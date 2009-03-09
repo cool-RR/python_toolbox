@@ -1,8 +1,8 @@
 Our goal is to build a framework for running physics simulations with an emphasis on flexibility. Flexibility in two senses:
 
 1. Being able to easily switch between different laws of physics: Newtonian Mechanics, Special Relativity, et cetera;
- 
- And,
+     
+    And,
 
 2. Being able to use the simulation engine in different types of software. Our main interest is using it as a virtual lab for running experiments; However, we would also like to be used in making a computer game (e.g., flying a spaceship in a relativistic world.)
 
