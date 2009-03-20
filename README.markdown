@@ -1,3 +1,8 @@
+New mockup of lab application:
+![](http://cool-rr.com/physicsthing/physicsthing_mockup_thumb.gif)
+
+-----------
+
 Our goal is to build a framework for running physics simulations with an emphasis on flexibility. Flexibility in two senses:
 
 1. Being able to easily switch between different laws of physics: Newtonian Mechanics, Special Relativity, et cetera;
