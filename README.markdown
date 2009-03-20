@@ -1,4 +1,4 @@
-New mockup of lab application:
+Mockup of lab application:
 ![](http://cool-rr.com/physicsthing/physicsthing_mockup_thumb.gif)
 
 -----------
