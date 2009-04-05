@@ -1,5 +1,4 @@
-Mockup of lab application:
-![](http://cool-rr.com/physicsthing/physicsthing_mockup_thumb.gif)
+Run gui.py in the ptdraft folder to see the demonstration. Then, Stuff->Calculate, Stuff->Play.
 
 -----------
 
@@ -34,4 +33,5 @@ Imagine a computer game in which you fly a spaceship at relativistic speeds! You
 
 -------
 
-More details soon.
+Mockup of lab application:
+![](http://cool-rr.com/physicsthing/physicsthing_mockup_thumb.gif)
