@@ -17,16 +17,19 @@ class Life(Simulation):
                 newboard.set(x,y,oldboard.willbecome(x,y))
         newnib=nib.Nib()
         newnib.board=newboard
+        newnib.clock=sourcenib.clock+1
         return newnib
 
     def makeplainnib(self,width=50,height=50):
         mynib=nib.Nib()
-        mynib.board=Board(width,height,False)
+        mynib.board=Board(width,height,makerandom=False)
+        mynib.clock=0
         return mynib
 
     def makerandomnib(self,width=50,height=50):
         mynib=nib.Nib()
-        mynib.board=Board(width,height,True)
+        mynib.board=Board(width,height,makerandom=True)
+        mynib.clock=0
         return mynib
 
     def show(self,nib):

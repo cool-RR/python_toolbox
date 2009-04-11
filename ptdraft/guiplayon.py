@@ -1,5 +1,5 @@
 import wx
-from misc import s2i,i2s
+from misc.stringsaver import s2i,i2s
 from core import *
 
 class GuiPlayon(object):
@@ -17,4 +17,10 @@ class GuiPlayon(object):
         self.shownib(movie[0].nib)
         if len(movie)>1:
             wx.FutureCall(delay*1000,functools.partial(self.showmovie,movie[1:],delay))
+
+    def playpath(self,path,delay):
+        if path.start==None:
+            return None
+        self.shownib(path.start.nib)
+        wx.FutureCall(delay*1000,functools.partial(self.playpath,path.cutofffirst(),delay))
 

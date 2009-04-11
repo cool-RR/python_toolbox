@@ -1,10 +1,3 @@
-def myprint(x,*args,**kwargs):
-    print(x,args,kwargs)
-
-
-"""
-begin string saving code
-"""
 stringsaverlibrary=[]
 
 def s2i(s):
@@ -24,7 +17,3 @@ def i2s(i):
     int to string
     """
     return stringsaverlibrary[i]
-
-"""
-end string saving code
-"""

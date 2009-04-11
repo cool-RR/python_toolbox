@@ -1,19 +1,11 @@
 import wx
 import os
-from misc.stringsaver import s2i,i2s
+from misc import s2i,i2s
 import time
-import customwidgets
+
 from core import *
 import simulations.life.life as life
 import simulations.life.lifegui as lifegui
-import threading
-
-
-class time_to_talk_with_manager_event(wx.PyCommandEvent):
-    pass
-
-myEVT_TIME_TO_TALK_WITH_MANAGER=wx.NewEventType()
-EVT_TIME_TO_TALK_WITH_MANAGER=wx.PyEventBinder(myEVT_TIME_TO_TALK_WITH_MANAGER,1)
 
 
 class myframe(wx.Frame):
@@ -51,13 +43,12 @@ class myframe(wx.Frame):
         toolbar.Realize()
 
         self.thing=wx.ScrolledWindow(self,-1)
-        self.timeline=customwidgets.Timeline(self,-1)
+
 
 
 
         self.sizer=wx.BoxSizer(wx.VERTICAL)
         self.sizer.Add(self.thing,1,wx.EXPAND)
-        self.sizer.Add(self.timeline,0,wx.EXPAND)
 
 
         self.SetSizer(self.sizer)
@@ -72,12 +63,6 @@ class myframe(wx.Frame):
         self.mygui=lifegui.LifeGuiPlayon(Playon(life.Life),self.thing)
         self.root=self.mygui.playon.makerandomroot(30,30)
         self.path=nib.Path(self.mygui.playon.nibtree,self.root)
-        self.timeline.setpath(self.path)
-
-        self.rendering_manager=threading.Thread(target=self.manage_rendering,name="rendering_manager")
-        self.rendering_manager.start()
-        self.Bind(EVT_TIME_TO_TALK_WITH_MANAGER,self.talk_with_manager)
-
 
     def calculate(self,e):
         try:
@@ -85,8 +70,7 @@ class myframe(wx.Frame):
         except:
             self.deus=self.tres=self.root
 
-        self.tres=self.mygui.playon.multistep(self.deus,steps=100)
-        self.timeline.Refresh()
+        self.tres=self.mygui.playon.multistep(self.deus,steps=200)
 
 
     def play(self,e):
@@ -109,12 +93,6 @@ class myframe(wx.Frame):
 
     def exit(self,e):
         self.Close()
-
-    def talk_with_manager(self):
-        pass
-
-    def manage_rendering(self):
-        pass
 
 
 
