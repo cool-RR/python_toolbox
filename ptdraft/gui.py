@@ -7,13 +7,18 @@ from core import *
 import simulations.life.life as life
 import simulations.life.lifegui as lifegui
 import threading
+from renderingmanager import RenderingManager
+import niftylock
 
 
+
+"""
 class time_to_talk_with_manager_event(wx.PyCommandEvent):
     pass
 
 myEVT_TIME_TO_TALK_WITH_MANAGER=wx.NewEventType()
 EVT_TIME_TO_TALK_WITH_MANAGER=wx.PyEventBinder(myEVT_TIME_TO_TALK_WITH_MANAGER,1)
+"""
 
 
 class myframe(wx.Frame):
@@ -73,10 +78,11 @@ class myframe(wx.Frame):
         self.root=self.mygui.playon.makerandomroot(30,30)
         self.path=nib.Path(self.mygui.playon.nibtree,self.root)
         self.timeline.setpath(self.path)
+        #self.root
 
-        self.rendering_manager=threading.Thread(target=self.manage_rendering,name="rendering_manager")
-        self.rendering_manager.start()
-        self.Bind(EVT_TIME_TO_TALK_WITH_MANAGER,self.talk_with_manager)
+        self.niftylock=niftylock.Niftylock()
+        self.rendering_manager=RenderingManager(niftylock=self.niftylock)
+        #self.Bind(EVT_TIME_TO_TALK_WITH_MANAGER,self.talk_with_manager)
 
 
     def calculate(self,e):
@@ -95,16 +101,7 @@ class myframe(wx.Frame):
 
     def draw(self,e=None):
         pass
-        """
-        dc = wx.PaintDC(self.realthing)
 
-        brush = wx.Brush("sky blue")
-        dc.SetBackground(brush)
-        dc.Clear()
-        for i in range(100):
-            dc.DrawBitmap(self.nibicon,10+20*i,10,True)
-        self.realthing.SetVirtualSize((1000,1000))
-        """
 
 
     def exit(self,e):
@@ -115,14 +112,6 @@ class myframe(wx.Frame):
 
     def manage_rendering(self):
         pass
-
-
-
-
-    """
-    def loadstring(self,*args,**kwargs):
-        self.control.
-    """
 
 
 app = wx.PySimpleApp()

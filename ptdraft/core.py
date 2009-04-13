@@ -9,7 +9,7 @@ traverse the nibtree, or have that information inside every
 nib. Which one should I choose?
 
 Or maybe give two options, one where the simulations gets the
-nib and one where it gets the nibleaf.
+nib and one where it gets the nibnode.
 """
 
 
@@ -63,15 +63,15 @@ class Playon(object):
     def rootthisnib(self,nib):
         return self.nibtree.addnib(nib)
 
-    def step(self,sourcenibleaf,t=1):
-        newnib=self.simulation.step(sourcenibleaf.nib,t)
-        return self.nibtree.addnib(newnib,sourcenibleaf)
+    def step(self,sourcenibnode,t=1):
+        newnib=self.simulation.step(sourcenibnode.nib,t)
+        return self.nibtree.addnib(newnib,sourcenibnode)
 
-    def multistep(self,sourcenibleaf,t=1,steps=1):
-        mynibleaf=sourcenibleaf
+    def multistep(self,sourcenibnode,t=1,steps=1):
+        mynibnode=sourcenibnode
         for i in range(steps):
-            mynibleaf=self.step(mynibleaf,t)
-        return mynibleaf
+            mynibnode=self.step(mynibnode,t)
+        return mynibnode
 
 
 
