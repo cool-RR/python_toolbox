@@ -1,24 +1,26 @@
 import wx
 import os
 from misc.stringsaver import s2i,i2s
+from misc.dumpqueue import dump_queue
 import time
 import customwidgets
 from core import *
 import simulations.life.life as life
 import simulations.life.lifegui as lifegui
 import threading
-from renderingmanager import RenderingManager
+#from renderingmanager import RenderingManager
+from edgerenderer import EdgeRenderer
 import niftylock
 
 
 
-"""
+
 class time_to_talk_with_manager_event(wx.PyCommandEvent):
     pass
 
 myEVT_TIME_TO_TALK_WITH_MANAGER=wx.NewEventType()
 EVT_TIME_TO_TALK_WITH_MANAGER=wx.PyEventBinder(myEVT_TIME_TO_TALK_WITH_MANAGER,1)
-"""
+
 
 
 class myframe(wx.Frame):
@@ -78,11 +80,13 @@ class myframe(wx.Frame):
         self.root=self.mygui.playon.make_random_root(30,30)
         self.path=nib.Path(self.mygui.playon.nibtree,self.root)
         self.timeline.set_path(self.path)
-        #self.root
+        self.edges_to_render=[self.root]
+        self.workers={}
 
-        self.rendering_manager=RenderingManager()
+        #self.rendering_manager=RenderingManager()
+
         #self.Bind(EVT_TIME_TO_TALK_WITH_MANAGER,self.talk_with_manager)
-
+        self.Bind(wx.EVT_IDLE,self.talk_with_manager)
 
     def calculate(self,e):
         try:
@@ -102,15 +106,52 @@ class myframe(wx.Frame):
         pass
 
 
-
     def exit(self,e):
         self.Close()
 
-    def talk_with_manager(self):
-        pass
+    def talk_with_manager(self,e=None): #Actually, I think I'll deprecate the manager
+        for edge in self.workers:
+            if not (edge in self.edges_to_render):
+                #TAKE WORK FROM WORKER AND RETIRE IT, ALSO DELETE FROM self.workers
+                worker=self.workers[edge]
+                result=dump_queue(worker.work_queue)
 
-    def manage_rendering(self):
-        pass
+                worker.message_queue.put("Terminate")
+
+                current=edge
+                for nib in result:
+                    current=self.mygui.playon.nibtree.add_nib(nib,parent=current)
+
+                del self.workers[edge]
+                worker.join()
+
+
+
+        for edge in self.edges_to_render[:]:
+            if self.workers.has_key(edge):
+                #TAKE WORK FROM WORKER, CHANGE EDGE
+                #IMPLEMENT INTO NIBTREE
+                worker=self.workers[edge]
+                result=dump_queue(worker.work_queue)
+
+                current=edge
+                for nib in result:
+                    current=self.mygui.playon.nibtree.add_nib(nib,parent=current)
+
+                self.edges_to_render.remove(edge)
+                self.edges_to_render.append(current)
+
+                del self.workers[edge]
+                self.workers[current]=worker
+
+            else:
+                #CREATE WORKER
+                thing=self.workers[edge]=EdgeRenderer(edge=edge)
+                thing.start()
+
+        self.Refresh()
+
+
 
 
 app = wx.PySimpleApp()

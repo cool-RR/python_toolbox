@@ -1,4 +1,3 @@
-from nibtreeoverview import *
 
 class NibNode(object):
     """
