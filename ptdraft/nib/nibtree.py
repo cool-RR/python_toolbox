@@ -25,6 +25,59 @@ class NibNode(object):
         A list of nibnodes who were created by editing from this nibnode
         """
 
+    def __len__(self):
+        """
+        Just returns 1 (useful because of N3Blocks)
+        """
+        return 1
+
+    def soft_get_block(self):
+        try:
+            return self.block
+        except AttributeError:
+            return self
+
+class NaturalNibNodesBlock(object):
+    def __init__(self,nibnodelist):
+        self.list=[]
+        self.add(nibnodelist)
+
+    def add(self,list):
+        if self.list!=[]:
+            if list[0].parent==self.list[-1]:
+                self.list=self.list+list
+            elif self.list[0].parent==list[-1]:
+                self.list=list+self.list
+            else:
+                raise StandardError("List of nibnodes is not adjacent to existing nibnodes")
+
+        for i in range(len(list)):
+            if i>=1:
+                if list[i].parent!=list[i-1]:
+                    raise StandardError("Tried to add non-consecutive nibnodes to block")
+            if list[i].nib.is_touched()==True:
+                raise StandardError("Tried to add touched nibnodes to block")
+            list[i].block=self
+
+    def __delitem__(self,item):
+        if item==0 or item==-1 or item==len(self)-1: #check if it's an edge item
+            return self.list.__delitem__(item)
+        else:
+            return StandardError("Can't remove a nibnode from the middle of a block")
+
+    def __contains__(self,item):
+        return self.list.__contains__(item)
+
+    def __iter__(self):
+        return self.list.__iter__()
+
+    def __len__(self):
+        return len(self.list)
+
+    def __getitem__(self,i):
+        return self.list[i]
+    pass
+
 class NibTree(object):
     """
     A nibtree is a tree of nibnodes. Each nibnode corresponds to a nib.
@@ -93,12 +146,24 @@ class NibTree(object):
         If it's a natural nib it cannot have a template_nibnode.
         """
         mynib=mynibnode.nib
-        if mynib.is_touched()==False and template_nibnode==None:
+        if mynib.is_touched()==False and template_nibnode!=None:
             raise StandardError("You tried adding an untouched nib to a tree while specifying a template_nibnode.")
 
-        self.nibnodes=[mynibnode]
+        try:
+            if parent!=template_nibnode.parent:
+                raise StandardError("parent you specified and parent of template_nibnode aren't the same!") # todo: Do something about this shit
+        except AttributeError:
+            pass
+
+        self.nibnodes+=[mynibnode]
         if parent==None:
             self.roots+=[mynibnode]
+            if mynib.is_touched()==True:
+                if template_nibnode!=None:
+                    template_nibnode.derived_nibnodes+=[mynibnode]
+            else:
+                NaturalNibNodesBlock([mynibnode])
+
             """
             if len(self.roots)==1:
                 for path in self.paths:
@@ -108,8 +173,15 @@ class NibTree(object):
         else:
             mynibnode.parent=parent
             parent.children+=[mynibnode]
+
             if mynib.is_touched()==True:
-                template_nibnode.derived_nibnodes+=[mynibnode]
+                if template_nibnode!=None:
+                    template_nibnode.derived_nibnodes+=[mynibnode]
+            else:
+                if parent.nib.is_touched()==True:
+                    NaturalNibNodesBlock([mynibnode])
+                else:
+                    parent.block.add([mynibnode])
 
             """
             # Update paths:
@@ -118,6 +190,9 @@ class NibTree(object):
                 for path in self.paths:
                     path.decisions[parent]=mynibnode
             """
+
+
+
 
     def nibnodecount(self):
         return len(self.nibnodelist)

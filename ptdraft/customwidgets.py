@@ -1,6 +1,6 @@
 import wx
 import math
-from misc.getlines import getlines as getlines
+from misc.getlines import get_lines as get_lines
 
 class Timeline(wx.Panel):
     def __init__(self,parent,id,*args,**kwargs):
@@ -22,7 +22,7 @@ class Timeline(wx.Panel):
         except:
             self.path=None
 
-    def setpath(self,path):
+    def set_path(self,path):
         self.path=path
 
     def OnPaint(self,e):
@@ -32,7 +32,7 @@ class Timeline(wx.Panel):
         dc = wx.PaintDC(self)
         #dc.DrawRectangle(3,3,50,90)
         if self.path!=None: #Draw rectangle for renedered segments
-            segs=self.path.getrenderedsegments(start,end)
+            segs=self.path.get_rendered_segments(start,end)
             dc.SetPen(wx.Pen('#000000'))
             dc.SetBrush(wx.Brush('#FFFFB8'))
             for seg in segs:
@@ -41,8 +41,8 @@ class Timeline(wx.Panel):
         #Draw ruler
         min=15
         temp=math.ceil(math.log10(min/self.zoom))
-        bigliners=getlines(start,end,temp+1)
-        presmallliners=getlines(start,end,temp)
+        bigliners=get_lines(start,end,temp+1)
+        presmallliners=get_lines(start,end,temp)
         smallliners=[]
         for thing in presmallliners:
             if bigliners.count(thing)==0:
@@ -50,12 +50,12 @@ class Timeline(wx.Panel):
 
 
 
-        self.drawsmallnumbers(dc,smallliners)
-        self.drawbignumbers(dc,bigliners)
+        self.draw_small_numbers(dc,smallliners)
+        self.draw_big_numbers(dc,bigliners)
 
 
 
-    def drawsmallnumbers(self,dc,numbers):
+    def draw_small_numbers(self,dc,numbers):
         dc.SetPen(wx.Pen('#000000'))
         dc.SetFont(wx.Font(9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, 'Courier 10 Pitch'))
         for number in numbers:
@@ -63,16 +63,13 @@ class Timeline(wx.Panel):
             width, height = dc.GetTextExtent(str(number))
             dc.DrawText(str(number), number-width/2, 8)
 
-    def drawbignumbers(self,dc,numbers):
+    def draw_big_numbers(self,dc,numbers):
         dc.SetPen(wx.Pen('#000000'))
         dc.SetFont(wx.Font(9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, 'Courier 10 Pitch'))
         for number in numbers:
             dc.DrawLine(number, 0, number, 9)
             width, height = dc.GetTextExtent(str(number))
             dc.DrawText(str(number), number-width/2, 12)
-
-
-
 
 
     def OnSize(self,e):

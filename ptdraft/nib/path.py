@@ -1,5 +1,5 @@
 from nibtree import *
-
+from busynode import *
 
 class Path(object):
     """
@@ -10,11 +10,17 @@ class Path(object):
     a nibnode which has multiple children.
 
     Question: Assume you have a path defined, and now the
-    nibtree is having some nibleaves added to it, making
+    nibtree is having some nibnodes added to it, making
     new decisions for the path necessary. what should the
     path do?
     should there be an automatic thing that will alert the path to it?
     maybe in the NibTree method for adding nibleaves?
+
+    Question:
+    in the decisions dict, will it be allowed that a key or value will be an N3Block?
+
+    todo:
+    beware case when there is a decision to go to a nibnode which was delete
     """
     def __init__(self,nibtree,start=None,decisions={}):
         #nibtree.path+=[self]
@@ -24,70 +30,72 @@ class Path(object):
 
 
     def __len__(self):
-        j=self.start
-        result=1
-        while True:
-            if self.decisions.has_key(j):
-                j=self.decisions[j]
-                result+=1
-            elif len(kids=(j.naturalchildren+j.editedchildren))>0:
-                if len(kids)>1:
-                    warnings.warn("This path has come across a junction for which he has no information! Guessing.")
-                j=kids[0]
-                result+=1
-            else:
-                break
+        if self.start==None:
+            raise StandardError("Tried to get len of path which has no start node")
+
+        result=0
+        for j in self:
+            result+=len(j)
+
         return result
 
+    def __iter__(self):
+        if self.start==None:
+            raise StopIteration
+        yield self.start
+        current=self.start
+        while True:
+            try:
+                current=self.next_nibnode(current)
+                yield current
+            except IndexError:
+                raise StopIteration("Ran out of nibtree")
+
+    def next_nibnode(self,i):
+        if self.decisions.has_key(i):
+            return self.decisions[i]
+        else:
+            kids=i.children
+            if len(kids)>0:
+                if len(kids)>1:
+                    warnings.warn("This path has come across a junction for which it has no information! Guessing.")
+                return kids[0]
+
+        raise IndexError("Ran out of nibtree")
+
+
     def __getitem__(self,i):
-        """
-        for nibnode, gives next nibnode in path
-        """
 
         if isinstance(i,int)==True:
             if i<0:
-                i=len(self)+i
+                i=len(self)+i #todo: something more optimized here?
 
-            j=self.start
-            for j in range(i):
-                if self.decisions.has_key(j):
-                    j=self.decisions[j]
-                else:
-                    kids=(j.naturalchildren+j.editedchildren)
-                    if len(kids)>0:
-                        if len(kids)>1:
-                            warnings.warn("This path has come across a junction for which iy has no information! Guessing.")
-                            j=kids[0]
-                #else
-                raise IndexError
+            index=-1
+            for j in self:
+                index+=len(j)
+                if index>=i:
+                    if isinstance(j,NaturalNibNodesBlock):
+                        return j[index-i]
+                    else:
+                        return j
+
         elif isinstance(i,slice)==True:
-            pass #todo
-        elif isinstance(i,NibNode)==True:
-            if self.decisions.has_key(i):
-                return self.decisions[i]
-            else:
-                kids=(i.naturalchildren+i.editedchildren)
-                if len(kids)>0:
-                    if len(kids)>1:
-                        warnings.warn("This path has come across a junction for which it has no information! Guessing.")
-                    return kids[0]
-            #else
-            raise IndexError("Ran out of nibtree")
+            raise NotImplementedError #todo
         else:
             return StandardError
 
-    def cutofffirst(self):
+    def cut_off_first(self):
         try:
-            second=self[self.start]
-        except IndexError:
+            second=self.next_nibnode(self.start)
+        except IndexError,StopIteration:
             second=None
         return Path(self.nibtree,second,self.decisions)
 
-    def getnibnodebytime(self,time):
+    def get_nibnode_by_time(self,time):
         """
         Gets the nibnode in path which "occupies" the timepoint "time".
         This means that, if there is a nibnode which is after "time", it
-        returns the nib immediately before it. Otherwise, returns None.
+        returns the nibnode immediately before it (if there is one). Otherwise, returns None.
         """
         low=self.start
         if time<low.nib.clock:
@@ -104,55 +112,41 @@ class Path(object):
         """
         while True:
             try:
-                new=self[low]
+                new=self.next_nibnode(low)
                 if new.nib.clock>time:
                     return low
                 low=new
+            except StopIteration:
+                return None
             except IndexError:
                 return None
 
 
-
-
-    def getrenderedsegments(self,starttime,endtime):
+    def get_rendered_segments(self,starttime,endtime):
         """
+        Assuming it's only one segment for now
         """
         segs=[]
-        foogi=self.getnibnodebytime(starttime)
+        foogi=self.get_nibnode_by_time(starttime)
         if foogi==None:
-            if starttime<self.start.nib.clock<endtime:
+            if starttime<self.start.nib.clock<=endtime:
                 myseg=[self.start.nib.clock,None]
             else:
                 return []
         else:
-            myseg=[foogi.nib.clock,None]
+            myseg=[starttime,None]
 
-        current=self.start
-        while True:
-            try:
-                new=self[current]
-                if new.nib.clock>endtime:
-                    myseg[1]=endtime
-                    segs+=[myseg]
-                    return segs
-                current=new
-            except IndexError:
-                myseg[1]=new.nib.clock
-                segs+=[myseg]
-                return segs
+        last=self[-1]
+        myseg[1]=min(last.nib.clock,endtime)
 
+        segs+=[myseg]
+        return segs
+
+
+    """
     def leads_to_same_edge(self,path):
-        """
-        todo
-        """
+        #todo maybe
         return False
-
-
-
-
-
-
     """
-    def __setitem__(self,i,value):
-        pass
-    """
+
+

@@ -1,4 +1,4 @@
-def getlines(start,end,thing):
+def get_lines(start,end,thing):
     """
     returns a list of all "round" numbers between start and end
     with thing=0, round numbers = 1, 2, 3...

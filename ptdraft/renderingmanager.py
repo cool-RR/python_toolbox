@@ -20,9 +20,10 @@ class RenderingManager(Thread):
         except:
             kwargs["name"]="Rendering Manager"
 
+        """
         self.niftylock=kwargs["niftylock"]
         del kwargs["niftylock"]
-
+        """
 
         Thread.__init__(self,*args,**kwargs)
         """

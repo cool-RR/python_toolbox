@@ -24,8 +24,8 @@ EVT_TIME_TO_TALK_WITH_MANAGER=wx.PyEventBinder(myEVT_TIME_TO_TALK_WITH_MANAGER,1
 class myframe(wx.Frame):
     def __init__(self,*args,**keywords):
         wx.Frame.__init__(self,*args,**keywords)
-        self.nibicon=wx.Bitmap("images\\circle.png", wx.BITMAP_TYPE_ANY)
-        self.touchednibicon=wx.Bitmap("images\\star.png", wx.BITMAP_TYPE_ANY)
+        self.nib_icon=wx.Bitmap("images\\circle.png", wx.BITMAP_TYPE_ANY)
+        self.touched_nib_icon=wx.Bitmap("images\\star.png", wx.BITMAP_TYPE_ANY)
 
         filemenu=wx.Menu()
         filemenu.Append(s2i("Open"),"&Open"," Open a file")
@@ -75,13 +75,12 @@ class myframe(wx.Frame):
         #self.draw()
 
         self.mygui=lifegui.LifeGuiPlayon(Playon(life.Life),self.thing)
-        self.root=self.mygui.playon.makerandomroot(30,30)
+        self.root=self.mygui.playon.make_random_root(30,30)
         self.path=nib.Path(self.mygui.playon.nibtree,self.root)
-        self.timeline.setpath(self.path)
+        self.timeline.set_path(self.path)
         #self.root
 
-        self.niftylock=niftylock.Niftylock()
-        self.rendering_manager=RenderingManager(niftylock=self.niftylock)
+        self.rendering_manager=RenderingManager()
         #self.Bind(EVT_TIME_TO_TALK_WITH_MANAGER,self.talk_with_manager)
 
 
@@ -96,7 +95,7 @@ class myframe(wx.Frame):
 
 
     def play(self,e):
-        self.mygui.playpath(self.path,0.1)
+        self.mygui.play_path(self.path,0.1)
 
 
     def draw(self,e=None):

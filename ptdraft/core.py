@@ -50,22 +50,22 @@ class Playon(object):
         self.simulation=simulationclass()
         self.nibtree=nib.NibTree()
 
-    def makeplainroot(self,*args,**kwargs):
-        nib=self.simulation.makeplainnib(*args,**kwargs)
-        nib.maketouched()
-        return self.rootthisnib(nib)
+    def make_plain_root(self,*args,**kwargs):
+        nib=self.simulation.make_plain_nib(*args,**kwargs)
+        nib.make_touched()
+        return self.root_this_nib(nib)
 
-    def makerandomroot(self,*args,**kwargs):
-        nib=self.simulation.makerandomnib(*args,**kwargs)
-        nib.maketouched()
-        return self.rootthisnib(nib)
+    def make_random_root(self,*args,**kwargs):
+        nib=self.simulation.make_random_nib(*args,**kwargs)
+        nib.touched=True
+        return self.root_this_nib(nib)
 
-    def rootthisnib(self,nib):
-        return self.nibtree.addnib(nib)
+    def root_this_nib(self,nib):
+        return self.nibtree.add_nib(nib)
 
     def step(self,sourcenibnode,t=1):
         newnib=self.simulation.step(sourcenibnode.nib,t)
-        return self.nibtree.addnib(newnib,sourcenibnode)
+        return self.nibtree.add_nib(newnib,sourcenibnode)
 
     def multistep(self,sourcenibnode,t=1,steps=1):
         mynibnode=sourcenibnode

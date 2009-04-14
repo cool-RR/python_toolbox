@@ -12,5 +12,5 @@ class LifeGuiPlayon(GuiPlayon):
         self.window.SetSizer(self.mysizer)
         self.mysizer.Fit(self.window)
 
-    def shownib(self,nib):
+    def show_nib(self,nib):
         self.mytextctrl.SetValue(str(nib.board))

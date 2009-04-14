@@ -10,17 +10,17 @@ class GuiPlayon(object):
         self.playon=myp
         self.window=window
 
-    def showstartend(self,start,end,delay):
-        self.showmovie(self.playon.nibtree.getmovie(start,end), delay)
+    def show_start_end(self,start,end,delay):
+        self.show_movie(self.playon.nibtree.get_movie(start,end), delay)
 
-    def showmovie(self,movie,delay):
-        self.shownib(movie[0].nib)
+    def show_movie(self,movie,delay):
+        self.show_nib(movie[0].nib)
         if len(movie)>1:
-            wx.FutureCall(delay*1000,functools.partial(self.showmovie,movie[1:],delay))
+            wx.FutureCall(delay*1000,functools.partial(self.show_movie,movie[1:],delay))
 
-    def playpath(self,path,delay):
+    def play_path(self,path,delay):
         if path.start==None:
             return None
-        self.shownib(path.start.nib)
-        wx.FutureCall(delay*1000,functools.partial(self.playpath,path.cutofffirst(),delay))
+        self.show_nib(path.start.nib)
+        wx.FutureCall(delay*1000,functools.partial(self.play_path,path.cut_off_first(),delay))
 
