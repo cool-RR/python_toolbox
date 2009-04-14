@@ -8,9 +8,7 @@ from core import *
 import simulations.life.life as life
 import simulations.life.lifegui as lifegui
 import threading
-#from renderingmanager import RenderingManager
 from edgerenderer import EdgeRenderer
-import niftylock
 import random
 
 
@@ -27,6 +25,7 @@ EVT_TIME_TO_TALK_WITH_MANAGER=wx.PyEventBinder(myEVT_TIME_TO_TALK_WITH_MANAGER,1
 class myframe(wx.Frame):
     def __init__(self,*args,**keywords):
         wx.Frame.__init__(self,*args,**keywords)
+        self.SetDoubleBuffered(True)
         self.nib_icon=wx.Bitmap("images\\circle.png", wx.BITMAP_TYPE_ANY)
         self.touched_nib_icon=wx.Bitmap("images\\star.png", wx.BITMAP_TYPE_ANY)
 
@@ -36,13 +35,11 @@ class myframe(wx.Frame):
         filemenu.Append(s2i("Exit"),"E&xit"," Close the program")
 
         stuffmenu=wx.Menu()
-        stuffmenu.Append(s2i("Calculate"),"&Calculate","")
         stuffmenu.Append(s2i("Play"),"&Play","")
 
 
         wx.EVT_MENU(self,s2i("Exit"),self.exit)
 
-        wx.EVT_MENU(self,s2i("Calculate"),self.calculate)
         wx.EVT_MENU(self,s2i("Play"),self.play)
 
 
@@ -60,12 +57,14 @@ class myframe(wx.Frame):
 
         self.thing=wx.ScrolledWindow(self,-1)
         self.timeline=customwidgets.Timeline(self,-1)
+        #self.nibtree_browser=customwidgets.NibTreeBrowser(self,-1)
 
 
 
         self.sizer=wx.BoxSizer(wx.VERTICAL)
         self.sizer.Add(self.thing,1,wx.EXPAND)
         self.sizer.Add(self.timeline,0,wx.EXPAND)
+        #self.sizer.Add(self.nibtree_browser,0,wx.EXPAND)
 
 
         self.SetSizer(self.sizer)
@@ -78,29 +77,21 @@ class myframe(wx.Frame):
         #self.draw()
 
         self.mygui=lifegui.LifeGuiPlayon(Playon(life.Life),self.thing)
-        self.root=self.mygui.playon.make_random_root(30,30)
+        self.root=self.mygui.playon.make_random_root(20,40)
         self.path=nib.Path(self.mygui.playon.nibtree,self.root)
         self.timeline.set_path(self.path)
+        #self.nibtree_browser.set_path(self.path)
         self.edges_to_render=[self.root]
         self.workers={}
 
         #self.rendering_manager=RenderingManager()
 
-        #self.Bind(EVT_TIME_TO_TALK_WITH_MANAGER,self.talk_with_manager)
-        self.Bind(wx.EVT_IDLE,self.talk_with_manager)
-
-    def calculate(self,e):
-        try:
-            self.deus=self.tres
-        except:
-            self.deus=self.tres=self.root
-
-        self.tres=self.mygui.playon.multistep(self.deus,steps=100)
-        self.timeline.Refresh()
+        #self.Bind(EVT_TIME_TO_TALK_WITH_MANAGER,self.manage_workers)
+        self.Bind(wx.EVT_IDLE,self.manage_workers)
 
 
     def play(self,e):
-        self.mygui.play_path(self.path,0.1)
+        self.mygui.play_path(self.path,0.05)
 
 
     def draw(self,e=None):
@@ -110,7 +101,7 @@ class myframe(wx.Frame):
     def exit(self,e):
         self.Close()
 
-    def talk_with_manager(self,e=None): #Actually, I think I'll deprecate the manager
+    def manage_workers(self,e=None):
         for edge in self.workers:
             if not (edge in self.edges_to_render):
                 #TAKE WORK FROM WORKER AND RETIRE IT, ALSO DELETE FROM self.workers
@@ -126,6 +117,7 @@ class myframe(wx.Frame):
 
                 del self.workers[edge]
                 worker.join()
+
 
 
 
@@ -156,8 +148,12 @@ class myframe(wx.Frame):
                 thing=self.workers[edge]=EdgeRenderer(edge)
                 thing.start()
 
-        if random.randint(0,4)==0:
-            self.Refresh()
+
+        self.Refresh()
+        try:
+            e.RequestMore()
+        except:
+            pass
 
 
 
