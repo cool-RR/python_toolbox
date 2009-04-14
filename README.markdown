@@ -1,4 +1,4 @@
-Run gui.py in the ptdraft folder to see the demonstration. Then, Stuff->Calculate, Stuff->Play.
+Run gui.py in the ptdraft folder to see the demonstration. Then, Stuff->Play.
 
 -----------
 
