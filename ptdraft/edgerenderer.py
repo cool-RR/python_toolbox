@@ -6,37 +6,41 @@ import simulations.life.lifegui as lifegui
 import threading
 
 class EdgeRenderer(Process):
-    def __init__(self,*args,**kwargs):
+    def __init__(self,starter,*args,**kwargs):
 
-        self.edge=kwargs["edge"]
-        del kwargs["edge"]
-
+        self.starter=starter
 
         Process.__init__(self,*args,**kwargs)
+        self.daemon=True
+
 
         self.message_queue=Queue() # use it for messages?
         self.work_queue=Queue()
 
+
+
     def run(self):
-        #raise("hell")
+
+        """
         import simulations.life.life as simulation
         import core
         import wx
-        self.work()
+        """
+        mylife=life.Life()
 
-    def work(self):
-        current=self.edge
+        current=self.starter.nib
         order=None
         while True:
-            next=simulation.step(current)
+            next=mylife.step(current)
             self.work_queue.put(next)
             current=next
 
             try:
-                order=self.message_queue.get()
+                order=self.message_queue.get(block=Flase)
                 #do something with order
                 if order=="Terminate":
                     break
                 order=None
             except:
                 pass
+

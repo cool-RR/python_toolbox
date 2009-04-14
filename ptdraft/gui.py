@@ -11,6 +11,7 @@ import threading
 #from renderingmanager import RenderingManager
 from edgerenderer import EdgeRenderer
 import niftylock
+import random
 
 
 
@@ -113,6 +114,7 @@ class myframe(wx.Frame):
         for edge in self.workers:
             if not (edge in self.edges_to_render):
                 #TAKE WORK FROM WORKER AND RETIRE IT, ALSO DELETE FROM self.workers
+                print("shit")
                 worker=self.workers[edge]
                 result=dump_queue(worker.work_queue)
 
@@ -133,6 +135,11 @@ class myframe(wx.Frame):
                 #IMPLEMENT INTO NIBTREE
                 worker=self.workers[edge]
                 result=dump_queue(worker.work_queue)
+                """
+                if result!=[]:
+                    print(result)
+                """
+                #print worker
 
                 current=edge
                 for nib in result:
@@ -146,14 +153,15 @@ class myframe(wx.Frame):
 
             else:
                 #CREATE WORKER
-                thing=self.workers[edge]=EdgeRenderer(edge=edge)
+                thing=self.workers[edge]=EdgeRenderer(edge)
                 thing.start()
 
-        self.Refresh()
+        if random.randint(0,4)==0:
+            self.Refresh()
 
 
 
-
-app = wx.PySimpleApp()
-fugi=myframe(None,-1,"Title",size=(600,600))
-app.MainLoop()
+if __name__=="__main__":
+    app = wx.PySimpleApp()
+    fugi=myframe(None,-1,"Title",size=(600,600))
+    app.MainLoop()
