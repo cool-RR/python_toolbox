@@ -11,6 +11,7 @@ class NibNode(object):
             self.nib=nib
 
         self.parent=parent
+        self.block=None
 
         self.children=[]
         """
@@ -31,12 +32,26 @@ class NibNode(object):
         return 1
 
     def soft_get_block(self):
-        try:
+        if self.block!=None:
             return self.block
-        except AttributeError:
+        else:
             return self
 
 class NaturalNibNodesBlock(object):
+    """
+    Who gets wrapped in a block? A succession of untouched nibnodes,
+    which:
+    1. Is at least 2 nibnodes in number
+    2. All members, except the two last ones, must have no children except
+       their successor in the block.
+    3. The second to last node may have children who are touched nibnodes,
+       in addition to the one untouched nib, the last nibnode, that is
+       already its child
+    4. The last nibnode may have any kinds of children.
+    5. The parent of the first nibnode must be either touched or
+       have additional children
+
+    """
     def __init__(self,nibnodelist):
         self.list=[]
         self.add(nibnodelist)
@@ -49,6 +64,8 @@ class NaturalNibNodesBlock(object):
                 self.list=list+self.list
             else:
                 raise StandardError("List of nibnodes is not adjacent to existing nibnodes")
+        else:
+            self.list=list[:]
 
         for i in range(len(list)):
             if i>=1:
@@ -58,8 +75,33 @@ class NaturalNibNodesBlock(object):
                 raise StandardError("Tried to add touched nibnodes to block")
             list[i].block=self
 
+    def split(self,nibnode):
+        """
+        splits block, where nibnode is the first node of the second block
+        """
+        i=self.list.index(nibnode)
+        secondlist=self.list[i:]
+        self.list=self.list[:i]
+        if len(secondlist)>=2:
+            NaturalNibNodesBlock(secondlist)
+        else:
+            for nibnode in secondlist:
+                nibnode.block=None
+        if len(self.list)<=2:
+            self.delete()
+
+
+    def delete(self):
+        """
+        deletes the block, leaving all nibnodes without a block
+        """
+        for nibnode in self:
+            nibnode.block=None
+        del self
+
     def __delitem__(self,item):
         if item==0 or item==-1 or item==len(self)-1: #check if it's an edge item
+            self.list[item].block=None
             return self.list.__delitem__(item)
         else:
             return StandardError("Can't remove a nibnode from the middle of a block")
@@ -160,8 +202,6 @@ class NibTree(object):
             if mynib.is_touched()==True:
                 if template_nibnode!=None:
                     template_nibnode.derived_nibnodes+=[mynibnode]
-            else:
-                NaturalNibNodesBlock([mynibnode])
 
             """
             if len(self.roots)==1:
@@ -176,11 +216,28 @@ class NibTree(object):
             if mynib.is_touched()==True:
                 if template_nibnode!=None:
                     template_nibnode.derived_nibnodes+=[mynibnode]
+                if parent.block!=None:
+                    if len(parent.block)-parent.block.list.index[parent]>=3:
+                        parent.block.split(parent)
             else:
+                if parent.block!=None:
+                    ind=parent.block.list.index(parent)
+                    number=len(parent.block)-ind
+                    if number==1:
+                        parent.block.add([mynibnode])
+                    else:
+                        parent.block.split(parent.block.list.index[i+1])
+
+                else:
+                    if len(parent.children)==1 and parent.nib.is_touched()==False:
+                        NaturalNibNodesBlock([parent,mynibnode])
+
+                """
                 if parent.nib.is_touched()==True:
                     NaturalNibNodesBlock([mynibnode])
                 else:
                     parent.block.add([mynibnode])
+                """
 
             """
             # Update paths:

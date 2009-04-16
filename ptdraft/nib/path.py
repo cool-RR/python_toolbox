@@ -1,5 +1,9 @@
+"""
+todo: path should be able to skip on n3blocks!
+"""
+
+import warnings
 from nibtree import *
-#from busynode import *
 
 class Path(object):
     """

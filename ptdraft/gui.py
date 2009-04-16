@@ -3,7 +3,6 @@ import os
 from misc.stringsaver import s2i,i2s
 from misc.dumpqueue import dump_queue
 import time
-import customwidgets
 from core import *
 import simulations.life.life as life
 import simulations.life.lifegui as lifegui
@@ -11,23 +10,29 @@ import threading
 from edgerenderer import EdgeRenderer
 import random
 
+#import psyco
+#psyco.full()
 
 
 
+"""
 class time_to_talk_with_manager_event(wx.PyCommandEvent):
     pass
 
 myEVT_TIME_TO_TALK_WITH_MANAGER=wx.NewEventType()
 EVT_TIME_TO_TALK_WITH_MANAGER=wx.PyEventBinder(myEVT_TIME_TO_TALK_WITH_MANAGER,1)
-
+"""
 
 
 class myframe(wx.Frame):
     def __init__(self,*args,**keywords):
         wx.Frame.__init__(self,*args,**keywords)
         self.SetDoubleBuffered(True)
+        """
         self.nib_icon=wx.Bitmap("images\\circle.png", wx.BITMAP_TYPE_ANY)
         self.touched_nib_icon=wx.Bitmap("images\\star.png", wx.BITMAP_TYPE_ANY)
+        """
+
 
         filemenu=wx.Menu()
         filemenu.Append(s2i("Open"),"&Open"," Open a file")
@@ -57,14 +62,14 @@ class myframe(wx.Frame):
 
         self.thing=wx.ScrolledWindow(self,-1)
         self.timeline=customwidgets.Timeline(self,-1)
-        #self.nibtree_browser=customwidgets.NibTreeBrowser(self,-1)
+        self.nibtree_browser=customwidgets.NibTreeBrowser(self,-1)
 
 
 
         self.sizer=wx.BoxSizer(wx.VERTICAL)
         self.sizer.Add(self.thing,1,wx.EXPAND)
         self.sizer.Add(self.timeline,0,wx.EXPAND)
-        #self.sizer.Add(self.nibtree_browser,0,wx.EXPAND)
+        self.sizer.Add(self.nibtree_browser,0,wx.EXPAND)
 
 
         self.SetSizer(self.sizer)
@@ -73,21 +78,21 @@ class myframe(wx.Frame):
 
         #self.Bind(wx.EVT_PAINT, self.draw)
 
-        self.Show()
-        #self.draw()
+
 
         self.mygui=lifegui.LifeGuiPlayon(Playon(life.Life),self.thing)
         self.root=self.mygui.playon.make_random_root(20,40)
         self.path=nib.Path(self.mygui.playon.nibtree,self.root)
         self.timeline.set_path(self.path)
-        #self.nibtree_browser.set_path(self.path)
+        self.nibtree_browser.set_nibtree(self.mygui.playon.nibtree)
         self.edges_to_render=[self.root]
         self.workers={}
 
-        #self.rendering_manager=RenderingManager()
 
-        #self.Bind(EVT_TIME_TO_TALK_WITH_MANAGER,self.manage_workers)
         self.Bind(wx.EVT_IDLE,self.manage_workers)
+
+        self.Show()
+        #self.draw()
 
 
     def play(self,e):
@@ -159,5 +164,6 @@ class myframe(wx.Frame):
 
 if __name__=="__main__":
     app = wx.PySimpleApp()
-    fugi=myframe(None,-1,"Title",size=(600,600))
+    import customwidgets
+    fugi=myframe(None,-1,":)",size=(600,600))
     app.MainLoop()

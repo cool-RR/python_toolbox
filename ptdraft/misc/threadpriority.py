@@ -1,6 +1,6 @@
 """
 
-Don't know how much this works, need to research it
+
 
 import threading
 import ctypes
@@ -10,6 +10,16 @@ w32 = ctypes.windll.kernel32
 
 THREAD_SET_INFORMATION = 0x20
 THREAD_PRIORITY_ABOVE_NORMAL = 1
+
+def set_priority(,priority):
+    if not self.isAlive():
+        print 'Unable to set priority of stopped thread'
+
+    handle = w32.OpenThread(THREAD_SET_INFORMATION, False, self.tid)
+    result = w32.SetThreadPriority(handle, priority)
+    w32.CloseHandle(handle)
+    if not result:
+        print 'Failed to set priority of thread', w32.GetLastError()
 
 class DummyThread(threading.Thread):
 
@@ -57,5 +67,4 @@ if __name__ == "__main__":
 
     # Trigger thread execution
     start.set()
-
 """

@@ -52,12 +52,12 @@ class Playon(object):
 
     def make_plain_root(self,*args,**kwargs):
         nib=self.simulation.make_plain_nib(*args,**kwargs)
-        nib.make_touched()
+        nib._Nib__touched=True
         return self.root_this_nib(nib)
 
     def make_random_root(self,*args,**kwargs):
         nib=self.simulation.make_random_nib(*args,**kwargs)
-        nib.touched=True
+        nib._Nib__touched=True
         return self.root_this_nib(nib)
 
     def root_this_nib(self,nib):

@@ -4,20 +4,21 @@ from core import *
 import simulations.life.life as life
 import simulations.life.lifegui as lifegui
 import threading
+from misc.processpriority import set_process_priority
 
 class EdgeRenderer(Process):
     def __init__(self,starter,*args,**kwargs):
-
-        self.starter=starter
-
         Process.__init__(self,*args,**kwargs)
+        self.set_priority(0)
+        self.starter=starter
         self.daemon=True
 
-
-        self.message_queue=Queue() # use it for messages?
+        self.message_queue=Queue()
         self.work_queue=Queue()
 
-
+    def set_priority(self,priority):
+        assert priority in range(6)
+        set_process_priority(self.pid,priority)
 
     def run(self):
 
