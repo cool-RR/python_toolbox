@@ -2,10 +2,10 @@
 #from nib import Nib
 import nib
 import random
-from .core import Simulation
+from .core import SimulationCore
 
 
-class Life(Simulation):
+class Life(SimulationCore):
     """
     """
 

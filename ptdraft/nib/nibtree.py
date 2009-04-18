@@ -16,7 +16,7 @@ class NibNode(object):
         self.children=[]
         """
         A list of:
-        1. nibnodes whose nibs were produced by simulation
+        1. nibnodes whose nibs were produced by SimulationCore
         2. nibnodes who were created by editing from the aforementioned set.
         """
 

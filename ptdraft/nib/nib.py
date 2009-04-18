@@ -16,10 +16,10 @@ import warnings
 
 class Nib(object):
     """
-    A nib is something like a time-point. It's something like a frozen state of the simulation.
+    A nib is something like a time-point. It's something like a frozen state of the SimulationCore.
 
     Most nibs are not touched, but some nibs are touched.
-    A touched nib is a nib that was not formed naturally by a simulation step:
+    A touched nib is a nib that was not formed naturally by a SimulationCore step:
     It was created by the user, either from scratch or based on an untouched nib.
     """
     def __init__(self,touched=False):

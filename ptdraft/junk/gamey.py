@@ -4,5 +4,5 @@ from file import *
 class player(object):
     pass
 
-class funky(simulation):
+class funky(SimulationCore):
     def step(self,sourcenibleaf):

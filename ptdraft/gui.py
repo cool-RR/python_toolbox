@@ -110,7 +110,6 @@ class myframe(wx.Frame):
         for edge in self.workers:
             if not (edge in self.edges_to_render):
                 #TAKE WORK FROM WORKER AND RETIRE IT, ALSO DELETE FROM self.workers
-                print("shit")
                 worker=self.workers[edge]
                 result=dump_queue(worker.work_queue)
 

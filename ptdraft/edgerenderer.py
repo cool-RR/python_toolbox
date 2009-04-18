@@ -1,3 +1,12 @@
+"""
+
+In the future, we may want the EdgeRenderer to receive a
+copy of the SimulationCore object. We will have to implement
+a copy() method on SimulationCore and pass it on to the new process.
+
+"""
+
+
 import wx
 from multiprocessing import *
 from core import *

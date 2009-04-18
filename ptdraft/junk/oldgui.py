@@ -4,8 +4,8 @@ from misc import s2i,i2s
 import time
 
 from core import *
-import simulations.life.life as life
-import simulations.life.lifegui as lifegui
+import SimulationCores.life.life as life
+import SimulationCores.life.lifegui as lifegui
 
 
 class myframe(wx.Frame):
