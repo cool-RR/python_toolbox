@@ -62,14 +62,14 @@ class myframe(wx.Frame):
 
         self.thing=wx.ScrolledWindow(self,-1)
         self.timeline=customwidgets.Timeline(self,-1)
-        self.nibtree_browser=customwidgets.NibTreeBrowser(self,-1)
+        self.tree_browser=customwidgets.TreeBrowser(self,-1)
 
 
 
         self.sizer=wx.BoxSizer(wx.VERTICAL)
         self.sizer.Add(self.thing,1,wx.EXPAND)
         self.sizer.Add(self.timeline,0,wx.EXPAND)
-        self.sizer.Add(self.nibtree_browser,0,wx.EXPAND)
+        self.sizer.Add(self.tree_browser,0,wx.EXPAND)
 
 
         self.SetSizer(self.sizer)
@@ -80,11 +80,11 @@ class myframe(wx.Frame):
 
 
 
-        self.mygui=lifegui.LifeGuiPlayon(Playon(life.Life),self.thing)
-        self.root=self.mygui.playon.make_random_root(20,40)
-        self.path=nib.Path(self.mygui.playon.nibtree,self.root)
+        self.mygui=lifegui.LifeGuiProject(Project(life.Life),self.thing)
+        self.root=self.mygui.project.make_random_root(20,40)
+        self.path=state.Path(self.mygui.project.tree,self.root)
         self.timeline.set_path(self.path)
-        self.nibtree_browser.set_nibtree(self.mygui.playon.nibtree)
+        self.tree_browser.set_tree(self.mygui.project.tree)
         self.edges_to_render=[self.root]
         self.workers={}
 
@@ -116,8 +116,8 @@ class myframe(wx.Frame):
                 worker.message_queue.put("Terminate")
 
                 current=edge
-                for nib in result:
-                    current=self.mygui.playon.nibtree.add_nib(nib,parent=current)
+                for state in result:
+                    current=self.mygui.project.tree.add_state(state,parent=current)
 
                 del self.workers[edge]
                 worker.join()
@@ -128,18 +128,14 @@ class myframe(wx.Frame):
         for edge in self.edges_to_render[:]:
             if self.workers.has_key(edge):
                 #TAKE WORK FROM WORKER, CHANGE EDGE
-                #IMPLEMENT INTO NIBTREE
+                #IMPLEMENT INTO TREE
                 worker=self.workers[edge]
                 result=dump_queue(worker.work_queue)
-                """
-                if result!=[]:
-                    print(result)
-                """
-                #print worker
+
 
                 current=edge
-                for nib in result:
-                    current=self.mygui.playon.nibtree.add_nib(nib,parent=current)
+                for state in result:
+                    current=self.mygui.project.tree.add_state(state,parent=current)
 
                 self.edges_to_render.remove(edge)
                 self.edges_to_render.append(current)
@@ -149,7 +145,7 @@ class myframe(wx.Frame):
 
             else:
                 #CREATE WORKER
-                thing=self.workers[edge]=EdgeRenderer(edge)
+                thing=self.workers[edge]=EdgeRenderer(edge.state)
                 thing.start()
 
 

@@ -1,6 +1,6 @@
 #import ptdraft.nib
 #from nib import Nib
-import nib
+import state
 import random
 from .core import SimulationCore
 
@@ -9,28 +9,28 @@ class Life(SimulationCore):
     """
     """
 
-    def step(self,sourcenib,*args,**kwargs):
-        oldboard=sourcenib.board
+    def step(self,sourcestate,*args,**kwargs):
+        oldboard=sourcestate.board
         newboard=Board(oldboard.width,oldboard.height)
         for x in range(oldboard.width):
             for y in range(oldboard.height):
                 newboard.set(x,y,oldboard.will_become(x,y))
-        newnib=nib.Nib()
-        newnib.board=newboard
-        newnib.clock=sourcenib.clock+1
-        return newnib
+        newstate=state.State()
+        newstate.board=newboard
+        newstate.clock=sourcestate.clock+1
+        return newstate
 
-    def make_plain_nib(self,width=50,height=50):
-        mynib=nib.Nib()
-        mynib.board=Board(width,height,make_random=False)
-        mynib.clock=0
-        return mynib
+    def make_plain_state(self,width=50,height=50):
+        mystate=state.State()
+        mystate.board=Board(width,height,make_random=False)
+        mystate.clock=0
+        return mystate
 
-    def make_random_nib(self,width=50,height=50):
-        mynib=nib.Nib()
-        mynib.board=Board(width,height,make_random=True)
-        mynib.clock=0
-        return mynib
+    def make_random_state(self,width=50,height=50):
+        mystate=state.State()
+        mystate.board=Board(width,height,make_random=True)
+        mystate.clock=0
+        return mystate
 
     def show(self,nib):
         pass

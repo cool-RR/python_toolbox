@@ -3,32 +3,32 @@ todo: path should be able to skip on n3blocks!
 """
 
 import warnings
-from nibtree import *
+from tree import *
 
 class Path(object):
     """
-    A path symbolizes a line of nibnodes in a nibtree.
-    A nibtree may be a complex tree with many junctions,
+    A path symbolizes a line of nodes in a tree.
+    A tree may be a complex tree with many junctions,
     but a path is a direct line. Therefore, a path object contains
     information about which child to choose when going through
-    a nibnode which has multiple children.
+    a node which has multiple children.
 
     Question: Assume you have a path defined, and now the
-    nibtree is having some nibnodes added to it, making
+    tree is having some nodes added to it, making
     new decisions for the path necessary. what should the
     path do?
     should there be an automatic thing that will alert the path to it?
-    maybe in the NibTree method for adding nibleaves?
+    maybe in the tree method for adding nodes?
 
     Question:
-    in the decisions dict, will it be allowed that a key or value will be an N3Block?
+    in the decisions dict, will it be allowed that a key or value will be a Block?
 
     todo:
-    beware case when there is a decision to go to a nibnode which was delete
+    beware case when there is a decision to go to a node which was deleted
     """
-    def __init__(self,nibtree,start=None,decisions={}):
-        #nibtree.path+=[self]
-        self.nibtree=nibtree
+    def __init__(self,tree,start=None,decisions={}):
+        #tree.path+=[self]
+        self.tree=tree
         self.start=start
         self.decisions=decisions.copy()
 
@@ -50,12 +50,12 @@ class Path(object):
         current=self.start
         while True:
             try:
-                current=self.next_nibnode(current)
+                current=self.next_node(current)
                 yield current
             except IndexError:
-                raise StopIteration("Ran out of nibtree")
+                raise StopIteration("Ran out of tree")
 
-    def next_nibnode(self,i):
+    def next_node(self,i):
         if self.decisions.has_key(i):
             return self.decisions[i]
         else:
@@ -65,7 +65,7 @@ class Path(object):
                     warnings.warn("This path has come across a junction for which it has no information! Guessing.")
                 return kids[0]
 
-        raise IndexError("Ran out of nibtree")
+        raise IndexError("Ran out of tree")
 
 
     def __getitem__(self,i):
@@ -78,7 +78,7 @@ class Path(object):
             for j in self:
                 index+=len(j)
                 if index>=i:
-                    if isinstance(j,NaturalNibNodesBlock):
+                    if isinstance(j,Block):
                         return j[index-i]
                     else:
                         return j
@@ -90,20 +90,20 @@ class Path(object):
 
     def cut_off_first(self):
         try:
-            second=self.next_nibnode(self.start)
+            second=self.next_node(self.start)
         except IndexError,StopIteration:
             second=None
-        return Path(self.nibtree,second,self.decisions)
+        return Path(self.tree,second,self.decisions)
 
-    def get_nibnode_by_time(self,time):
+    def get_node_by_time(self,time):
         """
-        Gets the nibnode in path which "occupies" the timepoint "time".
-        This means that, if there is a nibnode which is after "time", it
-        returns the nibnode immediately before it (if there is one). Otherwise, returns None.
+        Gets the node in path which "occupies" the timepoint "time".
+        This means that, if there is a node which is after "time", it
+        returns the node immediately before it (if there is one). Otherwise, returns None.
         """
         low=self.start
-        if time<low.nib.clock:
-            raise StandardError("You looked for a nibnode with a clock reading of "+str(time)+", while the earliest nibnode had a clock reading of "+str(self.start.nib.clock))
+        if time<low.state.clock:
+            raise StandardError("You looked for a node with a clock reading of "+str(time)+", while the earliest node had a clock reading of "+str(self.start.state.clock))
         """
         second=self[self.start]
         guessedrate=second.nib.time-self.start.nib.time
@@ -116,8 +116,8 @@ class Path(object):
         """
         while True:
             try:
-                new=self.next_nibnode(low)
-                if new.nib.clock>time:
+                new=self.next_node(low)
+                if new.state.clock>time:
                     return low
                 low=new
             except StopIteration:
@@ -131,17 +131,17 @@ class Path(object):
         Assuming it's only one segment for now
         """
         segs=[]
-        foogi=self.get_nibnode_by_time(starttime)
+        foogi=self.get_node_by_time(starttime)
         if foogi==None:
-            if starttime<self.start.nib.clock<=endtime:
-                myseg=[self.start.nib.clock,None]
+            if starttime<self.start.state.clock<=endtime:
+                myseg=[self.start.state.clock,None]
             else:
                 return []
         else:
             myseg=[starttime,None]
 
         last=self[-1]
-        myseg[1]=min(last.nib.clock,endtime)
+        myseg[1]=min(last.state.clock,endtime)
 
         segs+=[myseg]
         return segs

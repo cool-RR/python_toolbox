@@ -1,15 +1,15 @@
 import functools
-import nib
+import state
 import time
 
 """
 TODO: in radiation style simulations, how will the simulator know
 the history of the particles' movements? Two options. Either
-traverse the nibtree, or have that information inside every
-nib. Which one should I choose?
+traverse the tree, or have that information inside every
+state. Which one should I choose?
 
 Or maybe give two options, one where the simulation gets the
-nib and one where it gets the nibnode.
+state and one where it gets the node.
 """
 
 
@@ -26,10 +26,10 @@ class SimulationCore(object):
     def show(self, *args, **kwargs):
         raise NotImplementedError
 
-    def make_plain_nib(self, *args, **kwargs):
+    def make_plain_state(self, *args, **kwargs):
         raise NotImplementedError
 
-    def make_random_nib(self, *args, **kwargs):
+    def make_random_state(self, *args, **kwargs):
         raise NotImplementedError
 
     def step(self, *args, **kwargs):
@@ -37,7 +37,7 @@ class SimulationCore(object):
 
 
 
-class Playon(object):
+class Project(object):
     """
     initially each playon will be attached to a specific SimulationCore;
     later I'll make it able to use several SimulationCores
@@ -45,30 +45,30 @@ class Playon(object):
 
     def __init__(self,SimulationCoreclass):
         self.SimulationCore=SimulationCoreclass()
-        self.nibtree=nib.NibTree()
+        self.tree=state.Tree()
 
     def make_plain_root(self,*args,**kwargs):
-        nib=self.SimulationCore.make_plain_nib(*args,**kwargs)
-        nib._Nib__touched=True
-        return self.root_this_nib(nib)
+        state=self.SimulationCore.make_plain_state(*args,**kwargs)
+        state._State__touched=True
+        return self.root_this_state(state)
 
     def make_random_root(self,*args,**kwargs):
-        nib=self.SimulationCore.make_random_nib(*args,**kwargs)
-        nib._Nib__touched=True
-        return self.root_this_nib(nib)
+        state=self.SimulationCore.make_random_state(*args,**kwargs)
+        state._State__touched=True
+        return self.root_this_state(state)
 
-    def root_this_nib(self,nib):
-        return self.nibtree.add_nib(nib)
+    def root_this_state(self,state):
+        return self.tree.add_state(state)
 
-    def step(self,sourcenibnode,t=1):
-        newnib=self.SimulationCore.step(sourcenibnode.nib,t)
-        return self.nibtree.add_nib(newnib,sourcenibnode)
+    def step(self,sourcenode,t=1):
+        newstate=self.SimulationCore.step(sourcenode.state,t)
+        return self.tree.add_state(newstate,sourcenode)
 
-    def multistep(self,sourcenibnode,t=1,steps=1):
-        mynibnode=sourcenibnode
+    def multistep(self,sourcenode,t=1,steps=1):
+        mynode=sourcenode
         for i in range(steps):
-            mynibnode=self.step(mynibnode,t)
-        return mynibnode
+            mynode=self.step(mynode,t)
+        return mynode
 
 
 

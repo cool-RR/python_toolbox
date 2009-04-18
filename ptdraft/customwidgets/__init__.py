@@ -1,2 +1,2 @@
 from timeline import *
-from nibtreebrowser import *
+from treebrowser import *

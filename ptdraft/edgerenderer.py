@@ -26,7 +26,7 @@ class EdgeRenderer(Process):
         self.work_queue=Queue()
 
     def set_priority(self,priority):
-        assert priority in range(6)
+        assert priority in [0,1,2,3,4,5]
         set_process_priority(self.pid,priority)
 
     def run(self):
@@ -38,7 +38,7 @@ class EdgeRenderer(Process):
         """
         mylife=life.Life()
 
-        current=self.starter.nib
+        current=self.starter
         order=None
         while True:
             next=mylife.step(current)
