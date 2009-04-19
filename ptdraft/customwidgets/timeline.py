@@ -14,6 +14,9 @@ class Timeline(wx.Panel):
         self.start=float(start)
 
         self.screenify=lambda x: (x-self.start)*self.zoom
+        self.unscreenify=lambda x: (x/self.zoom)+self.start
+        self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse_event)
+
 
 
 
@@ -82,6 +85,7 @@ class Timeline(wx.Panel):
 
 
 
+
     def draw_small_numbers(self,dc,numbers):
         dc.SetPen(wx.Pen('#000000'))
         dc.SetFont(wx.Font(9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, 'Courier 10 Pitch'))
@@ -97,6 +101,14 @@ class Timeline(wx.Panel):
             dc.DrawLine(number, 0, number, 9)
             width, height = dc.GetTextExtent(str(number))
             dc.DrawText(str(number), number-width/2, 12)
+
+
+    def on_mouse_event(self,e):
+        if e.LeftUp():
+            thing=e.GetPositionTuple()[0]
+            node=self.path.get_node_by_time(self.unscreenify(thing))
+            if node!=None:
+                self.gui_project.make_active_node(node)
 
 
     def OnSize(self,e):
