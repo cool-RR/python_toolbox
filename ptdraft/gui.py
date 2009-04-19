@@ -1,17 +1,15 @@
 import wx
 import os
 from misc.stringsaver import s2i,i2s
-from misc.dumpqueue import dump_queue
 import time
 from core import *
 import simulations.life.life as life
 import simulations.life.lifegui as lifegui
 import threading
-from edgerenderer import EdgeRenderer
 import random
 
-#import psyco
-#psyco.full()
+import psyco
+psyco.full()
 
 
 
@@ -81,15 +79,20 @@ class myframe(wx.Frame):
 
 
         self.mygui=lifegui.LifeGuiProject(Project(life.Life),self.thing)
-        self.root=self.mygui.project.make_random_root(20,40)
+        self.root=self.mygui.project.make_random_root(28,120)
         self.path=state.Path(self.mygui.project.tree,self.root)
-        self.timeline.set_path(self.path)
-        self.tree_browser.set_tree(self.mygui.project.tree)
-        self.edges_to_render=[self.root]
-        self.workers={}
+
+        self.timeline.path=self.path
+        self.timeline.gui_project=self.mygui
+
+        self.tree_browser.tree=self.mygui.project.tree
+        self.tree_browser.gui_project=self.mygui
+
+        self.mygui.project.edges_to_render=[self.root]
+        self.mygui.make_active_node(self.root)
 
 
-        self.Bind(wx.EVT_IDLE,self.manage_workers)
+        self.Bind(wx.EVT_IDLE,self.manage_workers_wrapper)
 
         self.Show()
         #self.draw()
@@ -106,49 +109,8 @@ class myframe(wx.Frame):
     def exit(self,e):
         self.Close()
 
-    def manage_workers(self,e=None):
-        for edge in self.workers:
-            if not (edge in self.edges_to_render):
-                #TAKE WORK FROM WORKER AND RETIRE IT, ALSO DELETE FROM self.workers
-                worker=self.workers[edge]
-                result=dump_queue(worker.work_queue)
-
-                worker.message_queue.put("Terminate")
-
-                current=edge
-                for state in result:
-                    current=self.mygui.project.tree.add_state(state,parent=current)
-
-                del self.workers[edge]
-                worker.join()
-
-
-
-
-        for edge in self.edges_to_render[:]:
-            if self.workers.has_key(edge):
-                #TAKE WORK FROM WORKER, CHANGE EDGE
-                #IMPLEMENT INTO TREE
-                worker=self.workers[edge]
-                result=dump_queue(worker.work_queue)
-
-
-                current=edge
-                for state in result:
-                    current=self.mygui.project.tree.add_state(state,parent=current)
-
-                self.edges_to_render.remove(edge)
-                self.edges_to_render.append(current)
-
-                del self.workers[edge]
-                self.workers[current]=worker
-
-            else:
-                #CREATE WORKER
-                thing=self.workers[edge]=EdgeRenderer(edge.state)
-                thing.start()
-
-
+    def manage_workers_wrapper(self,e=None):
+        self.mygui.project.manage_workers()
         self.Refresh()
         try:
             e.RequestMore()
@@ -160,5 +122,5 @@ class myframe(wx.Frame):
 if __name__=="__main__":
     app = wx.PySimpleApp()
     import customwidgets
-    fugi=myframe(None,-1,":)",size=(600,600))
+    fugi=myframe(None,-1,"Title",size=(600,600))
     app.MainLoop()

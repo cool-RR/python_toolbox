@@ -3,29 +3,23 @@ import math
 from misc.getlines import get_lines as get_lines
 
 class Timeline(wx.Panel):
-    def __init__(self,parent,id,*args,**kwargs):
+    def __init__(self,parent,id,gui_project=None,path=None,zoom=1.0,start=0.0,*args,**kwargs):
         wx.Panel.__init__(self, parent, id, size=(-1,100), style=wx.SUNKEN_BORDER)
         self.Bind(wx.EVT_PAINT, self.OnPaint)
         self.Bind(wx.EVT_SIZE, self.OnSize)
-        try:
-            self.zoom=float(kwargs["zoom"])
-        except:
-            self.zoom=1.0
 
-        try:
-            self.start=float(kwargs["start"])
-        except:
-            self.start=0.0
-
-        try:
-            self.path=kwargs["path"]
-        except:
-            self.path=None
-
-    def set_path(self,path):
         self.path=path
+        self.gui_project=gui_project
+        self.zoom=float(zoom)
+        self.start=float(start)
+
+        self.screenify=lambda x: (x-self.start)*self.zoom
+
+
 
     def OnPaint(self,e):
+        if self.gui_project==None or self.path==None:
+            return
         (w,h)=self.GetSize()
         start=self.start
         end=self.start+w/self.zoom
@@ -36,7 +30,40 @@ class Timeline(wx.Panel):
             dc.SetPen(wx.Pen('#000000'))
             dc.SetBrush(wx.Brush('#FFFFB8'))
             for seg in segs:
-                dc.DrawRectangle((seg[0]-self.start)*self.zoom,0,(seg[1]-self.start)*self.zoom,h-4)
+                dc.DrawRectangle(self.screenify(seg[0]),0,self.screenify(seg[1]-seg[0]),h-4)
+
+        active=self.gui_project.active_node
+        if active!=None:
+            active_start=active.state.clock
+            try:
+                after_active=self.path.next_node(active)
+                active_end=after_active.state.clock
+            except IndexError:
+                after_active=None
+                active_end=active_start
+            active_inside=False
+            screen_active_start=start
+            screen_active_end=end
+
+
+            if start<=active_start<=end:
+                active_inside=True
+                screen_active_start=self.screenify(active_start)
+
+            if start<=active_end<=end:
+                active_inside=True
+                screen_active_end=self.screenify(active_end)
+
+
+
+            if active_inside==True:
+                dc.SetBrush(wx.Brush('#FF9933'))
+                dc.SetPen(wx.Pen('#000000', 1, wx.TRANSPARENT))
+                dc.DrawRectangle(math.floor(screen_active_start),1,math.ceil(screen_active_end-screen_active_start),h-6)
+
+
+
+
 
         #Draw ruler
         min=15

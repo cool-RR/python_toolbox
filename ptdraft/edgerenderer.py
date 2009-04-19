@@ -1,17 +1,24 @@
 """
 
-In the future, we may want the EdgeRenderer to receive a
+todo: In the future, we may want the EdgeRenderer to receive a
 copy of the SimulationCore object. We will have to implement
 a copy() method on SimulationCore and pass it on to the new process.
+
+Dude: are we actually passing a State object to the new process?
+I think that implies that we should make sure that
+it's picklable/serializable/whatever
+
+todo maybe: put something on edgerenderer that will shut it off
+if the main program is killed
 
 """
 
 
 import wx
 from multiprocessing import *
-from core import *
-import simulations.life.life as life
-import simulations.life.lifegui as lifegui
+#from core import *
+#import simulations.life.life as life
+#import simulations.life.lifegui as lifegui
 import threading
 from misc.processpriority import set_process_priority
 
@@ -36,6 +43,8 @@ class EdgeRenderer(Process):
         import core
         import wx
         """
+        import simulations.life.life as life
+        import simulations.life.lifegui as lifegui
         mylife=life.Life()
 
         current=self.starter

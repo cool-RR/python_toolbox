@@ -1,6 +1,8 @@
 import functools
 import state
 import time
+from edgerenderer import EdgeRenderer
+from misc.dumpqueue import dump_queue
 
 """
 TODO: in radiation style simulations, how will the simulator know
@@ -46,6 +48,8 @@ class Project(object):
     def __init__(self,SimulationCoreclass):
         self.SimulationCore=SimulationCoreclass()
         self.tree=state.Tree()
+        self.workers={} # A dict that maps edges that should be worked on to workers
+        self.edges_to_render=[]
 
     def make_plain_root(self,*args,**kwargs):
         state=self.SimulationCore.make_plain_state(*args,**kwargs)
@@ -70,6 +74,43 @@ class Project(object):
             mynode=self.step(mynode,t)
         return mynode
 
+    def manage_workers(self,*args,**kwargs):
+        for edge in self.workers:
+            if not (edge in self.edges_to_render):
+                #TAKE WORK FROM WORKER AND RETIRE IT, ALSO DELETE FROM self.workers
+                worker=self.workers[edge]
+                result=dump_queue(worker.work_queue)
+
+                worker.message_queue.put("Terminate")
+
+                current=edge
+                for state in result:
+                    current=self.tree.add_state(state,parent=current)
+
+                del self.workers[edge]
+                worker.join() #sure?
+
+        for edge in self.edges_to_render[:]:
+            if self.workers.has_key(edge):
+                #TAKE WORK FROM WORKER, CHANGE EDGE
+                #IMPLEMENT INTO TREE
+                worker=self.workers[edge]
+                result=dump_queue(worker.work_queue)
+
+                current=edge
+                for state in result:
+                    current=self.tree.add_state(state,parent=current)
+
+                self.edges_to_render.remove(edge)
+                self.edges_to_render.append(current)
+
+                del self.workers[edge]
+                self.workers[current]=worker
+
+            else:
+                #CREATE WORKER
+                thing=self.workers[edge]=EdgeRenderer(edge.state)
+                thing.start()
 
 
 

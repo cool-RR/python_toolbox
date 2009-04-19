@@ -1,6 +1,6 @@
 import life
 import wx
-from guiplayon import *
+from guiproject import *
 
 class LifeGuiProject(GuiProject):
     def __init__(self,*args,**kwargs):

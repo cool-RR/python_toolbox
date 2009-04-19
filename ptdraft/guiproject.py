@@ -10,6 +10,21 @@ class GuiProject(object):
         self.project=project
         self.window=window
 
+        self.active_node=None #This property contains the node that is currently displayed onscreen
+
+        self.selected=None
+        """
+        This property will tell which nodes are "selected". I'm not sure how I'll implement this,
+        maybe a NodeSelection class.
+        """
+
+    def make_active_node(self,node):
+        """
+        Makes "node" the active node
+        """
+        self.show_state(node.state)
+        self.active_node=node
+
     def show_start_end(self,start,end,delay):
         self.show_movie(self.project.tree.get_movie(start,end), delay)
 
@@ -21,6 +36,6 @@ class GuiProject(object):
     def play_path(self,path,delay):
         if path.start==None:
             return None
-        self.show_state(path.start.state)
+        self.make_active_node(path.start)
         wx.FutureCall(delay*1000,functools.partial(self.play_path,path.cut_off_first(),delay))
 

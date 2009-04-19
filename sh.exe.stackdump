@@ -1,6 +1,6 @@
 MSYS-1.0.11 Build:2008-06-30 08:37
 Exception: STATUS_ACCESS_VIOLATION at eip=710649E3
-eax=7FFDE000 ebx=00000000 ecx=00000000 edx=0022EE24 esi=00000000 edi=0022EDB8
+eax=7FFDF000 ebx=00000000 ecx=00000000 edx=0022EE24 esi=00000000 edi=0022EDB8
 ebp=0022E928 esp=0022E904 program=C:\Program Files\Git\bin\sh.exe
 cs=001B ds=0023 es=0023 fs=003B gs=0000 ss=0023
 Stack trace:
