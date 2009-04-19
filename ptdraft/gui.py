@@ -12,7 +12,6 @@ import random
 #psyco.full()
 
 
-
 """
 class time_to_talk_with_manager_event(wx.PyCommandEvent):
     pass
@@ -80,7 +79,7 @@ class myframe(wx.Frame):
 
 
         self.mygui=lifegui.LifeGuiProject(Project(life.Life),self.thing)
-        self.root=self.mygui.project.make_random_root(28,120)
+        self.root=self.mygui.project.make_random_root(28,40)
         self.path=state.Path(self.mygui.project.tree,self.root)
         self.mygui.path=self.path
 

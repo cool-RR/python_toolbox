@@ -2,9 +2,12 @@ import wx
 import math
 from misc.getlines import get_lines as get_lines
 
+
+
+
 class Timeline(wx.Panel):
     def __init__(self,parent,id,gui_project=None,path=None,zoom=1.0,start=0.0,*args,**kwargs):
-        wx.Panel.__init__(self, parent, id, size=(-1,100), style=wx.SUNKEN_BORDER)
+        wx.Panel.__init__(self, parent, id, size=(-1,40), style=wx.SUNKEN_BORDER)
         self.Bind(wx.EVT_PAINT, self.OnPaint)
         self.Bind(wx.EVT_SIZE, self.OnSize)
 
@@ -18,9 +21,15 @@ class Timeline(wx.Panel):
         self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse_event)
 
 
+        self.was_playing_before_mouse_click=None
+        self.active_triangle_width=13 # Must be odd number
+
+
 
 
     def OnPaint(self,e):
+        occupied_region=wx.Region()
+
         if self.gui_project==None or self.path==None:
             return
         (w,h)=self.GetSize()
@@ -33,7 +42,9 @@ class Timeline(wx.Panel):
             dc.SetPen(wx.Pen('#000000'))
             dc.SetBrush(wx.Brush('#FFFFB8'))
             for seg in segs:
-                dc.DrawRectangle(self.screenify(seg[0]),0,self.screenify(seg[1]-seg[0]),h-4)
+                sseg=[self.screenify(thing) for thing in seg]
+                dc.DrawRectangle(sseg[0],0,sseg[1]-sseg[0],h-4)
+                occupied_region=wx.Region(sseg[0]+1,1,sseg[1]-sseg[0]-2,h-4-2)
 
         active=self.gui_project.active_node
         if active!=None:
@@ -58,12 +69,14 @@ class Timeline(wx.Panel):
                 screen_active_end=self.screenify(active_end)
 
 
-
+            dc.SetBrush(wx.Brush('#FF9933'))
+            dc.SetPen(wx.Pen('#000000', 1, wx.TRANSPARENT))
             if active_inside==True:
-                dc.SetBrush(wx.Brush('#FF9933'))
-                dc.SetPen(wx.Pen('#000000', 1, wx.TRANSPARENT))
                 dc.DrawRectangle(math.floor(screen_active_start),1,math.ceil(screen_active_end-screen_active_start),h-6)
-
+            triangle_half_width=math.ceil(self.active_triangle_width/2.0)
+            dc.SetClippingRegionAsRegion(occupied_region)
+            dc.DrawPolygon(((screen_active_start-triangle_half_width,h-5),(screen_active_start+triangle_half_width,h-5),(screen_active_start,h-5-triangle_half_width)))
+            dc.DestroyClippingRegion()
 
 
 
@@ -104,11 +117,35 @@ class Timeline(wx.Panel):
 
 
     def on_mouse_event(self,e):
+        #print(dir(e))
+        if e.LeftDClick():
+            self.gui_project.toggle_playing()
         if e.LeftDown():
+            thing=e.GetPositionTuple()[0]
+            node=self.path.get_node_by_time(self.unscreenify(thing))
+
+            self.was_playing_before_mouse_click=self.gui_project.is_playing
+            if self.was_playing_before_mouse_click:
+                self.gui_project.stop_playing()
+
+            if node!=None:
+                self.gui_project.make_active_node(node)
+
+
+        if e.LeftIsDown():
             thing=e.GetPositionTuple()[0]
             node=self.path.get_node_by_time(self.unscreenify(thing))
             if node!=None:
                 self.gui_project.make_active_node(node)
+        if e.LeftUp():
+            if self.was_playing_before_mouse_click:
+                self.gui_project.start_playing()
+                self.was_playing_before_mouse_click=False
+        if e.Leaving():
+            if self.was_playing_before_mouse_click:
+                self.gui_project.start_playing()
+                self.was_playing_before_mouse_click=False
+
 
 
     def OnSize(self,e):

@@ -19,7 +19,7 @@ class GuiProject(object):
         maybe a NodeSelection class.
         """
 
-        self.playing=False
+        self.is_playing=False
 
         self.delay=0.05 # Should be a mechanism for setting that
 
@@ -32,7 +32,7 @@ class GuiProject(object):
         Makes "node" the active node
         """
         was_playing=False
-        if assuring_no_jump==False and self.playing==True:
+        if assuring_no_jump==False and self.is_playing==True:
             self.stop_playing()
             was_playing=True
         self.show_state(node.state)
@@ -41,17 +41,24 @@ class GuiProject(object):
             self.start_playing()
 
     def start_playing(self):
-        self.playing=True
+        if self.is_playing==True:
+            return
+        self.is_playing=True
         self.play_next(self.active_node)
-        print("boobs")
 
 
     def stop_playing(self):
-        self.playing=False
-        if self.timer_for_playing!=None:
-            self.timer_for_playing.Stop()
+        if self.is_playing==False:
+            return
+        self.is_playing=False
+        self.timer_for_playing.Stop()
+
+
+    def toggle_playing(self):
+        if self.is_playing:
+            return self.stop_playing()
         else:
-            warnings.warn("Tried to stop playing though wasn't playing")
+            return self.start_playing()
 
 
     def play_next(self,node):

@@ -14,3 +14,4 @@ class LifeGuiProject(GuiProject):
 
     def show_state(self,state):
         self.mytextctrl.SetValue(str(state.board))
+

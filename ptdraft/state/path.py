@@ -103,7 +103,8 @@ class Path(object):
         """
         low=self.start
         if time<low.state.clock:
-            raise StandardError("You looked for a node with a clock reading of "+str(time)+", while the earliest node had a clock reading of "+str(self.start.state.clock))
+            #raise StandardError("You looked for a node with a clock reading of "+str(time)+", while the earliest node had a clock reading of "+str(self.start.state.clock))
+            return None
         """
         second=self[self.start]
         guessedrate=second.nib.time-self.start.nib.time

@@ -94,7 +94,10 @@ class NiftyPaintDC(wx.PaintDC):
         assuming the tree has only one root!
         """
         self.active_node=self.gui_project.active_node
-        self.active_soft_block=self.active_node.soft_get_block()
+        try:
+            self.active_soft_block=self.active_node.soft_get_block()
+        except AttributeError:
+            self.active_soft_block=None
         size=self.draw_sub_tree((connector_length,connector_length),tree,tree.roots[0].soft_get_block())
         (width,height)=vectorish.add(size,(connector_length,connector_length))
         return (width,height)
