@@ -8,8 +8,8 @@ import simulations.life.lifegui as lifegui
 import threading
 import random
 
-import psyco
-psyco.full()
+#import psyco
+#psyco.full()
 
 
 
@@ -39,12 +39,13 @@ class myframe(wx.Frame):
 
         stuffmenu=wx.Menu()
         stuffmenu.Append(s2i("Play"),"&Play","")
+        stuffmenu.Append(s2i("Stop"),"&Stop","")
 
 
         wx.EVT_MENU(self,s2i("Exit"),self.exit)
 
         wx.EVT_MENU(self,s2i("Play"),self.play)
-
+        wx.EVT_MENU(self,s2i("Stop"),self.stop)
 
 
         menubar=wx.MenuBar()
@@ -81,6 +82,7 @@ class myframe(wx.Frame):
         self.mygui=lifegui.LifeGuiProject(Project(life.Life),self.thing)
         self.root=self.mygui.project.make_random_root(28,120)
         self.path=state.Path(self.mygui.project.tree,self.root)
+        self.mygui.path=self.path
 
         self.timeline.path=self.path
         self.timeline.gui_project=self.mygui
@@ -99,7 +101,11 @@ class myframe(wx.Frame):
 
 
     def play(self,e):
-        self.mygui.play_path(self.path,0.05)
+        self.mygui.start_playing()
+
+    def stop(self,e):
+        self.mygui.stop_playing()
+
 
 
     def draw(self,e=None):
