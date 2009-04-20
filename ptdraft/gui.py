@@ -75,7 +75,7 @@ class myframe(wx.Frame):
         wx.EVT_MENU(self,s2i("Play"),self.play)
         wx.EVT_MENU(self,s2i("Stop"),self.stop)
 
-        nodemenu=wx.Menu()
+        self.nodemenu=nodemenu=wx.Menu()
         nodemenu.Append(s2i("Fork by editing"),"Fork by &editing"," Create a new edited node with the current node as the template")
         nodemenu.Append(s2i("Fork naturally"),"Fork &naturally"," Run the simulation from this node")
         nodemenu.AppendSeparator()

@@ -119,7 +119,7 @@ class Timeline(wx.Panel):
         #print(dir(e))
         if e.LeftDClick():
             self.gui_project.toggle_playing()
-        if e.LeftDown():
+        if e.LeftDown():# or e.RightDown():
             thing=e.GetPositionTuple()[0]
             node=self.gui_project.path.get_node_by_time(self.unscreenify(thing))
 
