@@ -103,7 +103,7 @@ class NiftyPaintDC(wx.PaintDC):
 
 
 class TreeBrowser(wx.ScrolledWindow):
-    def __init__(self,parent,id,gui_project=None,tree=None,*args,**kwargs):
+    def __init__(self,parent,id,gui_project=None,*args,**kwargs):
         wx.ScrolledWindow.__init__(self, parent, id, size=(-1,200),style=wx.SUNKEN_BORDER)
         self.SetScrollRate(20,20)
         #self.sizer=wx.BoxSizer(wx.VERTICAL)
@@ -120,12 +120,11 @@ class TreeBrowser(wx.ScrolledWindow):
         self.panel.Bind(wx.EVT_PAINT, self.OnPaint)
         self.panel.Bind(wx.EVT_SIZE, self.OnSize)
 
-        self.tree=tree
         self.gui_project=gui_project
 
 
     def OnPaint(self,e):
-        if self.gui_project==None or self.tree==None:
+        if self.gui_project==None or self.gui_project.project.tree==None:
             return
 
 
@@ -133,7 +132,7 @@ class TreeBrowser(wx.ScrolledWindow):
         pen.SetCap(wx.CAP_PROJECTING)
         pen.SetJoin(wx.JOIN_ROUND)
         dc = NiftyPaintDC(self.panel,self.gui_project)
-        (width,height)=dc.draw_tree(self.tree)
+        (width,height)=dc.draw_tree(self.gui_project.project.tree)
         self.SetVirtualSize((width,height))
 
 

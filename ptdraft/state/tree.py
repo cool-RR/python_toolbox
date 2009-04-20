@@ -137,14 +137,11 @@ class Tree(object):
     maybe todo: make method fastaddstate (or fastaddnode)
 
     """
-    def __init__(self,create_first_path=True):
+    def __init__(self):
         self.nodes=[] # A list for containing all the nodes in the tree.
         self.roots=[] # A list of roots. Root = node without parent
-        self.paths=[] # A list of paths. See class Path for more info.
-        """
-        if createfirstpath==True:
-            Path(self)
-        """
+        #self.paths=[] # A list of paths. See class Path for more info.
+
 
     def new_natural_state(self,parent):
         """

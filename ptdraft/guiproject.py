@@ -25,7 +25,37 @@ class GuiProject(object):
 
         self.timer_for_playing=None
 
+        self.paths=[]
+        """
+        Contains a list of paths
+        """
+
         self.path=None
+        """
+        The active path
+        """
+
+    def set_active_path(self,path):
+        if not path in self.paths:
+            self.paths.append(path)
+        self.path=path
+
+    def make_plain_root(self,*args,**kwargs):
+        root=self.project.make_plain_root(*args,**kwargs)
+        if self.path==None:
+            self.path=state.Path(self.project.tree,root)
+        else:
+            self.path.start=root
+        return root
+
+    def make_random_root(self,*args,**kwargs):
+        root=self.project.make_random_root(*args,**kwargs)
+        if self.path==None:
+            self.path=state.Path(self.project.tree,root)
+        else:
+            self.path.start=root
+        return root
+
 
     def make_active_node(self,node,assuring_no_jump=False):
         """
@@ -65,10 +95,10 @@ class GuiProject(object):
         self.make_active_node(node,assuring_no_jump=True)
         self.timer_for_playing=wx.FutureCall(self.delay*1000,functools.partial(self.play_next,self.path.next_node(node)))
 
-    def fork_naturally(self,*args,**kwargs):
+    def step_from_active_node(self,*args,**kwargs):
         new_node=self.project.step(self.active_node)
 
-    def fork_by_editing(self,*args,**kwargs):
+    def edit_from_active_node(self,*args,**kwargs):
 
         pass
 

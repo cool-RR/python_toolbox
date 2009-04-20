@@ -49,11 +49,9 @@ class myframe(wx.Frame):
 
 
         self.mygui=lifegui.LifeGuiProject(Project(life.Life),self.thing)
-        self.root=self.mygui.project.make_random_root(28,40)
-        self.path=state.Path(self.mygui.project.tree,self.root)
-        self.mygui.path=self.path
+        self.root=self.mygui.make_random_root(28,40)
 
-        self.timeline.path=self.path
+        self.timeline.path=self.mygui.path
         self.timeline.gui_project=self.mygui
 
         self.tree_browser.tree=self.mygui.project.tree
@@ -83,8 +81,8 @@ class myframe(wx.Frame):
         nodemenu.AppendSeparator()
         nodemenu.Append(s2i("Delete..."),"&Delete..."," Delete the node")
 
-        wx.EVT_MENU(self,s2i("Fork by editing"),self.mygui.fork_by_editing)
-        wx.EVT_MENU(self,s2i("Fork naturally"),self.mygui.fork_naturally)
+        wx.EVT_MENU(self,s2i("Fork by editing"),self.mygui.edit_from_active_node)
+        wx.EVT_MENU(self,s2i("Fork naturally"),self.mygui.step_from_active_node)
 
 
 

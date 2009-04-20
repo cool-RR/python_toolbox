@@ -6,12 +6,11 @@ from misc.getlines import get_lines as get_lines
 
 
 class Timeline(wx.Panel):
-    def __init__(self,parent,id,gui_project=None,path=None,zoom=1.0,start=0.0,*args,**kwargs):
+    def __init__(self,parent,id,gui_project=None,zoom=1.0,start=0.0,*args,**kwargs):
         wx.Panel.__init__(self, parent, id, size=(-1,40), style=wx.SUNKEN_BORDER)
         self.Bind(wx.EVT_PAINT, self.OnPaint)
         self.Bind(wx.EVT_SIZE, self.OnSize)
 
-        self.path=path
         self.gui_project=gui_project
         self.zoom=float(zoom)
         self.start=float(start)
@@ -30,15 +29,15 @@ class Timeline(wx.Panel):
     def OnPaint(self,e):
         occupied_region=wx.Region()
 
-        if self.gui_project==None or self.path==None:
+        if self.gui_project==None or self.gui_project.path==None:
             return
         (w,h)=self.GetSize()
         start=self.start
         end=self.start+w/self.zoom
         dc = wx.PaintDC(self)
         #dc.DrawRectangle(3,3,50,90)
-        if self.path!=None: #Draw rectangle for renedered segments
-            segs=self.path.get_rendered_segments(start,end)
+        if self.gui_project.path!=None: #Draw rectangle for renedered segments
+            segs=self.gui_project.path.get_rendered_segments(start,end)
             dc.SetPen(wx.Pen('#000000'))
             dc.SetBrush(wx.Brush('#FFFFB8'))
             for seg in segs:
@@ -50,7 +49,7 @@ class Timeline(wx.Panel):
         if active!=None:
             active_start=active.state.clock
             try:
-                after_active=self.path.next_node(active)
+                after_active=self.gui_project.path.next_node(active)
                 active_end=after_active.state.clock
             except IndexError:
                 after_active=None
@@ -122,7 +121,7 @@ class Timeline(wx.Panel):
             self.gui_project.toggle_playing()
         if e.LeftDown():
             thing=e.GetPositionTuple()[0]
-            node=self.path.get_node_by_time(self.unscreenify(thing))
+            node=self.gui_project.path.get_node_by_time(self.unscreenify(thing))
 
             self.was_playing_before_mouse_click=self.gui_project.is_playing
             if self.was_playing_before_mouse_click:
@@ -134,7 +133,7 @@ class Timeline(wx.Panel):
 
         if e.LeftIsDown():
             thing=e.GetPositionTuple()[0]
-            node=self.path.get_node_by_time(self.unscreenify(thing))
+            node=self.gui_project.path.get_node_by_time(self.unscreenify(thing))
             if node!=None:
                 self.gui_project.make_active_node(node)
         if e.LeftUp():
