@@ -7,6 +7,7 @@ import simulations.life.life as life
 import simulations.life.lifegui as lifegui
 import threading
 import random
+import functools
 
 #import psyco
 #psyco.full()
@@ -25,38 +26,7 @@ class myframe(wx.Frame):
     def __init__(self,*args,**keywords):
         wx.Frame.__init__(self,*args,**keywords)
         self.SetDoubleBuffered(True)
-        """
-        self.nib_icon=wx.Bitmap("images\\circle.png", wx.BITMAP_TYPE_ANY)
-        self.touched_nib_icon=wx.Bitmap("images\\star.png", wx.BITMAP_TYPE_ANY)
-        """
 
-
-        filemenu=wx.Menu()
-        filemenu.Append(s2i("Open"),"&Open"," Open a file")
-        filemenu.AppendSeparator()
-        filemenu.Append(s2i("Exit"),"E&xit"," Close the program")
-
-        stuffmenu=wx.Menu()
-        stuffmenu.Append(s2i("Play"),"&Play","")
-        stuffmenu.Append(s2i("Stop"),"&Stop","")
-
-
-        wx.EVT_MENU(self,s2i("Exit"),self.exit)
-
-        wx.EVT_MENU(self,s2i("Play"),self.play)
-        wx.EVT_MENU(self,s2i("Stop"),self.stop)
-
-
-        menubar=wx.MenuBar()
-        menubar.Append(filemenu,"&File")
-        menubar.Append(stuffmenu,"&Stuff")
-        self.SetMenuBar(menubar)
-        self.CreateStatusBar()
-        toolbar = self.CreateToolBar()
-        toolbar.AddSimpleTool(s2i("Button New"), wx.Bitmap("images\\new.png", wx.BITMAP_TYPE_ANY),"New", " Create a new file")
-        toolbar.AddSimpleTool(s2i("Button Open"), wx.Bitmap("images\\open.png", wx.BITMAP_TYPE_ANY),"Open", " Open a file")
-        toolbar.AddSimpleTool(s2i("Button Save"), wx.Bitmap("images\\save.png", wx.BITMAP_TYPE_ANY),"Save", " Save to file")
-        toolbar.Realize()
 
         self.thing=wx.ScrolledWindow(self,-1)
         self.timeline=customwidgets.Timeline(self,-1)
@@ -94,6 +64,46 @@ class myframe(wx.Frame):
 
 
         self.Bind(wx.EVT_IDLE,self.manage_workers_wrapper)
+
+        filemenu=wx.Menu()
+        filemenu.Append(s2i("Exit"),"E&xit"," Close the program")
+
+        wx.EVT_MENU(self,s2i("Exit"),self.exit)
+
+        stuffmenu=wx.Menu()
+        stuffmenu.Append(s2i("Play"),"&Play","")
+        stuffmenu.Append(s2i("Stop"),"&Stop","")
+
+        wx.EVT_MENU(self,s2i("Play"),self.play)
+        wx.EVT_MENU(self,s2i("Stop"),self.stop)
+
+        nodemenu=wx.Menu()
+        nodemenu.Append(s2i("Fork by editing"),"Fork by &editing"," Create a new edited node with the current node as the template")
+        nodemenu.Append(s2i("Fork naturally"),"Fork &naturally"," Run the simulation from this node")
+        nodemenu.AppendSeparator()
+        nodemenu.Append(s2i("Delete..."),"&Delete..."," Delete the node")
+
+        wx.EVT_MENU(self,s2i("Fork by editing"),self.mygui.fork_by_editing)
+        wx.EVT_MENU(self,s2i("Fork naturally"),self.mygui.fork_naturally)
+
+
+
+
+
+
+
+
+        menubar=wx.MenuBar()
+        menubar.Append(filemenu,"&File")
+        menubar.Append(stuffmenu,"&Stuff")
+        menubar.Append(nodemenu,"&Node")
+        self.SetMenuBar(menubar)
+        self.CreateStatusBar()
+        toolbar = self.CreateToolBar()
+        toolbar.AddSimpleTool(s2i("Button New"), wx.Bitmap("images\\new.png", wx.BITMAP_TYPE_ANY),"New", " Create a new file")
+        toolbar.AddSimpleTool(s2i("Button Open"), wx.Bitmap("images\\open.png", wx.BITMAP_TYPE_ANY),"Open", " Open a file")
+        toolbar.AddSimpleTool(s2i("Button Save"), wx.Bitmap("images\\save.png", wx.BITMAP_TYPE_ANY),"Save", " Save to file")
+        toolbar.Realize()
 
         self.Show()
         #self.draw()

@@ -231,7 +231,7 @@ class Tree(object):
                     if number==1:
                         parent.block.add([mynode])
                     else:
-                        parent.block.split(parent.block.list.index[i+1])
+                        parent.block.split(parent.block.list[ind+1])
 
                 else:
                     if len(parent.children)==1 and parent.state.is_touched()==False:

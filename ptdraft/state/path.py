@@ -38,7 +38,7 @@ class Path(object):
             raise StandardError("Tried to get len of path which has no start node")
 
         result=0
-        for j in self:
+        for j in self.iterate_blockwise():
             result+=len(j)
 
         return result
@@ -55,11 +55,27 @@ class Path(object):
             except IndexError:
                 raise StopIteration("Ran out of tree")
 
+    def iterate_blockwise(self):
+        if self.start==None:
+            raise StopIteration
+        yield self.start.soft_get_block()
+        current=self.start.soft_get_block()
+        while True:
+            try:
+                current=self.next_node(current).soft_get_block()
+                yield current
+            except IndexError:
+                raise StopIteration("Ran out of tree")
+
+
     def next_node(self,i):
         if self.decisions.has_key(i):
             return self.decisions[i]
         else:
-            kids=i.children
+            if isinstance(i,Block):
+                kids=i[-1].children
+            else:
+                kids=i.children
             if len(kids)>0:
                 if len(kids)>1:
                     warnings.warn("This path has come across a junction for which it has no information! Guessing.")

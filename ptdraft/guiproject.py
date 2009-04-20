@@ -65,6 +65,21 @@ class GuiProject(object):
         self.make_active_node(node,assuring_no_jump=True)
         self.timer_for_playing=wx.FutureCall(self.delay*1000,functools.partial(self.play_next,self.path.next_node(node)))
 
+    def fork_naturally(self,*args,**kwargs):
+        new_node=self.project.step(self.active_node)
+
+    def fork_by_editing(self,*args,**kwargs):
+
+        pass
+
+    """
+
+    def play_path(self,path,delay):
+        if path.start==None:
+            return None
+        self.make_active_node(path.start)
+        wx.FutureCall(delay*1000,functools.partial(self.play_path,path.cut_off_first(),delay))
+
 
     def show_start_end(self,start,end,delay):
         self.show_movie(self.project.tree.get_movie(start,end), delay)
@@ -73,10 +88,4 @@ class GuiProject(object):
         self.show_state(movie[0].state)
         if len(movie)>1:
             wx.FutureCall(delay*1000,functools.partial(self.show_movie,movie[1:],delay))
-
-    def play_path(self,path,delay):
-        if path.start==None:
-            return None
-        self.make_active_node(path.start)
-        wx.FutureCall(delay*1000,functools.partial(self.play_path,path.cut_off_first(),delay))
-
+    """

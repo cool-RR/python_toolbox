@@ -63,9 +63,6 @@ class NiftyPaintDC(wx.PaintDC):
             self.DrawBitmapPoint(second_bitmap,point,useMask=True)
             self.DestroyClippingRegion()
 
-
-
-
         else:
             bitmap=self.elements[type]
             self.DrawBitmapPoint(bitmap,point,useMask=True)
@@ -111,7 +108,7 @@ class TreeBrowser(wx.ScrolledWindow):
         self.SetScrollRate(20,20)
         #self.sizer=wx.BoxSizer(wx.VERTICAL)
         #self.panel=wx.StaticBitmap(self,-1,wx.Bitmap("images\\snail.gif", wx.BITMAP_TYPE_ANY))#wx.Panel(self,-1,size=(-1,200))#wx.TextCtrl(self, -1, size=(-1,200), style=wx.TE_MULTILINE)
-        self.panel=wx.Panel(self,-1,size=(200,200))#wx.TextCtrl(self, -1, size=(-1,200), style=wx.TE_MULTILINE)
+        self.panel=wx.Panel(self,-1,size=(10000,200)) # todo: this 10000 size thing is a crappy hack
         #self.sizer.Add(self.panel,0)
         #self.SetSizer(self.sizer)
         #self.EnableScrolling(True, True)
