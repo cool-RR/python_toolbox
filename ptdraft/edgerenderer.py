@@ -11,6 +11,9 @@ it's picklable/serializable/whatever
 todo maybe: put something on edgerenderer that will shut it off
 if the main program is killed
 
+todo maybe: process creation is sometimes slow on windows.
+maybe have a spare EdgeRenderer at all times?
+
 """
 
 
