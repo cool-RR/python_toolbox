@@ -19,6 +19,9 @@ class State(object):
     Most states are untouched, a.k.a. natural, but some states are touched.
     A touched state is a state that was not formed naturally by a simulation step:
     It was created by the user, either from scratch or based on another state.
+
+    I think that a State object must always be serializable - Keep in mind
+    when you're giving it attributes. (They should all be serializable.)
     """
     def __init__(self,touched=False):
         self.__touched=touched

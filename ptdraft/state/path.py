@@ -71,6 +71,10 @@ class Path(object):
     def next_node(self,i):
         if self.decisions.has_key(i):
             return self.decisions[i]
+        if isinstance(i,Block):
+            if self.decisions.has_key(i[-1]):
+                return self.decisions[i[-1]]
+
         else:
             if isinstance(i,Block):
                 kids=i[-1].children

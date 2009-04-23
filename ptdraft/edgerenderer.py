@@ -14,6 +14,9 @@ if the main program is killed
 todo maybe: process creation is sometimes slow on windows.
 maybe have a spare EdgeRenderer at all times?
 
+todo maybe: instead of passing the starter state as a parameter,
+it should be sent in a queue.
+
 """
 
 
@@ -62,6 +65,7 @@ class EdgeRenderer(Process):
                 #do something with order
                 if order=="Terminate":
                     break
+
                 order=None
             except:
                 pass

@@ -1,4 +1,4 @@
-Run gui.py in the ptdraft folder to see the demonstration. Then, Stuff->Play.
+Run applicationwindow.py in the ptdraft folder to see the demonstration. Then, File -> Booga. Double click the timeline to toggle playing.
 
 -----------
 

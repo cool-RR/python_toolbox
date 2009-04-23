@@ -1,3 +1,8 @@
+"""
+todo: I think the refresh should be made more efficient
+
+"""
+
 import wx
 import math
 from misc.getlines import get_lines as get_lines
@@ -21,6 +26,7 @@ class Timeline(wx.Panel):
 
 
         self.was_playing_before_mouse_click=None
+        self.was_playing_before_mouse_click_but_then_paused_and_mouse_left=None
         self.active_triangle_width=13 # Must be odd number
 
 
@@ -117,6 +123,31 @@ class Timeline(wx.Panel):
 
     def on_mouse_event(self,e):
         #print(dir(e))
+        if e.RightDown():
+            self.gui_project.stop_playing()
+
+            reselect_node=False
+            new_thing=e.GetPositionTuple()[0]
+            if self.gui_project.active_node==None:
+                reselect_node=True
+            else:
+                thing=self.screenify(self.gui_project.active_node.state.clock)
+                if abs(thing-new_thing)>=8:
+                    reselect_node=True
+
+            if reselect_node==True:
+                new_node=self.gui_project.path.get_node_by_time(self.unscreenify(new_thing))
+                if new_node!=None:
+                    self.gui_project.make_active_node(new_node)
+
+            if self.gui_project.active_node!=None:
+                self.gui_project.main_window.Refresh()
+                self.PopupMenu(self.gui_project.get_node_menu(), e.GetPosition())
+
+
+
+
+
         if e.LeftDClick():
             self.gui_project.toggle_playing()
         if e.LeftDown():# or e.RightDown():
@@ -144,7 +175,12 @@ class Timeline(wx.Panel):
             if self.was_playing_before_mouse_click:
                 self.gui_project.start_playing()
                 self.was_playing_before_mouse_click=False
-
+                self.was_playing_before_mouse_click_but_then_paused_and_mouse_left=True
+        if e.Entering():
+            if self.was_playing_before_mouse_click_but_then_paused_and_mouse_left:
+                self.gui_project.stop_playing()
+                self.was_playing_before_mouse_click=True
+                self.was_playing_before_mouse_click_but_then_paused_and_mouse_left=False
 
 
     def OnSize(self,e):

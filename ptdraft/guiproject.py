@@ -2,14 +2,28 @@ import wx
 from misc.stringsaver import s2i,i2s
 from core import *
 import warnings
+import customwidgets
 
 class GuiProject(object):
-    def __init__(self,project,window):
+    def __init__(self,project,parent_window):
         """
         I think that window is supposed to be a ScrolledWindow
         """
         self.project=project
-        self.window=window
+        self.main_window=wx.ScrolledWindow(parent_window,-1)
+
+        self.state_showing_window=wx.ScrolledWindow(self.main_window,-1)
+        self.timeline=customwidgets.Timeline(self.main_window,-1,self)
+        self.tree_browser=customwidgets.TreeBrowser(self.main_window,-1,self)
+
+        self.sizer=wx.BoxSizer(wx.VERTICAL)
+        self.sizer.Add(self.state_showing_window,1,wx.EXPAND)
+        self.sizer.Add(self.timeline,0,wx.EXPAND)
+        self.sizer.Add(self.tree_browser,0,wx.EXPAND)
+        self.main_window.SetSizer(self.sizer)
+        self.sizer.Fit(self.main_window)
+
+
 
         self.active_node=None #This property contains the node that is currently displayed onscreen
 
@@ -34,6 +48,9 @@ class GuiProject(object):
         """
         The active path
         """
+
+        parent_window.Bind(wx.EVT_MENU,self.edit_from_active_node,id=s2i("Fork by editing"))
+        parent_window.Bind(wx.EVT_MENU,self.step_from_active_node,id=s2i("Fork naturally"))
 
     def set_active_path(self,path):
         if not path in self.paths:
@@ -93,14 +110,39 @@ class GuiProject(object):
 
     def play_next(self,node):
         self.make_active_node(node,assuring_no_jump=True)
-        self.timer_for_playing=wx.FutureCall(self.delay*1000,functools.partial(self.play_next,self.path.next_node(node)))
+        try:
+            next_node=self.path.next_node(node)
+        except IndexError:
+            return
+        self.timer_for_playing=wx.FutureCall(self.delay*1000,functools.partial(self.play_next,next_node))
 
     def step_from_active_node(self,*args,**kwargs):
         new_node=self.project.step(self.active_node)
+        self.notify_paths_of_fork(self.active_node,new_node)
 
     def edit_from_active_node(self,*args,**kwargs):
-
         pass
+
+    def notify_paths_of_fork(self,parent_node,child_node):
+        non_active_paths=[path for path in self.paths if path!=self.path]
+
+        if self.path!=None:
+            self.path.decisions[parent_node]=child_node
+        for path in non_active_paths:
+            if path.decisions.has_key(parent_node)==False:
+                path.decisions[parent_node]=parent_node.children[0]
+
+
+    def get_node_menu(self):
+        nodemenu=wx.Menu()
+        nodemenu.Append(s2i("Fork by editing"),"Fork by &editing"," Create a new edited node with the current node as the template")
+        nodemenu.Append(s2i("Fork naturally"),"Fork &naturally"," Run the simulation from this node")
+        nodemenu.AppendSeparator()
+        nodemenu.Append(s2i("Delete..."),"&Delete..."," Delete the node")
+        return nodemenu
+
+
+
 
     """
 

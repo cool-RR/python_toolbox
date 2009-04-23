@@ -1,3 +1,8 @@
+"""
+todo: I think the refresh should be made more efficient
+
+"""
+
 import wx
 from math import *
 import misc.vectorish as vectorish
@@ -5,23 +10,30 @@ from state import *
 
 connector_length=10 #length of connecting line between elements
 
+"""
+
+Move NiftyPaintDC to below?
+
+"""
+
+
 
 class NiftyPaintDC(wx.PaintDC):
     def __init__(self,window,gui_project,*args,**kwargs):
         wx.PaintDC.__init__(self,window,*args,**kwargs)
         self.gui_project=gui_project
 
-    elements={  \
-                   "Untouched": wx.Bitmap("images\\graysquare.png", wx.BITMAP_TYPE_ANY),    \
-                   "Touched": wx.Bitmap("images\\graystar.png", wx.BITMAP_TYPE_ANY),    \
-                   "Block": wx.Bitmap("images\\grayblock.png", wx.BITMAP_TYPE_ANY),    \
-                   "Selected Untouched": wx.Bitmap("images\\bluesquare.png", wx.BITMAP_TYPE_ANY),    \
-                   "Selected Touched": wx.Bitmap("images\\bluestar.png", wx.BITMAP_TYPE_ANY),    \
-                   "Selected Block": wx.Bitmap("images\\blueblock.png", wx.BITMAP_TYPE_ANY),    \
-                   "Active Untouched": wx.Bitmap("images\\orangesquare.png", wx.BITMAP_TYPE_ANY),    \
-                   "Active Touched": wx.Bitmap("images\\orangestar.png", wx.BITMAP_TYPE_ANY),    \
-                   "Active Block": wx.Bitmap("images\\orangeblock.png", wx.BITMAP_TYPE_ANY),    \
-                   }
+        self.elements={  \
+                       "Untouched": wx.Bitmap("images\\graysquare.png", wx.BITMAP_TYPE_ANY),    \
+                       "Touched": wx.Bitmap("images\\graystar.png", wx.BITMAP_TYPE_ANY),    \
+                       "Block": wx.Bitmap("images\\grayblock.png", wx.BITMAP_TYPE_ANY),    \
+                       "Selected Untouched": wx.Bitmap("images\\bluesquare.png", wx.BITMAP_TYPE_ANY),    \
+                       "Selected Touched": wx.Bitmap("images\\bluestar.png", wx.BITMAP_TYPE_ANY),    \
+                       "Selected Block": wx.Bitmap("images\\blueblock.png", wx.BITMAP_TYPE_ANY),    \
+                       "Active Untouched": wx.Bitmap("images\\orangesquare.png", wx.BITMAP_TYPE_ANY),    \
+                       "Active Touched": wx.Bitmap("images\\orangestar.png", wx.BITMAP_TYPE_ANY),    \
+                       "Active Block": wx.Bitmap("images\\orangeblock.png", wx.BITMAP_TYPE_ANY),    \
+                       }
 
     def draw_sub_tree(self,point,tree,start):
         make_block_stripe=False
@@ -124,7 +136,7 @@ class TreeBrowser(wx.ScrolledWindow):
 
 
     def OnPaint(self,e):
-        if self.gui_project==None or self.gui_project.project.tree==None:
+        if self.gui_project==None or self.gui_project.project.tree==None or self.gui_project.project.tree.roots==[]:
             return
 
 
