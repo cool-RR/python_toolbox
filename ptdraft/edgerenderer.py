@@ -26,12 +26,18 @@ from multiprocessing import *
 #import simulations.life.life as life
 #import simulations.life.lifegui as lifegui
 import threading
-from misc.processpriority import set_process_priority
+try:
+    from misc.processpriority import set_process_priority
+except:
+    pass
 
 class EdgeRenderer(Process):
     def __init__(self,starter,*args,**kwargs):
         Process.__init__(self,*args,**kwargs)
-        self.set_priority(0)
+        try:
+            self.set_priority(0)
+        except:
+            pass
         self.starter=starter
         self.daemon=True
 

@@ -1,5 +1,8 @@
 Run applicationwindow.py in the ptdraft folder to see the demonstration. Then, File -> Booga. Double click the timeline to toggle playing.
 
+Tested on Python 2.6. Requires wxPython. Optional: Python for Windows Extensions.
+
+
 -----------
 
 Our goal is to build a framework for running physics simulations with an emphasis on flexibility. Flexibility in two senses:
@@ -35,3 +38,7 @@ Imagine a computer game in which you fly a spaceship at relativistic speeds! You
 
 Mockup of lab application:
 ![](http://cool-rr.com/physicsthing/physicsthing_mockup_thumb.gif)
+
+-------
+
+This project is licensed under the MIT license.
