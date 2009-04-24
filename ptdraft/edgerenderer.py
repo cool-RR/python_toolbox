@@ -34,10 +34,7 @@ except:
 class EdgeRenderer(Process):
     def __init__(self,starter,*args,**kwargs):
         Process.__init__(self,*args,**kwargs)
-        try:
-            self.set_priority(0)
-        except:
-            pass
+
         self.starter=starter
         self.daemon=True
 
@@ -55,8 +52,16 @@ class EdgeRenderer(Process):
         import core
         import wx
         """
+        try:
+            self.set_priority(0)
+        except:
+            pass
         import simulations.life.life as life
         import simulations.life.lifegui as lifegui
+
+        #import psyco #These two belong here?
+        #psyco.full()
+
         mylife=life.Life()
 
         current=self.starter

@@ -77,7 +77,7 @@ class Project(object):
     def manage_workers(self,*args,**kwargs):
         for edge in self.workers:
             if not (edge in self.edges_to_render):
-                #TAKE WORK FROM WORKER AND RETIRE IT, ALSO DELETE FROM self.workers
+                #TAKE WORK FROM WORKER AND TERMINATE IT, ALSO DELETE FROM self.workers
                 worker=self.workers[edge]
                 result=dump_queue(worker.work_queue)
 
