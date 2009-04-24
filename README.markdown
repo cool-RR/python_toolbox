@@ -1,6 +1,6 @@
 Run applicationwindow.py in the ptdraft folder to see the demonstration. Then, File -> Booga. Double click the timeline to toggle playing.
 
-Tested on Python 2.6. Requires wxPython. Optional: Python for Windows Extensions.
+Tested on [Python 2.6](http://www.python.org/download/releases/2.6.2/). Requires [wxPython](http://www.wxpython.org/). Optional: [Python for Windows Extensions](http://sourceforge.net/projects/pywin32/).
 
 
 -----------
