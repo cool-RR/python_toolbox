@@ -13,7 +13,7 @@ Our goal is to build a framework for running physics simulations with an emphasi
 
 2. Being able to use the simulation engine in different types of software. Our main interest is using it as a virtual lab for running experiments; However, we would also like to be used in making a computer game (e.g., flying a spaceship in a relativistic world.)
 
-The project will be written entirely in Python.
+The project will be written in Python.
 
 -------------
 
