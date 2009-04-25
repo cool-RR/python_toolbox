@@ -10,11 +10,43 @@ from state import *
 
 connector_length=10 #length of connecting line between elements
 
-"""
 
-Move NiftyPaintDC to below?
+class TreeBrowser(wx.ScrolledWindow):
+    def __init__(self,parent,id,gui_project=None,*args,**kwargs):
+        wx.ScrolledWindow.__init__(self, parent, id, size=(-1,200),style=wx.SUNKEN_BORDER)
+        self.SetScrollRate(20,20)
+        #self.sizer=wx.BoxSizer(wx.VERTICAL)
+        #self.panel=wx.StaticBitmap(self,-1,wx.Bitmap("images\\snail.gif", wx.BITMAP_TYPE_ANY))#wx.Panel(self,-1,size=(-1,200))#wx.TextCtrl(self, -1, size=(-1,200), style=wx.TE_MULTILINE)
+        self.panel=wx.Panel(self,-1,size=(10000,200)) # todo: this 10000 size thing is a crappy hack
+        #self.sizer.Add(self.panel,0)
+        #self.SetSizer(self.sizer)
+        #self.EnableScrolling(True, True)
+        #self.SetScrollbars(5, 30, 1055, 40)
+        #self.sizer.Fit(self)
+        #self.Centre()
+        #self.SetVirtualSize((1000,1000))
 
-"""
+        self.panel.Bind(wx.EVT_PAINT, self.OnPaint)
+        self.panel.Bind(wx.EVT_SIZE, self.OnSize)
+
+        self.gui_project=gui_project
+
+
+    def OnPaint(self,e):
+        if self.gui_project==None or self.gui_project.project.tree==None or self.gui_project.project.tree.roots==[]:
+            return
+
+
+        pen=wx.Pen("Black",1,wx.SOLID)
+        pen.SetCap(wx.CAP_PROJECTING)
+        pen.SetJoin(wx.JOIN_ROUND)
+        dc = NiftyPaintDC(self.panel,self.gui_project)
+        (width,height)=dc.draw_tree(self.gui_project.project.tree)
+        self.SetVirtualSize((width,height))
+
+
+    def OnSize(self,e):
+        self.Refresh()
 
 
 
@@ -112,41 +144,3 @@ class NiftyPaintDC(wx.PaintDC):
         return (width,height)
 
 
-
-
-class TreeBrowser(wx.ScrolledWindow):
-    def __init__(self,parent,id,gui_project=None,*args,**kwargs):
-        wx.ScrolledWindow.__init__(self, parent, id, size=(-1,200),style=wx.SUNKEN_BORDER)
-        self.SetScrollRate(20,20)
-        #self.sizer=wx.BoxSizer(wx.VERTICAL)
-        #self.panel=wx.StaticBitmap(self,-1,wx.Bitmap("images\\snail.gif", wx.BITMAP_TYPE_ANY))#wx.Panel(self,-1,size=(-1,200))#wx.TextCtrl(self, -1, size=(-1,200), style=wx.TE_MULTILINE)
-        self.panel=wx.Panel(self,-1,size=(10000,200)) # todo: this 10000 size thing is a crappy hack
-        #self.sizer.Add(self.panel,0)
-        #self.SetSizer(self.sizer)
-        #self.EnableScrolling(True, True)
-        #self.SetScrollbars(5, 30, 1055, 40)
-        #self.sizer.Fit(self)
-        #self.Centre()
-        #self.SetVirtualSize((1000,1000))
-
-        self.panel.Bind(wx.EVT_PAINT, self.OnPaint)
-        self.panel.Bind(wx.EVT_SIZE, self.OnSize)
-
-        self.gui_project=gui_project
-
-
-    def OnPaint(self,e):
-        if self.gui_project==None or self.gui_project.project.tree==None or self.gui_project.project.tree.roots==[]:
-            return
-
-
-        pen=wx.Pen("Black",1,wx.SOLID)
-        pen.SetCap(wx.CAP_PROJECTING)
-        pen.SetJoin(wx.JOIN_ROUND)
-        dc = NiftyPaintDC(self.panel,self.gui_project)
-        (width,height)=dc.draw_tree(self.gui_project.project.tree)
-        self.SetVirtualSize((width,height))
-
-
-    def OnSize(self,e):
-        self.Refresh()
