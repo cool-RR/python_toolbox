@@ -36,6 +36,7 @@ class GuiProject(object):
         self.is_playing=False
 
         self.delay=0.05 # Should be a mechanism for setting that
+        self.default_buffer=50 # Should be a mechanism for setting that
 
         self.timer_for_playing=None
 
@@ -63,6 +64,7 @@ class GuiProject(object):
             self.path=state.Path(self.project.tree,root)
         else:
             self.path.start=root
+        self.project.render_all_edges(root,self.default_buffer)
         return root
 
     def make_random_root(self,*args,**kwargs):
@@ -71,6 +73,7 @@ class GuiProject(object):
             self.path=state.Path(self.project.tree,root)
         else:
             self.path.start=root
+        self.project.render_all_edges(root,self.default_buffer)
         return root
 
     def make_active_node_and_correct_path(self,node):
@@ -135,6 +138,7 @@ class GuiProject(object):
     def step_from_active_node(self,*args,**kwargs):
         new_node=self.project.step(self.active_node)
         self.notify_paths_of_fork(self.active_node,new_node)
+        self.project.render_all_edges(new_node,self.default_buffer)
 
     def edit_from_active_node(self,*args,**kwargs):
         pass

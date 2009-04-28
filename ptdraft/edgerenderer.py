@@ -1,5 +1,8 @@
 """
 
+change the terminology render->crunch throughtout the entire
+program?
+
 todo: In the future, we may want the EdgeRenderer to receive a
 copy of the SimulationCore object. We will have to implement
 a copy() method on SimulationCore and pass it on to the new process.
@@ -17,6 +20,7 @@ maybe have a spare EdgeRenderer at all times?
 todo maybe: instead of passing the starter state as a parameter,
 it should be sent in a queue.
 
+
 """
 
 
@@ -26,6 +30,8 @@ from multiprocessing import *
 #import simulations.life.life as life
 #import simulations.life.lifegui as lifegui
 import threading
+import Queue as QueueModule
+
 try:
     from misc.processpriority import set_process_priority
 except:
@@ -63,7 +69,6 @@ class EdgeRenderer(Process):
         #psyco.full()
 
         mylife=life.Life()
-
         current=self.starter
         order=None
         while True:
@@ -72,12 +77,13 @@ class EdgeRenderer(Process):
             current=next
 
             try:
-                order=self.message_queue.get(block=Flase)
+                order=self.message_queue.get(block=False)
                 #do something with order
-                if order=="Terminate":
-                    break
+                if order=="???":
+                    #do ???
+                    pass
 
                 order=None
-            except:
+            except QueueModule.Empty:
                 pass
 

@@ -68,7 +68,7 @@ class ApplicationWindow(wx.Frame):
         """
         gui_project=lifegui.LifeGuiProject(core.Project(life.Life),self.notebook)
         root=gui_project.make_random_root(28,40)
-        gui_project.project.edges_to_render.append(root)
+        gui_project.project.edges_to_render[root]=50
 
         self.add_gui_project(gui_project)
 
