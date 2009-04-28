@@ -6,9 +6,52 @@ todo: I think the refresh should be made more efficient
 import wx
 from math import *
 import misc.vectorish as vectorish
-from state import *
+import state
 
+
+"""
+class Object(object):
+    def __init__(self,*args,**kwargs):
+        pass
+
+class StateContainer(Object):
+    def __init__(self,parent=None,connector_class=None,*args,**kwargs):
+        Object.__init__(self,*args,**kwargs)
+        assert [x for x in [parent,connector_class] if x==None]!=[None]
+        self.parent=parent
+        connector=connector_class(parent,self)
+
+        self.children={} # {child: connector}
+
+
+
+class Node(StateContainer):
+    def __init__(self,*args,**kwargs):
+        StateContainer.__init__(self,*args,**kwargs)
+        pass
+
+class TouchedNode(Node):
+    def __init__(self,*args,**kwargs):
+        Node.__init__(self,*args,**kwargs)
+        pass
+
+class UntouchedNode(Node):
+    def __init__(self,*args,**kwargs):
+        Node.__init__(self,*args,**kwargs)
+        pass
+
+class Block(StateContainer):
+    def __init__(self,*args,**kwargs):
+        StateContainer.__init__(self,*args,**kwargs)
+        pass
+
+class Connector(Object):
+    def __init__(self,parent,child,*args,**kwargs):
+        Object.__init__(self,*args,**kwargs)
+        parent.children[child]=self
+"""
 connector_length=10 #length of connecting line between elements
+
 
 
 class TreeBrowser(wx.ScrolledWindow):
@@ -28,8 +71,14 @@ class TreeBrowser(wx.ScrolledWindow):
 
         self.panel.Bind(wx.EVT_PAINT, self.OnPaint)
         self.panel.Bind(wx.EVT_SIZE, self.OnSize)
+        self.panel.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse_event)
 
         self.gui_project=gui_project
+        self.clickable_map={}
+
+
+    def sync_tree(self,e=None):
+        pass
 
 
     def OnPaint(self,e):
@@ -40,13 +89,49 @@ class TreeBrowser(wx.ScrolledWindow):
         pen=wx.Pen("Black",1,wx.SOLID)
         pen.SetCap(wx.CAP_PROJECTING)
         pen.SetJoin(wx.JOIN_ROUND)
-        dc = NiftyPaintDC(self.panel,self.gui_project)
-        (width,height)=dc.draw_tree(self.gui_project.project.tree)
+        dc=NiftyPaintDC(self.panel,self.gui_project)
+        (self.clickable_map,(width,height))=dc.draw_tree(self.gui_project.project.tree)
         self.SetVirtualSize((width,height))
+        dc.Destroy()
 
 
     def OnSize(self,e):
         self.Refresh()
+
+    def on_mouse_event(self,e):
+        (x,y)=e.GetPositionTuple()
+        if e.LeftIsDown():
+            self.gui_project.stop_playing()
+            thing=self.search_map(x,y)
+            if thing==None:
+                #Deselect!
+                pass
+            else:
+                self.gui_project.make_active_node_and_correct_path(thing)
+        if e.RightDown():
+            self.gui_project.stop_playing()
+            thing=self.search_map(x,y)
+            if thing==None:
+                #Deselect!
+                pass
+            else:
+                self.gui_project.make_active_node_and_correct_path(thing)
+                self.PopupMenu(self.gui_project.get_node_menu(), e.GetPosition())
+
+
+
+    def search_map(self,x,y):
+        for key in self.clickable_map:
+            (a,b,c,d)=key
+            if a<=x<=c and b<=y<=d:
+                thing=self.clickable_map[key]
+                if isinstance(thing,state.Block):
+                    ratio=(x-a)/float(c-a)
+                    index=int(round(ratio*(len(thing)-1)))
+                    return thing[index]
+                else:
+                    return thing
+        return None
 
 
 
@@ -69,13 +154,13 @@ class NiftyPaintDC(wx.PaintDC):
 
     def draw_sub_tree(self,point,tree,start):
         make_block_stripe=False
-        if isinstance(start,Block):
+        if isinstance(start,state.Block):
             type="Block"
             kids=start[-1].children
             if start==self.active_soft_block:
                 make_block_stripe=True
                 type="Active "+type
-        elif isinstance(start,Node):
+        elif isinstance(start,state.Node):
             kids=start.children
             if start.state.is_touched()==True:
                 type="Touched"
@@ -112,6 +197,7 @@ class NiftyPaintDC(wx.PaintDC):
             self.DrawBitmapPoint(bitmap,point,useMask=True)
             bitmap_size=bitmap.GetSize()
 
+        self.clickable_map[(point[0],point[1],point[0]+bitmap_size[0],point[1]+bitmap_size[1])]=start
 
 
 
@@ -134,6 +220,7 @@ class NiftyPaintDC(wx.PaintDC):
         """
         assuming the tree has only one root!
         """
+        self.clickable_map={}
         self.active_node=self.gui_project.active_node
         try:
             self.active_soft_block=self.active_node.soft_get_block()
@@ -141,6 +228,6 @@ class NiftyPaintDC(wx.PaintDC):
             self.active_soft_block=None
         size=self.draw_sub_tree((connector_length,connector_length),tree,tree.roots[0].soft_get_block())
         (width,height)=vectorish.add(size,(connector_length,connector_length))
-        return (width,height)
+        return (self.clickable_map,(width,height))
 
 

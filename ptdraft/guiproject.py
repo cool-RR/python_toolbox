@@ -73,6 +73,20 @@ class GuiProject(object):
             self.path.start=root
         return root
 
+    def make_active_node_and_correct_path(self,node):
+        self.make_active_node(node)
+        if node in self.path:
+            return
+        else:
+            current=node
+            while True:
+                parent=current.parent
+                if parent==None:
+                    self.path.start=current
+                    break
+                if len(parent.children)>1:
+                    self.path.decisions[parent]=current
+                current=parent
 
     def make_active_node(self,node,assuring_no_jump=False):
         """
@@ -89,6 +103,8 @@ class GuiProject(object):
 
     def start_playing(self):
         if self.is_playing==True:
+            return
+        if self.active_node==None:
             return
         self.is_playing=True
         self.play_next(self.active_node)
