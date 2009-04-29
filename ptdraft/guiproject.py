@@ -91,24 +91,36 @@ class GuiProject(object):
                     self.path.decisions[parent]=current
                 current=parent
 
-    def make_active_node(self,node,assuring_no_jump=False):
+    def make_active_node(self,node):
         """
         Makes "node" the active node
         """
+        self.project.render_all_edges(node,self.default_buffer)
         was_playing=False
-        if assuring_no_jump==False and self.is_playing==True:
+        if self.is_playing==True:
             self.stop_playing()
             was_playing=True
         self.show_state(node.state)
         self.active_node=node
-        if assuring_no_jump==False and was_playing==True:
+        if was_playing==True:
             self.start_playing()
+
 
     def start_playing(self):
         if self.is_playing==True:
             return
         if self.active_node==None:
             return
+
+        edge=self.project.get_edge_on_path(self.active_node,None,self.path).popitem()[0]
+        if self.project.edges_to_render.has_key(edge):
+            self.was_buffering_before_starting_to_play=True
+            self.edge_and_buffering_amount_before_starting_to_play=(edge,self.project.edges_to_render[edge])
+        else:
+            self.was_buffering_before_starting_to_play=False
+
+        self.project.edges_to_render[edge]=None
+
         self.is_playing=True
         self.play_next(self.active_node)
 
@@ -119,6 +131,18 @@ class GuiProject(object):
         self.is_playing=False
         self.timer_for_playing.Stop()
 
+        if self.was_buffering_before_starting_to_play:
+            (old_edge,d)=self.edge_and_buffering_amount_before_starting_to_play
+            current_edge=self.project.get_edge_on_path(self.active_node,None,self.path).popitem()[0]
+            dist=self.path.distance_between_nodes(old_edge,current_edge)
+            maximum=max(d-dist,self.default_buffer) if d!=None else None
+            self.project.edges_to_render[current_edge]=maximum
+            self.was_buffering_before_starting_to_play=False
+        else:
+            current_edge=self.project.get_edge_on_path(self.active_node,None,self.path).popitem()[0]
+            self.project.edges_to_render[current_edge]=self.default_buffer
+
+
 
     def toggle_playing(self):
         if self.is_playing:
@@ -128,10 +152,17 @@ class GuiProject(object):
 
 
     def play_next(self,node):
-        self.make_active_node(node,assuring_no_jump=True)
+        self.show_state(node.state)
+        self.active_node=node
         try:
             next_node=self.path.next_node(node)
         except IndexError:
+            """
+            Do something here that will continue playing,
+            albeit slowly, when more nodes have been crunched
+            """
+            print("b")
+            self.is_playing=False
             return
         self.timer_for_playing=wx.FutureCall(self.delay*1000,functools.partial(self.play_next,next_node))
 

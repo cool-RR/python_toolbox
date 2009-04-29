@@ -55,6 +55,11 @@ class Block(object):
 
     Not sure if wrapping in a block should be forced.
 
+
+    Maybe change the definition of block so the next to last
+    can't have children! it's confusing. I think we should
+    change it.
+
     """
     def __init__(self,nodelist):
         self.list=[]

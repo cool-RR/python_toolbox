@@ -22,6 +22,8 @@ class Path(object):
 
     Question:
     in the decisions dict, will it be allowed that a key or value will be a Block?
+    Answer:
+    No! Only nodes!
 
     todo:
     beware case when there is a decision to go to a node which was deleted
@@ -68,18 +70,20 @@ class Path(object):
                 raise StopIteration("Ran out of tree")
 
 
-    def next_node(self,i):
-        if self.decisions.has_key(i):
-            return self.decisions[i]
-        if isinstance(i,Block):
-            if self.decisions.has_key(i[-1]):
-                return self.decisions[i[-1]]
+    def next_node(self,thing):
+        if self.decisions.has_key(thing):
+            next=self.decisions[thing]
+            assert isinstance(next,Node)
+            return self.decisions[thing]
+        if isinstance(thing,Block):
+            if self.decisions.has_key(thing[-1]):
+                return self.decisions[thing[-1]]
 
         else:
-            if isinstance(i,Block):
-                kids=i[-1].children
+            if isinstance(thing,Block):
+                kids=thing[-1].children
             else:
-                kids=i.children
+                kids=thing.children
             if len(kids)>0:
                 if len(kids)>1:
                     warnings.warn("This path has come across a junction for which it has no information! Guessing.")
@@ -166,6 +170,21 @@ class Path(object):
 
         segs+=[myseg]
         return segs
+
+    def distance_between_nodes(self,start,end):
+        # Optimize this with blocks
+        assert isinstance(start,Node)
+        assert isinstance(end,Node)
+
+        current=start
+        dist=0
+        while current!=end:
+            try:
+                current=self.next_node(current)
+            except IndexError:
+                raise StandardError("The end node was not found")
+            dist+=1
+        return dist
 
 
     """

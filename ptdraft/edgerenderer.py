@@ -20,6 +20,8 @@ maybe have a spare EdgeRenderer at all times?
 todo maybe: instead of passing the starter state as a parameter,
 it should be sent in a queue.
 
+todo: make sure the cursor does not get an hourglass when it shouldn't
+
 
 """
 
