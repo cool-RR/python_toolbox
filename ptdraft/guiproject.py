@@ -161,8 +161,7 @@ class GuiProject(object):
             Do something here that will continue playing,
             albeit slowly, when more nodes have been crunched
             """
-            print("b")
-            self.is_playing=False
+            self.stop_playing()
             return
         self.timer_for_playing=wx.FutureCall(self.delay*1000,functools.partial(self.play_next,next_node))
 
