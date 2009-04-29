@@ -22,12 +22,8 @@ Might simplify arithmetic too.
 
 class SimulationCore(object):
     """
-
-
     Thought: maybe instead of a SimulationCore object,
     it should just be one function?
-
-
     """
 
     def make_plain_state(self, *args, **kwargs):

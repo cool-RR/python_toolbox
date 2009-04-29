@@ -113,6 +113,9 @@ class Path(object):
             return StandardError
 
     def cut_off_first(self):
+        """
+        deprecate?
+        """
         try:
             second=self.next_node(self.start)
         except IndexError,StopIteration:

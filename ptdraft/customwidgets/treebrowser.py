@@ -100,11 +100,14 @@ class TreeBrowser(wx.ScrolledWindow):
 
     def on_mouse_event(self,e):
         (x,y)=e.GetPositionTuple()
+        if e.LeftDClick():
+            self.gui_project.toggle_playing()
+
+
         if e.LeftIsDown():
-            self.gui_project.stop_playing()
             thing=self.search_map(x,y)
             if thing==None:
-                #Deselect!
+                #maybe deselect?
                 pass
             else:
                 self.gui_project.make_active_node_and_correct_path(thing)

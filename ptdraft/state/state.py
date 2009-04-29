@@ -5,8 +5,6 @@ maybe it's silly that a parentless node must be touched?
 create mechanism for "stitching" nodes(making one a child
 of the other artificially)
 --
-What to do with paths???
---
 """
 
 import warnings

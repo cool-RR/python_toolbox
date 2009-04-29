@@ -42,59 +42,45 @@ class Block(object):
     Who gets wrapped in a block? A succession of untouched nodes,
     which:
     1. Is at least 2 nodes in number
-    2. All members, except the two last ones, must have no children except
+    2. All members, except the last one, must have no children except
        their successor in the block.
-    3. The second to last node may have children who are touched nodes,
-       in addition to the one untouched state, the last node, that is
-       already its child
-    4. The last node may have any kinds of children.
-
-    Maybe:
-    5. The parent of the first nibnode must be either touched or
-       have additional children
-
-    Not sure if wrapping in a block should be forced.
-
-
-    Maybe change the definition of block so the next to last
-    can't have children! it's confusing. I think we should
-    change it.
+    3. The last node may have any kinds of children.
 
     """
-    def __init__(self,nodelist):
+    def __init__(self,node_list):
         self.list=[]
-        self.add(nodelist)
+        self.add(node_list)
 
-    def add(self,nodelist):
+    def add(self,node_list):
         if self.list!=[]:
-            if nodelist[0].parent==self.list[-1]:
-                self.list=self.list+nodelist
-            elif self.nodelist[0].parent==nodelist[-1]:
-                self.list=nodelist+self.list
+            if node_list[0].parent==self.list[-1]:
+                self.list=self.list+node_list
+            elif self.node_list[0].parent==node_list[-1]:
+                self.list=node_list+self.list
             else:
-                raise StandardError("List of nibnodes is not adjacent to existing nibnodes")
+                raise StandardError("List of nodes is not adjacent to existing nodes")
         else:
-            self.list=nodelist[:]
+            self.list=node_list[:]
 
-        for i in range(len(nodelist)):
+        for i in range(len(node_list)):
             if i>=1:
-                if nodelist[i].parent!=nodelist[i-1]:
-                    raise StandardError("Tried to add non-consecutive nibnodes to block")
-            if nodelist[i].state.is_touched()==True:
-                raise StandardError("Tried to add touched nibnodes to block")
-            nodelist[i].block=self
+                if node_list[i].parent!=node_list[i-1]:
+                    raise StandardError("Tried to add non-consecutive nodes to block")
+            if node_list[i].state.is_touched()==True:
+                raise StandardError("Tried to add touched nodes to block")
+            node_list[i].block=self
 
     def split(self,node):
         """
         splits block, where "node" is the first node of the second block of the two
         """
         i=self.list.index(node)
-        secondlist=self.list[i:]
+        second_list=self.list[i:]
         self.list=self.list[:i]
-        if len(secondlist)>=2:
-            Block(secondlist)
+        if len(second_list)>=2:
+            Block(second_list)
         else:
-            for node in secondlist:
+            for node in second_list:
                 node.block=None
         if len(self.list)<=2:
             self.delete()
@@ -106,7 +92,6 @@ class Block(object):
         """
         for node in self:
             node.block=None
-        del self
 
     def __delitem__(self,item):
         if item==0 or item==-1 or item==len(self)-1: #check if it's an edge item
@@ -208,30 +193,25 @@ class Tree(object):
             self.roots+=[mynode]
             if mystate.is_touched()==True:
                 if template_node!=None:
-                    template_node.derived_nodes+=[mynode]
-
-            """
-            if len(self.roots)==1:
-                for path in self.paths:
-                    path.start=mynibnode
-            """
+                    template_node.derived_nodes.append(mynode)
 
         else:
             mynode.parent=parent
-            parent.children+=[mynode]
+            parent.children.append(mynode)
 
             if mystate.is_touched()==True:
                 if template_node!=None:
-                    template_node.derived_nibnodes+=[mynibnode]
+                    template_node.derived_nibnodes.append(mynibnode)
                 if parent.block!=None:
-                    if len(parent.block)-parent.block.list.index[parent]>=3:
-                        parent.block.split(parent)
+                    if parent!=parent.block.list[-1]:
+                        parent.block.split(parent.children[0])
             else:
                 if parent.block!=None:
                     ind=parent.block.list.index(parent)
                     number=len(parent.block)-ind
                     if number==1:
-                        parent.block.add([mynode])
+                        if len(parent.children)==1:
+                            parent.block.add([mynode])
                     else:
                         parent.block.split(parent.block.list[ind+1])
 
@@ -239,20 +219,7 @@ class Tree(object):
                     if len(parent.children)==1 and parent.state.is_touched()==False:
                         Block([parent,mynode])
 
-                """
-                if parent.nib.is_touched()==True:
-                    NaturalNibNodesBlock([mynibnode])
-                else:
-                    parent.block.add([mynibnode])
-                """
 
-            """
-            # Update paths:
-            kiddies=parent.editedchildren+parent.naturalchildren
-            if len(kiddies)>0:
-                for path in self.paths:
-                    path.decisions[parent]=mynibnode
-            """
 
 
 
