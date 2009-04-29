@@ -1,5 +1,5 @@
 """
-todo: path should be able to skip on n3blocks!
+todo: path's methods should all optimized using Blocks!
 """
 
 import warnings
@@ -13,17 +13,6 @@ class Path(object):
     information about which child to choose when going through
     a node which has multiple children.
 
-    Question: Assume you have a path defined, and now the
-    tree is having some nodes added to it, making
-    new decisions for the path necessary. what should the
-    path do?
-    should there be an automatic thing that will alert the path to it?
-    maybe in the tree method for adding nodes?
-
-    Question:
-    in the decisions dict, will it be allowed that a key or value will be a Block?
-    Answer:
-    No! Only nodes!
 
     todo:
     beware case when there is a decision to go to a node which was deleted
@@ -31,8 +20,16 @@ class Path(object):
     def __init__(self,tree,start=None,decisions={}):
         #tree.path+=[self]
         self.tree=tree
-        self.start=start
+
+        self.start=start # The starting node
+
         self.decisions=decisions.copy()
+        """
+        The decisions dict says which fork of the road the path chooses.
+        It's of the form {parent_node:child_node,...}
+        Note: child_node is always a node, but I'm currently not negating the
+        possibilty that parent_node will actually be a block.
+        """
 
 
     def __len__(self):
@@ -58,6 +55,9 @@ class Path(object):
                 raise StopIteration("Ran out of tree")
 
     def iterate_blockwise(self):
+        """
+        Iterates on the Path, returning Blocks when possible.
+        """
         if self.start==None:
             raise StopIteration
         yield self.start.soft_get_block()
@@ -71,6 +71,9 @@ class Path(object):
 
 
     def next_node(self,thing):
+        """
+        Returns the next node on the path.
+        """
         if self.decisions.has_key(thing):
             next=self.decisions[thing]
             assert isinstance(next,Node)
@@ -112,36 +115,21 @@ class Path(object):
         else:
             return StandardError
 
-    def cut_off_first(self):
-        """
-        deprecate?
-        """
-        try:
-            second=self.next_node(self.start)
-        except IndexError,StopIteration:
-            second=None
-        return Path(self.tree,second,self.decisions)
+
 
     def get_node_by_time(self,time):
         """
         Gets the node in path which "occupies" the timepoint "time".
         This means that, if there is a node which is after "time", it
         returns the node immediately before it (if there is one). Otherwise, returns None.
+
+        todo: Optimize.
         """
         low=self.start
         if time<low.state.clock:
             #raise StandardError("You looked for a node with a clock reading of "+str(time)+", while the earliest node had a clock reading of "+str(self.start.state.clock))
             return None
-        """
-        second=self[self.start]
-        guessedrate=second.nib.time-self.start.nib.time
 
-        try:
-            new=round((time-self.start.nib.clock)/float(guessedrate))+2
-            if
-        except:
-            high=self[-1]
-        """
         while True:
             try:
                 new=self.next_node(low)
@@ -156,7 +144,12 @@ class Path(object):
 
     def get_rendered_segments(self,starttime,endtime):
         """
-        Assuming it's only one segment for now
+        (Assuming it's only one segment for now)
+        Between timepoints "starttime" and "endtime", returns the segment of nodes that
+        exists in the Path.
+        Returns the segment like so: [[start,end]]
+        Example: In the path the first node's clock reading is 3.2, the last is 7.6.
+        starttime is 2 and endtime is 5. The function will return [[3.2,5]]
         """
         segs=[]
         foogi=self.get_node_by_time(starttime)
@@ -175,6 +168,9 @@ class Path(object):
         return segs
 
     def distance_between_nodes(self,start,end):
+        """
+        Returns the distance, in nodes, between "start" and "end"
+        """
         # Optimize this with blocks
         assert isinstance(start,Node)
         assert isinstance(end,Node)
@@ -191,9 +187,18 @@ class Path(object):
 
 
     """
+    Junk:
+
     def leads_to_same_edge(self,path):
         #todo maybe
         return False
+
+    def cut_off_first(self):
+        try:
+            second=self.next_node(self.start)
+        except IndexError,StopIteration:
+            second=None
+        return Path(self.tree,second,self.decisions)
     """
 
 

@@ -41,7 +41,7 @@ class ApplicationWindow(wx.Frame):
         toolbar.AddSimpleTool(s2i("Button Save"), wx.Bitmap("images\\save.png", wx.BITMAP_TYPE_ANY),"Save", " Save to file")
         toolbar.Realize()
 
-        self.Bind(wx.EVT_IDLE,self.manage_workers_wrapper)
+        self.Bind(wx.EVT_IDLE,self.sync_workers_wrapper)
         self.idle_block=False
 
         self.Show()
@@ -76,12 +76,12 @@ class ApplicationWindow(wx.Frame):
         #self.delete_gui_project(self.gui_projects[0])
         pass
 
-    def manage_workers_wrapper(self,e=None):
+    def sync_workers_wrapper(self,e=None):
         self.Refresh()
         if self.idle_block==True:
             return
         for thing in self.gui_projects:
-            thing.project.manage_workers()
+            thing.project.sync_workers()
         wx.CallLater(150,self.clear_idle_block_and_do) # Should make the delay customizable?
         self.idle_block=True
 

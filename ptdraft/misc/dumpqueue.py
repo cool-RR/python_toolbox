@@ -3,6 +3,10 @@ import Queue
 
 
 def dump_queue(queue):
+    """
+    Empties all pending items in a queue
+    and returns them in a list.
+    """
     result=[]
 
     while True:

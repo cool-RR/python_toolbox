@@ -1,19 +1,24 @@
-stringsaverlibrary=[]
+"""
+A little module for cataloging strings.
+"""
 
-def s2i(s):
+stringsaver_catalog=[]
+
+def s2i(string):
     """
-    String to int
+    If the string isn't cataloged already, catalogs it.
+    In any case, returns the number associated with the string
     """
-    global stringsaverlibrary
-    if s in stringsaverlibrary:
-        return stringsaverlibrary.index(s)
+    global stringsaver_catalog
+    if string in stringsaver_catalog:
+        return stringsaver_catalog.index(string)
     else:
-        stringsaverlibrary+=[s]
-        return stringsaverlibrary.index(s)
+        stringsaver_catalog+=[string]
+        return stringsaver_catalog.index(string)
 
 
-def i2s(i):
+def i2s(integer):
     """
-    int to string
+    Returns the string cataloged under the given integer
     """
-    return stringsaverlibrary[i]
+    return stringsaver_catalog[integer]

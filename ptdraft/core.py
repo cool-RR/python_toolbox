@@ -22,7 +22,14 @@ Might simplify arithmetic too.
 
 class SimulationCore(object):
     """
-    Thought: maybe instead of a SimulationCore object,
+    A SimulationCore is meant to be subclassed. A subclass of
+    SimulationCore has to define a function "step(self,source_state)"
+    that describes how to advance from one state to the next.
+    It should also define a few more functions: Currently those are
+    "make_plain_state" and "make_random_state".
+
+
+    todo Thought: maybe instead of a SimulationCore object,
     it should just be one function?
     """
 
@@ -36,61 +43,97 @@ class SimulationCore(object):
 
 class Project(object):
     """
-    initially each playon will be attached to a specific SimulationCore;
+    A Project encapsulates a Tree and a SimulationCore.
+
+    A Project, among other things, takes care of background
+    crunching of the simulation, using the "multiprocessing" module. A
+    Project employs "workers", actually instances of the EdgeRenderer
+    class, a subclass of multiprocessing.Process.
+    The Project is responsible for coordinating the workers. The method
+    sync_workers makes the Project review the work done by the workers,
+    implement it into the Tree, and gives them new instructions if necessary.
+
+    It is important to note that the Project class does not
+    require wxPython or any other GUI package: It can be used entirely from
+    the Python command-line.
+
+    todo: initially each Project will be attached to a specific SimulationCore;
     later I'll make it able to use several SimulationCores
     """
 
     def __init__(self,SimulationCoreclass):
+        """
+        That "SimulationCoreclass" should be the class that you have created
+        by subclassing SimulationCore.
+        """
         self.SimulationCore=SimulationCoreclass()
         self.tree=state.Tree()
+
         self.workers={} # A dict that maps edges that should be worked on to workers
+
         self.edges_to_render={}
+        """
+        A dict that maps edges that should be worked on to a number specifying
+        how many nodes should be created after them. "None" represents infinity.
+        """
 
     def make_plain_root(self,*args,**kwargs):
+        """
+        Creates a parent-less node, whose state is a simple plain state.
+        The SimulationCore subclass should define the function "make_plain_state"
+        for this to work.
+        Returns the node.
+        """
         state=self.SimulationCore.make_plain_state(*args,**kwargs)
         state._State__touched=True
         return self.root_this_state(state)
 
     def make_random_root(self,*args,**kwargs):
+        """
+        Creates a parent-less node, whose state is a random and messy state.
+        The SimulationCore subclass should define the function "make_random_state"
+        for this to work.
+        Returns the node.
+        """
         state=self.SimulationCore.make_random_state(*args,**kwargs)
         state._State__touched=True
         return self.root_this_state(state)
 
     def root_this_state(self,state):
+        """
+        Takes a state, wraps it in a node and adds to the Tree without a parent.
+        Returns the node.
+        """
         return self.tree.add_state(state)
 
     def step(self,sourcenode,t=1):
         """
-        rename/deprecate?
+        Takes a node and simulates a child node from it.
+        This is NOT done in the background.
+        Returns the child node.
         """
         newstate=self.SimulationCore.step(sourcenode.state,t)
         return self.tree.add_state(newstate,sourcenode)
 
     def multistep(self,sourcenode,t=1,steps=1):
         """
-        rename/deprecate?
+        Takes a node and simulates a succession of child nodes from it.
+        "steps" specifies how many nodes.
+        This is NOT done in the background.
+        Returns the last node.
         """
         mynode=sourcenode
         for i in range(steps):
             mynode=self.step(mynode,t)
         return mynode
 
-    """
-    def old_get_all_edges(self,node,max_distance=None):
-        if node.children==[]:
-            return {node:0}
-        if max_distance==0:
-            return {}
-
-        new_distance=max_distance-1 if max_distance!=None else None
-
-        d={}
-        for kid in node.children:
-            d.update(self.get_all_edges(kid,new_distance))
-        return d
-    """
-
     def get_all_edges(self,node,max_distance=None):
+        """
+        Given a node, finds all edges that are its descendents.
+        if max_distance is not None, only edges with a distance of
+        at most max_distance are returned.
+        Returns a dict of the form {node1:distance1, node2:distance2, ...}
+        """
         nodes={node:0}
         edges={}
         def within_max_distance(distance):
@@ -130,9 +173,13 @@ class Project(object):
 
 
 
-
-
     def get_edge_on_path(self,node,max_distance,path):
+        """
+        Given a node, finds the edge that is a descendant of it and is on "path".
+        if max_distance is not None, only an edge with a distance of
+        at most max_distance is returned.
+        Returns a dict of the form {node:distance}
+        """
         current=node
         i=0
         #for i in range(max_distance+1):
@@ -146,6 +193,10 @@ class Project(object):
 
 
     def render_all_edges(self,node,wanted_distance):
+        """
+        Orders to start crunching from all the edges of "node",
+        so that there will be a buffer whose length is at least "wanted_distance".
+        """
         edges=self.get_all_edges(node,wanted_distance)
         for (edge,distance) in edges.items():
             new_distance=wanted_distance-distance if wanted_distance!=None else None
@@ -154,9 +205,11 @@ class Project(object):
             else:
                 self.edges_to_render[edge]=new_distance
 
-    def render_on_path(self,node,wanted_distance,path=None):
-        if path==None:
-            path=self.path
+    def render_on_path(self,node,wanted_distance,path):
+        """
+        Orders to start crunching from the edge of the path on which "node" lies,
+        so that there will be a buffer whose length is at least "wanted_distance".
+        """
         edge_dict=get_edge_on_path(node,wanted_distance) # This dict may have a maximum of one item
         for (edge,distance) in edges.items():
             new_distance=wanted_distance-distance if wanted_distance!=None else None
@@ -166,13 +219,14 @@ class Project(object):
                 self.edges_to_render[edge]=new_distance
 
 
-    def manage_workers(self,*args,**kwargs):
+    def sync_workers(self,*args,**kwargs):
         """
-        Rename to sync_workers
+        Talks with all the workers, takes work from them for
+        implementing into the Tree, terminates workers or creates
+        new workers if necessary.
         """
         for edge in self.workers.copy():
             if not (edge in self.edges_to_render):
-                #TAKE WORK FROM WORKER AND TERMINATE IT, ALSO DELETE FROM self.workers
                 worker=self.workers[edge]
                 result=dump_queue(worker.work_queue)
 
@@ -183,7 +237,7 @@ class Project(object):
                     current=self.tree.add_state(state,parent=current)
 
                 del self.workers[edge]
-                worker.join() #sure?
+                worker.join() # todo: sure?
 
         for (edge,number) in self.edges_to_render.items():
             if self.workers.has_key(edge):
@@ -201,7 +255,7 @@ class Project(object):
                     new_number=number-len(result)
                     if new_number<=0:
                         worker.terminate()
-                        worker.join() #sure?
+                        worker.join() # todo: sure?
                         del self.workers[edge]
                     else:
                         self.edges_to_render[current]=new_number
@@ -217,6 +271,6 @@ class Project(object):
 
 
             else:
-                #CREATE WORKER
+                # Create worker
                 worker=self.workers[edge]=EdgeRenderer(edge.state)
                 worker.start()

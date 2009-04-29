@@ -1,3 +1,7 @@
+"""
+This is a dirty little module for manipulating tuples of two items as 2d vectors.
+"""
+
 import math
 
 def add(vec1,vec2):
