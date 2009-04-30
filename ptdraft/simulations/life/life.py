@@ -4,9 +4,13 @@ import state
 import random
 from .core import SimulationCore
 
+#import psyco
+#psyco.full()
 
 class Life(SimulationCore):
     """
+    Subclassing SimulationCore for Conway's Game of Life.
+    Google it for more info.
     """
 
     def step(self,sourcestate,*args,**kwargs):

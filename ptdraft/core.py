@@ -1,7 +1,7 @@
 import functools
 import state
 import time
-from edgerenderer import EdgeRenderer
+from edgecruncher import EdgeCruncher
 from misc.dumpqueue import dump_queue
 
 """
@@ -47,7 +47,7 @@ class Project(object):
 
     A Project, among other things, takes care of background
     crunching of the simulation, using the "multiprocessing" module. A
-    Project employs "workers", actually instances of the EdgeRenderer
+    Project employs "workers", actually instances of the EdgeCruncher
     class, a subclass of multiprocessing.Process.
     The Project is responsible for coordinating the workers. The method
     sync_workers makes the Project review the work done by the workers,
@@ -71,7 +71,7 @@ class Project(object):
 
         self.workers={} # A dict that maps edges that should be worked on to workers
 
-        self.edges_to_render={}
+        self.edges_to_crunch={}
         """
         A dict that maps edges that should be worked on to a number specifying
         how many nodes should be created after them. "None" represents infinity.
@@ -192,7 +192,7 @@ class Project(object):
         return {}
 
 
-    def render_all_edges(self,node,wanted_distance):
+    def crunch_all_edges(self,node,wanted_distance):
         """
         Orders to start crunching from all the edges of "node",
         so that there will be a buffer whose length is at least "wanted_distance".
@@ -200,12 +200,12 @@ class Project(object):
         edges=self.get_all_edges(node,wanted_distance)
         for (edge,distance) in edges.items():
             new_distance=wanted_distance-distance if wanted_distance!=None else None
-            if self.edges_to_render.has_key(edge):
-                self.edges_to_render[edge]=max(new_distance,self.edges_to_render[edge])
+            if self.edges_to_crunch.has_key(edge):
+                self.edges_to_crunch[edge]=max(new_distance,self.edges_to_crunch[edge])
             else:
-                self.edges_to_render[edge]=new_distance
+                self.edges_to_crunch[edge]=new_distance
 
-    def render_on_path(self,node,wanted_distance,path):
+    def crunch_on_path(self,node,wanted_distance,path):
         """
         Orders to start crunching from the edge of the path on which "node" lies,
         so that there will be a buffer whose length is at least "wanted_distance".
@@ -213,10 +213,10 @@ class Project(object):
         edge_dict=get_edge_on_path(node,wanted_distance) # This dict may have a maximum of one item
         for (edge,distance) in edges.items():
             new_distance=wanted_distance-distance if wanted_distance!=None else None
-            if self.edges_to_render.has_key(edge):
-                self.edges_to_render[edge]=max(new_distance,self.edges_to_render[edge])
+            if self.edges_to_crunch.has_key(edge):
+                self.edges_to_crunch[edge]=max(new_distance,self.edges_to_crunch[edge])
             else:
-                self.edges_to_render[edge]=new_distance
+                self.edges_to_crunch[edge]=new_distance
 
 
     def sync_workers(self,*args,**kwargs):
@@ -226,7 +226,7 @@ class Project(object):
         new workers if necessary.
         """
         for edge in self.workers.copy():
-            if not (edge in self.edges_to_render):
+            if not (edge in self.edges_to_crunch):
                 worker=self.workers[edge]
                 result=dump_queue(worker.work_queue)
 
@@ -239,7 +239,7 @@ class Project(object):
                 del self.workers[edge]
                 worker.join() # todo: sure?
 
-        for (edge,number) in self.edges_to_render.items():
+        for (edge,number) in self.edges_to_crunch.items():
             if self.workers.has_key(edge):
                 worker=self.workers[edge]
                 result=dump_queue(worker.work_queue)
@@ -248,7 +248,7 @@ class Project(object):
                 for state in result:
                     current=self.tree.add_state(state,parent=current)
 
-                del self.edges_to_render[edge]
+                del self.edges_to_crunch[edge]
 
 
                 if number!=None:
@@ -258,12 +258,12 @@ class Project(object):
                         worker.join() # todo: sure?
                         del self.workers[edge]
                     else:
-                        self.edges_to_render[current]=new_number
+                        self.edges_to_crunch[current]=new_number
                         del self.workers[edge]
                         self.workers[current]=worker
 
                 else:
-                    self.edges_to_render[current]=None
+                    self.edges_to_crunch[current]=None
                     del self.workers[edge]
                     self.workers[current]=worker
 
@@ -272,5 +272,5 @@ class Project(object):
 
             else:
                 # Create worker
-                worker=self.workers[edge]=EdgeRenderer(edge.state)
+                worker=self.workers[edge]=EdgeCruncher(edge.state)
                 worker.start()

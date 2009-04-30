@@ -3,58 +3,22 @@ todo: I think the refresh should be made more efficient
 
 """
 
+
 import wx
 from math import *
 import misc.vectorish as vectorish
 import state
 
 
-"""
-class Object(object):
-    def __init__(self,*args,**kwargs):
-        pass
 
-class StateContainer(Object):
-    def __init__(self,parent=None,connector_class=None,*args,**kwargs):
-        Object.__init__(self,*args,**kwargs)
-        assert [x for x in [parent,connector_class] if x==None]!=[None]
-        self.parent=parent
-        connector=connector_class(parent,self)
-
-        self.children={} # {child: connector}
-
-
-
-class Node(StateContainer):
-    def __init__(self,*args,**kwargs):
-        StateContainer.__init__(self,*args,**kwargs)
-        pass
-
-class TouchedNode(Node):
-    def __init__(self,*args,**kwargs):
-        Node.__init__(self,*args,**kwargs)
-        pass
-
-class UntouchedNode(Node):
-    def __init__(self,*args,**kwargs):
-        Node.__init__(self,*args,**kwargs)
-        pass
-
-class Block(StateContainer):
-    def __init__(self,*args,**kwargs):
-        StateContainer.__init__(self,*args,**kwargs)
-        pass
-
-class Connector(Object):
-    def __init__(self,parent,child,*args,**kwargs):
-        Object.__init__(self,*args,**kwargs)
-        parent.children[child]=self
-"""
 connector_length=10 #length of connecting line between elements
 
 
 
 class TreeBrowser(wx.ScrolledWindow):
+    """
+    A widget for browsing a state.Tree
+    """
     def __init__(self,parent,id,gui_project=None,*args,**kwargs):
         wx.ScrolledWindow.__init__(self, parent, id, size=(-1,200),style=wx.SUNKEN_BORDER)
         self.SetScrollRate(20,20)
@@ -147,9 +111,6 @@ class NiftyPaintDC(wx.PaintDC):
                        "Untouched": wx.Bitmap("images\\graysquare.png", wx.BITMAP_TYPE_ANY),    \
                        "Touched": wx.Bitmap("images\\graystar.png", wx.BITMAP_TYPE_ANY),    \
                        "Block": wx.Bitmap("images\\grayblock.png", wx.BITMAP_TYPE_ANY),    \
-                       "Selected Untouched": wx.Bitmap("images\\bluesquare.png", wx.BITMAP_TYPE_ANY),    \
-                       "Selected Touched": wx.Bitmap("images\\bluestar.png", wx.BITMAP_TYPE_ANY),    \
-                       "Selected Block": wx.Bitmap("images\\blueblock.png", wx.BITMAP_TYPE_ANY),    \
                        "Active Untouched": wx.Bitmap("images\\orangesquare.png", wx.BITMAP_TYPE_ANY),    \
                        "Active Touched": wx.Bitmap("images\\orangestar.png", wx.BITMAP_TYPE_ANY),    \
                        "Active Block": wx.Bitmap("images\\orangeblock.png", wx.BITMAP_TYPE_ANY),    \
@@ -234,3 +195,57 @@ class NiftyPaintDC(wx.PaintDC):
         return (self.clickable_map,(width,height))
 
 
+"""
+
+Maybe I'll use this sometime:
+
+                        "Selected Untouched": wx.Bitmap("images\\bluesquare.png", wx.BITMAP_TYPE_ANY),    \
+                       "Selected Touched": wx.Bitmap("images\\bluestar.png", wx.BITMAP_TYPE_ANY),    \
+                       "Selected Block": wx.Bitmap("images\\blueblock.png", wx.BITMAP_TYPE_ANY),    \
+"""
+
+
+"""
+
+Maybe I'll use this sometime:
+
+class Object(object):
+    def __init__(self,*args,**kwargs):
+        pass
+
+class StateContainer(Object):
+    def __init__(self,parent=None,connector_class=None,*args,**kwargs):
+        Object.__init__(self,*args,**kwargs)
+        assert [x for x in [parent,connector_class] if x==None]!=[None]
+        self.parent=parent
+        connector=connector_class(parent,self)
+
+        self.children={} # {child: connector}
+
+
+
+class Node(StateContainer):
+    def __init__(self,*args,**kwargs):
+        StateContainer.__init__(self,*args,**kwargs)
+        pass
+
+class TouchedNode(Node):
+    def __init__(self,*args,**kwargs):
+        Node.__init__(self,*args,**kwargs)
+        pass
+
+class UntouchedNode(Node):
+    def __init__(self,*args,**kwargs):
+        Node.__init__(self,*args,**kwargs)
+        pass
+
+class Block(StateContainer):
+    def __init__(self,*args,**kwargs):
+        StateContainer.__init__(self,*args,**kwargs)
+        pass
+
+class Connector(Object):
+    def __init__(self,parent,child,*args,**kwargs):
+        Object.__init__(self,*args,**kwargs)
+        parent.children[child]=self
+"""

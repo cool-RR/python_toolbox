@@ -15,6 +15,10 @@ import misc.notebookctrl as notebookctrl
 
 
 class ApplicationWindow(wx.Frame):
+    """
+    An application window that allows the user to open multiple GuiProjects
+    simultaneously.
+    """
     def __init__(self,*args,**keywords):
         wx.Frame.__init__(self,*args,**keywords)
         self.SetDoubleBuffered(True)
@@ -68,7 +72,7 @@ class ApplicationWindow(wx.Frame):
         """
         gui_project=lifegui.LifeGuiProject(core.Project(life.Life),self.notebook)
         root=gui_project.make_random_root(28,40)
-        gui_project.project.edges_to_render[root]=50
+        gui_project.project.edges_to_crunch[root]=50
 
         self.add_gui_project(gui_project)
 
@@ -77,15 +81,19 @@ class ApplicationWindow(wx.Frame):
         pass
 
     def sync_workers_wrapper(self,e=None):
+        """
+        A function that calls `sync_workers` for all the
+        open GuiProjects.
+        """
         self.Refresh()
         if self.idle_block==True:
             return
         for thing in self.gui_projects:
             thing.project.sync_workers()
-        wx.CallLater(150,self.clear_idle_block_and_do) # Should make the delay customizable?
+        wx.CallLater(150,self._clear_idle_block_and_do) # Should make the delay customizable?
         self.idle_block=True
 
-    def clear_idle_block_and_do(self):
+    def _clear_idle_block_and_do(self):
         self.idle_block=False
         event=wx.PyEvent()
         event.SetEventType(10006) # todo: change this to whatever wx constant name is given to the type of EVT_IDLE

@@ -10,7 +10,10 @@ from misc.getlines import get_lines as get_lines
 
 
 
-class Timeline(wx.Panel):
+class SeekBar(wx.Panel):
+    """
+    A seek-bar widget.
+    """
     def __init__(self,parent,id,gui_project=None,zoom=1.0,start=0.0,*args,**kwargs):
         wx.Panel.__init__(self, parent, id, size=(-1,40), style=wx.SUNKEN_BORDER)
         self.Bind(wx.EVT_PAINT, self.OnPaint)
@@ -43,7 +46,7 @@ class Timeline(wx.Panel):
         dc = wx.PaintDC(self)
         #dc.DrawRectangle(3,3,50,90)
         if self.gui_project.path!=None: #Draw rectangle for renedered segments
-            segs=self.gui_project.path.get_rendered_segments(start,end)
+            segs=self.gui_project.path.get_existing_segments(start,end)
             dc.SetPen(wx.Pen('#000000'))
             dc.SetBrush(wx.Brush('#FFFFB8'))
             for seg in segs:
@@ -146,8 +149,6 @@ class Timeline(wx.Panel):
 
 
 
-
-
         if e.LeftDClick():
             self.gui_project.toggle_playing()
         if e.LeftDown():# or e.RightDown():
@@ -185,22 +186,3 @@ class Timeline(wx.Panel):
 
     def OnSize(self,e):
         self.Refresh()
-
-if __name__=="__main__":
-
-    class ShoobiFrame(wx.Frame):
-        def __init__(self,*args,**kwargs):
-            wx.Frame.__init__(self,*args,**kwargs)
-            self.sizer=wx.BoxSizer(wx.VERTICAL)
-            self.text1=wx.TextCtrl(self, -1, style=wx.TE_MULTILINE)
-            self.text2=wx.TextCtrl(self, -1, style=wx.TE_MULTILINE)
-            self.timeline=Timeline(self,-1)
-            self.sizer.Add(self.text1,1,wx.EXPAND)
-            self.sizer.Add(self.timeline,1,wx.EXPAND)
-            self.sizer.Add(self.text2,1,wx.EXPAND)
-            self.SetSizer(self.sizer)
-            self.Show()
-
-    app = wx.PySimpleApp()
-    shoobi=ShoobiFrame(None,-1,"Title",size=(600,600))
-    app.MainLoop()

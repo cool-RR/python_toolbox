@@ -142,7 +142,7 @@ class Path(object):
                 return None
 
 
-    def get_rendered_segments(self,starttime,endtime):
+    def get_existing_segments(self,starttime,endtime):
         """
         (Assuming it's only one segment for now)
         Between timepoints "starttime" and "endtime", returns the segment of nodes that
