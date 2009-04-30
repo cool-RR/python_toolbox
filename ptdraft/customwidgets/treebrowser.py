@@ -84,7 +84,7 @@ class TreeBrowser(wx.ScrolledWindow):
                 pass
             else:
                 self.gui_project.make_active_node_and_correct_path(thing)
-                self.PopupMenu(self.gui_project.get_node_menu(), e.GetPosition())
+            self.PopupMenu(self.gui_project.get_node_menu(), e.GetPosition())
 
 
 

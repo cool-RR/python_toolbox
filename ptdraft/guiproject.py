@@ -59,6 +59,13 @@ class GuiProject(object):
         The active path.
         """
 
+        self.ran_out_of_tree_while_playing=False
+        """
+        Becomes True when you are playing the simulation and the nodes
+        are not ready yet. The simulation will continue playing
+        when the nodes will be created.
+        """
+
         parent_window.Bind(wx.EVT_MENU,self.edit_from_active_node,id=s2i("Fork by editing"))
         parent_window.Bind(wx.EVT_MENU,self.step_from_active_node,id=s2i("Fork naturally"))
 
@@ -170,7 +177,10 @@ class GuiProject(object):
         if self.is_playing==False:
             return
         self.is_playing=False
-        self.timer_for_playing.Stop()
+        try:
+            self.timer_for_playing.Stop()
+        except:
+            pass
 
         if self.was_buffering_before_starting_to_play:
             (old_edge,d)=self.edge_and_buffering_amount_before_starting_to_play
@@ -205,11 +215,7 @@ class GuiProject(object):
         try:
             next_node=self.path.next_node(node)
         except IndexError:
-            """
-            Do something here that will continue playing,
-            albeit slowly, when more nodes have been crunched
-            """
-            self.stop_playing()
+            self.ran_out_of_tree_while_playing=True
             return
         self.timer_for_playing=wx.FutureCall(self.delay*1000,functools.partial(self._play_next,next_node))
 
@@ -245,6 +251,17 @@ class GuiProject(object):
         for path in non_active_paths:
             if path.decisions.has_key(parent_node)==False:
                 path.decisions[parent_node]=parent_node.children[0]
+
+    def sync_workers(self):
+        """
+        A wrapper for Project.sync_workers()
+        """
+        self.project.sync_workers()
+        if self.ran_out_of_tree_while_playing==True:
+            self.ran_out_of_tree_while_playing=False
+            self.stop_playing()
+            self.start_playing()
+
 
 
     def get_node_menu(self):

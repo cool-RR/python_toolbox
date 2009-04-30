@@ -89,7 +89,7 @@ class ApplicationWindow(wx.Frame):
         if self.idle_block==True:
             return
         for thing in self.gui_projects:
-            thing.project.sync_workers()
+            thing.sync_workers()
         wx.CallLater(150,self._clear_idle_block_and_do) # Should make the delay customizable?
         self.idle_block=True
 
