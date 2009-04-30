@@ -1,5 +1,6 @@
 import wx
 from misc.stringsaver import s2i,i2s
+from misc.infinity import Infinity
 from core import *
 import warnings
 import customwidgets
@@ -107,10 +108,11 @@ class GuiProject(object):
     def make_active_node_and_correct_path(self,node):
         """
         Makes "node" the active node, displaying it onscreen.
-        Also modifies the active path so that it will go throught
+        Also modifies the active path so that it will go through
         that node.
         """
         if node in self.path:
+            self.make_active_node(node)
             return
         else:
             current=node
@@ -148,14 +150,14 @@ class GuiProject(object):
         if self.active_node==None:
             return
 
-        edge=self.project.get_edge_on_path(self.active_node,None,self.path).popitem()[0]
+        edge=self.project.get_edge_on_path(self.active_node,self.path).popitem()[0]
         if self.project.edges_to_crunch.has_key(edge):
             self.was_buffering_before_starting_to_play=True
             self.edge_and_buffering_amount_before_starting_to_play=(edge,self.project.edges_to_crunch[edge])
         else:
             self.was_buffering_before_starting_to_play=False
 
-        self.project.edges_to_crunch[edge]=None
+        self.project.edges_to_crunch[edge]=Infinity
 
         self.is_playing=True
         self._play_next(self.active_node)
@@ -172,13 +174,13 @@ class GuiProject(object):
 
         if self.was_buffering_before_starting_to_play:
             (old_edge,d)=self.edge_and_buffering_amount_before_starting_to_play
-            current_edge=self.project.get_edge_on_path(self.active_node,None,self.path).popitem()[0]
+            current_edge=self.project.get_edge_on_path(self.active_node,self.path).popitem()[0]
             dist=self.path.distance_between_nodes(old_edge,current_edge)
-            maximum=max(d-dist,self.default_buffer) if d!=None else None
+            maximum=max(d-dist,self.default_buffer)
             self.project.edges_to_crunch[current_edge]=maximum
             self.was_buffering_before_starting_to_play=False
         else:
-            current_edge=self.project.get_edge_on_path(self.active_node,None,self.path).popitem()[0]
+            current_edge=self.project.get_edge_on_path(self.active_node,self.path).popitem()[0]
             self.project.edges_to_crunch[current_edge]=self.default_buffer
 
 

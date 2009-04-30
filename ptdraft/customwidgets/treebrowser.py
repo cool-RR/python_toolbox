@@ -70,6 +70,7 @@ class TreeBrowser(wx.ScrolledWindow):
 
         if e.LeftIsDown():
             thing=self.search_map(x,y)
+            #print(thing)
             if thing==None:
                 #maybe deselect?
                 pass

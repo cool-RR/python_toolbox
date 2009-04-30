@@ -96,7 +96,7 @@ class ApplicationWindow(wx.Frame):
     def _clear_idle_block_and_do(self):
         self.idle_block=False
         event=wx.PyEvent()
-        event.SetEventType(10006) # todo: change this to whatever wx constant name is given to the type of EVT_IDLE
+        event.SetEventType(wx.wxEVT_IDLE) # todo: change this to whatever wx constant name is given to the type of EVT_IDLE
         wx.PostEvent(self,event)
 
 

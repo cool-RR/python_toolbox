@@ -3,6 +3,7 @@ import state
 import time
 from edgecruncher import EdgeCruncher
 from misc.dumpqueue import dump_queue
+from misc.infinity import Infinity
 
 """
 TODO: in radiation style simulations, how will the simulator know
@@ -13,10 +14,6 @@ state. Which one should I choose?
 Or maybe give two options, one where the simulation gets the
 state and one where it gets the node.
 
-todo:
-maybe introduce an "Infinity" constant for when you want
-to buffer an edge indefinitly? Currently we're using None.
-Might simplify arithmetic too.
 """
 
 
@@ -74,7 +71,7 @@ class Project(object):
         self.edges_to_crunch={}
         """
         A dict that maps edges that should be worked on to a number specifying
-        how many nodes should be created after them. "None" represents infinity.
+        how many nodes should be created after them.
         """
 
     def make_plain_root(self,*args,**kwargs):
@@ -127,24 +124,19 @@ class Project(object):
             mynode=self.step(mynode,t)
         return mynode
 
-    def get_all_edges(self,node,max_distance=None):
+    def get_all_edges(self,node,max_distance=Infinity):
         """
         Given a node, finds all edges that are its descendents.
-        if max_distance is not None, only edges with a distance of
-        at most max_distance are returned.
+        Only edges with a distance of at most max_distance are returned.
         Returns a dict of the form {node1:distance1, node2:distance2, ...}
         """
         nodes={node:0}
         edges={}
-        def within_max_distance(distance):
-            if max_distance==None:
-                return True
-            else:
-                return distance<=max_distance
+
 
         while len(nodes)>0:
             (node,d)=nodes.popitem()
-            if within_max_distance(d)==False:
+            if d>max_distance:
                 continue
             kids=node.children
             if kids==[]:
@@ -165,7 +157,7 @@ class Project(object):
                         nodes[kid]=d+1
                     continue
 
-                if within_max_distance(rest_of_block+d):
+                if rest_of_block+d<=max_distance:
                     for kid in block[-2].children:
                         nodes[kid]=d+rest_of_block
                     continue
@@ -173,17 +165,15 @@ class Project(object):
 
 
 
-    def get_edge_on_path(self,node,max_distance,path):
+    def get_edge_on_path(self,node,path,max_distance=Infinity):
         """
         Given a node, finds the edge that is a descendant of it and is on "path".
-        if max_distance is not None, only an edge with a distance of
-        at most max_distance is returned.
+        Only an edge with a distance of at most max_distance is returned.
         Returns a dict of the form {node:distance}
         """
         current=node
         i=0
-        #for i in range(max_distance+1):
-        while max_distance==None or i<max_distance+1:
+        while i<max_distance+1:
             try:
                 current=path.next_node(current)
             except IndexError:
@@ -199,7 +189,7 @@ class Project(object):
         """
         edges=self.get_all_edges(node,wanted_distance)
         for (edge,distance) in edges.items():
-            new_distance=wanted_distance-distance if wanted_distance!=None else None
+            new_distance=wanted_distance-distance
             if self.edges_to_crunch.has_key(edge):
                 self.edges_to_crunch[edge]=max(new_distance,self.edges_to_crunch[edge])
             else:
@@ -212,7 +202,7 @@ class Project(object):
         """
         edge_dict=get_edge_on_path(node,wanted_distance) # This dict may have a maximum of one item
         for (edge,distance) in edges.items():
-            new_distance=wanted_distance-distance if wanted_distance!=None else None
+            new_distance=wanted_distance-distance
             if self.edges_to_crunch.has_key(edge):
                 self.edges_to_crunch[edge]=max(new_distance,self.edges_to_crunch[edge])
             else:
@@ -251,7 +241,7 @@ class Project(object):
                 del self.edges_to_crunch[edge]
 
 
-                if number!=None:
+                if number!=Infinity:
                     new_number=number-len(result)
                     if new_number<=0:
                         worker.terminate()
@@ -263,7 +253,7 @@ class Project(object):
                         self.workers[current]=worker
 
                 else:
-                    self.edges_to_crunch[current]=None
+                    self.edges_to_crunch[current]=Infinity
                     del self.workers[edge]
                     self.workers[current]=worker
 
