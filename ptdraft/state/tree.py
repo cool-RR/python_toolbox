@@ -244,12 +244,22 @@ class Tree(object):
 
         self.nodes+=[mynode]
         if parent==None:
+
+            try:
+                mynode.state.clock
+            except AttributeError:
+                mynode.state.clock=0
+
             self.roots+=[mynode]
             if mystate.is_touched()==True:
                 if template_node!=None:
                     template_node.derived_nodes.append(mynode)
 
         else:
+            try:
+                mynode.state.clock
+            except:
+                mynode.state.clock=parent.state.clock+1
             mynode.parent=parent
             parent.children.append(mynode)
 

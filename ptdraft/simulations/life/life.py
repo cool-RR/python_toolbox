@@ -21,19 +21,16 @@ class Life(SimulationCore):
                 newboard.set(x,y,oldboard.will_become(x,y))
         newstate=state.State()
         newstate.board=newboard
-        newstate.clock=sourcestate.clock+1
         return newstate
 
     def make_plain_state(self,width=50,height=50):
         mystate=state.State()
         mystate.board=Board(width,height,make_random=False)
-        mystate.clock=0
         return mystate
 
     def make_random_state(self,width=50,height=50):
         mystate=state.State()
         mystate.board=Board(width,height,make_random=True)
-        mystate.clock=0
         return mystate
 
     def show(self,nib):
