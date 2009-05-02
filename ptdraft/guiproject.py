@@ -5,7 +5,7 @@ from core import *
 import warnings
 import customwidgets
 
-import wx.py.crust as crust
+import wx.py.shell
 
 class GuiProject(object):
     """
@@ -23,7 +23,7 @@ class GuiProject(object):
 
 
 
-        self.shell=crust.Crust(self.main_window)
+        self.shell=wx.py.shell.Shell(self.main_window, size=(400,-1))
         self.seek_bar=customwidgets.SeekBar(self.main_window,-1,self)
         self.tree_browser=customwidgets.TreeBrowser(self.main_window,-1,self)
 
