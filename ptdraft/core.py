@@ -230,7 +230,8 @@ class Project(object):
                 worker.join() # todo: sure?
 
         for (edge,number) in self.edges_to_crunch.items():
-            if self.workers.has_key(edge):
+            if self.workers.has_key(edge) and self.workers[edge].is_alive():
+
                 worker=self.workers[edge]
                 result=dump_queue(worker.work_queue)
 

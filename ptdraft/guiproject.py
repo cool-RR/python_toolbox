@@ -5,6 +5,8 @@ from core import *
 import warnings
 import customwidgets
 
+import wx.py.crust as crust
+
 class GuiProject(object):
     """
     A GuiProject encapsulates a Project for use with a wxPython
@@ -21,7 +23,7 @@ class GuiProject(object):
 
 
 
-        self.shell=customwidgets.Shell(self.main_window,-1,self)
+        self.shell=crust.Crust(self.main_window)
         self.seek_bar=customwidgets.SeekBar(self.main_window,-1,self)
         self.tree_browser=customwidgets.TreeBrowser(self.main_window,-1,self)
 
