@@ -71,7 +71,7 @@ class ApplicationWindow(wx.Frame):
         This is something temporary that should be deleted eventually
         """
         gui_project=lifegui.LifeGuiProject(core.Project(life.Life),self.notebook)
-        root=gui_project.make_random_root(28,40)
+        root=gui_project.make_random_root(40,80)
         gui_project.project.edges_to_crunch[root]=50
 
         self.add_gui_project(gui_project)

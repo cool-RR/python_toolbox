@@ -1,3 +1,3 @@
 from seekbar import *
 from treebrowser import *
-from newtreebrowser import *
+from shell import *

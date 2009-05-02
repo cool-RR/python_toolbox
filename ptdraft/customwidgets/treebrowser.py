@@ -21,12 +21,12 @@ class TreeBrowser(wx.ScrolledWindow):
     """
     def __init__(self,parent,id,gui_project=None,*args,**kwargs):
         wx.ScrolledWindow.__init__(self, parent, id, size=(-1,200),style=wx.SUNKEN_BORDER)
-        self.SetScrollRate(20,20)
-        #self.sizer=wx.BoxSizer(wx.VERTICAL)
+        #self.SetScrollRate(20,20)
+        self.sizer=wx.BoxSizer(wx.VERTICAL)
         #self.panel=wx.StaticBitmap(self,-1,wx.Bitmap("images\\snail.gif", wx.BITMAP_TYPE_ANY))#wx.Panel(self,-1,size=(-1,200))#wx.TextCtrl(self, -1, size=(-1,200), style=wx.TE_MULTILINE)
-        self.panel=wx.Panel(self,-1,size=(10000,200)) # todo: this 10000 size thing is a crappy hack
-        #self.sizer.Add(self.panel,0)
-        #self.SetSizer(self.sizer)
+        self.panel=wx.Panel(self,-1,size=(-1,200))
+        self.sizer.Add(self.panel,0,wx.EXPAND)
+        self.SetSizer(self.sizer)
         #self.EnableScrolling(True, True)
         #self.SetScrollbars(5, 30, 1055, 40)
         #self.sizer.Fit(self)

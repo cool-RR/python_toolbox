@@ -18,16 +18,25 @@ class GuiProject(object):
         self.main_window=wx.ScrolledWindow(parent_window,-1)
 
         self.state_showing_window=wx.ScrolledWindow(self.main_window,-1)
+
+
+
+        self.shell=customwidgets.Shell(self.main_window,-1,self)
         self.seek_bar=customwidgets.SeekBar(self.main_window,-1,self)
         self.tree_browser=customwidgets.TreeBrowser(self.main_window,-1,self)
 
+        self.top_sizer=wx.BoxSizer(wx.HORIZONTAL)
+        self.top_sizer.Add(self.state_showing_window,1,wx.EXPAND)
+        self.top_sizer.Add(self.shell,0,wx.EXPAND)
+
+
         self.sizer=wx.BoxSizer(wx.VERTICAL)
-        self.sizer.Add(self.state_showing_window,1,wx.EXPAND)
+        self.sizer.Add(self.top_sizer,1,wx.EXPAND)
         self.sizer.Add(self.seek_bar,0,wx.EXPAND)
         self.sizer.Add(self.tree_browser,0,wx.EXPAND)
+
         self.main_window.SetSizer(self.sizer)
         self.sizer.Fit(self.main_window)
-
 
 
         self.active_node=None
