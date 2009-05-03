@@ -3,9 +3,12 @@ from misc.stringsaver import s2i,i2s
 from misc.infinity import Infinity
 from core import *
 import warnings
+
 import customwidgets
+FoldableWindowContainer=customwidgets.FoldableWindowContainer
 
 import wx.py.shell
+
 
 class GuiProject(object):
     """
@@ -13,32 +16,24 @@ class GuiProject(object):
     interface.
     """
     def __init__(self,project,parent_window):
-        """
-        I think that window is supposed to be a ScrolledWindow
-        """
         self.project=project
         self.main_window=wx.ScrolledWindow(parent_window,-1)
+        self.main_sizer=wx.BoxSizer(wx.VERTICAL)
+        self.main_window.SetSizer(self.main_sizer)
 
         self.state_showing_window=wx.ScrolledWindow(self.main_window,-1)
 
-
-
-        self.shell=wx.py.shell.Shell(self.main_window, size=(400,-1))
+        self.shell=wx.py.shell.Shell(self.main_window,-1,size=(400,-1))
         self.seek_bar=customwidgets.SeekBar(self.main_window,-1,self)
         self.tree_browser=customwidgets.TreeBrowser(self.main_window,-1,self)
 
-        self.top_sizer=wx.BoxSizer(wx.HORIZONTAL)
-        self.top_sizer.Add(self.state_showing_window,1,wx.EXPAND)
-        self.top_sizer.Add(self.shell,0,wx.EXPAND)
 
+        self.top_fwc=FoldableWindowContainer(self.main_window,-1,self.state_showing_window,self.shell,wx.RIGHT,folded=True)
+        temp=FoldableWindowContainer(self.main_window,-1,self.top_fwc,self.seek_bar,wx.BOTTOM)
+        temp=FoldableWindowContainer(self.main_window,-1,temp,self.tree_browser,wx.BOTTOM)
+        self.main_sizer.Add(temp,1,wx.EXPAND)
+        self.main_sizer.Fit(self.main_window)
 
-        self.sizer=wx.BoxSizer(wx.VERTICAL)
-        self.sizer.Add(self.top_sizer,1,wx.EXPAND)
-        self.sizer.Add(self.seek_bar,0,wx.EXPAND)
-        self.sizer.Add(self.tree_browser,0,wx.EXPAND)
-
-        self.main_window.SetSizer(self.sizer)
-        self.sizer.Fit(self.main_window)
 
 
         self.active_node=None

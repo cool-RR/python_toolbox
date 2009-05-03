@@ -8,28 +8,28 @@ import wx
 from math import *
 import misc.vectorish as vectorish
 import state
-
+from wx.lib.scrolledpanel import ScrolledPanel
 
 
 connector_length=10 #length of connecting line between elements
 
 
 
-class TreeBrowser(wx.ScrolledWindow):
+class TreeBrowser(ScrolledPanel):
     """
     A widget for browsing a state.Tree
     """
     def __init__(self,parent,id,gui_project=None,*args,**kwargs):
-        wx.ScrolledWindow.__init__(self, parent, id, size=(-1,200),style=wx.SUNKEN_BORDER)
+        ScrolledPanel.__init__(self, parent, id, size=(-1,100),style=wx.SUNKEN_BORDER)
         #self.SetScrollRate(20,20)
         self.sizer=wx.BoxSizer(wx.VERTICAL)
         #self.panel=wx.StaticBitmap(self,-1,wx.Bitmap("images\\snail.gif", wx.BITMAP_TYPE_ANY))#wx.Panel(self,-1,size=(-1,200))#wx.TextCtrl(self, -1, size=(-1,200), style=wx.TE_MULTILINE)
-        self.panel=wx.Panel(self,-1,size=(-1,200))
-        self.sizer.Add(self.panel,0,wx.EXPAND)
+        self.panel=wx.Panel(self,-1,size=(-1,100))
+        self.sizer.Add(self.panel,1,wx.EXPAND)
         self.SetSizer(self.sizer)
         #self.EnableScrolling(True, True)
         #self.SetScrollbars(5, 30, 1055, 40)
-        #self.sizer.Fit(self)
+        self.sizer.Fit(self)
         #self.Centre()
         #self.SetVirtualSize((1000,1000))
 
