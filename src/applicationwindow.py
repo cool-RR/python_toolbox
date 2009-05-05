@@ -104,6 +104,6 @@ class ApplicationWindow(wx.Frame):
 
 if __name__=="__main__":
     app = wx.PySimpleApp()
-    my_app_win=ApplicationWindow(None,-1,"ViperSim",size=(600,600))
+    my_app_win=ApplicationWindow(None,-1,"GarlicSim",size=(600,600))
 
     app.MainLoop()
