@@ -33,8 +33,6 @@ priority accordingly.
 import wx
 from multiprocessing import *
 #from core import *
-#import simulations.life.life as life
-#import simulations.life.lifegui as lifegui
 import threading
 import Queue as QueueModule
 
@@ -54,9 +52,10 @@ class EdgeCruncher(Process):
     all the resulting states in a queue. An EdgeCruncher is quite dumb actually,
     most of the smart work is being done by sync_workers.
     """
-    def __init__(self,starter,*args,**kwargs):
+    def __init__(self,starter,step_function,*args,**kwargs):
         Process.__init__(self,*args,**kwargs)
 
+        self.step=step_function
         self.starter=starter
         self.daemon=True
 
@@ -94,17 +93,14 @@ class EdgeCruncher(Process):
             self.set_priority(0)
         except:
             pass
-        import simulations.life.life as life
-        import simulations.life.lifegui as lifegui
 
         #import psyco #These two belong here?
         #psyco.full()
 
-        mylife=life.Life()
         current=self.starter
         order=None
         while True:
-            next=mylife.step(current)
+            next=self.step(current)
             self.work_queue.put(next)
             current=next
 

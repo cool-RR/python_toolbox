@@ -15,9 +15,12 @@ class GuiProject(object):
     A GuiProject encapsulates a Project for use with a wxPython
     interface.
     """
-    def __init__(self,project,parent_window):
-        self.project=project
-        self.main_window=wx.ScrolledWindow(parent_window,-1)
+    def __init__(self,specific_simulation_package,parent_window):
+        self.project=Project(specific_simulation_package)
+
+
+
+        main_window=self.main_window=wx.ScrolledWindow(parent_window,-1)
         self.main_sizer=wx.BoxSizer(wx.VERTICAL)
         self.main_window.SetSizer(self.main_sizer)
 
@@ -72,8 +75,17 @@ class GuiProject(object):
         when the nodes will be created.
         """
 
-        parent_window.Bind(wx.EVT_MENU,self.edit_from_active_node,id=s2i("Fork by editing"))
-        parent_window.Bind(wx.EVT_MENU,self.step_from_active_node,id=s2i("Fork naturally"))
+        main_window.Bind(wx.EVT_MENU,self.edit_from_active_node,id=s2i("Fork by editing"))
+        main_window.Bind(wx.EVT_MENU,self.step_from_active_node,id=s2i("Fork naturally"))
+
+        self.specific_simulation_package=specific_simulation_package
+        specific_simulation_package.initialize(self)
+
+    def show_state(self,state):
+        self.specific_simulation_package.show_state(self,state)
+
+    def set_parent_window(self,parent_window):
+        self.main_window.Reparent(parent_window)
 
     def set_active_path(self,path):
         """
@@ -277,5 +289,3 @@ class GuiProject(object):
         nodemenu.AppendSeparator()
         nodemenu.Append(s2i("Delete..."),"&Delete..."," Delete the node")
         return nodemenu
-
-

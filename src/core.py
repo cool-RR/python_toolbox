@@ -58,12 +58,12 @@ class Project(object):
     later I'll make it able to use several SimulationCores
     """
 
-    def __init__(self,SimulationCoreclass):
+    def __init__(self,specific_simulation_package):
         """
         That "SimulationCoreclass" should be the class that you have created
         by subclassing SimulationCore.
         """
-        self.SimulationCore=SimulationCoreclass()
+        self.specific_simulation_package=specific_simulation_package
         self.tree=state.Tree()
 
         self.workers={} # A dict that maps edges that should be worked on to workers
@@ -74,6 +74,11 @@ class Project(object):
         how many nodes should be created after them.
         """
 
+    """
+    def load_specific_simulation_package(self,specific_simulation_package):
+        self.specific_simulation_package=specific_simulation_package
+    """
+
     def make_plain_root(self,*args,**kwargs):
         """
         Creates a parent-less node, whose state is a simple plain state.
@@ -81,7 +86,7 @@ class Project(object):
         for this to work.
         Returns the node.
         """
-        state=self.SimulationCore.make_plain_state(*args,**kwargs)
+        state=self.specific_simulation_package.make_plain_state(*args,**kwargs)
         state._State__touched=True
         return self.root_this_state(state)
 
@@ -92,7 +97,7 @@ class Project(object):
         for this to work.
         Returns the node.
         """
-        state=self.SimulationCore.make_random_state(*args,**kwargs)
+        state=self.specific_simulation_package.make_random_state(*args,**kwargs)
         state._State__touched=True
         return self.root_this_state(state)
 
@@ -109,7 +114,7 @@ class Project(object):
         This is NOT done in the background.
         Returns the child node.
         """
-        newstate=self.SimulationCore.step(sourcenode.state,t)
+        newstate=self.specific_simulation_package.step(sourcenode.state,t)
         return self.tree.add_state(newstate,sourcenode)
 
     def multistep(self,sourcenode,t=1,steps=1):
@@ -263,5 +268,5 @@ class Project(object):
 
             else:
                 # Create worker
-                worker=self.workers[edge]=EdgeCruncher(edge.state)
+                worker=self.workers[edge]=EdgeCruncher(edge.state,step_function=self.specific_simulation_package.step)
                 worker.start()
