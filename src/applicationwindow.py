@@ -28,12 +28,8 @@ class ApplicationWindow(wx.Frame):
 
         filemenu=wx.Menu()
         filemenu.Append(s2i("New"),"&New"," New")
-        filemenu.Append(s2i("Booga"),"&Booga"," Do the booga!")
-        filemenu.Append(s2i("Agoob"),"&Agoob"," Do the agoob!")
         filemenu.Append(s2i("Exit"),"E&xit"," Close the program")
         wx.EVT_MENU(self,s2i("New"),self.on_new)
-        wx.EVT_MENU(self,s2i("Booga"),self.booga)
-        wx.EVT_MENU(self,s2i("Agoob"),self.agoob)
         wx.EVT_MENU(self,s2i("Exit"),self.exit)
         menubar=wx.MenuBar()
         menubar.Append(filemenu,"&File")
@@ -70,20 +66,6 @@ class ApplicationWindow(wx.Frame):
     def exit(self,e):
         self.Close()
 
-    def booga(self,e):
-        """
-        This is something temporary that should be deleted eventually
-        """
-        import simulations.life as life
-        gui_project=guiproject.GuiProject(life,self.notebook)
-        self.add_gui_project(gui_project)
-        root=gui_project.make_random_root(40,80)
-        gui_project.project.edges_to_crunch[root]=50
-
-
-    def agoob(self,e):
-        #self.delete_gui_project(self.gui_projects[0])
-        pass
 
     def on_new(self,e):
 
@@ -103,23 +85,7 @@ class ApplicationWindow(wx.Frame):
         self.add_gui_project(gui_project)
         root=gui_project.make_random_root(40,80)
         gui_project.project.edges_to_crunch[root]=50
-        """
-        self.dirname = ''
-        dlg=wx.FileDialog(self, "Choose a file", self.dirname, "", "*.*", wx.OPEN)
-        if dlg.ShowModal() == wx.ID_OK:
-            file_name=dlg.GetFilename()
-            dir_name=dlg.GetDirectory()
-            module_name=file_name.split(".")[0]
-            path=os.path.join(dir_name,file_name)
-            print(module_name,path)
 
-            specific_simulation_module=imp.load_source(module_name,path)
-            gui_project=guiproject.GuiProject(specific_simulation_module,self.notebook)
-            self.add_gui_project(gui_project)
-            root=gui_project.make_random_root(40,80)
-            gui_project.project.edges_to_crunch[root]=50
-        dlg.Destroy()
-        """
 
     def sync_workers_wrapper(self,e=None):
         """
