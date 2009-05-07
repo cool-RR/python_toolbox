@@ -19,6 +19,7 @@ class SeekBar(wx.Panel):
         wx.Panel.__init__(self, parent, id, size=(-1,40), style=wx.SUNKEN_BORDER)
         self.Bind(wx.EVT_PAINT, self.OnPaint)
         self.Bind(wx.EVT_SIZE, self.OnSize)
+        self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse_event)
 
         self.gui_project=gui_project
         self.zoom=float(zoom)
@@ -26,7 +27,6 @@ class SeekBar(wx.Panel):
 
         self.screenify=lambda x: (x-self.start)*self.zoom
         self.unscreenify=lambda x: (x/self.zoom)+self.start
-        self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse_event)
 
 
         self.was_playing_before_mouse_click=None

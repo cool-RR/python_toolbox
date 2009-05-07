@@ -39,9 +39,14 @@ class ApplicationWindow(wx.Frame):
         self.CreateStatusBar()
         toolbar = self.CreateToolBar()
         toolbar.AddSimpleTool(s2i("Button New"), wx.Bitmap("images\\new.png", wx.BITMAP_TYPE_ANY),"New", " Create a new file")
-        toolbar.AddSimpleTool(s2i("Button Open"), wx.Bitmap("images\\open.png", wx.BITMAP_TYPE_ANY),"Open", " Open a file")
-        toolbar.AddSimpleTool(s2i("Button Save"), wx.Bitmap("images\\save.png", wx.BITMAP_TYPE_ANY),"Save", " Save to file")
+        #toolbar.AddSimpleTool(s2i("Button Open"), wx.Bitmap("images\\open.png", wx.BITMAP_TYPE_ANY),"Open", " Open a file")
+        #toolbar.AddSimpleTool(s2i("Button Save"), wx.Bitmap("images\\save.png", wx.BITMAP_TYPE_ANY),"Save", " Save to file")
+        toolbar.AddSeparator()
+        toolbar.AddSimpleTool(s2i("Button Done editing"), wx.Bitmap("images\\check.png", wx.BITMAP_TYPE_ANY),"Done editing", " Done editing")
         toolbar.Realize()
+
+        self.Bind(wx.EVT_TOOL, self.on_new, id=s2i("Button New"))
+        self.Bind(wx.EVT_TOOL, self.done_editing, id=s2i("Button Done editing"))
 
 
         self.Bind(wx.EVT_IDLE,self.sync_workers_wrapper)
@@ -51,7 +56,7 @@ class ApplicationWindow(wx.Frame):
 
     def add_gui_project(self,gui_project):
         self.gui_projects.append(gui_project)
-        self.notebook.AddPage(gui_project.main_window,"zort!")
+        self.notebook.AddPage(gui_project.main_window,"zort!",select=True)
         gui_project.set_parent_window(self.notebook)
 
     """
@@ -65,6 +70,17 @@ class ApplicationWindow(wx.Frame):
 
     def exit(self,e):
         self.Close()
+
+    def done_editing(self,e=None):
+        gui_project=self.get_active_gui_project()
+        gui_project.done_editing()
+
+    def get_active_gui_project(self):
+        selected_tab=self.notebook.GetPage(self.notebook.GetSelection())
+        for gui_project in self.gui_projects:
+            if gui_project.main_window==selected_tab:
+                return gui_project
+        raise StandardError("No GuiProject selected.")
 
 
     def on_new(self,e):
@@ -83,8 +99,9 @@ class ApplicationWindow(wx.Frame):
 
         gui_project=guiproject.GuiProject(specific_simulation_package,self.notebook)
         self.add_gui_project(gui_project)
-        root=gui_project.make_random_root(40,80)
+        root=gui_project.make_random_root(100,60)
         gui_project.project.edges_to_crunch[root]=50
+        gui_project.make_active_node(root)
 
 
     def sync_workers_wrapper(self,e=None):

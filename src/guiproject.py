@@ -4,6 +4,8 @@ from misc.infinity import Infinity
 from core import *
 import warnings
 
+import copy
+
 import customwidgets
 FoldableWindowContainer=customwidgets.FoldableWindowContainer
 
@@ -61,6 +63,7 @@ class GuiProject(object):
         self.paths=[]
         """
         Contains a list of paths.
+        todo: is there really a need for this?
         """
 
         self.path=None
@@ -185,8 +188,17 @@ class GuiProject(object):
         self.project.edges_to_crunch[edge]=Infinity
 
         self.is_playing=True
-        self._play_next(self.active_node)
+        self.__play_next(self.active_node)
 
+
+    def __editing_state(self):
+        node=self.active_node
+        state=node.state
+        if state.is_touched()==False or node.still_in_editing==False:
+            new_node=self.edit_from_active_node()
+            return new_node.state
+        else:
+            return state
 
     def stop_playing(self):
         """
@@ -224,7 +236,7 @@ class GuiProject(object):
             return self.start_playing()
 
 
-    def _play_next(self,node):
+    def __play_next(self,node):
         """
         A function called repeatedly while playing the simualtion.
         """
@@ -235,7 +247,7 @@ class GuiProject(object):
         except IndexError:
             self.ran_out_of_tree_while_playing=True
             return
-        self.timer_for_playing=wx.FutureCall(self.delay*1000,functools.partial(self._play_next,next_node))
+        self.timer_for_playing=wx.FutureCall(self.delay*1000,functools.partial(self.__play_next,next_node))
 
     def step_from_active_node(self,*args,**kwargs):
         """
@@ -243,18 +255,28 @@ class GuiProject(object):
         modifying any states.
         Creates a new node from the active node via
         natural simulation.
+        Returns the new node.
         """
         new_node=self.project.step(self.active_node)
         self.notify_paths_of_fork(self.active_node,new_node)
         self.project.crunch_all_edges(new_node,self.default_buffer)
+        self.make_active_node(new_node)
+        return new_node
 
     def edit_from_active_node(self,*args,**kwargs):
         """
         Used for forking the simulation by editing.
         Creates a new node from the active node via
         editing.
+        Returns the new node.
         """
-        pass
+        new_node=self.project.tree.new_touched_state(template_node=self.active_node)
+        new_node.still_in_editing=True
+        self.notify_paths_of_fork(self.active_node.parent,new_node)
+        self.make_active_node(new_node)
+        return new_node
+
+
 
     def notify_paths_of_fork(self,parent_node,child_node):
         """
@@ -262,6 +284,11 @@ class GuiProject(object):
         Why should the paths be notified? Because they need to
         know which fork of the road to choose.
         """
+
+        if parent_node==None:
+            self.path.start=child_node
+            return
+
         non_active_paths=[path for path in self.paths if path!=self.path]
 
         if self.path!=None:
@@ -289,3 +316,10 @@ class GuiProject(object):
         nodemenu.AppendSeparator()
         nodemenu.Append(s2i("Delete..."),"&Delete..."," Delete the node")
         return nodemenu
+
+    def done_editing(self):
+        node=self.active_node
+        if node.still_in_editing==False:
+            raise StandardError("You said 'done editing', but you were not in editing mode.")
+        node.still_in_editing=False
+        self.project.crunch_all_edges(node, self.default_buffer)

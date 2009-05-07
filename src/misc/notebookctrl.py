@@ -4706,7 +4706,7 @@ class NotebookCtrl(wx.Panel):
 
         if select:
             if oldselection >= 0:
-               self.bsizer.Show(self.GetPage(oldselection), False)
+                self.bsizer.Show(self.GetPage(oldselection), False)
 
             self.nb.SetSelection(self.GetPageCount()-1)
             self.bsizer.Layout()

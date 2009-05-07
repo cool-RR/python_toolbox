@@ -1,3 +1,4 @@
+import copy
 
 class Node(object):
     """
@@ -32,6 +33,8 @@ class Node(object):
         A list of nodes who were created by editing from this node.
         These nodes should have the same parent as this node.
         """
+
+        self.still_in_editing=False
 
     def __len__(self):
         """
@@ -205,7 +208,9 @@ class Tree(object):
         Maybe I'd like it to.
         """
 
-        x=State(touched=False)
+        x=copy.deepcopy(template_node.state)
+        x._State__touched=True
+
         if template_node==None:
             parent=None
         else:
@@ -228,7 +233,7 @@ class Tree(object):
         """
         Adds a node to the tree.
         The state inside the added node may be a natural state or a touched state.
-        If it's a natural nib it cannot have a template_nibnode.
+        If it's a natural state it cannot have a template_node.
         Returns the node.
         """
 
@@ -265,7 +270,7 @@ class Tree(object):
 
             if mystate.is_touched()==True:
                 if template_node!=None:
-                    template_node.derived_nibnodes.append(mynibnode)
+                    template_node.derived_nodes.append(mynode)
                 if parent.block!=None:
                     if parent!=parent.block.list[-1]:
                         parent.block.split(parent.children[0])

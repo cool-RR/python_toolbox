@@ -268,5 +268,6 @@ class Project(object):
 
             else:
                 # Create worker
-                worker=self.workers[edge]=EdgeCruncher(edge.state,step_function=self.specific_simulation_package.step)
-                worker.start()
+                if edge.still_in_editing==False:
+                    worker=self.workers[edge]=EdgeCruncher(edge.state,step_function=self.specific_simulation_package.step)
+                    worker.start()
