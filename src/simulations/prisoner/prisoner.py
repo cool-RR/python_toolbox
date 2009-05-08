@@ -5,7 +5,8 @@ import random
 random.seed()
 
 
-rounds=30
+ROUNDS=7
+NUMBER_OF_PLAYERS=70
 
 
 def make_random_state(*args,**kwargs):
@@ -15,7 +16,7 @@ def make_random_state(*args,**kwargs):
     state.round=-1
     state.match=0
 
-    state.player_pool=[random_strategy_player() for i in range(100)]
+    state.player_pool=[random_strategy_player() for i in range(NUMBER_OF_PLAYERS)]
 
     return new_match_step(state)
 
@@ -25,7 +26,7 @@ def step(source_state,*args,**kwargs):
     state.clock+=1
 
     state.round+=1
-    if state.round==rounds:
+    if state.round==ROUNDS:
         state.round=-1
         state.match+=1
         return new_match_step(state)
@@ -40,6 +41,10 @@ def new_match_step(state):
     Note: this function is not strictly a "step function":
     it manipulates the state that is given to it and then returns it.
     """
+    pool=state.player_pool
+    loser=player_with_least_points(pool)
+    pool.remove(loser)
+    pool.append(random_strategy_player())
     state.pairs=pair_pool(state.player_pool)
     return state
 
@@ -123,6 +128,18 @@ def how_many_players_of_certain_type(pool,type):
         if isinstance(player,type):
             n+=1
     return n
+
+def player_with_least_points(pool):
+    assert len(pool)>0
+    loser=pool[0]
+    for player in pool:
+        if player.points<loser.points:
+            loser=player
+    return loser
+
+
+
+
 
 
 
