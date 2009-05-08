@@ -5,6 +5,7 @@ import wx.lib.scrolledpanel as scrolled
 class BoardWidget(scrolled.ScrolledPanel):
     def __init__(self,parent,id,gui_project,*args,**kwargs):
         scrolled.ScrolledPanel.__init__(self,parent,id,style=wx.SUNKEN_BORDER,*args,**kwargs)
+        self.SetupScrolling()
         self.Bind(wx.EVT_PAINT, self.on_paint)
         self.Bind(wx.EVT_SIZE, self.on_size)
         self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse_event)
@@ -50,10 +51,19 @@ class BoardWidget(scrolled.ScrolledPanel):
                                    self.square_size])
                 brushes.append(black_brush if board.get(x,y)==True else white_brush)
 
-        transparent_pen=wx.Pen('#000000', 0, wx.TRANSPARENT)
-        dc.DrawRectangleList(rectangles,transparent_pen,brushes)
 
+        for rect in rectangles:
+            (rect[0],rect[1])=self.CalcScrolledPosition((rect[0],rect[1]))
+
+
+        transparent_pen=wx.Pen('#000000', 0, wx.TRANSPARENT)
+
+
+        dc.DrawRectangleList(rectangles,transparent_pen,brushes)
         dc.Destroy()
+
+        self.SetVirtualSize((board.width*(self.square_size+self.border_width),board.height*(self.square_size+self.border_width)))
+
 
 
     def on_size(self,e=None):
