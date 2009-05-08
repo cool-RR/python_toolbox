@@ -214,7 +214,7 @@ class GuiProject(object):
 
         if self.was_buffering_before_starting_to_play:
             (old_edge,d)=self.edge_and_buffering_amount_before_starting_to_play
-            current_edge=self.project.get_edge_on_path(self.active_node,self.path).popitem()[0]
+            current_edge=self.project.get_edge_on_path(old_edge,self.path).popitem()[0]
             dist=self.path.distance_between_nodes(old_edge,current_edge)
             maximum=max(d-dist,self.default_buffer)
             self.project.edges_to_crunch[current_edge]=maximum
@@ -256,6 +256,8 @@ class GuiProject(object):
         Creates a new node from the active node via
         natural simulation.
         Returns the new node.
+
+        todo: maybe not let to do it from unfinalized touched node?
         """
         new_node=self.project.step(self.active_node)
         self.notify_paths_of_fork(self.active_node,new_node)
