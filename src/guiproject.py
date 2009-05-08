@@ -1,4 +1,6 @@
 import wx
+import wx.lib.scrolledpanel as scrolled
+
 from misc.stringsaver import s2i,i2s
 from misc.infinity import Infinity
 from core import *
@@ -26,7 +28,7 @@ class GuiProject(object):
         self.main_sizer=wx.BoxSizer(wx.VERTICAL)
         self.main_window.SetSizer(self.main_sizer)
 
-        self.state_showing_window=wx.ScrolledWindow(self.main_window,-1)
+        self.state_showing_window=scrolled.ScrolledPanel(self.main_window,-1)
 
         self.shell=wx.py.shell.Shell(self.main_window,-1,size=(400,-1))
         self.seek_bar=customwidgets.SeekBar(self.main_window,-1,self)

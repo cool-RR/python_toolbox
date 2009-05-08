@@ -20,7 +20,7 @@ class BoardWidget(scrolled.ScrolledPanel):
     def unscreenify(self,x,y):
         if self.board==None:
             return None
-        screen_tuple=(x,y)
+        screen_tuple=self.CalcUnscrolledPosition(x,y)
         result=[(thing//(self.border_width+self.square_size)) for thing in screen_tuple]
         if 0<=result[0]<self.board.width and 0<=result[1]<self.board.height:
             return tuple(result)

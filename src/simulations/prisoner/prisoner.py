@@ -83,10 +83,10 @@ def play_game((x,y),round):
     y.other_guy_played(x_move)
 
 def random_strategy_player():
-    strategy=random.choice(strategies)
-    return strategy()
+    player=random.choice(player_types)
+    return player()
 
-class player(object):
+class Player(object):
     def __init__(self):
         self.points=0
 
@@ -96,15 +96,15 @@ class player(object):
     def other_guy_played(self,move):
         pass
 
-class angel(player):
+class Angel(Player):
     def play(self,round):
         return "Play nice"
 
-class asshole(player):
+class Asshole(Player):
     def play(self,round):
         return "Play mean"
 
-class smarty(player):
+class Smarty(Player):
     def play(self,round):
         if round==0:
             return "Play nice"
@@ -115,9 +115,14 @@ class smarty(player):
         self.last_play=move
 
 
-strategies=[angel,asshole,smarty]
+player_types=[Angel,Asshole,Smarty]
 
-
+def how_many_players_of_certain_type(pool,type):
+    n=0
+    for player in pool:
+        if isinstance(player,type):
+            n+=1
+    return n
 
 
 
