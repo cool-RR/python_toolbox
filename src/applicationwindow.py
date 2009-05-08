@@ -99,7 +99,7 @@ class ApplicationWindow(wx.Frame):
 
         gui_project=guiproject.GuiProject(specific_simulation_package,self.notebook)
         self.add_gui_project(gui_project)
-        root=gui_project.make_random_root(100,60)
+        root=gui_project.make_random_root(80,40)
         gui_project.project.edges_to_crunch[root]=50
         gui_project.make_active_node(root)
 
