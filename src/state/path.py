@@ -96,18 +96,23 @@ class Path(object):
 
 
     def __getitem__(self,i):
+        """
+        Gets node by number.
+        """
 
         if isinstance(i,int)==True:
             if i<0:
                 i=len(self)+i #todo: something more optimized here?
+                assert i>=0
 
             index=-1
-            for j in self:
+            for j in self.iterate_blockwise():
                 index+=len(j)
                 if index>=i:
                     if isinstance(j,Block):
-                        return j[index-i]
+                        return j[-(index-i)-1]
                     else:
+                        assert index==i
                         return j
 
         elif isinstance(i,slice)==True:
@@ -126,7 +131,6 @@ class Path(object):
         """
         low=self.start
         if time<low.state.clock:
-            #raise StandardError("You looked for a node with a clock reading of "+str(time)+", while the earliest node had a clock reading of "+str(self.start.state.clock))
             return None
 
         while True:
