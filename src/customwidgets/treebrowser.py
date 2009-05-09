@@ -139,8 +139,6 @@ class NiftyPaintDC(wx.PaintDC):
         else:
             raise StandardError
 
-        if False: # todo: if it's selected
-            type="Selected "+type
 
         if make_block_stripe==True:
 
@@ -179,7 +177,7 @@ class NiftyPaintDC(wx.PaintDC):
             line_end=vectorish.add(point,(self_width+1,total_height+bitmap_size[1]//2))
             (new_width,new_height)=self.draw_sub_tree(vectorish.add(point,(self_width,total_height)),tree,kid.soft_get_block())
             self.DrawLinePoint(line_start,line_end)
-            max_width=max(max_width,new_width)
+            max_width=max(max_width,self_width+new_width)
             total_height+=new_height
 
         return (max_width,max(total_height,bitmap_size[1]+connector_length))
