@@ -1,7 +1,7 @@
 """
 todo: path's methods should all optimized using Blocks!
 """
-
+import math
 import warnings
 from tree import *
 
@@ -120,10 +120,9 @@ class Path(object):
     def get_node_by_time(self,time):
         """
         Gets the node in path which "occupies" the timepoint "time".
-        This means that, if there is a node which is after "time", it
+        This means that, if there is a node which is right after "time", it
         returns the node immediately before it (if there is one). Otherwise, returns None.
 
-        todo: Optimize.
         """
         low=self.start
         if time<low.state.clock:
@@ -133,9 +132,32 @@ class Path(object):
         while True:
             try:
                 new=self.next_node(low)
-                if new.state.clock>time:
-                    return low
-                low=new
+                if new.block==None:
+                    if new.state.clock>time:
+                        return low
+                    low=new
+                    continue
+                else:
+                    block=new.block
+                    if block[0].state.clock>time:
+                        return low
+                    elif block[-1].state.clock<=time:
+                        low=block[-1]
+                        continue
+                    else: # our man is in the block!
+
+                        left=0
+                        right=len(block)-1
+
+                        while right-left>1:
+                            middle=(left+right)//2
+                            if block[middle].state.clock>time:
+                                right=middle
+                            else:
+                                left=middle
+
+                        return block[left]
+
             except StopIteration:
                 return None
             except IndexError:

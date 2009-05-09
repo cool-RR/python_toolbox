@@ -242,6 +242,7 @@ class GuiProject(object):
         """
         A function called repeatedly while playing the simualtion.
         """
+        #self.main_window.Refresh()
         self.show_state(node.state)
         self.active_node=node
         try:
