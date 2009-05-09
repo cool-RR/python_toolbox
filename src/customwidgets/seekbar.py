@@ -1,7 +1,6 @@
 """
 todo: I think the refresh should be made more efficient
 
-Make SeekBar a Window? ScrolledWindow?
 """
 
 import wx

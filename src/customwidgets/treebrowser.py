@@ -1,6 +1,7 @@
 """
 todo: I think the refresh should be made more efficient
 
+todo: fix horizontal scrolling
 """
 
 
@@ -21,21 +22,22 @@ class TreeBrowser(ScrolledPanel):
     """
     def __init__(self,parent,id,gui_project=None,*args,**kwargs):
         ScrolledPanel.__init__(self, parent, id, size=(-1,100),style=wx.SUNKEN_BORDER)
+        self.SetupScrolling()
         #self.SetScrollRate(20,20)
-        self.sizer=wx.BoxSizer(wx.VERTICAL)
+        #self.sizer=wx.BoxSizer(wx.VERTICAL)
         #self.panel=wx.StaticBitmap(self,-1,wx.Bitmap("images\\snail.gif", wx.BITMAP_TYPE_ANY))#wx.Panel(self,-1,size=(-1,200))#wx.TextCtrl(self, -1, size=(-1,200), style=wx.TE_MULTILINE)
-        self.panel=wx.Panel(self,-1,size=(-1,100))
-        self.sizer.Add(self.panel,1,wx.EXPAND)
-        self.SetSizer(self.sizer)
+        #self.panel=wx.Panel(self,-1,size=(-1,100))
+        #self.sizer.Add(self.panel,1,wx.EXPAND)
+        #self.SetSizer(self.sizer)
         #self.EnableScrolling(True, True)
         #self.SetScrollbars(5, 30, 1055, 40)
-        self.sizer.Fit(self)
+        #self.sizer.Fit(self)
         #self.Centre()
         #self.SetVirtualSize((1000,1000))
 
-        self.panel.Bind(wx.EVT_PAINT, self.OnPaint)
-        self.panel.Bind(wx.EVT_SIZE, self.OnSize)
-        self.panel.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse_event)
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+        self.Bind(wx.EVT_SIZE, self.OnSize)
+        self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse_event)
 
         self.gui_project=gui_project
         self.clickable_map={}
@@ -53,16 +55,16 @@ class TreeBrowser(ScrolledPanel):
         pen=wx.Pen("Black",1,wx.SOLID)
         pen.SetCap(wx.CAP_PROJECTING)
         pen.SetJoin(wx.JOIN_ROUND)
-        dc=NiftyPaintDC(self.panel,self.gui_project)
+        dc=NiftyPaintDC(self,self.gui_project,self.CalcScrolledPosition((0,0)))
         (self.clickable_map,(width,height))=dc.draw_tree(self.gui_project.project.tree)
         self.SetVirtualSize((width,height))
         dc.Destroy()
-
 
     def OnSize(self,e):
         self.Refresh()
 
     def on_mouse_event(self,e):
+        #(x,y)=self.CalcUnscrolledPosition(e.GetPositionTuple())
         (x,y)=e.GetPositionTuple()
         if e.LeftDClick():
             self.gui_project.toggle_playing()
@@ -104,9 +106,10 @@ class TreeBrowser(ScrolledPanel):
 
 
 class NiftyPaintDC(wx.PaintDC):
-    def __init__(self,window,gui_project,*args,**kwargs):
+    def __init__(self,window,gui_project,origin,*args,**kwargs):
         wx.PaintDC.__init__(self,window,*args,**kwargs)
         self.gui_project=gui_project
+        self.origin=origin
 
         self.elements={  \
                        "Untouched": wx.Bitmap("images\\graysquare.png", wx.BITMAP_TYPE_ANY),    \
@@ -191,7 +194,7 @@ class NiftyPaintDC(wx.PaintDC):
             self.active_soft_block=self.active_node.soft_get_block()
         except AttributeError:
             self.active_soft_block=None
-        size=self.draw_sub_tree((connector_length,connector_length),tree,tree.roots[0].soft_get_block())
+        size=self.draw_sub_tree(vectorish.add((connector_length,connector_length),self.origin),tree,tree.roots[0].soft_get_block())
         (width,height)=vectorish.add(size,(connector_length,connector_length))
         return (self.clickable_map,(width,height))
 
