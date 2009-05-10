@@ -242,8 +242,8 @@ class GuiProject(object):
         """
         A function called repeatedly while playing the simualtion.
         """
-        #self.main_window.Refresh()
         self.show_state(node.state)
+        self.main_window.Refresh()
         self.active_node=node
         try:
             next_node=self.path.next_node(node)
@@ -304,13 +304,17 @@ class GuiProject(object):
 
     def sync_workers(self):
         """
-        A wrapper for Project.sync_workers()
+        A wrapper for Project.sync_workers(). (todo: add read explanation)
+        Returns how many nodes were added to the tree.
         """
-        self.project.sync_workers()
+        added_nodes=self.project.sync_workers()
+        if added_nodes>0:
+            self.main_window.Refresh()
         if self.ran_out_of_tree_while_playing==True:
             self.ran_out_of_tree_while_playing=False
             self.stop_playing()
             self.start_playing()
+        return added_nodes
 
 
 

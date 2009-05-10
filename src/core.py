@@ -219,7 +219,11 @@ class Project(object):
         Talks with all the workers, takes work from them for
         implementing into the Tree, terminates workers or creates
         new workers if necessary.
+        Returns the total amount of nodes that were added to the tree.
         """
+
+        added_nodes=0
+
         for edge in self.workers.copy():
             if not (edge in self.edges_to_crunch):
                 worker=self.workers[edge]
@@ -230,6 +234,7 @@ class Project(object):
                 current=edge
                 for state in result:
                     current=self.tree.add_state(state,parent=current)
+                added_nodes+=len(result)
 
                 del self.workers[edge]
                 worker.join() # todo: sure?
@@ -243,6 +248,7 @@ class Project(object):
                 current=edge
                 for state in result:
                     current=self.tree.add_state(state,parent=current)
+                added_nodes+=len(result)
 
                 del self.edges_to_crunch[edge]
 
@@ -271,3 +277,4 @@ class Project(object):
                 if edge.still_in_editing==False:
                     worker=self.workers[edge]=EdgeCruncher(edge.state,step_function=self.specific_simulation_package.step)
                     worker.start()
+        return added_nodes

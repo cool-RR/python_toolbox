@@ -109,11 +109,14 @@ class ApplicationWindow(wx.Frame):
         A function that calls `sync_workers` for all the
         open GuiProjects.
         """
-        self.Refresh()
+
         if self.idle_block==True:
             return
+
+
         for thing in self.gui_projects:
             thing.sync_workers()
+
         wx.CallLater(150,self._clear_idle_block_and_do) # Should make the delay customizable?
         self.idle_block=True
 
