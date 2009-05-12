@@ -214,7 +214,7 @@ class Project(object):
                 self.edges_to_crunch[edge]=new_distance
 
 
-    def sync_workers(self,*args,**kwargs):
+    def sync_workers(self,temp_infinity_node=None):
         """
         Talks with all the workers, takes work from them for
         implementing into the Tree, terminates workers or creates
@@ -222,10 +222,21 @@ class Project(object):
         Returns the total amount of nodes that were added to the tree.
         """
 
+        my_edges_to_crunch=self.edges_to_crunch.copy()
+
+        if temp_infinity_node!=None:
+            if self.edges_to_crunch.has_key(temp_infinity_node):
+                had_temp_infinity_node=True
+                previous_value_of_temp_infinity_node=self.edges_to_crunch[temp_infinity_node]
+            else:
+                had_temp_infinity_node=False
+            my_edges_to_crunch[temp_infinity_node]=Infinity
+
+
         added_nodes=0
 
         for edge in self.workers.copy():
-            if not (edge in self.edges_to_crunch):
+            if not (edge in my_edges_to_crunch):
                 worker=self.workers[edge]
                 result=dump_queue(worker.work_queue)
 
@@ -239,7 +250,9 @@ class Project(object):
                 del self.workers[edge]
                 worker.join() # todo: sure?
 
-        for (edge,number) in self.edges_to_crunch.items():
+
+
+        for (edge,number) in my_edges_to_crunch.items():
             if self.workers.has_key(edge) and self.workers[edge].is_alive():
 
                 worker=self.workers[edge]
@@ -250,24 +263,28 @@ class Project(object):
                     current=self.tree.add_state(state,parent=current)
                 added_nodes+=len(result)
 
-                del self.edges_to_crunch[edge]
+                del my_edges_to_crunch[edge]
 
 
-                if number!=Infinity:
+                if number!=Infinity: # Maybe this is just a redundant dichotomy from before I had Infinity?
                     new_number=number-len(result)
                     if new_number<=0:
                         worker.terminate()
                         worker.join() # todo: sure?
                         del self.workers[edge]
                     else:
-                        self.edges_to_crunch[current]=new_number
+                        my_edges_to_crunch[current]=new_number
                         del self.workers[edge]
                         self.workers[current]=worker
 
                 else:
-                    self.edges_to_crunch[current]=Infinity
+                    my_edges_to_crunch[current]=Infinity
                     del self.workers[edge]
                     self.workers[current]=worker
+
+                if edge==temp_infinity_node:
+                    continuation_of_temp_infinity_node=current
+                    progress_with_temp_infinity_node=len(result)
 
 
 
@@ -277,4 +294,16 @@ class Project(object):
                 if edge.still_in_editing==False:
                     worker=self.workers[edge]=EdgeCruncher(edge.state,step_function=self.specific_simulation_package.step)
                     worker.start()
+                if edge==temp_infinity_node:
+                    continuation_of_temp_infinity_node=edge
+                    progress_with_temp_infinity_node=0
+
+        if temp_infinity_node!=None:
+            if had_temp_infinity_node:
+                my_edges_to_crunch[continuation_of_temp_infinity_node]=max(previous_value_of_temp_infinity_node-progress_with_temp_infinity_node,0)
+            else:
+                del my_edges_to_crunch[continuation_of_temp_infinity_node]
+
+        self.edges_to_crunch=my_edges_to_crunch
+
         return added_nodes

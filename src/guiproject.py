@@ -180,27 +180,9 @@ class GuiProject(object):
         if self.active_node==None:
             return
 
-        edge=self.project.get_edge_on_path(self.active_node,self.path).popitem()[0]
-        if self.project.edges_to_crunch.has_key(edge):
-            self.was_buffering_before_starting_to_play=True
-            self.edge_and_buffering_amount_before_starting_to_play=(edge,self.project.edges_to_crunch[edge])
-        else:
-            self.was_buffering_before_starting_to_play=False
-
-        self.project.edges_to_crunch[edge]=Infinity
-
         self.is_playing=True
-        self.__play_next(self.active_node)
+        self.timer_for_playing=wx.FutureCall(self.delay*1000,functools.partial(self.__play_next,self.active_node))
 
-
-    def __editing_state(self):
-        node=self.active_node
-        state=node.state
-        if state.is_touched()==False or node.still_in_editing==False:
-            new_node=self.edit_from_active_node()
-            return new_node.state
-        else:
-            return state
 
     def stop_playing(self):
         """
@@ -213,19 +195,18 @@ class GuiProject(object):
             self.timer_for_playing.Stop()
         except:
             pass
+        self.project.crunch_all_edges(self.active_node,self.default_buffer)
 
-        if self.was_buffering_before_starting_to_play:
-            (old_edge,d)=self.edge_and_buffering_amount_before_starting_to_play
-            current_edge=self.project.get_edge_on_path(old_edge,self.path).popitem()[0]
-            dist=self.path.distance_between_nodes(old_edge,current_edge)
-            maximum=max(d-dist,self.default_buffer)
-            self.project.edges_to_crunch[current_edge]=maximum
-            self.was_buffering_before_starting_to_play=False
+
+
+    def __editing_state(self):
+        node=self.active_node
+        state=node.state
+        if state.is_touched()==False or node.still_in_editing==False:
+            new_node=self.edit_from_active_node()
+            return new_node.state
         else:
-            current_edge=self.project.get_edge_on_path(self.active_node,self.path).popitem()[0]
-            self.project.edges_to_crunch[current_edge]=self.default_buffer
-
-
+            return state
 
     def toggle_playing(self):
         """
@@ -263,9 +244,8 @@ class GuiProject(object):
         todo: maybe not let to do it from unfinalized touched node?
         """
         new_node=self.project.step(self.active_node)
-        self.notify_paths_of_fork(self.active_node,new_node)
-        self.project.crunch_all_edges(new_node,self.default_buffer)
         self.make_active_node(new_node)
+        self.notify_paths_of_fork(new_node.parent,new_node)
         return new_node
 
     def edit_from_active_node(self,*args,**kwargs):
@@ -277,8 +257,8 @@ class GuiProject(object):
         """
         new_node=self.project.tree.new_touched_state(template_node=self.active_node)
         new_node.still_in_editing=True
-        self.notify_paths_of_fork(self.active_node.parent,new_node)
         self.make_active_node(new_node)
+        self.notify_paths_of_fork(self.active_node.parent,new_node)
         return new_node
 
 
@@ -304,10 +284,23 @@ class GuiProject(object):
 
     def sync_workers(self):
         """
-        A wrapper for Project.sync_workers(). (todo: add read explanation)
+        A wrapper for Project.sync_workers(). (todo: add real explanation)
         Returns how many nodes were added to the tree.
         """
-        added_nodes=self.project.sync_workers()
+
+        if self.is_playing:
+            playing_edge=self.project.get_edge_on_path(self.active_node, self.path).popitem()[0]
+        else:
+            playing_edge=None
+
+
+        added_nodes=self.project.sync_workers(temp_infinity_node=playing_edge)
+        """
+        This is the important line here, which actually executes
+        the Project's sync_workers function. As you can see,
+        we put the return value in `added_nodes`.
+        """
+
         if added_nodes>0:
             self.main_window.Refresh()
         if self.ran_out_of_tree_while_playing==True:

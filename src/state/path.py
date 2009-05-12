@@ -90,6 +90,8 @@ class Path(object):
             if len(kids)>0:
                 if len(kids)>1:
                     warnings.warn("This path has come across a junction for which it has no information! Guessing.")
+                    raise StandardError("This path has come across a junction for which it has no information! Guessing.")
+                    # Can comment out the error when not being too strict
                 return kids[0]
 
         raise IndexError("Ran out of tree")
