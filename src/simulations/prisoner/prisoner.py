@@ -45,6 +45,10 @@ def new_match_step(state):
     loser=player_with_least_points(pool)
     pool.remove(loser)
     pool.append(random_strategy_player())
+
+    #for player in pool:
+    #    player.points=0
+
     state.pairs=pair_pool(state.player_pool)
     return state
 

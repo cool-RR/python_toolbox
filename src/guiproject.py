@@ -169,6 +169,7 @@ class GuiProject(object):
         self.active_node=node
         if was_playing==True:
             self.start_playing()
+        self.main_window.Refresh()
 
 
     def start_playing(self):
