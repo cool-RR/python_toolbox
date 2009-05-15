@@ -81,10 +81,10 @@ class SeekBar(wx.Panel):
             dc.SetPen(wx.Pen('#000000', 1, wx.TRANSPARENT))
             if active_inside==True:
                 dc.DrawRectangle(math.floor(screen_active_start),1,math.ceil(screen_active_end-screen_active_start),h-6)
-            triangle_half_width=math.ceil(self.active_triangle_width/2.0)
-            dc.SetClippingRegionAsRegion(occupied_region)
-            dc.DrawPolygon(((screen_active_start-triangle_half_width,h-5),(screen_active_start+triangle_half_width,h-5),(screen_active_start,h-5-triangle_half_width)))
-            dc.DestroyClippingRegion()
+                triangle_half_width=math.ceil(self.active_triangle_width/2.0)
+                dc.SetClippingRegionAsRegion(occupied_region)
+                dc.DrawPolygon(((screen_active_start-triangle_half_width,h-5),(screen_active_start+triangle_half_width,h-5),(screen_active_start,h-5-triangle_half_width)))
+                dc.DestroyClippingRegion()
 
 
 
