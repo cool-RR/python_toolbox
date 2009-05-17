@@ -1,0 +1,1 @@
+Infinity=float("inf")
