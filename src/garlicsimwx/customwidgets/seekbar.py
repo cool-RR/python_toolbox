@@ -5,7 +5,7 @@ todo: I think the refresh should be made more efficient
 
 import wx
 import math
-from misc.getlines import get_lines as get_lines
+from garlicsimwx.misc.getlines import get_lines as get_lines
 
 
 

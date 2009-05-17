@@ -3,7 +3,7 @@ A module that defines the `Tree` class. See
 its documentation for more information.
 """
 
-import copy
+import copy as _copy
 
 from node import *
 from block import *
@@ -48,7 +48,7 @@ class Tree(object):
         Returns the node.
         """
 
-        x=copy.deepcopy(template_node.state)
+        x=_copy.deepcopy(template_node.state)
         x._State__touched=True
 
         if template_node==None:

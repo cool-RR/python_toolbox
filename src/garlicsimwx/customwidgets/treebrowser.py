@@ -7,7 +7,7 @@ todo: fix horizontal scrolling
 
 import wx
 from math import *
-import misc.vectorish as vectorish
+import garlicsimwx.misc.vectorish as vectorish
 import garlicsim.state
 from wx.lib.scrolledpanel import ScrolledPanel
 

@@ -24,6 +24,8 @@ Mac OS, etc., we need to monitor how much de-facto priority the
 process is actually getting from the OS, and to tweak its "official"
 priority accordingly.
 
+todo: it seems that on one-core systems the crunching is very slow.
+Maybe due to very low process priority of edgecruncher.
 
 
 """

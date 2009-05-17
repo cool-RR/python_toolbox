@@ -1,18 +1,24 @@
+import os, sys
+
 import wx
-import os
-from misc.stringsaver import s2i,i2s
-import functools
+
 import garlicsim
+from misc.stringsaver import s2i,i2s
 import guiproject
 import misc.notebookctrl as notebookctrl
-import imp
 import customwidgets
 
 #import psyco
 #psyco.full()
 
+def get_program_path():
+    module_file = __file__
+    module_dir = os.path.split(os.path.abspath(module_file))[0]
+    program_folder = os.path.abspath(module_dir)
+    return program_folder
 
-
+os.chdir(get_program_path())
+sys.path.append(get_program_path())
 
 class ApplicationWindow(wx.Frame):
     """
@@ -20,9 +26,11 @@ class ApplicationWindow(wx.Frame):
     simultaneously.
     """
     def __init__(self,*args,**keywords):
+
         wx.Frame.__init__(self,*args,**keywords)
         self.SetDoubleBuffered(True)
         self.notebook=notebookctrl.NotebookCtrl(self,-1,style=notebookctrl.NC_TOP)
+
 
         self.gui_projects=[]
 
@@ -39,8 +47,8 @@ class ApplicationWindow(wx.Frame):
         self.CreateStatusBar()
         toolbar = self.CreateToolBar()
         toolbar.AddSimpleTool(s2i("Button New"), wx.Bitmap("images\\new.png", wx.BITMAP_TYPE_ANY),"New", " Create a new file")
-        #toolbar.AddSimpleTool(s2i("Button Open"), wx.Bitmap("images\\open.png", wx.BITMAP_TYPE_ANY),"Open", " Open a file")
-        #toolbar.AddSimpleTool(s2i("Button Save"), wx.Bitmap("images\\save.png", wx.BITMAP_TYPE_ANY),"Save", " Save to file")
+        #toolbar.AddSimpleTool(s2i("Button Open"), wx.Bitmap(folder+"images\\open.png", wx.BITMAP_TYPE_ANY),"Open", " Open a file")
+        #toolbar.AddSimpleTool(s2i("Button Save"), wx.Bitmap(folder+"images\\save.png", wx.BITMAP_TYPE_ANY),"Save", " Save to file")
         toolbar.AddSeparator()
         toolbar.AddSimpleTool(s2i("Button Done editing"), wx.Bitmap("images\\check.png", wx.BITMAP_TYPE_ANY),"Done editing", " Done editing")
         toolbar.Realize()
@@ -82,19 +90,13 @@ class ApplicationWindow(wx.Frame):
                 return gui_project
         raise StandardError("No GuiProject selected.")
 
-
     def on_new(self,e):
-
-        #str="simulations.life"
-        #specific_simulation_package=__import__(str,fromlist=[''])
-
         dialog=customwidgets.SimulationPackageSelectionDialog(self,-1)
         if dialog.ShowModal() == wx.ID_OK:
             specific_simulation_package=dialog.get_simulation_package_selection()
         else:
             dialog.Destroy()
             return
-
         dialog.Destroy()
 
         gui_project=guiproject.GuiProject(specific_simulation_package,self.notebook)
@@ -102,7 +104,6 @@ class ApplicationWindow(wx.Frame):
         root=gui_project.make_random_root(80,40)
         gui_project.project.edges_to_crunch[root]=50
         gui_project.make_active_node(root)
-
 
     def sync_workers_wrapper(self,e=None):
         """
@@ -127,9 +128,7 @@ class ApplicationWindow(wx.Frame):
         wx.PostEvent(self,event)
 
 
-
-
-if __name__=="__main__":
+def main():
     app = wx.PySimpleApp()
     my_app_win=ApplicationWindow(None,-1,"GarlicSim",size=(600,600))
 
@@ -138,3 +137,8 @@ if __name__=="__main__":
     cProfile.run("app.MainLoop()")
     """
     app.MainLoop()
+
+
+
+if __name__=="__main__":
+    main()

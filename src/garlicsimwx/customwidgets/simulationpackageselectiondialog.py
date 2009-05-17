@@ -3,15 +3,12 @@ import wx
 
 class SimulationPackageSelectionDialog(wx.SingleChoiceDialog):
     def __init__(self,parent,id):
-
-        self.make_simulation_packages_dict()
+        self.make_simulation_packages_list()
         wx.SingleChoiceDialog.__init__(self,parent,
                                         "Choose simulation package","Choose simulation package",
                                         self.list_of_simulation_packages,wx.CHOICEDLG_STYLE)
 
-
-
-    def make_simulation_packages_dict(self):
+    def make_simulation_packages_list(self):
         import simulations
         self.list_of_simulation_packages=find_subpackages(simulations)
 
