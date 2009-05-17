@@ -1,4 +1,5 @@
 import garlicsim
 import garlicsimwx
 
-garlicsimwx.main()
+if __name__=="__main__":
+    garlicsimwx.main()

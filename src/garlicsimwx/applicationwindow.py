@@ -8,9 +8,11 @@ import guiproject
 import misc.notebookctrl as notebookctrl
 import customwidgets
 
+
 #import psyco
 #psyco.full()
 
+########################
 def get_program_path():
     module_file = __file__
     module_dir = os.path.split(os.path.abspath(module_file))[0]
@@ -19,6 +21,7 @@ def get_program_path():
 
 os.chdir(get_program_path())
 sys.path.append(get_program_path())
+########################
 
 class ApplicationWindow(wx.Frame):
     """
@@ -26,7 +29,6 @@ class ApplicationWindow(wx.Frame):
     simultaneously.
     """
     def __init__(self,*args,**keywords):
-
         wx.Frame.__init__(self,*args,**keywords)
         self.SetDoubleBuffered(True)
         self.notebook=notebookctrl.NotebookCtrl(self,-1,style=notebookctrl.NC_TOP)
