@@ -214,27 +214,6 @@ class Path(object):
 
 
 
-    def distance_between_nodes(self,start,end):
-        """
-        Returns the distance, in nodes, between the two nodes:
-        `start` and `end`.
-        """
-        # Optimize this with blocks
-        assert isinstance(start,Node)
-        assert isinstance(end,Node)
-
-        dist=0
-        for thing in self.iterate_blockwise(start):
-            if end is thing:
-                return dist
-            elif isinstance(thing,Block) and end in thing:
-                dist+=thing.index(end)
-                return dist
-            else:
-                dist+=len(thing)
-
-        raise StandardError("The end node was not found")
-
     def get_existing_time_segment(self,start_time,end_time):
         """
         Between timepoints "start_time" and "end_time", returns the segment of nodes that
@@ -259,3 +238,26 @@ class Path(object):
 
         return myseg
 
+"""
+    Removing, and it's written wrong:
+    def distance_between_nodes(self,start,end):
+        \"""
+        Returns the distance, in nodes, between the two nodes:
+        `start` and `end`.
+        \"""
+        # Optimize this with blocks
+        assert isinstance(start,Node)
+        assert isinstance(end,Node)
+
+        dist=0
+        for thing in self.iterate_blockwise(start):
+            if end is thing:
+                return dist
+            elif isinstance(thing,Block) and end in thing:
+                dist+=thing.index(end)
+                return dist
+            else:
+                dist+=len(thing)
+
+        raise StandardError("The end node was not found")
+"""

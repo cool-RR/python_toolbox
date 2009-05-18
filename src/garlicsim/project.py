@@ -230,7 +230,7 @@ class Project(object):
 
         return added_nodes
 """
-    Deprecating:
+    Removing:
 
     def get_edge_on_path(self,node,path,max_distance=Infinity):
         \"""

@@ -133,7 +133,7 @@ class Tree(object):
 
 
     """
-    Deprecating:
+    Removing:
 
     def new_natural_state(self,parent):
         \"""
