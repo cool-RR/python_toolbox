@@ -25,21 +25,6 @@ def make_random_state(width=50,height=50):
     mystate.board=Board(width,height,make_random=True)
     return mystate
 
-try:
-    import wx
-    import customwidgets
-    def initialize(gui_project):
-        gui_project.mysizer=wx.BoxSizer(wx.VERTICAL)
-        board_widget=gui_project.board_widget=customwidgets.BoardWidget(gui_project.state_showing_window,-1,gui_project)
-        gui_project.mysizer.Add(board_widget,1,wx.EXPAND)
-        gui_project.state_showing_window.SetSizer(gui_project.mysizer)
-        gui_project.mysizer.Fit(gui_project.state_showing_window)
-
-    def show_state(gui_project,state):
-        gui_project.board_widget.set_board(state.board)
-except ImportError:
-    pass
-
 
 
 class Board(object):
