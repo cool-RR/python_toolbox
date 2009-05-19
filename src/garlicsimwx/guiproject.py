@@ -93,7 +93,7 @@ class GuiProject(object):
         if hasattr(self.specific_simulation_package,"make_initial_dialog"):
             return self.specific_simulation_package.make_initial_dialog(self)
         else:
-            return 0#self.DEFUALT_THINGY_MEOW()
+            return self.make_generic_initial_dialog()
 
     def show_state(self,state):
         self.specific_simulation_package.show_state(self,state)
@@ -337,3 +337,13 @@ class GuiProject(object):
             raise StandardError("You said 'done editing', but you were not in editing mode.")
         node.still_in_editing=False
         self.project.crunch_all_edges(node, self.default_buffer)
+
+    def make_generic_initial_dialog(self):
+        initial_dialog=customwidgets.GenericInitialDialog(self.main_window, -1)
+        if initial_dialog.ShowModal()==wx.ID_OK:
+            if initial_dialog.info["random"]:
+                self.make_random_root()
+            else:
+                self.make_plain_root()
+        initial_dialog.Destroy()
+
