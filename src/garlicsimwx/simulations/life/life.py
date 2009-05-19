@@ -15,9 +15,9 @@ def step(sourcestate,*args,**kwargs):
     newstate.board=newboard
     return newstate
 
-def make_plain_state(width=50,height=50):
+def make_plain_state(width=50,height=50,fill="empty"):
     mystate=garlicsim.state.State()
-    mystate.board=Board(width,height,make_random=False)
+    mystate.board=Board(width,height,fill)
     return mystate
 
 def make_random_state(width=50,height=50):
@@ -28,15 +28,25 @@ def make_random_state(width=50,height=50):
 
 
 class Board(object):
-    def __init__(self,width,height,make_random=False):
+    def __init__(self,width,height,fill="empty"):
+        assert fill in ["empty","full","random"]
+
+        def make_cell():
+            if fill=="empty": return False
+            if fill=="full": return True
+            if fill=="random": return random.choice([True,False])
+
         (self.width,self.height)=(width,height)
         self.__list=[]
         for i in range(self.width*self.height):
-            self.__list.append(False if make_random==False else random.choice([True,False]))
+            self.__list.append(make_cell())
+
     def get(self,x,y):
         return self.__list[(x%self.width)*self.height+(y%self.height)]
+
     def set(self,x,y,value):
         self.__list[(x%self.width)*self.height+(y%self.height)]=value
+
     def get_neighbour_count(self,x,y):
         result=0
         for i in [-1,0,1]:
@@ -46,6 +56,7 @@ class Board(object):
                 if self.get(x+i,y+j)==True:
                     result+=1
         return result
+
     def will_become(self,x,y):
         n=self.get_neighbour_count(x,y)
         if self.get(x, y)==True:
@@ -58,6 +69,7 @@ class Board(object):
                 return True
             else:
                 return False
+
     def __repr__(self):
         return "\n".join(["".join([("#" if self.get(x,y)==True else " ") for y in range(self.height)]) for x in range(self.width)])
 

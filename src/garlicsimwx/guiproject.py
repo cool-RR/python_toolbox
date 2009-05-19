@@ -87,6 +87,13 @@ class GuiProject(object):
 
         self.specific_simulation_package=specific_simulation_package
         specific_simulation_package.initialize(self)
+        wx.CallAfter(self.make_initial_dialog)
+
+    def make_initial_dialog(self):
+        if hasattr(self.specific_simulation_package,"make_initial_dialog"):
+            return self.specific_simulation_package.make_initial_dialog(self)
+        else:
+            return 0#self.DEFUALT_THINGY_MEOW()
 
     def show_state(self,state):
         self.specific_simulation_package.show_state(self,state)
@@ -118,6 +125,7 @@ class GuiProject(object):
         else:
             self.path.start=root
         self.project.crunch_all_edges(root,self.default_buffer)
+        self.make_active_node(root)
         return root
 
     def make_random_root(self,*args,**kwargs):
@@ -135,6 +143,7 @@ class GuiProject(object):
         else:
             self.path.start=root
         self.project.crunch_all_edges(root,self.default_buffer)
+        self.make_active_node(root)
         return root
 
     def make_active_node_and_correct_path(self,node):
