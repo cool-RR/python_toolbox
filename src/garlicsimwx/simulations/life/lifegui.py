@@ -46,6 +46,7 @@ class InitialDialog(wx.Dialog):
 
         last_hbox = wx.BoxSizer(wx.HORIZONTAL)
         ok=wx.Button(self, -1, 'Ok', size=(70, 30))
+        ok.SetDefault()
         self.Bind(wx.EVT_BUTTON, self.on_ok, id=ok.GetId())
         cancel=wx.Button(self, -1, 'Cancel', size=(70, 30))
         self.Bind(wx.EVT_BUTTON, self.on_cancel, id=cancel.GetId())

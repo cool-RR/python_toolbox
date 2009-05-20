@@ -1,4 +1,4 @@
-Run `rundemo.py` in the src folder to see the demonstration. Then, File -> New. Choose one of the simulation packages, press Ok. Double click the seek bar to toggle playing.
+Run `rundemo.py` in the src folder to see the demonstration. Then, File -> New. Choose one of the simulation packages, press Ok. A dialog will pop up, press Ok. Double click the seek bar to toggle playing.
 
 Tested on [Python 2.6](http://www.python.org/download/releases/2.6.2/). Requires [wxPython](http://www.wxpython.org/). Optional: [Python for Windows Extensions](http://sourceforge.net/projects/pywin32/).
 

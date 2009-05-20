@@ -14,14 +14,16 @@ class GenericInitialDialog(wx.Dialog):
 
         vbox = wx.BoxSizer(wx.VERTICAL)
 
-        last_hbox = wx.BoxSizer(wx.HORIZONTAL)
+        last_hbox = wx.StdDialogButtonSizer()
         ok=wx.Button(self, wx.ID_OK, 'Ok', size=(70, 30))
-        self.SetAffirmativeId(ok.GetId())
+        ok.SetDefault()
+        last_hbox.SetAffirmativeButton(ok)
         self.Bind(wx.EVT_BUTTON, self.on_ok, id=ok.GetId())
-        cancel=wx.Button(self, -1, 'Cancel', size=(70, 30))
+        cancel=wx.Button(self, wx.ID_CANCEL, 'Cancel', size=(70, 30))
         self.Bind(wx.EVT_BUTTON, self.on_cancel, id=cancel.GetId())
-        last_hbox.Add(ok, 0)
-        last_hbox.Add(cancel, 0, wx.LEFT, 5)
+        last_hbox.AddButton(ok)
+        last_hbox.AddButton(cancel)
+        last_hbox.Realize()
 
 
         vbox.Add(hbox1,0,wx.ALIGN_CENTER | wx.TOP | wx.BOTTOM, 10)

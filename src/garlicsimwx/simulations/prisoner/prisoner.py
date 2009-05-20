@@ -8,6 +8,18 @@ random.seed()
 ROUNDS=7
 NUMBER_OF_PLAYERS=70
 
+def make_plain_state(*args,**kwargs):
+    global player_types
+    state=garlicsim.state.State()
+    state._State__touched=True
+
+    state.round=-1
+    state.match=0
+
+    state.player_pool=[player_types[i%len(player_types)]() for i in range(NUMBER_OF_PLAYERS)]
+
+    return new_match_step(state)
+
 
 def make_random_state(*args,**kwargs):
     state=garlicsim.state.State()
