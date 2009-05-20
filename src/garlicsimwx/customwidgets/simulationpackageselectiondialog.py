@@ -9,12 +9,12 @@ class SimulationPackageSelectionDialog(wx.SingleChoiceDialog):
                                         self.list_of_simulation_packages,wx.CHOICEDLG_STYLE)
 
     def make_simulation_packages_list(self):
-        import simulations
-        self.list_of_simulation_packages=find_subpackages(simulations)
+        import simulationpackages
+        self.list_of_simulation_packages=find_subpackages(simulationpackages)
 
     def get_simulation_package_selection(self):
         string=self.GetStringSelection()
-        result=__import__("simulations."+string,fromlist=[''])
+        result=__import__("simulationpackages."+string,fromlist=[''])
         return result
 
 

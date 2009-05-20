@@ -141,7 +141,7 @@ class SeekBar(wx.Panel):
             if reselect_node==True:
                 new_node=self.gui_project.path.get_node_by_time(self.unscreenify(new_thing))
                 if new_node!=None:
-                    self.gui_project.make_active_node(new_node)
+                    self.gui_project.set_active_node(new_node,modify_path=False)
 
             if self.gui_project.active_node!=None:
                 self.gui_project.main_window.Refresh()
@@ -160,14 +160,14 @@ class SeekBar(wx.Panel):
                 self.gui_project.stop_playing()
 
             if node!=None:
-                self.gui_project.make_active_node(node)
+                self.gui_project.set_active_node(node,modify_path=False)
 
 
         if e.LeftIsDown():
             thing=e.GetPositionTuple()[0]
             node=self.gui_project.path.get_node_by_time(self.unscreenify(thing))
             if node!=None:
-                self.gui_project.make_active_node(node)
+                self.gui_project.set_active_node(node,modify_path=False)
         if e.LeftUp():
             if self.was_playing_before_mouse_click:
                 self.gui_project.start_playing()

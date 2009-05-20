@@ -77,7 +77,7 @@ class TreeBrowser(ScrolledPanel):
                 #maybe deselect?
                 pass
             else:
-                self.gui_project.make_active_node_and_correct_path(thing)
+                self.gui_project.set_active_node(thing)
         if e.RightDown():
             self.gui_project.stop_playing()
             thing=self.search_map(x,y)
@@ -85,7 +85,7 @@ class TreeBrowser(ScrolledPanel):
                 #Deselect!
                 pass
             else:
-                self.gui_project.make_active_node_and_correct_path(thing)
+                self.gui_project.set_active_node(thing)
             self.PopupMenu(self.gui_project.get_node_menu(), e.GetPosition())
 
 

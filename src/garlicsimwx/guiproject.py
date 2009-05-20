@@ -64,12 +64,6 @@ class GuiProject(object):
         Contains the wx.Timer object used when playing the simulation
         """
 
-        self.paths=[]
-        """
-        Contains a list of paths.
-        todo: is there really a need for this?
-        """
-
         self.path=None
         """
         The active path.
@@ -101,15 +95,6 @@ class GuiProject(object):
     def set_parent_window(self,parent_window):
         self.main_window.Reparent(parent_window)
 
-    def set_active_path(self,path):
-        """
-        Sets `path` as the active path,
-        also adding it to self.paths if necessary.
-        """
-        if not path in self.paths:
-            self.paths.append(path)
-        self.path=path
-
     def make_plain_root(self,*args,**kwargs):
         """
         Creates a parent-less node, whose state is a simple plain state.
@@ -120,12 +105,7 @@ class GuiProject(object):
         Returns the node.
         """
         root=self.project.make_plain_root(*args,**kwargs)
-        if self.path==None:
-            self.path=garlicsim.state.Path(self.project.tree,root)
-        else:
-            self.path.start=root
-        self.project.crunch_all_edges(root,self.default_buffer)
-        self.make_active_node(root)
+        self.set_active_node(root)
         return root
 
     def make_random_root(self,*args,**kwargs):
@@ -138,36 +118,10 @@ class GuiProject(object):
         Returns the node.
         """
         root=self.project.make_random_root(*args,**kwargs)
-        if self.path==None:
-            self.path=garlicsim.state.Path(self.project.tree,root)
-        else:
-            self.path.start=root
-        self.project.crunch_all_edges(root,self.default_buffer)
-        self.make_active_node(root)
+        self.set_active_node(root)
         return root
 
-    def make_active_node_and_correct_path(self,node):
-        """
-        Makes "node" the active node, displaying it onscreen.
-        Also modifies the active path so that it will go through
-        that node.
-        """
-        if node in self.path:
-            self.make_active_node(node)
-            return
-        else:
-            current=node
-            while True:
-                parent=current.parent
-                if parent==None:
-                    self.path.start=current
-                    break
-                if len(parent.children)>1:
-                    self.path.decisions[parent]=current
-                current=parent
-        self.make_active_node(node)
-
-    def make_active_node(self,node):
+    def set_active_node(self,node,modify_path=True):
         """
         Makes "node" the active node, displaying it onscreen.
         """
@@ -180,7 +134,31 @@ class GuiProject(object):
         self.active_node=node
         if was_playing==True:
             self.start_playing()
+        if modify_path:
+            self.__modify_path_to_include_active_node()
         self.main_window.Refresh()
+
+    def __modify_path_to_include_active_node(self):
+        """
+
+        """
+        if self.path is None:
+            self.path=garlicsim.state.Path(self.project.tree)
+        if self.active_node in self.path:
+            return
+        else:
+            current=self.active_node
+            while True:
+                if current.block is not None:
+                    current=current.block[0]
+                parent=current.parent
+                if parent is None:
+                    self.path.start=current
+                    return
+                if len(parent.children)>1:
+                    self.path.decisions[parent]=current
+                current=parent
+
 
 
     def start_playing(self):
@@ -214,7 +192,7 @@ class GuiProject(object):
     def __editing_state(self):
         node=self.active_node
         state=node.state
-        if state.is_touched()==False or node.still_in_editing==False:
+        if state.is_touched() is False or node.still_in_editing is False:
             new_node=self.edit_from_active_node()
             return new_node.state
         else:
@@ -225,10 +203,7 @@ class GuiProject(object):
         If the simulation is currently playing, stops it.
         Otherwise, starts playing.
         """
-        if self.is_playing:
-            return self.stop_playing()
-        else:
-            return self.start_playing()
+        return self.stop_playing() if self.is_playing else self.start_playing()
 
 
     def __play_next(self,node):
@@ -256,8 +231,7 @@ class GuiProject(object):
         todo: maybe not let to do it from unfinalized touched node?
         """
         new_node=self.project.step(self.active_node)
-        self.make_active_node(new_node)
-        self.notify_paths_of_fork(new_node.parent,new_node)
+        self.set_active_node(new_node)
         return new_node
 
     def edit_from_active_node(self,*args,**kwargs):
@@ -269,30 +243,9 @@ class GuiProject(object):
         """
         new_node=self.project.tree.new_touched_state(template_node=self.active_node)
         new_node.still_in_editing=True
-        self.make_active_node(new_node)
-        self.notify_paths_of_fork(self.active_node.parent,new_node)
+        self.set_active_node(new_node)
         return new_node
 
-
-
-    def notify_paths_of_fork(self,parent_node,child_node):
-        """
-        Notifies all the paths in self.paths of the new fork.
-        Why should the paths be notified? Because they need to
-        know which fork of the road to choose.
-        """
-
-        if parent_node==None:
-            self.path.start=child_node
-            return
-
-        non_active_paths=[path for path in self.paths if path!=self.path]
-
-        if self.path!=None:
-            self.path.decisions[parent_node]=child_node
-        for path in non_active_paths:
-            if path.decisions.has_key(parent_node)==False:
-                path.decisions[parent_node]=parent_node.children[0]
 
     def sync_workers(self):
         """

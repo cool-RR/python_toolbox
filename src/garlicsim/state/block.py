@@ -100,7 +100,7 @@ class Block(object):
         """
         Returns whether the block contains `node`
         """
-        return self.list.__contains__(node)
+        return node.block==self # Nice, ay?
 
     def __iter__(self):
         return self.list.__iter__()
