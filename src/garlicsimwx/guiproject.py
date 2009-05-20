@@ -21,8 +21,8 @@ class GuiProject(object):
     A GuiProject encapsulates a Project for use with a wxPython
     interface.
     """
-    def __init__(self,specific_simulation_package,parent_window):
-        self.project=garlicsim.Project(specific_simulation_package)
+    def __init__(self,simulation_package,parent_window):
+        self.project=garlicsim.Project(simulation_package)
 
 
 
@@ -85,18 +85,18 @@ class GuiProject(object):
         main_window.Bind(wx.EVT_MENU,self.edit_from_active_node,id=s2i("Fork by editing"))
         main_window.Bind(wx.EVT_MENU,self.step_from_active_node,id=s2i("Fork naturally"))
 
-        self.specific_simulation_package=specific_simulation_package
-        specific_simulation_package.initialize(self)
+        self.simulation_package=simulation_package
+        simulation_package.initialize(self)
         wx.CallAfter(self.make_initial_dialog)
 
     def make_initial_dialog(self):
-        if hasattr(self.specific_simulation_package,"make_initial_dialog"):
-            return self.specific_simulation_package.make_initial_dialog(self)
+        if hasattr(self.simulation_package,"make_initial_dialog"):
+            return self.simulation_package.make_initial_dialog(self)
         else:
             return self.make_generic_initial_dialog()
 
     def show_state(self,state):
-        self.specific_simulation_package.show_state(self,state)
+        self.simulation_package.show_state(self,state)
 
     def set_parent_window(self,parent_window):
         self.main_window.Reparent(parent_window)

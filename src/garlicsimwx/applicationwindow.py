@@ -67,7 +67,6 @@ class ApplicationWindow(wx.Frame):
     def add_gui_project(self,gui_project):
         self.gui_projects.append(gui_project)
         self.notebook.AddPage(gui_project.main_window,"zort!",select=True)
-        gui_project.set_parent_window(self.notebook)
 
     """
     def delete_gui_project(self,gui_project):
@@ -95,17 +94,14 @@ class ApplicationWindow(wx.Frame):
     def on_new(self,e):
         dialog=customwidgets.SimulationPackageSelectionDialog(self,-1)
         if dialog.ShowModal() == wx.ID_OK:
-            specific_simulation_package=dialog.get_simulation_package_selection()
+            simulation_package=dialog.get_simulation_package_selection()
         else:
             dialog.Destroy()
             return
         dialog.Destroy()
 
-        gui_project=guiproject.GuiProject(specific_simulation_package,self.notebook)
+        gui_project=guiproject.GuiProject(simulation_package,self.notebook)
         self.add_gui_project(gui_project)
-        #root=gui_project.make_random_root(80,40)
-        #gui_project.project.edges_to_crunch[root]=50
-        #gui_project.make_active_node(root)
 
     def sync_workers_wrapper(self,e=None):
         """

@@ -11,9 +11,7 @@ todo:
 maybe path belongs in Project and not GuiProject?
 
 
-    todo: initially each Project will be attached to a
-    specific simulation package; later I'll make it able to use
-    several simulation packages.
+    todo: specify arguments to step function
 
 todo: more sophisticated version of `edges_to_crunch`.
 
@@ -43,10 +41,6 @@ class Project(object):
 
     The Project class does not require wxPython or any other
     GUI package: It can be used entirely from the Python command-line.
-
-    todo: initially each Project will be attached to a
-    specific simulation package; later I'll make it able to use
-    several simulation packages.
     """
 
     def __init__(self,simulation_package):
