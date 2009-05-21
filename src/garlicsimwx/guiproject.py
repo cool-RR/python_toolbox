@@ -140,25 +140,11 @@ class GuiProject(object):
 
     def __modify_path_to_include_active_node(self):
         """
-
+        Makes sure that self.path goes through the active node,
+        replacing it with another path if it doesn't.
         """
-        if self.path is None:
-            self.path=garlicsim.state.Path(self.project.tree)
-        if self.active_node in self.path:
-            return
-        else:
-            current=self.active_node
-            while True:
-                if current.block is not None:
-                    current=current.block[0]
-                parent=current.parent
-                if parent is None:
-                    self.path.start=current
-                    return
-                if len(parent.children)>1:
-                    self.path.decisions[parent]=current
-                current=parent
-
+        if (self.path is None) or (self.active_node not in self.path):
+            self.path=self.active_node.make_containing_path()
 
 
     def start_playing(self):

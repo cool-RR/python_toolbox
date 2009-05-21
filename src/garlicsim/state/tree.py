@@ -64,7 +64,7 @@ class Tree(object):
         Wraps state in node and adds to tree.
         Returns the node.
         """
-        mynode=Node(state)
+        mynode=Node(self,state)
         self.add_node(mynode,parent,template_node)
         return mynode
 

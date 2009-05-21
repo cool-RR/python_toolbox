@@ -3,12 +3,14 @@ A module that defines the `Path` class. See
 its documentation for more information.
 
 todo: path's methods should all optimized using Blocks!
+are they already?
 """
 
 import warnings
 from tree import *
 from node import *
 from block import *
+
 
 class Path(object):
     """
