@@ -31,18 +31,16 @@ Maybe due to very low process priority of edgecruncher.
 """
 
 
-import wx
-from multiprocessing import *
 #from core import *
 import threading
-import Queue as QueueModule
+import Queue as queue
 
 try:
     from misc.processpriority import set_process_priority
 except:
     pass
 
-class EdgeCruncher(Process):
+class EdgeCruncher(threading.Thread):
     """
     EdgeCruncher is a subclass of multiprocessing.Process. An EdgeCruncher
     is responsible for crunching the simulation in the background.
@@ -60,13 +58,13 @@ class EdgeCruncher(Process):
         self.starter=starter
         self.daemon=True
 
-        self.work_queue=Queue()
+        self.work_queue=queue.Queue()
         """
         The EdgeCruncher puts the work that it has completed
         into this queue, to be picked up by sync_workers.
         """
 
-        self.message_queue=Queue()
+        self.message_queue=queue.Queue()
         """
         This queue is used by sync_workers to send instructions
         to the EdgeRenderer.
@@ -85,13 +83,9 @@ class EdgeCruncher(Process):
         The function ran by EdgeCruncher. Does the actual work.
         """
 
-        """
-        import simulations.life.life as simulation
-        import core
-        import wx
-        """
         try:
-            self.set_priority(0)
+            #self.set_priority(0)
+            pass
         except:
             pass
 
