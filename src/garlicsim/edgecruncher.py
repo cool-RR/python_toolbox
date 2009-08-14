@@ -33,7 +33,11 @@ Maybe due to very low process priority of edgecruncher.
 
 #from core import *
 import threading
-import Queue as queue
+
+try:
+    import queue
+except ImportError:
+    import Queue as queue
 
 try:
     from misc.processpriority import set_process_priority
@@ -52,7 +56,7 @@ class EdgeCruncher(threading.Thread):
     most of the smart work is being done by sync_workers.
     """
     def __init__(self,starter,step_function,*args,**kwargs):
-        Process.__init__(self,*args,**kwargs)
+        threading.Thread.__init__(self,*args,**kwargs)
 
         self.step=step_function
         self.starter=starter
@@ -92,21 +96,22 @@ class EdgeCruncher(threading.Thread):
         #import psyco #These two belong here?
         #psyco.full()
 
-        current=self.starter
-        order=None
+        current = self.starter
+        order = None
         while True:
-            next=self.step(current)
+            next = self.step(current)
             self.work_queue.put(next)
-            current=next
+            current = next
 
             try:
                 order=self.message_queue.get(block=False)
                 #do something with order
-                if order=="???":
-                    #do ???
-                    pass
-
-                order=None
-            except QueueModule.Empty:
+                if order=="Terminate":
+                    return
+                order = None
+            except queue.Empty:
                 pass
+
+    def terminate(self):
+        self.message_queue.put("Terminate")
 

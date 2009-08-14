@@ -1,4 +1,5 @@
 import os, sys
+import random
 
 import wx
 
@@ -8,6 +9,7 @@ import guiproject
 import misc.notebookctrl as notebookctrl
 import customwidgets
 
+import misc.threadtimer as threadtimer
 
 #import psyco
 #psyco.full()
@@ -22,6 +24,11 @@ def get_program_path():
 os.chdir(get_program_path())
 sys.path.append(get_program_path())
 ########################
+
+
+wxEVT_RUN_BACKGROUND = wx.NewEventType()
+EVT_RUN_BACKGROUND = wx.PyEventBinder(wxEVT_RUN_BACKGROUND, 1)
+
 
 class ApplicationWindow(wx.Frame):
     """
@@ -58,9 +65,19 @@ class ApplicationWindow(wx.Frame):
         self.Bind(wx.EVT_TOOL, self.on_new, id=s2i("Button New"))
         self.Bind(wx.EVT_TOOL, self.done_editing, id=s2i("Button Done editing"))
 
+        """
+        self.Bind(EVT_RUN_BACKGROUND, self.on_run_background)
 
-        self.Bind(wx.EVT_IDLE,self.sync_workers_wrapper)
-        self.idle_block=False
+        event = wx.PyEvent()
+        event.SetEventType(wxEVT_RUN_BACKGROUND)
+        wx.PostEvent(self, event)
+
+        self.run_background_block=False
+        """
+
+        self.background_timer = threadtimer.ThreadTimer(self)
+        self.background_timer.start(150)
+        self.Bind(threadtimer.EVT_THREAD_TIMER, self.background_stuff)
 
         self.Show()
 
@@ -78,6 +95,7 @@ class ApplicationWindow(wx.Frame):
     """
 
     def exit(self,e):
+        self.background_timer.stop()
         self.Close()
 
     def done_editing(self,e=None):
@@ -103,27 +121,14 @@ class ApplicationWindow(wx.Frame):
         gui_project=guiproject.GuiProject(simulation_package,self.notebook)
         self.add_gui_project(gui_project)
 
-    def sync_workers_wrapper(self,e=None):
+    def background_stuff(self, e=None):
         """
         A function that calls `sync_workers` for all the
         open GuiProjects.
         """
+        for gui_project in self.gui_projects:
+            gui_project.sync_workers()
 
-        if self.idle_block==True:
-            return
-
-
-        for thing in self.gui_projects:
-            thing.sync_workers()
-
-        wx.CallLater(150,self._clear_idle_block_and_do) # Should make the delay customizable?
-        self.idle_block=True
-
-    def _clear_idle_block_and_do(self):
-        self.idle_block=False
-        event=wx.PyEvent()
-        event.SetEventType(wx.wxEVT_IDLE)
-        wx.PostEvent(self,event)
 
 
 def main():
