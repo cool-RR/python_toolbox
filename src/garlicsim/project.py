@@ -17,8 +17,9 @@ todo: more sophisticated version of `edges_to_crunch`.
 
 """
 
+import random
 import state
-from edgecruncher import EdgeCruncher
+from crunchers import CruncherThread, CruncherProcess
 from misc.dumpqueue import dump_queue
 from misc.infinity import Infinity # Same as Infinity=float("inf")
 
@@ -45,7 +46,7 @@ class Project(object):
 
     def __init__(self,simulation_package):
 
-        self.simulation_package=simulation_package
+        self.init_simulation_package(simulation_package)
         self.tree=state.Tree()
 
         self.workers={}
@@ -58,6 +59,19 @@ class Project(object):
         A dict that maps edges that should be worked on to a number specifying
         how many nodes should be created after them.
         """
+
+    def init_simulation_package(self, simulation_package):
+
+        self.simulation_package = simulation_package
+
+        step_defined = hasattr(simulation_package, "step")
+        history_step_defined = hasattr(simulation_package, "history_step")
+
+        if step_defined and history_step_defined:
+            raise StandardError("The simulation package is defining both a\
+                                 step and a history_step - That's forbidden!")
+
+        self.history_looker = history_step_defined
 
 
     def make_plain_root(self,*args,**kwargs):
@@ -138,6 +152,8 @@ class Project(object):
         Returns the total amount of nodes that were added to the tree.
         """
 
+        Cruncher = random.choice([CruncherThread, CruncherProcess])
+
         my_edges_to_crunch=self.edges_to_crunch.copy()
 
         if temp_infinity_node!=None:
@@ -208,7 +224,7 @@ class Project(object):
             else:
                 # Create worker
                 if edge.still_in_editing==False:
-                    worker=self.workers[edge]=EdgeCruncher(edge.state,step_function=self.simulation_package.step)
+                    worker=self.workers[edge]=Cruncher(edge.state,step_function=self.simulation_package.step)
                     worker.start()
                 if edge==temp_infinity_node:
                     continuation_of_temp_infinity_node=edge

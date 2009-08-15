@@ -21,9 +21,16 @@ class ThreadTimer(object):
        self.alive = False
 
 class Thread(threading.Thread):
+
     def run(self):
-       while self.parent.alive:
-           time.sleep(self.parent.interval / 1000.0)
+
+        interval_in_seconds = self.parent.interval / 1000.0
+        def sleep():
+            time.sleep(interval_in_seconds)
+
+        sleep()
+        while self.parent.alive:
            event = wx.PyEvent()
            event.SetEventType(wxEVT_THREAD_TIMER)
            wx.PostEvent(self.parent.parent, event)
+           sleep()

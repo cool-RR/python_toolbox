@@ -31,7 +31,6 @@ Maybe due to very low process priority of edgecruncher.
 """
 
 
-#from core import *
 import threading
 
 try:
@@ -44,7 +43,7 @@ try:
 except:
     pass
 
-class EdgeCruncher(threading.Thread):
+class CruncherThread(threading.Thread):
     """
     EdgeCruncher is a subclass of multiprocessing.Process. An EdgeCruncher
     is responsible for crunching the simulation in the background.
