@@ -30,7 +30,7 @@ def initialize(gui_project):
 
 def show_state(gui_project,state):
     for player_type in player_types:
-        part=gui_project.pie_part_dict[player_type]
-        value=how_many_players_of_certain_type(state.player_pool,player_type)
+        part = gui_project.pie_part_dict[player_type]
+        value = how_many_players_of_certain_type(state.player_pool, player_type)
         part.SetValue(value)
     pass

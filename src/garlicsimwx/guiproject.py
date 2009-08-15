@@ -32,7 +32,9 @@ class GuiProject(object):
 
         self.state_showing_window=scrolled.ScrolledPanel(self.main_window,-1)
 
-        self.shell=wx.py.shell.Shell(self.main_window,-1,size=(400,-1))
+        locals_for_shell = locals()
+        locals_for_shell.update({"this_gui_project": self})
+        self.shell=wx.py.shell.Shell(self.main_window, -1, size=(400,-1), locals=locals_for_shell)
         self.seek_bar=customwidgets.SeekBar(self.main_window,-1,self)
         self.tree_browser=customwidgets.TreeBrowser(self.main_window,-1,self)
 
@@ -287,6 +289,6 @@ class GuiProject(object):
         initial_dialog.Destroy()
 
     def tree_modify_refresh(self):
-        self.seek_bar.Refresh()
-        self.tree_browser.Refresh()
+        pass#self.seek_bar.Refresh()
+        #self.tree_browser.Refresh()
 

@@ -26,10 +26,6 @@ sys.path.append(get_program_path())
 ########################
 
 
-wxEVT_RUN_BACKGROUND = wx.NewEventType()
-EVT_RUN_BACKGROUND = wx.PyEventBinder(wxEVT_RUN_BACKGROUND, 1)
-
-
 class ApplicationWindow(wx.Frame):
     """
     An application window that allows the user to open multiple GuiProjects

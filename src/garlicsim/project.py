@@ -152,7 +152,7 @@ class Project(object):
         Returns the total amount of nodes that were added to the tree.
         """
 
-        Cruncher = random.choice([CruncherThread, CruncherProcess])
+        Cruncher = CruncherThread#random.choice([CruncherThread, CruncherProcess])
 
         my_edges_to_crunch=self.edges_to_crunch.copy()
 
