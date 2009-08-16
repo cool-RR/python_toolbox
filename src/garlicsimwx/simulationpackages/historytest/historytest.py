@@ -19,7 +19,7 @@ def make_random_state(*args,**kwargs):
     return state
 
 
-def step(history_browser,*args,**kwargs):
+def history_step(history_browser,*args,**kwargs):
 
     new_state=garlicsim.state.State()
 
@@ -31,5 +31,3 @@ def step(history_browser,*args,**kwargs):
     else:
         new_state.number=888
     return new_state
-
-step.history_looker=True

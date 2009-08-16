@@ -122,6 +122,7 @@ class ApplicationWindow(wx.Frame):
         A function that calls `sync_workers` for all the
         open GuiProjects.
         """
+        print("bg")
         for gui_project in self.gui_projects:
             gui_project.sync_workers()
 

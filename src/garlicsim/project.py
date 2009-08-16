@@ -23,6 +23,8 @@ from crunchers import CruncherThread, CruncherProcess
 from misc.dumpqueue import dump_queue
 from misc.infinity import Infinity # Same as Infinity=float("inf")
 
+PreferredCruncher = CruncherProcess
+
 
 class Project(object):
     """
@@ -47,7 +49,13 @@ class Project(object):
     def __init__(self,simulation_package):
 
         self.init_simulation_package(simulation_package)
+
         self.tree=state.Tree()
+
+        if self.history_looker:
+            self.Cruncher = CruncherThread
+        else:
+            self.Cruncher = PreferredCruncher
 
         self.workers={}
         """
@@ -152,7 +160,6 @@ class Project(object):
         Returns the total amount of nodes that were added to the tree.
         """
 
-        Cruncher = CruncherThread#random.choice([CruncherThread, CruncherProcess])
 
         my_edges_to_crunch=self.edges_to_crunch.copy()
 
@@ -224,7 +231,7 @@ class Project(object):
             else:
                 # Create worker
                 if edge.still_in_editing==False:
-                    worker=self.workers[edge]=Cruncher(edge.state,step_function=self.simulation_package.step)
+                    worker=self.workers[edge]=self.Cruncher(edge.state,step_function=self.simulation_package.step)
                     worker.start()
                 if edge==temp_infinity_node:
                     continuation_of_temp_infinity_node=edge
