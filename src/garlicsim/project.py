@@ -13,6 +13,7 @@ todo: more sophisticated version of `edges_to_crunch`.
 
 import random
 import state
+import misc.coolreadwritelock as coolreadwritelock
 from simpackgrokker import SimpackGrokker
 from crunchers import CruncherThread, CruncherProcess
 from misc.dumpqueue import dump_queue
@@ -41,12 +42,14 @@ class Project(object):
     GUI package: It can be used entirely from the Python command-line.
     """
 
-    def __init__(self,simpack):
+    def __init__(self, simpack):
         
         self.simpack_grokker = SimpackGrokker(simpack)
         self.simpack = simpack
 
         self.tree=state.Tree()
+        self.tree_lock = coolreadwritelock.CoolReadWriteLock()
+        #self.cruncher_mapping_lock = coolreadwritelock.CoolReadWriteLock()
 
         if self.simpack_grokker.history_looker:
             self.Cruncher = CruncherThread
@@ -72,7 +75,7 @@ class Project(object):
         Returns the node.
         """
         state=self.simpack.make_plain_state(*args,**kwargs)
-        state._State__touched=True
+        state._State__touched = True
         return self.root_this_state(state)
 
     def make_random_root(self,*args,**kwargs):
@@ -83,7 +86,7 @@ class Project(object):
         Returns the node.
         """
         state=self.simpack.make_random_state(*args,**kwargs)
-        state._State__touched=True
+        state._State__touched = True
         return self.root_this_state(state)
 
     def root_this_state(self,state):
@@ -212,7 +215,6 @@ class Project(object):
             return self.Cruncher(node.state,step_function=self.simpack_grokker.step)
         else: # self.Cruncher == CruncherThread
             return self.Cruncher(node,self,step_function=self.simpack_grokker.step)
-        return self.Cruncher(edge.state,step_function=self.simpack_grokker.step)
 """
     Removing:
 

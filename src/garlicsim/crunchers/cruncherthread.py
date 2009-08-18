@@ -62,7 +62,8 @@ class CruncherThread(threading.Thread):
     """
     def __init__(self, initial_node, project ,step_function, *args, **kwargs):
         threading.Thread.__init__(self, *args, **kwargs)
-
+        
+        self.project = project
         self.step = step_function
         self.history_looker = hasattr(self.step,"history_looker") and self.step.history_looker
         if self.history_looker:
@@ -113,7 +114,7 @@ class CruncherThread(threading.Thread):
         self.current = self.starter
         order = None
         if self.history_looker:
-            self.history_browser = historybrowser.HistoryBrowser()
+            self.history_browser = historybrowser.HistoryBrowser(self)
             
         while True:
             self.do_work()

@@ -11,6 +11,7 @@ from tree import *
 from node import *
 from block import *
 
+def get_state_clock: return state.clock # misc this
 
 class Path(object):
     """
@@ -168,13 +169,67 @@ class Path(object):
             return thing[-1]
         else:
             return thing
+    
+    def request_by_clock(clock, rounding="Closest"):
+        return self.request_by_monotonic_function(function=get_state_clock, value=clock, rounding=rounding)    
+        
+    def request_by_monotonic_function(function, value, rounding="Closest"):
+        assert rounding in ["High", "Low", "Exact", "Both", "Closest"]        
+        
+        get = lambda item: function(item[1].state)
+        
+        low = [0, self.start]
+        high = [len(self)-1, self[-1]]
+        
+        low_value, high_value = get(low), get(high)
+        
+        if low_value >= value:
+            if rounding in ["Both", "High", "Closest"] or (low_value==value and rounding=="Exact"):
+                return [low[1]]
+            else: # rounding in ["Low"] or (rounding in ["Exact"] and low_value!=value)
+                return []
+        if high_value <= value:
+            if rounding in ["Both", "Low", "Closest"] or (low_value==value and rounding=="Exact"):
+                return [high[1]]
+            else: # rounding in ["High"] or (rounding in ["Exact"] and low_value!=value)
+                return []
+        
+        """
+        Now we know the value is somewhere inside the path.
+        """
+        
+        while high[0] - low[0] > 1: # Not sure this section is efficient, since we're doing lots of getitem
+            medium_index = (low[0] + high[0]) // 2
+            medium = [medium_index, self[medium_index]]
+            medium_value = get(medium)
+            if medium_value > value:
+                high = medium; high_value = medium_value
+                continue
+            if medium_value < value:
+                low = medium; low_value = medium_value
+                continue
+            if medium_value == value:
+                after_medium = [medium[0]+1, self[medium[0]+1]]
+                after_medium_value = get(after_medium)
+                before_medium = [medium[0]-1, self[medium[0]-1]]
+                if get(after_medium) == value:
+                    low = medium; low_value = medium_value
+                    high = after_medium; high_value = after_medium_value
+                    break
+                else: # get(after_medium) > value
+                    high = medium; high_value = medium_value
+                    low = before_medium; low_value = get(before_medium)
+                    break
+                
+        
+        return [node for [number, node] in (low, high)]
+        
 
-    def get_node_by_time(self,time):
+    def get_node_by_time(self, time):
         """
         Gets the node in path which "occupies" the timepoint "time".
         This means that, if there is a node which is right after "time", it
         returns the node immediately before it (if there is one). Otherwise, returns None.
-
         """
         low=self.start
         if time<low.state.clock:
