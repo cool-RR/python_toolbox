@@ -100,16 +100,15 @@ class CruncherProcess(multiprocessing.Process):
             next = self.step(current)
             self.work_queue.put(next)
             current = next
-
             try:
                 order=self.message_queue.get(block=False)
                 #do something with order
-                if order=="Terminate":
+                if order=="Retire":
                     return
                 order = None
             except queue.Empty:
                 pass
 
-    def terminate(self):
-        self.message_queue.put("Terminate")
+    def retire(self):
+        self.message_queue.put("Retire")
 

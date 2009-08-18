@@ -58,7 +58,7 @@ class GuiProject(object):
         Says whether the simulation is currently playing.
         """
 
-        self.delay=0.05 # Should be a mechanism for setting that
+        self.delay=0.5 # Should be a mechanism for setting that
         self.default_buffer=50 # Should be a mechanism for setting that
 
         self.timer_for_playing=None
@@ -289,6 +289,6 @@ class GuiProject(object):
         initial_dialog.Destroy()
 
     def tree_modify_refresh(self):
-        pass#self.seek_bar.Refresh()
-        #self.tree_browser.Refresh()
+        self.seek_bar.Refresh()
+        self.tree_browser.Refresh()
 

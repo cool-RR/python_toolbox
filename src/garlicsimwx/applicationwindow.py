@@ -122,7 +122,6 @@ class ApplicationWindow(wx.Frame):
         A function that calls `sync_workers` for all the
         open GuiProjects.
         """
-        print("bg")
         for gui_project in self.gui_projects:
             gui_project.sync_workers()
 
@@ -130,7 +129,7 @@ class ApplicationWindow(wx.Frame):
 
 def main():
     app = wx.PySimpleApp()
-    my_app_win=ApplicationWindow(None,-1,"GarlicSim",size=(600,600))
+    my_app_win=ApplicationWindow(None, -1, "GarlicSim", size=(600,600))
 
     """
     import cProfile

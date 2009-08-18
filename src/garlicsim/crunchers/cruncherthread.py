@@ -1,5 +1,7 @@
 """
 
+Maybe make the process/thread just an attribute?
+
 todo: What if EdgeRenderer has a run-time error?
 
 
@@ -105,12 +107,12 @@ class CruncherThread(threading.Thread):
             try:
                 order=self.message_queue.get(block=False)
                 #do something with order
-                if order=="Terminate":
+                if order=="Retire":
                     return
                 order = None
             except queue.Empty:
                 pass
 
-    def terminate(self):
-        self.message_queue.put("Terminate")
+    def retire(self):
+        self.message_queue.put("Retire")
 

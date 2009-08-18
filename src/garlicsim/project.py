@@ -23,7 +23,7 @@ from crunchers import CruncherThread, CruncherProcess
 from misc.dumpqueue import dump_queue
 from misc.infinity import Infinity # Same as Infinity=float("inf")
 
-PreferredCruncher = CruncherProcess
+PreferredCruncher = [CruncherThread, CruncherProcess][0]
 
 
 class Project(object):
@@ -76,7 +76,7 @@ class Project(object):
         history_step_defined = hasattr(simulation_package, "history_step")
 
         if step_defined and history_step_defined:
-            raise StandardError("The simulation package is defining both a\
+            raise StandardError("The simulation package is defining both a \
                                  step and a history_step - That's forbidden!")
 
         self.history_looker = history_step_defined
@@ -179,7 +179,7 @@ class Project(object):
                 worker=self.workers[edge]
                 result=dump_queue(worker.work_queue)
 
-                worker.terminate()
+                worker.retire()
 
                 current=edge
                 for state in result:
@@ -208,7 +208,7 @@ class Project(object):
                 if number!=Infinity: # Maybe this is just a redundant dichotomy from before I had Infinity?
                     new_number=number-len(result)
                     if new_number<=0:
-                        worker.terminate()
+                        worker.retire()
                         worker.join() # todo: sure?
                         del self.workers[edge]
                     else:
