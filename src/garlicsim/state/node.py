@@ -135,5 +135,13 @@ class Node(object):
                         nodes[kid]=d+rest_of_block
                     continue
         return edges
+    
+    def get_root(self):
+        lowest = self.block[0] if self.block else self
+        while lowest.parent is not None:
+            lowest = lowest.parent
+            if lowest.block:
+                lowest = lowest.block[0]
+        return lowest
 
 from path import *

@@ -106,15 +106,15 @@ class ApplicationWindow(wx.Frame):
         raise StandardError("No GuiProject selected.")
 
     def on_new(self,e):
-        dialog=customwidgets.SimulationPackageSelectionDialog(self,-1)
+        dialog=customwidgets.SimpackSelectionDialog(self,-1)
         if dialog.ShowModal() == wx.ID_OK:
-            simulation_package=dialog.get_simulation_package_selection()
+            simpack=dialog.get_simpack_selection()
         else:
             dialog.Destroy()
             return
         dialog.Destroy()
 
-        gui_project=guiproject.GuiProject(simulation_package,self.notebook)
+        gui_project=guiproject.GuiProject(simpack,self.notebook)
         self.add_gui_project(gui_project)
 
     def sync_workers(self, e=None):

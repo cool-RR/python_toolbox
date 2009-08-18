@@ -1,5 +1,7 @@
 """
 
+Maybe be more DRYish in thread and process?
+
 Maybe make the process/thread just an attribute?
 
 todo: What if EdgeRenderer has a run-time error?
@@ -40,7 +42,8 @@ try:
 except ImportError:
     import Queue as queue
 
-import garlicsim.historybrowser
+from garlicsim.historybrowser import HistoryBrowser
+
 try:
     from misc.processpriority import set_process_priority
 except:
@@ -57,8 +60,8 @@ class CruncherThread(threading.Thread):
     all the resulting states in a queue. An EdgeCruncher is quite dumb actually,
     most of the smart work is being done by sync_workers.
     """
-    def __init__(self,starter,step_function,*args,**kwargs):
-        threading.Thread.__init__(self,*args,**kwargs)
+    def __init__(self, initial_node, project ,step_function, *args, **kwargs):
+        threading.Thread.__init__(self, *args, **kwargs)
 
         self.step = step_function
         self.history_looker = hasattr(self.step,"history_looker") and self.step.history_looker
@@ -67,7 +70,10 @@ class CruncherThread(threading.Thread):
         else:
             self.do_work = self.do_non_history_looker_work
     
-        self.starter = starter
+        if self.history_looker:
+            self.history_browser = HistoryBrowser(cruncher=self, initial_node=initial_node)
+        
+        self.initial_state = initial_node.state
         self.daemon = True
 
         self.work_queue = queue.Queue()
@@ -106,6 +112,9 @@ class CruncherThread(threading.Thread):
 
         self.current = self.starter
         order = None
+        if self.history_looker:
+            self.history_browser = historybrowser.HistoryBrowser()
+            
         while True:
             self.do_work()
 
@@ -129,5 +138,8 @@ class CruncherThread(threading.Thread):
         pass
     
     def retire(self):
+        """
+        This method may be called both from within the process and from outside the process.
+        """
         self.message_queue.put("Retire")
 

@@ -1,11 +1,5 @@
 """
-TODO: in radiation style simulations, how will the simulator know
-the history of the particles' movements? Two options. Either
-traverse the tree, or have that information inside every
-state. Which one should I choose?
 
-Or maybe give two options, one where the simulation gets the
-state and one where it gets the node.
 
 todo:
 maybe path belongs in Project and not GuiProject?
@@ -19,6 +13,7 @@ todo: more sophisticated version of `edges_to_crunch`.
 
 import random
 import state
+from simpackgrokker import SimpackGrokker
 from crunchers import CruncherThread, CruncherProcess
 from misc.dumpqueue import dump_queue
 from misc.infinity import Infinity # Same as Infinity=float("inf")
@@ -46,13 +41,14 @@ class Project(object):
     GUI package: It can be used entirely from the Python command-line.
     """
 
-    def __init__(self,simulation_package):
-
-        self.init_simulation_package(simulation_package)
+    def __init__(self,simpack):
+        
+        self.simpack_grokker = SimpackGrokker(simpack)
+        self.simpack = simpack
 
         self.tree=state.Tree()
 
-        if self.history_looker:
+        if self.simpack_grokker.history_looker:
             self.Cruncher = CruncherThread
         else:
             self.Cruncher = PreferredCruncher
@@ -68,20 +64,6 @@ class Project(object):
         how many nodes should be created after them.
         """
 
-    def init_simulation_package(self, simulation_package):
-
-        self.simulation_package = simulation_package
-
-        step_defined = hasattr(simulation_package, "step")
-        history_step_defined = hasattr(simulation_package, "history_step")
-
-        if step_defined and history_step_defined:
-            raise StandardError("The simulation package is defining both a \
-                                 step and a history_step - That's forbidden!")
-
-        self.history_looker = history_step_defined
-
-
     def make_plain_root(self,*args,**kwargs):
         """
         Creates a parent-less node, whose state is a simple plain state.
@@ -89,7 +71,7 @@ class Project(object):
         for this to work.
         Returns the node.
         """
-        state=self.simulation_package.make_plain_state(*args,**kwargs)
+        state=self.simpack.make_plain_state(*args,**kwargs)
         state._State__touched=True
         return self.root_this_state(state)
 
@@ -100,7 +82,7 @@ class Project(object):
         for this to work.
         Returns the node.
         """
-        state=self.simulation_package.make_random_state(*args,**kwargs)
+        state=self.simpack.make_random_state(*args,**kwargs)
         state._State__touched=True
         return self.root_this_state(state)
 
@@ -110,28 +92,6 @@ class Project(object):
         Returns the node.
         """
         return self.tree.add_state(state)
-
-    def step(self,source_node):
-        """
-        Takes a node and simulates a child node from it.
-        This is NOT done in the background.
-        Returns the child node.
-        """
-        new_state=self.simulation_package.step(source_node.state)
-        return self.tree.add_state(new_state,source_node)
-
-    def multistep(self,source_node,steps=1):
-        """
-        Takes a node and simulates a succession of child nodes from it.
-        `steps` specifies how many nodes.
-        This is NOT done in the background.
-        Returns the last node.
-        """
-        my_node=source_node
-        for i in range(steps):
-            my_node=self.step(my_node)
-        return my_node
-
 
     def crunch_all_edges(self,node,wanted_distance):
         """
@@ -231,7 +191,7 @@ class Project(object):
             else:
                 # Create worker
                 if edge.still_in_editing==False:
-                    worker=self.workers[edge]=self.Cruncher(edge.state,step_function=self.simulation_package.step)
+                    worker=self.workers[edge] = self.create_cruncher(edge)
                     worker.start()
                 if edge==temp_infinity_node:
                     continuation_of_temp_infinity_node=edge
@@ -246,6 +206,13 @@ class Project(object):
         self.edges_to_crunch=my_edges_to_crunch
 
         return added_nodes
+    
+    def create_cruncher(self, node):
+        if self.Cruncher == CruncherProcess:
+            return self.Cruncher(node.state,step_function=self.simpack_grokker.step)
+        else: # self.Cruncher == CruncherThread
+            return self.Cruncher(node,self,step_function=self.simpack_grokker.step)
+        return self.Cruncher(edge.state,step_function=self.simpack_grokker.step)
 """
     Removing:
 
@@ -277,4 +244,25 @@ class Project(object):
                 self.edges_to_crunch[edge]=max(new_distance,self.edges_to_crunch[edge])
             else:
                 self.edges_to_crunch[edge]=new_distance
+                
+    def step(self,source_node):
+        \"""
+        Takes a node and simulates a child node from it.
+        This is NOT done in the background.
+        Returns the child node.
+        \"""
+        new_state=self.simulation_package.step(source_node.state)
+        return self.tree.add_state(new_state,source_node)
+
+    def multistep(self,source_node,steps=1):
+        \"""
+        Takes a node and simulates a succession of child nodes from it.
+        `steps` specifies how many nodes.
+        This is NOT done in the background.
+        Returns the last node.
+        \"""
+        my_node=source_node
+        for i in range(steps):
+            my_node=self.step(my_node)
+        return my_node
 """
