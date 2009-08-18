@@ -56,12 +56,12 @@ class Project(object):
         else:
             self.Cruncher = PreferredCruncher
 
-        self.workers={}
+        self.workers={} #rename to crunchers
         """
         A dict that maps edges that should be worked on to workers.
         """
 
-        self.edges_to_crunch={}
+        self.edges_to_crunch={} 
         """
         A dict that maps edges that should be worked on to a number specifying
         how many nodes should be created after them.
@@ -123,98 +123,98 @@ class Project(object):
         Returns the total amount of nodes that were added to the tree.
         """
 
-
-        my_edges_to_crunch=self.edges_to_crunch.copy()
-
-        if temp_infinity_node!=None:
-            if self.edges_to_crunch.has_key(temp_infinity_node):
-                had_temp_infinity_node=True
-                previous_value_of_temp_infinity_node=self.edges_to_crunch[temp_infinity_node]
-            else:
-                had_temp_infinity_node=False
-            my_edges_to_crunch[temp_infinity_node]=Infinity
-
-
-        added_nodes=0
-
-        for edge in self.workers.copy():
-            if not (edge in my_edges_to_crunch):
-                worker=self.workers[edge]
-                result=dump_queue(worker.work_queue)
-
-                worker.retire()
-
-                current=edge
-                for state in result:
-                    current=self.tree.add_state(state,parent=current)
-                added_nodes+=len(result)
-
-                del self.workers[edge]
-                worker.join() # todo: sure?
-
-
-
-        for (edge,number) in my_edges_to_crunch.items():
-            if self.workers.has_key(edge) and self.workers[edge].is_alive():
-
-                worker=self.workers[edge]
-                result=dump_queue(worker.work_queue)
-
-                current=edge
-                for state in result:
-                    current=self.tree.add_state(state,parent=current)
-                added_nodes+=len(result)
-
-                del my_edges_to_crunch[edge]
-
-
-                if number!=Infinity: # Maybe this is just a redundant dichotomy from before I had Infinity?
-                    new_number=number-len(result)
-                    if new_number<=0:
-                        worker.retire()
-                        worker.join() # todo: sure?
-                        del self.workers[edge]
+        with self.tree_lock.write:
+            my_edges_to_crunch=self.edges_to_crunch.copy()
+    
+            if temp_infinity_node!=None:
+                if self.edges_to_crunch.has_key(temp_infinity_node):
+                    had_temp_infinity_node=True
+                    previous_value_of_temp_infinity_node=self.edges_to_crunch[temp_infinity_node]
+                else:
+                    had_temp_infinity_node=False
+                my_edges_to_crunch[temp_infinity_node]=Infinity
+    
+    
+            added_nodes=0
+    
+            for edge in self.workers.copy():
+                if not (edge in my_edges_to_crunch):
+                    worker=self.workers[edge]
+                    result=dump_queue(worker.work_queue)
+    
+                    worker.retire()
+    
+                    current=edge
+                    for state in result:
+                        current=self.tree.add_state(state,parent=current)
+                    added_nodes+=len(result)
+    
+                    del self.workers[edge]
+                    #worker.join() # todo: sure?
+    
+    
+    
+            for (edge,number) in my_edges_to_crunch.items():
+                if self.workers.has_key(edge) and self.workers[edge].is_alive():
+    
+                    worker=self.workers[edge]
+                    result=dump_queue(worker.work_queue)
+    
+                    current=edge
+                    for state in result:
+                        current=self.tree.add_state(state,parent=current)
+                    added_nodes+=len(result)
+    
+                    del my_edges_to_crunch[edge]
+    
+    
+                    if number!=Infinity: # Maybe this is just a redundant dichotomy from before I had Infinity?
+                        new_number=number-len(result)
+                        if new_number<=0:
+                            worker.retire()
+                            #worker.join() # todo: sure?
+                            del self.workers[edge]
+                        else:
+                            my_edges_to_crunch[current]=new_number
+                            del self.workers[edge]
+                            self.workers[current]=worker
+    
                     else:
-                        my_edges_to_crunch[current]=new_number
+                        my_edges_to_crunch[current]=Infinity
                         del self.workers[edge]
                         self.workers[current]=worker
-
+    
+                    if edge==temp_infinity_node:
+                        continuation_of_temp_infinity_node=current
+                        progress_with_temp_infinity_node=len(result)
+    
+    
+    
+    
                 else:
-                    my_edges_to_crunch[current]=Infinity
-                    del self.workers[edge]
-                    self.workers[current]=worker
-
-                if edge==temp_infinity_node:
-                    continuation_of_temp_infinity_node=current
-                    progress_with_temp_infinity_node=len(result)
-
-
-
-
-            else:
-                # Create worker
-                if edge.still_in_editing==False:
-                    worker=self.workers[edge] = self.create_cruncher(edge)
-                    worker.start()
-                if edge==temp_infinity_node:
-                    continuation_of_temp_infinity_node=edge
-                    progress_with_temp_infinity_node=0
-
-        if temp_infinity_node!=None:
-            if had_temp_infinity_node:
-                my_edges_to_crunch[continuation_of_temp_infinity_node]=max(previous_value_of_temp_infinity_node-progress_with_temp_infinity_node,0)
-            else:
-                del my_edges_to_crunch[continuation_of_temp_infinity_node]
-
-        self.edges_to_crunch=my_edges_to_crunch
-
-        return added_nodes
+                    # Create worker
+                    if edge.still_in_editing==False:
+                        worker=self.workers[edge] = self.create_cruncher(edge)
+                        worker.start()
+                    if edge==temp_infinity_node:
+                        continuation_of_temp_infinity_node=edge
+                        progress_with_temp_infinity_node=0
+    
+            if temp_infinity_node!=None:
+                if had_temp_infinity_node:
+                    my_edges_to_crunch[continuation_of_temp_infinity_node]=max(previous_value_of_temp_infinity_node-progress_with_temp_infinity_node,0)
+                else:
+                    del my_edges_to_crunch[continuation_of_temp_infinity_node]
+    
+            self.edges_to_crunch=my_edges_to_crunch
+    
+            return added_nodes
     
     def create_cruncher(self, node):
         if self.Cruncher == CruncherProcess:
-            return self.Cruncher(node.state,step_function=self.simpack_grokker.step)
+            return self.Cruncher(node.state, step_function=self.simpack_grokker.step)
         else: # self.Cruncher == CruncherThread
-            return self.Cruncher(node,self,step_function=self.simpack_grokker.step)
+            return self.Cruncher(node.state, self, step_function=self.simpack_grokker.step)
 """
     Removing:
 

@@ -22,9 +22,11 @@ def make_random_state(*args,**kwargs):
 def history_step(history_browser,*args,**kwargs):
 
     new_state=garlicsim.state.State()
+    
+    
 
     with history_browser:
-        root=history_browser.request_state_by_number(0)
+        root = history_browser.request_state_by_clock(0, rounding="Exact")
 
     if random.choice([True,False]):
         new_state.number=root.number

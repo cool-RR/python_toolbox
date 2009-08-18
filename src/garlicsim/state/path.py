@@ -11,7 +11,7 @@ from tree import *
 from node import *
 from block import *
 
-def get_state_clock: return state.clock # misc this
+def get_state_clock(): return state.clock # misc this
 
 class Path(object):
     """
@@ -170,10 +170,10 @@ class Path(object):
         else:
             return thing
     
-    def request_by_clock(clock, rounding="Closest"):
+    def request_node_by_clock(self, clock, rounding="Closest"):
         return self.request_by_monotonic_function(function=get_state_clock, value=clock, rounding=rounding)    
         
-    def request_by_monotonic_function(function, value, rounding="Closest"):
+    def request_node_by_monotonic_function(self, function, value, rounding="Closest"):
         assert rounding in ["High", "Low", "Exact", "Both", "Closest"]        
         
         get = lambda item: function(item[1].state)
@@ -184,15 +184,19 @@ class Path(object):
         low_value, high_value = get(low), get(high)
         
         if low_value >= value:
-            if rounding in ["Both", "High", "Closest"] or (low_value==value and rounding=="Exact"):
-                return [low[1]]
-            else: # rounding in ["Low"] or (rounding in ["Exact"] and low_value!=value)
-                return []
+            if rounding == "Both":
+                return [None, low[1]]
+            if rounding in ["High", "Closest"] or (low_value==value and rounding=="Exact"):
+                return low[1]
+            else: # rounding == "Low" or (rounding == "Exact" and low_value!=value)
+                return None
         if high_value <= value:
-            if rounding in ["Both", "Low", "Closest"] or (low_value==value and rounding=="Exact"):
-                return [high[1]]
-            else: # rounding in ["High"] or (rounding in ["Exact"] and low_value!=value)
-                return []
+            if rounding == "Both":
+                return [high[1], None]
+            if rounding in ["Low", "Closest"] or (low_value==value and rounding=="Exact"):
+                return high[1]
+            else: # rounding == "High" or (rounding == "Exact" and low_value!=value)
+                return None
         
         """
         Now we know the value is somewhere inside the path.
@@ -221,8 +225,10 @@ class Path(object):
                     low = before_medium; low_value = get(before_medium)
                     break
                 
+        both = [node for [number, node] in (low, high)]
         
-        return [node for [number, node] in (low, high)]
+        return make_both_data_into_preferred_rounding(both, function, value, rounding)
+        
         
 
     def get_node_by_time(self, time):
@@ -295,26 +301,15 @@ class Path(object):
 
         return myseg
 
-"""
-    Removing, and it's written wrong:
-    def distance_between_nodes(self,start,end):
-        \"""
-        Returns the distance, in nodes, between the two nodes:
-        `start` and `end`.
-        \"""
-        # Optimize this with blocks
-        assert isinstance(start,Node)
-        assert isinstance(end,Node)
-
-        dist=0
-        for thing in self.iterate_blockwise(start):
-            if end is thing:
-                return dist
-            elif isinstance(thing,Block) and end in thing:
-                dist+=thing.index(end)
-                return dist
-            else:
-                dist+=len(thing)
-
-        raise StandardError("The end node was not found")
-"""
+def make_both_data_into_preferred_rounding(both, function, value, rounding):
+    if rounding == "Both": return both
+    elif rounding == "Low": return both[0]
+    elif rounding == "High": return both[1]
+    elif rounding == "Exact": return [state for state in both if (state is not None and function(state)==value)][0]
+    elif rounding == "Closest":
+        distances = [abs(function(state)-value) for state in both]
+        if distances[0] <= distances[1]:
+            return both[0]
+        else:
+            return both[1]
+    

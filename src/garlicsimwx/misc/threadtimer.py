@@ -32,8 +32,11 @@ class Thread(threading.Thread):
             time.sleep(interval_in_seconds)
 
       sleep()
-      while self.parent.alive:
-         event = wx.PyEvent()
-         event.SetEventType(wxEVT_THREAD_TIMER)
-         wx.PostEvent(self.parent.parent, event)
-         sleep()
+      try:
+         while self.parent.alive:
+            event = wx.PyEvent()
+            event.SetEventType(wxEVT_THREAD_TIMER)
+            wx.PostEvent(self.parent.parent, event)
+            sleep()
+      except:
+         return # Just so it wouldn't raise an error when wx is shutting down

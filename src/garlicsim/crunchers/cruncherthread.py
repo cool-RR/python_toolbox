@@ -60,7 +60,7 @@ class CruncherThread(threading.Thread):
     all the resulting states in a queue. An EdgeCruncher is quite dumb actually,
     most of the smart work is being done by sync_workers.
     """
-    def __init__(self, initial_node, project ,step_function, *args, **kwargs):
+    def __init__(self, initial_state, project ,step_function, *args, **kwargs):
         threading.Thread.__init__(self, *args, **kwargs)
         
         self.project = project
@@ -70,11 +70,9 @@ class CruncherThread(threading.Thread):
             self.do_work = self.do_history_looker_work
         else:
             self.do_work = self.do_non_history_looker_work
-    
-        if self.history_looker:
-            self.history_browser = HistoryBrowser(cruncher=self, initial_node=initial_node)
+
         
-        self.initial_state = initial_node.state
+        self.initial_state = initial_state
         self.daemon = True
 
         self.work_queue = queue.Queue()
@@ -111,13 +109,16 @@ class CruncherThread(threading.Thread):
         #import psyco #These two belong here?
         #psyco.full()
 
-        self.current = self.starter
+        self.current = self.initial_state
         order = None
         if self.history_looker:
-            self.history_browser = historybrowser.HistoryBrowser(self)
+            self.history_browser = HistoryBrowser(cruncher=self)
             
         while True:
-            self.do_work()
+            try:
+                self.do_work()
+            except ObsoleteCruncherError:
+                return
 
             try:
                 order=self.message_queue.get(block=False)
@@ -134,9 +135,9 @@ class CruncherThread(threading.Thread):
         self.current = next
     
     def do_history_looker_work(self):
-        #if self.history_looker
-        
-        pass
+        next = self.step(self.history_browser)
+        self.work_queue.put(next)        
+        self.current = next
     
     def retire(self):
         """
@@ -144,3 +145,5 @@ class CruncherThread(threading.Thread):
         """
         self.message_queue.put("Retire")
 
+import garlicsim.crunchers
+from garlicsim.crunchers import ObsoleteCruncherError

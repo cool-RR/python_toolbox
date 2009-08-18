@@ -4,9 +4,9 @@ class ContextManager(object):
     def __init__(self, lock, acquire_func):
         self.lock = lock
         self.acquire_func = acquire_func
-    def __enter__(*args, **kwargs):
+    def __enter__(self, *args, **kwargs):
         self.acquire_func()
-    def __exit__(*args, **kwargs):
+    def __exit__(self, *args, **kwargs):
         self.lock.release()
 
 class CoolReadWriteLock(ReadWriteLock):
