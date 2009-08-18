@@ -40,6 +40,7 @@ try:
 except ImportError:
     import Queue as queue
 
+import garlicsim.historybrowser
 try:
     from misc.processpriority import set_process_priority
 except:
@@ -59,17 +60,23 @@ class CruncherThread(threading.Thread):
     def __init__(self,starter,step_function,*args,**kwargs):
         threading.Thread.__init__(self,*args,**kwargs)
 
-        self.step=step_function
-        self.starter=starter
-        self.daemon=True
+        self.step = step_function
+        self.history_looker = hasattr(self.step,"history_looker") and self.step.history_looker
+        if self.history_looker:
+            self.do_work = self.do_history_looker_work
+        else:
+            self.do_work = self.do_non_history_looker_work
+    
+        self.starter = starter
+        self.daemon = True
 
-        self.work_queue=queue.Queue()
+        self.work_queue = queue.Queue()
         """
         The EdgeCruncher puts the work that it has completed
         into this queue, to be picked up by sync_workers.
         """
 
-        self.message_queue=queue.Queue()
+        self.message_queue = queue.Queue()
         """
         This queue is used by sync_workers to send instructions
         to the EdgeRenderer.
@@ -97,12 +104,10 @@ class CruncherThread(threading.Thread):
         #import psyco #These two belong here?
         #psyco.full()
 
-        current = self.starter
+        self.current = self.starter
         order = None
         while True:
-            next = self.step(current)
-            self.work_queue.put(next)
-            current = next
+            self.do_work()
 
             try:
                 order=self.message_queue.get(block=False)
@@ -112,7 +117,17 @@ class CruncherThread(threading.Thread):
                 order = None
             except queue.Empty:
                 pass
-
+            
+    def do_non_history_looker_work(self):
+        next = self.step(self.current)
+        self.work_queue.put(next)
+        self.current = next
+    
+    def do_history_looker_work(self):
+        #if self.history_looker
+        
+        pass
+    
     def retire(self):
         self.message_queue.put("Retire")
 

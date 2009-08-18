@@ -73,7 +73,7 @@ class ApplicationWindow(wx.Frame):
 
         self.background_timer = threadtimer.ThreadTimer(self)
         self.background_timer.start(150)
-        self.Bind(threadtimer.EVT_THREAD_TIMER, self.background_stuff)
+        self.Bind(threadtimer.EVT_THREAD_TIMER, self.sync_workers)
 
         self.Show()
 
@@ -117,7 +117,7 @@ class ApplicationWindow(wx.Frame):
         gui_project=guiproject.GuiProject(simulation_package,self.notebook)
         self.add_gui_project(gui_project)
 
-    def background_stuff(self, e=None):
+    def sync_workers(self, e=None):
         """
         A function that calls `sync_workers` for all the
         open GuiProjects.
