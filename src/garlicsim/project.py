@@ -19,7 +19,7 @@ from crunchers import CruncherThread, CruncherProcess
 from misc.dumpqueue import dump_queue
 from misc.infinity import Infinity # Same as Infinity=float("inf")
 
-PreferredCruncher = [CruncherThread, CruncherProcess][0]
+PreferredCruncher = [CruncherThread, CruncherProcess][1]
 
 
 class Project(object):

@@ -23,9 +23,9 @@ class InitialDialog(wx.Dialog):
 
         hbox1=wx.BoxSizer(wx.HORIZONTAL)
         self.x_title=x_title=wx.StaticText(self,-1,"Width: ")
-        self.x_textctrl=x_textctrl=wx.TextCtrl(self, -1, "80")
+        self.x_textctrl=x_textctrl=wx.TextCtrl(self, -1, "50")
         self.y_title=y_title=wx.StaticText(self,-1,"Height: ")
-        self.y_textctrl=y_textctrl=wx.TextCtrl(self, -1, "40")
+        self.y_textctrl=y_textctrl=wx.TextCtrl(self, -1, "30")
         hbox1.Add(x_title,0,wx.ALIGN_CENTER |wx.EXPAND | wx.ALL,5)
         hbox1.Add(x_textctrl,0,wx.EXPAND | wx.ALIGN_CENTER |wx.RIGHT,40)
         hbox1.Add(y_title,0,wx.EXPAND | wx.ALIGN_CENTER |wx.RIGHT,10)
