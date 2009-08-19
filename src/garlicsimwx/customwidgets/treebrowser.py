@@ -73,7 +73,7 @@ class TreeBrowser(ScrolledPanel):
         if e.LeftIsDown():
             thing=self.search_map(x,y)
             #print(thing)
-            if thing==None:
+            if thing is None:
                 #maybe deselect?
                 pass
             else:
@@ -81,7 +81,7 @@ class TreeBrowser(ScrolledPanel):
         if e.RightDown():
             self.gui_project.stop_playing()
             thing=self.search_map(x,y)
-            if thing==None:
+            if thing is None:
                 #Deselect!
                 pass
             else:

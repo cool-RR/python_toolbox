@@ -215,6 +215,20 @@ class Project(object):
             return self.Cruncher(node.state, step_function=self.simpack_grokker.step)
         else: # self.Cruncher == CruncherThread
             return self.Cruncher(node.state, self, step_function=self.simpack_grokker.step)
+    
+    def step(self,source_node):
+        """
+        Takes a node and simulates a child node from it.
+        This is NOT done in the background.
+        Returns the child node.
+        """
+        with self.tree_lock.write:
+            if self.simpack_grokker.history_looker:
+                raise NotImplementedError
+            else:
+                new_state = self.simpack_grokker.step(source_node.state)
+                return self.tree.add_state(new_state, source_node)
+
 """
     Removing:
 
@@ -247,14 +261,6 @@ class Project(object):
             else:
                 self.edges_to_crunch[edge]=new_distance
                 
-    def step(self,source_node):
-        \"""
-        Takes a node and simulates a child node from it.
-        This is NOT done in the background.
-        Returns the child node.
-        \"""
-        new_state=self.simulation_package.step(source_node.state)
-        return self.tree.add_state(new_state,source_node)
 
     def multistep(self,source_node,steps=1):
         \"""

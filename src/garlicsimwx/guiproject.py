@@ -2,7 +2,10 @@ import wx
 import wx.lib.scrolledpanel as scrolled
 
 import functools
+try: import queue
+except ImportError: import Queue as queue
 
+import misc.dumpqueue as dumpqueue
 from misc.stringsaver import s2i,i2s
 from misc.infinity import Infinity
 import garlicsim
@@ -47,13 +50,13 @@ class GuiProject(object):
 
 
 
-        self.active_node=None
+        self.active_node = None
         """
         This attribute contains the node that is currently displayed onscreen
         """
 
 
-        self.is_playing=False
+        self.is_playing = False
         """
         Says whether the simulation is currently playing.
         """
@@ -66,12 +69,12 @@ class GuiProject(object):
         Contains the wx.Timer object used when playing the simulation
         """
 
-        self.path=None
+        self.path = None
         """
         The active path.
         """
 
-        self.ran_out_of_tree_while_playing=False
+        self.ran_out_of_tree_while_playing = False
         """
         Becomes True when you are playing the simulation and the nodes
         are not ready yet. The simulation will continue playing
@@ -81,8 +84,13 @@ class GuiProject(object):
         main_window.Bind(wx.EVT_MENU,self.edit_from_active_node,id=s2i("Fork by editing"))
         main_window.Bind(wx.EVT_MENU,self.step_from_active_node,id=s2i("Fork naturally"))
 
-        self.simpack = simpack
+        self.simpack = simpack        
+        
         simpack.initialize(self)
+                
+        self.stuff_to_do_when_idle = queue.Queue()
+        self.main_window.Bind(wx.EVT_IDLE, self.on_idle)
+        
         wx.CallAfter(self.make_initial_dialog)
 
     def make_initial_dialog(self):
@@ -96,6 +104,15 @@ class GuiProject(object):
 
     def set_parent_window(self,parent_window):
         self.main_window.Reparent(parent_window)
+        
+    def on_idle(self, event=None):
+        try:
+            mission = self.stuff_to_do_when_idle.get(block=False)
+            mission()
+            event.RequestMore(True)
+        except queue.Empty:
+            pass
+                
 
     def make_plain_root(self,*args,**kwargs):
         """
@@ -123,18 +140,18 @@ class GuiProject(object):
         self.set_active_node(root)
         return root
 
-    def set_active_node(self,node,modify_path=True):
+    def set_active_node(self, node, modify_path=True):
         """
         Makes "node" the active node, displaying it onscreen.
         """
-        self.project.crunch_all_edges(node,self.default_buffer)
-        was_playing=False
-        if self.is_playing==True:
-            self.stop_playing()
-            was_playing=True
+        self.project.crunch_all_edges(node, self.default_buffer)
+        
+        was_playing = self.is_playing
+        if self.is_playing: self.stop_playing()
+
         self.show_state(node.state)
-        self.active_node=node
-        if was_playing==True:
+        self.active_node = node
+        if was_playing:
             self.start_playing()
         if modify_path:
             self.__modify_path_to_include_active_node()
@@ -144,6 +161,8 @@ class GuiProject(object):
         """
         Makes sure that self.path goes through the active node,
         replacing it with another path if it doesn't.
+        
+        todo: make this not forget our future decisions!
         """
         if (self.path is None) or (self.active_node not in self.path):
             self.path=self.active_node.make_containing_path()
@@ -153,27 +172,33 @@ class GuiProject(object):
         """
         Starts playback of the simulation.
         """
-        if self.is_playing==True:
+        if self.is_playing is True:
             return
-        if self.active_node==None:
+        if self.active_node is None:
             return
 
-        self.is_playing=True
-        self.timer_for_playing=wx.FutureCall(self.delay*1000,functools.partial(self.__play_next,self.active_node))
+        self.is_playing = True
+        
+        def mission():
+            self.timer_for_playing = wx.FutureCall(self.delay*1000, functools.partial(self.__play_next, self.active_node))
+        self.stuff_to_do_when_idle.put(mission)
 
 
     def stop_playing(self):
         """
         Stops playback of the simulation.
         """
-        if self.is_playing==False:
+        if self.timer_for_playing is not None:
+            try:
+                self.timer_for_playing.Stop()
+            except:
+                pass
+        if self.is_playing is False:
             return
-        self.is_playing=False
-        try:
-            self.timer_for_playing.Stop()
-        except:
-            pass
-        self.project.crunch_all_edges(self.active_node,self.default_buffer)
+        self.is_playing = False
+        dumpqueue.dump_queue(self.stuff_to_do_when_idle)
+        assert self.stuff_to_do_when_idle.qsize() == 0
+        self.project.crunch_all_edges(self.active_node, self.default_buffer)
 
 
 
@@ -194,19 +219,25 @@ class GuiProject(object):
         return self.stop_playing() if self.is_playing else self.start_playing()
 
 
-    def __play_next(self,node):
+    def __play_next(self, node):
         """
         A function called repeatedly while playing the simulation.
         """
+        if self.is_playing is False: return
         self.show_state(node.state)
         self.main_window.Refresh() # Make more efficient?
-        self.active_node=node
+        self.active_node = node
         try:
-            next_node=self.path.next_node(node)
+            next_node = self.path.next_node(node)
         except IndexError:
-            self.ran_out_of_tree_while_playing=True
+            self.ran_out_of_tree_while_playing = True
             return
-        self.timer_for_playing=wx.FutureCall(self.delay*1000,functools.partial(self.__play_next,next_node))
+        
+        def mission():
+            self.timer_for_playing = wx.FutureCall(self.delay*1000, functools.partial(self.__play_next, next_node))
+            
+        self.stuff_to_do_when_idle.put(mission)
+        
 
     def step_from_active_node(self,*args,**kwargs):
         """
