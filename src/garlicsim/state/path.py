@@ -307,6 +307,8 @@ def make_both_data_into_preferred_rounding(both, function, value, rounding):
     elif rounding == "High": return both[1]
     elif rounding == "Exact": return [state for state in both if (state is not None and function(state)==value)][0]
     elif rounding == "Closest":
+        if both[0] is None: return both[1]
+        if both[1] is None: return both[0]
         distances = [abs(function(state)-value) for state in both]
         if distances[0] <= distances[1]:
             return both[0]

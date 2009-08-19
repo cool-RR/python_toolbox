@@ -5,6 +5,9 @@ we should mark it so the historybrowser will know it's dead.
 
 make it easy to use hisotrybrowser's method from a separate thread,
 so when waiting for a lock the Cruncher could still be productive.
+
+
+maybe I've exaggerated in using @with_self in so many places?
 """
 import threading
 import state
@@ -37,6 +40,10 @@ class HistoryBrowser(object):
     
     def __exit__(self, *args, **kwargs):
         self.tree_lock.release()
+     
+    @with_self
+    def get_last_state(self):
+        return self[-1]
     
     @with_self
     def __getitem__(self, index):
@@ -94,7 +101,7 @@ class HistoryBrowser(object):
         our_leaf = self.__get_our_leaf()
         
         
-        tree_result = self.request_state_by_monotonic_function_from_tree(our_edge, function, value, rounding="Both")
+        tree_result = self.request_state_by_monotonic_function_from_tree(our_leaf, function, value, rounding="Both")
         if tree_result[1] is not None:
             # Then there is no need to check the queue even.
             return make_both_data_into_preferred_rounding(tree_result, function, value, rounding)
@@ -127,8 +134,8 @@ class HistoryBrowser(object):
                 return make_both_data_into_preferred_rounding(tree_result, function, value, rounding)
             
     @with_self   
-    def request_state_by_monotonic_function_from_tree(self, our_edge, function, value, rounding="Closest"):
-        path = our_edge.make_containing_path()
+    def request_state_by_monotonic_function_from_tree(self, our_leaf, function, value, rounding="Closest"):
+        path = our_leaf.make_containing_path()
         result_in_nodes = path.request_node_by_monotonic_function(function, value, rounding)
         result = [(node.state if node is not None else None) for node in result_in_nodes]
         return result
