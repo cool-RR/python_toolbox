@@ -3,7 +3,7 @@ todo: I think the refresh should be made more efficient
 
 todo: fix horizontal scrolling
 """
-
+import os
 
 import wx
 from math import *
@@ -112,12 +112,12 @@ class NiftyPaintDC(wx.PaintDC):
         self.origin=origin
 
         self.elements={  \
-                       "Untouched": wx.Bitmap("images\\graysquare.png", wx.BITMAP_TYPE_ANY),    \
-                       "Touched": wx.Bitmap("images\\graystar.png", wx.BITMAP_TYPE_ANY),    \
-                       "Block": wx.Bitmap("images\\grayblock.png", wx.BITMAP_TYPE_ANY),    \
-                       "Active Untouched": wx.Bitmap("images\\orangesquare.png", wx.BITMAP_TYPE_ANY),    \
-                       "Active Touched": wx.Bitmap("images\\orangestar.png", wx.BITMAP_TYPE_ANY),    \
-                       "Active Block": wx.Bitmap("images\\orangeblock.png", wx.BITMAP_TYPE_ANY),    \
+                       "Untouched": wx.Bitmap(os.path.join("images","graysquare.png"), wx.BITMAP_TYPE_ANY),    \
+                       "Touched": wx.Bitmap(os.path.join("images","graystar.png"), wx.BITMAP_TYPE_ANY),    \
+                       "Block": wx.Bitmap(os.path.join("images","grayblock.png"), wx.BITMAP_TYPE_ANY),    \
+                       "Active Untouched": wx.Bitmap(os.path.join("images","orangesquare.png"), wx.BITMAP_TYPE_ANY),    \
+                       "Active Touched": wx.Bitmap(os.path.join("images","orangestar.png"), wx.BITMAP_TYPE_ANY),    \
+                       "Active Block": wx.Bitmap(os.path.join("images","orangeblock.png"), wx.BITMAP_TYPE_ANY),    \
                        }
 
     def draw_sub_tree(self,point,tree,start):
