@@ -48,11 +48,11 @@ class ApplicationWindow(wx.Frame):
         self.SetMenuBar(menubar)
         self.CreateStatusBar()
         toolbar = self.CreateToolBar()
-        toolbar.AddSimpleTool(s2i("Button New"), wx.Bitmap("images\\new.png", wx.BITMAP_TYPE_ANY),"New", " Create a new file")
+        toolbar.AddSimpleTool(s2i("Button New"), wx.Bitmap(os.path.join("images","new.png"), wx.BITMAP_TYPE_ANY),"New", " Create a new file")
         #toolbar.AddSimpleTool(s2i("Button Open"), wx.Bitmap(folder+"images\\open.png", wx.BITMAP_TYPE_ANY),"Open", " Open a file")
         #toolbar.AddSimpleTool(s2i("Button Save"), wx.Bitmap(folder+"images\\save.png", wx.BITMAP_TYPE_ANY),"Save", " Save to file")
         toolbar.AddSeparator()
-        toolbar.AddSimpleTool(s2i("Button Done editing"), wx.Bitmap("images\\check.png", wx.BITMAP_TYPE_ANY),"Done editing", " Done editing")
+        toolbar.AddSimpleTool(s2i("Button Done editing"), wx.Bitmap(os.path.join("images","check.png"), wx.BITMAP_TYPE_ANY),"Done editing", " Done editing")
         toolbar.Realize()
 
         self.Bind(wx.EVT_TOOL, self.on_new, id=s2i("Button New"))
