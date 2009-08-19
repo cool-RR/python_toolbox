@@ -26,7 +26,10 @@ def history_step(history_browser,*args,**kwargs):
     
 
     with history_browser:
-        root = history_browser.request_state_by_clock(0, rounding="Exact")
+        try:
+            root = history_browser[7]
+        except IndexError:
+            root = history_browser[0]
 
     if random.choice([True,False]):
         new_state.number=root.number

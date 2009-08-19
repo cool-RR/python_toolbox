@@ -127,7 +127,7 @@ class Path(object):
         raise IndexError("Ran out of tree")
 
 
-    def __getitem__(self,i):
+    def __getitem__(self, i):
         """
         Gets node by number.
         """
@@ -136,19 +136,19 @@ class Path(object):
             if i<0:
                 if i==-1:
                     return self.get_last()
-                i=len(self)+i #todo: something more optimized here?
-                if i<0: raise IndexError
+                else: # i < -1
+                    i=len(self) + i #todo: something more optimized here?
 
-
-            index=-1
+            index = -1
             for j in self.iterate_blockwise():
-                index+=len(j)
-                if index>=i:
+                index += len(j)
+                if index >= i:
                     if isinstance(j,Block):
                         return j[-(index-i)-1]
                     else:
                         assert index==i
                         return j
+            raise IndexError
 
         elif isinstance(i,slice)==True:
             raise NotImplementedError
