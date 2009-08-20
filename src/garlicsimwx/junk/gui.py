@@ -57,7 +57,7 @@ class myframe(wx.Frame):
         self.tree_browser.tree=self.mygui.project.tree
         self.tree_browser.gui_project=self.mygui
 
-        self.mygui.project.edges_to_render=[self.root]
+        self.mygui.project.leaves_to_render=[self.root]
         self.mygui.set_active_node(self.root)
 
 

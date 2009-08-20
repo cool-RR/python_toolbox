@@ -90,7 +90,7 @@ class Block(object):
         Removes a node from the Block. Can only remove
         an edge node.
         """
-        if item == 0 or item == -1 or item == len(self) - 1: #is edge item?
+        if item == 0 or item == -1 or item == len(self) - 1: #is edge?
             self.list[item].block = None
             return self.list.__delitem__(item)
         else:

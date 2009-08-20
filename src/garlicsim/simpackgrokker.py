@@ -1,4 +1,16 @@
+"""
+A module that defined the SimpackGrokker class. See its documentation
+for more details.
+"""
+
 class SimpackGrokker(object):
+    """
+    An object that encapsulates a simpack, giving useful information about it
+    that may not be directly specified in the simpack.
+    
+    When a SimpackGrokker loads a simpack, it checks whether it is
+    history-dependent. It puts the answer in its attribute `history_dependent`.
+    """
     def __init__(self, simpack):
         self.simpack = simpack
 

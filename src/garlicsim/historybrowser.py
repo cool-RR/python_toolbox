@@ -1,25 +1,31 @@
 """
-todo in the future: because historybrowser
-retains a reference to a node, when the user deletes a node
-we should mark it so the historybrowser will know it's dead.
+This module defines the HistoryBrowser class. See its documentation
+for more info.
 
-make it easy to use hisotrybrowser's method from a separate thread,
-so when waiting for a lock the cruncher could still be productive.
-
-
-maybe I've exaggerated in using @with_self in so many places?
 """
 import threading
+
 import state
 import crunchers
 
 import misc.binarysearch as binarysearch
-from misc.queuetools import queue_get_item
+import misc.queuetools as queuetools
 
-def get_state_clock(state): return state.clock
+
+
+get_state_clock = lambda state: state.clock
+
+__all__ = ["HistoryBrowser"]
+
+
+
 
 def with_self(method):
     """
+    A decorator used in HistoryBrowser's methods to use the history browser
+    as a context manager when calling the method.
+    
+    To do:
     Maybe we will want to check whether we own the lock
     """
     def fixed(self, *args, **kwargs):
@@ -28,12 +34,42 @@ def with_self(method):
     return fixed
 
 class HistoryBrowser(object):
+    """
+    A HistoryBrowser is a device for requesting information about the history
+    of the simulation.
+    It is intended to be used by CruncherThread in simulations that are
+    history-dependent.
+    
+    With a HistoryBrowser one can request states from the simulations timeline.
+    States can be requested by clock time or position in the timeline or by
+    other measures; See documentation for this class's methods.
+    
+    Since we do not know whether the states we request have been implemented in
+    the tree already, or they are still in the work_queue, it's the job of the
+    HistoryBrowser to find that out. This is done transperantly for the user.
+    
+    When using a HistoryBroswer, the tree_lock of the project is acquired
+    for reading. That acquiring action can also be invoked by using
+    HistoryBrowser as a context manager.
+    
+    
+
+    
+    todo in the future: because historybrowser
+    retains a reference to a node, when the user deletes a node
+    we should mark it so the historybrowser will know it's dead.
+    
+    make it easy to use hisotrybrowser's method from a separate thread,
+    so when waiting for a lock the cruncher could still be productive.
+        
+    maybe I've exaggerated in using @with_self in so many places?
+    
+    """
     def __init__(self, cruncher):
         self.cruncher = cruncher
         self.project = cruncher.project
         self.tree = self.project.tree
         self.tree_lock = self.project.tree_lock
-        #self.cruncher_mapping_lock = self.project.cruncher_mapping_lock
     
     def __enter__(self, *args, **kwargs):
         self.tree_lock.acquireRead()
@@ -43,12 +79,15 @@ class HistoryBrowser(object):
      
     @with_self
     def get_last_state(self):
+        """
+        Syntactic sugar for getting the last state in the timeline.
+        """
         return self[-1]
     
     @with_self
     def __getitem__(self, index):
         """
-        Returns a state by its position.
+        Returns a state by its position in the timeline.
         """
         assert isinstance(index, int)
         if index < 1:
@@ -58,6 +97,9 @@ class HistoryBrowser(object):
     
     @with_self
     def __get_item_negative(self, index):
+        """
+        Used when __getitem__ is called with a negative index.
+        """
         try:
             return self.__get_item_from_queue(index)
         except IndexError:
@@ -70,6 +112,9 @@ class HistoryBrowser(object):
     
     @with_self
     def __get_item_positive(self, index):
+        """
+        Used when __getitem__ is called with a positive index.
+        """
         our_leaf = self.__get_our_leaf()
         path = our_leaf.make_containing_path()
         try:
@@ -88,18 +133,34 @@ class HistoryBrowser(object):
     
     @with_self
     def __get_item_from_queue(self, index):
-        return queue_get_item(self.cruncher.work_queue, index)
+        """
+        Obtains an item by index number from the work_queue of our cruncher.
+        """
+        return queuetools.queue_get_item(self.cruncher.work_queue, index)
     
     @with_self
     def request_state_by_clock(self, clock, rounding="Closest"):
+        """
+        Requests a state by specifying desired clock time.
+        
+        See documentation of garlicsim.misc.binarysearch.binary_search for
+        details about rounding options.
+        """
         assert rounding in ["High", "Low", "Exact", "Both", "Closest"]
-        return self.request_state_by_monotonic_function(function=get_state_clock, value=clock, rounding=rounding)
+        return self.request_state_by_monotonic_function\
+               (function=get_state_clock, value=clock, rounding=rounding)
     
     @with_self
     def request_state_by_monotonic_function(self, function, value, rounding="Closest"):
+        """
+        Requests a state by specifying a measure function and a desired value.
+        The function must by a monotonic rising function on the timeline.
+        
+        See documentation of garlicsim.misc.binarysearch.binary_search for
+        details about rounding options.
+        """
         assert rounding in ["High", "Low", "Exact", "Both", "Closest"]
         our_leaf = self.__get_our_leaf()
-        
         
         tree_result = self.request_state_by_monotonic_function_from_tree\
                       (our_leaf, function, value, rounding="Both")
@@ -142,6 +203,14 @@ class HistoryBrowser(object):
             
     @with_self   
     def request_state_by_monotonic_function_from_tree(self, our_leaf, function, value, rounding="Closest"):
+        """
+        Requests a state FROM THE TREE ONLY by specifying a measure function
+        and a desired value.
+        The function must by a monotonic rising function on the timeline.
+        
+        See documentation of garlicsim.misc.binarysearch.binary_search for
+        details about rounding options.
+        """
         assert rounding in ["High", "Low", "Exact", "Both", "Closest"]
         path = our_leaf.make_containing_path()
         new_function = lambda node: function(node.state)
@@ -151,18 +220,35 @@ class HistoryBrowser(object):
     
     @with_self
     def request_state_by_monotonic_function_from_queue(self, function, value, rounding="Closest"):
+        """
+        Requests a state FROM THE QUEUE ONLY by specifying a measure function
+        and a desired value.
+        The function must by a monotonic rising function on the timeline.
+        
+        See documentation of garlicsim.misc.binarysearch.binary_search for
+        details about rounding options.
+        """
         assert rounding in ["High", "Low", "Exact", "Both", "Closest"]
         queue = self.cruncher.work_queue
         queue_size = queue.qsize()
         with queue.mutex:
-            queue_as_list = list(queue.queue) # Probably inefficient, should access them one by one
+            queue_as_list = list(queue.queue)
+            # Probably inefficient, should access them one by one
         
-        return binarysearch.binary_search(queue_as_list, function, value, rounding)
+        return binarysearch.binary_search\
+               (queue_as_list, function, value, rounding)
     
     @with_self
     def __get_our_leaf(self):
-        current_thread = threading.currentThread()    
-        leaves_that_are_us = [leaf for (leaf, cruncher) in self.project.workers.items() if cruncher==current_thread]
+        """
+        Returns the leaf that the current cruncher is assigned to work on.
+        """
+        current_thread = threading.currentThread()  
+        
+        leaves_that_are_us = \
+            [leaf for (leaf, cruncher) in self.project.workers.items()\
+             if cruncher==current_thread]
+        
         num = len(leaves_that_are_us)
         assert num <= 1
         if num == 1:

@@ -7,7 +7,7 @@ maybe path belongs in Project and not GuiProject?
 
     todo: specify arguments to step function
 
-todo: more sophisticated version of `edges_to_crunch`.
+todo: more sophisticated version of `leaves_to_crunch`.
 
 """
 
@@ -58,12 +58,12 @@ class Project(object):
 
         self.workers={} #rename to crunchers
         """
-        A dict that maps edges that should be worked on to workers.
+        A dict that maps leaves that should be worked on to workers.
         """
 
-        self.edges_to_crunch={} 
+        self.leaves_to_crunch={} 
         """
-        A dict that maps edges that should be worked on to a number specifying
+        A dict that maps leaves that should be worked on to a number specifying
         how many nodes should be created after them.
         """
 
@@ -96,19 +96,19 @@ class Project(object):
         """
         return self.tree.add_state(state)
 
-    def crunch_all_edges(self,node,wanted_distance):
+    def crunch_all_leaves(self,node,wanted_distance):
         """
-        Orders to start crunching from all the edges of "node",
+        Orders to start crunching from all the leaves of "node",
         so that there will be a buffer whose length
         is at least "wanted_distance".
         """
-        edges=node.get_all_leaves(wanted_distance)
-        for (edge,distance) in edges.items():
+        leaves=node.get_all_leaves(wanted_distance)
+        for (leaf,distance) in leaves.items():
             new_distance=wanted_distance-distance
-            if self.edges_to_crunch.has_key(edge):
-                self.edges_to_crunch[edge]=max(new_distance,self.edges_to_crunch[edge])
+            if self.leaves_to_crunch.has_key(leaf):
+                self.leaves_to_crunch[leaf]=max(new_distance,self.leaves_to_crunch[leaf])
             else:
-                self.edges_to_crunch[edge]=new_distance
+                self.leaves_to_crunch[leaf]=new_distance
 
 
     def sync_workers(self,temp_infinity_node=None):
@@ -124,48 +124,48 @@ class Project(object):
         """
 
         with self.tree_lock.write:
-            my_edges_to_crunch=self.edges_to_crunch.copy()
+            my_leaves_to_crunch=self.leaves_to_crunch.copy()
     
             if temp_infinity_node!=None:
-                if self.edges_to_crunch.has_key(temp_infinity_node):
+                if self.leaves_to_crunch.has_key(temp_infinity_node):
                     had_temp_infinity_node=True
-                    previous_value_of_temp_infinity_node=self.edges_to_crunch[temp_infinity_node]
+                    previous_value_of_temp_infinity_node=self.leaves_to_crunch[temp_infinity_node]
                 else:
                     had_temp_infinity_node=False
-                my_edges_to_crunch[temp_infinity_node]=Infinity
+                my_leaves_to_crunch[temp_infinity_node]=Infinity
     
     
             added_nodes=0
     
-            for edge in self.workers.copy():
-                if not (edge in my_edges_to_crunch):
-                    worker=self.workers[edge]
+            for leaf in self.workers.copy():
+                if not (leaf in my_leaves_to_crunch):
+                    worker=self.workers[leaf]
                     result=dump_queue(worker.work_queue)
     
                     worker.retire()
     
-                    current=edge
+                    current=leaf
                     for state in result:
                         current=self.tree.add_state(state,parent=current)
                     added_nodes+=len(result)
     
-                    del self.workers[edge]
+                    del self.workers[leaf]
                     #worker.join() # todo: sure?
     
     
     
-            for (edge,number) in my_edges_to_crunch.items():
-                if self.workers.has_key(edge) and self.workers[edge].is_alive():
+            for (leaf,number) in my_leaves_to_crunch.items():
+                if self.workers.has_key(leaf) and self.workers[leaf].is_alive():
     
-                    worker=self.workers[edge]
+                    worker=self.workers[leaf]
                     result=dump_queue(worker.work_queue)
     
-                    current=edge
+                    current=leaf
                     for state in result:
                         current=self.tree.add_state(state,parent=current)
                     added_nodes+=len(result)
     
-                    del my_edges_to_crunch[edge]
+                    del my_leaves_to_crunch[leaf]
     
     
                     if number!=Infinity: # Maybe this is just a redundant dichotomy from before I had Infinity?
@@ -173,18 +173,18 @@ class Project(object):
                         if new_number<=0:
                             worker.retire()
                             #worker.join() # todo: sure?
-                            del self.workers[edge]
+                            del self.workers[leaf]
                         else:
-                            my_edges_to_crunch[current]=new_number
-                            del self.workers[edge]
+                            my_leaves_to_crunch[current]=new_number
+                            del self.workers[leaf]
                             self.workers[current]=worker
     
                     else:
-                        my_edges_to_crunch[current]=Infinity
-                        del self.workers[edge]
+                        my_leaves_to_crunch[current]=Infinity
+                        del self.workers[leaf]
                         self.workers[current]=worker
     
-                    if edge==temp_infinity_node:
+                    if leaf==temp_infinity_node:
                         continuation_of_temp_infinity_node=current
                         progress_with_temp_infinity_node=len(result)
     
@@ -193,20 +193,20 @@ class Project(object):
     
                 else:
                     # Create worker
-                    if edge.still_in_editing==False:
-                        worker=self.workers[edge] = self.create_cruncher(edge)
+                    if leaf.still_in_editing==False:
+                        worker=self.workers[leaf] = self.create_cruncher(leaf)
                         worker.start()
-                    if edge==temp_infinity_node:
-                        continuation_of_temp_infinity_node=edge
+                    if leaf==temp_infinity_node:
+                        continuation_of_temp_infinity_node=leaf
                         progress_with_temp_infinity_node=0
     
             if temp_infinity_node!=None:
                 if had_temp_infinity_node:
-                    my_edges_to_crunch[continuation_of_temp_infinity_node]=max(previous_value_of_temp_infinity_node-progress_with_temp_infinity_node,0)
+                    my_leaves_to_crunch[continuation_of_temp_infinity_node]=max(previous_value_of_temp_infinity_node-progress_with_temp_infinity_node,0)
                 else:
-                    del my_edges_to_crunch[continuation_of_temp_infinity_node]
+                    del my_leaves_to_crunch[continuation_of_temp_infinity_node]
     
-            self.edges_to_crunch=my_edges_to_crunch
+            self.leaves_to_crunch=my_leaves_to_crunch
     
             return added_nodes
     
@@ -231,36 +231,6 @@ class Project(object):
 
 """
     Removing:
-
-    def get_edge_on_path(self,node,path,max_distance=Infinity):
-        \"""
-        Given a node, finds the edge that is a descendant of it and is on "path".
-        Only an edge with a distance of at most max_distance is returned.
-        Returns a dict of the form {node:distance}
-        \"""
-        current=node
-        i=0
-        while i<max_distance+1:
-            try:
-                current=path.next_node(current)
-            except IndexError:
-                return {current:i}
-            i+=1
-        return {}
-
-    def crunch_on_path(self,node,wanted_distance,path):
-        \"""
-        Orders to start crunching from the edge of the path on which "node" lies,
-        so that there will be a buffer whose length is at least "wanted_distance".
-        \"""
-        edge_dict=get_edge_on_path(node,wanted_distance) # This dict may have a maximum of one item
-        for (edge,distance) in edges.items():
-            new_distance=wanted_distance-distance
-            if self.edges_to_crunch.has_key(edge):
-                self.edges_to_crunch[edge]=max(new_distance,self.edges_to_crunch[edge])
-            else:
-                self.edges_to_crunch[edge]=new_distance
-                
 
     def multistep(self,source_node,steps=1):
         \"""

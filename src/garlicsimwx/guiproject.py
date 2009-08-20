@@ -144,7 +144,7 @@ class GuiProject(object):
         """
         Makes "node" the active node, displaying it onscreen.
         """
-        self.project.crunch_all_edges(node, self.default_buffer)
+        self.project.crunch_all_leaves(node, self.default_buffer)
         
         was_playing = self.is_playing
         if self.is_playing: self.stop_playing()
@@ -198,7 +198,7 @@ class GuiProject(object):
         self.is_playing = False
         dumpqueue.dump_queue(self.stuff_to_do_when_idle)
         assert self.stuff_to_do_when_idle.qsize() == 0
-        self.project.crunch_all_edges(self.active_node, self.default_buffer)
+        self.project.crunch_all_leaves(self.active_node, self.default_buffer)
 
 
 
@@ -275,12 +275,12 @@ class GuiProject(object):
         """
 
         if self.is_playing:
-            playing_edge = self.path.get_last_node(starting_at=self.active_node)
+            playing_leaf = self.path.get_last_node(starting_at=self.active_node)
         else:
-            playing_edge=None
+            playing_leaf = None
 
 
-        added_nodes=self.project.sync_workers(temp_infinity_node=playing_edge)
+        added_nodes=self.project.sync_workers(temp_infinity_node=playing_leaf)
         """
         This is the important line here, which actually executes
         the Project's sync_workers function. As you can see,
@@ -310,7 +310,7 @@ class GuiProject(object):
         if node.still_in_editing==False:
             raise StandardError("You said 'done editing', but you were not in editing mode.")
         node.still_in_editing=False
-        self.project.crunch_all_edges(node, self.default_buffer)
+        self.project.crunch_all_leaves(node, self.default_buffer)
 
     def make_generic_initial_dialog(self):
         initial_dialog=customwidgets.GenericInitialDialog(self.main_window, -1)

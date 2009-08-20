@@ -72,7 +72,7 @@ class Node(object):
                 current = current.block[0]
             parent = current.parent
             if parent is None:
-                path.start = current
+                path.root = current
                 break
             if len(parent.children) > 1:
                 path.decisions[parent] = current
