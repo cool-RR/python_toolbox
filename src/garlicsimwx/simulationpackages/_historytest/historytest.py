@@ -5,7 +5,7 @@ import math
 from math import pi
 import random
 random.seed()
-def make_plain_state(*args,**kwargs):
+def make_plain_state(*args, **kwargs):
     state=garlicsim.state.State()
     state._State__touched = True
     state.left = 0
@@ -14,7 +14,7 @@ def make_plain_state(*args,**kwargs):
     return state
 
 
-def make_random_state(*args,**kwargs):
+def make_random_state(*args, **kwargs):
     state=garlicsim.state.State()
     state._State__touched = True
     state.left = random.random() * 2 * pi
@@ -23,7 +23,7 @@ def make_random_state(*args,**kwargs):
     return state
 
 
-def history_step(history_browser,*args,**kwargs):
+def history_step(history_browser, *args, **kwargs):
 
     last_state = history_browser.get_last_state()
     new_state = copy.deepcopy(last_state)

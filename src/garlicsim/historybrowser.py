@@ -13,7 +13,7 @@ import threading
 import state
 import crunchers
 
-from misc.queuegetitem import queue_get_item
+from misc.queuetools import queue_get_item
 from state import make_both_data_into_preferred_rounding
 
 def get_state_clock(state): return state.clock

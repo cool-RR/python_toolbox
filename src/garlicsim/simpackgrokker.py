@@ -10,6 +10,6 @@ class SimpackGrokker(object):
                                  step and a history_step - That's forbidden!")
         
         self.step = simpack.step if step_defined else simpack.history_step
-        self.history_looker =  self.step.history_looker = \
+        self.history_dependent =  self.step.history_dependent = \
             history_step_defined
     

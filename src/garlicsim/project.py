@@ -13,10 +13,10 @@ todo: more sophisticated version of `edges_to_crunch`.
 
 import random
 import state
-import misc.coolreadwritelock as coolreadwritelock
+import misc.readwritelock as readwritelock
 from simpackgrokker import SimpackGrokker
 from crunchers import CruncherThread, CruncherProcess
-from misc.dumpqueue import dump_queue
+from misc.queuetools import dump_queue
 from misc.infinity import Infinity # Same as Infinity=float("inf")
 
 PreferredCruncher = [CruncherThread, CruncherProcess][1]
@@ -48,10 +48,10 @@ class Project(object):
         self.simpack = simpack
 
         self.tree=state.Tree()
-        self.tree_lock = coolreadwritelock.CoolReadWriteLock()
+        self.tree_lock = readwritelock.ReadWriteLock()
         #self.cruncher_mapping_lock = coolreadwritelock.CoolReadWriteLock()
 
-        if self.simpack_grokker.history_looker:
+        if self.simpack_grokker.history_dependent:
             self.Cruncher = CruncherThread
         else:
             self.Cruncher = PreferredCruncher
@@ -223,7 +223,7 @@ class Project(object):
         Returns the child node.
         """
         with self.tree_lock.write:
-            if self.simpack_grokker.history_looker:
+            if self.simpack_grokker.history_dependent:
                 raise NotImplementedError
             else:
                 new_state = self.simpack_grokker.step(source_node.state)
