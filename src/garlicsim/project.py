@@ -102,7 +102,7 @@ class Project(object):
         so that there will be a buffer whose length
         is at least "wanted_distance".
         """
-        edges=node.get_all_edges(wanted_distance)
+        edges=node.get_all_leaves(wanted_distance)
         for (edge,distance) in edges.items():
             new_distance=wanted_distance-distance
             if self.edges_to_crunch.has_key(edge):
