@@ -4,6 +4,8 @@ its documentation for more information.
 
 todo: path's methods should all optimized using Blocks!
 are they already?
+
+rename "start" to "root"
 """
 
 import warnings
@@ -11,7 +13,7 @@ from tree import *
 from node import *
 from block import *
 
-def get_state_clock(): return state.clock # misc this
+import garlicsim.misc.binarysearch as binarysearch
 
 class Path(object):
     """
@@ -25,13 +27,13 @@ class Path(object):
     todo:
     beware case when there is a decision to go to a node which was deleted
     """
-    def __init__(self,tree,start=None,decisions={}):
+    def __init__(self, tree, start=None, decisions={}):
         #tree.path+=[self]
-        self.tree=tree
+        self.tree = tree
 
-        self.start=start # The starting node
+        self.start = start # The starting node
 
-        self.decisions=decisions.copy()
+        self.decisions = decisions.copy()
         """
         The decisions dict says which fork of the road the path chooses.
         It's of the form {parent_node:child_node,...}
@@ -41,12 +43,12 @@ class Path(object):
 
 
     def __len__(self):
-        if self.start==None:
+        if self.start is None:
             raise StandardError("Tried to get len of path which has no start node")
 
-        result=0
+        result = 0
         for j in self.iterate_blockwise():
-            result+=len(j)
+            result += len(j)
 
         return result
 
@@ -133,7 +135,7 @@ class Path(object):
         if isinstance(i,int)==True:
             if i<0:
                 if i==-1:
-                    return self.get_last()
+                    return self.get_last_node()
                 else: # i < -1
                     i=len(self) + i #todo: something more optimized here?
 
@@ -154,7 +156,7 @@ class Path(object):
             return StandardError
 
 
-    def get_last(self,starting_at=None):
+    def get_last_node(self,starting_at=None):
         """
         Returns the last node in the path.
         Optionally, you are allowed to specify a node from
@@ -168,68 +170,69 @@ class Path(object):
         else:
             return thing
     
-    def request_node_by_clock(self, clock, rounding="Closest"):
-        return self.request_by_monotonic_function(function=get_state_clock, value=clock, rounding=rounding)    
+    def get_node_by_clock(self, clock, rounding="Closest"):
+        my_function = lambda node: node.state.clock # Put this in misc somewhere?
+        return self.get_node_by_monotonic_function(function=my_function,
+                                                   value=clock,
+                                                   rounding=rounding)    
         
-    def request_node_by_monotonic_function(self, function, value, rounding="Closest"):
+    def get_node_by_monotonic_function(self, function, value, rounding="Closest"):
         assert rounding in ["High", "Low", "Exact", "Both", "Closest"]        
         
-        get = lambda item: function(item[1].state)
+        low = self.start
         
-        low = [0, self.start]
-        high = [len(self)-1, self[-1]]
-        
-        low_value, high_value = get(low), get(high)
-        
-        if low_value >= value:
-            if rounding == "Both":
-                return [None, low[1]]
-            if rounding in ["High", "Closest"] or (low_value==value and rounding=="Exact"):
-                return low[1]
-            else: # rounding == "Low" or (rounding == "Exact" and low_value!=value)
-                return None
-        if high_value <= value:
-            if rounding == "Both":
-                return [high[1], None]
-            if rounding in ["Low", "Closest"] or (low_value==value and rounding=="Exact"):
-                return high[1]
-            else: # rounding == "High" or (rounding == "Exact" and low_value!=value)
-                return None
+        if function(low) >= value:
+            return binarysearch.make_both_data_into_preferred_rounding \
+                   ((None, low), function, value, rounding)
         
         """
-        Now we know the value is somewhere inside the path.
+        Now we've established that the first node in the path has a lower value
+        than what we're looking for.
         """
         
-        while high[0] - low[0] > 1: # Not sure this section is efficient, since we're doing lots of getitem
-            medium_index = (low[0] + high[0]) // 2
-            medium = [medium_index, self[medium_index]]
-            medium_value = get(medium)
-            if medium_value > value:
-                high = medium; high_value = medium_value
-                continue
-            if medium_value < value:
-                low = medium; low_value = medium_value
-                continue
-            if medium_value == value:
-                after_medium = [medium[0]+1, self[medium[0]+1]]
-                after_medium_value = get(after_medium)
-                before_medium = [medium[0]-1, self[medium[0]-1]]
-                if get(after_medium) == value:
-                    low = medium; low_value = medium_value
-                    high = after_medium; high_value = after_medium_value
-                    break
-                else: # get(after_medium) > value
-                    high = medium; high_value = medium_value
-                    low = before_medium; low_value = get(before_medium)
-                    break
-                
-        both = [node for [number, node] in (low, high)]
+        for thing in self.iterate_blockwise():
+            if isinstance(thing, Block):
+                first = thing[0]
+                if function(first) >= value:
+                    return binarysearch.make_both_data_into_preferred_rounding \
+                           ((low, first), function, value, rounding)
+                    
+                last = thing[-1]
+                if function(last) >= value:
+                    # It's in the block
+                    return binarysearch.binary_search(thing, \
+                           function, value, rounding)
+                else:
+                    low = last
+                    continue
+            else: # thing is a Node
+                if function(thing) >= value:
+                    return binarysearch.make_both_data_into_preferred_rounding \
+                           ((low, thing), function, value, rounding)
+                else:
+                    low = thing
+                    continue
         
-        return make_both_data_into_preferred_rounding(both, function, value, rounding)
+        """
+        If the flow reached here, that means that even the last node
+        in the path has lower value than the value we're looking for.
+        """
         
+        return binarysearch.make_both_data_into_preferred_rounding \
+               ((low, None), function, value, rounding)
+            
         
-
-    def get_node_by_time(self, time):
+    
+    def get_node_occupying_timepoint(self, timepoint):
+        temp = self.get_node_by_clock(timepoint, rounding="Both")
+        if temp.count(None)==0:
+            print(temp[0])
+            return temp[0]
+        else:
+            print("None")
+            return None
+    
+    def old_get_node_by_time(self, time):
         """
         Gets the node in path which "occupies" the timepoint "time".
         This means that, if there is a node which is right after "time", it
@@ -275,7 +278,7 @@ class Path(object):
 
 
 
-    def get_existing_time_segment(self,start_time,end_time):
+    def get_existing_time_segment(self, start_time, end_time):
         """
         Between timepoints "start_time" and "end_time", returns the segment of nodes that
         exists in the Path.
@@ -284,32 +287,15 @@ class Path(object):
         start_time is 2 and end_time is 5. The function will return [3.2,5]
         """
 
-        foogi=self.get_node_by_time(start_time)
-        if foogi==None:
-            if start_time<self.start.state.clock<=end_time:
-                myseg=[self.start.state.clock,None]
-            else:
-                return None
+        clock_of_first = self.start.state.clock
+        clock_of_last = self.get_last_node().state.clock
+        
+        if clock_of_first <= end_time and clock_of_last >= start_time:            
+            return [max(clock_of_first, start_time),
+                    min(clock_of_last, end_time)]
         else:
-            myseg=[start_time,None]
-
-        last=self[-1]
-        myseg[1]=min(last.state.clock,end_time)
+            return None
+            
 
 
-        return myseg
-
-def make_both_data_into_preferred_rounding(both, function, value, rounding):
-    if rounding == "Both": return both
-    elif rounding == "Low": return both[0]
-    elif rounding == "High": return both[1]
-    elif rounding == "Exact": return [state for state in both if (state is not None and function(state)==value)][0]
-    elif rounding == "Closest":
-        if both[0] is None: return both[1]
-        if both[1] is None: return both[0]
-        distances = [abs(function(state)-value) for state in both]
-        if distances[0] <= distances[1]:
-            return both[0]
-        else:
-            return both[1]
     

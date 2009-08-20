@@ -262,8 +262,8 @@ class GuiProject(object):
         editing.
         Returns the new node.
         """
-        new_node=self.project.tree.new_touched_state(template_node=self.active_node)
-        new_node.still_in_editing=True
+        new_node = self.project.tree.new_touched_state(template_node=self.active_node)
+        new_node.still_in_editing = True
         self.set_active_node(new_node)
         return new_node
 
@@ -275,7 +275,7 @@ class GuiProject(object):
         """
 
         if self.is_playing:
-            playing_edge=self.path.get_last(starting_at=self.active_node)
+            playing_edge = self.path.get_last_node(starting_at=self.active_node)
         else:
             playing_edge=None
 

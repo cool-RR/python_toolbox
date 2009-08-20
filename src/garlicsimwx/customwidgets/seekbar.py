@@ -139,7 +139,7 @@ class SeekBar(wx.Panel):
                     reselect_node=True
 
             if reselect_node==True:
-                new_node=self.gui_project.path.get_node_by_time(self.unscreenify(new_thing))
+                new_node=self.gui_project.path.get_node_occupying_timepoint(self.unscreenify(new_thing))
                 if new_node!=None:
                     self.gui_project.set_active_node(new_node,modify_path=False)
 
@@ -153,7 +153,7 @@ class SeekBar(wx.Panel):
             self.gui_project.toggle_playing()
         if e.LeftDown():# or e.RightDown():
             thing=e.GetPositionTuple()[0]
-            node=self.gui_project.path.get_node_by_time(self.unscreenify(thing))
+            node=self.gui_project.path.get_node_occupying_timepoint(self.unscreenify(thing))
 
             self.was_playing_before_mouse_click=self.gui_project.is_playing
             if self.was_playing_before_mouse_click:
@@ -165,7 +165,7 @@ class SeekBar(wx.Panel):
 
         if e.LeftIsDown():
             thing=e.GetPositionTuple()[0]
-            node=self.gui_project.path.get_node_by_time(self.unscreenify(thing))
+            node=self.gui_project.path.get_node_occupying_timepoint(self.unscreenify(thing))
             if node!=None:
                 self.gui_project.set_active_node(node,modify_path=False)
         if e.LeftUp():

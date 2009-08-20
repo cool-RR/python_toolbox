@@ -6,36 +6,34 @@ This module imports `path.py` at the end.
 """
 
 from state import *
-
-Infinity=float("inf")
-
+from garlicsim.misc.infinity import Infinity
 
 class Node(object):
     """
     A node encapsulates a State with the attribute ".state".
     Nodes are used to organize states in a Tree.
     """
-    def __init__(self,tree,state=None,parent=None):
+    def __init__(self, tree, state=None, parent=None):
         """
         Constructor for Node. If a
         """
         if state is None:
-            self.state=State()
+            self.state = State()
         else:
-            self.state=state
+            self.state = state
 
-        self.parent=parent
+        self.parent = parent
 
-        self.tree=tree
+        self.tree = tree
 
 
-        self.block=None
+        self.block = None
         """
         A node may be a member of a Block. See class Block
         for more details.
         """
 
-        self.children=[]
+        self.children = []
         """
         A list of:
         1. Nodes whose states were produced by simulation from this node.
@@ -43,13 +41,13 @@ class Node(object):
            the nodes in the aforementioned set.
         """
 
-        self.derived_nodes=[]
+        self.derived_nodes = []
         """
         A list of nodes who were created by editing from this node.
         These nodes should have the same parent as this node.
         """
 
-        self.still_in_editing=False
+        self.still_in_editing = False
 
     def __len__(self):
         """
@@ -68,43 +66,43 @@ class Node(object):
             return self
 
     def make_containing_path(self):
-        path=Path(self.tree)
+        path = Path(self.tree)
 
-        current=self
+        current = self
         while True:
             if current.block is not None:
-                current=current.block[0]
-            parent=current.parent
+                current = current.block[0]
+            parent = current.parent
             if parent is None:
-                path.start=current
+                path.start = current
                 break
-            if len(parent.children)>1:
-                path.decisions[parent]=current
-            current=parent
+            if len(parent.children) > 1:
+                path.decisions[parent] = current
+            current = parent
 
-        current=self
+        current = self
         while True:
             if current.block is not None:
-                current=current.block[-1]
-            kids=current.children
-            if len(kids)==0:
+                current = current.block[-1]
+            kids = current.children
+            if len(kids) == 0:
                 break
             else:
-                next=kids[0]
-                path.decisions[current]=next
-                current=next
+                next = kids[0]
+                path.decisions[current] = next
+                current = next
 
         return path
 
-    def get_all_edges(self,max_distance=Infinity):
+    def get_all_edges(self, max_distance=Infinity):
         """
-        Finds all edges that are its descendents of this node.
+        Finds all leaves that are descendents of this node.
         Only edges with a distance of at most max_distance are returned.
         (Distance is specified in nodes.)
         Returns a dict of the form {node1:distance1, node2:distance2, ...}
         """
-        nodes={self:0}
-        edges={}
+        nodes = {self:0}
+        edges = {}
 
 
         while len(nodes)>0:
