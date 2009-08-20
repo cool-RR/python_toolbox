@@ -234,7 +234,9 @@ class GuiProject(object):
             return
         
         def mission():
-            self.timer_for_playing = wx.FutureCall(self.delay*1000, functools.partial(self.__play_next, next_node))
+            self.timer_for_playing = wx.FutureCall(self.delay*1000,
+                                                   functools.partial(self.__play_next,
+                                                                     next_node))
             
         self.stuff_to_do_when_idle.put(mission)
         
