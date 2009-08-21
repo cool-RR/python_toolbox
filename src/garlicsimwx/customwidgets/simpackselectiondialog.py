@@ -1,18 +1,18 @@
 import os, glob
 import wx
 
-class SimulationPackageSelectionDialog(wx.SingleChoiceDialog):
+class SimpackSelectionDialog(wx.SingleChoiceDialog):
     def __init__(self,parent,id):
-        self.make_simulation_packages_list()
+        self.make_simpack_list()
         wx.SingleChoiceDialog.__init__(self,parent,
                                         "Choose simulation package","Choose simulation package",
-                                        self.list_of_simulation_packages,wx.CHOICEDLG_STYLE)
+                                        self.list_of_simpacks,wx.CHOICEDLG_STYLE)
 
-    def make_simulation_packages_list(self):
+    def make_simpack_list(self):
         import simulationpackages
-        self.list_of_simulation_packages=find_subpackages(simulationpackages)
+        self.list_of_simpacks=find_subpackages(simulationpackages)
 
-    def get_simulation_package_selection(self):
+    def get_simpack_selection(self):
         string=self.GetStringSelection()
         result=__import__("simulationpackages."+string,fromlist=[''])
         return result

@@ -1,27 +1,22 @@
 """
-TODO: in radiation style simulations, how will the simulator know
-the history of the particles' movements? Two options. Either
-traverse the tree, or have that information inside every
-state. Which one should I choose?
-
-Or maybe give two options, one where the simulation gets the
-state and one where it gets the node.
-
-todo:
-maybe path belongs in Project and not GuiProject?
-
-
-    todo: specify arguments to step function
-
-todo: more sophisticated version of `edges_to_crunch`.
-
+This module defines a class Project. See this class's documentation
+for more info
 """
 
+import random
+
 import state
-from edgecruncher import EdgeCruncher
-from misc.dumpqueue import dump_queue
+import simpackgrokker
+from crunchers import CruncherThread, CruncherProcess
+
+import misc.readwritelock as readwritelock
+import misc.queuetools as queuetools
 from misc.infinity import Infinity # Same as Infinity=float("inf")
 
+PreferredCruncher = [CruncherThread, CruncherProcess][1]
+# Should be a nicer way of setting that.
+
+__all__ = ["Project"]
 
 class Project(object):
     """
@@ -32,105 +27,100 @@ class Project(object):
     A Project encapsulates a Tree.
 
     A Project, among other things, takes care of background
-    crunching of the simulation, using the `multiprocessing` module. A
-    Project employs "workers", actually instances of the EdgeCruncher
-    class, a subclass of multiprocessing.Process.
-    The Project is responsible for coordinating the workers. The method
-    sync_workers makes the Project review the work done by the workers,
-    implement it into the Tree, and gives them new instructions if necessary.
+    crunching of the simulation, using threads and/or processes.
+    A Project employs "crunchers", which are either threads or processes,
+    and which crunch the simulation in the background.
+    The Project is responsible for coordinating the crunchers. The method
+    sync_crunchers makes the Project review the work done by the crunchers,
+    implement it into the Tree, and retire/employ them as necessary.
 
     The Project class does not require wxPython or any other
     GUI package: It can be used entirely from the Python command-line.
     """
 
-    def __init__(self,simulation_package):
+    def __init__(self, simpack):
+        
+        self.simpack_grokker = simpackgrokker.SimpackGrokker(simpack)
+        self.simpack = simpack
 
-        self.simulation_package=simulation_package
         self.tree=state.Tree()
+        
+        self.tree_lock = readwritelock.ReadWriteLock()
+        """
+        The tree_lock is a read-write lock that guards access to the tree.
+        We need such a thing because some simulations are history-dependent
+        and require reading from the tree in the same time that sync_crunchers
+        could potentially be writing to it.
+        """
+        
 
-        self.workers={}
+        if self.simpack_grokker.history_dependent:
+            self.Cruncher = CruncherThread
+        else:
+            self.Cruncher = PreferredCruncher
+
+        self.crunchers = {}
         """
-        A dict that maps edges that should be worked on to workers.
+        A dict that maps leaves that should be worked on to crunchers.
         """
 
-        self.edges_to_crunch={}
+        self.leaves_to_crunch = {} 
         """
-        A dict that maps edges that should be worked on to a number specifying
+        A dict that maps leaves that should be worked on to a number specifying
         how many nodes should be created after them.
         """
 
-
-    def make_plain_root(self,*args,**kwargs):
+    def make_plain_root(self, *args, **kwargs):
         """
         Creates a parent-less node, whose state is a simple plain state.
         The simulation package should define the function `make_plain_state`
         for this to work.
         Returns the node.
         """
-        state=self.simulation_package.make_plain_state(*args,**kwargs)
-        state._State__touched=True
+        state = self.simpack.make_plain_state(*args,**kwargs)
+        state._State__touched = True
         return self.root_this_state(state)
 
-    def make_random_root(self,*args,**kwargs):
+    def make_random_root(self, *args, **kwargs):
         """
         Creates a parent-less node, whose state is a random and messy state.
-        The simulation package  should define the function `make_random_state`
+        The simulation package should define the function `make_random_state`
         for this to work.
         Returns the node.
         """
-        state=self.simulation_package.make_random_state(*args,**kwargs)
-        state._State__touched=True
+        state = self.simpack.make_random_state(*args,**kwargs)
+        state._State__touched = True
         return self.root_this_state(state)
 
-    def root_this_state(self,state):
+    def root_this_state(self, state):
         """
-        Takes a state, wraps it in a node and adds to the Tree without a parent.
+        Takes a state, wraps it in a node and adds to the Tree without
+        a parent.
         Returns the node.
         """
         return self.tree.add_state(state)
 
-    def step(self,source_node):
+    def crunch_all_leaves(self, node, wanted_distance):
         """
-        Takes a node and simulates a child node from it.
-        This is NOT done in the background.
-        Returns the child node.
-        """
-        new_state=self.simulation_package.step(source_node.state)
-        return self.tree.add_state(new_state,source_node)
-
-    def multistep(self,source_node,steps=1):
-        """
-        Takes a node and simulates a succession of child nodes from it.
-        `steps` specifies how many nodes.
-        This is NOT done in the background.
-        Returns the last node.
-        """
-        my_node=source_node
-        for i in range(steps):
-            my_node=self.step(my_node)
-        return my_node
-
-
-    def crunch_all_edges(self,node,wanted_distance):
-        """
-        Orders to start crunching from all the edges of "node",
+        Orders to start crunching from all the leaves of `node`,
         so that there will be a buffer whose length
-        is at least "wanted_distance".
+        is at least `wanted_distance`.
         """
-        edges=node.get_all_edges(wanted_distance)
-        for (edge,distance) in edges.items():
-            new_distance=wanted_distance-distance
-            if self.edges_to_crunch.has_key(edge):
-                self.edges_to_crunch[edge]=max(new_distance,self.edges_to_crunch[edge])
+        leaves = node.get_all_leaves(wanted_distance)
+        for (leaf, distance) in leaves.items():
+            new_distance = wanted_distance - distance
+            if self.leaves_to_crunch.has_key(leaf):
+                self.leaves_to_crunch[leaf] = \
+                    max(new_distance, self.leaves_to_crunch[leaf])
             else:
-                self.edges_to_crunch[edge]=new_distance
+                self.leaves_to_crunch[leaf] = new_distance
 
 
-    def sync_workers(self,temp_infinity_node=None):
+    def sync_crunchers(self, temp_infinity_node=None):
         """
-        Talks with all the workers, takes work from them for
-        implementing into the Tree, terminates workers or creates
-        new workers if necessary.
+        Talks with all the crunchers, takes work from them for
+        implementing into the Tree, terminates crunchers or creates
+        new crunchers if necessary.
         You can pass a node as `temp_infinity_node`. That will cause this
         function to temporarily treat this node as if it should be crunched
         indefinitely.
@@ -138,120 +128,132 @@ class Project(object):
         Returns the total amount of nodes that were added to the tree.
         """
 
-        my_edges_to_crunch=self.edges_to_crunch.copy()
-
-        if temp_infinity_node!=None:
-            if self.edges_to_crunch.has_key(temp_infinity_node):
-                had_temp_infinity_node=True
-                previous_value_of_temp_infinity_node=self.edges_to_crunch[temp_infinity_node]
-            else:
-                had_temp_infinity_node=False
-            my_edges_to_crunch[temp_infinity_node]=Infinity
-
-
-        added_nodes=0
-
-        for edge in self.workers.copy():
-            if not (edge in my_edges_to_crunch):
-                worker=self.workers[edge]
-                result=dump_queue(worker.work_queue)
-
-                worker.terminate()
-
-                current=edge
-                for state in result:
-                    current=self.tree.add_state(state,parent=current)
-                added_nodes+=len(result)
-
-                del self.workers[edge]
-                worker.join() # todo: sure?
-
-
-
-        for (edge,number) in my_edges_to_crunch.items():
-            if self.workers.has_key(edge) and self.workers[edge].is_alive():
-
-                worker=self.workers[edge]
-                result=dump_queue(worker.work_queue)
-
-                current=edge
-                for state in result:
-                    current=self.tree.add_state(state,parent=current)
-                added_nodes+=len(result)
-
-                del my_edges_to_crunch[edge]
-
-
-                if number!=Infinity: # Maybe this is just a redundant dichotomy from before I had Infinity?
-                    new_number=number-len(result)
-                    if new_number<=0:
-                        worker.terminate()
-                        worker.join() # todo: sure?
-                        del self.workers[edge]
-                    else:
-                        my_edges_to_crunch[current]=new_number
-                        del self.workers[edge]
-                        self.workers[current]=worker
-
+        with self.tree_lock.write:
+            my_leaves_to_crunch = self.leaves_to_crunch.copy()
+    
+            if temp_infinity_node:
+                if self.leaves_to_crunch.has_key(temp_infinity_node):
+                    had_temp_infinity_node = True
+                    previous_value_of_temp_infinity_node = \
+                            self.leaves_to_crunch[temp_infinity_node]
                 else:
-                    my_edges_to_crunch[current]=Infinity
-                    del self.workers[edge]
-                    self.workers[current]=worker
-
-                if edge==temp_infinity_node:
-                    continuation_of_temp_infinity_node=current
-                    progress_with_temp_infinity_node=len(result)
-
-
-
-
+                    had_temp_infinity_node = False
+                my_leaves_to_crunch[temp_infinity_node] = Infinity
+    
+    
+            added_nodes = 0
+    
+            for leaf in self.crunchers.copy():
+                if not (leaf in my_leaves_to_crunch):
+                    cruncher = self.crunchers[leaf]
+                    result = queuetools.dump_queue(cruncher.work_queue)
+    
+                    cruncher.retire()
+    
+                    current = leaf
+                    for state in result:
+                        current = self.tree.add_state(state, parent=current)
+                    added_nodes += len(result)
+    
+                    del self.crunchers[leaf]
+                    #cruncher.join() # todo: sure?
+    
+    
+    
+            for (leaf, number) in my_leaves_to_crunch.items():
+                if self.crunchers.has_key(leaf) and self.crunchers[leaf].is_alive():
+    
+                    cruncher = self.crunchers[leaf]
+                    result = queuetools.dump_queue(cruncher.work_queue)
+    
+                    current = leaf
+                    for state in result:
+                        current = self.tree.add_state(state, parent=current)
+                    added_nodes += len(result)
+    
+                    del my_leaves_to_crunch[leaf]
+    
+    
+                    if number != Infinity: # Maybe this is just a redundant dichotomy from before I had Infinity?
+                        new_number = number - len(result)
+                        if new_number <= 0:
+                            cruncher.retire()
+                            #cruncher.join() # todo: sure?
+                            del self.crunchers[leaf]
+                        else:
+                            my_leaves_to_crunch[current] = new_number
+                            del self.crunchers[leaf]
+                            self.crunchers[current] = cruncher
+    
+                    else:
+                        my_leaves_to_crunch[current] = Infinity
+                        del self.crunchers[leaf]
+                        self.crunchers[current] = cruncher
+    
+                    if leaf == temp_infinity_node:
+                        continuation_of_temp_infinity_node = current
+                        progress_with_temp_infinity_node = len(result)
+    
+    
+    
+    
+                else:
+                    # Create cruncher
+                    if leaf.still_in_editing is False:
+                        cruncher=self.crunchers[leaf] = self.create_cruncher(leaf)
+                    if leaf == temp_infinity_node:
+                        continuation_of_temp_infinity_node = leaf
+                        progress_with_temp_infinity_node = 0
+    
+            if temp_infinity_node:
+                if had_temp_infinity_node:
+                    my_leaves_to_crunch[continuation_of_temp_infinity_node]=max(previous_value_of_temp_infinity_node-progress_with_temp_infinity_node,0)
+                else:
+                    del my_leaves_to_crunch[continuation_of_temp_infinity_node]
+    
+            self.leaves_to_crunch=my_leaves_to_crunch
+    
+            return added_nodes
+    
+    def create_cruncher(self, node):
+        """
+        Creates a cruncher and tells it to start working on `node`.
+        """
+        if self.Cruncher == CruncherProcess:
+            cruncher = self.Cruncher(node.state,
+                                     step_function=self.simpack_grokker.step)
+        
+        else: # self.Cruncher == CruncherThread
+            cruncher = self.Cruncher(node.state, self,
+                                    step_function=self.simpack_grokker.step)
+        cruncher.start()
+        return cruncher
+    
+    def step(self,source_node):
+        """
+        Takes a node and simulates a child node from it.
+        This is NOT done in the background.
+        Returns the child node.
+        """
+        with self.tree_lock.write:
+            if self.simpack_grokker.history_dependent:
+                raise NotImplementedError
             else:
-                # Create worker
-                if edge.still_in_editing==False:
-                    worker=self.workers[edge]=EdgeCruncher(edge.state,step_function=self.simulation_package.step)
-                    worker.start()
-                if edge==temp_infinity_node:
-                    continuation_of_temp_infinity_node=edge
-                    progress_with_temp_infinity_node=0
+                new_state = self.simpack_grokker.step(source_node.state)
+                return self.tree.add_state(new_state, source_node)
 
-        if temp_infinity_node!=None:
-            if had_temp_infinity_node:
-                my_edges_to_crunch[continuation_of_temp_infinity_node]=max(previous_value_of_temp_infinity_node-progress_with_temp_infinity_node,0)
-            else:
-                del my_edges_to_crunch[continuation_of_temp_infinity_node]
-
-        self.edges_to_crunch=my_edges_to_crunch
-
-        return added_nodes
 """
     Removing:
 
-    def get_edge_on_path(self,node,path,max_distance=Infinity):
+    def multistep(self,source_node,steps=1):
         \"""
-        Given a node, finds the edge that is a descendant of it and is on "path".
-        Only an edge with a distance of at most max_distance is returned.
-        Returns a dict of the form {node:distance}
+        Takes a node and simulates a succession of child nodes from it.
+        `steps` specifies how many nodes.
+        This is NOT done in the background.
+        Returns the last node.
         \"""
-        current=node
-        i=0
-        while i<max_distance+1:
-            try:
-                current=path.next_node(current)
-            except IndexError:
-                return {current:i}
-            i+=1
-        return {}
-
-    def crunch_on_path(self,node,wanted_distance,path):
-        \"""
-        Orders to start crunching from the edge of the path on which "node" lies,
-        so that there will be a buffer whose length is at least "wanted_distance".
-        \"""
-        edge_dict=get_edge_on_path(node,wanted_distance) # This dict may have a maximum of one item
-        for (edge,distance) in edges.items():
-            new_distance=wanted_distance-distance
-            if self.edges_to_crunch.has_key(edge):
-                self.edges_to_crunch[edge]=max(new_distance,self.edges_to_crunch[edge])
-            else:
-                self.edges_to_crunch[edge]=new_distance
+        my_node=source_node
+        for i in range(steps):
+            my_node=self.step(my_node)
+        return my_node
 """

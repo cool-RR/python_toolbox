@@ -1,14 +1,6 @@
 """
 A module that defines the `State` class. See
 its documentation for more information.
-
-
-TODO:
-maybe it's silly that a parentless node must be touched?
----
-create mechanism for "stitching" nodes(making one a child
-of the other artificially)
---
 """
 
 
@@ -32,8 +24,8 @@ class State(object):
     attributes assigned to it.
     """
 
-    def __init__(self,touched=False):
-        self.__touched=touched
+    def __init__(self, touched=False):
+        self.__touched = touched
 
     def is_touched(self):
         """

@@ -2,7 +2,10 @@ import wx
 import wx.lib.scrolledpanel as scrolled
 
 import functools
+try: import queue
+except ImportError: import Queue as queue
 
+import misc.dumpqueue as dumpqueue
 from misc.stringsaver import s2i,i2s
 from misc.infinity import Infinity
 import garlicsim
@@ -21,8 +24,8 @@ class GuiProject(object):
     A GuiProject encapsulates a Project for use with a wxPython
     interface.
     """
-    def __init__(self,simulation_package,parent_window):
-        self.project=garlicsim.Project(simulation_package)
+    def __init__(self,simpack,parent_window):
+        self.project=garlicsim.Project(simpack)
 
 
 
@@ -32,7 +35,9 @@ class GuiProject(object):
 
         self.state_showing_window=scrolled.ScrolledPanel(self.main_window,-1)
 
-        self.shell=wx.py.shell.Shell(self.main_window,-1,size=(400,-1))
+        locals_for_shell = locals()
+        locals_for_shell.update({"this_gui_project": self})
+        self.shell=wx.py.shell.Shell(self.main_window, -1, size=(400,-1), locals=locals_for_shell)
         self.seek_bar=customwidgets.SeekBar(self.main_window,-1,self)
         self.tree_browser=customwidgets.TreeBrowser(self.main_window,-1,self)
 
@@ -45,13 +50,13 @@ class GuiProject(object):
 
 
 
-        self.active_node=None
+        self.active_node = None
         """
         This attribute contains the node that is currently displayed onscreen
         """
 
 
-        self.is_playing=False
+        self.is_playing = False
         """
         Says whether the simulation is currently playing.
         """
@@ -64,12 +69,12 @@ class GuiProject(object):
         Contains the wx.Timer object used when playing the simulation
         """
 
-        self.path=None
+        self.path = None
         """
         The active path.
         """
 
-        self.ran_out_of_tree_while_playing=False
+        self.ran_out_of_tree_while_playing = False
         """
         Becomes True when you are playing the simulation and the nodes
         are not ready yet. The simulation will continue playing
@@ -79,21 +84,35 @@ class GuiProject(object):
         main_window.Bind(wx.EVT_MENU,self.edit_from_active_node,id=s2i("Fork by editing"))
         main_window.Bind(wx.EVT_MENU,self.step_from_active_node,id=s2i("Fork naturally"))
 
-        self.simulation_package=simulation_package
-        simulation_package.initialize(self)
+        self.simpack = simpack        
+        
+        simpack.initialize(self)
+                
+        self.stuff_to_do_when_idle = queue.Queue()
+        self.main_window.Bind(wx.EVT_IDLE, self.on_idle)
+        
         wx.CallAfter(self.make_initial_dialog)
 
     def make_initial_dialog(self):
-        if hasattr(self.simulation_package,"make_initial_dialog"):
-            return self.simulation_package.make_initial_dialog(self)
+        if hasattr(self.simpack,"make_initial_dialog"):
+            return self.simpack.make_initial_dialog(self)
         else:
             return self.make_generic_initial_dialog()
 
     def show_state(self,state):
-        self.simulation_package.show_state(self,state)
+        self.simpack.show_state(self,state)
 
     def set_parent_window(self,parent_window):
         self.main_window.Reparent(parent_window)
+        
+    def on_idle(self, event=None):
+        try:
+            mission = self.stuff_to_do_when_idle.get(block=False)
+            mission()
+            event.RequestMore(True)
+        except queue.Empty:
+            pass
+                
 
     def make_plain_root(self,*args,**kwargs):
         """
@@ -121,18 +140,18 @@ class GuiProject(object):
         self.set_active_node(root)
         return root
 
-    def set_active_node(self,node,modify_path=True):
+    def set_active_node(self, node, modify_path=True):
         """
         Makes "node" the active node, displaying it onscreen.
         """
-        self.project.crunch_all_edges(node,self.default_buffer)
-        was_playing=False
-        if self.is_playing==True:
-            self.stop_playing()
-            was_playing=True
+        self.project.crunch_all_leaves(node, self.default_buffer)
+        
+        was_playing = self.is_playing
+        if self.is_playing: self.stop_playing()
+
         self.show_state(node.state)
-        self.active_node=node
-        if was_playing==True:
+        self.active_node = node
+        if was_playing:
             self.start_playing()
         if modify_path:
             self.__modify_path_to_include_active_node()
@@ -142,6 +161,8 @@ class GuiProject(object):
         """
         Makes sure that self.path goes through the active node,
         replacing it with another path if it doesn't.
+        
+        todo: make this not forget our future decisions!
         """
         if (self.path is None) or (self.active_node not in self.path):
             self.path=self.active_node.make_containing_path()
@@ -151,27 +172,33 @@ class GuiProject(object):
         """
         Starts playback of the simulation.
         """
-        if self.is_playing==True:
+        if self.is_playing is True:
             return
-        if self.active_node==None:
+        if self.active_node is None:
             return
 
-        self.is_playing=True
-        self.timer_for_playing=wx.FutureCall(self.delay*1000,functools.partial(self.__play_next,self.active_node))
+        self.is_playing = True
+        
+        def mission():
+            self.timer_for_playing = wx.FutureCall(self.delay*1000, functools.partial(self.__play_next, self.active_node))
+        self.stuff_to_do_when_idle.put(mission)
 
 
     def stop_playing(self):
         """
         Stops playback of the simulation.
         """
-        if self.is_playing==False:
+        if self.timer_for_playing is not None:
+            try:
+                self.timer_for_playing.Stop()
+            except:
+                pass
+        if self.is_playing is False:
             return
-        self.is_playing=False
-        try:
-            self.timer_for_playing.Stop()
-        except:
-            pass
-        self.project.crunch_all_edges(self.active_node,self.default_buffer)
+        self.is_playing = False
+        dumpqueue.dump_queue(self.stuff_to_do_when_idle)
+        assert self.stuff_to_do_when_idle.qsize() == 0
+        self.project.crunch_all_leaves(self.active_node, self.default_buffer)
 
 
 
@@ -192,19 +219,27 @@ class GuiProject(object):
         return self.stop_playing() if self.is_playing else self.start_playing()
 
 
-    def __play_next(self,node):
+    def __play_next(self, node):
         """
-        A function called repeatedly while playing the simualtion.
+        A function called repeatedly while playing the simulation.
         """
+        if self.is_playing is False: return
         self.show_state(node.state)
-        self.main_window.Refresh()
-        self.active_node=node
+        self.main_window.Refresh() # Make more efficient?
+        self.active_node = node
         try:
-            next_node=self.path.next_node(node)
+            next_node = self.path.next_node(node)
         except IndexError:
-            self.ran_out_of_tree_while_playing=True
+            self.ran_out_of_tree_while_playing = True
             return
-        self.timer_for_playing=wx.FutureCall(self.delay*1000,functools.partial(self.__play_next,next_node))
+        
+        def mission():
+            self.timer_for_playing = wx.FutureCall(self.delay*1000,
+                                                   functools.partial(self.__play_next,
+                                                                     next_node))
+            
+        self.stuff_to_do_when_idle.put(mission)
+        
 
     def step_from_active_node(self,*args,**kwargs):
         """
@@ -227,33 +262,33 @@ class GuiProject(object):
         editing.
         Returns the new node.
         """
-        new_node=self.project.tree.new_touched_state(template_node=self.active_node)
-        new_node.still_in_editing=True
+        new_node = self.project.tree.new_touched_state(template_node=self.active_node)
+        new_node.still_in_editing = True
         self.set_active_node(new_node)
         return new_node
 
 
-    def sync_workers(self):
+    def sync_crunchers(self):
         """
-        A wrapper for Project.sync_workers(). (todo: add real explanation)
+        A wrapper for Project.sync_crunchers(). (todo: add real explanation)
         Returns how many nodes were added to the tree.
         """
 
         if self.is_playing:
-            playing_edge=self.path.get_last(starting_at=self.active_node)
+            playing_leaf = self.path.get_last_node(starting_at=self.active_node)
         else:
-            playing_edge=None
+            playing_leaf = None
 
 
-        added_nodes=self.project.sync_workers(temp_infinity_node=playing_edge)
+        added_nodes=self.project.sync_crunchers(temp_infinity_node=playing_leaf)
         """
         This is the important line here, which actually executes
-        the Project's sync_workers function. As you can see,
+        the Project's sync_crunchers function. As you can see,
         we put the return value in `added_nodes`.
         """
 
         if added_nodes>0:
-            self.main_window.Refresh()
+            self.tree_modify_refresh()
         if self.ran_out_of_tree_while_playing==True:
             self.ran_out_of_tree_while_playing=False
             self.stop_playing()
@@ -275,7 +310,7 @@ class GuiProject(object):
         if node.still_in_editing==False:
             raise StandardError("You said 'done editing', but you were not in editing mode.")
         node.still_in_editing=False
-        self.project.crunch_all_edges(node, self.default_buffer)
+        self.project.crunch_all_leaves(node, self.default_buffer)
 
     def make_generic_initial_dialog(self):
         initial_dialog=customwidgets.GenericInitialDialog(self.main_window, -1)
@@ -285,4 +320,8 @@ class GuiProject(object):
             else:
                 self.make_plain_root()
         initial_dialog.Destroy()
+
+    def tree_modify_refresh(self):
+        self.seek_bar.Refresh()
+        self.tree_browser.Refresh()
 
