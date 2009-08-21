@@ -6,7 +6,7 @@ and multiprocessing.Process respectively.
 A cruncher is a dumb little drone. It receives a state from the main program,
 and then it repeatedly applies the step funcion of the simulation to produce
 more states. Those states are then put in the cruncher's work_queue. They
-are then taken by the main program when Project.sync_workers is called,
+are then taken by the main program when Project.sync_crunchers is called,
 and put into the tree.
 
 The main reason there are two kinds of crunchers is that some simulations,

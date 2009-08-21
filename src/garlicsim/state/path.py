@@ -216,10 +216,8 @@ class Path(object):
     def get_node_occupying_timepoint(self, timepoint):
         temp = self.get_node_by_clock(timepoint, rounding="Both")
         if temp.count(None)==0:
-            print(temp[0])
             return temp[0]
         else:
-            print("None")
             return None
         
 

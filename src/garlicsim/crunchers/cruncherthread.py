@@ -19,7 +19,7 @@ class CruncherThread(threading.Thread):
     program, and then it repeatedly applies the step funcion of the simulation
     to produce more states. Those states are then put in the cruncher's
     work_queue. They are then taken by the main program when
-    Project.sync_workers is called, and put into the tree.
+    Project.sync_crunchers is called, and put into the tree.
         
     Read more about crunchers in the documentation of the crunchers package.
     
@@ -47,7 +47,7 @@ class CruncherThread(threading.Thread):
         self.work_queue = queue.Queue()
         """
         The cruncher puts the work that it has completed
-        into this queue, to be picked up by sync_workers.
+        into this queue, to be picked up by sync_crunchers.
         """
 
         self.order_queue = queue.Queue()

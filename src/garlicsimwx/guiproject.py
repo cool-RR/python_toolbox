@@ -268,9 +268,9 @@ class GuiProject(object):
         return new_node
 
 
-    def sync_workers(self):
+    def sync_crunchers(self):
         """
-        A wrapper for Project.sync_workers(). (todo: add real explanation)
+        A wrapper for Project.sync_crunchers(). (todo: add real explanation)
         Returns how many nodes were added to the tree.
         """
 
@@ -280,10 +280,10 @@ class GuiProject(object):
             playing_leaf = None
 
 
-        added_nodes=self.project.sync_workers(temp_infinity_node=playing_leaf)
+        added_nodes=self.project.sync_crunchers(temp_infinity_node=playing_leaf)
         """
         This is the important line here, which actually executes
-        the Project's sync_workers function. As you can see,
+        the Project's sync_crunchers function. As you can see,
         we put the return value in `added_nodes`.
         """
 

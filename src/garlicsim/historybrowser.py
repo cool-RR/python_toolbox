@@ -246,7 +246,7 @@ class HistoryBrowser(object):
         current_thread = threading.currentThread()  
         
         leaves_that_are_us = \
-            [leaf for (leaf, cruncher) in self.project.workers.items()\
+            [leaf for (leaf, cruncher) in self.project.crunchers.items()\
              if cruncher==current_thread]
         
         num = len(leaves_that_are_us)

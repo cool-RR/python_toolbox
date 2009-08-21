@@ -73,7 +73,7 @@ class ApplicationWindow(wx.Frame):
 
         self.background_timer = threadtimer.ThreadTimer(self)
         self.background_timer.start(150)
-        self.Bind(threadtimer.EVT_THREAD_TIMER, self.sync_workers)
+        self.Bind(threadtimer.EVT_THREAD_TIMER, self.sync_crunchers)
 
         self.Show()
 
@@ -117,13 +117,13 @@ class ApplicationWindow(wx.Frame):
         gui_project=guiproject.GuiProject(simpack,self.notebook)
         self.add_gui_project(gui_project)
 
-    def sync_workers(self, e=None):
+    def sync_crunchers(self, e=None):
         """
-        A function that calls `sync_workers` for all the
+        A function that calls `sync_crunchers` for all the
         open GuiProjects.
         """
         for gui_project in self.gui_projects:
-            gui_project.sync_workers()
+            gui_project.sync_crunchers()
 
 
 
