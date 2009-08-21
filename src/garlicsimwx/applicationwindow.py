@@ -4,7 +4,6 @@ import random
 import wx
 
 import garlicsim
-from misc.stringsaver import s2i,i2s
 import guiproject
 import misc.notebookctrl as notebookctrl
 import customwidgets
@@ -40,10 +39,10 @@ class ApplicationWindow(wx.Frame):
         self.gui_projects=[]
 
         filemenu=wx.Menu()
-        filemenu.Append(s2i("New"),"&New"," New")
-        filemenu.Append(s2i("Exit"),"E&xit"," Close the program")
-        wx.EVT_MENU(self,s2i("New"),self.on_new)
-        wx.EVT_MENU(self,s2i("Exit"),self.exit)
+        new_menu_button = filemenu.Append(-1 ,"&New"," New")
+        exit_menu_button = filemenu.Append(-1 ,"E&xit"," Close the program")
+        self.Bind(wx.EVT_MENU, self.on_new, new_menu_button)
+        self.Bind(wx.EVT_MENU, self.exit, exit_menu_button)        
         menubar=wx.MenuBar()
         menubar.Append(filemenu,"&File")
         #menubar.Append(stuffmenu,"&Stuff")
@@ -51,15 +50,13 @@ class ApplicationWindow(wx.Frame):
         self.SetMenuBar(menubar)
         self.CreateStatusBar()
         toolbar = self.CreateToolBar()
-        toolbar.AddSimpleTool(s2i("Button New"), wx.Bitmap(os.path.join("images","new.png"), wx.BITMAP_TYPE_ANY),"New", " Create a new file")
-        #toolbar.AddSimpleTool(s2i("Button Open"), wx.Bitmap(folder+"images\\open.png", wx.BITMAP_TYPE_ANY),"Open", " Open a file")
-        #toolbar.AddSimpleTool(s2i("Button Save"), wx.Bitmap(folder+"images\\save.png", wx.BITMAP_TYPE_ANY),"Save", " Save to file")
+        new_tool = toolbar.AddSimpleTool(-1, wx.Bitmap(os.path.join("images","new.png"), wx.BITMAP_TYPE_ANY),"New", " Create a new file")
         toolbar.AddSeparator()
-        toolbar.AddSimpleTool(s2i("Button Done editing"), wx.Bitmap(os.path.join("images","check.png"), wx.BITMAP_TYPE_ANY),"Done editing", " Done editing")
+        done_tool = toolbar.AddSimpleTool(-1, wx.Bitmap(os.path.join("images","check.png"), wx.BITMAP_TYPE_ANY),"Done editing", " Done editing")
         toolbar.Realize()
 
-        self.Bind(wx.EVT_TOOL, self.on_new, id=s2i("Button New"))
-        self.Bind(wx.EVT_TOOL, self.done_editing, id=s2i("Button Done editing"))
+        self.Bind(wx.EVT_TOOL, self.on_new, new_tool)
+        self.Bind(wx.EVT_TOOL, self.done_editing, done_tool)
 
         """
         self.Bind(EVT_RUN_BACKGROUND, self.on_run_background)
