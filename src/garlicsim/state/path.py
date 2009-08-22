@@ -51,8 +51,8 @@ class Path(object):
                 current = self.next_node(current)
                 yield current
             except IndexError:
-                raise StopIteration("Ran out of tree")
-
+                raise StopIteration
+            
     def iterate_blockwise(self, starting_at=None):
         """
         Iterates on the Path, returning Blocks when possible.
@@ -74,16 +74,33 @@ class Path(object):
                 yield current
             except IndexError:
                 raise StopIteration("Ran out of tree")
+    
+    def iterate_blockwise_reversed(self, starting_at):
+        
+        current = starting_at.soft_get_block()
+
+        yield current
+
+        while True:
+            if isinstance(current, Node):
+                parent = current.parent
+            else: # isinstance(current, Block)
+                parent = current[0].parent
+            
+            if parent is None:
+                raise StopIteration
+            current = parent.soft_get_block()
+            yield current
 
     def __contains__(self,thing):
         """
         Returns whether the path contains `thing`.
         `thing` may be a Node or a Block.
         """
-        assert isinstance(thing,Node) or isinstance(thing,Block)
+        assert isinstance(thing, Node) or isinstance(thing, Block)
 
         for x in self.iterate_blockwise():
-            if x is thing:
+            if x == thing:
                 return True
             elif isinstance(x, Block) and thing in x:
                 return True
@@ -117,34 +134,60 @@ class Path(object):
         raise IndexError("Ran out of tree")
 
 
-    def __getitem__(self, i):
+    def __getitem__(self, index):
         """
         Gets node by number.
         """
-
-        if isinstance(i, int):
-            if i < 0:
-                if i == -1:
-                    return self.get_last_node()
-                else: # i < -1
-                    i = len(self) + i #todo: something more optimized here?
-
-            index = -1
-            for j in self.iterate_blockwise():
-                index += len(j)
-                if index >= i:
-                    if isinstance(j,Block):
-                        return j[-(index-i)-1]
-                    else:
-                        assert index == i
-                        return j
-            raise IndexError
-
-        elif isinstance(i, slice):
-            raise NotImplementedError
+        
+        assert isinstance(index, int)
+        
+        if index >= 0:
+            return self.__get_item_positive(index)
         else:
-            return StandardError
+            return self.__get_item_negative(index)
 
+    def __get_item_negative(self, index, starting_at=None):
+        assert isinstance(index, int)
+        assert isinstance(starting_at, Node)
+        if starting_at == None:
+            starting_at = self.get_last_node()
+        if index == -1:
+            return starting_at
+        
+        my_index = 0
+        
+        if starting_at.block:
+            block = starting_at.block
+            index_of_starting_at = block.index(starting_at)
+            
+            my_index -= (index_of_starting_at + 1)
+            
+            if my_index <= index:
+                return block[index - my_index]
+        
+        for thing in self.iterate_blockwise_reversed(starting_at=starting_at):
+            my_index -= len(thing)
+            if my_index <= index:
+                if isinstance(thing, Block):
+                    return thing[ (index - my_index)]
+                else:
+                    assert my_index == index
+                    return thing
+        raise IndexError
+        
+        
+    def __get_item_positive(self, index):
+        assert isinstance(index, int)
+        my_index = -1
+        for thing in self.iterate_blockwise():
+            my_index += len(thing)
+            if my_index >= index:
+                if isinstance(thing, Block):
+                    return thing[(index-my_index) - 1]
+                else:
+                    assert my_index == index
+                    return thing
+        raise IndexError
 
     def get_last_node(self, starting_at=None):
         """
@@ -167,6 +210,9 @@ class Path(object):
                                                    rounding=rounding)    
         
     def get_node_by_monotonic_function(self, function, value, rounding="Closest"):
+        """
+        Todo: make option to return index instead of node?
+        """
         assert rounding in ["High", "Low", "Exact", "Both", "Closest"]        
         
         low = self.root
@@ -238,6 +284,13 @@ class Path(object):
                     min(clock_of_last, end_time)]
         else:
             return None
+    
+    """
+    def find_index_of_node(self, node):
+        self_interface = binarysearch.SequenceInterface(self)
+        function = lambda index: self[index].
+        Path.get_node_by_monotonic_function
+    """
             
 
 

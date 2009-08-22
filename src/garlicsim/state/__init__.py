@@ -9,3 +9,5 @@ from tree import *
 from path import *
 from node import *
 from block import *
+
+import pathtools

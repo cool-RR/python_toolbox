@@ -24,9 +24,6 @@ def with_self(method):
     """
     A decorator used in HistoryBrowser's methods to use the history browser
     as a context manager when calling the method.
-    
-    To do:
-    Maybe we will want to check whether we own the lock
     """
     def fixed(self, *args, **kwargs):
         with self:
@@ -108,7 +105,9 @@ class HistoryBrowser(object):
             new_index = index + queue_size
             our_leaf = self.__get_our_leaf()
             path = our_leaf.make_containing_path()            
-            return path[new_index].state
+            #result_state = path[new_index].state
+            #if result_state.clock >= our_leaf.
+            
     
     @with_self
     def __get_item_positive(self, index):
@@ -117,18 +116,11 @@ class HistoryBrowser(object):
         """
         our_leaf = self.__get_our_leaf()
         path = our_leaf.make_containing_path()
-        try:
-            return path[index].state
-        except IndexError:
-            path_length = len(path)
-            assert path_length-1 < index
-            try:
-                return self.__get_item_from_queue(index - path_length)
-            except IndexError:
-                raise IndexError("The path and the cruncher's work_queue together hold " +
-                               str(path_length + self.cruncher.work_queue.qsize()) +
-                               " states, and you asked for state number " + str(index) +
-                               ".")
+        result_state = path[index].state
+        if result_state.clock > our_leaf.state.clock:
+            
+            raise IndexError
+        return result_state
             
     
     @with_self
@@ -137,11 +129,9 @@ class HistoryBrowser(object):
         Obtains an item by index number from the work_queue of our cruncher.
         """
         item = queuetools.queue_get_item(self.cruncher.work_queue, index)
-        print item.clock
+        #print item.clock
         return item
-        """
-        return queuetools.queue_get_item(self.cruncher.work_queue, index)
-        """
+        
     
     @with_self
     def request_state_by_clock(self, clock, rounding="Closest"):
@@ -248,6 +238,8 @@ class HistoryBrowser(object):
         """
         Returns the leaf that the current cruncher is assigned to work on.
         """
+        if hasattr(self, "our_leaf"): return self.our_leaf
+        
         current_thread = threading.currentThread()  
         
         leaves_that_are_us = \
@@ -260,6 +252,7 @@ class HistoryBrowser(object):
             our_leaf = leaves_that_are_us[0]
         else: # num == 0
             raise crunchers.ObsoleteCruncherError
+        self.our_leaf = our_leaf
         return our_leaf
     
     
