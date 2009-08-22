@@ -26,6 +26,7 @@ def make_random_state(*args, **kwargs):
 def history_step(history_browser, *args, **kwargs):
 
     last_state = history_browser.get_last_state()
+    #print last_state.clock; import sys; sys.stdout.flush()
     new_state = copy.deepcopy(last_state)
     new_state.clock += 1
     new_state._State__touched = False

@@ -82,7 +82,7 @@ class HistoryBrowser(object):
         """
         Syntactic sugar for getting the last state in the timeline.
         """
-        return self[-1]
+        return self.__get_our_leaf.state()
     
     @with_self
     def __getitem__(self, index):
@@ -136,7 +136,12 @@ class HistoryBrowser(object):
         """
         Obtains an item by index number from the work_queue of our cruncher.
         """
+        item = queuetools.queue_get_item(self.cruncher.work_queue, index)
+        print item.clock
+        return item
+        """
         return queuetools.queue_get_item(self.cruncher.work_queue, index)
+        """
     
     @with_self
     def request_state_by_clock(self, clock, rounding="Closest"):
@@ -246,8 +251,8 @@ class HistoryBrowser(object):
         current_thread = threading.currentThread()  
         
         leaves_that_are_us = \
-            [leaf for (leaf, cruncher) in self.project.crunchers.items()\
-             if cruncher==current_thread]
+            [leaf for (leaf, cruncher) in self.project.crunching_manager.crunchers.items()\
+             if cruncher == current_thread]
         
         num = len(leaves_that_are_us)
         assert num <= 1

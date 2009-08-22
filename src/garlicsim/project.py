@@ -5,14 +5,11 @@ for more info
 
 import state
 import simpackgrokker
-from crunchers import CruncherThread, CruncherProcess
+import crunchingmanager
 
 import misc.readwritelock as readwritelock
-import misc.queuetools as queuetools
 from misc.infinity import Infinity # Same as Infinity=float("inf")
 
-PreferredCruncher = [CruncherThread, CruncherProcess][1]
-# Should be a nicer way of setting that.
 
 __all__ = ["Project"]
 
@@ -43,6 +40,8 @@ class Project(object):
 
         self.tree=state.Tree()
         
+        self.crunching_manager = crunchingmanager.CrunchingManager(self)
+        
         self.tree_lock = readwritelock.ReadWriteLock()
         """
         The tree_lock is a read-write lock that guards access to the tree.
@@ -50,17 +49,7 @@ class Project(object):
         and require reading from the tree in the same time that sync_crunchers
         could potentially be writing to it.
         """
-        
 
-        if self.simpack_grokker.history_dependent:
-            self.Cruncher = CruncherThread
-        else:
-            self.Cruncher = PreferredCruncher
-
-        self.crunchers = {}
-        """
-        A dict that maps leaves that should be worked on to crunchers.
-        """
 
         self.leaves_to_crunch = {} 
         """
@@ -75,7 +64,7 @@ class Project(object):
         for this to work.
         Returns the node.
         """
-        state = self.simpack.make_plain_state(*args,**kwargs)
+        state = self.simpack.make_plain_state(*args, **kwargs)
         state._State__touched = True
         return self.root_this_state(state)
 
@@ -86,7 +75,7 @@ class Project(object):
         for this to work.
         Returns the node.
         """
-        state = self.simpack.make_random_state(*args,**kwargs)
+        state = self.simpack.make_random_state(*args, **kwargs)
         state._State__touched = True
         return self.root_this_state(state)
 
@@ -125,107 +114,10 @@ class Project(object):
 
         Returns the total amount of nodes that were added to the tree.
         """
-
-        with self.tree_lock.write:
-            my_leaves_to_crunch = self.leaves_to_crunch.copy()
-    
-            if temp_infinity_node:
-                if self.leaves_to_crunch.has_key(temp_infinity_node):
-                    had_temp_infinity_node = True
-                    previous_value_of_temp_infinity_node = \
-                            self.leaves_to_crunch[temp_infinity_node]
-                else:
-                    had_temp_infinity_node = False
-                my_leaves_to_crunch[temp_infinity_node] = Infinity
-    
-    
-            added_nodes = 0
-    
-            for leaf in self.crunchers.copy():
-                if not (leaf in my_leaves_to_crunch):
-                    cruncher = self.crunchers[leaf]
-                    result = queuetools.dump_queue(cruncher.work_queue)
-    
-                    cruncher.retire()
-    
-                    current = leaf
-                    for state in result:
-                        current = self.tree.add_state(state, parent=current)
-                    added_nodes += len(result)
-    
-                    del self.crunchers[leaf]
-                    #cruncher.join() # todo: sure?
-    
-    
-    
-            for (leaf, number) in my_leaves_to_crunch.items():
-                if self.crunchers.has_key(leaf) and self.crunchers[leaf].is_alive():
-    
-                    cruncher = self.crunchers[leaf]
-                    result = queuetools.dump_queue(cruncher.work_queue)
-    
-                    current = leaf
-                    for state in result:
-                        current = self.tree.add_state(state, parent=current)
-                    added_nodes += len(result)
-    
-                    del my_leaves_to_crunch[leaf]
-    
-    
-                    if number != Infinity: # Maybe this is just a redundant dichotomy from before I had Infinity?
-                        new_number = number - len(result)
-                        if new_number <= 0:
-                            cruncher.retire()
-                            #cruncher.join() # todo: sure?
-                            del self.crunchers[leaf]
-                        else:
-                            my_leaves_to_crunch[current] = new_number
-                            del self.crunchers[leaf]
-                            self.crunchers[current] = cruncher
-    
-                    else:
-                        my_leaves_to_crunch[current] = Infinity
-                        del self.crunchers[leaf]
-                        self.crunchers[current] = cruncher
-    
-                    if leaf == temp_infinity_node:
-                        continuation_of_temp_infinity_node = current
-                        progress_with_temp_infinity_node = len(result)
-    
-    
-    
-    
-                else:
-                    # Create cruncher
-                    if leaf.still_in_editing is False:
-                        cruncher=self.crunchers[leaf] = self.create_cruncher(leaf)
-                    if leaf == temp_infinity_node:
-                        continuation_of_temp_infinity_node = leaf
-                        progress_with_temp_infinity_node = 0
-    
-            if temp_infinity_node:
-                if had_temp_infinity_node:
-                    my_leaves_to_crunch[continuation_of_temp_infinity_node]=max(previous_value_of_temp_infinity_node-progress_with_temp_infinity_node,0)
-                else:
-                    del my_leaves_to_crunch[continuation_of_temp_infinity_node]
-    
-            self.leaves_to_crunch=my_leaves_to_crunch
-    
-            return added_nodes
-    
-    def create_cruncher(self, node):
-        """
-        Creates a cruncher and tells it to start working on `node`.
-        """
-        if self.Cruncher == CruncherProcess:
-            cruncher = self.Cruncher(node.state,
-                                     step_function=self.simpack_grokker.step)
         
-        else: # self.Cruncher == CruncherThread
-            cruncher = self.Cruncher(node.state, self,
-                                    step_function=self.simpack_grokker.step)
-        cruncher.start()
-        return cruncher
+        return self.crunching_manager.sync_crunchers(temp_infinity_node=temp_infinity_node)
+    
+
     
     
 
