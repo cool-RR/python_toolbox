@@ -82,7 +82,7 @@ class HistoryBrowser(object):
         """
         Syntactic sugar for getting the last state in the timeline.
         """
-        return self.__get_our_leaf.state()
+        return self[-1]
     
     @with_self
     def __getitem__(self, index):

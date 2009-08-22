@@ -2,6 +2,21 @@
 A module for doing a binary search in a sequence.
 """
 
+def SequenceInterface(object):
+    def __init__(self, sequence):
+        self.sequence = sequence
+    def __getitem__(self, index):
+        return index
+    def __len__(self):
+        return len(self.sequence)
+
+
+def binary_search_by_index(sequence, function, value, rounding="Closest"):
+    sequence_interface = SequenceInterface(sequence)
+    fixed_function = lambda index: function(sequence[index])
+    result = binary_search(sequence_interface, fixed_function, value, rounding)
+
+
 def binary_search(sequence, function, value, rounding="Closest"):
     """
     Does a binary search through a sequence.
@@ -18,6 +33,10 @@ def binary_search(sequence, function, value, rounding="Closest"):
     For all rounding options, a return value of None is returned if no
     matching item is found. (In the case of rounding="Both", either of the
     items in the tuple may be None)
+    
+    Note: This function uses None to express its inability to find any matches;
+    Therefore, you better not use it on sequences in which None is a possible
+    item.
     """
     assert rounding in ["High", "Low", "Exact", "Both", "Closest"]
     
@@ -92,3 +111,5 @@ def make_both_data_into_preferred_rounding(both, function, value, rounding):
             return both[0]
         else:
             return both[1]
+        
+        
