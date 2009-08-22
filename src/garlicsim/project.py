@@ -3,8 +3,6 @@ This module defines a class Project. See this class's documentation
 for more info
 """
 
-import random
-
 import state
 import simpackgrokker
 from crunchers import CruncherThread, CruncherProcess
@@ -229,22 +227,24 @@ class Project(object):
         cruncher.start()
         return cruncher
     
+    
+
+"""
+    Removing:
+    
     def step(self,source_node):
-        """
+        \"""
         Takes a node and simulates a child node from it.
         This is NOT done in the background.
         Returns the child node.
-        """
+        \"""
         with self.tree_lock.write:
             if self.simpack_grokker.history_dependent:
                 raise NotImplementedError
             else:
                 new_state = self.simpack_grokker.step(source_node.state)
                 return self.tree.add_state(new_state, source_node)
-
-"""
-    Removing:
-
+                
     def multistep(self,source_node,steps=1):
         \"""
         Takes a node and simulates a succession of child nodes from it.

@@ -241,19 +241,19 @@ class GuiProject(object):
         self.stuff_to_do_when_idle.put(mission)
         
 
-    def step_from_active_node(self,*args,**kwargs):
+    def step_from_active_node(self, *args, **kwargs):
         """
-        Used for forking the simulation without
-        modifying any states.
-        Creates a new node from the active node via
-        natural simulation.
-        Returns the new node.
+        Used for forking the simulation without modifying any states.
+        Creates a new node from the active node via natural simulation.
 
         todo: maybe not let to do it from unfinalized touched node?
         """
-        new_node=self.project.step(self.active_node)
-        self.set_active_node(new_node)
-        return new_node
+        
+        node = self.active_node
+        if self.project.leaves_to_crunch.has_key(node):
+            return # Problem: Node is already a leaf. Todo.
+        else:
+            self.project.leaves_to_crunch[node] = self.default_buffer
 
     def edit_from_active_node(self,*args,**kwargs):
         """
