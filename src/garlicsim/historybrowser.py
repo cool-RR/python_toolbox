@@ -6,6 +6,7 @@ for more info.
 import threading
 
 import state
+import state.pathtools as pathtools
 import crunchers
 
 import misc.binarysearch as binarysearch
@@ -104,9 +105,11 @@ class HistoryBrowser(object):
             queue_size = self.cruncher.work_queue.qsize()
             new_index = index + queue_size
             our_leaf = self.__get_our_leaf()
-            path = our_leaf.make_containing_path()            
-            #result_state = path[new_index].state
-            #if result_state.clock >= our_leaf.
+            path = our_leaf.make_containing_path()
+            result_node = pathtools.get_item_with_end_node_negative(path,
+                                                                    our_leaf,
+                                                                    new_index)
+            return result_node.state
             
     
     @with_self
@@ -116,11 +119,30 @@ class HistoryBrowser(object):
         """
         our_leaf = self.__get_our_leaf()
         path = our_leaf.make_containing_path()
-        result_state = path[index].state
-        if result_state.clock > our_leaf.state.clock:
+        try:
+            result_node = pathtools.get_item_with_end_node_negative(path,
+                                                                    our_leaf,
+                                                                    index)
             
-            raise IndexError
-        return result_state
+            return result_node.state
+        
+        except IndexError:
+            path_length = pathtools.length_with_end_node(path, our_leaf)
+            # Probably inefficient: We're plowing through the path again.
+            new_index = index - path_length
+            try:
+                return self.__get_item_from_queue(new_index)
+            except IndexError:
+                queue_length = self.cruncher.work_queue.qsize()
+                timeline_length = queue_length + path_length
+                message = "You asked for node number " + str(index) + \
+                          " while the timeline has only " + timeline_length + \
+                          " states, comprised by " + path_length + \
+                          " states in the tree and " + queue_length + \
+                          " states in the queue."
+                raise IndexError(message)
+        
+        
             
     
     @with_self
