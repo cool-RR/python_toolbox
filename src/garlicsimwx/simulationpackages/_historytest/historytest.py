@@ -23,16 +23,15 @@ def make_random_state(*args, **kwargs):
     return state
 
 
-def history_step(history_browser, *args, **kwargs):
+def history_step(history_browser, t=0.1, *args, **kwargs):
 
     last_state = history_browser.get_last_state()
-    #print last_state.clock; import sys; sys.stdout.flush()
     new_state = copy.deepcopy(last_state)
-    new_state.clock += 1
+    new_state.clock += t
     new_state._State__touched = False
     
     new_state.left_vel += random.random() * 0.2 - 0.1
-    new_state.left += new_state.left_vel
+    new_state.left += new_state.left_vel * t
     
     past_state = history_browser.request_state_by_clock(new_state.clock - 20)
     if past_state is not None:

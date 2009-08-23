@@ -260,7 +260,6 @@ class HistoryBrowser(object):
         """
         Returns the leaf that the current cruncher is assigned to work on.
         """
-        if hasattr(self, "our_leaf"): return self.our_leaf
         
         current_thread = threading.currentThread()  
         
@@ -274,7 +273,6 @@ class HistoryBrowser(object):
             our_leaf = leaves_that_are_us[0]
         else: # num == 0
             raise crunchers.ObsoleteCruncherError
-        self.our_leaf = our_leaf
         return our_leaf
     
     
