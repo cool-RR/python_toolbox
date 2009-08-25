@@ -82,7 +82,7 @@ class GuiProject(object):
         """
 
         main_window.Bind(wx.EVT_MENU,self.edit_from_active_node,id=s2i("Fork by editing"))
-        main_window.Bind(wx.EVT_MENU,self.step_from_active_node,id=s2i("Fork naturally"))
+        main_window.Bind(wx.EVT_MENU,self.fork_naturally,id=s2i("Fork naturally"))
 
         self.simpack = simpack        
         
@@ -241,7 +241,7 @@ class GuiProject(object):
         self.stuff_to_do_when_idle.put(mission)
         
 
-    def step_from_active_node(self, *args, **kwargs):
+    def fork_naturally(self, *args, **kwargs):
         """
         Used for forking the simulation without modifying any states.
         Creates a new node from the active node via natural simulation.

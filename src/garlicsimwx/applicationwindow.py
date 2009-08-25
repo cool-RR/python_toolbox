@@ -76,7 +76,7 @@ class ApplicationWindow(wx.Frame):
 
     def add_gui_project(self,gui_project):
         self.gui_projects.append(gui_project)
-        self.notebook.AddPage(gui_project.main_window,"zort!",select=True)
+        self.notebook.AddPage(gui_project.main_window,"Simulation",select=True)
 
     """
     def delete_gui_project(self,gui_project):
