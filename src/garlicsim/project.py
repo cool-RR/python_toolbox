@@ -8,7 +8,7 @@ import simpackgrokker
 import crunchingmanager
 
 import misc.readwritelock as readwritelock
-from misc.infinity import Infinity # Same as Infinity=float("inf")
+from misc.infinity import Infinity # Same as Infinity = float("inf")
 
 
 __all__ = ["Project"]
@@ -115,7 +115,8 @@ class Project(object):
         Returns the total amount of nodes that were added to the tree.
         """
         
-        return self.crunching_manager.sync_crunchers(temp_infinity_node=temp_infinity_node)
+        return self.crunching_manager.sync_crunchers \
+               (temp_infinity_node=temp_infinity_node)
     
 
     

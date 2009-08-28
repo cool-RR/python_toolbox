@@ -2,7 +2,7 @@ import wx
 
 class GenericInitialDialog(wx.Dialog):
     def __init__(self, parent, id):
-        wx.Dialog.__init__(self, parent, id, size=(900,800),title="Creating a root state")
+        wx.Dialog.__init__(self, parent, id, title="Creating a root state")
 
 
         hbox1=wx.BoxSizer(wx.HORIZONTAL)

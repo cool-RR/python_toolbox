@@ -19,7 +19,7 @@ def show_state(gui_project,state):
 
 class InitialDialog(wx.Dialog):
     def __init__(self, parent, id):
-        wx.Dialog.__init__(self, parent, id, size=(900,800),title="Creating a root state")
+        wx.Dialog.__init__(self, parent, id, title="Creating a root state")
 
         hbox1=wx.BoxSizer(wx.HORIZONTAL)
         self.x_title=x_title=wx.StaticText(self,-1,"Width: ")
