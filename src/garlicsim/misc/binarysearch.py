@@ -1,5 +1,9 @@
 """
 A module for doing a binary search in a sequence.
+
+Todo: create a different mode where all objects are wrapped in a list before
+being returned. This will allow this module to handle sequences that have None
+as legitimate members.
 """
 
 def SequenceInterface(object):
