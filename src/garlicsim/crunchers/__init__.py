@@ -16,7 +16,7 @@ hard to implement using Process, because information transfer between processes
 is complicated. This is why CruncherThread was born, as threads share memory
 trivially between them.
 
-Another reason from CrunccerThread is that on single-core computer it might
+Another reason for CruncherThread is that on single-core computer it might
 be faster than CruncherProcess because of the memory-sharing.
 
 See documentation for CruncherThread and CruncherProcess for more details.
@@ -29,5 +29,9 @@ class ObsoleteCruncherError(Exception):
     """
     pass
 
-from cruncherthread import *
-from cruncherprocess import *
+from cruncher_thread import *
+from cruncher_process import *
+
+
+__all__ = ["CruncherProcess", "CruncherThread", "ObsoleteCruncherError"]
+

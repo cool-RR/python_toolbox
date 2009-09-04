@@ -1,13 +1,13 @@
 """
 This module defines a class Project. See this class's documentation
-for more info
+for more info.
 """
 
 import state
-import simpackgrokker
-import crunchingmanager
+import simpack_grokker
+import crunching_manager
 
-import misc.readwritelock as readwritelock
+import misc.read_write_lock as read_write_lock
 from misc.infinity import Infinity # Same as Infinity = float("inf")
 
 
@@ -35,21 +35,20 @@ class Project(object):
 
     def __init__(self, simpack):
         
-        self.simpack_grokker = simpackgrokker.SimpackGrokker(simpack)
+        self.simpack_grokker = simpack_grokker.SimpackGrokker(simpack)
         self.simpack = simpack
 
-        self.tree=state.Tree()
+        self.tree = state.Tree()
         
-        self.crunching_manager = crunchingmanager.CrunchingManager(self)
+        self.crunching_manager = crunching_manager.CrunchingManager(self)
         
-        self.tree_lock = readwritelock.ReadWriteLock()
+        self.tree_lock = read_write_lock.ReadWriteLock()
         """
         The tree_lock is a read-write lock that guards access to the tree.
         We need such a thing because some simulations are history-dependent
         and require reading from the tree in the same time that sync_crunchers
         could potentially be writing to it.
         """
-
 
         self.leaves_to_crunch = {} 
         """
@@ -59,7 +58,7 @@ class Project(object):
 
     def make_plain_root(self, *args, **kwargs):
         """
-        Creates a parent-less node, whose state is a simple plain state.
+        Creates a parentless node, whose state is a simple plain state.
         The simulation package should define the function `make_plain_state`
         for this to work.
         Returns the node.
@@ -70,7 +69,7 @@ class Project(object):
 
     def make_random_root(self, *args, **kwargs):
         """
-        Creates a parent-less node, whose state is a random and messy state.
+        Creates a parentless node, whose state is a random and messy state.
         The simulation package should define the function `make_random_state`
         for this to work.
         Returns the node.

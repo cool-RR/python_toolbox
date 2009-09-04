@@ -8,7 +8,7 @@ from tree import *
 from node import *
 from block import *
 
-import garlicsim.misc.binarysearch as binarysearch
+import garlicsim.misc.binary_search as binary_search
 
 class Path(object):
     """
@@ -218,7 +218,7 @@ class Path(object):
         low = self.root
         
         if function(low) >= value:
-            return binarysearch.make_both_data_into_preferred_rounding \
+            return binary_search.make_both_data_into_preferred_rounding \
                    ((None, low), function, value, rounding)
         
         """
@@ -230,20 +230,20 @@ class Path(object):
             if isinstance(thing, Block):
                 first = thing[0]
                 if function(first) >= value:
-                    return binarysearch.make_both_data_into_preferred_rounding \
+                    return binary_search.make_both_data_into_preferred_rounding \
                            ((low, first), function, value, rounding)
                     
                 last = thing[-1]
                 if function(last) >= value:
                     # It's in the block
-                    return binarysearch.binary_search(thing, \
+                    return binary_search.binary_search(thing, \
                            function, value, rounding)
                 else:
                     low = last
                     continue
             else: # thing is a Node
                 if function(thing) >= value:
-                    return binarysearch.make_both_data_into_preferred_rounding \
+                    return binary_search.make_both_data_into_preferred_rounding \
                            ((low, thing), function, value, rounding)
                 else:
                     low = thing
@@ -254,7 +254,7 @@ class Path(object):
         in the path has lower value than the value we're looking for.
         """
         
-        return binarysearch.make_both_data_into_preferred_rounding \
+        return binary_search.make_both_data_into_preferred_rounding \
                ((low, None), function, value, rounding)
             
         
@@ -287,7 +287,7 @@ class Path(object):
     
     """
     def find_index_of_node(self, node):
-        self_interface = binarysearch.SequenceInterface(self)
+        self_interface = binary_search.SequenceInterface(self)
         function = lambda index: self[index].
         Path.get_node_by_monotonic_function
     """
