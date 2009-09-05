@@ -300,6 +300,12 @@ class Path(object):
         
     
     def get_node_occupying_timepoint(self, timepoint):
+        """
+        Takes a timepoint. Checks whether we have at least one node that is
+        before this timepoint and one that is after this time point. If that
+        is the case, returns the node immediately before the time point.
+        Otherwise, returns None.
+        """
         temp = self.get_node_by_clock(timepoint, rounding="Both")
         if temp.count(None)==0:
             return temp[0]
