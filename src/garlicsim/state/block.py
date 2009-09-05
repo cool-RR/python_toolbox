@@ -3,6 +3,7 @@ A module that defines the `Block` class. See
 its documentation for more information.
 """
 
+__all__ = ["Block"]
 
 class Block(object):
     """

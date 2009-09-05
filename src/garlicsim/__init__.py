@@ -1,3 +1,11 @@
-from project import *
+"""
+GarlicSim is a platform for writing, running and analyzing simulations. It can
+handle any kind of simulation: Physics, game theory, epidemic spread,
+electronics, etc.
 
-# __all__ = ["Project","state","Infinity","state"]
+Visit http://garlicsim.com for more info.
+"""
+
+from project import Project
+
+__all__ = ["Project"]

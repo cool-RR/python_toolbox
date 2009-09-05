@@ -19,11 +19,11 @@ def get_item(path, end_node, index):
     documentation for more info.
     """
     if index >= 0:
-        return __get_item_positive(path, end_node, index)
+        return get_item_positive(path, end_node, index)
     else: # index < 0
-        return __get_item_negative(path, end_node, index)
+        return get_item_negative(path, end_node, index)
     
-def __get_item_positive(path, end_node, index):
+def get_item_positive(path, end_node, index):
     """
     Gets a node from the path by index number, given that the index number
     is positive.
@@ -35,7 +35,7 @@ def __get_item_positive(path, end_node, index):
     if result.state.clock > end_node.state.clock:
         raise IndexError
     
-def __get_item_negative(path, end_node, index):
+def get_item_negative(path, end_node, index):
     """
     Gets a node from the path by index number, given that the index number
     is positive.

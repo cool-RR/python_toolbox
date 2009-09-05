@@ -22,15 +22,11 @@ class Project(object):
     A Project encapsulates a Tree.
 
     A Project, among other things, takes care of background
-    crunching of the simulation, using threads and/or processes.
-    A Project employs "crunchers", which are either threads or processes,
-    and which crunch the simulation in the background.
-    The Project is responsible for coordinating the crunchers. The method
-    sync_crunchers makes the Project review the work done by the crunchers,
-    implement it into the Tree, and retire/employ them as necessary.
-
-    The Project class does not require wxPython or any other
-    GUI package: It can be used entirely from the Python command-line.
+    crunching of the simulation. This is done by the CrunchingManager object
+    which is a part of the Project. The CrunchingManager employs
+    CruncherThreads and/or CruncherProcesses to get the work done.
+    To make the CrunchingManager take work from the crunchers and coordinate
+    them, call the sync_workers method of the project.
     """
 
     def __init__(self, simpack):
@@ -88,9 +84,8 @@ class Project(object):
 
     def crunch_all_leaves(self, node, wanted_distance):
         """
-        Orders to start crunching from all the leaves of `node`,
-        so that there will be a buffer whose length
-        is at least `wanted_distance`.
+        Orders to start crunching from all the leaves of `node`, so that there
+        will be a buffer whose length is at least `wanted_distance`.
         """
         leaves = node.get_all_leaves(wanted_distance)
         for (leaf, distance) in leaves.items():
@@ -116,8 +111,9 @@ class Project(object):
         
         return self.crunching_manager.sync_crunchers \
                (temp_infinity_node=temp_infinity_node)
-    
 
+    
+    
     
     
 

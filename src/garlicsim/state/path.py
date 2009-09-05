@@ -3,12 +3,14 @@ A module that defines the `Path` class. See
 its documentation for more information.
 """
 
-import warnings
-from tree import *
-from node import *
-from block import *
+from node import Node
+from block import Block
+# Note we are doing `from tree import Tree` in the bottom of the file
+# to avoid problems with circular imports.
 
 import garlicsim.misc.binary_search as binary_search
+
+__all__ = ["Path"]
 
 class Path(object):
     """
@@ -76,7 +78,11 @@ class Path(object):
                 raise StopIteration("Ran out of tree")
     
     def iterate_blockwise_reversed(self, starting_at):
-        
+        """
+        Iterates backwards on the Path, returning Blocks when possible.
+        You must specify a node/block from which to start iterating,
+        using the parameter `starting_at`.
+        """
         current = starting_at.soft_get_block()
 
         yield current
@@ -136,7 +142,7 @@ class Path(object):
 
     def __getitem__(self, index):
         """
-        Gets node by number.
+        Gets a node by its index number in the path.
         """
         
         assert isinstance(index, int)
@@ -147,10 +153,14 @@ class Path(object):
             return self.__get_item_negative(index)
 
     def __get_item_negative(self, index, starting_at=None):
-        assert isinstance(index, int)
-        assert isinstance(starting_at, Node)
+        """
+        Gets a node by its index number in the path, assuming that number is
+        negative.
+        """
         if starting_at == None:
             starting_at = self.get_last_node()
+        else:
+            assert isinstance(starting_at, Node)
         if index == -1:
             return starting_at
         
@@ -177,7 +187,10 @@ class Path(object):
         
         
     def __get_item_positive(self, index):
-        assert isinstance(index, int)
+        """
+        Gets a node by its index number in the path, assuming that number is
+        positive.
+        """
         my_index = -1
         for thing in self.iterate_blockwise():
             my_index += len(thing)
@@ -290,7 +303,4 @@ class Path(object):
             return None
     
 
-            
-
-
-    
+from tree import Tree

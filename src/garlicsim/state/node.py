@@ -5,8 +5,12 @@ its documentation for more information.
 This module imports `path.py` at the end.
 """
 
-from state import *
+from state import State
+# Note we are doing `from path import Path` in the bottom of the file
+# to avoid problems with circular imports.
 from garlicsim.misc.infinity import Infinity
+
+__all__ = ["Node"]
 
 class Node(object):
     """
@@ -144,4 +148,4 @@ class Node(object):
                 lowest = lowest.block[0]
         return lowest
 
-from path import *
+from path import Path

@@ -12,14 +12,9 @@ import crunchers
 import misc.binary_search as binary_search
 import misc.queue_tools as queue_tools
 
-
-
-get_state_clock = lambda state: state.clock
-
 __all__ = ["HistoryBrowser"]
 
-
-
+get_state_clock = lambda state: state.clock
 
 def with_self(method):
     """
@@ -38,9 +33,9 @@ class HistoryBrowser(object):
     It is intended to be used by CruncherThread in simulations that are
     history-dependent.
     
-    With a HistoryBrowser one can request states from the simulations timeline.
-    States can be requested by clock time or position in the timeline or by
-    other measures; See documentation for this class's methods.
+    With a HistoryBrowser one can request states from the simulation's
+    timeline. States can be requested by clock time or position in the timeline
+    or by other measures; See documentation for this class's methods.
     
     Since we do not know whether the states we request have been implemented in
     the tree already, or they are still in the work_queue, it's the job of the
@@ -51,16 +46,14 @@ class HistoryBrowser(object):
     HistoryBrowser as a context manager.
     
     
-
-    
     todo in the future: because historybrowser
     retains a reference to a node, when the user deletes a node
     we should mark it so the historybrowser will know it's dead.
     
-    make it easy to use hisotrybrowser's method from a separate thread,
+    todo: make it easy to use hisotrybrowser's method from a separate thread,
     so when waiting for a lock the cruncher could still be productive.
         
-    maybe I've exaggerated in using @with_self in so many places?
+    todo: maybe I've exaggerated in using @with_self in so many places?
     
     """
     def __init__(self, cruncher):
@@ -127,7 +120,7 @@ class HistoryBrowser(object):
         
         except IndexError:
             path_length = path_tools.with_end_node.length(path, our_leaf)
-            # Probably inefficient: We're plowing through the path again.
+            # todo: Probably inefficient: We're plowing through the path again.
             new_index = index - path_length
             try:
                 return self.__get_item_from_queue(new_index)
@@ -249,7 +242,7 @@ class HistoryBrowser(object):
         queue_size = queue.qsize()
         with queue.mutex:
             queue_as_list = list(queue.queue)
-            # Probably inefficient, should access them one by one
+            # todo: Probably inefficient, should access them one by one
         
         return binary_search.binary_search\
                (queue_as_list, function, value, rounding)

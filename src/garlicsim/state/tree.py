@@ -5,10 +5,11 @@ its documentation for more information.
 
 import copy as _copy
 
-from node import *
-from block import *
+from block import Block
+# Note we are doing `from node import Node` in the bottom of the file
+# to avoid problems with circular imports.
 
-__all__=["Tree"]
+__all__ = ["Tree"]
 
 
 class Tree(object):
@@ -129,3 +130,5 @@ class Tree(object):
 
     def node_count(self):
         return len(self.nodes)
+    
+from node import Node

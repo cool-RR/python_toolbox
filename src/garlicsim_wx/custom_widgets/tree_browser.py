@@ -12,7 +12,7 @@ import garlicsim.state
 from wx.lib.scrolledpanel import ScrolledPanel
 
 
-connector_length=10 #length of connecting line between elements
+connector_length = 10 #length of connecting line between elements
 
 
 

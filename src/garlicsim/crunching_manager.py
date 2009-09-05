@@ -1,14 +1,27 @@
-
+"""
+This module defines the CrunchingManager class; See its documentation for more
+info.
+"""
 
 import misc.queue_tools as queue_tools
 from crunchers import CruncherThread, CruncherProcess
 from misc.infinity import Infinity
 
 PreferredCruncher = [CruncherThread, CruncherProcess][1]
-# Should be a nicer way of setting that.
+# Should make a nicer way of setting that.
 
+__all__ = ["CrunchingManager"]
 
 class CrunchingManager(object):
+    """
+    A crunching manager manages the background crunching for a project.
+    Every project creates a crunching manager. The job of the crunching manager
+    is to coordinate the crunchers, creating and retiring them as necessary.
+    The main use of a crunching manager is through its sync_workers methods,
+    which goes over all the crunchers and all the leaves of the tree that need
+    to be crunched, making sure the crunchers are working exactly on these
+    leaves.
+    """
     def __init__(self, project):
         
         self.project = project
@@ -31,9 +44,12 @@ class CrunchingManager(object):
         new crunchers if necessary.
         You can pass a node as `temp_infinity_node`. That will cause this
         function to temporarily treat this node as if it should be crunched
-        indefinitely.
+        indefinitely. This is useful when the simulation is playing back on
+        a path that leads to this node, and we want to have as big a buffer
+        as possible on that path.
 
-        Returns the total amount of nodes that were added to the tree.
+        Returns the total amount of nodes that were added to the tree in the
+        process.
         """
 
         with self.project.tree_lock.write:
