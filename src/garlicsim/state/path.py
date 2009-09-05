@@ -211,7 +211,11 @@ class Path(object):
         
     def get_node_by_monotonic_function(self, function, value, rounding="Closest"):
         """
-        Todo: make option to return index instead of node?
+        Gets a node by specifying a measure function and a desired value.
+        The function must be a monotonic rising function on the timeline.
+        
+        See documentation of garlicsim.misc.binary_search.binary_search for
+        details about rounding options.
         """
         assert rounding in ["High", "Low", "Exact", "Both", "Closest"]        
         

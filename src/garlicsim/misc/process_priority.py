@@ -1,4 +1,9 @@
-import win32api,win32process,win32con
+"""
+This module defines a function called set_process_priority. See its
+documentation for more info.
+"""
+
+import win32api, win32process, win32con
 
 def set_process_priority(pid=None,priority=1):
     """ Set The Priority of a Windows Process.  Priority is a value between 0-5 where

@@ -170,7 +170,7 @@ class HistoryBrowser(object):
     def request_state_by_monotonic_function(self, function, value, rounding="Closest"):
         """
         Requests a state by specifying a measure function and a desired value.
-        The function must by a monotonic rising function on the timeline.
+        The function must be a monotonic rising function on the timeline.
         
         See documentation of garlicsim.misc.binary_search.binary_search for
         details about rounding options.
