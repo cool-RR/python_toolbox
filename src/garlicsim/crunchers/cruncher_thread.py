@@ -61,7 +61,10 @@ class CruncherThread(threading.Thread):
     def run(self):
         """
         This is called when the cruncher is started. It just calls
-        the main_loop method.
+        the main_loop method in a try clause, excepting ObsoleteCruncherError;
+        That exception means that the cruncher has been retired in the middle
+        of its job, so it is propagated up to this level, where it causes the
+        cruncher to terminate.
         """
         try:
             self.main_loop()
@@ -71,7 +74,8 @@ class CruncherThread(threading.Thread):
     def main_loop(self):
         """
         The main loop of the cruncher. It's basically, "As long as no one
-        tells you to retire, apply the step function repeatedly."
+        tells you to retire, apply the step function repeatedly and put the
+        results in your work queue."
         """
         self.current = self.initial_state
         order = None
@@ -117,7 +121,7 @@ class CruncherThread(threading.Thread):
         """
         This is the "work" function for the cruncher in the case the simulation
         is history-dependent.
-        It calls the step function on the history browser. It then put the
+        It calls the step function on the history browser. It then puts the
         returned state in the work_queue.
         """
         next = self.step(self.history_browser)

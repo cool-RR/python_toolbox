@@ -285,12 +285,7 @@ class Path(object):
         else:
             return None
     
-    """
-    def find_index_of_node(self, node):
-        self_interface = binary_search.SequenceInterface(self)
-        function = lambda index: self[index].
-        Path.get_node_by_monotonic_function
-    """
+
             
 
 

@@ -6,19 +6,18 @@ being returned. This will allow this module to handle sequences that have None
 as legitimate members.
 """
 
-def SequenceInterface(object):
-    def __init__(self, sequence):
-        self.sequence = sequence
-    def __getitem__(self, index):
-        return index
-    def __len__(self):
-        return len(self.sequence)
-
 
 def binary_search_by_index(sequence, function, value, rounding="Closest"):
-    sequence_interface = SequenceInterface(sequence)
+    """
+    Similiar to binary_search (refer to its documentation for more info).
+    The difference is that instead of returning a result in terms of sequence
+    items, it returns the indexes of these items in the sequence.
+    """
+    
+    my_range = range(len(sequence))
     fixed_function = lambda index: function(sequence[index])
-    result = binary_search(sequence_interface, fixed_function, value, rounding)
+    result = binary_search(my_range, fixed_function, value, rounding)
+    return result
 
 
 def binary_search(sequence, function, value, rounding="Closest"):
@@ -93,15 +92,16 @@ def binary_search(sequence, function, value, rounding="Closest"):
     
     both = (sequence[low], sequence[high])
     
-    return make_both_data_into_preferred_rounding(both, function, value, rounding)
+    return make_both_data_into_preferred_rounding(both, function,\
+                                                  value, rounding)
 
 def make_both_data_into_preferred_rounding(both, function, value, rounding):
     """
     Refer to documentation of `binary_search` in this module.
     
-    This function takes the return value from binary_search() with rounding="Both"
-    as `both`. It then gives the data with a different rounding, specified with
-    the parameter `rounding`.
+    This function takes the return value from binary_search() with
+    rounding="Both" as the parameter both. It then gives the data with a
+    different rounding, specified with the parameter `rounding`.
     """
     if rounding == "Both": return both
     elif rounding == "Low": return both[0]

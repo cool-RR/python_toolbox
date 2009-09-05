@@ -65,7 +65,10 @@ class CruncherProcess(multiprocessing.Process):
     def run(self):
         """
         This is called when the cruncher is started. It just calls
-        the main_loop method.
+        the main_loop method in a try clause, excepting ObsoleteCruncherError;
+        That exception means that the cruncher has been retired in the middle
+        of its job, so it is propagated up to this level, where it causes the
+        cruncher to terminate.
         """
         try:
             self.main_loop()
@@ -75,7 +78,8 @@ class CruncherProcess(multiprocessing.Process):
     def main_loop(self):
         """
         The main loop of the cruncher. It's basically, "As long as no one
-        tells you to retire, apply the step function repeatedly."
+        tells you to retire, apply the step function repeatedly and put the
+        results in your work queue."
         """
         self.set_priority(0)
         self.current = self.initial_state
