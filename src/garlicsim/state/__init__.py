@@ -10,6 +10,5 @@ from path import Path
 from node import Node
 from block import Block
 
-import path_tools
 
-__all__ = ["State", "Tree", "Path", "Node", "Block", "path_tools"]
+__all__ = ["State", "Tree", "Path", "Node", "Block"]

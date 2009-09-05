@@ -6,7 +6,6 @@ for more info.
 import threading
 
 import state
-import state.path_tools as path_tools
 import crunchers
 
 import misc.binary_search as binary_search
@@ -99,9 +98,7 @@ class HistoryBrowser(object):
             new_index = index + queue_size
             our_leaf = self.__get_our_leaf()
             path = our_leaf.make_containing_path()
-            result_node = path_tools.with_end_node.get_item_negative(path,
-                                                                     our_leaf,
-                                                                     new_index)
+            result_node = path.__getitem__(new_index, end_node=our_leaf)
             return result_node.state
             
     

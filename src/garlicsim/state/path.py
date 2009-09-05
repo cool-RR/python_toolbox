@@ -5,6 +5,7 @@ its documentation for more information.
 
 from node import Node
 from block import Block
+import path_tools
 # Note we are doing `from tree import Tree` in the bottom of the file
 # to avoid problems with circular imports.
 
@@ -33,7 +34,9 @@ class Path(object):
         """
 
 
-    def __len__(self):
+    def __len__(self, end_node=None):
+        if end_node is not None:
+            return path_tools.with_end_node.length(self, end_node)
         if self.root is None:
             return 0
 
@@ -98,7 +101,7 @@ class Path(object):
             current = parent.soft_get_block()
             yield current
 
-    def __contains__(self,thing):
+    def __contains__(self, thing):
         """
         Returns whether the path contains `thing`.
         `thing` may be a Node or a Block.
@@ -140,10 +143,14 @@ class Path(object):
         raise IndexError("Ran out of tree")
 
 
-    def __getitem__(self, index):
+    def __getitem__(self, index, end_node=None):
         """
         Gets a node by its index number in the path.
+        You can optionally specify an end node in which the path ends.
         """
+
+        if end_node is not None:
+            return path_tools.with_end_node.get_item(self, end_node, index)
         
         assert isinstance(index, int)
         
@@ -216,13 +223,24 @@ class Path(object):
         else:
             return thing
     
-    def get_node_by_clock(self, clock, rounding="Closest"):
-        my_function = lambda node: node.state.clock # Define this outside?
+    def get_node_by_clock(self, clock, rounding="Closest", end_node=None):
+        """
+        Gets a node according to its clock reading.
+        
+        See documentation of garlicsim.misc.binary_search.binary_search for
+        details about rounding options.
+        """
+        if end_node is not None:
+            return path_tools.with_end_node.get_node_by_clock(self, end_node,
+                                                              clock, rounding)
+        
+        my_function = lambda node: node.state.clock
         return self.get_node_by_monotonic_function(function=my_function,
                                                    value=clock,
                                                    rounding=rounding)    
         
-    def get_node_by_monotonic_function(self, function, value, rounding="Closest"):
+    def get_node_by_monotonic_function(self, function, value,
+                                       rounding="Closest", end_node=None):
         """
         Gets a node by specifying a measure function and a desired value.
         The function must be a monotonic rising function on the timeline.
@@ -230,6 +248,11 @@ class Path(object):
         See documentation of garlicsim.misc.binary_search.binary_search for
         details about rounding options.
         """
+        if end_node is not None:
+            return path_tools.with_end_node.\
+                   get_node_by_monotonic_function(self, end_node, function,
+                                                  value, rounding=rounding)
+        
         assert rounding in ["High", "Low", "Exact", "Both", "Closest"]        
         
         low = self.root
@@ -301,6 +324,7 @@ class Path(object):
                     min(clock_of_last, end_time)]
         else:
             return None
+    
     
 
 from tree import Tree
