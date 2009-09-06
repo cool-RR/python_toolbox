@@ -6,6 +6,7 @@ for more info.
 import state
 import simpack_grokker
 import crunching_manager
+import misc.module_wrapper
 
 import misc.read_write_lock as read_write_lock
 from misc.infinity import Infinity # Same as Infinity = float("inf")
@@ -31,8 +32,9 @@ class Project(object):
 
     def __init__(self, simpack):
         
-        self.simpack_grokker = simpack_grokker.SimpackGrokker(simpack)
-        self.simpack = simpack
+        wrapped_simpack = misc.module_wrapper.module_wrapper_factory(simpack)
+        self.simpack_grokker = simpack_grokker.SimpackGrokker(wrapped_simpack)
+        self.simpack = wrapped_simpack
 
         self.tree = state.Tree()
         
@@ -111,12 +113,22 @@ class Project(object):
         
         return self.crunching_manager.sync_crunchers \
                (temp_infinity_node=temp_infinity_node)
+    
+    def __getstate__(self):
+        return {"tree": self.tree,
+                "simpack": self.simpack,
+                "leaves_to_crunch": self.leaves_to_crunch}
+    
+    def __setstate__(self, pickled_project):
+        self.__init__(pickled_project["simpack"])
+        self.tree = pickled_project["tree"]
+        self.leaves_to_crunch = pickled_project["leaves_to_crunch"]
+    
 
-    
-    
-    
-    
-
+        
+        
+        
+        
 """
     Removing:
     
