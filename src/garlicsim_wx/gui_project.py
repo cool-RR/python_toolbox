@@ -161,11 +161,12 @@ class GuiProject(object):
         """
         Makes sure that self.path goes through the active node,
         replacing it with another path if it doesn't.
-        
-        todo: make this not forget our future decisions!
         """
-        if (self.path is None) or (self.active_node not in self.path):
-            self.path=self.active_node.make_containing_path()
+        if self.path is None:
+            self.path = self.active_node.make_containing_path()
+            return
+        if not self.active_node in self.path:
+            self.path.modify_to_include_node(self.active_node)
 
 
     def start_playing(self):

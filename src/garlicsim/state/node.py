@@ -82,6 +82,10 @@ class Node(object):
                 path.decisions[parent] = current
             current = parent
 
+        """
+        I had this in order to change the future of the path,
+        I now thing it's not a good idea.
+        
         current = self
         while True:
             if current.block is not None:
@@ -93,6 +97,7 @@ class Node(object):
                 next = kids[0]
                 path.decisions[current] = next
                 current = next
+        """
 
         return path
 

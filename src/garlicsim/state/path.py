@@ -317,9 +317,9 @@ class Path(object):
         """
         Between timepoints "start_time" and "end_time", returns the segment of nodes that
         exists in the Path.
-        Returns the segment like so: [start,end]
+        Returns the segment like so: [start, end]
         Example: In the path the first node's clock reading is 3.2, the last is 7.6.
-        start_time is 2 and end_time is 5. The function will return [3.2,5]
+        start_time is 2 and end_time is 5. The function will return [3.2, 5]
         """
 
         clock_of_first = self.root.state.clock
@@ -330,6 +330,15 @@ class Path(object):
                     min(clock_of_last, end_time)]
         else:
             return None
+    
+    def modify_to_include_node(self, node):
+        """
+        Modifies the path so it will include the mentioned node.
+        """
+        new_path = node.make_containing_path()
+        self.root = new_path.root
+        self.decisions.update(new_path.decisions)
+        
     
     
 
