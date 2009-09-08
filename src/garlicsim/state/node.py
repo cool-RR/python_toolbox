@@ -16,16 +16,16 @@ class Node(object):
     """
     A node encapsulates a State with the attribute ".state".
     Nodes are used to organize states in a Tree.
+    
+    todo: Maybe node should not reference tree?
     """
-    def __init__(self, tree, state, parent=None):
+    def __init__(self, tree, state, parent=None, touched=False):
         
         self.state = state
-
         self.parent = parent
-
         self.tree = tree
-
-
+        self.__touched = touched
+        
         self.block = None
         """
         A node may be a member of a Block. See class Block
@@ -48,6 +48,9 @@ class Node(object):
 
         self.still_in_editing = False
 
+    def is_touched(self):
+        return self.__touched
+        
     def __len__(self):
         """
         Just returns 1. This is useful because of Blocks.

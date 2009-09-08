@@ -206,7 +206,7 @@ class GuiProject(object):
     def __editing_state(self):
         node=self.active_node
         state=node.state
-        if state.is_touched() is False or node.still_in_editing is False:
+        if node.is_touched() is False or node.still_in_editing is False:
             new_node=self.edit_from_active_node()
             return new_node.state
         else:

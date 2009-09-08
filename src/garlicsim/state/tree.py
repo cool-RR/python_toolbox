@@ -3,7 +3,7 @@ A module that defines the `Tree` class. See
 its documentation for more information.
 """
 
-import copy as _copy
+import copy
 
 from block import Block
 # Note we are doing `from node import Node` in the bottom of the file
@@ -49,8 +49,7 @@ class Tree(object):
         Returns the node.
         """
 
-        x = _copy.deepcopy(template_node.state)
-        x._State__touched = True
+        x = copy.deepcopy(template_node.state)
 
         if template_node is None:
             parent = None
@@ -65,7 +64,8 @@ class Tree(object):
         Wraps state in node and adds to tree.
         Returns the node.
         """
-        mynode = Node(self,state)
+        touched = (parent is None) or (template_node is not None)    
+        mynode = Node(self, state, touched=touched)
         self.add_node(mynode, parent, template_node)
         return mynode
 
@@ -78,13 +78,14 @@ class Tree(object):
         Returns the node.
         """
 
-        mystate = node.state
-        if mystate.is_touched() is False and template_node is not None:
-            raise StandardError("You tried adding an untouched state to a tree while specifying a template_node.")
+        if (not node.is_touched()) and (template_node is not None):
+            raise StandardError("You tried adding an untouched state to a \
+                                 tree while specifying a template_node.")
 
         if template_node is not None:
             if parent != template_node.parent:
-                raise StandardError("Parent you specified and parent of template_node aren't the same!")
+                raise StandardError("Parent you specified and parent of \
+                                     template_node aren't the same!")
                 # todo: Do something about this shit
 
         self.nodes.append(node)
@@ -95,7 +96,7 @@ class Tree(object):
                 node.state.clock = 0
 
             self.roots.append(node)
-            if mystate.is_touched():
+            if node.is_touched():
                 if template_node is not None:
                     template_node.derived_nodes.append(node)
 
@@ -106,7 +107,7 @@ class Tree(object):
             node.parent = parent
             parent.children.append(node)
 
-            if mystate.is_touched():
+            if node.is_touched():
                 if template_node is not None:
                     template_node.derived_nodes.append(node)
                 if parent.block is not None:
@@ -123,7 +124,7 @@ class Tree(object):
                         parent.block.split(parent.block[ind+1])
 
                 else:
-                    if len(parent.children) == 1 and parent.state.is_touched() is False:
+                    if len(parent.children) == 1 and parent.is_touched() is False:
                         Block([parent,node])
         return node
 
