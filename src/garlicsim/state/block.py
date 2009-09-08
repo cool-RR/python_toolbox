@@ -56,7 +56,7 @@ class Block(object):
             if i >= 1:
                 if node_list[i].parent != node_list[i-1]:
                     raise StandardError("Tried to add non-consecutive nodes to block")
-            if node_list[i].state.is_touched():
+            if node_list[i].is_touched():
                 raise StandardError("Tried to add touched nodes to block")
             node_list[i].block = self
 

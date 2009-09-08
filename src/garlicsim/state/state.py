@@ -17,18 +17,12 @@ class State(object):
     A touched State is a State that was not formed naturally by a simulation step:
     It was created by the user, either from scratch or based on another State.
 
-    When a State is created, a ".clock" attribute must be assigned to it, specifying
-    "what time it is" in this State.
+    When a State is created, a ".clock" attribute must be assigned to it,
+    specifying "what time it is" in this State.
 
     A State object must always be picklable, as do all the
     attributes assigned to it.
     """
 
-    def __init__(self, touched=False):
-        self.__touched = touched
-
-    def is_touched(self):
-        """
-        Returns True if the State is touched, False otherwise.
-        """
-        return self.__touched
+    def __init__(self):
+        pass
