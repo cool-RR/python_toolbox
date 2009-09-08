@@ -9,10 +9,14 @@ import gui_project
 import misc.notebookctrl as notebookctrl
 import custom_widgets
 
+import misc.homedirectory
+
+
 import misc.thread_timer as thread_timer
 
 #import psyco
 #psyco.full()
+
 
 ########################
 def get_program_path():
@@ -21,8 +25,14 @@ def get_program_path():
     program_folder = os.path.abspath(module_dir)
     return program_folder
 
-os.chdir(get_program_path())
-sys.path.append(get_program_path())
+def use_path(path):
+    os.chdir(path)
+    sys.path.append(path)
+    
+def fuck_the_path():
+    use_path(get_program_path())
+    
+fuck_the_path()
 ########################
 
 
@@ -87,29 +97,32 @@ class ApplicationWindow(wx.Frame):
     def on_open(self, event=None):
         wcd = 'Text files (*.txt)|*.txt|All files (*)|*|'
         cur_dir = os.getcwd()
-        open_dlg = wx.FileDialog(self, message='Choose a file',
-                                 defaultDir=cur_dir, defaultFile='',
-                                 wildcard=wcd, style=wx.OPEN | wx.CHANGE_DIR)
-        if open_dlg.ShowModal() == wx.ID_OK:
-            path = open_dlg.GetPath()
-
-            try:
-                my_file = open(path, 'r')
-                tickled_gui_project = cPickle.load(my_file)
-                print(tickled_gui_project)
-
-            except IOError, error:
-                dlg = wx.MessageDialog(self,
-                                       'Error opening file\n' + str(error))
-                dlg.ShowModal()
-
-            except UnicodeDecodeError, error:
-                dlg = wx.MessageDialog(self,
-                                       'Error opening file\n' + str(error))
-                dlg.ShowModal()
-
-        open_dlg.Destroy()
-        
+        try:
+            open_dlg = wx.FileDialog(self, message='Choose a file',
+                                     defaultDir=cur_dir, defaultFile='',
+                                     wildcard=wcd, style=wx.OPEN | wx.CHANGE_DIR)
+            if open_dlg.ShowModal() == wx.ID_OK:
+                path = open_dlg.GetPath()
+                
+                try:
+                    with file(path, 'r') as my_file:
+                        tickled_gui_project = cPickle.load(my_file)
+                        
+                except IOError, error:
+                    dlg = wx.MessageDialog(self,
+                                           'Error opening file\n' + str(error))
+                    dlg.ShowModal()
+                        
+                except UnicodeDecodeError, error:
+                    dlg = wx.MessageDialog(self,
+                                           'Error opening file\n' + str(error))
+                    dlg.ShowModal()
+                    
+                
+                    open_dlg.Destroy()
+        finally:
+            fuck_the_path()
+            
         my_gui_project = gui_project.load_tickled_gui_project\
                        (tickled_gui_project, self.notebook)
         self.add_gui_project(my_gui_project)
@@ -122,21 +135,25 @@ class ApplicationWindow(wx.Frame):
         
         wcd='Text files (*.txt)|*.txt|All files (*)|*|'
         cur_dir = os.getcwd()
-        save_dlg = wx.FileDialog(self, message='Save file as...',
-                                 defaultDir=cur_dir, defaultFile='',
-                                 wildcard=wcd,
-                                 style=wx.SAVE | wx.OVERWRITE_PROMPT)
-        if save_dlg.ShowModal() == wx.ID_OK:
-            path = save_dlg.GetPath()
-
-            try:
-                my_file = open(path, 'w')
-                cPickle.dump(tickled, my_file)
-                my_file.close()
-
-            except IOError, error:
-                dlg = wx.MessageDialog(self, 'Error saving file\n' + str(error))
-                dlg.ShowModal()
+        try:
+            save_dlg = wx.FileDialog(self, message='Save file as...',
+                                     defaultDir=cur_dir, defaultFile='',
+                                     wildcard=wcd,
+                                     style=wx.SAVE | wx.OVERWRITE_PROMPT)
+            if save_dlg.ShowModal() == wx.ID_OK:
+                path = save_dlg.GetPath()
+    
+                try:
+                    with file(path, 'w') as my_file:
+                        cPickle.dump(tickled, my_file)
+    
+                except IOError, error:
+                    dlg = wx.MessageDialog(self, 'Error saving file\n' + str(error))
+                    dlg.ShowModal()
+            
+        finally:
+            fuck_the_path()
+            
         save_dlg.Destroy()
     
     """
