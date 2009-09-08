@@ -85,7 +85,7 @@ class ApplicationWindow(wx.Frame):
 
         
     def on_open(self, event=None):
-        wcd = 'All files (*)|*|'
+        wcd = 'Text files (*.txt)|*.txt|All files (*)|*|'
         cur_dir = os.getcwd()
         open_dlg = wx.FileDialog(self, message='Choose a file',
                                  defaultDir=cur_dir, defaultFile='',
@@ -120,7 +120,7 @@ class ApplicationWindow(wx.Frame):
         tickled = my_gui_project.tickle()
         
         
-        wcd='All files(*)|*|'
+        wcd='Text files (*.txt)|*.txt|All files (*)|*|'
         cur_dir = os.getcwd()
         save_dlg = wx.FileDialog(self, message='Save file as...',
                                  defaultDir=cur_dir, defaultFile='',
