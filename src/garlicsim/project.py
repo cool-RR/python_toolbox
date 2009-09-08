@@ -115,14 +115,18 @@ class Project(object):
                (temp_infinity_node=temp_infinity_node)
     
     def __getstate__(self):
-        return {"tree": self.tree,
-                "simpack": self.simpack,
-                "leaves_to_crunch": self.leaves_to_crunch}
+        
+        my_dict = dict(self.__dict__)
+        
+        del my_dict["tree_lock"]
+        del my_dict["crunching_manager"]
+        
+        return my_dict
     
     def __setstate__(self, pickled_project):
+        
         self.__init__(pickled_project["simpack"])
-        self.tree = pickled_project["tree"]
-        self.leaves_to_crunch = pickled_project["leaves_to_crunch"]
+        self.__dict__.update(pickled_project)
     
 
         
