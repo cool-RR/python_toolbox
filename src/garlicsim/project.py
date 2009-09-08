@@ -62,7 +62,6 @@ class Project(object):
         Returns the node.
         """
         state = self.simpack.make_plain_state(*args, **kwargs)
-        state._State__touched = True
         return self.root_this_state(state)
 
     def make_random_root(self, *args, **kwargs):
@@ -73,7 +72,6 @@ class Project(object):
         Returns the node.
         """
         state = self.simpack.make_random_state(*args, **kwargs)
-        state._State__touched = True
         return self.root_this_state(state)
 
     def root_this_state(self, state):
