@@ -1,14 +1,21 @@
 import gc
 
+import weakref
 
-library = []
+class WeakRefSet(object):
+    def __init__(self):
+        self.weak_dict = weakref.WeakValueDictionary()
+    def add(self, thing):
+        id_ = id(thing)
+        if self.weak_dict.has_key[id_]:
+            possible_match = self.weak_dict(id_)
+            assert possible_match is thing
+            return
+        else self.weak_dict[id_] = thing
+    def __contains__(self, thing):
+        return (thing in self.weak_dict.values())
 
-
-def get_object_by_id(id_):
-    for thing in gc.get_objects():
-        if id(thing) == id_:
-            return thing
-    raise Exception("No found")
+library = WeakRefSet()
 
 class PersistentObject(object):
     """
@@ -22,7 +29,7 @@ class PersistentObject(object):
         if args:
             return FFF
         else:
-            thing = object.__new__(cls)
+            thing = super(PersistentObject, cls).__new__(cls)
             library.append(id(thing))
             thing
     
@@ -39,6 +46,7 @@ class PersistentObject(object):
     
     def __copy__(self):
         return self
-    
+    """
     def __del__(self):
         library.remove(id(self))
+    """
