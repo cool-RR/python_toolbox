@@ -151,11 +151,10 @@ class CrunchingManager(object):
         step_function = self.project.simpack_grokker.step
         
         if self.Cruncher == CruncherProcess:
-            cruncher = self.Cruncher(node.state,
-                                     step_function=step_function)
+            cruncher = self.Cruncher(node.state, self.project.simpack_grokker)
         
         else: # self.Cruncher == CruncherThread
-            cruncher = self.Cruncher(node.state, self.project,
-                                    step_function=step_function)
+            cruncher = self.Cruncher(node.state, self.project)
+            
         cruncher.start()
         return cruncher

@@ -27,19 +27,14 @@ class CruncherThread(threading.Thread):
     The advantage of CruncherThread over CruncherProcess is that
     CruncherThread is able to handle simulations that are history-dependent.
     """
-    def __init__(self, initial_state, project ,step_function, *args, **kwargs):
+    def __init__(self, initial_state, project, *args, **kwargs):
         threading.Thread.__init__(self, *args, **kwargs)
         
         self.project = project
-        self.step = step_function
         
         self.history_dependent = \
             hasattr(self.step,"history_dependent") and self.step.history_dependent
         
-        if self.history_dependent:
-            self.do_work = self.do_history_dependent_work
-        else:
-            self.do_work = self.do_non_history_dependent_work
 
         
         self.initial_state = initial_state
@@ -77,18 +72,30 @@ class CruncherThread(threading.Thread):
         tells you to retire, apply the step function repeatedly and put the
         results in your work queue."
         """
-        self.current = self.initial_state
-        order = None
+    
+        
         if self.history_dependent:
             self.history_browser = HistoryBrowser(cruncher=self)
+            self.generator = self.project.simpack_grokker.step_generator \
+                             (self.history_browser)
+        else:
+            self.generator = self.project.simpack_grokker.step_generator \
+                             (self.initial_state) 
         
-        while True:
-            self.do_work()
+        order = None
+        
+        
+        for state in self.generator:
+            
+            self.work_queue.put(state)
+        
             order = self.get_order()
             if order:
                 self.process_order(order)
                 order = None
     
+                
+            
                     
     def get_order(self):
         """
@@ -106,27 +113,6 @@ class CruncherThread(threading.Thread):
         if order=="Retire":
             raise ObsoleteCruncherError
         
-    def do_non_history_dependent_work(self):
-        """
-        This is the "work" function for the cruncher in the case the simulation
-        is NOT history-dependent.
-        It calls the step function on the current state and makes that result
-        the current state, putting it in the work_queue.
-        """
-        next = self.step(self.current)
-        self.work_queue.put(next)
-        self.current = next
-    
-    def do_history_dependent_work(self):
-        """
-        This is the "work" function for the cruncher in the case the simulation
-        is history-dependent.
-        It calls the step function on the history browser. It then puts the
-        returned state in the work_queue.
-        """
-        next = self.step(self.history_browser)
-        self.work_queue.put(next)        
-        self.current = next
     
     def retire(self):
         """

@@ -32,10 +32,10 @@ class CruncherProcess(multiprocessing.Process):
     CruncherProcess is able to run on a different core of the processor
     in the machine, thus using the full power of the processor.
     """
-    def __init__(self, initial_state, step_function, *args, **kwargs):
+    def __init__(self, initial_state, simpack_grokker, *args, **kwargs):
         multiprocessing.Process.__init__(self, *args, **kwargs)
-
-        self.step = step_function
+        
+        self.simpack_grokker = simpack_grokker
         self.initial_state = initial_state
         self.daemon = True
 
@@ -50,6 +50,8 @@ class CruncherProcess(multiprocessing.Process):
         This queue is used to send instructions
         to the cruncher.
         """
+        
+        assert simpack_grokker.history_dependent is False
 
 
     def set_priority(self,priority):
@@ -82,11 +84,17 @@ class CruncherProcess(multiprocessing.Process):
         results in your work queue."
         """
         self.set_priority(0)
-        self.current = self.initial_state
+        
+        self.generator = self.simpack_grokker.step_generator \
+                            (self.initial_state)
         order = None
         
-        while True:
-            self.do_work()
+        
+        
+        for state in self.generator:
+            
+            self.work_queue.put(state)
+            
             order = self.get_order()
             if order:
                 self.process_order(order)
@@ -109,15 +117,6 @@ class CruncherProcess(multiprocessing.Process):
         if order=="Retire":
             raise ObsoleteCruncherError
         
-    def do_work(self):
-        """
-        This is the "work" function for the cruncher.
-        It calls the step function on the current state and makes that result
-        the current state, putting it in the work_queue.
-        """
-        next = self.step(self.current)
-        self.work_queue.put(next)
-        self.current = next
 
     def retire(self):
         """
