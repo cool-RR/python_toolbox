@@ -32,8 +32,7 @@ class CruncherThread(threading.Thread):
         
         self.project = project
         
-        self.history_dependent = \
-            hasattr(self.step,"history_dependent") and self.step.history_dependent
+        self.history_dependent = self.project.simpack_grokker.history_dependent
         
 
         
@@ -76,16 +75,16 @@ class CruncherThread(threading.Thread):
         
         if self.history_dependent:
             self.history_browser = HistoryBrowser(cruncher=self)
-            self.generator = self.project.simpack_grokker.step_generator \
+            self.step_iterator = self.project.simpack_grokker.step_generator \
                              (self.history_browser)
         else:
-            self.generator = self.project.simpack_grokker.step_generator \
-                             (self.initial_state) 
+            self.step_iterator = self.project.simpack_grokker.step_generator \
+                              (self.initial_state) 
         
         order = None
         
         
-        for state in self.generator:
+        for state in self.step_iterator:
             
             self.work_queue.put(state)
         

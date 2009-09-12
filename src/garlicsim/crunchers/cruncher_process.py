@@ -32,10 +32,10 @@ class CruncherProcess(multiprocessing.Process):
     CruncherProcess is able to run on a different core of the processor
     in the machine, thus using the full power of the processor.
     """
-    def __init__(self, initial_state, simpack_grokker, *args, **kwargs):
+    def __init__(self, initial_state, step_generator, *args, **kwargs):
         multiprocessing.Process.__init__(self, *args, **kwargs)
         
-        self.simpack_grokker = simpack_grokker
+        self.step_generator = step_generator
         self.initial_state = initial_state
         self.daemon = True
 
@@ -51,7 +51,6 @@ class CruncherProcess(multiprocessing.Process):
         to the cruncher.
         """
         
-        assert simpack_grokker.history_dependent is False
 
 
     def set_priority(self,priority):
@@ -85,13 +84,11 @@ class CruncherProcess(multiprocessing.Process):
         """
         self.set_priority(0)
         
-        self.generator = self.simpack_grokker.step_generator \
-                            (self.initial_state)
+        self.step_iterator = self.step_generator(self.initial_state)
         order = None
         
         
-        
-        for state in self.generator:
+        for state in self.step_iterator:
             
             self.work_queue.put(state)
             

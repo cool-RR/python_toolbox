@@ -83,23 +83,19 @@ class SimpackGrokker(object):
             whether it's history-dependent or not, so we're gonna use self.step
             in our generator.
             """
-            if self.history_step_defined:
-                def history_step_generator_from_simple_step\
-                    (history_browser, *args, **kwargs):
-                    while True:
-                        yield self.step(history_browser, *args, **kwargs)
-                self.step_generator = history_step_generator_from_simple_step
+            if self.history_step_defined:               
+                        
+                self.step_generator = functools.partial \
+                    (history_step_generator_from_simple_step, self.step)
+                
                 return
                 
                 
             else: # It's a non-history simpack
-                def non_history_step_generator_from_simple_step\
-                    (old_state, *args, **kwargs):
-                    current = old_state
-                    while True:
-                        current = self.step(current, *args, **kwargs)
-                        yield current
-                self.step_generator = non_history_step_generator_from_simple_step
+                
+                self.step_generator = functools.partial \
+                    (non_history_step_generator_from_simple_step, self.step)
+                
                 return
                 
         
@@ -139,3 +135,16 @@ class SimpackGrokker(object):
     def step(self, old_state_or_history_browser, *args, **kwargs):
         raise NotImplementedError
         
+    
+
+def non_history_step_generator_from_simple_step(step_function, old_state,
+                                                *args, **kwargs):
+    current = old_state
+    while True:
+        current = step_function(current, *args, **kwargs)
+        yield current
+        
+def history_step_generator_from_simple_step(step_function, history_browser,
+                                            *args, **kwargs):
+    while True:
+        yield step_function(history_browser, *args, **kwargs)
