@@ -1,23 +1,34 @@
 import gc
-
+import uuid
 import weakref
 
-class WeakRefSet(object):
+class WeakRefShit(object):
     def __init__(self):
         self.weak_dict = weakref.WeakValueDictionary()
     def add(self, thing):
-        id_ = id(thing)
-        if self.weak_dict.has_key[id_]:
-            possible_match = self.weak_dict(id_)
-            assert possible_match is thing
-            return
-        else self.weak_dict[id_] = thing
+        uuid_ = uuid4()
+        self.weak_dict[uuid_] = thing
     def __contains__(self, thing):
         return (thing in self.weak_dict.values())
 
-library = WeakRefSet()
+library = weakref.WeakValueDictionary() #WeakRefShit()
 
-class PersistentObject(object):
+class Fuck(object):
+    
+    def __init__(self, *args, **kwargs):
+        print "__init__ called with ", self, args, kwargs
+    def __new__(cls, *args, **kwargs):
+        print "__new__ called with ", cls, args, kwargs
+        return super(Fuck, cls).__new__(cls)
+    def __getnewargs__(self, *args, **kwargs):
+        print "__getnewargs__ called with ", self, args, kwargs
+        return ("Shit that __getnewargs__ returned", "more shit")
+        
+    
+    
+
+
+class PersistentReadOnlyObject(object):
     """
     def __init__(self):
     """
@@ -25,13 +36,18 @@ class PersistentObject(object):
     def __getstate__(self):
         return (id(self), self.__dict__)
     
-    def __new__(cls, *args):
-        if args:
-            return FFF
-        else:
-            thing = super(PersistentObject, cls).__new__(cls)
-            library.append(id(thing))
-            thing
+    def __new__(cls, *args, **kwargs):
+        uuid_ = kwargs.pop("_PersistentReadOnlyObject__uuid", None)
+        if uuid_: # This section is for when we are called at unpickling time
+            thing = library.pop(uuid_, None)
+            if thing:
+                return thing
+        else: # This section is for when we are called at normal creation time
+            thing = super(PersistentReadOnlyObject, cls).__new__(cls)
+            new_uuid = uuid.uuid4()
+            thing._PersistentReadOnlyObject__uuid = new_uuid
+            library[new_uuid] = thing
+            return thing
     
     def __getnewargs__(self):
         return id(self)
