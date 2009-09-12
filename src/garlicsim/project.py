@@ -32,7 +32,7 @@ class Project(object):
 
     def __init__(self, simpack):
         
-        wrapped_simpack = simpack#misc.module_wrapper.module_wrapper_factory(simpack)
+        wrapped_simpack = misc.module_wrapper.module_wrapper_factory(simpack)
         self.simpack_grokker = simpack_grokker.SimpackGrokker(wrapped_simpack)
         self.simpack = wrapped_simpack
 

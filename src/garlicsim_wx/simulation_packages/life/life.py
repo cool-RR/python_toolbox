@@ -15,6 +15,7 @@ def step(sourcestate,*args,**kwargs):
     newstate.board=newboard
     return newstate
 
+
 def make_plain_state(width=50,height=50,fill="empty"):
     mystate=garlicsim.state.State()
     mystate.board=Board(width,height,fill)
@@ -22,7 +23,7 @@ def make_plain_state(width=50,height=50,fill="empty"):
 
 def make_random_state(width=50,height=50):
     mystate=garlicsim.state.State()
-    mystate.board=Board(width,height,make_random=True)
+    mystate.board=Board(width,height,fill="random")
     return mystate
 
 
