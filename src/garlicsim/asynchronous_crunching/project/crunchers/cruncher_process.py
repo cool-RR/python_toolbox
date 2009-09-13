@@ -123,4 +123,4 @@ class CruncherProcess(multiprocessing.Process):
         """
         self.order_queue.put("Retire")
 
-from garlicsim.crunchers import ObsoleteCruncherError
+from exceptions import ObsoleteCruncherError

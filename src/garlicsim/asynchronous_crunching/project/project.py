@@ -3,13 +3,13 @@ This module defines a class Project. See this class's documentation
 for more info.
 """
 
-import state
-import simpack_grokker
+import garlicsim.state
+import garlicsim.simpack_grokker
 import crunching_manager
-import misc.module_wrapper
+import garlicsim.misc.module_wrapper
 
-import misc.read_write_lock as read_write_lock
-from misc.infinity import Infinity # Same as Infinity = float("inf")
+import garlicsim.misc.read_write_lock as read_write_lock
+from garlicsim.misc.infinity import Infinity # Same as Infinity = float("inf")
 
 
 __all__ = ["Project"]
@@ -32,11 +32,13 @@ class Project(object):
 
     def __init__(self, simpack):
         
-        wrapped_simpack = misc.module_wrapper.module_wrapper_factory(simpack)
-        self.simpack_grokker = simpack_grokker.SimpackGrokker(wrapped_simpack)
+        wrapped_simpack = \
+            garlicsim.misc.module_wrapper.module_wrapper_factory(simpack)
+        self.simpack_grokker = \
+            garlicsim.simpack_grokker.SimpackGrokker(wrapped_simpack)
         self.simpack = wrapped_simpack
 
-        self.tree = state.Tree()
+        self.tree = garlicsim.state.Tree()
         
         self.crunching_manager = crunching_manager.CrunchingManager(self)
         

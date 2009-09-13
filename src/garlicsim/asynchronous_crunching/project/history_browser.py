@@ -5,11 +5,10 @@ for more info.
 """
 import threading
 
-import state
 import crunchers
 
-import misc.binary_search as binary_search
-import misc.queue_tools as queue_tools
+import garlicsim.misc.binary_search as binary_search
+import garlicsim.misc.queue_tools as queue_tools
 
 __all__ = ["HistoryBrowser"]
 

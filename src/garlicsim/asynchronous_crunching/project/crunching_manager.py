@@ -3,9 +3,9 @@ This module defines the CrunchingManager class; See its documentation for more
 info.
 """
 
-import misc.queue_tools as queue_tools
+import garlicsim.misc.queue_tools as queue_tools
 from crunchers import CruncherThread, CruncherProcess
-from misc.infinity import Infinity
+from garlicsim.misc.infinity import Infinity
 
 PreferredCruncher = [CruncherThread, CruncherProcess][1]
 # Should make a nicer way of setting that.

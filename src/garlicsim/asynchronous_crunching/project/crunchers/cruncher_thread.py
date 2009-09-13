@@ -8,7 +8,7 @@ try:
 except ImportError:
     import Queue as queue
 
-from garlicsim.history_browser import HistoryBrowser
+from garlicsim.asynchronous_crunching.project.history_browser import HistoryBrowser
 
 __all__ = ["CruncherThread"]
 
@@ -121,4 +121,4 @@ class CruncherThread(threading.Thread):
         """
         self.order_queue.put("Retire")
 
-from garlicsim.crunchers import ObsoleteCruncherError
+from exceptions import ObsoleteCruncherError

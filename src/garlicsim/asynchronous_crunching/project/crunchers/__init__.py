@@ -22,15 +22,11 @@ be faster than CruncherProcess because of the memory-sharing.
 See documentation for CruncherThread and CruncherProcess for more details.
 """
 
-class ObsoleteCruncherError(Exception):
-    """
-    An error to raise when a cruncher is trying to do work, but in the meantime
-    the main program decided that work should be stopped.
-    """
-    pass
 
-from cruncher_thread import *
-from cruncher_process import *
+
+from cruncher_thread import CruncherThread
+from cruncher_process import CruncherProcess
+from exceptions import ObsoleteCruncherError
 
 
 __all__ = ["CruncherProcess", "CruncherThread", "ObsoleteCruncherError"]
