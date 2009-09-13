@@ -1,5 +1,5 @@
 import garlicsim
-import history_browser
+import history_browser as history_browser_module # Avoiding name clash
 
 def simulate(simpack, state, iterations, *args, **kwargs):
     simpack_grokker = garlicsim.simpack_grokker.SimpackGrokker(simpack)
@@ -13,17 +13,21 @@ def simulate(simpack, state, iterations, *args, **kwargs):
     
     
 def __history_simulate(simpack_grokker, state, iterations, *args, **kwargs):
-    tree = garlicsim.state.tree()
+    tree = garlicsim.state.Tree()
     root = tree.add_state(state, parent=None)
     path = root.make_containing_path()
-    history_browser = history_browser.HistoryBrowser(path)
+    history_browser = history_browser_module.HistoryBrowser(path)
     
     iterator = simpack_grokker.step_generator(history_browser, *args, **kwargs)
     
-    for i in range(iterations-1):
-        iterator.next()
+    current_node = root
+    for i in range(iterations):
+        current_state = iterator.next()
+        current_node = tree.add_state(current_state, parent=current_node)
         
-    final_state = iterator.next()
+    final_state = current_state
+    # Which is still here as the last value from the for loop
+    
     return final_state
 
 
@@ -32,8 +36,10 @@ def __non_history_simulate(simpack_grokker, state, iterations,
                            *args, **kwargs):
     
     iterator = simpack_grokker.step_generator(state, *args, **kwargs)
-    for i in range(iterations-1):
-        iterator.next()
+    for i in range(iterations):
+        current_state = iterator.next()
         
-    final_state = iterator.next()
+    final_state = current_state
+    # Which is still here as the last value from the for loop
+    
     return final_state

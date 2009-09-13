@@ -1,6 +1,6 @@
 """
 
-
+todo: maybe implement history_browser.__len__() ?
 """
 
 
@@ -57,7 +57,7 @@ class HistoryBrowser(object):
         assert rounding in ["High", "Low", "Exact", "Both", "Closest"]
         
         new_function = lambda node: function(node.state)
-        result_in_nodes = path.get_node_by_monotonic_function\
+        result_in_nodes = self.path.get_node_by_monotonic_function \
                         (new_function, value, rounding)
         
         if rounding == "Both":

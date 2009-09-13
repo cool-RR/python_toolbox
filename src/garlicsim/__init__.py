@@ -9,6 +9,6 @@ todo: fix documentation everywhere to reflect that `touched` is now a node attri
 """
 
 from asynchronous_crunching import Project
-from synchronous_crunching import simulate
+from synchronous_crunching import simulate, path_simulate
 
-__all__ = ["Project", "simulate"]
+__all__ = ["Project", "simulate", "path_simulate"]
