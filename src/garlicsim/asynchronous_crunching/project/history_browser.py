@@ -2,6 +2,7 @@
 This module defines the HistoryBrowser class. See its documentation
 for more info.
 
+todo: this needs testing
 """
 import threading
 
@@ -79,7 +80,7 @@ class HistoryBrowser(object):
         Returns a state by its position in the timeline.
         """
         assert isinstance(index, int)
-        if index < 1:
+        if index < 0:
             return self.__get_item_negative(index)
         else: # index >= 0
             return self.__get_item_positive(index)
@@ -109,13 +110,11 @@ class HistoryBrowser(object):
         our_leaf = self.__get_our_leaf()
         path = our_leaf.make_containing_path()
         try:
-            result_node = path_tools.with_end_node.get_item_negative(path,
-                                                                     our_leaf,
-                                                                     index)
+            result_node = path.__getitem__(index, end_node=our_leaf)
             return result_node.state
         
         except IndexError:
-            path_length = path_tools.with_end_node.length(path, our_leaf)
+            path_length = path.__len__(end_node=our_leaf)
             # todo: Probably inefficient: We're plowing through the path again.
             new_index = index - path_length
             try:
@@ -139,7 +138,6 @@ class HistoryBrowser(object):
         Obtains an item by index number from the work_queue of our cruncher.
         """
         item = queue_tools.queue_get_item(self.cruncher.work_queue, index)
-        #print item.clock
         return item
         
     
@@ -156,7 +154,8 @@ class HistoryBrowser(object):
                (function=get_state_clock, value=clock, rounding=rounding)
     
     @with_self
-    def request_state_by_monotonic_function(self, function, value, rounding="Closest"):
+    def request_state_by_monotonic_function(self, function, value,
+                                            rounding="Closest"):
         """
         Requests a state by specifying a measure function and a desired value.
         The function must be a monotonic rising function on the timeline.
@@ -165,10 +164,9 @@ class HistoryBrowser(object):
         details about rounding options.
         """
         assert rounding in ["High", "Low", "Exact", "Both", "Closest"]
-        our_leaf = self.__get_our_leaf()
         
         tree_result = self.request_state_by_monotonic_function_from_tree\
-                      (our_leaf, function, value, rounding="Both")
+                      (function, value, rounding="Both")
         
         if tree_result[1] is not None:
             # Then there is no need to check the queue even.
@@ -187,9 +185,10 @@ class HistoryBrowser(object):
                 """
                 The result is on or beyond the edge of the queue.
                 """
-                if queue_result[1] == None:
-                    # The result is either the most recent state in the queue or "after" it
-                    return make_both_data_into_preferred_rounding\
+                if queue_result[1] is None:
+                    # The result is either the most recent state in the queue
+                    # or "after" it
+                    return binary_search.make_both_data_into_preferred_rounding\
                            (queue_result, function, value, rounding)
                 else: # queue_result[0] == None
                     """
@@ -204,10 +203,12 @@ class HistoryBrowser(object):
                 """
                 The queue is just totally empty.
                 """
-                return make_both_data_into_preferred_rounding(tree_result, function, value, rounding)
+                return binary_search.make_both_data_into_preferred_rounding \
+                       (tree_result, function, value, rounding)
             
     @with_self   
-    def request_state_by_monotonic_function_from_tree(self, our_leaf, function, value, rounding="Closest"):
+    def request_state_by_monotonic_function_from_tree(self, function, value,
+                                                      rounding="Closest"):
         """
         Requests a state FROM THE TREE ONLY by specifying a measure function
         and a desired value.
@@ -217,14 +218,18 @@ class HistoryBrowser(object):
         details about rounding options.
         """
         assert rounding in ["High", "Low", "Exact", "Both", "Closest"]
+        our_leaf = self.__get_our_leaf()
         path = our_leaf.make_containing_path()
         new_function = lambda node: function(node.state)
-        result_in_nodes = path.get_node_by_monotonic_function(new_function, value, rounding)
-        result = [(node.state if node is not None else None) for node in result_in_nodes]
+        result_in_nodes = path.get_node_by_monotonic_function \
+                        (new_function, value, rounding)
+        result = [(node.state if node is not None else None) \
+                  for node in result_in_nodes]
         return result
     
     @with_self
-    def request_state_by_monotonic_function_from_queue(self, function, value, rounding="Closest"):
+    def request_state_by_monotonic_function_from_queue(self, function, value,
+                                                       rounding="Closest"):
         """
         Requests a state FROM THE QUEUE ONLY by specifying a measure function
         and a desired value.
@@ -251,8 +256,10 @@ class HistoryBrowser(object):
         
         current_thread = threading.currentThread()  
         
+        leaves_to_crunchers = self.project.crunching_manager.crunchers.items()
+        
         leaves_that_are_us = \
-            [leaf for (leaf, cruncher) in self.project.crunching_manager.crunchers.items()\
+            [leaf for (leaf, cruncher) in leaves_to_crunchers\
              if cruncher == current_thread]
         
         num = len(leaves_that_are_us)
