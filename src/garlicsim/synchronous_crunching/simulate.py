@@ -13,7 +13,7 @@ def simulate(simpack, state, iterations, *args, **kwargs):
     
     
 def __history_simulate(simpack_grokker, state, iterations, *args, **kwargs):
-    tree = garlicsim.state.Tree()
+    tree = garlicsim.data_structures.Tree()
     root = tree.add_state(state, parent=None)
     path = root.make_containing_path()
     history_browser = history_browser_module.HistoryBrowser(path)
