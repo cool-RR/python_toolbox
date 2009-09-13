@@ -1,4 +1,4 @@
-import garlicsim.state
+import garlicsim.data_structures
 import copy
 
 import random
@@ -10,7 +10,7 @@ NUMBER_OF_PLAYERS=70
 
 def make_plain_state(*args,**kwargs):
     global player_types
-    state=garlicsim.state.State()
+    state=garlicsim.data_structures.State()
 
     state.round=-1
     state.match=0
@@ -21,7 +21,7 @@ def make_plain_state(*args,**kwargs):
 
 
 def make_random_state(*args,**kwargs):
-    state=garlicsim.state.State()
+    state=garlicsim.data_structures.State()
 
     state.round=-1
     state.match=0

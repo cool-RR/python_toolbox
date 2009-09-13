@@ -3,7 +3,7 @@ This module defines a class Project. See this class's documentation
 for more info.
 """
 
-import garlicsim.state
+import garlicsim.data_structures
 import garlicsim.simpack_grokker
 import crunching_manager
 import garlicsim.misc.module_wrapper
@@ -38,7 +38,7 @@ class Project(object):
             garlicsim.simpack_grokker.SimpackGrokker(wrapped_simpack)
         self.simpack = wrapped_simpack
 
-        self.tree = garlicsim.state.Tree()
+        self.tree = garlicsim.data_structures.Tree()
         
         self.crunching_manager = crunching_manager.CrunchingManager(self)
         

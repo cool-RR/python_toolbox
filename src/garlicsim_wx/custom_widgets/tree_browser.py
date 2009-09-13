@@ -8,7 +8,7 @@ import os
 import wx
 from math import *
 import garlicsim_wx.misc.vectorish as vectorish
-import garlicsim.state
+import garlicsim.data_structures
 from wx.lib.scrolledpanel import ScrolledPanel
 
 
@@ -95,7 +95,7 @@ class TreeBrowser(ScrolledPanel):
             (a,b,c,d)=key
             if a<=x<=c and b<=y<=d:
                 thing=self.clickable_map[key]
-                if isinstance(thing,garlicsim.state.Block):
+                if isinstance(thing,garlicsim.data_structures.Block):
                     ratio=(x-a)/float(c-a)
                     index=int(round(ratio*(len(thing)-1)))
                     return thing[index]
@@ -122,13 +122,13 @@ class NiftyPaintDC(wx.PaintDC):
 
     def draw_sub_tree(self,point,tree,start):
         make_block_stripe=False
-        if isinstance(start,garlicsim.state.Block):
+        if isinstance(start,garlicsim.data_structures.Block):
             type="Block"
             kids=start[-1].children
             if start==self.active_soft_block:
                 make_block_stripe=True
                 type="Active "+type
-        elif isinstance(start,garlicsim.state.Node):
+        elif isinstance(start,garlicsim.data_structures.Node):
             kids=start.children
             if start.is_touched()==True:
                 type="Touched"
