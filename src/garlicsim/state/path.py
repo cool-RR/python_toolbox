@@ -5,7 +5,7 @@ its documentation for more information.
 
 from node import Node
 from block import Block
-import path_tools
+import path_tools as __path_tools
 # Note we are doing `from tree import Tree` in the bottom of the file
 # to avoid problems with circular imports.
 
@@ -36,7 +36,7 @@ class Path(object):
 
     def __len__(self, end_node=None):
         if end_node is not None:
-            return path_tools.with_end_node.length(self, end_node)
+            return __path_tools.with_end_node.length(self, end_node)
         if self.root is None:
             return 0
 
@@ -150,7 +150,7 @@ class Path(object):
         """
 
         if end_node is not None:
-            return path_tools.with_end_node.get_item(self, end_node, index)
+            return __path_tools.with_end_node.get_item(self, end_node, index)
         
         assert isinstance(index, int)
         
@@ -231,8 +231,9 @@ class Path(object):
         details about rounding options.
         """
         if end_node is not None:
-            return path_tools.with_end_node.get_node_by_clock(self, end_node,
-                                                              clock, rounding)
+            return __path_tools.with_end_node.get_node_by_clock(self, end_node,
+                                                                clock,
+                                                                rounding)
         
         my_function = lambda node: node.state.clock
         return self.get_node_by_monotonic_function(function=my_function,
@@ -249,7 +250,7 @@ class Path(object):
         details about rounding options.
         """
         if end_node is not None:
-            return path_tools.with_end_node.\
+            return __path_tools.with_end_node.\
                    get_node_by_monotonic_function(self, end_node, function,
                                                   value, rounding=rounding)
         
