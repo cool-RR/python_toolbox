@@ -244,6 +244,10 @@ class HistoryBrowser(object):
                (queue_as_list, function, value, rounding)
     
     @with_self
+    def __len__(self):
+        pass
+    
+    @with_self
     def __get_our_leaf(self):
         """
         Returns the leaf that the current cruncher is assigned to work on.
