@@ -1,4 +1,4 @@
-import garlicsim.state
+import garlicsim.data_structures
 import copy
 
 import math
@@ -6,7 +6,7 @@ from math import pi
 import random
 random.seed()
 def make_plain_state(*args, **kwargs):
-    state=garlicsim.state.State()
+    state=garlicsim.data_structures.State()
     state.left = 0
     state.left_vel = 0
     state.right = 0
@@ -14,7 +14,7 @@ def make_plain_state(*args, **kwargs):
 
 
 def make_random_state(*args, **kwargs):
-    state=garlicsim.state.State()
+    state=garlicsim.data_structures.State()
     state.left = random.random() * 2 * pi
     state.left_vel = 0
     state.right = random.random() * 2 * pi

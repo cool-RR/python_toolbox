@@ -1,4 +1,4 @@
-import garlicsim.state
+import garlicsim.data_structures
 import random
 import warnings
 
@@ -11,18 +11,18 @@ def step(sourcestate,*args,**kwargs):
     for x in range(oldboard.width):
         for y in range(oldboard.height):
             newboard.set(x,y,oldboard.will_become(x,y))
-    newstate=garlicsim.state.State()
+    newstate=garlicsim.data_structures.State()
     newstate.board=newboard
     return newstate
 
 
 def make_plain_state(width=50,height=50,fill="empty"):
-    mystate=garlicsim.state.State()
+    mystate=garlicsim.data_structures.State()
     mystate.board=Board(width,height,fill)
     return mystate
 
 def make_random_state(width=50,height=50):
-    mystate=garlicsim.state.State()
+    mystate=garlicsim.data_structures.State()
     mystate.board=Board(width,height,fill="random")
     return mystate
 

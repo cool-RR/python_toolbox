@@ -8,7 +8,7 @@ These function are, and they take a path and an end node as their
 parameters.
 """
 
-from garlicsim.state.node import Node
+from garlicsim.data_structures.node import Node
 import garlicsim.misc.binary_search as binary_search
 
 def get_item(path, end_node, index):

@@ -1,4 +1,4 @@
-import garlicsim.state
+import garlicsim.data_structures
 import random
 import warnings
 import functools
