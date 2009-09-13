@@ -3,9 +3,9 @@ This module defines the CrunchingManager class; See its documentation for more
 info.
 """
 
-import misc.queue_tools as queue_tools
+import garlicsim.misc.queue_tools as queue_tools
 from crunchers import CruncherThread, CruncherProcess
-from misc.infinity import Infinity
+from garlicsim.misc.infinity import Infinity
 
 PreferredCruncher = [CruncherThread, CruncherProcess][1]
 # Should make a nicer way of setting that.
@@ -151,11 +151,11 @@ class CrunchingManager(object):
         step_function = self.project.simpack_grokker.step
         
         if self.Cruncher == CruncherProcess:
-            cruncher = self.Cruncher(node.state,
-                                     step_function=step_function)
+            cruncher = self.Cruncher \
+                     (node.state, self.project.simpack_grokker.step_generator)
         
         else: # self.Cruncher == CruncherThread
-            cruncher = self.Cruncher(node.state, self.project,
-                                    step_function=step_function)
+            cruncher = self.Cruncher(node.state, self.project)
+            
         cruncher.start()
         return cruncher

@@ -3,12 +3,13 @@ This module defines a class Project. See this class's documentation
 for more info.
 """
 
-import state
-import simpack_grokker
+import garlicsim.state
+import garlicsim.simpack_grokker
 import crunching_manager
+import garlicsim.misc.module_wrapper
 
-import misc.read_write_lock as read_write_lock
-from misc.infinity import Infinity # Same as Infinity = float("inf")
+import garlicsim.misc.read_write_lock as read_write_lock
+from garlicsim.misc.infinity import Infinity # Same as Infinity = float("inf")
 
 
 __all__ = ["Project"]
@@ -31,10 +32,13 @@ class Project(object):
 
     def __init__(self, simpack):
         
-        self.simpack_grokker = simpack_grokker.SimpackGrokker(simpack)
-        self.simpack = simpack
+        wrapped_simpack = \
+            garlicsim.misc.module_wrapper.module_wrapper_factory(simpack)
+        self.simpack_grokker = \
+            garlicsim.simpack_grokker.SimpackGrokker(wrapped_simpack)
+        self.simpack = wrapped_simpack
 
-        self.tree = state.Tree()
+        self.tree = garlicsim.state.Tree()
         
         self.crunching_manager = crunching_manager.CrunchingManager(self)
         
@@ -109,12 +113,26 @@ class Project(object):
         
         return self.crunching_manager.sync_crunchers \
                (temp_infinity_node=temp_infinity_node)
+    
+    def __getstate__(self):
+        
+        my_dict = dict(self.__dict__)
+        
+        del my_dict["tree_lock"]
+        del my_dict["crunching_manager"]
+        
+        return my_dict
+    
+    def __setstate__(self, pickled_project):
+        
+        self.__init__(pickled_project["simpack"])
+        self.__dict__.update(pickled_project)
+    
 
-    
-    
-    
-    
-
+        
+        
+        
+        
 """
     Removing:
     

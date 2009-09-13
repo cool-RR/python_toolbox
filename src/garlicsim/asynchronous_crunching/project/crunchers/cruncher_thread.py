@@ -1,24 +1,20 @@
 """
-This module defines CruncherProcess. See its documentation.
+This module defines CruncherThread. See its documentation.
 """
-
-import multiprocessing
+import threading
 
 try:
     import queue
 except ImportError:
     import Queue as queue
 
-try:
-    import garlicsim.misc.process_priority as process_priority
-except ImportError:
-    pass
+from garlicsim.asynchronous_crunching.project.history_browser import HistoryBrowser
 
-__all__ = ["CruncherProcess"]
+__all__ = ["CruncherThread"]
 
-class CruncherProcess(multiprocessing.Process):
+class CruncherThread(threading.Thread):
     """
-    CruncherProcess is a type of cruncher.
+    CruncherThread is a type of cruncher.
     
     A cruncher is a dumb little drone. It receives a state from the main
     program, and then it repeatedly applies the step funcion of the simulation
@@ -28,39 +24,33 @@ class CruncherProcess(multiprocessing.Process):
         
     Read more about crunchers in the documentation of the crunchers package.
     
-    The advantage of CruncherProcess over CruncherThread is that
-    CruncherProcess is able to run on a different core of the processor
-    in the machine, thus using the full power of the processor.
+    The advantage of CruncherThread over CruncherProcess is that
+    CruncherThread is able to handle simulations that are history-dependent.
     """
-    def __init__(self, initial_state, step_function, *args, **kwargs):
-        multiprocessing.Process.__init__(self, *args, **kwargs)
+    def __init__(self, initial_state, project, *args, **kwargs):
+        threading.Thread.__init__(self, *args, **kwargs)
+        
+        self.project = project
+        
+        self.history_dependent = self.project.simpack_grokker.history_dependent
+        
 
-        self.step = step_function
+        
         self.initial_state = initial_state
         self.daemon = True
 
-        self.work_queue = multiprocessing.Queue()
+        self.work_queue = queue.Queue()
         """
         The cruncher puts the work that it has completed
         into this queue, to be picked up by sync_crunchers.
         """
-        
-        self.order_queue = multiprocessing.Queue()
+
+        self.order_queue = queue.Queue()
         """
         This queue is used to send instructions
         to the cruncher.
         """
 
-
-    def set_priority(self,priority):
-        """
-        Sets the priority of this process: Currently Windows only.
-        """
-        assert priority in [0, 1, 2, 3, 4, 5]
-        try:
-            process_priority.set_process_priority(self.pid, priority)
-        except: #Not sure exactly what to "except" here; wary of non-windows systems.
-            pass
 
     def run(self):
         """
@@ -81,17 +71,30 @@ class CruncherProcess(multiprocessing.Process):
         tells you to retire, apply the step function repeatedly and put the
         results in your work queue."
         """
-        self.set_priority(0)
-        self.current = self.initial_state
+    
+        
+        if self.history_dependent:
+            self.history_browser = HistoryBrowser(cruncher=self)
+            self.step_iterator = self.project.simpack_grokker.step_generator \
+                             (self.history_browser)
+        else:
+            self.step_iterator = self.project.simpack_grokker.step_generator \
+                              (self.initial_state) 
+        
         order = None
         
-        while True:
-            self.do_work()
+        
+        for state in self.step_iterator:
+            
+            self.work_queue.put(state)
+        
             order = self.get_order()
             if order:
                 self.process_order(order)
                 order = None
     
+                
+            
                     
     def get_order(self):
         """
@@ -109,22 +112,13 @@ class CruncherProcess(multiprocessing.Process):
         if order=="Retire":
             raise ObsoleteCruncherError
         
-    def do_work(self):
-        """
-        This is the "work" function for the cruncher.
-        It calls the step function on the current state and makes that result
-        the current state, putting it in the work_queue.
-        """
-        next = self.step(self.current)
-        self.work_queue.put(next)
-        self.current = next
-
+    
     def retire(self):
         """
         Retiring the cruncher, causing it to shut down as soon as it receives
-        the order. This method may be called either from within the process or
-        from another process.
+        the order. This method may be called either from within the thread or
+        from another thread.
         """
         self.order_queue.put("Retire")
 
-from garlicsim.crunchers import ObsoleteCruncherError
+from exceptions import ObsoleteCruncherError

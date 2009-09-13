@@ -24,52 +24,67 @@ class GuiProject(object):
     A GuiProject encapsulates a Project for use with a wxPython
     interface.
     """
-    def __init__(self,simpack,parent_window):
-        self.project=garlicsim.Project(simpack)
+    def __init__(self, simpack, parent_window):
+        self.__init_general(simpack, parent_window)
+        self.__init_on_creation()
+        
+    def __init_general(self, simpack, parent_window, project=None,
+                       active_node=None, path=None):
+    
+        self.simpack = garlicsim.misc.module_wrapper.ModuleWrapper(simpack)
+        
+        if project:
+            self.project = project
+        else:
+            self.project = garlicsim.Project(simpack)
 
-
-
-        main_window=self.main_window=wx.ScrolledWindow(parent_window,-1)
-        self.main_sizer=wx.BoxSizer(wx.VERTICAL)
+        main_window = self.main_window = \
+                    wx.ScrolledWindow(parent_window,-1)
+        self.main_sizer = wx.BoxSizer(wx.VERTICAL)
         self.main_window.SetSizer(self.main_sizer)
 
-        self.state_showing_window=scrolled.ScrolledPanel(self.main_window,-1)
+        self.state_showing_window = \
+            scrolled.ScrolledPanel(self.main_window, -1)
 
         locals_for_shell = locals()
         locals_for_shell.update({"this_gui_project": self})
-        self.shell=wx.py.shell.Shell(self.main_window, -1, size=(400,-1), locals=locals_for_shell)
-        self.seek_bar=custom_widgets.SeekBar(self.main_window,-1,self)
-        self.tree_browser=custom_widgets.TreeBrowser(self.main_window,-1,self)
+        self.shell = wx.py.shell.Shell(self.main_window, -1,
+                                       size=(400, -1), locals=locals_for_shell)
+        self.seek_bar = custom_widgets.SeekBar(self.main_window, -1, self)
+        self.tree_browser = custom_widgets.TreeBrowser(self.main_window,
+                                                       -1, self)
 
 
-        self.top_fwc=FoldableWindowContainer(self.main_window,-1,self.state_showing_window,self.shell,wx.RIGHT,folded=True)
-        temp=FoldableWindowContainer(self.main_window,-1,self.top_fwc,self.seek_bar,wx.BOTTOM)
-        temp=FoldableWindowContainer(self.main_window,-1,temp,self.tree_browser,wx.BOTTOM)
-        self.main_sizer.Add(temp,1,wx.EXPAND)
+        self.top_fwc = FoldableWindowContainer(self.main_window, -1,
+                                               self.state_showing_window,
+                                               self.shell, wx.RIGHT,
+                                               folded=True)
+        temp = FoldableWindowContainer(self.main_window, -1, self.top_fwc,
+                                       self.seek_bar, wx.BOTTOM)
+        temp = FoldableWindowContainer(self.main_window, -1, temp,
+                                       self.tree_browser, wx.BOTTOM)
+        self.main_sizer.Add(temp, 1, wx.EXPAND)
         self.main_sizer.Fit(self.main_window)
 
-
-
-        self.active_node = None
+        self.active_node = active_node
         """
         This attribute contains the node that is currently displayed onscreen
         """
-
 
         self.is_playing = False
         """
         Says whether the simulation is currently playing.
         """
 
-        self.delay=0.05 # Should be a mechanism for setting that
-        self.default_buffer=50 # Should be a mechanism for setting that
+        self.delay = 0.05 # Should be a mechanism for setting that
+        self.default_buffer = 50 # Should be a mechanism for setting that
 
         self.timer_for_playing=None
         """
         Contains the wx.Timer object used when playing the simulation
         """
 
-        self.path = None
+        self.path = path
         """
         The active path.
         """
@@ -83,16 +98,16 @@ class GuiProject(object):
 
         main_window.Bind(wx.EVT_MENU,self.edit_from_active_node,id=s2i("Fork by editing"))
         main_window.Bind(wx.EVT_MENU,self.fork_naturally,id=s2i("Fork naturally"))
-
-        self.simpack = simpack        
+     
         
         simpack.initialize(self)
                 
         self.stuff_to_do_when_idle = queue.Queue()
         self.main_window.Bind(wx.EVT_IDLE, self.on_idle)
-        
-        wx.CallAfter(self.make_initial_dialog)
 
+    def __init_on_creation(self):
+        wx.CallAfter(self.make_initial_dialog)
+    
     def make_initial_dialog(self):
         if hasattr(self.simpack,"make_initial_dialog"):
             return self.simpack.make_initial_dialog(self)
@@ -325,4 +340,23 @@ class GuiProject(object):
     def tree_modify_refresh(self):
         self.seek_bar.Refresh()
         self.tree_browser.Refresh()
-
+        
+    def tickle(self):
+        stuff_we_want = ["project", "path", "active_node", "simpack"]
+        my_dict = {}
+        for thing in stuff_we_want:
+            my_dict[thing] = self.__dict__[thing]
+        return my_dict
+    
+def load_tickled_gui_project(tickled_gui_project, parent_window):
+    gui_project = GuiProject.__new__(GuiProject)
+    
+    simpack = tickled_gui_project.pop("simpack")
+    
+    gui_project._GuiProject__init_general(simpack, parent_window,
+                                          **tickled_gui_project)
+    return gui_project
+        
+    
+    
+    
