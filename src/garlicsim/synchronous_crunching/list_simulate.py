@@ -1,18 +1,18 @@
 import garlicsim
 import history_browser as history_browser_module # Avoiding name clash
 
-def path_simulate(simpack, state, iterations, *args, **kwargs):
+def list_simulate(simpack, state, iterations, *args, **kwargs):
     simpack_grokker = garlicsim.simpack_grokker.SimpackGrokker(simpack)
     if simpack_grokker.history_dependent:
-        return __history_path_simulate(simpack_grokker, state, iterations,
+        return __history_list_simulate(simpack_grokker, state, iterations,
                                        *args, **kwargs)
     else: # It's a non-history-dependent simpack
-        return __non_history_path_simulate(simpack_grokker, state, iterations,
+        return __non_history_list_simulate(simpack_grokker, state, iterations,
                                            *args, **kwargs)
         
     
     
-def __history_path_simulate(simpack_grokker, state, iterations,
+def __history_list_simulate(simpack_grokker, state, iterations,
                             *args, **kwargs):
     tree = garlicsim.data_structures.Tree()
     root = tree.add_state(state, parent=None)
@@ -26,11 +26,11 @@ def __history_path_simulate(simpack_grokker, state, iterations,
         current_state = iterator.next()
         current_node = tree.add_state(current_state, parent=current_node)
     
-    return path
+    return [node.state for node in path]
 
 
 
-def __non_history_path_simulate(simpack_grokker, state, iterations,
+def __non_history_list_simulate(simpack_grokker, state, iterations,
                                 *args, **kwargs):
     
     tree = garlicsim.data_structures.Tree()
@@ -44,4 +44,4 @@ def __non_history_path_simulate(simpack_grokker, state, iterations,
         current_state = iterator.next()
         current_node = tree.add_state(current_state, parent=current_node)
     
-    return path
+    return [node.state for node in path]
