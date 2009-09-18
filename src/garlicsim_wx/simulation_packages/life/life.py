@@ -5,6 +5,8 @@ import warnings
 #import psyco
 #psyco.full()
 
+
+
 def step(sourcestate,*args,**kwargs):
     oldboard=sourcestate.board
     newboard=Board(oldboard.width,oldboard.height)

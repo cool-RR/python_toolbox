@@ -1,5 +1,8 @@
 """
 todo: need to lock library to avoid thread trouble?
+
+todo: need to raise an exception if we're getting pickled with
+an old protocol?
 """
 
 import uuid
