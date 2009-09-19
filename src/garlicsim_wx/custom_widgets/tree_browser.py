@@ -51,7 +51,7 @@ class TreeBrowser(ScrolledPanel):
 
 
     def OnPaint(self,e):
-        if self.gui_project==None or self.gui_project.project.tree==None or self.gui_project.project.tree.roots==[]:
+        if self.gui_project==None or self.gui_project.project.tree==None or len(self.gui_project.project.tree.roots)==0:
             return
 
 
@@ -189,13 +189,16 @@ class NiftyPaintDC(wx.PaintDC):
         """
         assuming the tree has only one root!
         """
+        def get_root():
+            return tree.roots.__iter__().next()
+
         self.clickable_map={}
         self.active_node=self.gui_project.active_node
         try:
             self.active_soft_block=self.active_node.soft_get_block()
         except AttributeError:
             self.active_soft_block=None
-        size=self.draw_sub_tree(vectorish.add((connector_length,connector_length),self.origin),tree,tree.roots[0].soft_get_block())
+        size=self.draw_sub_tree(vectorish.add((connector_length,connector_length),self.origin),tree,get_root().soft_get_block())
         (width,height)=vectorish.add(size,(connector_length,connector_length))
         return (self.clickable_map,(width,height))
 

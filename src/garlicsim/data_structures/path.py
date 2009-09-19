@@ -30,7 +30,7 @@ class Path(object):
 
         self.root = root # The root node
 
-        self.decisions = decisions.copy()
+        self.decisions = dict(decisions)
         """
         The decisions dict says which fork of the road the path chooses.
         It's of the form {parent_node: child_node,...}

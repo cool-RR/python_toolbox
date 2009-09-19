@@ -40,8 +40,8 @@ class Tree(object):
     will also be called a root.
     """
     def __init__(self):
-        self.nodes = [] # A list for containing all the nodes in the tree.
-        self.roots = [] # A list of roots. Root = node without parent.
+        self.nodes = set() # A list for containing all the nodes in the tree.
+        self.roots = set() # A list of roots. Root = node without parent.
 
 
     def new_touched_state(self, template_node=None):
@@ -91,14 +91,14 @@ class Tree(object):
                                      template_node aren't the same!")
                 # todo: Do something about this shit
 
-        self.nodes.append(node)
+        self.nodes.add(node)
 
         if parent is None:
 
             if hasattr(node.state, "clock") is False:
                 node.state.clock = 0
 
-            self.roots.append(node)
+            self.roots.add(node)
             if node.is_touched():
                 if template_node is not None:
                     template_node.derived_nodes.append(node)
