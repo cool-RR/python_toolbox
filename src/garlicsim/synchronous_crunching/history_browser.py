@@ -72,5 +72,8 @@ class HistoryBrowser(object):
             
         return result
     
+    def __len__(self):
+        return len(self.path)
+    
     
     
