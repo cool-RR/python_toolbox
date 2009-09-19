@@ -1,3 +1,6 @@
+# Copyright 2009 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
 """
 A collection of functions for handling paths when defining an end node.
 Normally, a path has no end node. But sometimes we wish to specify a node

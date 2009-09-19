@@ -1,3 +1,6 @@
+# Copyright 2009 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
 """
 The state package defines the `State`,
 `Node`,`Tree`,`Block`, and `Path` objects.

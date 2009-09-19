@@ -1,3 +1,6 @@
+# Copyright 2009 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
 import garlicsim
 import history_browser as history_browser_module # Avoiding name clash
 

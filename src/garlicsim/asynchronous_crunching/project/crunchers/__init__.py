@@ -1,3 +1,6 @@
+# Copyright 2009 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
 """
 This package defines two crunchers, CruncherThread and CruncherProcess.
 They work in a similar way, but they are based on threading.Thread
