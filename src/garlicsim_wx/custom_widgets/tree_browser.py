@@ -151,8 +151,8 @@ class NiftyPaintDC(wx.PaintDC):
             second_bitmap=self.elements[type]
 
             slice=[None,None]
-            length=float(len(start.list))
-            slice[0]=start.list.index(self.active_node)/length
+            length=float(len(start))
+            slice[0]=start.index(self.active_node)/length
             slice[1]=slice[0]+1/length
 
             screen_slice=[floor(point[0]+2+(bitmap_size[0]-4)*slice[0]),ceil(point[0]+2+(bitmap_size[0]-4)*slice[1])]

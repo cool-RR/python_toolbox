@@ -133,7 +133,7 @@ class Node(object):
                 continue
             else:
                 block = node.block
-                index = block.list.index(node)
+                index = block.index(node)
                 rest_of_block = (len(block) - index - 1)
 
                 if rest_of_block == 0: # If we hit the last node in the Block

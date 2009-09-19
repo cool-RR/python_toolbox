@@ -122,13 +122,13 @@ class Tree(object):
                     number = len(parent.block) - ind
                     if number == 1:
                         if len(parent.children) == 1:
-                            parent.block.add([node])
+                            parent.block.append_node(node)
                     else:
                         parent.block.split(parent.block[ind+1])
 
                 else:
                     if len(parent.children) == 1 and parent.is_touched() is False:
-                        Block([parent,node])
+                        Block([parent, node])
         return node
 
 
