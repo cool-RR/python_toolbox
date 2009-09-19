@@ -43,4 +43,4 @@ Then people ask, if it is so general, how is it useful? There are two answers to
 
 -------
 
-GarlicSim is comprised of two packages, `garlicsim` which is the business logic, and `garlicsim_wx`, which is the wxPython-based GUI. The `garlicsim` package is distributed under the LGPL2.1 license.
+GarlicSim is comprised of two packages, `garlicsim` which is the business logic, and `garlicsim_wx`, which is the wxPython-based GUI. Both packages are copyright 2009 Ram Rachum. The `garlicsim` package is distributed under the LGPL2.1 license. The `garlicsim_wx` package is not licensed for distribution.

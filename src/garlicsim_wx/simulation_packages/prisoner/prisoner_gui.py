@@ -1,3 +1,6 @@
+# Copyright 2009 Ram Rachum.
+# This program is not licensed for distribution and may not be distributed.
+
 from prisoner import *
 import wx.lib.agw.piectrl as piectrl
 import wx

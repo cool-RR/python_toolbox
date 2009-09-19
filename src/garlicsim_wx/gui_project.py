@@ -1,3 +1,6 @@
+# Copyright 2009 Ram Rachum.
+# This program is not licensed for distribution and may not be distributed.
+
 import wx
 import wx.lib.scrolledpanel as scrolled
 

@@ -1,3 +1,6 @@
+# Copyright 2009 Ram Rachum.
+# This program is not licensed for distribution and may not be distributed.
+
 """
 This is a dirty little module for manipulating tuples of two items as 2d vectors.
 """

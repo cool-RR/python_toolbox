@@ -1,3 +1,6 @@
+# Copyright 2009 Ram Rachum.
+# This program is not licensed for distribution and may not be distributed.
+
 """
 Module for finding out the directory of the program we are running,
 be it a Python script or an executable.
