@@ -1,9 +1,13 @@
+# How to run #
+
 Run `run_demo.py` in the src folder to see the demonstration. Then, File -> New. Choose one of the simulation packages, press Ok. A dialog will pop up, press Ok. Double click the seek bar to toggle playing.
 
 Tested on [Python 2.6](http://www.python.org/download/releases/2.6.2/). Requires [wxPython](http://www.wxpython.org/). Optional: [Python for Windows Extensions](http://sourceforge.net/projects/pywin32/).
 
 
 -----------
+
+# What is GarlicSim? #
 
 GarlicSim is a platform for writing, running and analyzing simulations. It can handle any kind of simulation: Physics, game theory, epidemic spread, electronics, etc.
 
@@ -29,7 +33,7 @@ Mockup:
 
 -------
 
-**Frequently Asked Question:**
+# Frequently Asked Question: #
 
 _What kind of simulations will I be able to do with GarlicSim?_
 
@@ -42,5 +46,7 @@ Then people ask, if it is so general, how is it useful? There are two answers to
 2.  If you are interested in only a specific subset of simulations -- say, simulations of solid bodies in Physics -- Then it will be the wisest to write a framework for that within the framework of GarlicSim. Indeed, part of the work on GarlicSim will include writing these kind of sub-frameworks for the common categories of simulations (e.g., a framework for physics, a framework for game theory, etcetera.)
 
 -------
+
+# Licensing #
 
 GarlicSim is comprised of two packages, `garlicsim` which is the business logic, and `garlicsim_wx`, which is the wxPython-based GUI. Both packages are copyright 2009 Ram Rachum. The `garlicsim` package is distributed under the LGPL2.1 license. The `garlicsim_wx` package is not licensed for distribution.
