@@ -2,8 +2,8 @@
 # This program is distributed under the LGPL2.1 license.
 
 """
-A module that defines the `Block` class. See
-its documentation for more information.
+A module that defines the `Block` class. See its documentation for more
+information.
 """
 
 __all__ = ["Block", "BlockError"]

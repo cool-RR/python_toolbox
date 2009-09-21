@@ -2,10 +2,8 @@
 # This program is distributed under the LGPL2.1 license.
 
 """
-A module that defines the `Node` class. See
-its documentation for more information.
-
-This module imports `path.py` at the end.
+A module that defines the `Node` class. See its documentation for more
+information.
 """
 
 from state import State
@@ -20,6 +18,10 @@ class Node(object):
     A node encapsulates a State with the attribute ".state".
     Nodes are used to organize states in a Tree.
     
+    Most nodes are untouched, a.k.a. natural, but some nodes are touched.
+    A touched State is a State that was not formed naturally by a simulation step:
+    It was created by the user, either from scratch or based on another State.
+    
     todo: Maybe node should not reference tree?
     """
     def __init__(self, tree, state, parent=None, touched=False):
@@ -27,7 +29,11 @@ class Node(object):
         self.state = state
         self.parent = parent
         self.tree = tree
-        self.__touched = touched
+        
+        self.touched = touched
+        """
+        Says whether the node is a touched node.
+        """
         
         self.block = None
         """
@@ -50,9 +56,17 @@ class Node(object):
         """
 
         self.still_in_editing = False
+        """
+        A flag that is raised for a node which is "still in editing", meaning
+        that its state is still being edited and was not yet finalizing, thus
+        no crunching should be made from the node until it is finalized.
+        """
 
     def is_touched(self):
-        return self.__touched
+        """
+        todo: get rid of this, touched is not private
+        """
+        return self.touched
         
     def __len__(self):
         """

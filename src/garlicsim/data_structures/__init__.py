@@ -17,7 +17,8 @@ from state import State
 from tree import Tree
 from path import Path
 from node import Node
-from block import Block
+from block import Block, BlockError
 
 
-__all__ = ["State", "Tree", "Path", "Node", "Block"]
+__all__ = ["State", "Tree", "Path", "Node", "Block"] + \
+        ["BlockError"]
