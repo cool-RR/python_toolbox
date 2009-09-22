@@ -15,10 +15,10 @@ nodes.
 
 from state import State
 from tree import Tree
-from path import Path
+from path import Path, PathError
 from node import Node
 from block import Block, BlockError
 
 
 __all__ = ["State", "Tree", "Path", "Node", "Block"] + \
-        ["BlockError"]
+        ["BlockError", "PathError"]

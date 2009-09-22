@@ -14,7 +14,20 @@ import path_tools
 
 import garlicsim.misc.binary_search as binary_search
 
-__all__ = ["Path"]
+__all__ = ["Path", "PathError"]
+
+class PathError(Exception):
+    """
+    An exception related to the class Path.
+    """
+    pass
+
+class PathOutOfRangeError(Exception):
+    """
+    An exception related to the class Path, raised when nodes are requested
+    from the path which are out of its range for whatever reason.
+    """
+    pass
 
 class Path(object):
     """
@@ -22,6 +35,12 @@ class Path(object):
     contain many junctions, but a path is a direct line through it. Therefore,
     a path object contains information about which child to choose when going
     through a node which has multiple children.
+    
+    The attribute ".decisions" is a dictionary of the form {node_which_forks: 
+    node_to_continue_to, ... }. It usually contains as keys only nodes that
+    have more than one child.
+    
+    The attribute ".root" says from which node the path begins.
     """
     def __init__(self, tree, root=None, decisions={}):
         
@@ -41,15 +60,24 @@ class Path(object):
         Returns the length of the path in nodes. You can optionally specify an
         end node, in which the path ends.
         """
-        if end_node is not None:
-            return path_tools.with_end_node.length(self, end_node)
-        if self.root is None:
-            return 0
-
-        result = 0
-        for j in self.iterate_blockwise():
-            result += len(j)
-        return result
+        if self.root is None: return 0
+        length = 0
+        for thing in path.iterate_blockwise():
+            if thing.block:
+                if end_node and end_node in thing:
+                    length += thing.block.index(end_node) + 1
+                    return length
+                else: # end_node is not in thing
+                    length += len(thing)
+                    continue
+                else: # thing is a blockless node
+                    length += 1
+                    if thing == end_node: return length
+        
+        if end_node is None:
+            return length
+        else:
+            raise PathError("Didn't reach end_node!")
 
     def __iter__(self):
         if self.root is None:
@@ -60,13 +88,14 @@ class Path(object):
             try:
                 current = self.next_node(current)
                 yield current
-            except IndexError:
+            except PathOutOfRangeError:
                 raise StopIteration
             
     def iterate_blockwise(self, starting_at=None):
         """
-        Iterates on the Path, returning Blocks when possible. You are allowed to specify a node/block from
-        which to start iterating, using the parameter `starting_at`.
+        Iterates on the Path, returning Blocks when possible. You are allowed
+        to specify a node/block from which to start iterating, using the
+        parameter `starting_at`.
         """
         if starting_at is None:
             if self.root is None:
@@ -81,16 +110,16 @@ class Path(object):
             try:
                 current = self.next_node(current).soft_get_block()
                 yield current
-            except IndexError:
-                raise StopIteration("Ran out of tree")
+            except PathOutOfRangeError:
+                raise StopIteration
     
-    def iterate_blockwise_reversed(self, starting_at):
+    def iterate_blockwise_reversed(self, end_node):
         """
         Iterates backwards on the Path, returning Blocks when possible.
         You must specify a node/block from which to start iterating,
         using the parameter `starting_at`.
         """
-        current = starting_at.soft_get_block()
+        current = end_node.soft_get_block()
 
         yield current
 
@@ -124,6 +153,10 @@ class Path(object):
     def next_node(self, thing):
         """
         Returns the next node on the path.
+        
+        If we've come to a fork for which we have no key in the decisions dict,
+        we choose the most recent child node, and update the decisions dict to
+        point to it as well.
         """
         if self.decisions.has_key(thing):
             next = self.decisions[thing]
@@ -143,8 +176,8 @@ class Path(object):
                 kid = kids[-1]
                 self.decisions[thing] = kid
                 return kid
-
-        raise IndexError("Ran out of tree")
+            else: # No kids
+                raise PathOutOfRangeError
 
 
     def __getitem__(self, index, end_node=None):
@@ -152,41 +185,37 @@ class Path(object):
         Gets a node by its index number in the path.
         You can optionally specify an end node in which the path ends.
         """
-
-        if end_node is not None:
-            return path_tools.with_end_node.get_item(self, end_node, index)
-        
         assert isinstance(index, int)
         
         if index >= 0:
-            return self.__get_item_positive(index)
+            return self.__get_item_positive(index, end_node=end_node)
         else:
-            return self.__get_item_negative(index)
+            return self.__get_item_negative(index, end_node=end_node)
 
-    def __get_item_negative(self, index, starting_at=None):
+    def __get_item_negative(self, index, end_node=None):
         """
         Gets a node by its index number in the path, assuming that number is
         negative.
         """
-        if starting_at == None:
-            starting_at = self.get_last_node()
+        if end_node == None:
+            end_node = self.get_last_node()
         else:
-            assert isinstance(starting_at, Node)
+            assert isinstance(end_node, Node)
         if index == -1:
-            return starting_at
+            return end_node
         
         my_index = 0
         
-        if starting_at.block:
-            block = starting_at.block
-            index_of_starting_at = block.index(starting_at)
+        if end_node.block:
+            block = end_node.block
+            index_of_end_node = block.index(end_node)
             
-            my_index -= (index_of_starting_at + 1)
+            my_index -= (index_of_end_node + 1)
             
             if my_index <= index:
                 return block[index - my_index]
         
-        for thing in self.iterate_blockwise_reversed(starting_at=starting_at):
+        for thing in self.iterate_blockwise_reversed(end_node=end_node):
             my_index -= len(thing)
             if my_index <= index:
                 if isinstance(thing, Block):
@@ -194,24 +223,30 @@ class Path(object):
                 else:
                     assert my_index == index
                     return thing
-        raise IndexError
+        raise PathOutOfRangeError
         
         
-    def __get_item_positive(self, index):
+    def __get_item_positive(self, index, end_node=None):
         """
         Gets a node by its index number in the path, assuming that number is
         positive.
         """
         my_index = -1
+        answer = None
         for thing in self.iterate_blockwise():
             my_index += len(thing)
             if my_index >= index:
                 if isinstance(thing, Block):
-                    return thing[(index-my_index) - 1]
+                    answer = thing[(index-my_index) - 1]
+                    break 
                 else:
                     assert my_index == index
-                    return thing
-        raise IndexError
+                    answer = thing
+                    break
+        if answer:
+            if (not end_node) or answer.state.clock < end_node.state.clock:
+                return thing
+        raise PathOutOfRangeError
 
     def get_last_node(self, starting_at=None):
         """

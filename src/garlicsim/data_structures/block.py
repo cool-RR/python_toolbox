@@ -160,7 +160,7 @@ class Block(object):
             return self.__node_list.__delitem__(i)
         else:
             if -len(self) < i < len(self) - 1:
-                return NotImplementedError("""Can't remove a node from the \
+                raise NotImplementedError("""Can't remove a node from the \
                 middle of a block""")
             else:
                 raise IndexError("""Tried to remove a node by index, while \
