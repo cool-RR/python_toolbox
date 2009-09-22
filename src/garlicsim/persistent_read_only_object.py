@@ -3,19 +3,26 @@ todo: need to lock library to avoid thread trouble?
 
 todo: need to raise an exception if we're getting pickled with
 an old protocol?
+
+todo: make it polite to other similar classes
 """
 
 import uuid
 import weakref
 
 library = weakref.WeakValueDictionary()
- 
-class PersistentReadOnlyObject(object):
-    
-    def __new__(cls, *args):        
-        assert len(args) in [0, 1]
+
+class UuidToken(object):
+    def __init__(self, uuid):
+        self.uuid = uuid
         
-        received_uuid = args[0] if args else None
+
+class PersistentReadOnlyObject(object):
+    def __new__(cls, *args, **kwargs):
+        if len(args)==1 and len(kwargs)==0 and isinstance(args[0], UuidToken):
+            received_uuid = args[0].uuid
+        else:
+            received_uuid = None
         
         if received_uuid:
             # This section is for when we are called at unpickling time
@@ -43,7 +50,7 @@ class PersistentReadOnlyObject(object):
         return my_dict
     
     def __getnewargs__(self):
-        return (self._PersistentReadOnlyObject__uuid,)
+        return (UuidToken(self._PersistentReadOnlyObject__uuid),)
     
     def __setstate__(self, state):
         if self.__dict__.pop("_PersistentReadOnlyObject__skip_setstate", None):
@@ -57,8 +64,6 @@ class PersistentReadOnlyObject(object):
     def __copy__(self):
         return self
 
-
-    
 # --------------------------------------------------------------
 """
 From here on it's just testing stuff; will be moved to another file.
