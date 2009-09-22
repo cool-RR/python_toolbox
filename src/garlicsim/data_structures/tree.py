@@ -81,7 +81,7 @@ class Tree(object):
         Returns the node.
         """
 
-        if (not node.is_touched()) and (template_node is not None):
+        if (not node.touched) and (template_node is not None):
             raise StandardError("You tried adding an untouched state to a \
                                  tree while specifying a template_node.")
 
@@ -99,7 +99,7 @@ class Tree(object):
                 node.state.clock = 0
 
             self.roots.add(node)
-            if node.is_touched():
+            if node.touched:
                 if template_node is not None:
                     template_node.derived_nodes.append(node)
 
@@ -110,7 +110,7 @@ class Tree(object):
             node.parent = parent
             parent.children.append(node)
 
-            if node.is_touched():
+            if node.touched:
                 if template_node is not None:
                     template_node.derived_nodes.append(node)
                 if parent.block is not None:
@@ -127,7 +127,7 @@ class Tree(object):
                         parent.block.split(parent.block[ind+1])
 
                 else:
-                    if len(parent.children) == 1 and parent.is_touched() is False:
+                    if len(parent.children) == 1 and parent.touched is False:
                         Block([parent, node])
         return node
 

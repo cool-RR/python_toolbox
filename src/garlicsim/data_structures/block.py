@@ -2,13 +2,16 @@
 # This program is distributed under the LGPL2.1 license.
 
 """
-A module that defines the `Block` class. See its documentation for more
-information.
+A module that defines the Block class and the related BlockError exception. See
+the documentation of Block for more information.
 """
 
 __all__ = ["Block", "BlockError"]
 
 class BlockError(Exception):
+    """
+    An exception related to the class Block.
+    """
     pass
 
 class Block(object):
@@ -99,7 +102,7 @@ class Block(object):
                 raise BlockError("""Tried to add to the block a node which \
                 doesn't have exactly one child, and not as the last node in \
                 the block.""")
-            if node_list[i].is_touched():
+            if node_list[i].touched:
                 raise BlockError("Tried to add touched nodes to block.")
         
         if not self.__node_list:

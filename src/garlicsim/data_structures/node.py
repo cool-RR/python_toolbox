@@ -15,12 +15,13 @@ __all__ = ["Node"]
 
 class Node(object):
     """
-    A node encapsulates a State with the attribute ".state".
-    Nodes are used to organize states in a Tree.
+    A node encapsulates a State with the attribute ".state". Nodes are used to
+    organize states in a Tree.
     
     Most nodes are untouched, a.k.a. natural, but some nodes are touched.
-    A touched State is a State that was not formed naturally by a simulation step:
-    It was created by the user, either from scratch or based on another State.
+    A touched node is a node whose state was not formed naturally by a
+    simulation step: It was created by the user, either from scratch or based
+    on another state.
     
     todo: Maybe node should not reference tree?
     """
@@ -37,16 +38,15 @@ class Node(object):
         
         self.block = None
         """
-        A node may be a member of a Block. See class Block
-        for more details.
+        A node may be a member of a block. See class Block for more details.
         """
 
         self.children = []
         """
         A list of:
         1. Nodes whose states were produced by simulation from this node.
-        2. Nodes who were "created by editing" from one of
-           the nodes in the aforementioned set.
+        2. Nodes who were "created by editing" from one of the nodes in the
+        aforementioned set.
         """
 
         self.derived_nodes = []
@@ -58,19 +58,13 @@ class Node(object):
         self.still_in_editing = False
         """
         A flag that is raised for a node which is "still in editing", meaning
-        that its state is still being edited and was not yet finalizing, thus
-        no crunching should be made from the node until it is finalized.
+        that its state is still being edited and was not yet finalized, thus no
+        crunching should be made from the node until it is finalized.
         """
-
-    def is_touched(self):
-        """
-        todo: get rid of this, touched is not private
-        """
-        return self.touched
         
     def __len__(self):
         """
-        Just returns 1. This is useful because of Blocks.
+        Just returns 1. This is useful because of blocks.
         """
         return 1
 
@@ -102,33 +96,17 @@ class Node(object):
                 path.decisions[parent] = current
             current = parent
 
-        """
-        I had this in order to change the future of the path,
-        I now thing it's not a good idea.
-        
-        current = self
-        while True:
-            if current.block is not None:
-                current = current.block[-1]
-            kids = current.children
-            if len(kids) == 0:
-                break
-            else:
-                next = kids[0]
-                path.decisions[current] = next
-                current = next
-        """
-
         return path
 
     def get_all_leaves(self, max_distance=Infinity):
         """
-        Finds all leaves that are descendents of this node.
-        Only leaves with a distance of at most max_distance are returned.
-        (Distance is specified in nodes.)
+        Finds all leaves that are descendents of this node. Only leaves with a
+        distance of at most max_distance are returned. (Distance is specified
+        in nodes.)
+        
         Returns a dict of the form {node1: distance1, node2: distance2, ...}
         """
-        nodes = {self:0}
+        nodes = {self: 0}
         leaves = {}
 
 

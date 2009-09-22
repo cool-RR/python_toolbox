@@ -133,7 +133,7 @@ class NiftyPaintDC(wx.PaintDC):
                 type="Active "+type
         elif isinstance(start,garlicsim.data_structures.Node):
             kids=start.children
-            if start.is_touched()==True:
+            if start.touched:
                 type="Touched"
             else:
                 type="Untouched"

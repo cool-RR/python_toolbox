@@ -2,8 +2,8 @@
 # This program is distributed under the LGPL2.1 license.
 
 """
-A module that defines the `State` class. See
-its documentation for more information.
+A module that defines the `State` class. See its documentation for more
+information.
 """
 
 
@@ -26,6 +26,5 @@ class State(object):
     A State object must always be picklable, as do all the
     attributes assigned to it.
     """
-
-    def __init__(self):
-        pass
+    
+    pass

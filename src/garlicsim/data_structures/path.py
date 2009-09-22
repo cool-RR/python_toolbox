@@ -2,8 +2,8 @@
 # This program is distributed under the LGPL2.1 license.
 
 """
-A module that defines the `Path` class. See
-its documentation for more information.
+A module that defines the `Path` class. See its documentation for more
+information.
 """
 
 from node import Node
@@ -18,11 +18,10 @@ __all__ = ["Path"]
 
 class Path(object):
     """
-    A path symbolizes a line of nodes in a tree.
-    A tree may be a complex tree with many junctions,
-    but a path is a direct line. Therefore, a path object contains
-    information about which child to choose when going through
-    a node which has multiple children.
+    A path symbolizes a line of nodes in a tree. A tree may be complex and
+    contain many junctions, but a path is a direct line through it. Therefore,
+    a path object contains information about which child to choose when going
+    through a node which has multiple children.
     """
     def __init__(self, tree, root=None, decisions={}):
         
@@ -38,6 +37,10 @@ class Path(object):
 
 
     def __len__(self, end_node=None):
+        """
+        Returns the length of the path in nodes. You can optionally specify an
+        end node, in which the path ends.
+        """
         if end_node is not None:
             return path_tools.with_end_node.length(self, end_node)
         if self.root is None:
@@ -46,7 +49,6 @@ class Path(object):
         result = 0
         for j in self.iterate_blockwise():
             result += len(j)
-
         return result
 
     def __iter__(self):
@@ -63,8 +65,7 @@ class Path(object):
             
     def iterate_blockwise(self, starting_at=None):
         """
-        Iterates on the Path, returning Blocks when possible.
-        You are allowed to specify a node/block from
+        Iterates on the Path, returning Blocks when possible. You are allowed to specify a node/block from
         which to start iterating, using the parameter `starting_at`.
         """
         if starting_at is None:
