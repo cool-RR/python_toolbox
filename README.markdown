@@ -15,6 +15,8 @@ The aim of GarlicSim is to write that 90% of the code once and for all, and to d
 
 Additionally, we intend to ship GarlicSim with a standard library of common simulations, that the user may find useful to use as-is, or with his/her own modifications.
 
+** [Introduction to GarlicSim](http://dl.getdropbox.com/u/1927707/Introduction%20to%20GarlicSim.doc) ** - This is a document that attempts to explain about GarlicSim and how it works. It is still far from complete.
+
 -------
 
 Current screenshot, showing the [Game of Life](http://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) simulation package shipped with the program:
