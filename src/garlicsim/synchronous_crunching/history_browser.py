@@ -9,13 +9,13 @@ todo: maybe implement history_browser.__len__() ?
 
 import garlicsim.misc.binary_search as binary_search
 import garlicsim.misc.queue_tools as queue_tools
+import garlicsim.history_browser_abc
 
 __all__ = ["HistoryBrowser"]
 
 get_state_clock = lambda state: state.clock
 
-
-class HistoryBrowser(object):
+class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
     """
     
     """

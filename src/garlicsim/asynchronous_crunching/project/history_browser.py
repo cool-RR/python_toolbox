@@ -5,11 +5,15 @@
 This module defines the HistoryBrowser class. See its documentation
 for more info.
 
+todo: change "our leaf" to "our node", since it might not be a leaf.
+
 todo: this needs testing
 """
 import threading
 
 import crunchers
+
+import garlicsim.history_browser_abc
 
 import garlicsim.misc.binary_search as binary_search
 import garlicsim.misc.queue_tools as queue_tools
@@ -28,7 +32,7 @@ def with_self(method):
             return method(self, *args, **kwargs)
     return fixed
 
-class HistoryBrowser(object):
+class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
     """
     A HistoryBrowser is a device for requesting information about the history
     of the simulation.
@@ -253,7 +257,19 @@ class HistoryBrowser(object):
     
     @with_self
     def __len__(self):
-        pass
+        """
+        Returns the length of the timeline in nodes, which means the sum of:
+        1. The length of the work_queue of our cruncher.
+        2. The length of the path in the tree which leads to our node, up to
+           our node.
+        """
+        queue_length = self.cruncher.work_queue.qsize()
+        
+        our_leaf = self.__get_our_leaf()
+        our_path = our_leaf.make_containing_path()
+        path_length = our_path.__len__(end_node = our_leaf)
+        
+        return queue_length + path_length
     
     @with_self
     def __get_our_leaf(self):
@@ -276,6 +292,5 @@ class HistoryBrowser(object):
         else: # num == 0
             raise crunchers.ObsoleteCruncherError
         return our_leaf
-    
-    
+            
     

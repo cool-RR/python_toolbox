@@ -23,6 +23,7 @@ from asynchronous_crunching import Project
 from synchronous_crunching import simulate, list_simulate
 from persistent_read_only_object import PersistentReadOnlyObject
 import data_structures
+import history_browser_abc
 
 __all__ = ["Project", "simulate", "list_simulate", "PersistentReadOnlyObject",
-           "data_structures"]
+           "data_structures", "history_browser_abc"]
