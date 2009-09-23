@@ -125,15 +125,15 @@ class Block(object):
 
     def split(self, node):
         """
-        Splits block into two blocks, where `node` is the first node of the
-        second block of the two. If either of the new blocks will contain just
+        Splits block into two blocks, so `node` would be the last node of the
+        first block of the two. If either of the new blocks will contain just
         one node, that block will get deleted and the single node will become
         blockless.
         """
         assert node in self
         i = self.__node_list.index(node)
-        second_list = self.__node_list[i:]
-        self.__node_list = self.__node_list[:i]
+        second_list = self.__node_list[i+1:]
+        self.__node_list = self.__node_list[:i+1]
         if len(second_list) >= 2:
             Block(second_list)
         else:

@@ -220,6 +220,7 @@ class Path(object):
                 else:
                     assert my_index == index
                     return thing
+                
         raise PathOutOfRangeError
         
         
@@ -380,7 +381,7 @@ class Path(object):
     
     def modify_to_include_node(self, node):
         """
-        Modifies the path so it will include the mentioned node.
+        Modifies the path so it will include the specified node.
         """
         new_path = node.make_containing_path()
         self.root = new_path.root

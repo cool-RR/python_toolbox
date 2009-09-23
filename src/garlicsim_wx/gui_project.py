@@ -281,7 +281,7 @@ class GuiProject(object):
         editing.
         Returns the new node.
         """
-        new_node = self.project.tree.new_touched_state(template_node=self.active_node)
+        new_node = self.project.tree.fork_by_editing(template_node=self.active_node)
         new_node.still_in_editing = True
         self.set_active_node(new_node)
         return new_node
