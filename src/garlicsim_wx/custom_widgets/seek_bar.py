@@ -9,6 +9,7 @@ todo: I think the refresh should be made more efficient
 import wx
 import math
 from garlicsim_wx.misc.getlines import get_lines
+import garlicsim
 
 
 
@@ -63,7 +64,7 @@ class SeekBar(wx.Panel):
             try:
                 after_active=self.gui_project.path.next_node(active)
                 active_end=after_active.state.clock
-            except IndexError:
+            except garlicsim.data_structures.path.PathOutOfRangeError:
                 after_active=None
                 active_end=active_start
             active_inside=False

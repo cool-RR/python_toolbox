@@ -8,7 +8,6 @@ information.
 
 from node import Node
 from block import Block
-import path_tools
 # Note we are doing `from tree import Tree` in the bottom of the file
 # to avoid problems with circular imports.
 
@@ -70,9 +69,9 @@ class Path(object):
                 else: # end_node is not in thing
                     length += len(thing)
                     continue
-                else: # thing is a blockless node
-                    length += 1
-                    if thing == end_node: return length
+            else: # thing is a blockless node
+                length += 1
+                if thing == end_node: return length
         
         if end_node is None:
             return length
@@ -158,27 +157,25 @@ class Path(object):
         we choose the most recent child node, and update the decisions dict to
         point to it as well.
         """
-        if self.decisions.has_key(thing):
-            next = self.decisions[thing]
-            assert isinstance(next, Node)
-            return self.decisions[thing]
         
-        if isinstance(thing, Block):
-            if self.decisions.has_key(thing[-1]):
-                return self.decisions[thing[-1]]
+        # We're dealing with the case of 1 child first, because it's the most common.
+        real_thing = thing if isinstance(thing, Node) else thing[-1]
+        kids = real_thing.children
+        if len(kids) == 1:
+            return kids[0]
+        
+        if self.decisions.has_key(thing) or self.decisions.has_key(real_thing):
+            return self.decisions.get(thing, None) or \
+                   self.decisions.get(real_thing, None)
+        
+        if len(kids) > 1:
+            kid = kids[-1]
+            self.decisions[real_thing] = kid
+            return kid
 
-        else:
-            if isinstance(thing, Block):
-                kids = thing[-1].children
-            else:
-                kids = thing.children
-            if len(kids) > 0:
-                kid = kids[-1]
-                self.decisions[thing] = kid
-                return kid
-            else: # No kids
-                raise PathOutOfRangeError
-
+        else: # no kids
+            raise PathOutOfRangeError
+            
 
     def __getitem__(self, index, end_node=None):
         """
@@ -269,37 +266,41 @@ class Path(object):
         See documentation of garlicsim.misc.binary_search.binary_search for
         details about rounding options.
         """
-        if end_node is not None:
-            return path_tools.with_end_node.get_node_by_clock(self, end_node,
-                                                                clock,
-                                                                rounding)
         
         my_function = lambda node: node.state.clock
         return self.get_node_by_monotonic_function(function=my_function,
                                                    value=clock,
-                                                   rounding=rounding)    
+                                                   rounding=rounding,
+                                                   end_node=end_node)    
         
     def get_node_by_monotonic_function(self, function, value,
                                        rounding="Closest", end_node=None):
         """
-        Gets a node by specifying a measure function and a desired value.
-        The function must be a monotonic rising function on the timeline.
+        Gets a node by specifying a measure function and a desired value. The
+        function must be a monotonic rising function on the timeline.
         
         See documentation of garlicsim.misc.binary_search.binary_search for
         details about rounding options.
         """
-        if end_node is not None:
-            return path_tools.with_end_node.\
-                   get_node_by_monotonic_function(self, end_node, function,
-                                                  value, rounding=rounding)
         
         assert rounding in ["High", "Low", "Exact", "Both", "Closest"]        
+
+        if end_node is None:
+            correct_both_for_end_node = lambda both: both
+        else:
+            def correct_both_for_end_node(both):
+                new_both = both[:]
+                if new_both[0].state.clock >= end_node.state.clock:
+                    new_both[0] = end_node
+                if new_both[1].state.clock >= end_node.state.clock:
+                    new_both[1] = None
         
         low = self.root
         
         if function(low) >= value:
+            both = correct_both_for_end_node((None, low))
             return binary_search.make_both_data_into_preferred_rounding \
-                   ((None, low), function, value, rounding)
+                   (both, function, value, rounding)
         
         """
         Now we've established that the first node in the path has a lower value
@@ -310,21 +311,26 @@ class Path(object):
             if isinstance(thing, Block):
                 first = thing[0]
                 if function(first) >= value:
+                    both = correct_both_for_end_node((low, first))
                     return binary_search.make_both_data_into_preferred_rounding \
-                           ((low, first), function, value, rounding)
+                           (both, function, value, rounding)
                     
                 last = thing[-1]
                 if function(last) >= value:
                     # It's in the block
-                    return binary_search.binary_search(thing, \
-                           function, value, rounding)
+                    both = binary_search.binary_search(thing, function, value,
+                                                       rounding="Both")
+                    both = correct_both_for_end_node(both)
+                    return binary_search.make_both_data_into_preferred_rounding \
+                           (both, function, value, rounding)
                 else:
                     low = last
                     continue
             else: # thing is a Node
                 if function(thing) >= value:
+                    both = correct_both_for_end_node((low, thing))
                     return binary_search.make_both_data_into_preferred_rounding \
-                           ((low, thing), function, value, rounding)
+                           (both, function, value, rounding)
                 else:
                     low = thing
                     continue
@@ -334,8 +340,9 @@ class Path(object):
         in the path has lower value than the value we're looking for.
         """
         
+        both = correct_both_for_end_node((low, None))
         return binary_search.make_both_data_into_preferred_rounding \
-               ((low, None), function, value, rounding)
+               (both, function, value, rounding)
             
         
     

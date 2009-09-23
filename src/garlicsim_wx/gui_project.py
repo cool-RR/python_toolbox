@@ -248,7 +248,7 @@ class GuiProject(object):
         self.active_node = node
         try:
             next_node = self.path.next_node(node)
-        except IndexError:
+        except garlicsim.data_structures.path.PathOutOfRangeError:
             self.ran_out_of_tree_while_playing = True
             return
         
