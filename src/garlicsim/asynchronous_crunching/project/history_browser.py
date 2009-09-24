@@ -149,7 +149,7 @@ class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
         
     
     @with_self
-    def request_state_by_clock(self, clock, rounding="Closest"):
+    def get_state_by_clock(self, clock, rounding="Closest"):
         """
         Requests a state by specifying desired clock time.
         
@@ -157,12 +157,12 @@ class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
         details about rounding options.
         """
         assert rounding in ["High", "Low", "Exact", "Both", "Closest"]
-        return self.request_state_by_monotonic_function\
+        return self.get_state_by_monotonic_function\
                (function=get_state_clock, value=clock, rounding=rounding)
     
     @with_self
-    def request_state_by_monotonic_function(self, function, value,
-                                            rounding="Closest"):
+    def get_state_by_monotonic_function(self, function, value,
+                                        rounding="Closest"):
         """
         Requests a state by specifying a measure function and a desired value.
         The function must be a monotonic rising function on the timeline.
@@ -172,7 +172,7 @@ class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
         """
         assert rounding in ["High", "Low", "Exact", "Both", "Closest"]
         
-        tree_result = self.request_state_by_monotonic_function_from_tree\
+        tree_result = self.__get_state_by_monotonic_function_from_tree \
                       (function, value, rounding="Both")
         
         if tree_result[1] is not None:
@@ -181,7 +181,7 @@ class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
                    (tree_result, function, value, rounding)
         
         else:
-            queue_result = self.request_state_by_monotonic_function_from_queue\
+            queue_result = self.__get_state_by_monotonic_function_from_queue \
                            (function, value, rounding="Both")
             none_count = queue_result.count(None)
             if none_count == 0:
@@ -199,8 +199,8 @@ class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
                            (queue_result, function, value, rounding)
                 else: # queue_result[0] == None
                     """
-                    Getting tricky: The result is somewhere in the middle between
-                    the queue and the tree.
+                    Getting tricky: The result is somewhere in the middle
+                    between the queue and the tree.
                     """
                     combined_result = [tree_result[0], queue_result[1]]
                     return binary_search.make_both_data_into_preferred_rounding\
@@ -214,8 +214,8 @@ class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
                        (tree_result, function, value, rounding)
             
     @with_self   
-    def request_state_by_monotonic_function_from_tree(self, function, value,
-                                                      rounding="Closest"):
+    def __get_state_by_monotonic_function_from_tree(self, function, value,
+                                                    rounding="Closest"):
         """
         Requests a state FROM THE TREE ONLY by specifying a measure function
         and a desired value.
@@ -235,8 +235,8 @@ class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
         return result
     
     @with_self
-    def request_state_by_monotonic_function_from_queue(self, function, value,
-                                                       rounding="Closest"):
+    def __get_state_by_monotonic_function_from_queue(self, function, value,
+                                                     rounding="Closest"):
         """
         Requests a state FROM THE QUEUE ONLY by specifying a measure function
         and a desired value.

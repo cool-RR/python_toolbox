@@ -37,7 +37,7 @@ class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
         return self.path[index].state
     
     
-    def request_state_by_clock(self, clock, rounding="Closest"):
+    def get_state_by_clock(self, clock, rounding="Closest"):
         """
         Requests a state by specifying desired clock time.
         
@@ -45,11 +45,11 @@ class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
         details about rounding options.
         """
         assert rounding in ["High", "Low", "Exact", "Both", "Closest"]
-        return self.request_state_by_monotonic_function\
+        return self.get_state_by_monotonic_function\
                (function=get_state_clock, value=clock, rounding=rounding)
     
     
-    def request_state_by_monotonic_function(self, function, value, rounding="Closest"):
+    def get_state_by_monotonic_function(self, function, value, rounding="Closest"):
         """
         Requests a state by specifying a measure function and a desired value.
         The function must be a monotonic rising function on the timeline.
