@@ -2,8 +2,8 @@
 # This program is distributed under the LGPL2.1 license.
 
 """
-
-todo: maybe implement history_browser.__len__() ?
+This module defines the HistoryBrowserABC class. See its documentation for more
+information.
 """
 
 
@@ -17,14 +17,25 @@ get_state_clock = lambda state: state.clock
 
 class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
     """
-    
+    A history browser is a device for requesting states from the timeline of
+    the simulation. It is relevant only to simulations that are
+    history-dependent.
+    This specific kind of history browser, defined in the synchronous_crunching
+    package, is intended for synchronously-crunched simulations in which there
+    are no worker processes/threads doing the crunching. Therefore, its job is
+    quite simple; it recieves a path in its constructor and it handles all
+    state requests from that path.
     """
     def __init__(self, path):
-        self.path = path
+        
+        self.path = path        
+        """
+        This is the path, from which all states will be taken when requested.
+        """
      
     def get_last_state(self):
-        """
-        Syntactic sugar for getting the last state in the timeline.
+        """"
+        Gets the last state in the timeline. Identical to __getitem__(-1).
         """
         return self[-1]
     
@@ -73,6 +84,12 @@ class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
         return result
     
     def __len__(self):
+        """
+        Returns the length of the timeline in nodes, which means the sum of:
+        1. The length of the work_queue of our cruncher.
+        2. The length of the path in the tree which leads to our node, up to
+           our node.
+        """
         return len(self.path)
     
     

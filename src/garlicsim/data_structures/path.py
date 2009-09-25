@@ -13,7 +13,7 @@ from block import Block
 
 import garlicsim.misc.binary_search as binary_search
 
-__all__ = ["Path", "PathError"]
+__all__ = ["Path", "PathError", "PathOutOfRangeError"]
 
 class PathError(Exception):
     """

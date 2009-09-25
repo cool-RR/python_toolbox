@@ -77,7 +77,7 @@ class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
     @with_self
     def get_last_state(self):
         """
-        Syntactic sugar for getting the last state in the timeline.
+        Gets the last state in the timeline. Identical to __getitem__(-1).
         """
         return self[-1]
     

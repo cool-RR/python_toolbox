@@ -2,33 +2,34 @@
 # This program is distributed under the LGPL2.1 license.
 
 """
-A module that defined the SimpackGrokker class. See its documentation
-for more details.
+This module defines the SimpackGrokker class. See its documentation for more
+details.
 """
 
 import functools
 
-__all__ = ["SimpackGrokker"]
+#__all__ = ["SimpackGrokker"]
+
+class InvalidSimpack(Exception):
+    """
+    An exception to raise when trying to load an invalid simpack.
+    """
+    pass
 
 class SimpackGrokker(object):
     """
     An object that encapsulates a simpack, giving useful information about it
-    that may not be directly specified in the simpack.
-    
-    When a SimpackGrokker loads a simpack, it checks whether it is
-    history-dependent. It puts the answer in its attribute `history_dependent`.
+    and tools to use with it.
     """
     def __init__(self, simpack):
         self.simpack = simpack
         
-    
         self.simple_non_history_step_defined = hasattr(simpack, "step")
         self.non_history_step_generator_defined = \
             hasattr(simpack, "step_generator")
         self.simple_history_step_defined = hasattr(simpack, "history_step")
         self.history_step_generator_defined = hasattr(simpack,
                                                       "history_step_generator")
-        
         
         self.non_history_step_defined = \
             (self.simple_non_history_step_defined or \
@@ -43,16 +44,13 @@ class SimpackGrokker(object):
         self.step_generator_defined = \
             (self.non_history_step_generator_defined or \
              self.history_step_generator_defined)
-
         
         if self.history_step_defined and self.non_history_step_defined:
-            raise StandardError("The simulation package is defining both a \
-                                 history-dependent step and a \
-                                 non-history-dependent step - That's \
-                                 forbidden!")
+            raise StandardError("""The simulation package is defining both a \
+            history-dependent step and a non-history-dependent step - That's \
+            forbidden!""")
         
         assert self.simple_step_defined or self.step_generator_defined
-        
         
         self.history_dependent = self.history_step_defined
         
@@ -60,7 +58,6 @@ class SimpackGrokker(object):
         self.step.history_dependent = self.history_step_defined
         
         self.__init_step_generator()
-        
     
     def __init_step_generator(self):
         
