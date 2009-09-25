@@ -14,9 +14,6 @@ is included with this package as the file `lgpl2.1_license.txt`.
 
 This licensing does not apply to `garlicsim_wx`, which is the associated GUI
 package.
-
-todo: fix documentation everywhere to reflect that `touched` is now a node
-attribute.
 """
 
 from asynchronous_crunching import Project
