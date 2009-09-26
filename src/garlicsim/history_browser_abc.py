@@ -12,7 +12,7 @@ class HistoryBrowserABC(object):
     """
     HistoryBrowserABC is an abstract base class for history browsers, created
     with the abc module from Python's standard library. See abc's documentation
-    for more information.
+    for more information about abstract base classes.
     All history browsers should be based on this class.
     A history browser is a device for requesting states from the timeline of
     the simulation. It is relevant only to simulations that are
