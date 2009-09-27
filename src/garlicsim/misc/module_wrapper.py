@@ -8,6 +8,10 @@ discardables = ['__builtins__']
 wrapped_modules = {}
 
 def module_wrapper_factory(module):
+    """
+    Given a module, returns a ModuleWrapper which is almost identical to the
+    module, with the difference being that it can be pickled.
+    """
     if wrapped_modules.has_key(module):
         return wrapped_modules[module]
     else:

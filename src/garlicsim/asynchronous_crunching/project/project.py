@@ -19,18 +19,16 @@ __all__ = ["Project"]
 
 class Project(object):
     """
-    `Project` is the main class that the garlicsim package defines.
-    When you want to do a simulation, you create a Project. All your
-    work is done within this Project.
+    You create a project when you want to do a simulation which will crunch
+    in the background with worker threads or worker processes.
 
     A Project encapsulates a Tree.
 
-    A Project, among other things, takes care of background
-    crunching of the simulation. This is done by the CrunchingManager object
-    which is a part of the Project. The CrunchingManager employs
-    CruncherThreads and/or CruncherProcesses to get the work done.
-    To make the CrunchingManager take work from the crunchers and coordinate
-    them, call the sync_workers method of the project.
+    The crunching is taken care of by the CrunchingManager which is a part of
+    every project. The CrunchingManager employs CruncherThreads and/or
+    CruncherProcesses to get the work done. To make the CrunchingManager take
+    work from the crunchers and coordinate them, call the sync_workers method
+    of the project.
     """
 
     def __init__(self, simpack):
