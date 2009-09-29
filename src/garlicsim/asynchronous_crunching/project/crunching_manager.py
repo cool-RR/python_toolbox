@@ -15,6 +15,16 @@ PreferredCruncher = [CruncherThread, CruncherProcess][1]
 
 __all__ = ["CrunchingManager"]
 
+def with_tree_lock(method):
+    """
+    A decorator used in CrunchingManager's methods to use the tree lock (in
+    write mode) as a context manager when calling the method.
+    """
+    def fixed(self, *args, **kwargs):
+        with self.project.tree_lock.write:
+            return method(self, *args, **kwargs)
+    return fixed
+
 class CrunchingManager(object):
     """
     A crunching manager manages the background crunching for a project.
@@ -23,7 +33,7 @@ class CrunchingManager(object):
     The main use of a crunching manager is through its sync_workers methods,
     which goes over all the crunchers and all the leaves of the tree that need
     to be crunched, making sure the crunchers are working exactly on these
-    leaves.
+    leaves, and collecting work from them to implement into the tree.
     """
     def __init__(self, project):
         
@@ -34,120 +44,101 @@ class CrunchingManager(object):
         else:
             self.Cruncher = PreferredCruncher
         
-        
         self.crunchers = {}
         """
-        A dict that maps leaves that should be worked on to crunchers.
+        A dict that maps nodes that should be worked on to crunchers.
         """
-    
+        
+    @with_tree_lock
     def sync_crunchers(self, temp_infinity_node=None):
         """
-        Talks with all the crunchers, takes work from them for
-        implementing into the Tree, terminates crunchers or creates
-        new crunchers if necessary.
-        You can pass a node as `temp_infinity_node`. That will cause this
-        function to temporarily treat this node as if it should be crunched
+        Talks with all the crunchers, takes work from them for implementing
+        into the tree, retiring crunchers or recruiting new crunchers as
+        necessary.
+        You can specify a node to be a `temp_infinity_node`. That will cause
+        sync_crunchers to temporarily treat this node as if it should be crunched
         indefinitely. This is useful when the simulation is playing back on
         a path that leads to this node, and we want to have as big a buffer
         as possible on that path.
 
         Returns the total amount of nodes that were added to the tree in the
         process.
-        """
-
-        with self.project.tree_lock.write:
-            tree = self.project.tree
-            my_leaves_to_crunch = self.project.leaves_to_crunch.copy()
-    
-            if temp_infinity_node:
-                if self.project.leaves_to_crunch.has_key(temp_infinity_node):
-                    had_temp_infinity_node = True
-                    previous_value_of_temp_infinity_node = \
-                            self.project.leaves_to_crunch[temp_infinity_node]
-                else:
-                    had_temp_infinity_node = False
-                my_leaves_to_crunch[temp_infinity_node] = Infinity
-    
-    
-            added_nodes = 0
-    
-            for leaf in self.crunchers.copy():
-                if not (leaf in my_leaves_to_crunch):
-                    cruncher = self.crunchers[leaf]
-                    result = queue_tools.dump_queue(cruncher.work_queue)
-    
-                    cruncher.retire()
-    
-                    current = leaf
-                    for state in result:
-                        current = tree.add_state(state, parent=current)
-                    added_nodes += len(result)
-    
-                    del self.crunchers[leaf]
-                    #cruncher.join() # todo: sure?
-    
-    
-    
-            for (leaf, number) in my_leaves_to_crunch.items():
-                if self.crunchers.has_key(leaf) and self.crunchers[leaf].is_alive():
-    
-                    cruncher = self.crunchers[leaf]
-                    result = queue_tools.dump_queue(cruncher.work_queue)
-    
-                    current = leaf
-                    for state in result:
-                        current = tree.add_state(state, parent=current)
-                    added_nodes += len(result)
-    
-                    del my_leaves_to_crunch[leaf]
-    
-    
-                    if number != Infinity: # Maybe this is just a redundant dichotomy from before I had Infinity?
-                        new_number = number - len(result)
-                        if new_number <= 0:
-                            cruncher.retire()
-                            #cruncher.join() # todo: sure?
-                            del self.crunchers[leaf]
-                        else:
-                            my_leaves_to_crunch[current] = new_number
-                            del self.crunchers[leaf]
-                            self.crunchers[current] = cruncher
-    
-                    else:
-                        my_leaves_to_crunch[current] = Infinity
-                        del self.crunchers[leaf]
-                        self.crunchers[current] = cruncher
-    
-                    if leaf == temp_infinity_node:
-                        continuation_of_temp_infinity_node = current
-                        progress_with_temp_infinity_node = len(result)
-    
-    
-    
-    
-                else:
-                    # Create cruncher
-                    if leaf.still_in_editing is False:
-                        cruncher = self.crunchers[leaf] = self.create_cruncher(leaf)
-                    if leaf == temp_infinity_node:
-                        continuation_of_temp_infinity_node = leaf
-                        progress_with_temp_infinity_node = 0
-    
-            if temp_infinity_node:
-                if had_temp_infinity_node:
-                    temp = max(previous_value_of_temp_infinity_node - \
-                               progress_with_temp_infinity_node, 0)
-                    
-                    my_leaves_to_crunch[continuation_of_temp_infinity_node] = temp
-                                       
-                else:
-                    del my_leaves_to_crunch[continuation_of_temp_infinity_node]
-    
-            self.project.leaves_to_crunch = my_leaves_to_crunch
-    
-            return added_nodes
         
-    def create_cruncher(self, node):
+        todo: should rethink how this entire operation works.
+        """
+        tree = self.project.tree
+        my_leaves_to_crunch = self.project.leaves_to_crunch.copy()
+
+        if temp_infinity_node:
+            if self.project.leaves_to_crunch.has_key(temp_infinity_node):
+                had_temp_infinity_node = True
+                previous_value_of_temp_infinity_node = \
+                        self.project.leaves_to_crunch[temp_infinity_node]
+            else:
+                had_temp_infinity_node = False
+            my_leaves_to_crunch[temp_infinity_node] = Infinity
+
+        total_added_nodes = 0
+
+        for leaf in self.crunchers.copy():
+            if not (leaf in my_leaves_to_crunch):
+                cruncher = self.crunchers[leaf]
+                (added_nodes, new_leaf) = self.__add_work_to_tree(cruncher, leaf, retire=True)
+                total_added_nodes += added_nodes
+                
+                del self.crunchers[leaf]
+
+
+
+        for (leaf, number) in my_leaves_to_crunch.items():
+            if self.crunchers.has_key(leaf) and self.crunchers[leaf].is_alive():
+
+                cruncher = self.crunchers[leaf]
+                
+                (added_nodes, new_leaf) = self.__add_work_to_tree(cruncher, leaf)
+                total_added_nodes += added_nodes
+                del my_leaves_to_crunch[leaf]
+
+
+                new_number = number - added_nodes
+                if new_number <= 0:
+                    cruncher.retire()
+                    #cruncher.join() # todo: sure?
+                    del self.crunchers[leaf]
+                else:
+                    my_leaves_to_crunch[new_leaf] = new_number
+                    del self.crunchers[leaf]
+                    self.crunchers[new_leaf] = cruncher
+
+                if leaf == temp_infinity_node:
+                    continuation_of_temp_infinity_node = new_leaf
+                    progress_with_temp_infinity_node = added_nodes
+
+
+            else:
+                # Create cruncher
+                if leaf.still_in_editing is False:
+                    cruncher = self.crunchers[leaf] = \
+                             self.__create_cruncher(leaf)
+                if leaf == temp_infinity_node:
+                    continuation_of_temp_infinity_node = leaf
+                    progress_with_temp_infinity_node = 0
+
+        if temp_infinity_node:
+            if had_temp_infinity_node:
+                temp = max(previous_value_of_temp_infinity_node - \
+                           progress_with_temp_infinity_node, 0)
+                
+                my_leaves_to_crunch[continuation_of_temp_infinity_node] = temp
+                                   
+            else:
+                del my_leaves_to_crunch[continuation_of_temp_infinity_node]
+
+        self.project.leaves_to_crunch = my_leaves_to_crunch
+
+        return total_added_nodes
+        
+    def __create_cruncher(self, node):
         """
         Creates a cruncher and tells it to start working on `node`.
         """
@@ -162,3 +153,20 @@ class CrunchingManager(object):
             
         cruncher.start()
         return cruncher
+    
+    def __add_work_to_tree(self, cruncher, node, retire=False):
+        """
+        Takes work from the cruncher and adds to the tree at the specified
+        node. If `retire` is set to True, retires the cruncher.
+        
+        Returns (number, leaf), where `number` is the number of nodes that
+        were added, and `leaf` is the last node that was added.
+        """
+        tree = self.project.tree
+        states = queue_tools.dump_queue(cruncher.work_queue)
+        if retire:
+            cruncher.retire()
+        current = node
+        for state in states:
+            current = tree.add_state(state, parent=current)
+        return (len(states), current)
