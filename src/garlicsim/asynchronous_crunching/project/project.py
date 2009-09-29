@@ -6,16 +6,14 @@ This module defines the Project class. See its documentation for more
 information.
 """
 
-
-
 import garlicsim.data_structures
 import garlicsim.simpack_grokker
 import crunching_manager
-import garlicsim.misc.module_wrapper
-import garlicsim.misc.cool_dict
 
 import garlicsim.misc.read_write_lock as read_write_lock
 from garlicsim.misc.infinity import Infinity
+import garlicsim.misc.module_wrapper
+import garlicsim.misc.cool_dict
 
 __all__ = ["Project"]
 

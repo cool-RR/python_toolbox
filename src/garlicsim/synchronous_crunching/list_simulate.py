@@ -2,8 +2,8 @@
 # This program is distributed under the LGPL2.1 license.
 
 """
-This module defines the `list_simulate` function. See its documentation for
-more information.
+This module defines the list_simulate function. See its documentation for more
+information.
 """
 
 import garlicsim
@@ -26,7 +26,7 @@ def list_simulate(simpack, state, iterations, *args, **kwargs):
     else: # It's a non-history-dependent simpack
         return __non_history_list_simulate(simpack_grokker, state, iterations,
                                            *args, **kwargs)
-        
+
     
 def __history_list_simulate(simpack_grokker, state, iterations,
                             *args, **kwargs):
@@ -50,7 +50,6 @@ def __history_list_simulate(simpack_grokker, state, iterations,
         current_node = tree.add_state(current_state, parent=current_node)
     
     return [node.state for node in path]
-
 
 
 def __non_history_list_simulate(simpack_grokker, state, iterations,

@@ -117,7 +117,7 @@ class Block(object):
         elif self.__node_list[0].parent == node_list[-1]:
             self.__node_list = node_list + self.__node_list
         else:
-            raise StandardError("""List of nodes is not adjacent to existing \
+            raise BlockError("""List of nodes is not adjacent to existing \
             nodes""")
 
         for node in node_list:

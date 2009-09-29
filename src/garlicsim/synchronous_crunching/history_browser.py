@@ -2,10 +2,9 @@
 # This program is distributed under the LGPL2.1 license.
 
 """
-This module defines the HistoryBrowserABC class. See its documentation for more
+This module defines the HistoryBrowser class. See its documentation for more
 information.
 """
-
 
 import garlicsim.misc.binary_search as binary_search
 import garlicsim.misc.queue_tools as queue_tools
@@ -27,7 +26,6 @@ class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
     state requests from that path.
     """
     def __init__(self, path):
-        
         self.path = path        
         """
         This is the path, from which all states will be taken when requested.
@@ -39,26 +37,12 @@ class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
         """
         return self[-1]
     
-    
     def __getitem__(self, index):
         """
         Returns a state by its position in the timeline.
         """
         assert isinstance(index, int)
         return self.path[index].state
-    
-    
-    def get_state_by_clock(self, clock, rounding="Closest"):
-        """
-        Requests a state by specifying desired clock time.
-        
-        See documentation of garlicsim.misc.binary_search.binary_search for
-        details about rounding options.
-        """
-        assert rounding in ["High", "Low", "Exact", "Both", "Closest"]
-        return self.get_state_by_monotonic_function\
-               (function=get_state_clock, value=clock, rounding=rounding)
-    
     
     def get_state_by_monotonic_function(self, function, value, rounding="Closest"):
         """
@@ -91,6 +75,3 @@ class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
            our node.
         """
         return len(self.path)
-    
-    
-    

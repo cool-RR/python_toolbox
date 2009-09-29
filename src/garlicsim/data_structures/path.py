@@ -8,8 +8,7 @@ information.
 
 from node import Node
 from block import Block
-# Note we are doing `from tree import Tree` in the bottom of the file
-# to avoid problems with circular imports.
+# Note we are doing `from tree import Tree` in the bottom of the file.
 
 import garlicsim.misc.binary_search as binary_search
 
@@ -42,17 +41,14 @@ class Path(object):
     The attribute ".root" says from which node the path begins.
     """
     def __init__(self, tree, root=None, decisions={}):
-        
         self.tree = tree
-
         self.root = root # The root node
-
+        
         self.decisions = dict(decisions)
         """
         The decisions dict says which fork of the road the path chooses.
         It's of the form {parent_node: child_node,...}
         """
-
 
     def __len__(self, end_node=None):
         """
@@ -92,7 +88,7 @@ class Path(object):
             
     def iterate_blockwise(self, starting_at=None):
         """
-        Iterates on the Path, returning Blocks when possible. You are allowed
+        Iterates on the path, returning blocks when possible. You are allowed
         to specify a node/block from which to start iterating, using the
         parameter `starting_at`.
         """
@@ -114,7 +110,7 @@ class Path(object):
     
     def iterate_blockwise_reversed(self, end_node):
         """
-        Iterates backwards on the Path, returning Blocks when possible.
+        Iterates backwards on the path, returning blocks when possible.
         You must specify a node/block from which to start iterating,
         using the parameter `starting_at`.
         """
@@ -135,8 +131,8 @@ class Path(object):
 
     def __contains__(self, thing):
         """
-        Returns whether the path contains `thing`.
-        `thing` may be a Node or a Block.
+        Returns whether the path contains `thing` which may be a node or a
+        block.
         """
         assert isinstance(thing, Node) or isinstance(thing, Block)
 
@@ -179,8 +175,8 @@ class Path(object):
 
     def __getitem__(self, index, end_node=None):
         """
-        Gets a node by its index number in the path.
-        You can optionally specify an end node in which the path ends.
+        Gets a node by its index number in the path. You can optionally specify
+        an end node in which the path ends.
         """
         assert isinstance(index, int)
         
@@ -223,7 +219,6 @@ class Path(object):
                 
         raise PathOutOfRangeError
         
-        
     def __get_item_positive(self, index, end_node=None):
         """
         Gets a node by its index number in the path, assuming that number is
@@ -249,8 +244,8 @@ class Path(object):
     def get_last_node(self, starting_at=None):
         """
         Returns the last node in the path.
-        Optionally, you are allowed to specify a node from
-        which to start searching.
+        Optionally, you are allowed to specify a node from which to start
+        searching.
         """
         for thing in self.iterate_blockwise(starting_at=starting_at):
             pass
@@ -363,11 +358,13 @@ class Path(object):
 
     def get_existing_time_segment(self, start_time, end_time):
         """
-        Between timepoints "start_time" and "end_time", returns the segment of nodes that
-        exists in the Path.
+        Between timepoints "start_time" and "end_time", returns the segment of
+        nodes that exists in the Path.
         Returns the segment like so: [start, end]
-        Example: In the path the first node's clock reading is 3.2, the last is 7.6.
-        start_time is 2 and end_time is 5. The function will return [3.2, 5]
+        
+        Example: In the path the first node's clock reading is 3.2, the last is
+        7.6. start_time is 2 and end_time is 5. The function will return
+        [3.2, 5].
         """
 
         clock_of_first = self.root.state.clock
@@ -388,6 +385,4 @@ class Path(object):
         self.decisions.update(new_path.decisions)
         
     
-    
-
 from tree import Tree

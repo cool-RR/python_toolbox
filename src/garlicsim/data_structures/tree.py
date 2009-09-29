@@ -9,11 +9,9 @@ information.
 import copy
 
 from block import Block
-# Note we are doing `from node import Node` in the bottom of the file
-# to avoid problems with circular imports.
+# Note we are doing `from node import Node` in the bottom of the file.
 
 __all__ = ["Tree", "TreeError"]
-
 
 class TreeError(Exception):
     """
@@ -67,9 +65,9 @@ class Tree(object):
         Returns the node.
         """
         touched = (parent is None) or (template_node is not None)    
-        mynode = Node(self, state, touched=touched)
-        self.add_node(mynode, parent, template_node)
-        return mynode
+        my_node = Node(self, state, touched=touched)
+        self.add_node(my_node, parent, template_node)
+        return my_node
 
 
     def add_node(self, node, parent=None, template_node=None):
@@ -118,7 +116,6 @@ class Tree(object):
                 node.state.clock = 0
             self.roots.add(node)
             return node
-
 
 
     def node_count(self):

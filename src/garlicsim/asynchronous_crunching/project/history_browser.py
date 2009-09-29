@@ -20,8 +20,6 @@ import garlicsim.misc.queue_tools as queue_tools
 
 __all__ = ["HistoryBrowser"]
 
-get_state_clock = lambda state: state.clock
-
 def with_self(method):
     """
     A decorator used in HistoryBrowser's methods to use the history browser
@@ -144,19 +142,6 @@ class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
         item = queue_tools.queue_get_item(self.cruncher.work_queue, index)
         return item
         
-    
-    @with_self
-    def get_state_by_clock(self, clock, rounding="Closest"):
-        """
-        Requests a state by specifying desired clock time.
-        
-        See documentation of garlicsim.misc.binary_search.binary_search for
-        details about rounding options.
-        """
-        assert rounding in ["High", "Low", "Exact", "Both", "Closest"]
-        return self.get_state_by_monotonic_function\
-               (function=get_state_clock, value=clock, rounding=rounding)
-    
     @with_self
     def get_state_by_monotonic_function(self, function, value,
                                         rounding="Closest"):
@@ -289,5 +274,4 @@ class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
         else: # num == 0
             raise crunchers.ObsoleteCruncherError
         return our_node
-            
-    
+        

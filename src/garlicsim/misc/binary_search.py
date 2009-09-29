@@ -7,6 +7,8 @@ A module for doing a binary search in a sequence.
 Todo: create a different mode where all objects are wrapped in a list/tuple
 before being returned. This will allow this module to handle sequences that
 have None as legitimate members.
+
+todo: add option to specify cmp.
 """
 
 

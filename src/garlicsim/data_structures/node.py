@@ -7,8 +7,7 @@ information.
 """
 
 from state import State
-# Note we are doing `from path import Path` in the bottom of the file
-# to avoid problems with circular imports.
+# Note we are doing `from path import Path` in the bottom of the file.
 from garlicsim.misc.infinity import Infinity
 
 __all__ = ["Node"]

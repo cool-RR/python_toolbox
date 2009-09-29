@@ -13,14 +13,32 @@ todo: make it polite to other similar classes
 import uuid
 import weakref
 
+__all__ = ["PersistentReadOnlyObject"]
+
 library = weakref.WeakValueDictionary()
 
 class UuidToken(object):
+    """
+    A token which contains a uuid with its attribute .uuid
+    """
     def __init__(self, uuid):
         self.uuid = uuid
-        
 
 class PersistentReadOnlyObject(object):
+    """
+    A class to use as a subclass for objects which do not change.
+    When copying a PersistentReadOnlyObject, it is not really copied; The new
+    "copy" is just the same object.
+    When a PersistentReadOnlyObject is passed around between processes in
+    queues, each process retains only one copy of it.
+    
+    What does it mean that the object is read-only? It means that starting from
+    the first time that it is copied or put in a queue, it should not be
+    changed.
+
+    There is no mechanism that enforces that the user doesn't change the
+    object.
+    """
     def __new__(cls, *args, **kwargs):
         if len(args)==1 and len(kwargs)==0 and isinstance(args[0], UuidToken):
             received_uuid = args[0].uuid

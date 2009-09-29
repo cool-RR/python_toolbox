@@ -1,3 +1,11 @@
+# Copyright 2009 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+"""
+This module defines the CoolDict class. See its documentation for more
+information.
+"""
+
 import copy
 
 class CoolDict(dict):

@@ -8,6 +8,10 @@ information.
 
 import abc
 
+__all__ = ["HistoryBrowserABC"]
+
+get_state_clock = lambda state: state.clock
+
 class HistoryBrowserABC(object):
     """
     HistoryBrowserABC is an abstract base class for history browsers, created
@@ -35,16 +39,6 @@ class HistoryBrowserABC(object):
         pass
     
     @abc.abstractmethod
-    def get_state_by_clock(self):
-        """
-        Requests a state by specifying desired clock time.
-        
-        See documentation of garlicsim.misc.binary_search.binary_search for
-        details about rounding options.
-        """
-        pass
-    
-    @abc.abstractmethod
     def get_state_by_monotonic_function(self):
         """
         Requests a state by specifying a measure function and a desired value.
@@ -66,3 +60,13 @@ class HistoryBrowserABC(object):
         pass
     
     
+    def get_state_by_clock(self, clock, rounding="Closest"):
+        """
+        Requests a state by specifying desired clock time.
+        
+        See documentation of garlicsim.misc.binary_search.binary_search for
+        details about rounding options.
+        """
+        assert rounding in ["High", "Low", "Exact", "Both", "Closest"]
+        return self.get_state_by_monotonic_function\
+               (function=get_state_clock, value=clock, rounding=rounding)

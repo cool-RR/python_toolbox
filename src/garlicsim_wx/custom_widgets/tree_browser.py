@@ -143,7 +143,7 @@ class NiftyPaintDC(wx.PaintDC):
             raise StandardError
 
 
-        if make_block_stripe==True:
+        if make_block_stripe is True:
 
             bitmap=self.elements["Block"]
             self.DrawBitmapPoint(bitmap,point,useMask=True)
