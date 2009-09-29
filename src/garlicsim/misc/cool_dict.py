@@ -1,6 +1,14 @@
+import copy
 
 class CoolDict(dict):
+    """
+    A class derived from dict which some extra methods.
+    """
     def raise_to(self, key, value):
+        """
+        Same as `cool_dict[key] = value`, except if the cool dict already has
+        `key`, and its value is higher than `value`.
+        """
         has_key = self.has_key(key)
         if not has_key:
             self[key] = value
@@ -8,6 +16,10 @@ class CoolDict(dict):
             self[key] = max(value, self[key])
             
     def lower_to(self, key, value):
+        """
+        Same as `cool_dict[key] = value`, except if the cool dict already has
+        `key`, and its value is lower than `value`.
+        """
         has_key = self.has_key(key)
         if not has_key:
             self[key] = value
@@ -16,6 +28,12 @@ class CoolDict(dict):
             
     def copy(self):
         return CoolDict(self)
+    
+    def __copy__(self):
+        return CoolDict(self)
+    
+    def __deepcopy__(self, memo):
+        raise NotImplementedError # todo
     
     def transfer_value(self, key, new_key):
         assert self.has_key(key)
@@ -26,7 +44,3 @@ class CoolDict(dict):
         del self[key]
         
         return value
-    
-    
-        
-            

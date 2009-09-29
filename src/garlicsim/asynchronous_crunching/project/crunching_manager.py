@@ -2,8 +2,8 @@
 # This program is distributed under the LGPL2.1 license.
 
 """
-This module defines the CrunchingManager class; See its documentation for more
-info.
+This module defines the CrunchingManager class. See its documentation for more
+information.
 """
 
 import garlicsim.misc.queue_tools as queue_tools
@@ -35,8 +35,7 @@ class CrunchingManager(object):
     to be crunched, making sure the crunchers are working exactly on these
     leaves, and collecting work from them to implement into the tree.
     """
-    def __init__(self, project):
-        
+    def __init__(self, project):        
         self.project = project
         
         if project.simpack_grokker.history_dependent:

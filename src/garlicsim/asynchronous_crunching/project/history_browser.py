@@ -103,9 +103,9 @@ class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
             # The requested state is in the tree
             queue_size = self.cruncher.work_queue.qsize()
             new_index = index + queue_size
-            our_leaf = self.__get_our_leaf()
-            path = our_leaf.make_containing_path()
-            result_node = path.__getitem__(new_index, end_node=our_leaf)
+            our_node = self.__get_our_node()
+            path = our_node.make_containing_path()
+            result_node = path.__getitem__(new_index, end_node=our_node)
             return result_node.state
             
     
@@ -114,14 +114,14 @@ class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
         """
         Used when __getitem__ is called with a positive index.
         """
-        our_leaf = self.__get_our_leaf()
-        path = our_leaf.make_containing_path()
+        our_node = self.__get_our_node()
+        path = our_node.make_containing_path()
         try:
-            result_node = path.__getitem__(index, end_node=our_leaf)
+            result_node = path.__getitem__(index, end_node=our_node)
             return result_node.state
         
         except IndexError:
-            path_length = path.__len__(end_node=our_leaf)
+            path_length = path.__len__(end_node=our_node)
             # todo: Probably inefficient: We're plowing through the path again.
             new_index = index - path_length
             try:
@@ -136,9 +136,6 @@ class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
                           " states in the queue."
                 raise IndexError(message)
         
-        
-            
-    
     @with_self
     def __get_item_from_queue(self, index):
         """
@@ -225,8 +222,8 @@ class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
         details about rounding options.
         """
         assert rounding in ["High", "Low", "Exact", "Both", "Closest"]
-        our_leaf = self.__get_our_leaf()
-        path = our_leaf.make_containing_path()
+        our_node = self.__get_our_node()
+        path = our_node.make_containing_path()
         new_function = lambda node: function(node.state)
         result_in_nodes = path.get_node_by_monotonic_function \
                         (new_function, value, rounding)
@@ -265,32 +262,32 @@ class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
         """
         queue_length = self.cruncher.work_queue.qsize()
         
-        our_leaf = self.__get_our_leaf()
-        our_path = our_leaf.make_containing_path()
-        path_length = our_path.__len__(end_node = our_leaf)
+        our_node = self.__get_our_node()
+        our_path = our_node.make_containing_path()
+        path_length = our_path.__len__(end_node = our_node)
         
         return queue_length + path_length
     
     @with_self
-    def __get_our_leaf(self):
+    def __get_our_node(self):
         """
-        Returns the leaf that the current cruncher is assigned to work on.
+        Returns the node that the current cruncher is assigned to work on.
         """
         
         current_thread = threading.currentThread()  
         
-        leaves_to_crunchers = self.project.crunching_manager.crunchers.items()
+        nodes_to_crunchers = self.project.crunching_manager.crunchers.items()
         
-        leaves_that_are_us = \
-            [leaf for (leaf, cruncher) in leaves_to_crunchers\
+        nodes_that_are_us = \
+            [leaf for (leaf, cruncher) in leaves_to_crunchers \
              if cruncher == current_thread]
         
-        num = len(leaves_that_are_us)
+        num = len(nodes_that_are_us)
         assert num <= 1
         if num == 1:
-            our_leaf = leaves_that_are_us[0]
+            our_node = leaves_that_are_us[0]
         else: # num == 0
             raise crunchers.ObsoleteCruncherError
-        return our_leaf
+        return our_node
             
     

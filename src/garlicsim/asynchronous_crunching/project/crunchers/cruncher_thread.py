@@ -2,7 +2,8 @@
 # This program is distributed under the LGPL2.1 license.
 
 """
-This module defines CruncherThread. See its documentation.
+This module defines the CruncherThread class. See its documentation for
+more information.
 """
 import threading
 
@@ -12,6 +13,8 @@ except ImportError:
     import Queue as queue
 
 from garlicsim.asynchronous_crunching.project.history_browser import HistoryBrowser
+
+from exceptions import ObsoleteCruncherError
 
 __all__ = ["CruncherThread"]
 
@@ -36,9 +39,7 @@ class CruncherThread(threading.Thread):
         self.project = project
         
         self.history_dependent = self.project.simpack_grokker.history_dependent
-        
-
-        
+                
         self.initial_state = initial_state
         self.daemon = True
 
@@ -53,7 +54,6 @@ class CruncherThread(threading.Thread):
         This queue is used to send instructions
         to the cruncher.
         """
-
 
     def run(self):
         """
@@ -74,8 +74,6 @@ class CruncherThread(threading.Thread):
         tells you to retire, apply the step function repeatedly and put the
         results in your work queue."
         """
-    
-        
         if self.history_dependent:
             self.history_browser = HistoryBrowser(cruncher=self)
             self.step_iterator = self.project.simpack_grokker.step_generator \
@@ -86,18 +84,11 @@ class CruncherThread(threading.Thread):
         
         order = None
         
-        
         for state in self.step_iterator:
-            
             self.work_queue.put(state)
-        
             order = self.get_order()
             if order:
                 self.process_order(order)
-                order = None
-    
-                
-            
                     
     def get_order(self):
         """
@@ -112,9 +103,8 @@ class CruncherThread(threading.Thread):
         """
         Processes an order receieved from order_queue.
         """
-        if order=="Retire":
+        if order == "Retire":
             raise ObsoleteCruncherError
-        
     
     def retire(self):
         """
@@ -123,5 +113,3 @@ class CruncherThread(threading.Thread):
         from another thread.
         """
         self.order_queue.put("Retire")
-
-from exceptions import ObsoleteCruncherError

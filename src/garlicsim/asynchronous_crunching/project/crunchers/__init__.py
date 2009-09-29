@@ -21,16 +21,10 @@ trivially between them.
 
 Another reason for CruncherThread is that on single-core computer it might
 be faster than CruncherProcess because of the memory-sharing.
-
-See documentation for CruncherThread and CruncherProcess for more details.
 """
-
-
 
 from cruncher_thread import CruncherThread
 from cruncher_process import CruncherProcess
 from exceptions import ObsoleteCruncherError
 
-
 __all__ = ["CruncherProcess", "CruncherThread", "ObsoleteCruncherError"]
-
