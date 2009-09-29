@@ -269,10 +269,10 @@ class GuiProject(object):
         """
         
         node = self.active_node
-        if self.project.leaves_to_crunch.has_key(node):
+        if self.project.nodes_to_crunch.has_key(node):
             return # Problem: Node is already a leaf. Todo.
         else:
-            self.project.leaves_to_crunch[node] = self.default_buffer
+            self.project.nodes_to_crunch[node] = self.default_buffer
 
     def edit_from_active_node(self,*args,**kwargs):
         """

@@ -33,11 +33,11 @@ class Project(object):
     of the project.
     
     What the crunching manager's sync_crunchers method will do is check the
-    attribute .leaves_to_crunch of the project. This attribute is a dict-like
+    attribute .nodes_to_crunch of the project. This attribute is a dict-like
     object which maps nodes that should be crunched to a number specifying how
     many states should be crunched from this node. The crunching manager will
     then coordinate the crunchers in order to do this work. It will update the
-    .leaves_to_crunch attribute when the crunchers have completed some of the
+    .nodes_to_crunch attribute when the crunchers have completed some of the
     work.
     """
 
@@ -63,7 +63,7 @@ class Project(object):
         could potentially be writing to it.
         """
 
-        self.leaves_to_crunch = garlicsim.misc.cool_dict.CoolDict()
+        self.nodes_to_crunch = garlicsim.misc.cool_dict.CoolDict()
         """
         A dict that maps leaves that should be worked on to a number specifying
         how many nodes should be created after them.
@@ -105,7 +105,7 @@ class Project(object):
         leaves = node.get_all_leaves(wanted_distance)
         for (leaf, distance) in leaves.items():
             new_distance = wanted_distance - distance
-            self.leaves_to_crunch.raise_to(leaf, new_distance)
+            self.nodes_to_crunch.raise_to(leaf, new_distance)
 
     def sync_crunchers(self, temp_infinity_node=None):
         """

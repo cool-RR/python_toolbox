@@ -279,13 +279,13 @@ class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
         nodes_to_crunchers = self.project.crunching_manager.crunchers.items()
         
         nodes_that_are_us = \
-            [leaf for (leaf, cruncher) in leaves_to_crunchers \
+            [node for (node, cruncher) in nodes_to_crunchers \
              if cruncher == current_thread]
         
         num = len(nodes_that_are_us)
         assert num <= 1
         if num == 1:
-            our_node = leaves_that_are_us[0]
+            our_node = nodes_that_are_us[0]
         else: # num == 0
             raise crunchers.ObsoleteCruncherError
         return our_node

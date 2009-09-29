@@ -66,21 +66,21 @@ class CrunchingManager(object):
         todo: should rethink how this entire operation works.
         """
         tree = self.project.tree
-        my_leaves_to_crunch = self.project.leaves_to_crunch.copy()
+        my_nodes_to_crunch = self.project.nodes_to_crunch.copy()
 
         if temp_infinity_node:
-            if self.project.leaves_to_crunch.has_key(temp_infinity_node):
+            if self.project.nodes_to_crunch.has_key(temp_infinity_node):
                 had_temp_infinity_node = True
                 previous_value_of_temp_infinity_node = \
-                        self.project.leaves_to_crunch[temp_infinity_node]
+                        self.project.nodes_to_crunch[temp_infinity_node]
             else:
                 had_temp_infinity_node = False
-            my_leaves_to_crunch[temp_infinity_node] = Infinity
+            my_nodes_to_crunch[temp_infinity_node] = Infinity
 
         total_added_nodes = 0
 
         for leaf in self.crunchers.copy():
-            if not (leaf in my_leaves_to_crunch):
+            if not (leaf in my_nodes_to_crunch):
                 cruncher = self.crunchers[leaf]
                 (added_nodes, new_leaf) = self.__add_work_to_tree(cruncher, leaf, retire=True)
                 total_added_nodes += added_nodes
@@ -89,14 +89,14 @@ class CrunchingManager(object):
 
 
 
-        for (leaf, number) in my_leaves_to_crunch.items():
+        for (leaf, number) in my_nodes_to_crunch.items():
             if self.crunchers.has_key(leaf) and self.crunchers[leaf].is_alive():
 
                 cruncher = self.crunchers[leaf]
                 
                 (added_nodes, new_leaf) = self.__add_work_to_tree(cruncher, leaf)
                 total_added_nodes += added_nodes
-                del my_leaves_to_crunch[leaf]
+                del my_nodes_to_crunch[leaf]
 
 
                 new_number = number - added_nodes
@@ -105,7 +105,7 @@ class CrunchingManager(object):
                     #cruncher.join() # todo: sure?
                     del self.crunchers[leaf]
                 else:
-                    my_leaves_to_crunch[new_leaf] = new_number
+                    my_nodes_to_crunch[new_leaf] = new_number
                     del self.crunchers[leaf]
                     self.crunchers[new_leaf] = cruncher
 
@@ -128,12 +128,12 @@ class CrunchingManager(object):
                 temp = max(previous_value_of_temp_infinity_node - \
                            progress_with_temp_infinity_node, 0)
                 
-                my_leaves_to_crunch[continuation_of_temp_infinity_node] = temp
+                my_nodes_to_crunch[continuation_of_temp_infinity_node] = temp
                                    
             else:
-                del my_leaves_to_crunch[continuation_of_temp_infinity_node]
+                del my_nodes_to_crunch[continuation_of_temp_infinity_node]
 
-        self.project.leaves_to_crunch = my_leaves_to_crunch
+        self.project.nodes_to_crunch = my_nodes_to_crunch
 
         return total_added_nodes
         
