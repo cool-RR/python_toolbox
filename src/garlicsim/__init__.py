@@ -14,6 +14,9 @@ is included with this package as the file `lgpl2.1_license.txt`.
 
 This licensing does not apply to `garlicsim_wx`, which is the associated GUI
 package.
+
+todo: move history_browser_abc and persistent_read_only_object to a more
+obscure location.
 """
 
 from asynchronous_crunching import Project
