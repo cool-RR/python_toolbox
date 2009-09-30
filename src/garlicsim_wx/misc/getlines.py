@@ -1,3 +1,6 @@
+# Copyright 2009 Ram Rachum.
+# This program is not licensed for distribution and may not be distributed.
+
 def get_lines(start,end,thing):
     """
     returns a list of all "round" numbers between start and end

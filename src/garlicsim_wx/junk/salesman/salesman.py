@@ -1,4 +1,4 @@
-import garlicsim.state as state_module
+import garlicsim.data_structures
 import copy
 
 import random
@@ -10,8 +10,7 @@ NUM_OF_CITIES = 10
 MUTATION_RATE = 0.4
 
 def make_random_state(*args,**kwargs):
-    state=state_module.State()
-    state._State__touched=True
+    state=garlicsim.data_structures.State()
     state.freeze = 0
     state.min = 100000000
     state.biomorph = [];
@@ -25,7 +24,6 @@ make_plain_state=make_random_state # Temporary
 
 def step(source_state,*args,**kwargs):
     state=copy.deepcopy(source_state)
-    state._State__touched=False
     state.clock+=1
 
     state.biomorph.sort(cmp_eval)

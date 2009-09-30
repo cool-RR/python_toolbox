@@ -1,3 +1,6 @@
+# Copyright 2009 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
 """
 This package defines two crunchers, CruncherThread and CruncherProcess.
 They work in a similar way, but they are based on threading.Thread
@@ -18,20 +21,10 @@ trivially between them.
 
 Another reason for CruncherThread is that on single-core computer it might
 be faster than CruncherProcess because of the memory-sharing.
-
-See documentation for CruncherThread and CruncherProcess for more details.
 """
 
-class ObsoleteCruncherError(Exception):
-    """
-    An error to raise when a cruncher is trying to do work, but in the meantime
-    the main program decided that work should be stopped.
-    """
-    pass
-
-from cruncher_thread import *
-from cruncher_process import *
-
+from cruncher_thread import CruncherThread
+from cruncher_process import CruncherProcess
+from exceptions import ObsoleteCruncherError
 
 __all__ = ["CruncherProcess", "CruncherThread", "ObsoleteCruncherError"]
-

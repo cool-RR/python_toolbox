@@ -1,3 +1,6 @@
+# Copyright 2009 Ram Rachum.
+# This program is not licensed for distribution and may not be distributed.
+
 class Cooldict(object):
     def __init__(self,dict=None):
         self.mylist=[]

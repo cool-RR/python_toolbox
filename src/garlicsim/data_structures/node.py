@@ -1,43 +1,51 @@
-"""
-A module that defines the `Node` class. See
-its documentation for more information.
+# Copyright 2009 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
 
-This module imports `path.py` at the end.
+"""
+A module that defines the `Node` class. See its documentation for more
+information.
 """
 
 from state import State
-# Note we are doing `from path import Path` in the bottom of the file
-# to avoid problems with circular imports.
+# Note we are doing `from path import Path` in the bottom of the file.
 from garlicsim.misc.infinity import Infinity
 
 __all__ = ["Node"]
 
 class Node(object):
     """
-    A node encapsulates a State with the attribute ".state".
-    Nodes are used to organize states in a Tree.
+    A node encapsulates a State with the attribute ".state". Nodes are used to
+    organize states in a Tree.
+    
+    Most nodes are untouched, a.k.a. natural, but some nodes are touched.
+    A touched node is a node whose state was not formed naturally by a
+    simulation step: It was created by the user, either from scratch or based
+    on another state.
+    
+    todo: Maybe node should not reference tree?
     """
-    def __init__(self, tree, state, parent=None):
+    def __init__(self, tree, state, parent=None, touched=False):
         
         self.state = state
-
         self.parent = parent
-
         self.tree = tree
-
-
+        
+        self.touched = touched
+        """
+        Says whether the node is a touched node.
+        """
+        
         self.block = None
         """
-        A node may be a member of a Block. See class Block
-        for more details.
+        A node may be a member of a block. See class Block for more details.
         """
 
         self.children = []
         """
         A list of:
         1. Nodes whose states were produced by simulation from this node.
-        2. Nodes who were "created by editing" from one of
-           the nodes in the aforementioned set.
+        2. Nodes who were "created by editing" from one of the nodes in the
+        aforementioned set.
         """
 
         self.derived_nodes = []
@@ -47,10 +55,15 @@ class Node(object):
         """
 
         self.still_in_editing = False
-
+        """
+        A flag that is raised for a node which is "still in editing", meaning
+        that its state is still being edited and was not yet finalized, thus no
+        crunching should be made from the node until it is finalized.
+        """
+        
     def __len__(self):
         """
-        Just returns 1. This is useful because of Blocks.
+        Just returns 1. This is useful because of blocks.
         """
         return 1
 
@@ -82,28 +95,17 @@ class Node(object):
                 path.decisions[parent] = current
             current = parent
 
-        current = self
-        while True:
-            if current.block is not None:
-                current = current.block[-1]
-            kids = current.children
-            if len(kids) == 0:
-                break
-            else:
-                next = kids[0]
-                path.decisions[current] = next
-                current = next
-
         return path
 
     def get_all_leaves(self, max_distance=Infinity):
         """
-        Finds all leaves that are descendents of this node.
-        Only leaves with a distance of at most max_distance are returned.
-        (Distance is specified in nodes.)
+        Finds all leaves that are descendents of this node. Only leaves with a
+        distance of at most max_distance are returned. (Distance is specified
+        in nodes.)
+        
         Returns a dict of the form {node1: distance1, node2: distance2, ...}
         """
-        nodes = {self:0}
+        nodes = {self: 0}
         leaves = {}
 
 
@@ -122,7 +124,7 @@ class Node(object):
                 continue
             else:
                 block = node.block
-                index = block.list.index(node)
+                index = block.index(node)
                 rest_of_block = (len(block) - index - 1)
 
                 if rest_of_block == 0: # If we hit the last node in the Block
