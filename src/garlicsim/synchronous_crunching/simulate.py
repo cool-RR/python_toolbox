@@ -11,7 +11,7 @@ import history_browser as history_browser_module # Avoiding name clash
 
 __all__ = ["simulate"]
 
-def simulate(simpack, state, iterations, *args, **kwargs):
+def simulate(simpack, state, iterations=1, *args, **kwargs):
     """
     Simulates from the given state, using the given simpack, for the given
     number of iterations. Returns the final state of the simulation.
@@ -27,7 +27,7 @@ def simulate(simpack, state, iterations, *args, **kwargs):
                                   *args, **kwargs)
 
     
-def __history_simulate(simpack_grokker, state, iterations, *args, **kwargs):
+def __history_simulate(simpack_grokker, state, iterations=1, *args, **kwargs):
     """
     For history-dependent simulations only: Simulates from the given state,
     using the given simpack, for the given number of iterations. Returns the
