@@ -9,5 +9,6 @@ recruiting any worker threads or worker processes.
 
 from simulate import simulate
 from list_simulate import list_simulate
+from history_browser import HistoryBrowser
 
-__all__ = ["simulate", "list_simulate"]
+__all__ = ["simulate", "list_simulate", "HistoryBrowser"]

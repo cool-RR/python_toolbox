@@ -7,3 +7,8 @@ documentation for more information.
 """
 
 from project import Project
+from history_browser import HistoryBrowser
+from crunching_manager import CrunchingManager
+import crunchers
+
+__all__ = ["Project", "HistoryBrowser", "CrunchingManager", "crunchers"]

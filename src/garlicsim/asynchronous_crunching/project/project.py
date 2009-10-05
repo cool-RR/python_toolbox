@@ -17,6 +17,17 @@ import garlicsim.misc.cool_dict
 
 __all__ = ["Project"]
 
+def with_tree_lock(method):
+    """
+    A decorator used in Project's methods to use the tree lock (in write mode)
+    as a context manager when calling the method.
+    """
+    def fixed(self, *args, **kwargs):
+        method.__doc__ if method.__doc__ else None
+        with self.tree_lock.write:
+            return method(self, *args, **kwargs)
+    return fixed
+
 class Project(object):
     """
     You create a project when you want to do a simulation which will crunch
@@ -119,6 +130,73 @@ class Project(object):
         
         return self.crunching_manager.sync_crunchers \
                (temp_infinity_node=temp_infinity_node)
+    
+    @with_tree_lock
+    def simulate(self, node, iterations=1, *args, **kwargs):
+        """
+        Simulates from the given node for the given number of iterations,
+        implementing the results into the tree. Note this is done
+        synchronously, i.e. in the currrent thread.
+        
+        Any extraneous parameters will be passed to the step function.
+        
+        Returns the final node.                
+        """
+        
+        if self.simpack_grokker.history_dependent:
+            return self.__history_dependent_simulate(node, iterations,
+                                                     *args, **kwargs)
+        else:
+            return self.__non_history_dependent_simulate(node, iterations,
+                                                         *args, **kwargs)
+        
+    def __history_dependent_simulate(self, node, iterations=1,
+                                     *args, **kwargs):
+        """
+        For history-dependent simulations only:
+        
+        Simulates from the given node for the given number of iterations,
+        implementing the results into the tree. Note this is done
+        synchronously, i.e. in the currrent thread.
+        
+        Any extraneous parameters will be passed to the step function.
+        
+        Returns the final node.                
+        """
+        
+        path = node.make_containing_path()
+        history_browser = garlicsim.synchronous_crunching.\
+                        history_browser.HistoryBrowser(path)
+        current_node = node
+        state = node.state
+        for i in range(iterations):
+            state = self.simpack_grokker.step(history_browser,
+                                              *args, **kwargs)
+            current_node = self.tree.add_state(state, parent=current_node)
+            
+        return current_node
+    
+    def __non_history_dependent_simulate(self, node, iterations=1,
+                                         *args, **kwargs):
+        """
+        For non-history-dependent simulations only:
+        
+        Simulates from the given node for the given number of iterations,
+        implementing the results into the tree. Note this is done
+        synchronously, i.e. in the currrent thread.
+        
+        Any extraneous parameters will be passed to the step function.
+        
+        Returns the final node.                
+        """
+        
+        current_node = node
+        state = node.state
+        for i in range(iterations):
+            state = self.simpack_grokker.step(state, *args, **kwargs)
+            current_node = self.tree.add_state(state, parent=current_node)
+            
+        return current_node
     
     def __getstate__(self):
         my_dict = dict(self.__dict__)

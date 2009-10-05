@@ -17,6 +17,8 @@ package.
 
 todo: move history_browser_abc and persistent_read_only_object to a more
 obscure location.
+
+todo: maybe do the "with tree_lock" in Project instead of in CrunchingManager?
 """
 
 from asynchronous_crunching import Project
