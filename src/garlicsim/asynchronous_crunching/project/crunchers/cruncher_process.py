@@ -7,7 +7,7 @@ more information.
 """
 
 import multiprocessing
-
+import copy
 try:
     import queue
 except ImportError:
@@ -47,7 +47,7 @@ class CruncherProcess(multiprocessing.Process):
         
         self.step_generator = step_generator
         self.initial_state = initial_state
-        self.crunching_profile = crunching_profile
+        self.crunching_profile = copy.deepcopy(crunching_profile)
         
         self.daemon = True
 
@@ -104,12 +104,19 @@ class CruncherProcess(multiprocessing.Process):
                                 **step_options_profile.kwargs)
         order = None
         
-        for state in self.step_iterator:    
+        for state in self.step_iterator:
             self.work_queue.put(state)
+            self.deal_with_crunching_profile(state)
             order = self.get_order()
             if order:
                 self.process_order(order)
-                    
+                
+    def deal_with_crunching_profile(self, state):
+        profile = self.crunching_profile
+        profile.nodes_distance -= 1
+        profile.
+        pass
+    
     def get_order(self):
         """
         Attempts to read an order from the order_queue, if one has been sent.

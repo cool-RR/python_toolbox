@@ -65,7 +65,8 @@ class CrunchingManager(object):
         Returns the total amount of nodes that were added to the tree in the
         process.
         
-        todo: should rethink how this entire operation works.
+        todo: maybe only the cruncher will be responsible for stopping when
+        it's done? It's no dumb drone no more.
         """
         tree = self.project.tree
         nodes_to_crunch = self.project.nodes_to_crunch
