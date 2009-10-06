@@ -97,45 +97,63 @@ class Node(object):
 
         return path
 
-    def get_all_leaves(self, max_distance=Infinity):
+    def get_all_leaves(self, max_nodes_distance=None, max_clock_distance=None):
         """
         Finds all leaves that are descendents of this node. Only leaves with a
-        distance of at most max_distance are returned. (Distance is specified
-        in nodes.)
+        distance of at most TODO (IT'S `OR`ED) are returned.
         
-        Returns a dict of the form {node1: distance1, node2: distance2, ...}
+        Returns a dict of the form TODO
         """
-        nodes = {self: 0}
+        if max_nodes_distance is None:
+            max_nodes_distance = Infinity
+        if max_clock_distance is None:
+            max_clock_distance = Infinity
+                    
+        nodes = {self: {"nodes_distance": 0, "clock_distance": 0}}
         leaves = {}
 
-
-        while len(nodes) > 0:
-            (node, d) = nodes.popitem()
-            if d > max_distance:
+        while nodes:
+            item = nodes.popitem()
+            node = item[0]
+            nodes_distance = item[1]["nodes_distance"]
+            clock_distance = item[1]["clock_distance"]
+            
+            if nodes_distance > max_nodes_distance or \
+               clock_distance > max_clock_distance:
                 continue
+            
             kids = node.children
+            
             if not kids:
                 # We have a leaf!
-                leaves[node] = d
+                leaves[node] = {
+                    "nodes_distance": nodes_distance,
+                    "clock_distance": clock_distance,
+                }
                 continue
-            if node.block is None:
+            
+            if (node.block is None) or node.is_last_on_block():
                 for kid in kids:
-                    nodes[kid] = d + 1
+                    nodes[kid] = {
+                        "nodes_distance": nodes_distance + 1,
+                        "clock_distance": kid.state.clock - self.state.clock,
+                    }
                 continue
             else:
                 block = node.block
                 index = block.index(node)
                 rest_of_block = (len(block) - index - 1)
+                
+                # We know the node isn't the last on the block, because we
+                # checked for that before.
 
-                if rest_of_block == 0: # If we hit the last node in the Block
-                    for kid in kids:
-                        nodes[kid] = d + 1
-                    continue
-
-                if rest_of_block + d <= max_distance:
-                    for kid in block[-2].children:
-                        nodes[kid] = d + rest_of_block
-                    continue
+                last = block[-1]
+                nodes[last] = {
+                    "nodes_distance": nodes_distance + rest_of_block,
+                    "clock_distance": last.state.clock - self.state.clock,
+                }
+                continue
+            
         return leaves
     
     def get_root(self):
@@ -149,5 +167,11 @@ class Node(object):
             if lowest.block:
                 lowest = lowest.block[0]
         return lowest
+    
+    def is_last_on_block(self):
+        return self.block and (self.block.index(self) == len(self.block) - 1)
+    
+    def is_first_on_block(self):
+        return self.block and (self.block.index(self) == 0)
 
 from path import Path

@@ -43,8 +43,7 @@ class Project(object):
     
     What the crunching manager's sync_crunchers method will do is check the
     attribute .nodes_to_crunch of the project. This attribute is a dict-like
-    object which maps nodes that should be crunched to a number specifying how
-    many states should be crunched from this node. The crunching manager will
+    object which maps nodes that should be crunched to a TODO. The crunching manager will
     then coordinate the crunchers in order to do this work. It will update the
     .nodes_to_crunch attribute when the crunchers have completed some of the
     work.
@@ -74,8 +73,8 @@ class Project(object):
 
         self.nodes_to_crunch = garlicsim.misc.cool_dict.CoolDict()
         """
-        A dict that maps leaves that should be worked on to a number specifying
-        how many nodes should be created after them.
+        A dict that maps leaves that should be worked on to a
+        CrunchingProfile.
         """
 
     def make_plain_root(self, *args, **kwargs):
@@ -106,15 +105,29 @@ class Project(object):
         """
         return self.tree.add_state(state)
 
-    def crunch_all_leaves(self, node, wanted_distance):
+    def crunch_all_leaves(self, node, wanted_nodes_distance=None,
+                          wanted_clock_distance=None):
         """
         Orders to start crunching from all the leaves of `node`, so that there
-        will be a buffer whose length is at least `wanted_distance`.
+        will be a buffer whose length is at least TODO
         """
-        leaves = node.get_all_leaves(wanted_distance)
-        for (leaf, distance) in leaves.items():
-            new_distance = wanted_distance - distance
-            self.nodes_to_crunch.raise_to(leaf, new_distance)
+        leaves = node.get_all_leaves(max_nodes_distance=nodes_distance,
+                                     max_clock_distance=clock_distance)
+        for item in leaves.items():
+            
+            leaf = item[0]
+            nodes_distance = item[1]["nodes_distance"]
+            clock_distance = item[1]["clock_distance"]
+            
+            new_nodes_distance = wanted_nodes_distance - nodes_distance
+            new_clock_distance = wanted_clock_distance - clock_distance
+            
+            crunching_profile = \
+                self.nodes_to_crunch.get(leaf, garlicsim.CrunchingProfile())
+            
+            crunching_profile.nodes = max(crunching_profile.nodes, nodes)
+            crunching_profile.clock = max(crunching_profile.clock, clock)
+                
 
     def sync_crunchers(self, temp_infinity_node=None):
         """

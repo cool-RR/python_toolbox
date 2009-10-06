@@ -272,7 +272,11 @@ class GuiProject(object):
         if self.project.nodes_to_crunch.has_key(node):
             return # Problem: Node is already a leaf. Todo.
         else:
-            self.project.nodes_to_crunch[node] = self.default_buffer
+            
+            crunching_profile = \
+                garlicsim.CrunchingProfile(clock=self.default_buffer)
+            
+            self.project.nodes_to_crunch[node] = crunching_profile
 
     def edit_from_active_node(self,*args,**kwargs):
         """

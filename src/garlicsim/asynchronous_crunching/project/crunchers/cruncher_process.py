@@ -38,11 +38,15 @@ class CruncherProcess(multiprocessing.Process):
     CruncherProcess is able to run on a different core of the processor
     in the machine, thus using the full power of the processor.
     """
-    def __init__(self, initial_state, step_generator, *args, **kwargs):
+    def __init__(self, initial_state, step_generator,
+                 step_options_profile=None):
+        
         multiprocessing.Process.__init__(self, *args, **kwargs)
         
         self.step_generator = step_generator
         self.initial_state = initial_state
+        self.step_options_profile = step_options_profile
+        
         self.daemon = True
 
         self.work_queue = multiprocessing.Queue()
@@ -89,7 +93,10 @@ class CruncherProcess(multiprocessing.Process):
         """
         self.set_priority(0)
         
-        self.step_iterator = self.step_generator(self.initial_state)
+        self.step_iterator = \
+            self.step_generator(self.initial_state,
+                                *self.step_options_profile.args,
+                                **self.step_options_profile.kwargs)
         order = None
         
         for state in self.step_iterator:    
