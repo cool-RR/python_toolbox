@@ -105,14 +105,14 @@ class Project(object):
         """
         return self.tree.add_state(state)
 
-    def crunch_all_leaves(self, node, wanted_nodes_distance=None,
-                          wanted_clock_distance=None):
+    def crunch_all_leaves(self, node, wanted_nodes_distance=0,
+                          wanted_clock_distance=0):
         """
         Orders to start crunching from all the leaves of `node`, so that there
         will be a buffer whose length is at least TODO
         """
-        leaves = node.get_all_leaves(max_nodes_distance=nodes_distance,
-                                     max_clock_distance=clock_distance)
+        leaves = node.get_all_leaves(max_nodes_distance=wanted_nodes_distance,
+                                     max_clock_distance=wanted_clock_distance)
         for item in leaves.items():
             
             leaf = item[0]
@@ -123,10 +123,13 @@ class Project(object):
             new_clock_distance = wanted_clock_distance - clock_distance
             
             crunching_profile = \
-                self.nodes_to_crunch.get(leaf, garlicsim.CrunchingProfile())
+                self.nodes_to_crunch.setdefault(leaf,
+                                                garlicsim.CrunchingProfile())
             
-            crunching_profile.nodes = max(crunching_profile.nodes, nodes)
-            crunching_profile.clock = max(crunching_profile.clock, clock)
+            crunching_profile.nodes = max(crunching_profile.nodes_distance,
+                                          new_nodes_distance)
+            crunching_profile.clock = max(crunching_profile.clock_distance,
+                                          new_clock_distance)
                 
 
     def sync_crunchers(self, temp_infinity_node=None):

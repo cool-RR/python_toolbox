@@ -80,7 +80,7 @@ class GuiProject(object):
         """
 
         self.delay = 0.05 # Should be a mechanism for setting that
-        self.default_buffer = 50 # Should be a mechanism for setting that
+        self.default_buffer = 100 # Should be a mechanism for setting that
 
         self.timer_for_playing=None
         """
@@ -274,7 +274,7 @@ class GuiProject(object):
         else:
             
             crunching_profile = \
-                garlicsim.CrunchingProfile(clock=self.default_buffer)
+                garlicsim.CrunchingProfile(clock_distance=self.default_buffer)
             
             self.project.nodes_to_crunch[node] = crunching_profile
 

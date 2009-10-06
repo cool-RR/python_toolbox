@@ -6,7 +6,9 @@ This module defines the CrunchingManager class. See its documentation for more
 information.
 """
 
+import garlicsim
 import garlicsim.misc.queue_tools as queue_tools
+from garlicsim.misc.infinity import FunnyInfinity
 from crunchers import CruncherThread, CruncherProcess
 from garlicsim.misc.infinity import Infinity
 
@@ -66,74 +68,57 @@ class CrunchingManager(object):
         todo: should rethink how this entire operation works.
         """
         tree = self.project.tree
-        my_nodes_to_crunch = self.project.nodes_to_crunch.copy()
-
-        if temp_infinity_node:
-            if self.project.nodes_to_crunch.has_key(temp_infinity_node):
-                had_temp_infinity_node = True
-                previous_value_of_temp_infinity_node = \
-                        self.project.nodes_to_crunch[temp_infinity_node]
-            else:
-                had_temp_infinity_node = False
-            my_nodes_to_crunch[temp_infinity_node] = Infinity
-
+        nodes_to_crunch = self.project.nodes_to_crunch
+        
+        if temp_infinity_node:            
+            temp_infinity_profile = nodes_to_crunch.setdefault(
+                temp_infinity_node,
+                garlicsim.CrunchingProfile()
+            )
+            temp_infinity_profile.nodes_distance += FunnyInfinity
+            temp_infinity_profile.clock_distance += FunnyInfinity
+            
         total_added_nodes = 0
 
-        for leaf in self.crunchers.copy():
-            if not (leaf in my_nodes_to_crunch):
-                cruncher = self.crunchers[leaf]
-                (added_nodes, new_leaf) = self.__add_work_to_tree(cruncher, leaf, retire=True)
+        for (leaf, cruncher) in self.crunchers.copy().items():
+            if not (leaf in nodes_to_crunch):
+                (added_nodes, new_leaf) = \
+                    self.__add_work_to_tree(cruncher, leaf, retire=True)
                 total_added_nodes += added_nodes
-                
                 del self.crunchers[leaf]
 
 
-
-        for (leaf, number) in my_nodes_to_crunch.items():
+        for (leaf, profile) in nodes_to_crunch.copy().items():
             if self.crunchers.has_key(leaf) and self.crunchers[leaf].is_alive():
 
                 cruncher = self.crunchers[leaf]
                 
                 (added_nodes, new_leaf) = self.__add_work_to_tree(cruncher, leaf)
                 total_added_nodes += added_nodes
-                del my_nodes_to_crunch[leaf]
+                del nodes_to_crunch[leaf]
 
-
-                new_number = number - added_nodes
-                if new_number <= 0:
+                profile.nodes_distance -= added_nodes
+                profile.clock_distance -= (new_leaf.state.clock - leaf.state.clock)
+                
+                if profile.clock_distance <= 0 and profile.nodes_distance <= 0:
                     cruncher.retire()
                     #cruncher.join() # todo: sure?
                     del self.crunchers[leaf]
                 else:
-                    my_nodes_to_crunch[new_leaf] = new_number
+                    nodes_to_crunch[new_leaf] = profile
+                    
                     del self.crunchers[leaf]
                     self.crunchers[new_leaf] = cruncher
-
-                if leaf == temp_infinity_node:
-                    continuation_of_temp_infinity_node = new_leaf
-                    progress_with_temp_infinity_node = added_nodes
-
 
             else:
                 # Create cruncher
                 if leaf.still_in_editing is False:
                     cruncher = self.crunchers[leaf] = \
                              self.__create_cruncher(leaf)
-                if leaf == temp_infinity_node:
-                    continuation_of_temp_infinity_node = leaf
-                    progress_with_temp_infinity_node = 0
 
         if temp_infinity_node:
-            if had_temp_infinity_node:
-                temp = max(previous_value_of_temp_infinity_node - \
-                           progress_with_temp_infinity_node, 0)
-                
-                my_nodes_to_crunch[continuation_of_temp_infinity_node] = temp
-                                   
-            else:
-                del my_nodes_to_crunch[continuation_of_temp_infinity_node]
-
-        self.project.nodes_to_crunch = my_nodes_to_crunch
+            temp_infinity_profile.nodes_distance -= FunnyInfinity
+            temp_infinity_profile.clock_distance -= FunnyInfinity
 
         return total_added_nodes
         
