@@ -71,7 +71,7 @@ class CruncherProcess(multiprocessing.Process):
         assert priority in [0, 1, 2, 3, 4, 5]
         try:
             process_priority.set_process_priority(self.pid, priority)
-        except: #Not sure exactly what to "except" here; wary of non-windows systems.
+        except: #Not sure what to "except" here; wary of non-windows systems.
             pass
 
     def run(self):
@@ -114,8 +114,9 @@ class CruncherProcess(multiprocessing.Process):
     def deal_with_crunching_profile(self, state):
         profile = self.crunching_profile
         profile.nodes_distance -= 1
-        profile.
-        pass
+        profile.clock_distance = state.clock - self.initial_state.clock
+        if profile.is_done():
+            raise ObsoleteCruncherError
     
     def get_order(self):
         """

@@ -7,6 +7,10 @@ class CrunchingProfile(object):
         self.clock_distance = clock_distance
         self.step_options_profile = step_options_profile
         
+    def is_done(self):
+        return (self.nodes_distance <= 0) and \
+               (self.clock_distance <= 0)
+        
     def __repr__(self):
         
         stuff = []

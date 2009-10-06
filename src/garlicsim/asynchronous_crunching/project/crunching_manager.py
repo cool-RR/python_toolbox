@@ -101,7 +101,7 @@ class CrunchingManager(object):
                 profile.nodes_distance -= added_nodes
                 profile.clock_distance -= (new_leaf.state.clock - leaf.state.clock)
                 
-                if profile.clock_distance <= 0 and profile.nodes_distance <= 0:
+                if profile.is_done():
                     cruncher.retire()
                     #cruncher.join() # todo: sure?
                     del self.crunchers[leaf]
