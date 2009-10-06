@@ -14,9 +14,13 @@ is_a_number = lambda thing: isinstance(thing, numbers.Number)
 Infinity = float("inf")
 
 class FunnyInfinityClass(object):
+    """
+    todo: maybe someone on the internet implemented this?
+    """
     def __init__(self):
         self.added = 0
         self.sign = 1
+        
     def __add__(self, other):
         if is_a_number(other):
             result = copy.deepcopy(self)
@@ -29,6 +33,12 @@ class FunnyInfinityClass(object):
                 return self.added + other.added
         else:
             raise NotImplementedError
+
+    def __sub__(self, other):
+        return self.__add__(-other)
+    
+    __rsub__ = __sub__
+        
     def __cmp__(self, other):
         if is_a_number(other):
             return 1
@@ -40,9 +50,15 @@ class FunnyInfinityClass(object):
                 return cmp(self.added, other.added)
         else:
             raise NotImplementedError
+        
+    __radd__ = __add__
+    __rcmp__ = __cmp__
+    
     def __neg__(self):
         result = copy.deepcopy(self)
         result.sign *= -1
+        return result
+        
     def __repr__(self):
         if self.added == 0:            
             return "FunnyInfinity" 
