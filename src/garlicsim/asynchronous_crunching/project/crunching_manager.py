@@ -114,7 +114,7 @@ class CrunchingManager(object):
                 # Create cruncher
                 if leaf.still_in_editing is False:
                     cruncher = self.crunchers[leaf] = \
-                             self.__create_cruncher(leaf)
+                             self.__create_cruncher(leaf, profile)
 
         if temp_infinity_node:
             temp_infinity_profile.nodes_distance -= FunnyInfinity
@@ -122,15 +122,16 @@ class CrunchingManager(object):
 
         return total_added_nodes
         
-    def __create_cruncher(self, node):
+    def __create_cruncher(self, node, crunching_profile=None):
         """
-        Creates a cruncher and tells it to start working on `node`.
+        Creates a cruncher and tells it to start working on `node`. TODO
         """
         step_function = self.project.simpack_grokker.step
         
         if self.Cruncher == CruncherProcess:
             cruncher = self.Cruncher \
-                     (node.state, self.project.simpack_grokker.step_generator)
+                     (node.state, self.project.simpack_grokker.step_generator,
+                      crunching_profile=crunching_profile)
         
         else: # self.Cruncher == CruncherThread
             cruncher = self.Cruncher(node.state, self.project)

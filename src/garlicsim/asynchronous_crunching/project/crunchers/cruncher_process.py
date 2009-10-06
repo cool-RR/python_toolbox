@@ -13,6 +13,8 @@ try:
 except ImportError:
     import Queue as queue
 
+    
+import garlicsim
 try:
     import garlicsim.misc.process_priority as process_priority
 except ImportError:
@@ -39,13 +41,13 @@ class CruncherProcess(multiprocessing.Process):
     in the machine, thus using the full power of the processor.
     """
     def __init__(self, initial_state, step_generator,
-                 step_options_profile=None):
+                 crunching_profile):
         
-        multiprocessing.Process.__init__(self, *args, **kwargs)
+        multiprocessing.Process.__init__(self)
         
         self.step_generator = step_generator
         self.initial_state = initial_state
-        self.step_options_profile = step_options_profile
+        self.crunching_profile = crunching_profile
         
         self.daemon = True
 
@@ -89,14 +91,17 @@ class CruncherProcess(multiprocessing.Process):
         """
         The main loop of the cruncher. It's basically, "As long as no one
         tells you to retire, apply the step function repeatedly and put the
-        results in your work queue."
+        results in your work queue." TODO
         """
         self.set_priority(0)
         
+        step_options_profile = self.crunching_profile.step_options_profile or \
+                          garlicsim.StepOptionsProfile()
+        
         self.step_iterator = \
             self.step_generator(self.initial_state,
-                                *self.step_options_profile.args,
-                                **self.step_options_profile.kwargs)
+                                *step_options_profile.args,
+                                **step_options_profile.kwargs)
         order = None
         
         for state in self.step_iterator:    
@@ -120,7 +125,6 @@ class CruncherProcess(multiprocessing.Process):
         """
         if order=="Retire":
             raise ObsoleteCruncherError
-        
 
     def retire(self):
         """

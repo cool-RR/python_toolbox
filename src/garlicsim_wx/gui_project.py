@@ -160,9 +160,12 @@ class GuiProject(object):
 
     def set_active_node(self, node, modify_path=True):
         """
-        Makes "node" the active node, displaying it onscreen.
+        Makes `node` the active node, displaying it onscreen.
         """
-        self.project.crunch_all_leaves(node, self.default_buffer)
+        self.project.crunch_all_leaves(
+            node,
+            wanted_clock_distance=self.default_buffer
+        )
         
         was_playing = self.is_playing
         if self.is_playing: self.stop_playing()

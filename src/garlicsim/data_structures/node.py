@@ -118,7 +118,7 @@ class Node(object):
             nodes_distance = item[1]["nodes_distance"]
             clock_distance = item[1]["clock_distance"]
             
-            if nodes_distance > max_nodes_distance or \
+            if nodes_distance > max_nodes_distance and \
                clock_distance > max_clock_distance:
                 continue
             

@@ -126,10 +126,15 @@ class Project(object):
                 self.nodes_to_crunch.setdefault(leaf,
                                                 garlicsim.CrunchingProfile())
             
-            crunching_profile.nodes = max(crunching_profile.nodes_distance,
-                                          new_nodes_distance)
-            crunching_profile.clock = max(crunching_profile.clock_distance,
-                                          new_clock_distance)
+            crunching_profile.nodes_distance = max(
+                crunching_profile.nodes_distance,
+                new_nodes_distance
+            )
+            
+            crunching_profile.clock_distance = max(
+                crunching_profile.clock_distance,
+                new_clock_distance
+            )
                 
 
     def sync_crunchers(self, temp_infinity_node=None):
