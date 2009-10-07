@@ -11,7 +11,6 @@ todo: this needs testing
 """
 import threading
 
-# Doing import crunchers at bottom
 
 import garlicsim.history_browser_abc
 from obsolete_cruncher_error import ObsoleteCruncherError

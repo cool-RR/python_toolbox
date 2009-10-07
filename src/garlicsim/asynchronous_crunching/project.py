@@ -111,12 +111,10 @@ class Project(object):
         will be a buffer whose length is at least TODO
         """
         leaves = node.get_all_leaves(max_clock_distance=wanted_clock_distance)
+        new_clock_target = node.state.clock + wanted_clock_distance
         for item in leaves.items():
             
             leaf = item[0]
-            clock_distance = item[1]["clock_distance"]
-            
-            new_clock_distance = wanted_clock_distance - clock_distance
             
             crunching_profile = \
                 self.nodes_to_crunch.setdefault(
@@ -126,7 +124,7 @@ class Project(object):
             
             crunching_profile.clock_target = max(
                 crunching_profile.clock_target,
-                new_clock_distance
+                new_clock_target
             )
                 
 
