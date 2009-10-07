@@ -277,7 +277,9 @@ class GuiProject(object):
         else:
             
             crunching_profile = \
-                garlicsim.CrunchingProfile(clock_distance=self.default_buffer)
+                garlicsim.asynchronous_crunching.CrunchingProfile(
+                    clock_distance=self.default_buffer
+                )
             
             self.project.nodes_to_crunch[node] = crunching_profile
 

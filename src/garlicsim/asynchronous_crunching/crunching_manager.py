@@ -7,6 +7,7 @@ information.
 """
 
 import garlicsim
+import garlicsim.misc.dict_tools
 import garlicsim.misc.queue_tools as queue_tools
 from garlicsim.misc.infinity import FunnyInfinity
 from crunchers import CruncherThread, CruncherProcess
@@ -52,6 +53,8 @@ class CrunchingManager(object):
         A dict that maps nodes that should be worked on to crunchers.
         """
         
+        self.old_nodes_to_crunch = {}
+        
     @with_tree_lock
     def sync_crunchers(self, temp_infinity_node=None):
         """
@@ -93,38 +96,43 @@ class CrunchingManager(object):
             
         total_added_nodes = 0
 
-        for (leaf, cruncher) in self.crunchers.copy().items():
-            if not (leaf in nodes_to_crunch):
+        for (node, cruncher) in self.crunchers.copy().items():
+            if not (node in nodes_to_crunch):
                 (added_nodes, new_leaf) = \
-                    self.__add_work_to_tree(cruncher, leaf, retire=True)
+                    self.__add_work_to_tree(cruncher, node, retire=True)
                 total_added_nodes += added_nodes
-                del self.crunchers[leaf]
+                del self.crunchers[node]
 
 
-        for (leaf, profile) in nodes_to_crunch.copy().items():
-            if self.crunchers.has_key(leaf) and self.crunchers[leaf].is_alive():
+        for (node, profile) in nodes_to_crunch.copy().items():
+            if self.crunchers.has_key(node) and self.crunchers[node].is_alive():
 
-                cruncher = self.crunchers[leaf]
+                cruncher = self.crunchers[node]
                 
-                (added_nodes, new_leaf) = self.__add_work_to_tree(cruncher, leaf)
+                (added_nodes, new_leaf) = self.__add_work_to_tree(cruncher, node)
                 total_added_nodes += added_nodes
-                del nodes_to_crunch[leaf]
+                del nodes_to_crunch[node]
 
                 if profile.state_satisfies(new_leaf.state):
                     cruncher.retire()
                     #cruncher.join() # todo: sure?
-                    del self.crunchers[leaf]
+                    del self.crunchers[node]
                 else:
-                    nodes_to_crunch[new_leaf] = profile
+                    old_profile = self.old_nodes_to_crunch.get(node, None)
+                    if old_profile != profile and node != temp_infinity_node:
+                        cruncher.update_crunching_profile(profile)
+                        #print("Updated profile.\nOld: %s.\nNew: %s.\n\n" % \
+                        #      (old_profile, profile))
                     
-                    del self.crunchers[leaf]
+                    nodes_to_crunch[new_leaf] = profile
+                    del self.crunchers[node]
                     self.crunchers[new_leaf] = cruncher
 
             else:
                 # Create cruncher
-                if leaf.still_in_editing is False:
-                    cruncher = self.crunchers[leaf] = \
-                             self.__create_cruncher(leaf, profile)
+                if node.still_in_editing is False:
+                    cruncher = self.crunchers[node] = \
+                             self.__create_cruncher(node, profile)
 
         if temp_infinity_node:
             if had_temp_infinity_node:
@@ -137,8 +145,15 @@ class CrunchingManager(object):
             else:
                 del nodes_to_crunch[temp_infinity_node]
 
+        self.__make_old_nodes_to_crunch()
+                
         return total_added_nodes
         
+    def __make_old_nodes_to_crunch(self):
+        self.old_nodes_to_crunch = garlicsim.misc.dict_tools.deepcopy_values(
+            self.project.nodes_to_crunch
+        )
+    
     def __create_cruncher(self, node, crunching_profile=None):
         """
         Creates a cruncher and tells it to start working on `node`. TODO

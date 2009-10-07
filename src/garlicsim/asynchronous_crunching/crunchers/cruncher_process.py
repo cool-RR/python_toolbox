@@ -144,6 +144,8 @@ class CruncherProcess(multiprocessing.Process):
         """
         if order=="Retire":
             raise ObsoleteCruncherError
+        if isinstance(order, CrunchingProfile):
+            self.crunching_profile = order
 
     def retire(self):
         """
@@ -152,3 +154,6 @@ class CruncherProcess(multiprocessing.Process):
         from another process.
         """
         self.order_queue.put("Retire")
+        
+    def update_crunching_profile(self, profile):
+        self.order_queue.put(profile)
