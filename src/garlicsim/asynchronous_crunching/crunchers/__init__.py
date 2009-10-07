@@ -25,6 +25,5 @@ be faster than CruncherProcess because of the memory-sharing.
 
 from cruncher_thread import CruncherThread
 from cruncher_process import CruncherProcess
-from exceptions import ObsoleteCruncherError
 
-__all__ = ["CruncherProcess", "CruncherThread", "ObsoleteCruncherError"]
+__all__ = ["CruncherProcess", "CruncherThread"]

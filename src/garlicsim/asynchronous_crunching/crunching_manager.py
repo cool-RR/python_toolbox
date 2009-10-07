@@ -10,7 +10,9 @@ import garlicsim
 import garlicsim.misc.queue_tools as queue_tools
 from garlicsim.misc.infinity import FunnyInfinity
 from crunchers import CruncherThread, CruncherProcess
+from crunching_profile import CrunchingProfile
 from garlicsim.misc.infinity import Infinity
+
 
 PreferredCruncher = [CruncherThread, CruncherProcess][1]
 # Should make a nicer way of setting that.
@@ -71,13 +73,23 @@ class CrunchingManager(object):
         tree = self.project.tree
         nodes_to_crunch = self.project.nodes_to_crunch
         
-        if temp_infinity_node:            
-            temp_infinity_profile = nodes_to_crunch.setdefault(
-                temp_infinity_node,
-                garlicsim.CrunchingProfile()
-            )
-            temp_infinity_profile.nodes_distance += FunnyInfinity
-            temp_infinity_profile.clock_distance += FunnyInfinity
+        if temp_infinity_node:
+            
+            had_temp_infinity_node = \
+                nodes_to_crunch.has_key(temp_infinity_node)
+
+            if had_temp_infinity_node:
+                
+                old_temp_infinity_node_clock_target = \
+                    nodes_to_crunch[temp_infinity_node].clock_target
+                
+                nodes_to_crunch[temp_infinity_node].clock_target = Infinity
+                
+            else:
+                
+                nodes_to_crunch[temp_infinity_node] = \
+                    CrunchingProfile(clock_target=Infinity)
+            
             
         total_added_nodes = 0
 
@@ -98,10 +110,7 @@ class CrunchingManager(object):
                 total_added_nodes += added_nodes
                 del nodes_to_crunch[leaf]
 
-                profile.nodes_distance -= added_nodes
-                profile.clock_distance -= (new_leaf.state.clock - leaf.state.clock)
-                
-                if profile.is_done():
+                if profile.state_satisfies(new_leaf.state):
                     cruncher.retire()
                     #cruncher.join() # todo: sure?
                     del self.crunchers[leaf]
@@ -118,8 +127,15 @@ class CrunchingManager(object):
                              self.__create_cruncher(leaf, profile)
 
         if temp_infinity_node:
-            temp_infinity_profile.nodes_distance -= FunnyInfinity
-            temp_infinity_profile.clock_distance -= FunnyInfinity
+            if had_temp_infinity_node:
+                leaves = temp_infinity_node.get_all_leaves()
+                assert len(leaves) == 1
+                (leaf, distances) = leaves.popitem()
+                clock_distance = distances["clock_distance"]
+                nodes_to_crunch[leaf].clock_target = \
+                    old_temp_infinity_node_clock_target - clock_distance
+            else:
+                del nodes_to_crunch[temp_infinity_node]
 
         return total_added_nodes
         

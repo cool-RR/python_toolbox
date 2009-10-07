@@ -11,9 +11,10 @@ todo: this needs testing
 """
 import threading
 
-import crunchers
+# Doing import crunchers at bottom
 
 import garlicsim.history_browser_abc
+from obsolete_cruncher_error import ObsoleteCruncherError
 
 import garlicsim.misc.binary_search as binary_search
 import garlicsim.misc.queue_tools as queue_tools
@@ -272,6 +273,7 @@ class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
         if num == 1:
             our_node = nodes_that_are_us[0]
         else: # num == 0
-            raise crunchers.ObsoleteCruncherError
+            raise ObsoleteCruncherError
         return our_node
         
+    

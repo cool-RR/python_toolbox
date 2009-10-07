@@ -26,11 +26,10 @@ todo: change all strings (like "Both" and "Retire") to non-caps
 from asynchronous_crunching import Project
 from synchronous_crunching import simulate, list_simulate
 from persistent_read_only_object import PersistentReadOnlyObject
-from crunching_profile import CrunchingProfile # doesn't belong here
-from step_options_profile import StepOptionsProfile
+from step_options_profile import StepOptionsProfile # todo: belongs here?
 import data_structures
 import history_browser_abc
 
 __all__ = ["Project", "simulate", "list_simulate", "PersistentReadOnlyObject",
            "data_structures", "history_browser_abc",
-           "CrunchingProfile", "StepOptionsProfile"]
+           "StepOptionsProfile"]

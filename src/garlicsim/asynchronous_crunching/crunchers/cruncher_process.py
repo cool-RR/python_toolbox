@@ -14,13 +14,18 @@ except ImportError:
     import Queue as queue
 
     
+
 import garlicsim
+
+from garlicsim.asynchronous_crunching import \
+     CrunchingProfile, ObsoleteCruncherError
+
 try:
     import garlicsim.misc.process_priority as process_priority
-except ImportError:
+except:
     pass
 
-from exceptions import ObsoleteCruncherError
+from garlicsim.asynchronous_crunching import ObsoleteCruncherError
 
 __all__ = ["CruncherProcess"]
 
@@ -47,6 +52,7 @@ class CruncherProcess(multiprocessing.Process):
         
         self.step_generator = step_generator
         self.initial_state = initial_state
+        self.last_clock = self.initial_state.clock
         self.crunching_profile = copy.deepcopy(crunching_profile)
         
         self.daemon = True
@@ -105,17 +111,22 @@ class CruncherProcess(multiprocessing.Process):
         order = None
         
         for state in self.step_iterator:
+            self.autoclock(state)
             self.work_queue.put(state)
-            self.deal_with_crunching_profile(state)
+            self.check_crunching_profile(state)
             order = self.get_order()
             if order:
                 self.process_order(order)
+    
                 
-    def deal_with_crunching_profile(self, state):
-        profile = self.crunching_profile
-        profile.nodes_distance -= 1
-        profile.clock_distance = state.clock - self.initial_state.clock
-        if profile.is_done():
+    def autoclock(self, state):
+        if not hasattr(state, "clock"):
+            state.clock = self.last_clock + 1
+        self.last_clock = state.clock
+            
+        
+    def check_crunching_profile(self, state):
+        if self.crunching_profile.state_satisfies(state):
             raise ObsoleteCruncherError
     
     def get_order(self):

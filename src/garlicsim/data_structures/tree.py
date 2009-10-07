@@ -92,7 +92,7 @@ class Tree(object):
         self.nodes.add(node)
 
         if parent:
-            if hasattr(node.state, "clock") is False:
+            if not hasattr(node.state, "clock"):
                 node.state.clock = parent.state.clock + 1
 
             node.parent = parent
@@ -112,7 +112,7 @@ class Tree(object):
                 
                         
         else: # parent is None
-            if hasattr(node.state, "clock") is False:
+            if not hasattr(node.state, "clock"):
                 node.state.clock = 0
             self.roots.add(node)
             return node

@@ -315,8 +315,8 @@ class GuiProject(object):
 
         if added_nodes>0:
             self.tree_modify_refresh()
-        if self.ran_out_of_tree_while_playing==True:
-            self.ran_out_of_tree_while_playing=False
+        if self.ran_out_of_tree_while_playing:
+            self.ran_out_of_tree_while_playing = False
             self.stop_playing()
             self.start_playing()
         return added_nodes
