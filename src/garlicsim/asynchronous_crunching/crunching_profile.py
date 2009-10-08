@@ -1,4 +1,7 @@
-
+'''
+todo: if we're changing step options, it's still necessary to replace the
+cruncher
+'''
 
 class CrunchingProfile(object):
     

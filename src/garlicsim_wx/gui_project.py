@@ -276,9 +276,10 @@ class GuiProject(object):
             return # Problem: Node is already a leaf. Todo.
         else:
             
+            clock_target = node.state.clock + self.default_buffer
             crunching_profile = \
                 garlicsim.asynchronous_crunching.CrunchingProfile(
-                    clock_distance=self.default_buffer
+                    clock_target=clock_target
                 )
             
             self.project.nodes_to_crunch[node] = crunching_profile

@@ -105,45 +105,51 @@ class CrunchingManager(object):
 
 
         for (node, profile) in nodes_to_crunch.copy().items():
-            if self.crunchers.has_key(node) and self.crunchers[node].is_alive():
+            
+            if self.crunchers.has_key(node) is False:
+                self.__conditional_create_cruncher(node, profile)
+                continue
 
-                cruncher = self.crunchers[node]
-                
-                (added_nodes, new_leaf) = self.__add_work_to_tree(cruncher, node)
-                total_added_nodes += added_nodes
-                del nodes_to_crunch[node]
+            # self.crunchers.has_key(node) is True
+            
+            cruncher = self.crunchers[node]
+            
+            (added_nodes, new_leaf) = self.__add_work_to_tree(cruncher, node)
+            total_added_nodes += added_nodes
 
-                if profile.state_satisfies(new_leaf.state):
+            del nodes_to_crunch[node]
+            del self.crunchers[node]
+            
+            
+            if profile.state_satisfies(new_leaf.state):
+                if cruncher.is_alive():
                     cruncher.retire()
-                    #cruncher.join() # todo: sure?
-                    del self.crunchers[node]
-                else:
-                    old_profile = self.old_nodes_to_crunch.get(node, None)
-                    if old_profile != profile and node != temp_infinity_node:
-                        cruncher.update_crunching_profile(profile)
-                        #print("Updated profile.\nOld: %s.\nNew: %s.\n\n" % \
-                        #      (old_profile, profile))
-                    
-                    nodes_to_crunch[new_leaf] = profile
-                    del self.crunchers[node]
-                    self.crunchers[new_leaf] = cruncher
-
+                
             else:
-                # Create cruncher
-                if node.still_in_editing is False:
-                    cruncher = self.crunchers[node] = \
-                             self.__create_cruncher(node, profile)
+                nodes_to_crunch[new_leaf] = profile
+                if cruncher.is_alive():
+                    old_profile = self.old_nodes_to_crunch.get(node, None)
+                    if (old_profile != profile) and \
+                       (node != temp_infinity_node):
+                        cruncher.update_crunching_profile(profile)                        
+                    self.crunchers[new_leaf] = cruncher
+                else:
+                    self.__conditional_create_cruncher(new_leaf, profile)
+                    
+                        
 
         if temp_infinity_node:
-            if had_temp_infinity_node:
-                leaves = temp_infinity_node.get_all_leaves()
-                assert len(leaves) == 1
-                (leaf, distances) = leaves.popitem()
-                clock_distance = distances["clock_distance"]
+            
+            leaves = temp_infinity_node.get_all_leaves()
+            assert len(leaves) == 1 # maybe just warn here?
+            (leaf, distances) = leaves.popitem()
+            clock_distance = distances["clock_distance"]
+            
+            if had_temp_infinity_node:    
                 nodes_to_crunch[leaf].clock_target = \
                     old_temp_infinity_node_clock_target - clock_distance
             else:
-                del nodes_to_crunch[temp_infinity_node]
+                del nodes_to_crunch[leaf]
 
         self.__make_old_nodes_to_crunch()
                 
@@ -154,22 +160,21 @@ class CrunchingManager(object):
             self.project.nodes_to_crunch
         )
     
-    def __create_cruncher(self, node, crunching_profile=None):
-        """
-        Creates a cruncher and tells it to start working on `node`. TODO
-        """
-        step_function = self.project.simpack_grokker.step
+    def __conditional_create_cruncher(self, node, crunching_profile=None):
+        if node.still_in_editing is False:
+            step_function = self.project.simpack_grokker.step
+            if self.Cruncher == CruncherProcess:
+                cruncher = self.Cruncher \
+                         (node.state,
+                          self.project.simpack_grokker.step_generator,
+                          crunching_profile=crunching_profile)
+            else: # self.Cruncher == CruncherThread
+                cruncher = self.Cruncher(node.state, self.project,
+                                         crunching_profile=crunching_profile)
+            cruncher.start()
+            self.crunchers[node] = cruncher
+            return cruncher
         
-        if self.Cruncher == CruncherProcess:
-            cruncher = self.Cruncher \
-                     (node.state, self.project.simpack_grokker.step_generator,
-                      crunching_profile=crunching_profile)
-        
-        else: # self.Cruncher == CruncherThread
-            cruncher = self.Cruncher(node.state, self.project)
-            
-        cruncher.start()
-        return cruncher
     
     def __add_work_to_tree(self, cruncher, node, retire=False):
         """

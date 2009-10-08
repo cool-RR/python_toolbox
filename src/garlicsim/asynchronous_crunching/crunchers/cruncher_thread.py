@@ -5,14 +5,14 @@
 This module defines the CruncherThread class. See its documentation for
 more information.
 """
+
 import threading
+import Queue as queue
+import copy
 
-try:
-    import queue
-except ImportError:
-    import Queue as queue
-
-from garlicsim.asynchronous_crunching import HistoryBrowser, ObsoleteCruncherError
+import garlicsim
+from garlicsim.asynchronous_crunching import \
+     HistoryBrowser, ObsoleteCruncherError, CrunchingProfile
 
 __all__ = ["CruncherThread"]
 
@@ -31,11 +31,11 @@ class CruncherThread(threading.Thread):
     The advantage of CruncherThread over CruncherProcess is that
     CruncherThread is able to handle simulations that are history-dependent.
     """
-    def __init__(self, initial_state, project, *args, **kwargs):
-        threading.Thread.__init__(self, *args, **kwargs)
+    def __init__(self, initial_state, project, crunching_profile):
+        threading.Thread.__init__(self)
         
         self.project = project
-        
+        self.crunching_profile = copy.deepcopy(crunching_profile)
         self.history_dependent = self.project.simpack_grokker.history_dependent
                 
         self.initial_state = initial_state
@@ -72,22 +72,40 @@ class CruncherThread(threading.Thread):
         tells you to retire, apply the step function repeatedly and put the
         results in your work queue."
         """
+        
+        step_options_profile = self.crunching_profile.step_options_profile or \
+                             garlicsim.StepOptionsProfile()
+        
         if self.history_dependent:
             self.history_browser = HistoryBrowser(cruncher=self)
             self.step_iterator = self.project.simpack_grokker.step_generator \
-                             (self.history_browser)
+                             (self.history_browser, *step_options_profile.args,
+                              **step_options_profile.kwargs)
         else:
             self.step_iterator = self.project.simpack_grokker.step_generator \
-                              (self.initial_state) 
+                              (self.initial_state, *step_options_profile.args,
+                               **step_options_profile.kwargs) 
         
         order = None
         
         for state in self.step_iterator:
+            self.autoclock(state)
             self.work_queue.put(state)
+            self.check_crunching_profile(state)
             order = self.get_order()
             if order:
                 self.process_order(order)
-                    
+
+                
+    def autoclock(self, state):
+        if not hasattr(state, "clock"):
+            state.clock = self.last_clock + 1
+        self.last_clock = state.clock
+        
+    def check_crunching_profile(self, state):
+        if self.crunching_profile.state_satisfies(state):
+            raise ObsoleteCruncherError
+        
     def get_order(self):
         """
         Attempts to read an order from the order_queue, if one has been sent.
@@ -103,6 +121,8 @@ class CruncherThread(threading.Thread):
         """
         if order == "Retire":
             raise ObsoleteCruncherError
+        elif isinstance(order, CrunchingProfile):
+            self.crunching_profile = copy.deepcopy(order)
     
     def retire(self):
         """
@@ -110,9 +130,9 @@ class CruncherThread(threading.Thread):
         the order. This method may be called either from within the thread or
         from another thread.
         """
-        self.order_queue.put("Retire")
-
-
+        self.order_queue.put("Retire")        
         
+    def update_crunching_profile(self, profile):
+        self.order_queue.put(profile)
     
 

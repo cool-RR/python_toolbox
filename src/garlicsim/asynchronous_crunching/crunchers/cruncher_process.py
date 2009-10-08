@@ -8,22 +8,13 @@ more information.
 
 import multiprocessing
 import copy
-try:
-    import queue
-except ImportError:
-    import Queue as queue
-
-    
+import Queue as queue
 
 import garlicsim
-
 from garlicsim.asynchronous_crunching import \
      CrunchingProfile, ObsoleteCruncherError
-
-try:
-    import garlicsim.misc.process_priority as process_priority
-except:
-    pass
+try: import garlicsim.misc.process_priority as process_priority
+except: pass
 
 from garlicsim.asynchronous_crunching import ObsoleteCruncherError
 
@@ -118,12 +109,11 @@ class CruncherProcess(multiprocessing.Process):
             if order:
                 self.process_order(order)
     
-                
+             
     def autoclock(self, state):
         if not hasattr(state, "clock"):
             state.clock = self.last_clock + 1
-        self.last_clock = state.clock
-            
+        self.last_clock = state.clock           
         
     def check_crunching_profile(self, state):
         if self.crunching_profile.state_satisfies(state):
@@ -144,7 +134,7 @@ class CruncherProcess(multiprocessing.Process):
         """
         if order=="Retire":
             raise ObsoleteCruncherError
-        if isinstance(order, CrunchingProfile):
+        elif isinstance(order, CrunchingProfile):
             self.crunching_profile = order
 
     def retire(self):
