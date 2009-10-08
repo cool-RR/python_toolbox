@@ -21,6 +21,10 @@ obscure location.
 todo: maybe do the "with tree_lock" in Project instead of in CrunchingManager?
 
 todo: change all strings (like "Both" and "Retire") to non-caps
+
+todo: organize all namespaces
+
+todo: give cmp to binary_search
 """
 
 from asynchronous_crunching import Project

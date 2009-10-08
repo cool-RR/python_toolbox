@@ -15,12 +15,23 @@ def dump_queue(queue):
     and returns them in a list.
     """
     result = []
-
+    initial_size = queue.qsize()
+    print("Queue has %s items initially." % initial_size)
     while True:
         try:
             thing = queue.get(block=False)
             result.append(thing)
         except Queue.Empty:
+            current_size = queue.qsize()
+            total_size = current_size + len(result)
+            print("Dumping complete:")
+            if current_size == initial_size:
+                print("No items were added to the queue.")
+            else:
+                print("%s items were added to the queue." % \
+                      (total_size - initial_size))
+            print("Extracted %s items from the queue, queue has %s items left" \
+                  % (len(result), current_size))
             return result
 
 

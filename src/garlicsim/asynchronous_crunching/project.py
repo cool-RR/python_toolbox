@@ -105,7 +105,7 @@ class Project(object):
         """
         return self.tree.add_state(state)
 
-    def crunch_all_leaves(self, node, wanted_clock_distance=0):
+    def crunch_all_leaves(self, node, wanted_clock_distance=0): #todo: specify profile
         """
         Orders to start crunching from all the leaves of `node`, so that there
         will be a buffer whose length is at least TODO
