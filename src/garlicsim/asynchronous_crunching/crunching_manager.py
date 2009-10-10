@@ -6,16 +6,17 @@ This module defines the CrunchingManager class. See its documentation for more
 information.
 """
 
+from __future__ import with_statement
+
 import garlicsim
 import garlicsim.general_misc.dict_tools
 import garlicsim.general_misc.queue_tools as queue_tools
-from garlicsim.general_misc.infinity import FunnyInfinity
 from crunchers import CruncherThread, CruncherProcess
 from crunching_profile import CrunchingProfile
 from garlicsim.general_misc.infinity import Infinity
 
 
-PreferredCruncher = [CruncherThread, CruncherProcess][1]
+PreferredCruncher = [CruncherThread, CruncherProcess][0]
 # Should make a nicer way of setting that.
 
 __all__ = ["CrunchingManager"]

@@ -9,8 +9,8 @@ todo: change "our leaf" to "our node", since it might not be a leaf.
 
 todo: this needs testing
 """
+from __future__ import with_statement
 import threading
-
 
 import garlicsim.misc.history_browser_abc
 from obsolete_cruncher_error import ObsoleteCruncherError

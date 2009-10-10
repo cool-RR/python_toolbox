@@ -350,7 +350,7 @@ class Path(object):
         Otherwise, returns None.
         """
         temp = self.get_node_by_clock(timepoint, rounding="both")
-        if temp.count(None)==0:
+        if list(temp).count(None)==0:
             return temp[0]
         else:
             return None

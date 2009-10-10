@@ -1,6 +1,8 @@
 # Copyright 2009 Ram Rachum.
 # This program is not licensed for distribution and may not be distributed.
 
+from __future__ import with_statement
+
 import os, sys
 import random
 import cPickle

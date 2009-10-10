@@ -7,6 +7,7 @@ information.
 """
 
 import garlicsim
+import garlicsim.misc
 import history_browser as history_browser_module # Avoiding name clash
 
 __all__ = ["list_simulate"]
@@ -19,7 +20,7 @@ def list_simulate(simpack, state, iterations, *args, **kwargs):
     
     Any extraneous parameters will be passed to the step function.
     """
-    simpack_grokker = garlicsim.simpack_grokker.SimpackGrokker(simpack)
+    simpack_grokker = garlicsim.misc.SimpackGrokker(simpack)
     if simpack_grokker.history_dependent:
         return __history_list_simulate(simpack_grokker, state, iterations,
                                        *args, **kwargs)

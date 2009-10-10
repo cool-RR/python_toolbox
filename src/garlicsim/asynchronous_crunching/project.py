@@ -6,6 +6,8 @@ This module defines the Project class. See its documentation for more
 information.
 """
 
+from __future__ import with_statement
+
 import garlicsim.data_structures
 import garlicsim.misc.simpack_grokker
 import crunching_manager

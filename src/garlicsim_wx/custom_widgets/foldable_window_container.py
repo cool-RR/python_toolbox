@@ -49,7 +49,7 @@ class FoldableWindowContainer(wx.Panel):
             self.sash_pos = self.splitter.SashPosition
             self.splitter.Unsplit(toRemove=self.foldable_window)
         else:
-            self.splitter.Split(*self.windows_tuple, sashPosition=self.sash_pos)
+            self.splitter.Split(self.windows_tuple[0], self.windows_tuple[1], sashPosition=self.sash_pos)
 
 
 class FoldTest(wx.Frame):

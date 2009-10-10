@@ -8,7 +8,9 @@ information.
 # todo: should be something that fishes step_options_profile from *args.
 """
 
-import garlicsim
+from __future__ import with_statement
+
+import garlicsim.misc
 import history_browser as history_browser_module # Avoiding name clash
 
 __all__ = ["simulate"]
@@ -20,7 +22,7 @@ def simulate(simpack, state, iterations=1, *args, **kwargs):
     
     Any extraneous parameters will be passed to the step function.
     """
-    simpack_grokker = garlicsim.simpack_grokker.SimpackGrokker(simpack)
+    simpack_grokker = garlicsim.misc.SimpackGrokker(simpack)
     if simpack_grokker.history_dependent:
         return __history_simulate(simpack_grokker, state, iterations,
                                   *args, **kwargs)
