@@ -10,7 +10,7 @@ from node import Node
 from block import Block
 # Note we are doing `from tree import Tree` in the bottom of the file.
 
-import garlicsim.misc.binary_search as binary_search
+import garlicsim.general_misc.binary_search as binary_search
 
 __all__ = ["Path", "PathError", "PathOutOfRangeError"]
 
@@ -255,11 +255,11 @@ class Path(object):
         else:
             return thing
     
-    def get_node_by_clock(self, clock, rounding="Closest", end_node=None):
+    def get_node_by_clock(self, clock, rounding="closest", end_node=None):
         """
         Gets a node according to its clock reading.
         
-        See documentation of garlicsim.misc.binary_search.binary_search for
+        See documentation of garlicsim..binary_search.binary_search for
         details about rounding options.
         """
         
@@ -270,16 +270,16 @@ class Path(object):
                                                    end_node=end_node)    
         
     def get_node_by_monotonic_function(self, function, value,
-                                       rounding="Closest", end_node=None):
+                                       rounding="closest", end_node=None):
         """
         Gets a node by specifying a measure function and a desired value. The
         function must be a monotonic rising function on the timeline.
         
-        See documentation of garlicsim.misc.binary_search.binary_search for
+        See documentation of garlicsim..binary_search.binary_search for
         details about rounding options.
         """
         
-        assert rounding in ["High", "Low", "Exact", "Both", "Closest"]        
+        assert rounding in ["high", "low", "exact", "both", "closest"]        
 
         if end_node is None:
             correct_both_for_end_node = lambda both: both
@@ -315,7 +315,7 @@ class Path(object):
                 if function(last) >= value:
                     # It's in the block
                     both = binary_search.binary_search(thing, function, value,
-                                                       rounding="Both")
+                                                       rounding="both")
                     both = correct_both_for_end_node(both)
                     return binary_search.make_both_data_into_preferred_rounding \
                            (both, function, value, rounding)
@@ -349,7 +349,7 @@ class Path(object):
         is the case, returns the node immediately before the time point.
         Otherwise, returns None.
         """
-        temp = self.get_node_by_clock(timepoint, rounding="Both")
+        temp = self.get_node_by_clock(timepoint, rounding="both")
         if temp.count(None)==0:
             return temp[0]
         else:

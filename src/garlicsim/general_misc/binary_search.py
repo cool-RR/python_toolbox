@@ -12,7 +12,7 @@ todo: add option to specify cmp.
 """
 
 
-def binary_search_by_index(sequence, function, value, rounding="Closest"):
+def binary_search_by_index(sequence, function, value, rounding="closest"):
     """
     Similiar to binary_search (refer to its documentation for more info).
     The difference is that instead of returning a result in terms of sequence
@@ -25,28 +25,28 @@ def binary_search_by_index(sequence, function, value, rounding="Closest"):
     return result
 
 
-def binary_search(sequence, function, value, rounding="Closest"):
+def binary_search(sequence, function, value, rounding="closest"):
     """
     Does a binary search through a sequence.
     
     It is assumed that `function` is a montonic rising function on `sequence`.
 
     There are five options for the "rounding" parameter:
-    "High": Gives the lowest sequence item which has value greater than `value`
-    "Low": Gives the highest sequence item which has value smaller than `value`
-    "Exact": Gives the item which has a value of exactly `value`
-    "Closest": Gives the item that has value closest to `value`
-    "Both": Gives a tuple (low, high) of the two items that surround `value`.
+    "high": Gives the lowest sequence item which has value greater than `value`
+    "low": Gives the highest sequence item which has value smaller than `value`
+    "exact": Gives the item which has a value of exactly `value`
+    "closest": Gives the item that has value closest to `value`
+    "both": Gives a tuple (low, high) of the two items that surround `value`.
     
     For all rounding options, a return value of None is returned if no
-    matching item is found. (In the case of rounding="Both", either of the
+    matching item is found. (In the case of rounding="both", either of the
     items in the tuple may be None)
     
     Note: This function uses None to express its inability to find any matches;
     Therefore, you better not use it on sequences in which None is a possible
     item.
     """
-    assert rounding in ["High", "Low", "Exact", "Both", "Closest"]
+    assert rounding in ["high", "low", "exact", "both", "closest"]
     
     get = lambda number: function(sequence[number])
 
@@ -56,18 +56,18 @@ def binary_search(sequence, function, value, rounding="Closest"):
     low_value, high_value = get(low), get(high)
     
     if low_value >= value:
-        if rounding == "Both":
+        if rounding == "both":
             return [None, sequence[low]]
-        if rounding in ["High", "Closest"] or (low_value==value and rounding=="Exact"):
+        if rounding in ["high", "closest"] or (low_value==value and rounding=="exact"):
             return sequence[low]
-        else: # rounding == "Low" or (rounding == "Exact" and low_value!=value)
+        else: # rounding == "low" or (rounding == "exact" and low_value!=value)
             return None
     if high_value <= value:
-        if rounding == "Both":
+        if rounding == "both":
             return [sequence[high], None]
-        if rounding in ["Low", "Closest"] or (low_value==value and rounding=="Exact"):
+        if rounding in ["low", "closest"] or (low_value==value and rounding=="exact"):
             return sequence[high]
-        else: # rounding == "High" or (rounding == "Exact" and low_value!=value)
+        else: # rounding == "high" or (rounding == "exact" and low_value!=value)
             return None
         
     """
@@ -105,14 +105,14 @@ def make_both_data_into_preferred_rounding(both, function, value, rounding):
     Refer to documentation of `binary_search` in this module.
     
     This function takes the return value from binary_search() with
-    rounding="Both" as the parameter both. It then gives the data with a
+    rounding="both" as the parameter both. It then gives the data with a
     different rounding, specified with the parameter `rounding`.
     """
-    if rounding == "Both": return both
-    elif rounding == "Low": return both[0]
-    elif rounding == "High": return both[1]
-    elif rounding == "Exact": return [state for state in both if (state is not None and function(state)==value)][0]
-    elif rounding == "Closest":
+    if rounding == "both": return both
+    elif rounding == "low": return both[0]
+    elif rounding == "high": return both[1]
+    elif rounding == "exact": return [state for state in both if (state is not None and function(state)==value)][0]
+    elif rounding == "closest":
         if both[0] is None: return both[1]
         if both[1] is None: return both[0]
         distances = [abs(function(state)-value) for state in both]

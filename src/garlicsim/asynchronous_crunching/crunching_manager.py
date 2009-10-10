@@ -7,12 +7,12 @@ information.
 """
 
 import garlicsim
-import garlicsim.misc.dict_tools
-import garlicsim.misc.queue_tools as queue_tools
-from garlicsim.misc.infinity import FunnyInfinity
+import garlicsim.general_misc.dict_tools
+import garlicsim.general_misc.queue_tools as queue_tools
+from garlicsim.general_misc.infinity import FunnyInfinity
 from crunchers import CruncherThread, CruncherProcess
 from crunching_profile import CrunchingProfile
-from garlicsim.misc.infinity import Infinity
+from garlicsim.general_misc.infinity import Infinity
 
 
 PreferredCruncher = [CruncherThread, CruncherProcess][1]
@@ -156,7 +156,7 @@ class CrunchingManager(object):
         return total_added_nodes
         
     def __make_old_nodes_to_crunch(self):
-        self.old_nodes_to_crunch = garlicsim.misc.dict_tools.deepcopy_values(
+        self.old_nodes_to_crunch = garlicsim.general_misc.dict_tools.deepcopy_values(
             self.project.nodes_to_crunch
         )
     

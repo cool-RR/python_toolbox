@@ -12,11 +12,11 @@ todo: this needs testing
 import threading
 
 
-import garlicsim.history_browser_abc
+import garlicsim.misc.history_browser_abc
 from obsolete_cruncher_error import ObsoleteCruncherError
 
-import garlicsim.misc.binary_search as binary_search
-import garlicsim.misc.queue_tools as queue_tools
+import garlicsim.general_misc.binary_search as binary_search
+import garlicsim.general_misc.queue_tools as queue_tools
 
 __all__ = ["HistoryBrowser"]
 
@@ -30,7 +30,7 @@ def with_self(method):
             return method(self, *args, **kwargs)
     return fixed
 
-class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
+class HistoryBrowser(garlicsim.misc.history_browser_abc.HistoryBrowserABC):
     """
     A HistoryBrowser is a device for requesting information about the history
     of the simulation.
@@ -144,18 +144,18 @@ class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
         
     @with_self
     def get_state_by_monotonic_function(self, function, value,
-                                        rounding="Closest"):
+                                        rounding="closest"):
         """
         Requests a state by specifying a measure function and a desired value.
         The function must be a monotonic rising function on the timeline.
         
-        See documentation of garlicsim.misc.binary_search.binary_search for
+        See documentation of garlicsim..binary_search.binary_search for
         details about rounding options.
         """
-        assert rounding in ["High", "Low", "Exact", "Both", "Closest"]
+        assert rounding in ["high", "low", "exact", "both", "closest"]
         
         tree_result = self.__get_state_by_monotonic_function_from_tree \
-                      (function, value, rounding="Both")
+                      (function, value, rounding="both")
         
         if tree_result[1] is not None:
             # Then there is no need to check the queue even.
@@ -164,7 +164,7 @@ class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
         
         else:
             queue_result = self.__get_state_by_monotonic_function_from_queue \
-                           (function, value, rounding="Both")
+                           (function, value, rounding="both")
             none_count = queue_result.count(None)
             if none_count == 0:
                 # The result is entirely in the queue
@@ -197,16 +197,16 @@ class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
             
     @with_self   
     def __get_state_by_monotonic_function_from_tree(self, function, value,
-                                                    rounding="Closest"):
+                                                    rounding="closest"):
         """
         Requests a state FROM THE TREE ONLY by specifying a measure function
         and a desired value.
         The function must by a monotonic rising function on the timeline.
         
-        See documentation of garlicsim.misc.binary_search.binary_search for
+        See documentation of garlicsim..binary_search.binary_search for
         details about rounding options.
         """
-        assert rounding in ["High", "Low", "Exact", "Both", "Closest"]
+        assert rounding in ["high", "low", "exact", "both", "closest"]
         our_node = self.__get_our_node()
         path = our_node.make_containing_path()
         new_function = lambda node: function(node.state)
@@ -218,16 +218,16 @@ class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
     
     @with_self
     def __get_state_by_monotonic_function_from_queue(self, function, value,
-                                                     rounding="Closest"):
+                                                     rounding="closest"):
         """
         Requests a state FROM THE QUEUE ONLY by specifying a measure function
         and a desired value.
         The function must by a monotonic rising function on the timeline.
         
-        See documentation of garlicsim.misc.binary_search.binary_search for
+        See documentation of garlicsim..binary_search.binary_search for
         details about rounding options.
         """
-        assert rounding in ["High", "Low", "Exact", "Both", "Closest"]
+        assert rounding in ["high", "low", "exact", "both", "closest"]
         queue = self.cruncher.work_queue
         queue_size = queue.qsize()
         with queue.mutex:

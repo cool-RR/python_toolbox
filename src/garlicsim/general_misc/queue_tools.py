@@ -8,9 +8,17 @@ when working with queues.
 
 import Queue
 
+class Stopper(object):
+    pass
+
+class SecondStopper(object):
+    pass
+
 def dump_queue(queue):
     """
     Empties all pending items in a queue and returns them in a list.
+    
+    Use only when no other processes/threads are reading from the queue.
     """
     result = []
 
@@ -18,27 +26,29 @@ def dump_queue(queue):
     initial_size = queue.qsize()
     print("Queue has %s items initially." % initial_size)
     #  END  DEBUG CODE
+
+    queue.put(Stopper)
+    #queue.put(SecondStopper)
     
-    while True:
-        try:
-            thing = queue.get(block=False)
-            result.append(thing)
-        except Queue.Empty:
+    for thing in iter(queue.get, Stopper): # todo sentinel=
+        result.append(thing)
+    
+    #result = result[:-1]
+    
+    # START DEBUG CODE
+    current_size = queue.qsize()
+    total_size = current_size + len(result)
+    print("Dumping complete:")
+    if current_size == initial_size:
+        print("No items were added to the queue.")
+    else:
+        print("%s items were added to the queue." % \
+              (total_size - initial_size))
+    print("Extracted %s items from the queue, queue has %s items left" \
+    % (len(result), current_size))
+    #  END  DEBUG CODE
             
-            # START DEBUG CODE
-            current_size = queue.qsize()
-            total_size = current_size + len(result)
-            print("Dumping complete:")
-            if current_size == initial_size:
-                print("No items were added to the queue.")
-            else:
-                print("%s items were added to the queue." % \
-                      (total_size - initial_size))
-            print("Extracted %s items from the queue, queue has %s items \
-            left" % (len(result), current_size))
-            #  END  DEBUG CODE
-            
-            return result
+    return result
 
 
 def queue_get_item(queue, i):

@@ -3,9 +3,10 @@ This module defines the ArgumentsProfile class. See its documentation for
 more information.
 """
 
-import garlicsim.misc.arguments_profile
+import garlicsim.general_misc.arguments_profile
                
-class StepOptionsProfile(garlicsim.misc.arguments_profile.ArgumentsProfile):
+class StepOptionsProfile\
+      (garlicsim.general_misc.arguments_profile.ArgumentsProfile):
     """
     A profile of *args and **kwargs to be used with a step function.
     

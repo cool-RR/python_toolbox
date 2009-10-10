@@ -6,15 +6,15 @@ This module defines the HistoryBrowser class. See its documentation for more
 information.
 """
 
-import garlicsim.misc.binary_search as binary_search
-import garlicsim.misc.queue_tools as queue_tools
-import garlicsim.history_browser_abc
+import garlicsim.general_misc.binary_search as binary_search
+import garlicsim.general_misc.queue_tools as queue_tools
+import garlicsim.misc.history_browser_abc
 
 __all__ = ["HistoryBrowser"]
 
 get_state_clock = lambda state: state.clock
 
-class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
+class HistoryBrowser(garlicsim.misc.history_browser_abc.HistoryBrowserABC):
     """
     A history browser is a device for requesting states from the timeline of
     the simulation. It is relevant only to simulations that are
@@ -44,21 +44,21 @@ class HistoryBrowser(garlicsim.history_browser_abc.HistoryBrowserABC):
         assert isinstance(index, int)
         return self.path[index].state
     
-    def get_state_by_monotonic_function(self, function, value, rounding="Closest"):
+    def get_state_by_monotonic_function(self, function, value, rounding="closest"):
         """
         Requests a state by specifying a measure function and a desired value.
         The function must be a monotonic rising function on the timeline.
         
-        See documentation of garlicsim.misc.binary_search.binary_search for
+        See documentation of garlicsim..binary_search.binary_search for
         details about rounding options.
         """
-        assert rounding in ["High", "Low", "Exact", "Both", "Closest"]
+        assert rounding in ["high", "low", "exact", "both", "closest"]
         
         new_function = lambda node: function(node.state)
         result_in_nodes = self.path.get_node_by_monotonic_function \
                         (new_function, value, rounding)
         
-        if rounding == "Both":
+        if rounding == "both":
             result = [(node.state if node is not None else None) \
                       for node in result_in_nodes]
         else:

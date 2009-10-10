@@ -7,13 +7,12 @@ information.
 """
 
 import garlicsim.data_structures
-import garlicsim.simpack_grokker
+import garlicsim.misc.simpack_grokker
 import crunching_manager
 
-import garlicsim.misc.read_write_lock as read_write_lock
-from garlicsim.misc.infinity import Infinity
-import garlicsim.misc.module_wrapper
-import garlicsim.misc.cool_dict
+import garlicsim.general_misc.read_write_lock as read_write_lock
+from garlicsim.general_misc.infinity import Infinity
+import garlicsim.general_misc.module_wrapper
 
 __all__ = ["Project"]
 
@@ -42,8 +41,8 @@ class Project(object):
     of the project.
     
     What the crunching manager's sync_crunchers method will do is check the
-    attribute .nodes_to_crunch of the project. This attribute is a dict-like
-    object which maps nodes that should be crunched to a TODO. The crunching manager will
+    attribute .nodes_to_crunch of the project. This attribute is a dict 
+    which maps nodes that should be crunched to a TODO. The crunching manager will
     then coordinate the crunchers in order to do this work. It will update the
     .nodes_to_crunch attribute when the crunchers have completed some of the
     work.
@@ -52,10 +51,11 @@ class Project(object):
     def __init__(self, simpack):
         
         wrapped_simpack = \
-            garlicsim.misc.module_wrapper.module_wrapper_factory(simpack)
+            garlicsim.general_misc.module_wrapper.module_wrapper_factory \
+            (simpack)
         
         self.simpack_grokker = \
-            garlicsim.simpack_grokker.SimpackGrokker(wrapped_simpack)
+            garlicsim.misc.simpack_grokker.SimpackGrokker(wrapped_simpack)
         
         self.simpack = wrapped_simpack
 
@@ -71,7 +71,7 @@ class Project(object):
         could potentially be writing to it.
         """
 
-        self.nodes_to_crunch = garlicsim.misc.cool_dict.CoolDict()
+        self.nodes_to_crunch = {}
         """
         A dict that maps leaves that should be worked on to a
         CrunchingProfile.

@@ -13,10 +13,8 @@ import Queue as queue
 import garlicsim
 from garlicsim.asynchronous_crunching import \
      CrunchingProfile, ObsoleteCruncherError
-try: import garlicsim.misc.process_priority as process_priority
+try: import garlicsim.general_misc.process_priority as process_priority
 except: pass
-
-from garlicsim.asynchronous_crunching import ObsoleteCruncherError
 
 __all__ = ["CruncherProcess"]
 
@@ -24,8 +22,8 @@ class CruncherProcess(multiprocessing.Process):
     """
     CruncherProcess is a type of cruncher.
     
-    A cruncher is a dumb little drone. It receives a state from the main
-    program, and then it repeatedly applies the step funcion of the simulation
+    A cruncher is responsible for crunching the simulation.
+    It receives a state from the main program, and then it repeatedly applies the step funcion of the simulation
     to produce more states. Those states are then put in the cruncher's
     work_queue. They are then taken by the main program when
     Project.sync_crunchers is called, and put into the tree.
@@ -93,7 +91,7 @@ class CruncherProcess(multiprocessing.Process):
         self.set_priority(0)
         
         step_options_profile = self.crunching_profile.step_options_profile or \
-                          garlicsim.StepOptionsProfile()
+                          garlicsim.misc.StepOptionsProfile()
         
         self.step_iterator = \
             self.step_generator(self.initial_state,
@@ -132,18 +130,23 @@ class CruncherProcess(multiprocessing.Process):
         """
         Processes an order receieved from order_queue.
         """
-        if order=="Retire":
+        if order=="retire":
             raise ObsoleteCruncherError
         elif isinstance(order, CrunchingProfile):
             self.crunching_profile = order
 
     def retire(self):
         """
-        Retiring the cruncher, causing it to shut down as soon as it receives
+        Retire the cruncher. Process-safe.
+        
+        TODO Retiring the cruncher, causing it to shut down as soon as it receives
         the order. This method may be called either from within the process or
         from another process.
         """
-        self.order_queue.put("Retire")
+        self.order_queue.put("retire")
         
     def update_crunching_profile(self, profile):
+        """
+        Process-safe TODO
+        """
         self.order_queue.put(profile)

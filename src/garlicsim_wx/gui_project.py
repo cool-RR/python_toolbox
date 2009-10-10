@@ -8,9 +8,9 @@ import functools
 try: import queue
 except ImportError: import Queue as queue
 
-import garlicsim.misc.queue_tools as queue_tools
+import garlicsim.general_misc.queue_tools as queue_tools
 from misc.stringsaver import s2i,i2s
-from garlicsim.misc.infinity import Infinity
+from garlicsim.general_misc.infinity import Infinity
 import garlicsim
 import warnings
 
@@ -34,7 +34,7 @@ class GuiProject(object):
     def __init_general(self, simpack, parent_window, project=None,
                        active_node=None, path=None):
     
-        self.simpack = garlicsim.misc.module_wrapper.ModuleWrapper(simpack)
+        self.simpack = garlicsim.general_misc.module_wrapper.ModuleWrapper(simpack)
         
         if project:
             self.project = project

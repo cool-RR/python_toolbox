@@ -74,7 +74,7 @@ class CruncherThread(threading.Thread):
         """
         
         step_options_profile = self.crunching_profile.step_options_profile or \
-                             garlicsim.StepOptionsProfile()
+                             garlicsim.misc.StepOptionsProfile()
         
         if self.history_dependent:
             self.history_browser = HistoryBrowser(cruncher=self)
@@ -119,20 +119,25 @@ class CruncherThread(threading.Thread):
         """
         Processes an order receieved from order_queue.
         """
-        if order == "Retire":
+        if order == "retire":
             raise ObsoleteCruncherError
         elif isinstance(order, CrunchingProfile):
             self.crunching_profile = copy.deepcopy(order)
     
     def retire(self):
         """
-        Retiring the cruncher, causing it to shut down as soon as it receives
+        Retire the cruncher. Thread-safe.
+        
+        TODORetiring the cruncher, causing it to shut down as soon as it receives
         the order. This method may be called either from within the thread or
         from another thread.
         """
-        self.order_queue.put("Retire")        
+        self.order_queue.put("retire")        
         
     def update_crunching_profile(self, profile):
+        """
+        Thread-safe TODO
+        """
         self.order_queue.put(profile)
     
 
