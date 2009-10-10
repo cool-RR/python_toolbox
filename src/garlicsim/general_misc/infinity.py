@@ -8,4 +8,4 @@ The only reason for this alias is to make code more readable.
 
 import copy
 
-Infinity = 1000000 # float("inf")  TODO
+Infinity = 1e1000000 # float("inf")  TODO
