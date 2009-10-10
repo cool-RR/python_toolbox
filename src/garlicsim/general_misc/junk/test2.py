@@ -57,5 +57,5 @@ if __name__ == '__main__':
     p = Process()
     p.start()
     # p.join()
-    time.sleep(1)
+    time.sleep(10)
     l = dump_queue(p.q)
