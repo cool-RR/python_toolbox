@@ -22,13 +22,13 @@ Additionally, we intend to ship GarlicSim with a standard library of common simu
 
 Current screenshot, showing the [Game of Life](http://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) simulation package shipped with the program:
 
-![](http://garlicsim.com/images/screenshot.gif)
+![](http://garlicsim.org/images/screenshot.gif)
 
 -------
 
 Mockup:
 
-![](http://garlicsim.com/images/mockup_thumb.gif)
+![](http://garlicsim.org/images/mockup_thumb.gif)
 
 # Frequently Asked Question: #
 
