@@ -16,7 +16,7 @@ from crunching_profile import CrunchingProfile
 from garlicsim.general_misc.infinity import Infinity
 
 
-PreferredCruncher = [CruncherThread, CruncherProcess][0]
+PreferredCruncher = [CruncherThread, CruncherProcess][1]
 # Should make a nicer way of setting that.
 
 __all__ = ["CrunchingManager"]
