@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 """
-A module that defines the `Tree` class. See its documentation for more
+A module that defines the Tree class and the related TODO. See its documentation for more
 information.
 """
 

@@ -124,9 +124,8 @@ class CrunchingManager(object):
     def __sync_crunchers(self, temp_infinity_node):
         """
         Used by sync_crunchers. Does the actual work of syncing the crunchers.
-        
-        todo: should not get temp_infinity_node
         """
+        #todo: should not get temp_infinity_node!
         
         nodes_to_crunch = self.project.nodes_to_crunch
         
