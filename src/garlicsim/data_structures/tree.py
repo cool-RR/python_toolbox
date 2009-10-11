@@ -2,8 +2,8 @@
 # This program is distributed under the LGPL2.1 license.
 
 """
-A module that defines the `Tree` class. See its documentation for more
-information.
+A module that defines the Tree class and the related TreeError exception. See
+their documentation for more information.
 """
 
 import copy
@@ -40,13 +40,19 @@ class Tree(object):
     also be called a root and be a member of tree.roots .
     """
     def __init__(self):
-        self.nodes = set() # A set for containing all the nodes in the tree.
-        self.roots = set() # A set of roots. A root is a node without a parent.
+        self.nodes = set()
+        """Nodes that belong to the tree."""
+        self.roots = set()
+        """The set of roots (parentless nodes) of the tree."""
 
-    def fork_by_editing(self, template_node):
+    def fork_to_edit(self, template_node):
         """
-        Creates a new touched state, using the state of template_node as a
-        template. Wraps it in a node and adds to tree.
+        "Duplicate" the node, marking the new one as touched.
+        
+        The new node will have the same parent as `template_node`. This
+        method is used when forking the tree by editing. The state of the new
+        node is usually modified by the user after it is created.
+        
         Returns the node.
         """
         x = copy.deepcopy(template_node.state)
@@ -61,7 +67,8 @@ class Tree(object):
 
     def add_state(self, state, parent=None, template_node=None):
         """
-        Wraps state in node and adds to tree.
+        Wrap state in node and adds to tree.
+        
         Returns the node.
         """
         touched = (parent is None) or (template_node is not None)    
@@ -72,20 +79,20 @@ class Tree(object):
 
     def add_node(self, node, parent=None, template_node=None):
         """
-        Adds a node to the tree.
+        Add a node to the tree.
         
-        It may be a natural node or a touched node. If it's a natural node it
-        cannot have a template_node.
+        It may be a natural node or a touched node. If it's a natural node you
+        may not specify a template_node.
         
         Returns the node.
         """
         if template_node is not None:
             if parent != template_node.parent:
                 raise TreeError("""Parent you specified and parent of \
-                template_node aren't the same!""")
+template_node aren't the same!""")
             if not node.touched:
                 raise TreeError("""You tried adding an untouched state to a \
-                tree while specifying a template_node.""")
+tree while specifying a template_node.""")
             template_node.derived_nodes.append(node)
             
 
@@ -120,7 +127,7 @@ class Tree(object):
 
     def node_count(self):
         """
-        Returns the number of nodes in the tree.
+        Return the number of nodes in the tree.
         """
         return len(self.nodes)
     

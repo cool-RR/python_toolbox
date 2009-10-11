@@ -8,8 +8,12 @@ class ArgumentsProfile(object):
     A profile of *args and **kwargs to be used with a function.
     
     Usage:
+    
     arguments_profile = ArgumentsProfile(34, "meow", width=60)
+    
     function(*arguments_profile.args, **arguments_profile.kwargs)
+    # is equivalent to
+    function(34, "meow", width=60)
     
     """
     

@@ -18,6 +18,8 @@ package.
 todo: maybe do the "with tree_lock" in Project instead of in CrunchingManager?
 
 todo: organize all namespaces
+
+todo: decide policies regaring import (whether from, as, or regular)
 """
 
 from asynchronous_crunching import Project

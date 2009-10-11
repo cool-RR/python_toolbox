@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 """
-A module that defines the `Node` class. See its documentation for more
+A module that defines the Node class. See its documentation for more
 information.
 """
 
@@ -14,16 +14,16 @@ __all__ = ["Node"]
 
 class Node(object):
     """
-    A node encapsulates a State with the attribute ".state". Nodes are used to
-    organize states in a Tree.
+    A node encapsulates a state with the attribute ".state". Nodes are used to
+    organize states in a tree.
     
     Most nodes are untouched, a.k.a. natural, but some nodes are touched.
     A touched node is a node whose state was not formed naturally by a
     simulation step: It was created by the user, either from scratch or based
     on another state.
-    
-    todo: Maybe node should not reference tree?
     """
+    #todo: Maybe node should not reference tree?
+    
     def __init__(self, tree, state, parent=None, touched=False):
         
         self.state = state
@@ -63,23 +63,23 @@ class Node(object):
         
     def __len__(self):
         """
-        Just returns 1. This is useful because of blocks.
+        Just return 1. This is useful because of blocks.
         """
         return 1
 
     def soft_get_block(self):
         """
-        If this node is a member of a Block, returns the Block.
-        Otherwise, returns the node itself.
+        If this node is a member of a block, return the block.
+        
+        Otherwise, return the node itself.
         """
-        if self.block is not None:
-            return self.block
-        else:
-            return self
+        return self.block or self
 
     def make_containing_path(self):
         """
-        Creates a path that contains this node.
+        Create a path that contains this node.
+        
+        Returns the path.
         """
         path = Path(self.tree)
 
@@ -99,10 +99,26 @@ class Node(object):
 
     def get_all_leaves(self, max_nodes_distance=None, max_clock_distance=None):
         """
-        Finds all leaves that are descendents of this node. Only leaves with a
-        distance of at most TODO (IT'S `OR`ED) are returned.
+        Get all leaves that are descendents of this node.
         
-        Returns a dict of the form TODO
+        Only leaves with a distance of at most `max_nodes_distance` in nodes or
+        `max_clock_distance` in clock are returned. (Note this is an OR
+        relation between the two condintions)
+        
+        Returns a dict of the form:
+        
+        {
+            leaf1: {
+                'nodes_distance': nodes_distance1,
+                'clock_distance': clock_distance1,
+            },            
+            leaf2: {
+                'nodes_distance': nodes_distance2,
+                'clock_distance': clock_distance2,
+            },
+            # ...
+        }
+            
         """
         if max_nodes_distance is None:
             max_nodes_distance = Infinity
@@ -158,8 +174,10 @@ class Node(object):
     
     def get_root(self):
         """
-        Gets the root of this node, i.e. the node which is the parent of
-        the parent of the parent of... the parent of this node.
+        Get the root of this node.
+        
+        This means the node which is the parent of the parent of the parent
+        of... the parent of this node.
         """
         lowest = self.block[0] if self.block else self
         while lowest.parent is not None:

@@ -14,11 +14,14 @@ __all__ = ["list_simulate"]
 
 def list_simulate(simpack, state, iterations, *args, **kwargs):
     """
-    Simulates from the given state, using the given simpack, for the given
-    number of iterations. Returns a list that spans all the states, from the
-    initial one given to the final one.
+    Simulate from the given state for the given number of iterations.
+
+    A simpack must be passed as the first parameter.
     
     Any extraneous parameters will be passed to the step function.
+    
+    Returns a list that spans all the states, from the initial one given to
+    the final one.
     """
     simpack_grokker = garlicsim.misc.SimpackGrokker(simpack)
     if simpack_grokker.history_dependent:
@@ -32,11 +35,16 @@ def list_simulate(simpack, state, iterations, *args, **kwargs):
 def __history_list_simulate(simpack_grokker, state, iterations,
                             *args, **kwargs):
     """
-    For history-dependent simulations only: Simulates from the given state,
-    using the given simpack, for the given number of iterations. Returns a
-    list that spans all the states, from the initial one given to the final one.
+    For history-dependent simulations only:
+    
+    Simulate from the given state for the given number of iterations.
+
+    A simpack must be passed as the first parameter.
     
     Any extraneous parameters will be passed to the step function.
+    
+    Returns a list that spans all the states, from the initial one given to
+    the final one.
     """
     tree = garlicsim.data_structures.Tree()
     root = tree.add_state(state, parent=None)
@@ -56,11 +64,16 @@ def __history_list_simulate(simpack_grokker, state, iterations,
 def __non_history_list_simulate(simpack_grokker, state, iterations,
                                 *args, **kwargs):
     """
-    For non-history-dependent simulations only: Simulates from the given state,
-    using the given simpack, for the given number of iterations. Returns a
-    list that spans all the states, from the initial one given to the final one.
+    For non-history-dependent simulations only:
+    
+    Simulate from the given state for the given number of iterations.
+
+    A simpack must be passed as the first parameter.
     
     Any extraneous parameters will be passed to the step function.
+    
+    Returns a list that spans all the states, from the initial one given to
+    the final one.
     """
     tree = garlicsim.data_structures.Tree()
     root = tree.add_state(state, parent=None)

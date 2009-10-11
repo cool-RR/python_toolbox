@@ -38,17 +38,18 @@ class Block(object):
     """
     def __init__(self, node_list):
         """
-        Constructs a block from the members of node_list.
+        Construct a block from the members of node_list.
         """
         self.__node_list = []
         self.add_node_list(node_list)
 
     def append_node(self, node):
         """
-        Appends a single node to the block. If the block's node list is empty,
-        the node will be added without any condition. If the node list contains
-        some nodes, the new node must be either a child of the last node or the
-        parent of the first one.
+        Append a single node to the block.
+        
+        If the block's node list is empty, the node will be added
+        unconditionally. If the node list contains some nodes, the new node
+        must be either a child of the last node or the parent of the first one.
         """
         if not self.__node_list:
             # If the node list is [], let's make it [node].
@@ -76,7 +77,8 @@ class Block(object):
         
     def add_node_list(self, node_list):
         """
-        Adds a list of nodes to the Block.
+        Add a list of nodes to the block.
+        
         These nodes must already be successive to each other.
         Also, one of the following conditions must be true:
             1. The first node in the list is a child of the last node in the
@@ -125,10 +127,11 @@ class Block(object):
 
     def split(self, node):
         """
-        Splits block into two blocks, so `node` would be the last node of the
-        first block of the two. If either of the new blocks will contain just
-        one node, that block will get deleted and the single node will become
-        blockless.
+        Split the block into two blocks.
+        
+        `node` would be the last node of the first block of the two. If either
+        of the new blocks will contain just one node, that block will get
+        deletedand the single node will become blockless.
         """
         assert node in self
         i = self.__node_list.index(node)
@@ -145,7 +148,7 @@ class Block(object):
 
     def delete(self):
         """
-        Deletes the block, leaving all nodes without a block.
+        Delete the block, leaving all its nodes without a block.
         """
         for node in self:
             node.block = None
@@ -153,7 +156,7 @@ class Block(object):
 
     def __delitem__(self, i):
         """
-        Removes a node from the block. Can only remove an edge node.
+        Remove a node from the block. Can only remove an edge node.
         """
         if (i == 0) or (i == -1) or (i == len(self) - 1) or (i == -len(self)):
             self.__node_list[i].block = None
@@ -168,7 +171,7 @@ class Block(object):
 
     def __contains__(self, node):
         """
-        Returns whether the block contains `node`.
+        Return whether the block contains `node`.
         """
         return node.block == self
 
@@ -177,7 +180,7 @@ class Block(object):
 
     def __len__(self):
         """
-        Returns the number of nodes in the block.
+        Return the number of nodes in the block.
         """
         return len(self.__node_list)
 
@@ -186,6 +189,6 @@ class Block(object):
 
     def index(self, node):
         """
-        Returns the index number of the specified node in the block.
+        Return the index number of the specified node in the block.
         """
         return self.__node_list.index(node)

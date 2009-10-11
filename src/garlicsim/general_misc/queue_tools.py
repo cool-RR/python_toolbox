@@ -2,9 +2,10 @@
 # This program is distributed under the LGPL2.1 license.
 
 """
-This module defines several functions that might be useful
-when working with queues.
+This module defines several functions that might be useful when working with
+queues.
 """
+
 from __future__ import with_statement
 
 import Queue
@@ -18,18 +19,38 @@ def dump_queue(queue):
     """
     result = []
 
+    # START DEBUG CODE
+    #initial_size = queue.qsize()
+    #print("Queue has %s items initially." % initial_size)
+    #  END  DEBUG CODE
 
+    #queue.put(Stopper)
     #queue.put(SecondStopper)
     
     try:
-        thing = queue.get(block = False)
-        result.append(thing)
+        while True:
+            thing = queue.get(block=False)
+            result.append(thing)
     except Queue.Empty:
         pass
-        
+    
+    #for thing in iter(queue.get, Stopper): # todo sentinel=
+    #    result.append(thing)
     
     #result = result[:-1]
     
+    # START DEBUG CODE
+    #current_size = queue.qsize()
+    #total_size = current_size + len(result)
+    #print("Dumping complete:")
+    #if current_size == initial_size:
+        #print("No items were added to the queue.")
+    #else:
+        #print("%s items were added to the queue." % \
+              #(total_size - initial_size))
+    #print("Extracted %s items from the queue, queue has %s items left" \
+    #% (len(result), current_size))
+    #  END  DEBUG CODE
             
     return result
 

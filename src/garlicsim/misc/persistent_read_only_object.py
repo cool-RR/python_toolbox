@@ -8,6 +8,9 @@ todo: need to raise an exception if we're getting pickled with
 an old protocol?
 
 todo: make it polite to other similar classes
+
+todo: what happens when you want to fork-by-editing a state and change
+a big 3-d model which is a PRO?
 """
 
 import uuid
@@ -88,7 +91,7 @@ class PersistentReadOnlyObject(object):
 # --------------------------------------------------------------
 """
 From here on it's just testing stuff; will be moved to another file.
-"""
+
     
     
 def play_around(queue, thing):
@@ -123,3 +126,4 @@ if __name__ == "__main__":
     for thing in things:
         assert same(thing, a) and same(thing, b) and same(thing, c)
     print("all cool!")
+"""
