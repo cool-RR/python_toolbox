@@ -4,13 +4,9 @@
 """
 This module defines the HistoryBrowser class. See its documentation
 for more info.
-
-todo: change "our leaf" to "our node", since it might not be a leaf.
-
-todo: this needs testing
 """
-import threading
 
+import threading
 
 import garlicsim.misc.history_browser_abc
 from obsolete_cruncher_error import ObsoleteCruncherError
@@ -33,9 +29,8 @@ def with_self(method):
 class HistoryBrowser(garlicsim.misc.history_browser_abc.HistoryBrowserABC):
     """
     A HistoryBrowser is a device for requesting information about the history
-    of the simulation.
-    It is intended to be used by CruncherThread in simulations that are
-    history-dependent.
+    of the simulation. It is intended to be used by CruncherThread in
+    simulations that are history-dependent.
     
     With a HistoryBrowser one can request states from the simulation's
     timeline. States can be requested by clock time or position in the timeline
@@ -50,16 +45,16 @@ class HistoryBrowser(garlicsim.misc.history_browser_abc.HistoryBrowserABC):
     HistoryBrowser as a context manager.
     
     
-    todo in the future: because historybrowser
-    retains a reference to a node, when the user deletes a node
-    we should mark it so the historybrowser will know it's dead.
+    todo in the future: because historybrowser retains a reference to a node,
+    when the user deletes a node we should mark it so the historybrowser will
+    know it's dead.
     
     todo: make it easy to use hisotrybrowser's method from a separate thread,
     so when waiting for a lock the cruncher could still be productive.
         
     todo: maybe I've exaggerated in using @with_self in so many places?
-    
     """
+    
     def __init__(self, cruncher):
         self.cruncher = cruncher
         self.project = cruncher.project
@@ -67,22 +62,28 @@ class HistoryBrowser(garlicsim.misc.history_browser_abc.HistoryBrowserABC):
         self.tree_lock = self.project.tree_lock
     
     def __enter__(self, *args, **kwargs):
+        '''
+        Acquire the project's tree_lock for reading.
+        '''
         self.tree_lock.acquireRead()
     
     def __exit__(self, *args, **kwargs):
+        '''
+        Release the project's tree_lock.
+        '''
         self.tree_lock.release()
      
     @with_self
     def get_last_state(self):
         """
-        Gets the last state in the timeline. Identical to __getitem__(-1).
+        Get the last state in the timeline. Identical to __getitem__(-1).
         """
         return self[-1]
     
     @with_self
     def __getitem__(self, index):
         """
-        Returns a state by its position in the timeline.
+        Get a state by its position in the timeline.
         """
         assert isinstance(index, int)
         if index < 0:
@@ -93,7 +94,7 @@ class HistoryBrowser(garlicsim.misc.history_browser_abc.HistoryBrowserABC):
     @with_self
     def __get_item_negative(self, index):
         """
-        Used when __getitem__ is called with a negative index.
+        Get a state by its position in the timeline. Negative indices only.
         """
         try:
             return self.__get_item_from_queue(index)
@@ -110,7 +111,7 @@ class HistoryBrowser(garlicsim.misc.history_browser_abc.HistoryBrowserABC):
     @with_self
     def __get_item_positive(self, index):
         """
-        Used when __getitem__ is called with a positive index.
+        Get a state by its position in the timeline. Positive indices only.
         """
         our_node = self.__get_our_node()
         path = our_node.make_containing_path()
@@ -137,7 +138,7 @@ class HistoryBrowser(garlicsim.misc.history_browser_abc.HistoryBrowserABC):
     @with_self
     def __get_item_from_queue(self, index):
         """
-        Obtains an item by index number from the work_queue of our cruncher.
+        Obtain an item by index number from the work_queue of our cruncher.
         """
         item = queue_tools.queue_get_item(self.cruncher.work_queue, index)
         return item
@@ -146,11 +147,12 @@ class HistoryBrowser(garlicsim.misc.history_browser_abc.HistoryBrowserABC):
     def get_state_by_monotonic_function(self, function, value,
                                         rounding="closest"):
         """
-        Requests a state by specifying a measure function and a desired value.
+        Get a state by specifying a measure function and a desired value.
+        
         The function must be a monotonic rising function on the timeline.
         
-        See documentation of garlicsim..binary_search.binary_search for
-        details about rounding options.
+        See documentation of garlicsim.general_misc.binary_search.binary_search
+        for details about rounding options.
         """
         assert rounding in ["high", "low", "exact", "both", "closest"]
         
@@ -199,12 +201,12 @@ class HistoryBrowser(garlicsim.misc.history_browser_abc.HistoryBrowserABC):
     def __get_state_by_monotonic_function_from_tree(self, function, value,
                                                     rounding="closest"):
         """
-        Requests a state FROM THE TREE ONLY by specifying a measure function
-        and a desired value.
-        The function must by a monotonic rising function on the timeline.
+        Get a state from the tree only by measure function and desired value.
         
-        See documentation of garlicsim..binary_search.binary_search for
-        details about rounding options.
+        The function must be a monotonic rising function on the timeline.
+        
+        See documentation of garlicsim.general_misc.binary_search.binary_search
+        for details about rounding options.
         """
         assert rounding in ["high", "low", "exact", "both", "closest"]
         our_node = self.__get_our_node()
@@ -220,12 +222,12 @@ class HistoryBrowser(garlicsim.misc.history_browser_abc.HistoryBrowserABC):
     def __get_state_by_monotonic_function_from_queue(self, function, value,
                                                      rounding="closest"):
         """
-        Requests a state FROM THE QUEUE ONLY by specifying a measure function
-        and a desired value.
+        Get a state from the queue only by measure function and desired value.
+        
         The function must by a monotonic rising function on the timeline.
         
-        See documentation of garlicsim..binary_search.binary_search for
-        details about rounding options.
+        See documentation of garlicsim.general_misc.binary_search.binary_search
+        for details about rounding options.
         """
         assert rounding in ["high", "low", "exact", "both", "closest"]
         queue = self.cruncher.work_queue
@@ -240,7 +242,9 @@ class HistoryBrowser(garlicsim.misc.history_browser_abc.HistoryBrowserABC):
     @with_self
     def __len__(self):
         """
-        Returns the length of the timeline in nodes, which means the sum of:
+        Returns the length of the timeline in nodes
+        
+        This means the sum of:
         1. The length of the work_queue of our cruncher.
         2. The length of the path in the tree which leads to our node, up to
            our node.
@@ -256,7 +260,7 @@ class HistoryBrowser(garlicsim.misc.history_browser_abc.HistoryBrowserABC):
     @with_self
     def __get_our_node(self):
         """
-        Returns the node that the current cruncher is assigned to work on.
+        Get the node that the current cruncher is assigned to work on.
         """
         
         current_thread = threading.currentThread()  

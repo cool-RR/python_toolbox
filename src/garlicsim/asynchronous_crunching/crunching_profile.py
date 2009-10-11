@@ -6,6 +6,8 @@ This module defines the CrunchingProfile class. See its documentation for more
 information.
 """
 
+__all__ = ['CrunchingProfile']
+
 class CrunchingProfile(object):
     '''
     A crunching profile is a set of instructions that a cruncher follows when
