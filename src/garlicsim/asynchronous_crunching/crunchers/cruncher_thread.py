@@ -85,7 +85,7 @@ class CruncherThread(threading.Thread):
         else:
             thing = self.initial_state
             
-        self.step_iterator = self.step_generator(self.history_browser,
+        self.step_iterator = self.step_generator(thing,
                                                  *step_options_profile.args,
                                                  **step_options_profile.kwargs)
         

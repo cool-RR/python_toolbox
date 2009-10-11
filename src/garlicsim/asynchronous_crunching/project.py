@@ -22,7 +22,6 @@ def with_tree_lock(method):
     as a context manager when calling the method.
     """
     def fixed(self, *args, **kwargs):
-        method.__doc__ if method.__doc__ else None
         with self.tree_lock.write:
             return method(self, *args, **kwargs)
     return fixed

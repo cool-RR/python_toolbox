@@ -100,7 +100,7 @@ class CrunchingManager(object):
                     CrunchingProfile(clock_target=Infinity)
             
             
-        total_added_nodes = self.__sync_crunchers()
+        total_added_nodes = self.__sync_crunchers(temp_infinity_node)
                     
                         
 
@@ -121,10 +121,14 @@ class CrunchingManager(object):
                 
         return total_added_nodes
         
-    def __sync_crunchers(self):
+    def __sync_crunchers(self, temp_infinity_node):
         """
         Used by sync_crunchers. Does the actual work of syncing the crunchers.
+        
+        todo: should not get temp_infinity_node
         """
+        
+        nodes_to_crunch = self.project.nodes_to_crunch
         
         total_added_nodes = 0
 
