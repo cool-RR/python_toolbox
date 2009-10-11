@@ -13,7 +13,6 @@ import Queue as queue
 import garlicsim
 from garlicsim.asynchronous_crunching import \
      CrunchingProfile, ObsoleteCruncherError
-from garlicsim.general_misc import mmm
 try: import garlicsim.general_misc.process_priority as process_priority
 except: pass
 

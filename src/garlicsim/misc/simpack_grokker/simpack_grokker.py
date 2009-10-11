@@ -36,7 +36,7 @@ class SimpackGrokker(object):
     
     def __init_analysis(self):
         """
-        Analyzes the simpack.
+        Analyze the simpack.
         """
         simpack = self.simpack
         self.simple_non_history_step_defined = hasattr(simpack, "step")
@@ -73,13 +73,11 @@ class SimpackGrokker(object):
         
     def __init_step_generator(self):
         """
-        Obtains a step generator; If the simpack defines one, uses it,
-        otherwise creates one from the simple step function.
+        Obtain a step generator; If the simpack defines one, use it, otherwise
+        create one from the simple step function.
         """
         if self.step_generator_defined:
-            """
-            The simpack supplies a step generator, so we're gonna use that.
-            """
+            # The simpack supplies a step generator, so we're gonna use that.
             if self.history_step_defined:
                 self.step_generator = self.simpack.history_step_generator
                 return
@@ -110,13 +108,11 @@ class SimpackGrokker(object):
     
     def __init_step(self):
         """
-        Obtains a simple step function; If the simpack defines one, uses it,
-        otherwise creates one from the step generator.
+        Obtain a simple step function; If the simpack defines one, use it,
+        otherwise create one from the step generator.
         """
         if self.simple_step_defined:
-            """
-            If the simpack defines a simple step, we'll just point to that.
-            """
+            # If the simpack defines a simple step, we'll just point to that.
             if self.history_dependent:
                 self.step = self.simpack.history_step
                 return

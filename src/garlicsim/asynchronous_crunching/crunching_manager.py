@@ -15,7 +15,7 @@ from crunching_profile import CrunchingProfile
 from garlicsim.general_misc.infinity import Infinity
 
 
-PreferredCruncher = [CruncherThread, CruncherProcess][0]
+PreferredCruncher = [CruncherThread, CruncherProcess][1]
 # Should make a nicer way of setting that.
 
 __all__ = ["CrunchingManager"]
@@ -126,6 +126,8 @@ class CrunchingManager(object):
         Used by sync_crunchers. Does the actual work of syncing the crunchers.
         """
         #todo: should not get temp_infinity_node!
+        
+        #todo: will the cruncher of a temp_infinity_node stop after finite time
         
         nodes_to_crunch = self.project.nodes_to_crunch
         

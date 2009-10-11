@@ -8,7 +8,7 @@ for more info.
 
 import threading
 
-import garlicsim.misc.history_browser_abc
+import garlicsim.misc.history_browser
 from obsolete_cruncher_error import ObsoleteCruncherError
 
 import garlicsim.general_misc.binary_search as binary_search
@@ -26,7 +26,7 @@ def with_self(method):
             return method(self, *args, **kwargs)
     return fixed
 
-class HistoryBrowser(garlicsim.misc.history_browser_abc.HistoryBrowserABC):
+class HistoryBrowser(garlicsim.misc.history_browser.HistoryBrowser):
     """
     A HistoryBrowser is a device for requesting information about the history
     of the simulation. It is intended to be used by CruncherThread in
@@ -242,7 +242,7 @@ class HistoryBrowser(garlicsim.misc.history_browser_abc.HistoryBrowserABC):
     @with_self
     def __len__(self):
         """
-        Returns the length of the timeline in nodes
+        Returns the length of the timeline in nodes.
         
         This means the sum of:
         1. The length of the work_queue of our cruncher.

@@ -8,13 +8,13 @@ information.
 
 import garlicsim.general_misc.binary_search as binary_search
 import garlicsim.general_misc.queue_tools as queue_tools
-import garlicsim.misc.history_browser_abc
+import garlicsim.misc.history_browser
 
 __all__ = ["HistoryBrowser"]
 
 get_state_clock = lambda state: state.clock
 
-class HistoryBrowser(garlicsim.misc.history_browser_abc.HistoryBrowserABC):
+class HistoryBrowser(garlicsim.misc.history_browser.HistoryBrowser):
     """
     A history browser is a device for requesting states from the timeline of
     the simulation. It is relevant only to simulations that are
@@ -32,25 +32,26 @@ class HistoryBrowser(garlicsim.misc.history_browser_abc.HistoryBrowserABC):
         """
      
     def get_last_state(self):
-        """"
-        Gets the last state in the timeline. Identical to __getitem__(-1).
+        """
+        Get the last state in the timeline. Identical to __getitem__(-1).
         """
         return self[-1]
     
     def __getitem__(self, index):
         """
-        Returns a state by its position in the timeline.
+        Get a state by its position in the timeline.
         """
         assert isinstance(index, int)
         return self.path[index].state
     
     def get_state_by_monotonic_function(self, function, value, rounding="closest"):
         """
-        Requests a state by specifying a measure function and a desired value.
+        Get a state by specifying a measure function and a desired value.
+        
         The function must be a monotonic rising function on the timeline.
         
-        See documentation of garlicsim..binary_search.binary_search for
-        details about rounding options.
+        See documentation of garlicsim.general_misc.binary_search.binary_search
+        for details about rounding options.
         """
         assert rounding in ["high", "low", "exact", "both", "closest"]
         

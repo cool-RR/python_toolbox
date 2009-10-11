@@ -291,8 +291,8 @@ class GuiProject(object):
         editing.
         Returns the new node.
         """
-        new_node = self.project.tree.fork_by_editing(template_node=self.active_node)
-        new_node.still_in_editing = True
+        new_node = self.project.tree.fork_to_edit(template_node=self.active_node)
+        new_node.still_in_editing = True #todo: should be in `fork_to_edit` ?
         self.set_active_node(new_node)
         return new_node
 

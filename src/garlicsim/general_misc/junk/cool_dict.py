@@ -10,7 +10,7 @@ import copy
 
 class CoolDict(dict):
     """
-    A class derived from dict which some extra methods.
+    A class derived from dict which defines some extra methods.
     """
     def raise_to(self, key, value):
         """
