@@ -5,12 +5,11 @@
 ##################################################################
 [project attributes]
 proj.directory-list = [{'dirloc': loc('.'),
-                        'excludes': (),
+                        'excludes': [u'src/garlicsim/simulate.py',
+                                     u'src/garlicsim/synchronous_crunching/path_simulate.py'],
                         'filter': '*',
                         'include_hidden': False,
                         'recursive': True,
                         'watch_for_changes': True}]
-proj.file-list = [loc('src/garlicsim/simulate.py'),
-                  loc('src/garlicsim/synchronous_crunching/path_simulate.py')]
 proj.file-type = 'shared'
 proj.main-file = loc('src/run_demo.py')

@@ -27,11 +27,18 @@ def dump_queue(queue):
     print("Queue has %s items initially." % initial_size)
     #  END  DEBUG CODE
 
-    queue.put(Stopper)
+    #queue.put(Stopper)
     #queue.put(SecondStopper)
     
-    for thing in iter(queue.get, Stopper): # todo sentinel=
-        result.append(thing)
+    try:
+        while True:
+            thing = queue.get(block=False)
+            result.append(thing)
+    except Queue.Empty:
+        pass
+    
+    #for thing in iter(queue.get, Stopper): # todo sentinel=
+    #    result.append(thing)
     
     #result = result[:-1]
     

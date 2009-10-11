@@ -13,6 +13,7 @@ import Queue as queue
 import garlicsim
 from garlicsim.asynchronous_crunching import \
      CrunchingProfile, ObsoleteCruncherError
+from garlicsim.general_misc import mmm
 try: import garlicsim.general_misc.process_priority as process_priority
 except: pass
 
@@ -46,7 +47,7 @@ class CruncherProcess(multiprocessing.Process):
         
         self.daemon = True
 
-        self.work_queue = multiprocessing.Queue()
+        self.work_queue = mmm.Queue() # multiprocessing.Queue()
         """
         The cruncher puts the work that it has completed into this queue, to be
         picked up by sync_crunchers.
