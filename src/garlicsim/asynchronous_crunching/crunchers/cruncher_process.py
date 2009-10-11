@@ -23,10 +23,10 @@ class CruncherProcess(multiprocessing.Process):
     """
     CruncherProcess is a type of cruncher.
     
-    A cruncher is responsible for crunching the simulation.
-    It receives a state from the main program, and then it repeatedly applies the step funcion of the simulation
-    to produce more states. Those states are then put in the cruncher's
-    work_queue. They are then taken by the main program when
+    A cruncher is a worker which crunches the simulation. It receives a state
+    from the main program, and then it repeatedly applies the step function of
+    the simulation to produce more states. Those states are then put in the
+    cruncher's work_queue. They are then taken by the main program when
     Project.sync_crunchers is called, and put into the tree.
         
     Read more about crunchers in the documentation of the crunchers package.
@@ -47,7 +47,7 @@ class CruncherProcess(multiprocessing.Process):
         
         self.daemon = True
 
-        self.work_queue = mmm.Queue() # multiprocessing.Queue()
+        self.work_queue = multiprocessing.Queue()
         """
         The cruncher puts the work that it has completed into this queue, to be
         picked up by sync_crunchers.
@@ -58,7 +58,6 @@ class CruncherProcess(multiprocessing.Process):
         This queue is used to send instructions to the cruncher.
         """
         
-
 
     def set_priority(self,priority):
         """
@@ -85,9 +84,9 @@ class CruncherProcess(multiprocessing.Process):
 
     def main_loop(self):
         """
-        The main loop of the cruncher. It's basically, "As long as no one
-        tells you to retire, apply the step function repeatedly and put the
-        results in your work queue." TODO
+        The main loop of the cruncher. Crunches the simulations repeatedly
+        until the crunching profile is satisfied or a 'retire' order is
+        received.
         """
         self.set_priority(0)
         
@@ -101,7 +100,7 @@ class CruncherProcess(multiprocessing.Process):
         order = None
         
         for state in self.step_iterator:
-            self.autoclock(state)
+            self.auto_clock(state)
             self.work_queue.put(state)
             self.check_crunching_profile(state)
             order = self.get_order()
@@ -109,18 +108,33 @@ class CruncherProcess(multiprocessing.Process):
                 self.process_order(order)
     
              
-    def autoclock(self, state):
+    def auto_clock(self, state):
+        """
+        If the state lacks a clock attribute, set one up automatically.
+        
+        The new clock attribute will be equal to the clock of the old state
+        plus 1.
+        """
         if not hasattr(state, "clock"):
             state.clock = self.last_clock + 1
         self.last_clock = state.clock           
         
     def check_crunching_profile(self, state):
+        '''
+        Check if the cruncher crunched enough states. If so retire.
+        
+        The crunching manager specifies how much the cruncher should crunch.
+        We consult with it to check if the cruncher has finished, and if it did
+        we retire the cruncher.
+        '''
         if self.crunching_profile.state_satisfies(state):
             raise ObsoleteCruncherError
     
     def get_order(self):
         """
         Attempts to read an order from the order_queue, if one has been sent.
+        
+        Returns the order.
         """
         try:
             return self.order_queue.get(block=False)
@@ -140,14 +154,12 @@ class CruncherProcess(multiprocessing.Process):
         """
         Retire the cruncher. Process-safe.
         
-        TODO Retiring the cruncher, causing it to shut down as soon as it receives
-        the order. This method may be called either from within the process or
-        from another process.
+        Cause it to shut down as soon as it receives the order.
         """
         self.order_queue.put("retire")
         
     def update_crunching_profile(self, profile):
         """
-        Process-safe TODO
+        Update the cruncher's crunching profile. Process-safe.
         """
         self.order_queue.put(profile)

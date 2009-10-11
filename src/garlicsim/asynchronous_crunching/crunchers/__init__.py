@@ -6,11 +6,15 @@ This package defines two crunchers, CruncherThread and CruncherProcess.
 They work in a similar way, but they are based on threading.Thread
 and multiprocessing.Process respectively.
 
-A cruncher is a dumb little drone. It receives a state from the main program,
-and then it repeatedly applies the step funcion of the simulation to produce
-more states. Those states are then put in the cruncher's work_queue. They
-are then taken by the main program when Project.sync_crunchers is called,
-and put into the tree.
+A cruncher is a worker which crunches the simulation. It receives a state from
+the main program, and then it repeatedly applies the step function of the
+simulation to produce more states. Those states are then put in the cruncher's
+work_queue. They are then taken by the main program when Project.sync_crunchers
+is called, and put into the tree.
+
+The cruncher also receives a crunching profile from the main program. The
+crunching profile specifes how far the cruncher should crunch the simulation,
+and which arguments it should pass to the step function.
 
 The main reason there are two kinds of crunchers is that some simulations,
 albeit a small minority of them, are history-dependent: They require access

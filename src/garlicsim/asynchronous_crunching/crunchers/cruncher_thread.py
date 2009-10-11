@@ -20,10 +20,10 @@ class CruncherThread(threading.Thread):
     """
     CruncherThread is a type of cruncher.
     
-    A cruncher is a dumb little drone. It receives a state from the main
-    program, and then it repeatedly applies the step funcion of the simulation
-    to produce more states. Those states are then put in the cruncher's
-    work_queue. They are then taken by the main program when
+    A cruncher is a worker which crunches the simulation. It receives a state
+    from the main program, and then it repeatedly applies the step function of
+    the simulation to produce more states. Those states are then put in the
+    cruncher's work_queue. They are then taken by the main program when
     Project.sync_crunchers is called, and put into the tree.
         
     Read more about crunchers in the documentation of the crunchers package.
@@ -35,6 +35,7 @@ class CruncherThread(threading.Thread):
         threading.Thread.__init__(self)
         
         self.project = project
+        self.step_generator = project.simpack_grokker.step_generator
         self.crunching_profile = copy.deepcopy(crunching_profile)
         self.history_dependent = self.project.simpack_grokker.history_dependent
                 
@@ -44,16 +45,16 @@ class CruncherThread(threading.Thread):
 
         self.work_queue = queue.Queue()
         """
-        The cruncher puts the work that it has completed
-        into this queue, to be picked up by sync_crunchers.
+        The cruncher puts the work that it has completed into this queue, to be
+        picked up by sync_crunchers.
         """
 
         self.order_queue = queue.Queue()
         """
-        This queue is used to send instructions
-        to the cruncher.
+        This queue is used to send instructions to the cruncher.
         """
 
+        
     def run(self):
         """
         This is called when the cruncher is started. It just calls
@@ -69,9 +70,9 @@ class CruncherThread(threading.Thread):
 
     def main_loop(self):
         """
-        The main loop of the cruncher. It's basically, "As long as no one
-        tells you to retire, apply the step function repeatedly and put the
-        results in your work queue."
+        The main loop of the cruncher. Crunches the simulations repeatedly
+        until the crunching profile is satisfied or a 'retire' order is
+        received.
         """
         
         step_options_profile = self.crunching_profile.step_options_profile or \
@@ -79,18 +80,18 @@ class CruncherThread(threading.Thread):
         
         if self.history_dependent:
             self.history_browser = HistoryBrowser(cruncher=self)
-            self.step_iterator = self.project.simpack_grokker.step_generator \
-                             (self.history_browser, *step_options_profile.args,
-                              **step_options_profile.kwargs)
+            thing = self.history_browser
         else:
-            self.step_iterator = self.project.simpack_grokker.step_generator \
-                              (self.initial_state, *step_options_profile.args,
-                               **step_options_profile.kwargs) 
+            thing = self.initial_state
+            
+        self.step_iterator = self.step_generator(self.history_browser,
+                                                 *step_options_profile.args,
+                                                 **step_options_profile.kwargs)
         
         order = None
         
         for state in self.step_iterator:
-            self.autoclock(state)
+            self.auto_clock(state)
             self.work_queue.put(state)
             self.check_crunching_profile(state)
             order = self.get_order()
@@ -98,18 +99,33 @@ class CruncherThread(threading.Thread):
                 self.process_order(order)
 
                 
-    def autoclock(self, state):
+    def auto_clock(self, state):
+        """
+        If the state lacks a clock attribute, set one up automatically.
+        
+        The new clock attribute will be equal to the clock of the old state
+        plus 1.
+        """
         if not hasattr(state, "clock"):
             state.clock = self.last_clock + 1
         self.last_clock = state.clock
         
     def check_crunching_profile(self, state):
+        '''
+        Check if the cruncher crunched enough states. If so retire.
+        
+        The crunching manager specifies how much the cruncher should crunch.
+        We consult with it to check if the cruncher has finished, and if it did
+        we retire the cruncher.
+        '''
         if self.crunching_profile.state_satisfies(state):
             raise ObsoleteCruncherError
         
     def get_order(self):
         """
         Attempts to read an order from the order_queue, if one has been sent.
+        
+        Returns the order.
         """
         try:
             return self.order_queue.get(block=False)
@@ -129,15 +145,13 @@ class CruncherThread(threading.Thread):
         """
         Retire the cruncher. Thread-safe.
         
-        TODORetiring the cruncher, causing it to shut down as soon as it receives
-        the order. This method may be called either from within the thread or
-        from another thread.
+        Cause it to shut down as soon as it receives the order.
         """
         self.order_queue.put("retire")        
         
     def update_crunching_profile(self, profile):
         """
-        Thread-safe TODO
+        Update the cruncher's crunching profile. Thread-safe.
         """
         self.order_queue.put(profile)
     
