@@ -61,7 +61,7 @@ class CruncherProcess(multiprocessing.Process):
 
     def set_priority(self,priority):
         """
-        Sets the priority of this process: Currently Windows only.
+        Set the priority of this process: Currently Windows only.
         """
         assert priority in [0, 1, 2, 3, 4, 5]
         try:
@@ -84,9 +84,10 @@ class CruncherProcess(multiprocessing.Process):
 
     def main_loop(self):
         """
-        The main loop of the cruncher. Crunches the simulations repeatedly
-        until the crunching profile is satisfied or a 'retire' order is
-        received.
+        The main loop of the cruncher.
+        
+        Crunches the simulations repeatedly until the crunching profile is
+        satisfied or a 'retire' order is received.
         """
         self.set_priority(0)
         
@@ -132,7 +133,7 @@ class CruncherProcess(multiprocessing.Process):
     
     def get_order(self):
         """
-        Attempts to read an order from the order_queue, if one has been sent.
+        Attempt to read an order from the order_queue, if one has been sent.
         
         Returns the order.
         """
@@ -143,7 +144,7 @@ class CruncherProcess(multiprocessing.Process):
     
     def process_order(self, order):
         """
-        Processes an order receieved from order_queue.
+        Process an order receieved from order_queue.
         """
         if order=="retire":
             raise ObsoleteCruncherError

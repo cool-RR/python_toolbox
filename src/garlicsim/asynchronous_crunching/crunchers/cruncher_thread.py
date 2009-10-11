@@ -70,9 +70,10 @@ class CruncherThread(threading.Thread):
 
     def main_loop(self):
         """
-        The main loop of the cruncher. Crunches the simulations repeatedly
-        until the crunching profile is satisfied or a 'retire' order is
-        received.
+        The main loop of the cruncher.
+        
+        Crunches the simulations repeatedly until the crunching profile is
+        satisfied or a 'retire' order is received.
         """
         
         step_options_profile = self.crunching_profile.step_options_profile or \
@@ -123,7 +124,7 @@ class CruncherThread(threading.Thread):
         
     def get_order(self):
         """
-        Attempts to read an order from the order_queue, if one has been sent.
+        Attempt to read an order from the order_queue, if one has been sent.
         
         Returns the order.
         """
@@ -134,7 +135,7 @@ class CruncherThread(threading.Thread):
     
     def process_order(self, order):
         """
-        Processes an order receieved from order_queue.
+        Process an order receieved from order_queue.
         """
         if order == "retire":
             raise ObsoleteCruncherError
