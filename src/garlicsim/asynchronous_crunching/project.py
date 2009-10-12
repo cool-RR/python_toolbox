@@ -16,7 +16,7 @@ import garlicsim.general_misc.module_wrapper
 
 __all__ = ["Project"]
 
-def with_tree_lock(method):
+def with_tree_lock(method): TODO use decorator module
     """
     A decorator used in Project's methods to use the tree lock (in write mode)
     as a context manager when calling the method.

@@ -6,12 +6,15 @@ This module defines the CrunchingManager class. See its documentation for more
 information.
 """
 
+import types
+
 import garlicsim
-import garlicsim.general_misc.dict_tools
-import garlicsim.general_misc.queue_tools as queue_tools
-from garlicsim.general_misc.infinity import FunnyInfinity
 from crunchers import CruncherThread, CruncherProcess
 from crunching_profile import CrunchingProfile
+
+import garlicsim.general_misc.third_party.decorator
+import garlicsim.general_misc.dict_tools
+import garlicsim.general_misc.queue_tools as queue_tools
 from garlicsim.general_misc.infinity import Infinity
 
 
@@ -20,17 +23,18 @@ PreferredCruncher = [CruncherThread, CruncherProcess][1]
 
 __all__ = ["CrunchingManager"]
 
-def with_tree_lock(method):
+
+@garlicsim.general_misc.third_party.decorator.decorator
+def with_tree_lock(method, *args, **kwargs):
     """
     A decorator used in CrunchingManager's methods to use the tree lock (in
     write mode) as a context manager when calling the method.
-    
-    todo: This decorator fucks up documentation, search internet
     """
-    def fixed(self, *args, **kwargs):
-        with self.project.tree_lock.write:
-            return method(self, *args, **kwargs)
-    return fixed
+    asser
+    self = args[0]
+    with self.project.tree_lock.write:
+        return method(*args, **kwargs)
+    
 
 class CrunchingManager(object):
     """
