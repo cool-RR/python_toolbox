@@ -190,7 +190,7 @@ class NiftyPaintDC(wx.PaintDC):
         assuming the tree has only one root!
         """
         def get_root():
-            return tree.roots.__iter__().next()
+            return tree.roots.__iter__().next() # hack for when roots is a set, may be unneeded now
 
         self.clickable_map={}
         self.active_node=self.gui_project.active_node

@@ -15,14 +15,13 @@ def list_simulate(simpack, state, iterations, *args, **kwargs):
     """
     Simulate from the given state for the given number of iterations.
 
-    A simpack must be passed as the first parameter.
-    
-    Any extraneous parameters will be passed to the step function.
+    A simpack must be passed as the first parameter. Any extraneous parameters
+    will be passed to the step function.
     
     Returns a list that spans all the states, from the initial one given to
     the final one.
     """
-    simpack_grokker = garlicsim.simpack_grokker.SimpackGrokker(simpack)
+    simpack_grokker = garlicsim.misc.SimpackGrokker(simpack)
     if simpack_grokker.history_dependent:
         return __history_list_simulate(simpack_grokker, state, iterations,
                                        *args, **kwargs)
@@ -38,9 +37,8 @@ def __history_list_simulate(simpack_grokker, state, iterations,
     
     Simulate from the given state for the given number of iterations.
 
-    A simpack must be passed as the first parameter.
-    
-    Any extraneous parameters will be passed to the step function.
+    A simpack must be passed as the first parameter. Any extraneous parameters
+    will be passed to the step function.
     
     Returns a list that spans all the states, from the initial one given to
     the final one.
@@ -67,9 +65,8 @@ def __non_history_list_simulate(simpack_grokker, state, iterations,
     
     Simulate from the given state for the given number of iterations.
 
-    A simpack must be passed as the first parameter.
-    
-    Any extraneous parameters will be passed to the step function.
+    A simpack must be passed as the first parameter. Any extraneous parameters
+    will be passed to the step function.
     
     Returns a list that spans all the states, from the initial one given to
     the final one.

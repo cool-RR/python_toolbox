@@ -13,19 +13,22 @@ import crunching_manager
 import garlicsim.general_misc.read_write_lock as read_write_lock
 from garlicsim.general_misc.infinity import Infinity
 import garlicsim.general_misc.module_wrapper
+import garlicsim.general_misc.third_party.decorator
 
 __all__ = ["Project"]
 
-def with_tree_lock(method): TODO use decorator module
+
+@garlicsim.general_misc.third_party.decorator.decorator
+def with_tree_lock(method, *args, **kwargs):
     """
     A decorator used in Project's methods to use the tree lock (in write mode)
     as a context manager when calling the method.
     """
-    def fixed(self, *args, **kwargs):
-        with self.tree_lock.write:
-            return method(self, *args, **kwargs)
-    return fixed
-
+    self = args[0]
+    with self.tree_lock.write:
+        return method(*args, **kwargs)
+        
+    
 class Project(object):
     """
     You create a project when you want to do a simulation which will crunch

@@ -30,7 +30,6 @@ def with_tree_lock(method, *args, **kwargs):
     A decorator used in CrunchingManager's methods to use the tree lock (in
     write mode) as a context manager when calling the method.
     """
-    asser
     self = args[0]
     with self.project.tree_lock.write:
         return method(*args, **kwargs)
