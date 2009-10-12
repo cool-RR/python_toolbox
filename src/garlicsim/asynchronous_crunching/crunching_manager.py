@@ -13,7 +13,7 @@ import garlicsim.general_misc.dict_tools
 import garlicsim.general_misc.queue_tools as queue_tools
 from crunchers import CruncherThread, CruncherProcess
 from crunching_profile import CrunchingProfile
-from garlicsim.general_misc.infinity import Infinity
+from garlicsim.general_misc.backport_cruft.classed_infinity import Infinity
 
 
 PreferredCruncher = [CruncherThread, CruncherProcess][1]

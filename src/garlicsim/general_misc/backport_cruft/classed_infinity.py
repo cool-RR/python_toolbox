@@ -25,10 +25,13 @@ class InfinityError(Exception):
     pass
 
 class InfinityClass(object):
+    
     def __init__(self, direction=1):
         self.direction = direction
+        
     def __abs__(self):
         return Infinity
+    
     def __add__(self, other):
         if isinstance(other, InfinityClass):
             if self.direction == other.direction:
@@ -37,8 +40,10 @@ class InfinityClass(object):
                 raise InfinityRaceError
         elif is_floatable(other):
             return self
+        
     def __sub__(self, other):
         return self.__add__(-other)
+    
     def __cmp__(self, other):
         if isinstance(other, InfinityClass):
             d_cmp = cmp(self.direction, other.direction)
@@ -59,8 +64,10 @@ class InfinityClass(object):
                 raise InfinityRaceError
             else:
                 return InfinityClass(direction=self.direction * s)
+            
     def __float__(self):
         raise ValueError("Can't convert infinite number to float")
+    
     def __mul__(self, other):
         if isinstance(other, InfinityClass):
             return InfinityClass(self.direction * other.direction)
@@ -70,12 +77,16 @@ class InfinityClass(object):
                 raise InfinityRaceError
             else:
                 return InfinityClass(direction=self.direction * s)
+            
     def __neg__(self):
         return InfinityClass(-self.direction)
+    
     def __nonzero__(self):
         return True
+    
     def __pos__(self):
         return self
+    
     def __pow__(self, other):
         if isinstance(other, InfinityClass):
             raise object # todo
@@ -102,7 +113,6 @@ class InfinityClass(object):
                         raise ValueError(""""negative number cannot be raised
 to a fractional power""")            
           
-            
                 
     def __rpow__(self, other):
         if isinstance(other, InfinityClass):
@@ -111,17 +121,22 @@ to a fractional power""")
             raise NotImplementedError
         else: # is_floatable(number) is True
             raise NotImplementedError # todo
+        
     def __radd__(self, other):
         return self.__add__(other)
+    
     def __rsub__(self, other):
         return ( - self.__sub__(other))
+    
     def __rmul__(self, other):
         return self.__mul__(other)
+    
     __truediv__ = __floordiv__ = __div__
     
     def __eq__(self, other):
         return isinstance(other, InfinityClass) and \
                other.direction == self.direction
+    
     def __neq__(self, other):
         return not self.__eq__(other)
     
@@ -134,3 +149,8 @@ to a fractional power""")
         
 
 Infinity = InfinityClass()
+
+
+
+
+
