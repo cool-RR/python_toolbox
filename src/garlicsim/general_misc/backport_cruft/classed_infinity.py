@@ -1,3 +1,12 @@
+# Copyright 2009 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''
+This module defines the Infinity class and the related InfinityError and
+InfinityRaceError exception.
+'''
+
+__all__ = ['Infinity', 'InfinityError', 'InfinityRaceError']
 
 def sign(x):
     if x > 0: return 1
@@ -19,13 +28,24 @@ def is_nonfractional(x):
         return False
     
 class InfinityRaceError(Exception):
+    '''
+    An exception to raise when a calculation is being made between two
+    quantities that involve infinity, and the two infinities are "pitted"
+    against each other in a way which makes it impossible to determine what the
+    result of the computation would be.
+    '''
     pass
 
 class InfinityError(Exception):
+    '''
+    An exception related to infinity.
+    '''
     pass
 
 class InfinityClass(object):
     '''
+    A class for infinity numbers. There are only two distinct instances of this
+    class: Infinity and (-Infinity).
     '''
     #todo: add __assign__ or whatever it's called
     
@@ -152,8 +172,5 @@ to a fractional power""")
         
 
 Infinity = InfinityClass()
-
-
-
 
 
