@@ -21,7 +21,6 @@ PreferredCruncher = [CruncherThread, CruncherProcess][1]
 
 __all__ = ["CrunchingManager"]
 
-
 @garlicsim.general_misc.third_party.decorator.decorator
 def with_tree_lock(method, *args, **kwargs):
     """
@@ -31,7 +30,7 @@ def with_tree_lock(method, *args, **kwargs):
     self = args[0]
     with self.project.tree_lock.write:
         return method(*args, **kwargs)
-    
+
 
 class CrunchingManager(object):
     """
