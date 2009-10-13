@@ -35,6 +35,8 @@ class ReadWriteLock(original_read_write_lock.ReadWriteLock):
     with lock.write:
         pass #perform write operations here
     
+    
+    todo: rename from acquireRead style to acquire_read style
     """
     def __init__(self, *args, **kwargs):
         original_read_write_lock.ReadWriteLock.__init__(self, *args, **kwargs)

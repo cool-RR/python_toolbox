@@ -27,8 +27,8 @@ def with_tree_lock(method, *args, **kwargs):
     self = args[0]
     with self.tree_lock.write:
         return method(*args, **kwargs)
-        
-    
+
+
 class Project(object):
     """
     You create a project when you want to do a simulation which will crunch
