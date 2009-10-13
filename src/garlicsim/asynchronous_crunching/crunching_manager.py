@@ -31,7 +31,7 @@ def with_tree_lock(method, *args, **kwargs):
     self = args[0]
     with self.project.tree_lock.write:
         return method(*args, **kwargs)
-    
+
 
 class CrunchingManager(object):
     """
