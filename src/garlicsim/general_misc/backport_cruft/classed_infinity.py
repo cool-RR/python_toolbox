@@ -25,6 +25,9 @@ class InfinityError(Exception):
     pass
 
 class InfinityClass(object):
+    '''
+    '''
+    #todo: add __assign__ or whatever it's called
     
     def __init__(self, direction=1):
         self.direction = direction
