@@ -15,18 +15,19 @@ from obsolete_cruncher_error import ObsoleteCruncherError
 
 import garlicsim.general_misc.binary_search as binary_search
 import garlicsim.general_misc.queue_tools as queue_tools
+import garlicsim.general_misc.third_party.decorator
 
 __all__ = ["HistoryBrowser"]
 
-def with_self(method):
+@garlicsim.general_misc.third_party.decorator.decorator
+def with_self(method, *args, **kwargs):
     """
     A decorator used in HistoryBrowser's methods to use the history browser
     as a context manager when calling the method.
     """
-    def fixed(self, *args, **kwargs):
-        with self:
-            return method(self, *args, **kwargs)
-    return fixed
+    self = args[0]
+    with self:
+        return method(*args, **kwargs)
 
 class HistoryBrowser(garlicsim.misc.history_browser.HistoryBrowser):
     """

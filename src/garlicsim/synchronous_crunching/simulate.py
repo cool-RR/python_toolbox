@@ -19,13 +19,10 @@ def simulate(simpack, state, iterations=1, *args, **kwargs):
     """
     Simulate from the given state for the given number of iterations.
 
-    A simpack must be passed as the first parameter.
-    
-    Any extraneous parameters will be passed to the step function.
+    A simpack must be passed as the first parameter. Any extraneous parameters
+    will be passed to the step function.
     
     Returns the final state of the simulation.
-    
-    Any extraneous parameters will be passed to the step function.
     """
     simpack_grokker = garlicsim.misc.SimpackGrokker(simpack)
     if simpack_grokker.history_dependent:
@@ -42,13 +39,10 @@ def __history_simulate(simpack_grokker, state, iterations=1, *args, **kwargs):
     
     Simulate from the given state for the given number of iterations.
 
-    A simpack must be passed as the first parameter.
-    
-    Any extraneous parameters will be passed to the step function.
+    A simpack must be passed as the first parameter. Any extraneous parameters
+    will be passed to the step function.
     
     Returns the final state of the simulation.
-    
-    Any extraneous parameters will be passed to the step function.
     """
     tree = garlicsim.data_structures.Tree()
     root = tree.add_state(state, parent=None)
@@ -75,13 +69,10 @@ def __non_history_simulate(simpack_grokker, state, iterations,
     
     Simulate from the given state for the given number of iterations.
 
-    A simpack must be passed as the first parameter.
-    
-    Any extraneous parameters will be passed to the step function.
+    A simpack must be passed as the first parameter. Any extraneous parameters
+    will be passed to the step function.
     
     Returns the final state of the simulation.
-    
-    Any extraneous parameters will be passed to the step function.
     """
     iterator = simpack_grokker.step_generator(state, *args, **kwargs)
     for i in range(iterations):

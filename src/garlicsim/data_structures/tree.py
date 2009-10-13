@@ -40,10 +40,10 @@ class Tree(object):
     also be called a root and be a member of tree.roots .
     """
     def __init__(self):
-        self.nodes = set()
-        """Nodes that belong to the tree."""
-        self.roots = set()
-        """The set of roots (parentless nodes) of the tree."""
+        self.nodes = []
+        """List of nodes that belong to the tree."""
+        self.roots = []
+        """List of roots (parentless nodes) of the tree."""
 
     def fork_to_edit(self, template_node):
         """
@@ -96,7 +96,7 @@ tree while specifying a template_node.""")
             template_node.derived_nodes.append(node)
             
 
-        self.nodes.add(node)
+        self.nodes.append(node)
 
         if parent:
             if not hasattr(node.state, "clock"):
@@ -121,7 +121,7 @@ tree while specifying a template_node.""")
         else: # parent is None
             if not hasattr(node.state, "clock"):
                 node.state.clock = 0
-            self.roots.add(node)
+            self.roots.append(node)
             return node
 
 

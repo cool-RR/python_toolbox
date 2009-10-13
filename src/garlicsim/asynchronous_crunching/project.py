@@ -15,19 +15,22 @@ import crunching_manager
 import garlicsim.general_misc.read_write_lock as read_write_lock
 from garlicsim.general_misc.backport_cruft.classed_infinity import Infinity
 import garlicsim.general_misc.module_wrapper
+import garlicsim.general_misc.third_party.decorator
 
 __all__ = ["Project"]
 
-def with_tree_lock(method):
+
+@garlicsim.general_misc.third_party.decorator.decorator
+def with_tree_lock(method, *args, **kwargs):
     """
     A decorator used in Project's methods to use the tree lock (in write mode)
     as a context manager when calling the method.
     """
-    def fixed(self, *args, **kwargs):
-        with self.tree_lock.write:
-            return method(self, *args, **kwargs)
-    return fixed
-
+    self = args[0]
+    with self.tree_lock.write:
+        return method(*args, **kwargs)
+        
+    
 class Project(object):
     """
     You create a project when you want to do a simulation which will crunch
@@ -174,7 +177,7 @@ class Project(object):
         else:
             return self.__non_history_dependent_simulate(node, iterations,
                                                          *args, **kwargs)
-        
+    @with_tree_lock        
     def __history_dependent_simulate(self, node, iterations=1,
                                      *args, **kwargs):
         """
@@ -191,17 +194,19 @@ class Project(object):
         """
         
         path = node.make_containing_path()
-        history_browser = garlicsim.synchronous_crunching.\
-                        history_browser.HistoryBrowser(path)
+        history_browser = \
+            garlicsim.synchronous_crunching.HistoryBrowser(path)
         current_node = node
         state = node.state
         for i in range(iterations):
+            history_browser.end_node = node
             state = self.simpack_grokker.step(history_browser,
                                               *args, **kwargs)
             current_node = self.tree.add_state(state, parent=current_node)
             
         return current_node
     
+    @with_tree_lock
     def __non_history_dependent_simulate(self, node, iterations=1,
                                          *args, **kwargs):
         """

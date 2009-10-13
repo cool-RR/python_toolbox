@@ -33,13 +33,16 @@ class GuiProject(object):
         
     def __init_general(self, simpack, parent_window, project=None,
                        active_node=None, path=None):
-    
+        # todo: break into two methods, one gui related and one less
+        
         self.simpack = garlicsim.general_misc.module_wrapper.ModuleWrapper(simpack)
         
-        if project:
-            self.project = project
-        else:
-            self.project = garlicsim.Project(simpack)
+        self.project = project or garlicsim.Project(simpack)
+        
+        self.path = path
+        """
+        The active path.
+        """
 
         main_window = self.main_window = \
                     wx.ScrolledWindow(parent_window,-1)
@@ -50,7 +53,8 @@ class GuiProject(object):
             scrolled.ScrolledPanel(self.main_window, -1)
 
         locals_for_shell = locals()
-        locals_for_shell.update({"this_gui_project": self})
+        locals_for_shell.update({'gp': self, 'p': self.project,
+                                 't': self.project.tree})
         self.shell = wx.py.shell.Shell(self.main_window, -1,
                                        size=(400, -1), locals=locals_for_shell)
         self.seek_bar = custom_widgets.SeekBar(self.main_window, -1, self)
@@ -85,11 +89,6 @@ class GuiProject(object):
         self.timer_for_playing=None
         """
         Contains the wx.Timer object used when playing the simulation
-        """
-
-        self.path = path
-        """
-        The active path.
         """
 
         self.ran_out_of_tree_while_playing = False

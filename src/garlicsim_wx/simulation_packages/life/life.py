@@ -4,6 +4,7 @@
 """
 A module for simulating Conway's Game of Life.
 """
+# todo: in garlicsim intro, maybe need only abridged version of this.
 
 import garlicsim.data_structures
 import random
@@ -11,6 +12,10 @@ import random
 class State(garlicsim.data_structures.State):
     def __repr__(self):
         return self.board.__repr__()
+    def __eq__(self, other):
+        return isinstance(other, State) and self.board == other.board
+    def __neq__(self, other):
+        return not self.__eq__(other)
     
 def step(old_state, *args, **kwargs):
     old_board = old_state.board
@@ -106,3 +111,9 @@ class Board(object):
         cell = lambda x, y: "#" if self.get(x, y) is True else " "
         row = lambda y: "".join(cell(x, y) for x in range(self.width))
         return "\n".join(row(y) for y in range(self.height))
+    
+    def __eq__(self, other):
+        return isinstance(other, Board) and self.__list == other.__list
+    
+    def __neq__(self, other):
+        return not self.__eq__(other)
