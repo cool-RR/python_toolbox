@@ -10,7 +10,7 @@ except ImportError: import Queue as queue
 
 import garlicsim.general_misc.queue_tools as queue_tools
 from misc.stringsaver import s2i,i2s
-from garlicsim.general_misc.infinity import Infinity
+from garlicsim.general_misc.backport_cruft.classed_infinity import Infinity
 import garlicsim
 import warnings
 

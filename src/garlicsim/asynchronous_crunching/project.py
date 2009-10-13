@@ -13,7 +13,7 @@ import garlicsim.misc.simpack_grokker
 import crunching_manager
 
 import garlicsim.general_misc.read_write_lock as read_write_lock
-from garlicsim.general_misc.infinity import Infinity
+from garlicsim.general_misc.backport_cruft.classed_infinity import Infinity
 import garlicsim.general_misc.module_wrapper
 
 __all__ = ["Project"]

@@ -8,7 +8,7 @@ information.
 
 from state import State
 # Note we are doing `from path import Path` in the bottom of the file.
-from garlicsim.general_misc.infinity import Infinity
+from garlicsim.general_misc.backport_cruft.classed_infinity import Infinity
 
 __all__ = ["Node"]
 
