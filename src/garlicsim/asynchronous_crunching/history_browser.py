@@ -235,9 +235,8 @@ class HistoryBrowser(garlicsim.misc.history_browser.HistoryBrowser):
         assert rounding in ["high", "low", "exact", "both", "closest"]
         queue = self.cruncher.work_queue
         queue_size = queue.qsize()
-        with queue.mutex:
-            queue_as_list = list(queue.queue)
-            # todo: Probably inefficient, should access them one by one
+        queue_as_list = queue_tools.queue_as_list(queue)
+        # todo: Probably inefficient, should access them one by one
         
         return binary_search.binary_search\
                (queue_as_list, function, value, rounding)

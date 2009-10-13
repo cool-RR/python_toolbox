@@ -9,6 +9,7 @@ information.
 """
 
 import garlicsim
+import garlicsim.misc
 import history_browser as history_browser_module # Avoiding name clash
 
 __all__ = ["simulate"]

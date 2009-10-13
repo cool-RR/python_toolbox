@@ -46,6 +46,12 @@ def binary_search(sequence, function, value, rounding="closest"):
     """
     assert rounding in ["high", "low", "exact", "both", "closest"]
     
+    if not sequence:
+        if rounding == 'both':
+            return (None, None)
+        else:
+            return None
+    
     get = lambda number: function(sequence[number])
 
     low = 0
