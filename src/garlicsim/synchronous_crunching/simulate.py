@@ -8,9 +8,7 @@ information.
 # todo: should be something that fishes step_options_profile from *args.
 """
 
-from __future__ import with_statement
-
-import garlicsim.misc
+import garlicsim
 import history_browser as history_browser_module # Avoiding name clash
 
 __all__ = ["simulate"]
