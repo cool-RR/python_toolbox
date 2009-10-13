@@ -10,7 +10,6 @@ from __future__ import with_statement
 
 import Queue
 
-
 def dump_queue(queue):
     """
     Empties all pending items in a queue and returns them in a list.
@@ -57,7 +56,8 @@ def dump_queue(queue):
 
 def queue_get_item(queue, i):
     """
-    Retrieves an item from a queue according to the specified index.
+    Get an item from the queue by index number without removing any items.
+    
     Note: This was designed for Queue.Queue. Don't try to use this, for
     example, on multiprocessing.Queue.
     """
@@ -66,8 +66,8 @@ def queue_get_item(queue, i):
 
 def queue_as_list(queue):
     """
-    Returns a list that contains all the items in the queue in order.
-    This is without emptying the queue.
+    Get all the items in the queue as a list without removing them.
+    
     Note: This was designed for Queue.Queue. Don't try to use this, for
     example, on multiprocessing.Queue.
     """
