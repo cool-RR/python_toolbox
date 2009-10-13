@@ -6,15 +6,13 @@ This module defines the CrunchingManager class. See its documentation for more
 information.
 """
 
-import types
-
 import garlicsim
 from crunchers import CruncherThread, CruncherProcess
 from crunching_profile import CrunchingProfile
 
-import garlicsim.general_misc.third_party.decorator
 import garlicsim.general_misc.dict_tools
 import garlicsim.general_misc.queue_tools as queue_tools
+import garlicsim.general_misc.third_party.decorator
 from garlicsim.general_misc.infinity import Infinity
 
 
