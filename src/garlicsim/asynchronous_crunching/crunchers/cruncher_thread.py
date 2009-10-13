@@ -38,9 +38,10 @@ class CruncherThread(threading.Thread):
         self.step_generator = project.simpack_grokker.step_generator
         self.crunching_profile = copy.deepcopy(crunching_profile)
         self.history_dependent = self.project.simpack_grokker.history_dependent
-                
+        
         self.initial_state = initial_state
         self.last_clock = initial_state.clock
+        
         self.daemon = True
 
         self.work_queue = queue.Queue()
