@@ -25,26 +25,41 @@ class HistoryBrowser(garlicsim.misc.history_browser.HistoryBrowser):
     quite simple; it recieves a path in its constructor and it handles all
     state requests from that path.
     """
-    def __init__(self, path):
-        self.path = path        
+    def __init__(self, path, end_node=None):
+        
+        self.path = path
         """
         This is the path, from which all states will be taken when requested.
         """
+        
+        self.end_node = end_node
+        '''
+        An optional end node, in which the path ends.
+        
+        If not specified, it will be None, meaning that the path would go on
+        until its natural end.
+        
+        If this option is specified, you will have to update the end_node of
+        the history browser every time you use the step function. (That's
+        because you've added a node to the tree, and that node should now be
+        the end_node.)
+        '''
      
     def get_last_state(self):
         """
         Get the last state in the timeline. Identical to __getitem__(-1).
         """
-        return self[-1]
+        return self.end_node.state or self[-1]
     
     def __getitem__(self, index):
         """
         Get a state by its position in the timeline.
         """
         assert isinstance(index, int)
-        return self.path[index].state
+        return self.path.__getitem__(index, end_node=end_node).state
     
-    def get_state_by_monotonic_function(self, function, value, rounding="closest"):
+    def get_state_by_monotonic_function(self, function, value,
+                                        rounding="closest"):
         """
         Get a state by specifying a measure function and a desired value.
         
@@ -57,7 +72,7 @@ class HistoryBrowser(garlicsim.misc.history_browser.HistoryBrowser):
         
         new_function = lambda node: function(node.state)
         result_in_nodes = self.path.get_node_by_monotonic_function \
-                        (new_function, value, rounding)
+                        (new_function, value, rounding, end_node=self.end_node)
         
         if rounding == "both":
             result = [(node.state if node is not None else None) \
@@ -75,4 +90,4 @@ class HistoryBrowser(garlicsim.misc.history_browser.HistoryBrowser):
         2. The length of the path in the tree which leads to our node, up to
            our node.
         """
-        return len(self.path)
+        return len(self.path, end_node=end_node)

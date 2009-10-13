@@ -175,7 +175,7 @@ class Project(object):
         else:
             return self.__non_history_dependent_simulate(node, iterations,
                                                          *args, **kwargs)
-        
+    @with_tree_lock        
     def __history_dependent_simulate(self, node, iterations=1,
                                      *args, **kwargs):
         """
@@ -192,17 +192,19 @@ class Project(object):
         """
         
         path = node.make_containing_path()
-        history_browser = garlicsim.synchronous_crunching.\
-                        history_browser.HistoryBrowser(path)
+        history_browser = \
+            garlicsim.synchronous_crunching.HistoryBrowser(path)
         current_node = node
         state = node.state
         for i in range(iterations):
+            history_browser.end_node = node
             state = self.simpack_grokker.step(history_browser,
                                               *args, **kwargs)
             current_node = self.tree.add_state(state, parent=current_node)
             
         return current_node
     
+    @with_tree_lock
     def __non_history_dependent_simulate(self, node, iterations=1,
                                          *args, **kwargs):
         """

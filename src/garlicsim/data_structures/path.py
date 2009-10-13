@@ -246,7 +246,7 @@ class Path(object):
                     break
         if answer:
             if (not end_node) or answer.state.clock < end_node.state.clock:
-                return thing
+                return answer
         raise PathOutOfRangeError
 
     def get_last_node(self, starting_at=None):
@@ -296,10 +296,12 @@ class Path(object):
         else:
             def correct_both_for_end_node(both):
                 new_both = both[:]
-                if new_both[0].state.clock >= end_node.state.clock:
+                end_clock = end_node.state.clock
+                if new_both[0] and new_both[0].state.clock >= end_clock:
                     new_both[0] = end_node
-                if new_both[1].state.clock >= end_node.state.clock:
+                if new_both[1] and new_both[1].state.clock >= end_clock:
                     new_both[1] = None
+                return new_both
         
         low = self.root
         
