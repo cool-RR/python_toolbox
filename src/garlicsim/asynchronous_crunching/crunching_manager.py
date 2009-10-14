@@ -17,7 +17,7 @@ import garlicsim.general_misc.queue_tools as queue_tools
 import garlicsim.general_misc.third_party.decorator
 from garlicsim.general_misc.backport_cruft.classed_infinity import Infinity
 
-PreferredCruncher = [CruncherThread, CruncherProcess][1]
+PreferredCruncher = [CruncherThread, CruncherProcess][0]
 # Should make a nicer way of setting that.
 
 __all__ = ["CrunchingManager"]
