@@ -1,20 +1,20 @@
 # Copyright 2009 Ram Rachum.
 # This program is not licensed for distribution and may not be distributed.
 
+import warnings
+import copy
+import functools
+import Queue
+
 import wx
 import wx.lib.scrolledpanel as scrolled
 
-import functools
-try: import queue
-except ImportError: import Queue as queue
-
+import garlicsim
+import garlicsim.asynchronous_crunching.crunchers
 import garlicsim.general_misc.queue_tools as queue_tools
 from misc.stringsaver import s2i,i2s
 from garlicsim.general_misc.infinity import Infinity
-import garlicsim
-import warnings
 
-import copy
 
 import custom_widgets
 FoldableWindowContainer=custom_widgets.FoldableWindowContainer
@@ -38,6 +38,9 @@ class GuiProject(object):
         self.simpack = garlicsim.general_misc.module_wrapper.ModuleWrapper(simpack)
         
         self.project = project or garlicsim.Project(simpack)
+        if self.project.simpack_grokker.history_dependent is False:
+            self.project.crunching_manager.Cruncher = \
+                garlicsim.asynchronous_crunching.crunchers.CruncherProcess
         
         self.path = path
         """
@@ -104,7 +107,7 @@ class GuiProject(object):
         
         simpack.initialize(self)
                 
-        self.stuff_to_do_when_idle = queue.Queue()
+        self.stuff_to_do_when_idle = Queue.Queue()
         self.main_window.Bind(wx.EVT_IDLE, self.on_idle)
 
     def __init_on_creation(self):
@@ -127,7 +130,7 @@ class GuiProject(object):
             mission = self.stuff_to_do_when_idle.get(block=False)
             mission()
             event.RequestMore(True)
-        except queue.Empty:
+        except Queue.Empty:
             pass
                 
 
