@@ -16,9 +16,10 @@ nodes.
 from state import State
 from tree import Tree, TreeError
 from path import Path, PathError, PathOutOfRangeError
-from node import Node
+from node import Node, NodeError
 from block import Block, BlockError
 
 
 __all__ = ["State", "Tree", "Path", "Node", "Block"] + \
-        ["BlockError", "PathError", "PathOutOfRangeError", "TreeError"]
+        ["BlockError", "PathError", "PathOutOfRangeError", "TreeError",
+         "NodeError"]

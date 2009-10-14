@@ -2,15 +2,21 @@
 # This program is distributed under the LGPL2.1 license.
 
 """
-A module that defines the Node class. See its documentation for more
-information.
+A module that defines the Node class and the related NodeError exception. See
+its documentation for more information.
 """
 
 from state import State
 # Note we are doing `from path import Path` in the bottom of the file.
 from garlicsim.general_misc.infinity import Infinity
 
-__all__ = ["Node"]
+__all__ = ["Node", "NodeError"]
+
+
+class NodeError(Exception):
+    '''An error related to the Node class.'''
+    pass
+
 
 class Node(object):
     """
@@ -24,16 +30,26 @@ class Node(object):
     """
     #todo: Maybe node should not reference tree?
     
-    def __init__(self, tree, state, parent=None, touched=False):
+    def __init__(self, tree, state, parent=None, step_options_profile=None,
+                 touched=False):
+
+        if (touched and step_options_profile):
+            
         
-        self.state = state
-        self.parent = parent
         self.tree = tree
+        self.state = state
+        
+        
+        self.parent = parent
+        """The parent node of this node."""
+        
+        self.step_options_profile = step_options_profile
+        """
+        The step options profile under which the contained state was created.
+        """
         
         self.touched = touched
-        """
-        Says whether the node is a touched node.
-        """
+        """Says whether the node is a touched node."""
         
         self.block = None
         """
