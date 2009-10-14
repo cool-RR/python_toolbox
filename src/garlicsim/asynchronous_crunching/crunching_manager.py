@@ -7,10 +7,12 @@ information.
 """
 
 import garlicsim
+import garlicsim.misc.nodes_added
 from crunchers import CruncherThread, CruncherProcess
 from crunching_profile import CrunchingProfile
 
-import garlicsim.general_misc.dict_tools
+
+import garlicsim.general_misc.dict_tools #todo: example of inconsistent import policy
 import garlicsim.general_misc.queue_tools as queue_tools
 import garlicsim.general_misc.third_party.decorator
 from garlicsim.general_misc.infinity import Infinity
