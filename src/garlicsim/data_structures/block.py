@@ -98,7 +98,16 @@ successor or a direct ancestor of the block.""")
         if len(node_list) == 1:
             self.append_node(node_list[0])
             return
-
+        
+        step_option_profiles = \
+            set([node.step_options_profile for node in node_list])
+        if len(step_option_profiles) > 1:
+            raise BlockError('''Tried to add node list that doesn't share the \
+same step options profile.''')
+        if step_option_profiles.pop() != self.get_step_options_profile():
+            raise BlockError('''Tried to add nodelist which contains node that \
+has a different step_options_profile.''')
+        
         # We now make sure the node_list is successive, untouched, and has no
         # unwanted children.
         for i in range(len(node_list)):
