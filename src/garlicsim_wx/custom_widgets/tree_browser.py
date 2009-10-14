@@ -3,8 +3,6 @@
 
 """
 todo: I think the refresh should be made more efficient
-
-todo: fix horizontal scrolling
 """
 import os
 

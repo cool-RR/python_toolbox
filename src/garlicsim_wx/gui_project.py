@@ -220,7 +220,7 @@ class GuiProject(object):
         if self.is_playing is False:
             return
         self.is_playing = False
-        queue_tools.dump_queue(self.stuff_to_do_when_idle)
+        queue_tools.dump(self.stuff_to_do_when_idle)
         assert self.stuff_to_do_when_idle.qsize() == 0
         self.project.crunch_all_leaves(self.active_node, self.default_buffer)
 

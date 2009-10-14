@@ -4,7 +4,7 @@
 """
 A module for doing a binary search in a sequence.
 
-Todo: wrap all things in tuples!
+Todo: wrap all things in tuples?
 
 todo: add option to specify cmp.
 """

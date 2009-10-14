@@ -7,7 +7,7 @@ information.
 """
 
 import garlicsim
-import garlicsim.misc.nodes_added
+from garlicsim.misc.nodes_added import NodesAdded
 from crunchers import CruncherThread, CruncherProcess
 from crunching_profile import CrunchingProfile
 
@@ -133,7 +133,7 @@ class CrunchingManager(object):
         
         nodes_to_crunch = self.project.nodes_to_crunch
         
-        total_added_nodes = 0
+        total_added_nodes = NodesAdded(0)
 
         for (node, cruncher) in self.crunchers.copy().items():
             if not (node in nodes_to_crunch):
@@ -217,10 +217,17 @@ class CrunchingManager(object):
         were added, and `leaf` is the last node that was added.
         """
         tree = self.project.tree
-        states = queue_tools.dump_queue(cruncher.work_queue)
+        states = queue_tools.dump(cruncher.work_queue)
         if retire:
             cruncher.retire()
         current = node
         for state in states:
             current = tree.add_state(state, parent=current)
-        return (len(states), current)
+        nodes_added = NodesAdded(len(states))
+        return (nodes_added, current)
+    
+    
+    
+    
+    
+    

@@ -17,10 +17,14 @@ class State(garlicsim.data_structures.State):
     def __neq__(self, other):
         return not self.__eq__(other)
     
-def step(old_state, *args, **kwargs):
+def step(old_state, useless=None, krazy=None):
     old_board = old_state.board
     new_board = Board(parent=old_board)
     new_state = State()
+    if krazy:
+        new_state.board = \
+            Board(old_board.width, old_board.height, fill='random')
+        return new_state
     new_state.board = new_board
     return new_state
 
