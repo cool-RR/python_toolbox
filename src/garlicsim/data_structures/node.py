@@ -34,8 +34,9 @@ class Node(object):
                  touched=False):
 
         if (touched and step_options_profile):
+            raise NodeError \
+                  ('Only an untouched node may have a step options profile.')
             
-        
         self.tree = tree
         self.state = state
         
@@ -203,9 +204,14 @@ class Node(object):
         return lowest
     
     def is_last_on_block(self):
+        '''Return whether the node the last one on its block.'''
         return self.block and (self.block.index(self) == len(self.block) - 1)
     
     def is_first_on_block(self):
+        '''Return whether the node the first one on its block.'''
         return self.block and (self.block.index(self) == 0)
 
 from path import Path
+
+
+

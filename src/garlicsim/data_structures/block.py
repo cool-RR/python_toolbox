@@ -33,7 +33,7 @@ class Block(object):
     3. The last node may have any kinds of children.
 
     If you want to check whether a certain node is in a block or not,
-    check its ".block" attribute.
+    check its ".block" attribute. TODODOC
 
     """
     def __init__(self, node_list):
@@ -57,6 +57,11 @@ class Block(object):
             node.block = self
             return
         
+        if node.step_options_profile != self.get_step_options_profile():
+            raise BlockError('''Tried to add node which has a different
+step_options_profile.''')
+            
+        
         # If the flow reached here, the block is not empty.
         last_in_block = self.__node_list[-1]
         if node.parent == last_in_block:
@@ -73,7 +78,7 @@ class Block(object):
             return
         
         raise BlockError("""Tried to add a node which is not a direct \
-        successor or a direct ancestor of the block.""")
+successor or a direct ancestor of the block.""")
         
     def add_node_list(self, node_list):
         """
@@ -93,17 +98,15 @@ class Block(object):
         if len(node_list) == 1:
             self.append_node(node_list[0])
             return
-        
+
         # We now make sure the node_list is successive, untouched, and has no
         # unwanted children.
         for i in range(len(node_list)):
             if (i >= 1) and (node_list[i].parent != node_list[i-1]):
-                raise BlockError("""Tried to add non-consecutive nodes to \
-                block.""")
+                raise BlockError('Tried to add non-consecutive nodes to block.')
             if (len(node_list) - i >= 2) and (len(node_list[i].children) != 1):
                 raise BlockError("""Tried to add to the block a node which \
-                doesn't have exactly one child, and not as the last node in \
-                the block.""")
+doesn't have exactly one child, and not as the last node in the block.""")
             if node_list[i].touched:
                 raise BlockError("Tried to add touched nodes to block.")
         
@@ -119,8 +122,7 @@ class Block(object):
         elif self.__node_list[0].parent == node_list[-1]:
             self.__node_list = node_list + self.__node_list
         else:
-            raise BlockError("""List of nodes is not adjacent to existing \
-            nodes""")
+            raise BlockError('List of nodes is not adjacent to existing nodes.')
 
         for node in node_list:
             node.block = self
@@ -164,10 +166,10 @@ class Block(object):
         else:
             if -len(self) < i < len(self) - 1:
                 raise NotImplementedError("""Can't remove a node from the \
-                middle of a block""")
+middle of a block""")
             else:
                 raise IndexError("""Tried to remove a node by index, while \
-                the index was bigger than the block's length.""")
+the index was bigger than the block's length.""")
 
     def __contains__(self, node):
         """
@@ -192,3 +194,16 @@ class Block(object):
         Return the index number of the specified node in the block.
         """
         return self.__node_list.index(node)
+    
+    def get_step_options_profile(self):
+        '''
+        Get the step options profile of the nodes in this block.
+        
+        This profile must be identical in all of the nodes in the block.
+        '''
+        return self.__node_list
+        
+
+        
+
+
