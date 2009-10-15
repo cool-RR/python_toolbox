@@ -15,6 +15,7 @@ from crunching_profile import CrunchingProfile
 import garlicsim.general_misc.dict_tools #todo: example of inconsistent import policy
 import garlicsim.general_misc.queue_tools as queue_tools
 import garlicsim.general_misc.third_party.decorator
+import garlicsim.general_misc.change_tracker
 from garlicsim.general_misc.infinity import Infinity
 
 
@@ -64,8 +65,10 @@ class CrunchingManager(object):
         that is assigned to work on it.
         """
         
+        self.crunching_profiles_change_tracker = \
+            garlicsim.general_misc.change_tracker.ChangeTracker()
+
         
-        todo, use hash to see when crunhing profile changed
         
     @with_tree_lock
     def sync_crunchers(self):
@@ -91,7 +94,7 @@ class CrunchingManager(object):
                 del self.crunchers[job]
 
 
-        for job in self.jobs.copy():
+        for job in self.jobs[:]:
             
             
             if self.crunchers.has_key(job) is False:
@@ -111,10 +114,18 @@ class CrunchingManager(object):
             job.node = new_leaf
             
             if not job.is_done(): # (Calling is_done again cause node changed)
+                
                 if cruncher.is_alive():
-                    if CRUNCHING PROFILE CHANGED TODO:
+                    
+                    crunching_profile = job.crunching_profile
+                    
+                    if self.crunching_profiles_change_tracker.check_in \
+                       (crunching_profile):
+                        
                         cruncher.update_crunching_profile(crunching_profile)
+                        
                 else:
+                    
                     self.__conditional_create_cruncher(new_leaf,
                                                        crunching_profile)
             else: # job.is_done() is True           
@@ -130,6 +141,9 @@ class CrunchingManager(object):
         '''
         Create a cruncher to crunch the node, unless there is reason not to.
         '''
+        node = job.node
+        crunching_profile = job.crunching_profile
+        
         if node.still_in_editing is False:
             step_function = self.project.simpack_grokker.step
             if self.Cruncher == CruncherProcess:
@@ -142,6 +156,9 @@ class CrunchingManager(object):
                                          crunching_profile=crunching_profile)
             cruncher.start()
             self.crunchers[node] = cruncher
+            
+            self.crunching_profiles_change_tracker.check_in(crunching_profile)
+            
             return cruncher
     
     def get_jobs_by_node(self, node):

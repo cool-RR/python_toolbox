@@ -169,6 +169,8 @@ class Project(object):
                         *args, **kwargs):
         '''
         tododoc
+        
+        Returns the job.
         '''
         # todo: Make Infinitesimal class to put as default to clock_distance?
         # todo: change "fork naturally" to use this?
@@ -176,12 +178,13 @@ class Project(object):
         step_options_profile = \
             garlicsim.misc.step_options_profile.StepOptionsProfile(args, kwargs)
         
-        crunching_profile = CrunchingProfile(
+        clock_target = node.state.clock + clock_buffer
         
-        job = Job(node, 
+        crunching_profile = CrunchingProfile(clock_target, step_options_profile)
         
+        job = Job(node, crunching_profile)
         
-        pass
+        return self.crunching_manager.jobs.append(job)
     
 
     def sync_crunchers(self):
