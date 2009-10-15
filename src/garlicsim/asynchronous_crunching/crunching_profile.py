@@ -32,9 +32,9 @@ class CrunchingProfile(object):
         '''
         return state.clock >= self.clock_target
     
-    def raise_clock_target(self, new_clock_target): #todo: use this everywhere
-        if self.clock_target < new_clock_target:
-            self.clock_target = new_clock_target
+    def raise_clock_target(self, clock_target): #todo: use this everywhere
+        if self.clock_target < clock_target:
+            self.clock_target = clock_target
     
     def __eq__(self, other):
         return isinstance(other, CrunchingProfile) and \

@@ -85,6 +85,9 @@ class GuiProject(object):
         """
         Says whether the simulation is currently playing.
         """
+        
+        self.infinity_job = None
+        
 
         self.delay = 0.05 # Should be a mechanism for setting that
         self.default_buffer = 100 # Should be a mechanism for setting that
@@ -178,6 +181,14 @@ class GuiProject(object):
             self.start_playing()
         if modify_path:
             self.__modify_path_to_include_active_node()
+            
+        if modify_path and was_playing:
+            self.infinity_job.crunching_profile.clock_buffer = \
+                self.infinity_job.node.state.clock + self.default_buffer
+            self.infinity_job = self.project.maintain_buffer_on_path(node,
+                                                                     self.path)
+                
+            
         self.main_window.Refresh()
 
     def __modify_path_to_include_active_node(self):
@@ -203,6 +214,9 @@ class GuiProject(object):
 
         self.is_playing = True
         
+        self.infinity_job = \
+            self.project.maintain_buffer_on_path(self.active_node, self.path)
+        
         def mission():
             self.timer_for_playing = wx.FutureCall(self.delay*1000, functools.partial(self.__play_next, self.active_node))
         self.stuff_to_do_when_idle.put(mission)
@@ -217,9 +231,16 @@ class GuiProject(object):
                 self.timer_for_playing.Stop()
             except:
                 pass
+            
         if self.is_playing is False:
             return
+        
         self.is_playing = False
+        
+        assert self.infinity_job is not None
+        self.infinity_job.crunching_profile.clock_target = \
+            self.infinity_job.node.state.clock + self.default_buffer
+        
         queue_tools.dump(self.stuff_to_do_when_idle)
         assert self.stuff_to_do_when_idle.qsize() == 0
         self.project.maintain_buffer(self.active_node, self.default_buffer)
@@ -305,13 +326,7 @@ class GuiProject(object):
         Returns how many nodes were added to the tree.
         """
 
-        if self.is_playing:
-            playing_leaf = self.path.get_last_node(starting_at=self.active_node)
-        else:
-            playing_leaf = None
-
-
-        added_nodes=self.project.sync_crunchers(temp_infinity_node=playing_leaf)
+        added_nodes=self.project.sync_crunchers()
         """
         This is the important line here, which actually executes
         the Project's sync_crunchers function. As you can see,

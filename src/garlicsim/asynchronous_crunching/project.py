@@ -9,7 +9,7 @@ information.
 import garlicsim.data_structures
 import garlicsim.misc.simpack_grokker
 import crunching_manager
-from node_crunching_job import NodeCrunchingJob
+from job import Job
 from crunching_profile import CrunchingProfile
 
 import garlicsim.general_misc.read_write_lock as read_write_lock
@@ -107,30 +107,28 @@ class Project(object):
         """
         return self.tree.add_state(state)
 
-    def maintain_buffer(self, node, wanted_clock_distance=0):
+    def maintain_buffer(self, node, clock_buffer=0):
         """
         Make sure there's a large enough buffer of nodes after `node`.
 
         This method will ensure that every path that starts at `node` will have
-        a clock buffer of at least `wanted_clock_distance` after `node`.
+        a clock buffer of at least `clock_buffer` after `node`.
         If there isn't, the leaves of `node` will be crunched until there's a
-        buffer of `wanted_clock_distance` between `node` and each of the
+        buffer of `clock_buffer` between `node` and each of the
         leaves.
         """
-        # todo: rename wanted_clock_buffer?
-        todo, check step options profile
-        leaves = node.get_all_leaves(max_clock_distance=wanted_clock_distance)
-        new_clock_target = node.state.clock + wanted_clock_distance
-        for item in leaves.items():
-            
-            leaf = item[0]
-            
+        leaves_dict = node.get_all_leaves(max_clock_distance=clock_buffer)
+        new_clock_target = node.state.clock + clock_buffer
+        
+        for item in leaves_dict.items():
+
+            leaf = item[0]        
             jobs = self.crunching_manager.get_jobs_by_node(leaf)
             
             if not jobs:
                 crunching_profile = (new_clock_target,
                                      leaf.step_options_profile)
-                job = NodeCrunchingJob(leaf, crunching_profile)
+                job = Job(leaf, crunching_profile)
                 jobs.append(job)
                 continue
             
@@ -138,21 +136,15 @@ class Project(object):
                 job.crunching_profile.raise_clock_target(new_clock_target)
             
     
-    def maintain_buffer_on_path(self, node, path, wanted_clock_distance=0):
+    def maintain_buffer_on_path(self, node, path, clock_buffer=0):
         """
-        Make sure there's a large enough buffer of nodes after `node`.
-
-        This method will ensure that every path that starts at `node` will have
-        a clock buffer of at least `wanted_clock_distance` after `node`.
-        If there isn't, the leaves of `node` will be crunched until there's a
-        buffer of `wanted_clock_distance` between `node` and each of the
-        leaves.tododoc
+        Make sure ther
+        
+        Returns the job.
         """
-        # todo: rename wanted_clock_buffer?
-        # todo: return the job?
         
         leaf = path.get_last_node(starting_at=node)
-        new_clock_target = node.state.clock + wanted_clock_distance     
+        new_clock_target = node.state.clock + clock_buffer     
 
         jobs = self.crunching_manager.get_jobs_by_node(leaf)
         
@@ -167,7 +159,7 @@ class Project(object):
             step_options_profile = leaf.step_options_profile
             crunching_profile = CrunchingProfile(new_clock_target,
                                                  step_options_profile)
-            job = NodeCrunchingJob(leaf, crunching_profile)
+            job = Job(leaf, crunching_profile)
             return
           
     
@@ -185,7 +177,7 @@ class Project(object):
         pass
     
 
-    def sync_crunchers(self, temp_infinity_node=None):
+    def sync_crunchers(self):
         """
         Take work from the crunchers, and give them new instructions if needed.
         
@@ -201,8 +193,7 @@ class Project(object):
         Returns the total amount of nodes that were added to the tree in the
         process.
         """        
-        return self.crunching_manager.sync_crunchers \
-               (temp_infinity_node=temp_infinity_node)
+        return self.crunching_manager.sync_crunchers()
     
     @with_tree_lock
     def simulate(self, node, iterations=1, *args, **kwargs):

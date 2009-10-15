@@ -108,14 +108,16 @@ tree while specifying a template_node.""")
             
             if parent.block:
                 if len(parent.children)==1:
-                    if not node.touched:
+                    if (not node.touched) and (parent.step_options_profile == \
+                                               node.step_options_profile):
                         parent.block.append_node(node)
                 else: # parent.children > 1
                     if not (parent is parent.block[-1]):
                         parent.block.split(parent)
             else: # parent.block is None
                 if (not node.touched) and (not parent.touched) and \
-                   (len(parent.children)==1):
+                   (len(parent.children)==1) and \
+                   (parent.step_options_profile == node.step_options_profile):
                     Block([parent, node])
                 
                         

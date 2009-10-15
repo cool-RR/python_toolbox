@@ -5,9 +5,9 @@
 tododoc
 """
 
-__all__ = ['NodeCrunchingJob']
+__all__ = ['Job']
 
-class NodeCrunchingJob(object):
+class Job(object): # rename to job
     '''
     TODODOC
     A crunching profile is a set of instructions that a cruncher follows when
