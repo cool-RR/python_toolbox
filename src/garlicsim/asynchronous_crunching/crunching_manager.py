@@ -58,6 +58,8 @@ class CrunchingManager(object):
         A dict that maps nodes that should be worked on to crunchers.
         """
         
+        self.crunhing_profile
+        
         todo, use hash to see when crunhing profile changed
         
     @with_tree_lock
@@ -110,7 +112,6 @@ class CrunchingManager(object):
                     cruncher.retire()
                 
             else:
-                nodes_to_crunch[new_leaf] = crunching_profile
                 if cruncher.is_alive():
                     old_crunching_profile = \
                         self.old_nodes_to_crunch.get(node, None)
