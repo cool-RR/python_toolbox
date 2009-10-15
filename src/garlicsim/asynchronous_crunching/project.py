@@ -75,13 +75,6 @@ class Project(object):
         could potentially be writing to it.
         """
 
-        self.nodes_to_crunch = []
-        """
-        tododoc
-        A dict that maps leaves that should be worked on to a crunching
-        profile.
-        """
-
     def make_plain_root(self, *args, **kwargs):
         """
         Create a parentless node whose state is a simple plain state.

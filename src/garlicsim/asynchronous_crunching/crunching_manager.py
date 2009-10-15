@@ -53,6 +53,9 @@ class CrunchingManager(object):
         else:
             self.Cruncher = PreferredCruncher
         
+        self.jobs = []
+        '''tododoc'''
+        
         self.crunchers = {}
         """tododoc, should map JOBS to crunchers.
         A dict that maps nodes that should be worked on to crunchers.
@@ -75,22 +78,26 @@ class CrunchingManager(object):
         process.
         """
         tree = self.project.tree
-        nodes_to_crunch = self.project.nodes_to_crunch
         
         total_added_nodes = NodesAdded(0)
 
         for (job, cruncher) in self.crunchers.copy().items():
-            if not (job in nodes_to_crunch):
+            if not (job in self.jobs):
                 (added_nodes, new_leaf) = \
                     self.__add_work_to_tree(cruncher, node, retire=True)
                 total_added_nodes += added_nodes
                 del self.crunchers[job]
 
 
-        for job in nodes_to_crunch.copy():
-            crunching_profile = job.crunching_profile
+        for job in self.jobs.copy():
+            
+            job_done = job.is_done()
+            
             if self.crunchers.has_key(job) is False:
-                self.__conditional_create_cruncher(job)
+                if not job_done:
+                    self.__conditional_create_cruncher(job)
+                else: # job_done is True
+                    self.jobs.remove(job)
                 continue
 
             # self.crunchers.has_key(job) is True
@@ -100,43 +107,22 @@ class CrunchingManager(object):
             (added_nodes, new_leaf) = self.__add_work_to_tree(cruncher, node)
             total_added_nodes += added_nodes
 
-            #del nodes_to_crunch[node]
-            #del self.crunchers[node]
-            
             job.node = new_leaf
             
-            done = job.is_done()
-            
-            if done:
+            if not job_done:
                 if cruncher.is_alive():
-                    cruncher.retire()
-                
-            else:
-                if cruncher.is_alive():
-                    old_crunching_profile = \
-                        self.old_nodes_to_crunch.get(node, None)
-                    if old_crunching_profile != crunching_profile:
-                        cruncher.update_crunching_profile(crunching_profile)                        
-                    self.crunchers[new_leaf] = cruncher
+                    if CRUNCHING PROFILE CHANGED TODO:
+                        cruncher.update_crunching_profile(crunching_profile)
                 else:
                     self.__conditional_create_cruncher(new_leaf, crunching_profile)
-        
-        
-        self.__make_old_nodes_to_crunch()
-
+            else: # job_done is True           
+                self.jobs.remove(job)
+                if cruncher.is_alive():
+                    cruncher.retire()
+                del self.crunchers[job]
+            
         return total_added_nodes
 
-    
-    def __make_old_nodes_to_crunch(self):
-        '''
-        Make and store a copy of the .nodes_to_crunch attribute of the project.
-        
-        This is used to tell whether the project updated its crunching
-        profiles, and if so we should update the crunchers' profiles.
-        '''
-        self.old_nodes_to_crunch = garlicsim.general_misc.dict_tools.deepcopy_values(
-            self.project.nodes_to_crunch
-        )
     
     def __conditional_create_cruncher(self, job):
         '''
@@ -157,8 +143,7 @@ class CrunchingManager(object):
             return cruncher
     
     def get_jobs_by_node(self, node):
-        return [job for jobs in self.project.nodes_to_crunch
-                if job.node == node]
+        return [job for jobs in self.jobs if job.node == node]
     
     def __add_work_to_tree(self, cruncher, node, retire=False): #todo: modify this to take job?
         """
