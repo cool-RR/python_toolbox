@@ -32,10 +32,6 @@ class Node(object):
     
     def __init__(self, tree, state, parent=None, step_options_profile=None,
                  touched=False):
-
-        if (touched and step_options_profile):
-            raise NodeError \
-                  ('Only an untouched node may have a step options profile.')
             
         self.tree = tree
         self.state = state

@@ -57,27 +57,28 @@ class Tree(object):
         """
         x = copy.deepcopy(template_node.state)
 
-        if template_node is None:
-            parent = None
-        else:
-            parent = template_node.parent
+        parent = template_node.parent
+        step_options_profile = template_node.step_options_profile
+        return self.add_state(x, parent,
+                              step_options_profile=step_options_profile,
+                              template_node=template_node)
 
-        return self.add_state(x, parent, template_node)
 
-
-    def add_state(self, state, parent=None, template_node=None):
+    def add_state(self, state, parent=None, step_options_profile=None,
+                  template_node=None):
         """
         Wrap state in node and adds to tree.
         
         Returns the node.
         """
         touched = (parent is None) or (template_node is not None)    
-        my_node = Node(self, state, touched=touched)
+        my_node = Node(self, state, step_options_profile=step_options_profile,
+                       touched=touched)
         self.add_node(my_node, parent, template_node)
         return my_node
 
 
-    def add_node(self, node, parent=None, template_node=None):
+    def add_node(self, node, parent=None, template_node=None): #todo: private?
         """
         Add a node to the tree.
         

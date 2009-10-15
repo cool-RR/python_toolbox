@@ -19,7 +19,13 @@ class NodeCrunchingJob(object):
         
         self.crunching_profile = crunching_profile
   
-
+    
+    def is_done(self):
+        '''
+        does not check the node's leaf!
+        '''
+        return node.state.clock >= self.crunching_profile.clock_target
+    
     # todo: should there be an is_done here or other helpful methods?
         
     # todo: make __repr__ like this:

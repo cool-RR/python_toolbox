@@ -9,6 +9,8 @@ information.
 import garlicsim.data_structures
 import garlicsim.misc.simpack_grokker
 import crunching_manager
+from node_crunching_job import NodeCrunchingJob
+from crunching_profile import CrunchingProfile
 
 import garlicsim.general_misc.read_write_lock as read_write_lock
 from garlicsim.general_misc.infinity import Infinity
@@ -123,22 +125,58 @@ class Project(object):
         leaves.
         """
         # todo: rename wanted_clock_buffer?
+        todo, check step options profile
         leaves = node.get_all_leaves(max_clock_distance=wanted_clock_distance)
         new_clock_target = node.state.clock + wanted_clock_distance
         for item in leaves.items():
             
             leaf = item[0]
             
-            crunching_profile = \
-                self.nodes_to_crunch.setdefault(
-                    leaf,
-                    garlicsim.asynchronous_crunching.CrunchingProfile()
-                )
+            jobs = self.crunching_manager.get_jobs_by_node(leaf)
             
-            crunching_profile.clock_target = max(
-                crunching_profile.clock_target,
-                new_clock_target
-            )
+            if not jobs:
+                crunching_profile = (new_clock_target,
+                                     leaf.step_options_profile)
+                job = NodeCrunchingJob(leaf, crunching_profile)
+                jobs.append(job)
+                continue
+            
+            for job in jobs:
+                job.crunching_profile.raise_clock_target(new_clock_target)
+            
+    
+    def maintain_buffer_on_path(self, node, path, wanted_clock_distance=0):
+        """
+        Make sure there's a large enough buffer of nodes after `node`.
+
+        This method will ensure that every path that starts at `node` will have
+        a clock buffer of at least `wanted_clock_distance` after `node`.
+        If there isn't, the leaves of `node` will be crunched until there's a
+        buffer of `wanted_clock_distance` between `node` and each of the
+        leaves.tododoc
+        """
+        # todo: rename wanted_clock_buffer?
+        # todo: return the job?
+        
+        leaf = path.get_last_node(starting_at=node)
+        new_clock_target = node.state.clock + wanted_clock_distance     
+
+        jobs = self.crunching_manager.get_jobs_by_node(leaf)
+        
+        if jobs:
+            job = jobs[-1]
+            # We only want to take one job. We're guessing the last, and 
+            # therefore the most recent one, will be the most wanted by the
+            # user.
+            job.crunching_profile.clock_target = new_clock_target
+            return
+        else:
+            step_options_profile = leaf.step_options_profile
+            crunching_profile = CrunchingProfile(new_clock_target,
+                                                 step_options_profile)
+            job = NodeCrunchingJob(leaf, crunching_profile)
+            return
+          
     
     def begin_crunching(self, node, clock_distance=None,
                         step_options_profile=None):
@@ -148,7 +186,7 @@ class Project(object):
         # todo: Make Infinitesimal class to put as default to clock_distance?
         # todo: change "fork naturally" to use this?
         
-        
+        TODO
         
         
         pass
