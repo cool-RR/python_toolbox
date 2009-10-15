@@ -14,12 +14,6 @@ is included with this package as the file `lgpl2.1_license.txt`.
 
 This licensing does not apply to `garlicsim_wx`, which is the associated GUI
 package.
-
-todo: maybe do the "with tree_lock" in Project instead of in CrunchingManager?
-
-todo: organize all namespaces
-
-todo: decide policies regaring import (whether from, as, or regular)
 """
 
 from asynchronous_crunching import Project

@@ -5,7 +5,7 @@ import multiprocessing
 class Stopper(object):
     pass
 
-def dump_queue(queue):
+def dump(queue):
     """
     Empties all pending items in a queue and returns them in a list.
     
@@ -58,4 +58,4 @@ if __name__ == '__main__':
     p.start()
     # p.join()
     time.sleep(10)
-    l = dump_queue(p.q)
+    l = dump(p.q)
