@@ -265,10 +265,11 @@ class HistoryBrowser(garlicsim.misc.history_browser.HistoryBrowser):
         # current_thread = threading.currentThread()
         # This was used instead of self.cruncher. Don't know why. 11/10/2009.
         
-        nodes_to_crunchers = self.project.crunching_manager.crunchers.items()
+        
+        jobs_to_crunchers = self.project.crunching_manager.crunchers.items()
         
         nodes_that_are_us = \
-            [node for (node, cruncher) in nodes_to_crunchers \
+            [job.node for (job, cruncher) in jobs_to_crunchers \
              if cruncher == self.cruncher]
         
         num = len(nodes_that_are_us)

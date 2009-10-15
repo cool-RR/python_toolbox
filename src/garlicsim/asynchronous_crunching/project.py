@@ -125,16 +125,16 @@ class Project(object):
         for item in leaves_dict.items():
 
             leaf = item[0]        
-            jobs = self.crunching_manager.get_jobs_by_node(leaf)
+            jobs_of_leaf = self.crunching_manager.get_jobs_by_node(leaf)
             
-            if not jobs:
-                crunching_profile = (new_clock_target,
-                                     leaf.step_options_profile)
+            if not jobs_of_leaf:
+                crunching_profile = CrunchingProfile(new_clock_target,
+                                                     leaf.step_options_profile)
                 job = Job(leaf, crunching_profile)
-                jobs.append(job)
+                self.crunching_manager.jobs.append(job)
                 continue
             
-            for job in jobs:
+            for job in jobs_of_leaf:
                 job.crunching_profile.raise_clock_target(new_clock_target)
             
     
@@ -148,21 +148,22 @@ class Project(object):
         leaf = path.get_last_node(starting_at=node)
         new_clock_target = node.state.clock + clock_buffer     
 
-        jobs = self.crunching_manager.get_jobs_by_node(leaf)
+        jobs_of_leaf = self.crunching_manager.get_jobs_by_node(leaf)
         
-        if jobs:
-            job = jobs[-1]
+        if jobs_of_leaf:
+            job = jobs_of_leaf[-1]
             # We only want to take one job. We're guessing the last, and 
             # therefore the most recent one, will be the most wanted by the
             # user.
             job.crunching_profile.clock_target = new_clock_target
-            return
+            return job
         else:
             step_options_profile = leaf.step_options_profile
             crunching_profile = CrunchingProfile(new_clock_target,
                                                  step_options_profile)
             job = Job(leaf, crunching_profile)
-            return
+            self.crunching_manager.jobs.append(job)
+            return job
           
     
     def begin_crunching(self, node, clock_buffer=None,
@@ -176,7 +177,8 @@ class Project(object):
         # todo: change "fork naturally" to use this?
         
         step_options_profile = \
-            garlicsim.misc.step_options_profile.StepOptionsProfile(args, kwargs)
+            garlicsim.misc.step_options_profile.StepOptionsProfile(*args,
+                                                                   **kwargs)
         
         clock_target = node.state.clock + clock_buffer
         

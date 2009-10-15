@@ -89,7 +89,7 @@ class CrunchingManager(object):
         for (job, cruncher) in self.crunchers.copy().items():
             if not (job in self.jobs):
                 (added_nodes, new_leaf) = \
-                    self.__add_work_to_tree(cruncher, node, retire=True)
+                    self.__add_work_to_tree(cruncher, job.node, retire=True)
                 total_added_nodes += added_nodes
                 del self.crunchers[job]
 
@@ -108,17 +108,18 @@ class CrunchingManager(object):
             
             cruncher = self.crunchers[job]
             
-            (added_nodes, new_leaf) = self.__add_work_to_tree(cruncher, node)
+            (added_nodes, new_leaf) = self.__add_work_to_tree(cruncher,
+                                                              job.node)
             total_added_nodes += added_nodes
 
             job.node = new_leaf
             
-            if not job.is_done(): # (Calling is_done again cause node changed)
+            if not job.is_done(): # (Need to call is_done again cause node changed)
+                
+                crunching_profile = job.crunching_profile
                 
                 if cruncher.is_alive():
-                    
-                    crunching_profile = job.crunching_profile
-                    
+                                        
                     if self.crunching_profiles_change_tracker.check_in \
                        (crunching_profile):
                         
@@ -126,8 +127,7 @@ class CrunchingManager(object):
                         
                 else:
                     
-                    self.__conditional_create_cruncher(new_leaf,
-                                                       crunching_profile)
+                    self.__conditional_create_cruncher(job)
             else: # job.is_done() is True           
                 self.jobs.remove(job)
                 if cruncher.is_alive():
@@ -155,14 +155,14 @@ class CrunchingManager(object):
                 cruncher = self.Cruncher(node.state, self.project,
                                          crunching_profile=crunching_profile)
             cruncher.start()
-            self.crunchers[node] = cruncher
+            self.crunchers[job] = cruncher
             
             self.crunching_profiles_change_tracker.check_in(crunching_profile)
             
             return cruncher
     
     def get_jobs_by_node(self, node):
-        return [job for jobs in self.jobs if job.node == node]
+        return [job for job in self.jobs if job.node == node]
     
     def __add_work_to_tree(self, cruncher, node, retire=False): #todo: modify this to take job?
         """

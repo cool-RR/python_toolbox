@@ -169,7 +169,7 @@ class GuiProject(object):
         """
         self.project.maintain_buffer(
             node,
-            wanted_clock_distance=self.default_buffer
+            clock_buffer=self.default_buffer
         )
         
         was_playing = self.is_playing
@@ -215,7 +215,8 @@ class GuiProject(object):
         self.is_playing = True
         
         self.infinity_job = \
-            self.project.maintain_buffer_on_path(self.active_node, self.path)
+            self.project.maintain_buffer_on_path(self.active_node, self.path,
+                                                 Infinity)
         
         def mission():
             self.timer_for_playing = wx.FutureCall(self.delay*1000, functools.partial(self.__play_next, self.active_node))
@@ -295,8 +296,8 @@ class GuiProject(object):
         """
         
         node = self.active_node
-        self.project.begin_crunching(self, self.active_node,
-                                     self.default_buffer) # pass so_profile
+        self.project.begin_crunching(self.active_node, self.default_buffer)
+        # todo: give so_profile
 
 
     def edit_from_active_node(self,*args,**kwargs):

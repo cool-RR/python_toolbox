@@ -27,6 +27,7 @@ class StepOptionsProfile(ArgumentsProfile):
         
         # Perhaps we were passed a StepOptionsProfile object instead of args
         # and kwargs? If so load that one, cause we're all cool and nice.
+        candidate = None
         if len(args) == 1 and len(kwargs) == 0:
             candidate = args[0]
         if len(args) == 0 and len(kwargs) == 1 and \
