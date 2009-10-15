@@ -73,8 +73,9 @@ class Project(object):
         could potentially be writing to it.
         """
 
-        self.nodes_to_crunch = {}
+        self.nodes_to_crunch = []
         """
+        tododoc
         A dict that maps leaves that should be worked on to a crunching
         profile.
         """
@@ -111,14 +112,17 @@ class Project(object):
         """
         return self.tree.add_state(state)
 
-    def crunch_all_leaves(self, node, wanted_clock_distance=0): #todo: specify profile
+    def maintain_buffer(self, node, wanted_clock_distance=0):
         """
-        Crunch all the leaves of `node`.
-        
-        The leaves of `node` will be crunched to the point where there's a
-        buffer of `wanted_clock_distance` between `node` and each of its
+        Make sure there's a large enough buffer of nodes after `node`.
+
+        This method will ensure that every path that starts at `node` will have
+        a clock buffer of at least `wanted_clock_distance` after `node`.
+        If there isn't, the leaves of `node` will be crunched until there's a
+        buffer of `wanted_clock_distance` between `node` and each of the
         leaves.
         """
+        # todo: rename wanted_clock_buffer?
         leaves = node.get_all_leaves(max_clock_distance=wanted_clock_distance)
         new_clock_target = node.state.clock + wanted_clock_distance
         for item in leaves.items():
@@ -135,7 +139,20 @@ class Project(object):
                 crunching_profile.clock_target,
                 new_clock_target
             )
-                
+    
+    def begin_crunching(self, node, clock_distance=None,
+                        step_options_profile=None):
+        '''
+        tododoc
+        '''
+        # todo: Make Infinitesimal class to put as default to clock_distance?
+        # todo: change "fork naturally" to use this?
+        
+        
+        
+        
+        pass
+    
 
     def sync_crunchers(self, temp_infinity_node=None):
         """
@@ -168,6 +185,7 @@ class Project(object):
         
         Returns the final node.
         """
+        # todo: is simulate a good name? Need to say it's synchronously
         
         if self.simpack_grokker.history_dependent:
             return self.__history_dependent_simulate(node, iterations,

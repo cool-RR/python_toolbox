@@ -104,9 +104,10 @@ successor or a direct ancestor of the block.""")
         if len(step_option_profiles) > 1:
             raise BlockError('''Tried to add node list that doesn't share the \
 same step options profile.''')
-        if step_option_profiles.pop() != self.get_step_options_profile():
-            raise BlockError('''Tried to add nodelist which contains node that \
-has a different step_options_profile.''')
+        if self.__node_list and \
+           list(step_option_profiles)[0] != self.get_step_options_profile():
+            raise BlockError('''Tried to add nodelist which contains node \
+that has a different step_options_profile.''')
         
         # We now make sure the node_list is successive, untouched, and has no
         # unwanted children.
@@ -210,7 +211,7 @@ the index was bigger than the block's length.""")
         
         This profile must be identical in all of the nodes in the block.
         '''
-        return self.__node_list
+        return self.__node_list[0].step_options_profile
         
 
         

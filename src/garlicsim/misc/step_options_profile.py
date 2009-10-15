@@ -6,12 +6,12 @@ This module defines the StepOptionsProfile class. See its documentation for
 more information.
 """
 
-import garlicsim.general_misc.arguments_profile
+from garlicsim.general_misc.arguments_profile import ArgumentsProfile
 
 __all__ = ['StepOptionsProfile']
 
 class StepOptionsProfile\
-      (garlicsim.general_misc.arguments_profile.ArgumentsProfile):
+      (ArgumentsProfile):
     """
     A profile of *args and **kwargs to be used with a step function.
     
@@ -32,3 +32,9 @@ class StepOptionsProfile\
                    thing]        
         big_string = ', '.join(strings)
         return 'StepOptionsProfile(%s)' % big_string
+    
+    def __eq__(self, other):
+        if other is None:
+            return len(self.args) == 0 and len(self.kwargs) == 0
+        else:
+            return ArgumentsProfile

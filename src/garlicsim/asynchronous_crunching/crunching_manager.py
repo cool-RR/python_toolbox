@@ -37,6 +37,7 @@ def with_tree_lock(method, *args, **kwargs):
 class CrunchingManager(object):
     """
     A crunching manager manages the background crunching for a project.
+    
     Every project creates a crunching manager. The job of the crunching manager
     is to coordinate the crunchers, creating and retiring them as necessary.
     The main use of a crunching manager is through its sync_workers methods,
@@ -53,12 +54,12 @@ class CrunchingManager(object):
             self.Cruncher = PreferredCruncher
         
         self.crunchers = {}
-        """
+        """tododoc, should map JOBS to crunchers.
         A dict that maps nodes that should be worked on to crunchers.
         """
         
         self.old_nodes_to_crunch = {}
-        """
+        """tododoc
         Here we store a copy of the `.nodes_to_crunch` attribute of the
         project. This is used to tell whether the project updated its
         crunching profiles, and if so we should update the crunchers' profiles.
