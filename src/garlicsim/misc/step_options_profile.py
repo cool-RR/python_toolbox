@@ -10,8 +10,7 @@ from garlicsim.general_misc.arguments_profile import ArgumentsProfile
 
 __all__ = ['StepOptionsProfile']
 
-class StepOptionsProfile\
-      (ArgumentsProfile):
+class StepOptionsProfile(ArgumentsProfile):
     """
     A profile of *args and **kwargs to be used with a step function.
     
@@ -22,8 +21,31 @@ class StepOptionsProfile\
     step(state, *arguments_profile.args, **arguments_profile.kwargs)
     # is equivalent to
     step(state, 34, "meow", width=60)
-    
     """
+    #todo: maybe ditch ArgumentsProfile?
+    def __init__(self, *args, **kwargs):
+        
+        # Perhaps we were passed a StepOptionsProfile object instead of args
+        # and kwargs? If so load that one, cause we're all cool and nice.
+        if len(args) == 1 and len(kwargs) == 0:
+            candidate = args[0]
+        if len(args) == 0 and len(kwargs) == 1 and \
+           kwargs.has_key('step_options_profile'):
+            candidate = kwargs['step_options_profile']
+        
+        if isinstance(candidate, StepOptionsProfile):
+            self.__load_from(candidate)
+            return
+        
+        self.args, self.kwargs = args, kwargs
+        
+        
+    def __load_from(profile):
+        '''
+        Take another step options profile and load its arguments into this one.
+        '''
+        self.args, self.kwargs = profile.args, profile.kwargs
+        
     def __repr__(self):
         args_string = ', '.join([repr(thing) for thing in self.args])
         kwargs_string = ', '.join([str(key)+'='+repr(value) for \

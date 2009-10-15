@@ -8,9 +8,11 @@ information.
 
 import garlicsim.data_structures
 import garlicsim.misc.simpack_grokker
-import crunching_manager
+import garlicsim.misc.step_options_profile
+import crunching_manager # todo from
 from job import Job
 from crunching_profile import CrunchingProfile
+
 
 import garlicsim.general_misc.read_write_lock as read_write_lock
 from garlicsim.general_misc.infinity import Infinity
@@ -138,7 +140,7 @@ class Project(object):
     
     def maintain_buffer_on_path(self, node, path, clock_buffer=0):
         """
-        Make sure ther
+        Make sure ther TODODOC
         
         Returns the job.
         """
@@ -163,15 +165,20 @@ class Project(object):
             return
           
     
-    def begin_crunching(self, node, clock_distance=None,
-                        step_options_profile=None):
+    def begin_crunching(self, node, clock_buffer=None,
+                        *args, **kwargs):
         '''
         tododoc
         '''
         # todo: Make Infinitesimal class to put as default to clock_distance?
         # todo: change "fork naturally" to use this?
         
-        TODO
+        step_options_profile = \
+            garlicsim.misc.step_options_profile.StepOptionsProfile(args, kwargs)
+        
+        crunching_profile = CrunchingProfile(
+        
+        job = Job(node, 
         
         
         pass

@@ -54,12 +54,16 @@ class CrunchingManager(object):
             self.Cruncher = PreferredCruncher
         
         self.jobs = []
-        '''tododoc'''
+        '''
+        The jobs that the crunching manager will be responsible for doing.
+        '''
         
         self.crunchers = {}
-        """tododoc, should map JOBS to crunchers.
-        A dict that maps nodes that should be worked on to crunchers.
         """
+        A dict that maps jobs to crunchers. Every job is mapped to the cruncher
+        that is assigned to work on it.
+        """
+        
         
         todo, use hash to see when crunhing profile changed
         
@@ -89,10 +93,9 @@ class CrunchingManager(object):
 
         for job in self.jobs.copy():
             
-            job_done = job.is_done()
             
             if self.crunchers.has_key(job) is False:
-                if not job_done:
+                if not job.is_done():
                     self.__conditional_create_cruncher(job)
                 else: # job_done is True
                     self.jobs.remove(job)
@@ -107,13 +110,14 @@ class CrunchingManager(object):
 
             job.node = new_leaf
             
-            if not job_done:
+            if not job.is_done(): # (Calling is_done again cause node changed)
                 if cruncher.is_alive():
                     if CRUNCHING PROFILE CHANGED TODO:
                         cruncher.update_crunching_profile(crunching_profile)
                 else:
-                    self.__conditional_create_cruncher(new_leaf, crunching_profile)
-            else: # job_done is True           
+                    self.__conditional_create_cruncher(new_leaf,
+                                                       crunching_profile)
+            else: # job.is_done() is True           
                 self.jobs.remove(job)
                 if cruncher.is_alive():
                     cruncher.retire()

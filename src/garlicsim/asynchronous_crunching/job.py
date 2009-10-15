@@ -2,41 +2,46 @@
 # This program is distributed under the LGPL2.1 license.
 
 """
-tododoc
+This module defines the Job class. See its documentation for more info.
 """
 
 __all__ = ['Job']
 
 class Job(object): # rename to job
     '''
-    TODODOC
-    A crunching profile is a set of instructions that a cruncher follows when
-    crunching the simulation.
+    A job of crunching the simulation from a given node.
+        
+    A job specifies a node and a crunching profile. It means we should crunch
+    from node according to the cruncing profile.
     '''
     def __init__(self, node, crunching_profile):
         
         self.node = node
+        '''
+        The node from which we need to crunch.
+        '''
         
         self.crunching_profile = crunching_profile
+        '''
+        The crunching profile to be used for crunching.
+        '''
   
-    
     def is_done(self):
         '''
-        does not check the node's leaf!
+        Return whether the job is done, i.e. enough crunching has been done.
         '''
-        return node.state.clock >= self.crunching_profile.clock_target
+        return self.crunching_profile.state_satisfies(self.node.state)
     
-    # todo: should there be an is_done here or other helpful methods?
+    # todo: should there be other helpful methods here?
         
     # todo: make __repr__ like this:
-    """
-    def __repr__(self):
+    
+    def __repr__(self): #todo: ensure not subclass?
         stuff = []
-        stuff.append("clock_target=%s" % self.clock_target)
-        stuff.append("step_options_profile=%s" % self.step_options_profile)
+        stuff.append("node=%s" % self.node)
+        stuff.append("crunching_profile=%s" % self.crunching_profile)
         temp = ", ".join(stuff)
-        return ("CrunchingProfile(%s)" % temp)
-    """
+        return ("Job(%s)" % temp)
     
     
     
