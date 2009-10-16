@@ -10,11 +10,11 @@ class ChangeTracker(object):
         self.library = weakref.WeakKeyDictionary()
         
     def check_in(self, thing):
-        if self.library.has_key(thing) is False:
+        if thing not in self.library:
             self.library[thing] = hash(thing)
             return True
         
-        # self.library.has_key(thing) is True
+        # thing in self.library
         
         previous_hash = self.library[thing]
         new_hash = hash(thing)

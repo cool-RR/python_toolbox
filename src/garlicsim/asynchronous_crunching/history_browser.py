@@ -8,12 +8,12 @@ for more info.
 
 import threading
 
-import garlicsim.misc.history_browser
-from obsolete_cruncher_error import ObsoleteCruncherError
-
 import garlicsim.general_misc.binary_search as binary_search
 import garlicsim.general_misc.queue_tools as queue_tools
 import garlicsim.general_misc.third_party.decorator
+
+import garlicsim.misc.history_browser
+from obsolete_cruncher_error import ObsoleteCruncherError
 
 __all__ = ["HistoryBrowser"]
 
@@ -44,16 +44,6 @@ class HistoryBrowser(garlicsim.misc.history_browser.HistoryBrowser):
     When using a HistoryBroswer, the tree_lock of the project is acquired
     for reading. That acquiring action can also be invoked by using
     HistoryBrowser as a context manager.
-    
-    
-    todo in the future: because historybrowser retains a reference to a node,
-    when the user deletes a node we should mark it so the historybrowser will
-    know it's dead.
-    
-    todo: make it easy to use hisotrybrowser's method from a separate thread,
-    so when waiting for a lock the cruncher could still be productive.
-        
-    todo: maybe I've exaggerated in using @with_self in so many places?
     '''
     
     def __init__(self, cruncher):

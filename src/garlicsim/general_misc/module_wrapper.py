@@ -12,7 +12,7 @@ def module_wrapper_factory(module):
     Given a module, returns a ModuleWrapper which is almost identical to the
     module, with the difference being that it can be pickled.
     '''
-    if wrapped_modules.has_key(module):
+    if module in wrapped_modules:
         return wrapped_modules[module]
     else:
         module_wrapper = ModuleWrapper(module)

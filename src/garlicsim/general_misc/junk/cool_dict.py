@@ -6,6 +6,8 @@ This module defines the CoolDict class. See its documentation for more
 information.
 '''
 
+# remove has_key from all places
+
 import copy
 
 class CoolDict(dict):

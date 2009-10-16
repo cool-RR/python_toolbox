@@ -167,7 +167,7 @@ class GuiProject(object):
         '''
         Makes `node` the active node, displaying it onscreen.
         '''
-        self.project.maintain_buffer(
+        self.project.ensure_buffer(
             node,
             clock_buffer=self.default_buffer
         )
@@ -185,7 +185,7 @@ class GuiProject(object):
         if modify_path and was_playing:
             self.infinity_job.crunching_profile.clock_buffer = \
                 self.infinity_job.node.state.clock + self.default_buffer
-            self.infinity_job = self.project.maintain_buffer_on_path(node,
+            self.infinity_job = self.project.ensure_buffer_on_path(node,
                                                                      self.path,
                                                                      Infinity)
                 
@@ -216,7 +216,7 @@ class GuiProject(object):
         self.is_playing = True
         
         self.infinity_job = \
-            self.project.maintain_buffer_on_path(self.active_node, self.path,
+            self.project.ensure_buffer_on_path(self.active_node, self.path,
                                                  Infinity)
         
         def mission():
@@ -245,7 +245,7 @@ class GuiProject(object):
         
         queue_tools.dump(self.stuff_to_do_when_idle)
         assert self.stuff_to_do_when_idle.qsize() == 0
-        self.project.maintain_buffer(self.active_node, self.default_buffer)
+        self.project.ensure_buffer(self.active_node, self.default_buffer)
 
 
 
@@ -350,7 +350,7 @@ class GuiProject(object):
         if node.still_in_editing==False:
             raise StandardError("You said 'done editing', but you were not in editing mode.")
         node.still_in_editing=False
-        self.project.maintain_buffer(node, self.default_buffer)
+        self.project.ensure_buffer(node, self.default_buffer)
 
     def make_generic_initial_dialog(self):
         initial_dialog=custom_widgets.GenericInitialDialog(self.main_window, -1)

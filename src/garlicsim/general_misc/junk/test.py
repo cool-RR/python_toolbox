@@ -11,7 +11,7 @@ if __name__ == "__main__":
     
     node = project.root_this_state(state)
     
-    project.maintain_buffer(node, 100)
+    project.ensure_buffer(node, 100)
     
     print(project.sync_crunchers())
     

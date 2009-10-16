@@ -31,7 +31,7 @@ class StepOptionsProfile(ArgumentsProfile):
         if len(args) == 1 and len(kwargs) == 0:
             candidate = args[0]
         if len(args) == 0 and len(kwargs) == 1 and \
-           kwargs.has_key('step_options_profile'):
+           ('step_options_profile' in kwargs):
             candidate = kwargs['step_options_profile']
         
         if isinstance(candidate, StepOptionsProfile):

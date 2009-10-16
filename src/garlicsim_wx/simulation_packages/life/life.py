@@ -14,7 +14,7 @@ class State(garlicsim.data_structures.State):
         return self.board.__repr__()
     def __eq__(self, other):
         return isinstance(other, State) and self.board == other.board
-    def __neq__(self, other):
+    def __ne__(self, other):
         return not self.__eq__(other)
     
 def step(old_state, useless=None, krazy=None):
@@ -119,5 +119,5 @@ class Board(object):
     def __eq__(self, other):
         return isinstance(other, Board) and self.__list == other.__list
     
-    def __neq__(self, other):
+    def __ne__(self, other):
         return not self.__eq__(other)

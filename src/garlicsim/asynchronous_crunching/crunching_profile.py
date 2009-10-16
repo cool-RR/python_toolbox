@@ -28,11 +28,14 @@ class CrunchingProfile(object):
   
     def state_satisfies(self, state):
         '''
-        Checks whether a state has a clock high enough to satisfy this profile.
+        Check whether a state has a clock high enough to satisfy this profile.
         '''
         return state.clock >= self.clock_target
     
     def raise_clock_target(self, clock_target): #todo: use this everywhere
+        '''
+        If .clock_target is lower than the given clock_target, raise it.
+        '''
         if self.clock_target < clock_target:
             self.clock_target = clock_target
     

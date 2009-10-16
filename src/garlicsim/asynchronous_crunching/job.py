@@ -7,7 +7,7 @@ This module defines the Job class. See its documentation for more info.
 
 __all__ = ['Job']
 
-class Job(object): # rename to job
+class Job(object):
     '''
     A job of crunching the simulation from a given node.
         
@@ -34,8 +34,7 @@ class Job(object): # rename to job
     
     # todo: should there be other helpful methods here?
         
-    # todo: make __repr__ like this:
-    
+
     def __repr__(self): #todo: ensure not subclass?
         stuff = []
         stuff.append("node=%s" % self.node)

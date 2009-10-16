@@ -165,7 +165,7 @@ class Path(object):
         if len(kids) == 1:
             return kids[0]
         
-        if self.decisions.has_key(thing) or self.decisions.has_key(real_thing):
+        if (thing in self.decisions) or (real_thing in self.decisions):
             return self.decisions.get(thing, None) or \
                    self.decisions.get(real_thing, None)
         

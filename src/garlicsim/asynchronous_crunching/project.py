@@ -6,21 +6,20 @@ This module defines the Project class. See its documentation for more
 information.
 '''
 
-import garlicsim.data_structures
-import garlicsim.misc.simpack_grokker
-import garlicsim.misc.step_options_profile
-import crunching_manager # todo from
-from job import Job
-from crunching_profile import CrunchingProfile
-
-
-import garlicsim.general_misc.read_write_lock as read_write_lock
+import garlicsim.general_misc.read_write_lock
 from garlicsim.general_misc.infinity import Infinity
 import garlicsim.general_misc.module_wrapper
 import garlicsim.general_misc.third_party.decorator
 
-__all__ = ["Project"]
+import garlicsim.data_structures
+import garlicsim.misc.simpack_grokker
+import garlicsim.misc.step_options_profile
 
+from crunching_manager import CrunchingManager
+from job import Job
+from crunching_profile import CrunchingProfile
+
+__all__ = ["Project"]
 
 @garlicsim.general_misc.third_party.decorator.decorator
 def with_tree_lock(method, *args, **kwargs):
@@ -67,9 +66,9 @@ class Project(object):
 
         self.tree = garlicsim.data_structures.Tree()
         
-        self.crunching_manager = crunching_manager.CrunchingManager(self)
+        self.crunching_manager = CrunchingManager(self)
         
-        self.tree_lock = read_write_lock.ReadWriteLock()
+        self.tree_lock = garlicsim.general_misc.read_write_lock.ReadWriteLock()
         '''
         The tree_lock is a read-write lock that guards access to the tree.
         We need such a thing because some simulations are history-dependent
@@ -109,22 +108,22 @@ class Project(object):
         '''
         return self.tree.add_state(state)
 
-    def maintain_buffer(self, node, clock_buffer=0):
+    def ensure_buffer(self, node, clock_buffer=0):
         '''
-        Make sure there's a large enough buffer of nodes after `node`.
+        Maintain a large enough buffer of nodes after `node`.
 
         This method will ensure that every path that starts at `node` will have
-        a clock buffer of at least `clock_buffer` after `node`.
-        If there isn't, the leaves of `node` will be crunched until there's a
-        buffer of `clock_buffer` between `node` and each of the
-        leaves.
+        a clock buffer of at least `clock_buffer` after `node`. If there isn't,
+        the leaves of `node` will be crunched until there's a buffer of
+        `clock_buffer` between `node` and each of the leaves.
         '''
         leaves_dict = node.get_all_leaves(max_clock_distance=clock_buffer)
         new_clock_target = node.state.clock + clock_buffer
         
         for item in leaves_dict.items():
 
-            leaf = item[0]        
+            leaf = item[0]
+            
             jobs_of_leaf = self.crunching_manager.get_jobs_by_node(leaf)
             
             if not jobs_of_leaf:
@@ -138,11 +137,14 @@ class Project(object):
                 job.crunching_profile.raise_clock_target(new_clock_target)
             
     
-    def maintain_buffer_on_path(self, node, path, clock_buffer=0):
+    def ensure_buffer_on_path(self, node, path, clock_buffer=0):
         '''
-        Make sure ther TODODOC
-        
-        Returns the job.
+        Make sTODOure there's a large enough buffer of nodes after `node` on `path`.
+
+        This method will ensure that on the given path there will be a clock
+        buffer of at least `clock_buffer` after `node`. If there isn't, the
+        leaf at the end of the path will be crunched until the buffer is big
+        enough.
         '''
         
         leaf = path.get_last_node(starting_at=node)

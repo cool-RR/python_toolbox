@@ -89,6 +89,7 @@ class CrunchingManager(object):
         
         total_added_nodes = NodesAdded(0)
 
+        
         for (job, cruncher) in self.crunchers.copy().items():
             if not (job in self.jobs):
                 (added_nodes, new_leaf) = \
@@ -100,14 +101,14 @@ class CrunchingManager(object):
         for job in self.jobs[:]:
             
             
-            if self.crunchers.has_key(job) is False:
+            if job not in self.crunchers:
                 if not job.is_done():
                     self.__conditional_create_cruncher(job)
                 else: # job_done is True
                     self.jobs.remove(job)
                 continue
 
-            # self.crunchers.has_key(job) is True
+            # job in self.crunchers
             
             cruncher = self.crunchers[job]
             
@@ -162,9 +163,13 @@ class CrunchingManager(object):
             
             self.crunching_profiles_change_tracker.check_in(crunching_profile)
             
-            return cruncher
     
     def get_jobs_by_node(self, node):
+        '''
+        Get all the jobs that should be done on the specified Node.
+        
+        This is every job whose .node attribute is equal to the specified node.
+        '''
         return [job for job in self.jobs if job.node == node]
     
     def __add_work_to_tree(self, cruncher, node, retire=False): #todo: modify this to take job?
@@ -173,8 +178,8 @@ class CrunchingManager(object):
         
         If `retire` is set to True, retires the cruncher.
         
-        Returns (number, leaf), where `number` is the number of nodes that
-        were added, and `leaf` is the last node that was added.
+        Returns (number, leaf), where `number` is the number of nodes that were
+        added, and `leaf` is the last node that was added.
         '''
         tree = self.project.tree
         states = queue_tools.dump(cruncher.work_queue)
