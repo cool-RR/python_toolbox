@@ -186,7 +186,8 @@ class GuiProject(object):
             self.infinity_job.crunching_profile.clock_buffer = \
                 self.infinity_job.node.state.clock + self.default_buffer
             self.infinity_job = self.project.maintain_buffer_on_path(node,
-                                                                     self.path)
+                                                                     self.path,
+                                                                     Infinity)
                 
             
         self.main_window.Refresh()

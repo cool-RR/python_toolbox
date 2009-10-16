@@ -295,13 +295,13 @@ class Path(object):
             correct_both_for_end_node = lambda both: both
         else:
             def correct_both_for_end_node(both):
-                new_both = both[:]
+                new_both = list(both)
                 end_clock = end_node.state.clock
                 if new_both[0] and new_both[0].state.clock >= end_clock:
                     new_both[0] = end_node
                 if new_both[1] and new_both[1].state.clock >= end_clock:
                     new_both[1] = None
-                return new_both
+                return tuple(new_both)
         
         low = self.root
         

@@ -1,6 +1,10 @@
 import weakref
 
-class ChangeTracker(object):
+
+class ChangeTracker(object): 
+    '''
+    '''
+    #todo: possible that hash won't change when object changes?
     
     def __init__(self):
         self.library = weakref.WeakKeyDictionary()

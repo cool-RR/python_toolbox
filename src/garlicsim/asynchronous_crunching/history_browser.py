@@ -214,7 +214,7 @@ class HistoryBrowser(garlicsim.misc.history_browser.HistoryBrowser):
         path = our_node.make_containing_path()
         new_function = lambda node: function(node.state)
         result_in_nodes = path.get_node_by_monotonic_function \
-                        (new_function, value, rounding)
+                        (new_function, value, rounding, end_node=our_node)
         result = [(node.state if node is not None else None) \
                   for node in result_in_nodes]
         return result
