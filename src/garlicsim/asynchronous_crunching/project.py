@@ -1,10 +1,10 @@
 # Copyright 2009 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-"""
+'''
 This module defines the Project class. See its documentation for more
 information.
-"""
+'''
 
 import garlicsim.data_structures
 import garlicsim.misc.simpack_grokker
@@ -24,17 +24,17 @@ __all__ = ["Project"]
 
 @garlicsim.general_misc.third_party.decorator.decorator
 def with_tree_lock(method, *args, **kwargs):
-    """
+    '''
     A decorator used in Project's methods to use the tree lock (in write mode)
     as a context manager when calling the method.
-    """
+    '''
     self = args[0]
     with self.tree_lock.write:
         return method(*args, **kwargs)
 
 
 class Project(object):
-    """
+    '''
     You create a project when you want to do a simulation which will crunch
     in the background with worker threads or worker processes.
 
@@ -52,7 +52,7 @@ class Project(object):
     then coordinate the crunchers in order to do this work. It will update the
     .nodes_to_crunch attribute when the crunchers have completed some of the
     work.
-    """
+    '''
 
     def __init__(self, simpack):
         
@@ -70,47 +70,47 @@ class Project(object):
         self.crunching_manager = crunching_manager.CrunchingManager(self)
         
         self.tree_lock = read_write_lock.ReadWriteLock()
-        """
+        '''
         The tree_lock is a read-write lock that guards access to the tree.
         We need such a thing because some simulations are history-dependent
         and require reading from the tree in the same time that sync_crunchers
         could potentially be writing to it.
-        """
+        '''
 
     def make_plain_root(self, *args, **kwargs):
-        """
+        '''
         Create a parentless node whose state is a simple plain state.
         
         The simulation package has to define the function `make_plain_state`
         for this to work.
         
         Returns the node.
-        """
+        '''
         state = self.simpack.make_plain_state(*args, **kwargs)
         return self.root_this_state(state)
 
     def make_random_root(self, *args, **kwargs):
-        """
+        '''
         Creates a parentless node whose state is a random and messy state.
         
         The simulation package has to define the function `make_random_state`
         for this to work.
         
         Returns the node.
-        """
+        '''
         state = self.simpack.make_random_state(*args, **kwargs)
         return self.root_this_state(state)
 
     def root_this_state(self, state):
-        """
+        '''
         Take a state, wrap it in a node and add to the tree without a parent.
         
         Returns the node.
-        """
+        '''
         return self.tree.add_state(state)
 
     def maintain_buffer(self, node, clock_buffer=0):
-        """
+        '''
         Make sure there's a large enough buffer of nodes after `node`.
 
         This method will ensure that every path that starts at `node` will have
@@ -118,7 +118,7 @@ class Project(object):
         If there isn't, the leaves of `node` will be crunched until there's a
         buffer of `clock_buffer` between `node` and each of the
         leaves.
-        """
+        '''
         leaves_dict = node.get_all_leaves(max_clock_distance=clock_buffer)
         new_clock_target = node.state.clock + clock_buffer
         
@@ -139,11 +139,11 @@ class Project(object):
             
     
     def maintain_buffer_on_path(self, node, path, clock_buffer=0):
-        """
+        '''
         Make sure ther TODODOC
         
         Returns the job.
-        """
+        '''
         
         leaf = path.get_last_node(starting_at=node)
         new_clock_target = node.state.clock + clock_buffer     
@@ -190,7 +190,7 @@ class Project(object):
     
 
     def sync_crunchers(self):
-        """
+        '''
         Take work from the crunchers, and give them new instructions if needed.
         
         Talks with all the crunchers, takes work from them for implementing
@@ -204,12 +204,12 @@ class Project(object):
 
         Returns the total amount of nodes that were added to the tree in the
         process.
-        """        
+        '''        
         return self.crunching_manager.sync_crunchers()
     
     @with_tree_lock
     def simulate(self, node, iterations=1, *args, **kwargs):
-        """
+        '''
         Simulates from the given node for the given number of iterations.
         
         The results are implemented the results into the tree. Note that the
@@ -218,7 +218,7 @@ class Project(object):
         Any extraneous parameters will be passed to the step function.
         
         Returns the final node.
-        """
+        '''
         # todo: is simulate a good name? Need to say it's synchronously
         
         if self.simpack_grokker.history_dependent:
@@ -230,7 +230,7 @@ class Project(object):
     @with_tree_lock        
     def __history_dependent_simulate(self, node, iterations=1,
                                      *args, **kwargs):
-        """
+        '''
         For history-dependent simulations only:
         
         Simulates from the given node for the given number of iterations.
@@ -241,7 +241,7 @@ class Project(object):
         Any extraneous parameters will be passed to the step function.
         
         Returns the final node.
-        """
+        '''
         
         path = node.make_containing_path()
         history_browser = \
@@ -259,7 +259,7 @@ class Project(object):
     @with_tree_lock
     def __non_history_dependent_simulate(self, node, iterations=1,
                                          *args, **kwargs):
-        """
+        '''
         For non-history-dependent simulations only:
         
         Simulates from the given node for the given number of iterations.
@@ -270,7 +270,7 @@ class Project(object):
         Any extraneous parameters will be passed to the step function.
         
         Returns the final node.
-        """
+        '''
         
         current_node = node
         state = node.state

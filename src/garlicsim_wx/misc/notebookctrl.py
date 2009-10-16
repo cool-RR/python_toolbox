@@ -32,7 +32,7 @@
 # --------------------------------------------------------------------------- #
 
 
-"""
+'''
 A full-featured notebook control, worked out by Andrea Gavana And Julianne Sharer.
 
 Description:
@@ -125,7 +125,7 @@ Latest Revision: Andrea Gavana @ 06 Oct 2006, 18.10 GMT
     NCDropTarget, TabbedPage, TabCtrl, TransientTipWindow,
     macPopupWindow, macTransientTipWindow, NCFrame, DEFAULT_SIZE,
     NotebookSpinButton, NotebookMenuButton
-"""
+'''
 
 __docformat__ = "epytext"
 
@@ -144,63 +144,63 @@ import weakref
 
 # HitTest Results
 NC_HITTEST_NOWHERE = 0   # Not On Tab
-"""Indicates mouse coordinates not on any tab of the notebook"""
+'''Indicates mouse coordinates not on any tab of the notebook'''
 NC_HITTEST_ONICON  = 1   # On Icon
-"""Indicates mouse coordinates on an icon in a tab of the notebook"""
+'''Indicates mouse coordinates on an icon in a tab of the notebook'''
 NC_HITTEST_ONLABEL = 2   # On Label
-"""Indicates mouse coordinates on a label in a tab of the notebook"""
+'''Indicates mouse coordinates on a label in a tab of the notebook'''
 NC_HITTEST_ONITEM  = 4   # Generic, On Item
-"""Indicates mouse coordinates on a tab of the notebook"""
+'''Indicates mouse coordinates on a tab of the notebook'''
 NC_HITTEST_ONX = 8       # On Small Square On Every Page
-"""Indicates mouse coordinates on the closing I{X} in a tab of the notebook"""
+'''Indicates mouse coordinates on the closing I{X} in a tab of the notebook'''
 
 # NotebookCtrl Styles
 # NotebookCtrl Placed On Top (Default)
 NC_TOP = 1
-"""Specify tabs at the top of the notebook control."""
+'''Specify tabs at the top of the notebook control.'''
 # NotebookCtrl Placed At The Bottom
 NC_BOTTOM = 2
-"""Specify tabs at the bottom of the notebook control."""
+'''Specify tabs at the bottom of the notebook control.'''
 # NotebookCtrl With Fixed Width Tabs
 NC_FIXED_WIDTH = 4
-"""Specify tabs of a fixed width in the notebook control."""
+'''Specify tabs of a fixed width in the notebook control.'''
 # NotebookCtrl Placed At The Left
 NC_LEFT = 8
-"""Specify tabs on the left side of the notebook control."""
+'''Specify tabs on the left side of the notebook control.'''
 # NotebookCtrl Placed At The Right
 NC_RIGHT = 16
-"""Specify tabs on the right side of the notebook control."""
+'''Specify tabs on the right side of the notebook control.'''
 # NotebookCtrl tab rotated
 NC_ROTATE = 32
-"""Specify rotated tabs (with vertical text) in the notebook control."""
+'''Specify rotated tabs (with vertical text) in the notebook control.'''
 # NotebookCtrl switchable between compact and expanded sizes
 NC_EXPANDABLE = 64
-"""Specify that the notebook control includes a toggle button to
+'''Specify that the notebook control includes a toggle button to
 switch between compact tabs (rotated on the left or right side)
-expanded tabs (horizontal on the left or right side)."""
+expanded tabs (horizontal on the left or right side).'''
 
 NC_DEFAULT_STYLE = NC_TOP | wx.NO_BORDER
-"""The default style for the notebook control (tabs on top with no border)"""
+'''The default style for the notebook control (tabs on top with no border)'''
 # Also wx.STATIC_BORDER Is Supported
 
 # NotebookCtrl theme styles
 NC_GRADIENT_VERTICAL = 1
-"""Specify tabs rendered with a vertical gradient background."""
+'''Specify tabs rendered with a vertical gradient background.'''
 NC_GRADIENT_HORIZONTAL = 2
-"""Specify tabs rendered with a horizontal gradient background."""
+'''Specify tabs rendered with a horizontal gradient background.'''
 NC_GRADIENT_SELECTION = 4
 NC_AQUA_LIGHT = 8
-"""Specify tabs rendered with a Mac I{Light Aqua}-like background."""
+'''Specify tabs rendered with a Mac I{Light Aqua}-like background.'''
 NC_AQUA_DARK = 16
-"""Specify tabs rendered with a Mac I{Dark Aqua}-like background."""
+'''Specify tabs rendered with a Mac I{Dark Aqua}-like background.'''
 NC_AQUA = NC_AQUA_LIGHT
-"""Specify tabs rendered with a Mac I{Light Aqua}-like background."""
+'''Specify tabs rendered with a Mac I{Light Aqua}-like background.'''
 NC_METAL = 32
-"""Specify tabs rendered with a Mac I{Metal}-like background."""
+'''Specify tabs rendered with a Mac I{Metal}-like background.'''
 NC_SILVER = 64
-"""Specify tabs rendered with a Windows I{Silver}-like background."""
+'''Specify tabs rendered with a Windows I{Silver}-like background.'''
 NC_KDE = 128
-"""Specify tabs rendered with a KDE-style background."""
+'''Specify tabs rendered with a KDE-style background.'''
 
 # Patch To Make NotebookCtrl Working Also On MacOS: Thanks To Stani ;-)
 if wx.Platform == '__WXMAC__':
@@ -258,31 +258,31 @@ wxEVT_NOTEBOOKCTRL_PAGE_MIDDLE = wx.NewEventType()
 #-----------------------------------#
 
 EVT_NOTEBOOKCTRL_PAGE_CHANGED = wx.PyEventBinder(wxEVT_NOTEBOOKCTRL_PAGE_CHANGED, 1)
-"""Notify client objects when the active page in the notebook control
-has changed."""
+'''Notify client objects when the active page in the notebook control
+has changed.'''
 
 EVT_NOTEBOOKCTRL_PAGE_CHANGING = wx.PyEventBinder(wxEVT_NOTEBOOKCTRL_PAGE_CHANGING, 1)
-"""Notify client objects when the active page in the notebook control
-is changing."""
+'''Notify client objects when the active page in the notebook control
+is changing.'''
 
 EVT_NOTEBOOKCTRL_PAGE_CLOSING = wx.PyEventBinder(wxEVT_NOTEBOOKCTRL_PAGE_CLOSING, 1)
-"""Notify client objects when a page in the notebook control is closing."""
+'''Notify client objects when a page in the notebook control is closing.'''
 
 EVT_NOTEBOOKCTRL_PAGE_DND = wx.PyEventBinder(wxEVT_NOTEBOOKCTRL_PAGE_DND, 1)
-"""Enable client objects to override the behavior of the notebook control
-when a dragged tab is dropped onto it."""
+'''Enable client objects to override the behavior of the notebook control
+when a dragged tab is dropped onto it.'''
 
 EVT_NOTEBOOKCTRL_PAGE_DCLICK = wx.PyEventBinder(wxEVT_NOTEBOOKCTRL_PAGE_DCLICK, 1)
-"""Notify client objects when the user double-clicks a tab
-in the notebook control."""
+'''Notify client objects when the user double-clicks a tab
+in the notebook control.'''
 
 EVT_NOTEBOOKCTRL_PAGE_RIGHT = wx.PyEventBinder(wxEVT_NOTEBOOKCTRL_PAGE_RIGHT, 1)
-"""Notify client objects when the user right-clicks a tab
-in the notebook control."""
+'''Notify client objects when the user right-clicks a tab
+in the notebook control.'''
 
 EVT_NOTEBOOKCTRL_PAGE_MIDDLE = wx.PyEventBinder(wxEVT_NOTEBOOKCTRL_PAGE_MIDDLE, 1)
-"""Notify client objects when the user clicks with the
-middle mouse button on a tab in the notebook control."""
+'''Notify client objects when the user clicks with the
+middle mouse button on a tab in the notebook control.'''
 
 attrs = ["_backstyle", "_backtooltip", "_borderpen", "_convertimage", "_drawx",
          "_drawxstyle", "_enabledragging", "_focusindpen", "_hideonsingletab",
@@ -320,10 +320,10 @@ def GetMenuButtonImage():
 # ---------------------------------------------------------------------------- #
 
 def GrayOut(anImage):
-    """
+    '''
     Convert The Given Image (In Place) To A Grayed-Out Version,
     Appropriate For A 'Disabled' Appearance.
-    """
+    '''
 
     factor = 0.7        # 0 < f < 1.  Higher Is Grayer
 
@@ -348,10 +348,10 @@ def GrayOut(anImage):
 
 
 def MakeGray((r,g,b), factor, maskColor):
-    """
+    '''
     Make A Pixel Grayed-Out. If The Pixel Matches The MaskColor, It Won't Be
     Changed.
-    """
+    '''
 
     if (r,g,b) != maskColor:
         return map(lambda x: int((230 - x) * factor) + x, (r,g,b))
@@ -377,61 +377,61 @@ def GetDefaultTabStyle():
 # ---------------------------------------------------------------------------- #
 
 class NotebookCtrlEvent(wx.PyCommandEvent):
-    """
+    '''
     Represent details of the events that the L{NotebookCtrl} object sends.
-    """
+    '''
 
     def __init__(self, eventType, id=1, nSel=-1, nOldSel=-1):
-        """ Default Class Constructor. """
+        ''' Default Class Constructor. '''
 
         wx.PyCommandEvent.__init__(self, eventType, id)
         self._eventType = eventType
 
 
     def SetSelection(self, nSel):
-        """ Sets Event Selection. """
+        ''' Sets Event Selection. '''
 
         self._selection = nSel
 
 
     def SetOldSelection(self, nOldSel):
-        """ Sets Old Event Selection. """
+        ''' Sets Old Event Selection. '''
 
         self._oldselection = nOldSel
 
 
     def GetSelection(self):
-        """ Returns Event Selection. """
+        ''' Returns Event Selection. '''
 
         return self._selection
 
 
     def GetOldSelection(self):
-        """ Returns Old Event Selection """
+        ''' Returns Old Event Selection '''
 
         return self._oldselection
 
 
     def SetOldPosition(self, pos):
-        """ Sets Old Event Position. """
+        ''' Sets Old Event Position. '''
 
         self._oldposition = pos
 
 
     def SetNewPosition(self, pos):
-        """ Sets New Event Position. """
+        ''' Sets New Event Position. '''
 
         self._newposition = pos
 
 
     def GetOldPosition(self):
-        """ Returns Old Event Position. """
+        ''' Returns Old Event Position. '''
 
         return self._oldposition
 
 
     def GetNewPosition(self):
-        """ Returns New Event Position. """
+        ''' Returns New Event Position. '''
 
         return self._newposition
 
@@ -447,7 +447,7 @@ class NCDragInfo:
     _map = weakref.WeakValueDictionary()
 
     def __init__(self, container, pageindex):
-        """ Default Class Constructor. """
+        ''' Default Class Constructor. '''
 
         self._id = id(container)
         NCDragInfo._map[self._id] = container
@@ -455,13 +455,13 @@ class NCDragInfo:
 
 
     def GetContainer(self):
-        """ Returns The NotebookCtrl Page (Usually A Panel). """
+        ''' Returns The NotebookCtrl Page (Usually A Panel). '''
 
         return NCDragInfo._map.get(self._id, None)
 
 
     def GetPageIndex(self):
-        """ Returns The Page Index Associated With A Page. """
+        ''' Returns The Page Index Associated With A Page. '''
 
         return self._pageindex
 
@@ -475,7 +475,7 @@ class NCDragInfo:
 class NCDropTarget(wx.DropTarget):
 
     def __init__(self, parent):
-        """ Default Class Constructor. """
+        ''' Default Class Constructor. '''
 
         wx.DropTarget.__init__(self)
 
@@ -485,7 +485,7 @@ class NCDropTarget(wx.DropTarget):
 
 
     def OnData(self, x, y, dragres):
-        """ Handles The OnData() Method TO Call The Real DnD Routine. """
+        ''' Handles The OnData() Method TO Call The Real DnD Routine. '''
 
         if not self.GetData():
             return wx.DragNone
@@ -502,22 +502,22 @@ class NCDropTarget(wx.DropTarget):
 # ---------------------------------------------------------------------------- #
 
 class ThemeStyle:
-    """
+    '''
     Represent the style for rendering a notebook tab.
-    """
+    '''
 
     GRADIENT_VERTICAL = 1
     GRADIENT_HORIZONTAL = 2
     DIFFERENT_GRADIENT_FOR_SELECTED = 4
 
     def __init__(self):
-        """ Default Constructor For This Class."""
+        ''' Default Constructor For This Class.'''
 
         self.ResetDefaults()
 
 
     def ResetDefaults(self):
-        """ Resets Default Theme. """
+        ''' Resets Default Theme. '''
 
         self._normal = True
         self._aqua = False
@@ -533,10 +533,10 @@ class ThemeStyle:
 
 
     def EnableMacTheme(self, enable=True, style=1):
-        """
+        '''
         Enables/Disables Mac Themes. style=1 Is The Light Style, While style=2
         Is The Dark Style. Mainly Used For Control Background Colour, Not For Tabs.
-        """
+        '''
 
         if enable:
             self._normal = False
@@ -551,7 +551,7 @@ class ThemeStyle:
 
 
     def EnableKDETheme(self, enable=True):
-        """ Globally Enables/Disables Unix-Like KDE Theme For Tabs. """
+        ''' Globally Enables/Disables Unix-Like KDE Theme For Tabs. '''
 
         self._kdetheme = enable
 
@@ -565,7 +565,7 @@ class ThemeStyle:
 
 
     def EnableMetalTheme(self, enable=True):
-        """ Globally Enables/Disables Mac-Like Metal Theme For Tabs. """
+        ''' Globally Enables/Disables Mac-Like Metal Theme For Tabs. '''
 
         self._metal = enable
 
@@ -579,7 +579,7 @@ class ThemeStyle:
 
 
     def EnableAquaTheme(self, enable=True, style=1):
-        """ Globally Enables/Disables Mac-Like Aqua Theme For Tabs. """
+        ''' Globally Enables/Disables Mac-Like Aqua Theme For Tabs. '''
 
         if enable:
             self._aqua = style
@@ -594,7 +594,7 @@ class ThemeStyle:
 
 
     def EnableSilverTheme(self, enable=True):
-        """ Globally Enables/Disables Windows Silver Theme For Tabs. """
+        ''' Globally Enables/Disables Windows Silver Theme For Tabs. '''
 
         self._silver = enable
 
@@ -608,12 +608,12 @@ class ThemeStyle:
 
 
     def EnableGradientStyle(self, enable=True, style=1):
-        """
+        '''
         Enables/Disables Gradient Drawing On Tabs. style=1 Is The Vertical Gradient,
         While style=2 Is The Horizontal Gradient.
         If style flag 4 is set, the style has a separate set of colors for the
         selected tab.
-        """
+        '''
 
         if enable:
             self._normal = False
@@ -630,7 +630,7 @@ class ThemeStyle:
 
 
     def SetFirstGradientColour(self, colour=None):
-        """ Sets The First Gradient Colour. """
+        ''' Sets The First Gradient Colour. '''
 
         if colour is None:
             colour = wx.WHITE
@@ -638,14 +638,14 @@ class ThemeStyle:
         self._firstcolour = colour
 
     def SetFirstGradientColourSelected(self, colour=None):
-        """Sets The First Gradient Colour For The Selected Tab."""
+        '''Sets The First Gradient Colour For The Selected Tab.'''
         if colour is None:
             colour = wx.WHITE
 
         self._firstcolourselected = colour
 
     def SetSecondGradientColour(self, colour=None):
-        """ Sets The Second Gradient Colour. """
+        ''' Sets The Second Gradient Colour. '''
 
         if colour is None:
             color = self.GetBackgroundColour()
@@ -656,7 +656,7 @@ class ThemeStyle:
         self._secondcolour = colour
 
     def SetSecondGradientColourSelected(self, colour=None):
-        """ Sets The Second Gradient Colour For The Selected Tab. """
+        ''' Sets The Second Gradient Colour For The Selected Tab. '''
 
         if colour is None:
             color = self.GetBackgroundColour()
@@ -667,7 +667,7 @@ class ThemeStyle:
         self._secondcolourselected = colour
 
     def GetFirstGradientColour(self, selected=False):
-        """ Returns The First Gradient Colour. """
+        ''' Returns The First Gradient Colour. '''
 
         if selected and self._gradient & self.DIFFERENT_GRADIENT_FOR_SELECTED:
             return self._firstcolourselected
@@ -675,7 +675,7 @@ class ThemeStyle:
             return self._firstcolour
 
     def GetSecondGradientColour(self, selected=False):
-        """ Returns The Second Gradient Colour. """
+        ''' Returns The Second Gradient Colour. '''
 
         if selected and self._gradient & self.DIFFERENT_GRADIENT_FOR_SELECTED:
             return self._secondcolourselected
@@ -692,7 +692,7 @@ class ThemeStyle:
 class TabbedPage:
 
     def __init__(self, text="", image=-1, hidden=False):
-        """ Default Class Constructor. """
+        ''' Default Class Constructor. '''
 
         self._text = text
         self._image = image
@@ -725,7 +725,7 @@ class NotebookSpinButton(wx.SpinButton):
 
     def __init__(self, parent, id=wx.ID_ANY, pos=wx.DefaultPosition,
                  size=wx.DefaultSize, style=wx.SP_HORIZONTAL):
-        """ Default Class Constructor. """
+        ''' Default Class Constructor. '''
 
         wx.SpinButton.__init__(self, parent, id, pos, size, style)
         self._nb = parent
@@ -740,7 +740,7 @@ class NotebookSpinButton(wx.SpinButton):
         return result
 
     def OnSpin(self, event):
-        """ Handles The User's Clicks On The SpinButton. """
+        ''' Handles The User's Clicks On The SpinButton. '''
 
         if type(event) != type(1):
             pos = event.GetPosition()
@@ -784,7 +784,7 @@ class NotebookMenuButton(BitmapButton):
 
     def __init__(self, parent, id=-1, pos=wx.DefaultPosition, size=(15, 11),
                  style=0):
-        """ Default Class Constructor. """
+        ''' Default Class Constructor. '''
 
         bmp = GetMenuButtonBitmap()
 
@@ -803,7 +803,7 @@ class NotebookMenuButton(BitmapButton):
 
 
     def OnButton(self, event):
-        """ Handles The wx.EVT_BUTTON For NotebookMenuButton (Opens The wx.PopupMenu) """
+        ''' Handles The wx.EVT_BUTTON For NotebookMenuButton (Opens The wx.PopupMenu) '''
 
         count = self._nb.GetPageCount()
 
@@ -843,7 +843,7 @@ class NotebookMenuButton(BitmapButton):
 
 
     def OnMenu(self, event):
-        """ Handles The wx.EVT_MENU For NotebookMenuButton. Calls HideTab(). """
+        ''' Handles The wx.EVT_MENU For NotebookMenuButton. Calls HideTab(). '''
 
         indx = self._myids.index(event.GetId())
         checked = not event.GetEventObject().IsChecked(event.GetId())
@@ -854,10 +854,10 @@ class NotebookMenuButton(BitmapButton):
 
 
     def OnEnterWindow(self, event):
-        """
+        '''
         Changes The NotebookMenuButton Background Colour When The Mouse
         Enters The Button Region.
-        """
+        '''
 
         entercolour = self.GetBackgroundColour()
         firstcolour  = entercolour.Red()
@@ -880,10 +880,10 @@ class NotebookMenuButton(BitmapButton):
 
 
     def OnLeaveWindow(self, event):
-        """
+        '''
         Restore The NotebookMenuButton Background Colour When The Mouse
         Leaves The Button Region.
-        """
+        '''
 
         self.SetBackgroundColour(self._originalcolour)
         self.Refresh()
@@ -919,10 +919,10 @@ class TabCtrl(wx.PyControl):
     def __init__(self, parent, id=wx.ID_ANY, pos=wx.DefaultPosition,
                  size=DEFAULT_SIZE, style=NC_DEFAULT_STYLE,
                  validator=wx.DefaultValidator, name="TabCtrl"):
-        """
+        '''
         Default Class Constructor.
         Used Internally. Do Not Call It Explicitely!
-        """
+        '''
 
         wx.PyControl.__init__(self, parent, id, pos, size, wx.NO_BORDER | wx.WANTS_CHARS,
                               validator, name)
@@ -1062,7 +1062,7 @@ class TabCtrl(wx.PyControl):
 
 
     def OnDropTarget(self, x, y, nPage, oldcont):
-        """ Handles The OnDrop Action For Drag And Drop Between Different NotebookCtrl. """
+        ''' Handles The OnDrop Action For Drag And Drop Between Different NotebookCtrl. '''
 
         where = self.HitTest(wx.Point(x, y))
 
@@ -1245,7 +1245,7 @@ class TabCtrl(wx.PyControl):
         return wx.DragMove
 
     def OnLeaveWindow(self, event):
-        """ Handles The wx.EVT_LEAVE_WINDOW Events For TabCtrl. """
+        ''' Handles The wx.EVT_LEAVE_WINDOW Events For TabCtrl. '''
 
         if self._enabledragging:
             if self._isdragging:
@@ -1271,10 +1271,10 @@ class TabCtrl(wx.PyControl):
 
 
     def OnKeyDown(self, event):
-        """
+        '''
         Handles The wx.EVT_KEY_DOWN Event For TabCtrl. This Is Only Processed If
         The User Navigate Through Tabs With Ctrl-Tab Keyboard Navigation.
-        """
+        '''
 
         if event.GetKeyCode() == wx.WXK_TAB:
             if event.ControlDown():
@@ -1295,13 +1295,13 @@ class TabCtrl(wx.PyControl):
 
 
     def AddPage(self, text, select=False, img=-1, hidden=False):
-        """
+        '''
         Add A Page To The Notebook.
 
         @param text: The Tab Text;
         @param select: Whether The Page Should Be Selected Or Not;
         @param img: Specifies The Optional Image Index For The New Page.
-        """
+        '''
 
         self._pages.append(TabbedPage(text, img, hidden))
         self._somethingchanged = True
@@ -1323,14 +1323,14 @@ class TabCtrl(wx.PyControl):
 
 
     def InsertPage(self, nPage, text, select=False, img=-1, hidden=False):
-        """
+        '''
         Insert A Page Into The Notebook.
 
         @param nPage: Specifies The Position For The New Page;
         @param text: The Tab Text;
         @param select: Whether The Page Should Be Selected Or Not;
         @param img: Specifies The Optional Image Index For The New Page.
-        """
+        '''
 
         if nPage < 0 or (self.GetSelection() >= 0 and nPage >= self.GetPageCount()):
             raise "\nERROR: Invalid Notebook Page In InsertPage: (" + str(nPage) + ")"
@@ -1357,7 +1357,7 @@ class TabCtrl(wx.PyControl):
 
 
     def DeleteAllPages(self):
-        """ Deletes All NotebookCtrl Pages. """
+        ''' Deletes All NotebookCtrl Pages. '''
 
         for tims in self._timers:
             if tims.IsRunning():
@@ -1374,7 +1374,7 @@ class TabCtrl(wx.PyControl):
 
 
     def DeletePage(self, nPage, oncontinue=True):
-        """ Deletes The Page nPage, And The Associated Window. """
+        ''' Deletes The Page nPage, And The Associated Window. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In DeletePage: (" + str(nPage) + ")"
@@ -1411,10 +1411,10 @@ class TabCtrl(wx.PyControl):
 
 
     def SetSelection(self, nPage):
-        """
+        '''
         Sets The Current Tab Selection To The Given nPage. This Call Generates The
         EVT_NOTEBOOKCTRL_PAGE_CHANGING Event.
-        """
+        '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In SetSelection: (" + str(nPage) + ")"
@@ -1518,25 +1518,25 @@ class TabCtrl(wx.PyControl):
 
 
     def GetPageCount(self):
-        """ Returns The Number Of Pages In NotebookCtrl. """
+        ''' Returns The Number Of Pages In NotebookCtrl. '''
 
         return len(self._pages)
 
 
     def GetSelection(self):
-        """ Returns The Current Selection. """
+        ''' Returns The Current Selection. '''
 
         return self._selection
 
 
     def GetImageList(self):
-        """ Returns The Image List Associated With The NotebookCtrl. """
+        ''' Returns The Image List Associated With The NotebookCtrl. '''
 
         return self._imglist
 
 
     def SetImageList(self, imagelist):
-        """ Associate An Image List To NotebookCtrl. """
+        ''' Associate An Image List To NotebookCtrl. '''
 
         self._imglist = imagelist
         self._grayedlist = wx.ImageList(16, 16, True, 0)
@@ -1551,7 +1551,7 @@ class TabCtrl(wx.PyControl):
 
 
     def AssignImageList(self, imagelist):
-        """ Associate An Image List To NotebookCtrl. """
+        ''' Associate An Image List To NotebookCtrl. '''
 
         self._imglist = imagelist
         self._grayedlist = wx.ImageList(16, 16, True, 0)
@@ -1566,13 +1566,13 @@ class TabCtrl(wx.PyControl):
 
 
     def GetPadding(self):
-        """ Returns The (Horizontal, Vertical) Padding Of The Text Inside Tabs. """
+        ''' Returns The (Horizontal, Vertical) Padding Of The Text Inside Tabs. '''
 
         return self._padding
 
 
     def SetPadding(self, padding):
-        """ Sets The (Horizontal, Vertical) Padding Of The Text Inside Tabs. """
+        ''' Sets The (Horizontal, Vertical) Padding Of The Text Inside Tabs. '''
 
         self._padding = padding
         self._somethingchanged = True
@@ -1581,7 +1581,7 @@ class TabCtrl(wx.PyControl):
 
 
     def GetPageText(self, nPage):
-        """ Returns The String For The Given Page nPage. """
+        ''' Returns The String For The Given Page nPage. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In GetPageText: (" + str(nPage) + ")"
@@ -1590,7 +1590,7 @@ class TabCtrl(wx.PyControl):
 
 
     def SetPageText(self, nPage, text):
-        """ Sets The String For The Given Page nPage. """
+        ''' Sets The String For The Given Page nPage. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In SetPageText: (" + str(nPage) + ")"
@@ -1603,7 +1603,7 @@ class TabCtrl(wx.PyControl):
 
 
     def GetPageImage(self, nPage):
-        """ Returns The Image Index For The Given Page nPage. """
+        ''' Returns The Image Index For The Given Page nPage. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In GetPageImage: (" + str(nPage) + ")"
@@ -1612,7 +1612,7 @@ class TabCtrl(wx.PyControl):
 
 
     def SetPageImage(self, nPage, img):
-        """ Sets The Image Index For The Given Page nPage. """
+        ''' Sets The Image Index For The Given Page nPage. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In SetPageImage: (" + str(nPage) + ")"
@@ -1630,7 +1630,7 @@ class TabCtrl(wx.PyControl):
 
 
     def SetPageTextFont(self, nPage, font=None):
-        """ Sets The Primary Font For The Given Page nPage. """
+        ''' Sets The Primary Font For The Given Page nPage. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In SetPageTextFont: (" + str(nPage) + ")"
@@ -1688,7 +1688,7 @@ class TabCtrl(wx.PyControl):
         self.Refresh()
 
     def SetTabHeight(self, height=28):
-        """ Sets The Tabs Height. """
+        ''' Sets The Tabs Height. '''
 
         if self._style & NC_TOP or self._style & NC_BOTTOM:
             self.SetBestSize((-1, height))
@@ -1696,7 +1696,7 @@ class TabCtrl(wx.PyControl):
 
 
     def SetControlBackgroundColour(self, colour=None):
-        """ Sets The TabCtrl Background Colour (Behind The Tabs). """
+        ''' Sets The TabCtrl Background Colour (Behind The Tabs). '''
 
         if colour is None:
             colour = wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE)
@@ -1706,7 +1706,7 @@ class TabCtrl(wx.PyControl):
 
 
     def GetPageTextFont(self, nPage):
-        """ Returns The Primary Font For The Given Page nPage. """
+        ''' Returns The Primary Font For The Given Page nPage. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In GetPageTextFont: (" + str(nPage) + ")"
@@ -1715,7 +1715,7 @@ class TabCtrl(wx.PyControl):
 
 
     def SetPageTextSecondaryFont(self, nPage, font=None):
-        """ Sets The Secondary Font For The Given Page nPage. """
+        ''' Sets The Secondary Font For The Given Page nPage. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In SetPageTextSecondaryFont: (" + str(nPage) + ")"
@@ -1774,7 +1774,7 @@ class TabCtrl(wx.PyControl):
 
 
     def GetPageTextSecondaryFont(self, nPage):
-        """ Returns The Secondary Font For The Given Page nPage. """
+        ''' Returns The Secondary Font For The Given Page nPage. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In GetPageTextSecondaryFont: (" + str(nPage) + ")"
@@ -1783,7 +1783,7 @@ class TabCtrl(wx.PyControl):
 
 
     def SetPageTextColour(self, nPage, colour=None):
-        """ Sets The Text Colour For The Given Page nPage. """
+        ''' Sets The Text Colour For The Given Page nPage. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In SetPageTextColour: (" + str(nPage) + ")"
@@ -1797,7 +1797,7 @@ class TabCtrl(wx.PyControl):
 
 
     def GetPageTextColour(self, nPage):
-        """ Returns The Text Colour For The Given Page nPage. """
+        ''' Returns The Text Colour For The Given Page nPage. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In GetPageTextColour: (" + str(nPage) + ")"
@@ -1806,7 +1806,7 @@ class TabCtrl(wx.PyControl):
 
 
     def SetPageColour(self, nPage, colour=None):
-        """ Sets The Tab Background Colour For The Given Page nPage. """
+        ''' Sets The Tab Background Colour For The Given Page nPage. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In SetPageColour: (" + str(nPage) + ")"
@@ -1820,7 +1820,7 @@ class TabCtrl(wx.PyControl):
 
 
     def GetPageColour(self, nPage):
-        """ Returns The Tab Background Colour For The Given Page nPage. """
+        ''' Returns The Tab Background Colour For The Given Page nPage. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In GetPageColour: (" + str(nPage) + ")"
@@ -1835,7 +1835,7 @@ class TabCtrl(wx.PyControl):
 
 
     def EnablePage(self, nPage, enable=True):
-        """ Enable/Disable The Given Page nPage. """
+        ''' Enable/Disable The Given Page nPage. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In EnablePage: (" + str(nPage) + ")"
@@ -1859,7 +1859,7 @@ class TabCtrl(wx.PyControl):
 
 
     def IsPageEnabled(self, nPage):
-        """ Returns Whether A Page Is Enabled Or Not. """
+        ''' Returns Whether A Page Is Enabled Or Not. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In IsPageEnabled: (" + str(nPage) + ")"
@@ -1868,40 +1868,40 @@ class TabCtrl(wx.PyControl):
 
 
     def SetHighlightSelection(self, highlight=True):
-        """ Globally Enables/Disables Tab Highlighting On Tab Selection. """
+        ''' Globally Enables/Disables Tab Highlighting On Tab Selection. '''
 
         self._highlight = highlight
         self.Refresh()
 
 
     def GetHighlightSelection(self):
-        """ Returns Globally Enable/Disable State For Tab Highlighting On Tab Selection. """
+        ''' Returns Globally Enable/Disable State For Tab Highlighting On Tab Selection. '''
 
         return self._highlight
 
 
     def SetUseFocusIndicator(self, focus=True):
-        """ Globally Enables/Disables Tab Focus Indicator. """
+        ''' Globally Enables/Disables Tab Focus Indicator. '''
 
         self._usefocus = focus
         self.Refresh()
 
 
     def GetUseFocusIndicator(self):
-        """ Returns Globally Enable/Disable State For Tab Focus Indicator. """
+        ''' Returns Globally Enable/Disable State For Tab Focus Indicator. '''
 
         return self._usefocus
 
 
     def SetPageToolTip(self, nPage, tooltip="", timer=500, winsize=400):
-        """
+        '''
         Sets A ToolTip For The Given Page nPage.
 
         @param nPage: The Given Page;
         @param tooltip: The ToolTip String;
         @param timer: The Timer After Which The Tip Window Is Popped Up;
         @param winsize: The Maximum Width Of The Tip Window.
-        """
+        '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In SetPageToolTip: (" + str(nPage) + ")"
@@ -1912,7 +1912,7 @@ class TabCtrl(wx.PyControl):
 
 
     def GetPageToolTip(self, nPage):
-        """ Returns A Tuple With All Page ToolTip Parameters. """
+        ''' Returns A Tuple With All Page ToolTip Parameters. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In GetPageToolTip: (" + str(nPage) + ")"
@@ -1922,7 +1922,7 @@ class TabCtrl(wx.PyControl):
 
 
     def EnableToolTip(self, show=True):
-        """ Globally Enables/Disables Tab ToolTips. """
+        ''' Globally Enables/Disables Tab ToolTips. '''
 
         self._showtooltip = show
 
@@ -1946,13 +1946,13 @@ class TabCtrl(wx.PyControl):
 
 
     def GetToolTipBackgroundColour(self):
-        """ Returns The ToolTip Window Background Colour. """
+        ''' Returns The ToolTip Window Background Colour. '''
 
         return self._backtooltip
 
 
     def SetToolTipBackgroundColour(self, colour=None):
-        """ Sets The ToolTip Window Background Colour. """
+        ''' Sets The ToolTip Window Background Colour. '''
 
         if colour is None:
             colour = wx.Colour(255, 255, 230)
@@ -1961,7 +1961,7 @@ class TabCtrl(wx.PyControl):
 
 
     def EnableTabGradients(self, enable=True):
-        """ Globally Enables/Disables Drawing Of Gradient Coloured Tabs For Each Tab. """
+        ''' Globally Enables/Disables Drawing Of Gradient Coloured Tabs For Each Tab. '''
 
         self._usegradients = enable
 
@@ -1973,7 +1973,7 @@ class TabCtrl(wx.PyControl):
 
 
     def SetPageFirstGradientColour(self, nPage, colour=None):
-        """ Sets The Single Tab First Gradient Colour. """
+        ''' Sets The Single Tab First Gradient Colour. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In SetPageFirstGradientColour: (" + str(nPage) + ")"
@@ -1986,7 +1986,7 @@ class TabCtrl(wx.PyControl):
 
 
     def SetPageSecondGradientColour(self, nPage, colour=None):
-        """ Sets The Single Tab Second Gradient Colour. """
+        ''' Sets The Single Tab Second Gradient Colour. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In SetPageSecondGradientColour: (" + str(nPage) + ")"
@@ -2002,7 +2002,7 @@ class TabCtrl(wx.PyControl):
 
 
     def GetPageFirstGradientColour(self, nPage):
-        """ Returns The Single Tab First Gradient Colour. """
+        ''' Returns The Single Tab First Gradient Colour. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In GetPageFirstGradientColour: (" + str(nPage) + ")"
@@ -2011,7 +2011,7 @@ class TabCtrl(wx.PyControl):
 
 
     def GetPageSecondGradientColour(self, nPage):
-        """ Returns The Single Tab Second Gradient Colour. """
+        ''' Returns The Single Tab Second Gradient Colour. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In GetPageSecondGradientColour: (" + str(nPage) + ")"
@@ -2020,7 +2020,7 @@ class TabCtrl(wx.PyControl):
 
 
     def CancelTip(self):
-        """ Destroys The Tip Window (Probably You Won't Need This One). """
+        ''' Destroys The Tip Window (Probably You Won't Need This One). '''
 
         if self._istooltipshown:
             self._istooltipshown = False
@@ -2029,10 +2029,10 @@ class TabCtrl(wx.PyControl):
 
 
     def AdvanceSelection(self, forward=True):
-        """
+        '''
         Cycles Through The Tabs. The Call To This Function Generates The
         EVT_NOTEBOOKCTRL_PAGE_CHANGING Event.
-        """
+        '''
 
         if self.GetPageCount() <= 1:
             return
@@ -2081,10 +2081,10 @@ class TabCtrl(wx.PyControl):
 
 
     def SetDefaultPage(self, defaultpage=-1):
-        """
+        '''
         Sets The Default Page That Will Be Selected When An Active And Selected
         Tab Is Made Inactive.
-        """
+        '''
 
         if defaultpage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In SetDefaultPage: (" + str(defaultpage) + ")"
@@ -2093,13 +2093,13 @@ class TabCtrl(wx.PyControl):
 
 
     def GetDefaultPage(self):
-        """ Returns The Default Page. """
+        ''' Returns The Default Page. '''
 
         return self._defaultpage
 
 
     def UpdateSpinButton(self):
-        """ Update The NotebookSpinButton. Used Internally. """
+        ''' Update The NotebookSpinButton. Used Internally. '''
 
         count = self.GetPageCount()
 
@@ -2159,13 +2159,13 @@ class TabCtrl(wx.PyControl):
 
 
     def HasSpinButton(self):
-        """ Returns Wheter The NotebookSpinButton Exists And Is Shown. """
+        ''' Returns Wheter The NotebookSpinButton Exists And Is Shown. '''
 
         return hasattr(self, "_spinbutton") and self._spinbutton.IsShown()
 
 
     def IsLastVisible(self):
-        """ Returns Whether The Last Tab Is Visible Or Not. """
+        ''' Returns Whether The Last Tab Is Visible Or Not. '''
 
         if self.HasSpinButton():
             if self._style & NC_LEFT or self._style & NC_RIGHT:
@@ -2180,7 +2180,7 @@ class TabCtrl(wx.PyControl):
 
 
     def UpdateMenuButton(self, show):
-        """ Updates The Notebook Menu Button To Show/Hide Tabs. Used Internally. """
+        ''' Updates The Notebook Menu Button To Show/Hide Tabs. Used Internally. '''
 
         count = self.GetPageCount()
 
@@ -2214,13 +2214,13 @@ class TabCtrl(wx.PyControl):
 
 
     def HasMenuButton(self):
-        """ Returns Wheter The NotebookMenuButton Exists And Is Shown. """
+        ''' Returns Wheter The NotebookMenuButton Exists And Is Shown. '''
 
         return hasattr(self, "_menubutton") and self._menubutton.IsShown()
 
 
     def HideTab(self, nPage, hide=True):
-        """ Hides A Tab In The NotebookCtrl. """
+        ''' Hides A Tab In The NotebookCtrl. '''
 
         if hide:
             self._pages[nPage]._ishidden = True
@@ -2235,7 +2235,7 @@ class TabCtrl(wx.PyControl):
 
 
     def HitTest(self, point, flags=0):
-        """
+        '''
         Standard NotebookCtrl HitTest() Method. If Called With 2 Outputs, It
         Returns The Page Clicked (If Any) And One Of These Flags:
 
@@ -2244,7 +2244,7 @@ class TabCtrl(wx.PyControl):
         NC_HITTEST_ONLABEL = 2   ==> Hit On Label
         NC_HITTEST_ONITEM  = 4   ==> Hit Generic, On Item
         NC_HITTEST_ONX = 8       ==> Hit On Closing "X" On Every Page
-        """
+        '''
 
         mirror = self._style & NC_BOTTOM
         size = self.GetSize()
@@ -2322,13 +2322,13 @@ class TabCtrl(wx.PyControl):
 
 
     def EnableDragAndDrop(self, enable=True):
-        """ Globall Enables/Disables Tabs Drag And Drop. """
+        ''' Globall Enables/Disables Tabs Drag And Drop. '''
 
         self._enabledragging = enable
 
 
     def EnableHiding(self, enable=True):
-        """ Globally Enables/Disables Hiding On Tabs In Runtime. """
+        ''' Globally Enables/Disables Hiding On Tabs In Runtime. '''
 
         self._enablehiding = enable
         self.UpdateMenuButton(enable)
@@ -2337,13 +2337,13 @@ class TabCtrl(wx.PyControl):
 
 
     def SetAnimationImages(self, nPage, imgarray):
-        """
+        '''
         Sets An Animation List Associated To The Given Page nPage.
 
         @param nPage: The Given Page
         @param imgarray: A List Of Image Indexes Of Images Inside The
           ImageList Associated To NotebookCtrl.
-        """
+        '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In SetAnimationImages: (" + str(nPage) + ")"
@@ -2363,7 +2363,7 @@ class TabCtrl(wx.PyControl):
 
 
     def GetAnimationImages(self, nPage):
-        """ Returns The Animation Images List Associated To The Given Page nPage. """
+        ''' Returns The Animation Images List Associated To The Given Page nPage. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In GetAnimationImages: (" + str(nPage) + ")"
@@ -2372,7 +2372,7 @@ class TabCtrl(wx.PyControl):
 
 
     def AnimateTab(self, event):
-        """ Called When The Refreshing Animation Timer Expires. Used Internally"""
+        ''' Called When The Refreshing Animation Timer Expires. Used Internally'''
 
         obj = event.GetEventObject()
         nPage = self._timers.index(obj)
@@ -2393,7 +2393,7 @@ class TabCtrl(wx.PyControl):
 
 
     def StartAnimation(self, nPage, timer=500):
-        """ Starts The Animation On The Given Page, With Refreshing Time Rate "timer". """
+        ''' Starts The Animation On The Given Page, With Refreshing Time Rate "timer". '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In StartAnimation: (" + str(nPage) + ")"
@@ -2410,7 +2410,7 @@ class TabCtrl(wx.PyControl):
 
 
     def StopAnimation(self, nPage):
-        """ Stops The Animation On The Given Page nPage. """
+        ''' Stops The Animation On The Given Page nPage. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In StopAnimation: (" + str(nPage) + ")"
@@ -2420,7 +2420,7 @@ class TabCtrl(wx.PyControl):
 
 
     def SetDrawX(self, drawx=True, style=1, image1=None, image2=None):
-        """
+        '''
         Globally Enables/Disables The Drawing Of A Closing "X" In The Tab.
 
         @param drawx: C{True} to enable drawing a closing "X"; C{False} to
@@ -2434,7 +2434,7 @@ class TabCtrl(wx.PyControl):
           the X on an unhighlighted tab
         @param image2: if C{style} is C{3}, the image to use when drawing
           the X on a highlighted tab
-        """
+        '''
 
         self._drawx = drawx
         self._drawxstyle = style
@@ -2452,16 +2452,16 @@ class TabCtrl(wx.PyControl):
 
 
     def GetDrawX(self):
-        """
+        '''
         Returns The Enable/Disable State Of Drawing Of A Small "X" At The Top-Right Of
         Every Page.
-        """
+        '''
 
         return self._drawx, self._drawxstyle
 
 
     def GetInsideTab(self, pt):
-        """ Returns The Tab On Which The Mouse Is Hovering On. """
+        ''' Returns The Tab On Which The Mouse Is Hovering On. '''
 
         count = 0
 
@@ -2475,7 +2475,7 @@ class TabCtrl(wx.PyControl):
 
 
     def GetInsideX(self, pt):
-        """ Returns The Tab On Which The Mouse Is Hovering On The "X" Button. """
+        ''' Returns The Tab On Which The Mouse Is Hovering On The "X" Button. '''
 
         count = 0
 
@@ -2489,19 +2489,19 @@ class TabCtrl(wx.PyControl):
 
 
     def SetImageToCloseButton(self, convert=True):
-        """ Set Whether The Tab Icon Should Be Converted To The Close Button Or Not. """
+        ''' Set Whether The Tab Icon Should Be Converted To The Close Button Or Not. '''
 
         self._convertimage = convert
 
 
     def GetImageToCloseButton(self):
-        """ Get Whether The Tab Icon Should Be Converted To The Close Button Or Not. """
+        ''' Get Whether The Tab Icon Should Be Converted To The Close Button Or Not. '''
 
         return self._convertimage
 
 
     def ConvertImageToCloseButton(self, page):
-        """ Globally Converts The Page Image To The "Opera" Style Close Button. """
+        ''' Globally Converts The Page Image To The "Opera" Style Close Button. '''
 
         bmpindex = self.GetPageImage(page)
         if  bmpindex < 0:
@@ -2564,7 +2564,7 @@ class TabCtrl(wx.PyControl):
 
 
     def RedrawClosingX(self, pt, insidex, drawx, highlight=False):
-        """ Redraw The Closing "X" Accordingly To The Mouse "Hovering" Position. """
+        ''' Redraw The Closing "X" Accordingly To The Mouse "Hovering" Position. '''
 
         colour = self.GetPageTextColour(insidex)
         back_colour = self.GetBackgroundColour()
@@ -2603,13 +2603,13 @@ class TabCtrl(wx.PyControl):
 
 
     def HideOnSingleTab(self, hide=True):
-        """ Hides The TabCtrl When There Is Only One Tab In NotebookCtrl. """
+        ''' Hides The TabCtrl When There Is Only One Tab In NotebookCtrl. '''
 
         self._hideonsingletab = hide
 
 
     def SetPagePopupMenu(self, nPage, menu):
-        """ Sets A Popup Menu Specific To A Single Tab. """
+        ''' Sets A Popup Menu Specific To A Single Tab. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In SetPagePopupMenu: (" + str(nPage) + ")"
@@ -2618,7 +2618,7 @@ class TabCtrl(wx.PyControl):
 
 
     def GetPagePopupMenu(self, nPage):
-        """ Returns The Popup Menu Associated To A Single Tab. """
+        ''' Returns The Popup Menu Associated To A Single Tab. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In GetPagePopupMenu: (" + str(nPage) + ")"
@@ -2627,10 +2627,10 @@ class TabCtrl(wx.PyControl):
 
 
     def DrawInsertionMark(self, dc, nPage):
-        """
+        '''
         Draw An Insertion Arrow To Let The User Understand Where A Dragged Tab Will
         Be Dropped (Between Which Tabs).
-        """
+        '''
 
         if not self._enablehiding:
             if nPage < 0 or nPage >= len(self._tabrect):
@@ -2677,7 +2677,7 @@ class TabCtrl(wx.PyControl):
 
 
     def OnMouseMotion(self, event):
-        """ Handles The wx.EVT_MOTION Event For TabCtrl. """
+        ''' Handles The wx.EVT_MOTION Event For TabCtrl. '''
 
         pt = event.GetPosition()
 
@@ -2775,7 +2775,7 @@ class TabCtrl(wx.PyControl):
 
 
     def OnShowToolTip(self):
-        """ Called When The Timer For The ToolTip Expires. Used Internally. """
+        ''' Called When The Timer For The ToolTip Expires. Used Internally. '''
 
         pt = self.ScreenToClient(wx.GetMousePosition())
 
@@ -2818,7 +2818,7 @@ class TabCtrl(wx.PyControl):
 
 
     def OnMouseLeftDown(self, event):
-        """ Handles The wx.EVT_LEFT_DOWN Event For TabCtrl. """
+        ''' Handles The wx.EVT_LEFT_DOWN Event For TabCtrl. '''
 
         pos = event.GetPosition()
         page, flags = self.HitTest(pos, 1)
@@ -2854,7 +2854,7 @@ class TabCtrl(wx.PyControl):
 
 
     def OnMouseLeftDClick(self, event):
-        """ Handles The wx.EVT_LEFT_DCLICK Event For TabCtrl. """
+        ''' Handles The wx.EVT_LEFT_DCLICK Event For TabCtrl. '''
 
         pos = event.GetPosition()
         page = self.HitTest(pos)
@@ -2878,7 +2878,7 @@ class TabCtrl(wx.PyControl):
 
 
     def OnMouseLeftUp(self, event):
-        """ Handles The wx.EVT_LEFT_UP Event For TabCtrl. """
+        ''' Handles The wx.EVT_LEFT_UP Event For TabCtrl. '''
 
         if not self._enabledragging:
             event.Skip()
@@ -3015,7 +3015,7 @@ class TabCtrl(wx.PyControl):
 
 
     def OnSize(self, event=None):
-        """ Handles The wx.EVT_SIZE Event For TabCtrl. """
+        ''' Handles The wx.EVT_SIZE Event For TabCtrl. '''
 
         if self._sizeToggleButton:
             width = self.GetSize()[0]
@@ -3028,7 +3028,7 @@ class TabCtrl(wx.PyControl):
 
 
     def OnMouseRightUp(self, event):
-        """ Handles The wx.EVT_RIGHT_UP Event For TabCtrl. """
+        ''' Handles The wx.EVT_RIGHT_UP Event For TabCtrl. '''
 
         pt = event.GetPosition()
         id = self.HitTest(pt)
@@ -3045,7 +3045,7 @@ class TabCtrl(wx.PyControl):
 
 
     def OnMouseRightDown(self, event):
-        """ Handles The wx.EVT_RIGHT_DOWN Event For TabCtrl. """
+        ''' Handles The wx.EVT_RIGHT_DOWN Event For TabCtrl. '''
 
         pos = event.GetPosition()
         page = self.HitTest(pos)
@@ -3070,7 +3070,7 @@ class TabCtrl(wx.PyControl):
 
 
     def OnMouseMiddleDown(self, event):
-        """ Handles The wx.EVT_MIDDLE_DOWN Event For TabCtrl. """
+        ''' Handles The wx.EVT_MIDDLE_DOWN Event For TabCtrl. '''
 
         pos = event.GetPosition()
         page = self.HitTest(pos)
@@ -3095,7 +3095,7 @@ class TabCtrl(wx.PyControl):
 
 
     def SetSelectionColour(self, colour=None):
-        """ Sets The Tab Selection Colour (Thin Line Above The Selected Tab). """
+        ''' Sets The Tab Selection Colour (Thin Line Above The Selected Tab). '''
 
         if colour is None:
             colour = wx.Colour(255, 180, 0)
@@ -3104,7 +3104,7 @@ class TabCtrl(wx.PyControl):
 
 
     def SetContourLineColour(self, colour=None):
-        """ Sets The Contour Line Colour (Controur Line Around Tabs). """
+        ''' Sets The Contour Line Colour (Controur Line Around Tabs). '''
 
         if colour is None:
             if not self._tabstyle._normal or self._usegradients:
@@ -3123,7 +3123,7 @@ class TabCtrl(wx.PyControl):
 
 
     def ApplyTabTheme(self, theme=None):
-        """ Applies A Particular Theme To Be Drawn On Tabs. """
+        ''' Applies A Particular Theme To Be Drawn On Tabs. '''
 
         if theme is None:
             theme = ThemeStyle()
@@ -3134,7 +3134,7 @@ class TabCtrl(wx.PyControl):
         self.Refresh()
 
     def DrawMacTheme(self, dc, tabrect, theme):
-        """ Draws The Mac Theme On Tabs, If It Is Enabled. """
+        ''' Draws The Mac Theme On Tabs, If It Is Enabled. '''
 
         if theme == 1:
             col1, col2 = NC_MAC_LIGHT
@@ -3174,7 +3174,7 @@ class TabCtrl(wx.PyControl):
 
 
     def DrawKDETheme(self, dc, rect):
-        """ Draws Unix-Style KDE Theme On Tabs. """
+        ''' Draws Unix-Style KDE Theme On Tabs. '''
 
         x, y, w, h = rect
 
@@ -3204,7 +3204,7 @@ class TabCtrl(wx.PyControl):
 
 
     def DrawSilverTheme(self, dc, rect, selected):
-        """ Draws Windows XP Silver-Like Theme. """
+        ''' Draws Windows XP Silver-Like Theme. '''
 
         x, y, w, h = rect
 
@@ -3299,7 +3299,7 @@ class TabCtrl(wx.PyControl):
 
 
     def DrawAquaTheme(self, dc, rect, style, selected):
-        """ Draws Mac-Style Aqua Theme On Tabs. """
+        ''' Draws Mac-Style Aqua Theme On Tabs. '''
 
         x, y, w, h = rect
 
@@ -3439,7 +3439,7 @@ class TabCtrl(wx.PyControl):
 
 
     def DrawMetalTheme(self, dc, rect):
-        """ Draws Mac-Style Metal Gradient On Tabs. """
+        ''' Draws Mac-Style Metal Gradient On Tabs. '''
 
         x, y, w, h = rect
 
@@ -3492,7 +3492,7 @@ class TabCtrl(wx.PyControl):
 
 
     def DrawVerticalGradient(self, dc, rect, index):
-        """ Gradient Fill From Colour 1 To Colour 2 From Top To Bottom. """
+        ''' Gradient Fill From Colour 1 To Colour 2 From Top To Bottom. '''
 
         dc.SetPen(wx.TRANSPARENT_PEN)
 
@@ -3558,7 +3558,7 @@ class TabCtrl(wx.PyControl):
 
 
     def DrawHorizontalGradient(self, dc, rect, index):
-        """ Gradient Fill From Colour 1 To Colour 2 From Left To Right. """
+        ''' Gradient Fill From Colour 1 To Colour 2 From Left To Right. '''
 
         dc.SetPen(wx.TRANSPARENT_PEN)
 
@@ -3620,7 +3620,7 @@ class TabCtrl(wx.PyControl):
 
 
     def GetAllTextExtents(self, dc):
-        """ Returns All Tabs Text Extents. Used Internally. """
+        ''' Returns All Tabs Text Extents. Used Internally. '''
 
         self._mintabwidths = []
         self._maxtabwidths = []
@@ -3665,7 +3665,7 @@ class TabCtrl(wx.PyControl):
 
 
     def DrawBuiltinStyle(self, dc, style, rect, index, selection):
-        """ Methods That Holds All The Theme Styles. """
+        ''' Methods That Holds All The Theme Styles. '''
 
         if style._aqua:
             if self._selstyle._normal:
@@ -3726,7 +3726,7 @@ class TabCtrl(wx.PyControl):
 
 
     def DrawGradientOnTab(self, dc, rect, col1, col2):
-        """ Draw A Gradient Coloured Tab. """
+        ''' Draw A Gradient Coloured Tab. '''
 
         dc.SetPen(wx.TRANSPARENT_PEN)
 
@@ -4333,7 +4333,7 @@ class TabCtrl(wx.PyControl):
                 tabrect.x+tabrect.width, tabrect.y+tabrect.height-4)
 
     def OnPaint(self, event):
-        """ Handles The wx.EVT_PAINT Event For TabCtrl. """
+        ''' Handles The wx.EVT_PAINT Event For TabCtrl. '''
 
         dc = wx.BufferedPaintDC(self)
 
@@ -4456,7 +4456,7 @@ class TabCtrl(wx.PyControl):
 # ---------------------------------------------------------------------------- #
 
 class NotebookCtrl(wx.Panel):
-    """
+    '''
     Display one or more windows in a notebook.
 
     B{Events}:
@@ -4476,11 +4476,11 @@ class NotebookCtrl(wx.Panel):
         - B{EVT_NOTEBOOKCTRL_PAGE_MIDDLE}: sent when the user
             clicks a tab in the notebook with the middle mouse
             button
-    """
+    '''
 
     def __init__(self, parent, id, pos=wx.DefaultPosition, size=wx.DefaultSize,
                  style=NC_DEFAULT_STYLE, sizer=wx.HORIZONTAL, margin=2, name="NotebookCtrl"):
-        """
+        '''
         Default Class Constructor.
 
         @param style: Style For The NotebookCtrl, Which May Be:
@@ -4501,7 +4501,7 @@ class NotebookCtrl(wx.Panel):
         @param margin: An Integer Number Of Pixels That Add Space
           Above TabCtrl If style=NC_TOP, Or Below It If
           style=NC_BOTTOM
-        """
+        '''
 
         wx.Panel.__init__(self, parent, -1, style=wx.NO_FULL_REPAINT_ON_RESIZE |
                           wx.CLIP_CHILDREN, name=name)
@@ -4561,10 +4561,10 @@ class NotebookCtrl(wx.Panel):
 
 
     def OnKeyDown(self, event):
-        """
+        '''
         Handles The wx.EVT_KEY_DOWN Event For NotebookCtrl. This Is Only Processed
         If The User Navigate Through Tabs With Ctrl-Tab Keyboard Navigation.
-        """
+        '''
 
         if event.GetKeyCode() == wx.WXK_TAB:
             if event.ControlDown():
@@ -4585,7 +4585,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def OnMouseMotion(self, event):
-        """ Handles The wx.EVT_MOTION Event For NotebookCtrl. """
+        ''' Handles The wx.EVT_MOTION Event For NotebookCtrl. '''
 
         if self.nb._enabledragging:
 
@@ -4624,13 +4624,13 @@ class NotebookCtrl(wx.Panel):
 
 
     def EnableChildFocus(self, enable=True):
-        """ Enables/Disables Sending EVT_NOTEBOOKCTRL_PAGE_CHANGING When In Tile Mode. """
+        ''' Enables/Disables Sending EVT_NOTEBOOKCTRL_PAGE_CHANGING When In Tile Mode. '''
 
         self._focusswitch = enable
 
 
     def FindFocusedPage(self, obj):
-        """ Find Which NotebookCtrl Page Has The Focus Based On Its Child Focus. """
+        ''' Find Which NotebookCtrl Page Has The Focus Based On Its Child Focus. '''
 
         while 1:
             if obj in self._notebookpages:
@@ -4645,7 +4645,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def OnFocus(self, event):
-        """ Handles The wx.EVT_CHILD_FOCUS Event For NotebookCtrl. """
+        ''' Handles The wx.EVT_CHILD_FOCUS Event For NotebookCtrl. '''
 
         if not self._focusswitch:
             event.Skip()
@@ -4678,14 +4678,14 @@ class NotebookCtrl(wx.Panel):
 
 
     def AddPage(self, page, text, select=False, img=-1, hidden=False):
-        """
+        '''
         Add A Page To The Notebook.
 
         @param page: Specifies The New Page;
         @param text: The Tab Text;
         @param select: Whether The Page Should Be Selected Or Not;
         @param img: Specifies The Optional Image Index For The New Page.
-        """
+        '''
 
         self.Freeze()
 
@@ -4745,7 +4745,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def InsertPage(self, nPage, page, text, select=False, img=-1, hidden=False):
-        """
+        '''
         Insert A Page Into The Notebook.
 
         @param page: Specifies The New Page;
@@ -4754,7 +4754,7 @@ class NotebookCtrl(wx.Panel):
         @param select: Whether The Page Should Be Selected Or Not;
         @param img: Specifies The Optional Image Index For The New Page.
         @param hidden: C{True} to hide the page; C{False} to display it
-        """
+        '''
 
         if nPage < 0 or (self.GetSelection() >= 0 and nPage >= self.GetPageCount()):
             raise "\nERROR: Invalid Notebook Page In InsertPage: (" + str(nPage) + ")"
@@ -4824,7 +4824,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def GetPage(self, nPage):
-        """ Returns The Window At The Given Position nPage. """
+        ''' Returns The Window At The Given Position nPage. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In GetPage: (" + str(nPage) + ")"
@@ -4833,7 +4833,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def DeleteAllPages(self):
-        """ Deletes All NotebookCtrl Pages. """
+        ''' Deletes All NotebookCtrl Pages. '''
 
         self.Freeze()
 
@@ -4866,7 +4866,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def DeletePage(self, nPage):
-        """ Deletes The Page nPage, And The Associated Window. """
+        ''' Deletes The Page nPage, And The Associated Window. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In DeletePage: (" + str(nPage) + ")"
@@ -4934,10 +4934,10 @@ class NotebookCtrl(wx.Panel):
 
 
     def SetSelection(self, nPage):
-        """
+        '''
         Sets The Current Tab Selection To The Given nPage. This Call Generates The
         EVT_NOTEBOOKCTRL_PAGE_CHANGING Event.
-        """
+        '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In SetSelection: (" + str(nPage) + ")"
@@ -4954,61 +4954,61 @@ class NotebookCtrl(wx.Panel):
 
 
     def GetPageCount(self):
-        """ Returns The Number Of Pages In NotebookCtrl. """
+        ''' Returns The Number Of Pages In NotebookCtrl. '''
 
         return self.nb.GetPageCount()
 
 
     def GetSelection(self):
-        """ Returns The Current Selection. """
+        ''' Returns The Current Selection. '''
 
         return self.nb.GetSelection()
 
 
     def GetImageList(self):
-        """ Returns The Image List Associated With The NotebookCtrl. """
+        ''' Returns The Image List Associated With The NotebookCtrl. '''
 
         return self.nb.GetImageList()
 
 
     def SetImageList(self, imagelist):
-        """ Associate An Image List To NotebookCtrl. """
+        ''' Associate An Image List To NotebookCtrl. '''
 
         self.nb.SetImageList(imagelist)
 
 
     def AssignImageList(self, imagelist):
-        """ Associate An Image List To NotebookCtrl. """
+        ''' Associate An Image List To NotebookCtrl. '''
 
         self.nb.AssignImageList(imagelist)
 
 
     def GetPadding(self):
-        """ Returns The (Horizontal, Vertical) Padding Of The Text Inside Tabs. """
+        ''' Returns The (Horizontal, Vertical) Padding Of The Text Inside Tabs. '''
 
         return self.nb.GetPadding()
 
 
     def SetPadding(self, padding):
-        """ Sets The (Horizontal, Vertical) Padding Of The Text Inside Tabs. """
+        ''' Sets The (Horizontal, Vertical) Padding Of The Text Inside Tabs. '''
 
         self.nb.SetPadding(padding)
 
 
     def SetUseFocusIndicator(self, focus=True):
-        """ Globally Enables/Disables Tab Focus Indicator. """
+        ''' Globally Enables/Disables Tab Focus Indicator. '''
 
         self.nb.SetUseFocusIndicator(focus)
 
 
     def GetUseFocusIndicator(self):
-        """ Returns Globally Enable/Disable State For Tab Focus Indicator. """
+        ''' Returns Globally Enable/Disable State For Tab Focus Indicator. '''
 
         return self.nb.GetUseFocusIndicator()
 
 
     def EnablePage(self, nPage, enable=True):
-        """ Enable/Disable The Given Page nPage. """
+        ''' Enable/Disable The Given Page nPage. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In EnablePage: (" + str(nPage) + ")"
@@ -5017,7 +5017,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def IsPageEnabled(self, nPage):
-        """ Returns Whether A Page Is Enabled Or Not. """
+        ''' Returns Whether A Page Is Enabled Or Not. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In IsPageEnabled: (" + str(nPage) + ")"
@@ -5026,25 +5026,25 @@ class NotebookCtrl(wx.Panel):
 
 
     def SetHighlightSelection(self, highlight=True):
-        """ Globally Enables/Disables Tab Highlighting On Tab Selection. """
+        ''' Globally Enables/Disables Tab Highlighting On Tab Selection. '''
 
         self.nb.SetHighlightSelection(highlight)
 
 
     def GetHighlightSelection(self):
-        """ Returns Globally Enable/Disable State For Tab Highlighting On Tab Selection. """
+        ''' Returns Globally Enable/Disable State For Tab Highlighting On Tab Selection. '''
 
         return self.nb.GetHighlightSelection()
 
 
     def SetAnimationImages(self, nPage, imgarray):
-        """
+        '''
         Sets An Animation List Associated To The Given Page nPage.
 
         @param nPage: The Given Page;
         @param imgarray: A List Of Image Indexes Of Images Inside The
           ImageList Associated To NotebookCtrl.
-        """
+        '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In SetAnimationImages: (" + str(nPage) + ")"
@@ -5064,7 +5064,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def GetAnimationImages(self, nPage):
-        """ Returns The Animation Images List Associated To The Given Page nPage. """
+        ''' Returns The Animation Images List Associated To The Given Page nPage. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In GetAnimationImages: (" + str(nPage) + ")"
@@ -5073,7 +5073,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def StartAnimation(self, nPage, timer=500):
-        """ Starts The Animation On The Given Page nPage, With Refreshing Time Rate "timer". """
+        ''' Starts The Animation On The Given Page nPage, With Refreshing Time Rate "timer". '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In StartAnimation: (" + str(nPage) + ")"
@@ -5082,7 +5082,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def StopAnimation(self, nPage):
-        """ Stops The Animation On The Given Page nPage. """
+        ''' Stops The Animation On The Given Page nPage. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In StopAnimation: (" + str(nPage) + ")"
@@ -5091,19 +5091,19 @@ class NotebookCtrl(wx.Panel):
 
 
     def EnableDragAndDrop(self, enable=True):
-        """ Globall Enables/Disables Tabs Drag And Drop. """
+        ''' Globall Enables/Disables Tabs Drag And Drop. '''
 
         self.nb.EnableDragAndDrop(enable)
 
 
     def EnableHiding(self, enable=True):
-        """ Globally Enables/Disables Hiding On Tabs In Runtime. """
+        ''' Globally Enables/Disables Hiding On Tabs In Runtime. '''
 
         self.nb.EnableHiding(enable)
 
 
     def SetDrawX(self, drawx=True, style=1, image1=None, image2=None):
-        """
+        '''
         Globally Enables/Disables The Drawing Of A Closing "X" In The Tab.
 
         @param drawx: C{True} to enable drawing a closing "X"; C{False} to
@@ -5117,34 +5117,34 @@ class NotebookCtrl(wx.Panel):
           the X on an unhighlighted tab
         @param image2: if C{style} is C{3}, the image to use when drawing
           the X on a highlighted tab
-        """
+        '''
 
         self.nb.SetDrawX(drawx, style, image1, image2)
 
 
     def GetDrawX(self):
-        """
+        '''
         Returns The Enable/Disable State Of Drawing Of A Small "X" At The Top-Right Of
         Every Page.
-        """
+        '''
 
         return self.nb.GetDrawX()
 
 
     def SetImageToCloseButton(self, convert=True):
-        """ Set Whether The Tab Icon Should Be Converted To The Close Button Or Not. """
+        ''' Set Whether The Tab Icon Should Be Converted To The Close Button Or Not. '''
 
         self.nb.SetImageToCloseButton(convert)
 
 
     def GetImageToCloseButton(self):
-        """ Get Whether The Tab Icon Should Be Converted To The Close Button Or Not. """
+        ''' Get Whether The Tab Icon Should Be Converted To The Close Button Or Not. '''
 
         return self.nb._convertimage
 
 
     def HideOnSingleTab(self, hide=True):
-        """ Hides The TabCtrl When There Is Only One Tab In NotebookCtrl. """
+        ''' Hides The TabCtrl When There Is Only One Tab In NotebookCtrl. '''
 
         self.nb.HideOnSingleTab(hide)
 
@@ -5158,7 +5158,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def SetPagePopupMenu(self, nPage, menu):
-        """ Sets A Popup Menu Specific To A Single Tab. """
+        ''' Sets A Popup Menu Specific To A Single Tab. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In SetPagePopupMenu: (" + str(nPage) + ")"
@@ -5167,7 +5167,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def GetPagePopupMenu(self, nPage):
-        """ Returns The Popup Menu Associated To A Single Tab. """
+        ''' Returns The Popup Menu Associated To A Single Tab. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In GetPagePopupMenu: (" + str(nPage) + ")"
@@ -5176,14 +5176,14 @@ class NotebookCtrl(wx.Panel):
 
 
     def SetPageToolTip(self, nPage, tooltip="", timer=500, winsize=400):
-        """
+        '''
         Sets A ToolTip For The Given Page nPage.
 
         @param nPage: The Given Page;
         @param tooltip: The ToolTip String;
         @param timer: The Timer After Which The Tip Window Is Popped Up;
         @param winsize: The Maximum Width Of The Tip Window.
-        """
+        '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In SetPageToolTip: (" + str(nPage) + ")"
@@ -5192,7 +5192,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def GetPageToolTip(self, nPage):
-        """ Returns A Tuple With All Page ToolTip Parameters. """
+        ''' Returns A Tuple With All Page ToolTip Parameters. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In GetPageToolTip: (" + str(nPage) + ")"
@@ -5201,19 +5201,19 @@ class NotebookCtrl(wx.Panel):
 
 
     def EnableToolTip(self, show=True):
-        """ Globally Enables/Disables Tab ToolTips. """
+        ''' Globally Enables/Disables Tab ToolTips. '''
 
         self.nb.EnableToolTip(show)
 
 
     def GetToolTipBackgroundColour(self):
-        """ Returns The ToolTip Window Background Colour. """
+        ''' Returns The ToolTip Window Background Colour. '''
 
         return self.nb.GetToolTipBackgroundColour()
 
 
     def SetToolTipBackgroundColour(self, colour=None):
-        """ Sets The ToolTip Window Background Colour. """
+        ''' Sets The ToolTip Window Background Colour. '''
 
         if colour is None:
             colour = wx.Colour(255, 255, 230)
@@ -5222,13 +5222,13 @@ class NotebookCtrl(wx.Panel):
 
 
     def EnableTabGradients(self, enable=True):
-        """ Globally Enables/Disables Drawing Of Gradient Coloured Tabs For Each Tab. """
+        ''' Globally Enables/Disables Drawing Of Gradient Coloured Tabs For Each Tab. '''
 
         self.nb.EnableTabGradients(enable)
 
 
     def SetPageFirstGradientColour(self, nPage, colour=None):
-        """ Sets The Single Tab First Gradient Colour. """
+        ''' Sets The Single Tab First Gradient Colour. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In SetPageFirstGradientColour: (" + str(nPage) + ")"
@@ -5240,7 +5240,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def SetPageSecondGradientColour(self, nPage, colour=None):
-        """ Sets The Single Tab Second Gradient Colour. """
+        ''' Sets The Single Tab Second Gradient Colour. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In SetPageSecondGradientColour: (" + str(nPage) + ")"
@@ -5249,7 +5249,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def GetPageFirstGradientColour(self, nPage):
-        """ Returns The Single Tab First Gradient Colour. """
+        ''' Returns The Single Tab First Gradient Colour. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In GetPageFirstGradientColour: (" + str(nPage) + ")"
@@ -5258,7 +5258,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def GetPageSecondGradientColour(self, nPage):
-        """ Returns The Single Tab Second Gradient Colour. """
+        ''' Returns The Single Tab Second Gradient Colour. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In GetPageSecondGradientColour: (" + str(nPage) + ")"
@@ -5267,25 +5267,25 @@ class NotebookCtrl(wx.Panel):
 
 
     def CancelTip(self):
-        """ Destroys The Tip Window (Probably You Won't Need This One. """
+        ''' Destroys The Tip Window (Probably You Won't Need This One. '''
 
         self.nb.CancelTip()
 
 
     def AdvanceSelection(self, forward=True):
-        """
+        '''
         Cycles Through The Tabs. The Call To This Function Generates The
         EVT_NOTEBOOKCTRL_PAGE_CHANGING Event.
-        """
+        '''
 
         self.nb.AdvanceSelection(forward)
 
 
     def SetDefaultPage(self, defaultpage=-1):
-        """
+        '''
         Sets The Default Page That Will Be Selected When An Active And Selected
         Tab Is Made Inactive.
-        """
+        '''
 
         if defaultpage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In SetDefaultPage: (" + str(defaultpage) + ")"
@@ -5294,13 +5294,13 @@ class NotebookCtrl(wx.Panel):
 
 
     def GetDefaultPage(self):
-        """ Returns The Default Page. """
+        ''' Returns The Default Page. '''
 
         return self.nb.GetDefaultPage()
 
 
     def GetPageText(self, nPage):
-        """ Returns The String For The Given Page nPage. """
+        ''' Returns The String For The Given Page nPage. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In GetPageText: (" + str(nPage) + ")"
@@ -5309,7 +5309,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def SetPageText(self, nPage, text):
-        """ Sets The String For The Given Page nPage. """
+        ''' Sets The String For The Given Page nPage. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In SetPageText: (" + str(nPage) + ")"
@@ -5318,7 +5318,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def GetPageImage(self, nPage):
-        """ Returns The Image Index For The Given Page nPage. """
+        ''' Returns The Image Index For The Given Page nPage. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In GetPageImage: (" + str(nPage) + ")"
@@ -5327,7 +5327,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def SetPageImage(self, nPage, img):
-        """ Sets The Image Index For The Given Page nPage. """
+        ''' Sets The Image Index For The Given Page nPage. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In SetPageImage: (" + str(nPage) + ")"
@@ -5336,7 +5336,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def SetPageTextFont(self, nPage, font=None):
-        """ Sets The Primary Font For The Given Page nPage. """
+        ''' Sets The Primary Font For The Given Page nPage. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In SetPageTextFont: (" + str(nPage) + ")"
@@ -5348,7 +5348,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def GetPageTextFont(self, nPage):
-        """ Returns The Primary Font For The Given Page nPage. """
+        ''' Returns The Primary Font For The Given Page nPage. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In GetPageTextFont: (" + str(nPage) + ")"
@@ -5357,7 +5357,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def SetPageTextSecondaryFont(self, nPage, font=None):
-        """ Sets The Secondary Font For The Given Page nPage. """
+        ''' Sets The Secondary Font For The Given Page nPage. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In SetPageTextSecondaryFont: (" + str(nPage) + ")"
@@ -5369,7 +5369,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def GetPageTextSecondaryFont(self, nPage):
-        """ Returns The Secondary Font For The Given Page nPage. """
+        ''' Returns The Secondary Font For The Given Page nPage. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In GetPageTextSecondaryFont: (" + str(nPage) + ")"
@@ -5378,7 +5378,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def SetPageTextColour(self, nPage, colour=None):
-        """ Sets The Text Colour For The Given Page nPage. """
+        ''' Sets The Text Colour For The Given Page nPage. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In SetPageTextColour: (" + str(nPage) + ")"
@@ -5390,7 +5390,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def GetPageTextColour(self, nPage):
-        """ Returns The Text Colour For The Given Page nPage. """
+        ''' Returns The Text Colour For The Given Page nPage. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In GetPageTextColour: (" + str(nPage) + ")"
@@ -5399,7 +5399,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def SetPageColour(self, nPage, colour=None):
-        """ Sets The Tab Background Colour For The Given Page nPage. """
+        ''' Sets The Tab Background Colour For The Given Page nPage. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In SetPageColour: (" + str(nPage) + ")"
@@ -5411,7 +5411,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def GetPageColour(self, nPage):
-        """ Returns The Tab Background Colour For The Given Page nPage. """
+        ''' Returns The Tab Background Colour For The Given Page nPage. '''
 
         if nPage < 0 or nPage >= self.GetPageCount():
             raise "\nERROR: Invalid Notebook Page In GetPageColour: (" + str(nPage) + ")"
@@ -5420,7 +5420,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def SetTabHeight(self, height=28):
-        """ Sets The Tabs Height. """
+        ''' Sets The Tabs Height. '''
 
         if height <= 0:
             raise "\nERROR: Impossible To Set An Height <= 0. "
@@ -5429,7 +5429,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def SetControlBackgroundColour(self, colour=None):
-        """ Sets The TabCtrl Background Colour (Behind The Tabs). """
+        ''' Sets The TabCtrl Background Colour (Behind The Tabs). '''
 
         if colour is None:
             colour = wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE)
@@ -5438,7 +5438,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def ApplyTabTheme(self, theme=None):
-        """ Apply A Particular Theme To Be Drawn On Tabs. """
+        ''' Apply A Particular Theme To Be Drawn On Tabs. '''
 
         if theme is None:
             theme = ThemeStyle()
@@ -5447,7 +5447,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def SetSelectionColour(self, colour=None):
-        """ Sets The Tab Selection Colour (Thin Line Above The Selected Tab). """
+        ''' Sets The Tab Selection Colour (Thin Line Above The Selected Tab). '''
 
         if colour is None:
             colour = wx.Colour(255, 180, 0)
@@ -5456,12 +5456,12 @@ class NotebookCtrl(wx.Panel):
 
 
     def SetContourLineColour(self, colour=None):
-        """ Sets The Contour Line Colour (Controur Line Around Tabs). """
+        ''' Sets The Contour Line Colour (Controur Line Around Tabs). '''
 
         self.nb.SetContourLineColour(colour)
 
     def Tile(self, show=True, orient=None):
-        """ Shows Pages In Column/Row Mode (One Panel After The Other In Columns/Rows). """
+        ''' Shows Pages In Column/Row Mode (One Panel After The Other In Columns/Rows). '''
 
         if self._GetTabCtrlWindow().IsShown() == show and orient is None:
             return
@@ -5557,7 +5557,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def ShowTabs(self, show=True):
-        """ Shows/Hides Tabs On Request. """
+        ''' Shows/Hides Tabs On Request. '''
 
         if self._GetTabCtrlWindow().IsShown() == show:
             return
@@ -5577,7 +5577,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def GetIndex(self, page):
-        """ Returns The Page Index (Position) Based On The NotebookCtrl Page Passed. """
+        ''' Returns The Page Index (Position) Based On The NotebookCtrl Page Passed. '''
 
         if page in self._notebookpages:
             return self._notebookpages.index(page)
@@ -5586,7 +5586,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def ReparentPage(self, nPage, newParent):
-        """ Reparents The NotebookCtrl Page nPage To A New Parent. """
+        ''' Reparents The NotebookCtrl Page nPage To A New Parent. '''
 
         if nPage < 0 or (self.GetSelection() >= 0 and nPage >= self.GetPageCount()):
             raise "\nERROR: Invalid Notebook Page In ReparentPage: (" + str(nPage) + ")"
@@ -5596,7 +5596,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def ReparentToFrame(self, nPage, createNotebook=False):
-        """ Reparents The NotebookCtrl Page nPage To A New Frame. """
+        ''' Reparents The NotebookCtrl Page nPage To A New Frame. '''
 
         if nPage < 0 or (self.GetSelection() >= 0 and nPage >= self.GetPageCount()):
             raise "\nERROR: Invalid Notebook Page In ReparentToFrame: (" + str(nPage) + ")"
@@ -5642,7 +5642,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def ReparentToNotebook(self, nPage, notebook, newPage=None):
-        """ Reparents The NotebookCtrl Page nPage To A New NotebookCtrl. """
+        ''' Reparents The NotebookCtrl Page nPage To A New NotebookCtrl. '''
 
         if nPage < 0 or (self.GetSelection() >= 0 and nPage >= self.GetPageCount()):
             raise "\nERROR: Invalid Notebook Page In ReparentToNotebook: (" + str(nPage) + ")"
@@ -5683,7 +5683,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def GetPageInfo(self, nPage):
-        """ Returns All The Style Information For A Given Page. """
+        ''' Returns All The Style Information For A Given Page. '''
 
         if nPage < 0 or (self.GetSelection() >= 0 and nPage >= self.GetPageCount()):
             raise "\nERROR: Invalid Notebook Page In GetPageInfo: (" + str(nPage) + ")"
@@ -5722,7 +5722,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def SetPageInfo(self, nPage, infos):
-        """ Sets All The Style Information For A Given Page. """
+        ''' Sets All The Style Information For A Given Page. '''
 
         if nPage < 0 or (self.GetSelection() >= 0 and nPage >= self.GetPageCount()):
             raise "\nERROR: Invalid Notebook Page In SetPageInfo: (" + str(nPage) + ")"
@@ -5744,7 +5744,7 @@ class NotebookCtrl(wx.Panel):
 
 
     def SetCustomPage(self, panel):
-        """ Sets A Custom Panel To Show When There Are No Pages Left In NotebookCtrl. """
+        ''' Sets A Custom Panel To Show When There Are No Pages Left In NotebookCtrl. '''
 
         self.Freeze()
 
@@ -5775,19 +5775,19 @@ class NotebookCtrl(wx.Panel):
 
 
     def GetCustomPage(self):
-        """ Gets A Custom Panel To Show When There Are No Pages Left In NotebookCtrl. """
+        ''' Gets A Custom Panel To Show When There Are No Pages Left In NotebookCtrl. '''
 
         return self._custompanel
 
 
     def HideTab(self, nPage, hide=True):
-        """ Hides A Tab In The NotebookCtrl. """
+        ''' Hides A Tab In The NotebookCtrl. '''
 
         self.nb.HideTab(nPage, hide)
 
 
     def HitTest(self, point, flags=0):
-        """
+        '''
         Standard NotebookCtrl HitTest() Method. If Called With 2 Outputs, It
         Returns The Page Clicked (If Any) And One Of These Flags:
 
@@ -5796,7 +5796,7 @@ class NotebookCtrl(wx.Panel):
         NC_HITTEST_ONLABEL = 2   ==> Hit On Label
         NC_HITTEST_ONITEM  = 4   ==> Hit Generic, On Item
         NC_HITTEST_ONX = 8       ==> Hit On Closing "X" On Every Page
-        """
+        '''
 
         return self.nb.HitTest(point, flags)
 
@@ -5899,10 +5899,10 @@ class macPopupWindow(wx.Frame):
 
 
     def OnActivate(self, evt):
-        """
+        '''
         Let The User Hide The Tooltip By Clicking On It.
         NotebookCtrl Will Destroy It Later.
-        """
+        '''
 
         if self._hideOnActivate:
             wx.Frame.Show(self,False)
@@ -5966,7 +5966,7 @@ class NCFrame(wx.Frame):
         event.Skip()
 
 class NotebookCtrlWindowHandler(xrc.XmlResourceHandler):
-    """
+    '''
     Create L{NotebookCtrl} windows defined in Xrc resources.
 
     Below is an example of a resource definition::
@@ -5995,11 +5995,11 @@ class NotebookCtrlWindowHandler(xrc.XmlResourceHandler):
       </resource>
 
     @undocumented: CanHandle, DoCreateResource, SetupWindow
-    """
+    '''
     def __init__(self):
-        """
+        '''
         Create a NotebookCtrlWindowHandler instance.
-        """
+        '''
         xrc.XmlResourceHandler.__init__(self)
         # Specify the window styles recognized by objects of this type
         self.AddStyle("wxNO_BORDER", wx.NO_BORDER)

@@ -1,7 +1,7 @@
 # Copyright 2009 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-"""
+'''
 This package defines two crunchers, CruncherThread and CruncherProcess.
 They work in a similar way, but they are based on threading.Thread
 and multiprocessing.Process respectively.
@@ -25,9 +25,7 @@ trivially between them.
 
 Another reason for CruncherThread is that on single-core computer it might
 be faster than CruncherProcess because of the memory-sharing.
-"""
+'''
 
 from cruncher_thread import CruncherThread
 from cruncher_process import CruncherProcess
-
-__all__ = ["CruncherProcess", "CruncherThread"]

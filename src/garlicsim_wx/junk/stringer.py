@@ -1,7 +1,7 @@
 def s2i(s):
-    """
+    '''
     String to int
-    """
+    '''
     result=0
     l=len(s)
     for i in range(l):
@@ -9,9 +9,9 @@ def s2i(s):
     return result
 
 def i2s(myi):
-    """
+    '''
     int to string
-    """
+    '''
     i=myi
     result=""
     k=0

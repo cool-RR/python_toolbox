@@ -1,10 +1,10 @@
 # Copyright 2009 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-"""
+'''
 This module defines the HistoryBrowser class. See its documentation
 for more info.
-"""
+'''
 
 import threading
 
@@ -19,16 +19,16 @@ __all__ = ["HistoryBrowser"]
 
 @garlicsim.general_misc.third_party.decorator.decorator
 def with_self(method, *args, **kwargs):
-    """
+    '''
     A decorator used in HistoryBrowser's methods to use the history browser
     as a context manager when calling the method.
-    """
+    '''
     self = args[0]
     with self:
         return method(*args, **kwargs)
 
 class HistoryBrowser(garlicsim.misc.history_browser.HistoryBrowser):
-    """
+    '''
     A HistoryBrowser is a device for requesting information about the history
     of the simulation. It is intended to be used by CruncherThread in
     simulations that are history-dependent.
@@ -54,7 +54,7 @@ class HistoryBrowser(garlicsim.misc.history_browser.HistoryBrowser):
     so when waiting for a lock the cruncher could still be productive.
         
     todo: maybe I've exaggerated in using @with_self in so many places?
-    """
+    '''
     
     def __init__(self, cruncher):
         self.cruncher = cruncher
@@ -76,16 +76,16 @@ class HistoryBrowser(garlicsim.misc.history_browser.HistoryBrowser):
      
     @with_self
     def get_last_state(self):
-        """
+        '''
         Get the last state in the timeline. Identical to __getitem__(-1).
-        """
+        '''
         return self[-1]
     
     @with_self
     def __getitem__(self, index):
-        """
+        '''
         Get a state by its position in the timeline.
-        """
+        '''
         assert isinstance(index, int)
         if index < 0:
             return self.__get_item_negative(index)
@@ -94,9 +94,9 @@ class HistoryBrowser(garlicsim.misc.history_browser.HistoryBrowser):
     
     @with_self
     def __get_item_negative(self, index):
-        """
+        '''
         Get a state by its position in the timeline. Negative indices only.
-        """
+        '''
         try:
             return self.__get_item_from_queue(index)
         except IndexError:
@@ -111,9 +111,9 @@ class HistoryBrowser(garlicsim.misc.history_browser.HistoryBrowser):
     
     @with_self
     def __get_item_positive(self, index):
-        """
+        '''
         Get a state by its position in the timeline. Positive indices only.
-        """
+        '''
         our_node = self.__get_our_node()
         path = our_node.make_containing_path()
         try:
@@ -138,23 +138,23 @@ class HistoryBrowser(garlicsim.misc.history_browser.HistoryBrowser):
         
     @with_self
     def __get_item_from_queue(self, index):
-        """
+        '''
         Obtain an item by index number from the work_queue of our cruncher.
-        """
+        '''
         item = queue_tools.queue_get_item(self.cruncher.work_queue, index)
         return item
         
     @with_self
     def get_state_by_monotonic_function(self, function, value,
                                         rounding="closest"):
-        """
+        '''
         Get a state by specifying a measure function and a desired value.
         
         The function must be a monotonic rising function on the timeline.
         
         See documentation of garlicsim.general_misc.binary_search.binary_search
         for details about rounding options.
-        """
+        '''
         assert rounding in ["high", "low", "exact", "both", "closest"]
         
         tree_result = self.__get_state_by_monotonic_function_from_tree \
@@ -174,41 +174,41 @@ class HistoryBrowser(garlicsim.misc.history_browser.HistoryBrowser):
                 return binary_search.make_both_data_into_preferred_rounding\
                        (queue_result, function, value, rounding)
             elif none_count == 1:
-                """
+                '''
                 The result is on or beyond the edge of the queue.
-                """
+                '''
                 if queue_result[1] is None:
                     # The result is either the most recent state in the queue
                     # or "after" it
                     return binary_search.make_both_data_into_preferred_rounding\
                            (queue_result, function, value, rounding)
                 else: # queue_result[0] == None
-                    """
+                    '''
                     Getting tricky: The result is somewhere in the middle
                     between the queue and the tree.
-                    """
+                    '''
                     combined_result = [tree_result[0], queue_result[1]]
                     return binary_search.make_both_data_into_preferred_rounding\
                            (combined_result, function, value, rounding)
     
             elif none_count == 2:
-                """
+                '''
                 The queue is just totally empty.
-                """
+                '''
                 return binary_search.make_both_data_into_preferred_rounding \
                        (tree_result, function, value, rounding)
             
     @with_self   
     def __get_state_by_monotonic_function_from_tree(self, function, value,
                                                     rounding="closest"):
-        """
+        '''
         Get a state from the tree only by measure function and desired value.
         
         The function must be a monotonic rising function on the timeline.
         
         See documentation of garlicsim.general_misc.binary_search.binary_search
         for details about rounding options.
-        """
+        '''
         assert rounding in ["high", "low", "exact", "both", "closest"]
         our_node = self.__get_our_node()
         path = our_node.make_containing_path()
@@ -222,14 +222,14 @@ class HistoryBrowser(garlicsim.misc.history_browser.HistoryBrowser):
     @with_self
     def __get_state_by_monotonic_function_from_queue(self, function, value,
                                                      rounding="closest"):
-        """
+        '''
         Get a state from the queue only by measure function and desired value.
         
         The function must by a monotonic rising function on the timeline.
         
         See documentation of garlicsim.general_misc.binary_search.binary_search
         for details about rounding options.
-        """
+        '''
         assert rounding in ["high", "low", "exact", "both", "closest"]
         queue = self.cruncher.work_queue
         queue_as_list = queue_tools.queue_as_list(queue)
@@ -240,14 +240,14 @@ class HistoryBrowser(garlicsim.misc.history_browser.HistoryBrowser):
     
     @with_self
     def __len__(self):
-        """
+        '''
         Returns the length of the timeline in nodes.
         
         This means the sum of:
         1. The length of the work_queue of our cruncher.
         2. The length of the path in the tree which leads to our node, up to
            our node.
-        """
+        '''
         queue_length = self.cruncher.work_queue.qsize()
         
         our_node = self.__get_our_node()
@@ -258,9 +258,9 @@ class HistoryBrowser(garlicsim.misc.history_browser.HistoryBrowser):
     
     @with_self
     def __get_our_node(self):
-        """
+        '''
         Get the node that the current cruncher is assigned to work on.
-        """
+        '''
         
         # current_thread = threading.currentThread()
         # This was used instead of self.cruncher. Don't know why. 11/10/2009.

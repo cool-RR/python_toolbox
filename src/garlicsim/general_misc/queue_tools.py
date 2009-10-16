@@ -1,19 +1,19 @@
 # Copyright 2009 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-"""
+'''
 This module defines several functions that might be useful when working with
 queues.
-"""
+'''
 
 import Queue
 
 def dump(queue):
-    """
+    '''
     Empties all pending items in a queue and returns them in a list.
     
     Use only when no other processes/threads are reading from the queue.
-    """
+    '''
     result = []
 
     # START DEBUG CODE
@@ -53,21 +53,21 @@ def dump(queue):
 
 
 def queue_get_item(queue, i):
-    """
+    '''
     Get an item from the queue by index number without removing any items.
     
     Note: This was designed for Queue.Queue. Don't try to use this, for
     example, on multiprocessing.Queue.
-    """
+    '''
     with queue.mutex:
         return queue.queue[i]
 
 def queue_as_list(queue):
-    """
+    '''
     Get all the items in the queue as a list without removing them.
     
     Note: This was designed for Queue.Queue. Don't try to use this, for
     example, on multiprocessing.Queue.
-    """
+    '''
     with queue.mutex:
         return list(queue.queue)

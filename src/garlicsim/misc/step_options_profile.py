@@ -1,17 +1,17 @@
 # Copyright 2009 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-"""
+'''
 This module defines the StepOptionsProfile class. See its documentation for
 more information.
-"""
+'''
 
 from garlicsim.general_misc.arguments_profile import ArgumentsProfile
 
 __all__ = ['StepOptionsProfile']
 
 class StepOptionsProfile(ArgumentsProfile):
-    """
+    '''
     A profile of *args and **kwargs to be used with a step function.
     
     Usage:
@@ -21,7 +21,7 @@ class StepOptionsProfile(ArgumentsProfile):
     step(state, *arguments_profile.args, **arguments_profile.kwargs)
     # is equivalent to
     step(state, 34, "meow", width=60)
-    """
+    '''
     #todo: maybe ditch ArgumentsProfile?
     def __init__(self, *args, **kwargs):
         

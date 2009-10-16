@@ -1,9 +1,9 @@
 import multiprocessing
 
 BUFFER = 3
-"""
+'''
 This is the minimum number of idle processes that should always be available.
-"""
+'''
 
 class Process(multiprocessing.Process):
     def start(self):

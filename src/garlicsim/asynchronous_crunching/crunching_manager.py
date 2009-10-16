@@ -1,42 +1,39 @@
 # Copyright 2009 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-"""
+'''
 This module defines the CrunchingManager class. See its documentation for more
 information.
-"""
+'''
 
-import garlicsim
-from garlicsim.misc.nodes_added import NodesAdded
-from crunchers import CruncherThread, CruncherProcess
-from crunching_profile import CrunchingProfile
-
-
-import garlicsim.general_misc.dict_tools #todo: example of inconsistent import policy
 import garlicsim.general_misc.queue_tools as queue_tools
 import garlicsim.general_misc.third_party.decorator
 import garlicsim.general_misc.change_tracker
 from garlicsim.general_misc.infinity import Infinity
 
+import garlicsim
+from garlicsim.misc.nodes_added import NodesAdded
+import crunchers
+from crunching_profile import CrunchingProfile
 
-PreferredCruncher = [CruncherThread, CruncherProcess][0]
+PreferredCruncher = [crunchers.CruncherThread, crunchers.CruncherProcess][0]
 # Should make a nicer way of setting that.
 
 __all__ = ["CrunchingManager"]
 
 @garlicsim.general_misc.third_party.decorator.decorator
 def with_tree_lock(method, *args, **kwargs):
-    """
+    '''
     A decorator used in CrunchingManager's methods to use the tree lock (in
     write mode) as a context manager when calling the method.
-    """
+    '''
     self = args[0]
     with self.project.tree_lock.write:
         return method(*args, **kwargs)
 
 
 class CrunchingManager(object):
-    """
+    '''
     A crunching manager manages the background crunching for a project.
     
     Every project creates a crunching manager. The job of the crunching manager
@@ -45,34 +42,40 @@ class CrunchingManager(object):
     which goes over all the crunchers and all the nodes of the tree that need
     to be crunched, making sure the crunchers are working on these nodes, and
     collecting work from them to implement into the tree.
-    """
+    '''
     def __init__(self, project):        
         self.project = project
         
         if project.simpack_grokker.history_dependent:
-            self.Cruncher = CruncherThread
+            self.Cruncher = crunchers.CruncherThread
         else:
             self.Cruncher = PreferredCruncher
         
         self.jobs = []
         '''
         The jobs that the crunching manager will be responsible for doing.
+        
+        These are of the class garlicsim.asynchronous_crunching.Job.
         '''
         
         self.crunchers = {}
-        """
-        A dict that maps jobs to crunchers. Every job is mapped to the cruncher
-        that is assigned to work on it.
-        """
+        '''
+        Dict that maps each job to the cruncher reponsible for doing it.
+        '''
         
         self.crunching_profiles_change_tracker = \
             garlicsim.general_misc.change_tracker.ChangeTracker()
-
+        '''
+        A change tracker which tracks changes made to crunching profiles.
         
+        This is used to update the crunchers if the crunching profile for the
+        job they're working on has changed.
+        '''
+
         
     @with_tree_lock
     def sync_crunchers(self):
-        """
+        '''
         Take work from the crunchers, and give them new instructions if needed.
         
         Talks with all the crunchers, takes work from them for implementing
@@ -81,7 +84,7 @@ class CrunchingManager(object):
 
         Returns the total amount of nodes that were added to the tree in the
         process.
-        """
+        '''
         tree = self.project.tree
         
         total_added_nodes = NodesAdded(0)
@@ -146,12 +149,12 @@ class CrunchingManager(object):
         
         if node.still_in_editing is False:
             step_function = self.project.simpack_grokker.step
-            if self.Cruncher == CruncherProcess:
+            if self.Cruncher == crunchers.CruncherProcess:
                 cruncher = self.Cruncher \
                          (node.state,
                           self.project.simpack_grokker.step_generator,
                           crunching_profile=crunching_profile)
-            else: # self.Cruncher == CruncherThread
+            else: # self.Cruncher == crunchers.CruncherThread
                 cruncher = self.Cruncher(node.state, self.project,
                                          crunching_profile=crunching_profile)
             cruncher.start()
@@ -165,14 +168,14 @@ class CrunchingManager(object):
         return [job for job in self.jobs if job.node == node]
     
     def __add_work_to_tree(self, cruncher, node, retire=False): #todo: modify this to take job?
-        """
+        '''
         Take work from the cruncher and add to the tree at the specified node.
         
         If `retire` is set to True, retires the cruncher.
         
         Returns (number, leaf), where `number` is the number of nodes that
         were added, and `leaf` is the last node that was added.
-        """
+        '''
         tree = self.project.tree
         states = queue_tools.dump(cruncher.work_queue)
         if retire:

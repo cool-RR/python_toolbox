@@ -1,9 +1,9 @@
 # Copyright 2009 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-"""
+'''
 This module defines the Job class. See its documentation for more info.
-"""
+'''
 
 __all__ = ['Job']
 

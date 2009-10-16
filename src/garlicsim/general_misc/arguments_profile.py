@@ -1,13 +1,13 @@
 # Copyright 2009 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-"""
+'''
 This module defines the ArgumentsProfile class. See its documentation for
 more information.
-"""
+'''
 
 class ArgumentsProfile(object):
-    """
+    '''
     A profile of *args and **kwargs to be used with a function.
     
     Usage:
@@ -18,7 +18,7 @@ class ArgumentsProfile(object):
     # is equivalent to
     function(34, "meow", width=60)
     
-    """
+    '''
     
     def __init__(self, *args, **kwargs):
         self.args = args

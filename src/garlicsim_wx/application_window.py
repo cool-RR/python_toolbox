@@ -40,10 +40,10 @@ fuck_the_path()
 
 
 class ApplicationWindow(wx.Frame):
-    """
+    '''
     An application window that allows the user to open multiple GuiProjects
     simultaneously.
-    """
+    '''
     def __init__(self,*args,**keywords):
         wx.Frame.__init__(self,*args,**keywords)
         self.SetDoubleBuffered(True)
@@ -76,7 +76,7 @@ class ApplicationWindow(wx.Frame):
         self.Bind(wx.EVT_TOOL, self.on_new, new_tool)
         self.Bind(wx.EVT_TOOL, self.done_editing, done_tool)
 
-        """
+        '''
         self.Bind(EVT_RUN_BACKGROUND, self.on_run_background)
 
         event = wx.PyEvent()
@@ -84,7 +84,7 @@ class ApplicationWindow(wx.Frame):
         wx.PostEvent(self, event)
 
         self.run_background_block=False
-        """
+        '''
 
         self.background_timer = thread_timer.ThreadTimer(self)
         self.background_timer.start(150)
@@ -159,14 +159,14 @@ class ApplicationWindow(wx.Frame):
             
         save_dlg.Destroy()
     
-    """
+    '''
     def delete_gui_project(self,gui_project):
         I did this wrong.
         self.gui_projects.remove(gui_project)
         self.notebook.AddPage(gui_project.main_window,"zort!")
         self.notebook.DeletePage(0)
         del gui_project
-    """
+    '''
 
     def exit(self,e):
         self.background_timer.stop()
@@ -196,10 +196,10 @@ class ApplicationWindow(wx.Frame):
         self.add_gui_project(my_gui_project)
 
     def sync_crunchers(self, e=None):
-        """
+        '''
         A function that calls `sync_crunchers` for all the
         open GuiProjects.
-        """
+        '''
         for gui_project in self.gui_projects:
             gui_project.sync_crunchers()
 
@@ -209,10 +209,10 @@ def main():
     app = wx.PySimpleApp()
     my_app_win=ApplicationWindow(None, -1, "GarlicSim", size=(600,600))
 
-    """
+    '''
     import cProfile
     cProfile.run("app.MainLoop()")
-    """
+    '''
     app.MainLoop()
 
 

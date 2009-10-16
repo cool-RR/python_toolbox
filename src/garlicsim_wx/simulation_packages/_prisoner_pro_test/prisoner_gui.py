@@ -20,12 +20,12 @@ def initialize(gui_project):
         gui_project.pie._series.append(part)
         gui_project.pie_part_dict[player_type]=part
 
-    """
+    '''
     sizer=wx.BoxSizer(wx.HORIZONTAL)
     sizer.Add(gui_project.pie,1,wx.EXPAND)
     gui_project.state_showing_window.SetSizer(sizer)
     sizer.Fit(gui_project.state_showing_window)
-    """
+    '''
 
 
 def show_state(gui_project,state):

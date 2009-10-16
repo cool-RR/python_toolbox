@@ -1,13 +1,13 @@
 # Copyright 2009 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-"""
+'''
 A module that defines the State class. See its documentation for more
 information.
-"""
+'''
 
 class State(object):
-    """
+    '''
     A state describes a world state in the simulation; it contains information
     about a "frozen moment" in the simulation.
 
@@ -19,6 +19,6 @@ class State(object):
 
     A state object must always be picklable, as do all the attributes assigned
     to it.
-    """
+    '''
     
     pass

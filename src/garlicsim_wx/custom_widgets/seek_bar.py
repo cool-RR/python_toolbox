@@ -1,10 +1,10 @@
 # Copyright 2009 Ram Rachum.
 # This program is not licensed for distribution and may not be distributed.
 
-"""
+'''
 todo: I think the refresh should be made more efficient
 
-"""
+'''
 
 import wx
 import math
@@ -15,9 +15,9 @@ import garlicsim
 
 
 class SeekBar(wx.Panel):
-    """
+    '''
     A seek-bar widget.
-    """
+    '''
     def __init__(self,parent,id,gui_project=None,zoom=1.0,start=0.0,*args,**kwargs):
         wx.Panel.__init__(self, parent, id, size=(-1,40), style=wx.SUNKEN_BORDER)
         self.Bind(wx.EVT_PAINT, self.OnPaint)

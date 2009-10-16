@@ -19,11 +19,11 @@ def show_state(gui_project,state):
         if mini > evalF(state.biomorph[i]):
             mini = evalF(state.biomorph[i])
     gui_project.text_ctrl.SetValue(str(mini))
-    """
+    '''
     p = []
     for i in range(10):
         p+= [evalF(state.biomorph[i])]
     p.sort()
     print p
-    """
+    '''
     pass

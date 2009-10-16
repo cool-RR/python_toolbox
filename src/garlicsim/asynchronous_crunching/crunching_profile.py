@@ -1,10 +1,10 @@
 # Copyright 2009 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-"""
+'''
 This module defines the CrunchingProfile class. See its documentation for more
 information.
-"""
+'''
 
 __all__ = ['CrunchingProfile']
 

@@ -1,13 +1,13 @@
 # Copyright 2009 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-"""
+'''
 This module defines the CruncherThread class. See its documentation for
 more information.
-"""
+'''
 
 import threading
-import Queue as queue
+import Queue
 import copy
 
 import garlicsim
@@ -17,7 +17,7 @@ from garlicsim.asynchronous_crunching import \
 __all__ = ["CruncherThread"]
 
 class CruncherThread(threading.Thread):
-    """
+    '''
     CruncherThread is a type of cruncher.
     
     A cruncher is a worker which crunches the simulation. It receives a state
@@ -30,7 +30,7 @@ class CruncherThread(threading.Thread):
     
     The advantage of CruncherThread over CruncherProcess is that
     CruncherThread is able to handle simulations that are history-dependent.
-    """
+    '''
     def __init__(self, initial_state, project, crunching_profile):
         threading.Thread.__init__(self)
         
@@ -44,38 +44,37 @@ class CruncherThread(threading.Thread):
         
         self.daemon = True
 
-        self.work_queue = queue.Queue()
-        """
-        The cruncher puts the work that it has completed into this queue, to be
-        picked up by sync_crunchers.
-        """
+        self.work_queue = Queue.Queue()
+        '''
+        Queue for putting completed work to be picked up by the main thread.
+        '''
 
-        self.order_queue = queue.Queue()
-        """
-        This queue is used to send instructions to the cruncher.
-        """
+        self.order_queue = Queue.Queue()
+        '''
+        Queue for receiving instructions from the main thread.
+        '''
 
         
     def run(self):
-        """
+        '''
         This is called when the cruncher is started. It just calls
         the main_loop method in a try clause, excepting ObsoleteCruncherError;
         That exception means that the cruncher has been retired in the middle
         of its job, so it is propagated up to this level, where it causes the
         cruncher to terminate.
-        """
+        '''
         try:
             self.main_loop()
         except ObsoleteCruncherError:
             return
 
     def main_loop(self):
-        """
+        '''
         The main loop of the cruncher.
         
         Crunches the simulations repeatedly until the crunching profile is
         satisfied or a 'retire' order is received.
-        """
+        '''
         
         step_options_profile = self.crunching_profile.step_options_profile or \
                              garlicsim.misc.StepOptionsProfile()
@@ -102,12 +101,12 @@ class CruncherThread(threading.Thread):
 
                 
     def auto_clock(self, state):
-        """
+        '''
         If the state lacks a clock attribute, set one up automatically.
         
         The new clock attribute will be equal to the clock of the old state
         plus 1.
-        """
+        '''
         if not hasattr(state, "clock"):
             state.clock = self.last_clock + 1
         self.last_clock = state.clock
@@ -124,37 +123,37 @@ class CruncherThread(threading.Thread):
             raise ObsoleteCruncherError
         
     def get_order(self):
-        """
+        '''
         Attempt to read an order from the order_queue, if one has been sent.
         
         Returns the order.
-        """
+        '''
         try:
             return self.order_queue.get(block=False)
-        except queue.Empty:
+        except Queue.Empty:
             return None
     
     def process_order(self, order):
-        """
+        '''
         Process an order receieved from order_queue.
-        """
+        '''
         if order == "retire":
             raise ObsoleteCruncherError
         elif isinstance(order, CrunchingProfile):
             self.crunching_profile = copy.deepcopy(order)
     
     def retire(self):
-        """
+        '''
         Retire the cruncher. Thread-safe.
         
         Cause it to shut down as soon as it receives the order.
-        """
+        '''
         self.order_queue.put("retire")        
         
     def update_crunching_profile(self, profile):
-        """
+        '''
         Update the cruncher's crunching profile. Thread-safe.
-        """
+        '''
         self.order_queue.put(profile)
     
 
