@@ -4,7 +4,9 @@ import weakref
 class ChangeTracker(object): 
     '''
     '''
-    #todo: possible that hash won't change when object changes?
+    # Todo: Someone suggested that it's possible the hash won't change even
+    # when the object changes, which might break my program. If so, we can 
+    # use pickle.
     
     def __init__(self):
         self.library = weakref.WeakKeyDictionary()
