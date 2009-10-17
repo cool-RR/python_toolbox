@@ -1,4 +1,4 @@
-
+# tododoc
 # maybe call it AddedNodes?
 
 class NodesAdded(int):
@@ -6,7 +6,7 @@ class NodesAdded(int):
     sync_crunchers functions return a NodesAdded object instead of an int.
     
     NodesAdded is jsut a subclass of int which has a nice __repr__ saying
-    what the context of that number is.
+    '<7 nodes were added to the tree>' instead of just '7'.
     '''
     def __repr__(self):
         return '<' + int.__repr__(self) + ' nodes were added to the tree>'
@@ -32,4 +32,10 @@ class NodesAdded(int):
             return int_result
         
     __rsub__ = __sub__
+    
+    def __pos__(self):
+        return self
+    
+    def __neg__(self):
+        return NodesAdded(int.__neg__(self))
             
