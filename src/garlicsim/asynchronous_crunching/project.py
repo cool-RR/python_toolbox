@@ -8,10 +8,10 @@ information.
 
 from __future__ import with_statement
 
+import garlicsim.general_misc.read_write_lock
 from garlicsim.general_misc.backport_cruft.classed_infinity import Infinity
 import garlicsim.general_misc.module_wrapper
 import garlicsim.general_misc.third_party.decorator
-import garlicsim.general_misc.read_write_lock
 
 import garlicsim.data_structures
 import garlicsim.misc.simpack_grokker

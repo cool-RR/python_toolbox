@@ -12,6 +12,7 @@ NUMBER_OF_PLAYERS=70
 
 BaseForHandicap = [object, PersistentReadOnlyObject][1]
 
+
 class Handicap(BaseForHandicap):
     def __init__(self, thing, meow):
         self.thing, self.meow = thing, meow
