@@ -250,12 +250,7 @@ class HistoryBrowser(garlicsim.misc.history_browser.HistoryBrowser):
     def __get_our_node(self):
         '''
         Get the node that the current cruncher is assigned to work on.
-        '''
-        
-        # current_thread = threading.currentThread()
-        # This was used instead of self.cruncher. Don't know why. 11/10/2009.
-        
-        
+        '''        
         jobs_to_crunchers = self.project.crunching_manager.crunchers.items()
         
         nodes_that_are_us = \

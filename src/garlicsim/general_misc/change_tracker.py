@@ -25,4 +25,6 @@ class ChangeTracker(object):
         else:
             self.library[thing] = new_hash
             return True
-            
+    
+    def __contains__(self, thing):
+        return self.library.__contains__(thing)

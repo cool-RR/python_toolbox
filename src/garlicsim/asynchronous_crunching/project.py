@@ -110,7 +110,7 @@ class Project(object):
 
     def ensure_buffer(self, node, clock_buffer=0):
         '''
-        Maintain a large enough buffer of nodes after `node`.
+        Ensure there's a large enough buffer of nodes after `node`.
 
         This method will ensure that every path that starts at `node` will have
         a clock buffer of at least `clock_buffer` after `node`. If there isn't,
@@ -139,7 +139,7 @@ class Project(object):
     
     def ensure_buffer_on_path(self, node, path, clock_buffer=0):
         '''
-        Make sTODOure there's a large enough buffer of nodes after `node` on `path`.
+        Ensure there's a large enough buffer of nodes after `node` on `path`.
 
         This method will ensure that on the given path there will be a clock
         buffer of at least `clock_buffer` after `node`. If there isn't, the
@@ -168,15 +168,20 @@ class Project(object):
             return job
           
     
-    def begin_crunching(self, node, clock_buffer=None,
-                        *args, **kwargs):
+    def begin_crunching(self, node, clock_buffer=None, *args, **kwargs):
         '''
-        tododoc
+        Start a new crunching job from `node`, possibly forking the simulation.
+        
+        On the next call to .sync_crunchers, a cruncher will start working on
+        the new job.
+        If there are already jobs on that node, they will all be crunched
+        independently of each other to create different forks.        
+        Any args or kwargs will be packed in a StepOptionsProfile object and
+        passed to the step function. You may pass a StepOptionsProfile
+        yourself, as the only argument, and it will be noticed and used.
         
         Returns the job.
         '''
-        # todo: Make Infinitesimal class to put as default to clock_distance?
-        # todo: change "fork naturally" to use this?
         
         step_options_profile = \
             garlicsim.misc.step_options_profile.StepOptionsProfile(*args,
