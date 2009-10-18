@@ -6,11 +6,9 @@ This module defines the StepOptionsProfile class. See its documentation for
 more information.
 '''
 
-from garlicsim.general_misc.arguments_profile import ArgumentsProfile
-
 __all__ = ['StepOptionsProfile']
 
-class StepOptionsProfile(ArgumentsProfile):
+class StepOptionsProfile(object):
     '''
     A profile of *args and **kwargs to be used with a step function.
     
@@ -22,7 +20,6 @@ class StepOptionsProfile(ArgumentsProfile):
     # is equivalent to
     step(state, 34, "meow", width=60)
     '''
-    #todo: maybe ditch ArgumentsProfile?
     def __init__(self, *args, **kwargs):
         
         # Perhaps we were passed a StepOptionsProfile object instead of args
@@ -60,4 +57,8 @@ class StepOptionsProfile(ArgumentsProfile):
         if other is None:
             return len(self.args) == 0 and len(self.kwargs) == 0
         else:
-            return ArgumentsProfile
+            return isinstance(other, StepOptionsProfile) and \
+                   self.args == other.args and self.kwargs == other.kwargs
+
+    def __ne__(self, other):
+        return not self.__eq__(other)

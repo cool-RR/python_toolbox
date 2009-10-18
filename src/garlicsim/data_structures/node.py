@@ -6,9 +6,10 @@ A module that defines the Node class and the related NodeError exception. See
 its documentation for more information.
 '''
 
+from garlicsim.general_misc.infinity import Infinity
 from state import State
 # Note we are doing `from path import Path` in the bottom of the file.
-from garlicsim.general_misc.infinity import Infinity
+
 
 __all__ = ["Node", "NodeError"]
 

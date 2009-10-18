@@ -15,8 +15,7 @@ def binary_search_by_index(sequence, function, value, rounding="closest"):
     Similiar to binary_search (refer to its documentation for more info).
     The difference is that instead of returning a result in terms of sequence
     items, it returns the indexes of these items in the sequence.
-    '''
-    
+    ''' 
     my_range = xrange(len(sequence))
     fixed_function = lambda index: function(sequence[index])
     result = binary_search(my_range, fixed_function, value, rounding)

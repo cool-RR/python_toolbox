@@ -3,6 +3,11 @@ import weakref
 
 class ChangeTracker(object): 
     '''
+    Tracks changes in objects that are registered with it.
+    
+    To register an object, use .check_in(obj). It will return True. Every time
+    .check_in will be called with the same object, it will return whether the
+    object changed since the last time it was checked in.
     '''
     # Todo: Someone suggested that it's possible the hash won't change even
     # when the object changes, which might break my program. If so, we can 
@@ -12,6 +17,13 @@ class ChangeTracker(object):
         self.library = weakref.WeakKeyDictionary()
         
     def check_in(self, thing):
+        '''        
+        Checks in an object for change tracking.
+        
+        The first time you check in an object, it will return True. Every time
+        .check_in will be called with the same object, it will return whether the
+        object changed since the last time it was checked in.
+        '''
         if thing not in self.library:
             self.library[thing] = hash(thing)
             return True

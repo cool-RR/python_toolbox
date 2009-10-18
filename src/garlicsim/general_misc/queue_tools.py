@@ -10,7 +10,7 @@ import Queue
 
 def dump(queue):
     '''
-    Empties all pending items in a queue and returns them in a list.
+    Empty all pending items in a queue and return them in a list.
     
     Use only when no other processes/threads are reading from the queue.
     '''
