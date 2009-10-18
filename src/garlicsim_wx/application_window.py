@@ -102,6 +102,7 @@ class ApplicationWindow(wx.Frame):
     def on_open(self, event=None):
         wcd = 'Text files (*.txt)|*.txt|All files (*)|*|'
         cur_dir = os.getcwd()
+        tickled_gui_project = None
         try:
             open_dlg = wx.FileDialog(self, message='Choose a file',
                                      defaultDir=cur_dir, defaultFile='',
@@ -128,8 +129,9 @@ class ApplicationWindow(wx.Frame):
         finally:
             fuck_the_path()
             
-        my_gui_project = gui_project.load_tickled_gui_project\
-                       (tickled_gui_project, self.notebook)
+        if tickled_gui_project:
+            my_gui_project = gui_project.load_tickled_gui_project\
+                (tickled_gui_project, self.notebook)
         self.add_gui_project(my_gui_project)
     
     def on_save(self, event=None):
