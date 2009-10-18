@@ -160,7 +160,7 @@ class HistoryBrowser(garlicsim.misc.history_browser.HistoryBrowser):
         else:
             queue_result = self.__get_state_by_monotonic_function_from_queue \
                            (function, value, rounding="both")
-            none_count = queue_result.count(None)
+            none_count = list(queue_result).count(None)
             if none_count == 0:
                 # The result is entirely in the queue
                 return binary_search.make_both_data_into_preferred_rounding\

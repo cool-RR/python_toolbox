@@ -1,5 +1,5 @@
 import garlicsim.data_structures
-import garlicsim
+from garlicsim.misc.persistent_read_only_object import PersistentReadOnlyObject
 import copy
 
 import random
@@ -10,7 +10,7 @@ ROUNDS=7
 NUMBER_OF_PLAYERS=70
 
 
-BaseForHandicap = [object, garlicsim.PersistentReadOnlyObject] [1]
+BaseForHandicap = [object, PersistentReadOnlyObject][1]
 
 class Handicap(BaseForHandicap):
     def __init__(self, thing, meow):

@@ -11,7 +11,7 @@ from __future__ import with_statement
 import garlicsim.general_misc.queue_tools as queue_tools
 import garlicsim.general_misc.third_party.decorator
 import garlicsim.general_misc.change_tracker
-from garlicsim.general_misc.infinity import Infinity
+from garlicsim.general_misc.backport_cruft.classed_infinity import Infinity
 
 import garlicsim
 from garlicsim.misc.nodes_added import NodesAdded
