@@ -111,7 +111,7 @@ that has a different step_options_profile.''')
         
         # We now make sure the node_list is successive, untouched, and has no
         # unwanted children.
-        for i in range(len(node_list)):
+        for i in xrange(len(node_list)):
             if (i >= 1) and (node_list[i].parent != node_list[i-1]):
                 raise BlockError('Tried to add non-consecutive nodes to block.')
             if (len(node_list) - i >= 2) and (len(node_list[i].children) != 1):

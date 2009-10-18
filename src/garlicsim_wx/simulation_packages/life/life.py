@@ -46,8 +46,8 @@ class Board(object):
         if parent:
             self.width, self.height = (parent.width, parent.height)
             self.__list = [None] * parent.width * parent.height
-            for x in range(parent.width):
-                for y in range(parent.height):
+            for x in xrange(parent.width):
+                for y in xrange(parent.height):
                     self.set(x, y, parent.cell_will_become(x, y))
             return
                 
@@ -62,7 +62,7 @@ class Board(object):
 
         self.width, self.height = (width, height)
         self.__list = []
-        for i in range(self.width*self.height):
+        for i in xrange(self.width*self.height):
             self.__list.append(make_cell())
 
     def get(self, x, y):
@@ -113,8 +113,8 @@ class Board(object):
         Displays the board, ASCII-art style.
         '''
         cell = lambda x, y: "#" if self.get(x, y) is True else " "
-        row = lambda y: "".join(cell(x, y) for x in range(self.width))
-        return "\n".join(row(y) for y in range(self.height))
+        row = lambda y: "".join(cell(x, y) for x in xrange(self.width))
+        return "\n".join(row(y) for y in xrange(self.height))
     
     def __eq__(self, other):
         return isinstance(other, Board) and self.__list == other.__list

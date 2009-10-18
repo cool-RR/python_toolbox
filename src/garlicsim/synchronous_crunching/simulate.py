@@ -51,7 +51,7 @@ def __history_simulate(simpack_grokker, state, iterations=1, *args, **kwargs):
     iterator = simpack_grokker.step_generator(history_browser, *args, **kwargs)
     
     current_node = root
-    for i in range(iterations):
+    for i in xrange(iterations):
         current_state = iterator.next()
         current_node = tree.add_state(current_state, parent=current_node)
         
@@ -74,7 +74,7 @@ def __non_history_simulate(simpack_grokker, state, iterations,
     Returns the final state of the simulation.
     '''
     iterator = simpack_grokker.step_generator(state, *args, **kwargs)
-    for i in range(iterations):
+    for i in xrange(iterations):
         current_state = iterator.next()
         
     final_state = current_state

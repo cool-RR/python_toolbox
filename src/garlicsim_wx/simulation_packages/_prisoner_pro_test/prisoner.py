@@ -25,7 +25,7 @@ def make_plain_state(*args,**kwargs):
     state.round=-1
     state.match=0
 
-    state.player_pool=[player_types[i%len(player_types)]() for i in range(NUMBER_OF_PLAYERS)]
+    state.player_pool=[player_types[i%len(player_types)]() for i in xrange(NUMBER_OF_PLAYERS)]
 
     return new_match_step(state)
 
@@ -37,7 +37,7 @@ def make_random_state(*args,**kwargs):
     state.round=-1
     state.match=0
 
-    state.player_pool=[random_strategy_player() for i in range(NUMBER_OF_PLAYERS)]
+    state.player_pool=[random_strategy_player() for i in xrange(NUMBER_OF_PLAYERS)]
 
     return new_match_step(state)
 

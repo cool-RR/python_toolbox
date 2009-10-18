@@ -15,13 +15,13 @@ def initialize(gui_project):
 def show_state(gui_project,state):
 
     mini = 1000000
-    for i in range(NUM_OF_BIOMORPH):
+    for i in xrange(NUM_OF_BIOMORPH):
         if mini > evalF(state.biomorph[i]):
             mini = evalF(state.biomorph[i])
     gui_project.text_ctrl.SetValue(str(mini))
     '''
     p = []
-    for i in range(10):
+    for i in xrange(10):
         p+= [evalF(state.biomorph[i])]
     p.sort()
     print p

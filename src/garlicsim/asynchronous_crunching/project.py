@@ -255,7 +255,7 @@ class Project(object):
             garlicsim.synchronous_crunching.HistoryBrowser(path)
         current_node = node
         state = node.state
-        for i in range(iterations):
+        for i in xrange(iterations):
             history_browser.end_node = node
             state = self.simpack_grokker.step(history_browser,
                                               *args, **kwargs)
@@ -281,7 +281,7 @@ class Project(object):
         
         current_node = node
         state = node.state
-        for i in range(iterations):
+        for i in xrange(iterations):
             state = self.simpack_grokker.step(state, *args, **kwargs)
             current_node = self.tree.add_state(state, parent=current_node)
             
