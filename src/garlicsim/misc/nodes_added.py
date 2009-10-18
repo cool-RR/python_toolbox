@@ -1,5 +1,6 @@
-# tododoc
-# maybe call it AddedNodes?
+# Copyright 2009 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
 
 class NodesAdded(int):
     '''
