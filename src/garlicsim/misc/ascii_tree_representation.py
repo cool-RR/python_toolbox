@@ -1,5 +1,9 @@
+# Copyright 2009 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
 from garlicsim.data_structures import Tree, Node, Block
 
+#todo
 
 def show(tree):
     if len(tree.roots) > 1: raise NotImplementedError

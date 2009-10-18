@@ -1,21 +1,21 @@
 # Copyright 2009 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-"""
+'''
 A module that defines the Block class and the related BlockError exception. See
 the documentation of Block for more information.
-"""
+'''
 
 __all__ = ["Block", "BlockError"]
 
 class BlockError(Exception):
-    """
+    '''
     An exception related to the class Block.
-    """
+    '''
     pass
 
 class Block(object):
-    """
+    '''
     A block is a device for bundling together a succession of natural nodes.
     It makes the tree more organized and easy to browse, and improves
     performance.
@@ -33,29 +33,34 @@ class Block(object):
     3. The last node may have any kinds of children.
 
     If you want to check whether a certain node is in a block or not,
-    check its ".block" attribute.
+    check its ".block" attribute. TODODOC
 
-    """
+    '''
     def __init__(self, node_list):
-        """
+        '''
         Construct a block from the members of node_list.
-        """
+        '''
         self.__node_list = []
         self.add_node_list(node_list)
 
     def append_node(self, node):
-        """
+        '''
         Append a single node to the block.
         
         If the block's node list is empty, the node will be added
         unconditionally. If the node list contains some nodes, the new node
         must be either a child of the last node or the parent of the first one.
-        """
+        '''
         if not self.__node_list:
             # If the node list is [], let's make it [node].
             self.__node_list.append(node)
             node.block = self
             return
+        
+        if node.step_options_profile != self.get_step_options_profile():
+            raise BlockError('''Tried to add node which has a different
+step_options_profile.''')
+            
         
         # If the flow reached here, the block is not empty.
         last_in_block = self.__node_list[-1]
@@ -72,11 +77,11 @@ class Block(object):
             node.block = self
             return
         
-        raise BlockError("""Tried to add a node which is not a direct \
-        successor or a direct ancestor of the block.""")
+        raise BlockError('''Tried to add a node which is not a direct \
+successor or a direct ancestor of the block.''')
         
     def add_node_list(self, node_list):
-        """
+        '''
         Add a list of nodes to the block.
         
         These nodes must already be successive to each other.
@@ -85,7 +90,7 @@ class Block(object):
                block.
             2. The last node in the list is the parent of the first node in
                the block.
-        """
+        '''
 
         if not node_list:
             return
@@ -94,16 +99,24 @@ class Block(object):
             self.append_node(node_list[0])
             return
         
+        step_option_profiles = \
+            set([node.step_options_profile for node in node_list])
+        if len(step_option_profiles) > 1:
+            raise BlockError('''Tried to add node list that doesn't share the \
+same step options profile.''')
+        if self.__node_list and \
+           list(step_option_profiles)[0] != self.get_step_options_profile():
+            raise BlockError('''Tried to add nodelist which contains node \
+that has a different step_options_profile.''')
+        
         # We now make sure the node_list is successive, untouched, and has no
         # unwanted children.
-        for i in range(len(node_list)):
+        for i in xrange(len(node_list)):
             if (i >= 1) and (node_list[i].parent != node_list[i-1]):
-                raise BlockError("""Tried to add non-consecutive nodes to \
-                block.""")
+                raise BlockError('Tried to add non-consecutive nodes to block.')
             if (len(node_list) - i >= 2) and (len(node_list[i].children) != 1):
-                raise BlockError("""Tried to add to the block a node which \
-                doesn't have exactly one child, and not as the last node in \
-                the block.""")
+                raise BlockError('''Tried to add to the block a node which \
+doesn't have exactly one child, and not as the last node in the block.''')
             if node_list[i].touched:
                 raise BlockError("Tried to add touched nodes to block.")
         
@@ -119,20 +132,19 @@ class Block(object):
         elif self.__node_list[0].parent == node_list[-1]:
             self.__node_list = node_list + self.__node_list
         else:
-            raise BlockError("""List of nodes is not adjacent to existing \
-            nodes""")
+            raise BlockError('List of nodes is not adjacent to existing nodes.')
 
         for node in node_list:
             node.block = self
 
     def split(self, node):
-        """
+        '''
         Split the block into two blocks.
         
         `node` would be the last node of the first block of the two. If either
         of the new blocks will contain just one node, that block will get
         deletedand the single node will become blockless.
-        """
+        '''
         assert node in self
         i = self.__node_list.index(node)
         second_list = self.__node_list[i+1:]
@@ -147,48 +159,61 @@ class Block(object):
 
 
     def delete(self):
-        """
+        '''
         Delete the block, leaving all its nodes without a block.
-        """
+        '''
         for node in self:
             node.block = None
         self.__node_list = []
 
     def __delitem__(self, i):
-        """
+        '''
         Remove a node from the block. Can only remove an edge node.
-        """
+        '''
         if (i == 0) or (i == -1) or (i == len(self) - 1) or (i == -len(self)):
             self.__node_list[i].block = None
             return self.__node_list.__delitem__(i)
         else:
             if -len(self) < i < len(self) - 1:
-                raise NotImplementedError("""Can't remove a node from the \
-                middle of a block""")
+                raise NotImplementedError('''Can't remove a node from the \
+middle of a block''')
             else:
-                raise IndexError("""Tried to remove a node by index, while \
-                the index was bigger than the block's length.""")
+                raise IndexError('''Tried to remove a node by index, while \
+the index was bigger than the block's length.''')
 
     def __contains__(self, node):
-        """
+        '''
         Return whether the block contains `node`.
-        """
+        '''
         return node.block == self
 
     def __iter__(self):
         return self.__node_list.__iter__()
 
     def __len__(self):
-        """
+        '''
         Return the number of nodes in the block.
-        """
+        '''
         return len(self.__node_list)
 
     def __getitem__(self, i):
         return self.__node_list[i]
 
     def index(self, node):
-        """
+        '''
         Return the index number of the specified node in the block.
-        """
+        '''
         return self.__node_list.index(node)
+    
+    def get_step_options_profile(self):
+        '''
+        Get the step options profile of the nodes in this block.
+        
+        This profile must be identical in all of the nodes in the block.
+        '''
+        return self.__node_list[0].step_options_profile
+        
+
+        
+
+

@@ -1,10 +1,10 @@
 # Copyright 2009 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-"""
+'''
 A module that defines the Tree class and the related TreeError exception. See
 their documentation for more information.
-"""
+'''
 
 import copy
 
@@ -14,13 +14,13 @@ from block import Block
 __all__ = ["Tree", "TreeError"]
 
 class TreeError(Exception):
-    """
+    '''
     An exception related to the class Tree.
-    """
+    '''
     pass
 
 class Tree(object):
-    """
+    '''
     A tree of nodes. Each node encapsulates a state.
 
     A tree is used within a project to organize everything that is happenning
@@ -38,15 +38,15 @@ class Tree(object):
 
     Each node in the tree may have a parent, or may not, in which case it will
     also be called a root and be a member of tree.roots .
-    """
+    '''
     def __init__(self):
         self.nodes = []
-        """List of nodes that belong to the tree."""
+        '''List of nodes that belong to the tree.'''
         self.roots = []
-        """List of roots (parentless nodes) of the tree."""
+        '''List of roots (parentless nodes) of the tree.'''
 
     def fork_to_edit(self, template_node):
-        """
+        '''
         "Duplicate" the node, marking the new one as touched.
         
         The new node will have the same parent as `template_node`. This
@@ -54,45 +54,46 @@ class Tree(object):
         node is usually modified by the user after it is created.
         
         Returns the node.
-        """
+        '''
         x = copy.deepcopy(template_node.state)
 
-        if template_node is None:
-            parent = None
-        else:
-            parent = template_node.parent
+        parent = template_node.parent
+        step_options_profile = template_node.step_options_profile
+        return self.add_state(x, parent,
+                              step_options_profile=step_options_profile,
+                              template_node=template_node)
 
-        return self.add_state(x, parent, template_node)
 
-
-    def add_state(self, state, parent=None, template_node=None):
-        """
+    def add_state(self, state, parent=None, step_options_profile=None,
+                  template_node=None):
+        '''
         Wrap state in node and adds to tree.
         
         Returns the node.
-        """
+        '''
         touched = (parent is None) or (template_node is not None)    
-        my_node = Node(self, state, touched=touched)
+        my_node = Node(self, state, step_options_profile=step_options_profile,
+                       touched=touched)
         self.add_node(my_node, parent, template_node)
         return my_node
 
 
-    def add_node(self, node, parent=None, template_node=None):
-        """
+    def add_node(self, node, parent=None, template_node=None): #todo: private?
+        '''
         Add a node to the tree.
         
         It may be a natural node or a touched node. If it's a natural node you
         may not specify a template_node.
         
         Returns the node.
-        """
+        '''
         if template_node is not None:
             if parent != template_node.parent:
-                raise TreeError("""Parent you specified and parent of \
-template_node aren't the same!""")
+                raise TreeError('''Parent you specified and parent of \
+template_node aren't the same!''')
             if not node.touched:
-                raise TreeError("""You tried adding an untouched state to a \
-tree while specifying a template_node.""")
+                raise TreeError('''You tried adding an untouched state to a \
+tree while specifying a template_node.''')
             template_node.derived_nodes.append(node)
             
 
@@ -107,14 +108,16 @@ tree while specifying a template_node.""")
             
             if parent.block:
                 if len(parent.children)==1:
-                    if not node.touched:
+                    if (not node.touched) and (parent.step_options_profile == \
+                                               node.step_options_profile):
                         parent.block.append_node(node)
                 else: # parent.children > 1
                     if not (parent is parent.block[-1]):
                         parent.block.split(parent)
             else: # parent.block is None
                 if (not node.touched) and (not parent.touched) and \
-                   (len(parent.children)==1):
+                   (len(parent.children)==1) and \
+                   (parent.step_options_profile == node.step_options_profile):
                     Block([parent, node])
                 
                         
@@ -126,9 +129,9 @@ tree while specifying a template_node.""")
 
 
     def node_count(self):
-        """
+        '''
         Return the number of nodes in the tree.
-        """
+        '''
         return len(self.nodes)
     
 from node import Node

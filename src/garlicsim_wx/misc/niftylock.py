@@ -1,9 +1,9 @@
 # Copyright 2009 Ram Rachum.
 # This program is not licensed for distribution and may not be distributed.
 
-"""
+'''
 Does it matter whether we are using locks from threading or multiprocessing?
-"""
+'''
 
 import threading
 
@@ -48,7 +48,7 @@ if __name__=="__main__":
     import random
     SIZE=1000
 
-    l=[[0] for i in range(SIZE)]
+    l=[[0] for i in xrange(SIZE)]
 
     n=Niftylock()
 
@@ -73,9 +73,9 @@ if __name__=="__main__":
             pass
 
     threads=[]
-    for i in range(100):
+    for i in xrange(100):
         threads.append(threading.Thread(target=gocrazy))
         threads[-1].start()
-    for i in range(100):
+    for i in xrange(100):
         threads[i].join()
     print(l)

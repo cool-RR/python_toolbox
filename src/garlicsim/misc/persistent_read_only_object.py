@@ -1,7 +1,7 @@
 # Copyright 2009 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-"""
+'''
 todo: need to lock library to avoid thread trouble?
 
 todo: need to raise an exception if we're getting pickled with
@@ -11,7 +11,7 @@ todo: make it polite to other similar classes
 
 todo: what happens when you want to fork-by-editing a state and change
 a big 3-d model which is a PRO?
-"""
+'''
 
 import uuid
 import weakref
@@ -21,14 +21,14 @@ __all__ = ["PersistentReadOnlyObject"]
 library = weakref.WeakValueDictionary()
 
 class UuidToken(object):
-    """
+    '''
     A token which contains a uuid with its attribute .uuid
-    """
+    '''
     def __init__(self, uuid):
         self.uuid = uuid
 
 class PersistentReadOnlyObject(object):
-    """
+    '''
     A class to use as a subclass for objects which do not change.
     When copying a PersistentReadOnlyObject, it is not really copied; The new
     "copy" is just the same object.
@@ -41,7 +41,7 @@ class PersistentReadOnlyObject(object):
 
     There is no mechanism that enforces that the user doesn't change the
     object.
-    """
+    '''
     def __new__(cls, *args, **kwargs):
         if len(args)==1 and len(kwargs)==0 and isinstance(args[0], UuidToken):
             received_uuid = args[0].uuid
@@ -89,7 +89,7 @@ class PersistentReadOnlyObject(object):
         return self
 
 # --------------------------------------------------------------
-"""
+'''
 From here on it's just testing stuff; will be moved to another file.
 
     
@@ -126,4 +126,4 @@ if __name__ == "__main__":
     for thing in things:
         assert same(thing, a) and same(thing, b) and same(thing, c)
     print("all cool!")
-"""
+'''

@@ -23,10 +23,10 @@
 ##   USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
 ##   DAMAGE.
 
-"""
+'''
 Decorator module, see http://pypi.python.org/pypi/decorator
 for the documentation.
-"""
+'''
 
 __all__ = ["decorator", "FunctionMaker", "partial",
            "deprecated", "getinfo", "new_wrapper"]
@@ -50,11 +50,11 @@ DEF = re.compile('\s*def\s*([_\w][_\w\d]*)\s*\(')
 
 # basic functionality
 class FunctionMaker(object):
-    """
+    '''
     An object with the ability to create functions with a given signature.
     It has attributes name, doc, module, signature, defaults, dict and
     methods update and make.
-    """
+    '''
     def __init__(self, func=None, name=None, signature=None,
                  defaults=None, doc=None, module=None, funcdict=None):
         if func:
@@ -130,12 +130,12 @@ class FunctionMaker(object):
     @classmethod
     def create(cls, obj, body, evaldict, defaults=None,
                doc=None, module=None, addsource=True,**attrs):
-        """
+        '''
         Create a function from the strings name, signature and body.
         evaldict is the evaluation dictionary. If addsource is true an attribute
         __source__ is added to the result. The attributes attrs are added,
         if any.
-        """
+        '''
         if isinstance(obj, str): # "name(signature)"
             name, rest = obj.strip().split('(', 1)
             signature = rest[:-1] #strip a right parens            
@@ -150,10 +150,10 @@ class FunctionMaker(object):
                         evaldict, addsource, **attrs)
   
 def decorator(caller, func=None):
-    """
+    '''
     decorator(caller) converts a caller function into a decorator;
     decorator(caller, func) decorates a function using a caller.
-    """
+    '''
     if func is not None: # returns a decorated function
         return FunctionMaker.create(
             func, "return _call_(_func_, %(signature)s)",
@@ -182,7 +182,7 @@ def deprecated(func, *args, **kw):
 
 @deprecated
 def getinfo(func):
-    """
+    '''
     Returns an info dictionary containing:
     - name (the name of the function : str)
     - argnames (the names of the arguments : list)
@@ -206,7 +206,7 @@ def getinfo(func):
 
     >>> info["signature"]
     'self, x, y, *args, **kw'
-    """
+    '''
     assert inspect.ismethod(func) or inspect.isfunction(func)
     regargs, varargs, varkwargs, defaults = inspect.getargspec(func)
     argnames = list(regargs)
@@ -235,13 +235,13 @@ def update_wrapper(wrapper, model, infodict=None):
 
 @deprecated
 def new_wrapper(wrapper, model):
-    """
+    '''
     An improvement over functools.update_wrapper. The wrapper is a generic
     callable object. It works by generating a copy of the wrapper with the 
     right signature and by updating the copy, not the original.
     Moreovoer, 'model' can be a dictionary with keys 'name', 'doc', 'module',
     'dict', 'defaults'.
-    """
+    '''
     if isinstance(model, dict):
         infodict = model
     else: # assume model is a function

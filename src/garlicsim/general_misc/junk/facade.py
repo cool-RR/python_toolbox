@@ -1,9 +1,9 @@
 import cPickle
 
-"""
+'''
 class Fuga(object):
     def __init__(
-"""
+'''
     
     
 class Object(object):

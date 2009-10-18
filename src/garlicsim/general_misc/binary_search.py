@@ -1,30 +1,29 @@
 # Copyright 2009 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-"""
+'''
 A module for doing a binary search in a sequence.
 
 Todo: wrap all things in tuples?
 
 todo: add option to specify cmp.
-"""
+'''
 
 
 def binary_search_by_index(sequence, function, value, rounding="closest"):
-    """
+    '''
     Similiar to binary_search (refer to its documentation for more info).
     The difference is that instead of returning a result in terms of sequence
     items, it returns the indexes of these items in the sequence.
-    """
-    
-    my_range = range(len(sequence))
+    ''' 
+    my_range = xrange(len(sequence))
     fixed_function = lambda index: function(sequence[index])
     result = binary_search(my_range, fixed_function, value, rounding)
     return result
 
 
 def binary_search(sequence, function, value, rounding="closest"):
-    """
+    '''
     Does a binary search through a sequence.
     
     It is assumed that `function` is a montonic rising function on `sequence`.
@@ -43,7 +42,7 @@ def binary_search(sequence, function, value, rounding="closest"):
     Note: This function uses None to express its inability to find any matches;
     Therefore, you better not use it on sequences in which None is a possible
     item.
-    """
+    '''
     assert rounding in ["high", "low", "exact", "both", "closest"]
     
     if not sequence:
@@ -74,9 +73,9 @@ def binary_search(sequence, function, value, rounding="closest"):
         else: # rounding == "high" or (rounding == "exact" and low_value!=value)
             return None
         
-    """
+    '''
     Now we know the value is somewhere inside the sequence.
-    """
+    '''
     
     while high - low > 1:
         medium = (low + high) // 2
@@ -105,13 +104,13 @@ def binary_search(sequence, function, value, rounding="closest"):
                                                   value, rounding)
 
 def make_both_data_into_preferred_rounding(both, function, value, rounding):
-    """
+    '''
     Refer to documentation of `binary_search` in this module.
     
     This function takes the return value from binary_search() with
     rounding="both" as the parameter both. It then gives the data with a
     different rounding, specified with the parameter `rounding`.
-    """
+    '''
     if rounding == "both": return both
     elif rounding == "low": return both[0]
     elif rounding == "high": return both[1]

@@ -28,7 +28,7 @@ class Window(wx.Window):
         
     def on_paint(self, event=None):
         dc = wx.PaintDC(self)
-        for i in range(NUMBER_OF_LINES):
+        for i in xrange(NUMBER_OF_LINES):
             dc.DrawLinePoint(random_point(), random_point())
 
 

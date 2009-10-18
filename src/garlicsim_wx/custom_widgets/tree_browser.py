@@ -1,9 +1,9 @@
 # Copyright 2009 Ram Rachum.
 # This program is not licensed for distribution and may not be distributed.
 
-"""
+'''
 todo: I think the refresh should be made more efficient
-"""
+'''
 import os
 
 import wx
@@ -18,9 +18,9 @@ connector_length = 10 #length of connecting line between elements
 
 
 class TreeBrowser(ScrolledPanel):
-    """
+    '''
     A widget for browsing a state.Tree
-    """
+    '''
     def __init__(self,parent,id,gui_project=None,*args,**kwargs):
         ScrolledPanel.__init__(self, parent, id, size=(-1,100),style=wx.SUNKEN_BORDER)
         self.SetupScrolling()
@@ -184,9 +184,9 @@ class NiftyPaintDC(wx.PaintDC):
         return (max_width,max(total_height,bitmap_size[1]+connector_length))
 
     def draw_tree(self,tree):
-        """
+        '''
         assuming the tree has only one root!
-        """
+        '''
         def get_root():
             return tree.roots.__iter__().next() # hack for when roots is a set, may be unneeded now
 
@@ -201,17 +201,17 @@ class NiftyPaintDC(wx.PaintDC):
         return (self.clickable_map,(width,height))
 
 
-"""
+'''
 
 Maybe I'll use this sometime:
 
                         "Selected Untouched": wx.Bitmap("images\\bluesquare.png", wx.BITMAP_TYPE_ANY),    \
                        "Selected Touched": wx.Bitmap("images\\bluestar.png", wx.BITMAP_TYPE_ANY),    \
                        "Selected Block": wx.Bitmap("images\\blueblock.png", wx.BITMAP_TYPE_ANY),    \
-"""
+'''
 
 
-"""
+'''
 
 Maybe I'll use this sometime:
 
@@ -254,4 +254,4 @@ class Connector(Object):
     def __init__(self,parent,child,*args,**kwargs):
         Object.__init__(self,*args,**kwargs)
         parent.children[child]=self
-"""
+'''

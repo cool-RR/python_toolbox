@@ -18,7 +18,7 @@ def make_plain_state(*args,**kwargs):
     state.round=-1
     state.match=0
 
-    state.player_pool=[player_types[i%len(player_types)]() for i in range(NUMBER_OF_PLAYERS)]
+    state.player_pool=[player_types[i%len(player_types)]() for i in xrange(NUMBER_OF_PLAYERS)]
 
     return new_match_step(state)
 
@@ -29,7 +29,7 @@ def make_random_state(*args,**kwargs):
     state.round=-1
     state.match=0
 
-    state.player_pool=[random_strategy_player() for i in range(NUMBER_OF_PLAYERS)]
+    state.player_pool=[random_strategy_player() for i in xrange(NUMBER_OF_PLAYERS)]
 
     return new_match_step(state)
 
@@ -49,10 +49,10 @@ def step(source_state,*args,**kwargs):
     return state
 
 def new_match_step(state):
-    """
+    '''
     Note: this function is not strictly a "step function":
     it manipulates the state that is given to it and then returns it.
-    """
+    '''
     pool=state.player_pool
     loser=player_with_least_points(pool)
     pool.remove(loser)
@@ -65,10 +65,10 @@ def new_match_step(state):
     return state
 
 def pair_pool(player_pool):
-    """
+    '''
     Takes a player pool and returns a list of random pairs of players.
     Every player will be a member of exactly one pair.
-    """
+    '''
     assert len(player_pool)%2==0
     result=[]
     pool=player_pool[:]

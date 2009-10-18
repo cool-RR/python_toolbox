@@ -46,8 +46,8 @@ class BoardWidget(scrolled.ScrolledPanel):
         black_brush=wx.Brush("Black")
         rectangles=[]
         brushes=[]
-        for x in range(board.width):
-            for y in range(board.height):
+        for x in xrange(board.width):
+            for y in xrange(board.height):
                 rectangles.append([(self.square_size+self.border_width)*x,
                                    (self.square_size+self.border_width)*y,
                                    self.square_size,

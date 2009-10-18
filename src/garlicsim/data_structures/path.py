@@ -1,10 +1,10 @@
 # Copyright 2009 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-"""
+'''
 A module that defines the Path class. See its documentation for more
 information.
-"""
+'''
 
 from node import Node
 from block import Block
@@ -15,20 +15,20 @@ import garlicsim.general_misc.binary_search as binary_search
 __all__ = ["Path", "PathError", "PathOutOfRangeError"]
 
 class PathError(Exception):
-    """
+    '''
     An exception related to the class Path.
-    """
+    '''
     pass
 
 class PathOutOfRangeError(Exception):
-    """
+    '''
     An exception related to the class Path, raised when nodes are requested
     from the path which are out of its range.
-    """
+    '''
     pass
 
 class Path(object):
-    """
+    '''
     A path symbolizes a line of nodes in a tree. A tree may be complex and
     contain many junctions, but a path is a direct line through it. Therefore,
     a path object contains information about which child to choose when going
@@ -39,24 +39,24 @@ class Path(object):
     have more than one child.
     
     The attribute ".root" says from which node the path begins.
-    """
+    '''
     def __init__(self, tree, root=None, decisions={}):
         self.tree = tree
         self.root = root
-        """The root node."""
+        '''The root node.'''
         
         self.decisions = dict(decisions)
-        """
+        '''
         The decisions dict says which fork of the road the path chooses.
         It's of the form {node_which_forks: node_to_continue_to, ... }
-        """
+        '''
 
     def __len__(self, end_node=None):
-        """
+        '''
         Get the length of the path in nodes.
         
         You can optionally specify an end node, in which the path ends.
-        """
+        '''
         if self.root is None: return 0
         length = 0
         for thing in path.iterate_blockwise():
@@ -90,12 +90,12 @@ class Path(object):
                 raise StopIteration
             
     def iterate_blockwise(self, starting_at=None):
-        """
+        '''
         Iterate on the path, returning blocks when possible.
         
         You are allowed to specify a node/block from which to start iterating,
         using the parameter `starting_at`.
-        """
+        '''
         if starting_at is None:
             if self.root is None:
                 raise StopIteration
@@ -113,12 +113,12 @@ class Path(object):
                 raise StopIteration
     
     def iterate_blockwise_reversed(self, end_node):
-        """
+        '''
         Iterate backwards on the path, returning blocks when possible.
         
         You must specify a node/block from which to start iterating, using the
         parameter `end_node`.
-        """
+        '''
         current = end_node.soft_get_block()
 
         yield current
@@ -135,9 +135,9 @@ class Path(object):
             yield current
 
     def __contains__(self, thing):
-        """
+        '''
         Return whether the path contains the specified node/block.
-        """
+        '''
         assert isinstance(thing, Node) or isinstance(thing, Block)
 
         for x in self.iterate_blockwise():
@@ -150,13 +150,13 @@ class Path(object):
 
 
     def next_node(self, thing):
-        """
+        '''
         Return the node on the path which is next after `thing`.
         
         If we've come to a fork for which we have no key in the decisions dict,
         we choose the most recent child node, and update the decisions dict to
         point to it as well.
-        """
+        '''
         
         # We're dealing with the case of 1 child first, because it's the most
         # common.
@@ -165,7 +165,7 @@ class Path(object):
         if len(kids) == 1:
             return kids[0]
         
-        if self.decisions.has_key(thing) or self.decisions.has_key(real_thing):
+        if (thing in self.decisions) or (real_thing in self.decisions):
             return self.decisions.get(thing, None) or \
                    self.decisions.get(real_thing, None)
         
@@ -179,11 +179,11 @@ class Path(object):
             
 
     def __getitem__(self, index, end_node=None):
-        """
+        '''
         Get a node by its index number in the path.
 
         You can optionally specify an end node in which the path ends.
-        """
+        '''
         assert isinstance(index, int)
         
         if index >= 0:
@@ -192,11 +192,11 @@ class Path(object):
             return self.__get_item_negative(index, end_node=end_node)
 
     def __get_item_negative(self, index, end_node=None):
-        """
+        '''
         Get a node by its index number in the path. Negative indices only.
 
         You can optionally specify an end node in which the path ends.
-        """
+        '''
         if end_node == None:
             end_node = self.get_last_node()
         else:
@@ -227,11 +227,11 @@ class Path(object):
         raise PathOutOfRangeError
         
     def __get_item_positive(self, index, end_node=None):
-        """
+        '''
         Get a node by its index number in the path. Positive indices only.
 
         You can optionally specify an end node in which the path ends.
-        """
+        '''
         my_index = -1
         answer = None
         for thing in self.iterate_blockwise():
@@ -250,12 +250,12 @@ class Path(object):
         raise PathOutOfRangeError
 
     def get_last_node(self, starting_at=None):
-        """
+        '''
         Get the last node in the path.
         
         Optionally, you are allowed to specify a node from which to start
         searching.
-        """
+        '''
         for thing in self.iterate_blockwise(starting_at=starting_at):
             pass
 
@@ -265,12 +265,12 @@ class Path(object):
             return thing
     
     def get_node_by_clock(self, clock, rounding="closest", end_node=None):
-        """
+        '''
         Get a node according to its clock.
         
         See documentation of garlicsim.general_misc.binary_search.binary_search
         for details about rounding options.
-        """
+        '''
         
         my_function = lambda node: node.state.clock
         return self.get_node_by_monotonic_function(function=my_function,
@@ -280,14 +280,14 @@ class Path(object):
         
     def get_node_by_monotonic_function(self, function, value,
                                        rounding="closest", end_node=None):
-        """
+        '''
         Get a node by specifying a measure function and a desired value.
         
         The function must be a monotonic rising function on the timeline.
         
         See documentation of garlicsim.general_misc.binary_search.binary_search
         for details about rounding options.
-        """
+        '''
         
         assert rounding in ["high", "low", "exact", "both", "closest"]        
 
@@ -295,13 +295,13 @@ class Path(object):
             correct_both_for_end_node = lambda both: both
         else:
             def correct_both_for_end_node(both):
-                new_both = both[:]
+                new_both = list(both)
                 end_clock = end_node.state.clock
                 if new_both[0] and new_both[0].state.clock >= end_clock:
                     new_both[0] = end_node
                 if new_both[1] and new_both[1].state.clock >= end_clock:
                     new_both[1] = None
-                return new_both
+                return tuple(new_both)
         
         low = self.root
         
@@ -310,10 +310,10 @@ class Path(object):
             return binary_search.make_both_data_into_preferred_rounding \
                    (both, function, value, rounding)
         
-        """
+        '''
         Now we've established that the first node in the path has a lower value
         than what we're looking for.
-        """
+        '''
         
         for thing in self.iterate_blockwise():
             if isinstance(thing, Block):
@@ -343,10 +343,10 @@ class Path(object):
                     low = thing
                     continue
         
-        """
+        '''
         If the flow reached here, that means that even the last node
         in the path has lower value than the value we're looking for.
-        """
+        '''
         
         both = correct_both_for_end_node((low, None))
         return binary_search.make_both_data_into_preferred_rounding \
@@ -355,7 +355,7 @@ class Path(object):
         
     
     def get_node_occupying_timepoint(self, timepoint):
-        """
+        '''
         Get the node which "occupies" the given timepoint.
         
         A node is considered to "occupy" a timepoint if it is the
@@ -365,7 +365,7 @@ class Path(object):
         "occupying".)
         
         If no such node exists, returns None.
-        """
+        '''
         temp = self.get_node_by_clock(timepoint, rounding="both")
         if list(temp).count(None)==0:
             return temp[0]
@@ -374,14 +374,14 @@ class Path(object):
         
 
     def get_existing_time_segment(self, start_time, end_time):
-        """
+        '''
         Get the existing time segment between `start_time` and `end_time`.
         
         Example: In the path the first node's clock reading is 3.2, the last is
         7.6.
         `start_time` is 2 and `end_time` is 5.
         The function will return [3.2, 5].
-        """
+        '''
 
         clock_of_first = self.root.state.clock
         clock_of_last = self.get_last_node().state.clock
@@ -393,9 +393,9 @@ class Path(object):
             return None
     
     def modify_to_include_node(self, node):
-        """
+        '''
         Modifiy the path to include the specified node.
-        """
+        '''
         new_path = node.make_containing_path()
         self.root = new_path.root
         self.decisions.update(new_path.decisions)

@@ -23,10 +23,10 @@ import wx.py.shell
 
 
 class GuiProject(object):
-    """
+    '''
     A GuiProject encapsulates a Project for use with a wxPython
     interface.
-    """
+    '''
     def __init__(self, simpack, parent_window):
         self.__init_general(simpack, parent_window)
         self.__init_on_creation()
@@ -43,9 +43,9 @@ class GuiProject(object):
                 garlicsim.asynchronous_crunching.crunchers.CruncherProcess
         
         self.path = path
-        """
+        '''
         The active path.
-        """
+        '''
 
         main_window = self.main_window = \
                     wx.ScrolledWindow(parent_window,-1)
@@ -77,29 +77,32 @@ class GuiProject(object):
         self.main_sizer.Fit(self.main_window)
 
         self.active_node = active_node
-        """
+        '''
         This attribute contains the node that is currently displayed onscreen
-        """
+        '''
 
         self.is_playing = False
-        """
+        '''
         Says whether the simulation is currently playing.
-        """
+        '''
+        
+        self.infinity_job = None
+        
 
         self.delay = 0.05 # Should be a mechanism for setting that
         self.default_buffer = 100 # Should be a mechanism for setting that
 
         self.timer_for_playing=None
-        """
+        '''
         Contains the wx.Timer object used when playing the simulation
-        """
+        '''
 
         self.ran_out_of_tree_while_playing = False
-        """
+        '''
         Becomes True when you are playing the simulation and the nodes
         are not ready yet. The simulation will continue playing
         when the nodes will be created.
-        """
+        '''
 
         main_window.Bind(wx.EVT_MENU,self.edit_from_active_node,id=s2i("Fork by editing"))
         main_window.Bind(wx.EVT_MENU,self.fork_naturally,id=s2i("Fork naturally"))
@@ -135,38 +138,38 @@ class GuiProject(object):
                 
 
     def make_plain_root(self,*args,**kwargs):
-        """
+        '''
         Creates a parent-less node, whose state is a simple plain state.
         The SimulationCore subclass should define the function "make_plain_state"
         for this to work.
         Updates the active path to start from this root.
         Starts crunching on this new root.
         Returns the node.
-        """
+        '''
         root=self.project.make_plain_root(*args,**kwargs)
         self.set_active_node(root)
         return root
 
     def make_random_root(self,*args,**kwargs):
-        """
+        '''
         Creates a parent-less node, whose state is a random and messy state.
         The SimulationCore subclass should define the function "make_random_state"
         for this to work.
         Updates the active path to start from this root.
         Starts crunching on this new root.
         Returns the node.
-        """
+        '''
         root=self.project.make_random_root(*args,**kwargs)
         self.set_active_node(root)
         return root
 
     def set_active_node(self, node, modify_path=True):
-        """
+        '''
         Makes `node` the active node, displaying it onscreen.
-        """
-        self.project.crunch_all_leaves(
+        '''
+        self.project.ensure_buffer(
             node,
-            wanted_clock_distance=self.default_buffer
+            clock_buffer=self.default_buffer
         )
         
         was_playing = self.is_playing
@@ -178,13 +181,22 @@ class GuiProject(object):
             self.start_playing()
         if modify_path:
             self.__modify_path_to_include_active_node()
+            
+        if modify_path and was_playing:
+            self.infinity_job.crunching_profile.clock_buffer = \
+                self.infinity_job.node.state.clock + self.default_buffer
+            self.infinity_job = self.project.ensure_buffer_on_path(node,
+                                                                     self.path,
+                                                                     Infinity)
+                
+            
         self.main_window.Refresh()
 
     def __modify_path_to_include_active_node(self):
-        """
+        '''
         Makes sure that self.path goes through the active node,
         replacing it with another path if it doesn't.
-        """
+        '''
         if self.path is None:
             self.path = self.active_node.make_containing_path()
             return
@@ -193,9 +205,9 @@ class GuiProject(object):
 
 
     def start_playing(self):
-        """
+        '''
         Starts playback of the simulation.
-        """
+        '''
         if self.is_playing is True:
             return
         if self.active_node is None:
@@ -203,26 +215,37 @@ class GuiProject(object):
 
         self.is_playing = True
         
+        self.infinity_job = \
+            self.project.ensure_buffer_on_path(self.active_node, self.path,
+                                                 Infinity)
+        
         def mission():
             self.timer_for_playing = wx.FutureCall(self.delay*1000, functools.partial(self.__play_next, self.active_node))
         self.stuff_to_do_when_idle.put(mission)
 
 
     def stop_playing(self):
-        """
+        '''
         Stops playback of the simulation.
-        """
+        '''
         if self.timer_for_playing is not None:
             try:
                 self.timer_for_playing.Stop()
             except:
                 pass
+            
         if self.is_playing is False:
             return
+        
         self.is_playing = False
+        
+        assert self.infinity_job is not None
+        self.infinity_job.crunching_profile.clock_target = \
+            self.infinity_job.node.state.clock + self.default_buffer
+        
         queue_tools.dump(self.stuff_to_do_when_idle)
         assert self.stuff_to_do_when_idle.qsize() == 0
-        self.project.crunch_all_leaves(self.active_node, self.default_buffer)
+        self.project.ensure_buffer(self.active_node, self.default_buffer)
 
 
 
@@ -236,17 +259,17 @@ class GuiProject(object):
             return state
 
     def toggle_playing(self):
-        """
+        '''
         If the simulation is currently playing, stops it.
         Otherwise, starts playing.
-        """
+        '''
         return self.stop_playing() if self.is_playing else self.start_playing()
 
 
     def __play_next(self, node):
-        """
+        '''
         A function called repeatedly while playing the simulation.
-        """
+        '''
         if self.is_playing is False: return
         self.show_state(node.state)
         self.main_window.Refresh() # Make more efficient?
@@ -266,33 +289,25 @@ class GuiProject(object):
         
 
     def fork_naturally(self, *args, **kwargs):
-        """
+        '''
         Used for forking the simulation without modifying any states.
         Creates a new node from the active node via natural simulation.
 
         todo: maybe not let to do it from unfinalized touched node?
-        """
+        '''
         
         node = self.active_node
-        if self.project.nodes_to_crunch.has_key(node):
-            return # Problem: Node is already a leaf. Todo.
-        else:
-            
-            clock_target = node.state.clock + self.default_buffer
-            crunching_profile = \
-                garlicsim.asynchronous_crunching.CrunchingProfile(
-                    clock_target=clock_target
-                )
-            
-            self.project.nodes_to_crunch[node] = crunching_profile
+        self.project.begin_crunching(self.active_node, self.default_buffer)
+        # todo: give so_profile
+
 
     def edit_from_active_node(self,*args,**kwargs):
-        """
+        '''
         Used for forking the simulation by editing.
         Creates a new node from the active node via
         editing.
         Returns the new node.
-        """
+        '''
         new_node = self.project.tree.fork_to_edit(template_node=self.active_node)
         new_node.still_in_editing = True #todo: should be in `fork_to_edit` ?
         self.set_active_node(new_node)
@@ -300,23 +315,17 @@ class GuiProject(object):
 
 
     def sync_crunchers(self):
-        """
+        '''
         A wrapper for Project.sync_crunchers(). (todo: add real explanation)
         Returns how many nodes were added to the tree.
-        """
+        '''
 
-        if self.is_playing:
-            playing_leaf = self.path.get_last_node(starting_at=self.active_node)
-        else:
-            playing_leaf = None
-
-
-        added_nodes=self.project.sync_crunchers(temp_infinity_node=playing_leaf)
-        """
+        added_nodes=self.project.sync_crunchers()
+        '''
         This is the important line here, which actually executes
         the Project's sync_crunchers function. As you can see,
         we put the return value in `added_nodes`.
-        """
+        '''
 
         if added_nodes>0:
             self.tree_modify_refresh()
@@ -341,7 +350,7 @@ class GuiProject(object):
         if node.still_in_editing==False:
             raise StandardError("You said 'done editing', but you were not in editing mode.")
         node.still_in_editing=False
-        self.project.crunch_all_leaves(node, self.default_buffer)
+        self.project.ensure_buffer(node, self.default_buffer)
 
     def make_generic_initial_dialog(self):
         initial_dialog=custom_widgets.GenericInitialDialog(self.main_window, -1)

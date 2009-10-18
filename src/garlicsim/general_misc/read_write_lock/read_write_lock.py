@@ -1,9 +1,9 @@
 # Copyright 2009 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-"""
+'''
 See documentation of class ReadWriteLock defined in this module.
-"""
+'''
 
 import original_read_write_lock
 
@@ -19,7 +19,7 @@ class ContextManager(object):
         self.lock.release()
 
 class ReadWriteLock(original_read_write_lock.ReadWriteLock):
-    """
+    '''
     A ReadWriteLock subclassed from a different ReadWriteLock class defined
     in the module original_read_write_lock.py, (See the documentation of the
     original class for more details.)
@@ -37,7 +37,7 @@ class ReadWriteLock(original_read_write_lock.ReadWriteLock):
     
     
     todo: rename from acquireRead style to acquire_read style
-    """
+    '''
     def __init__(self, *args, **kwargs):
         original_read_write_lock.ReadWriteLock.__init__(self, *args, **kwargs)
         self.read = ContextManager(self, self.acquireRead)

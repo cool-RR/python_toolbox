@@ -1,11 +1,11 @@
 # -*- coding: iso-8859-15 -*-
-"""locks.py - Read-Write lock thread lock implementation
+'''locks.py - Read-Write lock thread lock implementation
 
 See the class documentation for more info.
 
 Copyright (C) 2007, Heiko Wundram.
 Released under the BSD-license.
-"""
+'''
 
 # Imports
 # -------
@@ -18,7 +18,7 @@ from time import time
 # ---------------
 
 class ReadWriteLock(object):
-    """Read-Write lock class. A read-write lock differs from a standard
+    '''Read-Write lock class. A read-write lock differs from a standard
     threading.RLock() by allowing multiple threads to simultaneously hold a
     read lock, while allowing only a single thread to hold a write lock at the
     same point of time.
@@ -41,10 +41,10 @@ class ReadWriteLock(object):
     occur. After the write lock has been granted, the thread will hold a
     full write lock, and not be downgraded after the upgrading call to
     acquireWrite() has been match by a corresponding release().
-    """
+    '''
 
     def __init__(self):
-        """Initialize this read-write lock."""
+        '''Initialize this read-write lock.'''
 
         # Condition variable, used to signal waiters of a change in object
         # state.
@@ -59,14 +59,14 @@ class ReadWriteLock(object):
         self.__readers = {}
 
     def acquireRead(self,timeout=None):
-        """Acquire a read lock for the current thread, waiting at most
+        '''Acquire a read lock for the current thread, waiting at most
         timeout seconds or doing a non-blocking check in case timeout is <= 0.
 
         In case timeout is None, the call to acquireRead blocks until the
         lock request can be serviced.
 
         In case the timeout expires before the lock could be serviced, a
-        RuntimeError is thrown."""
+        RuntimeError is thrown.'''
 
         if timeout is not None:
             endtime = time() + timeout
@@ -106,7 +106,7 @@ class ReadWriteLock(object):
             self.__condition.release()
 
     def acquireWrite(self,timeout=None):
-        """Acquire a write lock for the current thread, waiting at most
+        '''Acquire a write lock for the current thread, waiting at most
         timeout seconds or doing a non-blocking check in case timeout is <= 0.
 
         In case the write lock cannot be serviced due to the deadlock
@@ -116,7 +116,7 @@ class ReadWriteLock(object):
         lock request can be serviced.
 
         In case the timeout expires before the lock could be serviced, a
-        RuntimeError is thrown."""
+        RuntimeError is thrown.'''
 
         if timeout is not None:
             endtime = time() + timeout
@@ -193,9 +193,9 @@ class ReadWriteLock(object):
             self.__condition.release()
 
     def release(self):
-        """Release the currently held lock.
+        '''Release the currently held lock.
 
-        In case the current thread holds no lock, a ValueError is thrown."""
+        In case the current thread holds no lock, a ValueError is thrown.'''
 
         me = currentThread()
         self.__condition.acquire()
