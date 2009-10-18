@@ -38,7 +38,8 @@ class GuiProject(object):
         self.simpack = garlicsim.general_misc.module_wrapper.ModuleWrapper(simpack)
         
         self.project = project or garlicsim.Project(simpack)
-        if self.project.simpack_grokker.history_dependent is False:
+        if self.project.simpack_grokker.history_dependent is False and \
+           'CruncherProcess' in garlicsim.asynchronous_crunching.crunchers.__dict__:
             self.project.crunching_manager.Cruncher = \
                 garlicsim.asynchronous_crunching.crunchers.CruncherProcess
         

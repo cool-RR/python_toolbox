@@ -155,5 +155,8 @@ class CruncherThread(threading.Thread):
         Update the cruncher's crunching profile. Thread-safe.
         '''
         self.order_queue.put(profile)
+        
+    is_alive = threading.Thread.isAlive
+    '''Crutch for Python 2.5 and below.'''
     
 

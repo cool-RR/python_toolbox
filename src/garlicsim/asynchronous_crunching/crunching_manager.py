@@ -19,7 +19,7 @@ import crunchers
 from crunching_profile import CrunchingProfile
 
 
-PreferredCruncher = [crunchers.CruncherThread, crunchers.CruncherProcess][0]
+PreferredCruncher = crunchers.CruncherThread
 # Should make a nicer way of setting that.
 
 __all__ = ["CrunchingManager"]
@@ -153,7 +153,8 @@ class CrunchingManager(object):
         
         if node.still_in_editing is False:
             step_function = self.project.simpack_grokker.step
-            if self.Cruncher == crunchers.CruncherProcess:
+            if 'CruncherProcess' in crunchers.__dict__  and \
+               self.Cruncher == crunchers.CruncherProcess:
                 cruncher = self.Cruncher \
                          (node.state,
                           self.project.simpack_grokker.step_generator,

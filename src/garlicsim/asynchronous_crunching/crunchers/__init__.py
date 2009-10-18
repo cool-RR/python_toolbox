@@ -28,4 +28,8 @@ be faster than CruncherProcess because of the memory-sharing.
 '''
 
 from cruncher_thread import CruncherThread
-from cruncher_process import CruncherProcess
+
+try:
+    from cruncher_process import CruncherProcess
+except ImportError:
+    pass
