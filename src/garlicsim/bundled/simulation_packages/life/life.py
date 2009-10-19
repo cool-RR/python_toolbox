@@ -4,7 +4,6 @@
 '''
 A module for simulating Conway's Game of Life.
 '''
-# todo: in garlicsim intro, maybe need only abridged version of this.
 
 import garlicsim.data_structures
 import random
@@ -43,7 +42,12 @@ class Board(object):
     Represents a Life board.
     ''' 
     def __init__(self, width=None, height=None, fill="empty", parent=None):
+        '''
+        If `parent` is specified, makes a board which is descendent from the
+        parent.
+        '''
         if parent:
+            assert width == height == None
             self.width, self.height = (parent.width, parent.height)
             self.__list = [None] * parent.width * parent.height
             for x in xrange(parent.width):
@@ -67,20 +71,19 @@ class Board(object):
 
     def get(self, x, y):
         '''
-        Gets the value of cell (x, y) in the board.
+        Get the value of cell (x, y) in the board.
         '''
         return self.__list[ (x % self.width) * self.height + (y%self.height) ]
 
     def set(self, x, y, value):
         '''
-        Sets the value of cell (x, y) in the board to the specified value.
+        Set the value of cell (x, y) in the board to the specified value.
         '''
         self.__list[ (x%self.width) * self.height + (y%self.height) ] = value
 
     def get_true_neighbors_count(self, x, y):
         '''
-        Given a cell (x, y), returns the number of neighbors it has whose value
-        is True.
+        Get the number of True neighbors a cell has.
         '''
         result = 0
         for i in [-1 ,0 ,1]:
@@ -93,7 +96,7 @@ class Board(object):
 
     def cell_will_become(self, x, y):
         '''
-        Returns what value a specified cell will have after an iteration of the
+        Return what value a specified cell will have after an iteration of the
         simulation.
         '''
         n = self.get_true_neighbors_count(x, y)
@@ -110,7 +113,7 @@ class Board(object):
 
     def __repr__(self):
         '''
-        Displays the board, ASCII-art style.
+        Display the board, ASCII-art style.
         '''
         cell = lambda x, y: "#" if self.get(x, y) is True else " "
         row = lambda y: "".join(cell(x, y) for x in xrange(self.width))

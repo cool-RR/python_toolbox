@@ -6,7 +6,7 @@ GarlicSim is a platform for writing, running and analyzing simulations. It can
 handle any kind of simulation: Physics, game theory, epidemic spread,
 electronics, etc.
 
-Visit http://garlicsim.com for more info.
+Visit http://garlicsim.org for more info.
 
 This package, called `garlicsim`, is the business logic. It is copyrighted to
 Ram Rachum, 2009, and is distributed under the LGPL v2.1 License. The license
