@@ -12,12 +12,12 @@ class SimpackSelectionDialog(wx.SingleChoiceDialog):
                                         self.list_of_simpacks,wx.CHOICEDLG_STYLE)
 
     def make_simpack_list(self):
-        import simulation_packages
+        import garlicsim.bundled.simulation_packages as simulation_packages
         self.list_of_simpacks=find_subpackages(simulation_packages)
 
     def get_simpack_selection(self):
         string=self.GetStringSelection()
-        result=__import__("simulation_packages."+string,fromlist=[''])
+        result=__import__("garlicsim.bundled.simulation_packages."+string,fromlist=[''])
         return result
 
 
