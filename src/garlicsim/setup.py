@@ -1,5 +1,12 @@
 #!/usr/bin/env python
 
+# Copyright 2009 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''
+Distutils setup file for GarlicSim.
+'''
+
 import os
 from distutils.core import setup
 from general_misc import package_finder
@@ -13,9 +20,6 @@ electronics, etc.
 
 my_packages = package_finder.get_packages('', include_self=True,
                                           recursive=True)
-
-print(my_packages)
-
 setup(
     name='GarlicSim',
     version='0.1',
