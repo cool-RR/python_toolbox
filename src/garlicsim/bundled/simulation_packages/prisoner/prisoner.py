@@ -1,5 +1,7 @@
+# Copyright 2009 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
 import garlicsim.data_structures
-from garlicsim.misc.persistent_read_only_object import PersistentReadOnlyObject
 import copy
 
 import random
@@ -9,20 +11,10 @@ random.seed()
 ROUNDS=7
 NUMBER_OF_PLAYERS=70
 
-
-BaseForHandicap = [object, PersistentReadOnlyObject][1]
-
-
-class Handicap(BaseForHandicap):
-    def __init__(self, thing, meow):
-        self.thing, self.meow = thing, meow
-        self.big_list = [random.random() for i in range(100000)]
-
 def make_plain_state(*args,**kwargs):
     global player_types
     state=garlicsim.data_structures.State()
 
-    state.handicap = Handicap("The thing", meow="The meow")
     state.round=-1
     state.match=0
 
@@ -34,7 +26,6 @@ def make_plain_state(*args,**kwargs):
 def make_random_state(*args,**kwargs):
     state=garlicsim.data_structures.State()
 
-    state.handicap = Handicap("The thing", meow="The meow")
     state.round=-1
     state.match=0
 

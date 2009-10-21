@@ -13,6 +13,7 @@ Backports of it for Python 2.4 and 2.5 are available on the internet.
 import multiprocessing
 import copy
 import Queue
+
 try: import garlicsim.general_misc.process_priority
 except: pass
 
