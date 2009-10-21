@@ -9,7 +9,10 @@ Distutils setup file for GarlicSim.
 
 import os
 from distutils.core import setup
+import distutils
 from general_misc import package_finder
+
+distutils.dir_util.remove_tree(verbose=True)
 
 my_long_description = \
 '''\
@@ -20,6 +23,9 @@ electronics, etc.
 
 my_packages = package_finder.get_packages('', include_self=True,
                                           recursive=True)
+
+my_data_files = [('', ['lgpl2.1_license.txt',]),]
+
 setup(
     name='GarlicSim',
     version='0.1',
@@ -28,6 +34,7 @@ setup(
     author_email='cool-rr@cool-rr.com',
     url='http://garlicsim.org',
     packages=my_packages,
+    data_files=my_data_files,
     package_dir={'': '..'},
     license= "LGPL 2.1 License",
     long_description = my_long_description,
