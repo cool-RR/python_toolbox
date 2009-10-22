@@ -23,7 +23,7 @@ hard to implement using Process, because information transfer between processes
 is complicated. This is why CruncherThread was born, as threads share memory
 trivially between them.
 
-Another reason for CruncherThread is that on single-core computer it might
+Another reason for CruncherThread is that on a single-core computer it might
 be faster than CruncherProcess because of the memory-sharing.
 '''
 

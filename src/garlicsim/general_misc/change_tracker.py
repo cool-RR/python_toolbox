@@ -7,6 +7,7 @@ information.
 '''
 
 import weakref
+import cPickle
 
 
 class ChangeTracker(object): 
@@ -32,19 +33,22 @@ class ChangeTracker(object):
         .check_in will be called with the same object, it will return whether the
         object changed since the last time it was checked in.
         '''
+        
+        new_pickle = cPickle.dumps(thing)
+        
         if thing not in self.library:
-            self.library[thing] = hash(thing)
+            self.library[thing] = new_pickle
             return True
         
         # thing in self.library
         
-        previous_hash = self.library[thing]
-        new_hash = hash(thing)
-        if previous_hash == new_hash:
+        previous_pickle = self.library[thing]
+        if previous_pickle == new_pickle:
             return False
         else:
-            self.library[thing] = new_hash
+            self.library[thing] = new_pickle
             return True
     
     def __contains__(self, thing):
         return self.library.__contains__(thing)
+
