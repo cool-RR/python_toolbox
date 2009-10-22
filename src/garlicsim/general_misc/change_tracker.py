@@ -18,9 +18,6 @@ class ChangeTracker(object):
     .check_in will be called with the same object, it will return whether the
     object changed since the last time it was checked in.
     '''
-    # Todo: Someone suggested that it's possible the hash won't change even
-    # when the object changes, which might break my program. If so, we can 
-    # use pickle.
     
     def __init__(self):
         self.library = weakref.WeakKeyDictionary()
