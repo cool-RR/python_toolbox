@@ -128,10 +128,31 @@ tree while specifying a template_node.''')
             return node
 
 
-    def node_count(self):
+    def all_possible_paths(self):
         '''
-        Return the number of nodes in the tree.
+        Return all the possible paths this tree may entertain.
         '''
-        return len(self.nodes)
+        result = []
+        for root in self.roots:
+            result += root.all_possible_paths()
+        return result
+    
+    
+    def __repr__(self):
+        '''
+        Get a string representation of the tree.
+        
+        Example output:
+        TODO
+        '''
+        return '<%s.%s with %s roots, %s nodes and %s possible paths at %s>' % \
+               (
+                   self.__class__.__module__,
+                   self.__class__.__name__,
+                   len(self.roots),
+                   len(self.nodes),
+                   len(self.all_possible_paths()),
+                   hex(id(self))
+               )
     
 from node import Node

@@ -6,6 +6,8 @@ A module that defines the Path class. See its documentation for more
 information.
 '''
 
+import copy as copy_module # Avoiding name clash.
+
 from node import Node
 from block import Block
 # Note we are doing `from tree import Tree` in the bottom of the file.
@@ -59,12 +61,12 @@ class Path(object):
         '''
         if self.root is None: return 0
         length = 0
-        for thing in path.iterate_blockwise():
-            if thing.block:
+        for thing in self.iterate_blockwise():
+            if isinstance(thing, Block):
                 if end_node and end_node in thing:
-                    length += thing.block.index(end_node) + 1
+                    length += thing.index(end_node) + 1
                     return length
-                else: # end_node is not in thing
+                else: # (not end_node) or (end_node not in thing)
                     length += len(thing)
                     continue
             else: # thing is a blockless node
@@ -399,6 +401,40 @@ class Path(object):
         new_path = node.make_containing_path()
         self.root = new_path.root
         self.decisions.update(new_path.decisions)
+    
+    def __repr__(self):
+        '''
+        Get a string representation of the path.
         
+        Example output:
+        '<garlicsim.data_structures.path.Path of length 43 at 0x1c822d0>'
+        '''
+        return '<%s.%s of length %s at %s>' % \
+               (
+                   self.__class__.__module__,
+                   self.__class__.__name__,
+                   len(self),
+                   hex(id(self))
+               )
+    
+    
+    
+    def copy(self):
+        '''
+        Make a shallow copy of the path.
+        '''
+        
+        # Most of these things don't need duplicating, but just for
+        # completeness' sake:
+        tree = self.tree
+        root = self.root
+        decisions = self.decisions.copy()
+        
+        path = Path(tree=tree, root=root, decisions=decisions)
+        
+        return path
+    
+    __copy__ = copy
+    
     
 from tree import Tree

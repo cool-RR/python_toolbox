@@ -212,6 +212,21 @@ the index was bigger than the block's length.''')
         This profile must be identical in all of the nodes in the block.
         '''
         return self.__node_list[0].step_options_profile
+    
+    def __repr__(self):
+        '''
+        Get a string representation of the block.
+        
+        Example output:
+        <garlicsim.data_structures.block.Block of length 40 at 0x1c84d70>
+        '''
+        return '<%s.%s of length %s at %s>' % \
+               (
+                   self.__class__.__module__,
+                   self.__class__.__name__,
+                   len(self),
+                   hex(id(self))
+               )
         
 
         

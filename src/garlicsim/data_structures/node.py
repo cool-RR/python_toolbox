@@ -7,7 +7,9 @@ its documentation for more information.
 '''
 
 from garlicsim.general_misc.infinity import Infinity
+
 from state import State
+from block import Block
 # Note we are doing `from path import Path` in the bottom of the file.
 
 
@@ -74,6 +76,7 @@ class Node(object):
         that its state is still being edited and was not yet finalized, thus no
         crunching should be made from the node until it is finalized.
         '''
+  
         
     def __len__(self):
         '''
@@ -81,6 +84,7 @@ class Node(object):
         '''
         return 1
 
+    
     def soft_get_block(self):
         '''
         If this node is a member of a block, return the block.
@@ -89,11 +93,58 @@ class Node(object):
         '''
         return self.block or self
 
+    
     def make_containing_path(self):
         '''
         Create a path that contains this node.
         
+        There may be multiple different paths that contain this node. This will
+        return the one which points to the newest possible forks.
         Returns the path.
+        '''
+        
+        path = self.__make_past_path()
+        
+        path.get_last_node()
+        # Calling that will make the path choose the newest forks.
+        
+        return path
+    
+        
+    def all_possible_paths(self):
+        '''
+        Get a list of all possible paths that contain this node.
+        
+        Note: There may be paths that contain this node which will not be
+        identical to one of the paths given here, because these other paths
+        may specify decisions that are not even on the same root as these
+        paths.
+        '''
+        past_path = self.__make_past_path()
+        paths = []
+        fork = None
+        for thing in past_path.iterate_blockwise(starting_at=self):
+            real_thing = thing[-1] if isinstance(thing, Block) else thing
+            if len(real_thing.children):
+                fork = real_thing
+                break
+        
+        if fork:
+            for kid in fork.children:
+                paths += kid.all_possible_paths()
+            return paths
+        else: # fork is None and real_thing is the final node of the path
+            # In this case there are no forks after our node, we just return
+            # the past_path which we have driven to its end. (Not that it has
+            # any forks to decide on anyway.
+            return [past_path]
+    
+    def __make_past_path(self):
+        '''
+        Create a path that contains this node.
+        
+        There may be multiple different paths that contain this node. This will
+        return a path that doesn't specify any decisions after this node.
         '''
         path = Path(self.tree)
 
