@@ -13,6 +13,8 @@ Backports of it for Python 2.4 and 2.5 are available on the internet.
 import multiprocessing
 import copy
 import Queue
+import sys
+import os
 
 try: import garlicsim.general_misc.process_priority
 except: pass
@@ -61,18 +63,28 @@ class CruncherProcess(multiprocessing.Process):
         Queue for receiving instructions from the main thread.
         '''
 
-    def set_priority(self, priority):
+    def set_low_priority(self):
         '''
-        Set the priority of this process: Currently Windows only.
+        Set a low priority for this process.
         '''
-        assert priority in [0, 1, 2, 3, 4, 5]
+        
         try:
-            garlicsim.general_misc.process_priority.set_process_priority(
-                self.pid,
-                priority
-            )
-        except: # Not sure what to "except" here; wary of non-windows systems.
-            pass
+            sys.getwindowsversion()
+        except:
+            is_windows = False
+        else:
+            is_windows = True
+
+        if is_windows:
+            try:
+                garlicsim.general_misc.process_priority.set_process_priority(0)
+            except:
+                pass
+        else:
+            try:
+                os.nice(1)
+            except:
+                pass
 
     def run(self):
         '''
@@ -94,7 +106,7 @@ class CruncherProcess(multiprocessing.Process):
         Crunches the simulations repeatedly until the crunching profile is
         satisfied or a 'retire' order is received.
         '''
-        self.set_priority(0)
+        self.set_low_priority()
         
         step_options_profile = self.crunching_profile.step_options_profile or \
                           garlicsim.misc.StepOptionsProfile()

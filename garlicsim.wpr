@@ -12,4 +12,4 @@ proj.directory-list = [{'dirloc': loc('.'),
                         'recursive': True,
                         'watch_for_changes': True}]
 proj.file-type = 'shared'
-proj.main-file = loc('src/run_gui.py')
+proj.main-file = loc('run_gui.py')

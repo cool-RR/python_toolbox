@@ -10,7 +10,7 @@ Distutils setup file for GarlicSim.
 import os
 from distutils.core import setup
 import distutils
-from general_misc import package_finder
+from garlicsim.general_misc import package_finder
 
 try:
     distutils.dir_util.remove_tree('build', verbose=True)
@@ -24,7 +24,8 @@ handle any kind of simulation: Physics, game theory, epidemic spread,
 electronics, etc.
 '''
 
-my_packages = package_finder.get_packages('', include_self=True,
+my_packages = package_finder.get_packages('garlicsim',
+                                          include_self=True,
                                           recursive=True)
 
 setup(
@@ -35,7 +36,6 @@ setup(
     author_email='cool-rr@cool-rr.com',
     url='http://garlicsim.org',
     packages=my_packages,
-    package_dir={'': '..'},
     license= "LGPL 2.1 License",
     long_description = my_long_description,
         
