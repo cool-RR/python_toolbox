@@ -71,14 +71,20 @@ class Tree(object):
         
         Returns the node.
         '''
-        touched = (parent is None) or (template_node is not None)    
-        my_node = Node(self, state, step_options_profile=step_options_profile,
-                       touched=touched)
-        self.add_node(my_node, parent, template_node)
+        touched = (parent is None) or (template_node is not None)
+        
+        my_node = Node(
+            self,
+            state,
+            step_options_profile=copy.deepcopy(step_options_profile),
+            touched=touched
+        )
+        
+        self.__add_node(my_node, parent, template_node)
         return my_node
 
 
-    def add_node(self, node, parent=None, template_node=None): #todo: private?
+    def __add_node(self, node, parent=None, template_node=None): #todo: private?
         '''
         Add a node to the tree.
         

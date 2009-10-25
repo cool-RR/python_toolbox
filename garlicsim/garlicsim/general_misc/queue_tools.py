@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines several functions that might be useful when working with
+This module defines several functions that may be useful when working with
 queues.
 '''
 

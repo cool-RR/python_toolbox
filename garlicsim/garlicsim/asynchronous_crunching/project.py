@@ -217,7 +217,7 @@ class Project(object):
     @with_tree_lock
     def simulate(self, node, iterations=1, *args, **kwargs):
         '''
-        Simulates from the given node for the given number of iterations.
+        Simulate from the given node for the given number of iterations.
         
         The results are implemented the results into the tree. Note that the
         crunching for this is done synchronously, i.e. in the currrent thread.
@@ -228,19 +228,24 @@ class Project(object):
         '''
         # todo: is simulate a good name? Need to say it's synchronously
         
+        step_options_profile = \
+            garlicsim.misc.step_options_profile.StepOptionsProfile(*args,
+                                                                   **kwargs)
+        
         if self.simpack_grokker.history_dependent:
             return self.__history_dependent_simulate(node, iterations,
-                                                     *args, **kwargs)
+                                                     step_options_profile)
         else:
             return self.__non_history_dependent_simulate(node, iterations,
-                                                         *args, **kwargs)
+                                                         step_options_profile)
+        
     @with_tree_lock        
-    def __history_dependent_simulate(self, node, iterations=1,
-                                     *args, **kwargs):
+    def __history_dependent_simulate(self, node, iterations,
+                                     step_options_profile):
         '''
         For history-dependent simulations only:
         
-        Simulates from the given node for the given number of iterations.
+        Simulate from the given node for the given number of iterations.
         
         The results are implemented the results into the tree. Note that the
         crunching for this is done synchronously, i.e. in the currrent thread.
@@ -258,18 +263,21 @@ class Project(object):
         for i in xrange(iterations):
             history_browser.end_node = node
             state = self.simpack_grokker.step(history_browser,
-                                              *args, **kwargs)
-            current_node = self.tree.add_state(state, parent=current_node)
+                                              *step_options_profile.args,
+                                              **step_options_profile.kwargs)
+            current_node = \
+                self.tree.add_state(state, parent=current_node,
+                                    step_options_profile=step_options_profile)
             
         return current_node
     
     @with_tree_lock
-    def __non_history_dependent_simulate(self, node, iterations=1,
-                                         *args, **kwargs):
+    def __non_history_dependent_simulate(self, node, iterations,
+                                         step_options_profile):
         '''
         For non-history-dependent simulations only:
         
-        Simulates from the given node for the given number of iterations.
+        Simulate from the given node for the given number of iterations.
         
         The results are implemented the results into the tree. Note that the
         crunching for this is done synchronously, i.e. in the currrent thread.
@@ -282,8 +290,12 @@ class Project(object):
         current_node = node
         state = node.state
         for i in xrange(iterations):
-            state = self.simpack_grokker.step(state, *args, **kwargs)
-            current_node = self.tree.add_state(state, parent=current_node)
+            state = self.simpack_grokker.step(state,
+                                              *step_options_profile.args,
+                                              **step_options_profile.kwargs)
+            current_node = \
+                self.tree.add_state(state, parent=current_node,
+                                    step_options_profile=step_options_profile)
             
         return current_node
     

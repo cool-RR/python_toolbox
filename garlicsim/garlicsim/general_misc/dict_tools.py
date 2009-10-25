@@ -2,8 +2,8 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines several functions that might be useful
-when working with dicts.
+This module defines several functions that may be useful when working with
+dicts.
 '''
 
 import copy
