@@ -35,7 +35,7 @@ class CruncherThread(threading.Thread):
         threading.Thread.__init__(self)
         
         self.project = project
-        self.step_generator = project.simpack_grokker.step_generator
+        self.step_function = project.simpack_grokker.step
         self.crunching_profile = copy.deepcopy(crunching_profile)
         self.history_dependent = self.project.simpack_grokker.history_dependent
         
@@ -46,7 +46,7 @@ class CruncherThread(threading.Thread):
 
         self.work_queue = Queue.Queue()
         '''
-        Queue for putting completed work to be picked up by the main thread.
+        Queue for putting completed work to be picked up by the main thread.TODO
         '''
 
         self.order_queue = Queue.Queue()
@@ -76,8 +76,9 @@ class CruncherThread(threading.Thread):
         satisfied or a 'retire' order is received.
         '''
         
-        step_options_profile = self.crunching_profile.step_options_profile or \
-                             garlicsim.misc.StepOptionsProfile()
+        self.step_options_profile = \
+            self.crunching_profile.step_options_profile or \
+            garlicsim.misc.StepOptionsProfile()
         
         if self.history_dependent:
             self.history_browser = HistoryBrowser(cruncher=self)
@@ -85,13 +86,15 @@ class CruncherThread(threading.Thread):
         else:
             thing = self.initial_state
             
-        self.step_iterator = self.step_generator(thing,
-                                                 *step_options_profile.args,
-                                                 **step_options_profile.kwargs)
-        
         order = None
         
-        for state in self.step_iterator:
+        while True:
+            state = self.step_function(thing,
+                                       *self.step_options_profile.args,
+                                       **self.step_options_profile.kwargs)
+            if not self.history_dependent:
+                thing = state
+                
             self.auto_clock(state)
             self.work_queue.put(state)
             self.check_crunching_profile(state)
@@ -110,6 +113,7 @@ class CruncherThread(threading.Thread):
         if not hasattr(state, "clock"):
             state.clock = self.last_clock + 1
         self.last_clock = state.clock
+
         
     def check_crunching_profile(self, state):
         '''
@@ -121,6 +125,7 @@ class CruncherThread(threading.Thread):
         '''
         if self.crunching_profile.state_satisfies(state):
             raise ObsoleteCruncherError
+
         
     def get_order(self):
         '''
@@ -132,16 +137,26 @@ class CruncherThread(threading.Thread):
             return self.order_queue.get(block=False)
         except Queue.Empty:
             return None
-    
+
+        
     def process_order(self, order):
         '''
         Process an order receieved from order_queue.
         '''
         if order == "retire":
             raise ObsoleteCruncherError
+        
         elif isinstance(order, CrunchingProfile):
-            self.crunching_profile = copy.deepcopy(order)
-    
+            
+            if self.crunching_profile.step_options_profile != \
+               order.step_options_profile:
+                
+                self.work_queue.put \
+                    (copy.deepcopy(order.step_options_profile))
+                
+            self.crunching_profile = order
+            
+            
     def retire(self):
         '''
         Retire the cruncher. Thread-safe.
@@ -149,6 +164,7 @@ class CruncherThread(threading.Thread):
         Cause it to shut down as soon as it receives the order.
         '''
         self.order_queue.put("retire")        
+        
         
     def update_crunching_profile(self, profile):
         '''
