@@ -155,6 +155,7 @@ class CruncherThread(threading.Thread):
                     (copy.deepcopy(order.step_options_profile))
                 
             self.crunching_profile = order
+            self.step_options_profile = order.step_options_profile
             
             
     def retire(self):

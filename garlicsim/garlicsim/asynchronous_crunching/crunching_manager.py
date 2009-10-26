@@ -140,6 +140,7 @@ class CrunchingManager(object):
                        (crunching_profile):
                         
                         cruncher.update_crunching_profile(crunching_profile)
+                        print('updated crunching profile')#log
                         
                 else:
                     
