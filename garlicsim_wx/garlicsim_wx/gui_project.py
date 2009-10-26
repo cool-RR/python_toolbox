@@ -231,7 +231,7 @@ class GuiProject(object):
         if self.timer_for_playing is not None:
             try:
                 self.timer_for_playing.Stop()
-            except:
+            except Exception:
                 pass
             
         if self.is_playing is False:

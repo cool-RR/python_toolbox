@@ -14,7 +14,7 @@ from garlicsim.general_misc import package_finder
 
 try:
     distutils.dir_util.remove_tree('build', verbose=True)
-except:
+except Exception:
     pass
 
 my_long_description = \
@@ -43,5 +43,5 @@ setup(
 
 try:
     distutils.dir_util.remove_tree('build', verbose=True)
-except:
+except Exception:
     pass

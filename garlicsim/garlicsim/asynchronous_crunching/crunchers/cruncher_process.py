@@ -17,7 +17,7 @@ import sys
 import os
 
 try: import garlicsim.general_misc.process_priority
-except: pass
+except Exception: pass
 
 import garlicsim
 from garlicsim.asynchronous_crunching import \
@@ -69,7 +69,7 @@ class CruncherProcess(multiprocessing.Process):
         
         try:
             sys.getwindowsversion()
-        except:
+        except Exception:
             is_windows = False
         else:
             is_windows = True
@@ -77,12 +77,12 @@ class CruncherProcess(multiprocessing.Process):
         if is_windows:
             try:
                 garlicsim.general_misc.process_priority.set_process_priority(0)
-            except:
+            except Exception:
                 pass
         else:
             try:
                 os.nice(1)
-            except:
+            except Exception:
                 pass
 
     def run(self):

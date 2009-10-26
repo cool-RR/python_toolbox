@@ -13,7 +13,7 @@ def naturally_picklable(thing):
     try:
         cPickle.dumps(thing)
         return True
-    except:
+    except Exception:
         return False
 
 def prepare_for_pickling(thing):
