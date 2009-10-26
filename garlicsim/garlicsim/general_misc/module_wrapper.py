@@ -41,7 +41,7 @@ if __name__ == "__main__":
         try:
             cPickle.dumps(ModuleWrapper(module))
             return True
-        except:
+        except Exception:
             return False
         
     import garlicsim_wx.simulation_packages.life as life

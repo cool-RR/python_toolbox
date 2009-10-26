@@ -6,7 +6,7 @@ This module defines the ObsoleteCruncherError exception. See its documentation
 for more information.
 '''
 
-class ObsoleteCruncherError(Exception):
+class ObsoleteCruncherError(BaseException):
     '''
     An error to raise when a cruncher is trying to do work, but in the meantime
     the main program decided that the work assigned to this cruncher is no
