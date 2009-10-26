@@ -58,13 +58,13 @@ class Tree(object):
         x = copy.deepcopy(template_node.state)
 
         parent = template_node.parent
-        step_options_profile = template_node.step_options_profile
+        step_profile = template_node.step_profile
         return self.add_state(x, parent,
-                              step_options_profile=step_options_profile,
+                              step_profile=step_profile,
                               template_node=template_node)
 
 
-    def add_state(self, state, parent=None, step_options_profile=None,
+    def add_state(self, state, parent=None, step_profile=None,
                   template_node=None):
         '''
         Wrap state in node and adds to tree.
@@ -76,7 +76,7 @@ class Tree(object):
         my_node = Node(
             self,
             state,
-            step_options_profile=copy.deepcopy(step_options_profile),
+            step_profile=copy.deepcopy(step_profile),
             touched=touched
         )
         
@@ -114,8 +114,8 @@ tree while specifying a template_node.''')
             
             if parent.block:
                 if len(parent.children)==1:
-                    if (not node.touched) and (parent.step_options_profile == \
-                                               node.step_options_profile):
+                    if (not node.touched) and (parent.step_profile == \
+                                               node.step_profile):
                         parent.block.append_node(node)
                 else: # parent.children > 1
                     if not (parent is parent.block[-1]):
@@ -123,7 +123,7 @@ tree while specifying a template_node.''')
             else: # parent.block is None
                 if (not node.touched) and (not parent.touched) and \
                    (len(parent.children)==1) and \
-                   (parent.step_options_profile == node.step_options_profile):
+                   (parent.step_profile == node.step_profile):
                     Block([parent, node])
                 
                         

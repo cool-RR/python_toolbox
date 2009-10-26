@@ -2,19 +2,19 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the StepOptionsProfile class. See its documentation for
+This module defines the StepProfile class. See its documentation for
 more information.
 '''
 
-__all__ = ['StepOptionsProfile']
+__all__ = ['StepProfile']
 
-class StepOptionsProfile(object):
+class StepProfile(object):
     '''
     A profile of *args and **kwargs to be used with a step function.
     
     Usage:
     
-    step_options_profile = StepOptionsProfile(34, "meow", width=60)
+    step_profile = StepProfile(34, "meow", width=60)
 
     step(state, *arguments_profile.args, **arguments_profile.kwargs)
     # is equivalent to
@@ -22,16 +22,16 @@ class StepOptionsProfile(object):
     '''
     def __init__(self, *args, **kwargs):
         
-        # Perhaps we were passed a StepOptionsProfile object instead of args
+        # Perhaps we were passed a StepProfile object instead of args
         # and kwargs? If so load that one, cause we're all cool and nice.
         candidate = None
         if len(args) == 1 and len(kwargs) == 0:
             candidate = args[0]
         if len(args) == 0 and len(kwargs) == 1 and \
-           ('step_options_profile' in kwargs):
-            candidate = kwargs['step_options_profile']
+           ('step_profile' in kwargs):
+            candidate = kwargs['step_profile']
         
-        if isinstance(candidate, StepOptionsProfile):
+        if isinstance(candidate, StepProfile):
             self.__load_from(candidate)
             return
         
@@ -51,13 +51,13 @@ class StepOptionsProfile(object):
         strings = [thing for thing in [args_string, kwargs_string] if \
                    thing]        
         big_string = ', '.join(strings)
-        return 'StepOptionsProfile(%s)' % big_string
+        return 'StepProfile(%s)' % big_string
     
     def __eq__(self, other):
         if other is None:
             return len(self.args) == 0 and len(self.kwargs) == 0
         else:
-            return isinstance(other, StepOptionsProfile) and \
+            return isinstance(other, StepProfile) and \
                    self.args == other.args and self.kwargs == other.kwargs
     
     def __hash__(self):

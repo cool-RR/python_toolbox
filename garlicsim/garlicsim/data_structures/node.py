@@ -33,7 +33,7 @@ class Node(object):
     '''
     #todo: Maybe node should not reference tree?
     
-    def __init__(self, tree, state, parent=None, step_options_profile=None,
+    def __init__(self, tree, state, parent=None, step_profile=None,
                  touched=False):
             
         self.tree = tree
@@ -43,7 +43,7 @@ class Node(object):
         self.parent = parent
         '''The parent node of this node.'''
         
-        self.step_options_profile = step_options_profile
+        self.step_profile = step_profile
         '''
         The step options profile under which the contained state was created.
         '''

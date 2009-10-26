@@ -13,7 +13,7 @@ class CrunchingProfile(object):
     A crunching profile is a set of instructions that a cruncher follows when
     crunching the simulation.
     '''
-    def __init__(self, clock_target=None, step_options_profile=None):
+    def __init__(self, clock_target=None, step_profile=None):
         
         self.clock_target = clock_target
         '''
@@ -21,7 +21,7 @@ class CrunchingProfile(object):
         clock of `.clock_target` or higher.
         '''
         
-        self.step_options_profile = step_options_profile
+        self.step_profile = step_profile
         '''
         The step options profile we want to be used with the step function.
         '''
@@ -42,7 +42,7 @@ class CrunchingProfile(object):
     def __eq__(self, other):
         return isinstance(other, CrunchingProfile) and \
                self.clock_target == other.clock_target and \
-               self.step_options_profile == other.step_options_profile
+               self.step_profile == other.step_profile
 
     def __hash__(self):
         # Defining __hash__ because there's __eq__ which makes the default
@@ -55,7 +55,7 @@ class CrunchingProfile(object):
     def __repr__(self):
         stuff = []
         stuff.append("clock_target=%s" % self.clock_target)
-        stuff.append("step_options_profile=%s" % self.step_options_profile)
+        stuff.append("step_profile=%s" % self.step_profile)
         temp = ", ".join(stuff)
         return ("CrunchingProfile(%s)" % temp)
     

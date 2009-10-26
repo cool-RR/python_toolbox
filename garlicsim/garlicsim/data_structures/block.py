@@ -34,7 +34,7 @@ class Block(object):
     2. All members, except the last one, must have no children except
        their successor in the block.
     3. The last node may have any kinds of children.
-    4. All members share the same step_options_profile.
+    4. All members share the same step_profile.
 
     If you want to check whether a certain node is in a block or not,
     check its ".block" attribute.
@@ -61,9 +61,9 @@ class Block(object):
             node.block = self
             return
         
-        if node.step_options_profile != self.get_step_options_profile():
+        if node.step_profile != self.get_step_profile():
             raise BlockError('''Tried to add node which has a different
-step_options_profile.''')
+step_profile.''')
             
         
         # If the flow reached here, the block is not empty.
@@ -104,16 +104,16 @@ successor or a direct ancestor of the block.''')
             return
                 
         for (n1, n2) in cute_iter_tools.pairs(node_list):
-            if (n1.step_options_profile != n1.step_options_profile):
+            if (n1.step_profile != n1.step_profile):
                 raise BlockError('''Tried to add node list that doesn't share \
 the same step options profile.''')
         
-        sample_step_options_profile = node_list[0].step_options_profile
+        sample_step_profile = node_list[0].step_profile
         
         if self.__node_list and \
-           sample_step_options_profile != self.get_step_options_profile():
+           sample_step_profile != self.get_step_profile():
             raise BlockError('''Tried to add nodelist which contains node \
-that has a different step_options_profile.''')
+that has a different step_profile.''')
         
         # We now make sure the node_list is successive, untouched, and has no
         # unwanted children.
@@ -211,13 +211,13 @@ the index was bigger than the block's length.''')
         '''
         return self.__node_list.index(node)
     
-    def get_step_options_profile(self):
+    def get_step_profile(self):
         '''
         Get the step options profile of the nodes in this block.
         
         This profile must be identical in all of the nodes in the block.
         '''
-        return self.__node_list[0].step_options_profile
+        return self.__node_list[0].step_profile
     
     def __repr__(self):
         '''

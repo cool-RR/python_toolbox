@@ -108,13 +108,13 @@ class CruncherProcess(multiprocessing.Process):
         '''
         self.set_low_priority()
         
-        step_options_profile = self.crunching_profile.step_options_profile or \
-                          garlicsim.misc.StepOptionsProfile()
+        step_profile = self.crunching_profile.step_profile or \
+                          garlicsim.misc.StepProfile()
         
         self.step_iterator = \
             self.step_generator(self.initial_state,
-                                *step_options_profile.args,
-                                **step_options_profile.kwargs)
+                                *step_profile.args,
+                                **step_profile.kwargs)
         order = None
         
         for state in self.step_iterator:

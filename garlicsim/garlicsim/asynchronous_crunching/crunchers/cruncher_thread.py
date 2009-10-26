@@ -76,8 +76,8 @@ class CruncherThread(threading.Thread):
         satisfied or a 'retire' order is received.
         '''
         
-        step_options_profile = self.crunching_profile.step_options_profile or \
-                             garlicsim.misc.StepOptionsProfile()
+        step_profile = self.crunching_profile.step_profile or \
+                             garlicsim.misc.StepProfile()
         
         if self.history_dependent:
             self.history_browser = HistoryBrowser(cruncher=self)
@@ -86,8 +86,8 @@ class CruncherThread(threading.Thread):
             thing = self.initial_state
             
         self.step_iterator = self.step_generator(thing,
-                                                 *step_options_profile.args,
-                                                 **step_options_profile.kwargs)
+                                                 *step_profile.args,
+                                                 **step_profile.kwargs)
         
         order = None
         

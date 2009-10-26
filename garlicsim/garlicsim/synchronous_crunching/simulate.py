@@ -5,7 +5,7 @@
 This module defines the `simulate` function. See its documentation for more
 information.
 
-# todo: should be something that fishes step_options_profile from *args.
+# todo: should be something that fishes step_profile from *args.
 '''
 
 import garlicsim

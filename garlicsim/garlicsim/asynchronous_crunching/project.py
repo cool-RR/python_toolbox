@@ -13,7 +13,7 @@ import garlicsim.general_misc.third_party.decorator
 
 import garlicsim.data_structures
 import garlicsim.misc.simpack_grokker
-import garlicsim.misc.step_options_profile
+import garlicsim.misc.step_profile
 
 from crunching_manager import CrunchingManager
 from job import Job
@@ -128,7 +128,7 @@ class Project(object):
             
             if not jobs_of_leaf:
                 crunching_profile = CrunchingProfile(new_clock_target,
-                                                     leaf.step_options_profile)
+                                                     leaf.step_profile)
                 job = Job(leaf, crunching_profile)
                 self.crunching_manager.jobs.append(job)
                 continue
@@ -160,9 +160,9 @@ class Project(object):
             job.crunching_profile.clock_target = new_clock_target
             return job
         else:
-            step_options_profile = leaf.step_options_profile
+            step_profile = leaf.step_profile
             crunching_profile = CrunchingProfile(new_clock_target,
-                                                 step_options_profile)
+                                                 step_profile)
             job = Job(leaf, crunching_profile)
             self.crunching_manager.jobs.append(job)
             return job
@@ -176,20 +176,20 @@ class Project(object):
         the new job.
         If there are already jobs on that node, they will all be crunched
         independently of each other to create different forks.        
-        Any args or kwargs will be packed in a StepOptionsProfile object and
-        passed to the step function. You may pass a StepOptionsProfile
+        Any args or kwargs will be packed in a StepProfile object and
+        passed to the step function. You may pass a StepProfile
         yourself, as the only argument, and it will be noticed and used.
         
         Returns the job.
         '''
         
-        step_options_profile = \
-            garlicsim.misc.step_options_profile.StepOptionsProfile(*args,
+        step_profile = \
+            garlicsim.misc.step_profile.StepProfile(*args,
                                                                    **kwargs)
         
         clock_target = node.state.clock + clock_buffer
         
-        crunching_profile = CrunchingProfile(clock_target, step_options_profile)
+        crunching_profile = CrunchingProfile(clock_target, step_profile)
         
         job = Job(node, crunching_profile)
         
@@ -228,20 +228,20 @@ class Project(object):
         '''
         # todo: is simulate a good name? Need to say it's synchronously
         
-        step_options_profile = \
-            garlicsim.misc.step_options_profile.StepOptionsProfile(*args,
+        step_profile = \
+            garlicsim.misc.step_profile.StepProfile(*args,
                                                                    **kwargs)
         
         if self.simpack_grokker.history_dependent:
             return self.__history_dependent_simulate(node, iterations,
-                                                     step_options_profile)
+                                                     step_profile)
         else:
             return self.__non_history_dependent_simulate(node, iterations,
-                                                         step_options_profile)
+                                                         step_profile)
         
     @with_tree_lock        
     def __history_dependent_simulate(self, node, iterations,
-                                     step_options_profile):
+                                     step_profile):
         '''
         For history-dependent simulations only:
         
@@ -263,17 +263,17 @@ class Project(object):
         for i in xrange(iterations):
             history_browser.end_node = node
             state = self.simpack_grokker.step(history_browser,
-                                              *step_options_profile.args,
-                                              **step_options_profile.kwargs)
+                                              *step_profile.args,
+                                              **step_profile.kwargs)
             current_node = \
                 self.tree.add_state(state, parent=current_node,
-                                    step_options_profile=step_options_profile)
+                                    step_profile=step_profile)
             
         return current_node
     
     @with_tree_lock
     def __non_history_dependent_simulate(self, node, iterations,
-                                         step_options_profile):
+                                         step_profile):
         '''
         For non-history-dependent simulations only:
         
@@ -291,11 +291,11 @@ class Project(object):
         state = node.state
         for i in xrange(iterations):
             state = self.simpack_grokker.step(state,
-                                              *step_options_profile.args,
-                                              **step_options_profile.kwargs)
+                                              *step_profile.args,
+                                              **step_profile.kwargs)
             current_node = \
                 self.tree.add_state(state, parent=current_node,
-                                    step_options_profile=step_options_profile)
+                                    step_profile=step_profile)
             
         return current_node
     
