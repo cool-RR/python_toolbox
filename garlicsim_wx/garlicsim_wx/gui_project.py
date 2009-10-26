@@ -56,8 +56,10 @@ class GuiProject(object):
             scrolled.ScrolledPanel(self.main_window, -1)
 
         locals_for_shell = locals()
-        locals_for_shell.update({'gp': self, 'p': self.project,
-                                 't': self.project.tree})
+        locals_for_shell.update({'gp': self,
+                                 'p': self.project,
+                                 't': self.project.tree,
+                                 'garlicsim': garlicsim})
         self.shell = wx.py.shell.Shell(self.main_window, -1,
                                        size=(400, -1), locals=locals_for_shell)
         self.seek_bar = custom_widgets.SeekBar(self.main_window, -1, self)

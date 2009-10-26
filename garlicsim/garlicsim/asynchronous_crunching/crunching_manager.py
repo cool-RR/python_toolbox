@@ -12,7 +12,7 @@ import garlicsim.general_misc.change_tracker
 from garlicsim.general_misc.infinity import Infinity
 
 import garlicsim
-from garlicsim.misc.nodes_added import NodesAdded
+import garlicsim.misc
 import crunchers
 from crunching_profile import CrunchingProfile
 
@@ -188,7 +188,7 @@ class CrunchingManager(object):
         current = node
         for state in states:
             current = tree.add_state(state, parent=current)
-        nodes_added = NodesAdded(len(states))
+        nodes_added = garlicsim.misc.NodesAdded(len(states))
         return (nodes_added, current)
     
     
