@@ -407,7 +407,7 @@ class Path(object):
         Get a string representation of the path.
         
         Example output:
-        '<garlicsim.data_structures.path.Path of length 43 at 0x1c822d0>'
+        <garlicsim.data_structures.path.Path of length 43 at 0x1c822d0>
         '''
         return '<%s.%s of length %s at %s>' % \
                (

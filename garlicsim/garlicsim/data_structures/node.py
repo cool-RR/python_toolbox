@@ -258,6 +258,24 @@ class Node(object):
     def is_first_on_block(self):
         '''Return whether the node the first one on its block.'''
         return self.block and (self.block.index(self) == 0)
+    
+    def __repr__(self):
+        '''
+        Get a string representation of the node.
+        
+        Example output:
+        <garlicsim.data_structures.node.Node, untouched, belongs to a block, at
+        0x1ffde70>
+        '''
+        return '<%s.%s, %s%s, %s, at %s>' % \
+               (
+                   self.__class__.__module__,
+                   self.__class__.__name__,
+                   'root, ' if (self.parent is None) else '',
+                   'touched' if self.touched else 'untouched',
+                   'belongs to a block' if self.block else 'blockless',
+                   hex(id(self))
+               )
 
 from path import Path
 

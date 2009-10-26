@@ -24,18 +24,20 @@ class Block(object):
 
     When you're doing a simulation, often you'll have a succession of 1000+
     natural nodes, which were created "organically", each from its parent,
-    by simulation. There is no point in displaying a 1000 nodes in the tree
-    browser: Therefore they are grouped together into a block.
+    by simulation. Having a block to group these nodes together imporves
+    efficiency.
 
     Who qualifies to get wrapped in a block? A succession of untouched nodes,
     which:
     1. Is at least 2 nodes in number.
+    
     2. All members, except the last one, must have no children except
        their successor in the block.
     3. The last node may have any kinds of children.
+    4. All members share the same step_options_profile.
 
     If you want to check whether a certain node is in a block or not,
-    check its ".block" attribute. TODODOC
+    check its ".block" attribute.
 
     '''
     def __init__(self, node_list):

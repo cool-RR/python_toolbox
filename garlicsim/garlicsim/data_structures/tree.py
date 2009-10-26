@@ -149,7 +149,8 @@ tree while specifying a template_node.''')
         Get a string representation of the tree.
         
         Example output:
-        TODO
+        <garlicsim.data_structures.tree.Tree with 1 roots, 233 nodes and 3
+        possible paths at 0x1f6ae70>
         '''
         return '<%s.%s with %s roots, %s nodes and %s possible paths at %s>' % \
                (

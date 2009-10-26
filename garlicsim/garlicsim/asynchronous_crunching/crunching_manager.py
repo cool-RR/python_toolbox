@@ -87,7 +87,7 @@ class CrunchingManager(object):
         '''
         tree = self.project.tree
         
-        total_added_nodes = NodesAdded(0)
+        total_added_nodes = garlicsim.misc.NodesAdded(0)
 
         
         for (job, cruncher) in self.crunchers.copy().items():
@@ -191,7 +191,26 @@ class CrunchingManager(object):
         nodes_added = garlicsim.misc.NodesAdded(len(states))
         return (nodes_added, current)
     
-    
+    def __repr__(self):
+        '''
+        Get a string representation of the crunching manager.
+        
+        Example output:
+        <garlicsim.asynchronous_crunching.crunching_manager.CrunchingManager
+        currently employing 2 crunchers to handle 2 jobs at 0x1f699b0>
+        '''
+        
+        crunchers_count = len(self.crunchers)
+        job_count = len(self.jobs)
+                                   
+        return '<%s.%s currently employing %s crunchers to handle %s jobs at %s>' % \
+               (
+                   self.__class__.__module__,
+                   self.__class__.__name__,
+                   crunchers_count,
+                   job_count,
+                   hex(id(self))
+               )
     
     
     
