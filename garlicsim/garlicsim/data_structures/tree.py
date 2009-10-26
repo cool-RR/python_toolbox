@@ -84,7 +84,7 @@ class Tree(object):
         return my_node
 
 
-    def __add_node(self, node, parent=None, template_node=None): #todo: private?
+    def __add_node(self, node, parent=None, template_node=None):
         '''
         Add a node to the tree.
         
