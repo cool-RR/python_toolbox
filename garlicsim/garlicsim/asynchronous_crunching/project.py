@@ -311,6 +311,31 @@ class Project(object):
         self.__init__(pickled_project["simpack"])
         self.__dict__.update(pickled_project)
         
+    def __repr__(self):
+        '''
+        Get a string representation of the project.
+        
+        Example output:
+        <garlicsim.asynchronous_crunching.project.Project containing 101 nodes
+        and employing 4 crunchers at 0x1f668d0>
+        
+        Todo: better have the simpack mentioned here, not doing it cause it's
+        currently in a module wrapper.
+        '''
+        
+        nodes_count = len(self.tree.nodes)
+        crunchers_count = len(self.crunching_manager.crunchers)
+                                   
+        return '''<%s.%s containing %s nodes and employing %s crunchers at \
+%s>''' % \
+               (
+                   self.__class__.__module__,
+                   self.__class__.__name__,
+                   nodes_count,
+                   crunchers_count,
+                   hex(id(self))
+               )
+        
         
         
         

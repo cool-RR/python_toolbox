@@ -13,7 +13,7 @@ from garlicsim.general_misc.infinity import Infinity
 
 import garlicsim
 import garlicsim.data_structures
-from garlicsim.misc.nodes_added import NodesAdded
+import garlicsim.misc
 import crunchers
 from crunching_profile import CrunchingProfile
 from garlicsim.misc.step_options_profile import StepOptionsProfile
@@ -99,7 +99,7 @@ class CrunchingManager(object):
         '''
         tree = self.project.tree
         
-        total_added_nodes = NodesAdded(0)
+        total_added_nodes = garlicsim.misc.NodesAdded(0)
 
         
         for (job, cruncher) in self.crunchers.copy().items():
@@ -217,10 +217,30 @@ class CrunchingManager(object):
         if retire:
             cruncher.retire()
         
-        nodes_added = NodesAdded(counter)
+        nodes_added = garlicsim.misc.NodesAdded(counter)
+
         return (nodes_added, current)
     
-    
+    def __repr__(self):
+        '''
+        Get a string representation of the crunching manager.
+        
+        Example output:
+        <garlicsim.asynchronous_crunching.crunching_manager.CrunchingManager
+        currently employing 2 crunchers to handle 2 jobs at 0x1f699b0>
+        '''
+        
+        crunchers_count = len(self.crunchers)
+        job_count = len(self.jobs)
+                                   
+        return '<%s.%s currently employing %s crunchers to handle %s jobs at %s>' % \
+               (
+                   self.__class__.__module__,
+                   self.__class__.__name__,
+                   crunchers_count,
+                   job_count,
+                   hex(id(self))
+               )
     
     
     
