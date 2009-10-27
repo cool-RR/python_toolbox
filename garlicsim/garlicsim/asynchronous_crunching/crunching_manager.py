@@ -12,9 +12,11 @@ import garlicsim.general_misc.change_tracker
 from garlicsim.general_misc.infinity import Infinity
 
 import garlicsim
+import garlicsim.data_structures
 import garlicsim.misc
 import crunchers
 from crunching_profile import CrunchingProfile
+from garlicsim.misc.step_profile import StepProfile
 
 PreferredCruncher = [crunchers.CruncherThread, crunchers.CruncherProcess][0]
 # Should make a nicer way of setting that.
@@ -61,6 +63,16 @@ class CrunchingManager(object):
         self.crunchers = {}
         '''
         Dict that maps each job to the cruncher reponsible for doing it.
+        '''
+        
+        self.step_profiles = {}
+        '''
+        Dict that maps each cruncher to its step options profile.
+        
+        This exists because a cruncher might change its step options profile
+        in the course of its work. When it does, it announces this by putting
+        the profile in the work queue. In this dict we keep track of the last
+        step options profile each cruncher was known to use.
         '''
         
         self.crunching_profiles_change_tracker = \
@@ -153,7 +165,7 @@ class CrunchingManager(object):
             if self.Cruncher == crunchers.CruncherProcess:
                 cruncher = self.Cruncher \
                          (node.state,
-                          self.project.simpack_grokker.step_generator,
+                          self.project.simpack_grokker.step,
                           crunching_profile=crunching_profile)
             else: # self.Cruncher == crunchers.CruncherThread
                 cruncher = self.Cruncher(node.state, self.project,
@@ -162,6 +174,8 @@ class CrunchingManager(object):
             self.crunchers[job] = cruncher
             
             self.crunching_profiles_change_tracker.check_in(crunching_profile)
+            self.step_profiles[cruncher] = \
+                crunching_profile.step_profile
             
     
     def get_jobs_by_node(self, node):
@@ -182,13 +196,29 @@ class CrunchingManager(object):
         added, and `leaf` is the last node that was added.
         '''
         tree = self.project.tree
-        states = queue_tools.dump(cruncher.work_queue)
+        
+        current = node
+        counter = 0
+        self.step_profiles[cruncher]
+        
+        for thing in queue_tools.iterate(cruncher.work_queue):
+            if isinstance(thing, garlicsim.data_structures.State):
+                counter += 1
+                current = tree.add_state(
+                    thing,
+                    parent=current,
+                    step_profile=self.step_profiles[cruncher]
+                )
+            elif isinstance(thing, StepProfile):
+                self.step_profiles[cruncher] = thing
+            else:
+                raise Exception('Unexpected object in work queue')
+                        
         if retire:
             cruncher.retire()
-        current = node
-        for state in states:
-            current = tree.add_state(state, parent=current)
-        nodes_added = garlicsim.misc.NodesAdded(len(states))
+        
+        nodes_added = garlicsim.misc.NodesAdded(counter)
+
         return (nodes_added, current)
     
     def __repr__(self):

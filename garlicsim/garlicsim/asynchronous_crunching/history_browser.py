@@ -131,7 +131,7 @@ class HistoryBrowser(garlicsim.misc.history_browser.HistoryBrowser):
         '''
         Obtain an item by index number from the work_queue of our cruncher.
         '''
-        item = queue_tools.queue_get_item(self.cruncher.work_queue, index)
+        item = queue_tools.get_item(self.cruncher.work_queue, index)
         return item
         
     @with_self
