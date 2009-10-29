@@ -186,7 +186,7 @@ class CruncherProcess(multiprocessing.Process):
         '''
         Retire the cruncher. Process-safe.
         
-        Cause it to shut down as soon as it receives the order.
+        Causes it to shut down as soon as it receives the order.
         '''
         self.order_queue.put("retire")
         

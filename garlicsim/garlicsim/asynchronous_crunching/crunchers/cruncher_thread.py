@@ -161,7 +161,7 @@ class CruncherThread(threading.Thread):
         '''
         Retire the cruncher. Thread-safe.
         
-        Cause it to shut down as soon as it receives the order.
+        Causes it to shut down as soon as it receives the order.
         '''
         self.order_queue.put("retire")        
         

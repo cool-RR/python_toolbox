@@ -1,8 +1,8 @@
 # How to run #
 
-Run `run_gui.py` in the src folder to see the demonstration. Then, File -> New. Choose one of the simulation packages, press Ok. A dialog will pop up, press Ok. Double click the seek bar to toggle playing.
+Run `run_gui.py` in the root folder to launch the GUI. Then, File -> New. Choose one of the simulation packages, press Ok. A dialog will pop up, press Ok. Double click the seek bar to toggle playing.
 
-Tested on [Python 2.6](http://www.python.org/download/releases/2.6.2/). Requires [wxPython](http://www.wxpython.org/). Optional: [Psyco](http://psyco.org), on Windows: [Python for Windows Extensions](http://sourceforge.net/projects/pywin32/).
+Tested on [Python 2.6](http://www.python.org/download/releases/2.6.4/). Requires [wxPython](http://www.wxpython.org/). Optional: [Psyco](http://psyco.org), on Windows: [Python for Windows Extensions](http://sourceforge.net/projects/pywin32/).
 
 # What is GarlicSim? #
 
@@ -10,17 +10,17 @@ GarlicSim is an ambitious open-source project in the field of scientific computi
 
 GarlicSim is a platform for writing, running and analyzing simulations. It is general enough to handle any kind of simulation: Physics, game theory, epidemic spread, electronics, etc.
 
+When you're writing a simulation, about 90% of the code you write is boilerplate; Code that isn't directly related to the phenomenon you're simulating, but is necessary for your simulation to work. The aim of GarlicSim is to write that 90% of the code once and for all, and to do it well, so you could concentrate on the important 10%.
 
-The program is written in Python.
+GarlicSim defines a new format for simulations. It's called a **simulation package**, and often abbreivated as **simpack**. For example, say you are interested in simulating the interaction of hurricane storms. It is up to you to write a simpack for this type of simulation. The simpack is simply a Python package which defines a few special functions according to the GarlicSim simpack API, the most important function being the **step function**.
 
+The beauty is that since so many simulation types can fit into this mold of a simpack, the tools that GarlicSim provides can be used across all of these different domains. Once you plug your own simpack into GarlicSim, you're ready to roll. All the tools that GarlicSim provides will work with your simulation.
 
-When you're writing a simulation, about 90% of the code you write is boilerplate; Code that isn't directly related to the phenomenon you're simulating, but is necessary for your simulation to work.
-The aim of GarlicSim is to write that 90% of the code once and for all, and to do it well, so you could concentrate on the important 10%.
+Additionally, GarlicSim will eventually be shipped with a standard library of simpacks for common simulations, that the user may find useful to use as-is, or with his own modifications.
 
-Additionally, GarlicSim will eventually be shipped with a standard library of common simulations, that the user may find useful to use as-is, or with his/her own modifications.
+For a more thorugh introduction to how GarlicSim works, check out the ** [Introduction to GarlicSim](http://dl.getdropbox.com/u/1927707/Introduction%20to%20GarlicSim.doc) ** - Though not yet complete, it goes deep into the principles of GarlicSim and how to work with it.
 
-
-** [Introduction to GarlicSim](http://dl.getdropbox.com/u/1927707/Introduction%20to%20GarlicSim.doc) ** - This is a document that attempts to explain about GarlicSim and how it works. It is still far from complete.
+GarlicSim is written in Python.
 
 -------
 
