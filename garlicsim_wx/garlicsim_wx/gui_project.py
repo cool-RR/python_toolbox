@@ -1,41 +1,52 @@
 # Copyright 2009 Ram Rachum. No part of this program may be used, copied or
 # distributed without explicit written permission from Ram Rachum.
 
+'''
+This module defines the GuiProject class. See its documentation for more info.
+'''
+
 import warnings
 import copy
 import functools
 import Queue
 
 import wx
-import wx.lib.scrolledpanel as scrolled
+import wx.lib.scrolledpanel
+import wx.py.shell
 
-import garlicsim
-import garlicsim.asynchronous_crunching.crunchers
 import garlicsim.general_misc.queue_tools as queue_tools
 from general_misc.stringsaver import s2i,i2s
 from garlicsim.general_misc.infinity import Infinity
 
+import garlicsim
+import garlicsim.asynchronous_crunching.crunchers
 
 import custom_widgets
-FoldableWindowContainer=custom_widgets.FoldableWindowContainer
-
-import wx.py.shell
+from custom_widgets import FoldableWindowContainer
 
 
 class GuiProject(object):
     '''
-    A GuiProject encapsulates a Project for use with a wxPython
-    interface.
+    A GuiProject encapsulates a Project for use with a wxPython interface.
     '''
+    
     def __init__(self, simpack, parent_window):
+        # This is broken down into a few parts.
         self.__init_general(simpack, parent_window)
         self.__init_on_creation()
+
         
     def __init_general(self, simpack, parent_window, project=None,
                        active_node=None, path=None):
-        # todo: break into two methods, one gui related and one less
+        '''
+        General initialization.
         
-        self.simpack = garlicsim.general_misc.module_wrapper.ModuleWrapper(simpack)
+        Sets up most of the important attributes of the GuiProject, such as
+        `.path` and `.active_node`.
+        '''
+        
+        self.simpack = \
+            garlicsim.general_misc.module_wrapper.ModuleWrapper(simpack)
         
         self.project = project or garlicsim.Project(simpack)
         if self.project.simpack_grokker.history_dependent is False:
@@ -43,28 +54,58 @@ class GuiProject(object):
                 garlicsim.asynchronous_crunching.crunchers.CruncherProcess
         
         self.path = path
+        '''The active path.'''
+
+        self.active_node = active_node
+        '''The node that is currently displayed onscreen.'''
+
+        self.is_playing = False
+        '''Says whether the simulation is currently playing.'''
+        
+        self.infinity_job = None
         '''
-        The active path.
+        The job of the playing leaf, which should be crunched to infinity.
         '''
 
-        main_window = self.main_window = \
-                    wx.ScrolledWindow(parent_window,-1)
+        self.delay = 0.05 # Should be a mechanism for setting that
+        self.default_buffer = 100 # Should be a mechanism for setting that
+
+        self.timer_for_playing=None
+        '''Contains the wx.Timer object used when playing the simulation.'''
+
+        self.ran_out_of_tree_while_playing = False
+        '''
+        Becomes True when you are playing the simulation and the nodes are not
+        ready yet. The simulation will continue playing when the nodes will be
+        created.
+        '''
+
+        self.__init_gui(parent_window)
+        
+        simpack.initialize(self)
+
+        
+    def __init_gui(self, parent_window):
+        '''
+        Initialization related to the GUI widgets which make up the GuiProject.
+        '''
+        main_window = self.main_window = wx.ScrolledWindow(parent_window, -1)
         self.main_sizer = wx.BoxSizer(wx.VERTICAL)
         self.main_window.SetSizer(self.main_sizer)
 
         self.state_showing_window = \
-            scrolled.ScrolledPanel(self.main_window, -1)
+            wx.lib.scrolledpanel.ScrolledPanel(self.main_window, -1)
 
         locals_for_shell = locals()
         locals_for_shell.update({'gp': self,
                                  'p': self.project,
                                  't': self.project.tree,
                                  'garlicsim': garlicsim})
-        self.shell = wx.py.shell.Shell(self.main_window, -1,
-                                       size=(400, -1), locals=locals_for_shell)
+        self.shell = wx.py.shell.Shell(self.main_window, -1, size=(400, -1),
+                                       locals=locals_for_shell)
         self.seek_bar = custom_widgets.SeekBar(self.main_window, -1, self)
-        self.tree_browser = custom_widgets.TreeBrowser(self.main_window,
-                                                       -1, self)
+        self.tree_browser = custom_widgets.TreeBrowser(self.main_window, -1,
+                                                       self)
 
 
         self.top_fwc = FoldableWindowContainer(self.main_window, -1,
@@ -77,60 +118,47 @@ class GuiProject(object):
                                        self.tree_browser, wx.BOTTOM)
         self.main_sizer.Add(temp, 1, wx.EXPAND)
         self.main_sizer.Fit(self.main_window)
-
-        self.active_node = active_node
-        '''
-        This attribute contains the node that is currently displayed onscreen
-        '''
-
-        self.is_playing = False
-        '''
-        Says whether the simulation is currently playing.
-        '''
         
-        self.infinity_job = None
+        main_window.Bind(wx.EVT_MENU, self.edit_from_active_node,
+                         id=s2i("Fork by editing"))
+        main_window.Bind(wx.EVT_MENU, self.fork_naturally,
+                         id=s2i("Fork naturally"))
         
-
-        self.delay = 0.05 # Should be a mechanism for setting that
-        self.default_buffer = 100 # Should be a mechanism for setting that
-
-        self.timer_for_playing=None
-        '''
-        Contains the wx.Timer object used when playing the simulation
-        '''
-
-        self.ran_out_of_tree_while_playing = False
-        '''
-        Becomes True when you are playing the simulation and the nodes
-        are not ready yet. The simulation will continue playing
-        when the nodes will be created.
-        '''
-
-        main_window.Bind(wx.EVT_MENU,self.edit_from_active_node,id=s2i("Fork by editing"))
-        main_window.Bind(wx.EVT_MENU,self.fork_naturally,id=s2i("Fork naturally"))
-     
-        
-        simpack.initialize(self)
-                
         self.stuff_to_do_when_idle = Queue.Queue()
         self.main_window.Bind(wx.EVT_IDLE, self.on_idle)
 
+        
     def __init_on_creation(self):
+        '''
+        Initialization done when the GuiProject is actually created, not loaded.
+        '''
         wx.CallAfter(self.make_initial_dialog)
-    
+
+        
     def make_initial_dialog(self):
+        '''
+        Create a dialog for creating a root state.
+        '''
         if hasattr(self.simpack,"make_initial_dialog"):
             return self.simpack.make_initial_dialog(self)
         else:
             return self.make_generic_initial_dialog()
 
-    def show_state(self,state):
+        
+    def show_state(self, state):
+        '''Show the state onscreen.'''
         self.simpack.show_state(self,state)
 
-    def set_parent_window(self,parent_window):
-        self.main_window.Reparent(parent_window)
+        
+    def set_parent_window(self, parent_window):
+        '''
+        Set the parent wxPython window of the main window of the GuiProject.
+        '''
+        self.main_window.Reparent(parent_window)        
+        
         
     def on_idle(self, event=None):
+        '''Handler for the wx.EVT_IDLE event.'''
         try:
             mission = self.stuff_to_do_when_idle.get(block=False)
             mission()
@@ -139,40 +167,41 @@ class GuiProject(object):
             pass
                 
 
-    def make_plain_root(self,*args,**kwargs):
+    def make_plain_root(self, *args, **kwargs):
         '''
-        Creates a parent-less node, whose state is a simple plain state.
-        The SimulationCore subclass should define the function "make_plain_state"
-        for this to work.
+        Create a parentless node, whose state is a simple plain state.
+        
+        The simpack must define the function "make_plain_state" for this to
+        work.
         Updates the active path to start from this root.
         Starts crunching on this new root.
         Returns the node.
         '''
-        root=self.project.make_plain_root(*args,**kwargs)
+        root = self.project.make_plain_root(*args,**kwargs)
         self.set_active_node(root)
         return root
 
-    def make_random_root(self,*args,**kwargs):
+    
+    def make_random_root(self, *args, **kwargs):
         '''
-        Creates a parent-less node, whose state is a random and messy state.
-        The SimulationCore subclass should define the function "make_random_state"
-        for this to work.
+        Create a parentless node, whose state is a random and messy state.
+        
+        The simpack must should define the function "make_random_state" for
+        this to work.
         Updates the active path to start from this root.
         Starts crunching on this new root.
         Returns the node.
         '''
-        root=self.project.make_random_root(*args,**kwargs)
+        root = self.project.make_random_root(*args, **kwargs)
         self.set_active_node(root)
         return root
 
+    
     def set_active_node(self, node, modify_path=True):
         '''
-        Makes `node` the active node, displaying it onscreen.
+        Make `node` the active node, displaying it onscreen.
         '''
-        self.project.ensure_buffer(
-            node,
-            clock_buffer=self.default_buffer
-        )
+        self.project.ensure_buffer(node, clock_buffer=self.default_buffer)
         
         was_playing = self.is_playing
         if self.is_playing: self.stop_playing()
@@ -188,16 +217,15 @@ class GuiProject(object):
             self.infinity_job.crunching_profile.clock_buffer = \
                 self.infinity_job.node.state.clock + self.default_buffer
             self.infinity_job = self.project.ensure_buffer_on_path(node,
-                                                                     self.path,
-                                                                     Infinity)
-                
+                                                                   self.path,
+                                                                   Infinity)    
             
         self.main_window.Refresh()
 
+        
     def __modify_path_to_include_active_node(self):
         '''
-        Makes sure that self.path goes through the active node,
-        replacing it with another path if it doesn't.
+        Ensure that self.path includes the active node.
         '''
         if self.path is None:
             self.path = self.active_node.make_containing_path()
@@ -208,9 +236,9 @@ class GuiProject(object):
 
     def start_playing(self):
         '''
-        Starts playback of the simulation.
+        Start playback of the simulation.
         '''
-        if self.is_playing is True:
+        if self.is_playing:
             return
         if self.active_node is None:
             return
@@ -250,7 +278,6 @@ class GuiProject(object):
         self.project.ensure_buffer(self.active_node, self.default_buffer)
 
 
-
     def __editing_state(self):
         node=self.active_node
         state=node.state
@@ -260,6 +287,7 @@ class GuiProject(object):
         else:
             return state
 
+        
     def toggle_playing(self):
         '''
         If the simulation is currently playing, stops it.
@@ -338,7 +366,6 @@ class GuiProject(object):
         return added_nodes
 
 
-
     def get_node_menu(self):
         nodemenu=wx.Menu()
         nodemenu.Append(s2i("Fork by editing"),"Fork by &editing"," Create a new edited node with the current node as the template")
@@ -347,6 +374,7 @@ class GuiProject(object):
         nodemenu.Append(s2i("Delete..."),"&Delete..."," Delete the node")
         return nodemenu
 
+    
     def done_editing(self):
         node=self.active_node
         if node.still_in_editing==False:
@@ -354,6 +382,7 @@ class GuiProject(object):
         node.still_in_editing=False
         self.project.ensure_buffer(node, self.default_buffer)
 
+        
     def make_generic_initial_dialog(self):
         initial_dialog=custom_widgets.GenericInitialDialog(self.main_window, -1)
         if initial_dialog.ShowModal()==wx.ID_OK:
@@ -363,6 +392,7 @@ class GuiProject(object):
                 self.make_plain_root()
         initial_dialog.Destroy()
 
+        
     def tree_modify_refresh(self):
         self.seek_bar.Refresh()
         self.tree_browser.Refresh()
@@ -373,6 +403,7 @@ class GuiProject(object):
         for thing in stuff_we_want:
             my_dict[thing] = self.__dict__[thing]
         return my_dict
+    
     
 def load_tickled_gui_project(tickled_gui_project, parent_window):
     gui_project = GuiProject.__new__(GuiProject)
