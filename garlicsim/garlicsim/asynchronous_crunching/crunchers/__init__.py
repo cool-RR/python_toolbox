@@ -23,8 +23,20 @@ hard to implement using Process, because information transfer between processes
 is complicated. This is why CruncherThread was born, as threads share memory
 trivially between them.
 
-Another reason for CruncherThread is that on a single-core computer it might
-be faster than CruncherProcess because of the memory-sharing.
+These are the advantages of CruncherThread:
+
+    1. CruncherThread is able to handle simulations that are history-dependent.
+    2. CruncherThread is based on the threading module, which is stabler and
+       more mature than the multiprocessing module.
+    3. CruncherThread is much easier to debug than CruncherProcess, since there
+       are currently many more tools for debugging Python threads than Python
+       processes.
+    4. On a single-core computer, CruncherThread may be faster than
+       CruncherProcess because of shared memory.
+
+The advantage of CruncherProcess over CruncherThread is that CruncherProcess is
+able to run on a different core of the processor in the machine, thus using the
+full power of the processor.
 '''
 
 from cruncher_thread import CruncherThread
