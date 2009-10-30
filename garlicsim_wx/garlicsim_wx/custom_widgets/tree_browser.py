@@ -8,7 +8,7 @@ import os
 
 import wx
 from math import *
-import garlicsim_wx.misc.vectorish as vectorish
+import garlicsim_wx.general_misc.vectorish as vectorish
 import garlicsim.data_structures
 from wx.lib.scrolledpanel import ScrolledPanel
 

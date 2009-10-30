@@ -9,13 +9,13 @@ import wx
 
 import garlicsim
 import gui_project
-import misc.notebookctrl as notebookctrl
+import general_misc.notebookctrl as notebookctrl
 import custom_widgets
 
-import misc.homedirectory
+import general_misc.homedirectory
 
 
-import misc.thread_timer as thread_timer
+import general_misc.thread_timer as thread_timer
 
 #import psyco
 #psyco.full()

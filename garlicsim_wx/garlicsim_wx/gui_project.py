@@ -12,7 +12,7 @@ import wx.lib.scrolledpanel as scrolled
 import garlicsim
 import garlicsim.asynchronous_crunching.crunchers
 import garlicsim.general_misc.queue_tools as queue_tools
-from misc.stringsaver import s2i,i2s
+from general_misc.stringsaver import s2i,i2s
 from garlicsim.general_misc.infinity import Infinity
 
 
