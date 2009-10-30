@@ -28,8 +28,15 @@ class CruncherThread(threading.Thread):
         
     Read more about crunchers in the documentation of the crunchers package.
     
-    The advantage of CruncherThread over CruncherProcess is that
-    CruncherThread is able to handle simulations that are history-dependent.
+    The advantages of CruncherThread over CruncherProcess are:
+    1. CruncherThread is able to handle simulations that are history-dependent.
+    2. CruncherThread is based on the threading module, which is stabler and
+       more mature than the multiprocessing module.
+    3. CruncherThread is much easier to debug than CruncherProcess, since there
+       are currently many more tools for debugging Python threads than Python
+       processes.
+    4. On a single-core computer, CruncherThread may be faster than
+       CruncherProcess because of shared memory.
     '''
     def __init__(self, initial_state, project, crunching_profile):
         threading.Thread.__init__(self)
