@@ -1,5 +1,5 @@
-# Copyright 2009 Ram Rachum.
-# This program is not licensed for distribution and may not be distributed.
+# Copyright 2009 Ram Rachum. No part of this program may be used, copied or
+# distributed without explicit written permission from Ram Rachum.
 
 '''
 A little module for cataloging strings.
