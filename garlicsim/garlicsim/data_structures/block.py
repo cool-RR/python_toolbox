@@ -143,6 +143,7 @@ doesn't have exactly one child, and not as the last node in the block.''')
         for node in node_list:
             node.block = self
 
+            
     def split(self, node):
         '''
         Split the block into two blocks.
@@ -172,6 +173,7 @@ doesn't have exactly one child, and not as the last node in the block.''')
             node.block = None
         self.__node_list = []
 
+        
     def __delitem__(self, i):
         '''
         Remove a node from the block. Can only remove an edge node.
@@ -187,29 +189,35 @@ middle of a block''')
                 raise IndexError('''Tried to remove a node by index, while \
 the index was bigger than the block's length.''')
 
+            
     def __contains__(self, node):
         '''
         Return whether the block contains `node`.
         '''
         return node.block == self
 
+    
     def __iter__(self):
         return self.__node_list.__iter__()
 
+    
     def __len__(self):
         '''
         Return the number of nodes in the block.
         '''
         return len(self.__node_list)
 
+    
     def __getitem__(self, i):
         return self.__node_list[i]
 
+    
     def index(self, node):
         '''
         Return the index number of the specified node in the block.
         '''
         return self.__node_list.index(node)
+    
     
     def get_step_profile(self):
         '''
@@ -219,6 +227,7 @@ the index was bigger than the block's length.''')
         '''
         return self.__node_list[0].step_profile
     
+    
     def __repr__(self):
         '''
         Get a string representation of the block.
@@ -227,7 +236,7 @@ the index was bigger than the block's length.''')
         <garlicsim.data_structures.block.Block of length 40 crunched with
         StepProfile(t=0.1) at 0x1c84d70>
         '''
-        return '<%s.%s of length %s crunched with %s at %s>' % \
+        return '<%s.%s of length %s, crunched with %s at %s>' % \
                (
                    self.__class__.__module__,
                    self.__class__.__name__,

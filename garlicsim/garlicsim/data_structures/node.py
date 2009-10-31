@@ -275,7 +275,7 @@ class Node(object):
             (
                 self.__class__.__module__,
                 self.__class__.__name__,
-                'with clock %s' % self.state.clock if hasattr(self.state, 'clock') else '',
+                ' with clock %s' % self.state.clock if hasattr(self.state, 'clock') else '',
                 'root, ' if (self.parent is None) else '',
                 'touched' if self.touched else 'untouched',
                 'belongs to a block' if self.block else 'blockless',

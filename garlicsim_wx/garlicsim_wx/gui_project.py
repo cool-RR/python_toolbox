@@ -299,7 +299,11 @@ class GuiProject(object):
 
 
     def __play_next(self, node):
-        '''A function called repeatedly while playing the simulation.'''
+        '''
+        Show the next node onscreen.
+        
+        This method is called repeatedly when playing the simulation.
+        '''
         if self.is_playing is False: return
         self.show_state(node.state)
         self.main_window.Refresh() # Make more efficient?
@@ -319,22 +323,24 @@ class GuiProject(object):
 
     def fork_naturally(self, *args, **kwargs):
         '''
-        Used for forking the simulation without modifying any states.
-        Creates a new node from the active node via natural simulation.
-
-        todo: maybe not let to do it from unfinalized touched node?
+        Fork the simulation from the active node.
+        
+        Used for forking the simulation without modifying any states. Creates
+        a new node from the active node via natural simulation.
+        
+        Any extraneous arguments will be passed to the step function.
         '''
+        #todo: maybe not let to do it from unfinalized touched node?
         
         node = self.active_node
-        self.project.begin_crunching(self.active_node, self.default_buffer)
-        # todo: give so_profile
+        self.project.begin_crunching(self.active_node, self.default_buffer,
+                                     *args, **kwargs)
 
 
     def edit_from_active_node(self, *args, **kwargs):
         '''
-        Used for forking the simulation by editing.
-        Creates a new node from the active node via
-        editing.
+        Fork the simulation from the active node by editing.
+        
         Returns the new node.
         '''
         new_node = self.project.tree.fork_to_edit(template_node=self.active_node)
@@ -345,38 +351,66 @@ class GuiProject(object):
 
     def sync_crunchers(self):
         '''
-        A wrapper for Project.sync_crunchers(). (todo: add real explanation)
-        Returns how many nodes were added to the tree.
+        Take work from the crunchers, and give them new instructions if needed.
+        
+        (This is a wrapper for Project.sync_crunchers() with some gui-related
+        additions.)
+        
+        Talks with all the crunchers, takes work from them for implementing
+        into the tree, retiring crunchers or recruiting new crunchers as
+        necessary.
+        You can specify a node to be a `temp_infinity_node`. That will cause
+        sync_crunchers to temporarily treat this node as if it should be crunched
+        indefinitely. This is useful when the simulation is playing back on
+        a path that leads to this node, and we want to have as big a buffer
+        as possible on that path.
+
+        Returns the total amount of nodes that were added to the tree in the
+        process.
         '''
 
-        added_nodes=self.project.sync_crunchers()
+        added_nodes = self.project.sync_crunchers()
         '''
         This is the important line here, which actually executes
         the Project's sync_crunchers function. As you can see,
         we put the return value in `added_nodes`.
         '''
 
-        if added_nodes>0:
+        if added_nodes > 0:
             self.tree_modify_refresh()
+            
         if self.ran_out_of_tree_while_playing:
             self.ran_out_of_tree_while_playing = False
             self.stop_playing()
             self.start_playing()
+            
         return added_nodes
 
 
     def get_node_menu(self):
-        nodemenu=wx.Menu()
-        nodemenu.Append(s2i("Fork by editing"),"Fork by &editing"," Create a new edited node with the current node as the template")
-        nodemenu.Append(s2i("Fork naturally"),"Fork &naturally"," Run the simulation from this node")
+        nodemenu = wx.Menu()
+        nodemenu.Append(
+            s2i("Fork by editing"),
+            "Fork by &editing",
+            " Create a new edited node with the current node as the template"
+        )
+        nodemenu.Append(
+            s2i("Fork naturally"),
+            "Fork &naturally",
+            " Run the simulation from this node"
+        )
         nodemenu.AppendSeparator()
-        nodemenu.Append(s2i("Delete..."),"&Delete..."," Delete the node")
+        nodemenu.Append(
+            s2i("Delete..."),
+            "&Delete...",
+            " Delete the node"
+        )
         return nodemenu
 
     
     def done_editing(self):
-        node=self.active_node
-        if node.still_in_editing==False:
+        node = self.active_node
+        if node.still_in_editing is False:
             raise StandardError("You said 'done editing', but you were not in editing mode.")
         node.still_in_editing=False
         self.project.ensure_buffer(node, self.default_buffer)
