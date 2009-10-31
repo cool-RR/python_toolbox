@@ -20,6 +20,10 @@ class StepProfile(object):
     # is equivalent to
     step(state, 34, "meow", width=60)
     '''
+    # todo: perhaps this should be based on an ArgumentsProfile after all?
+    # In __repr__ and stuff we'll just check self's class. How does Python
+    # do it when you subclass its builtin types?
+    
     def __init__(self, *args, **kwargs):
         
         # Perhaps we were passed a StepProfile object instead of args
@@ -54,11 +58,8 @@ class StepProfile(object):
         return 'StepProfile(%s)' % big_string
     
     def __eq__(self, other):
-        if other is None:
-            return len(self.args) == 0 and len(self.kwargs) == 0
-        else:
-            return isinstance(other, StepProfile) and \
-                   self.args == other.args and self.kwargs == other.kwargs
+        return isinstance(other, StepProfile) and \
+               self.args == other.args and self.kwargs == other.kwargs
     
     def __hash__(self):
         # Defining __hash__ because there's __eq__ which makes the default

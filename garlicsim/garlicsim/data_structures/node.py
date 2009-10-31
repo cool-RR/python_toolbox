@@ -264,18 +264,20 @@ class Node(object):
         Get a string representation of the node.
         
         Example output:
-        <garlicsim.data_structures.node.Node, untouched, belongs to a block, at
-        0x1ffde70>
+        <garlicsim.data_structures.node.Node with clock 6.5, untouched, belongs
+        to a block, crunched with StepProfile(t=0.1), at 0x1ffde70>
         '''
-        return '<%s.%s, %s%s, %s, at %s>' % \
-               (
-                   self.__class__.__module__,
-                   self.__class__.__name__,
-                   'root, ' if (self.parent is None) else '',
-                   'touched' if self.touched else 'untouched',
-                   'belongs to a block' if self.block else 'blockless',
-                   hex(id(self))
-               )
+        return '<%s.%s%s, %s%s, %s, %sat %s>' % \
+            (
+                self.__class__.__module__,
+                self.__class__.__name__,
+                'with clock %s' % self.state.clock if hasattr(self.state, 'clock') else '',
+                'root, ' if (self.parent is None) else '',
+                'touched' if self.touched else 'untouched',
+                'belongs to a block' if self.block else 'blockless',
+                'crunched with %s, ' % self.step_profile if self.step_profile,
+                hex(id(self))
+            )
 
 from path import Path
 
