@@ -7,18 +7,13 @@ import cPickle
 
 import wx
 
-import garlicsim
-import gui_project
-import general_misc.notebookctrl as notebookctrl
-import custom_widgets
-
+import general_misc.notebookctrl
 import general_misc.homedirectory
-
-
 import general_misc.thread_timer as thread_timer
 
-#import psyco
-#psyco.full()
+import garlicsim
+import gui_project
+import custom_widgets
 
 
 ########################
@@ -41,40 +36,64 @@ fuck_the_path()
 
 class ApplicationWindow(wx.Frame):
     '''
-    An application window that allows the user to open multiple GuiProjects
-    simultaneously.
+    The main window of garlicsim_wx.
+    
+    This window allows the user to create and manipulate gui projects.
     '''
-    def __init__(self,*args,**keywords):
-        wx.Frame.__init__(self,*args,**keywords)
+    def __init__(self, *args, **keywords):
+        
+        wx.Frame.__init__(self, *args, **keywords)
         self.SetDoubleBuffered(True)
-        self.notebook=notebookctrl.NotebookCtrl(self,-1,style=notebookctrl.NC_TOP)
+        self.notebook = general_misc.notebookctrl.NotebookCtrl(
+            self,
+            -1,
+            style=general_misc.notebookctrl.NC_TOP
+        )
 
+        self.gui_projects = []
+        '''The gui projects open inside this application window.'''
 
-        self.gui_projects=[]
-
-        filemenu=wx.Menu()
-        new_menu_button = filemenu.Append(-1 ,"&New"," New")
-        open_menu_button = filemenu.Append(-1 ,"&Open"," Open")
-        save_menu_button = filemenu.Append(-1 ,"&Save"," Save")
-        exit_menu_button = filemenu.Append(-1 ,"E&xit"," Close the program")
+        ######################################
+        
+        filemenu = wx.Menu()
+        new_menu_button = filemenu.Append(-1 ,"&New", " New")
+        open_menu_button = filemenu.Append(-1 ,"&Open", " Open")
+        save_menu_button = filemenu.Append(-1 ,"&Save", " Save")
+        exit_menu_button = filemenu.Append(-1 ,"E&xit", " Close the program")
         self.Bind(wx.EVT_MENU, self.on_new, new_menu_button)
         self.Bind(wx.EVT_MENU, self.on_open, open_menu_button)        
         self.Bind(wx.EVT_MENU, self.on_save, save_menu_button)        
         self.Bind(wx.EVT_MENU, self.exit, exit_menu_button)        
-        menubar=wx.MenuBar()
-        menubar.Append(filemenu,"&File")
+        menubar = wx.MenuBar()
+        menubar.Append(filemenu, "&File")
         #menubar.Append(stuffmenu,"&Stuff")
         #menubar.Append(nodemenu,"&Node")
         self.SetMenuBar(menubar)
         self.CreateStatusBar()
+        
+        ######################################
+        
         toolbar = self.CreateToolBar()
-        new_tool = toolbar.AddSimpleTool(-1, wx.Bitmap(os.path.join("images","new.png"), wx.BITMAP_TYPE_ANY),"New", " Create a new file")
+        new_tool = toolbar.AddSimpleTool(
+            -1,
+            wx.Bitmap(os.path.join("images", "new.png"), wx.BITMAP_TYPE_ANY),
+            "New",
+            " Create a new file"
+        )
         toolbar.AddSeparator()
-        done_tool = toolbar.AddSimpleTool(-1, wx.Bitmap(os.path.join("images","check.png"), wx.BITMAP_TYPE_ANY),"Done editing", " Done editing")
+        done_tool = toolbar.AddSimpleTool(
+            -1,
+            wx.Bitmap(os.path.join("images", "check.png"), wx.BITMAP_TYPE_ANY),
+            "Done editing",
+            " Done editing"
+        )
         toolbar.Realize()
 
         self.Bind(wx.EVT_TOOL, self.on_new, new_tool)
         self.Bind(wx.EVT_TOOL, self.done_editing, done_tool)
+        
+        ######################################
+        
 
         '''
         self.Bind(EVT_RUN_BACKGROUND, self.on_run_background)
@@ -85,19 +104,23 @@ class ApplicationWindow(wx.Frame):
 
         self.run_background_block=False
         '''
-
+        
         self.background_timer = thread_timer.ThreadTimer(self)
         self.background_timer.start(150)
         self.Bind(thread_timer.EVT_THREAD_TIMER, self.sync_crunchers)
 
+        ######################################
+        
         self.Show()
 
-    def add_gui_project(self,gui_project):
+    def add_gui_project(self, gui_project):
+        '''Add a gui project, opening a new tab for it in the notebook.'''
         self.gui_projects.append(gui_project)
-        self.notebook.AddPage(gui_project.main_window,"Simulation",select=True)
+        self.notebook.AddPage(gui_project.main_window, "Simulation", select=True)
 
         
     def on_open(self, event=None):
+        '''Raise a dialog for opening a gui project from file.'''
         wcd = 'Text files (*.txt)|*.txt|All files (*)|*|'
         cur_dir = os.getcwd()
         tickled_gui_project = None
@@ -133,6 +156,7 @@ class ApplicationWindow(wx.Frame):
         self.add_gui_project(my_gui_project)
     
     def on_save(self, event=None):
+        '''Raise a dialog for saving a gui project to file.'''
         
         my_gui_project = self.gui_projects[0] # Change this to get the active
         tickled = my_gui_project.tickle()
@@ -153,7 +177,8 @@ class ApplicationWindow(wx.Frame):
                         cPickle.dump(tickled, my_file)
     
                 except IOError, error:
-                    dlg = wx.MessageDialog(self, 'Error saving file\n' + str(error))
+                    dlg = wx.MessageDialog(self,
+                                           'Error saving file\n' + str(error))
                     dlg.ShowModal()
             
         finally:
@@ -170,25 +195,29 @@ class ApplicationWindow(wx.Frame):
         del gui_project
     '''
 
-    def exit(self,e):
+    def exit(self, e=None):
+        '''Close the application window.'''
         self.background_timer.stop()
         self.Close()
 
-    def done_editing(self,e=None):
-        gui_project=self.get_active_gui_project()
+    def done_editing(self, e=None):
+        '''Finalize editing of the active node in the active gui project.'''
+        gui_project = self.get_active_gui_project()
         gui_project.done_editing()
 
     def get_active_gui_project(self):
-        selected_tab=self.notebook.GetPage(self.notebook.GetSelection())
+        '''Get the active gui project.'''
+        selected_tab = self.notebook.GetPage(self.notebook.GetSelection())
         for gui_project in self.gui_projects:
-            if gui_project.main_window==selected_tab:
+            if gui_project.main_window == selected_tab:
                 return gui_project
         raise StandardError("No GuiProject selected.")
 
-    def on_new(self,e):
-        dialog=custom_widgets.SimpackSelectionDialog(self,-1)
+    def on_new(self, e):
+        '''Create a new gui project.'''        
+        dialog = custom_widgets.SimpackSelectionDialog(self,-1)
         if dialog.ShowModal() == wx.ID_OK:
-            simpack=dialog.get_simpack_selection()
+            simpack = dialog.get_simpack_selection()
         else:
             dialog.Destroy()
             return
@@ -199,17 +228,30 @@ class ApplicationWindow(wx.Frame):
 
     def sync_crunchers(self, e=None):
         '''
-        A function that calls `sync_crunchers` for all the
-        open GuiProjects.
+        Take work from the crunchers, and give them new instructions if needed.
+                
+        (This is a wrapper that calls the sync_crunchers method of all the
+        gui projects.)
+        
+        Talks with all the crunchers, takes work from them for implementing
+        into the tree, retiring crunchers or recruiting new crunchers as
+        necessary.
+        
+        Returns the total amount of nodes that were added to each gui project's
+        tree.
         '''
-        for gui_project in self.gui_projects:
-            gui_project.sync_crunchers()
+        
+        return sum((gui_project.sync_crunchers() for gui_project in
+                    self.gui_projects))
 
 
 
 def main():
+    '''
+    Start the gui.
+    '''
     app = wx.PySimpleApp()
-    my_app_win=ApplicationWindow(None, -1, "GarlicSim", size=(600,600))
+    my_app_win = ApplicationWindow(None, -1, "GarlicSim", size=(600, 600))
 
     '''
     import cProfile

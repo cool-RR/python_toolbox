@@ -321,23 +321,20 @@ class GuiProject(object):
         self.stuff_to_do_when_idle.put(mission)
         
 
-    def fork_naturally(self, *args, **kwargs):
+    def fork_naturally(self, e=None):
         '''
         Fork the simulation from the active node.
         
         Used for forking the simulation without modifying any states. Creates
         a new node from the active node via natural simulation.
-        
-        Any extraneous arguments will be passed to the step function.
         '''
         #todo: maybe not let to do it from unfinalized touched node?
         
         node = self.active_node
-        self.project.begin_crunching(self.active_node, self.default_buffer,
-                                     *args, **kwargs)
+        self.project.begin_crunching(self.active_node, self.default_buffer)
 
 
-    def edit_from_active_node(self, *args, **kwargs):
+    def edit_from_active_node(self, e=None):
         '''
         Fork the simulation from the active node by editing.
         
@@ -359,11 +356,6 @@ class GuiProject(object):
         Talks with all the crunchers, takes work from them for implementing
         into the tree, retiring crunchers or recruiting new crunchers as
         necessary.
-        You can specify a node to be a `temp_infinity_node`. That will cause
-        sync_crunchers to temporarily treat this node as if it should be crunched
-        indefinitely. This is useful when the simulation is playing back on
-        a path that leads to this node, and we want to have as big a buffer
-        as possible on that path.
 
         Returns the total amount of nodes that were added to the tree in the
         process.

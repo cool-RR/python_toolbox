@@ -202,11 +202,6 @@ class Project(object):
         Talks with all the crunchers, takes work from them for implementing
         into the tree, retiring crunchers or recruiting new crunchers as
         necessary.
-        You can specify a node to be a `temp_infinity_node`. That will cause
-        sync_crunchers to temporarily treat this node as if it should be crunched
-        indefinitely. This is useful when the simulation is playing back on
-        a path that leads to this node, and we want to have as big a buffer
-        as possible on that path.
 
         Returns the total amount of nodes that were added to the tree in the
         process.
