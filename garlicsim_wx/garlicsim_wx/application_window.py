@@ -246,7 +246,7 @@ class ApplicationWindow(wx.Frame):
 
 
 
-def main():
+def start():
     '''
     Start the gui.
     '''
@@ -261,5 +261,5 @@ def main():
 
 
 
-if __name__=="__main__":
-    main()
+if __name__ == "__main__":
+    start()

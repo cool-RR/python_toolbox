@@ -1,7 +1,10 @@
 # Copyright 2009 Ram Rachum. No part of this program may be used, copied or
 # distributed without explicit written permission from Ram Rachum.
 
-import wx, wx.calendar, wx.lib.buttons
+
+import wx
+import wx.calendar
+import wx.lib.buttons
 
 
 class FoldableWindowContainer(wx.Panel):
@@ -52,28 +55,28 @@ class FoldableWindowContainer(wx.Panel):
             self.splitter.Split(*self.windows_tuple, sashPosition=self.sash_pos)
 
 
-class FoldTest(wx.Frame):
-    def __init__(self):
-        wx.Frame.__init__(self, None)
+if __name__ == "__main__":
+    class FoldTest(wx.Frame):
+        def __init__(self):
+            wx.Frame.__init__(self, None)
+            
+            left = wx.ScrolledWindow(self, style=wx.BORDER_SUNKEN)
+            right = wx.ScrolledWindow(self, style=wx.BORDER_SUNKEN)
+            
+            left_sizer = wx.BoxSizer(wx.VERTICAL)
+            left.SetSizer(left_sizer)
+            left_sizer.Add(wx.calendar.CalendarCtrl(left), 1, wx.EXPAND | wx.ALL, 5)
+            left_sizer.Add(wx.Button(left, label="Act"), 0, wx.EXPAND | wx.ALL, 5)
+            
+            right_sizer = wx.BoxSizer(wx.VERTICAL)
+            right.SetSizer(right_sizer)
+            right_sizer.Add(
+                wx.StaticText(right, label="Fold panel", style=wx.BORDER_RAISED),
+                1, wx.EXPAND | wx.ALL, 5
+            )
 
-        left = wx.ScrolledWindow(self, style=wx.BORDER_SUNKEN)
-        right = wx.ScrolledWindow(self, style=wx.BORDER_SUNKEN)
+            FoldableWindowContainer(self, -1, left, right, wx.RIGHT)
 
-        left_sizer = wx.BoxSizer(wx.VERTICAL)
-        left.SetSizer(left_sizer)
-        left_sizer.Add(wx.calendar.CalendarCtrl(left), 1, wx.EXPAND | wx.ALL, 5)
-        left_sizer.Add(wx.Button(left, label="Act"), 0, wx.EXPAND | wx.ALL, 5)
-
-        right_sizer = wx.BoxSizer(wx.VERTICAL)
-        right.SetSizer(right_sizer)
-        right_sizer.Add(
-            wx.StaticText(right, label="Fold panel", style=wx.BORDER_RAISED),
-            1, wx.EXPAND | wx.ALL, 5
-        )
-
-        FoldableWindowContainer(self, -1, left, right, wx.RIGHT)
-
-if __name__=="__main__":
     app = wx.PySimpleApp()
     app.TopWindow = FoldTest()
     app.TopWindow.Show()

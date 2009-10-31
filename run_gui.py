@@ -42,4 +42,4 @@ if __name__ == '__main__':
     import garlicsim
     import garlicsim_wx
         
-    garlicsim_wx.main()
+    garlicsim_wx.start()
