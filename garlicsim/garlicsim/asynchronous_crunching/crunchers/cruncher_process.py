@@ -111,7 +111,7 @@ class CruncherProcess(multiprocessing.Process):
         state = self.initial_state
         
         self.step_profile = \
-            self.crunching_profile.step_profile or garlicsim.misc.StepProfile()
+            garlicsim.misc.StepProfile(self.crunching_profile.step_profile)
         
         order = None
         
@@ -173,10 +173,13 @@ class CruncherProcess(multiprocessing.Process):
         
         elif isinstance(order, CrunchingProfile):
             
+            order.step_profile = garlicsim.misc.StepProfile(order.step_profile)
+            
             if self.crunching_profile.step_profile != \
                order.step_profile:
                 
-                self.work_queue.put(order.step_profile)
+                self.work_queue.put \
+                    (order.step_profile)
                 
             self.crunching_profile = order
             self.step_profile = order.step_profile

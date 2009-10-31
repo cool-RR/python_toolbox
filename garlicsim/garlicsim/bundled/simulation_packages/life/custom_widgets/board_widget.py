@@ -52,7 +52,7 @@ class BoardWidget(scrolled.ScrolledPanel):
                                    (self.square_size+self.border_width)*y,
                                    self.square_size,
                                    self.square_size])
-                brushes.append(black_brush if board.get(x,y)==True else white_brush)
+                brushes.append(black_brush if board.get(x,y) is True else white_brush)
 
 
         for rect in rectangles:
@@ -76,12 +76,12 @@ class BoardWidget(scrolled.ScrolledPanel):
         if e.LeftDown():
             pos=e.GetPositionTuple()
             thing=self.unscreenify(*pos)
-            if thing!=None:
+            if thing is not None:
                 (x,y)=thing
                 old_value=self.board.get(x,y)
                 new_value=not old_value
 
-                new_state=self.gui_project._GuiProject__editing_state()
+                new_state=self.gui_project.editing_state()
                 new_board=new_state.board
                 new_board.set(x,y,new_value)
 

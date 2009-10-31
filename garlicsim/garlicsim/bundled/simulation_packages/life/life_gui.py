@@ -8,6 +8,7 @@ import functools
 
 import wx
 import custom_widgets
+
 def initialize(gui_project):
     gui_project.mysizer=wx.BoxSizer(wx.VERTICAL)
     board_widget=gui_project.board_widget=custom_widgets.BoardWidget(gui_project.state_showing_window,-1,gui_project)

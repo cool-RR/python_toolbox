@@ -139,7 +139,7 @@ class GuiProject(object):
         '''
         Create a dialog for creating a root state.
         '''
-        if hasattr(self.simpack,"make_initial_dialog"):
+        if hasattr(self.simpack, "make_initial_dialog"):
             return self.simpack.make_initial_dialog(self)
         else:
             return self.make_generic_initial_dialog()
@@ -147,7 +147,7 @@ class GuiProject(object):
         
     def show_state(self, state):
         '''Show the state onscreen.'''
-        self.simpack.show_state(self,state)
+        self.simpack.show_state(self, state)
 
         
     def set_parent_window(self, parent_window):
@@ -177,7 +177,7 @@ class GuiProject(object):
         Starts crunching on this new root.
         Returns the node.
         '''
-        root = self.project.make_plain_root(*args,**kwargs)
+        root = self.project.make_plain_root(*args, **kwargs)
         self.set_active_node(root)
         return root
 
@@ -214,11 +214,11 @@ class GuiProject(object):
             self.__modify_path_to_include_active_node()
             
         if modify_path and was_playing:
-            self.infinity_job.crunching_profile.clock_buffer = \
+            self.infinity_job.crunching_profile.clock_target = \
                 self.infinity_job.node.state.clock + self.default_buffer
             self.infinity_job = self.project.ensure_buffer_on_path(node,
                                                                    self.path,
-                                                                   Infinity)    
+                                                                   Infinity)   
             
         self.main_window.Refresh()
 
@@ -235,9 +235,7 @@ class GuiProject(object):
 
 
     def start_playing(self):
-        '''
-        Start playback of the simulation.
-        '''
+        '''Start playback of the simulation.'''
         if self.is_playing:
             return
         if self.active_node is None:
@@ -250,14 +248,14 @@ class GuiProject(object):
                                                  Infinity)
         
         def mission():
-            self.timer_for_playing = wx.FutureCall(self.delay*1000, functools.partial(self.__play_next, self.active_node))
+            play_next = functools.partial(self.__play_next, self.active_node)
+            self.timer_for_playing = wx.FutureCall(self.delay * 1000, play_next)
+            
         self.stuff_to_do_when_idle.put(mission)
 
 
     def stop_playing(self):
-        '''
-        Stops playback of the simulation.
-        '''
+        '''Stop playback of the simulation.'''
         if self.timer_for_playing is not None:
             try:
                 self.timer_for_playing.Stop()
@@ -278,28 +276,30 @@ class GuiProject(object):
         self.project.ensure_buffer(self.active_node, self.default_buffer)
 
 
-    def __editing_state(self):
-        node=self.active_node
-        state=node.state
-        if node.touched is False or node.still_in_editing is False:
-            new_node=self.edit_from_active_node()
+    def editing_state(self):
+        '''
+        Get a state suitable for editing.
+        
+        If the current active node is "still in editing", returns its state. If
+        not, forks the tree with the active node as a template and returns the
+        newly created state.
+        '''
+        node = self.active_node
+        state = node.state
+        if (node.touched is False) or (node.still_in_editing is False):
+            new_node = self.edit_from_active_node()
             return new_node.state
         else:
             return state
 
         
     def toggle_playing(self):
-        '''
-        If the simulation is currently playing, stops it.
-        Otherwise, starts playing.
-        '''
+        '''Toggle the onscreen playback of the simulation.'''
         return self.stop_playing() if self.is_playing else self.start_playing()
 
 
     def __play_next(self, node):
-        '''
-        A function called repeatedly while playing the simulation.
-        '''
+        '''A function called repeatedly while playing the simulation.'''
         if self.is_playing is False: return
         self.show_state(node.state)
         self.main_window.Refresh() # Make more efficient?
@@ -311,9 +311,8 @@ class GuiProject(object):
             return
         
         def mission():
-            self.timer_for_playing = wx.FutureCall(self.delay*1000,
-                                                   functools.partial(self.__play_next,
-                                                                     next_node))
+            play_next = functools.partial(self.__play_next, next_node)
+            self.timer_for_playing = wx.FutureCall(self.delay * 1000, play_next)
             
         self.stuff_to_do_when_idle.put(mission)
         
@@ -331,7 +330,7 @@ class GuiProject(object):
         # todo: give so_profile
 
 
-    def edit_from_active_node(self,*args,**kwargs):
+    def edit_from_active_node(self, *args, **kwargs):
         '''
         Used for forking the simulation by editing.
         Creates a new node from the active node via

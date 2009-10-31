@@ -6,6 +6,8 @@ This module defines the StepProfile class. See its documentation for
 more information.
 '''
 
+import copy
+
 __all__ = ['StepProfile']
 
 class StepProfile(object):
@@ -16,7 +18,7 @@ class StepProfile(object):
     
     step_profile = StepProfile(34, "meow", width=60)
 
-    step(state, *arguments_profile.args, **arguments_profile.kwargs)
+    step(state, *step_profile.args, **step_profile.kwargs)
     # is equivalent to
     step(state, 34, "meow", width=60)
     '''
@@ -38,11 +40,12 @@ class StepProfile(object):
         self.args, self.kwargs = args, kwargs
         
         
-    def __load_from(profile):
+    def __load_from(self, Sprofile):
         '''
         Take another step options profile and load its arguments into this one.
         '''
-        self.args, self.kwargs = profile.args, profile.kwargs
+        self.args = copy.copy(profile.args)
+        self.kwargs = copy.copy(profile.kwargs)
         
     def __repr__(self):
         args_string = ', '.join([repr(thing) for thing in self.args])
