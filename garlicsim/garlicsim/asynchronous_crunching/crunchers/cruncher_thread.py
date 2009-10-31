@@ -83,8 +83,7 @@ class CruncherThread(threading.Thread):
         satisfied or a 'retire' order is received.
         '''
         
-        self.step_profile = \
-            garlicsim.misc.StepProfile(self.crunching_profile.step_profile)
+        self.step_profile = self.crunching_profile.step_profile
         
         if self.history_dependent:
             self.history_browser = HistoryBrowser(cruncher=self)
@@ -154,13 +153,10 @@ class CruncherThread(threading.Thread):
         
         elif isinstance(order, CrunchingProfile):
             
-            order.step_profile = garlicsim.misc.StepProfile(order.step_profile)
-            
             if self.crunching_profile.step_profile != \
                order.step_profile:
                 
-                self.work_queue.put \
-                    (order.step_profile)
+                self.work_queue.put(order.step_profile)
                 
             self.crunching_profile = order
             self.step_profile = order.step_profile
