@@ -6,6 +6,8 @@ This module defines the CrunchingProfile class. See its documentation for more
 information.
 '''
 
+import garlicsim.misc
+
 __all__ = ['CrunchingProfile']
 
 class CrunchingProfile(object):
@@ -21,7 +23,7 @@ class CrunchingProfile(object):
         clock of `.clock_target` or higher.
         '''
         
-        self.step_profile = step_profile
+        self.step_profile = step_profile or garlicsim.misc.StepProfile()
         '''
         The step options profile we want to be used with the step function.
         '''

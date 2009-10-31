@@ -224,13 +224,15 @@ the index was bigger than the block's length.''')
         Get a string representation of the block.
         
         Example output:
-        <garlicsim.data_structures.block.Block of length 40 at 0x1c84d70>
+        <garlicsim.data_structures.block.Block of length 40 crunched with
+        StepProfile(t=0.1) at 0x1c84d70>
         '''
-        return '<%s.%s of length %s at %s>' % \
+        return '<%s.%s of length %s crunched with %s at %s>' % \
                (
                    self.__class__.__module__,
                    self.__class__.__name__,
                    len(self),
+                   self.get_step_profile(),
                    hex(id(self))
                )
         

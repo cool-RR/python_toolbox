@@ -46,6 +46,10 @@ class Node(object):
         self.step_profile = step_profile
         '''
         The step options profile under which the contained state was created.
+        
+        For an untouched node, this must be a real StepProfile, even an empty
+        one. Only a touched node which was created from scratch should have
+        None for its step profile.
         '''
         
         self.touched = touched
@@ -264,18 +268,20 @@ class Node(object):
         Get a string representation of the node.
         
         Example output:
-        <garlicsim.data_structures.node.Node, untouched, belongs to a block, at
-        0x1ffde70>
+        <garlicsim.data_structures.node.Node with clock 6.5, untouched, belongs
+        to a block, crunched with StepProfile(t=0.1), at 0x1ffde70>
         '''
-        return '<%s.%s, %s%s, %s, at %s>' % \
-               (
-                   self.__class__.__module__,
-                   self.__class__.__name__,
-                   'root, ' if (self.parent is None) else '',
-                   'touched' if self.touched else 'untouched',
-                   'belongs to a block' if self.block else 'blockless',
-                   hex(id(self))
-               )
+        return '<%s.%s%s, %s%s, %s, %sat %s>' % \
+            (
+                self.__class__.__module__,
+                self.__class__.__name__,
+                'with clock %s' % self.state.clock if hasattr(self.state, 'clock') else '',
+                'root, ' if (self.parent is None) else '',
+                'touched' if self.touched else 'untouched',
+                'belongs to a block' if self.block else 'blockless',
+                'crunched with %s, ' % self.step_profile if self.step_profile else '',
+                hex(id(self))
+            )
 
 from path import Path
 
