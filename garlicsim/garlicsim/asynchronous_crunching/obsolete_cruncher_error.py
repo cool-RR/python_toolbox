@@ -12,4 +12,5 @@ class ObsoleteCruncherError(BaseException):
     the main program decided that the work assigned to this cruncher is no
     longer wanted, and should therefore be stopped.
     '''
+    # Inherits from BaseException because it is an exit exception
     pass

@@ -388,6 +388,11 @@ class GuiProject(object):
 
 
     def get_node_menu(self):
+        '''
+        Get the node menu.
+        
+        The node menu lets you do actions with the active node.
+        '''
         nodemenu = wx.Menu()
         nodemenu.Append(
             s2i("Fork by editing"),
@@ -409,6 +414,9 @@ class GuiProject(object):
 
     
     def done_editing(self):
+        '''
+        Finalize the changes made to the active node.
+        '''
         node = self.active_node
         if node.still_in_editing is False:
             raise StandardError("You said 'done editing', but you were not in editing mode.")
@@ -417,6 +425,12 @@ class GuiProject(object):
 
         
     def make_generic_initial_dialog(self):
+        '''
+        Create a generic initial dialog.
+        
+        This is a dialog raised immediately when the GuiProject is created. It
+        asks the user which kind of root state he would like to start with.
+        '''
         initial_dialog=custom_widgets.GenericInitialDialog(self.main_window, -1)
         if initial_dialog.ShowModal()==wx.ID_OK:
             if initial_dialog.info["random"]:
@@ -427,10 +441,18 @@ class GuiProject(object):
 
         
     def tree_modify_refresh(self):
+        '''
+        Refresh the parts of the GUI which are dependent on the tree.
+        
+        This should be called whenever the tree gets changed.
+        '''
         self.seek_bar.Refresh()
         self.tree_browser.Refresh()
         
     def tickle(self):
+        '''
+        Used for saving the GuiProject to file.
+        '''
         stuff_we_want = ["project", "path", "active_node", "simpack"]
         my_dict = {}
         for thing in stuff_we_want:
