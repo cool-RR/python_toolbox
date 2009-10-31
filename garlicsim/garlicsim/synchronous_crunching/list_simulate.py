@@ -23,16 +23,17 @@ def list_simulate(simpack, state, iterations, *args, **kwargs):
     the final one.
     '''
     simpack_grokker = garlicsim.misc.SimpackGrokker(simpack)
+    step_profile = garlicsim.misc.StepProfile(*args, **kwargs)
     if simpack_grokker.history_dependent:
         return __history_list_simulate(simpack_grokker, state, iterations,
-                                       *args, **kwargs)
+                                       step_profile)
     else: # It's a non-history-dependent simpack
         return __non_history_list_simulate(simpack_grokker, state, iterations,
-                                           *args, **kwargs)
+                                           step_profile)
 
     
 def __history_list_simulate(simpack_grokker, state, iterations,
-                            *args, **kwargs):
+                             step_profile=None):
     '''
     For history-dependent simulations only:
     
@@ -44,12 +45,17 @@ def __history_list_simulate(simpack_grokker, state, iterations,
     Returns a list that spans all the states, from the initial one given to
     the final one.
     '''
+    
+    if step_profile is None: step_profile = garlicsim.misc.StepProfile()
+    
     tree = garlicsim.data_structures.Tree()
     root = tree.add_state(state, parent=None)
     path = root.make_containing_path()
     history_browser = history_browser_module.HistoryBrowser(path)
     
-    iterator = simpack_grokker.step_generator(history_browser, *args, **kwargs)
+    iterator = simpack_grokker.step_generator(history_browser,
+                                              *step_profile.args,
+                                              **step_profile.kwargs)
     
     current_node = root
     for i in xrange(iterations):
@@ -60,7 +66,7 @@ def __history_list_simulate(simpack_grokker, state, iterations,
 
 
 def __non_history_list_simulate(simpack_grokker, state, iterations,
-                                *args, **kwargs):
+                                step_profile=None):
     '''
     For non-history-dependent simulations only:
     
@@ -72,11 +78,16 @@ def __non_history_list_simulate(simpack_grokker, state, iterations,
     Returns a list that spans all the states, from the initial one given to
     the final one.
     '''
+
+    if step_profile is None: step_profile = garlicsim.misc.StepProfile()
+    
     tree = garlicsim.data_structures.Tree()
     root = tree.add_state(state, parent=None)
     path = root.make_containing_path()
     
-    iterator = simpack_grokker.step_generator(state, *args, **kwargs)
+    iterator = simpack_grokker.step_generator(state,
+                                              *step_profile.args,
+                                              **step_profile.kwargs)
     
     current_node = root
     for i in xrange(iterations):

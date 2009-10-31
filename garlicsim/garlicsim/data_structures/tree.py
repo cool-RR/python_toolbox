@@ -58,7 +58,7 @@ class Tree(object):
         x = copy.deepcopy(template_node.state)
 
         parent = template_node.parent
-        step_profile = template_node.step_profile
+        step_profile = copy.copy(template_node.step_profile)
         return self.add_state(x, parent,
                               step_profile=step_profile,
                               template_node=template_node)
@@ -76,7 +76,7 @@ class Tree(object):
         my_node = Node(
             self,
             state,
-            step_profile=copy.deepcopy(step_profile),
+            step_profile=copy.copy(step_profile),
             touched=touched
         )
         

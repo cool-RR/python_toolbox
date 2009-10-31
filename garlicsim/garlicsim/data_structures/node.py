@@ -46,6 +46,10 @@ class Node(object):
         self.step_profile = step_profile
         '''
         The step options profile under which the contained state was created.
+        
+        For an untouched node, this must be a real StepProfile, even an empty
+        one. Only a touched node which was created from scratch should have
+        None for its step profile.
         '''
         
         self.touched = touched
@@ -275,7 +279,7 @@ class Node(object):
                 'root, ' if (self.parent is None) else '',
                 'touched' if self.touched else 'untouched',
                 'belongs to a block' if self.block else 'blockless',
-                'crunched with %s, ' % self.step_profile if self.step_profile,
+                'crunched with %s, ' % self.step_profile if self.step_profile else '',
                 hex(id(self))
             )
 

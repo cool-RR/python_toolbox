@@ -127,8 +127,9 @@ class Project(object):
             jobs_of_leaf = self.crunching_manager.get_jobs_by_node(leaf)
             
             if not jobs_of_leaf:
+                step_profile = leaf.step_profile or garlicsim.misc.StepProfile()
                 crunching_profile = CrunchingProfile(new_clock_target,
-                                                     leaf.step_profile)
+                                                     step_profile)
                 job = Job(leaf, crunching_profile)
                 self.crunching_manager.jobs.append(job)
                 continue
@@ -160,7 +161,7 @@ class Project(object):
             job.crunching_profile.clock_target = new_clock_target
             return job
         else:
-            step_profile = leaf.step_profile
+            step_profile = leaf.step_profile or garlicsim.misc.StepProfile()
             crunching_profile = CrunchingProfile(new_clock_target,
                                                  step_profile)
             job = Job(leaf, crunching_profile)
@@ -183,9 +184,7 @@ class Project(object):
         Returns the job.
         '''
         
-        step_profile = \
-            garlicsim.misc.step_profile.StepProfile(*args,
-                                                                   **kwargs)
+        step_profile = garlicsim.misc.StepProfile(*args, **kwargs)
         
         clock_target = node.state.clock + clock_buffer
         
@@ -228,9 +227,7 @@ class Project(object):
         '''
         # todo: is simulate a good name? Need to say it's synchronously
         
-        step_profile = \
-            garlicsim.misc.step_profile.StepProfile(*args,
-                                                                   **kwargs)
+        step_profile = garlicsim.misc.StepProfile(*args, **kwargs)
         
         if self.simpack_grokker.history_dependent:
             return self.__history_dependent_simulate(node, iterations,
@@ -241,7 +238,7 @@ class Project(object):
         
     @with_tree_lock        
     def __history_dependent_simulate(self, node, iterations,
-                                     step_profile):
+                                     step_profile=None):
         '''
         For history-dependent simulations only:
         
@@ -250,10 +247,12 @@ class Project(object):
         The results are implemented the results into the tree. Note that the
         crunching for this is done synchronously, i.e. in the currrent thread.
         
-        Any extraneous parameters will be passed to the step function.
+        A step profile may be passed to be used with the step function.
         
         Returns the final node.
         '''
+        
+        if step_profile is None: step_profile = garlicsim.misc.StepProfile()
         
         path = node.make_containing_path()
         history_browser = \
@@ -273,7 +272,7 @@ class Project(object):
     
     @with_tree_lock
     def __non_history_dependent_simulate(self, node, iterations,
-                                         step_profile):
+                                         step_profile=None):
         '''
         For non-history-dependent simulations only:
         
@@ -282,10 +281,12 @@ class Project(object):
         The results are implemented the results into the tree. Note that the
         crunching for this is done synchronously, i.e. in the currrent thread.
         
-        Any extraneous parameters will be passed to the step function.
+        A step profile may be passed to be used with the step function.
         
         Returns the final node.
         '''
+        
+        if step_profile is None: step_profile = garlicsim.misc.StepProfile()
         
         current_node = node
         state = node.state
