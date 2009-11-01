@@ -1,6 +1,10 @@
 # Copyright 2009 Ram Rachum. No part of this program may be used, copied or
 # distributed without explicit written permission from Ram Rachum.
 
+'''
+This module defines the FoldableWindowContainer class. See its documentation
+for more info.
+'''
 
 import wx
 import wx.calendar
@@ -59,6 +63,11 @@ class FoldableWindowContainer(wx.Panel):
             self.on_fold_toggle()
 
     def on_fold_toggle(self, event=None):
+        '''
+        Toggle the fold status.
+        
+        If the window is folded, unfold it. If it's not folded, fold it.
+        '''
         if self.splitter.IsSplit():
             self.sash_pos = self.splitter.SashPosition
             self.splitter.Unsplit(toRemove=self.foldable_window)
