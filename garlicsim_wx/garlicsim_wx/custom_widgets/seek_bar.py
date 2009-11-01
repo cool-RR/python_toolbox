@@ -10,7 +10,7 @@ This module defines the SeekBar class. See its documentation for more info.
 import wx
 import math
 
-from garlicsim_wx.general_misc.getlines import get_lines
+from garlicsim_wx.general_misc.get_lines import get_lines
 import garlicsim
 
 class SeekBar(wx.Panel):

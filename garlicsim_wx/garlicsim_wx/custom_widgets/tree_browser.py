@@ -17,7 +17,7 @@ import garlicsim_wx.general_misc.vectorish as vectorish
 import garlicsim.data_structures
 
 
-connector_length = 10 #length of connecting line between elements
+connector_length = 10 # length of connecting line between elements
 
 
 class TreeBrowser(ScrolledPanel):
