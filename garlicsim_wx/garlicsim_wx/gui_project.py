@@ -27,7 +27,7 @@ from custom_widgets import FoldableWindowContainer
 
 class GuiProject(object):
     '''
-    A GuiProject encapsulates a Project for use with a wxPython interface.
+    A gui project encapsulates a project for use with a wxPython interface.
     '''
     
     def __init__(self, simpack, parent_window):
@@ -87,7 +87,7 @@ class GuiProject(object):
         
     def __init_gui(self, parent_window):
         '''
-        Initialization related to the GUI widgets which make up the GuiProject.
+        Initialization related to the GUI widgets which make up the gui project.
         '''
         main_window = self.main_window = wx.ScrolledWindow(parent_window, -1)
         self.main_sizer = wx.BoxSizer(wx.VERTICAL)
@@ -130,7 +130,7 @@ class GuiProject(object):
         
     def __init_on_creation(self):
         '''
-        Initialization done when the GuiProject is actually created, not loaded.
+        Initialization done when gui project is actually created, not loaded.
         '''
         wx.CallAfter(self.make_initial_dialog)
 
@@ -420,7 +420,7 @@ class GuiProject(object):
         '''
         Create a generic initial dialog.
         
-        This is a dialog raised immediately when the GuiProject is created. It
+        This is a dialog raised immediately when the gui project is created. It
         asks the user which kind of root state he would like to start with.
         '''
         initial_dialog=custom_widgets.GenericInitialDialog(self.main_window, -1)

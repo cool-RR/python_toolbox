@@ -211,7 +211,7 @@ class ApplicationWindow(wx.Frame):
         for gui_project in self.gui_projects:
             if gui_project.main_window == selected_tab:
                 return gui_project
-        raise StandardError("No GuiProject selected.")
+        raise StandardError("No gui project selected.")
 
     def on_new(self, e):
         '''Create a new gui project.'''        

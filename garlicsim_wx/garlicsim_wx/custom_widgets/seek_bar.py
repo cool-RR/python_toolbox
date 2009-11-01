@@ -47,9 +47,9 @@ class SeekBar(wx.Panel):
     def on_paint(self, e=None):
         '''Refresh the seek-bar.'''
         
-        occupied_region=wx.Region()
+        occupied_region = wx.Region()
 
-        if self.gui_project is None or self.gui_project.path is None:
+        if (self.gui_project is None) or (self.gui_project.path is None):
             return
         
         (w, h) = self.GetSize()

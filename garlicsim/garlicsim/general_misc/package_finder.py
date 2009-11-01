@@ -1,11 +1,23 @@
+# Copyright 2009 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''
+This module defines functions related to finding Python packages. See
+documentation of get_packages for more info.
+'''
+
 import glob
 import os
 import types
 
 def get_packages(root, include_self=False, recursive=False):
     '''
-    root may be a module/package, or a path.
+    Find all sub-packages.
+    
+    `root` may be a module, package, or a path.
+    # todo: module? really?
     '''
+    
     if isinstance(root, types.ModuleType):
         root_module = root
         root_path = os.path.dirname(root_module.__file__)
@@ -17,7 +29,7 @@ def get_packages(root, include_self=False, recursive=False):
 
     ######################################################
     
-    result=[]
+    result = []
     
     if include_self:
         result.append('')
@@ -34,5 +46,6 @@ def get_packages(root, include_self=False, recursive=False):
     return [(root_module_name + thing) for thing in result]
 
 def is_package(path):
+    '''Is the given path a Python package?'''
     return os.path.isdir(path) and \
            glob.glob(os.path.join(path, '__init__.*'))

@@ -2,27 +2,32 @@
 # distributed without explicit written permission from Ram Rachum.
 
 '''
-todo: I think the refresh should be made more efficient
+This module defines the TreeBrowser class. See its documentation for more info.
 '''
-import os
+#todo: I think the refresh should be made more efficient
 
-import wx
+
+import os
 from math import *
+
+from wx.lib.scrolledpanel import ScrolledPanel
+import wx
+
 import garlicsim_wx.general_misc.vectorish as vectorish
 import garlicsim.data_structures
-from wx.lib.scrolledpanel import ScrolledPanel
 
 
 connector_length = 10 #length of connecting line between elements
 
 
-
 class TreeBrowser(ScrolledPanel):
     '''
-    A widget for browsing a state.Tree
+    A widget for browsing a garlicsim.data_structures.Tree.
     '''
-    def __init__(self,parent,id,gui_project=None,*args,**kwargs):
-        ScrolledPanel.__init__(self, parent, id, size=(-1,100),style=wx.SUNKEN_BORDER)
+    def __init__(self, parent, id, gui_project=None, *args, **kwargs):
+        ScrolledPanel.__init__(self, parent, id, size=(-1, 100),
+                               style=wx.SUNKEN_BORDER)
+
         self.SetupScrolling()
         #self.SetScrollRate(20,20)
         #self.sizer=wx.BoxSizer(wx.VERTICAL)
@@ -36,69 +41,77 @@ class TreeBrowser(ScrolledPanel):
         #self.Centre()
         #self.SetVirtualSize((1000,1000))
 
-        self.Bind(wx.EVT_PAINT, self.OnPaint)
-        self.Bind(wx.EVT_SIZE, self.OnSize)
+        self.Bind(wx.EVT_PAINT, self.on_paint)
+        self.Bind(wx.EVT_SIZE, self.on_size)
         self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse_event)
 
-        self.gui_project=gui_project
-        self.clickable_map={}
+        self.gui_project = gui_project
+        self.clickable_map = {}
 
+    def on_paint(self, e=None):
+        '''Refresh the tree browser.'''
 
-    def sync_tree(self,e=None):
-        pass
-
-
-    def OnPaint(self,e):
-        if self.gui_project==None or self.gui_project.project.tree==None or len(self.gui_project.project.tree.roots)==0:
+        if self.gui_project is None or \
+           self.gui_project.project.tree is None or \
+           len(self.gui_project.project.tree.roots) == 0:
+            
             return
 
 
-        pen=wx.Pen("Black",1,wx.SOLID)
+        pen = wx.Pen("Black", 1, wx.SOLID)
         pen.SetCap(wx.CAP_PROJECTING)
         pen.SetJoin(wx.JOIN_ROUND)
-        dc=NiftyPaintDC(self,self.gui_project,self.CalcScrolledPosition((0,0)))
-        (self.clickable_map,(width,height))=dc.draw_tree(self.gui_project.project.tree)
+
+        dc = NiftyPaintDC(self, self.gui_project,
+                          self.CalcScrolledPosition((0, 0)))
+        
+        (self.clickable_map, (width, height)) = \
+            dc.draw_tree(self.gui_project.project.tree)
+        
         self.SetVirtualSize((width,height))
         dc.Destroy()
 
-    def OnSize(self,e):
+    def on_size(self, e=None):
         self.Refresh()
 
-    def on_mouse_event(self,e):
+    def on_mouse_event(self, e):
         #(x,y)=self.CalcUnscrolledPosition(e.GetPositionTuple())
-        (x,y)=e.GetPositionTuple()
+
+        (x, y) = e.GetPositionTuple()
+        
         if e.LeftDClick():
             self.gui_project.toggle_playing()
 
 
         if e.LeftIsDown():
-            thing=self.search_map(x,y)
+            thing = self.search_map(x,y)
             #print(thing)
             if thing is None:
                 #maybe deselect?
                 pass
             else:
                 self.gui_project.set_active_node(thing)
+                
         if e.RightDown():
             self.gui_project.stop_playing()
-            thing=self.search_map(x,y)
+            thing = self.search_map(x,y)
             if thing is None:
                 #Deselect!
                 pass
             else:
                 self.gui_project.set_active_node(thing)
+                
             self.PopupMenu(self.gui_project.get_node_menu(), e.GetPosition())
 
 
-
-    def search_map(self,x,y):
+    def search_map(self, x, y):
         for key in self.clickable_map:
-            (a,b,c,d)=key
-            if a<=x<=c and b<=y<=d:
-                thing=self.clickable_map[key]
-                if isinstance(thing,garlicsim.data_structures.Block):
-                    ratio=(x-a)/float(c-a)
-                    index=int(round(ratio*(len(thing)-1)))
+            (a, b, c, d) = key
+            if (a <= x <= c) and (b <= y <= d):
+                thing = self.clickable_map[key]
+                if isinstance(thing, garlicsim.data_structures.Block):
+                    ratio = (x - a) / float(c - a)
+                    index = int(round(ratio*(len(thing)-1)))
                     return thing[index]
                 else:
                     return thing
@@ -107,19 +120,19 @@ class TreeBrowser(ScrolledPanel):
 
 
 class NiftyPaintDC(wx.PaintDC):
-    def __init__(self,window,gui_project,origin,*args,**kwargs):
-        wx.PaintDC.__init__(self,window,*args,**kwargs)
-        self.gui_project=gui_project
-        self.origin=origin
+    def __init__(self, window, gui_project, origin, *args, **kwargs):
+        wx.PaintDC.__init__(self, window, *args, **kwargs)
+        self.gui_project = gui_project
+        self.origin = origin
 
-        self.elements={  \
-                       "Untouched": wx.Bitmap(os.path.join("images","graysquare.png"), wx.BITMAP_TYPE_ANY),    \
-                       "Touched": wx.Bitmap(os.path.join("images","graystar.png"), wx.BITMAP_TYPE_ANY),    \
-                       "Block": wx.Bitmap(os.path.join("images","grayblock.png"), wx.BITMAP_TYPE_ANY),    \
-                       "Active Untouched": wx.Bitmap(os.path.join("images","orangesquare.png"), wx.BITMAP_TYPE_ANY),    \
-                       "Active Touched": wx.Bitmap(os.path.join("images","orangestar.png"), wx.BITMAP_TYPE_ANY),    \
-                       "Active Block": wx.Bitmap(os.path.join("images","orangeblock.png"), wx.BITMAP_TYPE_ANY),    \
-                       }
+        self.elements = {
+            "Untouched": wx.Bitmap(os.path.join("images","graysquare.png"), wx.BITMAP_TYPE_ANY),
+            "Touched": wx.Bitmap(os.path.join("images","graystar.png"), wx.BITMAP_TYPE_ANY),
+            "Block": wx.Bitmap(os.path.join("images","grayblock.png"), wx.BITMAP_TYPE_ANY),
+            "Active Untouched": wx.Bitmap(os.path.join("images","orangesquare.png"), wx.BITMAP_TYPE_ANY),
+            "Active Touched": wx.Bitmap(os.path.join("images","orangestar.png"), wx.BITMAP_TYPE_ANY),
+            "Active Block": wx.Bitmap(os.path.join("images","orangeblock.png"), wx.BITMAP_TYPE_ANY),
+        }
 
     def draw_sub_tree(self,point,tree,start):
         make_block_stripe=False
