@@ -120,6 +120,8 @@ class TreeBrowser(ScrolledPanel):
 
 
 class NiftyPaintDC(wx.PaintDC):
+    '''A PaintDC used to paint the tree in a tree browser.'''
+    
     def __init__(self, window, gui_project, origin, *args, **kwargs):
         wx.PaintDC.__init__(self, window, *args, **kwargs)
         self.gui_project = gui_project
@@ -134,84 +136,128 @@ class NiftyPaintDC(wx.PaintDC):
             "Active Block": wx.Bitmap(os.path.join("images","orangeblock.png"), wx.BITMAP_TYPE_ANY),
         }
 
-    def draw_sub_tree(self,point,tree,start):
-        make_block_stripe=False
-        if isinstance(start,garlicsim.data_structures.Block):
-            type="Block"
-            kids=start[-1].children
-            if start==self.active_soft_block:
-                make_block_stripe=True
-                type="Active "+type
-        elif isinstance(start,garlicsim.data_structures.Node):
-            kids=start.children
+    def draw_sub_tree(self, point, tree, start):
+        make_block_stripe = False
+        if isinstance(start, garlicsim.data_structures.Block):
+            type = "Block"
+            kids = start[-1].children
+            if start == self.active_soft_block:
+                make_block_stripe = True
+                type = "Active " + type
+        elif isinstance(start, garlicsim.data_structures.Node):
+            kids = start.children
             if start.touched:
-                type="Touched"
+                type = "Touched"
             else:
-                type="Untouched"
-            if start==self.active_soft_block:
-                type="Active "+type
+                type = "Untouched"
+            if start == self.active_soft_block:
+                type = "Active " + type
         else:
             raise StandardError
 
 
         if make_block_stripe is True:
 
-            bitmap=self.elements["Block"]
-            self.DrawBitmapPoint(bitmap,point,useMask=True)
-            bitmap_size=bitmap.GetSize()
-            second_bitmap=self.elements[type]
+            bitmap = self.elements["Block"]
+            self.DrawBitmapPoint(bitmap, point, useMask=True)
+            bitmap_size = bitmap.GetSize()
+            second_bitmap = self.elements[type]
 
-            slice=[None,None]
-            length=float(len(start))
-            slice[0]=start.index(self.active_node)/length
-            slice[1]=slice[0]+1/length
+            slice = [None, None]
+            length = float(len(start))
+            slice[0] = start.index(self.active_node) / length
+            slice[1] = slice[0] + (1 / length)
 
-            screen_slice=[floor(point[0]+2+(bitmap_size[0]-4)*slice[0]),ceil(point[0]+2+(bitmap_size[0]-4)*slice[1])]
-            region=wx.Region(screen_slice[0],point[1],screen_slice[1]-screen_slice[0],bitmap_size[1])
+            screen_slice = [
+                floor(point[0] + 2 + (bitmap_size[0] - 4) * slice[0]),
+                ceil(point[0] + 2 + (bitmap_size[0] - 4) * slice[1])
+            ]
+            region = wx.Region(screen_slice[0], point[1],
+                               screen_slice[1] - screen_slice[0],
+                               bitmap_size[1])
+            
             self.SetClippingRegionAsRegion(region)
-            self.DrawBitmapPoint(second_bitmap,point,useMask=True)
+            self.DrawBitmapPoint(second_bitmap, point, useMask=True)
             self.DestroyClippingRegion()
 
         else:
-            bitmap=self.elements[type]
-            self.DrawBitmapPoint(bitmap,point,useMask=True)
-            bitmap_size=bitmap.GetSize()
+            bitmap = self.elements[type]
+            self.DrawBitmapPoint(bitmap, point, useMask=True)
+            bitmap_size = bitmap.GetSize()
 
-        self.clickable_map[(point[0],point[1],point[0]+bitmap_size[0],point[1]+bitmap_size[1])]=start
+        temp = (point[0],
+                point[1],
+                point[0] + bitmap_size[0],
+                point[1] + bitmap_size[1])
+        
+        self.clickable_map[temp] = start
+        del temp
 
 
 
-        last_height=0
-        total_height=0
-        self_width=bitmap_size[0]+connector_length
-        max_width=self_width
-        line_start=vectorish.add(point,(bitmap_size[0]-1,bitmap_size[1]//2))
-
+        last_height = 0
+        total_height = 0
+        self_width = bitmap_size[0] + connector_length
+        max_width = self_width
+        line_start = vectorish.add(
+            point,
+            (
+                bitmap_size[0] - 1,
+                bitmap_size[1] // 2
+            )
+        )
+        
         for kid in kids:
-            line_end=vectorish.add(point,(self_width+1,total_height+bitmap_size[1]//2))
-            (new_width,new_height)=self.draw_sub_tree(vectorish.add(point,(self_width,total_height)),tree,kid.soft_get_block())
-            self.DrawLinePoint(line_start,line_end)
-            max_width=max(max_width,self_width+new_width)
-            total_height+=new_height
+            line_end = vectorish.add(
+                point,
+                (
+                    self_width + 1,
+                 total_height + bitmap_size[1] // 2
+                )
+            )
+            
+            temp = vectorish.add(point, (self_width, total_height))
+            (new_width, new_height) = \
+                self.draw_sub_tree(temp, tree, kid.soft_get_block())
+            del temp
+            self.DrawLinePoint(line_start, line_end)
+            max_width = max(max_width, self_width + new_width)
+            total_height += new_height
 
-        return (max_width,max(total_height,bitmap_size[1]+connector_length))
+        return (
+            max_width,
+            max(
+                total_height,
+                bitmap_size[1] + connector_length
+            )
+        )
 
-    def draw_tree(self,tree):
+    def draw_tree(self, tree):
         '''
-        assuming the tree has only one root!
+        Draw the tree.
+        
+        This will only use the part of the tree that springs from the first
+        root!
         '''
-        def get_root():
-            return tree.roots.__iter__().next() # hack for when roots is a set, may be unneeded now
 
-        self.clickable_map={}
-        self.active_node=self.gui_project.active_node
+        self.clickable_map = {}
+        self.active_node = self.gui_project.active_node
         try:
-            self.active_soft_block=self.active_node.soft_get_block()
+            self.active_soft_block = self.active_node.soft_get_block()
         except AttributeError:
-            self.active_soft_block=None
-        size=self.draw_sub_tree(vectorish.add((connector_length,connector_length),self.origin),tree,get_root().soft_get_block())
-        (width,height)=vectorish.add(size,(connector_length,connector_length))
-        return (self.clickable_map,(width,height))
+            self.active_soft_block = None
+
+        size = self.draw_sub_tree(
+            vectorish.add(
+                (connector_length, connector_length),
+                self.origin
+                ),
+            tree,
+            tree.roots[0].soft_get_block()
+        )
+        
+        (width, height) = vectorish.add(size, (connector_length, connector_length))
+        return (self.clickable_map, (width, height))
 
 
 '''
