@@ -8,25 +8,35 @@ import wx.lib.buttons
 
 
 class FoldableWindowContainer(wx.Panel):
-    def __init__(self, parent, id, main_window, foldable_window,where=wx.RIGHT,folded=False,**kwargs):
-        wx.Panel.__init__(self, parent, id,**kwargs)
+    '''
+    This joins two windows, making a button that makes the auxilary window fold.
+    '''
+    def __init__(self, parent, id, main_window, foldable_window,
+                 where=wx.RIGHT, folded=False, **kwargs):
+        wx.Panel.__init__(self, parent, id, **kwargs)
 
-        self.main_window=main_window
-        self.foldable_window=foldable_window
+        self.main_window = main_window
+        self.foldable_window = foldable_window
 
-        assert where in [wx.TOP,wx.BOTTOM,wx.LEFT,wx.RIGHT]
-        self.orientation=wx.VERTICAL if where in [wx.TOP,wx.BOTTOM] else wx.HORIZONTAL
+        assert where in [wx.TOP, wx.BOTTOM, wx.LEFT, wx.RIGHT]
+        
+        self.orientation = wx.VERTICAL if where in [wx.TOP, wx.BOTTOM] \
+            else wx.HORIZONTAL
+        
         sizer = wx.BoxSizer(self.orientation)
         self.SetSizer(sizer)
         self.splitter = wx.SplitterWindow(self, style=wx.SP_LIVE_UPDATE)
         main_window.Reparent(self.splitter)
         foldable_window.Reparent(self.splitter)
 
-        self.splitter.Split=self.splitter.SplitVertically if self.orientation==wx.HORIZONTAL else self.splitter.SplitHorizontally
+        self.splitter.Split = self.splitter.SplitVertically if \
+            self.orientation == wx.HORIZONTAL else \
+            self.splitter.SplitHorizontally
 
-        self.main_one_first=where in [wx.BOTTOM,wx.RIGHT]
-        self.windows_tuple=(main_window,foldable_window) if self.main_one_first else (foldable_window,main_window)
-        self.splitter.SetSashGravity(1 if self.main_one_first else 0)
+        self.main_one_first = where in [wx.BOTTOM, wx.RIGHT]
+        self.windows_tuple = (main_window,foldable_window) if \
+            self.main_one_first else (foldable_window,main_window)
+        self.splitter.SetSashGravity(int(self.main_one_first))
 
         self.splitter.Split(*self.windows_tuple)
         self.splitter.SetMinimumPaneSize(50)
@@ -34,20 +44,21 @@ class FoldableWindowContainer(wx.Panel):
         if self.main_one_first:
             sizer.Add(self.splitter, 1, wx.EXPAND)
 
-        button_size=(-1,10) if self.orientation==wx.VERTICAL else (10,-1)
-        fold_button = wx.lib.buttons.GenButton(self, -1,size=button_size)
+        button_size = (-1,10) if self.orientation == wx.VERTICAL \
+                    else (10,-1)
+        fold_button = wx.lib.buttons.GenButton(self, -1, size=button_size)
         fold_button.SetBackgroundColour('#668866')
-        fold_button.Bind(wx.EVT_BUTTON, self.On_FoldToggle)
+        fold_button.Bind(wx.EVT_BUTTON, self.on_fold_toggle)
         sizer.Add(fold_button, 0, wx.EXPAND)
         if not self.main_one_first:
             sizer.Add(self.splitter, 1, wx.EXPAND)
 
         sizer.Fit(self)
 
-        if folded==True:
-            self.On_FoldToggle()
+        if folded:
+            self.on_fold_toggle()
 
-    def On_FoldToggle(self, event=None):
+    def on_fold_toggle(self, event=None):
         if self.splitter.IsSplit():
             self.sash_pos = self.splitter.SashPosition
             self.splitter.Unsplit(toRemove=self.foldable_window)
@@ -56,6 +67,9 @@ class FoldableWindowContainer(wx.Panel):
 
 
 if __name__ == "__main__":
+    
+    # Testing the foldable window container.
+    
     class FoldTest(wx.Frame):
         def __init__(self):
             wx.Frame.__init__(self, None)
