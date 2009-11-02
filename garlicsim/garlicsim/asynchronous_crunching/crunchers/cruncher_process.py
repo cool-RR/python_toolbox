@@ -55,7 +55,13 @@ class CruncherProcess(multiprocessing.Process):
 
         self.work_queue = multiprocessing.Queue()
         '''
-        Queue for putting completed work to be picked up by the main thread.TODO
+        Queue for putting completed work to be picked up by the main thread.
+        
+        In this queue the cruncher will put the states that it produces, in
+        chronological order. If the cruncher is being given a new crunching
+        profile which has a new and different step profile, the cruncher
+        will put the new step profile in this queue in order to signal that
+        from that point on, all states were crunched with that step profile.
         '''
         
         self.order_queue = multiprocessing.Queue()
