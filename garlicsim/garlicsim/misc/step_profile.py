@@ -44,7 +44,7 @@ class StepProfile(object):
         self.args, self.kwargs = args, kwargs
         
         
-    def __load_from(self, Sprofile):
+    def __load_from(self, profile):
         '''
         Take another step options profile and load its arguments into this one.
         '''
