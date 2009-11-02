@@ -2,9 +2,10 @@
 # distributed without explicit written permission from Ram Rachum.
 
 '''
-todo: daemonize? destroy on __del__?
+This module defines the ThreadTimer object. See its documentation for more
+info.
 '''
-
+# todo: daemonize? destroy on __del__?
 
 import threading
 import time
@@ -14,6 +15,12 @@ wxEVT_THREAD_TIMER = wx.NewEventType()
 EVT_THREAD_TIMER = wx.PyEventBinder(wxEVT_THREAD_TIMER, 1)
 
 class ThreadTimer(object):
+   '''
+   A timer for a wxPython app which runs on a different thread.
+   
+   This solved a problem of wxPython timers being late when the program was
+   busy.
+   '''
    n = 0
    def __init__(self, parent):
       self.parent = parent
@@ -24,16 +31,20 @@ class ThreadTimer(object):
       self.alive = False
 
    def start(self, interval):
+      '''Start the timer.'''
       self.interval = interval
       self.alive = True
       self.thread.start()
 
    def stop(self):
+      '''Stop the timer.'''
       self.alive = False
 
       
 class Thread(threading.Thread):
-   
+   '''
+   Thread used as a timer for wxPython programs.
+   '''
    def run(self):
       interval_in_seconds = self.parent.interval / 1000.0
       def sleep():
