@@ -298,8 +298,9 @@ class Project(object):
     def __getstate__(self):
         my_dict = dict(self.__dict__)
         
-        del my_dict["tree_lock"]
-        del my_dict["crunching_manager"]
+        del my_dict['tree_lock']
+        del my_dict['crunching_manager']
+        del my_dict['simpack_grokker']
         
         return my_dict
     

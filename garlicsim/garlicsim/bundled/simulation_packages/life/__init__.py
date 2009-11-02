@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-A simulation package for Conway's Game of Life
+A simulation package for Conway's Game of Life.
 '''
 
 from life import *
@@ -15,4 +15,4 @@ except ImportError:
     pass
 
 if wx_installed:
-    from life_gui import *
+    from life_wx import *

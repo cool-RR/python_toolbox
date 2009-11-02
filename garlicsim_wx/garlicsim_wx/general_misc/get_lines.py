@@ -18,7 +18,7 @@ def get_lines(start, end, thing):
     mything = int(round(thing))
     mystart = round(start,mything)
     if mystart < start:
-        mystart + = 10 ** mything
+        mystart += 10 ** mything
     '''
     myend=round(end,-thing)
     if myend>end:
