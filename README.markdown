@@ -8,7 +8,7 @@ Requires:
 
 Optional:
 
-* [Psyco](http://psyco.org)
+* [Psyco](http://psyco.sourceforge.net/)
 * on Windows only: [Python for Windows Extensions](http://sourceforge.net/projects/pywin32/)
 
 Gui requires:
