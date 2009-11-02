@@ -45,12 +45,11 @@ class Project(object):
     work from the crunchers and coordinate them, call the sync_crunchers method
     of the project.
     
-    What the crunching manager's sync_crunchers method will do is check the
-    attribute .nodes_to_crunch of the project. This attribute is a dict 
-    which maps nodes that should be crunched to a TODO. The crunching manager will
-    then coordinate the crunchers in order to do this work. It will update the
-    .nodes_to_crunch attribute when the crunchers have completed some of the
-    work.
+    The crunching manager contains a list of jobs as an attribute `.jobs`. See
+    documentation for garlicsim.asynchronous_crunching.Job for more info about
+    jobs. The crunching manager will employ crunchers in order to complete the
+    jobs. It will then take work from these crunchers, put it into the tree,
+    and delete the jobs when they are completed.
     '''
 
     def __init__(self, simpack):
@@ -158,7 +157,7 @@ class Project(object):
             # We only want to take one job. We're guessing the last, and 
             # therefore the most recent one, will be the most wanted by the
             # user.
-            job.crunching_profile.clock_target = new_clock_target
+            job.crunching_profile.raise_clock_target(new_clock_target)
             return job
         else:
             step_profile = leaf.step_profile or garlicsim.misc.StepProfile()
@@ -315,10 +314,9 @@ class Project(object):
         Example output:
         <garlicsim.asynchronous_crunching.project.Project containing 101 nodes
         and employing 4 crunchers at 0x1f668d0>
-        
-        Todo: better have the simpack mentioned here, not doing it cause it's
-        currently in a module wrapper.
         '''
+        # Todo: better have the simpack mentioned here, not doing it cause it's
+        # currently in a module wrapper.
         
         nodes_count = len(self.tree.nodes)
         crunchers_count = len(self.crunching_manager.crunchers)

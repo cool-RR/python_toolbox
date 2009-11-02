@@ -2,6 +2,8 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
+Note: This module is still experimental.
+
 todo: need to lock library to avoid thread trouble?
 
 todo: need to raise an exception if we're getting pickled with
@@ -41,6 +43,8 @@ class PersistentReadOnlyObject(object):
 
     There is no mechanism that enforces that the user doesn't change the
     object.
+    
+    Note: This class is still experimental.
     '''
     def __new__(cls, *args, **kwargs):
         if len(args)==1 and len(kwargs)==0 and isinstance(args[0], UuidToken):

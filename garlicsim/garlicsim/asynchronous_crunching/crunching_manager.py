@@ -44,6 +44,12 @@ class CrunchingManager(object):
     which goes over all the crunchers and all the nodes of the tree that need
     to be crunched, making sure the crunchers are working on these nodes, and
     collecting work from them to implement into the tree.
+    
+    The crunching manager contains a list of jobs as an attribute `.jobs`. See
+    documentation for garlicsim.asynchronous_crunching.Job for more info about
+    jobs. The crunching manager will employ crunchers in order to complete the
+    jobs. It will then take work from these crunchers, put it into the tree,
+    and delete the jobs when they are completed.
     '''
     def __init__(self, project):        
         self.project = project
@@ -186,7 +192,7 @@ class CrunchingManager(object):
         '''
         return [job for job in self.jobs if job.node == node]
     
-    def __add_work_to_tree(self, cruncher, node, retire=False): #todo: modify this to take job?
+    def __add_work_to_tree(self, cruncher, node, retire=False):
         '''
         Take work from the cruncher and add to the tree at the specified node.
         
@@ -195,6 +201,8 @@ class CrunchingManager(object):
         Returns (number, leaf), where `number` is the number of nodes that were
         added, and `leaf` is the last node that was added.
         '''
+        #todo: modify this to take job?
+        
         tree = self.project.tree
         
         current = node

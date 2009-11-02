@@ -53,8 +53,11 @@ Both packages are copyright 2009 Ram Rachum.
 GarlicSim has official support for 4 different versions of Python. For each of these versions there is a separate fork. The fork for Python 2.6 is the main fork, on which most development is done. Some of the other forks have slightly reduced functionality, described here:
 
 [GarlicSim for Python 2.4](http://github.com/cool-RR/GarlicSim-for-Python-2.4) - Does not support multiprocessing, only multithreading.
+
 [GarlicSim for Python 2.5](http://github.com/cool-RR/GarlicSim-for-Python-2.5) - Requires backported multiprocessing package to be installed in order to use multiprocessing.
+
 [GarlicSim for Python 2.6](http://github.com/cool-RR/GarlicSim-for-Python-2.6) - Main fork, contains all the functionality.
+
 [GarlicSim for Python 3.1](http://github.com/cool-RR/GarlicSim-for-Python-3.1) - Does not contain gui package, since wxPython doesn't yet support Python 3.x.
 
 # Frequently asked question: #
