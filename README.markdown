@@ -4,16 +4,16 @@ Run `run_gui.py` in the root folder to launch the GUI. Then, File -> New. Choose
 
 Requires:
 
-* [Python 2.6](http://www.python.org/download/releases/2.6.4/). (Scroll down to the "Python versions" section for other versions.)
+* [Python 2.6](http://www.python.org/download/releases/2.6.4/) (Scroll down to the "Python versions" section for other versions.)
 
 Optional:
 
 * [Psyco](http://psyco.org)
-* on Windows only: [Python for Windows Extensions](http://sourceforge.net/projects/pywin32/).
+* on Windows only: [Python for Windows Extensions](http://sourceforge.net/projects/pywin32/)
 
 Gui requires:
 
-* [wxPython](http://www.wxpython.org/). (Not needed for non-gui usage.)
+* [wxPython](http://www.wxpython.org/) (Not needed for non-gui usage.)
 
 # What is GarlicSim? #
 
