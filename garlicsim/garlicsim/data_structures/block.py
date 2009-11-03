@@ -6,7 +6,7 @@ A module that defines the Block class and the related BlockError exception. See
 the documentation of Block for more information.
 '''
 
-from garlicsim.general_misc import cute_iter_tools
+from garlicsim.general_misc import logic_tools
 
 __all__ = ["Block", "BlockError"]
 
@@ -102,11 +102,11 @@ successor or a direct ancestor of the block.''')
         if len(node_list) == 1:
             self.append_node(node_list[0])
             return
-                
-        for (n1, n2) in cute_iter_tools.pairs(node_list):
-            if (n1.step_profile != n1.step_profile):
-                raise BlockError('''Tried to add node list that doesn't share \
-the same step options profile.''')
+        
+        if not logic_tools.all_equal((node.step_profile for node
+                                      in node_list)):
+            raise BlockError('''Tried to add node list that doesn't share the \
+same step options profile.''')
         
         sample_step_profile = node_list[0].step_profile
         
