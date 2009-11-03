@@ -39,5 +39,13 @@ able to run on a different core of the processor in the machine, thus using the
 full power of the processor.
 '''
 
-from cruncher_thread import CruncherThread
-from cruncher_process import CruncherProcess
+#from cruncher_thread import CruncherThread
+#from cruncher_process import CruncherProcess
+
+import garlicsim.general_misc.import_tools as import_tools
+
+our_path = os.path.dirname(unicode(__file__, sys.getfilesystemencoding()))
+import_tools.import_all(our_path)
+TODO
+
+
