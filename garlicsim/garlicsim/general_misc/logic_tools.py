@@ -7,6 +7,7 @@ This module defines logic-related tools.
 
 import garlicsim.general_misc.cute_iter_tools as cute_iter_tools
 
+
 def all_equal(iterable):
     '''
     Return whether all elements in the iterable are equal to each other.
@@ -16,3 +17,4 @@ def all_equal(iterable):
     equality checks will be made.
     '''
     return all(a==b for (a, b) in cute_iter_tools.pairs(iterable))
+

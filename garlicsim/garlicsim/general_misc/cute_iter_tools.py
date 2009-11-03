@@ -14,10 +14,14 @@ def pairs(iterable):
     [(0, 1), (1, 2), (2, 3)]. (Except it would be an iterator and not an actual
     list.)
     '''
-    iterator = iter(iterable)
     
-    current = iterator.next()
-    while True:
-        previous = current
-        current = iterator.next()
-        yield (previous, current)
+    first_run = True
+    old = None
+    for current in iterable:
+        if not first_run:
+            yield (old, current)
+        else:
+            first_run = False
+        old = current
+        
+        
