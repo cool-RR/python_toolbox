@@ -4,7 +4,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-Distutils setup file for GarlicSim.
+Distutils setup file for garlicsim.
 '''
 
 import os
@@ -29,9 +29,9 @@ my_packages = package_finder.get_packages('garlicsim',
                                           recursive=True)
 
 setup(
-    name='GarlicSim',
+    name='garlicsim',
     version='0.1',
-    description='A Pythonic framework for working with simulations',
+    description='Pythonic framework for working with simulations',
     author='Ram Rachum',
     author_email='cool-rr@cool-rr.com',
     url='http://garlicsim.org',
