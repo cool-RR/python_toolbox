@@ -1,4 +1,3 @@
-'''tododoc'''
 
 def cannot_compile(thing):
     try:

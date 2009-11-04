@@ -30,7 +30,9 @@ class CruncherThread(threading.Thread):
     package.
     
     The advantages of CruncherThread over CruncherProcess are:
-    1. CruncherThread is able to handle simulations that are history-dependent.
+    1. CruncherThread is able to handle simulations that are history-dependent,
+       which would have been very hard to implement in a Process, since
+       processes don't share memory, and threads do share memory trivially.
     2. CruncherThread is based on the threading module, which is stabler and
        more mature than the multiprocessing module.
     3. CruncherThread is much easier to debug than CruncherProcess, since there

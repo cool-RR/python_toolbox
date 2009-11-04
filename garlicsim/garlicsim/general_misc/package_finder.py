@@ -54,10 +54,11 @@ def get_packages(root, include_self=False, recursive=False, self_in_name=True):
 
 def get_packages_and_modules_filenames(root, recursive=False):
     '''
-    Find all packages and modules. tododoc
+    Find the filenames of all of the packages and modules inside the package.
     
     `root` may be a module, package, or a path.
-    # todo: module? really?
+    todo: module? really?
+    todo: needs testing
     '''
         
     if isinstance(root, types.ModuleType):
