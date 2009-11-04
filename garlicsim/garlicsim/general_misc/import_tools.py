@@ -18,7 +18,7 @@ def import_by_path(path):
     return module
     
 
-def import_all(path, exclude='__init__'):
+def import_all(package, exclude='__init__'):
     '''tododoc'''
     
     paths = package_finder.get_packages_and_modules_filenames(path)
