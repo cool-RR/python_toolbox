@@ -39,26 +39,9 @@ able to run on a different core of the processor in the machine, thus using the
 full power of the processor.
 '''
 
-def __get_modules():
-    import os
-    import garlicsim.general_misc.import_tools as import_tools
-    
-    our_path = os.path.dirname(__file__)
-
-    return import_tools.import_all(our_path)
-
-def __collect_crunchers():
-    import imp
-    c = {}
-    for (module_name, module) in __get_modules().items():
-        assert hasattr(module, '__all__'), '''Cruncher-defining module must \
-define __all__ which declares only the cruncher(s) that are defined.'''
-        for cruncher_name in module.__all__:
-            c[cruncher_name] = getattr(module, cruncher_name)
-        
-    return c
-    
-crunchers = __collect_crunchers()
+from ...general_misc import warehouse
+from . import cruncher_process
+crunchers = warehouse.create(__file__)
 
 
 
