@@ -2,32 +2,23 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the CruncherProcess class. See its documentation for
+This module defines the CruncherThread class. See its documentation for
 more information.
-
-This module requires the multiprocessing package to be installed. It is part of
-the standard library for Python 2.6 and above, but not for earlier versions.
-Backports of it for Python 2.4 and 2.5 are available on the internet.
 '''
 
-import multiprocessing
-import copy
+import threading
 import Queue
-import sys
-import os
-
-try: import garlicsim.general_misc.process_priority
-except Exception: pass
+import copy
 
 import garlicsim
 from garlicsim.asynchronous_crunching import \
-     CrunchingProfile, ObsoleteCruncherError
+     HistoryBrowser, ObsoleteCruncherError, CrunchingProfile
 
-__all__ = ["CruncherProcess"]
+__all__ = ["CruncherThread"]
 
-class CruncherProcess(multiprocessing.Process):
+class CruncherThread(threading.Thread):
     '''
-    CruncherProcess is a type of cruncher.
+    CruncherThread is a type of cruncher.
     
     A cruncher is a worker which crunches the simulation. It receives a state
     from the main program, and then it repeatedly applies the step function of
@@ -35,25 +26,33 @@ class CruncherProcess(multiprocessing.Process):
     cruncher's work_queue. They are then taken by the main program when
     Project.sync_crunchers is called, and put into the tree.
         
-    Read more about crunchers in the documentation of the crunchers package.
+    Read more about crunchers in the documentation of the crunchers_warehouse
+    package.
     
-    The advantage of CruncherProcess over CruncherThread is that
-    CruncherProcess is able to run on a different core of the processor
-    in the machine, thus using the full power of the processor.
+    The advantages of CruncherThread over CruncherProcess are:
+    1. CruncherThread is able to handle simulations that are history-dependent.
+    2. CruncherThread is based on the threading module, which is stabler and
+       more mature than the multiprocessing module.
+    3. CruncherThread is much easier to debug than CruncherProcess, since there
+       are currently many more tools for debugging Python threads than Python
+       processes.
+    4. On a single-core computer, CruncherThread may be faster than
+       CruncherProcess because of shared memory.
     '''
-    def __init__(self, initial_state, step_function, crunching_profile):
+    def __init__(self, initial_state, project, crunching_profile):
+        threading.Thread.__init__(self)
         
-        multiprocessing.Process.__init__(self)
+        self.project = project
+        self.step_function = project.simpack_grokker.step
+        self.crunching_profile = copy.deepcopy(crunching_profile)
+        self.history_dependent = self.project.simpack_grokker.history_dependent
         
-        self.step_function = step_function
         self.initial_state = initial_state
-        self.last_clock = self.initial_state.clock
-        self.crunching_profile = crunching_profile
-        copy.deepcopy(crunching_profile)
+        self.last_clock = initial_state.clock
         
         self.daemon = True
 
-        self.work_queue = multiprocessing.Queue()
+        self.work_queue = Queue.Queue()
         '''
         Queue for putting completed work to be picked up by the main thread.
         
@@ -63,39 +62,17 @@ class CruncherProcess(multiprocessing.Process):
         will put the new step profile in this queue in order to signal that
         from that point on, all states were crunched with that step profile.
         '''
-        
-        self.order_queue = multiprocessing.Queue()
+
+        self.order_queue = Queue.Queue()
         '''
         Queue for receiving instructions from the main thread.
         '''
 
-    def set_low_priority(self):
-        '''
-        Set a low priority for this process.
-        '''
         
-        try:
-            sys.getwindowsversion()
-        except Exception:
-            is_windows = False
-        else:
-            is_windows = True
-
-        if is_windows:
-            try:
-                garlicsim.general_misc.process_priority.set_process_priority(0)
-            except Exception:
-                pass
-        else:
-            try:
-                os.nice(1)
-            except Exception:
-                pass
-
     def run(self):
         '''
-        This is called when the cruncher is started. It just calls the
-        main_loop method in a try clause, excepting ObsoleteCruncherError;
+        This is called when the cruncher is started. It just calls
+        the main_loop method in a try clause, excepting ObsoleteCruncherError;
         That exception means that the cruncher has been retired in the middle
         of its job, so it is propagated up to this level, where it causes the
         cruncher to terminate.
@@ -112,26 +89,32 @@ class CruncherProcess(multiprocessing.Process):
         Crunches the simulations repeatedly until the crunching profile is
         satisfied or a 'retire' order is received.
         '''
-        self.set_low_priority()
-        
-        state = self.initial_state
         
         self.step_profile = self.crunching_profile.step_profile
         
+        if self.history_dependent:
+            self.history_browser = HistoryBrowser(cruncher=self)
+            thing = self.history_browser
+        else:
+            thing = self.initial_state
+            
         order = None
         
         while True:
-            state = self.step_function(state,
+            state = self.step_function(thing,
                                        *self.step_profile.args,
                                        **self.step_profile.kwargs)
+            if not self.history_dependent:
+                thing = state
+                
             self.auto_clock(state)
             self.work_queue.put(state)
             self.check_crunching_profile(state)
             order = self.get_order()
             if order:
                 self.process_order(order)
-    
-             
+
+                
     def auto_clock(self, state):
         '''
         If the state lacks a clock attribute, set one up automatically.
@@ -141,8 +124,8 @@ class CruncherProcess(multiprocessing.Process):
         '''
         if not hasattr(state, "clock"):
             state.clock = self.last_clock + 1
-        self.last_clock = state.clock           
-        
+        self.last_clock = state.clock
+
         
     def check_crunching_profile(self, state):
         '''
@@ -154,7 +137,7 @@ class CruncherProcess(multiprocessing.Process):
         '''
         if self.crunching_profile.state_satisfies(state):
             raise ObsoleteCruncherError
-    
+
         
     def get_order(self):
         '''
@@ -166,13 +149,12 @@ class CruncherProcess(multiprocessing.Process):
             return self.order_queue.get(block=False)
         except Queue.Empty:
             return None
-    
+
         
     def process_order(self, order):
         '''
         Process an order receieved from order_queue.
         '''
-        
         if order == "retire":
             raise ObsoleteCruncherError
         
@@ -185,24 +167,21 @@ class CruncherProcess(multiprocessing.Process):
                 
             self.crunching_profile = order
             self.step_profile = order.step_profile
-
+            
             
     def retire(self):
         '''
-        Retire the cruncher. Process-safe.
+        Retire the cruncher. Thread-safe.
         
         Causes it to shut down as soon as it receives the order.
         '''
-        self.order_queue.put("retire")
+        self.order_queue.put("retire")        
         
         
     def update_crunching_profile(self, profile):
         '''
-        Update the cruncher's crunching profile. Process-safe.
+        Update the cruncher's crunching profile. Thread-safe.
         '''
         self.order_queue.put(profile)
-        
-        
-        
-        
     
+

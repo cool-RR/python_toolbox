@@ -1,7 +1,7 @@
 # Copyright 2009 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''
+'''TODOdOC
 This package defines two crunchers, CruncherThread and CruncherProcess.
 They work in a similar way, but they are based on threading.Thread
 and multiprocessing.Process respectively.
@@ -39,10 +39,6 @@ able to run on a different core of the processor in the machine, thus using the
 full power of the processor.
 '''
 
-#from cruncher_thread import CruncherThread
-#from cruncher_process import CruncherProcess
-
-
 def __get_modules():
     import os
     import garlicsim.general_misc.import_tools as import_tools
@@ -51,7 +47,19 @@ def __get_modules():
 
     return import_tools.import_all(our_path)
 
-for (name, module) in __get_modules().items():
-    exec('from ' + name + ' import *')
+def __collect_crunchers():
+    import imp
+    c = {}
+    for (module_name, module) in __get_modules().items():
+        assert hasattr(module, '__all__'), '''Cruncher-defining module must \
+define __all__ which declares only the cruncher(s) that are defined.'''
+        for cruncher_name in module.__all__:
+            c[cruncher_name] = __import__(module_name, fromlist=[cruncher_name])
+        
+    return c
     
-pass
+crunchers = __collect_crunchers()
+
+
+
+
