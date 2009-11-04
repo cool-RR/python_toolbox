@@ -6,7 +6,6 @@ todo: make WarehouseError and fuck assert
 
 import os
 import garlicsim.general_misc.import_tools as import_tools
-import imp
 import warnings
 
 __all__ = ['create']

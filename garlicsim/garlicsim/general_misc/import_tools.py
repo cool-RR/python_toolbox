@@ -10,6 +10,7 @@ def import_by_path(path):
     path_to_dir = os.path.dirname(path)
     try:
         (my_file, pathname, description) = imp.find_module(name, [path_to_dir])
+        print((my_file, pathname, description))
         module = imp.load_module(name, my_file, pathname, description)
     finally:
         my_file.close()
@@ -18,6 +19,7 @@ def import_by_path(path):
     
 
 def import_all(path, exclude='__init__'):
+    '''tododoc'''
     
     paths = package_finder.get_packages_and_modules_filenames(path)
     
