@@ -54,7 +54,7 @@ def __collect_crunchers():
         assert hasattr(module, '__all__'), '''Cruncher-defining module must \
 define __all__ which declares only the cruncher(s) that are defined.'''
         for cruncher_name in module.__all__:
-            c[cruncher_name] = __import__(module_name, fromlist=[cruncher_name])
+            c[cruncher_name] = getattr(module, cruncher_name)
         
     return c
     
