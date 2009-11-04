@@ -11,7 +11,7 @@ import warnings
 __all__ = ['create']
 
 
-def create(path_to_init_module):
+def create(package):
     '''
     tododoc
     Simply pass __file__ into this function.
@@ -20,7 +20,7 @@ def create(path_to_init_module):
     '''
     
     things = {}
-    modules = import_tools.import_all(os.path.dirname(path_to_init_module))
+    modules = import_tools.import_all(package)
     for (module_name, module) in modules.items():
         assert hasattr(module, '__all__'), '''Module in warehouse must define \
 __all__ which declares exactly which objects should be collected.'''

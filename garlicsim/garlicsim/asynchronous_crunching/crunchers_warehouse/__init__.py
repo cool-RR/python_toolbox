@@ -38,7 +38,7 @@ The advantage of CruncherProcess over CruncherThread is that CruncherProcess is
 able to run on a different core of the processor in the machine, thus using the
 full power of the processor.
 '''
-print(__package__, ' boobs')
+
 from ...general_misc import warehouse
 from . import cruncher_process
 crunchers = warehouse.create(__file__)
