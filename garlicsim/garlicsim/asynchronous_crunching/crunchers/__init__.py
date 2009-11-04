@@ -42,10 +42,16 @@ full power of the processor.
 #from cruncher_thread import CruncherThread
 #from cruncher_process import CruncherProcess
 
-import garlicsim.general_misc.import_tools as import_tools
 
-our_path = os.path.dirname(unicode(__file__, sys.getfilesystemencoding()))
-import_tools.import_all(our_path)
-TODO
+def __get_modules():
+    import os
+    import garlicsim.general_misc.import_tools as import_tools
+    
+    our_path = os.path.dirname(__file__)
 
+    return import_tools.import_all(our_path)
 
+for (name, module) in __get_modules().items():
+    exec('from ' + name + ' import *')
+    
+pass

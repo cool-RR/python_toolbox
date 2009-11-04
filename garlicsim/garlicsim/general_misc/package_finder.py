@@ -91,7 +91,7 @@ def get_packages_and_modules_filenames(root, recursive=False):
                 result += [os.path.join(entry, thing) for thing in
                            inner_results]
     
-    return [os.path.join(full_path, entry) for entry in result]
+    return [os.path.join(os.path.dirname(full_path), entry) for entry in result]
 
 def is_package(path):
     '''Is the given path a Python package?'''
@@ -101,5 +101,5 @@ def is_package(path):
 def is_module(path):
     '''Is the given path a Python single-file module?'''
     extension = os.path.splitext(path)[1]
-    return extension.lower() in ['py', 'pyc', 'pyo', 'pyw']
+    return extension.lower() in ['.py', '.pyc', '.pyo', '.pyw']
 
