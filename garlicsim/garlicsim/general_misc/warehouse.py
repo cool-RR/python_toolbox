@@ -6,13 +6,12 @@ This module lets you import things dynamically from a warehouse. See
 documentation of `create` for more information about what a warehouse is.
 
 todo: maybe class instead of func?
-todo: make WarehouseError and fuck assert
 '''
 
 import os
 import warnings
 
-from . import import_tools
+from garlicsim.general_misc import import_tools
 
 __all__ = ['create']
 
@@ -42,7 +41,7 @@ def create(package):
     __init__:
     
     import sys
-    from ...wherever import warehouse
+    from garlicsim.general_misc import warehouse
     this_module = sys.modules[__name__]
     objects = warehouse.create(this_module)
     
