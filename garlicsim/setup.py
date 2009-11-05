@@ -28,6 +28,16 @@ my_packages = package_finder.get_packages('garlicsim',
                                           include_self=True,
                                           recursive=True)
 
+my_classifiers = [
+    'Development Status :: 2 - Pre-Alpha',
+    'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',
+    'Programming Language :: Python :: 2.6',
+    'Topic :: Scientific/Engineering',
+    'Programming Language :: Python',
+]
+
+
+
 setup(
     name='garlicsim',
     version='0.1',
@@ -38,7 +48,7 @@ setup(
     packages=my_packages,
     license= "LGPL 2.1 License",
     long_description = my_long_description,
-        
+    classifiers = my_classifiers,
 )
 
 try:
