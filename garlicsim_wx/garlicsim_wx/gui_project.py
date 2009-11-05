@@ -19,7 +19,8 @@ from garlicsim.general_misc.backport_cruft.classed_infinity import Infinity
 from general_misc.stringsaver import s2i,i2s
 
 import garlicsim
-import garlicsim.asynchronous_crunching.crunchers
+from garlicsim.asynchronous_crunching.crunchers_warehouse import crunchers
+
 import custom_widgets
 from custom_widgets import FoldableWindowContainer
 
@@ -49,9 +50,9 @@ class GuiProject(object):
         
         self.project = project or garlicsim.Project(simpack)
         if self.project.simpack_grokker.history_dependent is False and \
-           'CruncherProcess' in garlicsim.asynchronous_crunching.crunchers.__dict__:
+           'CruncherProcess' in crunchers:
             self.project.crunching_manager.Cruncher = \
-                garlicsim.asynchronous_crunching.crunchers.CruncherProcess
+                crunchers['CruncherProcess']
         
         self.path = path
         '''The active path.'''

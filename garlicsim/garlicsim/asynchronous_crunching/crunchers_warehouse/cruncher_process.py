@@ -35,7 +35,8 @@ class CruncherProcess(multiprocessing.Process):
     cruncher's work_queue. They are then taken by the main program when
     Project.sync_crunchers is called, and put into the tree.
         
-    Read more about crunchers in the documentation of the crunchers package.
+    Read more about crunchers in the documentation of the crunchers_warehouse
+    package.
     
     The advantage of CruncherProcess over CruncherThread is that
     CruncherProcess is able to run on a different core of the processor

@@ -16,12 +16,11 @@ from garlicsim.general_misc.backport_cruft.classed_infinity import Infinity
 import garlicsim
 import garlicsim.data_structures
 import garlicsim.misc
-import crunchers
+from crunchers_warehouse import crunchers
 from crunching_profile import CrunchingProfile
 from garlicsim.misc.step_profile import StepProfile
 
-
-PreferredCruncher = crunchers.CruncherThread
+PreferredCruncher = crunchers['CruncherThread']
 # Should make a nicer way of setting that.
 
 __all__ = ["CrunchingManager"]
@@ -58,7 +57,7 @@ class CrunchingManager(object):
         self.project = project
         
         if project.simpack_grokker.history_dependent:
-            self.Cruncher = crunchers.CruncherThread
+            self.Cruncher = crunchers['CruncherThread']
         else:
             self.Cruncher = PreferredCruncher
         
@@ -171,13 +170,12 @@ class CrunchingManager(object):
         
         if node.still_in_editing is False:
             step_function = self.project.simpack_grokker.step
-            if 'CruncherProcess' in crunchers.__dict__  and \
-               self.Cruncher == crunchers.CruncherProcess:
+            if self.Cruncher == crunchers.get('CruncherProcess', None):
                 cruncher = self.Cruncher \
                          (node.state,
                           self.project.simpack_grokker.step,
                           crunching_profile=crunching_profile)
-            else: # self.Cruncher == crunchers.CruncherThread
+            else: # self.Cruncher == crunchers['CruncherThread']
                 cruncher = self.Cruncher(node.state, self.project,
                                          crunching_profile=crunching_profile)
             cruncher.start()
