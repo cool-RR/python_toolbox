@@ -15,8 +15,8 @@ import wx.lib.scrolledpanel
 import wx.py.shell
 
 import garlicsim.general_misc.queue_tools as queue_tools
-from garlicsim.general_misc.backport_cruft.classed_infinity import Infinity
 from general_misc.stringsaver import s2i,i2s
+from garlicsim.general_misc.backport_cruft.classed_infinity import Infinity
 
 import garlicsim
 from garlicsim.asynchronous_crunching.crunchers_warehouse import crunchers

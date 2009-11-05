@@ -4,12 +4,13 @@ Run `run_gui.py` in the root folder to launch the GUI. Then, File -> New. Choose
 
 Requires:
 
-* [Python 2.6](http://www.python.org/download/releases/2.6.4/) (Scroll down to the "Python versions" section for other versions.)
+* [Python 2.5](http://www.python.org/download/releases/2.5.4/) (Scroll down to the "Python versions" section for other versions.)
 
 Optional:
 
 * [Psyco](http://psyco.sourceforge.net/)
 * on Windows only: [Python for Windows Extensions](http://sourceforge.net/projects/pywin32/)
+* [Backport of the multiprocessing module](http://code.google.com/p/python-multiprocessing/)
 
 Gui requires:
 
