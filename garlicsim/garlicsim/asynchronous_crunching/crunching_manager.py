@@ -18,7 +18,7 @@ from crunchers_warehouse import crunchers
 from crunching_profile import CrunchingProfile
 from garlicsim.misc.step_profile import StepProfile
 
-PreferredCruncher = crunchers.CruncherThread
+PreferredCruncher = crunchers['CruncherThread']
 # Should make a nicer way of setting that.
 
 __all__ = ["CrunchingManager"]
