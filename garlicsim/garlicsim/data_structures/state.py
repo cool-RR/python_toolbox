@@ -32,7 +32,7 @@ class State(object):
                (
                    self.__class__.__module__,
                    self.__class__.__name__,
-                   'with clock %s' % self.clock if hasattr(self, clock) else '',
+                   'with clock %s ' % self.clock if hasattr(self, 'clock') else '',
                    hex(id(self))
                )
         
