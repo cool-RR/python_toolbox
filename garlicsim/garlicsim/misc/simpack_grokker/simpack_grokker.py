@@ -9,8 +9,8 @@ See their documentation for more details.
 import functools
 
 from step_function_manipulators import \
-     simple_history_step_from_step_generator, \
-     simple_non_history_step_from_step_generator, \
+     history_simple_step_from_step_generator, \
+     non_history_simple_step_from_step_generator, \
      non_history_step_generator_from_simple_step, \
      history_step_generator_from_simple_step
 
@@ -73,8 +73,10 @@ class SimpackGrokker(object):
         
     def __init_step_generator(self):
         '''
-        Obtain a step generator; If the simpack defines one, use it, otherwise
-        create one from the simple step function.
+        Obtain a step generator.tododoc
+        
+        If the simpack defines one, use it, otherwise create one from the simple
+        step function.
         '''
         if self.step_generator_defined:
             # The simpack supplies a step generator, so we're gonna use that.
@@ -107,7 +109,7 @@ class SimpackGrokker(object):
                 return
     
     def __init_step(self):
-        '''
+        '''tododoc
         Obtain a simple step function; If the simpack defines one, use it,
         otherwise create one from the step generator.
         '''
@@ -123,12 +125,12 @@ class SimpackGrokker(object):
             if self.history_dependent:
                 
                 self.step = functools.partial \
-                    (simple_history_step_from_step_generator,
+                    (history_simple_step_from_step_generator,
                      self.simpack.history_step_generator)
                 return
             else: # It's non-history dependent
                 self.step = functools.partial \
-                    (simple_non_history_step_from_step_generator,
+                    (non_history_simple_step_from_step_generator,
                      self.simpack.step_generator)
                 return    
         
