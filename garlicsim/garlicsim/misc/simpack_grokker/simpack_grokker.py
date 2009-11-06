@@ -8,11 +8,8 @@ See their documentation for more details.
 
 import functools
 
-from step_function_manipulators import \
-     history_simple_step_from_step_generator, \
-     non_history_simple_step_from_step_generator, \
-     non_history_step_generator_from_simple_step, \
-     history_step_generator_from_simple_step
+from garlicsim.misc import AutoClockGenerator
+import garlicsim
 
 __all__ = ["SimpackGrokker", "InvalidSimpack"]
 
@@ -113,29 +110,81 @@ class SimpackGrokker(object):
         Obtain a simple step function; If the simpack defines one, use it,
         otherwise create one from the step generator.
         '''
-        if self.simple_step_defined:
-            # If the simpack defines a simple step, we'll just point to that.
-            if self.history_dependent:
-                self.step = self.simpack.history_step
-                return
-            else: # It's non-history dependent
-                self.step = self.simpack.step
-                return
-        else:
-            if self.history_dependent:
-                
-                self.step = functools.partial \
-                    (history_simple_step_from_step_generator,
-                     self.simpack.history_step_generator)
-                return
-            else: # It's non-history dependent
-                self.step = functools.partial \
-                    (non_history_simple_step_from_step_generator,
-                     self.simpack.step_generator)
-                return    
         
-    def step(self, old_state_or_history_browser, *args, **kwargs):
-        raise NotImplementedError
+        
+    def step(self, state_or_history_browser, step_profile):
+        '''tododoc'''
+        auto_clock_generator = AutoClockGenerator()
+        if isinstance(state_or_history_browser,
+                      garlicsim.data_structures.State):
+            state = state_or_history_browser
+        else:
+            state = state_or_history_browser.get_last_state()
+        auto_clock_generator.make_clock(state)
+
+        if self.simple_step_defined:
+            step_function = self.simpack.history_step if \
+                          self.history_dependent else self.simpack.step
+            result = step_function(state_or_history_browser,
+                                   *step_profile.args,
+                                   **step_profile.kwargs)
+        else:# self.step_generator_defined is True
+            step_generator = self.simpack.history_step_generator if \
+                          self.history_dependent else \
+                          self.simpack.step_generator
+            iterator = step_generator(state_or_history_browser,
+                                      *step_profile.args,
+                                      **step_profile.kwargs)
+            result = iterator.next()
+            
+        result.clock = AutoClockGenerator.make_clock(result)
+        return result
+            
+        
     
-    def step_generator(self, old_state_or_history_browser, *args, **kwargs):
-        raise NotImplementedError
+    def step_generator(self, state_or_history_browser, step_profile):
+        '''tododoc'''
+        auto_clock_generator = AutoClockGenerator()
+        if isinstance(state_or_history_browser,
+                      garlicsim.data_structures.State):
+            state = state_or_history_browser
+        else:
+            state = state_or_history_browser.get_last_state()
+        auto_clock_generator.make_clock(state)
+
+        if self.step_generator_defined:
+            
+            step_generator = self.simpack.history_step_generator if \
+                          self.history_dependent else \
+                          self.simpack.step_generator
+
+            while True: # wrapping it 'cause maybe the iterator is finite
+                iterator = step_generator(state_or_history_browser,
+                                          *step_profile.args,
+                                          **step_profile.kwargs)
+                
+                for current_state in iterator:
+                    current_state.clock = auto_clock_generator(state)
+                    yield current_state
+                
+                if isinstance(state_or_history_browser,
+                              garlicsim.data_structures.State):
+                    state_or_history_browser = current_state
+            
+        else: # self.simple_step_defined is True
+            
+            step_function = self.simpack.history_step if \
+                          self.history_dependent else self.simpack.step
+            
+            if self.history_dependent:
+                while True
+                
+            result = step_function(state,
+                                   *step_profile.args,
+                                   **step_profile.kwargs)
+            current_state = state
+            
+            result = iterator.next()
+            
+        result.clock = AutoClockGenerator.make_clock(result)
+        return result
