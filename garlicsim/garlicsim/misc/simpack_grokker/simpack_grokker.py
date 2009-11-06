@@ -188,3 +188,41 @@ class SimpackGrokker(object):
             
         result.clock = AutoClockGenerator.make_clock(result)
         return result
+
+import copy
+import garlicsim
+class KewlIterator(object):
+    def __init__(self, step, state_or_history_browser, step_profile):
+        self.step_profile = copy.deepcopy(step_profile)
+        self.history_dependent = isinstance(state_or_history_browser,
+                                            garlicsim.misc.HistoryBrowser)
+        if self.history_dependent:
+            self.current_state = None
+            self.history_browser = state_or_history_browser
+        else:
+            self.current_state = state_or_history_browser
+            self.history_browser = None
+            
+        self.auto_clock_generator = AutoClockGenerator()
+        if self.current_state:
+            self.auto_clock_generator.make_clock(self.current_state)
+            
+    def __iter__(self): return self
+    
+    def next(self):
+        if not self.history_dependent:
+            new_state = 
+            pass
+        else: # self.history_dependent is True
+            pass
+        
+    def auto_clock(self, state):
+        state.clock = self.auto_clock_generator.make_clock(state)
+        
+    def set_step_profile(self, step_profile):
+        self.step_profile = copy.deepcopy(step_profile)
+        
+    
+    
+    
+    
