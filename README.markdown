@@ -31,7 +31,7 @@ Additionally, GarlicSim will eventually be shipped with a standard library of si
 
 For a more thorugh introduction to how GarlicSim works, check out the ** [Introduction to GarlicSim](http://dl.getdropbox.com/u/1927707/Introduction%20to%20GarlicSim.doc) ** - Though not yet complete, it goes deep into the principles of GarlicSim and how to work with it.
 
-GarlicSim itself is written in pure Python. When writing simpacks it is possible to use C code for greater speed.
+GarlicSim itself is written in pure Python. The speed of simulations is mostly dependent on the simpack's performance - So it is possible to use C code in a simpack to make things faster.
 
 -------
 
