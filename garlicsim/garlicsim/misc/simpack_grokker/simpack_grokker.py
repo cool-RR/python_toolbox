@@ -144,6 +144,20 @@ class SimpackGrokker(object):
     
     def step_generator(self, state_or_history_browser, step_profile):
         '''tododoc'''
+        
+        if self.step_generator_defined:
+            step_generator = self.simpack.history_step_generator if \
+                           self.history_dependent else \
+                           self.simpack.step_generator
+            return KewlIterator(state_or_history_browser, step_profile,
+                                step_generator=step_generator)
+        else:
+            assert self.simple_step_defined
+            simple_step = self.simpack.history_step if self.history_dependent \
+                        else self.simpack.step
+            return KewlIterator(state_or_history_browser, step_profile,
+                                simple_step=simple_step)
+        '''
         auto_clock_generator = AutoClockGenerator()
         if isinstance(state_or_history_browser,
                       garlicsim.data_structures.State):
@@ -188,11 +202,26 @@ class SimpackGrokker(object):
             
         result.clock = AutoClockGenerator.make_clock(result)
         return result
+        '''
 
 import copy
 import garlicsim
+
 class KewlIterator(object):
-    def __init__(self, step, state_or_history_browser, step_profile):
+    '''
+    tododoc
+    
+    make stuff private here?
+    '''
+    def __init__(self, state_or_history_browser, step_profile,
+                 simple_step = None, step_generator=None):
+
+        assert [simple_step, step_generator].count(None) == 1
+        
+        self.simple_step = simple_step
+        self.step_generator = step_generator
+        self.raw_iterator = None
+        
         self.step_profile = copy.deepcopy(step_profile)
         self.history_dependent = isinstance(state_or_history_browser,
                                             garlicsim.misc.HistoryBrowser)
@@ -207,20 +236,53 @@ class KewlIterator(object):
         if self.current_state:
             self.auto_clock_generator.make_clock(self.current_state)
             
+        self.step_profile_changed = False
+            
     def __iter__(self): return self
     
     def next(self):
-        if not self.history_dependent:
-            new_state = 
-            pass
-        else: # self.history_dependent is True
-            pass
+        '''
+        '''
+        self.current_state = self.__get_new_state()
+        self.auto_clock(self.current_state)
+        return self.current_state
+        
+    def __get_new_state(self):
+        if self.simple_step:
+            return self.simple_step(self.current_state,
+                                    *self.step_profile.args,
+                                    **self.step_profile.kwargs)
+        else: # self.step_generator is not None
+            self.rebuild_raw_iterator_if_necessary()
+            try:
+                return self.raw_iterator.next()
+            except StopIteration:
+                try:
+                    self.rebuild_raw_iterator()
+                    return self.raw_iterator.next()
+                except StopIteration:
+                    raise InvalidSimpack('''Step generator's iterator raised
+StopIteration before producing a single state.''')
+            
+                
+    def rebuild_raw_iterator_if_necessary(self):
+        if (self.raw_iterator is None) or self.step_profile_changed:
+            self.rebuild_raw_iterator()
+            
+    def rebuild_raw_iterator(self):
+        thing = self.current_state or self.history_browser
+        self.raw_iterator = self.step_generator(thing,
+                                                *self.step_profile.args,
+                                                **self.step_profile.kwargs)
+                
+        
         
     def auto_clock(self, state):
         state.clock = self.auto_clock_generator.make_clock(state)
         
     def set_step_profile(self, step_profile):
         self.step_profile = copy.deepcopy(step_profile)
+        self.step_profile_changed = True
         
     
     
