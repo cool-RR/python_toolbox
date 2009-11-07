@@ -67,9 +67,9 @@ GarlicSim has official support for 4 different versions of Python. For each of t
 
 [GarlicSim for Python 3.1](http://github.com/cool-RR/GarlicSim-for-Python-3.1) - Does not contain gui package, since wxPython doesn't yet support Python 3.x.
 
-# Frequently asked question: #
+# Frequently asked questions: #
 
-_What kind of simulations will I be able to do with GarlicSim?_
+## What kind of simulations will I be able to do with GarlicSim? ##
 
 People often ask this; probably because they do not fully believe it when they read GarlicSim's description saying that it can handle any kind of simulation. Well, it can. It is very general.
 
@@ -79,9 +79,7 @@ Then people ask, if it is so general, how is it useful? There are two answers to
 
 2.  If you are interested in only a specific subset of simulations -- say, simulations of solid bodies in Physics -- Then it will be the wisest to write a framework for that within the framework of GarlicSim. Indeed, part of the work on GarlicSim will include writing these kind of sub-frameworks for the common categories of simulations (e.g., a framework for physics, a framework for game theory, etcetera.)
 
-----------
-
-_Does GarlicSim give mathematical tools for simulations?_
+## Does GarlicSim give mathematical tools for simulations? ##
 
 **No.** GarlicSim doesn't contain any mathematical tools, or any algorithms to be used in simulations. These things are related to the **content** of the simulation, which is none of GarlicSim's business. GarlicSim handles the organization, or "bureaucracy" of the simulation, so you can concentrate on the content. There are many Python projects that give mathematical tools and algorithms that may be of use to you in you simulations, and you should use them in your simpack.
 
