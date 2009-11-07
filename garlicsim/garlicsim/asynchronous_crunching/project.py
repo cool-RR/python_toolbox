@@ -251,14 +251,13 @@ class Project(object):
         
         path = node.make_containing_path()
         history_browser = \
-            garlicsim.synchronous_crunching.HistoryBrowser(path)
+            garlicsim.synchronous_crunching.HistoryBrowser(path, end_node=node)
         
         iterator = self.simpack_grokker.step_generator(history_browser,
                                                        step_profile)
-        finite_iterator = cute_iter_tools.finitize(iterator, iterations)        
+        finite_iterator = cute_iter_tools.finitize(iterator, iterations)
         
         current_node = node
-        state = node.state
         for current_state in finite_iterator:
             current_node = self.tree.add_state(current_state,
                                                parent=current_node,
@@ -285,11 +284,12 @@ class Project(object):
         
         if step_profile is None: step_profile = garlicsim.misc.StepProfile()
 
-        current_node = node
         state = node.state
                 
         iterator = self.simpack_grokker.step_generator(state, step_profile)
         finite_iterator = cute_iter_tools.finitize(iterator, iterations)
+        
+        current_node = node
         
         for current_state in finite_iterator:
             current_node = self.tree.add_state(current_state,

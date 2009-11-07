@@ -8,16 +8,10 @@ See their documentation for more details.
 
 import functools
 
-from garlicsim.misc import AutoClockGenerator
+from garlicsim.misc import AutoClockGenerator, StepIterator
 import garlicsim
 
-__all__ = ["SimpackGrokker", "InvalidSimpack"]
-
-class InvalidSimpack(Exception):
-    '''
-    An exception to raise when trying to load an invalid simpack.
-    '''
-    pass
+__all__ = ["SimpackGrokker"]
 
 class SimpackGrokker(object):
     '''
@@ -104,102 +98,14 @@ class SimpackGrokker(object):
             step_generator = self.simpack.history_step_generator if \
                            self.history_dependent else \
                            self.simpack.step_generator
-            return KewlIterator(state_or_history_browser, step_profile,
+            return StepIterator(state_or_history_browser, step_profile,
                                 step_generator=step_generator)
         else:
             assert self.simple_step_defined
             simple_step = self.simpack.history_step if self.history_dependent \
                         else self.simpack.step
-            return KewlIterator(state_or_history_browser, step_profile,
+            return StepIterator(state_or_history_browser, step_profile,
                                 simple_step=simple_step)
         
-
-import copy
-import garlicsim
-
-class KewlIterator(object):
-    '''
-    tododoc
-    
-    make stuff private here?
-    '''
-    def __init__(self, state_or_history_browser, step_profile,
-                 simple_step = None, step_generator=None):
-
-        assert [simple_step, step_generator].count(None) == 1
-        
-        self.simple_step = simple_step
-        self.step_generator = step_generator
-        self.raw_iterator = None
-        
-        self.step_profile = copy.deepcopy(step_profile)
-        self.history_dependent = isinstance(state_or_history_browser,
-                                            garlicsim.misc.HistoryBrowser)
-        if self.history_dependent:
-            self.current_state = None
-            self.history_browser = state_or_history_browser
-        else:
-            self.current_state = state_or_history_browser
-            self.history_browser = None
-            
-        self.auto_clock_generator = AutoClockGenerator()
-        if self.current_state:
-            self.auto_clock_generator.make_clock(self.current_state)
-            
-        self.step_profile_changed = False
-            
-    def __iter__(self): return self
-    
-    def next(self):
-        '''
-        '''
-        self.current_state = self.__get_new_state()
-        self.auto_clock(self.current_state)
-        #raise StandardError(str(self.current_state.clock))
-        return self.current_state
-        
-    def __get_new_state(self):
-        if self.simple_step:
-            thing = self.history_browser if self.history_dependent else \
-                  self.current_state
-            return self.simple_step(thing,
-                                    *self.step_profile.args,
-                                    **self.step_profile.kwargs)
-        else: # self.step_generator is not None
-            self.rebuild_raw_iterator_if_necessary()
-            try:
-                return self.raw_iterator.next()
-            except StopIteration:
-                try:
-                    self.rebuild_raw_iterator()
-                    return self.raw_iterator.next()
-                except StopIteration:
-                    raise InvalidSimpack('''Step generator's iterator raised
-StopIteration before producing a single state.''')
-            
-                
-    def rebuild_raw_iterator_if_necessary(self):
-        if (self.raw_iterator is None) or self.step_profile_changed:
-            self.rebuild_raw_iterator()
-            self.step_profile_changed = False
-            
-    def rebuild_raw_iterator(self):
-        thing = self.current_state or self.history_browser
-        self.raw_iterator = self.step_generator(thing,
-                                                *self.step_profile.args,
-                                                **self.step_profile.kwargs)
-                
         
         
-    def auto_clock(self, state):
-        value = self.auto_clock_generator.make_clock(state)
-        state.clock = value
-        
-    def set_step_profile(self, step_profile):
-        self.step_profile = copy.deepcopy(step_profile)
-        self.step_profile_changed = True
-        
-    
-    
-    
-    

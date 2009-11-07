@@ -6,6 +6,6 @@ This package defines the SimpackGrokker class in the module simpack_grokker.py.
 See its documentation for more information.
 '''
 
-from simpack_grokker import SimpackGrokker, InvalidSimpack
+from simpack_grokker import SimpackGrokker
 
-__all__ = ["SimpackGrokker", "InvalidSimpack"]
+__all__ = ["SimpackGrokker"]
