@@ -27,9 +27,6 @@ class SimpackGrokker(object):
     def __init__(self, simpack):
         self.simpack = simpack
         self.__init_analysis()
-        self.__init_step()
-        self.step.history_dependent = self.history_step_defined
-        self.__init_step_generator()
     
     def __init_analysis(self):
         '''
@@ -68,48 +65,6 @@ class SimpackGrokker(object):
         
         self.history_dependent = self.history_step_defined
         
-    def __init_step_generator(self):
-        '''
-        Obtain a step generator.tododoc
-        
-        If the simpack defines one, use it, otherwise create one from the simple
-        step function.
-        '''
-        if self.step_generator_defined:
-            # The simpack supplies a step generator, so we're gonna use that.
-            if self.history_step_defined:
-                self.step_generator = self.simpack.history_step_generator
-                return
-            else: # It's a non-history simpack
-                self.step_generator = self.simpack.step_generator
-                return
-                
-        else:
-            '''
-            The simpack supplied no step generator, only a simple step, so
-            we're gonna make a generator that uses it.
-            Remember, self.step is pointing to our simple step function,
-            whether it's history-dependent or not, so we're gonna use self.step
-            in our generator.
-            '''
-            if self.history_step_defined:               
-                        
-                self.step_generator = functools.partial \
-                    (history_step_generator_from_simple_step, self.step)
-                return
-                
-    
-            else: # It's a non-history simpack
-                
-                self.step_generator = functools.partial \
-                    (non_history_step_generator_from_simple_step, self.step)
-                return
-    
-    def __init_step(self):
-        '''tododoc
-        Obtain a simple step function; If the simpack defines one, use it,
-        otherwise create one from the step generator.
-        '''
         
         
     def step(self, state_or_history_browser, step_profile):
@@ -157,52 +112,7 @@ class SimpackGrokker(object):
                         else self.simpack.step
             return KewlIterator(state_or_history_browser, step_profile,
                                 simple_step=simple_step)
-        '''
-        auto_clock_generator = AutoClockGenerator()
-        if isinstance(state_or_history_browser,
-                      garlicsim.data_structures.State):
-            state = state_or_history_browser
-        else:
-            state = state_or_history_browser.get_last_state()
-        auto_clock_generator.make_clock(state)
-
-        if self.step_generator_defined:
-            
-            step_generator = self.simpack.history_step_generator if \
-                          self.history_dependent else \
-                          self.simpack.step_generator
-
-            while True: # wrapping it 'cause maybe the iterator is finite
-                iterator = step_generator(state_or_history_browser,
-                                          *step_profile.args,
-                                          **step_profile.kwargs)
-                
-                for current_state in iterator:
-                    current_state.clock = auto_clock_generator(state)
-                    yield current_state
-                
-                if isinstance(state_or_history_browser,
-                              garlicsim.data_structures.State):
-                    state_or_history_browser = current_state
-            
-        else: # self.simple_step_defined is True
-            
-            step_function = self.simpack.history_step if \
-                          self.history_dependent else self.simpack.step
-            
-            if self.history_dependent:
-                while True
-                
-            result = step_function(state,
-                                   *step_profile.args,
-                                   **step_profile.kwargs)
-            current_state = state
-            
-            result = iterator.next()
-            
-        result.clock = AutoClockGenerator.make_clock(result)
-        return result
-        '''
+        
 
 import copy
 import garlicsim
@@ -245,11 +155,14 @@ class KewlIterator(object):
         '''
         self.current_state = self.__get_new_state()
         self.auto_clock(self.current_state)
+        #raise StandardError(str(self.current_state.clock))
         return self.current_state
         
     def __get_new_state(self):
         if self.simple_step:
-            return self.simple_step(self.current_state,
+            thing = self.history_browser if self.history_dependent else \
+                  self.current_state
+            return self.simple_step(thing,
                                     *self.step_profile.args,
                                     **self.step_profile.kwargs)
         else: # self.step_generator is not None
@@ -268,6 +181,7 @@ StopIteration before producing a single state.''')
     def rebuild_raw_iterator_if_necessary(self):
         if (self.raw_iterator is None) or self.step_profile_changed:
             self.rebuild_raw_iterator()
+            self.step_profile_changed = False
             
     def rebuild_raw_iterator(self):
         thing = self.current_state or self.history_browser
@@ -278,7 +192,8 @@ StopIteration before producing a single state.''')
         
         
     def auto_clock(self, state):
-        state.clock = self.auto_clock_generator.make_clock(state)
+        value = self.auto_clock_generator.make_clock(state)
+        state.clock = value
         
     def set_step_profile(self, step_profile):
         self.step_profile = copy.deepcopy(step_profile)

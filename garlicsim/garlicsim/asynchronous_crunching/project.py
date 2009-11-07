@@ -6,6 +6,7 @@ This module defines the Project class. See its documentation for more
 information.
 '''
 
+from garlicsim.general_misc import cute_iter_tools
 import garlicsim.general_misc.read_write_lock
 from garlicsim.general_misc.infinity import Infinity
 import garlicsim.general_misc.module_wrapper
@@ -251,16 +252,18 @@ class Project(object):
         path = node.make_containing_path()
         history_browser = \
             garlicsim.synchronous_crunching.HistoryBrowser(path)
+        
+        iterator = self.simpack_grokker.step_generator(history_browser,
+                                                       step_profile)
+        finite_iterator = cute_iter_tools.finitize(iterator, iterations)        
+        
         current_node = node
         state = node.state
-        for i in xrange(iterations):
-            history_browser.end_node = node
-            state = self.simpack_grokker.step(history_browser,
-                                              *step_profile.args,
-                                              **step_profile.kwargs)
-            current_node = \
-                self.tree.add_state(state, parent=current_node,
-                                    step_profile=step_profile)
+        for current_state in finite_iterator:
+            current_node = self.tree.add_state(current_state,
+                                               parent=current_node,
+                                               step_profile=step_profile)
+            history_browser.end_node = current_node
             
         return current_node
     
@@ -281,16 +284,17 @@ class Project(object):
         '''
         
         if step_profile is None: step_profile = garlicsim.misc.StepProfile()
-        
+
         current_node = node
         state = node.state
-        for i in xrange(iterations):
-            state = self.simpack_grokker.step(state,
-                                              *step_profile.args,
-                                              **step_profile.kwargs)
-            current_node = \
-                self.tree.add_state(state, parent=current_node,
-                                    step_profile=step_profile)
+                
+        iterator = self.simpack_grokker.step_generator(state, step_profile)
+        finite_iterator = cute_iter_tools.finitize(iterator, iterations)
+        
+        for current_state in finite_iterator:
+            current_node = self.tree.add_state(current_state,
+                                               parent=current_node,
+                                               step_profile=step_profile)
             
         return current_node
     

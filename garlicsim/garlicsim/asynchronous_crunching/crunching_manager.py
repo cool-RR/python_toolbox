@@ -171,7 +171,7 @@ class CrunchingManager(object):
             if self.Cruncher == crunchers['CruncherProcess']:
                 cruncher = self.Cruncher \
                          (node.state,
-                          self.project.simpack_grokker.step,
+                          self.project.simpack_grokker.step_generator,
                           crunching_profile=crunching_profile)
             else: # self.Cruncher == crunchers['CruncherThread']
                 cruncher = self.Cruncher(node.state, self.project,

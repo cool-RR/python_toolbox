@@ -6,6 +6,8 @@ This module defines the `simulate` function. See its documentation for more
 information.
 '''
 
+from garlicsim.general_misc import cute_iter_tools
+
 import garlicsim
 import garlicsim.misc
 import history_browser as history_browser_module # Avoiding name clash
@@ -48,13 +50,11 @@ def __history_simulate(simpack_grokker, state, iterations=1, step_profile=None):
     path = root.make_containing_path()
     history_browser = history_browser_module.HistoryBrowser(path)
     
-    iterator = simpack_grokker.step_generator(history_browser,
-                                              *step_profile.args,
-                                              **step_profile.kwargs)
+    iterator = simpack_grokker.step_generator(history_browser, step_profile)
+    finite_iterator = cute_iter_tools.finitize(iterator, iterations)
     
     current_node = root
-    for i in xrange(iterations):
-        current_state = iterator.next()
+    for current_state in finite_iterator:
         current_node = tree.add_state(current_state, parent=current_node)
         
     final_state = current_state
@@ -76,11 +76,10 @@ def __non_history_simulate(simpack_grokker, state, iterations=1,
     Returns the final state of the simulation.
     '''
     if step_profile is None: step_profile = garlicsim.misc.StepProfile()
-    iterator = simpack_grokker.step_generator(state,
-                                              *step_profile.args,
-                                              **step_profile.kwargs)
-    for i in xrange(iterations):
-        current_state = iterator.next()
+    iterator = simpack_grokker.step_generator(state, step_profile)
+    finite_iterator = cute_iter_tools.finitize(iterator, iterations)
+    for current_state in finite_iterator:
+        pass
         
     final_state = current_state
     # Which is still here as the last value from the for loop

@@ -9,7 +9,7 @@ This module requires the multiprocessing package to be installed. It is part of
 the standard library for Python 2.6 and above, but not for earlier versions.
 Backports of it for Python 2.4 and 2.5 are available on the internet.
 '''
-TODO: change everything that does step to put in only a step profile unpacked
+
 import multiprocessing
 import copy
 import Queue
@@ -42,15 +42,14 @@ class CruncherProcess(multiprocessing.Process):
     CruncherProcess is able to run on a different core of the processor
     in the machine, thus using the full power of the processor.
     '''
-    def __init__(self, initial_state, step_function, crunching_profile):
+    def __init__(self, initial_state, step_generator, crunching_profile):
         
         multiprocessing.Process.__init__(self)
         
-        self.step_function = step_function
+        self.step_generator = step_generator
         self.initial_state = initial_state
         self.last_clock = self.initial_state.clock
         self.crunching_profile = crunching_profile
-        copy.deepcopy(crunching_profile)
         
         self.daemon = True
 
@@ -119,30 +118,17 @@ class CruncherProcess(multiprocessing.Process):
         
         self.step_profile = self.crunching_profile.step_profile
         
+        self.iterator = self.step_generator(self.initial_state,
+                                            self.step_profile)
+        
         order = None
         
-        while True:
-            state = self.step_function(state,
-                                       *self.step_profile.args,
-                                       **self.step_profile.kwargs)
-            self.auto_clock(state)
+        for state in self.iterator:
             self.work_queue.put(state)
             self.check_crunching_profile(state)
             order = self.get_order()
             if order:
-                self.process_order(order)
-    
-             
-    def auto_clock(self, state):
-        '''
-        If the state lacks a clock attribute, set one up automatically.
-        
-        The new clock attribute will be equal to the clock of the old state
-        plus 1.
-        '''
-        if not hasattr(state, "clock"):
-            state.clock = self.last_clock + 1
-        self.last_clock = state.clock           
+                self.process_order(order) 
         
         
     def check_crunching_profile(self, state):
@@ -170,23 +156,24 @@ class CruncherProcess(multiprocessing.Process):
     
         
     def process_order(self, order):
-        '''
-        Process an order receieved from order_queue.
-        '''
+        '''Process an order receieved from order_queue.'''
         
         if order == "retire":
             raise ObsoleteCruncherError
         
         elif isinstance(order, CrunchingProfile):
+            self.process_crunching_profile_order(order)
             
-            if self.crunching_profile.step_profile != \
-               order.step_profile:
-                
-                self.work_queue.put(order.step_profile)
-                
-            self.crunching_profile = order
-            self.step_profile = order.step_profile
-
+            
+            
+    def process_crunching_profile_order(self, order):
+        '''tododoc'''
+        if self.crunching_profile.step_profile != order.step_profile:
+            self.work_queue.put(order.step_profile)
+        self.crunching_profile = order
+        self.step_profile = order.step_profile            
+        self.iterator.set_step_profile(self.step_profile)
+        
             
     def retire(self):
         '''
@@ -198,9 +185,7 @@ class CruncherProcess(multiprocessing.Process):
         
         
     def update_crunching_profile(self, profile):
-        '''
-        Update the cruncher's crunching profile. Process-safe.
-        '''
+        '''Update the cruncher's crunching profile. Process-safe.'''
         self.order_queue.put(profile)
         
         

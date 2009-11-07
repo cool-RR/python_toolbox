@@ -12,6 +12,7 @@ def store(method, *args, **kwargs):
     self = args[0]
     result = method(*args, **kwargs)
     self.last_state_clock = result
+    return result
     
 class AutoClockGenerator(object):
     def __init__(self):
@@ -22,8 +23,8 @@ class AutoClockGenerator(object):
         if hasattr(state, 'clock'):
             return state.clock
         else:
-            if self.last_state_clock:
-                return self.last_state.clock + 1
+            if self.last_state_clock is not None: # can be 0
+                return self.last_state_clock + 1
             else:       
                 return 0
             

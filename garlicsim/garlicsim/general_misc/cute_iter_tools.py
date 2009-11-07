@@ -24,4 +24,8 @@ def pairs(iterable):
             first_run = False
         old = current
         
-        
+def finitize(iterable, n):
+    '''tododoc'''
+    iterator = iter(iterable)
+    for i in xrange(n):
+        yield iterator.next()
