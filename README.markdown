@@ -81,5 +81,5 @@ Then people ask, if it is so general, how is it useful? There are two answers to
 
 ## Does GarlicSim give mathematical tools for simulations? ##
 
-**No.** GarlicSim doesn't contain any mathematical tools, or any algorithms to be used in simulations. These things are related to the **content** of the simulation, which is none of GarlicSim's business. GarlicSim handles the organization, or "bureaucracy" of the simulation, so you can concentrate on the content. There are many Python projects that give mathematical tools and algorithms that may be of use to you in you simulations, and you should use them in your simpack.
+**No.** GarlicSim doesn't contain any mathematical tools, or any algorithms to be used in simulations. These things are related to the **content** of the simulation, which is none of GarlicSim's business. GarlicSim handles the organization, or "bureaucracy" of the simulation, so you can concentrate on the content. If you need mathematical tools for your simulation there are many Python projects that provide them, and you may use them in your simpack that you run with GarlicSim.
 
