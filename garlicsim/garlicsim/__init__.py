@@ -22,3 +22,5 @@ from asynchronous_crunching import Project
 from synchronous_crunching import simulate, list_simulate
 
 __all__ = ["Project", "simulate", "list_simulate"]
+
+__version__ = '0.1'

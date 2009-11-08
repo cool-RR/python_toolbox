@@ -11,6 +11,7 @@ import os
 from distutils.core import setup
 import distutils
 from garlicsim.general_misc import package_finder
+import garlicsim
 
 try:
     distutils.dir_util.remove_tree('build', verbose=True)
@@ -40,13 +41,13 @@ my_classifiers = [
 
 setup(
     name='garlicsim',
-    version='0.1',
+    version=garlicsim.__version__,
     description='Pythonic framework for working with simulations',
     author='Ram Rachum',
     author_email='cool-rr@cool-rr.com',
     url='http://garlicsim.org',
     packages=my_packages,
-    license= "LGPL 2.1 License",
+    license="LGPL v2.1",
     long_description = my_long_description,
     classifiers = my_classifiers,
 )
