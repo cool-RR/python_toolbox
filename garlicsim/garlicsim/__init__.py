@@ -16,6 +16,8 @@ This licensing does not apply to `garlicsim_wx`, which is the associated GUI
 package.
 '''
 
+import general_misc
+import misc
 from asynchronous_crunching import Project
 from synchronous_crunching import simulate, list_simulate
 

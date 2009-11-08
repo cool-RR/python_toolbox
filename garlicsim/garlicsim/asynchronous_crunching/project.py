@@ -255,7 +255,7 @@ class Project(object):
         
         iterator = self.simpack_grokker.step_generator(history_browser,
                                                        step_profile)
-        finite_iterator = cute_iter_tools.finitize(iterator, iterations)
+        finite_iterator = cute_iter_tools.shorten(iterator, iterations)
         
         current_node = node
         for current_state in finite_iterator:
@@ -287,7 +287,7 @@ class Project(object):
         state = node.state
                 
         iterator = self.simpack_grokker.step_generator(state, step_profile)
-        finite_iterator = cute_iter_tools.finitize(iterator, iterations)
+        finite_iterator = cute_iter_tools.shorten(iterator, iterations)
         
         current_node = node
         

@@ -147,7 +147,7 @@ class CruncherThread(threading.Thread):
             self.process_crunching_profile_order(order)
             
     def process_crunching_profile_order(self, order):
-        '''tododoc'''
+        '''Process an order to update the crunching profile.'''
         if self.crunching_profile.step_profile != order.step_profile:
             self.work_queue.put(copy.deepcopy(order.step_profile))
         self.crunching_profile = order

@@ -8,7 +8,7 @@ See their documentation for more details.
 
 import functools
 
-from garlicsim.misc import AutoClockGenerator, StepIterator
+from garlicsim.misc import AutoClockGenerator, StepIterator, InvalidSimpack
 import garlicsim
 
 __all__ = ["SimpackGrokker"]
@@ -50,19 +50,24 @@ class SimpackGrokker(object):
         
         if self.history_step_defined and self.non_history_step_defined:
             raise InvalidSimpack('''The simulation package is defining both a \
-            history-dependent step and a non-history-dependent step - which \
-            is forbidden.''')
+history-dependent step and a non-history-dependent step - which is forbidden.\
+''')
         
         if not (self.simple_step_defined or self.step_generator_defined):
-            raise InvalidSimpack('''The simulation package has not defined any
-            kind of step function.''')
+            raise InvalidSimpack('''The simulation package has not defined any \
+kind of step function.''')
         
         self.history_dependent = self.history_step_defined
         
         
         
     def step(self, state_or_history_browser, step_profile):
-        '''tododoc'''
+        '''
+        Perform a step of the simulation.
+        
+        The step profile will specify which parameters to pass to the simpack's
+        step function.
+        '''
         auto_clock_generator = AutoClockGenerator()
         if isinstance(state_or_history_browser,
                       garlicsim.data_structures.State):
@@ -92,7 +97,12 @@ class SimpackGrokker(object):
         
     
     def step_generator(self, state_or_history_browser, step_profile):
-        '''tododoc'''
+        '''
+        Step generator for crunching states of the simulation.
+        
+        The step profile will specify which parameters to pass to the simpack's
+        step function.
+        '''
         
         if self.step_generator_defined:
             step_generator = self.simpack.history_step_generator if \

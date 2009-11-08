@@ -6,6 +6,9 @@ This module defines the `simulate` function. See its documentation for more
 information.
 '''
 
+import copy
+import warnings
+
 from garlicsim.general_misc import cute_iter_tools
 
 import garlicsim
@@ -25,6 +28,11 @@ def simulate(simpack, state, iterations=1, *args, **kwargs):
     '''
     simpack_grokker = garlicsim.misc.SimpackGrokker(simpack)
     step_profile = garlicsim.misc.StepProfile(*args, **kwargs)
+
+    if not hasattr(state, 'clock'):
+        state = copy.deepcopy(state)        
+        state.clock = 0
+    
     if simpack_grokker.history_dependent:
         return __history_simulate(simpack_grokker, state, iterations,
                                   step_profile)
@@ -51,7 +59,7 @@ def __history_simulate(simpack_grokker, state, iterations=1, step_profile=None):
     history_browser = history_browser_module.HistoryBrowser(path)
     
     iterator = simpack_grokker.step_generator(history_browser, step_profile)
-    finite_iterator = cute_iter_tools.finitize(iterator, iterations)
+    finite_iterator = cute_iter_tools.shorten(iterator, iterations)
     
     current_node = root
     for current_state in finite_iterator:
@@ -77,7 +85,7 @@ def __non_history_simulate(simpack_grokker, state, iterations=1,
     '''
     if step_profile is None: step_profile = garlicsim.misc.StepProfile()
     iterator = simpack_grokker.step_generator(state, step_profile)
-    finite_iterator = cute_iter_tools.finitize(iterator, iterations)
+    finite_iterator = cute_iter_tools.shorten(iterator, iterations)
     for current_state in finite_iterator:
         pass
         
