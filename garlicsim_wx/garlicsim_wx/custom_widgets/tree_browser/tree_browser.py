@@ -10,12 +10,15 @@ This module defines the TreeBrowser class. See its documentation for more info.
 import os
 from math import *
 
-from wx.lib.scrolledpanel import ScrolledPanel
+import pkg_resources
 import wx
+from wx.lib.scrolledpanel import ScrolledPanel
 
 import garlicsim_wx.general_misc.vectorish as vectorish
 import garlicsim.data_structures
 
+from . import images as __images_package
+images_package = __images_package.__name__
 
 connector_length = 10 # length of connecting line between elements
 
@@ -126,15 +129,22 @@ class NiftyPaintDC(wx.PaintDC):
         wx.PaintDC.__init__(self, window, *args, **kwargs)
         self.gui_project = gui_project
         self.origin = origin
-
-        self.elements = {
-            "Untouched": wx.Bitmap(os.path.join("images","graysquare.png"), wx.BITMAP_TYPE_ANY),
-            "Touched": wx.Bitmap(os.path.join("images","graystar.png"), wx.BITMAP_TYPE_ANY),
-            "Block": wx.Bitmap(os.path.join("images","grayblock.png"), wx.BITMAP_TYPE_ANY),
-            "Active Untouched": wx.Bitmap(os.path.join("images","orangesquare.png"), wx.BITMAP_TYPE_ANY),
-            "Active Touched": wx.Bitmap(os.path.join("images","orangestar.png"), wx.BITMAP_TYPE_ANY),
-            "Active Block": wx.Bitmap(os.path.join("images","orangeblock.png"), wx.BITMAP_TYPE_ANY),
+        
+        elements_raw = {
+            
+            'Untouched': 'graysquare.png',
+            'Touched': 'graystar.png',
+            'Block': 'grayblock.png',
+            'Active Untouched': 'orangesquare.png',
+            'Active Touched': 'orangestar.png',
+            'Active Block': 'orangeblock.png',
         }
+        
+        self.elements = {}
+        for key in elements_raw:
+            file_name = pkg_resources.resource_filename(images_package,
+                                                        elements_raw[key])
+            self.elements[key] = wx.Bitmap(file_name, wx.BITMAP_TYPE_ANY)
 
     def draw_sub_tree(self, point, tree, start):
         make_block_stripe = False
