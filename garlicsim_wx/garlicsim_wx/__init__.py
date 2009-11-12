@@ -9,6 +9,10 @@ working with simulations, friendly enough that it may be used by
 non-programmers.
 '''
 
+import garlicsim.general_misc.requirement_checker
+for thing in ['Distribute', 'wxPython', 'GarlicSim']: # cancel in my debug mode?
+    garlicsim.general_misc.requirement_checker.require(thing)
+
 import wx
 
 from application_window import ApplicationWindow
