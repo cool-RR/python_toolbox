@@ -9,5 +9,23 @@ working with simulations, friendly enough that it may be used by
 non-programmers.
 '''
 
-from application_window import ApplicationWindow, start
+import wx
+
+from application_window import ApplicationWindow
 from gui_project import GuiProject
+
+def start():
+    '''
+    Start the gui.
+    '''
+    app = wx.PySimpleApp()
+    my_app_win = ApplicationWindow(None, -1, "GarlicSim", size=(600, 600))
+
+    '''
+    import cProfile
+    cProfile.run("app.MainLoop()")
+    '''
+    app.MainLoop()
+    
+if __name__ == "__main__":
+    start()
