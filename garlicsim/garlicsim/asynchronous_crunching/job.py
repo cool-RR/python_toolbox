@@ -12,7 +12,7 @@ class Job(object):
     A job of crunching the simulation from a given node.
         
     A job specifies a node and a crunching profile. It means we should crunch
-    from node according to the cruncing profile.
+    from `node` according to the cruncing profile.
     '''
     def __init__(self, node, crunching_profile):
         
@@ -36,12 +36,19 @@ class Job(object):
         
 
     def __repr__(self): #todo: ensure not subclass?
+        '''
+        Get a string representation of the job.
+        
+        Example output: 
+
+        Job(node=<garlicsim.data_structures.node.Node with clock 17, untouched,
+        belongs to a block, crunched with StepProfile(), at 0x20664b0>,
+        crunching_profile=CrunchingProfile(clock_target=100,
+        step_profile=StepProfile()))
+        '''
+        
         stuff = []
         stuff.append("node=%s" % self.node)
         stuff.append("crunching_profile=%s" % self.crunching_profile)
         temp = ", ".join(stuff)
         return ("Job(%s)" % temp)
-    
-    
-    
-    

@@ -132,5 +132,5 @@ StopIteration before producing a single state.''')
         self.step_profile = copy.deepcopy(step_profile)
         self.step_profile_changed = True
         
-    
+
     
