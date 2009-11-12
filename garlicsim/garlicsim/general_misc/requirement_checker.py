@@ -31,9 +31,9 @@ def require(distribution_name, silent=False):
         if silent:
             return False
         else:
-            raise DistributionNotFound('''The '%s' module is requires, but \
+            raise DistributionNotFound('''The '%s' module is required, but \
 it's not currently installed on your system. Please find it online and \
-install it, then try again.''')
+install it, then try again.''' % distribution_name)
         
         
     
