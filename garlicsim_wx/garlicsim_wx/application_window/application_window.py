@@ -1,7 +1,14 @@
 # Copyright 2009 Ram Rachum. No part of this program may be used, copied or
 # distributed without explicit written permission from Ram Rachum.
 
-import os, sys
+'''
+This module defines the ApplicationWindow class.
+
+See its documentation for more information.
+'''
+
+import os
+import sys
 import random
 import cPickle
 
@@ -9,7 +16,6 @@ import wx
 import pkg_resources
 
 import garlicsim_wx.general_misc.notebookctrl
-import garlicsim_wx.general_misc.homedirectory
 import garlicsim_wx.general_misc.thread_timer as thread_timer
 
 import garlicsim
@@ -18,24 +24,6 @@ import garlicsim_wx.custom_widgets
 
 from . import images as __images_package
 images_package = __images_package.__name__
-
-
-########################
-def get_program_path():
-    module_file = __file__
-    module_dir = os.path.split(os.path.abspath(module_file))[0]
-    program_folder = os.path.abspath(module_dir)
-    return program_folder
-
-def use_path(path):
-    os.chdir(path)
-    sys.path.append(path)
-    
-def fuck_the_path():
-    use_path(get_program_path())
-    
-fuck_the_path()
-########################
 
 
 class ApplicationWindow(wx.Frame):
