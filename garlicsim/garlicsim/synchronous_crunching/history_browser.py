@@ -52,7 +52,7 @@ class HistoryBrowser(garlicsim.misc.history_browser.HistoryBrowser):
     def __getitem__(self, index):
         '''Get a state by its position in the timeline.'''
         assert isinstance(index, int)
-        return self.path.__getitem__(index, end_node=end_node).state
+        return self.path.__getitem__(index, end_node=self.end_node).state
     
     def get_state_by_monotonic_function(self, function, value,
                                         rounding="closest"):
