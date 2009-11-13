@@ -55,29 +55,21 @@ class HistoryBrowser(garlicsim.misc.history_browser.HistoryBrowser):
         self.tree_lock = self.project.tree_lock
     
     def __enter__(self, *args, **kwargs):
-        '''
-        Acquire the project's tree_lock for reading.
-        '''
+        '''Acquire the project's tree_lock for reading.'''
         self.tree_lock.acquireRead()
     
     def __exit__(self, *args, **kwargs):
-        '''
-        Release the project's tree_lock.
-        '''
+        '''Release the project's tree_lock.'''
         self.tree_lock.release()
      
     @with_self
     def get_last_state(self):
-        '''
-        Get the last state in the timeline. Identical to __getitem__(-1).
-        '''
+        '''Get the last state in the timeline. Identical to __getitem__(-1).'''
         return self[-1]
     
     @with_self
     def __getitem__(self, index):
-        '''
-        Get a state by its position in the timeline.
-        '''
+        '''Get a state by its position in the timeline.'''
         assert isinstance(index, int)
         if index < 0:
             return self.__get_item_negative(index)
@@ -250,9 +242,7 @@ class HistoryBrowser(garlicsim.misc.history_browser.HistoryBrowser):
     
     @with_self
     def __get_our_node(self):
-        '''
-        Get the node that the current cruncher is assigned to work on.
-        '''        
+        '''Get the node that the current cruncher is assigned to work on.'''
         jobs_to_crunchers = self.project.crunching_manager.crunchers.items()
         
         nodes_that_are_us = \

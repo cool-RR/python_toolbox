@@ -46,17 +46,13 @@ class HistoryBrowser(garlicsim.misc.history_browser.HistoryBrowser):
         '''
      
     def get_last_state(self):
-        '''
-        Get the last state in the timeline. Identical to __getitem__(-1).
-        '''
-        return self.end_node.state or self[-1]
+        '''Get the last state in the timeline. Identical to __getitem__(-1).'''
+        return self.end_node.state if self.end_node else self[-1]
     
     def __getitem__(self, index):
-        '''
-        Get a state by its position in the timeline.
-        '''
+        '''Get a state by its position in the timeline.'''
         assert isinstance(index, int)
-        return self.path.__getitem__(index, end_node=end_node).state
+        return self.path.__getitem__(index, end_node=self.end_node).state
     
     def get_state_by_monotonic_function(self, function, value,
                                         rounding="closest"):
@@ -90,4 +86,4 @@ class HistoryBrowser(garlicsim.misc.history_browser.HistoryBrowser):
         2. The length of the path in the tree which leads to our node, up to
            our node.
         '''
-        return len(self.path, end_node=end_node)
+        return len(self.path, end_node=self.end_node)

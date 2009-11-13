@@ -2,8 +2,10 @@ import time
 import garlicsim
 from garlicsim.bundled.simulation_packages import life
 from garlicsim.bundled.simulation_packages import prisoner
+from garlicsim.bundled.simulation_packages import _history_test
 
-simpack = life
+
+simpack = _history_test
 
 if __name__ == '__main__':
     
@@ -19,13 +21,13 @@ if __name__ == '__main__':
     
     result = garlicsim.list_simulate(simpack, state, 10)
     
-    assert result[-1] == new_state
+    # assert result[-1] == new_state
     
     
     project = garlicsim.Project(simpack)
     
-    project.crunching_manager.Cruncher = \
-        garlicsim.asynchronous_crunching.crunchers_warehouse.crunchers['CruncherProcess']
+    #project.crunching_manager.Cruncher = \
+    #    garlicsim.asynchronous_crunching.crunchers_warehouse.crunchers['CruncherProcess']
     
     root = project.root_this_state(state)
     
