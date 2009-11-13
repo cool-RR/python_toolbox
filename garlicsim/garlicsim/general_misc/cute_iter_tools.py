@@ -24,4 +24,20 @@ def pairs(iterable):
             first_run = False
         old = current
         
+def shorten(iterable, n):
+    '''
+    Shorten an iterator to length n.
+    
+    Iterate over the given iterable, but stop after n iterations (Or when the
+    iterable stops iteration by itself.)
+    
+    todo: make possible for n to be infinite.
+    '''
+    
+    assert isinstance(n, int)
+    counter = 0
+    for thing in iterable:
+        if counter >= n: raise StopIteration
+        yield thing
+        counter += 1
         

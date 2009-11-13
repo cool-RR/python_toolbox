@@ -52,6 +52,12 @@ class StepProfile(object):
         self.kwargs = copy.copy(profile.kwargs)
         
     def __repr__(self):
+        '''
+        Get a string representation of the step profile.
+        
+        Example output:
+        StepProfile('billinear', t=7)
+        '''
         args_string = ', '.join([repr(thing) for thing in self.args])
         kwargs_string = ', '.join([str(key)+'='+repr(value) for \
                                    (key, value) in self.kwargs.items()])

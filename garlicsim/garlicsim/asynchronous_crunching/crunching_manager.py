@@ -20,10 +20,18 @@ from crunchers_warehouse import crunchers
 from crunching_profile import CrunchingProfile
 from garlicsim.misc.step_profile import StepProfile
 
-PreferredCruncher = crunchers['CruncherThread']
-# Should make a nicer way of setting that.
+__all__ = ['CrunchingManager', 'DefaultCruncher', 'DefaultHistoryCruncher']
 
-__all__ = ["CrunchingManager"]
+DefaultCruncher = crunchers['CruncherThread']
+'''
+The cruncher class to be used by default in non-history-dependent simulations.
+'''
+
+DefaultHistoryCruncher = crunchers['CruncherThread']
+'''
+The cruncher class to be used by default in history-dependent simulations.
+'''
+
 
 @garlicsim.general_misc.third_party.decorator.decorator
 def with_tree_lock(method, *args, **kwargs):
@@ -56,10 +64,9 @@ class CrunchingManager(object):
     def __init__(self, project):        
         self.project = project
         
-        if project.simpack_grokker.history_dependent:
-            self.Cruncher = crunchers['CruncherThread']
-        else:
-            self.Cruncher = PreferredCruncher
+        history_dependent = project.simpack_grokker.history_dependent 
+        self.Cruncher = \
+            DefaultHistoryCruncher if history_dependent else DefaultCruncher
         
         self.jobs = []
         '''
@@ -173,7 +180,7 @@ class CrunchingManager(object):
             if self.Cruncher == crunchers.get('CruncherProcess', None):
                 cruncher = self.Cruncher \
                          (node.state,
-                          self.project.simpack_grokker.step,
+                          self.project.simpack_grokker.step_generator,
                           crunching_profile=crunching_profile)
             else: # self.Cruncher == crunchers['CruncherThread']
                 cruncher = self.Cruncher(node.state, self.project,

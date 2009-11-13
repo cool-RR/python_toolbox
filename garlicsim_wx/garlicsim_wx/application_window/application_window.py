@@ -1,39 +1,31 @@
 # Copyright 2009 Ram Rachum. No part of this program may be used, copied or
 # distributed without explicit written permission from Ram Rachum.
 
+'''
+This module defines the ApplicationWindow class.
+
+See its documentation for more information.
+'''
+
 from __future__ import with_statement
 
-import os, sys
+import os
+import sys
 import random
 import cPickle
 
 import wx
+import pkg_resources
 
-import general_misc.notebookctrl
-import general_misc.homedirectory
-import general_misc.thread_timer as thread_timer
+import garlicsim_wx.general_misc.notebookctrl
+import garlicsim_wx.general_misc.thread_timer as thread_timer
 
 import garlicsim
-import gui_project
-import custom_widgets
+import garlicsim_wx.gui_project
+import garlicsim_wx.custom_widgets
 
-
-########################
-def get_program_path():
-    module_file = __file__
-    module_dir = os.path.split(os.path.abspath(module_file))[0]
-    program_folder = os.path.abspath(module_dir)
-    return program_folder
-
-def use_path(path):
-    os.chdir(path)
-    sys.path.append(path)
-    
-def fuck_the_path():
-    use_path(get_program_path())
-    
-fuck_the_path()
-########################
+from . import images as __images_package
+images_package = __images_package.__name__
 
 
 class ApplicationWindow(wx.Frame):
@@ -46,10 +38,10 @@ class ApplicationWindow(wx.Frame):
         
         wx.Frame.__init__(self, *args, **keywords)
         self.SetDoubleBuffered(True)
-        self.notebook = general_misc.notebookctrl.NotebookCtrl(
+        self.notebook = garlicsim_wx.general_misc.notebookctrl.NotebookCtrl(
             self,
             -1,
-            style=general_misc.notebookctrl.NC_TOP
+            style=garlicsim_wx.general_misc.notebookctrl.NC_TOP
         )
 
         self.gui_projects = []
@@ -76,16 +68,26 @@ class ApplicationWindow(wx.Frame):
         ######################################
         
         toolbar = self.CreateToolBar()
+        image_file_name = {
+            'new': 'new.png',
+            'done': 'check.png',
+        }
+        images = {}
+        for key in image_file_name:
+            file_name = pkg_resources.resource_filename(images_package,
+                                                        image_file_name[key])
+            images[key] = wx.Bitmap(file_name, wx.BITMAP_TYPE_ANY)
+            
         new_tool = toolbar.AddSimpleTool(
             -1,
-            wx.Bitmap(os.path.join("images", "new.png"), wx.BITMAP_TYPE_ANY),
+            images['new'],
             "New",
             " Create a new file"
         )
         toolbar.AddSeparator()
         done_tool = toolbar.AddSimpleTool(
             -1,
-            wx.Bitmap(os.path.join("images", "check.png"), wx.BITMAP_TYPE_ANY),
+            images['done'],
             "Done editing",
             " Done editing"
         )
@@ -153,7 +155,7 @@ class ApplicationWindow(wx.Frame):
             fuck_the_path()
             
         if tickled_gui_project:
-            my_gui_project = gui_project.load_tickled_gui_project\
+            my_gui_project = garlicsim_wx.gui_project.load_tickled_gui_project\
                 (tickled_gui_project, self.notebook)
         self.add_gui_project(my_gui_project)
     
@@ -217,7 +219,7 @@ class ApplicationWindow(wx.Frame):
 
     def on_new(self, e):
         '''Create a new gui project.'''        
-        dialog = custom_widgets.SimpackSelectionDialog(self,-1)
+        dialog = garlicsim_wx.custom_widgets.SimpackSelectionDialog(self, -1)
         if dialog.ShowModal() == wx.ID_OK:
             simpack = dialog.get_simpack_selection()
         else:
@@ -225,7 +227,7 @@ class ApplicationWindow(wx.Frame):
             return
         dialog.Destroy()
 
-        my_gui_project = gui_project.GuiProject(simpack, self.notebook)
+        my_gui_project = garlicsim_wx.gui_project.GuiProject(simpack, self.notebook)
         self.add_gui_project(my_gui_project)
 
     def sync_crunchers(self, e=None):
@@ -246,22 +248,3 @@ class ApplicationWindow(wx.Frame):
         return sum((gui_project.sync_crunchers() for gui_project in
                     self.gui_projects))
 
-
-
-def start():
-    '''
-    Start the gui.
-    '''
-    app = wx.PySimpleApp()
-    my_app_win = ApplicationWindow(None, -1, "GarlicSim", size=(600, 600))
-
-    '''
-    import cProfile
-    cProfile.run("app.MainLoop()")
-    '''
-    app.MainLoop()
-
-
-
-if __name__ == "__main__":
-    start()

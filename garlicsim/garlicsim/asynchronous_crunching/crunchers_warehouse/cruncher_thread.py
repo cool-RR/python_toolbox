@@ -45,7 +45,7 @@ class CruncherThread(threading.Thread):
         threading.Thread.__init__(self)
         
         self.project = project
-        self.step_function = project.simpack_grokker.step
+        self.step_generator = project.simpack_grokker.step_generator
         self.crunching_profile = copy.deepcopy(crunching_profile)
         self.history_dependent = self.project.simpack_grokker.history_dependent
         
@@ -99,34 +99,17 @@ class CruncherThread(threading.Thread):
             thing = self.history_browser
         else:
             thing = self.initial_state
+
+        self.iterator = self.step_generator(thing, self.step_profile)
             
         order = None
         
-        while True:
-            state = self.step_function(thing,
-                                       *self.step_profile.args,
-                                       **self.step_profile.kwargs)
-            if not self.history_dependent:
-                thing = state
-                
-            self.auto_clock(state)
+        for state in self.iterator:
             self.work_queue.put(state)
             self.check_crunching_profile(state)
             order = self.get_order()
             if order:
                 self.process_order(order)
-
-                
-    def auto_clock(self, state):
-        '''
-        If the state lacks a clock attribute, set one up automatically.
-        
-        The new clock attribute will be equal to the clock of the old state
-        plus 1.
-        '''
-        if not hasattr(state, "clock"):
-            state.clock = self.last_clock + 1
-        self.last_clock = state.clock
 
         
     def check_crunching_profile(self, state):
@@ -161,16 +144,16 @@ class CruncherThread(threading.Thread):
             raise ObsoleteCruncherError
         
         elif isinstance(order, CrunchingProfile):
+            self.process_crunching_profile_order(order)
             
-            if self.crunching_profile.step_profile != \
-               order.step_profile:
-                
-                self.work_queue.put(order.step_profile)
-                
-            self.crunching_profile = order
-            self.step_profile = order.step_profile
-            
-            
+    def process_crunching_profile_order(self, order):
+        '''Process an order to update the crunching profile.'''
+        if self.crunching_profile.step_profile != order.step_profile:
+            self.work_queue.put(copy.deepcopy(order.step_profile))
+        self.crunching_profile = order
+        self.step_profile = order.step_profile            
+        self.iterator.set_step_profile(self.step_profile)
+        
     def retire(self):
         '''
         Retire the cruncher. Thread-safe.

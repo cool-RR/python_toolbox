@@ -5,6 +5,7 @@ Run `run_gui.py` in the root folder to launch the GUI. Then, File -> New. Choose
 Requires:
 
 * [Python 2.5](http://www.python.org/download/releases/2.5.4/) (Scroll down to the "Python versions" section for other versions.)
+* [Distribute](http://pypi.python.org/pypi/distribute), version 0.6.8 or later
 
 Optional:
 
