@@ -10,6 +10,9 @@ the standard library for Python 2.6 and above, but not for earlier versions.
 Backports of it for Python 2.4 and 2.5 are available on the internet.
 '''
 
+import garlicsim.general_misc.requirement_checker
+garlicsim.general_misc.requirement_checker.require('multiprocessing')
+
 import multiprocessing
 import copy
 import Queue
