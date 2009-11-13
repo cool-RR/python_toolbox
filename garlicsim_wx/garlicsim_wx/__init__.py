@@ -10,7 +10,7 @@ non-programmers.
 '''
 
 import garlicsim.general_misc.requirement_checker
-for thing in ['Distribute', 'GarlicSim']: #+ ['wxPython'] arrgh : # cancel in my debug mode?
+for thing in ['Distribute']: # + ['GarlicSim', 'wxPython'] arrgh : # cancel in my debug mode?
     garlicsim.general_misc.requirement_checker.require(thing)
 
 import wx
