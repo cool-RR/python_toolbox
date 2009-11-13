@@ -28,16 +28,12 @@ class HistoryBrowser(object):
     
     @abc.abstractmethod
     def get_last_state(self):
-        '''
-        Get the last state in the timeline. Identical to __getitem__(-1).
-        '''
+        '''Get the last state in the timeline. Identical to __getitem__(-1).'''
         pass
     
     @abc.abstractmethod
     def __getitem__(self):
-        '''
-        Get a state by its position in the timeline.
-        '''
+        '''Get a state by its position in the timeline.'''
         pass
     
     @abc.abstractmethod
