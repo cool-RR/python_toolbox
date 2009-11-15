@@ -224,6 +224,9 @@ class CrunchingManager(object):
                     parent=current,
                     step_profile=self.step_profiles[cruncher]
                 )
+                # todo optimization: save step profile in variable, it's
+                # wasteful to do a dict lookup every state.
+                
             elif isinstance(thing, StepProfile):
                 self.step_profiles[cruncher] = thing
             else:
