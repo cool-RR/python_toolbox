@@ -1,6 +1,6 @@
 # Installation #
 
-[Binary installers are available here.](http://github.com/cool-RR/GarlicSim-for-Python-2.6/downloads)
+[**Binary installers** are available here.](http://github.com/cool-RR/GarlicSim-for-Python-2.6/downloads)
 
 For a source installation: Download the repo, then run `setup.py install` twice, once in the `garlicsim` folder and once in the `garlicsim_wx` folder.
 
@@ -29,7 +29,7 @@ If you wish, it's possible to just run the gui and play with it without installi
 
 -------------
 
-What to do in the GUI? Then, File -> New. Choose one of the simulation packages, press Ok. A dialog will pop up, press Ok. Double click the seek bar to toggle playing.
+What to do in the GUI? Select File -> New. Choose one of the simulation packages, press Ok. A dialog will pop up, press Ok. Double click the seek bar to toggle playing.
 
 # What is GarlicSim? #
 
