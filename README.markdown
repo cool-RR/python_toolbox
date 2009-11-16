@@ -1,8 +1,17 @@
-# How to run #
+# Installation #
 
-Run `run_gui.py` in the root folder to launch the GUI. Then, File -> New. Choose one of the simulation packages, press Ok. A dialog will pop up, press Ok. Double click the seek bar to toggle playing.
+[Binary installers are available here.](http://github.com/cool-RR/GarlicSim-for-Python-2.6/downloads)
 
-Requires:
+For a source installation: Download the repo, then run `setup.py install` twice, once in the `garlicsim` folder and once in the `garlicsim_wx` folder.
+
+To start the GUI:
+
+    import garlicsim_wx
+    if __name__ == '__main__': # Needed because of multiprocessing
+        garlicsim_wx.start()
+
+
+Requirements:
 
 * [Python 2.6](http://www.python.org/download/releases/2.6.4/) (Scroll down to the "Python versions" section for other versions.)
 * [Distribute](http://pypi.python.org/pypi/distribute), version 0.6.8 or later
@@ -12,9 +21,15 @@ Optional:
 * [Psyco](http://psyco.sourceforge.net/)
 * on Windows only: [Python for Windows Extensions](http://sourceforge.net/projects/pywin32/)
 
-Gui requires:
+Gui requirements:
 
 * [wxPython](http://www.wxpython.org/) (Not needed for non-gui usage.)
+
+If you wish, it's possible to just run the gui and play with it without installing anything. To do so, download the repo and run the `run_gui.py` file in the root folder.
+
+-------------
+
+What to do in the GUI? Then, File -> New. Choose one of the simulation packages, press Ok. A dialog will pop up, press Ok. Double click the seek bar to toggle playing.
 
 # What is GarlicSim? #
 

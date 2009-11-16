@@ -2,7 +2,7 @@
 # distributed without explicit written permission from Ram Rachum.
 
 '''
-This is garlicsim_wx, a wxPython GUI for GarlicSim.
+garlicsim_wx, a wxPython GUI for garlicsim.
 
 The final goal of this project is to become a fully-fledged application for
 working with simulations, friendly enough that it may be used by
@@ -15,6 +15,10 @@ import wx
 
 from application_window import ApplicationWindow
 from gui_project import GuiProject
+
+__all__ = ['ApplicationWindow', 'GuiProject', 'start']
+
+__version__ = '0.1'
 
 def start():
     '''
