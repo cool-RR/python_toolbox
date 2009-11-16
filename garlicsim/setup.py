@@ -8,9 +8,8 @@ Distutils setup file for garlicsim.
 '''
 
 import os
-from distutils.core import setup
+import setuptools
 import distutils
-from garlicsim.general_misc import package_finder
 import garlicsim
 
 try:
@@ -23,11 +22,9 @@ my_long_description = \
 GarlicSim is a platform for writing, running and analyzing simulations. It can
 handle any kind of simulation: Physics, game theory, epidemic spread,
 electronics, etc.
-'''
 
-my_packages = package_finder.get_packages('garlicsim',
-                                          include_self=True,
-                                          recursive=True)
+Visit http://garlicsim.org for more info.
+'''
 
 my_classifiers = [
     'Development Status :: 2 - Pre-Alpha',
@@ -38,19 +35,20 @@ my_classifiers = [
 ]
 
 
-
-setup(
+setuptools.setup(
     name='garlicsim',
     version=garlicsim.__version__,
+    install_requires=['Distribute >= 0.6'],
     description='Pythonic framework for working with simulations',
     author='Ram Rachum',
     author_email='cool-rr@cool-rr.com',
     url='http://garlicsim.org',
-    packages=my_packages,
+    packages=setuptools.find_packages(),
     license="LGPL v2.1",
     long_description = my_long_description,
     classifiers = my_classifiers,
 )
+
 
 try:
     distutils.dir_util.remove_tree('build', verbose=True)
