@@ -61,6 +61,10 @@ Mockup:
 
 ![](http://garlicsim.org/images/mockup_thumb.gif)
 
+# Community and Support #
+
+If you need help with anything related to GarlicSim, mail me at [cool-rr@cool-rr.com](mailto:cool-rr@cool-rr.com). Soon there will be an official collaboration medium for GarlicSim.
+
 # Core and GUI #
 
 This repository contains two packages, `garlicsim`, which is the core logic, and `garlicsim_wx`, which is the wxPython-based GUI. 
