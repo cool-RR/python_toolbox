@@ -7,6 +7,8 @@ garlicsim_wx, a wxPython GUI for garlicsim.
 The final goal of this project is to become a fully-fledged application for
 working with simulations, friendly enough that it may be used by
 non-programmers.
+
+This fork of garlicsim_wx is intended for Python 2.5.
 '''
 
 import bootstrap
