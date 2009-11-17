@@ -26,10 +26,10 @@ import setuptools
 import distutils
 import garlicsim
 
-try:
-    distutils.dir_util.remove_tree('build', verbose=True)
-except Exception:
-    pass
+#try:
+    #distutils.dir_util.remove_tree('build', verbose=True)
+#except Exception:
+    #pass
 
 my_long_description = \
 '''\
@@ -67,8 +67,8 @@ try:
     
 
 finally:
-    
-    try:
-        distutils.dir_util.remove_tree('build', verbose=True)
-    except Exception:
-        pass
+    pass
+    #try:
+        #distutils.dir_util.remove_tree('build', verbose=True)
+    #except Exception:
+        #pass
