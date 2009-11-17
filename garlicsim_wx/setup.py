@@ -4,7 +4,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-Distribute setup file for garlicsim.
+Distribute setup file for garlicsim_wx.
 '''
 
 def ensure_Distribute_is_installed():
@@ -24,7 +24,7 @@ ensure_Distribute_is_installed()
 import os
 import setuptools
 import distutils
-import garlicsim
+import garlicsim_wx
 
 try:
     distutils.dir_util.remove_tree('build', verbose=True)
@@ -33,37 +33,38 @@ except Exception:
 
 my_long_description = \
 '''\
-GarlicSim is a platform for writing, running and analyzing simulations. It can
-handle any kind of simulation: Physics, game theory, epidemic spread,
-electronics, etc.
+garlicsim_wx, a wxPython GUI for garlicsim.
 
-Visit http://garlicsim.org for more info.
+The final goal of this project is to become a fully-fledged application for
+working with simulations, friendly enough that it may be used by
+non-programmers.
 '''
 
 my_classifiers = [
-    'Development Status :: 3 - Alpha',
-    'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',
-    'Programming Language :: Python :: 2.5',
+    'Development Status :: 2 - Pre-Alpha',
+    'Programming Language :: Python :: 2.6',
     'Topic :: Scientific/Engineering',
     'Programming Language :: Python',
 ]
 
+
 try:
+    
     setuptools.setup(
-        name='garlicsim',
-        version=garlicsim.__version__,
-        install_requires=['Distribute >= 0.6'],
-        description='Pythonic framework for working with simulations',
+        name='garlicsim_wx',
+        version=garlicsim_wx.__version__,
+        install_requires=['Distribute >= 0.6', 'garlicsim == 0.1'],
+        description='Gui for garlicsim, a Pythonic framework for working with simulations',
         author='Ram Rachum',
         author_email='cool-rr@cool-rr.com',
         url='http://garlicsim.org',
         packages=setuptools.find_packages(),
-        license="LGPL v2.1",
+        license="Proprietary",
         long_description = my_long_description,
         classifiers = my_classifiers,
         include_package_data = True,
     )
-    
+
 
 finally:
     

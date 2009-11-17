@@ -1,3 +1,6 @@
+
+from __future__ import with_statement
+
 import multiprocessing
 import multiprocessing.queues
 
