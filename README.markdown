@@ -1,6 +1,6 @@
 # Installation #
 
-[**Binary installers** are available here.](http://github.com/cool-RR/GarlicSim-for-Python-2.6/downloads) (There are two separate installers, one for `garlicsim` and one for `garlicsim_wx`.)
+**Windows binary installers** are available [here](http://pypi.python.org/pypi/garlicsim%20for%20Python%202.6/) for `garlicsim` and [here](http://pypi.python.org/pypi/garlicsim_wx%20for%20Python%202.6/) for `garlicsim_wx`.
 
 For a source installation: Download the repo, then run `setup.py install` twice, once in the `garlicsim` folder and once in the `garlicsim_wx` folder.
 
