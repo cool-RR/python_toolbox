@@ -51,7 +51,7 @@ my_classifiers = [
 
 try:
     setuptools.setup(
-        name='garlicsim',
+        name='garlicsim for Python 2.5',
         version=garlicsim.__version__,
         install_requires=['Distribute >= 0.6'],
         description='Pythonic framework for working with simulations',

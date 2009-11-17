@@ -52,7 +52,7 @@ my_classifiers = [
 try:
     
     setuptools.setup(
-        name='garlicsim_wx',
+        name='garlicsim_wx for Python 2.5',
         version=garlicsim_wx.__version__,
         install_requires=['Distribute >= 0.6', 'garlicsim == 0.1'],
         description='Gui for garlicsim, a Pythonic framework for working with simulations',
