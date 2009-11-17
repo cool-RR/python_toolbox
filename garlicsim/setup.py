@@ -67,7 +67,7 @@ try:
     
 
 finally:
-    
+    pass
     try:
         distutils.dir_util.remove_tree('build', verbose=True)
     except Exception:
