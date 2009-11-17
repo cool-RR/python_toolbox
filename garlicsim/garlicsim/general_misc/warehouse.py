@@ -49,11 +49,11 @@ def create(package):
     will now be available as `my_package.objects`.
     
     
-    todo: works when frozen?
+    todo: works when frozen? Use pkg_resources?
     '''
     
     things = {}
-    modules = import_tools.import_all(package)
+    modules = import_tools.import_all(package, graceful_fail=True)
     for (module_name, module) in modules.items():
         if not hasattr(module, '__all__'):
             raise WarehouseError('''Module in warehouse must define __all__ \
