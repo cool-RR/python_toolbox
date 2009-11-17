@@ -28,7 +28,7 @@ def __check_prerequisites():
             import pkg_resources
             modules.append(pkg_resources)
             assert pkg_resources.require('Distribute >= 0.6')
-        except (ImportError, pkg_resources.DistributionNotFound, AssertionError):
+        except:
             raise MissingModule('''Distribute (version 0.6 and upwards) is \
 required, but it's not currently installed on your system. Please find it \
 online and install it, then try again.''')

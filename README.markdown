@@ -16,7 +16,7 @@ Requirements:
 * [Python 2.5](http://www.python.org/download/releases/2.5.4/) (Scroll down to the "Python versions" section for other versions.)
 * [Distribute](http://pypi.python.org/pypi/distribute), version 0.6.8 or later
 
-Optional:
+Recommended, but not mandatory:
 
 * [Psyco](http://psyco.sourceforge.net/)
 * on Windows only: [Python for Windows Extensions](http://sourceforge.net/projects/pywin32/)

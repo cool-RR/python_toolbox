@@ -53,6 +53,7 @@ try:
     setuptools.setup(
         name='garlicsim for Python 2.5',
         version=garlicsim.__version__,
+        requires=['Distribute (>= 0.6)'],
         install_requires=['Distribute >= 0.6'],
         description='Pythonic framework for working with simulations',
         author='Ram Rachum',
