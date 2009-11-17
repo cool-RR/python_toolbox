@@ -7,6 +7,20 @@
 Distribute setup file for garlicsim.
 '''
 
+def ensure_Distribute_is_installed():
+    
+    no_distribute_error = Exception('''`Distribute` is required but is not \
+installed. Download it from the internet and install it, then try again.''')
+
+    try:
+        import pkg_resources
+    except ImportError:
+        raise no_distribute_error
+    
+    pkg_resources.require('Distribute')
+
+ensure_Distribute_is_installed()
+
 import os
 import setuptools
 import distutils
