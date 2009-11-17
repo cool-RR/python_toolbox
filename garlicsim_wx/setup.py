@@ -42,6 +42,7 @@ non-programmers.
 
 my_classifiers = [
     'Development Status :: 2 - Pre-Alpha',
+    'Intended Audience :: Science/Research',
     'Programming Language :: Python :: 2.6',
     'Topic :: Scientific/Engineering',
     'Programming Language :: Python',

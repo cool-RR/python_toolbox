@@ -88,6 +88,12 @@ GarlicSim has official support for 4 different versions of Python. For each of t
 
 [GarlicSim for Python 3.1](http://github.com/cool-RR/GarlicSim-for-Python-3.1) - Does not contain gui package, since wxPython doesn't yet support Python 3.x.
 
+# Current state #
+
+Garlicsim is at version 0.1, which is an alpha release. It is still very experimental, and there are probably many bugs. If you run into any trouble, [drop me a mail](mailto:cool-rr@cool-rr.com).
+
+At this experimental stage of the project, backward compatibility will _not_ be maintained. However, I will be available to assist in issues related to backward compatibility.
+
 # Frequently asked questions: #
 
 ## What kind of simulations will I be able to do with GarlicSim? ##
