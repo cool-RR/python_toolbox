@@ -26,10 +26,10 @@ import setuptools
 import distutils
 import garlicsim
 
-#try:
-    #distutils.dir_util.remove_tree('build', verbose=True)
-#except Exception:
-    #pass
+try:
+    distutils.dir_util.remove_tree('build', verbose=True)
+except Exception:
+    pass
 
 my_long_description = \
 '''\
@@ -51,7 +51,7 @@ my_classifiers = [
 
 try:
     setuptools.setup(
-        name='garlicsim',
+        name='garlicsim for Python 2.6',
         version=garlicsim.__version__,
         install_requires=['Distribute >= 0.6'],
         description='Pythonic framework for working with simulations',
@@ -68,7 +68,7 @@ try:
 
 finally:
     pass
-    #try:
-        #distutils.dir_util.remove_tree('build', verbose=True)
-    #except Exception:
-        #pass
+    try:
+        distutils.dir_util.remove_tree('build', verbose=True)
+    except Exception:
+        pass
