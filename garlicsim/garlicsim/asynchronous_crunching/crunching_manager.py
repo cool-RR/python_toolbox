@@ -224,8 +224,10 @@ class CrunchingManager(object):
                 current = tree.add_state(
                     thing,
                     parent=current,
-                    step_profile=self.step_profiles[cruncher]
+                    step_profile=self.step_profiles[cruncher],
+                    
                 )
+                
             elif isinstance(thing, StepProfile):
                 self.step_profiles[cruncher] = thing
             else:

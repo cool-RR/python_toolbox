@@ -4,20 +4,37 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-Distutils setup file for garlicsim.
+`Distribute` setup file for garlicsim.
 '''
 
+def ensure_Distribute_is_installed():
+    
+    no_distribute_error = Exception('''`Distribute` is required but is not \
+    installed. Download it from the internet and install it, then try again.''')
+
+    try:
+        import pkg_resources
+    except ImportError:
+        raise no_distribute_error
+    
+    pkg_resources.require('Distribute')
+
+ensure_Distribute_is_installed()
+
+
+
 import os
-from distutils.core import setup
-import distutils
-from garlicsim.general_misc import package_finder
+from setuptools.core import setup
+import setuptools
 import garlicsim
 
+'''
 try:
-    distutils.dir_util.remove_tree('build', verbose=True)
+    setuptools.dir_util.remove_tree('build', verbose=True)
 except Exception:
     pass
-
+'''
+    
 my_long_description = \
 '''\
 GarlicSim is a platform for writing, running and analyzing simulations. It can
@@ -52,7 +69,9 @@ setup(
     classifiers = my_classifiers,
 )
 
+'''
 try:
     distutils.dir_util.remove_tree('build', verbose=True)
 except Exception:
     pass
+'''
