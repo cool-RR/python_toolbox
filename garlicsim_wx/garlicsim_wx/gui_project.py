@@ -15,6 +15,7 @@ import wx.lib.scrolledpanel
 import wx.py.shell
 
 import garlicsim.general_misc.queue_tools as queue_tools
+import garlicsim.general_misc.dict_tools as dict_tools
 from general_misc.stringsaver import s2i,i2s
 from garlicsim.general_misc.backport_cruft.classed_infinity import Infinity
 
@@ -83,7 +84,7 @@ class GuiProject(object):
 
         self.__init_gui(parent_window)
         
-        simpack.initialize(self)
+        self.simpack_initialize()
 
         
     def __init_gui(self, parent_window):
@@ -128,6 +129,31 @@ class GuiProject(object):
         self.stuff_to_do_when_idle = Queue.Queue()
         self.main_window.Bind(wx.EVT_IDLE, self.on_idle)
 
+    
+    def simpack_initialize(self):
+        '''
+        Initialize the simpack.
+        
+        Hackish now.
+        '''
+        assert hasattr(self.simpack, 'initialize') == \
+               hasattr(self.simpack, 'show_state')
+        
+        self.simpack_crutches = not hasattr(self.simpack, 'initialize')
+        
+        if not self.simpack_crutches:
+            return self.simpack.initialize(self)
+        else:
+            sizer = wx.BoxSizer(wx.VERTICAL)
+            self.text_state_shower = \
+                wx.TextCtrl(self.state_showing_window, -1,
+                            style=wx.TE_MULTILINE)
+            font = wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.BOLD, False, u'Courier New')
+            self.text_state_shower.SetFont(font)
+            sizer.Add(self.text_state_shower, 1, wx.EXPAND)
+            self.state_showing_window.SetSizer(sizer)
+            sizer.Fit(self.state_showing_window)
+        
         
     def __init_on_creation(self):
         '''
@@ -148,7 +174,11 @@ class GuiProject(object):
         
     def show_state(self, state):
         '''Show the state onscreen.'''
-        self.simpack.show_state(self, state)
+        if not self.simpack_crutches:
+            self.simpack.show_state(self, state)
+        else:
+            string = dict_tools.fancy_string(state.__dict__)
+            self.text_state_shower.SetValue(string)
 
         
     def set_parent_window(self, parent_window):
@@ -441,6 +471,8 @@ class GuiProject(object):
         '''
         self.seek_bar.Refresh()
         self.tree_browser.Refresh()
+        
+    
         
     def tickle(self):
         '''
