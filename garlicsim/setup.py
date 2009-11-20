@@ -24,7 +24,6 @@ ensure_Distribute_is_installed()
 import os
 import setuptools
 import distutils
-import garlicsim
 
 try:
     distutils.dir_util.remove_tree('build', verbose=True)
@@ -51,8 +50,9 @@ my_classifiers = [
 
 try:
     setuptools.setup(
-        name='garlicsim',
-        version=garlicsim.__version__,
+        name='garlicsim for Python 2.6',
+        version=garlicsim.'0.1.4',
+        requires=['Distribute (>= 0.6)'],
         install_requires=['Distribute >= 0.6'],
         description='Pythonic framework for working with simulations',
         author='Ram Rachum',
@@ -67,7 +67,7 @@ try:
     
 
 finally:
-    
+    pass
     try:
         distutils.dir_util.remove_tree('build', verbose=True)
     except Exception:

@@ -24,7 +24,6 @@ ensure_Distribute_is_installed()
 import os
 import setuptools
 import distutils
-import garlicsim_wx
 
 try:
     distutils.dir_util.remove_tree('build', verbose=True)
@@ -52,9 +51,10 @@ my_classifiers = [
 try:
     
     setuptools.setup(
-        name='garlicsim_wx',
-        version=garlicsim_wx.__version__,
-        install_requires=['Distribute >= 0.6', 'garlicsim == 0.1'],
+        name='garlicsim_wx for Python 2.6',
+        version='0.1.4',
+        requires=['Distribute (>= 0.6)', 'garlicsim (== 0.1.4)'],
+        install_requires=['Distribute >= 0.6', 'garlicsim == 0.1.4'],
         description='Gui for garlicsim, a Pythonic framework for working with simulations',
         author='Ram Rachum',
         author_email='cool-rr@cool-rr.com',
