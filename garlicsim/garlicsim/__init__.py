@@ -26,5 +26,5 @@ from synchronous_crunching import simulate, list_simulate
 
 __all__ = ["Project", "simulate", "list_simulate"]
 
-__version__ = '0.1.4'
+__version__ = '0.1.5'
 

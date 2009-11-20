@@ -52,9 +52,9 @@ try:
     
     setuptools.setup(
         name='garlicsim_wx for Python 2.6',
-        version='0.1.4',
-        requires=['Distribute (>= 0.6)', 'garlicsim (== 0.1.4)'],
-        install_requires=['Distribute >= 0.6', 'garlicsim == 0.1.4'],
+        version='0.1.5',
+        requires=['Distribute (>= 0.6)', 'garlicsim (== 0.1.5)'],
+        install_requires=['Distribute >= 0.6', 'garlicsim == 0.1.5'],
         description='Gui for garlicsim, a Pythonic framework for working with simulations',
         author='Ram Rachum',
         author_email='cool-rr@cool-rr.com',
