@@ -57,6 +57,12 @@ class Server(object):
         
     def is_busy(self):
         return (self.current_client is not None)
+    
+    def __repr__(self):
+        if self.is_busy():
+            return 'Server, busy'
+        else:
+            return 'Server, free' 
         
 
 class Client(object):
@@ -76,6 +82,7 @@ class Facility(object):
     
     def add_client(self, client):
         self.clients.append(client)
+        self.waiting_clients.append(client)
         if len(self.waiting_clients) == 1:
             idle_servers_iterator = self.idle_servers_generator()
             try:
@@ -98,6 +105,10 @@ class Facility(object):
         except IndexError:
             return None
         server.service_client(client)
+        
+    def __repr__(self):
+        return 'facility with %s clients, %s of which stand in queue' % \
+               (len(self.clients), len(self.waiting_clients))
         
                     
 
@@ -128,7 +139,7 @@ class Population(object):
     
 
 def make_plain_state(n_servers=3, population_size=Infinity, mean_arrival=1,
-                     mean_service=1):
+                     mean_service=3):
     my_state = State()
     event_set = events_module.EventSet()
     my_state.event_set = event_set
