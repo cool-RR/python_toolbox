@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-A simulation package for testing garlicsim.misc.PersistentReadOnlyObject.
+A simulation package for testing garlicsim.misc.Persistent.
 '''
 
 from prisoner import *

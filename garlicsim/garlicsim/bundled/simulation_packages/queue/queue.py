@@ -31,7 +31,7 @@ class State(garlicsim.data_structures.State):
 class Server(object):
     def __init__(self, event_set, facility, mean_service):
         
-        self.identity = garlicsim.misc.PersistentReadOnlyObject()
+        self.identity = garlicsim.misc.Persistent()
         
         self.event_set = event_set
         self.facility = facility
@@ -72,12 +72,12 @@ class Server(object):
 
 class Client(object):
     def __init__(self):
-        self.identity = garlicsim.misc.PersistentReadOnlyObject()
+        self.identity = garlicsim.misc.Persistent()
 
 class Facility(object):
     def __init__(self, event_set, servers=[], clients=[]):
         
-        self.identity = garlicsim.misc.PersistentReadOnlyObject()
+        self.identity = garlicsim.misc.Persistent()
         self.event_set = event_set
         self.servers = servers
         self.clients = clients
@@ -134,7 +134,7 @@ clients were served total.>''' % \
 class Population(object):
     def __init__(self, event_set, facility, size=Infinity, mean_arrival=1):
         assert size == Infinity
-        self.identity = garlicsim.misc.PersistentReadOnlyObject()
+        self.identity = garlicsim.misc.Persistent()
         self.size = size
         self.mean_arrival = mean_arrival
         self.event_set = event_set

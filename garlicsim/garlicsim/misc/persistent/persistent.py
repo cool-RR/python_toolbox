@@ -15,12 +15,16 @@ todo: what happens when you want to fork-by-editing a state and change
 a big 3-d model which is a PRO?
 '''
 
+
 import uuid
 import weakref
 
-__all__ = ["PersistentReadOnlyObject"]
+
+
+__all__ = ["Persistent"]
 
 library = weakref.WeakValueDictionary()
+
 
 class UuidToken(object):
     '''
@@ -29,20 +33,18 @@ class UuidToken(object):
     def __init__(self, uuid):
         self.uuid = uuid
 
-class PersistentReadOnlyObject(object):
+class Persistent(object):
     '''
-    A class to use as a subclass for objects which do not change.
-    When copying a PersistentReadOnlyObject, it is not really copied; The new
-    "copy" is just the same object.
-    When a PersistentReadOnlyObject is passed around between processes in
-    queues, each process retains only one copy of it.
+    A class to use as a subclass for objects which do not change. When copying a
+    Persistent, it is not really copied; The new "copy" is just the same object.
+    When a Persistent is passed around between processes in queues, each process
+    retains only one copy of it.
     
     What does it mean that the object is read-only? It means that starting from
     the first time that it is copied or put in a queue, it should not be
     changed.
 
-    There is no mechanism that enforces that the user doesn't change the
-    object.
+    There is no mechanism that enforces that the user doesn't change the object.
     
     Note: This class is still experimental.
     '''
@@ -56,32 +58,32 @@ class PersistentReadOnlyObject(object):
             # This section is for when we are called at unpickling time
             thing = library.pop(received_uuid, None)
             if thing:
-                thing._PersistentReadOnlyObject__skip_setstate = True
+                thing._Persistent__skip_setstate = True
                 return thing
             else: # This object does not exist in our library yet; Let's add it
-                thing = super(PersistentReadOnlyObject, cls).__new__(cls)
-                thing._PersistentReadOnlyObject__uuid = received_uuid
+                thing = super(Persistent, cls).__new__(cls)
+                thing._Persistent__uuid = received_uuid
                 library[received_uuid] = thing
                 return thing
                 
         else:
             # This section is for when we are called at normal creation time
-            thing = super(PersistentReadOnlyObject, cls).__new__(cls)
+            thing = super(Persistent, cls).__new__(cls)
             new_uuid = uuid.uuid4()
-            thing._PersistentReadOnlyObject__uuid = new_uuid
+            thing._Persistent__uuid = new_uuid
             library[new_uuid] = thing
             return thing
         
     def __getstate__(self):
         my_dict = dict(self.__dict__)
-        del my_dict["_PersistentReadOnlyObject__uuid"]
+        del my_dict["_Persistent__uuid"]
         return my_dict
     
     def __getnewargs__(self):
-        return (UuidToken(self._PersistentReadOnlyObject__uuid),)
+        return (UuidToken(self._Persistent__uuid),)
     
     def __setstate__(self, state):
-        if self.__dict__.pop("_PersistentReadOnlyObject__skip_setstate", None):
+        if self.__dict__.pop("_Persistent__skip_setstate", None):
             return
         else:
             self.__dict__.update(state)
@@ -92,14 +94,36 @@ class PersistentReadOnlyObject(object):
     def __copy__(self):
         return self
     
+    def __generate_personality(self):
+        '''tododoc, and all below'''
+        import human_names
+        u = int(self.__uuid)
+        (u, human_name_seed) = divmod(u, 5494)
+        
+        self.__human_name = human_names.name_list[u]
+        
+    
     def get_light_color(self):
-        pass
+        if hasattr(self, '_Persistent__light_color'):
+            return self.__light_color
+        else:
+            self.__generate_personality()
+            return self.__light_color
     
     def get_dark_color(self):
-        pass
+        if hasattr(self, '_Persistent__dark_color'):
+            return self.__dark_color
+        else:
+            self.__generate_personality()
+            return self.__dark_color
         
-    def get_name(self):
-        pass
+    def get_human_name(self):
+        if hasattr(self, '_Persistent__human_name'):
+            return self.__human_name
+        else:
+            self.__generate_personality()
+            return self.__human_name
+        
 
 # --------------------------------------------------------------
 '''
@@ -111,7 +135,7 @@ def play_around(queue, thing):
     import copy
     queue.put((thing, copy.deepcopy(thing),))
 
-class Booboo(PersistentReadOnlyObject):
+class Booboo(Persistent):
     def __init__(self):
         self.number = random.random()
     
