@@ -100,7 +100,7 @@ class Persistent(object):
         u = int(self.__uuid)
         (u, human_name_seed) = divmod(u, 5494)
         
-        self.__human_name = human_names.name_list[u]
+        self.__human_name = human_names.name_list[human_name_seed]
         
     
     def get_light_color(self):
