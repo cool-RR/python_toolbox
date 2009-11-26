@@ -31,12 +31,16 @@ class State(garlicsim.data_structures.State):
 class Server(object):
     def __init__(self, event_set, facility, mean_service):
         
+        self.identity = garlicsim.misc.PersistentReadOnlyObject()
+        
         self.event_set = event_set
         self.facility = facility
         self.mean_service = mean_service
         
         self.current_client = None
         self.finish_service_event = None
+        
+        self.client_counter = 0
     
     def service_client(self, client):
         assert self.current_client is None and \
@@ -48,11 +52,12 @@ class Server(object):
         
     def finish_client(self):
         assert self.current_client is not None
+        self.client_counter += 1
         client = self.current_client 
         self.current_client = None
         self.finish_service_event = None
         self.facility.clients.remove(client)
-        self.facility.request_client(self)
+        self.facility.feed_client(self)
         
         
     def is_busy(self):
@@ -60,16 +65,19 @@ class Server(object):
     
     def __repr__(self):
         if self.is_busy():
-            return 'Server, busy'
+            return '<Server (busy) who served %s clients>' % self.client_counter
         else:
-            return 'Server, free' 
+            return '<Server (free) who served %s clients>' % self.client_counter
         
 
 class Client(object):
-    pass
+    def __init__(self):
+        self.identity = garlicsim.misc.PersistentReadOnlyObject()
 
 class Facility(object):
     def __init__(self, event_set, servers=[], clients=[]):
+        
+        self.identity = garlicsim.misc.PersistentReadOnlyObject()
         self.event_set = event_set
         self.servers = servers
         self.clients = clients
@@ -98,17 +106,26 @@ class Facility(object):
         for idle_server in inner_generator:
             yield idle_server
             
-    def request_client(self, server):
+    def feed_client(self, server):
         assert server.is_busy() is False
         try:
             client = self.waiting_clients.pop(0)
         except IndexError:
             return None
         server.service_client(client)
+    
+    def finished_client_count(self):
+        return sum((server.client_counter for server in self.servers))
         
+    
     def __repr__(self):
-        return 'facility with %s clients, %s of which stand in queue' % \
-               (len(self.clients), len(self.waiting_clients))
+        return '''<facility with %s clients, %s of which stand in queue. %s \
+clients were served total.>''' % \
+            (
+                len(self.clients),
+                len(self.waiting_clients),
+                self.finished_client_count()
+            )
         
                     
 
@@ -117,6 +134,7 @@ class Facility(object):
 class Population(object):
     def __init__(self, event_set, facility, size=Infinity, mean_arrival=1):
         assert size == Infinity
+        self.identity = garlicsim.misc.PersistentReadOnlyObject()
         self.size = size
         self.mean_arrival = mean_arrival
         self.event_set = event_set

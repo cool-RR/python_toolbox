@@ -91,6 +91,15 @@ class PersistentReadOnlyObject(object):
     
     def __copy__(self):
         return self
+    
+    def get_light_color(self):
+        pass
+    
+    def get_dark_color(self):
+        pass
+        
+    def get_name(self):
+        pass
 
 # --------------------------------------------------------------
 '''
