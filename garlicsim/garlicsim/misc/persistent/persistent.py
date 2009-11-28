@@ -18,7 +18,7 @@ a big 3-d model which is a PRO?
 
 import uuid
 import weakref
-
+import colorsys
 
 
 __all__ = ["Persistent"]
@@ -49,13 +49,20 @@ class Persistent(object):
     Note: This class is still experimental.
     '''
     def __new__(cls, *args, **kwargs):
+        
+        # Here we need to check in what context __new__ was called.
+        # There are two options:
+        #     1. The object is being created.
+        #     2. The object is being unpickled.
+        # We check whether we are getting a uuid token. If we are, it's
+        # unpickling. If we don't, it's creation.
+        
         if len(args)==1 and len(kwargs)==0 and isinstance(args[0], UuidToken):
             received_uuid = args[0].uuid
         else:
             received_uuid = None
-        
-        if received_uuid:
-            # This section is for when we are called at unpickling time
+            
+        if received_uuid: # The object is being unpickled
             thing = library.pop(received_uuid, None)
             if thing:
                 thing._Persistent__skip_setstate = True
@@ -66,8 +73,7 @@ class Persistent(object):
                 library[received_uuid] = thing
                 return thing
                 
-        else:
-            # This section is for when we are called at normal creation time
+        else: # The object is being created
             thing = super(Persistent, cls).__new__(cls)
             new_uuid = uuid.uuid4()
             thing._Persistent__uuid = new_uuid
@@ -95,12 +101,30 @@ class Persistent(object):
         return self
     
     def __generate_personality(self):
-        '''tododoc, and all below'''
-        import human_names
-        u = int(self.__uuid)
-        (u, human_name_seed) = divmod(u, 5494)
+        '''tododoc, and all below
         
+        todo: do (or find) some take_entropy library
+        todo: maybe make Personality class?
+        '''
+        import human_names
+        color_resolution = 100
+        
+        u = int(self.__uuid)
+        
+        (u, human_name_seed) = divmod(u, 5494)
         self.__human_name = human_names.name_list[human_name_seed]
+        
+        color_seeds = []
+        for i in range(4):
+            (u, new_color_seed) = divmod(u, color_resolution)
+            color_seeds.append(new_color_seed)
+        
+
+        normalized_color_seeds = \
+            [color_seed * (1.0/color_resolution) for color_seed in color_seeds]
+        
+        self.__light_color = normalized_color_seeds[0:2] + [0.9]
+        self.__dark_color = normalized_color_seeds[2:4] + [0.1]
         
     
     def get_light_color(self):
