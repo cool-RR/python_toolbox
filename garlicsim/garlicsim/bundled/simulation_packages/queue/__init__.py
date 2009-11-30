@@ -2,17 +2,17 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-A simulation package for testing garlicsim.misc.Persistent.
+tododoc
 '''
 
-from prisoner import *
+from queue import *
 
-wx_installed=False
+wx_installed = False
 try:
     import wx
-    wx_installed=True
+    wx_installed = True
 except ImportError:
     pass
 
 if wx_installed:
-    from prisoner_wx import *
+    from queue_wx import *
