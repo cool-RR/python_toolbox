@@ -94,7 +94,7 @@ class Persistent(object):
         else:
             self.__dict__.update(state)
     
-    def __deepcopy__(self, memo):
+    def __deepcopy__(self, memo): #todo: supposed to put thing in memo!
         return self
     
     def __copy__(self):
