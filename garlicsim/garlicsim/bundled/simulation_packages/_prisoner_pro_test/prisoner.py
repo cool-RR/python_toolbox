@@ -9,8 +9,8 @@ import random
 random.seed()
 
 
-ROUNDS=7
-NUMBER_OF_PLAYERS=70
+ROUNDS = 7
+NUMBER_OF_PLAYERS = 70
 
 
 BaseForHandicap = [object, PersistentReadOnlyObject][1]
