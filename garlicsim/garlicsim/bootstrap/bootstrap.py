@@ -24,7 +24,7 @@ def __check_prerequisites():
         pass
     
     
-    # Currently no modules requires, so none are being checked.
+    # Currently no modules required, so none are being checked.
     # Future requirements should be put here.
     
     modules += []
