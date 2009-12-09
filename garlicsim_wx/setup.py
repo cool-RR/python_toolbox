@@ -4,26 +4,12 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-Distribute setup file for garlicsim_wx.
+Setuptools setup file for garlicsim_wx.
 '''
-
-def ensure_Distribute_is_installed():
-    
-    no_distribute_error = Exception('''`Distribute` is required but is not \
-installed. Download it from the internet and install it, then try again.''')
-
-    try:
-        import pkg_resources
-    except ImportError:
-        raise no_distribute_error
-    
-    pkg_resources.require('Distribute')
-
-ensure_Distribute_is_installed()
 
 import os
 import setuptools
-import distutils
+import distutils # Just for deleting the "build" directory.
 
 try:
     distutils.dir_util.remove_tree('build', verbose=True)

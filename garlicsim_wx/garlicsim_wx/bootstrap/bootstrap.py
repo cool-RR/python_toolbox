@@ -35,17 +35,6 @@ required, but it's not currently installed on your system. Please find it \
 online and install it, then try again.''')
         
     
-    def check_distribute():
-        try:
-            import pkg_resources
-            modules.append(pkg_resources)
-            assert pkg_resources.require('Distribute >= 0.6')
-        except Exception:
-            raise MissingModule('''Distribute (version 0.6 and upwards) is \
-required, but it's not currently installed on your system. Please find it \
-online and install it, then try again.''')
-        return [pkg_resources]
-    
     def check_wx():
         try:
             import wx
@@ -62,7 +51,7 @@ required, but it's not currently installed on your system. Please find it \
 online and install it, then try again.''')
     
 
-    checkers = [check_distribute, check_garlicsim, check_wx]
+    checkers = [check_garlicsim, check_wx]
     
     for checker in checkers:
         modules += checker()
