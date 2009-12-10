@@ -7,6 +7,8 @@ This module defines the ApplicationWindow class.
 See its documentation for more information.
 '''
 
+from __future__ import with_statement
+
 import os
 import sys
 import random

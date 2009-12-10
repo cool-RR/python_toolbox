@@ -4,26 +4,12 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-Distribute setup file for garlicsim.
+Setuptools setup file for garlicsim.
 '''
-
-def ensure_Distribute_is_installed():
-    
-    no_distribute_error = Exception('''`Distribute` is required but is not \
-installed. Download it from the internet and install it, then try again.''')
-
-    try:
-        import pkg_resources
-    except ImportError:
-        raise no_distribute_error
-    
-    pkg_resources.require('Distribute')
-
-ensure_Distribute_is_installed()
 
 import os
 import setuptools
-import distutils
+import distutils # Just for deleting the "build" directory.
 
 try:
     distutils.dir_util.remove_tree('build', verbose=True)
@@ -43,17 +29,16 @@ my_classifiers = [
     'Development Status :: 3 - Alpha',
     'Intended Audience :: Science/Research',
     'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 2.5',
     'Programming Language :: Python :: 2.6',
     'Topic :: Scientific/Engineering',
-    'Programming Language :: Python',
 ]
 
 try:
     setuptools.setup(
-        name='garlicsim for Python 2.6',
+        name='garlicsim',
         version='0.1.5',
-        requires=['Distribute (>= 0.6)'],
-        install_requires=['Distribute >= 0.6'],
         description='Pythonic framework for working with simulations',
         author='Ram Rachum',
         author_email='cool-rr@cool-rr.com',
@@ -67,7 +52,6 @@ try:
     
 
 finally:
-    pass
     try:
         distutils.dir_util.remove_tree('build', verbose=True)
     except Exception:

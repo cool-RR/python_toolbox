@@ -23,18 +23,11 @@ def __check_prerequisites():
         '''An error to raise when a required module is not found.'''
         pass
     
-    def check_distribute():
-        try:
-            import pkg_resources
-            modules.append(pkg_resources)
-            assert pkg_resources.require('Distribute >= 0.6')
-        except:
-            raise MissingModule('''Distribute (version 0.6 and upwards) is \
-required, but it's not currently installed on your system. Please find it \
-online and install it, then try again.''')
-        return [pkg_resources]
     
-    modules += check_distribute()
+    # Currently no modules required, so none are being checked.
+    # Future requirements should be put here.
+    
+    modules += []
     
     return modules
 

@@ -6,7 +6,7 @@ This module defines the HistoryBrowser class. See its documentation for more
 information.
 '''
 
-import abc
+import garlicsim.general_misc.third_party.abc as abc
 
 __all__ = ["HistoryBrowser"]
 

@@ -3,6 +3,7 @@ import garlicsim
 from garlicsim.bundled.simulation_packages import life
 import cPickle
 
+
 state = life.make_random_state(40, 15)
 print(state)
 new_state = garlicsim.simulate(life, state)

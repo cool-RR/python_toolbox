@@ -4,26 +4,30 @@
 
 # Installation #
 
-**Windows binary installers** are available [here](http://pypi.python.org/pypi/garlicsim%20for%20Python%202.6/) for `garlicsim` and [here](http://pypi.python.org/pypi/garlicsim_wx%20for%20Python%202.6/) for `garlicsim_wx`.
+**Windows binary installers** are available [here](http://pypi.python.org/pypi/garlicsim/) for `garlicsim` and [here](http://pypi.python.org/pypi/garlicsim_wx/) for `garlicsim_wx`.
 
 For a source installation: Download the repo, then run `setup.py install` twice, once in the `garlicsim` folder and once in the `garlicsim_wx` folder.
 
 To start the GUI:
 
     import garlicsim_wx
-    if __name__ == '__main__': # Needed because of multiprocessing
+    if __name__ == '__main__': # Needed for multiprocessing
         garlicsim_wx.start()
 
 
-Requirements:
+Core requirements:
 
-* [Python 2.6](http://www.python.org/download/releases/2.6.4/) (Scroll down to the "Python versions" section for other versions.)
-* [Distribute](http://pypi.python.org/pypi/distribute), version 0.6.8 or later
+* Python, version 2.5, 2.6 or 2.7. If you're new to Python, [download version 2.6](http://python.org/download/releases/2.6.4/). If you use Python 3.1 or above, use [this fork of GarlicSim](http://github.com/cool-RR/GarlicSim-for-Python-3.1) instead.
+
+Some bundled simpacks require:
+
+* [NumPy and SciPy](http://www.scipy.org/Download).
 
 Recommended, but not mandatory:
 
-* [Psyco](http://psyco.sourceforge.net/)
-* on Windows only: [Python for Windows Extensions](http://sourceforge.net/projects/pywin32/)
+* [Psyco](http://psyco.sourceforge.net/).
+* on Windows only: [Python for Windows Extensions](http://sourceforge.net/projects/pywin32/).
+* [Backport of the multiprocessing module](http://code.google.com/p/python-multiprocessing/). Relevant only for users of Python 2.5.
 
 Gui requirements:
 
@@ -80,16 +84,10 @@ The `garlicsim` package is the important one, and its code is well-organized and
 Both packages are copyright 2009 Ram Rachum. 
 
 # Python versions #
+ 
+GarlicSim supports Python versions 2.5 and up, not including Python 3.x.
 
-GarlicSim has official support for 4 different versions of Python. For each of these versions there is a separate fork. The fork for Python 2.6 is the main fork, on which most development is done. Some of the other forks have slightly reduced functionality, described here:
-
-[GarlicSim for Python 2.4](http://github.com/cool-RR/GarlicSim-for-Python-2.4) - Does not support multiprocessing, only multithreading.
-
-[GarlicSim for Python 2.5](http://github.com/cool-RR/GarlicSim-for-Python-2.5) - Requires [backported multiprocessing package](http://code.google.com/p/python-multiprocessing/) to be installed in order to use multiprocessing.
-
-[GarlicSim for Python 2.6](http://github.com/cool-RR/GarlicSim-for-Python-2.6) - Main fork, contains all the functionality.
-
-[GarlicSim for Python 3.1](http://github.com/cool-RR/GarlicSim-for-Python-3.1) - Does not contain gui package, since wxPython doesn't yet support Python 3.x.
+There is a [separate fork of GarlicSim](http://github.com/cool-RR/GarlicSim-for-Python-3.1) that supports Python 3.1. Take note though that it does not contain a GUI, because wxPython does not support Python 3.1.
 
 # Current state #
 
