@@ -4,7 +4,7 @@ import copy_reg
 import types
 
 def reduce_method(m):
-    return (getattr, (m.__self__, m.__func__.__name__))
+    return (getattr, (m.im_self, m.im_func.__name__))
 
 copy_reg.pickle(types.MethodType, reduce_method)
 ###############################################################################
