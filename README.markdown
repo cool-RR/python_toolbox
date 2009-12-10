@@ -1,25 +1,30 @@
+# Brief Video Introduction #
+
+[![](http://garlicsim.org/images/video_thumbnail.jpg)](http://garlicsim.org/brief_introduction.html)
+
 # Installation #
 
-**Windows binary installers** are available [here](http://pypi.python.org/pypi/garlicsim%20for%20Python%202.6/) for `garlicsim` and [here](http://pypi.python.org/pypi/garlicsim_wx%20for%20Python%202.6/) for `garlicsim_wx`.
+**Windows binary installers** are available [here](http://pypi.python.org/pypi/garlicsim%20for%20Python%202.5/) for `garlicsim` and [here](http://pypi.python.org/pypi/garlicsim_wx%20for%20Python%202.5/) for `garlicsim_wx`.
 
 For a source installation: Download the repo, then run `setup.py install` twice, once in the `garlicsim` folder and once in the `garlicsim_wx` folder.
 
 To start the GUI:
 
     import garlicsim_wx
-    if __name__ == '__main__': # Needed because of multiprocessing
+    if __name__ == '__main__': # Needed for multiprocessing
         garlicsim_wx.start()
 
 
 Requirements:
 
-* [Python 2.6](http://www.python.org/download/releases/2.6.4/) (Scroll down to the "Python versions" section for other versions.)
+* [Python 2.5](http://www.python.org/download/releases/2.5.4/) (Scroll down to the "Python versions" section for other versions.)
 * [Distribute](http://pypi.python.org/pypi/distribute), version 0.6.8 or later
 
 Recommended, but not mandatory:
 
 * [Psyco](http://psyco.sourceforge.net/)
 * on Windows only: [Python for Windows Extensions](http://sourceforge.net/projects/pywin32/)
+* [Backport of the multiprocessing module](http://code.google.com/p/python-multiprocessing/)
 
 Gui requirements:
 

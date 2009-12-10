@@ -6,10 +6,12 @@ This module defines the CrunchingManager class. See its documentation for more
 information.
 '''
 
+from __future__ import with_statement
+
 import garlicsim.general_misc.queue_tools as queue_tools
 import garlicsim.general_misc.third_party.decorator
 import garlicsim.general_misc.change_tracker
-from garlicsim.general_misc.infinity import Infinity
+from garlicsim.general_misc.backport_cruft.classed_infinity import Infinity
 
 import garlicsim
 import garlicsim.data_structures
@@ -175,7 +177,7 @@ class CrunchingManager(object):
         
         if node.still_in_editing is False:
             step_function = self.project.simpack_grokker.step
-            if self.Cruncher == crunchers['CruncherProcess']:
+            if self.Cruncher == crunchers.get('CruncherProcess', None):
                 cruncher = self.Cruncher \
                          (node.state,
                           self.project.simpack_grokker.step_generator,
@@ -222,7 +224,8 @@ class CrunchingManager(object):
                 current = tree.add_state(
                     thing,
                     parent=current,
-                    step_profile=self.step_profiles[cruncher]
+                    step_profile=self.step_profiles[cruncher],
+                    
                 )
                 # todo optimization: save step profile in variable, it's
                 # wasteful to do a dict lookup every state.

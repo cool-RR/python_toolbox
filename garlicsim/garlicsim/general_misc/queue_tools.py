@@ -6,6 +6,8 @@ This module defines several functions that may be useful when working with
 queues.
 '''
 
+from __future__ import with_statement
+
 import Queue
 
 def dump(queue):

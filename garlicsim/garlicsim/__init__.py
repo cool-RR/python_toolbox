@@ -15,7 +15,7 @@ is included with this package as the file `lgpl2.1_license.txt`.
 This licensing does not apply to `garlicsim_wx`, which is the associated GUI
 package.
 
-This fork of garlicsim is intended for Python 2.6.
+This fork of garlicsim is intended for Python 2.5.
 '''
 
 import bootstrap
