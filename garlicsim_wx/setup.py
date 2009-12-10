@@ -28,16 +28,17 @@ non-programmers.
 my_classifiers = [
     'Development Status :: 2 - Pre-Alpha',
     'Intended Audience :: Science/Research',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 2.5',
     'Programming Language :: Python :: 2.6',
     'Topic :: Scientific/Engineering',
-    'Programming Language :: Python',
 ]
 
 
 try:
     
     setuptools.setup(
-        name='garlicsim_wx for Python 2.5',
+        name='garlicsim_wx',
         version='0.1.5',
         requires=['garlicsim (== 0.1.5)'],
         install_requires=['garlicsim == 0.1.5'],

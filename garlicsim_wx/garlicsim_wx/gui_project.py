@@ -17,7 +17,7 @@ import wx.py.shell
 import garlicsim.general_misc.queue_tools as queue_tools
 import garlicsim.general_misc.dict_tools as dict_tools
 from general_misc.stringsaver import s2i,i2s
-from garlicsim.general_misc.backport_cruft.classed_infinity import Infinity
+from garlicsim.general_misc.infinity import Infinity
 
 import garlicsim
 from garlicsim.asynchronous_crunching.crunchers_warehouse import crunchers

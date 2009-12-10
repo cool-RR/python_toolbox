@@ -29,14 +29,15 @@ my_classifiers = [
     'Development Status :: 3 - Alpha',
     'Intended Audience :: Science/Research',
     'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',
-    'Programming Language :: Python :: 2.5',
-    'Topic :: Scientific/Engineering',
     'Programming Language :: Python',
+    'Programming Language :: Python :: 2.5',
+    'Programming Language :: Python :: 2.6',
+    'Topic :: Scientific/Engineering',
 ]
 
 try:
     setuptools.setup(
-        name='garlicsim for Python 2.5',
+        name='garlicsim',
         version='0.1.5',
         description='Pythonic framework for working with simulations',
         author='Ram Rachum',

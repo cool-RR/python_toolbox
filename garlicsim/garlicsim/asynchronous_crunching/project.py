@@ -10,7 +10,7 @@ from __future__ import with_statement
 
 from garlicsim.general_misc import cute_iter_tools
 import garlicsim.general_misc.read_write_lock
-from garlicsim.general_misc.backport_cruft.classed_infinity import Infinity
+from garlicsim.general_misc.infinity import Infinity
 import garlicsim.general_misc.module_wrapper
 import garlicsim.general_misc.third_party.decorator
 

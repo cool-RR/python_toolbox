@@ -6,7 +6,7 @@ A module that defines the Node class and the related NodeError exception. See
 its documentation for more information.
 '''
 
-from garlicsim.general_misc.backport_cruft.classed_infinity import Infinity
+from garlicsim.general_misc.infinity import Infinity
 
 from state import State
 from block import Block
