@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-tododoc
+A simpack for simulations in Queueing Theory.
 '''
 
 from queue import *

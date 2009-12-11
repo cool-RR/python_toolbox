@@ -20,7 +20,7 @@ def make_wx_color((r, g, b)):
 
 class StateShower(wx.lib.scrolledpanel.ScrolledPanel):
     '''
-    tododoc
+    Widget for showing a state of the queue simpack.
     '''
     def __init__(self, parent, id, gui_project, *args, **kwargs):
         wx.lib.scrolledpanel.ScrolledPanel.__init__(self, parent, id,
@@ -67,9 +67,7 @@ class StateShower(wx.lib.scrolledpanel.ScrolledPanel):
 
         servers = state.servers
         
-        numbered_server_iterator = itertools.izip(itertools.count(), servers)
-        
-        for (i, server) in numbered_server_iterator:
+        for (i, server) in enumerate(servers):
 
             personality = server.identity.get_personality()
             

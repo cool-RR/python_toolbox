@@ -1,20 +1,23 @@
+# Copyright 2009 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
 
-###############################################################################
-import copy_reg
-import types
+'''
+This module defines the Event class.
 
-def reduce_method(m):
-    return (getattr, (m.im_self, m.im_func.__name__))
-
-copy_reg.pickle(types.MethodType, reduce_method)
-
-# todo: Possibly should be somewhere else. Note it alters global state, yuck!
-###############################################################################
+See its documentation for more information.
+'''
 
 import copy
 import types
 
 class Event(object):
+    '''
+    An event.
+    
+    An event has a `.time_left` property, saying how much time there is until
+    the event happens, and an `.action` property which gets called when the
+    event happens.
+    '''
     def __init__(self, time_left, action):
         assert time_left > 0
         self.time_left = time_left
@@ -22,40 +25,15 @@ class Event(object):
         self.done = False
         
     def pass_time(self, t):
+        '''
+        Make `t` time pass.
+        
+        If enough time passes, the event happens and the action gets executed.
+        In that case the return value of the action will be returned.
+        '''
         self.time_left -= t
         if (self.time_left <= 0)  and (not self.done):
             return self.action()
         else:
             return None
-    '''   
-    def __deepcopy__(self, memo):        
-
-        if isinstance(self.action, types.MethodType):
-            instance = self.action.__self__
-            if instance is None: # Method is unbound
-                new_action = copy.deepcopy(self.action, memo)
-            
-            new_instance = copy.deepcopy(self.action.__self__, memo)
-            new_action = getattr(new_instance, self.action.__name__)
-        else:
-            new_action = copy.deepcopy(self.action, memo)
-        
-        censored_dict = copy.copy(self.__dict__)
-        censored_dict.pop('action')
-        new_dict = copy.deepcopy(censored_dict, memo)
-        new_dict['action'] = new_action
-        
-        new_event = Event.__new__(self.__class__)
-        
-        new_event.__dict__.update(new_dict)
-        
-        return new_event
-    ''' 
-            
-        
-
-        
-
-        
-        
         
