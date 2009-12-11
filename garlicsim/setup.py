@@ -38,7 +38,7 @@ my_classifiers = [
 try:
     setuptools.setup(
         name='garlicsim',
-        version='0.1.5',
+        version='0.2',
         description='Pythonic framework for working with simulations',
         author='Ram Rachum',
         author_email='cool-rr@cool-rr.com',

@@ -39,9 +39,8 @@ try:
     
     setuptools.setup(
         name='garlicsim_wx',
-        version='0.1.5',
-        requires=['garlicsim (== 0.1.5)'],
-        install_requires=['garlicsim == 0.1.5'],
+        version='0.2',
+        requires=['garlicsim (== 0.2)'],
         description='Gui for garlicsim, a Pythonic framework for working with simulations',
         author='Ram Rachum',
         author_email='cool-rr@cool-rr.com',
