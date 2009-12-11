@@ -48,11 +48,11 @@ class Personality(object):
         normalized_color_seeds = \
             [color_seed * (1.0/color_resolution) for color_seed in color_seeds]
         
-        light_color_hsv = normalized_color_seeds[0:2] + [0.9]
-        dark_color_hsv = normalized_color_seeds[2:4] + [0.1]
+        light_color_hls = (normalized_color_seeds[0], 0.9, normalized_color_seeds[1])
+        dark_color_hls = (normalized_color_seeds[2], 0.3, normalized_color_seeds[3])
         
-        self.light_color = colorsys.hsv_to_rgb(*light_color_hsv)
-        self.dark_color = colorsys.hsv_to_rgb(*dark_color_hsv)
+        self.light_color = colorsys.hls_to_rgb(*light_color_hls)
+        self.dark_color = colorsys.hls_to_rgb(*dark_color_hls)
         
                           
                         
