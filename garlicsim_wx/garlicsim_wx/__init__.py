@@ -8,7 +8,7 @@ The final goal of this project is to become a fully-fledged application for
 working with simulations, friendly enough that it may be used by
 non-programmers.
 
-This program is intended for Python versions 2.5, 2.6 and 2.7.
+This program is intended for Python versions 2.5 and 2.6.
 '''
 
 import bootstrap

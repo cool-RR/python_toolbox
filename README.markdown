@@ -17,7 +17,8 @@ To start the GUI:
 
 Core requirements:
 
-* Python, version 2.5, 2.6 or 2.7. If you're new to Python, [download version 2.6](http://python.org/download/releases/2.6.4/). If you use Python 3.1 or above, use [this fork of GarlicSim](http://github.com/cool-RR/GarlicSim-for-Python-3.1) instead.
+* Python, version 2.5 or 2.6. If you're new to Python, [download version 2.6](http://python.org/download/releases/2.6.4/). If you use Python 3.1 or above, use [this fork of GarlicSim](http://github.com/cool-RR/GarlicSim-for-Python-3.1) instead.
+* Either [setuptools](http://pypi.python.org/pypi/setuptools) or [Distribute](http://pypi.python.org/pypi/distribute).
 
 Some bundled simpacks require:
 

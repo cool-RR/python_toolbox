@@ -23,11 +23,21 @@ def __check_prerequisites():
         '''An error to raise when a required module is not found.'''
         pass
     
+    def check_pkg_resources():
+        try:
+            import pkg_resources
+            return [pkg_resources]
+        except ImportError:
+            raise MissingModule('''pkg_resources is required, but it's not \
+currently installed on your system. It comes with either setuptools or \
+Distribute, so please find either one of these on the internet and install \
+it, then try again.''')
     
-    # Currently no modules required, so none are being checked.
-    # Future requirements should be put here.
     
-    modules += []
+    checkers = [check_pkg_resources]
+    
+    for checker in checkers:
+        modules += checker()
     
     return modules
 
