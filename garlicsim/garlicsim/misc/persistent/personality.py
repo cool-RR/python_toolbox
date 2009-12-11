@@ -1,9 +1,30 @@
-'''tododoc'''
+# Copyright 2009 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''
+This module defines the Personality class.
+
+See its documentation for more information.
+'''
 
 from persistent import Persistent
 
 class Personality(object):
-
+    '''
+    A bunch of easy-to-remember attributes associated with a persistent object.
+    
+    These attributes include:
+      * A human name
+      * A light color
+      * A dark color
+    
+    Each persistent object has a personality associated with it, generated
+    automatically from its uuid. The personality makes it easy for humans to
+    identify the persistent object.
+    
+    Colors are specified in HSL.
+    '''
+    
     def __init__(self, persistent):
 
         assert isinstance(persistent, Persistent)
