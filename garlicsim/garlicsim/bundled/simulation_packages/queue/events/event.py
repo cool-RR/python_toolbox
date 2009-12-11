@@ -7,6 +7,8 @@ def reduce_method(m):
     return (getattr, (m.im_self, m.im_func.__name__))
 
 copy_reg.pickle(types.MethodType, reduce_method)
+
+# todo: Possibly should be somewhere else. Note it alters global state, yuck!
 ###############################################################################
 
 import copy

@@ -11,6 +11,7 @@ from exceptions import InvalidSimpack, SimpackError, GarlicSimWarning
 from auto_clock_generator import AutoClockGenerator
 from history_browser import HistoryBrowser
 from step_iterator import StepIterator
+import persistent
 from persistent import Persistent
 from step_profile import StepProfile
 from nodes_added import NodesAdded
