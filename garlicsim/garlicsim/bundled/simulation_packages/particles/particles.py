@@ -68,16 +68,24 @@ def make_random_state():
     my_state = State(particles=particles)
     return my_state
 
-class Particle(object):
 
-    def __init__(self, position=None, velocity=None, acceleration=None, mass=1, charge=1):
-        self.position = position or Vector((0, 0, 0))
-        self.velocity = velocity or Vector((0, 0, 0))
-        self.acceleration = acceleration or Vector((0, 0, 0))
-        self.mass = mass
-        self.charge = charge
-        self.identity = Persistent
+#####################################################
+
+from enthought.traits.api import HasTraits, Float, Instance, Range
+
+class Particle(HasTraits):
+
+    position = Instance(Vector, args=((0, 0, 0),), allow_none=False)
+    velocity = Instance(Vector, args=((0, 0, 0),), allow_none=False)
+    acceleration = Instance(Vector, args=((0, 0, 0),), allow_none=False)
+    mass = Range(low=0, exclude_low=True)
+    charge = Float
     
+    def __init__(self, *args, **kwargs):
+        HasTraits.__init__(self, *args, **kwargs)
+        self.identity = Persistent
+        
+        
     def __sub__(self, other):
         '''Force from other particle on this one.'''
         assert isinstance(other, Particle)
