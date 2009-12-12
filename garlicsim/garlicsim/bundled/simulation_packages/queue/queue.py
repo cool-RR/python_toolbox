@@ -17,7 +17,7 @@ import garlicsim
 
 import events as events_module
 
-
+#todo: math error here:
 def time_for_next_occurence(mean_time_for_next_occurence):
     '''
     Given a mean time between occurences, generate the time for next occurence.
