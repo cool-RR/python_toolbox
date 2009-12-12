@@ -35,24 +35,18 @@ my_classifiers = [
     'Topic :: Scientific/Engineering',
 ]
 
-try:
-    setuptools.setup(
-        name='garlicsim',
-        version='0.2',
-        description='Pythonic framework for working with simulations',
-        author='Ram Rachum',
-        author_email='cool-rr@cool-rr.com',
-        url='http://garlicsim.org',
-        packages=setuptools.find_packages(),
-        license="LGPL v2.1",
-        long_description = my_long_description,
-        classifiers = my_classifiers,
-        include_package_data = True,
-    )
-    
 
-finally:
-    try:
-        distutils.dir_util.remove_tree('build', verbose=True)
-    except Exception:
-        pass
+setuptools.setup(
+    name='garlicsim',
+    version='0.2.2',
+    description='Pythonic framework for working with simulations',
+    author='Ram Rachum',
+    author_email='cool-rr@cool-rr.com',
+    url='http://garlicsim.org',
+    packages=setuptools.find_packages(),
+    license="LGPL v2.1",
+    long_description = my_long_description,
+    classifiers = my_classifiers,
+    include_package_data = True,
+)
+
