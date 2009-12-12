@@ -15,4 +15,4 @@ except ImportError:
     pass
 
 if wx_installed:
-    pass#from particles_wx import *
+    from particles_wx import *
