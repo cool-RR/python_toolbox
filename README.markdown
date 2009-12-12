@@ -92,7 +92,7 @@ There is a [separate fork of GarlicSim](http://github.com/cool-RR/GarlicSim-for-
 
 # Current state #
 
-Garlicsim is at version 0.1.x, which is an alpha release. It is still very experimental, and there are probably many bugs. If you run into any trouble, [drop me a mail](mailto:cool-rr@cool-rr.com).
+Garlicsim is at version 0.2.x, which is an alpha release. It is still very experimental, and there are probably many bugs. If you run into any trouble, [drop me a mail](mailto:cool-rr@cool-rr.com).
 
 At this experimental stage of the project, backward compatibility will _not_ be maintained. However, I will be available to assist in issues related to backward compatibility.
 
