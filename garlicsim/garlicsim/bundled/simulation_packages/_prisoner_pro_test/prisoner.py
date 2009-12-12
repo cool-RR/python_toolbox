@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 import garlicsim.data_structures
-from garlicsim.misc.persistent_read_only_object import Persistent
+from garlicsim.misc import Persistent
 import copy
 
 import random
