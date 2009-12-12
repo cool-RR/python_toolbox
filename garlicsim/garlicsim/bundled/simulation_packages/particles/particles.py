@@ -22,8 +22,11 @@ class State(garlicsim.data_structures.State):
 def step(old_state, t=1):
 
     new_state = copy.deepcopy(old_state)
-        
+    new_state.clock += t
+    
+    '''
     old_particles_dict = dict([(new_particle, [particle for particle in old_state.particles if particle.identity is new_particle_identity][0]) for new_particle in new_state.particle])
+    '''
     '''Mapping from the particles of the new state to their original sources.'''
     
     for particle in new_state.particles:
@@ -33,8 +36,15 @@ def step(old_state, t=1):
             other_force = particle - other_particle
             force_sum += other_force
         
-        acceleration = force_sum / particle.mass
+        new_acceleration = force_sum / particle.mass
+        average_acceleration = (new_acceleration + particle.acceleration) / 2
+        new_velocity = particle.acceleration * t + particle.velocity
+        average_velocity = (new_velocity + particle.velocity) / 2
+        new_position = average_velocity * t + particle.position
         
+        particle.position = new_position
+        particle.velocity = new_velocity
+        particle.acceleration = new_acceleration
         
     
     return new_state
@@ -77,5 +87,9 @@ class Particle(object):
     
     def __rsub__(self, other):
         return other.__sub__(self)
+    
+
+    def __repr__(self):
+        return 'Position: ' + repr(self.position)
         
         

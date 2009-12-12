@@ -117,12 +117,10 @@ class Vector(object):
     def __getitem__(self, *args, **kwargs):
         return self.__list.__getitem__(*args, **kwargs)
     
-    """
-    def __deepcopy__(self):
-            s=[thing.__deepcopy__() for thing in self]
-            return vector[s]
-    """                
-
+    def __repr__(self):
+        
+        return 'Vector(' + repr(self.__list) + ')'
+    
 ################################################################################################
 
 def zeros(n):
