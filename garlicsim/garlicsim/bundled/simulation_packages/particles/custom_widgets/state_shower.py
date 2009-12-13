@@ -9,6 +9,7 @@ tododoc
 '''
 
 
+'''
 from enthought.traits.api import HasTraits, Range, Instance, \
      on_trait_change
 from enthought.traits.ui.api import View, Item, HGroup
@@ -18,7 +19,18 @@ from enthought.mayavi.tools.mlab_scene_model import \
 from enthought.mayavi.core.ui.mayavi_scene import MayaviScene
 
 
-'''
+
+from numpy import linspace, pi, cos, sin
+
+def curve(n_mer, n_long):
+    phi = linspace(0, 2*pi, 2000)
+    return [ cos(phi*n_mer) * (1 + 0.5*cos(n_long*phi)),
+            sin(phi*n_mer) * (1 + 0.5*cos(n_long*phi)),
+            0.5*sin(n_long*phi),
+            sin(phi*n_mer)]
+
+
+
 class Visualization(HasTraits):
     meridional = Range(1, 30,  6)
     transverse = Range(0, 30, 11)
