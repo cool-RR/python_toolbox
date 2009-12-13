@@ -7,6 +7,8 @@ import wx.lib.scrolledpanel as scrolled
 '''
 tododoc
 '''
+
+
 from enthought.traits.api import HasTraits, Range, Instance, \
      on_trait_change
 from enthought.traits.ui.api import View, Item, HGroup
@@ -16,6 +18,7 @@ from enthought.mayavi.tools.mlab_scene_model import \
 from enthought.mayavi.core.ui.mayavi_scene import MayaviScene
 
 
+'''
 class Visualization(HasTraits):
     meridional = Range(1, 30,  6)
     transverse = Range(0, 30, 11)
@@ -40,7 +43,8 @@ class Visualization(HasTraits):
                         '_', 'meridional', 'transverse',
                     ),
                 )
-
+'''
+                
     
 class StateShower(wx.lib.scrolledpanel.ScrolledPanel):
     '''

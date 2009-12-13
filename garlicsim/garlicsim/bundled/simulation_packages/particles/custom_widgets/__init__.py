@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-Defines a widget to be used for Life in garlicsim_wx.
+tododoc
 '''
 
-from board_widget import BoardWidget
+from state_shower import StateShower
