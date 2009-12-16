@@ -70,9 +70,13 @@ Mockup:
 
 ![](http://garlicsim.org/images/mockup_thumb.gif)
 
-# Community and Support #
+# Mailing lists #
 
-If you need help with anything related to GarlicSim, mail me at [cool-rr@cool-rr.com](mailto:cool-rr@cool-rr.com). Soon there will be an official collaboration medium for GarlicSim.
+The main mailing list is **[garlicsim@librelist.org](mailto:garlicsim@librelist.org)**.
+
+The development mailing list is **[garlicsim.dev@librelist.org](mailto:garlicsim.dev@librelist.org)**.
+
+To subscribe just send an email. These lists are hosted by [librelist](http://librelist.org), which is currently slightly experimental.
 
 # Core and GUI #
 
