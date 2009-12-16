@@ -64,9 +64,16 @@ class CrunchingManager(object):
     def __init__(self, project):        
         self.project = project
         
-        history_dependent = project.simpack_grokker.history_dependent 
-        self.Cruncher = \
-            DefaultHistoryCruncher if history_dependent else DefaultCruncher
+
+        force_cruncher = project.simpack_grokker.force_cruncher
+        
+        if force_cruncher is not None:
+            self.Cruncher = force_cruncher
+        else:
+            history_dependent = project.simpack_grokker.history_dependent
+            
+            self.Cruncher = DefaultHistoryCruncher if history_dependent \
+                            else DefaultCruncher
         
         self.jobs = []
         '''

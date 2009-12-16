@@ -8,12 +8,17 @@ tododoc
 import random
 import copy
 
+import garlicsim
 import garlicsim.data_structures
 from garlicsim.misc import Persistent
 
 from vectors import Vector
 
 ke = 8987551787.3681764
+
+force_cruncher = garlicsim.asynchronous_crunching.\
+                 crunchers_warehouse.crunchers['CruncherThread']
+# We're forcing CruncherThread because of ETS+multiprocessing bug
 
 class State(garlicsim.data_structures.State):
     def __init__(self, particles):

@@ -9,7 +9,7 @@ tododoc
 '''
 
 
-'''
+
 from enthought.traits.api import HasTraits, Range, Instance, \
      on_trait_change
 from enthought.traits.ui.api import View, Item, HGroup
@@ -17,7 +17,7 @@ from enthought.tvtk.pyface.scene_editor import SceneEditor
 from enthought.mayavi.tools.mlab_scene_model import \
      MlabSceneModel
 from enthought.mayavi.core.ui.mayavi_scene import MayaviScene
-
+'''
 
 
 from numpy import linspace, pi, cos, sin
