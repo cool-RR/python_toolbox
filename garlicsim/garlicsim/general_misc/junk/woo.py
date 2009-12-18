@@ -1,23 +1,10 @@
-# Copyright 2009 Ram Rachum.
-# This program is distributed under the LGPL2.1 license.
-
-import wx
-import wx.lib.scrolledpanel as scrolled
-
-'''
-tododoc
-'''
-
-
-
 from enthought.traits.api import HasTraits, Range, Instance, \
-     on_trait_change
+                    on_trait_change
 from enthought.traits.ui.api import View, Item, HGroup
 from enthought.tvtk.pyface.scene_editor import SceneEditor
 from enthought.mayavi.tools.mlab_scene_model import \
-     MlabSceneModel
+                    MlabSceneModel
 from enthought.mayavi.core.ui.mayavi_scene import MayaviScene
-
 
 from numpy import linspace, pi, cos, sin
 
@@ -27,7 +14,6 @@ def curve(n_mer, n_long):
             sin(phi*n_mer) * (1 + 0.5*cos(n_long*phi)),
             0.5*sin(n_long*phi),
             sin(phi*n_mer)]
-
 
 
 class Visualization(HasTraits):
@@ -54,41 +40,19 @@ class Visualization(HasTraits):
                         '_', 'meridional', 'transverse',
                     ),
                 )
-                
-    
-class StateShower(wx.lib.scrolledpanel.ScrolledPanel):
-    '''
-    
-    '''
-    def __init__(self, parent, id, gui_project, *args, **kwargs):
-        wx.lib.scrolledpanel.ScrolledPanel.__init__(self, parent, id,
-                                                    style=wx.SUNKEN_BORDER,
-                                                    *args,
-                                                    **kwargs)
-        self.SetupScrolling()
-        #self.Bind(wx.EVT_PAINT, self.on_paint)
-        self.Bind(wx.EVT_SIZE, self.on_size)
-        #self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse_event)
 
-        self.gui_project = gui_project
-        
+
+
+import wx
+
+class MainWindow(wx.Frame):
+    def __init__(self, parent, id):
+        wx.Frame.__init__(self, parent, id, 'Mayavi in Wx')
         self.visualization = Visualization()
-        self.control = \
-            self.visualization.edit_traits(parent=self, kind='subpanel').control
-        
-        self.state = None
-        
-        self.font = wx.Font(12, wx.FONTFAMILY_TELETYPE, wx.FONTSTYLE_NORMAL,
-                            wx.FONTWEIGHT_BOLD, face='Courier New')
+        self.control = self.visualization.edit_traits(parent=self,
+                                kind='subpanel').control
+        self.Show()
 
-        
-    def load_state(self, state):
-        '''Set the state to be displayed.'''
-        self.state = state
-        #self.Refresh()
-
-    
-    def on_size(self, e=None):
-        '''Refresh the widget.'''
-        self.Refresh()
-
+app = wx.PySimpleApp()
+frame = MainWindow(None, wx.ID_ANY)
+app.MainLoop()
