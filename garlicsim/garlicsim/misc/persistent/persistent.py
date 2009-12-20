@@ -26,6 +26,8 @@ import uuid
 import weakref
 import colorsys
 
+from copy_modes import DoCopyPersistent, DontCopyPersistent
+
 # Doing `from personality import Personality` at bottom of file
 
 __all__ = ['Persistent']
@@ -87,7 +89,7 @@ class Persistent(object):
             thing._Persistent__uuid = new_uuid
             library[new_uuid] = thing
             return thing
-        
+    
     def __getstate__(self):
         my_dict = dict(self.__dict__)
         del my_dict["_Persistent__uuid"]
@@ -103,7 +105,13 @@ class Persistent(object):
             self.__dict__.update(state)
     
     def __deepcopy__(self, memo): #todo: supposed to put thing in memo!
-        return self
+        '''tododoc'''
+        
+        
+        if isinstance(memo, DontCopyPersistent):
+            tododoc! ! '''how do i make sure it refers to copies of objects?'''
+        else:
+            tododoc ! !
     
     def __copy__(self):
         return self
