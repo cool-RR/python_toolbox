@@ -10,7 +10,7 @@ See its documentation for more information.
 from garlicsim.general_misc.copy_mode import CopyMode
 from garlicsim.misc.persistent import DontCopyPersistent
 
-class StepCopy(CopyMode, DontCopyPersistent):
+class StepCopy(DontCopyPersistent, CopyMode):
     '''
     A copy mode used in step function to generate the next state.
     
