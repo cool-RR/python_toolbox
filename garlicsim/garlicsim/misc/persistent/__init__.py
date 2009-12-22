@@ -9,3 +9,4 @@ See their documentation for more information.
 
 from persistent import Persistent
 from personality import Personality
+from copy_modes import DontCopyPersistent

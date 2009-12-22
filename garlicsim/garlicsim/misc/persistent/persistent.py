@@ -16,9 +16,6 @@ todo: need to raise an exception if we're getting pickled with
 an old protocol?
 
 todo: make it polite to other similar classes
-
-todo: what happens when you want to fork-by-editing a state and change
-a big 3-d model which is a PRO?
 '''
 
 
@@ -26,7 +23,8 @@ import uuid
 import weakref
 import colorsys
 
-from copy_modes import DoCopyPersistent, DontCopyPersistent
+from copy_modes import DontCopyPersistent
+from garlicsim.general_misc import copy_tools
 
 # Doing `from personality import Personality` at bottom of file
 
@@ -104,14 +102,21 @@ class Persistent(object):
         else:
             self.__dict__.update(state)
     
-    def __deepcopy__(self, memo): #todo: supposed to put thing in memo!
-        '''tododoc'''
+    def __deepcopy__(self, memo):
+        '''
+        Deepcopy the object. If DontCopyPersistent is given, only mock-copy.
         
-        
+        When this method receieves an instance of DontCopyPersistent as a memo
+        dictionary, it will not actually deepcopy the object but only return a
+        reference to the original object.
+        '''
         if isinstance(memo, DontCopyPersistent):
-            tododoc! ! '''how do i make sure it refers to copies of objects?'''
+            memo[id(self)] = self
+            return self
         else:
-            tododoc ! !
+            new_copy = copy_tools.deepcopy_as_simple_object(self, memo)
+            new_copy._Persistent__uuid = uuid.uuid4()
+            return new_copy
     
     def __copy__(self):
         return self
