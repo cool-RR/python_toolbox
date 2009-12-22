@@ -7,7 +7,7 @@ to be defined near the root of the garlicsim package but not important enough
 to be put in the main namespace.
 '''
 
-from copy_mode import CopyMode
+from step_copy import StepCopy
 from exceptions import InvalidSimpack, SimpackError, GarlicSimWarning
 from auto_clock_generator import AutoClockGenerator
 from history_browser import HistoryBrowser

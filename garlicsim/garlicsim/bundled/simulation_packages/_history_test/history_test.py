@@ -3,6 +3,7 @@
 
 import garlicsim.data_structures
 import copy
+from garlicsim.misc import StepCopy
 
 import math
 from math import pi
@@ -27,7 +28,7 @@ def make_random_state(*args, **kwargs):
 def history_step(history_browser, t=0.1, *args, **kwargs):
 
     last_state = history_browser.get_last_state()
-    new_state = copy.deepcopy(last_state)
+    new_state = copy.deepcopy(last_state, StepCopy())
     new_state.clock += t
     
     useless_state = history_browser.get_state_by_clock(10000000)
