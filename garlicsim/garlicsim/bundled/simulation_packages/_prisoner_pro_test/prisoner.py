@@ -1,8 +1,8 @@
-# Copyright 2009 Ram Rachum.
+# Copyright 2009-2010 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
 import garlicsim.data_structures
-from garlicsim.misc import Persistent
+from garlicsim.misc import Persistent, StepCopy
 import copy
 
 import random
@@ -46,7 +46,7 @@ def make_random_state(*args,**kwargs):
     return new_match_step(state)
 
 def step(source_state,*args,**kwargs):
-    state=copy.deepcopy(source_state)
+    state=copy.deepcopy(source_state, StepCopy())
     state.clock+=1
 
     state.round+=1

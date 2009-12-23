@@ -1,4 +1,4 @@
-# Copyright 2009 Ram Rachum.
+# Copyright 2009-2010 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
 '''
@@ -16,15 +16,15 @@ todo: need to raise an exception if we're getting pickled with
 an old protocol?
 
 todo: make it polite to other similar classes
-
-todo: what happens when you want to fork-by-editing a state and change
-a big 3-d model which is a PRO?
 '''
 
 
 import uuid
 import weakref
 import colorsys
+
+from copy_modes import DontCopyPersistent
+from garlicsim.general_misc import copy_tools
 
 # Doing `from personality import Personality` at bottom of file
 
@@ -87,7 +87,7 @@ class Persistent(object):
             thing._Persistent__uuid = new_uuid
             library[new_uuid] = thing
             return thing
-        
+    
     def __getstate__(self):
         my_dict = dict(self.__dict__)
         del my_dict["_Persistent__uuid"]
@@ -102,8 +102,21 @@ class Persistent(object):
         else:
             self.__dict__.update(state)
     
-    def __deepcopy__(self, memo): #todo: supposed to put thing in memo!
-        return self
+    def __deepcopy__(self, memo):
+        '''
+        Deepcopy the object. If DontCopyPersistent is given, only mock-copy.
+        
+        When this method receieves an instance of DontCopyPersistent as a memo
+        dictionary, it will not actually deepcopy the object but only return a
+        reference to the original object.
+        '''
+        if isinstance(memo, DontCopyPersistent):
+            memo[id(self)] = self
+            return self
+        else:
+            new_copy = copy_tools.deepcopy_as_simple_object(self, memo)
+            new_copy._Persistent__uuid = uuid.uuid4()
+            return new_copy
     
     def __copy__(self):
         return self

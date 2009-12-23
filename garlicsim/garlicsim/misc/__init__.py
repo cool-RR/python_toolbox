@@ -1,4 +1,4 @@
-# Copyright 2009 Ram Rachum.
+# Copyright 2009-2010 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
 '''
@@ -7,6 +7,7 @@ to be defined near the root of the garlicsim package but not important enough
 to be put in the main namespace.
 '''
 
+from step_copy import StepCopy
 from exceptions import InvalidSimpack, SimpackError, GarlicSimWarning
 from auto_clock_generator import AutoClockGenerator
 from history_browser import HistoryBrowser

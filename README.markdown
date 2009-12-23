@@ -70,9 +70,13 @@ Mockup:
 
 ![](http://garlicsim.org/images/mockup_thumb.gif)
 
-# Community and Support #
+# Mailing lists #
 
-If you need help with anything related to GarlicSim, mail me at [cool-rr@cool-rr.com](mailto:cool-rr@cool-rr.com). Soon there will be an official collaboration medium for GarlicSim.
+The main mailing list is **[garlicsim@librelist.org](mailto:garlicsim@librelist.org)**.
+
+The development mailing list is **[garlicsim.dev@librelist.org](mailto:garlicsim.dev@librelist.org)**.
+
+To subscribe just send an email. These lists are hosted by [librelist](http://librelist.org), which is currently slightly experimental.
 
 # Core and GUI #
 
@@ -92,7 +96,7 @@ There is a [separate fork of GarlicSim](http://github.com/cool-RR/GarlicSim-for-
 
 # Current state #
 
-Garlicsim is at version 0.2.x, which is an alpha release. It is still very experimental, and there are probably many bugs. If you run into any trouble, [drop me a mail](mailto:cool-rr@cool-rr.com).
+Garlicsim is at version 0.2.x, which is an alpha release. It is still very experimental, and there are probably many bugs. If you run into any trouble, let us know immediately in the [mailing list](mailto:garlicsim@librelist.org).
 
 At this experimental stage of the project, backward compatibility will _not_ be maintained. However, I will be available to assist in issues related to backward compatibility.
 

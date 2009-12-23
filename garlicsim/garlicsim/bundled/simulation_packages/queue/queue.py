@@ -1,4 +1,4 @@
-# Copyright 2009 Ram Rachum.
+# Copyright 2009-2010 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
 '''
@@ -13,6 +13,7 @@ import numpy
 import numpy.random
 
 from garlicsim.general_misc.infinity import Infinity
+from garlicsim.misc import StepCopy
 import garlicsim
 
 import events as events_module
@@ -236,7 +237,7 @@ def step(old_state, t=None):
     
     assert t is None # for now
     
-    new_state = copy.deepcopy(old_state)
+    new_state = copy.deepcopy(old_state, StepCopy())
     time_passed = new_state.event_set.do_next_event()
     
     new_state.clock = old_state.clock + time_passed
