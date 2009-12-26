@@ -116,6 +116,7 @@ class Persistent(object):
         else:
             new_copy = copy_tools.deepcopy_as_simple_object(self, memo)
             new_copy._Persistent__uuid = uuid.uuid4()
+            new_copy.__personality = None
             return new_copy
     
     def __copy__(self):
