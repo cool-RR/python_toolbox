@@ -54,7 +54,7 @@ The beauty is that since so many simulation types can fit into this mold of a si
 
 Additionally, GarlicSim will eventually be shipped with a standard library of simpacks for common simulations, that the user may find useful to use as-is, or with his own modifications.
 
-For a more thorough introduction to how GarlicSim works, check out the ** [Introduction to GarlicSim](http://dl.getdropbox.com/u/1927707/Introduction%20to%20GarlicSim.doc) ** - Though not yet complete, it goes deep into the principles of GarlicSim and how to work with it.
+For a more thorough introduction to how GarlicSim works, check out the ** [Introduction to GarlicSim](http://dl.getdropbox.com/u/1927707/Introduction%20to%20GarlicSim.pdf) ** - Though not yet complete, it goes deep into the principles of GarlicSim and how to work with it.
 
 GarlicSim itself is written in pure Python. The speed of simulations is mostly dependent on the simpack's performance - So it is possible to use C code in a simpack to make things faster.
 
