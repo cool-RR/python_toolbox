@@ -260,6 +260,20 @@ class Node(object):
         '''Return whether the node the first one on its block.'''
         return self.block and (self.block.index(self) == 0)
     
+    def is_overlapping(self, other):
+        '''
+        Return whether this node overlaps with the given entity.
+        
+        `other` may be a node, in which case overlapping means being the same
+        node. `other` can also be a block, in which case overlapping means this
+        node is contained in the block.
+        '''
+        if isinstance(other, Node):
+            return (self is other)
+        else:
+            assert isinstance(other, Block)
+            return (self in other)
+    
     def __repr__(self):
         '''
         Get a string representation of the node.

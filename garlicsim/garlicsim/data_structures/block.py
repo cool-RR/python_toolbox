@@ -9,6 +9,8 @@ See the documentation of Block for more information.
 
 from garlicsim.general_misc import logic_tools
 
+# We are doing `from node import Node` in the bottom of the file.
+
 __all__ = ["Block", "BlockError"]
 
 class BlockError(Exception):
@@ -231,7 +233,20 @@ the index was bigger than the block's length.''')
         This profile must be identical in all of the nodes in the block.
         '''
         return self.__node_list[0].step_profile
-    
+     
+    def is_overlapping(self, other):
+        '''
+        Return whether this block overlaps with the given entity.
+        
+        `other` may be a block, in which case overlapping means being the same
+        block. `other` can also be a node, in which case overlapping means the
+        node is contained in this block.
+        '''
+        if isinstance(other, Block):
+            return (self is other)
+        else:
+            assert isinstance(other, Node)
+            return (self in other)
     
     def __repr__(self):
         '''
@@ -250,7 +265,4 @@ the index was bigger than the block's length.''')
                    hex(id(self))
                )
         
-
-        
-
-
+from node import Node

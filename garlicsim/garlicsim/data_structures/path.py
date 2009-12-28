@@ -11,7 +11,7 @@ import copy as copy_module # Avoiding name clash.
 
 from node import Node
 from block import Block
-# Note we are doing `from tree import Tree` in the bottom of the file.
+# We are doing `from tree import Tree` in the bottom of the file.
 
 import garlicsim.general_misc.binary_search as binary_search
 
@@ -52,9 +52,12 @@ class Path(object):
     have more than one child.
     
     The attribute ".root" says from which node the path begins.
+    #tododoc say start and end are inclusive
     '''
     def __init__(self, tree, root=None, decisions={}):
+
         self.tree = tree
+        
         self.root = root
         '''The root node.'''
         
@@ -66,21 +69,18 @@ class Path(object):
          # todo: Use shallow copy instead of dict.__init__. Will allow
          # dictoids.
 
+         
     def __len__(self, start=None, end=None):
         '''
         Get the length of the path in nodes.
         
         You can optionally specify star end node, in which the path ends.tododoc
         '''
-        if start is None:
-            if self.root is None:
-                return 0
-            current = self.root
-        else: # start is not None
-            current = start
+        if start is None and self.root is None:
+            return 0
             
         return sum(len(thing) for thing in 
-                   self.iterate_blockwise(start=current, end=end))
+                   self.iterate_blockwise(start=start, end=end))
 
 
     def __iter__(self, start=None, end=None): #todo: make sure that start==end is ok
@@ -99,7 +99,7 @@ class Path(object):
                 current = self.next_node(current)
                 yield current
                 if end is not None:
-                    if current == end:
+                    if current is end:
                         raise StopIteration
                     elif isinstance(end, Block) and (current in end):
                         if current.is_last_on_block():
@@ -108,6 +108,7 @@ class Path(object):
                 if end is not None:
                     raise EndNotReached
                 raise StopIteration
+            
             
     def iterate_blockwise(self, start=None, end=None):
         '''
@@ -133,6 +134,8 @@ class Path(object):
                     index_of_start = start.block.index(start)
                     for current in start.block[index_of_start:-1]:
                         yield current
+                        if end is not None and (current is end):
+                            raise StopIteration
                     current = start.block[-1]
                 
         yield current
@@ -142,7 +145,7 @@ class Path(object):
                 current = self.next_node(current)
                 if current.block is not None:
                     if end is not None:
-                        if end == current.block:
+                        if end is current.block:
                             yield current.block
                             raise StopIteration
                         elif end in current.block:
@@ -155,20 +158,29 @@ class Path(object):
                         yield current
                 else: # current.block is None
                     yield current
-                    if end is not None and current == end:
+                    if end is not None and current is end:
                         raise StopIteration
             except PathOutOfRangeError:
                 if end is not None:
                     raise EndNotReached
                 raise StopIteration
     
-    def iterate_blockwise_reversed(self, end_node):
+            
+    def iterate_blockwise_reversed(self, end, start=None):
         '''
         Iterate backwards on the path, yielding blocks when possible.
         
         You must specify a node/block from which to start iterating, using the
         parameter `end_node`.tododoc
         '''
+        if isinstance(end, Node):
+            if end.block is not None:
+                if end.is_last_on_block() is False:
+                    index_of_end = end.block.index(end)
+                    for current in end.block[index_of_end::-1]:
+                        yield current
+                        if start is not None and (start is current):
+                            raise StopIteration
         current = end_node.soft_get_block()
 
         yield current
@@ -184,16 +196,17 @@ class Path(object):
             current = parent.soft_get_block()
             yield current
 
+            
     def __contains__(self, thing):
         '''
         Return whether the path contains the specified node/block.tododoc
         '''
         assert isinstance(thing, Node) or isinstance(thing, Block)
 
-        for x in self.iterate_blockwise():
-            if x == thing:
+        for candidate in self.iterate_blockwise():
+            if candidate is thing:
                 return True
-            elif isinstance(x, Block) and thing in x:
+            elif isinstance(candidate, Block) and thing in candidate:
                 return True
             
         return False
@@ -241,13 +254,14 @@ class Path(object):
         else:
             return self.__get_item_negative(index, end_node=end_node)
 
+        
     def __get_item_negative(self, index, end_node=None):
         '''
         Get a node by its index number in the path. Negative indices only.
 
         You can optionally specify an end node in which the path ends.
         '''
-        if end_node == None:
+        if end_node is None:
             end_node = self.get_last_node()
         else:
             assert isinstance(end_node, Node)
@@ -274,8 +288,9 @@ class Path(object):
                     assert my_index == index
                     return thing
                 
-        raise PathOutOfRangeError()
+        raise PathOutOfRangeError
         
+    
     def __get_item_positive(self, index, end_node=None):
         '''
         Get a node by its index number in the path. Positive indices only.
@@ -314,6 +329,7 @@ class Path(object):
         else:
             return thing
     
+        
     def get_node_by_clock(self, clock, rounding="closest", end_node=None):
         '''
         Get a node according to its clock.
@@ -328,6 +344,7 @@ class Path(object):
                                                    rounding=rounding,
                                                    end_node=end_node)    
         
+    
     def get_node_by_monotonic_function(self, function, value,
                                        rounding="closest", end_node=None):
         '''
@@ -402,7 +419,6 @@ class Path(object):
         return binary_search.make_both_data_into_preferred_rounding \
                (both, function, value, rounding)
             
-        
     
     def get_node_occupying_timepoint(self, timepoint):
         '''
@@ -417,7 +433,7 @@ class Path(object):
         If no such node exists, returns None.
         '''
         temp = self.get_node_by_clock(timepoint, rounding="both")
-        if list(temp).count(None)==0:
+        if list(temp).count(None) == 0:
             return temp[0]
         else:
             return None
@@ -442,6 +458,7 @@ class Path(object):
         else:
             return None
     
+        
     def modify_to_include_node(self, node):
         '''
         Modifiy the path to include the specified node.
@@ -450,6 +467,7 @@ class Path(object):
         self.root = new_path.root
         self.decisions.update(new_path.decisions)
     
+        
     def __repr__(self):
         '''
         Get a string representation of the path.
@@ -466,7 +484,6 @@ class Path(object):
                )
     
     
-    
     def copy(self):
         '''
         Make a shallow copy of the path.
@@ -481,6 +498,7 @@ class Path(object):
         path = Path(tree=tree, root=root, decisions=decisions)
         
         return path
+    
     
     __copy__ = copy
     
