@@ -2,8 +2,9 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-A module that defines the Tree class and the related TreeError exception. See
-their documentation for more information.
+A module that defines the Tree class and the related TreeError exception.
+
+See their documentation for more information.
 '''
 
 import copy

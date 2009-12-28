@@ -39,7 +39,6 @@ class Node(object):
         self.tree = tree
         self.state = state
         
-        
         self.parent = parent
         '''The parent node of this node.'''
         
@@ -83,9 +82,7 @@ class Node(object):
   
         
     def __len__(self):
-        '''
-        Just return 1. This is useful because of blocks.
-        '''
+        '''Just return 1. This is useful because of blocks.'''
         return 1
 
     

@@ -2,8 +2,9 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-A module that defines the Path class. See its documentation for more
-information.
+A module that defines the Path class and a few related exceptions.
+
+See its documentation for more information.
 '''
 
 import copy as copy_module # Avoiding name clash.
@@ -14,18 +15,28 @@ from block import Block
 
 import garlicsim.general_misc.binary_search as binary_search
 
-__all__ = ["Path", "PathError", "PathOutOfRangeError"]
+__all__ = ['Path', 'PathError', 'PathOutOfRangeError', 'EndNotReached',
+           'StartNotReached']
 
 class PathError(Exception):
+    '''An exception related to the class Path.'''
+    pass
+
+class PathOutOfRangeError(PathError):
     '''
-    An exception related to the class Path.
+    Nodes are requested from the path which are out of its range.
     '''
     pass
 
-class PathOutOfRangeError(Exception):
+class EndNotReached(PathError):
     '''
-    An exception related to the class Path, raised when nodes are requested
-    from the path which are out of its range.
+    An end node/block is specified but it turns out not to be on the path.
+    '''
+    pass
+
+class StartNotReached(PathError):
+    '''
+    A start node/block is specified but it turns out not to be on the path.
     '''
     pass
 
@@ -52,74 +63,111 @@ class Path(object):
         The decisions dict says which fork of the road the path chooses.
         It's of the form {node_which_forks: node_to_continue_to, ... }
         '''
+         # todo: Use shallow copy instead of dict.__init__. Will allow
+         # dictoids.
 
-    def __len__(self, end_node=None):
+    def __len__(self, start=None, end=None):
         '''
         Get the length of the path in nodes.
         
-        You can optionally specify an end node, in which the path ends.
+        You can optionally specify star end node, in which the path ends.tododoc
         '''
-        if self.root is None: return 0
-        length = 0
-        for thing in self.iterate_blockwise():
-            if isinstance(thing, Block):
-                if end_node and end_node in thing:
-                    length += thing.index(end_node) + 1
-                    return length
-                else: # (not end_node) or (end_node not in thing)
-                    length += len(thing)
-                    continue
-            else: # thing is a blockless node
-                length += 1
-                if thing == end_node: return length
-        
-        if end_node is None:
-            return length
-        else:
-            raise PathError("Didn't reach end_node!")
+        if start is None:
+            if self.root is None:
+                return 0
+            current = self.root
+        else: # start is not None
+            current = start
+            
+        return sum(len(thing) for thing in 
+                   self.iterate_blockwise(start=current, end=end))
 
-    def __iter__(self):
-        '''Iterate over the nodes in the path.'''
-        if self.root is None:
-            raise StopIteration
-        yield self.root
-        current = self.root
+
+    def __iter__(self, start=None, end=None): #todo: make sure that start==end is ok
+        '''Iterate over the nodes in the path.tododoc'''
+        if start is None:
+            if self.root is None:
+                raise StopIteration
+            current = self.root
+        else:
+            current = start if isinstance(start, Node) else start[0]
+        
+        yield current
+        
         while True:
             try:
                 current = self.next_node(current)
                 yield current
+                if end is not None:
+                    if current == end:
+                        raise StopIteration
+                    elif isinstance(end, Block) and (current in end):
+                        if current.is_last_on_block():
+                            raise StopIteration
             except PathOutOfRangeError:
+                if end is not None:
+                    raise EndNotReached
                 raise StopIteration
             
-    def iterate_blockwise(self, starting_at=None):
+    def iterate_blockwise(self, start=None, end=None):
         '''
-        Iterate on the path, returning blocks when possible.
+        Iterate on the path, yielding blocks when possible.tododoc
         
         You are allowed to specify a node/block from which to start iterating,
-        using the parameter `starting_at`.
+        using the parameter `start`.
         '''
-        if starting_at is None:
+
+        if start is None:
             if self.root is None:
                 raise StopIteration
             current = self.root.soft_get_block()
-        else:
-            current = starting_at.soft_get_block()
-
+        else: # start is not None
+            current = start
+            if isinstance(start, Node) and start.block is not None:
+                if start.is_first_on_block():
+                    current = start.block
+                else: 
+                    # We are starting iteration on a node in a block. We will
+                    # not yield its block at all. We'll yield all the nodes one
+                    # by one until the next node/block in the tree.
+                    index_of_start = start.block.index(start)
+                    for current in start.block[index_of_start:-1]:
+                        yield current
+                    current = start.block[-1]
+                
         yield current
 
         while True:
             try:
-                current = self.next_node(current).soft_get_block()
-                yield current
+                current = self.next_node(current)
+                if current.block is not None:
+                    if end is not None:
+                        if end == current.block:
+                            yield current.block
+                            raise StopIteration
+                        elif end in current.block:
+                            index_of_end = current.block
+                            for thing in current.block[ 0 : (index_of_end + 1) ]:
+                                yield thing
+                            raise StopIteration
+                    else: # end is None
+                        current = current.block
+                        yield current
+                else: # current.block is None
+                    yield current
+                    if end is not None and current == end:
+                        raise StopIteration
             except PathOutOfRangeError:
+                if end is not None:
+                    raise EndNotReached
                 raise StopIteration
     
     def iterate_blockwise_reversed(self, end_node):
         '''
-        Iterate backwards on the path, returning blocks when possible.
+        Iterate backwards on the path, yielding blocks when possible.
         
         You must specify a node/block from which to start iterating, using the
-        parameter `end_node`.
+        parameter `end_node`.tododoc
         '''
         current = end_node.soft_get_block()
 
@@ -138,7 +186,7 @@ class Path(object):
 
     def __contains__(self, thing):
         '''
-        Return whether the path contains the specified node/block.
+        Return whether the path contains the specified node/block.tododoc
         '''
         assert isinstance(thing, Node) or isinstance(thing, Block)
 
@@ -226,7 +274,7 @@ class Path(object):
                     assert my_index == index
                     return thing
                 
-        raise PathOutOfRangeError
+        raise PathOutOfRangeError()
         
     def __get_item_positive(self, index, end_node=None):
         '''

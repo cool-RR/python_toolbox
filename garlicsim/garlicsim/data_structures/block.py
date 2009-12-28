@@ -2,8 +2,9 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-A module that defines the Block class and the related BlockError exception. See
-the documentation of Block for more information.
+A module that defines the Block class and the related BlockError exception.
+
+See the documentation of Block for more information.
 '''
 
 from garlicsim.general_misc import logic_tools
@@ -208,8 +209,12 @@ the index was bigger than the block's length.''')
         return len(self.__node_list)
 
     
-    def __getitem__(self, i):
-        return self.__node_list[i]
+    def __getitem__(self, *args, **kwargs):
+        return self.__node_list.__getitem__(*args, **kwargs)
+    
+    
+    def __getslice__(self, *args, **kwargs):
+        return self.__node_list.__getslice__(*args, **kwargs)
 
     
     def index(self, node):
