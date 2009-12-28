@@ -268,6 +268,7 @@ class Node(object):
         node. `other` can also be a block, in which case overlapping means this
         node is contained in the block.
         '''
+        if other is None: return False
         if isinstance(other, Node):
             return (self is other)
         else:

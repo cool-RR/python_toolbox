@@ -242,6 +242,7 @@ the index was bigger than the block's length.''')
         block. `other` can also be a node, in which case overlapping means the
         node is contained in this block.
         '''
+        if other is None: return False
         if isinstance(other, Block):
             return (self is other)
         else:

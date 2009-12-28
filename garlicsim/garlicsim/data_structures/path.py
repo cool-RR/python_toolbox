@@ -91,19 +91,21 @@ class Path(object):
             current = self.root
         else:
             current = start if isinstance(start, Node) else start[0]
-        
-        yield current
-        
+            
+            
         while True:
-            try:
-                current = self.next_node(current)
-                yield current
-                if end is not None:
-                    if current is end:
+            
+            yield current
+            
+            if end is not None:
+                if current is end:
+                    raise StopIteration
+                elif isinstance(end, Block) and (current in end):
+                    if current.is_last_on_block():
                         raise StopIteration
-                    elif isinstance(end, Block) and (current in end):
-                        if current.is_last_on_block():
-                            raise StopIteration
+                        
+            try:
+                current = self.next_node(current)           
             except PathOutOfRangeError:
                 if end is not None:
                     raise EndNotReached
@@ -134,7 +136,7 @@ class Path(object):
                     index_of_start = start.block.index(start)
                     for current in start.block[index_of_start:-1]:
                         yield current
-                        if end is not None and (current is end):
+                        if current.is_overlapping(end):
                             raise StopIteration
                     current = start.block[-1]
                 
@@ -158,7 +160,7 @@ class Path(object):
                         yield current
                 else: # current.block is None
                     yield current
-                    if end is not None and current is end:
+                    if current.is_overlapping(end):
                         raise StopIteration
             except PathOutOfRangeError:
                 if end is not None:
@@ -299,7 +301,7 @@ class Path(object):
         '''
         my_index = -1
         answer = None
-        for thing in self.iterate_blockwise():
+        for thing in self.iterate_blockwise(): CAN BE SMARTER HERE?
             my_index += len(thing)
             if my_index >= index:
                 if isinstance(thing, Block):
