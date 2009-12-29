@@ -144,6 +144,15 @@ tree while specifying a template_node.''')
             result += root.all_possible_paths()
         return result
     
+    def delete_node_selection(self, node_selection, stitch=False):#tododoc
+        node_selection.compact()
+        pass
+    
+    def delete_node_range(self, node_range, stitch=False):#tododoc
+        pass
+        
+        
+        
     
     def __repr__(self):
         '''

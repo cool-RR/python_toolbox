@@ -5,14 +5,15 @@
 This module defines functions that may be useful when working with iterators.
 '''
 
-def pairs(iterable):
+import itertools
+
+def consecutive_pairs(iterable):
     '''
     Iterate over successive pairs from the iterable.
     
-    Example:
-    if the iterable is [0, 1, 2, 3], then its `pairs` would be
-    [(0, 1), (1, 2), (2, 3)]. (Except it would be an iterator and not an actual
-    list.)
+    Example: if the iterable is [0, 1, 2, 3], then its `consecutive_pairs` would
+    be [(0, 1), (1, 2), (2, 3)]. (Except it would be an iterator and not an
+    actual list.)
     '''
     
     first_run = True
@@ -23,7 +24,18 @@ def pairs(iterable):
         else:
             first_run = False
         old = current
-        
+
+def orderless_combinations(iterable, n, start=0):#tododoc, optimize
+    if n == 1:
+        for thing in itertools.islice(iterable, start, None):
+            yield [thing]
+    # if not isinstance(iterable, list):
+    #     iterable = list(iterable)
+    for (i, thing) in itertools.islice(enumerate(iterable), start, None):
+        for sub_result in orderless_combinations(iterable, n-1, start=i+1):
+            yield [thing] + sub_result
+    
+    
 def shorten(iterable, n):
     '''
     Shorten an iterator to length n.

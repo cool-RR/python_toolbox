@@ -243,13 +243,13 @@ class Path(object):
                 raise StopIteration
             
 
-    def __contains__(self, thing):
+    def __contains__(self, thing, start=None, end=None):
         '''
         Return whether the path contains the specified node/block.
         '''
         assert isinstance(thing, Node) or isinstance(thing, Block)
 
-        for candidate in self.iterate_blockwise():
+        for candidate in self.iterate_blockwise(start=start, end=end):
             if candidate is thing:
                 return True
             elif isinstance(candidate, Block) and thing in candidate:

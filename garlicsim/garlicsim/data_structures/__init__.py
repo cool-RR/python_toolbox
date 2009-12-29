@@ -15,12 +15,15 @@ nodes.
 
 from state import State
 from tree import Tree, TreeError
-from path import (Path, PathError, PathOutOfRangeError, StartNotReached,
-                  EndNotReached)
+from path import Path, PathError, PathOutOfRangeError
 from node import Node, NodeError
 from block import Block, BlockError
 
+from node_range import NodeRange
+from node_selection import NodeSelection
 
-__all__ = ['State', 'Tree', 'Path', 'Node', 'Block'] + \
-          ['BlockError', 'PathError', 'PathOutOfRangeError', 'StartNotReached',
-           'EndNotReached', 'TreeError', 'NodeError']
+
+__all__ = ['State', 'Tree', 'Path', 'Node', 'Block', 'NodeRange',
+           'NodeSelection'] + \
+          ['BlockError', 'PathError', 'PathOutOfRangeError', 'TreeError',
+           'NodeError']
