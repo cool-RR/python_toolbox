@@ -154,6 +154,9 @@ tree while specifying a template_node.''')
         start_node = node_range.start if isinstance(node_range.start, Node) \
                      else node_range.start[0]
         
+        end_node = node_range.end if isinstance(node_range.end, Node) \
+                     else node_range.end[-1]
+        
         if start_node in self.roots:
             self.roots.remove(start_node)
                         
@@ -164,7 +167,18 @@ tree while specifying a template_node.''')
             
         for node in node_range:
             self.nodes.remove(node)
-        
+
+        current_block = None
+        last_block_change = None
+        for node in node_range:
+            if node.block is not current_block or node is end_node:
+                if current_block is not None:
+                    del current_block[current_block.index(last_block_change) :
+                                      current_block.index(node.parent)]
+                current_block = node.block
+                last_block_change = node
+                    
+            
         parent_to_use = big_parent if (stitch is True) else None
         for node in outside_children:
             node.parent = parent_to_use

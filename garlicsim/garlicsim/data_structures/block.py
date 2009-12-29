@@ -47,9 +47,9 @@ class Block(object):
         '''
         Construct a block from the members of node_list.
         '''
+        self.alive = True
         self.__node_list = []
         self.add_node_list(node_list)
-        self.alive = True
 
     def append_node(self, node):
         '''
@@ -205,23 +205,23 @@ while the index was bigger than the block's length.''')
         elif isinstance(i, slice):
             if i.start < 0:
                 i.start += len(self)
-            if i.end < 0:
-                i.end += len(self)
+            if i.stop < 0:
+                i.stop += len(self)
             
-            assert 0 <= i.start <= i.end < len(self)
+            assert 0 <= i.start <= i.stop < len(self)
             
-            start_node, end_node = [self[index] for index in (i.start, i.end)]
+            start_node, end_node = [self[index] for index in (i.start, i.stop)]
             
-            self.split(i.end)
+            self.split(end_node)
 
             if self.alive is False:                
                 return
             
             if i.start >= 1:                
-                self.split(i.start.parent)
+                self.split(start_node.parent)
                 
-            if i.start.block is not None:
-                i.start.block.delete()
+            if start_node.block is not None:
+                start_node.block.delete()
             
         else:
             raise NotImplementedError
