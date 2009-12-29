@@ -126,20 +126,26 @@ class Path(object):
             current = self.root.soft_get_block()
         else: # start is not None
             current = start
-            if isinstance(start, Node) and start.block is not None:
-                if start.is_first_on_block():
-                    current = start.block
-                else: 
-                    # We are starting iteration on a node in a block. (And it's
-                    # not the first one on the block.) We will not yield its
-                    # block at all. We'll yield all the nodes one by one until
-                    # the next node/block in the tree.
-                    index_of_start = start.block.index(start)
-                    for current in start.block[index_of_start:-1]:
-                        yield current
-                        if current is end:
-                            raise StopIteration
-                    current = start.block[-1]
+            if isinstance(start, Node) and start.block is not None and \
+               start.is_first_on_block() is False:
+                # We are starting iteration on a node in a block. (And it's not
+                # the first one on the block.) We will not yield its block at
+                # all. We'll yield all the nodes one by one until the next
+                # node/block in the tree.
+                index_of_start = start.block.index(start)
+                for current in start.block[index_of_start:]:
+                    yield current
+                    if current is end:
+                        raise StopIteration
+                    
+                assert current is start.block[-1]
+                
+                try:
+                    current = self.next_node(current)
+                except PathOutOfRangeError:
+                    if end is not None:
+                        raise EndNotReached
+                    raise StopIteration
                 
         while True:
             if current.block is not None:
@@ -148,7 +154,7 @@ class Path(object):
                         yield current.block
                         raise StopIteration
                     elif end in current.block:
-                        index_of_end = current.block
+                        index_of_end = current.block.index(end)
                         for thing in current.block[ 0 : (index_of_end + 1) ]:
                             yield thing
                         raise StopIteration
@@ -175,20 +181,28 @@ class Path(object):
         parameter `end_node`.tododoc
         '''
         current = end
-        if isinstance(end, Node) and end.block is not None:
-            if end.is_last_on_block():
-                current = end.block
-            else: 
-                # We are starting iteration on a node in a block. (And it's not
-                # the last one on the block.) We will not yield its block at
-                # all. We'll yield all the nodes one by one until the previous
-                # node/block in the tree.
-                index_of_end = end.block.index(end)
-                for current in end.block[ index_of_end : 0 : -1 ]:
-                    yield current
-                    if current is start:
-                        raise StopIteration
-                current = end.block[0]
+        if isinstance(end, Node) and end.block is not None and \
+           end.is_last_on_block() is False:
+            # We are starting iteration on a node in a block. (And it's not the
+            # last one on the block.) We will not yield its block at all. We'll
+            # yield all the nodes one by one until the previous node/block in
+            # the tree.
+            index_of_end = end.block.index(end)
+            for current in end.block[ index_of_end : : -1 ]:
+                yield current
+                if current is start:
+                    raise StopIteration
+
+            assert current is end.block[0]
+            
+            if isinstance(current, Node):
+                current = current.parent
+            else: # isinstance(current, Block)
+                current = current[0].parent
+            if current is None:
+                if start is not None:
+                    raise StartNotReached
+                raise StopIteration
                 
         while True:
             if current.block is not None:
@@ -197,8 +211,8 @@ class Path(object):
                         yield current.block
                         raise StopIteration
                     elif start in current.block:
-                        index_of_start = current.block
-                        for thing in current.block[ 0 : (index_of_start + 1) ]:
+                        index_of_start = current.block.index(start)
+                        for thing in current.block[ : (index_of_start - 1) : -1 ]:
                             yield thing
                         raise StopIteration
                 else: # start is None
@@ -208,13 +222,17 @@ class Path(object):
                 yield current
                 if current.is_overlapping(start):
                     raise StopIteration
-            
+
             if isinstance(current, Node):
                 current = current.parent
             else: # isinstance(current, Block)
                 current = current[0].parent
-
+            if current is None:
+                if start is not None:
+                    raise StartNotReached
+                raise StopIteration
             
+
     def __contains__(self, thing):
         '''
         Return whether the path contains the specified node/block.tododoc
@@ -259,7 +277,7 @@ class Path(object):
             raise PathOutOfRangeError
             
 
-    def __getitem__(self, index, end_node=None):
+    def __getitem__(self, index, end=None):
         '''
         Get a node by its index number in the path.
 
@@ -268,40 +286,40 @@ class Path(object):
         assert isinstance(index, int)
         
         if index >= 0:
-            return self.__get_item_positive(index, end_node=end_node)
+            return self.__get_item_positive(index, end=end)
         else:
-            return self.__get_item_negative(index, end_node=end_node)
+            return self.__get_item_negative(index, end=end)
 
         
-    def __get_item_negative(self, index, end_node=None):
+    def __get_item_negative(self, index, end=None):
         '''
         Get a node by its index number in the path. Negative indices only.
 
         You can optionally specify an end node in which the path ends.
         '''
-        if end_node is None:
-            end_node = self.get_last_node()
+        if end is None:
+            end = self.get_last_node()
         else:
-            assert isinstance(end_node, Node)
+            assert isinstance(end, Node)
         if index == -1:
-            return end_node
+            return end
         
         my_index = 0
         
-        if end_node.block:
-            block = end_node.block
-            index_of_end_node = block.index(end_node)
+        if end.block:
+            block = end.block
+            index_of_end = block.index(end)
             
-            my_index -= (index_of_end_node + 1)
+            my_index -= (index_of_end + 1)
             
             if my_index <= index:
                 return block[index - my_index]
         
-        for thing in self.iterate_blockwise_reversed(end_node=end_node):
+        for thing in self.iterate_blockwise_reversed(end=end):
             my_index -= len(thing)
             if my_index <= index:
                 if isinstance(thing, Block):
-                    return thing[ (index - my_index)]
+                    return thing[(index - my_index)]
                 else:
                     assert my_index == index
                     return thing
@@ -309,7 +327,7 @@ class Path(object):
         raise PathOutOfRangeError
         
     
-    def __get_item_positive(self, index, end_node=None):
+    def __get_item_positive(self, index, end=None):
         '''
         Get a node by its index number in the path. Positive indices only.
 
@@ -317,7 +335,7 @@ class Path(object):
         '''
         my_index = -1
         answer = None
-        for thing in self.iterate_blockwise(): CAN BE SMARTER HERE?
+        for thing in self.iterate_blockwise(end=end):
             my_index += len(thing)
             if my_index >= index:
                 if isinstance(thing, Block):
@@ -327,19 +345,18 @@ class Path(object):
                     assert my_index == index
                     answer = thing
                     break
-        if answer:
-            if (not end_node) or answer.state.clock < end_node.state.clock:
-                return answer
+        if answer is not None:
+            return answer
         raise PathOutOfRangeError
 
-    def get_last_node(self, starting_at=None):
+    def get_last_node(self, start=None):
         '''
         Get the last node in the path.
         
         Optionally, you are allowed to specify a node from which to start
         searching.
         '''
-        for thing in self.iterate_blockwise(starting_at=starting_at):
+        for thing in self.iterate_blockwise(start=start):
             pass
 
         if isinstance(thing, Block):

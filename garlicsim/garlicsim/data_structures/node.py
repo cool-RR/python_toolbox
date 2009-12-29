@@ -10,8 +10,8 @@ See documentation of Node for more information.
 from garlicsim.general_misc.infinity import Infinity
 
 from state import State
-from block import Block
-# Note we are doing `from path import Path` in the bottom of the file.
+# We are doing `from block import Block` in the bottom of the file.
+# We are doing `from path import Path` in the bottom of the file.
 
 
 __all__ = ["Node", "NodeError"]
@@ -126,7 +126,7 @@ class Node(object):
         past_path = self.__make_past_path()
         paths = []
         fork = None
-        for thing in past_path.iterate_blockwise(starting_at=self):
+        for thing in past_path.iterate_blockwise(start=self):
             real_thing = thing[-1] if isinstance(thing, Block) else thing
             if len(real_thing.children):
                 fork = real_thing
@@ -298,6 +298,6 @@ class Node(object):
             )
 
 from path import Path
-
+from block import Block
 
 

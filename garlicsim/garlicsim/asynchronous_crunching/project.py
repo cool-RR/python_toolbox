@@ -150,7 +150,7 @@ class Project(object):
         enough.
         '''
         
-        leaf = path.get_last_node(starting_at=node)
+        leaf = path.get_last_node(start=node)
         new_clock_target = node.state.clock + clock_buffer     
 
         jobs_of_leaf = self.crunching_manager.get_jobs_by_node(leaf)
