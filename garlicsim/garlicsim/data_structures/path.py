@@ -52,7 +52,10 @@ class Path(object):
     have more than one child.
     
     The attribute ".root" says from which node the path begins.
-    #tododoc say start and end are inclusive
+    
+    Some of Path's method accept `start` and `end` parameters for specifying a
+    sub-range inside the path. It should be noted that this range will include
+    both endpoints.
     '''
     def __init__(self, tree, root=None, decisions={}):
 
@@ -74,7 +77,8 @@ class Path(object):
         '''
         Get the length of the path in nodes.
         
-        You can optionally specify star end node, in which the path ends.tododoc
+        You can optionally specify `start` and/or `end`, which may be either
+        nodes or blocks.
         '''
         if start is None and self.root is None:
             return 0
@@ -83,15 +87,21 @@ class Path(object):
                    self.iterate_blockwise(start=start, end=end))
 
 
-    def __iter__(self, start=None, end=None): #todo: make sure that start==end is ok
-        '''Iterate over the nodes in the path.tododoc'''
+    def __iter__(self, start=None, end=None):
+        '''
+        Iterate over the nodes in the path.
+        
+        You can optionally specify `start` and/or `end`, which may be either
+        nodes or blocks.
+        '''
         if start is None:
             if self.root is None:
                 raise StopIteration
             current = self.root
         else:
-            current = start if isinstance(start, Node) else start[0]
-            
+            current = start
+        
+        current = current if isinstance(current, Node) else current[0]
             
         while True:
             
@@ -114,10 +124,10 @@ class Path(object):
             
     def iterate_blockwise(self, start=None, end=None):
         '''
-        Iterate on the path, yielding blocks when possible.tododoc
+        Iterate on the path, yielding blocks when possible.
         
-        You are allowed to specify a node/block from which to start iterating,
-        using the parameter `start`.
+        You can optionally specify `start` and/or `end`, which may be either
+        nodes or blocks.
         '''
 
         if start is None:
@@ -177,8 +187,8 @@ class Path(object):
         '''
         Iterate backwards on the path, yielding blocks when possible.
         
-        You must specify a node/block from which to start iterating, using the
-        parameter `end_node`.tododoc
+        You must specify an `end`. You may optionally specify a `start`. Both of
+        these may be either nodes or blocks.
         '''
         current = end
         if isinstance(end, Node) and end.block is not None and \
@@ -235,7 +245,7 @@ class Path(object):
 
     def __contains__(self, thing):
         '''
-        Return whether the path contains the specified node/block.tododoc
+        Return whether the path contains the specified node/block.
         '''
         assert isinstance(thing, Node) or isinstance(thing, Block)
 
@@ -353,8 +363,7 @@ class Path(object):
         '''
         Get the last node in the path.
         
-        Optionally, you are allowed to specify a node from which to start
-        searching.
+        You can optionally specify `start`, which may be either a node or block.
         '''
         for thing in self.iterate_blockwise(start=start):
             pass
