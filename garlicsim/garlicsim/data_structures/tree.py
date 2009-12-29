@@ -146,12 +146,31 @@ tree while specifying a template_node.''')
     
     def delete_node_selection(self, node_selection, stitch=False):#tododoc
         node_selection.compact()
-        pass
+        for node_range in node_selection.ranges:
+            self.delete_node_range(node_range, stitch=stitch)
     
     def delete_node_range(self, node_range, stitch=False):#tododoc
-        pass
         
+        start_node = node_range.start if isinstance(node_range.start, Node) \
+                     else node_range.start[0]
         
+        if start_node in self.roots:
+            self.roots.remove(start_node)
+                        
+        big_parent = start_node.parent
+        big_parent.children.remove(start_node)
+        
+        outside_children = node_range.get_outside_children()
+            
+        for node in node_range:
+            self.nodes.remove(node)
+        
+        parent_to_use = big_parent if (stitch is True) else None
+        for node in outside_children:
+            node.parent = parent_to_use
+            if parent_to_use is None:
+                self.roots.append(node)
+            
         
     
     def __repr__(self):

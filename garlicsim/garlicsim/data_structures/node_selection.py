@@ -4,7 +4,7 @@ from node import Node
 from node_range import NodeRange
 
     
-class CompletelyCanonic(Exception):
+class CompletelyCompact(Exception):
     pass
     
 from garlicsim.general_misc import cute_iter_tools
@@ -21,7 +21,7 @@ class NodeSelection(object):
         try:
             while True:
                 self.__partially_compact()
-        except CompletelyCanonic:
+        except CompletelyCompact:
             return
             
     def __partially_compact(self):
