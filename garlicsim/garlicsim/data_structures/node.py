@@ -2,8 +2,9 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-A module that defines the Node class and the related NodeError exception. See
-its documentation for more information.
+A module that defines the Node class and the related NodeError exception.
+
+See documentation of Node for more information.
 '''
 
 from garlicsim.general_misc.infinity import Infinity
@@ -23,15 +24,16 @@ class NodeError(Exception):
 
 class Node(object):
     '''
-    A node encapsulates a state with the attribute ".state". Nodes are used to
-    organize states in a tree.
+    Nodes are used to organize states in a tree.
+    
+    A node encapsulates a state with the attribute ".state". 
     
     Most nodes are untouched, a.k.a. natural, but some nodes are touched.
     A touched node is a node whose state was not formed naturally by a
     simulation step: It was created by the user, either from scratch or based
     on another state.
     '''
-    #todo: Maybe node should not reference tree?
+    # todo: Maybe node should not reference tree?
     
     def __init__(self, tree, state, parent=None, step_profile=None,
                  touched=False):

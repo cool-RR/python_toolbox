@@ -130,38 +130,37 @@ class Path(object):
                 if start.is_first_on_block():
                     current = start.block
                 else: 
-                    # We are starting iteration on a node in a block. We will
-                    # not yield its block at all. We'll yield all the nodes one
-                    # by one until the next node/block in the tree.
+                    # We are starting iteration on a node in a block. (And it's
+                    # not the first one on the block.) We will not yield its
+                    # block at all. We'll yield all the nodes one by one until
+                    # the next node/block in the tree.
                     index_of_start = start.block.index(start)
                     for current in start.block[index_of_start:-1]:
                         yield current
-                        if current.is_overlapping(end):
+                        if current is end:
                             raise StopIteration
                     current = start.block[-1]
                 
-        yield current
-
         while True:
+            if current.block is not None:
+                if end is not None:
+                    if end is current.block:
+                        yield current.block
+                        raise StopIteration
+                    elif end in current.block:
+                        index_of_end = current.block
+                        for thing in current.block[ 0 : (index_of_end + 1) ]:
+                            yield thing
+                        raise StopIteration
+                else: # end is None
+                    current = current.block
+                    yield current
+            else: # current.block is None
+                yield current
+                if current.is_overlapping(end):
+                    raise StopIteration
             try:
                 current = self.next_node(current)
-                if current.block is not None:
-                    if end is not None:
-                        if end is current.block:
-                            yield current.block
-                            raise StopIteration
-                        elif end in current.block:
-                            index_of_end = current.block
-                            for thing in current.block[ 0 : (index_of_end + 1) ]:
-                                yield thing
-                            raise StopIteration
-                    else: # end is None
-                        current = current.block
-                        yield current
-                else: # current.block is None
-                    yield current
-                    if current.is_overlapping(end):
-                        raise StopIteration
             except PathOutOfRangeError:
                 if end is not None:
                     raise EndNotReached
@@ -175,28 +174,45 @@ class Path(object):
         You must specify a node/block from which to start iterating, using the
         parameter `end_node`.tododoc
         '''
-        if isinstance(end, Node):
-            if end.block is not None:
-                if end.is_last_on_block() is False:
-                    index_of_end = end.block.index(end)
-                    for current in end.block[index_of_end::-1]:
-                        yield current
-                        if start is not None and (start is current):
-                            raise StopIteration
-        current = end_node.soft_get_block()
-
-        yield current
-
+        current = end
+        if isinstance(end, Node) and end.block is not None:
+            if end.is_last_on_block():
+                current = end.block
+            else: 
+                # We are starting iteration on a node in a block. (And it's not
+                # the last one on the block.) We will not yield its block at
+                # all. We'll yield all the nodes one by one until the previous
+                # node/block in the tree.
+                index_of_end = end.block.index(end)
+                for current in end.block[ index_of_end : 0 : -1 ]:
+                    yield current
+                    if current is start:
+                        raise StopIteration
+                current = end.block[0]
+                
         while True:
-            if isinstance(current, Node):
-                parent = current.parent
-            else: # isinstance(current, Block)
-                parent = current[0].parent
+            if current.block is not None:
+                if start is not None:
+                    if start is current.block:
+                        yield current.block
+                        raise StopIteration
+                    elif start in current.block:
+                        index_of_start = current.block
+                        for thing in current.block[ 0 : (index_of_start + 1) ]:
+                            yield thing
+                        raise StopIteration
+                else: # start is None
+                    current = current.block
+                    yield current
+            else: # current.block is None
+                yield current
+                if current.is_overlapping(start):
+                    raise StopIteration
             
-            if parent is None:
-                raise StopIteration
-            current = parent.soft_get_block()
-            yield current
+            if isinstance(current, Node):
+                current = current.parent
+            else: # isinstance(current, Block)
+                current = current[0].parent
 
             
     def __contains__(self, thing):
