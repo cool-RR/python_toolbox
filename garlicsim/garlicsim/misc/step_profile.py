@@ -41,7 +41,8 @@ class StepProfile(object):
             self.__load_from(candidate)
             return
         
-        self.args, self.kwargs = args, kwargs
+        self.args = tuple(args)
+        self.kwargs = kwargs  # todo: Get some frozendict class for this
         
         
     def __load_from(self, profile):

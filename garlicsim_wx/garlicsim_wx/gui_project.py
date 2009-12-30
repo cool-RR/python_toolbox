@@ -22,8 +22,8 @@ from garlicsim.general_misc.infinity import Infinity
 import garlicsim
 from garlicsim.asynchronous_crunching.crunchers_warehouse import crunchers
 
-import custom_widgets
-from custom_widgets import FoldableWindowContainer
+import widgets.workspace_widgets
+from widgets.general_misc import FoldableWindowContainer
 
 
 class GuiProject(object):
@@ -105,9 +105,10 @@ class GuiProject(object):
                                  'garlicsim': garlicsim})
         self.shell = wx.py.shell.Shell(self.main_window, -1, size=(400, -1),
                                        locals=locals_for_shell)
-        self.seek_bar = custom_widgets.SeekBar(self.main_window, -1, self)
-        self.tree_browser = custom_widgets.TreeBrowser(self.main_window, -1,
-                                                       self)
+        self.seek_bar = widgets.workspace_widgets.SeekBar(self.main_window, -1,
+                                                          self)
+        self.tree_browser = \
+            widgets.workspace_widgets.TreeBrowser(self.main_window, -1, self)
 
 
         self.top_fwc = FoldableWindowContainer(self.main_window, -1,
@@ -454,7 +455,7 @@ class GuiProject(object):
         This is a dialog raised immediately when the gui project is created. It
         asks the user which kind of root state he would like to start with.
         '''
-        initial_dialog=custom_widgets.GenericInitialDialog(self.main_window, -1)
+        initial_dialog=widgets.misc.GenericInitialDialog(self.main_window, -1)
         if initial_dialog.ShowModal()==wx.ID_OK:
             if initial_dialog.info["random"]:
                 self.make_random_root()

@@ -22,7 +22,7 @@ import garlicsim_wx.general_misc.thread_timer as thread_timer
 
 import garlicsim
 import garlicsim_wx.gui_project
-import garlicsim_wx.custom_widgets
+import garlicsim_wx.widgets
 
 from . import images as __images_package
 images_package = __images_package.__name__
@@ -219,7 +219,7 @@ class ApplicationWindow(wx.Frame):
 
     def on_new(self, e):
         '''Create a new gui project.'''        
-        dialog = garlicsim_wx.custom_widgets.SimpackSelectionDialog(self, -1)
+        dialog = garlicsim_wx.widgets.misc.SimpackSelectionDialog(self, -1)
         if dialog.ShowModal() == wx.ID_OK:
             simpack = dialog.get_simpack_selection()
         else:
