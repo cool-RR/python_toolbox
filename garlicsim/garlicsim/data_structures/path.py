@@ -133,7 +133,7 @@ class Path(object):
         if start is None:
             if self.root is None:
                 raise StopIteration
-            current = self.root.soft_get_block()
+            current = self.root
         else: # start is not None
             current = start
             if isinstance(start, Node) and start.block is not None and \
@@ -168,6 +168,9 @@ class Path(object):
                         for thing in current.block[ 0 : (index_of_end + 1) ]:
                             yield thing
                         raise StopIteration
+                    else: # end isn't here
+                        current = current.block
+                        yield current    
                 else: # end is None
                     current = current.block
                     yield current
@@ -243,13 +246,13 @@ class Path(object):
                 raise StopIteration
             
 
-    def __contains__(self, thing):
+    def __contains__(self, thing, start=None, end=None):
         '''
         Return whether the path contains the specified node/block.
         '''
         assert isinstance(thing, Node) or isinstance(thing, Block)
 
-        for candidate in self.iterate_blockwise():
+        for candidate in self.iterate_blockwise(start=start, end=end):
             if candidate is thing:
                 return True
             elif isinstance(candidate, Block) and thing in candidate:

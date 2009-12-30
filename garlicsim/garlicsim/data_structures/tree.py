@@ -136,14 +136,59 @@ tree while specifying a template_node.''')
 
 
     def all_possible_paths(self):
-        '''
-        Return all the possible paths this tree may entertain.
-        '''
+        '''Return all the possible paths this tree may entertain.'''
         result = []
         for root in self.roots:
             result += root.all_possible_paths()
         return result
     
+    def delete_node_selection(self, node_selection, stitch=False):#tododoc
+        node_selection.compact()
+        for node_range in node_selection.ranges:
+            self.delete_node_range(node_range, stitch=stitch)
+    
+    def delete_node_range(self, node_range, stitch=False):#tododoc
+        
+        start_node = node_range.start if isinstance(node_range.start, Node) \
+                     else node_range.start[0]
+        
+        end_node = node_range.end if isinstance(node_range.end, Node) \
+                     else node_range.end[-1]
+        
+        if start_node in self.roots:
+            self.roots.remove(start_node)
+                        
+        big_parent = start_node.parent
+        if big_parent is not None:
+            big_parent.children.remove(start_node)
+        
+        outside_children = node_range.get_outside_children()
+            
+        for node in node_range:
+            self.nodes.remove(node)
+
+        current_block = None
+        last_block_change = None
+        for node in node_range:
+            if node.block is not current_block:
+                if current_block is not None:
+                    del current_block[current_block.index(last_block_change) :
+                                      current_block.index(node)]
+                current_block = node.block
+                last_block_change = node
+                
+        if current_block is not None:
+            del current_block[current_block.index(last_block_change) :
+                              current_block.index(end_node)]
+                    
+            
+        parent_to_use = big_parent if (stitch is True) else None
+        for node in outside_children:
+            node.parent = parent_to_use
+            if parent_to_use is None:
+                self.roots.append(node)
+            
+        
     
     def __repr__(self):
         '''

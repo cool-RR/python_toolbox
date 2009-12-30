@@ -16,5 +16,5 @@ def all_equal(iterable):
     member is tested against every other member. In a list of size n, n-1
     equality checks will be made.
     '''
-    return all(a==b for (a, b) in cute_iter_tools.pairs(iterable))
+    return all(a==b for (a, b) in cute_iter_tools.consecutive_pairs(iterable))
 

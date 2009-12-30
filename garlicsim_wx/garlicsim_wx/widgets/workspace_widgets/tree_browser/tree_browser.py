@@ -50,6 +50,23 @@ class TreeBrowser(ScrolledPanel):
 
         self.gui_project = gui_project
         self.clickable_map = {}
+        
+        
+        elements_raw = {
+            
+            'Untouched': 'graysquare.png',
+            'Touched': 'graystar.png',
+            'Block': 'grayblock.png',
+            'Active Untouched': 'orangesquare.png',
+            'Active Touched': 'orangestar.png',
+            'Active Block': 'orangeblock.png',
+        }
+        
+        self.elements = {}
+        for key in elements_raw:
+            file_name = pkg_resources.resource_filename(images_package,
+                                                        elements_raw[key])
+            self.elements[key] = wx.Bitmap(file_name, wx.BITMAP_TYPE_ANY)
 
     def on_paint(self, e=None):
         '''Refresh the tree browser.'''
@@ -66,7 +83,7 @@ class TreeBrowser(ScrolledPanel):
         pen.SetJoin(wx.JOIN_ROUND)
 
         dc = NiftyPaintDC(self, self.gui_project,
-                          self.CalcScrolledPosition((0, 0)))
+                          self.CalcScrolledPosition((0, 0)), self)
         
         (self.clickable_map, (width, height)) = \
             dc.draw_tree(self.gui_project.project.tree)
@@ -125,26 +142,13 @@ class TreeBrowser(ScrolledPanel):
 class NiftyPaintDC(wx.PaintDC):
     '''A PaintDC used to paint the tree in a tree browser.'''
     
-    def __init__(self, window, gui_project, origin, *args, **kwargs):
+    def __init__(self, window, gui_project, origin, tree_browser, *args, **kwargs):
         wx.PaintDC.__init__(self, window, *args, **kwargs)
         self.gui_project = gui_project
         self.origin = origin
+        self.tree_browser = tree_browser
         
-        elements_raw = {
-            
-            'Untouched': 'graysquare.png',
-            'Touched': 'graystar.png',
-            'Block': 'grayblock.png',
-            'Active Untouched': 'orangesquare.png',
-            'Active Touched': 'orangestar.png',
-            'Active Block': 'orangeblock.png',
-        }
         
-        self.elements = {}
-        for key in elements_raw:
-            file_name = pkg_resources.resource_filename(images_package,
-                                                        elements_raw[key])
-            self.elements[key] = wx.Bitmap(file_name, wx.BITMAP_TYPE_ANY)
 
     def draw_sub_tree(self, point, tree, start):
         make_block_stripe = False
@@ -168,10 +172,10 @@ class NiftyPaintDC(wx.PaintDC):
 
         if make_block_stripe is True:
 
-            bitmap = self.elements["Block"]
+            bitmap = self.tree_browser.elements["Block"]
             self.DrawBitmapPoint(bitmap, point, useMask=True)
             bitmap_size = bitmap.GetSize()
-            second_bitmap = self.elements[type]
+            second_bitmap = self.tree_browser.elements[type]
 
             slice = [None, None]
             length = float(len(start))
@@ -191,7 +195,7 @@ class NiftyPaintDC(wx.PaintDC):
             self.DestroyClippingRegion()
 
         else:
-            bitmap = self.elements[type]
+            bitmap = self.tree_browser.elements[type]
             self.DrawBitmapPoint(bitmap, point, useMask=True)
             bitmap_size = bitmap.GetSize()
 
@@ -257,16 +261,19 @@ class NiftyPaintDC(wx.PaintDC):
         except AttributeError:
             self.active_soft_block = None
 
-        size = self.draw_sub_tree(
-            vectorish.add(
-                (connector_length, connector_length),
-                self.origin
-                ),
-            tree,
-            tree.roots[0].soft_get_block()
-        )
+        sizes = []
+        pos = vectorish.add((connector_length, connector_length), self.origin)
+        for root in tree.roots:
+            size = self.draw_sub_tree(
+                pos,
+                tree,
+                root.soft_get_block()
+            )
+            pos = vectorish.add(pos, (size[0], 0))
+            sizes.append(size)
         
-        (width, height) = vectorish.add(size, (connector_length, connector_length))
+        width = sum(size[0] for size in sizes) + (connector_length * len(sizes))
+        height = max(size[1] for size in sizes) + connector_length
         return (self.clickable_map, (width, height))
 
 

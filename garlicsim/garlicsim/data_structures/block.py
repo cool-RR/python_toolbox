@@ -47,6 +47,7 @@ class Block(object):
         '''
         Construct a block from the members of node_list.
         '''
+        self.alive = True
         self.__node_list = []
         self.add_node_list(node_list)
 
@@ -58,6 +59,9 @@ class Block(object):
         unconditionally. If the node list contains some nodes, the new node
         must be either a child of the last node or the parent of the first one.
         '''
+        
+        assert self.alive
+        
         if not self.__node_list:
             # If the node list is [], let's make it [node].
             self.__node_list.append(node)
@@ -86,7 +90,8 @@ step_profile.''')
         
         raise BlockError('''Tried to add a node which is not a direct \
 successor or a direct ancestor of the block.''')
-        
+
+    
     def add_node_list(self, node_list):
         '''
         Add a list of nodes to the block.
@@ -98,7 +103,9 @@ successor or a direct ancestor of the block.''')
             2. The last node in the list is the parent of the first node in
                the block.
         '''
-
+        
+        assert self.alive
+        
         if not node_list:
             return
         
@@ -153,8 +160,9 @@ doesn't have exactly one child, and not as the last node in the block.''')
         
         `node` would be the last node of the first block of the two. If either
         of the new blocks will contain just one node, that block will get
-        deletedand the single node will become blockless.
+        deleted and the single node will become blockless.
         '''
+        assert self.alive
         assert node in self
         i = self.__node_list.index(node)
         second_list = self.__node_list[i+1:]
@@ -169,60 +177,88 @@ doesn't have exactly one child, and not as the last node in the block.''')
 
 
     def delete(self):
-        '''
-        Delete the block, leaving all its nodes without a block.
-        '''
+        '''Delete the block, leaving all its nodes without a block.'''
+        assert self.alive
         for node in self:
             node.block = None
         self.__node_list = []
+        self.alive = False
 
         
     def __delitem__(self, i):
-        '''
-        Remove a node from the block. Can only remove an edge node.
-        '''
-        if (i == 0) or (i == -1) or (i == len(self) - 1) or (i == -len(self)):
-            self.__node_list[i].block = None
-            return self.__node_list.__delitem__(i)
-        else:
-            if -len(self) < i < len(self) - 1:
-                raise NotImplementedError('''Can't remove a node from the \
-middle of a block''')
+        '''Remove a node from the block. Can only remove an edge node.tododoc'''
+        
+        assert self.alive
+        
+        if isinstance(i, int):
+            if (i == 0) or (i == -1) or \
+               (i == len(self) - 1) or (i == -len(self)):
+                self.__node_list[i].block = None
+                return self.__node_list.__delitem__(i)
+            elif (-len(self) < i < len(self) - 1):
+                    raise NotImplementedError('''Can't remove a node from the \
+middle of a block''') #tododoc
             else:
-                raise IndexError('''Tried to remove a node by index, while \
-the index was bigger than the block's length.''')
+                raise IndexError('''Tried to remove a node by index, \
+while the index was bigger than the block's length.''')
+        
+        elif isinstance(i, slice): # todo: support specifying by nodes too
+            if i.start < 0:
+                i.start += len(self)
+            if i.stop < 0:
+                i.stop += len(self)
+            
+            assert 0 <= i.start <= i.stop < len(self)
+            
+            start_node, end_node = [self[index] for index in (i.start, i.stop)]
+            
+            self.split(end_node)
 
+            if self.alive is False:                
+                return
+            
+            if i.start >= 1:                
+                self.split(start_node.parent)
+                
+            if start_node.block is not None:
+                start_node.block.delete()
+            
+        else:
+            raise NotImplementedError
+
+    
             
     def __contains__(self, node):
-        '''
-        Return whether the block contains `node`.
-        '''
-        return node.block == self
+        '''Return whether the block contains `node`.'''
+        assert self.alive
+        return node.block is self
 
     
     def __iter__(self):
+        assert self.alive
         return self.__node_list.__iter__()
 
     
     def __len__(self):
-        '''
-        Return the number of nodes in the block.
-        '''
+        '''Return the number of nodes in the block.'''
+        assert self.alive
         return len(self.__node_list)
 
     
     def __getitem__(self, *args, **kwargs):
+        assert self.alive
         return self.__node_list.__getitem__(*args, **kwargs)
     
     
-    def __getslice__(self, *args, **kwargs):
-        return self.__node_list.__getslice__(*args, **kwargs)
+    # def __getslice__(self, *args, **kwargs): #todo: can drop because of getitem?
+    #     return self.__node_list.__getslice__(*args, **kwargs)
 
     
     def index(self, node):
         '''
         Return the index number of the specified node in the block.
         '''
+        assert self.alive
         return self.__node_list.index(node)
     
     
@@ -232,6 +268,7 @@ the index was bigger than the block's length.''')
         
         This profile must be identical in all of the nodes in the block.
         '''
+        assert self.alive
         return self.__node_list[0].step_profile
      
     def is_overlapping(self, other):
@@ -242,6 +279,8 @@ the index was bigger than the block's length.''')
         block. `other` can also be a node, in which case overlapping means the
         node is contained in this block.
         '''
+        assert self.alive
+        
         if other is None: return False
         if isinstance(other, Block):
             return (self is other)
@@ -257,6 +296,7 @@ the index was bigger than the block's length.''')
         <garlicsim.data_structures.block.Block of length 40 crunched with
         StepProfile(t=0.1) at 0x1c84d70>
         '''
+        assert self.alive # todo: say "Dead block"
         return '<%s.%s of length %s, crunched with %s at %s>' % \
                (
                    self.__class__.__module__,
