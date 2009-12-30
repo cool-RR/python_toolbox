@@ -133,7 +133,7 @@ class Path(object):
         if start is None:
             if self.root is None:
                 raise StopIteration
-            current = self.root.soft_get_block()
+            current = self.root
         else: # start is not None
             current = start
             if isinstance(start, Node) and start.block is not None and \
@@ -168,6 +168,9 @@ class Path(object):
                         for thing in current.block[ 0 : (index_of_end + 1) ]:
                             yield thing
                         raise StopIteration
+                    else: # end isn't here
+                        current = current.block
+                        yield current    
                 else: # end is None
                     current = current.block
                     yield current

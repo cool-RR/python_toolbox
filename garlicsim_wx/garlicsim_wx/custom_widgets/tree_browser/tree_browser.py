@@ -273,7 +273,7 @@ class NiftyPaintDC(wx.PaintDC):
             sizes.append(size)
         
         width = sum(size[0] for size in sizes) + (connector_length * len(sizes))
-        height = max(size[1 ] for size in sizes) + connector_length
+        height = max(size[1] for size in sizes) + connector_length
         return (self.clickable_map, (width, height))
 
 

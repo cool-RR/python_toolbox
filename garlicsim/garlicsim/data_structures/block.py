@@ -186,7 +186,7 @@ doesn't have exactly one child, and not as the last node in the block.''')
 
         
     def __delitem__(self, i):
-        '''Remove a node from the block. Can only remove an edge node.'''
+        '''Remove a node from the block. Can only remove an edge node.tododoc'''
         
         assert self.alive
         

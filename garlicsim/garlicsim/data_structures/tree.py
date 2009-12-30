@@ -136,9 +136,7 @@ tree while specifying a template_node.''')
 
 
     def all_possible_paths(self):
-        '''
-        Return all the possible paths this tree may entertain.
-        '''
+        '''Return all the possible paths this tree may entertain.'''
         result = []
         for root in self.roots:
             result += root.all_possible_paths()
@@ -161,7 +159,8 @@ tree while specifying a template_node.''')
             self.roots.remove(start_node)
                         
         big_parent = start_node.parent
-        big_parent.children.remove(start_node)
+        if big_parent is not None:
+            big_parent.children.remove(start_node)
         
         outside_children = node_range.get_outside_children()
             
@@ -174,7 +173,7 @@ tree while specifying a template_node.''')
             if node.block is not current_block or node is end_node:
                 if current_block is not None:
                     del current_block[current_block.index(last_block_change) :
-                                      current_block.index(node.parent)]
+                                      current_block.index(node)]
                 current_block = node.block
                 last_block_change = node
                     
