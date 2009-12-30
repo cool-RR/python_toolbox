@@ -202,7 +202,7 @@ middle of a block''') #tododoc
                 raise IndexError('''Tried to remove a node by index, \
 while the index was bigger than the block's length.''')
         
-        elif isinstance(i, slice):
+        elif isinstance(i, slice): # todo: support specifying by nodes too
             if i.start < 0:
                 i.start += len(self)
             if i.stop < 0:

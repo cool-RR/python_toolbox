@@ -170,12 +170,16 @@ tree while specifying a template_node.''')
         current_block = None
         last_block_change = None
         for node in node_range:
-            if node.block is not current_block or node is end_node:
+            if node.block is not current_block:
                 if current_block is not None:
                     del current_block[current_block.index(last_block_change) :
                                       current_block.index(node)]
                 current_block = node.block
                 last_block_change = node
+                
+        if current_block is not None:
+            del current_block[current_block.index(last_block_change) :
+                              current_block.index(end_node)]
                     
             
         parent_to_use = big_parent if (stitch is True) else None
