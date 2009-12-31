@@ -5,14 +5,32 @@
 tododoc
 '''
 
-from garlicsim.general_misc.third_party import decorator as decorator_module
+import weakref
+import functools
 
-def state_memoize(function, *args, **kwargs):
-    if not hasattr(function, 'memo'):
-        function.memo = {}
+import garlicsim
+
+#from garlicsim.general_misc.third_party import decorator as decorator_module
+from abcs import MemoizedStateFunction, MemoizedHistoryFunction
+
+
+def state_memoize(function):
     
-    if 
-    pass
+    def memoized(state):
+        assert isinstance(state, garlicsim.data_structures.State)
+        if state in memoized.memo:
+            return memoized.memo[state]
+        else:
+            memoized.memo[state] = value = function(state)
+            return value
+            
+    memoized.memo = weakref.WeakKeyDictionary()
+    
+    functools.update_wrapper(memoized, function)
+    
+    MemoizedStateFunction.register(memoized) TODO this isn't working
+    
+    return memoized
 
 def history_memoize(function, *args, **kwargs):
     pass
