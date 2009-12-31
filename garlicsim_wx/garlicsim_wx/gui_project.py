@@ -164,9 +164,7 @@ class GuiProject(object):
 
         
     def make_initial_dialog(self):
-        '''
-        Create a dialog for creating a root state.
-        '''
+        '''Create a dialog for creating a root state.'''
         if hasattr(self.simpack, "make_initial_dialog"):
             return self.simpack.make_initial_dialog(self)
         else:
@@ -443,7 +441,8 @@ class GuiProject(object):
         '''
         node = self.active_node
         if node.still_in_editing is False:
-            raise StandardError("You said 'done editing', but you were not in editing mode.")
+            raise StandardError('''You said 'done editing', but you were not \
+in editing mode.''')
         node.still_in_editing=False
         self.project.ensure_buffer(node, self.default_buffer)
 
@@ -455,8 +454,8 @@ class GuiProject(object):
         This is a dialog raised immediately when the gui project is created. It
         asks the user which kind of root state he would like to start with.
         '''
-        initial_dialog=widgets.misc.GenericInitialDialog(self.main_window, -1)
-        if initial_dialog.ShowModal()==wx.ID_OK:
+        initial_dialog = widgets.misc.GenericInitialDialog(self.main_window, -1)
+        if initial_dialog.ShowModal() == wx.ID_OK:
             if initial_dialog.info["random"]:
                 self.make_random_root()
             else:
