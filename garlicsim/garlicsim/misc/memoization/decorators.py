@@ -10,10 +10,36 @@ import functools
 
 import garlicsim
 
-#from garlicsim.general_misc.third_party import decorator as decorator_module
-from abcs import MemoizedStateFunction, MemoizedHistoryFunction
 
+class StateMemoizedFunction(object):
+    '''
+    bla bla
+    
+    bla bla
+    bla bla
+    '''
+    def __init__(self, function):
+        self.function = function #todo assert function takes only state arg
+        self.memo = weakref.WeakKeyDictionary()
 
+        if self.function.__doc__:
+            self.__doc__ += \
+            '\nThis is the documentation of the original function, `%s`:\n' % \
+            self.function.__name__+ self.function.__doc__
+        
+        
+    def __call__(self, state):
+        assert isinstance(state, garlicsim.data_structures.State)
+        if state in self.memo:
+            return self.memo[state]
+        else:
+            self.memo[state] = value = self.function(state)
+            return value
+        
+    def purge(self):
+        self.memo.clear()
+        
+'''
 def state_memoize(function):
     
     def memoized(state):
@@ -31,6 +57,24 @@ def state_memoize(function):
     MemoizedStateFunction.register(memoized) TODO this isn't working
     
     return memoized
+'''
 
 def history_memoize(function, *args, **kwargs):
     pass
+
+if __name__ == '__main__':
+    @StateMemoizedFunction
+    def f(state):
+        '''
+        Calculate the puke of the function.
+        
+        Puke is very tasty.
+        '''
+        import random
+        return random.random()
+    
+    s1 = garlicsim.data_structures.State()
+    s2 = garlicsim.data_structures.State()
+    
+    print(f(s1), f(s2), f(s1), f(s2), f(s1), f(s2))
+    
