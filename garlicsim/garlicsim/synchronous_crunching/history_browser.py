@@ -26,7 +26,7 @@ class HistoryBrowser(garlicsim.misc.history_browser.HistoryBrowser):
     state requests from that path.
     '''
     def __init__(self, path, end_node=None):
-        
+        #todo: maybe not require path, just calculate from node?
         self.path = path
         '''
         This is the path, from which all states will be taken when requested.

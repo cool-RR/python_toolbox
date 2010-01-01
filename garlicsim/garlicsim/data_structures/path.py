@@ -22,7 +22,7 @@ class PathError(Exception):
     '''An exception related to the class Path.'''
     pass
 
-class PathOutOfRangeError(PathError):
+class PathOutOfRangeError(PathError, IndexError):
     '''
     Nodes are requested from the path which are out of its range.
     '''
@@ -296,7 +296,10 @@ class Path(object):
 
         You can optionally specify an end node in which the path ends.
         '''
+        #todo: allow slicing? make Path.states for this and for iterating?
+        #todo: generalize `end` to blocks
         assert isinstance(index, int)
+        
         
         if index >= 0:
             return self.__get_item_positive(index, end=end)
@@ -313,21 +316,25 @@ class Path(object):
         if end is None:
             end = self.get_last_node()
         else:
-            assert isinstance(end, Node)
+            assert isinstance(end, Node) or isinstance(end, Block)
         if index == -1:
             return end
         
-        my_index = 0
+        my_index = -1
         
         if end.block:
             block = end.block
             index_of_end = block.index(end)
             
-            my_index -= (index_of_end + 1)
+            my_index -= (index_of_end)
             
             if my_index <= index:
                 return block[index - my_index]
+            
+            end = end.block[0]
         
+        my_index += 1
+            
         for thing in self.iterate_blockwise_reversed(end=end):
             my_index -= len(thing)
             if my_index <= index:
@@ -346,6 +353,7 @@ class Path(object):
 
         You can optionally specify an end node in which the path ends.
         '''
+        # todo: supports blocks?
         my_index = -1
         answer = None
         for thing in self.iterate_blockwise(end=end):
