@@ -2,8 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-tododoc
+Package for memoization of functions that take states or history browsers.
 '''
 
-from decorators import *
-from abcs import *
+from decorators import state_memoize, history_memoize
