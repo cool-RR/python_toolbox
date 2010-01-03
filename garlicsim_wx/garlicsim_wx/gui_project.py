@@ -72,7 +72,7 @@ class GuiProject(object):
         self.delay = 0.05 # Should be a mechanism for setting that
         self.default_buffer = 100 # Should be a mechanism for setting that
 
-        self.timer_for_playing=None
+        self.timer_for_playing = None
         '''Contains the wx.Timer object used when playing the simulation.'''
 
         self.ran_out_of_tree_while_playing = False
@@ -89,7 +89,7 @@ class GuiProject(object):
         
     def __init_gui(self, parent_window):
         '''
-        Initialization related to the GUI widgets which make up the gui project.
+        Initialization related to the widgets which make up the gui project.
         '''
         main_window = self.main_window = wx.ScrolledWindow(parent_window, -1)
         self.main_sizer = wx.BoxSizer(wx.VERTICAL)

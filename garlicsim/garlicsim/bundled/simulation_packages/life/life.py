@@ -1,9 +1,7 @@
 # Copyright 2009-2010 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''
-A module for simulating Conway's Game of Life.
-'''
+'''A module for simulating Conway's Game of Life.'''
 
 import garlicsim.data_structures
 import random
@@ -124,3 +122,33 @@ class Board(object):
     
     def __ne__(self, other):
         return not self.__eq__(other)
+
+@garlicsim.misc.memoization.state_memoize
+def live_cells(state):
+    '''Return how many live cells there are in the state.'''
+    print('calculating for state %s' % id(state))
+    return state.board._Board__list.count(True)
+
+   
+for i in range(3):
+    states = [node.state for node in path]
+    print([live_cells(state) for state in states[-3:]])
+
+@garlicsim.misc.memoization.history_memoize
+def changes(history_browser):
+    '''
+    Return how many cells changed between the most recent state and its parent.
+    '''
+    try:
+        state = history_browser[-1]
+        last_state = history_browser[-2]
+    except IndexError:
+        return None
+    board, last_board = state.board, last_state.board
+    board_size = len(board._Board__list)
+    counter = 0
+    for i in xrange(board_size):
+        if board._Board__list[i] != last_board._Board__list[i]:
+            counter += 1
+    return counter
+
