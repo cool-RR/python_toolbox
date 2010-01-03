@@ -74,10 +74,12 @@ def history_memoize(function, *args, **kwargs):
             return memoized.node_memo[node]
         else:
             path = node.make_containing_path()
-            history_browser = garlicsim.synchronous_crunching.HistoryBrowser( #todo: wrong historybrowser? what about treelock?
-                path=path,
-                end_node=node
-            )
+            with node.tree.lock.read:
+                history_browser = \
+                    garlicsim.synchronous_crunching.HistoryBrowser(
+                        path=path,
+                        end_node=node
+                    )
             value = function(history_browser)
             memoized.node_memo[node] = value
             return value

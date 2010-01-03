@@ -31,7 +31,7 @@ def with_tree_lock(method, *args, **kwargs):
     as a context manager when calling the method.
     '''
     self = args[0]
-    with self.tree_lock.write:
+    with self.tree.lock.write:
         return method(*args, **kwargs)
 
 
@@ -69,14 +69,7 @@ class Project(object):
         self.tree = garlicsim.data_structures.Tree()
         
         self.crunching_manager = CrunchingManager(self)
-        
-        self.tree_lock = garlicsim.general_misc.read_write_lock.ReadWriteLock()
-        '''
-        The tree_lock is a read-write lock that guards access to the tree.
-        We need such a thing because some simulations are history-dependent
-        and require reading from the tree in the same time that sync_crunchers
-        could potentially be writing to it.
-        '''
+    
 
     def make_plain_root(self, *args, **kwargs):
         '''
@@ -303,7 +296,6 @@ class Project(object):
     def __getstate__(self):
         my_dict = dict(self.__dict__)
         
-        del my_dict['tree_lock']
         del my_dict['crunching_manager']
         del my_dict['simpack_grokker']
         

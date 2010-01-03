@@ -9,15 +9,15 @@ See their documentation for more information.
 
 import copy
 
+import garlicsim
+
 # We are doing `from block import Block` in the bottom of the file.
 # We are doing `from node import Node` in the bottom of the file.
 
 __all__ = ["Tree", "TreeError"]
 
 class TreeError(Exception):
-    '''
-    An exception related to the class Tree.
-    '''
+    '''An exception related to the Tree class.'''
     pass
 
 class Tree(object):
@@ -38,14 +38,26 @@ class Tree(object):
     different scenarios in parallel in the same simulation.
 
     Each node in the tree may have a parent, or may not, in which case it will
-    also be called a root and be a member of tree.roots .
+    also be called a root and be a member of tree.roots.
     '''
     def __init__(self):
+        
         self.nodes = []
         '''List of nodes that belong to the tree.'''
+        
         self.roots = []
         '''List of roots (parentless nodes) of the tree.'''
+        
+        self.lock = garlicsim.general_misc.read_write_lock.ReadWriteLock()
+        '''
+        A read-write lock that guards access to the tree.
+        
+        We need such a thing because some simulations are history-dependent and
+        require reading from the tree in the same time that sync_crunchers could
+        potentially be writing to it.
+        '''
 
+        
     def fork_to_edit(self, template_node):
         '''
         "Duplicate" the node, marking the new one as touched.
@@ -208,5 +220,19 @@ tree while specifying a template_node.''')
                    hex(id(self))
                )
     
+    
+    def __getstate__(self):
+        my_dict = dict(self.__dict__)
+        del my_dict['lock']
+        return my_dict
+    
+    
+    def __setstate__(self, pickled_tree):
+        self.__init__()
+        self.__dict__.update(pickled_tree)
+        
+        
+    
 from node import Node
 from block import Block
+

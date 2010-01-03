@@ -31,31 +31,31 @@ def with_self(method, *args, **kwargs):
 
 class HistoryBrowser(garlicsim.misc.history_browser.HistoryBrowser):
     '''
-    A HistoryBrowser is a device for requesting information about the history
-    of the simulation. It is intended to be used by CruncherThread in
-    simulations that are history-dependent.
+    A HistoryBrowser is a device for requesting information about the history of
+    the simulation. It is intended to be used by CruncherThread in simulations
+    that are history-dependent.
     
-    With a HistoryBrowser one can request states from the simulation's
-    timeline. States can be requested by clock time or position in the timeline
-    or by other measures; See documentation for this class's methods.
+    With a HistoryBrowser one can request states from the simulation's timeline.
+    States can be requested by clock time or position in the timeline or by
+    other measures; See documentation for this class's methods.
     
     Since we do not know whether the states we request have been implemented in
     the tree already, or they are still in the work_queue, it's the job of the
     HistoryBrowser to find that out. This is done transperantly for the user.
     
-    When using a HistoryBroswer, the tree_lock of the project is acquired
-    for reading. That acquiring action can also be invoked by using
-    HistoryBrowser as a context manager.
+    When using a HistoryBroswer, the lock of the project's tree is acquired for
+    reading. That acquiring action can also be invoked by using HistoryBrowser
+    as a context manager.
     '''
     
     def __init__(self, cruncher):
         self.cruncher = cruncher
         self.project = cruncher.project
         self.tree = self.project.tree
-        self.tree_lock = self.project.tree_lock
+        self.tree_lock = self.project.tree.lock
     
     def __enter__(self, *args, **kwargs):
-        '''Acquire the project's tree_lock for reading.'''
+        '''Acquire the lock of the project's tree for reading.'''
         self.tree_lock.acquireRead()
     
     def __exit__(self, *args, **kwargs):

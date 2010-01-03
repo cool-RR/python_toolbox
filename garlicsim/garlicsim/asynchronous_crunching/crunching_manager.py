@@ -40,7 +40,7 @@ def with_tree_lock(method, *args, **kwargs):
     write mode) as a context manager when calling the method.
     '''
     self = args[0]
-    with self.project.tree_lock.write:
+    with self.project.tree.lock.write:
         return method(*args, **kwargs)
 
 

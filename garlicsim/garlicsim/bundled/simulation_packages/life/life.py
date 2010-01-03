@@ -130,9 +130,6 @@ def live_cells(state):
     return state.board._Board__list.count(True)
 
    
-for i in range(3):
-    states = [node.state for node in path]
-    print([live_cells(state) for state in states[-3:]])
 
 @garlicsim.misc.memoization.history_memoize
 def changes(history_browser):
