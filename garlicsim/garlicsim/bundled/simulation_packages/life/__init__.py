@@ -16,3 +16,10 @@ except ImportError:
 
 if wx_installed:
     from life_wx import *
+    
+
+class Meta:
+    deterministic = 2
+    scalar_state_functions = [live_cells]
+    scalar_history_function = [changes]
+    
