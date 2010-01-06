@@ -11,8 +11,8 @@ import copy
 
 import garlicsim
 
-# We are doing `from block import Block` in the bottom of the file.
-# We are doing `from node import Node` in the bottom of the file.
+# `from block import Block` in the bottom of the file.
+# `from node import Node` in the bottom of the file.
 
 __all__ = ["Tree", "TreeError"]
 
