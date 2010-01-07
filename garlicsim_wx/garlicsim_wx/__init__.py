@@ -17,7 +17,6 @@ import wx
 
 from application_window import ApplicationWindow
 from gui_project import GuiProject
-import editing_interface
 
 __all__ = ['ApplicationWindow', 'GuiProject', 'start', 'editing_interface']
 

@@ -52,7 +52,7 @@ class NodeSelection(object):
             self.ranges.remove(second)
             return
         else:
-            raise CompletelyCanonic
+            raise CompletelyCompact
         
     def __add__(self, other):
         assert isinstance(other, NodeSelection)

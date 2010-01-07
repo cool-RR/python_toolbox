@@ -185,7 +185,7 @@ tree while specifying a template_node.''')
             if node.block is not current_block:
                 if current_block is not None:
                     del current_block[current_block.index(last_block_change) :
-                                      current_block.index(node)]
+                                      current_block.index(node.parent)]
                 current_block = node.block
                 last_block_change = node
                 
