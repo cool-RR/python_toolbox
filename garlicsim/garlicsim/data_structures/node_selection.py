@@ -1,4 +1,4 @@
-'''tododoc'''
+-'''tododoc'''
 
 from node import Node
 from node_range import NodeRange
@@ -15,8 +15,8 @@ class NodeSelection(object):
                       list(ranges)
         
     def compact(self):
-        for range in self.ranges:
-            assert range.is_valid()
+        for node_range in self.ranges:
+            assert node_range.is_valid()
         
         try:
             while True:
@@ -53,7 +53,12 @@ class NodeSelection(object):
             return
         else:
             raise CompletelyCompact
-        
+    
+    def __iter__(self):
+        for node_range in self.ranges:
+            for node in node_range:
+                return(node)
+    
     def __add__(self, other):
         assert isinstance(other, NodeSelection)
         return NodeSelection(self.ranges + other.ranges)
@@ -63,6 +68,7 @@ class NodeSelection(object):
 
     def copy(self):
         return NodeSelection(self.ranges)
+    
     
     __copy__ = copy
     

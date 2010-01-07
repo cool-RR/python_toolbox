@@ -154,6 +154,13 @@ tree while specifying a template_node.''')
             result += root.all_possible_paths()
         return result
     
+    def move_node_range(self, node_range): #tododoc
+        pass
+    
+    def copy_node_range(self, node_range, start=None, end=None): #tododoc
+        
+        pass
+    
     def delete_node_selection(self, node_selection, stitch=False):#tododoc
         node_selection.compact()
         for node_range in node_selection.ranges:
