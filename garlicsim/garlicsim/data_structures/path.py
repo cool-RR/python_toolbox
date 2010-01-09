@@ -29,7 +29,7 @@ class PathOutOfRangeError(Exception):
     '''
     pass
 
-class Path(object):
+class Path(object): #todo: add __reversed__ here, maybe also in Block and others
     '''
     A path symbolizes a line of nodes in a tree. A tree may be complex and
     contain many junctions, but a path is a direct line through it. Therefore,
