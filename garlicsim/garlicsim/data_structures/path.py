@@ -9,6 +9,8 @@ See its documentation for more information.
 
 import copy as copy_module # Avoiding name clash.
 
+from garlicsim.misc import GarlicSimException
+
 from node import Node
 from block import Block
 # We are doing `from tree import Tree` in the bottom of the file.
@@ -18,7 +20,7 @@ import garlicsim.general_misc.binary_search as binary_search
 __all__ = ['Path', 'PathError', 'PathOutOfRangeError', 'EndNotReached',
            'StartNotReached']
 
-class PathError(Exception):
+class PathError(GarlicSimException):
     '''An exception related to the class Path.'''
     pass
 

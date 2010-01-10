@@ -10,13 +10,14 @@ See their documentation for more information.
 import copy
 
 import garlicsim
+from garlicsim.misc import GarlicSimException
 
 # `from block import Block` in the bottom of the file.
 # `from node import Node` in the bottom of the file.
 
 __all__ = ["Tree", "TreeError"]
 
-class TreeError(Exception):
+class TreeError(GarlicSimException):
     '''An exception related to the Tree class.'''
     pass
 

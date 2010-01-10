@@ -8,7 +8,8 @@ to be put in the main namespace.
 '''
 
 from step_copy import StepCopy
-from exceptions import InvalidSimpack, SimpackError, GarlicSimWarning
+from exceptions import (InvalidSimpack, SimpackError, GarlicSimWarning,
+                        SmartException, GarlicSimException)
 from auto_clock_generator import AutoClockGenerator
 from history_browser import HistoryBrowser
 from step_iterator import StepIterator

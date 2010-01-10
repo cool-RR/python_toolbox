@@ -9,11 +9,13 @@ See the documentation of Block for more information.
 
 from garlicsim.general_misc import logic_tools
 
+from garlicsim.misc import GarlicSimException
+
 # We are doing `from node import Node` in the bottom of the file.
 
 __all__ = ["Block", "BlockError"]
 
-class BlockError(Exception):
+class BlockError(GarlicSimException):
     '''
     An exception related to the class Block.
     '''
