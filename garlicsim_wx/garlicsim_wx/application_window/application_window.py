@@ -45,23 +45,11 @@ class ApplicationWindow(wx.Frame):
         
         self.aui_manager.SetManagedWindow(self)
 
-        # create several text controls
         text1 = wx.TextCtrl(self, -1, "Pane 1 - sample text",
                             wx.DefaultPosition, wx.Size(200,150),
                             wx.NO_BORDER | wx.TE_MULTILINE)
-                                           
-        text2 = wx.TextCtrl(self, -1, "Pane 2 - sample text",
-                            wx.DefaultPosition, wx.Size(200,150),
-                            wx.NO_BORDER | wx.TE_MULTILINE)
-                                           
-        text3 = wx.TextCtrl(self, -1, "Main content window",
-                            wx.DefaultPosition, wx.Size(200,150),
-                            wx.NO_BORDER | wx.TE_MULTILINE)
         
-        # add the panes to the manager
         self.aui_manager.AddPane(text1, wx.lib.agw.aui.AuiPaneInfo().Left().Caption("Pane Number One"))
-        self.aui_manager.AddPane(text2, wx.lib.agw.aui.AuiPaneInfo().Bottom().Caption("Pane Number Two"))
-        self.aui_manager.AddPane(text3, wx.lib.agw.aui.AuiPaneInfo().CenterPane())
                               
         self.aui_manager.Update()
 
@@ -86,7 +74,7 @@ class ApplicationWindow(wx.Frame):
         #menubar.Append(nodemenu,"&Node")
         self.SetMenuBar(menubar)
         self.CreateStatusBar()
-        
+        """
         ######################################
         
         toolbar = self.CreateToolBar()
@@ -117,7 +105,7 @@ class ApplicationWindow(wx.Frame):
 
         self.Bind(wx.EVT_TOOL, self.on_new, new_tool)
         self.Bind(wx.EVT_TOOL, self.done_editing, done_tool)
-        
+        """
         ######################################
         
         self.background_timer = thread_timer.ThreadTimer(self)
