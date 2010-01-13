@@ -12,7 +12,7 @@ __all__ = ["HistoryBrowser"]
 
 get_state_clock = lambda state: state.clock
 
-class HistoryBrowser(object):
+class HistoryBrowser(object): #todo: rename to BaseHistoryBrowser?
     '''
     An abstract base class for history browsers, created with the abc module 
     from Python's standard library. See abc's documentation for more
