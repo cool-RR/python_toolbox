@@ -22,7 +22,6 @@ from garlicsim.general_misc.infinity import Infinity
 import garlicsim
 from garlicsim.asynchronous_crunching.crunchers_warehouse import crunchers
 
-import widgets.workspace_widgets
 from widgets.general_misc import FoldableWindowContainer
         
 
@@ -98,29 +97,8 @@ class GuiProject(object):
         self.state_showing_window = \
             wx.lib.scrolledpanel.ScrolledPanel(self.main_window, -1)
 
-        locals_for_shell = locals()
-        locals_for_shell.update({'gp': self,
-                                 'p': self.project,
-                                 't': self.project.tree,
-                                 'garlicsim': garlicsim})
-        self.shell = wx.py.shell.Shell(self.main_window, -1, size=(400, -1),
-                                       locals=locals_for_shell)
-        self.seek_bar = widgets.workspace_widgets.SeekBar(self.main_window, -1,
-                                                          self)
-        self.tree_browser = \
-            widgets.workspace_widgets.TreeBrowser(self.main_window, -1, self)
+        
 
-
-        self.top_fwc = FoldableWindowContainer(self.main_window, -1,
-                                               self.state_showing_window,
-                                               self.shell, wx.RIGHT,
-                                               folded=True)
-        temp = FoldableWindowContainer(self.main_window, -1, self.top_fwc,
-                                       self.seek_bar, wx.BOTTOM)
-        temp = FoldableWindowContainer(self.main_window, -1, temp,
-                                       self.tree_browser, wx.BOTTOM)
-        self.main_sizer.Add(temp, 1, wx.EXPAND)
-        self.main_sizer.Fit(self.main_window)
         
         main_window.Bind(wx.EVT_MENU, self.edit_from_active_node,
                          id=s2i("Fork by editing"))

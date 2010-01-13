@@ -18,12 +18,12 @@ import wx
 import wx.lib.agw.aui
 import pkg_resources
 
-import garlicsim_wx.general_misc.notebookctrl
 import garlicsim_wx.general_misc.thread_timer as thread_timer
 
 import garlicsim
 import garlicsim_wx.gui_project
 import garlicsim_wx.widgets
+from garlicsim_wx.widgets.workspace_widgets_warehouse import workspace_widgets
 
 from . import images as __images_package
 images_package = __images_package.__name__
@@ -219,6 +219,34 @@ class ApplicationWindow(wx.Frame):
         dialog.Destroy()
 
         self.gui_project = garlicsim_wx.gui_project.GuiProject(simpack, self)
+        
+        locals_for_shell = locals()
+        locals_for_shell.update({'gp': self.gui_project,
+                                 'p': self.gui_project.project,
+                                 't': self.gui_project.project.tree,
+                                 'garlicsim': garlicsim})
+        
+        self.shell = wx.py.shell.Shell(self, -1, size=(400, -1),
+                                       locals=locals_for_shell)
+        self.aui_manager.AddPane(
+            self.shell,
+            wx.lib.agw.aui.AuiPaneInfo().Left().Caption("Shell")
+        )
+        
+        self.seek_bar = workspace_widgets['SeekBar'](self, -1, self.gui_project)
+        
+        self.aui_manager.AddPane(
+            self.seek_bar,
+            wx.lib.agw.aui.AuiPaneInfo().Left().Caption("Seek Bar")
+        )
+        
+        self.tree_browser = workspace_widgets['TreeBrowser'](self, -1,
+                                                             self.gui_project)
+        
+        self.aui_manager.AddPane(
+            self.tree_browser,
+            wx.lib.agw.aui.AuiPaneInfo().Left().Caption("Tree Browser")
+        )
 
     def sync_crunchers(self, e=None):
         '''

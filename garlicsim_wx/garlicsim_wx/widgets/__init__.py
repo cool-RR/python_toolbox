@@ -5,4 +5,4 @@
 
 import misc
 import general_misc
-import workspace_widgets
+import workspace_widgets_warehouse

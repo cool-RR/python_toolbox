@@ -27,8 +27,7 @@ documentation for the different crunchers for more info.
 import sys
 from garlicsim.general_misc import warehouse
 
-this_module = sys.modules[__name__]
-crunchers = warehouse.create(this_module)
+crunchers = warehouse.create(sys.modules[__name__])
 
 
 
