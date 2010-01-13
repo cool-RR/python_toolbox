@@ -9,6 +9,8 @@ See documentation of Node for more information.
 
 from garlicsim.general_misc.infinity import Infinity
 
+from garlicsim.misc import GarlicSimException
+
 from state import State
 # We are doing `from block import Block` in the bottom of the file.
 # We are doing `from path import Path` in the bottom of the file.
@@ -17,7 +19,7 @@ from state import State
 __all__ = ["Node", "NodeError"]
 
 
-class NodeError(Exception):
+class NodeError(GarlicSimException):
     '''An error related to the Node class.'''
     pass
 

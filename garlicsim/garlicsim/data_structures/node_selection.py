@@ -1,10 +1,13 @@
--'''tododoc'''
+'''tododoc'''
+
+
+from garlicsim.misc import GarlicSimException
 
 from node import Node
 from node_range import NodeRange
 
     
-class CompletelyCompact(Exception):
+class CompletelyCompact(GarlicSimException):
     pass
     
 from garlicsim.general_misc import cute_iter_tools

@@ -11,12 +11,14 @@ todo: maybe class instead of func?
 import os
 import warnings
 
+from garlicsim.misc import GarlicSimException
+
 from garlicsim.general_misc import import_tools
 
 __all__ = ['create']
 
 
-class WarehouseError(Exception):
+class WarehouseError(GarlicSimException):
     '''Error to raise when there is a warehouse-related error.'''
 
 def create(package):

@@ -7,7 +7,7 @@ for more information.
 '''
 
 class ObsoleteCruncherError(BaseException):
-    '''
+    ''' #tododoc: format
     An error to raise when a cruncher is trying to do work, but in the meantime
     the main program decided that the work assigned to this cruncher is no
     longer wanted, and should therefore be stopped.

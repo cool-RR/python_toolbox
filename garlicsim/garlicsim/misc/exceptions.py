@@ -5,6 +5,32 @@
 A module defining a collection of exceptions.
 '''
 
+
+class SmartException(Exception):
+    '''tododoc'''
+    def __init__(self, msg=None):
+        if msg is None:
+            if self.__doc__:
+                msg = self.__doc__.strip().split('\n')[0] 
+                # Getting the first line of the documentation
+        Exception.__init__(self, msg)
+
+
+class GarlicSimException(SmartException):
+    '''
+    GarlicSim-related exception.
+    '''
+
+
+class GarlicSimWarning(Warning):
+    '''
+    GarlicSim-related warning.
+    '''
+
+
+            
+
+
 class InvalidSimpack(Exception):
     '''
     An exception to raise when trying to load an invalid simpack.
@@ -17,9 +43,5 @@ class SimpackError(Exception):
     '''
     pass
 
-class GarlicSimWarning(Warning):
-    '''
-    GarlicSim-related warning.
-    '''
     
     
