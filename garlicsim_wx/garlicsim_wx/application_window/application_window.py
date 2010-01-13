@@ -15,6 +15,7 @@ import random
 import cPickle
 
 import wx
+import wx.lib.agw.aui
 import pkg_resources
 
 import garlicsim_wx.general_misc.notebookctrl
@@ -38,14 +39,35 @@ class ApplicationWindow(wx.Frame):
         
         wx.Frame.__init__(self, *args, **keywords)
         self.SetDoubleBuffered(True)
-        self.notebook = garlicsim_wx.general_misc.notebookctrl.NotebookCtrl(
-            self,
-            -1,
-            style=garlicsim_wx.general_misc.notebookctrl.NC_TOP
-        )
+        
+        
+        self.aui_manager = wx.lib.agw.aui.AuiManager()
+        
+        self.aui_manager.SetManagedWindow(self)
 
-        self.gui_projects = []
-        '''The gui projects open inside this application window.'''
+        # create several text controls
+        text1 = wx.TextCtrl(self, -1, "Pane 1 - sample text",
+                            wx.DefaultPosition, wx.Size(200,150),
+                            wx.NO_BORDER | wx.TE_MULTILINE)
+                                           
+        text2 = wx.TextCtrl(self, -1, "Pane 2 - sample text",
+                            wx.DefaultPosition, wx.Size(200,150),
+                            wx.NO_BORDER | wx.TE_MULTILINE)
+                                           
+        text3 = wx.TextCtrl(self, -1, "Main content window",
+                            wx.DefaultPosition, wx.Size(200,150),
+                            wx.NO_BORDER | wx.TE_MULTILINE)
+        
+        # add the panes to the manager
+        self.aui_manager.AddPane(text1, wx.lib.agw.aui.AuiPaneInfo().Left().Caption("Pane Number One"))
+        self.aui_manager.AddPane(text2, wx.lib.agw.aui.AuiPaneInfo().Bottom().Caption("Pane Number Two"))
+        self.aui_manager.AddPane(text3, wx.lib.agw.aui.AuiPaneInfo().CenterPane())
+                              
+        self.aui_manager.Update()
+
+                
+
+        self.gui_project = None
 
         ######################################
         
@@ -98,17 +120,6 @@ class ApplicationWindow(wx.Frame):
         
         ######################################
         
-
-        '''
-        self.Bind(EVT_RUN_BACKGROUND, self.on_run_background)
-
-        event = wx.PyEvent()
-        event.SetEventType(wxEVT_RUN_BACKGROUND)
-        wx.PostEvent(self, event)
-
-        self.run_background_block=False
-        '''
-        
         self.background_timer = thread_timer.ThreadTimer(self)
         self.background_timer.start(150)
         self.Bind(thread_timer.EVT_THREAD_TIMER, self.sync_crunchers)
@@ -116,11 +127,6 @@ class ApplicationWindow(wx.Frame):
         ######################################
         
         self.Show()
-
-    def add_gui_project(self, gui_project):
-        '''Add a gui project, opening a new tab for it in the notebook.'''
-        self.gui_projects.append(gui_project)
-        self.notebook.AddPage(gui_project.main_window, "Simulation", select=True)
 
         
     def on_open(self, event=None):
@@ -201,24 +207,21 @@ class ApplicationWindow(wx.Frame):
 
     def exit(self, e=None):
         '''Close the application window.'''
+        self.aui_manager.UnInit()
+        self.Destroy()        
+        event.Skip()        
         self.background_timer.stop()
         self.Close()
 
     def done_editing(self, e=None):
         '''Finalize editing of the active node in the active gui project.'''
-        gui_project = self.get_active_gui_project()
-        gui_project.done_editing()
-
-    def get_active_gui_project(self):
-        '''Get the active gui project.'''
-        selected_tab = self.notebook.GetPage(self.notebook.GetSelection())
-        for gui_project in self.gui_projects:
-            if gui_project.main_window == selected_tab:
-                return gui_project
-        raise StandardError("No gui project selected.")
+        self.gui_project.done_editing()
 
     def on_new(self, e):
         '''Create a new gui project.'''        
+        if self.gui_project is not None:
+            raise NotImplementedError
+        
         dialog = garlicsim_wx.widgets.misc.SimpackSelectionDialog(self, -1)
         if dialog.ShowModal() == wx.ID_OK:
             simpack = dialog.get_simpack_selection()
@@ -227,8 +230,7 @@ class ApplicationWindow(wx.Frame):
             return
         dialog.Destroy()
 
-        my_gui_project = garlicsim_wx.gui_project.GuiProject(simpack, self.notebook)
-        self.add_gui_project(my_gui_project)
+        self.gui_project = garlicsim_wx.gui_project.GuiProject(simpack, self)
 
     def sync_crunchers(self, e=None):
         '''
@@ -245,6 +247,5 @@ class ApplicationWindow(wx.Frame):
         tree.
         '''
         
-        return sum((gui_project.sync_crunchers() for gui_project in
-                    self.gui_projects))
+        return self.gui_project.sync_crunchers() if self.gui_project else 0
 

@@ -24,7 +24,7 @@ from garlicsim.asynchronous_crunching.crunchers_warehouse import crunchers
 
 import widgets.workspace_widgets
 from widgets.general_misc import FoldableWindowContainer
-
+        
 
 class GuiProject(object):
     '''

@@ -23,11 +23,10 @@ __all__ = ['ApplicationWindow', 'GuiProject', 'start', 'editing_interface']
 __version__ = '0.2.2'
 
 def start():
-    '''
-    Start the gui.
-    '''
+    '''Start the gui.'''
     app = wx.PySimpleApp()
     my_app_win = ApplicationWindow(None, -1, "GarlicSim", size=(600, 600))
+    app.SetTopWindow(my_app_win)
 
     '''
     import cProfile
