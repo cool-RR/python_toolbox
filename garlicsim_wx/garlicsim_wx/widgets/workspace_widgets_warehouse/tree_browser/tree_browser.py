@@ -167,7 +167,7 @@ class NiftyPaintDC(wx.PaintDC):
             if start == self.active_soft_block:
                 type = "Active " + type
         else:
-            raise StandardError
+            raise Exception
 
 
         if make_block_stripe is True:

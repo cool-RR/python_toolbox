@@ -57,14 +57,22 @@ class Project(object):
 
     def __init__(self, simpack):
         
-        wrapped_simpack = \
-            garlicsim.general_misc.module_wrapper.module_wrapper_factory \
-            (simpack)
-        
-        self.simpack = wrapped_simpack
-        
-        self.simpack_grokker = \
-            garlicsim.misc.simpack_grokker.SimpackGrokker(wrapped_simpack)        
+        if isinstance(simpack, garlicsim.misc.SimpackGrokker):
+            
+            self.simpack_grokker = simpack
+            
+            self.simpack = self.simpack_grokker.simpack
+            
+        else:
+            
+            wrapped_simpack = \
+                garlicsim.general_misc.module_wrapper.module_wrapper_factory \
+                (simpack)
+            
+            self.simpack = wrapped_simpack
+            
+            self.simpack_grokker = \
+                garlicsim.misc.simpack_grokker.SimpackGrokker(wrapped_simpack)
 
         self.tree = garlicsim.data_structures.Tree()
         

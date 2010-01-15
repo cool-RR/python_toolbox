@@ -68,7 +68,7 @@ class GuiProject(object):
         The job of the playing leaf, which should be crunched to infinity.
         '''
 
-        self.delay = 0.05 # Should be a mechanism for setting that
+        self.delay = 0.05 # Will disappear soon
         self.default_buffer = 100 # Should be a mechanism for setting that
 
         self.timer_for_playing = None
@@ -419,9 +419,9 @@ class GuiProject(object):
         '''
         node = self.active_node
         if node.still_in_editing is False:
-            raise StandardError('''You said 'done editing', but you were not \
-in editing mode.''')
-        node.still_in_editing=False
+            raise Exception('''You said 'done editing', but you were not in \
+editing mode.''')
+        node.still_in_editing = False
         self.project.ensure_buffer(node, self.default_buffer)
 
         
