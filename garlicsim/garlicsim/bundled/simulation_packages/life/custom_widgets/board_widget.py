@@ -4,14 +4,15 @@
 import wx
 import wx.lib.scrolledpanel as scrolled
 
+import garlicsim_wx
+
 '''
 Defines the BoardWidget class.
 '''
 
-class BoardWidget(scrolled.ScrolledPanel):
-    '''
-    Widget for displaying a Life board.
-    '''
+class BoardWidget(scrolled.ScrolledPanel,
+                  garlicsim_wx.widgets.WorkspaceWidget):
+    '''Widget for displaying a Life board.'''
     def __init__(self, parent, id, gui_project, *args, **kwargs):
         scrolled.ScrolledPanel.__init__(self, parent, id,
                                         style=wx.SUNKEN_BORDER, *args,

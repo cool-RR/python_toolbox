@@ -15,7 +15,8 @@ import wx
 from wx.lib.scrolledpanel import ScrolledPanel
 
 import garlicsim_wx.general_misc.vectorish as vectorish
-import garlicsim.data_structures
+import garlicsim
+import garlicsim_wx
 
 from . import images as __images_package
 images_package = __images_package.__name__
@@ -23,7 +24,7 @@ images_package = __images_package.__name__
 connector_length = 10 # length of connecting line between elements
 
 
-class TreeBrowser(ScrolledPanel):
+class TreeBrowser(ScrolledPanel, garlicsim_wx.widgets.WorkspaceWidget):
     '''
     A widget for browsing a garlicsim.data_structures.Tree.
     '''

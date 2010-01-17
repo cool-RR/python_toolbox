@@ -12,10 +12,11 @@ import math
 
 from garlicsim_wx.general_misc.get_lines import get_lines
 import garlicsim
+import garlicsim_wx
 
 __all__ = ["SeekBar"]
 
-class SeekBar(wx.Panel):
+class SeekBar(wx.Panel, garlicsim_wx.widgets.WorkspaceWidget):
     '''
     A seek-bar widget.
     
