@@ -22,6 +22,7 @@ from garlicsim.general_misc.infinity import Infinity
 import garlicsim
 from garlicsim.asynchronous_crunching.crunchers_warehouse import crunchers
 
+import garlicsim_wx
 from widgets.general_misc import FoldableWindowContainer
         
 
@@ -45,8 +46,22 @@ class GuiProject(object):
         `.path` and `.active_node`.
         '''
         
-        self.simpack = \
-            garlicsim.general_misc.module_wrapper.ModuleWrapper(simpack)
+        if isinstance(simpack, garlicsim.misc.SimpackGrokker):
+            
+            self.simpack_grokker = simpack
+            
+            self.simpack = self.simpack_grokker.simpack
+            
+        else:
+            
+            wrapped_simpack = \
+                garlicsim.general_misc.module_wrapper.module_wrapper_factory \
+                (simpack)
+            
+            self.simpack = wrapped_simpack
+            
+            self.simpack_grokker = \
+                garlicsim_wx.misc.SimpackGrokker(wrapped_simpack)
         
         self.project = project or garlicsim.Project(simpack)
         if self.project.simpack_grokker.history_dependent is False and \
@@ -414,9 +429,7 @@ class GuiProject(object):
 
     
     def done_editing(self):
-        '''
-        Finalize the changes made to the active node.
-        '''
+        '''Finalize the changes made to the active node.'''
         node = self.active_node
         if node.still_in_editing is False:
             raise Exception('''You said 'done editing', but you were not in \

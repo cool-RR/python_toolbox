@@ -15,17 +15,19 @@ import bootstrap
 
 import wx
 
-from application_window import ApplicationWindow
+import misc
+
+from frame import Frame
 from gui_project import GuiProject
 
-__all__ = ['ApplicationWindow', 'GuiProject', 'start', 'editing_interface']
+__all__ = ['Frame', 'GuiProject', 'start', 'editing_interface']
 
 __version__ = '0.2.2'
 
 def start():
     '''Start the gui.'''
     app = wx.PySimpleApp()
-    my_app_win = ApplicationWindow(None, -1, "GarlicSim", size=(600, 600))
+    my_app_win = Frame(None, -1, "GarlicSim", size=(600, 600))
     app.SetTopWindow(my_app_win)
 
     '''

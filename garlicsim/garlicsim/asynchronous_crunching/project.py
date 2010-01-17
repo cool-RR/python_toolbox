@@ -72,7 +72,7 @@ class Project(object):
             self.simpack = wrapped_simpack
             
             self.simpack_grokker = \
-                garlicsim.misc.simpack_grokker.SimpackGrokker(wrapped_simpack)
+                garlicsim.misc.SimpackGrokker(wrapped_simpack)
 
         self.tree = garlicsim.data_structures.Tree()
         

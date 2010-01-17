@@ -6,3 +6,4 @@
 import misc
 import general_misc
 import workspace_widgets_warehouse
+from workspace_widget import WorkspaceWidget
