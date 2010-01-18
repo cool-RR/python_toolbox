@@ -31,13 +31,13 @@ class GuiProject(object):
     A gui project encapsulates a project for use with a wxPython interface.
     '''
     
-    def __init__(self, simpack, parent_window):
+    def __init__(self, simpack, frame):
         # This is broken down into a few parts.
-        self.__init_general(simpack, parent_window)
+        self.__init_general(simpack, frame)
         self.__init_on_creation()
 
         
-    def __init_general(self, simpack, parent_window, project=None,
+    def __init_general(self, simpack, frame, project=None,
                        active_node=None, path=None):
         '''
         General initialization.
@@ -64,6 +64,7 @@ class GuiProject(object):
                 garlicsim_wx.misc.SimpackGrokker(wrapped_simpack)
         
         self.project = project or garlicsim.Project(simpack)
+        
         if self.project.simpack_grokker.history_dependent is False and \
            'CruncherProcess' in crunchers:
             self.project.crunching_manager.Cruncher = \
