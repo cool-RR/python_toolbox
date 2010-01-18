@@ -65,11 +65,18 @@ class GuiProject(object):
         
         self.project = project or garlicsim.Project(simpack)
         
+
+        ### Choosing a Cruncher class: ########################################
+        
         if self.project.simpack_grokker.history_dependent is False and \
+           self.project.simpack_grokker.force_cruncher is None and \
            'CruncherProcess' in crunchers:
+            
             self.project.crunching_manager.Cruncher = \
                 crunchers['CruncherProcess']
         
+        #######################################################################
+            
         self.path = path
         '''The active path.'''
 
