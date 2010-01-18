@@ -8,6 +8,7 @@ class WorkspaceWidget(object):
     
     '''
     @abc.abstractmethod
-    def __init__(self, frame):
+    def __init__(self, gui_project):
         pass
     '''
+    

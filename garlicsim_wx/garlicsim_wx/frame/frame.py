@@ -247,6 +247,8 @@ class Frame(wx.Frame):
             self.tree_browser,
             wx.lib.agw.aui.AuiPaneInfo().Left().Caption("Tree Browser")
         )
+        
+        #should create StateReprShower if the simpac got no workspace widgets
 
     def sync_crunchers(self, e=None):
         '''

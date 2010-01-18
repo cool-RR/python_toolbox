@@ -7,10 +7,17 @@ tododoc
 
 from particles import *
 
-wx_installed=False
+import garlicsim
+
+class Meta(object):
+    force_cruncher = garlicsim.asynchronous_crunching.\
+                     crunchers_warehouse.crunchers['CruncherThread']
+    # We're forcing CruncherThread because of ETS + multiprocessing bug
+
+wx_installed = False
 try:
     import wx
-    wx_installed=True
+    wx_installed = True
 except ImportError:
     pass
 

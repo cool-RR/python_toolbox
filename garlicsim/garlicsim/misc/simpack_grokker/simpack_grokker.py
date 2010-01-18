@@ -70,13 +70,12 @@ class SimpackGrokker(object):
     def __init__(self, simpack):
         self.simpack = simpack
         self.__init_analysis()
+        self.__init_analysis_meta()
     
     def __init_analysis(self):
         '''Analyze the simpack.'''
         simpack = self.simpack
 
-        self.force_cruncher = getattr(simpack, 'force_cruncher', None)
-        
         self.simple_non_history_step_defined = hasattr(simpack, "step")
         self.non_history_step_generator_defined = \
             hasattr(simpack, "step_generator")
@@ -109,7 +108,29 @@ kind of step function.''')
         
         self.history_dependent = self.history_step_defined
         
+        self.force_cruncher = getattr(simpack, 'force_cruncher', None)
         
+    
+    def __init_analysis_meta(self):
+        #tododoc
+        
+        attribute_names = ['force_cruncher', 'deterministic',
+                           'scalar_state_functions', 'scalar_history_functions']
+
+        original_meta_dict = \
+            dict(vars(self.simpack.Meta)) if hasattr(self.simpack, 'Meta') else {}
+        
+
+        dict_for_fixed_meta = {}
+        for attribute_name in attribute_names:
+            dict_for_fixed_meta[attribute_name] = \
+                original_meta_dict.get(attribute_name, None)
+            
+        # todo: currently throws away unrecognized attributes from the simpack's
+        # Meta.
+        
+        self.Meta = type('Meta', (object,), dict_for_fixed_meta)
+                
         
     def step(self, state_or_history_browser, step_profile):
         '''

@@ -69,7 +69,7 @@ class GuiProject(object):
         ### Choosing a Cruncher class: ########################################
         
         if self.project.simpack_grokker.history_dependent is False and \
-           self.project.simpack_grokker.force_cruncher is None and \
+           self.project.simpack_grokker.Meta.force_cruncher is None and \
            'CruncherProcess' in crunchers:
             
             self.project.crunching_manager.Cruncher = \
@@ -90,8 +90,6 @@ class GuiProject(object):
         '''
         The job of the playing leaf, which should be crunched to infinity.
         '''
-
-        self.delay = 0.05 # Will disappear soon
         self.default_buffer = 100 # Should be a mechanism for setting that
 
         self.timer_for_playing = None
@@ -104,8 +102,6 @@ class GuiProject(object):
         created.
         '''
 
-        self.__init_gui(parent_window)
-        
         self.simpack_initialize()
 
         
@@ -113,17 +109,8 @@ class GuiProject(object):
         '''
         Initialization related to the widgets which make up the gui project.
         '''
-        main_window = self.main_window = wx.ScrolledWindow(parent_window, -1)
-        self.main_sizer = wx.BoxSizer(wx.VERTICAL)
-        self.main_window.SetSizer(self.main_sizer)
-
-        self.state_showing_window = \
-            wx.lib.scrolledpanel.ScrolledPanel(self.main_window, -1)
-
         
-
-        
-        main_window.Bind(wx.EVT_MENU, self.edit_from_active_node,
+        frame.Bind(wx.EVT_MENU, self.edit_from_active_node,
                          id=s2i("Fork by editing"))
         main_window.Bind(wx.EVT_MENU, self.fork_naturally,
                          id=s2i("Fork naturally"))
@@ -171,15 +158,8 @@ class GuiProject(object):
         else:
             return self.make_generic_initial_dialog()
 
-        
-    def show_state(self, state):
-        '''Show the state onscreen.'''
-        if not self.simpack_crutches:
-            self.simpack.show_state(self, state)
-        else:
-            string = dict_tools.fancy_string(state.__dict__)
-            self.text_state_shower.SetValue(string)
-
+    def get_active_state(self):#tododoc
+        return self.active_node.state if self.active_node is not None else None
         
     def set_parent_window(self, parent_window):
         '''
@@ -461,38 +441,4 @@ editing mode.''')
                 self.make_plain_root()
         initial_dialog.Destroy()
 
-        
-    def tree_modify_refresh(self):
-        '''
-        Refresh the parts of the GUI which are dependent on the tree.
-        
-        This should be called whenever the tree gets changed.
-        '''
-        self.seek_bar.Refresh()
-        self.tree_browser.Refresh()
-        
-    
-        
-    def tickle(self):
-        '''
-        Used for saving the GuiProject to file.
-        '''
-        stuff_we_want = ["project", "path", "active_node", "simpack"]
-        my_dict = {}
-        for thing in stuff_we_want:
-            my_dict[thing] = self.__dict__[thing]
-        return my_dict
-    
-    
-def load_tickled_gui_project(tickled_gui_project, parent_window):
-    gui_project = GuiProject.__new__(GuiProject)
-    
-    simpack = tickled_gui_project.pop("simpack")
-    
-    gui_project._GuiProject__init_general(simpack, parent_window,
-                                          **tickled_gui_project)
-    return gui_project
-        
-    
-    
     
