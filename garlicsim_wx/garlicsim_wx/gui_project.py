@@ -46,6 +46,9 @@ class GuiProject(object):
         `.path` and `.active_node`.
         '''
         
+        self.frame = frame
+        
+        
         if isinstance(simpack, garlicsim.misc.SimpackGrokker):
             
             self.simpack_grokker = simpack
@@ -188,8 +191,6 @@ class GuiProject(object):
         
         was_playing = self.is_playing
         if self.is_playing: self.stop_playing()
-
-        self.show_state(node.state)
         self.active_node = node
         if was_playing:
             self.start_playing()
@@ -202,8 +203,8 @@ class GuiProject(object):
             self.infinity_job = self.project.ensure_buffer_on_path(node,
                                                                    self.path,
                                                                    Infinity)   
-            
-        self.main_window.Refresh()
+        
+        self.frame.Refresh()
 
         
     def __modify_path_to_include_active_node(self):
@@ -350,9 +351,6 @@ class GuiProject(object):
         the Project's sync_crunchers function. As you can see,
         we put the return value in `added_nodes`.
         '''
-
-        if added_nodes > 0:
-            self.tree_modify_refresh()
             
         if self.ran_out_of_tree_while_playing:
             self.ran_out_of_tree_while_playing = False
@@ -405,7 +403,8 @@ editing mode.''')
         This is a dialog raised immediately when the gui project is created. It
         asks the user which kind of root state he would like to start with.
         '''
-        initial_dialog = widgets.misc.GenericInitialDialog(self.main_window, -1)
+        initial_dialog = \
+            garlicsim_wx.widgets.misc.GenericInitialDialog(self.frame, -1)
         if initial_dialog.ShowModal() == wx.ID_OK:
             if initial_dialog.info["random"]:
                 self.make_random_root()

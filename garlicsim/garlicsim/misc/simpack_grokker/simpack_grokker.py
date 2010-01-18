@@ -14,6 +14,9 @@ import garlicsim
 
 __all__ = ["SimpackGrokker"]
 
+class Meta(object):
+    pass#tododoc
+
 class SimpackGrokker(object):
     '''
     An object that encapsulates a simpack, giving useful information about it
@@ -129,7 +132,9 @@ kind of step function.''')
         # todo: currently throws away unrecognized attributes from the simpack's
         # Meta.
         
-        self.Meta = type('Meta', (object,), dict_for_fixed_meta)
+        self.Meta = Meta()
+        for (key, value) in dict_for_fixed_meta.iteritems():
+            setattr(self.Meta, key, value)
                 
         
     def step(self, state_or_history_browser, step_profile):

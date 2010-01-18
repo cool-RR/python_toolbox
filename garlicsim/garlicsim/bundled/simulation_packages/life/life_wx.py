@@ -105,7 +105,7 @@ class InitialDialog(wx.Dialog):
         self.EndModal(wx.ID_CANCEL)
 
 
-def make_initial_dialog(gui_project):
+def zmake_initial_dialog(gui_project): # what to do about this?
     '''Create the initial dialog for creating a root state.'''
     initial_dialog = InitialDialog(gui_project.main_window, -1)
     if initial_dialog.ShowModal() == wx.ID_OK:

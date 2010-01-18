@@ -282,6 +282,11 @@ class Frame(wx.Frame):
         Returns the total amount of nodes that were added to each gui project's
         tree.
         '''
+        nodes_added = self.gui_project.sync_crunchers() \
+                    if self.gui_project else 0
         
-        return self.gui_project.sync_crunchers() if self.gui_project else 0
+        if nodes_added > 0:
+            self.Refresh()
+        
+        return nodes_added
 

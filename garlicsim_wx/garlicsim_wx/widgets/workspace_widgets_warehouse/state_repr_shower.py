@@ -10,9 +10,9 @@ import garlicsim.general_misc.dict_tools as dict_tools
 __all__ = ["StateReprShower"]
 
 class StateReprShower(wx.TextCtrl, WorkspaceWidget):#tododoc
-    def __init__(self, gui_project):
-        wx.TextCtrl.__init__(self, gui_project.frame, style=wx.TE_MULTILINE)
-        WorkspaceWidget.__init__(self, gui_project)
+    def __init__(self, frame):
+        wx.TextCtrl.__init__(self, frame, style=wx.TE_MULTILINE)
+        WorkspaceWidget.__init__(self, frame)
         
 
     def OnPaint(self, *args, **kwargs):
