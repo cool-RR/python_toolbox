@@ -101,9 +101,6 @@ class GuiProject(object):
         ready yet. The simulation will continue playing when the nodes will be
         created.
         '''
-
-        self.simpack_initialize()
-
         
     def __init_gui(self, parent_window):
         '''
@@ -118,31 +115,6 @@ class GuiProject(object):
         self.stuff_to_do_when_idle = Queue.Queue()
         self.main_window.Bind(wx.EVT_IDLE, self.on_idle)
 
-    
-    def simpack_initialize(self):
-        '''
-        Initialize the simpack.
-        
-        Hackish now.
-        '''
-        assert hasattr(self.simpack, 'initialize') == \
-               hasattr(self.simpack, 'show_state')
-        
-        self.simpack_crutches = not hasattr(self.simpack, 'initialize')
-        
-        if not self.simpack_crutches:
-            return self.simpack.initialize(self)
-        else:
-            sizer = wx.BoxSizer(wx.VERTICAL)
-            self.text_state_shower = \
-                wx.TextCtrl(self.state_showing_window, -1,
-                            style=wx.TE_MULTILINE)
-            font = wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.BOLD, False, u'Courier New')
-            self.text_state_shower.SetFont(font)
-            sizer.Add(self.text_state_shower, 1, wx.EXPAND)
-            self.state_showing_window.SetSizer(sizer)
-            sizer.Fit(self.state_showing_window)
-        
         
     def __init_on_creation(self):
         '''

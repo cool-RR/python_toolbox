@@ -40,9 +40,16 @@ class Frame(wx.Frame):
         wx.Frame.__init__(self, *args, **keywords)
         self.SetDoubleBuffered(True)
         
+        self.workspace_widgets = dict(
+            (w, None) for w in workspace_widgets
+        )
+        
+        self.default_workspace_widgets = [value for (key, value) in
+                                          workspace_widgets.items() if
+                                          (key in ['StateReprShower'])]
+        # todo: should be somewhere else
         
         self.aui_manager = wx.lib.agw.aui.AuiManager()
-        
         self.aui_manager.SetManagedWindow(self)
 
         text1 = wx.TextCtrl(self, -1, "Pane 1 - sample text",
@@ -50,23 +57,26 @@ class Frame(wx.Frame):
                             wx.NO_BORDER | wx.TE_MULTILINE)
         
         self.aui_manager.AddPane(text1, wx.lib.agw.aui.AuiPaneInfo().Left().Caption("Pane Number One"))
-                              
+                             
         self.aui_manager.Update()
 
                 
-
         self.gui_project = None
 
         ######################################
         
         filemenu = wx.Menu()
         new_menu_button = filemenu.Append(-1 ,"&New", " New")
+        """
         open_menu_button = filemenu.Append(-1 ,"&Open", " Open")
         save_menu_button = filemenu.Append(-1 ,"&Save", " Save")
+        """
         exit_menu_button = filemenu.Append(-1 ,"E&xit", " Close the program")
         self.Bind(wx.EVT_MENU, self.on_new, new_menu_button)
+        """
         self.Bind(wx.EVT_MENU, self.on_open, open_menu_button)        
-        self.Bind(wx.EVT_MENU, self.on_save, save_menu_button)        
+        self.Bind(wx.EVT_MENU, self.on_save, save_menu_button)
+        """
         self.Bind(wx.EVT_MENU, self.exit, exit_menu_button)        
         menubar = wx.MenuBar()
         menubar.Append(filemenu, "&File")
@@ -116,7 +126,7 @@ class Frame(wx.Frame):
         
         self.Show()
 
-        
+    """
     def on_open(self, event=None):
         '''Raise a dialog for opening a gui project from file.'''
         wcd = 'Text files (*.txt)|*.txt|All files (*)|*|'
@@ -184,14 +194,14 @@ class Frame(wx.Frame):
             
         save_dlg.Destroy()
     
-    '''
+    
     def delete_gui_project(self,gui_project):
         I did this wrong.
         self.gui_projects.remove(gui_project)
         self.notebook.AddPage(gui_project.main_window,"zort!")
         self.notebook.DeletePage(0)
         del gui_project
-    '''
+    """
 
     def exit(self, e=None):
         '''Close the application window.'''
@@ -203,7 +213,8 @@ class Frame(wx.Frame):
 
     def done_editing(self, e=None):
         '''Finalize editing of the active node in the active gui project.'''
-        self.gui_project.done_editing()
+        assert self.gui_project
+        return self.gui_project.done_editing()
 
     def on_new(self, e):
         '''Create a new gui project.'''        
@@ -211,6 +222,7 @@ class Frame(wx.Frame):
             raise NotImplementedError
         
         dialog = garlicsim_wx.widgets.misc.SimpackSelectionDialog(self, -1)
+        
         if dialog.ShowModal() == wx.ID_OK:
             simpack = dialog.get_simpack_selection()
         else:
@@ -220,6 +232,7 @@ class Frame(wx.Frame):
 
         self.gui_project = garlicsim_wx.gui_project.GuiProject(simpack, self)
         
+        '''
         locals_for_shell = locals()
         locals_for_shell.update({'gp': self.gui_project,
                                  'p': self.gui_project.project,
@@ -247,8 +260,13 @@ class Frame(wx.Frame):
             self.tree_browser,
             wx.lib.agw.aui.AuiPaneInfo().Left().Caption("Tree Browser")
         )
+        '''
+        # should create StateReprShower only if the simpack got no workspace
+        # widgets
         
-        #should create StateReprShower if the simpac got no workspace widgets
+        for Widget in self.default_workspace_widgets:
+            self.workspace_widgets[Widget] = Widget(self)
+        
 
     def sync_crunchers(self, e=None):
         '''

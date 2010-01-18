@@ -11,10 +11,9 @@ __all__ = ["StateReprShower"]
 
 class StateReprShower(wx.TextCtrl, WorkspaceWidget):#tododoc
     def __init__(self, gui_project):
-        
         wx.TextCtrl.__init__(self, gui_project.frame, style=wx.TE_MULTILINE)
+        WorkspaceWidget.__init__(self, gui_project)
         
-        self.gui_project = gui_project
 
     def OnPaint(self, *args, **kwargs):
         active_state = self.gui_project.get_active_state()
