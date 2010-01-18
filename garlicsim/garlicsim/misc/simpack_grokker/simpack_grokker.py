@@ -74,6 +74,9 @@ class SimpackGrokker(object):
     def __init_analysis(self):
         '''Analyze the simpack.'''
         simpack = self.simpack
+
+        self.force_cruncher = getattr(simpack, 'force_cruncher', None)
+        
         self.simple_non_history_step_defined = hasattr(simpack, "step")
         self.non_history_step_generator_defined = \
             hasattr(simpack, "step_generator")
