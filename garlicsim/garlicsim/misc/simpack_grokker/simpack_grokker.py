@@ -3,6 +3,7 @@
 
 '''
 This module defines the SimpackGrokker class and the InvalidSimpack exception.
+
 See their documentation for more details.
 '''
 
@@ -17,15 +18,61 @@ class SimpackGrokker(object):
     '''
     An object that encapsulates a simpack, giving useful information about it
     and tools to use with it.
+    
+    todo: move this somewhere else:
+    
+    class Meta:
+    
+        deterministic = 0
+        
+        # Says whether the step function of this simpack is deterministic. This
+        # is useful because if a simpack declares itself to be deterministic
+        # then GarlicSim can analyze whether a simulation has reached a
+        # constant/repetitive state.
+        
+        # 0 means completely not deterministic -- has a random element.
+        
+        # 1 means deterministic in principle, but not absolutely. (For example,
+        # in some simpacks rounding errors may make states that should otherwise
+        # be equal not be equal.)
+        
+        # 2 means absolutely deterministic. There is no random element in the
+        # step function, and given identical input states it will return
+        # identical output states.
+        
+        ################################################
+        
+        scalar_state_functions = [live_cells, maturity]
+        
+        # List of scalar state functions given by the simpack. A scalar state
+        # function is a function from a state to a real number. These should be
+        # decorated by garlicsim.misc.memoization.state_memoize.
+        
+        scalar_history_functions = [changes]
+        
+        # List of scalar history functions given by the simpack. A scalar
+        # history function is a function from a history browser to a real
+        # number. These should be decorated by
+        # garlicsim.misc.memoization.history_memoize.
+        
+        ################################################
+        
+        (tododoc: The following belong in Meta_wx, move it)
+        
+        seek_bar_graphs = [live_cells, changes]
+        
+        # List of scalar state function and scalar history functions that should
+        # be shown as graphs in the seek bar.
+        
+        ################################################
+        
     '''
     def __init__(self, simpack):
         self.simpack = simpack
         self.__init_analysis()
     
     def __init_analysis(self):
-        '''
-        Analyze the simpack.
-        '''
+        '''Analyze the simpack.'''
         simpack = self.simpack
 
         self.force_cruncher = getattr(simpack, 'force_cruncher', None)
