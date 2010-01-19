@@ -18,8 +18,9 @@ import wx
 import wx.lib.agw.aui
 import pkg_resources
 
-import garlicsim_wx.general_misc.thread_timer as thread_timer
 
+from garlicsim.general_misc import dict_tools
+import garlicsim_wx.general_misc.thread_timer as thread_timer
 import garlicsim
 import garlicsim_wx.gui_project
 import garlicsim_wx.widgets
@@ -40,14 +41,18 @@ class Frame(wx.Frame):
         wx.Frame.__init__(self, *args, **keywords)
         self.SetDoubleBuffered(True)
         
-        self.workspace_widgets = dict(
-            (w, None) for w in workspace_widgets
-        )
+        self.workspace_widgets = dict.fromkeys(workspace_widgets)
         
-        self.default_workspace_widgets = [value for (key, value) in
-                                          workspace_widgets.items() if
-                                          (key in ['StateReprShower'])]
-        # todo: should be somewhere else
+        list_of_default_widgets = [
+            'StateReprShower',
+            'Shell',
+        ]
+        # todo: should be somewhere else        
+        
+        self.default_workspace_widgets = dict_tools.get_list(
+            workspace_widgets,
+            list_of_default_widgets
+        )
         
         self.aui_manager = wx.lib.agw.aui.AuiManager()
         self.aui_manager.SetManagedWindow(self)
@@ -207,7 +212,7 @@ class Frame(wx.Frame):
         '''Close the application window.'''
         self.aui_manager.UnInit()
         self.Destroy()        
-        event.Skip()        
+        e.Skip()        
         self.background_timer.stop()
         self.Close()
 

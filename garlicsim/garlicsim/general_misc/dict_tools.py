@@ -20,6 +20,8 @@ def deepcopy_values(d):
     return new_d
 '''
 
+def get_list(d, iterable):
+    return [value for (key, value) in d.iteritems() if (key in iterable)]
 
 def fancy_string(d, indent=0):
     '''Show a dict as a string, slightly nicer than dict.__repr__.'''

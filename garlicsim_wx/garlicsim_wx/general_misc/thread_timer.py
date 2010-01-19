@@ -43,9 +43,7 @@ class ThreadTimer(object):
 
       
 class Thread(threading.Thread):
-   '''
-   Thread used as a timer for wxPython programs.
-   '''
+   '''Thread used as a timer for wxPython programs.'''
    def run(self):
       interval_in_seconds = self.parent.interval / 1000.0
       def sleep():

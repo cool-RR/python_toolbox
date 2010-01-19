@@ -13,7 +13,10 @@ class StateReprShower(wx.TextCtrl, WorkspaceWidget):#tododoc
     def __init__(self, frame):
         wx.TextCtrl.__init__(self, frame, style=wx.TE_MULTILINE)
         WorkspaceWidget.__init__(self, frame)
-        self.Bind(wx.EVT_PAINT, self.on_paint)       
+        self.Bind(wx.EVT_PAINT, self.on_paint)
+        font = wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.BOLD, False,
+                       u'Courier New')
+        self.SetFont(font)
 
     def on_paint(self, event):
         if self.frame.gui_project:
@@ -22,5 +25,4 @@ class StateReprShower(wx.TextCtrl, WorkspaceWidget):#tododoc
                 self.SetValue(dict_tools.fancy_string(vars(active_state)))
          
         event.Skip()
-        #wx.TextCtrl.OnPaint(self, *args, **kwargs)
     

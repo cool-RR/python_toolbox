@@ -18,6 +18,7 @@ import garlicsim.general_misc.queue_tools as queue_tools
 import garlicsim.general_misc.dict_tools as dict_tools
 from general_misc.stringsaver import s2i,i2s
 from garlicsim.general_misc.infinity import Infinity
+import garlicsim_wx.general_misc.thread_timer as thread_timer
 
 import garlicsim
 from garlicsim.asynchronous_crunching.crunchers_warehouse import crunchers
@@ -230,6 +231,10 @@ class GuiProject(object):
         self.infinity_job = \
             self.project.ensure_buffer_on_path(self.active_node, self.path,
                                                  Infinity)
+        
+        self.timer_for_playing = thread_timer.ThreadTimer(self)
+        self.timer_for_playing.start(1000//25)
+        self.Bind(thread_timer.EVT_THREAD_TIMER, self.sync_crunchers)
         
         def mission():
             play_next = functools.partial(self.__play_next, self.active_node)
