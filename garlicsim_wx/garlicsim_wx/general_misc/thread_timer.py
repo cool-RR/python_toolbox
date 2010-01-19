@@ -23,7 +23,7 @@ class ThreadTimer(object):
    busy.
    '''
    n = 0
-   def __init__(self, parent):
+   def __init__(self, parent): # should get id?
       self.parent = parent
       ThreadTimer.n += 1
       thread_name = "ThreadTimer Thread no. " + str(self.n)

@@ -10,7 +10,7 @@ from __future__ import with_statement
 
 import Queue
 
-def dump(queue):
+def dump(queue): #todo: change to use iterate
     '''
     Empty all pending items in a queue and return them in a list.
     

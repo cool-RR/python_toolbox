@@ -46,6 +46,8 @@ class Frame(wx.Frame):
         list_of_default_widgets = [
             'StateReprShower',
             'Shell',
+            'SeekBar',
+            'TreeBrowser'
         ]
         # todo: should be somewhere else        
         
@@ -56,16 +58,7 @@ class Frame(wx.Frame):
         
         self.aui_manager = wx.lib.agw.aui.AuiManager()
         self.aui_manager.SetManagedWindow(self)
-
-        text1 = wx.TextCtrl(self, -1, "Pane 1 - sample text",
-                            wx.DefaultPosition, wx.Size(200,150),
-                            wx.NO_BORDER | wx.TE_MULTILINE)
         
-        self.aui_manager.AddPane(text1, wx.lib.agw.aui.AuiPaneInfo().Left().Caption("Pane Number One"))
-                             
-        self.aui_manager.Update()
-
-                
         self.gui_project = None
 
         ######################################
@@ -128,6 +121,11 @@ class Frame(wx.Frame):
         self.Bind(thread_timer.EVT_THREAD_TIMER, self.sync_crunchers)
 
         ######################################
+        
+        self.Bind(wx.EVT_IDLE, self.on_idle)
+        
+
+        
         
         self.Show()
 
@@ -294,4 +292,8 @@ class Frame(wx.Frame):
             self.Refresh()
         
         return nodes_added
+    
+    def on_idle(self, event):
+        if self.gui_project:
+            return self.gui_project.on_idle(event)
 

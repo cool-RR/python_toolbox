@@ -28,10 +28,10 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
     '''
     A widget for browsing a garlicsim.data_structures.Tree.
     '''
-    def __init__(self, parent, id, gui_project=None, *args, **kwargs):
-        ScrolledPanel.__init__(self, parent, id, size=(-1, 100),
-                               style=wx.SUNKEN_BORDER)
-
+    def __init__(self, frame):
+        ScrolledPanel.__init__(self, frame, style=wx.SUNKEN_BORDER)
+        WorkspaceWidget.__init__(self, frame)
+        
         self.SetupScrolling()
         #self.SetScrollRate(20,20)
         #self.sizer=wx.BoxSizer(wx.VERTICAL)
@@ -49,7 +49,6 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
         self.Bind(wx.EVT_SIZE, self.on_size)
         self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse_event)
 
-        self.gui_project = gui_project
         self.clickable_map = {}
         
         

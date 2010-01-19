@@ -24,17 +24,17 @@ class SeekBar(wx.Panel, WorkspaceWidget):
     spans. It shows which node is currently active. It allows to move to any
     other node on the path just by clicking.
     '''
-    def __init__(self, parent, id, gui_project=None, zoom=1.0, start=0.0,
-                 *args, **kwargs):
+    def __init__(self, frame):
         
-        wx.Panel.__init__(self, parent, id, size=(-1, 40), style=wx.SUNKEN_BORDER)
+        wx.Panel.__init__(self, frame, style=wx.SUNKEN_BORDER)
+        WorkspaceWidget.__init__(self, frame)
+        
         self.Bind(wx.EVT_PAINT, self.on_paint)
         self.Bind(wx.EVT_SIZE, self.on_size)
         self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse_event)
 
-        self.gui_project = gui_project
-        self.zoom = float(zoom)
-        self.start = float(start)
+        self.zoom = 1.
+        self.start = 0.
 
         self.screenify = lambda x: (x-self.start)*self.zoom
         '''Translate from time point to on-screen coordinate.'''
@@ -213,7 +213,7 @@ class SeekBar(wx.Panel, WorkspaceWidget):
         if e.LeftUp():
             if self.was_playing_before_mouse_click:
                 self.gui_project.start_playing()
-                self.was_playing_before_mouse_click=False
+                self.was_playing_before_mouse_click = False
                 
         if e.Leaving():
             if self.was_playing_before_mouse_click:

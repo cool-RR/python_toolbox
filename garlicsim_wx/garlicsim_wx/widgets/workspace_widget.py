@@ -12,6 +12,8 @@ class WorkspaceWidget(object):
         
         self.frame = frame
         
+        self.gui_project = frame.gui_project
+        
         frame.aui_manager.AddPane(
             self,
             wx.lib.agw.aui.AuiPaneInfo().Left().Caption(type(self).__name__)

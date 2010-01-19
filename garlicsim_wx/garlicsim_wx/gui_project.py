@@ -9,6 +9,7 @@ import warnings
 import copy
 import functools
 import Queue
+import time
 
 import wx
 import wx.lib.scrolledpanel
@@ -96,8 +97,15 @@ class GuiProject(object):
         '''
         self.default_buffer = 100 # Should be a mechanism for setting that
 
-        self.timer_for_playing = None
+        self.timer_for_playing = wx.Timer(self.frame)
         '''Contains the wx.Timer object used when playing the simulation.'''
+        
+        
+        self.frame.Bind(wx.EVT_TIMER, self.__play_next_caller, self.timer_for_playing)
+        # use threadtimer? should have id or something
+        self.playing_speed = 4
+        self.real_time_krap = None
+        self.simulation_time_krap = None 
 
         self.ran_out_of_tree_while_playing = False
         '''
@@ -105,6 +113,8 @@ class GuiProject(object):
         ready yet. The simulation will continue playing when the nodes will be
         created.
         '''
+        
+        self.stuff_to_do_when_idle = Queue.Queue()
         
     def __init_gui(self, parent_window):
         '''
@@ -137,13 +147,7 @@ class GuiProject(object):
     def get_active_state(self):#tododoc
         return self.active_node.state if self.active_node is not None else None
         
-    def set_parent_window(self, parent_window):
-        '''
-        Set the parent wxPython window of the main window of the GuiProject.
-        '''
-        self.main_window.Reparent(parent_window)        
-        
-        
+    
     def on_idle(self, event=None):
         '''Handler for the wx.EVT_IDLE event.'''
         try:
@@ -185,9 +189,7 @@ class GuiProject(object):
 
     
     def set_active_node(self, node, modify_path=True):
-        '''
-        Make `node` the active node, displaying it onscreen.
-        '''
+        '''Make `node` the active node, displaying it onscreen.'''
         self.project.ensure_buffer(node, clock_buffer=self.default_buffer)
         
         was_playing = self.is_playing
@@ -232,33 +234,33 @@ class GuiProject(object):
             self.project.ensure_buffer_on_path(self.active_node, self.path,
                                                  Infinity)
         
-        self.timer_for_playing = thread_timer.ThreadTimer(self)
-        self.timer_for_playing.start(1000//25)
-        self.Bind(thread_timer.EVT_THREAD_TIMER, self.sync_crunchers)
+        self.timer_for_playing.Start(1000//25)
         
-        def mission():
-            play_next = functools.partial(self.__play_next, self.active_node)
-            self.timer_for_playing = wx.FutureCall(self.delay * 1000, play_next)
-            
-        self.stuff_to_do_when_idle.put(mission)
+        assert self.real_time_krap == self.simulation_time_krap == None
+        self.real_time_krap = time.time()
+        self.simulation_time_krap = self.active_node.state.clock
+        
+        #self.stuff_to_do_when_idle.put(mission)
 
 
     def stop_playing(self):
         '''Stop playback of the simulation.'''
-        if self.timer_for_playing is not None:
-            try:
-                self.timer_for_playing.Stop()
-            except Exception:
-                pass
-            
+        
         if self.is_playing is False:
             return
+
+        try:
+            self.timer_for_playing.Stop()
+        except Exception:
+            pass
         
         self.is_playing = False
         
         assert self.infinity_job is not None
         self.infinity_job.crunching_profile.clock_target = \
             self.infinity_job.node.state.clock + self.default_buffer
+        
+        self.real_time_krap = self.simulation_time_krap = None
         
         queue_tools.dump(self.stuff_to_do_when_idle)
         assert self.stuff_to_do_when_idle.qsize() == 0
@@ -287,27 +289,39 @@ class GuiProject(object):
         return self.stop_playing() if self.is_playing else self.start_playing()
 
 
-    def __play_next(self, node):
+    def __play_next_caller(self, event=None):#tododoc
+        self.stuff_to_do_when_idle.put(self.__play_next)
+        
+    def __play_next(self, event=None):
         '''
         Show the next node onscreen.
         
         This method is called repeatedly when playing the simulation.
         '''
         if self.is_playing is False: return
-        self.show_state(node.state)
-        self.main_window.Refresh() # Make more efficient?
-        self.active_node = node
-        try:
-            next_node = self.path.next_node(node)
-        except garlicsim.data_structures.path.PathOutOfRangeError:
-            self.ran_out_of_tree_while_playing = True
+
+        current_real_time = time.time()
+        real_time_elapsed = (current_real_time - self.real_time_krap)
+        desired_simulation_time = self.simulation_time_krap + \
+                                  (real_time_elapsed * self.playing_speed)
+        
+        new_node = self.path.get_node_by_clock(desired_simulation_time,
+                                               rounding='closest')
+        # correct rounding?
+        #print(new_node)
+
+        self.real_time_krap = current_real_time
+
+        if new_node:
+            self.simulation_time_krap = desired_simulation_time#new_node.state.clock
+            self.active_node = new_node
+            self.frame.Refresh()
+        else:
+            self.ran_out_of_tree_while_playing = True # unneeded?
+            # deal with this crap
             return
         
-        def mission():
-            play_next = functools.partial(self.__play_next, next_node)
-            self.timer_for_playing = wx.FutureCall(self.delay * 1000, play_next)
-            
-        self.stuff_to_do_when_idle.put(mission)
+        
         
 
     def fork_naturally(self, e=None):
