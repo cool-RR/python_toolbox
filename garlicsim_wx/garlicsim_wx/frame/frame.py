@@ -234,42 +234,18 @@ class Frame(wx.Frame):
         dialog.Destroy()
 
         self.gui_project = garlicsim_wx.gui_project.GuiProject(simpack, self)
-        
-        '''
-        locals_for_shell = locals()
-        locals_for_shell.update({'gp': self.gui_project,
-                                 'p': self.gui_project.project,
-                                 't': self.gui_project.project.tree,
-                                 'garlicsim': garlicsim})
-        
-        self.shell = wx.py.shell.Shell(self, -1, size=(400, -1),
-                                       locals=locals_for_shell)
-        self.aui_manager.AddPane(
-            self.shell,
-            wx.lib.agw.aui.AuiPaneInfo().Left().Caption("Shell")
-        )
-        
-        self.seek_bar = workspace_widgets['SeekBar'](self, -1, self.gui_project)
-        
-        self.aui_manager.AddPane(
-            self.seek_bar,
-            wx.lib.agw.aui.AuiPaneInfo().Left().Caption("Seek Bar")
-        )
-        
-        self.tree_browser = workspace_widgets['TreeBrowser'](self, -1,
-                                                             self.gui_project)
-        
-        self.aui_manager.AddPane(
-            self.tree_browser,
-            wx.lib.agw.aui.AuiPaneInfo().Left().Caption("Tree Browser")
-        )
-        '''
-        # should create StateReprShower only if the simpack got no workspace
-        # widgets
+
+        # todo: should create StateReprShower only if the simpack got no
+        # workspace widgets
         
         for Widget in self.default_workspace_widgets:
             self.workspace_widgets[Widget] = Widget(self)
         
+        self.__organize_workspace_widgets()
+        
+    def __organize_workspace_widgets(self): # fuck this when I learn perspectives
+        
+        pass
 
     def sync_crunchers(self, e=None):
         '''

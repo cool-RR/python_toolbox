@@ -182,7 +182,7 @@ class SeekBar(wx.Panel, WorkspaceWidget):
                     self.gui_project.set_active_node(new_node, modify_path=False)
 
             if self.gui_project.active_node is not None:
-                self.gui_project.main_window.Refresh()
+                self.gui_project.frame.Refresh()
                 self.PopupMenu(self.gui_project.get_node_menu(), e.GetPosition())
 
 
