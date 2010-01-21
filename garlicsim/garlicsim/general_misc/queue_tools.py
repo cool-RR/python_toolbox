@@ -16,48 +16,11 @@ def dump(queue): #todo: change to use iterate
     
     Use only when no other processes/threads are reading from the queue.
     '''
-    result = []
-
-    # START DEBUG CODE
-    #initial_size = queue.qsize()
-    #print("Queue has %s items initially." % initial_size)
-    #  END  DEBUG CODE
-
-    #queue.put(Stopper)
-    #queue.put(SecondStopper)
-    
-    try:
-        while True:
-            thing = queue.get(block=False)
-            result.append(thing)
-    except Queue.Empty:
-        pass
-    
-    #for thing in iter(queue.get, Stopper): # todo sentinel=
-    #    result.append(thing)
-    
-    #result = result[:-1]
-    
-    # START DEBUG CODE
-    #current_size = queue.qsize()
-    #total_size = current_size + len(result)
-    #print("Dumping complete:")
-    #if current_size == initial_size:
-        #print("No items were added to the queue.")
-    #else:
-        #print("%s items were added to the queue." % \
-              #(total_size - initial_size))
-    #print("Extracted %s items from the queue, queue has %s items left" \
-    #% (len(result), current_size))
-    #  END  DEBUG CODE
-            
-    return result
+    return list(iterate(queue))
 
 
 def iterate(queue, block=False):
-    '''
-    Iterate over the items in the queue.
-    '''
+    '''Iterate over the items in the queue.'''
     
     while True:
         try:

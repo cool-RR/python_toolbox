@@ -128,6 +128,8 @@ class Frame(wx.Frame):
         
         
         self.Show()
+        
+        self.Maximize()
 
     """
     def on_open(self, event=None):
