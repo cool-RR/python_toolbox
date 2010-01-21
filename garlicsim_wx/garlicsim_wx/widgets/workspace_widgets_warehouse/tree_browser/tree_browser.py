@@ -254,27 +254,28 @@ class NiftyPaintDC(wx.PaintDC):
         root!
         '''
 
-        self.clickable_map = {}
-        self.active_node = self.gui_project.active_node
-        try:
-            self.active_soft_block = self.active_node.soft_get_block()
-        except AttributeError:
-            self.active_soft_block = None
-
-        sizes = []
-        pos = vectorish.add((connector_length, connector_length), self.origin)
-        for root in tree.roots:
-            size = self.draw_sub_tree(
-                pos,
-                tree,
-                root.soft_get_block()
-            )
-            pos = vectorish.add(pos, (size[0], 0))
-            sizes.append(size)
-        
-        width = sum(size[0] for size in sizes) + (connector_length * len(sizes))
-        height = max(size[1] for size in sizes) + connector_length
-        return (self.clickable_map, (width, height))
+        if self.gui_project:
+            self.clickable_map = {}
+            self.active_node = self.gui_project.active_node
+            try:
+                self.active_soft_block = self.active_node.soft_get_block()
+            except AttributeError:
+                self.active_soft_block = None
+    
+            sizes = []
+            pos = vectorish.add((connector_length, connector_length), self.origin)
+            for root in tree.roots:
+                size = self.draw_sub_tree(
+                    pos,
+                    tree,
+                    root.soft_get_block()
+                )
+                pos = vectorish.add(pos, (size[0], 0))
+                sizes.append(size)
+            
+            width = sum(size[0] for size in sizes) + (connector_length * len(sizes))
+            height = max(size[1] for size in sizes) + connector_length
+            return (self.clickable_map, (width, height))
 
 
 '''
