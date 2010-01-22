@@ -15,7 +15,7 @@ import random
 import cPickle
 
 import wx
-import wx.lib.agw.aui
+from garlicsim_wx.general_misc.third_party import aui
 import pkg_resources
 
 
@@ -56,7 +56,7 @@ class Frame(wx.Frame):
             list_of_default_widgets
         )
         
-        self.aui_manager = wx.lib.agw.aui.AuiManager()
+        self.aui_manager = aui.AuiManager()
         self.aui_manager.SetManagedWindow(self)
         
         self.gui_project = None
