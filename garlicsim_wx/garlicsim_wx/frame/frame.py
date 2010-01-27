@@ -126,6 +126,7 @@ class Frame(wx.Frame):
         
 
         
+        self.aui_manager.Update()
         
         self.Show()
         

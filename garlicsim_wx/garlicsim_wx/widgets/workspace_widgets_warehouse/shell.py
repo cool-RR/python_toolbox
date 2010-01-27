@@ -19,6 +19,7 @@ class Shell(wx.py.shell.Shell, WorkspaceWidget):#tododoc
             'garlicsim': garlicsim,
             'garlicsim_wx': garlicsim_wx,
         }
-        wx.py.shell.Shell.__init__(self, frame, locals=locals_for_shell)
+        wx.py.shell.Shell.__init__(self, frame, size=(100, 100),
+                                   locals=locals_for_shell)
         WorkspaceWidget.__init__(self, frame)
     

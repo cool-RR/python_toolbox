@@ -29,7 +29,8 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
     A widget for browsing a garlicsim.data_structures.Tree.
     '''
     def __init__(self, frame):
-        ScrolledPanel.__init__(self, frame, style=wx.SUNKEN_BORDER)
+        ScrolledPanel.__init__(self, frame, size=(100, 100),
+                               style=wx.SUNKEN_BORDER)
         WorkspaceWidget.__init__(self, frame)
         
         self.SetupScrolling()

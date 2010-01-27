@@ -11,7 +11,8 @@ __all__ = ["StateReprShower"]
 
 class StateReprShower(wx.TextCtrl, WorkspaceWidget):#tododoc
     def __init__(self, frame):
-        wx.TextCtrl.__init__(self, frame, style=wx.TE_MULTILINE)
+        wx.TextCtrl.__init__(self, frame, size=(100, 100),
+                             style=wx.TE_MULTILINE)
         WorkspaceWidget.__init__(self, frame)
         self.Bind(wx.EVT_PAINT, self.on_paint)
         font = wx.Font(9, wx.DEFAULT, wx.NORMAL, wx.BOLD, False,

@@ -9,11 +9,12 @@ class MyFrame(wx.Frame):
 
         wx.Frame.__init__(self, parent, id, title, pos, size, style)
 
-        self._mgr = aui.AuiManager()
+        self.aui_manager = aui.AuiManager()
         
         # notify AUI which frame to use
-        self._mgr.SetManagedWindow(self)
-
+        self.aui_manager.SetManagedWindow(self)
+        
+        
         # create several text controls
         text1 = wx.TextCtrl(self, -1, "Pane 1 - sample text",
                             wx.DefaultPosition, wx.Size(200,150),
@@ -28,12 +29,13 @@ class MyFrame(wx.Frame):
                             wx.NO_BORDER | wx.TE_MULTILINE)
         
         # add the panes to the manager
-        self._mgr.AddPane(text1, AuiPaneInfo().Left().Caption("Pane Number One"))
-        self._mgr.AddPane(text2, AuiPaneInfo().Bottom().Caption("Pane Number Two"))
-        self._mgr.AddPane(text3, AuiPaneInfo().CenterPane())
-                              
+        self.aui_manager.AddPane(text1, AuiPaneInfo().Left().Caption("Pane Number One"))
+        self.aui_manager.AddPane(text2, AuiPaneInfo().Bottom().Caption("Pane Number Two"))
+        self.aui_manager.AddPane(text3, AuiPaneInfo().CenterPane())
+
         # tell the manager to "commit" all the changes just made
-        self._mgr.Update()
+        self.aui_manager.Update()
+        
 
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
@@ -41,7 +43,7 @@ class MyFrame(wx.Frame):
     def OnClose(self, event):
 
         # deinitialize the frame manager
-        self._mgr.UnInit()
+        self.aui_manager.UnInit()
 
         self.Destroy()        
         event.Skip()        
