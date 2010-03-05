@@ -200,7 +200,7 @@ Plus the following features:
       enough outside of the notebook to become floating pages;
   (k) Implementation of the style ``AUI_NB_DRAW_DND_TAB`` (on by default), which draws an image
       representation of a tab while dragging;
-  (l) Implementation of the style ``AUI_NB_SASH_DCLICK_UNSPLIT``, which unsplit a splitted AuiNotebook
+  (l) Implementation of the `AuiNotebook` unsplit functionality, which unsplit a splitted AuiNotebook
       when double-clicking on a sash;
   (m) Possibility to hide all the tabs by calling `HideAllTAbs`;
   (n) wxPython controls can now be added inside page tabs by calling `AddControlToPage`, and they can be
@@ -265,7 +265,7 @@ License And Version
 
 AUI library is distributed under the wxPython license. 
 
-Latest revision: Andrea Gavana @ 05 Jan 2010, 16.00 GMT
+Latest revision: Andrea Gavana @ 20 Feb 2010, 18.00 GMT
 
 Version 1.1. 
 

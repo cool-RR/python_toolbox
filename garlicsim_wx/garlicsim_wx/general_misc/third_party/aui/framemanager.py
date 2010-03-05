@@ -13,7 +13,7 @@
 # Python Code By:
 #
 # Andrea Gavana, @ 23 Dec 2005
-# Latest Revision: 05 Jan 2010, 16.00 GMT
+# Latest Revision: 01 Feb 2010, 15.00 GMT
 #
 # For All Kind Of Problems, Requests Of Enhancements And Bug Reports, Please
 # Write To Me At:
@@ -6213,7 +6213,10 @@ class AuiManager(wx.EvtHandler):
                     p.window.Refresh()
                     p.window.Update()
 
-        self.Repaint()
+        if wx.Platform == "__WXMAC__":
+            self._frame.Refresh()
+        else:
+            self.Repaint()
 
         if not self._masterManager:
             e = self.FireEvent(wxEVT_AUI_PERSPECTIVE_CHANGED, None, canVeto=False)    
@@ -8540,7 +8543,10 @@ class AuiManager(wx.EvtHandler):
         if self._frame:
                 
             self.DoFrameLayout()
-            self.Repaint()
+            if wx.Platform == "__WXMAC__":
+                self._frame.Refresh()
+            else:
+                self.Repaint()
             
             if isinstance(self._frame, wx.MDIParentFrame) or isinstance(self._frame, tabmdi.AuiMDIClientWindow) \
                or isinstance(self._frame, tabmdi.AuiMDIParentFrame):

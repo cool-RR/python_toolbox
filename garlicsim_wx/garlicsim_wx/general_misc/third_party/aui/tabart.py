@@ -202,7 +202,6 @@ class AuiDefaultTabArt(object):
          ``AUI_NB_CLOSE_ON_TAB_LEFT``         Draws the tab close button on the left instead of on the right (a la Camino browser)
          ``AUI_NB_TAB_FLOAT``                 Allows the floating of single tabs. Known limitation: when the notebook is more or less full screen, tabs cannot be dragged far enough outside of the notebook to become floating pages
          ``AUI_NB_DRAW_DND_TAB``              Draws an image representation of a tab while dragging (on by default)
-         ``AUI_NB_SASH_DCLICK_UNSPLIT``       Unsplit a splitted AuiNotebook when double-clicking on a sash.
          ==================================== ==================================
         
         """
@@ -878,6 +877,7 @@ class AuiDefaultTabArt(object):
         useImages = self.GetFlags() & AUI_NB_USE_IMAGES_DROPDOWN
         menuPopup = wx.Menu()
 
+        longest = 0
         for i, page in enumerate(pages):
         
             caption = page.caption
@@ -886,6 +886,11 @@ class AuiDefaultTabArt(object):
             # an assert in the menu code.
             if caption == "":
                 caption = " "
+
+            # Save longest caption width for calculating menu width with
+            width = wnd.GetTextExtent(caption)[0]
+            if width > longest:
+                longest = width
 
             if useImages:
                 menuItem = wx.MenuItem(menuPopup, 1000+i, caption)
@@ -904,13 +909,23 @@ class AuiDefaultTabArt(object):
         
             menuPopup.Check(1000+active_idx, True)
         
-        # find out where to put the popup menu of window items
-        pt = wx.GetMousePosition()
-        pt = wnd.ScreenToClient(pt)
-
         # find out the screen coordinate at the bottom of the tab ctrl
         cli_rect = wnd.GetClientRect()
-        pt.y = cli_rect.y + cli_rect.height
+
+        # Calculate the approximate size of the popupmenu for setting the
+        # position of the menu when its shown.
+        # Account for extra padding on left/right of text on mac menus
+        if wx.Platform in ['__WXMAC__', '__WXMSW__']:
+            longest += 32
+
+        # Bitmap/Checkmark width + padding
+        longest += 20
+
+        if self.GetFlags() & AUI_NB_CLOSE_BUTTON:
+            longest += 16
+
+        pt = wx.Point(cli_rect.x + cli_rect.GetWidth() - longest,
+                     cli_rect.y + cli_rect.height)
 
         cc = AuiCommandCapture()
         wnd.PushEventHandler(cc)
@@ -1005,7 +1020,6 @@ class AuiSimpleTabArt(object):
          ``AUI_NB_CLOSE_ON_TAB_LEFT``         Draws the tab close button on the left instead of on the right (a la Camino browser)
          ``AUI_NB_TAB_FLOAT``                 Allows the floating of single tabs. Known limitation: when the notebook is more or less full screen, tabs cannot be dragged far enough outside of the notebook to become floating pages
          ``AUI_NB_DRAW_DND_TAB``              Draws an image representation of a tab while dragging (on by default)
-         ``AUI_NB_SASH_DCLICK_UNSPLIT``       Unsplit a splitted AuiNotebook when double-clicking on a sash.
          ==================================== ==================================
         
         """
@@ -2430,7 +2444,6 @@ class ChromeTabArt(AuiDefaultTabArt):
          ``AUI_NB_CLOSE_ON_TAB_LEFT``         Draws the tab close button on the left instead of on the right (a la Camino browser)
          ``AUI_NB_TAB_FLOAT``                 Allows the floating of single tabs. Known limitation: when the notebook is more or less full screen, tabs cannot be dragged far enough outside of the notebook to become floating pages
          ``AUI_NB_DRAW_DND_TAB``              Draws an image representation of a tab while dragging (on by default)
-         ``AUI_NB_SASH_DCLICK_UNSPLIT``       Unsplit a splitted AuiNotebook when double-clicking on a sash.
          ==================================== ==================================
 
         :note: Overridden from L{AuiDefaultTabArt}.
