@@ -21,26 +21,18 @@ class GarlicSimException(SmartException):
     GarlicSim-related exception.
     '''
 
-
 class GarlicSimWarning(Warning):
     '''
     GarlicSim-related warning.
     '''
+    
 
-
-            
-
-
-class InvalidSimpack(Exception):
-    '''
-    An exception to raise when trying to load an invalid simpack.
-    '''
+class InvalidSimpack(GarlicSimException):
+    '''Trying to load an invalid simpack.'''
     pass
 
-class SimpackError(Exception):
-    '''
-    An exception to raise when a simpack behaves unexpectedly.
-    '''
+class SimpackError(GarlicSimException):
+    '''A simpack behaved unexpectedly.'''
     pass
 
     

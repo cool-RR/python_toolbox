@@ -11,7 +11,7 @@ from step_copy import StepCopy
 from exceptions import (InvalidSimpack, SimpackError, GarlicSimWarning,
                         SmartException, GarlicSimException)
 from auto_clock_generator import AutoClockGenerator
-from history_browser import HistoryBrowser
+from base_history_browser import BaseHistoryBrowser
 from step_iterator import StepIterator
 import persistent
 from persistent import Persistent

@@ -26,22 +26,23 @@ class SimpackGrokker(object):
     
     class Meta:
     
-        deterministic = 0
+        deterministic = garlicsim.misc.constants.UNDETERMINISTIC
         
         # Says whether the step function of this simpack is deterministic. This
         # is useful because if a simpack declares itself to be deterministic
         # then GarlicSim can analyze whether a simulation has reached a
         # constant/repetitive state.
         
-        # 0 means completely not deterministic -- has a random element.
+        # UNDETERMINISTIC means completely not deterministic -- has a random
+        # element.
         
-        # 1 means deterministic in principle, but not absolutely. (For example,
-        # in some simpacks rounding errors may make states that should otherwise
-        # be equal not be equal.)
+        # SUPPOSEDLY_DETERMINISTIC means deterministic in principle, but not
+        # absolutely. (For example, in some simpacks rounding errors may make
+        # states that should otherwise be equal not be equal.)
         
-        # 2 means absolutely deterministic. There is no random element in the
-        # step function, and given identical input states it will return
-        # identical output states.
+        # DETERMINISTIC means absolutely deterministic. There is no random
+        # element in the step function, and given identical input states it is
+        # guaranteed to return identical output states.
         
         ################################################
         
@@ -120,8 +121,8 @@ kind of step function.''')
         attribute_names = ['force_cruncher', 'deterministic',
                            'scalar_state_functions', 'scalar_history_functions']
 
-        original_meta_dict = \
-            dict(vars(self.simpack.Meta)) if hasattr(self.simpack, 'Meta') else {}
+        original_meta_dict = dict(vars(self.simpack.Meta)) if \
+                           hasattr(self.simpack, 'Meta') else {}
         
 
         dict_for_fixed_meta = {}

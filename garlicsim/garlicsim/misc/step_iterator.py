@@ -49,7 +49,7 @@ class StepIterator(object):
         
         self.step_profile = copy.deepcopy(step_profile)
         self.history_dependent = isinstance(state_or_history_browser,
-                                            garlicsim.misc.HistoryBrowser)
+                                            garlicsim.misc.BaseHistoryBrowser)
         if self.history_dependent:
             self.current_state = None
             self.history_browser = state_or_history_browser

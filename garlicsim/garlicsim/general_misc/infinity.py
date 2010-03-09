@@ -33,10 +33,9 @@ class InfinityRaceError(GarlicSimException):
     '''
     An "infinity race" between two infinite sizes.
     
-    An exception to raise when a calculation is being made between two
-    quantities that involve infinity, and the two infinities are "pitted"
-    against each other in a way which makes it impossible to determine what the
-    result of the computation would be.
+    A calculation is being made between two quantities that involve infinity,
+    and the two infinities are "pitted" against each other in a way which makes
+    it impossible to determine what the result of the computation would be.
     '''
     pass
 
@@ -52,6 +51,7 @@ class InfinityClass(object):
     class: Infinity and (-Infinity).
     '''
     #todo: add __assign__ or whatever it's called
+    #todo: add interoperability with float(inf). (Need to detect its existance)
     
     def __init__(self, direction=1):
         self.direction = direction

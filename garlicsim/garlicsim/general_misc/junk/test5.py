@@ -5,7 +5,7 @@ from garlicsim.bundled.simulation_packages import prisoner
 from garlicsim.bundled.simulation_packages import _history_test
 
 
-simpack = _history_test
+simpack = life
 
 if __name__ == '__main__':
     
