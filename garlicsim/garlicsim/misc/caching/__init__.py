@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-Package for memoization of functions that take states or history browsers.
+Package for caching of functions that take states or history browsers.
 '''
 
-from decorators import state_memoize, history_memoize
+from decorators import state_cache, history_cache

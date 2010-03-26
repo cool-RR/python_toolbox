@@ -2,12 +2,12 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-Provides decorators to memoize state- or history-dependent functions.
+Provides decorators to cache state- or history-dependent functions.
 
-`state_memoize` is for functions that take a state. `history_memoize` is for
+`state_cache` is for functions that take a state. `history_cache` is for
 functions that take a history browser.
 '''
-#todo: make sure the memo gets lost on pickling
+#todo: make sure the cache gets lost on pickling
 #todo: append to function's docstring?
 
 import weakref
@@ -17,9 +17,9 @@ import garlicsim
 
         
 
-def state_memoize(function):
+def state_cache(function):
     '''
-    Memoization decorator for state functions.
+    Caching decorator for state functions.
     
     This decorator should be used only on functions that have exactly one
     argument which is a state. (For example, in a Physics simulation you might
@@ -27,29 +27,29 @@ def state_memoize(function):
     state.)
     
     On any subsequent calls to the function given the same state, the
-    pre-calcluated value will be given from the memo instead of calculating it
+    pre-calcluated value will be given from the cache instead of calculating it
     again.
     '''
-    if hasattr(function, 'state_memo'): return function
+    if hasattr(function, 'state_cache'): return function
     
-    def memoized(state):
+    def cached(state):
         assert isinstance(state, garlicsim.data_structures.State)
-        if state in memoized.state_memo:
-            return memoized.state_memo[state]
+        if state in cached.state_cache:
+            return cached.state_cache[state]
         else:
-            memoized.state_memo[state] = value = function(state)
+            cached.state_cache[state] = value = function(state)
             return value
             
-    memoized.state_memo = weakref.WeakKeyDictionary()
+    cached.state_cache = weakref.WeakKeyDictionary()
     
-    functools.update_wrapper(memoized, function)
+    functools.update_wrapper(cached, function)
     
-    return memoized
+    return cached
 
 
-def history_memoize(function, *args, **kwargs):
+def history_cache(function, *args, **kwargs):
     '''
-    Memoization decorator for functions that take a history browser.
+    Caching decorator for functions that take a history browser.
     
     This decorator should be used only on functions that have exactly one
     argument which is a history browser. (For example, in a cellular automata
@@ -62,16 +62,16 @@ def history_memoize(function, *args, **kwargs):
     fed into the original function.
     
     On any subsequent calls to the function given the same node, the
-    pre-calcluated value will be given from the memo instead of calculating it
+    pre-calcluated value will be given from the cache instead of calculating it
     again.
     '''
-    if hasattr(function, 'node_memo'):
+    if hasattr(function, 'node_cache'):
         return function
     
-    def memoized(node):
+    def cached(node):
         assert isinstance(node, garlicsim.data_structures.Node)
-        if node in memoized.node_memo:
-            return memoized.node_memo[node]
+        if node in cached.node_cache:
+            return cached.node_cache[node]
         else:
             path = node.make_containing_path()
             with node.tree.lock.read:
@@ -81,14 +81,14 @@ def history_memoize(function, *args, **kwargs):
                         end_node=node
                     )
             value = function(history_browser)
-            memoized.node_memo[node] = value
+            cached.node_cache[node] = value
             return value
             
-    memoized.node_memo = weakref.WeakKeyDictionary()
+    cached.node_cache = weakref.WeakKeyDictionary()
     
-    functools.update_wrapper(memoized, function)
+    functools.update_wrapper(cached, function)
     
-    return memoized
+    return cached
 
 if __name__ == '__main__': # make this into test
     import garlicsim
@@ -104,7 +104,7 @@ if __name__ == '__main__': # make this into test
     
     path = r.make_containing_path()
     
-    @state_memoize
+    @state_cache
     def live_cells(state):
         '''
         Meooww
@@ -117,7 +117,7 @@ if __name__ == '__main__': # make this into test
         states = [node.state for node in path]
         print([live_cells(state) for state in states[-3:]])
     
-    @history_memoize
+    @history_cache
     def changes(history_browser):
         '''
         frrrr

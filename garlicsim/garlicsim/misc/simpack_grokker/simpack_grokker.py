@@ -50,14 +50,14 @@ class SimpackGrokker(object):
         
         # List of scalar state functions given by the simpack. A scalar state
         # function is a function from a state to a real number. These should be
-        # decorated by garlicsim.misc.memoization.state_memoize.
+        # decorated by garlicsim.misc.cached.state_cache.
         
         scalar_history_functions = [changes]
         
         # List of scalar history functions given by the simpack. A scalar
         # history function is a function from a history browser to a real
         # number. These should be decorated by
-        # garlicsim.misc.memoization.history_memoize.
+        # garlicsim.misc.cached.history_cache.
         
         ################################################
         

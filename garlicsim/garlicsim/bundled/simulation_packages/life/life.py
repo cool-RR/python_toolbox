@@ -123,7 +123,7 @@ class Board(object):
     def __ne__(self, other):
         return not self.__eq__(other)
 
-@garlicsim.misc.memoization.state_memoize
+@garlicsim.misc.caching.state_cache
 def live_cells(state):
     '''Return how many live cells there are in the state.'''
     print('calculating for state %s' % id(state))
@@ -131,7 +131,7 @@ def live_cells(state):
 
    
 
-@garlicsim.misc.memoization.history_memoize
+@garlicsim.misc.caching.history_cache
 def changes(history_browser):
     '''
     Return how many cells changed between the most recent state and its parent.
