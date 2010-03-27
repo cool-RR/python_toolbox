@@ -82,7 +82,7 @@ kind of step function.''')
             result = step_function(state_or_history_browser,
                                    *step_profile.args,
                                    **step_profile.kwargs)
-        else:# self.step_generator_defined is True
+        else: # self.step_generator_defined is True
             step_generator = self.simpack.history_step_generator if \
                           self.history_dependent else \
                           self.simpack.step_generator
@@ -91,7 +91,7 @@ kind of step function.''')
                                       **step_profile.kwargs)
             result = iterator.next()
             
-        result.clock = AutoClockGenerator.make_clock(result)
+        result.clock = auto_clock_generator.make_clock(result)
         return result
             
         

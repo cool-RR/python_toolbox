@@ -36,11 +36,11 @@ class Path(object): #todo: add __reversed__ here, maybe also in Block and others
     a path object contains information about which child to choose when going
     through a node which has multiple children.
     
-    The attribute ".decisions" is a dictionary of the form {node_which_forks: 
+    The attribute `.decisions` is a dictionary of the form {node_which_forks: 
     node_to_continue_to, ... }. It usually contains as keys only nodes that
     have more than one child.
     
-    The attribute ".root" says from which node the path begins.
+    The attribute `.root` says from which node the path begins.
     '''
     def __init__(self, tree, root=None, decisions={}):
         self.tree = tree
