@@ -1,3 +1,5 @@
+from __future__ import division
+
 import nose
 
 import garlicsim
@@ -7,6 +9,9 @@ from garlicsim.bundled.simulation_packages import life
 from garlicsim.bundled.simulation_packages import prisoner
 from garlicsim.bundled.simulation_packages import _history_test
 from garlicsim.bundled.simulation_packages import queue
+
+
+
 
 def _is_deterministic(simpack):
     return simpack.__name__.split('.')[-1] == 'life'
@@ -121,21 +126,44 @@ def asynchronous_crunching_check(simpack):
     assert len(project.tree.all_possible_paths()) == 3
 
     
-    two_paths = node_3.all_containing_paths()
+    two_paths = node_3.all_possible_paths()
     
     assert len(two_paths) == 2
-    [path_1, path_2] = two_paths
-    get_clock_buffer = lambda path: (path[-1].clock - node_3.clock)
-    [clock_buffer_1, clock_buffer_2] = [get_clock_buffer(p) for p in two_paths]
+    (path_1, path_2) = two_paths
+    get_clock_buffer = lambda path: (path[-1].state.clock - node_3.state.clock)
+    (clock_buffer_1, clock_buffer_2) = [get_clock_buffer(p) for p in two_paths]
     
-    project.ensure_buffer_on_path(None, path_1, get_clock_buffer(p) * 1.2)
-        
-    WAS HERE YO
+    project.ensure_buffer_on_path(node_3, path_1, get_clock_buffer(path_1) * 1.2)
+    
+    total_nodes_added = 0
+    while project.crunching_manager.jobs:
+        time.sleep(0.1)
+        total_nodes_added += project.sync_crunchers()
+    
+    (old_clock_buffer_1, old_clock_buffer_2) = (clock_buffer_1, clock_buffer_2)
+    (clock_buffer_1, clock_buffer_2) = [get_clock_buffer(p) for p in two_paths]
+    
+    assert clock_buffer_1 / old_clock_buffer_1 >= 1.2
+    assert clock_buffer_2 == old_clock_buffer_2
+    
+    project.ensure_buffer_on_path(node_3, path_2, get_clock_buffer(path_2) * 1.3)
+    
+    total_nodes_added = 0
+    while project.crunching_manager.jobs:
+        time.sleep(0.1)
+        total_nodes_added += project.sync_crunchers()
+    
+    (old_clock_buffer_1, old_clock_buffer_2) = (clock_buffer_1, clock_buffer_2)
+    (clock_buffer_1, clock_buffer_2) = [get_clock_buffer(p) for p in two_paths]
+    
+    assert clock_buffer_1 == old_clock_buffer_1
+    assert clock_buffer_2 / old_clock_buffer_2 >= 1.3
+    
     
     
     plain_root = project.make_plain_root()
     
-    assert len(tree.roots) == 2
+    assert len(project.tree.roots) == 2
     
     assert len(project.tree.all_possible_paths()) == 4
     
