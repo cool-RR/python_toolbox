@@ -1,16 +1,15 @@
 from __future__ import division
 
 import nose
+import time
+import itertools
 
 import garlicsim
 from garlicsim.general_misc import cute_iter_tools
-import time
 from garlicsim.bundled.simulation_packages import life
 from garlicsim.bundled.simulation_packages import prisoner
 from garlicsim.bundled.simulation_packages import _history_test
 from garlicsim.bundled.simulation_packages import queue
-
-
 
 
 def _is_deterministic(simpack):
@@ -26,12 +25,17 @@ def simpack_test():
     
     simpacks = [life, prisoner, _history_test, queue]
     
-    for simpack in simpacks:
-        yield synchronous_crunching_check, simpack
-        yield asynchronous_crunching_check, simpack
+    crunchers = \
+        garlicsim.asynchronous_crunching.crunchers_warehouse.crunchers.values()
+    
+    crunchers = [c for c in crunchers if not 'Process' in c.__name__]
+    # Until multiprocessing shit is solved
+    
+    for simpack, cruncher in itertools.product(simpacks, crunchers):
+        yield simpack_check, simpack, cruncher
 
         
-def synchronous_crunching_check(simpack):
+def simpack_check(simpack, cruncher):
     
     state = simpack.make_random_state() 
     
@@ -59,13 +63,10 @@ def synchronous_crunching_check(simpack):
     
     for old, new in cute_iter_tools.pairs(result):
         assert new == my_simpack_grokker.step(old, empty_step_profile)
-        
-
-def asynchronous_crunching_check(simpack):
     
     project = garlicsim.Project(simpack)
     
-    state = simpack.make_random_state()    
+    project.crunching_manager.Cruncher = cruncher
     
     root = project.root_this_state(state)
     
@@ -84,8 +85,11 @@ def asynchronous_crunching_check(simpack):
     
     assert len(paths) == 1
     
-    [my_path] = paths
+    (my_path,) = paths
     
+    if _is_deterministic(simpack):
+        assert my_path[5].state == new_state
+        
     assert len(my_path) == x + 1
     
     node_1 = my_path[-3]
