@@ -38,9 +38,9 @@ my_classifiers = [
 
 setuptools.setup(
     name='garlicsim_wx',
-    version='0.2.2',
-    requires=['garlicsim (== 0.2.2)'],
-    install_requires=['garlicsim == 0.2.2'],
+    version='0.3',
+    requires=['garlicsim (== 0.3)'],
+    install_requires=['garlicsim == 0.3'],
     description='Gui for garlicsim, a Pythonic framework for working with simulations',
     author='Ram Rachum',
     author_email='cool-rr@cool-rr.com',

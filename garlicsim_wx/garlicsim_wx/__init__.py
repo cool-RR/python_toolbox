@@ -20,7 +20,7 @@ from gui_project import GuiProject
 
 __all__ = ['ApplicationWindow', 'GuiProject', 'start']
 
-__version__ = '0.2.2'
+__version__ = '0.3'
 
 def start():
     '''
