@@ -43,7 +43,7 @@ setuptools.setup(
     author='Ram Rachum',
     author_email='cool-rr@cool-rr.com',
     url='http://garlicsim.org',
-    packages=setuptools.find_packages(),
+    packages=setuptools.find_packages('./garlicsim'),
     license="LGPL v2.1",
     long_description = my_long_description,
     classifiers = my_classifiers,
