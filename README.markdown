@@ -86,7 +86,7 @@ The `garlicsim` package is the important one, and its code is well-organized and
 
 `garlicsim_wx` is in a far less mature state than `garlicsim`. Also, it is not licensed as open source. (Though the source code is available and not obfuscated.) I have not yet decided if the gui will be developed as an open source project or as commercial software, so in the meantime it is officially closed source.
 
-Both packages are copyright 2009 Ram Rachum. 
+Both packages are copyright 2009-2010 Ram Rachum. 
 
 # Python versions #
  
