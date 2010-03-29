@@ -16,6 +16,11 @@ try:
 except Exception:
     pass
 
+def get_packages():
+    return ['garlicsim.' + p for p in
+            setuptools.find_packages('./garlicsim')] + \
+           ['garlicsim']
+
 my_long_description = \
 '''\
 GarlicSim is a platform for writing, running and analyzing simulations. It can
@@ -38,12 +43,12 @@ my_classifiers = [
 
 setuptools.setup(
     name='garlicsim',
-    version='0.2.2',
+    version='0.3',
     description='Pythonic framework for working with simulations',
     author='Ram Rachum',
     author_email='cool-rr@cool-rr.com',
     url='http://garlicsim.org',
-    packages=setuptools.find_packages(),
+    packages=get_packages(),
     license="LGPL v2.1",
     long_description = my_long_description,
     classifiers = my_classifiers,

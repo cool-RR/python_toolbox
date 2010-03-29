@@ -14,3 +14,5 @@ proj.file-list = [loc('src/garlicsim/simulate.py'),
                   loc('src/garlicsim/synchronous_crunching/path_simulate.py')]
 proj.file-type = 'shared'
 proj.main-file = loc('run_gui.py')
+testing.auto-test-file-specs = ('*_tests/*.py',)
+testing.test-framework = {None: 'nose'}

@@ -22,7 +22,7 @@ from gui_project import GuiProject
 
 __all__ = ['Frame', 'GuiProject', 'start', 'editing_interface']
 
-__version__ = '0.2.2'
+__version__ = '0.3'
 
 def start():
     '''Start the gui.'''
