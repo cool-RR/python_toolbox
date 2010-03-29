@@ -16,6 +16,11 @@ try:
 except Exception:
     pass
 
+def get_packages():
+    return ['garlicsim_wx.' + p for p
+            in setuptools.find_packages('./garlicsim_wx')] + \
+           ['garlicsim_wx']
+
 my_long_description = \
 '''\
 garlicsim_wx, a wxPython GUI for garlicsim.
@@ -45,7 +50,7 @@ setuptools.setup(
     author='Ram Rachum',
     author_email='cool-rr@cool-rr.com',
     url='http://garlicsim.org',
-    packages=setuptools.find_packages(),
+    packages=get_packages(),
     license="Proprietary",
     long_description = my_long_description,
     classifiers = my_classifiers,

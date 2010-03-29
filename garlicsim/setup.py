@@ -17,7 +17,9 @@ except Exception:
     pass
 
 def get_packages():
-    return ['garlicsim.' + p for p in setuptools.find_packages('./garlicsim')]
+    return ['garlicsim.' + p for p in
+            setuptools.find_packages('./garlicsim')] + \
+           ['garlicsim']
 
 my_long_description = \
 '''\
