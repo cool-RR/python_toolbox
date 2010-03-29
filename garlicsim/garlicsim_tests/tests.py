@@ -60,12 +60,15 @@ def simpack_check(simpack, cruncher):
         if hasattr(simpack, 'State'): # Later make mandatory
             assert isinstance(item, simpack.State)
     
-    if _is_deterministic(simpack):
-        
-        assert result[-1] == new_state
-        
-        for old, new in cute_iter_tools.consecutive_pairs(result):
-            assert new == my_simpack_grokker.step(old, empty_step_profile)
+    if _is_deterministic(simpack) is False:
+        return
+    
+    assert simpack.__name__.split('.')[-1] == 'life'
+    
+    assert result[-1] == new_state
+    
+    for old, new in cute_iter_tools.pairs(result):
+        assert new == my_simpack_grokker.step(old, empty_step_profile)
     
     project = garlicsim.Project(simpack)
     
