@@ -71,11 +71,23 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
 
         h_sizer = wx.BoxSizer(wx.HORIZONTAL)
         
-        self.button_to_start = wx.Button(x, -1, size=(30, 50))
-        self.button_previous_node = wx.Button(x, -1, size=(30, 50))
+        bitmap_filename_list = ['to_start.png',
+                                'previous_node.png',
+                                #'play.png',
+                                'next_node.png',
+                                'to_end.png']
+        
+        bitmaps = []
+        for bitmap_filename in bitmap_filename_list:
+            path = pkg_resources.resource_filename(images_package,
+                                                   bitmap_filename)
+            bitmaps.append(wx.Bitmap(path, wx.BITMAP_TYPE_ANY))
+                           
+        self.button_to_start = wx.BitmapButton(x, -1, bitmap=bitmaps[0], size=(30, 50))
+        self.button_previous_node = wx.BitmapButton(x, -1, bitmap=bitmaps[1], size=(30, 50))
         self.button_play = wx.Button(x, -1, size=(60, 50))
-        self.button_next_node= wx.Button(x, -1, size=(30, 50))
-        self.button_to_end = wx.Button(x, -1, size=(30, 50))
+        self.button_next_node= wx.BitmapButton(x, -1, bitmap=bitmaps[2], size=(30, 50))
+        self.button_to_end = wx.BitmapButton(x, -1, bitmap=bitmaps[3], size=(30, 50))
 
         button_line = (
             self.button_to_start,
