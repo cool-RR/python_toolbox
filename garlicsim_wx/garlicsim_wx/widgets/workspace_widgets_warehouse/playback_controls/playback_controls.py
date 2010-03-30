@@ -112,6 +112,40 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         self.Refresh()
         if e is not None:
             e.Skip()
+            
+    def update_buttons_status(self, e=None):
+        if self.gui_project.path is None:
+            self.button_to_start.Disable()
+            self.button_previous_node.Disable()
+            self.button_play.Disable()
+            self.button_next_node.Disable()
+            self.button_to_end.Disable()
+        
+        elif self.gui_project.active_node is None:
+            self.button_previous_node.Disable()
+            self.button_next_node.Disable()
+            self.button_play.Disable()
+            
+        else:
+            self.button_play.Enable()
+            
+            if self.gui_project.active_node.parent is not None:
+                self.button_previous_node.Enable()
+                self.button_to_start.Enable()
+            else:
+                self.button_previous_node.Disable()
+                self.button_to_start.Disable()
+                
+            if self.gui_project.active_node.children:
+                self.button_next_node.Enable()
+                self.button_to_end.Enable()
+            else:
+                self.button_next_node.Disable()
+                self.button_to_end.Disable()
+        
+    def OnPaint(self, e):
+        self.update_buttons_status()
+        wx.Panel.OnPaint(self, e)
         
     def on_button_to_start(self, e=None):
         try:
