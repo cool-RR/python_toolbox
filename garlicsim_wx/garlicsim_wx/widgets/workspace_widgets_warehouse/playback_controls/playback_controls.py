@@ -28,6 +28,18 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         
         self.Bind(wx.EVT_SIZE, self.on_size)
         
+        
+        bitmap_list = ['to_start', 'previous_node', 'play',
+                                'next_node', 'to_end', 'pause',
+                                'finalize']
+        
+        bitmaps_dict = self.bitmap_dict = {}
+        for bitmap_name in bitmap_list:
+            path = pkg_resources.resource_filename(images_package,
+                                                   bitmap_name + '.png')
+            self.bitmap_dict[bitmap_name] = wx.Bitmap(path, wx.BITMAP_TYPE_ANY)
+
+            
         """
         h_sizer1 = wx.BoxSizer(wx.HORIZONTAL)
         self.plain = empty = wx.RadioButton(self, -1, 'Plain', style=wx.RB_GROUP)
@@ -71,24 +83,24 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
 
         h_sizer = wx.BoxSizer(wx.HORIZONTAL)
         
-        bitmap_filename_list = ['to_start.png',
-                                'previous_node.png',
-                                #'play.png',
-                                'next_node.png',
-                                'to_end.png']
-        
-        bitmaps = []
-        for bitmap_filename in bitmap_filename_list:
-            path = pkg_resources.resource_filename(images_package,
-                                                   bitmap_filename)
-            bitmaps.append(wx.Bitmap(path, wx.BITMAP_TYPE_ANY))
                            
-        self.button_to_start = wx.BitmapButton(x, -1, bitmap=bitmaps[0], size=(30, 50))
-        self.button_previous_node = wx.BitmapButton(x, -1, bitmap=bitmaps[1], size=(30, 50))
-        self.button_play = wx.Button(x, -1, size=(60, 50))
-        self.button_next_node= wx.BitmapButton(x, -1, bitmap=bitmaps[2], size=(30, 50))
-        self.button_to_end = wx.BitmapButton(x, -1, bitmap=bitmaps[3], size=(30, 50))
-
+        self.button_to_start = wx.BitmapButton(
+            x, -1, bitmaps_dict['to_start'], size=(30, 50)
+        )
+        self.button_previous_node = wx.BitmapButton(
+            x, -1, bitmaps_dict['previous_node'], size=(30, 50)
+        )
+        self.button_play = wx.BitmapButton(
+            x, -1, bitmaps_dict['play'], size=(60, 50)
+        )
+        self.button_next_node= wx.BitmapButton(
+            x, -1, bitmaps_dict['next_node'], size=(30, 50)
+        )
+        self.button_to_end = wx.BitmapButton(
+            x, -1, bitmaps_dict['to_end'], size=(30, 50)
+        )
+        
+        
         button_line = (
             self.button_to_start,
             self.button_previous_node,
