@@ -228,5 +228,7 @@ class SeekBar(wx.Panel, WorkspaceWidget):
                 self.was_playing_before_mouse_click_but_then_paused_and_mouse_left = False
 
 
-    def on_size(self,e):
+    def on_size(self, e):
         self.Refresh()
+        if e is not None:
+            e.Skip()

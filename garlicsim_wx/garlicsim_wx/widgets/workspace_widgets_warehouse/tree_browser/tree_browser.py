@@ -94,6 +94,8 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
 
     def on_size(self, e=None):
         self.Refresh()
+        if e is not None:
+            e.Skip()
 
     def on_mouse_event(self, e):
         #(x,y)=self.CalcUnscrolledPosition(e.GetPositionTuple())

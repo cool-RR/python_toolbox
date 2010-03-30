@@ -16,11 +16,11 @@ from . import images as __images_package
 images_package = __images_package.__name__
 
 
-class PlaybackControls(wx.PyPanel, WorkspaceWidget):
-    DoGetBestSize = lambda self: wx.Size(180, 96)
+class PlaybackControls(wx.Panel, WorkspaceWidget):
+    #DoGetBestSize = lambda self: wx.Size(180, 96)
     def __init__(self, frame):
-        wx.PyPanel.__init__(self, frame, -1, size=(180, 96),
-                               style=wx.SUNKEN_BORDER)
+        wx.Panel.__init__(self, frame, -1, size=(180, 96),
+                          style=wx.SUNKEN_BORDER)
         aui_pane_info = aui.AuiPaneInfo().\
             Caption('PLAYBACK CONTROLS').\
             CloseButton(False).\

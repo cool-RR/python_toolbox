@@ -91,4 +91,6 @@ class StateShower(wx.lib.scrolledpanel.ScrolledPanel):
     def on_size(self, e=None):
         '''Refresh the widget.'''
         self.Refresh()
+        if e is not None:
+            e.Skip()
 

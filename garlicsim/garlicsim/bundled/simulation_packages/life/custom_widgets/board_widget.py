@@ -92,6 +92,8 @@ class BoardWidget(scrolled.ScrolledPanel,
     def on_size(self, e=None):
         '''Refresh the widget.'''
         self.Refresh()
+        if e is not None:
+            e.Skip()
 
     def on_mouse_event(self, e):
         '''Mouse event handler.'''
