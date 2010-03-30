@@ -102,6 +102,23 @@ class PlaybackControls(wx.PyPanel, WorkspaceWidget):
             x, -1, bitmaps_dict['to_end'], size=(30, 50)
         )
         
+        # Some buttons should be grayed out depending on the path!
+        
+        
+        self.Bind(wx.EVT_BUTTON, self.on_button_to_start,
+                  source=self.button_to_start)
+        
+        self.Bind(wx.EVT_BUTTON, self.on_button_previous_node,
+                  source=self.button_previous_node)
+        
+        self.Bind(wx.EVT_BUTTON, self.on_button_to_start,
+                  source=self.button_to_start)
+        
+        self.Bind(wx.EVT_BUTTON, self.on_button_next_node,
+                  source=self.button_next_node)
+        
+        self.Bind(wx.EVT_BUTTON, self.on_button_to_end,
+                  source=self.button_to_end)
         
         button_line = (
             self.button_to_start,
@@ -153,3 +170,21 @@ class PlaybackControls(wx.PyPanel, WorkspaceWidget):
 
     def on_size(self, e=None):
         self.Refresh()
+        
+    def on_button_to_start(self, e=None):
+        try:
+            start_node = self.gui_project.path[0]
+            self.gui_project.set_active_node(start_node)
+        except garlicsim.data_structures.path.PathOutOfRangeError:
+            pass
+        
+    def on_button_to_end(self, e=None):
+        end_node = self.gui_project.path[-1]
+        self.gui_project.set_active_node(end_node)
+    
+    def on_button_previous_node(self, e=None):
+        end_node = self.gui_project.path[-1]
+        self.gui_project.set_active_node(end_node)
+        
+        
+        
