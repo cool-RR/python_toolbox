@@ -410,7 +410,7 @@ class GuiProject(object):
         node = self.active_node
         if node.still_in_editing is False:
             raise Exception('''You said 'done editing', but you were not in \
-editing mode.''')
+editing mode.''') # change to fitting exception class
         node.still_in_editing = False
         self.project.ensure_buffer(node, self.default_buffer)
 

@@ -29,7 +29,7 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         WorkspaceWidget.__init__(self, frame, aui_pane_info)
         
         self.Bind(wx.EVT_SIZE, self.on_size)
-        
+        self.Bind(wx.EVT_IDLE, self.update_buttons_status) #cancel this
         
         bitmap_list = ['to_start', 'previous_node', 'play',
                                 'next_node', 'to_end', 'pause',
@@ -77,8 +77,8 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         self.Bind(wx.EVT_BUTTON, self.on_button_previous_node,
                   source=self.button_previous_node)
         
-        self.Bind(wx.EVT_BUTTON, self.on_button_to_start,
-                  source=self.button_to_start)
+        self.Bind(wx.EVT_BUTTON, self.on_button_play,
+                  source=self.button_play)
         
         self.Bind(wx.EVT_BUTTON, self.on_button_next_node,
                   source=self.button_next_node)
@@ -114,6 +114,9 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
             e.Skip()
             
     def update_buttons_status(self, e=None):
+        
+        active_node = self.gui_project.active_node
+        
         if self.gui_project.path is None:
             self.button_to_start.Disable()
             self.button_previous_node.Disable()
@@ -121,7 +124,7 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
             self.button_next_node.Disable()
             self.button_to_end.Disable()
         
-        elif self.gui_project.active_node is None:
+        elif active_node is None:
             self.button_previous_node.Disable()
             self.button_next_node.Disable()
             self.button_play.Disable()
@@ -129,21 +132,30 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         else:
             self.button_play.Enable()
             
-            if self.gui_project.active_node.parent is not None:
+            if active_node.parent is not None:
                 self.button_previous_node.Enable()
                 self.button_to_start.Enable()
             else:
                 self.button_previous_node.Disable()
                 self.button_to_start.Disable()
                 
-            if self.gui_project.active_node.children:
+            if active_node.children:
                 self.button_next_node.Enable()
                 self.button_to_end.Enable()
             else:
                 self.button_next_node.Disable()
                 self.button_to_end.Disable()
         
-    def OnPaint(self, e):
+        if self.button_play.IsEnabled():
+            assert active_node is not None
+            if active_node.still_in_editing:
+                self.button_play.SetBitmapLabel(self.bitmap_dict['finalize'])
+            elif self.gui_project.is_playing:
+                self.button_play.SetBitmapLabel(self.bitmap_dict['pause'])
+            else: # self.gui_project.is_playing is False
+                self.button_play.SetBitmapLabel(self.bitmap_dict['play'])
+        
+    def OnPaint(self, e): # cancel this?
         self.update_buttons_status()
         wx.Panel.OnPaint(self, e)
         
@@ -179,4 +191,11 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         except garlicsim.data_structures.path.PathOutOfRangeError:
             return
         
-        
+    def on_button_play(self, e=None):
+        if active_node.still_in_editing:
+            self.gui_project.done_editing()
+        else:
+            self.gui_project.toggle_playing()
+            
+            
+            
