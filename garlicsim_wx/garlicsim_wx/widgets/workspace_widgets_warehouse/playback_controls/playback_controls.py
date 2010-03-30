@@ -41,45 +41,11 @@ class PlaybackControls(wx.PyPanel, WorkspaceWidget):
                                                    bitmap_name + '.png')
             self.bitmap_dict[bitmap_name] = wx.Bitmap(path, wx.BITMAP_TYPE_ANY)
 
-            
-        """
-        h_sizer1 = wx.BoxSizer(wx.HORIZONTAL)
-        self.plain = empty = wx.RadioButton(self, -1, 'Plain', style=wx.RB_GROUP)
-        self.random = random = wx.RadioButton(self, -1, 'Random')
-        random.SetValue(True)
-        h_sizer1.Add(empty, 0, wx.ALIGN_CENTER | wx.ALL, 5)
-        h_sizer1.Add(random, 0, wx.ALIGN_CENTER | wx.ALL, 5)
-
-        v_sizer = wx.BoxSizer(wx.VERTICAL)
-
-        last_h_sizer = wx.StdDialogButtonSizer()
-        ok = wx.Button(self, wx.ID_OK, 'Ok', size=(70, 30))
-        ok.SetDefault()
-        last_h_sizer.SetAffirmativeButton(ok)
-        cancel = wx.Button(self, wx.ID_CANCEL, 'Cancel', size=(70, 30))
-        last_h_sizer.AddButton(ok)
-        last_h_sizer.AddButton(cancel)
-        last_h_sizer.Realize()
-
-        v_sizer.Add(h_sizer1, 0, wx.ALIGN_CENTER | wx.TOP | wx.BOTTOM, 10)
-        v_sizer.Add(last_h_sizer, 1, wx.ALIGN_CENTER | wx.BOTTOM, 10)
-
-        self.SetSizer(v_sizer)
-        v_sizer.Fit(self)
-        ok.SetFocus()
-        """
-        
-        x = self#panel = wx.Panel(self, -1)
 
         v_sizer = self.v_sizer = wx.BoxSizer(wx.VERTICAL)
 
-        '''h_sizer1 = wx.BoxSizer(wx.HORIZONTAL)
-        st1 = wx.StaticText(x, -1, 'Class Name')
-        st1.SetFont(font)
-        h_sizer1.Add(st1, 0, wx.RIGHT, 8)
-        tc = wx.TextCtrl(x, -1)
-        h_sizer1.Add(tc, 1)'''
-        b1 = wx.Button(x, -1, size=(180, 30))
+
+        b1 = wx.Button(self, -1, size=(180, 30))
         v_sizer.Add(b1, 0)
 
 
@@ -87,19 +53,19 @@ class PlaybackControls(wx.PyPanel, WorkspaceWidget):
         
                            
         self.button_to_start = wx.BitmapButton(
-            x, -1, bitmaps_dict['to_start'], size=(30, 50)
+            self, -1, bitmaps_dict['to_start'], size=(30, 50)
         )
         self.button_previous_node = wx.BitmapButton(
-            x, -1, bitmaps_dict['previous_node'], size=(30, 50)
+            self, -1, bitmaps_dict['previous_node'], size=(30, 50)
         )
         self.button_play = wx.BitmapButton(
-            x, -1, bitmaps_dict['play'], size=(60, 50)
+            self, -1, bitmaps_dict['play'], size=(60, 50)
         )
         self.button_next_node= wx.BitmapButton(
-            x, -1, bitmaps_dict['next_node'], size=(30, 50)
+            self, -1, bitmaps_dict['next_node'], size=(30, 50)
         )
         self.button_to_end = wx.BitmapButton(
-            x, -1, bitmaps_dict['to_end'], size=(30, 50)
+            self, -1, bitmaps_dict['to_end'], size=(30, 50)
         )
         
         # Some buttons should be grayed out depending on the path!
@@ -133,39 +99,13 @@ class PlaybackControls(wx.PyPanel, WorkspaceWidget):
         v_sizer.Add(h_sizer,)
 
 
-        '''h_sizer3 = wx.BoxSizer(wx.HORIZONTAL)
-        tc2 = wx.TextCtrl(x, -1, style=wx.TE_MULTILINE)'''
-        b3 = wx.Button(x, -1, size=(180, 16))
+        b3 = wx.Button(self, -1, size=(180, 16))
         v_sizer.Add(b3, 1)
 
 
-
-        x.SetSizer(v_sizer)
-
+        self.SetSizer(v_sizer)
         v_sizer.Layout()
-        v_sizer.Fit(x)
         
-        
-        '''
-        v_sizer = self.v_sizer = wx.BoxSizer(wx.VERTICAL)
-        
-        x = panel = wx.Panel(self, -1, )
-        
-        b1 = wx.Button(x, -1)
-        b2 = wx.TextCtrl(x, size=(200, 200), style=wx.TE_MULTILINE)
-        b3 = wx.Button(x, -1)
-        
-        v_sizer.Add(b1, 1, wx.EXPAND | wx.ALIGN_CENTER_HORIZONTAL)
-        v_sizer.Add(b2, 3, wx.EXPAND | wx.ALIGN_CENTER_HORIZONTAL)
-        v_sizer.Add(b3, 1, wx.EXPAND | wx.ALIGN_CENTER_HORIZONTAL)
-        
-        
-        
-        
-        
-        x.SetSizer(v_sizer)
-        v_sizer.Fit(x)
-        x.Centre()'''
 
 
     def on_size(self, e=None):
