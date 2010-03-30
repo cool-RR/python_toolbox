@@ -8,7 +8,7 @@ class WorkspaceWidget(object):
     
     __metaclass__ = abc.ABCMeta
     
-    def __init__(self, frame):
+    def __init__(self, frame, aui_pane_info=None):
         
         self.frame = frame
         
@@ -16,7 +16,7 @@ class WorkspaceWidget(object):
         
         class_name = self.__class__.__name__
         
-        self.aui_pane_info = \
+        self.aui_pane_info = aui_pane_info or \
             aui.AuiPaneInfo().\
             Caption(string_tools.camelcase_to_spacecase(class_name).upper()).\
             Center().CloseButton(False)

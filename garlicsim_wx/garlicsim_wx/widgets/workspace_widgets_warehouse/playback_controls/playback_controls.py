@@ -7,6 +7,7 @@ tododoc
 
 import pkg_resources
 import wx
+from garlicsim_wx.general_misc.third_party import aui
 
 import garlicsim
 from garlicsim_wx.widgets import WorkspaceWidget
@@ -18,100 +19,110 @@ images_package = __images_package.__name__
 class PlaybackControls(wx.Panel, WorkspaceWidget):
     
     def __init__(self, frame):
-        wx.Panel.__init__(self, frame, size=(500, 500),
+        wx.Panel.__init__(self, frame, -1, size=(180, 96),
                                style=wx.SUNKEN_BORDER)
-        WorkspaceWidget.__init__(self, frame)
+        aui_pane_info = aui.AuiPaneInfo().\
+            Caption('PLAYBACK CONTROLS').\
+            CloseButton(False).BestSize(180, 96).MinSize(180, 96).MaxSize(180, 96)
+        WorkspaceWidget.__init__(self, frame, aui_pane_info)
         
         self.Bind(wx.EVT_SIZE, self.on_size)
         
-        panel = wx.Panel(self, -1)
+        """
+        h_sizer1 = wx.BoxSizer(wx.HORIZONTAL)
+        self.plain = empty = wx.RadioButton(self, -1, 'Plain', style=wx.RB_GROUP)
+        self.random = random = wx.RadioButton(self, -1, 'Random')
+        random.SetValue(True)
+        h_sizer1.Add(empty, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+        h_sizer1.Add(random, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
-        font = wx.SystemSettings_GetFont(wx.SYS_SYSTEM_FONT)
-        font.SetPointSize(9)
+        v_sizer = wx.BoxSizer(wx.VERTICAL)
 
-        vbox = wx.BoxSizer(wx.VERTICAL)
+        last_h_sizer = wx.StdDialogButtonSizer()
+        ok = wx.Button(self, wx.ID_OK, 'Ok', size=(70, 30))
+        ok.SetDefault()
+        last_h_sizer.SetAffirmativeButton(ok)
+        cancel = wx.Button(self, wx.ID_CANCEL, 'Cancel', size=(70, 30))
+        last_h_sizer.AddButton(ok)
+        last_h_sizer.AddButton(cancel)
+        last_h_sizer.Realize()
 
-        hbox1 = wx.BoxSizer(wx.HORIZONTAL)
-        st1 = wx.StaticText(panel, -1, 'Class Name')
+        v_sizer.Add(h_sizer1, 0, wx.ALIGN_CENTER | wx.TOP | wx.BOTTOM, 10)
+        v_sizer.Add(last_h_sizer, 1, wx.ALIGN_CENTER | wx.BOTTOM, 10)
+
+        self.SetSizer(v_sizer)
+        v_sizer.Fit(self)
+        ok.SetFocus()
+        """
+        
+        x =  panel = wx.Panel(self, -1)
+
+        v_sizer = self.v_sizer = wx.BoxSizer(wx.VERTICAL)
+
+        '''h_sizer1 = wx.BoxSizer(wx.HORIZONTAL)
+        st1 = wx.StaticText(x, -1, 'Class Name')
         st1.SetFont(font)
-        hbox1.Add(st1, 0, wx.RIGHT, 8)
-        tc = wx.TextCtrl(panel, -1)
-        hbox1.Add(tc, 1)
-        vbox.Add(hbox1, 0, wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, 10)
+        h_sizer1.Add(st1, 0, wx.RIGHT, 8)
+        tc = wx.TextCtrl(x, -1)
+        h_sizer1.Add(tc, 1)'''
+        b1 = wx.Button(x, -1, size=(180, 30))
+        v_sizer.Add(b1, 0, wx.EXPAND)
 
-        vbox.Add((-1, 10))
 
-        hbox2 = wx.BoxSizer(wx.HORIZONTAL)
-        st2 = wx.StaticText(panel, -1, 'Matching Classes')
-        st2.SetFont(font)
-        hbox2.Add(st2, 0)
-        vbox.Add(hbox2, 0, wx.LEFT | wx.TOP, 10)
+        h_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        
+        self.button_to_start = wx.Button(x, -1, size=(30, 50))
+        self.button_previous_node = wx.Button(x, -1, size=(30, 50))
+        self.button_play = wx.Button(x, -1, size=(60, 50))
+        self.button_next_node= wx.Button(x, -1, size=(30, 50))
+        self.button_to_end = wx.Button(x, -1, size=(30, 50))
 
-        vbox.Add((-1, 10))
+        button_line = (
+            self.button_to_start,
+            self.button_previous_node,
+            self.button_play,
+            self.button_next_node,
+            self.button_to_end
+        )
+        
+        for button in button_line:
+            h_sizer.Add(button, 0)
+        v_sizer.Add(h_sizer,)
 
-        hbox3 = wx.BoxSizer(wx.HORIZONTAL)
-        tc2 = wx.TextCtrl(panel, -1, style=wx.TE_MULTILINE)
-        hbox3.Add(tc2, 1, wx.EXPAND)
-        vbox.Add(hbox3, 1, wx.LEFT | wx.RIGHT | wx.EXPAND, 10)
 
-        vbox.Add((-1, 25))
+        '''h_sizer3 = wx.BoxSizer(wx.HORIZONTAL)
+        tc2 = wx.TextCtrl(x, -1, style=wx.TE_MULTILINE)'''
+        b3 = wx.Button(x, -1, size=(180, 16))
+        v_sizer.Add(b3, 1, wx.EXPAND)
 
-        hbox4 = wx.BoxSizer(wx.HORIZONTAL)
-        cb1 = wx.CheckBox(panel, -1, 'Case Sensitive')
-        cb1.SetFont(font)
-        hbox4.Add(cb1)
-        cb2 = wx.CheckBox(panel, -1, 'Nested Classes')
-        cb2.SetFont(font)
-        hbox4.Add(cb2, 0, wx.LEFT, 10)
-        cb3 = wx.CheckBox(panel, -1, 'Non-Project classes')
-        cb3.SetFont(font)
-        hbox4.Add(cb3, 0, wx.LEFT, 10)
-        vbox.Add(hbox4, 0, wx.LEFT, 10)
 
-        vbox.Add((-1, 25))
 
-        hbox5 = wx.BoxSizer(wx.HORIZONTAL)
-        btn1 = wx.Button(panel, -1, 'Ok', size=(70, 30))
-        hbox5.Add(btn1, 0)
-        btn2 = wx.Button(panel, -1, 'Close', size=(70, 30))
-        hbox5.Add(btn2, 0, wx.LEFT | wx.BOTTOM , 5)
-        vbox.Add(hbox5, 0, wx.ALIGN_RIGHT | wx.RIGHT, 10)
-
-        panel.SetSizer(vbox)
-        vbox.Fit(panel)
+        x.SetSizer(v_sizer)
+        v_sizer.Fit(x)
         self.Centre()
         self.Show(True)
         
-        """v_sizer = self.v_sizer = wx.BoxSizer(wx.VERTICAL)
-        
-        self.SetBackgroundColour('#4f5049')
-
-
-        midPan = wx.Panel(self, -1)
-        midPan.SetBackgroundColour('#ededed')
-        
         
         '''
-        b1 = wx.Button(self, -1)
-        b2 = wx.TextCtrl(self, size=(200, 200), style=wx.TE_MULTILINE)
-        b3 = wx.Button(self, -1)
+        v_sizer = self.v_sizer = wx.BoxSizer(wx.VERTICAL)
         
-        v_sizer.Add(b1, 1, wx.EXPAND)# | wx.ALIGN_CENTER_HORIZONTAL)
-        v_sizer.Add(b2, 1, wx.EXPAND)# | wx.ALIGN_CENTER_HORIZONTAL)
-        v_sizer.Add(b3, 1, wx.EXPAND)# | wx.ALIGN_CENTER_HORIZONTAL)
-        '''
+        x = panel = wx.Panel(self, -1, )
         
-        v_sizer.Add(midPan, 1, wx.EXPAND | wx.ALL, 20)
+        b1 = wx.Button(x, -1)
+        b2 = wx.TextCtrl(x, size=(200, 200), style=wx.TE_MULTILINE)
+        b3 = wx.Button(x, -1)
+        
+        v_sizer.Add(b1, 1, wx.EXPAND | wx.ALIGN_CENTER_HORIZONTAL)
+        v_sizer.Add(b2, 3, wx.EXPAND | wx.ALIGN_CENTER_HORIZONTAL)
+        v_sizer.Add(b3, 1, wx.EXPAND | wx.ALIGN_CENTER_HORIZONTAL)
         
         
-        midPan2 = wx.Panel(self, -1)
-        midPan2.SetBackgroundColour('#00ff22')
         
-        v_sizer.Add(midPan2, 1, wx.EXPAND | wx.ALL, 20)
         
-        self.SetSizer(v_sizer)
-        v_sizer.Fit(self)
-        self.Centre()"""
+        
+        x.SetSizer(v_sizer)
+        v_sizer.Fit(x)
+        x.Centre()'''
 
 
     def on_size(self, e=None):

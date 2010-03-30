@@ -71,7 +71,7 @@ class Frame(wx.Frame):
         self.aui_manager.SetManagedWindow(self)
         
         
-        self.aui_manager._art.SetMetric(aui.AUI_DOCKART_SASH_SIZE, 1)
+        self.aui_manager._art.SetMetric(aui.AUI_DOCKART_SASH_SIZE, 2)
         
         self.aui_manager._art.SetMetric(aui.AUI_DOCKART_CAPTION_SIZE, 10)
         self.aui_manager._art.SetFont(
@@ -274,8 +274,10 @@ class Frame(wx.Frame):
 
         self.playback_controls = workspace_widgets['PlaybackControls'](self)
         self.playback_controls.aui_pane_info\
-            .Bottom().Row(0)#\
-            #.Floatable(False)
+            .Bottom().Row(0).Position(1)\
+            .BestSize(180, 96).MinSize(180, 96).MaxSize(180, 96)\
+            .Resizable(False)
+            
         
         self.seek_bar = workspace_widgets['SeekBar'](self)
         self.seek_bar.aui_pane_info\
