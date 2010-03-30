@@ -271,6 +271,11 @@ class Frame(wx.Frame):
             .Bottom().Row(0)\
             .BestSize(1000, 100).MinSize(200, 50).MaxSize(10000, 250)\
             .Floatable(False)
+
+        self.playback_controls = workspace_widgets['PlaybackControls'](self)
+        self.playback_controls.aui_pane_info\
+            .Bottom().Row(0)#\
+            #.Floatable(False)
         
         self.seek_bar = workspace_widgets['SeekBar'](self)
         self.seek_bar.aui_pane_info\
