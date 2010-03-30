@@ -378,13 +378,19 @@ class Path(object): #todo: add __reversed__ here, maybe also in Block and others
         
         You can optionally specify `start`, which may be either a node or block.
         '''
+
+        thing = None # Setting to None before loop, so we know if loop was empty
+        
         for thing in self.iterate_blockwise(start=start):
             pass
 
         if isinstance(thing, Block):
             return thing[-1]
-        else:
+        elif isinstance(thing, Node):
             return thing
+        else: # thing is None
+            raise PathOutOfRangeError('''You asked for the last node in the \
+path, but it's completely empty.''')
     
         
     def get_node_by_clock(self, clock, rounding="closest", end_node=None):

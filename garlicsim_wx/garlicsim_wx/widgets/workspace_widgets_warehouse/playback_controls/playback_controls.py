@@ -173,18 +173,34 @@ class PlaybackControls(wx.PyPanel, WorkspaceWidget):
         
     def on_button_to_start(self, e=None):
         try:
+            if self.gui_project.path is None: return
             start_node = self.gui_project.path[0]
             self.gui_project.set_active_node(start_node)
         except garlicsim.data_structures.path.PathOutOfRangeError:
-            pass
+            return
         
     def on_button_to_end(self, e=None):
-        end_node = self.gui_project.path[-1]
-        self.gui_project.set_active_node(end_node)
+        try:
+            if self.gui_project.path is None: return
+            end_node = self.gui_project.path[-1]
+            self.gui_project.set_active_node(end_node)
+        except garlicsim.data_structures.path.PathOutOfRangeError:
+            return
     
     def on_button_previous_node(self, e=None):
-        end_node = self.gui_project.path[-1]
-        self.gui_project.set_active_node(end_node)
+        if self.gui_project.active_node is None: return
+        previous_node = self.gui_project.active_node.parent
+        if previous_node is not None:
+            self.gui_project.set_active_node(previous_node)
         
+                
+    def on_button_next_node(self, e=None):
+        if self.gui_project.active_node is None: return
+        try:
+            next_node = \
+                self.gui_project.path.next_node(self.gui_project.active_node)
+            self.gui_project.set_active_node(next_node)
+        except garlicsim.data_structures.path.PathOutOfRangeError:
+            return
         
         
