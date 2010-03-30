@@ -69,7 +69,7 @@ class PlaybackControls(wx.PyPanel, WorkspaceWidget):
         ok.SetFocus()
         """
         
-        x = panel = wx.Panel(self, -1)
+        x = self#panel = wx.Panel(self, -1)
 
         v_sizer = self.v_sizer = wx.BoxSizer(wx.VERTICAL)
 
@@ -80,7 +80,7 @@ class PlaybackControls(wx.PyPanel, WorkspaceWidget):
         tc = wx.TextCtrl(x, -1)
         h_sizer1.Add(tc, 1)'''
         b1 = wx.Button(x, -1, size=(180, 30))
-        v_sizer.Add(b1, 0, wx.EXPAND)
+        v_sizer.Add(b1, 0)
 
 
         h_sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -136,14 +136,14 @@ class PlaybackControls(wx.PyPanel, WorkspaceWidget):
         '''h_sizer3 = wx.BoxSizer(wx.HORIZONTAL)
         tc2 = wx.TextCtrl(x, -1, style=wx.TE_MULTILINE)'''
         b3 = wx.Button(x, -1, size=(180, 16))
-        v_sizer.Add(b3, 1, wx.EXPAND)
+        v_sizer.Add(b3, 1)
 
 
 
         x.SetSizer(v_sizer)
+
+        v_sizer.Layout()
         v_sizer.Fit(x)
-        self.Centre()
-        self.Show(True)
         
         
         '''
@@ -170,6 +170,8 @@ class PlaybackControls(wx.PyPanel, WorkspaceWidget):
 
     def on_size(self, e=None):
         self.Refresh()
+        if e is not None:
+            e.Skip()
         
     def on_button_to_start(self, e=None):
         try:
