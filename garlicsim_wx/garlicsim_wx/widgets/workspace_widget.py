@@ -18,7 +18,7 @@ class WorkspaceWidget(object):
         
         self.aui_pane_info = \
             aui.AuiPaneInfo().\
-            Caption(string_tools.camelcase_to_spacecase(class_name)).\
+            Caption(string_tools.camelcase_to_spacecase(class_name).upper()).\
             Center().CloseButton(False)
         
         frame.aui_manager.AddPane(

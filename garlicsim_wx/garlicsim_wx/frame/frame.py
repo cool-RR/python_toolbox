@@ -70,6 +70,20 @@ class Frame(wx.Frame):
         self.aui_manager = aui.AuiManager()
         self.aui_manager.SetManagedWindow(self)
         
+        
+        self.aui_manager._art.SetMetric(aui.AUI_DOCKART_SASH_SIZE, 1)
+        
+        self.aui_manager._art.SetMetric(aui.AUI_DOCKART_CAPTION_SIZE, 10)
+        self.aui_manager._art.SetFont(
+            aui.AUI_DOCKART_CAPTION_FONT,
+            wx.Font(7, wx.FONTFAMILY_MAX, wx.NORMAL, wx.NORMAL, False)
+        )
+        
+        self.aui_manager._art.SetMetric(aui.AUI_DOCKART_GRADIENT_TYPE,
+                                        aui.AUI_GRADIENT_NONE)
+        self.aui_manager._art.SetColor(aui.AUI_DOCKART_INACTIVE_CAPTION_COLOUR,
+                                        wx.Color(200, 200, 200))
+        
         self.gui_project = None
 
         ######################################
