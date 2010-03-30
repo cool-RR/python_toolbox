@@ -254,24 +254,24 @@ class Frame(wx.Frame):
         
         self.tree_browser = workspace_widgets['TreeBrowser'](self)
         self.tree_browser.aui_pane_info\
-            .Bottom().BestSize(1000, 100).Row(0)\
-            .Floatable(False).CloseButton(False).MaximizeButton(True)\
-            .PinButton(True).Gripper()
+            .Bottom().Row(0)\
+            .BestSize(1000, 100).MinSize(200, 50).MaxSize(10000, 250)\
+            .Floatable(False)
         
         self.seek_bar = workspace_widgets['SeekBar'](self)
         self.seek_bar.aui_pane_info\
-            .Bottom().BestSize(1000, 50).Row(1)\
-            .Floatable(False).MaximizeButton(True).PinButton(True)
-            #.MinimizeButton(True).MinimizeMode(aui.AUI_MINIMIZE_POS_RIGHT | aui.AUI_MINIMIZE_CAPT_SMART)
+            .Bottom().Row(1)\
+            .BestSize(600, 40).MinSize(200, 40).MaxSize(10000, 100)\
+            .Floatable(False)
         
         self.shell = workspace_widgets['Shell'](self)
         self.shell.aui_pane_info\
-            .Right().BestSize(400, 600).Row(0)\
-            .Name('boobs').MaximizeButton(True).PinButton(True)
+            .Right().Row(0)\
+            .BestSize(400, 600)
             
         self.state_repr_shower = workspace_widgets['StateReprShower'](self)
         self.state_repr_shower.aui_pane_info\
-            .Floatable(False).MaximizeButton(True).PinButton(True)
+            .BestSize(300, 300)
             
         self.aui_manager.Update()
         
