@@ -20,6 +20,7 @@ import pkg_resources
 
 
 from garlicsim.general_misc import dict_tools
+from garlicsim.general_misc import string_tools
 import garlicsim_wx.general_misc.thread_timer as thread_timer
 import garlicsim
 import garlicsim_wx.gui_project
@@ -41,6 +42,8 @@ class Frame(wx.Frame):
         wx.Frame.__init__(self, *args, **keywords)
         self.SetDoubleBuffered(True)
         
+        #"""
+        
         self.workspace_widgets = dict.fromkeys(workspace_widgets)
         
         list_of_default_widgets = [
@@ -55,6 +58,8 @@ class Frame(wx.Frame):
             workspace_widgets,
             list_of_default_widgets
         )
+        
+        #"""
         
         self.aui_manager = aui.AuiManager()
         self.aui_manager.SetManagedWindow(self)
@@ -242,13 +247,23 @@ class Frame(wx.Frame):
         # workspace widgets
         
         for Widget in self.default_workspace_widgets:
-            self.workspace_widgets[Widget] = Widget(self)
+            w = self.workspace_widgets[Widget.__name__] = Widget(self)
         
         self.__organize_workspace_widgets()
         
     def __organize_workspace_widgets(self): # fuck this when I learn perspectives
         
-        pass
+        self.aui_manager.GetPane(self.workspace_widgets['TreeBrowser'])\
+            .Bottom().BestSize(0, 100).Row(0)
+        self.aui_manager.GetPane(self.workspace_widgets['SeekBar'])\
+            .Bottom().BestSize(0, 50).Row(1)
+        self.aui_manager.GetPane(self.workspace_widgets['Shell'])\
+            .Right().BestSize(500, 0).Row(0)
+        
+        
+        self.aui_manager.Update()
+        self.Refresh()
+        
 
     def sync_crunchers(self, e=None):
         '''

@@ -16,7 +16,7 @@ class WorkspaceWidget(object):
         
         frame.aui_manager.AddPane(
             self,
-            aui.AuiPaneInfo().Caption(type(self).__name__)
+            aui.AuiPaneInfo().Caption(type(self).__name__).Center()
         )
                              
         frame.aui_manager.Update()

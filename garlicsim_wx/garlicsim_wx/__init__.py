@@ -30,10 +30,10 @@ def start():
     my_app_win = Frame(None, -1, "GarlicSim", size=(600, 600))
     app.SetTopWindow(my_app_win)
 
-    '''
+    """
     import cProfile
     cProfile.run("app.MainLoop()")
-    '''
+    """
     app.MainLoop()
     
 if __name__ == "__main__":
