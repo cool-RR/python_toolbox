@@ -55,7 +55,7 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         ok.SetFocus()
         """
         
-        x =  panel = wx.Panel(self, -1)
+        x = panel = wx.Panel(self, -1)
 
         v_sizer = self.v_sizer = wx.BoxSizer(wx.VERTICAL)
 

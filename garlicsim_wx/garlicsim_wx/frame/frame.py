@@ -277,7 +277,7 @@ class Frame(wx.Frame):
             .Bottom().Row(0).Position(1)\
             .BestSize(180, 96).MinSize(180, 96).MaxSize(180, 96)\
             .Resizable(False)
-            
+        
         
         self.seek_bar = workspace_widgets['SeekBar'](self)
         self.seek_bar.aui_pane_info\
