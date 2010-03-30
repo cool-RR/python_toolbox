@@ -42,7 +42,7 @@ class Frame(wx.Frame):
         wx.Frame.__init__(self, *args, **keywords)
         self.SetDoubleBuffered(True)
         
-        #"""
+        """
         
         self.workspace_widgets = dict.fromkeys(workspace_widgets)
         
@@ -59,7 +59,13 @@ class Frame(wx.Frame):
             list_of_default_widgets
         )
         
-        #"""
+        """
+        
+        self.tree_browser = None
+        self.seek_bar = None
+        self.shell = None
+        self.state_repr_shower = None
+                
         
         self.aui_manager = aui.AuiManager()
         self.aui_manager.SetManagedWindow(self)
@@ -246,12 +252,36 @@ class Frame(wx.Frame):
         # todo: should create StateReprShower only if the simpack got no
         # workspace widgets
         
+        self.tree_browser = workspace_widgets['TreeBrowser'](self)
+        self.tree_browser.aui_pane_info\
+            .Bottom().BestSize(1000, 100).Row(0)\
+            .Floatable(False).CloseButton(False).MaximizeButton(True)\
+            .PinButton(True).Gripper()
+        
+        self.seek_bar = workspace_widgets['SeekBar'](self)
+        self.seek_bar.aui_pane_info\
+            .Bottom().BestSize(1000, 50).Row(1)\
+            .Floatable(False).MaximizeButton(True).PinButton(True)
+            #.MinimizeButton(True).MinimizeMode(aui.AUI_MINIMIZE_POS_RIGHT | aui.AUI_MINIMIZE_CAPT_SMART)
+        
+        self.shell = workspace_widgets['Shell'](self)
+        self.shell.aui_pane_info\
+            .Right().BestSize(400, 600).Row(0)\
+            .Name('boobs').MaximizeButton(True).PinButton(True)
+            
+        self.state_repr_shower = workspace_widgets['StateReprShower'](self)
+        self.state_repr_shower.aui_pane_info\
+            .Floatable(False).MaximizeButton(True).PinButton(True)
+            
+        self.aui_manager.Update()
+        
+        """
         for Widget in self.default_workspace_widgets:
             w = self.workspace_widgets[Widget.__name__] = Widget(self)
         
         self.__organize_workspace_widgets()
         
-    def __organize_workspace_widgets(self): # fuck this when I learn perspectives
+    def __organize_workspace_widgets(self):
         
         self.aui_manager.GetPane(self.workspace_widgets['TreeBrowser'])\
             .Bottom().BestSize(0, 100).Row(0)
@@ -263,7 +293,7 @@ class Frame(wx.Frame):
         
         self.aui_manager.Update()
         self.Refresh()
-        
+        """
 
     def sync_crunchers(self, e=None):
         '''

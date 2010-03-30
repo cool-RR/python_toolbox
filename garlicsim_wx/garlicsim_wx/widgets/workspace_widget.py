@@ -1,8 +1,8 @@
 #tododoc
 
 from garlicsim_wx.general_misc.third_party import aui
-
 from garlicsim.general_misc.third_party import abc
+from garlicsim.general_misc import string_tools
 
 class WorkspaceWidget(object):
     
@@ -14,9 +14,16 @@ class WorkspaceWidget(object):
         
         self.gui_project = frame.gui_project
         
+        class_name = self.__class__.__name__
+        
+        self.aui_pane_info = \
+            aui.AuiPaneInfo().\
+            Caption(string_tools.camelcase_to_spacecase(class_name)).\
+            Center()
+        
         frame.aui_manager.AddPane(
             self,
-            aui.AuiPaneInfo().Caption(type(self).__name__).Center()
+            self.aui_pane_info
         )
                              
         frame.aui_manager.Update()
