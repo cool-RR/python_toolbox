@@ -192,7 +192,7 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
             return
         
     def on_button_play(self, e=None):
-        if active_node.still_in_editing:
+        if self.gui_project.active_node.still_in_editing:
             self.gui_project.done_editing()
         else:
             self.gui_project.toggle_playing()
