@@ -196,6 +196,9 @@ class GuiProject(object):
         '''Make `node` the active node, displaying it onscreen.'''
         self.project.ensure_buffer(node, clock_buffer=self.default_buffer)
         
+        if self.active_node is node:
+            return
+        
         was_playing = self.is_playing
         if self.is_playing: self.stop_playing()
         self.active_node = node

@@ -98,6 +98,7 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
             e.Skip()
 
     def on_mouse_event(self, e):
+        #todo: should catch drag to outside of the window
         #(x,y)=self.CalcUnscrolledPosition(e.GetPositionTuple())
 
         (x, y) = e.GetPositionTuple()

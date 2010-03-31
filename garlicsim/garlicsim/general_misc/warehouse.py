@@ -55,7 +55,7 @@ def create(package):
     '''
     
     things = {}
-    modules = import_tools.import_all(package, graceful_fail=True)
+    modules = import_tools.import_all(package, silent_fail=False)
     for (module_name, module) in modules.items():
         if not hasattr(module, '__all__'):
             raise WarehouseError('''Module in warehouse must define __all__ \

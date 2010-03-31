@@ -160,6 +160,7 @@ class SeekBar(wx.Panel, WorkspaceWidget):
 
 
     def on_mouse_event(self, e):
+        #todo: should catch drag to outside of the window        
         #print(dir(e))
         if e.RightDown():
             self.gui_project.stop_playing()

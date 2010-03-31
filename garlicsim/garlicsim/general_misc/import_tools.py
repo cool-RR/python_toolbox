@@ -34,7 +34,7 @@ def import_by_path(path, name=None):
     return module
     
 
-def import_all(package, exclude='__init__', graceful_fail=False):
+def import_all(package, exclude='__init__', silent_fail=False):
     '''
     Import all the modules and packages that live inside the given package.
     
@@ -66,7 +66,7 @@ def import_all(package, exclude='__init__', graceful_fail=False):
         try:
             d[name] = import_by_path(path, name)
         except Exception:
-            if not graceful_fail:
+            if not silent_fail:
                 raise
     
     return d
