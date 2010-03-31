@@ -1765,7 +1765,10 @@ class AuiPaneInfo(object):
             state &= ~flag
 
         self.state = state
-        
+
+        if flag in [self.buttonClose, self.buttonMaximize, self.buttonMinimize, self.buttonPin]:
+            self.ResetButtons()
+            
         return self
     
     
@@ -1778,6 +1781,32 @@ class AuiPaneInfo(object):
         
         return (self.state & flag and [True] or [False])[0]
 
+
+    def ResetButtons(self):
+        """
+        Resets all the buttons and recreates them from scratch depending on the
+        L{AuiPaneInfo} flags.
+        """
+
+        floating = self.HasFlag(self.optionFloating)
+        self.buttons = []
+
+        if not floating and self.HasMinimizeButton():
+            button = AuiPaneButton(AUI_BUTTON_MINIMIZE)
+            self.buttons.append(button)
+    
+        if not floating and self.HasMaximizeButton():
+            button = AuiPaneButton(AUI_BUTTON_MAXIMIZE_RESTORE)
+            self.buttons.append(button)
+
+        if not floating and self.HasPinButton():
+            button = AuiPaneButton(AUI_BUTTON_PIN)
+            self.buttons.append(button)
+
+        if self.HasCloseButton():
+            button = AuiPaneButton(AUI_BUTTON_CLOSE)
+            self.buttons.append(button)
+        
 
     def CountButtons(self):
         """ Returns the number of visible buttons in the docked pane. """
