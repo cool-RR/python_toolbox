@@ -16,7 +16,7 @@ from garlicsim_wx.widgets import WorkspaceWidget
 __all__ = ["ScratchWheel"]
 
 class ScratchWheel(wx.Panel): # Gradient filling?
-    
+    #This shit needs to get redrawed often enough to see the wheel move when playing
     def __init__(self, parent, gui_project, *args, **kwargs):
         
         if 'style' in kwargs:
@@ -34,16 +34,28 @@ class ScratchWheel(wx.Panel): # Gradient filling?
         
         self.speed_function = lambda x: 20 * x ** 4
         
-        self.current_angle = 0
-        
         self.n_lines = 40
         
         self.line_width = 10
 
+    def get_current_angle(self): 
+        gui_project = self.gui_project
+        if gui_project is None or gui_project.active_node is None:
+            return 0
+        if gui_project.is_playing:
+            clock = gui_project.simulation_time_krap or \
+                  gui_project.active_node.state.clock
+        else:
+            clock = gui_project.active_node.state.clock
+            
+        return (clock * 0.1) % (2*math.pi)
+    
+        
     def __calculate_lines(self):
         w = self.Size[0]
+        angle = self.get_current_angle()
         d_angle = (2 * math.pi) / self.n_lines
-        line_angles = (((self.current_angle + d_angle*i) % (2*math.pi)) for i in
+        line_angles = (((angle + d_angle*i) % (2*math.pi)) for i in
                        range(self.n_lines))
         visible_line_angles = (angle for angle in line_angles
                                if 0 <= angle <= math.pi)

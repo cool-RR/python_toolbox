@@ -27,7 +27,7 @@ __version__ = '0.3'
 def start():
     '''Start the gui.'''
     app = wx.PySimpleApp()
-    my_app_win = Frame(None, -1, "GarlicSim", size=(600, 600))
+    my_app_win = Frame(None, -1, "GarlicSim", size=(1024, 768))
     app.SetTopWindow(my_app_win)
 
     """

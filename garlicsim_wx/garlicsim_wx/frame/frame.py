@@ -65,7 +65,7 @@ class Frame(wx.Frame):
         self.seek_bar = None
         self.shell = None
         self.state_repr_shower = None
-                
+        
         
         self.aui_manager = aui.AuiManager()
         self.aui_manager.SetManagedWindow(self)

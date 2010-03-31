@@ -306,24 +306,33 @@ class GuiProject(object):
 
         current_real_time = time.time()
         real_time_elapsed = (current_real_time - self.real_time_krap)
-        desired_simulation_time = self.simulation_time_krap + \
-                                  (real_time_elapsed * self.defacto_playing_speed)
+        desired_simulation_time = \
+            self.simulation_time_krap + \
+            (real_time_elapsed * self.defacto_playing_speed)
         
-        new_node = self.path.get_node_by_clock(desired_simulation_time,
-                                               rounding='closest')
+        both_nodes = self.path.get_node_by_clock(desired_simulation_time,
+                                               rounding='both')
+
         # correct rounding?
         #print(new_node)
+        
+        if self.defacto_playing_speed < 0:
+            both_nodes[0], both_nodes[1] = both_nodes[1], both_nodes[0] 
+                
+        new_node = both_nodes[0]
+        assert new_node
 
         self.real_time_krap = current_real_time
 
-        if new_node:
+        if both_nodes[1] is not None:
             self.simulation_time_krap = desired_simulation_time#new_node.state.clock
             self.active_node = new_node
             self.frame.Refresh()
         else:
             self.ran_out_of_tree_while_playing = True # unneeded?
-            # deal with this crap
-            return
+            self.simulation_time_krap = new_node.state.clock
+            self.active_node = new_node
+            self.frame.Refresh()
         
         
         
