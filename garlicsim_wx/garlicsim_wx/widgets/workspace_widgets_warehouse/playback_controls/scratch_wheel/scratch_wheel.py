@@ -54,11 +54,11 @@ class ScratchWheel(wx.Panel): # Gradient filling?
         
         self.speed_function = lambda x: 20 * x ** 4
         
-        self.n_lines = 20
+        self.n_lines = 15
         
         self.line_width = 20
         
-        self.clock_factor = 0.03 # todo: maybe rename
+        self.clock_factor = 0.05 # todo: maybe rename
         
         self.being_grabbed = False
         
@@ -77,21 +77,24 @@ class ScratchWheel(wx.Panel): # Gradient filling?
     
     def __get_current_pseudoclock(self): 
         gui_project = self.gui_project
+        
         if gui_project is None or gui_project.active_node is None:
             return 0
         
+        active_node = self.gui_project.active_node
+        
         if self.being_grabbed is True:
-            active_node = self.gui_project.active_node
+            
             if active_node.parent is None or len(active_node.children) == 0:
-                return angle
+                return active_node.state.clock
             else:
                 return self.desired_clock_while_grabbing
         
         elif gui_project.is_playing:
             return gui_project.simulation_time_krap or \
-                   gui_project.active_node.state.clock
+                   active_node.state.clock
         else:
-            return gui_project.active_node.state.clock
+            return active_node.state.clock
             
     
         
@@ -253,8 +256,10 @@ class ScratchWheel(wx.Panel): # Gradient filling?
         (rx, ry)= (x/w, y/h)
         
         if e.LeftDown():
-            self.grabbed_angle = pos_to_angle(rx)
-            self.grabbed_pseudoclock = self.__get_current_pseudoclock()
+            self.angle_while_grabbing = self.grabbed_angle = pos_to_angle(rx)
+            self.d_angle_while_grabbing = 0
+            self.desired_clock_while_grabbing = self.grabbed_pseudoclock = \
+                self.__get_current_pseudoclock()
             self.was_playing_before_drag = self.gui_project.is_playing
             self.gui_project.stop_playing()
             self.being_grabbed = True
@@ -263,11 +268,15 @@ class ScratchWheel(wx.Panel): # Gradient filling?
             return
         
         if e.LeftIsDown():
-            assert self.HasCapture()
+            if not self.HasCapture():
+                return
             self.angle_while_grabbing = expanded_pos_to_angle(rx)
-            self.d_angle_while_grabbing = self.angle_while_grabbing - self.grabbed_angle
+            self.d_angle_while_grabbing = (self.angle_while_grabbing - self.grabbed_angle)
             self.desired_clock_while_grabbing = self.grabbed_pseudoclock + \
-                (self.d_angle_while_grabbing * self.clock_factor)
+                (self.d_angle_while_grabbing / self.clock_factor)
+            
+            print(self.desired_clock_while_grabbing)
+            
             both_nodes = self.gui_project.path.get_node_by_clock(
                 self.desired_clock_while_grabbing,
                 rounding='both'
