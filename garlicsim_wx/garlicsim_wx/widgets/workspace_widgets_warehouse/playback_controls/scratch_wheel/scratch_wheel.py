@@ -16,17 +16,17 @@ from garlicsim_wx.widgets import WorkspaceWidget
 __all__ = ["ScratchWheel"]
 
 def pos_to_angle(pos):
-    return math.acos(-1 + 2*pos)
+    return -math.acos(-1 + 2*pos)
 
 
 def expanded_pos_to_angle(pos):
     if 0 <= pos <= 1:
-        return math.acos(-1 + 2*pos)
+        return -math.acos(-1 + 2*pos)
     else:
-        return math.pi * (1 - pos)
+        return -math.pi * (1 - pos)
 
 def angle_to_pos(angle):
-    return (1 + math.cos(angle)) / 2
+    return (1 + math.cos(-angle)) / 2
 
 
 class ScratchWheel(wx.Panel): # Gradient filling?
@@ -105,7 +105,7 @@ class ScratchWheel(wx.Panel): # Gradient filling?
         line_angles = (((angle + d_angle*i) % (2*math.pi)) for i in
                        range(self.n_lines))
         visible_line_angles = (angle for angle in line_angles
-                               if 0 <= angle <= math.pi)
+                               if math.pi <= angle <= 2 * math.pi)
         at_least_one = lambda x: 1.0 if x < 1 else x
         get_line_pos = lambda angle: w * angle_to_pos(angle)
         get_line_width = \
@@ -286,7 +286,7 @@ class ScratchWheel(wx.Panel): # Gradient filling?
             
             self.gui_project.set_active_node(node, modify_path=False)
                 
-        if e.LeftUp():
+        if e.LeftUp() or e.Leaving():
             if self.HasCapture():
                 self.ReleaseMouse()
             self.being_grabbed = False
