@@ -103,7 +103,11 @@ class GuiProject(object):
         
         self.frame.Bind(wx.EVT_TIMER, self.__play_next_caller, self.timer_for_playing)
         # use threadtimer? should have id or something
-        self.playing_speed = 4
+
+        self.defacto_playing_speed = 4
+        self.official_playing_speed = 4
+        self.standard_playing_speed = 4
+        
         self.real_time_krap = None
         self.simulation_time_krap = None 
 
@@ -303,7 +307,7 @@ class GuiProject(object):
         current_real_time = time.time()
         real_time_elapsed = (current_real_time - self.real_time_krap)
         desired_simulation_time = self.simulation_time_krap + \
-                                  (real_time_elapsed * self.playing_speed)
+                                  (real_time_elapsed * self.defacto_playing_speed)
         
         new_node = self.path.get_node_by_clock(desired_simulation_time,
                                                rounding='closest')

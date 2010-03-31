@@ -28,7 +28,7 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
     '''
     A widget for browsing a garlicsim.data_structures.Tree.
     '''
-    def __init__(self, frame):
+    def __init__(self, frame): # todo: on mouse drag should pause like seek bar does
         ScrolledPanel.__init__(self, frame, size=(100, 100),
                                style=wx.SUNKEN_BORDER)
         WorkspaceWidget.__init__(self, frame)
