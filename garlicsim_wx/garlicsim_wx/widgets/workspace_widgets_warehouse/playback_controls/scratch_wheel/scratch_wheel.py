@@ -10,7 +10,7 @@ from __future__ import division
 import wx
 import math
 
-import garlicsim
+import garlicsim, garlicsim_wx
 from garlicsim_wx.widgets import WorkspaceWidget
 
 __all__ = ["ScratchWheel"]
@@ -50,6 +50,8 @@ class ScratchWheel(wx.Panel): # Gradient filling?
         
         self.gui_project = gui_project
         
+        assert isinstance(self.gui_project, garlicsim_wx.GuiProject)
+        
         self.speed_function = lambda x: 20 * x ** 4
         
         self.n_lines = 20
@@ -62,8 +64,9 @@ class ScratchWheel(wx.Panel): # Gradient filling?
         
         self.grabbed_angle = None
         self.grabbed_pseudoclock = None
-        
         self.angle_while_grabbing = None
+        self.d_angle_while_grabbing = None
+        self.desired_clock_while_grabbing = None
         
         self.was_playing_before_drag = None
 
@@ -82,9 +85,7 @@ class ScratchWheel(wx.Panel): # Gradient filling?
             if active_node.parent is None or len(active_node.children) == 0:
                 return angle
             else:
-                d_angle = self.angle_while_grabbing - self.grabbed_angle
-                d_clock = d_angle * self.clock_factor
-                return self.grabbed_pseudoclock + d_clock
+                return self.desired_clock_while_grabbing
         
         elif gui_project.is_playing:
             return gui_project.simulation_time_krap or \
@@ -263,10 +264,33 @@ class ScratchWheel(wx.Panel): # Gradient filling?
         
         if e.LeftIsDown():
             assert self.HasCapture()
-            print (x, y)
-            angle = expanded_pos_to_angle(rx)
-            d_angle = angle - self.grabbed_angle
+            self.angle_while_grabbing = expanded_pos_to_angle(rx)
+            self.d_angle_while_grabbing = self.angle_while_grabbing - self.grabbed_angle
+            self.desired_clock_while_grabbing = self.grabbed_pseudoclock + \
+                (self.d_angle_while_grabbing * self.clock_factor)
+            both_nodes = self.gui_project.path.get_node_by_clock(
+                self.desired_clock_while_grabbing,
+                rounding='both'
+            )
+        
+            node = both_nodes[0] or both_nodes[1]
             
+            self.gui_project.set_active_node(node, modify_path=False)
+                
+        if e.LeftUp():
+            if self.HasCapture():
+                self.ReleaseMouse()
+            self.being_grabbed = False
+            self.grabbed_angle = None
+            self.grabbed_pseudoclock = None
+            self.angle_while_grabbing = None
+            self.d_angle_while_grabbing = None
+            self.desired_clock_while_grabbing = None
+            
+            if self.was_playing_before_drag:
+                self.gui_project.start_playing()
+            
+            self.was_playing_before_drag = None
         
         return
         if e.RightDown():
