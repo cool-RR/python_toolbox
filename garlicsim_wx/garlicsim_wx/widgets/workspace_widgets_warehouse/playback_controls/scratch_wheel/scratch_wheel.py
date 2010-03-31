@@ -34,9 +34,9 @@ class ScratchWheel(wx.Panel): # Gradient filling?
         
         self.speed_function = lambda x: 20 * x ** 4
         
-        self.n_lines = 40
+        self.n_lines = 20
         
-        self.line_width = 10
+        self.line_width = 20
 
     def get_current_angle(self): 
         gui_project = self.gui_project
@@ -48,7 +48,7 @@ class ScratchWheel(wx.Panel): # Gradient filling?
         else:
             clock = gui_project.active_node.state.clock
             
-        return (clock * 0.1) % (2*math.pi)
+        return (clock * 0.03) % (2*math.pi)
     
         
     def __calculate_lines(self):
@@ -69,8 +69,8 @@ class ScratchWheel(wx.Panel): # Gradient filling?
         return lines
         
 
-    def on_paint(self, e=None):
-        
+    def on_paint(self, e=None): # try to make the lines antialiased, they jump too much
+        # make lines different from each other, to make easier to keep track
         
         if self.gui_project is None:
             return

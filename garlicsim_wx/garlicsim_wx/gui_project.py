@@ -317,7 +317,7 @@ class GuiProject(object):
         #print(new_node)
         
         if self.defacto_playing_speed < 0:
-            both_nodes[0], both_nodes[1] = both_nodes[1], both_nodes[0] 
+            both_nodes = (both_nodes[1], both_nodes[0])
                 
         new_node = both_nodes[0]
         assert new_node
