@@ -12,6 +12,9 @@ from garlicsim_wx.general_misc.third_party import aui
 import garlicsim
 from garlicsim_wx.widgets import WorkspaceWidget
 
+
+from scratch_wheel import ScratchWheel
+
 from . import images as __images_package
 images_package = __images_package.__name__
 
@@ -99,8 +102,8 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         v_sizer.Add(h_sizer,)
 
 
-        b3 = wx.Button(self, -1, size=(180, 16))
-        v_sizer.Add(b3, 1)
+        self.scratch_wheel = ScratchWheel(self, -1, size=(180, 16))
+        v_sizer.Add(self.scratch_wheel, 1)
 
 
         self.SetSizer(v_sizer)

@@ -14,7 +14,7 @@ from garlicsim_wx.widgets import WorkspaceWidget
 
 __all__ = ["ScratchWheel"]
 
-class ScratchWheel(wx.Panel):
+class ScratchWheel(wx.Panel): # Gradient filling?
     
     def __init__(self, *args, **kwargs):
         
@@ -29,130 +29,42 @@ class ScratchWheel(wx.Panel):
         self.Bind(wx.EVT_SIZE, self.on_size)
         self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse_event)
 
-
-
-        self.screenify = lambda x: (x-self.start)*self.zoom
-        '''Translate from time point to on-screen coordinate.'''
+        self.speed_function = lambda x: 20 * x ** 4
         
-        self.unscreenify = lambda x: (x/self.zoom)+self.start
-        '''Translate from on-screen coordinate to time point.'''
+        self.current_angle = 0
+        
+        self.n_lines = 50
+        
+        self.line_width = 3
 
-        self.was_playing_before_mouse_click = None
-        self.was_playing_before_mouse_click_but_then_paused_and_mouse_left = None
-        self.active_triangle_width = 13 # Must be odd number
-
+    def __calculate_lines(self):
+        w = self.Size[0]
+        d_angle = (2 * math.pi) / self.n_lines
+        line_angles = (((self.current_angle + d_angle*i) % 2*math.pi) for i in
+                       range(self.n_lines))
+        visible_line_angles = (angle for angle in line_angles
+                               if 0 <= angle <= math.pi)
+        lines = (((w/2)*(1 + math.cos(angle)), math.sin(angle)*self.line_width)
+                 for angle in visible_line_angles) # (pos, width) per line
+        
 
     def on_paint(self, e=None):
-        '''Refresh the seek-bar.'''
         
-        occupied_region = wx.Region()
-
+        
         if (self.gui_project is None) or (self.gui_project.path is None):
             return
         
         (w, h) = self.GetSize()
-        start = self.start
-        end = self.start + (w / self.zoom)
         dc = wx.PaintDC(self)
-        #dc.DrawRectangle(3,3,50,90)
-        if self.gui_project.path is not None: # Draw rect for renedered segment
-            seg = self.gui_project.path.get_existing_time_segment(start, end)
-            if seg is not None:
-                dc.SetPen(wx.Pen('#000000'))
-                dc.SetBrush(wx.Brush('#FFFFB8'))
-                sseg = [self.screenify(thing) for thing in seg]
-                dc.DrawRectangle(sseg[0], 0, sseg[1]-sseg[0], h-4)
-                occupied_region = wx.Region(sseg[0] + 1, 1,
-                                            sseg[1] - sseg[0] - 2,
-                                            h - 6)
-
-        active = self.gui_project.active_node
-        if active is not None:
-            active_start = active.state.clock
-            try:
-                after_active = self.gui_project.path.next_node(active)
-                active_end = after_active.state.clock
-            except garlicsim.data_structures.path.PathOutOfRangeError:
-                after_active = None
-                active_end = active_start
-            active_inside = False
-            screen_active_start = start
-            screen_active_end = end
-
-            if start <= active_start <= end:
-                active_inside = True
-                screen_active_start = self.screenify(active_start)
-
-            if start <= active_end <= end:
-                active_inside = True
-                screen_active_end = self.screenify(active_end)
-
-
-            dc.SetBrush(wx.Brush('#FF9933'))
-            dc.SetPen(wx.Pen('#000000', 1, wx.TRANSPARENT))
-            if active_inside is True:
-                dc.DrawRectangle(math.floor(screen_active_start),
-                                 1,
-                                 math.ceil(screen_active_end-screen_active_start),
-                                 h-6)
-                triangle_half_width = math.ceil(self.active_triangle_width / 2.0)
-                dc.SetClippingRegionAsRegion(occupied_region)
-                dc.DrawPolygon(
-                        ((screen_active_start - triangle_half_width, h - 5),
-                        (screen_active_start + triangle_half_width, h - 5),
-                        (screen_active_start, h - 5 - triangle_half_width))
-                    )
-                dc.DestroyClippingRegion()
-
-
-
-
-        # Draw ruler
-        min = 15
-        temp = math.ceil(math.log10(min / self.zoom))
-        bigliners = get_lines(start, end, temp+1)
-        presmallliners = get_lines(start, end, temp)
-        smallliners = []
-        for thing in presmallliners:
-            if bigliners.count(thing) == 0:
-                smallliners.append(thing)
-
-        self.draw_small_numbers(dc, smallliners)
-        self.draw_big_numbers(dc, bigliners)
-
-
-    def draw_small_numbers(self, dc, numbers):
-        dc.SetPen(wx.Pen('#000000'))
-        dc.SetFont(
-            wx.Font(9,
-                    wx.FONTFAMILY_DEFAULT,
-                    wx.FONTSTYLE_NORMAL,
-                    wx.FONTWEIGHT_NORMAL,
-                    False,
-                    'Courier 10 Pitch')
-        )
+        #dc.SetBrush(wx.Brush('#222222'))
+        dc.FloodFill(1, 1, wx.Color(0x22, 0x22, 0x22))
+        lines = self.__calculate_lines()
+        rectangle_list = [(l_x - l_w/2., 0, l_w, h) for (l_x, l_w) in lines]
+        dc.SetPen(wx.Pen('#AAAAAA'))
+        dc.SetBrush(wx.Brush('#666666'))
+        dc.DrawRectangleList(rectangle_list)
         
-        for number in numbers:
-            dc.DrawLine(number, 0, number, 6)
-            width, height = dc.GetTextExtent(str(number))
-            dc.DrawText(str(number), (number - width / 2), 8)
-
-    def draw_big_numbers(self, dc, numbers):
-        dc.SetPen(wx.Pen('#000000'))
-        dc.SetFont(
-            wx.Font(9,
-                    wx.FONTFAMILY_DEFAULT,
-                    wx.FONTSTYLE_NORMAL,
-                    wx.FONTWEIGHT_BOLD,
-                    False,
-                    'Courier 10 Pitch')
-        )
-        
-        for number in numbers:
-            dc.DrawLine(number, 0, number, 9)
-            width, height = dc.GetTextExtent(str(number))
-            dc.DrawText(str(number), (number - width / 2), 12)
-
+    
 
     def on_mouse_event(self, e):
         #print(dir(e))
