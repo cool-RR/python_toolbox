@@ -249,6 +249,7 @@ class ScratchWheel(wx.Panel): # Gradient filling?
 
     def on_mouse_event(self, e):
         #todo: possibly do momentum, like in old shockwave carouselle
+        # todo: should probably stop cursor from moving when hitting a wall
         #print(dir(e))
         #return
         (w, h) = self.GetSize()
@@ -286,7 +287,9 @@ class ScratchWheel(wx.Panel): # Gradient filling?
             
             self.gui_project.set_active_node(node, modify_path=False)
                 
-        if e.LeftUp() or e.Leaving():
+        if e.LeftUp(): #or e.Leaving():
+            # todo: make sure that when leaving
+            # entire app, things don't get fucked
             if self.HasCapture():
                 self.ReleaseMouse()
             self.being_grabbed = False
