@@ -47,7 +47,7 @@ class ScratchWheel(wx.Panel): # Gradient filling?
         
         self.Unbind(wx.EVT_ERASE_BACKGROUND) # Good or bad?
 
-        self.SetCursor(cursor_collection)
+        self.SetCursor(cursor_collection.get_open_grab())
         
         self.gui_project = gui_project
         
@@ -266,7 +266,8 @@ class ScratchWheel(wx.Panel): # Gradient filling?
             self.gui_project.stop_playing()
             self.being_grabbed = True
             
-            self.CaptureMouse()
+            self.CaptureMouse()    
+            self.SetCursor(cursor_collection.get_closed_grab())
             return
         
         if e.LeftIsDown():
@@ -293,6 +294,7 @@ class ScratchWheel(wx.Panel): # Gradient filling?
             # entire app, things don't get fucked
             if self.HasCapture():
                 self.ReleaseMouse()
+            self.SetCursor(cursor_collection.get_open_grab())
             self.being_grabbed = False
             self.grabbed_angle = None
             self.grabbed_pseudoclock = None
