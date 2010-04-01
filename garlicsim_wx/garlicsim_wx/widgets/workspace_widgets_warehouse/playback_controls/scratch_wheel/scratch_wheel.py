@@ -12,6 +12,7 @@ import math
 
 import garlicsim, garlicsim_wx
 from garlicsim_wx.widgets import WorkspaceWidget
+from garlicsim_wx.general_misc import cursor_collection
 
 __all__ = ["ScratchWheel"]
 
@@ -46,7 +47,7 @@ class ScratchWheel(wx.Panel): # Gradient filling?
         
         self.Unbind(wx.EVT_ERASE_BACKGROUND) # Good or bad?
 
-        self.SetCursor(wx.StockCursor(wx.CURSOR_SIZING))
+        self.SetCursor(cursor_collection)
         
         self.gui_project = gui_project
         

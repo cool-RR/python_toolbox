@@ -53,6 +53,8 @@ def create(package):
     
     todo: works when frozen? Use pkg_resources?
     '''
+    # todo: Consider using `locals()[s] = value` to put stuff in module namespace.
+    # or maybe globals()? Is this possible at all here?
     
     things = {}
     modules = import_tools.import_all(package, silent_fail=False)
