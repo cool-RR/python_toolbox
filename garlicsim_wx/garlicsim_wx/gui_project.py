@@ -101,7 +101,7 @@ class GuiProject(object):
         '''Contains the wx.Timer object used when playing the simulation.'''
         
         
-        self.frame.Bind(wx.EVT_TIMER, self.__play_next_caller, self.timer_for_playing)
+        self.frame.Bind(wx.EVT_TIMER, self.__play_next, self.timer_for_playing)
         # use threadtimer? should have id or something
 
         self.defacto_playing_speed = 4
@@ -118,8 +118,6 @@ class GuiProject(object):
         created.
         '''
         
-        self.stuff_to_do_when_idle = Queue.Queue()
-        
     def __init_gui(self, parent_window):
         '''
         Initialization related to the widgets which make up the gui project.
@@ -130,7 +128,6 @@ class GuiProject(object):
         main_window.Bind(wx.EVT_MENU, self.fork_naturally,
                          id=s2i("Fork naturally"))
         
-        self.stuff_to_do_when_idle = Queue.Queue()
         self.main_window.Bind(wx.EVT_IDLE, self.on_idle)
 
         
@@ -154,12 +151,10 @@ class GuiProject(object):
     
     def on_idle(self, event=None):
         '''Handler for the wx.EVT_IDLE event.'''
-        try:
-            mission = self.stuff_to_do_when_idle.get(block=False)
-            mission()
-            event.RequestMore(True)
-        except Queue.Empty:
-            pass
+        
+        #event.RequestMore(True)
+        pass
+        
                 
 
     def make_plain_root(self, *args, **kwargs):
@@ -247,7 +242,6 @@ class GuiProject(object):
         self.real_time_krap = time.time()
         self.simulation_time_krap = self.active_node.state.clock
         
-        #self.stuff_to_do_when_idle.put(mission)
 
 
     def stop_playing(self):
@@ -269,8 +263,6 @@ class GuiProject(object):
         
         self.real_time_krap = self.simulation_time_krap = None
         
-        queue_tools.dump(self.stuff_to_do_when_idle)
-        assert self.stuff_to_do_when_idle.qsize() == 0
         self.project.ensure_buffer(self.active_node, self.default_buffer)
 
 
@@ -294,10 +286,7 @@ class GuiProject(object):
     def toggle_playing(self):
         '''Toggle the onscreen playback of the simulation.'''
         return self.stop_playing() if self.is_playing else self.start_playing()
-
-
-    def __play_next_caller(self, event=None):#tododoc
-        self.stuff_to_do_when_idle.put(self.__play_next)
+    
         
     def __play_next(self, event=None):
         '''
@@ -314,7 +303,7 @@ class GuiProject(object):
             (real_time_elapsed * self.defacto_playing_speed)
         
         both_nodes = self.path.get_node_by_clock(desired_simulation_time,
-                                               rounding='both')
+                                                 rounding='both')
 
         # correct rounding?
         #print(new_node)

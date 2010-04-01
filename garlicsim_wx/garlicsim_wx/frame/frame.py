@@ -42,6 +42,8 @@ class Frame(wx.Frame):
         wx.Frame.__init__(self, *args, **keywords)
         self.SetDoubleBuffered(True)
         
+        self.Bind(wx.EVT_CLOSE, self.exit)
+        
         """
         
         self.workspace_widgets = dict.fromkeys(workspace_widgets)
@@ -236,6 +238,9 @@ class Frame(wx.Frame):
 
     def exit(self, e=None):
         '''Close the application window.'''
+        print('Frame.exit called.')
+        if self.gui_project:
+            self.gui_project.stop_playing()
         self.aui_manager.UnInit()
         self.Destroy()        
         e.Skip()        
