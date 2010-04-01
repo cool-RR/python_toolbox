@@ -20,15 +20,15 @@ images_package = __images_package.__name__
 
 
 class PlaybackControls(wx.Panel, WorkspaceWidget):
-    #DoGetBestSize = lambda self: wx.Size(180, 96)
+    #DoGetBestSize = lambda self: wx.Size(180, 120)
     def __init__(self, frame):
-        wx.Panel.__init__(self, frame, -1, size=(180, 96),
+        wx.Panel.__init__(self, frame, -1, size=(180, 120),
                           style=wx.SUNKEN_BORDER)
         aui_pane_info = aui.AuiPaneInfo().\
             Caption('PLAYBACK CONTROLS').\
             CloseButton(False).\
             Fixed().\
-            BestSize(180, 96).MinSize(180, 96).MaxSize(180, 96)
+            BestSize(180, 120).MinSize(180, 120).MaxSize(180, 120)
         WorkspaceWidget.__init__(self, frame, aui_pane_info)
         
         self.Bind(wx.EVT_SIZE, self.on_size)
@@ -102,7 +102,7 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         v_sizer.Add(h_sizer,)
 
 
-        self.scratch_wheel = ScratchWheel(self, self.gui_project, -1, size=(180, 16))
+        self.scratch_wheel = ScratchWheel(self, self.gui_project, -1, size=(180, 40))
         v_sizer.Add(self.scratch_wheel, 1)
 
 
