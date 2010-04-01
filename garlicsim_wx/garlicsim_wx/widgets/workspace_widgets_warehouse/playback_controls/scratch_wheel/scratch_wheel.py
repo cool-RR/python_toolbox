@@ -14,6 +14,7 @@ import garlicsim, garlicsim_wx
 from garlicsim_wx.widgets import WorkspaceWidget
 from garlicsim_wx.general_misc import cursor_collection
 
+
 __all__ = ["ScratchWheel"]
 
 def pos_to_angle(pos):
@@ -96,26 +97,7 @@ class ScratchWheel(wx.Panel): # Gradient filling?
                    active_node.state.clock
         else:
             return active_node.state.clock
-            
-    
-        
-    def __calculate_lines(self):
-        w = self.Size[0]
-        angle = self.get_current_angle()
-        d_angle = (2 * math.pi) / self.n_lines
-        line_angles = (((angle + d_angle*i) % (2*math.pi)) for i in
-                       range(self.n_lines))
-        visible_line_angles = (angle for angle in line_angles
-                               if math.pi <= angle <= 2 * math.pi)
-        at_least_one = lambda x: 1.0 if x < 1 else x
-        get_line_pos = lambda angle: w * angle_to_pos(angle)
-        get_line_width = \
-            lambda angle: at_least_one(math.sin(angle)**2*self.line_width)
-        lines = ((get_line_pos(angle), get_line_width(angle))
-                 for angle in visible_line_angles) # (pos, width) per line
-        
-        return lines
-        
+                    
 
     def on_paint(self, e=None): # try to make the lines antialiased, they jump too much
         # make lines different from each other, to make easier to keep track
