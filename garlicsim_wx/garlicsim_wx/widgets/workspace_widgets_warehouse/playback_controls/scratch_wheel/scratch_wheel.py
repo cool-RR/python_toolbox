@@ -14,6 +14,7 @@ import garlicsim, garlicsim_wx
 from garlicsim_wx.widgets import WorkspaceWidget
 from garlicsim_wx.general_misc import cursor_collection
 
+import images
 
 __all__ = ["ScratchWheel"]
 
@@ -22,13 +23,14 @@ def pos_to_angle(pos):
 
 
 def expanded_pos_to_angle(pos):
-    if 0 <= pos <= 1:
-        return -math.acos(-1 + 2*pos)
-    else:
-        return -math.pi * (1 - pos)
+    #if 0 <= pos <= 1:
+    #    return -math.acos(-1 + 2*pos)
+    #else:
+    pos = (pos * 0.8) + 0.1
+    return -math.pi * (1 - pos)
 
-def angle_to_pos(angle):
-    return (1 + math.cos(-angle)) / 2
+#def angle_to_pos(angle):
+#    return (1 + math.cos(-angle)) / 2
 
 
 class ScratchWheel(wx.Panel): # Gradient filling?
@@ -105,8 +107,20 @@ class ScratchWheel(wx.Panel): # Gradient filling?
         if self.gui_project is None:
             return
         
-        (w, h) = self.GetSize()
+        #(w, h) = self.GetSize()
         dc = wx.PaintDC(self)
+        
+        angle = self.get_current_angle()
+        frame = int(
+            ((angle % ((2/3) * math.pi)) / (2 * math.pi)) * 3 * images.N_FRAMES
+        )
+        if frame == images.N_FRAMES:
+            frame =- 1
+        
+        bitmap = images.get_image(frame)
+        #bitmap.IsOk()
+        dc.DrawBitmap(bitmap, 0, 0)
+        """
         dc.SetBrush(wx.Brush('#777777'))
         dc.DrawRectangle(-1, -1, w+2, h+2)
         
@@ -122,7 +136,7 @@ class ScratchWheel(wx.Panel): # Gradient filling?
             gc.DrawRectangle(*rectangle)
         #$#gc.PopState()
         #'''
-        
+        """
         """
         font = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
         font.SetWeight(wx.BOLD)
@@ -240,7 +254,7 @@ class ScratchWheel(wx.Panel): # Gradient filling?
         (rx, ry)= (x/w, y/h)
         
         if e.LeftDown():
-            self.angle_while_grabbing = self.grabbed_angle = pos_to_angle(rx)
+            self.angle_while_grabbing = self.grabbed_angle = expanded_pos_to_angle(rx)
             self.d_angle_while_grabbing = 0
             self.desired_clock_while_grabbing = self.grabbed_pseudoclock = \
                 self.__get_current_pseudoclock()

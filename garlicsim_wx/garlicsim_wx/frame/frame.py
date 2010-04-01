@@ -280,7 +280,7 @@ class Frame(wx.Frame):
         self.playback_controls = workspace_widgets['PlaybackControls'](self)
         self.playback_controls.aui_pane_info\
             .Bottom().Row(0).Position(1)\
-            .BestSize(180, 120).MinSize(180, 120).MaxSize(180, 120)\
+            .BestSize(184, 128).MinSize(184, 128).MaxSize(184, 128)\
             .Resizable(False)
         
         
