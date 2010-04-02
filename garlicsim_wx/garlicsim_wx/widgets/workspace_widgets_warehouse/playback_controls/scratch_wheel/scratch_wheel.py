@@ -61,9 +61,13 @@ class ScratchWheel(wx.Panel): # Gradient filling?
         self.n_lines = 15
         
         self.line_width = 20
+
+        self.frame_number_that_should_be_drawn = None
         
-        self.current_picture_frame = -1
+        self.current_frame_number = -1
         # Set to -1 to make sure first drawing won't fuck up
+        
+        self.image_size = images.get_image_size()
         
         self.clock_factor = 0.05 # todo: maybe rename
         
@@ -76,6 +80,8 @@ class ScratchWheel(wx.Panel): # Gradient filling?
         self.desired_clock_while_grabbing = None
         
         self.was_playing_before_drag = None
+        
+        self.__calculate_frame_number()
 
         
     def get_current_angle(self):
@@ -103,28 +109,38 @@ class ScratchWheel(wx.Panel): # Gradient filling?
         else:
             return active_node.state.clock
                     
-
+    def __calculate_frame_number(self):
+        angle = self.get_current_angle()
+        frame_number = int(
+            ((angle % ((2/3) * math.pi)) / (2 * math.pi)) * 3 * images.N_FRAMES
+        )
+        if frame_number == images.N_FRAMES:
+            frame_number =- 1
+        
+        self.frame_number_that_should_be_drawn = frame_number
+    
+    def __redraw_if_wheel_should_rotate(self):
+        self.frame_number_that_should_be_drawn = self.__calculate_frame_number()
+        if self.frame_number_that_should_be_drawn != self.current_frame_number:
+            self.Refresh()
+        
     def on_paint(self, e=None): # try to make the lines antialiased, they jump too much
         # make lines different from each other, to make easier to keep track
         
         if self.gui_project is None:
             return
         
-        #(w, h) = self.GetSize()
+        (w, h) = self.GetClientRect()[2:4]
         
-        
-        angle = self.get_current_angle()
-        frame = int(
-            ((angle % ((2/3) * math.pi)) / (2 * math.pi)) * 3 * images.N_FRAMES
-        )
-        if frame == images.N_FRAMES:
-            frame =- 1
+        (iw, ih) = self.image_size
 
-        if frame != self.current_picture_frame:    
-            bitmap = images.get_image(frame)
-            dc = wx.PaintDC(self)
-            dc.DrawBitmap(bitmap, 0, 0)
-            self.current_picture_frame = frame
+        (ix, iy) = ((w-iw)/2, (h-ih)/2)
+        
+        
+        bitmap = images.get_image(self.frame_number_that_should_be_drawn)
+        dc = wx.PaintDC(self)
+        dc.DrawBitmap(bitmap, 0, 0)
+        self.current_frame_number = self.frame_number_that_should_be_drawn
             
         """
         dc.SetBrush(wx.Brush('#777777'))
@@ -255,7 +271,7 @@ class ScratchWheel(wx.Panel): # Gradient filling?
         # todo: should probably stop cursor from moving when hitting a wall
         #print(dir(e))
         #return
-        (w, h) = self.GetSize()
+        (w, h) = self.GetClientRect()[2:4]
         (x, y) = e.GetPositionTuple()
         (rx, ry)= (x/w, y/h)
         

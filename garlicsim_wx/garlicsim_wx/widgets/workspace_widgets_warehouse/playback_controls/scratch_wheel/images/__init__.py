@@ -22,4 +22,12 @@ def get_image(i):
     assert len(cached_images) == N_FRAMES
     
     return cached_images[i]
-    
+
+cached_image_size = None
+
+def get_image_size():
+    if cached_image_size:
+        return cached_image_size
+    else:
+        image = get_image(0)
+        return image.GetSize()
