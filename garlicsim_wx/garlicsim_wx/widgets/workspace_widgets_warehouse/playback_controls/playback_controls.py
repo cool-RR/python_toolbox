@@ -118,6 +118,8 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
             
     def update_buttons_status(self, e=None):
         
+        self.scratch_wheel._ScratchWheel__redraw_if_wheel_should_rotate()        
+        
         active_node = self.gui_project.active_node
         
         if self.gui_project.path is None:
