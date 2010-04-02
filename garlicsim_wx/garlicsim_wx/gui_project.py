@@ -97,12 +97,11 @@ class GuiProject(object):
         '''
         self.default_buffer = 100 # Should be a mechanism for setting that
 
-        self.timer_for_playing = wx.Timer(self.frame)
+        self.timer_for_playing = thread_timer.ThreadTimer(self.frame)
         '''Contains the wx.Timer object used when playing the simulation.'''
         
-        
-        self.frame.Bind(wx.EVT_TIMER, self.__play_next, self.timer_for_playing)
-        # use threadtimer? should have id or something
+        self.frame.Bind(thread_timer.EVT_THREAD_TIMER, self.__play_next,
+                        self.timer_for_playing)
 
         self.defacto_playing_speed = 4
         self.official_playing_speed = 4

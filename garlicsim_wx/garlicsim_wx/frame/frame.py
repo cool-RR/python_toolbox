@@ -145,7 +145,8 @@ class Frame(wx.Frame):
         
         self.background_timer = thread_timer.ThreadTimer(self)
         self.background_timer.start(150)
-        self.Bind(thread_timer.EVT_THREAD_TIMER, self.sync_crunchers)
+        self.Bind(thread_timer.EVT_THREAD_TIMER, self.sync_crunchers,
+                  self.background_timer)
 
         ######################################
         
