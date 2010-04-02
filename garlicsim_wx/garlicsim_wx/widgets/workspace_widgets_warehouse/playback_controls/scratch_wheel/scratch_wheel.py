@@ -148,9 +148,9 @@ class ScratchWheel(wx.Panel): # Gradient filling?
         bitmap = images.get_image(self.frame_number_that_should_be_drawn)
         dc = wx.PaintDC(self)
         dc.DrawBitmap(bitmap, ox, oy)
+        # todo: Is the way I draw the bitmap the fastest way?
         self.current_frame_number = self.frame_number_that_should_be_drawn
             
-        
     def on_mouse_event(self, e):
         #todo: possibly do momentum, like in old shockwave carouselle
         # todo: should probably stop cursor from moving when hitting a wall
