@@ -29,6 +29,11 @@ def expanded_pos_to_angle(pos):
     pos = (pos * 0.8) + 0.1
     return -math.pi * (1 - pos)
 
+def expanded_angle_to_pos(angle):
+    pos = 1 - (angle / (-math.pi))
+    return (pos - 0.1) / 0.8
+    
+
 #def angle_to_pos(angle):
 #    return (1 + math.cos(-angle)) / 2
 
@@ -97,10 +102,17 @@ class ScratchWheel(wx.Panel): # Gradient filling?
         
         if self.being_grabbed is True:
             
+            
             if active_node.parent is None or len(active_node.children) == 0:
                 return active_node.state.clock
             else:
-                return self.desired_clock_while_grabbing
+                clock = self.desired_clock_while_grabbing
+                if clock < self.gui_project.path[0].state.clock:
+                    return self.gui_project.path[0].state.clock
+                elif clock > self.gui_project.path[-1].state.clock:
+                    return self.gui_project.path[-1].state.clock
+                else:
+                    return clock
         
         elif gui_project.is_playing:
             return gui_project.simulation_time_krap or \
@@ -178,12 +190,20 @@ class ScratchWheel(wx.Panel): # Gradient filling?
 
             self.gui_project.set_active_node(node, modify_path=False)
             
-            """if list(both_nodes).count(None) == 1: # Means we got an edge node
+            if list(both_nodes).count(None) == 1: # Means we got an edge node
                 edge_clock = node.state.clock
                 direction = -1 if node is both_nodes[0] else 1
                 # direction that we bring back the cursor to if it goes too far
-                x_of_edge = 
-            """
+                d_clock = (edge_clock - self.grabbed_pseudoclock)
+                d_angle = d_clock * self.clock_factor
+                edge_angle = self.grabbed_angle + d_angle
+                edge_rx = expanded_angle_to_pos(edge_angle)
+                edge_x = edge_rx * w
+                is_going_over = \
+                    (edge_x - x > 0) if direction == 1 else (edge_x - x < 0)
+                if is_going_over:
+                    self.WarpPointer(edge_x, y)
+            
                 
         if e.LeftUp(): #or e.Leaving():
             # todo: make sure that when leaving
