@@ -312,7 +312,13 @@ class GuiProject(object):
             both_nodes = (both_nodes[1], both_nodes[0])
                 
         new_node = both_nodes[0]
-        assert new_node
+        
+        if new_node is None:
+            # This is for dealing with this edge case:
+            assert both_nodes[1].state.clock == desired_simulation_time
+            # Happens when moving to start of path while playing.
+            new_node = both_nodes[1]
+            
 
         self.real_time_krap = current_real_time
 

@@ -62,6 +62,9 @@ class ScratchWheel(wx.Panel): # Gradient filling?
         
         self.line_width = 20
         
+        self.current_picture_frame = -1
+        # Set to -1 to make sure first drawing won't fuck up
+        
         self.clock_factor = 0.05 # todo: maybe rename
         
         self.being_grabbed = False
@@ -108,7 +111,7 @@ class ScratchWheel(wx.Panel): # Gradient filling?
             return
         
         #(w, h) = self.GetSize()
-        dc = wx.PaintDC(self)
+        
         
         angle = self.get_current_angle()
         frame = int(
@@ -116,10 +119,13 @@ class ScratchWheel(wx.Panel): # Gradient filling?
         )
         if frame == images.N_FRAMES:
             frame =- 1
-        
-        bitmap = images.get_image(frame)
-        #bitmap.IsOk()
-        dc.DrawBitmap(bitmap, 0, 0)
+
+        if frame != self.current_picture_frame:    
+            bitmap = images.get_image(frame)
+            dc = wx.PaintDC(self)
+            dc.DrawBitmap(bitmap, 0, 0)
+            self.current_picture_frame = frame
+            
         """
         dc.SetBrush(wx.Brush('#777777'))
         dc.DrawRectangle(-1, -1, w+2, h+2)
