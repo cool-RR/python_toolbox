@@ -85,8 +85,7 @@ class ScratchWheel(wx.Panel): # Gradient filling?
 
         
     def get_current_angle(self):
-        return (self.__get_current_pseudoclock() * self.clock_factor) % \
-               (2*math.pi)
+        return self.__get_current_pseudoclock() * self.clock_factor
     
     def __get_current_pseudoclock(self): 
         gui_project = self.gui_project
@@ -130,16 +129,13 @@ class ScratchWheel(wx.Panel): # Gradient filling?
         if self.gui_project is None:
             return
         
-        (w, h) = self.GetClientRect()[2:4]
+        bw, bh = self.GetWindowBorderSize()
         
-        (iw, ih) = self.image_size
-
-        (ix, iy) = ((w-iw)/2, (h-ih)/2)
-        
+        ox, oy = ((4 - bw) / 2 , (4 - bh) / 2)
         
         bitmap = images.get_image(self.frame_number_that_should_be_drawn)
         dc = wx.PaintDC(self)
-        dc.DrawBitmap(bitmap, ix, iy)
+        dc.DrawBitmap(bitmap, ox, oy)
         self.current_frame_number = self.frame_number_that_should_be_drawn
             
         
@@ -148,9 +144,9 @@ class ScratchWheel(wx.Panel): # Gradient filling?
         # todo: should probably stop cursor from moving when hitting a wall
         #print(dir(e))
         #return
-        (w, h) = self.GetClientRect()[2:4]
+        (w, h) = self.GetClientSize()
         (x, y) = e.GetPositionTuple()
-        (rx, ry)= (x/w, y/h)
+        (rx, ry) = (x/w, y/h)
         
         if e.LeftDown():
             self.angle_while_grabbing = self.grabbed_angle = expanded_pos_to_angle(rx)
@@ -179,8 +175,15 @@ class ScratchWheel(wx.Panel): # Gradient filling?
             )
         
             node = both_nodes[0] or both_nodes[1]
-            
+
             self.gui_project.set_active_node(node, modify_path=False)
+            
+            """if list(both_nodes).count(None) == 1: # Means we got an edge node
+                edge_clock = node.state.clock
+                direction = -1 if node is both_nodes[0] else 1
+                # direction that we bring back the cursor to if it goes too far
+                x_of_edge = 
+            """
                 
         if e.LeftUp(): #or e.Leaving():
             # todo: make sure that when leaving
