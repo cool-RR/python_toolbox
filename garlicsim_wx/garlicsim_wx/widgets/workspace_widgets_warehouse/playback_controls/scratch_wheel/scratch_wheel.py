@@ -273,9 +273,7 @@ class ScratchWheel(wx.Panel): # Gradient filling?
             self.d_angle_while_grabbing = (self.angle_while_grabbing - self.grabbed_angle)
             self.desired_clock_while_grabbing = self.grabbed_pseudoclock + \
                 (self.d_angle_while_grabbing / self.clock_factor)
-            
-            print(self.desired_clock_while_grabbing)
-            
+                       
             both_nodes = self.gui_project.path.get_node_by_clock(
                 self.desired_clock_while_grabbing,
                 rounding='both'
