@@ -393,7 +393,7 @@ class Path(object): #todo: add __reversed__ here, maybe also in Block and others
 path, but it's completely empty.''')
     
         
-    def get_node_by_clock(self, clock, rounding="closest", end_node=None):
+    def get_node_by_clock(self, clock, rounding='closest', end_node=None):
         '''
         Get a node according to its clock.
         
@@ -409,7 +409,7 @@ path, but it's completely empty.''')
         
     
     def get_node_by_monotonic_function(self, function, value,
-                                       rounding="closest", end_node=None):
+                                       rounding='closest', end_node=None):
         '''
         Get a node by specifying a measure function and a desired value.
         
@@ -509,7 +509,7 @@ path, but it's completely empty.''')
                 else: # cmp_last == 1 and function(last) > value
                     # The two final results are both in the block.
                     return binary_search.binary_search(block, function, value,
-                                                       rounding="both")
+                                                       rounding='both')
                     
                 
             else: # thing is a Node
@@ -545,7 +545,7 @@ path, but it's completely empty.''')
         
         If no such node exists, returns None.
         '''
-        temp = self.get_node_by_clock(timepoint, rounding="both")
+        temp = self.get_node_by_clock(timepoint, rounding='both')
         if list(temp).count(None) == 0:
             return temp[0]
         else:

@@ -55,7 +55,7 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         return self.path.__getitem__(index, end=self.end_node).state
     
     def get_state_by_monotonic_function(self, function, value,
-                                        rounding="closest"):
+                                        rounding='closest'):
         '''
         Get a state by specifying a measure function and a desired value.
         
@@ -64,13 +64,13 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         See documentation of garlicsim.general_misc.binary_search.binary_search
         for details about rounding options.
         '''
-        assert rounding in ["high", "low", "exact", "both", "closest"]
+        assert rounding in ['high', 'low', 'exact', 'both', 'closest']
         
         new_function = lambda node: function(node.state)
         result_in_nodes = self.path.get_node_by_monotonic_function \
                         (new_function, value, rounding, end_node=self.end_node)
         
-        if rounding == "both":
+        if rounding == 'both':
             result = [(node.state if node is not None else None) \
                       for node in result_in_nodes]
         else:
