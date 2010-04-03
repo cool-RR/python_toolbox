@@ -277,13 +277,6 @@ class Frame(wx.Frame):
             .Bottom().Row(0)\
             .BestSize(1000, 100).MinSize(200, 50).MaxSize(10000, 250)\
             .Floatable(False)
-
-        self.playback_controls = workspace_widgets['PlaybackControls'](self)
-        self.playback_controls.aui_pane_info\
-            .Bottom().Row(0).Position(1)\
-            .BestSize(184, 128).MinSize(184, 128).MaxSize(184, 128)\
-            .Resizable(False)
-        
         
         self.seek_bar = workspace_widgets['SeekBar'](self)
         self.seek_bar.aui_pane_info\
@@ -295,10 +288,17 @@ class Frame(wx.Frame):
         self.shell.aui_pane_info\
             .Right().Row(0)\
             .BestSize(400, 600)
-            
+
+        self.playback_controls = workspace_widgets['PlaybackControls'](self)
+        self.playback_controls.aui_pane_info\
+            .Left()\
+            .BestSize(184, 128).MinSize(184, 128).MaxSize(184, 128)\
+            .Resizable(False)
+        
         self.state_repr_shower = workspace_widgets['StateReprShower'](self)
         self.state_repr_shower.aui_pane_info\
-            .BestSize(300, 300)
+            .BestSize(300, 300)\
+            .MaximizeButton()
             
         self.aui_manager.Update()
         
