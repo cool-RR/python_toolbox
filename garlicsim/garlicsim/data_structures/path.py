@@ -457,7 +457,7 @@ path, but it's completely empty.''')
         if cmp_root == 0: # function(root) == value
             return (root, root)
 
-        assert cmp_root == -1 and function(root) < value
+        assert cmp_root == -1 # and function(root) < value
         
         # Now we've established that the first node in the path has a strictly
         # lower value than what we're looking for.
@@ -518,11 +518,13 @@ path, but it's completely empty.''')
                 
                 cmp_node = cmp(function(node), value)
                                 
-                if cmp_node == -1: # function(node) > value
-                    return (low, node)
-                else: # function(node) < value
+                if cmp_node == -1: # function(node) < value
                     low = node
                     continue
+                elif cmp_node == 0: # function(node) == value
+                    return (node, node)
+                else: # function(node) > value
+                    return (low, node)
         
 
         # If the flow reached here, that means that even the last node in the
