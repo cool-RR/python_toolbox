@@ -433,41 +433,47 @@ path, but it's completely empty.''')
                     new_both[1] = None
                 return tuple(new_both)
         
-        low = self.root
+        root = self.root
         
-        if function(low) >= value:
-            both = correct_both_for_end_node((None, low))
+        function_root = function(root)
+        
+        if function_root >= value:
+            if function_root > value:
+                both = correct_both_for_end_node((None, root))
+            else: # function_root == value, at least mathematically
+                both = correct_both_for_end_node((root, root))
             return binary_search.make_both_data_into_preferred_rounding \
                    (both, function, value, rounding)
         
-        '''
-        Now we've established that the first node in the path has a lower value
-        than what we're looking for.
-        '''
+        # Now we've established that the first node in the path has a lower value
+        # than what we're looking for.
+        
+        
+        # A rule we will obey in this function: `low` will always be a member
+        # whose value is lower than the desired value. (Strongly lower, meaning
+        # not lower-or-equal.)
+        
+        low = self.root
         
         for thing in self.iterate_blockwise():
             if isinstance(thing, Block):
                 first = thing[0]
-
-                function_first = function(first)
                 
-                if function_first <= value:
+                if function(first) < value:
                     low = first
                 
-                if function_first >= value:
+                else: # function(first) >= value
                     both = correct_both_for_end_node((low, first))
                     return binary_search.make_both_data_into_preferred_rounding \
                            (both, function, value, rounding)
                     
                 last = thing[-1]
                 
-                function_last = function(last)
-                
-                if function_last <= value:
+                if function(last) < value:
                     low = last
                     continue
                 
-                if function_last >= value:
+                else: # function_last >= value
                     # It's in the block
                     both = binary_search.binary_search(thing, function, value,
                                                        rounding="both")
