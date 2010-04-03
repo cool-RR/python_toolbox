@@ -7,6 +7,8 @@ A module for doing a binary search in a sequence.
 Todo: wrap all things in tuples?
 
 todo: add option to specify cmp.
+
+todo: possibly change 'low' to class Low(RoundingOption).
 '''
 
 
@@ -43,7 +45,7 @@ def binary_search(sequence, function, value, rounding="closest"):
     Therefore, you better not use it on sequences in which None is a possible
     item.
     '''
-    assert rounding in ["high", "low", "exact", "both", "closest"]
+    assert rounding in ("high", "low", "exact", "both", "closest")
     
     if not sequence:
         if rounding == 'both':

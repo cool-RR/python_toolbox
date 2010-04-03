@@ -419,87 +419,116 @@ path, but it's completely empty.''')
         for details about rounding options.
         '''
         
-        assert rounding in ["high", "low", "exact", "both", "closest"]        
+        assert rounding in ('high', 'low', 'exact', 'both', 'closest')
 
-        if end_node is None:
-            correct_both_for_end_node = lambda both: both
-        else:
-            def correct_both_for_end_node(both):
-                new_both = list(both)
-                end_clock = end_node.state.clock
-                if new_both[0] and new_both[0].state.clock >= end_clock:
-                    new_both[0] = end_node
-                if new_both[1] and new_both[1].state.clock >= end_clock:
-                    new_both[1] = None
-                return tuple(new_both)
+        both = \
+            self.__get_node_by_monotonic_function_with_both_rounding(function,
+                                                                     value)
+        
+        if end_node is not None:
+            new_both = list(both)
+            end_clock = end_node.state.clock
+            if new_both[0] and new_both[0].state.clock >= end_clock:
+                new_both[0] = end_node
+            if new_both[1] and new_both[1].state.clock >= end_clock:
+                new_both[1] = None
+            both = tuple(new_both)
+        
+        return binary_search.make_both_data_into_preferred_rounding \
+               (both, function, value, rounding)
+                    
+    
+    def __get_node_by_monotonic_function_with_both_rounding(self, function,
+                                                            value):
+        '''
+        tododoc
+        
+        note that this function does not let you specify an end node. currently
+        we're not optimizing for the case where you have an end node and this
+        function might waste resources exploring beyond it.
+        '''
         
         root = self.root
         
-        function_root = function(root)
+        cmp_root = cmp(function(root), value)
         
-        if function_root >= value:
-            if function_root > value:
-                both = correct_both_for_end_node((None, root))
-            else: # function_root == value, at least mathematically
-                both = correct_both_for_end_node((root, root))
-            return binary_search.make_both_data_into_preferred_rounding \
-                   (both, function, value, rounding)
+        if cmp_root == 1: # function(root) > value
+            return (None, root)
+        if cmp_root == 0: # function(root) == value
+            return (root, root)
+
+        assert cmp_root == -1 and function(root) < value
         
-        # Now we've established that the first node in the path has a lower value
-        # than what we're looking for.
+        # Now we've established that the first node in the path has a strictly
+        # lower value than what we're looking for.
         
-        
-        # A rule we will obey in this function: `low` will always be a member
-        # whose value is lower than the desired value. (Strongly lower, meaning
-        # not lower-or-equal.)
+        # A rule we will strictly obey in this function: `low` will always be a
+        # member whose value is lower than the desired value. (Strictly lower,
+        # meaning not lower-or-equal.)
         
         low = self.root
         
         for thing in self.iterate_blockwise():
+            
+            # Rule: Every time we inspect a new node/block, `low` will be the
+            # node that is its immediate parent. i.e. The highest node possible
+            # from those that we have previously examined.
+            
             if isinstance(thing, Block):
-                first = thing[0]
                 
-                if function(first) < value:
+                block = thing
+                
+                first = block[0]
+
+                cmp_first = cmp(function(first), value)
+                
+                if cmp_first == -1: # function(first) < value
                     low = first
                 
-                else: # function(first) >= value
-                    both = correct_both_for_end_node((low, first))
-                    return binary_search.make_both_data_into_preferred_rounding \
-                           (both, function, value, rounding)
+                elif cmp_first == 0: # function(first) == value
+                    return (first, first)
                     
-                last = thing[-1]
+                else: # cmp_first == 1 and function(first) > value
+                    return (low, first)
+                    
                 
-                if function(last) < value:
+                # At this point we know that the first node in the block has a
+                # strictly lower value than the target value.
+                
+                last = block[-1]
+                
+                cmp_last = cmp(function(last), value)
+                
+                if cmp_last == -1: # function(last) < value
                     low = last
                     continue
                 
-                else: # function_last >= value
-                    # It's in the block
-                    both = binary_search.binary_search(thing, function, value,
+                elif cmp_last == 0: # function(last) == value                
+                    return (last, last)
+                
+                else: # cmp_last == 1 and function(last) > value
+                    # The two final results are both in the block.
+                    return binary_search.binary_search(block, function, value,
                                                        rounding="both")
-                    both = correct_both_for_end_node(both)
-                    return binary_search.make_both_data_into_preferred_rounding \
-                           (both, function, value, rounding)
-                else:
-                    low = last
-                    continue
+                    
+                
             else: # thing is a Node
-                if function(thing) >= value:
-                    both = correct_both_for_end_node((low, thing))
-                    return binary_search.make_both_data_into_preferred_rounding \
-                           (both, function, value, rounding)
-                else:
-                    low = thing
+                
+                node = thing
+                
+                cmp_node = cmp(function(node), value)
+                                
+                if cmp_node == -1: # function(node) > value
+                    return (low, node)
+                else: # function(node) < value
+                    low = node
                     continue
         
-        '''
-        If the flow reached here, that means that even the last node
-        in the path has lower value than the value we're looking for.
-        '''
+
+        # If the flow reached here, that means that even the last node in the
+        # path has lower value than the value we're looking for.
         
-        both = correct_both_for_end_node((low, None))
-        return binary_search.make_both_data_into_preferred_rounding \
-               (both, function, value, rounding)
+        return (low, None)
             
     
     def get_node_occupying_timepoint(self, timepoint):
