@@ -107,8 +107,6 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
             self, -1, bitmaps_dict['to_end'], size=(31, 50)
         )
         
-        # Some buttons should be grayed out depending on the path!
-        
         
         self.Bind(wx.EVT_BUTTON, self.on_button_to_start,
                   source=self.button_to_start)

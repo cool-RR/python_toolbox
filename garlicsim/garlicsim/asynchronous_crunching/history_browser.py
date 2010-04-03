@@ -193,7 +193,7 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         See documentation of garlicsim.general_misc.binary_search.binary_search
         for details about rounding options.
         '''
-        assert rounding in ['high', 'low', 'exact', 'both', 'closest']
+        assert rounding in ('high', 'low', 'exact', 'both', 'closest')
         our_node = self.__get_our_node()
         path = our_node.make_containing_path()
         new_function = lambda node: function(node.state)
@@ -214,7 +214,7 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         See documentation of garlicsim.general_misc.binary_search.binary_search
         for details about rounding options.
         '''
-        assert rounding in ['high', 'low', 'exact', 'both', 'closest']
+        assert rounding in ('high', 'low', 'exact', 'both', 'closest')
         queue = self.cruncher.work_queue
         queue_as_list = queue_tools.queue_as_list(queue)
         # todo: Probably inefficient, should access them one by one
