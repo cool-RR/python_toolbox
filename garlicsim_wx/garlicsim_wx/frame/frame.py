@@ -287,7 +287,8 @@ class Frame(wx.Frame):
         self.shell = workspace_widgets['Shell'](self)
         self.shell.aui_pane_info\
             .Right().Row(0)\
-            .BestSize(400, 600)
+            .BestSize(400, 600)\
+            .MaximizeButton(True)
 
         self.playback_controls = workspace_widgets['PlaybackControls'](self)
         self.playback_controls.aui_pane_info\
@@ -298,7 +299,7 @@ class Frame(wx.Frame):
         self.state_repr_shower = workspace_widgets['StateReprShower'](self)
         self.state_repr_shower.aui_pane_info\
             .BestSize(300, 300)\
-            .MaximizeButton()
+            .MaximizeButton(True)
             
         self.aui_manager.Update()
         
