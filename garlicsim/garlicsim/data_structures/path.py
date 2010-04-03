@@ -448,13 +448,26 @@ path, but it's completely empty.''')
         for thing in self.iterate_blockwise():
             if isinstance(thing, Block):
                 first = thing[0]
-                if function(first) >= value:
+
+                function_first = function(first)
+                
+                if function_first <= value:
+                    low = first
+                
+                if function_first >= value:
                     both = correct_both_for_end_node((low, first))
                     return binary_search.make_both_data_into_preferred_rounding \
                            (both, function, value, rounding)
                     
                 last = thing[-1]
-                if function(last) >= value:
+                
+                function_last = function(last)
+                
+                if function_last <= value:
+                    low = last
+                    continue
+                
+                if function_last >= value:
                     # It's in the block
                     both = binary_search.binary_search(thing, function, value,
                                                        rounding="both")

@@ -348,6 +348,7 @@ class GuiProject(object):
 
 
     def edit_from_active_node(self, e=None):
+        # todo: event argument is bad, in other places too
         '''
         Fork the simulation from the active node by editing.
         

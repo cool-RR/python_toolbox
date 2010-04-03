@@ -13,7 +13,9 @@ class NodesAdded(int):
     
     NodesAdded is jsut a subclass of int which has a nice __repr__ saying
     '<7 nodes were added to the tree>' instead of just '7'.
-    '''
+    '''    
+    # todo: this class is borderline redundant. Also, I think Maciej said not
+    # to subclass builtin types in his pycon talk.
     def __repr__(self):
         return '<' + int.__repr__(self) + ' nodes were added to the tree>'
     

@@ -10,6 +10,8 @@ import garlicsim_wx
 __all__ = ["Shell"]
 
 class Shell(wx.py.shell.Shell, WorkspaceWidget):#tododoc
+    # todo: After every command in shell, must send a big refresh signal to
+    # everything
     def __init__(self, frame):
         locals_for_shell = {
             'f': frame,
