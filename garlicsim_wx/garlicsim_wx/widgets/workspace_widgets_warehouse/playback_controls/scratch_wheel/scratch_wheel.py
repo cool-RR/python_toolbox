@@ -38,8 +38,10 @@ def expanded_angle_to_pos(angle):
 #    return (1 + math.cos(-angle)) / 2
 
 
-class ScratchWheel(wx.Panel): # Gradient filling?
-    #This shit needs to get redrawed often enough to see the wheel move when playing
+class ScratchWheel(wx.Panel):
+    # todo: This shit needs to get redrawed often enough to see the wheel move
+    # when playing
+    # todo: Add simple motion blur when moving fast.
     def __init__(self, parent, gui_project, *args, **kwargs):
         
         if 'style' in kwargs:

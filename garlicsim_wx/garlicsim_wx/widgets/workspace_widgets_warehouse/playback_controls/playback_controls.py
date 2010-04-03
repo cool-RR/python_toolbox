@@ -133,7 +133,7 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         
         for button in button_line:
             h_sizer.Add(button, 0)
-        v_sizer.Add(h_sizer, 0)
+        v_sizer.Add(h_sizer, 1, wx.EXPAND)
 
 
         self.scratch_wheel = ScratchWheel(self, self.gui_project, -1, size=(184, 48))
