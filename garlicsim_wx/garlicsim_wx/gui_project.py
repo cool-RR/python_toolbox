@@ -147,12 +147,7 @@ class GuiProject(object):
     def get_active_state(self):#tododoc
         return self.active_node.state if self.active_node is not None else None
         
-    
-    def on_idle(self, event=None):
-        '''Handler for the wx.EVT_IDLE event.'''
-        
-        #event.RequestMore(True)
-        pass
+
         
                 
 

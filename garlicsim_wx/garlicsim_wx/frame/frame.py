@@ -347,7 +347,4 @@ class Frame(wx.Frame):
         
         return nodes_added
     
-    def on_idle(self, event):
-        if self.gui_project:
-            return self.gui_project.on_idle(event)
 

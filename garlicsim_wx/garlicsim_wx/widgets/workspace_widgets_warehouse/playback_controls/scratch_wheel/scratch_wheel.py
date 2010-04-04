@@ -55,7 +55,7 @@ class ScratchWheel(wx.Panel):
         self.Bind(wx.EVT_PAINT, self.on_paint)
         self.Bind(wx.EVT_SIZE, self.on_size)
         self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse_event)
-        
+        self.Bind(wx.EVT_IDLE, self.on_idle)
         self.Unbind(wx.EVT_ERASE_BACKGROUND) # Good or bad?
 
         self.SetCursor(cursor_collection.get_open_grab())
@@ -352,3 +352,7 @@ class ScratchWheel(wx.Panel):
         self.Refresh()
         if e is not None:
             e.Skip()
+            
+    def on_idle(self, event):
+        if self.current_motion_blur_bitmap != images.get_blurred_gear_image(0):
+            self.Refresh()
