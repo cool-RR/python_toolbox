@@ -9,6 +9,7 @@ from __future__ import division
 
 import wx
 import math
+import time
 
 import garlicsim, garlicsim_wx
 from garlicsim_wx.widgets import WorkspaceWidget
@@ -86,6 +87,17 @@ class ScratchWheel(wx.Panel):
         self.d_angle_while_grabbing = None
         self.desired_clock_while_grabbing = None
         
+        self.velocity_tracking_counter = 0
+        self.velocity_tracking_period = 100
+        self.last_tracked_time_and_angle = None
+        self.current_velocity_estimate = 0
+        '''
+        units of radian per second, and that's a real world second, not in the
+        simulation.
+        '''
+        self.velocity_for_maximal_motion_blur = 30
+        self.current_motion_blur_alpha = 0
+        
         self.was_playing_before_drag = None
         
         self.__calculate_frame_number()
@@ -132,16 +144,39 @@ class ScratchWheel(wx.Panel):
         
         self.frame_number_that_should_be_drawn = frame_number
     
-    def __redraw_if_wheel_should_rotate(self):
+    def __redraw_if_wheel_should_rotate(self):        
         self.__calculate_frame_number()
         if self.frame_number_that_should_be_drawn != self.current_frame_number:
             self.Refresh()
+    
+    def __calculate_velocity_estimate_if_needed(self):
         
+        if self.velocity_tracking_counter == 0:
+
+            current = (time.time(), self.get_current_angle())
+            last = self.last_tracked_time_and_angle
+
+            d_angle = current[1] - last[1]
+            d_time = current[0] - last[0]
+            
+            if d_time == 0:
+                self.current_velocity_estimate = 0
+                # We rather have a fake velocity than raise an exception
+            
+            self.current_velocity_estimate = d_angle / d_time
+            
+            self.last_tracked_time_and_angle = current
+        
+        self.velocity_tracking_counter += 1
+        self.velocity_tracking_counter %= self.velocity_tracking_period
+            
     def on_paint(self, e=None):
-        
         
         if self.gui_project is None:
             return
+        
+        self.__calculate_velocity_estimate_if_needed()
+        velocity = self.current_velocity_estimate
         
         bw, bh = self.GetWindowBorderSize()
         
@@ -154,10 +189,9 @@ class ScratchWheel(wx.Panel):
         self.current_frame_number = self.frame_number_that_should_be_drawn
             
     def on_mouse_event(self, e):
-        #todo: possibly do momentum, like in old shockwave carouselle
-        # todo: should probably stop cursor from moving when hitting a wall
-        #print(dir(e))
-        #return
+        #todo: possibly do momentum, like in old shockwave carouselle.
+        # todo: right click should give context menu with 'Sensitivity...'
+        
         (w, h) = self.GetClientSize()
         (x, y) = e.GetPositionTuple()
         (rx, ry) = (x/w, y/h)
@@ -224,7 +258,7 @@ class ScratchWheel(wx.Panel):
                 self.gui_project.start_playing()
             
             self.was_playing_before_drag = None
-        
+            
         return
         if e.RightDown():
             self.gui_project.stop_playing()
