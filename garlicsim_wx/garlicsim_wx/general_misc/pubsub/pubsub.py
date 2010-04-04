@@ -57,6 +57,7 @@ class Event(object):
         if self.sent is True:
             raise Exception()
         self.sent = True
+        print type(self) # debug
         for subscriber in self.get_subscribers():
             subscriber(*self.args, **self.kwargs)
     

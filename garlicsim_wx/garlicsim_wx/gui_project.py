@@ -118,20 +118,25 @@ class GuiProject(object):
         created.
         '''
         #todo: can possibly name these event types.
-        
-        self.tree_changed_not_on_path = pubsub.EventType()
-        self.tree_changed_on_path = pubsub.EventType()
+        # todo: move to __init_event_types
+        self.tree_changed_on_path = pubsub.EventType('TreeChangedOnPath')
+        self.tree_changed_not_on_path = \
+            pubsub.EventType('TreeChangedNotOnPath')        
         self.tree_changed = pubsub.EventType(
+            'TreeChanged',
             bases=(self.tree_changed_not_on_path, self.tree_changed_on_path,)
         )
         
         self.tree_structure_changed_on_path = pubsub.EventType(
+            'TreeStructureChangedOnPath',
             bases=(self.tree_changed_on_path,)
         )
         self.tree_structure_changed_not_on_path = pubsub.EventType(
+            'TreeStructureChangedNotOnPath',
             bases=(self.tree_changed_not_on_path,)
         )
         self.tree_structure_changed = pubsub.EventType(
+            'TreeStructureChanged',
             bases=(
                 self.tree_structure_changed_on_path,
                 self.tree_structure_changed_not_on_path
@@ -139,22 +144,25 @@ class GuiProject(object):
         )
         
 
-        self.pseudoclock_changed = pubsub.EventType()
+        self.pseudoclock_changed = pubsub.EventType('PseudoclockChanged')
 
-        self.active_node_changed = pubsub.EventType()
+        self.active_node_changed = pubsub.EventType('ActiveNodeChanged')
         # todo: should possibly be subclass of pseudoclock_changed
         
-        self.path_changed = pubsub.EventType()
+        self.path_changed = pubsub.EventType('PathChanged')
         
         self.path_contents_changed = pubsub.EventType(
+            'PathContentsChanged',
             bases=(self.path_changed, self.tree_changed_on_path)
         )
         
-        self.playing_toggled = pubsub.EventType()
+        self.playing_toggled = pubsub.EventType('PlayingToggled')
         self.playing_started = pubsub.EventType(
+            'PlayingStarted',
             bases=(self.playing_toggled,)
         )
         self.playing_stopped = pubsub.EventType(
+            'PlayingStopped',
             bases=(self.playing_toggled,)
         )
         #todo: maybe need an event type for when editing a state?
