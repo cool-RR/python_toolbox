@@ -574,9 +574,13 @@ path, but it's completely empty.''')
         
     def modify_to_include_node(self, node):
         '''
-        Modifiy the path to include the specified node.
+        Modify the path to include the specified node.
+        
+        Optimization note: Don't try to check whether `node in path` before
+        calling this method. It's more efficient to just call this method
+        without checking first.
         '''
-        new_path = node.make_containing_path()
+        new_path = node.make_past_path()
         self.root = new_path.root
         self.decisions.update(new_path.decisions)
     

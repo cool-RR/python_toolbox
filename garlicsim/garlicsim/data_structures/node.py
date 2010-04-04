@@ -108,7 +108,7 @@ class Node(object):
         Returns the path.
         '''
         
-        path = self.__make_past_path()
+        path = self.make_past_path()
         
         path.get_last_node()
         # Calling that will make the path choose the newest forks.
@@ -125,7 +125,7 @@ class Node(object):
         may specify decisions that are not even on the same root as these
         paths.
         '''
-        past_path = self.__make_past_path()
+        past_path = self.make_past_path()
         paths = []
         fork = None
         for thing in past_path.iterate_blockwise(start=self):
@@ -144,7 +144,7 @@ class Node(object):
             # any forks to decide on anyway.
             return [past_path]
     
-    def __make_past_path(self):
+    def make_past_path(self):
         '''
         Create a path that contains this node.
         

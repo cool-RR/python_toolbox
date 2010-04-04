@@ -1,14 +1,28 @@
 from garlicsim.general_misc.third_party import abc
 import itertools
 
-class EventMeta(type):
-    def __new__(mcls, name, bases, namespace):
-        cls = super(EventMeta, mcls).__new__(mcls, name, bases, namespace)
+class EventType(type):
+    # todo: can make nice __repr__
+    def __new__(mcls, name='UnnamedEventType', bases=None, namespace={}):
+        '''note that default for bases is (Event,)'''
+        if bases is None:
+            bases = (Event,)
+        namespace = dict(namespace)
+        namespace.setdefault('__metaclass__', EventType)
+        cls = super(EventType, mcls).__new__(mcls, name, bases, namespace)
         cls.specific_subscribers = set()
         return cls
+    
+    def __init__(mcls, name='UnnamedEventType', bases=None, namespace={}):
+        '''note that default for bases is (Event,)'''
+        namespace = dict(namespace)
+        namespace.setdefault('__metaclass__', EventType)
+        if bases is None:
+            bases = (Event,)
+        cls = super(EventType, mcls).__init__(name, bases, namespace)
 
 class Event(object):
-    __metaclass__ = EventMeta
+    __metaclass__ = EventType
     def __init__(self, *args, **kwargs):
         self.sent = False
         self.args, self.kwargs = args, kwargs

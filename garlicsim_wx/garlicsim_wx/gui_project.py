@@ -25,6 +25,7 @@ import garlicsim
 from garlicsim.asynchronous_crunching.crunchers_warehouse import crunchers
 
 import garlicsim_wx
+from garlicsim_wx.general_misc import pubsub
 from widgets.general_misc import FoldableWindowContainer
         
 
@@ -82,8 +83,8 @@ class GuiProject(object):
         
         #######################################################################
             
-        self.path = path
-        '''The active path.'''
+        self._path = path
+        '''tododoc (privatizing) The active path.'''
 
         self.active_node = active_node
         '''The node that is currently displayed onscreen.'''
@@ -116,6 +117,35 @@ class GuiProject(object):
         ready yet. The simulation will continue playing when the nodes will be
         created.
         '''
+        #todo: can possibly name these event types.
+        self.tree_changed = pubsub.EventType()
+        self.tree_structure_changed = pubsub.EventType(bases=(self.tree_changed,))
+        self.tree_changed_on_path = pubsub.EventType(bases=(self.tree_changed,))
+        self.tree_structure_changed_on_path = pubsub.EventType(
+            bases=(self.tree_structure_changed, self.tree_changed_on_path)
+        )
+        
+        self.active_node_changed = pubsub.EventType()
+        
+        self.path_changed = pubsub.EventType()
+        
+        self.pseudoclock_changed = pubsub.EventType()
+        
+        self.playing_toggled = pubsub.EventType()
+    
+
+    ###########################################################################
+        
+    def _get_path(self):
+        return self._path
+    
+    def _set_path(self, path):
+        self._path = path
+        self.path_changed().send()
+        
+    path = property(_get_path, _set_path, doc='The active path.')
+        
+    ###########################################################################
         
     def __init_gui(self, parent_window):
         '''
@@ -127,7 +157,6 @@ class GuiProject(object):
         main_window.Bind(wx.EVT_MENU, self.fork_naturally,
                          id=s2i("Fork naturally"))
         
-        self.main_window.Bind(wx.EVT_IDLE, self.on_idle)
 
         
     def __init_on_creation(self):
@@ -146,9 +175,6 @@ class GuiProject(object):
 
     def get_active_state(self):#tododoc
         return self.active_node.state if self.active_node is not None else None
-        
-
-        
                 
 
     def make_plain_root(self, *args, **kwargs):
@@ -162,7 +188,9 @@ class GuiProject(object):
         Returns the node.
         '''
         root = self.project.make_plain_root(*args, **kwargs)
+        self.tree_structure_changed().send()
         self.set_active_node(root)
+        self.active_node_changed().send()
         return root
 
     
@@ -177,7 +205,9 @@ class GuiProject(object):
         Returns the node.
         '''
         root = self.project.make_random_root(*args, **kwargs)
+        self.tree_structure_changed().send()
         self.set_active_node(root)
+        self.active_node_changed().send()
         return root
 
     
@@ -191,6 +221,7 @@ class GuiProject(object):
         was_playing = self.is_playing
         if self.is_playing: self.stop_playing()
         self.active_node = node
+        self.active_node_changed().send()
         if was_playing:
             self.start_playing()
         if modify_path:
@@ -203,18 +234,17 @@ class GuiProject(object):
                                                                    self.path,
                                                                    Infinity)   
         
-        self.frame.Refresh()
+        self.frame.Refresh() # kill this
 
         
     def __modify_path_to_include_active_node(self):
-        '''
-        Ensure that self.path includes the active node.
-        '''
+        '''Ensure that self.path includes the active node.'''
         if self.path is None:
-            self.path = self.active_node.make_containing_path()
-            return
-        if not self.active_node in self.path:
+            self.path = self.active_node.make_containing_path()    
+        else:
             self.path.modify_to_include_node(self.active_node)
+            
+        self.path_changed().send()
 
 
     def start_playing(self):
@@ -225,6 +255,7 @@ class GuiProject(object):
             return
 
         self.is_playing = True
+        #self.
         
         self.infinity_job = \
             self.project.ensure_buffer_on_path(self.active_node, self.path,
