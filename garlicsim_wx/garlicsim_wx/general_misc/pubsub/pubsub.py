@@ -23,14 +23,20 @@ class Event(object):
         
     @classmethod
     def get_subscribers(cls):
-        event_classes = [base for base in cls.__bases__
-                         if issubclass(base, Event)] + [cls]
+        event_bases = [base for base in cls.__bases__
+                       if issubclass(base, Event)] 
         
-        return reduce(
+        base_subscribers = reduce(
             set.union,
-            [base.specific_subscribers for base in event_classes]
+            [base.get_subscribers() for base in event_bases],
+            set()
         )
         # todo: Is there a more efficient way to add sets?
+        
+        return set.union(
+            base_subscribers,
+            cls.specific_subscribers
+        )
     
     def send(self):
         if self.sent is True:
