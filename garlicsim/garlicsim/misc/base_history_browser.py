@@ -63,6 +63,6 @@ class BaseHistoryBrowser(object):
         See documentation of garlicsim.general_misc.binary_search.binary_search
         for details about rounding options.
         '''
-        assert rounding in ['high', 'low', 'exact', 'both', 'closest']
+        assert rounding in ('high', 'low', 'exact', 'both', 'closest')
         return self.get_state_by_monotonic_function\
                (function=get_state_clock, value=clock, rounding=rounding)
