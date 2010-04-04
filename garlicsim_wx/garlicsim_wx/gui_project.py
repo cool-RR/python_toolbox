@@ -118,18 +118,37 @@ class GuiProject(object):
         created.
         '''
         #todo: can possibly name these event types.
-        self.tree_changed = pubsub.EventType()
-        self.tree_structure_changed = pubsub.EventType(bases=(self.tree_changed,))
-        self.tree_changed_on_path = pubsub.EventType(bases=(self.tree_changed,))
-        self.tree_structure_changed_on_path = pubsub.EventType(
-            bases=(self.tree_structure_changed, self.tree_changed_on_path)
+        
+        self.tree_changed_not_on_path = pubsub.EventType()
+        self.tree_changed_on_path = pubsub.EventType()
+        self.tree_changed = pubsub.EventType(
+            bases=(self.tree_changed_not_on_path, self.tree_changed_on_path,)
         )
         
+        self.tree_structure_changed_on_path = pubsub.EventType(
+            bases=(self.tree_changed_on_path,)
+        )
+        self.tree_structure_changed_not_on_path = pubsub.EventType(
+            bases=(self.tree_changed_not_on_path,)
+        )
+        self.tree_structure_changed = pubsub.EventType(
+            bases=(
+                self.tree_structure_changed_on_path,
+                self.tree_structure_changed_not_on_path
+            )
+        )
+        
+
+        self.pseudoclock_changed = pubsub.EventType()
+
         self.active_node_changed = pubsub.EventType()
+        # todo: should possibly be subclass of pseudoclock_changed
         
         self.path_changed = pubsub.EventType()
         
-        self.pseudoclock_changed = pubsub.EventType()
+        self.path_contents_changed = pubsub.EventType(
+            bases=(self.path_changed, self.tree_changed_on_path)
+        )
         
         self.playing_toggled = pubsub.EventType()
         self.playing_started = pubsub.EventType(
@@ -195,9 +214,8 @@ class GuiProject(object):
         Returns the node.
         '''
         root = self.project.make_plain_root(*args, **kwargs)
-        self.tree_structure_changed().send()
+        self.tree_structure_changed_not_on_path().send()
         self.set_active_node(root)
-        self.active_node_changed().send()
         return root
 
     
@@ -212,9 +230,8 @@ class GuiProject(object):
         Returns the node.
         '''
         root = self.project.make_random_root(*args, **kwargs)
-        self.tree_structure_changed().send()
+        self.tree_structure_changed_not_on_path().send()
         self.set_active_node(root)
-        self.active_node_changed().send()
         return root
 
     
@@ -262,7 +279,7 @@ class GuiProject(object):
             return
 
         self.is_playing = True
-        self.playing_started().send()
+        
         
         self.infinity_job = \
             self.project.ensure_buffer_on_path(self.active_node, self.path,
@@ -273,6 +290,7 @@ class GuiProject(object):
         assert self.real_time_krap == self.simulation_time_krap == None
         self.real_time_krap = time.time()
         self.simulation_time_krap = self.active_node.state.clock
+        self.playing_started().send()
         self.pseudoclock_changed().send()
         
 
@@ -289,13 +307,13 @@ class GuiProject(object):
             pass
         
         self.is_playing = False
-        self.playing_stopped().send()
         
         assert self.infinity_job is not None
         self.infinity_job.crunching_profile.clock_target = \
             self.infinity_job.node.state.clock + self.default_buffer
         
         self.real_time_krap = self.simulation_time_krap = None
+        self.playing_stopped().send()        
         self.pseudoclock_changed().send() #todo: relevant when changes to None?
         self.project.ensure_buffer(self.active_node, self.default_buffer)
 
@@ -338,9 +356,8 @@ class GuiProject(object):
         
         both_nodes = self.path.get_node_by_clock(desired_simulation_time,
                                                  rounding='both')
-
         # correct rounding?
-        #print(new_node)
+        
         
         if self.defacto_playing_speed < 0:
             both_nodes = (both_nodes[1], both_nodes[0])
@@ -352,6 +369,8 @@ class GuiProject(object):
             assert both_nodes[1].state.clock == desired_simulation_time
             # Happens when moving to start of path while playing.
             new_node = both_nodes[1]
+            # todo: not sure this still happens after change i did in binary
+            # search conventions
             
 
         self.real_time_krap = current_real_time
@@ -390,8 +409,10 @@ class GuiProject(object):
         
         Returns the new node.
         '''
-        new_node = self.project.tree.fork_to_edit(template_node=self.active_node)
+        new_node = \
+            self.project.tree.fork_to_edit(template_node=self.active_node)
         new_node.still_in_editing = True #todo: should be in `fork_to_edit` ?
+        self.tree_structure_changed_on_path()
         self.set_active_node(new_node)
         return new_node
 
@@ -412,12 +433,14 @@ class GuiProject(object):
         '''
 
         added_nodes = self.project.sync_crunchers()
-        '''
-        This is the important line here, which actually executes
-        the Project's sync_crunchers function. As you can see,
-        we put the return value in `added_nodes`.
-        '''
-            
+        
+        # This is the important line here, which actually executes
+        # the Project's sync_crunchers function.
+        
+        self.tree_changed().send()
+        # todo: It would be hard but great if we could know whether the tree
+        # changes were on the path.
+        
         if self.ran_out_of_tree_while_playing:
             self.ran_out_of_tree_while_playing = False
             self.stop_playing()
@@ -459,6 +482,11 @@ class GuiProject(object):
             raise Exception('''You said 'done editing', but you were not in \
 editing mode.''') # change to fitting exception class
         node.still_in_editing = False
+        
+        self.tree_structure_changed_on_path()
+        # not sure whether it's considered a structure change or even just a
+        # change, but playing it safe
+        
         self.project.ensure_buffer(node, self.default_buffer)
 
         
