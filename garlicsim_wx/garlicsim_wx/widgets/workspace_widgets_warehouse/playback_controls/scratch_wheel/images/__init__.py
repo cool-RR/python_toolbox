@@ -7,9 +7,10 @@ from . import images as __images_package
 images_package = __images_package.__name__
 
 N_FRAMES = 87
+N_BLURRED_GEAR_FRAMES = 6
 
 cached_images = []
-cached_motion_blur_image = None
+cached_blurred_gear_images = []
 
 def get_image(i):
     
@@ -28,18 +29,28 @@ def get_image(i):
     
     return cached_images[i]
 
-def get_motion_blur_image():
+def get_blurred_gear_image(i):
     
-    global cached_motion_blur_image
+    global N_FRAMES, cached_blurred_gear_images
     
-    if cached_motion_blur_image is None:
-        full_path = pkg_resources.resource_filename(images_package,
-                                                    'motion_blur.png')
-        bitmap = wx.Bitmap(full_path, wx.BITMAP_TYPE_ANY)
-        cached_motion_blur_image = bitmap
+    assert isinstance(i, int) and 0 <= i <= (N_BLURRED_GEAR_FRAMES - 1)
+    if not cached_blurred_gear_images:
+        for j in range(N_BLURRED_GEAR_FRAMES):
+            file_name = 'blurred_gear_%d.png' % j
+            full_path = pkg_resources.resource_filename(images_package,
+                                                        file_name)
+            bitmap = wx.Bitmap(full_path, wx.BITMAP_TYPE_ANY)
+            cached_blurred_gear_images.append(bitmap)
     
-    return cached_motion_blur_image
+    assert len(cached_blurred_gear_images) == N_BLURRED_GEAR_FRAMES
+    
+    return cached_blurred_gear_images[i]
 
+def get_blurred_gear_image_by_ratio(r):
+    assert 0 <= r <= 1
+    return get_blurred_gear_image(
+        int(round(r * (N_BLURRED_GEAR_FRAMES - 1)))
+    )
 
 cached_image_size = None
 

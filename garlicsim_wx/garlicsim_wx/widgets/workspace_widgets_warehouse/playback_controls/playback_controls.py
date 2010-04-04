@@ -8,6 +8,7 @@ tododoc
 import pkg_resources
 import wx
 from garlicsim_wx.general_misc.third_party import aui
+from garlicsim_wx.general_misc import thread_timer
 
 import garlicsim, garlicsim_wx
 from garlicsim_wx.widgets import WorkspaceWidget
@@ -58,7 +59,11 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         # It may be removed.
         
         self.Bind(wx.EVT_SIZE, self.on_size)
-        self.Bind(wx.EVT_IDLE, self.update_buttons_status) #cancel this
+        self.Bind(
+            wx.EVT_IDLE,
+            self.update_buttons_status,
+        )
+        # todo: eventually cancel this and use pubsub
         
         self.center_button_mode = PlayMode
         

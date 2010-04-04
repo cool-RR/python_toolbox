@@ -88,15 +88,15 @@ class ScratchWheel(wx.Panel):
         self.desired_clock_while_grabbing = None
         
         self.velocity_tracking_counter = 0
-        self.velocity_tracking_period = 100
-        self.last_tracked_time_and_angle = None
+        self.velocity_tracking_period = 1#100
+        self.last_tracked_time_and_angle = (0, 0)
         self.current_velocity_estimate = 0
         '''
         units of radian per second, and that's a real world second, not in the
         simulation.
         '''
-        self.velocity_for_maximal_motion_blur = 30
-        self.current_motion_blur_alpha = 0
+        self.velocity_for_maximal_motion_blur = 10
+        self.current_motion_blur_bitmap = None
         
         self.was_playing_before_drag = None
         
@@ -145,16 +145,20 @@ class ScratchWheel(wx.Panel):
         self.frame_number_that_should_be_drawn = frame_number
     
     def __redraw_if_wheel_should_rotate(self):        
+        print('ScratchWheel.__redraw_if_wheel_should_rotate called')
         self.__calculate_frame_number()
         if self.frame_number_that_should_be_drawn != self.current_frame_number:
             self.Refresh()
     
-    def __calculate_velocity_estimate_if_needed(self):
+    def __update_motion_blur_bitmap_if_needed(self):
+        
+        
         
         if self.velocity_tracking_counter == 0:
 
             current = (time.time(), self.get_current_angle())
             last = self.last_tracked_time_and_angle
+            
 
             d_angle = current[1] - last[1]
             d_time = current[0] - last[0]
@@ -163,20 +167,33 @@ class ScratchWheel(wx.Panel):
                 self.current_velocity_estimate = 0
                 # We rather have a fake velocity than raise an exception
             
-            self.current_velocity_estimate = d_angle / d_time
+            self.current_velocity_estimate = velocity = d_angle / d_time
+
+            r_velocity = velocity / self.velocity_for_maximal_motion_blur
+
+            alpha = min(abs(r_velocity), 1)
+            
+            alpha = min(alpha, 0.8)
+            # I'm limiting the alpha, still want to see some animation
+            
+            self.current_motion_blur_bitmap = \
+                images.get_blurred_gear_image_by_ratio(alpha)
             
             self.last_tracked_time_and_angle = current
+            
         
         self.velocity_tracking_counter += 1
         self.velocity_tracking_counter %= self.velocity_tracking_period
             
     def on_paint(self, e=None):
-        
+        # todo: optimization: if motion blur is (rounded to) zero, don't draw
+
+        print('ScratchWheel.on_paint called')
         if self.gui_project is None:
             return
         
-        self.__calculate_velocity_estimate_if_needed()
-        velocity = self.current_velocity_estimate
+        self.__redraw_if_wheel_should_rotate()
+        self.__update_motion_blur_bitmap_if_needed()
         
         bw, bh = self.GetWindowBorderSize()
         
@@ -185,12 +202,15 @@ class ScratchWheel(wx.Panel):
         bitmap = images.get_image(self.frame_number_that_should_be_drawn)
         dc = wx.PaintDC(self)
         dc.DrawBitmap(bitmap, ox, oy)
+        dc.DrawBitmap(self.current_motion_blur_bitmap, ox, oy, useMask=True)
         # todo: Is the way I draw the bitmap the fastest way?
         self.current_frame_number = self.frame_number_that_should_be_drawn
             
     def on_mouse_event(self, e):
         #todo: possibly do momentum, like in old shockwave carouselle.
         # todo: right click should give context menu with 'Sensitivity...'
+
+        self.Refresh()
         
         (w, h) = self.GetClientSize()
         (x, y) = e.GetPositionTuple()
