@@ -1,5 +1,6 @@
 from garlicsim.general_misc.third_party import abc
 import itertools
+# todo: possibly make thread that consolidates subscriber calling.
 
 class EventType(type):
     # todo: can make nice __repr__

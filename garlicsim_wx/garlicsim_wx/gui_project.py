@@ -132,6 +132,13 @@ class GuiProject(object):
         self.pseudoclock_changed = pubsub.EventType()
         
         self.playing_toggled = pubsub.EventType()
+        self.playing_started = pubsub.EventType(
+            bases=(self.playing_toggled,)
+        )
+        self.playing_stopped = pubsub.EventType(
+            bases=(self.playing_toggled,)
+        )
+        #todo: maybe need an event type for when editing a state?
     
 
     ###########################################################################
@@ -255,7 +262,7 @@ class GuiProject(object):
             return
 
         self.is_playing = True
-        #self.
+        self.playing_started().send()
         
         self.infinity_job = \
             self.project.ensure_buffer_on_path(self.active_node, self.path,
@@ -266,6 +273,7 @@ class GuiProject(object):
         assert self.real_time_krap == self.simulation_time_krap == None
         self.real_time_krap = time.time()
         self.simulation_time_krap = self.active_node.state.clock
+        self.pseudoclock_changed().send()
         
 
 
@@ -277,17 +285,18 @@ class GuiProject(object):
 
         try:
             self.timer_for_playing.Stop()
-        except Exception:
+        except Exception: # todo: Find out the type
             pass
         
         self.is_playing = False
+        self.playing_stopped().send()
         
         assert self.infinity_job is not None
         self.infinity_job.crunching_profile.clock_target = \
             self.infinity_job.node.state.clock + self.default_buffer
         
         self.real_time_krap = self.simulation_time_krap = None
-        
+        self.pseudoclock_changed().send() #todo: relevant when changes to None?
         self.project.ensure_buffer(self.active_node, self.default_buffer)
 
 
@@ -349,13 +358,13 @@ class GuiProject(object):
 
         if both_nodes[1] is not None:
             self.simulation_time_krap = desired_simulation_time#new_node.state.clock
-            self.active_node = new_node
-            self.frame.Refresh()
         else:
             self.ran_out_of_tree_while_playing = True # unneeded?
             self.simulation_time_krap = new_node.state.clock
-            self.active_node = new_node
-            self.frame.Refresh()
+        self.active_node = new_node
+        self.pseudoclock_changed().send()
+        self.active_node_changed().send()
+        self.frame.Refresh() #todo: kill
         
         
         
