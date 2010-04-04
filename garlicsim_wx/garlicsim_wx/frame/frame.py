@@ -150,9 +150,7 @@ class Frame(wx.Frame):
 
         ######################################
         
-        self.Bind(wx.EVT_IDLE, self.on_idle)
         
-
         
         self.aui_manager.Update()
         
