@@ -97,6 +97,7 @@ class ScratchWheel(wx.Panel):
         '''
         self.velocity_for_maximal_motion_blur = 10
         self.current_motion_blur_bitmap = None
+        self.velocity_time_sampling_minimum = 0.05
         
         self.was_playing_before_drag = None
         
@@ -145,7 +146,6 @@ class ScratchWheel(wx.Panel):
         self.frame_number_that_should_be_drawn = frame_number
     
     def __redraw_if_wheel_should_rotate(self):        
-        print('ScratchWheel.__redraw_if_wheel_should_rotate called')
         self.__calculate_frame_number()
         if self.frame_number_that_should_be_drawn != self.current_frame_number:
             self.Refresh()
@@ -155,17 +155,19 @@ class ScratchWheel(wx.Panel):
         
         
         if self.velocity_tracking_counter == 0:
-
+            # todo: if settled on a period of 1, cut the period business
+            
             current = (time.time(), self.get_current_angle())
             last = self.last_tracked_time_and_angle
-            
 
-            d_angle = current[1] - last[1]
             d_time = current[0] - last[0]
+            d_angle = current[1] - last[1]
             
-            if d_time == 0:
-                self.current_velocity_estimate = 0
-                # We rather have a fake velocity than raise an exception
+            if d_time < self.velocity_time_sampling_minimum:
+                return
+                # This protects us from two things: Having a grossly inaccurate
+                # velocity reading because of tiny sample, and have a division
+                # by zero.
             
             self.current_velocity_estimate = velocity = d_angle / d_time
 
@@ -188,7 +190,6 @@ class ScratchWheel(wx.Panel):
     def on_paint(self, e=None):
         # todo: optimization: if motion blur is (rounded to) zero, don't draw
 
-        print('ScratchWheel.on_paint called')
         if self.gui_project is None:
             return
         
