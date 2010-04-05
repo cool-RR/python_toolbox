@@ -46,8 +46,10 @@ class BoardWidget(scrolled.ScrolledPanel,
         self.board = board
         self.Refresh()
 
-    def on_paint(self, e=None):
+    def on_paint(self, event):
         '''Paint event handler.'''
+        
+        event.Skip()
         
         board = self.board
         dc = wx.PaintDC(self)

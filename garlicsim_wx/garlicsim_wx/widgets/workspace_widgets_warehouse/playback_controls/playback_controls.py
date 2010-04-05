@@ -9,6 +9,8 @@ import pkg_resources
 import wx
 from garlicsim_wx.general_misc.third_party import aui
 from garlicsim_wx.general_misc import thread_timer
+from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
+from garlicsim_wx.general_misc import pubsub
 
 import garlicsim, garlicsim_wx
 from garlicsim_wx.widgets import WorkspaceWidget
@@ -59,6 +61,7 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         # It may be removed.
         
         self.Bind(wx.EVT_SIZE, self.on_size)
+        self.Bind(wx.EVT_PAINT, self.on_paint)
         self.Bind(
             wx.EVT_IDLE,
             self.update_buttons_status,
@@ -66,6 +69,22 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         # todo: eventually cancel this and use pubsub
         
         self.center_button_mode = PlayMode
+
+        self.center_button_update_flag = True
+        self.navigation_buttons_update_flag = True
+        
+        self.gui_project.PlayingToggled.add_subscriber(
+            FlagRaiser(self, 'center_button_update_flag')
+        )
+
+        self.NavigationButtonsNeedUpdate = pubsub.EventType(
+            'NavigationButtonsNeedUpdate',
+            bases=(
+                self.gui_project.ActiveNodeChanged,
+                self.gui_project.PathContentsChanged
+            )
+        )
+        
         
         bitmap_list = ['to_start', 'previous_node', 'play',
                                 'next_node', 'to_end', 'pause',
@@ -149,10 +168,20 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         
 
 
-    def on_size(self, e=None):
+    def on_size(self, event):
         self.Refresh()
-        if e is not None:
-            e.Skip()
+        event.Skip()
+    
+        
+    def on_paint(self, event):
+        if self.center_button_needs_update:
+            self.__update_center_button()
+        if self.NavigationButtonsNeedUpdate:
+            self.__update_navigation_buttons()    
+        
+        super(PlaybackControls, self).OnPaint(event)
+        
+        event.Skip()
             
     def update_buttons_status(self, e=None):
         
@@ -191,10 +220,10 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
                 self.button_to_end.Disable()
         
         if self.button_center_button.IsEnabled():
-            self.__update_center_button_mode()
+            self.__update_center_button()
             
         
-    def __update_center_button_mode(self):
+    def __update_center_button(self):
         active_node = self.gui_project.active_node
         assert active_node is not None
         if active_node.still_in_editing:

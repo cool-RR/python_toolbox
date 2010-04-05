@@ -187,9 +187,11 @@ class ScratchWheel(wx.Panel):
         self.velocity_tracking_counter += 1
         self.velocity_tracking_counter %= self.velocity_tracking_period
             
-    def on_paint(self, e=None):
+    def on_paint(self, event):
         # todo: optimization: if motion blur is (rounded to) zero, don't draw
-
+        
+        event.Skip()
+        
         if self.gui_project is None:
             return
         

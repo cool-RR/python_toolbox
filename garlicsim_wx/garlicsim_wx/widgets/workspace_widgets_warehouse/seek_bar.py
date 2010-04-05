@@ -47,8 +47,9 @@ class SeekBar(wx.Panel, WorkspaceWidget):
         self.active_triangle_width = 13 # Must be odd number
 
 
-    def on_paint(self, e=None):
+    def on_paint(self, event):
         '''Refresh the seek-bar.'''
+        event.Skip()
         
         occupied_region = wx.Region()
 

@@ -37,6 +37,7 @@ class GuiProject(object):
     def __init__(self, simpack, frame):
         # This is broken down into a few parts.
         self.__init_general(simpack, frame)
+        self.__init_gui()
         self.__init_on_creation()
 
         
@@ -119,53 +120,53 @@ class GuiProject(object):
         '''
         #todo: can possibly name these event types.
         # todo: move to __init_event_types
-        # todo: not clear that `tree_changed` means that only data changed
+        # todo: not clear that `TreeChagned` means that only data changed
         # and not structure.
-        self.tree_changed_on_path = pubsub.EventType('TreeChangedOnPath')
-        self.tree_changed_not_on_path = \
+        self.TreeChagnedOnPath = pubsub.EventType('TreeChangedOnPath')
+        self.TreeChagnedNotOnPath = \
             pubsub.EventType('TreeChangedNotOnPath')        
-        self.tree_changed = pubsub.EventType(
+        self.TreeChagned = pubsub.EventType(
             'TreeChanged',
-            bases=(self.tree_changed_not_on_path, self.tree_changed_on_path,)
+            bases=(self.TreeChagnedNotOnPath, self.TreeChagnedOnPath,)
         )
         
-        self.tree_structure_changed_on_path = pubsub.EventType(
+        self.TreeStructureChangedOnPath = pubsub.EventType(
             'TreeStructureChangedOnPath',
-            bases=(self.tree_changed_on_path,)
+            bases=(self.TreeChagnedOnPath,)
         )
-        self.tree_structure_changed_not_on_path = pubsub.EventType(
+        self.TreeStructureChangedNotOnPath = pubsub.EventType(
             'TreeStructureChangedNotOnPath',
-            bases=(self.tree_changed_not_on_path,)
+            bases=(self.TreeChagnedNotOnPath,)
         )
-        self.tree_structure_changed = pubsub.EventType(
+        self.TreeStructureChanged = pubsub.EventType(
             'TreeStructureChanged',
             bases=(
-                self.tree_structure_changed_on_path,
-                self.tree_structure_changed_not_on_path
+                self.TreeStructureChangedOnPath,
+                self.TreeStructureChangedNotOnPath
             )
         )
         
 
-        self.pseudoclock_changed = pubsub.EventType('PseudoclockChanged')
+        self.PseudoclockChanged = pubsub.EventType('PseudoclockChanged')
 
-        self.active_node_changed = pubsub.EventType('ActiveNodeChanged')
-        # todo: should possibly be subclass of pseudoclock_changed
+        self.ActiveNodeChanged = pubsub.EventType('ActiveNodeChanged')
+        # todo: should possibly be subclass of PseudoclockChanged
         
-        self.path_changed = pubsub.EventType('PathChanged')
+        self.PathChanged = pubsub.EventType('PathChanged')
         
-        self.path_contents_changed = pubsub.EventType(
+        self.PathContentsChanged = pubsub.EventType(
             'PathContentsChanged',
-            bases=(self.path_changed, self.tree_changed_on_path)
+            bases=(self.PathChanged, self.TreeChagnedOnPath)
         )
         
-        self.playing_toggled = pubsub.EventType('PlayingToggled')
-        self.playing_started = pubsub.EventType(
+        self.PlayingToggled = pubsub.EventType('PlayingToggled')
+        self.PlayingStarted = pubsub.EventType(
             'PlayingStarted',
-            bases=(self.playing_toggled,)
+            bases=(self.PlayingToggled,)
         )
-        self.playing_stopped = pubsub.EventType(
+        self.PlayingStopped = pubsub.EventType(
             'PlayingStopped',
-            bases=(self.playing_toggled,)
+            bases=(self.PlayingToggled,)
         )
         #todo: maybe need an event type for when editing a state?
     
@@ -177,20 +178,20 @@ class GuiProject(object):
     
     def _set_path(self, path):
         self._path = path
-        self.path_changed().send()
+        self.PathChanged().send()
         
     path = property(_get_path, _set_path, doc='The active path.')
         
     ###########################################################################
         
-    def __init_gui(self, parent_window):
+    def __init_gui(self):
         '''
         Initialization related to the widgets which make up the gui project.
         '''
         
-        frame.Bind(wx.EVT_MENU, self.edit_from_active_node,
+        self.frame.Bind(wx.EVT_MENU, self.edit_from_active_node,
                          id=s2i("Fork by editing"))
-        main_window.Bind(wx.EVT_MENU, self.fork_naturally,
+        self.frame.Bind(wx.EVT_MENU, self.fork_naturally,
                          id=s2i("Fork naturally"))
         
 
@@ -224,7 +225,7 @@ class GuiProject(object):
         Returns the node.
         '''
         root = self.project.make_plain_root(*args, **kwargs)
-        self.tree_structure_changed_not_on_path().send()
+        self.TreeStructureChangedNotOnPath().send()
         self.set_active_node(root)
         return root
 
@@ -240,7 +241,7 @@ class GuiProject(object):
         Returns the node.
         '''
         root = self.project.make_random_root(*args, **kwargs)
-        self.tree_structure_changed_not_on_path().send()
+        self.TreeStructureChangedNotOnPath().send()
         self.set_active_node(root)
         return root
 
@@ -255,7 +256,7 @@ class GuiProject(object):
         was_playing = self.is_playing
         if self.is_playing: self.stop_playing()
         self.active_node = node
-        self.active_node_changed().send()
+        self.ActiveNodeChanged().send()
         if was_playing:
             self.start_playing()
         if modify_path:
@@ -278,7 +279,7 @@ class GuiProject(object):
         else:
             self.path.modify_to_include_node(self.active_node)
             
-        self.path_changed().send()
+        self.PathChanged().send()
 
 
     def start_playing(self):
@@ -300,8 +301,8 @@ class GuiProject(object):
         assert self.real_time_krap == self.simulation_time_krap == None
         self.real_time_krap = time.time()
         self.simulation_time_krap = self.active_node.state.clock
-        self.playing_started().send()
-        self.pseudoclock_changed().send()
+        self.PlayingStarted().send()
+        self.PseudoclockChanged().send()
         
 
 
@@ -323,8 +324,8 @@ class GuiProject(object):
             self.infinity_job.node.state.clock + self.default_buffer
         
         self.real_time_krap = self.simulation_time_krap = None
-        self.playing_stopped().send()        
-        self.pseudoclock_changed().send() #todo: relevant when changes to None?
+        self.PlayingStopped().send()        
+        self.PseudoclockChanged().send() #todo: relevant when changes to None?
         self.project.ensure_buffer(self.active_node, self.default_buffer)
 
 
@@ -391,8 +392,8 @@ class GuiProject(object):
             self.ran_out_of_tree_while_playing = True # unneeded?
             self.simulation_time_krap = new_node.state.clock
         self.active_node = new_node
-        self.pseudoclock_changed().send()
-        self.active_node_changed().send()
+        self.PseudoclockChanged().send()
+        self.ActiveNodeChanged().send()
         self.frame.Refresh() #todo: kill
         
         
@@ -422,7 +423,7 @@ class GuiProject(object):
         new_node = \
             self.project.tree.fork_to_edit(template_node=self.active_node)
         new_node.still_in_editing = True #todo: should be in `fork_to_edit` ?
-        self.tree_structure_changed_on_path().send()
+        self.TreeStructureChangedOnPath().send()
         self.set_active_node(new_node)
         return new_node
 
@@ -442,25 +443,29 @@ class GuiProject(object):
         process.
         '''
         
-        leaves_to_crunch = (job.node for job in 
-                            self.project.crunching_manager.jobs)
-        blockless_leaves = [leaf for leaf in leaves_to_crunch
-                            if leaf.block is None]
+        #leaves_to_crunch = (job.node for job in 
+                            #self.project.crunching_manager.jobs)
+        feisty_jobs = [job for job in self.project.crunching_manager.jobs
+                       if not job.node.is_last_on_block()]
+        fesity_jobs_to_nodes = dict((job, job.node) for job in feisty_jobs)
+        #feisty_leaves = [leaf for leaf in leaves_to_crunch
+                         #if not leaf.is_last_on_block()]
         # todo: explain what i do here
         
 
         added_nodes = self.project.sync_crunchers()
         
-        # This is the important line here, which actually executes
-        # the Project's sync_crunchers function.
+        # This is the heavy line here, which actually executes the Project's
+        # sync_crunchers function.
         
         
         
         if added_nodes > 0:
-            if any((leaf.block for leaf in blockless_leaves)):
-                self.tree_structure_changed().send()
+            if any(fesity_jobs_to_nodes[job] is not job.node
+                   for job in feisty_jobs):
+                self.TreeStructureChanged().send()
             else:
-                self.tree_changed().send()
+                self.TreeChagned().send()
             # todo: It would be hard but nice to know whether the tree changes
             # were on the path. This could save some rendering on SeekBar.
             
@@ -506,7 +511,7 @@ class GuiProject(object):
 editing mode.''') # change to fitting exception class
         node.still_in_editing = False
         
-        self.tree_structure_changed_on_path()
+        self.TreeStructureChangedOnPath()
         # not sure whether it's considered a structure change or even just a
         # change, but playing it safe
         

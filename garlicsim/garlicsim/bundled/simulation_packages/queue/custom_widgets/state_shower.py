@@ -45,8 +45,10 @@ class StateShower(wx.lib.scrolledpanel.ScrolledPanel):
         self.state = state
         self.Refresh()
 
-    def on_paint(self, e=None):
+    def on_paint(self, event):
         '''Paint event handler.'''
+        
+        event.Skip()
         
         state = self.state
         dc = wx.PaintDC(self)

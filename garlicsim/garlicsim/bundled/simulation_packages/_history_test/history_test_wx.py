@@ -28,8 +28,9 @@ class StateShower(wx.Window):
         self.Bind(wx.EVT_PAINT, self.on_paint)
         self.radius = 60
         
-    def on_paint(self, event=None):
+    def on_paint(self, event):
         '''Paint event handler.'''
+        event.Skip()
         dc = wx.PaintDC(self)
         dc.SetBrush(wx.Brush("white", wx.TRANSPARENT))
         for [side, pos] in [[self.left, (100, 100)], [self.right, (300, 100)]]:

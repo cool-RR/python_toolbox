@@ -69,9 +69,11 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
                                                         elements_raw[key])
             self.elements[key] = wx.Bitmap(file_name, wx.BITMAP_TYPE_ANY)
 
-    def on_paint(self, e=None):
+    def on_paint(self, event):
         '''Refresh the tree browser.'''
 
+        event.Skip()
+        
         if self.gui_project is None or \
            self.gui_project.project.tree is None or \
            len(self.gui_project.project.tree.roots) == 0:

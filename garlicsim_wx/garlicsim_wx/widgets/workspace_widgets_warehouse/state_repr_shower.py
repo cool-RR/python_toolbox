@@ -21,6 +21,7 @@ class StateReprShower(wx.TextCtrl, WorkspaceWidget):#tododoc
         self.state = None
 
     def on_paint(self, event):
+        event.Skip()
         if self.frame.gui_project:
             active_state = self.frame.gui_project.get_active_state()        
             if active_state:
@@ -29,5 +30,5 @@ class StateReprShower(wx.TextCtrl, WorkspaceWidget):#tododoc
                     state_repr = dict_tools.fancy_string(vars(active_state))
                     self.SetValue(state_repr)
          
-        event.Skip()
+        
     
