@@ -80,7 +80,7 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
 
         self.NavigationButtonsNeedUpdate = pubsub.EventType(
             'NavigationButtonsNeedUpdate',
-            bases=(
+            subs=(
                 self.gui_project.ActiveNodeChanged,
                 self.gui_project.PathContentsChanged
             )

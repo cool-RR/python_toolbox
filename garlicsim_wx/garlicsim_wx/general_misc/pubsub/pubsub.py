@@ -1,10 +1,16 @@
 from garlicsim.general_misc.third_party import abc
 import itertools
 # todo: possibly make thread that consolidates subscriber calling.
+# todo: can define "abstract" event type, so you can't create direct instances,
+# only instances of subclasses. For example TreeChanged.
+
+# Thinking aid: If event type A has subclasses B and C, it means it gets called
+# if B or C get called. (Or also if it gets called directly itself.)
 
 class EventType(type):
     # todo: can make nice __repr__
-    def __new__(mcls, name='UnnamedEventType', bases=None, namespace={}, subs=()):
+    def __new__(mcls, name='UnnamedEventType', bases=None, namespace={},
+                subs=()):
         '''note that default for bases is (Event,)'''
         
         if bases is None:
@@ -12,22 +18,26 @@ class EventType(type):
             
         namespace = dict(namespace)
         namespace.setdefault('__metaclass__', EventType)
-
-        for sub in subs:
-            assert isinstance(sub, EventType)
-            sub.__bases__ = (mcls,) + sub.__bases__ # Oh yeah.
         
         cls = super(EventType, mcls).__new__(mcls, name, bases, namespace)
         cls.specific_subscribers = set()
         return cls
     
-    def __init__(mcls, name='UnnamedEventType', bases=None, namespace={}, subs=()):
+    def __init__(cls, name='UnnamedEventType', bases=None, namespace={},
+                 subs=()):
         '''note that default for bases is (Event,)'''
-        namespace = dict(namespace)
-        namespace.setdefault('__metaclass__', EventType)
+        
         if bases is None:
             bases = (Event,)
-        cls = super(EventType, mcls).__init__(name, bases, namespace)
+            
+        namespace = dict(namespace)
+        namespace.setdefault('__metaclass__', EventType)
+        
+        for sub in subs:
+            assert isinstance(sub, EventType)
+            sub.__bases__ = (cls,) + sub.__bases__ # Oh yeah.
+        
+        cls = super(EventType, cls).__init__(name, bases, namespace)
 
 class Event(object):
     __metaclass__ = EventType

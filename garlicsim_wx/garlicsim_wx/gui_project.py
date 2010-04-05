@@ -118,28 +118,45 @@ class GuiProject(object):
         ready yet. The simulation will continue playing when the nodes will be
         created.
         '''
-        #todo: can possibly name these event types.
+        
         # todo: move to __init_event_types
-        # todo: not clear that `TreeChagned` means that only data changed
+        # todo: not clear that `TreeChanged` means that only data changed
         # and not structure.
-        self.TreeChagnedOnPath = pubsub.EventType('TreeChangedOnPath')
-        self.TreeChagnedNotOnPath = \
-            pubsub.EventType('TreeChangedNotOnPath')        
-        self.TreeChagned = pubsub.EventType(
-            'TreeChanged',
-            bases=(self.TreeChagnedNotOnPath, self.TreeChagnedOnPath,)
+        self.TreeChanged = pubsub.EventType('TreeChanged')
+        self.TreeChangedOnPath = pubsub.EventType(
+            'TreeChangedOnPath',
+            bases=(self.TreeChanged,)
+        )
+        self.TreeChangedNotOnPath = pubsub.EventType(
+            'TreeChangedNotOnPath',
+            bases=(self.TreeChanged,)
         )
         
+        self.TreeChangedAtUnknownLocation = pubsub.EventType(
+            'TreeChangedAtUnknownLocation',
+            bases=(self.TreeChangedNotOnPath, self.TreeChangedOnPath,)
+        )
+        
+        self.TreeStructureChanged = pubsub.EventType(
+            'TreeStructureChanged',
+            bases=(self.TreeChanged,)
+        )
         self.TreeStructureChangedOnPath = pubsub.EventType(
             'TreeStructureChangedOnPath',
-            bases=(self.TreeChagnedOnPath,)
+            bases=(
+                self.TreeChangedOnPath,
+                self.TreeStructureChanged
+            )
         )
         self.TreeStructureChangedNotOnPath = pubsub.EventType(
             'TreeStructureChangedNotOnPath',
-            bases=(self.TreeChagnedNotOnPath,)
+            bases=(
+                self.TreeChangedNotOnPath,
+                self.TreeStructureChanged
+            )
         )
-        self.TreeStructureChanged = pubsub.EventType(
-            'TreeStructureChanged',
+        self.TreeStructureChangedAtUnknownLocation = pubsub.EventType(
+            'TreeStructureChangedAtUnknownLocation',
             bases=(
                 self.TreeStructureChangedOnPath,
                 self.TreeStructureChangedNotOnPath
@@ -156,7 +173,7 @@ class GuiProject(object):
         
         self.PathContentsChanged = pubsub.EventType(
             'PathContentsChanged',
-            bases=(self.PathChanged, self.TreeChagnedOnPath)
+            subs=(self.PathChanged, self.TreeChangedOnPath)
         )
         
         self.PlayingToggled = pubsub.EventType('PlayingToggled')
@@ -465,7 +482,7 @@ class GuiProject(object):
                    for job in feisty_jobs):
                 self.TreeStructureChanged().send()
             else:
-                self.TreeChagned().send()
+                self.TreeChanged().send()
             # todo: It would be hard but nice to know whether the tree changes
             # were on the path. This could save some rendering on SeekBar.
             
