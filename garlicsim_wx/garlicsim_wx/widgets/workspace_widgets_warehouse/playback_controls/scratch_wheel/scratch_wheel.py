@@ -14,6 +14,8 @@ import time
 import garlicsim, garlicsim_wx
 from garlicsim_wx.widgets import WorkspaceWidget
 from garlicsim_wx.general_misc import cursor_collection
+from garlicsim_wx.general_misc import pubsub
+from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
 
 import images
 
@@ -58,6 +60,7 @@ class ScratchWheel(wx.Panel):
         self.Bind(wx.EVT_IDLE, self.on_idle)
         self.Unbind(wx.EVT_ERASE_BACKGROUND) # Good or bad?
 
+        
         self.SetCursor(cursor_collection.get_open_grab())
         
         self.gui_project = gui_project
@@ -101,7 +104,16 @@ class ScratchWheel(wx.Panel):
         
         self.was_playing_before_drag = None
         
-        self.__calculate_frame_number()
+        self.update_flag = False
+        
+        self.NeedsUpdate = pubsub.EventType(
+            'NeedsUpdate',
+            bases=(self.gui_project.PseudoclockChanged)
+        )
+        
+        self.NeedsUpdate.add_subscriber(FlagRaiser(self, 'update_flag'))
+        
+        #self.__calculate_frame_number()
 
         
     def get_current_angle(self):
