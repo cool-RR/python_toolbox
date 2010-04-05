@@ -46,7 +46,12 @@ class Event(object):
             [base.get_subscribers() for base in event_bases],
             set()
         )
+
+        # todo: Maybe faster to iterate over the specific_subscribers of all
+        # those in __mro__
+        
         # todo: Is there a more efficient way to add sets?
+        
         
         return set.union(
             base_subscribers,

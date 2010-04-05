@@ -420,7 +420,7 @@ class GuiProject(object):
         new_node = \
             self.project.tree.fork_to_edit(template_node=self.active_node)
         new_node.still_in_editing = True #todo: should be in `fork_to_edit` ?
-        self.tree_structure_changed_on_path()
+        self.tree_structure_changed_on_path().send()
         self.set_active_node(new_node)
         return new_node
 
@@ -445,14 +445,19 @@ class GuiProject(object):
         # This is the important line here, which actually executes
         # the Project's sync_crunchers function.
         
-        self.tree_changed().send()
-        # todo: It would be hard but great if we could know whether the tree
-        # changes were on the path.
         
-        if self.ran_out_of_tree_while_playing:
-            self.ran_out_of_tree_while_playing = False
-            self.stop_playing()
-            self.start_playing()
+        
+        if added_nodes > 0:
+
+            self.tree_structure_changed().send()
+            # todo: It would be hard but important to know whether the tree
+            # changes (1) were on the path (2) structure or data. maybe subclass
+            # something inside.
+            
+            if self.ran_out_of_tree_while_playing:
+                self.ran_out_of_tree_while_playing = False
+                self.stop_playing()
+                self.start_playing()
             
         return added_nodes
 
