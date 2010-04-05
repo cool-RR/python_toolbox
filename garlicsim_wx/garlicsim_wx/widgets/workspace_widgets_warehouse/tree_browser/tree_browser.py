@@ -15,6 +15,7 @@ import wx
 from wx.lib.scrolledpanel import ScrolledPanel
 
 import garlicsim_wx.general_misc.vectorish as vectorish
+from garlicsim_wx.general_misc import pubsub
 import garlicsim
 from garlicsim_wx.widgets import WorkspaceWidget
 
@@ -50,11 +51,12 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
         self.Bind(wx.EVT_SIZE, self.on_size)
         self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse_event)
 
+        self.NeedsRecalculation = 
+        
         self.clickable_map = {}
         
         
-        elements_raw = {
-            
+        elements_raw = {            
             'Untouched': 'graysquare.png',
             'Touched': 'graystar.png',
             'Block': 'grayblock.png',
