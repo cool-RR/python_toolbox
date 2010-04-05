@@ -122,66 +122,70 @@ class GuiProject(object):
         # todo: move to __init_event_types
         # todo: not clear that `TreeChanged` means that only data changed
         # and not structure.
-        self.TreeChanged = pubsub.EventType('TreeChanged')
-        self.TreeChangedOnPath = pubsub.EventType(
+        
+        self.event_system = pubsub.EventSystem()
+        
+        self.TreeChanged = self.event_system.make_event_type('TreeChanged')
+        self.TreeChangedOnPath = self.event_system.make_event_type(
             'TreeChangedOnPath',
             bases=(self.TreeChanged,)
         )
-        self.TreeChangedNotOnPath = pubsub.EventType(
+        self.TreeChangedNotOnPath = self.event_system.make_event_type(
             'TreeChangedNotOnPath',
             bases=(self.TreeChanged,)
         )
         
-        self.TreeChangedAtUnknownLocation = pubsub.EventType(
+        self.TreeChangedAtUnknownLocation = self.event_system.make_event_type(
             'TreeChangedAtUnknownLocation',
-            bases=(self.TreeChangedNotOnPath, self.TreeChangedOnPath,)
+            bases=(self.TreeChangedOnPath, self.TreeChangedNotOnPath,)
         )
         
-        self.TreeStructureChanged = pubsub.EventType(
+        self.TreeStructureChanged = self.event_system.make_event_type(
             'TreeStructureChanged',
             bases=(self.TreeChanged,)
         )
-        self.TreeStructureChangedOnPath = pubsub.EventType(
+        self.TreeStructureChangedOnPath = self.event_system.make_event_type(
             'TreeStructureChangedOnPath',
             bases=(
                 self.TreeChangedOnPath,
                 self.TreeStructureChanged
             )
         )
-        self.TreeStructureChangedNotOnPath = pubsub.EventType(
+        self.TreeStructureChangedNotOnPath = self.event_system.make_event_type(
             'TreeStructureChangedNotOnPath',
             bases=(
                 self.TreeChangedNotOnPath,
                 self.TreeStructureChanged
             )
         )
-        self.TreeStructureChangedAtUnknownLocation = pubsub.EventType(
+        self.TreeStructureChangedAtUnknownLocation = self.event_system.make_event_type(
             'TreeStructureChangedAtUnknownLocation',
             bases=(
                 self.TreeStructureChangedOnPath,
-                self.TreeStructureChangedNotOnPath
+                self.TreeStructureChangedNotOnPath,
+                self.TreeChangedAtUnknownLocation
             )
         )
         
 
-        self.PseudoclockChanged = pubsub.EventType('PseudoclockChanged')
+        self.PseudoclockChanged = self.event_system.make_event_type('PseudoclockChanged')
 
-        self.ActiveNodeChanged = pubsub.EventType('ActiveNodeChanged')
+        self.ActiveNodeChanged = self.event_system.make_event_type('ActiveNodeChanged')
         # todo: should possibly be subclass of PseudoclockChanged
         
-        self.PathChanged = pubsub.EventType('PathChanged')
+        self.PathChanged = self.event_system.make_event_type('PathChanged')
         
-        self.PathContentsChanged = pubsub.EventType(
+        self.PathContentsChanged = self.event_system.make_event_type(
             'PathContentsChanged',
             subs=(self.PathChanged, self.TreeChangedOnPath)
         )
         
-        self.PlayingToggled = pubsub.EventType('PlayingToggled')
-        self.PlayingStarted = pubsub.EventType(
+        self.PlayingToggled = self.event_system.make_event_type('PlayingToggled')
+        self.PlayingStarted = self.event_system.make_event_type(
             'PlayingStarted',
             bases=(self.PlayingToggled,)
         )
-        self.PlayingStopped = pubsub.EventType(
+        self.PlayingStopped = self.event_system.make_event_type(
             'PlayingStopped',
             bases=(self.PlayingToggled,)
         )

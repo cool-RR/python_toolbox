@@ -1,9 +1,43 @@
 from garlicsim.general_misc.third_party import abc
 import itertools
+from garlicsim.general_misc import cute_iter_tools
 # todo: possibly make thread that consolidates subscriber calling.
 # todo: can define "abstract" event type, so you can't create direct instances,
 # only instances of subclasses. For example TreeChanged.
 
+def class_cmp(a, b):
+    if issubclass(a, b):
+        return -1
+    if issubclass(b, a):
+        return 1
+    else:
+        return type.__cmp__(a, b)
+        
+
+def sanitize_bases(bases):
+    new_bases = sorted(bases, class_cmp)
+        
+    kill_set = set()
+    
+    for first_base, second_base in \
+        cute_iter_tools.orderless_combinations(new_bases, 2):
+        if issubclass(first_base, second_base):
+            kill_set.add(second_base)
+    
+    for base_to_kill in kill_set:
+        new_bases.remove(base_to_kill)
+    
+    return tuple(new_bases)
+
+def inject_base(cls, base): # move to other module
+    """
+    new_bases = [base]
+    for old_base in cls.__bases__:
+        if not issubclass(base, old_base):
+            new_bases.append(old_base)
+    """
+    cls.__bases__ = sanitize_bases(cls.__bases__ + (base,))
+    
 
 class EventSystem(object):
     
@@ -31,31 +65,40 @@ class EventSystem(object):
     
     def make_event_type(self, name='Unnamed', bases=None, subs=None):
         
+        
+        if bases is None:
+            bases = ()
+        bases = sanitize_bases(bases + (self.bottom_event_type,))
+        """
         if bases is None:
             bases = (self.bottom_event_type,)
         else:
             assert all(isinstance(base, type) for base in bases)
-            if not any(issubclass(base, self.bottom_event_type) in bases):
+            if not any(issubclass(base, self.bottom_event_type)
+                       for base in bases):
                 bases = (self.bottom_event_type,) + bases
                 # Afraid to change to +=
+        """
         
         if subs is None:
             subs = (self.top_event_type,)
         else:
-            assert all(isinstance(base, type) for sub in subs)
-            if not any(issubclass(self.top_event_type, sub) in subs):
+            assert all(isinstance(sub, type) for sub in subs)
+            if not any(issubclass(self.top_event_type, sub) for sub in subs):
                 subs = subs + (self.top_event_type,)
                 # Afraid to change to +=
         
-        event_type = EventType(name, bases, subs)
+        event_type = EventType(name, bases=bases, subs=subs)
         
         self.event_type_set.add(event_type)
         
         return event_type
+        
+    
     
     def remove_event_type(self, event_type):
         assert event_type in self.event_type_set
-
+        # more complicated
         for other_event_type in self.event_type_set:
             if event_type in other_event_type.__bases__:
                 new_bases = list(other_event_type.__bases__)
@@ -95,13 +138,13 @@ class EventType(type):
         
         if bases is None:
             bases = (BaseEvent,)
-            
+        
         #namespace = dict(namespace)
         #namespace.setdefault('__metaclass__', EventType)
         
         for sub in subs:
             assert issubclass(sub, BaseEvent)
-            sub.__bases__ = (cls,) + sub.__bases__ # Oh yeah.
+            inject_base(sub, cls) # Oh yeah.
         
         cls = super(EventType, cls).__init__(name, bases, namespace)
     

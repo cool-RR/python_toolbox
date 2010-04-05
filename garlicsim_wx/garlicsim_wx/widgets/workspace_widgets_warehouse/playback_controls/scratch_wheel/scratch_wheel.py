@@ -106,7 +106,7 @@ class ScratchWheel(wx.Panel):
         
         self.recalculation_flag = False
         
-        self.NeedsRecalculation = pubsub.EventType(
+        self.NeedsRecalculation = self.gui_project.event_system.make_event_type(
             'NeedsRecalculation',
             subs=(
                 self.gui_project.PseudoclockChanged,
@@ -118,7 +118,7 @@ class ScratchWheel(wx.Panel):
             FlagRaiser(self, 'recalculation_flag', refresh=False)
         )
         
-        #self.NeedsRedraw = pubsub.EventType('NeedsRedraw')
+        #self.NeedsRedraw = self.gui_project.event_system.make_event_type('NeedsRedraw')
         #self.NeedsRedraw 
         
         

@@ -55,7 +55,7 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
         self.tree_remapping_flag = False
         self.recalculation_flag = False
         
-        self.NeedsTreeRemapping = pubsub.EventType(
+        self.NeedsTreeRemapping = self.gui_project.event_system.make_event_type(
             'NeedsTreeRemapping',
             subs=(
                 self.gui_project.TreeStructureChanged,
@@ -66,7 +66,7 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
             FlagRaiser(self, 'tree_remapping_flag')
         )
         
-        self.NeedsRecalculation = pubsub.EventType(
+        self.NeedsRecalculation = self.gui_project.event_system.make_event_type(
             'NeedsRecalculation',
             subs=(
                 self.NeedsTreeRemapping,
