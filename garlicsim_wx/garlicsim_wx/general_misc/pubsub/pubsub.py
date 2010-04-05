@@ -4,17 +4,24 @@ import itertools
 
 class EventType(type):
     # todo: can make nice __repr__
-    def __new__(mcls, name='UnnamedEventType', bases=None, namespace={}, subs=(,)):
+    def __new__(mcls, name='UnnamedEventType', bases=None, namespace={}, subs=()):
         '''note that default for bases is (Event,)'''
+        
         if bases is None:
             bases = (Event,)
+            
         namespace = dict(namespace)
         namespace.setdefault('__metaclass__', EventType)
+
+        for sub in subs:
+            assert isinstance(sub, EventType)
+            sub.__bases__ = (mcls,) + sub.__bases__ # Oh yeah.
+        
         cls = super(EventType, mcls).__new__(mcls, name, bases, namespace)
         cls.specific_subscribers = set()
         return cls
     
-    def __init__(mcls, name='UnnamedEventType', bases=None, namespace={}, subs=(,)):
+    def __init__(mcls, name='UnnamedEventType', bases=None, namespace={}, subs=()):
         '''note that default for bases is (Event,)'''
         namespace = dict(namespace)
         namespace.setdefault('__metaclass__', EventType)
