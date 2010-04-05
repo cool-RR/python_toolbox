@@ -1,8 +1,9 @@
 
 
-class FlagRaiser(object):
-    def __init__(self, object, attribute_name, value=True):
-        self.object, self.attribute_name, self.value = \
-            object, attribute_name, value
+class FlagRaiser(object): # todo: consider renaming to show it does `Refresh`
+    def __init__(self, window, attribute_name, value=True):
+        self.window, self.attribute_name, self.value = \
+            window, attribute_name, value
     def __call__(self):
-        setattr(object, attribute_name, value)
+        setattr(self.window, self.attribute_name, self.value)
+        self.window.Refresh()

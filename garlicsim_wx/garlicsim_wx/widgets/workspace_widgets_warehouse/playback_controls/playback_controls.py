@@ -62,11 +62,12 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         
         self.Bind(wx.EVT_SIZE, self.on_size)
         self.Bind(wx.EVT_PAINT, self.on_paint)
-        self.Bind(
+        """self.Bind(
             wx.EVT_IDLE,
             self.update_buttons_status,
         )
         # todo: eventually cancel this and use pubsub
+        """
         
         self.center_button_mode = PlayMode
 
@@ -85,6 +86,9 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
             )
         )
         
+        self.NavigationButtonsNeedUpdate.add_subscriber(
+            FlagRaiser(self, 'navigation_buttons_update_flag')
+        )
         
         bitmap_list = ['to_start', 'previous_node', 'play',
                                 'next_node', 'to_end', 'pause',
@@ -174,37 +178,29 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
     
         
     def on_paint(self, event):
-        if self.center_button_needs_update:
+        if self.center_button_update_flag:
             self.__update_center_button()
-        if self.NavigationButtonsNeedUpdate:
+        if self.navigation_buttons_update_flag:
             self.__update_navigation_buttons()    
-        
-        super(PlaybackControls, self).OnPaint(event)
-        
-        event.Skip()
-            
-    def update_buttons_status(self, e=None):
         
         self.scratch_wheel._ScratchWheel__redraw_if_wheel_should_rotate()
         # todo: Fishy to call private method here
         
+        super(PlaybackControls, self).OnPaint(event)
+        
+        event.Skip()
+
+    def __update_navigation_buttons(self):
+        
         active_node = self.gui_project.active_node
         
-        if self.gui_project.path is None:
+        if self.gui_project.path is None or active_node is None:
             self.button_to_start.Disable()
             self.button_previous_node.Disable()
-            self.button_center_button.Disable()
             self.button_next_node.Disable()
             self.button_to_end.Disable()
-        
-        elif active_node is None:
-            self.button_previous_node.Disable()
-            self.button_next_node.Disable()
-            self.button_center_button.Disable()
-            
-        else:
-            self.button_center_button.Enable()
-            
+    
+        else:      
             if active_node.parent is not None:
                 self.button_previous_node.Enable()
                 self.button_to_start.Enable()
@@ -219,19 +215,28 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
                 self.button_next_node.Disable()
                 self.button_to_end.Disable()
         
-        if self.button_center_button.IsEnabled():
-            self.__update_center_button()
-            
+        self.navigation_buttons_update_flag = False    
         
     def __update_center_button(self):
-        active_node = self.gui_project.active_node
-        assert active_node is not None
-        if active_node.still_in_editing:
-            self.set_center_button_mode(FinalizeMode)
-        elif self.gui_project.is_playing:
-            self.set_center_button_mode(PauseMode)
-        else: # self.gui_project.is_playing is False
+        gui_project = self.gui_project
+        active_node = gui_project.active_node
+        
+        if gui_project.path is None or active_node is None:
             self.set_center_button_mode(PlayMode)
+            self.button_to_start.Disable()
+        else:
+            self.button_to_start.Enable()
+            # todo: find out if it's wasteful to call enable if the button's
+            # enbaled
+            
+            if active_node.still_in_editing:
+                self.set_center_button_mode(FinalizeMode)
+            elif self.gui_project.is_playing:
+                self.set_center_button_mode(PauseMode)
+            else: # self.gui_project.is_playing is False
+                self.set_center_button_mode(PlayMode)
+        
+        self.center_button_update_flag = False
     
     def set_center_button_mode(self, center_button_mode): 
         # Not privatized because it's a setter

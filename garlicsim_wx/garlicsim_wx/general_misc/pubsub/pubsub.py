@@ -4,7 +4,7 @@ import itertools
 
 class EventType(type):
     # todo: can make nice __repr__
-    def __new__(mcls, name='UnnamedEventType', bases=None, namespace={}):
+    def __new__(mcls, name='UnnamedEventType', bases=None, namespace={}, subs=(,)):
         '''note that default for bases is (Event,)'''
         if bases is None:
             bases = (Event,)
@@ -14,7 +14,7 @@ class EventType(type):
         cls.specific_subscribers = set()
         return cls
     
-    def __init__(mcls, name='UnnamedEventType', bases=None, namespace={}):
+    def __init__(mcls, name='UnnamedEventType', bases=None, namespace={}, subs=(,)):
         '''note that default for bases is (Event,)'''
         namespace = dict(namespace)
         namespace.setdefault('__metaclass__', EventType)
