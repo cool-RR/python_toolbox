@@ -37,6 +37,7 @@ def inject_base(cls, base): # move to other module
             new_bases.append(old_base)
     """
     cls.__bases__ = sanitize_bases(cls.__bases__ + (base,))
+    # All your base are belong to us.
     
 
 class EventSystem(object):
@@ -50,7 +51,7 @@ class EventSystem(object):
         self.top_event_type = \
             EventType('TopEvent', (self.bottom_event_type,), {})
         
-        self.event_type_set = set((
+        self.event_types = set((
             self.bottom_event_type,
             self.top_event_type
         ))
@@ -90,23 +91,28 @@ class EventSystem(object):
         
         event_type = EventType(name, bases=bases, subs=subs)
         
-        self.event_type_set.add(event_type)
+        self.event_types.add(event_type)
         
         return event_type
         
     
     
     def remove_event_type(self, event_type):
-        assert event_type in self.event_type_set
-        # more complicated
-        for other_event_type in self.event_type_set:
-            if event_type in other_event_type.__bases__:
+
+        event_type_to_remove = event_type
+        assert event_type_to_remove in self.event_types
+        abandoned_bases = event_type_to_remove.__bases__
+        
+        for other_event_type in self.event_types:
+            if event_type_to_remove in other_event_type.__bases__:
                 new_bases = list(other_event_type.__bases__)
                 while event_type in new_bases:
                     new_bases.remove(event_type)
-                other_event_type.__bases__ = tuple(new_bases)
+                new_bases += abandoned_bases
+                
+                other_event_type.__bases__ = sanitize_bases(new_bases)
         
-        self.event_type_set.remove(event_type)
+        self.event_types.remove(event_type)
         
 
 # Thinking aid: If event type A has subclasses B and C, it means it gets called
@@ -208,27 +214,48 @@ class BaseEvent(object):
     
         
 if __name__ == '__main__': # todo: move this to a test
-    class Violence(Event): pass
-    class Explosion(Violence): pass
-    class FistFight(Violence): pass
-    class War(Explosion, FistFight): pass
-    
-    
-    def violence_subscriber():
-        print('Violence subscriber called')
-    def explosion_subscriber():
-        print('Explosion subscriber called')
-    def fist_fight_subscriber():
-        print('FistFight subscriber called')
-    def war_subscriber():
-        print('War subscriber called')
-    
-    Violence.add_subscriber(violence_subscriber)
-    Explosion.add_subscriber(explosion_subscriber)
-    FistFight.add_subscriber(fist_fight_subscriber)
-    War.add_subscriber(war_subscriber)
-    
-    Violence().send()
     
     event_system = EventSystem()
-    event_type = event_system.make_event_type()
+    SocialEvent = event_system.make_event_type('SocialEvent')
+    Party = event_system.make_event_type('Party', (SocialEvent,))
+    MusicParty = event_system.make_event_type('MusicParty', (Party,))
+    TranceMusicParty = event_system.make_event_type('TranceMusicParty', (MusicParty,))
+    Dinner = event_system.make_event_type('Dinner', (SocialEvent,))
+    Show = event_system.make_event_type('Show', (SocialEvent,))
+    RockConcert = event_system.make_event_type('RockConcert', (MusicParty, Show))
+    
+    DinnerOrShow = event_system.make_event_type('DinnerOrShow', subs=(Dinner, Show))
+    
+    def make_subscriber(name):
+        def subscriber():
+            print('%s subscriber called' % name)
+        return subscriber
+    
+    for event_type in event_system.event_types:
+        event_type.add_subscriber(make_subscriber(event_type.__name__))
+        
+    
+    def get_relations(classes):
+        relations = {}
+        for cls1 in classes:
+            relations[cls1] = set(cls2 for cls2 in classes if issubclass(cls1, cls2))
+        return relations
+            
+    def prune_relations(rel1, thing):
+        for (key, value) in rel1.copy().iteritems():
+            if (key is thing):
+                del rel1[thing]
+                continue
+            if thing in value:
+                value.remove(thing)
+       
+    to_remove = MusicParty
+    rel = get_relations(event_system.event_types)
+    prune_relations(rel, to_remove)
+    event_system.remove_event_type(to_remove)
+    new_rel = get_relations(event_system.event_types)
+    assert new_rel == rel
+        
+            
+            
+    
