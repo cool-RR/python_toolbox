@@ -106,15 +106,15 @@ class ScratchWheel(wx.Panel):
         
         self.recalculation_flag = False
         
-        self.NeedsRecalculation = self.gui_project.emitter_system.make_emitter(
-            'NeedsRecalculation',
-            subs=(
+        self.needs_recalculation_emitter = self.gui_project.emitter_system.make_emitter(
+            'needs_recalculation_emitter',
+            inputs=(
                 self.gui_project.pseudoclock_changed_emitter,
                 self.gui_project.active_node_changed_emitter # todo: not sure if needed
             )
         )
         
-        self.NeedsRecalculation.add_subscriber(
+        self.needs_recalculation_emitter.needs_output(
             FlagRaiser(self, 'recalculation_flag', refresh=False)
         )
         
@@ -122,7 +122,7 @@ class ScratchWheel(wx.Panel):
         #self.NeedsRedraw 
         
         
-        self.NeedsRecalculation().send()
+        self.needs_recalculation_emitter().send()
 
         
     def get_current_angle(self):
@@ -266,7 +266,7 @@ class ScratchWheel(wx.Panel):
             node = both_nodes[0] or both_nodes[1]
 
             self.gui_project.set_active_node(node, modify_path=False)
-            self.gui_project.pseudoclock_changed_emitter().send()
+            self.gui_project.pseudoclock_changed_emitter.emit()
             # todo: gui_project should have method to change pseudoclock, so
             # it'll change the active node itself and we won't need to call any
             # event. this method should also be used in __play_next.

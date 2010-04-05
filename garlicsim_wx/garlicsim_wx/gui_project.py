@@ -127,40 +127,42 @@ class GuiProject(object):
         
         self.tree_changed_emitter = self.emitter_system.make_emitter()
         self.tree_changed_on_path_emitter = self.emitter_system.make_emitter(
-            'tree_changed_on_path_emitter',
-            bases=(self.tree_changed_emitter,)
+            outputs=(self.tree_changed_emitter,)
         )
+
         self.tree_changed_not_on_path = self.emitter_system.make_emitter(
-            'tree_changed_not_on_path',
-            bases=(self.tree_changed_emitter,)
+            outputs=(self.tree_changed_emitter,)
         )
         
-        self.tree_changed_at_unknown_location_emitter = self.emitter_system.make_emitter(
-            'tree_changed_at_unknown_location_emitter',
-            bases=(self.tree_changed_on_path_emitter, self.tree_changed_not_on_path,)
+        self.tree_changed_at_unknown_location_emitter = \
+            self.emitter_system.make_emitter(
+            outputs=(
+                self.tree_changed_on_path_emitter,
+                self.tree_changed_not_on_path,
+            )
         )
         
         self.tree_structure_changed_emitter = self.emitter_system.make_emitter(
-            'tree_structure_changed_emitter',
-            bases=(self.tree_changed_emitter,)
+            outputs=(self.tree_changed_emitter,)
         )
-        self.tree_structure_changed_on_path_emitter = self.emitter_system.make_emitter(
-            'tree_structure_changed_on_path_emitter',
-            bases=(
+        
+        self.tree_structure_changed_on_path_emitter = \
+            self.emitter_system.make_emitter(
+            outputs=(
                 self.tree_changed_on_path_emitter,
                 self.tree_structure_changed_emitter
             )
         )
-        self.tree_structure_changed_not_on_path_emitter = self.emitter_system.make_emitter(
-            'tree_structure_changed_not_on_path_emitter',
-            bases=(
+        self.tree_structure_changed_not_on_path_emitter = \
+            self.emitter_system.make_emitter(
+            outputs=(
                 self.tree_changed_not_on_path,
                 self.tree_structure_changed_emitter
             )
         )
-        self.tree_structure_changed_at_unknown_location_emitter = self.emitter_system.make_emitter(
-            'tree_structure_changed_at_unknown_location_emitter',
-            bases=(
+        self.tree_structure_changed_at_unknown_location_emitter = \
+            self.emitter_system.make_emitter(
+            outputs=(
                 self.tree_structure_changed_on_path_emitter,
                 self.tree_structure_changed_not_on_path_emitter,
                 self.tree_changed_at_unknown_location_emitter
@@ -168,28 +170,28 @@ class GuiProject(object):
         )
         
 
-        self.pseudoclock_changed_emitter = self.emitter_system.make_emitter('pseudoclock_changed_emitter')
+        self.pseudoclock_changed_emitter = self.emitter_system.make_emitter()
 
-        self.active_node_changed_emitter = self.emitter_system.make_emitter('active_node_changed_emitter')
+        self.active_node_changed_emitter = self.emitter_system.make_emitter()
         # todo: should possibly be subclass of pseudoclock_changed_emitter
         
-        self.path_changed_emitter = self.emitter_system.make_emitter('path_changed_emitter')
+        self.path_changed_emitter = self.emitter_system.make_emitter()
         
         self.path_contents_changed_emitter = self.emitter_system.make_emitter(
-            'path_contents_changed_emitter',
-            subs=(self.path_changed_emitter, self.tree_changed_on_path_emitter)
+            inputs=(
+                self.path_changed_emitter,
+                self.tree_changed_on_path_emitter
+            )
         )
         
-        self.playing_toggled_emitter = self.emitter_system.make_emitter('playing_toggled_emitter')
+        self.playing_toggled_emitter = self.emitter_system.make_emitter()
         self.playing_started_emitter = self.emitter_system.make_emitter(
-            'playing_started_emitter',
-            bases=(self.playing_toggled_emitter,)
+            outputs=(self.playing_toggled_emitter,)
         )
         self.playing_stopped_emitter = self.emitter_system.make_emitter(
-            'playing_stopped_emitter',
-            bases=(self.playing_toggled_emitter,)
+            outputs=(self.playing_toggled_emitter,)
         )
-        #todo: maybe need an event type for when editing a state?
+        #todo: maybe need an emitter for when editing a state?
     
 
     ###########################################################################
@@ -199,7 +201,7 @@ class GuiProject(object):
     
     def _set_path(self, path):
         self._path = path
-        self.path_changed_emitter().send()
+        self.path_changed_emitter.emit()
         
     path = property(_get_path, _set_path, doc='The active path.')
         
@@ -246,7 +248,7 @@ class GuiProject(object):
         Returns the node.
         '''
         root = self.project.make_plain_root(*args, **kwargs)
-        self.tree_structure_changed_not_on_path_emitter().send()
+        self.tree_structure_changed_not_on_path_emitter.emit()
         self.set_active_node(root)
         return root
 
@@ -262,7 +264,7 @@ class GuiProject(object):
         Returns the node.
         '''
         root = self.project.make_random_root(*args, **kwargs)
-        self.tree_structure_changed_not_on_path_emitter().send()
+        self.tree_structure_changed_not_on_path_emitter.emit()
         self.set_active_node(root)
         return root
 
@@ -277,7 +279,7 @@ class GuiProject(object):
         was_playing = self.is_playing
         if self.is_playing: self.stop_playing()
         self.active_node = node
-        self.active_node_changed_emitter().send()
+        self.active_node_changed_emitter.emit()
         if was_playing:
             self.start_playing()
         if modify_path:
@@ -300,7 +302,7 @@ class GuiProject(object):
         else:
             self.path.modify_to_include_node(self.active_node)
             
-        self.path_changed_emitter().send()
+        self.path_changed_emitter.emit()
 
 
     def start_playing(self):
@@ -322,8 +324,8 @@ class GuiProject(object):
         assert self.real_time_krap == self.simulation_time_krap == None
         self.real_time_krap = time.time()
         self.simulation_time_krap = self.active_node.state.clock
-        self.playing_started_emitter().send()
-        self.pseudoclock_changed_emitter().send()
+        self.playing_started_emitter.emit()
+        self.pseudoclock_changed_emitter.emit()
         
 
 
@@ -345,8 +347,8 @@ class GuiProject(object):
             self.infinity_job.node.state.clock + self.default_buffer
         
         self.real_time_krap = self.simulation_time_krap = None
-        self.playing_stopped_emitter().send()        
-        self.pseudoclock_changed_emitter().send() #todo: relevant when changes to None?
+        self.playing_stopped_emitter.emit()        
+        self.pseudoclock_changed_emitter.emit() #todo: relevant when changes to None?
         self.project.ensure_buffer(self.active_node, self.default_buffer)
 
 
@@ -413,8 +415,8 @@ class GuiProject(object):
             self.ran_out_of_tree_while_playing = True # unneeded?
             self.simulation_time_krap = new_node.state.clock
         self.active_node = new_node
-        self.pseudoclock_changed_emitter().send()
-        self.active_node_changed_emitter().send()
+        self.pseudoclock_changed_emitter.emit()
+        self.active_node_changed_emitter.emit()
         #self.frame.Refresh() #todo: kill
         
         
@@ -444,7 +446,7 @@ class GuiProject(object):
         new_node = \
             self.project.tree.fork_to_edit(template_node=self.active_node)
         new_node.still_in_editing = True #todo: should be in `fork_to_edit` ?
-        self.tree_structure_changed_on_path_emitter().send()
+        self.tree_structure_changed_on_path_emitter.emit()
         self.set_active_node(new_node)
         return new_node
 
@@ -484,9 +486,9 @@ class GuiProject(object):
         if added_nodes > 0:
             if any(fesity_jobs_to_nodes[job] is not job.node
                    for job in feisty_jobs):
-                self.tree_structure_changed_at_unknown_location_emitter().send()
+                self.tree_structure_changed_at_unknown_location_emitter.emit()
             else:
-                self.tree_changed_at_unknown_location_emitter().send()
+                self.tree_changed_at_unknown_location_emitter.emit()
             # todo: It would be hard but nice to know whether the tree changes
             # were on the path. This could save some rendering on SeekBar.
             

@@ -74,27 +74,27 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         self.center_button_update_flag = True
         self.navigation_buttons_update_flag = True
         
-        self.CenterButtonNeedsUpdate = self.gui_project.emitter_system.make_emitter(
-            'NavigationButtonsNeedUpdate',
-            subs=(
+        self.center_button_needs_update_emitter = self.gui_project.emitter_system.make_emitter(
+            'navigation_buttons_need_update_emitter',
+            inputs=(
                 self.gui_project.playing_toggled_emitter,
                 self.gui_project.active_node_changed_emitter
             )
         )
         
-        self.CenterButtonNeedsUpdate.add_subscriber(
+        self.center_button_needs_update_emitter.needs_output(
             FlagRaiser(self, 'center_button_update_flag')
         )
 
-        self.NavigationButtonsNeedUpdate = self.gui_project.emitter_system.make_emitter(
-            'NavigationButtonsNeedUpdate',
-            subs=(
+        self.navigation_buttons_need_update_emitter = self.gui_project.emitter_system.make_emitter(
+            'navigation_buttons_need_update_emitter',
+            inputs=(
                 self.gui_project.active_node_changed_emitter,
                 self.gui_project.path_contents_changed_emitter
             )
         )
         
-        self.NavigationButtonsNeedUpdate.add_subscriber(
+        self.navigation_buttons_need_update_emitter.needs_output(
             FlagRaiser(self, 'navigation_buttons_update_flag')
         )
         
