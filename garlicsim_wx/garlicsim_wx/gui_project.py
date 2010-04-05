@@ -119,6 +119,8 @@ class GuiProject(object):
         '''
         #todo: can possibly name these event types.
         # todo: move to __init_event_types
+        # todo: not clear that `tree_changed` means that only data changed
+        # and not structure.
         self.tree_changed_on_path = pubsub.EventType('TreeChangedOnPath')
         self.tree_changed_not_on_path = \
             pubsub.EventType('TreeChangedNotOnPath')        
@@ -439,6 +441,13 @@ class GuiProject(object):
         Returns the total amount of nodes that were added to the tree in the
         process.
         '''
+        
+        leaves_to_crunch = (job.node for job in 
+                            self.project.crunching_manager.jobs)
+        blockless_leaves = [leaf for leaf in leaves_to_crunch
+                            if leaf.block is None]
+        # todo: explain what i do here
+        
 
         added_nodes = self.project.sync_crunchers()
         
@@ -448,11 +457,12 @@ class GuiProject(object):
         
         
         if added_nodes > 0:
-
-            self.tree_structure_changed().send()
-            # todo: It would be hard but important to know whether the tree
-            # changes (1) were on the path (2) structure or data. maybe subclass
-            # something inside.
+            if any((leaf.block for leaf in blockless_leaves)):
+                self.tree_structure_changed().send()
+            else:
+                self.tree_changed().send()
+            # todo: It would be hard but nice to know whether the tree changes
+            # were on the path. This could save some rendering on SeekBar.
             
             if self.ran_out_of_tree_while_playing:
                 self.ran_out_of_tree_while_playing = False

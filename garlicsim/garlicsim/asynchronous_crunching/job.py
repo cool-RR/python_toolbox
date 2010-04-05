@@ -17,14 +17,10 @@ class Job(object):
     def __init__(self, node, crunching_profile):
         
         self.node = node
-        '''
-        The node from which we need to crunch.
-        '''
+        '''The node from which we need to crunch.'''
         
         self.crunching_profile = crunching_profile
-        '''
-        The crunching profile to be used for crunching.
-        '''
+        '''The crunching profile to be used for crunching.'''
   
     def is_done(self):
         '''
