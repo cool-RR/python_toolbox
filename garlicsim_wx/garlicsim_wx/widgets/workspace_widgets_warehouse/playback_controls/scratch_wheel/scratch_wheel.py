@@ -106,23 +106,19 @@ class ScratchWheel(wx.Panel):
         
         self.recalculation_flag = False
         
-        self.needs_recalculation_emitter = self.gui_project.emitter_system.make_emitter(
-            'needs_recalculation_emitter',
-            inputs=(
-                self.gui_project.pseudoclock_changed_emitter,
-                self.gui_project.active_node_changed_emitter # todo: not sure if needed
+        self.needs_recalculation_emitter = \
+            self.gui_project.emitter_system.make_emitter(
+                inputs=(
+                    self.gui_project.pseudoclock_changed_emitter,
+                    self.gui_project.active_node_changed_emitter # todo: needed?
+                ),
+                outputs=(
+                    FlagRaiser(self, 'recalculation_flag', refresh=False),
+                )
             )
-        )
-        
-        self.needs_recalculation_emitter.needs_output(
-            FlagRaiser(self, 'recalculation_flag', refresh=False)
-        )
-        
-        #self.NeedsRedraw = self.gui_project.emitter_system.make_emitter('NeedsRedraw')
-        #self.NeedsRedraw 
         
         
-        self.needs_recalculation_emitter().send()
+        self.needs_recalculation_emitter.emit()
 
         
     def get_current_angle(self):

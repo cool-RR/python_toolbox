@@ -55,31 +55,30 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
         self.tree_remapping_flag = False
         self.recalculation_flag = False
         
-        self.needs_tree_remapping_emitter = self.gui_project.emitter_system.make_emitter(
-            'needs_tree_remapping_emitter',
-            inputs=(
-                self.gui_project.tree_structure_changed_emitter,
+        self.needs_tree_remapping_emitter = \
+            self.gui_project.emitter_system.make_emitter(
+                inputs=(
+                    self.gui_project.tree_structure_changed_emitter,
+                ),
+                outputs=(
+                    FlagRaiser(self, 'tree_remapping_flag'),
+                )
             )
-        )
 
-        self.needs_tree_remapping_emitter.needs_output(
-            FlagRaiser(self, 'tree_remapping_flag')
-        )
         
-        self.needs_recalculation_emitter = self.gui_project.emitter_system.make_emitter(
-            'needs_recalculation_emitter',
-            inputs=(
-                self.needs_tree_remapping_emitter,
-                self.gui_project.active_node_changed_emitter,
-                self.gui_project.tree_changed_on_path_emitter,                
-                # Note that if there's a non-structure tree change not on the
-                # path it won't affect us.
+        self.needs_recalculation_emitter = \
+            self.gui_project.emitter_system.make_emitter(
+                inputs=(
+                    self.needs_tree_remapping_emitter,
+                    self.gui_project.active_node_changed_emitter,
+                    self.gui_project.tree_changed_on_path_emitter,                
+                    # Note that if there's a non-structure tree change not on
+                    # the path it won't affect us.
+                ),
+                outputs=(
+                    FlagRaiser(self, 'recalculation_flag'),
+                )
             )
-        )
-        
-        self.needs_recalculation_emitter.needs_output(
-            FlagRaiser(self, 'recalculation_flag')
-        )
         
         self.clickable_map = {}
         

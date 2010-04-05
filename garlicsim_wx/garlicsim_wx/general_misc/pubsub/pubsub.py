@@ -6,7 +6,7 @@ class EmitterSystem(object):
     #todo later: optimize by cutting redundant links between boxes
     def __init__(self):
         self.bottom_emitter = Emitter()
-        self.top_emitter = Emitter(inputs=(self.bottom_emitter))
+        self.top_emitter = Emitter(outputs=(self.bottom_emitter,))
         self.emitters = set()
     
     def make_emitter(self, inputs=(), outputs=()):
@@ -15,6 +15,8 @@ class EmitterSystem(object):
         outputs = set(outputs)
         outputs.add(self.bottom_emitter)
         emitter = Emitter(inputs, outputs)
+        self.emitters.add(emitter)
+        return emitter
     
     def remove_emitter(self, emitter):
         emitter.disconnect_from_all()
@@ -32,19 +34,20 @@ class Emitter(object):
             
     
     def add_input(self, emitter):
-        assert isinstance(thing, Emitter)
+        assert isinstance(emitter, Emitter)
         self.inputs.add(emitter)
         emitter.outputs.add(self)
         
     def remove_input(self, emitter):
-        assert isinstance(thing, Emitter)
+        assert isinstance(emitter, Emitter)
         self.inputs.remove(emitter)
         emitter.outputs.remove(self)
     
     def add_output(self, thing):
         assert isinstance(thing, Emitter) or callable(thing)
         self.outputs.add(thing)
-        emitter.inputs.add(self)
+        if isinstance(thing, Emitter):
+            thing.inputs.add(self)
         
     def remove_output(self, thing):
         assert isinstance(thing, Emitter) or callable(thing)
@@ -72,7 +75,7 @@ class Emitter(object):
         children_callable_outputs = reduce(
             set.union,
             (emitter.get_total_callable_outputs() for emitter
-             in self.get_emitter_outputs()),
+             in self.get_emitter_outputs() if emitter is not self),
             set()
         )
         

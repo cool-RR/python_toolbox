@@ -74,29 +74,29 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         self.center_button_update_flag = True
         self.navigation_buttons_update_flag = True
         
-        self.center_button_needs_update_emitter = self.gui_project.emitter_system.make_emitter(
-            'navigation_buttons_need_update_emitter',
-            inputs=(
-                self.gui_project.playing_toggled_emitter,
-                self.gui_project.active_node_changed_emitter
-            )
+        self.center_button_needs_update_emitter = \
+            self.gui_project.emitter_system.make_emitter(
+                inputs=(
+                    self.gui_project.playing_toggled_emitter,
+                    self.gui_project.active_node_changed_emitter
+                ),
+                outputs=(
+                    FlagRaiser(self, 'center_button_update_flag'),
+                )
         )
         
-        self.center_button_needs_update_emitter.needs_output(
-            FlagRaiser(self, 'center_button_update_flag')
-        )
 
-        self.navigation_buttons_need_update_emitter = self.gui_project.emitter_system.make_emitter(
-            'navigation_buttons_need_update_emitter',
-            inputs=(
-                self.gui_project.active_node_changed_emitter,
-                self.gui_project.path_contents_changed_emitter
-            )
+        self.navigation_buttons_need_update_emitter = \
+            self.gui_project.emitter_system.make_emitter(
+                inputs=(
+                    self.gui_project.active_node_changed_emitter,
+                    self.gui_project.path_contents_changed_emitter
+                ),            
+                outputs=(
+                    FlagRaiser(self, 'navigation_buttons_update_flag'),
+                )
         )
         
-        self.navigation_buttons_need_update_emitter.needs_output(
-            FlagRaiser(self, 'navigation_buttons_update_flag')
-        )
         
         bitmap_list = ['to_start', 'previous_node', 'play',
                                 'next_node', 'to_end', 'pause',
