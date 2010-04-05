@@ -73,7 +73,7 @@ class ScratchWheel(wx.Panel):
         
         self.line_width = 20
 
-        self.frame_number_that_should_be_drawn = None
+        self.frame_number_that_should_be_drawn = 0
         
         self.current_frame_number = -1
         # Set to -1 to make sure first drawing won't fuck up
@@ -108,12 +108,15 @@ class ScratchWheel(wx.Panel):
         
         self.NeedsUpdate = pubsub.EventType(
             'NeedsUpdate',
-            bases=(self.gui_project.PseudoclockChanged)
+            subs=(
+                self.gui_project.PseudoclockChanged,
+                self.gui_project.ActiveNodeChanged # todo: not sure if needed
+            )
         )
         
         self.NeedsUpdate.add_subscriber(FlagRaiser(self, 'update_flag'))
         
-        #self.__calculate_frame_number()
+        self.NeedsUpdate().send()
 
         
     def get_current_angle(self):
@@ -147,7 +150,7 @@ class ScratchWheel(wx.Panel):
         else:
             return active_node.state.clock
                     
-    def __calculate_frame_number(self):
+    def __update(self):
         angle = self.get_current_angle()
         frame_number = int(
             ((angle % ((2/3) * math.pi)) / (2 * math.pi)) * 3 * images.N_FRAMES
@@ -156,15 +159,12 @@ class ScratchWheel(wx.Panel):
             frame_number =- 1
         
         self.frame_number_that_should_be_drawn = frame_number
-    
-    def __redraw_if_wheel_should_rotate(self):        
-        self.__calculate_frame_number()
-        if self.frame_number_that_should_be_drawn != self.current_frame_number:
-            self.Refresh()
+        
+        self.__update_motion_blur_bitmap_if_needed()
+        
+        self.update_flag = False
     
     def __update_motion_blur_bitmap_if_needed(self):
-        
-        
         
         if self.velocity_tracking_counter == 0:
             # todo: if settled on a period of 1, cut the period business
@@ -207,9 +207,9 @@ class ScratchWheel(wx.Panel):
         if self.gui_project is None:
             return
         
-        self.__redraw_if_wheel_should_rotate()
-        self.__update_motion_blur_bitmap_if_needed()
-        
+        if self.update_flag:
+            self.__update()
+            
         bw, bh = self.GetWindowBorderSize()
         
         ox, oy = ((4 - bw) / 2 , (4 - bh) / 2)
@@ -224,6 +224,7 @@ class ScratchWheel(wx.Panel):
     def on_mouse_event(self, e):
         #todo: possibly do momentum, like in old shockwave carouselle.
         # todo: right click should give context menu with 'Sensitivity...'
+        # todo: make check: if left up and has capture, release capture
 
         self.Refresh()
         
@@ -260,6 +261,10 @@ class ScratchWheel(wx.Panel):
             node = both_nodes[0] or both_nodes[1]
 
             self.gui_project.set_active_node(node, modify_path=False)
+            self.gui_project.PseudoclockChanged().send()
+            # todo: gui_project should have method to change pseudoclock, so
+            # it'll change the active node itself and we won't need to call any
+            # event. this method should also be used in __play_next.
             
             if list(both_nodes).count(None) == 1: # Means we got an edge node
                 edge_clock = node.state.clock

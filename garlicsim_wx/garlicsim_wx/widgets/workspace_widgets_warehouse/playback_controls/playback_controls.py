@@ -181,10 +181,7 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         if self.center_button_update_flag:
             self.__update_center_button()
         if self.navigation_buttons_update_flag:
-            self.__update_navigation_buttons()    
-        
-        self.scratch_wheel._ScratchWheel__redraw_if_wheel_should_rotate()
-        # todo: Fishy to call private method here
+            self.__update_navigation_buttons()
         
         super(PlaybackControls, self).OnPaint(event)
         
