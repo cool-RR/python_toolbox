@@ -106,11 +106,11 @@ class ScratchWheel(wx.Panel):
         
         self.recalculation_flag = False
         
-        self.NeedsRecalculation = self.gui_project.event_system.make_event_type(
+        self.NeedsRecalculation = self.gui_project.emitter_system.make_emitter(
             'NeedsRecalculation',
             subs=(
-                self.gui_project.PseudoclockChanged,
-                self.gui_project.ActiveNodeChanged # todo: not sure if needed
+                self.gui_project.pseudoclock_changed_emitter,
+                self.gui_project.active_node_changed_emitter # todo: not sure if needed
             )
         )
         
@@ -118,7 +118,7 @@ class ScratchWheel(wx.Panel):
             FlagRaiser(self, 'recalculation_flag', refresh=False)
         )
         
-        #self.NeedsRedraw = self.gui_project.event_system.make_event_type('NeedsRedraw')
+        #self.NeedsRedraw = self.gui_project.emitter_system.make_emitter('NeedsRedraw')
         #self.NeedsRedraw 
         
         
@@ -266,7 +266,7 @@ class ScratchWheel(wx.Panel):
             node = both_nodes[0] or both_nodes[1]
 
             self.gui_project.set_active_node(node, modify_path=False)
-            self.gui_project.PseudoclockChanged().send()
+            self.gui_project.pseudoclock_changed_emitter().send()
             # todo: gui_project should have method to change pseudoclock, so
             # it'll change the active node itself and we won't need to call any
             # event. this method should also be used in __play_next.

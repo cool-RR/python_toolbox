@@ -55,10 +55,10 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
         self.tree_remapping_flag = False
         self.recalculation_flag = False
         
-        self.NeedsTreeRemapping = self.gui_project.event_system.make_event_type(
+        self.NeedsTreeRemapping = self.gui_project.emitter_system.make_emitter(
             'NeedsTreeRemapping',
             subs=(
-                self.gui_project.TreeStructureChanged,
+                self.gui_project.tree_structure_changed_emitter,
             )
         )
 
@@ -66,12 +66,12 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
             FlagRaiser(self, 'tree_remapping_flag')
         )
         
-        self.NeedsRecalculation = self.gui_project.event_system.make_event_type(
+        self.NeedsRecalculation = self.gui_project.emitter_system.make_emitter(
             'NeedsRecalculation',
             subs=(
                 self.NeedsTreeRemapping,
-                self.gui_project.ActiveNodeChanged,
-                self.gui_project.TreeChangedOnPath,                
+                self.gui_project.active_node_changed_emitter,
+                self.gui_project.tree_changed_on_path_emitter,                
                 # Note that if there's a non-structure tree change not on the
                 # path it won't affect us.
             )
