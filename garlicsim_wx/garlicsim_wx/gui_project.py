@@ -480,9 +480,9 @@ class GuiProject(object):
         if added_nodes > 0:
             if any(fesity_jobs_to_nodes[job] is not job.node
                    for job in feisty_jobs):
-                self.TreeStructureChanged().send()
+                self.TreeStructureChangedAtUnknownLocation().send()
             else:
-                self.TreeChanged().send()
+                self.TreeChangedAtUnknownLocation().send()
             # todo: It would be hard but nice to know whether the tree changes
             # were on the path. This could save some rendering on SeekBar.
             

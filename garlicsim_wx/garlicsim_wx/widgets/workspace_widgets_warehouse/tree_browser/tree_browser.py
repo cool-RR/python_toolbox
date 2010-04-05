@@ -16,6 +16,7 @@ from wx.lib.scrolledpanel import ScrolledPanel
 
 import garlicsim_wx.general_misc.vectorish as vectorish
 from garlicsim_wx.general_misc import pubsub
+from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
 import garlicsim
 from garlicsim_wx.widgets import WorkspaceWidget
 
@@ -51,10 +52,36 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
         self.Bind(wx.EVT_SIZE, self.on_size)
         self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse_event)
 
-        self.NeedsRecalculation = 
+        self.tree_remapping_flag = False
+        self.recalculation_flag = False
+        
+        self.NeedsTreeRemapping = pubsub.EventType(
+            'NeedsTreeRemapping',
+            subs=(
+                self.gui_project.TreeStructureChanged,
+            )
+        )
+
+        self.NeedsTreeRemapping.add_subscriber(
+            FlagRaiser(self, 'tree_remapping_flag')
+        )
+        
+        self.NeedsRecalculation = pubsub.EventType(
+            'NeedsRecalculation',
+            subs=(
+                self.NeedsTreeRemapping,
+                self.gui_project.ActiveNodeChanged,
+                self.gui_project.TreeChangedOnPath,                
+                # Note that if there's a non-structure tree change not on the
+                # path it won't affect us.
+            )
+        )
+        
+        self.NeedsRecalculation.add_subscriber(
+            FlagRaiser(self, 'recalculation_flag')
+        )
         
         self.clickable_map = {}
-        
         
         elements_raw = {            
             'Untouched': 'graysquare.png',
@@ -75,6 +102,8 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
         '''Refresh the tree browser.'''
 
         event.Skip()
+        
+        # todo: optimize so it groks the tree only when needed.
         
         if self.gui_project is None or \
            self.gui_project.project.tree is None or \

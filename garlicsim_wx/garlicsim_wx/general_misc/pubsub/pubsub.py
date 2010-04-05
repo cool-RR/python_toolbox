@@ -8,8 +8,7 @@ import itertools
 # if B or C get called. (Or also if it gets called directly itself.)
 
 class EventType(type):
-    # todo: can make nice __repr__
-    def __new__(mcls, name='UnnamedEventType', bases=None, namespace={},
+    def __new__(mcls, name='Unnamed', bases=None, namespace={},
                 subs=()):
         '''note that default for bases is (Event,)'''
         
@@ -23,7 +22,7 @@ class EventType(type):
         cls.specific_subscribers = set()
         return cls
     
-    def __init__(cls, name='UnnamedEventType', bases=None, namespace={},
+    def __init__(cls, name='Unnamed', bases=None, namespace={},
                  subs=()):
         '''note that default for bases is (Event,)'''
         
@@ -38,6 +37,13 @@ class EventType(type):
             sub.__bases__ = (cls,) + sub.__bases__ # Oh yeah.
         
         cls = super(EventType, cls).__init__(name, bases, namespace)
+    
+    def __repr__(self):
+        return '<%s EventType at %s>' % (
+            self.__name__,
+            hex(id(self))
+            )
+    
 
 class Event(object):
     __metaclass__ = EventType
@@ -79,9 +85,15 @@ class Event(object):
         if self.sent is True:
             raise Exception()
         self.sent = True
-        #print type(self) # debug
+        print self # debug
         for subscriber in self.get_subscribers():
             subscriber(*self.args, **self.kwargs)
+            
+    def __repr__(self):
+        return '<%s event at %s>' % (
+            self.__class__.__name__,
+            hex(id(self))
+            )
     
         
 if __name__ == '__main__': # todo: move this to a test

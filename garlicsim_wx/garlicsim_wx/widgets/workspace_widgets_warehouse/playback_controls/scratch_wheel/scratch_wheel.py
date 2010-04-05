@@ -210,7 +210,6 @@ class ScratchWheel(wx.Panel):
             
     def on_paint(self, event):
         # todo: optimization: if motion blur is (rounded to) zero, don't draw
-        print('Redraw!')
         event.Skip()
         
         if self.recalculation_flag:
