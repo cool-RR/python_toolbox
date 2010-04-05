@@ -341,7 +341,7 @@ class Frame(wx.Frame):
                     if self.gui_project else 0
         
         if nodes_added > 0:
-            self.Refresh()
+            pass#self.Refresh()
         
         return nodes_added
     

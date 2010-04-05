@@ -286,7 +286,7 @@ class GuiProject(object):
                                                                    self.path,
                                                                    Infinity)   
         
-        self.frame.Refresh() # kill this
+        #self.frame.Refresh() # kill this
 
         
     def __modify_path_to_include_active_node(self):
@@ -411,7 +411,7 @@ class GuiProject(object):
         self.active_node = new_node
         self.PseudoclockChanged().send()
         self.ActiveNodeChanged().send()
-        self.frame.Refresh() #todo: kill
+        #self.frame.Refresh() #todo: kill
         
         
         

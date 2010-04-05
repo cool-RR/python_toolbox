@@ -104,19 +104,25 @@ class ScratchWheel(wx.Panel):
         
         self.was_playing_before_drag = None
         
-        self.update_flag = False
+        self.recalculation_flag = False
         
-        self.NeedsUpdate = pubsub.EventType(
-            'NeedsUpdate',
+        self.NeedsRecalculation = pubsub.EventType(
+            'NeedsRecalculation',
             subs=(
                 self.gui_project.PseudoclockChanged,
                 self.gui_project.ActiveNodeChanged # todo: not sure if needed
             )
         )
         
-        self.NeedsUpdate.add_subscriber(FlagRaiser(self, 'update_flag'))
+        self.NeedsRecalculation.add_subscriber(
+            FlagRaiser(self, 'recalculation_flag', refresh=False)
+        )
         
-        self.NeedsUpdate().send()
+        #self.NeedsRedraw = pubsub.EventType('NeedsRedraw')
+        #self.NeedsRedraw 
+        
+        
+        self.NeedsRecalculation().send()
 
         
     def get_current_angle(self):
@@ -150,7 +156,7 @@ class ScratchWheel(wx.Panel):
         else:
             return active_node.state.clock
                     
-    def __update(self):
+    def __recalculate(self):
         angle = self.get_current_angle()
         frame_number = int(
             ((angle % ((2/3) * math.pi)) / (2 * math.pi)) * 3 * images.N_FRAMES
@@ -160,9 +166,12 @@ class ScratchWheel(wx.Panel):
         
         self.frame_number_that_should_be_drawn = frame_number
         
+        if self.frame_number_that_should_be_drawn != self.current_frame_number:
+            self.Refresh()
+        
         self.__update_motion_blur_bitmap_if_needed()
         
-        self.update_flag = False
+        self.recalculation_flag = False
     
     def __update_motion_blur_bitmap_if_needed(self):
         
@@ -201,14 +210,11 @@ class ScratchWheel(wx.Panel):
             
     def on_paint(self, event):
         # todo: optimization: if motion blur is (rounded to) zero, don't draw
-        
+        print('Redraw!')
         event.Skip()
         
-        if self.gui_project is None:
-            return
-        
-        if self.update_flag:
-            self.__update()
+        if self.recalculation_flag:
+            self.__recalculate()
             
         bw, bh = self.GetWindowBorderSize()
         

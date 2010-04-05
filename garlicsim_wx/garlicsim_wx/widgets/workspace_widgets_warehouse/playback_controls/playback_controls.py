@@ -74,7 +74,15 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         self.center_button_update_flag = True
         self.navigation_buttons_update_flag = True
         
-        self.gui_project.PlayingToggled.add_subscriber(
+        self.CenterButtonNeedsUpdate = pubsub.EventType(
+            'NavigationButtonsNeedUpdate',
+            subs=(
+                self.gui_project.PlayingToggled,
+                self.gui_project.ActiveNodeChanged
+            )
+        )
+        
+        self.CenterButtonNeedsUpdate.add_subscriber(
             FlagRaiser(self, 'center_button_update_flag')
         )
 
