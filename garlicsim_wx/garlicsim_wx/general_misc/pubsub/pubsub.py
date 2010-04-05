@@ -4,6 +4,7 @@ from garlicsim.general_misc import cute_iter_tools
 # todo: possibly make thread that consolidates subscriber calling.
 # todo: can define "abstract" event type, so you can't create direct instances,
 # only instances of subclasses. For example TreeChanged.
+# todo: really organize and explain this module
 
 def class_cmp(a, b):
     if issubclass(a, b):
@@ -57,12 +58,6 @@ class EventSystem(object):
         ))
 
 
-    """
-    def __make_unlinked_event_type(self, name='Unnamed'):        
-        event_type = type(name, (Event,), {})
-        event_type.specific_subscribers = set()
-        return event_type
-    """
     
     def make_event_type(self, name='Unnamed', bases=None, subs=None):
         
@@ -70,16 +65,6 @@ class EventSystem(object):
         if bases is None:
             bases = ()
         bases = sanitize_bases(bases + (self.bottom_event_type,))
-        """
-        if bases is None:
-            bases = (self.bottom_event_type,)
-        else:
-            assert all(isinstance(base, type) for base in bases)
-            if not any(issubclass(base, self.bottom_event_type)
-                       for base in bases):
-                bases = (self.bottom_event_type,) + bases
-                # Afraid to change to +=
-        """
         
         if subs is None:
             subs = (self.top_event_type,)
@@ -120,7 +105,7 @@ class EventSystem(object):
 
 class EventType(type):
     
-    #__metaclass__ = EventSystem
+    
     
     def __new__(mcls, name='Unnamed', bases=None, namespace={},
                 subs=()):
