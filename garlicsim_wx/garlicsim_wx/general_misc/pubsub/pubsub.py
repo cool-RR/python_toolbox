@@ -4,19 +4,85 @@ import itertools
 # todo: can define "abstract" event type, so you can't create direct instances,
 # only instances of subclasses. For example TreeChanged.
 
+
+class EventSystem(object):
+    
+    def __init__(self):
+        
+        
+        self.bottom_event_type = \
+            EventType('BottomEvent', (BaseEvent,), {})
+        
+        self.top_event_type = \
+            EventType('TopEvent', (self.bottom_event_type,), {})
+        
+        self.event_type_set = set((
+            self.bottom_event_type,
+            self.top_event_type
+        ))
+
+
+    """
+    def __make_unlinked_event_type(self, name='Unnamed'):        
+        event_type = type(name, (Event,), {})
+        event_type.specific_subscribers = set()
+        return event_type
+    """
+    
+    def make_event_type(self, name='Unnamed', bases=None, subs=None):
+        
+        if bases is None:
+            bases = (self.bottom_event_type,)
+        else:
+            assert all(isinstance(base, type) for base in bases)
+            if not any(issubclass(base, self.bottom_event_type) in bases):
+                bases = (self.bottom_event_type,) + bases
+                # Afraid to change to +=
+        
+        if subs is None:
+            subs = (self.top_event_type,)
+        else:
+            assert all(isinstance(base, type) for sub in subs)
+            if not any(issubclass(self.top_event_type, sub) in subs):
+                subs = subs + (self.top_event_type,)
+                # Afraid to change to +=
+        
+        event_type = EventType(name, bases, subs)
+        
+        self.event_type_set.add(event_type)
+        
+        return event_type
+    
+    def remove_event_type(self, event_type):
+        assert event_type in self.event_type_set
+
+        for other_event_type in self.event_type_set:
+            if event_type in other_event_type.__bases__:
+                new_bases = list(other_event_type.__bases__)
+                while event_type in new_bases:
+                    new_bases.remove(event_type)
+                other_event_type.__bases__ = tuple(new_bases)
+        
+        self.event_type_set.remove(event_type)
+        
+
 # Thinking aid: If event type A has subclasses B and C, it means it gets called
 # if B or C get called. (Or also if it gets called directly itself.)
 
 class EventType(type):
+    
+    #__metaclass__ = EventSystem
+    
     def __new__(mcls, name='Unnamed', bases=None, namespace={},
                 subs=()):
-        '''note that default for bases is (Event,)'''
+        '''note that default for bases is (BaseEvent,)'''
         
         if bases is None:
-            bases = (Event,)
+            bases = (BaseEvent,)
             
-        namespace = dict(namespace)
-        namespace.setdefault('__metaclass__', EventType)
+        #namespace = dict(namespace)
+        #namespace.setdefault('__metaclass__', EventType)
+        
         
         cls = super(EventType, mcls).__new__(mcls, name, bases, namespace)
         cls.specific_subscribers = set()
@@ -24,16 +90,17 @@ class EventType(type):
     
     def __init__(cls, name='Unnamed', bases=None, namespace={},
                  subs=()):
-        '''note that default for bases is (Event,)'''
+        '''note that default for bases is (BaseEvent,)'''
+    
         
         if bases is None:
-            bases = (Event,)
+            bases = (BaseEvent,)
             
-        namespace = dict(namespace)
-        namespace.setdefault('__metaclass__', EventType)
+        #namespace = dict(namespace)
+        #namespace.setdefault('__metaclass__', EventType)
         
         for sub in subs:
-            assert isinstance(sub, EventType)
+            assert issubclass(sub, BaseEvent)
             sub.__bases__ = (cls,) + sub.__bases__ # Oh yeah.
         
         cls = super(EventType, cls).__init__(name, bases, namespace)
@@ -45,7 +112,7 @@ class EventType(type):
             )
     
 
-class Event(object):
+class BaseEvent(object):
     __metaclass__ = EventType
     def __init__(self, *args, **kwargs):
         self.sent = False
@@ -62,7 +129,8 @@ class Event(object):
     @classmethod
     def get_subscribers(cls):
         event_bases = [base for base in cls.__bases__
-                       if issubclass(base, Event)] 
+                       if issubclass(base, BaseEvent) and
+                       base is not BaseEvent] 
         
         base_subscribers = reduce(
             set.union,
@@ -118,3 +186,6 @@ if __name__ == '__main__': # todo: move this to a test
     War.add_subscriber(war_subscriber)
     
     Violence().send()
+    
+    event_system = EventSystem()
+    event_type = event_system.make_event_type()
