@@ -10,7 +10,7 @@ import wx
 from garlicsim_wx.general_misc.third_party import aui
 from garlicsim_wx.general_misc import thread_timer
 from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
-from garlicsim_wx.general_misc import pubsub
+from garlicsim_wx.general_misc import emitters
 
 import garlicsim, garlicsim_wx
 from garlicsim_wx.widgets import WorkspaceWidget
@@ -66,7 +66,7 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
             wx.EVT_IDLE,
             self.update_buttons_status,
         )
-        # todo: eventually cancel this and use pubsub
+        # todo: eventually cancel this and use emitters
         """
         
         self.center_button_mode = PlayMode

@@ -13,6 +13,8 @@ import math
 from garlicsim_wx.general_misc.get_lines import get_lines
 import garlicsim
 from garlicsim_wx.widgets import WorkspaceWidget
+from garlicsim_wx.general_misc import emitters
+from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
 
 __all__ = ["SeekBar"]
 
@@ -24,6 +26,7 @@ class SeekBar(wx.Panel, WorkspaceWidget):
     spans. It shows which node is currently active. It allows to move to any
     other node on the path just by clicking.
     '''
+    #todo: show little breaks on the bar where there's a block start/end
     def __init__(self, frame):
         
         wx.Panel.__init__(self, frame, size=(100, 100), style=wx.SUNKEN_BORDER)
@@ -46,10 +49,29 @@ class SeekBar(wx.Panel, WorkspaceWidget):
         self.was_playing_before_mouse_click_but_then_paused_and_mouse_left = None
         self.active_triangle_width = 13 # Must be odd number
 
+        self.view_changed_flag = False
+        self.active_node_changed_flag = False
+        self.path_contents_changed_flag = False
+        
+        self.view_change_emitter = emitters.Emitter()
+        self.gui_project.active_node_changed_emitter.add_output(
+            FlagRaiser(self, 'active_node_changed_flag')
+        )
+        self.gui_project.path_contents_changed_emitter.add_output(
+            FlagRaiser(self, 'path_contents_changed_flag')
+        )
+
 
     def on_paint(self, event):
         '''Refresh the seek-bar.'''
         event.Skip()
+        
+
+        self.view_changed_flag = False
+        self.active_node_changed_flag = False
+        self.path_contents_changed_flag = False
+        # todo: now we just lower these flags retardedly, in future there will
+        # be __recalculate
         
         occupied_region = wx.Region()
 

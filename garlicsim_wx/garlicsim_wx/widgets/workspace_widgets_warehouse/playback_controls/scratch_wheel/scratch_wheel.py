@@ -14,7 +14,7 @@ import time
 import garlicsim, garlicsim_wx
 from garlicsim_wx.widgets import WorkspaceWidget
 from garlicsim_wx.general_misc import cursor_collection
-from garlicsim_wx.general_misc import pubsub
+from garlicsim_wx.general_misc import emitters
 from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
 
 import images

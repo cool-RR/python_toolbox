@@ -25,7 +25,7 @@ import garlicsim
 from garlicsim.asynchronous_crunching.crunchers_warehouse import crunchers
 
 import garlicsim_wx
-from garlicsim_wx.general_misc import pubsub
+from garlicsim_wx.general_misc import emitters
 from widgets.general_misc import FoldableWindowContainer
         
 
@@ -123,7 +123,7 @@ class GuiProject(object):
         # todo: not clear that `tree_changed_emitter` means that only data changed
         # and not structure.
         
-        self.emitter_system = pubsub.EmitterSystem()
+        self.emitter_system = emitters.EmitterSystem()
         
         self.tree_changed_emitter = self.emitter_system.make_emitter()
         self.tree_changed_on_path_emitter = self.emitter_system.make_emitter(

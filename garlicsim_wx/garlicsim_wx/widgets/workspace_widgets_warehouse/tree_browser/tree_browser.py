@@ -15,7 +15,7 @@ import wx
 from wx.lib.scrolledpanel import ScrolledPanel
 
 import garlicsim_wx.general_misc.vectorish as vectorish
-from garlicsim_wx.general_misc import pubsub
+from garlicsim_wx.general_misc import emitters
 from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
 import garlicsim
 from garlicsim_wx.widgets import WorkspaceWidget
@@ -103,6 +103,11 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
         event.Skip()
         
         # todo: optimize so it groks the tree only when needed.
+        
+        self.tree_remapping_flag = False
+        self.recalculation_flag = False
+        # todo: now we just lower these flags retardedly, in future there will
+        # be __recalculate
         
         if self.gui_project is None or \
            self.gui_project.project.tree is None or \
