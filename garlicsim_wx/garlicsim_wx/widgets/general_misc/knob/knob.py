@@ -7,7 +7,7 @@ from garlicsim.general_misc import math_tools
 from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.general_misc import cursor_collection
 from garlicsim.general_misc import binary_search
-
+from garlicsim.general_misc import cute_iter_tools
 from . import images as __images_package
 images_package = __images_package.__name__
 
@@ -122,21 +122,42 @@ class Knob(wx.Panel):
     
     def __make_snap_points_y_starts(self):
         
+        self.snap_points_y = []
         snap_point_ratios = self._get_snap_points_as_ratios()
+        if not snap_point_ratios:
+            return
+        assert len(snap_point_ratios) >= 1
         my_i = binary_search.binary_search_by_index(
             snap_point_ratios,
             cmp,
             0,
             'low'
         )
-        first_positive_i = my_i + 1
         
-        if snap_point_ratios[my_i] == 0:
-            first_negative_i = my_i - 1
-            zero_is_snap_point = True
+
+        if my_i is None:
+            first_positive_i = 0
         else:
-            first_negative_i = my_i
-            zero_is_snap_point = False
+            first_positive_i = my_i + 1
+        
+            if snap_point_ratios[my_i] == 0:
+                first_negative_i = my_i - 1
+                zero_is_snap_point = True
+            else:
+                first_negative_i = my_i
+                zero_is_snap_point = False
+            
+        try:
+            assert snap_point_ratios[first_negative_i] < 0
+        except IndexError:
+            pass
+        
+        try:
+            assert snap_point_ratios[first_positive_i] > 0
+        except IndexError:
+            pass
+        
+                
             
         zero_padding = \
             self.snap_point_drag_well / 2 if zero_is_snap_point else 0
@@ -144,27 +165,27 @@ class Knob(wx.Panel):
         negative_snap_point_ratio = snap_point_ratios[:first_negative_i+1]
         positive_snap_point_ratio = snap_point_ratios[first_positive_i:]
         
-        self.snap_points_y = []
         
-        for (i, ratio) in reversed(enumerate(negative_snap_point_ratio)):
+        
+        for (i, ratio) in cute_iter_tools.enumerate(negative_snap_point_ratio,
+                                                    reverse_index=True):
+            assert ratio < 0 # todo: remove
             padding_to_add = i * self.snap_point_drag_well + zero_padding
             self.snap_points_y.append(
                 ratio * self.base_drag_radius + padding_to_add
             )
         
         for (i, ratio) in enumerate(positive_snap_point_ratio):
+            assert ratio > 0 # todo: remove
             padding_to_add = i * self.snap_point_drag_well + zero_padding
             self.snap_points_y.append(
                 ratio * self.base_drag_radius + padding_to_add
             )
         
             
-        
-        
-            
-        
-            
-        pass
+    def __get_snap_points_y_starts_from_origin(self, y):
+        return [y_start for y_start in self.snap_points_y_starts
+                if (0 <= y_start < y) or (0 >= y_start > 0)]
     
     def __get_n_snap_points_from_origin(self, ratio):
         '''note it returns a float'''
@@ -186,10 +207,30 @@ class Knob(wx.Panel):
         return ratio
     
     def __map_y_to_ratio(self, y):
-        raw_ratio = self.__raw_map_y_to_ratio(y)
-        self.__get_n_snap_points_from_origin(raw_ratio) * \
-            self.snap_point_drag_well()
+        #raw_ratio = self.__raw_map_y_to_ratio(y)
+        #self.__get_n_snap_points_from_origin(raw_ratio) * \
+            #self.snap_point_drag_well()
+        y_starts_from_origin = self.__get_snap_points_y_starts_from_origin(y)
+        ry = y - self.grabbed_y
+        padding_counter = 0
         
+        if y_starts_from_origin[0] == 0:
+            padding_counter += self.snap_point_drag_well / 2
+            y_starts_from_origin.pop(0)
+            
+        distance_from_last = ry - y_starts_from_origin[-1]
+        if distance_from_last < self.snap_point_drag_well:
+            padding_counter += distance_from_last
+            y_starts_from_origin.pop(-1)
+        
+        padding_counter += self.snap_point_drag_well * len(y_starts_from_origin)
+        
+        new_ry = ry - padding_counter
+        assert math_tools.sign(new_ry) == math_tools.sign(ry)
+        
+        ratio = new_ry / self.snap_point_drag_well
+        
+        return ratio
         
     def on_mouse(self, event):
         # todo: maybe right click should give context menu with 'Sensitivity...'
@@ -198,28 +239,28 @@ class Knob(wx.Panel):
         self.Refresh()
         
         (w, h) = self.GetClientSize()
-        (x, y) = e.GetPositionTuple()
+        (x, y) = event.GetPositionTuple()
         (rx, ry) = (x/w, y/h)
         
-        if e.LeftDown():
+        if event.LeftDown():
             self.being_dragged = True
             self.grabbed_y = y
             self.origin_y_while_dragging = y - \
                 (self.base_drag_radius * (self.current_ratio + \
                 self.snap_point_ratio_well * \
                 self.__get_n_snap_points_from_origin(self.current_ratio)))
-            
+            self.__make_snap_points_y_starts()
             
             self.CaptureMouse()    
             self.SetCursor(cursor_collection.get_closed_grab())
             return
         
-        if e.LeftIsDown() and self.HasCapture():
+        if event.LeftIsDown() and self.HasCapture():
             ratio = self.__map_y_to_ratio(y)
             self.value_setter(ratio)
             
                 
-        if e.LeftIsUp(): #or e.Leaving():
+        if event.LeftUp() or (event.LeftIsUp() and self.HasCapture()):
             # todo: make sure that when leaving
             # entire app, things don't get fucked
             if self.HasCapture():
