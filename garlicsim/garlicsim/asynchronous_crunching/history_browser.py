@@ -139,6 +139,12 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         See documentation of garlicsim.general_misc.binary_search.binary_search
         for details about rounding options.
         '''
+        
+        # tododoc important: make sure this function follows the new guidelines
+        # regarding binary search. When asking for 'low' and there's an exact
+        # match, we must return it. Same for 'high'. When requested 'both' and
+        # there's an exact match, we give the exact match twice.
+        
         assert rounding in ['high', 'low', 'exact', 'both', 'closest']
         
         tree_result = self.__get_state_by_monotonic_function_from_tree \
