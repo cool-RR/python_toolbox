@@ -294,12 +294,11 @@ class Frame(wx.Frame):
             .BestSize(400, 600)\
             .MaximizeButton(True)
 
-        
-        
         self.state_repr_shower = workspace_widgets['StateReprShower'](self)
         self.state_repr_shower.aui_pane_info\
             .BestSize(300, 300)\
-            .MaximizeButton(True)
+            .MaximizeButton(True)\
+            .Floatable(False)
             
         self.aui_manager.Update()
         
