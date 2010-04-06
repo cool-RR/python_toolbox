@@ -22,6 +22,8 @@ def binary_search_by_index(sequence, function, value, rounding='closest'):
     The difference is that instead of returning a result in terms of sequence
     items, it returns the indexes of these items in the sequence.
     ''' 
+    if function is None:
+        function = lambda x: x
     my_range = xrange(len(sequence))
     fixed_function = lambda index: function(sequence[index])
     result = binary_search(my_range, fixed_function, value, rounding)
@@ -63,6 +65,9 @@ def binary_search(sequence, function, value, rounding='closest'):
     # todo: i think this should be changed to return tuples
     
     assert rounding in ('high', 'low', 'exact', 'both', 'closest')
+    
+    if function is None:
+        function = lambda x: x
     
     if not sequence:
         if rounding == 'both':

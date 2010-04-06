@@ -40,12 +40,13 @@ class Knob(wx.Panel):
         self.current_angle = 0
         self.current_ratio = 0
         self.snap_points = []
-        self.snap_point_ratio_well = 0.1
+        self.snap_point_ratio_well = 1 # 0.4
         
-        self.base_drag_radius = 500 # in pixels
+        self.base_drag_radius = 100#50 # in pixels
         self.snap_point_drag_well = \
             self.snap_point_ratio_well * self.base_drag_radius
-        
+         # todo: warning, this attribute is not dynamic
+            
         self.being_dragged = False
         
         self.grabbed_y = None
@@ -55,6 +56,10 @@ class Knob(wx.Panel):
         #self.ratio_while_dragging = None
         #self.d_angle_while_dragging = None
         #self.desired_clock_while_dragging = None
+        
+        self.set_snap_point(1)
+        #self.set_snap_point(4)
+        #self.set_snap_point(-3)
         
     def _angle_to_ratio(self, angle):
         return angle / (math.pi * 5 / 6)
@@ -120,21 +125,23 @@ class Knob(wx.Panel):
     def _get_snap_points_as_ratios(self):
         return [self._value_to_ratio(value) for value in self.snap_points]
     
-    def __make_snap_points_y_starts(self):
+    def __make_snap_points_y_starts(self): # todo: should be named ry?
         
-        self.snap_points_y = []
+        self.snap_points_y_starts = []
         snap_point_ratios = self._get_snap_points_as_ratios()
         if not snap_point_ratios:
             return
         assert len(snap_point_ratios) >= 1
         my_i = binary_search.binary_search_by_index(
             snap_point_ratios,
-            cmp,
-            0,
-            'low'
+            function=None,
+            value=0,
+            rounding='low'
         )
         
-
+        first_negative_i = None
+        zero_is_snap_point = False
+        
         if my_i is None:
             first_positive_i = 0
         else:
@@ -145,11 +152,11 @@ class Knob(wx.Panel):
                 zero_is_snap_point = True
             else:
                 first_negative_i = my_i
-                zero_is_snap_point = False
+                
             
         try:
             assert snap_point_ratios[first_negative_i] < 0
-        except IndexError:
+        except (IndexError, TypeError): # TypeError in case it's None
             pass
         
         try:
@@ -162,7 +169,8 @@ class Knob(wx.Panel):
         zero_padding = \
             self.snap_point_drag_well / 2 if zero_is_snap_point else 0
 
-        negative_snap_point_ratio = snap_point_ratios[:first_negative_i+1]
+        negative_snap_point_ratio = snap_point_ratios[:first_negative_i+1] \
+                                  if first_negative_i is not None else []
         positive_snap_point_ratio = snap_point_ratios[first_positive_i:]
         
         
@@ -171,21 +179,30 @@ class Knob(wx.Panel):
                                                     reverse_index=True):
             assert ratio < 0 # todo: remove
             padding_to_add = i * self.snap_point_drag_well + zero_padding
-            self.snap_points_y.append(
+            self.snap_points_y_starts.append(
                 ratio * self.base_drag_radius + padding_to_add
             )
         
         for (i, ratio) in enumerate(positive_snap_point_ratio):
             assert ratio > 0 # todo: remove
             padding_to_add = i * self.snap_point_drag_well + zero_padding
-            self.snap_points_y.append(
+            self.snap_points_y_starts.append(
                 ratio * self.base_drag_radius + padding_to_add
             )
         
             
     def __get_snap_points_y_starts_from_origin(self, y):
-        return [y_start for y_start in self.snap_points_y_starts
-                if (0 <= y_start < y) or (0 >= y_start > 0)]
+        result = [y_start for y_start in self.snap_points_y_starts
+                  if (0 <= y_start < y) or (0 >= y_start > 0)]
+        
+        # # # #debug. todo: remove it # #
+        signs_of_result = [math_tools.sign(y_start) for y_start in result]
+        signs_set = set(signs_of_result + [math_tools.sign(y)])
+        assert not ((-1 in signs_set) and (1 in signs_set))
+        # # # #
+        return result
+    
+        
     
     def __get_n_snap_points_from_origin(self, ratio):
         '''note it returns a float'''
@@ -197,7 +214,7 @@ class Knob(wx.Panel):
             result += 0.5
         if any(s == ratio for s in snap_point_ratios):
             result += 0.5
-            
+        return result
     
     def __raw_map_y_to_ratio(self, y):
         assert self.being_dragged
@@ -210,26 +227,31 @@ class Knob(wx.Panel):
         #raw_ratio = self.__raw_map_y_to_ratio(y)
         #self.__get_n_snap_points_from_origin(raw_ratio) * \
             #self.snap_point_drag_well()
-        y_starts_from_origin = self.__get_snap_points_y_starts_from_origin(y)
-        ry = y - self.grabbed_y
+        ry = y - self.origin_y_while_dragging
+        y_starts_from_origin = self.__get_snap_points_y_starts_from_origin(ry)
+        
         padding_counter = 0
         
-        if y_starts_from_origin[0] == 0:
-            padding_counter += self.snap_point_drag_well / 2
-            y_starts_from_origin.pop(0)
+        if len(y_starts_from_origin) > 0:
+            if y_starts_from_origin[0] == 0:
+                padding_counter += self.snap_point_drag_well / 2
+                y_starts_from_origin.pop(0)
+                
+            distance_from_last = ry - y_starts_from_origin[-1]
+            assert distance_from_last >= 0
+            if distance_from_last < self.snap_point_drag_well:
+                padding_counter += distance_from_last
+                y_starts_from_origin.pop(-1)
             
-        distance_from_last = ry - y_starts_from_origin[-1]
-        if distance_from_last < self.snap_point_drag_well:
-            padding_counter += distance_from_last
-            y_starts_from_origin.pop(-1)
-        
-        padding_counter += self.snap_point_drag_well * len(y_starts_from_origin)
+            padding_counter += self.snap_point_drag_well * len(y_starts_from_origin)
         
         new_ry = ry - padding_counter
         assert math_tools.sign(new_ry) == math_tools.sign(ry)
         
-        ratio = new_ry / self.snap_point_drag_well
-        
+        ratio = new_ry / self.base_drag_radius
+        if abs(ratio) > 1:
+            ratio = math_tools.sign(ratio)
+        print(self.origin_y_while_dragging, y, ratio)
         return ratio
         
     def on_mouse(self, event):
@@ -257,10 +279,11 @@ class Knob(wx.Panel):
         
         if event.LeftIsDown() and self.HasCapture():
             ratio = self.__map_y_to_ratio(y)
-            self.value_setter(ratio)
+            value = self._ratio_to_value(ratio)
+            self.value_setter(value)
             
                 
-        if event.LeftUp() or (event.LeftIsUp() and self.HasCapture()):
+        if event.LeftUp():#
             # todo: make sure that when leaving
             # entire app, things don't get fucked
             if self.HasCapture():
