@@ -1,6 +1,7 @@
 from __future__ import division
 import wx
-def draw_bitmap_to_dc_rotated(dc, bitmap, angle, point, useMask=useMask):
+wx.PaintDC
+def draw_bitmap_to_dc_rotated(dc, bitmap, angle, point, useMask=False):
     """Rotate a bitmap and write it to the supplied device context."""
     img = bitmap.ConvertToImage()
     

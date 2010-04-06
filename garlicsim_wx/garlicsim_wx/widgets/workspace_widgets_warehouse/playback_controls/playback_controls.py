@@ -69,10 +69,10 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         # todo: eventually cancel this and use emitters
         """
         
+        self.inner_panel = wx.Panel(self, -1, size=(184, 124))
+        
         self.center_button_mode = PlayMode
 
-        
-        
         
         bitmap_list = ['to_start', 'previous_node', 'play',
                                 'next_node', 'to_end', 'pause',
@@ -96,30 +96,35 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
 
         #wx.Button(self, -1, size=(184, 30))
         self.playing_speed_knob = Knob(
-            self,
+            self.inner_panel,
             lambda: getattr(self.gui_project, 'official_playing_speed'),
             self.gui_project.set_official_playing_speed
         )
-        v_sizer.Add(self.playing_speed_knob, 0)
+        
+        v_sizer.Add(
+            self.playing_speed_knob,
+            0,
+            wx.ALIGN_CENTER_HORIZONTAL #| wx.ALIGN_CENTER_VERTICAL #wx.EXPAND #| 
+        )
 
 
         h_sizer = wx.BoxSizer(wx.HORIZONTAL)
         
                            
         self.button_to_start = wx.BitmapButton(
-            self, -1, bitmaps_dict['to_start'], size=(31, 50)
+            self.inner_panel, -1, bitmaps_dict['to_start'], size=(31, 50)
         )
         self.button_previous_node = wx.BitmapButton(
-            self, -1, bitmaps_dict['previous_node'], size=(31, 50)
+            self.inner_panel, -1, bitmaps_dict['previous_node'], size=(31, 50)
         )
         self.button_center_button = wx.BitmapButton(
-            self, -1, bitmaps_dict['play'], size=(60, 50)
+            self.inner_panel, -1, bitmaps_dict['play'], size=(60, 50)
         )
         self.button_next_node= wx.BitmapButton(
-            self, -1, bitmaps_dict['next_node'], size=(31, 50)
+            self.inner_panel, -1, bitmaps_dict['next_node'], size=(31, 50)
         )
         self.button_to_end = wx.BitmapButton(
-            self, -1, bitmaps_dict['to_end'], size=(31, 50)
+            self.inner_panel, -1, bitmaps_dict['to_end'], size=(31, 50)
         )
         
         
@@ -151,11 +156,12 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         v_sizer.Add(h_sizer, 0)#1, wx.EXPAND)
 
 
-        self.scratch_wheel = ScratchWheel(self, self.gui_project, -1, size=(184, 44))
+        self.scratch_wheel = ScratchWheel(self.inner_panel, self.gui_project,
+                                          -1, size=(184, 44))
         v_sizer.Add(self.scratch_wheel, 0)
 
 
-        self.SetSizer(v_sizer)
+        self.inner_panel.SetSizer(v_sizer)
         v_sizer.Layout()
         
         

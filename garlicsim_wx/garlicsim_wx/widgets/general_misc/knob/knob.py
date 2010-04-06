@@ -30,7 +30,7 @@ class Knob(wx.Panel):
         
         self.recalculation_flag = False        
         
-        self.sensitivity = 5
+        self.sensitivity = 25
         self.angle_resolution = math.pi / 180 # One degree
         self.current_angle = 0
         self.current_ratio = 0
@@ -52,8 +52,8 @@ class Knob(wx.Panel):
         return math_tools.sign(value) * \
                (2 / math.pi) * \
                math.acos(
-                   - math.exp(
-                       (math.pi * math.sqrt(abs(value))) / \
+                   math.exp(
+                       - (math.pi * math.sqrt(abs(value))) / \
                        (2 * math.sqrt(self.sensitivity))
                    )
                )
@@ -68,7 +68,7 @@ class Knob(wx.Panel):
     def remove_snap_point(self, value):
         self.snap_points.remove(value)
         
-    def _recalculate(self, event):
+    def _recalculate(self):
         value = self.value_getter()
         self.current_ratio = self._value_to_ratio(value)
         angle = self._ratio_to_angle(self.current_ratio)
