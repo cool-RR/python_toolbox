@@ -187,15 +187,15 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         
     def on_paint(self, event):
         if self.center_button_update_flag:
-            self.__update_center_button()
+            self._update_center_button()
         if self.navigation_buttons_update_flag:
-            self.__update_navigation_buttons()
+            self._update_navigation_buttons()
         
         super(PlaybackControls, self).OnPaint(event)
         
         event.Skip()
 
-    def __update_navigation_buttons(self):
+    def _update_navigation_buttons(self):
         
         active_node = self.gui_project.active_node
         
@@ -222,7 +222,7 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         
         self.navigation_buttons_update_flag = False    
         
-    def __update_center_button(self):
+    def _update_center_button(self):
         gui_project = self.gui_project
         active_node = gui_project.active_node
         

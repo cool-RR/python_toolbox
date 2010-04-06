@@ -152,7 +152,7 @@ class ScratchWheel(wx.Panel):
         else:
             return active_node.state.clock
                     
-    def __recalculate(self):
+    def _recalculate(self):
         angle = self.get_current_angle()
         frame_number = int(
             ((angle % ((2/3) * math.pi)) / (2 * math.pi)) * 3 * images.N_FRAMES
@@ -209,7 +209,7 @@ class ScratchWheel(wx.Panel):
         event.Skip()
         
         if self.recalculation_flag:
-            self.__recalculate()
+            self._recalculate()
             
         bw, bh = self.GetWindowBorderSize()
         

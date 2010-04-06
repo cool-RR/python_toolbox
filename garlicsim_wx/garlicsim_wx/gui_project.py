@@ -84,8 +84,8 @@ class GuiProject(object):
         
         #######################################################################
             
-        self._path = path
-        '''tododoc (privatizing) The active path.'''
+        self.path = path
+        '''The active path.'''
 
         self.active_node = active_node
         '''The node that is currently displayed onscreen.'''
@@ -191,21 +191,20 @@ class GuiProject(object):
         self.playing_stopped_emitter = self.emitter_system.make_emitter(
             outputs=(self.playing_toggled_emitter,)
         )
+
+        self.official_playing_speed_change_emitter = \
+            self.emitter_system.make_emitter()
+        
         #todo: maybe need an emitter for when editing a state?
     
 
-    ###########################################################################
-        
-    def _get_path(self):
-        return self._path
-    
-    def _set_path(self, path):
-        self._path = path
+    def set_path(self, path):
+        self.path = path
         self.path_changed_emitter.emit()
         
-    path = property(_get_path, _set_path, doc='The active path.')
-        
-    ###########################################################################
+    def set_official_playing_speed(self, value):
+        self.official_playing_speed = value
+        self.official_playing_speed_change_emitter.emit()
         
     def __init_gui(self):
         '''
@@ -298,7 +297,7 @@ class GuiProject(object):
     def __modify_path_to_include_active_node(self):
         '''Ensure that self.path includes the active node.'''
         if self.path is None:
-            self.path = self.active_node.make_containing_path()    
+            self.set_path(self.active_node.make_containing_path())
         else:
             self.path.modify_to_include_node(self.active_node)
             
