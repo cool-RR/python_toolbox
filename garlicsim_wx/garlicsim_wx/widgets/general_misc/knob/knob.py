@@ -4,6 +4,7 @@ import wx
 import math
 import pkg_resources
 from garlicsim.general_misc import math_tools
+from garlicsim_wx.general_misc import wx_tools
 
 from . import images as __images_package
 images_package = __images_package.__name__
@@ -11,9 +12,13 @@ images_package = __images_package.__name__
 
 
 class Knob(wx.Panel):
-    def __init__(self, parent, setter, getter, *args, **kwargs):
+    def __init__(self, parent, getter, setter, *args, **kwargs):
+        
         assert 'size' not in kwargs
+        
         assert callable(setter) and callable(getter)
+        self.value_getter, self.value_setter = getter, setter
+        
         wx.Panel.__init__(self, parent, *args, size=(30, 30), **kwargs)
         
         self.original_bitmap = wx.Bitmap(
@@ -23,7 +28,7 @@ class Knob(wx.Panel):
         
         self.Bind(wx.EVT_PAINT, self.on_paint)
         
-        self.recalculation_flag = False
+        self.recalculation_flag = False        
         
         self.sensitivity = 5
         self.angle_resolution = math.pi / 180 # One degree
@@ -64,11 +69,29 @@ class Knob(wx.Panel):
         self.snap_points.remove(value)
         
     def _recalculate(self, event):
-        pass
+        value = self.value_getter()
+        self.current_ratio = self._value_to_ratio(value)
+        angle = self._ratio_to_angle(self.current_ratio)
+        d_angle = angle - self.current_angle
+        if d_angle > self.angle_resolution:
+            self.current_angle = angle
+            self.Refresh()
+        self.recalculation_flag = False
     
     def on_paint(self, event):
         event.Skip()
         if self.recalculation_flag:
             self._recalculate()
         
-            
+        dc = wx.PaintDC(self)
+
+        w, h = self.GetClientSize()
+        
+        wx_tools.draw_bitmap_to_dc_rotated(
+            dc,
+            self.original_bitmap,
+            self.current_angle,
+            (w/2, h/2),
+            useMask=True
+        )
+        

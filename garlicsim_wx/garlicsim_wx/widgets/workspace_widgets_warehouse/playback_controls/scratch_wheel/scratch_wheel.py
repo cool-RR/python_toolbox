@@ -113,7 +113,9 @@ class ScratchWheel(wx.Panel):
                     self.gui_project.active_node_changed_emitter # todo: needed?
                 ),
                 outputs=(
-                    FlagRaiser(self, 'recalculation_flag', refresh=False),
+                    FlagRaiser(self, 'recalculation_flag'),
+                    # todo: currently we refresh, not good. if it's the same
+                    # bitmap it'll be wasteful to refresh.
                 )
             )
         

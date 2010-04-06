@@ -14,7 +14,7 @@ from garlicsim_wx.general_misc import emitters
 
 import garlicsim, garlicsim_wx
 from garlicsim_wx.widgets import WorkspaceWidget
-
+from garlicsim_wx.widgets.general_misc.knob import Knob
 
 from scratch_wheel import ScratchWheel
 
@@ -71,31 +71,7 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         
         self.center_button_mode = PlayMode
 
-        self.center_button_update_flag = True
-        self.navigation_buttons_update_flag = True
         
-        self.center_button_needs_update_emitter = \
-            self.gui_project.emitter_system.make_emitter(
-                inputs=(
-                    self.gui_project.playing_toggled_emitter,
-                    self.gui_project.active_node_changed_emitter
-                ),
-                outputs=(
-                    FlagRaiser(self, 'center_button_update_flag'),
-                )
-        )
-        
-
-        self.navigation_buttons_need_update_emitter = \
-            self.gui_project.emitter_system.make_emitter(
-                inputs=(
-                    self.gui_project.active_node_changed_emitter,
-                    self.gui_project.path_contents_changed_emitter
-                ),            
-                outputs=(
-                    FlagRaiser(self, 'navigation_buttons_update_flag'),
-                )
-        )
         
         
         bitmap_list = ['to_start', 'previous_node', 'play',
@@ -118,9 +94,13 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
 
         v_sizer = self.v_sizer = wx.BoxSizer(wx.VERTICAL)
 
-
-        b1 = wx.Button(self, -1, size=(184, 30))
-        v_sizer.Add(b1, 0)
+        #wx.Button(self, -1, size=(184, 30))
+        self.playing_speed_knob = Knob(
+            self,
+            lambda: getattr(self.gui_project, 'official_playing_speed'),
+            self.gui_project.set_official_playing_speed
+        )
+        v_sizer.Add(self.playing_speed_knob, 0)
 
 
         h_sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -178,6 +158,37 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         self.SetSizer(v_sizer)
         v_sizer.Layout()
         
+        
+        self.center_button_update_flag = True
+        self.navigation_buttons_update_flag = True
+        self.playing_speed_knob_update_flag = True        
+        
+        self.center_button_needs_update_emitter = \
+            self.gui_project.emitter_system.make_emitter(
+                inputs=(
+                    self.gui_project.playing_toggled_emitter,
+                    self.gui_project.active_node_changed_emitter
+                ),
+                outputs=(
+                    FlagRaiser(self, 'center_button_update_flag'),
+                )
+        )
+        
+
+        self.navigation_buttons_need_update_emitter = \
+            self.gui_project.emitter_system.make_emitter(
+                inputs=(
+                    self.gui_project.active_node_changed_emitter,
+                    self.gui_project.path_contents_changed_emitter
+                ),            
+                outputs=(
+                    FlagRaiser(self, 'navigation_buttons_update_flag'),
+                )
+        )
+        
+        self.gui_project.official_playing_speed_change_emitter.add_output(
+            FlagRaiser(self.playing_speed_knob, 'recalculation_flag', True)
+        )
 
 
     def on_size(self, event):
