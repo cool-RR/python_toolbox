@@ -82,13 +82,13 @@ class ScratchWheel(wx.Panel):
         
         self.clock_factor = 0.05 # todo: maybe rename
         
-        self.being_grabbed = False
+        self.being_dragged = False
         
         self.grabbed_angle = None
         self.grabbed_pseudoclock = None
-        self.angle_while_grabbing = None
-        self.d_angle_while_grabbing = None
-        self.desired_clock_while_grabbing = None
+        self.angle_while_dragging = None
+        self.d_angle_while_dragging = None
+        self.desired_clock_while_dragging = None
         
         self.velocity_tracking_counter = 0
         self.velocity_tracking_period = 1#100
@@ -134,13 +134,13 @@ class ScratchWheel(wx.Panel):
         
         active_node = self.gui_project.active_node
         
-        if self.being_grabbed is True:
+        if self.being_dragged is True:
             
             
             if active_node.parent is None or len(active_node.children) == 0:
                 return active_node.state.clock
             else:
-                clock = self.desired_clock_while_grabbing
+                clock = self.desired_clock_while_dragging
                 if clock < self.gui_project.path[0].state.clock:
                     return self.gui_project.path[0].state.clock
                 elif clock > self.gui_project.path[-1].state.clock:
@@ -236,13 +236,13 @@ class ScratchWheel(wx.Panel):
         (rx, ry) = (x/w, y/h)
         
         if e.LeftDown():
-            self.angle_while_grabbing = self.grabbed_angle = expanded_pos_to_angle(rx)
-            self.d_angle_while_grabbing = 0
-            self.desired_clock_while_grabbing = self.grabbed_pseudoclock = \
+            self.angle_while_dragging = self.grabbed_angle = expanded_pos_to_angle(rx)
+            self.d_angle_while_dragging = 0
+            self.desired_clock_while_dragging = self.grabbed_pseudoclock = \
                 self.__get_current_pseudoclock()
             self.was_playing_before_drag = self.gui_project.is_playing
             self.gui_project.stop_playing()
-            self.being_grabbed = True
+            self.being_dragged = True
             
             self.CaptureMouse()    
             self.SetCursor(cursor_collection.get_closed_grab())
@@ -251,13 +251,13 @@ class ScratchWheel(wx.Panel):
         if e.LeftIsDown():
             if not self.HasCapture():
                 return
-            self.angle_while_grabbing = expanded_pos_to_angle(rx)
-            self.d_angle_while_grabbing = (self.angle_while_grabbing - self.grabbed_angle)
-            self.desired_clock_while_grabbing = self.grabbed_pseudoclock + \
-                (self.d_angle_while_grabbing / self.clock_factor)
+            self.angle_while_dragging = expanded_pos_to_angle(rx)
+            self.d_angle_while_dragging = (self.angle_while_dragging - self.grabbed_angle)
+            self.desired_clock_while_dragging = self.grabbed_pseudoclock + \
+                (self.d_angle_while_dragging / self.clock_factor)
                        
             both_nodes = self.gui_project.path.get_node_by_clock(
-                self.desired_clock_while_grabbing,
+                self.desired_clock_while_dragging,
                 rounding='both'
             )
         
@@ -290,12 +290,12 @@ class ScratchWheel(wx.Panel):
             if self.HasCapture():
                 self.ReleaseMouse()
             self.SetCursor(cursor_collection.get_open_grab())
-            self.being_grabbed = False
+            self.being_dragged = False
             self.grabbed_angle = None
             self.grabbed_pseudoclock = None
-            self.angle_while_grabbing = None
-            self.d_angle_while_grabbing = None
-            self.desired_clock_while_grabbing = None
+            self.angle_while_dragging = None
+            self.d_angle_while_dragging = None
+            self.desired_clock_while_dragging = None
             
             if self.was_playing_before_drag:
                 self.gui_project.start_playing()
@@ -303,71 +303,71 @@ class ScratchWheel(wx.Panel):
             self.was_playing_before_drag = None
             
         return
-        if e.RightDown():
-            self.gui_project.stop_playing()
+        #if e.RightDown():
+            #self.gui_project.stop_playing()
 
-            reselect_node = False
-            new_thing = e.GetPositionTuple()[0]
-            if self.gui_project.active_node is None:
-                reselect_node=True
-            else:
-                thing = self.screenify(self.gui_project.active_node.state.clock)
-                if abs(thing - new_thing) >= 8:
-                    reselect_node = True
+            #reselect_node = False
+            #new_thing = e.GetPositionTuple()[0]
+            #if self.gui_project.active_node is None:
+                #reselect_node=True
+            #else:
+                #thing = self.screenify(self.gui_project.active_node.state.clock)
+                #if abs(thing - new_thing) >= 8:
+                    #reselect_node = True
 
-            if reselect_node is True:
+            #if reselect_node is True:
                 
-                new_node = self.gui_project.path.get_node_occupying_timepoint \
-                         (self.unscreenify(new_thing))
+                #new_node = self.gui_project.path.get_node_occupying_timepoint \
+                         #(self.unscreenify(new_thing))
                 
-                if new_node is not None:
-                    self.gui_project.set_active_node(new_node, modify_path=False)
+                #if new_node is not None:
+                    #self.gui_project.set_active_node(new_node, modify_path=False)
 
-            if self.gui_project.active_node is not None:
-                self.gui_project.frame.Refresh()
-                self.PopupMenu(self.gui_project.get_node_menu(), e.GetPosition())
+            #if self.gui_project.active_node is not None:
+                #self.gui_project.frame.Refresh()
+                #self.PopupMenu(self.gui_project.get_node_menu(), e.GetPosition())
 
 
 
-        if e.LeftDClick():
-            self.gui_project.toggle_playing()
+        #if e.LeftDClick():
+            #self.gui_project.toggle_playing()
             
-        if e.LeftDown():# or e.RightDown():
-            thing = e.GetPositionTuple()[0]
-            node = self.gui_project.path.get_node_occupying_timepoint \
-                 (self.unscreenify(thing))
+        #if e.LeftDown():# or e.RightDown():
+            #thing = e.GetPositionTuple()[0]
+            #node = self.gui_project.path.get_node_occupying_timepoint \
+                 #(self.unscreenify(thing))
 
-            self.was_playing_before_mouse_click = self.gui_project.is_playing
-            if self.was_playing_before_mouse_click:
-                self.gui_project.stop_playing()
+            #self.was_playing_before_mouse_click = self.gui_project.is_playing
+            #if self.was_playing_before_mouse_click:
+                #self.gui_project.stop_playing()
 
-            if node is not None:
-                self.gui_project.set_active_node(node, modify_path=False)
+            #if node is not None:
+                #self.gui_project.set_active_node(node, modify_path=False)
 
 
-        if e.LeftIsDown():
-            thing = e.GetPositionTuple()[0]
-            node = self.gui_project.path.get_node_occupying_timepoint \
-                 (self.unscreenify(thing))
-            if node is not None:
-                self.gui_project.set_active_node(node, modify_path=False)
+        #if e.LeftIsDown():
+            #thing = e.GetPositionTuple()[0]
+            #node = self.gui_project.path.get_node_occupying_timepoint \
+                 #(self.unscreenify(thing))
+            #if node is not None:
+                #self.gui_project.set_active_node(node, modify_path=False)
                 
-        if e.LeftUp():
-            if self.was_playing_before_mouse_click:
-                self.gui_project.start_playing()
-                self.was_playing_before_mouse_click = False
+        #if e.LeftUp():
+            #if self.was_playing_before_mouse_click:
+                #self.gui_project.start_playing()
+                #self.was_playing_before_mouse_click = False
                 
-        if e.Leaving():
-            if self.was_playing_before_mouse_click:
-                self.gui_project.start_playing()
-                self.was_playing_before_mouse_click = False
-                self.was_playing_before_mouse_click_but_then_paused_and_mouse_left = True
+        #if e.Leaving():
+            #if self.was_playing_before_mouse_click:
+                #self.gui_project.start_playing()
+                #self.was_playing_before_mouse_click = False
+                #self.was_playing_before_mouse_click_but_then_paused_and_mouse_left = True
                 
-        if e.Entering():
-            if self.was_playing_before_mouse_click_but_then_paused_and_mouse_left:
-                self.gui_project.stop_playing()
-                self.was_playing_before_mouse_click = True
-                self.was_playing_before_mouse_click_but_then_paused_and_mouse_left = False
+        #if e.Entering():
+            #if self.was_playing_before_mouse_click_but_then_paused_and_mouse_left:
+                #self.gui_project.stop_playing()
+                #self.was_playing_before_mouse_click = True
+                #self.was_playing_before_mouse_click_but_then_paused_and_mouse_left = False
 
 
     def on_size(self, e):

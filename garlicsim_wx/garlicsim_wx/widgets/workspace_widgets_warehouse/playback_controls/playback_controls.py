@@ -100,11 +100,18 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
             lambda: getattr(self.gui_project, 'official_playing_speed'),
             self.gui_project.set_official_playing_speed
         )
+
+        knob_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        knob_sizer.Add(
+            self.playing_speed_knob,
+            1,
+            wx.EXPAND | wx.ALIGN_CENTER_HORIZONTAL | wx.ALIGN_CENTER_VERTICAL #wx.EXPAND #| 
+        )
         
         v_sizer.Add(
-            self.playing_speed_knob,
+            knob_sizer,
             0,
-            wx.ALIGN_CENTER_HORIZONTAL #| wx.ALIGN_CENTER_VERTICAL #wx.EXPAND #| 
+            wx.ALIGN_CENTER_VERTICAL#| wx.ALIGN_CENTER_VERTICAL #wx.EXPAND #| 
         )
 
 
