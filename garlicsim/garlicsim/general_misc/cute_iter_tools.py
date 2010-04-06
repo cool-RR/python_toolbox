@@ -6,6 +6,7 @@ This module defines functions that may be useful when working with iterators.
 '''
 
 import itertools
+import __builtin__
 
 def consecutive_pairs(iterable):
     '''
@@ -53,3 +54,11 @@ def shorten(iterable, n):
         yield thing
         counter += 1
         
+def enumerate(reversable, reverse_index=False):
+    if reverse_index is False:
+        return __builtin__.enumerate(reversable)
+    else:
+        my_list = list(__builtin__.enumerate(reversed(reversable)))
+        my_list.reverse()
+        return my_list
+    

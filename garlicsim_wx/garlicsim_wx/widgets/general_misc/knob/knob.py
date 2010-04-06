@@ -5,6 +5,8 @@ import math
 import pkg_resources
 from garlicsim.general_misc import math_tools
 from garlicsim_wx.general_misc import wx_tools
+from garlicsim_wx.general_misc import cursor_collection
+from garlicsim.general_misc import binary_search
 
 from . import images as __images_package
 images_package = __images_package.__name__
@@ -29,13 +31,15 @@ class Knob(wx.Panel):
         self.Bind(wx.EVT_PAINT, self.on_paint)
         self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse)
         
+        self.SetCursor(cursor_collection.get_open_grab())
+        
         self.recalculation_flag = False        
         
         self.sensitivity = 25
         self.angle_resolution = math.pi / 180 # One degree
         self.current_angle = 0
         self.current_ratio = 0
-        self.snap_points = set()
+        self.snap_points = []
         self.snap_point_ratio_well = 0.1
         
         self.base_drag_radius = 500 # in pixels
@@ -46,7 +50,8 @@ class Knob(wx.Panel):
         
         self.grabbed_y = None
         self.grabbed_ratio = None
-        self.origin_y_while_grabbing = None
+        self.origin_y_while_dragging = None
+        self.snap_points_y_starts = []
         #self.ratio_while_dragging = None
         #self.d_angle_while_dragging = None
         #self.desired_clock_while_dragging = None
@@ -78,7 +83,9 @@ class Knob(wx.Panel):
     
     
     def set_snap_point(self, value):
-        self.snap_points.add(value)
+        # Not optimizing with the sorting for now
+        self.snap_points.append(value)
+        self.snap_points.sort()
     
     def remove_snap_point(self, value):
         self.snap_points.remove(value)
@@ -111,36 +118,78 @@ class Knob(wx.Panel):
         )
         
     def _get_snap_points_as_ratios(self):
-        return set(self._value_to_ratio(value) for value in self.snap_points)
+        return [self._value_to_ratio(value) for value in self.snap_points]
+    
+    def __make_snap_points_y_starts(self):
         
+        snap_point_ratios = self._get_snap_points_as_ratios()
+        my_i = binary_search.binary_search_by_index(
+            snap_point_ratios,
+            cmp,
+            0,
+            'low'
+        )
+        first_positive_i = my_i + 1
+        
+        if snap_point_ratios[my_i] == 0:
+            first_negative_i = my_i - 1
+            zero_is_snap_point = True
+        else:
+            first_negative_i = my_i
+            zero_is_snap_point = False
+            
+        zero_padding = \
+            self.snap_point_drag_well / 2 if zero_is_snap_point else 0
+
+        negative_snap_point_ratio = snap_point_ratios[:first_negative_i+1]
+        positive_snap_point_ratio = snap_point_ratios[first_positive_i:]
+        
+        self.snap_points_y = []
+        
+        for (i, ratio) in reversed(enumerate(negative_snap_point_ratio)):
+            padding_to_add = i * self.snap_point_drag_well + zero_padding
+            self.snap_points_y.append(
+                ratio * self.base_drag_radius + padding_to_add
+            )
+        
+        for (i, ratio) in enumerate(positive_snap_point_ratio):
+            padding_to_add = i * self.snap_point_drag_well + zero_padding
+            self.snap_points_y.append(
+                ratio * self.base_drag_radius + padding_to_add
+            )
+        
+            
+        
+        
+            
+        
+            
+        pass
+    
     def __get_n_snap_points_from_origin(self, ratio):
-        '''note can return n + 0.5'''
+        '''note it returns a float'''
         snap_point_ratios = self._get_snap_points_as_ratios()
         snap_points_between = (s for s in snap_point_ratios if
                                (0 < s < ratio) or (0 > s > ratio))
         result = float(len(list(snap_points_between)))
         if any(s == 0 for s in snap_point_ratios):
             result += 0.5
+        if any(s == ratio for s in snap_point_ratios):
+            result += 0.5
             
+    
+    def __raw_map_y_to_ratio(self, y):
+        assert self.being_dragged
+        ratio = (y - self.origin_y_while_dragging) / self.base_drag_radius
+        if abs(ratio) > 1:
+            ratio = math_tools.sign(ratio)
+        return ratio
+    
+    def __map_y_to_ratio(self, y):
+        raw_ratio = self.__raw_map_y_to_ratio(y)
+        self.__get_n_snap_points_from_origin(raw_ratio) * \
+            self.snap_point_drag_well()
         
-    def __make_drag_map(self, origin):
-        #snap_point_ratios = self._get_snap_points_as_ratios()
-
-        def _raw_map(y):
-            ratio = (y - origin) / self.base_drag_radius
-            if abs(ratio) > 1:
-                ratio = math_tools.sign(ratio)
-            return raw_input
-            
-        def map(y):
-            raw_ratio = _raw_map(y)
-            #snap_points_between = [s for s in snap_point_ratios if
-                                   #(0 < s < raw_ratio) or (0 > s > raw_ratio)]
-            #n_snap_points_between = len(snap_points_between)
-            self.__get_n_snap_points_from_origin(raw_ratio)
-            
-            
-        pass
         
     def on_mouse(self, event):
         # todo: maybe right click should give context menu with 'Sensitivity...'
@@ -155,76 +204,33 @@ class Knob(wx.Panel):
         if e.LeftDown():
             self.being_dragged = True
             self.grabbed_y = y
-            self.origin_y_while_grabbing = \
-                self.current_ratio * self.base_drag_radius + \
-                self.snap_point_drag_well * 
+            self.origin_y_while_dragging = y - \
+                (self.base_drag_radius * (self.current_ratio + \
+                self.snap_point_ratio_well * \
+                self.__get_n_snap_points_from_origin(self.current_ratio)))
             
-            
-            self.angle_while_dragging = self.grabbed_angle = expanded_pos_to_angle(rx)
-            self.d_angle_while_dragging = 0
-            self.desired_clock_while_dragging = self.grabbed_pseudoclock = \
-                self.__get_current_pseudoclock()
-            self.was_playing_before_drag = self.gui_project.is_playing
-            self.gui_project.stop_playing()
-            self.being_dragged = True
             
             self.CaptureMouse()    
             self.SetCursor(cursor_collection.get_closed_grab())
             return
         
-        if e.LeftIsDown():
-            if not self.HasCapture():
-                return
-            self.angle_while_dragging = expanded_pos_to_angle(rx)
-            self.d_angle_while_dragging = (self.angle_while_dragging - self.grabbed_angle)
-            self.desired_clock_while_dragging = self.grabbed_pseudoclock + \
-                (self.d_angle_while_dragging / self.clock_factor)
-                       
-            both_nodes = self.gui_project.path.get_node_by_clock(
-                self.desired_clock_while_dragging,
-                rounding='both'
-            )
-        
-            node = both_nodes[0] or both_nodes[1]
-
-            self.gui_project.set_active_node(node, modify_path=False)
-            self.gui_project.pseudoclock_changed_emitter.emit()
-            # todo: gui_project should have method to change pseudoclock, so
-            # it'll change the active node itself and we won't need to call any
-            # event. this method should also be used in __play_next.
-            
-            if list(both_nodes).count(None) == 1: # Means we got an edge node
-                edge_clock = node.state.clock
-                direction = -1 if node is both_nodes[0] else 1
-                # direction that we bring back the cursor to if it goes too far
-                d_clock = (edge_clock - self.grabbed_pseudoclock)
-                d_angle = d_clock * self.clock_factor
-                edge_angle = self.grabbed_angle + d_angle
-                edge_rx = expanded_angle_to_pos(edge_angle)
-                edge_x = edge_rx * w
-                is_going_over = \
-                    (edge_x - x > 0) if direction == 1 else (edge_x - x < 0)
-                if is_going_over:
-                    self.WarpPointer(edge_x, y)
+        if e.LeftIsDown() and self.HasCapture():
+            ratio = self.__map_y_to_ratio(y)
+            self.value_setter(ratio)
             
                 
-        if e.LeftUp(): #or e.Leaving():
+        if e.LeftIsUp(): #or e.Leaving():
             # todo: make sure that when leaving
             # entire app, things don't get fucked
             if self.HasCapture():
                 self.ReleaseMouse()
             self.SetCursor(cursor_collection.get_open_grab())
             self.being_dragged = False
-            self.grabbed_angle = None
-            self.grabbed_pseudoclock = None
-            self.angle_while_dragging = None
-            self.d_angle_while_dragging = None
-            self.desired_clock_while_dragging = None
+            self.grabbed_y = None
+            self.grabbed_ratio = None
+            self.origin_y_while_dragging = None
+            del self.snap_points_y_starts[:]
             
-            if self.was_playing_before_drag:
-                self.gui_project.start_playing()
-            
-            self.was_playing_before_drag = None
             
         return
         
