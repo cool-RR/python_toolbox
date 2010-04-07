@@ -61,9 +61,6 @@ class Knob(wx.Panel):
         
         self.set_snap_point(1)
         self.set_snap_point(4)
-        self.set_snap_point(-3)
-        self.set_snap_point(-7)
-        self.set_snap_point(-30)
         
     def _angle_to_ratio(self, angle):
         return angle / (math.pi * 5 / 6)
@@ -253,7 +250,7 @@ class Knob(wx.Panel):
             #ratio = math_tools.sign(ratio)
         #return ratio
     
-    def __map_y_to_ratio(self, rev_y):
+    def __map_y_to_ratio(self, rev_y): # todo: rename to rev_y
         
         rry =  rev_y - self.origin_rev_y_while_dragging
         rry_starts_from_origin = \
@@ -280,7 +277,7 @@ class Knob(wx.Panel):
         ratio = new_rry / self.base_drag_radius
         if abs(ratio) > 1:
             ratio = math_tools.sign(ratio)
-        print(self.origin_rev_y_while_dragging, rev_y, ratio)
+        # print(self.origin_rev_y_while_dragging, rev_y, ratio)
         return ratio
         
     def on_mouse(self, event):
@@ -305,9 +302,17 @@ class Knob(wx.Panel):
             self.grabbed_rev_y = rev_y
             self.origin_rev_y_while_dragging = rev_y - \
                 (self.base_drag_radius * (self.current_ratio + \
+                math_tools.sign(self.current_ratio) * \
                 self.snap_point_ratio_well * \
                 self.__get_n_snap_points_from_origin(self.current_ratio)))
+            
             self.__make_snap_points_rry_starts()
+            
+            # # # debug, remove # # #
+            offset = self.__map_y_to_ratio(self.origin_rev_y_while_dragging)
+            assert 0.01 > offset > -0.01 # might not be exactly cause of fuzziness
+            if offset != 0.0: print('warning, nonzero offset %s' % offset)
+            # # #
             
             self.CaptureMouse()    
             self.SetCursor(cursor_collection.get_closed_grab())
@@ -333,10 +338,12 @@ class Knob(wx.Panel):
             
             
         return
+    
+    def __debug_map(self, start=-500, finish=500, step=10):
+        return [(i, self.__map_y_to_ratio(i)) for i in xrange(start, finish, step)]
         
         
-        
-        
+
         
         
         
