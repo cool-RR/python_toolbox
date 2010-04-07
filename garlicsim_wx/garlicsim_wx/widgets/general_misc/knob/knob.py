@@ -9,6 +9,9 @@ from garlicsim_wx.general_misc import cursor_collection
 from garlicsim.general_misc import binary_search
 from garlicsim.general_misc import cute_iter_tools
 
+from snap_map import SnapMap
+
+
 from . import images as __images_package
 images_package = __images_package.__name__
 
@@ -42,12 +45,11 @@ class Knob(wx.Panel):
         self.current_angle = 0
         self.current_ratio = 0
         self.snap_points = []
-        self.snap_point_ratio_well = 1 # 0.4
         
         self.base_drag_radius = 100#50 # in pixels
-        self.snap_point_drag_well = \
-            self.snap_point_ratio_well * self.base_drag_radius
-         # todo: warning, this attribute is not dynamic
+        self.snap_point_drag_well = 100 #20 \
+            
+         
             
         self.being_dragged = False
         
@@ -310,10 +312,10 @@ class Knob(wx.Panel):
             self.being_dragged = True
             self.grabbed_rev_y = rev_y
             self.origin_rev_y_while_dragging = rev_y - \
-                (self.base_drag_radius * (self.current_ratio + \
+                (self.base_drag_radius * self.current_ratio + \
                 math_tools.sign(self.current_ratio) * \
-                self.snap_point_ratio_well * \
-                self.__get_n_snap_points_from_origin(self.current_ratio)))
+                self.snap_point_drag_well * \
+                self.__get_n_snap_points_from_origin(self.current_ratio))
             
             self.__make_snap_points_rry_starts()
             
