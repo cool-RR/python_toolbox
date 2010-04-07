@@ -61,6 +61,7 @@ class Knob(wx.Panel):
         
         self.set_snap_point(1)
         self.set_snap_point(4)
+        self.set_snap_point(-1)
         
     def _angle_to_ratio(self, angle):
         return angle / (math.pi * 5 / 6)
@@ -222,7 +223,7 @@ class Knob(wx.Panel):
             rounding='closest'
         )
 
-        if abs(closest_snap_point - ratio) < self.snap_point_ratio_well:
+        if abs(closest_snap_point - ratio) < (self.snap_point_ratio_well / 2):
             # Are we inside the well of the closest snap point?
             
             # If so, we'll register it as 0.5 for our counter.
@@ -253,6 +254,9 @@ class Knob(wx.Panel):
     def __map_y_to_ratio(self, rev_y): # todo: rename to rev_y
         
         rry =  rev_y - self.origin_rev_y_while_dragging
+        print rry
+        pass
+        
         rry_starts_from_origin = \
             self.__get_snap_points_rry_starts_from_origin(rry)
         
@@ -271,7 +275,7 @@ class Knob(wx.Panel):
             padding_counter += \
                 self.snap_point_drag_well * len(rry_starts_from_origin)
         
-        new_rry = rry - padding_counter
+        new_rry = rry - padding_counter * math_tools.sign(rry)
         assert math_tools.sign(new_rry) == math_tools.sign(rry)
         
         ratio = new_rry / self.base_drag_radius
@@ -340,7 +344,8 @@ class Knob(wx.Panel):
         return
     
     def __debug_map(self, start=-500, finish=500, step=10):
-        return [(i, self.__map_y_to_ratio(i)) for i in xrange(start, finish, step)]
+        return [(i, self.__map_y_to_ratio(i+self.origin_rev_y_while_dragging))
+                for i in xrange(start, finish, step)]
         
         
 
