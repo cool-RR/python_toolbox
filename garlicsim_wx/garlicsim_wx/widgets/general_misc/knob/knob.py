@@ -62,6 +62,9 @@ class Knob(wx.Panel):
         self.set_snap_point(1)
         self.set_snap_point(4)
         self.set_snap_point(-1)
+        self.set_snap_point(40)
+        self.set_snap_point(-30)
+
         
     def _angle_to_ratio(self, angle):
         return angle / (math.pi * 5 / 6)
@@ -214,8 +217,10 @@ class Knob(wx.Panel):
         snap_point_ratios = self._get_snap_points_as_ratios()
 
         snap_points_between = [s for s in snap_point_ratios
-                               if (0 < s < ratio ) or (0 > s > ratio)]
+                               if (0 < s < ratio + 0.0001 ) or 
+                               (0 > s > ratio - 0.0001)]
 
+        """
         closest_snap_point = binary_search.binary_search(
             snap_point_ratios,
             function=None,
@@ -236,9 +241,9 @@ class Knob(wx.Panel):
                 snap_points_between.remove(closest_snap_point)
             except ValueError:
                 pass
-        
+        """
         counter += len(snap_points_between)
-        if any(s == 0 for s in snap_point_ratios):
+        if any((0.0001 < s < 0.0001) for s in snap_point_ratios):
             # We're substracting 0.5 because the zero-snap-point was already
             # counted as a full 1 when it should only be counted as 0.5.
             counter -= 0.5 
