@@ -193,9 +193,9 @@ class Knob(wx.Panel):
             
     def __get_snap_points_y_starts_from_origin(self, y):
         result = [y_start for y_start in self.snap_points_y_starts
-                  if (0 <= y_start < y) or (0 >= y_start > 0)]
+                  if (0 <= y_start < y) or (0 >= y_start > y)]
         
-        # # # #debug. todo: remove it # #
+        # # # # assertion block for debugging. todo: remove it # #
         signs_of_result = [math_tools.sign(y_start) for y_start in result]
         signs_set = set(signs_of_result + [math_tools.sign(y)])
         assert not ((-1 in signs_set) and (1 in signs_set))
@@ -206,15 +206,39 @@ class Knob(wx.Panel):
     
     def __get_n_snap_points_from_origin(self, ratio):
         '''note it returns a float'''
+        
+        counter = 0
+        
         snap_point_ratios = self._get_snap_points_as_ratios()
-        snap_points_between = (s for s in snap_point_ratios if
-                               (0 < s < ratio) or (0 > s > ratio))
+
+        snap_points_between = (s for s in snap_point_ratios
+                               if (0 < s < ratio ) or (0 > s > ratio))
+
+        closest_snap_point = binary_search.binary_search(
+            snap_point_ratios,
+            function=None,
+            value=ratio,
+            rounding='closest'
+        )
+
+        if abs(closest_snap_point - ratio) < self.snap_point_ratio_well:
+            # Are we inside the well of the closest snap point?
+            
+            # If so, we'll register it as 0.5 for our counter.
+            counter += 0.5
+            
+            # Also, we need to make sure to remove this snap point from the
+            # list. We can't be sure if it was included or not due to the
+            # fuzziness of floating numbers, so we do it in a try-except.
+            try:
+                snap_points_between.remove(closest_snap_point)
+            except ValueError:
+                pass
+        
         result = float(len(list(snap_points_between)))
         if any(s == 0 for s in snap_point_ratios):
-            result += 0.5
-        if any(s == ratio for s in snap_point_ratios):
-            result += 0.5
-        return result
+            counter += 0.5
+        return counter
     
     def __raw_map_y_to_ratio(self, y):
         assert self.being_dragged
