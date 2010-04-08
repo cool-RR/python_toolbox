@@ -39,8 +39,9 @@ class SnapMap(object):
         return self.initial_pos - relative_y
         # doing minus because y is upside down
         
-    def pos_to_ratio(self, pos):
-        pass
+    def pos_to_ratio(self, pos):        
+        
+        raise NotImplementedError
     
     def ratio_to_y(self, ratio):
         return self.pos_to_y(self.ratio_to_pos(ratio))
