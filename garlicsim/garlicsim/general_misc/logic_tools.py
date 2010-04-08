@@ -17,4 +17,3 @@ def all_equal(iterable):
     equality checks will be made.
     '''
     return all(a==b for (a, b) in cute_iter_tools.consecutive_pairs(iterable))
-
