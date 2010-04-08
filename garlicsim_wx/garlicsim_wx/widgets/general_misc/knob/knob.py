@@ -350,9 +350,6 @@ class Knob(wx.Panel):
             
         return
     
-    def __debug_map(self, start=-500, finish=500, step=10):
-        return [(i, self.__map_y_to_ratio(i+self.origin_rev_y_while_dragging))
-                for i in xrange(start, finish, step)]
         
         
 

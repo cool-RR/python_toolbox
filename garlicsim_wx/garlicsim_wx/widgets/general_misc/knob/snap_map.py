@@ -9,7 +9,7 @@ class SnapMap(object):
         self.snap_point_ratios = snap_point_ratios
         self.base_drag_radius = base_drag_radius
         self.snap_point_drag_well = snap_point_drag_well
-        self._make_snap_point_pos_starts()
+        #self._make_snap_point_pos_starts()
 
     def _get_n_snap_points_from_bottom(self, ratio):
         return len([s for s in self.snap_point_ratios
@@ -21,6 +21,11 @@ class SnapMap(object):
         distance_from_bottom = ratio - (-1)
         result = padding + distance_from_bottom * self.base_drag_radius
         return result
+
+    def _debug_ratio_to_pos(self, step=0.1):
+        if step is None: step = 10
+        
+        return [(i, self.ratio_to_pos(i)) for i in xrange(-1, 1, step)]
     
     def _make_snap_point_pos_starts(self): # todo: should be named ry?
         
@@ -88,5 +93,7 @@ class SnapMap(object):
             )
     
     def pos_to_ratio(self, pos):
-        
-    
+        pass
+
+if __name__ == '__main__':
+    s=SnapMap([0.5,0.7],100,100)
