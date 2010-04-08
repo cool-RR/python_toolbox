@@ -46,19 +46,13 @@ class Knob(wx.Panel):
         self.current_ratio = 0
         self.snap_points = []
         
-        self.base_drag_radius = 100#50 # in pixels
-        self.snap_point_drag_well = 100 #20 \
+        self.base_drag_radius = 50#100#50 # in pixels
+        self.snap_point_drag_well = 20#100 #20 \
             
          
             
         self.being_dragged = False
         self.snap_map = None
-        
-        self.set_snap_point(1)
-        self.set_snap_point(4)
-        self.set_snap_point(-1)
-        self.set_snap_point(40)
-        self.set_snap_point(-30)
 
         
     def _angle_to_ratio(self, angle):

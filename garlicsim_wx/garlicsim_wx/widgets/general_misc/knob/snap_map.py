@@ -16,6 +16,8 @@ class SnapMap(object):
         self.initial_y = initial_y
         self.initial_ratio = initial_ratio
         self.initial_pos = self.ratio_to_pos(initial_ratio)
+        self.max_pos = base_drag_radius * 2 + \
+            len(snap_point_ratios) * snap_point_drag_well
         self._make_snap_point_pos_starts()
             
     
@@ -24,6 +26,7 @@ class SnapMap(object):
     ############
     
     def ratio_to_pos(self, ratio):
+        assert (- 1 - FUZZ) <= ratio <= 1 + FUZZ
         n_snap_points_from_bottom = self._get_n_snap_points_from_bottom(ratio)
         padding = n_snap_points_from_bottom * self.snap_point_drag_well
         distance_from_bottom = ratio - (-1)
@@ -31,16 +34,28 @@ class SnapMap(object):
         return result
 
     def pos_to_y(self, pos):
+        assert 0 - FUZZ <= pos <= self.max_pos + FUZZ
         relative_pos = (pos - self.initial_pos)
         return self.initial_y - relative_pos
         # doing minus because y is upside down
     
     def y_to_pos(self, y):
         relative_y = (y - self.initial_y)
-        return self.initial_pos - relative_y
+
         # doing minus because y is upside down
+        pos = self.initial_pos - relative_y
         
-    def pos_to_ratio(self, pos):        
+        if pos < 0:
+            pos = 0
+        if pos > self.max_pos:
+            pos = self.max_pos
+        
+        return pos
+        
+        
+    def pos_to_ratio(self, pos):
+        assert 0 - FUZZ <= pos <= self.max_pos + FUZZ
+        
         snap_point_pos_starts_from_bottom = [
             p for p in self.snap_point_pos_starts if p <= pos
         ]
@@ -67,7 +82,12 @@ class SnapMap(object):
         padding += \
             len(snap_point_pos_starts_from_bottom) * self.snap_point_drag_well
         
-        return ((pos - padding) / self.snap_point_drag_well) - 1
+        
+        ratio = ((pos - padding) / self.base_drag_radius) - 1
+        
+        assert (- 1 - FUZZ) <= ratio <= 1 + FUZZ
+        
+        return ratio
         
     
     def ratio_to_y(self, ratio):
