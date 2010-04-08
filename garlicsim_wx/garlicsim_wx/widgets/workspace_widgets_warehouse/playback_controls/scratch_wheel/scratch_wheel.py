@@ -59,7 +59,9 @@ class ScratchWheel(wx.Panel):
         self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse_event)
         self.Bind(wx.EVT_IDLE, self.on_idle)
         self.Unbind(wx.EVT_ERASE_BACKGROUND) # Good or bad?
-
+        
+        self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
+        # For solving Vista/7 flicker problems
         
         self.SetCursor(cursor_collection.get_open_grab())
         
