@@ -1,6 +1,7 @@
 # todo: if there's a limit to how close snap points can be to each other,
 # document it
 
+from __future__ import division
 from garlicsim.general_misc import misc_tools
 
 FUZZ = 0.001
@@ -15,7 +16,7 @@ class SnapMap(object):
         self.initial_y = initial_y
         self.initial_ratio = initial_ratio
         self.initial_pos = self.ratio_to_pos(initial_ratio)
-        #self._make_snap_point_pos_starts()
+        self._make_snap_point_pos_starts()
             
     
     ###########################################################################
@@ -40,8 +41,34 @@ class SnapMap(object):
         # doing minus because y is upside down
         
     def pos_to_ratio(self, pos):        
+        snap_point_pos_starts_from_bottom = [
+            p for p in self.snap_point_pos_starts if p <= pos
+        ]
         
-        raise NotImplementedError
+        padding = 0
+        
+        if snap_point_pos_starts_from_bottom:
+
+            candidate_for_current_snap_point = \
+                snap_point_pos_starts_from_bottom[-1]
+        
+            distance_from_candidate = (pos - candidate_for_current_snap_point)
+            
+            if distance_from_candidate < self.snap_point_drag_well:
+                
+                # It IS the current snap point!
+                
+                snap_point_pos_starts_from_bottom.remove(
+                    candidate_for_current_snap_point
+                )
+                
+                padding += distance_from_candidate
+        
+        padding += \
+            len(snap_point_pos_starts_from_bottom) * self.snap_point_drag_well
+        
+        return ((pos - padding) / self.snap_point_drag_well) - 1
+        
     
     def ratio_to_y(self, ratio):
         return self.pos_to_y(self.ratio_to_pos(ratio))
@@ -77,70 +104,14 @@ class SnapMap(object):
     def _make_snap_point_pos_starts(self):
         
         self.snap_point_pos_starts = []
-        snap_point_ratios = self._get_snap_points_as_ratios()
-        if not snap_point_ratios:
-            return
-        assert len(snap_point_ratios) >= 1
-        my_i = binary_search.binary_search_by_index(
-            snap_point_ratios,
-            function=None,
-            value=0,
-            rounding='low'
-        )
         
-        first_negative_i = None
-        zero_is_snap_point = False
+        for i, ratio in enumerate(self.snap_point_ratios):
+            self.snap_point_pos_starts.append(
+                (1 + ratio) * self.base_drag_radius + \
+                i * self.snap_point_drag_well
+            )
         
-        if my_i is None:
-            first_positive_i = 0
-        else:
-            first_positive_i = my_i + 1
-        
-            if snap_point_ratios[my_i] == 0:
-                first_negative_i = my_i - 1
-                zero_is_snap_point = True
-            else:
-                first_negative_i = my_i
-                
-            
-        try:
-            assert snap_point_ratios[first_negative_i] < 0
-        except (IndexError, TypeError): # TypeError in case it's None
-            pass
-        
-        try:
-            assert snap_point_ratios[first_positive_i] > 0
-        except IndexError:
-            pass
-        
-                
-            
-        zero_padding = \
-            self.snap_point_drag_well / 2 if zero_is_snap_point else 0
 
-        negative_snap_point_ratios = snap_point_ratios[:first_negative_i+1] \
-                                   if first_negative_i is not None else []
-        positive_snap_point_ratios = snap_point_ratios[first_positive_i:]
-        
-        
-        
-        for (i, ratio) in cute_iter_tools.enumerate(negative_snap_point_ratios,
-                                                    reverse_index=True):
-            assert ratio < 0 # todo: remove
-            padding_to_add = - (i * self.snap_point_drag_well + zero_padding)
-            self.snap_point_pos_starts.append(
-                ratio * self.base_drag_radius + padding_to_add
-            )
-        
-        for (i, ratio) in enumerate(positive_snap_point_ratios):
-            assert ratio > 0 # todo: remove
-            padding_to_add = i * self.snap_point_drag_well + zero_padding
-            self.snap_point_pos_starts.append(
-                ratio * self.base_drag_radius + padding_to_add
-            )
-    
-    def pos_to_ratio(self, pos):
-        pass
 
 if __name__ == '__main__':
-    s=SnapMap([-0.3,0,0.5,0.7],100,100)
+    s=SnapMap([-0.3,0,0.5,0.7],100,100,0,0)
