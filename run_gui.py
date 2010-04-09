@@ -36,11 +36,13 @@ if not debug:
     
 if __name__ == '__main__':
     
-    #if use_psyco:
-        #psyco.full()
         
     import garlicsim
     import garlicsim_wx
+    
+    if use_psyco:
+        psyco.full()
+    garlicsim_wx.start()
         
-    import cProfile
-    cProfile.run('garlicsim_wx.start()', sort=0)
+    #import cProfile
+    #cProfile.run('garlicsim_wx.start()', sort=0)
