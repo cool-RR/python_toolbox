@@ -94,10 +94,20 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
 
         v_sizer = self.v_sizer = wx.BoxSizer(wx.VERTICAL)
 
+
+        playing_speed_getter = lambda: \
+            self.gui_project.official_playing_speed / \
+            self.gui_project.standard_playing_speed
+        
+        playing_speed_setter = lambda value: \
+            self.gui_project.set_official_playing_speed(
+                value * self.gui_project.standard_playing_speed
+            )
+        
         self.playing_speed_knob = Knob(
             self.inner_panel,
-            lambda: getattr(self.gui_project, 'official_playing_speed'),
-            self.gui_project.set_official_playing_speed
+            getter = playing_speed_getter,
+            setter = playing_speed_setter
         )
         
         

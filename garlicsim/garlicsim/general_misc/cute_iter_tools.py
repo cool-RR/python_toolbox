@@ -61,4 +61,6 @@ def enumerate(reversable, reverse_index=False):
         my_list = list(__builtin__.enumerate(reversed(reversable)))
         my_list.reverse()
         return my_list
-    
+
+def is_iterable(thing):
+    return hasattr(thing, '__iter__')

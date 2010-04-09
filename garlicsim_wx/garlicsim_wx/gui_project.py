@@ -193,7 +193,11 @@ class GuiProject(object):
         )
 
         self.official_playing_speed_change_emitter = \
-            self.emitter_system.make_emitter()
+            self.emitter_system.make_emitter(
+                outputs=(self.update_defacto_playing_speed,)
+            )
+        
+        
         
         #todo: maybe need an emitter for when editing a state?
     
@@ -205,6 +209,11 @@ class GuiProject(object):
     def set_official_playing_speed(self, value):
         self.official_playing_speed = value
         self.official_playing_speed_change_emitter.emit()
+        
+    def update_defacto_playing_speed(self):
+        # In the future this will check if someone's temporarily tweaking the
+        # defacto speed, and let that override.
+        self.defacto_playing_speed = self.official_playing_speed
         
     def __init_gui(self):
         '''
@@ -224,7 +233,7 @@ class GuiProject(object):
         '''
         wx.CallAfter(self.make_initial_dialog)
 
-        
+    
     def make_initial_dialog(self):
         '''Create a dialog for creating a root state.'''
         if hasattr(self.simpack, "make_initial_dialog"):

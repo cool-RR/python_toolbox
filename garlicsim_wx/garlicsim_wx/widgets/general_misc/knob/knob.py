@@ -26,7 +26,7 @@ class Knob(wx.Panel):
         assert callable(setter) and callable(getter)
         self.value_getter, self.value_setter = getter, setter
         
-        wx.Panel.__init__(self, parent, *args, size=(30, 30), **kwargs)
+        wx.Panel.__init__(self, parent, *args, size=(29, 29), **kwargs)
         
         self.original_bitmap = wx.Bitmap(
             pkg_resources.resource_filename(images_package, 'knob.png'),
@@ -34,12 +34,30 @@ class Knob(wx.Panel):
         )
         
         self.Bind(wx.EVT_PAINT, self.on_paint)
-        
+        self.Bind(wx.EVT_SIZE, self.on_size)
         self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse)
+        self.Bind(wx.EVT_ERASE_BACKGROUND, self.on_erase)
         
         self.SetCursor(cursor_collection.get_open_grab())
         
-        self.recalculation_flag = False        
+        self._background_brush = wx.Brush(
+            wx.SystemSettings.GetColour(wx.SYS_COLOUR_MENUBAR)
+        )
+        
+        '''
+        todo: Not sure it's the right system color. Find the tight onw by
+        comparing on different platforms. The right one is probably one of
+        these:
+        
+        ['SYS_COLOUR_MENUBAR', 'SYS_COLOUR_SCROLLBAR', 'SYS_COLOUR_3DFACE',
+        'SYS_COLOUR_INACTIVECAPTIONTEXT', 'SYS_COLOUR_3DLIGHT',
+        'SYS_COLOUR_MENU', 'SYS_COLOUR_INACTIVEBORDER', 'SYS_COLOUR_BTNFACE',
+        'SYS_COLOUR_ACTIVEBORDER']
+        '''
+        
+        self._knob_house_brush = wx.Brush(wx.Color(0, 0, 0))
+        
+        self.recalculation_flag = True
         
         self.sensitivity = 25
         self.angle_resolution = math.pi / 180 # One degree
@@ -105,15 +123,19 @@ class Knob(wx.Panel):
     
     def on_paint(self, event):
         
-        event.Skip()
+        #event.Skip()
         
         if self.recalculation_flag:
             self.recalculate()
         
-        dc = wx.PaintDC(self)
+        dc = wx.BufferedPaintDC(self)
+        
+        dc.SetBackground(self._background_brush)
+        dc.Clear()
         
         w, h = self.GetClientSize()
         
+        """
         wx_tools.draw_bitmap_to_dc_rotated(
             dc,
             self.original_bitmap,
@@ -121,14 +143,25 @@ class Knob(wx.Panel):
             (w/2, h/2),
             useMask=True
         )
+        """
         
         gc = wx.GraphicsContext.Create(dc)
 
-        gc.SetPen(wx.Pen(wx.NamedColor('Red'), 20))
-        gc.DrawEllipse(5,5,2,2)
-        gc.DrawEllipse(100,200,500,500)
+        gc.SetPen(wx.TRANSPARENT_PEN)
+        gc.SetBrush(self._knob_house_brush)
         
-    
+        assert isinstance(gc, wx.GraphicsContext)
+        gc.Translate(w/2, h/2)
+        gc.Rotate(self.current_angle)
+        gc.DrawEllipse(-13.5, -13.5, 27, 27)
+        gc.DrawBitmap(self.original_bitmap, -13, -13, 26, 26)
+        
+        #gc.DrawEllipse(5,5,2,2)
+        #gc.DrawEllipse(100,200,500,500)
+        
+    def on_size(self, event):
+        event.Skip()
+        self.Refresh()
       
     def on_mouse(self, event):
         # todo: maybe right click should give context menu with 'Sensitivity...'
@@ -172,7 +205,8 @@ class Knob(wx.Panel):
             
         return
     
-        
+    def on_erase(self, event):
+        pass
         
 
         
