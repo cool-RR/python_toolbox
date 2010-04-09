@@ -101,8 +101,10 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
             self.gui_project.set_official_playing_speed
         )
         
-        self.playing_speed_knob.set_snap_point(-1)
-        self.playing_speed_knob.set_snap_point(1)
+        
+        #self.playing_speed_knob.set_snap_point(-1)
+        #self.playing_speed_knob.set_snap_point(1)
+        
 
         knob_sizer = wx.BoxSizer(wx.HORIZONTAL)
         knob_sizer.Add(

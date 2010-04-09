@@ -34,6 +34,7 @@ class Knob(wx.Panel):
         )
         
         self.Bind(wx.EVT_PAINT, self.on_paint)
+        
         self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse)
         
         self.SetCursor(cursor_collection.get_open_grab())
@@ -53,8 +54,9 @@ class Knob(wx.Panel):
             
         self.being_dragged = False
         self.snap_map = None
-
         
+
+    
     def _angle_to_ratio(self, angle):
         return angle / (math.pi * 5 / 6)
 
@@ -102,15 +104,14 @@ class Knob(wx.Panel):
         self.recalculation_flag = False
     
     def on_paint(self, event):
-        '''
-        """
+        
         event.Skip()
         
         if self.recalculation_flag:
             self.recalculate()
-        """
+        
         dc = wx.PaintDC(self)
-        """
+        
         w, h = self.GetClientSize()
         
         wx_tools.draw_bitmap_to_dc_rotated(
@@ -120,17 +121,6 @@ class Knob(wx.Panel):
             (w/2, h/2),
             useMask=True
         )
-        """
-        gc = wx.GraphicsContext.Create(dc)
-        assert isinstance(gc, wx.GraphicsContext)
-        #gc.PushState()
-        gc.SetPen(wx.Pen(wx.NamedColor('Red'), 20))
-        gc.DrawEllipse(5, 5, 5, 5)
-        gc.DrawEllipse(5, 5, 5, 5)
-        #gc.PopState()
-        gc.SetFont(wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT))
-        gc.DrawText("anurag", 0, 0)
-        '''
         dc = wx.PaintDC(self)
         gc = wx.GraphicsContext.Create(dc)
 
@@ -139,7 +129,7 @@ class Knob(wx.Panel):
         gc.DrawEllipse(100,200,500,500)
         
     
-        
+      
     def on_mouse(self, event):
         # todo: maybe right click should give context menu with 'Sensitivity...'
         # todo: make check: if left up and has capture, release capture
