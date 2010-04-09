@@ -1,6 +1,7 @@
 
 import itertools
 from garlicsim.general_misc import cute_iter_tools
+from garlicsim_wx.general_misc import magic_tools
 
 # todo: there should probably some circularity check. Maybe actually circularity
 # should be permitted?
@@ -33,7 +34,7 @@ class Emitter(object):
     # todo: can make "freeze_cache_rebuilding" context manager. how used with
     # multiple events?
     
-    def __init__(self, inputs=(), outputs=()):
+    def __init__(self, inputs=(), outputs=(), name='unnamed'):
         self._inputs = set()
         self._outputs = set()
         for output in outputs:
@@ -43,6 +44,11 @@ class Emitter(object):
         # inputs, so when we update their cache, it could use ours.
         for input in inputs:
             self.add_input(input)
+            
+        try:
+            self.name = magic_tools.get_name_of_attribute_that_we_will_become()
+        except Exception:
+            self.name = None
    
     def _get_input_layers(self):
 
@@ -143,6 +149,12 @@ class Emitter(object):
             # We are using the cache directly instead of calling the getter, for
             # speed.
             callable_output()
+    
+    def __repr__(self):
+        if self.name:
+            return '<%s emitter at %s>' % (self.name, hex(id(self)))
+        else:
+            return object.__repr__(self)
     """
     Unused:
     
