@@ -102,12 +102,15 @@ class Knob(wx.Panel):
         self.recalculation_flag = False
     
     def on_paint(self, event):
+        '''
+        """
         event.Skip()
+        
         if self.recalculation_flag:
             self.recalculate()
-        
+        """
         dc = wx.PaintDC(self)
-
+        """
         w, h = self.GetClientSize()
         
         wx_tools.draw_bitmap_to_dc_rotated(
@@ -117,6 +120,24 @@ class Knob(wx.Panel):
             (w/2, h/2),
             useMask=True
         )
+        """
+        gc = wx.GraphicsContext.Create(dc)
+        assert isinstance(gc, wx.GraphicsContext)
+        #gc.PushState()
+        gc.SetPen(wx.Pen(wx.NamedColor('Red'), 20))
+        gc.DrawEllipse(5, 5, 5, 5)
+        gc.DrawEllipse(5, 5, 5, 5)
+        #gc.PopState()
+        gc.SetFont(wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT))
+        gc.DrawText("anurag", 0, 0)
+        '''
+        dc = wx.PaintDC(self)
+        gc = wx.GraphicsContext.Create(dc)
+
+        gc.SetPen(wx.Pen(wx.NamedColor('Red'), 20))
+        gc.DrawEllipse(5,5,2,2)
+        gc.DrawEllipse(100,200,500,500)
+        
     
         
     def on_mouse(self, event):
