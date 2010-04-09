@@ -104,18 +104,19 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         self.playing_speed_knob.set_snap_point(-1)
         self.playing_speed_knob.set_snap_point(1)
         
-
-        knob_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        
+        self.knob_sizer = knob_sizer = wx.BoxSizer(wx.HORIZONTAL)
         knob_sizer.Add(
             self.playing_speed_knob,
             1,
             wx.EXPAND | wx.ALIGN_CENTER_HORIZONTAL | wx.ALIGN_CENTER_VERTICAL #wx.EXPAND #| 
         )
         
+        
         v_sizer.Add(
-            knob_sizer,
+            knob_sizer, #self.playing_speed_knob, # knob_sizer,
             0,
-            wx.ALIGN_CENTER_VERTICAL#| wx.ALIGN_CENTER_VERTICAL #wx.EXPAND #| 
+            #wx.ALIGN_CENTER_HORIZONTAL #wx.EXPAND #|
         )
 
 
@@ -173,6 +174,8 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
 
 
         self.inner_panel.SetSizer(v_sizer)
+        knob_sizer.Layout()
+        h_sizer.Layout()
         v_sizer.Layout()
         
         
