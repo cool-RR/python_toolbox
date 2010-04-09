@@ -94,7 +94,6 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
 
         v_sizer = self.v_sizer = wx.BoxSizer(wx.VERTICAL)
 
-        #wx.Button(self, -1, size=(184, 30))
         self.playing_speed_knob = Knob(
             self.inner_panel,
             lambda: getattr(self.gui_project, 'official_playing_speed'),
@@ -102,8 +101,8 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         )
         
         
-        #self.playing_speed_knob.set_snap_point(-1)
-        #self.playing_speed_knob.set_snap_point(1)
+        self.playing_speed_knob.set_snap_point(-1)
+        self.playing_speed_knob.set_snap_point(1)
         
 
         knob_sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -215,6 +214,7 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
     
         
     def on_paint(self, event):
+        event.Skip()
         if self.center_button_update_flag:
             self._update_center_button()
         if self.navigation_buttons_update_flag:
@@ -222,7 +222,10 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         
         super(PlaybackControls, self).OnPaint(event)
         
-        event.Skip()
+        #dc = wx.PaintDC(self)
+        #gc = wx.GraphicsContext.Create(dc)
+        #gc.SetPen(wx.Pen(wx.NamedColor('Blue'), 20))
+        #gc.DrawEllipse(5,5,30,30)
 
     def _update_navigation_buttons(self):
         
@@ -280,12 +283,7 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
             self.center_button_bitmap_dict[center_button_mode]
         )
         self.center_button_mode = center_button_mode
-            
-    """
-    def OnPaint(self, e): # cancel this?
-        self.update_buttons_status()
-        wx.Panel.OnPaint(self, e)
-    """
+       
         
     def on_button_to_start(self, e=None):
         try:

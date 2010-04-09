@@ -121,7 +121,7 @@ class Knob(wx.Panel):
             (w/2, h/2),
             useMask=True
         )
-        dc = wx.PaintDC(self)
+        
         gc = wx.GraphicsContext.Create(dc)
 
         gc.SetPen(wx.Pen(wx.NamedColor('Red'), 20))
