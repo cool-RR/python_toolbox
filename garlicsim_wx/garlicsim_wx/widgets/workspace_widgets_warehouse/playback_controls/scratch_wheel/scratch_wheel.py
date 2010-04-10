@@ -92,7 +92,6 @@ class ScratchWheel(wx.Panel):
         self.d_angle_while_dragging = None
         self.desired_clock_while_dragging = None
         
-        self.velocity_tracking_counter = 0
         self.velocity_tracking_period = 1#100
         self.last_tracked_time_and_angle = (0, 0)
         self.current_velocity_estimate = 0
@@ -166,47 +165,40 @@ class ScratchWheel(wx.Panel):
         
         self.frame_number_that_should_be_drawn = frame_number
         
-        if self.frame_number_that_should_be_drawn != self.current_frame_number:
-            self.Refresh()
+        #if self.frame_number_that_should_be_drawn != self.current_frame_number:
+            #self.Refresh()
         
-        self.__update_motion_blur_bitmap_if_needed()
+        self.__update_motion_blur_bitmap()
         
         self.recalculation_flag = False
     
-    def __update_motion_blur_bitmap_if_needed(self):
+    def __update_motion_blur_bitmap(self):
+
+        current = (time.time(), self.get_current_angle())
+        last = self.last_tracked_time_and_angle
+
+        d_time = current[0] - last[0]
+        d_angle = current[1] - last[1]
         
-        if self.velocity_tracking_counter == 0:
-            # todo: if settled on a period of 1, cut the period business
-            
-            current = (time.time(), self.get_current_angle())
-            last = self.last_tracked_time_and_angle
-
-            d_time = current[0] - last[0]
-            d_angle = current[1] - last[1]
-            
-            if d_time < self.velocity_time_sampling_minimum:
-                return
-                # This protects us from two things: Having a grossly inaccurate
-                # velocity reading because of tiny sample, and have a division
-                # by zero.
-            
-            self.current_velocity_estimate = velocity = d_angle / d_time
-
-            r_velocity = velocity / self.velocity_for_maximal_motion_blur
-
-            alpha = min(abs(r_velocity), 1)
-            
-            alpha = min(alpha, 0.8)
-            # I'm limiting the alpha, still want to see some animation
-            
-            self.current_motion_blur_bitmap = \
-                images.get_blurred_gear_image_by_ratio(alpha)
-            
-            self.last_tracked_time_and_angle = current
-            
+        if d_time < self.velocity_time_sampling_minimum:
+            return
+            # This protects us from two things: Having a grossly inaccurate
+            # velocity reading because of tiny sample, and having a division by
+            # zero.
         
-        self.velocity_tracking_counter += 1
-        self.velocity_tracking_counter %= self.velocity_tracking_period
+        self.current_velocity_estimate = velocity = d_angle / d_time
+
+        r_velocity = velocity / self.velocity_for_maximal_motion_blur
+
+        alpha = min(abs(r_velocity), 1)
+        
+        alpha = min(alpha, 0.8)
+        # I'm limiting the alpha, still want to see some animation
+        
+        self.current_motion_blur_bitmap = \
+            images.get_blurred_gear_image_by_ratio(alpha)
+        
+        self.last_tracked_time_and_angle = current
             
     def on_paint(self, event):
         # todo: optimization: if motion blur is (rounded to) zero, don't draw
