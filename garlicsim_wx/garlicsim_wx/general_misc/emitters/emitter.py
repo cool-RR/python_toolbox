@@ -6,49 +6,49 @@ from garlicsim_wx.general_misc import magic_tools
 # todo: there should probably some circularity check. Maybe actually circularity
 # should be permitted?
 
-class EmitterSystem(object):
-    #todo future: maybe optimize by cutting redundant links between boxes
-    def __init__(self):
-        self.bottom_emitter = Emitter()
-        self.top_emitter = Emitter(outputs=(self.bottom_emitter,))
-        self.emitters = set()
-    
-    def make_emitter(self, inputs=(), outputs=()):
-        assert cute_iter_tools.is_iterable(inputs) and \
-               cute_iter_tools.is_iterable(outputs)
-        inputs = set(inputs)
-        inputs.add(self.top_emitter)
-        outputs = set(outputs)
-        outputs.add(self.bottom_emitter)
-        emitter = Emitter(inputs, outputs)
-        self.emitters.add(emitter)
-        return emitter
-    
-    def remove_emitter(self, emitter):
-        emitter.disconnect_from_all()
-        self.emitters.remove(emitter)
-        
 
+
+#class FreezeCacheRebuildingContextManager(object):
+    #def __init__(self, emitter):
+        #self.emitter = emitter
+    #def __enter__(self):
+        #self.emitter._cache_rebuilding_frozen += 1
+    #def __exit__(self, *args, **kwargs):
+        #self.emitter._cache_rebuilding_frozen -= 1
+        
+        
 class Emitter(object):
     
     # todo: can make "freeze_cache_rebuilding" context manager. how used with
     # multiple events?
     
-    def __init__(self, inputs=(), outputs=(), name='unnamed'):
+    def __init__(self, inputs=(), outputs=(), name=None):
+
+        #self._cache_rebuilding_frozen = 0
+        #self.freeze_cache_rebuilding = \
+            #FreezeCacheRebuildingContextManager(self)
+        
         self._inputs = set()
         self._outputs = set()
+        
         for output in outputs:
             self.add_output(output)
+            
         self._recalculate_total_callable_outputs()        
+
         # We made sure to create the callable outputs cache before we add
         # inputs, so when we update their cache, it could use ours.
         for input in inputs:
             self.add_input(input)
-            
-        try:
-            self.name = magic_tools.get_name_of_attribute_that_we_will_become()
-        except Exception:
-            self.name = None
+
+        if name:
+            self.name = name
+        else:
+            try:
+                self.name = \
+                    magic_tools.get_name_of_attribute_that_we_will_become()
+            except Exception:
+                self.name = None
    
     def _get_input_layers(self):
 
@@ -145,7 +145,6 @@ class Emitter(object):
     def emit(self):
         # Note that this function gets called many times, so it should be
         # optimized for speed.
-        print self
         for callable_output in self.__total_callable_outputs_cache:
             # We are using the cache directly instead of calling the getter, for
             # speed.

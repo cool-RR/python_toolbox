@@ -45,4 +45,4 @@ if __name__ == '__main__':
     garlicsim_wx.start()
         
     #import cProfile
-    #cProfile.run('garlicsim_wx.start()', sort=0)
+    #cProfile.run('garlicsim_wx.start()', sort=2)
