@@ -7,22 +7,25 @@ import wx.lib.scrolledpanel as scrolled
 import garlicsim_wx
 
 '''
-Defines the BoardWidget class.
+Defines the BoardViewer class.
 '''
 
-class BoardWidget(scrolled.ScrolledPanel,
+class BoardViewer(scrolled.ScrolledPanel,
                   garlicsim_wx.widgets.WorkspaceWidget):
     '''Widget for displaying a Life board.'''
-    def __init__(self, parent, id, gui_project, *args, **kwargs):
-        scrolled.ScrolledPanel.__init__(self, parent, id,
-                                        style=wx.SUNKEN_BORDER, *args,
-                                        **kwargs)
+    def __init__(self, frame):
+              
+        scrolled.ScrolledPanel.__init__(self, frame,
+                                        style=wx.SUNKEN_BORDER)
+        
+        garlicsim_wx.widgets.WorkspaceWidget.__init__(self, frame)
+        
         self.SetupScrolling()
+        
         self.Bind(wx.EVT_PAINT, self.on_paint)
         self.Bind(wx.EVT_SIZE, self.on_size)
         self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse_event)
 
-        self.gui_project = gui_project
         self.border_width = 1
         self.square_size = 7
         self.board = None
@@ -91,17 +94,17 @@ class BoardWidget(scrolled.ScrolledPanel,
 
 
 
-    def on_size(self, e=None):
+    def on_size(self, event):
         '''Refresh the widget.'''
         self.Refresh()
-        if e is not None:
-            e.Skip()
+        if event is not None:
+            event.Skip()
 
-    def on_mouse_event(self, e):
+    def on_mouse_event(self, event):
         '''Mouse event handler.'''
         
-        if e.LeftDown():
-            pos = e.GetPositionTuple()
+        if event.LeftDown():
+            pos = event.GetPositionTuple()
             thing = self.unscreenify(*pos)
             if thing is not None:
                 (x, y) = thing

@@ -22,7 +22,7 @@ if wx_installed:
     
     class Meta_wx(object):
         seek_bar_graphs = [live_cells, changes]
-        workspace_widgets = [custom_widgets.BoardWidget]
+        workspace_widgets = [custom_widgets.BoardViewer]
     
 
 

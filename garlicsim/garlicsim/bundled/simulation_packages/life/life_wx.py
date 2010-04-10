@@ -12,11 +12,13 @@ import wx
 import garlicsim.data_structures
 import custom_widgets
 
+"""
+
 def initialize(gui_project):
     '''Initialize the gui.'''
     gui_project.mysizer = wx.BoxSizer(wx.VERTICAL)
     board_widget = gui_project.board_widget = \
-        custom_widgets.BoardWidget(gui_project.state_showing_window, -1,
+        custom_widgets.BoardViewer(gui_project.state_showing_window, -1,
                                    gui_project)
     gui_project.mysizer.Add(board_widget, 1, wx.EXPAND)
     gui_project.state_showing_window.SetSizer(gui_project.mysizer)
@@ -25,7 +27,9 @@ def initialize(gui_project):
 def show_state(gui_project, state):
     '''Show the given state onscreen.'''
     gui_project.board_widget.set_board(state.board)
-
+    
+"""
+StateViewer = custom_widgets.BoardViewer
 ################
 
 class InitialDialog(wx.Dialog):

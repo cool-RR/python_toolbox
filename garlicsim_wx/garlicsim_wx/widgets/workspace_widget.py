@@ -20,14 +20,14 @@ class WorkspaceWidget(object):
         assert isinstance(self.gui_project, garlicsim_wx.GuiProject)
         
         # I put these asserts mainly for better source assistance in Wing.
-        # This may be removed.
+        # They may be removed.
         
         class_name = self.__class__.__name__
         
         self.aui_pane_info = aui_pane_info or \
             aui.AuiPaneInfo().\
             Caption(string_tools.camelcase_to_spacecase(class_name).upper()).\
-            Center().CloseButton(False)
+            CloseButton(False)
         
         frame.aui_manager.AddPane(
             self,

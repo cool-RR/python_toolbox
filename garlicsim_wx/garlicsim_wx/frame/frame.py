@@ -294,10 +294,17 @@ class Frame(wx.Frame):
             .BestSize(400, 600)\
             .MaximizeButton(True)
 
-        self.state_repr_viewer = workspace_widgets['StateReprViewer'](self)
-        self.state_repr_viewer.aui_pane_info\
+        StateViewer = getattr(
+            self.gui_project.simpack,
+            'StateViewer',
+            workspace_widgets['StateReprViewer']
+        )
+        
+        self.state_viewer = StateViewer(self)
+        self.state_viewer.aui_pane_info\
             .BestSize(300, 300)\
             .MaximizeButton(True)\
+            .Center()\
             .Floatable(False)
             
         self.aui_manager.Update()

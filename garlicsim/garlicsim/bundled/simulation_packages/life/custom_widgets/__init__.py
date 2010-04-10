@@ -5,4 +5,4 @@
 Defines a widget to be used for Life in garlicsim_wx.
 '''
 
-from board_widget import BoardWidget
+from board_viewer import BoardViewer
