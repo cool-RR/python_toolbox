@@ -81,7 +81,7 @@ class Emitter(object):
         #todo: freeze flag check here
         self._recalculate_total_callable_outputs()
         input_layers = self._get_input_layers()
-        for input_layer in reversed(input_layers):
+        for input_layer in input_layers:
             for input in input_layer:
                 input._recalculate_total_callable_outputs()
         
@@ -145,6 +145,7 @@ class Emitter(object):
     def emit(self):
         # Note that this function gets called many times, so it should be
         # optimized for speed.
+        print self
         for callable_output in self.__total_callable_outputs_cache:
             # We are using the cache directly instead of calling the getter, for
             # speed.
