@@ -29,6 +29,10 @@ class BoardViewer(scrolled.ScrolledPanel,
         self.border_width = 1
         self.square_size = 7
         self.board = None
+        
+        self.gui_project.active_node_changed_emitter.add_output(
+            lambda: self.set_board(self.gui_project.active_node.state.board)
+        )
 
         
     def unscreenify(self, x, y):
