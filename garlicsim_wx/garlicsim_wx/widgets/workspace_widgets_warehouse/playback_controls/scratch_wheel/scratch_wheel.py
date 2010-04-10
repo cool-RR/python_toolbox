@@ -126,6 +126,9 @@ class ScratchWheel(wx.Panel):
                     FlagRaiser(self, 'recalculation_flag'),
                     # todo: currently we refresh, not good. if it's the same
                     # bitmap it'll be wasteful to refresh.
+                    # update: I spoke with Andrea about this. He said something
+                    # about OnInternalIdle, but it didn't work out (April 10th,
+                    # 2010).                    
                 )
             )
         
