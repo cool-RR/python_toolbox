@@ -49,7 +49,7 @@ class Frame(wx.Frame):
         self.workspace_widgets = dict.fromkeys(workspace_widgets)
         
         list_of_default_widgets = [
-            'StateReprShower',
+            'StateReprViewer',
             'Shell',
             'SeekBar',
             'TreeBrowser'
@@ -66,7 +66,7 @@ class Frame(wx.Frame):
         self.tree_browser = None
         self.seek_bar = None
         self.shell = None
-        self.state_repr_shower = None
+        self.state_repr_viewer = None
         
         
         self.aui_manager = aui.AuiManager()
@@ -267,7 +267,7 @@ class Frame(wx.Frame):
 
         self.gui_project = garlicsim_wx.gui_project.GuiProject(simpack, self)
 
-        # todo: should create StateReprShower only if the simpack got no
+        # todo: should create StateReprViewer only if the simpack got no
         # workspace widgets
         
         self.tree_browser = workspace_widgets['TreeBrowser'](self)
@@ -294,8 +294,8 @@ class Frame(wx.Frame):
             .BestSize(400, 600)\
             .MaximizeButton(True)
 
-        self.state_repr_shower = workspace_widgets['StateReprShower'](self)
-        self.state_repr_shower.aui_pane_info\
+        self.state_repr_viewer = workspace_widgets['StateReprViewer'](self)
+        self.state_repr_viewer.aui_pane_info\
             .BestSize(300, 300)\
             .MaximizeButton(True)\
             .Floatable(False)

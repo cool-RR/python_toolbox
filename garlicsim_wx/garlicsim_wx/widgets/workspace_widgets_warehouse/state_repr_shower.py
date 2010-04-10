@@ -7,9 +7,9 @@ from garlicsim_wx.widgets import WorkspaceWidget
 import garlicsim.general_misc.dict_tools as dict_tools
 from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
 
-__all__ = ["StateReprShower"]
+__all__ = ["StateReprViewer"]
 
-class StateReprShower(wx.TextCtrl, WorkspaceWidget):#tododoc
+class StateReprViewer(wx.TextCtrl, WorkspaceWidget):#tododoc
     def __init__(self, frame):
         wx.TextCtrl.__init__(self, frame, size=(100, 100),
                              style=wx.TE_MULTILINE)

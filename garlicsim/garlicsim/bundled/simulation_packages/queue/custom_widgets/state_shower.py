@@ -10,7 +10,7 @@ import garlicsim
 from garlicsim.general_misc.infinity import Infinity
 
 '''
-This module defines the StateShower class.
+This module defines the StateViewer class.
 
 See its documentation for more information.
 '''
@@ -18,7 +18,7 @@ See its documentation for more information.
 def make_wx_color((r, g, b)):
     return wx.Color(255*r, 255*g, 255*b)
 
-class StateShower(wx.lib.scrolledpanel.ScrolledPanel):
+class StateViewer(wx.lib.scrolledpanel.ScrolledPanel):
     '''
     Widget for showing a state of the queue simpack.
     '''

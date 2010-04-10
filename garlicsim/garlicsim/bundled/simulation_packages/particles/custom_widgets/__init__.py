@@ -5,4 +5,4 @@
 tododoc
 '''
 
-from state_shower import StateShower
+from state_viewer import StateViewer

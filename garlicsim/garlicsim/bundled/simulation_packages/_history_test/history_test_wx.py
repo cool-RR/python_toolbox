@@ -8,18 +8,18 @@ import math
 
 def initialize(gui_project):
     '''Initialize the gui.'''
-    gui_project.state_shower = StateShower(gui_project.state_showing_window)
+    gui_project.state_viewer = StateViewer(gui_project.state_showing_window)
     sizer=wx.BoxSizer(wx.VERTICAL)
-    sizer.Add(gui_project.state_shower, 1, wx.EXPAND)
+    sizer.Add(gui_project.state_viewer, 1, wx.EXPAND)
     gui_project.state_showing_window.SetSizer(sizer)
 
 
 def show_state(gui_project, state):
     '''Show the state onscreen.'''
-    gui_project.state_shower.load_state(state)
+    gui_project.state_viewer.load_state(state)
 
 
-class StateShower(wx.Window):
+class StateViewer(wx.Window):
     '''Widget for showing a state onscreen.'''
     def __init__(self, *args, **kwargs):
         wx.Window.__init__(self, *args, **kwargs)

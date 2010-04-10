@@ -56,7 +56,7 @@ class Visualization(HasTraits):
                 )
                 
     
-class StateShower(wx.lib.scrolledpanel.ScrolledPanel):
+class StateViewer(wx.lib.scrolledpanel.ScrolledPanel):
     '''
     
     '''

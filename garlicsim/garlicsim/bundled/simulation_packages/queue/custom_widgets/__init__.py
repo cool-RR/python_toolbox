@@ -3,4 +3,4 @@
 
 '''Custom widgets for the queue simpack.'''
 
-from state_shower import StateShower
+from state_viewer import StateViewer
