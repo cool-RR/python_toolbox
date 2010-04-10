@@ -6,15 +6,6 @@ from garlicsim_wx.general_misc import magic_tools
 # todo: there should probably some circularity check. Maybe actually circularity
 # should be permitted?
 
-
-
-#class FreezeCacheRebuildingContextManager(object):
-    #def __init__(self, emitter):
-        #self.emitter = emitter
-    #def __enter__(self):
-        #self.emitter._cache_rebuilding_frozen += 1
-    #def __exit__(self, *args, **kwargs):
-        #self.emitter._cache_rebuilding_frozen -= 1
         
         
 class Emitter(object):
@@ -24,9 +15,8 @@ class Emitter(object):
     
     def __init__(self, inputs=(), outputs=(), name=None):
 
-        #self._cache_rebuilding_frozen = 0
-        #self.freeze_cache_rebuilding = \
-            #FreezeCacheRebuildingContextManager(self)
+        assert cute_iter_tools.is_iterable(inputs) and \
+               cute_iter_tools.is_iterable(outputs)
         
         self._inputs = set()
         self._outputs = set()

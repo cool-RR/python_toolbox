@@ -227,8 +227,9 @@ class ScratchWheel(wx.Panel):
         self.current_frame_number = self.frame_number_that_should_be_drawn
             
     def on_mouse_event(self, e):
-        #todo: possibly do momentum, like in old shockwave carouselle.
-        # todo: right click should give context menu with 'Sensitivity...'
+        # todo: possibly do momentum, like in old shockwave carouselle.
+        # todo: right click should give context menu with 'Sensitivity...' and
+        # 'Disable'
         # todo: make check: if left up and has capture, release capture
 
         self.Refresh()
@@ -305,71 +306,7 @@ class ScratchWheel(wx.Panel):
             self.was_playing_before_drag = None
             
         return
-        #if e.RightDown():
-            #self.gui_project.stop_playing()
 
-            #reselect_node = False
-            #new_thing = e.GetPositionTuple()[0]
-            #if self.gui_project.active_node is None:
-                #reselect_node=True
-            #else:
-                #thing = self.screenify(self.gui_project.active_node.state.clock)
-                #if abs(thing - new_thing) >= 8:
-                    #reselect_node = True
-
-            #if reselect_node is True:
-                
-                #new_node = self.gui_project.path.get_node_occupying_timepoint \
-                         #(self.unscreenify(new_thing))
-                
-                #if new_node is not None:
-                    #self.gui_project.set_active_node(new_node, modify_path=False)
-
-            #if self.gui_project.active_node is not None:
-                #self.gui_project.frame.Refresh()
-                #self.PopupMenu(self.gui_project.get_node_menu(), e.GetPosition())
-
-
-
-        #if e.LeftDClick():
-            #self.gui_project.toggle_playing()
-            
-        #if e.LeftDown():# or e.RightDown():
-            #thing = e.GetPositionTuple()[0]
-            #node = self.gui_project.path.get_node_occupying_timepoint \
-                 #(self.unscreenify(thing))
-
-            #self.was_playing_before_mouse_click = self.gui_project.is_playing
-            #if self.was_playing_before_mouse_click:
-                #self.gui_project.stop_playing()
-
-            #if node is not None:
-                #self.gui_project.set_active_node(node, modify_path=False)
-
-
-        #if e.LeftIsDown():
-            #thing = e.GetPositionTuple()[0]
-            #node = self.gui_project.path.get_node_occupying_timepoint \
-                 #(self.unscreenify(thing))
-            #if node is not None:
-                #self.gui_project.set_active_node(node, modify_path=False)
-                
-        #if e.LeftUp():
-            #if self.was_playing_before_mouse_click:
-                #self.gui_project.start_playing()
-                #self.was_playing_before_mouse_click = False
-                
-        #if e.Leaving():
-            #if self.was_playing_before_mouse_click:
-                #self.gui_project.start_playing()
-                #self.was_playing_before_mouse_click = False
-                #self.was_playing_before_mouse_click_but_then_paused_and_mouse_left = True
-                
-        #if e.Entering():
-            #if self.was_playing_before_mouse_click_but_then_paused_and_mouse_left:
-                #self.gui_project.stop_playing()
-                #self.was_playing_before_mouse_click = True
-                #self.was_playing_before_mouse_click_but_then_paused_and_mouse_left = False
 
 
     def on_size(self, e):

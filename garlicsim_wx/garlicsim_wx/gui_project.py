@@ -118,88 +118,91 @@ class GuiProject(object):
         ready yet. The simulation will continue playing when the nodes will be
         created.
         '''
+
+        self.__init_emitters()
         
-        # todo: move to __init_event_types
+    def __init_emitters(self):
+        
         # todo: not clear that `tree_changed_emitter` means that only data changed
         # and not structure.
         
         self.emitter_system = emitters.EmitterSystem()
+                
+        with self.emitter_system.freeze_cache_rebuilding:
         
-        self.tree_changed_emitter = self.emitter_system.make_emitter()
-        self.tree_changed_on_path_emitter = self.emitter_system.make_emitter(
-            outputs=(self.tree_changed_emitter,)
-        )
-
-        self.tree_changed_not_on_path = self.emitter_system.make_emitter(
-            outputs=(self.tree_changed_emitter,)
-        )
-        
-        self.tree_changed_at_unknown_location_emitter = \
-            self.emitter_system.make_emitter(
-            outputs=(
-                self.tree_changed_on_path_emitter,
-                self.tree_changed_not_on_path,
+            es = self.emitter_system
+            
+            self.tree_changed_emitter = es.make_emitter()
+            self.tree_changed_on_path_emitter = es.make_emitter(
+                outputs=(self.tree_changed_emitter,)
             )
-        )
-        
-        self.tree_structure_changed_emitter = self.emitter_system.make_emitter(
-            outputs=(self.tree_changed_emitter,)
-        )
-        
-        self.tree_structure_changed_on_path_emitter = \
-            self.emitter_system.make_emitter(
-            outputs=(
-                self.tree_changed_on_path_emitter,
-                self.tree_structure_changed_emitter
+    
+            self.tree_changed_not_on_path = es.make_emitter(
+                outputs=(self.tree_changed_emitter,)
             )
-        )
-        self.tree_structure_changed_not_on_path_emitter = \
-            self.emitter_system.make_emitter(
-            outputs=(
-                self.tree_changed_not_on_path,
-                self.tree_structure_changed_emitter
+            
+            self.tree_changed_at_unknown_location_emitter = es.make_emitter(
+                outputs=(
+                    self.tree_changed_on_path_emitter,
+                    self.tree_changed_not_on_path,
+                )
             )
-        )
-        self.tree_structure_changed_at_unknown_location_emitter = \
-            self.emitter_system.make_emitter(
-            outputs=(
-                self.tree_structure_changed_on_path_emitter,
-                self.tree_structure_changed_not_on_path_emitter,
-                self.tree_changed_at_unknown_location_emitter
+            
+            self.tree_structure_changed_emitter = es.make_emitter(
+                outputs=(self.tree_changed_emitter,)
             )
-        )
-        
-
-        self.pseudoclock_changed_emitter = self.emitter_system.make_emitter()
-
-        self.active_node_changed_emitter = self.emitter_system.make_emitter()
-        # todo: should possibly be subclass of pseudoclock_changed_emitter
-        
-        self.path_changed_emitter = self.emitter_system.make_emitter()
-        
-        self.path_contents_changed_emitter = self.emitter_system.make_emitter(
-            inputs=(
-                self.path_changed_emitter,
-                self.tree_changed_on_path_emitter
+            
+            self.tree_structure_changed_on_path_emitter = es.make_emitter(
+                outputs=(
+                    self.tree_changed_on_path_emitter,
+                    self.tree_structure_changed_emitter
+                )
             )
-        )
-        
-        self.playing_toggled_emitter = self.emitter_system.make_emitter()
-        self.playing_started_emitter = self.emitter_system.make_emitter(
-            outputs=(self.playing_toggled_emitter,)
-        )
-        self.playing_stopped_emitter = self.emitter_system.make_emitter(
-            outputs=(self.playing_toggled_emitter,)
-        )
-
-        self.official_playing_speed_change_emitter = \
-            self.emitter_system.make_emitter(
-                outputs=(self.update_defacto_playing_speed,)
+            self.tree_structure_changed_not_on_path_emitter = es.make_emitter(
+                outputs=(
+                    self.tree_changed_not_on_path,
+                    self.tree_structure_changed_emitter
+                )
             )
-        
-        
-        
-        #todo: maybe need an emitter for when editing a state?
+            self.tree_structure_changed_at_unknown_location_emitter = \
+                es.make_emitter(
+                outputs=(
+                    self.tree_structure_changed_on_path_emitter,
+                    self.tree_structure_changed_not_on_path_emitter,
+                    self.tree_changed_at_unknown_location_emitter
+                )
+            )
+            
+    
+            self.pseudoclock_changed_emitter = es.make_emitter()
+    
+            self.active_node_changed_emitter = es.make_emitter()
+            # todo: should possibly take input from pseudoclock_changed_emitter
+            
+            self.path_changed_emitter = es.make_emitter()
+            
+            self.path_contents_changed_emitter = es.make_emitter(
+                inputs=(
+                    self.path_changed_emitter,
+                    self.tree_changed_on_path_emitter
+                )
+            )
+            
+            self.playing_toggled_emitter = es.make_emitter()
+            self.playing_started_emitter = es.make_emitter(
+                outputs=(self.playing_toggled_emitter,)
+            )
+            self.playing_stopped_emitter = es.make_emitter(
+                outputs=(self.playing_toggled_emitter,)
+            )
+    
+            self.official_playing_speed_change_emitter = es.make_emitter(
+                    outputs=(self.update_defacto_playing_speed,)
+                )
+            
+            
+            
+            #todo: maybe need an emitter for when editing a state?
     
 
     def set_path(self, path):
