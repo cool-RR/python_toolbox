@@ -5,7 +5,7 @@
 import wx
 from garlicsim_wx.widgets import WorkspaceWidget
 import garlicsim.general_misc.dict_tools as dict_tools
-
+from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
 
 __all__ = ["StateReprShower"]
 
@@ -19,16 +19,24 @@ class StateReprShower(wx.TextCtrl, WorkspaceWidget):#tododoc
                        u'Courier New')
         self.SetFont(font)
         self.state = None
+        
+        self.needs_update_flag = True
+        
+        self.gui_project.active_node_changed_emitter.add_output(
+            FlagRaiser(self, 'needs_update_flag')
+        )
 
     def on_paint(self, event):
         event.Skip()
-        if self.frame.gui_project:
-            active_state = self.frame.gui_project.get_active_state()        
-            if active_state:
-                if active_state is not self.state:
-                    self.state = active_state
-                    state_repr = dict_tools.fancy_string(vars(active_state))
-                    self.SetValue(state_repr)
+        if self.needs_update_flag:
+            if self.frame.gui_project:
+                active_state = self.frame.gui_project.get_active_state()        
+                if active_state:
+                    if active_state is not self.state:
+                        self.state = active_state
+                        state_repr = dict_tools.fancy_string(vars(active_state))
+                        self.SetValue(state_repr)
+            self.needs_update_flag = False
          
         
     

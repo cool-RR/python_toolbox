@@ -34,12 +34,13 @@ class ThreadTimer(object):
 
    def __init_thread(self):
       thread_name = ''.join(('Thread used by ThreadTimer no. ', str(self.n)))
-      self.thread = Thread(name=thread_name)
+      self.thread = Thread(self, name=thread_name)
       # Overwriting previous thread, so it'll get garbage-collected, hopefully
-      self.thread.parent = self
    
    def start(self, interval):
       '''Start the timer.'''
+      if self.alive:
+         self.stop()
       self.interval = interval
       self.alive = True
       self.thread.start()
@@ -47,6 +48,7 @@ class ThreadTimer(object):
    def stop(self):
       '''Stop the timer.'''
       self.alive = False
+      self.thread.retired = True
       self.__init_thread()
    
    Start = start
@@ -58,6 +60,11 @@ class ThreadTimer(object):
       
 class Thread(threading.Thread):
    '''Thread used as a timer for wxPython programs.'''
+   def __init__(self, parent, name):
+      threading.Thread.__init__(self, name=name)
+      self.parent = parent
+      self.retired = False
+      
    def run(self):
       interval_in_seconds = self.parent.interval / 1000.0
       def sleep():
@@ -65,7 +72,7 @@ class Thread(threading.Thread):
 
       sleep()
       try:
-         while self.parent.alive:
+         while self.parent.alive is True and self.retired is False:
             event = wx.PyEvent(self.parent.wx_id)
             event.SetEventType(wxEVT_THREAD_TIMER)
             wx.PostEvent(self.parent.parent, event)

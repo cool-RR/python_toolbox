@@ -14,6 +14,7 @@ import time
 import garlicsim, garlicsim_wx
 from garlicsim_wx.widgets import WorkspaceWidget
 from garlicsim_wx.general_misc import cursor_collection
+from garlicsim_wx.general_misc import thread_timer
 from garlicsim_wx.general_misc import emitters
 from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
 
@@ -104,6 +105,14 @@ class ScratchWheel(wx.Panel):
         self.velocity_time_sampling_minimum = 0.05
         
         self.was_playing_before_drag = None
+            
+        self.motion_blur_update_timer = thread_timer.ThreadTimer(self)
+        self.Bind(thread_timer.EVT_THREAD_TIMER,
+                  self.on_motion_blur_update_timer,
+                  self.motion_blur_update_timer)
+        
+        # I don't think ThreadTimer should be used here. But for some reason
+        # wx.Timer didn't work.
         
         self.recalculation_flag = False
         
@@ -163,10 +172,7 @@ class ScratchWheel(wx.Panel):
         if frame_number == images.N_FRAMES:
             frame_number =- 1
         
-        self.frame_number_that_should_be_drawn = frame_number
-        
-        #if self.frame_number_that_should_be_drawn != self.current_frame_number:
-            #self.Refresh()
+        self.frame_number_that_should_be_drawn = frame_number        
         
         self.__update_motion_blur_bitmap()
         
@@ -195,9 +201,20 @@ class ScratchWheel(wx.Panel):
         alpha = min(alpha, 0.8)
         # I'm limiting the alpha, still want to see some animation
         
-        self.current_motion_blur_bitmap = \
-            images.get_blurred_gear_image_by_ratio(alpha)
+        new_motion_blur_image = images.get_blurred_gear_image_by_ratio(alpha)
         
+        self.current_motion_blur_bitmap = new_motion_blur_image
+        
+        if new_motion_blur_image is not \
+           images.get_blurred_gear_image_by_ratio(0):
+            # We have a non-zero visible motion blur
+            
+            self.motion_blur_update_timer.Start(30)
+        
+        else:
+            
+            self.motion_blur_update_timer.Stop()
+            
         self.last_tracked_time_and_angle = current
             
     def on_paint(self, event):
@@ -301,11 +318,15 @@ class ScratchWheel(wx.Panel):
 
 
 
-    def on_size(self, e):
+    def on_size(self, event):
         self.Refresh()
-        if e is not None:
-            e.Skip()
+        if event is not None:
+            event.Skip()
+    
+    def on_motion_blur_update_timer(self, event):
+        self.recalculation_flag = True
+        self.Refresh()
             
-    def on_idle(self, event):
+    def on_idle(self, event): # todo: kill this
         if self.current_motion_blur_bitmap != images.get_blurred_gear_image(0):
             self.Refresh()
