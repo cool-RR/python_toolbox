@@ -61,14 +61,10 @@ class GuiProject(object):
             
         else:
             
-            wrapped_simpack = \
-                garlicsim.general_misc.module_wrapper.module_wrapper_factory \
-                (simpack)
-            
-            self.simpack = wrapped_simpack
+            self.simpack = simpack
             
             self.simpack_grokker = \
-                garlicsim_wx.misc.SimpackGrokker(wrapped_simpack)
+                garlicsim_wx.misc.SimpackGrokker(simpack)
         
         self.project = project or garlicsim.Project(simpack)
         
@@ -76,7 +72,7 @@ class GuiProject(object):
         ### Choosing a Cruncher class: ########################################
         
         if self.project.simpack_grokker.history_dependent is False and \
-           self.project.simpack_grokker.Meta.force_cruncher is None and \
+           self.project.simpack_grokker.settings.FORCE_CRUNCHER is None and \
            'CruncherProcess' in crunchers:
             
             self.project.crunching_manager.Cruncher = \

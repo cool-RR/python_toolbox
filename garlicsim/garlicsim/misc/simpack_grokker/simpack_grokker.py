@@ -14,6 +14,9 @@ import garlicsim
 
 __all__ = ["SimpackGrokker"]
 
+class Settings(object):
+    pass
+
 class SimpackGrokker(object):
     '''
     An object that encapsulates a simpack, giving useful information about it
@@ -115,26 +118,38 @@ kind of step function.''')
     def __init_analysis_settings(self):
         #tododoc
         
+        try:
+            settings_module = __import__(
+                ''.join((self.simpack.__name__, '.settings')),
+                {}, {}, [''] # fromlist cruft
+            )
+            # todo: I should be prepared for the case of using a non-module
+            # object as a simpack!
+            
+        except ImportError:
+            settings_module = None
+            
+        
         attribute_names = [
             'FORCE_CRUNCHER', 'DETERMINISM', 'SCALAR_STATE_FUNCTIONS',
             'SCALAR_HISTORY_FUNCTIONS'
-        ]
+        ] # Should be defined somewhere else
 
-        original_meta_dict = dict(vars(self.simpack.Meta)) if \
-                           hasattr(self.simpack, 'Meta') else {}
+        original_settings_dict = \
+            dict(vars(settings_module)) if settings_module else {}
         
 
-        dict_for_fixed_meta = {}
+        dict_for_fixed_settings = {}
         for attribute_name in attribute_names:
-            dict_for_fixed_meta[attribute_name] = \
-                original_meta_dict.get(attribute_name, None)
+            dict_for_fixed_settings[attribute_name] = \
+                original_settings_dict.get(attribute_name, None)
             
         # todo: currently throws away unrecognized attributes from the simpack's
-        # Meta.
+        # settings.
         
-        self.Meta = Meta()
-        for (key, value) in dict_for_fixed_meta.iteritems():
-            setattr(self.Meta, key, value)
+        self.settings = Settings()
+        for (key, value) in dict_for_fixed_settings.iteritems():
+            setattr(self.settings, key, value)
                 
         
     def step(self, state_or_history_browser, step_profile):

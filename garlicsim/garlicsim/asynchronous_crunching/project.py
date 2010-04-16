@@ -65,14 +65,24 @@ class Project(object):
             
         else:
             
-            wrapped_simpack = \
-                garlicsim.general_misc.module_wrapper.module_wrapper_factory \
-                (simpack)
+            #wrapped_simpack = \
+                #garlicsim.general_misc.module_wrapper.module_wrapper_factory \
+                #(simpack)
             
-            self.simpack = wrapped_simpack
+            #self.simpack = wrapped_simpack
+            
+            #self.simpack_grokker = \
+                #garlicsim.misc.SimpackGrokker(wrapped_simpack)
+            
+            # todo: I cancelled the module-wrapping because it fucked some
+            # things up. The original reason for it is that modules can't be
+            # pickled. But I'll just use that thing that lets me register ways
+            # to pickle objects.
+            
+            self.simpack = simpack
             
             self.simpack_grokker = \
-                garlicsim.misc.SimpackGrokker(wrapped_simpack)
+                garlicsim.misc.SimpackGrokker(simpack)
 
         self.tree = garlicsim.data_structures.Tree()
         
