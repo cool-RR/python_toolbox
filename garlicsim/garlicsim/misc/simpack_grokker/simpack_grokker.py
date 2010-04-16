@@ -8,6 +8,7 @@ See their documentation for more details.
 '''
 
 import functools
+import types
 
 from garlicsim.misc import AutoClockGenerator, StepIterator, InvalidSimpack
 import garlicsim
@@ -15,6 +16,7 @@ import garlicsim
 __all__ = ["SimpackGrokker"]
 
 class Settings(object):
+    #todo: subclass from a pretty vars-shower
     pass
 
 class SimpackGrokker(object):
@@ -112,22 +114,26 @@ kind of step function.''')
         
         self.history_dependent = self.history_step_defined
         
-        self.force_cruncher = getattr(simpack, 'force_cruncher', None)
-        
     
     def __init_analysis_settings(self):
         #tododoc
         
-        try:
-            settings_module = __import__(
-                ''.join((self.simpack.__name__, '.settings')),
-                {}, {}, [''] # fromlist cruft
-            )
-            # todo: I should be prepared for the case of using a non-module
-            # object as a simpack!
+        # We want to access the `.settings` of our simpack, but we don't know if
+        # our simpack is a module or some other kind of object. So if it's a
+        # module, we'll `try` to import `settings`.
+        
+        if isinstance(self.simpack, types.ModuleType):
+            try:
+                __import__(''.join((self.simpack.__name__, '.settings')))
+                # This imports the `settings` submodule, but does *not* keep a
+                # reference to it. We'll access it as an attribute of the
+                # simpack below.
             
-        except ImportError:
-            settings_module = None
+            except ImportError:
+                pass
+            
+        
+        original_settings = getattr(self.simpack, 'settings', Settings())
             
         
         attribute_names = [
@@ -136,19 +142,19 @@ kind of step function.''')
         ] # Should be defined somewhere else
 
         original_settings_dict = \
-            dict(vars(settings_module)) if settings_module else {}
+            dict(vars(original_settings)) if original_settings else {}
         
 
-        dict_for_fixed_settings = {}
+        fixed_settings_dict = {}
         for attribute_name in attribute_names:
-            dict_for_fixed_settings[attribute_name] = \
+            fixed_settings_dict[attribute_name] = \
                 original_settings_dict.get(attribute_name, None)
             
         # todo: currently throws away unrecognized attributes from the simpack's
         # settings.
         
         self.settings = Settings()
-        for (key, value) in dict_for_fixed_settings.iteritems():
+        for (key, value) in fixed_settings_dict.iteritems():
             setattr(self.settings, key, value)
                 
         

@@ -1,4 +1,5 @@
-# alters global state, yuck!
+# alters global state, yuck! Maybe check before if it's already set to
+# something?
 
 import copy_reg
 import types

@@ -64,9 +64,12 @@ class GuiProject(object):
             self.simpack = simpack
             
             self.simpack_grokker = \
-                garlicsim_wx.misc.SimpackGrokker(simpack)
+                garlicsim.misc.SimpackGrokker(simpack)
+            
+            self.simpack_wx_grokker = \
+                garlicsim_wx.misc.SimpackWxGrokker(simpack)
         
-        self.project = project or garlicsim.Project(simpack)
+        self.project = project or garlicsim.Project(self.simpack_grokker)
         
 
         ### Choosing a Cruncher class: ########################################

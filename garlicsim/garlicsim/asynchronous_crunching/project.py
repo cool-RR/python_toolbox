@@ -76,8 +76,7 @@ class Project(object):
             
             # todo: I cancelled the module-wrapping because it fucked some
             # things up. The original reason for it is that modules can't be
-            # pickled. But I'll just use that thing that lets me register ways
-            # to pickle objects.
+            # pickled. But I'll just use copy_reg.
             
             self.simpack = simpack
             
