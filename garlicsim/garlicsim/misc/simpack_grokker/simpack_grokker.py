@@ -14,9 +14,6 @@ import garlicsim
 
 __all__ = ["SimpackGrokker"]
 
-class Meta(object):
-    pass#tododoc
-
 class SimpackGrokker(object):
     '''
     An object that encapsulates a simpack, giving useful information about it
@@ -74,7 +71,7 @@ class SimpackGrokker(object):
     def __init__(self, simpack):
         self.simpack = simpack
         self.__init_analysis()
-        self.__init_analysis_meta()
+        self.__init_analysis_settings()
     
     def __init_analysis(self):
         '''Analyze the simpack.'''
@@ -115,11 +112,13 @@ kind of step function.''')
         self.force_cruncher = getattr(simpack, 'force_cruncher', None)
         
     
-    def __init_analysis_meta(self):
+    def __init_analysis_settings(self):
         #tododoc
         
-        attribute_names = ['force_cruncher', 'deterministic',
-                           'scalar_state_functions', 'scalar_history_functions']
+        attribute_names = [
+            'FORCE_CRUNCHER', 'DETERMINISM', 'SCALAR_STATE_FUNCTIONS',
+            'SCALAR_HISTORY_FUNCTIONS'
+        ]
 
         original_meta_dict = dict(vars(self.simpack.Meta)) if \
                            hasattr(self.simpack, 'Meta') else {}
