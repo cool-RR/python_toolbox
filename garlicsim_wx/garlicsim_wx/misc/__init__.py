@@ -1,3 +1,3 @@
 #tododoc
 
-from simpack_grokker import SimpackGrokker
+from simpack_wx_grokker import SimpackWxGrokker
