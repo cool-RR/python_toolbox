@@ -10,8 +10,6 @@ from garlicsim_wx.general_misc import magic_tools
         
 class Emitter(object):
     
-    # todo: can make "freeze_cache_rebuilding" context manager. how used with
-    # multiple events?
     
     def __init__(self, inputs=(), outputs=(), name=None):
 
@@ -39,7 +37,13 @@ class Emitter(object):
                     magic_tools.get_name_of_attribute_that_we_will_become()
             except Exception:
                 self.name = None
-   
+
+    def get_inputs(self):
+        return self._inputs
+    
+    def get_outputs(self):
+        return self._outputs
+                
     def _get_input_layers(self):
 
         input_layers = [self._inputs]
@@ -68,7 +72,21 @@ class Emitter(object):
                 
         
     def _recalculate_total_callable_outputs_recursively(self):
-        #todo: freeze flag check here
+        
+        # todo: I suspect this wouldn't work for the following case. `self` has
+        # inputs `A` and `B`. `A` has input `B`. A callable output `func` was
+        # just removed from `self`, so this function got called. We update the
+        # cache here, then take the first input layer, which is `A` and `B` in
+        # some order. Say `B` is first. Now, we do `recalculate` on `B`, but `A`
+        # still got the cache with `func`, and `B` will take that. I need to
+        # test this.
+        # 
+        # I have an idea how to solve it: In the getter of the cache, check the
+        # cache exists, otherwise rebuild. The reason we didn't do it up to now
+        # was to optimize for speed, but only `emit` needs to be fast and it
+        # doesn't use the getter. We'll clear the caches of all inputs, and
+        # they'll rebuild as they call each other.
+        
         self._recalculate_total_callable_outputs()
         input_layers = self._get_input_layers()
         for input_layer in input_layers:

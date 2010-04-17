@@ -1,10 +1,11 @@
 
+import math
 
 import wx
 import wx.lib.agw.piectrl as piectrl
 import garlicsim_wx
 
-from .. import prisoner
+from ... import prisoner
 
 
 class StateViewer(piectrl.PieCtrl, garlicsim_wx.widgets.WorkspaceWidget):
@@ -23,7 +24,7 @@ class StateViewer(piectrl.PieCtrl, garlicsim_wx.widgets.WorkspaceWidget):
         self.SetAngle(math.pi)
     
         self.pie_part_dict = {}
-        for player_type in prisonerplayer_types:
+        for player_type in prisoner.player_types:
             part = piectrl.PiePart()
             part.SetLabel(player_type.__name__)
             part.SetValue(1)
@@ -31,10 +32,16 @@ class StateViewer(piectrl.PieCtrl, garlicsim_wx.widgets.WorkspaceWidget):
             self._series.append(part)
             self.pie_part_dict[player_type] = part
             
-    def show_state(self):
+        self.gui_project.active_node_changed_emitter.add_output(
+            lambda: self.show_state(self.gui_project.active_node.state)
+        )
+            
+    def show_state(self, state):
         for player_type in prisoner.player_types:
             part = self.pie_part_dict[player_type]
-            value = how_many_players_of_certain_type(state.player_pool,
-                                                     player_type)
+            value = prisoner.how_many_players_of_certain_type(
+                state.player_pool,
+                player_type
+            )
             part.SetValue(value)
 
