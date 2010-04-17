@@ -33,7 +33,7 @@ class WorkspaceWidget(object):
             self,
             self.aui_pane_info
         )
-                             
+         
         frame.aui_manager.Update()
 
         
