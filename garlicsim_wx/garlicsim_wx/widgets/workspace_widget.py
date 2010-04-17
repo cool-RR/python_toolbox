@@ -10,7 +10,7 @@ class WorkspaceWidget(object):
     
     __metaclass__ = abc.ABCMeta
     
-    def __init__(self, frame, aui_pane_info=None):
+    def __init__(self, frame):
     
         
         self.frame = frame
@@ -21,20 +21,9 @@ class WorkspaceWidget(object):
         
         # I put these asserts mainly for better source assistance in Wing.
         # They may be removed.
-        
-        class_name = self.__class__.__name__
-        
-        self.aui_pane_info = aui_pane_info or \
-            aui.AuiPaneInfo().\
-            Caption(string_tools.camelcase_to_spacecase(class_name).upper()).\
-            CloseButton(False)
-        
-        frame.aui_manager.AddPane(
-            self,
-            self.aui_pane_info
-        )
-         
-        frame.aui_manager.Update()
 
+    @classmethod
+    def get_uppercase_name(cls):
+        return string_tools.camelcase_to_spacecase(cls.__name__).upper()
         
     
