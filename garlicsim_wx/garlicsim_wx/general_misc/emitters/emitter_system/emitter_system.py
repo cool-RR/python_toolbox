@@ -1,26 +1,7 @@
 import itertools
 from garlicsim.general_misc import cute_iter_tools
 
-from .emitter import Emitter
-
-class EmitterSystemEmitter(Emitter):    
-    def __init__(self, emitter_system, inputs=(), outputs=(), name=None):
-        self.emitter_system = emitter_system
-        Emitter.__init__(self, inputs=inputs, outputs=outputs, name=name)        
-                        
-    def _recalculate_total_callable_outputs_recursively(self):
-        if self.emitter_system._cache_rebuilding_frozen == 0:
-            Emitter._recalculate_total_callable_outputs_recursively(self)
-        
-    def add_input(self, emitter):
-        assert emitter in self.emitter_system.emitters
-        Emitter.add_input(self, emitter)
-    
-    def add_output(self, thing):
-        if isinstance(thing, Emitter):
-            assert thing in self.emitter_system.emitters
-        Emitter.add_output(self, thing)
-    
+from emitter import Emitter
 
 class FreezeCacheRebuildingContextManager(object):
     def __init__(self, emitter_system):
@@ -45,10 +26,10 @@ class EmitterSystem(object):
         
         self.emitters = set()
         
-        self.bottom_emitter = EmitterSystemEmitter(self)
+        self.bottom_emitter = Emitter(self)
         self.emitters.add(self.bottom_emitter)
         
-        self.top_emitter = EmitterSystemEmitter(
+        self.top_emitter = Emitter(
             self,
             outputs=(self.bottom_emitter,)
         )
@@ -61,7 +42,7 @@ class EmitterSystem(object):
         inputs.add(self.top_emitter)
         outputs = set(outputs)
         outputs.add(self.bottom_emitter)
-        emitter = EmitterSystemEmitter(self, inputs, outputs, name)
+        emitter = Emitter(self, inputs, outputs, name)
         self.emitters.add(emitter)
         return emitter
     
