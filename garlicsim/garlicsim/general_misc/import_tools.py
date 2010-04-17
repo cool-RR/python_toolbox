@@ -73,6 +73,18 @@ def import_all(package, exclude='__init__', silent_fail=False):
     
     
         
+"""    
+def get_actual_object(thing):
+    if not isinstance(thing, basestring):
+        return thing
+    names = thing.split('.')
+""" 
+    
+    
+    
+    
+    
+    
     
     
     

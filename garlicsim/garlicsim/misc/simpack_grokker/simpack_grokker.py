@@ -17,7 +17,11 @@ __all__ = ["SimpackGrokker"]
 
 class Settings(object):
     #todo: subclass from a pretty vars-shower
-    pass
+    def __init__(self):
+        self.FORCE_CRUNCHER = None
+        self.DETERMINISM = None
+        self.SCALAR_STATE_FUNCTIONS = []
+        self.SCALAR_HISTORY_FUNCTIONS = []
 
 class SimpackGrokker(object):
     '''
@@ -122,9 +126,11 @@ kind of step function.''')
         # our simpack is a module or some other kind of object. So if it's a
         # module, we'll `try` to import `settings`.
         
+        self.settings = Settings()        
+        
         if isinstance(self.simpack, types.ModuleType):
             try:
-                __import__(''.join((self.simpack.__name__, '.settings')))
+                __import__(''.join((self.simpack_wx.__name__, '.settings')))
                 # This imports the `settings` submodule, but does *not* keep a
                 # reference to it. We'll access it as an attribute of the
                 # simpack below.
@@ -132,30 +138,17 @@ kind of step function.''')
             except ImportError:
                 pass
             
-        
-        original_settings = getattr(self.simpack, 'settings', Settings())
+        # Checking if there are original settings at all. If there aren't, we're
+        # done.
+        if hasattr(original_settings, 'settings'):
             
+            original_settings = getattr(self.simpack, 'settings')
         
-        attribute_names = [
-            'FORCE_CRUNCHER', 'DETERMINISM', 'SCALAR_STATE_FUNCTIONS',
-            'SCALAR_HISTORY_FUNCTIONS'
-        ] # Should be defined somewhere else
-
-        original_settings_dict = \
-            dict(vars(original_settings)) if original_settings else {}
-        
-
-        fixed_settings_dict = {}
-        for attribute_name in attribute_names:
-            fixed_settings_dict[attribute_name] = \
-                original_settings_dict.get(attribute_name, None)
-            
-        # todo: currently throws away unrecognized attributes from the simpack's
-        # settings.
-        
-        self.settings = Settings()
-        for (key, value) in fixed_settings_dict.iteritems():
-            setattr(self.settings, key, value)
+            for (key, value) in vars(self.settings).iteritems():
+                if hasattr(original_settings, key):
+                    setattr(self.settings, key, value)
+            # todo: currently throws away unrecognized attributes from the
+            # simpack's settings.
                 
         
     def step(self, state_or_history_browser, step_profile):

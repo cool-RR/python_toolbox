@@ -4,6 +4,13 @@ import types
 
 import garlicsim_wx
 
+class Settings(object):
+    #todo: subclass from a pretty vars-shower
+    def __init__(self):
+        self.BIG_WIDGETS = []
+        self.SMALL_WIDGETS = []
+        self.SEEK_BAR_GRAPHS = []
+
 class SimpackWxGrokker(object):
     '''
 
@@ -42,6 +49,8 @@ class SimpackWxGrokker(object):
         # our simpack_wx is a module or some other kind of object. So if it's a
         # module, we'll `try` to import `settings`.
         
+        self.settings = Settings()        
+        
         if isinstance(self.simpack_wx, types.ModuleType):
             try:
                 __import__(''.join((self.simpack_wx.__name__, '.settings')))
@@ -52,27 +61,16 @@ class SimpackWxGrokker(object):
             except ImportError:
                 pass
             
-        
-        original_settings = getattr(self.simpack_wx, 'settings', Settings())
+        # Checking if there are original settings at all. If there aren't, we're
+        # done.
+        if hasattr(original_settings, 'settings'):
             
+            original_settings = getattr(self.simpack_wx, 'settings')
         
-        attribute_names = [
-            'WORKSPACE_WIDGETS', 'SEEK_BAR_GRAPHS', 'STATE_VIEWER'
-            ] # Should be defined somewhere else
-
-        original_settings_dict = \
-            dict(vars(original_settings)) if original_settings else {}
-        
-
-        fixed_settings_dict = {}
-        for attribute_name in attribute_names:
-            fixed_settings_dict[attribute_name] = \
-                original_settings_dict.get(attribute_name, None)
-            
-        # todo: currently throws away unrecognized attributes from the simpack's
-        # settings.
-        
-        self.settings = Settings()
-        for (key, value) in fixed_settings_dict.iteritems():
-            setattr(self.settings, key, value)
+            for (key, value) in vars(self.settings).iteritems():
+                if hasattr(original_settings, key):
+                    setattr(self.settings, key, value)
+            # todo: currently throws away unrecognized attributes from the
+            # simpack's settings.
+                
     

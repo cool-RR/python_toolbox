@@ -294,18 +294,21 @@ class Frame(wx.Frame):
             .BestSize(400, 600)\
             .MaximizeButton(True)
 
-        StateViewer = getattr(
-            self.gui_project.simpack,
-            'StateViewer',
-            workspace_widgets['StateReprViewer']
-        )
+        big_widget_classes = \
+            self.gui_project.simpack_wx_grokker.settings.BIG_WIDGETS + \
+            [workspace_widgets['StateReprViewer']]
         
-        self.state_viewer = StateViewer(self)
-        self.state_viewer.aui_pane_info\
-            .BestSize(300, 300)\
-            .MaximizeButton(True)\
-            .Center()\
-            .Floatable(False)
+        self.big_widgets = []
+        # todo: not the right way, should be easy listing of all widgets
+        
+        for BigWidget in big_widget_classes:
+            big_widget = BigWidget(self)
+            big_widget.aui_pane_info\
+                .BestSize(300, 300)\
+                .MaximizeButton(True)\
+                .Center()\
+                .Floatable(False)
+            self.big_widgets.append(big_widget)
             
         self.aui_manager.Update()
         

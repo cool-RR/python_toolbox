@@ -65,10 +65,10 @@ class CrunchingManager(object):
         self.project = project
         
 
-        force_cruncher = project.simpack_grokker.force_cruncher
+        FORCE_CRUNCHER = project.simpack_grokker.settings.FORCE_CRUNCHER
         
-        if force_cruncher is not None:
-            self.Cruncher = force_cruncher
+        if FORCE_CRUNCHER is not None:
+            self.Cruncher = FORCE_CRUNCHER
         else:
             history_dependent = project.simpack_grokker.history_dependent
             
