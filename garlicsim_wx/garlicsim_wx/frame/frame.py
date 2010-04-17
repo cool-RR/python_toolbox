@@ -271,29 +271,40 @@ class Frame(wx.Frame):
         # workspace widgets
         
         self.tree_browser = workspace_widgets['TreeBrowser'](self)
-        self.tree_browser.aui_pane_info\
+        self.aui_manager.AddPane(
+            self.tree_browser,
+            aui.AuiPaneInfo()\
             .Bottom().Row(0)\
             .BestSize(1000, 100).MinSize(200, 50).MaxSize(10000, 250)\
             .Floatable(False)
+        )
         
         self.playback_controls = workspace_widgets['PlaybackControls'](self)
-        self.playback_controls.aui_pane_info\
+        self.aui_manager.AddPane(
+            self.playback_controls,
+            aui.AuiPaneInfo()\
             .Bottom()\
             .BestSize(184, 128).MinSize(184, 128).MaxSize(184, 128)\
             .Resizable(False)        
+        )
         
         self.seek_bar = workspace_widgets['SeekBar'](self)
-        self.seek_bar.aui_pane_info\
+        self.aui_manager.AddPane(
+            self.seek_bar,
+            aui.AuiPaneInfo()\
             .Bottom().Row(1)\
             .BestSize(600, 40).MinSize(200, 40).MaxSize(10000, 100)\
             .Floatable(False)
+        )
         
         self.shell = workspace_widgets['Shell'](self)
-        self.shell.aui_pane_info\
+        self.aui_manager.AddPane(
+            self.shell,
+            aui.AuiPaneInfo()\
             .Right().Row(0)\
             .BestSize(400, 600)\
             .MaximizeButton(True)
-
+        )
         
         """
         self.state_repr_viewer = workspace_widgets['StateReprViewer'](self)
