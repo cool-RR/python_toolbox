@@ -130,7 +130,7 @@ kind of step function.''')
         
         if isinstance(self.simpack, types.ModuleType):
             try:
-                __import__(''.join((self.simpack_wx.__name__, '.settings')))
+                __import__(''.join((self.simpack.__name__, '.settings')))
                 # This imports the `settings` submodule, but does *not* keep a
                 # reference to it. We'll access it as an attribute of the
                 # simpack below.
@@ -140,13 +140,14 @@ kind of step function.''')
             
         # Checking if there are original settings at all. If there aren't, we're
         # done.
-        if hasattr(original_settings, 'settings'):
+        if hasattr(self.simpack, 'settings'):
             
             original_settings = getattr(self.simpack, 'settings')
         
             for (key, value) in vars(self.settings).iteritems():
                 if hasattr(original_settings, key):
-                    setattr(self.settings, key, value)
+                    actual_value = getattr(original_settings, key)
+                    setattr(self.settings, key, actual_value)
             # todo: currently throws away unrecognized attributes from the
             # simpack's settings.
                 

@@ -7,8 +7,8 @@ import garlicsim_wx
 class Settings(object):
     #todo: subclass from a pretty vars-shower
     def __init__(self):
-        self.BIG_WIDGETS = []
-        self.SMALL_WIDGETS = []
+        self.BIG_WORKSPACE_WIDGETS = []
+        self.SMALL_WORKSPACE_WIDGETS = []
         self.SEEK_BAR_GRAPHS = []
 
 class SimpackWxGrokker(object):
@@ -63,13 +63,14 @@ class SimpackWxGrokker(object):
             
         # Checking if there are original settings at all. If there aren't, we're
         # done.
-        if hasattr(original_settings, 'settings'):
+        if hasattr(self.simpack_wx, 'settings'):
             
             original_settings = getattr(self.simpack_wx, 'settings')
         
             for (key, value) in vars(self.settings).iteritems():
                 if hasattr(original_settings, key):
-                    setattr(self.settings, key, value)
+                    actual_value = getattr(original_settings, key)
+                    setattr(self.settings, key, actual_value)
             # todo: currently throws away unrecognized attributes from the
             # simpack's settings.
                 

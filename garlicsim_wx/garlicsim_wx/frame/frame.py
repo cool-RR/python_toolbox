@@ -294,18 +294,45 @@ class Frame(wx.Frame):
             .BestSize(400, 600)\
             .MaximizeButton(True)
 
+        
+        """
+        self.state_repr_viewer = workspace_widgets['StateReprViewer'](self)
+        self.state_repr_viewer.aui_pane_info\
+            .BestSize(300, 300)\
+            .MaximizeButton(True)\
+            .NotebookControl(notebook_id)\
+            .Center()\
+            .Floatable(False)
+        """
+        
+        settings_wx = self.gui_project.simpack_wx_grokker.settings
+        
         big_widget_classes = \
-            self.gui_project.simpack_wx_grokker.settings.BIG_WIDGETS + \
+            settings_wx.BIG_WORKSPACE_WIDGETS + \
             [workspace_widgets['StateReprViewer']]
         
         self.big_widgets = []
-        # todo: not the right way, should be easy listing of all widgets
+        # todo: not the right way, should be easy listing of all widget
         
-        for BigWidget in big_widget_classes:
+
+        notebook_id = wx.NewId() # todo: apporopriate?
+
+        self.aui_manager.AddPane(
+            None,
+            aui.AuiPaneInfo()\
+            .BestSize(300, 300)\
+            .MaximizeButton(True)\
+            .NotebookControl(notebook_id)\
+            .Center()\
+            .Floatable(False)
+        )
+        
+        for i, BigWidget in enumerate(big_widget_classes):
             big_widget = BigWidget(self)
             big_widget.aui_pane_info\
                 .BestSize(300, 300)\
                 .MaximizeButton(True)\
+                .NotebookPage(notebook_id, i)\
                 .Center()\
                 .Floatable(False)
             self.big_widgets.append(big_widget)
