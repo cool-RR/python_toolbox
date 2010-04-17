@@ -1,4 +1,4 @@
-from life import *
+from __init__ import *
 from garlicsim.misc import settings
 
 DETERMINISM = settings.DETERMINISTIC

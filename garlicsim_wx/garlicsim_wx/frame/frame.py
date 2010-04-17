@@ -315,14 +315,14 @@ class Frame(wx.Frame):
         # todo: not the right way, should be easy listing of all widget
         
 
-        notebook_id = wx.NewId() # todo: apporopriate?
+        #notebook_id = wx.NewId() # todo: apporopriate?
 
         self.aui_manager.AddPane(
             None,
             aui.AuiPaneInfo()\
             .BestSize(300, 300)\
             .MaximizeButton(True)\
-            .NotebookControl(notebook_id)\
+            #.NotebookControl(notebook_id)\
             .Center()\
             .Floatable(False)
         )
@@ -332,9 +332,9 @@ class Frame(wx.Frame):
             big_widget.aui_pane_info\
                 .BestSize(300, 300)\
                 .MaximizeButton(True)\
-                .NotebookPage(notebook_id, i)\
                 .Center()\
                 .Floatable(False)
+            #.NotebookPage(notebook_id, i)\
             self.big_widgets.append(big_widget)
             
         self.aui_manager.Update()
