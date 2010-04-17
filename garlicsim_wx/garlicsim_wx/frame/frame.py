@@ -145,8 +145,11 @@ class Frame(wx.Frame):
         
         self.background_timer = thread_timer.ThreadTimer(self)
         self.background_timer.start(150)
-        self.Bind(thread_timer.EVT_THREAD_TIMER, self.sync_crunchers,
-                  self.background_timer)
+        self.Bind(
+            thread_timer.EVT_THREAD_TIMER,
+            lambda event: self.sync_crunchers(),
+            self.background_timer
+        )
 
         ######################################
         
@@ -378,7 +381,7 @@ class Frame(wx.Frame):
         self.Refresh()
         """
 
-    def sync_crunchers(self, e=None):
+    def sync_crunchers(self):
         '''
         Take work from the crunchers, and give them new instructions if needed.
                 
