@@ -19,11 +19,17 @@ class WorkspaceWidget(object):
         self.gui_project = frame.gui_project
         assert isinstance(self.gui_project, garlicsim_wx.GuiProject)
         
+        self.aui_manager = frame.aui_manager
+        assert isinstance(self.aui_manager, aui.AuiManager)
+        
         # I put these asserts mainly for better source assistance in Wing.
-        # They may be removed.
+        # They may be removed.        
 
     @classmethod
     def get_uppercase_name(cls):
         return string_tools.camelcase_to_spacecase(cls.__name__).upper()
+    
+    def get_aui_pane_info(self):
+        return self.aui_manager.GetPane(self)
         
     

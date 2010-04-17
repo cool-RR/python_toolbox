@@ -276,7 +276,9 @@ class Frame(wx.Frame):
             aui.AuiPaneInfo()\
             .Bottom().Row(0)\
             .BestSize(1000, 100).MinSize(200, 50).MaxSize(10000, 250)\
-            .Floatable(False)
+            .Caption(self.tree_browser.get_uppercase_name())
+            .Floatable(False)\
+            .CloseButton(False)
         )
         
         self.playback_controls = workspace_widgets['PlaybackControls'](self)
@@ -285,7 +287,9 @@ class Frame(wx.Frame):
             aui.AuiPaneInfo()\
             .Bottom()\
             .BestSize(184, 128).MinSize(184, 128).MaxSize(184, 128)\
-            .Resizable(False)        
+            .Caption(self.playback_controls.get_uppercase_name())
+            .Resizable(False)\
+            .CloseButton(False)        
         )
         
         self.seek_bar = workspace_widgets['SeekBar'](self)
@@ -294,7 +298,9 @@ class Frame(wx.Frame):
             aui.AuiPaneInfo()\
             .Bottom().Row(1)\
             .BestSize(600, 40).MinSize(200, 40).MaxSize(10000, 100)\
-            .Floatable(False)
+            .Caption(self.seek_bar.get_uppercase_name())
+            .Floatable(False)\
+            .CloseButton(False)
         )
         
         self.shell = workspace_widgets['Shell'](self)
@@ -303,48 +309,50 @@ class Frame(wx.Frame):
             aui.AuiPaneInfo()\
             .Right().Row(0)\
             .BestSize(400, 600)\
-            .MaximizeButton(True)
+            .Caption(self.shell.get_uppercase_name())
+            .MaximizeButton(True)\
+            .CloseButton(False)
         )
         
-        """
+        
         self.state_repr_viewer = workspace_widgets['StateReprViewer'](self)
-        self.state_repr_viewer.aui_pane_info\
+        self.aui_manager.AddPane(
+            self.state_repr_viewer,
+            aui.AuiPaneInfo()\
             .BestSize(300, 300)\
             .MaximizeButton(True)\
-            .NotebookControl(notebook_id)\
+            #.NotebookControl(notebook_id)\
             .Center()\
-            .Floatable(False)
-        """
+            .Caption(self.state_repr_viewer.get_uppercase_name())
+            .Floatable(False)\
+            .CloseButton(False)
+        )
         
         settings_wx = self.gui_project.simpack_wx_grokker.settings
         
         big_widget_classes = \
-            settings_wx.BIG_WORKSPACE_WIDGETS + \
-            [workspace_widgets['StateReprViewer']]
+            settings_wx.BIG_WORKSPACE_WIDGETS #+ \
+        #    [workspace_widgets['StateReprViewer']]
         
         self.big_widgets = []
         # todo: not the right way, should be easy listing of all widget
         
 
         #notebook_id = wx.NewId() # todo: apporopriate?
-
-        self.aui_manager.AddPane(
-            None,
-            aui.AuiPaneInfo()\
-            .BestSize(300, 300)\
-            .MaximizeButton(True)\
-            #.NotebookControl(notebook_id)\
-            .Center()\
-            .Floatable(False)
-        )
         
         for i, BigWidget in enumerate(big_widget_classes):
             big_widget = BigWidget(self)
-            big_widget.aui_pane_info\
+            self.aui_manager.AddPane(
+                big_widget,
+                aui.AuiPaneInfo()\
                 .BestSize(300, 300)\
                 .MaximizeButton(True)\
                 .Center()\
-                .Floatable(False)
+                .Caption(big_widget.get_uppercase_name())\
+                .Floatable(False)\
+                .CloseButton(False),
+                target=self.state_repr_viewer.get_aui_pane_info()
+            )
             #.NotebookPage(notebook_id, i)\
             self.big_widgets.append(big_widget)
             

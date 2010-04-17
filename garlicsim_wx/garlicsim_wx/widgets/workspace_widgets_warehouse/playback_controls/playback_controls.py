@@ -49,12 +49,7 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
     def __init__(self, frame):
         wx.Panel.__init__(self, frame, -1, size=(184, 128),
                           style=wx.SUNKEN_BORDER)
-        aui_pane_info = aui.AuiPaneInfo().\
-            Caption('PLAYBACK CONTROLS').\
-            CloseButton(False).\
-            Fixed().\
-            BestSize(184, 128).MinSize(184, 128).MaxSize(184, 128)
-        WorkspaceWidget.__init__(self, frame, aui_pane_info)
+        WorkspaceWidget.__init__(self, frame)
         
         assert isinstance(self.gui_project, garlicsim_wx.GuiProject)
         # I put this assert mainly for better source assistance in Wing.
