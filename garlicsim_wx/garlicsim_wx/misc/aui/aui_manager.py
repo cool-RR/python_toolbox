@@ -8,7 +8,7 @@ from aui_tab_art import AuiTabArt
 
 class AuiManager(aui.AuiManager):
     def __init__(self, managed_window=None):
-        aui.AuiManager.__init__(self, managed_window) # try aero flag
+        aui.AuiManager.__init__(self, managed_window) # todo: try aero and whidbey flags
  
         self.SetArtProvider(AuiDockArt())
         

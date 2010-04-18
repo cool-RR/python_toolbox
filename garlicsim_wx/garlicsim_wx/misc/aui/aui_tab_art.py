@@ -5,7 +5,13 @@ from garlicsim_wx.general_misc.third_party import aui
 
 class AuiTabArt(aui.AuiDefaultTabArt):
     def __init__(self):
-        aui.AuiDefaultDockArt.__init__(self)
+        aui.AuiDefaultTabArt.__init__(self)
+        
+        font = wx.Font(7, wx.FONTFAMILY_MAX, wx.NORMAL, wx.NORMAL, False)
+        
+        self.SetNormalFont(font)
+        self.SetSelectedFont(font)
+        self.SetMeasuringFont(font)
  
         """
         self.SetMetric(aui.AUI_DOCKART_SASH_SIZE, 2)
