@@ -25,7 +25,7 @@ import garlicsim_wx.general_misc.thread_timer as thread_timer
 import garlicsim
 import garlicsim_wx.gui_project
 import garlicsim_wx.widgets
-from garlicsim_wx.widgets.workspace_widgets_warehouse import workspace_widgets
+from garlicsim_wx.widgets import workspace_widgets
 
 from . import images as __images_package
 images_package = __images_package.__name__
@@ -272,7 +272,7 @@ class Frame(wx.Frame):
         # todo: should create StateReprViewer only if the simpack got no
         # workspace widgets
         
-        self.tree_browser = workspace_widgets['TreeBrowser'](self)
+        self.tree_browser = workspace_widgets.TreeBrowser(self)
         self.aui_manager.AddPane(
             self.tree_browser,
             aui.AuiPaneInfo()\
@@ -283,7 +283,7 @@ class Frame(wx.Frame):
             .CloseButton(False)
         )
         
-        self.playback_controls = workspace_widgets['PlaybackControls'](self)
+        self.playback_controls = workspace_widgets.PlaybackControls(self)
         self.aui_manager.AddPane(
             self.playback_controls,
             aui.AuiPaneInfo()\
@@ -294,7 +294,7 @@ class Frame(wx.Frame):
             .CloseButton(False)        
         )
         
-        self.seek_bar = workspace_widgets['SeekBar'](self)
+        self.seek_bar = workspace_widgets.SeekBar(self)
         self.aui_manager.AddPane(
             self.seek_bar,
             aui.AuiPaneInfo()\
@@ -305,7 +305,7 @@ class Frame(wx.Frame):
             .CloseButton(False)
         )
         
-        self.shell = workspace_widgets['Shell'](self)
+        self.shell = workspace_widgets.Shell(self)
         self.aui_manager.AddPane(
             self.shell,
             aui.AuiPaneInfo()\
@@ -317,7 +317,7 @@ class Frame(wx.Frame):
         )
         
         
-        self.state_repr_viewer = workspace_widgets['StateReprViewer'](self)
+        self.state_repr_viewer = workspace_widgets.StateReprViewer(self)
         self.aui_manager.AddPane(
             self.state_repr_viewer,
             aui.AuiPaneInfo()\
