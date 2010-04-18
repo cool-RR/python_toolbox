@@ -223,18 +223,20 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
     
         
     def on_paint(self, event):
-        event.Skip()
+        
         if self.center_button_update_flag:
             self._update_center_button()
         if self.navigation_buttons_update_flag:
             self._update_navigation_buttons()
         
-        wx.Panel.OnPaint(self, event)
+        event.Skip()
         
-        #dc = wx.PaintDC(self)
-        #gc = wx.GraphicsContext.Create(dc)
-        #gc.SetPen(wx.Pen(wx.NamedColor('Blue'), 20))
-        #gc.DrawEllipse(5,5,30,30)
+        # I thought I was supposed to call this here:
+        # 
+        # wx.Panel.OnPaint(self, event)
+        # 
+        # I don't, and for some reason this still works. Mysterious.
+        
 
     def _update_navigation_buttons(self):
         

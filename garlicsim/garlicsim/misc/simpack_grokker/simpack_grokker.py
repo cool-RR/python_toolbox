@@ -19,7 +19,7 @@ class Settings(object):
     #todo: subclass from a pretty vars-shower
     def __init__(self):
         self.FORCE_CRUNCHER = None
-        self.DETERMINISM = None
+        self.DETERMINISM_FUNCTION = lambda step_profile: None
         self.SCALAR_STATE_FUNCTIONS = []
         self.SCALAR_HISTORY_FUNCTIONS = []
 
