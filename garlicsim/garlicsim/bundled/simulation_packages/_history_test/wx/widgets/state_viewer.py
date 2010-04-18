@@ -1,32 +1,24 @@
-# Copyright 2009-2010 Ram Rachum.
-# This program is distributed under the LGPL2.1 license.
 
-'''Definitions for garlicsim_wx.'''
-
-import wx
 import math
 
-def initialize(gui_project):
-    '''Initialize the gui.'''
-    gui_project.state_viewer = StateViewer(gui_project.state_showing_window)
-    sizer=wx.BoxSizer(wx.VERTICAL)
-    sizer.Add(gui_project.state_viewer, 1, wx.EXPAND)
-    gui_project.state_showing_window.SetSizer(sizer)
+import wx
+import garlicsim_wx
 
 
-def show_state(gui_project, state):
-    '''Show the state onscreen.'''
-    gui_project.state_viewer.load_state(state)
-
-
-class StateViewer(wx.Window):
+class StateViewer(wx.Window, garlicsim_wx.widgets.WorkspaceWidget):
     '''Widget for showing a state onscreen.'''
-    def __init__(self, *args, **kwargs):
-        wx.Window.__init__(self, *args, **kwargs)
+    def __init__(self, frame):
+        wx.Window.__init__(self, frame)
+        garlicsim_wx.widgets.WorkspaceWidget.__init__(self, frame)
+        
         self.left = None
         self.right = None
         self.Bind(wx.EVT_PAINT, self.on_paint)
         self.radius = 60
+        
+        self.gui_project.active_node_changed_emitter.add_output(
+            lambda: self.load_state(self.gui_project.active_node.state)
+        )
         
     def on_paint(self, event):
         '''Paint event handler.'''
