@@ -16,5 +16,7 @@ class AuiManager(aui.AuiManager):
         
     def CreateNotebook(self):
         notebook = aui.AuiManager.CreateNotebook(self)
-        notebook.SetArtProvider(self.TabArtProvider())
+        tab_art_provider = self.TabArtProvider()
+        notebook.SetArtProvider(tab_art_provider)
+        #notebook._tabs.SetArtProvider(tab_art_provider)
         return notebook
