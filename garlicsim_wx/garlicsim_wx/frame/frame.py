@@ -25,6 +25,7 @@ import garlicsim_wx.general_misc.thread_timer as thread_timer
 import garlicsim
 import garlicsim_wx.gui_project
 import garlicsim_wx.widgets
+import garlicsim_wx.misc
 from garlicsim_wx.widgets import workspace_widgets
 
 from . import images as __images_package
@@ -69,23 +70,9 @@ class Frame(wx.Frame):
         self.state_repr_viewer = None
         
         
-        self.aui_manager = aui.AuiManager()
-        self.aui_manager.SetManagedWindow(self)
-        
-        
-        self.aui_manager._art.SetMetric(aui.AUI_DOCKART_SASH_SIZE, 2)
-        
-        self.aui_manager._art.SetMetric(aui.AUI_DOCKART_CAPTION_SIZE, 10)
-        self.aui_manager._art.SetFont(
-            aui.AUI_DOCKART_CAPTION_FONT,
-            wx.Font(7, wx.FONTFAMILY_MAX, wx.NORMAL, wx.NORMAL, False)
-        )
-        
-        self.aui_manager._art.SetMetric(aui.AUI_DOCKART_GRADIENT_TYPE,
-                                        aui.AUI_GRADIENT_NONE)
-        self.aui_manager._art.SetColor(aui.AUI_DOCKART_INACTIVE_CAPTION_COLOUR,
-                                        wx.Color(200, 200, 200))
-        
+        self.aui_manager = garlicsim_wx.misc.AuiManager(self)
+        #self.aui_manager.SetManagedWindow(self)
+                
         self.gui_project = None
 
         ######################################
@@ -323,7 +310,6 @@ class Frame(wx.Frame):
             aui.AuiPaneInfo()\
             .BestSize(300, 300)\
             .MaximizeButton(True)\
-            #.NotebookControl(notebook_id)\
             .Center()\
             .Caption(self.state_repr_viewer.get_uppercase_name())
             .Floatable(False)\
