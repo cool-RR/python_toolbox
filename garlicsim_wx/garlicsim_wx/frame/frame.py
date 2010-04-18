@@ -70,7 +70,7 @@ class Frame(wx.Frame):
         self.state_repr_viewer = None
         
         
-        self.aui_manager = garlicsim_wx.misc.AuiManager(self)
+        self.aui_manager = garlicsim_wx.misc.aui.AuiManager(self)
         #self.aui_manager.SetManagedWindow(self)
                 
         self.gui_project = None
