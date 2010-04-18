@@ -95,7 +95,6 @@ class Emitter(object):
         
         
     def _recalculate_total_callable_outputs(self):
-        '''does not check the freeze flag.'''
         children_callable_outputs = reduce(
             set.union,
             (emitter.get_total_callable_outputs() for emitter
