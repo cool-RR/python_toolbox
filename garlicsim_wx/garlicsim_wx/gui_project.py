@@ -199,6 +199,10 @@ class GuiProject(object):
                     outputs=(self.update_defacto_playing_speed,)
                 )
             
+            self.active_node_finalized_emitter = es.make_emitter(
+                outputs=(self.tree_changed_on_path_emitter,) # todo: correct?
+            )
+            
             
             
             #todo: maybe need an emitter for when editing a state?
@@ -536,17 +540,15 @@ class GuiProject(object):
         return nodemenu
 
     
-    def done_editing(self):
+    def finalize_active_node(self):
         '''Finalize the changes made to the active node.'''
         node = self.active_node
         if node.still_in_editing is False:
-            raise Exception('''You said 'done editing', but you were not in \
-editing mode.''') # change to fitting exception class
+            raise Exception('''You tried to finalize active state, but you \
+            were not in editing mode.''') # change to fitting exception class
         node.still_in_editing = False
         
-        self.tree_structure_changed_on_path_emitter()
-        # not sure whether it's considered a structure change or even just a
-        # change, but playing it safe
+        self.active_node_finalized_emitter.emit()
         
         self.project.ensure_buffer(node, self.default_buffer)
 

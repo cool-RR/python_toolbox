@@ -139,7 +139,7 @@ class Frame(wx.Frame):
         toolbar.Realize()
 
         self.Bind(wx.EVT_TOOL, self.on_new, new_tool)
-        self.Bind(wx.EVT_TOOL, self.done_editing, done_tool)
+        self.Bind(wx.EVT_TOOL, self.finalize_active_node, done_tool)
         """
         ######################################
         
@@ -249,10 +249,10 @@ class Frame(wx.Frame):
         self.background_timer.stop()
         self.Close()
 
-    def done_editing(self, e=None):
+    def finalize_active_node(self, e=None):
         '''Finalize editing of the active node in the active gui project.'''
         assert self.gui_project
-        return self.gui_project.done_editing()
+        return self.gui_project.finalize_active_node()
 
     def on_new(self, e):
         '''Create a new gui project.'''        

@@ -39,7 +39,7 @@ class FinalizeMode(CenterButtonMode):
     @staticmethod
     def action(playback_controls):
         try:
-            playback_controls.gui_project.done_editing()
+            playback_controls.gui_project.finalize_active_node()
         except Exception: # todo: should have meaningful exceptions all over
             pass
 
@@ -192,7 +192,8 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
             self.gui_project.emitter_system.make_emitter(
                 inputs=(
                     self.gui_project.playing_toggled_emitter,
-                    self.gui_project.active_node_changed_emitter
+                    self.gui_project.active_node_changed_emitter,
+                    self.gui_project.active_node_finalized_emitter
                 ),
                 outputs=(
                     FlagRaiser(self, 'center_button_update_flag'),
