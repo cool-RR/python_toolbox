@@ -42,7 +42,7 @@ class Frame(wx.Frame):
         wx.Frame.__init__(self, *args, **keywords)
         self.SetDoubleBuffered(True)
         
-        self.Bind(wx.EVT_CLOSE, self.exit)
+        self.Bind(wx.EVT_CLOSE, self.on_close)
         
         """
         
@@ -102,7 +102,7 @@ class Frame(wx.Frame):
         self.Bind(wx.EVT_MENU, self.on_open, open_menu_button)        
         self.Bind(wx.EVT_MENU, self.on_save, save_menu_button)
         """
-        self.Bind(wx.EVT_MENU, self.exit, exit_menu_button)        
+        self.Bind(wx.EVT_MENU, self.on_close, exit_menu_button)        
         menubar = wx.MenuBar()
         menubar.Append(filemenu, "&File")
         #menubar.Append(stuffmenu,"&Stuff")
@@ -238,16 +238,15 @@ class Frame(wx.Frame):
         del gui_project
     """
 
-    def exit(self, e=None):
+    def on_close(self, event):
         '''Close the application window.'''
         print('Frame.exit called.')
         if self.gui_project:
             self.gui_project.stop_playing()
         self.aui_manager.UnInit()
         self.Destroy()        
-        e.Skip()        
+        event.Skip()        
         self.background_timer.stop()
-        self.Close()
 
     def finalize_active_node(self, e=None):
         '''Finalize editing of the active node in the active gui project.'''

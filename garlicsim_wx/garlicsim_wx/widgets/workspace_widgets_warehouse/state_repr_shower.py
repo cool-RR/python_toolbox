@@ -22,9 +22,15 @@ class StateReprViewer(wx.TextCtrl, WorkspaceWidget):#tododoc
         
         self.needs_update_flag = True
         
-        self.gui_project.active_node_changed_emitter.add_output(
-            FlagRaiser(self, 'needs_update_flag')
-        )
+        self.needs_update_emitter = \
+            self.gui_project.emitter_system.make_emitter(
+                inputs=(
+                    self.gui_project.active_node_changed_emitter,
+                    # todo: put the active_state_changed whatever here
+                    ),
+                outputs=(FlagRaiser(self, 'needs_update_flag'),)
+            )
+    
 
     def on_paint(self, event):
         event.Skip()
