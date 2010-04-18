@@ -21,7 +21,7 @@ from frame import Frame
 from gui_project import GuiProject
 
 __all__ = ['Frame', 'GuiProject', 'start', 'editing_interface']
-# todo: wtf is editing_interface? can probably remove
+# tododoc: wtf is editing_interface? can probably remove
 
 __version__ = '0.3'
 

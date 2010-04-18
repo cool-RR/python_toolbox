@@ -229,7 +229,7 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         if self.navigation_buttons_update_flag:
             self._update_navigation_buttons()
         
-        super(PlaybackControls, self).OnPaint(event)
+        wx.Panel.OnPaint(self, event)
         
         #dc = wx.PaintDC(self)
         #gc = wx.GraphicsContext.Create(dc)

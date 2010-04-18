@@ -102,7 +102,7 @@ class Frame(wx.Frame):
         self.Bind(wx.EVT_MENU, self.on_open, open_menu_button)        
         self.Bind(wx.EVT_MENU, self.on_save, save_menu_button)
         """
-        self.Bind(wx.EVT_MENU, self.on_close, exit_menu_button)        
+        self.Bind(wx.EVT_MENU, self.on_exit_menu_button, exit_menu_button)
         menubar = wx.MenuBar()
         menubar.Append(filemenu, "&File")
         #menubar.Append(stuffmenu,"&Stuff")
@@ -240,7 +240,7 @@ class Frame(wx.Frame):
 
     def on_close(self, event):
         '''Close the application window.'''
-        print('Frame.exit called.')
+        print('Frame.exit called.') #tododoc: kill this
         if self.gui_project:
             self.gui_project.stop_playing()
         self.aui_manager.UnInit()
@@ -380,6 +380,14 @@ class Frame(wx.Frame):
         self.Refresh()
         """
 
+    def on_exit_menu_button(self, event):
+        self._post_close_event()
+
+    def _post_close_event(self):
+        event = wx.PyEvent(self.Id)
+        event.SetEventType(wx.wxEVT_CLOSE_WINDOW)
+        wx.PostEvent(self, event)
+        
     def sync_crunchers(self):
         '''
         Take work from the crunchers, and give them new instructions if needed.
