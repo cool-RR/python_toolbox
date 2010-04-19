@@ -8,10 +8,20 @@ import garlicsim_wx
 from ... import prisoner
 
 
-class StateViewer(piectrl.PieCtrl, garlicsim_wx.widgets.WorkspaceWidget):
+class StateViewer(wx.Panel, garlicsim_wx.widgets.WorkspaceWidget):
     def __init__(self, frame):
-        piectrl.PieCtrl.__init__(self, frame)
+        wx.Panel.__init__(self, frame)
         garlicsim_wx.widgets.WorkspaceWidget.__init__(self, frame)
+        
+        self.pie_ctrl = piectrl.PieCtrl(self, style=wx.NO_BORDER)
+        
+        self.sizer_v = wx.BoxSizer(wx.VERTICAL)
+        self.sizer_h = wx.BoxSizer(wx.HORIZONTAL)
+        self.sizer_v.Add(self.sizer_h, 1, wx.EXPAND)
+        self.sizer_h.Add(self.pie_ctrl, 1, wx.EXPAND)
+        
+        self.SetSizer(self.sizer_v)
+        self.sizer_v.Layout()
         
         color_dict = {
             prisoner.Angel: wx.NamedColor("White"),
@@ -20,8 +30,8 @@ class StateViewer(piectrl.PieCtrl, garlicsim_wx.widgets.WorkspaceWidget):
         }
         
         font = wx.Font(12, wx.SWISS, wx.NORMAL, wx.BOLD, True, 'Arial')
-        self.GetLegend().SetLabelFont(font)
-        self.SetAngle(math.pi)
+        self.pie_ctrl.GetLegend().SetLabelFont(font)
+        self.pie_ctrl.SetAngle(math.pi)
     
         self.pie_part_dict = {}
         for player_type in prisoner.player_types:
@@ -29,7 +39,7 @@ class StateViewer(piectrl.PieCtrl, garlicsim_wx.widgets.WorkspaceWidget):
             part.SetLabel(player_type.__name__)
             part.SetValue(1)
             part.SetColour(color_dict[player_type])
-            self._series.append(part)
+            self.pie_ctrl._series.append(part)
             self.pie_part_dict[player_type] = part
             
         self.gui_project.active_node_changed_emitter.add_output(
