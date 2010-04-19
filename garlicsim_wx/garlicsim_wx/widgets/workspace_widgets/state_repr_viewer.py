@@ -9,15 +9,29 @@ from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
 
 __all__ = ["StateReprViewer"]
 
-class StateReprViewer(wx.TextCtrl, WorkspaceWidget):#tododoc
+class StateReprViewer(wx.Panel, WorkspaceWidget):#tododoc
     def __init__(self, frame):
-        wx.TextCtrl.__init__(self, frame, size=(100, 100),
-                             style=wx.TE_MULTILINE)
+        wx.Panel.__init__(self, frame, size=(300, 300))
         WorkspaceWidget.__init__(self, frame)
-        self.Bind(wx.EVT_PAINT, self.on_paint)
+
+        self.Bind(wx.EVT_PAINT, self.on_paint)        
+        
+        self.text_ctrl = wx.TextCtrl(
+            self,
+            style=wx.TE_MULTILINE | wx.NO_BORDER
+        )
         font = wx.Font(9, wx.DEFAULT, wx.NORMAL, wx.BOLD, False,
                        u'Courier New')
-        self.SetFont(font)
+        self.text_ctrl.SetFont(font)
+        
+        self.sizer_v = wx.BoxSizer(wx.VERTICAL)
+        self.sizer_h = wx.BoxSizer(wx.HORIZONTAL)
+        self.sizer_v.Add(self.sizer_h, 1, wx.EXPAND)
+        self.sizer_h.Add(self.text_ctrl, 1, wx.EXPAND)
+        
+        self.SetSizer(self.sizer_v)
+        self.sizer_v.Layout()
+        
         self.state = None
         
         self.needs_update_flag = True
@@ -35,13 +49,13 @@ class StateReprViewer(wx.TextCtrl, WorkspaceWidget):#tododoc
     def on_paint(self, event):
         event.Skip()
         if self.needs_update_flag:
-            if self.frame.gui_project:
-                active_state = self.frame.gui_project.get_active_state()        
+            if self.gui_project:
+                active_state = self.gui_project.get_active_state()        
                 if active_state:
                     if active_state is not self.state:
                         self.state = active_state
                         state_repr = dict_tools.fancy_string(vars(active_state))
-                        self.SetValue(state_repr)
+                        self.text_ctrl.SetValue(state_repr)
             self.needs_update_flag = False
          
         
