@@ -13,4 +13,6 @@ import pkg_resources
         file_name in ['male.txt', 'female.txt']
     ]
 
-name_list = male_raw.split('\r\n') + female_raw.split('\r\n')
+del file_name
+
+name_list = male_raw.split(':') + female_raw.split(':')
