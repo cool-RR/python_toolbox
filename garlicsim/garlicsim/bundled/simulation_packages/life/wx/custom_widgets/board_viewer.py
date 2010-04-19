@@ -30,9 +30,14 @@ class BoardViewer(scrolled.ScrolledPanel,
         self.square_size = 7
         self.board = None
         
+        self._buffer_bitmap = wx.EmptyBitmap(1, 1)
+        
         self.gui_project.active_node_changed_emitter.add_output(
             lambda: self.set_board(self.gui_project.active_node.state.board)
         )
+
+        self.redraw_needed_flag = True
+        
 
         
     def unscreenify(self, x, y):
@@ -50,23 +55,40 @@ class BoardViewer(scrolled.ScrolledPanel,
 
     def set_board(self, board):
         '''Set the board to be displayed.'''
-        self.board = board
-        self.Refresh()
-
-    def on_paint(self, event):
-        '''Paint event handler.'''
+        if board is not self.board:
+            self.board = board
+            self.redraw_needed_flag = True
+            self.Refresh()
         
-        event.Skip()
+    def _get_size_from_board(self):
+        if self.board:
+            return (
+                self.board.width * (self.square_size + self.border_width),
+                self.board.height * (self.square_size + self.border_width)
+            )
+        else:
+            return (1, 1)
+        
+    def _draw_buffer_bitmap(self):        
         
         board = self.board
-        dc = wx.PaintDC(self)
-
+        
+        (w, h) = self._get_size_from_board()
+        self._buffer_bitmap = wx.EmptyBitmap(w, h)
+        
+        dc = wx.MemoryDC(self._buffer_bitmap)
+        
+        
+        dc.SetPen(wx.TRANSPARENT_PEN)
+        dc.SetBrush(wx.Brush('#d4d0c8'))
+        dc.DrawRectangle(0, 0, w, h)
+        
         if board is None:
             dc.Destroy()
             return
-
-        white_brush = wx.Brush("White")
-        black_brush = wx.Brush("Black")
+        
+        white_brush = wx.Brush('White')
+        black_brush = wx.Brush('Black')
         rectangles = []
         brushes = []
         for x in xrange(board.width):
@@ -78,24 +100,31 @@ class BoardViewer(scrolled.ScrolledPanel,
                 brushes.append(black_brush if board.get(x,y) is True
                                else white_brush)
 
-
         for rect in rectangles:
             (rect[0], rect[1]) = self.CalcScrolledPosition((rect[0], rect[1]))
 
-
         transparent_pen = wx.Pen('#000000', 0, wx.TRANSPARENT)
-
-
+        
         dc.DrawRectangleList(rectangles, transparent_pen, brushes)
         dc.Destroy()
+        
+    def on_paint(self, event):
+        '''Paint event handler.'''
+        
+        if self.redraw_needed_flag is True:
+            self._draw_buffer_bitmap()
+            self.redraw_needed_flag = False
+        
+        event.Skip()
+        
+        dc = wx.PaintDC(self)
 
-        self.SetVirtualSize(
-            (
-                board.width * (self.square_size + self.border_width),
-                board.height * (self.square_size + self.border_width)
-            )
-        )
-
+        dc.DrawBitmapPoint(self._buffer_bitmap, self.CalcScrolledPosition((0, 0)))
+        
+        dc.Destroy()
+        
+        (w, h) = self._get_size_from_board()
+        self.SetVirtualSize((w, h))
 
 
     def on_size(self, event):
@@ -118,6 +147,8 @@ class BoardViewer(scrolled.ScrolledPanel,
                 new_state = self.gui_project.editing_state()
                 new_board = new_state.board
                 new_board.set(x, y, new_value)
+            
+                self.redraw_needed_flag = True
 
 
         self.Refresh()
