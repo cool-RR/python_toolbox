@@ -13,13 +13,15 @@ import types
 from garlicsim.misc import AutoClockGenerator, StepIterator, InvalidSimpack
 import garlicsim
 
+import misc
+
 __all__ = ["SimpackGrokker"]
 
 class Settings(object):
     #todo: subclass from a pretty vars-shower
     def __init__(self):
         self.FORCE_CRUNCHER = None
-        self.DETERMINISM_FUNCTION = lambda step_profile: None
+        self.DETERMINISM_FUNCTION = misc.default_determinism_function
         self.SCALAR_STATE_FUNCTIONS = []
         self.SCALAR_HISTORY_FUNCTIONS = []
 
