@@ -771,7 +771,7 @@ class AuiDefaultToolBarArt(object):
         
         self._base_colour = GetBaseColour()
 
-        self._flags = 0
+        self._agwFlags = 0
         self._text_orientation = AUI_TBTOOL_TEXT_BOTTOM
         self._highlight_colour = wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHT)
 
@@ -808,21 +808,21 @@ class AuiDefaultToolBarArt(object):
         return AuiDefaultToolBarArt()
 
 
-    def SetFlags(self, flags):
+    def SetAGWFlags(self, agwFlags):
         """
         Sets the toolbar art flags.
 
-        :param `flags`: a combination of the following values:
+        :param `agwFlags`: a combination of the following values:
 
          ==================================== ==================================
          Flag name                            Description
          ==================================== ==================================
          ``AUI_TB_TEXT``                      Shows the text in the toolbar buttons; by default only icons are shown
-         ``AUI_TB_NO_TOOLTIPS``               Don't show tooltips on AuiToolBar items
-         ``AUI_TB_NO_AUTORESIZE``             Do not auto-resize the AuiToolBar
-         ``AUI_TB_GRIPPER``                   Shows a gripper on the AuiToolBar
-         ``AUI_TB_OVERFLOW``                  The AuiToolBar can contain overflow items
-         ``AUI_TB_VERTICAL``                  The AuiToolBar is vertical
+         ``AUI_TB_NO_TOOLTIPS``               Don't show tooltips on `AuiToolBar` items
+         ``AUI_TB_NO_AUTORESIZE``             Do not auto-resize the `AuiToolBar`
+         ``AUI_TB_GRIPPER``                   Shows a gripper on the `AuiToolBar`
+         ``AUI_TB_OVERFLOW``                  The `AuiToolBar` can contain overflow items
+         ``AUI_TB_VERTICAL``                  The `AuiToolBar` is vertical
          ``AUI_TB_HORZ_LAYOUT``               Shows the text and the icons alongside, not vertically stacked. This style must be used with ``AUI_TB_TEXT``.
          ``AUI_TB_PLAIN_BACKGROUND``          Don't draw a gradient background on the toolbar
          ``AUI_TB_HORZ_TEXT``                 Combination of ``AUI_TB_HORZ_LAYOUT`` and ``AUI_TB_TEXT``
@@ -830,7 +830,18 @@ class AuiDefaultToolBarArt(object):
         
         """
         
-        self._flags = flags
+        self._agwFlags = agwFlags
+
+
+    def GetAGWFlags(self):
+        """
+        Returns the L{AuiDefaultToolBarArt} flags. See L{SetAGWFlags} for more
+        details.
+
+        :see: L{SetAGWFlags}
+        """
+
+        return self._agwFlags
 
 
     def SetFont(self, font):
@@ -861,17 +872,6 @@ class AuiDefaultToolBarArt(object):
         """
 
         self._text_orientation = orientation
-
-
-    def GetFlags(self):
-        """
-        Returns the L{AuiDefaultToolBarArt} flags. See L{SetFlags} for more
-        details.
-
-        :see: L{SetFlags}
-        """
-
-        return self._flags
 
 
     def GetFont(self):
@@ -1050,7 +1050,7 @@ class AuiDefaultToolBarArt(object):
         if item.GetState() & AUI_BUTTON_STATE_DISABLED:
             dc.SetTextForeground(DISABLED_TEXT_COLOUR)
 
-        if self._flags & AUI_TB_TEXT and item.GetLabel() != "":
+        if self._agwFlags & AUI_TB_TEXT and item.GetLabel() != "":
             self.DrawLabel(dc, wnd, item, text_rect)
         
 
@@ -1137,7 +1137,7 @@ class AuiDefaultToolBarArt(object):
         if item.GetState() & AUI_BUTTON_STATE_DISABLED:
             dc.SetTextForeground(DISABLED_TEXT_COLOUR)
 
-        if self._flags & AUI_TB_TEXT and item.GetLabel() != "":  
+        if self._agwFlags & AUI_TB_TEXT and item.GetLabel() != "":  
             self.DrawLabel(dc, wnd, item, text_rect)
         
 
@@ -1157,7 +1157,7 @@ class AuiDefaultToolBarArt(object):
 
         dc.SetFont(self._font)
 
-        if self._flags & AUI_TB_TEXT:
+        if self._agwFlags & AUI_TB_TEXT:
         
             tx, text_height = dc.GetTextExtent("ABCDHgj")        
 
@@ -1173,7 +1173,7 @@ class AuiDefaultToolBarArt(object):
         text_x = rect.x + (rect.width/2) - (text_width/2) + 1
         text_y = rect.y + rect.height - text_height - 1
 
-        if self._flags & AUI_TB_TEXT and item.GetLabel() != "": 
+        if self._agwFlags & AUI_TB_TEXT and item.GetLabel() != "": 
             dc.DrawText(item.GetLabel(), text_x, text_y)
     
 
@@ -1201,13 +1201,13 @@ class AuiDefaultToolBarArt(object):
         :param `item`: an instance of L{AuiToolBarItem}.
         """
         
-        if not item.GetBitmap().IsOk() and not self._flags & AUI_TB_TEXT:
+        if not item.GetBitmap().IsOk() and not self._agwFlags & AUI_TB_TEXT:
             return wx.Size(16, 16)
 
         width = item.GetBitmap().GetWidth()
         height = item.GetBitmap().GetHeight()
 
-        if self._flags & AUI_TB_TEXT:
+        if self._agwFlags & AUI_TB_TEXT:
         
             dc.SetFont(self._font)
             label_size = GetLabelSize(dc, item.GetLabel(), self.GetOrientation() != AUI_TBTOOL_HORIZONTAL)
@@ -1256,7 +1256,7 @@ class AuiDefaultToolBarArt(object):
         """
         
         horizontal = True
-        if self._flags & AUI_TB_VERTICAL:
+        if self._agwFlags & AUI_TB_VERTICAL:
             horizontal = False
 
         rect = wx.Rect(*_rect)
@@ -1294,7 +1294,7 @@ class AuiDefaultToolBarArt(object):
         i = 0
         while 1:
         
-            if self._flags & AUI_TB_VERTICAL:
+            if self._agwFlags & AUI_TB_VERTICAL:
             
                 x = rect.x + (i*4) + 4
                 y = rect.y + 3
@@ -1336,7 +1336,7 @@ class AuiDefaultToolBarArt(object):
             cli_rect = wnd.GetClientRect()
             light_gray_bg = StepColour(self._highlight_colour, 170)
 
-            if self._flags & AUI_TB_VERTICAL:
+            if self._agwFlags & AUI_TB_VERTICAL:
             
                 dc.SetPen(wx.Pen(self._highlight_colour))
                 dc.DrawLine(rect.x, rect.y, rect.x+rect.width, rect.y)
@@ -1420,7 +1420,7 @@ class AuiDefaultToolBarArt(object):
 
         for item in items:
 
-            if item.GetKind() != ITEM_SEPARATOR:
+            if item.GetKind() not in [ITEM_SEPARATOR, ITEM_SPACER, ITEM_CONTROL]:
             
                 text = item.GetShortHelp()
                 if text == "":
@@ -1447,7 +1447,7 @@ class AuiDefaultToolBarArt(object):
             
             else:
             
-                if items_added > 0:
+                if items_added > 0 and item.GetKind() == ITEM_SEPARATOR:
                     menuPopup.AppendSeparator()
             
         # find out where to put the popup menu of window items
@@ -1489,7 +1489,7 @@ class AuiDefaultToolBarArt(object):
         bmp_width = item.GetBitmap().GetWidth()
         bmp_height = item.GetBitmap().GetHeight()
      
-        if self._flags & AUI_TB_TEXT:        
+        if self._agwFlags & AUI_TB_TEXT:        
             dc.SetFont(self._font)
             label_size = GetLabelSize(dc, item.GetLabel(), not horizontal)
             text_height = label_size.GetHeight()
@@ -1532,7 +1532,7 @@ class AuiToolBar(wx.PyControl):
     """
 
     def __init__(self, parent, id=wx.ID_ANY, pos=wx.DefaultPosition,
-                 size=wx.DefaultSize, style=AUI_TB_DEFAULT_STYLE):
+                 size=wx.DefaultSize, style=0, agwStyle=AUI_TB_DEFAULT_STYLE):
         """
         Default class constructor.
 
@@ -1542,23 +1542,25 @@ class AuiToolBar(wx.PyControl):
          chosen by either the windowing system or wxPython, depending on platform;
         :param `size`: the control size. A value of (-1, -1) indicates a default size,
          chosen by either the windowing system or wxPython, depending on platform;
-        :param `style`: the window style. This can be a combination of the following bits:
+        :param `style`: the control window style;
+        :param `agwStyle`: the AGW-specific window style. This can be a combination of the
+         following bits:
         
          ==================================== ==================================
          Flag name                            Description
          ==================================== ==================================
          ``AUI_TB_TEXT``                      Shows the text in the toolbar buttons; by default only icons are shown
-         ``AUI_TB_NO_TOOLTIPS``               Don't show tooltips on AuiToolBar items
-         ``AUI_TB_NO_AUTORESIZE``             Do not auto-resize the AuiToolBar
-         ``AUI_TB_GRIPPER``                   Shows a gripper on the AuiToolBar
-         ``AUI_TB_OVERFLOW``                  The AuiToolBar can contain overflow items
-         ``AUI_TB_VERTICAL``                  The AuiToolBar is vertical
+         ``AUI_TB_NO_TOOLTIPS``               Don't show tooltips on `AuiToolBar` items
+         ``AUI_TB_NO_AUTORESIZE``             Do not auto-resize the `AuiToolBar`
+         ``AUI_TB_GRIPPER``                   Shows a gripper on the `AuiToolBar`
+         ``AUI_TB_OVERFLOW``                  The `AuiToolBar` can contain overflow items
+         ``AUI_TB_VERTICAL``                  The `AuiToolBar` is vertical
          ``AUI_TB_HORZ_LAYOUT``               Shows the text and the icons alongside, not vertically stacked. This style must be used with ``AUI_TB_TEXT``.
          ``AUI_TB_PLAIN_BACKGROUND``          Don't draw a gradient background on the toolbar
          ``AUI_TB_HORZ_TEXT``                 Combination of ``AUI_TB_HORZ_LAYOUT`` and ``AUI_TB_TEXT``
          ==================================== ==================================
 
-         The default value for `style` is: ``AUI_TB_DEFAULT_STYLE`` = 0
+         The default value for `agwStyle` is: ``AUI_TB_DEFAULT_STYLE`` = 0
 
         """
         
@@ -1581,11 +1583,12 @@ class AuiToolBar(wx.PyControl):
         self._gripper_sizer_item = None
         self._overflow_sizer_item = None
         self._dragging = False
-        self._style = style | wx.NO_BORDER
-        self._gripper_visible = (self._style & AUI_TB_GRIPPER and [True] or [False])[0]
-        self._overflow_visible = (self._style & AUI_TB_OVERFLOW and [True] or [False])[0]
+
+        self._agwStyle = self._originalStyle = agwStyle
+
+        self._gripper_visible = (self._agwStyle & AUI_TB_GRIPPER and [True] or [False])[0]
+        self._overflow_visible = (self._agwStyle & AUI_TB_OVERFLOW and [True] or [False])[0]
         self._overflow_state = 0
-        self._style = style
         self._custom_overflow_prepend = []
         self._custom_overflow_append = []
 
@@ -1593,15 +1596,15 @@ class AuiToolBar(wx.PyControl):
         
         self.SetMargins(5, 5, 2, 2)
         self.SetFont(wx.NORMAL_FONT)
-        self._art.SetFlags(self._style)
+        self._art.SetAGWFlags(self._agwStyle)
         self.SetExtraStyle(wx.WS_EX_PROCESS_IDLE)
         
-        if style & AUI_TB_HORZ_LAYOUT:
+        if agwStyle & AUI_TB_HORZ_LAYOUT:
             self.SetToolTextOrientation(AUI_TBTOOL_TEXT_RIGHT)
-        elif style & AUI_TB_VERTICAL:
-            if style & AUI_TB_CLOCKWISE:
+        elif agwStyle & AUI_TB_VERTICAL:
+            if agwStyle & AUI_TB_CLOCKWISE:
                 self.SetToolOrientation(AUI_TBTOOL_VERT_CLOCKWISE)
-            elif style & AUI_TB_COUNTERCLOCKWISE:
+            elif agwStyle & AUI_TB_COUNTERCLOCKWISE:
                 self.SetToolOrientation(AUI_TBTOOL_VERT_COUNTERCLOCKWISE)
  
         self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
@@ -1628,7 +1631,7 @@ class AuiToolBar(wx.PyControl):
         """
         Sets the style of the window.
         
-        :param `style`: the new window style.
+        :param `style`: the new window style. 
 
         :note: Please note that some styles cannot be changed after the window
          creation and that `Refresh` might need to be be called after changing the
@@ -1636,44 +1639,71 @@ class AuiToolBar(wx.PyControl):
 
         :note: Overridden from `wx.PyControl`.
         """
+
+        wx.PyControl.SetWindowStyleFlag(self, style|wx.BORDER_NONE)
         
-        style |= wx.BORDER_NONE
-        wx.PyControl.SetWindowStyleFlag(self, style)
-        self._style = style
+
+    def SetAGWWindowStyleFlag(self, agwStyle):
+        """
+        Sets the AGW-specific style of the window.
+        
+        :param `agwStyle`: the new window style. This can be a combination of the
+         following bits:
+        
+         ==================================== ==================================
+         Flag name                            Description
+         ==================================== ==================================
+         ``AUI_TB_TEXT``                      Shows the text in the toolbar buttons; by default only icons are shown
+         ``AUI_TB_NO_TOOLTIPS``               Don't show tooltips on `AuiToolBar` items
+         ``AUI_TB_NO_AUTORESIZE``             Do not auto-resize the `AuiToolBar`
+         ``AUI_TB_GRIPPER``                   Shows a gripper on the `AuiToolBar`
+         ``AUI_TB_OVERFLOW``                  The `AuiToolBar` can contain overflow items
+         ``AUI_TB_VERTICAL``                  The `AuiToolBar` is vertical
+         ``AUI_TB_HORZ_LAYOUT``               Shows the text and the icons alongside, not vertically stacked. This style must be used with ``AUI_TB_TEXT``.
+         ``AUI_TB_PLAIN_BACKGROUND``          Don't draw a gradient background on the toolbar
+         ``AUI_TB_HORZ_TEXT``                 Combination of ``AUI_TB_HORZ_LAYOUT`` and ``AUI_TB_TEXT``
+         ==================================== ==================================
+
+        :note: Please note that some styles cannot be changed after the window
+         creation and that `Refresh` might need to be be called after changing the
+         others for the change to take place immediately.
+        """
+        
+        self._agwStyle = self._originalStyle = agwStyle
 
         if self._art:
-            self._art.SetFlags(self._style)
+            self._art.SetAGWFlags(self._agwStyle)
         
-        if self._style & AUI_TB_GRIPPER:
+        if agwStyle & AUI_TB_GRIPPER:
             self._gripper_visible = True
         else:
             self._gripper_visible = False
 
-        if self._style & AUI_TB_OVERFLOW:
+        if agwStyle & AUI_TB_OVERFLOW:
             self._overflow_visible = True
         else:
             self._overflow_visible = False
 
-        if style & AUI_TB_HORZ_LAYOUT:
+        if agwStyle & AUI_TB_HORZ_LAYOUT:
             self.SetToolTextOrientation(AUI_TBTOOL_TEXT_RIGHT)
         else:
             self.SetToolTextOrientation(AUI_TBTOOL_TEXT_BOTTOM)
 
-        if style & AUI_TB_VERTICAL:
-            if style & AUI_TB_CLOCKWISE:
+        if agwStyle & AUI_TB_VERTICAL:
+            if agwStyle & AUI_TB_CLOCKWISE:
                 self.SetToolOrientation(AUI_TBTOOL_VERT_CLOCKWISE)
-            elif style & AUI_TB_COUNTERCLOCKWISE:
+            elif agwStyle & AUI_TB_COUNTERCLOCKWISE:
                 self.SetToolOrientation(AUI_TBTOOL_VERT_COUNTERCLOCKWISE)
 
                 
-    def GetWindowStyleFlag(self):
+    def GetAGWWindowStyleFlag(self):
         """
-        Returns the window style flag.
+        Returns the AGW-specific window style flag.
 
-        :note: Overridden from `wx.PyControl`.
+        :see: L{SetAGWWindowStyleFlag} for an explanation of various AGW-specific style,        
         """
 
-        return self._style
+        return self._agwStyle
     
 
     def SetArtProvider(self, art):
@@ -1690,7 +1720,7 @@ class AuiToolBar(wx.PyControl):
         self._art = art
 
         if self._art:
-            self._art.SetFlags(self._style)
+            self._art.SetAGWFlags(self._agwStyle)
             self._art.SetTextOrientation(self._tool_text_orientation)
             self._art.SetOrientation(self._tool_orientation)
         
@@ -2437,9 +2467,9 @@ class AuiToolBar(wx.PyControl):
 
         self._gripper_visible = visible
         if visible:
-            self._style |= AUI_TB_GRIPPER
+            self._agwStyle |= AUI_TB_GRIPPER
         else:
-            self._style &= ~AUI_TB_GRIPPER
+            self._agwStyle &= ~AUI_TB_GRIPPER
             
         self.Realize()
         self.Refresh(False)
@@ -2460,10 +2490,10 @@ class AuiToolBar(wx.PyControl):
 
         self._overflow_visible = visible
         if visible:
-            self._style |= AUI_TB_OVERFLOW
+            self._agwStyle |= AUI_TB_OVERFLOW
         else:
-            self._style &= ~AUI_TB_OVERFLOW
-            
+            self._agwStyle &= ~AUI_TB_OVERFLOW
+
         self.Refresh(False)
 
 
@@ -2864,7 +2894,7 @@ class AuiToolBar(wx.PyControl):
         cli_w, cli_h = self.GetClientSize()
         rect = self._items[tool_idx].sizer_item.GetRect()
 
-        if self._style & AUI_TB_VERTICAL:
+        if self._agwStyle & AUI_TB_VERTICAL:
             # take the dropdown size into account
             if self._overflow_visible:
                 cli_h -= self._overflow_sizer_item.GetSize().y
@@ -2928,7 +2958,7 @@ class AuiToolBar(wx.PyControl):
             return False
 
         horizontal = True
-        if self._style & AUI_TB_VERTICAL:
+        if self._agwStyle & AUI_TB_VERTICAL:
             horizontal = False
 
         # create the new sizer to add toolbar elements to
@@ -3006,7 +3036,7 @@ class AuiToolBar(wx.PyControl):
                 ctrl_sizer_item = vert_sizer.Add(item.window, 0, wx.EXPAND)
                 vert_sizer.AddStretchSpacer(1)
                 
-                if self._style & AUI_TB_TEXT and \
+                if self._agwStyle & AUI_TB_TEXT and \
                     self._tool_text_orientation == AUI_TBTOOL_TEXT_BOTTOM and \
                     item.GetLabel() != "":
                 
@@ -3042,7 +3072,7 @@ class AuiToolBar(wx.PyControl):
         # add drop down area
         self._overflow_sizer_item = None
 
-        if self._style & AUI_TB_OVERFLOW:
+        if self._agwStyle & AUI_TB_OVERFLOW:
         
             overflow_size = self._art.GetElementSize(AUI_TBART_OVERFLOW_SIZE)
             if overflow_size > 0 and self._overflow_visible:
@@ -3102,7 +3132,7 @@ class AuiToolBar(wx.PyControl):
         self._minWidth = size.x
         self._minHeight = size.y
 
-        if self._style & AUI_TB_NO_AUTORESIZE == 0:
+        if self._agwStyle & AUI_TB_NO_AUTORESIZE == 0:
         
             cur_size = self.GetClientSize()
             new_size = self.GetMinSize()
@@ -3137,7 +3167,7 @@ class AuiToolBar(wx.PyControl):
         overflow_rect = wx.Rect(*self._overflow_sizer_item.GetRect())
         overflow_size = self._art.GetElementSize(AUI_TBART_OVERFLOW_SIZE)
 
-        if self._style & AUI_TB_VERTICAL:
+        if self._agwStyle & AUI_TB_VERTICAL:
         
             overflow_rect.y = cli_rect.height - overflow_size
             overflow_rect.x = 0
@@ -3251,6 +3281,7 @@ class AuiToolBar(wx.PyControl):
         """
         
         x, y = self.GetClientSize()
+        realize = False
 
         if x > y:
             self.SetOrientation(wx.HORIZONTAL)
@@ -3260,28 +3291,43 @@ class AuiToolBar(wx.PyControl):
         if (x >= y and self._absolute_min_size.x > x) or (y > x and self._absolute_min_size.y > y):
         
             # hide all flexible items
-            for item in self._items:                
+            for item in self._items:
                 if item.sizer_item and item.proportion > 0 and item.sizer_item.IsShown():
                     item.sizer_item.Show(False)
                     item.sizer_item.SetProportion(0)
-   
+
+            if self._originalStyle & AUI_TB_OVERFLOW:
+                if not self.GetOverflowVisible():
+                    self.SetOverflowVisible(True)
+                    realize = True
+                       
         else:
-        
+
+            if self._originalStyle & AUI_TB_OVERFLOW and not self._custom_overflow_append and \
+               not self._custom_overflow_prepend:
+                if self.GetOverflowVisible():
+                    self.SetOverflowVisible(False)
+                    realize = True
+
             # show all flexible items
-            for item in self._items:            
+            for item in self._items:
                 if item.sizer_item and item.proportion > 0 and not item.sizer_item.IsShown():
                     item.sizer_item.Show(True)
                     item.sizer_item.SetProportion(item.proportion)
                 
         self._sizer.SetDimension(0, 0, x, y)
 
-        self.Refresh(False)
+        if realize:
+            self.Realize()
+        else:
+            self.Refresh(False)
+            
         self.Update()
 
         
     def DoSetSize(self, x, y, width, height, sizeFlags=wx.SIZE_AUTO):
         """        
-        Sets the position and size of the window in pixels. The `flags`
+        Sets the position and size of the window in pixels. The `sizeFlags`
         parameter indicates the interpretation of the other params if they are
         equal to -1.
 
@@ -3348,10 +3394,10 @@ class AuiToolBar(wx.PyControl):
         cli_rect = wx.RectPS(wx.Point(0, 0), self.GetClientSize())
 
         horizontal = True
-        if self._style & AUI_TB_VERTICAL:
+        if self._agwStyle & AUI_TB_VERTICAL:
             horizontal = False
 
-        if self._style & AUI_TB_PLAIN_BACKGROUND:
+        if self._agwStyle & AUI_TB_PLAIN_BACKGROUND:
             self._art.DrawPlainBackground(dc, self, cli_rect)
         else:
             self._art.DrawBackground(dc, self, cli_rect, horizontal)
@@ -3386,7 +3432,7 @@ class AuiToolBar(wx.PyControl):
 
             item_rect = wx.Rect(*item.sizer_item.GetRect())
 
-            if (horizontal  and item_rect.x + item_rect.width >= last_extent) or \
+            if (horizontal and item_rect.x + item_rect.width >= last_extent) or \
                (not horizontal and item_rect.y + item_rect.height >= last_extent):
 
                 break
@@ -3876,7 +3922,7 @@ class AuiToolBar(wx.PyControl):
         if not manager:
             return False
         
-        if manager.GetFlags() & AUI_MGR_PREVIEW_MINIMIZED_PANES == 0:
+        if manager.GetAGWFlags() & AUI_MGR_PREVIEW_MINIMIZED_PANES == 0:
             # No previews here
             return False
 

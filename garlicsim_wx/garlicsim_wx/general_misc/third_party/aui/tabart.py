@@ -163,7 +163,7 @@ class AuiDefaultTabArt(object):
     def Clone(self):
         """ Clones the art object. """
 
-        art = AuiDefaultTabArt()
+        art = type(self)()
         art.SetNormalFont(self.GetNormalFont())
         art.SetSelectedFont(self.GetSelectedFont())
         art.SetMeasuringFont(self.GetMeasuringFont())
@@ -172,11 +172,11 @@ class AuiDefaultTabArt(object):
         return art
 
 
-    def SetFlags(self, flags):
+    def SetAGWFlags(self, agwFlags):
         """
         Sets the tab art flags.
 
-        :param `flags`: a combination of the following values:
+        :param `agwFlags`: a combination of the following values:
 
          ==================================== ==================================
          Flag name                            Description
@@ -206,35 +206,38 @@ class AuiDefaultTabArt(object):
         
         """
 
-        self._flags = flags
+        self._agwFlags = agwFlags
 
 
-    def GetFlags(self):
+    def GetAGWFlags(self):
         """
         Returns the tab art flags.
 
-        :see: L{SetFlags} for a list of possible return values.
+        :see: L{SetAGWFlags} for a list of possible return values.
         """
 
-        return self._flags
+        return self._agwFlags
     
             
-    def SetSizingInfo(self, tab_ctrl_size, tab_count):
+    def SetSizingInfo(self, tab_ctrl_size, tab_count, minMaxTabWidth):
         """
         Sets the tab sizing information.
         
         :param `tab_ctrl_size`: the size of the tab control area;
-        :param `tab_count`: the number of tabs.
+        :param `tab_count`: the number of tabs;
+        :param `minMaxTabWidth`: the minimum and maximum tab widths to be used
+         when the ``AUI_NB_TAB_FIXED_WIDTH`` style is active.
         """
         
         self._fixed_tab_width = 100
+        minTabWidth, maxTabWidth = minMaxTabWidth
 
         tot_width = tab_ctrl_size.x - self.GetIndentSize() - 4
-        flags = self.GetFlags()
+        agwFlags = self.GetAGWFlags()
         
-        if flags & AUI_NB_CLOSE_BUTTON:
+        if agwFlags & AUI_NB_CLOSE_BUTTON:
             tot_width -= self._active_close_bmp.GetWidth()
-        if flags & AUI_NB_WINDOWLIST_BUTTON:
+        if agwFlags & AUI_NB_WINDOWLIST_BUTTON:
             tot_width -= self._active_windowlist_bmp.GetWidth()
 
         if tab_count > 0:
@@ -248,6 +251,11 @@ class AuiDefaultTabArt(object):
 
         if self._fixed_tab_width > 220:
             self._fixed_tab_width = 220
+
+        if minTabWidth > -1:
+            self._fixed_tab_width = max(self._fixed_tab_width, minTabWidth)
+        if maxTabWidth > -1:
+            self._fixed_tab_width = min(self._fixed_tab_width, maxTabWidth)
 
         self._tab_ctrl_height = tab_ctrl_size.y
     
@@ -264,12 +272,12 @@ class AuiDefaultTabArt(object):
         self._buttonRect = wx.Rect()
 
         # draw background
-        flags = self.GetFlags()
-        if flags & AUI_NB_BOTTOM:
+        agwFlags = self.GetAGWFlags()
+        if agwFlags & AUI_NB_BOTTOM:
             r = wx.Rect(rect.x, rect.y, rect.width+2, rect.height)
 
-        # TODO: else if (flags & AUI_NB_LEFT) 
-        # TODO: else if (flags & AUI_NB_RIGHT) 
+        # TODO: else if (agwFlags & AUI_NB_LEFT) 
+        # TODO: else if (agwFlags & AUI_NB_RIGHT) 
         else: #for AUI_NB_TOP
             r = wx.Rect(rect.x, rect.y, rect.width+2, rect.height-3)
 
@@ -284,12 +292,12 @@ class AuiDefaultTabArt(object):
         y = rect.GetHeight()
         w = rect.GetWidth()
 
-        if flags & AUI_NB_BOTTOM:
+        if agwFlags & AUI_NB_BOTTOM:
             dc.SetBrush(wx.Brush(bottom_colour))
             dc.DrawRectangle(-1, 0, w+2, 4)
 
-        # TODO: else if (flags & AUI_NB_LEFT) 
-        # TODO: else if (flags & AUI_NB_RIGHT)
+        # TODO: else if (agwFlags & AUI_NB_LEFT) 
+        # TODO: else if (agwFlags & AUI_NB_RIGHT)
         
         else: # for AUI_NB_TOP
             dc.SetBrush(self._base_colour_brush)
@@ -362,9 +370,9 @@ class AuiDefaultTabArt(object):
         dc.SetClippingRegion(tab_x, tab_y, clip_width+1, tab_height-3)
 
         border_points = [wx.Point() for i in xrange(6)]
-        flags = self.GetFlags()
+        agwFlags = self.GetAGWFlags()
         
-        if flags & AUI_NB_BOTTOM:
+        if agwFlags & AUI_NB_BOTTOM:
         
             border_points[0] = wx.Point(tab_x,             tab_y)
             border_points[1] = wx.Point(tab_x,             tab_y+tab_height-6)
@@ -373,7 +381,7 @@ class AuiDefaultTabArt(object):
             border_points[4] = wx.Point(tab_x+tab_width,   tab_y+tab_height-6)
             border_points[5] = wx.Point(tab_x+tab_width,   tab_y)
         
-        else: #if (flags & AUI_NB_TOP) 
+        else: #if (agwFlags & AUI_NB_TOP) 
         
             border_points[0] = wx.Point(tab_x,             tab_y+tab_height-4)
             border_points[1] = wx.Point(tab_x,             tab_y+2)
@@ -382,8 +390,8 @@ class AuiDefaultTabArt(object):
             border_points[4] = wx.Point(tab_x+tab_width,   tab_y+2)
             border_points[5] = wx.Point(tab_x+tab_width,   tab_y+tab_height-4)
         
-        # TODO: else if (flags & AUI_NB_LEFT) 
-        # TODO: else if (flags & AUI_NB_RIGHT) 
+        # TODO: else if (agwFlags & AUI_NB_LEFT) 
+        # TODO: else if (agwFlags & AUI_NB_RIGHT) 
 
         drawn_tab_yoff = border_points[1].y
         drawn_tab_height = border_points[0].y - border_points[1].y
@@ -457,11 +465,11 @@ class AuiDefaultTabArt(object):
         # this gets rid of the top one of those lines in the tab control
         if page.active:
         
-            if flags & AUI_NB_BOTTOM:
+            if agwFlags & AUI_NB_BOTTOM:
                 dc.SetPen(wx.Pen(StepColour(self._base_colour, 170)))
                 
-            # TODO: else if (flags & AUI_NB_LEFT) 
-            # TODO: else if (flags & AUI_NB_RIGHT) 
+            # TODO: else if (agwFlags & AUI_NB_LEFT) 
+            # TODO: else if (agwFlags & AUI_NB_RIGHT) 
             else: # for AUI_NB_TOP
                 dc.SetPen(self._base_colour_pen)
                 
@@ -476,7 +484,7 @@ class AuiDefaultTabArt(object):
         if close_button_state != AUI_BUTTON_STATE_HIDDEN:
             close_button_width = self._active_close_bmp.GetWidth()
 
-            if flags & AUI_NB_CLOSE_ON_TAB_LEFT:
+            if agwFlags & AUI_NB_CLOSE_ON_TAB_LEFT:
                 text_offset += close_button_width - 5
                 
         bitmap_offset = 0
@@ -484,7 +492,7 @@ class AuiDefaultTabArt(object):
         if pagebitmap.IsOk():
         
             bitmap_offset = tab_x + 8
-            if flags & AUI_NB_CLOSE_ON_TAB_LEFT and close_button_width:
+            if agwFlags & AUI_NB_CLOSE_ON_TAB_LEFT and close_button_width:
                 bitmap_offset += close_button_width - 5
 
             # draw bitmap
@@ -498,7 +506,7 @@ class AuiDefaultTabArt(object):
 
         else:
 
-            if flags & AUI_NB_CLOSE_ON_TAB_LEFT == 0 or not close_button_width:
+            if agwFlags & AUI_NB_CLOSE_ON_TAB_LEFT == 0 or not close_button_width:
                 text_offset = tab_x + 8
         
         draw_text = ChopText(dc, caption, tab_width - (text_offset-tab_x) - close_button_width)
@@ -540,9 +548,9 @@ class AuiDefaultTabArt(object):
             elif close_button_state == AUI_BUTTON_STATE_PRESSED:
                 bmp = self._pressed_close_bmp
 
-            shift = (flags & AUI_NB_BOTTOM and [1] or [0])[0]
+            shift = (agwFlags & AUI_NB_BOTTOM and [1] or [0])[0]
 
-            if flags & AUI_NB_CLOSE_ON_TAB_LEFT:
+            if agwFlags & AUI_NB_CLOSE_ON_TAB_LEFT:
                 rect = wx.Rect(tab_x + 4, tab_y + (tab_height - bmp.GetHeight())/2 - shift,
                                close_button_width, tab_height)
             else:
@@ -645,8 +653,8 @@ class AuiDefaultTabArt(object):
         tab_width += 16
         tab_height += 10
 
-        flags = self.GetFlags()
-        if flags & AUI_NB_TAB_FIXED_WIDTH:
+        agwFlags = self.GetAGWFlags()
+        if agwFlags & AUI_NB_TAB_FIXED_WIDTH:
             tab_width = self._fixed_tab_width
 
         if control is not None:
@@ -874,7 +882,7 @@ class AuiDefaultTabArt(object):
         :param `active_idx`: the active tab index.
         """
         
-        useImages = self.GetFlags() & AUI_NB_USE_IMAGES_DROPDOWN
+        useImages = self.GetAGWFlags() & AUI_NB_USE_IMAGES_DROPDOWN
         menuPopup = wx.Menu()
 
         longest = 0
@@ -921,7 +929,7 @@ class AuiDefaultTabArt(object):
         # Bitmap/Checkmark width + padding
         longest += 20
 
-        if self.GetFlags() & AUI_NB_CLOSE_BUTTON:
+        if self.GetAGWFlags() & AUI_NB_CLOSE_BUTTON:
             longest += 16
 
         pt = wx.Point(cli_rect.x + cli_rect.GetWidth() - longest,
@@ -950,7 +958,7 @@ class AuiSimpleTabArt(object):
         self._selected_font.SetWeight(wx.BOLD)
         self._measuring_font = self._selected_font
 
-        self._flags = 0
+        self._agwFlags = 0
         self._fixed_tab_width = 100
 
         base_colour = wx.SystemSettings.GetColour(wx.SYS_COLOUR_3DFACE)
@@ -981,7 +989,7 @@ class AuiSimpleTabArt(object):
     def Clone(self):
         """ Clones the art object. """
 
-        art = AuiSimpleTabArt()
+        art = type(self)()
         art.SetNormalFont(self.GetNormalFont())
         art.SetSelectedFont(self.GetSelectedFont())
         art.SetMeasuringFont(self.GetMeasuringFont())
@@ -990,11 +998,11 @@ class AuiSimpleTabArt(object):
         return art
 
 
-    def SetFlags(self, flags):
+    def SetAGWFlags(self, agwFlags):
         """
         Sets the tab art flags.
 
-        :param `flags`: a combination of the following values:
+        :param `agwFlags`: a combination of the following values:
 
          ==================================== ==================================
          Flag name                            Description
@@ -1024,34 +1032,37 @@ class AuiSimpleTabArt(object):
         
         """
 
-        self._flags = flags
+        self._agwFlags = agwFlags
 
 
-    def GetFlags(self):
+    def GetAGWFlags(self):
         """
         Returns the tab art flags.
 
-        :see: L{SetFlags} for a list of possible return values.
+        :see: L{SetAGWFlags} for a list of possible return values.
         """
 
-        return self._flags
+        return self._agwFlags
     
 
-    def SetSizingInfo(self, tab_ctrl_size, tab_count):
+    def SetSizingInfo(self, tab_ctrl_size, tab_count, minMaxTabWidth):
         """
         Sets the tab sizing information.
         
         :param `tab_ctrl_size`: the size of the tab control area;
-        :param `tab_count`: the number of tabs.
+        :param `tab_count`: the number of tabs;
+        :param `minMaxTabWidth`: the minimum and maximum tab widths to be used
+         when the ``AUI_NB_TAB_FIXED_WIDTH`` style is active.
         """
         
         self._fixed_tab_width = 100
+        minTabWidth, maxTabWidth = minMaxTabWidth
 
         tot_width = tab_ctrl_size.x - self.GetIndentSize() - 4
 
-        if self._flags & AUI_NB_CLOSE_BUTTON:
+        if self._agwFlags & AUI_NB_CLOSE_BUTTON:
             tot_width -= self._active_close_bmp.GetWidth()
-        if self._flags & AUI_NB_WINDOWLIST_BUTTON:
+        if self._agwFlags & AUI_NB_WINDOWLIST_BUTTON:
             tot_width -= self._active_windowlist_bmp.GetWidth()
 
         if tab_count > 0:
@@ -1065,6 +1076,11 @@ class AuiSimpleTabArt(object):
 
         if self._fixed_tab_width > 220:
             self._fixed_tab_width = 220
+
+        if minTabWidth > -1:
+            self._fixed_tab_width = max(self._fixed_tab_width, minTabWidth)
+        if maxTabWidth > -1:
+            self._fixed_tab_width = min(self._fixed_tab_width, maxTabWidth)
 
         self._tab_ctrl_height = tab_ctrl_size.y
         
@@ -1105,7 +1121,7 @@ class AuiSimpleTabArt(object):
         if caption == "":
             caption = "Xj"
 
-        flags = self.GetFlags()
+        agwFlags = self.GetAGWFlags()
         
         dc.SetFont(self._selected_font)
         selected_textx, selected_texty, dummy = dc.GetMultiLineTextExtent(caption)
@@ -1176,7 +1192,7 @@ class AuiSimpleTabArt(object):
         if close_button_state != AUI_BUTTON_STATE_HIDDEN:
         
             close_button_width = self._active_close_bmp.GetWidth()
-            if flags & AUI_NB_CLOSE_ON_TAB_LEFT:
+            if agwFlags & AUI_NB_CLOSE_ON_TAB_LEFT:
                 if control:
                     text_offset = tab_x + (tab_height/2) + close_button_width - (textx/2) - 2
                 else:
@@ -1191,7 +1207,7 @@ class AuiSimpleTabArt(object):
         
             text_offset = tab_x + (tab_height/3) + (tab_width/2) - (textx/2)
             if control:
-                if flags & AUI_NB_CLOSE_ON_TAB_LEFT:
+                if agwFlags & AUI_NB_CLOSE_ON_TAB_LEFT:
                     text_offset = tab_x + (tab_height/3) - (textx/2) + close_button_width + 2
                 else:
                     text_offset = tab_x + (tab_height/3) - (textx/2)
@@ -1201,7 +1217,7 @@ class AuiSimpleTabArt(object):
             text_offset = tab_x + tab_height
 
         # chop text if necessary
-        if flags & AUI_NB_CLOSE_ON_TAB_LEFT:
+        if agwFlags & AUI_NB_CLOSE_ON_TAB_LEFT:
             draw_text = ChopText(dc, caption, tab_width - (text_offset-tab_x))
         else:
             draw_text = ChopText(dc, caption,
@@ -1249,7 +1265,7 @@ class AuiSimpleTabArt(object):
             else:
                 bmp = self._disabled_close_bmp
 
-            if flags & AUI_NB_CLOSE_ON_TAB_LEFT:
+            if agwFlags & AUI_NB_CLOSE_ON_TAB_LEFT:
                 rect = wx.Rect(tab_x + tab_height - 2,
                                tab_y + (tab_height/2) - (bmp.GetHeight()/2) + 1,
                                close_button_width, tab_height - 1)
@@ -1323,7 +1339,7 @@ class AuiSimpleTabArt(object):
         if close_button_state != AUI_BUTTON_STATE_HIDDEN:
             tab_width += self._active_close_bmp.GetWidth()
 
-        if self._flags & AUI_NB_TAB_FIXED_WIDTH:
+        if self._agwFlags & AUI_NB_TAB_FIXED_WIDTH:
             tab_width = self._fixed_tab_width
 
         if control is not None:
@@ -1412,7 +1428,7 @@ class AuiSimpleTabArt(object):
         """
         
         menuPopup = wx.Menu()
-        useImages = self.GetFlags() & AUI_NB_USE_IMAGES_DROPDOWN
+        useImages = self.GetAGWFlags() & AUI_NB_USE_IMAGES_DROPDOWN
         
         for i, page in enumerate(pages):
 
@@ -1589,7 +1605,7 @@ class VC71TabArt(AuiDefaultTabArt):
     def Clone(self):
         """ Clones the art object. """
 
-        art = VC71TabArt()
+        art = type(self)()
         art.SetNormalFont(self.GetNormalFont())
         art.SetSelectedFont(self.GetSelectedFont())
         art.SetMeasuringFont(self.GetMeasuringFont())
@@ -1629,9 +1645,9 @@ class VC71TabArt(AuiDefaultTabArt):
             clip_width = (in_rect.x + in_rect.width) - tab_x - 4
             
         dc.SetClippingRegion(tab_x, tab_y, clip_width + 1, tab_height - 3)
-        flags = self.GetFlags()
+        agwFlags = self.GetAGWFlags()
 
-        if flags & AUI_NB_BOTTOM:
+        if agwFlags & AUI_NB_BOTTOM:
             tab_y -= 1
 
         dc.SetPen((page.active and [wx.Pen(wx.SystemSettings.GetColour(wx.SYS_COLOUR_3DHIGHLIGHT))] or \
@@ -1644,38 +1660,38 @@ class VC71TabArt(AuiDefaultTabArt):
             tabH = tab_height - 2
             dc.DrawRectangle(tab_x, tab_y, tab_width, tabH)
 
-            rightLineY1 = (flags & AUI_NB_BOTTOM and [vertical_border_padding - 2] or \
+            rightLineY1 = (agwFlags & AUI_NB_BOTTOM and [vertical_border_padding - 2] or \
                            [vertical_border_padding - 1])[0]
             rightLineY2 = tabH + 3
             dc.SetPen(wx.Pen(wx.SystemSettings.GetColour(wx.SYS_COLOUR_3DSHADOW)))
             dc.DrawLine(tab_x + tab_width - 1, rightLineY1 + 1, tab_x + tab_width - 1, rightLineY2)
             
-            if flags & AUI_NB_BOTTOM:
+            if agwFlags & AUI_NB_BOTTOM:
                 dc.DrawLine(tab_x + 1, rightLineY2 - 3 , tab_x + tab_width - 1, rightLineY2 - 3)
                 
             dc.SetPen(wx.Pen(wx.SystemSettings.GetColour(wx.SYS_COLOUR_3DDKSHADOW)))
             dc.DrawLine(tab_x + tab_width, rightLineY1, tab_x + tab_width, rightLineY2)
             
-            if flags & AUI_NB_BOTTOM:
+            if agwFlags & AUI_NB_BOTTOM:
                 dc.DrawLine(tab_x, rightLineY2 - 2, tab_x + tab_width, rightLineY2 - 2)
 
         else:
         
             # We dont draw a rectangle for non selected tabs, but only
             # vertical line on the right
-            blackLineY1 = (flags & AUI_NB_BOTTOM and [vertical_border_padding + 2] or \
+            blackLineY1 = (agwFlags & AUI_NB_BOTTOM and [vertical_border_padding + 2] or \
                            [vertical_border_padding + 1])[0]
             blackLineY2 = tab_height - 5
             dc.DrawLine(tab_x + tab_width, blackLineY1, tab_x + tab_width, blackLineY2)
         
         border_points = [0, 0]
         
-        if flags & AUI_NB_BOTTOM:
+        if agwFlags & AUI_NB_BOTTOM:
         
             border_points[0] = wx.Point(tab_x, tab_y)
             border_points[1] = wx.Point(tab_x, tab_y + tab_height - 6)
         
-        else: # if (flags & AUI_NB_TOP)
+        else: # if (agwFlags & AUI_NB_TOP)
         
             border_points[0] = wx.Point(tab_x, tab_y + tab_height - 4)
             border_points[1] = wx.Point(tab_x, tab_y + 2)
@@ -1688,7 +1704,7 @@ class VC71TabArt(AuiDefaultTabArt):
 
         if close_button_state != AUI_BUTTON_STATE_HIDDEN:
             close_button_width = self._active_close_bmp.GetWidth()
-            if flags & AUI_NB_CLOSE_ON_TAB_LEFT:
+            if agwFlags & AUI_NB_CLOSE_ON_TAB_LEFT:
                 text_offset += close_button_width - 5
 
         if not page.enabled:
@@ -1699,13 +1715,13 @@ class VC71TabArt(AuiDefaultTabArt):
             pagebitmap = page.bitmap
 
         shift = 0
-        if flags & AUI_NB_BOTTOM:
+        if agwFlags & AUI_NB_BOTTOM:
             shift = (page.active and [1] or [2])[0]
             
         bitmap_offset = 0
         if pagebitmap.IsOk():
             bitmap_offset = tab_x + 8
-            if flags & AUI_NB_CLOSE_ON_TAB_LEFT and close_button_width:
+            if agwFlags & AUI_NB_CLOSE_ON_TAB_LEFT and close_button_width:
                 bitmap_offset += close_button_width - 5
 
             # draw bitmap
@@ -1717,7 +1733,7 @@ class VC71TabArt(AuiDefaultTabArt):
             text_offset += 3 # bitmap padding
         
         else:
-            if flags & AUI_NB_CLOSE_ON_TAB_LEFT == 0 or not close_button_width:
+            if agwFlags & AUI_NB_CLOSE_ON_TAB_LEFT == 0 or not close_button_width:
                 text_offset = tab_x + 8
         
         # if the caption is empty, measure some temporary text
@@ -1775,7 +1791,7 @@ class VC71TabArt(AuiDefaultTabArt):
             elif close_button_state == AUI_BUTTON_STATE_PRESSED:
                 bmp = self._pressed_close_bmp
 
-            if flags & AUI_NB_CLOSE_ON_TAB_LEFT:
+            if agwFlags & AUI_NB_CLOSE_ON_TAB_LEFT:
                 rect = wx.Rect(tab_x + 4,
                                drawn_tab_yoff + (drawn_tab_height / 2) - (bmp.GetHeight() / 2) + shift,
                                close_button_width, tab_height)
@@ -1808,7 +1824,7 @@ class FF2TabArt(AuiDefaultTabArt):
     def Clone(self):
         """ Clones the art object. """
 
-        art = FF2TabArt()
+        art = type(self)()
         art.SetNormalFont(self.GetNormalFont())
         art.SetSelectedFont(self.GetSelectedFont())
         art.SetMeasuringFont(self.GetMeasuringFont())
@@ -1878,17 +1894,17 @@ class FF2TabArt(AuiDefaultTabArt):
         if not page.active:
             adjust = 1
 
-        flags = self.GetFlags()
+        agwFlags = self.GetAGWFlags()
         
         tabPoints[0].x = tab_x + 3
-        tabPoints[0].y = (flags & AUI_NB_BOTTOM and [3] or [tab_height - 2])[0]
+        tabPoints[0].y = (agwFlags & AUI_NB_BOTTOM and [3] or [tab_height - 2])[0]
 
         tabPoints[1].x = tabPoints[0].x
-        tabPoints[1].y = (flags & AUI_NB_BOTTOM and [tab_height - (vertical_border_padding + 2) - adjust] or \
+        tabPoints[1].y = (agwFlags & AUI_NB_BOTTOM and [tab_height - (vertical_border_padding + 2) - adjust] or \
                           [(vertical_border_padding + 2) + adjust])[0]
 
         tabPoints[2].x = tabPoints[1].x+2
-        tabPoints[2].y = (flags & AUI_NB_BOTTOM and [tab_height - vertical_border_padding - adjust] or \
+        tabPoints[2].y = (agwFlags & AUI_NB_BOTTOM and [tab_height - vertical_border_padding - adjust] or \
                           [vertical_border_padding + adjust])[0]
 
         tabPoints[3].x = tab_x + tab_width - 2
@@ -1904,7 +1920,7 @@ class FF2TabArt(AuiDefaultTabArt):
         tabPoints[6].y = tabPoints[0].y
 
         rr = wx.RectPP(tabPoints[2], tabPoints[5])
-        self.DrawTabBackground(dc, rr, page.active, (flags & AUI_NB_BOTTOM) == 0)
+        self.DrawTabBackground(dc, rr, page.active, (agwFlags & AUI_NB_BOTTOM) == 0)
 
         dc.SetBrush(wx.TRANSPARENT_BRUSH)
         dc.SetPen(wx.Pen(wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNSHADOW)))
@@ -1922,7 +1938,7 @@ class FF2TabArt(AuiDefaultTabArt):
         close_button_width = 0
         if close_button_state != AUI_BUTTON_STATE_HIDDEN:
             close_button_width = self._active_close_bmp.GetWidth()
-            if flags & AUI_NB_CLOSE_ON_TAB_LEFT:
+            if agwFlags & AUI_NB_CLOSE_ON_TAB_LEFT:
                 text_offset += close_button_width - 4
 
         if not page.enabled:
@@ -1933,13 +1949,13 @@ class FF2TabArt(AuiDefaultTabArt):
             pagebitmap = page.bitmap
 
         shift = -1
-        if flags & AUI_NB_BOTTOM:
+        if agwFlags & AUI_NB_BOTTOM:
             shift = 2
         
         bitmap_offset = 0
         if pagebitmap.IsOk():
             bitmap_offset = tab_x + 8
-            if flags & AUI_NB_CLOSE_ON_TAB_LEFT and close_button_width:
+            if agwFlags & AUI_NB_CLOSE_ON_TAB_LEFT and close_button_width:
                 bitmap_offset += close_button_width - 4
 
             # draw bitmap
@@ -1952,7 +1968,7 @@ class FF2TabArt(AuiDefaultTabArt):
         
         else:
         
-            if flags & AUI_NB_CLOSE_ON_TAB_LEFT == 0 or not close_button_width:
+            if agwFlags & AUI_NB_CLOSE_ON_TAB_LEFT == 0 or not close_button_width:
                 text_offset = tab_x + 8
         
         # if the caption is empty, measure some temporary text
@@ -1967,7 +1983,7 @@ class FF2TabArt(AuiDefaultTabArt):
             dc.SetFont(self._normal_font)
             textx, texty, dummy = dc.GetMultiLineTextExtent(caption)
 
-        if flags & AUI_NB_CLOSE_ON_TAB_LEFT:
+        if agwFlags & AUI_NB_CLOSE_ON_TAB_LEFT:
             draw_text = ChopText(dc, caption, tab_width - (text_offset-tab_x) - close_button_width + 1)
         else:
             draw_text = ChopText(dc, caption, tab_width - (text_offset-tab_x) - close_button_width)
@@ -2011,7 +2027,7 @@ class FF2TabArt(AuiDefaultTabArt):
             elif close_button_state == AUI_BUTTON_STATE_PRESSED:
                 bmp = self._pressed_close_bmp
 
-            if flags & AUI_NB_CLOSE_ON_TAB_LEFT:
+            if agwFlags & AUI_NB_CLOSE_ON_TAB_LEFT:
                 rect = wx.Rect(tab_x + 5,
                                drawn_tab_yoff + (drawn_tab_height / 2) - (bmp.GetHeight() / 2) + shift,
                                close_button_width, tab_height)
@@ -2102,7 +2118,7 @@ class VC8TabArt(AuiDefaultTabArt):
     def Clone(self):
         """ Clones the art object. """
 
-        art = VC8TabArt()
+        art = type(self)()
         art.SetNormalFont(self.GetNormalFont())
         art.SetSelectedFont(self.GetSelectedFont())
         art.SetMeasuringFont(self.GetMeasuringFont())
@@ -2111,15 +2127,24 @@ class VC8TabArt(AuiDefaultTabArt):
         return art
 
 
-    def SetSizingInfo(self, tab_ctrl_size, tab_count):
+    def SetSizingInfo(self, tab_ctrl_size, tab_count, minMaxTabWidth):
         """
         Sets the tab sizing information.
         
         :param `tab_ctrl_size`: the size of the tab control area;
-        :param `tab_count`: the number of tabs.
+        :param `tab_count`: the number of tabs;
+        :param `minMaxTabWidth`: the minimum and maximum tab widths to be used
+         when the ``AUI_NB_TAB_FIXED_WIDTH`` style is active.
         """
         
-        AuiDefaultTabArt.SetSizingInfo(self, tab_ctrl_size, tab_count)
+        AuiDefaultTabArt.SetSizingInfo(self, tab_ctrl_size, tab_count, minMaxTabWidth)
+
+        minTabWidth, maxTabWidth = minMaxTabWidth
+        if minTabWidth > -1:
+            self._fixed_tab_width = max(self._fixed_tab_width, minTabWidth)
+        if maxTabWidth > -1:
+            self._fixed_tab_width = min(self._fixed_tab_width, maxTabWidth)
+        
         self._fixed_tab_width -= 5
 
 
@@ -2195,27 +2220,27 @@ class VC8TabArt(AuiDefaultTabArt):
         if not page.active:
             adjust = 1
 
-        flags = self.GetFlags()
-        tabPoints[0].x = (flags & AUI_NB_BOTTOM and [tab_x] or [tab_x + adjust])[0]
-        tabPoints[0].y = (flags & AUI_NB_BOTTOM and [2] or [tab_height - 3])[0]
+        agwFlags = self.GetAGWFlags()
+        tabPoints[0].x = (agwFlags & AUI_NB_BOTTOM and [tab_x] or [tab_x + adjust])[0]
+        tabPoints[0].y = (agwFlags & AUI_NB_BOTTOM and [2] or [tab_height - 3])[0]
 
         tabPoints[1].x = tabPoints[0].x + tab_height - vertical_border_padding - 3 - adjust
-        tabPoints[1].y = (flags & AUI_NB_BOTTOM and [tab_height - (vertical_border_padding+2)] or \
+        tabPoints[1].y = (agwFlags & AUI_NB_BOTTOM and [tab_height - (vertical_border_padding+2)] or \
                           [(vertical_border_padding+2)])[0]
 
         tabPoints[2].x = tabPoints[1].x + 4
-        tabPoints[2].y = (flags & AUI_NB_BOTTOM and [tab_height - vertical_border_padding] or \
+        tabPoints[2].y = (agwFlags & AUI_NB_BOTTOM and [tab_height - vertical_border_padding] or \
                           [vertical_border_padding])[0]
 
         tabPoints[3].x = tabPoints[2].x + tab_width - tab_height + vertical_border_padding
-        tabPoints[3].y = (flags & AUI_NB_BOTTOM and [tab_height - vertical_border_padding] or \
+        tabPoints[3].y = (agwFlags & AUI_NB_BOTTOM and [tab_height - vertical_border_padding] or \
                           [vertical_border_padding])[0]
 
         tabPoints[4].x = tabPoints[3].x + 1
-        tabPoints[4].y = (flags & AUI_NB_BOTTOM and [tabPoints[3].y - 1] or [tabPoints[3].y + 1])[0]
+        tabPoints[4].y = (agwFlags & AUI_NB_BOTTOM and [tabPoints[3].y - 1] or [tabPoints[3].y + 1])[0]
 
         tabPoints[5].x = tabPoints[4].x + 1
-        tabPoints[5].y = (flags & AUI_NB_BOTTOM and [(tabPoints[4].y - 1)] or [tabPoints[4].y + 1])[0]
+        tabPoints[5].y = (agwFlags & AUI_NB_BOTTOM and [(tabPoints[4].y - 1)] or [tabPoints[4].y + 1])[0]
 
         tabPoints[6].x = tabPoints[2].x + tab_width - tab_height + 2 + vertical_border_padding
         tabPoints[6].y = tabPoints[0].y
@@ -2244,7 +2269,7 @@ class VC8TabArt(AuiDefaultTabArt):
         close_button_width = 0
         if close_button_state != AUI_BUTTON_STATE_HIDDEN:
             close_button_width = self._active_close_bmp.GetWidth()
-            if flags & AUI_NB_CLOSE_ON_TAB_LEFT:
+            if agwFlags & AUI_NB_CLOSE_ON_TAB_LEFT:
                 text_offset += close_button_width
 
         if not page.enabled:
@@ -2255,13 +2280,13 @@ class VC8TabArt(AuiDefaultTabArt):
             pagebitmap = page.bitmap
 
         shift = 0
-        if flags & AUI_NB_BOTTOM:
+        if agwFlags & AUI_NB_BOTTOM:
             shift = (page.active and [1] or [2])[0]
         
         bitmap_offset = 0
         if pagebitmap.IsOk():
             bitmap_offset = tab_x + 20
-            if flags & AUI_NB_CLOSE_ON_TAB_LEFT and close_button_width:
+            if agwFlags & AUI_NB_CLOSE_ON_TAB_LEFT and close_button_width:
                 bitmap_offset += close_button_width
 
             # draw bitmap
@@ -2273,7 +2298,7 @@ class VC8TabArt(AuiDefaultTabArt):
             text_offset += 3 # bitmap padding
         
         else:
-            if flags & AUI_NB_CLOSE_ON_TAB_LEFT == 0 or not close_button_width:
+            if agwFlags & AUI_NB_CLOSE_ON_TAB_LEFT == 0 or not close_button_width:
                 text_offset = tab_x + tab_height
         
         # if the caption is empty, measure some temporary text
@@ -2288,7 +2313,7 @@ class VC8TabArt(AuiDefaultTabArt):
             dc.SetFont(self._normal_font)
             textx, texty, dummy = dc.GetMultiLineTextExtent(caption)
 
-        if flags & AUI_NB_CLOSE_ON_TAB_LEFT:
+        if agwFlags & AUI_NB_CLOSE_ON_TAB_LEFT:
             draw_text = ChopText(dc, caption, tab_width - (text_offset-tab_x))
         else:
             draw_text = ChopText(dc, caption, tab_width - (text_offset-tab_x) - close_button_width)
@@ -2337,7 +2362,7 @@ class VC8TabArt(AuiDefaultTabArt):
             else:
                 xpos = tab_x + tab_width - close_button_width - 5
 
-            if flags & AUI_NB_CLOSE_ON_TAB_LEFT:
+            if agwFlags & AUI_NB_CLOSE_ON_TAB_LEFT:
                 rect = wx.Rect(tab_x + 20,
                                drawn_tab_yoff + (drawn_tab_height / 2) - (bmp.GetHeight() / 2) + shift,
                                close_button_width, tab_height)
@@ -2414,11 +2439,11 @@ class ChromeTabArt(AuiDefaultTabArt):
         self.SetCustomButton(AUI_BUTTON_CLOSE, AUI_BUTTON_STATE_PRESSED, closePBmp)
         
 
-    def SetFlags(self, flags):
+    def SetAGWFlags(self, agwFlags):
         """
         Sets the tab art flags.
 
-        :param `flags`: a combination of the following values:
+        :param `agwFlags`: a combination of the following values:
 
          ==================================== ==================================
          Flag name                            Description
@@ -2449,12 +2474,12 @@ class ChromeTabArt(AuiDefaultTabArt):
         :note: Overridden from L{AuiDefaultTabArt}.
         """
 
-        if flags & AUI_NB_TOP:
+        if agwFlags & AUI_NB_TOP:
             self.SetBitmaps(mirror=False)
-        elif flags & AUI_NB_BOTTOM:
+        elif agwFlags & AUI_NB_BOTTOM:
             self.SetBitmaps(mirror=True)
 
-        AuiDefaultTabArt.SetFlags(self, flags)            
+        AuiDefaultTabArt.SetAGWFlags(self, agwFlags)            
 
 
     def SetBitmaps(self, mirror):
@@ -2485,7 +2510,7 @@ class ChromeTabArt(AuiDefaultTabArt):
     def Clone(self):
         """ Clones the art object. """
 
-        art = ChromeTabArt()
+        art = type(self)()
         art.SetNormalFont(self.GetNormalFont())
         art.SetSelectedFont(self.GetSelectedFont())
         art.SetMeasuringFont(self.GetMeasuringFont())
@@ -2494,15 +2519,24 @@ class ChromeTabArt(AuiDefaultTabArt):
         return art
 
 
-    def SetSizingInfo(self, tab_ctrl_size, tab_count):
+    def SetSizingInfo(self, tab_ctrl_size, tab_count, minMaxTabWidth):
         """
         Sets the tab sizing information.
         
         :param `tab_ctrl_size`: the size of the tab control area;
-        :param `tab_count`: the number of tabs.
+        :param `tab_count`: the number of tabs;
+        :param `minMaxTabWidth`: the minimum and maximum tab widths to be used
+         when the ``AUI_NB_TAB_FIXED_WIDTH`` style is active.
         """
         
-        AuiDefaultTabArt.SetSizingInfo(self, tab_ctrl_size, tab_count)
+        AuiDefaultTabArt.SetSizingInfo(self, tab_ctrl_size, tab_count, minMaxTabWidth)
+
+        minTabWidth, maxTabWidth = minMaxTabWidth
+        if minTabWidth > -1:
+            self._fixed_tab_width = max(self._fixed_tab_width, minTabWidth)
+        if maxTabWidth > -1:
+            self._fixed_tab_width = min(self._fixed_tab_width, maxTabWidth)
+
         self._fixed_tab_width -= 5
 
 
@@ -2552,7 +2586,7 @@ class ChromeTabArt(AuiDefaultTabArt):
         tab_size, x_extent = self.GetTabSize(dc, wnd, page.caption, page.bitmap, page.active,
                                              close_button_state, control)
 
-        flags = self.GetFlags()
+        agwFlags = self.GetAGWFlags()
         
         tab_height = self._tab_ctrl_height - 1
         tab_width = tab_size[0]
@@ -2597,7 +2631,7 @@ class ChromeTabArt(AuiDefaultTabArt):
         close_button_width = 0
         if close_button_state != AUI_BUTTON_STATE_HIDDEN:
             close_button_width = self._active_close_bmp.GetWidth()
-            if flags & AUI_NB_CLOSE_ON_TAB_LEFT:
+            if agwFlags & AUI_NB_CLOSE_ON_TAB_LEFT:
                 text_offset += close_button_width
 
         if not page.enabled:
@@ -2610,7 +2644,7 @@ class ChromeTabArt(AuiDefaultTabArt):
         bitmap_offset = 0
         if pagebitmap.IsOk():
             bitmap_offset = tab_x + leftw
-            if flags & AUI_NB_CLOSE_ON_TAB_LEFT and close_button_width:
+            if agwFlags & AUI_NB_CLOSE_ON_TAB_LEFT and close_button_width:
                 bitmap_offset += close_button_width
 
             # draw bitmap
@@ -2623,7 +2657,7 @@ class ChromeTabArt(AuiDefaultTabArt):
         
         else:
         
-            if flags & AUI_NB_CLOSE_ON_TAB_LEFT == 0 or not close_button_width:
+            if agwFlags & AUI_NB_CLOSE_ON_TAB_LEFT == 0 or not close_button_width:
                 text_offset = tab_x + leftw
         
         # if the caption is empty, measure some temporary text
@@ -2638,7 +2672,7 @@ class ChromeTabArt(AuiDefaultTabArt):
             dc.SetFont(self._normal_font)
             textx, texty, dummy = dc.GetMultiLineTextExtent(caption)
 
-        if flags & AUI_NB_CLOSE_ON_TAB_LEFT:
+        if agwFlags & AUI_NB_CLOSE_ON_TAB_LEFT:
             draw_text = ChopText(dc, caption, tab_width - (text_offset-tab_x) - leftw)
         else:
             draw_text = ChopText(dc, caption, tab_width - (text_offset-tab_x) - close_button_width - leftw)
@@ -2675,7 +2709,7 @@ class ChromeTabArt(AuiDefaultTabArt):
             elif close_button_state == AUI_BUTTON_STATE_PRESSED:
                 bmp = self._pressed_close_bmp
 
-            if flags & AUI_NB_CLOSE_ON_TAB_LEFT:
+            if agwFlags & AUI_NB_CLOSE_ON_TAB_LEFT:
                 rect = wx.Rect(tab_x + leftw - 2,
                                drawn_tab_yoff + (drawn_tab_height / 2) - (bmp.GetHeight() / 2) + 1,
                                close_button_width, tab_height)
@@ -2684,7 +2718,7 @@ class ChromeTabArt(AuiDefaultTabArt):
                                drawn_tab_yoff + (drawn_tab_height / 2) - (bmp.GetHeight() / 2) + 1,
                                close_button_width, tab_height)
 
-            if flags & AUI_NB_BOTTOM:
+            if agwFlags & AUI_NB_BOTTOM:
                 rect.y -= 1
                 
             # Indent the button if it is pressed down:

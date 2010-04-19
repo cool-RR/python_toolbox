@@ -208,7 +208,8 @@ Plus the following features:
   (o) Possibility to preview all the pages in a `AuiNotebook` (as thumbnails) by using the `NotebookPreview`
       method of `AuiNotebook`;
   (p) Tab labels can be edited by calling the `SetRenamable` method on a `AuiNotebook` page;
-  (q) Support for multi-lines tab labels in `AuiNotebook`.
+  (q) Support for multi-lines tab labels in `AuiNotebook`;
+  (r) Support for setting minimum and maximum tab widths for fixed width tabs.
 
 |
 
@@ -265,9 +266,9 @@ License And Version
 
 AUI library is distributed under the wxPython license. 
 
-Latest revision: Andrea Gavana @ 30 Mar 2010, 23.00 GMT
+Latest revision: Andrea Gavana @ 19 Apr 2010, 20.00 GMT
 
-Version 1.1. 
+Version 1.2. 
 
 """
 
