@@ -7,28 +7,10 @@ class AuiTabArt(aui.AuiDefaultTabArt):
     def __init__(self):
         aui.AuiDefaultTabArt.__init__(self)
         
-        font = wx.Font(7, wx.FONTFAMILY_MAX, wx.NORMAL, wx.NORMAL, False)
-        
-        self.SetNormalFont(font)
-        self.SetSelectedFont(wx.Font(17, wx.FONTFAMILY_MAX, wx.NORMAL, wx.NORMAL, False))
-        self.SetMeasuringFont(font)
+        self.SetNormalFont(wx.Font(7, wx.FONTFAMILY_MAX, wx.NORMAL, wx.NORMAL))
+        self.SetSelectedFont(wx.Font(7, wx.FONTFAMILY_MAX, wx.NORMAL, wx.NORMAL))
+        self.SetMeasuringFont(wx.Font(7, wx.FONTFAMILY_MAX, wx.NORMAL, wx.NORMAL))
  
-        """
-        self.SetMetric(aui.AUI_DOCKART_SASH_SIZE, 2)
-        
-        self.SetMetric(aui.AUI_DOCKART_CAPTION_SIZE, 10)
-        self.SetFont(
-            aui.AUI_DOCKART_CAPTION_FONT,
-            wx.Font(7, wx.FONTFAMILY_MAX, wx.NORMAL, wx.NORMAL, False)
-        )
-        
-        self.SetMetric(aui.AUI_DOCKART_GRADIENT_TYPE,
-                       aui.AUI_GRADIENT_NONE)
-        
-        self.SetColor(aui.AUI_DOCKART_INACTIVE_CAPTION_COLOUR,
-                      wx.Color(200, 200, 200))
-        """
-
     def Clone(self):
 
         art = type(self)()

@@ -227,7 +227,6 @@ class Frame(wx.Frame):
 
     def on_close(self, event):
         '''Close the application window.'''
-        print('Frame.exit called.') #tododoc: kill this
         if self.gui_project:
             self.gui_project.stop_playing()
         self.aui_manager.UnInit()
