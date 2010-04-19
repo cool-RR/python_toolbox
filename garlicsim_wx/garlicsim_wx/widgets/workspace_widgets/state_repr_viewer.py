@@ -42,7 +42,8 @@ class StateReprViewer(wx.Panel, WorkspaceWidget):#tododoc
                     self.gui_project.active_node_changed_emitter,
                     # todo: put the active_state_changed whatever here
                     ),
-                outputs=(FlagRaiser(self, 'needs_update_flag'),)
+                outputs=(FlagRaiser(self, 'needs_update_flag'),),
+                name='needs_update_emitter',
             )
     
 

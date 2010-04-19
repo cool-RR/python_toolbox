@@ -131,37 +131,45 @@ class GuiProject(object):
         
             es = self.emitter_system
             
-            self.tree_modified_emitter = es.make_emitter()
+            self.tree_modified_emitter = es.make_emitter(
+                name='tree_modified_emitter',
+            )
             self.tree_modified_on_path_emitter = es.make_emitter(
-                outputs=(self.tree_modified_emitter,)
+                outputs=(self.tree_modified_emitter,),
+                name='tree_modified_on_path_emitter',
             )
     
             self.tree_modified_not_on_path = es.make_emitter(
-                outputs=(self.tree_modified_emitter,)
+                outputs=(self.tree_modified_emitter,),
+                name='tree_modified_not_on_path',
             )
             
             self.tree_modified_at_unknown_location_emitter = es.make_emitter(
                 outputs=(
                     self.tree_modified_on_path_emitter,
                     self.tree_modified_not_on_path,
-                )
+                ),
+                name='tree_modified_at_unknown_location_emitter',
             )
             
             self.tree_structure_modified_emitter = es.make_emitter(
-                outputs=(self.tree_modified_emitter,)
+                outputs=(self.tree_modified_emitter,),
+                name='tree_structure_modified_emitter',
             )
             
             self.tree_structure_modified_on_path_emitter = es.make_emitter(
                 outputs=(
                     self.tree_modified_on_path_emitter,
                     self.tree_structure_modified_emitter
-                )
+                ),
+                name='tree_structure_modified_on_path_emitter',
             )
             self.tree_structure_modified_not_on_path_emitter = es.make_emitter(
                 outputs=(
                     self.tree_modified_not_on_path,
                     self.tree_structure_modified_emitter
-                )
+                ),
+                name='tree_structure_modified_not_on_path_emitter',
             )
             self.tree_structure_modified_at_unknown_location_emitter = \
                 es.make_emitter(
@@ -169,38 +177,52 @@ class GuiProject(object):
                     self.tree_structure_modified_on_path_emitter,
                     self.tree_structure_modified_not_on_path_emitter,
                     self.tree_modified_at_unknown_location_emitter
-                )
+                ),
+                name='tree_structure_modified_at_unknown_location_emitter',
             )
             
     
-            self.pseudoclock_changed_emitter = es.make_emitter()
+            self.pseudoclock_changed_emitter = es.make_emitter(
+                name='pseudoclock_changed_emitter'
+            )
     
-            self.active_node_changed_emitter = es.make_emitter()
+            self.active_node_changed_emitter = es.make_emitter(
+                name='active_node_changed_emitter'
+            )
             # todo: should possibly take input from pseudoclock_changed_emitter
             
-            self.path_changed_emitter = es.make_emitter()
+            self.path_changed_emitter = es.make_emitter(
+                name='path_changed_emitter'
+            )
             
             self.path_contents_changed_emitter = es.make_emitter(
                 inputs=(
                     self.path_changed_emitter,
                     self.tree_modified_on_path_emitter
-                )
+                ),
+                name='path_contents_changed_emitter',
             )
             
-            self.playing_toggled_emitter = es.make_emitter()
+            self.playing_toggled_emitter = es.make_emitter(
+                name='playing_toggled_emitter',
+            )
             self.playing_started_emitter = es.make_emitter(
-                outputs=(self.playing_toggled_emitter,)
+                outputs=(self.playing_toggled_emitter,),
+                name='playing_started_emitter',
             )
             self.playing_stopped_emitter = es.make_emitter(
-                outputs=(self.playing_toggled_emitter,)
+                outputs=(self.playing_toggled_emitter,),
+                name='playing_stopped_emitter',
             )
     
             self.official_playing_speed_change_emitter = es.make_emitter(
-                    outputs=(self.update_defacto_playing_speed,)
+                    outputs=(self.update_defacto_playing_speed,),
+                    name='official_playing_speed_change_emitter',
                 )
             
             self.active_node_finalized_emitter = es.make_emitter(
-                outputs=(self.tree_modified_on_path_emitter,) # todo: correct?
+                outputs=(self.tree_modified_on_path_emitter,), # todo: correct?
+                name='active_node_finalized_emitter',
             )
             
             

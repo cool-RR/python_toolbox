@@ -1,7 +1,6 @@
 
 import itertools
 from garlicsim.general_misc import cute_iter_tools
-from garlicsim_wx.general_misc import magic_tools
 
 # todo: there should probably some circularity check. Maybe actually circularity
 # should be permitted?
@@ -29,14 +28,15 @@ class Emitter(object):
         for input in inputs:
             self.add_input(input)
 
-        if name:
-            self.name = name
-        else:
-            try:
-                self.name = \
-                    magic_tools.get_name_of_attribute_that_we_will_become()
-            except Exception:
-                self.name = None
+        self.name = name
+        #if name:
+            #self.name = name
+        #else:
+            #try:
+                #self.name = \
+                    #magic_tools.get_name_of_attribute_that_we_will_become()
+            #except Exception:
+                #self.name = None
 
     def get_inputs(self):
         return self._inputs

@@ -129,7 +129,8 @@ class ScratchWheel(wx.Panel):
                     # update: I spoke with Andrea about this. He said something
                     # about OnInternalIdle, but it didn't work out (April 10th,
                     # 2010).                    
-                )
+                ),
+                name='needs_recalculation_emitter',
             )
         
         

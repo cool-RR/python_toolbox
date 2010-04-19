@@ -197,7 +197,8 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
                 ),
                 outputs=(
                     FlagRaiser(self, 'center_button_update_flag'),
-                )
+                ),
+                name='center_button_needs_update_emitter',
         )
         
 
@@ -209,7 +210,8 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
                 ),            
                 outputs=(
                     FlagRaiser(self, 'navigation_buttons_update_flag'),
-                )
+                ),
+                name='navigation_buttons_need_update_emitter',
         )
         
         self.gui_project.official_playing_speed_change_emitter.add_output(
