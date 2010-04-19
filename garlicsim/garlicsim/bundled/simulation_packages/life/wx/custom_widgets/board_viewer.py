@@ -100,8 +100,8 @@ class BoardViewer(scrolled.ScrolledPanel,
                 brushes.append(black_brush if board.get(x,y) is True
                                else white_brush)
 
-        for rect in rectangles:
-            (rect[0], rect[1]) = self.CalcScrolledPosition((rect[0], rect[1]))
+        #for rect in rectangles:
+            #(rect[0], rect[1]) = self.CalcScrolledPosition((rect[0], rect[1]))
 
         transparent_pen = wx.Pen('#000000', 0, wx.TRANSPARENT)
         
@@ -111,20 +111,22 @@ class BoardViewer(scrolled.ScrolledPanel,
     def on_paint(self, event):
         '''Paint event handler.'''
         
+        event.Skip()
+        
+        (w, h) = self._get_size_from_board()
+        self.SetVirtualSize((w, h))
+        
         if self.redraw_needed_flag is True:
             self._draw_buffer_bitmap()
             self.redraw_needed_flag = False
-        
-        event.Skip()
-        
+                
         dc = wx.PaintDC(self)
 
         dc.DrawBitmapPoint(self._buffer_bitmap, self.CalcScrolledPosition((0, 0)))
         
         dc.Destroy()
         
-        (w, h) = self._get_size_from_board()
-        self.SetVirtualSize((w, h))
+        
 
 
     def on_size(self, event):
