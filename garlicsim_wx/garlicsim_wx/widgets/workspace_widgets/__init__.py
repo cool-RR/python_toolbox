@@ -5,7 +5,7 @@
 widgets used in the workspace.
 '''
 
-from state_repr_shower import StateReprViewer
+from state_repr_viewer import StateReprViewer
 from shell import Shell
 from seek_bar import SeekBar
 from tree_browser import TreeBrowser
