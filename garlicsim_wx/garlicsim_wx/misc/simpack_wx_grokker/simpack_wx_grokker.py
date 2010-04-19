@@ -10,19 +10,15 @@ class Settings(object):
         self.BIG_WORKSPACE_WIDGETS = []
         self.SMALL_WORKSPACE_WIDGETS = []
         self.SEEK_BAR_GRAPHS = []
+        '''
+        List of scalar state function and scalar history functions that should
+        be shown as graphs in the seek bar.
+        '''
 
 class SimpackWxGrokker(object):
     '''
 
         
-        tododoc: organize this:
-        
-        seek_bar_graphs = [live_cells, changes]
-        
-        # List of scalar state function and scalar history functions that should
-        # be shown as graphs in the seek bar.
-        
-        ################################################
         
     '''
     def __init__(self, simpack):
@@ -36,7 +32,8 @@ class SimpackWxGrokker(object):
         try:
             self.simpack_wx = self.simpack.wx
         except AttributeError:
-            raise Exception('''Simpack has no wx''') # todo: edit this
+            self.simpack_wx = None
+            #raise Exception('''Simpack has no wx''') # todo: edit this
         
         self.__init_analysis_settings()
     
@@ -63,7 +60,7 @@ class SimpackWxGrokker(object):
             
         # Checking if there are original settings at all. If there aren't, we're
         # done.
-        if hasattr(self.simpack_wx, 'settings'):
+        if self.simpack_wx and hasattr(self.simpack_wx, 'settings'):
             
             original_settings = getattr(self.simpack_wx, 'settings')
         
