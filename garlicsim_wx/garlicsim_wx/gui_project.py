@@ -122,8 +122,8 @@ class GuiProject(object):
         
     def __init_emitters(self):
         
-        # todo: not clear that `tree_changed_emitter` means that only data changed
-        # and not structure.
+        # todo: not clear that `tree_modified_emitter` means that only data
+        # changed and not structure.
         
         self.emitter_system = emitters.EmitterSystem()
                 
@@ -131,44 +131,44 @@ class GuiProject(object):
         
             es = self.emitter_system
             
-            self.tree_changed_emitter = es.make_emitter()
-            self.tree_changed_on_path_emitter = es.make_emitter(
-                outputs=(self.tree_changed_emitter,)
+            self.tree_modified_emitter = es.make_emitter()
+            self.tree_modified_on_path_emitter = es.make_emitter(
+                outputs=(self.tree_modified_emitter,)
             )
     
-            self.tree_changed_not_on_path = es.make_emitter(
-                outputs=(self.tree_changed_emitter,)
+            self.tree_modified_not_on_path = es.make_emitter(
+                outputs=(self.tree_modified_emitter,)
             )
             
-            self.tree_changed_at_unknown_location_emitter = es.make_emitter(
+            self.tree_modified_at_unknown_location_emitter = es.make_emitter(
                 outputs=(
-                    self.tree_changed_on_path_emitter,
-                    self.tree_changed_not_on_path,
+                    self.tree_modified_on_path_emitter,
+                    self.tree_modified_not_on_path,
                 )
             )
             
-            self.tree_structure_changed_emitter = es.make_emitter(
-                outputs=(self.tree_changed_emitter,)
+            self.tree_structure_modified_emitter = es.make_emitter(
+                outputs=(self.tree_modified_emitter,)
             )
             
-            self.tree_structure_changed_on_path_emitter = es.make_emitter(
+            self.tree_structure_modified_on_path_emitter = es.make_emitter(
                 outputs=(
-                    self.tree_changed_on_path_emitter,
-                    self.tree_structure_changed_emitter
+                    self.tree_modified_on_path_emitter,
+                    self.tree_structure_modified_emitter
                 )
             )
-            self.tree_structure_changed_not_on_path_emitter = es.make_emitter(
+            self.tree_structure_modified_not_on_path_emitter = es.make_emitter(
                 outputs=(
-                    self.tree_changed_not_on_path,
-                    self.tree_structure_changed_emitter
+                    self.tree_modified_not_on_path,
+                    self.tree_structure_modified_emitter
                 )
             )
-            self.tree_structure_changed_at_unknown_location_emitter = \
+            self.tree_structure_modified_at_unknown_location_emitter = \
                 es.make_emitter(
                 outputs=(
-                    self.tree_structure_changed_on_path_emitter,
-                    self.tree_structure_changed_not_on_path_emitter,
-                    self.tree_changed_at_unknown_location_emitter
+                    self.tree_structure_modified_on_path_emitter,
+                    self.tree_structure_modified_not_on_path_emitter,
+                    self.tree_modified_at_unknown_location_emitter
                 )
             )
             
@@ -183,7 +183,7 @@ class GuiProject(object):
             self.path_contents_changed_emitter = es.make_emitter(
                 inputs=(
                     self.path_changed_emitter,
-                    self.tree_changed_on_path_emitter
+                    self.tree_modified_on_path_emitter
                 )
             )
             
@@ -200,7 +200,7 @@ class GuiProject(object):
                 )
             
             self.active_node_finalized_emitter = es.make_emitter(
-                outputs=(self.tree_changed_on_path_emitter,) # todo: correct?
+                outputs=(self.tree_modified_on_path_emitter,) # todo: correct?
             )
             
             
@@ -262,7 +262,7 @@ class GuiProject(object):
         Returns the node.
         '''
         root = self.project.make_plain_root(*args, **kwargs)
-        self.tree_structure_changed_not_on_path_emitter.emit()
+        self.tree_structure_modified_not_on_path_emitter.emit()
         self.set_active_node(root)
         return root
 
@@ -278,7 +278,7 @@ class GuiProject(object):
         Returns the node.
         '''
         root = self.project.make_random_root(*args, **kwargs)
-        self.tree_structure_changed_not_on_path_emitter.emit()
+        self.tree_structure_modified_not_on_path_emitter.emit()
         self.set_active_node(root)
         return root
 
@@ -460,7 +460,7 @@ class GuiProject(object):
         new_node = \
             self.project.tree.fork_to_edit(template_node=self.active_node)
         new_node.still_in_editing = True #todo: should be in `fork_to_edit` ?
-        self.tree_structure_changed_on_path_emitter.emit()
+        self.tree_structure_modified_on_path_emitter.emit()
         self.set_active_node(new_node)
         return new_node
 
@@ -500,9 +500,9 @@ class GuiProject(object):
         if added_nodes > 0:
             if any(fesity_jobs_to_nodes[job] is not job.node
                    for job in feisty_jobs):
-                self.tree_structure_changed_at_unknown_location_emitter.emit()
+                self.tree_structure_modified_at_unknown_location_emitter.emit()
             else:
-                self.tree_changed_at_unknown_location_emitter.emit()
+                self.tree_modified_at_unknown_location_emitter.emit()
             # todo: It would be hard but nice to know whether the tree changes
             # were on the path. This could save some rendering on SeekBar.
             

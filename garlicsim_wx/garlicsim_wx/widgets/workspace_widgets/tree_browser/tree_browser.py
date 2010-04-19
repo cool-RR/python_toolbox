@@ -58,7 +58,7 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
         self.needs_tree_remapping_emitter = \
             self.gui_project.emitter_system.make_emitter(
                 inputs=(
-                    self.gui_project.tree_structure_changed_emitter,
+                    self.gui_project.tree_structure_modified_emitter,
                 ),
                 outputs=(
                     FlagRaiser(self, 'tree_remapping_flag'),
@@ -71,7 +71,7 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
                 inputs=(
                     self.needs_tree_remapping_emitter,
                     self.gui_project.active_node_changed_emitter,
-                    self.gui_project.tree_changed_on_path_emitter,                
+                    self.gui_project.tree_modified_on_path_emitter,                
                     # Note that if there's a non-structure tree change not on
                     # the path it won't affect us.
                 ),
