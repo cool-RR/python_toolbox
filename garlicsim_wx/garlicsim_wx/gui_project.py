@@ -108,8 +108,8 @@ class GuiProject(object):
         self.official_playing_speed = 4
         self.standard_playing_speed = 4
         
-        self.real_time_krap = None
-        self.simulation_time_krap = None 
+        self.last_tracked_real_time = None
+        self.pseudoclock = None 
 
         self.ran_out_of_tree_while_playing = False
         '''
@@ -357,9 +357,9 @@ class GuiProject(object):
         
         self.timer_for_playing.Start(1000//25)
         
-        assert self.real_time_krap == self.simulation_time_krap == None
-        self.real_time_krap = time.time()
-        self.simulation_time_krap = self.active_node.state.clock
+        assert self.last_tracked_real_time == self.pseudoclock == None
+        self.last_tracked_real_time = time.time()
+        self.pseudoclock = self.active_node.state.clock
         self.playing_started_emitter.emit()
         self.pseudoclock_changed_emitter.emit()
         
@@ -382,7 +382,7 @@ class GuiProject(object):
         self.infinity_job.crunching_profile.clock_target = \
             self.infinity_job.node.state.clock + self.default_buffer
         
-        self.real_time_krap = self.simulation_time_krap = None
+        self.last_tracked_real_time = self.pseudoclock = None
         self.playing_stopped_emitter.emit()        
         self.pseudoclock_changed_emitter.emit() #todo: relevant when changes to None?
         self.project.ensure_buffer(self.active_node, self.default_buffer)
@@ -419,9 +419,9 @@ class GuiProject(object):
         if self.is_playing is False: return
 
         current_real_time = time.time()
-        real_time_elapsed = (current_real_time - self.real_time_krap)
+        real_time_elapsed = (current_real_time - self.last_tracked_real_time)
         desired_simulation_time = \
-            self.simulation_time_krap + \
+            self.pseudoclock + \
             (real_time_elapsed * self.defacto_playing_speed)
         
         both_nodes = self.path.get_node_by_clock(desired_simulation_time,
@@ -443,13 +443,13 @@ class GuiProject(object):
             # search conventions
             
 
-        self.real_time_krap = current_real_time
+        self.last_tracked_real_time = current_real_time
 
         if both_nodes[1] is not None:
-            self.simulation_time_krap = desired_simulation_time#new_node.state.clock
+            self.pseudoclock = desired_simulation_time#new_node.state.clock
         else:
             self.ran_out_of_tree_while_playing = True # unneeded?
-            self.simulation_time_krap = new_node.state.clock
+            self.pseudoclock = new_node.state.clock
         self.active_node = new_node
         self.pseudoclock_changed_emitter.emit()
         self.active_node_changed_emitter.emit()

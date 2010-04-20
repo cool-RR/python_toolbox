@@ -162,7 +162,7 @@ class ScratchWheel(wx.Panel):
                     return clock
         
         elif gui_project.is_playing:
-            return gui_project.simulation_time_krap or \
+            return gui_project.pseudoclock or \
                    active_node.state.clock
         else:
             return active_node.state.clock

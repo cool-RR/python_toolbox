@@ -7,6 +7,7 @@ tododoc
 
 import pkg_resources
 import wx
+
 from garlicsim_wx.general_misc.third_party import aui
 from garlicsim_wx.general_misc import thread_timer
 from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
@@ -116,7 +117,9 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         knob_sizer.Add(
             self.playing_speed_knob,
             1,
-            wx.EXPAND | wx.ALIGN_CENTER_HORIZONTAL | wx.ALIGN_CENTER_VERTICAL #wx.EXPAND #| 
+            wx.EXPAND | wx.ALIGN_CENTER_HORIZONTAL |\
+            wx.ALIGN_CENTER_VERTICAL | wx.LEFT,
+            75
         )
         
         
