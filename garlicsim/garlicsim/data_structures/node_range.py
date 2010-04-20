@@ -1,4 +1,11 @@
-'''tododoc'''
+# Copyright 2009-2010 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''
+This module defines the NodeRange class.
+
+See its documentation for more info.
+'''
 
 from node import Node
 from block import Block
@@ -7,12 +14,19 @@ class NodeRange(object):
     '''A consecutive range of nodes.'''
 
     def __init__(self, start, end):
+        '''
+        Construct a NodeRange.
+        
+        `start` is the node or block in which this range starts.
+        
+        `end` is the node or block in which this range ends.
+        '''
         
         self.start = start
-        '''The node in which this range starts.'''
+        '''The node or block in which this range starts.'''
         
         self.end = end
-        '''The node in which this range ends.'''
+        '''The node or block in which this range ends.'''
     
         
     def make_path(self):
@@ -26,7 +40,8 @@ class NodeRange(object):
         '''
         Assert there are no obvious problems with this node range.
         
-        This checks that the end node is a descendent of the start node.
+        This checks that the end node/block is a descendent of the start
+        node/block.
         '''
         path = self.make_path()
         assert (self.start in path.__iter__(end=self.end))
@@ -66,6 +81,12 @@ class NodeRange(object):
         return NodeRange(new_start, new_end)
     
     def get_outside_children(self):
+        '''
+        Get all the non-member children nodes of nodes which are members.
+        
+        This returns every node which is (a) a child of a node in this node
+        range and (b) not in this node range itself.
+        '''
         outside_children = []
         for thing in self.iterate_blockwise():
             candidate = thing if isinstance(thing, Node) else thing[-1]

@@ -6,18 +6,33 @@ from garlicsim.misc import GarlicSimException
 from node import Node
 from node_range import NodeRange
 
-    
+from garlicsim.general_misc import cute_iter_tools
+
+
 class CompletelyCompact(GarlicSimException):
     pass
     
-from garlicsim.general_misc import cute_iter_tools
 
 class NodeSelection(object):
-    def __init__(self, ranges):
+    '''
+    A selection of nodes.
+    
+    A NodeSelection could be described as a "set" of nodes, though the nodes are
+    not specified one by one, but as a collection of node ranges.
+    '''
+    def __init__(self, ranges=()):
+        '''
+        Construct the NodeSelection.
+        
+        `ranges` is a list of node ranges that this selection will be made of.
+        '''
         self.ranges = [ranges] if isinstance(ranges, NodeRange) else \
                       list(ranges)
         
     def compact(self):
+        '''
+        
+        '''
         for node_range in self.ranges:
             node_range._sanity_check()
         
@@ -58,6 +73,7 @@ class NodeSelection(object):
             raise CompletelyCompact
     
     def __iter__(self):
+        '''Iterate over the nodes that are members of this NodeSelection.'''
         for node_range in self.ranges:
             for node in node_range:
                 return(node)
