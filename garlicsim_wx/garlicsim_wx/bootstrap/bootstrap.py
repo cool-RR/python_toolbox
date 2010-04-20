@@ -30,8 +30,8 @@ def __check_prerequisites():
             return [garlicsim]
         except ImportError:
             raise MissingModule('''garlicsim is \
-required, but it's not currently installed on your system. Please find it \
-online and install it, then try again.''')
+required, but it's not currently installed on your system. Go to \
+http://garlicsim.org and follow the instructions for installation.''')
         
     
     def check_wx():
