@@ -54,6 +54,9 @@ class NodeSelection(object):
             
     def __partially_compact(self):
         '''Try to make the NodeSelection a bit more compact.'''
+        # todo: consider defining a canonic decomposition of a node selection to
+        # node ranges. This will make a few things easier, like checking
+        # equality.
         first, second = None, None
         for (r1, r2) in cute_iter_tools.orderless_combinations(self.ranges, 2):
             if r1.start in r2:
@@ -96,10 +99,18 @@ class NodeSelection(object):
     
     def __ror__(self, other):
         return self.__add__(other)
-
+    
+    def __eq__(self, other):
+        # Currently horribly inefficient
+        return set(self) == set(other)
+        
+    def __req__(self, other):
+        return self.__eq__(other)
+    
     def copy(self):
         '''Shallow-copy the NodeSelection.'''
-        return NodeSelection(self.ranges)
+        klass = type(self)
+        return klass((node_range.copy() for node_range in self.ranges))
     
     
     __copy__ = copy

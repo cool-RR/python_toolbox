@@ -94,5 +94,10 @@ class NodeRange(object):
                                  not in self]
         return outside_children
             
-        
+    def copy(self):
+        '''Shallow-copy the node range.'''
+        klass = type(self)
+        return klass(self.start, self.end)
+
+    __copy__ = copy
         
