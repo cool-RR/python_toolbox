@@ -25,7 +25,13 @@ class StateViewer(wx.Window, garlicsim_wx.widgets.WorkspaceWidget):
     def on_paint(self, event):
         '''Paint event handler.'''
         event.Skip()
-        dc = wx.PaintDC(self)
+        dc = wx.BufferedPaintDC(self)
+                
+        dc.SetBackground(
+            wx.Brush(wx.SystemSettings.GetColour(wx.SYS_COLOUR_MENUBAR))
+        )
+        dc.Clear()
+        
         dc.SetBrush(wx.Brush("white", wx.TRANSPARENT))
         for [side, pos] in [[self.left, (100, 100)], [self.right, (300, 100)]]:
             

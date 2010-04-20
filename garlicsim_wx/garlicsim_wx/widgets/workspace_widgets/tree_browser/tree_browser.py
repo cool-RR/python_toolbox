@@ -189,11 +189,11 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
 
 
 
-class NiftyPaintDC(wx.PaintDC):
+class NiftyPaintDC(wx.BufferedPaintDC):
     '''A PaintDC used to paint the tree in a tree browser.'''
     
     def __init__(self, window, gui_project, origin, tree_browser, *args, **kwargs):
-        wx.PaintDC.__init__(self, window, *args, **kwargs)
+        wx.BufferedPaintDC.__init__(self, window, *args, **kwargs)
         self.gui_project = gui_project
         self.origin = origin
         self.tree_browser = tree_browser

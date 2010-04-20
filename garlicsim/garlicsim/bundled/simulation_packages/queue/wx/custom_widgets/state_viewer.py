@@ -60,8 +60,13 @@ class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,
         event.Skip()
         
         state = self.state
-        dc = wx.PaintDC(self)
-
+        dc = wx.BufferedPaintDC(self)
+        
+        dc.SetBackground(
+            wx.Brush(wx.SystemSettings.GetColour(wx.SYS_COLOUR_MENUBAR))
+        )
+        dc.Clear()
+        
         if state is None:
             dc.Destroy()
             return
