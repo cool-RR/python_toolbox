@@ -12,6 +12,8 @@ class StateViewer(wx.Panel, garlicsim_wx.widgets.WorkspaceWidget):
     def __init__(self, frame):
         wx.Panel.__init__(self, frame)
         garlicsim_wx.widgets.WorkspaceWidget.__init__(self, frame)
+
+        self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
         
         self.pie_ctrl = piectrl.PieCtrl(self, style=wx.NO_BORDER)
         

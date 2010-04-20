@@ -20,6 +20,8 @@ class BoardViewer(scrolled.ScrolledPanel,
         
         garlicsim_wx.widgets.WorkspaceWidget.__init__(self, frame)
         
+        self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
+        
         self.SetupScrolling()
         
         self.Bind(wx.EVT_PAINT, self.on_paint)

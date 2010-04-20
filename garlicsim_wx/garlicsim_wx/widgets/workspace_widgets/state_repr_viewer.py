@@ -14,6 +14,8 @@ class StateReprViewer(wx.Panel, WorkspaceWidget):#tododoc
         wx.Panel.__init__(self, frame, size=(300, 300))
         WorkspaceWidget.__init__(self, frame)
 
+        self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
+        
         self.Bind(wx.EVT_PAINT, self.on_paint)        
         
         self.text_ctrl = wx.TextCtrl(

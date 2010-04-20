@@ -32,6 +32,8 @@ class SeekBar(wx.Panel, WorkspaceWidget):
         wx.Panel.__init__(self, frame, size=(100, 100), style=wx.SUNKEN_BORDER)
         WorkspaceWidget.__init__(self, frame)
         
+        self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
+        
         self.Bind(wx.EVT_PAINT, self.on_paint)
         self.Bind(wx.EVT_SIZE, self.on_size)
         self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse_event)

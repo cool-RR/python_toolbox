@@ -11,6 +11,8 @@ class StateViewer(wx.Window, garlicsim_wx.widgets.WorkspaceWidget):
         wx.Window.__init__(self, frame)
         garlicsim_wx.widgets.WorkspaceWidget.__init__(self, frame)
         
+        self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
+        
         self.left = None
         self.right = None
         self.Bind(wx.EVT_PAINT, self.on_paint)

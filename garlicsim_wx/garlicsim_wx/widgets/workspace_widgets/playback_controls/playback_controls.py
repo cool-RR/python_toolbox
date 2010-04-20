@@ -51,6 +51,8 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
                           style=wx.SUNKEN_BORDER)
         WorkspaceWidget.__init__(self, frame)
         
+        self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
+        
         assert isinstance(self.gui_project, garlicsim_wx.GuiProject)
         # I put this assert mainly for better source assistance in Wing.
         # It may be removed.

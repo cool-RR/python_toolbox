@@ -35,6 +35,8 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
                                style=wx.SUNKEN_BORDER)
         WorkspaceWidget.__init__(self, frame)
         
+        self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
+        
         self.SetupScrolling()
         #self.SetScrollRate(20,20)
         #self.sizer=wx.BoxSizer(wx.VERTICAL)

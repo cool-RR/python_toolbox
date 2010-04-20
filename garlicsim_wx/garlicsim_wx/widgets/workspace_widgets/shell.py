@@ -24,4 +24,6 @@ class Shell(wx.py.shell.Shell, WorkspaceWidget):#tododoc
         wx.py.shell.Shell.__init__(self, frame, size=(100, 100),
                                    locals=locals_for_shell)
         WorkspaceWidget.__init__(self, frame)
+        
+        self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
     

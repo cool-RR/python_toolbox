@@ -28,7 +28,11 @@ class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,
         wx.lib.scrolledpanel.ScrolledPanel.__init__(self, frame,
                                                     style=wx.SUNKEN_BORDER)
         garlicsim_wx.widgets.WorkspaceWidget.__init__(self, frame)
+        
+        self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
+        
         self.SetupScrolling()
+        
         self.Bind(wx.EVT_PAINT, self.on_paint)
         self.Bind(wx.EVT_SIZE, self.on_size)
         #self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse_event)
