@@ -302,7 +302,7 @@ class Frame(wx.Frame):
             .CloseButton(False)
         )
         
-        
+        """
         self.state_repr_viewer = workspace_widgets.StateReprViewer(self)
         self.aui_manager.AddPane(
             self.state_repr_viewer,
@@ -314,9 +314,28 @@ class Frame(wx.Frame):
             .Floatable(False)\
             .CloseButton(False)
         )
-        
+        """
         settings_wx = self.gui_project.simpack_wx_grokker.settings
         
+
+        big_widget_class = settings_wx.BIG_WORKSPACE_WIDGETS[0] if \
+                         settings_wx.BIG_WORKSPACE_WIDGETS else \
+                         workspace_widgets.StateReprViewer
+
+        self.big_widget = big_widget_class(self)
+        self.aui_manager.AddPane(
+            self.big_widget,
+            aui.AuiPaneInfo()\
+            .BestSize(300, 300)\
+            .MaximizeButton(True)\
+            .Center()\
+            .Caption(self.big_widget.get_uppercase_name())
+            .Floatable(False)\
+            .CloseButton(False)
+        )
+        
+        
+        """
         big_widget_classes = \
             settings_wx.BIG_WORKSPACE_WIDGETS #+ \
         #    [workspace_widgets['StateReprViewer']]
@@ -324,8 +343,6 @@ class Frame(wx.Frame):
         self.big_widgets = []
         # todo: not the right way, should be easy listing of all widget
         
-
-        #notebook_id = wx.NewId() # todo: apporopriate?
         
         for i, BigWidget in enumerate(big_widget_classes):
             big_widget = BigWidget(self)
@@ -342,7 +359,9 @@ class Frame(wx.Frame):
             )
             #.NotebookPage(notebook_id, i)\
             self.big_widgets.append(big_widget)
-            
+
+        """
+        
         self.aui_manager.Update()
         
         """
