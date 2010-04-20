@@ -54,4 +54,4 @@ class StateViewer(wx.Panel, garlicsim_wx.widgets.WorkspaceWidget):
                 player_type
             )
             part.SetValue(value)
-
+        self.Refresh()
