@@ -20,8 +20,7 @@ def __check_prerequisites():
     modules = []
     
     class MissingModule(Exception):
-        '''An error to raise when a required module is not found.'''
-        pass
+        '''A required module is not found.'''
     
     def check_pkg_resources():
         try:

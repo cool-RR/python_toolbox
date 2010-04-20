@@ -19,7 +19,7 @@ __all__ = ['create']
 
 
 class WarehouseError(GarlicSimException):
-    '''Error to raise when there is a warehouse-related error.'''
+    '''A warehouse-related error occurred.'''
 
 def create(package):
     '''

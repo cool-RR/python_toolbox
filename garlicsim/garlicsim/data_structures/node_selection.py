@@ -8,9 +8,11 @@ from node_range import NodeRange
 
 from garlicsim.general_misc import cute_iter_tools
 
+__all__ = ['NodeSelection']
+
 
 class CompletelyCompact(GarlicSimException):
-    pass
+    '''The NodeSelection is already completely compact.'''
     
 
 class NodeSelection(object):
@@ -31,7 +33,10 @@ class NodeSelection(object):
         
     def compact(self):
         '''
+        Compact the NodeSelection.
         
+        This'll make it use the minimum number of node ranges while still
+        containing exactly the same nodes.
         '''
         for node_range in self.ranges:
             node_range._sanity_check()
@@ -43,6 +48,7 @@ class NodeSelection(object):
             return
             
     def __partially_compact(self):
+        '''Try to make the NodeSelection a bit more compact.'''
         first, second = None, None
         for (r1, r2) in cute_iter_tools.orderless_combinations(self.ranges, 2):
             if r1.start in r2:
@@ -78,22 +84,19 @@ class NodeSelection(object):
             for node in node_range:
                 return(node)
     
-    def __add__(self, other):
+    def __or__(self, other):
+        '''Perform a union betwee two NodeSelections and return the result.'''
         assert isinstance(other, NodeSelection)
         return NodeSelection(self.ranges + other.ranges)
     
-    def __radd__(self, other):
+    def __ror__(self, other):
         return self.__add__(other)
 
     def copy(self):
+        '''Shallow-copy the NodeSelection.'''
         return NodeSelection(self.ranges)
     
     
     __copy__ = copy
-    
-    
-    
-    
-    
     
     
