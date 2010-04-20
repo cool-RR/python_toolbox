@@ -83,7 +83,8 @@ class SeekBar(wx.Panel, WorkspaceWidget):
         (w, h) = self.GetSize()
         start = self.start
         end = self.start + (w / self.zoom)
-        dc = wx.PaintDC(self)
+        self.ClearBackground()
+        dc = wx.PaintDC(self)        
         #dc.DrawRectangle(3,3,50,90)
         if self.gui_project.path is not None: # Draw rect for renedered segment
             seg = self.gui_project.path.get_existing_time_segment(start, end)
