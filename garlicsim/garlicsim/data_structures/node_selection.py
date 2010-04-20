@@ -19,7 +19,7 @@ class NodeSelection(object):
         
     def compact(self):
         for node_range in self.ranges:
-            assert node_range.is_valid()
+            node_range._sanity_check()
         
         try:
             while True:
