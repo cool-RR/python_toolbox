@@ -123,7 +123,12 @@ class BoardViewer(scrolled.ScrolledPanel,
             self.redraw_needed_flag = False
                 
         dc = wx.PaintDC(self)
-
+        
+        dc.SetBackground(
+            wx.Brush(wx.SystemSettings.GetColour(wx.SYS_COLOUR_MENUBAR))
+        )
+        dc.Clear()
+        
         dc.DrawBitmapPoint(self._buffer_bitmap, self.CalcScrolledPosition((0, 0)))
         
         dc.Destroy()

@@ -127,6 +127,11 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
         dc = NiftyPaintDC(self, self.gui_project,
                           self.CalcScrolledPosition((0, 0)), self)
         
+        dc.SetBackground(
+            wx.Brush(wx.SystemSettings.GetColour(wx.SYS_COLOUR_MENUBAR))
+        )
+        dc.Clear()
+        
         (self.clickable_map, (width, height)) = \
             dc.draw_tree(self.gui_project.project.tree)
         
