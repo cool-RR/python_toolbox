@@ -219,7 +219,7 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
                 name='navigation_buttons_need_update_emitter',
         )
         
-        self.gui_project.official_playing_speed_change_emitter.add_output(
+        self.gui_project.official_playing_speed_modified_emitter.add_output(
             FlagRaiser(self.playing_speed_knob, 'recalculation_flag', True)
         )
 

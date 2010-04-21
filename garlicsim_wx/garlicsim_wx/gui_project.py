@@ -182,14 +182,14 @@ class GuiProject(object):
             )
             
     
-            self.pseudoclock_changed_emitter = es.make_emitter(
-                name='pseudoclock_changed_emitter'
+            self.pseudoclock_modified_emitter = es.make_emitter(
+                name='pseudoclock_modified_emitter'
             )
     
             self.active_node_changed_emitter = es.make_emitter(
                 name='active_node_changed_emitter'
             )
-            # todo: should possibly take input from pseudoclock_changed_emitter
+            # todo: should possibly take input from pseudoclock_modified_emitter
             
             self.path_changed_emitter = es.make_emitter(
                 name='path_changed_emitter'
@@ -215,9 +215,9 @@ class GuiProject(object):
                 name='playing_stopped_emitter',
             )
     
-            self.official_playing_speed_change_emitter = es.make_emitter(
+            self.official_playing_speed_modified_emitter = es.make_emitter(
                     outputs=(self.update_defacto_playing_speed,),
-                    name='official_playing_speed_change_emitter',
+                    name='official_playing_speed_modified_emitter',
                 )
             
             self.active_node_finalized_emitter = es.make_emitter(
@@ -236,7 +236,7 @@ class GuiProject(object):
         
     def set_official_playing_speed(self, value):
         self.official_playing_speed = value
-        self.official_playing_speed_change_emitter.emit()
+        self.official_playing_speed_modified_emitter.emit()
         
     def update_defacto_playing_speed(self):
         # In the future this will check if someone's temporarily tweaking the
@@ -361,7 +361,7 @@ class GuiProject(object):
         self.last_tracked_real_time = time.time()
         self.pseudoclock = self.active_node.state.clock
         self.playing_started_emitter.emit()
-        self.pseudoclock_changed_emitter.emit()
+        self.pseudoclock_modified_emitter.emit()
         
 
 
@@ -384,7 +384,7 @@ class GuiProject(object):
         
         self.last_tracked_real_time = self.pseudoclock = None
         self.playing_stopped_emitter.emit()        
-        self.pseudoclock_changed_emitter.emit() #todo: relevant when changes to None?
+        self.pseudoclock_modified_emitter.emit() #todo: relevant when changes to None?
         self.project.ensure_buffer(self.active_node, self.default_buffer)
 
 
@@ -451,7 +451,7 @@ class GuiProject(object):
             self.ran_out_of_tree_while_playing = True # unneeded?
             self.pseudoclock = new_node.state.clock
         self.active_node = new_node
-        self.pseudoclock_changed_emitter.emit()
+        self.pseudoclock_modified_emitter.emit()
         self.active_node_changed_emitter.emit()
         #self.frame.Refresh() #todo: kill
         
