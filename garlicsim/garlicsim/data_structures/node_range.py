@@ -7,6 +7,8 @@ This module defines the NodeRange class.
 See its documentation for more info.
 '''
 
+from garlicsim.general_misc import cute_iter_tools
+
 from node import Node
 from block import Block
 
@@ -100,4 +102,34 @@ class NodeRange(object):
         return klass(self.start, self.end)
 
     __copy__ = copy
+    
+    def __repr__(self):
+        '''
+        Get a string representation of the node range.
         
+        Example output:
+        tododoc
+        '''
+        return '<%s.%s%s, from %s %s to %s %s, containing %s nodes total, %sat %s>' % \
+            (
+                
+                self.__class__.__module__,
+                
+                self.__class__.__name__,
+                
+                'block that starts at clock' if isinstance(self.start, Block) \
+                else 'node with clock',
+                
+                self.start[0].clock if isinstance(self.start, Block) \
+                else self.start.clock,
+                
+                'block that ends at clock' if \
+                isinstance(self.start, Block) else 'node with clock',
+                
+                self.end[-1].clock if isinstance(self.end, Block) \
+                else self.end.clock,
+
+                cute_iter_tools.get_length(self),
+                
+                hex(id(self))
+            )

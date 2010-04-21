@@ -90,10 +90,10 @@ class NodeSelection(object):
         '''Iterate over the nodes that are members of this NodeSelection.'''
         for node_range in self.ranges:
             for node in node_range:
-                return(node)
+                return node
     
     def __or__(self, other):
-        '''Perform a union betwee two NodeSelections and return the result.'''
+        '''Perform a union between two NodeSelections and return the result.'''
         assert isinstance(other, NodeSelection)
         return NodeSelection(self.ranges + other.ranges)
     
@@ -102,6 +102,8 @@ class NodeSelection(object):
     
     def __eq__(self, other):
         # Currently horribly inefficient
+        if not isinstance(other, NodeSelection):
+            return False # todo: should be NotImplemented?
         return set(self) == set(other)
         
     def __req__(self, other):

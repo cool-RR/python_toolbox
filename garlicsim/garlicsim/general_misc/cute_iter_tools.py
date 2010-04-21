@@ -64,3 +64,9 @@ def enumerate(reversable, reverse_index=False):
 
 def is_iterable(thing):
     return hasattr(thing, '__iter__')
+
+def get_length(iterable):
+    i = 0
+    for thing in iterable:
+        i += 1
+    return i
