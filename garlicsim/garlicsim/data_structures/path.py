@@ -421,7 +421,7 @@ path, but it's completely empty.''')
         for details about rounding options.
         '''
         
-        assert isinstance(rounding, binary_search.Rounding)
+        assert issubclass(rounding, binary_search.Rounding)
 
         both = \
             self.__get_node_by_monotonic_function_with_both_rounding(function,

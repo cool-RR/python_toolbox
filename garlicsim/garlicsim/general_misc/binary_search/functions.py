@@ -29,7 +29,7 @@ def binary_search_by_index(sequence, function, value, rounding=CLOSEST):
     return result
 
 
-def binary_search(sequence, function, value, CLOSEST):
+def binary_search(sequence, function, value, rounding=CLOSEST):
     '''
     Does a binary search through a sequence.
     
@@ -66,7 +66,7 @@ def binary_search(sequence, function, value, CLOSEST):
 
     # todo: i think this should be changed to return tuples
     
-    assert isinstance(rounding, Rounding)
+    assert issubclass(rounding, Rounding)
     
     if function is None:
         function = lambda x: x

@@ -64,7 +64,7 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         See documentation of garlicsim.general_misc.binary_search.binary_search
         for details about rounding options.tododoc
         '''
-        assert isinstance(rounding, binary_search.Rounding)
+        assert issubclass(rounding, binary_search.Rounding)
         
         new_function = lambda node: function(node.state)
         result_in_nodes = self.path.get_node_by_monotonic_function \

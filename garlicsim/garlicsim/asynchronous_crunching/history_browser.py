@@ -145,10 +145,10 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         # match, we must return it. Same for HIGH. When requested BOTH and
         # there's an exact match, we give the exact match twice.
         
-        assert isinstance(rounding, binary_search.Rounding)
+        assert issubclass(rounding, binary_search.Rounding)
         
         tree_result = self.__get_state_by_monotonic_function_from_tree \
-                      (function, value, rounding=BOTH)
+                      (function, value, rounding=binary_search.BOTH)
         
         if tree_result[1] is not None:
             # Then there is no need to check the queue even.
@@ -157,7 +157,7 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         
         else:
             queue_result = self.__get_state_by_monotonic_function_from_queue \
-                           (function, value, rounding=BOTH)
+                           (function, value, rounding=binary_search.BOTH)
             none_count = list(queue_result).count(None)
             if none_count == 0:
                 # The result is entirely in the queue
@@ -199,7 +199,7 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         See documentation of garlicsim.general_misc.binary_search.binary_search
         for details about rounding options.tododoc
         '''
-        assert isinstance(rounding, binary_search.Rounding)
+        assert issubclass(rounding, binary_search.Rounding)
         our_node = self.__get_our_node()
         path = our_node.make_containing_path()
         new_function = lambda node: function(node.state)
@@ -220,7 +220,7 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         See documentation of garlicsim.general_misc.binary_search.binary_search
         for details about rounding options.tododoc
         '''
-        assert isinstance(rounding, binary_search.Rounding)
+        assert issubclass(rounding, binary_search.Rounding)
         queue = self.cruncher.work_queue
         queue_as_list = queue_tools.queue_as_list(queue)
         # todo: Probably inefficient, should access them one by one
