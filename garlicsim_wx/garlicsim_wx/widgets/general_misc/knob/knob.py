@@ -19,6 +19,7 @@ images_package = __images_package.__name__
 
 class Knob(wx.Panel):
     # todo future: make key that disables snapping while dragging
+    # todo: consider letting the knob turn just a bit slower near the edges.
     def __init__(self, parent, getter, setter, *args, **kwargs):
         
         assert 'size' not in kwargs
@@ -40,24 +41,12 @@ class Knob(wx.Panel):
         
         self.SetCursor(cursor_collection.get_open_grab())
         
-        self._background_brush = wx.Brush(
-            wx.SystemSettings.GetColour(wx.SYS_COLOUR_MENUBAR)
-        )
         
-        '''
-        todo: Not sure it's the right system color. Find the tight onw by
-        comparing on different platforms. The right one is probably one of
-        these:
         
-        ['SYS_COLOUR_MENUBAR', 'SYS_COLOUR_SCROLLBAR', 'SYS_COLOUR_3DFACE',
-        'SYS_COLOUR_INACTIVECAPTIONTEXT', 'SYS_COLOUR_3DLIGHT',
-        'SYS_COLOUR_MENU', 'SYS_COLOUR_INACTIVEBORDER', 'SYS_COLOUR_BTNFACE',
-        'SYS_COLOUR_ACTIVEBORDER']
-        '''
         
         self._knob_house_brush = wx.Brush(wx.Color(0, 0, 0))
         
-        self.recalculation_flag = True
+        
         
         self.sensitivity = 25
         self.angle_resolution = math.pi / 180 # One degree
@@ -73,6 +62,8 @@ class Knob(wx.Panel):
         self.being_dragged = False
         self.snap_map = None
         
+        self.needs_recalculation_flag = True
+        self._recalculate()
 
     
     def _angle_to_ratio(self, angle):
@@ -111,7 +102,7 @@ class Knob(wx.Panel):
     def remove_snap_point(self, value):
         self.snap_points.remove(value)
         
-    def recalculate(self):
+    def _recalculate(self):
         value = self.value_getter()
         self.current_ratio = self._value_to_ratio(value)
         angle = self._ratio_to_angle(self.current_ratio)
@@ -119,18 +110,18 @@ class Knob(wx.Panel):
         if abs(d_angle) > self.angle_resolution:
             self.current_angle = angle
             self.Refresh()
-        self.recalculation_flag = False
+        self.needs_recalculation_flag = False
     
     def on_paint(self, event):
         
         #event.Skip()
         
-        if self.recalculation_flag:
-            self.recalculate()
+        # Not checking for recalculation flag, this widget is not real-time
+        # enough to care about the delay.
         
         dc = wx.BufferedPaintDC(self)
         
-        dc.SetBackground(self._background_brush)
+        dc.SetBackground(wx_tools.get_background_brush())
         dc.Clear()
         
         w, h = self.GetClientSize()

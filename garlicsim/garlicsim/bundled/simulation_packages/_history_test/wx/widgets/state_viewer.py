@@ -3,6 +3,7 @@ import math
 
 import wx
 import garlicsim_wx
+from garlicsim_wx.general_misc import wx_tools
 
 
 class StateViewer(wx.Window, garlicsim_wx.widgets.WorkspaceWidget):
@@ -27,9 +28,7 @@ class StateViewer(wx.Window, garlicsim_wx.widgets.WorkspaceWidget):
         event.Skip()
         dc = wx.BufferedPaintDC(self)
                 
-        dc.SetBackground(
-            wx.Brush(wx.SystemSettings.GetColour(wx.SYS_COLOUR_MENUBAR))
-        )
+        dc.SetBackground(wx_tools.get_background_brush())
         dc.Clear()
         
         dc.SetBrush(wx.Brush("white", wx.TRANSPARENT))

@@ -16,6 +16,7 @@ from wx.lib.scrolledpanel import ScrolledPanel
 
 import garlicsim_wx.general_misc.vectorish as vectorish
 from garlicsim_wx.general_misc import emitters
+from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
 import garlicsim
 from garlicsim_wx.widgets import WorkspaceWidget
@@ -127,9 +128,7 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
         dc = NiftyPaintDC(self, self.gui_project,
                           self.CalcScrolledPosition((0, 0)), self)
         
-        dc.SetBackground(
-            wx.Brush(wx.SystemSettings.GetColour(wx.SYS_COLOUR_MENUBAR))
-        )
+        dc.SetBackground(wx_tools.get_background_brush())
         dc.Clear()
         
         (self.clickable_map, (width, height)) = \

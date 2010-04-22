@@ -122,6 +122,9 @@ class GuiProject(object):
 
         self.__init_emitters()
         
+        self.emitter_system.top_emitter.emit()
+        # Just for good measure, jiggle all the widgets up.
+        
     def __init_emitters(self):
         
         # todo: not clear that `tree_modified_emitter` means that only data

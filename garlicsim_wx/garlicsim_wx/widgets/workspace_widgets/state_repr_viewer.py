@@ -50,7 +50,6 @@ class StateReprViewer(wx.Panel, WorkspaceWidget):#tododoc
                     ),
                 name='state_repr_viewer_needs_recalculation',
             )
-        
     
 
     def _recalculate(self):

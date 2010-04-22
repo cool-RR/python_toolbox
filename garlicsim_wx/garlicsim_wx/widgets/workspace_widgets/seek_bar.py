@@ -14,6 +14,7 @@ from garlicsim_wx.general_misc.get_lines import get_lines
 import garlicsim
 from garlicsim_wx.widgets import WorkspaceWidget
 from garlicsim_wx.general_misc import emitters
+from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
 
 __all__ = ["SeekBar"]
@@ -85,9 +86,7 @@ class SeekBar(wx.Panel, WorkspaceWidget):
         end = self.start + (w / self.zoom)
         dc = wx.BufferedPaintDC(self)
 
-        dc.SetBackground(
-            wx.Brush(wx.SystemSettings.GetColour(wx.SYS_COLOUR_MENUBAR))
-        )
+        dc.SetBackground(wx_tools.get_background_brush())
         dc.Clear()
         
         #dc.DrawRectangle(3,3,50,90)

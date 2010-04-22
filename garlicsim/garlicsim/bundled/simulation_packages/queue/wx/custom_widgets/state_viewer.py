@@ -9,6 +9,7 @@ import wx.lib.scrolledpanel
 import garlicsim
 import garlicsim_wx
 from garlicsim.general_misc.infinity import Infinity
+from garlicsim_wx.general_misc import wx_tools
 
 '''
 This module defines the StateViewer class.
@@ -62,9 +63,7 @@ class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,
         state = self.state
         dc = wx.BufferedPaintDC(self)
         
-        dc.SetBackground(
-            wx.Brush(wx.SystemSettings.GetColour(wx.SYS_COLOUR_MENUBAR))
-        )
+        dc.SetBackground(wx_tools.get_background_brush())
         dc.Clear()
         
         if state is None:

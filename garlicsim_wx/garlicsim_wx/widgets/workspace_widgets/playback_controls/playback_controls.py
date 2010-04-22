@@ -201,7 +201,8 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
                     self.gui_project.active_node_finalized_emitter
                 ),
                 outputs=(
-                    FlagRaiser(self, 'center_button_update_flag', delay=5),
+                    FlagRaiser(self, 'center_button_update_flag',
+                               function=self._update_center_button, delay=0.03),
                 ),
                 name='playback_controls_center_button_needs_update',
         )
@@ -214,7 +215,10 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
                     self.gui_project.path_contents_changed_emitter
                 ),            
                 outputs=(
-                    FlagRaiser(self, 'navigation_buttons_update_flag', delay=5),
+                    FlagRaiser(
+                        self, 'navigation_buttons_update_flag',
+                        function=self._update_navigation_buttons, delay=0.03
+                        ),
                 ),
                 name='playback_controls_navigation_buttons_need_update',
         )
@@ -224,7 +228,8 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         # which is expensive.
         
         self.gui_project.official_playing_speed_modified_emitter.add_output(
-            FlagRaiser(self.playing_speed_knob, 'recalculation_flag')
+            FlagRaiser(self.playing_speed_knob, 'recalculation_flag',
+                       self.playing_speed_knob._recalculate, delay=0.03)
         )
 
 
