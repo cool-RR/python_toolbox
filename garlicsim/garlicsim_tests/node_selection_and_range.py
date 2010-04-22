@@ -36,6 +36,11 @@ def node_selection_and_range_test():
     
     logic_tools.all_equal((ns1, ns2, ns3, ns4), exhaustive=True)
     
+    all_ranges = sum((ns.ranges for ns in (ns1, ns2, ns3, ns4)), [])
+    
+    for range in all_ranges:
+        assert range == range.clone_with_blocks_dissolved()
+    
     
     
     

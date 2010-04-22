@@ -110,8 +110,8 @@ class NodeRange(object):
         Example output:
         tododoc
         '''
-        return '<%s.%s%s, from %s %s to %s %s, containing %s nodes total, %sat %s>' % \
-            (
+        return '<%s.%s, from %s %s to %s %s, containing %s nodes total, at %s>' \
+               % (
                 
                 self.__class__.__module__,
                 
@@ -120,16 +120,26 @@ class NodeRange(object):
                 'block that starts at clock' if isinstance(self.start, Block) \
                 else 'node with clock',
                 
-                self.start[0].clock if isinstance(self.start, Block) \
-                else self.start.clock,
+                self.start[0].state.clock if isinstance(self.start, Block) \
+                else self.start.state.clock,
                 
                 'block that ends at clock' if \
                 isinstance(self.start, Block) else 'node with clock',
                 
-                self.end[-1].clock if isinstance(self.end, Block) \
-                else self.end.clock,
+                self.end[-1].state.clock if isinstance(self.end, Block) \
+                else self.end.state.clock,
 
                 cute_iter_tools.get_length(self),
                 
                 hex(id(self))
             )
+    
+    def __eq__(self, other):
+        if not isinstance(other, NodeRange):
+            return False
+        r1 = self.clone_with_blocks_dissolved()
+        r2 = other.clone_with_blocks_dissolved()
+        return (r1.start is r2.start) and (r1.end is r2.end)
+    
+    def __req__(self, other):
+        return self.__eq__(other)

@@ -45,6 +45,7 @@ class Block(object):
     check its ".block" attribute.
 
     '''
+    # todo: maybe Node and Block should inherit from some BaseTreeMember
     def __init__(self, node_list):
         '''
         Construct a block from the members of node_list.
@@ -230,10 +231,13 @@ while the index was bigger than the block's length.''')
 
     
             
-    def __contains__(self, node):
-        '''Return whether the block contains `node`.'''
+    def __contains__(self, thing):
+        '''Return whether `thing` is a node which this block contains.'''
+        # The argument is called `thing` and not `node` because we want to let
+        # people put a block in, and we'll just give them False. Saves them
+        # checking themselves if what they got is a node.
         assert self.alive
-        return node.block is self
+        return isinstance(thing, Node) and thing.block is self
 
     
     def __iter__(self):

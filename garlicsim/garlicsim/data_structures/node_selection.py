@@ -90,7 +90,7 @@ class NodeSelection(object):
         '''Iterate over the nodes that are members of this NodeSelection.'''
         for node_range in self.ranges:
             for node in node_range:
-                return node
+                yield node
     
     def __or__(self, other):
         '''Perform a union between two NodeSelections and return the result.'''

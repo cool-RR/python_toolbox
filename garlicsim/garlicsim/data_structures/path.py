@@ -30,7 +30,7 @@ class PathOutOfRangeError(PathError, IndexError):
     '''
     pass
 
-class EndNotReached(PathError):
+class EndNotReached(PathError): # todo: consider subclass from one of the obscure
     '''
     An end node/block is specified but it turns out not to be on the path.
     '''
