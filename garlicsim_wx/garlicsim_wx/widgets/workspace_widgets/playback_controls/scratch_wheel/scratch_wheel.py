@@ -17,6 +17,7 @@ from garlicsim_wx.widgets import WorkspaceWidget
 from garlicsim_wx.general_misc import cursor_collection
 from garlicsim_wx.general_misc import thread_timer
 from garlicsim_wx.general_misc import emitters
+from garlicsim.general_misc import math_tools
 from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
 
 import images
@@ -134,8 +135,9 @@ class ScratchWheel(wx.Panel):
 
         
     def get_current_angle(self):
-        return self.__get_current_pseudoclock() * self.clock_factor
+        return self.gui_project.pseudoclock * self.clock_factor
     
+    """
     def __get_current_pseudoclock(self): 
         gui_project = self.gui_project
         
@@ -160,6 +162,7 @@ class ScratchWheel(wx.Panel):
         
         else:
             return gui_project.pseudoclock
+    """
                     
     def _recalculate(self, possibly_refresh=True):
         angle = self.get_current_angle()
@@ -259,7 +262,7 @@ class ScratchWheel(wx.Panel):
             self.angle_while_dragging = self.grabbed_angle = expanded_pos_to_angle(rx)
             self.d_angle_while_dragging = 0
             self.desired_clock_while_dragging = self.grabbed_pseudoclock = \
-                self.__get_current_pseudoclock()
+                self.gui_project.pseudoclock
             self.was_playing_before_drag = self.gui_project.is_playing
             self.gui_project.stop_playing()
             self.being_dragged = True
@@ -273,25 +276,18 @@ class ScratchWheel(wx.Panel):
                 return
             self.angle_while_dragging = expanded_pos_to_angle(rx)
             self.d_angle_while_dragging = (self.angle_while_dragging - self.grabbed_angle)
-            self.desired_clock_while_dragging = self.grabbed_pseudoclock + \
-                (self.d_angle_while_dragging / self.clock_factor)
-                       
-            both_nodes = self.gui_project.path.get_node_by_clock(
-                self.desired_clock_while_dragging,
-                rounding='both'
-            )
-        
-            node = both_nodes[0] or both_nodes[1]
-
-            self.gui_project.set_active_node(node, modify_path=False)
-            self.gui_project.pseudoclock_modified_emitter.emit()
-            # todo: gui_project should have method to change pseudoclock, so
-            # it'll change the active node itself and we won't need to call any
-            # event. this method should also be used in __play_next.
             
-            if list(both_nodes).count(None) == 1: # Means we got an edge node
+            desired_pseudoclock = self.grabbed_pseudoclock + \
+                (self.d_angle_while_dragging / self.clock_factor)
+            
+            self.gui_project.set_pseudoclock(desired_pseudoclock)
+            
+            if self.gui_project.pseudoclock != desired_pseudoclock:
+                # Means we got an edge node
+                
                 edge_clock = node.state.clock
-                direction = -1 if node is both_nodes[0] else 1
+                direction = cmp(self.gui_project.pseudoclock,
+                                desired_pseudoclock)
                 # direction that we bring back the cursor to if it goes too far
                 d_clock = (edge_clock - self.grabbed_pseudoclock)
                 d_angle = d_clock * self.clock_factor
@@ -305,8 +301,8 @@ class ScratchWheel(wx.Panel):
             
                 
         if e.LeftUp(): #or e.Leaving():
-            # todo: make sure that when leaving
-            # entire app, things don't get fucked
+            # todo: make sure that when leaving entire app, things don't get
+            # fucked
             if self.HasCapture():
                 self.ReleaseMouse()
             self.SetCursor(cursor_collection.get_open_grab())
