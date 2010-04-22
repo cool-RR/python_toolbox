@@ -54,7 +54,7 @@ class StateReprViewer(wx.Panel, WorkspaceWidget):#tododoc
     
 
     def _recalculate(self):
-        if self.needs_update_flag:
+        if self.needs_recalculation_flag:
             if self.gui_project:
                 active_state = self.gui_project.get_active_state()        
                 if active_state:
@@ -62,7 +62,7 @@ class StateReprViewer(wx.Panel, WorkspaceWidget):#tododoc
                         self.state = active_state
                         state_repr = dict_tools.fancy_string(vars(active_state))
                         self.text_ctrl.SetValue(state_repr)
-            self.needs_update_flag = False
+            self.needs_recalculation_flag = False
         
     def on_paint(self, event):
         event.Skip()
