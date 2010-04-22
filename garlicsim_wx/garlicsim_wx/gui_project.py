@@ -19,6 +19,7 @@ import garlicsim.general_misc.queue_tools as queue_tools
 import garlicsim.general_misc.dict_tools as dict_tools
 from general_misc.stringsaver import s2i,i2s
 from garlicsim.general_misc.infinity import Infinity
+from garlicsim.general_misc import binary_search
 import garlicsim_wx.general_misc.thread_timer as thread_timer
 from garlicsim.general_misc import binary_search
 
@@ -244,15 +245,15 @@ class GuiProject(object):
             self.pseudoclock = value
             self.pseudoclock_modified_emitter.emit()
         
-    def set_pseudoclock(self, desired_pseudoclock, rounding='low'):
-        '''tododoc: if you say 'low' and there's only high, you'll get high, and
+    def set_pseudoclock(self, desired_pseudoclock, rounding=binary_search.LOW):
+        '''tododoc: if you say LOW and there's only high, you'll get high, and
         vice versa.'''
 
-        assert rounding in ('low', 'high')
-        # may add 'closest' and 'exact' later
+        assert rounding in (binary_search.LOW, binary_search.HIGH)
+        # may add CLOSEST and EXACT later
         
         both_nodes = self.path.get_node_by_clock(desired_pseudoclock,
-                                                 rounding='both')
+                                                 rounding=binary_search.BOTH)
 
         """
         new_node = binary_search.make_both_data_into_preferred_rounding(
@@ -263,7 +264,7 @@ class GuiProject(object):
         )
         """
         
-        if rounding == 'high':
+        if rounding is binary_search.HIGH:
             both_nodes = (both_nodes[1], both_nodes[0])
             # Swapping them, explain
             
@@ -483,7 +484,9 @@ class GuiProject(object):
             (real_time_elapsed * self.defacto_playing_speed)
         
 
-        rounding = 'low' if self.defacto_playing_speed > 0 else 'high'
+        rounding = binary_search.LOW if self.defacto_playing_speed > 0 \
+                 else binary_search.HIGH
+        
         self.set_pseudoclock(desired_pseudoclock, rounding)
 
         self.last_tracked_real_time = current_real_time

@@ -55,22 +55,22 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         return self.path.__getitem__(index, end=self.end_node).state
     
     def get_state_by_monotonic_function(self, function, value,
-                                        rounding='closest'):
+                                        rounding=binary_search.CLOSEST):
         '''
         Get a state by specifying a measure function and a desired value.
         
         The function must be a monotonic rising function on the timeline.
         
         See documentation of garlicsim.general_misc.binary_search.binary_search
-        for details about rounding options.
+        for details about rounding options.tododoc
         '''
-        assert rounding in ['high', 'low', 'exact', 'both', 'closest']
+        assert isinstance(rounding, binary_search.Rounding)
         
         new_function = lambda node: function(node.state)
         result_in_nodes = self.path.get_node_by_monotonic_function \
                         (new_function, value, rounding, end_node=self.end_node)
         
-        if rounding == 'both':
+        if rounding is binary_search.BOTH:
             result = [(node.state if node is not None else None) \
                       for node in result_in_nodes]
         else:

@@ -409,7 +409,8 @@ path, but it's completely empty.''')
         
     
     def get_node_by_monotonic_function(self, function, value,
-                                       rounding='closest', end_node=None):
+                                       rounding=binary_search.CLOSEST,
+                                       end_node=None):
         '''
         Get a node by specifying a measure function and a desired value.
         
@@ -419,7 +420,7 @@ path, but it's completely empty.''')
         for details about rounding options.
         '''
         
-        assert rounding in ('high', 'low', 'exact', 'both', 'closest')
+        assert isinstance(rounding, binary_search.Rounding)
 
         both = \
             self.__get_node_by_monotonic_function_with_both_rounding(function,

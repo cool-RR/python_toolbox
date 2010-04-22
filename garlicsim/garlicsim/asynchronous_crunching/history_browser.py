@@ -141,14 +141,14 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         '''
         
         # tododoc important: make sure this function follows the new guidelines
-        # regarding binary search. When asking for 'low' and there's an exact
-        # match, we must return it. Same for 'high'. When requested 'both' and
+        # regarding binary search. When asking for LOW and there's an exact
+        # match, we must return it. Same for HIGH. When requested BOTH and
         # there's an exact match, we give the exact match twice.
         
-        assert rounding in ['high', 'low', 'exact', 'both', 'closest']
+        assert isinstance(rounding, binary_search.Rounding)
         
         tree_result = self.__get_state_by_monotonic_function_from_tree \
-                      (function, value, rounding='both')
+                      (function, value, rounding=BOTH)
         
         if tree_result[1] is not None:
             # Then there is no need to check the queue even.
@@ -157,7 +157,7 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         
         else:
             queue_result = self.__get_state_by_monotonic_function_from_queue \
-                           (function, value, rounding='both')
+                           (function, value, rounding=BOTH)
             none_count = list(queue_result).count(None)
             if none_count == 0:
                 # The result is entirely in the queue
@@ -189,17 +189,17 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
                        (tree_result, function, value, rounding)
             
     @with_self   
-    def __get_state_by_monotonic_function_from_tree(self, function, value,
-                                                    rounding='closest'):
+    def __get_state_by_monotonic_function_from_tree(
+        self, function, value, rounding=binary_search.CLOSEST):
         '''
         Get a state from the tree only by measure function and desired value.
         
         The function must be a monotonic rising function on the timeline.
         
         See documentation of garlicsim.general_misc.binary_search.binary_search
-        for details about rounding options.
+        for details about rounding options.tododoc
         '''
-        assert rounding in ('high', 'low', 'exact', 'both', 'closest')
+        assert isinstance(rounding, binary_search.Rounding)
         our_node = self.__get_our_node()
         path = our_node.make_containing_path()
         new_function = lambda node: function(node.state)
@@ -210,17 +210,17 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         return result
     
     @with_self
-    def __get_state_by_monotonic_function_from_queue(self, function, value,
-                                                     rounding='closest'):
+    def __get_state_by_monotonic_function_from_queue(
+        self, function, value, rounding=binary_search.CLOSEST):
         '''
         Get a state from the queue only by measure function and desired value.
         
         The function must by a monotonic rising function on the timeline.
         
         See documentation of garlicsim.general_misc.binary_search.binary_search
-        for details about rounding options.
+        for details about rounding options.tododoc
         '''
-        assert rounding in ('high', 'low', 'exact', 'both', 'closest')
+        assert isinstance(rounding, binary_search.Rounding)
         queue = self.cruncher.work_queue
         queue_as_list = queue_tools.queue_as_list(queue)
         # todo: Probably inefficient, should access them one by one

@@ -7,6 +7,7 @@ information.
 '''
 
 import garlicsim.general_misc.third_party.abc as abc
+from garlicsim.general_misc import binary_search
 
 __all__ = ["HistoryBrowser"]
 
@@ -56,13 +57,13 @@ class BaseHistoryBrowser(object):
         pass
     
     
-    def get_state_by_clock(self, clock, rounding='closest'):
+    def get_state_by_clock(self, clock, binary_search.CLOSEST):
         '''
         Get a state by specifying desired clock time.
         
         See documentation of garlicsim.general_misc.binary_search.binary_search
         for details about rounding options.
         '''
-        assert rounding in ('high', 'low', 'exact', 'both', 'closest')
+        assert isinstance(rounding, binary_search.Rounding)
         return self.get_state_by_monotonic_function\
                (function=get_state_clock, value=clock, rounding=rounding)
