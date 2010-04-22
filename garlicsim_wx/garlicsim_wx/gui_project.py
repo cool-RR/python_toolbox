@@ -271,7 +271,8 @@ class GuiProject(object):
         none_count = list(both_nodes).count(None)
         
         if none_count == 0:
-            self._set_active_node(both_nodes[0])
+            node = both_nodes[0]
+            self._set_active_node(node)
             self._set_pseudoclock(desired_pseudoclock)
         elif none_count == 1:
             node = both_nodes[0] or both_nodes[1]
@@ -281,6 +282,7 @@ class GuiProject(object):
             assert both_nodes == (None, None)
             # path is completely empty! Not sure if I should raise something
             return
+        self.project.ensure_buffer(node, clock_buffer=self.default_buffer)
     
     def round_pseudoclock_to_active_node(self):
         self._set_pseudoclock(self.active_node.state.clock)
@@ -365,7 +367,7 @@ class GuiProject(object):
         if self.active_node is node:
             return
         
-        was_playing = self.is_playing
+        was_playing = self.is_playing # todo: consider cancelling this
         if self.is_playing: self.stop_playing()
         
         self._set_active_node(node)
