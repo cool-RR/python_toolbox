@@ -111,7 +111,7 @@ class GuiProject(object):
         self.last_tracked_real_time = None
         self.pseudoclock = None 
 
-        self.ran_out_of_tree_while_playing = False
+        #self.ran_out_of_tree_while_playing = False
         '''
         Becomes True when you are playing the simulation and the nodes are not
         ready yet. The simulation will continue playing when the nodes will be
@@ -237,7 +237,40 @@ class GuiProject(object):
     def set_official_playing_speed(self, value):
         self.official_playing_speed = value
         self.official_playing_speed_modified_emitter.emit()
+
+    def _set_pseudoclock(self, value):
+        self.pseudoclock = value
+        self.pseudoclock_modified_emitter.emit()
         
+    def set_pseudoclock(self, desired_pseudoclock):
+        '''tododoc: not guaranteed to set excatly the value you specified.'''
+            
+        both_nodes = self.path.get_node_by_clock(desired_pseudoclock,
+                                                 rounding='both')
+        
+        if self.defacto_playing_speed < 0:
+            both_nodes = (both_nodes[1], both_nodes[0])
+                
+        new_node = both_nodes[0]
+        
+        if new_node is None:
+            # This is for dealing with this edge case:
+            assert both_nodes[1].state.clock == desired_pseudoclock
+            # Happens when moving to start of path while playing.
+            new_node = both_nodes[1]
+            # todo: not sure this still happens after change i did in binary
+            # search conventions
+            
+        if both_nodes[1] is not None:
+            self._set_pseudoclock(desired_simulation_time)
+        else:
+            # self.ran_out_of_tree_while_playing = True # unneeded?
+            self._set_pseudoclock(new_node.state.clock)
+        
+        if new_node != self.active_node:
+            self._set_active_node(new_node)
+        
+            
     def update_defacto_playing_speed(self):
         # In the future this will check if someone's temporarily tweaking the
         # defacto speed, and let that override.
@@ -304,6 +337,11 @@ class GuiProject(object):
         self.set_active_node(root)
         return root
 
+
+    def _set_active_node(self, node):
+        self.active_node = node
+        self.active_node_changed_emitter.emit()
+        
     
     def set_active_node(self, node, modify_path=True):
         '''Make `node` the active node, displaying it onscreen.'''
@@ -314,8 +352,11 @@ class GuiProject(object):
         
         was_playing = self.is_playing
         if self.is_playing: self.stop_playing()
-        self.active_node = node
-        self.active_node_changed_emitter.emit()
+        
+        self._set_active_node(node)
+
+        self._set_pseudoclock(node.state.clock)
+        
         if was_playing:
             self.start_playing()
         if modify_path:
@@ -357,11 +398,13 @@ class GuiProject(object):
         
         self.timer_for_playing.Start(1000//25)
         
-        assert self.last_tracked_real_time == self.pseudoclock == None
-        self.last_tracked_real_time = time.time()
-        self.pseudoclock = self.active_node.state.clock
+        assert self.last_tracked_real_time == None
+        assert self.pseudoclock == self.active_node.state.clock
+        self.last_tracked_real_time = time.time()        
         self.playing_started_emitter.emit()
-        self.pseudoclock_modified_emitter.emit()
+        
+        # todo: maybe should start a call of __play_next right here, to save
+        # 25ms delay on the first frame?
         
 
 
@@ -382,10 +425,11 @@ class GuiProject(object):
         self.infinity_job.crunching_profile.clock_target = \
             self.infinity_job.node.state.clock + self.default_buffer
         
-        self.last_tracked_real_time = self.pseudoclock = None
-        self.playing_stopped_emitter.emit()        
-        self.pseudoclock_modified_emitter.emit() #todo: relevant when changes to None?
+        self.last_tracked_real_time = None
+        self.set_pseudoclock(self.active_node.state.clock)
         self.project.ensure_buffer(self.active_node, self.default_buffer)
+        
+        self.playing_stopped_emitter.emit()
 
 
     def editing_state(self):
@@ -420,42 +464,13 @@ class GuiProject(object):
 
         current_real_time = time.time()
         real_time_elapsed = (current_real_time - self.last_tracked_real_time)
-        desired_simulation_time = \
+        desired_pseudoclock = \
             self.pseudoclock + \
             (real_time_elapsed * self.defacto_playing_speed)
         
-        both_nodes = self.path.get_node_by_clock(desired_simulation_time,
-                                                 rounding='both')
-        # correct rounding?
-        
-        
-        if self.defacto_playing_speed < 0:
-            both_nodes = (both_nodes[1], both_nodes[0])
-                
-        new_node = both_nodes[0]
-        
-        if new_node is None:
-            # This is for dealing with this edge case:
-            assert both_nodes[1].state.clock == desired_simulation_time
-            # Happens when moving to start of path while playing.
-            new_node = both_nodes[1]
-            # todo: not sure this still happens after change i did in binary
-            # search conventions
-            
+        self.set_pseudoclock(desired_pseudoclock)
 
         self.last_tracked_real_time = current_real_time
-
-        if both_nodes[1] is not None:
-            self.pseudoclock = desired_simulation_time#new_node.state.clock
-        else:
-            self.ran_out_of_tree_while_playing = True # unneeded?
-            self.pseudoclock = new_node.state.clock
-        self.active_node = new_node
-        self.pseudoclock_modified_emitter.emit()
-        self.active_node_changed_emitter.emit()
-        #self.frame.Refresh() #todo: kill
-        
-        
         
 
     def fork_naturally(self, e=None):
@@ -528,10 +543,12 @@ class GuiProject(object):
             # todo: It would be hard but nice to know whether the tree changes
             # were on the path. This could save some rendering on SeekBar.
             
+            """
             if self.ran_out_of_tree_while_playing:
                 self.ran_out_of_tree_while_playing = False
                 self.stop_playing()
                 self.start_playing()
+            """
             
         return added_nodes
 

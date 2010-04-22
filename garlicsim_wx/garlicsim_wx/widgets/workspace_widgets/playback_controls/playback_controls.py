@@ -201,7 +201,7 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
                     self.gui_project.active_node_finalized_emitter
                 ),
                 outputs=(
-                    FlagRaiser(self, 'center_button_update_flag'),
+                    FlagRaiser(self, 'center_button_update_flag', delay=5),
                 ),
                 name='center_button_needs_update_emitter',
         )
@@ -214,13 +214,17 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
                     self.gui_project.path_contents_changed_emitter
                 ),            
                 outputs=(
-                    FlagRaiser(self, 'navigation_buttons_update_flag'),
+                    FlagRaiser(self, 'navigation_buttons_update_flag', delay=5),
                 ),
                 name='navigation_buttons_need_update_emitter',
         )
         
+        # todo: we might be doing here too many refreshes to ourselves. Remember
+        # that a refresh on the PlaybackControls will refresh all its children,
+        # which is expensive.
+        
         self.gui_project.official_playing_speed_modified_emitter.add_output(
-            FlagRaiser(self.playing_speed_knob, 'recalculation_flag', True)
+            FlagRaiser(self.playing_speed_knob, 'recalculation_flag')
         )
 
 

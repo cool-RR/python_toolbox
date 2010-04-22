@@ -10,6 +10,7 @@ from __future__ import division
 import wx
 import math
 import time
+import random # todo: for debugging, kill this
 
 import garlicsim, garlicsim_wx
 from garlicsim_wx.widgets import WorkspaceWidget
@@ -122,12 +123,8 @@ class ScratchWheel(wx.Panel):
                     self.gui_project.active_node_changed_emitter # todo: needed?
                 ),
                 outputs=(
-                    FlagRaiser(self, 'recalculation_flag'),
-                    # todo: currently we refresh, not good. if it's the same
-                    # bitmap it'll be wasteful to refresh.
-                    # update: I spoke with Andrea about this. He said something
-                    # about OnInternalIdle, but it didn't work out (April 10th,
-                    # 2010).                    
+                    FlagRaiser(self, 'recalculation_flag',
+                               function=self._recalculate, delay=0.03),
                 ),
                 name='needs_recalculation_emitter',
             )
@@ -161,13 +158,10 @@ class ScratchWheel(wx.Panel):
                 else:
                     return clock
         
-        elif gui_project.is_playing:
-            return gui_project.pseudoclock or \
-                   active_node.state.clock
         else:
-            return active_node.state.clock
+            return gui_project.pseudoclock
                     
-    def _recalculate(self):
+    def _recalculate(self, possibly_refresh=True):
         angle = self.get_current_angle()
         frame_number = int(
             ((angle % ((2/3) * math.pi)) / (2 * math.pi)) * 3 * images.N_FRAMES
@@ -175,13 +169,17 @@ class ScratchWheel(wx.Panel):
         if frame_number == images.N_FRAMES:
             frame_number =- 1
         
-        self.frame_number_that_should_be_drawn = frame_number        
+        if self.frame_number_that_should_be_drawn != frame_number:
+            self.frame_number_that_should_be_drawn = frame_number
+            if possibly_refresh:
+                self.Refresh()
+            
         
-        self.__update_motion_blur_bitmap()
+        self.__update_motion_blur_bitmap(possibly_refresh)
         
         self.recalculation_flag = False
     
-    def __update_motion_blur_bitmap(self):
+    def __update_motion_blur_bitmap(self, possibly_refresh):
 
         current = (time.time(), self.get_current_angle())
         last = self.last_tracked_time_and_angle
@@ -206,7 +204,10 @@ class ScratchWheel(wx.Panel):
         
         new_motion_blur_image = images.get_blurred_gear_image_by_ratio(alpha)
         
-        self.current_motion_blur_bitmap = new_motion_blur_image
+        if self.current_motion_blur_bitmap != new_motion_blur_image:
+            self.current_motion_blur_bitmap = new_motion_blur_image
+            if possibly_refresh:
+                self.Refresh()
         
         if new_motion_blur_image is not \
            images.get_blurred_gear_image_by_ratio(0):
@@ -222,10 +223,14 @@ class ScratchWheel(wx.Panel):
             
     def on_paint(self, event):
         # todo: optimization: if motion blur is (rounded to) zero, don't draw
+
+        print('ScratchWheel.Refresh called. %s' % random.randint(0, 8))
         event.Skip()
         
         if self.recalculation_flag:
-            self._recalculate()
+            self._recalculate(possibly_refresh=False)
+            # We make sure `_recalculate` won't refresh, because that would make
+            # an infinite loop
             
         bw, bh = self.GetWindowBorderSize()
         
