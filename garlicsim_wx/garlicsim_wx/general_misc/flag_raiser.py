@@ -1,8 +1,7 @@
 import wx
 
 class FlagRaiser(object): # todo: rename?
-    def __init__(self, window, attribute_name=None,
-                 value=True, function=None, delay=None):
+    def __init__(self, window, attribute_name=None, function=None, delay=None):
         '''
         tododoc
         default for `function` is `window.Refresh`
@@ -10,7 +9,6 @@ class FlagRaiser(object): # todo: rename?
         assert isinstance(window, wx.Window)
         self.window = window
         self.attribute_name = attribute_name
-        self.value = value
         self.function = function or window.Refresh
         self.delay = delay
         if delay is not None:
@@ -20,7 +18,7 @@ class FlagRaiser(object): # todo: rename?
         
     def __call__(self):
         if self.attribute_name:
-            setattr(self.window, self.attribute_name, self.value)
+            setattr(self.window, self.attribute_name, True)
         if self.delay is None:
             self.function()
         else: # self.delay is a positive number
@@ -28,4 +26,5 @@ class FlagRaiser(object): # todo: rename?
                 self.timer.Start(self._delay_in_ms, oneShot=True)
                 
     def on_timer(self, event):
-        self.function()
+        if getattr(self.window, self.attribute_name) is True:
+            self.function()
