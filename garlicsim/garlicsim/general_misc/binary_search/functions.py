@@ -83,19 +83,33 @@ def binary_search(sequence, function, value, CLOSEST):
     high = len(sequence) - 1
 
     low_value, high_value = get(low), get(high)
+
     
     if low_value >= value:
+
         if rounding is BOTH:
             return [None if low_value > value else sequence[low], sequence[low]]
-        if rounding in (HIGH, CLOSEST) or (low_value==value and rounding is EXACT):
+        
+        if rounding in (HIGH, CLOSEST) or \
+           (low_value==value and rounding is EXACT):
             return sequence[low]
+        
         else: # rounding is LOW or (rounding is EXACT and low_value!=value)
             return None
+
+        
     if high_value <= value:
+
         if rounding is BOTH:
-            return [sequence[high], None if high_value < value else sequence[high]]
-        if rounding in (LOW, CLOSEST) or (low_value==value and rounding=='exact'):
+            return [
+                sequence[high],
+                None if high_value < value else sequence[high]
+            ]
+        
+        if rounding in (LOW, CLOSEST) or \
+           (low_value==value and rounding is EXACT):
             return sequence[high]
+        
         else: # rounding is HIGH or (rounding is EXACT and low_value!=value)
             return None
         

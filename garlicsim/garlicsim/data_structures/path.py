@@ -15,7 +15,7 @@ from node import Node
 from block import Block
 # We are doing `from tree import Tree` in the bottom of the file.
 
-import garlicsim.general_misc.binary_search as binary_search
+from garlicsim.general_misc import binary_search
 
 __all__ = ['Path', 'PathError', 'PathOutOfRangeError', 'EndNotReached',
            'StartNotReached']
@@ -393,12 +393,13 @@ class Path(object): #todo: add __reversed__ here, maybe also in Block and others
 path, but it's completely empty.''')
     
         
-    def get_node_by_clock(self, clock, rounding='closest', end_node=None):
+    def get_node_by_clock(self, clock, rounding=binary_search.CLOSEST,
+                          end_node=None):
         '''
         Get a node according to its clock.
         
         See documentation of garlicsim.general_misc.binary_search.binary_search
-        for details about rounding options.
+        for details about rounding options.tododoc
         '''
         
         my_function = lambda node: node.state.clock
@@ -509,8 +510,9 @@ path, but it's completely empty.''')
                 
                 else: # cmp_last == 1 and function(last) > value
                     # The two final results are both in the block.
-                    return binary_search.binary_search(block, function, value,
-                                                       rounding='both')
+                    return binary_search.binary_search(
+                        block, function, value, rounding=binary_search.BOTH
+                    )
                     
                 
             else: # thing is a Node
@@ -546,7 +548,7 @@ path, but it's completely empty.''')
         
         If no such node exists, returns None.
         '''
-        temp = self.get_node_by_clock(timepoint, rounding='both')
+        temp = self.get_node_by_clock(timepoint, rounding=binary_search.BOTH)
         if list(temp).count(None) == 0:
             return temp[0]
         else:

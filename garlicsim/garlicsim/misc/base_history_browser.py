@@ -57,7 +57,7 @@ class BaseHistoryBrowser(object):
         pass
     
     
-    def get_state_by_clock(self, clock, binary_search.CLOSEST):
+    def get_state_by_clock(self, clock, rounding=binary_search.CLOSEST):
         '''
         Get a state by specifying desired clock time.
         

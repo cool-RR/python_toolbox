@@ -130,14 +130,14 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         
     @with_self
     def get_state_by_monotonic_function(self, function, value,
-                                        rounding='closest'):
+                                        rounding=binary_search.CLOSEST):
         '''
         Get a state by specifying a measure function and a desired value.
         
         The function must be a monotonic rising function on the timeline.
         
         See documentation of garlicsim.general_misc.binary_search.binary_search
-        for details about rounding options.
+        for details about rounding options.tododoc
         '''
         
         # tododoc important: make sure this function follows the new guidelines
