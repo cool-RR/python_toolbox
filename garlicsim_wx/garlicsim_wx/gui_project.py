@@ -20,6 +20,7 @@ import garlicsim.general_misc.dict_tools as dict_tools
 from general_misc.stringsaver import s2i,i2s
 from garlicsim.general_misc.infinity import Infinity
 import garlicsim_wx.general_misc.thread_timer as thread_timer
+from garlicsim.general_misc import binary_search
 
 import garlicsim
 from garlicsim.asynchronous_crunching.crunchers_warehouse import crunchers
@@ -109,7 +110,7 @@ class GuiProject(object):
         self.standard_playing_speed = 4
         
         self.last_tracked_real_time = None
-        self.pseudoclock = None 
+        self.pseudoclock = 0
 
         #self.ran_out_of_tree_while_playing = False
         '''
@@ -239,37 +240,49 @@ class GuiProject(object):
         self.official_playing_speed_modified_emitter.emit()
 
     def _set_pseudoclock(self, value):
-        self.pseudoclock = value
-        self.pseudoclock_modified_emitter.emit()
+        if self.pseudoclock != value:
+            self.pseudoclock = value
+            self.pseudoclock_modified_emitter.emit()
         
-    def set_pseudoclock(self, desired_pseudoclock):
-        '''tododoc: not guaranteed to set excatly the value you specified.'''
-            
+    def set_pseudoclock(self, desired_pseudoclock, rounding='low'):
+        '''tododoc: if you say 'low' and there's only high, you'll get high, and
+        vice versa.'''
+
+        assert rounding in ('low', 'high')
+        # may add 'closest' and 'exact' later
+        
         both_nodes = self.path.get_node_by_clock(desired_pseudoclock,
                                                  rounding='both')
+
+        """
+        new_node = binary_search.make_both_data_into_preferred_rounding(
+            both_nodes,
+            lambda node: node.state.clock,
+            desired_pseudoclock,
+            rounding
+        )
+        """
         
-        if self.defacto_playing_speed < 0:
+        if rounding == 'high':
             both_nodes = (both_nodes[1], both_nodes[0])
-                
-        new_node = both_nodes[0]
-        
-        if new_node is None:
-            # This is for dealing with this edge case:
-            assert both_nodes[1].state.clock == desired_pseudoclock
-            # Happens when moving to start of path while playing.
-            new_node = both_nodes[1]
-            # todo: not sure this still happens after change i did in binary
-            # search conventions
+            # Swapping them, explain
             
-        if both_nodes[1] is not None:
-            self._set_pseudoclock(desired_simulation_time)
+        none_count = list(both_nodes).count(None)
+        
+        if none_count == 0:
+            self._set_active_node(both_nodes[0])
+            self._set_pseudoclock(desired_pseudoclock)
+        elif none_count == 1:
+            node = both_nodes[0] or both_nodes[1]
+            self._set_active_node(node)
+            self._set_pseudoclock(node.state.clock)
         else:
-            # self.ran_out_of_tree_while_playing = True # unneeded?
-            self._set_pseudoclock(new_node.state.clock)
-        
-        if new_node != self.active_node:
-            self._set_active_node(new_node)
-        
+            assert both_nodes == (None, None)
+            # path is completely empty! Not sure if I should raise something
+            return
+    
+    def round_pseudoclock_to_active_node(self):
+        self._set_pseudoclock(self.active_node.state.clock)
             
     def update_defacto_playing_speed(self):
         # In the future this will check if someone's temporarily tweaking the
@@ -339,8 +352,9 @@ class GuiProject(object):
 
 
     def _set_active_node(self, node):
-        self.active_node = node
-        self.active_node_changed_emitter.emit()
+        if self.active_node != node:
+            self.active_node = node
+            self.active_node_changed_emitter.emit()
         
     
     def set_active_node(self, node, modify_path=True):
@@ -399,7 +413,7 @@ class GuiProject(object):
         self.timer_for_playing.Start(1000//25)
         
         assert self.last_tracked_real_time == None
-        assert self.pseudoclock == self.active_node.state.clock
+        self.round_pseudoclock_to_active_node()
         self.last_tracked_real_time = time.time()        
         self.playing_started_emitter.emit()
         
@@ -426,7 +440,7 @@ class GuiProject(object):
             self.infinity_job.node.state.clock + self.default_buffer
         
         self.last_tracked_real_time = None
-        self.set_pseudoclock(self.active_node.state.clock)
+        self.round_pseudoclock_to_active_node()
         self.project.ensure_buffer(self.active_node, self.default_buffer)
         
         self.playing_stopped_emitter.emit()
@@ -468,7 +482,9 @@ class GuiProject(object):
             self.pseudoclock + \
             (real_time_elapsed * self.defacto_playing_speed)
         
-        self.set_pseudoclock(desired_pseudoclock)
+
+        rounding = 'low' if self.defacto_playing_speed > 0 else 'high'
+        self.set_pseudoclock(desired_pseudoclock, rounding)
 
         self.last_tracked_real_time = current_real_time
         

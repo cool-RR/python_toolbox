@@ -125,7 +125,7 @@ class ScratchWheel(wx.Panel):
                 ),
                 outputs=(
                     FlagRaiser(self, 'recalculation_flag',
-                               function=self._recalculate, delay=0.03),
+                               ),#function=self._recalculate, delay=0.03),
                 ),
                 name='needs_recalculation_emitter',
             )
@@ -285,7 +285,7 @@ class ScratchWheel(wx.Panel):
             if self.gui_project.pseudoclock != desired_pseudoclock:
                 # Means we got an edge node
                 
-                edge_clock = node.state.clock
+                edge_clock = self.gui_project.active_node.state.clock
                 direction = cmp(self.gui_project.pseudoclock,
                                 desired_pseudoclock)
                 # direction that we bring back the cursor to if it goes too far
@@ -315,7 +315,9 @@ class ScratchWheel(wx.Panel):
             
             if self.was_playing_before_drag:
                 self.gui_project.start_playing()
-            
+                
+            self.gui_project.round_pseudoclock_to_active_node()
+                
             self.was_playing_before_drag = None
             
         return
