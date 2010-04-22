@@ -125,7 +125,7 @@ class ScratchWheel(wx.Panel):
                 ),
                 outputs=(
                     FlagRaiser(self, 'recalculation_flag',
-                               ),#function=self._recalculate, delay=0.03),
+                               function=self._recalculate, delay=0.03),
                 ),
                 name='needs_recalculation_emitter',
             )
