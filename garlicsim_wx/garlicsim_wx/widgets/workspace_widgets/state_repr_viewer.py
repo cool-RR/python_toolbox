@@ -36,7 +36,7 @@ class StateReprViewer(wx.Panel, WorkspaceWidget):#tododoc
         
         self.state = None
         
-        self.needs_update_flag = True
+        self.needs_recalculation_flag = True
         
         self.needs_update_emitter = \
             self.gui_project.emitter_system.make_emitter(
@@ -44,13 +44,16 @@ class StateReprViewer(wx.Panel, WorkspaceWidget):#tododoc
                     self.gui_project.active_node_changed_emitter,
                     # todo: put the active_state_changed whatever here
                     ),
-                outputs=(FlagRaiser(self, 'needs_update_flag'),),
-                name='state_repr_viewer_needs_update_emitter',
+                outputs=(
+                    FlagRaiser(self, 'needs_recalculation_flag',
+                               function=self._recalculate, delay=0.03),
+                    ),
+                name='state_repr_viewer_needs_recalculation',
             )
+        
     
 
-    def on_paint(self, event):
-        event.Skip()
+    def _recalculate(self):
         if self.needs_update_flag:
             if self.gui_project:
                 active_state = self.gui_project.get_active_state()        
@@ -60,6 +63,14 @@ class StateReprViewer(wx.Panel, WorkspaceWidget):#tododoc
                         state_repr = dict_tools.fancy_string(vars(active_state))
                         self.text_ctrl.SetValue(state_repr)
             self.needs_update_flag = False
+        
+    def on_paint(self, event):
+        event.Skip()
+        # Notice that we are not checking the `needs_recalculation_flag` here.
+        # The FlagRaiser's 30ms delay is small enough, and we don't need to have
+        # very fast response time in the state repr viewer, so we can afford to
+        # wait another 30ms before an update.
+        
          
         
     

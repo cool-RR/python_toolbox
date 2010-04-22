@@ -158,10 +158,12 @@ class Emitter(object):
             callable_output()
     
     def __repr__(self):
-        if self.name:
-            return '<%s emitter at %s>' % (self.name, hex(id(self)))
-        else:
-            return object.__repr__(self)
+        return '<%s.%s %sat %s>' % (
+            self.__class__.__module__,
+            self.__class__.__name__,
+            ''.join(("'", self.name, "' ")) if self.name else '',
+            hex(id(self))
+        )
     """
     Unused:
     

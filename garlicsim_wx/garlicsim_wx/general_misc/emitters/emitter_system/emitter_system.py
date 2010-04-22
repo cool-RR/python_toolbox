@@ -26,13 +26,13 @@ class EmitterSystem(object):
         
         self.emitters = set()
         
-        self.bottom_emitter = Emitter(self, name='bottom_emitter')
+        self.bottom_emitter = Emitter(self, name='bottom')
         self.emitters.add(self.bottom_emitter)
         
         self.top_emitter = Emitter(
             self,
             outputs=(self.bottom_emitter,),
-            name='top_emitter',
+            name='top',
         )
         self.emitters.add(self.top_emitter)
         

@@ -65,7 +65,7 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
                 outputs=(
                     FlagRaiser(self, 'tree_remapping_flag'),
                 ),
-                name='needs_tree_remapping_emitter',
+                name='needs_tree_remapping',
             )
 
         
@@ -81,7 +81,7 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
                 outputs=(
                     FlagRaiser(self, 'recalculation_flag'),
                 ),
-                name='needs_recalculation_emitter',
+                name='needs_recalculation',
             )
         
         self.clickable_map = {}

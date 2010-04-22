@@ -203,7 +203,7 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
                 outputs=(
                     FlagRaiser(self, 'center_button_update_flag', delay=5),
                 ),
-                name='playback_controls_center_button_needs_update_emitter',
+                name='playback_controls_center_button_needs_update',
         )
         
 
@@ -216,7 +216,7 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
                 outputs=(
                     FlagRaiser(self, 'navigation_buttons_update_flag', delay=5),
                 ),
-                name='playback_controls_navigation_buttons_need_update_emitter',
+                name='playback_controls_navigation_buttons_need_update',
         )
         
         # todo: we might be doing here too many refreshes to ourselves. Remember

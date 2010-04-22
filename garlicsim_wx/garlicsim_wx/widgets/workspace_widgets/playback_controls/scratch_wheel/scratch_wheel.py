@@ -10,7 +10,7 @@ from __future__ import division
 import wx
 import math
 import time
-import random # todo: for debugging, kill this
+#import random # todo: for debugging, kill this
 
 import garlicsim, garlicsim_wx
 from garlicsim_wx.widgets import WorkspaceWidget
@@ -127,7 +127,7 @@ class ScratchWheel(wx.Panel):
                     FlagRaiser(self, 'recalculation_flag',
                                function=self._recalculate, delay=0.03),
                 ),
-                name='needs_recalculation_emitter',
+                name='needs_recalculation',
             )
         
         
@@ -227,7 +227,7 @@ class ScratchWheel(wx.Panel):
     def on_paint(self, event):
         # todo: optimization: if motion blur is (rounded to) zero, don't draw
 
-        print('ScratchWheel.Refresh called. %s' % random.randint(0, 8))
+        #print('ScratchWheel.Refresh called. %s' % random.randint(0, 8))
         event.Skip()
         
         if self.recalculation_flag:
