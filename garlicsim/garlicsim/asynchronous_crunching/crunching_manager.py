@@ -36,8 +36,7 @@ The cruncher class to be used by default in history-dependent simulations.
 @garlicsim.general_misc.third_party.decorator.decorator
 def with_tree_lock(method, *args, **kwargs):
     '''
-    A decorator used in CrunchingManager's methods to use the tree lock (in
-    write mode) as a context manager when calling the method.
+    Decorator for using the tree lock (in write mode) as a context manager.
     '''
     self = args[0]
     with self.project.tree.lock.write:
@@ -83,9 +82,7 @@ class CrunchingManager(object):
         '''
         
         self.crunchers = {}
-        '''
-        Dict that maps each job to the cruncher reponsible for doing it.
-        '''
+        '''Dict that maps each job to the cruncher reponsible for doing it.'''
         
         self.step_profiles = {}
         '''
