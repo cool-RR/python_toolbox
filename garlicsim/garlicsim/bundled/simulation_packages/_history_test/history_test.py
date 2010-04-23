@@ -1,21 +1,21 @@
 # Copyright 2009-2010 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-import garlicsim.data_structures
 import copy
-from garlicsim.misc import StepCopy
-
 import math
 from math import pi
 import random
 random.seed()
+
+from garlicsim.misc import StepCopy
+import garlicsim.data_structures
+
 def make_plain_state(*args, **kwargs):
     state=garlicsim.data_structures.State()
     state.left = 0
     state.left_vel = 0
     state.right = 0
     return state
-
 
 def make_random_state(*args, **kwargs):
     state=garlicsim.data_structures.State()

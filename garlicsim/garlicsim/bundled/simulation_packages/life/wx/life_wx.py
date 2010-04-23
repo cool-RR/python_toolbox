@@ -10,7 +10,7 @@ import functools
 import wx
 
 import garlicsim.data_structures
-import custom_widgets
+import widgets
 
 """
 
