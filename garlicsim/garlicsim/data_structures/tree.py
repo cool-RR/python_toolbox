@@ -15,19 +15,19 @@ from garlicsim.misc import GarlicSimException
 # `from block import Block` in the bottom of the file.
 # `from node import Node` in the bottom of the file.
 
+
 __all__ = ["Tree", "TreeError"]
 
+
 class TreeError(GarlicSimException):
-    '''An exception related to the Tree class.'''
-    pass
+    '''Tree-related exception.'''
 
 class Tree(object):
     '''
-    A tree of nodes. Each node encapsulates a state.
+    A time tree, (generalization of timeline,) of the simulation.
 
-    A tree is used within a project to organize everything that is happenning
-    in the simulation. A tree, which may be called a time tree, is a
-    generalization of a timeline.
+    A tree is used within a project to organize everything that is happenning in
+    the simulation.
     
     Often, when doing a simulation, the tree will be a degenerate tree, i.e. a
     straight, long succession of nodes with no more than one child each. The
@@ -39,7 +39,7 @@ class Tree(object):
     different scenarios in parallel in the same simulation.
 
     Each node in the tree may have a parent, or may not, in which case it will
-    also be called a root and be a member of tree.roots.
+    also be called a root and be a member of `.roots`.
     '''
     def __init__(self):
         
@@ -155,14 +155,18 @@ tree while specifying a template_node.''')
             result += root.all_possible_paths()
         return result
     
+    """ todo: In construction:
     def move_node_range(self, node_range): #tododoc
         pass
     
-    def copy_node_range(self, node_range, start=None, end=None): #tododoc
-        
+    def copy_node_range(self, node_range, start=None, end=None): #tododoc 
         pass
+    """
     
     def delete_node_selection(self, node_selection, stitch=False):#tododoc
+        '''
+        Delete a node selection from the tree.
+        '''
         node_selection.compact()
         for node_range in node_selection.ranges:
             self.delete_node_range(node_range, stitch=stitch)

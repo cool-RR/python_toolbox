@@ -20,15 +20,14 @@ __all__ = ["Node", "NodeError"]
 
 
 class NodeError(GarlicSimException):
-    '''An error related to the Node class.'''
-    pass
+    '''Node-related Exception.'''
 
 
 class Node(object):
     '''
     Nodes are used to organize states in a tree.
     
-    A node encapsulates a state with the attribute ".state". 
+    A node encapsulates a state with the attribute `.state`. 
     
     Most nodes are untouched, a.k.a. natural, but some nodes are touched.
     A touched node is a node whose state was not formed naturally by a
@@ -39,16 +38,29 @@ class Node(object):
     
     def __init__(self, tree, state, parent=None, step_profile=None,
                  touched=False):
-            
+        '''
+        Construct the node.
+        
+        `tree` is the tree in which this node resides. `state` is the state it
+        should contain. `parent` is its parent node in the tree, which may be
+        None for a root. `step_profile` is the step profile with which the state
+        was crunched, which may be None for a state that was created from
+        scratch. `touched` is whether the state was modified/created from
+        scratch, in contrast to having been produced by crunching.
+        '''
+        
         self.tree = tree
+        '''The tree in which this node resides.'''
+        
         self.state = state
+        '''The state contained in the node.'''
         
         self.parent = parent
         '''The parent node of this node.'''
         
         self.step_profile = step_profile
         '''
-        The step options profile under which the contained state was created.
+        The step options profile with which the contained state was created.
         
         For an untouched node, this must be a real StepProfile, even an empty
         one. Only a touched node which was created from scratch should have
@@ -66,22 +78,25 @@ class Node(object):
         self.children = []
         '''
         A list of:
-        1. Nodes whose states were produced by simulation from this node.
-        2. Nodes who were "created by editing" from one of the nodes in the
-        aforementioned set.
+            1. Nodes whose states were produced by simulation from this node.
+            2. Nodes who were "created by editing" from one of the nodes in the
+            aforementioned set.
         '''
 
         self.derived_nodes = []
         '''
-        A list of nodes who were created by editing from this node.
+        List of nodes who were created by editing from this node.
+        
         These nodes should have the same parent as this node.
         '''
 
         self.still_in_editing = False
         '''
-        A flag that is raised for a node which is "still in editing", meaning
-        that its state is still being edited and was not yet finalized, thus no
-        crunching should be made from the node until it is finalized.
+        A flag that is raised for a node which is "still in editing".
+        
+        This means that its state is still being edited and was not yet
+        finalized, thus no crunching should be made from the node until it is
+        finalized.
         '''
   
         

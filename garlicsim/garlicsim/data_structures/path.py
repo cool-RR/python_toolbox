@@ -9,59 +9,64 @@ See its documentation for more information.
 
 import copy as copy_module # Avoiding name clash.
 
+from garlicsim.general_misc import binary_search
+
 from garlicsim.misc import GarlicSimException
 
 from node import Node
 from block import Block
 # We are doing `from tree import Tree` in the bottom of the file.
 
-from garlicsim.general_misc import binary_search
 
 __all__ = ['Path', 'PathError', 'PathOutOfRangeError', 'EndNotReached',
            'StartNotReached']
 
+
 class PathError(GarlicSimException):
-    '''An exception related to the class Path.'''
-    pass
+    '''Path-related exception.'''
 
 class PathOutOfRangeError(PathError, IndexError):
-    '''
-    Nodes are requested from the path which are out of its range.
-    '''
-    pass
+    '''Nodes are requested from the path which are out of its range.'''
 
-class EndNotReached(PathError): # todo: consider subclass from one of the obscure
+class EndNotReached(PathError):
     '''
     An end node/block is specified but it turns out not to be on the path.
     '''
-    pass
+    # todo: consider subclass from one of the obscure exceptions like
+    # LookupError
 
 class StartNotReached(PathError):
     '''
     A start node/block is specified but it turns out not to be on the path.
     '''
-    pass
+    
 
-class Path(object): #todo: add __reversed__ here, maybe also in Block and others
+class Path(object):
     '''
-    A path symbolizes a line of nodes in a tree. A tree may be complex and
-    contain many junctions, but a path is a direct line through it. Therefore,
-    a path object contains information about which child to choose when going
-    through a node which has multiple children.
+    A path represents a line of nodes in a tree.
     
-    The attribute `.decisions` is a dictionary of the form {node_which_forks: 
-    node_to_continue_to, ... }. It usually contains as keys only nodes that
-    have more than one child.
-    
-    The attribute `.root` says from which node the path begins.
+    A tree may be complex and contain many junctions, but a path is a direct
+    line through it. Therefore, a path object contains information about which
+    child to choose when going through a node which has multiple children.
     
     Some of Path's method accept `start` and `end` parameters for specifying a
     sub-range inside the path. It should be noted that this range will include
     both endpoints.
     '''
+    # todo: add __reversed__ here, maybe also in Block and others
+    
     def __init__(self, tree, root=None, decisions={}):
+        '''
+        Construct the path.
+        
+        `tree` is the tree that this path is on. `root` is the node from which
+        the path begins. `decisions` is a dictionary of the form
+        {node_which_forks: node_to_continue_to, ... }. It usually contains as
+        keys only nodes that have more than one child.
+        '''
 
         self.tree = tree
+        '''The tree that this path is on.'''
         
         self.root = root
         '''The root node.'''
@@ -249,9 +254,8 @@ class Path(object): #todo: add __reversed__ here, maybe also in Block and others
             
 
     def __contains__(self, thing, start=None, end=None):
-        '''
-        Return whether the path contains the specified node/block.
-        '''
+        '''Return whether the path contains the specified node/block.'''
+        
         assert isinstance(thing, Node) or isinstance(thing, Block)
 
         for candidate in self.iterate_blockwise(start=start, end=end):
@@ -443,9 +447,13 @@ path, but it's completely empty.''')
     def __get_node_by_monotonic_function_with_both_rounding(self, function,
                                                             value):
         '''
-        tododoc
+        Get a node by specifying a measure function and a desired value.
         
-        note that this function does not let you specify an end node. currently
+        The function must be a monotonic rising function on the timeline.
+        
+        The rounding option used is `binary_search.BOTH`.
+        
+        Note that this function does not let you specify an end node. currently
         we're not optimizing for the case where you have an end node and this
         function might waste resources exploring beyond it.
         '''
@@ -541,8 +549,8 @@ path, but it's completely empty.''')
         Get the node which "occupies" the given timepoint.
         
         A node is considered to "occupy" a timepoint if it is the
-        highest-clocked node before the timepoint, AND there exists another
-        node which has a clock higher than timepoint (that higher node is not
+        highest-clocked node before the timepoint, AND there exists another node
+        which has a clock higher than timepoint (that higher node is not
         returned, it just has to exist for the first node to qualify as
         "occupying".)
         
@@ -568,7 +576,7 @@ path, but it's completely empty.''')
         clock_of_first = self.root.state.clock
         clock_of_last = self.get_last_node().state.clock
         
-        if clock_of_first <= end_time and clock_of_last >= start_time:            
+        if clock_of_first <= end_time and clock_of_last >= start_time:
             return [max(clock_of_first, start_time),
                     min(clock_of_last, end_time)]
         else:
@@ -605,9 +613,7 @@ path, but it's completely empty.''')
     
     
     def copy(self):
-        '''
-        Make a shallow copy of the path.
-        '''
+        '''Make a shallow copy of the path.'''
         
         # Most of these things don't need duplicating, but just for
         # completeness' sake:
