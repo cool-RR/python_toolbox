@@ -12,6 +12,8 @@ A module for doing a binary search in a sequence.
 # todo: i think `binary_search_by_index` should have the core logic, and the
 # other one will use it. I think this will save many sequence accesses, and some
 # sequences can be expensive.
+#
+# todo: decide already if we return only tuples or only lists. Probably tuples.
 
 
 from .roundings import Rounding, LOW, HIGH, EXACT, CLOSEST, BOTH

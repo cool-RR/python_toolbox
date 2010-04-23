@@ -136,14 +136,9 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         
         The function must be a monotonic rising function on the timeline.
         
-        See documentation of garlicsim.general_misc.binary_search.binary_search
-        for details about rounding options.tododoc
+        See documentation of garlicsim.general_misc.binary_search.roundings for
+        details about rounding options.
         '''
-        
-        # tododoc important: make sure this function follows the new guidelines
-        # regarding binary search. When asking for LOW and there's an exact
-        # match, we must return it. Same for HIGH. When requested BOTH and
-        # there's an exact match, we give the exact match twice.
         
         assert issubclass(rounding, binary_search.Rounding)
         
@@ -164,27 +159,21 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
                 return binary_search.make_both_data_into_preferred_rounding\
                        (queue_result, function, value, rounding)
             elif none_count == 1:
-                '''
-                The result is on or beyond the edge of the queue.
-                '''
+                # The result is somewhere after the past edge of the queue.
                 if queue_result[1] is None:
-                    # The result is either the most recent state in the queue
-                    # or "after" it
+                    # The result is beyond the future edge of the queue.
                     return binary_search.make_both_data_into_preferred_rounding\
                            (queue_result, function, value, rounding)
                 else: # queue_result[0] == None
-                    '''
-                    Getting tricky: The result is somewhere in the middle
-                    between the queue and the tree.
-                    '''
+                    # Getting tricky: The result is somewhere in the middle
+                    # between the queue and the tree.
                     combined_result = [tree_result[0], queue_result[1]]
                     return binary_search.make_both_data_into_preferred_rounding\
                            (combined_result, function, value, rounding)
     
-            elif none_count == 2:
-                '''
-                The queue is just totally empty.
-                '''
+            else:
+                assert none_count == 2
+                # The queue is just totally empty.
                 return binary_search.make_both_data_into_preferred_rounding \
                        (tree_result, function, value, rounding)
             
@@ -196,8 +185,8 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         
         The function must be a monotonic rising function on the timeline.
         
-        See documentation of garlicsim.general_misc.binary_search.binary_search
-        for details about rounding options.tododoc
+        See documentation of garlicsim.general_misc.binary_search.roundings for
+        details about rounding options.
         '''
         assert issubclass(rounding, binary_search.Rounding)
         our_node = self.__get_our_node()
@@ -217,8 +206,8 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         
         The function must by a monotonic rising function on the timeline.
         
-        See documentation of garlicsim.general_misc.binary_search.binary_search
-        for details about rounding options.tododoc
+        See documentation of garlicsim.general_misc.binary_search.roundings for
+        details about rounding options.
         '''
         assert issubclass(rounding, binary_search.Rounding)
         queue = self.cruncher.work_queue
@@ -231,7 +220,7 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
     @with_self
     def __len__(self):
         '''
-        Returns the length of the timeline in nodes.
+        Get the length of the timeline in nodes.
         
         This means the sum of:
         1. The length of the work_queue of our cruncher.

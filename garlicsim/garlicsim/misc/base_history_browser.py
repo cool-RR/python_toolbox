@@ -44,16 +44,14 @@ class BaseHistoryBrowser(object):
         
         The function must be a monotonic rising function on the timeline.
         
-        See documentation of garlicsim.general_misc.binary_search.binary_search
-        for details about rounding options.
+        See documentation of garlicsim.general_misc.binary_search.roundings for
+        details about rounding options.
         '''
         pass
     
     @abc.abstractmethod
     def __len__(self):
-        '''
-        Returns the length of the timeline in nodes.
-        '''
+        '''Get the length of the timeline in nodes.'''
         pass
     
     
@@ -61,8 +59,8 @@ class BaseHistoryBrowser(object):
         '''
         Get a state by specifying desired clock time.
         
-        See documentation of garlicsim.general_misc.binary_search.binary_search
-        for details about rounding options.
+        See documentation of garlicsim.general_misc.binary_search.roundings for
+        details about rounding options.
         '''
         assert issubclass(rounding, binary_search.Rounding)
         return self.get_state_by_monotonic_function\

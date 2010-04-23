@@ -398,8 +398,8 @@ path, but it's completely empty.''')
         '''
         Get a node according to its clock.
         
-        See documentation of garlicsim.general_misc.binary_search.binary_search
-        for details about rounding options.tododoc
+        See documentation of garlicsim.general_misc.binary_search.roundings for
+        details about rounding options.
         '''
         
         my_function = lambda node: node.state.clock
@@ -417,8 +417,8 @@ path, but it's completely empty.''')
         
         The function must be a monotonic rising function on the timeline.
         
-        See documentation of garlicsim.general_misc.binary_search.binary_search
-        for details about rounding options.
+        See documentation of garlicsim.general_misc.binary_search.roundings for
+        details about rounding options.
         '''
         
         assert issubclass(rounding, binary_search.Rounding)
