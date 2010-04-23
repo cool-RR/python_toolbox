@@ -2,8 +2,9 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the HistoryBrowser class. See its documentation
-for more info.
+This module defines the HistoryBrowser class.
+
+See its documentation for more info.
 '''
 
 from __future__ import with_statement
@@ -21,16 +22,15 @@ __all__ = ["HistoryBrowser"]
 
 @garlicsim.general_misc.third_party.decorator.decorator
 def with_self(method, *args, **kwargs):
-    '''
-    A decorator used in HistoryBrowser's methods to use the history browser
-    as a context manager when calling the method.
-    '''
+    '''Decorator for using the history browser as a context manager.'''
     self = args[0]
     with self:
         return method(*args, **kwargs)
 
 class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
     '''
+    A device for requesting information about the history of the simulation.
+    
     A HistoryBrowser is a device for requesting information about the history of
     the simulation. It is intended to be used by CruncherThread in simulations
     that are history-dependent.

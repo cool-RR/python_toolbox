@@ -15,15 +15,14 @@ get_state_clock = lambda state: state.clock
 
 class BaseHistoryBrowser(object):
     '''
-    An abstract base class for history browsers, created with the abc module 
-    from Python's standard library. See abc's documentation for more
-    information about abstract base classes.
+    A device for requesting information about the history of the simulation.
+
+    With a HistoryBrowser one can request states from the simulation's timeline.
+    States can be requested by clock time or position in the timeline or by
+    other measures; See documentation for this class's methods.
     
-    All history browsers should be based on this class.
-    
-    A history browser is a device for requesting states from the timeline of
-    the simulation. It is relevant only to simulations that are
-    history-dependent.
+    This is an abstract base class from which all history browsers should
+    subclass.
     '''
     __metaclass__ = abc.ABCMeta
     

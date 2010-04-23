@@ -16,9 +16,12 @@ get_state_clock = lambda state: state.clock
 
 class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
     '''
-    A history browser is a device for requesting states from the timeline of
-    the simulation. It is relevant only to simulations that are
-    history-dependent.
+    A device for requesting information about the history of the simulation.
+    
+    A HistoryBrowser is a device for requesting information about the history of
+    the simulation. It is intended to be used by CruncherThread in simulations
+    that are history-dependent.
+    
     This specific kind of history browser, defined in the synchronous_crunching
     package, is intended for synchronously-crunched simulations in which there
     are no worker processes/threads doing the crunching. Therefore, its job is
