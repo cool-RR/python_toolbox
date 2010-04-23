@@ -15,16 +15,17 @@ from garlicsim.misc import GarlicSimException
 
 __all__ = ["Block", "BlockError"]
 
-class BlockError(GarlicSimException):
-    '''
-    An exception related to the class Block.
-    '''
-    pass
 
+class BlockError(GarlicSimException):
+    '''Block-related exception.'''
+
+    
 class Block(object):
     '''
-    A block is a device for bundling together a succession of natural nodes.
-    It makes the tree more organized and easy to browse, and improves
+    A device for bundling together a succession of natural nodes.
+    
+    
+    Blocks make the tree more organized and easy to browse, and improve
     performance.
 
     When you're doing a simulation, often you'll have a succession of 1000+
@@ -34,12 +35,11 @@ class Block(object):
 
     Who qualifies to get wrapped in a block? A succession of untouched nodes,
     which:
-    1. Is at least 2 nodes in number.
-    
-    2. All members, except the last one, must have no children except
-       their successor in the block.
-    3. The last node may have any kinds of children.
-    4. All members share the same step_profile.
+        1. Is at least 2 nodes in number.
+        2. All members, except the last one, must have no children except
+           their successor in the block.
+        3. The last node may have any kinds of children.
+        4. All members share the same step_profile.
 
     If you want to check whether a certain node is in a block or not,
     check its ".block" attribute.
@@ -47,9 +47,7 @@ class Block(object):
     '''
     # todo: maybe Node and Block should inherit from some BaseTreeMember
     def __init__(self, node_list):
-        '''
-        Construct a block from the members of node_list.
-        '''
+        '''Construct a block from the members of node_list.'''
         self.alive = True
         self.__node_list = []
         self.add_node_list(node_list)
@@ -241,6 +239,7 @@ while the index was bigger than the block's length.''')
 
     
     def __iter__(self):
+        '''Iterate over the nodes in the block.'''
         assert self.alive
         return self.__node_list.__iter__()
 
@@ -251,9 +250,10 @@ while the index was bigger than the block's length.''')
         return len(self.__node_list)
 
     
-    def __getitem__(self, *args, **kwargs):
+    def __getitem__(self, index):
+        '''Get a node by index number from the block'''
         assert self.alive
-        return self.__node_list.__getitem__(*args, **kwargs)
+        return self.__node_list.__getitem__(index)
     
     
     # def __getslice__(self, *args, **kwargs): #todo: can drop because of getitem?
@@ -261,18 +261,16 @@ while the index was bigger than the block's length.''')
 
     
     def index(self, node):
-        '''
-        Return the index number of the specified node in the block.
-        '''
+        '''Get the index number of the specified node in the block.'''
         assert self.alive
         return self.__node_list.index(node)
     
     
     def get_step_profile(self):
         '''
-        Get the step options profile of the nodes in this block.
+        Get the step profile of the nodes in this block.
         
-        This profile must be identical in all of the nodes in the block.
+        The same profile is used in all of the nodes in the block.
         '''
         assert self.alive
         return self.__node_list[0].step_profile
