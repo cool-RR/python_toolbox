@@ -2,7 +2,9 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the Job class. See its documentation for more info.
+This module defines the Job class.
+
+See its documentation for more info.
 '''
 
 __all__ = ['Job']
@@ -14,6 +16,8 @@ class Job(object):
     A job specifies a node and a crunching profile. It means we should crunch
     from `node` according to the cruncing profile.
     '''
+    # todo: should there be other helpful methods here?
+    
     def __init__(self, node, crunching_profile):
         
         self.node = node
@@ -22,15 +26,14 @@ class Job(object):
         self.crunching_profile = crunching_profile
         '''The crunching profile to be used for crunching.'''
   
+        
     def is_done(self):
         '''
         Return whether the job is done, i.e. enough crunching has been done.
         '''
         return self.crunching_profile.state_satisfies(self.node.state)
     
-    # todo: should there be other helpful methods here?
         
-
     def __repr__(self): #todo: ensure not subclass?
         '''
         Get a string representation of the job.

@@ -23,8 +23,9 @@ def get_packages():
 
 my_long_description = \
 '''\
-GarlicSim is a platform for writing, running and analyzing simulations. It can
-handle any kind of simulation: Physics, game theory, epidemic spread,
+GarlicSim is a platform for writing, running and analyzing simulations.
+
+It can handle any kind of simulation: Physics, game theory, epidemic spread,
 electronics, etc.
 
 Visit http://garlicsim.org for more info.
@@ -43,7 +44,7 @@ my_classifiers = [
 
 setuptools.setup(
     name='garlicsim',
-    version='0.3',
+    version='0.4',
     description='Pythonic framework for working with simulations',
     author='Ram Rachum',
     author_email='cool-rr@cool-rr.com',

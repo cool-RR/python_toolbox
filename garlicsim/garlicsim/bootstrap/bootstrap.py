@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This is a bootstrap module for garlicsim.
+A bootstrap module for garlicsim.
 
 It checks all prerequisites are installed.
 '''

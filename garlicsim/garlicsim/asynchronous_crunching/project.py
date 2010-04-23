@@ -2,8 +2,9 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the Project class. See its documentation for more
-information.
+This module defines the Project class.
+
+See its documentation for more information.
 '''
 
 from __future__ import with_statement
@@ -37,6 +38,8 @@ def with_tree_lock(method, *args, **kwargs):
 
 class Project(object):
     '''
+    A simulation project. This is the flagship class of `garlicsim`.
+    
     You create a project when you want to do a simulation which will crunch
     in the background with worker threads or worker processes.
 
@@ -58,30 +61,11 @@ class Project(object):
     def __init__(self, simpack):
         
         if isinstance(simpack, garlicsim.misc.SimpackGrokker):
-            
-            self.simpack_grokker = simpack
-            
+            self.simpack_grokker = simpack            
             self.simpack = self.simpack_grokker.simpack
-            
-        else:
-            
-            #wrapped_simpack = \
-                #garlicsim.general_misc.module_wrapper.module_wrapper_factory \
-                #(simpack)
-            
-            #self.simpack = wrapped_simpack
-            
-            #self.simpack_grokker = \
-                #garlicsim.misc.SimpackGrokker(wrapped_simpack)
-            
-            # todo: I cancelled the module-wrapping because it fucked some
-            # things up. The original reason for it is that modules can't be
-            # pickled. But I'll just use copy_reg.
-            
+        else: # The simpack we got is an actual simpack
             self.simpack = simpack
-            
-            self.simpack_grokker = \
-                garlicsim.misc.SimpackGrokker(simpack)
+            self.simpack_grokker = garlicsim.misc.SimpackGrokker(simpack)
 
         self.tree = garlicsim.data_structures.Tree()
         
@@ -187,11 +171,13 @@ class Project(object):
         
         On the next call to .sync_crunchers, a cruncher will start working on
         the new job.
+        
         If there are already jobs on that node, they will all be crunched
         independently of each other to create different forks.
-        Any args or kwargs will be packed in a StepProfile object and
-        passed to the step function. You may pass a StepProfile
-        yourself, as the only argument, and it will be noticed and used.
+        
+        Any args or kwargs will be packed in a StepProfile object and passed to
+        the step function. You may pass a StepProfile yourself, as the only
+        argument, and it will be noticed and used.
         
         Returns the job.
         '''

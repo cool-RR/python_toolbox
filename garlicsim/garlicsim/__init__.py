@@ -2,8 +2,9 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-GarlicSim is a platform for writing, running and analyzing simulations. It can
-handle any kind of simulation: Physics, game theory, epidemic spread,
+GarlicSim is a platform for writing, running and analyzing simulations.
+
+It can handle any kind of simulation: Physics, game theory, epidemic spread,
 electronics, etc.
 
 Visit http://garlicsim.org for more info.
@@ -27,5 +28,5 @@ from synchronous_crunching import simulate, list_simulate
 
 __all__ = ["Project", "simulate", "list_simulate"]
 
-__version__ = '0.3'
+__version__ = '0.4'
 

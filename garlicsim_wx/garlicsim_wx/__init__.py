@@ -23,7 +23,7 @@ from gui_project import GuiProject
 __all__ = ['Frame', 'GuiProject', 'start', 'editing_interface']
 # tododoc: wtf is editing_interface? can probably remove
 
-__version__ = '0.3'
+__version__ = '0.4'
 
 def start():
     '''Start the gui.'''

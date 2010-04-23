@@ -2,8 +2,9 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the ObsoleteCruncherError exception. See its documentation
-for more information.
+This module defines the ObsoleteCruncherError exception.
+
+See its documentation for more info.
 '''
 
 class ObsoleteCruncherError(BaseException):
@@ -15,4 +16,3 @@ class ObsoleteCruncherError(BaseException):
     should therefore be stopped.
     '''
     # Inherits from BaseException because it is an exit exception
-    pass
