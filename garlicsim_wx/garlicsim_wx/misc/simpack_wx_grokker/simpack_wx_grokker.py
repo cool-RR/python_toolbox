@@ -14,6 +14,7 @@ class Settings(object):
         List of scalar state function and scalar history functions that should
         be shown as graphs in the seek bar.
         '''
+        self.STATE_CREATION_DIALOG = garlicsim_wx.misc.StateCreationDialog
 
 class SimpackWxGrokker(object):
     '''

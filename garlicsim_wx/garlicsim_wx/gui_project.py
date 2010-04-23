@@ -312,15 +312,18 @@ class GuiProject(object):
         '''
         Initialization done when gui project is actually created, not loaded.
         '''
-        wx.CallAfter(self.make_initial_dialog)
+        wx.CallAfter(self.make_state_creation_dialog)
 
     
-    def make_initial_dialog(self):
+    def make_state_creation_dialog(self):
         '''Create a dialog for creating a root state.'''
-        if hasattr(self.simpack, "make_initial_dialog"):
-            return self.simpack.make_initial_dialog(self)
-        else:
-            return self.make_generic_initial_dialog()
+        Dialog = self.simpack_wx_grokker.settings.STATE_CREATION_DIALOG
+        dialog = Dialog(self.frame)
+        state = dialog.start()
+        if state:
+            root = self.project.root_this_state(state)
+            self.set_active_node(root)
+        
 
     def get_active_state(self):#tododoc
         return self.active_node.state if self.active_node is not None else None
@@ -616,21 +619,5 @@ class GuiProject(object):
         
         self.project.ensure_buffer(node, self.default_buffer)
 
-        
-    def make_generic_initial_dialog(self):
-        '''
-        Create a generic initial dialog.
-        
-        This is a dialog raised immediately when the gui project is created. It
-        asks the user which kind of root state he would like to start with.
-        '''
-        initial_dialog = \
-            garlicsim_wx.widgets.misc.GenericInitialDialog(self.frame, -1)
-        if initial_dialog.ShowModal() == wx.ID_OK:
-            if initial_dialog.info["random"]:
-                self.make_random_root()
-            else:
-                self.make_plain_root()
-        initial_dialog.Destroy()
 
     

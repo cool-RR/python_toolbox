@@ -13,10 +13,13 @@ import garlicsim.data_structures
 import widgets
 
 
-class InitialDialog(wx.Dialog):
+class StateCreationDialog(wx.Dialog):
     '''Initial dialog for creating a root state.'''
-    def __init__(self, parent, id):
-        wx.Dialog.__init__(self, parent, id, title="Creating a root state")
+    def __init__(self, frame):
+        wx.Dialog.__init__(self, frame, title="Creating a root state")
+        
+        self.frame = frame
+        self.simpack = frame.gui_project.simpack
 
         hbox1=wx.BoxSizer(wx.HORIZONTAL)
         self.x_title = x_title = wx.StaticText(self, -1, "Width: ")
@@ -58,7 +61,7 @@ class InitialDialog(wx.Dialog):
         ok.SetFocus()
 
     def on_ok(self, e=None):
-        '''Do okay on the dialog.'''
+        '''Do 'okay' on the dialog.'''
 
         def complain(message):
             dialog = wx.MessageDialog(self, message, "Error",
@@ -80,26 +83,30 @@ class InitialDialog(wx.Dialog):
             complain("Bad height!")
             return
 
-        self.info["fill"] = "full" if self.full.GetValue() else "empty" if self.empty.GetValue() else "random"
+        self.info["fill"] = "full" if self.full.GetValue() else \
+            "empty" if self.empty.GetValue() else "random"
 
 
         self.EndModal(wx.ID_OK)
 
     def on_cancel(self, e=None):
-        '''Do cancel on the dialog.'''
+        '''Do 'cancel' on the dialog.'''
         self.EndModal(wx.ID_CANCEL)
+        
+    def start(self):
+        if self.ShowModal() == wx.ID_OK:
+            width, height, fill = (
+                self.info["width"],
+                self.info["height"],
+                self.info["fill"]
+            )
+            state = self.simpack.make_plain_state(width, height, fill)
+        else:
+            state = None
+        self.Destroy()
+        return state
+        
 
 
-def make_initial_dialog(gui_project): # what to do about this?
-    '''Create the initial dialog for creating a root state.'''
-    initial_dialog = InitialDialog(gui_project.frame, -1)
-    if initial_dialog.ShowModal() == wx.ID_OK:
-        width, height, fill = (
-            initial_dialog.info["width"],
-            initial_dialog.info["height"],
-            initial_dialog.info["fill"]
-        )
-        gui_project.make_plain_root(width, height, fill)
-    initial_dialog.Destroy()
     
     

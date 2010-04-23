@@ -2,21 +2,25 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-This module defines the GenericInitialDialog class. See its documentation for
-more info.
+This module defines the StateCreationDialog class.
+
+See its documentation for more info.
 '''
 
 import wx
 
-class GenericInitialDialog(wx.Dialog):
+class StateCreationDialog(wx.Dialog): # make base class
     '''
     An initial dialog to show when creating a root state.
     
     This is a generic one, used if the simpack doesn't define its own.
     '''
-    def __init__(self, parent, id):
+    def __init__(self, frame):
    
-        wx.Dialog.__init__(self, parent, id, title="Creating a root state")
+        wx.Dialog.__init__(self, frame, title='Creating a root state')
+        
+        self.frame = frame
+        self.simpack = frame.gui_project.simpack
 
         hbox1 = wx.BoxSizer(wx.HORIZONTAL)
         self.plain = empty = wx.RadioButton(self, -1, 'Plain', style=wx.RB_GROUP)
@@ -45,25 +49,28 @@ class GenericInitialDialog(wx.Dialog):
         vbox.Fit(self)
         ok.SetFocus()
 
-    def on_ok(self,e=None):
+    def start(self):
+        if self.ShowModal() == wx.ID_OK:
+            if self.info['random']:
+                state = self.simpack.make_random_state()
+            else:
+                state = self.simpack.make_plain_state()
+        else:
+            state = None
+        self.Destroy()
+        return state
+        
+    def on_ok(self, e=None):
         '''Do 'Okay' on the dialog.'''
-
-        '''
-        def complain(message):
-            dialog = wx.MessageDialog(self, message, "Error",
-                                      wx.ICON_ERROR | wx.OK)
-            dialog.ShowModal()
-            dialog.Destroy()
-        '''
 
         self.info = {}
 
-        self.info["random"] = self.random.GetValue() # It's a bool
+        self.info['random'] = self.random.GetValue() # It's a bool
 
         self.EndModal(wx.ID_OK)
 
         
-    def on_cancel(self,e=None):
+    def on_cancel(self, e=None):
         '''Do 'cancel' on the dialog'''
         
         self.EndModal(wx.ID_CANCEL)
