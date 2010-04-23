@@ -20,14 +20,16 @@ images_package = __images_package.__name__
 class Knob(wx.Panel):
     # todo future: make key that disables snapping while dragging
     # todo: consider letting the knob turn just a bit slower near the edges.
+    # todo: currently forcing size to be constant, in future allow changing
     def __init__(self, parent, getter, setter, *args, **kwargs):
         
         assert 'size' not in kwargs
+        kwargs['size'] = (29, 29)
         
         assert callable(setter) and callable(getter)
         self.value_getter, self.value_setter = getter, setter
         
-        wx.Panel.__init__(self, parent, *args, size=(29, 29), **kwargs)
+        wx.Panel.__init__(self, parent, *args, **kwargs)
         
         self.original_bitmap = wx.Bitmap(
             pkg_resources.resource_filename(images_package, 'knob.png'),

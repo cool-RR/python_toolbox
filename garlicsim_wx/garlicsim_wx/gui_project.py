@@ -5,6 +5,8 @@
 This module defines the GuiProject class. See its documentation for more info.
 '''
 
+from __future__ import with_statement
+
 import warnings
 import copy
 import functools

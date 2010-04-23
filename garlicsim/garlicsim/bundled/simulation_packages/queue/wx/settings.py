@@ -1,4 +1,3 @@
-from queue_wx import *
 import custom_widgets
 
 SEEK_BAR_GRAPHS = []

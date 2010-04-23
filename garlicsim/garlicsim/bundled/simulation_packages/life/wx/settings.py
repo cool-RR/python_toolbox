@@ -1,5 +1,4 @@
-from life_wx import *
-from ..life import *
+from ..life import live_cells, changes
 import custom_widgets
 
 SEEK_BAR_GRAPHS = [live_cells, changes]
