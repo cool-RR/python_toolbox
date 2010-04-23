@@ -2,8 +2,9 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the CruncherProcess class. See its documentation for
-more information.
+This module defines the CruncherProcess class.
+
+See its documentation for more information.
 
 This module requires the multiprocessing package to be installed. It is part of
 the standard library for Python 2.6 and above, but not for earlier versions.
@@ -40,8 +41,7 @@ class CruncherProcess(multiprocessing.Process):
     cruncher's work_queue. They are then taken by the main program when
     Project.sync_crunchers is called, and put into the tree.
         
-    Read more about crunchers in the documentation of the crunchers_warehouse
-    package.
+    Read more about crunchers in the documentation of the crunchers package.
     
     The advantage of CruncherProcess over CruncherThread is that
     CruncherProcess is able to run on a different core of the processor
@@ -70,14 +70,10 @@ class CruncherProcess(multiprocessing.Process):
         '''
         
         self.order_queue = multiprocessing.Queue()
-        '''
-        Queue for receiving instructions from the main thread.
-        '''
+        '''Queue for receiving instructions from the main thread.'''
 
     def set_low_priority(self):
-        '''
-        Set a low priority for this process.
-        '''
+        '''Set a low priority for this process.'''
         
         try:
             sys.getwindowsversion()
@@ -99,6 +95,8 @@ class CruncherProcess(multiprocessing.Process):
 
     def run(self):
         '''
+        Internal method.
+        
         This is called when the cruncher is started. It just calls the
         main_loop method in a try clause, excepting ObsoleteCruncherError;
         That exception means that the cruncher has been retired in the middle

@@ -2,8 +2,9 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the CruncherThread class. See its documentation for
-more information.
+This module defines the CruncherThread class.
+
+See its documentation for more information.
 '''
 
 import threading
@@ -26,8 +27,7 @@ class CruncherThread(threading.Thread):
     cruncher's work_queue. They are then taken by the main program when
     Project.sync_crunchers is called, and put into the tree.
         
-    Read more about crunchers in the documentation of the crunchers_warehouse
-    package.
+    Read more about crunchers in the documentation of the crunchers package.
     
     The advantages of CruncherThread over CruncherProcess are:
     1. CruncherThread is able to handle simulations that are history-dependent,
@@ -66,18 +66,18 @@ class CruncherThread(threading.Thread):
         '''
 
         self.order_queue = Queue.Queue()
-        '''
-        Queue for receiving instructions from the main thread.
-        '''
+        '''Queue for receiving instructions from the main thread.'''
 
         
     def run(self):
         '''
-        This is called when the cruncher is started. It just calls
-        the main_loop method in a try clause, excepting ObsoleteCruncherError;
-        That exception means that the cruncher has been retired in the middle
-        of its job, so it is propagated up to this level, where it causes the
-        cruncher to terminate.
+        Internal method.
+        
+        This is called when the cruncher is started. It just calls the main_loop
+        method in a try clause, excepting ObsoleteCruncherError; That exception
+        means that the cruncher has been retired in the middle of its job, so it
+        is propagated up to this level, where it causes the cruncher to
+        terminate.
         '''
         try:
             self.main_loop()
@@ -137,9 +137,7 @@ class CruncherThread(threading.Thread):
 
         
     def process_order(self, order):
-        '''
-        Process an order receieved from order_queue.
-        '''
+        '''Process an order receieved from order_queue.'''
         if order == "retire":
             raise ObsoleteCruncherError
         
@@ -164,9 +162,7 @@ class CruncherThread(threading.Thread):
         
         
     def update_crunching_profile(self, profile):
-        '''
-        Update the cruncher's crunching profile. Thread-safe.
-        '''
+        '''Update the cruncher's crunching profile. Thread-safe.'''
         self.order_queue.put(profile)
         
     is_alive = threading.Thread.isAlive
