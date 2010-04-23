@@ -11,7 +11,7 @@ Backports of it for Python 2.4 and 2.5 are available on the internet.
 '''
 
 try:
-    import zmultiprocessing
+    import multiprocessing
 except ImportError:
     raise ImportError('''The backported multiprocessing package is needed. \
 Search for it online and install it.''')
