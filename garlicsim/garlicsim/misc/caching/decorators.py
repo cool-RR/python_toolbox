@@ -10,6 +10,8 @@ functions that take a history browser.
 #todo: make sure the cache gets lost on pickling
 #todo: append to function's docstring?
 
+from __future__ import with_statement
+
 import weakref
 import functools
 

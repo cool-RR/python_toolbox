@@ -13,7 +13,7 @@ one will use it. I think this will save many sequence accesses, and some
 sequences can be expensive.
 '''
 
-from .roundings import *
+from .roundings import Rounding, LOW, HIGH, EXACT, CLOSEST, BOTH
 
 def binary_search_by_index(sequence, function, value, rounding=CLOSEST):
     '''
