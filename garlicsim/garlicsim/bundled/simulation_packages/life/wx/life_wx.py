@@ -12,25 +12,6 @@ import wx
 import garlicsim.data_structures
 import widgets
 
-"""
-
-def initialize(gui_project):
-    '''Initialize the gui.'''
-    gui_project.mysizer = wx.BoxSizer(wx.VERTICAL)
-    board_widget = gui_project.board_widget = \
-        custom_widgets.BoardViewer(gui_project.state_showing_window, -1,
-                                   gui_project)
-    gui_project.mysizer.Add(board_widget, 1, wx.EXPAND)
-    gui_project.state_showing_window.SetSizer(gui_project.mysizer)
-    gui_project.mysizer.Fit(gui_project.state_showing_window)
-
-def show_state(gui_project, state):
-    '''Show the given state onscreen.'''
-    gui_project.board_widget.set_board(state.board)
-    
-"""
-StateViewer = custom_widgets.BoardViewer
-################
 
 class InitialDialog(wx.Dialog):
     '''Initial dialog for creating a root state.'''
@@ -109,9 +90,9 @@ class InitialDialog(wx.Dialog):
         self.EndModal(wx.ID_CANCEL)
 
 
-def zmake_initial_dialog(gui_project): # what to do about this?
+def make_initial_dialog(gui_project): # what to do about this?
     '''Create the initial dialog for creating a root state.'''
-    initial_dialog = InitialDialog(gui_project.main_window, -1)
+    initial_dialog = InitialDialog(gui_project.frame, -1)
     if initial_dialog.ShowModal() == wx.ID_OK:
         width, height, fill = (
             initial_dialog.info["width"],

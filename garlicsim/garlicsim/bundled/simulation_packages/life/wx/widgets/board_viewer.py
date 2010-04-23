@@ -1,15 +1,15 @@
 # Copyright 2009-2010 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
+'''Defines the BoardViewer class.'''
+
 import wx
 import wx.lib.scrolledpanel as scrolled
 
 from garlicsim_wx.general_misc import wx_tools
+
 import garlicsim_wx
 
-'''
-Defines the BoardViewer class.
-'''
 
 class BoardViewer(scrolled.ScrolledPanel,
                   garlicsim_wx.widgets.WorkspaceWidget):
@@ -64,6 +64,9 @@ class BoardViewer(scrolled.ScrolledPanel,
             self.Refresh()
         
     def _get_size_from_board(self):
+        '''
+        Get the size the widget should be by inspecting the size of the board.
+        '''
         if self.board:
             return (
                 self.board.width * (self.square_size + self.border_width),
@@ -72,7 +75,8 @@ class BoardViewer(scrolled.ScrolledPanel,
         else:
             return (1, 1)
         
-    def _draw_buffer_bitmap(self):        
+    def _draw_buffer_bitmap(self):
+        '''Draw the buffer bitmap, which `on_paint` will draw to the screen.'''
         
         board = self.board
         
@@ -103,9 +107,6 @@ class BoardViewer(scrolled.ScrolledPanel,
                 brushes.append(black_brush if board.get(x,y) is True
                                else white_brush)
 
-        #for rect in rectangles:
-            #(rect[0], rect[1]) = self.CalcScrolledPosition((rect[0], rect[1]))
-
         transparent_pen = wx.Pen('#000000', 0, wx.TRANSPARENT)
         
         dc.DrawRectangleList(rectangles, transparent_pen, brushes)
@@ -128,15 +129,14 @@ class BoardViewer(scrolled.ScrolledPanel,
         dc.SetBackground(wx_tools.get_background_brush())
         dc.Clear()
         
-        dc.DrawBitmapPoint(self._buffer_bitmap, self.CalcScrolledPosition((0, 0)))
+        dc.DrawBitmapPoint(self._buffer_bitmap,
+                           self.CalcScrolledPosition((0, 0)))
         
         dc.Destroy()
         
         
-
-
     def on_size(self, event):
-        '''Refresh the widget.'''
+        '''EVT_SIZE handler.'''
         self.Refresh()
         if event is not None:
             event.Skip()
