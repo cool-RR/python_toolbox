@@ -1,3 +1,4 @@
+import copy
 import nose
 from garlicsim.general_misc import logic_tools
 
@@ -11,15 +12,18 @@ def node_selection_and_range_test():
     tree = project.tree
     root = project.root_this_state(root_state)
     leaf1 = project.simulate(root, 10)
-    path = leaf1.make_containing_path()
-    assert root in path
-    middle_node = path[5]
+    path1 = leaf1.make_containing_path()
+    middle_node = path1[5]
     leaf2 = project.simulate(middle_node, 10)
+    path2 = leaf2.make_containing_path()
     
     # Now we have a tree with a fork in it, in `middle_node`
     
     range1 = ds.NodeRange(root, leaf1)
+    assert path1 == range1.make_path()
     range2 = ds.NodeRange(root, leaf2)
+    assert path2 == range2.make_path()
+    
     ns1 = ds.NodeSelection([range1, range2])
     ns2 = ns1.copy()
     assert ns1 == ns2
@@ -40,6 +44,39 @@ def node_selection_and_range_test():
     
     for range in all_ranges:
         assert range == range.clone_with_blocks_dissolved()
+    
+    
+    #####################
+    alt_tree, alt_ns1 = copy.deepcopy((tree, ns1))
+    alt_tree.delete_node_selection(alt_ns1)
+    assert len(alt_tree.nodes) == 0
+    #####################
+
+    middle_node_grandparent = middle_node.parent.parent    
+    
+    middle_node_grandchild_1 = path1.next_node(path1.next_node(middle_node))
+    middle_node_grandchild_2 = path2.next_node(path2.next_node(middle_node))
+    
+    assert middle_node_grandchild_1 is not middle_node_grandchild_2
+    
+    small_range_1 = ds.NodeRange(middle_node_grandparent,
+                                 middle_node_grandchild_1)
+    small_range_2 = ds.NodeRange(middle_node_grandparent,
+                                 middle_node_grandchild_2)
+    
+    assert small_range_1 != small_range_2
+    
+    small_ns = ds.NodeSelection((small_range_1, small_range_2))
+    
+    #####################
+    alt_tree, alt_small_range_1 = copy.deepcopy((tree, small_range_1))
+    alt_tree.delete_node_range(alt_small_range_1, stitch=False)
+    assert len(alt_tree.roots) == 3
+    #####################
+    
+    
+    
+    
     
     
     

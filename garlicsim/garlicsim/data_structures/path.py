@@ -625,8 +625,15 @@ path, but it's completely empty.''')
         
         return path
     
-    
     __copy__ = copy
+    
+    def __eq__(self, other):
+        # Currently horribly inefficient
+        assert isinstance(other, Path)
+        return list(self) == list(other)
+        
+    def __req__(self, other):
+        return self.__eq__(other)
     
     
 from tree import Tree
