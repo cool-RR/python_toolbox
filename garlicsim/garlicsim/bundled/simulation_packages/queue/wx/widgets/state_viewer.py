@@ -1,6 +1,12 @@
 # Copyright 2009-2010 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
+'''
+This module defines the StateViewer class.
+
+See its documentation for more information.
+'''
+
 import itertools
 
 import wx
@@ -11,20 +17,14 @@ import garlicsim_wx
 from garlicsim.general_misc.infinity import Infinity
 from garlicsim_wx.general_misc import wx_tools
 
-'''
-This module defines the StateViewer class.
-
-See its documentation for more information.
-'''
 
 def make_wx_color((r, g, b)):
     return wx.Color(255*r, 255*g, 255*b)
 
+
 class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,
                   garlicsim_wx.widgets.WorkspaceWidget):
-    '''
-    Widget for showing a state of the queue simpack.
-    '''
+    '''Widget for showing a state of the `queue` simpack.'''
     def __init__(self, frame):
         wx.lib.scrolledpanel.ScrolledPanel.__init__(self, frame,
                                                     style=wx.SUNKEN_BORDER)
@@ -37,13 +37,11 @@ class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,
         self.Bind(wx.EVT_PAINT, self.on_paint)
         self.Bind(wx.EVT_SIZE, self.on_size)
         #self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse_event)
-
         
         self.state = None
         
         self.font = wx.Font(12, wx.FONTFAMILY_TELETYPE, wx.FONTSTYLE_NORMAL,
-                            wx.FONTWEIGHT_BOLD, face='Courier New')
-        
+                            wx.FONTWEIGHT_BOLD, face='Courier New')        
         
         self.gui_project.active_node_changed_emitter.add_output(
             lambda: self.load_state(self.gui_project.active_node.state)
@@ -170,7 +168,7 @@ class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,
 
         
         dc.Destroy()
-        '''
+        """
 
         self.SetVirtualSize(
             (
@@ -178,9 +176,7 @@ class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,
                 board.height * (self.square_size + self.border_width)
             )
         )
-        '''
-
-
+        """
 
     def on_size(self, event):
         '''Refresh the widget.'''

@@ -1,13 +1,17 @@
 # Copyright 2009-2010 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-import garlicsim.data_structures
+'''
+A simulation package for a repeating game of prisoner's dillema between a
+population of players with different strategies.
+'''
+
 import copy
-from garlicsim.misc import StepCopy
-
-
 import random
 random.seed()
+
+import garlicsim.data_structures
+from garlicsim.misc import StepCopy
 
 
 ROUNDS = 7
@@ -160,9 +164,4 @@ def player_with_least_points(pool):
         if player.points < loser.points:
             loser = player
     return loser
-
-
-
-
-
 

@@ -50,6 +50,7 @@ class StateCreationDialog(wx.Dialog): # make base class
         ok.SetFocus()
 
     def start(self):
+        '''Start the dialog to make a new state.'''
         if self.ShowModal() == wx.ID_OK:
             if self.info['random']:
                 state = self.simpack.make_random_state()

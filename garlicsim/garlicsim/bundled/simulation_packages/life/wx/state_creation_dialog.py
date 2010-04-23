@@ -1,7 +1,11 @@
 # Copyright 2009-2010 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''Definitions for garlicsim_wx.'''
+'''
+Defines the StateCreationDialog class.
+
+See its documentation for more info.
+'''
 
 import random
 import warnings
@@ -94,6 +98,7 @@ class StateCreationDialog(wx.Dialog):
         self.EndModal(wx.ID_CANCEL)
         
     def start(self):
+        '''Start the dialog to make a new state.'''
         if self.ShowModal() == wx.ID_OK:
             width, height, fill = (
                 self.info["width"],

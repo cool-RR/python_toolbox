@@ -18,6 +18,7 @@ import garlicsim
 
 import events as events_module
 
+
 #todo: math error here:
 def time_for_next_occurence(mean_time_for_next_occurence):
     '''
@@ -247,4 +248,3 @@ def step(old_state, t=None):
 
 
 make_random_state = make_plain_state # for now
-
