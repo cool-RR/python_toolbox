@@ -24,7 +24,7 @@ import garlicsim_wx.general_misc.thread_timer as thread_timer
 from garlicsim.general_misc import binary_search
 
 import garlicsim
-from garlicsim.asynchronous_crunching.crunchers_warehouse import crunchers
+from garlicsim.asynchronous_crunching import crunchers
 
 import garlicsim_wx
 from garlicsim_wx.general_misc import emitters
@@ -78,10 +78,9 @@ class GuiProject(object):
         
         if self.project.simpack_grokker.history_dependent is False and \
            self.project.simpack_grokker.settings.FORCE_CRUNCHER is None and \
-           'CruncherProcess' in crunchers:
+           'CruncherProcess' in vars(crunchers):
             
-            self.project.crunching_manager.Cruncher = \
-                crunchers['CruncherProcess']
+            self.project.crunching_manager.Cruncher = crunchers.CruncherProcess
         
         #######################################################################
             

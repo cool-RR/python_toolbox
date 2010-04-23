@@ -16,18 +16,18 @@ from garlicsim.general_misc.infinity import Infinity
 import garlicsim
 import garlicsim.data_structures
 import garlicsim.misc
-from crunchers_warehouse import crunchers
+import crunchers
 from crunching_profile import CrunchingProfile
 from garlicsim.misc.step_profile import StepProfile
 
 __all__ = ['CrunchingManager', 'DefaultCruncher', 'DefaultHistoryCruncher']
 
-DefaultCruncher = crunchers['CruncherThread']
+DefaultCruncher = crunchers.CruncherThread
 '''
 The cruncher class to be used by default in non-history-dependent simulations.
 '''
 
-DefaultHistoryCruncher = crunchers['CruncherThread']
+DefaultHistoryCruncher = crunchers.CruncherThread
 '''
 The cruncher class to be used by default in history-dependent simulations.
 '''
@@ -184,12 +184,12 @@ class CrunchingManager(object):
         
         if node.still_in_editing is False:
             step_function = self.project.simpack_grokker.step
-            if self.Cruncher == crunchers.get('CruncherProcess', None):
+            if self.Cruncher == getattr(crunchers, 'CruncherProcess', None):
                 cruncher = self.Cruncher \
                          (node.state,
                           self.project.simpack_grokker.step_generator,
                           crunching_profile=crunching_profile)
-            else: # self.Cruncher == crunchers['CruncherThread']
+            else: # self.Cruncher == crunchers.CruncherThread
                 cruncher = self.Cruncher(node.state, self.project,
                                          crunching_profile=crunching_profile)
             cruncher.start()

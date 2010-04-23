@@ -27,7 +27,7 @@ if __name__ == '__main__':
     project = garlicsim.Project(simpack)
     
     #project.crunching_manager.Cruncher = \
-    #    garlicsim.asynchronous_crunching.crunchers_warehouse.crunchers['CruncherProcess']
+    #    garlicsim.asynchronous_crunching.crunchers.CruncherProcess
     
     root = project.root_this_state(state)
     

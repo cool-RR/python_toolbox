@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This package is a warehouse. For an explanation of what a warehouse is and how
+tododoc.This package is a warehouse. For an explanation of what a warehouse is and how
 it works, see documentation of garlicsim.general_mise.warehouse.create.
 
 This is a warehouse of crunchers. What is a cruncher?
@@ -24,11 +24,11 @@ cruncher you should use for your project depends on the situation. See the
 documentation for the different crunchers for more info.
 '''
 
-import sys
-from garlicsim.general_misc import warehouse
-
-crunchers = warehouse.create(sys.modules[__name__])
-
-
-
-
+from cruncher_thread import CruncherThread
+try:
+    from cruncher_process import CruncherProcess
+except ImportError:
+    import warnings
+    warnings.warn('''You don't have the multiprocessing package installed. \
+GarlicSim will run, but it won't be able to use CruncherProcess in order to \
+take advantage of multiple processor cores for crunching.''')
