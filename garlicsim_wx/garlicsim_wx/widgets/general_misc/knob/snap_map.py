@@ -184,13 +184,17 @@ class SnapMap(object):
                 counter += 1
             return counter    
     
-    def _debug_ratio_to_pos(self, step=0.1):
-        if step is None: step = 10
-        
-        return [(i, self.ratio_to_pos(i)) for i in
-                misc_tools.frange(-1, 1, step)]
     
     def _make_snap_point_pos_starts(self):
+        '''
+        Make a list with a "pos start" for each snap point.
+        
+        A "pos start" is the lowest point, in pos scale, of a snap point's drag
+        well.
+
+        The list is not returned, but is stored as the attribute
+        `.snap_point_pos_starts`.
+        '''
         
         self.snap_point_pos_starts = []
         
@@ -199,8 +203,18 @@ class SnapMap(object):
                 (1 + ratio) * self.base_drag_radius + \
                 i * self.snap_point_drag_well
             )
+            
+    
+    """
+    def _debug_ratio_to_pos(self, step=0.1):
+        if step is None: step = 10
+        
+        return [(i, self.ratio_to_pos(i)) for i in
+                misc_tools.frange(-1, 1, step)]
+    """
         
 
-
+"""
 if __name__ == '__main__':
     s=SnapMap([-0.3,0,0.5,0.7],100,100,0,0)
+"""
