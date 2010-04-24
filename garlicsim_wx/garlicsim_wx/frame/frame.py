@@ -96,82 +96,7 @@ class Frame(wx.Frame):
         
         self.Maximize()
 
-    """
-    def on_open(self, event=None):
-        '''Raise a dialog for opening a gui project from file.'''
-        wcd = 'Text files (*.txt)|*.txt|All files (*)|*|'
-        cur_dir = os.getcwd()
-        tickled_gui_project = None
-        try:
-            open_dlg = wx.FileDialog(self, message='Choose a file',
-                                     defaultDir=cur_dir, defaultFile='',
-                                     wildcard=wcd, style=wx.OPEN | wx.CHANGE_DIR)
-            if open_dlg.ShowModal() == wx.ID_OK:
-                path = open_dlg.GetPath()
-                
-                try:
-                    with file(path, 'r') as my_file:
-                        tickled_gui_project = cPickle.load(my_file)
-                        
-                except IOError, error:
-                    dlg = wx.MessageDialog(self,
-                                           'Error opening file\n' + str(error))
-                    dlg.ShowModal()
-                        
-                except UnicodeDecodeError, error:
-                    dlg = wx.MessageDialog(self,
-                                           'Error opening file\n' + str(error))
-                    dlg.ShowModal()
-                    
-                
-                    open_dlg.Destroy()
-        finally:
-            fuck_the_path()
-            
-        if tickled_gui_project:
-            my_gui_project = garlicsim_wx.gui_project.load_tickled_gui_project\
-                (tickled_gui_project, self.notebook)
-        self.add_gui_project(my_gui_project)
     
-    def on_save(self, event=None):
-        '''Raise a dialog for saving a gui project to file.'''
-        
-        my_gui_project = self.gui_projects[0] # Change this to get the active
-        tickled = my_gui_project.tickle()
-        
-        
-        wcd='Text files (*.txt)|*.txt|All files (*)|*|'
-        cur_dir = os.getcwd()
-        try:
-            save_dlg = wx.FileDialog(self, message='Save file as...',
-                                     defaultDir=cur_dir, defaultFile='',
-                                     wildcard=wcd,
-                                     style=wx.SAVE | wx.OVERWRITE_PROMPT)
-            if save_dlg.ShowModal() == wx.ID_OK:
-                path = save_dlg.GetPath()
-    
-                try:
-                    with file(path, 'w') as my_file:
-                        cPickle.dump(tickled, my_file)
-    
-                except IOError, error:
-                    dlg = wx.MessageDialog(self,
-                                           'Error saving file\n' + str(error))
-                    dlg.ShowModal()
-            
-        finally:
-            fuck_the_path()
-            
-        save_dlg.Destroy()
-    
-    
-    def delete_gui_project(self,gui_project):
-        I did this wrong.
-        self.gui_projects.remove(gui_project)
-        self.notebook.AddPage(gui_project.main_window,"zort!")
-        self.notebook.DeletePage(0)
-        del gui_project
-    """
 
     def on_close(self, event):
         '''Close the application window.'''
@@ -282,6 +207,8 @@ class Frame(wx.Frame):
             .CloseButton(False)
         )
         
+        if isinstance(self.big_widget, workspace_widgets.StateReprViewer):
+            self.state_repr_viewer= self.big_widget
         
         """
         big_widget_classes = \
@@ -312,33 +239,18 @@ class Frame(wx.Frame):
         
         self.aui_manager.Update()
         
-        """
-        for Widget in self.default_workspace_widgets:
-            w = self.workspace_widgets[Widget.__name__] = Widget(self)
-        
-        self.__organize_workspace_widgets()
-        
-    def __organize_workspace_widgets(self):
-        
-        self.aui_manager.GetPane(self.workspace_widgets['TreeBrowser'])\
-            .Bottom().BestSize(0, 100).Row(0)
-        self.aui_manager.GetPane(self.workspace_widgets['SeekBar'])\
-            .Bottom().BestSize(0, 50).Row(1)
-        self.aui_manager.GetPane(self.workspace_widgets['Shell'])\
-            .Right().BestSize(500, 0).Row(0)
-        
-        
-        self.aui_manager.Update()
-        self.Refresh()
-        """
 
     def on_exit_menu_button(self, event):
+        '''Exit menu button handler.'''
         self._post_close_event()
 
+        
     def _post_close_event(self):
+        '''Post a close event to the frame.'''
         event = wx.PyEvent(self.Id)
         event.SetEventType(wx.wxEVT_CLOSE_WINDOW)
         wx.PostEvent(self, event)
+        
         
     def sync_crunchers(self):
         '''
@@ -362,4 +274,80 @@ class Frame(wx.Frame):
         
         return nodes_added
     
-
+    
+    """
+    def on_open(self, event=None):
+        '''Raise a dialog for opening a gui project from file.'''
+        wcd = 'Text files (*.txt)|*.txt|All files (*)|*|'
+        cur_dir = os.getcwd()
+        tickled_gui_project = None
+        try:
+            open_dlg = wx.FileDialog(self, message='Choose a file',
+                                     defaultDir=cur_dir, defaultFile='',
+                                     wildcard=wcd, style=wx.OPEN | wx.CHANGE_DIR)
+            if open_dlg.ShowModal() == wx.ID_OK:
+                path = open_dlg.GetPath()
+                
+                try:
+                    with file(path, 'r') as my_file:
+                        tickled_gui_project = cPickle.load(my_file)
+                        
+                except IOError, error:
+                    dlg = wx.MessageDialog(self,
+                                           'Error opening file\n' + str(error))
+                    dlg.ShowModal()
+                        
+                except UnicodeDecodeError, error:
+                    dlg = wx.MessageDialog(self,
+                                           'Error opening file\n' + str(error))
+                    dlg.ShowModal()
+                    
+                
+                    open_dlg.Destroy()
+        finally:
+            fuck_the_path()
+            
+        if tickled_gui_project:
+            my_gui_project = garlicsim_wx.gui_project.load_tickled_gui_project\
+                (tickled_gui_project, self.notebook)
+        self.add_gui_project(my_gui_project)
+    
+    def on_save(self, event=None):
+        '''Raise a dialog for saving a gui project to file.'''
+        
+        my_gui_project = self.gui_projects[0] # Change this to get the active
+        tickled = my_gui_project.tickle()
+        
+        
+        wcd='Text files (*.txt)|*.txt|All files (*)|*|'
+        cur_dir = os.getcwd()
+        try:
+            save_dlg = wx.FileDialog(self, message='Save file as...',
+                                     defaultDir=cur_dir, defaultFile='',
+                                     wildcard=wcd,
+                                     style=wx.SAVE | wx.OVERWRITE_PROMPT)
+            if save_dlg.ShowModal() == wx.ID_OK:
+                path = save_dlg.GetPath()
+    
+                try:
+                    with file(path, 'w') as my_file:
+                        cPickle.dump(tickled, my_file)
+    
+                except IOError, error:
+                    dlg = wx.MessageDialog(self,
+                                           'Error saving file\n' + str(error))
+                    dlg.ShowModal()
+            
+        finally:
+            fuck_the_path()
+            
+        save_dlg.Destroy()
+    
+    
+    def delete_gui_project(self,gui_project):
+        I did this wrong.
+        self.gui_projects.remove(gui_project)
+        self.notebook.AddPage(gui_project.main_window,"zort!")
+        self.notebook.DeletePage(0)
+        del gui_project
+    """
