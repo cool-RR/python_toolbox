@@ -1,9 +1,17 @@
-#tododoc
+# Copyright 2009-2010 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+This module defines the AuiDockArt class.
+
+See its documentation for more info.
+'''
 
 import wx
 from garlicsim_wx.general_misc.third_party import aui
 
 class AuiDockArt(aui.AuiDefaultDockArt):
+    '''A dock art provider.'''
     def __init__(self):
         aui.AuiDefaultDockArt.__init__(self)
  

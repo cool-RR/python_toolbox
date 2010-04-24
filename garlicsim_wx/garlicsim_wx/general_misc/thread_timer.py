@@ -2,8 +2,9 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-This module defines the ThreadTimer object. See its documentation for more
-info.
+This module defines the ThreadTimer class.
+
+See its documentation for more info.
 '''
 # todo: daemonize?
 # todo: kickass idea: make all timers use one thread that will sleep smartly

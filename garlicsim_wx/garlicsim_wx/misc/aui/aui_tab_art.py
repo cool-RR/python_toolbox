@@ -1,9 +1,17 @@
-#tododoc
+# Copyright 2009-2010 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+This module defines the AuiTabArt class.
+
+See its documentation for more info.
+'''
 
 import wx
 from garlicsim_wx.general_misc.third_party import aui
 
 class AuiTabArt(aui.AuiDefaultTabArt):
+    '''A tab art provider.'''
     def __init__(self):
         aui.AuiDefaultTabArt.__init__(self)
         

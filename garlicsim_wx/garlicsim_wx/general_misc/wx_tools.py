@@ -1,3 +1,8 @@
+# Copyright 2009-2010 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''Defines various tools for wxPython.'''
+
 from __future__ import division
 import wx
 
@@ -5,6 +10,7 @@ import wx
 
 _background_color = None
 def get_background_color():
+    '''Get the background color on this platform.'''
     global _background_color
     if _background_color is not None:
         return _background_color
@@ -26,6 +32,7 @@ def get_background_color():
 
 _background_brush = None
 def get_background_brush():
+    '''Get the background brush for this platform.'''
     global _background_brush
     if _background_brush is not None:
         return _background_brush
