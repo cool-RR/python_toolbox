@@ -2,8 +2,9 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the list_simulate function. See its documentation for more
-information.
+This module defines the list_simulate function.
+
+See its documentation for more info.
 '''
 
 import copy
@@ -45,10 +46,10 @@ def list_simulate(simpack, state, iterations, *args, **kwargs):
 def __history_list_simulate(simpack_grokker, state, iterations,
                              step_profile=None):
     '''
-    For history-dependent simulations only:
-    
     Simulate from the given state for the given number of iterations.
 
+    (Internal function for history-dependent simulations only.)    
+    
     A simpack must be passed as the first parameter. Any extraneous parameters
     will be passed to the step function.
     
@@ -76,9 +77,9 @@ def __history_list_simulate(simpack_grokker, state, iterations,
 def __non_history_list_simulate(simpack_grokker, state, iterations,
                                 step_profile=None):
     '''
-    For non-history-dependent simulations only:
-    
     Simulate from the given state for the given number of iterations.
+    
+    (Internal function for non-history-dependent simulations only.)
 
     A simpack must be passed as the first parameter. Any extraneous parameters
     will be passed to the step function.

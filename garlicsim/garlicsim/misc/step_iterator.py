@@ -13,6 +13,7 @@ import copy
 import garlicsim
 from garlicsim.misc import SimpackError, AutoClockGenerator
 
+
 class StepIterator(object):
     '''
     An iterator that uses a simpack's step to produce states.
@@ -26,11 +27,9 @@ class StepIterator(object):
     2. It's possible to change the step profile while iterating.
     3. Guaranteed infinite iterator, even if the simpack's iterator is finite.
     
-    And possibly more.
-    
-        
-    todo: make stuff private here?
+    And possibly more.  
     '''
+    # todo: make stuff private here?
     def __init__(self, state_or_history_browser, step_profile,
                  simple_step = None, step_generator=None):
         '''

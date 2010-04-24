@@ -2,9 +2,10 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This package defines several miscellaneous objects that are important enough
-to be defined near the root of the garlicsim package but not important enough
-to be put in the main namespace.
+Defines several miscellaneous objects.
+
+These objects are important enough to be defined near the root of the
+`garlicsim` package but not important enough to be put in the main namespace.
 '''
 
 from step_copy import StepCopy

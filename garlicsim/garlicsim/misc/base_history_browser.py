@@ -2,8 +2,9 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the HistoryBrowser class. See its documentation for more
-information.
+This module defines the BaseHistoryBrowser class.
+
+See its documentation for more info.
 '''
 
 import garlicsim.general_misc.third_party.abc as abc

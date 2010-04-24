@@ -2,8 +2,9 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the `simulate` function. See its documentation for more
-information.
+This module defines the `simulate` function.
+
+See its documentation for more info.
 '''
 
 import copy
@@ -42,10 +43,10 @@ def simulate(simpack, state, iterations=1, *args, **kwargs):
 
     
 def __history_simulate(simpack_grokker, state, iterations=1, step_profile=None):
-    '''
-    For history-dependent simulations only:
-    
+    '''    
     Simulate from the given state for the given number of iterations.
+    
+    (Internal function, for history-dependent simulations only)
 
     A simpack must be passed as the first parameter. A step profile may be
     passed to be used with the step function.
@@ -74,9 +75,9 @@ def __history_simulate(simpack_grokker, state, iterations=1, step_profile=None):
 def __non_history_simulate(simpack_grokker, state, iterations=1,
                            step_profile=None):
     '''
-    For non-history-dependent simulations only:
-    
     Simulate from the given state for the given number of iterations.
+    
+    (Internal function, for non-history-dependent simulations only.)
 
     A simpack must be passed as the first parameter. A step profile may be
     passed to be used with the step function.

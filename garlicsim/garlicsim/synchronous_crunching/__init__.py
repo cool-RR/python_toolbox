@@ -2,9 +2,10 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-The synchronous_crunching package defines functions for conducting simulations
-with the crunching being done synchronously, i.e. in the main thread, without
-recruiting any worker threads or worker processes.
+Defines functions for conducting simulations with synchronous crunching.
+
+This means that the crunching is done in the main thread, without recruiting any
+worker threads or worker processes.
 '''
 
 from simulate import simulate

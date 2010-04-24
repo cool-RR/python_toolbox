@@ -2,8 +2,9 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the StepProfile class. See its documentation for
-more information.
+This module defines the StepProfile class.
+
+See its documentation for more information.
 '''
 
 import copy

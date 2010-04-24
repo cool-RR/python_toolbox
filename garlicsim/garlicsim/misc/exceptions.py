@@ -1,13 +1,13 @@
 # Copyright 2009-2010 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''
-A module defining a collection of exceptions.
-'''
+'''Defines a collection of exceptions.'''
 
 
 class SmartException(Exception):
-    '''tododoc'''
+    '''
+    Exception that uses its first line of documentation in lieu of a message.
+    '''
     def __init__(self, msg=None):
         if msg is None:
             if self.__doc__:
@@ -17,23 +17,17 @@ class SmartException(Exception):
 
 
 class GarlicSimException(SmartException):
-    '''
-    GarlicSim-related exception.
-    '''
+    '''GarlicSim-related exception.'''
 
 class GarlicSimWarning(Warning):
-    '''
-    GarlicSim-related warning.
-    '''
+    '''GarlicSim-related warning.'''
     
 
 class InvalidSimpack(GarlicSimException):
     '''Trying to load an invalid simpack.'''
-    pass
 
 class SimpackError(GarlicSimException):
     '''A simpack behaved unexpectedly.'''
-    pass
 
     
     

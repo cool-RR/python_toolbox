@@ -2,8 +2,9 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the HistoryBrowser class. See its documentation for more
-information.
+This module defines the HistoryBrowser class.
+
+See its documentation for more info.
 '''
 
 import garlicsim.general_misc.binary_search as binary_search
@@ -12,7 +13,9 @@ import garlicsim.misc
 
 __all__ = ["HistoryBrowser"]
 
+
 get_state_clock = lambda state: state.clock
+
 
 class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
     '''
@@ -83,11 +86,6 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         return result
     
     def __len__(self):
-        '''
-        Returns the length of the timeline in nodes, which means the sum of:
-        1. The length of the work_queue of our cruncher.
-        2. The length of the path in the tree which leads to our node, up to
-           our node.
-        '''
+        '''Get the length of the timeline in nodes.'''
         return self.path.__len__(end=self.end_node)
     

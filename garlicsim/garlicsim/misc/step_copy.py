@@ -19,4 +19,3 @@ class StepCopy(DontCopyPersistent, CopyMode):
     should pass StepCopy() into the deepcopy function as a memo. This assures
     that certain objects get copied in the right way for this context.
     '''
-    pass
