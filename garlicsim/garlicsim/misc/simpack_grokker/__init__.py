@@ -2,8 +2,9 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This package defines the SimpackGrokker class in the module simpack_grokker.py.
-See its documentation for more information.
+This package defines the SimpackGrokker class.
+
+See its documentation for more info.
 '''
 
 from simpack_grokker import SimpackGrokker
