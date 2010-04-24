@@ -1,9 +1,7 @@
 # Copyright 2009-2010 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''
-A module for doing a binary search in a sequence.
-'''
+'''Module for doing a binary search in a sequence.'''
 
 # Todo: wrap all things in tuples?
 # 

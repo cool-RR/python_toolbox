@@ -26,12 +26,24 @@ def consecutive_pairs(iterable):
             first_run = False
         old = current
 
-def orderless_combinations(iterable, n, start=0):#tododoc, optimize
+def orderless_combinations(iterable, n, start=0):
+    '''
+    Iterate over combinations of items from the iterable.
+
+    `n` specifies the number of items. `start` specifies the member number from
+    which to start giving combinations. (Keep the default of 0 for doing the
+    whole iterable.)
+    
+    Example:
+    
+    orderless_combinations([1, 2, 3, 4], n=2) would be, in list form: [[1, 2],
+    [1, 3], [1, 4], [2, 3], [2, 4], [3, 4]].
+    '''
+    # todo: optimize or find 3rd party tool
+    
     if n == 1:
         for thing in itertools.islice(iterable, start, None):
             yield [thing]
-    # if not isinstance(iterable, list):
-    #     iterable = list(iterable)
     for (i, thing) in itertools.islice(enumerate(iterable), start, None):
         for sub_result in orderless_combinations(iterable, n-1, start=i+1):
             yield [thing] + sub_result
@@ -55,6 +67,14 @@ def shorten(iterable, n):
         counter += 1
         
 def enumerate(reversable, reverse_index=False):
+    '''
+    Iterate over `(i, item)` pairs, where `i` is the index number of `item`.
+    
+    This is an extension of the builtin `enumerate`. What it allows is to get a
+    reverse index, by specifying `reverse_index=True`. This causes `i` to count
+    down to zero instead of up from zero, so the `i` of the last member will be
+    zero.
+    '''
     if reverse_index is False:
         return __builtin__.enumerate(reversable)
     else:
@@ -63,9 +83,11 @@ def enumerate(reversable, reverse_index=False):
         return my_list
 
 def is_iterable(thing):
+    '''Return whether an object is iterable.'''
     return hasattr(thing, '__iter__')
 
 def get_length(iterable):
+    '''Get the length of an iterable.'''
     i = 0
     for thing in iterable:
         i += 1

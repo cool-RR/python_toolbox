@@ -1,9 +1,7 @@
 # Copyright 2009-2010 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''
-This module defines logic-related tools.
-'''
+'''This module defines logic-related tools.'''
 
 import garlicsim.general_misc.cute_iter_tools as cute_iter_tools
 

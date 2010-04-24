@@ -98,7 +98,7 @@ class NodeSelection(object):
         return NodeSelection(self.ranges + other.ranges)
     
     def __ror__(self, other):
-        return self.__add__(other)
+        return self.__or__(other)
     
     def __eq__(self, other):
         # Currently horribly inefficient

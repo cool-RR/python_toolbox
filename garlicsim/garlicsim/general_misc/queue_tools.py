@@ -1,16 +1,13 @@
 # Copyright 2009-2010 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''
-This module defines several functions that may be useful when working with
-queues.
-'''
+'''Defines several functions that may be useful when working with queues.'''
 
 from __future__ import with_statement
 
 import Queue
 
-def dump(queue): #todo: change to use iterate
+def dump(queue):
     '''
     Empty all pending items in a queue and return them in a list.
     

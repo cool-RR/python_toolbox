@@ -1,27 +1,13 @@
 # Copyright 2009-2010 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''
-This module defines several functions that may be useful when working with
-dicts.
-'''
+'''Defines several functions that may be useful when working with dicts.'''
 
 import copy
 
-'''
-def set_or_raise(dict_, key, value)
-'''
-
-'''
-def deepcopy_values(d):
-    new_d = d.copy()
-    for key in new_d:
-        new_d[key] = copy.deepcopy(new_d[key])
-    return new_d
-'''
-
-def get_list(d, iterable):
-    return [value for (key, value) in d.iteritems() if (key in iterable)]
+def get_list(d, container):
+    '''Get a list of the values in the dict whose keys are in `container`.'''
+    return [value for (key, value) in d.iteritems() if (key in container)]
 
 def fancy_string(d, indent=0):
     '''Show a dict as a string, slightly nicer than dict.__repr__.'''

@@ -2,18 +2,17 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the Infinity class and the related InfinityError and
-InfinityRaceError exception.
+This module defines the Infinity class and related exceptions.
+
+See their documentation for more info.
 '''
 
 from garlicsim.misc import GarlicSimException
+from garlicsim.general_misc import math_tools
+
 
 __all__ = ['Infinity', 'InfinityError', 'InfinityRaceError']
 
-def sign(x):
-    if x > 0: return 1
-    if x < 0: return -1
-    return 0
 
 def is_floatable(x):
     try:
@@ -37,21 +36,21 @@ class InfinityRaceError(GarlicSimException):
     and the two infinities are "pitted" against each other in a way which makes
     it impossible to determine what the result of the computation would be.
     '''
-    pass
 
 class InfinityError(GarlicSimException):
-    '''
-    An exception related to infinity.
-    '''
-    pass
+    '''Infinity-related exception.'''
 
+    
 class InfinityClass(object):
     '''
-    A class for infinity numbers. There are only two distinct instances of this
-    class: Infinity and (-Infinity).
+    A class for infinity numbers.
+    
+    There are only two distinct instances of this class: Infinity and
+    (-Infinity).
     '''
     #todo: add __assign__ or whatever it's called
     #todo: add interoperability with float(inf). (Need to detect its existance)
+    #todo: calling it InfinityClass is a bit wrong./
     
     def __init__(self, direction=1):
         self.direction = direction
@@ -86,7 +85,7 @@ class InfinityClass(object):
         if isinstance(other, InfinityClass):
             raise InfinityRaceError
         elif is_floatable(other):
-            s = sign(other)
+            s = math_tools.sign(other)
             if s==0:
                 raise InfinityRaceError
             else:
@@ -99,7 +98,7 @@ class InfinityClass(object):
         if isinstance(other, InfinityClass):
             return InfinityClass(self.direction * other.direction)
         elif is_floatable(other):
-            s = sign(other)
+            s = math_tools.sign(other)
             if s==0:
                 raise InfinityRaceError
             else:
@@ -118,7 +117,7 @@ class InfinityClass(object):
         if isinstance(other, InfinityClass):
             raise object # todo
         elif is_floatable(other):
-            s = sign(other)
+            s = math_tools.sign(other)
             if s==0:
                 raise InfinityRaceError
             else:
