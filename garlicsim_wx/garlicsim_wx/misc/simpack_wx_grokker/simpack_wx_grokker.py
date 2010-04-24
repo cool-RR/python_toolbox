@@ -1,27 +1,22 @@
-#tododoc
+# Copyright 2009-2010 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+This module defines the SimpackWxGrokker class.
+
+See its documentation for more info.
+'''
 
 import types
 
 import garlicsim_wx
 
-class Settings(object):
-    #todo: subclass from a pretty vars-shower
-    def __init__(self):
-        self.BIG_WORKSPACE_WIDGETS = []
-        self.SMALL_WORKSPACE_WIDGETS = []
-        self.SEEK_BAR_GRAPHS = []
-        '''
-        List of scalar state function and scalar history functions that should
-        be shown as graphs in the seek bar.
-        '''
-        self.STATE_CREATION_DIALOG = garlicsim_wx.misc.StateCreationDialog
+from .settings import Settings
+
 
 class SimpackWxGrokker(object):
-    '''
-
-        
-        
-    '''
+    '''Encapsulates a simpack_wx and gives useful information and tools.'''
+    
     def __init__(self, simpack):
         self.simpack = simpack
         
@@ -41,7 +36,8 @@ class SimpackWxGrokker(object):
         
     
     def __init_analysis_settings(self):
-        #tododoc
+        '''Analyze the simpack_wx to produce a Settings object.'''
+        # todo: consider doing this in Settings.__init__
         
         # We want to access the `.settings` of our simpack_wx, but we don't know if
         # our simpack_wx is a module or some other kind of object. So if it's a

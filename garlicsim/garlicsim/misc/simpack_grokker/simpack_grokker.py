@@ -26,7 +26,6 @@ class SimpackGrokker(object):
     
     def __init_analysis(self):
         '''Analyze the simpack.'''
-        # todo: consider doing this in Settings.__init__
         
         simpack = self.simpack
 
@@ -65,6 +64,7 @@ kind of step function.''')
     
     def __init_analysis_settings(self):
         '''Analyze the simpack to produce a Settings object.'''
+        # todo: consider doing this in Settings.__init__
         
         # We want to access the `.settings` of our simpack, but we don't know if
         # our simpack is a module or some other kind of object. So if it's a
