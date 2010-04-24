@@ -267,8 +267,11 @@ class ScratchWheel(wx.Panel):
             self.gui_project.stop_playing()
             self.being_dragged = True
             
-            self.CaptureMouse()    
             self.SetCursor(cursor_collection.get_closed_grab())
+            # SetCursor must be before CaptureMouse because of wxPython/GTK
+            # weirdness
+            self.CaptureMouse()    
+            
             return
         
         if e.LeftIsDown():
@@ -305,6 +308,8 @@ class ScratchWheel(wx.Panel):
             # fucked
             if self.HasCapture():
                 self.ReleaseMouse()
+            # SetCursor must be after ReleaseMouse because of wxPython/GTK
+            # weirdness
             self.SetCursor(cursor_collection.get_open_grab())
             self.being_dragged = False
             self.grabbed_angle = None

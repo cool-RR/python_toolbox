@@ -176,8 +176,11 @@ class Knob(wx.Panel):
                 initial_ratio=self.current_ratio
             )
             
-            self.CaptureMouse()    
             self.SetCursor(cursor_collection.get_closed_grab())
+            # SetCursor must be before CaptureMouse because of wxPython/GTK
+            # weirdness
+            self.CaptureMouse()
+            
             return
         
         if event.LeftIsDown() and self.HasCapture():
@@ -191,6 +194,8 @@ class Knob(wx.Panel):
             # entire app, things don't get fucked
             if self.HasCapture():
                 self.ReleaseMouse()
+            # SetCursor must be after ReleaseMouse because of wxPython/GTK
+            # weirdness
             self.SetCursor(cursor_collection.get_open_grab())
             self.being_dragged = False
             self.snap_map = None
