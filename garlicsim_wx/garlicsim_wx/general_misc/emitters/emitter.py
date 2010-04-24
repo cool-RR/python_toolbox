@@ -1,26 +1,77 @@
+# Copyright 2009-2010 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Defines the Emitter class.
+
+See its documentation for more info.
+'''
+
+# todo: there should probably be some circularity check. Maybe actually
+# circularity should be permitted?
 
 import itertools
 from garlicsim.general_misc import cute_iter_tools
-
-# todo: there should probably some circularity check. Maybe actually circularity
-# should be permitted?
-
         
-        
+
 class Emitter(object):
+    '''
+    An emitter you can `emit` from to call all its callable outputs.
     
+    The emitter idea is a variation on the publisher-subscriber design pattern.
+
+    Every emitter has a set of inputs and a set of outputs. The inputs, if there
+    are any, must be emitters themselves. So when you `emit` on any of this
+    emitter's inputs, it's as if you `emit`ted on this emitter as well.
+    (Recursively, of course.)
     
+    The outputs are a bit different. An emitter can have as outputs both (a)
+    other emitters and (b) callable objects. (Which means, functions or
+    function-like objects.)
+    
+    There's no need to explain (a): If `emitter_1` has as an output `emitter_2`,
+    then `emitter_2` has as an input `emitter_1`, which works like how we
+    explained above about inputs.
+    
+    But now (b): An emitter can have callables as outputs. (Without these, the
+    emitter idea won't have much use.) These callables simply get called
+    whenever the emitter or one of its inputs get `emit`ted.
+    
+    The callables that you register as outputs are functions that need to be
+    called when the original event that caused the `emit` action happens.
+    '''
+        
     def __init__(self, inputs=(), outputs=(), name=None):
+        '''
+        Construct the emitter.
+        
+        `inputs` is a list of inputs, all of them must be emitters.
+        
+        `outputs` is a list of outputs, they must be either emitters or
+        callables.
+        
+        `name` is a string name for the emitter.
+        '''
 
         assert cute_iter_tools.is_iterable(inputs) and \
                cute_iter_tools.is_iterable(outputs)
         
         self._inputs = set()
+        '''The emitter's inputs.'''
+        
         self._outputs = set()
+        '''The emitter's inputs.'''
         
         for output in outputs:
             self.add_output(output)
-            
+                        
+        self.__total_callable_outputs_cache = None
+        '''
+        A cache of total callable outputs.
+        
+        This means the callable outputs of this emitter and any output emitters.
+        '''
+        
         self._recalculate_total_callable_outputs()        
 
         # We made sure to create the callable outputs cache before we add
@@ -29,22 +80,27 @@ class Emitter(object):
             self.add_input(input)
 
         self.name = name
-        #if name:
-            #self.name = name
-        #else:
-            #try:
-                #self.name = \
-                    #magic_tools.get_name_of_attribute_that_we_will_become()
-            #except Exception:
-                #self.name = None
+        '''The emitter's name.'''
 
     def get_inputs(self):
+        '''Get the emitter's inputs.'''
         return self._inputs
     
     def get_outputs(self):
+        '''Get the emitter's outputs.'''
         return self._outputs
                 
     def _get_input_layers(self):
+        '''
+        Get the emitter's inputs as a list of layers.
+        
+        Every item in the list will be a list of emitters on that layer. For
+        example, the first item will be a list of direct inputs of our emitter.
+        The second item will be a list of *their* inputs. Etc.
+        
+        Every emitter can appear only once in this scheme: It would appear on
+        the closest layer that it's on.
+        '''
 
         input_layers = [self._inputs]
         current_layer = self._inputs
@@ -64,14 +120,19 @@ class Emitter(object):
             
             current_layer = next_layer        
 
-        # todo: remove this assert:
-        assert sum(len(layer) for layer in input_layers) == \
-               len(reduce(set.union, input_layers, set()))
+        
+        # assert sum(len(layer) for layer in input_layers) == \
+        #        len(reduce(set.union, input_layers, set()))
             
         return input_layers
                 
         
     def _recalculate_total_callable_outputs_recursively(self):
+        '''
+        Recalculate `__total_callable_outputs_cache` recursively.
+        
+        This will to do the recalculation for this emitter and all its inputs.
+        '''
         
         # todo: I suspect this wouldn't work for the following case. `self` has
         # inputs `A` and `B`. `A` has input `B`. A callable output `func` was
@@ -95,6 +156,11 @@ class Emitter(object):
         
         
     def _recalculate_total_callable_outputs(self):
+        '''
+        Recalculate `__total_callable_outputs_cache` for this emitter.
+        
+        This will to do the recalculation for this emitter and all its inputs.
+        '''
         children_callable_outputs = reduce(
             set.union,
             (emitter.get_total_callable_outputs() for emitter
@@ -106,18 +172,21 @@ class Emitter(object):
             children_callable_outputs.union(self._get_callable_outputs())
 
     def add_input(self, emitter):
+        '''Add an emitter as an input to this emitter.'''
         assert isinstance(emitter, Emitter)
         self._inputs.add(emitter)
         emitter._outputs.add(self)
         emitter._recalculate_total_callable_outputs_recursively()
         
     def remove_input(self, emitter):
+        '''Remove an input from this emitter.'''
         assert isinstance(emitter, Emitter)
         self._inputs.remove(emitter)
         emitter._outputs.remove(self)
         emitter._recalculate_total_callable_outputs_recursively()
     
     def add_output(self, thing):
+        '''Add an emitter or a callable as an output to this emitter.'''
         assert isinstance(thing, Emitter) or callable(thing)
         self._outputs.add(thing)
         if isinstance(thing, Emitter):
@@ -125,31 +194,47 @@ class Emitter(object):
         self._recalculate_total_callable_outputs_recursively()
         
     def remove_output(self, thing):
+        '''Remove an output from this emitter.'''
         assert isinstance(thing, Emitter) or callable(thing)
         self._outputs.remove(thing)
         emitter._inputs.remove(self)
         self._recalculate_total_callable_outputs_recursively()
         
     def disconnect_from_all(self): # todo: use the freeze here
+        '''Disconnect the emitter from all its inputs and outputs.'''
         for input in self._inputs: 
             self.remove_input(input)
         for output in self._outputs:
             self.remove_output(output)
         
     def _get_callable_outputs(self):
+        '''Get the direct callable outputs of this emitter.'''
         return set((
             output for output in self._outputs if callable(output)
         ))
     
     def _get_emitter_outputs(self):
+        '''Get the direct emitter outputs of this emitter.'''
         return set((
             output for output in self._outputs if isinstance(output, Emitter)
         ))
         
     def get_total_callable_outputs(self):
+        '''
+        Get the total of callable outputs of this emitter.
+        
+        This means the direct callable outputs, and the callable outputs of
+        emitter outputs.
+        '''
         return self.__total_callable_outputs_cache
     
     def emit(self):
+        '''
+        Call all of the (direct or indirect) callable outputs of this emitter.
+        
+        This is the most important method of the emitter. When you `emit`, all
+        the callable outputs get called in succession.
+        '''
         # Note that this function gets called many times, so it should be
         # optimized for speed.
         for callable_output in self.__total_callable_outputs_cache:

@@ -1,4 +1,9 @@
-#tododoc
+# Copyright 2009-2010 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''A collection of cursors.'''
+
+# todo: change to use generic caching decorator
 
 import pkg_resources
 import wx
@@ -8,8 +13,8 @@ images_package = __images_package.__name__
 
 cached_cursors = {}
 
-
 def get_open_grab():
+    '''Get the "open grab" cursor.'''
     name = 'open_grab'
     file_name = 'open_grab.png'
     hotspot = (8, 8)
@@ -29,6 +34,7 @@ def get_open_grab():
 
 
 def get_closed_grab():
+    '''Get the "closed grab" cursor.'''
     name = 'closed_grab'
     file_name = 'closed_grab.png'
     hotspot = (8, 8)
