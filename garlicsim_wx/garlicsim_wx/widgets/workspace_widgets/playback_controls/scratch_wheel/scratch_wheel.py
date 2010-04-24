@@ -2,7 +2,9 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-tododoc
+Defines the ScratchWheel class.
+
+See its documentation for more info.
 '''
 
 from __future__ import division
@@ -10,44 +12,22 @@ from __future__ import division
 import wx
 import math
 import time
-#import random # todo: for debugging, kill this
 
-import garlicsim, garlicsim_wx
 from garlicsim_wx.widgets import WorkspaceWidget
 from garlicsim_wx.general_misc import cursor_collection
 from garlicsim_wx.general_misc import thread_timer
-from garlicsim_wx.general_misc import emitters
 from garlicsim.general_misc import math_tools
 from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
 
+import garlicsim, garlicsim_wx
 import images
+
 
 __all__ = ["ScratchWheel"]
 
-def pos_to_angle(pos):
-    return -math.acos(-1 + 2*pos)
-
-
-def expanded_pos_to_angle(pos):
-    #if 0 <= pos <= 1:
-    #    return -math.acos(-1 + 2*pos)
-    #else:
-    pos = (pos * 0.8) + 0.1
-    return -math.pi * (1 - pos)
-
-def expanded_angle_to_pos(angle):
-    pos = 1 - (angle / (-math.pi))
-    return (pos - 0.1) / 0.8
-    
-
-#def angle_to_pos(angle):
-#    return (1 + math.cos(-angle)) / 2
-
 
 class ScratchWheel(wx.Panel):
-    # todo: This shit needs to get redrawed often enough to see the wheel move
-    # when playing
-    # todo: Add simple motion blur when moving fast.
+    '''Widget for visualizing playback and browsing small time intervals.'''
     def __init__(self, parent, gui_project, *args, **kwargs):
         
         if 'style' in kwargs:
@@ -68,10 +48,12 @@ class ScratchWheel(wx.Panel):
         self.SetCursor(cursor_collection.get_open_grab())
         
         self.gui_project = gui_project
+        '''The gui project that this scratch wheel is attached to.'''
         
         assert isinstance(self.gui_project, garlicsim_wx.GuiProject)
         
         self.speed_function = lambda x: 20 * x ** 4
+        ''' tododoc '''
         
         self.n_lines = 15
         
@@ -132,6 +114,26 @@ class ScratchWheel(wx.Panel):
         
         
         self.needs_recalculation_emitter.emit()
+        
+        
+    """
+    def pos_to_angle(pos):
+        return -math.acos(-1 + 2*pos)
+    
+    def angle_to_pos(angle):
+        return (1 + math.cos(-angle)) / 2
+    """
+    
+    def expanded_pos_to_angle(pos):
+        
+        pos = (pos * 0.8) + 0.1
+        return -math.pi * (1 - pos)
+    
+    
+    def expanded_angle_to_pos(angle):
+        pos = 1 - (angle / (-math.pi))
+        return (pos - 0.1) / 0.8
+        
 
         
     def get_current_angle(self):
@@ -259,7 +261,7 @@ class ScratchWheel(wx.Panel):
         (rx, ry) = (x/w, y/h)
         
         if e.LeftDown():
-            self.angle_while_dragging = self.grabbed_angle = expanded_pos_to_angle(rx)
+            self.angle_while_dragging = self.grabbed_angle = self._expanded_pos_to_angle(rx)
             self.d_angle_while_dragging = 0
             self.desired_clock_while_dragging = self.grabbed_pseudoclock = \
                 self.gui_project.pseudoclock
@@ -277,7 +279,7 @@ class ScratchWheel(wx.Panel):
         if e.LeftIsDown():
             if not self.HasCapture():
                 return
-            self.angle_while_dragging = expanded_pos_to_angle(rx)
+            self.angle_while_dragging = self._expanded_pos_to_angle(rx)
             self.d_angle_while_dragging = (self.angle_while_dragging - self.grabbed_angle)
             
             desired_pseudoclock = self.grabbed_pseudoclock + \
@@ -295,7 +297,7 @@ class ScratchWheel(wx.Panel):
                 d_clock = (edge_clock - self.grabbed_pseudoclock)
                 d_angle = d_clock * self.clock_factor
                 edge_angle = self.grabbed_angle + d_angle
-                edge_rx = expanded_angle_to_pos(edge_angle)
+                edge_rx = self._expanded_angle_to_pos(edge_angle)
                 edge_x = edge_rx * w
                 is_going_over = \
                     (edge_x - x > 0) if direction == 1 else (edge_x - x < 0)

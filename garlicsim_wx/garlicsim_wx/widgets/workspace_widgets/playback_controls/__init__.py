@@ -2,7 +2,9 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-tododoc
+Defines the PlaybackControls class.
+
+See its documentation for more info.
 '''
 
 from playback_controls import PlaybackControls
