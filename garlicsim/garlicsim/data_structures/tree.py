@@ -155,23 +155,35 @@ tree while specifying a template_node.''')
             result += root.all_possible_paths()
         return result
     
-    """ todo: In construction:
-    def move_node_range(self, node_range): #tododoc
-        pass
     
-    def copy_node_range(self, node_range, start=None, end=None): #tododoc 
-        pass
-    """
-    
-    def delete_node_selection(self, node_selection, stitch=False):#tododoc
+    def delete_node_selection(self, node_selection):
         '''
         Delete a node selection from the tree.
+        
+        Any nodes that will be orphaned by this deletion will become roots.
         '''
+                
+        stitch = False
+        # todo: this is supposed to be an argument allowing the children to be
+        # stitched to the new parent, but I'm currently forcing it to be false
+        # because I haven't decided yet how I will handle stitching.
+        
         node_selection.compact()
         for node_range in node_selection.ranges:
-            self.delete_node_range(node_range, stitch=stitch)
-    
-    def delete_node_range(self, node_range, stitch=False):#tododoc
+            self.delete_node_range(node_range) #, stitch=stitch)
+
+            
+    def delete_node_range(self, node_range):
+        '''
+        Delete a node range from the tree.
+        
+        Any nodes that will be orphaned by this deletion will become roots.
+        '''
+        
+        stitch = False
+        # todo: this is supposed to be an argument allowing the children to be
+        # stitched to the new parent, but I'm currently forcing it to be false
+        # because I haven't decided yet how I will handle stitching.
         
         start_node = node_range.start if isinstance(node_range.start, Node) \
                      else node_range.start[0]
@@ -205,14 +217,22 @@ tree while specifying a template_node.''')
             del current_block[current_block.index(last_block_change) :
                               current_block.index(end_node)]
                     
-            
         parent_to_use = big_parent if (stitch is True) else None
         for node in outside_children:
             node.parent = parent_to_use
             if parent_to_use is None:
                 self.roots.append(node)
-            
         
+    
+    
+    """ todo: In construction:
+    def move_node_range(self, node_range):
+        pass
+    
+    def copy_node_range(self, node_range, start=None, end=None):
+        pass
+    """
+
     
     def __repr__(self):
         '''
