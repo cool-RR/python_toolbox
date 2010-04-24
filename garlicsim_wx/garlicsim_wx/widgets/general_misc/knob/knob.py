@@ -36,19 +36,17 @@ class Knob(wx.Panel):
     variable.
 
 
-    
     There are three "scales" that one should keep in mind when working with Knob:
     
-    There's the "value" scale, which is the value that the actual final variable
-    gets. It spans from -Infinity to Infinity.
+    1. The "value" scale, which is the value that the actual final variable
+       gets. It spans from -Infinity to Infinity.
     
-    There's the "angle" scale, which is the angle in which the knob appears on
-    the screen. It span from (-(5/6) * pi) to ((5/6) * pi).
+    2. The "angle" scale, which is the angle in which the knob appears on
+        the screen. It span from (-(5/6) * pi) to ((5/6) * pi).
     
-    As a more convenient mediator between them there's the "ratio" scale, which
-    spans from -1 to 1, and is mapped linearly to "angle".
+    3. As a more convenient mediator between them there's the "ratio" scale,
+       which spans from -1 to 1, and is mapped linearly to "angle".
     
-
     
     The knob has snap points that can be modified with `.set_snap_point` and
     `.remove_snap_point`. These are specified by value.
@@ -131,7 +129,7 @@ class Knob(wx.Panel):
         drags to it, the knob will have the value of the snap point.
         
         The bigger this is, the harder the snap point "traps" the mouse.
-        '''         
+        '''
             
         self.being_dragged = False
         '''Flag saying whether the knob is currently being dragged.'''
@@ -150,18 +148,18 @@ class Knob(wx.Panel):
 
     
     def _angle_to_ratio(self, angle):
-        '''Conver from angle to ratio.'''
+        '''Convert from angle to ratio.'''
         return angle / (math.pi * 5 / 6)
 
     def _ratio_to_value(self, ratio):
-        '''Conver from ratio to value.'''
+        '''Convert from ratio to value.'''
         return self.sensitivity * \
                math_tools.sign(ratio) * \
                (4 / math.pi**2) * \
                math.log(math.cos(ratio * math.pi / 2))**2
         
     def _value_to_ratio(self, value):
-        '''Conver from value to ratio.'''
+        '''Convert from value to ratio.'''
         return math_tools.sign(value) * \
                (2 / math.pi) * \
                math.acos(
@@ -172,7 +170,7 @@ class Knob(wx.Panel):
                )
 
     def _ratio_to_angle(self, ratio):
-        '''Conver from ratio to angle.'''
+        '''Convert from ratio to angle.'''
         return ratio * (math.pi * 5 / 6)
     
     def _get_snap_points_as_ratios(self):
