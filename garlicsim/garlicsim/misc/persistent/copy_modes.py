@@ -19,5 +19,4 @@ class DontCopyPersistent(CopyMode):
     Keep in mind that if the Persistent holds reference to additional objects,
     they too will not really be copied under this mode.
     '''
-    pass
 

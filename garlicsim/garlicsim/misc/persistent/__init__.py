@@ -2,9 +2,9 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the Persistent and Personality classes.
+This module defines the Persistent class and some related classes.
 
-See their documentation for more information.
+See documentation of Persistent for more info.
 '''
 
 from persistent import Persistent

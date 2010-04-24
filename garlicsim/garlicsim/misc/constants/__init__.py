@@ -1,2 +1,0 @@
-'''tododoc'''
-from constants import *

@@ -270,7 +270,7 @@ class ScratchWheel(wx.Panel):
             self.SetCursor(cursor_collection.get_closed_grab())
             # SetCursor must be before CaptureMouse because of wxPython/GTK
             # weirdness
-            self.CaptureMouse()    
+            self.CaptureMouse()
             
             return
         

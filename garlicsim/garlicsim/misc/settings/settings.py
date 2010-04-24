@@ -1,15 +1,36 @@
 class Setting(object):
-    pass
+    '''
+    A setting.
+    
+    These are used as classes without insantiating.
+    '''
 
 class DeterminismSetting(Setting):
-    pass
+    '''
+    A setting of determinism.
+    
+    When GarlicSim knows that a certain step profile is deterministic, it can
+    help it analyze the simulation. For example, it lets GarlicSim detect when
+    the simulation has reached a constant/repetitive state.
+    '''
 
 class UNDETERMINISTIC(DeterminismSetting):
-    pass
+    '''Completely not deterministic -- has a random element.'''
 
 class SUPPOSEDLY_DETERMINISTIC(DeterminismSetting):
-    pass
+    '''
+    Means deterministic in principle, but not absolutely.
+    
+    For example, in some simpacks rounding errors may make states that should
+    otherwise be equal not be equal.
+    '''
+    # todo: possibly rename, use thesaurus
 
 class DETERMINISTIC(DeterminismSetting):
-    pass
+    '''
+    Absolutely deterministic.
+    
+    There is no random or fuzzy element in the step function, and given
+    identical input states it is guaranteed to return identical output states.
+    '''
 

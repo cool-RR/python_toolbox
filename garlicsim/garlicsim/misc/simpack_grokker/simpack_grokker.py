@@ -20,65 +20,31 @@ __all__ = ["SimpackGrokker"]
 class Settings(object):
     #todo: subclass from a pretty vars-shower
     def __init__(self):
+
         self.FORCE_CRUNCHER = None
+        
         self.DETERMINISM_FUNCTION = misc.default_determinism_function
+
         self.SCALAR_STATE_FUNCTIONS = []
+        '''
+        List of scalar state functions given by the simpack.
+        
+        A scalar state function is a function from a state to a real number.
+        These should be decorated by garlicsim.misc.cached.state_cache.
+        '''
+        
         self.SCALAR_HISTORY_FUNCTIONS = []
+        '''
+        List of scalar history functions given by the simpack.
+        
+        A scalar history function is a function from a history browser to a real
+        number. These should be decorated by
+        garlicsim.misc.cached.history_cache.
+        '''
 
 class SimpackGrokker(object):
-    '''
-    An object that encapsulates a simpack, giving useful information about it
-    and tools to use with it.
+    '''Encapsulates a simpack and gives useful information and tools.'''
     
-    todo: move this somewhere else:
-    
-    class Meta:
-    
-        deterministic = garlicsim.misc.constants.UNDETERMINISTIC
-        
-        # Says whether the step function of this simpack is deterministic. This
-        # is useful because if a simpack declares itself to be deterministic
-        # then GarlicSim can analyze whether a simulation has reached a
-        # constant/repetitive state.
-        
-        # UNDETERMINISTIC means completely not deterministic -- has a random
-        # element.
-        
-        # SUPPOSEDLY_DETERMINISTIC means deterministic in principle, but not
-        # absolutely. (For example, in some simpacks rounding errors may make
-        # states that should otherwise be equal not be equal.)
-        
-        # DETERMINISTIC means absolutely deterministic. There is no random
-        # element in the step function, and given identical input states it is
-        # guaranteed to return identical output states.
-        
-        ################################################
-        
-        scalar_state_functions = [live_cells, maturity]
-        
-        # List of scalar state functions given by the simpack. A scalar state
-        # function is a function from a state to a real number. These should be
-        # decorated by garlicsim.misc.cached.state_cache.
-        
-        scalar_history_functions = [changes]
-        
-        # List of scalar history functions given by the simpack. A scalar
-        # history function is a function from a history browser to a real
-        # number. These should be decorated by
-        # garlicsim.misc.cached.history_cache.
-        
-        ################################################
-        
-        (tododoc: The following belong in Meta_wx, move it)
-        
-        seek_bar_graphs = [live_cells, changes]
-        
-        # List of scalar state function and scalar history functions that should
-        # be shown as graphs in the seek bar.
-        
-        ################################################
-        
-    '''
     def __init__(self, simpack):
         self.simpack = simpack
         self.__init_analysis()
