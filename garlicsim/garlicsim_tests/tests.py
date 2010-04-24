@@ -1,3 +1,6 @@
+# Copyright 2009-2010 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
 '''
 Test module for garlicsim.
 
@@ -18,7 +21,7 @@ from garlicsim.bundled.simulation_packages import _history_test
 from garlicsim.bundled.simulation_packages import queue
 
 
-def _is_deterministic(simpack):
+def _is_deterministic(simpack)
     return simpack.__name__.split('.')[-1] == 'life'
 
 def setup():

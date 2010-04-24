@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-This module defines the Frame class.
+Defines the Frame class.
 
 See its documentation for more information.
 '''
@@ -18,10 +18,10 @@ import wx
 from garlicsim_wx.general_misc.third_party import aui
 import pkg_resources
 
-
 from garlicsim.general_misc import dict_tools
 from garlicsim.general_misc import string_tools
 import garlicsim_wx.general_misc.thread_timer as thread_timer
+
 import garlicsim
 import garlicsim_wx.gui_project
 import garlicsim_wx.widgets

@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-This is a bootstrap module for garlicsim_wx.
+Bootstrap module for garlicsim_wx.
 
 It checks all prerequisites are installed.
 '''
