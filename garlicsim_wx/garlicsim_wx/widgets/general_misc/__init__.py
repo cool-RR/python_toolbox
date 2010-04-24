@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-This package defines various generic wxPython widgets.
+This package defines generic wxPython widgets.
 '''
 
-from foldable_window_container import FoldableWindowContainer
+from knob import Knob

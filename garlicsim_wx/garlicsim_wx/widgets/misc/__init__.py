@@ -1,6 +1,6 @@
 # Copyright 2009-2010 Ram Rachum. No part of this program may be used, copied
 # or distributed without explicit written permission from Ram Rachum.
 
-'''This package defines various custom wxPython widgets.'''
+'''This package defines various wxPython widgets, specific to `garlicsim_wx`.'''
 
 from simpack_selection_dialog import SimpackSelectionDialog

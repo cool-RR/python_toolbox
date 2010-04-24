@@ -117,7 +117,7 @@ class Frame(wx.Frame):
         if self.gui_project is not None:
             raise NotImplementedError
         
-        dialog = garlicsim_wx.widgets.misc.SimpackSelectionDialog(self, -1)
+        dialog = garlicsim_wx.widgets.misc.SimpackSelectionDialog(self)
         
         if dialog.ShowModal() == wx.ID_OK:
             simpack = dialog.get_simpack_selection()

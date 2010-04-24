@@ -2,8 +2,9 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-This module defines the SimpackSelectionDialog class. See its documentation for
-more info.
+This module defines the SimpackSelectionDialog class.
+
+See its documentation for more info.
 '''
 
 import os
@@ -11,28 +12,23 @@ import glob
 import wx
 
 class SimpackSelectionDialog(wx.SingleChoiceDialog):
-    '''
-    A dialog for selecting a simpack when creating a new gui project.
-    '''
+    '''Dialog for selecting a simpack when creating a new gui project.'''
     
-    def __init__(self,parent,id):
+    def __init__(self, parent):
         self.make_simpack_list()
         wx.SingleChoiceDialog.__init__(self, parent,
-                                        "Choose simulation package",
-                                        "Choose simulation package",
-                                        self.list_of_simpacks,wx.CHOICEDLG_STYLE)
-
+                                       "Choose simulation package",
+                                       "Choose simulation package",
+                                       self.list_of_simpacks,
+                                       wx.CHOICEDLG_STYLE)
+        
     def make_simpack_list(self):
-        '''
-        Make a list of available simpacks.
-        '''
+        '''Make a list of available simpacks.'''
         import garlicsim.bundled.simulation_packages as simulation_packages
         self.list_of_simpacks = find_subpackages(simulation_packages)
 
     def get_simpack_selection(self):
-        '''
-        Import the selected simpack and return it.
-        '''
+        '''Import the selected simpack and return it.'''
         string = self.GetStringSelection()
         result = __import__("garlicsim.bundled.simulation_packages." + string,
                             fromlist=[''])

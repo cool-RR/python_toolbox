@@ -15,7 +15,7 @@ from garlicsim_wx.general_misc import emitters
 
 import garlicsim, garlicsim_wx
 from garlicsim_wx.widgets import WorkspaceWidget
-from garlicsim_wx.widgets.general_misc.knob import Knob
+from garlicsim_wx.widgets.general_misc import Knob
 
 from scratch_wheel import ScratchWheel
 

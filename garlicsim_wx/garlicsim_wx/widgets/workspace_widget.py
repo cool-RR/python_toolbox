@@ -1,4 +1,12 @@
-#tododoc
+# Copyright 2009-2010 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Defines the WorkspaceWidget class.
+
+See its documentation for more info.
+'''
+
 
 
 import garlicsim_wx
@@ -7,11 +15,15 @@ from garlicsim.general_misc.third_party import abc
 from garlicsim.general_misc import string_tools
 
 class WorkspaceWidget(object):
+    '''
+    Abstract base class for workspace widgets.
     
+    A workspace widget is a widget displayed on the Frame of `garlicsim_wx`, and
+    is connected to a specific gui project.
+    '''
     __metaclass__ = abc.ABCMeta
     
     def __init__(self, frame):
-    
         
         self.frame = frame
         assert isinstance(self.frame, garlicsim_wx.Frame)
@@ -27,9 +39,11 @@ class WorkspaceWidget(object):
 
     @classmethod
     def get_uppercase_name(cls):
+        '''Get the name of the widget's class in uppercase. Used for title.'''
         return string_tools.camelcase_to_spacecase(cls.__name__).upper()
     
     def get_aui_pane_info(self):
+        '''Get the AuiPaneInfo of this widget in the aui manager.'''
         return self.aui_manager.GetPane(self)
         
     

@@ -30,7 +30,6 @@ from garlicsim.asynchronous_crunching import crunchers
 
 import garlicsim_wx
 from garlicsim_wx.general_misc import emitters
-from widgets.general_misc import FoldableWindowContainer
         
 
 class GuiProject(object):
