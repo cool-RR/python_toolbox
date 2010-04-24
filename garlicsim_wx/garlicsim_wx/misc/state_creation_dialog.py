@@ -9,6 +9,7 @@ See its documentation for more info.
 
 import wx
 
+
 class StateCreationDialog(wx.Dialog): # make base class
     '''
     An initial dialog to show when creating a root state.
