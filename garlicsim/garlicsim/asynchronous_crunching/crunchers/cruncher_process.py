@@ -47,6 +47,9 @@ class CruncherProcess(multiprocessing.Process):
     CruncherProcess is able to run on a different core of the processor
     in the machine, thus using the full power of the processor.
     '''
+    # todo: probably encapsulate Process, because it pickles all __init__
+    # arguments and we want unified cruncher __init__.
+    
     def __init__(self, initial_state, step_generator, crunching_profile):
         
         multiprocessing.Process.__init__(self)

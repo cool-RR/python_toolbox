@@ -24,15 +24,31 @@ class ThreadTimer(object):
    This solved a problem of wxPython timers being late when the program is
    busy.
    '''
+   
    n = 0
+   '''The number of created thread timers.'''
+   
+   
    def __init__(self, parent):
+      '''
+      Construct the ThreadTimer.
+      
+      `parent` is the parent window.
+      '''
+      
       self.parent = parent
+      '''The parent window.'''
+      
       ThreadTimer.n += 1
       self.wx_id = wx.NewId()
+      '''The ID of this timer, given by wxPython.'''
+      
       self.__init_thread()
       self.alive = False
+      '''Flag saying whether this timer is running.'''
 
    def __init_thread(self):
+      '''Create the thread.'''
       thread_name = ''.join(('Thread used by ThreadTimer no. ', str(self.n)))
       self.thread = Thread(self, name=thread_name)
       # Overwriting previous thread, so it'll get garbage-collected, hopefully
@@ -51,10 +67,12 @@ class ThreadTimer(object):
       self.thread.retired = True
       self.__init_thread()
    
+   # Crutch for compatibilty with wx.Timer:
    Start = start
    Stop = stop
       
    def GetId(self):
+      '''Get the wx ID of this timer.'''
       return self.wx_id
 
       
@@ -66,6 +84,7 @@ class Thread(threading.Thread):
       self.retired = False
       
    def run(self):
+      '''Run the thread. Internal function.'''
       interval_in_seconds = self.parent.interval / 1000.0
       def sleep():
             time.sleep(interval_in_seconds)
