@@ -12,35 +12,9 @@ import types
 
 from garlicsim.misc import AutoClockGenerator, StepIterator, InvalidSimpack
 import garlicsim
-
 import misc
 
-__all__ = ["SimpackGrokker"]
-
-class Settings(object):
-    #todo: subclass from a pretty vars-shower
-    def __init__(self):
-
-        self.FORCE_CRUNCHER = None
-        
-        self.DETERMINISM_FUNCTION = misc.default_determinism_function
-
-        self.SCALAR_STATE_FUNCTIONS = []
-        '''
-        List of scalar state functions given by the simpack.
-        
-        A scalar state function is a function from a state to a real number.
-        These should be decorated by garlicsim.misc.cached.state_cache.
-        '''
-        
-        self.SCALAR_HISTORY_FUNCTIONS = []
-        '''
-        List of scalar history functions given by the simpack.
-        
-        A scalar history function is a function from a history browser to a real
-        number. These should be decorated by
-        garlicsim.misc.cached.history_cache.
-        '''
+from .settings import Settings
 
 class SimpackGrokker(object):
     '''Encapsulates a simpack and gives useful information and tools.'''
@@ -52,6 +26,8 @@ class SimpackGrokker(object):
     
     def __init_analysis(self):
         '''Analyze the simpack.'''
+        # todo: consider doing this in Settings.__init__
+        
         simpack = self.simpack
 
         self.simple_non_history_step_defined = hasattr(simpack, "step")
@@ -88,7 +64,7 @@ kind of step function.''')
         
     
     def __init_analysis_settings(self):
-        #tododoc
+        '''Analyze the simpack to produce a Settings object.'''
         
         # We want to access the `.settings` of our simpack, but we don't know if
         # our simpack is a module or some other kind of object. So if it's a

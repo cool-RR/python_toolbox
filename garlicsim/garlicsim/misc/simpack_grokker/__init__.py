@@ -2,11 +2,10 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This package defines the SimpackGrokker class.
+This package defines the SimpackGrokker and the Settings classes.
 
-See its documentation for more info.
+See their documentation for more info.
 '''
 
+from settings import Settings
 from simpack_grokker import SimpackGrokker
-
-__all__ = ["SimpackGrokker"]
