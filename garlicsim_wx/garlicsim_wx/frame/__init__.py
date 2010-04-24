@@ -2,10 +2,9 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-This package defines the Frame class.
+Defines the Frame class.
 
-See its documentation in the `frame.py` module for more
-information.
+See its documentation for more info.
 '''
 
 from frame import Frame

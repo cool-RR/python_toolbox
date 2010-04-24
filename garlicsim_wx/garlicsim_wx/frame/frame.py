@@ -44,34 +44,13 @@ class Frame(wx.Frame):
         self.SetDoubleBuffered(True)
         
         self.Bind(wx.EVT_CLOSE, self.on_close)
-        
-        """
-        
-        self.workspace_widgets = dict.fromkeys(workspace_widgets)
-        
-        list_of_default_widgets = [
-            'StateReprViewer',
-            'Shell',
-            'SeekBar',
-            'TreeBrowser'
-        ]
-        # todo: should be somewhere else        
-        
-        self.default_workspace_widgets = dict_tools.get_list(
-            workspace_widgets,
-            list_of_default_widgets
-        )
-        
-        """
-        
+                
         self.tree_browser = None
         self.seek_bar = None
         self.shell = None
         self.state_repr_viewer = None
         
-        
         self.aui_manager = garlicsim_wx.misc.aui.AuiManager(self)
-        #self.aui_manager.SetManagedWindow(self)
                 
         self.gui_project = None
 
@@ -96,38 +75,7 @@ class Frame(wx.Frame):
         #menubar.Append(nodemenu,"&Node")
         self.SetMenuBar(menubar)
         self.CreateStatusBar()
-        """
-        ######################################
         
-        toolbar = self.CreateToolBar()
-        image_file_name = {
-            'new': 'new.png',
-            'done': 'check.png',
-        }
-        images = {}
-        for key in image_file_name:
-            file_name = pkg_resources.resource_filename(images_package,
-                                                        image_file_name[key])
-            images[key] = wx.Bitmap(file_name, wx.BITMAP_TYPE_ANY)
-            
-        new_tool = toolbar.AddSimpleTool(
-            -1,
-            images['new'],
-            "New",
-            " Create a new file"
-        )
-        toolbar.AddSeparator()
-        done_tool = toolbar.AddSimpleTool(
-            -1,
-            images['done'],
-            "Done editing",
-            " Done editing"
-        )
-        toolbar.Realize()
-
-        self.Bind(wx.EVT_TOOL, self.on_new, new_tool)
-        self.Bind(wx.EVT_TOOL, self.finalize_active_node, done_tool)
-        """
         ######################################
         
         self.background_timer = thread_timer.ThreadTimer(self)
@@ -137,7 +85,7 @@ class Frame(wx.Frame):
             lambda event: self.sync_crunchers(),
             self.background_timer
         )
-
+        
         ######################################
         
         
