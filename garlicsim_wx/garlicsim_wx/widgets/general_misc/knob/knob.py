@@ -1,8 +1,19 @@
+# Copyright 2009-2010 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Defines the Knob class.
+
+See its documentation for more info.
+'''
+
 from __future__ import division
 
-import wx
 import math
+
+import wx
 import pkg_resources
+
 from garlicsim.general_misc import math_tools
 from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.general_misc import cursor_collection
@@ -11,17 +22,50 @@ from garlicsim.general_misc import cute_iter_tools
 
 from snap_map import SnapMap
 
-
 from . import images as __images_package
 images_package = __images_package.__name__
 
 
-
 class Knob(wx.Panel):
+    '''
+    A knob that sets a real value between -Infinity and Infinity.
+    
+    (Not really touching infinity.)
+    
+    By turning the knob with the mouse, the user changes a floating point
+    variable.
+
+
+    
+    There are three "scales" that one should keep in mind when working with Knob:
+    
+    There's the "value" scale, which is the value that the actual final variable
+    gets. It spans from -Infinity to Infinity.
+    
+    There's the "angle" scale, which is the angle in which the knob appears on
+    the screen. It span from (-(5/6) * pi) to ((5/6) * pi).
+    
+    As a more convenient mediator between them there's the "ratio" scale, which
+    spans from -1 to 1, and is mapped linearly to "angle".
+    
+
+    
+    The knob has snap points that can be modified with `.set_snap_point` and
+    `.remove_snap_point`. These are specified by value.
+    '''
     # todo future: make key that disables snapping while dragging
     # todo: consider letting the knob turn just a bit slower near the edges.
     # todo: currently forcing size to be constant, in future allow changing
     def __init__(self, parent, getter, setter, *args, **kwargs):
+        '''
+        Construct the knob.
+        
+        `getter` is the getter function used to get the value of the variable.
+        `setter` is the setter function used to set the value of the variable.
+        
+        Note that you can't give a size argument to knob, it is always created
+        with a size of (29, 29).
+        '''
         
         assert 'size' not in kwargs
         kwargs['size'] = (29, 29)
@@ -39,48 +83,85 @@ class Knob(wx.Panel):
         self.Bind(wx.EVT_PAINT, self.on_paint)
         self.Bind(wx.EVT_SIZE, self.on_size)
         self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse)
-        self.Bind(wx.EVT_ERASE_BACKGROUND, self.on_erase)
+        # self.Bind(wx.EVT_ERASE_BACKGROUND, self.on_erase)
         
         self.SetCursor(cursor_collection.get_open_grab())
         
         
-        
-        
         self._knob_house_brush = wx.Brush(wx.Color(0, 0, 0))
+        '''Brush used to paint the circle around the knob.'''
         
+        self.current_angle = 0
+        '''The current angle of the knob.'''
         
+        self.current_ratio = 0
+        '''The current ratio of the knob.'''
         
         self.sensitivity = 25
-        self.angle_resolution = math.pi / 180 # One degree
-        self.current_angle = 0
-        self.current_ratio = 0
-        self.snap_points = []
+        '''
+        The knob's sensitivity.
         
-        self.base_drag_radius = 50#100#50 # in pixels
-        self.snap_point_drag_well = 20#100 #20 \
-            
-         
+        Higher values will cause faster changes in value when turning the knob.
+        '''
+        
+        self.angle_resolution = math.pi / 180
+        '''The minimal change in angle that will warrant a repaint.'''
+        
+        self.snap_points = []
+        '''An ordered list of snap points, specified by value.'''
+        
+        self.base_drag_radius = 50
+        '''
+        The base drag radius, in pixels.
+        
+        This number is the basis for calculating the height of the area in which
+        the user can play with the mouse to turn the knob. Beyond that area the
+        knob will be turned all the way to one side, and any movement farther
+        will have no effect.
+        
+        If there are no snap points, the total height of that area will be `2 *
+        self.base_drag_radius`.
+        '''
+        
+        self.snap_point_drag_well = 20
+        '''
+        The height of a snap point's drag well, in pixels.
+        
+        This is the height of the area on the screen in which, when the user
+        drags to it, the knob will have the value of the snap point.
+        
+        The bigger this is, the harder the snap point "traps" the mouse.
+        '''         
             
         self.being_dragged = False
+        '''Flag saying whether the knob is currently being dragged.'''
+        
         self.snap_map = None
+        '''
+        The current snap map used by the knob.
+        
+        See documentation of SnapMap for more info.
+        '''
         
         self.needs_recalculation_flag = True
+        '''Flag saying whether the knob needs to be recalculated.'''
+        
         self._recalculate()
 
     
     def _angle_to_ratio(self, angle):
+        '''Conver from angle to ratio.'''
         return angle / (math.pi * 5 / 6)
 
     def _ratio_to_value(self, ratio):
-        #return self.sensitivity * \
-               #math_tools.sign(ratio) * \
-               #(-2*math.log(math.cos((math.pi*ratio)/2))) / math.pi
+        '''Conver from ratio to value.'''
         return self.sensitivity * \
                math_tools.sign(ratio) * \
                (4 / math.pi**2) * \
                math.log(math.cos(ratio * math.pi / 2))**2
         
     def _value_to_ratio(self, value):
+        '''Conver from value to ratio.'''
         return math_tools.sign(value) * \
                (2 / math.pi) * \
                math.acos(
@@ -91,20 +172,27 @@ class Knob(wx.Panel):
                )
 
     def _ratio_to_angle(self, ratio):
+        '''Conver from ratio to angle.'''
         return ratio * (math.pi * 5 / 6)
     
     def _get_snap_points_as_ratios(self):
+        '''Get the list of snap points, but as ratios instead of as values.'''
         return [self._value_to_ratio(value) for value in self.snap_points]
     
     def set_snap_point(self, value):
+        '''Set a snap point. Specified as value.'''
         # Not optimizing with the sorting for now
         self.snap_points.append(value)
         self.snap_points.sort()
     
     def remove_snap_point(self, value):
+        '''Remove a snap point. Specified as value.'''
         self.snap_points.remove(value)
         
     def _recalculate(self):
+        '''
+        Recalculate the knob, changing its angle and refreshing if necessary.
+        '''
         value = self.value_getter()
         self.current_ratio = self._value_to_ratio(value)
         angle = self._ratio_to_angle(self.current_ratio)
@@ -115,8 +203,7 @@ class Knob(wx.Panel):
         self.needs_recalculation_flag = False
     
     def on_paint(self, event):
-        
-        #event.Skip()
+        '''EVT_PAINT handler.'''
         
         # Not checking for recalculation flag, this widget is not real-time
         # enough to care about the delay.
@@ -127,16 +214,6 @@ class Knob(wx.Panel):
         dc.Clear()
         
         w, h = self.GetClientSize()
-        
-        """
-        wx_tools.draw_bitmap_to_dc_rotated(
-            dc,
-            self.original_bitmap,
-            -self.current_angle,
-            (w/2, h/2),
-            useMask=True
-        )
-        """
         
         gc = wx.GraphicsContext.Create(dc)
 
@@ -153,10 +230,12 @@ class Knob(wx.Panel):
         #gc.DrawEllipse(100,200,500,500)
         
     def on_size(self, event):
+        '''EVT_SIZE handler.'''
         event.Skip()
         self.Refresh()
       
     def on_mouse(self, event):
+        '''EVT_MOUSE handler.'''
         # todo: maybe right click should give context menu with 'Sensitivity...'
         # todo: make check: if left up and has capture, release capture
 
@@ -203,8 +282,10 @@ class Knob(wx.Panel):
             
         return
     
+    """
     def on_erase(self, event):
         pass
+    """
         
 
         
