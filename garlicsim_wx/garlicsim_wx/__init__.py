@@ -20,8 +20,7 @@ import misc
 from frame import Frame
 from gui_project import GuiProject
 
-__all__ = ['Frame', 'GuiProject', 'start', 'editing_interface']
-# tododoc: wtf is editing_interface? can probably remove
+__all__ = ['Frame', 'GuiProject', 'start']
 
 __version__ = '0.4'
 

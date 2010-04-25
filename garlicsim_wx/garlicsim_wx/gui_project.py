@@ -613,13 +613,6 @@ class GuiProject(object):
             # todo: It would be hard but nice to know whether the tree changes
             # were on the path. This could save some rendering on SeekBar.
             
-            """
-            if self.ran_out_of_tree_while_playing:
-                self.ran_out_of_tree_while_playing = False
-                self.stop_playing()
-                self.start_playing()
-            """
-            
         return added_nodes
 
 
