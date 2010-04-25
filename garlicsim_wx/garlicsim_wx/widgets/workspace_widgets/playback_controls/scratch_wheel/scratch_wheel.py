@@ -42,7 +42,6 @@ class ScratchWheel(wx.Panel):
         self.Bind(wx.EVT_PAINT, self.on_paint)
         self.Bind(wx.EVT_SIZE, self.on_size)
         self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse_event)
-        self.Bind(wx.EVT_IDLE, self.on_idle)
         self.Unbind(wx.EVT_ERASE_BACKGROUND) # Good or bad?
         
         self.SetCursor(cursor_collection.get_open_grab())
@@ -51,9 +50,6 @@ class ScratchWheel(wx.Panel):
         '''The gui project that this scratch wheel is attached to.'''
         
         assert isinstance(self.gui_project, garlicsim_wx.GuiProject)
-        
-        self.speed_function = lambda x: 20 * x ** 4
-        ''' tododoc '''
         
         self.frame_number_that_should_be_drawn = 0
         '''Serial number of the frame that should be drawn.'''
@@ -66,7 +62,9 @@ class ScratchWheel(wx.Panel):
         '''The size of the gear image.'''
         
         self.clock_factor = 0.05 # todo: maybe rename
-        '''tododoc'''
+        '''
+        Factor for converting from simulations seconds to radians in the gear.
+        '''
         
         self.being_dragged = False
         '''Flag that says whether the gear is currently being dragged.'''
@@ -145,20 +143,24 @@ class ScratchWheel(wx.Panel):
         
         
     """
-    def pos_to_angle(pos):
+    @staticmethod
+    def _pos_to_angle(pos):
         return -math.acos(-1 + 2*pos)
     
-    def angle_to_pos(angle):
+    @staticmethod
+    def _angle_to_pos(angle):
         return (1 + math.cos(-angle)) / 2
     """
     
-    def expanded_pos_to_angle(pos):
+    @staticmethod
+    def _expanded_pos_to_angle(pos):
         '''Convert from pos to angle, expanded.'''
         pos = (pos * 0.8) + 0.1
         return -math.pi * (1 - pos)
     
     
-    def expanded_angle_to_pos(angle):
+    @staticmethod    
+    def _expanded_angle_to_pos(angle):
         '''Convert from angle to pos, expanded.'''
         pos = 1 - (angle / (-math.pi))
         return (pos - 0.1) / 0.8
@@ -264,6 +266,7 @@ class ScratchWheel(wx.Panel):
         self.current_frame_number = self.frame_number_that_should_be_drawn
             
     def on_mouse_event(self, e):
+        '''EVT_MOUSE_EVENTS handler.'''
         # todo: possibly do momentum, like in old shockwave carouselle.
         # todo: right click should give context menu with 'Sensitivity...' and
         # 'Disable'
@@ -342,19 +345,17 @@ class ScratchWheel(wx.Panel):
                 
             self.was_playing_before_drag = None
             
-        return
-
-
 
     def on_size(self, event):
+        '''EVT_SIZE handler.'''
         self.Refresh()
         if event is not None:
             event.Skip()
     
     def on_motion_blur_update_timer(self, event):
+        '''Handler for when the motion blur timer goes off.'''
         self.recalculation_flag = True
         self.Refresh()
-            
-    def on_idle(self, event): # todo: kill this
-        if self.current_motion_blur_bitmap != images.get_blurred_gear_image(0):
-            self.Refresh()
+        
+        
+        

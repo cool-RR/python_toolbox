@@ -2,7 +2,9 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-This module defines the GuiProject class. See its documentation for more info.
+Defines the GuiProject class.
+
+See its documentation for more info.
 '''
 
 from __future__ import with_statement
@@ -23,21 +25,25 @@ from general_misc.stringsaver import s2i,i2s
 from garlicsim.general_misc.infinity import Infinity
 from garlicsim.general_misc import binary_search
 import garlicsim_wx.general_misc.thread_timer as thread_timer
-from garlicsim.general_misc import binary_search
 
 import garlicsim
 from garlicsim.asynchronous_crunching import crunchers
-
 import garlicsim_wx
 from garlicsim_wx.general_misc import emitters
         
 
 class GuiProject(object):
     '''
-    A gui project encapsulates a project for use with a wxPython interface.
+    Encapsulates a project for use with a wxPython interface.
     '''
     
     def __init__(self, simpack, frame):
+        '''
+        Construct the gui project.
+        
+        `simpack` is the simpack (or grokker) to use. `frame` is the frame in
+        which this gui project will live.
+        '''
         # This is broken down into a few parts.
         self.__init_general(simpack, frame)
         self.__init_gui()
@@ -46,14 +52,10 @@ class GuiProject(object):
         
     def __init_general(self, simpack, frame, project=None,
                        active_node=None, path=None):
-        '''
-        General initialization.
-        
-        Sets up most of the important attributes of the GuiProject, such as
-        `.path` and `.active_node`.
-        '''
+        '''General initialization.'''
         
         self.frame = frame
+        '''The frame that this gui project lives in.'''
         
         
         if isinstance(simpack, garlicsim.misc.SimpackGrokker):
@@ -65,14 +67,18 @@ class GuiProject(object):
         else:
             
             self.simpack = simpack
+            '''The simpack used for this gui project.'''
             
             self.simpack_grokker = \
                 garlicsim.misc.SimpackGrokker(simpack)
+            '''The simpack grokker used for this gui project.'''
             
             self.simpack_wx_grokker = \
                 garlicsim_wx.misc.SimpackWxGrokker(simpack)
+            '''The simpack_wx used for this gui project.'''
         
         self.project = project or garlicsim.Project(self.simpack_grokker)
+        '''The project encapsulated in this gui project.'''
         
 
         ### Choosing a Cruncher class: ########################################
@@ -98,7 +104,9 @@ class GuiProject(object):
         '''
         The job of the playing leaf, which should be crunched to infinity.
         '''
+        
         self.default_buffer = 100 # Should be a mechanism for setting that
+        '''The default clock buffer to crunch from an active node.'''
 
         self.timer_for_playing = thread_timer.ThreadTimer(self.frame)
         '''Contains the wx.Timer object used when playing the simulation.'''
@@ -107,17 +115,32 @@ class GuiProject(object):
                         self.timer_for_playing)
 
         self.defacto_playing_speed = 4
+        '''The playing speed that we are actually playing in.'''
+        
         self.official_playing_speed = 4
+        '''
+        The playing speed that we're "officially" playing in.
+        
+        The defacto playing speed may deviate from this.
+        '''
+        
         self.standard_playing_speed = 4
+        '''The reference playing speed. This speed is considered "normal".'''
         
         self.last_tracked_real_time = None
-        self.pseudoclock = 0
-
-        #self.ran_out_of_tree_while_playing = False
         '''
-        Becomes True when you are playing the simulation and the nodes are not
-        ready yet. The simulation will continue playing when the nodes will be
-        created.
+        The last tracked time point (real time, not simulation), for playback.
+        '''
+        
+        self.pseudoclock = 0
+        '''
+        The current pseudoclock.
+        
+        The pseudoclock is *something like* the clock of the current active
+        node. But not exactly. We're letting the pseudoclock slide more smoothly
+        from one node to its neighbor, instead of jumping. This is in order to
+        make some things smoother in the program. This is also why it's called
+        "pseudo".
         '''
 
         self.__init_emitters()
@@ -126,6 +149,7 @@ class GuiProject(object):
         # Just for good measure, jiggle all the widgets up.
         
     def __init_emitters(self):
+        '''Create an emitter system and a bunch of emitters.'''
         
         # todo: not clear that `tree_modified_emitter` means that only data
         # changed and not structure.
@@ -236,40 +260,46 @@ class GuiProject(object):
     
 
     def set_path(self, path):
+        '''Set the path.'''
         self.path = path
         self.path_changed_emitter.emit()
         
     def set_official_playing_speed(self, value):
+        '''Set the official playing speed.'''
         self.official_playing_speed = value
         self.official_playing_speed_modified_emitter.emit()
 
     def _set_pseudoclock(self, value):
+        '''Set the pseudoclock. Internal use.'''
         if self.pseudoclock != value:
             self.pseudoclock = value
             self.pseudoclock_modified_emitter.emit()
         
     def set_pseudoclock(self, desired_pseudoclock, rounding=binary_search.LOW):
-        '''tododoc: if you say LOW and there's only high, you'll get high, and
-        vice versa.'''
+        '''
+        Attempt to set the pseudoclock to a desired value.
+        
+        If value is outside the range of the current path, you'll get the clock
+        of the closest edge node.
+        
+        The active node will be changed to one which is close to the desired
+        pseudoclock. In `rounding` use `binary_search.LOW` to get the node just
+        below, or `binary_search.HIGH` to get the node just above.
+        
+        Note that if you choose `LOW`, and there's nothing below, only above,
+        you'll get the one above. Same for `HIGH`.
+        '''
 
         assert rounding in (binary_search.LOW, binary_search.HIGH)
         # may add CLOSEST and EXACT later
         
         both_nodes = self.path.get_node_by_clock(desired_pseudoclock,
                                                  rounding=binary_search.BOTH)
-
-        """
-        new_node = binary_search.make_both_data_into_preferred_rounding(
-            both_nodes,
-            lambda node: node.state.clock,
-            desired_pseudoclock,
-            rounding
-        )
-        """
         
         if rounding is binary_search.HIGH:
             both_nodes = (both_nodes[1], both_nodes[0])
-            # Swapping them, explain
+            # Just swapping the nodes. Simpler than having a big `if` for `HIGH`
+            # and `LOW`.
             
         none_count = list(both_nodes).count(None)
         
@@ -285,11 +315,15 @@ class GuiProject(object):
             assert both_nodes == (None, None)
             # path is completely empty! Not sure if I should raise something
             return
+        
         self.project.ensure_buffer(node, clock_buffer=self.default_buffer)
-    
+
+        
     def round_pseudoclock_to_active_node(self):
+        '''Set the value of the pseudoclock to the clock of the active node.'''
         self._set_pseudoclock(self.active_node.state.clock)
-            
+
+        
     def update_defacto_playing_speed(self):
         # In the future this will check if someone's temporarily tweaking the
         # defacto speed, and let that override.
@@ -324,7 +358,8 @@ class GuiProject(object):
             self.set_active_node(root)
         
 
-    def get_active_state(self):#tododoc
+    def get_active_state(self):
+        '''Get the active state, i.e. the state of the active node.'''
         return self.active_node.state if self.active_node is not None else None
                 
 
@@ -334,8 +369,10 @@ class GuiProject(object):
         
         The simpack must define the function "make_plain_state" for this to
         work.
-        Updates the active path to start from this root.
-        Starts crunching on this new root.
+        
+        Updates the active path to start from this root. Starts crunching on
+        this new root.
+        
         Returns the node.
         '''
         root = self.project.make_plain_root(*args, **kwargs)
@@ -348,10 +385,12 @@ class GuiProject(object):
         '''
         Create a parentless node, whose state is a random and messy state.
         
-        The simpack must should define the function "make_random_state" for
-        this to work.
-        Updates the active path to start from this root.
-        Starts crunching on this new root.
+        The simpack must should define the function "make_random_state" for this
+        to work.
+        
+        Updates the active path to start from this root. Starts crunching on
+        this new root.
+        
         Returns the node.
         '''
         root = self.project.make_random_root(*args, **kwargs)
@@ -361,13 +400,21 @@ class GuiProject(object):
 
 
     def _set_active_node(self, node):
+        '''Set the active node, displaying it onscreen. Internal use.'''
         if self.active_node != node:
             self.active_node = node
             self.active_node_changed_emitter.emit()
         
     
     def set_active_node(self, node, modify_path=True):
-        '''Make `node` the active node, displaying it onscreen.'''
+        '''
+        Set the active node, displaying it onscreen.
+        
+        This will change the pseudoclock to the clock of the node.
+        
+        if `modify_path` is True, the method will modify the path to go through
+        the node, if it doesn't already.        
+        '''
         self.project.ensure_buffer(node, clock_buffer=self.default_buffer)
         
         if self.active_node is node:
@@ -392,7 +439,6 @@ class GuiProject(object):
                                                                    self.path,
                                                                    Infinity)   
         
-        #self.frame.Refresh() # kill this
 
         
     def __modify_path_to_include_active_node(self):
@@ -514,13 +560,13 @@ class GuiProject(object):
 
 
     def edit_from_active_node(self, e=None):
-        # todo: event argument is bad, in other places too
-        # todo: maybe not restrict it to "from_active_node"?
         '''
         Fork the simulation from the active node by editing.
         
         Returns the new node.
         '''
+        # todo: event argument is bad, in other places too
+        # todo: maybe not restrict it to "from_active_node"?
         new_node = \
             self.project.tree.fork_to_edit(template_node=self.active_node)
         new_node.still_in_editing = True #todo: should be in `fork_to_edit` ?
@@ -544,21 +590,17 @@ class GuiProject(object):
         process.
         '''
         
-        #leaves_to_crunch = (job.node for job in 
-                            #self.project.crunching_manager.jobs)
         feisty_jobs = [job for job in self.project.crunching_manager.jobs
                        if not job.node.is_last_on_block()]
+        # Feisty jobs are jobs that might result in a structure change in the
+        # tree.
         fesity_jobs_to_nodes = dict((job, job.node) for job in feisty_jobs)
-        #feisty_leaves = [leaf for leaf in leaves_to_crunch
-                         #if not leaf.is_last_on_block()]
-        # todo: explain what i do here
         
 
         added_nodes = self.project.sync_crunchers()
         
         # This is the heavy line here, which actually executes the Project's
         # sync_crunchers function.
-        
         
         
         if added_nodes > 0:

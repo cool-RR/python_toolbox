@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-widgets used in the workspace.
+Widgets used in the workspace.
 '''
 
 from state_repr_viewer import StateReprViewer

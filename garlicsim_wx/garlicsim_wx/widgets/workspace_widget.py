@@ -7,8 +7,6 @@ Defines the WorkspaceWidget class.
 See its documentation for more info.
 '''
 
-
-
 import garlicsim_wx
 from garlicsim_wx.general_misc.third_party import aui
 from garlicsim.general_misc.third_party import abc

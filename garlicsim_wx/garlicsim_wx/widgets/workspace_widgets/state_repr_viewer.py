@@ -1,6 +1,11 @@
 # Copyright 2009-2010 Ram Rachum. No part of this program may be used, copied
 # or distributed without explicit written permission from Ram Rachum.
 
+'''
+Defines the StateReprViewer class.
+
+See its documentation for more info.
+'''
 
 import wx
 from garlicsim_wx.widgets import WorkspaceWidget
@@ -9,7 +14,8 @@ from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
 
 __all__ = ["StateReprViewer"]
 
-class StateReprViewer(wx.Panel, WorkspaceWidget):#tododoc
+class StateReprViewer(wx.Panel, WorkspaceWidget):
+    '''Widget for showing the repr of the active state.'''
     def __init__(self, frame):
         wx.Panel.__init__(self, frame, size=(300, 300))
         WorkspaceWidget.__init__(self, frame)
@@ -53,6 +59,7 @@ class StateReprViewer(wx.Panel, WorkspaceWidget):#tododoc
     
 
     def _recalculate(self):
+        '''Recalculate the widget.'''
         if self.needs_recalculation_flag:
             if self.gui_project:
                 active_state = self.gui_project.get_active_state()        
@@ -64,6 +71,7 @@ class StateReprViewer(wx.Panel, WorkspaceWidget):#tododoc
             self.needs_recalculation_flag = False
         
     def on_paint(self, event):
+        '''EVT_PAINT handler.'''
         event.Skip()
         # Notice that we are not checking the `needs_recalculation_flag` here.
         # The FlagRaiser's 30ms delay is small enough, and we don't need to have

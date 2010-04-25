@@ -2,22 +2,25 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-This module defines the SeekBar class. See its documentation for more info.
-'''
-#todo: I think the refresh should be made more efficient
+This module defines the SeekBar class.
 
+See its documentation for more info.
+'''
 
 import wx
 import math
 
 from garlicsim_wx.general_misc.get_lines import get_lines
-import garlicsim
-from garlicsim_wx.widgets import WorkspaceWidget
 from garlicsim_wx.general_misc import emitters
 from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
 
+from garlicsim_wx.widgets import WorkspaceWidget
+import garlicsim
+
+
 __all__ = ["SeekBar"]
+
 
 class SeekBar(wx.Panel, WorkspaceWidget):
     '''
