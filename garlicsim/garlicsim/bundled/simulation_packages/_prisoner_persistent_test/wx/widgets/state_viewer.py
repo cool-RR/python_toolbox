@@ -1,14 +1,24 @@
+# Copyright 2009-2010 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''
+This module defines the StateViewer class.
+
+See its documentation for more information.
+'''
 
 import math
 
 import wx
 import wx.lib.agw.piectrl as piectrl
+
 import garlicsim_wx
 
 from ... import prisoner
 
 
 class StateViewer(wx.Panel, garlicsim_wx.widgets.WorkspaceWidget):
+    '''Widget for viewing a `prisoner` state.'''
     def __init__(self, frame):
         wx.Panel.__init__(self, frame)
         garlicsim_wx.widgets.WorkspaceWidget.__init__(self, frame)
@@ -49,6 +59,7 @@ class StateViewer(wx.Panel, garlicsim_wx.widgets.WorkspaceWidget):
         )
             
     def show_state(self, state):
+        '''Show a state onscreen.'''
         for player_type in prisoner.player_types:
             part = self.pie_part_dict[player_type]
             value = prisoner.how_many_players_of_certain_type(
