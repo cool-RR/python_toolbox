@@ -73,7 +73,7 @@ class InfinityClass(object):
     def __cmp__(self, other):
         if isinstance(other, InfinityClass):
             d_cmp = cmp(self.direction, other.direction)
-            if d_cmp == 0:
+            if d_cmp != 0:
                 return d_cmp
             else:
                 raise InfinityRaceError
