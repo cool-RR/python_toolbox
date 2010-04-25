@@ -594,6 +594,7 @@ class GuiProject(object):
                        if not job.node.is_last_on_block()]
         # Feisty jobs are jobs that might result in a structure change in the
         # tree.
+        # todo: this logic works wrong. Can improve it.
         fesity_jobs_to_nodes = dict((job, job.node) for job in feisty_jobs)
         
 
