@@ -55,49 +55,77 @@ class ScratchWheel(wx.Panel):
         self.speed_function = lambda x: 20 * x ** 4
         ''' tododoc '''
         
-        self.n_lines = 15
-        
-        self.line_width = 20
-
         self.frame_number_that_should_be_drawn = 0
+        '''Serial number of the frame that should be drawn.'''
         
         self.current_frame_number = -1
+        '''Serial number of the frame that is currently drawn.'''
         # Set to -1 to make sure first drawing won't fuck up
         
         self.image_size = images.get_image_size()
+        '''The size of the gear image.'''
         
         self.clock_factor = 0.05 # todo: maybe rename
+        '''tododoc'''
         
         self.being_dragged = False
+        '''Flag that says whether the gear is currently being dragged.'''
         
         self.grabbed_angle = None
-        self.grabbed_pseudoclock = None
-        self.angle_while_dragging = None
-        self.d_angle_while_dragging = None
-        self.desired_clock_while_dragging = None
+        '''The angle that the user grabbed when starting to drag.'''
         
-        self.velocity_tracking_period = 1#100
+        self.grabbed_pseudoclock = None
+        '''The pseudoclock that the user grabbed when starting to drag.'''
+        
+        self.angle_while_dragging = None
+        
+        self.d_angle_while_dragging = None
+        
+        self.desired_clock_while_dragging = None
+                
         self.last_tracked_time_and_angle = (0, 0)
+        '''A tuple of (time, angle) that was recorded for velocity tracking.'''
+        
         self.current_velocity_estimate = 0
         '''
-        units of radian per second, and that's a real world second, not in the
-        simulation.
+        The current estimate of the gear's velocity.
+        
+        The units are radian per second, and that's a real world second, not in
+        the simulation.
         '''
+        
         self.velocity_for_maximal_motion_blur = 10
+        '''Velocity in which the scratch wheel will get maximal motion blur.'''
+        
         self.current_motion_blur_bitmap = None
+        '''The current bitmap to use for motion blur.'''
+        
         self.velocity_time_sampling_minimum = 0.05
+        '''The minimum interval over which we can measure the gear's velocity.'''
         
         self.was_playing_before_drag = None
+        '''Flag saying if playback was active before user grabbed the gear.'''
             
         self.motion_blur_update_timer = thread_timer.ThreadTimer(self)
+        '''
+        Timer to use for updating the motion blur bitmap.
+        
+        The motion blur bitmap must get updated periodically as long as its last
+        value was non-zero, even if the user doesn't touch anything. This is
+        because we don't want to have a situtation where the user dragged fast,
+        got a high motion blur, left the scratch wheel, and then the wheel is
+        frozen with a high motion blur.
+        '''
+        
         self.Bind(thread_timer.EVT_THREAD_TIMER,
                   self.on_motion_blur_update_timer,
                   self.motion_blur_update_timer)
         
-        # I don't think ThreadTimer should be used here. But for some reason
-        # wx.Timer didn't work.
+        # todo: I don't think ThreadTimer should be used here. But for some
+        # reason wx.Timer didn't work.
         
         self.recalculation_flag = False
+        '''Flag saying whether the scratch wheel needs to recalculate.'''
         
         self.needs_recalculation_emitter = \
             self.gui_project.emitter_system.make_emitter(
@@ -125,48 +153,29 @@ class ScratchWheel(wx.Panel):
     """
     
     def expanded_pos_to_angle(pos):
-        
+        '''Convert from pos to angle, expanded.'''
         pos = (pos * 0.8) + 0.1
         return -math.pi * (1 - pos)
     
     
     def expanded_angle_to_pos(angle):
+        '''Convert from angle to pos, expanded.'''
         pos = 1 - (angle / (-math.pi))
         return (pos - 0.1) / 0.8
-        
 
-        
-    def get_current_angle(self):
-        return self.gui_project.pseudoclock * self.clock_factor
     
-    """
-    def __get_current_pseudoclock(self): 
-        gui_project = self.gui_project
-        
-        if gui_project is None or gui_project.active_node is None:
-            return 0
-        
-        active_node = self.gui_project.active_node
-        
-        if self.being_dragged is True:
-            
-            
-            if active_node.parent is None or len(active_node.children) == 0:
-                return active_node.state.clock
-            else:
-                clock = self.desired_clock_while_dragging
-                if clock < self.gui_project.path[0].state.clock:
-                    return self.gui_project.path[0].state.clock
-                elif clock > self.gui_project.path[-1].state.clock:
-                    return self.gui_project.path[-1].state.clock
-                else:
-                    return clock
-        
-        else:
-            return gui_project.pseudoclock
-    """
+    def get_current_angle(self):
+        '''Get the angle that the scratch wheel should be in.'''
+        return self.gui_project.pseudoclock * self.clock_factor
                     
+    
     def _recalculate(self, possibly_refresh=True):
+        '''
+        Recalculate the scratch wheel.
+        
+        If `possibly_refresh` is True, and this function sees that the image on
+        the scratch wheel should change, then it will trigger a `Refresh`.
+        '''
         angle = self.get_current_angle()
         frame_number = int(
             ((angle % ((2/3) * math.pi)) / (2 * math.pi)) * 3 * images.N_FRAMES
@@ -185,6 +194,12 @@ class ScratchWheel(wx.Panel):
         self.recalculation_flag = False
     
     def __update_motion_blur_bitmap(self, possibly_refresh):
+        '''
+        Check the speed and update the motion blur bitmap if necessary.
+        
+        If `possibly_refresh` is True, and this function sees that the image on
+        the scratch wheel should change, then it will trigger a `Refresh`.
+        '''
 
         current = (time.time(), self.get_current_angle())
         last = self.last_tracked_time_and_angle
@@ -227,9 +242,9 @@ class ScratchWheel(wx.Panel):
         self.last_tracked_time_and_angle = current
             
     def on_paint(self, event):
+        '''EVT_PAINT handler.'''
         # todo: optimization: if motion blur is (rounded to) zero, don't draw
-
-        #print('ScratchWheel.Refresh called. %s' % random.randint(0, 8))
+        
         event.Skip()
         
         if self.recalculation_flag:
