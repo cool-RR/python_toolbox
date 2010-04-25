@@ -187,8 +187,20 @@ doesn't have exactly one child, and not as the last node in the block.''')
 
         
     def __delitem__(self, i):
-        '''Remove a node from the block. Can only remove an edge node.tododoc'''
+        '''
+        Remove a node or a slice of nodes from the block.
         
+        Nodes are specified by index number, whether you're removing a single
+        node or a slice of them.
+        
+        When removing a single node, only an edge node can be removed.
+        
+        Can only remove an edge node.        
+        '''
+        # todo: allow removing nodes from middle
+        # todo: change argument name `i` and seperate to two methods.
+        # todo: allow specifying by nodes instead of numbers, both in slices
+        # and in single.
         assert self.alive
         
         if isinstance(i, int):
@@ -197,13 +209,13 @@ doesn't have exactly one child, and not as the last node in the block.''')
                 self.__node_list[i].block = None
                 return self.__node_list.__delitem__(i)
             elif (-len(self) < i < len(self) - 1):
-                    raise NotImplementedError('''Can't remove a node from the \
-middle of a block''') #tododoc
+                    raise BlockError('''Can't remove a node from the \
+middle of a block''')
             else:
                 raise IndexError('''Tried to remove a node by index, \
 while the index was bigger than the block's length.''')
         
-        elif isinstance(i, slice): # todo: support specifying by nodes too
+        elif isinstance(i, slice):
             if i.start < 0:
                 i.start += len(self)
             if i.stop < 0:
@@ -228,7 +240,6 @@ while the index was bigger than the block's length.''')
             raise NotImplementedError
 
     
-            
     def __contains__(self, thing):
         '''Return whether `thing` is a node which this block contains.'''
         # The argument is called `thing` and not `node` because we want to let

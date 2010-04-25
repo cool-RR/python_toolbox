@@ -2,7 +2,9 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-tododoc
+Defines the ScratchWheel class.
+
+See its documentation for more info.
 '''
 
 from scratch_wheel import ScratchWheel

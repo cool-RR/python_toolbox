@@ -107,8 +107,10 @@ class NodeRange(object):
         '''
         Get a string representation of the node range.
         
-        Example output:
-        tododoc
+        Example output:        
+        <garlicsim.data_structures.node_range.NodeRange, from node with clock 2
+        to block that ends at clock 102, containing 101 nodes total, at
+        0x291c550>
         '''
         return '<%s.%s, from %s %s to %s %s, containing %s nodes total, at %s>' \
                % (
@@ -124,7 +126,7 @@ class NodeRange(object):
                 else self.start.state.clock,
                 
                 'block that ends at clock' if \
-                isinstance(self.start, Block) else 'node with clock',
+                isinstance(self.end, Block) else 'node with clock',
                 
                 self.end[-1].state.clock if isinstance(self.end, Block) \
                 else self.end.state.clock,
