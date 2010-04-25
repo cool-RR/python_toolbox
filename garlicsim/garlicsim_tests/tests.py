@@ -21,7 +21,7 @@ from garlicsim.bundled.simulation_packages import _history_test
 from garlicsim.bundled.simulation_packages import queue
 
 
-def _is_deterministic(simpack)
+def _is_deterministic(simpack):
     return simpack.__name__.split('.')[-1] == 'life'
 
 def setup():
