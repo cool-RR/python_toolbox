@@ -41,7 +41,7 @@ def simpack_test():
     crunchers = [garlicsim.asynchronous_crunching.crunchers.CruncherThread]
     # Until multiprocessing shit is solved
     
-    for simpack, cruncher in itertools.product(simpacks, crunchers):
+    for simpack, cruncher in cute_iter_tools.product(simpacks, crunchers):
         yield simpack_check, simpack, cruncher
 
         
