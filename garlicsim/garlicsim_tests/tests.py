@@ -4,7 +4,7 @@
 '''
 Test module for garlicsim.
 
-I'm just starting to learn unit-testing, so go easy on me.
+I'm just starting to learn testing, so go easy on me.
 '''
 
 from __future__ import division
