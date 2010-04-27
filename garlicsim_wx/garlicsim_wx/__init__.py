@@ -19,6 +19,7 @@ import misc
 
 from frame import Frame
 from gui_project import GuiProject
+from app import App
 
 __all__ = ['Frame', 'GuiProject', 'start']
 
@@ -26,15 +27,13 @@ __version__ = '0.4'
 
 def start():
     '''Start the gui.'''
-    app = wx.PySimpleApp()
-    frame = Frame(None, -1, "GarlicSim", size=(1140, 850))
-    app.SetTopWindow(frame)
-
-    """
-    import cProfile
-    cProfile.run("app.MainLoop()")
-    """
+    app = App()
     app.MainLoop()
+
+    # For profiling:
+    # import cProfile
+    # cProfile.run("app.MainLoop()")
+    
     
 if __name__ == "__main__":
     start()
