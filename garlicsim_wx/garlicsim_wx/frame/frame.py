@@ -38,9 +38,12 @@ class Frame(wx.Frame):
     
     This window allows the user to create and manipulate gui projects.
     '''
-    def __init__(self, *args, **keywords):
+    def __init__(self, app, *args, **keywords):
         
         wx.Frame.__init__(self, *args, **keywords)
+
+        self.app = app
+        
         self.SetDoubleBuffered(True)
         
         self.Bind(wx.EVT_CLOSE, self.on_close)
@@ -112,10 +115,12 @@ class Frame(wx.Frame):
         assert self.gui_project
         return self.gui_project.finalize_active_node()
 
-    def on_new(self, e):
+    def on_new(self, event):
         '''Create a new gui project.'''        
         if self.gui_project is not None:
-            raise NotImplementedError
+            new_frame = self.app.add_frame()
+            new_frame.on_new(event=None)
+            return
         
         dialog = garlicsim_wx.widgets.misc.SimpackSelectionDialog(self)
         
@@ -311,39 +316,38 @@ class Frame(wx.Frame):
             my_gui_project = garlicsim_wx.gui_project.load_tickled_gui_project\
                 (tickled_gui_project, self.notebook)
         self.add_gui_project(my_gui_project)
-    
+    """
     def on_save(self, event=None):
         '''Raise a dialog for saving a gui project to file.'''
         
-        my_gui_project = self.gui_projects[0] # Change this to get the active
-        tickled = my_gui_project.tickle()
-        
-        
-        wcd='Text files (*.txt)|*.txt|All files (*)|*|'
+        wcd='GarlicSim simulation pickle (*.gssp)|*.txt|All files (*)|*|'
         cur_dir = os.getcwd()
         try:
-            save_dlg = wx.FileDialog(self, message='Save file as...',
+            save_dialog = wx.FileDialog(self, message='Save file as...',
                                      defaultDir=cur_dir, defaultFile='',
                                      wildcard=wcd,
                                      style=wx.SAVE | wx.OVERWRITE_PROMPT)
-            if save_dlg.ShowModal() == wx.ID_OK:
-                path = save_dlg.GetPath()
+            if save_dialog.ShowModal() == wx.ID_OK:
+                path = save_dialog.GetPath()
     
                 try:
                     with file(path, 'w') as my_file:
-                        cPickle.dump(tickled, my_file)
+                        cPickle.dump(self.gui_project, my_file)
     
                 except IOError, error:
-                    dlg = wx.MessageDialog(self,
-                                           'Error saving file\n' + str(error))
-                    dlg.ShowModal()
+                    error_dialog = wx.MessageDialog(
+                        self,
+                        'Error saving file\n' + str(error)
+                    )
+                    error_dialog.ShowModal()
             
         finally:
-            fuck_the_path()
+            # fuck_the_path()
+            pass
             
-        save_dlg.Destroy()
+        save_dialog.Destroy()
     
-    
+    """    
     def delete_gui_project(self,gui_project):
         I did this wrong.
         self.gui_projects.remove(gui_project)
