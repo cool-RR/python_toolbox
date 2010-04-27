@@ -12,7 +12,7 @@ from __future__ import with_statement
 import os
 import sys
 import random
-import cPickle
+import pickle as pickle_module
 
 import wx
 from garlicsim_wx.general_misc.third_party import aui
@@ -61,16 +61,12 @@ class Frame(wx.Frame):
         
         filemenu = wx.Menu()
         new_menu_button = filemenu.Append(-1 ,"&New", " New")
-        """
-        open_menu_button = filemenu.Append(-1 ,"&Open", " Open")
+        #open_menu_button = filemenu.Append(-1 ,"&Open", " Open")
         save_menu_button = filemenu.Append(-1 ,"&Save", " Save")
-        """
         exit_menu_button = filemenu.Append(-1 ,"E&xit", " Close the program")
         self.Bind(wx.EVT_MENU, self.on_new, new_menu_button)
-        """
-        self.Bind(wx.EVT_MENU, self.on_open, open_menu_button)        
+        #self.Bind(wx.EVT_MENU, self.on_open, open_menu_button)        
         self.Bind(wx.EVT_MENU, self.on_save, save_menu_button)
-        """
         self.Bind(wx.EVT_MENU, self.on_exit_menu_button, exit_menu_button)
         menubar = wx.MenuBar()
         menubar.Append(filemenu, "&File")
@@ -295,7 +291,7 @@ class Frame(wx.Frame):
                 
                 try:
                     with file(path, 'r') as my_file:
-                        tickled_gui_project = cPickle.load(my_file)
+                        tickled_gui_project = pickle_module.load(my_file)
                         
                 except IOError, error:
                     dlg = wx.MessageDialog(self,
@@ -320,7 +316,7 @@ class Frame(wx.Frame):
     def on_save(self, event=None):
         '''Raise a dialog for saving a gui project to file.'''
         
-        wcd='GarlicSim simulation pickle (*.gssp)|*.txt|All files (*)|*|'
+        wcd='GarlicSim simulation pickle (*.gssp)|*.gssp|All files (*)|*|'
         cur_dir = os.getcwd()
         try:
             save_dialog = wx.FileDialog(self, message='Save file as...',
@@ -332,7 +328,7 @@ class Frame(wx.Frame):
     
                 try:
                     with file(path, 'w') as my_file:
-                        cPickle.dump(self.gui_project, my_file)
+                        pickle_module.dump(self.gui_project, my_file)
     
                 except IOError, error:
                     error_dialog = wx.MessageDialog(

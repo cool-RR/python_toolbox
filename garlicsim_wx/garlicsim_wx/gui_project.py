@@ -33,9 +33,7 @@ from garlicsim_wx.general_misc import emitters
         
 
 class GuiProject(object):
-    '''
-    Encapsulates a project for use with a wxPython interface.
-    '''
+    '''Encapsulates a project for use with a wxPython interface.'''
     
     def __init__(self, simpack, frame):
         '''
@@ -654,5 +652,16 @@ class GuiProject(object):
         
         self.project.ensure_buffer(node, self.default_buffer)
 
+        
+    def __getstate__(self):
+        my_dict = dict(self.__dict__)
+        
+        del my_dict['frame']
+        del my_dict['timer_for_playing']
+        
+        return my_dict
 
+    
+    def __setstate__(self, pickled_project):
+        raise Exception
     
