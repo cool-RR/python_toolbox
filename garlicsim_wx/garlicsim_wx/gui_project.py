@@ -55,27 +55,23 @@ class GuiProject(object):
         self.frame = frame
         '''The frame that this gui project lives in.'''
         
-        
         if isinstance(simpack, garlicsim.misc.SimpackGrokker):
-            
-            self.simpack_grokker = simpack
-            
-            self.simpack = self.simpack_grokker.simpack
-            
+            simpack_grokker = simpack            
+            simpack = simpack_grokker.simpack
         else:
+            simpack_grokker = garlicsim.misc.SimpackGrokker(simpack)
             
-            self.simpack = simpack
-            '''The simpack used for this gui project.'''
             
-            self.simpack_grokker = \
-                garlicsim.misc.SimpackGrokker(simpack)
-            '''The simpack grokker used for this gui project.'''
-            
-            self.simpack_wx_grokker = \
-                garlicsim_wx.misc.SimpackWxGrokker(simpack)
-            '''The simpack_wx used for this gui project.'''
+        self.simpack = simpack
+        '''The simpack used for this gui project.'''
         
-        self.project = project or garlicsim.Project(self.simpack_grokker)
+        self.simpack_grokker = simpack_grokker
+        '''The simpack grokker used for this gui project.'''
+        
+        self.simpack_wx_grokker = garlicsim_wx.misc.SimpackWxGrokker(simpack)
+        '''The simpack_wx used for this gui project.'''
+        
+        self.project = project or garlicsim.Project(simpack_grokker)
         '''The project encapsulated in this gui project.'''
         
 
