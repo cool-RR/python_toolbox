@@ -24,7 +24,7 @@ from garlicsim.general_misc import string_tools
 import garlicsim_wx.general_misc.thread_timer as thread_timer
 
 import garlicsim
-import garlicsim_wx.gui_project
+from garlicsim_wx.gui_project import GuiProject
 import garlicsim_wx.widgets
 import garlicsim_wx.misc
 from garlicsim_wx.widgets import workspace_widgets
@@ -60,11 +60,11 @@ class Frame(wx.Frame):
         
         filemenu = wx.Menu()
         new_menu_button = filemenu.Append(-1 ,"&New", " New")
-        #open_menu_button = filemenu.Append(-1 ,"&Open", " Open")
+        open_menu_button = filemenu.Append(-1 ,"&Open", " Open")
         save_menu_button = filemenu.Append(-1 ,"&Save", " Save")
         exit_menu_button = filemenu.Append(-1 ,"E&xit", " Close the program")
         self.Bind(wx.EVT_MENU, self.on_new, new_menu_button)
-        #self.Bind(wx.EVT_MENU, self.on_open, open_menu_button)        
+        self.Bind(wx.EVT_MENU, self.on_open, open_menu_button)        
         self.Bind(wx.EVT_MENU, self.on_save, save_menu_button)
         self.Bind(wx.EVT_MENU, self.on_exit_menu_button, exit_menu_button)
         menubar = wx.MenuBar()
@@ -129,8 +129,49 @@ class Frame(wx.Frame):
             return
         dialog.Destroy()
 
-        self.gui_project = garlicsim_wx.gui_project.GuiProject(simpack, self)
+        gui_project = GuiProject(simpack, self)
 
+        self.__setup_gui_project(gui_project)
+        
+
+    def on_exit_menu_button(self, event):
+        '''Exit menu button handler.'''
+        self._post_close_event()
+
+        
+    def _post_close_event(self):
+        '''Post a close event to the frame.'''
+        event = wx.PyEvent(self.Id)
+        event.SetEventType(wx.wxEVT_CLOSE_WINDOW)
+        wx.PostEvent(self, event)
+        
+        
+    def sync_crunchers(self):
+        '''
+        Take work from the crunchers, and give them new instructions if needed.
+                
+        (This is a wrapper that calls the sync_crunchers method of all the
+        gui projects.)
+        
+        Talks with all the crunchers, takes work from them for implementing
+        into the tree, retiring crunchers or recruiting new crunchers as
+        necessary.
+        
+        Returns the total amount of nodes that were added to each gui project's
+        tree.
+        '''
+        nodes_added = self.gui_project.sync_crunchers() \
+                    if self.gui_project else 0
+        
+        if nodes_added > 0:
+            pass#self.Refresh()
+        
+        return nodes_added
+    
+    def __setup_gui_project(self, gui_project):
+        
+        self.gui_project = gui_project
+        
         # todo: should create StateReprViewer only if the simpack got no
         # workspace widgets
         
@@ -242,48 +283,13 @@ class Frame(wx.Frame):
         
         self.aui_manager.Update()
         
-
-    def on_exit_menu_button(self, event):
-        '''Exit menu button handler.'''
-        self._post_close_event()
-
-        
-    def _post_close_event(self):
-        '''Post a close event to the frame.'''
-        event = wx.PyEvent(self.Id)
-        event.SetEventType(wx.wxEVT_CLOSE_WINDOW)
-        wx.PostEvent(self, event)
-        
-        
-    def sync_crunchers(self):
-        '''
-        Take work from the crunchers, and give them new instructions if needed.
-                
-        (This is a wrapper that calls the sync_crunchers method of all the
-        gui projects.)
-        
-        Talks with all the crunchers, takes work from them for implementing
-        into the tree, retiring crunchers or recruiting new crunchers as
-        necessary.
-        
-        Returns the total amount of nodes that were added to each gui project's
-        tree.
-        '''
-        nodes_added = self.gui_project.sync_crunchers() \
-                    if self.gui_project else 0
-        
-        if nodes_added > 0:
-            pass#self.Refresh()
-        
-        return nodes_added
     
-    
-    """
     def on_open(self, event=None):
         '''Raise a dialog for opening a gui project from file.'''
-        wcd = 'Text files (*.txt)|*.txt|All files (*)|*|'
+        assert self.gui_project is None
+        wcd = 'GarlicSim simulation pickle (*.gssp)|*.gssp|All files (*)|*|'
         cur_dir = os.getcwd()
-        tickled_gui_project = None
+        gui_project_vars = None
         try:
             open_dlg = wx.FileDialog(self, message='Choose a file',
                                      defaultDir=cur_dir, defaultFile='',
@@ -293,7 +299,7 @@ class Frame(wx.Frame):
                 
                 try:
                     with file(path, 'r') as my_file:
-                        tickled_gui_project = pickle_module.load(my_file)
+                        gui_project_vars = pickle_module.load(my_file)
                         
                 except IOError, error:
                     dlg = wx.MessageDialog(self,
@@ -308,19 +314,18 @@ class Frame(wx.Frame):
                 
                     open_dlg.Destroy()
         finally:
-            fuck_the_path()
-            
-        if tickled_gui_project:
-            my_gui_project = garlicsim_wx.gui_project.load_tickled_gui_project\
-                (tickled_gui_project, self.notebook)
-        self.add_gui_project(my_gui_project)
-    """
+            pass # fuck_the_path()
+        
+        if gui_project_vars:
+            gui_project = GuiProject.load_from_vars(self, gui_project_vars)
+            self.__setup_gui_project(gui_project)
+    
     
     def on_save(self, event=None):
         '''Raise a dialog for saving a gui project to file.'''
         
         assert self.gui_project is not None
-        wcd='GarlicSim simulation pickle (*.gssp)|*.gssp|All files (*)|*|'
+        wcd = 'GarlicSim simulation pickle (*.gssp)|*.gssp|All files (*)|*|'
         cur_dir = os.getcwd()
         try:
             save_dialog = wx.FileDialog(self, message='Save file as...',

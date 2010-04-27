@@ -35,7 +35,7 @@ from garlicsim_wx.general_misc import emitters
 class GuiProject(object):
     '''Encapsulates a project for use with a wxPython interface.'''
     
-    def __init__(self, simpack, frame):
+    def __init__(self, simpack, frame, project=None, virgin=True):
         '''
         Construct the gui project.
         
@@ -43,13 +43,31 @@ class GuiProject(object):
         which this gui project will live.
         '''
         # This is broken down into a few parts.
-        self.__init_general(simpack, frame)
+        self.__init_general(simpack, frame, project)
         self.__init_gui()
-        self.__init_on_creation()
+        if virgin:
+            self.__init_virgin()
 
+    
+    @staticmethod
+    def load_from_vars(frame, picklable_vars):
+
+        simpack, project = (
+            picklable_vars['simpack'],
+            picklable_vars['project']
+        )
         
-    def __init_general(self, simpack, frame, project=None,
-                       active_node=None, path=None):
+        gui_project = GuiProject(simpack, frame, project, virgin=False)
+        
+        for (key, value) in picklable_vars.iteritems():
+            setattr(gui_project, key, value)
+        
+        gui_project.emitter_system.top_emitter.emit()
+        
+        return gui_project
+    
+        
+    def __init_general(self, simpack, frame, project=None):
         '''General initialization.'''
         
         self.frame = frame
@@ -85,10 +103,10 @@ class GuiProject(object):
         
         #######################################################################
             
-        self.path = path
+        self.path = None # path
         '''The active path.'''
 
-        self.active_node = active_node
+        self.active_node = None # active_node
         '''The node that is currently displayed onscreen.'''
 
         self.is_playing = False
@@ -264,7 +282,7 @@ class GuiProject(object):
                          id=s2i("Fork naturally"))
         
         
-    def __init_on_creation(self):
+    def __init_virgin(self):
         '''
         Initialization done when gui project is actually created, not loaded.
         '''
@@ -654,7 +672,16 @@ class GuiProject(object):
         
         del my_dict['frame']
         del my_dict['timer_for_playing']
-        
+        del my_dict['simpack_grokker']
+        del my_dict['simpack_wx_grokker']
+
+        for (key, value) in my_dict.items():
+            
+            if isinstance(value, emitters.Emitter) or \
+               isinstance(value, emitters.EmitterSystem):
+                
+                del my_dict[key]
+            
         return my_dict
 
     
