@@ -315,9 +315,11 @@ class Frame(wx.Frame):
                 (tickled_gui_project, self.notebook)
         self.add_gui_project(my_gui_project)
     """
+    
     def on_save(self, event=None):
         '''Raise a dialog for saving a gui project to file.'''
         
+        assert self.gui_project is not None
         wcd='GarlicSim simulation pickle (*.gssp)|*.gssp|All files (*)|*|'
         cur_dir = os.getcwd()
         try:
@@ -330,7 +332,8 @@ class Frame(wx.Frame):
     
                 try:
                     with file(path, 'w') as my_file:
-                        pickle_module.dump(self.gui_project, my_file)
+                        picklable_vars = self.gui_project.__getstate__()
+                        pickle_module.dump(picklable_vars, my_file)
     
                 except IOError, error:
                     error_dialog = wx.MessageDialog(

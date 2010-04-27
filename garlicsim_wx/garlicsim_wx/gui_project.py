@@ -251,7 +251,25 @@ class GuiProject(object):
             
             
             #todo: maybe need an emitter for when editing a state?
-    
+
+            
+    def __init_gui(self):
+        '''
+        Initialization related to the widgets which make up the gui project.
+        '''
+        
+        self.frame.Bind(wx.EVT_MENU, self.edit_from_active_node,
+                         id=s2i("Fork by editing"))
+        self.frame.Bind(wx.EVT_MENU, self.fork_naturally,
+                         id=s2i("Fork naturally"))
+        
+        
+    def __init_on_creation(self):
+        '''
+        Initialization done when gui project is actually created, not loaded.
+        '''
+        wx.CallAfter(self.make_state_creation_dialog)
+        
 
     def set_path(self, path):
         '''Set the path.'''
@@ -323,24 +341,6 @@ class GuiProject(object):
         # defacto speed, and let that override.
         self.defacto_playing_speed = self.official_playing_speed
         
-    def __init_gui(self):
-        '''
-        Initialization related to the widgets which make up the gui project.
-        '''
-        
-        self.frame.Bind(wx.EVT_MENU, self.edit_from_active_node,
-                         id=s2i("Fork by editing"))
-        self.frame.Bind(wx.EVT_MENU, self.fork_naturally,
-                         id=s2i("Fork naturally"))
-        
-
-        
-    def __init_on_creation(self):
-        '''
-        Initialization done when gui project is actually created, not loaded.
-        '''
-        wx.CallAfter(self.make_state_creation_dialog)
-
     
     def make_state_creation_dialog(self):
         '''Create a dialog for creating a root state.'''
