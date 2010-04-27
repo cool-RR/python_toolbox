@@ -13,6 +13,7 @@ import os
 import sys
 import random
 import pickle as pickle_module
+import multiprocessing #tododoc: am i forcing multiprocessing here?
 
 import wx
 from garlicsim_wx.general_misc.third_party import aui
@@ -38,11 +39,9 @@ class Frame(wx.Frame):
     
     This window allows the user to create and manipulate gui projects.
     '''
-    def __init__(self, app, *args, **keywords):
+    def __init__(self, *args, **keywords):
         
         wx.Frame.__init__(self, *args, **keywords)
-
-        self.app = app
         
         self.SetDoubleBuffered(True)
         
@@ -111,11 +110,14 @@ class Frame(wx.Frame):
         assert self.gui_project
         return self.gui_project.finalize_active_node()
 
-    def on_new(self, event):
+    def on_new(self, event=None):
         '''Create a new gui project.'''        
         if self.gui_project is not None:
-            new_frame = self.app.add_frame()
-            new_frame.on_new(event=None)
+            new_process = multiprocessing.Process(
+                target=garlicsim_wx.start,
+                kwargs={'new_gui_project': True}
+            )
+            new_process.start()
             return
         
         dialog = garlicsim_wx.widgets.misc.SimpackSelectionDialog(self)

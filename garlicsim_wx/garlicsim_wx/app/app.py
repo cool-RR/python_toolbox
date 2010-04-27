@@ -16,24 +16,27 @@ class App(wx.PySimpleApp):
     # todo: need to think if i allow frames with no app. on one hand good idea,
     # to allow people to start a garlicsim_wx frame in their own app. on other
     # hand frames will need to know how to start another frame.
-    def __init__(self, *args, **keywords):
-        self.frames = []
-        super(App, self).__init__(*args, **keywords)
+    def __init__(self, new_gui_project=False, load_gui_project=None):
+        self.frame = None
+        assert not (new_gui_project and load_gui_project)
+        self.new_gui_project = new_gui_project
+        self.load_gui_project = load_gui_project
+        super(App, self).__init__()
         
+    
+    def OnInit(self):
         
-    def add_frame(self):
         frame = garlicsim_wx.Frame(
-            app=self,
             parent=None,
             title="GarlicSim",
             size=(1140, 850)
         )
-        self.frames.append(frame)
-        return frame
-    
-    def OnInit(self):
         
-        frame = self.add_frame()
+        self.frame = frame
+        
         self.SetTopWindow(frame)
+        
+        if self.new_gui_project is True:
+            wx.CallAfter(frame.on_new)
         
         return True

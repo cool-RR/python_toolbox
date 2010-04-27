@@ -25,9 +25,10 @@ __all__ = ['Frame', 'GuiProject', 'start']
 
 __version__ = '0.4'
 
-def start():
+def start(new_gui_project=False, load_gui_project=None):
     '''Start the gui.'''
-    app = App()
+    app = App(new_gui_project=new_gui_project,
+              load_gui_project=load_gui_project)
     app.MainLoop()
 
     # For profiling:
