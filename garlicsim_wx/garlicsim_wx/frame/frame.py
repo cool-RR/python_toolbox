@@ -12,7 +12,7 @@ from __future__ import with_statement
 import os
 import sys
 import random
-import pickle as pickle_module
+import cPickle as pickle_module
 import multiprocessing #tododoc: am i forcing multiprocessing here?
 
 import wx
@@ -285,11 +285,13 @@ class Frame(wx.Frame):
         
         self.aui_manager.Update()
         
+        self.gui_project.emitter_system.top_emitter.emit()
+        
     
     def on_open(self, event=None):
         '''Raise a dialog for opening a gui project from file.'''
         assert self.gui_project is None
-        wcd = 'GarlicSim simulation pickle (*.gssp)|*.gssp|All files (*)|*|'
+        wcd = 'GarlicSim Simulation Pickle (*.gssp)|*.gssp|All files (*)|*|'
         cur_dir = os.getcwd()
         gui_project_vars = None
         try:
@@ -327,7 +329,7 @@ class Frame(wx.Frame):
         '''Raise a dialog for saving a gui project to file.'''
         
         assert self.gui_project is not None
-        wcd = 'GarlicSim simulation pickle (*.gssp)|*.gssp|All files (*)|*|'
+        wcd = 'GarlicSim Simulation Pickle (*.gssp)|*.gssp|All files (*)|*|'
         cur_dir = os.getcwd()
         try:
             save_dialog = wx.FileDialog(self, message='Save file as...',

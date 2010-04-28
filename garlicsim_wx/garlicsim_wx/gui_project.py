@@ -62,8 +62,6 @@ class GuiProject(object):
         for (key, value) in picklable_vars.iteritems():
             setattr(gui_project, key, value)
         
-        gui_project.emitter_system.top_emitter.emit()
-        
         return gui_project
     
         
