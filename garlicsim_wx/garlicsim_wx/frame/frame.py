@@ -305,23 +305,28 @@ class Frame(wx.Frame):
                     with file(path, 'r') as my_file:
                         gui_project_vars = pickle_module.load(my_file)
                         
-                except IOError, error:
-                    dlg = wx.MessageDialog(self,
-                                           'Error opening file\n' + str(error))
-                    dlg.ShowModal()
+                except Exception, exception:
+                    dialog = wx.MessageDialog(
+                        self,
+                        'Error opening file:\n' + str(exception),
+                        style=(wx.OK | wx.ICON_ERROR)
+                    )
+                    dialog.ShowModal()
                         
-                except UnicodeDecodeError, error:
-                    dlg = wx.MessageDialog(self,
-                                           'Error opening file\n' + str(error))
-                    dlg.ShowModal()
-                    
-                
-                    open_dlg.Destroy()
         finally:
             pass # fuck_the_path()
         
         if gui_project_vars:
-            gui_project = GuiProject.load_from_vars(self, gui_project_vars)
+            try:
+                gui_project = GuiProject.load_from_vars(self, gui_project_vars)
+            except Exception, exception:
+                dialog = wx.MessageDialog(
+                    self,
+                    'Error opening file:\n' + str(exception),
+                    style=(wx.OK | wx.ICON_ERROR)
+                )
+                dialog.ShowModal()
+                
             self.__setup_gui_project(gui_project)
     
     
