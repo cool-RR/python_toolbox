@@ -11,3 +11,4 @@ These objects are important enough to be defined near the root of the
 from state_creation_dialog import StateCreationDialog
 from simpack_wx_grokker import SimpackWxGrokker
 import aui
+import icon_bundle

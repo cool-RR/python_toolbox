@@ -44,6 +44,8 @@ class Frame(wx.Frame):
         wx.Frame.__init__(self, *args, **keywords)
         
         self.SetDoubleBuffered(True)
+        wx.IconBundle
+        self.SetIcons(garlicsim_wx.misc.icon_bundle.get_icon_bundle())
         
         self.Bind(wx.EVT_CLOSE, self.on_close)
                 
