@@ -44,12 +44,14 @@ class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,
                             wx.FONTWEIGHT_BOLD, face='Courier New')        
         
         self.gui_project.active_node_changed_emitter.add_output(
-            lambda: self.load_state(self.gui_project.active_node.state)
+            lambda: self.load_state(self.gui_project.get_active_state())
         )
 
         
     def load_state(self, state):
         '''Set the state to be displayed.'''
+        if state is None:
+            return
         self.state = state
         self.Refresh()
 

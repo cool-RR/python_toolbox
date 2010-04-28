@@ -29,7 +29,7 @@ class StateViewer(wx.Window, garlicsim_wx.widgets.WorkspaceWidget):
         self.radius = 60
         
         self.gui_project.active_node_changed_emitter.add_output(
-            lambda: self.load_state(self.gui_project.active_node.state)
+            lambda: self.load_state(self.gui_project.get_active_state())
         )
         
     def on_paint(self, event):
@@ -54,6 +54,8 @@ class StateViewer(wx.Window, garlicsim_wx.widgets.WorkspaceWidget):
     
     def load_state(self, state):
         '''Load a state and show it onscreen.'''
+        if state is None:
+            return
         self.left, self.right = state.left, state.right
         self.Refresh()
         

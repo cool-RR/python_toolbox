@@ -55,11 +55,13 @@ class StateViewer(wx.Panel, garlicsim_wx.widgets.WorkspaceWidget):
             self.pie_part_dict[player_type] = part
             
         self.gui_project.active_node_changed_emitter.add_output(
-            lambda: self.show_state(self.gui_project.active_node.state)
+            lambda: self.show_state(self.gui_project.get_active_state())
         )
             
     def show_state(self, state):
         '''Show a state onscreen.'''
+        if state is None:
+            return
         for player_type in prisoner.player_types:
             part = self.pie_part_dict[player_type]
             value = prisoner.how_many_players_of_certain_type(

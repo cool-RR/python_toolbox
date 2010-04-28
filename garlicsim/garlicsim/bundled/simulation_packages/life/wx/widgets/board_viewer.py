@@ -36,7 +36,7 @@ class BoardViewer(scrolled.ScrolledPanel,
         self._buffer_bitmap = wx.EmptyBitmap(1, 1)
         
         self.gui_project.active_node_changed_emitter.add_output(
-            lambda: self.set_board(self.gui_project.active_node.state.board)
+            lambda: self.set_state(self.gui_project.get_active_state())
         )
 
         self.redraw_needed_flag = True
@@ -56,6 +56,11 @@ class BoardViewer(scrolled.ScrolledPanel,
         else:
             return None
 
+    def set_state(self, state):
+        '''Set the state to be displayed.'''
+        if state is not None:
+            self.set_board(state.board)
+        
     def set_board(self, board):
         '''Set the board to be displayed.'''
         if board is not self.board:
