@@ -13,7 +13,7 @@ import os
 import sys
 import random
 import cPickle as pickle_module
-import multiprocessing #tododoc: am i forcing multiprocessing here?
+import multiprocessing # tododoc: am i forcing multiprocessing here?
 
 import wx
 from garlicsim_wx.general_misc.third_party import aui
