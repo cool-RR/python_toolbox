@@ -28,7 +28,7 @@ def get_icon_bundle():
     
     _icon_bundle = wx.IconBundle()
     
-    _icon_bundle.AddIconFromFile(ico_file, wx.BITMAP_TYPE_ANY)
+    _icon_bundle.AddIconFromFile(ico_file, wx.BITMAP_TYPE_ICO)
     #_icon_bundle.AddIconFromFile(icns_file, wx.BITMAP_TYPE_ANY)
     
     return _icon_bundle
