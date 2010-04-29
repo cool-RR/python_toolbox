@@ -16,13 +16,28 @@ def get_icon_bundle():
     from . import images as __images_package
     images_package = __images_package.__name__
 
-    ico_stream = pkg_resources.resource_stream(
-        images_package,
-        'garlicsim.ico'
-    )
+
+    icons = []
+    for size in [16, 24, 32, 48, 96, 128, 256]:
+        file_name = 'icon%s.png' % str(size)
+        stream = pkg_resources.resource_stream(
+            images_package,
+            file_name
+        )
+        icon = wx.IconFromBitmap(
+            wx.BitmapFromImage(
+                wx.ImageFromStream(
+                    stream,
+                    wx.BITMAP_TYPE_PNG
+                )
+            )
+        )
+        icons.append(icon)
+                    
     
     _icon_bundle = wx.IconBundle()
     
-    _icon_bundle.AddIconFromFile(ico_file, wx.BITMAP_TYPE_ICO)
+    for icon in icons:
+        _icon_bundle.AddIcon(icon)
     
     return _icon_bundle
