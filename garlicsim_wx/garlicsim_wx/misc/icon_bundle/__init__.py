@@ -16,7 +16,7 @@ def get_icon_bundle():
     from . import images as __images_package
     images_package = __images_package.__name__
 
-    ico_file = pkg_resources.resource_filename(
+    ico_stream = pkg_resources.resource_stream(
         images_package,
         'garlicsim.ico'
     )
