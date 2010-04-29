@@ -30,6 +30,8 @@ working with simulations, friendly enough that it may be used by
 non-programmers.
 '''
 
+setuptools.fin
+
 my_classifiers = [
     'Development Status :: 2 - Pre-Alpha',
     'Intended Audience :: Science/Research',
@@ -55,4 +57,17 @@ setuptools.setup(
     long_description = my_long_description,
     classifiers = my_classifiers,
     include_package_data = True,
+    
+    # For py2exe:
+    windows=[
+        {
+            'script': 'garlicsim_wx.__init__',
+            'icon_resources': [
+                (
+                    0,
+                    'garlicsim_wx/misc/icon_bundle/images/garlicsim.ico'
+                )
+            ]
+        }
+        ],
 )
