@@ -118,10 +118,15 @@ class Frame(wx.Frame):
             
             program = [
                 os.path.abspath(sys.argv[0]),
-                '__garlicsim_wx_new'
             ]
-            if not hasattr(sys, 'frozen'):
-                program = [sys.executable] + program
+            
+            if hasattr(sys, 'frozen'):
+                program = [sys.executable]
+            else:
+                program = [sys.executable, os.path.abspath(sys.argv[0])]
+                # Todo: what if some other program is launching my code?
+                
+            program.append('__garlicsim_wx_new')
          
             subprocess.Popen(program)
             
