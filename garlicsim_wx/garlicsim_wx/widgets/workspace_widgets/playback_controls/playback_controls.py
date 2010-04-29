@@ -88,9 +88,14 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         
         bitmaps_dict = self.bitmap_dict = {}
         for bitmap_name in bitmap_list:
-            path = pkg_resources.resource_filename(images_package,
-                                                   bitmap_name + '.png')
-            self.bitmap_dict[bitmap_name] = wx.Bitmap(path, wx.BITMAP_TYPE_ANY)
+            stream = pkg_resources.resource_stream(images_package,
+                                                 bitmap_name + '.png')
+            self.bitmap_dict[bitmap_name] = wx.BitmapFromImage(
+                wx.ImageFromStream(
+                    stream,
+                    wx.BITMAP_TYPE_ANY
+                )
+            )
             
         
         self.center_button_bitmap_dict = {

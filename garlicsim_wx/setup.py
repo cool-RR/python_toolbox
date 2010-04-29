@@ -3,13 +3,20 @@
 # Copyright 2009-2010 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''
-Setuptools setup file for garlicsim_wx.
-'''
+'''Setuptools setup file for garlicsim_wx.'''
 
-import os
+import os.path
+import sys
 import setuptools
 import distutils # Just for deleting the "build" directory.
+try:
+    import py2exe
+except ImportError:
+    pass
+
+path_to_garlicsim = '../garlicsim'
+if path_to_garlicsim not in sys.path:
+    sys.path.append(path_to_garlicsim)
 
 try:
     distutils.dir_util.remove_tree('build', verbose=True)
@@ -21,6 +28,8 @@ def get_packages():
             in setuptools.find_packages('./garlicsim_wx')] + \
            ['garlicsim_wx']
 
+packages = get_packages()
+
 my_long_description = \
 '''\
 garlicsim_wx, a wxPython GUI for garlicsim.
@@ -29,8 +38,6 @@ The final goal of this project is to become a fully-fledged application for
 working with simulations, friendly enough that it may be used by
 non-programmers.
 '''
-
-setuptools.fin
 
 my_classifiers = [
     'Development Status :: 2 - Pre-Alpha',
@@ -52,8 +59,8 @@ setuptools.setup(
     author='Ram Rachum',
     author_email='cool-rr@cool-rr.com',
     url='http://garlicsim.org',
-    packages=get_packages(),
-    license="Proprietary",
+    packages=packages,
+    license='Proprietary',
     long_description = my_long_description,
     classifiers = my_classifiers,
     include_package_data = True,
@@ -61,7 +68,7 @@ setuptools.setup(
     # For py2exe:
     windows=[
         {
-            'script': 'garlicsim_wx.__init__',
+            'script': 'py2exe_cruft/GarlicSim.py',
             'icon_resources': [
                 (
                     0,
@@ -70,4 +77,10 @@ setuptools.setup(
             ]
         }
         ],
+    options={
+        'py2exe': {
+            'dist_dir': 'py2exe_dist',
+            'packages': packages
+        }
+    }
 )

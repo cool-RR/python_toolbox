@@ -24,9 +24,15 @@ def get_image(i):
     if not cached_images:
         for j in range(N_FRAMES):
             file_name = 'gear%04.d.png' % j
-            full_path = pkg_resources.resource_filename(images_package,
-                                                        file_name)
-            bitmap = wx.Bitmap(full_path, wx.BITMAP_TYPE_ANY)
+            stream = pkg_resources.resource_stream(images_package,
+                                                   file_name)
+            bitmap = wx.BitmapFromImage(
+                wx.ImageFromStream(
+                    stream,
+                    wx.BITMAP_TYPE_ANY
+                )
+            )
+            
             cached_images.append(bitmap)
     
     assert len(cached_images) == N_FRAMES
@@ -48,9 +54,15 @@ def get_blurred_gear_image(i):
     if not cached_blurred_gear_images:
         for j in range(N_BLURRED_GEAR_FRAMES):
             file_name = 'blurred_gear_%d.png' % j
-            full_path = pkg_resources.resource_filename(images_package,
-                                                        file_name)
-            bitmap = wx.Bitmap(full_path, wx.BITMAP_TYPE_ANY)
+            stream = pkg_resources.resource_stream(images_package,
+                                                   file_name)
+            bitmap = wx.BitmapFromImage(
+                wx.ImageFromStream(
+                    stream,
+                    wx.BITMAP_TYPE_ANY
+                )
+            )
+            
             cached_blurred_gear_images.append(bitmap)
     
     assert len(cached_blurred_gear_images) == N_BLURRED_GEAR_FRAMES

@@ -73,9 +73,11 @@ class Knob(wx.Panel):
         
         wx.Panel.__init__(self, parent, *args, **kwargs)
         
-        self.original_bitmap = wx.Bitmap(
-            pkg_resources.resource_filename(images_package, 'knob.png'),
-            wx.BITMAP_TYPE_ANY
+        self.original_bitmap = wx.BitmapFromImage(
+            wx.ImageFromStream(
+                pkg_resources.resource_stream(images_package, 'knob.png'),
+                wx.BITMAP_TYPE_ANY
+            )
         )
         
         self.Bind(wx.EVT_PAINT, self.on_paint)

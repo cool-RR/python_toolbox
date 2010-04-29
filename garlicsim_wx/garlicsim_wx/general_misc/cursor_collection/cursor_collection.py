@@ -20,9 +20,9 @@ def get_open_grab():
     hotspot = (8, 8)
     if name in cached_cursors:
         return cached_cursors[name]
-    full_path = pkg_resources.resource_filename(images_package,
-                                                file_name)
-    image = wx.Image(full_path, wx.BITMAP_TYPE_ANY)
+    stream = pkg_resources.resource_stream(images_package,
+                                           file_name)
+    image = wx.ImageFromStream(stream, wx.BITMAP_TYPE_ANY)
 
     if hotspot is not None:
         image.SetOptionInt(wx.IMAGE_OPTION_CUR_HOTSPOT_X, hotspot[0])
@@ -40,9 +40,9 @@ def get_closed_grab():
     hotspot = (8, 8)
     if name in cached_cursors:
         return cached_cursors[name]
-    full_path = pkg_resources.resource_filename(images_package,
-                                                file_name)
-    image = wx.Image(full_path, wx.BITMAP_TYPE_ANY)
+    stream = pkg_resources.resource_stream(images_package,
+                                           file_name)
+    image = wx.ImageFromStream(stream, wx.BITMAP_TYPE_ANY)
 
     if hotspot is not None:
         image.SetOptionInt(wx.IMAGE_OPTION_CUR_HOTSPOT_X, hotspot[0])

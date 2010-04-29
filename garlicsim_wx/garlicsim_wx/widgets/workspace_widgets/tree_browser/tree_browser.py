@@ -98,9 +98,14 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
         
         self.elements = {}
         for key in elements_raw:
-            file_name = pkg_resources.resource_filename(images_package,
-                                                        elements_raw[key])
-            self.elements[key] = wx.Bitmap(file_name, wx.BITMAP_TYPE_ANY)
+            stream = pkg_resources.resource_stream(images_package,
+                                                      elements_raw[key])
+            self.elements[key] = wx.BitmapFromImage(
+                wx.ImageFromStream(
+                    stream,
+                    wx.BITMAP_TYPE_ANY
+                )
+            )
 
     def on_paint(self, event):
         '''Refresh the tree browser.'''
