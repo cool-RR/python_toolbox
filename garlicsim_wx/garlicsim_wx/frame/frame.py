@@ -14,6 +14,7 @@ import sys
 import random
 import cPickle as pickle_module
 import multiprocessing # tododoc: am i forcing multiprocessing here?
+import subprocess
 
 import wx
 from garlicsim_wx.general_misc.third_party import aui
@@ -114,6 +115,14 @@ class Frame(wx.Frame):
     def on_new(self, event=None):
         '''Create a new gui project.'''        
         if self.gui_project is not None:
+            
+            #program = ('python', os.path.abspath(sys.argv[0]))
+            #if hasattr(sys, 'frozen'):
+                #program = os.path.abspath(sys.argv[0])
+                ## Sproaty says: Haven't tested this yet
+         
+            #subprocess.Popen(program)
+            
             new_process = multiprocessing.Process(
                 target=garlicsim_wx.start,
                 kwargs={'new_gui_project': True}
