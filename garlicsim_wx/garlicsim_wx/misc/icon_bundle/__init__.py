@@ -4,6 +4,7 @@ import pkg_resources
 import wx
 
 
+
 _icon_bundle = None
 
 def get_icon_bundle():
@@ -33,6 +34,9 @@ def get_icon_bundle():
             )
         )
         icons.append(icon)
+        
+        # todo: should probably be loading the bitmaps from the .ico file, to
+        # save on storing all those PNGs.
                     
     
     _icon_bundle = wx.IconBundle()
