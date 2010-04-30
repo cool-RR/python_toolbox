@@ -12,7 +12,8 @@ import wx
 from garlicsim_wx.general_misc.third_party import aui
 from garlicsim_wx.general_misc import wx_tools
 
-# tododoc: move to differnt module the overriding
+# tododoc: consider move to differnt module the overriding
+import types
 from garlicsim_wx.general_misc.third_party.aui.aui_utilities import (
     BitmapFromBits, StepColour, ChopText, GetBaseColour, DrawGradientRectangle,
     DrawMACCloseButton, DarkenBitmap, LightContrastColour)
