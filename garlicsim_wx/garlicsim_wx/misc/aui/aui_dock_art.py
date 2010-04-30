@@ -20,7 +20,7 @@ class AuiDockArt(aui.AuiDefaultDockArt):
         self.SetMetric(aui.AUI_DOCKART_CAPTION_SIZE, 10)
         self.SetFont(
             aui.AUI_DOCKART_CAPTION_FONT,
-            wx.Font(7, wx.FONTFAMILY_MAX, wx.NORMAL, wx.NORMAL, False)
+            wx.Font(7, wx.FONTFAMILY_DEFAULT, wx.NORMAL, wx.NORMAL, False)
         )
         
         self.SetMetric(aui.AUI_DOCKART_GRADIENT_TYPE,
