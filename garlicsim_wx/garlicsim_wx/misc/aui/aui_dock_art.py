@@ -94,3 +94,60 @@ class AuiDockArt(aui.AuiDefaultDockArt):
             dc.DrawRotatedText(draw_text, rect.x+(rect.width/2)-(h/2)-1, rect.y+rect.height-3-caption_offset, 90)
         else:
             dc.DrawText(draw_text, rect.x+3+caption_offset, rect.y+(rect.height/2)-(h/2))
+            
+    
+
+
+    def SetColor(self, id, colour):
+        """
+        Sets the colour of a certain setting.
+
+        :param `id`: can be one of the colour values in `Metric Ordinals`;
+        :param `colour`: the new value of the setting.
+        """
+
+        if isinstance(colour, basestring):
+            colour = wx.NamedColour(colour)
+        elif isinstance(colour, types.TupleType):
+            colour = wx.Colour(*colour)
+        elif isinstance(colour, types.IntType):
+            colour = wx.ColourRGB(colour)
+        
+        if id == AUI_DOCKART_BACKGROUND_COLOUR:
+            self._background_brush.SetColour(colour)
+        elif id == AUI_DOCKART_BACKGROUND_GRADIENT_COLOUR:
+            self._background_gradient_colour = colour
+        elif id == AUI_DOCKART_SASH_COLOUR:
+            self._sash_brush.SetColour(colour)
+        elif id == AUI_DOCKART_INACTIVE_CAPTION_COLOUR:
+            self._inactive_caption_colour = colour
+            if not self._custom_pane_bitmaps and wx.Platform == "__WXMAC__":
+                # No custom bitmaps for the pane close button
+                # Change the MAC close bitmap colour
+                pass # # self._inactive_close_bitmap = DrawMACCloseButton(wx.WHITE, colour)
+                # CHANGE IS HERE tododoc
+
+        elif id == AUI_DOCKART_INACTIVE_CAPTION_GRADIENT_COLOUR:
+            self._inactive_caption_gradient_colour = colour
+        elif id == AUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR:
+            self._inactive_caption_text_colour = colour
+        elif id == AUI_DOCKART_ACTIVE_CAPTION_COLOUR:
+            self._active_caption_colour = colour
+            if not self._custom_pane_bitmaps and wx.Platform == "__WXMAC__":
+                # No custom bitmaps for the pane close button
+                # Change the MAC close bitmap colour
+                pass # self._active_close_bitmap = DrawMACCloseButton(wx.WHITE, colour)
+                # CHANGE IS HERE tododoc
+                
+        elif id == AUI_DOCKART_ACTIVE_CAPTION_GRADIENT_COLOUR:
+            self._active_caption_gradient_colour = colour
+        elif id == AUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR:
+            self._active_caption_text_colour = colour
+        elif id == AUI_DOCKART_BORDER_COLOUR:
+            self._border_pen.SetColour(colour)
+        elif id == AUI_DOCKART_GRIPPER_COLOUR:
+            self._gripper_brush.SetColour(colour)
+            self._gripper_pen1.SetColour(StepColour(colour, 40))
+            self._gripper_pen2.SetColour(StepColour(colour, 60))
+        else:
+            raise Exception("Invalid Colour Ordinal.")
