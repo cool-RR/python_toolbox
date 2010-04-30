@@ -23,9 +23,11 @@ class AuiTabArt(aui.AuiDefaultTabArt):
     def __init__(self):
         aui.AuiDefaultTabArt.__init__(self)
         
-        self.SetNormalFont(wx.Font(7, wx.FONTFAMILY_DEFAULT, wx.NORMAL, wx.NORMAL))
-        self.SetSelectedFont(wx.Font(7, wx.FONTFAMILY_DEFAULT, wx.NORMAL, wx.NORMAL))
-        self.SetMeasuringFont(wx.Font(7, wx.FONTFAMILY_DEFAULT, wx.NORMAL, wx.NORMAL))
+        font_size = 9 if wx.Platform == '__WXMAC__' else 7
+        
+        self.SetNormalFont(wx.Font(font_size, wx.FONTFAMILY_DEFAULT, wx.NORMAL, wx.NORMAL))
+        self.SetSelectedFont(wx.Font(font_size, wx.FONTFAMILY_DEFAULT, wx.NORMAL, wx.NORMAL))
+        self.SetMeasuringFont(wx.Font(font_size, wx.FONTFAMILY_DEFAULT, wx.NORMAL, wx.NORMAL))
  
     def Clone(self):
 

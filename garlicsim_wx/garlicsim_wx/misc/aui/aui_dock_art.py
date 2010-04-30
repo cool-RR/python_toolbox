@@ -30,10 +30,12 @@ class AuiDockArt(aui.AuiDefaultDockArt):
  
         self.SetMetric(aui.AUI_DOCKART_SASH_SIZE, 2)
         
+        font_size = 9 if wx.Platform == '__WXMAC__' else 7
+        
         self.SetMetric(aui.AUI_DOCKART_CAPTION_SIZE, 11)
         self.SetFont(
             aui.AUI_DOCKART_CAPTION_FONT,
-            wx.Font(7, wx.FONTFAMILY_DEFAULT, wx.NORMAL, wx.NORMAL, False)
+            wx.Font(font_size, wx.FONTFAMILY_DEFAULT, wx.NORMAL, wx.NORMAL, False)
         )
         
         #self.SetMetric(aui.AUI_DOCKART_GRADIENT_TYPE,
