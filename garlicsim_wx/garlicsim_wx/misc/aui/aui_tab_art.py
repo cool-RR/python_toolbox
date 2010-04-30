@@ -10,6 +10,16 @@ See its documentation for more info.
 import wx
 from garlicsim_wx.general_misc.third_party import aui
 
+
+# tododoc: move overriding of `DrawTab` to another module to get rid of these
+from garlicsim_wx.general_misc.third_party.aui.aui_utilities import (
+    BitmapFromBits, StepColour, IndentPressedBitmap, ChopText, GetBaseColour,
+    DrawMACCloseButton, LightColour, TakeScreenShot, CopyAttributes)
+from garlicsim_wx.general_misc.third_party.aui.aui_constants import *
+
+
+from aui_constants import *
+
 class AuiTabArt(aui.AuiDefaultTabArt):
     '''A tab art provider.'''
     def __init__(self):
