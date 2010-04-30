@@ -18,8 +18,6 @@ from garlicsim_wx.general_misc.third_party.aui.aui_utilities import (
 from garlicsim_wx.general_misc.third_party.aui.aui_constants import *
 
 
-from aui_constants import *
-
 class AuiTabArt(aui.AuiDefaultTabArt):
     '''A tab art provider.'''
     def __init__(self):
@@ -246,7 +244,7 @@ class AuiTabArt(aui.AuiDefaultTabArt):
         
         draw_text = ChopText(dc, caption, tab_width - (text_offset-tab_x) - close_button_width)
 
-        ypos = drawn_tab_yoff + (drawn_tab_height)/2 - (texty/2) - 1
+        ypos = drawn_tab_yoff + (drawn_tab_height)/2 - (texty/2) # HERE'S THE CHANGE
 
         offset_focus = text_offset     
         if control is not None:
