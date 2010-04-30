@@ -244,7 +244,7 @@ class AuiTabArt(aui.AuiDefaultTabArt):
         
         draw_text = ChopText(dc, caption, tab_width - (text_offset-tab_x) - close_button_width)
 
-        ypos = drawn_tab_yoff + (drawn_tab_height)/2 - (texty/2) # HERE'S THE CHANGE
+        ypos = drawn_tab_yoff + (drawn_tab_height)/2 - (texty/2) + 1 # tododoc: HERE'S THE CHANGE
 
         offset_focus = text_offset     
         if control is not None:
