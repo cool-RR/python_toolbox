@@ -7,6 +7,7 @@
 
 import os.path
 import sys
+import glob
 import setuptools
 import distutils # Just for deleting the "build" directory.
 try:
@@ -23,12 +24,27 @@ try:
 except Exception:
     pass
 
+def package_to_path(package):
+    return package.replace('.', '/')
+
 def get_packages():
     return ['garlicsim_wx.' + p for p
             in setuptools.find_packages('./garlicsim_wx')] + \
            ['garlicsim_wx']
 
 packages = get_packages()
+
+def get_all_data_files():
+    total_data_files = []
+    for package in packages:
+        path = package_to_path(package)
+        all_files_and_folders = glob.glob(path + '/*')
+        data_files = [f for f in all_files_and_folders if
+                      (not '.py' in f[4:]) and (not os.path.isdir(f))]
+        total_data_files += data_files
+    return total_data_files
+
+g = get_all_data_files()
 
 my_long_description = \
 '''\
@@ -49,6 +65,29 @@ my_classifiers = [
 ]
 
 
+py2exe_kwargs = {
+    'windows': [
+        {
+            'script': 'py2exe_cruft/GarlicSim.py',
+            'icon_resources': [
+                (
+                    0,
+                    'garlicsim_wx/misc/icon_bundle/images/garlicsim.ico'
+                )
+            ]
+        }
+        ],
+    'zipfile': 'lib/library.zip',
+    'data_files': g,
+    'options': {
+        'py2exe': {
+            'dist_dir': 'py2exe_dist',
+            'packages': packages
+        }
+    }
+}
+
+more_kwargs = py2exe_kwargs if `py2exe` in sys.argv else {}
 
 setuptools.setup(
     name='garlicsim_wx',
@@ -64,23 +103,5 @@ setuptools.setup(
     long_description = my_long_description,
     classifiers = my_classifiers,
     include_package_data = True,
-    
-    # For py2exe:
-    windows=[
-        {
-            'script': 'py2exe_cruft/GarlicSim.py',
-            'icon_resources': [
-                (
-                    0,
-                    'garlicsim_wx/misc/icon_bundle/images/garlicsim.ico'
-                )
-            ]
-        }
-        ],
-    options={
-        'py2exe': {
-            'dist_dir': 'py2exe_dist',
-            'packages': packages
-        }
-    }
+    **more_kwargs
 )
