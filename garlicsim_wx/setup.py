@@ -18,6 +18,8 @@ except ImportError:
 # tododoc: the py2exe parts assume `garlicsim` is in the neighboring directory
 # like in the git repo
 
+# tododoc: document this module exhaustively.
+
 path_to_garlicsim = os.path.abspath('../garlicsim')
 if path_to_garlicsim not in sys.path:
     sys.path.append(path_to_garlicsim)
