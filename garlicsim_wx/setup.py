@@ -15,7 +15,10 @@ try:
 except ImportError:
     pass
 
-path_to_garlicsim = '../garlicsim'
+# tododoc: the py2exe parts assume `garlicsim` is in the neighboring directory
+# like in the git repo
+
+path_to_garlicsim = os.path.abspath('../garlicsim')
 if path_to_garlicsim not in sys.path:
     sys.path.append(path_to_garlicsim)
 
@@ -27,22 +30,44 @@ except Exception:
 def package_to_path(package):
     return package.replace('.', '/')
 
-def get_packages():
+def get_garlicsim_packages():
+    return ['garlicsim.' + p for p
+            in setuptools.find_packages('../garlicsim/garlicsim')] + \
+           ['garlicsim']
+
+garlicsim_packages = get_garlicsim_packages()
+
+def get_garlicsim_wx_packages():
     return ['garlicsim_wx.' + p for p
             in setuptools.find_packages('./garlicsim_wx')] + \
            ['garlicsim_wx']
 
-packages = get_packages()
+garlicsim_wx_packages = get_garlicsim_wx_packages()
 
-def get_all_data_files():
+def get_garlicsim_wx_data_files():
     total_data_files = []
-    for package in packages:
+    for package in garlicsim_wx_packages:
         path = package_to_path(package)
         all_files_and_folders = glob.glob(path + '/*')
         data_files = [f for f in all_files_and_folders if
                       (not '.py' in f[4:]) and (not os.path.isdir(f))]
         total_data_files.append(('lib/' + path, data_files))
     return total_data_files
+
+def get_garlicsim_data_files():
+    total_data_files = []
+    for package in garlicsim_packages:
+        path = package_to_path(package)
+        all_files_and_folders = glob.glob(path_to_garlicsim + '/' + path + '/*')
+        data_files = [f for f in all_files_and_folders if
+                      (not '.py' in f[4:]) and (not os.path.isdir(f))]
+        total_data_files.append(('lib/' + path, data_files))
+    return total_data_files
+
+def get_all_data_files():
+    return get_garlicsim_wx_data_files() + get_garlicsim_data_files()
+
+g=get_garlicsim_data_files()
 
 my_long_description = \
 '''\
@@ -84,7 +109,7 @@ if 'py2exe' in sys.argv:
         'options': {
             'py2exe': {
                 'dist_dir': 'py2exe_dist',
-                'packages': packages,
+                'packages': garlicsim_wx_packages,
                 'skip_archive': True,
                 'packages': 'garlicsim.bundled.simulation_packages',
             }
@@ -103,7 +128,7 @@ setuptools.setup(
     author='Ram Rachum',
     author_email='cool-rr@cool-rr.com',
     url='http://garlicsim.org',
-    packages=packages,
+    packages=garlicsim_wx_packages,
     license='Proprietary',
     long_description = my_long_description,
     classifiers = my_classifiers,
