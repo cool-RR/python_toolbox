@@ -44,8 +44,6 @@ def get_all_data_files():
         total_data_files += data_files
     return total_data_files
 
-g = get_all_data_files()
-
 my_long_description = \
 '''\
 garlicsim_wx, a wxPython GUI for garlicsim.
@@ -78,7 +76,7 @@ py2exe_kwargs = {
         }
         ],
     'zipfile': 'lib/library.zip',
-    'data_files': g,
+    'data_files': get_all_data_files(),
     'options': {
         'py2exe': {
             'dist_dir': 'py2exe_dist',
@@ -87,7 +85,7 @@ py2exe_kwargs = {
     }
 }
 
-more_kwargs = py2exe_kwargs if `py2exe` in sys.argv else {}
+more_kwargs = py2exe_kwargs if 'py2exe' in sys.argv else {}
 
 setuptools.setup(
     name='garlicsim_wx',
