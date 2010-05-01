@@ -41,7 +41,7 @@ def get_all_data_files():
         all_files_and_folders = glob.glob(path + '/*')
         data_files = [f for f in all_files_and_folders if
                       (not '.py' in f[4:]) and (not os.path.isdir(f))]
-        total_data_files += data_files
+        total_data_files.append(('lib/' + path, data_files))
     return total_data_files
 
 my_long_description = \
@@ -63,30 +63,37 @@ my_classifiers = [
 ]
 
 
-py2exe_kwargs = {
-    'windows': [
-        {
-            'script': 'py2exe_cruft/GarlicSim.py',
-            'icon_resources': [
-                (
-                    0,
-                    'garlicsim_wx/misc/icon_bundle/images/garlicsim.ico'
-                )
-            ]
-        }
-        ],
-    'zipfile': 'lib/library.zip',
-    'data_files': get_all_data_files(),
-    'options': {
-        'py2exe': {
-            'dist_dir': 'py2exe_dist',
-            'packages': packages
+more_kwargs = {}
+
+if 'py2exe' in sys.argv:
+
+    py2exe_kwargs = {
+        'windows': [
+            {
+                'script': 'py2exe_cruft/GarlicSim.py',
+                'icon_resources': [
+                    (
+                        0,
+                        'garlicsim_wx/misc/icon_bundle/images/garlicsim.ico'
+                    )
+                ]
+            }
+            ],
+        'zipfile': 'lib/library.zip',
+        'data_files': get_all_data_files(),
+        'options': {
+            'py2exe': {
+                'dist_dir': 'py2exe_dist',
+                'packages': packages,
+                'skip_archive': True,
+                'packages': 'garlicsim.bundled.simulation_packages',
+            }
         }
     }
-}
 
-more_kwargs = py2exe_kwargs if 'py2exe' in sys.argv else {}
+    more_kwargs.update(py2exe_kwargs)
 
+    
 setuptools.setup(
     name='garlicsim_wx',
     version='0.4',

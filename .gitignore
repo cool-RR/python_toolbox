@@ -1,2 +1,12 @@
 *.pyc
+
 *.wpu
+
+garlicsim/*dist
+garlicsim/*.egg-info
+garlicsim/build
+
+garlicsim_wx/*dist
+garlicsim_wx/*.egg-info
+garlicsim_wx/build
+
