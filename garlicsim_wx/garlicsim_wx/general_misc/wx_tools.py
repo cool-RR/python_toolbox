@@ -10,12 +10,12 @@ import wx
 
 _background_color = None
 def get_background_color():
-    '''Get the background color on this platform.'''
+    '''Get the background color on this platform.tododoc'''
     global _background_color
     if _background_color is not None:
         return _background_color
     
-    result = wx.SystemSettings.GetColour(wx.SYS_COLOUR_MENUBAR)
+    result = wx.Color(212, 208, 200)
     '''
     todo: Not sure it's the right system color. Find the right one by comparing
     on different platforms. The right one is probably one of these:

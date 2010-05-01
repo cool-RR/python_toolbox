@@ -116,18 +116,25 @@ class Frame(wx.Frame):
         '''Create a new gui project.'''        
         if self.gui_project is not None:
             
-            #program = ('python', os.path.abspath(sys.argv[0]))
-            #if hasattr(sys, 'frozen'):
-                #program = os.path.abspath(sys.argv[0])
-                ## Sproaty says: Haven't tested this yet
-         
-            #subprocess.Popen(program)
+            program = [
+                os.path.abspath(sys.argv[0]),
+            ]
             
-            new_process = multiprocessing.Process(
-                target=garlicsim_wx.start,
-                kwargs={'new_gui_project': True}
-            )
-            new_process.start()
+            if hasattr(sys, 'frozen'):
+                program = [sys.executable]
+            else:
+                program = [sys.executable, os.path.abspath(sys.argv[0])]
+                # Todo: what if some other program is launching my code?
+                
+            program.append('__garlicsim_wx_new')
+         
+            subprocess.Popen(program)
+            
+            #new_process = multiprocessing.Process(
+                #target=garlicsim_wx.start,
+                #kwargs={'new_gui_project': True}
+            #)
+            #new_process.start()
             return
         
         dialog = garlicsim_wx.widgets.misc.SimpackSelectionDialog(self)
