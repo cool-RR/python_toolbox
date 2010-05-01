@@ -126,31 +126,25 @@ class Frame(wx.Frame):
 
         
         if self.gui_project is None:
-            gui_project = GuiProject(simpack, self)
-            self.__setup_gui_project(gui_project)
+            self._new_gui_project_from_simpack(simpack)
         else:
-            program = [
-                os.path.abspath(sys.argv[0]),
-            ]
-            
+
             if hasattr(sys, 'frozen'):
                 program = [sys.executable]
             else:
                 program = [sys.executable, os.path.abspath(sys.argv[0])]
                 # Todo: what if some other program is launching my code?
                 
-            program.append('__garlicsim_wx_new')
+            program.append('__garlicsim_wx_new=%s' % simpack.__name__)
          
             subprocess.Popen(program)
             
-            #new_process = multiprocessing.Process(
-                #target=garlicsim_wx.start,
-                #kwargs={'new_gui_project': True}
-            #)
-            #new_process.start()
             return
             
-        
+    def _new_gui_project_from_simpack(self, simpack):
+        assert self.gui_project is None # tododoc
+        gui_project = GuiProject(simpack, self)
+        self.__setup_gui_project(gui_project)
 
     def on_exit_menu_button(self, event):
         '''Exit menu button handler.'''
@@ -306,32 +300,46 @@ class Frame(wx.Frame):
     
     def on_open(self, event=None):
         '''Raise a dialog for opening a gui project from file.'''
-        assert self.gui_project is None
         wcd = 'GarlicSim Simulation Pickle (*.gssp)|*.gssp|All files (*)|*|'
         cur_dir = os.getcwd()
         gui_project_vars = None
-        try:
-            open_dlg = wx.FileDialog(self, message='Choose a file',
-                                     defaultDir=cur_dir, defaultFile='',
-                                     wildcard=wcd, style=wx.OPEN | wx.CHANGE_DIR)
-            if open_dlg.ShowModal() == wx.ID_OK:
-                path = open_dlg.GetPath()
-                
-                try:
-                    with file(path, 'r') as my_file:
-                        gui_project_vars = pickle_module.load(my_file)
+
+        open_dialog = wx.FileDialog(self, message='Choose a file',
+                                    defaultDir=cur_dir, defaultFile='',
+                                    wildcard=wcd, style=wx.OPEN | wx.CHANGE_DIR)
+        if open_dialog.ShowModal() == wx.ID_OK:
+            path = open_dialog.GetPath()
+            
+            if self.gui_project is None:
+                self._open_gui_project_from_path(path)
+            else:
+                if hasattr(sys, 'frozen'):
+                    program = [sys.executable]
+                else:
+                    program = [sys.executable, os.path.abspath(sys.argv[0])]
+                    # Todo: what if some other program is launching my code?
+                    
+                program.append('__garlicsim_wx_load=%s' % path)
+             
+                subprocess.Popen(program)
                         
-                except Exception, exception:
-                    dialog = wx.MessageDialog(
-                        self,
-                        'Error opening file:\n' + str(exception),
-                        style=(wx.OK | wx.ICON_ERROR)
-                    )
-                    dialog.ShowModal()
-                        
-        finally:
-            pass # fuck_the_path()
         
+    
+    def _open_gui_project_from_path(self, path):
+        
+        try:
+            with file(path, 'r') as my_file:
+                gui_project_vars = pickle_module.load(my_file)
+                
+        except Exception, exception:
+            dialog = wx.MessageDialog(
+                self,
+                'Error opening file:\n' + str(exception),
+                style=(wx.OK | wx.ICON_ERROR)
+            )
+            dialog.ShowModal()
+            return
+                
         if gui_project_vars:
             try:
                 gui_project = GuiProject.load_from_vars(self, gui_project_vars)
@@ -344,6 +352,7 @@ class Frame(wx.Frame):
                 dialog.ShowModal()
                 
             self.__setup_gui_project(gui_project)
+
     
     
     def on_save(self, event=None):

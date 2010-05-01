@@ -7,6 +7,8 @@ Defines the App class.
 See its documentation for more information.
 '''
 
+import functools
+
 import wx
 
 import garlicsim_wx
@@ -16,11 +18,12 @@ class App(wx.PySimpleApp):
     # todo: need to think if i allow frames with no app. on one hand good idea,
     # to allow people to start a garlicsim_wx frame in their own app. on other
     # hand frames will need to know how to start another frame.
-    def __init__(self, new_gui_project=False, load_gui_project=None):
+    def __init__(self, new_gui_project_simpack_name=None,
+                 load_gui_project_file_path=None):
         self.frame = None
-        assert not (new_gui_project and load_gui_project)
-        self.new_gui_project = new_gui_project
-        self.load_gui_project = load_gui_project
+        assert not (new_gui_project_simpack_name and load_gui_project_file_path)
+        self.new_gui_project_simpack_name = new_gui_project_simpack_name
+        self.load_gui_project_file_path = load_gui_project_file_path
         super(App, self).__init__()
         
     
@@ -36,7 +39,26 @@ class App(wx.PySimpleApp):
         
         self.SetTopWindow(frame)
         
-        if self.new_gui_project is True:
-            wx.CallAfter(frame.on_new)
-        
+        if self.new_gui_project_simpack_name is not None:
+            simpack = __import__(
+                self.new_gui_project_simpack_name,
+                fromlist=['']
+            )
+            
+            wx.CallAfter(
+                functools.partial(
+                    self.frame._new_gui_project_from_simpack,
+                    simpack
+                )
+            )
+            
+        if self.load_gui_project_file_path is not None:
+            
+            wx.CallAfter(
+                functools.partial(
+                    self.frame._open_gui_project_from_path,
+                    path
+                )
+            )
+            
         return True
