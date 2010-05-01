@@ -114,8 +114,21 @@ class Frame(wx.Frame):
 
     def on_new(self, event=None):
         '''Create a new gui project.'''        
-        if self.gui_project is not None:
-            
+        
+        dialog = garlicsim_wx.widgets.misc.SimpackSelectionDialog(self)
+        
+        if dialog.ShowModal() == wx.ID_OK:
+            simpack = dialog.get_simpack_selection()
+        else:
+            dialog.Destroy()
+            return
+        dialog.Destroy()
+
+        
+        if self.gui_project is None:
+            gui_project = GuiProject(simpack, self)
+            self.__setup_gui_project(gui_project)
+        else:
             program = [
                 os.path.abspath(sys.argv[0]),
             ]
@@ -136,19 +149,7 @@ class Frame(wx.Frame):
             #)
             #new_process.start()
             return
-        
-        dialog = garlicsim_wx.widgets.misc.SimpackSelectionDialog(self)
-        
-        if dialog.ShowModal() == wx.ID_OK:
-            simpack = dialog.get_simpack_selection()
-        else:
-            dialog.Destroy()
-            return
-        dialog.Destroy()
-
-        gui_project = GuiProject(simpack, self)
-
-        self.__setup_gui_project(gui_project)
+            
         
 
     def on_exit_menu_button(self, event):
