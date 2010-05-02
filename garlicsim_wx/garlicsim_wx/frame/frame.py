@@ -125,7 +125,7 @@ class Frame(wx.Frame):
         
         
         file_menu.save_as_button = file_menu.Append(
-            -1, 'Save &as...\tShift+Ctrl+X',
+            -1, 'Save &as...\tShift+Ctrl+S',
             ' Save the currently open simulation under a different name'
         )
         
@@ -140,7 +140,9 @@ class Frame(wx.Frame):
         file_menu.AppendMenu(
             -1, '&Export', export_menu,
             ' Export simulation data'
-        )        
+        )
+        
+        # todo: file_menu.Enable(export_menu.Getid(), False)
 
         
         export_menu.video_button = export_menu.Append(
@@ -174,7 +176,7 @@ class Frame(wx.Frame):
         
 
         file_menu.exit_button = \
-            file_menu.Append(wx.ID_EXIT ,'E&xit\tCtrl+X', ' Close GarlicSim')        
+            file_menu.Append(wx.ID_EXIT ,'E&xit', ' Close GarlicSim')        
                 
         self.Bind(wx.EVT_MENU, self.on_exit_menu_button, file_menu.exit_button)
 
