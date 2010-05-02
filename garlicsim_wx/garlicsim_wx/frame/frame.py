@@ -137,12 +137,12 @@ class Frame(wx.Frame):
         
         export_menu = file_menu.export_menu = wx.Menu()
 
-        file_menu.AppendMenu(
+        file_menu.export_menu_button = file_menu.AppendMenu(
             -1, '&Export', export_menu,
             ' Export simulation data'
         )
         
-        # todo: file_menu.Enable(export_menu.Getid(), False)
+        file_menu.export_menu_button.Enable(False)
 
         
         export_menu.video_button = export_menu.Append(
@@ -236,10 +236,12 @@ class Frame(wx.Frame):
         
         online_resources_menu = help_menu.online_resources_menu = wx.Menu()
         
-        help_menu.AppendMenu(
+        help_menu.online_resources_menu_button = help_menu.AppendMenu(
             -1, '&Online resources', online_resources_menu,
             ' Use resources that require an internet connection'
         )
+        
+        help_menu.online_resources_menu_button.Enable(False)
         
         
         online_resources_menu.website_button = online_resources_menu.Append(
