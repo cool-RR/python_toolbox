@@ -202,6 +202,93 @@ class Frame(wx.Frame):
         edit_menu.redo_button.Enable(False)
         
         
+        help_menu = menu_bar.help_menu = wx.Menu()
+        
+        menu_bar.Append(help_menu, '&Help')
+        
+        
+        help_menu.garlicsim_help_button = help_menu.Append(
+            -1, 'GarlicSim &Help...\tF1',
+            ' Display the help documents for GarlicSim'
+        )
+        
+        help_menu.garlicsim_help_button.Enable(False)
+        
+        
+        help_menu.welcome_screen_button = help_menu.Append(
+            -1, '&Welcome screen...',
+            ' Show the welcome screen'
+        )
+        
+        help_menu.welcome_screen_button.Enable(False)
+        
+                
+        help_menu.garlicsim_book_button = help_menu.Append(
+            -1, 'Read the &book, "Introduction to GarlicSim"...',
+            ' Open the GarlicSim book, a PDF document'
+        )
+        
+        help_menu.garlicsim_book_button.Enable(False)
+        
+        
+        help_menu.AppendSeparator()
+        
+        
+        online_resources_menu = help_menu.online_resources_menu = wx.Menu()
+        
+        help_menu.AppendMenu(
+            -1, '&Online resources', online_resources_menu,
+            ' Use resources that require an internet connection'
+        )
+        
+        
+        online_resources_menu.website_button = online_resources_menu.Append(
+            -1, 'Official &website...',
+            ' Open the official GarlicSim website in your browser'
+        )
+        
+        online_resources_menu.website_button.Enable(False)
+        
+        
+        online_resources_menu.mailing_lists_button = online_resources_menu.Append(
+            -1, '&Mailing lists...',
+            ''' Open the page with info about GarlicSim mailing lists\
+in your browser'''
+        )
+        
+        online_resources_menu.mailing_lists_button.Enable(False)
+        
+        
+        online_resources_menu.blog_button = online_resources_menu.Append(
+            -1, '&Blog...',
+            ' Open the GarlicSim blog in your browser'
+        )
+        
+        online_resources_menu.blog_button.Enable(False)
+        
+
+        online_resources_menu.github_button = online_resources_menu.Append(
+            -1, 'Code &repository...',
+            ' Open the GitHub code repository for GarlicSim in your browser'
+        )
+        
+        online_resources_menu.github_button.Enable(False)
+        
+        
+        
+
+        
+        
+        help_menu.AppendSeparator()
+        
+                
+        help_menu.about_button = help_menu.Append(
+            wx.ID_ABOUT, '&About GarlicSim...',
+            ' Tell me a little bit about the GarlicSim software'
+        )
+        
+        help_menu.about_button.Enable(False)
+        
         
 
     def on_close(self, event):
