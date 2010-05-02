@@ -61,18 +61,43 @@ class Frame(wx.Frame):
         ######################################
         
         filemenu = wx.Menu()
-        new_menu_button = filemenu.Append(-1 ,"&New", " New")
-        open_menu_button = filemenu.Append(-1 ,"&Open", " Open")
-        save_menu_button = filemenu.Append(-1 ,"&Save", " Save")
-        exit_menu_button = filemenu.Append(-1 ,"E&xit", " Close the program")
+        
+        new_menu_button = \
+            filemenu.Append(-1 ,'&New...', ' Create a new simulation')
+        
+        open_menu_button = \
+            filemenu.Append(-1 ,'&Open...', ' Open a saved simulation')
+        
+        # put open recent here
+        
+        filemenu.AppendSeparator()
+        
+        close_menu_button = filemenu.Append(
+            -1 ,'&Close', ' Close the currently open simulation')
+        
+        save_menu_button = filemenu.Append(
+            -1 ,'&Save', ' Save the currently open simulation')
+        
+        save_as_menu_button = filemenu.Append(
+            -1, 'Save &as...',
+            ' Save the currently open simulation under a different name'
+        )
+        
+        filemenu.AppendSeparator()
+        
+        exit_menu_button = filemenu.Append(-1 ,'E&xit', ' Close GarlicSim')        
+        
+        close_menu_button.Enable(False)
+        save_as_menu_button.Enable(False)
+        
         self.Bind(wx.EVT_MENU, self.on_new, new_menu_button)
         self.Bind(wx.EVT_MENU, self.on_open, open_menu_button)        
         self.Bind(wx.EVT_MENU, self.on_save, save_menu_button)
         self.Bind(wx.EVT_MENU, self.on_exit_menu_button, exit_menu_button)
         menubar = wx.MenuBar()
-        menubar.Append(filemenu, "&File")
-        #menubar.Append(stuffmenu,"&Stuff")
-        #menubar.Append(nodemenu,"&Node")
+        menubar.Append(filemenu, '&File')
+        #menubar.Append(stuffmenu,'&Stuff')
+        #menubar.Append(nodemenu,'&Node')
         self.SetMenuBar(menubar)
         self.CreateStatusBar()
         
