@@ -95,13 +95,13 @@ class Frame(wx.Frame):
         
         
         file_menu.new_button = \
-            file_menu.Append(-1 ,'&New...', ' Create a new simulation')
+            file_menu.Append(-1 ,'&New...\tCtrl+N', ' Create a new simulation')
         
         self.Bind(wx.EVT_MENU, self.on_new, file_menu.new_button)
         
         
         file_menu.open_button = \
-            file_menu.Append(-1 ,'&Open...', ' Open a saved simulation')
+            file_menu.Append(-1 ,'&Open...\tCtrl+O', ' Open a saved simulation')
         
         self.Bind(wx.EVT_MENU, self.on_open, file_menu.open_button)        
         
@@ -113,19 +113,19 @@ class Frame(wx.Frame):
 
         
         file_menu.close_button = file_menu.Append(
-            -1 ,'&Close', ' Close the currently open simulation')
+            -1 ,'&Close\tCtrl+W', ' Close the currently open simulation')
         
         file_menu.close_button.Enable(False)
 
         
         file_menu.save_button = file_menu.Append(
-            -1 ,'&Save', ' Save the currently open simulation')
+            -1 ,'&Save\tCtrl+S', ' Save the currently open simulation')
         
         self.Bind(wx.EVT_MENU, self.on_save, file_menu.save_button)
         
         
         file_menu.save_as_button = file_menu.Append(
-            -1, 'Save &as...',
+            -1, 'Save &as...\tShift+Ctrl+X',
             ' Save the currently open simulation under a different name'
         )
         
@@ -163,7 +163,7 @@ class Frame(wx.Frame):
         
         
         file_menu.print_button = file_menu.Append(
-            -1, 'Print...',
+            -1, 'Print...\tCtrl+P',
             ' Print the current state of the simulation'
         )
 
@@ -174,9 +174,32 @@ class Frame(wx.Frame):
         
 
         file_menu.exit_button = \
-            file_menu.Append(wx.ID_EXIT ,'E&xit', ' Close GarlicSim')        
+            file_menu.Append(wx.ID_EXIT ,'E&xit\tCtrl+X', ' Close GarlicSim')        
                 
         self.Bind(wx.EVT_MENU, self.on_exit_menu_button, file_menu.exit_button)
+
+        
+        edit_menu = menu_bar.edit_menu = wx.Menu()
+        
+        menu_bar.Append(edit_menu, '&Edit')
+
+        
+        edit_menu.undo_button = edit_menu.Append(
+            -1, '&Undo\tCtrl+Z',
+            ' Undo the last operation'
+        )
+
+        edit_menu.undo_button.Enable(False)
+        
+        
+        edit_menu.redo_button = edit_menu.Append(
+            -1, '&Redo\tCtrl+Y',
+            ' Redo the last operation that was undone'
+        )
+
+        edit_menu.redo_button.Enable(False)
+        
+        
         
 
     def on_close(self, event):
