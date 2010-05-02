@@ -29,7 +29,7 @@ if not debug:
     
     
 if __name__ == '__main__':
-        
+    
     import garlicsim
     import garlicsim_wx
     

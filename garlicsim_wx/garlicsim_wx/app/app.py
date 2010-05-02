@@ -57,7 +57,7 @@ class App(wx.PySimpleApp):
             wx.CallAfter(
                 functools.partial(
                     self.frame._open_gui_project_from_path,
-                    path
+                    self.load_gui_project_file_path
                 )
             )
             

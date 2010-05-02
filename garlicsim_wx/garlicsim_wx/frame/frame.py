@@ -306,7 +306,7 @@ class Frame(wx.Frame):
 
         open_dialog = wx.FileDialog(self, message='Choose a file',
                                     defaultDir=cur_dir, defaultFile='',
-                                    wildcard=wcd, style=wx.OPEN | wx.CHANGE_DIR)
+                                    wildcard=wcd, style=wx.OPEN)
         if open_dialog.ShowModal() == wx.ID_OK:
             path = open_dialog.GetPath()
             
