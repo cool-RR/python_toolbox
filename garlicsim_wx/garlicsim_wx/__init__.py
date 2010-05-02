@@ -28,7 +28,7 @@ __all__ = ['Frame', 'GuiProject', 'start']
 
 __version__ = '0.4'
 
-def start():#new_gui_project=False, load_gui_project=None):
+def start():
     '''Start the gui.'''
     
     new_gui_project_simpack_name = None
@@ -45,10 +45,6 @@ def start():#new_gui_project=False, load_gui_project=None):
               load_gui_project_file_path=load_gui_project_file_path)
     
     app.MainLoop()
-
-    # For profiling:
-    # import cProfile
-    # cProfile.run("app.MainLoop()")
     
     
 if __name__ == "__main__":
