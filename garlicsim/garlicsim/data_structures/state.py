@@ -7,6 +7,8 @@ A module that defines the State class.
 See its documentation for more info.
 '''
 
+from garlicsim.general_misc import misc_tools
+
 class State(object):
     '''
     A state describes a world state in the world of the simulation.
@@ -28,12 +30,14 @@ class State(object):
         Get a string representation of the state.
         
         Example output:
-        <garlicsim.data_structures.state.State with clock 32.3 at 0x1c822d0>
+        <garlicsim.data_structures.State with clock 32.3 at 0x1c822d0>
         '''
         return '<%s.%s %sat %s>' % \
                (
-                   self.__class__.__module__,
-                   self.__class__.__name__,
+                   misc_tools.shorten_class_address(
+                       self.__class__.__module__,
+                       self.__class__.__name__
+                       ),
                    'with clock %s ' % self.clock if hasattr(self, 'clock') \
                                       else '',
                    hex(id(self))

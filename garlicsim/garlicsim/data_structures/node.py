@@ -8,6 +8,7 @@ See documentation of Node for more information.
 '''
 
 from garlicsim.general_misc.infinity import Infinity
+from garlicsim.general_misc import misc_tools
 
 from garlicsim.misc import GarlicSimException
 
@@ -298,14 +299,16 @@ class Node(object):
         '''
         Get a string representation of the node.
         
-        Example output:
-        <garlicsim.data_structures.node.Node with clock 6.5, untouched, belongs
-        to a block, crunched with StepProfile(t=0.1), at 0x1ffde70>
+        Example output:        
+        <garlicsim.data_structures.Node with clock 6.5, untouched, belongs to a
+        block, crunched with StepProfile(t=0.1), at 0x1ffde70>
         '''
-        return '<%s.%s%s, %s%s, %s, %sat %s>' % \
+        return '<%s%s, %s%s, %s, %sat %s>' % \
             (
-                self.__class__.__module__,
-                self.__class__.__name__,
+                misc_tools.shorten_class_address(
+                    self.__class__.__module__,
+                    self.__class__.__name__
+                    ),
                 ' with clock %s' % self.state.clock if hasattr(self.state, 'clock') else '',
                 'root, ' if (self.parent is None) else '',
                 'touched' if self.touched else 'untouched',

@@ -10,6 +10,7 @@ See its documentation for more information.
 import copy as copy_module # Avoiding name clash.
 
 from garlicsim.general_misc import binary_search
+from garlicsim.general_misc import misc_tools
 
 from garlicsim.misc import GarlicSimException
 
@@ -601,12 +602,14 @@ path, but it's completely empty.''')
         Get a string representation of the path.
         
         Example output:
-        <garlicsim.data_structures.path.Path of length 43 at 0x1c822d0>
+        <garlicsim.data_structures.Path of length 43 at 0x1c822d0>
         '''
-        return '<%s.%s of length %s at %s>' % \
+        return '<%s of length %s at %s>' % \
                (
-                   self.__class__.__module__,
-                   self.__class__.__name__,
+                   misc_tools.shorten_class_address(
+                       self.__class__.__module__,
+                       self.__class__.__name__
+                   ),
                    len(self),
                    hex(id(self))
                )

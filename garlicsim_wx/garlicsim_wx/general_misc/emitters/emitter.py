@@ -12,6 +12,7 @@ See its documentation for more info.
 
 import itertools
 from garlicsim.general_misc import cute_iter_tools
+from garlicsim.general_misc import misc_tools
         
 
 class Emitter(object):
@@ -243,9 +244,18 @@ class Emitter(object):
             callable_output()
     
     def __repr__(self):
-        return '<%s.%s %sat %s>' % (
-            self.__class__.__module__,
-            self.__class__.__name__,
+        '''
+        Get a string representation of the emitter.
+        
+        Example output:        
+        <garlicsim_wx.general_misc.emitters.emitter.Emitter 'tree_modified' at
+        0x1c013d0>
+        '''
+        return '<%s %sat %s>' % (
+            misc_tools.shorten_class_address(
+                       self.__class__.__module__,
+                       self.__class__.__name__
+                       ),
             ''.join(("'", self.name, "' ")) if self.name else '',
             hex(id(self))
         )

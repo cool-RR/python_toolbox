@@ -14,6 +14,7 @@ import garlicsim.general_misc.read_write_lock
 from garlicsim.general_misc.infinity import Infinity
 import garlicsim.general_misc.module_wrapper
 import garlicsim.general_misc.third_party.decorator
+from garlicsim.general_misc import misc_tools
 
 import garlicsim.data_structures
 import garlicsim.misc.simpack_grokker
@@ -313,8 +314,9 @@ class Project(object):
         Get a string representation of the project.
         
         Example output:
-        <garlicsim.asynchronous_crunching.project.Project containing 101 nodes
-        and employing 4 crunchers at 0x1f668d0>
+        
+        <garlicsim.Project containing 101 nodes and employing 4 crunchers at
+        0x1f668d0>
         '''
         # Todo: better have the simpack mentioned here, not doing it cause it's
         # currently in a module wrapper.
@@ -322,11 +324,13 @@ class Project(object):
         nodes_count = len(self.tree.nodes)
         crunchers_count = len(self.crunching_manager.crunchers)
                                    
-        return '''<%s.%s containing %s nodes and employing %s crunchers at \
+        return '''<%s containing %s nodes and employing %s crunchers at \
 %s>''' % \
                (
-                   self.__class__.__module__,
-                   self.__class__.__name__,
+                   misc_tools.shorten_class_address(
+                       self.__class__.__module__,
+                       self.__class__.__name__
+                   ),
                    nodes_count,
                    crunchers_count,
                    hex(id(self))

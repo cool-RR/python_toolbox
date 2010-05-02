@@ -11,6 +11,7 @@ import copy
 
 import garlicsim
 from garlicsim.misc import GarlicSimException
+from garlicsim.general_misc import misc_tools
 
 # `from block import Block` in the bottom of the file.
 # `from node import Node` in the bottom of the file.
@@ -238,14 +239,16 @@ tree while specifying a template_node.''')
         '''
         Get a string representation of the tree.
         
-        Example output:
-        <garlicsim.data_structures.tree.Tree with 1 roots, 233 nodes and 3
-        possible paths at 0x1f6ae70>
+        Example output:        
+        <garlicsim.data_structures.Tree with 1 roots, 233 nodes and 3 possible
+        paths at 0x1f6ae70>
         '''
-        return '<%s.%s with %s roots, %s nodes and %s possible paths at %s>' % \
+        return '<%s with %s roots, %s nodes and %s possible paths at %s>' % \
                (
-                   self.__class__.__module__,
-                   self.__class__.__name__,
+                   misc_tools.shorten_class_address(
+                       self.__class__.__module__,
+                       self.__class__.__name__
+                   ),
                    len(self.roots),
                    len(self.nodes),
                    len(self.all_possible_paths()),

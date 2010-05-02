@@ -12,6 +12,7 @@ import garlicsim.general_misc.queue_tools as queue_tools
 import garlicsim.general_misc.third_party.decorator
 import garlicsim.general_misc.change_tracker
 from garlicsim.general_misc.infinity import Infinity
+from garlicsim.general_misc import misc_tools
 
 import garlicsim
 import garlicsim.data_structures
@@ -23,14 +24,10 @@ from garlicsim.misc.step_profile import StepProfile
 __all__ = ['CrunchingManager', 'DefaultCruncher', 'DefaultHistoryCruncher']
 
 DefaultCruncher = crunchers.CruncherThread
-'''
-The cruncher class to be used by default in non-history-dependent simulations.
-'''
+'''Cruncher class to be used by default in non-history-dependent simulations.'''
 
 DefaultHistoryCruncher = crunchers.CruncherThread
-'''
-The cruncher class to be used by default in history-dependent simulations.
-'''
+'''Cruncher class to be used by default in history-dependent simulations.'''
 
 
 @garlicsim.general_misc.third_party.decorator.decorator
@@ -249,17 +246,19 @@ class CrunchingManager(object):
         Get a string representation of the crunching manager.
         
         Example output:
-        <garlicsim.asynchronous_crunching.crunching_manager.CrunchingManager
+        <garlicsim.asynchronous_crunching.CrunchingManager
         currently employing 2 crunchers to handle 2 jobs at 0x1f699b0>
         '''
         
         crunchers_count = len(self.crunchers)
         job_count = len(self.jobs)
                                    
-        return '<%s.%s currently employing %s crunchers to handle %s jobs at %s>' % \
+        return '<%s currently employing %s crunchers to handle %s jobs at %s>' % \
                (
-                   self.__class__.__module__,
-                   self.__class__.__name__,
+                   misc_tools.shorten_class_address(
+                       self.__class__.__module__,
+                       self.__class__.__name__
+                   ),
                    crunchers_count,
                    job_count,
                    hex(id(self))

@@ -8,6 +8,7 @@ See the documentation of Block for more information.
 '''
 
 from garlicsim.general_misc import logic_tools
+from garlicsim.general_misc import misc_tools
 
 from garlicsim.misc import GarlicSimException
 
@@ -308,14 +309,16 @@ while the index was bigger than the block's length.''')
         Get a string representation of the block.
         
         Example output:
-        <garlicsim.data_structures.block.Block of length 40 crunched with
+        <garlicsim.data_structures.Block of length 40 crunched with
         StepProfile(t=0.1) at 0x1c84d70>
         '''
         assert self.alive # todo: say "Dead block"
-        return '<%s.%s of length %s, crunched with %s at %s>' % \
+        return '<%s of length %s, crunched with %s at %s>' % \
                (
-                   self.__class__.__module__,
-                   self.__class__.__name__,
+                   misc_tools.shorten_class_address(
+                       self.__class__.__module__,
+                       self.__class__.__name__
+                   ),
                    len(self),
                    self.get_step_profile(),
                    hex(id(self))
