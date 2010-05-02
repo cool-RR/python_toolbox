@@ -57,63 +57,22 @@ class Frame(wx.Frame):
         self.aui_manager = garlicsim_wx.misc.aui.AuiManager(self)
                 
         self.gui_project = None
-
-        ######################################
         
-        filemenu = wx.Menu()
+        # tododoc properties here
         
-        new_menu_button = \
-            filemenu.Append(-1 ,'&New...', ' Create a new simulation')
-        
-        open_menu_button = \
-            filemenu.Append(-1 ,'&Open...', ' Open a saved simulation')
-        
-        # put open recent here
-        
-        filemenu.AppendSeparator()
-        
-        close_menu_button = filemenu.Append(
-            -1 ,'&Close', ' Close the currently open simulation')
-        
-        save_menu_button = filemenu.Append(
-            -1 ,'&Save', ' Save the currently open simulation')
-        
-        save_as_menu_button = filemenu.Append(
-            -1, 'Save &as...',
-            ' Save the currently open simulation under a different name'
-        )
-        
-        filemenu.AppendSeparator()
-        
-        exit_menu_button = filemenu.Append(-1 ,'E&xit', ' Close GarlicSim')        
-        
-        close_menu_button.Enable(False)
-        save_as_menu_button.Enable(False)
-        
-        self.Bind(wx.EVT_MENU, self.on_new, new_menu_button)
-        self.Bind(wx.EVT_MENU, self.on_open, open_menu_button)        
-        self.Bind(wx.EVT_MENU, self.on_save, save_menu_button)
-        self.Bind(wx.EVT_MENU, self.on_exit_menu_button, exit_menu_button)
-        menubar = wx.MenuBar()
-        menubar.Append(filemenu, '&File')
-        #menubar.Append(stuffmenu,'&Stuff')
-        #menubar.Append(nodemenu,'&Node')
-        self.SetMenuBar(menubar)
         self.CreateStatusBar()
         
-        ######################################
+        self.__init_menu_bar()        
         
         self.background_timer = thread_timer.ThreadTimer(self)
+        
         self.background_timer.start(150)
+        
         self.Bind(
             thread_timer.EVT_THREAD_TIMER,
             lambda event: self.sync_crunchers(),
             self.background_timer
         )
-        
-        ######################################
-        
-        
         
         self.aui_manager.Update()
         
@@ -121,7 +80,104 @@ class Frame(wx.Frame):
         
         self.Maximize()
 
-    
+        
+    def __init_menu_bar(self):
+                
+        
+        menu_bar = self.menu_bar = wx.MenuBar()
+        
+        self.SetMenuBar(menu_bar)        
+        
+
+        file_menu = menu_bar.file_menu = wx.Menu()
+        
+        menu_bar.Append(file_menu, '&File')
+        
+        
+        file_menu.new_button = \
+            file_menu.Append(-1 ,'&New...', ' Create a new simulation')
+        
+        self.Bind(wx.EVT_MENU, self.on_new, file_menu.new_button)
+        
+        
+        file_menu.open_button = \
+            file_menu.Append(-1 ,'&Open...', ' Open a saved simulation')
+        
+        self.Bind(wx.EVT_MENU, self.on_open, file_menu.open_button)        
+        
+        
+        # todo: put open recent here
+
+        
+        file_menu.AppendSeparator()
+
+        
+        file_menu.close_button = file_menu.Append(
+            -1 ,'&Close', ' Close the currently open simulation')
+        
+        file_menu.close_button.Enable(False)
+
+        
+        file_menu.save_button = file_menu.Append(
+            -1 ,'&Save', ' Save the currently open simulation')
+        
+        self.Bind(wx.EVT_MENU, self.on_save, file_menu.save_button)
+        
+        
+        file_menu.save_as_button = file_menu.Append(
+            -1, 'Save &as...',
+            ' Save the currently open simulation under a different name'
+        )
+        
+        file_menu.save_as_button.Enable(False)
+                
+        
+        file_menu.AppendSeparator()
+
+        
+        export_menu = file_menu.export_menu = wx.Menu()
+
+        file_menu.AppendMenu(
+            -1, '&Export', export_menu,
+            ' Export simulation data'
+        )        
+
+        
+        export_menu.video_button = export_menu.Append(
+            -1, '&Video',
+            ' Export a video sequence showing playback of the simulation'
+        )
+
+        export_menu.video_button.Enable(False)
+        
+        
+        export_menu.image_button = export_menu.Append(
+            -1, '&Image',
+            ' Export an image showing a single state in the simulation'
+        )
+        
+        export_menu.image_button.Enable(False)
+        
+                
+        file_menu.AppendSeparator()
+        
+        
+        file_menu.print_button = file_menu.Append(
+            -1, 'Print...',
+            ' Print the current state of the simulation'
+        )
+
+        file_menu.print_button.Enable(False)
+        
+        
+        file_menu.AppendSeparator()
+        
+
+        file_menu.exit_button = \
+            file_menu.Append(wx.ID_EXIT ,'E&xit', ' Close GarlicSim')        
+                
+        self.Bind(wx.EVT_MENU, self.on_exit_menu_button, file_menu.exit_button)
+        
 
     def on_close(self, event):
         '''Close the application window.'''
