@@ -142,7 +142,7 @@ class Frame(wx.Frame):
             ' Export simulation data'
         )
         
-        file_menu.export_menu_button.Enable(False)
+        # file_menu.export_menu_button.Enable(False) tododoc: uncomment
 
         
         export_menu.video_button = export_menu.Append(
@@ -184,6 +184,11 @@ class Frame(wx.Frame):
         edit_menu = menu_bar.edit_menu = wx.Menu()
         
         menu_bar.Append(edit_menu, '&Edit')
+        
+        # This disables a menu from the bar:
+        # menu_bar.EnableTop(menu_bar.FindMenu('Edit') ,False)        
+        # Logically it makes sense, but it makes it hard to see all the options
+        # in the menu, so at least for now I'm not doing it.
 
         
         edit_menu.undo_button = edit_menu.Append(
@@ -202,10 +207,119 @@ class Frame(wx.Frame):
         edit_menu.redo_button.Enable(False)
         
         
+        window_menu = menu_bar.window_menu = wx.Menu()
+
+        menu_bar.Append(window_menu, '&Window')
+        
+        
+        window_menu.workspace_menu = workspace_menu = wx.Menu()
+        
+        window_menu.workspace_menu_button = window_menu.AppendMenu(
+            -1, '&Workspace', window_menu.workspace_menu,
+            ' tododoc, if ever used'
+        )
+
+        # window_menu.workspace_menu_button.Enable(False) tododoc: uncomment
+        
+        
+        workspace_menu.save_workspace_button = workspace_menu.Append(
+            -1, '&Save workspace...',
+            ''' Save the current workspace configuration, so that it may be \
+recalled in the future'''
+        )
+        
+        workspace_menu.save_workspace_button.Enable(False)
+        
+        
+        workspace_menu.delete_workspace_button = workspace_menu.Append(
+            -1, '&Delete workspace...',
+            ' Delete one of the saved workspace configurations'
+        )
+        
+        workspace_menu.delete_workspace_button.Enable(False)
+        
+        
+        workspace_menu.AppendSeparator()
+        
+                
+        workspace_menu.delete_workspace_button = workspace_menu.Append(
+            -1, '&Default workspace',
+            ' Use the factory-default workspace configuration'
+        )
+        
+        workspace_menu.delete_workspace_button.Enable(False)
+        
+        
+        window_menu.AppendSeparator()
+        
+        
+        window_menu.crunching_button = window_menu.Append(
+            -1, '&Crunching',
+            ''' Show/hide the crunching tool, which lets you control how your \
+simulation is crunched''', wx.ITEM_CHECK
+        )
+                
+        window_menu.crunching_button.Enable(False)
+        
+        
+        window_menu.local_nodes_examiner_button = window_menu.Append(
+            -1, '&Local nodes examiner',
+            ''' Show/hide the local nodes examiner, which lets you manipulate \
+tree nodes one-by-one''', wx.ITEM_CHECK
+        )
+                
+        window_menu.local_nodes_examiner_button.Enable(False)
+        
+        
+        window_menu.playback_controls_button = window_menu.Append(
+            -1, '&Playback Controls',
+            ''' Show/hide the playback controls, which let you control the \
+onscreen playback of the simulation''', wx.ITEM_CHECK
+        )
+                
+        window_menu.playback_controls_button.Enable(False)
+        
+        
+        window_menu.seek_bar_button = window_menu.Append(
+            -1, 'Seek-&bar',
+            ''' Show/hide the seek-bar, which lets you navigate the active \
+timeline''', wx.ITEM_CHECK
+        )
+                
+        window_menu.seek_bar_button.Enable(False)
+        
+        
+        window_menu.shell_button = window_menu.Append(
+            -1, '&Shell',
+            ''' Show/hide the shell, which lets you analyze your simulation \
+using arbitrary Python code''', wx.ITEM_CHECK
+        )
+                
+        window_menu.shell_button.Enable(False)
+        
+        
+        window_menu.toolbox_button = window_menu.Append(
+            -1, 'Toolbo&x',
+            ''' Show/hide the toolbox, in which you can choose between \
+different tools to use in the other widgets''', wx.ITEM_CHECK
+        )
+                
+        window_menu.toolbox_button.Enable(False)
+        
+        
+        window_menu.tree_browser_button = window_menu.Append(
+            -1, '&Tree browser',
+            ''' Show/hide the tree browser, which lets you navigate the time \
+tree''', wx.ITEM_CHECK
+        )
+                
+        window_menu.tree_browser_button.Enable(False)
+        
+                
         help_menu = menu_bar.help_menu = wx.Menu()
         
         menu_bar.Append(help_menu, '&Help')
-        
+                
         
         help_menu.garlicsim_help_button = help_menu.Append(
             -1, 'GarlicSim &Help...\tF1',
@@ -241,7 +355,7 @@ class Frame(wx.Frame):
             ' Use resources that require an internet connection'
         )
         
-        help_menu.online_resources_menu_button.Enable(False)
+        #help_menu.online_resources_menu_button.Enable(False) tododoc: uncomment
         
         
         online_resources_menu.website_button = online_resources_menu.Append(
@@ -275,10 +389,6 @@ in your browser'''
         )
         
         online_resources_menu.github_button.Enable(False)
-        
-        
-        
-
         
         
         help_menu.AppendSeparator()

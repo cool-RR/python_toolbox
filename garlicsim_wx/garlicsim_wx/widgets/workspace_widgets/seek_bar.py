@@ -24,7 +24,7 @@ __all__ = ["SeekBar"]
 
 class SeekBar(wx.Panel, WorkspaceWidget):
     '''
-    A seek-bar widget.
+    Seek-bar widget, allowing navigation and visualization of the active path.
     
     The seek-bar is attached to a path. It shows what time period the path
     spans. It shows which node is currently active. It allows to move to any
