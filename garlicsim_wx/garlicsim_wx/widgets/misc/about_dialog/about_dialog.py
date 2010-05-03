@@ -23,7 +23,9 @@ class AboutDialog(wx.Dialog): # make base class
     def __init__(self, frame):
    
         wx.Dialog.__init__(self, frame, title='About GarlicSim',
-                           size=(628, 550))
+                           size=(628, 600))
+        
+        self.SetBackgroundColour(wx.Color(212, 208, 200))
         
         self.frame = frame
 
@@ -44,7 +46,7 @@ class AboutDialog(wx.Dialog): # make base class
         v_sizer.Add(self.image, 0)
 
         
-        self.html_window = wx.html.HtmlWindow(self, size=(628, 220))
+        self.html_window = wx.html.HtmlWindow(self, size=(628, 270))
         v_sizer.Add(self.html_window, 0)
         
         self.html_window.SetPage(
