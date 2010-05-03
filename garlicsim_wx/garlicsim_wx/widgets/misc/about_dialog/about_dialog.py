@@ -54,12 +54,12 @@ class AboutDialog(wx.Dialog): # make base class
             <html>
                 <body bgcolor="#d4d0c8">
                     <div align="center"> <font size="1">
-                            &copy; 2009-2010 Ram Rachum (a.k.a. cool-RR)
-                            <br />
-                            No part of this program may be used, copied or 
-                            distributed without explicit written permission
-                            from Ram Rachum.
-                            <br />
+                        &copy; 2009-2010 Ram Rachum (a.k.a. cool-RR)
+                        <br />                        
+                        No part of this program may be used, copied or
+                        distributed without explicit written permission from Ram
+                        Rachum.
+                        <br />
                     </font></div>
                     <div> 
                         GarlicSim is a platform for writing, running and
@@ -89,8 +89,7 @@ class AboutDialog(wx.Dialog): # make base class
         
         self.button_sizer = button_sizer = wx.StdDialogButtonSizer()
         self.ok_button = wx.Button(self, wx.ID_OK,
-                                   "Let's get back to simulating!",
-                                   )#size=(200, 30))
+                                   "Let's get back to simulating!")
         self.ok_button.SetDefault()
         button_sizer.SetAffirmativeButton(self.ok_button)
         self.Bind(wx.EVT_BUTTON, self.on_ok, self.ok_button)
