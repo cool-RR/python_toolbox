@@ -3,4 +3,5 @@
 
 '''This package defines various wxPython widgets, specific to `garlicsim_wx`.'''
 
+from state_creation_dialog import StateCreationDialog
 from simpack_selection_dialog import SimpackSelectionDialog

@@ -8,7 +8,6 @@ These objects are important enough to be defined near the root of the
 `garlicsim_wx` package but not important enough to be put in the main namespace.
 '''
 
-from state_creation_dialog import StateCreationDialog
 from simpack_wx_grokker import SimpackWxGrokker
 import aui
 import icon_bundle
