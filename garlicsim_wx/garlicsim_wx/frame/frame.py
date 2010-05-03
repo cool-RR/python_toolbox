@@ -13,8 +13,8 @@ import os
 import sys
 import random
 import cPickle as pickle_module
-import multiprocessing # tododoc: am i forcing multiprocessing here?
 import subprocess
+import webbrowser
 
 import wx
 from garlicsim_wx.general_misc.third_party import aui
@@ -363,7 +363,11 @@ tree''', wx.ITEM_CHECK
             ' Open the official GarlicSim website in your browser'
         )
         
-        online_resources_menu.website_button.Enable(False)
+        self.Bind(
+            wx.EVT_MENU,
+            lambda event: webbrowser.open_new_tab('http://garlicsim.org'),
+            online_resources_menu.website_button
+        )
         
         
         online_resources_menu.mailing_lists_button = online_resources_menu.Append(
@@ -372,7 +376,13 @@ tree''', wx.ITEM_CHECK
 in your browser'''
         )
         
-        online_resources_menu.mailing_lists_button.Enable(False)
+        self.Bind(
+            wx.EVT_MENU,
+            lambda event: webbrowser.open_new_tab(
+                'http://garlicsim.org/#mailing_lists'
+                ),
+            online_resources_menu.mailing_lists_button
+        )
         
         
         online_resources_menu.blog_button = online_resources_menu.Append(
@@ -380,7 +390,13 @@ in your browser'''
             ' Open the GarlicSim blog in your browser'
         )
         
-        online_resources_menu.blog_button.Enable(False)
+        self.Bind(
+            wx.EVT_MENU,
+            lambda event: webbrowser.open_new_tab(
+                'http://blog.garlicsim.org'
+                ),
+            online_resources_menu.blog_button
+        )
         
 
         online_resources_menu.github_button = online_resources_menu.Append(
@@ -388,7 +404,13 @@ in your browser'''
             ' Open the GitHub code repository for GarlicSim in your browser'
         )
         
-        online_resources_menu.github_button.Enable(False)
+        self.Bind(
+            wx.EVT_MENU,
+            lambda event: webbrowser.open_new_tab(
+                'http://github.com/cool-RR/GarlicSim'
+                ),
+            online_resources_menu.github_button
+        )
         
         
         help_menu.AppendSeparator()
