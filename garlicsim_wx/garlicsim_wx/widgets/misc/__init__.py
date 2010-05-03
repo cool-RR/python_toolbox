@@ -5,3 +5,4 @@
 
 from state_creation_dialog import StateCreationDialog
 from simpack_selection_dialog import SimpackSelectionDialog
+from about_dialog import AboutDialog

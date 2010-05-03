@@ -421,7 +421,12 @@ in your browser'''
             ' Tell me a little bit about the GarlicSim software'
         )
         
-        help_menu.about_button.Enable(False)
+        self.Bind(
+            wx.EVT_MENU,
+            lambda event: \
+                garlicsim_wx.widgets.misc.AboutDialog(self).ShowModal(),
+            help_menu.about_button
+        )
         
         
 
