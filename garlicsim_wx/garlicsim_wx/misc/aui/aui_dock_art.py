@@ -29,6 +29,13 @@ class AuiDockArt(aui.AuiDefaultDockArt):
     def __init__(self):
         aui.AuiDefaultDockArt.__init__(self)
  
+        self.SetColor(
+            aui.AUI_DOCKART_BACKGROUND_GRADIENT_COLOUR,
+            self.GetColor(
+                aui.AUI_DOCKART_BACKGROUND_COLOUR
+            )
+        )
+        
         self.SetMetric(aui.AUI_DOCKART_SASH_SIZE, 2)
         
         font_size = 9 if wx.Platform == '__WXMAC__' else 7

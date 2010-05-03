@@ -7,6 +7,8 @@ This module defines the AboutDialog class.
 See its documentation for more info.
 '''
 
+import webbrowser
+
 import pkg_resources
 
 import wx.html
@@ -84,6 +86,14 @@ class AboutDialog(wx.Dialog): # make base class
                 </body>
             </html>
             ''' % garlicsim_wx.__version__
+        )
+        
+        self.html_window.Bind(
+            wx.html.EVT_HTML_LINK_CLICKED, 
+            lambda event: webbrowser.open_new_tab(
+                event.GetLinkInfo().GetHref()
+                ),
+            self.html_window
         )
 
         
