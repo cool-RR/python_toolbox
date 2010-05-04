@@ -44,12 +44,12 @@ class AboutDialog(wx.Dialog): # make base class
             )
         )
         
-        self.image = wx.StaticBitmap(
+        self.static_bitmap = wx.StaticBitmap(
             self,
             -1,
             wx.BitmapFromImage(self._original_image)
         )
-        v_sizer.Add(self.image, 0)
+        v_sizer.Add(self.static_bitmap, 0)
         
         
         
@@ -139,7 +139,7 @@ class AboutDialog(wx.Dialog): # make base class
         new_image = self._original_image.Copy()
         t = time.time()
         new_image.RotateHue((t / 50.) % 1)
-        self.image.SetBitmap(wx.BitmapFromImage(new_image))
+        self.static_bitmap.SetBitmap(wx.BitmapFromImage(new_image))
 
         
     def EndModal(self, *args, **kwargs):
