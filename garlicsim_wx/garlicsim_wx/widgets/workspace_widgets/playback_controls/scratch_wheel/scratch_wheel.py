@@ -104,7 +104,7 @@ class ScratchWheel(wx.Panel):
         self.was_playing_before_drag = None
         '''Flag saying if playback was active before user grabbed the gear.'''
             
-        self.motion_blur_update_timer = thread_timer.ThreadTimer(self)
+        self.motion_blur_update_timer = wx.Timer(self)
         '''
         Timer to use for updating the motion blur bitmap.
         
@@ -115,7 +115,7 @@ class ScratchWheel(wx.Panel):
         frozen with a high motion blur.
         '''
         
-        self.Bind(thread_timer.EVT_THREAD_TIMER,
+        self.Bind(wx.EVT_TIMER,
                   self.on_motion_blur_update_timer,
                   self.motion_blur_update_timer)
         
