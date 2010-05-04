@@ -121,6 +121,8 @@ class ScratchWheel(wx.Panel):
         
         # todo: I don't think ThreadTimer should be used here. But for some
         # reason wx.Timer didn't work.
+        # Update: Possibly it didn't work because I forgot to put the self
+        # argument to wx.Timer?
         
         self.recalculation_flag = False
         '''Flag saying whether the scratch wheel needs to recalculate.'''

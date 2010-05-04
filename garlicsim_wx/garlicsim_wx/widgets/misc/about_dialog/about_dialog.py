@@ -7,6 +7,7 @@ This module defines the AboutDialog class.
 See its documentation for more info.
 '''
 
+import time
 import webbrowser
 
 import pkg_resources
@@ -29,24 +30,28 @@ class AboutDialog(wx.Dialog): # make base class
         
         self.SetBackgroundColour(wx.Color(212, 208, 200))
         
+        self.SetDoubleBuffered(True)
+        
         self.frame = frame
 
         v_sizer = wx.BoxSizer(wx.VERTICAL)
         
+
+        self._original_image = wx.ImageFromStream( # todo: rename to static_bitmap
+            pkg_resources.resource_stream(
+                images_package,
+                'about.png'
+            )
+        )
+        
         self.image = wx.StaticBitmap(
             self,
             -1,
-            wx.BitmapFromImage(
-                wx.ImageFromStream(
-                    pkg_resources.resource_stream(
-                        images_package,
-                        'about.png'
-                    )
-                )
-            )
+            wx.BitmapFromImage(self._original_image)
         )
         v_sizer.Add(self.image, 0)
-
+        
+        
         
         self.html_window = wx.html.HtmlWindow(self, size=(628, 270))
         v_sizer.Add(self.html_window, 0)
@@ -111,7 +116,13 @@ class AboutDialog(wx.Dialog): # make base class
         
         self.SetSizer(v_sizer)
         self.Layout()
+
         
+        self.timer = wx.Timer(self)
+        self.timer.Start(40)
+        self.Bind(wx.EVT_TIMER, self.on_timer, self.timer)
+        
+        self._rotate_image_hue()
 
         
     def on_ok(self, e=None):
@@ -119,7 +130,21 @@ class AboutDialog(wx.Dialog): # make base class
 
         self.EndModal(wx.ID_OK)
 
+        
+    def on_timer(self, event):
+        self._rotate_image_hue()
 
+        
+    def _rotate_image_hue(self):
+        new_image = self._original_image.Copy()
+        t = time.time()
+        new_image.RotateHue((t / 50.) % 1)
+        self.image.SetBitmap(wx.BitmapFromImage(new_image))
+
+        
+    def EndModal(self, *args, **kwargs):
+        self.timer.Stop()
+        wx.Dialog.EndModal(self, *args, **kwargs)
 
         
         
