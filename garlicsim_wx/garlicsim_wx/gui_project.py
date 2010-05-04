@@ -631,6 +631,7 @@ class GuiProject(object):
         
         The node menu lets you do actions with the active node.
         '''
+        #todo: kill this
         nodemenu = wx.Menu()
         nodemenu.Append(
             s2i("Fork by editing"),

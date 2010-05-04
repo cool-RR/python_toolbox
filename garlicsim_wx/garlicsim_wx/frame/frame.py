@@ -243,6 +243,36 @@ class Frame(wx.Frame):
         
         
         edit_menu.AppendSeparator()
+
+
+        edit_menu.select_all_button = edit_menu.Append(
+            -1, 'Select All\tCtrl+A',
+            ' Select all the nodes'
+        )
+
+        edit_menu.select_all_button.Enable(False)
+        
+        
+        edit_menu.deselect_button = edit_menu.Append(
+            -1, '&Deselect\tCtrl+D',
+            ' Deselect all the selected nodes'
+        )
+
+        edit_menu.deselect_button.Enable(False)
+        
+        
+        edit_menu.invert_selection_button = edit_menu.Append(
+            -1, 'Invert selection\tCtrl+Shift+I',
+            ''' Select all the nodes that aren't selected, and deselect \
+those that are selected'''
+        )
+
+        edit_menu.invert_selection_button.Enable(False)
+        
+        
+        
+        
+        edit_menu.AppendSeparator()
         
         
         edit_menu.preferences_button = edit_menu.Append(
@@ -252,6 +282,48 @@ class Frame(wx.Frame):
 
         edit_menu.preferences_button.Enable(False)
         
+
+        node_menu = menu_bar.node_menu = wx.Menu()
+        
+        menu_bar.Append(node_menu, '&Node')
+        
+
+        node_menu.fork_by_editing_button = node_menu.Append(
+            -1, 'Fork by &editing',
+            ' Fork the simulation by making a copy of the active node and editing it'
+        )
+
+        node_menu.fork_by_editing_button.Enable(False)
+
+        
+        node_menu.fork_by_crunching_button = node_menu.Append(
+            -1, 'Fork by &crunching',
+            ' Fork the simulation by crunching from the active node'
+        )
+
+        node_menu.fork_by_crunching_button.Enable(False)
+
+        
+        node_menu.AppendSeparator()
+        
+        
+        node_menu.properties_button = node_menu.Append(
+            -1, 'Node &properties...',
+            " See the active node's properties"
+        )
+
+        node_menu.properties_button.Enable(False)        
+        
+        
+        node_menu.AppendSeparator()
+        
+        
+        node_menu.delete_button = node_menu.Append(
+            -1, '&Delete active node...',
+            " Delete the active node"
+        )
+
+        node_menu.delete_button.Enable(False)
         
         
         window_menu = menu_bar.window_menu = wx.Menu()
@@ -263,7 +335,7 @@ class Frame(wx.Frame):
         
         window_menu.workspace_menu_button = window_menu.AppendMenu(
             -1, '&Workspace', window_menu.workspace_menu,
-            ' tododoc, if ever used'
+            ' Manipulate the workspace, i.e. the arrangement of widgets on the screen'
         )
 
         # window_menu.workspace_menu_button.Enable(False) tododoc: uncomment
