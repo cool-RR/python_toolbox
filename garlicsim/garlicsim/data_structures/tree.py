@@ -92,7 +92,7 @@ class Tree(object):
     def add_state(self, state, parent=None, step_profile=None,
                   template_node=None):
         '''
-        Wrap state in node and adds to tree.
+        Wrap state in node and add to tree.
         
         Returns the node.
         '''
