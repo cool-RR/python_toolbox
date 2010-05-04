@@ -37,7 +37,7 @@ class AboutDialog(wx.Dialog): # make base class
         v_sizer = wx.BoxSizer(wx.VERTICAL)
         
 
-        self._original_image = wx.ImageFromStream( # todo: rename to static_bitmap
+        self._original_image = wx.ImageFromStream(
             pkg_resources.resource_stream(
                 images_package,
                 'about.png'
