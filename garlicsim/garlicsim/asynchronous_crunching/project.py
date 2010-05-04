@@ -163,7 +163,23 @@ class Project(object):
             job = Job(leaf, crunching_profile)
             self.crunching_manager.jobs.append(job)
             return job
-          
+
+        
+    def fork_to_edit(self, template_node):
+        '''
+        "Duplicate" the node, marking the new one as touched.
+        
+        The new node will have the same parent as `template_node`. The state of
+        the new node is usually modified by the user after it is created, and
+        after that the node is finalized and used in simulation.
+        
+        This is useful when you want to make some changes in the world state and
+        see what they will cause in the simulation.
+        
+        Returns the node.
+        '''
+        return self.tree.fork_to_edit(template_node)
+
     
     def begin_crunching(self, node, clock_buffer=None, *args, **kwargs):
         '''

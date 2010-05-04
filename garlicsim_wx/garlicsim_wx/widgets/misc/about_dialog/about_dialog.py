@@ -20,7 +20,7 @@ from . import images as __images_package
 images_package = __images_package.__name__
 
 
-class AboutDialog(wx.Dialog): # make base class
+class AboutDialog(wx.Dialog):
     '''
     '''
     def __init__(self, frame):

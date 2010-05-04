@@ -207,6 +207,53 @@ class Frame(wx.Frame):
         edit_menu.redo_button.Enable(False)
         
         
+        edit_menu.AppendSeparator()
+        
+                
+        edit_menu.cut_button = edit_menu.Append(
+            -1, 'Cu&t\tCtrl+X',
+            ' Cut the current selection, copying to the clipboard and deleting it from the simulation'
+        )
+
+        edit_menu.cut_button.Enable(False)
+        
+                
+        edit_menu.copy_button = edit_menu.Append(
+            -1, '&Copy\tCtrl+C',
+            ' Copy the current selection to the clipboard'
+        )
+
+        edit_menu.copy_button.Enable(False)
+        
+                
+        edit_menu.paste_button = edit_menu.Append(
+            -1, '&Paste\tCtrl+V',
+            ' Paste the content of the clipboard into the simulation'
+        )
+
+        edit_menu.paste_button.Enable(False)
+        
+                
+        edit_menu.clear_button = edit_menu.Append(
+            -1, '&Clear\tDel',
+            ' Delete the current selection'
+        )
+
+        edit_menu.clear_button.Enable(False)
+        
+        
+        edit_menu.AppendSeparator()
+        
+        
+        edit_menu.preferences_button = edit_menu.Append(
+            -1, 'Prefere&nces',
+            " View and modify GarlicSim's program-wide preferences"
+        )
+
+        edit_menu.preferences_button.Enable(False)
+        
+        
+        
         window_menu = menu_bar.window_menu = wx.Menu()
 
         menu_bar.Append(window_menu, '&Window')

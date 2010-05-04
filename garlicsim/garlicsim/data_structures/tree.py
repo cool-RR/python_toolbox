@@ -9,9 +9,11 @@ See their documentation for more information.
 
 import copy
 
-import garlicsim
-from garlicsim.misc import GarlicSimException
 from garlicsim.general_misc import misc_tools
+
+import garlicsim.misc
+from garlicsim.misc import GarlicSimException
+
 
 # `from block import Block` in the bottom of the file.
 # `from node import Node` in the bottom of the file.
@@ -64,19 +66,27 @@ class Tree(object):
         '''
         "Duplicate" the node, marking the new one as touched.
         
-        The new node will have the same parent as `template_node`. This
-        method is used when forking the tree by editing. The state of the new
-        node is usually modified by the user after it is created.
+        The new node will have the same parent as `template_node`. The state of
+        the new node is usually modified by the user after it is created, and
+        after that the node is finalized and used in simulation.
+        
+        This is useful when you want to make some changes in the world state and
+        see what they will cause in the simulation.
         
         Returns the node.
         '''
-        x = copy.deepcopy(template_node.state)
+        new_state = copy.deepcopy(
+            template_node.state,
+            garlicsim.misc.persistent.DontCopyPersistent()
+        )
 
         parent = template_node.parent
-        step_profile = copy.copy(template_node.step_profile)
-        return self.add_state(x, parent,
-                              step_profile=step_profile,
-                              template_node=template_node)
+        new_step_profile = copy.copy(template_node.step_profile)
+        new_node = self.add_state(new_state, parent,
+                                  step_profile=new_step_profile,
+                                  template_node=template_node)
+        new_node.still_in_editing = True
+        return new_node
 
 
     def add_state(self, state, parent=None, step_profile=None,

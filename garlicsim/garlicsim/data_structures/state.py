@@ -32,7 +32,7 @@ class State(object):
         Example output:
         <garlicsim.data_structures.State with clock 32.3 at 0x1c822d0>
         '''
-        return '<%s.%s %sat %s>' % \
+        return '<%s %sat %s>' % \
                (
                    misc_tools.shorten_class_address(
                        self.__class__.__module__,

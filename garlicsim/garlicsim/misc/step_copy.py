@@ -12,7 +12,7 @@ from garlicsim.misc.persistent import DontCopyPersistent
 
 class StepCopy(DontCopyPersistent, CopyMode):
     '''
-    A copy mode used in step function to generate the next state.
+    A copy mode used in a step function to generate the next state.
     
     A popular design pattern in step functions is to deepcopy the old state,
     modify it, and then return it as the new state. When this is done, you

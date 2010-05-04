@@ -274,10 +274,10 @@ class GuiProject(object):
         Initialization related to the widgets which make up the gui project.
         '''
         
-        self.frame.Bind(wx.EVT_MENU, self.edit_from_active_node,
+        self.frame.Bind(wx.EVT_MENU, self.fork_by_editing,
                          id=s2i("Fork by editing"))
-        self.frame.Bind(wx.EVT_MENU, self.fork_naturally,
-                         id=s2i("Fork naturally"))
+        self.frame.Bind(wx.EVT_MENU, self.fork_by_crunching,
+                         id=s2i("Fork by crunching"))
         
         
     def __init_virgin(self):
@@ -522,7 +522,7 @@ class GuiProject(object):
         node = self.active_node
         state = node.state
         if (node.touched is False) or (node.still_in_editing is False):
-            new_node = self.edit_from_active_node()
+            new_node = self.fork_by_editing()
             return new_node.state
         else:
             return state
@@ -556,7 +556,7 @@ class GuiProject(object):
         self.last_tracked_real_time = current_real_time
         
 
-    def fork_naturally(self, e=None):
+    def fork_by_crunching(self, e=None):
         '''
         Fork the simulation from the active node.
         
@@ -569,7 +569,7 @@ class GuiProject(object):
         self.project.begin_crunching(self.active_node, self.default_buffer)
 
 
-    def edit_from_active_node(self, e=None):
+    def fork_by_editing(self, e=None):
         '''
         Fork the simulation from the active node by editing.
         
@@ -579,7 +579,6 @@ class GuiProject(object):
         # todo: maybe not restrict it to "from_active_node"?
         new_node = \
             self.project.tree.fork_to_edit(template_node=self.active_node)
-        new_node.still_in_editing = True #todo: should be in `fork_to_edit` ?
         self.tree_structure_modified_on_path_emitter.emit()
         self.set_active_node(new_node)
         return new_node
@@ -639,8 +638,8 @@ class GuiProject(object):
             " Create a new edited node with the current node as the template"
         )
         nodemenu.Append(
-            s2i("Fork naturally"),
-            "Fork &naturally",
+            s2i("Fork by crunching"),
+            "Fork by &crunching",
             " Run the simulation from this node"
         )
         nodemenu.AppendSeparator()
