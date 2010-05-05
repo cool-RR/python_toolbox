@@ -186,7 +186,7 @@ class Frame(wx.Frame):
         menu_bar.Append(edit_menu, '&Edit')
         
         # This disables a menu from the bar:
-        # menu_bar.EnableTop(menu_bar.FindMenu('Edit') ,False)        
+        # menu_bar.EnableTop(menu_bar.FindMenu('Edit'), False)
         # Logically it makes sense, but it makes it hard to see all the options
         # in the menu, so at least for now I'm not doing it.
 
@@ -212,7 +212,8 @@ class Frame(wx.Frame):
                 
         edit_menu.cut_button = edit_menu.Append(
             -1, 'Cu&t\tCtrl+X',
-            ' Cut the current selection, copying to the clipboard and deleting it from the simulation'
+            ''' Cut the current selection, copying to the clipboard and \
+deleting it from the simulation'''
         )
 
         edit_menu.cut_button.Enable(False)
@@ -296,13 +297,19 @@ those that are selected'''
         
         menu_bar.Append(node_menu, '&Node')
         
+        menu_bar.EnableTop(menu_bar.FindMenu('Node'), False)
+        
 
         node_menu.fork_by_editing_button = node_menu.Append(
             -1, 'Fork by &editing',
             ' Fork the simulation by making a copy of the active node and editing it'
         )
-
-        node_menu.fork_by_editing_button.Enable(False)
+        
+        self.Bind(
+            wx.EVT_MENU,
+            lambda event: self.gui_project.fork_by_editing(),
+            node_menu.fork_by_editing_button
+        )
 
         
         node_menu.fork_by_crunching_button = node_menu.Append(
@@ -310,7 +317,11 @@ those that are selected'''
             ' Fork the simulation by crunching from the active node'
         )
 
-        node_menu.fork_by_crunching_button.Enable(False)
+        self.Bind(
+            wx.EVT_MENU,
+            lambda event: self.gui_project.fork_by_crunching(),
+            node_menu.fork_by_crunching_button
+        )
 
         
         node_menu.AppendSeparator()

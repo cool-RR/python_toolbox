@@ -175,7 +175,7 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
             else:
                 self.gui_project.set_active_node(thing)
                 
-            self.PopupMenu(self.gui_project.get_node_menu(), e.GetPosition())
+            self.PopupMenu(self.frame.menu_bar.node_menu, e.GetPosition())
 
 
     def search_map(self, x, y):

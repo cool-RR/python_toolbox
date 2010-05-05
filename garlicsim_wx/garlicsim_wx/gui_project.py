@@ -154,6 +154,7 @@ class GuiProject(object):
         '''
 
         self.__init_emitters()
+        self.__init_menu_enablings()
         
         self.emitter_system.top_emitter.emit()
         # Just for good measure, jiggle all the widgets up.
@@ -230,6 +231,14 @@ class GuiProject(object):
             )
             # todo: should possibly take input from pseudoclock_modified_emitter
             
+            self.active_node_set_from_none_to_node = es.make_emitter(
+                name='active node set from none to node'
+            )
+            
+            self.active_node_set_from_node_to_none = es.make_emitter(
+                name='active node set from node to none'
+            )
+            
             self.path_changed_emitter = es.make_emitter(
                 name='path_changed'
             )
@@ -265,9 +274,23 @@ class GuiProject(object):
             )
             
             
-            
             #todo: maybe need an emitter for when editing a state?
 
+    
+    def __init_menu_enablings(self):
+        self.active_node_set_from_node_to_none.add_output(
+            lambda: self.frame.menu_bar.EnableTop(
+                self.frame.menu_bar.FindMenu('Node'),
+                False
+            )
+        )
+        
+        self.active_node_set_from_none_to_node.add_output(
+            lambda: self.frame.menu_bar.EnableTop(
+                self.frame.menu_bar.FindMenu('Node'),
+                True
+            )
+        )
             
     def __init_gui(self):
         '''
@@ -292,17 +315,20 @@ class GuiProject(object):
         self.path = path
         self.path_changed_emitter.emit()
         
+        
     def set_official_playing_speed(self, value):
         '''Set the official playing speed.'''
         self.official_playing_speed = value
         self.official_playing_speed_modified_emitter.emit()
 
+        
     def _set_pseudoclock(self, value):
         '''Set the pseudoclock. Internal use.'''
         if self.pseudoclock != value:
             self.pseudoclock = value
             self.pseudoclock_modified_emitter.emit()
-        
+
+            
     def set_pseudoclock(self, desired_pseudoclock, rounding=binary_search.LOW):
         '''
         Attempt to set the pseudoclock to a desired value.
@@ -412,8 +438,14 @@ class GuiProject(object):
     def _set_active_node(self, node):
         '''Set the active node, displaying it onscreen. Internal use.'''
         if self.active_node != node:
+            old_active_node = self.active_node
             self.active_node = node
-            self.active_node_changed_emitter.emit()
+            if old_active_node is None:
+                self.active_node_set_from_none_to_node.emit()
+            elif node is None:
+                self.active_node_set_from_node_to_none.emit()
+            else:
+                self.active_node_changed_emitter.emit()
         
     
     def set_active_node(self, node, modify_path=True):
@@ -623,33 +655,6 @@ class GuiProject(object):
             # were on the path. This could save some rendering on SeekBar.
             
         return added_nodes
-
-
-    def get_node_menu(self):
-        '''
-        Get the node menu.
-        
-        The node menu lets you do actions with the active node.
-        '''
-        #todo: kill this
-        nodemenu = wx.Menu()
-        nodemenu.Append(
-            s2i("Fork by editing"),
-            "Fork by &editing",
-            " Create a new edited node with the current node as the template"
-        )
-        nodemenu.Append(
-            s2i("Fork by crunching"),
-            "Fork by &crunching",
-            " Run the simulation from this node"
-        )
-        nodemenu.AppendSeparator()
-        nodemenu.Append(
-            s2i("Delete..."),
-            "&Delete...",
-            " Delete the node"
-        )
-        return nodemenu
 
     
     def finalize_active_node(self):
