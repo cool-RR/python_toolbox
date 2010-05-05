@@ -131,7 +131,8 @@ class ScratchWheel(wx.Panel):
             self.gui_project.emitter_system.make_emitter(
                 inputs=(
                     self.gui_project.pseudoclock_modified_emitter,
-                    self.gui_project.active_node_changed_emitter # todo: needed?
+                    self.gui_project.active_node_changed_or_modified_emitter
+                    # todo: needed?
                 ),
                 outputs=(
                     FlagRaiser(self, 'recalculation_flag',

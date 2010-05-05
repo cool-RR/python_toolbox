@@ -47,7 +47,7 @@ class StateReprViewer(wx.Panel, WorkspaceWidget):
         self.needs_update_emitter = \
             self.gui_project.emitter_system.make_emitter(
                 inputs=(
-                    self.gui_project.active_node_changed_emitter,
+                    self.gui_project.active_node_changed_or_modified_emitter,
                     # todo: put the active_state_changed whatever here
                     ),
                 outputs=(

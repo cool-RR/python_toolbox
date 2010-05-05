@@ -19,12 +19,13 @@ import wx
 import wx.lib.scrolledpanel
 import wx.py.shell
 
-import garlicsim.general_misc.queue_tools as queue_tools
-import garlicsim.general_misc.dict_tools as dict_tools
+from garlicsim.general_misc import queue_tools
+from garlicsim.general_misc import dict_tools
 from general_misc.stringsaver import s2i,i2s
 from garlicsim.general_misc.infinity import Infinity
 from garlicsim.general_misc import binary_search
-import garlicsim_wx.general_misc.thread_timer as thread_timer
+from garlicsim_wx.general_misc import thread_timer
+from garlicsim_wx.general_misc import wx_tools
 
 import garlicsim
 from garlicsim.asynchronous_crunching import crunchers
@@ -231,20 +232,16 @@ class GuiProject(object):
             )
             # todo: should possibly take input from pseudoclock_modified_emitter
             
-            self.active_node_set_from_none_to_node_emitter = es.make_emitter(
-                name='active node set from none to node'
+            self.active_node_modified_emitter = es.make_emitter(
+                name='active_node_modified'
             )
             
-            self.active_node_set_from_node_to_none_emitter = es.make_emitter(
-                name='active node set from node to none'
-            )
-            
-            self.active_block_set_from_none_to_block_emitter = es.make_emitter(
-                name='active block set from none to block'
-            )
-            
-            self.active_block_set_from_block_to_none_emitter = es.make_emitter(
-                name='active block set from block to none'
+            self.active_node_changed_or_modified_emitter = es.make_emitter(
+                name='active_node_changed_or_modified',
+                inputs=(
+                    self.active_node_changed_emitter,
+                    self.active_node_modified_emitter,
+                )
             )
             
             self.path_changed_emitter = es.make_emitter(
@@ -277,6 +274,7 @@ class GuiProject(object):
                 )
             
             self.active_node_finalized_emitter = es.make_emitter(
+                inputs=(self.active_node_modified_emitter,),
                 outputs=(self.tree_modified_on_path_emitter,), # todo: correct?
                 name='active_node_finalized',
             )
@@ -286,33 +284,14 @@ class GuiProject(object):
 
     
     def __init_menu_enablings(self):
-        self.active_node_set_from_node_to_none_emitter.add_output(
-            lambda: self.frame.menu_bar.EnableTop(
-                self.frame.menu_bar.FindMenu('Node'),
-                False
-            )
-        )
         
-        self.active_node_set_from_none_to_node_emitter.add_output(
-            lambda: self.frame.menu_bar.EnableTop(
-                self.frame.menu_bar.FindMenu('Node'),
-                True
+        for menu in [self.frame.menu_bar.node_menu,
+                     self.frame.menu_bar.block_menu]:
+            
+            self.active_node_changed_or_modified_emitter.add_output(
+                menu._recalculate
             )
-        )
         
-        self.active_block_set_from_block_to_none_emitter.add_output(
-            lambda: self.frame.menu_bar.EnableTop(
-                self.frame.menu_bar.FindMenu('Block'),
-                False
-            )
-        )
-        
-        self.active_block_set_from_none_to_block_emitter.add_output(
-            lambda: self.frame.menu_bar.EnableTop(
-                self.frame.menu_bar.FindMenu('Block'),
-                True
-            )
-        )
             
     def __init_gui(self):
         '''
@@ -459,28 +438,10 @@ class GuiProject(object):
 
     def _set_active_node(self, node):
         '''Set the active node, displaying it onscreen. Internal use.'''
-        if self.active_node != node:
-            
-            old_active_node = self.active_node
-            
-            self.active_node = node
-            
-            if old_active_node is None: # node is not None
-                self.active_node_set_from_none_to_node_emitter.emit()
-                if node.block:
-                    self.active_block_set_from_none_to_block_emitter.emit()
-                    
-            elif node is None: # old_active_node is not None
-                self.active_node_set_from_node_to_none_emitter.emit()
-                if old_active_node.block:
-                    self.active_block_set_from_block_to_none_emitter.emit()
-                    
-            else: # (node is not None) and (old_active_node is not None)
-                self.active_node_changed_emitter.emit()
-                if old_active_node.block is not None and node.block is None:
-                    self.active_block_set_from_block_to_none_emitter.emit()
-                elif old_active_node.block is None and node.block is not None:
-                    self.active_block_set_from_none_to_block_emitter.emit()
+        if self.active_node is not node:
+            self.active_node = node        
+            self.active_node_changed_emitter.emit()
+
         
     
     def set_active_node(self, node, modify_path=True):

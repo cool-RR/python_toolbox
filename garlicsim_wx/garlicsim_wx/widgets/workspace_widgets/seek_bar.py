@@ -56,12 +56,12 @@ class SeekBar(wx.Panel, WorkspaceWidget):
         self.active_triangle_width = 13 # Must be odd number
 
         self.view_changed_flag = False
-        self.active_node_changed_flag = False
+        self.active_node_changed_or_modified_flag = False
         self.path_contents_changed_flag = False
         
         self.view_change_emitter = emitters.Emitter()
-        self.gui_project.active_node_changed_emitter.add_output(
-            FlagRaiser(self, 'active_node_changed_flag')
+        self.gui_project.active_node_changed_or_modified_emitter.add_output(
+            FlagRaiser(self, 'active_node_changed_or_modified_flag')
         )
         self.gui_project.path_contents_changed_emitter.add_output(
             FlagRaiser(self, 'path_contents_changed_flag')
@@ -74,7 +74,7 @@ class SeekBar(wx.Panel, WorkspaceWidget):
         
 
         self.view_changed_flag = False
-        self.active_node_changed_flag = False
+        self.active_node_changed_or_modified_flag = False
         self.path_contents_changed_flag = False
         # todo: now we just lower these flags retardedly, in future there will
         # be __recalculate

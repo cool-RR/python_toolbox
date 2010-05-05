@@ -78,6 +78,9 @@ class EmitterSystem(object):
     def make_emitter(self, inputs=(), outputs=(), name=None):
         '''Create an emitter in this emitter system. Returns the emitter.'''
 
+        # todo: allow one value in inputs and outputs. do in all emitter
+        # constructors.
+        
         inputs = set(inputs)
         inputs.add(self.top_emitter)
         outputs = set(outputs)

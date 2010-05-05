@@ -43,7 +43,7 @@ class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,
         self.font = wx.Font(12, wx.FONTFAMILY_TELETYPE, wx.FONTSTYLE_NORMAL,
                             wx.FONTWEIGHT_BOLD, face='Courier New')        
         
-        self.gui_project.active_node_changed_emitter.add_output(
+        self.gui_project.active_node_changed_or_modified_emitter.add_output(
             lambda: self.load_state(self.gui_project.get_active_state())
         )
 

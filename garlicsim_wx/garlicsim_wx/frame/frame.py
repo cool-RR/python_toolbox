@@ -90,19 +90,16 @@ class Frame(wx.Frame):
         
 
         file_menu = menu_bar.file_menu = wx.Menu()
-        
         menu_bar.Append(file_menu, '&File')
         
         
         file_menu.new_button = \
             file_menu.Append(-1 ,'&New...\tCtrl+N', ' Create a new simulation')
-        
         self.Bind(wx.EVT_MENU, self.on_new, file_menu.new_button)
         
         
         file_menu.open_button = \
             file_menu.Append(-1 ,'&Open...\tCtrl+O', ' Open a saved simulation')
-        
         self.Bind(wx.EVT_MENU, self.on_open, file_menu.open_button)        
         
         
@@ -114,13 +111,11 @@ class Frame(wx.Frame):
         
         file_menu.close_button = file_menu.Append(
             -1 ,'&Close\tCtrl+W', ' Close the currently open simulation')
-        
         file_menu.close_button.Enable(False)
 
         
         file_menu.save_button = file_menu.Append(
             -1 ,'&Save\tCtrl+S', ' Save the currently open simulation')
-        
         self.Bind(wx.EVT_MENU, self.on_save, file_menu.save_button)
         
         
@@ -128,7 +123,6 @@ class Frame(wx.Frame):
             -1, 'Save &as...\tShift+Ctrl+S',
             ' Save the currently open simulation under a different name'
         )
-        
         file_menu.save_as_button.Enable(False)
                 
         
@@ -136,12 +130,10 @@ class Frame(wx.Frame):
 
         
         export_menu = file_menu.export_menu = wx.Menu()
-
         file_menu.export_menu_button = file_menu.AppendMenu(
             -1, '&Export', export_menu,
             ' Export simulation data'
         )
-        
         # file_menu.export_menu_button.Enable(False) tododoc: uncomment
 
         
@@ -149,7 +141,6 @@ class Frame(wx.Frame):
             -1, '&Video',
             ' Export a video sequence showing playback of the simulation'
         )
-
         export_menu.video_button.Enable(False)
         
         
@@ -157,7 +148,6 @@ class Frame(wx.Frame):
             -1, '&Image',
             ' Export an image showing a single state in the simulation'
         )
-        
         export_menu.image_button.Enable(False)
         
                 
@@ -168,7 +158,6 @@ class Frame(wx.Frame):
             -1, 'Print...\tCtrl+P',
             ' Print the current state of the simulation'
         )
-
         file_menu.print_button.Enable(False)
         
         
@@ -176,15 +165,12 @@ class Frame(wx.Frame):
         
 
         file_menu.exit_button = \
-            file_menu.Append(wx.ID_EXIT ,'E&xit', ' Close GarlicSim')        
-                
+            file_menu.Append(wx.ID_EXIT ,'E&xit', ' Close GarlicSim')               
         self.Bind(wx.EVT_MENU, self.on_exit_menu_button, file_menu.exit_button)
 
         
         edit_menu = menu_bar.edit_menu = wx.Menu()
-        
         menu_bar.Append(edit_menu, '&Edit')
-        
         # This disables a menu from the bar:
         # menu_bar.EnableTop(menu_bar.FindMenu('Edit'), False)
         # Logically it makes sense, but it makes it hard to see all the options
@@ -195,7 +181,6 @@ class Frame(wx.Frame):
             -1, '&Undo\tCtrl+Z',
             ' Undo the last operation'
         )
-
         edit_menu.undo_button.Enable(False)
         
         
@@ -203,7 +188,6 @@ class Frame(wx.Frame):
             -1, '&Redo\tCtrl+Y',
             ' Redo the last operation that was undone'
         )
-
         edit_menu.redo_button.Enable(False)
         
         
@@ -215,7 +199,6 @@ class Frame(wx.Frame):
             ''' Cut the current selection, copying to the clipboard and \
 deleting it from the simulation'''
         )
-
         edit_menu.cut_button.Enable(False)
         
                 
@@ -223,7 +206,6 @@ deleting it from the simulation'''
             -1, '&Copy\tCtrl+C',
             ' Copy the current selection to the clipboard'
         )
-
         edit_menu.copy_button.Enable(False)
         
                 
@@ -231,7 +213,6 @@ deleting it from the simulation'''
             -1, '&Paste\tCtrl+V',
             ' Paste the content of the clipboard into the simulation'
         )
-
         edit_menu.paste_button.Enable(False)
         
                 
@@ -239,7 +220,6 @@ deleting it from the simulation'''
             -1, 'Cl&ear\tDel',
             ' Delete the current selection'
         )
-
         edit_menu.clear_button.Enable(False)
         
         
@@ -250,7 +230,6 @@ deleting it from the simulation'''
             -1, 'Select &All\tCtrl+A',
             ' Select all the nodes'
         )
-
         edit_menu.select_all_button.Enable(False)
         
         
@@ -258,7 +237,6 @@ deleting it from the simulation'''
             -1, '&Deselect\tCtrl+D',
             ' Deselect all the selected nodes'
         )
-
         edit_menu.deselect_button.Enable(False)
         
         
@@ -267,7 +245,6 @@ deleting it from the simulation'''
             ''' Select all the nodes that aren't selected, and deselect \
 those that are selected'''
         )
-
         edit_menu.invert_selection_button.Enable(False)
         
         
@@ -278,7 +255,6 @@ those that are selected'''
             -1, 'Merge to blocks where possible',
             ' Merge adjacant nodes to blocks, where possible'
         )
-
         edit_menu.merge_to_blocks_button.Enable(False)
         
         
@@ -289,15 +265,16 @@ those that are selected'''
             -1, 'Prefere&nces',
             " View and modify GarlicSim's program-wide preferences"
         )
-
         edit_menu.preferences_button.Enable(False)
         
 
         node_menu = menu_bar.node_menu = wx.Menu()
-        
         menu_bar.Append(node_menu, '&Node')
-        
-        menu_bar.EnableTop(menu_bar.FindMenu('Node'), False)
+        node_menu._recalculate = lambda: menu_bar.EnableTop(
+            menu_bar.FindMenu('Node'), 
+            self.gui_project is not None and \
+            self.gui_project.active_node is not None
+        )
         
 
         node_menu.fork_by_editing_button = node_menu.Append(
@@ -316,7 +293,6 @@ those that are selected'''
             -1, 'Fork by &crunching',
             ' Fork the simulation by crunching from the active node'
         )
-
         self.Bind(
             wx.EVT_MENU,
             lambda event: self.gui_project.fork_by_crunching(),
@@ -331,7 +307,6 @@ those that are selected'''
             -1, 'Node &properties...',
             " See the active node's properties"
         )
-
         node_menu.properties_button.Enable(False)        
         
         
@@ -342,22 +317,23 @@ those that are selected'''
             -1, '&Delete active node...',
             " Delete the active node"
         )
-
         node_menu.delete_button.Enable(False)
         
         
         block_menu = menu_bar.block_menu = wx.Menu()
-
         menu_bar.Append(block_menu, '&Block')
-
-        menu_bar.EnableTop(menu_bar.FindMenu('Block'), False)
+        block_menu._recalculate = lambda: menu_bar.EnableTop(
+            menu_bar.FindMenu('Block'), 
+            self.gui_project is not None and \
+            self.gui_project.active_node is not None and \
+            self.gui_project.active_node.block is not None
+        )
         
         
         block_menu.split_button = block_menu.Append(
             -1, '&Split active block...',
             " Split the active block into two separate blocks"
         )
-
         block_menu.split_button.Enable(False)
         
         
@@ -365,22 +341,18 @@ those that are selected'''
             -1, 'S&catter active block...',
             " Scatter the active block, leaving all its nodes blockless"
         )
-
         block_menu.scatter_button.Enable(False)
         
         
         window_menu = menu_bar.window_menu = wx.Menu()
-
         menu_bar.Append(window_menu, '&Window')
         
         
         window_menu.workspace_menu = workspace_menu = wx.Menu()
-        
         window_menu.workspace_menu_button = window_menu.AppendMenu(
             -1, '&Workspace', window_menu.workspace_menu,
             ' Manipulate the workspace, i.e. the arrangement of widgets on the screen'
         )
-
         # window_menu.workspace_menu_button.Enable(False) tododoc: uncomment
         
         
@@ -389,7 +361,6 @@ those that are selected'''
             ''' Save the current workspace configuration, so that it may be \
 recalled in the future'''
         )
-        
         workspace_menu.save_workspace_button.Enable(False)
         
         
@@ -397,7 +368,6 @@ recalled in the future'''
             -1, '&Delete workspace...',
             ' Delete one of the saved workspace configurations'
         )
-        
         workspace_menu.delete_workspace_button.Enable(False)
         
         
@@ -408,7 +378,6 @@ recalled in the future'''
             -1, '&Default workspace',
             ' Use the factory-default workspace configuration'
         )
-        
         workspace_menu.delete_workspace_button.Enable(False)
         
         
@@ -419,8 +388,7 @@ recalled in the future'''
             -1, '&Crunching',
             ''' Show/hide the crunching tool, which lets you control how your \
 simulation is crunched''', wx.ITEM_CHECK
-        )
-                
+        )       
         window_menu.crunching_button.Enable(False)
         
         
@@ -428,8 +396,7 @@ simulation is crunched''', wx.ITEM_CHECK
             -1, '&Local nodes examiner',
             ''' Show/hide the local nodes examiner, which lets you manipulate \
 tree nodes one-by-one''', wx.ITEM_CHECK
-        )
-                
+        )       
         window_menu.local_nodes_examiner_button.Enable(False)
         
         
@@ -437,8 +404,7 @@ tree nodes one-by-one''', wx.ITEM_CHECK
             -1, '&Playback Controls',
             ''' Show/hide the playback controls, which let you control the \
 onscreen playback of the simulation''', wx.ITEM_CHECK
-        )
-                
+        )       
         window_menu.playback_controls_button.Enable(False)
         
         
@@ -446,8 +412,7 @@ onscreen playback of the simulation''', wx.ITEM_CHECK
             -1, 'Seek-&bar',
             ''' Show/hide the seek-bar, which lets you navigate the active \
 timeline''', wx.ITEM_CHECK
-        )
-                
+        )       
         window_menu.seek_bar_button.Enable(False)
         
         
@@ -455,8 +420,7 @@ timeline''', wx.ITEM_CHECK
             -1, '&Shell',
             ''' Show/hide the shell, which lets you analyze your simulation \
 using arbitrary Python code''', wx.ITEM_CHECK
-        )
-                
+        )       
         window_menu.shell_button.Enable(False)
         
         
@@ -464,8 +428,7 @@ using arbitrary Python code''', wx.ITEM_CHECK
             -1, 'Toolbo&x',
             ''' Show/hide the toolbox, in which you can choose between \
 different tools to use in the other widgets''', wx.ITEM_CHECK
-        )
-                
+        )       
         window_menu.toolbox_button.Enable(False)
         
         
@@ -473,13 +436,11 @@ different tools to use in the other widgets''', wx.ITEM_CHECK
             -1, '&Tree browser',
             ''' Show/hide the tree browser, which lets you navigate the time \
 tree''', wx.ITEM_CHECK
-        )
-                
+        )       
         window_menu.tree_browser_button.Enable(False)
         
                 
         help_menu = menu_bar.help_menu = wx.Menu()
-        
         menu_bar.Append(help_menu, '&Help')
                 
         
@@ -487,7 +448,6 @@ tree''', wx.ITEM_CHECK
             -1, 'GarlicSim &Help...\tF1',
             ' Display the help documents for GarlicSim'
         )
-        
         help_menu.garlicsim_help_button.Enable(False)
         
         
@@ -495,7 +455,6 @@ tree''', wx.ITEM_CHECK
             -1, '&Welcome screen...',
             ' Show the welcome screen'
         )
-        
         help_menu.welcome_screen_button.Enable(False)
         
                 
@@ -503,7 +462,6 @@ tree''', wx.ITEM_CHECK
             -1, 'Read the &book, "Introduction to GarlicSim"...',
             ' Open the GarlicSim book, a PDF document'
         )
-        
         help_menu.garlicsim_book_button.Enable(False)
         
         
@@ -511,20 +469,16 @@ tree''', wx.ITEM_CHECK
         
         
         online_resources_menu = help_menu.online_resources_menu = wx.Menu()
-        
         help_menu.online_resources_menu_button = help_menu.AppendMenu(
             -1, '&Online resources', online_resources_menu,
             ' Use resources that require an internet connection'
         )
-        
-        #help_menu.online_resources_menu_button.Enable(False) tododoc: uncomment
         
         
         online_resources_menu.website_button = online_resources_menu.Append(
             -1, 'Official &website...',
             ' Open the official GarlicSim website in your browser'
         )
-        
         self.Bind(
             wx.EVT_MENU,
             lambda event: webbrowser.open_new_tab('http://garlicsim.org'),
@@ -537,7 +491,6 @@ tree''', wx.ITEM_CHECK
             ''' Open the page with info about GarlicSim mailing lists\
 in your browser'''
         )
-        
         self.Bind(
             wx.EVT_MENU,
             lambda event: webbrowser.open_new_tab(
@@ -551,7 +504,6 @@ in your browser'''
             -1, '&Blog...',
             ' Open the GarlicSim blog in your browser'
         )
-        
         self.Bind(
             wx.EVT_MENU,
             lambda event: webbrowser.open_new_tab(
@@ -565,7 +517,6 @@ in your browser'''
             -1, 'Code &repository...',
             ' Open the GitHub code repository for GarlicSim in your browser'
         )
-        
         self.Bind(
             wx.EVT_MENU,
             lambda event: webbrowser.open_new_tab(
@@ -582,7 +533,6 @@ in your browser'''
             wx.ID_ABOUT, '&About GarlicSim...',
             ' Tell me a little bit about the GarlicSim software'
         )
-        
         self.Bind(
             wx.EVT_MENU,
             lambda event: \
@@ -590,8 +540,19 @@ in your browser'''
             help_menu.about_button
         )
         
+        self._recalculate_all_menus()
         
+        
+    def _recalculate_all_menus(self):
+        try_recalculate = lambda thing: \
+            thing._recalculate() if hasattr(thing, '_recalculate') else None
+        for (menu, label) in self.menu_bar.GetMenus():
+            for item in menu.GetMenuItems():
+                try_recalculate(item)
+            try_recalculate(menu)
+        try_recalculate(self.menu_bar)
 
+    
     def on_close(self, event):
         '''Close the application window.'''
         if self.gui_project:

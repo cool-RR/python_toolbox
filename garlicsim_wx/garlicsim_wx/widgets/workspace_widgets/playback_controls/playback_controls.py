@@ -229,7 +229,7 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
             self.gui_project.emitter_system.make_emitter(
                 inputs=(
                     self.gui_project.playing_toggled_emitter,
-                    self.gui_project.active_node_changed_emitter,
+                    self.gui_project.active_node_changed_or_modified_emitter,
                     self.gui_project.active_node_finalized_emitter
                 ),
                 outputs=(

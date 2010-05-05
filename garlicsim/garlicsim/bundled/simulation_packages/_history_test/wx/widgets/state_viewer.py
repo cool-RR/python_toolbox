@@ -28,7 +28,7 @@ class StateViewer(wx.Window, garlicsim_wx.widgets.WorkspaceWidget):
         self.Bind(wx.EVT_PAINT, self.on_paint)
         self.radius = 60
         
-        self.gui_project.active_node_changed_emitter.add_output(
+        self.gui_project.active_node_changed_or_modified_emitter.add_output(
             lambda: self.load_state(self.gui_project.get_active_state())
         )
         

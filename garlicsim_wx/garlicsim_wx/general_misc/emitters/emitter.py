@@ -10,6 +10,9 @@ See its documentation for more info.
 # todo: there should probably be some circularity check. Maybe actually
 # circularity should be permitted?
 
+# todo: make some way to emit from multiple emitters simulataneously, saving
+# redundant calls to shared callable outputs.
+
 import itertools
 from garlicsim.general_misc import cute_iter_tools
 from garlicsim.general_misc import misc_tools

@@ -52,7 +52,7 @@ class Emitter(OriginalEmitter):
         if self.emitter_system._cache_rebuilding_frozen == 0:
             OriginalEmitter._recalculate_total_callable_outputs_recursively(self)
         
-    def add_input(self, emitter):
+    def add_input(self, emitter): # todo: ability to add plural in same method
         '''
         Add an emitter as an input to this emitter.
 
@@ -61,7 +61,7 @@ class Emitter(OriginalEmitter):
         assert emitter in self.emitter_system.emitters
         OriginalEmitter.add_input(self, emitter)
     
-    def add_output(self, thing):
+    def add_output(self, thing): # todo: ability to add plural in same method
         '''
         Add an emitter or a callable as an output to this emitter.
         

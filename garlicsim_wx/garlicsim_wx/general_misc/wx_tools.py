@@ -39,3 +39,9 @@ def get_background_brush():
     result = wx.Brush(get_background_color())
     _background_brush = result
     return result
+
+def post_event(evt_handler, event_binder, source=None):
+    # todo: Use wherever I post events
+    event = wx.PyEvent(source.GetId() if source else 0)
+    event.SetEventType(event_binder.evtType[0])
+    wx.PostEvent(evt_handler, event)
