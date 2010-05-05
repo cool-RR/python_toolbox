@@ -349,6 +349,8 @@ those that are selected'''
         block_menu = menu_bar.block_menu = wx.Menu()
 
         menu_bar.Append(block_menu, '&Block')
+
+        menu_bar.EnableTop(menu_bar.FindMenu('Block'), False)
         
         
         block_menu.split_button = block_menu.Append(

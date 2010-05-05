@@ -231,12 +231,20 @@ class GuiProject(object):
             )
             # todo: should possibly take input from pseudoclock_modified_emitter
             
-            self.active_node_set_from_none_to_node = es.make_emitter(
+            self.active_node_set_from_none_to_node_emitter = es.make_emitter(
                 name='active node set from none to node'
             )
             
-            self.active_node_set_from_node_to_none = es.make_emitter(
+            self.active_node_set_from_node_to_none_emitter = es.make_emitter(
                 name='active node set from node to none'
+            )
+            
+            self.active_block_set_from_none_to_block_emitter = es.make_emitter(
+                name='active block set from none to block'
+            )
+            
+            self.active_block_set_from_block_to_none_emitter = es.make_emitter(
+                name='active block set from block to none'
             )
             
             self.path_changed_emitter = es.make_emitter(
@@ -278,16 +286,30 @@ class GuiProject(object):
 
     
     def __init_menu_enablings(self):
-        self.active_node_set_from_node_to_none.add_output(
+        self.active_node_set_from_node_to_none_emitter.add_output(
             lambda: self.frame.menu_bar.EnableTop(
                 self.frame.menu_bar.FindMenu('Node'),
                 False
             )
         )
         
-        self.active_node_set_from_none_to_node.add_output(
+        self.active_node_set_from_none_to_node_emitter.add_output(
             lambda: self.frame.menu_bar.EnableTop(
                 self.frame.menu_bar.FindMenu('Node'),
+                True
+            )
+        )
+        
+        self.active_block_set_from_block_to_none_emitter.add_output(
+            lambda: self.frame.menu_bar.EnableTop(
+                self.frame.menu_bar.FindMenu('Block'),
+                False
+            )
+        )
+        
+        self.active_block_set_from_none_to_block_emitter.add_output(
+            lambda: self.frame.menu_bar.EnableTop(
+                self.frame.menu_bar.FindMenu('Block'),
                 True
             )
         )
@@ -438,14 +460,27 @@ class GuiProject(object):
     def _set_active_node(self, node):
         '''Set the active node, displaying it onscreen. Internal use.'''
         if self.active_node != node:
+            
             old_active_node = self.active_node
+            
             self.active_node = node
-            if old_active_node is None:
-                self.active_node_set_from_none_to_node.emit()
-            elif node is None:
-                self.active_node_set_from_node_to_none.emit()
-            else:
+            
+            if old_active_node is None: # node is not None
+                self.active_node_set_from_none_to_node_emitter.emit()
+                if node.block:
+                    self.active_block_set_from_none_to_block_emitter.emit()
+                    
+            elif node is None: # old_active_node is not None
+                self.active_node_set_from_node_to_none_emitter.emit()
+                if old_active_node.block:
+                    self.active_block_set_from_block_to_none_emitter.emit()
+                    
+            else: # (node is not None) and (old_active_node is not None)
                 self.active_node_changed_emitter.emit()
+                if old_active_node.block is not None and node.block is None:
+                    self.active_block_set_from_block_to_none_emitter.emit()
+                elif old_active_node.block is None and node.block is not None:
+                    self.active_block_set_from_none_to_block_emitter.emit()
         
     
     def set_active_node(self, node, modify_path=True):
