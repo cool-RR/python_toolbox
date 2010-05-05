@@ -235,7 +235,7 @@ class Frame(wx.Frame):
         
                 
         edit_menu.clear_button = edit_menu.Append(
-            -1, '&Clear\tDel',
+            -1, 'Cl&ear\tDel',
             ' Delete the current selection'
         )
 
@@ -246,7 +246,7 @@ class Frame(wx.Frame):
 
 
         edit_menu.select_all_button = edit_menu.Append(
-            -1, 'Select All\tCtrl+A',
+            -1, 'Select &All\tCtrl+A',
             ' Select all the nodes'
         )
 
@@ -270,6 +270,15 @@ those that are selected'''
         edit_menu.invert_selection_button.Enable(False)
         
         
+        edit_menu.AppendSeparator()
+        
+        
+        edit_menu.merge_to_blocks_button = edit_menu.Append(
+            -1, 'Merge to blocks where possible',
+            ' Merge adjacant nodes to blocks, where possible'
+        )
+
+        edit_menu.merge_to_blocks_button.Enable(False)
         
         
         edit_menu.AppendSeparator()
@@ -324,6 +333,27 @@ those that are selected'''
         )
 
         node_menu.delete_button.Enable(False)
+        
+        
+        block_menu = menu_bar.block_menu = wx.Menu()
+
+        menu_bar.Append(block_menu, '&Block')
+        
+        
+        block_menu.split_button = block_menu.Append(
+            -1, '&Split active block...',
+            " Split the active block into two separate blocks"
+        )
+
+        block_menu.split_button.Enable(False)
+        
+        
+        block_menu.scatter_button = block_menu.Append( # todo: rename
+            -1, 'S&catter active block...',
+            " Scatter the active block, leaving all its nodes blockless"
+        )
+
+        block_menu.scatter_button.Enable(False)
         
         
         window_menu = menu_bar.window_menu = wx.Menu()
