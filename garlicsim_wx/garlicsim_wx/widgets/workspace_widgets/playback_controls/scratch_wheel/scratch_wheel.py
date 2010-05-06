@@ -7,6 +7,8 @@ Defines the ScratchWheel class.
 See its documentation for more info.
 '''
 
+# todo: currently has horrible cruft
+
 from __future__ import division
 
 import wx
@@ -51,12 +53,11 @@ class ScratchWheel(wx.Panel):
         
         assert isinstance(self.gui_project, garlicsim_wx.GuiProject)
         
-        self.frame_number_that_should_be_drawn = 0
-        '''Serial number of the frame that should be drawn.'''
-        
         self.current_frame_number = -1
         '''Serial number of the frame that is currently drawn.'''
         # Set to -1 to make sure first drawing won't fuck up
+        
+        self.current_blur_alpha = 0.
         
         self.current_bitmap = None
         
@@ -190,16 +191,16 @@ class ScratchWheel(wx.Panel):
         if frame_number == images.N_FRAMES:
             frame_number =- 1
         
-        if self.frame_number_that_should_be_drawn != frame_number:
-            self.frame_number_that_should_be_drawn = frame_number
+        if self.current_frame_number != frame_number:
+            self.current_frame_number = frame_number
             if possibly_refresh:
                 self.Refresh()
-            
         
         self.__update_motion_blur_bitmap(possibly_refresh)
         
         self.recalculation_flag = False
     
+        
     def __update_motion_blur_bitmap(self, possibly_refresh):
         '''
         Check the speed and update the motion blur bitmap if necessary.
@@ -215,6 +216,7 @@ class ScratchWheel(wx.Panel):
         d_angle = current[1] - last[1]
         
         if d_time < self.velocity_time_sampling_minimum:
+            self.motion_blur_update_timer.Start(30)
             return
             # This protects us from two things: Having a grossly inaccurate
             # velocity reading because of tiny sample, and having a division by
@@ -229,17 +231,21 @@ class ScratchWheel(wx.Panel):
         alpha = min(alpha, 0.8)
         # I'm limiting the alpha, still want to see some animation
         
-        new_bitmap = images.get_blurred_gear_image(
-            self.frame_number_that_should_be_drawn,
+        self.current_blur_alpha = alpha
+        
+        new_bitmap = images.get_blurred_gear_image_by_ratio(
+            self.current_frame_number,
             alpha
         )
         
         if self.current_bitmap is not new_bitmap:
-            self.current_bitmap = new_bitmap
+            # No need to do this:
+            # self.current_bitmap = new_bitmap
+            # The `on_paint` handler will do it anyway
             if possibly_refresh:
                 self.Refresh()
         
-        if new_bitmap.blur_raw is not images.get_blurred_image_raw(0):
+        if new_bitmap.blur_raw is not images.get_blur_image_raw(0):
             # We have a non-zero visible motion blur
             self.motion_blur_update_timer.Start(30)
         else:
@@ -247,6 +253,7 @@ class ScratchWheel(wx.Panel):
             
         self.last_tracked_time_and_angle = current
             
+        
     def on_paint(self, event):
         '''EVT_PAINT handler.'''
         # todo: optimization: if motion blur is (rounded to) zero, don't draw
@@ -261,12 +268,18 @@ class ScratchWheel(wx.Panel):
         bw, bh = self.GetWindowBorderSize()
         
         ox, oy = ((4 - bw) / 2 , (4 - bh) / 2)
+
+        self.current_bitmap = images.get_blurred_gear_image_by_ratio(
+            self.current_frame_number,
+            self.current_blur_alpha
+        )
         
-        bitmap = images.get_image(self.frame_number_that_should_be_drawn)
+        #print(self.current_frame_number,
+            #self.current_blur_alpha)
+        
         dc = wx.PaintDC(self)
         dc.DrawBitmap(self.current_bitmap, ox, oy)
         # todo: Is the way I draw the bitmap the fastest way?
-        self.current_frame_number = self.frame_number_that_should_be_drawn
             
     def on_mouse_event(self, e):
         '''EVT_MOUSE_EVENTS handler.'''
