@@ -40,8 +40,31 @@ def get_background_brush():
     _background_brush = result
     return result
 
+
 def post_event(evt_handler, event_binder, source=None):
     # todo: Use wherever I post events
     event = wx.PyEvent(source.GetId() if source else 0)
     event.SetEventType(event_binder.evtType[0])
     wx.PostEvent(evt_handler, event)
+    
+    
+def add_menus(menus, title='', style=0):
+    
+    big_menu = wx.Menu(title, style)
+
+    first_run = True
+
+    for menu in menus:
+        
+        if not first_run:
+            big_menu.AppendSeparator()
+        else:
+            first_run = False
+            
+        for item in menu.GetMenuItems():
+            big_menu.AppendItem(item)
+        
+    
+        
+
+

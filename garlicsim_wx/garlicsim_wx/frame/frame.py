@@ -62,7 +62,7 @@ class Frame(wx.Frame):
         
         self.CreateStatusBar()
         
-        self.__init_menu_bar()        
+        self.__init_menus()        
         
         self.background_timer = thread_timer.ThreadTimer(self)
         
@@ -81,7 +81,7 @@ class Frame(wx.Frame):
         self.Maximize()
 
         
-    def __init_menu_bar(self):
+    def __init_menus(self):
                 
         
         menu_bar = self.menu_bar = wx.MenuBar()
@@ -339,7 +339,7 @@ those that are selected'''
         
         block_menu.scatter_button = block_menu.Append( # todo: rename
             -1, 'S&catter active block...',
-            " Scatter the active block, leaving all its nodes blockless"
+            ' Scatter the active block, leaving all its nodes blockless'
         )
         block_menu.scatter_button.Enable(False)
         
@@ -351,7 +351,8 @@ those that are selected'''
         window_menu.workspace_menu = workspace_menu = wx.Menu()
         window_menu.workspace_menu_button = window_menu.AppendMenu(
             -1, '&Workspace', window_menu.workspace_menu,
-            ' Manipulate the workspace, i.e. the arrangement of widgets on the screen'
+            ''' Manipulate the workspace, i.e. the arrangement of widgets \
+on the screen'''
         )
         # window_menu.workspace_menu_button.Enable(False) tododoc: uncomment
         
@@ -539,6 +540,7 @@ in your browser'''
                 garlicsim_wx.widgets.misc.AboutDialog(self).ShowModal(),
             help_menu.about_button
         )
+        
         
         self._recalculate_all_menus()
         

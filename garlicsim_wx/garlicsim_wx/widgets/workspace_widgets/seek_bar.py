@@ -50,6 +50,13 @@ class SeekBar(wx.Panel, WorkspaceWidget):
         
         self.unscreenify = lambda x: (x/self.zoom)+self.start
         '''Translate from on-screen coordinate to time point.'''
+        
+        self.menu = wx_tools.add_menus(
+            (
+                self.frame.menu_bar.node_menu,
+                self.frame.menu_bar.block_menu
+            )
+        )
 
         self.was_playing_before_mouse_click = None
         self.was_playing_before_mouse_click_but_then_paused_and_mouse_left = None
@@ -219,7 +226,7 @@ class SeekBar(wx.Panel, WorkspaceWidget):
 
             if self.gui_project.active_node is not None:
                 self.gui_project.frame.Refresh()
-                self.PopupMenu(self.frame.menu_bar.node_menu, e.GetPosition())
+                self.PopupMenu(self.menu, e.GetPosition())
 
 
 
