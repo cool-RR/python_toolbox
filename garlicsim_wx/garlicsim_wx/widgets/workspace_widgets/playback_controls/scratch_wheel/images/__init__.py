@@ -3,88 +3,87 @@
 
 '''Images package.'''
 
+# todo optimization: ensure these pictures are saved as black&white, possibly
+# low depth.
+
 import wx
 import pkg_resources
+
+from garlicsim.general_misc import caching
 
 from . import images as __images_package
 images_package = __images_package.__name__
 
+
 N_FRAMES = 87
 N_BLURRED_GEAR_FRAMES = 6
 
-cached_images = []
-cached_blurred_gear_images = []
-
-def get_image(i):
-    '''Get image number `i` of the gear, when 0 <= i <= (N_FRAMES - 1).'''
+@caching.cache
+def get_image_raw(i):
+    '''Get image number `i` of the gear, when 0 <= i <= (N_FRAMES - 1).tododoc'''
     
-    global N_FRAMES, cached_images
+    assert (0 <= i <= N_FRAMES - 1) and isinstance(i, int)
     
-    assert isinstance(i, int) and 0 <= i <= (N_FRAMES - 1)
-    if not cached_images:
-        for j in range(N_FRAMES):
-            file_name = 'gear%04.d.png' % j
-            stream = pkg_resources.resource_stream(images_package,
-                                                   file_name)
-            bitmap = wx.BitmapFromImage(
-                wx.ImageFromStream(
-                    stream,
-                    wx.BITMAP_TYPE_ANY
-                )
-            )
+    file_name = 'gear%04.d.png' % i
+    stream = pkg_resources.resource_stream(images_package, file_name)
+    bitmap = wx.BitmapFromImage(
+        wx.ImageFromStream(
+            stream,
+            wx.BITMAP_TYPE_ANY
+        )
+    )
+    
+    return bitmap
             
-            cached_images.append(bitmap)
-    
-    assert len(cached_images) == N_FRAMES
-    
-    return cached_images[i]
 
-def get_blurred_gear_image(i):
+@caching.cache
+def get_blur_image_raw(i):
     '''
-    Get image number `i` of the blurred gear.
+    Get image number `i` of the blurred gear.tododoc
 
     The higher the `i`, the blurrier is the image.
     
     0 <= i <= (N_BLURRED_GEAR_FRAMES - 1).
     '''
     
-    global N_FRAMES, cached_blurred_gear_images
-    
     assert isinstance(i, int) and 0 <= i <= (N_BLURRED_GEAR_FRAMES - 1)
-    if not cached_blurred_gear_images:
-        for j in range(N_BLURRED_GEAR_FRAMES):
-            file_name = 'blurred_gear_%d.png' % j
-            stream = pkg_resources.resource_stream(images_package,
-                                                   file_name)
-            bitmap = wx.BitmapFromImage(
-                wx.ImageFromStream(
-                    stream,
-                    wx.BITMAP_TYPE_ANY
-                )
-            )
-            
-            cached_blurred_gear_images.append(bitmap)
     
-    assert len(cached_blurred_gear_images) == N_BLURRED_GEAR_FRAMES
-    
-    return cached_blurred_gear_images[i]
+    file_name = 'blurred_gear_%d.png' % i
+    stream = pkg_resources.resource_stream(images_package, file_name)
+    bitmap = wx.BitmapFromImage(
+        wx.ImageFromStream(
+            stream,
+            wx.BITMAP_TYPE_ANY
+        )
+    )
 
-def get_blurred_gear_image_by_ratio(r):
-    '''Get the image of the blurred gear by specifying a ratio from 0 to 1.'''
+    return bitmap
+
+
+@caching.cache
+def get_blurred_gear_image(i, j):
+    '''tododoc'''
+    image = get_image_raw(i)
+    blur = get_blur_image_raw(j)
+    bitmap = wx.EmptyBitmap(*get_image_size())
+    dc = wx.MemoryDC(bitmap)
+    dc.DrawBitmap(image, 0, 0)
+    dc.DrawBitmap(blur, 0, 0, True)
+    dc.Destroy()
+    return bitmap
+    
+
+def get_blurred_gear_image_by_ratio(i, r):
+    '''Get the image of the blurred gear by specifying a ratio from 0 to 1.tododoc'''
     assert 0 <= r <= 1
     return get_blurred_gear_image(
+        i,
         int(round(r * (N_BLURRED_GEAR_FRAMES - 1)))
     )
 
-cached_image_size = None
 
+@caching.cache
 def get_image_size():
     '''Get the size of these images here.'''
-    global cached_image_size
-    
-    if cached_image_size is None:
-        image = get_image(0)
-        cached_image_size = image.GetSize()
-    
-    return cached_image_size
+    return get_image_raw(0).GetSize()
     
