@@ -16,6 +16,8 @@ import wx.html
 
 import garlicsim_wx
 
+from bitmap_viewer import BitmapViewer
+
 from . import images as __images_package
 images_package = __images_package.__name__
 
@@ -51,6 +53,8 @@ class AboutDialog(wx.Dialog):
         )
         v_sizer.Add(self.static_bitmap, 0)
         
+        self.static_bitmap.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
+        self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
         
         
         self.html_window = wx.html.HtmlWindow(self, size=(628, 270))
