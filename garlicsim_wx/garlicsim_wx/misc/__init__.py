@@ -11,3 +11,4 @@ These objects are important enough to be defined near the root of the
 from simpack_wx_grokker import SimpackWxGrokker
 import aui
 import icon_bundle
+from menu_bar import MenuBar

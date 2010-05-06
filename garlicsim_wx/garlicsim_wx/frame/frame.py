@@ -84,10 +84,15 @@ class Frame(wx.Frame):
     def __init_menus(self):
                 
         
+        menu_bar = self.menu_bar = garlicsim_wx.misc.MenuBar(self)
+        self.SetMenuBar(menu_bar)
+        
+        """
         menu_bar = self.menu_bar = wx.MenuBar()
         
         self.SetMenuBar(menu_bar)        
         
+    
 
         file_menu = menu_bar.file_menu = wx.Menu()
         menu_bar.Append(file_menu, '&File')
@@ -543,6 +548,7 @@ in your browser'''
         
         
         self._recalculate_all_menus()
+        """
         
         
     def _recalculate_all_menus(self):
