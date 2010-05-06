@@ -17,6 +17,7 @@ from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
 
 from garlicsim_wx.widgets import WorkspaceWidget
 import garlicsim
+import garlicsim_wx
 
 
 __all__ = ["SeekBar"]
@@ -51,11 +52,9 @@ class SeekBar(wx.Panel, WorkspaceWidget):
         self.unscreenify = lambda x: (x/self.zoom)+self.start
         '''Translate from on-screen coordinate to time point.'''
         
-        self.menu = wx_tools.add_menus(
-            (
-                self.frame.menu_bar.node_menu,
-                self.frame.menu_bar.block_menu
-            )
+        self.menu = garlicsim_wx.general_misc.cute_menu.CuteMenu.add_menus(
+            [garlicsim_wx.misc.menu_bar.node_menu.NodeMenu(self.frame),
+             garlicsim_wx.misc.menu_bar.block_menu.BlockMenu(self.frame)]
         )
 
         self.was_playing_before_mouse_click = None
