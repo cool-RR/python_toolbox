@@ -14,8 +14,9 @@ import pkg_resources
 
 import wx.html
 
-import garlicsim_wx
+from garlicsim_wx.general_misc import wx_tools
 
+import garlicsim_wx
 from bitmap_viewer import BitmapViewer
 
 from . import images as __images_package
@@ -46,15 +47,11 @@ class AboutDialog(wx.Dialog):
             )
         )
         
-        self.static_bitmap = wx.StaticBitmap(
-            self,
-            -1,
-            wx.BitmapFromImage(self._original_image)
-        )
-        v_sizer.Add(self.static_bitmap, 0)
+        self.bitmap_viewer = BitmapViewer(self, size=(627, 271))
+        v_sizer.Add(self.bitmap_viewer, 0)
         
-        self.static_bitmap.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
-        self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
+        #self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
+        #self.SetBackgroundColour(wx_tools.get_background_color())
         
         
         self.html_window = wx.html.HtmlWindow(self, size=(628, 270))
@@ -143,7 +140,7 @@ class AboutDialog(wx.Dialog):
         new_image = self._original_image.Copy()
         t = time.time()
         new_image.RotateHue((t / 50.) % 1)
-        self.static_bitmap.SetBitmap(wx.BitmapFromImage(new_image))
+        self.bitmap_viewer.set_bitmap(wx.BitmapFromImage(new_image))
 
         
     def EndModal(self, *args, **kwargs):
