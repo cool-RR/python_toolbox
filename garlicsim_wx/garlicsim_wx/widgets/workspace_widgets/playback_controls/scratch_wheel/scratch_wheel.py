@@ -58,6 +58,8 @@ class ScratchWheel(wx.Panel):
         '''Serial number of the frame that is currently drawn.'''
         # Set to -1 to make sure first drawing won't fuck up
         
+        self.current_bitmap = None
+        
         self.image_size = images.get_image_size()
         '''The size of the gear image.'''
         
@@ -94,9 +96,6 @@ class ScratchWheel(wx.Panel):
         
         self.velocity_for_maximal_motion_blur = 10
         '''Velocity in which the scratch wheel will get maximal motion blur.'''
-        
-        self.current_motion_blur_bitmap = None
-        '''The current bitmap to use for motion blur.'''
         
         self.velocity_time_sampling_minimum = 0.07
         '''The minimum interval over which we can measure the gear's velocity.'''
@@ -230,21 +229,20 @@ class ScratchWheel(wx.Panel):
         alpha = min(alpha, 0.8)
         # I'm limiting the alpha, still want to see some animation
         
-        new_motion_blur_image = images.get_blurred_gear_image_by_ratio(alpha)
+        new_bitmap = images.get_blurred_gear_image(
+            self.frame_number_that_should_be_drawn,
+            alpha
+        )
         
-        if self.current_motion_blur_bitmap != new_motion_blur_image:
-            self.current_motion_blur_bitmap = new_motion_blur_image
+        if self.current_bitmap is not new_bitmap:
+            self.current_bitmap = new_bitmap
             if possibly_refresh:
                 self.Refresh()
         
-        if new_motion_blur_image is not \
-           images.get_blurred_gear_image_by_ratio(0):
+        if new_bitmap.blur_raw is not images.get_blurred_image_raw(0):
             # We have a non-zero visible motion blur
-            
             self.motion_blur_update_timer.Start(30)
-        
         else:
-            
             self.motion_blur_update_timer.Stop()
             
         self.last_tracked_time_and_angle = current
@@ -266,8 +264,7 @@ class ScratchWheel(wx.Panel):
         
         bitmap = images.get_image(self.frame_number_that_should_be_drawn)
         dc = wx.PaintDC(self)
-        dc.DrawBitmap(bitmap, ox, oy)
-        dc.DrawBitmap(self.current_motion_blur_bitmap, ox, oy, useMask=True)
+        dc.DrawBitmap(self.current_bitmap, ox, oy)
         # todo: Is the way I draw the bitmap the fastest way?
         self.current_frame_number = self.frame_number_that_should_be_drawn
             
