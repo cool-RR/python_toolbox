@@ -62,7 +62,7 @@ def get_blurred_gear_image(i, j):
     '''tododoc'''
     image = get_image_raw(i)
     blur = get_blur_image_raw(j)
-    bitmap = wx.EmptyBitmap(*get_image_size(), depth=8)
+    bitmap = wx.EmptyBitmap(*get_image_size())
     dc = wx.MemoryDC(bitmap)
     dc.DrawBitmap(image, 0, 0)
     dc.DrawBitmap(blur, 0, 0, True)
