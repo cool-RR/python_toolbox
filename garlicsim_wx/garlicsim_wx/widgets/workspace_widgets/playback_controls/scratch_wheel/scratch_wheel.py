@@ -98,7 +98,7 @@ class ScratchWheel(wx.Panel):
         self.current_motion_blur_bitmap = None
         '''The current bitmap to use for motion blur.'''
         
-        self.velocity_time_sampling_minimum = 0.05
+        self.velocity_time_sampling_minimum = 0.07
         '''The minimum interval over which we can measure the gear's velocity.'''
         
         self.was_playing_before_drag = None
@@ -136,7 +136,10 @@ class ScratchWheel(wx.Panel):
                 ),
                 outputs=(
                     FlagRaiser(self, 'recalculation_flag',
-                               function=self._recalculate, delay=0.03),
+                               function=self._recalculate),
+                    # todo: There was originally delay=0.03 here, but it made 
+                    # things too sluggish so I removed it. Will this cause a
+                    # problem?
                 ),
                 name='needs_recalculation',
             )
