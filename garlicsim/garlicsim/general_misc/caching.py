@@ -1,0 +1,24 @@
+
+# todo: use this in all the places where i `get` shit in garlicsim_wx, like
+# get_background_brush
+
+import functools
+
+def cache(function):
+    # todo: kwargs support
+    if hasattr(function, 'cache'): return function
+    
+    def cached(*args):
+        
+        try:
+            return cached.cache[args]
+        except KeyError:
+            cached.cache[args] = value = function(*args)
+            return value
+            
+    cached.cache = {} # weakref.WeakKeyDictionary()
+    # todo: no weakref on this baby, be advised
+    
+    functools.update_wrapper(cached, function)
+    
+    return cached
