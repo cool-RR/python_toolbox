@@ -18,7 +18,10 @@ except ImportError:
 # tododoc: the py2exe parts assume `garlicsim` is in the neighboring directory
 # like in the git repo
 
+# tododoc: move all the py2exe parts to `py2exe_cruft`
+
 # tododoc: document this module exhaustively.
+
 
 path_to_garlicsim = os.path.abspath('../garlicsim')
 if path_to_garlicsim not in sys.path:
@@ -91,7 +94,6 @@ def get_all_data_files():
     return get_garlicsim_wx_data_files() + get_garlicsim_data_files() + \
            get_dlls_and_stuff()
 
-d=get_dlls_and_stuff()
 
 my_long_description = \
 '''\
@@ -100,7 +102,7 @@ garlicsim_wx, a wxPython GUI for garlicsim.
 The final goal of this project is to become a fully-fledged application for
 working with simulations, friendly enough that it may be used by
 non-programmers.
-'''
+d'''
 
 
 my_classifiers = [

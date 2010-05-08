@@ -131,7 +131,7 @@ class Frame(wx.Frame):
                 we_are_main_program = ('run_gui' in main_script) or \
                                     ('garlicsim_wx' in main_script)
             
-            if not we_are_main_program or True:
+            if not we_are_main_program:
                 dialog = \
                     garlicsim_wx.widgets.misc.NotMainProgramWarningDialog(self)
                 if dialog.ShowModal() != wx.ID_YES:
@@ -316,13 +316,35 @@ class Frame(wx.Frame):
     
     def on_open(self, event=None):
         '''Raise a dialog for opening a gui project from file.'''
-        wcd = 'GarlicSim Simulation Pickle (*.gssp)|*.gssp|All files (*)|*|'
-        cur_dir = os.getcwd()
+        
+        if self.gui_project is not None:
+            
+            if hasattr(sys, 'frozen'):
+                program_to_run = [sys.executable]
+                we_are_main_program = 'GarlicSim' in sys.executable
+            else:
+                main_script = os.path.abspath(sys.argv[0])
+                program_to_run = [sys.executable, main_script]
+                we_are_main_program = ('run_gui' in main_script) or \
+                                    ('garlicsim_wx' in main_script)
+            
+            if not we_are_main_program:
+                dialog = \
+                    garlicsim_wx.widgets.misc.NotMainProgramWarningDialog(self)
+                if dialog.ShowModal() != wx.ID_YES:
+                    return
+                
+        wildcard = 'GarlicSim Simulation Pickle (*.gssp)|*.gssp|All files (*)|*|'
+        
+        # Todo: something more sensible here. Ideally should be last place you
+        # saved in, but for starters can be desktop.
+        folder = os.getcwd()
+        
         gui_project_vars = None
 
         open_dialog = wx.FileDialog(self, message='Choose a file',
-                                    defaultDir=cur_dir, defaultFile='',
-                                    wildcard=wcd, style=wx.OPEN)
+                                    defaultDir=folder, defaultFile='',
+                                    wcd=wildcard, style=wx.OPEN)
         if open_dialog.ShowModal() == wx.ID_OK:
             path = open_dialog.GetPath()
             
@@ -375,12 +397,12 @@ class Frame(wx.Frame):
         '''Raise a dialog for saving a gui project to file.'''
         
         assert self.gui_project is not None
-        wcd = 'GarlicSim Simulation Pickle (*.gssp)|*.gssp|All files (*)|*|'
-        cur_dir = os.getcwd()
+        wildcard = 'GarlicSim Simulation Pickle (*.gssp)|*.gssp|All files (*)|*|'
+        folder = os.getcwd()
         try:
             save_dialog = wx.FileDialog(self, message='Save file as...',
-                                     defaultDir=cur_dir, defaultFile='',
-                                     wildcard=wcd,
+                                     defaultDir=folder, defaultFile='',
+                                     wcd=wildcard,
                                      style=wx.SAVE | wx.OVERWRITE_PROMPT)
             if save_dialog.ShowModal() == wx.ID_OK:
                 path = save_dialog.GetPath()
