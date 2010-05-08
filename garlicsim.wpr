@@ -5,7 +5,9 @@
 ##################################################################
 [project attributes]
 proj.directory-list = [{'dirloc': loc('.'),
-                        'excludes': (),
+                        'excludes': [u'garlicsim_wx/py2exe_dist',
+                                     u'garlicsim_wx/build',
+                                     u'garlicsim_wx/garlicsim_wx.egg-info'],
                         'filter': '*',
                         'include_hidden': False,
                         'recursive': True,

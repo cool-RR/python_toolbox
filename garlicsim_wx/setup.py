@@ -79,8 +79,8 @@ def get_dlls_and_stuff():
         folders_to_do += folders
         total_data_files.append(
             (
-                path.replace('./py2exe_cruft/dlls_and_stuff', ''),
-                [f for f in files]
+                os.path.relpath(path, './py2exe_cruft/dlls_and_stuff'),
+                files
             )
         )
     return total_data_files
@@ -132,10 +132,11 @@ setup_kwargs = {
 
 
 if 'py2exe' in sys.argv:
-
+    
     path_to_add = os.path.abspath('./py2exe_cruft')
     if path_to_add not in sys.path:
         sys.path.append(path_to_add)
+        # Adding it because there's some dll there that we need.
     
     py2exe_kwargs = {
         'description': 'Pythonic framework for computer simulations',
