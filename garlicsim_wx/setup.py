@@ -66,10 +66,32 @@ def get_garlicsim_data_files():
         total_data_files.append(('lib/' + path, data_files))
     return total_data_files
 
-def get_all_data_files():
-    return get_garlicsim_wx_data_files() + get_garlicsim_data_files()
+def get_dlls_and_stuff():
+    total_data_files = []
+    path_to_folder = './py2exe_cruft/dlls_and_stuff'
+    folders_to_do = [path_to_folder]
+    while folders_to_do:
+        path = folders_to_do.pop()
+        assert not os.path.isabs(path)
+        all_files_and_folders = glob.glob(path + '/*')
+        files = [f for f in all_files_and_folders if (not os.path.isdir(f))]
+        folders = [f for f in all_files_and_folders if os.path.isdir(f)]
+        folders_to_do += folders
+        total_data_files.append(
+            (
+                path.replace('./py2exe_cruft/dlls_and_stuff', ''),
+                [f for f in files]
+            )
+        )
+    return total_data_files
 
-g=get_garlicsim_data_files()
+
+def get_all_data_files():
+    '''For use in py2exe only.tododoc'''
+    return get_garlicsim_wx_data_files() + get_garlicsim_data_files() + \
+           get_dlls_and_stuff()
+
+d=get_dlls_and_stuff()
 
 my_long_description = \
 '''\
@@ -79,6 +101,7 @@ The final goal of this project is to become a fully-fledged application for
 working with simulations, friendly enough that it may be used by
 non-programmers.
 '''
+
 
 my_classifiers = [
     'Development Status :: 2 - Pre-Alpha',
@@ -90,11 +113,28 @@ my_classifiers = [
 ]
 
 
-more_kwargs = {}
+
+setup_kwargs = {
+    'name': 'garlicsim_wx',
+    'version': '0.4',
+    'requires': ['garlicsim (== 0.4)'],
+    'install_requires': ['garlicsim == 0.4'],
+    'description': 'Gui for garlicsim, a Pythonic framework for computer simulations',
+    'author': 'Ram Rachum',
+    'author_email': 'cool-rr@cool-rr.com',
+    'url': 'http://garlicsim.org',
+    'packages': garlicsim_wx_packages,
+    'license': 'Proprietary',
+    'long_description': my_long_description,
+    'classifiers': my_classifiers,
+    'include_package_data': True,
+}
+
 
 if 'py2exe' in sys.argv:
 
     py2exe_kwargs = {
+        'description': 'Pythonic framework for computer simulations',
         'windows': [
             {
                 'script': 'py2exe_cruft/GarlicSim.py',
@@ -118,22 +158,9 @@ if 'py2exe' in sys.argv:
         }
     }
 
-    more_kwargs.update(py2exe_kwargs)
+    setup_kwargs.update(py2exe_kwargs)
 
     
 setuptools.setup(
-    name='garlicsim_wx',
-    version='0.4',
-    requires=['garlicsim (== 0.4)'],
-    install_requires=['garlicsim == 0.4'],
-    description='Gui for garlicsim, a Pythonic framework for working with simulations',
-    author='Ram Rachum',
-    author_email='cool-rr@cool-rr.com',
-    url='http://garlicsim.org',
-    packages=garlicsim_wx_packages,
-    license='Proprietary',
-    long_description = my_long_description,
-    classifiers = my_classifiers,
-    include_package_data = True,
-    **more_kwargs
+    **setup_kwargs
 )

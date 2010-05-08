@@ -88,9 +88,7 @@ class Frame(wx.Frame):
         self.SetMenuBar(menu_bar)
         
         """
-                
-        
-        
+        tododoc: is this needed?
         self._recalculate_all_menus()
         """
         
@@ -138,9 +136,12 @@ class Frame(wx.Frame):
 
             if hasattr(sys, 'frozen'):
                 program = [sys.executable]
+                we_are_main_program = 'GarlicSim' in sys.executable
             else:
-                program = [sys.executable, os.path.abspath(sys.argv[0])]
-                # Todo: what if some other program is launching my code?
+                main_script = os.path.abspath(sys.argv[0])
+                program = [sys.executable, main_script]
+                we_are_main_program = ('run_gui' in main_script) or \
+                                    ('garlicsim_wx' in main_script)
                 
             program.append('__garlicsim_wx_new=%s' % simpack.__name__)
          
