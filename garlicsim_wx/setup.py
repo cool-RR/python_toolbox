@@ -151,9 +151,30 @@ if 'py2exe' in sys.argv:
         'options': {
             'py2exe': {
                 'dist_dir': 'py2exe_dist',
-                'packages': garlicsim_wx_packages,
                 'skip_archive': True,
-                'packages': 'garlicsim.bundled.simulation_packages',
+                'packages': [
+                    
+                    # Here you put packages you want py2exe to include with all
+                    # subpackages. Problem is, there's a bug in py2exe which
+                    # will make it think a non-package directory is a package if
+                    # it contains a package within it. Then it'll get listed as
+                    # a package, and when import time comes the script will
+                    # fail.
+                    
+                    # So there's a danger for us here: For example, we can't
+                    # include `numpy` because it has some `tests` folder which
+                    # falls under this bug.
+                    
+                    'garlicsim.bundled.simulation_packages',
+                    
+                    'numpy.core', 'numpy.lib', 'numpy.matlib', 'numpy.dual',
+                    'numpy.numarray', 'numpy.oldnumeric', 'numpy.ctypeslib',
+                    'numpy.testing', 'numpy.random', 'numpy.linalg', 'numpy.fft',
+                    
+                    'scipy',
+                    
+                    ],
+                    
             }
         }
     }

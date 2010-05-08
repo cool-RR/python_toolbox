@@ -7,6 +7,8 @@ import sys
 import os.path
 import multiprocessing
 
+import almost_import_stdlib
+
 use_psyco = False
 try:
     import psyco
