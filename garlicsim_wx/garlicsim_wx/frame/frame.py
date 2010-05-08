@@ -120,6 +120,23 @@ class Frame(wx.Frame):
     def on_new(self, event=None):
         '''Create a new gui project.'''        
         
+        if self.gui_project is not None:
+            
+            if hasattr(sys, 'frozen'):
+                program_to_run = [sys.executable]
+                we_are_main_program = 'GarlicSim' in sys.executable
+            else:
+                main_script = os.path.abspath(sys.argv[0])
+                program_to_run = [sys.executable, main_script]
+                we_are_main_program = ('run_gui' in main_script) or \
+                                    ('garlicsim_wx' in main_script)
+            
+            if not we_are_main_program:
+                dialog = \
+                    garlicsim_wx.widgets.misc.NotMainProgramWarningDialog(self)
+                if dialog.ShowModal() != wx.ID_OK:
+                    return
+        
         dialog = garlicsim_wx.widgets.misc.SimpackSelectionDialog(self)
         
         if dialog.ShowModal() == wx.ID_OK:
@@ -132,20 +149,11 @@ class Frame(wx.Frame):
         
         if self.gui_project is None:
             self._new_gui_project_from_simpack(simpack)
-        else:
-
-            if hasattr(sys, 'frozen'):
-                program = [sys.executable]
-                we_are_main_program = 'GarlicSim' in sys.executable
-            else:
-                main_script = os.path.abspath(sys.argv[0])
-                program = [sys.executable, main_script]
-                we_are_main_program = ('run_gui' in main_script) or \
-                                    ('garlicsim_wx' in main_script)
+        else:    
                 
-            program.append('__garlicsim_wx_new=%s' % simpack.__name__)
+            program_to_run.append('__garlicsim_wx_new=%s' % simpack.__name__)
          
-            subprocess.Popen(program)
+            subprocess.Popen(program_to_run)
             
             return
             
