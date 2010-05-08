@@ -7,7 +7,12 @@ import sys
 import os.path
 import multiprocessing
 
-import almost_import_stdlib
+if False:
+    # The `if False` is important here, even though `almost_import_stdlib`
+    # already has one wrapping it inside, because `almost_import_stdlib.py`
+    # won't get packaged at all with py2exe, so trying to import it will raise
+    # an ImportError.
+    import almost_import_stdlib
 
 use_psyco = False
 try:
