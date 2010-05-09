@@ -94,7 +94,7 @@ def history_cache(function, *args, **kwargs):
 
 if __name__ == '__main__': # make this into test
     import garlicsim
-    from garlicsim.bundled.simulation_packages import life
+    from garlicsim_lib.simpacks import life
 
     s = life.make_random_state(10, 10)
     

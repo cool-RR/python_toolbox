@@ -15,10 +15,10 @@ import itertools
 
 import garlicsim
 from garlicsim.general_misc import cute_iter_tools
-from garlicsim.bundled.simulation_packages import life
-from garlicsim.bundled.simulation_packages import prisoner
-from garlicsim.bundled.simulation_packages import _history_test
-from garlicsim.bundled.simulation_packages import queue
+from garlicsim_lib.simpacks import life
+from garlicsim_lib.simpacks import prisoner
+from garlicsim_lib.simpacks import _history_test
+from garlicsim_lib.simpacks import queue
 
 
 def _is_deterministic(simpack):

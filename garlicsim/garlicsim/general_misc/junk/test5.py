@@ -1,8 +1,8 @@
 import time
 import garlicsim
-from garlicsim.bundled.simulation_packages import life
-from garlicsim.bundled.simulation_packages import prisoner
-from garlicsim.bundled.simulation_packages import _history_test
+from garlicsim_lib.simpacks import life
+from garlicsim_lib.simpacks import prisoner
+from garlicsim_lib.simpacks import _history_test
 
 
 simpack = life

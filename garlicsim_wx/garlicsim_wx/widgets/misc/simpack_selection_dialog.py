@@ -24,13 +24,13 @@ class SimpackSelectionDialog(wx.SingleChoiceDialog):
         
     def make_simpack_list(self):
         '''Make a list of available simpacks.'''
-        import garlicsim.bundled.simulation_packages as simulation_packages
-        self.list_of_simpacks = find_subpackages(simulation_packages)
+        import garlicsim_lib.simpacks as simpacks
+        self.list_of_simpacks = find_subpackages(simpacks)
 
     def get_simpack_selection(self):
         '''Import the selected simpack and return it.'''
         string = self.GetStringSelection()
-        result = __import__("garlicsim.bundled.simulation_packages." + string,
+        result = __import__("garlicsim_lib.simpacks." + string,
                             fromlist=[''])
         return result
 

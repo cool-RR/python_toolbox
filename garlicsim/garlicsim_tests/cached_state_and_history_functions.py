@@ -5,7 +5,7 @@ import copy
 import nose
 
 import garlicsim
-from garlicsim.bundled.simulation_packages import life
+from garlicsim_lib.simpacks import life
 from garlicsim.misc import caching
 
 def cached_state_function_test():

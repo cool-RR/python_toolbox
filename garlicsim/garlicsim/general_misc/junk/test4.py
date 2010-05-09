@@ -1,6 +1,6 @@
 import time
 import garlicsim
-from garlicsim.bundled.simulation_packages import life
+from garlicsim_lib.simpacks import life
 
 state = life.make_random_state(40, 15)
 print(state)

@@ -172,7 +172,7 @@ if 'py2exe' in sys.argv:
                     # include `numpy` because it has some `tests` folder which
                     # falls under this bug.
                     
-                    'garlicsim.bundled.simulation_packages',
+                    'garlicsim_lib.simpacks',
                     
                     'numpy.core', 'numpy.lib', 'numpy.matlib', 'numpy.dual',
                     'numpy.numarray', 'numpy.oldnumeric', 'numpy.ctypeslib',

@@ -1,7 +1,7 @@
 import time
 import garlicsim
-from garlicsim.bundled.simulation_packages import life
-from garlicsim.bundled.simulation_packages import prisoner
+from garlicsim_lib.simpacks import life
+from garlicsim_lib.simpacks import prisoner
 
 simpack = life
 
