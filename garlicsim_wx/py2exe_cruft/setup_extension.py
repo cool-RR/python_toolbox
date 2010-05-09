@@ -190,25 +190,19 @@ def get_all_submodules(package_name):
     For example:    
     `get_all_subpackages('numpy') == ['numpy.core', 'numpy.random', ...]`
     '''
-    return [
-        (package_name + '.' + m) for m in 
-        setuptools.find_packages(
-            imp.find_module(package_name, sys.path)[1]
-        )
-    ]
-
-
-def get_strict_modules(package_name):
-    '''tododoc'''
     package_path = imp.find_module(package_name, sys.path)[1]
     return [module for (loader, module, is_package) in 
-            pkgutil.iter_modules(path, package_name + '.') if not is_package]
+            pkgutil.iter_modules([package_path], package_name + '.') if not is_package]    
+
+
+g=get_all_submodules('numpy')
+0
 
 
 # This is a list of packages that should be included in the library, with all
-# their subpackages. In theory, the `packages` option of py2exe should take care
+# their submodules. In theory, the `packages` option of py2exe should take care
 # of it, but it has bugs in it so we're doing this ourselves.
-packages_to_include_with_all_subpackages = [
+packages_to_include_with_all_submodules = [
     
     'garlicsim', 'garlicsim_lib',
     
@@ -220,8 +214,8 @@ packages_to_include_with_all_subpackages = [
 # List of modules to be included in the library.
 includes = reduce(
     list.__add__,
-    [get_all_subpackages(package_name) for package_name in \
-     packages_to_include_with_all_subpackages]
+    [get_all_submodules(package_name) for package_name in \
+     packages_to_include_with_all_submodules]
 )
 
 
