@@ -7,7 +7,7 @@
 
 import os
 import setuptools
-import distutils # Just for deleting the "build" directory.
+import distutils # Just for deleting the "build" directory. # todo: probably kill
 
 try:
     distutils.dir_util.remove_tree('build', verbose=True)
