@@ -32,8 +32,10 @@ try:
 except Exception:
     pass
 
+
 def package_to_path(package):
     return package.replace('.', '/')
+
 
 def get_garlicsim_packages():
     return ['garlicsim.' + p for p
@@ -42,12 +44,55 @@ def get_garlicsim_packages():
 
 garlicsim_packages = get_garlicsim_packages()
 
+
+def get_garlicsim_lib_packages():
+    return ['garlicsim_lib.' + p for p
+            in setuptools.find_packages('../garlicsim_lib/garlicsim_lib')] + \
+           ['garlicsim_lib']
+
+garlicsim_lib_packages = get_garlicsim_lib_packages()
+
+
 def get_garlicsim_wx_packages():
     return ['garlicsim_wx.' + p for p
             in setuptools.find_packages('./garlicsim_wx')] + \
            ['garlicsim_wx']
 
 garlicsim_wx_packages = get_garlicsim_wx_packages()
+
+
+def get_garlicsim_data_files():
+    total_data_files = []
+    for package in garlicsim_packages:
+        path = package_to_path(package)
+        all_files_and_folders = glob.glob(path_to_garlicsim + '/' + path + '/*')
+        data_files = [f for f in all_files_and_folders if
+                      (not '.py' in f[4:]) and (not os.path.isdir(f))]
+        total_data_files.append(('lib/' + path, data_files))
+    return total_data_files
+
+
+def get_garlicsim_data_files():
+    total_data_files = []
+    for package in garlicsim_packages:
+        path = package_to_path(package)
+        all_files_and_folders = glob.glob(path_to_garlicsim + '/' + path + '/*')
+        data_files = [f for f in all_files_and_folders if
+                      (not '.py' in f[4:]) and (not os.path.isdir(f))]
+        total_data_files.append(('lib/' + path, data_files))
+    return total_data_files
+
+
+def get_garlicsim_lib_data_files():
+    total_data_files = []
+    for package in garlicsim_lib_packages:
+        path = package_to_path(package)
+        all_files_and_folders = glob.glob(path_to_garlicsim + '/' + path + '/*')
+        data_files = [f for f in all_files_and_folders if
+                      (not '.py' in f[4:]) and (not os.path.isdir(f))]
+        total_data_files.append(('lib/' + path, data_files))
+    return total_data_files
+
 
 def get_garlicsim_wx_data_files():
     total_data_files = []
@@ -59,15 +104,6 @@ def get_garlicsim_wx_data_files():
         total_data_files.append(('lib/' + path, data_files))
     return total_data_files
 
-def get_garlicsim_data_files():
-    total_data_files = []
-    for package in garlicsim_packages:
-        path = package_to_path(package)
-        all_files_and_folders = glob.glob(path_to_garlicsim + '/' + path + '/*')
-        data_files = [f for f in all_files_and_folders if
-                      (not '.py' in f[4:]) and (not os.path.isdir(f))]
-        total_data_files.append(('lib/' + path, data_files))
-    return total_data_files
 
 def get_dlls_and_stuff():
     total_data_files = []
@@ -91,8 +127,8 @@ def get_dlls_and_stuff():
 
 def get_all_data_files():
     '''For use in py2exe only.tododoc'''
-    return get_garlicsim_wx_data_files() + get_garlicsim_data_files() + \
-           get_dlls_and_stuff()
+    return get_garlicsim_data_files() + get_garlicsim_lib_data_files() + \
+           get_garlicsim_wx_data_files() + get_dlls_and_stuff()
 
 
 my_long_description = \
@@ -119,9 +155,20 @@ my_classifiers = [
 setup_kwargs = {
     'name': 'garlicsim_wx',
     'version': '0.4',
-    'requires': ['garlicsim (== 0.4)'],
-    'install_requires': ['garlicsim == 0.4'],
-    'description': 'Gui for garlicsim, a Pythonic framework for computer simulations',
+    
+    # `garlicsim_lib` is not really required, but in practice the vast majority
+    # of users will want it, so we mark it as required in order it to simplify
+    # installation.
+    'requires': [
+        'garlicsim (== 0.4)'
+        'garlicsim_lib (== 0.4)'
+        ],
+    'install_requires': [
+        'garlicsim == 0.4'
+        'garlicsim_lib == 0.4'
+        ],
+    
+    'description': 'GUI for garlicsim, a Pythonic framework for computer simulations',
     'author': 'Ram Rachum',
     'author_email': 'cool-rr@cool-rr.com',
     'url': 'http://garlicsim.org',
@@ -153,7 +200,7 @@ if 'py2exe' in sys.argv:
                 ]
             }
             ],
-        'zipfile': 'lib/library.zip',
+        'zipfile': 'lib/library.zip', #tododoc: probably cancel
         'data_files': get_all_data_files(),
         'options': {
             'py2exe': {
