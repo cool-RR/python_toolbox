@@ -1,6 +1,8 @@
 # tododoc: document extensively
 
+import setuptools
 import py2exe
+import imp
 import sys, os.path, glob
 
 path_to_garlicsim = os.path.abspath('../../garlicsim')
@@ -17,7 +19,7 @@ def package_to_path(package):
 
 def get_garlicsim_packages():
     return ['garlicsim.' + p for p
-            in setuptools.find_packages('../garlicsim/garlicsim')] + \
+            in setuptools.find_packages('../../garlicsim/garlicsim')] + \
            ['garlicsim']
 
 garlicsim_packages = get_garlicsim_packages()
@@ -25,7 +27,7 @@ garlicsim_packages = get_garlicsim_packages()
 
 def get_garlicsim_lib_packages():
     return ['garlicsim_lib.' + p for p
-            in setuptools.find_packages('../garlicsim_lib/garlicsim_lib')] + \
+            in setuptools.find_packages('../../garlicsim_lib/garlicsim_lib')] + \
            ['garlicsim_lib']
 
 garlicsim_lib_packages = get_garlicsim_lib_packages()
@@ -33,7 +35,7 @@ garlicsim_lib_packages = get_garlicsim_lib_packages()
 
 def get_garlicsim_wx_packages():
     return ['garlicsim_wx.' + p for p
-            in setuptools.find_packages('./garlicsim_wx')] + \
+            in setuptools.find_packages('../garlicsim_wx')] + \
            ['garlicsim_wx']
 
 garlicsim_wx_packages = get_garlicsim_wx_packages()
@@ -98,6 +100,31 @@ def get_all_data_files():
            get_garlicsim_wx_data_files() + get_dlls_and_stuff()
 
 
+def get_all_subpackages(package_name):
+    return [
+        (package_name + '.' + m) for m in 
+        setuptools.find_packages(
+            imp.find_module(package_name)[1]
+        )
+    ]
+
+
+packages_to_include_with_all_subpackages = [
+    
+    'garlicsim', 'garlicsim_lib',
+    
+    'numpy', 'scipy'
+    
+]
+
+
+includes = reduce(
+    list.__add__,
+    [get_all_subpackages(package_name) for package_name in \
+     packages_to_include_with_all_subpackages]
+)
+
+
 py2exe_kwargs = {
     'description': 'Pythonic framework for computer simulations',
     'windows': [
@@ -117,32 +144,18 @@ py2exe_kwargs = {
         'py2exe': {
             'dist_dir': 'py2exe_dist',
             'skip_archive': True,
-            'packages': [
-                
-                # Here you put packages you want py2exe to include with all
-                # subpackages. Problem is, there's a bug in py2exe which
-                # will make it think a non-package directory is a package if
-                # it contains a package within it. Then it'll get listed as
-                # a package, and when import time comes the script will
-                # fail.
-                
-                # So there's a danger for us here: For example, we can't
-                # include `numpy` because it has some `tests` folder which
-                # falls under this bug.
-                
-                # Todo: Consider using pkgutil.walk_packages here instead of
-                # listing them manually. Also in `get_garlicsim_packages` and
-                # friends.
-                
-                'garlicsim_lib.simpacks',
-                
-                'numpy.core', 'numpy.lib', 'numpy.matlib', 'numpy.dual',
-                'numpy.numarray', 'numpy.oldnumeric', 'numpy.ctypeslib',
-                'numpy.testing', 'numpy.random', 'numpy.linalg', 'numpy.fft',
-                
-                'scipy',
-                
-                ],
+            
+            # tododoc.Here you put packages you want py2exe to include with all
+            # subpackages. Problem is, there's a bug in py2exe which will make
+            # it think a non-package directory is a package if it contains a
+            # package within it. Then it'll get listed as a package, and when
+            # import time comes the script will fail.
+            
+            # So there's a danger for us here: For example, we can't include
+            # `numpy` because it has some `tests` folder which falls under this
+            # bug.
+            
+            'includes': includes,
                 
         }
     }
