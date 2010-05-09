@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-garlicsim_wx, a wxPython GUI for garlicsim.
+A wxPython-based GUI for garlicsim.
 
 The final goal of this project is to become a fully-fledged application for
 working with simulations, friendly enough that it may be used by
@@ -29,7 +29,7 @@ __all__ = ['Frame', 'GuiProject', 'start']
 __version__ = '0.4'
 
 def start():
-    '''Start the gui.'''
+    '''Start the GUI.'''
     
     new_gui_project_simpack_name = None
     for arg in sys.argv:

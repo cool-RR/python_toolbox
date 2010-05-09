@@ -18,8 +18,6 @@ if 'py2exe' in sys.argv:
     import py2exe_cruft.setup_extension
 
 
-# tododoc: document this module exhaustively.
-
 # Automatically deleting the build directory, in case one was left over from
 # last time.
 try:
@@ -44,12 +42,12 @@ garlicsim_wx_packages = get_garlicsim_wx_packages()
 
 my_long_description = \
 '''\
-garlicsim_wx, a wxPython GUI for garlicsim.
+A wxPython-based GUI for garlicsim.
 
 The final goal of this project is to become a fully-fledged application for
 working with simulations, friendly enough that it may be used by
 non-programmers.
-d'''
+'''
 
 
 my_classifiers = [

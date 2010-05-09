@@ -17,6 +17,7 @@ import setuptools
 import py2exe
 import imp
 import sys, os.path, glob
+import pkgutil
 
 # This module is meant to be imported from the garlicsim_wx setup.py file, and
 # should not be used otherwise:
@@ -83,6 +84,13 @@ garlicsim_wx_packages = get_garlicsim_wx_packages()
 
 
 def get_garlicsim_data_files():
+    '''
+    Get garlicsim's data files.
+    
+    This returns a list of tuples, where the second item in each tuple is a list
+    of files and the first item is the path to which these files should be
+    copied when doing the py2exe packaging.
+    '''
     total_data_files = []
     for package in garlicsim_packages:
         path = package_to_path(package)
@@ -95,6 +103,13 @@ def get_garlicsim_data_files():
 
 
 def get_garlicsim_lib_data_files():
+    '''
+    Get garlicsim_lib's data files.
+    
+    This returns a list of tuples, where the second item in each tuple is a list
+    of files and the first item is the path to which these files should be
+    copied when doing the py2exe packaging.
+    '''
     total_data_files = []
     for package in garlicsim_lib_packages:
         path = package_to_path(package)
@@ -107,6 +122,13 @@ def get_garlicsim_lib_data_files():
 
 
 def get_garlicsim_wx_data_files():
+    '''
+    Get garlicsim_wx's data files.
+    
+    This returns a list of tuples, where the second item in each tuple is a list
+    of files and the first item is the path to which these files should be
+    copied when doing the py2exe packaging.
+    '''
     total_data_files = []
     for package in garlicsim_wx_packages:
         path = package_to_path(package)
@@ -118,6 +140,13 @@ def get_garlicsim_wx_data_files():
 
 
 def get_dlls_and_stuff():
+    '''
+    Get some miscellaneous files that need to be copied to py2exe_dist.
+    
+    This returns a list of tuples, where the second item in each tuple is a list
+    of files and the first item is the path to which these files should be
+    copied when doing the py2exe packaging.
+    '''
     total_data_files = []
     path_to_folder = './py2exe_cruft/dlls_and_stuff'
     folders_to_do = [path_to_folder]
@@ -138,12 +167,29 @@ def get_dlls_and_stuff():
 
 
 def get_all_data_files():
-    '''For use in py2exe only.tododoc'''
+    '''
+    Get all the data files that need to be copied to py2exe_dist.
+    
+    This includes the data files for the `garlicsim`, `garlicsim_lib` and
+    `garlicsim_wx` packages, and some miscellaneous data files.
+    
+    This returns a list of tuples, where the second item in each tuple is a list
+    of files and the first item is the path to which these files should be
+    copied when doing the py2exe packaging.
+    '''
     return get_garlicsim_data_files() + get_garlicsim_lib_data_files() + \
            get_garlicsim_wx_data_files() + get_dlls_and_stuff()
 
 
-def get_all_subpackages(package_name):
+def get_all_submodules(package_name):
+    '''
+    Get all submodules of a package, recursively.
+    
+    This includes both modules and packages.
+    
+    For example:    
+    `get_all_subpackages('numpy') == ['numpy.core', 'numpy.random', ...]`
+    '''
     return [
         (package_name + '.' + m) for m in 
         setuptools.find_packages(
@@ -152,6 +198,16 @@ def get_all_subpackages(package_name):
     ]
 
 
+def get_strict_modules(package_name):
+    '''tododoc'''
+    package_path = imp.find_module(package_name, sys.path)[1]
+    return [module for (loader, module, is_package) in 
+            pkgutil.iter_modules(path, package_name + '.') if not is_package]
+
+
+# This is a list of packages that should be included in the library, with all
+# their subpackages. In theory, the `packages` option of py2exe should take care
+# of it, but it has bugs in it so we're doing this ourselves.
 packages_to_include_with_all_subpackages = [
     
     'garlicsim', 'garlicsim_lib',
@@ -161,6 +217,7 @@ packages_to_include_with_all_subpackages = [
 ]
 
 
+# List of modules to be included in the library.
 includes = reduce(
     list.__add__,
     [get_all_subpackages(package_name) for package_name in \
@@ -169,7 +226,11 @@ includes = reduce(
 
 
 py2exe_kwargs = {
+    
+    # We're giving a less nerdy description here, because this will be shown on
+    # the executable, where non-nerds might see it:
     'description': 'Pythonic framework for computer simulations',
+    
     'windows': [
         {
             'script': 'py2exe_cruft/GarlicSim.py',
@@ -181,25 +242,20 @@ py2exe_kwargs = {
             ]
         }
         ],
-    'zipfile': 'lib/library.zip', #tododoc: probably cancel
     'data_files': get_all_data_files(),
+    
+    # We don't really have a zipfile, this is the path to the library folder:
+    'zipfile': 'lib/library.zip',
+    # Keep in mind that this `library.zip` filename here will simply be ignored.
+    
     'options': {
         'py2exe': {
             'dist_dir': 'py2exe_dist',
+            
+            # We prefer to have all the files in a folder instead of a zip file.
             'skip_archive': True,
             
-            # tododoc.Here you put packages you want py2exe to include with all
-            # subpackages. Problem is, there's a bug in py2exe which will make
-            # it think a non-package directory is a package if it contains a
-            # package within it. Then it'll get listed as a package, and when
-            # import time comes the script will fail.
-            
-            # So there's a danger for us here: For example, we can't include
-            # `numpy` because it has some `tests` folder which falls under this
-            # bug.
-            
             'includes': includes,
-                
         }
     }
 }

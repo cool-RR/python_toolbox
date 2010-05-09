@@ -280,7 +280,7 @@ class Frame(wx.Frame):
         )
         
         if isinstance(self.big_widget, workspace_widgets.StateReprViewer):
-            self.state_repr_viewer= self.big_widget
+            self.state_repr_viewer = self.big_widget
         
         """
         big_widget_classes = \
