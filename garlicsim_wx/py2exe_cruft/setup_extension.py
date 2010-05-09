@@ -30,13 +30,28 @@ for path_to_add in paths_to_add:
     if path_to_add not in sys.path:
         sys.path.append(path_to_add)
 
+def cute_find_module(module_name):
+    '''tododoc'''
+    current_module_name = module_name
+    current_paths = sys.path
+
+    while '.' in current_module_name:
+        (big_package_name, current_module_name) = \
+            current_module_name.split('.', 1)
+        big_package_path = imp.find_module(big_package_name, current_paths)[1]
+        current_paths = [big_package_path]
+    
+    return imp.find_module(current_module_name, current_paths)[1]
+    
 
 def package_to_path(package):
     '''
     Given a package name, convert to path.
     
-    The path will be relative to the folder that contains the root packakge. So
-    `package_to_path('numpy.core') == 'numpy/core'`.
+    The path will be relative to the folder that contains the root package.
+    
+    Example:
+    package_to_path('numpy.core') == 'numpy/core'
     '''
     return package.replace('.', '/')
 
@@ -187,16 +202,27 @@ def get_all_submodules(package_name):
     
     This includes both modules and packages.
     
-    For example:    
-    `get_all_subpackages('numpy') == ['numpy.core', 'numpy.random', ...]`
+    Example:
+    
+    get_all_subpackages('numpy') == ['numpy.compat._inspect',
+    'numpy.compat.setup', 'numpy.compat.setupscons', ... ]
     '''
-    package_path = imp.find_module(package_name, sys.path)[1]
-    return [module for (loader, module, is_package) in 
-            pkgutil.iter_modules([package_path], package_name + '.') if not is_package]    
-
-
-g=get_all_submodules('numpy')
-0
+    package_path = cute_find_module(package_name)
+    
+    subpackage_names = [(package_name + '.' + m) for m in 
+                        setuptools.find_packages(package_path)]
+    
+    modules = []
+    for subpackage_name in subpackage_names:
+        subpackage_path = cute_find_module(subpackage_name)
+        modules += [
+            module for (loader, module, is_package) in 
+            pkgutil.iter_modules([subpackage_path], subpackage_name + '.')
+            if not is_package
+        ]
+        modules.append(subpackage_name)    
+        
+    return modules
 
 
 # This is a list of packages that should be included in the library, with all
