@@ -1,12 +1,29 @@
-# tododoc: document extensively
+# Copyright 2009-2010 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Module for packaging garlicsim_wx as executable using py2exe.
+
+Normally the contents of this module would be in setup.py; But py2exe introduces
+so much cruft, and I wanted to keep it away from my setup.py. So setup.py
+imports this module when it gets a `py2exe` command. This module should not be
+used otherwise.
+
+This module assumes that the `garlicsim` and `garlicsim_lib` folders are
+alongside the `garlicsim_wx` folder, as in the official git repo of GarlicSim.
+'''
 
 import setuptools
 import py2exe
 import imp
 import sys, os.path, glob
 
-path_to_garlicsim = os.path.abspath('../../garlicsim')
-path_to_garlicsim_lib = os.path.abspath('../../garlicsim_lib')
+# This module is meant to be imported from the garlicsim_wx setup.py file, and
+# should not be used otherwise:
+assert any('setup.py' in s for s in sys.argv)
+
+path_to_garlicsim = os.path.abspath('../garlicsim')
+path_to_garlicsim_lib = os.path.abspath('../garlicsim_lib')
 paths_to_add = [path_to_garlicsim, path_to_garlicsim_lib]
 for path_to_add in paths_to_add:
     if path_to_add not in sys.path:
@@ -14,28 +31,52 @@ for path_to_add in paths_to_add:
 
 
 def package_to_path(package):
+    '''
+    Given a package name, convert to path.
+    
+    The path will be relative to the folder that contains the root packakge. So
+    `package_to_path('numpy.core') == 'numpy/core'`.
+    '''
     return package.replace('.', '/')
 
 
 def get_garlicsim_packages():
+    '''
+    Get all the packages in garlicsim.
+    
+    This returns an answer in the form: ['garlicsim.data_structures',
+    'garlicsim.bootstrap', 'garlicsim.misc', ...]
+    '''
     return ['garlicsim.' + p for p
-            in setuptools.find_packages('../../garlicsim/garlicsim')] + \
+            in setuptools.find_packages('../garlicsim/garlicsim')] + \
            ['garlicsim']
 
 garlicsim_packages = get_garlicsim_packages()
 
 
 def get_garlicsim_lib_packages():
+    '''
+    Get all the packages in garlicsim_lib.
+    
+    This returns an answer in the form: ['garlicsim_lib.simpacks.life',
+    'garlicsim_lib.simpacks.prisoner', ...]
+    '''
     return ['garlicsim_lib.' + p for p
-            in setuptools.find_packages('../../garlicsim_lib/garlicsim_lib')] + \
+            in setuptools.find_packages('../garlicsim_lib/garlicsim_lib')] + \
            ['garlicsim_lib']
 
 garlicsim_lib_packages = get_garlicsim_lib_packages()
 
 
 def get_garlicsim_wx_packages():
+    '''
+    Get all the packages in garlicsim_wx.
+    
+    This returns an answer in the form: ['garlicsim_wx.frame',
+    'garlicsim_wx.widgets', 'garlicsim_wx.misc', ...]
+    '''
     return ['garlicsim_wx.' + p for p
-            in setuptools.find_packages('../garlicsim_wx')] + \
+            in setuptools.find_packages('garlicsim_wx')] + \
            ['garlicsim_wx']
 
 garlicsim_wx_packages = get_garlicsim_wx_packages()
@@ -45,7 +86,8 @@ def get_garlicsim_data_files():
     total_data_files = []
     for package in garlicsim_packages:
         path = package_to_path(package)
-        all_files_and_folders = glob.glob(path_to_garlicsim + '/' + path + '/*')
+        all_files_and_folders = \
+            glob.glob(path_to_garlicsim + '/' + path + '/*')
         data_files = [f for f in all_files_and_folders if
                       (not '.py' in f[4:]) and (not os.path.isdir(f))]
         total_data_files.append(('lib/' + path, data_files))
@@ -56,7 +98,8 @@ def get_garlicsim_lib_data_files():
     total_data_files = []
     for package in garlicsim_lib_packages:
         path = package_to_path(package)
-        all_files_and_folders = glob.glob(path_to_garlicsim + '/' + path + '/*')
+        all_files_and_folders = \
+            glob.glob(path_to_garlicsim_lib + '/' + path + '/*')
         data_files = [f for f in all_files_and_folders if
                       (not '.py' in f[4:]) and (not os.path.isdir(f))]
         total_data_files.append(('lib/' + path, data_files))
@@ -104,7 +147,7 @@ def get_all_subpackages(package_name):
     return [
         (package_name + '.' + m) for m in 
         setuptools.find_packages(
-            imp.find_module(package_name)[1]
+            imp.find_module(package_name, sys.path)[1]
         )
     ]
 
