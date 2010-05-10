@@ -32,9 +32,10 @@ __version__ = '0.4'
 def start():
     '''Start the GUI.'''
     
-    args = sys.argv[:]
+    args = sys.argv[1:] # Cutting off the executable
+    
     # If we're not frozen, the first argument is the path of the script, and
-    # that should be ignored:
+    # that should be cut off:
     if not hasattr(sys, 'frozen'):
         del args[:1]
     

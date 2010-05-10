@@ -16,7 +16,7 @@ DefaultDirName={pf}\GarlicSim
 DefaultGroupName=GarlicSim
 AllowNoIcons=yes
 OutputDir=.
-OutputBaseFilename=setup
+OutputBaseFilename=GarlicSim
 Compression=lzma
 SolidCompression=yes
 
