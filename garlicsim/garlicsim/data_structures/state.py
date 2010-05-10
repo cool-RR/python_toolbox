@@ -25,13 +25,16 @@ class State(object):
     to it.
     '''
     
-    def __repr__(self):
+    def __init__(self):
+        self.end_result = None
+    
+    def __repr__(self): # todo: show end_result here
         '''
         Get a string representation of the state.
         
         Example output:
         <garlicsim.data_structures.State with clock 32.3 at 0x1c822d0>
-        '''
+        ''' 
         return '<%s %sat %s>' % \
                (
                    misc_tools.shorten_class_address(

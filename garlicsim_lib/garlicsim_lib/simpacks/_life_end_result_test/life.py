@@ -20,9 +20,12 @@ def step(old_state, useless=None, krazy=None):
     new_state = State()
     if krazy:
         new_state.board = \
-            Board(old_board.width, old_board.height, fill='random')
+            Board(old_board.width, old_board.height, fill='random')    
         return new_state
     new_state.board = new_board
+    number_of_live_cells = live_cells(new_state)
+    if number_of_live_cells < (new_board.width * new_board.height) / 10.:
+        new_state.end_result = number_of_live_cells
     return new_state
 
 def make_plain_state(width=45, height=25, fill="empty"):
@@ -36,9 +39,7 @@ def make_random_state(width=45, height=25):
     return my_state
 
 class Board(object):
-    '''
-    Represents a Life board.
-    ''' 
+    '''Represents a Life board.''' 
     def __init__(self, width=None, height=None, fill="empty", parent=None):
         '''
         If `parent` is specified, makes a board which is descendent from the
@@ -126,7 +127,6 @@ class Board(object):
 @garlicsim.misc.caching.state_cache
 def live_cells(state):
     '''Return how many live cells there are in the state.'''
-    print('calculating for state %s' % id(state))
     return state.board._Board__list.count(True)
 
    

@@ -31,7 +31,8 @@ def simulate(simpack, state, iterations=1, *args, **kwargs):
     step_profile = garlicsim.misc.StepProfile(*args, **kwargs)
 
     if not hasattr(state, 'clock'):
-        state = copy.deepcopy(state)        
+        state = copy.deepcopy(state,
+                              garlicsim.misc.persistent.DontCopyPersistent())
         state.clock = 0
     
     if simpack_grokker.history_dependent:

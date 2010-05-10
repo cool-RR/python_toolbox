@@ -8,6 +8,9 @@ This module defines functions that may be useful when working with iterators.
 import itertools
 import __builtin__
 
+from garlicsim.general_misc.infinity import Infinity
+
+
 def consecutive_pairs(iterable):
     '''
     Iterate over successive pairs from the iterable.
@@ -58,6 +61,10 @@ def shorten(iterable, n):
     
     todo: make possible for n to be infinite.
     '''
+
+    if n == Infinity:
+        for thing in iterable:
+            yield thing
     
     assert isinstance(n, int)
     counter = 0

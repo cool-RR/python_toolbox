@@ -35,6 +35,7 @@ class State(garlicsim.data_structures.State):
     State class used by the `queue` simpack.
     '''
     def __init__(self, event_set, facility, servers, population):
+        garlicsim.data_structures.State.__init__(self)
         self.event_set = event_set
         self.facility = facility
         self.servers = servers

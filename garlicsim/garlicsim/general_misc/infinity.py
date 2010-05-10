@@ -160,8 +160,32 @@ to a fractional power""")
     __truediv__ = __floordiv__ = __div__
     
     def __eq__(self, other):
-        return isinstance(other, InfinityClass) and \
-               other.direction == self.direction
+
+        if isinstance(other, InfinityClass):
+            return other.direction == self.direction
+        
+        elif isinstance(other, float):
+            # We're checking to see if `other` is `float('inf')` or
+            # `-float('inf')`. But we must `try` it carefully, because in Python
+            # 2.5 there is no `float('inf')`.
+            #
+            # Todo: It seems this takes precedence over `float.__eq__`,
+            # fortunately. How come this happens?
+            try:
+                float_inf = float('inf')
+            except ValueError:
+                return False
+            
+            if other == float_inf:
+                return self.direction == 1
+            elif other == -float_inf:
+                return self.direction == -1
+            else:
+                return False
+            
+        else: # other is not any kind of infinity
+            return False
+        
     
     def __neq__(self, other):
         return not self.__eq__(other)

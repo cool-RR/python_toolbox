@@ -25,7 +25,7 @@ class StepIterator(object):
     1. The StepIterator automatically adds clock readings if the states are
        missing them.
     2. It's possible to change the step profile while iterating.
-    3. Guaranteed infinite iterator, even if the simpack's iterator is finite.
+    3. Guaranteed infinite iterator, even if the simpack's iterator is finite.tododoc
     
     And possibly more.  
     '''
@@ -33,7 +33,7 @@ class StepIterator(object):
     def __init__(self, state_or_history_browser, step_profile,
                  simple_step = None, step_generator=None):
         '''
-        Contructor.
+        Constructor.
         
         The iterator will use either a simple step function or a step generator
         under the hood. You have to supply either one or the other, but not
@@ -66,6 +66,8 @@ class StepIterator(object):
     
     def next(self):
         '''Crunch the next state.'''
+        if self.current_state and self.current_state.end_result is not None:
+            raise StopIteration
         self.current_state = self.__get_new_state()
         self.auto_clock(self.current_state)
         return self.current_state
