@@ -12,6 +12,7 @@ AppPublisher=Ram Rachum
 AppPublisherURL=http://garlicsim.org
 AppSupportURL=http://garlicsim.org
 AppUpdatesURL=http://garlicsim.org
+ChangesAssociations=yes
 DefaultDirName={pf}\GarlicSim
 DefaultGroupName=GarlicSim
 AllowNoIcons=yes
@@ -19,6 +20,20 @@ OutputDir=.
 OutputBaseFilename=GarlicSim
 Compression=lzma
 SolidCompression=yes
+
+[Registry]
+Root: HKCR; Subkey: ".gssp"; ValueType: string; ValueName: ""; ValueData: "GarlicSimSimulationPickle"; Flags: uninsdeletevalue
+
+Root: HKCR; Subkey: "GarlicSimSimulationPickle"; ValueType: string; ValueName: ""; ValueData: "GarlicSim Simulation Pickle"; Flags: uninsdeletekey
+
+"My Program File" above is the name for the file type as shown in Explorer.
+Root: HKCR; Subkey: "MyProgramFile\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\MYPROG.EXE,0"
+
+"DefaultIcon" is the registry key that specifies the filename containing the icon to associate with the file type. ",0" tells Explorer to use the first icon from MYPROG.EXE. (",1" would mean the second icon.)
+Root: HKCR; Subkey: "MyProgramFile\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\MYPROG.EXE"" ""%1"""
+
+"shell\open\command" is the registry key that specifies the program to execute when a file of the type is double-clicked in Explorer. The surrounding quotes are in the command line so it handles long filenames correctly.
+
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
