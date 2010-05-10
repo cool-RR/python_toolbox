@@ -6,7 +6,12 @@ garlicsim/*dist
 garlicsim/*.egg-info
 garlicsim/build
 
+garlicsim_lib/*dist
+garlicsim_lib/*.egg-info
+garlicsim_lib/build
+
 garlicsim_wx/*dist
 garlicsim_wx/*.egg-info
 garlicsim_wx/build
+garlicsim_wx/*.exe
 
