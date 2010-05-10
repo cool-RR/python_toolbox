@@ -16,6 +16,7 @@ This program is intended for Python versions 2.5 and 2.6.
 import bootstrap
 
 import sys
+import os.path
 
 import wx
 
@@ -31,15 +32,21 @@ __version__ = '0.4'
 def start():
     '''Start the GUI.'''
     
-    new_gui_project_simpack_name = None
-    for arg in sys.argv:
+    args = sys.argv[:]
+    # If we're not frozen, the first argument is the path of the script, and
+    # that should be ignored:
+    if not hasattr(sys, 'frozen'):
+        del args[:1]
+    
+    if args:
+        arg = args[0]
+        new_gui_project_simpack_name = None
+        load_gui_project_file_path = None
+        
         if arg.startswith('__garlicsim_wx_new='):
             new_gui_project_simpack_name = arg[19:]
-            
-    load_gui_project_file_path = None
-    for arg in sys.argv:
-        if arg.startswith('__garlicsim_wx_load='):
-            load_gui_project_file_path = arg[20:]
+        elif os.path.isfile(arg):
+            load_gui_project_file_path = arg
     
     app = App(new_gui_project_simpack_name=new_gui_project_simpack_name,
               load_gui_project_file_path=load_gui_project_file_path)

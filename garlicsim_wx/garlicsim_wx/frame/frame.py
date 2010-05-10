@@ -15,6 +15,7 @@ import random
 import cPickle as pickle_module
 import subprocess
 import webbrowser
+import traceback
 
 import wx
 from garlicsim_wx.general_misc.third_party import aui
@@ -344,7 +345,7 @@ class Frame(wx.Frame):
 
         open_dialog = wx.FileDialog(self, message='Choose a file',
                                     defaultDir=folder, defaultFile='',
-                                    wcd=wildcard, style=wx.OPEN)
+                                    wildcard=wildcard, style=wx.OPEN)
         if open_dialog.ShowModal() == wx.ID_OK:
             path = open_dialog.GetPath()
             
@@ -357,7 +358,7 @@ class Frame(wx.Frame):
                     program = [sys.executable, os.path.abspath(sys.argv[0])]
                     # Todo: what if some other program is launching my code?
                     
-                program.append('__garlicsim_wx_load=%s' % path)
+                program.append(path)
              
                 subprocess.Popen(program)
                         
@@ -372,7 +373,7 @@ class Frame(wx.Frame):
         except Exception, exception:
             dialog = wx.MessageDialog(
                 self,
-                'Error opening file:\n' + str(exception),
+                'Error opening file:\n' + traceback.format_exc(),
                 style=(wx.OK | wx.ICON_ERROR)
             )
             dialog.ShowModal()
@@ -384,7 +385,7 @@ class Frame(wx.Frame):
             except Exception, exception:
                 dialog = wx.MessageDialog(
                     self,
-                    'Error opening file:\n' + str(exception),
+                    'Error opening file:\n' + traceback.format_exc(),
                     style=(wx.OK | wx.ICON_ERROR)
                 )
                 dialog.ShowModal()
@@ -402,7 +403,7 @@ class Frame(wx.Frame):
         try:
             save_dialog = wx.FileDialog(self, message='Save file as...',
                                      defaultDir=folder, defaultFile='',
-                                     wcd=wildcard,
+                                     wildcard=wildcard,
                                      style=wx.SAVE | wx.OVERWRITE_PROMPT)
             if save_dialog.ShowModal() == wx.ID_OK:
                 path = save_dialog.GetPath()
