@@ -36,4 +36,9 @@ class Shell(wx.py.shell.Shell, WorkspaceWidget):
                                    locals=locals_for_shell)
         WorkspaceWidget.__init__(self, frame)
         
+        # Obscure: This causes the `site` module to add `help` and a few others
+        # to `__builtin__`. For some reason `site` isn't imported when frozen
+        # with py2exe, so here we make sure to import it.
+        import site; del site
+        
     
