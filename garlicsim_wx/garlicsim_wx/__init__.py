@@ -32,18 +32,20 @@ __version__ = '0.4'
 def start():
     '''Start the GUI.'''
     
-    args = sys.argv[1:] # Cutting off the executable
+    args = sys.argv[:]
+    # todo: Consider removing the args we can understand from sys.argv, so
+    # program inside will not be confused by them.
     
     # If we're not frozen, the first argument is the path of the script, and
     # that should be cut off:
     if not hasattr(sys, 'frozen'):
         del args[:1]
+        
+    new_gui_project_simpack_name = None
+    load_gui_project_file_path = None
     
     if args:
-        arg = args[0]
-        new_gui_project_simpack_name = None
-        load_gui_project_file_path = None
-        
+        arg = args[0]        
         if arg.startswith('__garlicsim_wx_new='):
             new_gui_project_simpack_name = arg[19:]
         elif os.path.isfile(arg):

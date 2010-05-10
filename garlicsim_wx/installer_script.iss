@@ -26,14 +26,9 @@ Root: HKCR; Subkey: ".gssp"; ValueType: string; ValueName: ""; ValueData: "Garli
 
 Root: HKCR; Subkey: "GarlicSimSimulationPickle"; ValueType: string; ValueName: ""; ValueData: "GarlicSim Simulation Pickle"; Flags: uninsdeletekey
 
-"My Program File" above is the name for the file type as shown in Explorer.
-Root: HKCR; Subkey: "MyProgramFile\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\MYPROG.EXE,0"
+Root: HKCR; Subkey: "GarlicSimSimulationPickle\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\lib\garlicsim_wx\misc\icon_bundle\images\garlicsim_document.ico,0"
 
-"DefaultIcon" is the registry key that specifies the filename containing the icon to associate with the file type. ",0" tells Explorer to use the first icon from MYPROG.EXE. (",1" would mean the second icon.)
-Root: HKCR; Subkey: "MyProgramFile\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\MYPROG.EXE"" ""%1"""
-
-"shell\open\command" is the registry key that specifies the program to execute when a file of the type is double-clicked in Explorer. The surrounding quotes are in the command line so it handles long filenames correctly.
-
+Root: HKCR; Subkey: "GarlicSimSimulationPickle\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\GarlicSim.exe"" ""%1"""
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
