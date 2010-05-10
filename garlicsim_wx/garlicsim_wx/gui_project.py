@@ -41,7 +41,8 @@ class GuiProject(object):
         Construct the gui project.
         
         `simpack` is the simpack (or grokker) to use. `frame` is the frame in
-        which this gui project will live.
+        which this gui project will live. `virgin` should remain True in normal
+        usage, it's set to False only when loading a GuiProject from file.
         '''
         # This is broken down into a few parts.
         self.__init_general(simpack, frame, project)
@@ -279,8 +280,14 @@ class GuiProject(object):
                 name='active_node_finalized',
             )
             
-            
             #todo: maybe need an emitter for when editing a state?
+            
+            ###################################################################
+                        
+            self.all_menus_need_recalculation_emitter = es.make_emitter(
+                outputs=(self.frame._recalculate_all_menus,),
+                name='all_menus_need_recalculation_emitter'
+            )
 
     
     def __init_menu_enablings(self):

@@ -2,6 +2,7 @@ import wx
 
 from file_menu import FileMenu
 from edit_menu import EditMenu
+from create_menu import CreateMenu
 from node_menu import NodeMenu
 from block_menu import BlockMenu
 from window_menu import WindowMenu
@@ -21,6 +22,13 @@ class MenuBar(wx.MenuBar):
         # self.EnableTop(self.FindMenu('Edit'), False)
         # Logically it makes sense, but it makes it hard to see all the options
         # in the menu, so at least for now I'm not doing it.
+        
+        self.create_menu = CreateMenu(frame)
+        self.Append(self.create_menu, '&Create')
+        self.create_menu._recalculate = lambda: self.EnableTop(
+            self.FindMenu('Create'), 
+            frame.gui_project is not None
+        )
         
         self.node_menu = NodeMenu(frame)
         self.Append(self.node_menu, '&Node')

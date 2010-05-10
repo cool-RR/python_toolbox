@@ -130,7 +130,7 @@ class Persistent(object):
     def __copy__(self):
         return self
     
-    def get_personality(self):
+    def get_personality(self): # Todo: consider doing __getattr__ thing
         '''
         Get the personality of this persistent object.
         
