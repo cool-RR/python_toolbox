@@ -83,23 +83,26 @@ class Frame(wx.Frame):
 
         
     def __init_menus(self):
-                
-        
         menu_bar = self.menu_bar = garlicsim_wx.misc.MenuBar(self)
         self.SetMenuBar(menu_bar)
-        
-        """
-        tododoc: is this needed?
         self._recalculate_all_menus()
-        """
         
         
     def _recalculate_all_menus(self):
+        
         try_recalculate = lambda thing: \
             thing._recalculate() if hasattr(thing, '_recalculate') else None
-        for (menu, label) in self.menu_bar.GetMenus():
+        
+        menus_to_recalculate = [menu for (menu, label) in                                 
+                                self.menu_bar.GetMenus()]
+        
+        while menus_to_recalculate:
+            menu = menus_to_recalculate.pop()
             for item in menu.GetMenuItems():
-                try_recalculate(item)
+                if item.IsSubMenu():
+                    menus_to_recalculate.append(item.GetSubMenu())
+                else:
+                    try_recalculate(item)
             try_recalculate(menu)
         try_recalculate(self.menu_bar)
 
