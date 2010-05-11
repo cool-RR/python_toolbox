@@ -662,15 +662,11 @@ class GuiProject(object):
     
     def finalize_active_node(self):
         '''Finalize the changes made to the active node.'''
-        node = self.active_node
-        if node.still_in_editing is False:
-            raise Exception('''You tried to finalize active state, but you \
-            were not in editing mode.''') # change to fitting exception class
-        node.still_in_editing = False
+        self.active_node.finalize()
         
         self.active_node_finalized_emitter.emit()
         
-        self.project.ensure_buffer(node, self.default_buffer)
+        self.project.ensure_buffer(self.active_node, self.default_buffer)
 
         
     def __getstate__(self):

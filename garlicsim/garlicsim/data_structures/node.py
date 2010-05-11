@@ -106,7 +106,22 @@ class Node(object):
         return 1
 
     
-    def soft_get_block(self):
+    def finalize(self):
+
+        if self.still_in_editing is False:
+            if self.touched:
+                message = '''You tried to finalize a touched node, but it has \
+already been finalized.'''
+            else: # self.touched is False
+                message = '''You tried to finalize an untouched node. \
+Untouched nodes can't be edited, so they have no concept of being finalized.'''
+            raise NodeError(message)
+        
+        self.still_in_editing = False
+        self.state.calculate_end_result()
+
+        
+    def soft_get_block(self): # todo: move to BaseTreeEntity
         '''
         If this node is a member of a block, return the block.
         

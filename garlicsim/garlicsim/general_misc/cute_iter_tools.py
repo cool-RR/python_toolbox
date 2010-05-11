@@ -65,6 +65,7 @@ def shorten(iterable, n):
     if n == Infinity:
         for thing in iterable:
             yield thing
+        raise StopIteration
     
     assert isinstance(n, int)
     counter = 0

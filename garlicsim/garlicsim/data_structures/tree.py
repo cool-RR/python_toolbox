@@ -79,8 +79,6 @@ class Tree(object):
             template_node.state,
             garlicsim.misc.persistent.DontCopyPersistent()
         )
-        
-        new_state.calculate_end_result()
 
         parent = template_node.parent
         new_step_profile = copy.copy(template_node.step_profile)

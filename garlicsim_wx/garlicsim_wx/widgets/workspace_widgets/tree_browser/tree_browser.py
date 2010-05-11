@@ -94,13 +94,15 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
         elements_raw = {            
             'Untouched': 'graysquare.png',
             'Touched': 'graystar.png',
-            'Untouched End': 'graysquare.png',
-            'Touched End': 'graystar.png',
+            'Unfinalized Touched': 'grayunfinalizedstar.png',
+            'Untouched End': 'grayendsquare.png',
+            'Touched End': 'grayendstar.png',
             'Block': 'grayblock.png',
             'Active Untouched': 'orangesquare.png',
             'Active Touched': 'orangestar.png',
-            'Active Untouched End': 'orangesquare.png',
-            'Active Touched End': 'orangestar.png',
+            'Active Unfinalized Touched': 'orangeunfinalizedstar.png',
+            'Active Untouched End': 'orangeendsquare.png',
+            'Active Touched End': 'orangeendstar.png',
             'Active Block': 'orangeblock.png',
         }
         
@@ -214,23 +216,34 @@ class NiftyPaintDC(wx.BufferedPaintDC):
 
     def draw_sub_tree(self, point, tree, start):
         make_block_stripe = False
+
         if isinstance(start, garlicsim.data_structures.Block):
+            
             type = "Block"
             kids = start[-1].children
             if start == self.active_soft_block:
                 make_block_stripe = True
                 type = "Active " + type
+                
         elif isinstance(start, garlicsim.data_structures.Node):
+            
             kids = start.children
+            
             if start.touched:
                 type = "Touched"
             else:
                 type = "Untouched"
+                
+            if start.still_in_editing:
+                type = 'Unfinalized ' + type
+            elif start.state.end_result is not None:
+                type = type + ' End'
+                    
             if start == self.active_soft_block:
                 type = "Active " + type
-            if start.state.end_result is not None:
-                type = type + ' End'
+                
         else:
+            
             raise Exception
 
 
