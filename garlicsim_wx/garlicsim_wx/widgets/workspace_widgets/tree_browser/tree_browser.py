@@ -29,9 +29,7 @@ connector_length = 10 # length of connecting line between elements
 
 
 class TreeBrowser(ScrolledPanel, WorkspaceWidget):
-    '''
-    A widget for browsing a garlicsim.data_structures.Tree.
-    '''
+    '''Widget for browsing a garlicsim.data_structures.Tree.'''
     def __init__(self, frame): # todo: on mouse drag should pause like seek bar does
         ScrolledPanel.__init__(self, frame, size=(100, 100),
                                style=wx.SUNKEN_BORDER)
@@ -96,9 +94,13 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
         elements_raw = {            
             'Untouched': 'graysquare.png',
             'Touched': 'graystar.png',
+            'Untouched End': 'graysquare.png',
+            'Touched End': 'graystar.png',
             'Block': 'grayblock.png',
             'Active Untouched': 'orangesquare.png',
             'Active Touched': 'orangestar.png',
+            'Active Untouched End': 'orangesquare.png',
+            'Active Touched End': 'orangestar.png',
             'Active Block': 'orangeblock.png',
         }
         
@@ -226,6 +228,8 @@ class NiftyPaintDC(wx.BufferedPaintDC):
                 type = "Untouched"
             if start == self.active_soft_block:
                 type = "Active " + type
+            if start.state.end_result is not None:
+                type = type + ' End'
         else:
             raise Exception
 

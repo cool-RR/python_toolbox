@@ -133,7 +133,7 @@ tree while specifying a template_node.''')
         self.nodes.append(node)
 
         if parent:
-            if not hasattr(node.state, "clock"):
+            if not hasattr(node.state, 'clock'):
                 node.state.clock = parent.state.clock + 1
 
             node.parent = parent
