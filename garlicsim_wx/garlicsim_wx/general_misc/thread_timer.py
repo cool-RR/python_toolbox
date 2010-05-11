@@ -15,10 +15,14 @@ import time
 
 import wx
 
+from garlicsim_wx.general_misc import cute_base_timer
+
+
 wxEVT_THREAD_TIMER = wx.NewEventType()
 EVT_THREAD_TIMER = wx.PyEventBinder(wxEVT_THREAD_TIMER, 1)
 
-class ThreadTimer(object):
+
+class ThreadTimer(cute_base_timer.CuteBaseTimer):
    '''
    A timer for a wxPython app which runs on a different thread.
    
@@ -36,6 +40,8 @@ class ThreadTimer(object):
       
       `parent` is the parent window.
       '''
+      
+      cute_base_timer.CuteBaseTimer.__init__(self, parent)
       
       self.parent = parent
       '''The parent window.'''

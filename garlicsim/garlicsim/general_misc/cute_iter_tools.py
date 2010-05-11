@@ -1,9 +1,7 @@
 # Copyright 2009-2010 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''
-This module defines functions that may be useful when working with iterators.
-'''
+'''Defines functions that may be useful when working with iterators.'''
 
 import itertools
 import __builtin__

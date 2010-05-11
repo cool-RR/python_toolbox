@@ -17,7 +17,7 @@ import time
 
 from garlicsim_wx.widgets import WorkspaceWidget
 from garlicsim_wx.general_misc import cursor_collection
-from garlicsim_wx.general_misc import thread_timer
+from garlicsim_wx.general_misc import cute_timer
 from garlicsim.general_misc import math_tools
 from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
 
@@ -104,7 +104,7 @@ class ScratchWheel(wx.Panel):
         self.was_playing_before_drag = None
         '''Flag saying if playback was active before user grabbed the gear.'''
             
-        self.motion_blur_update_timer = wx.Timer(self)
+        self.motion_blur_update_timer = cute_timer.CuteTimer(self)
         '''
         Timer to use for updating the motion blur bitmap.
         

@@ -15,6 +15,7 @@ import pkg_resources
 import wx.html
 
 from garlicsim_wx.general_misc import wx_tools
+import garlicsim_wx.general_misc.cute_timer
 
 import garlicsim_wx
 from bitmap_viewer import BitmapViewer
@@ -119,7 +120,7 @@ class AboutDialog(wx.Dialog):
         self.Layout()
 
         
-        self.timer = wx.Timer(self)
+        self.timer = garlicsim_wx.general_misc.cute_timer.CuteTimer(self)
         self.timer.Start(40)
         self.Bind(wx.EVT_TIMER, self.on_timer, self.timer)
         

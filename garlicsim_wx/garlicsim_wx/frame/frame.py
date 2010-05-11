@@ -112,7 +112,9 @@ class Frame(wx.Frame):
         if self.gui_project:
             self.gui_project.stop_playing()
         self.aui_manager.UnInit()
-        self.Destroy()        
+        self.Destroy()
+        garlicsim_wx.general_misc.cute_base_timer.CuteBaseTimer.\
+                    shut_off_timers_by_frame(self)
         event.Skip()        
         self.background_timer.stop()
 
