@@ -49,7 +49,7 @@ class FlagRaiser(object): # todo: rename?
             self.timer = cute_timer.CuteTimer(self.window)
             '''The timer we use to call the function.'''
             
-            self.timer.Bind(wx.EVT_TIMER, self.on_timer, self.timer)
+            self.window.Bind(wx.EVT_TIMER, self.on_timer, self.timer)
 
             
     def __call__(self):
