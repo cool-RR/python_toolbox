@@ -130,7 +130,7 @@ class CrunchingManager(object):
             if job not in self.crunchers:
                 if not job.is_done():
                     self.__conditional_create_cruncher(job)
-                else: # job_done is True
+                else: # job.is_done() is True
                     self.jobs.remove(job)
                 continue
 
@@ -158,7 +158,7 @@ class CrunchingManager(object):
                 else:
                     
                     self.__conditional_create_cruncher(job)
-            else: # job.is_done() is True           
+            else: # job.is_done() is True
                 self.jobs.remove(job)
                 if cruncher.is_alive():
                     cruncher.retire()

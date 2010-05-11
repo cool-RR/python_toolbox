@@ -27,6 +27,9 @@ class State(object):
     
     def __init__(self):
         self.end_result = None
+        
+    def calculate_end_result(self):
+        return
     
     def __repr__(self): # todo: show end_result here
         '''

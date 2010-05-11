@@ -79,6 +79,8 @@ class Tree(object):
             template_node.state,
             garlicsim.misc.persistent.DontCopyPersistent()
         )
+        
+        new_state.calculate_end_result()
 
         parent = template_node.parent
         new_step_profile = copy.copy(template_node.step_profile)
@@ -138,17 +140,29 @@ tree while specifying a template_node.''')
             parent.children.append(node)
             
             if parent.block:
-                if len(parent.children)==1:
-                    if (not node.touched) and (parent.step_profile == \
-                                               node.step_profile):
+                
+                if len(parent.children) == 1:
+                    
+                    if (not node.touched) and \
+                       (parent.step_profile == node.step_profile) and \
+                       (node.state.end_result is None):
+                        
                         parent.block.append_node(node)
+                        
                 else: # parent.children > 1
+
                     if not (parent is parent.block[-1]):
+                        
                         parent.block.split(parent)
+                        
             else: # parent.block is None
-                if (not node.touched) and (not parent.touched) and \
+                
+                if (not node.touched) and \
+                   (not parent.touched) and \
                    (len(parent.children)==1) and \
-                   (parent.step_profile == node.step_profile):
+                   (parent.step_profile == node.step_profile) and \
+                   (node.state.end_result is None):
+                    
                     Block([parent, node])
                 
                         

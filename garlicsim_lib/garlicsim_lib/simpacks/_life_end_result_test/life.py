@@ -7,12 +7,20 @@ import garlicsim.data_structures
 import random
 
 class State(garlicsim.data_structures.State):
+    
+    def calculate_end_result(self):
+        number_of_live_cells = live_cells(self)
+        if number_of_live_cells < (self.board.width * self.board.height) / 10.:
+            self.end_result = number_of_live_cells
+        else:
+            self.end_result = None
     def __repr__(self):
         return self.board.__repr__()
     def __eq__(self, other):
         return isinstance(other, State) and self.board == other.board
     def __ne__(self, other):
         return not self.__eq__(other)
+    
     
 def step(old_state, useless=None, krazy=None):
     old_board = old_state.board
@@ -23,9 +31,7 @@ def step(old_state, useless=None, krazy=None):
             Board(old_board.width, old_board.height, fill='random')    
         return new_state
     new_state.board = new_board
-    number_of_live_cells = live_cells(new_state)
-    if number_of_live_cells < (new_board.width * new_board.height) / 10.:
-        new_state.end_result = number_of_live_cells
+    
     return new_state
 
 def make_plain_state(width=45, height=25, fill="empty"):

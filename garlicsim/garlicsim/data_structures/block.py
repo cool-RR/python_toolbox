@@ -41,6 +41,7 @@ class Block(object):
            their successor in the block.
         3. The last node may have any kinds of children.
         4. All members share the same step_profile.
+        tododoc end_result
 
     If you want to check whether a certain node is in a block or not,
     check its ".block" attribute.
