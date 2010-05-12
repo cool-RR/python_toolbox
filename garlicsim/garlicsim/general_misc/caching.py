@@ -29,4 +29,7 @@ def cache(function):
 class CachedType(type): # tododoc: to simpack_wx_grokker too    
     @cache
     def __call__(cls, *args, **kwargs):
+        # todo: should not use the generic cache function. need to analyze
+        # signature of __init__. Possibly use the same args&kwargs grokker for
+        # this and `cache`.
         return type.__call__(cls, *args, **kwargs)
