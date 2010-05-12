@@ -15,3 +15,4 @@ garlicsim_wx/*.egg-info
 garlicsim_wx/build
 garlicsim_wx/*.exe
 
+*/docs/_build/*
