@@ -49,6 +49,7 @@ class Frame(wx.Frame):
         self.SetIcons(garlicsim_wx.misc.icon_bundle.get_icon_bundle())
         
         self.Bind(wx.EVT_CLOSE, self.on_close)
+        # self.Bind(wx.EVT_KEY_DOWN, self.on_key_down) todo: uncomment
                 
         self.tree_browser = None
         self.seek_bar = None
@@ -63,7 +64,9 @@ class Frame(wx.Frame):
         
         self.CreateStatusBar()
         
-        self.__init_menus()        
+        self.__init_menus()
+        
+        self.__init_key_bindings()
         
         self.background_timer = thread_timer.ThreadTimer(self)
         
@@ -86,7 +89,6 @@ class Frame(wx.Frame):
         menu_bar = self.menu_bar = garlicsim_wx.misc.MenuBar(self)
         self.SetMenuBar(menu_bar)
         self._recalculate_all_menus()
-        
         
     def _recalculate_all_menus(self):
         
@@ -438,4 +440,10 @@ class Frame(wx.Frame):
         self.notebook.AddPage(gui_project.main_window,"zort!")
         self.notebook.DeletePage(0)
         del gui_project
+    """
+    
+    """
+    def on_key_down(self, event):
+        if event
+        todo: Do the Key shit
     """

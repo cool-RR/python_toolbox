@@ -6,6 +6,8 @@ import functools
 
 def cache(function):
     # todo: kwargs support
+    # todo: try to be smart and figure out the function's signature, then be
+    # able to understand that squared(x) is the same as sqaured(number=x).
     if hasattr(function, 'cache'): return function
     
     def cached(*args):
