@@ -18,8 +18,13 @@ class State(garlicsim.data_structures.State):
         return my_state
 
     
+    @staticmethod
+    def create_messy_root(width=45, height=25):
+        return State.create_root(width, height, fill='random')
+                                 
+    
     def step(self, useless=None, krazy=None):
-        old_board = old_state.board
+        old_board = self.board
         new_board = Board(parent=old_board)
         new_state = State()
         if krazy:

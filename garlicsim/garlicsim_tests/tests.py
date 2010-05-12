@@ -47,11 +47,11 @@ def simpack_test():
         
 def simpack_check(simpack, cruncher):
     
-    state = simpack.make_random_state() 
+    state = simpack.State.create_messy_root()
     
-    new_state = garlicsim.simulate(simpack, state, 5)
+    new_state = garlicsim.simulate(state, 5)
     
-    result = garlicsim.list_simulate(simpack, state, 5)
+    result = garlicsim.list_simulate(state, 5)
     
     my_simpack_grokker = garlicsim.misc.SimpackGrokker(simpack)
     
@@ -172,7 +172,7 @@ def simpack_check(simpack, cruncher):
     
     
     
-    plain_root = project.make_plain_root()
+    plain_root = project.create_root()
     
     assert len(project.tree.roots) == 2
     

@@ -10,20 +10,32 @@ See their documentation for more details.
 import functools
 import types
 
-from garlicsim.misc import AutoClockGenerator, StepIterator, InvalidSimpack
-import garlicsim
+import garlicsim.general_misc.caching
+
+from garlicsim.misc import (AutoClockGenerator, StepIterator, InvalidSimpack,
+                            simpack_tools)
 import misc
 
 from .settings import Settings
 
+
 class SimpackGrokker(object):
     '''Encapsulates a simpack and gives useful information and tools.'''
+    
+    __metaclass__ = garlicsim.general_misc.caching.CachedType
+
+    @staticmethod
+    def create_from_state(state):
+        simpack = simpack_tools.get_from_state(state)
+        return SimpackGrokker(simpack)
+    
     
     def __init__(self, simpack):
         self.simpack = simpack
         self.__init_analysis()
         self.__init_analysis_settings()
-    
+
+        
     def __init_analysis(self):
         '''Analyze the simpack.'''
         

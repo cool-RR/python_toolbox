@@ -22,3 +22,9 @@ def cache(function):
     functools.update_wrapper(cached, function)
     
     return cached
+
+
+class CachedType(type): # tododoc: to simpack_wx_grokker too    
+    @cache
+    def __call__(cls, *args, **kwargs):
+        return type.__call__(cls, *args, **kwargs)

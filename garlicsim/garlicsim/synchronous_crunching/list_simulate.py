@@ -18,7 +18,7 @@ import history_browser as history_browser_module # Avoiding name clash
 
 __all__ = ["list_simulate"]
 
-def list_simulate(simpack, state, iterations, *args, **kwargs):
+def list_simulate(state, iterations, *args, **kwargs):
     '''
     Simulate from the given state for the given number of iterations.
 
@@ -28,7 +28,7 @@ def list_simulate(simpack, state, iterations, *args, **kwargs):
     Returns a list that spans all the states, from the initial one given to
     the final one.
     '''
-    simpack_grokker = garlicsim.misc.SimpackGrokker(simpack)
+    simpack_grokker = garlicsim.misc.SimpackGrokker.create_from_state(state)
     step_profile = garlicsim.misc.StepProfile(*args, **kwargs)
     
     if not hasattr(state, 'clock'):

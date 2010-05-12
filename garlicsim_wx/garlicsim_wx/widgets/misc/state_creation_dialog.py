@@ -16,7 +16,7 @@ class StateCreationDialog(wx.Dialog): # make base class
     
     This is a generic one, used if the simpack doesn't define its own.
     '''
-    def __init__(self, frame):
+    def __init__(self, frame): # tododoc: fuck out all the plain/random
    
         wx.Dialog.__init__(self, frame, title='Creating a root state')
         
@@ -53,10 +53,7 @@ class StateCreationDialog(wx.Dialog): # make base class
     def start(self):
         '''Start the dialog to make a new state.'''
         if self.ShowModal() == wx.ID_OK:
-            if self.info['random']:
-                state = self.simpack.make_random_state()
-            else:
-                state = self.simpack.make_plain_state()
+            state = self.simpack.State.create_root()
         else:
             state = None
         self.Destroy()

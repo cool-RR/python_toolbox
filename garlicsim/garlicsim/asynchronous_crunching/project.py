@@ -72,7 +72,7 @@ class Project(object):
         self.crunching_manager = CrunchingManager(self)
     
 
-    def make_plain_root(self, *args, **kwargs):
+    def create_root(self, *args, **kwargs):
         '''
         Create a parentless node whose state is a simple plain state.
         
@@ -81,10 +81,10 @@ class Project(object):
         
         Returns the node.
         '''
-        state = self.simpack.make_plain_state(*args, **kwargs)
+        state = self.simpack.State.create_root(*args, **kwargs)
         return self.root_this_state(state)
 
-    def make_random_root(self, *args, **kwargs):
+    def create_messy_root(self, *args, **kwargs):
         '''
         Creates a parentless node whose state is a random and messy state.
         
@@ -93,7 +93,7 @@ class Project(object):
         
         Returns the node.
         '''
-        state = self.simpack.make_random_state(*args, **kwargs)
+        state = self.simpack.State.create_messy_root(*args, **kwargs)
         return self.root_this_state(state)
 
     def root_this_state(self, state):

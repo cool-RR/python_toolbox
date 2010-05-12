@@ -16,7 +16,7 @@ def cached_state_function_test():
     
     cached_live_cells = caching.state_cache(live_cells)
     
-    s = life.make_random_state(5, 5)
+    s = life.State.create_root(5, 5)
     
     assert live_cells(s) == cached_live_cells(s) == cached_live_cells(s)
     
@@ -27,7 +27,7 @@ def cached_state_function_test():
     assert live_cells.called_flag is False
     
     
-    l = garlicsim.list_simulate(life, s, 10)
+    l = garlicsim.list_simulate(s, 10)
     
     result_1 = [cached_live_cells(s) for s in l[0:5]]
         
@@ -76,7 +76,7 @@ def cached_history_function_test():
                 counter += 1
         return counter
     
-    s = life.make_random_state(5, 5)
+    s = life.State.create_messy_root(5, 5)
     
     p = garlicsim.Project(life)
     

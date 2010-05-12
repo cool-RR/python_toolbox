@@ -9,6 +9,8 @@ See its documentation for more info.
 
 import types
 
+import garlicsim.general_misc.caching
+
 import garlicsim_wx
 
 from .settings import Settings
@@ -16,6 +18,8 @@ from .settings import Settings
 
 class SimpackWxGrokker(object):
     '''Encapsulates a simpack_wx and gives useful information and tools.'''
+    
+    __metaclass__ = garlicsim.general_misc.caching.CachedType
     
     def __init__(self, simpack):
         self.simpack = simpack

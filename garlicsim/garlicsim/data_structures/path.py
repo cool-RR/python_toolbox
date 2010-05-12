@@ -596,6 +596,10 @@ path, but it's completely empty.''')
         self.root = new_path.root
         self.decisions.update(new_path.decisions)
     
+    
+    def states(self): # todo: Make fancier, like dict.keys in Py3
+        for node in self:
+            yield node.state
         
     def __repr__(self):
         '''

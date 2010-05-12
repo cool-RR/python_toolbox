@@ -21,6 +21,7 @@ from nodes_added import NodesAdded
 from simpack_grokker import SimpackGrokker
 import caching
 import settings_constants
+import simpack_tools
 
 
 
