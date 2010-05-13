@@ -8,16 +8,15 @@
 /* -- page layout ----------------------------------------------------------- */
 
 body {
-    font-family: Verdana;
+    font-family: Verdana, Tahoma, sans-serif;
     font-size: 100%;
-    background-color: black;
+    background: black url("metal_background.jpg") repeat-y left;
     color: #000;
     margin: 0;
     padding: 0;
 }
 
 div.document {
-    background-color: black;
 }
 
 div.documentwrapper {
@@ -30,7 +29,6 @@ div.bodywrapper {
 }
 
 div.body {
-    background-color: black;
     color: #CCC;
     padding: 0 20px 30px 20px;
 }
@@ -58,6 +56,9 @@ div.related {
     background-color: #333;
     line-height: 30px;
     color: #CCC;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
 }
 
 div.related a {
@@ -95,7 +96,7 @@ div.documentwrapper {
 {%- endif %}
 
 div.sphinxsidebar h3 {
-    font-family: Arial, Helvetica;
+    font-family: 'Trebuchet MS', sans-serif;
     color: #CCC;
     font-size: 1.4em;
     font-weight: normal;
@@ -108,7 +109,7 @@ div.sphinxsidebar h3 a {
 }
 
 div.sphinxsidebar h4 {
-    font-family: Arial, Helvetica;
+    font-family: 'Trebuchet MS', sans-serif;
     color: #CCC;
     font-size: 1.3em;
     font-weight: normal;
@@ -135,9 +136,11 @@ div.sphinxsidebar a {
 }
 
 div.sphinxsidebar input {
-    border: 1px solid #333;
-    border-radius: 5px;
-    background: #333;
+    border: 2px solid #333;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    background: black;
     color: #CCC;
     font-family: sans-serif;
     font-size: 1em;
@@ -165,12 +168,13 @@ div.body h3,
 div.body h4,
 div.body h5,
 div.body h6 {
-    font-family: Arial, Helvetica;
-    background-color: black;
+    font-family: 'Trebuchet MS', sans-serif;
     font-weight: normal;
     color: #CCC;
     border-top: 3px solid #666;
     border-top-right-radius: 40px;
+    -moz-border-top-right-radius: 40px;
+    -webkit-border-top-right-radius: 40px;
     margin: 20px -20px 10px -20px;
     padding: 3px 0 3px 10px;
 }
@@ -187,11 +191,13 @@ a.headerlink {
     font-size: 0.8em;
     padding: 0 4px 0 4px;
     text-decoration: none;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
 }
 
 a.headerlink:hover {
-    background-color: yellow;
-    color: white;
+    background-color: #666;
 }
 
 div.body p, div.body dd, div.body li {
