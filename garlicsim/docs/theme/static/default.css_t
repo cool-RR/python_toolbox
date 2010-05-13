@@ -173,7 +173,7 @@ div.body h6 {
     color: #CCC;
     border-top: 3px solid #666;
     border-top-right-radius: 40px;
-    -moz-border-top-right-radius: 40px;
+    -moz-border-radius-topright: 40px;
     -webkit-border-top-right-radius: 40px;
     margin: 20px -20px 10px -20px;
     padding: 3px 0 3px 10px;
@@ -210,13 +210,16 @@ div.admonition p.admonition-title + p {
 }
 
 div.note {
-    background-color: #eee;
+    background-color: #333;
     border: 1px solid #ccc;
 }
 
 div.seealso {
-    background-color: #ffc;
-    border: 1px solid #ff6;
+    background-color: #330;
+    border: 1px solid #340;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
 }
 
 div.topic {
@@ -226,6 +229,9 @@ div.topic {
 div.warning {
     background-color: #ffe4e4;
     border: 1px solid #f66;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
 }
 
 p.admonition-title {
@@ -238,12 +244,17 @@ p.admonition-title:after {
 
 pre {
     padding: 5px;
-    background-color: #333;
     color: #CCC;
     line-height: 120%;
-    border: 1px solid #ac9;
-    border-left: none;
-    border-right: none;
+    border: 1px solid #666;
+    border-left-width: 0px;
+    border-right-width: 0px;
+    border-top-left-radius: 10px;
+    -moz-border-radius-topleft: 10px;
+    -webkit-border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    -moz-border-radius-bottomleft: 10px;
+    -webkit-border-bottom-left-radius: 10px;
 }
 
 tt {

@@ -292,7 +292,7 @@ dd {
     margin-left: 30px;
 }
 
-dt:target, .highlight {
+dt:target {
     background-color: #333;
 }
 
