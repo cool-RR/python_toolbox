@@ -1,0 +1,29 @@
+.. _intro-tutorial2:
+
+===========================================
+Tutorial part 2: Writing your first simpack
+===========================================
+
+In part 1 of the tutorial, we were playing around with someone else's simpack.
+In part 2, we are going to make our own.
+
+Motivation for our simpack
+==========================
+
+A few years ago, I was talking with a friend of mine about gambling. He said, "I
+thought of a really sure-fire way to win money at a coinflip game. (Where it's
+50/50 chance between doubling your money and losing it.) You bet $100. If you
+win, you won $100 and you're done. If you lose, you bet $200. If you win that,
+you've still got a net win of $100, and you're done. If you lose, you bet $400.
+If you win *that*, you still have a net win of $100, etc."
+
+"I guess you have a small chance of losing all your money, that's the drawback."
+
+"Yeah, but you're almost sure to win the $100. So let's say you come to the
+casino with $5,000, and you want to make $1,000. You use my method 10 times in a
+row, and you almost certainly win $1,000!"
+
+"I don't know..."
+
+We're going to make a simpack that will test whether my friend's method for
+beating the casino is any good.
