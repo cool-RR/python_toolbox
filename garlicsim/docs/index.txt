@@ -1,20 +1,19 @@
-.. garlicsim documentation master file, created by
-   sphinx-quickstart on Wed May 12 17:33:00 2010.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+.. _index:
 
-Welcome to garlicsim's documentation!
-=====================================
+=======================
+garlicsim documentation
+=======================
 
 Contents:
 
 .. toctree::
    :maxdepth: 2
+   
+   intro/index
 
-Indices and tables
-==================
+More documentation coming soon! If you have any questions, don't hesitate to speak up on the `mailing list`_!
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+.. _mailing list: mailto:garlicsim@librelist.org
 
+.. * :ref:`genindex`
+.. * :ref:`modindex`

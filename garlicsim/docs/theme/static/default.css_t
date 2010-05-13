@@ -206,9 +206,21 @@ div.admonition p.admonition-title + p {
     display: inline;
 }
 
+div.admonition {
+    border: 1px solid #666;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    margin-left: 2em;
+    margin-right: 2em;
+}
+
 div.note {
     background-color: #333;
     border: 1px solid #ccc;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
 }
 
 div.seealso {
@@ -224,8 +236,8 @@ div.topic {
 }
 
 div.warning {
-    background-color: #ffe4e4;
-    border: 1px solid #f66;
+    background-color: #300;
+    border: 1px solid #411;
     border-radius: 3px;
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
@@ -233,10 +245,6 @@ div.warning {
 
 p.admonition-title {
     display: inline;
-}
-
-p.admonition-title:after {
-    content: ":";
 }
 
 pre {

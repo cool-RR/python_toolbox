@@ -1,4 +1,4 @@
-.. _intro-tutorial01:
+.. _intro-tutorial1:
 
 ==============================================
 Tutorial part 1: Running your first simulation
@@ -27,15 +27,15 @@ Basic simulation commands using the :mod:`life <garlicsim_lib.simpacks.life>` si
 For making a Life simulation, we will use the :mod:`life
 <garlicsim_lib.simpacks.life>` simpack.
 
-.. rubric:: What is a simpack?
+.. admonition:: What is a simpack?
 
-For every kind of simulation there's a simulation package. We will usually
-abbreviate "simulation package" to simpack. For simulating Life, there's a
-:mod:`life <garlicsim_lib.simpacks.life>` simpack. If you'll want to
-simulate Quantum Mechanics, you will need a simpack for Quantum Mechanics.
-(Which might as well be named ``quantum_mechanics``.) There's a collection
-of various simpacks in the :mod:`garlicsim_lib.simpacks` package, and from
-there we will obtain our :mod:`life <garlicsim_lib.simpacks.life>` simpack.
+    For every kind of simulation there's a simulation package. We will usually
+    abbreviate "simulation package" to simpack. For simulating Life, there's a
+    :mod:`life <garlicsim_lib.simpacks.life>` simpack. If you'll want to
+    simulate Quantum Mechanics, you will need a simpack for Quantum Mechanics.
+    (Which might as well be named ``quantum_mechanics``.) There's a collection
+    of various simpacks in the :mod:`garlicsim_lib.simpacks` package, and from
+    there we will obtain our :mod:`life <garlicsim_lib.simpacks.life>` simpack.
 
 So:
 
@@ -51,12 +51,13 @@ The ``create_messy_root`` method makes a state with lots of randomness and mess.
 This is good for our purposes, because we want to see some nice chaos in our
 simulation.
 
-.. rubric:: What is a state?
+.. admonition:: What is a state?
 
-A state is the most basic data unit in GarlicSim. Sometimes called a "world
-state", a state is the description of the simulation world in one frozen moment
-in time. A :class:`State <garlicsim.data_structures.State>` object will contain
-all the information there is about that moment in time in the simulation.
+    A state is the most basic data unit in GarlicSim. Sometimes called a "world
+    state", a state is the description of the simulation world in one frozen
+    moment in time. A :class:`State <garlicsim.data_structures.State>` object
+    will contain all the information there is about that moment in time in the
+    simulation.
 
 Let's check out this state:
 
@@ -561,4 +562,4 @@ present can cause a big change in the future.
 What's next
 ===========
 
-In the next part of the tutorial, we're going to write our own simpack! :ref:`Let's go! <intro-tutorial02>`
+In the next part of the tutorial, we're going to write our own simpack! :ref:`Let's go! <intro-tutorial2>`
