@@ -1,9 +1,6 @@
-/**
- * Sphinx stylesheet -- default theme
- * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- */
 
 @import url("basic.css");
+
 
 /* -- page layout ----------------------------------------------------------- */
 
@@ -243,6 +240,7 @@ p.admonition-title:after {
 }
 
 pre {
+    font-family: Consolas, Monaco, Inconsolata, monospace;
     padding: 5px;
     color: #CCC;
     line-height: 120%;
@@ -258,15 +256,21 @@ pre {
 }
 
 tt {
-    background-color: #ecf0f3;
+    font-family: Consolas, Monaco, Inconsolata, monospace;
+    bakcground: #BBB;
     padding: 0 1px 0 1px;
     font-size: 0.95em;
 }
 
+
+a tt {
+    color: #CC0;
+}
+
 .warning tt {
-    background: #efc2c2;
+    background: black;
 }
 
 .note tt {
-    background: #d6d6d6;
+    background: #black;
 }
