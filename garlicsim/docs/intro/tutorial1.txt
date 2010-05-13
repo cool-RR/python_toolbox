@@ -274,7 +274,7 @@ node to the tree as a root. The method returned the new node. Let's see some
 info about our node:
 
     >>> node
-    <garlicsim.data_structures.Node with clock 0, root, touched, blockless, at 0x1c68ed0>
+    <garlicsim.data_structures.Node with clock 0, root, leaf, touched, blockless, at 0x1c68ed0>
 
 The ``clock 0`` thing means that the clock reading of this node's state is zero.
 The states that will succeed it will have incrementing clock readings. The
@@ -329,15 +329,16 @@ Since we didn't make any forks in our tree, it is currently a `degenerate`_
 tree-- It's simply a timeline. So there is only one possible path that goes
 through it.
 
-Let's fork our tree. But before that, let's get that single path and a reference to i
+Let's fork our tree. But before that, let's get that single path:
 
-    >>> path = node.make_containing_path()
+    >>> (path,) = project.tree.all_possible_paths()
     >>> path
     <garlicsim.data_structures.Path of length 21 at 0x1ccfb30>
-    >>> 
-    >>> 
+
+:class:`Path <garlicsim.data_structures.Path>` is a list-like object. We can get any node we want from it using its index number:
+    
     >>> path[-1]
-    <garlicsim.data_structures.Node with clock 20, untouched, belongs to a block, crunched with StepProfile(), at 0x1cd9070>
+    <garlicsim.data_structures.Node with clock 20, leaf, untouched, belongs to a block, crunched with StepProfile(), at 0x1cd9070>
     >>> 
     >>> 
     >>> path[-1].state
@@ -358,7 +359,8 @@ Let's fork our tree. But before that, let's get that single path and a reference
           ##             ##    # #     #    
     >>>
 
+This is the same "mature" state we saw several times in this tutorial.
     
-tododoc: Do some fork to edit here
+Okay, now let's do some forking.
 
 .. _degenerate: http://en.wikipedia.org/wiki/Degeneracy_(mathematics)

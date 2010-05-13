@@ -10,12 +10,18 @@ import garlicsim.data_structures
 
 
 class State(garlicsim.data_structures.State):
-        
+
+    @staticmethod
+    def create_diehard(width=45, height=25):
+        state = State()
+        state.board = Board.create_diehard(width, height)
+        return state
+    
     @staticmethod
     def create_root(width=45, height=25, fill="empty"):
-        my_state = State()
-        my_state.board = Board(width, height, fill)
-        return my_state
+        state = State()
+        state.board = Board(width, height, fill)
+        return state
 
     
     @staticmethod
@@ -94,6 +100,16 @@ class Board(object):
         for i in xrange(self.width*self.height):
             self.__list.append(make_cell())
 
+    @staticmethod
+    def create_diehard(width=45, height=25):
+        board = Board(width, height)
+        (x, y) = (width//2, height//2)
+        for (i, j) in [(6, 0), (0, 1), (1, 1), (1, 2), (5, 2), (6, 2), (7, 2)]:
+            board.set(x + i, y + j, True)
+            
+        return board
+        
+    
     def get(self, x, y):
         '''Get the value of cell (x, y) in the board.'''
         return self.__list[ (x % self.width) * self.height + (y%self.height) ]
