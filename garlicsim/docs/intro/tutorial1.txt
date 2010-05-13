@@ -21,8 +21,8 @@ living cells and organizms.
     
     .. _GarlicSim's mailing list: mailto:garlicsim@librelist.org
 
-Basic simulation command using the :mod:`life <garlicsim_lib.simpacks.life>` simpack
-====================================================================================
+Basic simulation commands using the :mod:`life <garlicsim_lib.simpacks.life>` simpack
+=====================================================================================
 
 For making a Life simulation, we will use the :mod:`life
 <garlicsim_lib.simpacks.life>` simpack.
@@ -224,7 +224,7 @@ The functions that we've been playing with now, :func:`simulate
 the simplest tools that GarlicSim provides for simulating. You could probably
 see that they are not much different than applying the step function yourself.
 
-Now it's time to introduce Project.
+Now it's time to introduce :class:`Project <garlicsim.Project>`.
 
 The :class:`Project <garlicsim.Project>` class
 ==============================================
@@ -372,10 +372,14 @@ Let's fork our tree. But before that, let's get that single path:
     >>> path1
     <garlicsim.data_structures.Path of length 51 at 0x1ccfb30>
 
-:class:`Path <garlicsim.data_structures.Path>` is a list-like object. We can get any node we want from it using its index number. Let's see how our diehard is doing at turn 51::
+:class:`Path <garlicsim.data_structures.Path>` is a list-like object. We can get any node we want from it using its index number. Let's see how our diehard is doing at clock 50:
+
+.. _original_clock_50:
+
+::
     
     >>> path1[-1]
-    <garlicsim.data_structures.Node with clock 51, leaf, untouched, belongs to a block, crunched with StepProfile(), at 0x1cd9070>
+    <garlicsim.data_structures.Node with clock 50, leaf, untouched, belongs to a block, crunched with StepProfile(), at 0x1cd9070>
     >>> 
     >>> 
     >>> path1[-1].state
@@ -479,20 +483,82 @@ lose any of our simulation data while doing experiments like this one.
     >>> 
     
 Did you notice the little change we did? We flipped one cell from dead to alive.
+
+Now after we edited the new node, we need to finalize it to tell GarlicSim that
+it can start crunching from that node.
     
-    
-    >>> project.ensure_buffer(root, 50)
-    >>> project.sync_crunchers()
-    <0 nodes were added to the tree>
-    >>> project.sync_crunchers()
-    <0 nodes were added to the tree>
     >>> new_node.finalize()
+    
+We can see our tree now has two possible paths:
+
+    >>> project.tree
+    <garlicsim.data_structures.Tree with 1 roots, 52 nodes and 2 possible paths at 0x1c68810>
+    
+The fork happens on clock 27, since that is the one we duplicated for editing.
+    
+Now we want to crunch from our new node up to a clock of 50, like in the original timeline:
+
+    >>> project.ensure_buffer(root, 50)
+
+:meth:`ensure_buffer <garlicsim.Project.ensure_buffer>` makes sure there is a
+buffer of the specified clock time (in our case 50) on all paths that go out of
+that node. This will cause our new path to be calculated up to clock 50. After
+we call :meth:`sync_crunchers <garlicsim.Project.sync_crunchers>`, of course:
+    
     >>> project.sync_crunchers()
     <0 nodes were added to the tree>
+    >>> # Give it a few seconds...
     >>> project.sync_crunchers()
     <23 nodes were added to the tree>
 
+It's ready! So what we did here, is create an alternate timeline. We have
+already seen the future (clock 50) of the original timeline, and now we're
+asking, "How would that future have looked if we make a little change at clock
+27?"
+
+Let's check the new path:
+
+    >>> new_path = new_node.make_containing_path()
+    
+And now, to see what happens in clock 50 in our alternate timeline::
+    
+    >>> new_path[-1].state
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                           #                    
+                          ###                   
+                          ####                  
+                              #                 
+                     #####    ##                
+                     ## ###  ###                
+                    #  ###  # #                 
+                  ##  #   #                     
+                  ##   #                        
+                  ##   #   #    #               
+                    # #       ##                
+                       #      ##                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+   >>> 
+   
+This is a very different state from :ref:`the one <original_clock_50>` in the original timeline! It has
+about twice as many live cells. This is a reminder of how a small change in the
+present can cause a big change in the future.
 
 .. _degenerate: http://en.wikipedia.org/wiki/Degeneracy_(mathematics)
 .. _Metushelah: http://en.wikipedia.org/wiki/Methuselah_(cellular_automata)
 .. _Diehard: http://en.wikipedia.org/wiki/File:Die_hard.gif
+
+What's next
+===========
+
+In the next part of the tutorial, we're going to write our own simpack! :ref:`Let's go! <intro-tutorial02>`
