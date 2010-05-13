@@ -8,16 +8,16 @@
 /* -- page layout ----------------------------------------------------------- */
 
 body {
-    font-family: {{ theme_bodyfont }};
+    font-family: Verdana;
     font-size: 100%;
-    background-color: {{ theme_footerbgcolor }};
+    background-color: black;
     color: #000;
     margin: 0;
     padding: 0;
 }
 
 div.document {
-    background-color: {{ theme_sidebarbgcolor }};
+    background-color: black;
 }
 
 div.documentwrapper {
@@ -30,8 +30,8 @@ div.bodywrapper {
 }
 
 div.body {
-    background-color: {{ theme_bgcolor }};
-    color: {{ theme_textcolor }};
+    background-color: black;
+    color: #CCC;
     padding: 0 20px 30px 20px;
 }
 
@@ -42,7 +42,7 @@ div.bodywrapper {
 {%- endif %}
 
 div.footer {
-    color: {{ theme_footertextcolor }};
+    color: #CCC;
     width: 100%;
     padding: 9px 0 9px 0;
     text-align: center;
@@ -50,18 +50,18 @@ div.footer {
 }
 
 div.footer a {
-    color: {{ theme_footertextcolor }};
+    color: #CCC;
     text-decoration: underline;
 }
 
 div.related {
-    background-color: {{ theme_relbarbgcolor }};
+    background-color: #333;
     line-height: 30px;
-    color: {{ theme_relbartextcolor }};
+    color: #CCC;
 }
 
 div.related a {
-    color: {{ theme_relbarlinkcolor }};
+    color: #CC0;
 }
 
 div.sphinxsidebar {
@@ -95,8 +95,8 @@ div.documentwrapper {
 {%- endif %}
 
 div.sphinxsidebar h3 {
-    font-family: {{ theme_headfont }};
-    color: {{ theme_sidebartextcolor }};
+    font-family: Arial, Helvetica;
+    color: #CCC;
     font-size: 1.4em;
     font-weight: normal;
     margin: 0;
@@ -104,12 +104,12 @@ div.sphinxsidebar h3 {
 }
 
 div.sphinxsidebar h3 a {
-    color: {{ theme_sidebartextcolor }};
+    color: #CCC;
 }
 
 div.sphinxsidebar h4 {
-    font-family: {{ theme_headfont }};
-    color: {{ theme_sidebartextcolor }};
+    font-family: Arial, Helvetica;
+    color: #CCC;
     font-size: 1.3em;
     font-weight: normal;
     margin: 5px 0 0 0;
@@ -117,7 +117,7 @@ div.sphinxsidebar h4 {
 }
 
 div.sphinxsidebar p {
-    color: {{ theme_sidebartextcolor }};
+    color: #CCC;
 }
 
 div.sphinxsidebar p.topless {
@@ -127,15 +127,18 @@ div.sphinxsidebar p.topless {
 div.sphinxsidebar ul {
     margin: 10px;
     padding: 0;
-    color: {{ theme_sidebartextcolor }};
+    color: #CCC;
 }
 
 div.sphinxsidebar a {
-    color: {{ theme_sidebarlinkcolor }};
+    color: #CC0;
 }
 
 div.sphinxsidebar input {
-    border: 1px solid {{ theme_sidebarlinkcolor }};
+    border: 1px solid #333;
+    border-radius: 5px;
+    background: #333;
+    color: #CCC;
     font-family: sans-serif;
     font-size: 1em;
 }
@@ -143,7 +146,7 @@ div.sphinxsidebar input {
 /* -- body styles ----------------------------------------------------------- */
 
 a {
-    color: {{ theme_linkcolor }};
+    color: yellow;
     text-decoration: none;
 }
 
@@ -162,11 +165,12 @@ div.body h3,
 div.body h4,
 div.body h5,
 div.body h6 {
-    font-family: {{ theme_headfont }};
-    background-color: {{ theme_headbgcolor }};
+    font-family: Arial, Helvetica;
+    background-color: black;
     font-weight: normal;
-    color: {{ theme_headtextcolor }};
-    border-bottom: 1px solid #ccc;
+    color: #CCC;
+    border-top: 3px solid #666;
+    border-top-right-radius: 40px;
     margin: 20px -20px 10px -20px;
     padding: 3px 0 3px 10px;
 }
@@ -179,14 +183,14 @@ div.body h5 { font-size: 110%; }
 div.body h6 { font-size: 100%; }
 
 a.headerlink {
-    color: {{ theme_headlinkcolor }};
+    color: yellow;
     font-size: 0.8em;
     padding: 0 4px 0 4px;
     text-decoration: none;
 }
 
 a.headerlink:hover {
-    background-color: {{ theme_headlinkcolor }};
+    background-color: yellow;
     color: white;
 }
 
@@ -228,8 +232,8 @@ p.admonition-title:after {
 
 pre {
     padding: 5px;
-    background-color: {{ theme_codebgcolor }};
-    color: {{ theme_codetextcolor }};
+    background-color: #333;
+    color: #CCC;
     line-height: 120%;
     border: 1px solid #ac9;
     border-left: none;
