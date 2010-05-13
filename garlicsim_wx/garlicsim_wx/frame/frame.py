@@ -66,8 +66,6 @@ class Frame(wx.Frame):
         
         self.__init_menus()
         
-        self.__init_key_bindings()
-        
         self.background_timer = thread_timer.ThreadTimer(self)
         
         self.background_timer.start(150)

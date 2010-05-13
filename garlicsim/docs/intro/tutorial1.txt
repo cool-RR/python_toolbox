@@ -45,9 +45,9 @@ So:
 That's it, we now have our :mod:`life <garlicsim_lib.simpacks.life>` simpack at
 our disposal. Let's make a :mod:`life <garlicsim_lib.simpacks.life>` state:
 
-    >>> state = life.State.make_messy_root()
+    >>> state = life.State.create_messy_root()
 
-The ``make_messy_root`` method makes a state with lots of randomness and mess.
+The ``create_messy_root`` method makes a state with lots of randomness and mess.
 This is good for our purposes, because we want to see some nice chaos in our
 simulation.
 
@@ -274,7 +274,7 @@ node to the tree as a root. The method returned the new node. Let's see some
 info about our node:
 
     >>> node
-    <garlicsim.data_structures.node.Node with clock 0, root, touched, blockless, at 0x1c68ed0>
+    <garlicsim.data_structures.Node with clock 0, root, touched, blockless, at 0x1c68ed0>
 
 The ``clock 0`` thing means that the clock reading of this node's state is zero.
 The states that will succeed it will have incrementing clock readings. The
@@ -300,31 +300,44 @@ project's crunching manager to review the work that needs to be done on the
 project, recruit workers to work on it, and take any work that has been
 completed from the workers to implement into the tree. We will explain all about
 :class:`CrunchingManager <garlicsim.asynchronous_crunching.CrunchingManager>`
-later on.
+later on. For now we will note that by default, the crunching of a
+:class:`Project <garlicsim.Project>` is done on an auxiliary :class:`Thread
+<threading.Thread>`; But by using different cruncher types, it can be done on an
+auxiliary :class:`Process <multiprocessing.Process>` or even on a cloud.
 
-After a few seconds have passed, we call it again:
+After a few seconds have passed, we call :meth:`sync_crunchers
+<garlicsim.Project.sync_crunchers>` again:
 
     >>> project.sync_crunchers()
     <20 nodes were added to the tree>
 
-We see that sync_crunchers tells us how many nodes were added to the tree. This
-return value is actually a subclass of :class:`int`, with a pretty
-representation which makes it easy to understand its context. It can be
-manipulated like any other :class:`int`.
+We see that :meth:`sync_crunchers <garlicsim.Project.sync_crunchers>` tells us
+how many nodes were added to the tree. This return value is actually a subclass
+of :class:`int`, with a pretty representation which makes it easy to understand
+its context. It can be manipulated like any other :class:`int`.
 
 Okay, now that the results of our simulation are ready, let's take a look at our tree:
 
     >>> project.tree
-    <garlicsim.data_structures.tree.Tree with 1 roots, 21 nodes and 1 possible paths at 0x1c68810>
-    >>> 
-    >>> 
+    <garlicsim.data_structures.Tree with 1 roots, 21 nodes and 1 possible paths at 0x1c68810>
+
+Our tree has only one possible :class:`Path <garlicsim.data_structures.Path>` in
+it. A :class:`Path <garlicsim.data_structures.Path>` represents one timeline
+inside a time tree; A direct line of nodes which succeed each other.
+
+Since we didn't make any forks in our tree, it is currently a `degenerate`_
+tree-- It's simply a timeline. So there is only one possible path that goes
+through it.
+
+Let's fork our tree. But before that, let's get that single path and a reference to i
+
     >>> path = node.make_containing_path()
     >>> path
-    <garlicsim.data_structures.path.Path of length 21 at 0x1ccfb30>
+    <garlicsim.data_structures.Path of length 21 at 0x1ccfb30>
     >>> 
     >>> 
     >>> path[-1]
-    <garlicsim.data_structures.node.Node with clock 20, untouched, belongs to a block, crunched with StepProfile(), at 0x1cd9070>
+    <garlicsim.data_structures.Node with clock 20, untouched, belongs to a block, crunched with StepProfile(), at 0x1cd9070>
     >>> 
     >>> 
     >>> path[-1].state
@@ -348,3 +361,4 @@ Okay, now that the results of our simulation are ready, let's take a look at our
     
 tododoc: Do some fork to edit here
 
+.. _degenerate: http://en.wikipedia.org/wiki/Degeneracy_(mathematics)

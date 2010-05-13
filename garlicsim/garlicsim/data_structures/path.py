@@ -289,7 +289,10 @@ class Path(object):
                    self.decisions.get(real_thing, None)
         
         if len(kids) > 1:
-            kid = kids[-1]
+            kid = kids[0]
+            # Whether it should take `kids[0]` or `kids[-1]` is a subject for
+            # debate. The question is, when you update the tree, do you want the
+            # old paths to point to the new nodes or the old?
             self.decisions[real_thing] = kid
             return kid
 
