@@ -1,0 +1,350 @@
+.. _intro-tutorial01:
+
+==============================================
+Tutorial part 1: Running your first simulation
+==============================================
+
+In this first part of the tutorial, we will run a simulation of `Conway's Game
+of Life`_, known simply as "Life". Life is a very popular and simple simulation
+to get started with. In spite of its simplicity, we'll be able to see
+interesting behaviors in our Life simulations. (Try spotting a `glider`_!) This
+simulation is called Life because the patterns that emerge from it can seem like
+living cells and organizms.
+
+.. _Conway's Game of Life: http://en.wikipedia.org/wiki/Conway's_Game_of_Life
+.. _glider: http://en.wikipedia.org/wiki/Glider_(Conway's_Life)
+
+.. admonition:: Where to get help
+
+    If you're having trouble going through this tutorial, you may ask for help in 
+    `GarlicSim's mailing list`_.
+    
+    .. _GarlicSim's mailing list: mailto:garlicsim@librelist.org
+
+Basic simulation command using the :mod:`life <garlicsim_lib.simpacks.life>` simpack
+====================================================================================
+
+For making a Life simulation, we will use the :mod:`life
+<garlicsim_lib.simpacks.life>` simpack.
+
+.. rubric:: What is a simpack?
+
+For every kind of simulation there's a simulation package. We will usually
+abbreviate "simulation package" to simpack. For simulating Life, there's a
+:mod:`life <garlicsim_lib.simpacks.life>` simpack. If you'll want to
+simulate Quantum Mechanics, you will need a simpack for Quantum Mechanics.
+(Which might as well be named ``quantum_mechanics``.) There's a collection
+of various simpacks in the :mod:`garlicsim_lib.simpacks` package, and from
+there we will obtain our :mod:`life <garlicsim_lib.simpacks.life>` simpack.
+
+So:
+
+    >>> import garlicsim
+    >>> from garlicsim_lib.simpacks import life
+
+That's it, we now have our :mod:`life <garlicsim_lib.simpacks.life>` simpack at
+our disposal. Let's make a :mod:`life <garlicsim_lib.simpacks.life>` state:
+
+    >>> state = life.State.make_messy_root()
+
+The ``make_messy_root`` method makes a state with lots of randomness and mess.
+This is good for our purposes, because we want to see some nice chaos in our
+simulation.
+
+.. rubric:: What is a state?
+
+A state is the most basic data unit in GarlicSim. Sometimes called a "world
+state", a state is the description of the simulation world in one frozen moment
+in time. A :class:`State <garlicsim.data_structures.State>` object will contain
+all the information there is about that moment in time in the simulation.
+
+Let's check out this state:
+
+    >>> state
+       ##  #  #  ##    ##    ## #  ##  ##  #
+     ###### #  ### ## # # ###########     # 
+      #   # ### # ####     ### #    #  #####
+    #  ###   ###    #  ###  # ##   ####  # #
+      ####### #        ##  ######  ### #  ##
+    #   ## ## ###  #  ### ## #  #  ## ###  #
+      #  # #   # #  ## #  ## ##    ### #   #
+    #   #### ##    #  ####    # # # ## ###  
+    ##  # #  # ## ## #      ##   ##  ## #   
+     ##  #      ### ## # ####  ##  # #   # #
+       ## ###     ##  # #  # ###  ## #### ##
+    ###  ##  ## #    ##  ####      ######## 
+      ##       ####   # ###### ## ## ###    
+    ### #  ## ####  ## ### ####   # # #### #
+    # #  # ##  # # #  #   # # ##  ### ## # #
+    >>> type(state)
+    <class 'life.State'>
+
+
+    
+We can see the board of the state is drawn nicely for us in ASCII art, with
+``#`` marking a "live" cell and an empty space marking a "dead" cell. We can see
+that this board is random, with no seeming structure.
+
+There are exactly 3 objects that are defined in the root :mod:`garlicsim`
+namespace. There are many classes and functions that are available in deeper
+namespaces, but only three that are available in the root namespace. These three
+definitions were chosen because they represent the most important and elementary
+functionalities of GarlicSim. The three definitions are
+:func:`garlicsim.simulate`, :func:`garlicsim.list_simulate` and
+:class:`garlicsim.Project`.
+
+Let's experiment with :func:`simulate <garlicsim.simulate>` first:
+
+    >>> new_state = garlicsim.simulate(state)
+    >>> new_state
+             ##     ### # #           #### #
+    ##    # #         # ###      ##  #      
+          # #     #   #          #    ###   
+    ##              #### ##                 
+     ##         #               # #      #  
+    ###       # #   ##          # #     #   
+     # #          ####     # ##  ##      ###
+    #  ##  # #   # #   #####  ##  #      # #
+      ###  ### ##    #      ###   #       ##
+     ##     #  ##    # ####    ##  #     # #
+       ##  ### ## ##    #    #### #         
+    ##   ## ### #  # ##         ##        # 
+        #####     # #          # ##         
+        # #####    ###          #        # #
+      #  #         ####   #      ##      #  
+
+What the :func:`simulate <garlicsim.simulate>` function did is apply the step
+function of :mod:`life <garlicsim_lib.simpacks.life>` exactly one time. This
+means this new board is what you get from one iteration of the Life simulation.
+We can see it has a bit more structure in it; There are clusters of dead and of
+live cells.
+
+What we can do now is supply the :func:`simulate <garlicsim.simulate>` function
+with a second parameter, which specifies how many iterations we want. Here we
+specify 20:
+
+    >>> new_state = garlicsim.simulate(state, 20)
+    >>> new_state
+           #            #  #  #   #  #     #
+                         ##       ## ##    #
+                               ##  # #     #
+                ###              ##   #   # 
+                ###                    ###  
+               #                            
+      # #       #                    ##     
+    # ## #       # ##                ##     
+    ###           ###            #        ##
+    ##  #          #  ##         ##      ## 
+                   # ####      # # #    # ##
+                    #         #    #   ##  #
+              ##     ###       #  ##  ## ## 
+              ##      #           #   ##   #
+          ##             ##    # #     #    
+
+We can see the new state, which is a result of 20 iterations of the simulation
+and is therefore more "mature" than the state we've seen before. It contains a
+few `typical Life creatures`_.
+
+.. _typical life creatures: http://en.wikipedia.org/wiki/Conway's_Game_of_Life#Examples_of_patterns
+
+Now let's try :func:`list_simulate <garlicsim.list_simulate>`. It is similar to
+:func:`simulate <garlicsim.simulate>`, except it returns the entire list of
+states, from the first given one to the last.
+
+    >>> result = garlicsim.list_simulate(state, 20)
+    >>> type(result)
+    <type 'list'>
+    >>> len(result)
+    21
+
+The list contains 21 states, comprising of the 1 initial state plus the 20
+states creates in 20 iterations. We can see our initial random state is the
+first member of this list:
+
+    >>> result[0]
+       ##  #  #  ##    ##    ## #  ##  ##  #
+     ###### #  ### ## # # ###########     # 
+      #   # ### # ####     ### #    #  #####
+    #  ###   ###    #  ###  # ##   ####  # #
+      ####### #        ##  ######  ### #  ##
+    #   ## ## ###  #  ### ## #  #  ## ###  #
+      #  # #   # #  ## #  ## ##    ### #   #
+    #   #### ##    #  ####    # # # ## ###  
+    ##  # #  # ## ## #      ##   ##  ## #   
+     ##  #      ### ## # ####  ##  # #   # #
+       ## ###     ##  # #  # ###  ## #### ##
+    ###  ##  ## #    ##  ####      ######## 
+      ##       ####   # ###### ## ## ###    
+    ### #  ## ####  ## ### ####   # # #### #
+    # #  # ##  # # #  #   # # ##  ### ## # #
+
+And the same "mature" state we saw before is the list's last member: 
+
+    >>> result[-1]
+           #            #  #  #   #  #     #
+                         ##       ## ##    #
+                               ##  # #     #
+                ###              ##   #   # 
+                ###                    ###  
+               #                            
+      # #       #                    ##     
+    # ## #       # ##                ##     
+    ###           ###            #        ##
+    ##  #          #  ##         ##      ## 
+                   # ####      # # #    # ##
+                    #         #    #   ##  #
+              ##     ###       #  ##  ## ## 
+              ##      #           #   ##   #
+          ##             ##    # #     #    
+    >>> result[-1] == new_state
+    True
+
+We can also check out any state in between:
+
+    >>> result[7]
+      #   #             #  #           #    
+        ##               ##        ######   
+                     ##              # ## # 
+      #            ## #                 ##  
+      # #      #### #              ##       
+              ## ## #      #    ## ##       
+    # #      #    #  ##    #     #   #    ##
+    #    ## ##   #    #### #    #  ###   ###
+       ####  #  #    ##   ##    #       ### 
+         ##                ### ##       ### 
+       #               ##    ## # ##    ## #
+      ##      #               ##            
+    #         # #                       #  #
+       ### ##  #                  #     ## #
+      #     #            ##      ###        
+
+
+The functions that we've been playing with now, :func:`simulate
+<garlicsim.simulate>` and :func:`list_simulate <garlicsim.list_simulate>`, are
+the simplest tools that GarlicSim provides for simulating. You could probably
+see that they are not much different than applying the step function yourself.
+
+Now it's time to introduce Project.
+
+The :class:`Project <garlicsim.Project>` class
+==============================================
+
+Before we'll create a :class:`Project <garlicsim.Project>` and play around with
+it, I'd like to show you a diagram that describes the inner workings of a
+:class:`Project <garlicsim.Project>`. You're not expected to understand what it
+all means right now; We're just taking a quick peek under the hood.
+
+.. image:: /images/project.png
+    :align: center
+ 
+Impressed? Now we'll play around with it some.
+
+:class:`Project <garlicsim.Project>` is a class, and to instantiate it you have
+to pass the simpack into it, like so:
+
+    >>> project = garlicsim.Project(life)
+
+(We're still using :mod:`life <garlicsim_lib.simpacks.life>` as our simpack.
+This is the same shell session that we started in the last section, with all the
+objects we created.)
+
+:class:`Project <garlicsim.Project>` is the main device used for doing
+simulations in GarlicSim. A project contains a :class:`Tree
+<garlicsim.data_structures.Tree>` within it; This is a time tree, in which we
+organize our simulation data. A time tree is generalization of a time line.
+Trees are useful, because they give you the ability to "split" or "fork" the
+simulation at any node you wish, allowing you to explore and analyze different
+scenarios in parallel in the same simulation.
+    
+Aside from the tree, :class:`Project <garlicsim.Project>` provides powerful
+tools for crunching the simulation. We're going to explain these tools in
+greater depth later, but for now let's just play around with our new project.
+
+Let's take the state we created before and use it as a "root" in our project:
+
+    >>> node = project.root_this_state(state)
+
+What is a "root"? It's just a term for describing a node that has no parent, and
+can therefore be thought of as "a root of the tree", (though a tree may have
+more than one root.) Similarly, "leaf" describes a node which has no children.
+
+When we called the :meth:`root_this_state <garlicsim.Project.root_this_state>`
+method, we created a node that has our state contained in it, and added that
+node to the tree as a root. The method returned the new node. Let's see some
+info about our node:
+
+    >>> node
+    <garlicsim.data_structures.node.Node with clock 0, root, touched, blockless, at 0x1c68ed0>
+
+The ``clock 0`` thing means that the clock reading of this node's state is zero.
+The states that will succeed it will have incrementing clock readings. The
+"blockless" thing means that this node is not part of a :class:`Block
+<garlicsim.data_structures.Block>`; More on blocks later.
+
+So now our tree has only one node, which is its root. Let's do some crunching to
+add more nodes.
+
+    >>> project.begin_crunching(node, 20)
+
+This will order the project to start crunching from our node. The number 20
+means it will crunch until it reaches a clock reading of 20. In our example it
+is equivalent to performing 20 iterations as we did in the previous section.
+
+However, crunching has not yet started. To start it, we will call:
+
+    >>> project.sync_crunchers()
+    <0 nodes were added to the tree>
+
+The :meth:`sync_crunchers <garlicsim.Project.sync_crunchers>` method causes the
+project's crunching manager to review the work that needs to be done on the
+project, recruit workers to work on it, and take any work that has been
+completed from the workers to implement into the tree. We will explain all about
+:class:`CrunchingManager <garlicsim.asynchronous_crunching.CrunchingManager>`
+later on.
+
+After a few seconds have passed, we call it again:
+
+    >>> project.sync_crunchers()
+    <20 nodes were added to the tree>
+
+We see that sync_crunchers tells us how many nodes were added to the tree. This
+return value is actually a subclass of :class:`int`, with a pretty
+representation which makes it easy to understand its context. It can be
+manipulated like any other :class:`int`.
+
+Okay, now that the results of our simulation are ready, let's take a look at our tree:
+
+    >>> project.tree
+    <garlicsim.data_structures.tree.Tree with 1 roots, 21 nodes and 1 possible paths at 0x1c68810>
+    >>> 
+    >>> 
+    >>> path = node.make_containing_path()
+    >>> path
+    <garlicsim.data_structures.path.Path of length 21 at 0x1ccfb30>
+    >>> 
+    >>> 
+    >>> path[-1]
+    <garlicsim.data_structures.node.Node with clock 20, untouched, belongs to a block, crunched with StepProfile(), at 0x1cd9070>
+    >>> 
+    >>> 
+    >>> path[-1].state
+           #            #  #  #   #  #     #
+                         ##       ## ##    #
+                               ##  # #     #
+                ###              ##   #   # 
+                ###                    ###  
+               #                            
+      # #       #                    ##     
+    # ## #       # ##                ##     
+    ###           ###            #        ##
+    ##  #          #  ##         ##      ## 
+                   # ####      # # #    # ##
+                    #         #    #   ##  #
+              ##     ###       #  ##  ## ## 
+              ##      #           #   ##   #
+          ##             ##    # #     #    
+    >>>
+
+    
+tododoc: Do some fork to edit here
+

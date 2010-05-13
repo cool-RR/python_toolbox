@@ -1,0 +1,29 @@
+.. _intro-index:
+
+Getting started
+===============
+
+New to GarlicSim? Here you have everything you need to know to get started with
+GarlicSim:
+
+.. toctree::
+   :maxdepth: 1
+    
+   overview
+   install
+   tutorial1
+   tutorial2
+   tutorial3
+   tutorial4
+   whatsnext
+   
+.. seealso::
+
+    If you're new to Python_, you must learn it before you start learning
+    GarlicSim. GarlicSim is written in Python, and any simpack you will write
+    will use Python.
+    
+    Visit Python's `beginner guide`_ for advice on how to learn Python.
+    
+    .. _python: http://python.org/
+    .. _beginner guide: http://wiki.python.org/moin/BeginnersGuide
