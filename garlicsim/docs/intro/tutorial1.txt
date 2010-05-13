@@ -244,10 +244,6 @@ to pass the simpack into it, like so:
 
     >>> project = garlicsim.Project(life)
 
-(We're still using :mod:`life <garlicsim_lib.simpacks.life>` as our simpack.
-This is the same shell session that we started in the last section, with all the
-objects we created.)
-
 :class:`Project <garlicsim.Project>` is the main device used for doing
 simulations in GarlicSim. A project contains a :class:`Tree
 <garlicsim.data_structures.Tree>` within it; This is a time tree, in which we
@@ -260,9 +256,45 @@ Aside from the tree, :class:`Project <garlicsim.Project>` provides powerful
 tools for crunching the simulation. We're going to explain these tools in
 greater depth later, but for now let's just play around with our new project.
 
-Let's take the state we created before and use it as a "root" in our project:
+In the last section, we played around with a random Life board; This time, we
+will use a specific, famous board called "`Diehard`_"::
 
-    >>> node = project.root_this_state(state)
+    >>> state = life.State.create_diehard()
+    >>> state
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+                                #                
+                          ##                     
+                           #   ###               
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+    >>> 
+    
+`Diehard`_ is a kind of `Metushelah`_; A small, seemingly innocent state that
+creates a lot of chaos before it eventually dies down, after many simulation
+steps.
+
+Let's take this state we created before and use it as a "root" in our project:
+
+    >>> root = project.root_this_state(state)
 
 What is a "root"? It's just a term for describing a node that has no parent, and
 can therefore be thought of as "a root of the tree", (though a tree may have
@@ -284,7 +316,7 @@ The states that will succeed it will have incrementing clock readings. The
 So now our tree has only one node, which is its root. Let's do some crunching to
 add more nodes.
 
-    >>> project.begin_crunching(node, 20)
+    >>> project.begin_crunching(root, 50)
 
 This will order the project to start crunching from our node. The number 20
 means it will crunch until it reaches a clock reading of 20. In our example it
@@ -309,17 +341,22 @@ After a few seconds have passed, we call :meth:`sync_crunchers
 <garlicsim.Project.sync_crunchers>` again:
 
     >>> project.sync_crunchers()
-    <20 nodes were added to the tree>
+    <50 nodes were added to the tree>
 
 We see that :meth:`sync_crunchers <garlicsim.Project.sync_crunchers>` tells us
 how many nodes were added to the tree. This return value is actually a subclass
 of :class:`int`, with a pretty representation which makes it easy to understand
 its context. It can be manipulated like any other :class:`int`.
 
-Okay, now that the results of our simulation are ready, let's take a look at our tree:
+(If you got less than 50 nodes added to the tree, don't worry; Just hit
+:meth:`sync_crunchers <garlicsim.Project.sync_crunchers>` again after a few
+seconds, and by then it should get you the rest of the nodes.)
+
+Okay, now that the results of our simulation are ready, let's take a look at our
+tree:
 
     >>> project.tree
-    <garlicsim.data_structures.Tree with 1 roots, 21 nodes and 1 possible paths at 0x1c68810>
+    <garlicsim.data_structures.Tree with 1 roots, 51 nodes and 1 possible paths at 0x1c68810>
 
 Our tree has only one possible :class:`Path <garlicsim.data_structures.Path>` in
 it. A :class:`Path <garlicsim.data_structures.Path>` represents one timeline
@@ -331,36 +368,131 @@ through it.
 
 Let's fork our tree. But before that, let's get that single path:
 
-    >>> (path,) = project.tree.all_possible_paths()
-    >>> path
-    <garlicsim.data_structures.Path of length 21 at 0x1ccfb30>
+    >>> (path1,) = project.tree.all_possible_paths()
+    >>> path1
+    <garlicsim.data_structures.Path of length 51 at 0x1ccfb30>
 
-:class:`Path <garlicsim.data_structures.Path>` is a list-like object. We can get any node we want from it using its index number:
+:class:`Path <garlicsim.data_structures.Path>` is a list-like object. We can get any node we want from it using its index number. Let's see how our diehard is doing at turn 51::
     
-    >>> path[-1]
-    <garlicsim.data_structures.Node with clock 20, leaf, untouched, belongs to a block, crunched with StepProfile(), at 0x1cd9070>
+    >>> path1[-1]
+    <garlicsim.data_structures.Node with clock 51, leaf, untouched, belongs to a block, crunched with StepProfile(), at 0x1cd9070>
     >>> 
     >>> 
-    >>> path[-1].state
-           #            #  #  #   #  #     #
-                         ##       ## ##    #
-                               ##  # #     #
-                ###              ##   #   # 
-                ###                    ###  
-               #                            
-      # #       #                    ##     
-    # ## #       # ##                ##     
-    ###           ###            #        ##
-    ##  #          #  ##         ##      ## 
-                   # ####      # # #    # ##
-                    #         #    #   ##  #
-              ##     ###       #  ##  ## ## 
-              ##      #           #   ##   #
-          ##             ##    # #     #    
+    >>> path1[-1].state
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                     #                       
+                    #   ###                  
+                        ##                   
+                           ##                
+                   # #     ##                
+                    ## #   # #               
+                     #  #    #               
+                                             
+                      # #                    
+                       #                     
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
     >>>
-
-This is the same "mature" state we saw several times in this tutorial.
     
-Okay, now let's do some forking.
+Grown quite a bit, hasn't it?
+    
+Okay, now let's do some forking. Let's catch diehard at clock 27::
+
+    >>> node = path[27]
+    >>> node.state
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+                                 #               
+                                 ###             
+                          ###       ##           
+                          # #   #    #           
+                          ###   #                
+                                #   #            
+                                   #             
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+    >>> 
+
+And now we're going to fork the tree, and modify that state a bit.
+    
+    >>> new_node = project.fork_to_edit(node)
+    
+The :meth:`fork_to_edit <GarlicSim.Project.fork_to_edit>` method duplicates the
+node we feed it, and gives us a fresh copy we can play with. That way we don't
+lose any of our simulation data while doing experiments like this one.
+
+::
+    
+    >>> new_node.state.board.set(28, 13, True)
+    >>> new_node.state
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+                                 #               
+                                 ###             
+                          ###   #   ##           
+                          # #   #    #           
+                          ###   #                
+                                #   #            
+                                   #             
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+    >>> 
+    
+Did you notice the little change we did? We flipped one cell from dead to alive.
+    
+    
+    >>> project.ensure_buffer(root, 50)
+    >>> project.sync_crunchers()
+    <0 nodes were added to the tree>
+    >>> project.sync_crunchers()
+    <0 nodes were added to the tree>
+    >>> new_node.finalize()
+    >>> project.sync_crunchers()
+    <0 nodes were added to the tree>
+    >>> project.sync_crunchers()
+    <23 nodes were added to the tree>
+
 
 .. _degenerate: http://en.wikipedia.org/wiki/Degeneracy_(mathematics)
+.. _Metushelah: http://en.wikipedia.org/wiki/Methuselah_(cellular_automata)
+.. _Diehard: http://en.wikipedia.org/wiki/File:Die_hard.gif

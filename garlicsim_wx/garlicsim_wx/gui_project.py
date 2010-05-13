@@ -407,7 +407,7 @@ class GuiProject(object):
         return self.active_node.state if self.active_node is not None else None
                 
 
-    def make_plain_root(self, *args, **kwargs):
+    def make_plain_root(self, *args, **kwargs): #tododoc: take care of this
         '''
         Create a parentless node, whose state is a simple plain state.
         
@@ -425,7 +425,7 @@ class GuiProject(object):
         return root
 
     
-    def make_random_root(self, *args, **kwargs):
+    def make_random_root(self, *args, **kwargs): #tododoc: take care of this
         '''
         Create a parentless node, whose state is a random and messy state.
         
