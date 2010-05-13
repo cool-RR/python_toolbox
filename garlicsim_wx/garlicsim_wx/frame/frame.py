@@ -23,7 +23,8 @@ import pkg_resources
 
 from garlicsim.general_misc import dict_tools
 from garlicsim.general_misc import string_tools
-import garlicsim_wx.general_misc.thread_timer as thread_timer
+from garlicsim_wx.general_misc import thread_timer
+from garlicsim_wx.general_misc import wx_tools
 
 import garlicsim
 from garlicsim_wx.gui_project import GuiProject
@@ -48,9 +49,8 @@ class Frame(wx.Frame):
         self.SetDoubleBuffered(True)
         self.SetIcons(garlicsim_wx.misc.icon_bundle.get_icon_bundle())
         
-        self.Bind(wx.EVT_CLOSE, self.on_close)
-        # self.Bind(wx.EVT_KEY_DOWN, self.on_key_down) todo: uncomment
-                
+        self.Bind(wx.EVT_CLOSE, self.on_close)        
+        
         self.tree_browser = None
         self.seek_bar = None
         self.shell = None
@@ -65,6 +65,7 @@ class Frame(wx.Frame):
         self.CreateStatusBar()
         
         self.__init_menus()
+        self.__init_key_handlers()
         
         self.background_timer = thread_timer.ThreadTimer(self)
         
@@ -106,7 +107,61 @@ class Frame(wx.Frame):
             try_recalculate(menu)
         try_recalculate(self.menu_bar)
 
-    
+        
+    def __init_key_handlers(self):
+        
+        self.Bind(wx.EVT_KEY_DOWN, self.on_key_down)
+        
+        def on_home():
+            
+            if self.gui_project is not None and \
+               self.gui_project.path is not None:
+                
+                try:
+                    self.gui_project.set_active_node(self.gui_project.path[0])
+                except LookupError:
+                    pass
+
+                
+        def on_end():
+            
+            if self.gui_project is not None and \
+               self.gui_project.path is not None:
+                
+                try:
+                    self.gui_project.set_active_node(self.gui_project.path[-1])
+                except LookupError:
+                    pass
+                
+        def on_left():
+            
+            if self.gui_project is not None and \
+               self.gui_project.path is not None:
+                
+                parent = self.gui_project.active_node.parent
+                if parent is not None:
+                    self.gui_project.set_active_node(parent)
+        
+        def on_right():
+            
+            if self.gui_project is not None and \
+               self.gui_project.path is not None:
+                
+                try:
+                    child = self.gui_project.path.next_node\
+                          (self.gui_project.active_node.parent)
+                    self.gui_project.set_active_node(child)
+                except LookupError:
+                    pass
+                
+        
+        self.key_handlers = {
+            wx_tools.Key(wx.WXK_HOME): on_home,
+            wx_tools.Key(wx.WXK_END): on_end,
+            wx_tools.Key(wx.WXK_LEFT): on_left,
+            wx_tools.Key(wx.WXK_RIGHT): on_right,
+        }    
+            
     def on_close(self, event):
         '''Close the application window.'''
         if self.gui_project:
@@ -405,29 +460,26 @@ class Frame(wx.Frame):
         assert self.gui_project is not None
         wildcard = 'GarlicSim Simulation Pickle (*.gssp)|*.gssp|All files (*)|*|'
         folder = os.getcwd()
-        try:
-            save_dialog = wx.FileDialog(self, message='Save file as...',
-                                     defaultDir=folder, defaultFile='',
-                                     wildcard=wildcard,
-                                     style=wx.SAVE | wx.OVERWRITE_PROMPT)
-            if save_dialog.ShowModal() == wx.ID_OK:
-                path = save_dialog.GetPath()
-    
-                try:
-                    with file(path, 'w') as my_file:
-                        picklable_vars = self.gui_project.__getstate__()
-                        pickle_module.dump(picklable_vars, my_file)
-    
-                except IOError, error:
-                    error_dialog = wx.MessageDialog(
-                        self,
-                        'Error saving file\n' + str(error)
-                    )
-                    error_dialog.ShowModal()
+        
+        save_dialog = wx.FileDialog(self, message='Save file as...',
+                                 defaultDir=folder, defaultFile='',
+                                 wildcard=wildcard,
+                                 style=wx.SAVE | wx.OVERWRITE_PROMPT)
+        if save_dialog.ShowModal() == wx.ID_OK:
+            path = save_dialog.GetPath()
+
+            try:
+                with file(path, 'w') as my_file:
+                    picklable_vars = self.gui_project.__getstate__()
+                    pickle_module.dump(picklable_vars, my_file)
+
+            except IOError, error:
+                error_dialog = wx.MessageDialog(
+                    self,
+                    'Error saving file\n' + str(error)
+                )
+                error_dialog.ShowModal()
             
-        finally:
-            # fuck_the_path()
-            pass
             
         save_dialog.Destroy()
     
@@ -440,8 +492,14 @@ class Frame(wx.Frame):
         del gui_project
     """
     
-    """
+    
     def on_key_down(self, event):
-        if event
-        todo: Do the Key shit
-    """
+        key = wx_tools.Key.get_from_key_event(event)
+        handler = self.key_handlers.get(key, None)
+        if handler:
+            handler()
+        else:
+            event.Skip()
+            
+    
+    

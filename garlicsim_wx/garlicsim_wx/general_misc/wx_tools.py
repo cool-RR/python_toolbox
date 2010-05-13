@@ -48,9 +48,31 @@ def post_event(evt_handler, event_binder, source=None):
     wx.PostEvent(evt_handler, event)
     
     
-
-        
+class Key(object):    
     
+    def __init__(self, key_code, cmd=False, alt=False, shift=False):
+        self.key_code = key_code
+        self.cmd = cmd
+        self.alt = alt
+        self.shift = shift
+        
+    @staticmethod
+    def get_from_key_event(event):
+        return Key(event.GetKeyCode(), event.CmdDown(),
+                   event.AltDown(), event.ShiftDown())
+    
+    def __hash__(self):
+        return hash(tuple(sorted(tuple(vars(self)))))
+    
+    def __eq__(self, other):
+        if not isinstance(other, Key):
+            return NotImplemented
+        return self.key_code == other.key_code and \
+               self.cmd == other.cmd and \
+               self.shift == other.shift and \
+               self.alt == other.alt
+        
+
         
 
 

@@ -13,6 +13,10 @@ body {
     padding: 0;
 }
 
+em {
+    font-style: normal;
+}
+
 div.document {
 }
 
