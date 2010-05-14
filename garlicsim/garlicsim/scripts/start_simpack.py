@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
-import os
+from __future__ import with_statement
+
+import os.path
 import sys
 import re
 import shutil
@@ -8,9 +10,33 @@ import shutil
 import pkg_resources
 
 import simpack_template
-simpack_template_module_name = simpack_template.__name__
+simpack_template_package_name = simpack_template.__name__
 
 
+def _walk_folder(package_name, folder):
+    '''pkg_resources'''
+    folders = [folder]
+    
+    while folders:
+        folder = folders.pop()
+        for f in pkg_resources.resource_listdir(package_name, folder):
+            path = '/'.join((folder, f))
+            if pkg_resources.resource_isdir(package_name, path):
+                folders.append(path)
+            else:
+                yield path
+        
+
+def _make_path_to_file(file):
+    dir = os.path.split(file)[0]
+    if os.path.isdir(dir):
+        return
+    parent_dir = os.path.split(dir)[0]
+    _make_path_to_file(dir)
+    os.mkdir(dir)
+    
+                
+    
 def start_simpack(containing_folder, name):
     """
     
@@ -26,45 +52,29 @@ def start_simpack(containing_folder, name):
     folder = os.path.join(containing_folder, name)
     
     os.mkdir(folder)
-
-    CODE A WALK IN PKG_RESOURCES
     
-    # Determine where the app or project templates are. Use
-    # django.__path__[0] because we don't know into which directory
-    # django has been installed.
-    template_dir = os.path.join(django.__path__[0], 'conf', '%s_template' % app_or_project)
-
-    for d, subdirs, files in os.walk(template_dir):
-        relative_dir = d[len(template_dir)+1:].replace('%s_name' % app_or_project, name)
-        if relative_dir:
-            os.mkdir(os.path.join(top_dir, relative_dir))
-        for i, subdir in enumerate(subdirs):
-            if subdir.startswith('.'):
-                del subdirs[i]
-        for f in files:
-            if not f.endswith('.py'):
-                # Ignore .pyc, .pyo, .py.class etc, as they cause various
-                # breakages.
-                continue
-            path_old = os.path.join(d, f)
-            path_new = os.path.join(top_dir, relative_dir, f.replace('%s_name' % app_or_project, name))
-            fp_old = open(path_old, 'r')
-            fp_new = open(path_new, 'w')
-            fp_new.write(fp_old.read().replace('{{ %s_name }}' % app_or_project, name).replace('{{ %s_name }}' % other, other_name))
-            fp_old.close()
-            fp_new.close()
-            try:
-                shutil.copymode(path_old, path_new)
-                _make_writeable(path_new)
-            except OSError:
-                sys.stderr.write(style.NOTICE("Notice: Couldn't set permission bits on %s. You're probably using an uncommon filesystem setup. No problem.\n" % path_new))
+    for file in _walk_folder(simpack_template_package_name, '.'):
+        dest_file = '/'.join((containing_folder, f.replace('simpack_name', name)))
+        
+        _make_path_to_file(file)
+        
+        with pkg_resources.resource_stream(file) as source:
+            with open(dest, 'w') as destination:
+            
+                destination.write(source.read().replace('simpack_name', name))
+            
+        try:
+            shutil.copymode(path_old, path_new)
+            _make_writeable(path_new)
+        except OSError:
+            pass
+    
 
                 
 def _make_writeable(filename):
     """
     Make sure that the file is writeable. Useful if our source is
     read-only.
-    
     """
     import stat
     if sys.platform.startswith('java'):
@@ -78,6 +88,7 @@ def _make_writeable(filename):
         
 def show_help():
     '''tododoc'''
+    print 'help! meow.'
     
 if __name__ == '__main__':
 
