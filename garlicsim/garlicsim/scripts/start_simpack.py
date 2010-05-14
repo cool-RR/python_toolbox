@@ -42,31 +42,39 @@ def start_simpack(containing_folder, name):
     
     """
     
-    if not re.search(r'^[_a-zA-Z]\w*$', name): # If it's not a valid directory name.
+    if not re.search(r'^[_a-zA-Z]\w*$', name): # If not valid folder name.
         # Provide a smart error message, depending on the error.
         if not re.search(r'^[_a-zA-Z]', name):
             message = 'make sure the name begins with a letter or underscore'
         else:
             message = 'use only numbers, letters and underscores'
-        raise Exception("%r is not a valid simpack name. Please %s." % (name, app_or_project, message))
+        raise Exception("%r is not a valid simpack name. Please %s." %
+                        (name, app_or_project, message))
     folder = os.path.join(containing_folder, name)
     
     os.mkdir(folder)
     
     for file in _walk_folder(simpack_template_package_name, '.'):
-        dest_file = '/'.join((containing_folder, f.replace('simpack_name', name)))
         
-        _make_path_to_file(file)
+        if os.path.splitext(file)[1] in ('.pyc', '.pyo'):
+            continue
         
-        with pkg_resources.resource_stream(file) as source:
-            with open(dest, 'w') as destination:
+        dest_file = '/'.join(
+            (containing_folder, file.replace('simpack_name', name))
+        )
+        
+        _make_path_to_file(dest_file)
+        
+        with pkg_resources.resource_stream(simpack_template_package_name, file) as source:
+            with open(dest_file, 'w') as destination:
             
                 destination.write(source.read().replace('simpack_name', name))
+                destination.write('boobs')
             
         try:
-            shutil.copymode(path_old, path_new)
-            _make_writeable(path_new)
-        except OSError:
+            shutil.copymode('/'.join(('simpack_template', file)), dest_file)
+            _make_writeable(dest_file)
+        except Exception:
             pass
     
 
