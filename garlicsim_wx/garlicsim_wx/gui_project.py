@@ -356,11 +356,13 @@ class GuiProject(object):
         assert rounding in (binary_search.LOW_OTHERWISE_HIGH,
                             binary_search.HIGH_OTHERWISE_LOW)
         # may add CLOSEST and EXACT later.tododoc
+
+        profile = binary_search.BinarySearchProfile(
         
         both_nodes = self.path.get_node_by_clock(desired_pseudoclock,
                                                  rounding=binary_search.BOTH)
         
-        if 'HIGH' in rounding.__name__:
+        if rounding.__name__.startswith('HIGH'):
             both_nodes = (both_nodes[1], both_nodes[0])
             # Just swapping the nodes. Simpler than having a big `if` for `HIGH`
             # and `LOW`.

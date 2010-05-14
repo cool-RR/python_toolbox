@@ -415,8 +415,8 @@ path, but it's completely empty.''')
         '''
         Get a node according to its clock.
         
-        See documentation of garlicsim.general_misc.binary_search.roundings for
-        details about rounding options.
+        See documentation of binary_search.roundings for details about rounding
+        options.
         '''
         
         my_function = lambda node: node.state.clock
@@ -434,8 +434,8 @@ path, but it's completely empty.''')
         
         The function must be a monotonic rising function on the timeline.
         
-        See documentation of garlicsim.general_misc.binary_search.roundings for
-        details about rounding options.
+        See documentation of binary_search.roundings for details about rounding
+        options.
         '''
         
         assert issubclass(rounding, binary_search.Rounding)
@@ -568,7 +568,7 @@ path, but it's completely empty.''')
         "occupying".)
         
         If no such node exists, returns None.
-        '''
+        '''#tododoc: Use LOW_IF_BOTH
         temp = self.get_node_by_clock(timepoint, rounding=binary_search.BOTH)
         if list(temp).count(None) == 0:
             return temp[0]
@@ -609,7 +609,9 @@ path, but it's completely empty.''')
         self.decisions.update(new_path.decisions)
     
     
-    def states(self): # todo: Make fancier, like dict.keys in Py3
+    def states(self):
+        # todo: Make fancier, like dict.keys in Py3. Probably create as object
+        # in __init__
         for node in self:
             yield node.state
         
