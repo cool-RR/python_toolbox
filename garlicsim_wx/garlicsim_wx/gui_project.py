@@ -337,7 +337,8 @@ class GuiProject(object):
             self.pseudoclock_modified_emitter.emit()
 
             
-    def set_pseudoclock(self, desired_pseudoclock, rounding=binary_search.LOW):
+    def set_pseudoclock(self, desired_pseudoclock,
+                        rounding=binary_search.LOW_OTHERWISE_HIGH):
         '''
         Attempt to set the pseudoclock to a desired value.
         
@@ -345,20 +346,21 @@ class GuiProject(object):
         of the closest edge node.
         
         The active node will be changed to one which is close to the desired
-        pseudoclock. In `rounding` use `binary_search.LOW` to get the node just
-        below, or `binary_search.HIGH` to get the node just above.
+        pseudoclock. In `rounding` use `binary_search.LOW_OTHERWISE_HIGH` to get
+        the node just below, or `binary_search.HIGH_OTHERWISE_LOW` to get the
+        node just above.tododoc
         
-        Note that if you choose `LOW`, and there's nothing below, only above,
-        you'll get the one above. Same for `HIGH`.
+        See documentation for these two options for more details.
         '''
 
-        assert rounding in (binary_search.LOW, binary_search.HIGH)
-        # may add CLOSEST and EXACT later
+        assert rounding in (binary_search.LOW_OTHERWISE_HIGH,
+                            binary_search.HIGH_OTHERWISE_LOW)
+        # may add CLOSEST and EXACT later.tododoc
         
         both_nodes = self.path.get_node_by_clock(desired_pseudoclock,
                                                  rounding=binary_search.BOTH)
         
-        if rounding is binary_search.HIGH:
+        if 'HIGH' in rounding.__name__:
             both_nodes = (both_nodes[1], both_nodes[0])
             # Just swapping the nodes. Simpler than having a big `if` for `HIGH`
             # and `LOW`.

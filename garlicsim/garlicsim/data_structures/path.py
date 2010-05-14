@@ -11,6 +11,7 @@ import copy as copy_module # Avoiding name clash.
 
 from garlicsim.general_misc import binary_search
 from garlicsim.general_misc import misc_tools
+from garlicsim.general_misc import cute_iter_tools
 
 from garlicsim.misc import GarlicSimException
 
@@ -128,6 +129,13 @@ class Path(object):
                 if end is not None:
                     raise EndNotReached
                 raise StopIteration
+
+            
+    def __reversed__(self): #todo: may add start and end
+        current_node = self[-1]
+        while current_node is not None:
+            yield current_node
+            current_node = current_node.parent
             
             
     def iterate_blockwise(self, start=None, end=None):
@@ -298,7 +306,8 @@ class Path(object):
 
         else: # no kids
             raise PathOutOfRangeError
-            
+
+    
 
     def __getitem__(self, index, end=None):
         '''
@@ -604,6 +613,29 @@ path, but it's completely empty.''')
         for node in self:
             yield node.state
         
+    def _get_lower_path(self, node):
+
+        wanted_clock = node.state.clock
+        
+        for (kid, parent) in cute_iter_tools.consecutive_pairs(reversed(self)):
+            if len(parent.children) == 1:
+                continue
+            my_index = parent.children.index(kid)
+            if my_index > 0:
+                kids_to_try = parent.children[:my_index]
+                break
+        else:
+            raise LookupError # tododoc: find more fitting exception class
+        
+        
+        for node in reversed(kids_to_try):
+            paths = node.all_possible_paths()
+            for path in reversed(paths):
+                assert isinstance(path, Path)
+                both = path.get # tododoc was working here
+                
+            
+            
     def __repr__(self):
         '''
         Get a string representation of the path.

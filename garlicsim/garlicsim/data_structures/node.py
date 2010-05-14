@@ -155,7 +155,8 @@ Untouched nodes can't be edited, so they have no concept of being finalized.'''
         identical to one of the paths given here, because these other paths
         may specify decisions that are not even on the same root as these
         paths.
-        '''
+        '''# tododoc: confirm getting them ordered
+        #todo: possibly add `reversed` option
         past_path = self.make_past_path()
         paths = []
         fork = None

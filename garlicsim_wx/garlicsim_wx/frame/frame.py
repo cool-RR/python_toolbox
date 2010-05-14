@@ -132,6 +132,15 @@ class Frame(wx.Frame):
                     self.gui_project.set_active_node(self.gui_project.path[-1])
                 except LookupError:
                     pass
+
+        def on_up():
+        
+        if self.gui_project is not None and \
+           self.gui_project.path is not None:
+            
+            parent = self.gui_project.active_node.parent
+            if parent is not None:
+                self.gui_project.set_active_node(parent)
                 
         def on_left():
             
@@ -149,7 +158,7 @@ class Frame(wx.Frame):
                 
                 try:
                     child = self.gui_project.path.next_node\
-                          (self.gui_project.active_node.parent)
+                          (self.gui_project.active_node)
                     self.gui_project.set_active_node(child)
                 except LookupError:
                     pass

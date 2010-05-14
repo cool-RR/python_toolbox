@@ -12,9 +12,14 @@
 # sequences can be expensive.
 #
 # todo: decide already if we return only tuples or only lists. Probably tuples.
+#
+# todo: ensure there are no `if variable` checks where we're thinking of None
+# but the variable might be False
 
-
-from .roundings import Rounding, LOW, HIGH, EXACT, CLOSEST, BOTH
+from .roundings import (Rounding, roundings, LOW, LOW_IF_BOTH,
+                        LOW_OTHERWISE_HIGH, HIGH, HIGH_IF_BOTH,
+                        HIGH_OTHERWISE_LOW, EXACT, CLOSEST, CLOSEST_IF_BOTH,
+                        BOTH)
 
 def binary_search_by_index(sequence, function, value, rounding=CLOSEST):
     '''
@@ -79,11 +84,13 @@ def binary_search(sequence, function, value, rounding=CLOSEST):
         if rounding is BOTH:
             return [None if low_value > value else sequence[low], sequence[low]]
         
-        if rounding in (HIGH, CLOSEST) or \
+        if rounding in (HIGH, HIGH_OTHERWISE_LOW, CLOSEST) or \
            (low_value==value and rounding is EXACT):
             return sequence[low]
         
-        else: # rounding is LOW or (rounding is EXACT and low_value!=value)
+        else:
+            # rounding in (LOW*, *_IF_BOTH) or (rounding is EXACT and
+            # low_value!=value)
             return None
 
         
@@ -95,11 +102,13 @@ def binary_search(sequence, function, value, rounding=CLOSEST):
                 None if high_value < value else sequence[high]
             ]
         
-        if rounding in (LOW, CLOSEST) or \
+        if rounding in (LOW, LOW_OTHERWISE_HIGH, CLOSEST) or \
            (low_value==value and rounding is EXACT):
             return sequence[high]
         
-        else: # rounding is HIGH or (rounding is EXACT and low_value!=value)
+        else:
+            # rounding in (HIGH*, *_IF_BOTH) or (rounding is EXACT and
+            # low_value!=value)
             return None
         
 
@@ -142,14 +151,37 @@ def make_both_data_into_preferred_rounding(both, function, value, rounding):
     functions) with rounding=BOTH as the parameter `both`. It then gives the
     data with a different rounding, specified with the parameter `rounding`.
     '''
-    if rounding is BOTH: return both
-    elif rounding is LOW: return both[0]
-    elif rounding is HIGH: return both[1]
+
+    if rounding is BOTH:
+        return both
+    
+    elif rounding is LOW:
+        return both[0]
+    
+    elif rounding is LOW_IF_BOTH:
+        return both[0] if both[1] is not None else None
+    
+    elif rounding is LOW_OTHERWISE_HIGH:
+        return both[0] if both[0] is not None else both[1]
+    
+    elif rounding is HIGH:
+        return both[1]
+    
+    elif rounding is HIGH_IF_BOTH:
+        return both[1] if both[0] is not None else None
+    
+    elif rounding is HIGH_OTHERWISE_LOW:
+        return both[1] if both[1] is not None else both[0]
+    
     elif rounding is EXACT:
         return [state for state in both if
                 (state is not None and function(state)==value)
                 ][0]
-    elif rounding is CLOSEST:
+    
+    elif rounding in (CLOSEST, CLOSEST_IF_BOTH):
+        if rounding is CLOSEST_IF_BOTH:
+            if None in both:
+                return None
         if both[0] is None: return both[1]
         if both[1] is None: return both[0]
         distances = [abs(function(state)-value) for state in both]
@@ -159,3 +191,15 @@ def make_both_data_into_preferred_rounding(both, function, value, rounding):
             return both[1]
         
         
+class BinarySearchProfile(object):
+    def __init__(sequence, function, value):
+        both = binary_search(sequence, function, value, BOTH)
+        for rounding in roundings:
+            setattr(
+                self,
+                rounding.__name__,
+                make_both_data_into_preferred_rounding(both, function, value,
+                                                       rounding)
+            )
+        
+    
