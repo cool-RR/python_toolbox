@@ -374,10 +374,10 @@ class GuiProject(object):
         
         self._set_active_node(node)
         
-        if binary_search_profile.had_to_compromise[rounding]:
-            self._set_pseudoclock(node.state.clock)
-        else:
+        if binary_search_profile.is_surrounded:
             self._set_pseudoclock(desired_pseudoclock)
+        else:
+            self._set_pseudoclock(node.state.clock)
         
         self.project.ensure_buffer(node, clock_buffer=self.default_buffer)
 

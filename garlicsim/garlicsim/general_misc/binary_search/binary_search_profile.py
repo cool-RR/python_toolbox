@@ -26,7 +26,11 @@ class BinarySearchProfile(object):
             self.results[rounding] = \
                 make_both_data_into_preferred_rounding(both, function, value,
                                                        rounding)
-
+        none_count = list(both).count(None)
+        self.all_empty = (none_count == 0)
+        self.one_side_empty = (none_count == 1)
+        self.is_surrounded = (none_count == 2)
+            
         self.had_to_compromise = {
             LOW_OTHERWISE_HIGH:
                 self.results[LOW_OTHERWISE_HIGH] is not self.results[LOW],

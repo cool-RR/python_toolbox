@@ -67,6 +67,8 @@ class Frame(wx.Frame):
         self.__init_menus()
         self.__init_key_handlers()
         
+        self.Bind(wx.EVT_CONTEXT_MENU, self.on_context_menu, self)
+        
         self.background_timer = thread_timer.ThreadTimer(self)
         
         self.background_timer.start(150)
@@ -88,6 +90,11 @@ class Frame(wx.Frame):
         menu_bar = self.menu_bar = garlicsim_wx.misc.MenuBar(self)
         self.SetMenuBar(menu_bar)
         self._recalculate_all_menus()
+        self.context_menu = \
+            garlicsim_wx.general_misc.cute_menu.CuteMenu.add_menus([
+                garlicsim_wx.misc.menu_bar.node_menu.NodeMenu(self),
+                garlicsim_wx.misc.menu_bar.block_menu.BlockMenu(self)
+            ])
         
     def _recalculate_all_menus(self):
         
@@ -200,17 +207,39 @@ class Frame(wx.Frame):
                     pass
             
                 
+        def on_command_left():
+            
+            if self.gui_project is not None and \
+               self.gui_project.active_node is not None:
+                
+                node = self.gui_project.active_node.get_ancestor(5, round=True)
+                if node:
+                    self.gui_project.set_active_node(node)
+        
+                    
+        def on_command_right():
+            
+            if self.gui_project is not None and \
+               self.gui_project.path is not None and \
+               self.gui_project.active_node is not None:
+                
+                current = self.gui_project.active_node
+                for i in xrange(5):
+                    try:
+                        current = self.gui_project.path.next_node(current)
+                    except LookupError:
+                        pass
+                self.gui_project.set_active_node(current)
+        
+                
         def on_page_up():
             
             if self.gui_project is not None and \
                self.gui_project.active_node is not None:
                 
-                current = self.gui_project.active_node
-                for i in xrange(20):
-                    if current.parent is None:
-                        break
-                    current = current.parent
-                self.gui_project.set_active_node(current)
+                node = self.gui_project.active_node.get_ancestor(20, round=True)
+                if node:
+                    self.gui_project.set_active_node(node)
         
                     
         def on_page_down():
@@ -226,6 +255,17 @@ class Frame(wx.Frame):
                     except LookupError:
                         pass
                 self.gui_project.set_active_node(current)
+
+                
+        def on_space():
+            if self.gui_project:
+                self.gui_project.toggle_playing()
+        
+                
+        def on_return():
+            if self.gui_project and self.gui_project.active_node.still_in_editing:
+                self.gui_project.finalize_active_node()
+
         
                 
         
@@ -236,10 +276,15 @@ class Frame(wx.Frame):
             wx_tools.Key(wx.WXK_DOWN): on_down,
             wx_tools.Key(wx.WXK_LEFT): on_left,
             wx_tools.Key(wx.WXK_RIGHT): on_right,
+            wx_tools.Key(wx.WXK_LEFT, cmd=True): on_command_left,
+            wx_tools.Key(wx.WXK_RIGHT, cmd=True): on_command_right,
             wx_tools.Key(wx.WXK_PAGEUP): on_page_up,
             wx_tools.Key(wx.WXK_PAGEDOWN): on_page_down,
+            wx_tools.Key(wx.WXK_SPACE): on_space,
+            wx_tools.Key(wx.WXK_RETURN): on_return,
         }    
             
+        
     def on_close(self, event):
         '''Close the application window.'''
         if self.gui_project:
@@ -579,5 +624,15 @@ class Frame(wx.Frame):
         else:
             event.Skip()
             
+            
+    def on_context_menu(self, event):
+        abs_position = event.GetPosition()
+        if abs_position == wx.DefaultPosition:
+            position = (0, 0)
+        else:
+            position = self.ScreenToClient(abs_position)
+            
+        self.PopupMenu(self.context_menu, position)
+        
     
     

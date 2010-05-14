@@ -202,7 +202,7 @@ class SeekBar(wx.Panel, WorkspaceWidget):
 
     def on_mouse_event(self, e):
         #todo: should catch drag to outside of the window        
-        #print(dir(e))
+        # todo: use EVT_CONTEXT_MENU, in tree browser and others too
         if e.RightDown():
             self.gui_project.stop_playing()
 

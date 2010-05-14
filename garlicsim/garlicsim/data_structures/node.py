@@ -23,7 +23,10 @@ __all__ = ["Node", "NodeError"]
 class NodeError(GarlicSimException):
     '''Node-related Exception.'''
 
-
+class NodeLookupError(NodeError, LookupError):
+    '''A node-related lookup was requested but no result was found.'''
+    
+    
 class Node(object):
     '''
     Nodes are used to organize states in a tree.
@@ -273,7 +276,53 @@ Untouched nodes can't be edited, so they have no concept of being finalized.'''
                 continue
             
         return leaves
+
     
+    def get_ancestor(self, generations=1, round=False):
+        ''''''
+
+        assert generations >= 0
+        if generations == 0:
+            return self
+        if generations == 1:
+            if self.parent:
+                return self.parent
+            else: # self.parent is None
+                if round:
+                    return self
+                else: # round is False
+                    raise NodeLookupError('''You asked for the node's parent, \
+but it's a root.''')                
+                
+        block = self.block
+        if block:
+            our_index = block.index(self)
+            wanted_index = our_index - generations
+            if wanted_index >= 0:
+                return block[wanted_index]
+            else: # wanted index < 0
+                first_node = block[0]
+                parent_of_first = first_node.parent
+                if parent_of_first is None:
+                    if round:
+                        return first_node
+                    else: # round is False
+                        raise NodeLookupError('''You asked for too many \
+generations back. This node's ancestry line doesn't go back that far.''')
+                
+                return parent_of_first.get_ancestor(- wanted_index - 1, round=round)
+        
+        assert self.block is None
+        if self.parent:
+            return self.parent.get_ancestor(generations - 1, round)
+        else:
+            if round:
+                return self
+            else: # round is False
+                raise NodeLookupError('''You asked for too many generations \
+back. This node's ancestry line doesn't go back that far.''')
+
+            
     def get_root(self):
         '''
         Get the root of this node.
