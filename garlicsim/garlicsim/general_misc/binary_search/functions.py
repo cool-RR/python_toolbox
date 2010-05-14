@@ -151,7 +151,8 @@ def make_both_data_into_preferred_rounding(both, function, value, rounding):
     functions) with rounding=BOTH as the parameter `both`. It then gives the
     data with a different rounding, specified with the parameter `rounding`.
     '''
-
+    # todo optimize and organize: break to individual functions, put in
+    # BinarySearchProfile
     if rounding is BOTH:
         return both
     
@@ -174,9 +175,10 @@ def make_both_data_into_preferred_rounding(both, function, value, rounding):
         return both[1] if both[1] is not None else both[0]
     
     elif rounding is EXACT:
-        return [state for state in both if
-                (state is not None and function(state)==value)
-                ][0]
+        results = [state for state in both if
+                   (state is not None and function(state) == value)
+                   ]
+        return results[0] if results else None
     
     elif rounding in (CLOSEST, CLOSEST_IF_BOTH):
         if rounding is CLOSEST_IF_BOTH:

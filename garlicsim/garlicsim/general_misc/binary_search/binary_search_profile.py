@@ -7,35 +7,41 @@ from .roundings import (Rounding, roundings, LOW, LOW_IF_BOTH,
                         HIGH_OTHERWISE_LOW, EXACT, CLOSEST, CLOSEST_IF_BOTH,
                         BOTH)
 
-from .functions import (binary_search, binary_search_by_index)
+from .functions import (binary_search, binary_search_by_index,
+                        make_both_data_into_preferred_rounding)
         
         
 class BinarySearchProfile(object):
-    def __init__(self, sequence, function, value, searcher=binary_search):
-        both = searcher(sequence, function, value, BOTH)
+
+    
+    def __init__(self, sequence, function, value, both=None):
+
+        if both is None:
+            both = searcher(sequence, function, value, BOTH)
+        
+        self.results = {}
+        '''tododoc'''
+        
         for rounding in roundings:
-            setattr(
-                self,
-                rounding.__name__,
+            self.results[rounding] = \
                 make_both_data_into_preferred_rounding(both, function, value,
                                                        rounding)
-            )
 
         self.had_to_compromise = {
             LOW_OTHERWISE_HIGH:
-                self(LOW_OTHERWISE_HIGH) is not self(LOW),
+                self.results[LOW_OTHERWISE_HIGH] is not self.results[LOW],
             HIGH_OTHERWISE_LOW:
-                self(HIGH_OTHERWISE_LOW) is not self(HIGH),
+                self.results[HIGH_OTHERWISE_LOW] is not self.results[HIGH],
         }
         '''tododoc'''
         
         self.got_none_because_no_item_on_other_side = {
             LOW_IF_BOTH:
-                self(LOW_IF_BOTH) is not self(LOW),
+                self.results[LOW_IF_BOTH] is not self.results[LOW],
             HIGH_IF_BOTH:
-                self(HIGH_IF_BOTH) is not self(HIGH),
+                self.results[HIGH_IF_BOTH] is not self.results[HIGH],
             CLOSEST_IF_BOTH:
-                self(CLOSEST_IF_BOTH) is not self(CLOSEST),
+                self.results[CLOSEST_IF_BOTH] is not self.results[CLOSEST],
         }
         '''tododoc'''
         

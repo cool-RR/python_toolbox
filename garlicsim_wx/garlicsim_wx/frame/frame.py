@@ -133,7 +133,40 @@ class Frame(wx.Frame):
                 except LookupError:
                     pass
 
+                
         def on_up():
+            if self.gui_project.path and self.gui_project.active_node:
+                try:
+                    new_path = self.gui_project.path._get_lower_path(
+                        self.gui_project.active_node
+                    )
+                except LookupError:
+                    return
+                pseudoclock = self.gui_project.pseudoclock
+                self.gui_project.path = new_path
+                self.gui_project.path_changed_emitter.emit()
+                self.gui_project.set_pseudoclock(pseudoclock)
+        
+        if self.gui_project is not None and \
+           self.gui_project.path is not None:
+            
+            parent = self.gui_project.active_node.parent
+            if parent is not None:
+                self.gui_project.set_active_node(parent)
+
+                
+        def on_down():
+            if self.gui_project.path and self.gui_project.active_node:
+                try:
+                    new_path = self.gui_project.path._get_higher_path(
+                        self.gui_project.active_node
+                    )
+                except LookupError:
+                    return
+                pseudoclock = self.gui_project.pseudoclock
+                self.gui_project.path = new_path
+                self.gui_project.path_changed_emitter.emit()
+                self.gui_project.set_pseudoclock(pseudoclock)
         
         if self.gui_project is not None and \
            self.gui_project.path is not None:
@@ -142,19 +175,22 @@ class Frame(wx.Frame):
             if parent is not None:
                 self.gui_project.set_active_node(parent)
                 
+                
         def on_left():
             
             if self.gui_project is not None and \
-               self.gui_project.path is not None:
+               self.gui_project.active_node is not None:
                 
                 parent = self.gui_project.active_node.parent
                 if parent is not None:
                     self.gui_project.set_active_node(parent)
         
+                    
         def on_right():
             
             if self.gui_project is not None and \
-               self.gui_project.path is not None:
+               self.gui_project.path is not None and \
+               self.gui_project.active_node is not None:
                 
                 try:
                     child = self.gui_project.path.next_node\
@@ -162,13 +198,46 @@ class Frame(wx.Frame):
                     self.gui_project.set_active_node(child)
                 except LookupError:
                     pass
+            
+                
+        def on_page_up():
+            
+            if self.gui_project is not None and \
+               self.gui_project.active_node is not None:
+                
+                current = self.gui_project.active_node
+                for i in xrange(20):
+                    if current.parent is None:
+                        break
+                    current = current.parent
+                self.gui_project.set_active_node(current)
+        
+                    
+        def on_page_down():
+            
+            if self.gui_project is not None and \
+               self.gui_project.path is not None and \
+               self.gui_project.active_node is not None:
+                
+                current = self.gui_project.active_node
+                for i in xrange(20):
+                    try:
+                        current = self.gui_project.path.next_node(current)
+                    except LookupError:
+                        pass
+                self.gui_project.set_active_node(current)
+        
                 
         
         self.key_handlers = {
             wx_tools.Key(wx.WXK_HOME): on_home,
             wx_tools.Key(wx.WXK_END): on_end,
+            wx_tools.Key(wx.WXK_UP): on_up,
+            wx_tools.Key(wx.WXK_DOWN): on_down,
             wx_tools.Key(wx.WXK_LEFT): on_left,
             wx_tools.Key(wx.WXK_RIGHT): on_right,
+            wx_tools.Key(wx.WXK_PAGEUP): on_page_up,
+            wx_tools.Key(wx.WXK_PAGEDOWN): on_page_down,
         }    
             
     def on_close(self, event):

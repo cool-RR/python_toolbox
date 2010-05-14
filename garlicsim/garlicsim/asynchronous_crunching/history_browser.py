@@ -136,13 +136,13 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         
         The function must be a monotonic rising function on the timeline.
         
-        See documentation of garlicsim.general_misc.binary_search.roundings for
-        details about rounding options.
+        See documentation of binary_search.roundings for details about rounding
+        options.
         '''
         
         assert issubclass(rounding, binary_search.Rounding)
         
-        tree_result = self.__get_state_by_monotonic_function_from_tree \
+        tree_result = self.__get_both_states_by_monotonic_function_from_tree \
                       (function, value, rounding=binary_search.BOTH)
         
         if tree_result[1] is not None:
@@ -178,24 +178,25 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
                        (tree_result, function, value, rounding)
             
     @with_self   
-    def __get_state_by_monotonic_function_from_tree(
-        self, function, value, rounding=binary_search.CLOSEST):
+    def __get_both_states_by_monotonic_function_from_tree(self, function, value):
         '''
-        Get a state from the tree only by measure function and desired value.
-        
+        Get two states from the tree with value surrounding the desired value.
+
         The function must be a monotonic rising function on the timeline.
         
-        See documentation of garlicsim.general_misc.binary_search.roundings for
-        details about rounding options.
+        This uses the binary_search.BOTH rounding. See its documentation.        
         '''
         assert issubclass(rounding, binary_search.Rounding)
         our_node = self.__get_our_node()
         path = our_node.make_containing_path()
         new_function = lambda node: function(node.state)
+        
         result_in_nodes = path.get_node_by_monotonic_function \
-                        (new_function, value, rounding, end_node=our_node)
+            (new_function, value, binary_search.BOTH, end_node=our_node)
+        
         result = [(node.state if node is not None else None) \
                   for node in result_in_nodes]
+        
         return result
     
     @with_self

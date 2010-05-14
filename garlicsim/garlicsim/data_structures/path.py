@@ -8,6 +8,7 @@ See its documentation for more information.
 '''
 
 import copy as copy_module # Avoiding name clash.
+import __builtin__
 
 from garlicsim.general_misc import binary_search
 from garlicsim.general_misc import misc_tools
@@ -439,11 +440,9 @@ path, but it's completely empty.''')
         '''
         
         assert issubclass(rounding, binary_search.Rounding)
-
-        both = \
-            self.__get_node_by_monotonic_function_with_both_rounding(function,
-                                                                     value)
         
+        both = self.__get_node_by_monotonic_function_with_both_rounding(function,
+                                                                        value)        
         if end_node is not None:
             new_both = list(both)
             end_clock = end_node.state.clock
@@ -451,10 +450,12 @@ path, but it's completely empty.''')
                 new_both[0] = end_node
             if new_both[1] and new_both[1].state.clock >= end_clock:
                 new_both[1] = None
-            both = tuple(new_both)
+            both = new_both
+            
+        binary_search_profile = \
+            binary_search.BinarySearchProfile(self, function, value, both)
         
-        return binary_search.make_both_data_into_preferred_rounding \
-               (both, function, value, rounding)
+        return binary_search_profile.results[rounding]
                     
     
     def __get_node_by_monotonic_function_with_both_rounding(self, function,
@@ -568,13 +569,10 @@ path, but it's completely empty.''')
         "occupying".)
         
         If no such node exists, returns None.
-        '''#tododoc: Use LOW_IF_BOTH
-        temp = self.get_node_by_clock(timepoint, rounding=binary_search.BOTH)
-        if list(temp).count(None) == 0:
-            return temp[0]
-        else:
-            return None
-        
+        '''
+        return self.get_node_by_clock(timepoint,
+                                      rounding=binary_search.LOW_IF_BOTH)
+    
 
     def get_existing_time_segment(self, start_time, end_time):
         '''
@@ -615,28 +613,44 @@ path, but it's completely empty.''')
         for node in self:
             yield node.state
         
+            
     def _get_lower_path(self, node):
 
+        return self._get_higher_path(node, reverse=True)
+                
+    
+    def _get_higher_path(self, node, reverse=False):
+
+        my_iter = __builtin__.reversed if reverse else iter
+        
         wanted_clock = node.state.clock
         
         for (kid, parent) in cute_iter_tools.consecutive_pairs(reversed(self)):
             if len(parent.children) == 1:
                 continue
             my_index = parent.children.index(kid)
-            if my_index > 0:
-                kids_to_try = parent.children[:my_index]
-                break
+
+            if reverse:
+                if my_index > 0:
+                    kids_to_try = parent.children[:my_index]
+                    break
+            
+            if not reverse:
+                if my_index < len(parent.children) -1:
+                    kids_to_try = parent.children[my_index+1:]
+                    break
         else:
             raise LookupError # tododoc: find more fitting exception class
         
         
-        for node in reversed(kids_to_try):
-            paths = node.all_possible_paths()
-            for path in reversed(paths):
+        for node in my_iter(kids_to_try):
+            paths = node.all_possible_paths() # todo: make reversed argument
+            for path in my_iter(paths):
                 assert isinstance(path, Path)
-                both = path.get # tododoc was working here
-                
-            
+                if path[-1].state.clock >= wanted_clock:
+                    return path
+        raise LookupError
+               
             
     def __repr__(self):
         '''

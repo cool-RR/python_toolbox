@@ -2,6 +2,8 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''Defines functions that may be useful when working with iterators.'''
+# todo: make something like `filter` except it returns first found, or raises
+# exception
 
 import itertools
 import __builtin__

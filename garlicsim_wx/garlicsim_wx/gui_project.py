@@ -348,39 +348,36 @@ class GuiProject(object):
         The active node will be changed to one which is close to the desired
         pseudoclock. In `rounding` use `binary_search.LOW_OTHERWISE_HIGH` to get
         the node just below, or `binary_search.HIGH_OTHERWISE_LOW` to get the
-        node just above.tododoc
+        node just above.
         
         See documentation for these two options for more details.
         '''
+        # todo: check that everything that should use this does use this
 
         assert rounding in (binary_search.LOW_OTHERWISE_HIGH,
                             binary_search.HIGH_OTHERWISE_LOW)
-        # may add CLOSEST and EXACT later.tododoc
-
-        profile = binary_search.BinarySearchProfile(
         
         both_nodes = self.path.get_node_by_clock(desired_pseudoclock,
                                                  rounding=binary_search.BOTH)
         
-        if rounding.__name__.startswith('HIGH'):
-            both_nodes = (both_nodes[1], both_nodes[0])
-            # Just swapping the nodes. Simpler than having a big `if` for `HIGH`
-            # and `LOW`.
-            
-        none_count = list(both_nodes).count(None)
+        binary_search_profile = binary_search.BinarySearchProfile(
+            self.path, 
+            lambda node: node.state.clock,
+            desired_pseudoclock,
+            both_nodes
+        )
         
-        if none_count == 0:
-            node = both_nodes[0]
-            self._set_active_node(node)
-            self._set_pseudoclock(desired_pseudoclock)
-        elif none_count == 1:
-            node = both_nodes[0] or both_nodes[1]
-            self._set_active_node(node)
+        node = binary_search_profile.results[rounding]
+        
+        if node is None:
+            return # todo: Not sure if I should raise something
+        
+        self._set_active_node(node)
+        
+        if binary_search_profile.had_to_compromise[rounding]:
             self._set_pseudoclock(node.state.clock)
         else:
-            assert both_nodes == (None, None)
-            # path is completely empty! Not sure if I should raise something
-            return
+            self._set_pseudoclock(desired_pseudoclock)
         
         self.project.ensure_buffer(node, clock_buffer=self.default_buffer)
 
@@ -587,8 +584,9 @@ class GuiProject(object):
             (real_time_elapsed * self.defacto_playing_speed)
         
 
-        rounding = binary_search.LOW if self.defacto_playing_speed > 0 \
-                 else binary_search.HIGH
+        rounding = binary_search.LOW_OTHERWISE_HIGH \
+                 if self.defacto_playing_speed > 0 \
+                 else binary_search.HIGH_OTHERWISE_LOW
         
         self.set_pseudoclock(desired_pseudoclock, rounding)
 
