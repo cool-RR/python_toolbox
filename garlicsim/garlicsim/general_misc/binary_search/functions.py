@@ -191,8 +191,8 @@ def make_both_data_into_preferred_rounding(both, function, value, rounding):
             return both[1]
         
         
-class BinarySearchProfile(object):
-    def __init__(sequence, function, value):
+class BinarySearchProfile(object):# move to module `binary_search_profile`
+    def __init__(self, sequence, function, value):
         both = binary_search(sequence, function, value, BOTH)
         for rounding in roundings:
             setattr(
@@ -201,5 +201,29 @@ class BinarySearchProfile(object):
                 make_both_data_into_preferred_rounding(both, function, value,
                                                        rounding)
             )
+
+        self.had_to_compromise = {
+            LOW_OTHERWISE_HIGH:
+                self(LOW_OTHERWISE_HIGH) is not self(LOW),
+            HIGH_OTHERWISE_LOW:
+                self(HIGH_OTHERWISE_LOW) is not self(HIGH),
+        }
+        '''tododoc'''
         
-    
+        self.got_none_because_no_item_on_other_side = {
+            LOW_IF_BOTH:
+                self(LOW_IF_BOTH) is not self(LOW),
+            HIGH_IF_BOTH:
+                self(HIGH_IF_BOTH) is not self(HIGH),
+            CLOSEST_IF_BOTH:
+                self(CLOSEST_IF_BOTH) is not self(CLOSEST),
+        }
+        '''tododoc'''
+        
+        for d in [self.had_to_compromise,
+                  self.got_none_because_no_item_on_other_side]:
+            
+            for rounding in roundings:
+                if rounding not in d:
+                    d[rounding] = None
+        

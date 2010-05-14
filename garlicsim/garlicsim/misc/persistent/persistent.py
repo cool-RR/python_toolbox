@@ -130,13 +130,14 @@ class Persistent(object):
     def __copy__(self):
         return self
     
-    def get_personality(self): # Todo: consider doing __getattr__ thing
+    def get_personality(self):
         '''
         Get the personality of this persistent object.
         
         See documentation of class garlicsim.misc.persistent.Personality for
         more information.
         '''
+         # Todo: consider doing __getattr__ thing, maybe `cache`?
         personality_exists = hasattr(self, '_Persistent__personality')
         
         if personality_exists is False:
