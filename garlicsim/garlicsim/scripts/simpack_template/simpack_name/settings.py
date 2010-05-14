@@ -22,7 +22,7 @@ import garlicsim
 #
 # This is useful because it allows garlicsim to detect if a simulation has
 # reached a repititive state, so it can stop the crunching right there and avoid
-# wasting resources.
+# wasting resources. (05.15.2010 - Still not implemented, sorry.)
 #
 # Note that this function does not return True or False: It returns a
 # `DeterminismSetting` class. For details about those, see documentation in
