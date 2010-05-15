@@ -314,23 +314,24 @@ class NiftyPaintDC(wx.BufferedPaintDC):
             total_height += new_height
             
         
-        if isinstance(start, garlicsim.data_structures.Node):
-            for end in start.ends:
-                line_end = vectorish.add(
-                    point,
-                    (
-                        self_width + 1,
-                     total_height + bitmap_size[1] // 2
-                    )
+        ends = start.ends if isinstance(start, garlicsim.data_structures.Node) \
+             else start[-1].ends
+        for end in ends:
+            line_end = vectorish.add(
+                point,
+                (
+                    self_width + 1,
+                 total_height + bitmap_size[1] // 2
                 )
-                
-                temp = vectorish.add(point, (self_width, total_height))
-                (new_width, new_height) = \
-                    self.draw_end(temp, tree, end)
-                del temp
-                self.DrawLinePoint(line_start, line_end)
-                max_width = max(max_width, self_width + new_width)
-                total_height += new_height
+            )
+            
+            temp = vectorish.add(point, (self_width, total_height))
+            (new_width, new_height) = \
+                self.draw_end(temp, tree, end)
+            del temp
+            self.DrawLinePoint(line_start, line_end)
+            max_width = max(max_width, self_width + new_width)
+            total_height += new_height
 
         return (
             max_width,

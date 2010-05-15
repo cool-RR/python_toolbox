@@ -123,7 +123,7 @@ class CrunchingManager(object):
         for (job, cruncher) in self.crunchers.copy().items():
             if not (job in self.jobs):
                 (added_nodes, new_leaf) = \
-                    self.__add_work_to_tree(cruncher, job.node, retire=True)
+                    self.__add_work_to_tree(cruncher, job, retire=True)
                 total_added_nodes += added_nodes
                 del self.crunchers[job]
 
@@ -143,7 +143,7 @@ class CrunchingManager(object):
             cruncher = self.crunchers[job]
             
             (added_nodes, new_leaf) = self.__add_work_to_tree(cruncher,
-                                                              job.node)
+                                                              job)
             total_added_nodes += added_nodes
 
             job.node = new_leaf
@@ -205,11 +205,11 @@ class CrunchingManager(object):
         return [job for job in self.jobs if job.node == node]
 
     
-    def __add_work_to_tree(self, cruncher, node, retire=False):
+    def __add_work_to_tree(self, cruncher, job, retire=False):
         '''
         Take work from the cruncher and add to the tree at the specified node.
         
-        If `retire` is set to True, retires the cruncher.
+        If `retire` is set to True, retires the cruncher. tododoc: may retire the cruncher if it gave an EndMarker
         
         Returns (number, leaf), where `number` is the number of nodes that were
         added, and `leaf` is the last node that was added.
@@ -217,6 +217,7 @@ class CrunchingManager(object):
         #todo: modify this to take job?
         
         tree = self.project.tree
+        node = job.node
         
         current = node
         counter = 0
@@ -237,13 +238,15 @@ class CrunchingManager(object):
             elif issubclass(thing, EndMarker):
                 tree.make_end(node=current,
                               step_profile=self.step_profiles[cruncher])
+                job.resulted_in_end = True
+                
                 
             elif isinstance(thing, StepProfile):
                 self.step_profiles[cruncher] = thing
             else:
-                raise Exception('Unexpected object in work queue')
+                raise Exception('Unexpected object %s in work queue' % thing)
                         
-        if retire:
+        if retire or job.resulted_in_end:
             cruncher.retire()
         
         nodes_added = garlicsim.misc.NodesAdded(counter)

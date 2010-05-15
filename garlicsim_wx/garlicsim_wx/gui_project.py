@@ -479,11 +479,12 @@ class GuiProject(object):
             self.__modify_path_to_include_active_node()
             
         if modify_path and was_playing:
-            self.infinity_job.crunching_profile.clock_target = \
-                self.infinity_job.node.state.clock + self.default_buffer
-            self.infinity_job = self.project.ensure_buffer_on_path(node,
-                                                                   self.path,
-                                                                   Infinity)   
+            if self.infinity_job:
+                self.infinity_job.crunching_profile.clock_target = \
+                    self.infinity_job.node.state.clock + self.default_buffer
+                self.infinity_job = self.project.ensure_buffer_on_path(node,
+                                                                       self.path,
+                                                                       Infinity)   
         
 
         

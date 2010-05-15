@@ -116,7 +116,7 @@ class Project(object):
         leaves_dict = node.get_all_leaves(max_clock_distance=clock_buffer)
         new_clock_target = node.state.clock + clock_buffer
         
-        for leaf in leaves_dict:
+        for leaf in leaves_dict.copy():
             if leaf.ends:
                 del leaves_dict[leaf]
         

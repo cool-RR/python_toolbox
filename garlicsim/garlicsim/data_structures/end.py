@@ -171,6 +171,8 @@ class End(TreeMember):
         <garlicsim.data_structures.Node with clock 6.5, untouched, belongs to a
         block, crunched with StepProfile(t=0.1), at 0x1ffde70>
         '''
+        return 'END tododoc parent: %s' % self.parent
+        """
         return '<%s%s, %s%s%s, %s, %sat %sEND tododoc>' % \
             (
                 misc_tools.shorten_class_address(
@@ -185,6 +187,7 @@ class End(TreeMember):
                 'crunched with %s, ' % self.step_profile if self.step_profile else '',
                 hex(id(self))
             )
+        """
 
 from block import Block
 
