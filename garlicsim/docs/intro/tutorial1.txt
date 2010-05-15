@@ -78,7 +78,7 @@ Let's check out this state:
     ### #  ## ####  ## ### ####   # # #### #
     # #  # ##  # # #  #   # # ##  ### ## # #
     >>> type(state)
-    <class 'life.State'>
+    <class 'garlicsim_lib.simpacks.life.life.State'>
 
 
     
@@ -306,7 +306,7 @@ method, we created a node that has our state contained in it, and added that
 node to the tree as a root. The method returned the new node. Let's see some
 info about our node:
 
-    >>> node
+    >>> root
     <garlicsim.data_structures.Node with clock 0, root, leaf, touched, blockless, at 0x1c68ed0>
 
 The ``clock 0`` thing means that the clock reading of this node's state is zero.
@@ -369,8 +369,8 @@ through it.
 
 Let's fork our tree. But before that, let's get that single path:
 
-    >>> (path1,) = project.tree.all_possible_paths()
-    >>> path1
+    >>> (path,) = project.tree.all_possible_paths()
+    >>> path
     <garlicsim.data_structures.Path of length 51 at 0x1ccfb30>
 
 :class:`Path <garlicsim.data_structures.Path>` is a list-like object. We can get any node we want from it using its index number. Let's see how our diehard is doing at clock 50:
@@ -379,11 +379,11 @@ Let's fork our tree. But before that, let's get that single path:
 
 ::
     
-    >>> path1[-1]
+    >>> path[-1]
     <garlicsim.data_structures.Node with clock 50, leaf, untouched, belongs to a block, crunched with StepProfile(), at 0x1cd9070>
     >>> 
     >>> 
-    >>> path1[-1].state
+    >>> path[-1].state
                                              
                                              
                                              
@@ -549,7 +549,7 @@ And now, to see what happens in clock 50 in our alternate timeline::
                                                 
                                                 
                                                 
-   >>> 
+    >>> 
    
 This is a very different state from :ref:`the one <original_clock_50>` in the original timeline! It has
 about twice as many live cells. This is a reminder of how a small change in the

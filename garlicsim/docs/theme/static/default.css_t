@@ -256,7 +256,7 @@ pre {
     padding: 5px;
     color: #CCC;
     line-height: 120%;
-    border: 1px solid #666;
+    border: 1px solid #333;
     border-left-width: 0px;
     border-right-width: 0px;
     border-top-left-radius: 10px;
