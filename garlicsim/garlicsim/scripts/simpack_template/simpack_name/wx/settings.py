@@ -1,6 +1,7 @@
 # import widgets.state_viewer
 # import widgets.state_creation_dialog
 
+
 # self.BIG_WORKSPACE_WIDGETS = widgets.state_viewer.StateViewer
 
 # Widgets to show in the middle of the frame. These must be instances of

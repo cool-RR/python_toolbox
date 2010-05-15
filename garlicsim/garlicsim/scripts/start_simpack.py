@@ -12,6 +12,11 @@ import pkg_resources
 import simpack_template
 simpack_template_package_name = simpack_template.__name__
 
+def _newline_replace(s):
+    if 'win' in sys.platform:
+        return s
+    else:
+        return s.replace('\r', '')
 
 def _walk_folder(package_name, folder):
     '''pkg_resources'''
@@ -68,16 +73,19 @@ def start_simpack(containing_folder, name):
         with pkg_resources.resource_stream(simpack_template_package_name, file) as source:
             with open(dest_file, 'w') as destination:
             
-                destination.write(source.read().replace('simpack_name', name))
-                destination.write('boobs')
+                destination.write(
+                    _newline_replace(
+                        source.read().replace('simpack_name', name)
+                    )
+                )
             
         try:
             shutil.copymode('/'.join(('simpack_template', file)), dest_file)
             _make_writeable(dest_file)
         except Exception:
             pass
-    
-
+    print('''%s simpack created successfully! Explore the %s folder and start \
+filling in the contents of your new simpack.''' % (name, name))
                 
 def _make_writeable(filename):
     """
