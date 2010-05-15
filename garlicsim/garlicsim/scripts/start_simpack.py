@@ -73,17 +73,9 @@ def start_simpack(containing_folder, name):
         with pkg_resources.resource_stream(simpack_template_package_name, file) as source:
             with open(dest_file, 'wb') as destination:
                 
-                string_to_write = source.read().\
-                                replace('simpack_name', name)
+                string_to_write = source.read().replace('simpack_name', name)
                 
                 destination.write(string_to_write)
-            
-            
-        with open(dest_file, 'rb') as destination:
-            string_reread = destination.read()
-        
-        #with open(dest_file, 'br') as destination:
-            #string_reread = destination.read()
             
         try:
             shutil.copymode('/'.join(('simpack_template', file)), dest_file)
@@ -110,7 +102,17 @@ def _make_writeable(filename):
         
 def show_help():
     '''tododoc'''
-    print 'help! meow.'
+    print '''\
+This is a script for creating a skeleton for a garlicsim simpack. Use this when
+you want to make a new simpack to have the basic folders and files created for
+you.
+
+    Usage: start_simpack.py simpack_name
+
+The simpack will be created in the current path, in a directory with the name of
+the simpack.'''
+    return
+
     
 if __name__ == '__main__':
 
