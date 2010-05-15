@@ -148,43 +148,52 @@ the :file:`coin_flip` folder.)
     import random
     import garlicsim.data_structures
         
-        class State(garlicsim.data_structures.State):
+    class State(garlicsim.data_structures.State):
+        
+        def __init__(self, balance, last_bet_result=0):
             
-            def __init__(self, balance, last_bet_result=0):
-                self.balance = balance
-                '''tododoc'''
-                
-                self.last_bet_result = 0
-                '''tododoc'''
+            garlicsim.data_structures.State.__init__(self)
             
-            def step(self):
-                if state.account >= 6000:
-                    state.end_result = 6000
-                    return
-                
-                if state.last_bet_result == 0 # Meaning the simulation just started
-                   or state.last_bet_result == 100: # Meaning we just won
-                    
-                    amount_to_bet = 100 # We're starting a new cycle
-                else: 
-                    assert state.last_bet_result in (-100, -200, -400, -800,
-                                                     -1600, -3200, -6400)
-                    # If the flow reached here it means we just lost. So we
-                    # should bet double the amount:
-                    amount_to_bet = - 2 * state.last_bet_result
-                
-                # Now we know what the amount we should bet, let's do it!
-                bet_result = random.choice([amount_to_bet, - amount_to_bet])
-                
-                new_balance = state.balance + bet_result
-                
-                new_state = State(new_balance, bet_result)
-                
-                return new_state
+            self.balance = balance
+            '''The current balance of our account, i.e. how much money we have.'''
             
+            self.last_bet_result = 0
+            '''How much we won/lost in the last bet. `-100` means we lost $100.'''
+        
+        def step(self):
+            if self.balance >= 6000:
+                self.end_result = 6000
+                return
+            
+            if self.last_bet_result in (0, 100):
+                # Meaning either (1) we just started the simulation or (2) we
+                # just won $100.                
+                amount_to_bet = 100 # We're starting a new cycle
                 
-            @staticmethod
-            def create_root():
-                state = State(balance=5000)
+            else: 
+                assert self.last_bet_result in (-100, -200, -400, -800,
+                                                -1600, -3200, -6400)
+                # If the flow reached here it means we just lost. So we
+                # should bet double the amount:
+                amount_to_bet = - 2 * state.last_bet_result
+            
+            # Now we know what the amount we should bet, let's do it!
+            bet_result = random.choice([amount_to_bet, - amount_to_bet])
+            
+            new_balance = state.balance + bet_result
+            
+            new_state = State(new_balance, bet_result)
+            
+            return new_state
+        
+            
+        @staticmethod
+        def create_root():
+            return State(balance=5000)
 
-Frr
+Frr::
+
+    def f():
+        return 'boobs'
+    
+Meow
