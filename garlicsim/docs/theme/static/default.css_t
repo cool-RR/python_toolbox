@@ -286,3 +286,9 @@ a tt {
 .note tt {
     background: #black;
 }
+
+
+
+.nf {
+    color: #2658BE !important;
+} /* Overriding Pygments here, because it's hard to extend it properly */

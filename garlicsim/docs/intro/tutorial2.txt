@@ -23,7 +23,107 @@ If you win *that*, you still have a net win of $100, etc."
 casino with $5,000, and you want to make $1,000. You use my method 10 times in a
 row, and you almost certainly win $1,000!"
 
-"I don't know..."
+"Well, I don't know..."
 
 We're going to make a simpack that will test whether my friend's method for
 beating the casino is any good.
+
+Starting a simpack using the :command:`start_simpack.py` script
+===============================================================
+
+A simpack is a Python package, and to create it you need to create a folder with
+all the ``__init__.py`` files and everything. To save you that time, garlicsim
+comes with a script called :command:`start_simpack.py`, which does all this for
+you.
+
+.. admonition:: The ``Scripts`` folder:
+
+    When you installed garlicsim, the :command:`start_simpack.py` script got
+    installed in your ``Scripts`` directory inside your Python distribution.
+    Normally, the ``Scripts`` directory will be placed on your system's
+    :envvar:`PATH` variable, and this will allow you to use
+    :command:`start_simpack.py` directly from anywhere on your filesystem. If
+    you try to run :command:`start_simpack.py` and get an error like "file not
+    found", ensure that your ``Scripts`` directory is added to your system's
+    :envvar:`PATH`.
+
+Where do you want to put your simpack? Open up your shell and go to that folder.
+
+::
+
+    C:\>start_simpack.py coin_flip
+    coin_flip simpack created successfully! Explore the coin_flip
+    folder and start filling in the contents of your new simpack.
+
+Alright! In the :file:`coin_clip` directory we will find the new files. This is its structure::
+
+    coin_flip/
+        __init__.py
+        settings.py
+        state.py
+        wx/
+            ...            
+            (The wx folder isn't important now)
+        
+
+You should browse this folder yourself, and go over the files. These are the abridged contents of the most important file, :file:`state.py`, which you should read::
+
+    import garlicsim.data_structures
+    
+    
+    class State(garlicsim.data_structures.State):
+        # This is your State subclass. Your state objects should contain all the
+        # information there is about a moment of time in your simulation.
+        
+        def __init__(self):
+            pass
+        
+        
+        def step(self):
+            # This function is the heart of your simpack. What it does is take an
+            # existing world state, and output the next world state.
+            #
+            # This is where all the crunching gets done. This function defines the
+            # laws of your simulation world.
+            # 
+            # The step function is one of the very few things that your simpack
+            # **must** define. Almost all of the other definitions are optional.
+            pass
+        
+            
+        @staticmethod
+        def create_root():
+            # In this function you create a root state. This usually becomes the
+            # first state in your simulation. You can make this function do
+            # something simple: For example, if you're simulating Life, you can make
+            # this function create an empty board.
+            #
+            # This function may take arguments, if you wish, to be used in making
+            # the state. For example, in a Life simulation you may want to specify
+            # the width and height of the board using arguments to this function.
+            #
+            # This function returns the newly-created state.
+            pass
+    
+        
+        @staticmethod
+        def create_messy_root():
+            # In this function you create a messy root state. This usually becomes the
+            # first state in your simulation. 
+            #
+            # Why messy? Because sometimes you want to have fun in your simulations.
+            # You want to create a world where there's a lot of mess, with many
+            # objects interacting with each other. This is a good way to test-drive
+            # your simulation.
+            #
+            # This function may take arguments, if you wish, to be used in making
+            # the state. For example, in a Life simulation you may want to specify
+            # the width and height of the board using arguments to this function.
+            #
+            # This function returns the newly-created state.
+            pass
+                                     
+    
+So now we can start filling in our simpack! But before that, we need to think about the laws of our simulation and how we're going to represent them in the :class:`State <garlicsim.data_structures.State>`.
+
+
