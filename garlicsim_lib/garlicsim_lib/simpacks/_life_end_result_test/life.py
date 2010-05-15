@@ -3,46 +3,76 @@
 
 '''A module for simulating Conway's Game of Life.'''
 
-import garlicsim.data_structures
 import random
+import itertools
+
+import garlicsim.data_structures
+
 
 class State(garlicsim.data_structures.State):
+
+    @staticmethod
+    def create_diehard(width=45, height=25):
+        state = State()
+        state.board = Board.create_diehard(width, height)
+        return state
     
-    def calculate_end_result(self):
-        number_of_live_cells = live_cells(self)
+    @staticmethod
+    def create_root(width=45, height=25, fill="empty"):
+        state = State()
+        state.board = Board(width, height, fill)
+        return state
+
+    
+    @staticmethod
+    def create_messy_root(width=45, height=25):
+        return State.create_root(width, height, fill='random')
+                                 
+    
+    def step(self, useless=None, krazy=None):
+        number_of_live_cells = self.get_n_live_cells()
         if number_of_live_cells < (self.board.width * self.board.height) / 10.:
-            self.end_result = number_of_live_cells
-        else:
-            self.end_result = None
+            raise garlicsim.misc.exceptions.WorldEnd
+            
+        old_board = self.board        
+        new_board = Board(parent=old_board)
+        new_state = State()
+        if krazy:
+            new_state.board = \
+                Board(old_board.width, old_board.height, fill='random')
+            return new_state
+        new_state.board = new_board
+        return new_state
+
+    
+    @garlicsim.misc.caching.state_cache
+    def get_n_live_cells(self):
+        '''Return how many live cells there are in the board.'''
+        return self.board._Board__list.count(True)
+
     def __repr__(self):
         return self.board.__repr__()
+    
     def __eq__(self, other):
         return isinstance(other, State) and self.board == other.board
+    
     def __ne__(self, other):
         return not self.__eq__(other)
     
+    def __sub__(self, other): # experimental, test
+        if isinstance(other, State):
+            return sum(
+                (x-y) for (x, y) in itertools.izip(
+                    self.board._Board__list,
+                    other.board._Board__list
+                )
+            )
+                
+        else:
+            return NotImplemented
+            
     
-def step(old_state, useless=None, krazy=None):
-    old_board = old_state.board
-    new_board = Board(parent=old_board)
-    new_state = State()
-    if krazy:
-        new_state.board = \
-            Board(old_board.width, old_board.height, fill='random')    
-        return new_state
-    new_state.board = new_board
-    
-    return new_state
 
-def make_plain_state(width=45, height=25, fill="empty"):
-    my_state = State()
-    my_state.board = Board(width, height, fill)
-    return my_state
-
-def make_random_state(width=45, height=25):
-    my_state = State()
-    my_state.board = Board(width, height, fill="random")
-    return my_state
 
 class Board(object):
     '''Represents a Life board.''' 
@@ -74,22 +104,26 @@ class Board(object):
         for i in xrange(self.width*self.height):
             self.__list.append(make_cell())
 
+    @staticmethod
+    def create_diehard(width=45, height=25):
+        board = Board(width, height)
+        (x, y) = (width//2, height//2)
+        for (i, j) in [(6, 0), (0, 1), (1, 1), (1, 2), (5, 2), (6, 2), (7, 2)]:
+            board.set(x + i, y + j, True)
+            
+        return board
+        
+    
     def get(self, x, y):
-        '''
-        Get the value of cell (x, y) in the board.
-        '''
+        '''Get the value of cell (x, y) in the board.'''
         return self.__list[ (x % self.width) * self.height + (y%self.height) ]
 
     def set(self, x, y, value):
-        '''
-        Set the value of cell (x, y) in the board to the specified value.
-        '''
+        '''Set the value of cell (x, y) in the board to the specified value.'''
         self.__list[ (x%self.width) * self.height + (y%self.height) ] = value
 
     def get_true_neighbors_count(self, x, y):
-        '''
-        Get the number of True neighbors a cell has.
-        '''
+        '''Get the number of True neighbors a cell has.'''
         result = 0
         for i in [-1 ,0 ,1]:
             for j in [-1, 0 ,1]:
@@ -117,9 +151,7 @@ class Board(object):
                 return False
 
     def __repr__(self):
-        '''
-        Display the board, ASCII-art style.
-        '''
+        '''Display the board, ASCII-art style.'''
         cell = lambda x, y: "#" if self.get(x, y) is True else " "
         row = lambda y: "".join(cell(x, y) for x in xrange(self.width))
         return "\n".join(row(y) for y in xrange(self.height))
@@ -130,10 +162,6 @@ class Board(object):
     def __ne__(self, other):
         return not self.__eq__(other)
 
-@garlicsim.misc.caching.state_cache
-def live_cells(state):
-    '''Return how many live cells there are in the state.'''
-    return state.board._Board__list.count(True)
 
    
 
@@ -156,6 +184,7 @@ def changes(history_browser):
     return counter
 
 def determinism_function(step_profile):
+    '''tododoc'''
     try:
         if step_profile.args[1] is True or step_profile.kwargs['krazy'] is True:
             return garlicsim.misc.settings.UNDETERMINISTIC

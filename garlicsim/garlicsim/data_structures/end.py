@@ -8,6 +8,8 @@ See documentation of Node for more information.
 '''
 
 
+from garlicsim.general_misc import misc_tools
+
 from tree_member import TreeMember
 from node import Node
 
@@ -32,6 +34,8 @@ class End(TreeMember):
         assert isinstance(parent, Node)
         self.parent = parent
         '''The parent node of this node.'''
+        
+        self.parent.ends.append(self)
         
         self.step_profile = step_profile
         '''

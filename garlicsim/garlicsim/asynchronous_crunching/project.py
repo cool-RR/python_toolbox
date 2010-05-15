@@ -116,6 +116,10 @@ class Project(object):
         leaves_dict = node.get_all_leaves(max_clock_distance=clock_buffer)
         new_clock_target = node.state.clock + clock_buffer
         
+        for leaf in leaves_dict:
+            if leaf.ends:
+                del leaves_dict[leaf]
+        
         for item in leaves_dict.items():
 
             leaf = item[0]
@@ -145,6 +149,8 @@ class Project(object):
         '''
         
         leaf = path.get_last_node(start=node)
+        if leaf.ends: return
+        
         new_clock_target = node.state.clock + clock_buffer     
 
         jobs_of_leaf = self.crunching_manager.get_jobs_by_node(leaf)

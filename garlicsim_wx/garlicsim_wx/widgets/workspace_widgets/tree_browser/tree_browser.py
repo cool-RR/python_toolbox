@@ -236,8 +236,6 @@ class NiftyPaintDC(wx.BufferedPaintDC):
                 
             if start.still_in_editing:
                 type = 'Unfinalized ' + type
-            #elif start.state.end_result is not None: tododoc fix
-            #    type = type + ' End'
                     
             if start == self.active_soft_block:
                 type = "Active " + type
@@ -314,6 +312,25 @@ class NiftyPaintDC(wx.BufferedPaintDC):
             self.DrawLinePoint(line_start, line_end)
             max_width = max(max_width, self_width + new_width)
             total_height += new_height
+            
+        
+        if isinstance(start, garlicsim.data_structures.Node):
+            for end in start.ends:
+                line_end = vectorish.add(
+                    point,
+                    (
+                        self_width + 1,
+                     total_height + bitmap_size[1] // 2
+                    )
+                )
+                
+                temp = vectorish.add(point, (self_width, total_height))
+                (new_width, new_height) = \
+                    self.draw_end(temp, tree, end)
+                del temp
+                self.DrawLinePoint(line_start, line_end)
+                max_width = max(max_width, self_width + new_width)
+                total_height += new_height
 
         return (
             max_width,
@@ -323,12 +340,47 @@ class NiftyPaintDC(wx.BufferedPaintDC):
             )
         )
 
+    
+    def draw_end(self, point, tree, start):
+
+        assert isinstance(start, garlicsim.data_structures.End)
+        
+        bitmap = self.tree_browser.elements['Untouched End']
+        self.DrawBitmapPoint(bitmap, point, useMask=True)
+        bitmap_size = bitmap.GetSize()
+
+        temp = (point[0],
+                point[1],
+                point[0] + bitmap_size[0],
+                point[1] + bitmap_size[1])
+        
+        self.clickable_map[temp] = start
+        
+        last_height = 0
+        total_height = 0
+        self_width = bitmap_size[0] + connector_length
+        max_width = self_width
+        line_start = vectorish.add(
+            point,
+            (
+                bitmap_size[0] - 1,
+                bitmap_size[1] // 2
+            )
+        )
+        
+        
+
+        return (
+            max_width,
+            max(
+                total_height,
+                bitmap_size[1] + connector_length
+            )
+        )
+    
     def draw_tree(self, tree):
         '''
         Draw the tree.
-        
-        This will only use the part of the tree that springs from the first
-        root!
         '''
 
         if self.gui_project:

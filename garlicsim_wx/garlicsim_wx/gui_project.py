@@ -536,9 +536,10 @@ class GuiProject(object):
         
         self.is_playing = False
         
-        assert self.infinity_job is not None
-        self.infinity_job.crunching_profile.clock_target = \
-            self.infinity_job.node.state.clock + self.default_buffer
+        # assert self.infinity_job is not None # tododoc: commented out because of End
+        if self.infinity_job:
+            self.infinity_job.crunching_profile.clock_target = \
+                self.infinity_job.node.state.clock + self.default_buffer
         
         self.last_tracked_real_time = None
         self.round_pseudoclock_to_active_node()

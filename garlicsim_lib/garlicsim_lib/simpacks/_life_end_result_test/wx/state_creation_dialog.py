@@ -105,7 +105,7 @@ class StateCreationDialog(wx.Dialog):
                 self.info["height"],
                 self.info["fill"]
             )
-            state = self.simpack.make_plain_state(width, height, fill)
+            state = self.simpack.State.create_root(width, height, fill)
         else:
             state = None
         self.Destroy()

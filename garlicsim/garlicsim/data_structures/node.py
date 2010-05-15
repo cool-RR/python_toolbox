@@ -103,6 +103,8 @@ class Node(TreeMember):
         finalized, thus no crunching should be made from the node until it is
         finalized.
         '''
+        
+        self.ends = []
   
         
     def __len__(self):
