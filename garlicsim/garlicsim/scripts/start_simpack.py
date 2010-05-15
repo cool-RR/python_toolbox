@@ -72,13 +72,18 @@ def start_simpack(containing_folder, name):
         
         with pkg_resources.resource_stream(simpack_template_package_name, file) as source:
             with open(dest_file, 'w') as destination:
-            
-                destination.write(
-                    _newline_replace(
-                        source.read().replace('simpack_name', name)
-                    )
+                
+                string_to_write = os.linesep.join(
+                    (line.replace('simpack_name', name).replace('\r', '').replace('\n', '')
+                     for line in source.readlines())
                 )
+                
+                destination.write(string_to_write)
             
+            
+        with open(dest_file, 'r') as destination:
+            string_reread = destination.read()
+        
         try:
             shutil.copymode('/'.join(('simpack_template', file)), dest_file)
             _make_writeable(dest_file)
