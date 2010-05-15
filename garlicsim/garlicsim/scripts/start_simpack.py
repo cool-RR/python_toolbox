@@ -9,7 +9,7 @@ import shutil
 
 import pkg_resources
 
-import simpack_template
+from garlicsim.scripts import simpack_template
 simpack_template_package_name = simpack_template.__name__
 
 def _newline_replace(s):
