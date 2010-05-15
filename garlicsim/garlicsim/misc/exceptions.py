@@ -28,6 +28,9 @@ class InvalidSimpack(GarlicSimException):
 
 class SimpackError(GarlicSimException):
     '''A simpack behaved unexpectedly.'''
+    
+class WorldEnd(GarlicSimException):  #tododoc: possibly rename
+    pass
 
     
     

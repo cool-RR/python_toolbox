@@ -69,7 +69,6 @@ class StepIterator(object):
         if self.current_state and self.current_state.end_result is not None:
             raise StopIteration
         self.current_state = self.__get_new_state()
-        self.current_state.calculate_end_result()
         self.auto_clock(self.current_state)
         return self.current_state
         

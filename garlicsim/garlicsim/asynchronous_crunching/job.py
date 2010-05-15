@@ -31,8 +31,7 @@ class Job(object):
         '''
         Return whether the job is done, i.e. enough crunching has been done.
         '''
-        return self.crunching_profile.state_satisfies(self.node.state) or \
-               self.node.state.end_result is not None
+        return self.crunching_profile.state_satisfies(self.node.state)
     
         
     def __repr__(self): #todo: ensure not subclass?

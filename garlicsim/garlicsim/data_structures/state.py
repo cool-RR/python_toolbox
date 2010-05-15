@@ -25,13 +25,7 @@ class State(object):
     to it.
     '''
     
-    def __init__(self):
-        self.end_result = None
-        
-    def calculate_end_result(self):
-        return
-    
-    def __repr__(self): # todo: show end_result here
+    def __repr__(self):
         '''
         Get a string representation of the state.
         

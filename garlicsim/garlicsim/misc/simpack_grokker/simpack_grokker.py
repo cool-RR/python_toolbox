@@ -124,7 +124,7 @@ of step function.''' % simpack.__name__)
         
         The step profile will specify which parameters to pass to the simpack's
         step function.
-        ''' # tododoc: should there be check for end_result here?
+        ''' 
         auto_clock_generator = AutoClockGenerator()
         if isinstance(state_or_history_browser,
                       garlicsim.data_structures.State):

@@ -18,7 +18,7 @@ import history_browser as history_browser_module # Avoiding name clash
 
 __all__ = ["list_simulate"]
 
-def list_simulate(state, iterations, *args, **kwargs):
+def list_simulate(state, iterations, *args, **kwargs): #tododoc: should probably return path
     '''
     Simulate from the given state for the given number of iterations.
 

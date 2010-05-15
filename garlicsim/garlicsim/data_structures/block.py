@@ -12,6 +12,7 @@ from garlicsim.general_misc import misc_tools
 
 from garlicsim.misc import GarlicSimException
 
+from tree_member import TreeMember
 # We are doing `from node import Node` in the bottom of the file.
 
 __all__ = ["Block", "BlockError"]
@@ -21,7 +22,7 @@ class BlockError(GarlicSimException):
     '''Block-related exception.'''
 
     
-class Block(object):
+class Block(TreeMember):
     '''
     A device for bundling together a succession of natural nodes.
     
@@ -54,6 +55,9 @@ class Block(object):
         self.__node_list = []
         self.add_node_list(node_list)
 
+    def get_block(self):
+        return self
+    
     def append_node(self, node):
         '''
         Append a single node to the block.
@@ -305,6 +309,85 @@ while the index was bigger than the block's length.''')
             assert isinstance(other, Node)
             return (self in other)
     
+    
+    def make_containing_path(self):
+        '''
+        Create a path that contains this node.
+        
+        There may be multiple different paths that contain this node. This will
+        return the one which points to the newest possible forks.
+        Returns the path.
+        '''
+        return self[0].make_containing_path()
+        
+    
+    
+    def all_possible_paths(self):
+        '''
+        Get a list of all possible paths that contain this node.
+        
+        Note: There may be paths that contain this node which will not be
+        identical to one of the paths given here, because these other paths
+        may specify decisions that are not even on the same root as these
+        paths.
+        '''
+        return self[0].all_possible_paths()
+    
+    
+    
+    def make_past_path(self):
+        '''
+        Create a path that contains this node.
+        
+        There may be multiple different paths that contain this node. This will
+        return a path that doesn't specify any decisions after this node.
+        '''
+        return self[0].make_past_path()
+
+
+    
+    def get_all_leaves(self, max_nodes_distance=None, max_clock_distance=None):
+        '''
+        Get all leaves that are descendents of this node.
+        
+        Only leaves with a distance of at most `max_nodes_distance` in nodes or
+        `max_clock_distance` in clock are returned. (Note this is an OR
+        relation between the two condintions)
+        
+        Returns a dict of the form:
+        
+        {
+            leaf1: {
+                'nodes_distance': nodes_distance1,
+                'clock_distance': clock_distance1,
+            },            
+            leaf2: {
+                'nodes_distance': nodes_distance2,
+                'clock_distance': clock_distance2,
+            },
+            # ...
+        }
+            
+        '''
+        return self[-1].make_containing_path(max_nodes_distance, max_clock_distance)
+
+    
+    
+    def get_ancestor(self, generations=1, round=False):
+        ''''''
+        return self[0].get_ancestor(generations, round)
+
+    
+    
+    def get_root(self):
+        '''
+        Get the root of this node.
+        
+        This means the node which is the parent of the parent of the parent
+        of... the parent of this node.
+        '''
+        return self[0].get_root()
+        
     def __repr__(self):
         '''
         Get a string representation of the block.

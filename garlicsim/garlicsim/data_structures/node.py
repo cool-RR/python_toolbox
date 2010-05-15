@@ -13,6 +13,7 @@ from garlicsim.general_misc import misc_tools
 from garlicsim.misc import GarlicSimException
 
 from state import State
+from tree_member import TreeMember
 # We are doing `from block import Block` in the bottom of the file.
 # We are doing `from path import Path` in the bottom of the file.
 
@@ -27,7 +28,7 @@ class NodeLookupError(NodeError, LookupError):
     '''A node-related lookup was requested but no result was found.'''
     
     
-class Node(object):
+class Node(TreeMember):
     '''
     Nodes are used to organize states in a tree.
     
@@ -121,10 +122,9 @@ Untouched nodes can't be edited, so they have no concept of being finalized.'''
             raise NodeError(message)
         
         self.still_in_editing = False
-        self.state.calculate_end_result()
 
         
-    def soft_get_block(self): # todo: move to BaseTreeEntity
+    def get_block(self): # todo: move to BaseTreeEntity
         '''
         If this node is a member of a block, return the block.
         

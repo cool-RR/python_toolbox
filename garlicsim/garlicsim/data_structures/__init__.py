@@ -12,6 +12,7 @@ nodes.
 '''
 
 
+from tree_member import TreeMember
 from state import State
 from tree import Tree, TreeError
 from path import Path, PathError, PathOutOfRangeError

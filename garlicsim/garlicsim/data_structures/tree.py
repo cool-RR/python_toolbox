@@ -142,8 +142,7 @@ tree while specifying a template_node.''')
                 if len(parent.children) == 1:
                     
                     if (not node.touched) and \
-                       (parent.step_profile == node.step_profile) and \
-                       (node.state.end_result is None):
+                       (parent.step_profile == node.step_profile):
                         
                         parent.block.append_node(node)
                         
@@ -158,8 +157,7 @@ tree while specifying a template_node.''')
                 if (not node.touched) and \
                    (not parent.touched) and \
                    (len(parent.children)==1) and \
-                   (parent.step_profile == node.step_profile) and \
-                   (node.state.end_result is None):
+                   (parent.step_profile == node.step_profile):
                     
                     Block([parent, node])
                 
