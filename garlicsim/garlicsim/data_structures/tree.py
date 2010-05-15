@@ -168,6 +168,11 @@ tree while specifying a template_node.''')
             self.roots.append(node)
             return node
 
+    
+    def make_end(self, node, step_profile):
+        end = End(self, node, step_profile)
+        return end
+    
 
     def all_possible_paths(self):
         '''Return all the possible paths this tree may entertain.'''
@@ -290,4 +295,4 @@ tree while specifying a template_node.''')
     
 from node import Node
 from block import Block
-
+from end import End

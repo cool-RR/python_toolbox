@@ -20,11 +20,15 @@ import garlicsim.misc
 import crunchers
 from crunching_profile import CrunchingProfile
 from garlicsim.misc.step_profile import StepProfile
+from .misc import EndMarker
+
 
 __all__ = ['CrunchingManager', 'DefaultCruncher', 'DefaultHistoryCruncher']
 
+
 DefaultCruncher = crunchers.CruncherThread
 '''Cruncher class to be used by default in non-history-dependent simulations.'''
+
 
 DefaultHistoryCruncher = crunchers.CruncherThread
 '''Cruncher class to be used by default in history-dependent simulations.'''
@@ -199,6 +203,7 @@ class CrunchingManager(object):
         This is every job whose .node attribute is equal to the specified node.
         '''
         return [job for job in self.jobs if job.node == node]
+
     
     def __add_work_to_tree(self, cruncher, node, retire=False):
         '''
@@ -228,6 +233,10 @@ class CrunchingManager(object):
                 )
                 # todo optimization: save step profile in variable, it's
                 # wasteful to do a dict lookup every state.
+            
+            elif issubclass(thing, EndMarker):
+                tree.make_end(node=current,
+                              step_profile=self.step_profiles[cruncher])
                 
             elif isinstance(thing, StepProfile):
                 self.step_profiles[cruncher] = thing

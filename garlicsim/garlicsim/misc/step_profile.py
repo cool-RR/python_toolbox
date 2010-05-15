@@ -11,7 +11,7 @@ import copy
 
 __all__ = ['StepProfile']
 
-class StepProfile(object):
+class StepProfile(object): # tododoc: use CachedType?
     '''
     A profile of *args and **kwargs to be used with a step function.
     

@@ -14,7 +14,7 @@ from node import Node
     
 class End(TreeMember):
     
-    def __init__(self, tree, state, parent, step_profile=None):
+    def __init__(self, tree, parent, step_profile=None):
         '''
         Construct the node.
         
@@ -28,9 +28,6 @@ class End(TreeMember):
         
         self.tree = tree
         '''The tree in which this node resides.'''
-        
-        self.state = state
-        '''The state contained in the node.'''
         
         assert isinstance(parent, Node)
         self.parent = parent
