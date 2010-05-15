@@ -124,6 +124,67 @@ You should browse this folder yourself, and go over the files. These are the abr
             pass
                                      
     
-So now we can start filling in our simpack! But before that, we need to think about the laws of our simulation and how we're going to represent them in the :class:`State <garlicsim.data_structures.State>`.
+So now we can start filling in our simpack! But before that, we need to think
+about the laws of our simulation and how we're going to represent them in the
+:class:`State <garlicsim.data_structures.State>`.
 
+Let's think about our simulation: We go into the casino, with a given amount of
+money, say $5,000. Every turn we make a bet on a certain amount of dollars.
+(That we must have at hand-- No loans at this casino.) We double our money or
+lose it, with a 50/50 chance.
 
+At first we bet $100. If we lose, we bet $200. If we lose again, we bet $400,
+etc. If we win one of those before going bankrupt, we made a net profit of $100,
+and then we start the cycle and bet $100 again.
+
+Our goal is to make $1,000, i.e. have $6,000 in our account. If we reach that,
+we win. If we lose all our money, we lose.
+
+Here is an attempt to write this simpack. (You can fill this in to your files in
+the :file:`coin_flip` folder.)
+
+::
+
+    import random
+    import garlicsim.data_structures
+        
+        class State(garlicsim.data_structures.State):
+            
+            def __init__(self, balance, last_bet_result=0):
+                self.balance = balance
+                '''tododoc'''
+                
+                self.last_bet_result = 0
+                '''tododoc'''
+            
+            def step(self):
+                if state.account >= 6000:
+                    state.end_result = 6000
+                    return
+                
+                if state.last_bet_result == 0 # Meaning the simulation just started
+                   or state.last_bet_result == 100: # Meaning we just won
+                    
+                    amount_to_bet = 100 # We're starting a new cycle
+                else: 
+                    assert state.last_bet_result in (-100, -200, -400, -800,
+                                                     -1600, -3200, -6400)
+                    # If the flow reached here it means we just lost. So we
+                    # should bet double the amount:
+                    amount_to_bet = - 2 * state.last_bet_result
+                
+                # Now we know what the amount we should bet, let's do it!
+                bet_result = random.choice([amount_to_bet, - amount_to_bet])
+                
+                new_balance = state.balance + bet_result
+                
+                new_state = State(new_balance, bet_result)
+                
+                return new_state
+            
+                
+            @staticmethod
+            def create_root():
+                state = State(balance=5000)
+
+Frr
