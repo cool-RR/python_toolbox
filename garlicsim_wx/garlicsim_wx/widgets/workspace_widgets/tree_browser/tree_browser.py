@@ -173,6 +173,8 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
             if thing is None:
                 #maybe deselect?
                 pass
+            elif isinstance(thing, garlicsim.data_structures.End):
+                self.gui_project.set_active_node(thing.parent)
             else:
                 self.gui_project.set_active_node(thing)
                 

@@ -64,8 +64,13 @@ def __history_simulate(simpack_grokker, state, iterations=1, step_profile=None):
     finite_iterator = cute_iter_tools.shorten(iterator, iterations)
     
     current_node = root
-    for current_state in finite_iterator:
-        current_node = tree.add_state(current_state, parent=current_node)
+    current_state = current_node.state
+    
+    try:
+        for current_state in finite_iterator:
+            current_node = tree.add_state(current_state, parent=current_node)
+    except garlicsim.misc.exceptions.WorldEnd:
+        pass
         
     final_state = current_state
     # Which is still here as the last value from the for loop
@@ -88,9 +93,14 @@ def __non_history_simulate(simpack_grokker, state, iterations=1,
     if step_profile is None: step_profile = garlicsim.misc.StepProfile()
     iterator = simpack_grokker.step_generator(state, step_profile)
     finite_iterator = cute_iter_tools.shorten(iterator, iterations)
-    for current_state in finite_iterator:
-        pass
-        
+    current_state = state
+    
+    try:
+        for current_state in finite_iterator:
+            pass
+    except garlicsim.misc.exceptions.WorldEnd:
+        pass    
+    
     final_state = current_state
     # Which is still here as the last value from the for loop
     
