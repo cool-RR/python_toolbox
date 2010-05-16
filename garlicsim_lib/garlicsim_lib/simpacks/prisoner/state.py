@@ -36,6 +36,7 @@ class State(garlicsim.data_structures.State):
             ]
         )
         state.prepare_for_new_match()
+        return state
     
     
     @staticmethod
@@ -50,6 +51,7 @@ class State(garlicsim.data_structures.State):
             ]
         )
         state.prepare_for_new_match()
+        return state
     
         
     def step(self):
