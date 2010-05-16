@@ -13,6 +13,7 @@ import garlicsim.general_misc.third_party.decorator
 import garlicsim.general_misc.change_tracker
 from garlicsim.general_misc.infinity import Infinity
 from garlicsim.general_misc import misc_tools
+from garlicsim.general_misc import cute_iter_tools
 
 import garlicsim
 import garlicsim.data_structures
@@ -223,7 +224,11 @@ class CrunchingManager(object):
         counter = 0
         self.step_profiles[cruncher]
         
-        for thing in queue_tools.iterate(cruncher.work_queue):
+        for thing in cute_iter_tools.shorten(
+            queue_tools.iterate(cruncher.work_queue),
+            10
+            ):
+            
             if isinstance(thing, garlicsim.data_structures.State):
                 counter += 1
                 current = tree.add_state(

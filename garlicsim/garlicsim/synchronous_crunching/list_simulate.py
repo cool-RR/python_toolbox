@@ -11,6 +11,7 @@ import copy
 import warnings
 
 from garlicsim.general_misc import cute_iter_tools
+from garlicsim.general_misc import misc_tools
 
 import garlicsim
 import garlicsim.misc
@@ -69,9 +70,17 @@ def __history_list_simulate(simpack_grokker, state, iterations,
     finite_iterator = cute_iter_tools.shorten(iterator, iterations)
     
     current_node = root
-    for current_state in finite_iterator:
-        current_node = tree.add_state(current_state, parent=current_node)
+    current_state = current_node.state
     
+    world_ended = False
+    try:
+        for current_state in finite_iterator:
+            current_node = tree.add_state(current_state, parent=current_node)
+    except garlicsim.misc.exceptions.WorldEnd:
+        world_ended = True
+    
+    # Not doing anything with `world_ended` yet
+        
     return [node.state for node in path]
 
 
@@ -99,7 +108,16 @@ def __non_history_list_simulate(simpack_grokker, state, iterations,
     finite_iterator = cute_iter_tools.shorten(iterator, iterations)
     
     current_node = root
-    for current_state in finite_iterator:
-        current_node = tree.add_state(current_state, parent=current_node)
+    current_state = current_node.state
+    
+    world_ended = False
+    try:
+        for current_state in finite_iterator:
+            current_node = tree.add_state(current_state, parent=current_node)
+    except garlicsim.misc.exceptions.WorldEnd:
+        world_ended = True
+
+    # Not doing anything with `world_ended` yet
     
     return [node.state for node in path]
+
