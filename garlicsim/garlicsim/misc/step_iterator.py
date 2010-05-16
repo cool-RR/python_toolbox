@@ -102,6 +102,7 @@ StopIteration before producing a single state.''')
             self.rebuild_raw_iterator()
             self.step_profile_changed = False
             
+            
     def rebuild_raw_iterator(self):
         '''
         Rebuild the internal iterator.

@@ -10,22 +10,27 @@ random.seed()
 from garlicsim.misc import StepCopy
 import garlicsim.data_structures
 
-def make_plain_state(*args, **kwargs):
-    state=garlicsim.data_structures.State()
-    state.left = 0
-    state.left_vel = 0
-    state.right = 0
-    return state
+class State(garlicsim.data_structures.State):
+    
+    def __init__(self, left, left_vel, right):
+        self.left = left
+        self.left_vel = left_vel
+        self.right = right
 
-def make_random_state(*args, **kwargs):
-    state=garlicsim.data_structures.State()
-    state.left = random.random() * 2 * pi
-    state.left_vel = 0
-    state.right = random.random() * 2 * pi
-    return state
+    @staticmethod
+    def create_root():
+        return State(0, 0, 0)
 
+    @staticmethod
+    def create_messy_root():
+        return State(
+            random.random() * 2 * pi,
+            0,
+            random.random() * 2 * pi
+        )
+        
 
-def history_step(history_browser, t=0.1, *args, **kwargs):
+def history_step(history_browser, t=0.1):
 
     last_state = history_browser.get_last_state()
     new_state = copy.deepcopy(last_state, StepCopy())

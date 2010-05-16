@@ -143,7 +143,7 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         assert issubclass(rounding, binary_search.Rounding)
         
         tree_result = self.__get_both_states_by_monotonic_function_from_tree \
-                      (function, value, rounding=binary_search.BOTH)
+                      (function, value)
         
         if tree_result[1] is not None:
             # Then there is no need to check the queue even.
@@ -186,7 +186,6 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         
         This uses the binary_search.BOTH rounding. See its documentation.        
         '''
-        assert issubclass(rounding, binary_search.Rounding)
         our_node = self.__get_our_node()
         path = our_node.make_containing_path()
         new_function = lambda node: function(node.state)
