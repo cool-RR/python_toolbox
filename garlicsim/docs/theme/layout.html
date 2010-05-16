@@ -182,7 +182,10 @@
     {%- if hasdoc('copyright') %}
       {% trans path=pathto('copyright'), copyright=copyright|e %}&copy; <a href="{{ path }}">Copyright</a> {{ copyright }}.{% endtrans %}
     {%- else %}
-      {% trans copyright=copyright|e %}&copy; Copyright {{ copyright }}.{% endtrans %}
+      {% trans copyright=copyright|e %}&copy; Copyright {{ copyright }}. <br />
+      This work is licensed under a Creative Commons Attribution-Share Alike 2.5 Israel License.<br />
+To view a copy of this license, visit: <a href="http://creativecommons.org/licenses/by-sa/2.5/il/">http://creativecommons.org/licenses/by-sa/2.5/il/</a><br />
+      {% endtrans %}
     {%- endif %}
     {%- if last_updated %}
       {% trans last_updated=last_updated|e %}Last updated on {{ last_updated }}.{% endtrans %}

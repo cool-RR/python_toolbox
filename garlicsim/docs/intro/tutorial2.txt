@@ -1,8 +1,8 @@
 .. _intro-tutorial2:
 
-===========================================
-Tutorial part 2: Writing your first simpack
-===========================================
+======================================================
+Tutorial part 2: Writing your first simulation package
+======================================================
 
 In part 1 of the tutorial, we were playing around with someone else's simpack.
 In part 2, we are going to make our own.
@@ -300,6 +300,9 @@ Let's play with :func:`list_simulate <garlcsim.list_simulate>`:
 Here we can see the story of another lucky gambler who made it to $6,000. We see
 how his account balance changed at every step in the way.
 
+Results analysis
+----------------
+
 Okay, now it's time to do what we started this simpack for: Checking if this
 betting scheme is any good. Let's run the simulation 1,000 times and get a list
 of the end balances:
@@ -313,7 +316,6 @@ of the end balances:
     
 Let's get the average amount of money that a gambler ends up with. This should
 let us get a good approximation to the `expected value`_ of this scheme:
-
     
     >>> sum(results) / len(results)
     4931.3000000000002
@@ -340,10 +342,22 @@ betting the entire $5,000 on the first turn. This is not surprising, since the
 expected value of each single bet is $0, so it doesn't matter what combination
 of these bets you will do, the expected value will stay $0.
 
+Sometimes though you care less about the expected value. For example, let's say
+you need to buy something for $6,000 very urgently, and you don't care about
+anything else. Then this is your chance to make $6,000 with this scheme:
     
     >>> results.count(6000)/len(results)
     0.70799999999999996
-    >>> exit()
+    
+Around 70%. Not bad, assuming you don't mind losing a lot of money on the other
+30 percent. Though it can be easily shown that you might as well have betted
+$1,000 from the beginning, and then double that if you lost, and you would have
+had the same chance of getting $6,000 at the end. Though that is the subject for
+another simulation...
 
+What's next
+===========
+
+tododoc
 
 .. _expected value: http://en.wikipedia.org/wiki/Expected_value
