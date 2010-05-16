@@ -14,7 +14,7 @@ import wx.lib.agw.piectrl as piectrl
 
 import garlicsim_wx
 
-from ... import prisoner
+from ... import state as prisoner
 
 
 class StateViewer(wx.Panel, garlicsim_wx.widgets.WorkspaceWidget):

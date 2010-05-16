@@ -31,15 +31,55 @@ def time_for_next_occurence(mean_time_for_next_occurence):
 
 
 class State(garlicsim.data_structures.State):
-    '''
-    State class used by the `queue` simpack.
-    '''
     def __init__(self, event_set, facility, servers, population):
         garlicsim.data_structures.State.__init__(self)
         self.event_set = event_set
         self.facility = facility
         self.servers = servers
         self.population = population
+
+    @staticmethod
+    def create_root(n_servers=3, population_size=Infinity, mean_arrival=1,
+                    mean_service=3):
+        
+        event_set = events_module.EventSet()
+        
+        facility = Facility(event_set=event_set)
+        
+        for i in range(n_servers):
+            facility.create_server(mean_service=mean_service)
+            
+        servers = facility.servers
+        
+        population = Population(
+            event_set=event_set,
+            facility=facility,
+            size=population_size,
+            mean_arrival=mean_arrival
+        )
+        
+        my_state = State(event_set, facility, servers, population)
+        
+        return my_state
+
+    create_messy_root = create_root # tododoc: remove when there's dialog
+    
+    def step(self, t=None):
+        '''Step function.'''
+        # todo good idea: t=None means step to next client. If given int just do
+        # many steps. (What with cut last?)
+        
+        assert t is None # for now
+        
+        new_state = copy.deepcopy(self, StepCopy())
+        time_passed = new_state.event_set.do_next_event()
+        
+        new_state.clock = self.clock + time_passed
+        
+        return new_state
+
+
+
 
             
 class Server(object):
@@ -209,43 +249,3 @@ class Population(object):
         return client
     
 
-def make_plain_state(n_servers=3, population_size=Infinity, mean_arrival=1,
-                     mean_service=3):
-    
-    event_set = events_module.EventSet()
-    
-    facility = Facility(event_set=event_set)
-    
-    for i in range(n_servers):
-        facility.create_server(mean_service=mean_service)
-        
-    servers = facility.servers
-    
-    population = Population(
-        event_set=event_set,
-        facility=facility,
-        size=population_size,
-        mean_arrival=mean_arrival
-    )
-    
-    my_state = State(event_set, facility, servers, population)
-    
-    return my_state
-    
-def step(old_state, t=None):
-    '''Step function.'''
-    # todo good idea: t=None means step to next client. If given int just do
-    # many steps. (What with cut last?)
-    
-    assert t is None # for now
-    
-    new_state = copy.deepcopy(old_state, StepCopy())
-    time_passed = new_state.event_set.do_next_event()
-    
-    new_state.clock = old_state.clock + time_passed
-    
-    return new_state
-
-
-
-make_random_state = make_plain_state # for now

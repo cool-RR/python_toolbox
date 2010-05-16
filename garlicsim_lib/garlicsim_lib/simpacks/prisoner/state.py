@@ -13,69 +13,76 @@ random.seed()
 import garlicsim.data_structures
 from garlicsim.misc import StepCopy
 
-
 ROUNDS = 7
 NUMBER_OF_PLAYERS = 70
 
-def make_plain_state(*args, **kwargs):
+
+class State(garlicsim.data_structures.State):
     
-    global player_types
-    state = garlicsim.data_structures.State()
-
-    state.round = -1
-    state.match = 0
-
-    state.player_pool = [
-        player_types[i % len(player_types)]() for i in xrange(NUMBER_OF_PLAYERS)
-    ]
-
-    return new_match_step(state)
-
-
-def make_random_state(*args, **kwargs):
-
-    state = garlicsim.data_structures.State()
-
-    state.round = -1
-    state.match = 0
-
-    state.player_pool = [
-        random_strategy_player() for i in xrange(NUMBER_OF_PLAYERS)
-    ]
-
-    return new_match_step(state)
-
-def step(source_state, *args, **kwargs):
+    def __init__(self, round, match, player_pool):
+        self.round = round
+        self.match = match
+        self.player_pool = player_pool
     
-    state = copy.deepcopy(source_state, StepCopy())
-    state.clock += 1
+    @staticmethod
+    def create_root():
+        global player_types
+        state = State(
+            round=-1,
+            match=0,
+            player_pool=[
+                player_types[i % len(player_types)]() for \
+                i in xrange(NUMBER_OF_PLAYERS)
+            ]
+        )
+        state.prepare_for_new_match()
+    
+    
+    @staticmethod
+    def create_messy_root():
+        global player_types
+        state = State(
+            round=-1,
+            match=0,
+            player_pool=[
+                random_strategy_player for \
+                i in xrange(NUMBER_OF_PLAYERS)
+            ]
+        )
+        state.prepare_for_new_match()
+    
+        
+    def step(self):
+        
+        state = copy.deepcopy(self, StepCopy())
+        state.clock += 1
+    
+        state.round += 1
+        if state.round == ROUNDS:
+            state.round = -1
+            state.match += 1
+            state.prepare_for_new_match()
+            return state
+    
+        for pair in state.pairs:
+            play_game(pair, state.round)
+    
+        return state
+    
+    
+    def prepare_for_new_match(self):
+        '''
+        Note: this function is not strictly a "step function":
+        it manipulates the state that is given to it and then returns it.
+        '''
+        pool = self.player_pool
+        loser = player_with_least_points(pool)
+        pool.remove(loser)
+        pool.append(random_strategy_player())
+    
+        self.pairs = pair_pool(self.player_pool)
 
-    state.round += 1
-    if state.round == ROUNDS:
-        state.round = -1
-        state.match += 1
-        return new_match_step(state)
 
-    for pair in state.pairs:
-        play_game(pair, state.round)
-
-    return state
-
-def new_match_step(state):
-    '''
-    Note: this function is not strictly a "step function":
-    it manipulates the state that is given to it and then returns it.
-    '''
-    pool = state.player_pool
-    loser = player_with_least_points(pool)
-    pool.remove(loser)
-    pool.append(random_strategy_player())
-
-    #for player in pool:
-    #    player.points=0
-
-    state.pairs = pair_pool(state.player_pool)
-    return state
 
 def pair_pool(player_pool):
     '''
@@ -96,19 +103,19 @@ def play_game((x, y), round):
     x_move = x.play(round)
     y_move = y.play(round)
 
-    assert x_move in ["Play nice", "Play mean"]
-    assert y_move in ["Play nice", "Play mean"]
+    assert x_move in [True, False]
+    assert y_move in [True, False]
 
-    if x_move == "Play nice" and y_move == "Play nice":
+    if x_move == True and y_move == True:
         x.points += 1
         y.points += 1
-    elif x_move == "Play nice" and y_move == "Play mean":
+    elif x_move == True and y_move == False:
         x.points += -4
         y.points += 2
-    elif x_move == "Play mean" and y_move == "Play nice":
+    elif x_move == False and y_move == True:
         x.points += 2
         y.points += -4
-    elif x_move == "Play mean" and y_move == "Play mean":
+    elif x_move == False and y_move == False:
         x.points += -1
         y.points += -1
 
@@ -131,16 +138,16 @@ class Player(object):
 
 class Angel(Player):
     def play(self, round):
-        return "Play nice"
+        return True
 
 class Asshole(Player):
     def play(self, round):
-        return "Play mean"
+        return False
 
 class Smarty(Player):
     def play(self, round):
         if round == 0:
-            return "Play nice"
+            return True
         else:
             return self.last_play
 

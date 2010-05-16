@@ -104,19 +104,19 @@ def play_game((x, y), round):
     x_move = x.play(round)
     y_move = y.play(round)
 
-    assert x_move in ["Play nice", "Play mean"]
-    assert y_move in ["Play nice", "Play mean"]
+    assert x_move in [True, False]
+    assert y_move in [True, False]
 
-    if x_move == "Play nice" and y_move == "Play nice":
+    if x_move == True and y_move == True:
         x.points += 1
         y.points += 1
-    elif x_move == "Play nice" and y_move == "Play mean":
+    elif x_move == True and y_move == False:
         x.points += -4
         y.points += 2
-    elif x_move == "Play mean" and y_move == "Play nice":
+    elif x_move == False and y_move == True:
         x.points += 2
         y.points += -4
-    elif x_move == "Play mean" and y_move == "Play mean":
+    elif x_move == False and y_move == False:
         x.points += -1
         y.points += -1
 
@@ -139,16 +139,16 @@ class Player(object):
 
 class Angel(Player):
     def play(self, round):
-        return "Play nice"
+        return True
 
 class Asshole(Player):
     def play(self, round):
-        return "Play mean"
+        return False
 
 class Smarty(Player):
     def play(self, round):
         if round == 0:
-            return "Play nice"
+            return True
         else:
             return self.last_play
 
