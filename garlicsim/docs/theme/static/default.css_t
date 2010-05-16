@@ -288,7 +288,12 @@ a tt {
 }
 
 
+/* Overriding Pygments here, because it's hard to extend it properly: */
 
 .nf {
-    color: #2658BE !important;
-} /* Overriding Pygments here, because it's hard to extend it properly */
+    color: #3668CE !important;
+} 
+
+.nb {
+    color: #009030 !important;
+}

@@ -300,296 +300,50 @@ Let's play with :func:`list_simulate <garlcsim.list_simulate>`:
 Here we can see the story of another lucky gambler who made it to $6,000. We see
 how his account balance changed at every step in the way.
 
-Okay, now it's time to do what we started this simpack for: Checking if this betting scheme is any good.
+Okay, now it's time to do what we started this simpack for: Checking if this
+betting scheme is any good. Let's run the simulation 1,000 times and get a list
+of the end balances:
 
-    >>> def get_end_balance():
-    ...     return garlicsim.simulate(s, Infinity).balance
-    ...
-    >>> get_end_result()
-    Traceback (most recent call last):
-      File "<stdin>", line 1, in <module>
-    NameError: name 'get_end_result' is not defined
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>>
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_result()
-    Traceback (most recent call last):
-      File "<stdin>", line 1, in <module>
-    NameError: name 'get_end_result' is not defined
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> garlicsim.list_simulate(s, Infinity)
-    [<coin_flip.State with clock 25 at 0xee5810>]
-    >>> garlicsim.list_simulate(s, Infinity)
-    [<coin_flip.State with clock 25 at 0xee5810>]
-    >>> garlicsim.list_simulate(s, Infinity)
-    [<coin_flip.State with clock 25 at 0xee5810>]
-    >>> s
-    <coin_flip.State with clock 25 at 0xee5810>
     >>> def get_end_balance():
     ...     return garlicsim.simulate(state, Infinity).balance
     ...
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    2200
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    1900
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    1900
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    2100
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    6000
-    >>> get_end_balance()
-    2500
-    >>> get_end_balance()
-    2300
-    >>> get_end_balance()
-    6000
     >>> results = [get_end_balance() for i in range(1000)]
     >>> results
-    [6000, 2300, 6000, 6000, 6000, 2100, 6000, 6000, 6000, 6000, 2100, 6000, 6000, 6000, 2700, 6000, 2200, 6000, 6000, 2700,
-     6000, 6000, 2300, 2200, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 2400, 6000, 6000, 6000, 6000, 2800, 6000, 6000, 6000,
-     6000, 2000, 6000, 2200, 2400, 6000, 6000, 2200, 6000, 1900, 6000, 6000, 6000, 6000, 2400, 6000, 6000, 6000, 2500, 6000,
-     6000, 6000, 6000, 2000, 6000, 6000, 6000, 6000, 2200, 6000, 2700, 1900, 6000, 6000, 6000, 2200, 2200, 1900, 2500, 6000,
-     6000, 2600, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 1900, 6000, 6000, 6000, 2500, 6000, 6000, 6000, 6000, 2100, 6000,
-     2300, 2200, 2200, 2800, 6000, 2100, 2300, 6000, 2400, 6000, 2800, 6000, 2500, 6000, 6000, 6000, 6000, 2100, 2400, 6000,
-     1900, 2300, 6000, 6000, 6000, 6000, 6000, 6000, 2100, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 2400, 6000, 6000, 6000,
-     6000, 6000, 2200, 2700, 6000, 2000, 6000, 6000, 6000, 1900, 2000, 2100, 2800, 2400, 6000, 2300, 6000, 6000, 2800, 6000,
-     2600, 6000, 6000, 6000, 6000, 2700, 2100, 2600, 6000, 6000, 2400, 2200, 6000, 1900, 6000, 2100, 6000, 2700, 6000, 6000,
-     6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 1900, 6000, 2200, 6000, 2500, 6000, 6000, 6000, 6000, 2400, 2300, 6000,
-     6000, 6000, 2700, 6000, 2200, 6000, 6000, 6000, 1900, 6000, 6000, 6000, 6000, 2400, 2500, 6000, 1900, 6000, 6000, 2100,
-     2400, 6000, 6000, 2700, 2100, 2000, 6000, 2300, 6000, 6000, 6000, 6000, 6000, 6000, 2500, 2400, 6000, 6000, 6000, 6000,
-     1900, 6000, 2700, 6000, 2400, 1900, 2300, 6000, 2400, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 2000, 6000, 6000,
-     2400, 2600, 6000, 6000, 2400, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 2800, 6000, 6000, 6000, 6000, 6000,
-     6000, 6000, 6000, 6000, 6000, 2500, 6000, 2100, 6000, 6000, 6000, 6000, 2400, 6000, 6000, 2500, 6000, 6000, 6000, 6000,
-     6000, 6000, 6000, 6000, 2800, 6000, 6000, 2600, 2800, 6000, 6000, 6000, 6000, 6000, 2000, 6000, 2600, 2800, 2600, 6000,
-     6000, 6000, 6000, 6000, 6000, 6000, 2100, 1900, 6000, 6000, 6000, 6000, 6000, 2200, 6000, 2600, 2600, 2100, 6000, 6000,
-     6000, 2500, 2000, 6000, 6000, 2400, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 2700, 6000, 2000, 1900,
-     6000, 6000, 6000, 6000, 6000, 6000, 6000, 2500, 6000, 1900, 2400, 6000, 6000, 6000, 6000, 2600, 2700, 6000, 6000, 6000,
-     6000, 6000, 6000, 6000, 6000, 6000, 6000, 2800, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 2600, 6000, 2000, 2000, 6000,
-     6000, 2600, 6000, 1900, 6000, 6000, 2300, 1900, 6000, 6000, 2200, 2200, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 2200,
-     6000, 1900, 6000, 6000, 2100, 6000, 6000, 2200, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 2700, 6000, 2100, 2400, 2200,
-     2000, 6000, 6000, 2200, 2000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 2500, 6000,
-     6000, 6000, 6000, 6000, 6000, 6000, 2800, 6000, 6000, 6000, 6000, 6000, 6000, 2800, 6000, 6000, 6000, 6000, 2300, 6000,
-     2800, 6000, 2300, 6000, 1900, 2800, 6000, 6000, 6000, 6000, 2300, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000,
-     6000, 6000, 6000, 2400, 2200, 6000, 6000, 6000, 6000, 2200, 6000, 2800, 6000, 2800, 6000, 6000, 6000, 6000, 2400, 6000,
-     6000, 6000, 6000, 6000, 6000, 6000, 6000, 2400, 2500, 2300, 2200, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 2000,
-     6000, 6000, 6000, 6000, 6000, 2200, 6000, 6000, 6000, 6000, 6000, 6000, 2300, 6000, 6000, 6000, 6000, 6000, 6000, 2200,
-     6000, 6000, 6000, 6000, 6000, 2800, 6000, 2500, 6000, 6000, 6000, 6000, 6000, 6000, 2400, 6000, 6000, 6000, 6000, 6000,
-     2200, 6000, 6000, 1900, 2700, 2400, 6000, 1900, 6000, 6000, 6000, 6000, 1900, 6000, 6000, 6000, 6000, 6000, 6000, 6000,
-     2000, 6000, 2400, 6000, 2400, 6000, 6000, 2100, 6000, 2600, 6000, 6000, 6000, 6000, 6000, 2800, 6000, 6000, 6000, 6000,
-     6000, 6000, 2000, 2200, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 2800, 6000, 6000, 2000, 6000,
-     6000, 6000, 6000, 6000, 2500, 6000, 2800, 6000, 6000, 6000, 6000, 6000, 6000, 2300, 6000, 6000, 6000, 6000, 2300, 6000,
-     6000, 2600, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 2300, 6000, 6000, 1900, 6000, 6000, 6000, 6000, 2300, 6000,
-     6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 2400, 1900, 2300, 6000, 6000, 6000, 6000, 2200,
-     6000, 2100, 6000, 2700, 6000, 2700, 6000, 6000, 1900, 6000, 6000, 6000, 2500, 6000, 6000, 6000, 2800, 2000, 6000, 6000,
-     6000, 2500, 6000, 2700, 2300, 6000, 6000, 6000, 6000, 6000, 6000, 2600, 6000, 2600, 6000, 2100, 6000, 2300, 6000, 6000,
-     2100, 6000, 6000, 1900, 2700, 6000, 6000, 6000, 2400, 6000, 6000, 6000, 6000, 2200, 2500, 2400, 6000, 6000, 2600, 6000,
-     2700, 2200, 6000, 6000, 2600, 6000, 6000, 2500, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 2800, 6000, 6000,
-     6000, 6000, 6000, 6000, 6000, 6000, 6000, 2600, 6000, 2100, 6000, 6000, 2400, 6000, 2800, 6000, 6000, 2800, 2700, 6000,
-     6000, 6000, 6000, 6000, 2600, 2500, 2100, 6000, 6000, 2300, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 1900,
-     6000, 2000, 2400, 6000, 2300, 6000, 6000, 6000, 2200, 2700, 1900, 6000, 6000, 6000, 6000, 2000, 6000, 6000, 6000, 2700,
-     2000, 6000, 6000, 2700, 6000, 6000, 6000, 6000, 6000, 2800, 2700, 2800, 2500, 6000, 2600, 6000, 2200, 6000, 6000, 6000,
-     6000, 6000, 6000, 1900, 2100, 6000, 2300, 6000, 6000, 2400, 2200, 6000, 6000, 6000, 2500, 2700, 6000, 2100, 6000, 2600,
-     6000, 6000, 2100, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 2000, 6000, 2600, 6000, 6000,
-     6000, 2800, 6000, 6000, 6000, 6000, 2500, 6000, 6000, 6000, 6000, 6000, 2700, 6000, 6000, 6000, 6000, 2300, 2200, 6000,
-     2600, 6000, 2100, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 2300, 6000, 1900, 6000, 2300, 6000, 6000, 6000, 6000,
-     6000, 6000, 6000, 2100, 2100, 6000, 1900, 6000, 6000, 2500, 6000, 2100, 6000, 2100, 2400, 6000, 6000, 2300, 6000, 6000,
-     6000, 6000, 2700, 2200, 6000, 6000, 2500, 2400, 6000, 1900, 6000, 6000, 6000, 6000, 6000, 6000, 2000, 6000, 6000, 2200,
-     6000, 6000, 2700, 6000, 6000, 6000, 2600, 6000, 6000, 6000, 6000, 2300, 6000, 2700, 6000, 6000, 6000, 6000, 6000, 2600]
+    [6000, 2300, 6000, 6000, 6000, 2100, 6000, 6000, <... Truncated>]
     
-    >>> from __future__ import division
+Let's get the average amount of money that a gambler ends up with. This should
+let us get a good approximation to the `expected value`_ of this scheme:
+
+    
+    >>> sum(results) / len(results)
+    4931.3000000000002
+
+Just a little below $5,000. Let's try with another sample:
+
+    >>> results = [get_end_balance() for i in range(1000)]
+    >>> sum(results) / len(results)
+    5016.1999999999998
+    
+Just a little above.
+
+    >>> results = [get_end_balance() for i in range(1000)]
+    >>> sum(results) / len(results)
+    4990.3000000000002
+    
+Again a little below. This is good enough indication that the expected value is
+zero. To get an exact value, we'll need to solve this problem analytically, of
+course, and that's not what garlicsim is about.
+
+So the expected value of this scheme is $0, meaning you aren't really "getting
+anything" with it. It has the same expected value as not betting at all, or
+betting the entire $5,000 on the first turn. This is not surprising, since the
+expected value of each single bet is $0, so it doesn't matter what combination
+of these bets you will do, the expected value will stay $0.
+
+    
     >>> results.count(6000)/len(results)
     0.70799999999999996
-    >>> sum(results)/len(results)
-    4931.3000000000002
-    >>> results = [get_end_balance() for i in range(1000)]
-    >>> sum(results)/len(results)
-    4945.8999999999996
-    >>> results = [get_end_balance() for i in range(1000)]
-    >>> sum(results)/len(results)
-    4990.3000000000002
-    >>> results = [get_end_balance() for i in range(1000)]
-    >>> sum(results)/len(results)
-    5016.1999999999998
     >>> exit()
-    
-    C:\Documents and Settings\User\My Documents\Python Projects\GarlicSim\garlicsim_lib\garlicsim_lib\simpacks>python
-    Enthought Python Distribution -- http://www.enthought.com
-    Version: 6.1-1 (32-bit)
-    
-    Python 2.6.4 |EPD 6.1-1 (32-bit)| (r264:75706, Nov 11 2009, 19:42:36) [MSC v.1500 32 bit (Intel)] on win32
-    Type "help", "copyright", "credits" or "license" for more information.
-    >>> import garlicsim
-    Traceback (most recent call last):
-      File "<stdin>", line 1, in <module>
-    ImportError: No module named garlicsim
-    >>> import sys
-    >>> sys.path += [r'C:\Documents and Settings\User\My Documents\Python Projects\GarlicSim\garlicsim']
-    >>> import garlcsim
-    Traceback (most recent call last):
-      File "<stdin>", line 1, in <module>
-    ImportError: No module named garlcsim
-    >>> import garlicsim
-    >>> import coin_flip
-    >>> state = coin_flip.State.create_root()
-    >>> vars(state)
-    {'balance': 5000, 'last_bet_result': 0}
-    >>> garlicsim.simulate(state, 5)
-    <coin_flip.State with clock 5 at 0xee9a10>
-    >>> new_state = garlicsim.simulate(state, 5)
-    >>> vars(new_state
+
+
+.. _expected value: http://en.wikipedia.org/wiki/Expected_value
