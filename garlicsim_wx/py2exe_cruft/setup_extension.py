@@ -276,6 +276,9 @@ py2exe_kwargs = {
             'skip_archive': True,
             
             'includes': includes,
+            
+            'dll_excludes': ['UxTheme.dll'],
+            
         }
     }
 }
