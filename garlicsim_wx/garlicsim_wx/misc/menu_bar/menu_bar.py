@@ -13,6 +13,8 @@ class MenuBar(wx.MenuBar):
         super(MenuBar, self).__init__()
         self.frame = frame
         
+        is_mac = (wx.Platform == '__WXMAC__')
+        
         self.file_menu = FileMenu(frame)
         self.Append(self.file_menu, '&File')
         
@@ -48,7 +50,9 @@ class MenuBar(wx.MenuBar):
         )
         
         self.window_menu = WindowMenu(frame)
-        self.Append(self.window_menu, '&Window')
+        title_of_window_menu = '&Workspace' if is_mac else '&Window'
+        self.Append(self.window_menu, title_of_window_menu)
         
         self.help_menu = HelpMenu(frame)
-        self.Append(self.help_menu, '&Help')
+        title_of_help_menu = 'GarlicSim &Help' if is_mac else '&Help'
+        self.Append(self.help_menu, title_of_help_menu)
