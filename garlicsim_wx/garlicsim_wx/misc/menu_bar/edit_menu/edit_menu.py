@@ -33,7 +33,7 @@ class EditMenu(CuteMenu):
         
                 
         self.cut_button = self.Append(
-            -1,
+            wx.ID_CUT,
             'Cu&t\tCtrl+X',
             ''' Cut the current selection, copying to the clipboard and \
 deleting it from the simulation'''
@@ -42,7 +42,7 @@ deleting it from the simulation'''
         
                 
         self.copy_button = self.Append(
-            -1,
+            wx.ID_COPY,
             '&Copy\tCtrl+C',
             ' Copy the current selection to the clipboard'
         )
@@ -50,7 +50,7 @@ deleting it from the simulation'''
         
                 
         self.paste_button = self.Append(
-            -1,
+            wx.ID_PASTE,
             '&Paste\tCtrl+V',
             ' Paste the content of the clipboard into the simulation'
         )
@@ -58,7 +58,7 @@ deleting it from the simulation'''
         
                 
         self.clear_button = self.Append(
-            -1,
+            wx.ID_CLEAR,
             'Cl&ear\tDel',
             ' Delete the current selection'
         )
