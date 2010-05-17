@@ -13,14 +13,16 @@ import functools
 
 import wx
 
+from garlicsim_wx.widgets.general_misc import CuteDialog
+
 import garlicsim.data_structures
 import widgets
 
 
-class StateCreationDialog(wx.Dialog):
+class StateCreationDialog(CuteDialog):
     '''Initial dialog for creating a root state.'''
     def __init__(self, frame):
-        wx.Dialog.__init__(self, frame, title="Creating a root state")
+        CuteDialog.__init__(self, frame, title="Creating a root state")
         
         self.frame = frame
         self.simpack = frame.gui_project.simpack

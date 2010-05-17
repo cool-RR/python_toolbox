@@ -9,8 +9,10 @@ See its documentation for more info.
 
 import wx
 
+from garlicsim_wx.widgets.general_misc import CuteDialog
 
-class StateCreationDialog(wx.Dialog): # make base class
+
+class StateCreationDialog(CuteDialog): # make base class
     '''
     An initial dialog to show when creating a root state.
     
@@ -18,7 +20,7 @@ class StateCreationDialog(wx.Dialog): # make base class
     '''
     def __init__(self, frame): # tododoc: fuck out all the plain/random
    
-        wx.Dialog.__init__(self, frame, title='Creating a root state')
+        CuteDialog.__init__(self, frame, title='Creating a root state')
         
         self.frame = frame
         self.simpack = frame.gui_project.simpack

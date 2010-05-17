@@ -6,3 +6,4 @@ This package defines generic wxPython widgets.
 '''
 
 from knob import Knob
+from cute_dialog import CuteDialog
