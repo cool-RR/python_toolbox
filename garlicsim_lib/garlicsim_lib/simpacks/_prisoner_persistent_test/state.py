@@ -1,18 +1,22 @@
 # Copyright 2009-2010 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-import garlicsim.data_structures
-from garlicsim.misc import Persistent
+'''
+A simulation package for a repeating game of prisoner's dillema between a
+population of players with different strategies.
+'''
+
 import copy
-from garlicsim.misc import StepCopy
-
-
 import random
 random.seed()
 
+import garlicsim.data_structures
+from garlicsim.misc import StepCopy
+from garlicsim.misc import Persistent
 
 ROUNDS = 7
 NUMBER_OF_PLAYERS = 70
+
 
 BaseForHandicap = [object, Persistent][1]
 
@@ -22,68 +26,75 @@ class Handicap(BaseForHandicap):
         self.big_list = [random.random() for i in range(100000)]
 
 
-def make_plain_state(*args, **kwargs):
+class State(garlicsim.data_structures.State):
     
-    global player_types
-    state = garlicsim.data_structures.State()
-    state.handicap = Handicap("The thing", meow="The meow")
-
-    state.round = -1
-    state.match = 0
-
-    state.player_pool = [
-        player_types[i % len(player_types)]() for i in xrange(NUMBER_OF_PLAYERS)
-    ]
-
-    return new_match_step(state)
-
-
-def make_random_state(*args, **kwargs):
-
-    state = garlicsim.data_structures.State()
-    state.handicap = Handicap("The thing", meow="The meow")
-
+    def __init__(self, round, match, player_pool):
+        self.round = round
+        self.match = match
+        self.player_pool = player_pool
+        self.handicap = Handicap("The thing", meow="The meow")
     
-    state.round = -1
-    state.match = 0
-
-    state.player_pool = [
-        random_strategy_player() for i in xrange(NUMBER_OF_PLAYERS)
-    ]
-
-    return new_match_step(state)
-
-def step(source_state, *args, **kwargs):
+    @staticmethod
+    def create_root():
+        global player_types
+        state = State(
+            round=-1,
+            match=0,
+            player_pool=[
+                player_types[i % len(player_types)]() for \
+                i in xrange(NUMBER_OF_PLAYERS)
+            ]
+        )
+        state.prepare_for_new_match()
+        return state
     
-    state = copy.deepcopy(source_state, StepCopy())
-    state.clock += 1
+    
+    @staticmethod
+    def create_messy_root():
+        global player_types
+        state = State(
+            round=-1,
+            match=0,
+            player_pool=[
+                random_strategy_player for \
+                i in xrange(NUMBER_OF_PLAYERS)
+            ]
+        )
+        state.prepare_for_new_match()
+        return state
+    
+        
+    def step(self):
+        
+        state = copy.deepcopy(self, StepCopy())
+        state.clock += 1
+    
+        state.round += 1
+        if state.round == ROUNDS:
+            state.round = -1
+            state.match += 1
+            state.prepare_for_new_match()
+            return state
+    
+        for pair in state.pairs:
+            play_game(pair, state.round)
+    
+        return state
+    
+    
+    def prepare_for_new_match(self):
+        '''
+        Note: this function is not strictly a "step function":
+        it manipulates the state that is given to it and then returns it.
+        '''
+        pool = self.player_pool
+        loser = player_with_least_points(pool)
+        pool.remove(loser)
+        pool.append(random_strategy_player())
+    
+        self.pairs = pair_pool(self.player_pool)
 
-    state.round += 1
-    if state.round == ROUNDS:
-        state.round = -1
-        state.match += 1
-        return new_match_step(state)
 
-    for pair in state.pairs:
-        play_game(pair, state.round)
-
-    return state
-
-def new_match_step(state):
-    '''
-    Note: this function is not strictly a "step function":
-    it manipulates the state that is given to it and then returns it.
-    '''
-    pool = state.player_pool
-    loser = player_with_least_points(pool)
-    pool.remove(loser)
-    pool.append(random_strategy_player())
-
-    #for player in pool:
-    #    player.points=0
-
-    state.pairs = pair_pool(state.player_pool)
-    return state
 
 def pair_pool(player_pool):
     '''
@@ -172,9 +183,4 @@ def player_with_least_points(pool):
         if player.points < loser.points:
             loser = player
     return loser
-
-
-
-
-
 

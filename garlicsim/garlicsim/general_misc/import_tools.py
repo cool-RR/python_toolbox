@@ -5,6 +5,7 @@
 This module defines various tools related to importing.
 '''
 
+import sys
 import os.path
 import imp
 from garlicsim.general_misc import package_finder
@@ -17,7 +18,7 @@ def import_by_path(path, name=None):
     i.e. a name with dots like "orange.claw.hammer". This will become the
     imported module's __name__ attribute. Otherwise only the short name,
     "hammer", will be used, which might cause problems in some cases. (Like
-    when using multiprocessing.
+    when using multiprocessing.)
     '''
     short_name = os.path.splitext(os.path.split(path)[1])[0]
     if name is None: name = short_name
@@ -73,8 +74,28 @@ def import_all(package, exclude='__init__', silent_fail=False):
     
     
     
-    
-    
+def import_if_exists(module_name):
+
+    if '.' in module_name:
+        package_name, submodule_name = module_name.rsplit('.', 1)
+        package = __import__(package_name, fromlist=[''])
+        package_path = package.__path__
+        try:
+            imp.find_module(submodule_name, package_path)
+        except ImportError:
+            return None
+    else: # '.' not in module_name
+        try:
+            imp.find_module(module_name)
+        except ImportError:
+            return None
+
+    # Not actually using the result of `imp.find_module`, just want to know that
+    # it worked and the module exists. We'll let the conventional `__import__`
+    # find the module again, assuming its finding procedure will work exactly
+    # the same as imp's.
+        
+    return __import__(module_name, fromlist=[''])
     
     
     

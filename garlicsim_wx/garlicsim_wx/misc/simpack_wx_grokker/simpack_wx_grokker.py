@@ -9,6 +9,7 @@ See its documentation for more info.
 
 import types
 
+from garlicsim.general_misc import import_tools
 import garlicsim.general_misc.caching
 
 import garlicsim_wx
@@ -45,19 +46,26 @@ class SimpackWxGrokker(object):
         
         # We want to access the `.settings` of our simpack_wx, but we don't know if
         # our simpack_wx is a module or some other kind of object. So if it's a
-        # module, we'll `try` to import `settings`.
+        # module, we'll try to import `settings`.
         
         self.settings = Settings()        
         
-        if isinstance(self.simpack_wx, types.ModuleType):
-            try:
-                __import__(''.join((self.simpack_wx.__name__, '.settings')))
-                # This imports the `settings` submodule, but does *not* keep a
-                # reference to it. We'll access it as an attribute of the
-                # simpack below.
+        if isinstance(self.simpack_wx, types.ModuleType) and \
+           not hasattr(self.simpack_wx, 'settings'):
             
-            except ImportError:
-                pass
+            # The `if` that we did here means: "If there's reason to suspect
+            # that self.simpack.settings is a module that exists but hasn't been
+            # imported yet."
+                
+            settings_module_name = ''.join((
+                self.simpack_wx.__name__,
+                '.settings'
+            ))
+            
+            import_tools.import_if_exists(settings_module_name)
+            # This imports the `settings` submodule, if it exists, but it
+            # does *not* keep a reference to it. We'll access `settings` as
+            # an attribute of the simpack below.
             
         # Checking if there are original settings at all. If there aren't, we're
         # done.

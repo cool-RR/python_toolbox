@@ -31,5 +31,3 @@ def underscore_to_camelcase(s):
     raise NotImplementedError
 """
 
-
-

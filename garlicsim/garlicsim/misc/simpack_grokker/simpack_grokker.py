@@ -9,7 +9,9 @@ See their documentation for more details.
 
 import functools
 import types
+import imp
 
+from garlicsim.general_misc import import_tools
 import garlicsim.general_misc.caching
 
 from garlicsim.misc import (AutoClockGenerator, StepIterator, InvalidSimpack,
@@ -44,12 +46,13 @@ class SimpackGrokker(object):
         try:
             State = simpack.State
         except AttributeError:
-            raise InvalidSimpack('''The %s simpack does not define a State \
+            raise InvalidSimpack('''The %s simpack does not define a `State` \
 class.''' % simpack.__name__)
         
         if not issubclass(State, garlicsim.data_structures.State):
-            raise InvalidSimpack('''The %s simpack define a State class, but \
-it's not a subclass of garlicsim.data_structures.State.''' % simpack.__name__)
+            raise InvalidSimpack('''The %s simpack defines a State class, but \
+it's not a subclass of `garlicsim.data_structures.State`.''' % \
+                                                             simpack.__name__)
 
         self.simple_non_history_step_defined = hasattr(State, "step")
         self.non_history_step_generator_defined = \
@@ -94,15 +97,22 @@ of step function.''' % simpack.__name__)
         
         self.settings = Settings()        
         
-        if isinstance(self.simpack, types.ModuleType):
-            try:
-                __import__(''.join((self.simpack.__name__, '.settings')))
-                # This imports the `settings` submodule, but does *not* keep a
-                # reference to it. We'll access it as an attribute of the
-                # simpack below.
+        if isinstance(self.simpack, types.ModuleType) and \
+           not hasattr(self.simpack, 'settings'):
             
-            except ImportError:
-                pass
+            # The `if` that we did here means: "If there's reason to suspect
+            # that self.simpack.settings is a module that exists but hasn't been
+            # imported yet."
+            
+            settings_module_name = ''.join((
+                self.simpack.__name__,
+                '.settings'
+            ))
+            
+            import_tools.import_if_exists(settings_module_name)
+            # This imports the `settings` submodule, if it exists, but it
+            # does *not* keep a reference to it. We'll access `settings` as
+            # an attribute of the simpack below.
             
         # Checking if there are original settings at all. If there aren't, we're
         # done.
