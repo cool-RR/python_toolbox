@@ -17,7 +17,7 @@ class FileMenu(CuteMenu):
 
         
         self.new_button = self.Append(
-            -1, 
+            wx.ID_NEW, 
             '&New...\tCtrl+N',
             ' Create a new simulation'
         )
@@ -25,7 +25,7 @@ class FileMenu(CuteMenu):
         
 
         self.open_button = self.Append(
-            -1,
+            wx.ID_OPEN,
             '&Open...\tCtrl+O',
             ' Open a saved simulation'
         )
@@ -39,7 +39,7 @@ class FileMenu(CuteMenu):
 
         
         self.close_button = self.Append(
-            -1,
+            wx.ID_CLOSE,
             '&Close\tCtrl+W',
             ' Close the currently open simulation'
         )
@@ -47,7 +47,7 @@ class FileMenu(CuteMenu):
 
         
         self.save_button = self.Append(
-            -1,
+            wx.ID_SAVE,
             '&Save\tCtrl+S',
             ' Save the currently open simulation'
         )
@@ -55,7 +55,7 @@ class FileMenu(CuteMenu):
         
         
         self.save_as_button = self.Append(
-            -1,
+            wx.ID_SAVEAS,
             'Save &as...\tShift+Ctrl+S',
             ' Save the currently open simulation under a different name'
         )
@@ -79,7 +79,7 @@ class FileMenu(CuteMenu):
         
         
         self.print_button = self.Append(
-            -1,
+            wx.ID_PRINT,
             'Print...\tCtrl+P',
             ' Print the current state of the simulation'
         )

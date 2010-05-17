@@ -19,7 +19,7 @@ class HelpMenu(CuteMenu):
         
         
         self.garlicsim_help_button = self.Append(
-            -1,
+            wx.ID_HELP_CONTENTS,
             'GarlicSim &Help...\tF1',
             ' Display the help documents for GarlicSim'
         )

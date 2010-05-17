@@ -24,7 +24,7 @@ class State(object):
     A state object must always be picklable, as do all the attributes assigned
     to it.
     '''
-    
+    # tododoc: consider making abc, and checking it can't be instantiated
     def __repr__(self):
         '''
         Get a string representation of the state.
@@ -42,4 +42,8 @@ class State(object):
                                       else '',
                    hex(id(self))
                )
+
+    create_root = None
+    create_messy_root = None
+    # Just so we could easily check whether a subclass implemented these.
         

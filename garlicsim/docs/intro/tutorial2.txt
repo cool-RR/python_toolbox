@@ -183,7 +183,7 @@ the :file:`coin_flip` folder.) Read the code and the comments:
             
             if amount_to_bet > self.balance:
                 # If we don't have the amount we should bet, we stop the simulation.
-                # True, we can try to bet whatever's left, but for simplicty's sake
+                # True, we can try to bet whatever's left, but for simplicity's sake
                 # we won't do that now.
                 raise garlicsim.misc.exceptions.WorldEnd
                 
@@ -211,7 +211,7 @@ should be done.
 
     Notice that the simulation :ref:`we explored before <intro-tutorial1`, Life,
     had no concept of ending the simulation. Life simulations continue to
-    infinity, regardless if the board becomes empty or repititive or whatever.
+    infinity, regardless if the board becomes empty or repetitive or whatever.
     
     Some simulations have a concept of "simulation end", and some just don't.
 

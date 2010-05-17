@@ -28,12 +28,12 @@ class State(garlicsim.data_structures.State):
             
         else: 
             # If the flow reached here it means we just lost. So we
-                # should bet double the amount:
-                amount_to_bet = - 2 * self.last_bet_result
+            # should bet double the amount:
+            amount_to_bet = - 2 * self.last_bet_result
             
         if amount_to_bet > self.balance:
             # If we don't have the amount we should bet, we stop the simulation.
-            # True, we can try to bet whatever's left, but for simplicty's sake
+            # True, we can try to bet whatever's left, but for simplicity's sake
             # we won't do that now.
             raise garlicsim.misc.exceptions.WorldEnd
             

@@ -9,7 +9,7 @@ of Life`_, known simply as "Life". Life is a very popular and simple simulation
 to get started with. In spite of its simplicity, we'll be able to see
 interesting behaviors in our Life simulations. (Try spotting a `glider`_!) This
 simulation is called Life because the patterns that emerge from it can seem like
-living cells and organizms.
+living cells and organisms.
 
 .. _Conway's Game of Life: http://en.wikipedia.org/wiki/Conway's_Game_of_Life
 .. _glider: http://en.wikipedia.org/wiki/Glider_(Conway's_Life)
