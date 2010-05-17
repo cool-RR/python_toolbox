@@ -11,6 +11,13 @@ Contents:
    
    intro/index
 
+..
+   Include when they're actually written:
+   
+   topics/index
+   ref/index
+   misc/index
+
 More documentation coming soon! If you have any questions, don't hesitate to speak up on the `mailing list`_!
 
 .. _mailing list: mailto:garlicsim@librelist.org

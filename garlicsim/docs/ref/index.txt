@@ -5,6 +5,9 @@ API Reference
 
 .. toctree::
    :maxdepth: 1
+   
+   simpack-api
+   cruncher-api
 
    
 

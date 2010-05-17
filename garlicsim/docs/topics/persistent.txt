@@ -1,0 +1,5 @@
+.. _topics-persistent
+
+=====================================================
+Using :class:`Persistent <garlicsim.misc.Persistent>`
+=====================================================

@@ -8,5 +8,10 @@ Introductions to all the key parts of GarlicSim you'll need to know:
 .. toctree::
    :maxdepth: 1
 
+   step-functions
+   time-tree
+   persistent
+   history-dependent-simulations
+   step-profiles
    
 

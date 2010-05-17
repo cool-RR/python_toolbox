@@ -1,4 +1,4 @@
-.. _garlicsim_wx:
+.. _misc-garlicsim_wx:
 
 ===========================================
 All you need to know about ``garlicsim_wx``
