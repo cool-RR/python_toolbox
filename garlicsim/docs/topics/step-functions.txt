@@ -1,0 +1,5 @@
+.. _topics-step-functions
+
+=========================
+Writing the step function
+=========================

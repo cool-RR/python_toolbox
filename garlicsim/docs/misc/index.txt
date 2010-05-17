@@ -1,0 +1,5 @@
+.. _misc-index:
+
+====================
+Miscellaneous topics
+====================

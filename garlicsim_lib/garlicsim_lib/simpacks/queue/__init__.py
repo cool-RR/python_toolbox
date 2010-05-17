@@ -3,4 +3,4 @@
 
 '''A simpack for simulations in Queueing Theory.'''
 
-from state import *
+from queue import *
