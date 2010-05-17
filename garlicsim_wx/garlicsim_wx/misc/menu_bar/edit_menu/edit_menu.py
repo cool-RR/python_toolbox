@@ -77,7 +77,7 @@ deleting it from the simulation'''
         
         
         self.deselect_button = self.Append(
-            wx.ID_UN,
+            -1,
             '&Deselect\tCtrl+D',
             ' Deselect all the selected nodes'
         )

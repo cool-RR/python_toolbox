@@ -1,0 +1,27 @@
+********************************
+Python winshell Module - CHANGES
+********************************
+
+What is it?
+===========
+
+The Python winshell module is a lightweight wrapper around some of
+the shell functions provided by the pywin32 extensions, not least
+so that I don't have to remember the mildly tortuous import paths
+and which constants mean what. It's pure Python and should work with 
+any version of Python although I haven't tested it with anything
+before 2.2.
+
+
+Where do I get it?
+==================
+
+http://timgolden.me.uk/python/winshell.html
+
+
+What's Changed?
+===============
+
+9th Nov 2005  0.2  . License changed to MIT
+                   . Added functionality using SHFileOperation
+25th Nov 2003 0.1  . Initial release by Tim Golden
