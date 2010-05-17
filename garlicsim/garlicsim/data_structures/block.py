@@ -55,7 +55,7 @@ class Block(TreeMember):
         self.__node_list = []
         self.add_node_list(node_list)
 
-    def get_block(self):
+    def soft_get_block(self):
         return self
     
     def append_node(self, node):

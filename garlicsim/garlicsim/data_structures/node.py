@@ -126,7 +126,7 @@ Untouched nodes can't be edited, so they have no concept of being finalized.'''
         self.still_in_editing = False
 
         
-    def get_block(self): # todo: move to BaseTreeEntity
+    def soft_get_block(self): # todo: move to BaseTreeEntity
         '''
         If this node is a member of a block, return the block.
         

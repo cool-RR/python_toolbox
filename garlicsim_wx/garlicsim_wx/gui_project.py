@@ -638,28 +638,68 @@ class GuiProject(object):
         process.
         '''
         
-        feisty_jobs = [job for job in self.project.crunching_manager.jobs
-                       if not job.node.is_last_on_block()]
-        # Feisty jobs are jobs that might result in a structure change in the
-        # tree.
-        # todo: this logic works wrong. Can improve it.
-        fesity_jobs_to_nodes = dict((job, job.node) for job in feisty_jobs)
+        # This method basically has two tasks. The first one is to take work
+        # from the crunchers and retire/recruit/redirect them as necessary. This
+        # is done by `Project.sync_crunchers`, which we call here, so that's not
+        # the tricky part here.
+        #
+        # The second task is the tricky part. We want to know just how much the
+        # tree was modified during this action. And the tricky thing is that
+        # `Project.sync_crunchers` won't do that for us, so we're going to have
+        # to try to deduce how much the tree modified ourselves, just by looking
+        # at the `jobs` list before and after calling `Project.sync_crunchers`.
+        #
+        # And when I say "to know how much the tree modified", I mean mainly to
+        # know if the modification is a structural modification, or just some
+        # blocks getting fatter. And the reason we want to know this is so we'll
+        # know whether to update various workspace widgets.
         
+        jobs = self.project.crunching_manager.jobs
+        
+        jobs_to_nodes = dict((job, job.node) for job in jobs)
 
-        added_nodes = self.project.sync_crunchers()
-        
+                
+        added_nodes = self.project.sync_crunchers()        
         # This is the heavy line here, which actually executes the Project's
-        # sync_crunchers function.
+        # `sync_crunchers` function.
         
         
-        if added_nodes > 0:
-            if any(fesity_jobs_to_nodes[job] is not job.node
-                   for job in feisty_jobs):
-                self.tree_structure_modified_at_unknown_location_emitter.emit()
-            else:
-                self.tree_modified_at_unknown_location_emitter.emit()
-            # todo: It would be hard but nice to know whether the tree changes
-            # were on the path. This could save some rendering on SeekBar.
+        if any(
+            (job not in jobs) or \
+            (job.node.soft_get_block() is not old_node.soft_get_block())
+            for job, old_node in jobs_to_nodes.iteritems()
+               ):
+
+            # What does this codition mean?
+            # 
+            # It means that there is at least one job that either:
+            # (a) Was removed from the jobs list, or
+            # (b) Changed the soft block it's pointing to.            
+            #
+            # The thing is, if there was a structural modification in the tree,
+            # this condition must be True. Therefore we call this here:
+            
+            self.tree_structure_modified_at_unknown_location_emitter.emit()
+            
+            # Even though we are not sure that the tree structure was modified;
+            # We have to play it safe. And since this condition doesn't happen
+            # most of the time when crunching, we're not wasting too much
+            # rendering time by assuming this is a structural modification.
+            
+            # Note that we didn't check if `added_nodes > 0`: This is because if
+            # an `End` was added to the tree, it wouldn't have been counted in
+            # `added_nodes`.
+            
+        elif added_nodes > 0:
+            
+            # If this condition is True, we know as a fact that there was no
+            # structural modification, and we know as a fact that some blocks
+            # have gotten fatter.
+            
+            self.tree_modified_at_unknown_location_emitter.emit()
+            
+        # todo: It would be hard but nice to know whether the tree changes were
+        # on the path. This could save some rendering on SeekBar.
             
         return added_nodes
 

@@ -201,7 +201,8 @@ class Emitter(object):
         '''Remove an output from this emitter.'''
         assert isinstance(thing, Emitter) or callable(thing)
         self._outputs.remove(thing)
-        emitter._inputs.remove(self)
+        if isinstance(thing, emitter):
+            thing._inputs.remove(self)
         self._recalculate_total_callable_outputs_recursively()
         
     def disconnect_from_all(self): # todo: use the freeze here

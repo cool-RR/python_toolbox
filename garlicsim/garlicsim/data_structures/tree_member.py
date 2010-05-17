@@ -23,7 +23,7 @@ class TreeMember(object):
 
         
     @abc.abstractmethod
-    def get_block(self):
+    def soft_get_block(self):
         '''
         If this node is a member of a block, return the block.
         

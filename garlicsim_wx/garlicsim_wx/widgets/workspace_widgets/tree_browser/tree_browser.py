@@ -309,7 +309,7 @@ class NiftyPaintDC(wx.BufferedPaintDC):
             
             temp = vectorish.add(point, (self_width, total_height))
             (new_width, new_height) = \
-                self.draw_sub_tree(temp, tree, kid.get_block())
+                self.draw_sub_tree(temp, tree, kid.soft_get_block())
             del temp
             self.DrawLinePoint(line_start, line_end)
             max_width = max(max_width, self_width + new_width)
@@ -390,7 +390,7 @@ class NiftyPaintDC(wx.BufferedPaintDC):
             self.clickable_map = {}
             self.active_node = self.gui_project.active_node
             try:
-                self.active_soft_block = self.active_node.get_block()
+                self.active_soft_block = self.active_node.soft_get_block()
             except AttributeError:
                 self.active_soft_block = None
     
@@ -400,7 +400,7 @@ class NiftyPaintDC(wx.BufferedPaintDC):
                 size = self.draw_sub_tree(
                     pos,
                     tree,
-                    root.get_block()
+                    root.soft_get_block()
                 )
                 pos = vectorish.add(pos, (size[0], 0))
                 sizes.append(size)
