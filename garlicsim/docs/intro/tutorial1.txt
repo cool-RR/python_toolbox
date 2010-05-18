@@ -307,7 +307,8 @@ node to the tree as a root. The method returned the new node. Let's see some
 info about our node:
 
     >>> root
-    <garlicsim.data_structures.Node with clock 0, root, leaf, touched, blockless, at 0x1c68ed0>
+    <garlicsim.data_structures.Node with clock 0,
+    root, leaf, touched, blockless, at 0x1c68ed0>
 
 The ``clock 0`` thing means that the clock reading of this node's state is zero.
 The states that will succeed it will have incrementing clock readings. The
@@ -357,7 +358,8 @@ Okay, now that the results of our simulation are ready, let's take a look at our
 tree:
 
     >>> project.tree
-    <garlicsim.data_structures.Tree with 1 roots, 51 nodes and 1 possible paths at 0x1c68810>
+    <garlicsim.data_structures.Tree with 1 roots,
+    51 nodes and 1 possible paths at 0x1c68810>
 
 Our tree has only one possible :class:`Path <garlicsim.data_structures.Path>` in
 it. A :class:`Path <garlicsim.data_structures.Path>` represents one timeline
@@ -373,14 +375,17 @@ Let's fork our tree. But before that, let's get that single path:
     >>> path
     <garlicsim.data_structures.Path of length 51 at 0x1ccfb30>
 
-:class:`Path <garlicsim.data_structures.Path>` is a list-like object. We can get any node we want from it using its index number. Let's see how our diehard is doing at clock 50:
+:class:`Path <garlicsim.data_structures.Path>` is a list-like object. We can get
+any node we want from it using its index number. Let's see how our diehard is
+doing at clock 50:
 
 .. _original_clock_50:
 
 ::
     
     >>> path[-1]
-    <garlicsim.data_structures.Node with clock 50, leaf, untouched, belongs to a block, crunched with StepProfile(), at 0x1cd9070>
+    <garlicsim.data_structures.Node with clock 50, leaf, untouched,
+    belongs to a block, crunched with StepProfile(), at 0x1cd9070>
     >>> 
     >>> 
     >>> path[-1].state
@@ -493,11 +498,13 @@ it can start crunching from that node.
 We can see our tree now has two possible paths:
 
     >>> project.tree
-    <garlicsim.data_structures.Tree with 1 roots, 52 nodes and 2 possible paths at 0x1c68810>
+    <garlicsim.data_structures.Tree with 1 roots,
+    52 nodes and 2 possible paths at 0x1c68810>
     
 The fork happens on clock 27, since that is the one we duplicated for editing.
     
-Now we want to crunch from our new node up to a clock of 50, like in the original timeline:
+Now we want to crunch from our new node up to a clock of 50, like in the
+original timeline:
 
     >>> project.ensure_buffer(root, 50)
 
@@ -551,9 +558,9 @@ And now, to see what happens in clock 50 in our alternate timeline::
                                                 
     >>> 
    
-This is a very different state from :ref:`the one <original_clock_50>` in the original timeline! It has
-about twice as many live cells. This is a reminder of how a small change in the
-present can cause a big change in the future.
+This is a very different state from :ref:`the one <original_clock_50>` in the
+original timeline! It has about twice as many live cells. This is a reminder of
+how a small change in the present can cause a big change in the future.
 
 .. _degenerate: http://en.wikipedia.org/wiki/Degeneracy_(mathematics)
 .. _Metushelah: http://en.wikipedia.org/wiki/Methuselah_(cellular_automata)
