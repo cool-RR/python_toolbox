@@ -4,10 +4,13 @@
 
 /* -- page layout ----------------------------------------------------------- */
 
+html {
+    background: black url("metal_background.jpg") repeat-y left;
+}
+
 body {
     font-family: Verdana, Tahoma, sans-serif;
     font-size: 100%;
-    background: black url("metal_background.jpg") repeat-y left;
     color: #000;
     margin: 0;
     padding: 0;
