@@ -3,7 +3,7 @@ from state import *
 import garlicsim
 
 
-# self.FORCE_CRUNCHER = garlicsim.asynchronous_crunching.crunchers.CruncherThread
+# FORCE_CRUNCHER = garlicsim.asynchronous_crunching.crunchers.CruncherThread
 
 # A cruncher that this simpack insists on using.  
 # 
@@ -12,7 +12,7 @@ import garlicsim
 
 
 
-# self.DETERMINISM_FUNCTION = garlicsim.misc.simpack_grokker.misc.default_determinism_function
+# DETERMINISM_FUNCTION = garlicsim.misc.simpack_grokker.misc.default_determinism_function
 
 # Function that takes a step profile and says whether its deterministic.
 #
