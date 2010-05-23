@@ -93,7 +93,7 @@ class Server(object):
         `mean_service` is the mean time it takes to service a client.
         '''
         
-        self.identity = garlicsim.misc.Persistent()
+        self.identity = garlicsim.misc.CrossProcessPersistent()
         
         self.event_set = event_set        
         self.facility = facility
@@ -147,7 +147,7 @@ class Server(object):
 class Client(object):
     '''A client which needs to be served in the facility.'''
     def __init__(self):
-        self.identity = garlicsim.misc.Persistent()
+        self.identity = garlicsim.misc.CrossProcessPersistent()
 
         
 class Facility(object):
@@ -155,7 +155,7 @@ class Facility(object):
     
     def __init__(self, event_set, servers=[], clients=[]):
         
-        self.identity = garlicsim.misc.Persistent()
+        self.identity = garlicsim.misc.CrossProcessPersistent()
         self.event_set = event_set
         self.servers = servers
         self.clients = clients
@@ -225,7 +225,7 @@ class Population(object):
         `mean_arrival` is the mean time between arrivals.
         '''
         assert size == Infinity
-        self.identity = garlicsim.misc.Persistent()
+        self.identity = garlicsim.misc.CrossProcessPersistent()
         self.size = size
         self.mean_arrival = mean_arrival
         self.event_set = event_set

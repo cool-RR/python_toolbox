@@ -46,7 +46,7 @@ class State(garlicsim.data_structures.State):
             round=-1,
             match=0,
             player_pool=[
-                random_strategy_player for \
+                random_strategy_player() for \
                 i in xrange(NUMBER_OF_PLAYERS)
             ]
         )

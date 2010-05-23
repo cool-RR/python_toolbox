@@ -29,7 +29,7 @@ if not debug:
         pass
     
     
-if __name__ == '__main__':
+def start():
     
     import garlicsim
     import garlicsim_wx
@@ -40,3 +40,6 @@ if __name__ == '__main__':
         
     #import cProfile
     #cProfile.run('garlicsim_wx.start()', sort=2)
+
+if __name__ == '__main__':
+    start()

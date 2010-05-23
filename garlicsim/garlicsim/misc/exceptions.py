@@ -4,7 +4,7 @@
 '''Defines a collection of exceptions.'''
 
 
-class SmartException(Exception):
+class SmartException(Exception):# tododoc: move to general_misc
     '''
     Exception that uses its first line of documentation in lieu of a message.
     '''

@@ -72,7 +72,11 @@ class Key(object):
                self.shift == other.shift and \
                self.alt == other.alt
         
-
+def iter_rects_of_region(region):
+    i = wx.RegionIterator(region)
+    while i.HaveRects():
+        yield i.GetRect()
+        i.Next()
         
 
 

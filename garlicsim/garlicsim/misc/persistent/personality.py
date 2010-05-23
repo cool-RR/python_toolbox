@@ -34,7 +34,7 @@ class Personality(object):
 
         color_resolution = 100
         
-        u = int(persistent._Persistent__uuid)
+        u = int(persistent._CrossProcessPersistent__uuid)
         
         (u, human_name_seed) = divmod(u, 5494)
         self.human_name = human_names.name_list[human_name_seed]

@@ -12,13 +12,13 @@ random.seed()
 
 import garlicsim.data_structures
 from garlicsim.misc import StepCopy
-from garlicsim.misc import Persistent
+from garlicsim.misc import CrossProcessPersistent
 
 ROUNDS = 7
 NUMBER_OF_PLAYERS = 70
 
 
-BaseForHandicap = [object, Persistent][1]
+BaseForHandicap = [object, CrossProcessPersistent][1]
 
 class Handicap(BaseForHandicap):
     def __init__(self, thing, meow):
@@ -56,7 +56,7 @@ class State(garlicsim.data_structures.State):
             round=-1,
             match=0,
             player_pool=[
-                random_strategy_player for \
+                random_strategy_player() for \
                 i in xrange(NUMBER_OF_PLAYERS)
             ]
         )

@@ -26,10 +26,16 @@ class SimpackWxGrokker(object):
         self.simpack = simpack
         
         if isinstance(simpack, types.ModuleType):
-            try:
-                __import__(''.join((simpack.__name__, '.wx')))
-            except ImportError:
-                pass
+            simpack_wx_module_name = ''.join((
+                self.simpack.__name__,
+                '.wx'
+            ))
+        
+        import_tools.import_if_exists(simpack_wx_module_name)
+        # This imports the `wx` submodule, if it exists, but it does *not* keep
+        # a reference to it. We'll access `wx` as an attribute of the simpack
+        # below.
+            
         try:
             self.simpack_wx = self.simpack.wx
         except AttributeError:
@@ -63,9 +69,9 @@ class SimpackWxGrokker(object):
             ))
             
             import_tools.import_if_exists(settings_module_name)
-            # This imports the `settings` submodule, if it exists, but it
-            # does *not* keep a reference to it. We'll access `settings` as
-            # an attribute of the simpack below.
+            # This imports the `settings` submodule, if it exists, but it does
+            # *not* keep a reference to it. We'll access `settings` as an
+            # attribute of the simpack_wx below.
             
         # Checking if there are original settings at all. If there aren't, we're
         # done.

@@ -15,7 +15,7 @@ from auto_clock_generator import AutoClockGenerator
 from base_history_browser import BaseHistoryBrowser
 from step_iterator import StepIterator
 import persistent
-from persistent import Persistent
+from persistent import Persistent, CrossProcessPersistent
 from step_profile import StepProfile
 from nodes_added import NodesAdded
 from simpack_grokker import SimpackGrokker
