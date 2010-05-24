@@ -15,7 +15,7 @@ class EditMenu(CuteMenu):
         
         self.undo_button = self.Append(
             wx.ID_UNDO,
-            '&Undo\tCtrl+Z',
+            '&Undo\tCtrl+ZZ',
             ' Undo the last operation'
         )
         self.undo_button.Enable(False)
@@ -23,7 +23,7 @@ class EditMenu(CuteMenu):
         
         self.redo_button = self.Append(
             wx.ID_REDO,
-            '&Redo\tCtrl+Y',
+            '&Redo\tCtrl+YY',
             ' Redo the last operation that was undone'
         )
         self.redo_button.Enable(False)
@@ -34,7 +34,7 @@ class EditMenu(CuteMenu):
                 
         self.cut_button = self.Append(
             wx.ID_CUT,
-            'Cu&t\tCtrl+X',
+            'Cu&t\tCtrl+XX',
             ''' Cut the current selection, copying to the clipboard and \
 deleting it from the simulation'''
         )
@@ -43,7 +43,7 @@ deleting it from the simulation'''
                 
         self.copy_button = self.Append(
             wx.ID_COPY,
-            '&Copy\tCtrl+C',
+            '&Copy\tCtrl+CC',
             ' Copy the current selection to the clipboard'
         )
         self.copy_button.Enable(False)
@@ -51,7 +51,7 @@ deleting it from the simulation'''
                 
         self.paste_button = self.Append(
             wx.ID_PASTE,
-            '&Paste\tCtrl+V',
+            '&Paste\tCtrl+VV',
             ' Paste the content of the clipboard into the simulation'
         )
         self.paste_button.Enable(False)
@@ -59,7 +59,7 @@ deleting it from the simulation'''
                 
         self.clear_button = self.Append(
             wx.ID_CLEAR,
-            'Cl&ear\tDel',
+            'Cl&ear\tDelDel',
             ' Delete the current selection'
         )
         self.clear_button.Enable(False)
@@ -70,7 +70,7 @@ deleting it from the simulation'''
 
         self.select_all_button = self.Append(
             wx.ID_SELECTALL,
-            'Select &All\tCtrl+A',
+            'Select &All\tCtrl+AA',
             ' Select all the nodes'
         )
         self.select_all_button.Enable(False)

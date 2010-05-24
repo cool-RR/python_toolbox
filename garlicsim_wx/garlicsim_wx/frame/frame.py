@@ -117,7 +117,7 @@ class Frame(wx.Frame):
         
     def __init_key_handlers(self):
         
-        #self.Bind(wx.EVT_KEY_DOWN, self.on_key_down)
+        self.Bind(wx.EVT_KEY_DOWN, self.on_key_down)
         
         def on_home():
             
