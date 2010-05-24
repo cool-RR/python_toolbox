@@ -19,7 +19,7 @@ __all__ = ["CruncherThread"]
 
 class CruncherThread(threading.Thread):
     '''
-    CruncherThread is a type of cruncher.
+    CruncherThread is cruncher that works from a thread.
     
     A cruncher is a worker which crunches the simulation. It receives a state
     from the main program, and then it repeatedly applies the step function of

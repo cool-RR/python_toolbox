@@ -33,7 +33,7 @@ __all__ = ["CruncherProcess"]
 
 class CruncherProcess(multiprocessing.Process):
     '''
-    CruncherProcess is a type of cruncher.
+    CruncherProcess is a type of cruncher the works from a process.
     
     A cruncher is a worker which crunches the simulation. It receives a state
     from the main program, and then it repeatedly applies the step function of

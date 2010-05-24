@@ -159,7 +159,7 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
                 return binary_search.make_both_data_into_preferred_rounding\
                        (queue_result, function, value, rounding)
             elif none_count == 1:
-                # The result is somewhere after the past edge of the queue.
+                # The result is either before the past edge of the queue or after its future edge.
                 if queue_result[1] is None:
                     # The result is beyond the future edge of the queue.
                     return binary_search.make_both_data_into_preferred_rounding\
