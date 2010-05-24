@@ -112,7 +112,7 @@ class CruncherThread(threading.Thread):
                 if order:
                     self.process_order(order)
         except garlicsim.misc.exceptions.WorldEnd:
-            self.work_queue.put(garlicsim.asynchronous_crunching.misc.EndMarker)
+            self.work_queue.put(garlicsim.asynchronous_crunching.misc.EndMarker())
 
         
     def check_crunching_profile(self, state):

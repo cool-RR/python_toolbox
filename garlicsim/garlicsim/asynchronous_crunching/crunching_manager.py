@@ -208,14 +208,15 @@ class CrunchingManager(object):
     
     def __add_work_to_tree(self, cruncher, job, retire=False):
         '''
-        Take work from the cruncher and add to the tree at the specified node.
+        Take work from cruncher and add to tree at the specified job's node.
         
-        If `retire` is set to True, retires the cruncher. tododoc: may retire the cruncher if it gave an EndMarker
+        If `retire` is set to True, retires the cruncher. Keep in mind that if
+        the cruncher gives an EndMarker, it will be retired regardless of the
+        `retire` argument.
         
         Returns (number, leaf), where `number` is the number of nodes that were
         added, and `leaf` is the last node that was added.
         '''
-        #todo: modify this to take job?
         
         tree = self.project.tree
         node = job.node
@@ -224,10 +225,7 @@ class CrunchingManager(object):
         counter = 0
         self.step_profiles[cruncher]
         
-        for thing in cute_iter_tools.shorten(
-            queue_tools.iterate(cruncher.work_queue),
-            10
-            ):
+        for thing in queue_tools.iterate(cruncher.work_queue):
             
             if isinstance(thing, garlicsim.data_structures.State):
                 counter += 1
@@ -240,7 +238,7 @@ class CrunchingManager(object):
                 # todo optimization: save step profile in variable, it's
                 # wasteful to do a dict lookup every state.
             
-            elif issubclass(thing, EndMarker):
+            elif isinstance(thing, EndMarker):
                 tree.make_end(node=current,
                               step_profile=self.step_profiles[cruncher])
                 job.resulted_in_end = True

@@ -2,14 +2,21 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-Defines objects for working with simulations that crunch asynchronically.
+Defines the EndMarker class.
 
-(Asynchronously means in a separate thread/process.)
-
-The most important class defined here is Project, and it is the only class that
-the user needs to interact with. It employs all the other classes.
+See its documentation for more info.
 '''
 
 
 class EndMarker(object):
-    pass
+    '''
+    A marker used by crunchers to say that the simulation reached its end.
+    
+    This is used only in endable simulations. When the step function raises a
+    WorldEnd exception, signifying that the simulation has ended, the cruncher
+    will place an EndMarker in the work queue. (Where otherwise states will be
+    placed.)
+    
+    The CrunchingManager will recognize the EndMarker and put an End to the
+    timeline.
+    '''
