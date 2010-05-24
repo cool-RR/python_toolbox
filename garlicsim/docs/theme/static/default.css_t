@@ -193,11 +193,16 @@ div.body h6 { font-size: 100%; }
 a.headerlink {
     color: yellow;
     font-size: 0.8em;
-    padding: 0 4px 0 4px;
+    padding: 0px 3px 0px 3px;
+    margin: 0px 5px 0px 3px;
     text-decoration: none;
+
     border-radius: 2px;
     -moz-border-radius: 2px;
     -webkit-border-radius: 2px;
+    
+    transition: 100ms ease-out;
+    -webkit-transition: 100ms ease-out;
 }
 
 a.headerlink:hover {

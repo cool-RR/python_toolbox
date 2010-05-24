@@ -2,11 +2,10 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-A module that defines the Node class and the related NodeError exception.
+Defines the End class.
 
-See documentation of Node for more information.
+See its documentation for more information.
 '''
-
 
 from garlicsim.general_misc import misc_tools
 
@@ -15,38 +14,35 @@ from node import Node
 
     
 class End(TreeMember):
+    '''
+    An end of the simulation.
+    
+    An `End` signifies that the simulation has ended. This is relevant in only
+    some simpacks; Some simpacks have a concept of ending the simulation, and
+    some don't. When a simulation was crunched and reached its end on some
+    timeline, the last node on that timeline will have an `End` object added to
+    its `.ends` list.
+    '''
     
     def __init__(self, tree, parent, step_profile=None):
-        '''
-        Construct the node.
-        
-        `tree` is the tree in which this node resides. `state` is the state it
-        should contain. `parent` is its parent node in the tree, which may be
-        None for a root. `step_profile` is the step profile with which the state
-        was crunched, which may be None for a state that was created from
-        scratch. `touched` is whether the state was modified/created from
-        scratch, in contrast to having been produced by crunching.
-        '''
         
         self.tree = tree
-        '''The tree in which this node resides.'''
+        '''The tree in which this end resides.'''
         
         assert isinstance(parent, Node)
         self.parent = parent
-        '''The parent node of this node.'''
+        '''
+        The parent node of this end.
+        
+        Note that this parent node will not have this end as a child; It will
+        list the end in its `.ends` attribute.
+        '''
         
         self.parent.ends.append(self)
         
         self.step_profile = step_profile
-        '''
-        The step options profile with which the contained state was created.
+        '''The step options profile with which the end was reached.'''
         
-        For an untouched node, this must be a real StepProfile, even an empty
-        one. Only a touched node which was created from scratch should have
-        None for its step profile.
-        '''
-        
-  
         
     def __len__(self):
         '''Just return 1. This is useful because of blocks.'''
@@ -56,30 +52,31 @@ class End(TreeMember):
         
     def soft_get_block(self):
         '''
-        If this node is a member of a block, return the block.
+        Just return `self`.
         
-        Otherwise, return the node itself.
+        (This is a method of all TreeMembers that returns the block that the
+        tree member belongs to, if there is one. But an end never belongs to a
+        block.
         '''
         return self
 
     
     def make_containing_path(self):
         '''
-        Create a path that contains this node.
+        Create a path that leads to this end.
         
-        There may be multiple different paths that contain this node. This will
-        return the one which points to the newest possible forks.
         Returns the path.
         '''
-        
         return self.parent.make_containing_path()
     
 
-    
-        
     def all_possible_paths(self):
         '''
-        Get a list of all possible paths that contain this node.
+        Get a list of all possible paths that lead to this end.
+        
+        (This method was invented for nodes and blocks and makes sense for them;
+        For an end, it will just return the one single path that leads to it,
+        since there can't be any forks after an end.)
         
         Note: There may be paths that contain this node which will not be
         identical to one of the paths given here, because these other paths
@@ -91,10 +88,13 @@ class End(TreeMember):
     
     def make_past_path(self):
         '''
-        Create a path that contains this node.
+        Create a path that leads to this end.
         
-        There may be multiple different paths that contain this node. This will
-        return a path that doesn't specify any decisions after this node.
+        (This method was invented for nodes and blocks and makes sense for them;
+        For an end, the "past path" is identical to the one made by
+        `make_containing_path`, since there can't be any forks after an end.)
+        
+        Returns the path.
         '''
         return self.parent.make_past_ath()
 

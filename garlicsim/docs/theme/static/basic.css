@@ -156,6 +156,7 @@ img.toggler {
 
 a.headerlink {
     visibility: hidden;
+    opacity: 0;
 }
 
 h1:hover > a.headerlink,
@@ -166,6 +167,7 @@ h5:hover > a.headerlink,
 h6:hover > a.headerlink,
 dt:hover > a.headerlink {
     visibility: visible;
+    opacity: 1;
 }
 
 div.body p.caption {
