@@ -76,26 +76,28 @@ class Project(object):
         '''
         Create a parentless node whose state is a simple plain state.
         
-        The simulation package has to define the function `make_plain_state`
-        for this to work.
+        The simulation package has to define the method `State.create_root` for
+        this to work.
         
         Returns the node.
         '''
         state = self.simpack.State.create_root(*args, **kwargs)
         return self.root_this_state(state)
 
+    
     def create_messy_root(self, *args, **kwargs):
         '''
         Creates a parentless node whose state is a random and messy state.
         
-        The simulation package has to define the function `make_random_state`
-        for this to work.
+        The simulation package has to define the method
+        `State.create_messy_root` for this to work.
         
         Returns the node.
         '''
         state = self.simpack.State.create_messy_root(*args, **kwargs)
         return self.root_this_state(state)
 
+    
     def root_this_state(self, state):
         '''
         Take a state, wrap it in a node and add to the tree without a parent.
@@ -104,6 +106,7 @@ class Project(object):
         '''
         return self.tree.add_state(state)
 
+    
     def ensure_buffer(self, node, clock_buffer=0):
         '''
         Ensure there's a large enough buffer of nodes after `node`.
@@ -117,7 +120,7 @@ class Project(object):
         new_clock_target = node.state.clock + clock_buffer
         
         for leaf in leaves_dict.copy():
-            if leaf.ends:
+            if leaf.ends: # todo: Not every end should count.
                 del leaves_dict[leaf]
         
         for item in leaves_dict.items():
@@ -149,7 +152,8 @@ class Project(object):
         '''
         
         leaf = path.get_last_node(start=node)
-        if leaf.ends: return
+        if leaf.ends: # todo: Not every end should count, I think.
+            return
         
         new_clock_target = node.state.clock + clock_buffer     
 
@@ -228,6 +232,7 @@ class Project(object):
         '''        
         return self.crunching_manager.sync_crunchers()
     
+    
     @with_tree_lock
     def simulate(self, node, iterations=1, *args, **kwargs):
         '''
@@ -250,6 +255,7 @@ class Project(object):
         else:
             return self.__non_history_dependent_simulate(node, iterations,
                                                          step_profile)
+        
         
     @with_tree_lock        
     def __history_dependent_simulate(self, node, iterations,
@@ -301,6 +307,7 @@ class Project(object):
             
         return current_node
     
+    
     @with_tree_lock
     def __non_history_dependent_simulate(self, node, iterations,
                                          step_profile=None):
@@ -333,6 +340,7 @@ class Project(object):
             
         return current_node
     
+    
     def __getstate__(self):
         my_dict = dict(self.__dict__)
         
@@ -341,9 +349,11 @@ class Project(object):
         
         return my_dict
     
+    
     def __setstate__(self, pickled_project):
         self.__init__(pickled_project["simpack"])
         self.__dict__.update(pickled_project)
+        
         
     def __repr__(self):
         '''

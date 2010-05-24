@@ -281,7 +281,15 @@ Untouched nodes can't be edited, so they have no concept of being finalized.'''
 
     
     def get_ancestor(self, generations=1, round=False):
-        ''''''
+        '''
+        Get an ancestor of this node.
+        
+        `generations` specifies the number of generation that the returned
+        ancestor should be above the current node. `round` determines how this
+        method will behave if it was asked for too many generations back, and
+        not enough existed. If `round` is True, it will return the root. If
+        `round` is False, it will raise a LookupError.
+        '''
 
         assert generations >= 0
         if generations == 0:

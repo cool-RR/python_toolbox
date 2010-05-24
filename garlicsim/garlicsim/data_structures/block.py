@@ -24,8 +24,7 @@ class BlockError(GarlicSimException):
     
 class Block(TreeMember):
     '''
-    A device for bundling together a succession of natural nodes.
-    
+    Succession of similar natural nodes in the tree.
     
     Blocks make the tree more organized and easy to browse, and improve
     performance.
@@ -38,17 +37,15 @@ class Block(TreeMember):
     Who qualifies to get wrapped in a block? A succession of untouched nodes,
     which:
         1. Is at least 2 nodes in number.
-        2. All members, except the last one, must have no children except
-           their successor in the block.
-        3. The last node may have any kinds of children.
+        2. All members, except the last one, must have no ends, and no
+           children except their successor in the block.
+        3. The last node may have any kinds of children and ends.
         4. All members share the same step_profile.
-        tododoc end_result
 
     If you want to check whether a certain node is in a block or not,
     check its ".block" attribute.
 
     '''
-    # todo: maybe Node and Block should inherit from some BaseTreeMember
     def __init__(self, node_list):
         '''Construct a block from the members of node_list.'''
         self.alive = True
@@ -312,10 +309,11 @@ while the index was bigger than the block's length.''')
     
     def make_containing_path(self):
         '''
-        Create a path that contains this node.
+        Create a path that contains this block.
         
-        There may be multiple different paths that contain this node. This will
+        There may be multiple different paths that contain this block. This will
         return the one which points to the newest possible forks.
+        
         Returns the path.
         '''
         return self[0].make_containing_path()
@@ -324,12 +322,11 @@ while the index was bigger than the block's length.''')
     
     def all_possible_paths(self):
         '''
-        Get a list of all possible paths that contain this node.
+        Get a list of all possible paths that contain this block.
         
         Note: There may be paths that contain this node which will not be
-        identical to one of the paths given here, because these other paths
-        may specify decisions that are not even on the same root as these
-        paths.
+        identical to one of the paths given here, because these other paths may
+        specify decisions that are not even on the same root as these paths.
         '''
         return self[0].all_possible_paths()
     
@@ -337,7 +334,7 @@ while the index was bigger than the block's length.''')
     
     def make_past_path(self):
         '''
-        Create a path that contains this node.
+        Create a path that contains this block.
         
         There may be multiple different paths that contain this node. This will
         return a path that doesn't specify any decisions after this node.
@@ -348,11 +345,11 @@ while the index was bigger than the block's length.''')
     
     def get_all_leaves(self, max_nodes_distance=None, max_clock_distance=None):
         '''
-        Get all leaves that are descendents of this node.
+        Get all leaves that are descendents of this block.
         
         Only leaves with a distance of at most `max_nodes_distance` in nodes or
-        `max_clock_distance` in clock are returned. (Note this is an OR
-        relation between the two condintions)
+        `max_clock_distance` in clock are returned. (Note this is an OR relation
+        between the two condintions)
         
         Returns a dict of the form:
         
@@ -374,20 +371,29 @@ while the index was bigger than the block's length.''')
     
     
     def get_ancestor(self, generations=1, round=False):
-        ''''''
+        '''
+        Get an ancestor of this block.
+        
+        `generations` specifies the number of generation that the returned
+        ancestor should be above the current block. `round` determines how this
+        method will behave if it was asked for too many generations back, and
+        not enough existed. If `round` is True, it will return the root. If
+        `round` is False, it will raise a LookupError.
+        '''
         return self[0].get_ancestor(generations, round)
 
     
     
     def get_root(self):
         '''
-        Get the root of this node.
+        Get the root of this block.
         
         This means the node which is the parent of the parent of the parent
-        of... the parent of this node.
+        of... the parent of this block.
         '''
         return self[0].get_root()
-        
+
+    
     def __repr__(self):
         '''
         Get a string representation of the block.

@@ -27,6 +27,7 @@ class Job(object):
         '''The crunching profile to be used for crunching.'''
         
         self.resulted_in_end = False
+        '''Flag marking that the job has resulted in an end of the simulation.'''
   
         
     def is_done(self):

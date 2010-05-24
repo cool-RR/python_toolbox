@@ -400,6 +400,7 @@ class GuiProject(object):
         state = dialog.start()
         if state:
             root = self.project.root_this_state(state)
+            self.tree_structure_modified_not_on_path_emitter.emit()
             self.set_active_node(root)
         
 
@@ -408,42 +409,7 @@ class GuiProject(object):
         return self.active_node.state if self.active_node is not None else None
                 
 
-    def make_plain_root(self, *args, **kwargs): #tododoc: take care of this
-        '''
-        Create a parentless node, whose state is a simple plain state.
-        
-        The simpack must define the function "make_plain_state" for this to
-        work.
-        
-        Updates the active path to start from this root. Starts crunching on
-        this new root.
-        
-        Returns the node.
-        '''
-        root = self.project.make_plain_root(*args, **kwargs)
-        self.tree_structure_modified_not_on_path_emitter.emit()
-        self.set_active_node(root)
-        return root
-
     
-    def make_random_root(self, *args, **kwargs): #tododoc: take care of this
-        '''
-        Create a parentless node, whose state is a random and messy state.
-        
-        The simpack must should define the function "make_random_state" for this
-        to work.
-        
-        Updates the active path to start from this root. Starts crunching on
-        this new root.
-        
-        Returns the node.
-        '''
-        root = self.project.make_random_root(*args, **kwargs)
-        self.tree_structure_modified_not_on_path_emitter.emit()
-        self.set_active_node(root)
-        return root
-
-
     def _set_active_node(self, node):
         '''Set the active node, displaying it onscreen. Internal use.'''
         if self.active_node is not node:
