@@ -15,6 +15,7 @@ import itertools
 
 import garlicsim
 from garlicsim.general_misc import cute_iter_tools
+
 from garlicsim_lib.simpacks import life
 from garlicsim_lib.simpacks import prisoner
 from garlicsim_lib.simpacks import _history_test

@@ -288,6 +288,7 @@ class Project(object):
                 history_browser.path = current_node.make_containing_path()
                 # Just once, after the first run, we set the path of the history
                 # browser to be the new end_node's path. Why?
+                
                 # Because just after the first run we've created the first new
                 # node, possibly causing a fork. Because of the new fork, the
                 # original path that we created at the beginning of this method

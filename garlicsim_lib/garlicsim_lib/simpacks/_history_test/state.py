@@ -37,8 +37,7 @@ def history_step(history_browser, t=0.1):
     new_state.clock += t
     
     useless_state = history_browser.get_state_by_clock(10000000)
-    # assert useless_state.clock == last_state.clock
-    new_useless_state = history_browser.get_state_by_clock(10000000)
+    assert useless_state.clock == last_state.clock
     
     new_state.left_vel += random.random() * 0.2 - 0.1
     new_state.left += new_state.left_vel * t

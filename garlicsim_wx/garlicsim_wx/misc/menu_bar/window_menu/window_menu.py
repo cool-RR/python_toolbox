@@ -24,7 +24,7 @@ class WindowMenu(CuteMenu):
             ''' Manipulate the workspace, i.e. the arrangement of widgets \
 on the screen'''
         )
-        # self.workspace_menu_button.Enable(False) tododoc: uncomment
+        self.workspace_menu_button.Enable(False)
         
         
         self.AppendSeparator()

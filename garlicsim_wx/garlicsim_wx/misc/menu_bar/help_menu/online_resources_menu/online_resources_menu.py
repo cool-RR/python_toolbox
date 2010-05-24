@@ -28,6 +28,19 @@ class OnlineResourcesMenu(CuteMenu):
         )
         
         
+        self.online_documentation_button = self.Append(
+            -1,
+            'Online &documentation...',
+            ''' Open the online version of GarlicSim's documentation in your \
+browser'''
+        )
+        frame.Bind(
+            wx.EVT_MENU,
+            lambda event: webbrowser.open_new_tab('http://docs.garlicsim.org'),
+            self.online_documentation_button
+        )
+        
+        
         self.mailing_lists_button = self.Append(
             -1,
             '&Mailing lists...',

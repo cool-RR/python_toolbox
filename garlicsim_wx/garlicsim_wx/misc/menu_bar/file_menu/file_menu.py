@@ -72,8 +72,8 @@ class FileMenu(CuteMenu):
             self.export_menu,
             ' Export simulation data'
         )
-        # self.export_menu_button.Enable(False) tododoc: uncomment        
-                
+        self.export_menu_button.Enable(False)
+        
         
         self.AppendSeparator()
         

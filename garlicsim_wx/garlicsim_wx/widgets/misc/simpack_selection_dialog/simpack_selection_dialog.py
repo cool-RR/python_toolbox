@@ -21,11 +21,14 @@ class SimpackSelectionDialog(wx.SingleChoiceDialog):
     
     def __init__(self, parent):
         self.make_simpack_list()
-        wx.SingleChoiceDialog.__init__(self, parent,
-                                       'Choose simulation package',
-                                       'Choose simulation package',
-                                       self.list_of_simpacks,
-                                       wx.CHOICEDLG_STYLE)
+        wx.SingleChoiceDialog.__init__(
+            self,
+            parent,
+            'Choose a simulation package for your new simulation:',
+            'Choose simulation package',
+            self.list_of_simpacks,
+            wx.CHOICEDLG_STYLE
+        )
         
     def make_simpack_list(self):
         '''Make a list of available simpacks.'''
