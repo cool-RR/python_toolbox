@@ -15,11 +15,23 @@ import garlicsim_wx
 
 
 class App(wx.PySimpleApp):
+    '''A garlicsim_wx app.'''
     # todo: need to think if i allow frames with no app. on one hand good idea,
     # to allow people to start a garlicsim_wx frame in their own app. on other
     # hand frames will need to know how to start another frame.
     def __init__(self, new_gui_project_simpack_name=None,
                  load_gui_project_file_path=None):
+        '''
+        Constructor.
+        
+        In order to start a new simulation on startup, pass the name of the
+        simpack as `new_gui_project_simpack_name`.
+        
+        In order to load a simulation from file on startup, pass the path to the
+        file as `load_gui_project_file_path`.
+        
+        (At most one of these can be done.)
+        '''
         self.frame = None
         assert not (new_gui_project_simpack_name and load_gui_project_file_path)
         self.new_gui_project_simpack_name = new_gui_project_simpack_name
