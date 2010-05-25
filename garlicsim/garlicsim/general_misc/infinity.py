@@ -49,7 +49,8 @@ class InfinityClass(object):
     (-Infinity).
     '''
     #todo: add __assign__ or whatever it's called
-    #todo: add interoperability with float(inf). (Need to detect its existance)
+    #todo: add more interoperability with float(inf). (Need to detect its
+    #existance)    
     #todo: calling it InfinityClass is a bit wrong./
     
     def __init__(self, direction=1):
@@ -165,7 +166,7 @@ to a fractional power""")
             return other.direction == self.direction
         
         elif isinstance(other, float):
-            # We're checking to see if `other` is `float('inf')` or
+            # We're checking to see if `other` is equal to `float('inf')` or
             # `-float('inf')`. But we must `try` it carefully, because in Python
             # 2.5 there is no `float('inf')`.
             #

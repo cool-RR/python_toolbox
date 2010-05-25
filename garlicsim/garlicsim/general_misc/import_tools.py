@@ -75,7 +75,7 @@ def import_all(package, exclude='__init__', silent_fail=False):
     
     
 def import_if_exists(module_name):
-
+    '''Import module by name, only if it exists, otherwise return None.'''    
     if '.' in module_name:
         package_name, submodule_name = module_name.rsplit('.', 1)
         package = __import__(package_name, fromlist=[''])
