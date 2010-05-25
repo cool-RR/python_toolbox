@@ -105,6 +105,12 @@ class Node(TreeMember):
         '''
         
         self.ends = []
+        '''
+        The ends whose parent is this node.
+        
+        This means, world ends that were arrived to on a timeline terminating
+        with this node.
+        '''
   
         
     def __len__(self):
@@ -113,7 +119,13 @@ class Node(TreeMember):
 
     
     def finalize(self):
-
+        '''
+        Finalize the node, assuming it's in currectly in editing mode.
+        
+        Before an edited node is finalized, it cannot be crunched from and
+        cannot have children. (i.e. nodes that follow it in time.) After getting
+        finalized, it may be crunched from and be assigned children.
+        '''
         if self.still_in_editing is False:
             if self.touched:
                 message = '''You tried to finalize a touched node, but it has \
@@ -160,7 +172,7 @@ Untouched nodes can't be edited, so they have no concept of being finalized.'''
         identical to one of the paths given here, because these other paths
         may specify decisions that are not even on the same root as these
         paths.
-        '''# tododoc: confirm getting them ordered
+        '''
         #todo: possibly add `reversed` option
         past_path = self.make_past_path()
         paths = []
@@ -178,7 +190,7 @@ Untouched nodes can't be edited, so they have no concept of being finalized.'''
         else: # fork is None and real_thing is the final node of the path
             # In this case there are no forks after our node, we just return
             # the past_path which we have driven to its end. (Not that it has
-            # any forks to decide on anyway.
+            # any forks to decide on anyway.)
             return [past_path]
     
     def make_past_path(self):

@@ -3,20 +3,9 @@
 
 '''Defines a collection of exceptions.'''
 
+from garlicsim.general_misc.exceptions import CuteException
 
-class SmartException(Exception):# tododoc: move to general_misc
-    '''
-    Exception that uses its first line of documentation in lieu of a message.
-    '''
-    def __init__(self, msg=None):
-        if msg is None:
-            if self.__doc__:
-                msg = self.__doc__.strip().split('\n')[0] 
-                # Getting the first line of the documentation
-        Exception.__init__(self, msg)
-
-
-class GarlicSimException(SmartException):
+class GarlicSimException(CuteException):
     '''GarlicSim-related exception.'''
 
 class GarlicSimWarning(Warning):
@@ -29,8 +18,8 @@ class InvalidSimpack(GarlicSimException):
 class SimpackError(GarlicSimException):
     '''A simpack behaved unexpectedly.'''
     
-class WorldEnd(GarlicSimException):  #tododoc: possibly rename
-    pass
+class WorldEnd(GarlicSimException):
+    '''The simulation has ended.'''
 
     
     

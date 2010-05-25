@@ -101,33 +101,26 @@ class End(TreeMember):
     
     def get_all_leaves(self, max_nodes_distance=None, max_clock_distance=None):
         '''
-        Get all leaves that are descendents of this node.
+        Get `{}`.
         
-        Only leaves with a distance of at most `max_nodes_distance` in nodes or
-        `max_clock_distance` in clock are returned. (Note this is an OR
-        relation between the two condintions)
-        
-        Returns a dict of the form:
-        
-        {
-            leaf1: {
-                'nodes_distance': nodes_distance1,
-                'clock_distance': clock_distance1,
-            },            
-            leaf2: {
-                'nodes_distance': nodes_distance2,
-                'clock_distance': clock_distance2,
-            },
-            # ...
-        }
-            
+        (This method was invented for nodes and blocks and makes sense for them;
+        There are no leaves, or anything else for that matter, that come after
+        an end.)
         '''
         
-        return {} # tododoc: I assume now that `leaves` don't include ends
+        return {}
 
     
     def get_ancestor(self, generations=1, round=False):
-        ''''''
+        '''
+        Get an ancestor of this end.
+        
+        `generations` specifies the number of generation that the returned
+        ancestor should be above the current end. `round` determines how this
+        method will behave if it was asked for too many generations back, and
+        not enough existed. If `round` is True, it will return the root. If
+        `round` is False, it will raise a LookupError.
+        '''
 
         assert generations >= 0
         if generations == 0:
@@ -138,10 +131,10 @@ class End(TreeMember):
             
     def get_root(self):
         '''
-        Get the root of this node.
+        Get the root of this end.
         
         This means the node which is the parent of the parent of the parent
-        of... the parent of this node.
+        of... the parent of this end.
         '''
         return self.parent.get_root()
     
@@ -149,46 +142,33 @@ class End(TreeMember):
     
     def is_overlapping(self, other):
         '''
-        Return whether this node overlaps with the given entity.
+        Return whether this end overlaps with the given entity.
         
-        `other` may be a node, in which case overlapping means being the same
-        node. `other` can also be a block, in which case overlapping means this
-        node is contained in the block.
+        Returns True only if `other` is the same end.
         '''
-        if other is None: return False
-        if isinstance(other, Node):
-            return (self is other)
-        else:
-            assert isinstance(other, Block)
-            return (self in other)
+        return self is other
     
     
     def __repr__(self):
         '''
-        Get a string representation of the node.
+        Get a string representation of the end.
         
         Example output:        
-        <garlicsim.data_structures.Node with clock 6.5, untouched, belongs to a
-        block, crunched with StepProfile(t=0.1), at 0x1ffde70>
+        <garlicsim.data_structures.End from state with clock 6.5, crunched with
+        StepProfile(t=0.1), at 0x1ffde70>
         '''
-        return 'END tododoc parent: %s' % self.parent
-        """
-        return '<%s%s, %s%s%s, %s, %sat %sEND tododoc>' % \
+        
+        return '<%s from state with clock %s, crunched with %s, at %s>' % \
             (
                 misc_tools.shorten_class_address(
                     self.__class__.__module__,
                     self.__class__.__name__
                     ),
-                ' with clock %s' % self.state.clock if hasattr(self.state, 'clock') else '',
-                'root, ' if (self.parent is None) else '',
-                'leaf, ' if (len(self.children) == 0) else '',
-                'touched' if self.touched else 'untouched',
-                'belongs to a block' if self.block else 'blockless',
-                'crunched with %s, ' % self.step_profile if self.step_profile else '',
+                self.parent.state.clock,
+                self.step_profile,
                 hex(id(self))
             )
-        """
+        
 
 from block import Block
-
 
