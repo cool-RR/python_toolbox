@@ -18,12 +18,12 @@ import history_browser as history_browser_module # Avoiding name clash
 
 __all__ = ["simulate"]
 
+
 def simulate(state, iterations=1, *args, **kwargs):
     '''
     Simulate from the given state for the given number of iterations.
 
-    A simpack must be passed as the first parameter. Any extraneous parameters
-    will be passed to the step function.
+    Any extraneous parameters will be passed to the step function.
     
     Returns the final state of the simulation.
     '''
@@ -49,8 +49,8 @@ def __history_simulate(simpack_grokker, state, iterations=1, step_profile=None):
     
     (Internal function, for history-dependent simulations only)
 
-    A simpack must be passed as the first parameter. A step profile may be
-    passed to be used with the step function.
+    A simpack grokker must be passed as the first parameter. A step profile may
+    be passed to be used with the step function.
     
     Returns the final state of the simulation.
     '''
@@ -85,8 +85,8 @@ def __non_history_simulate(simpack_grokker, state, iterations=1,
     
     (Internal function, for non-history-dependent simulations only.)
 
-    A simpack must be passed as the first parameter. A step profile may be
-    passed to be used with the step function.
+    A simpack grokker must be passed as the first parameter. A step profile may
+    be passed to be used with the step function.
     
     Returns the final state of the simulation.
     '''

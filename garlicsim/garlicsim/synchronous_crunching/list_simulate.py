@@ -19,12 +19,12 @@ import history_browser as history_browser_module # Avoiding name clash
 
 __all__ = ["list_simulate"]
 
-def list_simulate(state, iterations, *args, **kwargs): #tododoc: should probably return path
+
+def list_simulate(state, iterations, *args, **kwargs):
     '''
     Simulate from the given state for the given number of iterations.
 
-    A simpack must be passed as the first parameter. Any extraneous parameters
-    will be passed to the step function.
+    Any extraneous parameters will be passed to the step function.
     
     Returns a list that spans all the states, from the initial one given to
     the final one.
@@ -52,8 +52,8 @@ def __history_list_simulate(simpack_grokker, state, iterations,
 
     (Internal function for history-dependent simulations only.)    
     
-    A simpack must be passed as the first parameter. Any extraneous parameters
-    will be passed to the step function.
+    A simpack grokker must be passed as the first parameter. Any extraneous
+    parameters will be passed to the step function.
     
     Returns a list that spans all the states, from the initial one given to
     the final one.
@@ -91,8 +91,8 @@ def __non_history_list_simulate(simpack_grokker, state, iterations,
     
     (Internal function for non-history-dependent simulations only.)
 
-    A simpack must be passed as the first parameter. Any extraneous parameters
-    will be passed to the step function.
+    A simpack grokker must be passed as the first parameter. Any extraneous
+    parameters will be passed to the step function.
     
     Returns a list that spans all the states, from the initial one given to
     the final one.

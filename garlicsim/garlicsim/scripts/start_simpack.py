@@ -1,4 +1,14 @@
 #!/usr/bin/env python
+# Copyright 2009-2010 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''
+Script for starting a new simpack.
+
+Usage:
+start_simpack.py quantum_mechanics
+'''
+
 
 from __future__ import with_statement
 
@@ -12,14 +22,17 @@ import pkg_resources
 from garlicsim.scripts import simpack_template
 simpack_template_package_name = simpack_template.__name__
 
-def _newline_replace(s):
-    if 'win' in sys.platform:
-        return s
-    else:
-        return s.replace('\r', '')
-
+    
 def _walk_folder(package_name, folder):
-    '''pkg_resources'''
+    '''
+    Walk on subfolders of a folder using pkg_resources.
+
+    `package_name` is the name of the packagein which this folder lives.
+    `folder` is the path of the folder.
+    
+    Of course, since we are operating using pkg_resources, all paths are
+    relative to the pkg_resources-managed package.
+    '''
     folders = [folder]
     
     while folders:
@@ -33,6 +46,13 @@ def _walk_folder(package_name, folder):
         
 
 def _make_path_to_file(file):
+    '''
+    Create the folders needed before creating a file.
+    
+    Given a path to a file that doesn't exist, this function creates all the
+    folders up to the file, so the file could be later created without thinking
+    whether these folders exist or not.
+    '''
     dir = os.path.split(file)[0]
     if os.path.isdir(dir):
         return
@@ -44,7 +64,11 @@ def _make_path_to_file(file):
     
 def start_simpack(containing_folder, name):
     """
+    Create a new simpack.
     
+    This is the main function of this module. `containing_folder` is the folder
+    in which the simpack folder should be created. `name` is the name of the new
+    simpack, which will also be the name of its folder.
     """
     
     if not re.search(r'^[_a-zA-Z]\w*$', name): # If not valid folder name.
@@ -85,6 +109,7 @@ def start_simpack(containing_folder, name):
     print('''%s simpack created successfully! Explore the %s folder and start \
 filling in the contents of your new simpack.''' % (name, name))
                 
+    
 def _make_writeable(filename):
     """
     Make sure that the file is writeable. Useful if our source is
@@ -101,13 +126,13 @@ def _make_writeable(filename):
 
         
 def show_help():
-    '''tododoc'''
+    '''Print some help text that describes how to use this script'''
     print '''\
 This is a script for creating a skeleton for a garlicsim simpack. Use this when
 you want to make a new simpack to have the basic folders and files created for
 you.
 
-    Usage: start_simpack.py simpack_name
+    Usage: start_simpack.py my_simpack_name
 
 The simpack will be created in the current path, in a directory with the name of
 the simpack.'''

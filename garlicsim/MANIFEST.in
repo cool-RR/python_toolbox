@@ -1,2 +1,3 @@
 recursive-include garlicsim *
 recursive-exclude garlicsim *.pyc
+recursive-exclude garlicsim *.pyo

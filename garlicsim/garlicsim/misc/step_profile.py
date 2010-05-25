@@ -7,11 +7,13 @@ This module defines the StepProfile class.
 See its documentation for more information.
 '''
 
+
 import copy
 
 __all__ = ['StepProfile']
 
-class StepProfile(object): # tododoc: use CachedType?
+
+class StepProfile(object): # todo: use CachedType?
     '''
     A profile of *args and **kwargs to be used with a step function.
     

@@ -24,8 +24,10 @@ class StepIterator(object):
     
     1. The StepIterator automatically adds clock readings if the states are
        missing them.
-    2. It's possible to change the step profile while iterating.
-    3. Guaranteed infinite iterator, even if the simpack's iterator is finite.tododoc
+    2. It's possible to change the step profile while iterating.    
+    3. Unless the step function raises `WorldEnd` to end the simulation, this
+       iterator is guaranteed to be infinite, even if the simpack's iterator is
+       finite.
     
     And possibly more.  
     '''
