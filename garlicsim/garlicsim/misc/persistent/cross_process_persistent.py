@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the Persistent class.
+This module defines the CrossProcessPersistent class.
 
 See its documentation for more information.
 
@@ -11,11 +11,6 @@ See its documentation for more information.
 Note: This module is still experimental.
 
 todo: need to lock library to avoid thread trouble?
-
-todo: need to raise an exception if we're getting pickled with
-an old protocol?
-
-todo: make it polite to other similar classes
 '''
 
 
@@ -42,23 +37,28 @@ class CrossProcessPersistent(Persistent):
     '''
     Object that sometimes shouldn't really be duplicated.
 
-    Say some plain object references a Persistent object. Then that plain object
-    gets deepcopied with the DontCopyPersistent copy mode. The plain object will
-    get deepcopied, but the Persistent object under it will not! The new copy of
-    the plain object will refer to the same old copy of the Persistent object.
+    Say some plain object references a CrossProcessPersistent object. Then that
+    plain object gets deepcopied with the DontCopyPersistent copy mode. The
+    plain object will get deepcopied, but the CrossProcessPersistent object
+    under it will not! The new copy of the plain object will refer to the same
+    old copy of the CrossProcessPersistent object.
     
     This is useful for objects which are read-only and possibly heavy. You may
     use Persistent as a base class for these kinds of objects.
     
-    When copying a Persistent, it is not really copied; The new "copy" is just
-    the same object. When a Persistent is passed around between processes in
-    queues, each process retains only one copy of it.
+    When copying a CrossProcessPersistent, it is not really copied; The new
+    "copy" is just the same object. 
     
-    Keep in mind that a Persistent is read-only. This means that starting from the
-    first time that it is copied or put in a queue, it should not be changed.
+    Keep in mind that a CrossProcessPersistent is read-only. This means that
+    starting from the first time that it is copied or put in a queue, it should
+    not be changed.
 
     There is no mechanism that enforces that the user doesn't change the object,
     so the user must remember not to change it.
+    
+    What this class adds over Persistent, is that when a CrossProcessPersistent
+    is passed around between processes in queues, each process retains only one
+    copy of it.
     
     Note: This class is still experimental.
     '''

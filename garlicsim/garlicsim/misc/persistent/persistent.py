@@ -8,9 +8,7 @@ See its documentation for more information.
 
 
 
-Note: This module is still experimental.
-
-todo: need to lock library to avoid thread trouble?
+Note: This module is still experimental
 
 todo: need to raise an exception if we're getting pickled with
 an old protocol?
@@ -37,8 +35,7 @@ class Persistent(object):
     use Persistent as a base class for these kinds of objects.
     
     When copying a Persistent, it is not really copied; The new "copy" is just
-    the same object. When a Persistent is passed around between processes in
-    queues, each process retains only one copy of it.
+    the same object.
     
     Keep in mind that a Persistent is read-only. This means that starting from the
     first time that it is copied or put in a queue, it should not be changed.
@@ -65,6 +62,7 @@ class Persistent(object):
             new_copy = copy_tools.deepcopy_as_simple_object(self, memo)
             return new_copy
     
+        
     def __copy__(self):
         return self
     

@@ -167,7 +167,7 @@ the :file:`coin_flip` folder.) Read the code and the comments:
         def step(self):
             
             if self.balance >= 6000:
-                raise garlicsim.misc.exceptions.WorldEnd
+                raise garlicsim.misc.WorldEnd
             
             # First we need to calculate how much we're going to bet in this round.
             
@@ -185,7 +185,7 @@ the :file:`coin_flip` folder.) Read the code and the comments:
                 # If we don't have the amount we should bet, we stop the simulation.
                 # True, we can try to bet whatever's left, but for simplicity's sake
                 # we won't do that now.
-                raise garlicsim.misc.exceptions.WorldEnd
+                raise garlicsim.misc.WorldEnd
                 
             # Let's bet!
             bet_result = random.choice([amount_to_bet, - amount_to_bet])
@@ -201,7 +201,7 @@ the :file:`coin_flip` folder.) Read the code and the comments:
         def create_root():
             return State(balance=5000)
 
-What is that :exc:`WorldEnd <garlicsim.misc.exceptions.WorldEnd>` exception that
+What is that :exc:`WorldEnd <garlicsim.misc.WorldEnd>` exception that
 we're raising there? It means that, well, the world has ended. Notice we raise
 it either (a) when we get $6,000 or (b) when we run out of money to bet. What
 this exception means is that the simulation has ended, and no further simulating
@@ -262,8 +262,8 @@ until the gambler either gets $6,000 or loses too much money and quits. To do th
     
 That :const:`Infinity <garlicsim.general_misc.infinity.Infinity>` simply
 represents infinity, and it means: "Simulate until the simulation ends itself
-with a :exc:`WorldEnd <garlicsim.misc.exceptions.WorldEnd>`." (If the simulation
-won't raise :exc:`WorldEnd <garlicsim.misc.exceptions.WorldEnd>`, it will indeed
+with a :exc:`WorldEnd <garlicsim.misc.WorldEnd>`." (If the simulation
+won't raise :exc:`WorldEnd <garlicsim.misc.WorldEnd>`, it will indeed
 keep on simulating until the end of time, or until you kill the Python process,
 whichever comes sooner.)
 

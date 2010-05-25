@@ -4,7 +4,7 @@
 '''
 This module defines the Persistent class and some related classes.
 
-See documentation of Persistent for more info.
+See documentation of Persistent and CrossProcessPersistent for more info.
 '''
 
 from persistent import Persistent

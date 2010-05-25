@@ -17,7 +17,7 @@ class State(garlicsim.data_structures.State):
     def step(self):
         
         if self.balance >= 6000:
-            raise garlicsim.misc.exceptions.WorldEnd
+            raise garlicsim.misc.WorldEnd
         
         # First we need to calculate how much we're going to bet in this round.
         
@@ -35,7 +35,7 @@ class State(garlicsim.data_structures.State):
             # If we don't have the amount we should bet, we stop the simulation.
             # True, we can try to bet whatever's left, but for simplicity's sake
             # we won't do that now.
-            raise garlicsim.misc.exceptions.WorldEnd
+            raise garlicsim.misc.WorldEnd
             
         # Let's bet!
         bet_result = random.choice([amount_to_bet, - amount_to_bet])

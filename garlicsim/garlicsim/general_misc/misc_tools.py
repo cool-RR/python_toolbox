@@ -5,6 +5,7 @@
 
 import math
 
+
 def frange(start, finish=None, step=1.):
     '''
     Make a list containing an arithmetic progression of numbers.
@@ -20,7 +21,17 @@ def frange(start, finish=None, step=1.):
     count = int(math.ceil(finish - start)/step)
     return (start + n*step for n in range(count))
 
+
 def shorten_class_address(module_name, class_name):
+    '''
+    Shorten the address of a class.
+    
+    This is mostly used in `__repr__` methods of various classes to shorten the
+    text and make the final output more conscise. For example, if you have a
+    class `garlicsim.asynchronous_crunching.project.Project`, but which is also
+    available as `garlicsim.Project`, this function will return
+    'garlicsim.Project'.    
+    '''
     get_module = lambda module_name: __import__(module_name, fromlist=[''])
     original_module = get_module(module_name)
     original_class = getattr(original_module, class_name)
