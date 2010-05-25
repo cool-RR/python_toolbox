@@ -613,7 +613,7 @@ path, but it's completely empty.''')
     
     
     def states(self):
-        '''Iterate over the states in this path.'''
+        '''Iterate over the states of the nodes in this path.'''
         # todo: Make fancier, like dict.keys in Py3. Probably create as object
         # in __init__
         for node in self:

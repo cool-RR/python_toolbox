@@ -3,8 +3,8 @@
 
 '''Defines different rounding options for binary search.'''
 
-# tododoc: add options LOW_IF_BOTH, HIGH_IF_BOTH, CLOSEST_IF_BOTH. Confirm they
-# are used in all places that currently ~use them.
+# Confirm that *_IF_BOTH options are used are used in all places that currently
+# ~use them.
 
 class Rounding(object):
     '''Base class for rounding options for binary search.'''

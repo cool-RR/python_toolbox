@@ -367,20 +367,20 @@ back. This node's ancestry line doesn't go back that far.''')
         '''Return whether the node the first one on its block.'''
         return self.block and (self.block.index(self) == 0)
     
-    def is_overlapping(self, other):
+    def is_overlapping(self, tree_member):
         '''
-        Return whether this node overlaps with the given entity.
+        Return whether this node overlaps with the given tree_member.
         
-        `other` may be a node, in which case overlapping means being the same
-        node. `other` can also be a block, in which case overlapping means this
-        node is contained in the block.
+        `tree_member` may be a node, in which case overlapping means being the
+        same node. `tree_member` can also be a block, in which case overlapping
+        means this node is contained in the block.
         '''
-        if other is None: return False
-        if isinstance(other, Node):
-            return (self is other)
+        if tree_member is None: return False
+        if isinstance(tree_member, Node):
+            return (self is tree_member)
         else:
-            assert isinstance(other, Block)
-            return (self in other)
+            assert isinstance(tree_member, Block)
+            return (self in tree_member)
     
     def __repr__(self):
         '''

@@ -170,6 +170,11 @@ tree while specifying a template_node.''')
 
     
     def make_end(self, node, step_profile):
+        '''
+        Create an end after the specified node.
+        
+        Must specify a step profile with which this end was reached.
+        '''
         end = End(self, node, step_profile)
         return end
     

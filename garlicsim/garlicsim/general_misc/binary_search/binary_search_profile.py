@@ -1,6 +1,12 @@
 # Copyright 2009-2010 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
+'''
+Defines the BinarySearchProfile class.
+
+See its documentation for more info.
+'''
+
 
 from .roundings import (Rounding, roundings, LOW, LOW_IF_BOTH,
                         LOW_OTHERWISE_HIGH, HIGH, HIGH_IF_BOTH,
@@ -12,24 +18,51 @@ from .functions import (binary_search, binary_search_by_index,
         
         
 class BinarySearchProfile(object):
-
+    '''
+    A profile of binary search results.
+    
+    A binary search profile allows to access all kinds of aspects of the results
+    of a binary search, while not having to execute the search more than one
+    time.
+    '''
     
     def __init__(self, sequence, function, value, both=None):
+        '''
+        Constructor for BinarySearchProfile.
+        
+        `sequence` is the sequence through which the search is made. `function`
+        is a monotonically rising function on the sequence. `value` is the
+        wanted value.
+        
+        In the `both` argument you may put binary search results (with the BOTH
+        rounding option.) This will prevent the constructor from performing the
+        search itself. It will use the results you provided when giving its
+        analysis.
+        '''
 
         if both is None:
             both = searcher(sequence, function, value, BOTH)
         
         self.results = {}
-        '''tododoc'''
+        '''
+        `results` is a dict from rounding options to results that were obtained
+        using each function.
+        '''
         
         for rounding in roundings:
             self.results[rounding] = \
                 make_both_data_into_preferred_rounding(both, function, value,
                                                        rounding)
         none_count = list(both).count(None)
+        
         self.all_empty = (none_count == 2)
+        '''Flag saying whether the sequence is completely empty.'''
+        
         self.one_side_empty = (none_count == 1)
+        '''Flag saying whether the value is outside the sequence's scope.'''
+        
         self.is_surrounded = (none_count == 0)
+        '''Flag saying whether the value is inside the sequence's scope.'''
             
         self.had_to_compromise = {
             LOW_OTHERWISE_HIGH:
@@ -37,7 +70,12 @@ class BinarySearchProfile(object):
             HIGH_OTHERWISE_LOW:
                 self.results[HIGH_OTHERWISE_LOW] is not self.results[HIGH],
         }
-        '''tododoc'''
+        '''
+        Dictionary from "otherwise"-style roundings to bool.
+        
+        What this means is whether the "otherwise" route was taken. See
+        documentation of LOW_OTHERWISE_HIGH for more info.
+        '''
         
         self.got_none_because_no_item_on_other_side = {
             LOW_IF_BOTH:
@@ -47,7 +85,12 @@ class BinarySearchProfile(object):
             CLOSEST_IF_BOTH:
                 self.results[CLOSEST_IF_BOTH] is not self.results[CLOSEST],
         }
-        '''tododoc'''
+        '''
+        Dictionary from "if both"-style roundings to bool.
+        
+        What this means is whether the result was none because the BOTH result
+        wasn't full. See documentation of LOW_IF_BOTH for more info.
+        '''
         
         for d in [self.had_to_compromise,
                   self.got_none_because_no_item_on_other_side]:

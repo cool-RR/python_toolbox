@@ -9,6 +9,9 @@ See its documentation for more info.
 
 from garlicsim.general_misc import misc_tools
 
+import garlicsim
+
+
 class State(object):
     '''
     A state describes a world state in the world of the simulation.
@@ -24,7 +27,16 @@ class State(object):
     A state object must always be picklable, as do all the attributes assigned
     to it.
     '''
-    # tododoc: consider making abc, and checking it can't be instantiated
+    
+    def __new__(cls, *args, **kwargs):
+        if cls is State:
+            raise garlicsim.misc.GarlicSimException('''You tried to create a \
+State object whose class is `garlicsim.data_structures.State`. This is \
+unallowed; This class should be used as a base class for State classes in \
+simpacks.''')
+        return super(type, cls).__new__(cls, *args, **kwargs)
+    
+    
     def __repr__(self):
         '''
         Get a string representation of the state.

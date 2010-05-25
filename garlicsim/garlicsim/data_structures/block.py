@@ -289,22 +289,22 @@ while the index was bigger than the block's length.''')
         assert self.alive
         return self.__node_list[0].step_profile
      
-    def is_overlapping(self, other):
+    def is_overlapping(self, tree_member):
         '''
-        Return whether this block overlaps with the given entity.
+        Return whether this block overlaps with the given tree member.
         
-        `other` may be a block, in which case overlapping means being the same
-        block. `other` can also be a node, in which case overlapping means the
-        node is contained in this block.
+        `tree_member` may be a block, in which case overlapping means being the
+        same block. `tree_member` can also be a node, in which case overlapping
+        means the node is contained in this block.
         '''
         assert self.alive
         
-        if other is None: return False
-        if isinstance(other, Block):
-            return (self is other)
+        if tree_member is None: return False
+        if isinstance(tree_member, Block):
+            return (self is tree_member)
         else:
-            assert isinstance(other, Node)
-            return (self in other)
+            assert isinstance(tree_member, Node)
+            return (self in tree_member)
     
     
     def make_containing_path(self):
@@ -366,7 +366,8 @@ while the index was bigger than the block's length.''')
         }
             
         '''
-        return self[-1].make_containing_path(max_nodes_distance, max_clock_distance)
+        return self[-1].make_containing_path(max_nodes_distance,
+                                             max_clock_distance)
 
     
     
