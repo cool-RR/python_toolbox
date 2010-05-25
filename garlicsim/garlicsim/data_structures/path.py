@@ -28,6 +28,9 @@ __all__ = ['Path', 'PathError', 'PathOutOfRangeError', 'EndNotReached',
 class PathError(GarlicSimException):
     '''Path-related exception.'''
 
+class PathLookupError(PathError, LookupError):
+    '''Path-related exception.'''    
+    
 class PathOutOfRangeError(PathError, IndexError):
     '''Nodes are requested from the path which are out of its range.'''
 
@@ -56,7 +59,6 @@ class Path(object):
     sub-range inside the path. It should be noted that this range will include
     both endpoints.
     '''
-    # todo: add __reversed__ here, maybe also in Block and others
     
     def __init__(self, tree, root=None, decisions={}):
         '''
@@ -132,7 +134,9 @@ class Path(object):
                 raise StopIteration
 
             
-    def __reversed__(self): #todo: may add start and end
+    def __reversed__(self):
+        '''Iterate on the nodes in the path from end to start.'''
+        # todo: may add start and end
         current_node = self[-1]
         while current_node is not None:
             yield current_node
@@ -282,8 +286,8 @@ class Path(object):
         Return the node on the path which is next after `thing`.
         
         If we've come to a fork for which we have no key in the decisions dict,
-        we choose the most recent child node, and update the decisions dict to
-        point to it as well.
+        we choose the first child node in the parent node's `children`, and
+        update the decisions dict to point to it as well.
         '''
         
         # We're dealing with the case of 1 child first, because it's the most
@@ -441,8 +445,9 @@ path, but it's completely empty.''')
         
         assert issubclass(rounding, binary_search.Rounding)
         
-        both = self.__get_node_by_monotonic_function_with_both_rounding(function,
-                                                                        value)        
+        both = \
+             self.__get_node_by_monotonic_function_with_both_rounding(function,
+                                                                      value)
         if end_node is not None:
             new_both = list(both)
             end_clock = end_node.state.clock
@@ -608,6 +613,7 @@ path, but it's completely empty.''')
     
     
     def states(self):
+        '''Iterate over the states in this path.'''
         # todo: Make fancier, like dict.keys in Py3. Probably create as object
         # in __init__
         for node in self:
@@ -615,11 +621,27 @@ path, but it's completely empty.''')
         
             
     def _get_lower_path(self, node):
-
+        '''
+        Get a lower path than this one.
+        
+        "Lower" means that in some point in the past the other path goes through
+        a child node with a lower index number (in `children`) than this path.
+        
+        This method will return the highest path that is just below this path.
+        '''
         return self._get_higher_path(node, reverse=True)
                 
     
     def _get_higher_path(self, node, reverse=False):
+        '''
+        Get a higher path than this one.
+        
+        "Higher" means that in some point in the past the other path goes
+        through a child node with a higher index number (in `children`) than
+        this path.
+        
+        This method will return the lowest path that is just above this path.
+        '''
 
         my_iter = __builtin__.reversed if reverse else iter
         
@@ -640,8 +662,8 @@ path, but it's completely empty.''')
                     kids_to_try = parent.children[my_index+1:]
                     break
         else:
-            raise LookupError # tododoc: find more fitting exception class
-        
+            raise PathLookupError('This path is the %s one.' % \
+                                  ('lowest' if reverse else 'highest'))
         
         for node in my_iter(kids_to_try):
             paths = node.all_possible_paths() # todo: make reversed argument
@@ -649,7 +671,10 @@ path, but it's completely empty.''')
                 assert isinstance(path, Path)
                 if path[-1].state.clock >= wanted_clock:
                     return path
-        raise LookupError
+        
+        raise PathLookupError('''This path is the %s one which extends enough \
+in the future to the clock of the specified node.''' % \
+            ('lowest' if reverse else 'highest'))
                
             
     def __repr__(self):
