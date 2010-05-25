@@ -13,12 +13,22 @@ class State(garlicsim.data_structures.State):
 
     @staticmethod
     def create_diehard(width=45, height=25):
+        '''
+        Create the Diehard Metushelah.
+        
+        It looks like this:
+        
+                   #
+             ##
+              #   ###
+
+        '''
         state = State()
         state.board = Board.create_diehard(width, height)
         return state
     
     @staticmethod
-    def create_root(width=45, height=25, fill="empty"):
+    def create_root(width=45, height=25, fill='empty'):
         state = State()
         state.board = Board(width, height, fill)
         return state

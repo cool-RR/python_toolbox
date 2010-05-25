@@ -13,12 +13,22 @@ class State(garlicsim.data_structures.State):
 
     @staticmethod
     def create_diehard(width=45, height=25):
+        '''
+        Create the Diehard Metushelah.
+        
+        It looks like this:
+        
+                   #
+             ##
+              #   ###
+
+        '''
         state = State()
         state.board = Board.create_diehard(width, height)
         return state
     
     @staticmethod
-    def create_root(width=45, height=25, fill="empty"):
+    def create_root(width=45, height=25, fill='empty'):
         state = State()
         state.board = Board(width, height, fill)
         return state
@@ -55,7 +65,7 @@ class State(garlicsim.data_structures.State):
     def __ne__(self, other):
         return not self.__eq__(other)
     
-    def __sub__(self, other): # experimental, test
+    def __sub__(self, other): # todo: experimental, test
         if isinstance(other, State):
             return sum(
                 (x-y) for (x, y) in itertools.izip(
@@ -180,7 +190,6 @@ def changes(history_browser):
     return counter
 
 def determinism_function(step_profile):
-    '''tododoc'''
     try:
         if step_profile.args[1] is True or step_profile.kwargs['krazy'] is True:
             return garlicsim.misc.settings.UNDETERMINISTIC
