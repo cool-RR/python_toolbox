@@ -53,6 +53,7 @@ class GuiProject(object):
     
     @staticmethod
     def load_from_vars(frame, picklable_vars):
+        '''Take vars that were just unpickled and build a GuiProject from them.'''
 
         simpack, project = (
             picklable_vars['simpack'],
@@ -103,10 +104,10 @@ class GuiProject(object):
         
         #######################################################################
             
-        self.path = None # path
+        self.path = None
         '''The active path.'''
 
-        self.active_node = None # active_node
+        self.active_node = None
         '''The node that is currently displayed onscreen.'''
 
         self.is_playing = False
@@ -160,6 +161,7 @@ class GuiProject(object):
         
         self.emitter_system.top_emitter.emit()
         # Just for good measure, jiggle all the widgets up.
+        
         
     def __init_emitters(self):
         '''Create an emitter system and a bunch of emitters.'''
@@ -291,7 +293,7 @@ class GuiProject(object):
 
     
     def __init_menu_enablings(self):
-        
+        '''Connect the functions that (en/dis)able menus to the emitters.'''
         for menu in [self.frame.menu_bar.node_menu,
                      self.frame.menu_bar.block_menu]:
             
@@ -388,6 +390,7 @@ class GuiProject(object):
 
         
     def update_defacto_playing_speed(self):
+        '''Update the defacto playing speed to the official playing speed.'''
         # In the future this will check if someone's temporarily tweaking the
         # defacto speed, and let that override.
         self.defacto_playing_speed = self.official_playing_speed
@@ -503,7 +506,6 @@ class GuiProject(object):
         
         self.is_playing = False
         
-        # assert self.infinity_job is not None # tododoc: commented out because of End
         if self.infinity_job:
             self.infinity_job.crunching_profile.clock_target = \
                 self.infinity_job.node.state.clock + self.default_buffer

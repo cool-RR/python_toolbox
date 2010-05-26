@@ -60,8 +60,8 @@ class SimpackWxGrokker(object):
            not hasattr(self.simpack_wx, 'settings'):
             
             # The `if` that we did here means: "If there's reason to suspect
-            # that self.simpack.settings is a module that exists but hasn't been
-            # imported yet."
+            # that self.simpack_wx.settings is a module that exists but hasn't
+            # been imported yet."
                 
             settings_module_name = ''.join((
                 self.simpack_wx.__name__,

@@ -33,12 +33,12 @@ class BaseHistoryBrowser(object):
         pass
     
     @abc.abstractmethod
-    def __getitem__(self):
+    def __getitem__(self, i):
         '''Get a state by its position in the timeline.'''
         pass
     
     @abc.abstractmethod
-    def get_state_by_monotonic_function(self):
+    def get_state_by_monotonic_function(self, function, value, rounding):
         '''
         Get a state by specifying a measure function and a desired value.
         

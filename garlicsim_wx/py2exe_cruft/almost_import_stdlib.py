@@ -1,5 +1,14 @@
+# Copyright 2009-2010 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
 """
-tododoc
+"Almost" import the entire Python 2.6 standard library.
+
+This is so py2exe will think we're actually using all of it, and bundle it for
+our app.
+
+Todo: This currently doesn't import submodules which aren't imported by the
+package itself. (For example `email`.)
 """
 
 if False:

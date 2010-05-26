@@ -7,12 +7,7 @@
 
 import os
 import setuptools
-import distutils # Just for deleting the "build" directory.
 
-try:
-    distutils.dir_util.remove_tree('build', verbose=True)
-except Exception:
-    pass
 
 def get_packages():
     return ['garlicsim_lib.' + p for p in

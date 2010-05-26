@@ -11,7 +11,6 @@ import time
 import webbrowser
 
 import pkg_resources
-
 import wx.html
 
 from garlicsim_wx.general_misc import wx_tools
@@ -25,8 +24,7 @@ images_package = __images_package.__name__
 
 
 class AboutDialog(wx.Dialog):
-    '''
-    '''
+    '''An About dialog for GarlicSim.'''
     def __init__(self, frame):
    
         wx.Dialog.__init__(self, frame, title='About GarlicSim',
@@ -134,10 +132,12 @@ class AboutDialog(wx.Dialog):
 
         
     def on_timer(self, event):
+        '''wx.EVT_TIMER handler.'''
         self._rotate_image_hue()
 
         
     def _rotate_image_hue(self):
+        '''Rotate the image's hue by a tiny bit.'''
         new_image = self._original_image.Copy()
         t = time.time()
         new_image.RotateHue((t / 50.) % 1)

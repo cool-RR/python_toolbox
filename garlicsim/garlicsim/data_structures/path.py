@@ -472,7 +472,7 @@ path, but it's completely empty.''')
         
         The rounding option used is `binary_search.BOTH`.
         
-        Note that this function does not let you specify an end node. currently
+        Note that this function does not let you specify an end node. Currently
         we're not optimizing for the case where you have an end node and this
         function might waste resources exploring beyond it.
         '''

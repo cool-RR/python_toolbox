@@ -311,9 +311,9 @@ class Frame(wx.Frame):
                                     ('garlicsim_wx' in main_script)
             
             if not we_are_main_program:
-                dialog = \
+                warning_dialog = \
                     garlicsim_wx.widgets.misc.NotMainProgramWarningDialog(self)
-                if dialog.ShowModal() != wx.ID_YES:
+                if warning_dialog.ShowModal() != wx.ID_YES:
                     return
         
         dialog = garlicsim_wx.widgets.misc.SimpackSelectionDialog(self)

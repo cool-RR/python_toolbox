@@ -112,7 +112,7 @@ class NodeRange(object):
         <garlicsim.data_structures.NodeRange, from node with clock 2 to block
         that ends at clock 102, containing 101 nodes total, at 0x291c550>
         '''
-        return '<%s.%s, from %s %s to %s %s, containing %s nodes total, at %s>' \
+        return '<%s, from %s %s to %s %s, containing %s nodes total, at %s>' \
                % (
                    
                    misc_tools.shorten_class_address(

@@ -2,13 +2,22 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-tododoc
+Defines the NotMainProgramWarningDialog class.
+
+See its documentation for more info.
 '''
+
 
 import wx
 
 
 class NotMainProgramWarningDialog(wx.MessageDialog): 
+    '''
+    Dialog warning that garlicsim_wx is not the main program.
+    
+    This is something that can cause problems in several operations, like load/save, so we warn the user about it.
+    '''
+    
     
     def __init__(self, frame):
    

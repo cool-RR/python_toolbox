@@ -1,5 +1,5 @@
-# Copyright 2009-2010 Ram Rachum.
-# This program is distributed under the LGPL2.1 license.
+# Copyright 2009-2010 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
 
 '''A script for starting GarlicSim from an executable.'''
 

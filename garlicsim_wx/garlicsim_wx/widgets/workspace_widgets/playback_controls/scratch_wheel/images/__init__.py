@@ -17,7 +17,7 @@ N_BLURRED_GEAR_FRAMES = 6
 
 @caching.cache
 def get_image_raw(i):
-    '''Get image number `i` of the gear, when 0 <= i <= (N_FRAMES - 1).tododoc'''
+    '''Get image number `i` of the gear, when 0 <= i <= (N_FRAMES - 1).'''
     
     assert (0 <= i <= N_FRAMES - 1) and isinstance(i, int)
     
@@ -36,11 +36,11 @@ def get_image_raw(i):
 @caching.cache
 def get_blur_image_raw(i):
     '''
-    Get image number `i` of the blurred gear.tododoc
+    Get image number `i` of the blurred gear.
 
     The higher the `i`, the blurrier is the image.
     
-    0 <= i <= (N_BLURRED_GEAR_FRAMES - 1).
+    0 <= i <= (N_BLURRED_GEAR_FRAMES - 1)
     '''
     
     assert isinstance(i, int) and 0 <= i <= (N_BLURRED_GEAR_FRAMES - 1)
@@ -59,7 +59,12 @@ def get_blur_image_raw(i):
 
 @caching.cache
 def get_blurred_gear_image(i, j):
-    '''tododoc'''
+    '''
+    Get image number `i` of the gear, with motion blur number `j`.
+    
+    0 <= i <= (N_FRAMES - 1)
+    0 <= j <= (N_BLURRED_GEAR_FRAMES - 1)
+    '''
     image = get_image_raw(i)
     blur = get_blur_image_raw(j)
     bitmap = wx.EmptyBitmap(*get_image_size())
@@ -73,7 +78,7 @@ def get_blurred_gear_image(i, j):
     
 
 def get_blurred_gear_image_by_ratio(i, r):
-    '''Get the image of the blurred gear by specifying a ratio from 0 to 1.tododoc'''
+    '''Get the image of the blurred gear by specifying a ratio from 0 to 1.'''
     assert 0 <= r <= 1
     return get_blurred_gear_image(
         i,

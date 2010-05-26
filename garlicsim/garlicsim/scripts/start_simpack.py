@@ -78,7 +78,7 @@ def start_simpack(containing_folder, name):
         else:
             message = 'use only numbers, letters and underscores'
         raise Exception("%r is not a valid simpack name. Please %s." %
-                        (name, app_or_project, message))
+                        (name, message))
     folder = os.path.join(containing_folder, name)
     
     os.mkdir(folder)

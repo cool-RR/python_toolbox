@@ -58,8 +58,10 @@ class ScratchWheel(wx.Panel):
         # Set to -1 to make sure first drawing won't fuck up
         
         self.current_blur_alpha = 0.
+        '''The current level of motion blur. Between 0 and 1.'''
         
         self.current_bitmap = None
+        '''Current bitmap of the wheel.'''
         
         self.image_size = images.get_image_size()
         '''The size of the gear image.'''
@@ -119,10 +121,6 @@ class ScratchWheel(wx.Panel):
                   self.on_motion_blur_update_timer,
                   self.motion_blur_update_timer)
         
-        # todo: I don't think ThreadTimer should be used here. But for some
-        # reason wx.Timer didn't work.
-        # Update: Possibly it didn't work because I forgot to put the self
-        # argument to wx.Timer?
         
         self.recalculation_flag = False
         '''Flag saying whether the scratch wheel needs to recalculate.'''

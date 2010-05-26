@@ -31,7 +31,7 @@ for path_to_add in paths_to_add:
         sys.path.append(path_to_add)
 
 def cute_find_module(module_name):
-    '''tododoc'''
+    '''Find the path to a module by its name.'''
     current_module_name = module_name
     current_paths = sys.path
 

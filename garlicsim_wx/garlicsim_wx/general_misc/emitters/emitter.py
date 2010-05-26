@@ -201,7 +201,7 @@ class Emitter(object):
         '''Remove an output from this emitter.'''
         assert isinstance(thing, Emitter) or callable(thing)
         self._outputs.remove(thing)
-        if isinstance(thing, emitter):
+        if isinstance(thing, Emitter):
             thing._inputs.remove(self)
         self._recalculate_total_callable_outputs_recursively()
         

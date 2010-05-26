@@ -9,21 +9,12 @@ import os.path
 import sys
 import glob
 import setuptools
-import distutils # Just for deleting the "build" directory.
 
 
 if 'py2exe' in sys.argv:
-    # We have a separate file for doing stuff that is needed when packaaging
-    # with py2exe.
+    # We have a separate file for doing stuff that is needed when packaging with
+    # py2exe.
     import py2exe_cruft.setup_extension
-
-
-# Automatically deleting the build directory, in case one was left over from
-# last time.
-try:
-    distutils.dir_util.remove_tree('build', verbose=True)
-except Exception:
-    pass
 
 
 def get_garlicsim_wx_packages():

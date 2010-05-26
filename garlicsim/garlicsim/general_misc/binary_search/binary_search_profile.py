@@ -41,7 +41,7 @@ class BinarySearchProfile(object):
         '''
 
         if both is None:
-            both = searcher(sequence, function, value, BOTH)
+            both = binary_search(sequence, function, value, BOTH)
         
         self.results = {}
         '''
