@@ -28,7 +28,10 @@ class StateReprViewer(wx.Panel, WorkspaceWidget):
             self,
             style=wx.TE_MULTILINE | wx.NO_BORDER
         )
-        font = wx.Font(9, wx.DEFAULT, wx.NORMAL, wx.BOLD, False,
+        
+        font_size = 12 if wx.Platform == '__WXMAC__' else 9
+        
+        font = wx.Font(font_size, wx.DEFAULT, wx.NORMAL, wx.BOLD, False,
                        u'Courier New')
         self.text_ctrl.SetFont(font)
         
