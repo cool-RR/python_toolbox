@@ -87,6 +87,7 @@ class Frame(wx.Frame):
 
         
     def __init_menus(self):
+        '''Initialize the menu bar and the context menu.'''
         menu_bar = self.menu_bar = garlicsim_wx.misc.MenuBar(self)
         self.SetMenuBar(menu_bar)
         self._recalculate_all_menus()
@@ -96,8 +97,9 @@ class Frame(wx.Frame):
                 garlicsim_wx.misc.menu_bar.block_menu.BlockMenu(self)
             ])
         
-    def _recalculate_all_menus(self):
         
+    def _recalculate_all_menus(self):
+        '''Recalculate all the menus, determining in which state they'll be.'''
         try_recalculate = lambda thing: \
             thing._recalculate() if hasattr(thing, '_recalculate') else None
         
@@ -116,11 +118,12 @@ class Frame(wx.Frame):
 
         
     def __init_key_handlers(self):
+        '''Initialize key shortcuts.'''
         
         self.Bind(wx.EVT_KEY_DOWN, self.on_key_down)
         
         def on_home():
-            
+            '''Go to root node.'''
             if self.gui_project is not None and \
                self.gui_project.path is not None:
                 
@@ -131,7 +134,7 @@ class Frame(wx.Frame):
 
                 
         def on_end():
-            
+            '''Go to leaf node.'''
             if self.gui_project is not None and \
                self.gui_project.path is not None:
                 
@@ -142,6 +145,7 @@ class Frame(wx.Frame):
 
                 
         def on_up():
+            '''Go one path upwards.'''
             if self.gui_project.path and self.gui_project.active_node:
                 try:
                     new_path = self.gui_project.path._get_lower_path(
@@ -153,16 +157,10 @@ class Frame(wx.Frame):
                 self.gui_project.path = new_path
                 self.gui_project.path_changed_emitter.emit()
                 self.gui_project.set_pseudoclock(pseudoclock)
-        
-        if self.gui_project is not None and \
-           self.gui_project.path is not None:
-            
-            parent = self.gui_project.active_node.parent
-            if parent is not None:
-                self.gui_project.set_active_node(parent)
 
                 
         def on_down():
+            '''Go one path downwards.'''
             if self.gui_project.path and self.gui_project.active_node:
                 try:
                     new_path = self.gui_project.path._get_higher_path(
@@ -174,17 +172,10 @@ class Frame(wx.Frame):
                 self.gui_project.path = new_path
                 self.gui_project.path_changed_emitter.emit()
                 self.gui_project.set_pseudoclock(pseudoclock)
-        
-        if self.gui_project is not None and \
-           self.gui_project.path is not None:
-            
-            parent = self.gui_project.active_node.parent
-            if parent is not None:
-                self.gui_project.set_active_node(parent)
                 
                 
         def on_left():
-            
+            '''Go one node backwards.'''
             if self.gui_project is not None and \
                self.gui_project.active_node is not None:
                 
@@ -194,7 +185,7 @@ class Frame(wx.Frame):
         
                     
         def on_right():
-            
+            '''Go one node forward.'''
             if self.gui_project is not None and \
                self.gui_project.path is not None and \
                self.gui_project.active_node is not None:
@@ -208,7 +199,7 @@ class Frame(wx.Frame):
             
                 
         def on_command_left():
-            
+            '''Go five nodes backwards.'''
             if self.gui_project is not None and \
                self.gui_project.active_node is not None:
                 
@@ -218,7 +209,7 @@ class Frame(wx.Frame):
         
                     
         def on_command_right():
-            
+            '''Go five nodes forward.'''
             if self.gui_project is not None and \
                self.gui_project.path is not None and \
                self.gui_project.active_node is not None:
@@ -233,7 +224,7 @@ class Frame(wx.Frame):
         
                 
         def on_page_up():
-            
+            '''Go 20 nodes backwards.'''
             if self.gui_project is not None and \
                self.gui_project.active_node is not None:
                 
@@ -243,7 +234,7 @@ class Frame(wx.Frame):
         
                     
         def on_page_down():
-            
+            '''Go 20 nodes forward.'''
             if self.gui_project is not None and \
                self.gui_project.path is not None and \
                self.gui_project.active_node is not None:
@@ -258,11 +249,13 @@ class Frame(wx.Frame):
 
                 
         def on_space():
+            '''Toggle onscreen playback.'''
             if self.gui_project:
                 self.gui_project.toggle_playing()
         
                 
         def on_return():
+            '''Finalize the active node, if it's in editing.'''
             if self.gui_project and self.gui_project.active_node.still_in_editing:
                 self.gui_project.finalize_active_node()
 
@@ -286,21 +279,23 @@ class Frame(wx.Frame):
             
         
     def on_close(self, event):
-        '''Close the application window.'''
+        '''Close the frame.'''
         if self.gui_project:
             self.gui_project.stop_playing()
         self.aui_manager.UnInit()
         self.Destroy()
         garlicsim_wx.general_misc.cute_base_timer.CuteBaseTimer.\
-                    shut_off_timers_by_frame(self)
+                    stop_timers_by_frame(self)
         event.Skip()        
         self.background_timer.stop()
 
+        
     def finalize_active_node(self, e=None):
         '''Finalize editing of the active node in the active gui project.'''
         assert self.gui_project
         return self.gui_project.finalize_active_node()
 
+    
     def on_new(self, event=None):
         '''Create a new gui project.'''        
         
@@ -342,10 +337,16 @@ class Frame(wx.Frame):
             return
             
     def _new_gui_project_from_simpack(self, simpack):
+        '''
+        Start a new gui project, given the simpack to start it with.
+        
+        Internal use.
+        '''
         assert self.gui_project is None # tododoc
         gui_project = GuiProject(simpack, self)
         self.__setup_gui_project(gui_project)
 
+        
     def on_exit_menu_button(self, event):
         '''Exit menu button handler.'''
         self._post_close_event()
@@ -381,6 +382,11 @@ class Frame(wx.Frame):
         return nodes_added
     
     def __setup_gui_project(self, gui_project):
+        '''
+        Setup a newly-created gui project.
+        
+        Internal use.
+        '''
         
         self.gui_project = gui_project
         
@@ -548,9 +554,14 @@ class Frame(wx.Frame):
         
     
     def _open_gui_project_from_path(self, path):
+        '''
+        Open a gui project saved to a file specified by `path`.
+        
+        Internal use.
+        '''
         
         try:
-            with file(path, 'r') as my_file:
+            with open(path, 'rb') as my_file:
                 gui_project_vars = pickle_module.load(my_file)
                 
         except Exception, exception:
@@ -566,12 +577,13 @@ class Frame(wx.Frame):
             try:
                 gui_project = GuiProject.load_from_vars(self, gui_project_vars)
             except Exception, exception:
-                dialog = wx.MessageDialog(
+                error_dialog = wx.MessageDialog(
                     self,
                     'Error opening file:\n' + traceback.format_exc(),
                     style=(wx.OK | wx.ICON_ERROR)
                 )
-                dialog.ShowModal()
+                error_dialog.ShowModal()
+                error_dialog.Destroy()
                 
             self.__setup_gui_project(gui_project)
 
@@ -592,16 +604,18 @@ class Frame(wx.Frame):
             path = save_dialog.GetPath()
 
             try:
-                with file(path, 'w') as my_file:
+                with open(path, 'wb') as my_file:
                     picklable_vars = self.gui_project.__getstate__()
-                    pickle_module.dump(picklable_vars, my_file)
+                    pickle_module.dump(picklable_vars, my_file, protocol=2)
 
-            except IOError, error:
+            except Exception, exception:
                 error_dialog = wx.MessageDialog(
                     self,
-                    'Error saving file\n' + str(error)
+                    'Error saving to file:\n' + traceback.format_exc(),
+                    style=(wx.OK | wx.ICON_ERROR)
                 )
                 error_dialog.ShowModal()
+                error_dialog.Destroy()
             
             
         save_dialog.Destroy()
@@ -617,6 +631,7 @@ class Frame(wx.Frame):
     
     
     def on_key_down(self, event):
+        '''wx.EVT_KEY_DOWN handler.'''
         key = wx_tools.Key.get_from_key_event(event)
         handler = self.key_handlers.get(key, None)
         if handler:
@@ -626,6 +641,7 @@ class Frame(wx.Frame):
             
             
     def on_context_menu(self, event):
+        '''wx.EVT_CONTEXT_MENU handler.'''
         abs_position = event.GetPosition()
         if abs_position == wx.DefaultPosition:
             position = (0, 0)

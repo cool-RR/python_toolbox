@@ -15,7 +15,11 @@ import garlicsim_wx
 
 
 class App(wx.PySimpleApp):
-    '''A garlicsim_wx app.'''
+    '''
+    A garlicsim_wx App.
+    
+    The App is responsible for spawning a Frame.
+    '''
     # todo: need to think if i allow frames with no app. on one hand good idea,
     # to allow people to start a garlicsim_wx frame in their own app. on other
     # hand frames will need to know how to start another frame.

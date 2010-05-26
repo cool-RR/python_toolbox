@@ -1,18 +1,34 @@
-import wx
+# Copyright 2009-2010 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
 
-class CuteMenu(wx.Menu): # todo: make abc that enforces _build
+'''
+Defines the CuteMenu class.
+
+See its documentation for more information.
+'''
+
+import wx
+from garlicsim.general_misc.third_party import abc
+
+
+class CuteMenu(wx.Menu):
+    '''Menu class that allows easy adding of menus.'''
     
-    """
-    def __init__(self):
-        if not getattr(self, '_CuteMenu__parent_init_called', False):
-            super(CuteMenu, self).__init__()
-        self.__parent_init_called = True
-    """
+    __metaclass__ = abc.ABCMeta
         
-    @staticmethod
-    def add_menus(menus):#, title='', style=0):
+    @abc.abstractmethod
+    def _build(self):
+        '''Build the menu, populating it with items and/or submenus.'''
     
-        big_menu = CuteMenu()#title, style)
+    @staticmethod
+    def add_menus(menus):
+        '''
+        Build a menu from a sequence of smaller menus.
+        
+        A separator will come between the items of one menu to the the items of
+        the next.
+        '''
+        big_menu = UnbuildableCuteMenu()
     
         first_run = True
     
@@ -28,8 +44,15 @@ class CuteMenu(wx.Menu): # todo: make abc that enforces _build
                 first_run = False
                 
             type(menu).__dict__['_build'](big_menu)
-            
-            #for item in menu.GetMenuItems():
-                #big_menu.AppendItem(item)
                 
         return big_menu
+    
+    
+class UnbuildableCuteMenu(CuteMenu):
+    '''
+    CuteMenu that can't be built.
+    
+    This is useful when creating a Menu with `CuteMenu.add_menus`.
+    '''
+    def _build(self):
+        raise Exception("Can't _build an UnbuildableCuteMenu.")

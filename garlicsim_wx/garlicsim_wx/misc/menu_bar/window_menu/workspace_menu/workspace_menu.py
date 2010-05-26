@@ -6,7 +6,12 @@ class WorkspaceMenu(CuteMenu):
     def __init__(self, frame):
         super(WorkspaceMenu, self).__init__()
         self.frame = frame
+        self._build()
         
+        
+    def _build(self):
+
+        frame = self.frame
         
         self.save_workspace_button = self.Append(
             -1,

@@ -34,7 +34,7 @@ class State(object):
 State object whose class is `garlicsim.data_structures.State`. This is \
 unallowed; This class should be used as a base class for State classes in \
 simpacks.''')
-        return super(type, cls).__new__(cls, *args, **kwargs)
+        return super(type, cls).__new__(cls)
     
     
     def __repr__(self):
