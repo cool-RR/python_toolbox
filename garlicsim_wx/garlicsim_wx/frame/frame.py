@@ -57,10 +57,10 @@ class Frame(wx.Frame):
         self.state_repr_viewer = None
         
         self.aui_manager = garlicsim_wx.misc.aui.AuiManager(self)
+        '''The aui manager, which manages the workspace widgets.'''
                 
         self.gui_project = None
-        
-        # tododoc properties here
+        '''The current gui project.'''
         
         self.CreateStatusBar()
         
@@ -342,7 +342,7 @@ class Frame(wx.Frame):
         
         Internal use.
         '''
-        assert self.gui_project is None # tododoc
+        assert self.gui_project is None
         gui_project = GuiProject(simpack, self)
         self.__setup_gui_project(gui_project)
 

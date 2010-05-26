@@ -62,7 +62,7 @@ class State(garlicsim.data_structures.State):
         
         return my_state
 
-    create_messy_root = create_root # tododoc: remove when there's dialog
+    
     
     def step(self, t=None):
         '''Step function.'''

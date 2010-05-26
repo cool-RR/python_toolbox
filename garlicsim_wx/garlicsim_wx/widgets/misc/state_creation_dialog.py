@@ -18,7 +18,7 @@ class StateCreationDialog(CuteDialog): # make base class
     
     This is a generic one, used if the simpack doesn't define its own.
     '''
-    def __init__(self, frame): # tododoc: fuck out all the plain/random
+    def __init__(self, frame):
    
         CuteDialog.__init__(self, frame, title='Creating a root state')
         
@@ -28,12 +28,19 @@ class StateCreationDialog(CuteDialog): # make base class
 
         vbox = wx.BoxSizer(wx.VERTICAL)
         self.messy_check_box = messy_check_box = wx.CheckBox(self, -1, 'Messy' )
-        # tododoc: make tooltip
+        tool_tip_string = '''Make a messy chaotic state, useful for \
+test-driving the simpack.'''
         messy_check_box.SetValue(True)
         if State.create_root is None or State.create_messy_root is None:
             messy_check_box.Disable()
             if State.create_messy_root is None:
                 messy_check_box.SetValue(False)
+                tool_tip_string += ''' Not available because the simpack \
+doesn't define `create_messy_root`.'''
+            else:
+                tool_tip_string += ''' Can't be canceled because the simpack \
+doesn't define `create_root`.'''
+        messy_check_box.SetToolTipString(tool_tip_string)
         
         vbox.Add(messy_check_box, 0, wx.ALL, 10)
         

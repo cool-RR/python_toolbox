@@ -194,7 +194,6 @@ def changes(history_browser):
     return counter
 
 def determinism_function(step_profile):
-    '''tododoc'''
     try:
         if step_profile.args[1] is True or step_profile.kwargs['krazy'] is True:
             return garlicsim.misc.settings.UNDETERMINISTIC

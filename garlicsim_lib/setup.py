@@ -48,5 +48,6 @@ setuptools.setup(
     long_description = my_long_description,
     classifiers = my_classifiers,
     include_package_data = True,
+    zip_safe=False,
 )
 
