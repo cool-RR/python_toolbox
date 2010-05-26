@@ -12,7 +12,8 @@ import wx
 from garlicsim_wx.general_misc.third_party import aui
 from garlicsim_wx.general_misc import wx_tools
 
-# tododoc: consider move to differnt module the overriding
+# Imports for my copy-paste-modify overriding of some methods:
+# # # #
 import types
 from garlicsim_wx.general_misc.third_party.aui.aui_utilities import (
     BitmapFromBits, StepColour, ChopText, GetBaseColour, DrawGradientRectangle,
@@ -54,7 +55,8 @@ class AuiDockArt(aui.AuiDefaultDockArt):
 
         
     def DrawCaption(self, dc, window, text, rect, pane):
-        """tododoc be careful when aui updates
+        # A copy-paste-modify override. Changes not marked, you can diff.
+        """
         Draws the text in the pane caption.
 
         :param `dc`: a `wx.DC` device context;
@@ -62,7 +64,7 @@ class AuiDockArt(aui.AuiDefaultDockArt):
         :param `text`: the text to be displayed;
         :param `rect`: the pane caption rectangle;
         :param `pane`: the pane for which the text is drawn.
-        """        
+        """
 
         dc.SetPen(wx.TRANSPARENT_PEN)
         dc.SetFont(self._caption_font)
@@ -107,6 +109,7 @@ class AuiDockArt(aui.AuiDefaultDockArt):
 
 
     def SetColor(self, id, colour):
+        # A copy-paste-modify override. Changes marked with "# IS A CHANGE"
         """
         Sets the colour of a certain setting.
 
@@ -133,7 +136,7 @@ class AuiDockArt(aui.AuiDefaultDockArt):
                 # No custom bitmaps for the pane close button
                 # Change the MAC close bitmap colour
                 pass # # self._inactive_close_bitmap = DrawMACCloseButton(wx.WHITE, colour)
-                # CHANGE IS HERE tododoc
+                # IS A CHANGE
 
         elif id == AUI_DOCKART_INACTIVE_CAPTION_GRADIENT_COLOUR:
             self._inactive_caption_gradient_colour = colour
@@ -145,7 +148,7 @@ class AuiDockArt(aui.AuiDefaultDockArt):
                 # No custom bitmaps for the pane close button
                 # Change the MAC close bitmap colour
                 pass # self._active_close_bitmap = DrawMACCloseButton(wx.WHITE, colour)
-                # CHANGE IS HERE tododoc
+                # IS A CHANGE
                 
         elif id == AUI_DOCKART_ACTIVE_CAPTION_GRADIENT_COLOUR:
             self._active_caption_gradient_colour = colour

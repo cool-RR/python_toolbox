@@ -1,3 +1,12 @@
+# Copyright 2009-2010 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Defines the MenuBar class.
+
+See its documentation for more info.
+'''
+
 import wx
 
 from file_menu import FileMenu
@@ -8,7 +17,9 @@ from block_menu import BlockMenu
 from window_menu import WindowMenu
 from help_menu import HelpMenu
 
+
 class MenuBar(wx.MenuBar):
+    '''The main menubar of garlicsim_wx.'''
     def __init__(self, frame):
         super(MenuBar, self).__init__()
         self.frame = frame

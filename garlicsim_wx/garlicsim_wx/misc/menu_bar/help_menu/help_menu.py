@@ -1,3 +1,12 @@
+# Copyright 2009-2010 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Defines the HelpMenu class.
+
+See its documentation for more info.
+'''
+
 import wx
 
 from garlicsim_wx.general_misc.cute_menu import CuteMenu
@@ -8,6 +17,7 @@ from online_resources_menu import OnlineResourcesMenu
 
 
 class HelpMenu(CuteMenu):
+    '''Menu for getting help on GarlicSim.'''
     def __init__(self, frame):
         super(HelpMenu, self).__init__()
         self.frame = frame

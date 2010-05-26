@@ -1,3 +1,12 @@
+# Copyright 2009-2010 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Defines the OnlineResourcesMenu class.
+
+See its documentation for more info.
+'''
+
 
 import webbrowser
 
@@ -5,7 +14,9 @@ import wx
 
 from garlicsim_wx.general_misc.cute_menu import CuteMenu
 
+
 class OnlineResourcesMenu(CuteMenu):
+    '''Menu for accessing online resources in the web browser.'''
     def __init__(self, frame):
         super(OnlineResourcesMenu, self).__init__()
         self.frame = frame

@@ -1,8 +1,18 @@
+# Copyright 2009-2010 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Defines the WorkspaceMenu class.
+
+See its documentation for more info.
+'''
+
 import wx
 
 from garlicsim_wx.general_misc.cute_menu import CuteMenu
 
 class WorkspaceMenu(CuteMenu):
+    '''Menu for manipulating the workspace.'''
     def __init__(self, frame):
         super(WorkspaceMenu, self).__init__()
         self.frame = frame

@@ -10,12 +10,13 @@ See its documentation for more info.
 import wx
 from garlicsim_wx.general_misc.third_party import aui
 
-
-# tododoc: move overriding of `DrawTab` to another module to get rid of these
+# Imports for my copy-paste-modify overriding of some methods:
+# # # #
 from garlicsim_wx.general_misc.third_party.aui.aui_utilities import (
     BitmapFromBits, StepColour, IndentPressedBitmap, ChopText, GetBaseColour,
     DrawMACCloseButton, LightColour, TakeScreenShot, CopyAttributes)
 from garlicsim_wx.general_misc.third_party.aui.aui_constants import *
+# # # #
 
 
 class AuiTabArt(aui.AuiDefaultTabArt):
@@ -29,6 +30,7 @@ class AuiTabArt(aui.AuiDefaultTabArt):
         self.SetSelectedFont(wx.Font(font_size, wx.FONTFAMILY_DEFAULT, wx.NORMAL, wx.NORMAL))
         self.SetMeasuringFont(wx.Font(font_size, wx.FONTFAMILY_DEFAULT, wx.NORMAL, wx.NORMAL))
  
+        
     def Clone(self):
 
         art = type(self)()
@@ -39,9 +41,11 @@ class AuiTabArt(aui.AuiDefaultTabArt):
         art = aui.aui_utilities.CopyAttributes(art, self)
         return art
 
+    
     def DrawTab(self, dc, wnd, page, in_rect, close_button_state, paint_control=False):
+        # A copy-paste-modify override. Changes marked with "# IS A CHANGE"
         """
-        Draws a single tab.tododoc
+        Draws a single tab.
 
         :param `dc`: a `wx.DC` device context;
         :param `wnd`: a `wx.Window` instance object;
@@ -246,7 +250,7 @@ class AuiTabArt(aui.AuiDefaultTabArt):
         
         draw_text = ChopText(dc, caption, tab_width - (text_offset-tab_x) - close_button_width)
 
-        ypos = drawn_tab_yoff + (drawn_tab_height)/2 - (texty/2) + 1 # tododoc: HERE'S THE CHANGE
+        ypos = drawn_tab_yoff + (drawn_tab_height)/2 - (texty/2) + 1 # IS A CHANGE
 
         offset_focus = text_offset     
         if control is not None:

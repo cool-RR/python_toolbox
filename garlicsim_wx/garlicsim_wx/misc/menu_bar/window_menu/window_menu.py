@@ -1,3 +1,12 @@
+# Copyright 2009-2010 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Defines the WindowMenu class.
+
+See its documentation for more info.
+'''
+
 import wx
 
 from garlicsim_wx.general_misc.cute_menu import CuteMenu
@@ -6,6 +15,7 @@ from workspace_menu import WorkspaceMenu
 
 
 class WindowMenu(CuteMenu):
+    '''Menu for controlling workspace widgets.'''
     def __init__(self, frame):
         super(WindowMenu, self).__init__()
         self.frame = frame

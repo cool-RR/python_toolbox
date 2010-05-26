@@ -1,8 +1,18 @@
+# Copyright 2009-2010 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Defines the ExportMenu class.
+
+See its documentation for more info.
+'''
+
 import wx
 
 from garlicsim_wx.general_misc.cute_menu import CuteMenu
 
 class ExportMenu(CuteMenu):
+    '''Menu for exporting simulation data to non-GarlicSim formats.'''
     def __init__(self, frame):
         super(ExportMenu, self).__init__()
         self.frame = frame

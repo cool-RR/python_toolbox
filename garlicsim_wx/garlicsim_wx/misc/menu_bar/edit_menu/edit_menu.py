@@ -1,8 +1,19 @@
+# Copyright 2009-2010 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Defines the EditMenu class.
+
+See its documentation for more info.
+'''
+
 import wx
 
 from garlicsim_wx.general_misc.cute_menu import CuteMenu
 
+
 class EditMenu(CuteMenu):
+    '''Menu for editing: Undo, cut, copy, paste etc.'''
     def __init__(self, frame):
         super(EditMenu, self).__init__()
         self.frame = frame

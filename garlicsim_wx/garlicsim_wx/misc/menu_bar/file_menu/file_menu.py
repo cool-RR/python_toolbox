@@ -1,3 +1,12 @@
+# Copyright 2009-2010 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Defines the FileMenu class.
+
+See its documentation for more info.
+'''
+
 import wx
 
 from garlicsim_wx.general_misc.cute_menu import CuteMenu
@@ -6,6 +15,7 @@ from export_menu import ExportMenu
 
 
 class FileMenu(CuteMenu):
+    '''Menu for file actions: New, open, save...'''
     def __init__(self, frame):
         super(FileMenu, self).__init__()
         self.frame = frame
