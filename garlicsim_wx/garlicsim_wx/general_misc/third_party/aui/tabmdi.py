@@ -585,10 +585,10 @@ class AuiMDIChildFrame(wx.PyPanel):
 
 class AuiMDIClientWindow(auibook.AuiNotebook):
 
-    def __init__(self, parent, style=0):
+    def __init__(self, parent, agwStyle=0):
 
         auibook.AuiNotebook.__init__(self, parent, wx.ID_ANY, wx.Point(0, 0), wx.Size(100, 100),
-                                     AUI_NB_DEFAULT_STYLE|wx.NO_BORDER)
+                                     agwStyle=AUI_NB_DEFAULT_STYLE|wx.NO_BORDER)
 
         caption_icon_size = wx.Size(wx.SystemSettings.GetMetric(wx.SYS_SMALLICON_X),
                                     wx.SystemSettings.GetMetric(wx.SYS_SMALLICON_Y))

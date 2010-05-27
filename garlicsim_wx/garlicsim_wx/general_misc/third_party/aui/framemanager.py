@@ -13,7 +13,7 @@
 # Python Code By:
 #
 # Andrea Gavana, @ 23 Dec 2005
-# Latest Revision: 19 Apr 2010, 20.00 GMT
+# Latest Revision: 28 Apr 2010, 14.00 GMT
 #
 # For All Kind Of Problems, Requests Of Enhancements And Bug Reports, Please
 # Write To Me At:
@@ -3997,6 +3997,7 @@ class AuiManager(wx.EvtHandler):
          ``AUI_MGR_WHIDBEY_DOCKING_GUIDES``   Use the new Whidbey-style bitmaps as docking guides
          ``AUI_MGR_SMOOTH_DOCKING``           Performs a "smooth" docking of panes (a la PyQT)
          ``AUI_MGR_USE_NATIVE_MINIFRAMES``    Use miniframes with native caption bar as floating panes instead or custom drawn caption bars (forced on wxMac)
+         ``AUI_MGR_AUTONB_NO_CAPTION``        Panes that merge into an automatic notebook will not have the pane caption visible
          ==================================== ==================================
 
          Default value for `agwFlags` is:
@@ -4059,7 +4060,10 @@ class AuiManager(wx.EvtHandler):
         self._sliding_frame = None
 
         self._autoNBTabArt = tabart.AuiDefaultTabArt()
-        
+        self._autoNBStyle = AUI_NB_DEFAULT_STYLE | AUI_NB_BOTTOM | \
+                            AUI_NB_SUB_NOTEBOOK | AUI_NB_TAB_EXTERNAL_MOVE
+        self._autoNBStyle -= AUI_NB_DRAW_DND_TAB
+
         if managed_window:
             self.SetManagedWindow(managed_window)
 
@@ -4084,6 +4088,7 @@ class AuiManager(wx.EvtHandler):
         self.Bind(EVT_AUI_RENDER, self.OnRender)
         self.Bind(EVT_AUI_FIND_MANAGER, self.OnFindManager)
         self.Bind(EVT_AUI_PANE_MIN_RESTORE, self.OnRestoreMinimizedPane)
+        self.Bind(EVT_AUI_PANE_DOCKED, self.OnPaneDocked)
 
         self.Bind(auibook.EVT_AUINOTEBOOK_BEGIN_DRAG, self.OnTabBeginDrag)
         self.Bind(auibook.EVT_AUINOTEBOOK_PAGE_CLOSE, self.OnTabPageClose)
@@ -4282,6 +4287,7 @@ class AuiManager(wx.EvtHandler):
          ``AUI_MGR_WHIDBEY_DOCKING_GUIDES``   Use the new Whidbey-style bitmaps as docking guides        
          ``AUI_MGR_SMOOTH_DOCKING``           Performs a "smooth" docking of panes (a la PyQT)
          ``AUI_MGR_USE_NATIVE_MINIFRAMES``    Use miniframes with native caption bar as floating panes instead or custom drawn caption bars (forced on wxMac)
+         ``AUI_MGR_AUTONB_NO_CAPTION``        Panes that merge into an automatic notebook will not have the pane caption visible
          ==================================== ==================================
 
          :note: If using the ``AUI_MGR_USE_NATIVE_MINIFRAMES``, double-clicking on a
@@ -4721,8 +4727,10 @@ class AuiManager(wx.EvtHandler):
         # Add new item to notebook
         target.NotebookPage(paneInfo.notebook_id)
 
-        # Update for position and _notebooks in case we have another target
-        self.Update()
+        # we also want to remove our captions sometimes
+        if not self.RemoveAutoNBCaption(target):
+            # Update for position and _notebooks in case we have another target
+            self.Update()
         
         return True
 
@@ -5004,10 +5012,7 @@ class AuiManager(wx.EvtHandler):
         top of another pane.
         """
 
-        agwStyle = AUI_NB_DEFAULT_STYLE | AUI_NB_BOTTOM | \
-                   AUI_NB_SUB_NOTEBOOK | AUI_NB_TAB_EXTERNAL_MOVE
-        agwStyle -= AUI_NB_DRAW_DND_TAB
-        notebook = auibook.AuiNotebook(self._frame, -1, wx.Point(0, 0), wx.Size(0, 0), agwStyle=agwStyle)
+        notebook = auibook.AuiNotebook(self._frame, -1, wx.Point(0, 0), wx.Size(0, 0), agwStyle=self._autoNBStyle)
 
         # This is so we can get the tab-drag event.
         notebook.GetAuiManager().SetMasterManager(self)
@@ -5037,6 +5042,59 @@ class AuiManager(wx.EvtHandler):
 
         return self._autoNBTabArt        
         
+
+    def SetAutoNotebookStyle(self, agwStyle):
+        """
+        Sets the default AGW-specific window style for automatic notebooks.
+
+        :param `agwStyle`: the underlying L{AuiNotebook} window style.
+         This can be a combination of the following bits:
+        
+         ==================================== ==================================
+         Flag name                            Description
+         ==================================== ==================================
+         ``AUI_NB_TOP``                       With this style, tabs are drawn along the top of the notebook
+         ``AUI_NB_LEFT``                      With this style, tabs are drawn along the left of the notebook. Not implemented yet.
+         ``AUI_NB_RIGHT``                     With this style, tabs are drawn along the right of the notebook. Not implemented yet.
+         ``AUI_NB_BOTTOM``                    With this style, tabs are drawn along the bottom of the notebook.
+         ``AUI_NB_TAB_SPLIT``                 Allows the tab control to be split by dragging a tab
+         ``AUI_NB_TAB_MOVE``                  Allows a tab to be moved horizontally by dragging
+         ``AUI_NB_TAB_EXTERNAL_MOVE``         Allows a tab to be moved to another tab control
+         ``AUI_NB_TAB_FIXED_WIDTH``           With this style, all tabs have the same width
+         ``AUI_NB_SCROLL_BUTTONS``            With this style, left and right scroll buttons are displayed
+         ``AUI_NB_WINDOWLIST_BUTTON``         With this style, a drop-down list of windows is available
+         ``AUI_NB_CLOSE_BUTTON``              With this style, a close button is available on the tab bar
+         ``AUI_NB_CLOSE_ON_ACTIVE_TAB``       With this style, a close button is available on the active tab
+         ``AUI_NB_CLOSE_ON_ALL_TABS``         With this style, a close button is available on all tabs
+         ``AUI_NB_MIDDLE_CLICK_CLOSE``        Allows to close AuiNotebook tabs by mouse middle button click
+         ``AUI_NB_SUB_NOTEBOOK``              This style is used by AuiManager to create automatic AuiNotebooks
+         ``AUI_NB_HIDE_ON_SINGLE_TAB``        Hides the tab window if only one tab is present
+         ``AUI_NB_SMART_TABS``                Use Smart Tabbing, like ``Alt`` + ``Tab`` on Windows
+         ``AUI_NB_USE_IMAGES_DROPDOWN``       Uses images on dropdown window list menu instead of check items
+         ``AUI_NB_CLOSE_ON_TAB_LEFT``         Draws the tab close button on the left instead of on the right (a la Camino browser)
+         ``AUI_NB_TAB_FLOAT``                 Allows the floating of single tabs. Known limitation: when the notebook is more or less full screen, tabs cannot be dragged far enough outside of the notebook to become floating pages
+         ``AUI_NB_DRAW_DND_TAB``              Draws an image representation of a tab while dragging (on by default)
+         ==================================== ==================================
+
+        """
+
+        for nb in self._notebooks:
+            nb.SetAGWWindowStyleFlag(agwStyle)
+            nb.Refresh()
+            nb.Update()
+
+        self._autoNBStyle = agwStyle
+
+
+    def GetAutoNotebookStyle(self):
+        """
+        Returns the default AGW-specific window style for automatic notebooks.
+
+        :see: L{SetAutoNotebookStyle} method for a list of possible styles.
+        """
+
+        return self._autoNBStyle
+
 
     def SavePaneInfo(self, pane):
         """
@@ -9823,6 +9881,41 @@ class AuiManager(wx.EvtHandler):
         self.RestoreMinimizedPane(event.pane)
 
 
+    def OnPaneDocked(self, event):
+        """
+        Handles the ``EVT_AUI_PANE_DOCKED`` event for L{AuiManager}.
+
+        :param `event`: an instance of L{AuiManagerEvent} to be processed.
+        """
+
+        event.Skip()
+        self.RemoveAutoNBCaption(event.GetPane())        
+    
+
+    def RemoveAutoNBCaption(self, pane):
+        """
+        Removes the caption on newly created automatic notebooks.
+
+        :param `pane`: an instance of L{AuiPaneInfo} (the target notebook).
+        """
+
+        if self._agwFlags & AUI_MGR_AUTONB_NO_CAPTION == 0:
+            return False
+
+        def RemoveCaption():
+            """ Sub-function used to remove the pane caption on automatic notebooks. """
+            
+            if pane.HasNotebook(): 
+                notebook = self._notebooks[pane.notebook_id] 
+                self.GetPane(notebook).CaptionVisible(False).PaneBorder(False)                
+                self.Update() 
+
+        # it seems the notebook isnt created by this stage, so remove 
+        # the caption a moment later 
+        wx.CallAfter(RemoveCaption)
+        return True
+        
+        
     def RestoreMinimizedPane(self, paneInfo):
         """
         Restores a previously minimized pane.

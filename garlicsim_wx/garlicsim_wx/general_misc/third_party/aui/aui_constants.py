@@ -290,6 +290,9 @@ AUI_MGR_SMOOTH_DOCKING           = 1 << 13
 AUI_MGR_USE_NATIVE_MINIFRAMES    = 1 << 14
 """ Use miniframes with native caption bar as floating panes instead or custom
 drawn caption bars (forced on wxMac). """
+AUI_MGR_AUTONB_NO_CAPTION        = 1 << 15
+""" Panes that merge into an automatic notebook will not have the pane
+caption visible. """
 
 
 AUI_MGR_DEFAULT = AUI_MGR_ALLOW_FLOATING | AUI_MGR_TRANSPARENT_HINT | \
