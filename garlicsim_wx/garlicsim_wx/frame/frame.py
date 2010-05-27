@@ -560,7 +560,10 @@ class Frame(wx.Frame):
         Internal use.
         '''
         
+        old_recursion_limit = sys.getrecursionlimit()
+            
         try:
+            sys.setrecursionlimit(10000)
             with open(path, 'rb') as my_file:
                 gui_project_vars = pickle_module.load(my_file)
                 
@@ -572,6 +575,9 @@ class Frame(wx.Frame):
             )
             dialog.ShowModal()
             return
+        
+        finally:
+            sys.setrecursionlimit(old_recursion_limit)
                 
         if gui_project_vars:
             try:
@@ -602,8 +608,11 @@ class Frame(wx.Frame):
                                  style=wx.SAVE | wx.OVERWRITE_PROMPT)
         if save_dialog.ShowModal() == wx.ID_OK:
             path = save_dialog.GetPath()
-
+            
+            old_recursion_limit = sys.getrecursionlimit()
+            
             try:
+                sys.setrecursionlimit(10000)
                 with open(path, 'wb') as my_file:
                     picklable_vars = self.gui_project.__getstate__()
                     pickle_module.dump(picklable_vars, my_file, protocol=2)
@@ -616,6 +625,9 @@ class Frame(wx.Frame):
                 )
                 error_dialog.ShowModal()
                 error_dialog.Destroy()
+            
+            finally:
+                sys.setrecursionlimit(old_recursion_limit)
             
             
         save_dialog.Destroy()
