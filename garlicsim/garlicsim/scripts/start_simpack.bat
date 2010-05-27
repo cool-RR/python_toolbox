@@ -1,8 +1,11 @@
 @echo off
 
 if "%1" == "" goto help
+if "%1" == "help" goto help
+if "%1" == "/h" goto help
+if "%1" == "/?" goto help
 
-if "%1" == "help" (
+if "%1" == "--help" (
 	:help
 	echo.This is a script for creating a skeleton for a garlicsim simpack. Use this when
     echo.you want to make a new simpack to have the basic folders and files created for
