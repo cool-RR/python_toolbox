@@ -27,7 +27,7 @@ from app import App
 __all__ = ['Frame', 'GuiProject', 'start']
 
 
-__version__ = '0.4'
+__version__ = '0.5'
 
 
 def start():

@@ -54,18 +54,18 @@ my_classifiers = [
 
 setup_kwargs = {
     'name': 'garlicsim_wx',
-    'version': '0.4',
+    'version': '0.5',
     
     # `garlicsim_lib` is not really required, but in practice the vast majority
     # of users will want it, so we mark it as required in order it to simplify
     # installation.
     'requires': [
-        'garlicsim (== 0.4)',
-        'garlicsim_lib (== 0.4)'
+        'garlicsim (== 0.5)',
+        'garlicsim_lib (== 0.5)'
         ],
     'install_requires': [
-        'garlicsim == 0.4',
-        'garlicsim_lib == 0.4'
+        'garlicsim == 0.5',
+        'garlicsim_lib == 0.5'
         ],
     
     'description': \
