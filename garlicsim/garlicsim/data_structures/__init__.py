@@ -15,7 +15,7 @@ nodes.
 from tree_member import TreeMember
 from state import State
 from tree import Tree, TreeError
-from path import Path, PathError, PathOutOfRangeError
+from path import Path, PathError, PathLookupError, PathOutOfRangeError
 from node import Node, NodeError
 from block import Block, BlockError
 from end import End
@@ -24,7 +24,7 @@ from node_range import NodeRange
 from node_selection import NodeSelection
 
 
-__all__ = ['State', 'Tree', 'Path', 'Node', 'Block', 'NodeRange',
-           'NodeSelection'] + \
-          ['BlockError', 'PathError', 'PathOutOfRangeError', 'TreeError',
-           'NodeError']
+__all__ = ['TreeMember', 'State', 'Tree', 'Path', 'Node', 'Block', 'End',
+           'NodeRange', 'NodeSelection'] + \
+          ['BlockError', 'PathError', 'PathLookupError', 'PathOutOfRangeError',
+            'TreeError', 'NodeError']
