@@ -6,16 +6,16 @@ if "%1" == "/h" goto help
 if "%1" == "/?" goto help
 
 if "%1" == "--help" (
-	:help
+    :help
 	echo.This is a script for creating a skeleton for a garlicsim simpack. Use this when
     echo.you want to make a new simpack to have the basic folders and files created for
     echo.you.
     echo.
     echo.    Usage: start_simpack.py my_simpack_name
     echo.
-    echo.The simpack will be created in the current path, in a directory with the name of
-    echo.the simpack.
-	goto end
+    echo.The simpack will be created in the current path, in a directory with the name
+    echo.of the simpack.
+    goto end
 )
 
 xcopy "%~dp0\simpack_template\simpack_name" %1 /E/Q/K/I
