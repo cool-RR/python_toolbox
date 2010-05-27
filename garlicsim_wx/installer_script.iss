@@ -13,6 +13,7 @@ AppPublisherURL=http://garlicsim.org
 AppSupportURL=http://garlicsim.org
 AppUpdatesURL=http://garlicsim.org
 ChangesAssociations=yes
+ChangesEnvironment=yes
 DefaultDirName={pf}\GarlicSim
 DefaultGroupName=GarlicSim
 AllowNoIcons=yes
@@ -36,6 +37,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
+Name: modifypath; Description: "Add scripts folder to system &path";
 
 [Files]
 Source: "py2exe_dist/GarlicSim.exe"; DestDir: "{app}"; Flags: ignoreversion
@@ -50,3 +52,13 @@ Name: "{commondesktop}\GarlicSim"; Filename: "{app}\GarlicSim.exe"; Tasks: deskt
 [Run]
 Filename: "{app}\GarlicSim.exe"; Description: "{cm:LaunchProgram,GarlicSim}"; Flags: nowait postinstall skipifsilent
 
+[Code]
+function ModPathDir(): TArrayOfString;
+var
+    Dir:	TArrayOfString;
+begin
+    setArrayLength(Dir, 1)
+    Dir[0] := ExpandConstant('{app}');
+    Result := Dir;
+end;
+#include "py2exe_cruft/modpath.iss"

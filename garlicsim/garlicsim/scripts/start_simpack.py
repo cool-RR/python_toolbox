@@ -19,7 +19,7 @@ import shutil
 
 import pkg_resources
 
-from garlicsim.scripts import simpack_template
+import simpack_template
 simpack_template_package_name = simpack_template.__name__
 
     

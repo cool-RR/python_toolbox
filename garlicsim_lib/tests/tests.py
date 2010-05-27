@@ -48,7 +48,9 @@ def simpack_test():
         
 def simpack_check(simpack, cruncher):
     
-    state = simpack.State.create_messy_root()
+    state = simpack.State.create_messy_root() if \
+          simpack.State.create_messy_root else \
+          simpack.State.create_root()
     
     new_state = garlicsim.simulate(state, 5)
     

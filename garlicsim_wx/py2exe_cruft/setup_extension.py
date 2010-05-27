@@ -112,7 +112,7 @@ def get_garlicsim_data_files():
         all_files_and_folders = \
             glob.glob(path_to_garlicsim + '/' + path + '/*')
         data_files = [f for f in all_files_and_folders if
-                      (not '.py' in f[4:]) and (not os.path.isdir(f))]
+                      (not '.py' in f[-4:]) and (not os.path.isdir(f))]
         total_data_files.append(('lib/' + path, data_files))
     return total_data_files
 
@@ -131,7 +131,7 @@ def get_garlicsim_lib_data_files():
         all_files_and_folders = \
             glob.glob(path_to_garlicsim_lib + '/' + path + '/*')
         data_files = [f for f in all_files_and_folders if
-                      (not '.py' in f[4:]) and (not os.path.isdir(f))]
+                      (not '.py' in f[-4:]) and (not os.path.isdir(f))]
         total_data_files.append(('lib/' + path, data_files))
     return total_data_files
 
@@ -149,9 +149,29 @@ def get_garlicsim_wx_data_files():
         path = package_to_path(package)
         all_files_and_folders = glob.glob(path + '/*')
         data_files = [f for f in all_files_and_folders if
-                      (not '.py' in f[4:]) and (not os.path.isdir(f))]
+                      (not '.py' in f[-4:]) and (not os.path.isdir(f))]
         total_data_files.append(('lib/' + path, data_files))
     return total_data_files
+
+def get_garlicsim_script_files():
+    '''
+    Get garlicsim's script files.
+    
+    This returns a list of tuples, where the second item in each tuple is a list
+    of files and the first item is the path to which these files should be
+    copied when doing the py2exe packaging.
+    '''
+    total_script_files = []
+    garlicsim_script_packages = \
+        [p for p in garlicsim_packages if 'garlicsim.scripts' in p]
+    for package in garlicsim_script_packages:
+        path = package_to_path(package)
+        all_files_and_folders = \
+            glob.glob(path_to_garlicsim + '/' + path + '/*')
+        py_files = [f for f in all_files_and_folders if
+                    ('.py' == f[-3:]) and (not os.path.isdir(f))]
+        total_script_files.append(('lib/' + path, py_files))
+    return total_script_files
 
 
 def get_dlls_and_stuff():
@@ -193,7 +213,8 @@ def get_all_data_files():
     copied when doing the py2exe packaging.
     '''
     return get_garlicsim_data_files() + get_garlicsim_lib_data_files() + \
-           get_garlicsim_wx_data_files() + get_dlls_and_stuff()
+           get_garlicsim_wx_data_files() + get_garlicsim_script_files() + \
+           get_dlls_and_stuff()
 
 
 def get_all_submodules(package_name):
