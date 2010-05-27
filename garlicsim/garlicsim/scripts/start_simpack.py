@@ -19,7 +19,7 @@ import shutil
 
 import pkg_resources
 
-import simpack_template
+from garlicsim.scripts import simpack_template
 simpack_template_package_name = simpack_template.__name__
 
     
@@ -27,7 +27,7 @@ def _walk_folder(package_name, folder):
     '''
     Walk on subfolders of a folder using pkg_resources.
 
-    `package_name` is the name of the packagein which this folder lives.
+    `package_name` is the name of the package in which this folder lives.
     `folder` is the path of the folder.
     
     Of course, since we are operating using pkg_resources, all paths are
