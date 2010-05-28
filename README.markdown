@@ -17,7 +17,7 @@ To start the GUI:
 
 Core requirements:
 
-* Python, version 2.5 or 2.6. If you're new to Python, [download version 2.6](http://python.org/download/releases/2.6.4/). If you use Python 3.1 or above, use [this fork of GarlicSim](http://github.com/cool-RR/GarlicSim-for-Python-3.1) instead.
+* Python, version 2.5 or 2.6. If you're new to Python, [download version 2.6](http://python.org/download/releases/2.6.4/). If you use Python 3.1 or above, use [this fork of GarlicSim](http://github.com/cool-RR/GarlicSim-for-Python-3.x) instead.
 * Either [setuptools](http://pypi.python.org/pypi/setuptools) or [Distribute](http://pypi.python.org/pypi/distribute).
 * For users of Python 2.5 only: [Backport of the multiprocessing module](http://code.google.com/p/python-multiprocessing/).
 
@@ -93,7 +93,7 @@ Both packages are copyright 2009-2010 Ram Rachum.
  
 GarlicSim supports Python versions 2.5 and up, not including Python 3.x.
 
-There is a [separate fork of GarlicSim](http://github.com/cool-RR/GarlicSim-for-Python-3.1) that supports Python 3.1. Take note though that it does not contain a GUI, because wxPython does not support Python 3.1.
+There is a [separate fork of GarlicSim](http://github.com/cool-RR/GarlicSim-for-Python-3.x) that supports Python 3.x. Take note though that it does not contain a GUI, because wxPython does not support Python 3.x.
 
 # Current state #
 
