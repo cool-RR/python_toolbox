@@ -14,6 +14,10 @@ import __builtin__
 
 def reduce_method(method):
     '''Reducer for methods.'''
+    # todo: I have no idea how come it works for unbound methods. Because
+    # unbound methods are still of the type `MethodType`, and their `.im_self`
+    # is None, so how does it work? Possibly `pickle` actually knows how to
+    # pickle unbound methods, and doesn't really use this?    
     return (getattr, (method.im_self, method.im_func.__name__))
 
 copy_reg.pickle(types.MethodType, reduce_method)
