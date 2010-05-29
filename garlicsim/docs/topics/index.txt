@@ -8,6 +8,7 @@ Introductions to all the key parts of GarlicSim you'll need to know:
 .. toctree::
    :maxdepth: 1
 
+   what-is-garlicsim
    step-functions
    time-tree
    persistent

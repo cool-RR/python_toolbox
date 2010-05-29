@@ -17,7 +17,7 @@ body {
 }
 
 em {
-    font-style: normal;
+    font-style: italic;
 }
 
 div.document {
@@ -153,7 +153,7 @@ div.sphinxsidebar input {
 /* -- body styles ----------------------------------------------------------- */
 
 a {
-    color: yellow;
+    color: #CC0;
     text-decoration: none;
 }
 
@@ -161,9 +161,24 @@ a:hover {
     text-decoration: underline;
 }
 
-div.body p, div.body dd, div.body li {
+
+
+div.body p, div.body dd, div.body li, div.body blockquote {
     text-align: justify;
-    line-height: 130%;
+    line-height: 160%;
+}
+
+blockquote {
+    border-left: 3px dashed #CCC;
+    padding-left: 8px;
+}
+
+div.section {
+    max-width: 50em;
+}
+
+div.section > ul > li, div.section > ol > li {
+    margin-bottom: 15px;
 }
 
 div.body h1,
@@ -191,7 +206,7 @@ div.body h5 { font-size: 110%; }
 div.body h6 { font-size: 100%; }
 
 a.headerlink {
-    color: yellow;
+    color: #CC0;
     font-size: 0.8em;
     padding: 0px 3px 0px 3px;
     margin: 0px 5px 0px 3px;
@@ -209,10 +224,6 @@ a.headerlink:hover {
     background-color: #666;
 }
 
-div.body p, div.body dd, div.body li {
-    text-align: justify;
-    line-height: 130%;
-}
 
 div.admonition p.admonition-title + p {
     display: inline;

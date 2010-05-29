@@ -7,7 +7,6 @@ API Reference
    :maxdepth: 1
    
    simpack-api
-   cruncher-api
 
    
 

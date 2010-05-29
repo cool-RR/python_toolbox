@@ -1,0 +1,181 @@
+.. _topics-what-is-garlicsim
+
+=================
+What is GarlicSim
+=================
+
+In this guide we'll try to explain what GarlicSim is all about. You know that
+GarlicSim is a Pythonic framework for simulations, but what does that mean?
+
+
+What is a simulation exactly?
+=============================
+
+Before trying to define what "simulation" means, let's try to think of a few examples of simulations:
+
+* A simulation of a basketball bouncing on the floor.
+
+* A simulation of a car engine, describing the movement of its pistons and the
+  flow of fuel in and out of the engine.
+
+* A simulation of an anti-matter particle annihilating with a normal matter
+  particle.
+
+* A simulation of the spread of an epidemic in a geographic region.
+
+* A simulation of a population of poker players playing in groups with each
+  other.
+
+* A simulation of the evolution of the artificial intelligence of robots that
+  live in a simulated physical world and combat with each other for survival.
+
+* A simulation of a computer processor.
+
+* A simulation of cellular automata, such as :ref:`Conway's Game of Life
+  <intro-tutorial1>`.
+
+* A simulation of a Turing machine.
+
+With the above examples in mind, here is an attempt to define "simulation":
+
+   Simulation is the act of mimicking a real-world phenomenon symbolically in a
+   computer, without the phenomenon actually happening in reality.
+   
+This definition is almost good enough. It ignores the fact that some simulations
+are just abstract, like cellular automata. GarlicSim is designed to handle all
+of the simulations listed here, including the abstract ones.
+
+
+A more rigorous definition of "simulation"
+==========================================
+
+People often ask, if GarlicSim is so general that it applies to all simulations,
+how useful can it be? To answer that we need to look at what all the simulations
+we mentioned above have in common, and define that as the basic characteristic
+of a "simulation".
+
+The answer is:
+
+   A simulation is something that:
+
+   1. Defines the concept of a **world state**, and
+   
+   2. Defines a **step function**, which is a function that given a world state,
+      outputs the next world state.
+
+      
+What is a world state?
+----------------------
+
+It can be thought of as a frozen moment in time in the world of the simulation.
+A world state contains all the information there is about that moment in time in
+the simulation.
+
+* In the example of the bouncing basketball, a world state would describe the
+  height of the ball, its velocity and possibly any deformation it has received
+  from the ground.
+  
+* In the example of the cellular automata it would describe the current color of
+  each cell in the system.
+
+* In the example of the poker game it would describe which groups are currently
+  playing, the current cards that every player holds in his hand, who has the turn
+  in each game, how much money each player has in his pocket, etcetera.
+
+In the terminology of GarlicSim, we shorten the term "world state" into simply
+**state**. A state is actually a class, defined as
+:class:`garlicsim.data_structures.State`. The class itself doesn't define much;
+Every simulation will make its own ``State`` subclass and store data in its
+state instances as data attributes. For example, the basketball simulation might
+store a floating-point number in ``state.height``.
+
+
+What is a step function?
+------------------------
+
+It's a function that given the world state in a certain point of time,
+calculates the world state of the next moment in time.
+
+A little digression: As we all know, in our physical reality there is no such
+thing as "the next moment in time", since time is continuous and between every
+two moments in time there is another moment. However, when doing computer
+simulations we assume that time is discrete, not continuous, because it makes it
+much easier for us to work with. We basically assume that time is not a
+continuous line, but a line made of points; If we take two adjacent points,
+there is a finite time interval between them, which might be a second or a
+minute or a year, depending on the context, and there are no other moments in
+that interval between them. This decision is of course a compromise, and it
+introduces inaccuracy into our simulations; However, that accuracy can be made
+as small as desired by increasing the resolution of points in the timeline.
+
+Back to the step function. As we said, the step function takes the state in a
+certain point in time and calculates the state in the next point of time.
+
+* In the example of the bouncing basketball, the step function might take a
+  state in which the basketball is at a certain height and has a certain velocity
+  upwards, and return a state in which the basketball has a little bigger height
+  and a little smaller velocity.
+
+* In the example of the cellular automata, the step function takes a state that
+  specifies the color of each cell, and applies whatever manipulation that
+  cellular automata defines, and then returns the new color of every cell
+  according to that manipulation.
+
+* In the example of the poker game, the step function might take a state in
+  which it is the turn of player number 54 to play, and he has to decide whether
+  he wants to raise the stake or fold. The step function will then return the next
+  state, in which the player has decided to fold (for example,) and it is the turn
+  of the next player to play.
+
+When you think of it, the step function is actually the very heart of the
+simulation. There are other parts that a simulation must define, such as how to
+display a state on the screen, or how to create the initial state. But the most
+important thing in a simulation is its step function. The step function is the
+one responsible for doing the actual work of simulating, and thus it defines the
+"world rules" of a simulation. For example, by changing the step function of a
+simulation of Newtonian physics, one can transform it into a simulation of
+Special Relativity. Thus it can be said that the step function *is* the
+simulation.
+
+
+Some terminology: What will we mean when we say "simulation"
+============================================================
+
+Up to now we've been using the word "simulation" for two different meanings.
+Therefore I would now like to "split" it into two terms, so our terminology will
+be more precise. Besides the term "simulation", I would like to introduce the
+term **simulation package**, or as we will frequently abbreviate it, **simpack**.
+
+What's the difference between a simulation and a simulation package?
+--------------------------------------------------------------------
+
+Every simulation has a simpack. But one simpack may be used in many simulations.
+If a simpack can be said to describe the laws of a certain world, then a
+simulation is a story within that world. For example, we may have a simpack for
+simulating bouncing basketballs, which will describe exactly how basketballs
+move and bounce; But if we will want to actually simulate a basketball, we will
+have to create a simulation associated with that simpack. The story of our
+specific basketball will be contained in the simulation, not in the simpack.
+
+Therefore, a simpack can be thought of as a "simulation type." We talked before
+about how important the step function is; The step function is defined within
+the simpack.
+
+What we called "simulation" so far we'll also refer to as a **project**. This is
+because it's the name of the class corresponding to it:
+:class:`garlicsim.Project`.
+
+"Simpack", however, does not correspond to any class in GarlicSim; It is just a special kind of Python package  that defines a few key functions, among them the step function.
+
+How GarlicSim relates to simpacks
+The core of GarlicSim itself does not contain any simpacks. Simpacks can be thought of as add-ons to GarlicSim. GarlicSim will eventually be shipped with a standard library of simpacks, covering as many simulation domains as possible.
+
+One can say that there are two "levels" to GarlicSim development:
+
+1.	GarlicSim development - The development of GarlicSim itself, and
+2.	Simpack development - the development of simulation packages for GarlicSim.
+
+People who develop simpacks need not understand the inner workings of GarlicSim: All they need to know is the API between GarlicSim and the simpack that they intend to write. It can be said that from the point of view a GarlicSim developer, simpack developers are "users", while from the point of view of a simpack developer, "users" are people who just use the simpack and may not know how it works or how GarlicSim works, (and may as well be using GarlicSim entirely from a GUI without even knowing Python.)
+
+
+.. _Co
