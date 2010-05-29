@@ -36,7 +36,6 @@ Root: HKCR; Subkey: "GarlicSimSimulationPickle\shell\open\command"; ValueType: s
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
-Name: modifypath; Description: "Add scripts folder to system &path";
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 
@@ -52,14 +51,3 @@ Name: "{commondesktop}\GarlicSim"; Filename: "{app}\GarlicSim.exe"; Tasks: deskt
 
 [Run]
 Filename: "{app}\GarlicSim.exe"; Description: "{cm:LaunchProgram,GarlicSim}"; Flags: nowait postinstall skipifsilent
-
-[Code]
-function ModPathDir(): TArrayOfString;
-var
-    Dir:	TArrayOfString;
-begin
-    setArrayLength(Dir, 1)
-    Dir[0] := ExpandConstant('{app}\lib\garlicsim\scripts');
-    Result := Dir;
-end;
-#include "py2exe_cruft\modpath.iss"
