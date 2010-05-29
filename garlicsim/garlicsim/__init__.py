@@ -19,7 +19,7 @@ package.
 This program is intended for Python versions 2.5 and 2.6.
 '''
 
-import bootstrap
+from . import bootstrap
 import general_misc
 import general_misc.monkeypatch_copy_reg
 import misc
