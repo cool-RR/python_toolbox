@@ -86,6 +86,10 @@ We can see the board of the state is drawn nicely for us in ASCII art, with
 ``#`` marking a "live" cell and an empty space marking a "dead" cell. We can see
 that this board is random, with no seeming structure.
 
+(Of course, since the board is generated randomly, the one you'll get will be
+different from the one displayed here, and the same will be true for the next
+few boards. But they will have the same style as the boards displayed here.)
+
 There are exactly 3 objects that are defined in the root :mod:`garlicsim`
 namespace. There are many classes and functions that are available in deeper
 namespaces, but only three that are available in the root namespace. These three
