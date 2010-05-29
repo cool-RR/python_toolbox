@@ -8,6 +8,15 @@ It checks all prerequisites are installed.
 '''
 
 import warnings
+import sys
+
+
+if sys.version_info[0] >= 3:
+    raise Exception('''This package is not compatible with Python 3.x.''')
+if sys.version_info[1] <= 4:
+    raise Exception('''This package requires Python 2.5 and upwards. (Not \
+including 3.x).''')
+
 
 def __check_prerequisites():
     '''
