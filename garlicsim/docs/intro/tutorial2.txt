@@ -151,6 +151,7 @@ the :file:`coin_flip` folder.) Read the code and the comments:
     import random
     import garlicsim.data_structures
     
+    
     class State(garlicsim.data_structures.State):
         
         def __init__(self, balance, last_bet_result=0):
@@ -180,7 +181,7 @@ the :file:`coin_flip` folder.) Read the code and the comments:
                 # If the flow reached here it means we just lost. So we
                 # should bet double the amount:
                 amount_to_bet = - 2 * self.last_bet_result
-            
+                
             if amount_to_bet > self.balance:
                 # If we don't have the amount we should bet, we stop the simulation.
                 # True, we can try to bet whatever's left, but for simplicity's sake
@@ -200,6 +201,7 @@ the :file:`coin_flip` folder.) Read the code and the comments:
         @staticmethod
         def create_root():
             return State(balance=5000)
+
 
 What is that :exc:`WorldEnd <garlicsim.misc.WorldEnd>` exception that
 we're raising there? It means that, well, the world has ended. Notice we raise
