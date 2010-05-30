@@ -146,8 +146,9 @@ Therefore I would now like to "split" it into two terms, so our terminology will
 be more precise. Besides the term "simulation", I would like to introduce the
 term **simulation package**, or as we will frequently abbreviate it, **simpack**.
 
+
 What's the difference between a simulation and a simulation package?
---------------------------------------------------------------------
+====================================================================
 
 Every simulation has a simpack. But one simpack may be used in many simulations.
 If a simpack can be said to describe the laws of a certain world, then a
@@ -165,17 +166,37 @@ What we called "simulation" so far we'll also refer to as a **project**. This is
 because it's the name of the class corresponding to it:
 :class:`garlicsim.Project`.
 
-"Simpack", however, does not correspond to any class in GarlicSim; It is just a special kind of Python package  that defines a few key functions, among them the step function.
+"Simpack", however, does not correspond to any class in GarlicSim; It is just a
+special kind of Python package [#f1]_ that defines a few key functions, among them the
+step function.
+
 
 How GarlicSim relates to simpacks
-The core of GarlicSim itself does not contain any simpacks. Simpacks can be thought of as add-ons to GarlicSim. GarlicSim will eventually be shipped with a standard library of simpacks, covering as many simulation domains as possible.
+=================================
+
+The core of GarlicSim itself does not contain any simpacks. Simpacks can be
+thought of as third-party add-ons to GarlicSim. GarlicSim will eventually be
+shipped with a standard library of simpacks, covering as many simulation domains
+as possible.
 
 One can say that there are two "levels" to GarlicSim development:
 
-1.	GarlicSim development - The development of GarlicSim itself, and
-2.	Simpack development - the development of simulation packages for GarlicSim.
+1. GarlicSim development - The development of GarlicSim itself, and
+2. Simpack development - the development of simulation packages for GarlicSim.
 
-People who develop simpacks need not understand the inner workings of GarlicSim: All they need to know is the API between GarlicSim and the simpack that they intend to write. It can be said that from the point of view a GarlicSim developer, simpack developers are "users", while from the point of view of a simpack developer, "users" are people who just use the simpack and may not know how it works or how GarlicSim works, (and may as well be using GarlicSim entirely from a GUI without even knowing Python.)
+People who develop simpacks need not understand the inner workings of GarlicSim:
+All they need to know is the API between GarlicSim and the simpack that they
+intend to write. It can be said that from the point of view a GarlicSim
+developer, simpack developers are "users", while from the point of view of a
+simpack developer, "users" are people who just use the simpack and may not know
+how it works or how GarlicSim works, (and may as well be using GarlicSim
+entirely from a GUI without even knowing Python.)
 
 
-.. _Co
+
+.. rubric:: Footnotes
+
+.. [#f1] For the benefit of the reader who does not know what a Python package
+   is: It is similar to a Python module, except that it is a directory which has
+   modules in it. The directory must have a ``__init__.py``, even an empty one,
+   to be considered a Python package.

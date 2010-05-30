@@ -1,7 +1,7 @@
 .. _topics-index:
 
-Using GarlicSim
-===============
+All about Garlicsim
+===================
 
 Introductions to all the key parts of GarlicSim you'll need to know:
 
@@ -9,8 +9,8 @@ Introductions to all the key parts of GarlicSim you'll need to know:
    :maxdepth: 1
 
    what-is-garlicsim
-   step-functions
    time-tree
+   step-functions
    persistent
    history-dependent-simulations
    step-profiles
