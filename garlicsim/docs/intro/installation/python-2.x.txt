@@ -4,3 +4,6 @@
 Installing GarlicSim on Python 2.x
 ==================================
 
+Keep in mind that the GarlicSim project is comprised of three packages:
+`garlicsim`, `garlicsim_lib` and `garlicsim_wx`. You don't have to install all
+of them.
