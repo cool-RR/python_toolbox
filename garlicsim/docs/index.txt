@@ -12,11 +12,6 @@ Contents:
    intro/index
    topics/index
    ref/index
-   
-
-..
-   Include when they're actually written:
-   
    misc/index
 
 More documentation coming soon! If you have any questions or feedback, say hello

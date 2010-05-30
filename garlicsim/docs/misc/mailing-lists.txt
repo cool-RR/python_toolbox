@@ -1,0 +1,19 @@
+.. _misc-mailing-lists:
+
+=============
+Mailing Lists
+=============
+
+The main GarlicSim mailing list is at `garlicsim@librelist.org
+<mailto:garlicsim@librelist.org>`_. If you need any kind of help, or have
+anything to say, say it here. You'll get a quick response.
+
+The development mailing list is `garlicsim.dev@librelist.org
+<mailto:garlicsim.dev@librelist.org>`_. This is for the developers who work on
+GarlicSim itself.
+
+To subscribe to a list, just send an empty email to it. (This is required before
+you can post anything.)
+
+These lists are hosted by `librelist <http://librelist.org>`_, which is
+currently slightly experimental.

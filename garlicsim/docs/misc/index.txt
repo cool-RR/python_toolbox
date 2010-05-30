@@ -6,5 +6,10 @@ Miscellaneous topics
 
 .. toctree::
    :maxdepth: 1
+  
+   faq
+   mailing-lists
    
+..
    garlicsim_wx
+   
