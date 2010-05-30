@@ -29,7 +29,8 @@ gets built, and when it is long enough we can observe the phenomenon that we're
 interested in simulating.
 
 But actually, we're not going to define a timeline. We're going to define
-something better: A **time tree**.
+something better: A **time tree**. This would be represented by the class
+:class:`garlicsim.data_structures.Tree`.
 
 It's easy to understand the concept of a timeline: A succession of states that
 follow each other in time. A time tree is a generalization of a timeline. A
@@ -40,9 +41,6 @@ the meaning of a tree which is split into two at some point?
 The meaning is that there are two different timelines, two different scenarios
 contained within the same tree. The point of the split is also called a
 **fork**.
-
-.. image:: /images/natural_fork.png
-    :align: center
 
 By forking a time tree we can explore different scenarios within the same
 project. Before we get into that, we need to note that there are two kinds of
@@ -63,6 +61,9 @@ the point of the fork. In simulations that have some randomness in their step
 function, you will probably see a different reality in the new timeline. This is
 because whatever random factors were created during the first timeline will
 probably get a different random value in the new timeline.
+
+.. image:: /images/natural_fork.png
+    :align: center
 
 For example, you may have a simulation in which firefighters try to extinguish a
 forest fire as fast as possible, while the progress of each of them has some
