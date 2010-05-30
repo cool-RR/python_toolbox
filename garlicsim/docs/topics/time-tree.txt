@@ -1,5 +1,7 @@
 .. _topics-time-tree:
 
+This section is still incomplete.
+
 =============
 The time tree
 =============

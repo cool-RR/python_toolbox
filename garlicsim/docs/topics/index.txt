@@ -10,9 +10,11 @@ Introductions to all the key parts of GarlicSim you'll need to know:
 
    what-is-garlicsim
    time-tree
+   
+..
    step-functions
    persistent
    history-dependent-simulations
    step-profiles
    
-
+This section is still incomplete.

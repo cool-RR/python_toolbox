@@ -357,10 +357,5 @@ from the beginning, and then double that if you lost, and you would have had the
 same chance of getting $6,000 at the end. Though that is the subject for another
 simulation...
 
-What's next
-===========
-
-The documentation is still not written, sorry! If you have any question or you need guidance, say hello on the `mailing list`_!
-
 .. _expected value: http://en.wikipedia.org/wiki/Expected_value
 .. _mailing list: garlicsim@librelist.org
