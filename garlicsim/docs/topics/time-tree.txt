@@ -73,6 +73,20 @@ decide to do a natural fork at some point of the simulation, then in this new
 timeline they might end up with a different number of burnt trees.
 
 
+How do I make a natural fork?
+-----------------------------
+
+To make a natural fork in your project's tree, call
+:meth:`project.begin_crunching(node, clock_buffer) <Project.begin_crunching>`.
+``node`` is the node from which you want to fork, and ``clock_buffer`` is the
+amount of time you want to have crunched on your new fork. (Of course, you may
+crunch it further whenever you want.)
+
+Don't forget to call :meth:`Project.sync_crunchers` twice after this; The first
+time is for starting the crunchers, the second time is for collecting the work
+from them.
+
+
 What is a fork by editing?
 ==========================
 
@@ -96,3 +110,16 @@ node**.
 
 GarlicSim provides an automated procedure for creating that fork, so the user
 only needs to edit the state and the rest is done for him.
+
+
+How do I make a fork by editing?
+--------------------------------
+
+To make a fork by editing in your project's tree, call
+:meth:`project.fork_to_edit(node) <Project.fork_to_edit>`. ``node`` is the node
+that you want to duplicate and edit. The method will return the new node. You
+may modify the ``.state`` of the new node as you wish, and then call
+:meth:`Node.finalize() <Node.finalize>` on it when you're done.
+
+..
+   todo: speak on other aspects of trees, like paths.
