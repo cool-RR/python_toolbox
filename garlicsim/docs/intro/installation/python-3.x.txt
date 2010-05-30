@@ -1,0 +1,6 @@
+.. _intro-installation-python-3.x:
+
+==================================
+Installing GarlicSim on Python 3.x
+==================================
+

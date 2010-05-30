@@ -1,0 +1,13 @@
+.. _intro-installation-py2exe:
+
+==========================================
+All-in-one Windows installer for GarlicSim
+==========================================
+
+If you don't have Python installed on your system, or you don't even know what
+Python is, (and you use Windows,) this is for you:
+
+`Download all-in-one Windows GarlicSim 0.5 installer
+<http://github.com/downloads/cool-RR/GarlicSim/GarlicSim-0.5.exe>`_
+
+A similiar all-in-one installer for Mac will become available by 2011.

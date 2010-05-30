@@ -1,0 +1,15 @@
+.. _intro-installation-index:
+
+====================
+Installing GarlicSim
+====================
+
+Choose from one of these options for instructions on installing GarlicSim:
+
+.. toctree::
+   :maxdepth: 2
+    
+   For non-nerds: All-in-one Windows installer <py2exe>
+   python-2.x
+   python-3.x
+   
