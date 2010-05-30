@@ -1,4 +1,4 @@
-.. _topics-history-dependent-simulations
+.. _topics-history-dependent-simulations:
 
 =============================
 History-dependent simulations

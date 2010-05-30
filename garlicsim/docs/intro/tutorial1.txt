@@ -573,4 +573,5 @@ how a small change in the present can cause a big change in the future.
 What's next
 ===========
 
-In the next part of the tutorial, we're going to write our own simpack! :ref:`Let's go! <intro-tutorial2>`
+In the next part of the tutorial, we're going to write our own simpack!
+:ref:`Let's go! <intro-tutorial2>`

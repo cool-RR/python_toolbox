@@ -1,4 +1,4 @@
-.. _topics-step-profiles
+.. _topics-step-profiles:
 
 =============
 Step profiles

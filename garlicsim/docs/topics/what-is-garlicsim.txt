@@ -1,4 +1,4 @@
-.. _topics-what-is-garlicsim
+.. _topics-what-is-garlicsim:
 
 =================
 What is GarlicSim

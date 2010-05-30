@@ -1,5 +1,97 @@
-.. _topics-time-tree
+.. _topics-time-tree:
 
 =============
 The time tree
 =============
+
+:ref:`In the previous chapter <topics-what-is-garlicsim>` we defined the concept
+of a state. But in order to do a simulation, we need to put states in context
+with each other: We need to define a timeline of states that follow each other
+chronologically.
+
+A timeline would be a succession of states that follow each other in time. Every
+state in that succession is wrapped in a **node**. Every node has a parent and a
+child. If node 1 is the parent of node 2, that means that node 2 follows node 1
+immediately in time.
+
+A node is a device for putting a state in chronological context with other
+states in the simulation. It is the class :class:`garlicsim.state.Node`. Inside
+every node there is a state; it is the attribute ``.state`` of the node.
+
+.. image:: /images/timeline.png
+    :align: center
+
+The very act of computing the simulation, or as we call it, **crunching**, means
+to take the most recent node from the timeline, to retrieve its state, to apply
+the step function on it, thus receiving a new state, wrapping that in a node and
+putting that as the new child of the previous node. This is how the timeline
+gets built, and when it is long enough we can observe the phenomenon that we're
+interested in simulating.
+
+But actually, we're not going to define a timeline. We're going to define
+something better: A **time tree**.
+
+It's easy to understand the concept of a timeline: A succession of states that
+follow each other in time. A time tree is a generalization of a timeline. A
+degenerate time tree is simply a time line. That would be a tree which has no
+splits in it, i.e. every node but the last one has exactly one child. But what's
+the meaning of a tree which is split into two at some point?
+
+The meaning is that there are two different timelines, two different scenarios
+contained within the same tree. The point of the split is also called a
+**fork**.
+
+.. image:: /images/natural_fork.png
+    :align: center
+
+By forking a time tree we can explore different scenarios within the same
+project. Before we get into that, we need to note that there are two kinds of
+forks: A **natural fork** and a **fork by editing**.
+
+
+What is a natural fork?
+=======================
+
+A natural fork, also called **fork by crunching**, is only relevant in
+simulations which have some random non-deterministic factor in their step
+function. You can make a natural fork in deterministic simulations as well; But
+that would be of little use, because the second timeline will be identical to
+the first.
+
+A natural fork simply means that you start crunching the simulation again, from
+the point of the fork. In simulations that have some randomness in their step
+function, you will probably see a different reality in the new timeline. This is
+because whatever random factors were created during the first timeline will
+probably get a different random value in the new timeline.
+
+For example, you may have a simulation in which firefighters try to extinguish a
+forest fire as fast as possible, while the progress of each of them has some
+random factor in it. When you run the simulation the first time, you might see
+that they managed to extinguish the fire after it has burned 34 trees. If you
+decide to do a natural fork at some point of the simulation, then in this new
+timeline they might end up with a different number of burnt trees.
+
+
+What is a fork by editing?
+==========================
+
+A fork by editing is when you have a timeline, and you take one state from it,
+create a copy of it which you modify, and then put that modified state in a node
+that is parallel to the node of the original state.
+
+For example, let's say we're doing a simulation of two robots combating each
+other. We run the simulation and after the battle has finished, one of the
+robots won and destroyed the other. We may ask, what would have happened if a
+giant boulder would have fallen on the two robots while they were fighting?
+
+.. image:: /images/fork_by_editing.png
+    :align: center
+
+The above illustration shows how we will do that. We will take the node in which
+robot 2 hits back, and edit it, adding a giant boulder coming from the sky. This
+will result in a new and different timeline, in which robot 1 wins the fight.
+The node with the edited state is called a **touched node** or an **edited
+node**.
+
+GarlicSim provides an automated procedure for creating that fork, so the user
+only needs to edit the state and the rest is done for him.
