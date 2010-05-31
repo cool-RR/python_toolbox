@@ -4,3 +4,78 @@
 Installing GarlicSim on Python 3.x
 ==================================
 
+Before you start
+================
+
+General notes
+-------------
+
+Keep in mind that for Python 3.x, the GarlicSim project is comprised of two
+packages: ``garlicsim`` and ``garlicsim_lib``. ``garlicsim`` is the core logic
+and ``garlicsim_lib`` is a collection of simpacks. (There is no GUI in Python
+3.x because wxPython doesn't support it.)
+
+Installing ``garlicsim_lib`` is not mandatory.
+
+
+Requirements
+------------
+
+* `Python 3.1`_. If you use Python 2.x, use
+  :ref:`this fork of GarlicSim instead <intro-installation-python-2.x>`.
+ 
+* Either `setuptools`_ or `Distribute`_.
+
+
+Optional but recommended:
+
+* on Windows only: `Python for Windows Extensions`_.
+
+
+Installation methods
+====================
+
+You may choose from one of these installation methods:
+
+
+``easy_install``
+----------------
+
+You can use ``easy_install`` in the standard way to install. Keep in mind that
+the packages' names on PyPI are suffixed with "_py3":
+
+* ``easy_install garlicsim_py3``
+
+and/or
+
+* ``easy_install garlicsim_lib_py3``
+
+
+Installing from source
+----------------------
+
+GarlicSim is pure-Python and thus doesn't require building. These are the three
+source packages:
+
+* `garlicsim source package .tar.gz <http://pypi.python.org/packages/source/g/garlicsim_py3/garlicsim_py3-0.5.tar.gz>`_
+  `.zip <http://pypi.python.org/packages/source/g/garlicsim_py3/garlicsim_py3-0.5.zip>`_
+* `garlicsim_lib source package .tar.gz <http://pypi.python.org/packages/source/g/garlicsim_lib_py3/garlicsim_lib_py3-0.5.tar.gz>`_
+  `.zip <http://pypi.python.org/packages/source/g/garlicsim_lib_py3/garlicsim_lib_py3-0.5.zip>`_
+
+Use the standard ``python setup.py install`` to install.
+
+  
+Windows binaries
+----------------
+
+Some binaries for Windows are available:
+
+* `garlicsim Windows installer <http://pypi.python.org/packages/3.1/g/garlicsim_py3/garlicsim_py3-0.5.win32-py3.1.msi>`_
+* `garlicsim_lib Windows installer <http://pypi.python.org/packages/3.1/g/garlicsim_lib_py3/garlicsim_lib_py3-0.5.win32-py3.1.msi>`_
+  
+
+.. _Python 3.1: http://www.python.org/download/releases/3.1.2/
+.. _setuptools: http://pypi.python.org/pypi/setuptools
+.. _Distribute: http://pypi.python.org/pypi/distribute
+.. _Python for Windows Extensions: http://sourceforge.net/projects/pywin32
+.. _wxPython: http://wxpython.org/download.php
