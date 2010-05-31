@@ -91,6 +91,7 @@ source packages:
 
 Use the standard ``python setup.py install`` to install.
 
+
 Windows binaries
 ----------------
 
@@ -108,6 +109,17 @@ For Python 2.6:
 * `garlicsim_lib Windows installer <http://pypi.python.org/packages/2.6/g/garlicsim_lib/garlicsim_lib-0.5.win32-py2.6.msi>`_
 * `garlicsim_wx Windows installer <http://pypi.python.org/packages/2.6/g/garlicsim_wx/garlicsim_wx-0.5.win32-py2.6.msi>`_
 
+
+To start the GUI
+----------------
+
+In order to start the GUI after you install it, type the following in the Python
+interpreter:
+
+  >>> import garlicsim_wx
+  >>> if __name__ == '__main__': # Needed for multiprocessing
+  ...     garlicsim_wx.start()
+  ...
 
 
 

@@ -2,44 +2,14 @@
 
 [![](http://garlicsim.org/images/video_thumbnail.jpg)](http://garlicsim.org/brief_introduction.html)
 
-# Installation #
+# Documentation #
 
-**Windows binary installers** are available [here](http://pypi.python.org/pypi/garlicsim/) for `garlicsim` and [here](http://pypi.python.org/pypi/garlicsim_wx/) for `garlicsim_wx`.
-
-For a source installation: Download the repo, then run `setup.py install` twice, once in the `garlicsim` folder and once in the `garlicsim_wx` folder.
-
-To start the GUI:
-
-    import garlicsim_wx
-    if __name__ == '__main__': # Needed for multiprocessing
-        garlicsim_wx.start()
-
-
-Core requirements:
-
-* Python, version 2.5 or 2.6. If you're new to Python, [download version 2.6](http://python.org/download/releases/2.6.4/). If you use Python 3.1 or above, use [this fork of GarlicSim](http://github.com/cool-RR/GarlicSim-for-Python-3.x) instead.
-* Either [setuptools](http://pypi.python.org/pypi/setuptools) or [Distribute](http://pypi.python.org/pypi/distribute).
-* For users of Python 2.5 only: [Backport of the multiprocessing module](http://code.google.com/p/python-multiprocessing/).
-
-Some bundled simpacks require:
-
-* [NumPy and SciPy](http://www.scipy.org/Download).
-
-Recommended, but not mandatory:
-
-* [Psyco](http://psyco.sourceforge.net/).
-* on Windows only: [Python for Windows Extensions](http://sourceforge.net/projects/pywin32/).
-
-
-Gui requirements:
-
-* [wxPython](http://www.wxpython.org/) (Not needed for non-gui usage.)
+[Main documentation site](http://docs.garlicsim.org)
+[Installation](http://docs.garlicsim.org/intro/installation/python-2.x.html)
+[FAQ](http://docs.garlicsim.org/misc/faq.html)
+[Mailing lists](http://docs.garlicsim.org/misc/mailing-lists.html)
 
 If you wish, it's possible to just run the gui and play with it without installing anything. To do so, download the repo and run the `run_gui.py` file in the root folder.
-
--------------
-
-What to do in the GUI? Select File -> New. Choose one of the simulation packages, press Ok. A dialog will pop up, press Ok. Double click the seek bar to toggle playing.
 
 # What is GarlicSim? #
 
