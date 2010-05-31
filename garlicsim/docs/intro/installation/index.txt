@@ -4,10 +4,10 @@
 Installing GarlicSim
 ====================
 
-Choose from one of these options for instructions on installing GarlicSim:
+Choose one of the installation options for installing GarlicSim:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
     
    For non-nerds: All-in-one Windows installer <py2exe>
    python-2.x

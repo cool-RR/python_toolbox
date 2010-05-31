@@ -4,6 +4,80 @@
 Installing GarlicSim on Python 2.x
 ==================================
 
+Before you start
+================
+
+General notes
+-------------
+
 Keep in mind that the GarlicSim project is comprised of three packages:
-`garlicsim`, `garlicsim_lib` and `garlicsim_wx`. You don't have to install all
-of them.
+``garlicsim``, ``garlicsim_lib`` and ``garlicsim_wx``. ``garlicsim`` is the core
+logic, ``garlicsim_lib`` is a collection of simpacks, and ``garlicsim_wx`` is a
+wxPython-based GUI.
+
+You don't have to install all of them. You can install only the first one, or
+only the first two, or all three, depending on which functionality you want.
+
+
+Requirements
+------------
+
+* Python, version 2.5 or above. If you're new to Python, `download version 2.6
+  <http://python.org/download/releases/2.6.5>`_. If you use Python 3.x, use
+  :ref:`this fork of GarlicSim instead <intro-installation-python-3.x>`.
+ 
+* Either `setuptools`_ or `Distribute`_.
+
+And for users of Python 2.5 only:
+
+* `Backport of the multiprocessing module`_.
+
+tododoc
+
+Installation methods
+====================
+
+``easy_install``
+----------------
+
+You can use ``easy_install`` in the standard way to install:
+
+* ``easy_install garlicsim``
+
+and/or
+
+* ``easy_install garlicsim_lib``
+
+and/or
+
+* ``easy_install garlicsim_wx``
+
+
+Installing from source
+----------------------
+
+GarlicSim is pure-python and thus doesn't require building. These are the three
+source packages:
+
+* `garlicsim source package .tar.gz <http://pypi.python.org/packages/source/g/garlicsim/garlicsim-0.5.tar.gz>`_
+  `.zip <http://pypi.python.org/packages/source/g/garlicsim/garlicsim-0.5.zip>`_
+* `garlicsim_lib source package .tar.gz <http://pypi.python.org/packages/source/g/garlicsim_lib/garlicsim_lib-0.5.tar.gz>`_
+  `.zip <http://pypi.python.org/packages/source/g/garlicsim_lib/garlicsim_lib-0.5.zip>`_
+* `garlicsim_wx source package .tar.gz <http://pypi.python.org/packages/source/g/garlicsim_wx/garlicsim_wx-0.5.tar.gz>`_
+  `.zip <http://pypi.python.org/packages/source/g/garlicsim_wx/garlicsim_wx-0.5.zip>`_
+
+
+Windows binaries
+----------------
+
+Some binaries for Windows are available:
+
+
+
+
+
+
+
+.. _setuptools: http://pypi.python.org/pypi/setuptools
+.. _Distribute: http://pypi.python.org/pypi/distribute
+.. _Backport of the multiprocessing module: http://code.google.com/p/python-multiprocessing
