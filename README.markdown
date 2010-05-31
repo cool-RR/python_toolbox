@@ -6,8 +6,11 @@
 # Documentation #
 
 [Main documentation site](http://docs.garlicsim.org)
+
 [Installation](http://docs.garlicsim.org/intro/installation/python-2.x.html)
+
 [FAQ](http://docs.garlicsim.org/misc/faq.html)
+
 [Mailing lists](http://docs.garlicsim.org/misc/mailing-lists.html)
 
 If you wish, it's possible to just run the gui and play with it without installing anything. To do so, download the repo and run the `run_gui.py` file in the root folder.
