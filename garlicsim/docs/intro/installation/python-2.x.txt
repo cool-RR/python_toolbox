@@ -50,7 +50,7 @@ For some simpacks in ``garlicsim_lib``
 For ``garlicsim_wx``
 ^^^^^^^^^^^^^^^^^^^^
 
-* `wxPython`_
+* `wxPython 2.8.10.1 or above`_
 
 
 
@@ -111,7 +111,7 @@ For Python 2.6:
 
 
 To start the GUI
-----------------
+================
 
 In order to start the GUI after you install it, type the following in the Python
 interpreter:
@@ -129,4 +129,4 @@ interpreter:
 .. _Python for Windows Extensions: http://sourceforge.net/projects/pywin32
 .. _Psyco: http://psyco.sourceforge.net
 .. _SciPy and NumPy: http://scipy.org/Download
-.. _wxPython: http://wxpython.org/download.php
+.. _wxPython 2.8.10.1 or above: http://wxpython.org/download.php
