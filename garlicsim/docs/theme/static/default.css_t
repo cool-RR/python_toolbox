@@ -303,7 +303,6 @@ pre {
 
 tt {
     font-family: Consolas, Monaco, Inconsolata, monospace;
-    bakcground: #BBB;
     padding: 0 1px 0 1px;
     font-size: 0.95em;
 }
