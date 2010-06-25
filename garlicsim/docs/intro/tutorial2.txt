@@ -4,8 +4,8 @@
 Tutorial part 2: Writing your first simulation package
 ======================================================
 
-In part 1 of the tutorial, we were playing around with someone else's simpack.
-In part 2, we are going to make our own.
+In :ref:`part 1 <intro-tutorial1>` of the tutorial, we were playing around with
+someone else's simpack. In part 2, we are going to make our own.
 
 Motivation for our simpack
 ==========================
