@@ -1,0 +1,6 @@
+.. _topics-asynchronous-crunching:
+
+=========================================================================
+Asynchronous crunching: The ``Project`` class, GarlicSim's flagship class
+=========================================================================
+
