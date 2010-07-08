@@ -17,3 +17,4 @@ garlicsim_wx/build
 garlicsim_wx/*.exe
 
 */docs/_build/*
+*/docs/_deployed_build/*
