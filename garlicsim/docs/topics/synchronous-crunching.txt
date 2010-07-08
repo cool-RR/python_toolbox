@@ -1,0 +1,6 @@
+.. _topics-synchronous-crunching:
+
+=======================================================================
+Synchronous crunching: The ``simulate`` and ``list_simulate`` functions
+=======================================================================
+

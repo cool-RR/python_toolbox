@@ -56,7 +56,7 @@ class End(TreeMember):
         
         (This is a method of all TreeMembers that returns the block that the
         tree member belongs to, if there is one. But an end never belongs to a
-        block.
+        block.)
         '''
         return self
 
@@ -96,7 +96,7 @@ class End(TreeMember):
         
         Returns the path.
         '''
-        return self.parent.make_past_ath()
+        return self.parent.make_past_path()
 
     
     def get_all_leaves(self, max_nodes_distance=None, max_clock_distance=None):

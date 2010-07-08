@@ -12,6 +12,8 @@ Introductions to all the key parts of GarlicSim you'll need to know:
    time-tree
    
 ..
+   synchronous-crunching
+   asynchronous-crunching
    step-functions
    persistent
    history-dependent-simulations

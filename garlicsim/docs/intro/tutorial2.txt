@@ -4,8 +4,8 @@
 Tutorial part 2: Writing your first simulation package
 ======================================================
 
-In part 1 of the tutorial, we were playing around with someone else's simpack.
-In part 2, we are going to make our own.
+In :ref:`part 1 <intro-tutorial1>` of the tutorial, we were playing around with
+someone else's simpack. In part 2, we are going to make our own.
 
 Motivation for our simpack
 ==========================
@@ -221,8 +221,12 @@ Let's explore our new simpack!
 ==============================
 
 Now we're going to play with our simpack using the Python shell. Be sure that
-the new simpack is on your :attr:`sys.path`; An easy way would be to launch
-the Python interpreter from the folder in which your simpack resides.
+the new simpack is on your :attr:`sys.path`; An easy way would be to launch the
+Python interpreter from the folder in which your simpack resides. (For example,
+if your simpack is at ``C:\coin_flip``, you'll want to launch Python from
+``C:\``.)
+
+Got Python running? Let's get started:
 
     >>> from __future__ import division # To make sure we get real division
     >>> import garlicsim
