@@ -4,7 +4,7 @@
 garlicsim documentation
 =======================
 
-zContents:
+Contents:
 
 .. toctree::
    :maxdepth: 2
