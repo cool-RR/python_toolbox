@@ -10,7 +10,7 @@ There are only two mandatory definitions that a simpack has to make: A ``State``
 class and a step function. There are several different kinds of step functions,
 as will be detailed below. Defining just one is sufficient.
 
-zAll of the other definitions are optional, and provide added functionality.
+All of the other definitions are optional, and provide added functionality.
 
 Most of the step functions (and some of the other definitions) should be defined
 as methods of the ``State`` class.
