@@ -246,7 +246,7 @@ Let's simulate:
     
 Our lucky gambler made $400 in only 5 turns, not bad.
 
-You might notice that a :attr:`clock <garlicsim.data_structures.State.clock`
+You might notice that a :attr:`clock <garlicsim.data_structures.State.clock>`
 attribute was added to the state. This clock helps us keep track on what time
 point we're looking at. In turn-based simulations such as these, the clock is
 usually an :class:`int` and denotes the turn number. In other simulations, like
@@ -254,7 +254,7 @@ Physics simulations, the clock may by a :class:`float` that tells the exact time
 in seconds in the state.
 
 Notice that you didn't have to set the :attr:`clock
-<garlicsim.data_structures.State.clock` in your simpack: Since you didn't set a
+<garlicsim.data_structures.State.clock>` in your simpack: Since you didn't set a
 clock, one was created automatically for you.
 
 Simulating without a state limit
