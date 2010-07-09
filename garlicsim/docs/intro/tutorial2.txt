@@ -211,7 +211,7 @@ should be done.
 
 .. admonition:: Ending the simulation
 
-    Notice that the simulation :ref:`we explored before<intro-tutorial1`, Life,
+    Notice that the simulation :ref:`we explored before<intro-tutorial1>`, Life,
     had no concept of ending the simulation. Life simulations continue to
     infinity, regardless if the board becomes empty or repetitive or whatever.
     
