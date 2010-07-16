@@ -84,7 +84,7 @@ class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,
         
         for (i, server) in enumerate(servers):
 
-            personality = server.identity.get_personality()
+            personality = server.identity.personality
             
             name, light_color, dark_color = (
                 personality.human_name,
@@ -116,7 +116,7 @@ class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,
             
             else:
                 
-                client_personality = client.identity.get_personality()
+                client_personality = client.identity.personality
                 
                 client_name, client_light_color, client_dark_color = (
                     client_personality.human_name,
@@ -153,7 +153,7 @@ class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,
         
         dc.DrawText('Clients in queue:', 150, 70)
         
-        personalities = [client.identity.get_personality() for client in
+        personalities = [client.identity.personality for client in
                          state.facility.waiting_clients]
         
         names = []; background_colors = []; foreground_colors = []

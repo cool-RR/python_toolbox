@@ -23,7 +23,7 @@ from garlicsim.general_misc import misc_tools
 from garlicsim.general_misc import copy_tools
 
 from persistent import Persistent
-# Doing `from personality import Personality` at bottom of file
+from personality import Personality
 
 
 library = weakref.WeakValueDictionary()
@@ -128,12 +128,14 @@ class CrossProcessPersistent(Persistent):
         else:
             new_copy = copy_tools.deepcopy_as_simple_object(self, memo)
             new_copy._Persistent__uuid = uuid.uuid4()
-            if hasattr(new_copy, '_CrossProcessPersistent__personality'):
-                del new_copy._Persistent__personality
+            try:
+                del self.personality
+            except AttributeError:
+                pass
             return new_copy
 
         
-    self.personality = misc_tools.LazilyEvaluatedConstantProperty(Personality)
+    personality = misc_tools.LazilyEvaluatedConstantProperty(Personality)
 
 
-from personality import Personality
+
