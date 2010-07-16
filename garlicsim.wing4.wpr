@@ -1,0 +1,19 @@
+#!wing
+#!version=4.0
+##################################################################
+# Wing IDE project file                                          #
+##################################################################
+[project attributes]
+proj.directory-list = [{'dirloc': loc('.'),
+                        'excludes': [u'garlicsim_wx/py2exe_dist',
+                                     u'garlicsim/docs/_build',
+                                     u'garlicsim_wx/build',
+                                     u'garlicsim_wx/garlicsim_wx.egg-info'],
+                        'filter': '*',
+                        'include_hidden': False,
+                        'recursive': True,
+                        'watch_for_changes': True}]
+proj.file-type = 'shared'
+proj.main-file = loc('run_gui.py')
+testing.auto-test-file-specs = ('tests/*.py',)
+testing.test-framework = {None: 'nose'}
