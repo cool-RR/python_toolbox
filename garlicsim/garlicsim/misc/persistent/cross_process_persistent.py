@@ -19,6 +19,7 @@ import weakref
 import colorsys
 
 from copy_modes import DontCopyPersistent
+from garlicsim.general_misc import misc_tools
 from garlicsim.general_misc import copy_tools
 
 from persistent import Persistent
@@ -33,6 +34,7 @@ class UuidToken(object):
     def __init__(self, uuid):
         self.uuid = uuid
 
+        
 class CrossProcessPersistent(Persistent):
     '''
     Object that sometimes shouldn't really be duplicated.
@@ -93,20 +95,24 @@ class CrossProcessPersistent(Persistent):
             thing._CrossProcessPersistent__uuid = new_uuid
             library[new_uuid] = thing
             return thing
-    
+
+        
     def __getstate__(self):
         my_dict = dict(self.__dict__)
         del my_dict["_CrossProcessPersistent__uuid"]
         return my_dict
+
     
     def __getnewargs__(self):
         return (UuidToken(self._CrossProcessPersistent__uuid),)
+
     
     def __setstate__(self, state):
         if self.__dict__.pop("_CrossProcessPersistent__skip_setstate", None):
             return
         else:
             self.__dict__.update(state)
+
             
     def __deepcopy__(self, memo):
         '''
@@ -125,22 +131,9 @@ class CrossProcessPersistent(Persistent):
             if hasattr(new_copy, '_CrossProcessPersistent__personality'):
                 del new_copy._Persistent__personality
             return new_copy
+
         
-    def get_personality(self):
-        '''
-        Get the personality of this persistent object.
-        
-        See documentation of class garlicsim.misc.persistent.Personality for
-        more information.
-        '''
-         # Todo: consider doing __getattr__ thing, maybe `cache`?
-        personality_exists = hasattr(self, '_CrossProcessPersistent__personality')
-        
-        if personality_exists is False:
-            self.__personality = Personality(self)
-        
-        return self.__personality
-        
+    self.personality = misc_tools.LazilyEvaluatedConstantProperty(Personality)
 
 
 from personality import Personality

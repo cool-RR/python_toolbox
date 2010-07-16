@@ -58,4 +58,48 @@ def shorten_class_address(module_name, class_name):
             break
         
     return '.'.join((last_successful_module_name, class_name))
+
+
+class LazilyEvaluatedConstantProperty(object):
+    '''tododoc'''
+    def __init__(self, getter, name=None):
+        '''tododoc'''
+        self.getter = getter
+        self.our_name = name
+        
+        
+    def __get__(self, obj, our_type=None):
+
+        value = self.getter(obj)
+        
+        if not self.our_name:
+            if not our_type:
+                our_type = type(obj)
+            (self.our_name,) = (key for (key, value) in 
+                                vars(our_type).iteritems()
+                                if value is self)
+        
+        setattr(obj, self.our_name, value)
+        
+        return value
+        
+        
+if __name__ == '__main__': # todo: move to test suite
+    import random
+    class A(object):
+        def _get_personality(self):
+            print(
+                "Calculating personality for %s. (Should happen only once.)" % self
+            )
+            return random.choice(['Angry', 'Happy', 'Sad', 'Excited'])
+        personality = LazilyEvaluatedConstantProperty(_get_personality)
+    a = A()
+    print(a.personality)
+    print(a.personality)
+    print(a.personality)
+    
+    a2 = A()
+    print(a2.personality)
+    print(a2.personality)
+    print(a2.personality)
     

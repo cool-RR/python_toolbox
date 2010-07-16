@@ -15,12 +15,12 @@ an old protocol?
 
 todo: make it polite to other similar classes
 '''
-
-
 from copy_modes import DontCopyPersistent
 from garlicsim.general_misc import copy_tools
 
+
 __all__ = ['Persistent']
+
 
 class Persistent(object):
     '''
@@ -44,8 +44,7 @@ class Persistent(object):
     so the user must remember not to change it.
     
     Note: This class is still experimental.
-    '''
-    
+    '''    
     
     def __deepcopy__(self, memo):
         '''
