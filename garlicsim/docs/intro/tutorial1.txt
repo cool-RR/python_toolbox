@@ -324,9 +324,9 @@ add more nodes.
 
     >>> project.begin_crunching(root, 50)
 
-This will order the project to start crunching from our node. The number 20
-means it will crunch until it reaches a clock reading of 20. In our example it
-is equivalent to performing 20 iterations as we did in the previous section.
+This will order the project to start crunching from our node. The number 50
+means it will crunch until it reaches a clock reading of 50. In our example it
+is equivalent to performing 50 iterations as we did in the previous section.
 
 However, crunching has not yet started. To start it, we will call:
 
