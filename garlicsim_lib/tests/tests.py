@@ -48,6 +48,8 @@ def simpack_test():
         
 def simpack_check(simpack, cruncher):
     
+    my_simpack_grokker = garlicsim.misc.SimpackGrokker(simpack)
+    
     state = simpack.State.create_messy_root() if \
           simpack.State.create_messy_root else \
           simpack.State.create_root()
@@ -56,7 +58,21 @@ def simpack_check(simpack, cruncher):
     
     result = garlicsim.list_simulate(state, 5)
     
-    my_simpack_grokker = garlicsim.misc.SimpackGrokker(simpack)
+    iter_result = garlicsim.iter_simulate(state, 5)
+    
+    if my_simpack_grokker.history_dependent is True:
+        assert isinstance(iter_result, list)
+        if _is_deterministic(simpack):
+            assert iter_result == result
+    else: # my_simpack_grokker.history_dependent is False
+        assert not hasattr(iter_result, '__getitem__')
+        assert hasattr(iter_result, '__iter__')
+        iter_result_in_list = list(iter_result)
+        del iter_result
+        assert len(iter_result_in_list) == len(result) == 6
+        if _is_deterministic(simpack):
+            assert iter_result_in_list == result
+    
     
     empty_step_profile = garlicsim.misc.StepProfile()
     
