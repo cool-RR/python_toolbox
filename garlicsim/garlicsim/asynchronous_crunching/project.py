@@ -371,8 +371,7 @@ class Project(object):
             return self.__non_history_dependent_iter_simulate(node, iterations,
                                                               step_profile)
         
-        
-    @with_tree_lock        
+                
     def __history_dependent_iter_simulate(self, node, iterations,
                                           step_profile=None):
         '''
@@ -398,6 +397,10 @@ class Project(object):
         iterator = self.simpack_grokker.step_generator(history_browser,
                                                        step_profile)
         finite_iterator = cute_iter_tools.shorten(iterator, iterations)
+        finite_iterator_with_lock = cute_iter_tools.iter_with(
+            finite_iterator,
+            self.tree.lock.write
+        )
         
         current_node = node
         
@@ -406,7 +409,7 @@ class Project(object):
         first_run = True
 
         try:
-            for current_state in finite_iterator:
+            for current_state in finite_iterator_with_lock:
                 current_node = self.tree.add_state(current_state,
                                                    parent=current_node,
                                                    step_profile=step_profile)
@@ -433,7 +436,6 @@ class Project(object):
             self.tree.make_end(current_node, step_profile)
                 
     
-    @with_tree_lock
     def __non_history_dependent_iter_simulate(self, node, iterations,
                                               step_profile=None):
         '''
@@ -456,13 +458,17 @@ class Project(object):
                 
         iterator = self.simpack_grokker.step_generator(state, step_profile)
         finite_iterator = cute_iter_tools.shorten(iterator, iterations)
+        finite_iterator_with_lock = cute_iter_tools.iter_with(
+            finite_iterator,
+            self.tree.lock.write
+        )
         
         current_node = node
         
         yield current_node
         
         try:
-            for current_state in finite_iterator:
+            for current_state in finite_iterator_with_lock:
                 current_node = self.tree.add_state(current_state,
                                                    parent=current_node,
                                                    step_profile=step_profile)
