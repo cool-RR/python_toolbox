@@ -90,13 +90,13 @@ that this board is random, with no seeming structure.
 different from the one displayed here, and the same will be true for the next
 few boards. But they will have the same style as the boards displayed here.)
 
-There are exactly 3 objects that are defined in the root :mod:`garlicsim`
+There are exactly 4 objects that are defined in the root :mod:`garlicsim`
 namespace. There are many classes and functions that are available in deeper
-namespaces, but only three that are available in the root namespace. These three
+namespaces, but only four that are available in the root namespace. These four
 definitions were chosen because they represent the most important and elementary
-functionalities of GarlicSim. The three definitions are
-:func:`garlicsim.simulate`, :func:`garlicsim.list_simulate` and
-:class:`garlicsim.Project`.
+functionalities of GarlicSim. The four definitions are
+:func:`garlicsim.simulate`, :func:`garlicsim.list_simulate`,
+:func:`garlicsim.iter_simulate` and :class:`garlicsim.Project`.
 
 Let's experiment with :func:`simulate <garlicsim.simulate>` first:
 
@@ -223,11 +223,30 @@ We can also check out any state in between:
        ### ##  #                  #     ## #
       #     #            ##      ###        
 
+Now, what is :func:`iter_simulate <garlicsim.iter_simulate>`? It is similar to
+:func:`list_simulate <garlicsim.list_simulate>`, except it returns a generator
+instead of a list, and instead of crunching the 20 states in advance, it
+crunches them one by one, "lazily" as they say, every time we "pull" a state
+from it.
+
+    >>> garlicsim.iter_simulate(state, 5)
+    <generator object _non_history_iter_simulate at 0x013DC3F0>
+    >>> list(garlicsim.iter_simulate(state, 5)) == garlicsim.list_simulate(state, 5)
+    True
+    
+    
+This is useful because sometimes :func:`list_simulate <garlicsim.list_simulate>`
+will take too long before it finishes, so using :func:`iter_simulate
+<garlicsim.iter_simulate>` we can have every state calculated when we need it
+instead of having all the states calculated in advance.
+
+-------------------------------------------------------------------------------
 
 The functions that we've been playing with now, :func:`simulate
-<garlicsim.simulate>` and :func:`list_simulate <garlicsim.list_simulate>`, are
-the simplest tools that GarlicSim provides for simulating. You could probably
-see that they are not much different than applying the step function yourself.
+<garlicsim.simulate>`, :func:`list_simulate <garlicsim.list_simulate>` and
+:func:`iter_simulate <garlicsim.iter_simulate>`, are the simplest tools that
+GarlicSim provides for simulating. You could probably see that they are not much
+different than applying the step function yourself.
 
 Now it's time to introduce :class:`Project <garlicsim.Project>`.
 

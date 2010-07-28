@@ -161,7 +161,9 @@ a:hover {
     text-decoration: underline;
 }
 
-
+hr {
+    border: 1px solid #333;
+}
 
 div.body p, div.body dd, div.body li, div.body blockquote {
     text-align: justify;
