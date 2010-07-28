@@ -194,4 +194,27 @@ def simpack_check(simpack, cruncher):
     assert len(project.tree.all_possible_paths()) == 4
     
     
+    number_of_nodes = len(project.tree.nodes)
+    iterator = project.iter_simulate(node_1, 10)
+    
+    new_node = next(iterator)
+    assert new_node is node_1
+    assert len(project.tree.nodes) == number_of_nodes
+    
+    new_node = next(iterator)
+    assert new_node is not node_1
+    assert new_node.parent is node_1
+    assert len(project.tree.nodes) == number_of_nodes + 1
+    
+    bunch_of_new_nodes = tuple(iterator)
+    for parent_node, kid_node in cute_iter_tools.consecutive_pairs(bunch_of_new_nodes):
+        assert isinstance(parent_node, garlicsim.data_structures.Node)
+        assert isinstance(kid_node, garlicsim.data_structures.Node)
+        assert parent_node.children == [kid_node]
+        assert kid_node.parent is parent_node
+        
+    assert len(project.tree.nodes) == number_of_nodes + 10
+        
+    
+    
     
