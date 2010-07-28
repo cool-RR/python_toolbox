@@ -406,29 +406,23 @@ class Project(object):
         
         yield current_node
         
-        first_run = True
-
         try:
             for current_state in finite_iterator_with_lock:
+                
+                history_browser.end_node = current_node
+                history_browser.path = current_node.make_containing_path()
+                # Similarly to the `__history_dependent_simulate` method, here
+                # we also need to recreate the path. But in this case we need to
+                # do it not only on the first run, but on *each* run of the
+                # loop, because this is a generator, and the user may wreak
+                # havoc with the tree between `yield`s, causing our original
+                # path not to lead to the end_node anymore.                
+                # todo optimize: The fact we recreate a path every time might be
+                # costly.
+                
                 current_node = self.tree.add_state(current_state,
                                                    parent=current_node,
                                                    step_profile=step_profile)
-                history_browser.end_node = current_node
-                if first_run:
-                    history_browser.path = current_node.make_containing_path()
-                    # Just once, after the first run, we set the path of the
-                    # history browser to be the new end_node's path. Why?
-                    
-                    # Because just after the first run we've created the first
-                    # new node, possibly causing a fork. Because of the new
-                    # fork, the original path that we created at the beginning
-                    # of this method will get confused and take the old timeline
-                    # instead of the new timeline. (And it wouldn't even have
-                    # the end_node to stop it, because that would be on the new
-                    # timeline.) So we create a new path for the history
-                    # browser. We only need to do this once, because after the
-                    # first node we work on one straight timeline and we don't
-                    # fork the tree any more.
                     
                 yield current_node
         

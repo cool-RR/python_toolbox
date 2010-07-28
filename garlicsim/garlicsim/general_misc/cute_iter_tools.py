@@ -116,6 +116,7 @@ def product(*args, **kwargs):
     product('ABCD', 'xy') --> Ax Ay Bx By Cx Cy Dx Dy
     product(range(2), repeat=3) --> 000 001 010 011 100 101 110 111
     '''
+    # todo: revamp
     pools = map(tuple, args) * kwargs.get('repeat', 1)
     result = [[]]
     for pool in pools:

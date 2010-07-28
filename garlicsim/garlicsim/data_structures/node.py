@@ -153,13 +153,15 @@ Untouched nodes can't be edited, so they have no concept of being finalized.'''
         
         There may be multiple different paths that contain this node. This will
         return the one which points to the newest possible forks.
+        
         Returns the path.
         '''
         
         path = self.make_past_path()
         
         path.get_last_node()
-        # Calling that will make the path choose the newest forks.
+        # Calling this will make the path notice the forks in the nodes beyond
+        # this node and put them in its `decisions` dict.
         
         return path
     

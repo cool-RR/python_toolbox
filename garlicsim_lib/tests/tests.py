@@ -90,6 +90,8 @@ def simpack_check(simpack, cruncher):
     
     project.crunching_manager.Cruncher = cruncher
     
+    assert project.tree.lock._ReadWriteLock__writer is None
+    
     root = project.root_this_state(state)
     
     project.begin_crunching(root, 20)
@@ -150,7 +152,8 @@ def simpack_check(simpack, cruncher):
     
     assert len(project.tree.nodes) == x + y + 6 + total_nodes_added
     assert len(project.tree.all_possible_paths()) == 3
-
+    
+    assert project.tree.lock._ReadWriteLock__writer is None
     
     two_paths = node_3.all_possible_paths()
     
@@ -194,12 +197,19 @@ def simpack_check(simpack, cruncher):
     assert len(project.tree.all_possible_paths()) == 4
     
     
+    
+    assert project.tree.lock._ReadWriteLock__writer is None
+    
     number_of_nodes = len(project.tree.nodes)
     iterator = project.iter_simulate(node_1, 10)
+    
+    assert project.tree.lock._ReadWriteLock__writer is None
     
     new_node = next(iterator)
     assert new_node is node_1
     assert len(project.tree.nodes) == number_of_nodes
+    
+    assert project.tree.lock._ReadWriteLock__writer is None
     
     new_node = next(iterator)
     assert new_node is not node_1
@@ -208,6 +218,7 @@ def simpack_check(simpack, cruncher):
     
     bunch_of_new_nodes = tuple(iterator)
     for parent_node, kid_node in cute_iter_tools.consecutive_pairs(bunch_of_new_nodes):
+        assert project.tree.lock._ReadWriteLock__writer is None
         assert isinstance(parent_node, garlicsim.data_structures.Node)
         assert isinstance(kid_node, garlicsim.data_structures.Node)
         assert parent_node.children == [kid_node]
