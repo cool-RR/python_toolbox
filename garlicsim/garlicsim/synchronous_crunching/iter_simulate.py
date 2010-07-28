@@ -8,10 +8,8 @@ See its documentation for more info.
 '''
 
 import copy
-import warnings
 
 from garlicsim.general_misc import cute_iter_tools
-from garlicsim.general_misc import misc_tools
 
 import garlicsim
 import garlicsim.misc

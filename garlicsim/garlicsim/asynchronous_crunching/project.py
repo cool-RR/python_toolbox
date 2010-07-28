@@ -285,25 +285,30 @@ class Project(object):
         
         current_node = node
         first_run = True
-        for current_state in finite_iterator:
-            current_node = self.tree.add_state(current_state,
-                                               parent=current_node,
-                                               step_profile=step_profile)
-            history_browser.end_node = current_node
-            if first_run:
-                history_browser.path = current_node.make_containing_path()
-                # Just once, after the first run, we set the path of the history
-                # browser to be the new end_node's path. Why?
-                
-                # Because just after the first run we've created the first new
-                # node, possibly causing a fork. Because of the new fork, the
-                # original path that we created at the beginning of this method
-                # will get confused and take the old timeline instead of the new
-                # timeline. (And it wouldn't even have the end_node to stop it,
-                # because that would be on the new timeline.) So we create a new
-                # path for the history browser. We only need to do this once,
-                # because after the first node we work on one straight timeline
-                # and we don't fork the tree any more.
+        try:
+            for current_state in finite_iterator:
+                current_node = self.tree.add_state(current_state,
+                                                   parent=current_node,
+                                                   step_profile=step_profile)
+                history_browser.end_node = current_node
+                if first_run:
+                    history_browser.path = current_node.make_containing_path()
+                    # Just once, after the first run, we set the path of the
+                    # history browser to be the new end_node's path. Why?
+                    
+                    # Because just after the first run we've created the first
+                    # new node, possibly causing a fork. Because of the new
+                    # fork, the original path that we created at the beginning
+                    # of this method will get confused and take the old timeline
+                    # instead of the new timeline. (And it wouldn't even have
+                    # the end_node to stop it, because that would be on the new
+                    # timeline.) So we create a new path for the history
+                    # browser. We only need to do this once, because after the
+                    # first node we work on one straight timeline and we don't
+                    # fork the tree any more.
+        
+        except garlicsim.misc.WorldEnd:
+            self.tree.make_end(current_node, step_profile)
             
         return current_node
     
@@ -333,14 +338,17 @@ class Project(object):
         
         current_node = node
         
-        for current_state in finite_iterator:
-            current_node = self.tree.add_state(current_state,
-                                               parent=current_node,
-                                               step_profile=step_profile)
+        try:
+            for current_state in finite_iterator:
+                current_node = self.tree.add_state(current_state,
+                                                   parent=current_node,
+                                                   step_profile=step_profile)
+        except garlicsim.misc.WorldEnd:
+            self.tree.make_end(current_node, step_profile)
             
         return current_node
     
-    @with_tree_lock
+    
     def iter_simulate(self, node, iterations=1, *args, **kwargs):
         '''
         Simulate from the given node for the given number of iterations.
@@ -396,28 +404,34 @@ class Project(object):
         yield current_node
         
         first_run = True
-        for current_state in finite_iterator:
-            current_node = self.tree.add_state(current_state,
-                                               parent=current_node,
-                                               step_profile=step_profile)
-            history_browser.end_node = current_node
-            if first_run:
-                history_browser.path = current_node.make_containing_path()
-                # Just once, after the first run, we set the path of the history
-                # browser to be the new end_node's path. Why?
+
+        try:
+            for current_state in finite_iterator:
+                current_node = self.tree.add_state(current_state,
+                                                   parent=current_node,
+                                                   step_profile=step_profile)
+                history_browser.end_node = current_node
+                if first_run:
+                    history_browser.path = current_node.make_containing_path()
+                    # Just once, after the first run, we set the path of the
+                    # history browser to be the new end_node's path. Why?
+                    
+                    # Because just after the first run we've created the first
+                    # new node, possibly causing a fork. Because of the new
+                    # fork, the original path that we created at the beginning
+                    # of this method will get confused and take the old timeline
+                    # instead of the new timeline. (And it wouldn't even have
+                    # the end_node to stop it, because that would be on the new
+                    # timeline.) So we create a new path for the history
+                    # browser. We only need to do this once, because after the
+                    # first node we work on one straight timeline and we don't
+                    # fork the tree any more.
+                    
+                yield current_node
+        
+        except garlicsim.misc.WorldEnd:
+            self.tree.make_end(current_node, step_profile)
                 
-                # Because just after the first run we've created the first new
-                # node, possibly causing a fork. Because of the new fork, the
-                # original path that we created at the beginning of this method
-                # will get confused and take the old timeline instead of the new
-                # timeline. (And it wouldn't even have the end_node to stop it,
-                # because that would be on the new timeline.) So we create a new
-                # path for the history browser. We only need to do this once,
-                # because after the first node we work on one straight timeline
-                # and we don't fork the tree any more.
-                
-            yield current_node
-    
     
     @with_tree_lock
     def __non_history_dependent_iter_simulate(self, node, iterations,
@@ -447,11 +461,15 @@ class Project(object):
         
         yield current_node
         
-        for current_state in finite_iterator:
-            current_node = self.tree.add_state(current_state,
-                                               parent=current_node,
-                                               step_profile=step_profile)
-            yield current_node
+        try:
+            for current_state in finite_iterator:
+                current_node = self.tree.add_state(current_state,
+                                                   parent=current_node,
+                                                   step_profile=step_profile)
+                yield current_node
+        
+        except garlicsim.misc.WorldEnd:
+            self.tree.make_end(current_node, step_profile)
             
     
     def __getstate__(self):
