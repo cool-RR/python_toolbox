@@ -10,6 +10,7 @@ worker threads or worker processes.
 
 from simulate import simulate
 from list_simulate import list_simulate
+from iter_simulate import iter_simulate
 from history_browser import HistoryBrowser
 
-__all__ = ["simulate", "list_simulate", "HistoryBrowser"]
+__all__ = ['simulate', 'list_simulate', 'list_simulate', 'HistoryBrowser']

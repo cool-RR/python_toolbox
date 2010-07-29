@@ -261,9 +261,9 @@ class Project(object):
     def __history_dependent_simulate(self, node, iterations,
                                      step_profile=None):
         '''
-        For history-dependent simulations only:
-        
         Simulate from the given node for the given number of iterations.
+        
+        (Internal function for history-dependent simulations only.)
         
         The results are implemented the results into the tree. Note that the
         crunching for this is done synchronously, i.e. in the currrent thread.
@@ -285,25 +285,30 @@ class Project(object):
         
         current_node = node
         first_run = True
-        for current_state in finite_iterator:
-            current_node = self.tree.add_state(current_state,
-                                               parent=current_node,
-                                               step_profile=step_profile)
-            history_browser.end_node = current_node
-            if first_run:
-                history_browser.path = current_node.make_containing_path()
-                # Just once, after the first run, we set the path of the history
-                # browser to be the new end_node's path. Why?
-                
-                # Because just after the first run we've created the first new
-                # node, possibly causing a fork. Because of the new fork, the
-                # original path that we created at the beginning of this method
-                # will get confused and take the old timeline instead of the new
-                # timeline. (And it wouldn't even have the end_node to stop it,
-                # because that would be on the new timeline.) So we create a new
-                # path for the history browser. We only need to do this once,
-                # because after the first node we work on one straight timeline
-                # and we don't fork the tree any more.
+        try:
+            for current_state in finite_iterator:
+                current_node = self.tree.add_state(current_state,
+                                                   parent=current_node,
+                                                   step_profile=step_profile)
+                history_browser.end_node = current_node
+                if first_run:
+                    history_browser.path = current_node.make_containing_path()
+                    # Just once, after the first run, we set the path of the
+                    # history browser to be the new end_node's path. Why?
+                    
+                    # Because just after the first run we've created the first
+                    # new node, possibly causing a fork. Because of the new
+                    # fork, the original path that we created at the beginning
+                    # of this method will get confused and take the old timeline
+                    # instead of the new timeline. (And it wouldn't even have
+                    # the end_node to stop it, because that would be on the new
+                    # timeline.) So we create a new path for the history
+                    # browser. We only need to do this once, because after the
+                    # first node we work on one straight timeline and we don't
+                    # fork the tree any more.
+        
+        except garlicsim.misc.WorldEnd:
+            self.tree.make_end(current_node, step_profile)
             
         return current_node
     
@@ -312,9 +317,9 @@ class Project(object):
     def __non_history_dependent_simulate(self, node, iterations,
                                          step_profile=None):
         '''
-        For non-history-dependent simulations only:
-        
         Simulate from the given node for the given number of iterations.
+        
+        (Internal function for non-history-dependent simulations only.)
         
         The results are implemented the results into the tree. Note that the
         crunching for this is done synchronously, i.e. in the currrent thread.
@@ -333,13 +338,139 @@ class Project(object):
         
         current_node = node
         
-        for current_state in finite_iterator:
-            current_node = self.tree.add_state(current_state,
-                                               parent=current_node,
-                                               step_profile=step_profile)
+        try:
+            for current_state in finite_iterator:
+                current_node = self.tree.add_state(current_state,
+                                                   parent=current_node,
+                                                   step_profile=step_profile)
+        except garlicsim.misc.WorldEnd:
+            self.tree.make_end(current_node, step_profile)
             
         return current_node
     
+    
+    def iter_simulate(self, node, iterations=1, *args, **kwargs):
+        '''
+        Simulate from the given node for the given number of iterations.
+        
+        The results are implemented into the tree. Note that the crunching for
+        this is done synchronously, i.e. in the currrent thread.
+        
+        This returns a generator that yields all the nodes one-by-one, from the
+        initial node to the final one.
+        
+        Any extraneous parameters will be passed to the step function.
+        '''
+        
+        step_profile = garlicsim.misc.StepProfile(*args, **kwargs)
+        
+        if self.simpack_grokker.history_dependent:
+            return self.__history_dependent_iter_simulate(node, iterations,
+                                                          step_profile)
+        else:
+            return self.__non_history_dependent_iter_simulate(node, iterations,
+                                                              step_profile)
+        
+                
+    def __history_dependent_iter_simulate(self, node, iterations,
+                                          step_profile=None):
+        '''
+        Simulate from the given node for the given number of iterations.
+        
+        (Internal function for history-dependent simulations only.)
+        
+        The results are implemented into the tree. Note that the crunching for
+        this is done synchronously, i.e. in the currrent thread.
+        
+        This returns a generator that yields all the nodes one-by-one, from the
+        initial node to the final one.
+        
+        A step profile may be passed to be used with the step function.
+        '''
+        
+        if step_profile is None: step_profile = garlicsim.misc.StepProfile()
+        
+        path = node.make_containing_path()
+        history_browser = \
+            garlicsim.synchronous_crunching.HistoryBrowser(path, end_node=node)
+        
+        iterator = self.simpack_grokker.step_generator(history_browser,
+                                                       step_profile)
+        finite_iterator = cute_iter_tools.shorten(iterator, iterations)
+        finite_iterator_with_lock = cute_iter_tools.iter_with(
+            finite_iterator,
+            self.tree.lock.write
+        )
+        
+        current_node = node
+        
+        yield current_node
+        
+        try:
+            for current_state in finite_iterator_with_lock:
+                
+                history_browser.end_node = current_node
+                history_browser.path = current_node.make_containing_path()
+                # Similarly to the `__history_dependent_simulate` method, here
+                # we also need to recreate the path. But in this case we need to
+                # do it not only on the first run, but on *each* run of the
+                # loop, because this is a generator, and the user may wreak
+                # havoc with the tree between `yield`s, causing our original
+                # path not to lead to the end_node anymore.                
+                # todo optimize: The fact we recreate a path every time might be
+                # costly.
+                
+                current_node = self.tree.add_state(current_state,
+                                                   parent=current_node,
+                                                   step_profile=step_profile)
+                    
+                yield current_node
+        
+        except garlicsim.misc.WorldEnd:
+            self.tree.make_end(current_node, step_profile)
+                
+    
+    def __non_history_dependent_iter_simulate(self, node, iterations,
+                                              step_profile=None):
+        '''
+        Simulate from the given node for the given number of iterations.
+        
+        (Internal function for non-history-dependent simulations only.)
+        
+        The results are implemented into the tree. Note that the crunching for
+        this is done synchronously, i.e. in the currrent thread.
+        
+        This returns a generator that yields all the nodes one-by-one, from the
+        initial node to the final one.
+        
+        A step profile may be passed to be used with the step function.
+        '''
+        
+        if step_profile is None: step_profile = garlicsim.misc.StepProfile()
+
+        state = node.state
+                
+        iterator = self.simpack_grokker.step_generator(state, step_profile)
+        finite_iterator = cute_iter_tools.shorten(iterator, iterations)
+        finite_iterator_with_lock = cute_iter_tools.iter_with(
+            finite_iterator,
+            self.tree.lock.write
+        )
+        
+        current_node = node
+        
+        yield current_node
+        
+        try:
+            for current_state in finite_iterator_with_lock:
+                current_node = self.tree.add_state(current_state,
+                                                   parent=current_node,
+                                                   step_profile=step_profile)
+                yield current_node
+        
+        except garlicsim.misc.WorldEnd:
+            self.tree.make_end(current_node, step_profile)
+            
     
     def __getstate__(self):
         my_dict = dict(self.__dict__)

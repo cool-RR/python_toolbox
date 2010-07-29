@@ -5,6 +5,8 @@
 # todo: make something like `filter` except it returns first found, or raises
 # exception
 
+from __future__ import with_statement
+
 import itertools
 import __builtin__
 
@@ -29,6 +31,7 @@ def consecutive_pairs(iterable):
             first_run = False
         old = current
 
+        
 def orderless_combinations(iterable, n, start=0):
     '''
     Iterate over combinations of items from the iterable.
@@ -115,9 +118,25 @@ def product(*args, **kwargs):
     product('ABCD', 'xy') --> Ax Ay Bx By Cx Cy Dx Dy
     product(range(2), repeat=3) --> 000 001 010 011 100 101 110 111
     '''
+    # todo: revamp
     pools = map(tuple, args) * kwargs.get('repeat', 1)
     result = [[]]
     for pool in pools:
         result = [x + [y] for x in result for y in pool]
     for prod in result:
         yield tuple(prod)
+
+
+def iter_with(iterable, context_manager):
+    '''Iterate on `iterable`, `with`ing the context manager on every `next`.'''
+    
+    while True:
+        
+        with context_manager:
+            next_item = iterable.next()
+            # You may notice that we are not `except`ing a StopIteration here;
+            # If we get one, it'll just get propagated and end *this* iterator.
+        
+        yield next_item
+        
+        

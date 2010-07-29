@@ -118,6 +118,13 @@ class CrunchingManager(object):
         Returns the total amount of nodes that were added to the tree in the
         process.
         '''
+        # Danger, Will Robinson! This right here is one of the most technical
+        # and sensitive functions in all of GarlicSim-land. It's hard to keep
+        # track of what's going on in this function. Be careful if you're trying
+        # to make changes. May the Force be with you.
+        
+        # todo: Extensively document the implementation of this function.
+        
         total_added_nodes = garlicsim.misc.NodesAdded(0)
 
         

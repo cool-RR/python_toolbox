@@ -48,6 +48,8 @@ def simpack_test():
         
 def simpack_check(simpack, cruncher):
     
+    my_simpack_grokker = garlicsim.misc.SimpackGrokker(simpack)
+    
     state = simpack.State.create_messy_root() if \
           simpack.State.create_messy_root else \
           simpack.State.create_root()
@@ -56,7 +58,17 @@ def simpack_check(simpack, cruncher):
     
     result = garlicsim.list_simulate(state, 5)
     
-    my_simpack_grokker = garlicsim.misc.SimpackGrokker(simpack)
+    iter_result = garlicsim.iter_simulate(state, 5)
+    
+    
+    assert not hasattr(iter_result, '__getitem__')
+    assert hasattr(iter_result, '__iter__')
+    iter_result_in_list = list(iter_result)
+    del iter_result
+    assert len(iter_result_in_list) == len(result) == 6
+    if _is_deterministic(simpack):
+        assert iter_result_in_list == result
+    
     
     empty_step_profile = garlicsim.misc.StepProfile()
     
@@ -77,6 +89,8 @@ def simpack_check(simpack, cruncher):
     project = garlicsim.Project(simpack)
     
     project.crunching_manager.Cruncher = cruncher
+    
+    assert project.tree.lock._ReadWriteLock__writer is None
     
     root = project.root_this_state(state)
     
@@ -138,7 +152,8 @@ def simpack_check(simpack, cruncher):
     
     assert len(project.tree.nodes) == x + y + 6 + total_nodes_added
     assert len(project.tree.all_possible_paths()) == 3
-
+    
+    assert project.tree.lock._ReadWriteLock__writer is None
     
     two_paths = node_3.all_possible_paths()
     
@@ -180,6 +195,37 @@ def simpack_check(simpack, cruncher):
     assert len(project.tree.roots) == 2
     
     assert len(project.tree.all_possible_paths()) == 4
+    
+    
+    
+    assert project.tree.lock._ReadWriteLock__writer is None
+    
+    number_of_nodes = len(project.tree.nodes)
+    iterator = project.iter_simulate(node_1, 10)
+    
+    assert project.tree.lock._ReadWriteLock__writer is None
+    
+    new_node = iterator.next()
+    assert new_node is node_1
+    assert len(project.tree.nodes) == number_of_nodes
+    
+    assert project.tree.lock._ReadWriteLock__writer is None
+    
+    new_node = iterator.next()
+    assert new_node is not node_1
+    assert new_node.parent is node_1
+    assert len(project.tree.nodes) == number_of_nodes + 1
+    
+    bunch_of_new_nodes = tuple(iterator)
+    for parent_node, kid_node in cute_iter_tools.consecutive_pairs(bunch_of_new_nodes):
+        assert project.tree.lock._ReadWriteLock__writer is None
+        assert isinstance(parent_node, garlicsim.data_structures.Node)
+        assert isinstance(kid_node, garlicsim.data_structures.Node)
+        assert parent_node.children == [kid_node]
+        assert kid_node.parent is parent_node
+        
+    assert len(project.tree.nodes) == number_of_nodes + 10
+        
     
     
     

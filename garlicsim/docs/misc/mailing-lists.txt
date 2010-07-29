@@ -12,8 +12,9 @@ The development mailing list is `garlicsim.dev@librelist.org
 <mailto:garlicsim.dev@librelist.org>`_. This is for the developers who work on
 GarlicSim itself.
 
-To subscribe to a list, just send an empty email to it. (This is required before
-you can post anything.)
+To subscribe to a list, just send an empty email to it. This is required before
+you can post anything. Wait for an automated email asking you to confirm, then
+confirm, and only then you will be registered.
 
 These lists are hosted by `librelist <http://librelist.org>`_, which is
 currently slightly experimental.
