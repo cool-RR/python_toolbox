@@ -205,13 +205,13 @@ def simpack_check(simpack, cruncher):
     
     assert project.tree.lock._ReadWriteLock__writer is None
     
-    new_node = next(iterator)
+    new_node = iterator.next()
     assert new_node is node_1
     assert len(project.tree.nodes) == number_of_nodes
     
     assert project.tree.lock._ReadWriteLock__writer is None
     
-    new_node = next(iterator)
+    new_node = iterator.next()
     assert new_node is not node_1
     assert new_node.parent is node_1
     assert len(project.tree.nodes) == number_of_nodes + 1

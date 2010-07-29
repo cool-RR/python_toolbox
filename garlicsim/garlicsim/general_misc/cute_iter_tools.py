@@ -5,6 +5,8 @@
 # todo: make something like `filter` except it returns first found, or raises
 # exception
 
+from __future__ import with_statement
+
 import itertools
 import __builtin__
 
@@ -131,7 +133,7 @@ def iter_with(iterable, context_manager):
     while True:
         
         with context_manager:
-            next_item = next(iterable)
+            next_item = iterable.next()
             # You may notice that we are not `except`ing a StopIteration here;
             # If we get one, it'll just get propagated and end *this* iterator.
         
