@@ -28,5 +28,5 @@ from synchronous_crunching import simulate, list_simulate, iter_simulate
 
 __all__ = ['Project', 'simulate', 'list_simulate', 'iter_simulate']
 
-__version__ = '0.5'
+__version__ = '0.5.1'
 
