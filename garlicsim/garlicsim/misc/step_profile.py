@@ -17,15 +17,7 @@ __all__ = ['StepProfile']
 
 class StepProfile(object): # todo: use CachedType?
     '''
-    A profile of *args and **kwargs to be used with a step function.
-    
-    Usage:
-    
-    step_profile = StepProfile(34, "meow", width=60)
-
-    step(state, *step_profile.args, **step_profile.kwargs)
-    # is equivalent to
-    step(state, 34, "meow", width=60)
+    A profile of *args and **kwargs to be used with a step function. tododoc
     '''
     # todo: perhaps this should be based on an ArgumentsProfile after all?
     # In __repr__ and stuff we'll just check self's class. How does Python
@@ -105,10 +97,11 @@ class StepProfile(object): # todo: use CachedType?
         Get a string representation of the step profile.
         
         Example output:
-        StepProfile('billinear', t=7)
+        StepProfile(<unbound method State.step>, 'billinear', t=7)
         '''
-        #tododoc
-        args_string = ', '.join([repr(thing) for thing in self.args])
+        args_string = ', '.join(
+            [repr(thing) for thing in (self.step_function,) + self.args]
+        )
         kwargs_string = ', '.join([str(key)+'='+repr(value) for \
                                    (key, value) in self.kwargs.items()])
         strings = [thing for thing in [args_string, kwargs_string] if \

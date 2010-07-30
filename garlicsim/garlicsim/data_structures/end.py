@@ -155,7 +155,7 @@ class End(TreeMember):
         
         Example output:        
         <garlicsim.data_structures.End from state with clock 6.5, crunched with
-        StepProfile(t=0.1), at 0x1ffde70>
+        StepProfile(<unbound method State.step>), at 0x1ffde70>
         '''
         
         return '<%s from state with clock %s, crunched with %s, at %s>' % \

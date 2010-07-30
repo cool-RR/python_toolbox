@@ -8,11 +8,11 @@ from garlicsim.misc import step_iterators
 
 
 class SimpleStep(BaseStepType):
-    pass
+    step_iterator_class = step_iterators.StepIterator
 
 
 class StepGenerator(BaseStepType):
-    step_iterator_class = step_iterators.StepIterator
+    pass
     
     
 class HistoryStep(BaseStepType):

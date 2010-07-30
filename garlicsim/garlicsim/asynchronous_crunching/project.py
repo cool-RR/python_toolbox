@@ -133,7 +133,7 @@ class Project(object):
             
             if not jobs_of_leaf:
                 step_profile = leaf.step_profile or \
-                    garlicsim.misc.StepProfile(self.default_step_function)
+                    self.build_step_profile()
                 crunching_profile = CrunchingProfile(new_clock_target,
                                                      step_profile)
                 job = Job(leaf, crunching_profile)
@@ -170,7 +170,7 @@ class Project(object):
             job.crunching_profile.raise_clock_target(new_clock_target)
             return job
         else:
-            step_profile = leaf.step_profile or garlicsim.misc.StepProfile(self.default_step_function)
+            step_profile = leaf.step_profile or self.build_step_profile()
             crunching_profile = CrunchingProfile(new_clock_target,
                                                  step_profile)
             job = Job(leaf, crunching_profile)
@@ -211,7 +211,7 @@ class Project(object):
         Returns the job.
         '''
         
-        step_profile = garlicsim.misc.StepProfile(*args, **kwargs)
+        step_profile = self.build_step_profile(*args, **kwargs)
         
         clock_target = node.state.clock + clock_buffer
         
@@ -250,7 +250,7 @@ class Project(object):
         '''
         # todo: is simulate a good name? Need to say it's synchronously
         
-        step_profile = garlicsim.misc.StepProfile(*args, **kwargs)
+        step_profile = self.build_step_profile(*args, **kwargs)
         
         if self.simpack_grokker.history_dependent:
             return self.__history_dependent_simulate(node, iterations,
@@ -277,8 +277,7 @@ class Project(object):
         '''
         
         if step_profile is None:
-            step_profile = \
-                garlicsim.misc.StepProfile(self.default_step_function)
+            step_profile = self.build_step_profile()
         
         path = node.make_containing_path()
         history_browser = \
@@ -335,12 +334,11 @@ class Project(object):
         '''
         
         if step_profile is None:
-            step_profile = \
-                garlicsim.misc.StepProfile(self.default_step_function)
+            step_profile = self.build_step_profile()
 
         state = node.state
                 
-        iterator = self.simpack_grokker.nget_step_iterator(state, step_profile)
+        iterator = self.simpack_grokker.get_step_iterator(state, step_profile)
         finite_iterator = cute_iter_tools.shorten(iterator, iterations)
         
         current_node = node
@@ -369,7 +367,7 @@ class Project(object):
         Any extraneous parameters will be passed to the step function.
         '''
         
-        step_profile = garlicsim.misc.StepProfile(*args, **kwargs)
+        step_profile = self.build_step_profile(*args, **kwargs)
         
         if self.simpack_grokker.history_dependent:
             return self.__history_dependent_iter_simulate(node, iterations,
@@ -396,8 +394,7 @@ class Project(object):
         '''
         
         if step_profile is None:
-            step_profile = \
-                garlicsim.misc.StepProfile(self.default_step_function)
+            step_profile = self.build_step_profile()
         
         path = node.make_containing_path()
         history_browser = \
@@ -456,8 +453,7 @@ class Project(object):
         '''
         
         if step_profile is None:
-            step_profile = \
-                garlicsim.misc.StepProfile(self.default_step_function)
+            step_profile = self.build_step_profile()
 
         state = node.state
                 
@@ -524,7 +520,14 @@ class Project(object):
                    hex(id(self))
                )
         
-        
+    
+    
+    def build_step_profile(self, *args, **kwargs):
+        return garlicsim.misc.StepProfile.build_with_default_step_function(
+            self.default_step_function,
+            *args,
+            **kwargs
+        )
         
         
         

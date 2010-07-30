@@ -68,7 +68,7 @@ def _history_iter_simulate(simpack_grokker, state, iterations,
     
     if step_profile is None:
         step_profile = garlicsim.misc.StepProfile(
-            simpack_grokker.default_Step_function
+            simpack_grokker.default_step_function
         )
     
     tree = garlicsim.data_structures.Tree()
@@ -116,7 +116,7 @@ def _non_history_iter_simulate(simpack_grokker, state, iterations,
 
     if step_profile is None:
         step_profile = garlicsim.misc.StepProfile(
-            simpack_grokker.default_Step_function
+            simpack_grokker.default_step_function
         )
     
     iterator = simpack_grokker.get_step_iterator(state, step_profile)

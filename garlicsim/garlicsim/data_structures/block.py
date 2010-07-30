@@ -401,7 +401,7 @@ while the index was bigger than the block's length.''')
         
         Example output:
         <garlicsim.data_structures.Block of length 40 crunched with
-        StepProfile(t=0.1) at 0x1c84d70>
+        StepProfile(<unbound method State.step>, t=0.1) at 0x1c84d70>
         '''
         assert self.alive # todo: say "Dead block"
         return '<%s of length %s, crunched with %s at %s>' % \

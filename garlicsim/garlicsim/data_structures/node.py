@@ -390,7 +390,8 @@ back. This node's ancestry line doesn't go back that far.''')
         
         Example output:        
         <garlicsim.data_structures.Node with clock 6.5, untouched, belongs to a
-        block, crunched with StepProfile(t=0.1), at 0x1ffde70>
+        block, crunched with StepProfile(<unbound method State.step>), at
+        0x1ffde70>
         '''
         return '<%s%s, %s%s%s, %s, %sat %s>' % \
             (

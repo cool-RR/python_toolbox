@@ -45,10 +45,11 @@ class Job(object):
         Example output: 
 
         Job(node=<garlicsim.data_structures.node.Node with clock 17, untouched,
-        belongs to a block, crunched with StepProfile(), at 0x20664b0>, tododoc
+        belongs to a block, crunched with StepProfile(<unbound method State.step>), at 0x20664b0>,
         crunching_profile=CrunchingProfile(clock_target=100,
-        step_profile=StepProfile()))
+        step_profile=StepProfile(<unbound method State.step>)))
         '''
+        # todo: too long, should shorten
         
         stuff = []
         stuff.append("node=%s" % self.node)
