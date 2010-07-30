@@ -41,8 +41,6 @@ class StepIterator(BaseStepIterator):
         self.step_function = step_profile.step_function
         
         self.raw_iterator = None
-        
-        self.current_state = None
                     
         self.auto_clock_generator = AutoClockGenerator()
         
