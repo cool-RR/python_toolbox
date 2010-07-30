@@ -7,8 +7,8 @@ This module defines the StepProfile class.
 See its documentation for more information.
 '''
 
-
 import copy
+
 
 __all__ = ['StepProfile']
 
@@ -29,7 +29,10 @@ class StepProfile(object): # todo: use CachedType?
     # In __repr__ and stuff we'll just check self's class. How does Python
     # do it when you subclass its builtin types?
     
-    def __init__(self, *args, **kwargs):
+    def __init__(self, step_function, *args, **kwargs):
+        
+        assert callable(step_function)
+        self.step_function = step_function
         
         # Perhaps we were passed a StepProfile object instead of args
         # and kwargs? If so load that one, cause we're all cool and nice.
@@ -52,8 +55,10 @@ class StepProfile(object): # todo: use CachedType?
         '''
         Take another step options profile and load its arguments into this one.
         '''
-        self.args = copy.copy(profile.args)
-        self.kwargs = copy.copy(profile.kwargs)
+        self.step_function = step_profile.step_function
+        self.args = copy.copy(step_profile.args)
+        self.kwargs = copy.copy(step_profile.kwargs)
+        
         
     def __repr__(self):
         '''
@@ -62,6 +67,7 @@ class StepProfile(object): # todo: use CachedType?
         Example output:
         StepProfile('billinear', t=7)
         '''
+        #tododoc
         args_string = ', '.join([repr(thing) for thing in self.args])
         kwargs_string = ', '.join([str(key)+'='+repr(value) for \
                                    (key, value) in self.kwargs.items()])
@@ -70,14 +76,18 @@ class StepProfile(object): # todo: use CachedType?
         big_string = ', '.join(strings)
         return 'StepProfile(%s)' % big_string
     
+    
     def __eq__(self, other):
         return isinstance(other, StepProfile) and \
+               self.step_function is other.step_function and \
                self.args == other.args and self.kwargs == other.kwargs
+
     
     def __hash__(self):
         # Defining __hash__ because there's __eq__ which makes the default
         # __hash__ disappear on Python 3.
         return id(self)
 
+    
     def __ne__(self, other):
         return not self.__eq__(other)
