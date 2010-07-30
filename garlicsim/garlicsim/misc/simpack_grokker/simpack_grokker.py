@@ -14,12 +14,13 @@ import imp
 from garlicsim.general_misc import import_tools
 import garlicsim.general_misc.caching
 
-from garlicsim.misc import AutoClockGenerator, InvalidSimpack, simpack_tools
+from garlicsim.misc import (AutoClockGenerator, InvalidSimpack,
+                            GarlicSimException, simpack_tools)
 from garlicsim.misc import step_iterators as step_iterators_module
 import misc
 
 from .settings import Settings
-from .determine_step_type import determine_step_type
+from .get_step_type import get_step_type
 from . import step_types
 
 
@@ -66,7 +67,7 @@ it's not a subclass of `garlicsim.data_structures.State`.''' % \
         for method in state_methods.itervalues():
             
             if 'step' in method.__name__:
-                step_type = determine_step_type(method)
+                step_type = get_step_type(method)
                 self.step_functions[step_type].append(method)
             
         
@@ -196,24 +197,34 @@ it's not a subclass of `garlicsim.data_structures.State`.''' % \
         step function.
         '''
         
-        if self.step_generator_defined:
-            step_generator = self.simpack.history_step_generator if \
-                           self.history_dependent else \
-                           self.simpack.State.step_generator
-            return step_iterators_module.StepIterator(
-                state_or_history_browser,
-                step_profile,
-                step_generator=step_generator
-            )
-        else:
-            assert self.simple_step_defined
-            simple_step = self.simpack.history_step if self.history_dependent \
-                        else self.simpack.State.step
-            return step_iterators_module.StepIterator(
-                state_or_history_browser,
-                step_profile,
-                simple_step=simple_step
-            )
+        step_function = step_profile.step_function
+        step_type = get_step_type(step_function)
+        step_iterator_class = step_type.step_iterator_class
+
+        step_iterator = step_iterator_class(state_or_history_browser,
+                                            step_profile)
         
+        return step_iterator
         
+    
+    def get_inplace_step_iterator(self, state, step_profile):
+        step_function = step_profile.step_function
+        step_type = get_step_type(step_function)
+        
+        if step_type not in (step_types.InplaceStep,
+                             step_types.InplaceStepGenerator):
+
+            raise GarlicSimException("Can't get inplace step iterator for %s, "
+                                     "which is a non-inplace step "
+                                     "function." % step_function)
+            
+        inplace_step_iterator_class = step_type.inplace_step_iterator_class
+
+        inplace_step_iterator = inplace_step_iterator_class(
+            state_or_history_browser,
+            step_profile
+        )
+        
+        return inplace_step_iterator
+    
         

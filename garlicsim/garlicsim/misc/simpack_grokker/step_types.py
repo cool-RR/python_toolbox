@@ -4,29 +4,32 @@
 
 # todo: can do __instancehook__ shit later
 from .base_step_type import BaseStepType
+from garlicsim.misc import step_iterators
 
 
-class SimpleStep(StepType):
+class SimpleStep(BaseStepType):
     pass
 
 
-class StepGenerator(StepType):
+class StepGenerator(BaseStepType):
+    step_iterator_class = step_iterators.StepIterator
+    
+    
+class HistoryStep(BaseStepType):
+    step_iterator_class = step_iterators.HistoryStepIterator
+
+
+class HistoryStepGenerator(BaseStepType):
     pass
 
 
-class HistoryStep(StepType):
+class InplaceStep(BaseStepType):
+    inplace_step_iterator_class = 7
     pass
 
 
-class HistoryStepGenerator(StepType):
-    pass
-
-
-class InplaceStep(StepType):
-    pass
-
-
-class InplaceStepGenerator(StepType):
+class InplaceStepGenerator(BaseStepType):
+    inplace_step_iterator_class = 7
     pass
 
 

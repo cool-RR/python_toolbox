@@ -70,6 +70,9 @@ class Project(object):
         self.tree = garlicsim.data_structures.Tree()
         
         self.crunching_manager = CrunchingManager(self)
+        
+        self.default_step_function = simpack.simpack_grokker.default_step_function
+        # tododoc: make into "proxy property"
     
 
     def create_root(self, *args, **kwargs):
