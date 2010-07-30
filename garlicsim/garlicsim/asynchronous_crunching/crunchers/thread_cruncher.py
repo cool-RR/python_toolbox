@@ -45,7 +45,7 @@ class ThreadCruncher(BaseCruncher, threading.Thread):
         threading.Thread.__init__(self)
         
         self.project = project
-        self.step_generator = project.simpack_grokker.step_generator
+        self.step_iterator_getter = project.simpack_grokker.get_step_iterator
         self.crunching_profile = copy.deepcopy(crunching_profile)
         self.history_dependent = self.project.simpack_grokker.history_dependent
         
@@ -100,7 +100,7 @@ class ThreadCruncher(BaseCruncher, threading.Thread):
         else:
             thing = self.initial_state
 
-        self.iterator = self.step_generator(thing, self.step_profile)
+        self.iterator = self.step_iterator_getter(thing, self.step_profile)
             
         order = None
         

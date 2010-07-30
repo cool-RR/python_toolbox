@@ -33,16 +33,17 @@ class HistoryStepIterator(BaseStepIterator):
     '''
     # todo: make stuff private here?
     def __init__(self, history_browser, step_profile):
-
-        self.history_step_function = step_profile.step_function
         
-        self.raw_iterator = None
+        self.history_browser = history_browser
+        
+        self.history_step_function = step_profile.step_function
         
         self.step_profile = copy.deepcopy(step_profile)
         
+        self.raw_iterator = None
+        
         self.current_state = None
-        self.history_browser = state_or_history_browser
-            
+                    
         self.auto_clock_generator = AutoClockGenerator()
             
         self.step_profile_changed = False
