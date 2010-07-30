@@ -35,6 +35,8 @@ __all__ = ['ProcessCruncher']
 class Process(multiprocessing.Process):
     def __init__(self, step_iterator_getter, initial_state, crunching_profile):
         
+        multiprocessing.Process.__init__(self)
+        
         self.step_iterator_getter = step_iterator_getter
         self.initial_state = initial_state
         self.last_clock = self.initial_state.clock
@@ -56,6 +58,7 @@ class Process(multiprocessing.Process):
         self.order_queue = multiprocessing.Queue()
         '''Queue for receiving instructions from the main thread.'''
     
+        
     def set_low_priority(self):
         '''Set a low priority for this process.'''
         
@@ -105,8 +108,8 @@ class Process(multiprocessing.Process):
         
         self.step_profile = self.crunching_profile.step_profile
         
-        self.iterator = self.step_generator(self.initial_state,
-                                            self.step_profile)
+        self.iterator = self.step_iterator_getter(self.initial_state,
+                                                  self.step_profile)
         
         order = None
         
@@ -129,7 +132,8 @@ class Process(multiprocessing.Process):
         we retire the cruncher.
         '''
         if self.crunching_profile.state_satisfies(state):
-            raise ObsoleteCruncherError
+            raise ObsoleteCruncherError("We're done working, the clock target "
+                                        "has been reached. Shutting down.")
     
         
     def get_order(self):
@@ -147,8 +151,9 @@ class Process(multiprocessing.Process):
     def process_order(self, order):
         '''Process an order receieved from order_queue.'''
         
-        if order == "retire":
-            raise ObsoleteCruncherError
+        if order == 'retire':
+            raise ObsoleteCruncherError("Cruncher received a 'retire' order; "
+                                        "Shutting down.")
         
         elif isinstance(order, CrunchingProfile):
             self.process_crunching_profile_order(order)
@@ -158,10 +163,10 @@ class Process(multiprocessing.Process):
     def process_crunching_profile_order(self, order):
         '''Process an order to update the crunching profile.'''
         if self.crunching_profile.step_profile != order.step_profile:
-            self.work_queue.put(order.step_profile)
+            raise ObsoleteCruncherError('Step profile changed; Shutting down. '
+                                        'Crunching manager should create a '
+                                        'new cruncher.')
         self.crunching_profile = order
-        self.step_profile = order.step_profile            
-        self.iterator.set_step_profile(self.step_profile)
     
 
         
