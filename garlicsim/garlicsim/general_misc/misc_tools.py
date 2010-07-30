@@ -82,7 +82,7 @@ def get_object_from_address(address, parent_object=None):
         if '.' not in address:
             if isinstance(parent_object, types.ModuleType):
                 import_tools.import_if_exists(
-                    '.'.join(parent_object.__name__, address)
+                    '.'.join((parent_object.__name__, address))
                 )
                 # Not keeping reference, just importing so we could get later
             return getattr(parent_object, address)

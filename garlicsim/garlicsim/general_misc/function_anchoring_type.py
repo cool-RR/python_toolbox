@@ -8,8 +8,8 @@ from garlicsim.general_misc import misc_tools
 
 
 class FunctionAnchoringType(type):
-    def __call__(self, name, bases, namespace_dict):
-        my_type = super(type, self).__call__(self, name, bases, namespace_dict)
+    def __new__(self, name, bases, namespace_dict):
+        my_type = type.__new__(self, name, bases, namespace_dict)
         my_getted_vars = misc_tools.getted_vars(my_type)
         functions_to_anchor = [value for value in my_getted_vars.itervalues()
                                if isinstance(value, types.FunctionType)]
@@ -17,7 +17,7 @@ class FunctionAnchoringType(type):
             module_name = function.__module__
             module = __import__(function.__module__, fromlist=[''])
             function_name = function.__name__
-            anchor_address = '.'.join(module_name, function_name)
+            anchor_address = '.'.join((module_name, function_name))
             try:
                 already_defined_object = \
                     misc_tools.get_object_from_address(anchor_address)
