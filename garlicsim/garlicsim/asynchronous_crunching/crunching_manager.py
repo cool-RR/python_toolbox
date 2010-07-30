@@ -285,6 +285,3 @@ class CrunchingManager(object):
                    hex(id(self))
                )
     
-    
-    
-    

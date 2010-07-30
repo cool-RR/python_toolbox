@@ -9,6 +9,8 @@ See its documentation for more information.
 
 import copy
 
+from garlicsim.misc.simpack_grokker.get_step_type import get_step_type
+
 
 __all__ = ['StepProfile']
 
@@ -59,7 +61,45 @@ class StepProfile(object): # todo: use CachedType?
         self.args = copy.copy(step_profile.args)
         self.kwargs = copy.copy(step_profile.kwargs)
         
+ 
+    @staticmethod
+    def build_with_default_step_function(default_step_function, *args,
+                                         **kwargs):
+    
+        # Notice how we take from kwargs first.
+        candidates = None
+        if 'step_function' in kwargs:
+            candidates.append(kwargs['step_function'])
+        if len(args) >= 1:
+            candidates.append(args[0])
+            
+        if 'step_function' in kwargs:
+            step_function = kwargs['step_function']
+            
+            get_step_type(step_function)
+            # Just so things will break if it's not a step function.
+
+            kwargs_copy = kwargs.copy()
+            del kwargs_copy['step_function']
+            
+            return StepProfile(step_function, *args, **kwargs)
+
         
+        elif args:
+            
+            candidate = args[0]
+            
+            try:
+                get_step_type(candidate)
+            except Exception:
+                return StepProfile(default_step_function, *args, **kwargs)
+            else:
+                args_copy = args[1:]
+                return StepProfile(default_step_function, *args_copy, **kwargs)
+        
+        return StepProfile(default_step_function, *args, **kwargs)
+                
+    
     def __repr__(self):
         '''
         Get a string representation of the step profile.
