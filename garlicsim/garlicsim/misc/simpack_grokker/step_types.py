@@ -28,3 +28,7 @@ class InplaceStep(StepType):
 
 class InplaceStepGenerator(StepType):
     pass
+
+
+step_types_list = [SimpleStep, StepGenerator, HistoryStep,
+                   HistoryStepGenerator, InplaceStep, InplaceStepGenerator]

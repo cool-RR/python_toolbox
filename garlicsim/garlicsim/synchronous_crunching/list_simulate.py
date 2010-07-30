@@ -64,7 +64,7 @@ def _history_list_simulate(simpack_grokker, state, iterations,
     path = root.make_containing_path()
     history_browser = history_browser_module.HistoryBrowser(path)
     
-    iterator = simpack_grokker.step_generator(history_browser, step_profile)
+    iterator = simpack_grokker.get_step_iterator(history_browser, step_profile)
     finite_iterator = cute_iter_tools.shorten(iterator, iterations)
     
     current_node = root
@@ -102,7 +102,7 @@ def _non_history_list_simulate(simpack_grokker, state, iterations,
     root = tree.add_state(state, parent=None)
     path = root.make_containing_path()
     
-    iterator = simpack_grokker.step_generator(state, step_profile)
+    iterator = simpack_grokker.get_step_iterator(state, step_profile)
     finite_iterator = cute_iter_tools.shorten(iterator, iterations)
     
     current_node = root

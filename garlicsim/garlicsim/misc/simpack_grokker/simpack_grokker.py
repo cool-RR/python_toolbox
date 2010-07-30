@@ -19,6 +19,8 @@ from garlicsim.misc import step_iterators as step_iterators_module
 import misc
 
 from .settings import Settings
+from .determine_step_type import determine_step_type
+from . import step_types
 
 
 class SimpackGrokker(object):
@@ -57,50 +59,55 @@ it's not a subclass of `garlicsim.data_structures.State`.''' % \
         state_methods = dict((name , value) for (name, value) in
                              vars(State).iteritems() if callable(value))
 
-        for name, method in state_methods.iteritems():
-            if 'step' in name:
-                if 'inplace_step_generator'
-                'step_generator'
-                'history_step_generator'
-                'history_step'
-                'inplace_step'
-                
-                'step'
-                
+        self.step_functions = dict((step_type, []) for step_type in
+                                   step_types.step_types_list)
+        
+
+        for method in state_methods.itervalues():
+            
+            if 'step' in method.__name__:
+                step_type = determine_step_type(method)
+                self.step_functions[step_type].append(method)
             
         
+        all_step_functions = reduce(list.__add__,
+                                    self.step_functions.itervalues())
+        if not all_step_functions:
+            raise InvalidSimpack("The %s simpack has not defined any kind "
+                                 "of step function." % simpack.__name__)
         
-        self.simple_non_history_step_defined = hasattr(State, "step")
-        self.non_history_step_generator_defined = \
-            hasattr(State, "step_generator")
-        self.simple_history_step_defined = hasattr(simpack, "history_step")
-        self.history_step_generator_defined = hasattr(simpack,
-                                                      "history_step_generator")
+                
+        if self.step_functions[step_types.HistoryStep] or \
+           self.step_functions[step_types.HistoryStepGenerator]:
+            
+            self.history_dependent = True
+            
+            self.default_step_function = (
+                self.step_functions[step_types.HistoryStepGenerator] + \
+                self.step_functions[step_types.HistoryStep]
+            )[0]
+            
+            if self.step_functions[step_types.SimpleStep] or \
+               self.step_functions[step_types.StepGenerator] or \
+               self.step_functions[step_types.InplaceStep] or \
+               self.step_functions[step_types.InplaceStepGenerator]:
+                
+                raise InvalidSimpack("The %s simpack is defining both a "
+                                     "history-dependent step and a "
+                                     "non-history-dependent step - which "
+                                     "is forbidden." % simpack.__name__)
+        else: # No history step defined
+            
+            self.history_dependent = False
+            
+            self.default_step_function = (
+                self.step_functions[step_types.StepGenerator] + \
+                self.step_functions[step_types.SimpleStep] + \
+                self.step_functions[step_types.InplaceStepGenerator] + \
+                self.step_functions[step_types.InplaceStep]
+            )[0]
+            
         
-        self.non_history_step_defined = \
-            (self.simple_non_history_step_defined or \
-             self.non_history_step_generator_defined)
-        
-        self.history_step_defined = (self.simple_history_step_defined or \
-                                     self.history_step_generator_defined)
-        
-        self.simple_step_defined = (self.simple_non_history_step_defined or \
-                                    self.simple_history_step_defined)
-        
-        self.step_generator_defined = \
-            (self.non_history_step_generator_defined or \
-             self.history_step_generator_defined)
-        
-        if self.history_step_defined and self.non_history_step_defined:
-            raise InvalidSimpack('''The %s simpack is defining both a \
-history-dependent step and a non-history-dependent step - which is forbidden.\
-''' % simpack.__name__)
-        
-        if not (self.simple_step_defined or self.step_generator_defined):
-            raise InvalidSimpack('''The %s simpack has not defined any kind \
-of step function.''' % simpack.__name__)
-        
-        self.history_dependent = self.history_step_defined
         
     
     def __init_analysis_settings(self):
@@ -135,7 +142,7 @@ of step function.''' % simpack.__name__)
         if hasattr(self.simpack, 'settings'):
             
             original_settings = getattr(self.simpack, 'settings')
-        
+            
             for (key, value) in vars(self.settings).iteritems():
                 if hasattr(original_settings, key):
                     actual_value = getattr(original_settings, key)
@@ -143,14 +150,16 @@ of step function.''' % simpack.__name__)
             # todo: currently throws away unrecognized attributes from the
             # simpack's settings.
                 
-        
+    
+    """ tododoc: is this really needed? Can be done as a call to step_generator
     def step(self, state_or_history_browser, step_profile):
         '''
         Perform a step of the simulation.
         
         The step profile will specify which parameters to pass to the simpack's
         step function.
-        ''' 
+        '''
+        
         auto_clock_generator = AutoClockGenerator()
         if isinstance(state_or_history_browser,
                       garlicsim.data_structures.State):
@@ -176,10 +185,10 @@ of step function.''' % simpack.__name__)
             
         result.clock = auto_clock_generator.make_clock(result)
         return result
-            
+    """
         
     
-    def step_generator(self, state_or_history_browser, step_profile):
+    def get_step_iterator(self, state_or_history_browser, step_profile):
         '''
         Step generator for crunching states of the simulation.
         
