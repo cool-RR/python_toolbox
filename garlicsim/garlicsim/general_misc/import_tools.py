@@ -74,8 +74,13 @@ def import_all(package, exclude='__init__', silent_fail=False):
     
     
     
-def import_if_exists(module_name):
-    '''Import module by name, only if it exists, otherwise return None.'''    
+def import_if_exists(module_name, silent_fail=False):
+    '''
+    Import module by name and return it, only if it exists.
+    
+    If `silent_fail` is True, will return None if the module doesn't exist. If
+    `silent_fail` is False, will raise ImportError.
+    '''    
     if '.' in module_name:
         package_name, submodule_name = module_name.rsplit('.', 1)
         package = __import__(package_name, fromlist=[''])
@@ -88,7 +93,8 @@ def import_if_exists(module_name):
         try:
             imp.find_module(module_name)
         except ImportError:
-            return None
+            if not silent_fail:
+                raise
 
     # Not actually using the result of `imp.find_module`, just want to know that
     # it worked and the module exists. We'll let the conventional `__import__`

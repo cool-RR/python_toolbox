@@ -137,7 +137,8 @@ it's not a subclass of `garlicsim.data_structures.State`.''' % \
                 '.settings'
             ))
             
-            import_tools.import_if_exists(settings_module_name)
+            import_tools.import_if_exists(settings_module_name,
+                                          silent_fail=True)
             # This imports the `settings` submodule, if it exists, but it
             # does *not* keep a reference to it. We'll access `settings` as
             # an attribute of the simpack below.

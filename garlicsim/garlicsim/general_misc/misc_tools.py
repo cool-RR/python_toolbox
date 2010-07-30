@@ -4,6 +4,9 @@
 '''This module defines miscellaneous tools.'''
 
 import math
+import types
+
+from . import import_tools
 
 
 def frange(start, finish=None, step=1.):
@@ -60,6 +63,39 @@ def shorten_class_address(module_name, class_name):
     return '.'.join((last_successful_module_name, class_name))
 
 
+def get_object_from_address(address, parent_object=None):
+    if not parent_object:
+        if '.' not in address:
+            try:
+                return eval(address)
+            except NameError:
+                return __import__(address, fromlist=[''])   
+        else: # '.' in address
+            first_object_address, second_object_address = \
+                address.rsplit('.', 1)
+            first_object = get_object_from_address(first_object_address)
+            second_object = get_object_from_address(second_object_address,
+                                                    parent_object=first_object)
+            return second_object
+    
+    else: # parent_object is not none
+        if '.' not in address:
+            if isinstance(parent_object, types.ModuleType):
+                import_tools.import_if_exists(
+                    '.'.join(parent_object.__name__, address)
+                )
+                # Not keeping reference, just importing so we could get later
+            return getattr(parent_object, address)
+        else: # '.' in address
+            first_object_address, second_object_address = \
+                address.rsplit('.', 1)
+            first_object = get_object_from_address(first_object_address, parent_object)
+            second_object = get_object_from_address(second_object_address,
+                                                    parent_object=first_object)
+            return second_object
+    
+
+
 class LazilyEvaluatedConstantProperty(object):
     '''
     A property that is calculated (a) lazily and (b) only once for an object.
@@ -104,6 +140,7 @@ class LazilyEvaluatedConstantProperty(object):
         
         return value
 
+    
 def getted_vars(thing):
     # todo: can make "fallback" option, to use value from original `vars` if get
     # is unsuccessful.
