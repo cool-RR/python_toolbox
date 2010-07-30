@@ -133,7 +133,8 @@ class Project(object):
             jobs_of_leaf = self.crunching_manager.get_jobs_by_node(leaf)
             
             if not jobs_of_leaf:
-                step_profile = leaf.step_profile or garlicsim.misc.StepProfile()
+                step_profile = leaf.step_profile or \
+                    garlicsim.misc.StepProfile(self.default_step_function)
                 crunching_profile = CrunchingProfile(new_clock_target,
                                                      step_profile)
                 job = Job(leaf, crunching_profile)
@@ -170,7 +171,7 @@ class Project(object):
             job.crunching_profile.raise_clock_target(new_clock_target)
             return job
         else:
-            step_profile = leaf.step_profile or garlicsim.misc.StepProfile()
+            step_profile = leaf.step_profile or garlicsim.misc.StepProfile(self.default_step_function)
             crunching_profile = CrunchingProfile(new_clock_target,
                                                  step_profile)
             job = Job(leaf, crunching_profile)
@@ -276,7 +277,9 @@ class Project(object):
         Returns the final node.
         '''
         
-        if step_profile is None: step_profile = garlicsim.misc.StepProfile()
+        if step_profile is None:
+            step_profile = \
+                garlicsim.misc.StepProfile(self.default_step_function)
         
         path = node.make_containing_path()
         history_browser = \
@@ -332,7 +335,9 @@ class Project(object):
         Returns the final node.
         '''
         
-        if step_profile is None: step_profile = garlicsim.misc.StepProfile()
+        if step_profile is None:
+            step_profile = \
+                garlicsim.misc.StepProfile(self.default_step_function)
 
         state = node.state
                 
@@ -391,7 +396,9 @@ class Project(object):
         A step profile may be passed to be used with the step function.
         '''
         
-        if step_profile is None: step_profile = garlicsim.misc.StepProfile()
+        if step_profile is None:
+            step_profile = \
+                garlicsim.misc.StepProfile(self.default_step_function)
         
         path = node.make_containing_path()
         history_browser = \
@@ -449,7 +456,9 @@ class Project(object):
         A step profile may be passed to be used with the step function.
         '''
         
-        if step_profile is None: step_profile = garlicsim.misc.StepProfile()
+        if step_profile is None:
+            step_profile = \
+                garlicsim.misc.StepProfile(self.default_step_function)
 
         state = node.state
                 

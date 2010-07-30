@@ -408,7 +408,7 @@ doing at clock 50:
     
     >>> path[-1]
     <garlicsim.data_structures.Node with clock 50, leaf, untouched,
-    belongs to a block, crunched with StepProfile(), at 0x1cd9070>
+    belongs to a block, crunched with StepProfile(), at 0x1cd9070> tododoc
     >>> 
     >>> 
     >>> path[-1].state

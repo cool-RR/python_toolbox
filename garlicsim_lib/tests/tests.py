@@ -70,7 +70,9 @@ def simpack_check(simpack, cruncher):
         assert iter_result_in_list == result
     
     
-    empty_step_profile = garlicsim.misc.StepProfile()
+    empty_step_profile = garlicsim.misc.StepProfile(
+        my_simpack_grokker.default_step_function
+    )
     
     assert len(result) == 6
     
