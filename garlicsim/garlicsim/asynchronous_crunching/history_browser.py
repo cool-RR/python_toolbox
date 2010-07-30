@@ -32,7 +32,7 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
     A device for requesting information about the history of the simulation.
     
     A HistoryBrowser is a device for requesting information about the history of
-    the simulation. It is intended to be used by CruncherThread in simulations
+    the simulation. It is intended to be used by ThreadCruncher in simulations
     that are history-dependent.
     
     With a HistoryBrowser one can request states from the simulation's timeline.

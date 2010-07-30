@@ -36,10 +36,10 @@ def simpack_test():
     simpacks = [life, prisoner, _history_test, queue]
     
     crunchers = \
-        [garlicsim.asynchronous_crunching.crunchers.CruncherThread,
-         garlicsim.asynchronous_crunching.crunchers.CruncherProcess]
+        [garlicsim.asynchronous_crunching.crunchers.ThreadCruncher,
+         garlicsim.asynchronous_crunching.crunchers.ProcessCruncher]
     
-    crunchers = [garlicsim.asynchronous_crunching.crunchers.CruncherThread]
+    crunchers = [garlicsim.asynchronous_crunching.crunchers.ThreadCruncher]
     # Until multiprocessing shit is solved
     
     for simpack, cruncher in cute_iter_tools.product(simpacks, crunchers):

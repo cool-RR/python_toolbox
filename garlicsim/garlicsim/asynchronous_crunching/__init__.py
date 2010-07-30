@@ -13,6 +13,7 @@ the user needs to interact with. It employs all the other classes.
 from obsolete_cruncher_error import ObsoleteCruncherError
 from history_browser import HistoryBrowser
 from crunching_profile import CrunchingProfile
+from .base_cruncher import BaseCruncher
 import crunchers
 from project import Project
 from job import Job

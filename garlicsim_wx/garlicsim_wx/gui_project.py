@@ -98,9 +98,9 @@ class GuiProject(object):
         
         if self.project.simpack_grokker.history_dependent is False and \
            self.project.simpack_grokker.settings.FORCE_CRUNCHER is None and \
-           'CruncherProcess' in vars(crunchers):
+           'ProcessCruncher' in vars(crunchers):
             
-            self.project.crunching_manager.Cruncher = crunchers.CruncherProcess
+            self.project.crunching_manager.Cruncher = crunchers.ProcessCruncher
         
         #######################################################################
             

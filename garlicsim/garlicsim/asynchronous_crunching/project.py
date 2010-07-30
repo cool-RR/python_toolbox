@@ -46,8 +46,8 @@ class Project(object):
     A project contains within it a tree.
         
     The crunching is taken care of by the CrunchingManager which is a part of
-    every project. The CrunchingManager employs CruncherThreads and/or
-    CruncherProcesses to get the work done. To make the CrunchingManager take
+    every project. The CrunchingManager employs ThreadCrunchers and/or
+    ProcessCrunchers to get the work done. To make the CrunchingManager take
     work from the crunchers and coordinate them, call the sync_crunchers method
     of the project.
     

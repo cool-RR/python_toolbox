@@ -21,16 +21,16 @@ cruncher you should use for your project depends on the situation.
 See the documentation for the different crunchers for more info.
 '''
 
-from cruncher_thread import CruncherThread
+from thread_cruncher import ThreadCruncher
 try:
-    from cruncher_process import CruncherProcess
+    from process_cruncher import ProcessCruncher
 except ImportError:
     try:
         import multiprocessing
     except ImportError:
         import warnings
         warnings.warn('''You don't have the multiprocessing package \
-installed. GarlicSim will run, but it won't be able to use CruncherProcess in \
+installed. GarlicSim will run, but it won't be able to use ProcessCruncher in \
 order to take advantage of multiple processor cores for crunching.''')
     else:
         raise
