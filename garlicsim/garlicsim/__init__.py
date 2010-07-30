@@ -10,8 +10,8 @@ electronics, etc.
 Visit http://garlicsim.org for more info.
 
 This package, called `garlicsim`, is the business logic. It is copyrighted to
-Ram Rachum, 2009, and is distributed under the LGPL v2.1 License. The license
-is included with this package as the file `lgpl2.1_license.txt`.
+Ram Rachum, 2009-2010, and is distributed under the LGPL v2.1 License. The
+license is included with this package as the file `lgpl2.1_license.txt`.
 
 This licensing does not apply to `garlicsim_wx`, which is the associated GUI
 package.
