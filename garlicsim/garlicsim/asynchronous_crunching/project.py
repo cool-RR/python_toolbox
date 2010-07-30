@@ -283,7 +283,7 @@ class Project(object):
         history_browser = \
             garlicsim.synchronous_crunching.HistoryBrowser(path, end_node=node)
         
-        iterator = self.simpack_grokker.nget_step_iterator(history_browser,
+        iterator = self.simpack_grokker.get_step_iterator(history_browser,
                                                        step_profile)
         finite_iterator = cute_iter_tools.shorten(iterator, iterations)
         
@@ -400,7 +400,7 @@ class Project(object):
         history_browser = \
             garlicsim.synchronous_crunching.HistoryBrowser(path, end_node=node)
         
-        iterator = self.simpack_grokker.nget_step_iterator(history_browser,
+        iterator = self.simpack_grokker.get_step_iterator(history_browser,
                                                        step_profile)
         finite_iterator = cute_iter_tools.shorten(iterator, iterations)
         finite_iterator_with_lock = cute_iter_tools.iter_with(
@@ -457,7 +457,7 @@ class Project(object):
 
         state = node.state
                 
-        iterator = self.simpack_grokker.nget_step_iterator(state, step_profile)
+        iterator = self.simpack_grokker.get_step_iterator(state, step_profile)
         finite_iterator = cute_iter_tools.shorten(iterator, iterations)
         finite_iterator_with_lock = cute_iter_tools.iter_with(
             finite_iterator,

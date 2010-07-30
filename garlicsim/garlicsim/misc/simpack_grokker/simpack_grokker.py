@@ -157,7 +157,7 @@ it's not a subclass of `garlicsim.data_structures.State`.''' % \
             # simpack's settings.
                 
     
-    """ tododoc: is this really needed? Can be done as a call to step_generator
+    
     def step(self, state_or_history_browser, step_profile):
         '''
         Perform a step of the simulation.
@@ -165,33 +165,14 @@ it's not a subclass of `garlicsim.data_structures.State`.''' % \
         The step profile will specify which parameters to pass to the simpack's
         step function.
         '''
+    
+        # todo: probably inefficient, but this method is probably not used much
+        # anyway.
         
-        auto_clock_generator = AutoClockGenerator()
-        if isinstance(state_or_history_browser,
-                      garlicsim.data_structures.State):
-            state = state_or_history_browser
-        else:
-            state = state_or_history_browser.get_last_state()
-        auto_clock_generator.make_clock(state)
-
-        if self.simple_step_defined:
-            step_function = self.simpack.history_step if \
-                          self.history_dependent else self.simpack.State.step
-            result = step_function(state_or_history_browser,
-                                   *step_profile.args,
-                                   **step_profile.kwargs)
-        else: # self.step_generator_defined is True
-            step_generator = self.simpack.history_step_generator if \
-                          self.history_dependent else \
-                          self.simpack.State.step_generator
-            iterator = step_generator(state_or_history_browser,
-                                      *step_profile.args,
-                                      **step_profile.kwargs)
-            result = iterator.next()
-            
-        result.clock = auto_clock_generator.make_clock(result)
-        return result
-    """
+        step_iterator = self.get_step_iterator(state_or_history_browser,
+                                               step_profile)
+        return step_iterator.next()
+    
         
     
     def get_step_iterator(self, state_or_history_browser, step_profile):
