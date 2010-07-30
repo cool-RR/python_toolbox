@@ -10,27 +10,16 @@ See its documentation for more information.
 
 import copy
 
+from garlicsim.general_misc.third_party import abc
+
 import garlicsim
-from garlicsim.misc import SimpackError, AutoClockGenerator
 
 
-class StepIterator(object):
-    '''
-    An iterator that uses a simpack's step to produce states.
+class BaseStepIterator(object):
     
-    The StepIterator uses under the hood the simpack's step function, be it a
-    simple step function or a step generator. Using a StepIterator instead of
-    using the simpack's step has a few advantages:
-    
-    1. The StepIterator automatically adds clock readings if the states are
-       missing them.
-    2. It's possible to change the step profile while iterating.    
-    3. Unless the step function raises `WorldEnd` to end the simulation, this
-       iterator is guaranteed to be infinite, even if the simpack's iterator is
-       finite.
-    
-    And possibly more.  
-    '''
+    __metaclass__ = abc.ABCMeta
+
+    """
     # todo: make stuff private here?
     def __init__(self, state_or_history_browser, step_profile,
                  simple_step = None, step_generator=None):
@@ -134,5 +123,5 @@ StopIteration before producing a single state.''')
         self.step_profile = copy.deepcopy(step_profile)
         self.step_profile_changed = True
         
-
+    """
     

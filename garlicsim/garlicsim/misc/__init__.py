@@ -1,3 +1,4 @@
+
 # Copyright 2009-2010 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
@@ -13,7 +14,8 @@ from exceptions import (InvalidSimpack, SimpackError, GarlicSimWarning,
                         CuteException, GarlicSimException, WorldEnd)
 from auto_clock_generator import AutoClockGenerator
 from base_history_browser import BaseHistoryBrowser
-from step_iterator import StepIterator
+from base_step_iterator import BaseStepIterator
+import step_iterators
 import persistent
 from persistent import Persistent, CrossProcessPersistent
 from step_profile import StepProfile

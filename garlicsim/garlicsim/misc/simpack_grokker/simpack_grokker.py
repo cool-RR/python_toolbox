@@ -14,8 +14,8 @@ import imp
 from garlicsim.general_misc import import_tools
 import garlicsim.general_misc.caching
 
-from garlicsim.misc import (AutoClockGenerator, StepIterator, InvalidSimpack,
-                            simpack_tools)
+from garlicsim.misc import AutoClockGenerator, InvalidSimpack, simpack_tools
+from garlicsim.misc import step_iterators as step_iterators_module
 import misc
 
 from .settings import Settings
@@ -175,14 +175,20 @@ of step function.''' % simpack.__name__)
             step_generator = self.simpack.history_step_generator if \
                            self.history_dependent else \
                            self.simpack.State.step_generator
-            return StepIterator(state_or_history_browser, step_profile,
-                                step_generator=step_generator)
+            return step_iterators_module.StepIterator(
+                state_or_history_browser,
+                step_profile,
+                step_generator=step_generator
+            )
         else:
             assert self.simple_step_defined
             simple_step = self.simpack.history_step if self.history_dependent \
                         else self.simpack.State.step
-            return StepIterator(state_or_history_browser, step_profile,
-                                simple_step=simple_step)
+            return step_iterators_module.StepIterator(
+                state_or_history_browser,
+                step_profile,
+                simple_step=simple_step
+            )
         
         
         
