@@ -246,13 +246,7 @@ class CrunchingManager(object):
         crunching_profile = job.crunching_profile
         
         if node.still_in_editing is False:
-            if self.Cruncher == getattr(crunchers, 'ProcessCruncher', None):
-                cruncher = self.Cruncher \
-                         (node.state,
-                          self.project.simpack_grokker.get_step_iterator,
-                          crunching_profile=crunching_profile)
-            else: # self.Cruncher is crunchers.ThreadCruncher
-                cruncher = self.Cruncher(self, node.state, crunching_profile)
+            cruncher = self.Cruncher(self, node.state, crunching_profile)
             cruncher.start()
             self.crunchers[job] = cruncher
             

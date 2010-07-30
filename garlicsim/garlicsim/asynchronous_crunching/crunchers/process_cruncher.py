@@ -35,7 +35,7 @@ __all__ = ['ProcessCruncher']
 class Process(multiprocessing.Process):
     def __init__(self, step_iterator_getter, initial_state, crunching_profile):
         
-        self.step_iterator_getter = step_generator
+        self.step_iterator_getter = step_iterator_getter
         self.initial_state = initial_state
         self.last_clock = self.initial_state.clock
         self.crunching_profile = crunching_profile
@@ -188,9 +188,9 @@ class ProcessCruncher(BaseCruncher):
                               initial_state, crunching_profile)
         
         self.process = Process(
-            step_iterator_getter=crunching_manager.get_step_iterator,
-            initial_state=initial_state,
-            crunching_profile=crunching_profile
+            self.project.simpack_grokker.get_step_iterator,
+            initial_state,
+            crunching_profile
         )
         
         self.initial_state = initial_state
@@ -209,6 +209,8 @@ class ProcessCruncher(BaseCruncher):
         self.order_queue = self.process.order_queue
         '''Queue for receiving instructions from the main thread.'''
         
+        
+    def start(self):
         self.process.start()
 
             
@@ -226,6 +228,8 @@ class ProcessCruncher(BaseCruncher):
         self.order_queue.put(profile)
         
         
+    def is_alive(self):
+        return self.process.is_alive()
         
         
     
