@@ -251,9 +251,8 @@ class CrunchingManager(object):
                          (node.state,
                           self.project.simpack_grokker.get_step_iterator,
                           crunching_profile=crunching_profile)
-            else: # self.Cruncher == crunchers.ThreadCruncher
-                cruncher = self.Cruncher(node.state, self.project,
-                                         crunching_profile=crunching_profile)
+            else: # self.Cruncher is crunchers.ThreadCruncher
+                cruncher = self.Cruncher(self, node.state, crunching_profile)
             cruncher.start()
             self.crunchers[job] = cruncher
             

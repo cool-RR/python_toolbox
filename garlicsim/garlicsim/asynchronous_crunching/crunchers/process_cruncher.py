@@ -14,8 +14,8 @@ Backports of it for Python 2.4 and 2.5 are available on the internet.
 try:
     import multiprocessing
 except ImportError:
-    raise ImportError('''The backported multiprocessing package is needed. \
-Search for it online and install it.''')
+    raise ImportError('The backported multiprocessing package is needed. '
+                      'Search for it online and install it.')
 
 import copy
 import Queue
@@ -29,32 +29,13 @@ import garlicsim
 from garlicsim.asynchronous_crunching import \
      BaseCruncher, CrunchingProfile, ObsoleteCruncherError
 
-__all__ = ["ProcessCruncher"]
 
-class ProcessCruncher(BaseCruncher, multiprocessing.Process):
-    '''
-    ProcessCruncher is a type of cruncher the works from a process.
-    
-    A cruncher is a worker which crunches the simulation. It receives a state
-    from the main program, and then it repeatedly applies the step function of
-    the simulation to produce more states. Those states are then put in the
-    cruncher's work_queue. They are then taken by the main program when
-    Project.sync_crunchers is called, and put into the tree.
+__all__ = ['ProcessCruncher']
+
+class Process(multiprocessing.Process):
+    def __init__(self, step_iterator_getter, initial_state, crunching_profile):
         
-    Read more about crunchers in the documentation of the crunchers package.
-    
-    The advantage of ProcessCruncher over ThreadCruncher is that
-    ProcessCruncher is able to run on a different core of the processor
-    in the machine, thus using the full power of the processor.
-    '''
-    # todo: probably encapsulate Process, because it pickles all __init__
-    # arguments and we want unified cruncher __init__.
-    
-    def __init__(self, initial_state, step_generator, crunching_profile):
-        
-        multiprocessing.Process.__init__(self)
-        
-        self.step_generator = step_generator
+        self.step_iterator_getter = step_generator
         self.initial_state = initial_state
         self.last_clock = self.initial_state.clock
         self.crunching_profile = crunching_profile
@@ -74,7 +55,7 @@ class ProcessCruncher(BaseCruncher, multiprocessing.Process):
         
         self.order_queue = multiprocessing.Queue()
         '''Queue for receiving instructions from the main thread.'''
-
+    
     def set_low_priority(self):
         '''Set a low priority for this process.'''
         
@@ -181,7 +162,55 @@ class ProcessCruncher(BaseCruncher, multiprocessing.Process):
         self.crunching_profile = order
         self.step_profile = order.step_profile            
         self.iterator.set_step_profile(self.step_profile)
+    
+
         
+class ProcessCruncher(BaseCruncher):
+    '''
+    ProcessCruncher is a type of cruncher the works from a process.
+    
+    A cruncher is a worker which crunches the simulation. It receives a state
+    from the main program, and then it repeatedly applies the step function of
+    the simulation to produce more states. Those states are then put in the
+    cruncher's work_queue. They are then taken by the main program when
+    Project.sync_crunchers is called, and put into the tree.
+        
+    Read more about crunchers in the documentation of the crunchers package.
+    
+    The advantage of ProcessCruncher over ThreadCruncher is that
+    ProcessCruncher is able to run on a different core of the processor
+    in the machine, thus using the full power of the processor.
+    '''
+    
+    def __init__(self, crunching_manager, initial_state, crunching_profile):
+        
+        BaseCruncher.__init__(self, crunching_manager,
+                              initial_state, crunching_profile)
+        
+        self.process = Process(
+            step_iterator_getter=crunching_manager.get_step_iterator,
+            initial_state=initial_state,
+            crunching_profile=crunching_profile
+        )
+        
+        self.initial_state = initial_state
+        
+        self.work_queue = self.process.work_queue
+        '''
+        Queue for putting completed work to be picked up by the main thread.
+        
+        In this queue the cruncher will put the states that it produces, in
+        chronological order. If the cruncher is being given a new crunching
+        profile which has a new and different step profile, the cruncher
+        will put the new step profile in this queue in order to signal that
+        from that point on, all states were crunched with that step profile.
+        '''
+        
+        self.order_queue = self.process.order_queue
+        '''Queue for receiving instructions from the main thread.'''
+        
+        self.process.start()
+
             
     def retire(self):
         '''

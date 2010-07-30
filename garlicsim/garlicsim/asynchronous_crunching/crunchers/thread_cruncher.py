@@ -43,15 +43,15 @@ class ThreadCruncher(BaseCruncher, threading.Thread):
     4. On a single-core computer, ThreadCruncher may be faster than
        ProcessCruncher because of shared memory.
     '''
-    def __init__(self, initial_state, project, crunching_profile):
+    def __init__(self, crunching_manager, initial_state, crunching_profile):
+        BaseCruncher.__init__(self, crunching_manager,
+                              initial_state, crunching_profile)
         threading.Thread.__init__(self)
         
-        self.project = project
-        self.step_iterator_getter = project.simpack_grokker.get_step_iterator
-        self.crunching_profile = copy.deepcopy(crunching_profile)
+        self.step_iterator_getter = \
+            self.project.simpack_grokker.get_step_iterator
         self.history_dependent = self.project.simpack_grokker.history_dependent
         
-        self.initial_state = initial_state
         self.last_clock = initial_state.clock
         
         self.daemon = True
