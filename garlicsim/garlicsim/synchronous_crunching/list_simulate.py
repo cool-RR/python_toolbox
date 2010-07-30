@@ -24,11 +24,14 @@ def list_simulate(state, iterations, *args, **kwargs):
 
     Any extraneous parameters will be passed to the step function.
     
+    tododoc on all extraneous shit: you can pass a step function
+    
     Returns a list that spans all the states, from the initial one given to
     the final one.
     '''
     simpack_grokker = garlicsim.misc.SimpackGrokker.create_from_state(state)
     step_profile = garlicsim.misc.StepProfile(*args, **kwargs)
+    # tododoc: need to be smarter and look if it has step function.
     
     if not hasattr(state, 'clock'):
         state = copy.deepcopy(state,
@@ -57,7 +60,10 @@ def _history_list_simulate(simpack_grokker, state, iterations,
     the final one.
     '''
     
-    if step_profile is None: step_profile = garlicsim.misc.StepProfile()
+    if step_profile is None:
+        step_profile = garlicsim.misc.StepProfile(
+            simpack_grokker.default_Step_function
+        )
     
     tree = garlicsim.data_structures.Tree()
     root = tree.add_state(state, parent=None)
@@ -96,7 +102,10 @@ def _non_history_list_simulate(simpack_grokker, state, iterations,
     the final one.
     '''
 
-    if step_profile is None: step_profile = garlicsim.misc.StepProfile()
+    if step_profile is None:
+        step_profile = garlicsim.misc.StepProfile(
+            simpack_grokker.default_Step_function
+        )
     
     tree = garlicsim.data_structures.Tree()
     root = tree.add_state(state, parent=None)

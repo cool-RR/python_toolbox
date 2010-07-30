@@ -45,7 +45,7 @@ class Job(object):
         Example output: 
 
         Job(node=<garlicsim.data_structures.node.Node with clock 17, untouched,
-        belongs to a block, crunched with StepProfile(), at 0x20664b0>,
+        belongs to a block, crunched with StepProfile(), at 0x20664b0>, tododoc
         crunching_profile=CrunchingProfile(clock_target=100,
         step_profile=StepProfile()))
         '''

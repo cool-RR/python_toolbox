@@ -62,7 +62,10 @@ def _history_iter_simulate(simpack_grokker, state, iterations,
     the final one.
     '''
     
-    if step_profile is None: step_profile = garlicsim.misc.StepProfile()
+    if step_profile is None:
+        step_profile = garlicsim.misc.StepProfile(
+            simpack_grokker.default_Step_function
+        )
     
     tree = garlicsim.data_structures.Tree()
     root = tree.add_state(state, parent=None)
@@ -107,7 +110,10 @@ def _non_history_iter_simulate(simpack_grokker, state, iterations,
     the final one.
     '''
 
-    if step_profile is None: step_profile = garlicsim.misc.StepProfile()
+    if step_profile is None:
+        step_profile = garlicsim.misc.StepProfile(
+            simpack_grokker.default_Step_function
+        )
     
     iterator = simpack_grokker.get_step_iterator(state, step_profile)
     finite_iterator = cute_iter_tools.shorten(iterator, iterations)

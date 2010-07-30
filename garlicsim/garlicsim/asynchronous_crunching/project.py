@@ -71,7 +71,7 @@ class Project(object):
         
         self.crunching_manager = CrunchingManager(self)
         
-        self.default_step_function = simpack.simpack_grokker.default_step_function
+        self.default_step_function = self.simpack_grokker.default_step_function
         # tododoc: make into "proxy property"
     
 

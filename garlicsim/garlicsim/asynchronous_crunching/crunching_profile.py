@@ -14,7 +14,7 @@ __all__ = ['CrunchingProfile']
 class CrunchingProfile(object):
     '''Instructions that a cruncher follows when crunching the simulation.'''
     
-    def __init__(self, clock_target=None, step_profile=None):
+    def __init__(self, clock_target, step_profile):
         '''
         Construct the CrunchingProfile.
         
@@ -27,7 +27,7 @@ class CrunchingProfile(object):
         We crunch until we get a state with a clock of `.clock_target` or higher.
         '''
         
-        self.step_profile = step_profile or garlicsim.misc.StepProfile()
+        self.step_profile = step_profile
         '''The step profile we want to be used with the step function.'''
   
     def state_satisfies(self, state):
