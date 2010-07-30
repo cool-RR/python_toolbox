@@ -54,6 +54,22 @@ class.''' % simpack.__name__)
 it's not a subclass of `garlicsim.data_structures.State`.''' % \
                                                              simpack.__name__)
 
+        state_methods = dict((name , value) for (name, value) in
+                             vars(State).iteritems() if callable(value))
+
+        for name, method in state_methods.iteritems():
+            if 'step' in name:
+                if 'inplace_step_generator'
+                'step_generator'
+                'history_step_generator'
+                'history_step'
+                'inplace_step'
+                
+                'step'
+                
+            
+        
+        
         self.simple_non_history_step_defined = hasattr(State, "step")
         self.non_history_step_generator_defined = \
             hasattr(State, "step_generator")
