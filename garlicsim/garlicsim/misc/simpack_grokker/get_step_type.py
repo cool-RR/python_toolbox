@@ -1,6 +1,8 @@
 # Copyright 2009-2010 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
+import types
+
 from garlicsim.general_misc.third_party import decorator
 
 from garlicsim.misc import GarlicSimException
@@ -16,10 +18,10 @@ def get_step_type(step_function):
         return step_type_attribute
     else:
         step_type = _get_step_type(step_function)
-        try:
-            step_function.step_type = step_type
-        except AttributeError:
-            pass
+        actual_function = \
+            (step_function if isinstance(step_function, types.FunctionType)
+             else step_function.im_func)
+        actual_function.step_type = step_type
         return step_type
 
 

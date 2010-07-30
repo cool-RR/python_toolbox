@@ -12,6 +12,7 @@ import types
 import imp
 
 from garlicsim.general_misc import import_tools
+from garlicsim.general_misc import misc_tools
 import garlicsim.general_misc.caching
 
 from garlicsim.misc import (AutoClockGenerator, InvalidSimpack,
@@ -57,8 +58,11 @@ class.''' % simpack.__name__)
 it's not a subclass of `garlicsim.data_structures.State`.''' % \
                                                              simpack.__name__)
 
-        state_methods = dict((name , value) for (name, value) in
-                             vars(State).iteritems() if callable(value))
+
+        state_methods = dict(
+            (name , value) for (name, value) in
+            misc_tools.getted_vars(State).iteritems() if callable(value)
+        )
 
         self.step_functions = dict((step_type, []) for step_type in
                                    step_types.step_types_list)

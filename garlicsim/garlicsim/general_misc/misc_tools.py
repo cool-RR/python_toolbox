@@ -103,7 +103,14 @@ class LazilyEvaluatedConstantProperty(object):
         setattr(obj, self.our_name, value)
         
         return value
-        
+
+def getted_vars(thing):
+    # todo: can make "fallback" option, to use value from original `vars` if get
+    # is unsuccessful.
+    my_vars = vars(thing)
+    return dict((name, getattr(thing, name)) for name in my_vars.iterkeys())
+    
+
         
 if __name__ == '__main__': # todo: move to test suite
     import random
