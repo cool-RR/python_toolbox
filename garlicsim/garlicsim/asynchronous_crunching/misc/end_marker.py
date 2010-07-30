@@ -20,3 +20,5 @@ class EndMarker(object):
     The CrunchingManager will recognize the EndMarker and put an End to the
     timeline.
     '''
+    # todo: should allow putting a message, given by the WorldEnd, that will be
+    # attached to the End.

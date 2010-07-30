@@ -15,7 +15,9 @@ import garlicsim
 from garlicsim.asynchronous_crunching import \
      BaseCruncher, HistoryBrowser, ObsoleteCruncherError, CrunchingProfile
 
-__all__ = ["ThreadCruncher"]
+
+__all__ = ['ThreadCruncher']
+
 
 class ThreadCruncher(BaseCruncher, threading.Thread):
     '''
@@ -124,7 +126,8 @@ class ThreadCruncher(BaseCruncher, threading.Thread):
         we retire the cruncher.
         '''
         if self.crunching_profile.state_satisfies(state):
-            raise ObsoleteCruncherError
+            raise ObsoleteCruncherError("We're done working, the clock target "
+                                        "has been reached. Shutting down.")
 
         
     def get_order(self):
@@ -141,19 +144,22 @@ class ThreadCruncher(BaseCruncher, threading.Thread):
         
     def process_order(self, order):
         '''Process an order receieved from order_queue.'''
-        if order == "retire":
-            raise ObsoleteCruncherError
+        if order == 'retire':
+            raise ObsoleteCruncherError("Cruncher received a 'retire' order; "
+                                        "Shutting down.")
         
         elif isinstance(order, CrunchingProfile):
             self.process_crunching_profile_order(order)
             
+            
     def process_crunching_profile_order(self, order):
         '''Process an order to update the crunching profile.'''
         if self.crunching_profile.step_profile != order.step_profile:
-            self.work_queue.put(copy.deepcopy(order.step_profile))
+            raise ObsoleteCruncherError('Step profile changed; Shutting down. '
+                                        'Crunching manager should create a '
+                                        'new cruncher.')
         self.crunching_profile = order
-        self.step_profile = order.step_profile            
-        self.iterator.set_step_profile(self.step_profile)
+
         
     def retire(self):
         '''
@@ -161,12 +167,13 @@ class ThreadCruncher(BaseCruncher, threading.Thread):
         
         Causes it to shut down as soon as it receives the order.
         '''
-        self.order_queue.put("retire")        
+        self.order_queue.put('retire')        
         
         
     def update_crunching_profile(self, profile):
         '''Update the cruncher's crunching profile. Thread-safe.'''
         self.order_queue.put(profile)
+        
         
     is_alive = threading.Thread.isAlive
     '''Crutch for Python 2.5 and below.'''

@@ -90,7 +90,7 @@ class CrunchingManager(object):
         '''
         Dict that maps each cruncher to its step options profile.
         
-        This exists because a cruncher might change its step options profile
+        This exists because a cruncher might change its step options profile tododoc
         in the course of its work. When it does, it announces this by putting
         the profile in the work queue. In this dict we keep track of the last
         step options profile each cruncher was known to use.
@@ -118,15 +118,15 @@ class CrunchingManager(object):
         Returns the total amount of nodes that were added to the tree in the
         process.
         '''
-        # Danger, Will Robinson! This right here is one of the most technical
-        # and sensitive functions in all of GarlicSim-land. It's hard to keep
-        # track of what's going on in this function. Be careful if you're trying
-        # to make changes. May the Force be with you.
-        
-        # todo: Extensively document the implementation of this function.
-        
-        total_added_nodes = garlicsim.misc.NodesAdded(0)
+        # This is one of the most technical and sensitive functions in all of
+        # GarlicSim-land. Be careful if you're trying to make changes.
 
+        total_added_nodes = garlicsim.misc.NodesAdded(0)
+        '''int-oid in which we track the number of nodes added to the tree.'''
+        
+        # The first thing we do is iterate over the crunchers whose jobs have
+        # been terminated. We take work from them, put it into the tree, and
+        # promptly retire them, deleting them from `self.crunchers`.
         
         for (job, cruncher) in self.crunchers.copy().items():
             if not (job in self.jobs):
@@ -135,11 +135,22 @@ class CrunchingManager(object):
                 total_added_nodes += added_nodes
                 del self.crunchers[job]
 
-
+                
+        # In this point all the crunchers in `self.crunchers` have an active job
+        # associated with them.
+        #
+        # Now we'll iterate over the active jobs.
+        
         for job in self.jobs[:]:
             
             
             if job not in self.crunchers:
+                
+                # If there is no cruncher associated with the job, we create
+                # one. (As long as the job is unfinished, and the node isn't in
+                # editing.) And that's it for this job, we `continue` to the
+                # next one.
+                
                 if not job.is_done():
                     self.__conditional_create_cruncher(job)
                 else: # job.is_done() is True
@@ -147,6 +158,11 @@ class CrunchingManager(object):
                 continue
 
             # job in self.crunchers
+            #
+            # Okay, so it's an active job with an active cruncher working on it.
+            # We'll take work from the cruncher and put in the tree, updating
+            # the job to point at `new_leaf`, which is the node (leaf)
+            # containing the most recent state produced by the cruncher.
             
             cruncher = self.crunchers[job]
             
@@ -156,28 +172,71 @@ class CrunchingManager(object):
 
             job.node = new_leaf
             
-            if not job.is_done(): # (Need to call is_done again cause node changed)
+            # We took work from the cruncher, now it's time to decide if we want
+            # the cruncher to keep running or not. We will also update its
+            # crunching profile, if that has been changed on the job.
+            
+            if not job.is_done():
                 
                 crunching_profile = job.crunching_profile
                 
                 if cruncher.is_alive():
-                                        
+                    
+                    # The job is not the done, and the cruncher's still working.
+                    # In this case, the only thing left to do is check if the
+                    # crunching profile changed.
+
+                    # First we'll check if the step profile changed:
+                    
+                    if crunching_profile.step_profile != \
+                       self.step_profiles[cruncher]:
+                        
+                        # If it did, we immediately replace the cruncher,
+                        # because crunchers can't change step profile on the
+                        # fly.
+                        
+                        if cruncher.is_alive():
+                            cruncher.retire()
+                        
+                        self.__conditional_create_cruncher(job)
+                        
+                        continue
+                    
+                        
+                    # At this point we know that the step profile hasn't
+                    # changed, but possibly some other part (i.e. clock target)
+                    # has changed, and if so we update the cruncher about it.
+                        
                     if self.crunching_profiles_change_tracker.check_in \
                        (crunching_profile):
                         
                         cruncher.update_crunching_profile(crunching_profile)
                         
-                else:
+                        continue
+                        
+                else: # cruncher.is_alive() is False
+                    
+                    # Cruncher died; We'll create another:
                     
                     self.__conditional_create_cruncher(job)
+                    
+                    continue
+                    
+                    
             else: # job.is_done() is True
+                
+                # The job is done; We remove it from the job list, and retire
+                # and delete the cruncher.
+                
                 self.jobs.remove(job)
                 if cruncher.is_alive():
                     cruncher.retire()
                 del self.crunchers[job]
+
             
         return total_added_nodes
 
+    
     
     def __conditional_create_cruncher(self, job):
         '''
@@ -261,6 +320,7 @@ class CrunchingManager(object):
         nodes_added = garlicsim.misc.NodesAdded(counter)
 
         return (nodes_added, current)
+    
     
     def __repr__(self):
         '''
