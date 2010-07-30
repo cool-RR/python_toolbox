@@ -30,5 +30,6 @@ class FunctionAnchoringType(type):
                 # careful.
                 if already_defined_object is not function:
                     raise Exception # toododoc
+        return my_type
                     
     

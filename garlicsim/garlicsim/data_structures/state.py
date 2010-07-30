@@ -8,6 +8,7 @@ See its documentation for more info.
 '''
 
 from garlicsim.general_misc import misc_tools
+from garlicsim.general_misc.function_anchoring_type import FunctionAnchoringType
 
 import garlicsim
 
@@ -27,6 +28,8 @@ class State(object):
     A state object must always be picklable, as do all the attributes assigned
     to it.
     '''
+    
+    __metaclass__ = FunctionAnchoringType
     
     def __new__(cls, *args, **kwargs):
         if cls is State:
