@@ -73,8 +73,8 @@ class Block(TreeMember):
             return
         
         if node.step_profile != self.get_step_profile():
-            raise BlockError('''Tried to add node which has a different
-step_profile.''')
+            raise BlockError('Tried to add node which has a different step '
+                             'profile.')
             
         
         # If the flow reached here, the block is not empty.
@@ -92,8 +92,8 @@ step_profile.''')
             node.block = self
             return
         
-        raise BlockError('''Tried to add a node which is not a direct \
-successor or a direct ancestor of the block.''')
+        raise BlockError('Tried to add a node which is not a direct '
+                         'successor or a direct ancestor of the block.')
 
     
     def add_node_list(self, node_list):
@@ -119,15 +119,15 @@ successor or a direct ancestor of the block.''')
         
         if not logic_tools.all_equal((node.step_profile for node
                                       in node_list)):
-            raise BlockError('''Tried to add node list that doesn't share the \
-same step options profile.''')
+            raise BlockError("Tried to add node list that doesn't share the "
+                             "same step options profile.")
         
         sample_step_profile = node_list[0].step_profile
         
         if self.__node_list and \
            sample_step_profile != self.get_step_profile():
-            raise BlockError('''Tried to add nodelist which contains node \
-that has a different step_profile.''')
+            raise BlockError("Tried to add nodelist which contains node that "
+                             "has a different step profile.")
         
         # We now make sure the node_list is successive, untouched, and has no
         # unwanted children.
@@ -135,8 +135,9 @@ that has a different step_profile.''')
             if (i >= 1) and (node_list[i].parent != node_list[i-1]):
                 raise BlockError('Tried to add non-consecutive nodes to block.')
             if (len(node_list) - i >= 2) and (len(node_list[i].children) != 1):
-                raise BlockError('''Tried to add to the block a node which \
-doesn't have exactly one child, and not as the last node in the block.''')
+                raise BlockError("Tried to add to the block a node which "
+                                 "doesn't have exactly one child, and not as "
+                                 "the last node in the block.")
             if node_list[i].touched:
                 raise BlockError("Tried to add touched nodes to block.")
         
@@ -212,11 +213,11 @@ doesn't have exactly one child, and not as the last node in the block.''')
                 self.__node_list[i].block = None
                 return self.__node_list.__delitem__(i)
             elif (-len(self) < i < len(self) - 1):
-                    raise BlockError('''Can't remove a node from the \
-middle of a block''')
+                    raise BlockError("Can't remove a node from the middle of "
+                                     "a block")
             else:
-                raise IndexError('''Tried to remove a node by index, \
-while the index was bigger than the block's length.''')
+                raise IndexError("Tried to remove a node by index, while the "
+                                 "index was bigger than the block's length.")
         
         elif isinstance(i, slice):
             if i.start < 0:

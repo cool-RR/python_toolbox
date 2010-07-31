@@ -29,8 +29,9 @@ except ImportError:
         import multiprocessing
     except ImportError:
         import warnings
-        warnings.warn('''You don't have the multiprocessing package \
-installed. GarlicSim will run, but it won't be able to use ProcessCruncher in \
-order to take advantage of multiple processor cores for crunching.''')
+        warnings.warn("You don't have the multiprocessing package installed. "
+                      "GarlicSim will run, but it won't be able to use "
+                      "ProcessCruncher in order to take advantage of multiple "
+                      "processor cores for crunching.")
     else:
         raise

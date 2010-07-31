@@ -12,10 +12,10 @@ import sys
 
 
 if sys.version_info[0] >= 3:
-    raise Exception('''This package is not compatible with Python 3.x.''')
+    raise Exception("This package is not compatible with Python 3.x.")
 if sys.version_info[1] <= 4:
-    raise Exception('''This package requires Python 2.5 and upwards. (Not \
-including 3.x).''')
+    raise Exception("This package requires Python 2.5 and upwards. (Not "
+                    "including 3.x).")
 
 
 def __check_prerequisites():
@@ -38,20 +38,22 @@ def __check_prerequisites():
             import garlicsim
             return [garlicsim]
         except ImportError:
-            raise MissingModule('''garlicsim is \
-required, but it's not currently installed on your system. Go to \
-http://garlicsim.org and follow the instructions for installation.''')
-        
+            raise MissingModule("`garlicsim` is required, but it's not "
+                                "currently installed on your system. Go to "
+                                "http://garlicsim.org and follow the "
+                                "instructions for installation.")
     
     def check_wx():
         try:
             import wx
             if wx.__version__ < '2.8.10.1':
-                warnings.warn('''You have wxPython version %s installed, \
-while version 2.8.10.1 is needed. This program will try to run now, and if \
-you're lucky it will work alright, but if any problem comes up, try upgrading \
-wxPython. To do that, download and install the latest version from \
-http://wxpython.org''' % wx.__version__)
+                warnings.warn("You have wxPython version %s installed, while "
+                              "version 2.8.10.1 is needed. This program will "
+                              "try to run now, and if you're lucky it will "
+                              "work alright, but if any problem comes up, try "
+                              "upgrading wxPython. To do that, download and "
+                              "install the latest version from "
+                              "http://wxpython.org" % wx.__version__)
             return [wx]
         except ImportError:
             raise MissingModule('''wxPython (version 2.8.10.1 and upwards) is \

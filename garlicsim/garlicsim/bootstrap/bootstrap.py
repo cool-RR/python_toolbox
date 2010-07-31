@@ -11,11 +11,11 @@ import sys
 
 
 if sys.version_info[0] >= 3:
-    raise Exception('''This package is not compatible with Python 3.x. Use \
-`garlicsim_py3` instead.''')
+    raise Exception("This package is not compatible with Python 3.x. Use "
+                    "`garlicsim_py3` instead.")
 if sys.version_info[1] <= 4:
-    raise Exception('''This package requires Python 2.5 and upwards. (Not \
-including 3.x).''')
+    raise Exception("This package requires Python 2.5 and upwards. (Not "
+                    "including 3.x).")
 
 
 def __check_prerequisites():
@@ -38,11 +38,11 @@ def __check_prerequisites():
             import pkg_resources
             return [pkg_resources]
         except ImportError:
-            raise MissingModule('''pkg_resources is required, but it's not \
-currently installed on your system. It comes with either setuptools or \
-Distribute, so please find either one of these on the internet and install \
-it, then try again.''')
-    
+            raise MissingModule("pkg_resources is required, but it's not "
+                                "currently installed on your system. It comes "
+                                "with either setuptools or Distribute, so "
+                                "please find either one of these on the "
+                                "internet and install it, then try again.")
     
     checkers = [check_pkg_resources]
     
