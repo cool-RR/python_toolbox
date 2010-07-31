@@ -18,7 +18,7 @@ class BaseCruncher(object):
     '''
     
     '''
-    
+    # tododoc: add more shit here
     __metaclass__ = abc.ABCMeta
     
     def __init__(self, crunching_manager, initial_state, crunching_profile):

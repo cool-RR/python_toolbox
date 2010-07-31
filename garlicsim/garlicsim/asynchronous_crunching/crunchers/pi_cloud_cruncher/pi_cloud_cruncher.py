@@ -25,9 +25,6 @@ class PiCloudCruncher(BaseCruncher):
                               initial_state, crunching_profile)
         
         
-        
-        self.initial_state = initial_state
-        
         self.work_queue = self.process.work_queue
         '''
         Queue for putting completed work to be picked up by the main thread.
