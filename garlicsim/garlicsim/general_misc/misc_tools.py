@@ -69,7 +69,7 @@ def get_object_from_address(address, parent_object=None):
             try:
                 return eval(address)
             except NameError:
-                return __import__(address, fromlist=[''])   
+                return __import__(address)   
         else: # '.' in address
             first_object_address, second_object_address = \
                 address.rsplit('.', 1)

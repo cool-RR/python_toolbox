@@ -83,7 +83,10 @@ def import_if_exists(module_name, silent_fail=False):
     '''    
     if '.' in module_name:
         package_name, submodule_name = module_name.rsplit('.', 1)
-        package = __import__(package_name, fromlist=[''])
+        package = import_if_exists(package_name, silent_fail=silent_fail)
+        if not package:
+            assert silent_fail is True
+            return None
         package_path = package.__path__
         try:
             imp.find_module(submodule_name, package_path)
@@ -101,7 +104,11 @@ def import_if_exists(module_name, silent_fail=False):
     # find the module again, assuming its finding procedure will work exactly
     # the same as imp's.
         
-    return __import__(module_name, fromlist=[''])
+    if '.' in module_name:    
+        return __import__(module_name, fromlist=[''])
+    else:
+        return __import__(module_name)
+    
     
     
     
