@@ -9,13 +9,16 @@ I'm just starting to learn testing, so go easy on me.
 
 from __future__ import division
 
-import nose
+import types
 import time
 import itertools
+import cPickle, pickle
 
-import garlicsim
+import nose
+
 from garlicsim.general_misc import cute_iter_tools
 
+import garlicsim
 from garlicsim_lib.simpacks import life
 from garlicsim_lib.simpacks import prisoner
 from garlicsim_lib.simpacks import _history_test
@@ -126,6 +129,30 @@ def simpack_check(simpack, cruncher):
     assert len(project.tree.roots) == 1
     
     assert len(project.tree.all_possible_paths()) == 2
+    
+    try:
+        pickled_project = pickle.dumps(project, protocol=2)
+    except RuntimeError as runtime_error:
+        assert 'maximum recursion' in runtime_error.message
+    else:
+        unpickled_project = cPickle.loads(pickled_project)
+        path_pairs = itertools.izip(project.tree.all_possible_paths(),
+                                    unpickled_project.tree.all_possible_paths())
+        
+        if isinstance(
+            simpack.State.__eq__,
+            (types.FunctionType, types.MethodType, types.UnboundMethodType)
+        ):
+            
+            for path_of_original, path_of_duplicate in path_pairs:
+                
+                state_pairs = itertools.izip(path_of_original.states(),
+                                             path_of_duplicate.states())
+                for state_of_original, state_of_duplicate in state_pairs:
+                    
+                    assert state_of_original == state_of_duplicate
+            
+    
     
     node_3 = my_path.next_node(node_1)
     
