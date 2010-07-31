@@ -12,9 +12,9 @@ Backports of it for Python 2.4 and 2.5 are available on the internet.
 '''
 
 try:
-    import multiprocessing # tododoc: import_if_exists
+    import cloud # tododoc: do import_if_exists
 except ImportError:
     raise ImportError('The backported multiprocessing package is needed. '
-                      'Search for it online and install it.')
+                      'Search for it online and install it.') # tododoc
 
 from .process_cruncher import ProcessCruncher
