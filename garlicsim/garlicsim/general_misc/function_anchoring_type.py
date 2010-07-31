@@ -1,6 +1,7 @@
 # Copyright 2009-2010 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
+import sys
 import types
 
 from garlicsim.general_misc import misc_tools
@@ -16,8 +17,7 @@ class FunctionAnchoringType(type):
                                if isinstance(value, types.FunctionType)]
         for function in functions_to_anchor:
             module_name = function.__module__
-            module = import_tools.import_if_exists(function.__module__,
-                                                   silent_fail=False)
+            module = sys.modules[module_name]
             function_name = function.__name__
             anchor_address = '.'.join((module_name, function_name))
             try:

@@ -112,10 +112,7 @@ def import_if_exists(module_name, silent_fail=False):
     # find the module again, assuming its finding procedure will work exactly
     # the same as imp's.
         
-    if '.' in module_name:    
-        return __import__(module_name, fromlist=[''])
-    else:
-        return __import__(module_name)
+    return normal_import(module_name)
     
     
     
