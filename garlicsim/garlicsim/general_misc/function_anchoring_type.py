@@ -4,6 +4,7 @@
 import types
 
 from garlicsim.general_misc import misc_tools
+from garlicsim.general_misc import import_tools
 
 
 
@@ -15,7 +16,8 @@ class FunctionAnchoringType(type):
                                if isinstance(value, types.FunctionType)]
         for function in functions_to_anchor:
             module_name = function.__module__
-            module = __import__(function.__module__, fromlist=[''])
+            module = import_tools.import_if_exists(function.__module__,
+                                                   silent_fail=False)
             function_name = function.__name__
             anchor_address = '.'.join((module_name, function_name))
             try:

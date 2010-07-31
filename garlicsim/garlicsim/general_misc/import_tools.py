@@ -71,9 +71,17 @@ def import_all(package, exclude='__init__', silent_fail=False):
                 raise
     
     return d
+
+
+def normal_import(module_name):
+    if '.' in module_name:
+        package_name, submodule_name = module_name.rsplit('.', 1)
+        package = __import__(module_name)
+        return reduce(getattr, [package] + module_name.split('.')[1:])
+    else:
+        return __import__(module_name)
     
-    
-    
+
 def import_if_exists(module_name, silent_fail=False):
     '''
     Import module by name and return it, only if it exists.

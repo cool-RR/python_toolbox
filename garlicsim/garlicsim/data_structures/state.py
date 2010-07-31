@@ -31,7 +31,7 @@ class State(object):
     
     __metaclass__ = FunctionAnchoringType
     
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs): #tododoc: not getting called
         if cls is State:
             raise garlicsim.misc.GarlicSimException('''You tried to create a \
 State object whose class is `garlicsim.data_structures.State`. This is \
