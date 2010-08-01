@@ -17,6 +17,7 @@ import cPickle, pickle
 import nose
 
 from garlicsim.general_misc import cute_iter_tools
+from garlicsim.general_misc import math_tools
 
 import garlicsim
 from garlicsim_lib.simpacks import life
@@ -53,43 +54,45 @@ def simpack_check(simpack, cruncher):
     
     my_simpack_grokker = garlicsim.misc.SimpackGrokker(simpack)
     
+    assert my_simpack_grokker is garlicsim.misc.SimpackGrokker(simpack)
+    # Ensuring caching works.
+    
+    empty_step_profile = garlicsim.misc.StepProfile(
+        my_simpack_grokker.default_step_function
+    )
+    
     state = simpack.State.create_messy_root() if \
           simpack.State.create_messy_root else \
           simpack.State.create_root()
     
-    new_state = garlicsim.simulate(state, 5)
+    new_state = garlicsim.simulate(state, 3)
     
-    result = garlicsim.list_simulate(state, 5)
+    result = garlicsim.list_simulate(state, 3)
+    for item in result:
+        assert isinstance(item, garlicsim.data_structures.State)
+        assert isinstance(item, simpack.State)
     
-    iter_result = garlicsim.iter_simulate(state, 5)
+    assert isinstance(result, list)
+    assert len(result) == 4
+    
+    if _is_deterministic(simpack):    
+        for old, new in cute_iter_tools.consecutive_pairs(result):
+            assert new == my_simpack_grokker.step(old, empty_step_profile)
+            
+    
+    iter_result = garlicsim.iter_simulate(state, 3)
     
     
     assert not hasattr(iter_result, '__getitem__')
     assert hasattr(iter_result, '__iter__')
     iter_result_in_list = list(iter_result)
     del iter_result
-    assert len(iter_result_in_list) == len(result) == 6
+    assert len(iter_result_in_list) == len(result) == 4
     if _is_deterministic(simpack):
         assert iter_result_in_list == result
-    
-    
-    empty_step_profile = garlicsim.misc.StepProfile(
-        my_simpack_grokker.default_step_function
-    )
-    
-    assert len(result) == 6
-    
-    for item in result:
-        assert isinstance(item, garlicsim.data_structures.State)
-        if hasattr(simpack, 'State'): # Later make mandatory
-            assert isinstance(item, simpack.State)
-    
-    if _is_deterministic(simpack):
+        assert iter_result_in_list[-1] == new_state == result[-1]
         
-        assert result[-1] == new_state
-        
-        for old, new in cute_iter_tools.consecutive_pairs(result):
-            assert new == my_simpack_grokker.step(old, empty_step_profile)
+    
     
     project = garlicsim.Project(simpack)
     
@@ -99,7 +102,7 @@ def simpack_check(simpack, cruncher):
     
     root = project.root_this_state(state)
     
-    project.begin_crunching(root, 20)
+    project.begin_crunching(root, 4)
 
     total_nodes_added = 0    
     while project.crunching_manager.jobs:
@@ -107,6 +110,18 @@ def simpack_check(simpack, cruncher):
         total_nodes_added += project.sync_crunchers()
         
     x = total_nodes_added
+    
+    if x < 4:
+        # For simpacks with long time intervals, we make sure at least 4 nodes
+        # were created.
+        path = root.make_containing_path()
+        leaf = path[-1]
+        project.simulate(
+            leaf,
+            math_tools.round_to_int(4 - x, up=True)
+        )
+        x += path.__len__(start=leaf)
+            
     assert len(project.tree.nodes) == x + 1
     assert len(project.tree.roots) == 1
     
@@ -115,17 +130,14 @@ def simpack_check(simpack, cruncher):
     assert len(paths) == 1
     
     (my_path,) = paths
-    
-    if _is_deterministic(simpack):
-        assert my_path[5].state == new_state
         
     assert len(my_path) == x + 1
     
     node_1 = my_path[-3]
     
-    node_2 = project.simulate(node_1, 5)
+    node_2 = project.simulate(node_1, 3)
     
-    assert len(project.tree.nodes) == x + 6
+    assert len(project.tree.nodes) == x + 1 + 3
     assert len(project.tree.roots) == 1
     
     assert len(project.tree.all_possible_paths()) == 2
@@ -156,15 +168,27 @@ def simpack_check(simpack, cruncher):
     
     node_3 = my_path.next_node(node_1)
     
-    project.begin_crunching(node_3, 5)
+    project.begin_crunching(node_3, 3)
     
     total_nodes_added = 0
     while project.crunching_manager.jobs:
         time.sleep(0.1)
         total_nodes_added += project.sync_crunchers()
-    
     y = total_nodes_added
-    assert len(project.tree.nodes) == x + y + 6
+        
+    if y < 3:
+        # For simpacks with long time intervals, we make sure at least 3 nodes
+        # were created.
+        path = node_3.make_containing_path()
+        leaf = path[-1]
+        project.simulate(
+            leaf,
+            math_tools.round_to_int(3 - y, up=True)
+        )
+        y += path.__len__(start=leaf)
+    
+    
+    assert len(project.tree.nodes) == x + y + 4
     
     paths = project.tree.all_possible_paths()
     assert len(paths) == 3
@@ -179,7 +203,7 @@ def simpack_check(simpack, cruncher):
         time.sleep(0.1)
         total_nodes_added += project.sync_crunchers()
     
-    assert len(project.tree.nodes) == x + y + 6 + total_nodes_added
+    assert len(project.tree.nodes) == x + y + 4 + total_nodes_added
     assert len(project.tree.all_possible_paths()) == 3
     
     assert project.tree.lock._ReadWriteLock__writer is None
