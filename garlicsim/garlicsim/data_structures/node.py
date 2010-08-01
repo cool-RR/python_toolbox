@@ -315,8 +315,8 @@ Untouched nodes can't be edited, so they have no concept of being finalized.'''
                 if round:
                     return self
                 else: # round is False
-                    raise NodeLookupError('''You asked for the node's parent, \
-but it's a root.''')                
+                    raise NodeLookupError("You asked for the node's parent, "
+                                          "but it's a root.") 
                 
         block = self.block
         if block:
@@ -331,8 +331,10 @@ but it's a root.''')
                     if round:
                         return first_node
                     else: # round is False
-                        raise NodeLookupError('''You asked for too many \
-generations back. This node's ancestry line doesn't go back that far.''')
+                        raise NodeLookupError(
+                            "You asked for too many generations back. This "
+                            "node's ancestry line doesn't go back that far."
+                        )
                 
                 return parent_of_first.get_ancestor(- wanted_index - 1, round=round)
         
@@ -343,8 +345,9 @@ generations back. This node's ancestry line doesn't go back that far.''')
             if round:
                 return self
             else: # round is False
-                raise NodeLookupError('''You asked for too many generations \
-back. This node's ancestry line doesn't go back that far.''')
+                raise NodeLookupError("You asked for too many generations "
+                                      "back. This node's ancestry line "
+                                      "doesn't go back that far.")
 
             
     def get_root(self):

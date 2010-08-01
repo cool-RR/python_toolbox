@@ -1,9 +1,7 @@
 # Copyright 2009-2010 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''
-This module defines various tools related to importing.
-'''
+'''Defines various tools related to importing.'''
 
 import sys
 import os.path
@@ -98,13 +96,18 @@ def import_if_exists(module_name, silent_fail=False):
         package_path = package.__path__
         try:
             imp.find_module(submodule_name, package_path)
-        except ImportError:
-            return None
+        except ImportError:           
+            if silent_fail is True:
+                return None
+            else: # silent_fail is False
+                raise
     else: # '.' not in module_name
         try:
             imp.find_module(module_name)
         except ImportError:
-            if not silent_fail:
+            if silent_fail is True:
+                return None
+            else: # silent_fail is False
                 raise
 
     # Not actually using the result of `imp.find_module`, just want to know that
@@ -114,7 +117,7 @@ def import_if_exists(module_name, silent_fail=False):
         
     return normal_import(module_name)
     
-    
+tododoc=0#delete this
     
     
     

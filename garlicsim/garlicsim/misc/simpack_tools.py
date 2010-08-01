@@ -34,8 +34,8 @@ def _get_from_state_class(state_class):
         # Not saving the reference: But it'll get cached because SimpackGrokker
         # is a CachedType.
     except garlicsim.misc.InvalidSimpack:
-        raise garlicsim.misc.GarlicSimException('''Could not guess simpack \
-correctly from state object.''')
+        raise garlicsim.misc.GarlicSimException("Could not guess simpack "
+                                                "correctly from state object.")
     return simpack
     
     

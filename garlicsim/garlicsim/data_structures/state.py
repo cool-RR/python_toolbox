@@ -33,10 +33,12 @@ class State(object):
     
     def __new__(cls, *args, **kwargs): #tododoc: not getting called
         if cls is State:
-            raise garlicsim.misc.GarlicSimException('''You tried to create a \
-State object whose class is `garlicsim.data_structures.State`. This is \
-unallowed; This class should be used as a base class for State classes in \
-simpacks.''')
+            raise garlicsim.misc.GarlicSimException(
+                "You tried to create a State object whose class is "
+                "`garlicsim.data_structures.State`. This is unallowed; This "
+                "class should be used as a base class for State classes in "
+                "simpacks."
+            )
         return super(type, cls).__new__(cls)
     
     

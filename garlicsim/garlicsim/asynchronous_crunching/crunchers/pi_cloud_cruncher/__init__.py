@@ -11,10 +11,6 @@ the standard library for Python 2.6 and above, but not for earlier versions.
 Backports of it for Python 2.4 and 2.5 are available on the internet.
 '''
 
-try:
-    import cloud # tododoc: do import_if_exists
-except ImportError:
-    raise ImportError('The backported multiprocessing package is needed. '
-                      'Search for it online and install it.') # tododoc
+from garlicsim.general_misc import import_tools
 
-from .process_cruncher import ProcessCruncher
+from .pi_cloud_cruncher import PiCloudCruncher

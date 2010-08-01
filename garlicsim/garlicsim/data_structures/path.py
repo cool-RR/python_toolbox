@@ -411,8 +411,8 @@ class Path(object):
         elif isinstance(thing, Node):
             return thing
         else: # thing is None
-            raise PathOutOfRangeError('''You asked for the last node in the \
-path, but it's completely empty.''')
+            raise PathOutOfRangeError("You asked for the last node in the "
+                                      "path, but it's completely empty.")
     
         
     def get_node_by_clock(self, clock, rounding=binary_search.CLOSEST,
@@ -672,9 +672,9 @@ path, but it's completely empty.''')
                 if path[-1].state.clock >= wanted_clock:
                     return path
         
-        raise PathLookupError('''This path is the %s one which extends enough \
-in the future to the clock of the specified node.''' % \
-            ('lowest' if reverse else 'highest'))
+        raise PathLookupError("This path is the %s one which extends enough "
+                              "in the future to the clock of the specified  "
+                              "node." % ('lowest' if reverse else 'highest'))
                
             
     def __repr__(self):

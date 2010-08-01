@@ -11,11 +11,11 @@ import setuptools
 
 
 if sys.version_info[0] >= 3:
-    raise Exception('''This package is not compatible with Python 3.x. Use \
-`garlicsim_lib_py3` instead.''')
+    raise Exception("This package is not compatible with Python 3.x. Use "
+                    "`garlicsim_lib_py3` instead.")
 if sys.version_info[1] <= 4:
-    raise Exception('''This package requires Python 2.5 and upwards. (Not \
-including 3.x).''')
+    raise Exception("This package requires Python 2.5 and upwards. (Not "
+                    "including 3.x).")
 
 
 def get_packages():

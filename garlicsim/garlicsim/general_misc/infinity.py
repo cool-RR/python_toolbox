@@ -137,8 +137,8 @@ class InfinityClass(object):
                             else:                    
                                 return InfinityClass(-1)                            
                     else: # is_nonfractional(other) is False
-                        raise ValueError(""""negative number cannot be raised
-to a fractional power""")            
+                        raise ValueError("Negative number cannot be raised "
+                                         "to a fractional power")            
           
                 
     def __rpow__(self, other):

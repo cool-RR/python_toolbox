@@ -120,11 +120,11 @@ class Tree(object):
         '''
         if template_node is not None:
             if parent != template_node.parent:
-                raise TreeError('''Parent you specified and parent of \
-template_node aren't the same!''')
+                raise TreeError("Parent you specified and parent of "
+                                "template_node aren't the same!")
             if not node.touched:
-                raise TreeError('''You tried adding an untouched state to a \
-tree while specifying a template_node.''')
+                raise TreeError("You tried adding an untouched state to a "
+                                "tree while specifying a template_node.")
             template_node.derived_nodes.append(node)
             
 

@@ -40,7 +40,7 @@ class SimpackWxGrokker(object):
             self.simpack_wx = self.simpack.wx
         except AttributeError:
             self.simpack_wx = None
-            #raise Exception('''Simpack has no wx''') # todo: edit this
+            #raise Exception("Simpack has no wx") # todo: edit this
         
         self.__init_analysis_settings()
     

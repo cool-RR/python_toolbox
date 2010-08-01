@@ -50,13 +50,14 @@ class SimpackGrokker(object):
         try:
             State = simpack.State
         except AttributeError:
-            raise InvalidSimpack('''The %s simpack does not define a `State` \
-class.''' % simpack.__name__)
+            raise InvalidSimpack("The %s simpack does not define a `State` "
+                                 "class." % simpack.__name__)
         
         if not issubclass(State, garlicsim.data_structures.State):
-            raise InvalidSimpack('''The %s simpack defines a State class, but \
-it's not a subclass of `garlicsim.data_structures.State`.''' % \
-                                                             simpack.__name__)
+            raise InvalidSimpack("The %s simpack defines a State class, but "
+                                 "it's not a subclass of "
+                                 "`garlicsim.data_structures.State`." % \
+                                 simpack.__name__)
 
 
         state_methods = dict(

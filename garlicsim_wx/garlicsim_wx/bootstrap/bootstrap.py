@@ -56,9 +56,10 @@ def __check_prerequisites():
                               "http://wxpython.org" % wx.__version__)
             return [wx]
         except ImportError:
-            raise MissingModule('''wxPython (version 2.8.10.1 and upwards) is \
-required, but it's not currently installed on your system. Please find it \
-online and install it, then try again.''')
+            raise MissingModule("wxPython (version 2.8.10.1 and upwards) is "
+                                "required, but it's not currently installed "
+                                "on your system. Please find it online and "
+                                "install it, then try again.")
     
 
     checkers = [check_garlicsim, check_wx]
