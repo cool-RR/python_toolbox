@@ -46,7 +46,7 @@ def __check_prerequisites():
     def check_wx():
         try:
             import wx
-            if wx.__version__ < '2.8.10.1':
+            if wx.__version__ < '2.8.10.1': # todo: fallible version comparison
                 warnings.warn("You have wxPython version %s installed, while "
                               "version 2.8.10.1 is needed. This program will "
                               "try to run now, and if you're lucky it will "
@@ -58,8 +58,9 @@ def __check_prerequisites():
         except ImportError:
             raise MissingModule("wxPython (version 2.8.10.1 and upwards) is "
                                 "required, but it's not currently installed "
-                                "on your system. Please find it online and "
-                                "install it, then try again.")
+                                "on your system. Please go download it at "
+                                "http://wxpython.org, install it, then try "
+                                "again.")
     
 
     checkers = [check_garlicsim, check_wx]

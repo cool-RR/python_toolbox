@@ -9,19 +9,39 @@ See its documentation for more information.
 
 import copy
 
+from garlicsim.general_misc import caching
+
 from garlicsim.misc.simpack_grokker.get_step_type import get_step_type
 
 
 __all__ = ['StepProfile']
 
 
-class StepProfile(object): # todo: use CachedType?
+class StepProfile(object):
     '''
-    A profile of *args and **kwargs to be used with a step function. tododoc
+    Profile for doing simulation step, specifying step function and arguments.
+    
+    Using different step profiles, you can crunch your simulation in different
+    ways, using different world laws, different contsants and different
+    algorithm, within the same project.
+
+    The step profile contains three things:
+    
+      1. A reference to the step fucntion.
+      2. A list of arguments.
+      3. A dict of keyword arguments
+      
+    For example, if you're doing a simulation of Newtonian Mechanics, you can
+    create a step profile with `kwargs` of {'G': 3.0} in order to change the
+    graviational constant of the simulation on-the-fly.
     '''
     # todo: perhaps this should be based on an ArgumentsProfile after all?
     # In __repr__ and stuff we'll just check self's class. How does Python
     # do it when you subclass its builtin types?
+
+    
+    __metaclass__ = caching.CachedType
+    
     
     def __init__(self, step_function, *args, **kwargs):
         
@@ -57,25 +77,42 @@ class StepProfile(object): # todo: use CachedType?
     @staticmethod
     def build_with_default_step_function(default_step_function, *args,
                                          **kwargs):
-    
-        # Notice how we take from kwargs first.
-        candidates = None
-        if 'step_function' in kwargs:
-            candidates.append(kwargs['step_function'])
-        if len(args) >= 1:
-            candidates.append(args[0])
-            
+        '''
+        Create step profile, allowing the user to not specify step function.
+        
+        Most of the time when simulating, there is one default step function
+        that should be used if no other step function was explicitly specified.
+        But then again, we also want to allow the user to specify a step
+        function if he desires. So we get the (*args, **kwargs) pair from the
+        user, and we need to guess whether the user passed in a step function
+        for to use, or didn't, and if he didn't we'll use the default one.
+        
+        The user may put the step function as the first positional argument, or
+        as the 'step_function' keyword argument. 
+        '''
+
+        # We have two candidates to check now: args[0] and
+        # kwargs['step_function']. We'll check the kwargs one first, because
+        # that's more explicit and there's less chance we'll be catching some
+        # other object by mistake.
+        #
+        # So we start with kwargs:
+        
         if 'step_function' in kwargs:
             step_function = kwargs['step_function']
             
             get_step_type(step_function)
-            # Just so things will break if it's not a step function.
+            # Just so things will break if it's not a step function. If the user
+            # specified 'step_function', he's not going to get away with it not
+            # being an actual step function.
 
             kwargs_copy = kwargs.copy()
             del kwargs_copy['step_function']
             
             return StepProfile(step_function, *args, **kwargs)
 
+        
+        # No step function in kwargs. We'll try args:
         
         elif args:
             
