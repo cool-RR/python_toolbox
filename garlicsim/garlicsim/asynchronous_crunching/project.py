@@ -244,7 +244,11 @@ class Project(object):
         The results are implemented the results into the tree. Note that the
         crunching for this is done synchronously, i.e. in the currrent thread.
         
-        Any extraneous parameters will be passed to the step function.
+        If you wish, in *args and **kwargs you may specify simulation parameters
+        and/or a specific step function to use. (You may specify a step function
+        either as the first positional argument or the `step_function` keyword
+        argument.) You may also pass in an existing step profile as first
+        argument.
         
         Returns the final node.
         '''
@@ -363,8 +367,12 @@ class Project(object):
         
         This returns a generator that yields all the nodes one-by-one, from the
         initial node to the final one.
-        
-        Any extraneous parameters will be passed to the step function.
+            
+        If you wish, in *args and **kwargs you may specify simulation parameters
+        and/or a specific step function to use. (You may specify a step function
+        either as the first positional argument or the `step_function` keyword
+        argument.) You may also pass in an existing step profile as first
+        argument.
         '''
         
         step_profile = self.build_step_profile(*args, **kwargs)

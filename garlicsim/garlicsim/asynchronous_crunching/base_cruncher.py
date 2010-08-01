@@ -13,7 +13,6 @@ import copy
 from garlicsim.general_misc.third_party import abc
 
 
-
 class BaseCruncher(object):
     '''
     A cruncher receives a state from the main program, and then it repeatedly

@@ -24,10 +24,13 @@ def iter_simulate(state, iterations, *args, **kwargs):
     '''
     Simulate from the given state for the given number of iterations.
 
-    Any extraneous parameters will be passed to the step function.
-    
     This returns a generator that yields all the states one-by-one, from the
     initial state to the final one.
+    
+    If you wish, in *args and **kwargs you may specify simulation parameters
+    and/or a specific step function to use. (You may specify a step function
+    either as the first positional argument or the `step_function` keyword
+    argument.) You may also pass in an existing step profile as first argument.    
     '''
     simpack_grokker = garlicsim.misc.SimpackGrokker.create_from_state(state)
     step_profile = garlicsim.misc.StepProfile.build_with_default_step_function(
@@ -56,8 +59,7 @@ def _history_iter_simulate(simpack_grokker, state, iterations,
     
     (Internal function for history-dependent simulations only.)
 
-    A simpack grokker must be passed as the first parameter. Any extraneous
-    parameters will be passed to the step function.
+    A simpack grokker must be passed as the first parameter.
     
     This returns a generator that yields all the states one-by-one, from the
     initial state to the final one.
@@ -104,8 +106,7 @@ def _non_history_iter_simulate(simpack_grokker, state, iterations,
     
     (Internal function for non-history-dependent simulations only.)
 
-    A simpack grokker must be passed as the first parameter. Any extraneous
-    parameters will be passed to the step function.
+    A simpack grokker must be passed as the first parameter.
     
     This returns a generator that yields all the states one-by-one, from the
     initial state to the final one.

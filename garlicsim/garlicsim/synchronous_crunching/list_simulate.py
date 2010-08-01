@@ -21,13 +21,14 @@ __all__ = ["list_simulate"]
 def list_simulate(state, iterations, *args, **kwargs):
     '''
     Simulate from the given state for the given number of iterations.
-
-    Any extraneous parameters will be passed to the step function.
-    
-    tododoc on all extraneous shit: you can pass a step function
     
     Returns a list that spans all the states, from the initial one given to
     the final one.
+    
+    If you wish, in *args and **kwargs you may specify simulation parameters
+    and/or a specific step function to use. (You may specify a step function
+    either as the first positional argument or the `step_function` keyword
+    argument.) You may also pass in an existing step profile as first argument.
     '''
     simpack_grokker = garlicsim.misc.SimpackGrokker.create_from_state(state)
     step_profile = garlicsim.misc.StepProfile.build_with_default_step_function(
@@ -50,14 +51,13 @@ def list_simulate(state, iterations, *args, **kwargs):
 
     
 def _history_list_simulate(simpack_grokker, state, iterations,
-                             step_profile=None):
+                           step_profile=None):
     '''
     Simulate from the given state for the given number of iterations.
 
     (Internal function for history-dependent simulations only.)    
     
-    A simpack grokker must be passed as the first parameter. Any extraneous
-    parameters will be passed to the step function.
+    A simpack grokker must be passed as the first parameter.
     
     Returns a list that spans all the states, from the initial one given to
     the final one.
@@ -98,8 +98,7 @@ def _non_history_list_simulate(simpack_grokker, state, iterations,
     
     (Internal function for non-history-dependent simulations only.)
 
-    A simpack grokker must be passed as the first parameter. Any extraneous
-    parameters will be passed to the step function.
+    A simpack grokker must be passed as the first parameter.
     
     Returns a list that spans all the states, from the initial one given to
     the final one.

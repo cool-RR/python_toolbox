@@ -90,10 +90,10 @@ class CrunchingManager(object):
         '''
         Dict that maps each cruncher to its step options profile.
         
-        This exists because a cruncher might change its step options profile tododoc
-        in the course of its work. When it does, it announces this by putting
-        the profile in the work queue. In this dict we keep track of the last
-        step options profile each cruncher was known to use.
+        This exists because if the step profile for a job changes, we need to
+        retire the cruncher and make a new ones; Crunchers can't change step
+        profiles on the fly. So we use this dict to track which step profile
+        each cruncher uses.
         '''
         
         self.crunching_profiles_change_tracker = \

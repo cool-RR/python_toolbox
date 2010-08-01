@@ -23,7 +23,10 @@ def simulate(state, iterations=1, *args, **kwargs):
     '''
     Simulate from the given state for the given number of iterations.
 
-    Any extraneous parameters will be passed to the step function.
+    If you wish, in *args and **kwargs you may specify simulation parameters
+    and/or a specific step function to use. (You may specify a step function
+    either as the first positional argument or the `step_function` keyword
+    argument.) You may also pass in an existing step profile as first argument.
     
     Returns the final state of the simulation.
     '''
