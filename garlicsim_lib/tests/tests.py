@@ -25,6 +25,9 @@ from garlicsim_lib.simpacks import prisoner
 from garlicsim_lib.simpacks import _history_test
 from garlicsim_lib.simpacks import queue
 
+FUZZ = 0.0001
+'''Fuzziness of floats.'''
+
 
 def _is_deterministic(simpack):
     return simpack.__name__.split('.')[-1] == 'life'
@@ -133,7 +136,7 @@ def simpack_check(simpack, cruncher):
         
     assert len(my_path) == x + 1
     
-    node_1 = my_path[-3]
+    node_1 = my_path[1]
     
     node_2 = project.simulate(node_1, 3)
     
@@ -193,7 +196,7 @@ def simpack_check(simpack, cruncher):
     paths = project.tree.all_possible_paths()
     assert len(paths) == 3
     
-    assert set(len(p) for p in paths) == set([x + 1, x + 4, x + y])
+    assert set(len(p) for p in paths) == set([5, x + 1, 3 + y])
     
     
     project.ensure_buffer(node_3, 3)
@@ -225,7 +228,7 @@ def simpack_check(simpack, cruncher):
     (old_clock_buffer_1, old_clock_buffer_2) = (clock_buffer_1, clock_buffer_2)
     (clock_buffer_1, clock_buffer_2) = [get_clock_buffer(p) for p in two_paths]
     
-    assert clock_buffer_1 / old_clock_buffer_1 >= 1.2
+    assert clock_buffer_1 / old_clock_buffer_1 >= 1.2 - FUZZ
     assert clock_buffer_2 == old_clock_buffer_2
     
     project.ensure_buffer_on_path(node_3, path_2, get_clock_buffer(path_2) * 1.3)
@@ -239,7 +242,7 @@ def simpack_check(simpack, cruncher):
     (clock_buffer_1, clock_buffer_2) = [get_clock_buffer(p) for p in two_paths]
     
     assert clock_buffer_1 == old_clock_buffer_1
-    assert clock_buffer_2 / old_clock_buffer_2 >= 1.3
+    assert clock_buffer_2 / old_clock_buffer_2 >= 1.3 - FUZZ
     
     
     
