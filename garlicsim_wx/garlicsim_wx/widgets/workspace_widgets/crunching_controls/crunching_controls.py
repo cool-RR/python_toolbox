@@ -43,6 +43,17 @@ class CrunchingControls(wx.Panel, WorkspaceWidget):
         
         self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)
         
+        self.autocrunch_h_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        
+        self.main_v_sizer.Add(self.autocrunch_h_sizer)
+        
+        self.autocrunch_check_box = wx.CheckBox(self, -1, 'Autocrunch: ')
+        
+        self.autocrunch_h_sizer.Add(self.autocrunch_check_box)
+        
+        self.autocrunch_spin_ctrl = wx.SpinCtrl(self, -1)
+        
+        self.autocrunch_h_sizer.Add(self.autocrunch_spin_ctrl)
         """
         self.inner_panel = wx.Panel(self, -1, size=(184, 124))
         '''The panel that contains all the subwidgets.'''

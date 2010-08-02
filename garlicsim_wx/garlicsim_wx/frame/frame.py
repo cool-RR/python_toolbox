@@ -55,6 +55,7 @@ class Frame(wx.Frame):
         self.seek_bar = None
         self.shell = None
         self.state_repr_viewer = None
+        self.crunching_controls = None
         
         self.aui_manager = garlicsim_wx.misc.aui.AuiManager(self)
         '''The aui manager, which manages the workspace widgets.'''
@@ -434,6 +435,17 @@ class Frame(wx.Frame):
             .BestSize(400, 600)\
             .Caption(self.shell.get_uppercase_name())
             .MaximizeButton(True)\
+            .CloseButton(False)
+        )
+        
+        
+        self.crunching_controls = workspace_widgets.CrunchingControls(self)
+        self.aui_manager.AddPane(
+            self.crunching_controls,
+            aui.AuiPaneInfo()\
+            .Left().Row(0)\
+            .BestSize(400, 600)\
+            .Caption(self.shell.get_uppercase_name())
             .CloseButton(False)
         )
         

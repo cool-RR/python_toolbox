@@ -118,8 +118,10 @@ class GuiProject(object):
         The job of the playing leaf, which should be crunched to infinity.
         '''
         
-        self.default_buffer = 100 # Should be a mechanism for setting that
+        self.default_buffer = 100 # Should be a mechanism for setting !tododoc
         '''The default clock buffer to crunch from an active node.'''
+        
+        self._default_buffer_before_cancellation = None
 
         self.timer_for_playing = thread_timer.ThreadTimer(self.frame)
         '''Contains the wx.Timer object used when playing the simulation.'''
