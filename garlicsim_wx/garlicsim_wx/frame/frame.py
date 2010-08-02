@@ -147,7 +147,8 @@ class Frame(wx.Frame):
                 
         def on_up():
             '''Go one path upwards.'''
-            if self.gui_project.path and self.gui_project.active_node:
+            if self.gui_project and self.gui_project.path and \
+               self.gui_project.active_node:
                 try:
                     new_path = self.gui_project.path._get_lower_path(
                         self.gui_project.active_node
@@ -162,7 +163,8 @@ class Frame(wx.Frame):
                 
         def on_down():
             '''Go one path downwards.'''
-            if self.gui_project.path and self.gui_project.active_node:
+            if self.gui_project and self.gui_project.path and \
+               self.gui_project.active_node:
                 try:
                     new_path = self.gui_project.path._get_higher_path(
                         self.gui_project.active_node
