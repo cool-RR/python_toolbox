@@ -44,9 +44,6 @@ class CrunchingControls(wx.Panel, WorkspaceWidget):
         
         self.autocrunch_check_box = wx.CheckBox(self, -1, 'Autocrunch: ')
         
-        self.Bind(wx.EVT_CHECKBOX, self.on_autocrunch_check_box,
-                  source=self.autocrunch_check_box)
-        
         self.autocrunch_h_sizer.Add(
             self.autocrunch_check_box,
             0,
@@ -54,10 +51,27 @@ class CrunchingControls(wx.Panel, WorkspaceWidget):
             border=10
         )
         
-        self.autocrunch_spin_ctrl = wx.SpinCtrl(self, -1)
+        self.autocrunch_spin_ctrl = wx.SpinCtrl(self, -1, max=10000000)
         
         self.autocrunch_h_sizer.Add(self.autocrunch_spin_ctrl, 0,
                                     wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
+        
+        self.Bind(wx.EVT_CHECKBOX, self.on_autocrunch_check_box,
+                  source=self.autocrunch_check_box)
+        
+        self.autocrunch_check_box.SetValue(
+            bool(self.gui_project.default_buffer)
+        )
+        
+        self.autocrunch_spin_ctrl.Enable(
+            bool(self.gui_project.default_buffer)
+        )
+        
+        self.autocrunch_spin_ctrl.SetValue(
+            self.gui_project.default_buffer or \
+            self.gui_project._default_buffer_before_cancellation or \
+            0
+        )
         """
         self.inner_panel = wx.Panel(self, -1, size=(184, 124))
         '''The panel that contains all the subwidgets.'''
@@ -253,6 +267,10 @@ class CrunchingControls(wx.Panel, WorkspaceWidget):
             self.gui_project._default_buffer_before_cancellation = None
             self.autocrunch_spin_ctrl.SetValue(new_autocrunch)
             self.autocrunch_spin_ctrl.Enable()
+            self.gui_project.project.ensure_buffer(
+                self.gui_project.active_node,
+                clock_buffer=new_autocrunch
+            )
         else: # Checkbox got unchecked
             autocrunch_to_store = self.autocrunch_spin_ctrl.GetValue() or 100
             self.gui_project._default_buffer_before_cancellation = \
