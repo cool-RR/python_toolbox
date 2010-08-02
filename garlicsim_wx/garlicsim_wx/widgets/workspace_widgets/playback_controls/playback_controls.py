@@ -61,6 +61,8 @@ class FinalizeMode(CenterButtonMode):
 
 class PlaybackControls(wx.Panel, WorkspaceWidget):
     '''Widget to control playback of the simulation.'''
+    
+    _WorkspaceWidget__name = 'Playback'
 
     def __init__(self, frame):
         wx.Panel.__init__(self, frame, -1, size=(184, 128),

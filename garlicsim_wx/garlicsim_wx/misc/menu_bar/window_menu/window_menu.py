@@ -62,7 +62,7 @@ tree nodes one-by-one''',
         
         self.playback_controls_button = self.Append(
             -1,
-            '&Playback Controls',
+            '&Playback',
             ''' Show/hide the playback controls, which let you control the \
 onscreen playback of the simulation''',
             wx.ITEM_CHECK

@@ -21,6 +21,9 @@ class WorkspaceWidget(object):
     '''
     __metaclass__ = abc.ABCMeta
     
+    _WorkspaceWidget__name = None
+    '''The display name of the widget. Default is class name.'''
+    
     def __init__(self, frame):
         
         self.frame = frame
@@ -33,12 +36,13 @@ class WorkspaceWidget(object):
         assert isinstance(self.aui_manager, aui.AuiManager)
         
         # I put these asserts mainly for better source assistance in Wing.
-        # They may be removed.        
-
+        # They may be removed.
+        
     @classmethod
     def get_uppercase_name(cls):
         '''Get the name of the widget's class in uppercase. Used for title.'''
-        return string_tools.camelcase_to_spacecase(cls.__name__).upper()
+        name = cls._WorkspaceWidget__name or cls.__name__
+        return string_tools.camelcase_to_spacecase(name).upper()
     
     def get_aui_pane_info(self):
         '''Get the AuiPaneInfo of this widget in the aui manager.'''
