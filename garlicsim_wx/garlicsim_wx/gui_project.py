@@ -120,6 +120,7 @@ class GuiProject(object):
         
         self.default_buffer = 100 # Should be a mechanism for setting !tododoc
         '''The default clock buffer to crunch from an active node.'''
+        # tododoc: rename to autocrunch?
         
         self._default_buffer_before_cancellation = None
 

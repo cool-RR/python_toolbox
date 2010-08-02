@@ -445,7 +445,7 @@ class Frame(wx.Frame):
             aui.AuiPaneInfo()\
             .Left().Row(0)\
             .BestSize(400, 600)\
-            .Caption(self.shell.get_uppercase_name())
+            .Caption(self.crunching_controls.get_uppercase_name())
             .CloseButton(False)
         )
         

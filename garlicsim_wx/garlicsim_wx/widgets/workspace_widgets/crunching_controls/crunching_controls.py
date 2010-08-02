@@ -7,22 +7,15 @@ import pkg_resources
 import wx
 
 from garlicsim_wx.general_misc.third_party import aui
-from garlicsim_wx.general_misc import thread_timer
 from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
 from garlicsim_wx.general_misc import emitters
-from garlicsim_wx.widgets.general_misc import Knob
 
 import garlicsim, garlicsim_wx
 from garlicsim_wx.widgets import WorkspaceWidget
-from scratch_wheel import ScratchWheel
-
-from . import images as __images_package
-images_package = __images_package.__name__
 
         
 
 class CrunchingControls(wx.Panel, WorkspaceWidget):
-    '''Widget to control playback of the simulation.'''
     
     _WorkspaceWidget__name = 'Crunching'
 
@@ -43,17 +36,28 @@ class CrunchingControls(wx.Panel, WorkspaceWidget):
         
         self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)
         
+        self.SetSizer(self.main_v_sizer)
+        
         self.autocrunch_h_sizer = wx.BoxSizer(wx.HORIZONTAL)
         
-        self.main_v_sizer.Add(self.autocrunch_h_sizer)
+        self.main_v_sizer.Add(self.autocrunch_h_sizer, 0, wx.ALL, border=10)
         
         self.autocrunch_check_box = wx.CheckBox(self, -1, 'Autocrunch: ')
         
-        self.autocrunch_h_sizer.Add(self.autocrunch_check_box)
+        self.Bind(wx.EVT_CHECKBOX, self.on_autocrunch_check_box,
+                  source=self.autocrunch_check_box)
+        
+        self.autocrunch_h_sizer.Add(
+            self.autocrunch_check_box,
+            0,
+            wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.RIGHT,
+            border=10
+        )
         
         self.autocrunch_spin_ctrl = wx.SpinCtrl(self, -1)
         
-        self.autocrunch_h_sizer.Add(self.autocrunch_spin_ctrl)
+        self.autocrunch_h_sizer.Add(self.autocrunch_spin_ctrl, 0,
+                                    wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
         """
         self.inner_panel = wx.Panel(self, -1, size=(184, 124))
         '''The panel that contains all the subwidgets.'''
@@ -241,6 +245,22 @@ class CrunchingControls(wx.Panel, WorkspaceWidget):
         """
 
 
+    def on_autocrunch_check_box(self, event):
+        if event.IsChecked(): # Checkbox got checked
+            new_autocrunch = \
+                self.gui_project._default_buffer_before_cancellation or 100
+            self.gui_project.default_buffer = new_autocrunch
+            self.gui_project._default_buffer_before_cancellation = None
+            self.autocrunch_spin_ctrl.SetValue(new_autocrunch)
+            self.autocrunch_spin_ctrl.Enable()
+        else: # Checkbox got unchecked
+            autocrunch_to_store = self.autocrunch_spin_ctrl.GetValue() or 100
+            self.gui_project._default_buffer_before_cancellation = \
+                autocrunch_to_store
+            self.gui_project.default_buffer = 0
+            self.autocrunch_spin_ctrl.Disable()
+        
+        
     def on_size(self, event):
         '''EVT_SIZE handler.'''
         self.Refresh()
@@ -249,12 +269,6 @@ class CrunchingControls(wx.Panel, WorkspaceWidget):
         
     def on_paint(self, event):
         '''EVT_PAINT handler.'''
-        
-        if self.center_button_update_flag:
-            self._update_center_button()
-        if self.navigation_buttons_update_flag:
-            self._update_navigation_buttons()
-        
         event.Skip()
         
 
