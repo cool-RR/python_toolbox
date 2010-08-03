@@ -48,7 +48,8 @@ simulation is crunched'''
         )       
         #self.crunching_button.Enable(False)
         
-        self.Bind(wx.EVT_BUTTON, self.on_crunching, source=self.crunching_button)
+        self.Bind(wx.EVT_BUTTON, self.on_crunching,
+                  source=self.crunching_button)
         
         
         self.local_nodes_examiner_button = self.Append(
@@ -104,4 +105,7 @@ tree'''
         )       
         #self.tree_browser_button.Enable(False)
     
-    def on_crunching(self, event)
+        
+        
+    def on_crunching(self, event):
+        if that shit was closed
