@@ -256,7 +256,10 @@ class Frame(wx.Frame):
                 
         def on_return():
             '''Finalize the active node, if it's in editing.'''
-            if self.gui_project and self.gui_project.active_node.still_in_editing:
+
+            if self.gui_project and self.gui_project.active_node \
+               and self.gui_project.active_node.still_in_editing:
+                
                 self.gui_project.finalize_active_node()
 
         

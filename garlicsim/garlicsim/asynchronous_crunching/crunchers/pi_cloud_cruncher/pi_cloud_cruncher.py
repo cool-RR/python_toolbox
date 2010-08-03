@@ -7,6 +7,7 @@ import Queue
 import sys
 import os
 import threading
+import time
 
 from garlicsim.general_misc import import_tools
 
@@ -18,16 +19,27 @@ from garlicsim.asynchronous_crunching import \
 __all__ = ['PiCloudCruncher']    
 
 
-def step_and_go(step, state, step_profile, clock_target):
+def step_and_go(step, state, step_profile, clock_target, time_to_run):
     import cloud
     if state.clock >= clock_target:
-        return (None, None)
+        return ([], None)
+    
+    my_time_to_run = min(3, time_to_run)
+    time_to_stop = time.time() + my_time_to_run
+    new_states = []
+    while (state.clock < clock_target) and (time.time() < time_to_stop):
+        state = step(state, step_profile)
+        new_states.append(state)
+    
+    if state.clock < clock_target:
+        new_jid = cloud.call(step_and_go, step, state, step_profile,
+                             clock_target, time_to_run - my_time_to_run,
+                             _high_cpu=True)
+    else:
+        new_jid = None
         
-    new_state = step(state, step_profile)
-    new_jid = cloud.call(step_and_go, step, new_state, step_profile,
-                         clock_target)
     return (
-        new_state,
+        new_states,
         new_jid
     )
 
@@ -109,19 +121,21 @@ class PiCloudCruncher(BaseCruncher, threading.Thread):
             while True:
                 clock_target = self.crunching_profile.clock_target
                 current_clock = state.clock
-                intermediate_clock_target = min(current_clock + 20,
-                                                clock_target)
+                time_to_run = 20
                 initial_jid = cloud.call(step_and_go,
                                          self.project.simpack_grokker.step,
                                          state,
                                          self.step_profile,
-                                         intermediate_clock_target)
+                                         clock_target,
+                                         time_to_run,
+                                         _high_cpu=True)
                 jid = initial_jid
                 while True:
-                    (state, jid) = cloud.result(jid)
-                    if not state or not jid:
+                    (states, jid) = cloud.result(jid)
+                    for state in states:
+                        self.work_queue.put(state)
+                    if not jid:
                         break
-                    self.work_queue.put(state)
                     
                 self.check_crunching_profile(state)
                 order = self.get_order()
@@ -132,8 +146,6 @@ class PiCloudCruncher(BaseCruncher, threading.Thread):
 
     
 
-    """
-                
     def check_crunching_profile(self, state):
         '''
         Check if the cruncher crunched enough states. If so retire.
@@ -146,7 +158,7 @@ class PiCloudCruncher(BaseCruncher, threading.Thread):
             raise ObsoleteCruncherError("We're done working, the clock target "
                                         "has been reached. Shutting down.")
 
-
+    
     def get_order(self):
         '''
         Attempt to read an order from the order_queue, if one has been sent.
@@ -169,8 +181,6 @@ class PiCloudCruncher(BaseCruncher, threading.Thread):
             self.process_crunching_profile_order(order)
 
 
-    """
-    
     def process_crunching_profile_order(self, order):
         '''Process an order to update the crunching profile.'''
         if self.crunching_profile.step_profile != order.step_profile:
