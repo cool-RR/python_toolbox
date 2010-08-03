@@ -12,6 +12,8 @@ import copy
 
 from garlicsim.general_misc.third_party import abc
 
+import garlicsim
+
 
 class BaseCruncher(object):
     '''
@@ -34,10 +36,20 @@ class BaseCruncher(object):
     __metaclass__ = abc.ABCMeta
     
     def __init__(self, crunching_manager, initial_state, crunching_profile):
+        
         self.crunching_manager = crunching_manager
+        assert isinstance(self.crunching_manager,
+                          garlicsim.asynchronous_crunching.CrunchingManager)
+        
         self.project = crunching_manager.project
+        assert isinstance(self.project, garlicsim.Project)
+        
         self.initial_state = initial_state
+        assert isinstance(self.initial_state, garlicsim.data_structures.State)
+        
         self.crunching_profile = copy.deepcopy(crunching_profile)
+        assert isinstance(self.crunching_profile,
+                          garlicsim.asynchronous_crunching.CrunchingProfile)
     
         
     @abc.abstractmethod

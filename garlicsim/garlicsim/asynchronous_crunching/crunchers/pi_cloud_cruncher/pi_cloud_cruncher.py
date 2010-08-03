@@ -15,6 +15,20 @@ from garlicsim.asynchronous_crunching import \
 __all__ = ['PiCloudCruncher']    
 
 
+def step_and_go(step, state, step_profile, iterations):
+    if iterations == 0:
+        return (None, None)
+        
+    new_state = step(state, step_profile)
+    if iterations > 1:
+        new_jid = cloud.call(step_and_go, step, new_state, step_profile,
+                             iterations)
+        return (
+            new_state,
+            new_jid
+        )
+
+
 class PiCloudCruncher(BaseCruncher):
 
     def __init__(self, crunching_manager, initial_state, crunching_profile):
@@ -27,6 +41,12 @@ class PiCloudCruncher(BaseCruncher):
             raise ImportError("The `cloud` module is needed. Get it at "
                               "http://picloud.com.")
 
+        if self.project.simpack_grokker.history_dependent:
+            raise garlicsim.misc.GarlicSimException(
+                "PiCloudCruncher can't handle history-dependent simulations."
+            )
+        
+        
         self.step_iterator_getter = \
             self.project.simpack_grokker.get_step_iterator
         self.history_dependent = self.project.simpack_grokker.history_dependent
@@ -76,27 +96,25 @@ class PiCloudCruncher(BaseCruncher):
 
         self.step_profile = self.crunching_profile.step_profile
 
-        if self.history_dependent:
-            self.history_browser = HistoryBrowser(cruncher=self)
-            thing = self.history_browser
-        else:
-            thing = self.initial_state
+        state = self.initial_state
 
-            self.iterator = self.step_iterator_getter(thing, self.step_profile)
+        self.iterator = self.step_iterator_getter(thing, self.step_profile)
 
-            order = None
+        order = None
 
-            try:
-                for state in self.iterator:
-                    self.work_queue.put(state)
-                    self.check_crunching_profile(state)
-                    order = self.get_order()
-                    if order:
-                        self.process_order(order)
-            except garlicsim.misc.WorldEnd:
-                self.work_queue.put(garlicsim.asynchronous_crunching.misc.EndMarker())
+        try:
+            while True:
+                self.work_queue.put(state)
+                self.check_crunching_profile(state)
+                order = self.get_order()
+                if order:
+                    self.process_order(order)
+        except garlicsim.misc.WorldEnd:
+            self.work_queue.put(garlicsim.asynchronous_crunching.misc.EndMarker())
 
 
+    """
+                
     def check_crunching_profile(self, state):
         '''
         Check if the cruncher crunched enough states. If so retire.
@@ -132,6 +150,8 @@ class PiCloudCruncher(BaseCruncher):
             self.process_crunching_profile_order(order)
 
 
+    """
+    
     def process_crunching_profile_order(self, order):
         '''Process an order to update the crunching profile.'''
         if self.crunching_profile.step_profile != order.step_profile:
