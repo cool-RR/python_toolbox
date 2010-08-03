@@ -51,10 +51,10 @@ class State(garlicsim.data_structures.State):
         return new_state
 
     
-    @garlicsim.misc.caching.state_cache
-    def get_n_live_cells(self):
-        '''Return how many live cells there are in the board.'''
-        return self.board._Board__list.count(True)
+    #@garlicsim.misc.caching.state_cache
+    #def get_n_live_cells(self):
+        #'''Return how many live cells there are in the board.'''
+        #return self.board._Board__list.count(True)
 
     def __repr__(self):
         return self.board.__repr__()
@@ -171,6 +171,7 @@ class Board(object):
 
    
 
+"""
 @garlicsim.misc.caching.history_cache
 def changes(history_browser):
     '''
@@ -188,6 +189,7 @@ def changes(history_browser):
         if board._Board__list[i] != last_board._Board__list[i]:
             counter += 1
     return counter
+"""
 
 def determinism_function(step_profile):
     try:

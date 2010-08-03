@@ -100,7 +100,7 @@ class GuiProject(object):
            self.project.simpack_grokker.settings.FORCE_CRUNCHER is None and \
            'ProcessCruncher' in vars(crunchers):
             
-            self.project.crunching_manager.Cruncher = crunchers.ProcessCruncher
+            pass #tododoc self.project.crunching_manager.Cruncher = crunchers.ProcessCruncher
         
         #######################################################################
             

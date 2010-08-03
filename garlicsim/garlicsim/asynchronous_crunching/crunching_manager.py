@@ -27,7 +27,7 @@ from .misc import EndMarker
 __all__ = ['CrunchingManager', 'DefaultCruncher', 'DefaultHistoryCruncher']
 
 
-DefaultCruncher = crunchers.ThreadCruncher
+DefaultCruncher = crunchers.PiCloudCruncher # tododoc crunchers.ThreadCruncher
 '''Cruncher class to be used by default in non-history-dependent simulations.'''
 
 

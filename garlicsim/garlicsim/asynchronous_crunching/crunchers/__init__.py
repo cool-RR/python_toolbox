@@ -25,6 +25,7 @@ See the documentation for the different crunchers for more info.
 '''
 
 from thread_cruncher import ThreadCruncher
+from .pi_cloud_cruncher import PiCloudCruncher
 try:
     from process_cruncher import ProcessCruncher
 except ImportError:
