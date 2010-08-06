@@ -19,9 +19,11 @@ from garlicsim.asynchronous_crunching import \
 __all__ = ['PiCloudCruncher']    
 
 
+
+
 def step_and_go(step, state, step_profile, clock_target, time_to_run):
     import cloud
-    if state.clock >= clock_target:
+    if state.clock >= clock_target or time_to_run < 0.01:
         return ([], None)
     
     my_time_to_run = min(3, time_to_run)
