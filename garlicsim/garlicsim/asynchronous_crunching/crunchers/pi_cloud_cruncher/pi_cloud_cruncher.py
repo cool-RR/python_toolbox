@@ -26,7 +26,7 @@ def step_and_go(step, state, step_profile, clock_target, time_to_run):
     if state.clock >= clock_target or time_to_run < 0.01:
         return ([], None)
     
-    my_time_to_run = min(3, time_to_run)
+    my_time_to_run = min(0.5, time_to_run)
     time_to_stop = time.time() + my_time_to_run
     new_states = []
     while (state.clock < clock_target) and (time.time() < time_to_stop):
@@ -123,7 +123,7 @@ class PiCloudCruncher(BaseCruncher, threading.Thread):
             while True:
                 clock_target = self.crunching_profile.clock_target
                 current_clock = state.clock
-                time_to_run = 20
+                time_to_run = 3
                 initial_jid = cloud.call(step_and_go,
                                          self.project.simpack_grokker.step,
                                          state,
