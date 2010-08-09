@@ -23,6 +23,9 @@ class WorkspaceWidget(object):
     A workspace widget is a widget displayed on the Frame of `garlicsim_wx`, and
     is connected to a specific gui project.
     '''
+
+    # todo: How do I make it so all subclasses must inherit from Window?
+    
     __metaclass__ = abc.ABCMeta
     
 
@@ -62,10 +65,20 @@ class WorkspaceWidget(object):
         
     
     def on_key_down(self, event):
-        if wx_tools.Key.get_from_key_event(event) == self.__escape_key:
-            if self.frame.FindFocus() is self.frame:
-                event.Skip()
-            else:
+        
+        if wx_tools.Key.get_from_key_event(event) == self.__escape_key and \
+           self.frame.FindFocus() is not self.frame:
+                
                 self.frame.SetFocus()
+                
+        else:
+            event.Skip()
+
             
+    def on_workspace_widget_menu_select(self, event):
+        aui_pane_info = self.get_aui_pane_info()
+        if aui_pane_info.IsShown() is False:
+            aui_pane_info.Show()
+            self.aui_manager.Update()
+        self.SetFocus()
     

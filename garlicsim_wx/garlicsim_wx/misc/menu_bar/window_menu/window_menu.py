@@ -108,4 +108,5 @@ tree'''
         
         
     def on_crunching(self, event):
-        if that shit was closed
+        
+        pass # if that shit was closed
