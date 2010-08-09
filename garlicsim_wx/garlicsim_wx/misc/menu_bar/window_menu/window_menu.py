@@ -10,7 +10,10 @@ See its documentation for more info.
 import wx
 
 from garlicsim_wx.general_misc.cute_menu import CuteMenu
+from garlicsim_wx.general_misc import wx_tools
 
+from garlicsim_wx.widgets.workspace_widget import \
+     EVT_WORKSPACE_WIDGET_MENU_SELECT
 from workspace_menu import WorkspaceMenu
 
 
@@ -40,16 +43,22 @@ on the screen'''
         self.AppendSeparator()
         
         
-        self.crunching_button = self.Append(
+        self.crunching_controls_button = self.Append( #tododoc: don't forget enablings for these buttons
             -1,
             '&Crunching',
             ''' Show/hide the crunching tool, which lets you control how your \
 simulation is crunched'''
         )       
-        #self.crunching_button.Enable(False)
+        #self.crunching_controls_button.Enable(False)
         
-        self.Bind(wx.EVT_BUTTON, self.on_crunching,
-                  source=self.crunching_button)
+        frame.Bind(
+            wx.EVT_MENU,
+            lambda event: wx_tools.post_event(
+                frame.crunching_controls,
+                EVT_WORKSPACE_WIDGET_MENU_SELECT
+            ),
+            source=self.crunching_controls_button
+        )
         
         
         self.local_nodes_examiner_button = self.Append(
@@ -58,7 +67,16 @@ simulation is crunched'''
             ''' Show/hide the local nodes examiner, which lets you manipulate \
 tree nodes one-by-one'''
         )       
-        #self.local_nodes_examiner_button.Enable(False)
+        self.local_nodes_examiner_button.Enable(False)
+        
+        #frame.Bind(
+            #wx.EVT_MENU,
+            #lambda event: wx_tools.post_event(
+                #frame.local_nodes_examiner,
+                #EVT_WORKSPACE_WIDGET_MENU_SELECT
+            #),
+            #source=self.local_nodes_examiner_button
+        #)
         
         
         self.playback_controls_button = self.Append(
@@ -69,6 +87,15 @@ onscreen playback of the simulation'''
         )       
         #self.playback_controls_button.Enable(False)
         
+        frame.Bind(
+            wx.EVT_MENU,
+            lambda event: wx_tools.post_event(
+                frame.playback_controls,
+                EVT_WORKSPACE_WIDGET_MENU_SELECT
+            ),
+            source=self.playback_controls_button
+        )
+        
         
         self.seek_bar_button = self.Append(
             -1,
@@ -77,6 +104,15 @@ onscreen playback of the simulation'''
 timeline'''
         )       
         #self.seek_bar_button.Enable(False)
+        
+        frame.Bind(
+            wx.EVT_MENU,
+            lambda event: wx_tools.post_event(
+                frame.seek_bar,
+                EVT_WORKSPACE_WIDGET_MENU_SELECT
+            ),
+            source=self.seek_bar_button
+        )
         
         
         self.shell_button = self.Append(
@@ -87,6 +123,15 @@ using arbitrary Python code'''
         )       
         #self.shell_button.Enable(False)
         
+        frame.Bind(
+            wx.EVT_MENU,
+            lambda event: wx_tools.post_event(
+                frame.shell,
+                EVT_WORKSPACE_WIDGET_MENU_SELECT
+            ),
+            source=self.shell_button
+        )
+        
         
         self.toolbox_button = self.Append(
             -1,
@@ -94,7 +139,16 @@ using arbitrary Python code'''
             ''' Show/hide the toolbox, in which you can choose between \
 different tools to use in the other widgets'''
         )       
-        #self.toolbox_button.Enable(False)
+        self.toolbox_button.Enable(False)
+        
+        #frame.Bind(
+            #wx.EVT_MENU,
+            #lambda event: wx_tools.post_event(
+                #frame.toolbox,
+                #EVT_WORKSPACE_WIDGET_MENU_SELECT
+            #),
+            #source=self.toolbox_button
+        #)
         
         
         self.tree_browser_button = self.Append(
@@ -104,9 +158,15 @@ different tools to use in the other widgets'''
 tree'''
         )       
         #self.tree_browser_button.Enable(False)
+        
+        frame.Bind(
+            wx.EVT_MENU,
+            lambda event: wx_tools.post_event(
+                frame.tree_browser,
+                EVT_WORKSPACE_WIDGET_MENU_SELECT
+            ),
+            source=self.tree_browser_button
+        )
     
         
         
-    def on_crunching(self, event):
-        
-        pass # if that shit was closed

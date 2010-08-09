@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the WorkspaceWidget class.
+Defines the WorkspaceWidget class. tododoc event
 
 See its documentation for more info.
 '''
@@ -14,6 +14,14 @@ from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.general_misc.third_party import aui
 from garlicsim.general_misc.third_party import abc
 from garlicsim.general_misc import string_tools
+
+
+
+wxEVT_WORKSPACE_WIDGET_MENU_SELECT = wx.NewEventType()
+EVT_WORKSPACE_WIDGET_MENU_SELECT = wx.PyEventBinder(
+    wxEVT_WORKSPACE_WIDGET_MENU_SELECT,
+    1
+)
 
 
 class WorkspaceWidget(object):
@@ -50,6 +58,9 @@ class WorkspaceWidget(object):
         
         self.Bind(wx.EVT_KEY_DOWN, self.on_key_down)
         self.__escape_key = wx_tools.Key(wx.WXK_ESCAPE)
+        
+        self.Bind(EVT_WORKSPACE_WIDGET_MENU_SELECT,
+                  self.on_workspace_widget_menu_select)
         
         
     @classmethod

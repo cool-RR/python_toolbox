@@ -104,7 +104,7 @@ class Frame(wx.Frame):
         try_recalculate = lambda thing: \
             thing._recalculate() if hasattr(thing, '_recalculate') else None
         
-        menus_to_recalculate = [menu for (menu, label) in                                 
+        menus_to_recalculate = [menu for (menu, label) in
                                 self.menu_bar.GetMenus()]
         
         while menus_to_recalculate:
