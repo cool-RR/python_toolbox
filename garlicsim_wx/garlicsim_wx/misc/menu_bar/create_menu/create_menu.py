@@ -47,3 +47,7 @@ under which the simulation crunches'''
         self.create_step_profile_button.Enable(False)
         
         
+    def _recalculate(self):
+        self.enable_in_menu_bar(
+            self.frame.gui_project is not None
+        )

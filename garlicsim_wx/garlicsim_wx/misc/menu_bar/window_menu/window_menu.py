@@ -61,13 +61,13 @@ simulation is crunched'''
         )
         
         
-        self.local_nodes_examiner_button = self.Append(
-            -1,
-            '&Local nodes examiner',
-            ''' Show/hide the local nodes examiner, which lets you manipulate \
-tree nodes one-by-one'''
-        )       
-        self.local_nodes_examiner_button.Enable(False)
+        #self.local_nodes_examiner_button = self.Append(
+            #-1,
+            #'&Local nodes examiner',
+            #''' Show/hide the local nodes examiner, which lets you manipulate \
+#tree nodes one-by-one'''
+        #)       
+        #self.local_nodes_examiner_button.Enable(False)
         
         #frame.Bind(
             #wx.EVT_MENU,
@@ -133,13 +133,13 @@ using arbitrary Python code'''
         )
         
         
-        self.toolbox_button = self.Append(
-            -1,
-            'Toolbo&x',
-            ''' Show/hide the toolbox, in which you can choose between \
-different tools to use in the other widgets'''
-        )       
-        self.toolbox_button.Enable(False)
+        #self.toolbox_button = self.Append(
+            #-1,
+            #'Toolbo&x',
+            #''' Show/hide the toolbox, in which you can choose between \
+#different tools to use in the other widgets'''
+        #)       
+        #self.toolbox_button.Enable(False)
         
         #frame.Bind(
             #wx.EVT_MENU,
@@ -168,5 +168,18 @@ tree'''
             source=self.tree_browser_button
         )
     
+        self.workspace_widgets_buttons = [
+            self.crunching_controls_button,
+            #self.local_nodes_examiner_button,
+            self.playback_controls_button,
+            self.seek_bar_button,
+            self.shell_button,
+            #self.toolbox_button
+            self.tree_browser_button
+        ]
         
+    def _recalculate(self):
+        gui_project = self.frame.gui_project
+        for workspace_widget_button in self.workspace_widgets_buttons:
+            workspace_widget_button.Enable(gui_project is not None)
         

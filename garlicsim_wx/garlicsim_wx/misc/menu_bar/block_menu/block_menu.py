@@ -39,3 +39,10 @@ class BlockMenu(CuteMenu):
         self.scatter_button.Enable(False)
         
         
+    def _recalculate(self):
+        gui_project = self.frame.gui_project
+        self.enable_in_menu_bar(
+            gui_project is not None and \
+            gui_project.active_node is not None and \
+            gui_project.active_node.block is not None
+        )
