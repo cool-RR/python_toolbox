@@ -43,7 +43,7 @@ class SeekBar(wx.Panel, WorkspaceWidget):
         self.Bind(wx.EVT_SIZE, self.on_size)
         self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse_event)
         
-        self.Bind(wx.EVT_KEY_DOWN, lambda event: event.Skip())
+        self.Bind(wx.EVT_KEY_DOWN, lambda event: event.Skip()) # tododoc kill this
 
         self.zoom = 1.
         self.start = 0.
