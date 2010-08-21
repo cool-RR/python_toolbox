@@ -22,6 +22,7 @@ EVT_WORKSPACE_WIDGET_MENU_SELECT = wx.PyEventBinder(
     wxEVT_WORKSPACE_WIDGET_MENU_SELECT,
     1
 )
+# tododoc
 
 
 class WorkspaceWidget(object):
