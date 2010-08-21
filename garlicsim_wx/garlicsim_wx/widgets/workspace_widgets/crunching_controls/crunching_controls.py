@@ -11,7 +11,7 @@ from garlicsim_wx.general_misc import emitters
 import garlicsim, garlicsim_wx
 from garlicsim_wx.widgets import WorkspaceWidget
 
-from .step_profiles_list import StepProfilesList
+from .step_profiles_controls import StepProfilesControls
         
 
 class CrunchingControls(wx.Panel, WorkspaceWidget):
@@ -72,9 +72,9 @@ class CrunchingControls(wx.Panel, WorkspaceWidget):
             0
         )
         
-        self.step_profiles_list = StepProfilesList(self)
+        self.step_profiles_controls = StepProfilesControls(self)
         
-        self.main_v_sizer.Add(self.step_profiles_list, 1,
+        self.main_v_sizer.Add(self.step_profiles_controls, 1,
                               wx.EXPAND | wx.ALL, border=10)
         
         """
