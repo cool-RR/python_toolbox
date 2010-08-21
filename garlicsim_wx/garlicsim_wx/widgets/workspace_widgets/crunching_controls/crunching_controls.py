@@ -72,10 +72,18 @@ class CrunchingControls(wx.Panel, WorkspaceWidget):
             0
         )
         
-        self.step_profiles_controls = StepProfilesControls(self)
+        self.step_profiles_controls = StepProfilesControls(self, frame)
         
         self.main_v_sizer.Add(self.step_profiles_controls, 1,
                               wx.EXPAND | wx.ALL, border=10)
+        
+        self.horizontal_line = wx.Panel(self, -1, size=(-1, 1),
+                                        style=wx.SUNKEN_BORDER)
+        
+        self.main_v_sizer.Add(self.horizontal_line, 0,
+                              wx.EXPAND | wx.LEFT | wx.RIGHT, border=30)
+        
+        
         
         """
         self.inner_panel = wx.Panel(self, -1, size=(184, 124))

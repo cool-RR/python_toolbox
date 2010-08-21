@@ -16,7 +16,11 @@ from garlicsim_wx.widgets import WorkspaceWidget
 class StepProfilesList(hypertreelist.HyperTreeList):
     '''tododoc'''
     
-    def __init__(self, parent, *args, **kwargs):
+    def __init__(self, parent, frame, *args, **kwargs):
+        
+        assert isinstance(frame, garlicsim_wx.Frame)
+        self.frame = frame
+        
         wx.lib.agw.hypertreelist.HyperTreeList.__init__(
             self,
             parent,
