@@ -1,10 +1,9 @@
 # Copyright 2009-2010 Ram Rachum. No part of this program may be used, copied
 # or distributed without explicit written permission from Ram Rachum.
 
-
-
 import pkg_resources
 import wx
+import wx.lib.agw.hypertreelist
 
 from garlicsim_wx.general_misc.third_party import aui
 from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
@@ -72,6 +71,19 @@ class CrunchingControls(wx.Panel, WorkspaceWidget):
             self.gui_project._default_buffer_before_cancellation or \
             0
         )
+        
+        self.step_profiles_list = wx.lib.agw.hypertreelist.HyperTreeList(
+            self,
+            -1,
+            style=(
+                wx.TR_FULL_ROW_HIGHLIGHT | \
+                wx.TR_HIDE_ROOT | \
+                wx.TR_ROW_LINES
+            )
+        )
+        
+        self.main_v_sizer.Add(self.step_profiles_list, 1, wx.EXPAND)
+        
         """
         self.inner_panel = wx.Panel(self, -1, size=(184, 124))
         '''The panel that contains all the subwidgets.'''
