@@ -41,7 +41,7 @@ class StepProfilesControls(wx.Panel):
         new_image = wx.BitmapFromImage(
             wx.ImageFromStream(
                 pkg_resources.resource_stream(images_package,
-                                              'new_image.png'),
+                                              'new.png'),
                 wx.BITMAP_TYPE_ANY
             )
         )
@@ -53,7 +53,7 @@ class StepProfilesControls(wx.Panel):
         delete_image = wx.BitmapFromImage(
             wx.ImageFromStream(
                 pkg_resources.resource_stream(images_package,
-                                              'delete_image.png'),
+                                              'trash.png'),
                 wx.BITMAP_TYPE_ANY
             )
         )

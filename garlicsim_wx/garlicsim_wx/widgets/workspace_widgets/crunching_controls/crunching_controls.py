@@ -39,6 +39,7 @@ class CrunchingControls(wx.Panel, WorkspaceWidget):
         self.SetSizer(self.main_v_sizer)
         
         self.autocrunch_h_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        # probably move autocrunch to separate widget
         
         self.main_v_sizer.Add(self.autocrunch_h_sizer, 0, wx.ALL, border=10)
         
