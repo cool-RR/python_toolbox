@@ -12,6 +12,7 @@ import garlicsim, garlicsim_wx
 from garlicsim_wx.widgets import WorkspaceWidget
 
 from .step_profiles_controls import StepProfilesControls
+from .cruncher_controls import CruncherControls
         
 
 class CrunchingControls(wx.Panel, WorkspaceWidget):
@@ -77,11 +78,16 @@ class CrunchingControls(wx.Panel, WorkspaceWidget):
         self.main_v_sizer.Add(self.step_profiles_controls, 1,
                               wx.EXPAND | wx.ALL, border=10)
         
-        self.horizontal_line = wx.Panel(self, -1, size=(-1, 1),
+        self.horizontal_line = wx.Panel(self, -1, size=(-1, 2),
                                         style=wx.SUNKEN_BORDER)
         
         self.main_v_sizer.Add(self.horizontal_line, 0,
                               wx.EXPAND | wx.LEFT | wx.RIGHT, border=30)
+        
+        self.cruncher_controls = CruncherControls(self, frame, -1)
+        
+        self.main_v_sizer.Add(self.cruncher_controls, 0,
+                              wx.EXPAND | wx.ALL, 10)
         
         
         

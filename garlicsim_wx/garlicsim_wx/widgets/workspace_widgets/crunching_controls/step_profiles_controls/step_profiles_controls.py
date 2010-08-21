@@ -22,9 +22,9 @@ class StepProfilesControls(wx.Panel):
         
         self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)
         
-        self.static_text = wx.StaticText(self, -1, 'Step profiles:')
+        self.title_text = wx.StaticText(self, -1, 'Step profiles:')
         
-        self.main_v_sizer.Add(self.static_text, 0, wx.ALL, 10)
+        self.main_v_sizer.Add(self.title_text, 0, wx.ALL, 10)
         
         self.step_profiles_list = StepProfilesList(self, frame)
         
