@@ -3,7 +3,6 @@
 
 import pkg_resources
 import wx
-import wx.lib.agw.hypertreelist
 
 from garlicsim_wx.general_misc.third_party import aui
 from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
@@ -12,6 +11,7 @@ from garlicsim_wx.general_misc import emitters
 import garlicsim, garlicsim_wx
 from garlicsim_wx.widgets import WorkspaceWidget
 
+from .step_profiles_list import StepProfilesList
         
 
 class CrunchingControls(wx.Panel, WorkspaceWidget):
@@ -72,17 +72,10 @@ class CrunchingControls(wx.Panel, WorkspaceWidget):
             0
         )
         
-        self.step_profiles_list = wx.lib.agw.hypertreelist.HyperTreeList(
-            self,
-            -1,
-            style=(
-                wx.TR_FULL_ROW_HIGHLIGHT | \
-                wx.TR_HIDE_ROOT | \
-                wx.TR_ROW_LINES
-            )
-        )
+        self.step_profiles_list = StepProfilesList(self)
         
-        self.main_v_sizer.Add(self.step_profiles_list, 1, wx.EXPAND)
+        self.main_v_sizer.Add(self.step_profiles_list, 1,
+                              wx.EXPAND | wx.ALL, border=10)
         
         """
         self.inner_panel = wx.Panel(self, -1, size=(184, 124))
