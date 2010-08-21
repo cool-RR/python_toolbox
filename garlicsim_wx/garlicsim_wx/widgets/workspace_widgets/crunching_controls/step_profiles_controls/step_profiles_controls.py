@@ -8,6 +8,9 @@ import garlicsim, garlicsim_wx
 
 from .step_profiles_list import StepProfilesList
 
+from . import images as __images_package
+images_package = __images_package.__name__
+
     
 class StepProfilesControls(wx.Panel):
     '''tododoc'''
@@ -35,12 +38,26 @@ class StepProfilesControls(wx.Panel):
         
         self.main_v_sizer.Add(self.button_h_sizer, 0, wx.ALIGN_RIGHT)
         
-        self.new_button = wx.BitmapButton(self, -1, wx.EmptyBitmap(20, 10))
+        new_image = wx.BitmapFromImage(
+            wx.ImageFromStream(
+                pkg_resources.resource_stream(images_package,
+                                              'new_image.png'),
+                wx.BITMAP_TYPE_ANY
+            )
+        )
+        self.new_button = wx.BitmapButton(self, -1, new_image)
         self.new_button.SetToolTipString('Create a new step profile.')
         
         self.button_h_sizer.Add(self.new_button, 0, wx.RIGHT, 8)
         
-        self.delete_button = wx.BitmapButton(self, -1, wx.EmptyBitmap(20, 10))
+        delete_image = wx.BitmapFromImage(
+            wx.ImageFromStream(
+                pkg_resources.resource_stream(images_package,
+                                              'delete_image.png'),
+                wx.BITMAP_TYPE_ANY
+            )
+        )
+        self.delete_button = wx.BitmapButton(self, -1, delete_image)
         self.delete_button.SetToolTipString(
             'Delete the selected step profile.'
         )
