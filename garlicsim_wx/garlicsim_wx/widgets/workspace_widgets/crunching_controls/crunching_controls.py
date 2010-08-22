@@ -13,7 +13,7 @@ from garlicsim_wx.widgets import WorkspaceWidget
 
 from .step_profiles_controls import StepProfilesControls
 from .cruncher_controls import CruncherControls
-        
+
 
 class CrunchingControls(wx.Panel, WorkspaceWidget):
     
