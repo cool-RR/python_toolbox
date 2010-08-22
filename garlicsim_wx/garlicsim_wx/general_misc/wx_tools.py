@@ -96,4 +96,8 @@ def iter_rects_of_region(region):
         i.Next()
         
 
-
+def wx_color_to_html_color(color):
+    rgb = color.GetRGB()
+    (green_blue, red) = divmod(rgb, 256)
+    (blue, green) = divmod(green_blue, 256)
+    return '#%02x%02x%02x' % (red, green, blue)

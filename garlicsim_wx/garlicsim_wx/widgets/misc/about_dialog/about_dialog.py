@@ -56,10 +56,16 @@ class AboutDialog(wx.Dialog):
         self.html_window = wx.html.HtmlWindow(self, size=(628, 270))
         v_sizer.Add(self.html_window, 0)
         
+        foreground_color_in_hex = \
+            wx_tools.wx_color_to_html_color(self.GetForegroundColour())
+        background_color_in_hex = \
+            wx_tools.wx_color_to_html_color(self.GetBackgroundColour())
+        
+        
         self.html_window.SetPage(
             '''
             <html>
-                <body bgcolor="#d4d0c8">
+                <body bgcolor="%s" color="%s">
                     <div align="center"> <font size="1">
                         &copy; 2009-2010 Ram Rachum (a.k.a. cool-RR)
                         <br />                        
@@ -90,7 +96,11 @@ class AboutDialog(wx.Dialog):
                     </div>
                 </body>
             </html>
-            ''' % garlicsim_wx.__version__
+            ''' % (
+                    foreground_color_in_hex,
+                    background_color_in_hex,
+                    garlicsim_wx.__version__
+                )
         )
         
         self.html_window.Bind(
