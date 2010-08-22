@@ -13,6 +13,7 @@ from garlicsim_wx.widgets import WorkspaceWidget
 
 from .step_profiles_controls import StepProfilesControls
 from .cruncher_controls import CruncherControls
+from .autocrunch_controls import AutocrunchControls
 
 
 class CrunchingControls(wx.Panel, WorkspaceWidget):
@@ -38,41 +39,9 @@ class CrunchingControls(wx.Panel, WorkspaceWidget):
         
         self.SetSizer(self.main_v_sizer)
         
-        self.autocrunch_h_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        # probably move autocrunch to separate widget
-        
-        self.main_v_sizer.Add(self.autocrunch_h_sizer, 0, wx.ALL, border=10)
-        
-        self.autocrunch_check_box = wx.CheckBox(self, -1, 'Autocrunch: ')
-        
-        self.autocrunch_h_sizer.Add(
-            self.autocrunch_check_box,
-            0,
-            wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.RIGHT,
-            border=10
-        )
-        
-        self.autocrunch_spin_ctrl = wx.SpinCtrl(self, -1, max=10000000)
-        
-        self.autocrunch_h_sizer.Add(self.autocrunch_spin_ctrl, 0,
-                                    wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
-        
-        self.Bind(wx.EVT_CHECKBOX, self.on_autocrunch_check_box,
-                  source=self.autocrunch_check_box)
-        
-        self.autocrunch_check_box.SetValue(
-            bool(self.gui_project.default_buffer)
-        )
-        
-        self.autocrunch_spin_ctrl.Enable(
-            bool(self.gui_project.default_buffer)
-        )
-        
-        self.autocrunch_spin_ctrl.SetValue(
-            self.gui_project.default_buffer or \
-            self.gui_project._default_buffer_before_cancellation or \
-            0
-        )
+        self.autocrunch_controls = AutocrunchControls(self, frame)
+    
+        self.main_v_sizer.Add(self.autocrunch_controls, 0, wx.ALL, border=10)
         
         self.step_profiles_controls = StepProfilesControls(self, frame)
         
@@ -281,24 +250,6 @@ class CrunchingControls(wx.Panel, WorkspaceWidget):
         """
 
 
-    def on_autocrunch_check_box(self, event):
-        if event.IsChecked(): # Checkbox got checked
-            new_autocrunch = \
-                self.gui_project._default_buffer_before_cancellation or 100
-            self.gui_project.default_buffer = new_autocrunch
-            self.gui_project._default_buffer_before_cancellation = None
-            self.autocrunch_spin_ctrl.SetValue(new_autocrunch)
-            self.autocrunch_spin_ctrl.Enable()
-            self.gui_project.project.ensure_buffer(
-                self.gui_project.active_node,
-                clock_buffer=new_autocrunch
-            )
-        else: # Checkbox got unchecked
-            autocrunch_to_store = self.autocrunch_spin_ctrl.GetValue() or 100
-            self.gui_project._default_buffer_before_cancellation = \
-                autocrunch_to_store
-            self.gui_project.default_buffer = 0
-            self.autocrunch_spin_ctrl.Disable()
         
         
     def on_size(self, event):
