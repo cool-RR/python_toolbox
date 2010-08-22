@@ -16,6 +16,8 @@ class CruncherControls(wx.Panel):
         self.frame = frame
         
         wx.Panel.__init__(self, parent, *args, **kwargs)
+        
+        self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
 
         
         self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)
