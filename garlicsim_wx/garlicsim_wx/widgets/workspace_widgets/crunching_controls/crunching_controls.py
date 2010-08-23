@@ -49,7 +49,7 @@ class CrunchingControls(wx.Panel, WorkspaceWidget):
                               wx.EXPAND | wx.ALL, border=10)
         
         self.horizontal_line = wx.Panel(self, -1, size=(-1, 2),
-                                        style=wx.BORDER_STATIC)
+                                        style=wx.SIMPLE_BORDER)
         
         self.main_v_sizer.Add(self.horizontal_line, 0,
                               wx.EXPAND | wx.LEFT | wx.RIGHT, border=30)
