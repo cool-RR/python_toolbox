@@ -21,6 +21,9 @@ class StepProfilesList(hypertreelist.HyperTreeList):
         assert isinstance(frame, garlicsim_wx.Frame)
         self.frame = frame
         
+        no_header_style = getattr(hypertreelist, 'TR_NO_HEADER', 0)
+        '''tododoc'''
+        
         wx.lib.agw.hypertreelist.HyperTreeList.__init__(
             self,
             parent,
@@ -29,7 +32,7 @@ class StepProfilesList(hypertreelist.HyperTreeList):
                 wx.TR_FULL_ROW_HIGHLIGHT | \
                 wx.TR_ROW_LINES | \
                 wx.TR_HIDE_ROOT | \
-                hypertreelist.TR_NO_HEADER
+                no_header_style
             ),
             **kwargs
         )        
