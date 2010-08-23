@@ -19,7 +19,7 @@ def get_background_color():
     if wx.Platform == '__WXMSW__':
         return wx.Color(212, 208, 200)
     elif wx.Platform == '__WXMAC__':
-        return 1/0 #tododoc
+        return wx.Color(232, 232, 232)
     elif wx.Platform == '__WXGTK__':
         # Until SYS_COLOUR_* get their act togother, we're using Windows colors
         # for Linux.
