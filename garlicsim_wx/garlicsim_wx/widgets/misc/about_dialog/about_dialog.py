@@ -49,17 +49,13 @@ class AboutDialog(wx.Dialog):
         self.bitmap_viewer = BitmapViewer(self, size=(627, 271))
         v_sizer.Add(self.bitmap_viewer, 0)
         
-        #self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
-        #self.SetBackgroundColour(wx_tools.get_background_color())
-        
-        
         self.html_window = wx.html.HtmlWindow(self, size=(628, 270))
         v_sizer.Add(self.html_window, 0)
         
         foreground_color_in_hex = \
-            wx_tools.wx_color_to_html_color(self.GetForegroundColour())
+            wx_tools.wx_color_to_html_color(wx_tools.get_background_color())
         background_color_in_hex = \
-            wx_tools.wx_color_to_html_color(self.GetBackgroundColour())
+            wx_tools.wx_color_to_html_color(wx.Colour(0, 0, 0))
         
         
         self.html_window.SetPage(

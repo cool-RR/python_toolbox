@@ -82,7 +82,7 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         self.inner_panel = wx.Panel(self, -1, size=(184, 124))
         '''The panel that contains all the subwidgets.'''
         
-        self.inner_panel.SetBackgroundColour(wx.Color(212, 208, 200))
+        # self.inner_panel.SetBackgroundColour(wx.Color(212, 208, 200))
         
         self.center_button_mode = PlayMode
         '''The current mode of the center button.'''

@@ -16,10 +16,8 @@ def get_background_color():
     if _background_color is not None:
         return _background_color
     
-    result = wx.Color(212, 208, 200)
+    result = wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW)
     '''
-    NOTE I'M ACTUALLY USING A CONSTANT COLOR NOW. THIS COMMENT IS NOT RELEVANT
-    RIGHT NOW:    
     todo: Not sure it's the right system color. Find the right one by comparing
     on different platforms. The right one is probably one of these:
     
