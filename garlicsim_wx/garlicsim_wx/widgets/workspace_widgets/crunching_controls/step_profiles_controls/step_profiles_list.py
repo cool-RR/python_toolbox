@@ -40,5 +40,3 @@ class StepProfilesList(hypertreelist.HyperTreeList):
         self.AppendItem(self.root_item, 'boobs')
         self.AppendItem(self.root_item, 'ass')
         self.AppendItem(self.root_item, 'tits')
-        
-
