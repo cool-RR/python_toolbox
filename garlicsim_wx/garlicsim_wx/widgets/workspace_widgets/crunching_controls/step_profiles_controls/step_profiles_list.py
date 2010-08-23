@@ -3,7 +3,7 @@
 
 import pkg_resources
 import wx
-from wx.lib.agw import hypertreelist
+from garlicsim_wx.general_misc.third_party import hypertreelist
 
 from garlicsim_wx.general_misc.third_party import aui
 from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
@@ -21,7 +21,7 @@ class StepProfilesList(hypertreelist.HyperTreeList):
         assert isinstance(frame, garlicsim_wx.Frame)
         self.frame = frame
         
-        wx.lib.agw.hypertreelist.HyperTreeList.__init__(
+        hypertreelist.HyperTreeList.__init__(
             self,
             parent,
             *args,
@@ -30,9 +30,8 @@ class StepProfilesList(hypertreelist.HyperTreeList):
                 wx.TR_ROW_LINES | \
                 wx.TR_HIDE_ROOT | \
                 hypertreelist.TR_NO_HEADER
-            ),
-            **kwargs
-        )        
+                )
+        )
         
         self.AddColumn('')
         self.SetMainColumn(0)
@@ -41,5 +40,3 @@ class StepProfilesList(hypertreelist.HyperTreeList):
         self.AppendItem(self.root_item, 'boobs')
         self.AppendItem(self.root_item, 'ass')
         self.AppendItem(self.root_item, 'tits')
-        
-
