@@ -3,7 +3,7 @@
 
 import pkg_resources
 import wx
-from wx.lib.agw import hypertreelist
+from garlicsim_wx.general_misc.third_party import hypertreelist
 
 from garlicsim_wx.general_misc.third_party import aui
 from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
@@ -21,10 +21,7 @@ class StepProfilesList(hypertreelist.HyperTreeList):
         assert isinstance(frame, garlicsim_wx.Frame)
         self.frame = frame
         
-        no_header_style = getattr(hypertreelist, 'TR_NO_HEADER', 0)
-        '''tododoc'''
-        
-        wx.lib.agw.hypertreelist.HyperTreeList.__init__(
+        hypertreelist.HyperTreeList.__init__(
             self,
             parent,
             *args,
@@ -32,10 +29,9 @@ class StepProfilesList(hypertreelist.HyperTreeList):
                 wx.TR_FULL_ROW_HIGHLIGHT | \
                 wx.TR_ROW_LINES | \
                 wx.TR_HIDE_ROOT | \
-                no_header_style
-            ),
-            **kwargs
-        )        
+                hypertreelist.TR_NO_HEADER
+                )
+        )
         
         self.AddColumn('')
         self.SetMainColumn(0)
