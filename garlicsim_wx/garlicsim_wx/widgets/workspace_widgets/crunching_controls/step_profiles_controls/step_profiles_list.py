@@ -15,6 +15,7 @@ from garlicsim_wx.widgets import WorkspaceWidget
     
 class StepProfilesList(hypertreelist.HyperTreeList):
     '''tododoc'''
+    # tododoc: set max size dynamically according to number of profiles
     
     def __init__(self, parent, frame, *args, **kwargs):
         
@@ -31,7 +32,7 @@ class StepProfilesList(hypertreelist.HyperTreeList):
                 wx.TR_HIDE_ROOT | \
                 hypertreelist.TR_NO_HEADER
                 )
-        )
+        )        
         
         self.AddColumn('')
         self.SetMainColumn(0)
