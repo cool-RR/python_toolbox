@@ -30,7 +30,7 @@ class AboutDialog(wx.Dialog):
         wx.Dialog.__init__(self, frame, title='About GarlicSim',
                            size=(628, 600))
         
-        
+        self.SetBackgroundColour(wx_tools.get_background_color())
         
         self.SetDoubleBuffered(True)
         
