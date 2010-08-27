@@ -27,7 +27,7 @@ def get_background_color():
     
     else:
         warnings.warn("Unidentified platform! It's neither '__WXGTK__', "
-                      "'__WXMAC__' nor '__WXMSW__'. Things might noe work "
+                      "'__WXMAC__' nor '__WXMSW__'. Things might not work "
                       "properly.")
         return wx.Color(212, 208, 200)
 
