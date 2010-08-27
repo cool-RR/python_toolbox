@@ -4,6 +4,8 @@
 import pkg_resources
 import wx
 
+from garlicsim_wx.general_misc import wx_tools
+
 import garlicsim, garlicsim_wx
 
 from .step_profiles_list import StepProfilesList
@@ -21,6 +23,8 @@ class StepProfilesControls(wx.Panel):
         self.frame = frame
         
         wx.Panel.__init__(self, parent, *args, **kwargs)
+        
+        self.SetBackgroundColour(wx_tools.get_background_color())
 
         
         self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)

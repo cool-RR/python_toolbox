@@ -21,7 +21,10 @@ def get_background_color():
     elif wx.Platform == '__WXMAC__':
         return 1/0 #tododoc
     elif wx.Platform == '__WXGTK__':
-        return wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW)
+        # Until SYS_COLOUR_* get their act togother, we're using Windows colors
+        # for Linux.
+        return wx.Color(212, 208, 200)
+    
     else:
         warnings.warn("Unidentified platform! It's neither '__WXGTK__', "
                       "'__WXMAC__' nor '__WXMSW__'. Things might noe work "

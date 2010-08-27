@@ -6,6 +6,7 @@ import wx
 
 from garlicsim_wx.general_misc.third_party import aui
 from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
+from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.general_misc import emitters
 
 import garlicsim, garlicsim_wx
@@ -25,7 +26,7 @@ class CrunchingControls(wx.Panel, WorkspaceWidget):
                           style=wx.SUNKEN_BORDER)
         WorkspaceWidget.__init__(self, frame)
         
-        #self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
+        self.SetBackgroundColour(wx_tools.get_background_color())
         
         
         assert isinstance(self.gui_project, garlicsim_wx.GuiProject)

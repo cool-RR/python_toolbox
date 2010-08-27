@@ -4,6 +4,8 @@
 import pkg_resources
 import wx
 
+from garlicsim_wx.general_misc import wx_tools
+
 import garlicsim, garlicsim_wx
 
     
@@ -17,7 +19,7 @@ class CruncherControls(wx.Panel):
         
         wx.Panel.__init__(self, parent, *args, **kwargs)
         
-        self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
+        self.SetBackgroundColour(wx_tools.get_background_color())
 
         
         self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)
