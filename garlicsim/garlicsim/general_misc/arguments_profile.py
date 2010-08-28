@@ -5,12 +5,14 @@ from garlicsim.general_misc.third_party import inspect
 from garlicsim.general_misc.third_party.ordered_dict import OrderedDict
 from garlicsim.general_misc import dict_tools
 
+# Canonical: As few characters as possible, and after that as many keyword
+# arguments as possible.
 
 class ArgumentsProfile(object):
     def __init__(self, function, *args, **kwargs):
         self.function = function
-        self._raw_args = args
-        self._raw_kwargs = kwargs
+        raw_args = args
+        raw_kwargs = kwargs
         del args, kwargs
         
         self.args = []
@@ -18,15 +20,24 @@ class ArgumentsProfile(object):
         
         args_spec = inspect.getargspec(function)
         
-        (self._s_args, self._s_star_args,
-         self._s_star_kwargs, self._s_defaults) = args_spec
+        (s_args, s_star_args, s_star_kwargs, s_defaults) = args_spec
         
-        self._getcallargs_result = inspect.getcallargs(function,
-                                                       self._raw_args,
-                                                       self._raw_kwargs)
+        getcallargs_result = inspect.getcallargs(function,
+                                                 self._raw_args,
+                                                 self._raw_kwargs)
         
-        self._s_defaultless_args = self._s_args[:-len(self._s_defaults)]
-        dict_tools.get_list(self._getcallargs_result, self._
+        
+        # Phase 1: We specify all the args that don't have a default as
+        # positional args:
+        defaultless_args = s_args[:-len(s_defaults)]
+        self.args += dict_tools.get_list(getcallargs_result, defaultless_args)
+        
+        args_with_defaults = OrderedDict(zip(s_args[-len(s_defaults):], s_defaults))
+        args_differing_from_defaults = OrderedDict(
+            (key, value) for (key, value) in args_with_defaults.iteritems()
+            if value != getcallargs_result[key]
+        )
+        
 
         for arg_name_or_list in s_args:
             self._process_arg_name_or_list(arg_name_or_list)
