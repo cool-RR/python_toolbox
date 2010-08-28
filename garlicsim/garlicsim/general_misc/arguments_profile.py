@@ -2,8 +2,8 @@
 # This program is distributed under the LGPL2.1 license.
 
 from garlicsim.general_misc.third_party import inspect
+from garlicsim.general_misc.third_party.ordered_dict import OrderedDict
 
-#arghhh
 
 class ArgumentsProfile(object):
     def __init__(self, function, *args, **kwargs):
@@ -11,10 +11,15 @@ class ArgumentsProfile(object):
         self._raw_args = args
         self._raw_kwargs = kwargs
         
+        self.args = []
+        self.kwargs = OrderedDict()
+        
         args_spec = inspect.getargspec(function)
         
         (self._s_args, self._s_star_args,
          self._s_star_kwargs, self._s_defaults) = args_spec
+        
+        self._s_defaultless_args = self._s_args[:-len(self._s_defaults)]
 
         for arg_name_or_list in s_args:
             self._process_arg_name_or_list(arg_name_or_list)
