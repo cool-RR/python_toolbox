@@ -3,6 +3,7 @@
 
 from garlicsim.general_misc.third_party import inspect
 from garlicsim.general_misc.third_party.ordered_dict import OrderedDict
+from garlicsim.general_misc import dict_tools
 
 
 class ArgumentsProfile(object):
@@ -10,6 +11,7 @@ class ArgumentsProfile(object):
         self.function = function
         self._raw_args = args
         self._raw_kwargs = kwargs
+        del args, kwargs
         
         self.args = []
         self.kwargs = OrderedDict()
@@ -19,7 +21,12 @@ class ArgumentsProfile(object):
         (self._s_args, self._s_star_args,
          self._s_star_kwargs, self._s_defaults) = args_spec
         
+        self._getcallargs_result = inspect.getcallargs(function,
+                                                       self._raw_args,
+                                                       self._raw_kwargs)
+        
         self._s_defaultless_args = self._s_args[:-len(self._s_defaults)]
+        dict_tools.get_list(self._getcallargs_result, self._
 
         for arg_name_or_list in s_args:
             self._process_arg_name_or_list(arg_name_or_list)

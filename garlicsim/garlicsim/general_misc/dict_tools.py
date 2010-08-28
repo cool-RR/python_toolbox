@@ -5,9 +5,15 @@
 
 import copy
 
-def get_list(d, container):
+
+def get_list(d, iterable):
+    return [d[key] for key in iterable]
+
+
+def get_contained(d, container):
     '''Get a list of the values in the dict whose keys are in `container`.'''
     return [value for (key, value) in d.iteritems() if (key in container)]
+
 
 def fancy_string(d, indent=0):
     '''Show a dict as a string, slightly nicer than dict.__repr__.'''
@@ -32,4 +38,4 @@ def fancy_string(d, indent=0):
     return temp2
     
     
-    
+del copy    
