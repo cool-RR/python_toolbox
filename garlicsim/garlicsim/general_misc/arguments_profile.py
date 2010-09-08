@@ -103,7 +103,7 @@ class ArgumentsProfile(object):
             # Dict mapping from each defaultful arg to the "price" of specifying
             # it as a keyword (not including the length of the value):
             prices_of_keyword_prefixes = OrderedDict(
-                ((defaultful_arg, len(defaultful_args)+1) for 
+                ((defaultful_arg, len(defaultful_arg)+1) for 
                  defaultful_arg in defaultful_args)
             )
             # For example, if we have a defaultful arg "gravity_strength", then
@@ -265,7 +265,9 @@ if __name__ == '__main__':
     
     a2 = ArgumentsProfile(f, 1, c=3, b=2)
     a3 = ArgumentsProfile(f, c=3, a=1, b=2)
-    assert a1 == a2 == a3
+    a4 = ArgumentsProfile(f, 1, **{'c': 3, 'b': 2})
+    a5 = ArgumentsProfile(f, **OrderedDict((('c', 3), ('b',  2), ('a',  1))))
+    assert a1 == a2 == a3 == a4 == a5
     
     
     
@@ -350,6 +352,46 @@ if __name__ == '__main__':
     a7 = ArgumentsProfile(f, 1, 2, 3, 'booyeah')
     a8 = ArgumentsProfile(f, 1, 2, c=3, dragon='booyeah')
     assert a6 == a7 == a8
+    
+    
+    
+    def func(a, b, c=3, dragon=4, e=5, f=6, glide=7, human=8):
+        pass
+        
+    a1 = ArgumentsProfile(func, 1, 2, glide='boom')
+    assert a1.args == (1, 2)
+    assert a1.kwargs == OrderedDict((('glide', 'boom'),))
+    
+    a2 = ArgumentsProfile(func, 1, 2, 3, 4, 5, 6, 'boom')
+    a3 = ArgumentsProfile(func, 1, 2, 3, glide='boom')
+    assert a1 == a2 == a3
+    
+    a4 = ArgumentsProfile(func, 1, 2, glide='boom', human='pow')
+    a5 = ArgumentsProfile(func, 1, 2, 3, 4, 5, 6, 'boom', 'pow')
+    # edge case, second priority
+    assert a4.args == (1, 2)
+    assert a4.kwargs == OrderedDict((('glide', 'boom'), ('human', 'pow')))
+    assert a4 == a5
+    
+    
+    
+    def func(a, b, c=3, dragon=4, e=5, f=6, glide=7, human=8, iris=9):
+        pass
+        
+    a1 = ArgumentsProfile(func, 1, 2, glide='boom')
+    assert a1.args == (1, 2)
+    assert a1.kwargs == OrderedDict((('glide', 'boom'),))
+    
+    a2 = ArgumentsProfile(func, 1, 2, 3, 4, 5, 6, 'boom')
+    a3 = ArgumentsProfile(func, 1, 2, 3, glide='boom')
+    assert a1 == a2 == a3
+    
+    a4 = ArgumentsProfile(func, 1, 2, glide='boom', human='pow', iris='badabang')
+    a5 = ArgumentsProfile(func, 1, 2, 3, 4, 5, 6, 'boom', 'pow', 'badabang')
+    assert a4 == a5
+    assert a4.args == (1, 2, 3, 4, 5, 6, 'boom', 'pow', 'badabang')
+    assert not a4.kwargs
+    
     
     
     
