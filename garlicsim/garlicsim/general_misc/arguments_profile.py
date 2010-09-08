@@ -254,7 +254,7 @@ class ArgumentsProfile(object):
                     
         
         
-if __name__ == '__main__':
+if __name__ == '__main__': # tododoc: move to test module
     
     def f(a, b, c):
         pass
