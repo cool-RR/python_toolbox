@@ -26,7 +26,7 @@ class ArgumentsProfile(object):
         raw_kwargs = kwargs
         del args, kwargs
         
-        self.args = []
+        self.args = ()
         self.kwargs = OrderedDict()
         
         args_spec = inspect.getargspec(function)
@@ -50,8 +50,11 @@ class ArgumentsProfile(object):
         #######################################################################
         # Phase 1: We specify all the args that don't have a default as
         # positional args:
-        defaultless_args = s_args[:-n_defaultful_args]
-        self.args += dict_tools.get_list(getcallargs_result, defaultless_args)
+        defaultless_args = s_args[:-n_defaultful_args] if n_defaultful_args \
+                           else s_args[:]
+        self.args += tuple(
+            dict_tools.get_list(getcallargs_result, defaultless_args)
+        )
 
         
         #######################################################################
@@ -67,15 +70,16 @@ class ArgumentsProfile(object):
         # We will put the number of defaultful arguments that should be
         # specified positionally.
         
-        defaultful_args = s_args[-n_defaultful_args:]
+        defaultful_args = s_args[-n_defaultful_args:] if n_defaultful_args \
+                          else []
         
         # Dict that maps from argument name to default value:
         defaults = OrderedDict(zip(defaultful_args, s_defaults))
         
-        values_differing_from_defaults = OrderedDict(
-            (key, value) for (key, value) in defaultful_args.iteritems()
-            if value != getcallargs_result[key]
-        )
+        defaultful_args_differing_from_defaults = set((
+            defaultful_arg for defaultful_arg in defaultful_args
+            if defaults[defaultful_arg] != getcallargs_result[defaultful_arg]
+        ))
         
         if s_star_args and getcallargs_result[s_star_args]:
             # We have some arguments that go into *args! This means that we
@@ -147,7 +151,7 @@ class ArgumentsProfile(object):
                     2 * candidate + \
                     sum(
                         dict_tools.get_list(
-                            price_for_positionally_specified_defaultful_args,
+                            prices_of_values,
                             defaultful_args_to_specify_positionally
                         )
                     )
@@ -155,7 +159,7 @@ class ArgumentsProfile(object):
                 # between the arguments.
                     
                 defaultful_args_to_specify_by_keyword = filter(
-                    values_differing_from_defaults.__contains__,
+                    defaultful_args_differing_from_defaults.__contains__,
                     defaultful_args[candidate:]
                 )
                 
@@ -163,7 +167,13 @@ class ArgumentsProfile(object):
                     2 * candidate + \
                     sum(
                         dict_tools.get_list(
-                            price_for_defaultful_args_specified_by_keyword,
+                            prices_of_keyword_prefixes,
+                            defaultful_args_to_specify_by_keyword
+                        )
+                    ) + \
+                    sum(
+                        dict_tools.get_list(
+                            prices_of_values,
                             defaultful_args_to_specify_by_keyword
                         )
                     )
@@ -218,13 +228,13 @@ class ArgumentsProfile(object):
             
         defaultful_args_to_specify_positionally = \
             defaultful_args[:n_defaultful_args_to_specify_positionally]
-        self.args += [getcallargs_result[defaultful_arg] for defaultful_arg
-                      in defaultful_args_to_specify_positionally]
+        self.args += tuple((getcallargs_result[defaultful_arg] for defaultful_arg
+                      in defaultful_args_to_specify_positionally))
         
         # Now we add those specified by keyword:
 
         defaultful_args_to_specify_by_keyword = filter(
-                values_differing_from_defaults.__contains__,
+                defaultful_args_differing_from_defaults.__contains__,
                 defaultful_args[n_defaultful_args_to_specify_positionally:]
             )
         for defaultful_arg in defaultful_args_to_specify_by_keyword:
@@ -233,7 +243,13 @@ class ArgumentsProfile(object):
         #######################################################################
         # Phase 3: ???
             
-            
+    def __eq__(self, other):
+        if not isinstance(other, ArgumentsProfile):
+            raise Exception
+        return (self.function is other.function) and \
+               (self.args == other.args) and \
+               (self.kwargs == other.kwargs)
+    
             
                     
         
@@ -243,7 +259,28 @@ if __name__ == '__main__':
     def f(a, b, c):
         pass
     
-    a = ArgumentsProfile(f, 1, 2, 3)
-    assert a.args == (1, 2, 3)
-    assert not a.kwargs
-            
+    a1 = ArgumentsProfile(f, 1, 2, 3)
+    assert a1.args == (1, 2, 3)
+    assert not a1.kwargs
+    
+    a2 = ArgumentsProfile(f, 1, c=3, b=2)
+    a3 = ArgumentsProfile(f, c=3, a=1, b=2)
+    assert a1 == a2 == a3
+    
+    def g(a, b, c='three', d='four'):
+        pass
+    
+    a1 = ArgumentsProfile(g, 'one', 'two')
+    assert a1.args == ('one', 'two')
+    assert not a1.kwargs
+    
+    a2 = ArgumentsProfile(g, 'one', 'two', 'three')
+    a3 = ArgumentsProfile(g, 'one', 'two', 'three', 'four')
+    assert a1 == a2 == a3
+    
+    a4 = ArgumentsProfile(g, 'one', 'two', 'dynamite')
+    assert a1 != a4
+    assert a4.args == ('one', 'two', 'dynamite')
+    assert not a4.kwargs
+    
+    assert False
