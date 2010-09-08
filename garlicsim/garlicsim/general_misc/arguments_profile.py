@@ -33,9 +33,15 @@ class ArgumentsProfile(object):
         
         (s_args, s_star_args, s_star_kwargs, s_defaults) = args_spec
         
+        # `getargspec` has a weird policy, when inspecting a function with no
+        # defaults, to give a `defaults` of `None` instead of the more
+        # consistent `()`. We fix that here:
+        if s_defaults is None:
+            s_defaults = ()
+        
         getcallargs_result = inspect.getcallargs(function,
-                                                 self._raw_args,
-                                                 self._raw_kwargs)
+                                                 *raw_args,
+                                                 **raw_kwargs)
         
         # The number of args which have default values:
         n_defaultful_args = len(s_defaults)
@@ -232,21 +238,12 @@ class ArgumentsProfile(object):
                     
         
         
-        
-        
-        
-        
-        
-        
-
-        for arg_name_or_list in s_args:
-            self._process_arg_name_or_list(arg_name_or_list)
-                
-        
-    def _process_arg_name_or_list(self, arg_name_or_list, raw_args, s_defaults):
-        if isinstance(arg_name_or_list, basestring):
-            arg_name = arg_name_or_list
-            
-        else:
-            assert isinstance(arg_name_or_list, list)
+if __name__ == '__main__':
+    
+    def f(a, b, c):
+        pass
+    
+    a = ArgumentsProfile(f, 1, 2, 3)
+    assert a.args == (1, 2, 3)
+    assert not a.kwargs
             
