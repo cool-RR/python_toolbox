@@ -164,7 +164,7 @@ class ArgumentsProfile(object):
                 )
                 
                 price_for_defaultful_args_specified_by_keyword = \
-                    2 * candidate + \
+                    2 * len(defaultful_args_to_specify_by_keyword) + \
                     sum(
                         dict_tools.get_list(
                             prices_of_keyword_prefixes,
@@ -177,7 +177,7 @@ class ArgumentsProfile(object):
                             defaultful_args_to_specify_by_keyword
                         )
                     )
-                # The `2 * candidate` part is to account for the ", " parts
+                # The `2 * len(...)` part is to account for the ", " parts
                 # between the arguments.
                 
                 # Now we need to figure out if this candidate gets the "lonely
@@ -267,6 +267,8 @@ if __name__ == '__main__':
     a3 = ArgumentsProfile(f, c=3, a=1, b=2)
     assert a1 == a2 == a3
     
+    
+    
     def g(a, b, c='three', d='four'):
         pass
     
@@ -283,4 +285,76 @@ if __name__ == '__main__':
     assert a4.args == ('one', 'two', 'dynamite')
     assert not a4.kwargs
     
-    assert False
+    a5 = ArgumentsProfile(g, 'one', 'two', c='dynamite')
+    a6 = ArgumentsProfile(g, 'one', 'two', 'dynamite', 'four')
+    a7 = ArgumentsProfile(g, 'one', 'two', c='dynamite', d='four')
+    a8 = ArgumentsProfile(g, 'one', 'two', 'dynamite', d='four')
+    a9 = ArgumentsProfile(g, a='one', b='two', c='dynamite', d='four')
+    a10 = ArgumentsProfile(g, d='four', c='dynamite', b='two', a='one')
+    a11 = ArgumentsProfile(g, 'one', c='dynamite', d='four', b='two')
+    assert a4 == a5 == a6 == a7 == a8 == a9 == a10 == a11
+    
+    a12 = ArgumentsProfile(g, 'one', 'two', d='bang')
+    assert a12.args == ('one', 'two')
+    assert a12.kwargs == OrderedDict((('d', 'bang'),))
+    
+    a13 = ArgumentsProfile(g, 'one', 'two', 'three', d='bang')
+    a14 = ArgumentsProfile(g, 'one', 'two', c='three', d='bang')
+    a15 = ArgumentsProfile(g, 'one', 'two', 'three', 'bang')
+    a16 = ArgumentsProfile(g, a='one', b='two', c='three', d='bang')
+    a17 = ArgumentsProfile(g, b='two', c='three', d='bang', a='one')
+    assert a13 == a14 == a15 == a16 == a17
+    
+    
+    
+    def h(a, b, creativity=3, d=4):
+        pass
+    
+    a1 = ArgumentsProfile(h, 1, 2)
+    assert a1.args == (1, 2)
+    assert not a1.kwargs
+    
+    a2 = ArgumentsProfile(h, 1, 2, 3, 4)
+    a3 = ArgumentsProfile(h, a=1, b=2, creativity=3, d=4)
+    a4 = ArgumentsProfile(h, creativity=3, d=4, a=1, b=2)
+    a5 = ArgumentsProfile(h, 1, 2, creativity=3, d=4)
+    assert a1 == a2 == a3 == a4 == a5
+    
+    a6 = ArgumentsProfile(h, 1, 2, d='booyeah')
+    assert a6.args == (1, 2)
+    assert a6.kwargs == OrderedDict((('d', 'booyeah'),))
+    
+    a7 = ArgumentsProfile(h, 1, 2, 3, 'booyeah')
+    a8 = ArgumentsProfile(h, 1, 2, creativity=3, d='booyeah')
+    assert a6 == a7 == a8
+    
+    
+    
+    def f(a, b, c=3, dragon=4):
+        pass
+    
+    a1 = ArgumentsProfile(f, 1, 2)
+    assert a1.args == (1, 2)
+    assert not a1.kwargs
+    
+    a2 = ArgumentsProfile(f, 1, 2, 3, 4)
+    a3 = ArgumentsProfile(f, a=1, b=2, c=3, dragon=4)
+    a4 = ArgumentsProfile(f, c=3, dragon=4, a=1, b=2)
+    a5 = ArgumentsProfile(f, 1, 2, c=3, dragon=4)
+    assert a1 == a2 == a3 == a4 == a5
+    
+    a6 = ArgumentsProfile(f, 1, 2, dragon='booyeah')
+    assert a6.args == (1, 2, 3, 'booyeah')
+    assert not a6.kwargs
+    
+    a7 = ArgumentsProfile(f, 1, 2, 3, 'booyeah')
+    a8 = ArgumentsProfile(f, 1, 2, c=3, dragon='booyeah')
+    assert a6 == a7 == a8
+    
+    
+    
+    
+    
+    
+    
+    #assert False
