@@ -27,12 +27,21 @@ class ArgumentsProfile(object):
                                                  self._raw_kwargs)
         
         
+        #######################################################################
         # Phase 1: We specify all the args that don't have a default as
         # positional args:
         defaultless_args = s_args[:-len(s_defaults)]
         self.args += dict_tools.get_list(getcallargs_result, defaultless_args)
+
         
-        args_with_defaults = OrderedDict(zip(s_args[-len(s_defaults):], s_defaults))
+        #######################################################################
+        # Phase 2: ???
+        
+        # Creating a dict that maps from argument name to default value:
+        args_with_defaults = OrderedDict(
+            zip(s_args[-len(s_defaults):], s_defaults)
+        )
+        
         args_differing_from_defaults = OrderedDict(
             (key, value) for (key, value) in args_with_defaults.iteritems()
             if value != getcallargs_result[key]
