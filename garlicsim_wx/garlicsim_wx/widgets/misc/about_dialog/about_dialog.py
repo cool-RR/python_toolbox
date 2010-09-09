@@ -15,6 +15,7 @@ import wx.html
 
 from garlicsim_wx.general_misc import wx_tools
 import garlicsim_wx.general_misc.cute_timer
+from garlicsim_wx.widgets.general_misc import CuteDialog
 
 import garlicsim_wx
 from bitmap_viewer import BitmapViewer
@@ -23,14 +24,14 @@ from . import images as __images_package
 images_package = __images_package.__name__
 
 
-class AboutDialog(wx.Dialog):
+class AboutDialog(CuteDialog):
     '''An About dialog for GarlicSim.'''
     def __init__(self, frame):
    
         wx.Dialog.__init__(self, frame, title='About GarlicSim',
                            size=(628, 600))
         
-        self.SetBackgroundColour(wx.Color(212, 208, 200))
+        self.SetBackgroundColour(wx_tools.get_background_color())
         
         self.SetDoubleBuffered(True)
         
@@ -49,17 +50,19 @@ class AboutDialog(wx.Dialog):
         self.bitmap_viewer = BitmapViewer(self, size=(627, 271))
         v_sizer.Add(self.bitmap_viewer, 0)
         
-        #self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
-        #self.SetBackgroundColour(wx_tools.get_background_color())
-        
-        
         self.html_window = wx.html.HtmlWindow(self, size=(628, 270))
         v_sizer.Add(self.html_window, 0)
+        
+        foreground_color_in_hex = \
+            wx_tools.wx_color_to_html_color(wx_tools.get_background_color())
+        background_color_in_hex = \
+            wx_tools.wx_color_to_html_color(wx.Colour(0, 0, 0))
+        
         
         self.html_window.SetPage(
             '''
             <html>
-                <body bgcolor="#d4d0c8">
+                <body bgcolor="%s" color="%s">
                     <div align="center"> <font size="1">
                         &copy; 2009-2010 Ram Rachum (a.k.a. cool-RR)
                         <br />                        
@@ -90,7 +93,11 @@ class AboutDialog(wx.Dialog):
                     </div>
                 </body>
             </html>
-            ''' % garlicsim_wx.__version__
+            ''' % (
+                    foreground_color_in_hex,
+                    background_color_in_hex,
+                    garlicsim_wx.__version__
+                )
         )
         
         self.html_window.Bind(

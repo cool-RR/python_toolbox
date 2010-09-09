@@ -14,6 +14,7 @@ from garlicsim_wx.general_misc.third_party import aui
 from garlicsim_wx.general_misc import thread_timer
 from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
 from garlicsim_wx.general_misc import emitters
+from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.widgets.general_misc import Knob
 
 import garlicsim, garlicsim_wx
@@ -70,7 +71,8 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         WorkspaceWidget.__init__(self, frame)
         
         #self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
-        self.SetBackgroundColour(wx.Color(212, 208, 200))
+        self.SetBackgroundColour(wx_tools.get_background_color())
+        
         
         assert isinstance(self.gui_project, garlicsim_wx.GuiProject)
         # I put this assert mainly for better source assistance in Wing.
@@ -82,7 +84,7 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         self.inner_panel = wx.Panel(self, -1, size=(184, 124))
         '''The panel that contains all the subwidgets.'''
         
-        self.inner_panel.SetBackgroundColour(wx.Color(212, 208, 200))
+        self.inner_panel.SetBackgroundColour(wx_tools.get_background_color())
         
         self.center_button_mode = PlayMode
         '''The current mode of the center button.'''

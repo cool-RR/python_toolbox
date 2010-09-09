@@ -5,6 +5,8 @@ import wx
 
 import garlicsim, garlicsim_wx
 
+from garlicsim_wx.general_misc import wx_tools
+
 
 class AutocrunchControls(wx.Panel):
 
@@ -15,6 +17,8 @@ class AutocrunchControls(wx.Panel):
         self.gui_project = frame.gui_project
         
         wx.Panel.__init__(self, parent, -1)
+        
+        self.SetBackgroundColour(wx_tools.get_background_color())
         
         self.main_h_sizer = wx.BoxSizer(wx.HORIZONTAL)
         

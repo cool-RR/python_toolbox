@@ -4,44 +4,46 @@
 '''Defines various tools for wxPython.'''
 
 from __future__ import division
+
+import warnings
+
 import wx
 
+from garlicsim.general_misc import caching
 
-# employ generic caching decorator here to make shorter
 
-_background_color = None
+@caching.cache
 def get_background_color():
     '''Get the default garlicsim_wx background color'''
-    global _background_color
-    if _background_color is not None:
-        return _background_color
     
-    result = wx.Color(212, 208, 200)
-    '''
-    NOTE I'M ACTUALLY USING A CONSTANT COLOR NOW. THIS COMMENT IS NOT RELEVANT
-    RIGHT NOW:    
-    todo: Not sure it's the right system color. Find the right one by comparing
-    on different platforms. The right one is probably one of these:
+    if wx.Platform == '__WXMSW__':
+        # return wx.Color(212, 208, 200)
+        return wx.SystemSettings.GetColour(wx.SYS_COLOUR_MENUBAR)
+    elif wx.Platform == '__WXMAC__':
+        return wx.Color(232, 232, 232)
+    elif wx.Platform == '__WXGTK__':
+        # Until SYS_COLOUR_* get their act togother, we're using Windows colors
+        # for Linux.
+        return wx.Color(212, 208, 200)
     
-    ['SYS_COLOUR_MENUBAR', 'SYS_COLOUR_SCROLLBAR', 'SYS_COLOUR_3DFACE',
-    'SYS_COLOUR_INACTIVECAPTIONTEXT', 'SYS_COLOUR_3DLIGHT', 'SYS_COLOUR_MENU',
-    'SYS_COLOUR_INACTIVEBORDER', 'SYS_COLOUR_BTNFACE',
-    'SYS_COLOUR_ACTIVEBORDER']
-    '''
-    
-    _background_color = result
-    return result
+    else:
+        warnings.warn("Unidentified platform! It's neither '__WXGTK__', "
+                      "'__WXMAC__' nor '__WXMSW__'. Things might not work "
+                      "properly.")
+        return wx.Color(212, 208, 200)
 
 
-_background_brush = None
+@caching.cache
 def get_background_brush():
     '''Get the default garlicsim_wx background brush.'''
-    global _background_brush
-    if _background_brush is not None:
-        return _background_brush
-    result = wx.Brush(get_background_color())
-    _background_brush = result
-    return result
+    return wx.Brush(get_background_color())
+
+
+def wx_color_to_html_color(color):
+    rgb = color.GetRGB()
+    (green_blue, red) = divmod(rgb, 256)
+    (blue, green) = divmod(green_blue, 256)
+    return '#%02x%02x%02x' % (red, green, blue)
 
 
 def post_event(evt_handler, event_binder, source=None):

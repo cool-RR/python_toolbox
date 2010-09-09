@@ -17,7 +17,7 @@ class StepProfilesList(hypertreelist.HyperTreeList):
     '''tododoc'''
     # tododoc: set max size dynamically according to number of profiles
     
-    def __init__(self, parent, frame, *args, **kwargs):
+    def __init__(self, parent, frame):
         
         assert isinstance(frame, garlicsim_wx.Frame)
         self.frame = frame
@@ -25,7 +25,7 @@ class StepProfilesList(hypertreelist.HyperTreeList):
         hypertreelist.HyperTreeList.__init__(
             self,
             parent,
-            *args,
+            style=wx.SIMPLE_BORDER,
             agwStyle=(
                 wx.TR_FULL_ROW_HIGHLIGHT | \
                 wx.TR_ROW_LINES | \

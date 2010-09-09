@@ -33,7 +33,8 @@ class Shell(wx.py.shell.Shell, WorkspaceWidget):
             'wx': wx,
         }
         wx.py.shell.Shell.__init__(self, frame, size=(100, 100),
-                                   locals=locals_for_shell)
+                                   locals=locals_for_shell,
+                                   style=wx.SUNKEN_BORDER)
         WorkspaceWidget.__init__(self, frame)
         
         # Obscure: This causes the `site` module to add `help` and a few others
