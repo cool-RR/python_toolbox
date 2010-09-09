@@ -60,16 +60,18 @@ class StepProfile(ArgumentsProfile):
             candidate = kwargs['step_profile']
         
         if isinstance(candidate, StepProfile):
-            ArgumentsProfile.__init__(self, candidate.function,
+            ArgumentsProfile.__init__(self, candidate.step_function,
                                       *((StatePlaceholder,) + candidate.args),
                                       **candidate.kwargs)
         else:
             ArgumentsProfile.__init__(self, step_function,
                                       *((StatePlaceholder,) + args),
                                       **kwargs)
-            
+
         assert self.args[0] is StatePlaceholder
-        del self.args[0]
+        self.args = self.args[1:]
+        
+        self.step_function = self.function
         
         
     @staticmethod
