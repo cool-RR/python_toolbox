@@ -13,7 +13,7 @@ import pkgutil
 
 import wx
 
-from simpack_name_cmp import simpack_name_cmp
+from garlicsim.general_misc.cmp_tools import underscore_hating_cmp
 
 
 class SimpackSelectionDialog(wx.SingleChoiceDialog):
@@ -37,7 +37,7 @@ class SimpackSelectionDialog(wx.SingleChoiceDialog):
             module_name for (importer, module_name, is_package)
             in pkgutil.iter_modules(simpacks.__path__)
         ]
-        self.list_of_simpacks.sort(cmp=simpack_name_cmp)
+        self.list_of_simpacks.sort(cmp=underscore_hating_cmp)
         
 
     def get_simpack_selection(self):
