@@ -10,6 +10,7 @@ See its documentation for more information.
 import copy
 
 from garlicsim.general_misc import caching
+from garlicsim.general_misc.arguments_profile import ArgumentsProfile
 
 from garlicsim.misc.simpack_grokker.get_step_type import get_step_type
 
@@ -17,7 +18,11 @@ from garlicsim.misc.simpack_grokker.get_step_type import get_step_type
 __all__ = ['StepProfile']
 
 
-class StepProfile(object):
+class StatePlaceholder(object): # tododoc: make uninstanciable
+    pass
+
+
+class StepProfile(ArgumentsProfile):
     '''
     Profile for doing simulation step, specifying step function and arguments.
     
@@ -45,9 +50,6 @@ class StepProfile(object):
     
     def __init__(self, step_function, *args, **kwargs):
         
-        assert callable(step_function)
-        self.step_function = step_function
-        
         # Perhaps we were passed a StepProfile object instead of args
         # and kwargs? If so load that one, cause we're all cool and nice.
         candidate = None
@@ -58,22 +60,18 @@ class StepProfile(object):
             candidate = kwargs['step_profile']
         
         if isinstance(candidate, StepProfile):
-            self.__load_from(candidate)
-            return
+            ArgumentsProfile.__init__(self, candidate.function,
+                                      *((StatePlaceholder,) + candidate.args),
+                                      **candidate.kwargs)
+        else:
+            ArgumentsProfile.__init__(self, step_function,
+                                      *((StatePlaceholder,) + args),
+                                      **kwargs)
+            
+        assert self.args[0] is StatePlaceholder
+        del self.args[0]
         
-        self.args = tuple(args)
-        self.kwargs = kwargs  # todo: Get some frozendict class for this
         
-        
-    def __load_from(self, profile):
-        '''
-        Take another step options profile and load its arguments into this one.
-        '''
-        self.step_function = step_profile.step_function
-        self.args = copy.copy(step_profile.args)
-        self.kwargs = copy.copy(step_profile.kwargs)
-        
- 
     @staticmethod
     def build_with_default_step_function(default_step_function, *args,
                                          **kwargs):
@@ -90,6 +88,9 @@ class StepProfile(object):
         The user may put the step function as the first positional argument, or
         as the 'step_function' keyword argument. 
         '''
+        # tododoc: it's confusing thinking who should give the
+        # `default_step_function`. make this clear in docstring, or possibly
+        # make a function that returns a function.
 
         # We have two candidates to check now: args[0] and
         # kwargs['step_function']. We'll check the kwargs one first, because
@@ -109,7 +110,7 @@ class StepProfile(object):
             kwargs_copy = kwargs.copy()
             del kwargs_copy['step_function']
             
-            return StepProfile(step_function, *args, **kwargs)
+            return StepProfile(step_function, *args, **kwargs_copy)
 
         
         # No step function in kwargs. We'll try args:
@@ -126,7 +127,8 @@ class StepProfile(object):
                 args_copy = args[1:]
                 return StepProfile(default_step_function, *args_copy, **kwargs)
         
-        return StepProfile(default_step_function, *args, **kwargs)
+        else:
+            return StepProfile(default_step_function, *args, **kwargs)
                 
     
     def __repr__(self):
@@ -135,7 +137,7 @@ class StepProfile(object):
         
         Example output:
         StepProfile(<unbound method State.step>, 'billinear', t=7)
-        '''
+        '''#tododoc
         args_string = ', '.join(
             [repr(thing) for thing in (self.step_function,) + self.args]
         )

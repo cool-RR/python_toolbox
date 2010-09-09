@@ -18,7 +18,11 @@ class ArgumentsProfile(object):
     '''
     
     def __init__(self, function, *args, **kwargs):
+        
+        if not callable(function):
+            raise Exception('%s is not a callable object.' % function)
         self.function = function
+        
         raw_args = args
         raw_kwargs = kwargs
         del args, kwargs
