@@ -13,7 +13,13 @@ from garlicsim_wx.general_misc import wx_tools
 
 
 class CuteDialog(wx.Dialog):
-    '''Dialog that works around a Mac bug by centering itself on the screen.'''
+    '''
+    Dialog.
+    
+    Differences from wx.Dialog:
+    1. Works around a Mac bug by centering itself on the screen.
+    2. Uses garlicsim_wx's default background color.
+    '''
     def __init__(self, *args, **kwargs):
         wx.Dialog.__init__(self, *args, **kwargs)
         self.SetBackgroundColour(wx_tools.get_background_color())
