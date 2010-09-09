@@ -7,10 +7,6 @@ from garlicsim.general_misc import dict_tools
 from garlicsim.general_misc import cmp_tools
 
 
-#class MissionAccomplished(Exception): # tododoc: Make inaccessible
-    #pass
-
-
 # Our grand definition of canonical: As few characters as possible, and after
 # that as many keyword arguments as possible, with extraneous keyword arguments
 # ordered alphabetically (with "_" as the highest character, so anything
