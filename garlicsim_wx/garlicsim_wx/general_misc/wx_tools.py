@@ -17,8 +17,8 @@ def get_background_color():
     '''Get the default garlicsim_wx background color'''
     
     if wx.Platform == '__WXMSW__':
-        return wx.SystemSettings.GetColour(wx.SYS_COLOUR_MENU)
         # return wx.Color(212, 208, 200)
+        return wx.SystemSettings.GetColour(wx.SYS_COLOUR_MENU)
     elif wx.Platform == '__WXMAC__':
         return wx.Color(232, 232, 232)
     elif wx.Platform == '__WXGTK__':
