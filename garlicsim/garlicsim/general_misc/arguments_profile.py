@@ -44,6 +44,8 @@ class ArgumentsProfile(object):
                                                  *raw_args,
                                                  **raw_kwargs)
         
+        self.getcallargs_result = getcallargs_result # todo: rename?
+        
         # The number of args which have default values:
         n_defaultful_args = len(s_defaults)
         # The word "defaultful" means "something which has a default".
@@ -264,19 +266,21 @@ class ArgumentsProfile(object):
         
         if s_star_kwargs and getcallargs_result[s_star_kwargs]:
             
-            # We can't just add the *kwargs as is; We need to add them according
+            # We can't just add the **kwargs as is; We need to add them according
             # to canonical ordering. So we need to sort them first.
             
             unsorted_star_kwargs_names = \
                 getcallargs_result[s_star_kwargs].keys()
-            sorted_star_kwargs_names = \
-                sorted(unsorted_star_kwargs_names, cmp=tododoc)
+            sorted_star_kwargs_names = sorted(
+                unsorted_star_kwargs_names,
+                cmp=cmp_tools.underscore_hating_cmp
+            )
             
             sorted_star_kwargs = OrderedDict(
                 zip(
                     sorted_star_kwargs_names,
                     dict_tools.get_list(
-                        getcallargs_result[sorted_star_kwargs_names],
+                        getcallargs_result[s_star_kwargs],
                         sorted_star_kwargs
                     )
                 )
@@ -288,6 +292,7 @@ class ArgumentsProfile(object):
         # All phases completed! This arguments profile is canonical and ready.
         #######################################################################
             
+        
         
             
     def __eq__(self, other):
@@ -477,6 +482,29 @@ if __name__ == '__main__': # tododoc: move to test module
     assert a3.args == ('one', 'two', 'three', 'four', 'five', 'roar',
                        'meow_frr')
     assert not a3.kwargs
+    
+    
+    
+    def func(a, b, c=3, d=4, **kwargs):
+        pass
+    
+    a1 = ArgumentsProfile(func, 1, 2)
+    assert a1.args == (1, 2)
+    assert not a1.kwargs
+    
+    # Alphabetic ordering among the **kwargs, but `d` is first because it's a
+    # non-star:
+    a2 = ArgumentsProfile(func, 1, 2, d='bombastic', zany=True, blue=True)
+    assert a2.args == (1, 2)
+    assert a2.kwargs == OrderedDict((('d', 'bombastic'), ('blue', True), ('zany', True)))
+    
+    a3 = ArgumentsProfile(func, 1, b=2, blue=True, d='bombastic', zany=True)
+    a4 = ArgumentsProfile(func, zany=True, a=1, b=2, blue=True, d='bombastic')
+    a5 = ArgumentsProfile(func, 1, 2, 3, 'bombastic', zany=True, blue=True)
+    assert a2 == a3 == a4
+    
+    
+    
     
     
     
