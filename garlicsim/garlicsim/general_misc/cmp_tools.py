@@ -23,7 +23,6 @@ def _leading_underscore_cmp(a, b):
 
 def underscore_hating_cmp(a, b):
     '''Compare which simpack has a "higher" name.'''
-    # tododoc: change to just substitute some very high char for _, because of __
     assert isinstance(a, basestring) and isinstance(b, basestring)
     first_result = _leading_underscore_cmp(a, b)
     if first_result != 0:

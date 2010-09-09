@@ -496,15 +496,38 @@ if __name__ == '__main__': # tododoc: move to test module
     # non-star:
     a2 = ArgumentsProfile(func, 1, 2, d='bombastic', zany=True, blue=True)
     assert a2.args == (1, 2)
-    assert a2.kwargs == OrderedDict((('d', 'bombastic'), ('blue', True), ('zany', True)))
+    assert a2.kwargs == OrderedDict(
+        (('d', 'bombastic'), ('blue', True), ('zany', True))
+    )
     
     a3 = ArgumentsProfile(func, 1, b=2, blue=True, d='bombastic', zany=True)
     a4 = ArgumentsProfile(func, zany=True, a=1, b=2, blue=True, d='bombastic')
     a5 = ArgumentsProfile(func, 1, 2, 3, 'bombastic', zany=True, blue=True)
     assert a2 == a3 == a4
     
+
+    
+    def func(a, b, c='three', d='four', e='five', f='six', *args, **kwargs):
+        pass
+    
+    a1 = ArgumentsProfile(func, 'one', 'two', f='boomboomboom', __awesome=True,
+                          big=True)
+    assert a1.args == ('one', 'two')
+    assert a1.kwargs == OrderedDict(
+        (('f', 'boomboomboom'), ('big', True), ('__awesome', True))
+    )
+    
+    a2 = ArgumentsProfile(func, 'one', 'two', 'three', 'four', 'five',
+                          'bombastic', 'meow_frr', __funky=None, zany=True,
+                          _wet=False, blue=True)
+    assert a2.args == ('one', 'two', 'three', 'four', 'five', 'bombastic',
+                       'meow_frr')
+    assert a2.kwargs == OrderedDict(
+        (('blue', True), ('zany', True), ('_wet', False), ('__funky', None))
+    )
     
     
     
+    assert False
     
     
