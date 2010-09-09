@@ -18,7 +18,7 @@ def get_background_color():
     
     if wx.Platform == '__WXMSW__':
         # return wx.Color(212, 208, 200)
-        return wx.SystemSettings.GetColour(wx.SYS_COLOUR_MENU)
+        return wx.SystemSettings.GetColour(wx.SYS_COLOUR_MENUBAR)
     elif wx.Platform == '__WXMAC__':
         return wx.Color(232, 232, 232)
     elif wx.Platform == '__WXGTK__':
