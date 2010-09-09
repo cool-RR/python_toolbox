@@ -155,7 +155,7 @@ class ArgumentsProfile(object):
                             defaultful_args_to_specify_positionally
                         )
                     )
-                # The `2 * candidate` part is to account for the ", " parts
+                # The `2 * candidate` addend is to account for the ", " parts
                 # between the arguments.
                     
                 defaultful_args_to_specify_by_keyword = filter(
@@ -177,7 +177,7 @@ class ArgumentsProfile(object):
                             defaultful_args_to_specify_by_keyword
                         )
                     )
-                # The `2 * len(...)` part is to account for the ", " parts
+                # The `2 * len(...)` addend is to account for the ", " parts
                 # between the arguments.
                 
                 # Now we need to figure out if this candidate gets the "lonely
