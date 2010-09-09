@@ -70,3 +70,9 @@ editing it'''
         )
         self.delete_button.Enable(False)
                 
+        
+    def _recalculate(self):
+        self.enable_in_menu_bar(
+            self.frame.gui_project is not None and \
+            self.frame.gui_project.active_node is not None
+        )

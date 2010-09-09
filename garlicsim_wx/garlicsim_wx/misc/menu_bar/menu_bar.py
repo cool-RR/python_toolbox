@@ -38,27 +38,12 @@ class MenuBar(wx.MenuBar):
         
         self.create_menu = CreateMenu(frame)
         self.Append(self.create_menu, '&Create')
-        self.create_menu._recalculate = lambda: self.EnableTop(
-            self.FindMenu('Create'), 
-            frame.gui_project is not None
-        )
         
         self.node_menu = NodeMenu(frame)
         self.Append(self.node_menu, '&Node')
-        self.node_menu._recalculate = lambda: self.EnableTop(
-            self.FindMenu('Node'), 
-            frame.gui_project is not None and \
-            frame.gui_project.active_node is not None
-        )
         
         self.block_menu = BlockMenu(frame)
         self.Append(self.block_menu, '&Block')
-        self.block_menu._recalculate = lambda: self.EnableTop(
-            self.FindMenu('Block'), 
-            frame.gui_project is not None and \
-            frame.gui_project.active_node is not None and \
-            frame.gui_project.active_node.block is not None
-        )
         
         self.window_menu = WindowMenu(frame)
         title_of_window_menu = '&Workspace' if is_mac else '&Window'

@@ -10,3 +10,4 @@ from shell import Shell
 from seek_bar import SeekBar
 from tree_browser import TreeBrowser
 from playback_controls import PlaybackControls
+from crunching_controls import CrunchingControls

@@ -35,7 +35,8 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
                                style=wx.SUNKEN_BORDER)
         WorkspaceWidget.__init__(self, frame)
         
-        self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
+        self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM | wx.BG_STYLE_COLOUR)
+        self.SetBackgroundColour(wx_tools.get_background_color())
         
         self.SetupScrolling()
         #self.SetScrollRate(20,20)
@@ -109,7 +110,7 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
         self.elements = {}
         for key in elements_raw:
             stream = pkg_resources.resource_stream(images_package,
-                                                      elements_raw[key])
+                                                   elements_raw[key])
             self.elements[key] = wx.BitmapFromImage(
                 wx.ImageFromStream(
                     stream,

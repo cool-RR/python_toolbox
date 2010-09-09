@@ -2,15 +2,28 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the WorkspaceWidget class.
+Defines the WorkspaceWidget class. tododoc event
 
 See its documentation for more info.
 '''
 
+import wx
+
 import garlicsim_wx
+from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.general_misc.third_party import aui
 from garlicsim.general_misc.third_party import abc
 from garlicsim.general_misc import string_tools
+
+
+
+wxEVT_WORKSPACE_WIDGET_MENU_SELECT = wx.NewEventType()
+EVT_WORKSPACE_WIDGET_MENU_SELECT = wx.PyEventBinder(
+    wxEVT_WORKSPACE_WIDGET_MENU_SELECT,
+    1
+)
+# tododoc
+
 
 class WorkspaceWidget(object):
     '''
@@ -19,10 +32,15 @@ class WorkspaceWidget(object):
     A workspace widget is a widget displayed on the Frame of `garlicsim_wx`, and
     is connected to a specific gui project.
     '''
+
+    # todo: How do I make it so all subclasses must inherit from Window?
+    
     __metaclass__ = abc.ABCMeta
     
+
     _WorkspaceWidget__name = None
     '''The display name of the widget. Default is class name.'''
+
     
     def __init__(self, frame):
         
@@ -38,14 +56,41 @@ class WorkspaceWidget(object):
         # I put these asserts mainly for better source assistance in Wing.
         # They may be removed.
         
+        
+        self.Bind(wx.EVT_KEY_DOWN, self.on_key_down)
+        self.__escape_key = wx_tools.Key(wx.WXK_ESCAPE)
+        
+        self.Bind(EVT_WORKSPACE_WIDGET_MENU_SELECT,
+                  self.on_workspace_widget_menu_select)
+        
+        
     @classmethod
     def get_uppercase_name(cls):
         '''Get the name of the widget's class in uppercase. Used for title.'''
         name = cls._WorkspaceWidget__name or cls.__name__
         return string_tools.camelcase_to_spacecase(name).upper()
+
     
     def get_aui_pane_info(self):
         '''Get the AuiPaneInfo of this widget in the aui manager.'''
         return self.aui_manager.GetPane(self)
         
+    
+    def on_key_down(self, event):
+        
+        if wx_tools.Key.get_from_key_event(event) == self.__escape_key and \
+           self.frame.FindFocus() is not self.frame:
+                
+                self.frame.SetFocus()
+                
+        else:
+            event.Skip()
+
+            
+    def on_workspace_widget_menu_select(self, event):
+        aui_pane_info = self.get_aui_pane_info()
+        if aui_pane_info.IsShown() is False:
+            aui_pane_info.Show()
+            self.aui_manager.Update()
+        self.SetFocus()
     

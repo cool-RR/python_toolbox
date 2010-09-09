@@ -46,6 +46,9 @@ class Frame(wx.Frame):
         
         wx.Frame.__init__(self, *args, **keywords)
         
+        self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM | wx.BG_STYLE_COLOUR)
+        self.SetBackgroundColour(wx_tools.get_background_color())
+        
         self.SetDoubleBuffered(True)
         self.SetIcons(garlicsim_wx.misc.icon_bundle.get_icon_bundle())
         
@@ -55,6 +58,7 @@ class Frame(wx.Frame):
         self.seek_bar = None
         self.shell = None
         self.state_repr_viewer = None
+        self.crunching_controls = None
         
         self.aui_manager = garlicsim_wx.misc.aui.AuiManager(self)
         '''The aui manager, which manages the workspace widgets.'''
@@ -103,7 +107,7 @@ class Frame(wx.Frame):
         try_recalculate = lambda thing: \
             thing._recalculate() if hasattr(thing, '_recalculate') else None
         
-        menus_to_recalculate = [menu for (menu, label) in                                 
+        menus_to_recalculate = [menu for (menu, label) in
                                 self.menu_bar.GetMenus()]
         
         while menus_to_recalculate:
@@ -146,7 +150,8 @@ class Frame(wx.Frame):
                 
         def on_up():
             '''Go one path upwards.'''
-            if self.gui_project.path and self.gui_project.active_node:
+            if self.gui_project and self.gui_project.path and \
+               self.gui_project.active_node:
                 try:
                     new_path = self.gui_project.path._get_lower_path(
                         self.gui_project.active_node
@@ -161,7 +166,8 @@ class Frame(wx.Frame):
                 
         def on_down():
             '''Go one path downwards.'''
-            if self.gui_project.path and self.gui_project.active_node:
+            if self.gui_project and self.gui_project.path and \
+               self.gui_project.active_node:
                 try:
                     new_path = self.gui_project.path._get_higher_path(
                         self.gui_project.active_node
@@ -437,6 +443,17 @@ class Frame(wx.Frame):
             .BestSize(400, 600)\
             .Caption(self.shell.get_uppercase_name())
             .MaximizeButton(True)\
+            .CloseButton(False)
+        )
+        
+        
+        self.crunching_controls = workspace_widgets.CrunchingControls(self)
+        self.aui_manager.AddPane(
+            self.crunching_controls,
+            aui.AuiPaneInfo()\
+            .Left().Row(0)\
+            .BestSize(400, 600)\
+            .Caption(self.crunching_controls.get_uppercase_name())
             .CloseButton(False)
         )
         

@@ -48,6 +48,23 @@ class CuteMenu(wx.Menu):
         return big_menu
     
     
+    def enable_in_menu_bar(self, enable=True):
+        menu_bar = self.GetMenuBar()
+        menu_bar.EnableTop(
+            self._get_number_in_menu_bar(),
+            enable
+        )
+        
+    def _get_number_in_menu_bar(self):
+        # tododoc: check if we even have a menu bar, otherwise throw helpful
+        # exception.
+        menu_bar = self.GetMenuBar()
+        for (i, (menu, title)) in enumerate(menu_bar.GetMenus()):
+            if menu is self:
+                return i
+        raise Exception
+    
+    
 class UnbuildableCuteMenu(CuteMenu):
     '''
     CuteMenu that can't be built.

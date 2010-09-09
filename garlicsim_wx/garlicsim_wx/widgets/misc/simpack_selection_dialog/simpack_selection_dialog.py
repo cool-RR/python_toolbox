@@ -14,6 +14,7 @@ import pkgutil
 import wx
 
 from garlicsim.general_misc.cmp_tools import underscore_hating_cmp
+from garlicsim_wx.general_misc import wx_tools
 
 
 class SimpackSelectionDialog(wx.SingleChoiceDialog):
@@ -29,6 +30,7 @@ class SimpackSelectionDialog(wx.SingleChoiceDialog):
             self.list_of_simpacks,
             wx.CHOICEDLG_STYLE
         )
+        self.SetBackgroundColour(wx_tools.get_background_color())
         
     def make_simpack_list(self):
         '''Make a list of available simpacks.'''
