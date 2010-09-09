@@ -47,6 +47,7 @@ class ArgumentsProfile(object):
         n_defaultful_args = len(s_defaults)
         # The word "defaultful" means "something which has a default".
         
+        
         #######################################################################
         # Phase 1: We specify all the args that don't have a default as
         # positional args:
@@ -182,8 +183,12 @@ class ArgumentsProfile(object):
                 
                 # Now we need to figure out if this candidate gets the "lonely
                 # comma discount".
-                if lonely_comma_discount_may_be_given and candidate > 0:
+                if lonely_comma_discount_may_be_given and \
+                   (defaultful_args_to_specify_by_keyword or \
+                    defaultful_args_to_specify_positionally):
+                    
                     lonely_comma_discount = -2
+                    
                 else:
                     lonely_comma_discount = 0
                 
@@ -240,8 +245,49 @@ class ArgumentsProfile(object):
         for defaultful_arg in defaultful_args_to_specify_by_keyword:
             self.kwargs[defaultful_arg] = getcallargs_result[defaultful_arg]
                 
+        
         #######################################################################
-        # Phase 3: ???
+        # Phase 3: Add the star args:
+        
+        if s_star_args and getcallargs_result[s_star_args]:
+            
+            assert not self.kwargs
+            # Just making sure that no non-star args were specified by keyword,
+            # which would make it impossible for us to put stuff in *args.
+            
+            self.args += getcallargs_result[s_star_args]        
+
+            
+        #######################################################################
+        # Phase 4: Add the star kwargs:
+        
+        if s_star_kwargs and getcallargs_result[s_star_kwargs]:
+            
+            # We can't just add the *kwargs as is; We need to add them according
+            # to canonical ordering. So we need to sort them first.
+            
+            unsorted_star_kwargs_names = \
+                getcallargs_result[s_star_kwargs].keys()
+            sorted_star_kwargs_names = \
+                sorted(unsorted_star_kwargs_names, cmp=tododoc)
+            
+            sorted_star_kwargs = OrderedDict(
+                zip(
+                    sorted_star_kwargs_names,
+                    dict_tools.get_list(
+                        getcallargs_result[sorted_star_kwargs_names],
+                        sorted_star_kwargs
+                    )
+                )
+            )
+            
+            
+            self.kwargs.update(sorted_star_kwargs)
+            
+        # All phases completed! This arguments profile is canonical and ready.
+        #######################################################################
+            
+        
             
     def __eq__(self, other):
         if not isinstance(other, ArgumentsProfile):
