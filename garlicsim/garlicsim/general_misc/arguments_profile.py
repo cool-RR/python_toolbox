@@ -4,6 +4,7 @@
 from garlicsim.general_misc.third_party import inspect
 from garlicsim.general_misc.third_party.ordered_dict import OrderedDict
 from garlicsim.general_misc import dict_tools
+from garlicsim.general_misc import cmp_tools
 
 
 #class MissionAccomplished(Exception): # tododoc: Make inaccessible
@@ -291,7 +292,7 @@ class ArgumentsProfile(object):
             
     def __eq__(self, other):
         if not isinstance(other, ArgumentsProfile):
-            raise Exception
+            return NotImplemented
         return (self.function is other.function) and \
                (self.args == other.args) and \
                (self.kwargs == other.kwargs)
