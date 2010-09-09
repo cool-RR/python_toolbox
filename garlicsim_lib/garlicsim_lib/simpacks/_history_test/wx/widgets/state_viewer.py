@@ -18,7 +18,7 @@ import garlicsim_wx
 class StateViewer(wx.Window, garlicsim_wx.widgets.WorkspaceWidget):
     '''Widget for showing a state onscreen.'''
     def __init__(self, frame):
-        wx.Window.__init__(self, frame)
+        wx.Window.__init__(self, frame, style=wx.SUNKEN_BORDER)
         garlicsim_wx.widgets.WorkspaceWidget.__init__(self, frame)
         
         self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
