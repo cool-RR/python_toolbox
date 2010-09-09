@@ -441,9 +441,42 @@ if __name__ == '__main__': # tododoc: move to test module
     
     
     
+    def func(a, b, c=3, draconian=4, *args):
+        pass
+        
+    a1 = ArgumentsProfile(func, 1, 2)
+    assert a1.args == (1, 2)
+    assert not a1.kwargs
+    
+    a2 = ArgumentsProfile(func, 1, 2, draconian='kapow')
+    assert a2.args == (1, 2, 3, 'kapow')
+    assert not a2.kwargs
+    
+    a3 = ArgumentsProfile(func, 1, 2, 3, 'kapow')
+    assert a2 == a3
+    
+    a4 = ArgumentsProfile(func, 1, 2, 3, 'kapow', 'meow_frr')
+    assert a4.args == (1, 2, 3, 'kapow', 'meow_frr')
+    assert not a4.kwargs
     
     
     
+    def func(a, b, c='three', d='four', e='five', f='six', *args):
+        pass
+    
+    a1 = ArgumentsProfile(func, 'one', 'two', f='roar')
+    assert a1.args == ('one', 'two')
+    assert a1.kwargs == OrderedDict((('f', 'roar'),))
+    
+    a2 = ArgumentsProfile(func, 'one', 'two', 'three', 'four', 'five', 'roar')
+    assert a1 == a2
+        
+    # Specifying *args, so can't specify pre-*args arguments by keyword:
+    a3 = ArgumentsProfile(func, 'one', 'two', 'three', 'four', 'five', 'roar',
+                          'meow_frr')
+    assert a3.args == ('one', 'two', 'three', 'four', 'five', 'roar',
+                       'meow_frr')
+    assert not a3.kwargs
     
     
-    #assert False
+    
