@@ -288,7 +288,11 @@ class GuiProject(object):
             #todo: maybe need an emitter for when editing a state?
             
             ###################################################################
-                        
+            
+            self.default_buffer_modified_emitter = es.make_emitter(
+                name='default_buffer_modified',
+            )
+            
             self.all_menus_need_recalculation_emitter = es.make_emitter(
                 outputs=(self.frame._recalculate_all_menus,),
                 name='all_menus_need_recalculation_emitter'
@@ -387,6 +391,11 @@ class GuiProject(object):
         self.project.ensure_buffer(node, clock_buffer=self.default_buffer)
 
         
+    def set_default_buffer(self, default_buffer):
+        self.default_buffer = default_buffer
+        self.default_buffer_modified_emitter.emit()
+    
+        
     def round_pseudoclock_to_active_node(self):
         '''Set the value of the pseudoclock to the clock of the active node.'''
         self._set_pseudoclock(self.active_node.state.clock)
@@ -458,7 +467,6 @@ class GuiProject(object):
                                                                        self.path,
                                                                        Infinity)   
         
-
         
     def __modify_path_to_include_active_node(self):
         '''Ensure that self.path includes the active node.'''
