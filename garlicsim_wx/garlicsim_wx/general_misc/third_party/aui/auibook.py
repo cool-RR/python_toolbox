@@ -746,11 +746,11 @@ class TabNavigatorWindow(wx.Dialog):
 
         bk = self.GetParent()
         self._selectedItem = self._listBox.GetSelection()
-        iter = self._indexMap[self._selectedItem]
-        bk.SetSelection(iter)
-
         self.EndModal(wx.ID_OK)
         
+    def GetSelectedPage(self):
+        """ Gets the page index that was selected when the dialog was closed """
+        return self._indexMap[self._selectedItem]
 
     def OnPanelPaint(self, event):
         """
@@ -876,9 +876,9 @@ class AuiTabContainer(object):
          Flag name                            Description
          ==================================== ==================================
          ``AUI_NB_TOP``                       With this style, tabs are drawn along the top of the notebook
-         ``AUI_NB_LEFT``                      With this style, tabs are drawn along the left of the notebook. Not implemented yet.
-         ``AUI_NB_RIGHT``                     With this style, tabs are drawn along the right of the notebook. Not implemented yet.
-         ``AUI_NB_BOTTOM``                    With this style, tabs are drawn along the bottom of the notebook.
+         ``AUI_NB_LEFT``                      With this style, tabs are drawn along the left of the notebook. Not implemented yet
+         ``AUI_NB_RIGHT``                     With this style, tabs are drawn along the right of the notebook. Not implemented yet
+         ``AUI_NB_BOTTOM``                    With this style, tabs are drawn along the bottom of the notebook
          ``AUI_NB_TAB_SPLIT``                 Allows the tab control to be split by dragging a tab
          ``AUI_NB_TAB_MOVE``                  Allows a tab to be moved horizontally by dragging
          ``AUI_NB_TAB_EXTERNAL_MOVE``         Allows a tab to be moved to another tab control
@@ -888,8 +888,8 @@ class AuiTabContainer(object):
          ``AUI_NB_CLOSE_BUTTON``              With this style, a close button is available on the tab bar
          ``AUI_NB_CLOSE_ON_ACTIVE_TAB``       With this style, a close button is available on the active tab
          ``AUI_NB_CLOSE_ON_ALL_TABS``         With this style, a close button is available on all tabs
-         ``AUI_NB_MIDDLE_CLICK_CLOSE``        Allows to close AuiNotebook tabs by mouse middle button click
-         ``AUI_NB_SUB_NOTEBOOK``              This style is used by AuiManager to create automatic AuiNotebooks
+         ``AUI_NB_MIDDLE_CLICK_CLOSE``        Allows to close L{AuiNotebook} tabs by mouse middle button click
+         ``AUI_NB_SUB_NOTEBOOK``              This style is used by L{AuiManager} to create automatic AuiNotebooks
          ``AUI_NB_HIDE_ON_SINGLE_TAB``        Hides the tab window if only one tab is present
          ``AUI_NB_SMART_TABS``                Use Smart Tabbing, like ``Alt`` + ``Tab`` on Windows
          ``AUI_NB_USE_IMAGES_DROPDOWN``       Uses images on dropdown window list menu instead of check items
@@ -1262,9 +1262,10 @@ class AuiTabContainer(object):
 
     def Render(self, raw_dc, wnd):
         """
-        Render() renders the tab catalog to the specified `wx.DC`.
-        It is a virtual function and can be overridden to
-        provide custom drawing capabilities.
+        Renders the tab catalog to the specified `wx.DC`.
+        
+        It is a virtual function and can be overridden to provide custom drawing
+        capabilities.
 
         :param `raw_dc`: a `wx.DC` device context;
         :param `wnd`: an instance of `wx.Window`.
@@ -1649,10 +1650,12 @@ class AuiTabContainer(object):
 
     def ButtonHitTest(self, x, y):
         """
-        ButtonHitTest() tests if a button was hit.
+        Tests if a button was hit.
 
         :param `x`: the mouse `x` position;
         :param `y`: the mouse `y` position.
+
+        :returns: and instance of L{AuiTabContainerButton} if a button was hit, ``None`` otherwise.
         """
 
         if not self._rect.Contains((x,y)):
@@ -2214,6 +2217,11 @@ class AuiTabCtrl(wx.PyControl, AuiTabContainer):
 
 
     def OnKeyDown(self, event):
+        """
+        Handles the ``wx.EVT_KEY_DOWN`` event for L{AuiTabCtrl}.
+
+        :param `event`: a `wx.KeyEvent` event to be processed.        
+        """
 
         key = event.GetKeyCode()
         nb = self.GetParent()
@@ -2275,12 +2283,16 @@ class AuiTabCtrl(wx.PyControl, AuiTabContainer):
 
     def OnKeyDown2(self, event):
         """
+        Deprecated.
+        
         Handles the ``wx.EVT_KEY_DOWN`` event for L{AuiTabCtrl}.
 
-        :param `event`: a `wx.KeyEvent` event to be processed.        
+        :param `event`: a `wx.KeyEvent` event to be processed.
+
+        :warning: This method implementation is now deprecated. Refer to L{OnKeyDown}
+         for the correct one.
         """
 
-        print event.GetKeyCode(), event.ControlDown()        
         if self.GetActivePage() == -1:
             event.Skip()
             return
@@ -2601,7 +2613,7 @@ class AuiNotebook(wx.PyPanel):
          ``AUI_NB_TOP``                       With this style, tabs are drawn along the top of the notebook
          ``AUI_NB_LEFT``                      With this style, tabs are drawn along the left of the notebook. Not implemented yet.
          ``AUI_NB_RIGHT``                     With this style, tabs are drawn along the right of the notebook. Not implemented yet.
-         ``AUI_NB_BOTTOM``                    With this style, tabs are drawn along the bottom of the notebook.
+         ``AUI_NB_BOTTOM``                    With this style, tabs are drawn along the bottom of the notebook
          ``AUI_NB_TAB_SPLIT``                 Allows the tab control to be split by dragging a tab
          ``AUI_NB_TAB_MOVE``                  Allows a tab to be moved horizontally by dragging
          ``AUI_NB_TAB_EXTERNAL_MOVE``         Allows a tab to be moved to another tab control
@@ -2611,8 +2623,8 @@ class AuiNotebook(wx.PyPanel):
          ``AUI_NB_CLOSE_BUTTON``              With this style, a close button is available on the tab bar
          ``AUI_NB_CLOSE_ON_ACTIVE_TAB``       With this style, a close button is available on the active tab
          ``AUI_NB_CLOSE_ON_ALL_TABS``         With this style, a close button is available on all tabs
-         ``AUI_NB_MIDDLE_CLICK_CLOSE``        Allows to close AuiNotebook tabs by mouse middle button click
-         ``AUI_NB_SUB_NOTEBOOK``              This style is used by AuiManager to create automatic AuiNotebooks
+         ``AUI_NB_MIDDLE_CLICK_CLOSE``        Allows to close L{AuiNotebook} tabs by mouse middle button click
+         ``AUI_NB_SUB_NOTEBOOK``              This style is used by L{AuiManager} to create automatic AuiNotebooks
          ``AUI_NB_HIDE_ON_SINGLE_TAB``        Hides the tab window if only one tab is present
          ``AUI_NB_SMART_TABS``                Use Smart Tabbing, like ``Alt`` + ``Tab`` on Windows
          ``AUI_NB_USE_IMAGES_DROPDOWN``       Uses images on dropdown window list menu instead of check items
@@ -2646,8 +2658,7 @@ class AuiNotebook(wx.PyPanel):
 
     def InitNotebook(self, agwStyle):
         """
-        InitNotebook() contains common initialization
-        code called by all constructors.
+        Contains common initialization code called by all constructors.
 
         :param `agwStyle`: the notebook style.
 
@@ -2772,7 +2783,7 @@ class AuiNotebook(wx.PyPanel):
 
     def LoadPerspective(self, layout):
         """
-        LoadPerspective() loads a layout which was saved with L{SavePerspective}.
+        Loads a layout which was saved with L{SavePerspective}.
 
         :param `layout`: a string which contains a saved L{AuiNotebook} layout.
         """
@@ -3024,7 +3035,33 @@ class AuiNotebook(wx.PyPanel):
         """
         Sets the AGW-specific style of the window.
         
-        :param `agwStyle`: the new window style.
+        :param `agwStyle`: the new window style. This can be a combination of the following bits:
+        
+         ==================================== ==================================
+         Flag name                            Description
+         ==================================== ==================================
+         ``AUI_NB_TOP``                       With this style, tabs are drawn along the top of the notebook
+         ``AUI_NB_LEFT``                      With this style, tabs are drawn along the left of the notebook. Not implemented yet.
+         ``AUI_NB_RIGHT``                     With this style, tabs are drawn along the right of the notebook. Not implemented yet.
+         ``AUI_NB_BOTTOM``                    With this style, tabs are drawn along the bottom of the notebook
+         ``AUI_NB_TAB_SPLIT``                 Allows the tab control to be split by dragging a tab
+         ``AUI_NB_TAB_MOVE``                  Allows a tab to be moved horizontally by dragging
+         ``AUI_NB_TAB_EXTERNAL_MOVE``         Allows a tab to be moved to another tab control
+         ``AUI_NB_TAB_FIXED_WIDTH``           With this style, all tabs have the same width
+         ``AUI_NB_SCROLL_BUTTONS``            With this style, left and right scroll buttons are displayed
+         ``AUI_NB_WINDOWLIST_BUTTON``         With this style, a drop-down list of windows is available
+         ``AUI_NB_CLOSE_BUTTON``              With this style, a close button is available on the tab bar
+         ``AUI_NB_CLOSE_ON_ACTIVE_TAB``       With this style, a close button is available on the active tab
+         ``AUI_NB_CLOSE_ON_ALL_TABS``         With this style, a close button is available on all tabs
+         ``AUI_NB_MIDDLE_CLICK_CLOSE``        Allows to close L{AuiNotebook} tabs by mouse middle button click
+         ``AUI_NB_SUB_NOTEBOOK``              This style is used by L{AuiManager} to create automatic AuiNotebooks
+         ``AUI_NB_HIDE_ON_SINGLE_TAB``        Hides the tab window if only one tab is present
+         ``AUI_NB_SMART_TABS``                Use Smart Tabbing, like ``Alt`` + ``Tab`` on Windows
+         ``AUI_NB_USE_IMAGES_DROPDOWN``       Uses images on dropdown window list menu instead of check items
+         ``AUI_NB_CLOSE_ON_TAB_LEFT``         Draws the tab close button on the left instead of on the right (a la Camino browser)
+         ``AUI_NB_TAB_FLOAT``                 Allows the floating of single tabs. Known limitation: when the notebook is more or less full screen, tabs cannot be dragged far enough outside of the notebook to become floating pages
+         ``AUI_NB_DRAW_DND_TAB``              Draws an image representation of a tab while dragging (on by default)
+         ==================================== ==================================
 
         :note: Please note that some styles cannot be changed after the window
          creation and that `Refresh` might need to be be called after changing the
@@ -3190,7 +3227,7 @@ class AuiNotebook(wx.PyPanel):
 
         :param `page_idx`: the page index to be removed.
 
-        :note: L{RemovePage} removes a tab from the multi-notebook, but does not destroys the window.
+        :note: L{RemovePage} removes a tab from the multi-notebook, but does not destroy the window.
         
         :see: L{DeletePage}
         """
@@ -3299,7 +3336,7 @@ class AuiNotebook(wx.PyPanel):
 
     def HideAllTabs(self, hidden=True):
         """
-        Hides all tabs on the AuiNotebook control.
+        Hides all tabs on the L{AuiNotebook} control.
         
         :param `hidden`: if ``True`` hides all tabs.
         """
@@ -4787,7 +4824,7 @@ class AuiNotebook(wx.PyPanel):
             page_title = frame.GetTitle() 
             page_contents = frame.GetChildren()[-1] 
             page_contents.Reparent(self)
-            self.InsertPage(frame.page_index, page_contents, page_title, select=True, bitmap=frame.bitmap, control=control)
+            self.InsertPage(frame.page_index, page_contents, page_title, select=True, bitmap=frame.bitmap, control=frame.control)
 
             if frame.control:
                 src_tabs, idx = self.FindTab(page_contents)
@@ -4989,8 +5026,14 @@ class AuiNotebook(wx.PyPanel):
                     self._popupWin = TabNavigatorWindow(self, self._naviIcon)
                     self._popupWin.SetReturnCode(wx.ID_OK)
                     self._popupWin.ShowModal()
+                    idx = self._popupWin.GetSelectedPage()
                     self._popupWin.Destroy()
                     self._popupWin = None
+                    # Need to do CallAfter so that the selection and its
+                    # associated events get processed outside the context of
+                    # this key event. Not doing so causes odd issues with the
+                    # window focus under certain use cases on Windows.
+                    wx.CallAfter(self.SetSelection, idx, True)
                 else:
                     # a dialog is already opened
                     self._popupWin.OnNavigationKey(event)

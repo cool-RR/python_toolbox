@@ -3,7 +3,7 @@
 # Inspired By And Heavily Based On wxGenericTreeCtrl.
 #
 # Andrea Gavana, @ 17 May 2006
-# Latest Revision: 14 Apr 2010, 12.00 GMT
+# Latest Revision: 26 Aug 2010, 10.00 GMT
 #
 #
 # TODO List
@@ -12,20 +12,16 @@
 # No Limit In What Could Be Added To This Class. The First Things That Comes
 # To My Mind Are:
 #
-# 1. Implement The Style TR_EXTENDED (I Have Never Used It, But It May Be Useful).
-#
-# 2. Add Support For 3-State CheckBoxes (Is That Really Useful?).
-#
-# 3. Try To Implement A More Flicker-Free Background Image In Cases Like
+# 1. Try To Implement A More Flicker-Free Background Image In Cases Like
 #    Centered Or Stretched Image (Now CustomTreeCtrl Supports Only Tiled
 #    Background Images).
 #
-# 4. Try To Mimic Windows wx.TreeCtrl Expanding/Collapsing behaviour: CustomTreeCtrl
+# 2. Try To Mimic Windows wx.TreeCtrl Expanding/Collapsing behaviour: CustomTreeCtrl
 #    Suddenly Expands/Collapses The Nodes On Mouse Click While The Native Control
 #    Has Some Kind Of "Smooth" Expanding/Collapsing, Like A Wave. I Don't Even
 #    Know Where To Start To Do That.
 #
-# 5. Speed Up General OnPaint Things? I Have No Idea, Here CustomTreeCtrl Is Quite
+# 3. Speed Up General OnPaint Things? I Have No Idea, Here CustomTreeCtrl Is Quite
 #    Fast, But We Should See On Slower Machines.
 #
 #
@@ -58,6 +54,7 @@ to the standard `wx.TreeCtrl` behaviour this class supports:
 
 * CheckBox-type items: checkboxes are easy to handle, just selected or unselected
   state with no particular issues in handling the item's children;
+* Added support for 3-state value checkbox items;
 * RadioButton-type items: since I elected to put radiobuttons in CustomTreeCtrl, I
   needed some way to handle them, that made sense. So, I used the following approach:
   
@@ -84,6 +81,7 @@ to the standard `wx.TreeCtrl` behaviour this class supports:
 * Setting the CustomTreeCtrl check/radio item icons to a personalized imagelist;
 * Changing the style of the lines that connect the items (in terms of `wx.Pen` styles);
 * Using an image as a CustomTreeCtrl background (currently only in "tile" mode);
+* Adding images to any item in the leftmost area of the CustomTreeCtrl client window.
 
 And a lot more. Check the demo for an almost complete review of the functionalities.
 
@@ -211,14 +209,14 @@ License And Version
 
 CustomTreeCtrl is distributed under the wxPython license. 
 
-Latest Revision: Andrea Gavana @ 14 Apr 2010, 12.00 GMT
+Latest Revision: Andrea Gavana @ 26 Aug 2010, 10.00 GMT
 
-Version 2.1
+Version 2.3
 
 """
 
 # Version Info
-__version__ = "2.1"
+__version__ = "2.3"
 
 import wx
 from wx.lib.expando import ExpandoTextCtrl
@@ -246,8 +244,9 @@ TreeItemIcon_SelectedExpanded = 3    #     selected,     expanded
 
 TreeItemIcon_Checked = 0             # check button,     checked
 TreeItemIcon_NotChecked = 1          # check button, not checked
-TreeItemIcon_Flagged = 2             # radio button,     selected
-TreeItemIcon_NotFlagged = 3          # radio button, not selected
+TreeItemIcon_Undetermined = 2        # check button, undetermined
+TreeItemIcon_Flagged = 3             # radio button,     selected
+TreeItemIcon_NotFlagged = 4          # radio button, not selected
 
 # ----------------------------------------------------------------------------
 # CustomTreeCtrl flags
@@ -493,8 +492,8 @@ def EventFlagsToSelType(style, shiftDown=False, ctrlDown=False):
     are dealing with.
 
     :param `style`: the main L{CustomTreeCtrl} window style flag;
-    :param `shiftDown`: ``True`` if the ``Shift`` has is pressed, ``False`` otherwise;
-    :param `ctrlDown`: ``True`` if the ``Ctrl`` has is pressed, ``False`` otherwise;
+    :param `shiftDown`: ``True`` if the ``Shift`` key is pressed, ``False`` otherwise;
+    :param `ctrlDown`: ``True`` if the ``Ctrl`` key is pressed, ``False`` otherwise;
     """
 
     is_multiple = (style & TR_MULTIPLE) != 0
@@ -861,14 +860,14 @@ class CommandTreeEvent(wx.PyCommandEvent):
         return self._evtKey.GetKeyCode()
 
     
-    def SetKeyEvent(self, evt):
+    def SetKeyEvent(self, event):
         """
         Sets the keyboard data (for ``EVT_TREE_KEY_DOWN`` event only).
 
         :param `event`: a L{TreeEvent} event to be processed.
         """
 
-        self._evtKey = evt
+        self._evtKey = event
         
 
     def GetLabel(self):
@@ -1338,7 +1337,8 @@ class GenericTreeItem(object):
         self._images[TreeItemIcon_Expanded] = _NO_IMAGE
         self._images[TreeItemIcon_SelectedExpanded] = _NO_IMAGE
 
-        self._checkedimages = [None, None, None, None]
+        self._checkedimages = [None, None, None, None, None]
+        self._leftimage = _NO_IMAGE
 
         self._x = 0             # (virtual) offset from top
         self._y = 0             # (virtual) offset from left
@@ -1353,7 +1353,8 @@ class GenericTreeItem(object):
         self._isItalic = False      # render the label in italic font
         self._ownsAttr = False      # delete attribute when done
         self._type = ct_type        # item type: 0=normal, 1=check, 2=radio
-        self._checked = False       # only meaningful for check and radio
+        self._is3State = False      # true for 3-state checkbox items
+        self._checked = 0           # only meaningful for check and radio items
         self._enabled = True        # flag to enable/disable an item
         self._hypertext = False     # indicates if the item is hypertext
         self._visited = False       # visited state for an hypertext item
@@ -1362,8 +1363,9 @@ class GenericTreeItem(object):
             # do not construct the array for normal items
             self._checkedimages[TreeItemIcon_Checked] = 0
             self._checkedimages[TreeItemIcon_NotChecked] = 1
-            self._checkedimages[TreeItemIcon_Flagged] = 2
-            self._checkedimages[TreeItemIcon_NotFlagged] = 3
+            self._checkedimages[TreeItemIcon_Undetermined] = 2
+            self._checkedimages[TreeItemIcon_Flagged] = 3
+            self._checkedimages[TreeItemIcon_NotFlagged] = 4
         
         if parent:
             if parent.GetType() == 2 and not parent.IsChecked():
@@ -1380,7 +1382,7 @@ class GenericTreeItem(object):
         """
         Returns whether the item is ok or not.
 
-        :note: This method simply returns ``True``, it has been added for
+        :note: This method always returns ``True``, it has been added for
          backward compatibility with the wxWidgets C++ implementation.
         """
         
@@ -1430,6 +1432,7 @@ class GenericTreeItem(object):
          ================================= ========================
          ``TreeItemIcon_Checked``          To get the checkbox checked item image
          ``TreeItemIcon_NotChecked``       To get the checkbox unchecked item image
+         ``TreeItemIcon_Undetermined``     To get the checkbox undetermined state item image
          ``TreeItemIcon_Flagged``          To get the radiobutton checked image
          ``TreeItemIcon_NotFlagged``       To get the radiobutton unchecked image
          ================================= ========================
@@ -1438,7 +1441,16 @@ class GenericTreeItem(object):
         """
 
         return self._checkedimages[which]
-        
+
+
+    def GetLeftImage(self):
+        """
+        Returns the leftmost image associated to this item, i.e. the image on the
+        leftmost part of the client area of L{CustomTreeCtrl}.
+        """
+
+        return self._leftimage
+    
 
     def GetData(self):
         """Returns the data associated to this item."""
@@ -1457,6 +1469,18 @@ class GenericTreeItem(object):
         """
 
         self._images[which] = image
+
+
+    def SetLeftImage(self, image):
+        """
+        Sets the item leftmost image, i.e. the image associated to the item on the leftmost
+        part of the L{CustomTreeCtrl} client area.
+
+        :param `image`: an index within the left image list specifying the image to
+         use for the item in the leftmost part of the client area.
+        """
+
+        self._leftimage = image
 
         
     def SetData(self, data):
@@ -1500,20 +1524,20 @@ class GenericTreeItem(object):
         
 
     def GetX(self):
-        """Returns the x position on an item. """
+        """Returns the `x` position on an item, in logical coordinates. """
 
         return self._x 
 
 
     def GetY(self):
-        """Returns the y position on an item. """
+        """Returns the `y` position on an item, in logical coordinates. """
 
         return self._y 
 
 
     def SetX(self, x):
         """
-        Sets the x position on an item.
+        Sets the `x` position on an item, in logical coordinates.
 
         :param `x`: an integer specifying the x position of the item.
         """
@@ -1523,7 +1547,7 @@ class GenericTreeItem(object):
 
     def SetY(self, y):
         """
-        Sets the y position on an item.
+        Sets the `y` position on an item, in logical coordinates.
 
         :param `y`: an integer specifying the y position of the item.
         """
@@ -1789,14 +1813,99 @@ class GenericTreeItem(object):
         return not self._isCollapsed 
 
 
-    def IsChecked(self):
+    def GetValue(self):
         """
         Returns whether the item is checked or not.
 
         :note: This is meaningful only for checkbox-like and radiobutton-like items.
         """
 
-        return self._checked
+        if self.Is3State():
+            return self.Get3StateValue()
+        
+        return self._checked        
+
+
+    def Get3StateValue(self):
+        """
+        Gets the state of a 3-state checkbox item.
+
+        :return: ``wx.CHK_UNCHECKED`` when the checkbox is unchecked, ``wx.CHK_CHECKED``
+         when it is checked and ``wx.CHK_UNDETERMINED`` when it's in the undetermined
+         state. 
+
+        :note: This method raises an exception when the function is used with a 2-state
+         checkbox item.
+
+        :note: This method is meaningful only for checkbox-like items.
+        """
+
+        if not self.Is3State():
+            raise Exception("Get3StateValue can only be used with 3-state checkbox items.")
+
+        return self._checked        
+
+
+    def Is3State(self):
+        """
+        Returns whether or not the checkbox item is a 3-state checkbox.
+
+        :return: ``True`` if this checkbox is a 3-state checkbox, ``False`` if it's a
+         2-state checkbox item.
+
+        :note: This method is meaningful only for checkbox-like items.
+        """
+
+        return self._is3State
+    
+
+    def Set3StateValue(self, state):
+        """
+        Sets the checkbox item to the given `state`.
+
+        :param `state`: can be one of: ``wx.CHK_UNCHECKED`` (check is off), ``wx.CHK_CHECKED``
+         (check is on) or ``wx.CHK_UNDETERMINED`` (check is mixed).
+
+        :note: This method raises an exception when the checkbox item is a 2-state checkbox
+         and setting the state to ``wx.CHK_UNDETERMINED``.
+
+        :note: This method is meaningful only for checkbox-like items.
+        """
+
+        if not self._is3State and state == wx.CHK_UNDETERMINED:
+            raise Exception("Set3StateValue can only be used with 3-state checkbox items.")
+
+        self._checked = state
+
+
+    def Set3State(self, allow):
+        """
+        Sets whether the item has a 3-state value checkbox assigned to it or not.
+
+        :param `allow`: ``True`` to set an item as a 3-state checkbox, ``False`` to set it
+         to a 2-state checkbox.
+
+        :return: ``True`` if the change was successful, ``False`` otherwise.
+
+        :note: This method is meaningful only for checkbox-like items.
+        """
+
+        if self._type != 1:
+            return False
+
+        self._is3State = allow
+        return True
+            
+
+    def IsChecked(self):
+        """
+        This is just a maybe more readable synonym for L{GetValue}.
+        Returns whether the item is checked or not.
+
+        :note: This is meaningful only for checkbox-like and radiobutton-like items.
+        """
+
+        return self.GetValue()
 
 
     def Check(self, checked=True):
@@ -2104,9 +2213,14 @@ class GenericTreeItem(object):
         if self._type == 0:
             return None
 
-        if self.IsChecked():
+        checked = self.IsChecked()
+        
+        if checked > 0:
             if self._type == 1:     # Checkbox
-                return self._checkedimages[TreeItemIcon_Checked]
+                if checked == wx.CHK_CHECKED:
+                    return self._checkedimages[TreeItemIcon_Checked]
+                else:
+                    return self._checkedimages[TreeItemIcon_Undetermined]                    
             else:                   # Radiobutton
                 return self._checkedimages[TreeItemIcon_Flagged]
         else:
@@ -2194,8 +2308,8 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         self._hilightUnfocusedBrush2 = wx.Brush(backcolour)
 
         # image list for icons
-        self._imageListNormal = self._imageListButtons = self._imageListState = self._imageListCheck = None
-        self._ownsImageListNormal = self._ownsImageListButtons = self._ownsImageListState = False
+        self._imageListNormal = self._imageListButtons = self._imageListState = self._imageListCheck = self._imageListLeft = None
+        self._ownsImageListNormal = self._ownsImageListButtons = self._ownsImageListState = self._ownsImageListLeft = False
 
         # Drag and drop initial settings
         self._dragCount = 0
@@ -2392,8 +2506,10 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         
         render = wx.RendererNative.Get()
 
-        if checked:
+        if checked == wx.CHK_CHECKED:
             flag = wx.CONTROL_CHECKED
+        elif checked == wx.CHK_UNDETERMINED:
+            flag = wx.CONTROL_UNDETERMINED
         else:
             flag = 0
 
@@ -2562,6 +2678,73 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         return item.IsChecked()
 
 
+    def GetItem3StateValue(self, item):
+        """
+        Gets the state of a 3-state checkbox item.
+
+        :param `item`: an instance of L{GenericTreeItem}.
+
+        :return: ``wx.CHK_UNCHECKED`` when the checkbox is unchecked, ``wx.CHK_CHECKED``
+         when it is checked and ``wx.CHK_UNDETERMINED`` when it's in the undetermined
+         state. 
+
+        :note: This method raises an exception when the function is used with a 2-state
+         checkbox item.
+
+        :note: This method is meaningful only for checkbox-like items.
+        """
+
+        return item.Get3StateValue()
+
+
+    def IsItem3State(self, item):
+        """
+        Returns whether or not the checkbox item is a 3-state checkbox.
+
+        :param `item`: an instance of L{GenericTreeItem}.
+
+        :return: ``True`` if this checkbox is a 3-state checkbox, ``False`` if it's a
+         2-state checkbox item.
+
+        :note: This method is meaningful only for checkbox-like items.
+        """
+
+        return item.Is3State()
+    
+
+    def SetItem3StateValue(self, item, state):
+        """
+        Sets the checkbox item to the given `state`.
+
+        :param `item`: an instance of L{GenericTreeItem};
+        :param `state`: can be one of: ``wx.CHK_UNCHECKED`` (check is off), ``wx.CHK_CHECKED``
+         (check is on) or ``wx.CHK_UNDETERMINED`` (check is mixed).
+
+        :note: This method raises an exception when the checkbox item is a 2-state checkbox
+         and setting the state to ``wx.CHK_UNDETERMINED``.
+
+        :note: This method is meaningful only for checkbox-like items.
+        """
+
+        item.Set3StateValue(state)
+
+
+    def SetItem3State(self, item, allow):
+        """
+        Sets whether the item has a 3-state value checkbox assigned to it or not.
+
+        :param `item`: an instance of L{GenericTreeItem};
+        :param `allow`: ``True`` to set an item as a 3-state checkbox, ``False`` to set it
+         to a 2-state checkbox.
+
+        :return: ``True`` if the change was successful, ``False`` otherwise.
+
+        :note: This method is meaningful only for checkbox-like items.
+        """
+
+        return item.Set3State(allow)
+    
+
     def CheckItem2(self, item, checked=True, torefresh=False):
         """
         Used internally to avoid ``EVT_TREE_ITEM_CHECKED`` events.
@@ -2614,7 +2797,10 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         events ``EVT_TREE_ITEM_CHECKING`` and ``EVT_TREE_ITEM_CHECKED``.
 
         :param `item`: an instance of L{GenericTreeItem};
-        :param `checked`: ``True`` to check an item, ``False`` to uncheck it.
+        :param `checked`: for a radiobutton-type item, ``True`` to check it, ``False``
+         to uncheck it. For a checkbox-type item, it can be one of ``wx.CHK_UNCHECKED``
+         when the checkbox is unchecked, ``wx.CHK_CHECKED`` when it is checked and
+         ``wx.CHK_UNDETERMINED`` when it's in the undetermined state.
         """
 
         # Should we raise an error here?!?        
@@ -2639,8 +2825,12 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         if self.GetEventHandler().ProcessEvent(e):
             # Blocked by user
             return 
-        
-        item.Check(checked)
+
+        if item.Is3State():
+            item.Set3StateValue(checked)
+        else:
+            item.Check(checked)
+            
         dc = wx.ClientDC(self)
         self.RefreshLine(item)
 
@@ -2890,7 +3080,11 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
 
 
     def GetAGWWindowStyleFlag(self):
-        """Returns the L{CustomTreeCtrl} style."""
+        """
+        Returns the L{CustomTreeCtrl} style.
+
+        :see: The L{__init__} method for a list of possible style flags.
+        """
 
         return self._agwStyle
     
@@ -2933,6 +3127,17 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """
 
         return item.GetImage(which)
+
+
+    def GetItemLeftImage(self, item):
+        """
+        Returns the item leftmost image, i.e. the image associated to the item on the leftmost
+        part of the L{CustomTreeCtrl} client area.
+
+        :param `item`: an instance of L{GenericTreeItem}.
+        """
+
+        return item.GetLeftImage()
 
 
     def GetPyData(self, item):
@@ -3018,6 +3223,23 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """
 
         item.SetImage(image, which)
+
+        dc = wx.ClientDC(self)
+        self.CalculateSize(item, dc)
+        self.RefreshLine(item)
+
+
+    def SetItemLeftImage(self, item, image):
+        """
+        Sets the item leftmost image, i.e. the image associated to the item on the leftmost
+        part of the L{CustomTreeCtrl} client area.
+
+        :param `item`: an instance of L{GenericTreeItem};
+        :param `image`: an index within the left image list specifying the image to
+         use for the item in the leftmost part of the client area.
+        """
+
+        item.SetLeftImage(image)
 
         dc = wx.ClientDC(self)
         self.CalculateSize(item, dc)
@@ -3885,8 +4107,9 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
     def ResetTextControl(self):
         """ Called by L{TreeTextCtrl} when it marks itself for deletion. """
 
-        self._textCtrl.Destroy()
-        self._textCtrl = None
+        if self._textCtrl is not None:
+            self._textCtrl.Destroy()
+            self._textCtrl = None
 
         self.CalculatePositions()
         self.Refresh()
@@ -4102,13 +4325,13 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         return self.DoInsertItem(parentId, index+1, text, ct_type, wnd, image, selImage, data)
 
 
-    def InsertItemByIndex(self, parentId, before, text, ct_type=0, wnd=None, image=-1, selImage=-1, data=None):
+    def InsertItemByIndex(self, parentId, idPrevious, text, ct_type=0, wnd=None, image=-1, selImage=-1, data=None):
         """
         Inserts an item after the given previous.
 
         :param `parentId`: an instance of L{GenericTreeItem} representing the
          item's parent;
-        :param `before`: the index at which we should insert the new item;
+        :param `idPrevious`: the index at which we should insert the new item;
         :param `text`: the item text label;
         :param `ct_type`: the item type (see L{SetItemType} for a list of valid
          item types);
@@ -4127,7 +4350,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
             # should we give a warning here?
             return self.AddRoot(text, ct_type, wnd, image, selImage, data)
         
-        return self.DoInsertItem(parentId, before, text, ct_type, wnd, image, selImage, data)
+        return self.DoInsertItem(parentId, idPrevious, text, ct_type, wnd, image, selImage, data)
 
 
     def InsertItem(self, parentId, input, text, ct_type=0, wnd=None, image=-1, selImage=-1, data=None):
@@ -4502,6 +4725,9 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         Selects all the children of the given item.
 
         :param `item`: an instance of L{GenericTreeItem}.
+
+        :note: This method can be used only if L{CustomTreeCtrl} has the ``TR_MULTIPLE`` or ``TR_EXTENDED``
+         style set.        
         """
 
         if not self.HasAGWFlag(TR_MULTIPLE) and not self.HasAGWFlag(TR_EXTENDED):
@@ -4529,7 +4755,12 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
 
 
     def SelectAll(self):
-        """ Selects all the item in the tree. """
+        """
+        Selects all the item in the tree.
+
+        :note: This method can be used only if L{CustomTreeCtrl} has the ``TR_MULTIPLE`` or ``TR_EXTENDED``
+         style set.
+        """
 
         if not self.HasAGWFlag(TR_MULTIPLE) and not self.HasAGWFlag(TR_EXTENDED):
             raise Exception("SelectAll can be used only with multiple selection enabled.")
@@ -4592,8 +4823,14 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         :param `item1`: an instance of L{GenericTreeItem}, representing the first
          item in the range to select;
         :param `item2`: an instance of L{GenericTreeItem}, representing the last
-         item in the range to select.        
+         item in the range to select.
+
+        :note: This method can be used only if L{CustomTreeCtrl} has the ``TR_MULTIPLE`` or ``TR_EXTENDED``
+         style set.         
         """
+
+        if not self.HasAGWFlag(TR_MULTIPLE) and not self.HasAGWFlag(TR_EXTENDED):
+            raise Exception("SelectItemRange can be used only with multiple selection enabled.")
         
         self._select_me = None
 
@@ -4739,7 +4976,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """
         Returns a list of selected items.
 
-        :note: This method can be used only if L{CustomTreeCtrl} has the ``TR_MULTIPLE``
+        :note: This method can be used only if L{CustomTreeCtrl} has the ``TR_MULTIPLE`` or ``TR_EXTENDED``
          style set.
         """
 
@@ -4903,6 +5140,16 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         return self._imageListCheck        
 
 
+    def GetLeftImageList(self):
+        """
+        Returns the image list for L{CustomTreeCtrl} filled with images to be used on
+        the leftmost part of the client area. Any item can have a leftmost image associated
+        with it.
+        """
+
+        return self._imageListLeft
+
+
     def CalculateLineHeight(self):
         """ Calculates the height of a line. """
 
@@ -4950,6 +5197,20 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
 
                 if height > self._lineHeight:
                     self._lineHeight = height
+
+        if self._imageListLeft:
+        
+            # Calculate a self._lineHeight value from the leftmost image sizes.
+            # May be toggle off. Then CustomTreeCtrl will spread when
+            # necessary (which might look ugly).
+            n = self._imageListLeft.GetImageCount()
+
+            for i in xrange(n):
+            
+                width, height = self._imageListLeft.GetSize(i)
+
+                if height > self._lineHeight:
+                    self._lineHeight = height
         
         if self._lineHeight < 30:
             self._lineHeight += 2                 # at least 2 pixels
@@ -4984,6 +5245,34 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
                 bmp = imageList.GetBitmap(ii)
                 newbmp = MakeDisabledBitmap(bmp)
                 self._grayedImageList.Add(newbmp)
+
+
+    def SetLeftImageList(self, imageList):
+        """
+        Sets the image list for L{CustomTreeCtrl} filled with images to be used on
+        the leftmost part of the client area. Any item can have a leftmost image associated
+        with it.
+
+        :param `imageList`: an instance of `wx.ImageList`.
+        """
+
+        self._imageListLeft = imageList
+        self._ownsImageListLeft = False
+        self._dirty = True
+        
+        # Don't do any drawing if we're setting the list to NULL,
+        # since we may be in the process of deleting the tree control.
+        if imageList:
+            self.CalculateLineHeight()
+
+            # We gray out the image list to use the grayed icons with disabled items
+            sz = imageList.GetSize(0)
+            self._grayedImageListLeft = wx.ImageList(sz[0], sz[1], True, 0)
+
+            for ii in xrange(imageList.GetImageCount()):
+                bmp = imageList.GetBitmap(ii)
+                newbmp = MakeDisabledBitmap(bmp)
+                self._grayedImageListLeft.Add(newbmp)
         
 
     def SetStateImageList(self, imageList):
@@ -5053,6 +5342,14 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
                                                          enabled=False,
                                                          x=sizex, y=sizey))
 
+            self._imageListCheck.Add(self.GetControlBmp(checkbox=True,
+                                                        checked=2,
+                                                        enabled=True,
+                                                        x=sizex, y=sizey))
+            self._grayedCheckList.Add(self.GetControlBmp(checkbox=True,
+                                                         checked=2,
+                                                         enabled=False,
+                                                         x=sizex, y=sizey))
 
             # Get the Radio Buttons
             self._imageListCheck.Add(self.GetControlBmp(checkbox=False,
@@ -5121,6 +5418,19 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
 
         self.SetButtonsImageList(imageList)
         self._ownsImageListButtons = True
+
+
+    def AssignLeftImageList(self, imageList):
+        """
+        Assigns the image list for L{CustomTreeCtrl} filled with images to be used on
+        the leftmost part of the client area. Any item can have a leftmost image associated
+        with it.
+
+        :param `imageList`: an instance of `wx.ImageList`.
+        """
+
+        self.SetLeftImageList(imageList)
+        self._ownsImageListLeft = True
 
 
 # -----------------------------------------------------------------------------
@@ -5347,6 +5657,11 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
 
         image = item.GetCurrentImage()
         checkimage = item.GetCurrentCheckedImage()
+        leftimage = _NO_IMAGE
+        
+        if self._imageListLeft:
+            leftimage = item.GetLeftImage()
+            
         image_w, image_h = 0, 0
 
         if image != _NO_IMAGE:
@@ -5366,6 +5681,9 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         else:
             wcheck, hcheck = 0, 0
 
+        if leftimage != _NO_IMAGE:
+            l_image_w, l_image_h = self._imageListLeft.GetSize(leftimage)
+            
         total_h = self.GetLineHeight(item)
         drawItemBackground = False
             
@@ -5501,6 +5819,17 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
                          item.GetY() + ((total_h > hcheck) and [(total_h-hcheck)/2] or [0])[0],
                          wx.IMAGELIST_DRAW_TRANSPARENT)
 
+        if leftimage != _NO_IMAGE:
+            if item.IsEnabled():
+                imglist = self._imageListLeft
+            else:
+                imglist = self._grayedImageListLeft
+
+            imglist.Draw(leftimage, dc,
+                         4,
+                         item.GetY() + ((total_h > l_image_h) and [(total_h-l_image_h)/2] or [0])[0],
+                         wx.IMAGELIST_DRAW_TRANSPARENT)
+
         dc.SetBackgroundMode(wx.TRANSPARENT)
         extraH = ((total_h > text_h) and [(total_h - text_h)/2] or [0])[0]
 
@@ -5550,6 +5879,12 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """
 
         x = level*self._indent
+
+        left_image_list = 0
+        if self._imageListLeft:
+            left_image_list += self._imageListLeft.GetBitmap(0).GetWidth()
+            
+        x += left_image_list
         
         if not self.HasAGWFlag(TR_HIDE_ROOT):
         
@@ -5641,7 +5976,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
                 # draw the horizontal line here
                 dc.SetPen(self._dottedPen)
                 x_start = x
-                if x > self._indent:
+                if x > self._indent+left_image_list:
                     x_start -= self._indent
                 elif self.HasAGWFlag(TR_LINES_AT_ROOT):
                     x_start = 3
@@ -5938,7 +6273,12 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
                 self.GetEventHandler().ProcessEvent(event)
 
                 if keyCode == wx.WXK_SPACE and self.GetItemType(self._current) > 0:
-                    checked = not self.IsItemChecked(self._current)
+                    if self.IsItem3State(self._current):
+                        checked = self.GetItem3StateValue(self._current)
+                        checked = (checked+1)%3
+                    else:
+                        checked = not self.IsItemChecked(self._current)
+                        
                     self.CheckItem(self._current, checked)
         
             # in any case, also generate the normal key event for this key,
@@ -6618,7 +6958,14 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
                     if event.LeftDown():
                         if flags & TREE_HITTEST_ONITEM and self.HasAGWFlag(TR_FULL_ROW_HIGHLIGHT):
                             self.DoSelectItem(item, not self.HasAGWFlag(TR_MULTIPLE))
-                        self.CheckItem(item, not self.IsItemChecked(item))
+
+                        if self.IsItem3State(item):
+                            checked = self.GetItem3StateValue(item)
+                            checked = (checked+1)%3
+                        else:
+                            checked = not self.IsItemChecked(item)
+                            
+                        self.CheckItem(item, checked)
                         
                     return                                            
 
