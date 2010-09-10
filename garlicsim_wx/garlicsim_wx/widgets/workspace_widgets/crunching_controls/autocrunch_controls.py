@@ -35,17 +35,9 @@ class AutocrunchControls(wx.Panel):
         
         self.spin_ctrl = wx.SpinCtrl(self, -1, max=10000000)
         
-        self.Bind(wx.EVT_SPINCTRL, self.on_spin, self.spin_ctrl)
-        
-        self.gui_project.default_buffer_modified_emitter.add_output(
-            self.update_spin_ctrl
-        )
         
         self.main_h_sizer.Add(self.spin_ctrl, 0,
                               wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
-        
-        self.Bind(wx.EVT_CHECKBOX, self.on_check_box,
-                  source=self.check_box)
         
         self.check_box.SetValue(
             bool(self.gui_project.default_buffer)
@@ -59,6 +51,22 @@ class AutocrunchControls(wx.Panel):
             self.gui_project.default_buffer or \
             self.gui_project._default_buffer_before_cancellation or \
             0
+        )
+        
+        #######################################################################
+        # Setting up event handling and emitter connections:
+        
+        self.gui_project.default_buffer_modified_emitter.add_output(
+            self.update_check_box
+        )
+        
+        self.Bind(wx.EVT_CHECKBOX, self.on_check_box,
+                  source=self.check_box)
+        
+        self.Bind(wx.EVT_SPINCTRL, self.on_spin, self.spin_ctrl)
+        
+        self.gui_project.default_buffer_modified_emitter.add_output(
+            self.update_spin_ctrl
         )
         
         
@@ -88,9 +96,16 @@ class AutocrunchControls(wx.Panel):
         
         
     def update_spin_ctrl(self):
-        self.spin_ctrl.SetValue(
-            self.gui_project.default_buffer or \
-            self.gui_project._default_buffer_before_cancellation
+        value = self.gui_project.default_buffer or \
+                self.gui_project._default_buffer_before_cancellation or \
+                0
+        self.spin_ctrl.SetValue(value)
+        self.spin_ctrl.Enable(bool(value))
+        
+        
+    def update_check_box(self):
+        self.check_box.SetValue(
+            bool(self.gui_project.default_buffer)
         )
         
         
