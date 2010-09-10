@@ -152,7 +152,9 @@ class StepProfile(object):
         if short_form:
             step_function_address = misc_tools.shorten_class_address(
                 self.step_function.__module__,
-                self.step_function.__name__
+                misc_tools.get_address_from_object(
+                    self.step_function
+                )
             )
             final_big_string = ', '.join(
                 filter(
