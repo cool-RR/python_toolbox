@@ -6,6 +6,9 @@ from garlicsim.general_misc import caching
 # tododoc: add caching to all functions, after fixing caching with
 # ArgumentsProfile to accept kwargs.
 
+# todo: when shortening, check that we're not using stuff that was excluded from
+# `__all__` (if one exists)
+
 
 def _tail_shorten(address, root=None):
     '''

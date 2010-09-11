@@ -23,7 +23,6 @@ def frange(start, finish=None, step=1.):
 
     count = int(math.ceil(finish - start)/step)
     return (start + n*step for n in range(count))
-
     
 
 def getted_vars(thing, _getattr=getattr):

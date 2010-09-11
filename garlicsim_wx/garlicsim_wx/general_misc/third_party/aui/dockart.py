@@ -120,9 +120,9 @@ class AuiDefaultDockArt(object):
     ``AUI_BUTTON_MINIMIZE``                       Shows a minimize button on the pane
     ``AUI_BUTTON_PIN``                            Shows a pin button on the pane
     ``AUI_BUTTON_OPTIONS``                        Shows an option button on the pane (not implemented)
-    ``AUI_BUTTON_WINDOWLIST``                     Shows a window list button on the pane (for AuiNotebook)
-    ``AUI_BUTTON_LEFT``                           Shows a left button on the pane (for AuiNotebook)
-    ``AUI_BUTTON_RIGHT``                          Shows a right button on the pane (for AuiNotebook)
+    ``AUI_BUTTON_WINDOWLIST``                     Shows a window list button on the pane (for L{AuiNotebook})
+    ``AUI_BUTTON_LEFT``                           Shows a left button on the pane (for L{AuiNotebook})
+    ``AUI_BUTTON_RIGHT``                          Shows a right button on the pane (for L{AuiNotebook})
     ``AUI_BUTTON_UP``                             Shows an up button on the pane (not implemented)
     ``AUI_BUTTON_DOWN``                           Shows a down button on the pane (not implemented)
     ``AUI_BUTTON_CUSTOM1``                        Shows a custom button on the pane (not implemented)
@@ -419,7 +419,7 @@ class AuiDefaultDockArt(object):
             dc.SetBrush(wx.WHITE_BRUSH)
             dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height)
 
-        DrawGradientRectangle(dc, rect, self._background_colour,
+        DrawGradientRectangle(dc, rect, self._background_brush.GetColour(),
                               self._background_gradient_colour,
                               AUI_GRADIENT_HORIZONTAL, rect.x, 700)
 
@@ -897,6 +897,9 @@ class ModernDockArt(AuiDefaultDockArt):
 
     Is uses the `winxptheme` module and XP themes whenever possible, so it should
     look good even if the user has a custom theme.
+
+    :note: This dock art is Windows only and will only work if you have installed
+     Mark Hammond's `pywin32` module (http://sourceforge.net/projects/pywin32/).
     """
 
     def __init__(self, win):

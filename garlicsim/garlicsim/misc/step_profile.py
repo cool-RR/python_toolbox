@@ -11,6 +11,7 @@ import copy
 
 from garlicsim.general_misc import caching
 from garlicsim.general_misc.arguments_profile import ArgumentsProfile
+from garlicsim.general_misc import address_tools
 
 from garlicsim.misc.simpack_grokker.get_step_type import get_step_type
 
@@ -133,22 +134,56 @@ class StepProfile(ArgumentsProfile):
             return StepProfile(default_step_function, *args, **kwargs)
                 
     
-    def __repr__(self):
+    def __repr__(self, short_form=False, root=None):
         '''
         Get a string representation of the step profile.
         
         Example output:
         StepProfile(<unbound method State.step>, 'billinear', t=7)
-        '''#tododoc
-        args_string = ', '.join(
-            [repr(thing) for thing in (self.step_function,) + self.args]
+        '''
+
+        args_string = ', '.join((repr(thing) for thing in self.args))
+        kwargs_string = ', '.join(
+            ('='.join(
+                (str(key), repr(value)) for
+                (key, value) in self.kwargs.iteritems())
+             )
         )
-        kwargs_string = ', '.join([str(key)+'='+repr(value) for \
-                                   (key, value) in self.kwargs.items()])
-        strings = [thing for thing in [args_string, kwargs_string] if \
-                   thing]        
+        strings = filter(None, (args_string, kwargs_string))
         big_string = ', '.join(strings)
-        return 'StepProfile(%s)' % big_string
+        
+            
+        if short_form:
+            step_function_address = address_tools.get_address(
+                self.step_function,
+                shorten=True,
+                root=root
+            )
+            final_big_string = ', '.join(
+                filter(
+                    None,
+                    (
+                        '<state>',
+                        big_string
+                    )
+                )
+            )
+            return '%s(%s)' % (
+                step_function_address,
+                final_big_string
+            )
+            
+        else:
+            final_big_string = ', '.join(
+                filter(
+                    None,
+                    (
+                        repr(self.step_function),
+                        big_string
+                    )
+                )
+            )
+            return '%s(%s)' % (type(self).__name__, final_big_string)
     
     
     def __eq__(self, other):

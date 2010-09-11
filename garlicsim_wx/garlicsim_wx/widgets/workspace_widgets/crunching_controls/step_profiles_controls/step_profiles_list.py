@@ -38,6 +38,8 @@ class StepProfilesList(hypertreelist.HyperTreeList):
         self.SetMainColumn(0)
         self.root_item = self.AddRoot('')
         
-        self.AppendItem(self.root_item, 'boobs')
-        self.AppendItem(self.root_item, 'ass')
-        self.AppendItem(self.root_item, 'tits')
+        self.static_text = wx.StaticText(self, -1, 'boobies')
+        
+        self.AppendItem(self.root_item, 'boobs', ct_type=1, wnd=self.static_text)
+        self.AppendItem(self.root_item, 'ass', ct_type=2, wnd=None)
+        self.AppendItem(self.root_item, 'tits', ct_type=2, wnd=None)
