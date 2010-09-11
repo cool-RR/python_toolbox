@@ -102,11 +102,19 @@ def get_object_by_address(address, root=None, _parent_object=None):
 
 def get_address(obj, root=None, shorten=None):
     
-    if not hasattr(obj, '__module__'):
-        raise Exception("%s does not have a `__module__` attribute, so we "
-                        "can't get it's address." % obj)
+    # todo: Support classes inside classes. Currently doesn't work because
+    # Python doesn't tell us inside which class a class was defined. We'll
+    # probably have to do some kind of search.
     
-    if isinstance(obj, types.MethodType):
+    if not (isinstance(obj, types.ModuleType) or hasattr(obj, '__module__')):
+        raise Exception("%s is not a module, nor does not have a `__module__`"
+                        "attribute, therefore we can't get it's address." % \
+                        obj)
+    
+    if isinstance(obj, types.ModuleType):
+        return obj.__name__
+    
+    elif isinstance(obj, types.MethodType):
         address_candidate = '.'.join((obj.__module__, obj.im_class.__name__,
                                       obj.__name__))
         assert get_object_by_address(address_candidate) == obj
