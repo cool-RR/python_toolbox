@@ -19,7 +19,7 @@ import weakref
 import colorsys
 
 from copy_modes import DontCopyPersistent
-from garlicsim.general_misc import misc_tools
+from garlicsim.general_misc import caching
 from garlicsim.general_misc import copy_tools
 
 from persistent import Persistent
@@ -135,7 +135,7 @@ class CrossProcessPersistent(Persistent):
             return new_copy
 
         
-    personality = misc_tools.LazilyEvaluatedConstantProperty(Personality)
+    personality = caching.LazilyEvaluatedConstantProperty(Personality)
 
 
 

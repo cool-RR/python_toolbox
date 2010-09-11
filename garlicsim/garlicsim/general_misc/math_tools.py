@@ -28,6 +28,7 @@ def round_to_int(x, up=False):
     '''
     rounded_down = int(x // 1)
     if up:
-        return int(x) if x.is_integer() else rounded_down + 1
+        return int(x) if (isinstance(x, float) and x.is_integer()) \
+               else rounded_down + 1
     else:
         return rounded_down
