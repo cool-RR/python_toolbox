@@ -8,6 +8,7 @@ See its documentation for more info.
 '''
 
 from garlicsim.general_misc import misc_tools
+from garlicsim.general_misc import address_tools
 from garlicsim.general_misc.function_anchoring_type import FunctionAnchoringType
 
 import garlicsim
@@ -41,10 +42,7 @@ class State(object):
         ''' 
         return '<%s %sat %s>' % \
                (
-                   misc_tools.shorten_class_address(
-                       self.__class__.__module__,
-                       self.__class__.__name__
-                       ),
+                   address_tools.get_address(type(self), shorten=True),
                    'with clock %s ' % self.clock if hasattr(self, 'clock') \
                                       else '',
                    hex(id(self))

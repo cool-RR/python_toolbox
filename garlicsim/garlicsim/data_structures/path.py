@@ -12,6 +12,7 @@ import __builtin__
 
 from garlicsim.general_misc import binary_search
 from garlicsim.general_misc import misc_tools
+from garlicsim.general_misc import address_tools
 from garlicsim.general_misc import cute_iter_tools
 
 from garlicsim.misc import GarlicSimException
@@ -686,10 +687,7 @@ class Path(object):
         '''
         return '<%s of length %s at %s>' % \
                (
-                   misc_tools.shorten_class_address(
-                       self.__class__.__module__,
-                       self.__class__.__name__
-                   ),
+                   address_tools.get_address(type(self), shorten=True),
                    len(self),
                    hex(id(self))
                )

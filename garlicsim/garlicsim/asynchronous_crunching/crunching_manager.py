@@ -13,6 +13,7 @@ import garlicsim.general_misc.third_party.decorator
 import garlicsim.general_misc.change_tracker
 from garlicsim.general_misc.infinity import Infinity
 from garlicsim.general_misc import misc_tools
+from garlicsim.general_misc import address_tools
 from garlicsim.general_misc import cute_iter_tools
 
 import garlicsim
@@ -329,10 +330,7 @@ class CrunchingManager(object):
                                    
         return '<%s currently employing %s crunchers to handle %s jobs at %s>' % \
                (
-                   misc_tools.shorten_class_address(
-                       self.__class__.__module__,
-                       self.__class__.__name__
-                   ),
+                   address_tools.get_address(type(self), shorten=True),
                    crunchers_count,
                    job_count,
                    hex(id(self))

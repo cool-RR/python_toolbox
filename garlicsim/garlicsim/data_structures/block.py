@@ -9,6 +9,7 @@ See the documentation of Block for more information.
 
 from garlicsim.general_misc import logic_tools
 from garlicsim.general_misc import misc_tools
+from garlicsim.general_misc import address_tools
 
 from garlicsim.misc import GarlicSimException
 
@@ -407,10 +408,7 @@ class Block(TreeMember):
         assert self.alive # todo: say "Dead block"
         return '<%s of length %s, crunched with %s at %s>' % \
                (
-                   misc_tools.shorten_class_address(
-                       self.__class__.__module__,
-                       self.__class__.__name__
-                   ),
+                   address_tools.get_address(type(self), shorten=True),
                    len(self),
                    self.get_step_profile(),
                    hex(id(self))

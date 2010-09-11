@@ -14,6 +14,7 @@ import garlicsim.general_misc.read_write_lock
 from garlicsim.general_misc.infinity import Infinity
 import garlicsim.general_misc.third_party.decorator
 from garlicsim.general_misc import misc_tools
+from garlicsim.general_misc import address_tools
 
 import garlicsim.data_structures
 import garlicsim.misc.simpack_grokker
@@ -519,10 +520,7 @@ class Project(object):
         return '''<%s containing %s nodes and employing %s crunchers at \
 %s>''' % \
                (
-                   misc_tools.shorten_class_address(
-                       self.__class__.__module__,
-                       self.__class__.__name__
-                   ),
+                   address_tools.get_address(type(self), shorten=True),
                    nodes_count,
                    crunchers_count,
                    hex(id(self))

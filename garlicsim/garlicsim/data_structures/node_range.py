@@ -9,9 +9,11 @@ See its documentation for more info.
 
 from garlicsim.general_misc import cute_iter_tools
 from garlicsim.general_misc import misc_tools
+from garlicsim.general_misc import address_tools
 
 from node import Node
 from block import Block
+
 
 class NodeRange(object):
     '''A consecutive range of nodes.'''
@@ -115,10 +117,7 @@ class NodeRange(object):
         return '<%s, from %s %s to %s %s, containing %s nodes total, at %s>' \
                % (
                    
-                   misc_tools.shorten_class_address(
-                       self.__class__.__module__,
-                       self.__class__.__name__
-                       ),
+                   address_tools.get_address(type(self), shorten=True),
                    
                    'block that starts at clock' if isinstance(self.start, Block) \
                    else 'node with clock',

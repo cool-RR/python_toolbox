@@ -10,6 +10,7 @@ See their documentation for more information.
 import copy
 
 from garlicsim.general_misc import misc_tools
+from garlicsim.general_misc import address_tools
 
 import garlicsim.misc
 from garlicsim.misc import GarlicSimException
@@ -275,10 +276,7 @@ class Tree(object):
         '''
         return '<%s with %s roots, %s nodes and %s possible paths at %s>' % \
                (
-                   misc_tools.shorten_class_address(
-                       self.__class__.__module__,
-                       self.__class__.__name__
-                   ),
+                   address_tools.get_address(type(self), shorten=True),
                    len(self.roots),
                    len(self.nodes),
                    len(self.all_possible_paths()),

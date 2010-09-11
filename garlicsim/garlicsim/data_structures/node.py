@@ -9,6 +9,7 @@ See documentation of Node for more information.
 
 from garlicsim.general_misc.infinity import Infinity
 from garlicsim.general_misc import misc_tools
+from garlicsim.general_misc import address_tools
 
 from garlicsim.misc import GarlicSimException
 
@@ -398,10 +399,7 @@ Untouched nodes can't be edited, so they have no concept of being finalized.'''
         '''
         return '<%s%s, %s%s%s, %s, %sat %s>' % \
             (
-                misc_tools.shorten_class_address(
-                    self.__class__.__module__,
-                    self.__class__.__name__
-                    ),
+                address_tools.get_address(type(self), shorten=True),
                 ' with clock %s' % self.state.clock if hasattr(self.state, 'clock') else '',
                 'root, ' if (self.parent is None) else '',
                 'leaf, ' if (len(self.children) == 0) else '',

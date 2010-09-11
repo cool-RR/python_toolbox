@@ -8,6 +8,7 @@ See its documentation for more information.
 '''
 
 from garlicsim.general_misc import misc_tools
+from garlicsim.general_misc import address_tools
 
 from tree_member import TreeMember
 from node import Node
@@ -160,10 +161,7 @@ class End(TreeMember):
         
         return '<%s from state with clock %s, crunched with %s, at %s>' % \
             (
-                misc_tools.shorten_class_address(
-                    self.__class__.__module__,
-                    self.__class__.__name__
-                    ),
+                address_tools.get_address(type(self), shorten=True),
                 self.parent.state.clock,
                 self.step_profile,
                 hex(id(self))
