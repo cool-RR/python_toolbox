@@ -292,9 +292,7 @@ class ArgumentsProfile(object):
         # All phases completed! This arguments profile is canonical and ready.
         #######################################################################
             
-        
-        
-            
+                    
     def __eq__(self, other):
         if not isinstance(other, ArgumentsProfile):
             return NotImplemented
@@ -302,7 +300,13 @@ class ArgumentsProfile(object):
                (self.args == other.args) and \
                (self.kwargs == other.kwargs)
     
-            
+    
+    def __hash__(self): #tododoc: test in dict
+        return hash(
+            self.function,
+            self.args,
+            tuple(self.kwargs)
+        )
                     
 
     

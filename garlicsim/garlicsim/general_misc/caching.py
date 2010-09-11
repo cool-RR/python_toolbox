@@ -3,18 +3,24 @@
 
 import functools
 
+from garlicsim.general_misc.arguments_profile import ArgumentsProfile
+
 def cache(function):
     # todo: kwargs support
     # todo: try to be smart and figure out the function's signature, then be
     # able to understand that squared(x) is the same as sqaured(number=x).
+    
+    # In case we're being given a function that is already cached:
     if hasattr(function, 'cache'): return function
     
-    def cached(*args):
-        
+    def cached(*args, **kwargs):
+        arguments_profile = ArgumentsProfile(function, *args, **kwargs)
         try:
-            return cached.cache[args]
+            return cached.cache[arguments_profile]
         except KeyError:
-            cached.cache[args] = value = function(*args)
+            cached.cache[arguments_profile] = value = \
+                  function(*arguments_profile.args,
+                           **arguments_profile.kwargs)
             return value
             
     cached.cache = {} # weakref.WeakKeyDictionary()
