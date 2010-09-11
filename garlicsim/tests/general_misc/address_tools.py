@@ -149,11 +149,12 @@ def test_get_address():
                          shorten=True)
     assert result == 'garlicsim_lib.simpacks.life.State.step'
     
-    result = get_address(garlicsim_lib.simpacks.life.life.State.step, root=life)
+    result = get_address(garlicsim_lib.simpacks.life.life.State.step,
+                         root=garlicsim_lib.simpacks.life)
     assert result == 'life.life.State.step'
     
     result = get_address(garlicsim_lib.simpacks.life.life.State.step,
-                         root=life, shorten=True)
+                         root=garlicsim_lib.simpacks.life, shorten=True)
     assert result == 'life.State.step'
     
     

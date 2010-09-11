@@ -3,9 +3,11 @@ import types
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import caching
 
+# tododoc: add caching to all functions, after fixing caching with
+# ArgumentsProfile to accept kwargs.
 
-@caching.cache
-def _tail_shorten(address):
+
+def _tail_shorten(address, root=None):
     '''
     '''
     if '.' not in address:
@@ -13,8 +15,8 @@ def _tail_shorten(address):
         return address
     
     parent_address, child_name = address.rsplit('.', 1)
-    parent = get_object_by_address(parent_address)
-    child = get_object_by_address(address)
+    parent = get_object_by_address(parent_address, root=root)
+    child = get_object_by_address(address, root=root)
     
     current_parent_address = parent_address
     
@@ -30,7 +32,8 @@ def _tail_shorten(address):
             # We've reached the top module and it's successful, can break now.
             break
         
-        current_parent = get_object_by_address(current_parent_address)
+        current_parent = get_object_by_address(current_parent_address,
+                                               root=root)
         
         candidate_child = getattr(current_parent, child_name, None)
         
@@ -42,8 +45,7 @@ def _tail_shorten(address):
     return '.'.join((last_successful_parent_address, child_name))
 
 
-@caching.cache
-def shorten_address(address):
+def shorten_address(address, root=None):
     '''
     '''
     if '.' not in address:
@@ -51,21 +53,27 @@ def shorten_address(address):
         return address
     
     original_address_parts = address.split('.')
+    address_parts = original_address_parts[:]
     
     new_address = address
     
-    for i in range(len(original_address_parts)): #range(1 - len(address_parts), 1):
+    for i in range(2 - len(original_address_parts), 1):
+        
+        if i == 0:
+            i = None
+            # Yeah, this is weird. When `i == 0`, I want to slice `[:i]` and get
+            # everything. So I change `i` to `None`.
+            
         head = '.'.join(address_parts[:i])
-        new_head = _tail_shorten(head)
+        new_head = _tail_shorten(head, root=root)
         if new_head != head:
             # Something was shortened!
             new_address = new_address.replace(head, new_head, 1)
             address_parts = address.split('.')
             
-    
+    return new_address
 
 
-@caching.cache
 def get_object_by_address(address, root=None, _parent_object=None):
     
     if root:        
@@ -125,7 +133,6 @@ def get_object_by_address(address, root=None, _parent_object=None):
             return second_object
     
 
-@caching.cache
 def get_address(obj, root=None, shorten=None):
     
     # todo: Support classes inside classes. Currently doesn't work because
@@ -170,7 +177,7 @@ def get_address(obj, root=None, shorten=None):
                 break
                 
     if shorten:
-        address = shorten_address(address)
+        address = shorten_address(address, root=root)
     
     return address
 

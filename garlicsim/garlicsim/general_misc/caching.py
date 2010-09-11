@@ -1,6 +1,5 @@
 
-# todo: use this in all the places where i `get` shit in garlicsim_wx, like
-# get_background_brush
+# tododoc: Must use weakref, otherwise all garbage-collection goes kaput!
 
 import functools
 
