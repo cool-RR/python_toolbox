@@ -1,6 +1,7 @@
 import types
 
 from garlicsim.general_misc import import_tools
+from garlicsim.general_misc import caching
 
 
 def shorten_class_address(module_name, class_name):
@@ -100,27 +101,52 @@ def get_object_by_address(address, root=None, _parent_object=None):
             return second_object
     
 
+@caching.cache
 def get_address(obj, root=None, shorten=None):
     
     # todo: Support classes inside classes. Currently doesn't work because
-    # Python doesn't tell us inside which class a class was defined. We'll
-    # probably have to do some kind of search.
+    # Python doesn't tell us inside in which class an inner class was defined.
+    # We'll probably have to do some kind of search.
     
     if not (isinstance(obj, types.ModuleType) or hasattr(obj, '__module__')):
-        raise Exception("%s is not a module, nor does not have a `__module__`"
+        raise Exception("%s is not a module, nor does not have a `__module__` "
                         "attribute, therefore we can't get it's address." % \
                         obj)
     
     if isinstance(obj, types.ModuleType):
-        return obj.__name__
+        address = obj.__name__
+        assert get_object_by_address(address) is obj
     
     elif isinstance(obj, types.MethodType):
-        address_candidate = '.'.join((obj.__module__, obj.im_class.__name__,
+        address = '.'.join((obj.__module__, obj.im_class.__name__,
                                       obj.__name__))
-        assert get_object_by_address(address_candidate) == obj
+        assert get_object_by_address(address) == obj
         
     else:
-        address_candidate = '.'.join((obj.__module__, obj.__name__))
-        assert get_object_by_address(address_candidate) is obj
+        address= '.'.join((obj.__module__, obj.__name__))
+        assert get_object_by_address(address) is obj
+        
+        
+    if root:
+        
+        if isinstance(root, basestring):
+            root = get_object_by_address(root)
+        
+        root_short_name = root.__name__.rsplit('.', 1)[-1]
+            
+        address_parts = address.split('.')
+        heads = ['.'.join(address_parts[:i]) for i in
+                 range(1, len(address_parts) + 1)]
+        # heads is something like: ['garlicsim', 'garlicsim.misc',
+        # 'garlicsim.misc.step_copy', 'garlicsim.misc.step_copy.StepCopy']
+        
+        for head in reversed(heads):
+            if get_object_by_address(head) is root:
+                address = address.replace(head, root_short_name, 1)
+                break
+                
+    if shorten:
+        pass
     
-    return address_candidate
+    return address
+
