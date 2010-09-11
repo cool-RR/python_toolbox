@@ -4,44 +4,68 @@ from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import caching
 
 
-def shorten_class_address(module_name, class_name):
+@caching.cache
+def _tail_shorten(address):
     '''
-    Shorten the address of a class.
-    
-    This is mostly used in `__repr__` methods of various classes to shorten the
-    text and make the final output more conscise. For example, if you have a
-    class `garlicsim.asynchronous_crunching.project.Project`, but which is also
-    available as `garlicsim.Project`, this function will return
-    'garlicsim.Project'.    
     '''
-    get_module = lambda module_name: __import__(module_name, fromlist=[''])
-    original_module = get_module(module_name)
-    original_class = getattr(original_module, class_name)
+    if '.' not in address:
+        # Nothing to shorten
+        return address
     
-    current_module_name = module_name
+    parent_address, child_name = address.rsplit('.', 1)
+    parent = get_object_by_address(parent_address)
+    child = get_object_by_address(address)
     
-    last_successful_module_name = current_module_name
+    current_parent_address = parent_address
+    
+    last_successful_parent_address = current_parent_address
     
     while True:
-        # Removing the last submodule from the module name:
-        current_module_name = '.'.join(current_module_name.split('.')[:-1]) 
+        # Removing the last component from the parent address:
+        current_parent_address = '.'.join(
+            current_parent_address.split('.')[:-1]
+        )
         
-        if not current_module_name:
+        if not current_parent_address:
             # We've reached the top module and it's successful, can break now.
             break
         
-        current_module = get_module(current_module_name)
+        current_parent = get_object_by_address(current_parent_address)
         
-        candidate_class = getattr(current_module, class_name, None)
+        candidate_child = getattr(current_parent, child_name, None)
         
-        if candidate_class is original_class:
-            last_successful_module_name = current_module_name
+        if candidate_child is child:
+            last_successful_parent_address = current_parent_address
         else:
             break
         
-    return '.'.join((last_successful_module_name, class_name))
+    return '.'.join((last_successful_parent_address, child_name))
 
 
+@caching.cache
+def shorten_address(address):
+    '''
+    '''
+    if '.' not in address:
+        # Nothing to shorten
+        return address
+    
+    original_address_parts = address.split('.')
+    
+    new_address = address
+    
+    for i in range(len(original_address_parts)): #range(1 - len(address_parts), 1):
+        head = '.'.join(address_parts[:i])
+        new_head = _tail_shorten(head)
+        if new_head != head:
+            # Something was shortened!
+            new_address = new_address.replace(head, new_head, 1)
+            address_parts = address.split('.')
+            
+    
+
+
+@caching.cache
 def get_object_by_address(address, root=None, _parent_object=None):
     
     if root:        
@@ -146,7 +170,7 @@ def get_address(obj, root=None, shorten=None):
                 break
                 
     if shorten:
-        pass
+        address = shorten_address(address)
     
     return address
 
