@@ -1,3 +1,6 @@
+from garlicsim.general_misc import import_tools
+
+
 def shorten_class_address(module_name, class_name):
     '''
     Shorten the address of a class.
@@ -36,64 +39,70 @@ def shorten_class_address(module_name, class_name):
     return '.'.join((last_successful_module_name, class_name))
 
 
-
-
-
-def get_object_from_address(address, parent_object=None):
-    if not parent_object:
+def get_object_from_address(address, root=None, _parent_object=None):
+    
+    if not _parent_object:
+        # We were called directly by the user.
+        
         if '.' not in address:
-            try:
-                return eval(address)
-            except NameError:
-                return __import__(address)   
+            # We were called directly by the user with an address with no dots.
+            # There are limited options on what it can be: Either the root, or a
+            # builtin, or a module. We try all three:
+            if root and (address == root.__name__):
+                return root
+            else:
+                try:
+                    return eval(address)
+                except NameError:
+                    return __import__(address)
+                
         else: # '.' in address
             first_object_address, second_object_address = \
                 address.rsplit('.', 1)
-            first_object = get_object_from_address(first_object_address)
-            second_object = get_object_from_address(second_object_address,
-                                                    parent_object=first_object)
+            first_object = get_object_by_address(first_object_address,
+                                                 root=root)
+            second_object = get_object_by_address(second_object_address,
+                                                  _parent_object=first_object)
             return second_object
-    
-    else: # parent_object is not none
+
+        
+    else: # _parent_object is not none
         
         if '.' not in address:
             
-            if isinstance(parent_object, types.ModuleType) and \
-               hasattr(parent_object, '__path__'):
+            if isinstance(_parent_object, types.ModuleType) and \
+               hasattr(_parent_object, '__path__'):
                 
                 # It's a package
                 import_tools.import_if_exists(
-                    '.'.join((parent_object.__name__, address))
+                    '.'.join((_parent_object.__name__, address))
                 )
                 # Not keeping reference, just importing so we could get later
                 
-            return getattr(parent_object, address)
+            return getattr(_parent_object, address)
         
         else: # '.' in address
             first_object_address, second_object_address = \
                 address.rsplit('.', 1)
-            first_object = get_object_from_address(first_object_address, parent_object)
-            second_object = get_object_from_address(second_object_address,
-                                                    parent_object=first_object)
+            first_object = get_object_by_address(first_object_address, _parent_object)
+            second_object = get_object_by_address(second_object_address,
+                                                    _parent_object=first_object)
             return second_object
     
 
-def get_address_from_object(obj):
-    # todo: look for something like this in the community
-    assert isinstance(
-        obj,
-        (
-            type, types.FunctionType, types.ModuleType, types.MethodType
-        )
-    )
+def get_address(obj):
+    
+    if not hasattr(obj, '__module__'):
+        raise Exception("%s does not have a `__module__` attribute, so we "
+                        "can't get it's address." % obj)
     
     if isinstance(obj, types.MethodType):
         address_candidate = '.'.join((obj.__module__, obj.im_class.__name__,
                                       obj.__name__))
-        assert get_object_from_address(address_candidate) == obj
+        assert get_object_by_address(address_candidate) == obj
         
     else:
         address_candidate = '.'.join((obj.__module__, obj.__name__))
-        assert get_object_from_address(address_candidate) is obj
+        assert get_object_by_address(address_candidate) is obj
     
     return address_candidate
