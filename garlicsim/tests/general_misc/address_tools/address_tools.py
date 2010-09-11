@@ -1,4 +1,5 @@
-from garlicsim.general_misc.address_tools import *
+from garlicsim.general_misc.address_tools import (get_address,
+                                                  get_object_by_address)
 
 
 class A(object):
@@ -84,6 +85,9 @@ def test_get_address():
     ###########################################################################
     # Testing for locally defined class:
     
+    # Currently these tests are commented out, because `get_address` doesn't
+    # support nested classes yet.
+    
     #result = get_address(A.B)
     #assert result == prefix + 'A.B'
     #assert get_object_by_address(result) is A.B
@@ -156,6 +160,25 @@ def test_get_address():
     result = get_address(garlicsim_lib.simpacks.life.life.State.step,
                          root=garlicsim_lib.simpacks.life, shorten=True)
     assert result == 'life.State.step'
+    
+    
+    ###########################################################################
+    # Testing for local modules:
+    
+    from .sample_module_tree import w
+    
+    z = get_object_by_address('w.x.y.z', root=w)
+
+    result = get_address(z, root=w)
+    assert result == 'w.x.y.z'
+    
+    result = get_address(z, root=w, shorten=True)
+    assert result == 'w.y.z'
+    
+    result = get_address(z, root=w.x, shorten=True)
+    assert result == 'x.y.z'
+    
+    
     
     
     
