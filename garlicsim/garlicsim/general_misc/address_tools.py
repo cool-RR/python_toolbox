@@ -1,3 +1,5 @@
+import types
+
 from garlicsim.general_misc import import_tools
 
 
@@ -39,7 +41,12 @@ def shorten_class_address(module_name, class_name):
     return '.'.join((last_successful_module_name, class_name))
 
 
-def get_object_from_address(address, root=None, _parent_object=None):
+def get_object_by_address(address, root=None, _parent_object=None):
+    
+    if root:        
+        if isinstance(root, basestring):
+            root = get_object_by_address(root)
+        root_short_name = root.__name__.rsplit('.', 1)[-1]
     
     if not _parent_object:
         # We were called directly by the user.
@@ -48,7 +55,7 @@ def get_object_from_address(address, root=None, _parent_object=None):
             # We were called directly by the user with an address with no dots.
             # There are limited options on what it can be: Either the root, or a
             # builtin, or a module. We try all three:
-            if root and (address == root.__name__):
+            if root and (address == root_short_name):
                 return root
             else:
                 try:
@@ -72,10 +79,13 @@ def get_object_from_address(address, root=None, _parent_object=None):
             
             if isinstance(_parent_object, types.ModuleType) and \
                hasattr(_parent_object, '__path__'):
+                                
+                # `_parent_object` is a package. The wanted object may be a
+                # module. Let's try importing it:
                 
-                # It's a package
                 import_tools.import_if_exists(
-                    '.'.join((_parent_object.__name__, address))
+                    '.'.join((_parent_object.__name__, address)),
+                    silent_fail=True
                 )
                 # Not keeping reference, just importing so we could get later
                 
@@ -86,11 +96,11 @@ def get_object_from_address(address, root=None, _parent_object=None):
                 address.rsplit('.', 1)
             first_object = get_object_by_address(first_object_address, _parent_object)
             second_object = get_object_by_address(second_object_address,
-                                                    _parent_object=first_object)
+                                                  _parent_object=first_object)
             return second_object
     
 
-def get_address(obj):
+def get_address(obj, root=None, shorten=None):
     
     if not hasattr(obj, '__module__'):
         raise Exception("%s does not have a `__module__` attribute, so we "

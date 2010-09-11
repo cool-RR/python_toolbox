@@ -96,7 +96,7 @@ def import_if_exists(module_name, silent_fail=False):
         package_path = package.__path__
         try:
             imp.find_module(submodule_name, package_path)
-        except ImportError:           
+        except ImportError:
             if silent_fail is True:
                 return None
             else: # silent_fail is False

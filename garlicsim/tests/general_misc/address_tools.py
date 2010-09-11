@@ -14,28 +14,28 @@ class A(object):
             def deeper_method(self):
                 pass
 
-prefix = __name__ + '.'
             
-def test_get_object_by_address():
+prefix = __name__ + '.'
 
-    
+
+def test_get_object_by_address():
 
     ###########################################################################
     # Testing for locally defined class:
     
     assert get_object_by_address(prefix + 'A') is A
     assert get_object_by_address(prefix + 'A.B') is A.B
-    assert get_object_by_address(prefix + 'A.deep_method') == A.deep_method
+    assert get_object_by_address(prefix + 'A.method') == A.method
     assert get_object_by_address(prefix + 'A.B.deep_method') == A.B.deep_method
     assert get_object_by_address(prefix + 'A.C.D') is A.C.D
-    assert get_object_by_address(prefix + 'A.C.D.deep_method') == \
-           A.C.D.deep_method
+    assert get_object_by_address(prefix + 'A.C.D.deeper_method') == \
+           A.C.D.deeper_method
     
-    assert get_object_by_address('D.deep_method', root=(prefix + 'A.C.D')) == \
-           A.C.D.deep_method
-    assert get_object_by_address('D.deep_method', root=A.C.D) == \
-           A.C.D.deep_method
-    assert get_object_by_address('A', root=__name__.A) == A
+    assert get_object_by_address('D.deeper_method', root=(prefix + 'A.C.D')) == \
+           A.C.D.deeper_method
+    assert get_object_by_address('D.deeper_method', root=A.C.D) == \
+           A.C.D.deeper_method
+    assert get_object_by_address('A', root=A) == A
 
     
     ###########################################################################

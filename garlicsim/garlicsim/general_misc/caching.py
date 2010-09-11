@@ -66,6 +66,10 @@ class LazilyEvaluatedConstantProperty(object):
         
     def __get__(self, obj, our_type=None):
 
+        if not obj:
+            # We're being accessed from the class itself, not from an object
+            return self
+        
         value = self.getter(obj)
         
         if not self.our_name:
