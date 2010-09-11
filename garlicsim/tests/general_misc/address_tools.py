@@ -31,11 +31,11 @@ def test_get_object_by_address():
     assert get_object_by_address(prefix + 'A.C.D.deep_method') == \
            A.C.D.deep_method
     
-    assert get_object_by_address('D.deep_method', root=(prefix + 'A.C')) == \
+    assert get_object_by_address('D.deep_method', root=(prefix + 'A.C.D')) == \
            A.C.D.deep_method
-    assert get_object_by_address('D.deep_method', root=A.C) == \
+    assert get_object_by_address('D.deep_method', root=A.C.D) == \
            A.C.D.deep_method
-    assert get_object_by_address('A', root=__name__) == A
+    assert get_object_by_address('A', root=__name__.A) == A
 
     
     ###########################################################################
@@ -56,7 +56,8 @@ def test_get_object_by_address():
     result = get_object_by_address('email.email.encoders.base64.b32decode')
     assert result is email.encoders.base64.b32decode
     
-    result = get_object_by_address('base64.b32decode', root='email.email.encoders')
+    result = get_object_by_address('base64.b32decode',
+                                   root='email.email.encoders.base64')
     assert result is email.encoders.base64.b32decode
     
     
@@ -73,7 +74,8 @@ def test_get_object_by_address():
     assert result is garlicsim.misc.persistent.cross_process_persistent.\
                      CrossProcessPersistent.personality
     
-    result = get_object_by_address('end.End', root=garlicsim.data_structures)
+    result = get_object_by_address('data_structures.end.End',
+                                   root=garlicsim.data_structures)
     assert result is garlicsim.data_structures.end.End
     
     
@@ -91,12 +93,12 @@ def test_get_address():
     assert get_object_by_address(result) == A.C.D.deeper_method
     
     result = get_address(A.C.D.deeper_method, root=A.C)
-    assert result == 'D.deeper_method'
-    assert get_object_by_address(result) == A.C.D.deeper_method
+    assert result == 'C.D.deeper_method'
+    assert get_object_by_address(result, root=A.C) == A.C.D.deeper_method
     
-    result = get_address(A.C.D.deeper_method, root='A.C')
+    result = get_address(A.C.D.deeper_method, root='A.C.D')
     assert result == 'D.deeper_method'
-    assert get_object_by_address(result) == A.C.D.deeper_method
+    assert get_object_by_address(result, root='A.C.D') == A.C.D.deeper_method
     
     
     ###########################################################################
@@ -108,7 +110,7 @@ def test_get_address():
     assert get_object_by_address(result) is email.encoders.base64
     
     result = get_address(email.encoders.base64, root=email.encoders)
-    assert result == 'base64'
+    assert result == 'encoders.base64'
     assert get_object_by_address(result, root=email.encoders) is \
            email.encoders.base64
     
@@ -133,7 +135,7 @@ def test_get_address():
            garlicsim.Project
     
     result = get_address(garlicsim.data_structures.state.State, root=garlicsim)
-    assert result == 'data_structures.State'
+    assert result == 'garlicsim.data_structures.state.State'
     assert get_object_by_address(result, root=garlicsim) is \
            garlicsim.data_structures.state.State
     
@@ -143,11 +145,16 @@ def test_get_address():
     result = get_address(garlicsim_lib.simpacks.life.life.State.step)
     assert result == 'garlicsim_lib.simpacks.life.life.State.step'
     
-    result = get_address(garlicsim_lib.simpacks.life.life.State.step, shorten=True)
+    result = get_address(garlicsim_lib.simpacks.life.life.State.step,
+                         shorten=True)
     assert result == 'garlicsim_lib.simpacks.life.State.step'
     
-    result = get_address(garlicsim_lib.simpacks.life.life.State.step, root=)
-    assert result == 'garlicsim_lib.simpacks.life.State.step'
+    result = get_address(garlicsim_lib.simpacks.life.life.State.step, root=life)
+    assert result == 'life.life.State.step'
+    
+    result = get_address(garlicsim_lib.simpacks.life.life.State.step,
+                         root=life, shorten=True)
+    assert result == 'life.State.step'
     
     
     
