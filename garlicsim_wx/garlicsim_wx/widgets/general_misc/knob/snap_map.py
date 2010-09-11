@@ -213,8 +213,3 @@ class SnapMap(object):
                 misc_tools.frange(-1, 1, step)]
     """
         
-
-"""
-if __name__ == '__main__':
-    s=SnapMap([-0.3,0,0.5,0.7],100,100,0,0)
-"""
