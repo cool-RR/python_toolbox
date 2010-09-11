@@ -1,4 +1,3 @@
-
 def shorten_class_address(module_name, class_name):
     '''
     Shorten the address of a class.
@@ -37,6 +36,9 @@ def shorten_class_address(module_name, class_name):
     return '.'.join((last_successful_module_name, class_name))
 
 
+
+
+
 def get_object_from_address(address, parent_object=None):
     if not parent_object:
         if '.' not in address:
@@ -53,13 +55,20 @@ def get_object_from_address(address, parent_object=None):
             return second_object
     
     else: # parent_object is not none
+        
         if '.' not in address:
-            if isinstance(parent_object, types.ModuleType):
+            
+            if isinstance(parent_object, types.ModuleType) and \
+               hasattr(parent_object, '__path__'):
+                
+                # It's a package
                 import_tools.import_if_exists(
                     '.'.join((parent_object.__name__, address))
                 )
                 # Not keeping reference, just importing so we could get later
+                
             return getattr(parent_object, address)
+        
         else: # '.' in address
             first_object_address, second_object_address = \
                 address.rsplit('.', 1)
@@ -67,3 +76,24 @@ def get_object_from_address(address, parent_object=None):
             second_object = get_object_from_address(second_object_address,
                                                     parent_object=first_object)
             return second_object
+    
+
+def get_address_from_object(obj):
+    # todo: look for something like this in the community
+    assert isinstance(
+        obj,
+        (
+            type, types.FunctionType, types.ModuleType, types.MethodType
+        )
+    )
+    
+    if isinstance(obj, types.MethodType):
+        address_candidate = '.'.join((obj.__module__, obj.im_class.__name__,
+                                      obj.__name__))
+        assert get_object_from_address(address_candidate) == obj
+        
+    else:
+        address_candidate = '.'.join((obj.__module__, obj.__name__))
+        assert get_object_from_address(address_candidate) is obj
+    
+    return address_candidate
