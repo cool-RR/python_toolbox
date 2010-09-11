@@ -1,5 +1,6 @@
 from garlicsim.general_misc.address_tools import *
 
+
 class A(object):
     def method(self):
         pass
@@ -12,10 +13,12 @@ class A(object):
         class D(object):
             def deeper_method(self):
                 pass
+
+prefix = __name__ + '.'
             
 def test_get_object_by_address():
 
-    prefix = __name__ + '.'
+    
 
     ###########################################################################
     # Testing for locally defined class:
@@ -27,6 +30,12 @@ def test_get_object_by_address():
     assert get_object_by_address(prefix + 'A.C.D') is A.C.D
     assert get_object_by_address(prefix + 'A.C.D.deep_method') == \
            A.C.D.deep_method
+    
+    assert get_object_by_address('D.deep_method', root=(prefix + 'A.C')) == \
+           A.C.D.deep_method
+    assert get_object_by_address('D.deep_method', root=A.C) == \
+           A.C.D.deep_method
+    assert get_object_by_address('A', root=__name__) == A
 
     
     ###########################################################################
@@ -44,6 +53,105 @@ def test_get_object_by_address():
     result = get_object_by_address('email.base64mime.a2b_base64')
     assert result is email.base64mime.a2b_base64
     
-    result = get_object_by_address('email.base64mime.a2b_base64')
-    assert result is email.base64mime.a2b_base64
+    result = get_object_by_address('email.email.encoders.base64.b32decode')
+    assert result is email.encoders.base64.b32decode
+    
+    result = get_object_by_address('base64.b32decode', root='email.email.encoders')
+    assert result is email.encoders.base64.b32decode
+    
+    
+    ###########################################################################
+    # Testing for garlicsim:
+    
+    result = get_object_by_address('garlicsim.general_misc')
+    import garlicsim
+    assert garlicsim.general_misc is result
+    
+    result = get_object_by_address('garlicsim.misc.persistent.'
+                                   'cross_process_persistent.'
+                                   'CrossProcessPersistent.personality')
+    assert result is garlicsim.misc.persistent.cross_process_persistent.\
+                     CrossProcessPersistent.personality
+    
+    result = get_object_by_address('end.End', root=garlicsim.data_structures)
+    assert result is garlicsim.data_structures.end.End
+    
+    
+def test_get_address():
+    
+    ###########################################################################
+    # Testing for locally defined class:
+    
+    result = get_address(A.B)
+    assert result == prefix + 'A.B'
+    assert get_object_by_address(result) is A.B
+    
+    result = get_address(A.C.D.deeper_method)
+    assert result == prefix + 'A.C.D.deeper_method'
+    assert get_object_by_address(result) == A.C.D.deeper_method
+    
+    result = get_address(A.C.D.deeper_method, root=A.C)
+    assert result == 'D.deeper_method'
+    assert get_object_by_address(result) == A.C.D.deeper_method
+    
+    result = get_address(A.C.D.deeper_method, root='A.C')
+    assert result == 'D.deeper_method'
+    assert get_object_by_address(result) == A.C.D.deeper_method
+    
+    
+    ###########################################################################
+    # Testing for standard-library module:
+    
+    import email.encoders.base64
+    result = get_address(email.encoders.base64)
+    assert result == 'email.encoders.base64'
+    assert get_object_by_address(result) is email.encoders.base64
+    
+    result = get_address(email.encoders.base64, root=email.encoders)
+    assert result == 'base64'
+    assert get_object_by_address(result, root=email.encoders) is \
+           email.encoders.base64
+    
+    
+    ###########################################################################
+    # Testing for garlicsim:
+    
+    import garlicsim
+    result = get_address(garlicsim.data_structures.state.State)
+    assert result == 'garlicsim.data_structures.state.State'
+    assert get_object_by_address(result) is \
+           garlicsim.data_structures.state.State
+    
+    result = get_address(garlicsim.data_structures.state.State, shorten=True)
+    assert result == 'garlicsim.data_structures.State'
+    assert get_object_by_address(result) is \
+           garlicsim.data_structures.state.State
+    
+    result = get_address(garlicsim.Project, shorten=True)
+    assert result == 'garlicsim.Project'
+    assert get_object_by_address(result) is \
+           garlicsim.Project
+    
+    result = get_address(garlicsim.data_structures.state.State, root=garlicsim)
+    assert result == 'data_structures.State'
+    assert get_object_by_address(result, root=garlicsim) is \
+           garlicsim.data_structures.state.State
+    
+    
+    import garlicsim_lib.simpacks.life
+    
+    result = get_address(garlicsim_lib.simpacks.life.life.State.step)
+    assert result == 'garlicsim_lib.simpacks.life.life.State.step'
+    
+    result = get_address(garlicsim_lib.simpacks.life.life.State.step, shorten=True)
+    assert result == 'garlicsim_lib.simpacks.life.State.step'
+    
+    result = get_address(garlicsim_lib.simpacks.life.life.State.step, root=)
+    assert result == 'garlicsim_lib.simpacks.life.State.step'
+    
+    
+    
+    
+    
+    
     
