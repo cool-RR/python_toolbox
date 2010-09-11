@@ -100,12 +100,3 @@ def node_selection_and_range_test():
     
     assert len(tree.nodes) == 21
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
