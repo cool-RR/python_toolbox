@@ -123,7 +123,7 @@ def simpack_check(simpack, cruncher):
             leaf,
             math_tools.round_to_int(4 - x, up=True)
         )
-        x += path.__len__(start=leaf)
+        x += path.__len__(start=path.next_node(leaf))
             
     assert len(project.tree.nodes) == x + 1
     assert len(project.tree.roots) == 1
@@ -188,7 +188,7 @@ def simpack_check(simpack, cruncher):
             leaf,
             math_tools.round_to_int(3 - y, up=True)
         )
-        y += path.__len__(start=leaf)
+        y += path.__len__(start=path.next_node(leaf))
     
     
     assert len(project.tree.nodes) == x + y + 4
