@@ -12,7 +12,7 @@ class SleekRef(object):
         if callback and not callable(callback):
             raise Exception('%s is not a callable object.' % callback)
         try:
-            self.ref = weakref.ref(self, thing, callback)
+            self.ref = weakref.ref(thing, callback)
         except TypeError:
             self.ref = None
             self.thing = thing

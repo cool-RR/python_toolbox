@@ -19,7 +19,7 @@ class A():
     
 def test_sleek_ref():
     
-    def counter():
+    def counter(_=None):
         if not hasattr(counter, 'count'):
             counter.count = 0
         result = counter.count
@@ -51,15 +51,9 @@ def test_sleek_ref():
         unvolatile_thing = unvolatile_things.pop()
         sleek_ref = SleekRef(unvolatile_thing, counter)
         assert sleek_ref() is unvolatile_thing
-        if _is_weakreffable(unvolatile_thing):
-            count = counter()
-            del unvolatile_thing
-            gc.collect()
-            assert counter() == count + 2
-            assert sleek_ref() is None 
-        else:
-            count = counter()
-            del unvolatile_thing
-            gc.collect()
-            assert counter() == count + 1
-            assert sleek_ref() is not None
+        
+        count = counter()
+        del unvolatile_thing
+        gc.collect()
+        assert counter() == count + 1
+        assert sleek_ref() is not None 
