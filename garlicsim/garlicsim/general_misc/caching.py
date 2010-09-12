@@ -7,7 +7,7 @@ from garlicsim.general_misc.third_party import inspect
 
 from garlicsim.general_misc.arguments_profile import ArgumentsProfile
 from garlicsim.general_misc.sleek_ref import SleekRef
-from garlicsim.general_misc.weakref_tools import CuteWeakValueDictionary
+from garlicsim.general_misc.weakref_tools import CuteSleekValueDictionary
 
 
 class SleekCallArgs(object):
@@ -33,10 +33,10 @@ class SleekCallArgs(object):
         if star_kwargs_name:            
             star_kwargs = call_args.pop(star_kwargs_name, {})
             if star_kwargs:
-                self.star_kwargs_refs = CuteWeakValueDictionary(self.destroy,
+                self.star_kwargs_refs = CuteSleekValueDictionary(self.destroy,
                                                                 star_kwargs)
         
-        self.args_refs = CuteWeakValueDictionary(self.destroy, call_args)
+        self.args_refs = CuteSleekValueDictionary(self.destroy, call_args)
     
     args = property(lambda self: dict(self.args_refs))
     
@@ -62,6 +62,14 @@ class SleekCallArgs(object):
                 tuple(sorted(tuple(self.star_kwargs)))
             )
         )
+    
+    def __eq__(self, other):
+        if not isinstance(other, SleekCallArgs):
+            return NotImplemented
+        return self.args == other.args and \
+               self.star_args == other.star_args and \
+               self.star_kwargs == other.star_kwargs
+               
         
         
 
@@ -91,14 +99,31 @@ def cache(function):
     
     return cached
 
+class SelfPlaceholder(object):
+    pass # todo: make uninstanciable
 
 class CachedType(type):
-    @cache
+    def __new__(self, *args, **kwargs):
+        result = type.__new__(self, *args, **kwargs)
+        result.__cache = {}
+        return result
+    
     def __call__(cls, *args, **kwargs):
         # todo: should not use the generic cache function. need to analyze
         # signature of __init__. Possibly use the same args&kwargs grokker for
         # this and `cache`.
-        return type.__call__(cls, *args, **kwargs)
+        sleek_call_args = SleekCallArgs(
+            cls.__cache,
+            cls.__init__,
+            *((SelfPlaceholder,) + args),
+            **kwargs
+        )
+        try:
+            return cls.__cache[sleek_call_args]
+        except KeyError:
+            cls.__cache[sleek_call_args] = value = \
+                type.__call__(cls, *args, **kwargs)
+            return value
     
 
 class LazilyEvaluatedConstantProperty(object):

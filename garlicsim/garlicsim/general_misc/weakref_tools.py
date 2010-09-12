@@ -1,10 +1,11 @@
 from weakref import (getweakrefcount, getweakrefs, ref, proxy,
                      CallableProxyType, ProxyType, ReferenceType)
+from garlicsim.general_misc.sleek_ref import SleekRef
 import UserDict
 
-__all__ = ['CuteWeakValueDictionary']
+__all__ = ['CuteSleekValueDictionary']
 
-class CuteWeakValueDictionary(UserDict.UserDict):
+class CuteSleekValueDictionary(UserDict.UserDict):
     """Mapping class that references values weakly.
 
     Entries in the dictionary will be discarded when no strong
@@ -51,7 +52,7 @@ class CuteWeakValueDictionary(UserDict.UserDict):
         return "<WeakValueDictionary at %s>" % id(self)
 
     def __setitem__(self, key, value):
-        self.data[key] = KeyedRef(value, self._remove, key)
+        self.data[key] = KeyedSleekRef(value, self._remove, key)
 
     '''def copy(self):
         new = WeakValueDictionary()
@@ -135,7 +136,7 @@ class CuteWeakValueDictionary(UserDict.UserDict):
         try:
             wr = self.data[key]
         except KeyError:
-            self.data[key] = KeyedRef(default, self._remove, key)
+            self.data[key] = KeyedSleekRef(default, self._remove, key)
             return default
         else:
             return wr()
@@ -146,7 +147,7 @@ class CuteWeakValueDictionary(UserDict.UserDict):
             if not hasattr(dict, "items"):
                 dict = type({})(dict)
             for key, o in dict.items():
-                d[key] = KeyedRef(o, self._remove, key)
+                d[key] = KeyedSleekRef(o, self._remove, key)
         if len(kwargs):
             self.update(kwargs)
 
@@ -171,12 +172,12 @@ class CuteWeakValueDictionary(UserDict.UserDict):
         return L
 
 
-class KeyedRef(ref):
+class KeyedSleekRef(SleekRef):
     """Specialized reference that includes a key corresponding to the value.
 
     This is used in the WeakValueDictionary to avoid having to create
     a function object for each key stored in the mapping.  A shared
-    callback object can use the 'key' attribute of a KeyedRef instead
+    callback object can use the 'key' attribute of a KeyedSleekRef instead
     of getting a reference to the key from an enclosing scope.
 
     """
@@ -184,9 +185,9 @@ class KeyedRef(ref):
     __slots__ = "key",
 
     def __new__(type, ob, callback, key):
-        self = ref.__new__(type, ob, callback)
+        self = SleekRef.__new__(type, ob, callback)
         self.key = key
         return self
 
     def __init__(self, ob, callback, key):
-        super(KeyedRef,  self).__init__(ob, callback)
+        super(KeyedSleekRef, self).__init__(ob, callback)
