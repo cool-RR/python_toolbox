@@ -6,77 +6,8 @@ import weakref
 from garlicsim.general_misc.third_party import inspect
 
 from garlicsim.general_misc.arguments_profile import ArgumentsProfile
-from garlicsim.general_misc.sleek_ref import SleekRef
-from garlicsim.general_misc.weakref_tools import CuteSleekValueDictionary
+from garlicsim.general_misc.sleek_refs import SleekRef, CuteSleekValueDictionary
 
-
-class SleekCallArgs(object):
-    def __init__(self, containing_dict, function, *args, **kwargs):
-        
-        self.containing_dict = containing_dict
-        
-        args_spec = inspect.getargspec(function)
-        star_args_name, star_kwargs_name = \
-                      args_spec.varargs, args_spec.keywords
-        
-        call_args = inspect.getcallargs(function, *args, **kwargs)
-        del args, kwargs
-        
-        self.star_args_refs = []
-        if star_args_name:
-            star_args = call_args.pop(star_args_name, None)
-            if star_args:
-                self.star_args_refs = [SleekRef(star_arg, self.destroy) for
-                                       star_arg in star_args]
-        
-        self.star_kwargs_refs = {}
-        if star_kwargs_name:            
-            star_kwargs = call_args.pop(star_kwargs_name, {})
-            if star_kwargs:
-                self.star_kwargs_refs = CuteSleekValueDictionary(self.destroy,
-                                                                star_kwargs)
-        
-        self.args_refs = CuteSleekValueDictionary(self.destroy, call_args)
-    
-    args = property(lambda self: dict(self.args_refs))
-    
-    star_args = property(
-        lambda self:
-            tuple((star_arg_ref() for star_arg_ref in self.star_args_refs))
-    )
-    
-    star_kwargs = property(lambda self: dict(self.star_kwargs_refs))
-    
-        
-    def destroy(self, _=None):
-        try:
-            del self.containing_dict[self]
-        except KeyError:
-            pass
-        
-    def __hash__(self):
-        return hash(
-            (
-                tuple(sorted(tuple(self.args))),
-                self.star_args,
-                tuple(sorted(tuple(self.star_kwargs)))
-            )
-        )
-    
-    def __eq__(self, other):
-        if not isinstance(other, SleekCallArgs):
-            return NotImplemented
-        return self.args == other.args and \
-               self.star_args == other.star_args and \
-               self.star_kwargs == other.star_kwargs
-               
-        
-        
-
-#class SleekCallArgsDict(dict):
-    #def __init__(self, *args, **kwargs):
-        #dict.__init__(self, *args, **kwargs)
-        
 
 def cache(function):
     
