@@ -6,13 +6,16 @@ from garlicsim.general_misc.third_party import inspect
 
 __all__ = ['CuteSleekValueDictionary', 'SleekRef']
 
+class Ref(weakref.ref):
+    pass
+
 class SleekRef(object):
     def __init__(self, thing, callback=None):
         self.callback = callback
         if callback and not callable(callback):
             raise Exception('%s is not a callable object.' % callback)
         try:
-            self.ref = weakref.ref(thing, callback)
+            self.ref = Ref(thing, callback)
         except TypeError:
             self.ref = None
             self.thing = thing
@@ -200,15 +203,14 @@ class KeyedSleekRef(SleekRef):
 
     """
 
-    __slots__ = "key",
-
     def __new__(type, ob, callback, key):
-        self = SleekRef.__new__(type, ob, callback)
-        self.key = key
+        self = SleekRef.__new__(type)
         return self
 
     def __init__(self, ob, callback, key):
         super(KeyedSleekRef, self).__init__(ob, callback)
+        if self.ref:
+            self.ref.key = key
 
 
     

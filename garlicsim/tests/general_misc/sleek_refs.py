@@ -19,11 +19,11 @@ class A():
 
     
 def counter(_=None):
-        if not hasattr(counter, 'count'):
-            counter.count = 0
-        result = counter.count
-        counter.count += 1
-        return result
+    if not hasattr(counter, 'count'):
+        counter.count = 0
+    result = counter.count
+    counter.count += 1
+    return result
 
     
 def test_sleek_ref():
@@ -69,13 +69,31 @@ def test_cute_sleek_value_dictionary():
     unvolatile_things = [A.s, __builtins__, list, type,  list.append, str.join,
                          sum]
     
+    # Using len(csvd) as our key; Just to guarantee we're not running over an
+    # existing key.
+        
     while volatile_things:
         volatile_thing = volatile_things.pop()
         csvd = CuteSleekValueDictionary(counter)
-        # Using len(csvd) as our key; Just to guarantee we're not running over
-        # an existing key.
-        csvd[len(csvd)] = volatile_thing
+        if _is_weakreffable(volatile_thing):
+            csvd[len(csvd)] = volatile_thing
+            count = counter()
+            del volatile_thing
+            gc.collect()
+            assert counter() == count + 2
+        else:
+            csvd[len(csvd)] = volatile_thing
+            count = counter()
+            del volatile_thing
+            gc.collect()
+            assert counter() == count + 1
+            
+    while unvolatile_things:
+        unvolatile_thing = unvolatile_things.pop()
+        csvd = CuteSleekValueDictionary(counter)
+        
+        csvd[len(csvd)] = unvolatile_thing
         count = counter()
-        del volatile_thing
+        del unvolatile_thing
         gc.collect()
-        assert counter() == count + 2
+        assert counter() == count + 1
