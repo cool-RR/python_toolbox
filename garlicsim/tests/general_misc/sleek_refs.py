@@ -16,20 +16,24 @@ class A():
     @staticmethod
     def s():
         pass
+
     
-    
-def test_sleek_ref():
-    
-    def counter(_=None):
+def counter(_=None):
         if not hasattr(counter, 'count'):
             counter.count = 0
         result = counter.count
         counter.count += 1
         return result
+
+    
+def test_sleek_ref():
+    
+    
             
     volatile_things = [A(), 1, 4.5, 'meow', u'woof', [1, 2], (1, 2), {1: 2},
-                       set([1, 2, 3]), sum]
-    unvolatile_things = [A.s, __builtins__, list, type,  list.append, str.join]
+                       set([1, 2, 3])]
+    unvolatile_things = [A.s, __builtins__, list, type,  list.append, str.join,
+                         sum]
     
     while volatile_things:
         volatile_thing = volatile_things.pop()
@@ -60,4 +64,18 @@ def test_sleek_ref():
         assert sleek_ref() is not None
         
 def test_cute_sleek_value_dictionary():
-    pass
+    volatile_things = [A(), 1, 4.5, 'meow', u'woof', [1, 2], (1, 2), {1: 2},
+                       set([1, 2, 3])]
+    unvolatile_things = [A.s, __builtins__, list, type,  list.append, str.join,
+                         sum]
+    
+    while volatile_things:
+        volatile_thing = volatile_things.pop()
+        csvd = CuteSleekValueDictionary(counter)
+        # Using len(csvd) as our key; Just to guarantee we're not running over
+        # an existing key.
+        csvd[len(csvd)] = volatile_thing
+        count = counter()
+        del volatile_thing
+        gc.collect()
+        assert counter() == count + 2
