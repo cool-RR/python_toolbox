@@ -3,10 +3,11 @@
 
 import functools
 import weakref
-from garlicsim.general_misc.third_party import inspect
 
 from garlicsim.general_misc.arguments_profile import ArgumentsProfile
-from garlicsim.general_misc.sleek_refs import SleekRef, CuteSleekValueDictionary
+from garlicsim.general_misc.sleek_refs import (SleekRef,
+                                               CuteSleekValueDictionary,
+                                               SleekCallArgs)
 
 
 def cache(function):

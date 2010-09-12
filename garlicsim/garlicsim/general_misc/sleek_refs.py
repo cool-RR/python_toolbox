@@ -1,8 +1,27 @@
 import weakref
 import UserDict
 
+from garlicsim.general_misc.third_party import inspect
+
 
 __all__ = ['CuteSleekValueDictionary', 'SleekRef']
+
+class SleekRef(object):
+    def __init__(self, thing, callback=None):
+        self.callback = callback
+        if callback and not callable(callback):
+            raise Exception('%s is not a callable object.' % callback)
+        try:
+            self.ref = weakref.ref(self, thing, callback)
+        except TypeError:
+            self.ref = None
+            self.thing = thing
+        else:
+            self.thing = None
+            
+    def __call__(self):
+        return self.ref() if self.ref else self.thing
+
 
 class CuteSleekValueDictionary(UserDict.UserDict):
     """Mapping class that references values weakly.
@@ -191,21 +210,6 @@ class KeyedSleekRef(SleekRef):
     def __init__(self, ob, callback, key):
         super(KeyedSleekRef, self).__init__(ob, callback)
 
-class SleekRef(object):
-    def __init__(self, thing, callback=None):
-        self.callback = callback
-        if callback and not callable(callback):
-            raise Exception('%s is not a callable object.' % callback)
-        try:
-            self.ref = weakref.ref(self, thing, callback)
-        except TypeError:
-            self.ref = None
-            self.thing = thing
-        else:
-            self.thing = None
-            
-    def __call__(self):
-        return self.ref() if self.ref else self.thing
 
     
 class SleekCallArgs(object):
@@ -247,10 +251,11 @@ class SleekCallArgs(object):
     
         
     def destroy(self, _=None):
-        try:
-            del self.containing_dict[self]
-        except KeyError:
-            pass
+        if self.containing_dict:
+            try:
+                del self.containing_dict[self]
+            except KeyError:
+                pass
         
     def __hash__(self):
         return hash(
