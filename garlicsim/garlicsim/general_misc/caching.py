@@ -2,8 +2,75 @@
 # tododoc: Must use weakref, otherwise all garbage-collection goes kaput!
 
 import functools
+import weakref
+from garlicsim.general_misc.third_party import inspect
 
 from garlicsim.general_misc.arguments_profile import ArgumentsProfile
+from garlicsim.general_misc.sleek_ref import SleekRef
+from garlicsim.general_misc.weakref_tools import CuteWeakValueDictionary
+
+
+class SleekCallArgs(object):
+    def __init__(self, containing_dict, function, *args, **kwargs):
+        
+        self.containing_dict = containing_dict
+        
+        args_spec = inspect.getargspec(function)
+        star_args_name, star_kwargs_name = \
+                      args_spec.varargs, args_spec.keywords
+        
+        call_args = inspect.getcallargs(function, *args, **kwargs)
+        del args, kwargs
+        
+        self.weak_key_dict = weakref.WeakKeyDictionary()
+        
+        star_args = call_args.pop(star_args_name, None)
+        self.star_args_refs = [
+            SleekRef(star_arg, self.destroy) for star_arg in star_args
+        ]
+        
+        star_kwargs = call_args.pop(star_kwargs_name, None)
+        self.star_kwargs_refs = CuteWeakValueDictionary(
+            self.destroy,
+            star_kwargs
+        )
+        
+        self.args_refs = CuteWeakValueDictionary(
+            self.destroy,
+            call_args
+        )
+    
+    args = property(lambda self: dict(self.args_refs))
+    
+    star_args = property(
+        lambda self:
+            tuple((star_arg_ref() for star_arg_ref in self.star_arg_refs))
+    )
+    
+    star_kwargs = property(lambda self: dict(self.star_kwargs_refs))
+    
+        
+    def destroy(self, _=None):
+        try:
+            del self.containing_dict[self]
+        except KeyError:
+            pass
+        
+    def __hash__(self):
+        return hash(
+            (
+                self.args,
+                self.star_args,
+                self.star_kwargs
+            )
+        )
+        
+        
+
+#class SleekCallArgsDict(dict):
+    #def __init__(self, *args, **kwargs):
+        #dict.__init__(self, *args, **kwargs)
+        
 
 def cache(function):
     # todo: kwargs support
@@ -14,7 +81,7 @@ def cache(function):
     if hasattr(function, 'cache'): return function
     
     def cached(*args, **kwargs):
-        arguments_profile = ArgumentsProfile(function, *args, **kwargs)
+        callargs = inspect.getcallargs(function, *args, **kwargs)
         try:
             return cached.cache[arguments_profile]
         except KeyError:
