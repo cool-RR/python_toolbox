@@ -22,29 +22,27 @@ class SleekCallArgs(object):
         call_args = inspect.getcallargs(function, *args, **kwargs)
         del args, kwargs
         
-        self.weak_key_dict = weakref.WeakKeyDictionary()
+        self.star_args_refs = []
+        if star_args_name:
+            star_args = call_args.pop(star_args_name, None)
+            if star_args:
+                self.star_args_refs = [SleekRef(star_arg, self.destroy) for
+                                       star_arg in star_args]
         
-        star_args = call_args.pop(star_args_name, None)
-        self.star_args_refs = [
-            SleekRef(star_arg, self.destroy) for star_arg in star_args
-        ]
+        self.star_kwargs_refs = {}
+        if star_kwargs_name:            
+            star_kwargs = call_args.pop(star_kwargs_name, {})
+            if star_kwargs:
+                self.star_kwargs_refs = CuteWeakValueDictionary(self.destroy,
+                                                                star_kwargs)
         
-        star_kwargs = call_args.pop(star_kwargs_name, None)
-        self.star_kwargs_refs = CuteWeakValueDictionary(
-            self.destroy,
-            star_kwargs
-        )
-        
-        self.args_refs = CuteWeakValueDictionary(
-            self.destroy,
-            call_args
-        )
+        self.args_refs = CuteWeakValueDictionary(self.destroy, call_args)
     
     args = property(lambda self: dict(self.args_refs))
     
     star_args = property(
         lambda self:
-            tuple((star_arg_ref() for star_arg_ref in self.star_arg_refs))
+            tuple((star_arg_ref() for star_arg_ref in self.star_args_refs))
     )
     
     star_kwargs = property(lambda self: dict(self.star_kwargs_refs))
@@ -59,9 +57,9 @@ class SleekCallArgs(object):
     def __hash__(self):
         return hash(
             (
-                self.args,
+                tuple(sorted(tuple(self.args))),
                 self.star_args,
-                self.star_kwargs
+                tuple(sorted(tuple(self.star_kwargs)))
             )
         )
         
@@ -73,25 +71,21 @@ class SleekCallArgs(object):
         
 
 def cache(function):
-    # todo: kwargs support
-    # todo: try to be smart and figure out the function's signature, then be
-    # able to understand that squared(x) is the same as sqaured(number=x).
     
     # In case we're being given a function that is already cached:
     if hasattr(function, 'cache'): return function
     
+    cache_dict = {}
+    
     def cached(*args, **kwargs):
-        callargs = inspect.getcallargs(function, *args, **kwargs)
+        sleek_call_args = SleekCallArgs(cache_dict, function, *args, **kwargs)
         try:
-            return cached.cache[arguments_profile]
+            return cached.cache[sleek_call_args]
         except KeyError:
-            cached.cache[arguments_profile] = value = \
-                  function(*arguments_profile.args,
-                           **arguments_profile.kwargs)
+            cached.cache[sleek_call_args] = value = function(*args, **kwargs)
             return value
             
-    cached.cache = {} # weakref.WeakKeyDictionary()
-    # todo: no weakref on this baby, be advised
+    cached.cache = cache_dict
     
     functools.update_wrapper(cached, function)
     
