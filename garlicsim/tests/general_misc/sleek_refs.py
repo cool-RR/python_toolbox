@@ -17,6 +17,7 @@ class A():
     def s():
         pass
     
+    
 def test_sleek_ref():
     
     def counter(_=None):
@@ -56,4 +57,7 @@ def test_sleek_ref():
         del unvolatile_thing
         gc.collect()
         assert counter() == count + 1
-        assert sleek_ref() is not None 
+        assert sleek_ref() is not None
+        
+def test_cute_sleek_value_dictionary():
+    pass
