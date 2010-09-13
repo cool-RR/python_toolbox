@@ -32,11 +32,6 @@ FUZZ = 0.0001
 def _is_deterministic(simpack):
     return simpack.__name__.split('.')[-1] == 'life'
 
-def setup():
-    pass
-
-def trivial_test():
-    pass
 
 def simpack_test():
     
