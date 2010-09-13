@@ -3,6 +3,8 @@ import UserDict
 
 from garlicsim.general_misc.third_party import inspect
 
+# tododoc: break down to package
+
 
 __all__ = ['CuteSleekValueDictionary', 'SleekRef']
 
@@ -247,6 +249,13 @@ class SleekCallArgs(object):
                                                                 star_kwargs)
         
         self.args_refs = CuteSleekValueDictionary(self.destroy, call_args)
+        
+        # Calling hash now so it will get cached for the future; In the future
+        # the `.args`, `.star_args` and `.star_kwargs` attributes may change, so
+        # we must record the hash now:
+        hash(self)
+        
+        
     
     args = property(lambda self: dict(self.args_refs))
     
@@ -266,16 +275,19 @@ class SleekCallArgs(object):
             except KeyError:
                 pass
         
-            
+    
     def __hash__(self):
-        result = hash(
-            (
-                tuple(sorted(tuple(self.args))),
-                self.star_args,
-                tuple(sorted(tuple(self.star_kwargs)))
+        if hasattr(self, '_hash'):
+            return self._hash
+        else:
+            self._hash = hash(
+                (
+                    tuple(sorted(tuple(self.args))),
+                    self.star_args,
+                    tuple(sorted(tuple(self.star_kwargs)))
+                )
             )
-        )
-        return result
+            return self._hash
 
     
     def __eq__(self, other):

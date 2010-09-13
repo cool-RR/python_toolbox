@@ -5,9 +5,11 @@ import functools
 import weakref
 
 from garlicsim.general_misc.arguments_profile import ArgumentsProfile
-from garlicsim.general_misc.sleek_refs import (SleekRef,
-                                               CuteSleekValueDictionary,
-                                               SleekCallArgs)
+
+from garlicsim.general_misc.sleek_refs import SleekCallArgs
+
+
+# tododoc __all__
 
 
 def cache(function):
@@ -34,8 +36,10 @@ def cache(function):
     
     return cached
 
+
 class SelfPlaceholder(object):
     pass # todo: make uninstanciable
+
 
 class CachedType(type):
     def __new__(self, *args, **kwargs):
@@ -44,9 +48,6 @@ class CachedType(type):
         return result
     
     def __call__(cls, *args, **kwargs):
-        # todo: should not use the generic cache function. need to analyze
-        # signature of __init__. Possibly use the same args&kwargs grokker for
-        # this and `cache`.
         sleek_call_args = SleekCallArgs(
             cls.__cache,
             cls.__init__,
@@ -78,7 +79,8 @@ class LazilyEvaluatedConstantProperty(object):
         
             personality = LazilyEvaluatedConstantProperty(_get_personality)
     
-    '''
+    '''#tododoc: test as decorator
+    #tododoc: probably rename to CachedProperty, think
     def __init__(self, getter, name=None):
         '''
         Construct the LEC-property.
@@ -109,6 +111,4 @@ class LazilyEvaluatedConstantProperty(object):
         
         return value
 
-    
-        
     

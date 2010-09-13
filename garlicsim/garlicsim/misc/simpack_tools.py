@@ -35,6 +35,7 @@ def _get_from_state_class(state_class):
     except garlicsim.misc.InvalidSimpack:
         raise garlicsim.misc.GarlicSimException("Could not guess simpack "
                                                 "correctly from state object.")
+        # tododoc: This might mask a real InvalidSimpack exception
     return simpack
     
     
