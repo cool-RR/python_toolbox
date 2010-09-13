@@ -135,7 +135,7 @@ class CrossProcessPersistent(Persistent):
             return new_copy
 
         
-    personality = caching.LazilyEvaluatedConstantProperty(Personality)
+    personality = caching.CachedProperty(Personality)
 
 
 

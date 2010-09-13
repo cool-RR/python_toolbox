@@ -1,6 +1,6 @@
 
 from garlicsim.general_misc.caching import (cache, CachedType,
-                                            LazilyEvaluatedConstantProperty)
+                                            CachedProperty)
 
 def rotating_func(self):
     if not hasattr(rotating_func, 'i'):
@@ -14,7 +14,7 @@ def rotating_func(self):
 def test_lec_property():
         
     class A(object):
-        personality = LazilyEvaluatedConstantProperty(rotating_func)
+        personality = CachedProperty(rotating_func)
     
     a = A()
     assert a.personality == a.personality == a.personality
@@ -28,7 +28,7 @@ def test_lec_property():
 def test_lec_property_with_name():
         
     class A(object):
-        personality = LazilyEvaluatedConstantProperty(rotating_func,
+        personality = CachedProperty(rotating_func,
                                                       name='personality')
     
     a = A()
@@ -43,7 +43,7 @@ def test_lec_property_with_name():
 def test_lec_property_with_wrong_name():
         
     class A(object):
-        personality = LazilyEvaluatedConstantProperty(rotating_func,
+        personality = CachedProperty(rotating_func,
                                                       name='meow')
     
     a = A()
