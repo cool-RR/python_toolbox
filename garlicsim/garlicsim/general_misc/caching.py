@@ -11,6 +11,9 @@ from garlicsim.general_misc.sleek_refs import (SleekRef,
 
 
 def cache(function):
+    # todo idea: figure how how complex the function's argspec is, and then
+    # compile a function accordingly, so functions with a simple argspec won't
+    # have to go through so much shit.
     
     # In case we're being given a function that is already cached:
     if hasattr(function, 'cache'): return function

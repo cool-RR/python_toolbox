@@ -268,13 +268,14 @@ class SleekCallArgs(object):
         
             
     def __hash__(self):
-        return hash(
+        result = hash(
             (
                 tuple(sorted(tuple(self.args))),
                 self.star_args,
                 tuple(sorted(tuple(self.star_kwargs)))
             )
         )
+        return result
 
     
     def __eq__(self, other):
