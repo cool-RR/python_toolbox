@@ -215,6 +215,10 @@ class KeyedSleekRef(SleekRef):
 
     
 class SleekCallArgs(object):
+    # What if we one of the args gets gc'ed before this SCA gets added to the
+    # dictionary? It will render this SCA invalid, but we'll still be in the
+    # dict. So make note to user: Always keep reference to args and kwargs until
+    # the SCA gets added to the dict.
     def __init__(self, containing_dict, function, *args, **kwargs):
         
         self.containing_dict = containing_dict
@@ -259,6 +263,7 @@ class SleekCallArgs(object):
             except KeyError:
                 pass
         
+            
     def __hash__(self):
         return hash(
             (
@@ -267,6 +272,7 @@ class SleekCallArgs(object):
                 tuple(sorted(tuple(self.star_kwargs)))
             )
         )
+
     
     def __eq__(self, other):
         if not isinstance(other, SleekCallArgs):
@@ -274,3 +280,5 @@ class SleekCallArgs(object):
         return self.args == other.args and \
                self.star_args == other.star_args and \
                self.star_kwargs == other.star_kwargs
+    
+    

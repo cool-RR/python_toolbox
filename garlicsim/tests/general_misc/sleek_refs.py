@@ -132,3 +132,28 @@ def test_cute_sleek_value_dictionary():
         del unvolatile_thing
         gc.collect()
         assert counter() == count + 1
+        
+
+def test_sleek_call_args():
+    
+    volatile_things = [A(), 1, 4.5, 'meow', u'woof', [1, 2], (1, 2), {1: 2},
+                       set([1, 2, 3])]
+    unvolatile_things = [A.s, __builtins__, list, type,  list.append, str.join,
+                         sum]
+    def f(a, b, **kwargs):
+        pass
+    
+    sca_dict = {}
+    
+    args = (1, 2)
+    sca1 = SleekCallArgs(sca_dict, f, *args)
+    sca_dict[sca1] = 'meow'
+    del args
+    assert len(sca_dict) == 1
+    
+    args = (1, A())
+    sca2 = SleekCallArgs(sca_dict, f, *args)
+    sca_dict[sca2] = 'meow'
+    del args
+    assert len(sca_dict) == 1
+    
