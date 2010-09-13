@@ -140,7 +140,7 @@ def test_sleek_call_args():
                        set([1, 2, 3])]
     unvolatile_things = [A.s, __builtins__, list, type,  list.append, str.join,
                          sum]
-    def f(a, b, **kwargs):
+    def f(*args, **kwargs):
         pass
     
     sca_dict = {}
@@ -149,11 +149,13 @@ def test_sleek_call_args():
     sca1 = SleekCallArgs(sca_dict, f, *args)
     sca_dict[sca1] = 'meow'
     del args
+    gc.collect()
     assert len(sca_dict) == 1
     
     args = (1, A())
     sca2 = SleekCallArgs(sca_dict, f, *args)
     sca_dict[sca2] = 'meow'
     del args
+    gc.collect()
     assert len(sca_dict) == 1
     

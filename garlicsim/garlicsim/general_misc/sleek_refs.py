@@ -7,6 +7,7 @@ from garlicsim.general_misc.third_party import inspect
 __all__ = ['CuteSleekValueDictionary', 'SleekRef']
 
 class Ref(weakref.ref):
+    # To allow data attributes.
     pass
 
 class SleekRef(object):
@@ -41,6 +42,7 @@ class CuteSleekValueDictionary(UserDict.UserDict):
     def __init__(self, callback, *args, **kw):
         self.callback = callback
         def remove(wr, selfref=weakref.ref(self)):
+            print('removing, callback is %s' % s) # tododoc: kill
             self = selfref()
             if self is not None:
                 del self.data[wr.key]
@@ -257,6 +259,7 @@ class SleekCallArgs(object):
     
         
     def destroy(self, _=None):
+        print('destroying') # tododoc: kill
         if self.containing_dict:
             try:
                 del self.containing_dict[self]
