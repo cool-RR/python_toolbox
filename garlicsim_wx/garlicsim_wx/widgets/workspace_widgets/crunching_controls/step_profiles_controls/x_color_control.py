@@ -11,11 +11,13 @@ class XColorControl(wx.Window):
                            size=(25, 10), style=wx.SIMPLE_BORDER)
         self.color = color or wx.Color(0, 0, 0)
         self.Bind(wx.EVT_PAINT, self.on_paint)
+        self._pen = wx.Pen(wx.Color(0, 0, 0), width=0, style=wx.TRANSPARENT)
         
     
     def on_paint(self, event):
         dc = wx.PaintDC(self)
         dc.SetBrush(wx.Brush(self.color))
+        dc.SetPen(self._pen)
         dc.DrawRectangle(0, 0, *self.GetSize())
         dc.Destroy()
         

@@ -82,6 +82,8 @@ class StepProfilesList(hypertreelist.HyperTreeList):
                 item.color_control.set_color(color)
         
             self.SetItemText(item, step_profile.__repr__(short_form=True), 1)
+            item.color_control.SetSize((item.color_control.GetSize(0),
+                                       item.GetHeight() - 4))
         
         for item in self.items:
             if item.step_profile not in self.gui_project.step_profiles:
