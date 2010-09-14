@@ -20,9 +20,10 @@ class StepProfilesList(hypertreelist.HyperTreeList):
     
     def __init__(self, parent, frame):
         
-        assert isinstance(frame, garlicsim_wx.Frame)
         self.frame = frame
+        assert isinstance(self.frame, garlicsim_wx.Frame)
         self.gui_project = frame.gui_project
+        assert isinstance(self.gui_project, garlicsim_wx.GuiProject)
         
         hypertreelist.HyperTreeList.__init__(
             self,
@@ -44,11 +45,21 @@ class StepProfilesList(hypertreelist.HyperTreeList):
         
         self.items = self.root_item._children
         
-        #self.static_text = wx.StaticText(self, -1, 'boobies')
+        self.static_text = wx.StaticText(self.GetMainWindow(), -1, 'boobiesqqq')
         
-        self.AppendItem(self.root_item, 'boobs', ct_type=1, wnd=None)
+        self.AppendItem(self.root_item, 'boobs', ct_type=1, wnd=self.static_text)
         self.AppendItem(self.root_item, 'ass', ct_type=2, wnd=None)
         self.AppendItem(self.root_item, 'tits', ct_type=2, wnd=None)
         
+        #self.gui_project.step_profiles_set_modified_emitter.add_output(
+            #self.update
+        #)
+        
     def update(self):
-        pass
+        for step_profile in self.gui_project.step_profiles:
+            try:
+                item = self.step_profiles_to_items[step_profile]
+            except KeyError:
+                item = self.AppendItem(self.root_item, 'ass', ct_type=2, wnd=None)
+            else:
+                pass
