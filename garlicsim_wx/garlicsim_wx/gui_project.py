@@ -24,7 +24,7 @@ from garlicsim.general_misc import dict_tools
 from general_misc.stringsaver import s2i,i2s
 from garlicsim.general_misc.infinity import Infinity
 from garlicsim.general_misc import binary_search
-from garlicsim.general_misc.ordered_set import OrderedSet
+from garlicsim_wx.general_misc.emitting_ordered_set import EmittingOrderedSet
 from garlicsim_wx.general_misc import thread_timer
 from garlicsim_wx.general_misc import wx_tools
 
@@ -160,7 +160,7 @@ class GuiProject(object):
         "pseudo".
         '''
         
-        self.step_profiles = OrderedSet()
+        self.step_profiles = EmittingOrderedSet(emitter=None)
 
         self.__init_emitters()
         self.__init_menu_enablings()
@@ -294,6 +294,13 @@ class GuiProject(object):
             
             self.default_buffer_modified_emitter = es.make_emitter(
                 name='default_buffer_modified',
+            )
+            
+            self.step_profiles_set_modified_emitter = es.make_emitter(
+                name='step_profiles_set_modified',
+            )
+            self.step_profiles.set_emitter(
+                self.step_profiles_set_modified_emitter
             )
             
             self.all_menus_need_recalculation_emitter = es.make_emitter(
