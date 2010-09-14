@@ -1,3 +1,5 @@
+from __future__ import division
+
 from garlicsim.general_misc import cute_iter_tools
 
 def find_clear_place_on_circle(circle_points, circle_size=1):
@@ -14,7 +16,18 @@ def find_clear_place_on_circle(circle_points, circle_size=1):
         
         clear_space[first_point] = second_point - first_point
         
+    # That's the only one that might be negative, so we ensure it's positive:
     clear_space[last_point] %= circle_size
-    # That's the only one that might be negative
+    
+    maximum_clear_space = max(clear_space.itervalues())
+    
+    winners = [key for (key, value) in clear_space.iteritems()
+               if value == maximum_clear_space]
+    
+    winner = winners[0]
+    
+    result = winner + (maximum_clear_space / 2)
+    
+    return result
         
         
