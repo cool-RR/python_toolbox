@@ -21,15 +21,17 @@ def consecutive_pairs(iterable, wrap_around=False):
     be [(0, 1), (1, 2), (2, 3)]. (Except it would be an iterator and not an
     actual list.)
     '''# tododoc wrap_around
+
+    iterator = iter(iterable)
     
     try:
-        first_item = iterable.next()
+        first_item = iterator.next()
     except StopIteration:
         raise StopIteration
     
     old = first_item
     
-    for current in iterable:
+    for current in iterator:
         yield (old, current)
         old = current
         
