@@ -1,4 +1,4 @@
-from garlicsim.general_misc.ordered_set import OrderedSet
+from garlicsim.general_misc.ordered_set import OrderedSet, KEY, PREV, NEXT
 from garlicsim_wx.general_misc.emitters import Emitter
 
 class EmittingOrderedSet(OrderedSet):
