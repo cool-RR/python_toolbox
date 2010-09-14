@@ -24,6 +24,7 @@ from garlicsim.general_misc import dict_tools
 from general_misc.stringsaver import s2i,i2s
 from garlicsim.general_misc.infinity import Infinity
 from garlicsim.general_misc import binary_search
+from garlicsim.general_misc.ordered_set import OrderedSet
 from garlicsim_wx.general_misc import thread_timer
 from garlicsim_wx.general_misc import wx_tools
 
@@ -158,6 +159,8 @@ class GuiProject(object):
         make some things smoother in the program. This is also why it's called
         "pseudo".
         '''
+        
+        self.step_profiles = OrderedSet()
 
         self.__init_emitters()
         self.__init_menu_enablings()
