@@ -37,14 +37,14 @@ class StepProfilesList(hypertreelist.HyperTreeList):
                 wx.TR_FULL_ROW_HIGHLIGHT | \
                 wx.TR_ROW_LINES | \
                 wx.TR_HIDE_ROOT | \
-                0#hypertreelist.TR_NO_HEADER
+                hypertreelist.TR_NO_HEADER
                 )
         )        
         
         self.step_profiles_to_items = weakref.WeakKeyDictionary()
         
-        self.AddColumn('')
-        self.AddColumn('')
+        self.AddColumn('', width=50)
+        self.AddColumn('', width=150)
         self.SetMainColumn(0)
         self.root_item = self.AddRoot('')
         
@@ -82,7 +82,7 @@ class StepProfilesList(hypertreelist.HyperTreeList):
                 item.color_control.set_color(color)
         
             self.SetItemText(item, step_profile.__repr__(short_form=True), 1)
-            item.color_control.SetSize((item.color_control.GetSize(0),
+            item.color_control.SetSize((item.color_control.GetSize()[0],
                                        item.GetHeight() - 4))
         
         for item in self.items:
