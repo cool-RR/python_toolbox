@@ -1,4 +1,4 @@
-
+import UserDict
 from weakref import ref
 
 class WeakKeyDefaultDict(UserDict.UserDict, object): #todo: needs testing

@@ -144,10 +144,8 @@ class StepProfile(ArgumentsProfile):
 
         args_string = ', '.join((repr(thing) for thing in self.args))
         kwargs_string = ', '.join(
-            ('='.join(
-                (str(key), repr(value)) for
-                (key, value) in self.kwargs.iteritems())
-             )
+            ('='.join((str(key), repr(value))) for
+            (key, value) in self.kwargs.iteritems())
         )
         strings = filter(None, (args_string, kwargs_string))
         big_string = ', '.join(strings)
