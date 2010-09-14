@@ -13,6 +13,9 @@ from garlicsim_wx.general_misc import emitters
 import garlicsim, garlicsim_wx
 from garlicsim_wx.widgets import WorkspaceWidget
 
+from .step_profile_entry import StepProfileEntry
+from .x_color_control import XColorControl
+
     
 class StepProfilesList(hypertreelist.HyperTreeList):
     '''tododoc'''
@@ -33,12 +36,13 @@ class StepProfilesList(hypertreelist.HyperTreeList):
                 wx.TR_FULL_ROW_HIGHLIGHT | \
                 wx.TR_ROW_LINES | \
                 wx.TR_HIDE_ROOT | \
-                hypertreelist.TR_NO_HEADER
+                0#hypertreelist.TR_NO_HEADER
                 )
         )        
         
         self.step_profiles_to_items = weakref.WeakKeyDictionary()
         
+        self.AddColumn('')
         self.AddColumn('')
         self.SetMainColumn(0)
         self.root_item = self.AddRoot('')
@@ -47,7 +51,10 @@ class StepProfilesList(hypertreelist.HyperTreeList):
         
         self.static_text = wx.StaticText(self.GetMainWindow(), -1, 'boobiesqqq')
         
-        self.AppendItem(self.root_item, '', ct_type=1, wnd=self.static_text)
+        item = self.AppendItem(self.root_item, '', ct_type=1, wnd=self.static_text)
+        self.SetItemText(item, 'muaww', 1)
+        
+        
         self.AppendItem(self.root_item, 'ass', ct_type=2, wnd=None)
         self.AppendItem(self.root_item, 'tits', ct_type=2, wnd=None)
         
@@ -57,9 +64,16 @@ class StepProfilesList(hypertreelist.HyperTreeList):
         
     def update(self):
         for step_profile in self.gui_project.step_profiles:
+            color = self.gui_project.step_profiles_to_hues[step_profile]
             try:
                 item = self.step_profiles_to_items[step_profile]
             except KeyError:
-                item = self.AppendItem(self.root_item, 'ass', ct_type=2, wnd=None)
+                #entry = StepProfileEntry(self, step_profile)
+                color_control = XColorControl(self, color)
+                item = self.AppendItem(self.root_item, '', ct_type=2, wnd=color_control)
+                item.color_control = color_control
+                self.step_profiles_to_items[step_profile] = item
             else:
-                pass
+                item.color_control.set_control(color)
+        
+            self.SetItemText(item, step_profile.__repr__(short_form=True), 1)
