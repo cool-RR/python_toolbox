@@ -13,23 +13,28 @@ import __builtin__
 from garlicsim.general_misc.infinity import Infinity
 
 
-def consecutive_pairs(iterable):
+def consecutive_pairs(iterable, wrap_around=False):
     '''
     Iterate over successive pairs from the iterable.
     
     Example: if the iterable is [0, 1, 2, 3], then its `consecutive_pairs` would
     be [(0, 1), (1, 2), (2, 3)]. (Except it would be an iterator and not an
     actual list.)
-    '''
+    '''# tododoc wrap_around
     
-    first_run = True
-    old = None
+    try:
+        first_item = iterable.next()
+    except StopIteration:
+        raise StopIteration
+    
+    old = first_item
+    
     for current in iterable:
-        if not first_run:
-            yield (old, current)
-        else:
-            first_run = False
+        yield (old, current)
         old = current
+        
+    if wrap_around:
+        yield (current, first_item)
 
         
 def orderless_combinations(iterable, n, start=0):

@@ -14,6 +14,7 @@ import copy
 import functools
 import Queue
 import time
+import weakref
 
 import wx
 import wx.lib.scrolledpanel
@@ -25,6 +26,9 @@ from general_misc.stringsaver import s2i,i2s
 from garlicsim.general_misc.infinity import Infinity
 from garlicsim.general_misc import binary_search
 from garlicsim_wx.general_misc.emitting_ordered_set import EmittingOrderedSet
+from garlicsim.general_misc.weak_key_default_dict import WeakKeyDefaultDict
+from garlicsim_wx.misc.step_profile_hue_default_factory import \
+     StepProfileHueDefaultFactory
 from garlicsim_wx.general_misc import thread_timer
 from garlicsim_wx.general_misc import wx_tools
 
@@ -161,6 +165,10 @@ class GuiProject(object):
         '''
         
         self.step_profiles = EmittingOrderedSet(emitter=None)
+        
+        self.step_profiles_to_hues = WeakKeyDefaultDict(
+            default_factory=StepProfileHueDefaultFactory(self)
+        )
 
         self.__init_emitters()
         self.__init_menu_enablings()
