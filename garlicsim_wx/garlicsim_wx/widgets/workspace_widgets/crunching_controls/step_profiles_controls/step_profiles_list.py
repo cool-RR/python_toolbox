@@ -47,7 +47,7 @@ class StepProfilesList(hypertreelist.HyperTreeList):
         
         self.static_text = wx.StaticText(self.GetMainWindow(), -1, 'boobiesqqq')
         
-        self.AppendItem(self.root_item, 'boobs', ct_type=1, wnd=self.static_text)
+        self.AppendItem(self.root_item, '', ct_type=1, wnd=self.static_text)
         self.AppendItem(self.root_item, 'ass', ct_type=2, wnd=None)
         self.AppendItem(self.root_item, 'tits', ct_type=2, wnd=None)
         
