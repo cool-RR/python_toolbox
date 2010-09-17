@@ -40,8 +40,8 @@ def get_background_brush():
     return wx.Brush(get_background_color())
 
 
-def wx_color_to_html_color(color):
-    rgb = color.GetRGB()
+def wx_color_to_html_color(wx_color):
+    rgb = wx_color.GetRGB()
     (green_blue, red) = divmod(rgb, 256)
     (blue, green) = divmod(green_blue, 256)
     return '#%02x%02x%02x' % (red, green, blue)
@@ -51,13 +51,21 @@ def hls_to_wx_color(hls, alpha=255):
     return rgb_to_wx_color(colorsys.hls_to_rgb(*hls), alpha=alpha)
 
 
-def wx_color_to_hls(color):
-    return colorsys.rgb_to_hls(color.red, color.blue, color.green)
+def wx_color_to_hls(wx_color):
+    return colorsys.rgb_to_hls(wx_color.red, wx_color.blue, wx_color.green)
 
 
 def rgb_to_wx_color(rgb, alpha=255):
     r, g, b = rgb
     return wx.Color(r * 255, g * 255, b * 255, alpha)
+
+
+def wx_color_to_rgb(wx_color):
+    return (
+        wx_color.red / 255,
+        wx_color.blue / 255,
+        wx_color.green / 255
+    )
 
 
 def post_event(evt_handler, event_binder, source=None):

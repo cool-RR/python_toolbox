@@ -13,7 +13,7 @@ from garlicsim_wx.general_misc import color_tools
 BIG_LENGTH = 301
 THICKNESS = 21
 HALF_THICKNESS = THICKNESS / 2
-AA_THICKNESS = 2
+AA_THICKNESS = 1.5
 RADIUS = int((BIG_LENGTH / 2) - THICKNESS - 25)
 
 two_pi = math.pi * 2
@@ -27,12 +27,14 @@ def make_bitmap(lightness=1, saturation=1):
     
     dc.SetBrush(wx_tools.get_background_brush())
     dc.SetPen(wx.TRANSPARENT_PEN)
-    dc.DrawRectangle(-5, 5, BIG_LENGTH + 10, BIG_LENGTH + 10)
+    dc.DrawRectangle(-5, -5, BIG_LENGTH + 10, BIG_LENGTH + 10)
     
     center_x = center_y = BIG_LENGTH // 2 
     wheel_start_radius = RADIUS - HALF_THICKNESS
     wheel_end_radius = RADIUS + HALF_THICKNESS
-    background_color = wx_tools.get_background_color()
+    background_color_rgb = wx_tools.wx_color_to_rgb(
+        wx_tools.get_background_color()
+    )
     
     for x, y in itertools.product(xrange(BIG_LENGTH), xrange(BIG_LENGTH)):
         distance = ((x - center_x) ** 2 + (y - center_y) ** 2) ** 0.5
@@ -56,13 +58,16 @@ def make_bitmap(lightness=1, saturation=1):
                 
                 aa_ratio = aa_distance / AA_THICKNESS
                 
-                final_rgb = \
-                    color_tools.mix_rgb(aa_ratio, background_color, raw_rgb)
+                final_rgb = color_tools.mix_rgb(
+                    aa_ratio,
+                    background_color_rgb,
+                    raw_rgb
+                )
             
             else:
                 final_rgb = raw_rgb    
                 
-            color = wx_tools.hls_to_wx_color(hls, alpha=((1 - aa_ratio) * 255))
+            color = wx_tools.rgb_to_wx_color(final_rgb)
             pen = wx.Pen(color)
             dc.SetPen(pen)
             
@@ -97,9 +102,6 @@ class Wheel(wx.Panel):
         ox, oy = ((4 - bw) / 2 , (4 - bh) / 2) #tododoc: test and doc
         
         dc.DrawBitmap(self.bitmap, ox, oy)
-        
-        dc.SetPen(wx.Pen(wx.Color(255, 0, 0, 50)))
-        dc.DrawCircle(200, 200, 50)
                 
         
         dc.Destroy()
