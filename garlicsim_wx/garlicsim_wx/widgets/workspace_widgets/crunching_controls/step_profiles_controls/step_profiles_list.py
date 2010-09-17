@@ -73,7 +73,7 @@ class StepProfilesList(hypertreelist.HyperTreeList):
                 item = self.step_profiles_to_items[step_profile]
             except KeyError:
                 #entry = StepProfileEntry(self, step_profile)
-                color_control = ColorControl(self, color)
+                color_control = ColorControl(self, step_profile, color)
                 item = self.AppendItem(self.root_item, '', ct_type=2, wnd=color_control)
                 item.step_profile = step_profile
                 item.color_control = color_control

@@ -10,7 +10,7 @@ from garlicsim.general_misc import caching
 from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.general_misc import color_tools
 
-BIG_LENGTH = 301
+BIG_LENGTH = 201
 THICKNESS = 21
 HALF_THICKNESS = THICKNESS / 2
 AA_THICKNESS = 1.5

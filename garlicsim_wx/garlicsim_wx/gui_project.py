@@ -26,7 +26,8 @@ from general_misc.stringsaver import s2i,i2s
 from garlicsim.general_misc.infinity import Infinity
 from garlicsim.general_misc import binary_search
 from garlicsim_wx.general_misc.emitting_ordered_set import EmittingOrderedSet
-from garlicsim.general_misc.weak_key_default_dict import WeakKeyDefaultDict
+from garlicsim_wx.general_misc.emitting_weak_key_default_dict import \
+     EmittingWeakKeyDefaultDict
 from garlicsim_wx.misc.step_profile_hue_default_factory import \
      StepProfileHueDefaultFactory
 from garlicsim_wx.general_misc import thread_timer
@@ -166,7 +167,8 @@ class GuiProject(object):
         
         self.step_profiles = EmittingOrderedSet(emitter=None)
         
-        self.step_profiles_to_hues = WeakKeyDefaultDict(
+        self.step_profiles_to_hues = EmittingWeakKeyDefaultDict(
+            emitter=None,
             default_factory=StepProfileHueDefaultFactory(self)
         )
 
@@ -309,6 +311,13 @@ class GuiProject(object):
             )
             self.step_profiles.set_emitter(
                 self.step_profiles_set_modified_emitter
+            )
+            
+            self.step_profiles_to_hues_modified_emitter = es.make_emitter(
+                name='step_profiles_to_hues_modified',
+            )
+            self.step_profiles_to_hues.set_emitter(
+                self.step_profiles_to_hues_modified_emitter
             )
             
             self.all_menus_need_recalculation_emitter = es.make_emitter(

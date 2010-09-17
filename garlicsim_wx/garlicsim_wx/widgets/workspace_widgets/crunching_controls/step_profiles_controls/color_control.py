@@ -10,11 +10,13 @@ import garlicsim_wx
 
 
 class ColorControl(wx.Window):
-    def __init__(self, step_profiles_list, color=None):
+    def __init__(self, step_profiles_list, step_profile, color):
         wx.Window.__init__(self, step_profiles_list.GetMainWindow(),
                            size=(25, 10), style=wx.SIMPLE_BORDER)
-
-        self.color = color or wx.Color(0, 0, 0)
+                
+        self.step_profiles_list = step_profiles_list
+        self.step_profile = step_profile
+        self.color = color
         
         self._pen = wx.Pen(wx.Color(0, 0, 0), width=0, style=wx.TRANSPARENT)
         
@@ -33,9 +35,14 @@ class ColorControl(wx.Window):
     
     def on_mouse_left_down(self, event):
         old_hls = wx_tools.wx_color_to_hls(self.color)
+        step_profiles_to_hues = \
+            self.step_profiles_list.frame.gui_project.step_profiles_to_hues
+        
+        setter = lambda color: \
+                 step_profiles_to_hues.__setitem__(self.step_profile, color)
+        
         hue_selection_dialog = \
-            HueSelectionDialog(self, setter=lambda color: None,
-                               old_hls=old_hls, lightness=0.3,
+            HueSelectionDialog(self, setter, old_hls=old_hls, lightness=0.3,
                                title='Select hue for step profile')
         hue_selection_dialog.ShowModal()
         hue_selection_dialog.Destroy()
