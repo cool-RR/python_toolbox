@@ -2,8 +2,12 @@ from __future__ import division
 
 import wx
 
+from garlicsim_wx.general_misc import wx_tools
+
+
 def ratio_to_round_degrees(ratio):
     return int(ratio * 360)
+
 
 def degrees_to_ratio(degrees):
     return degrees / 360
@@ -12,6 +16,8 @@ def degrees_to_ratio(degrees):
 class Textual(wx.Panel):
     def __init__(self, hue_selection_dialog):
         wx.Panel.__init__(self, parent=hue_selection_dialog, size=(75, 100))
+        self.SetBackgroundColour(wx_tools.get_background_color())
+        
         self.hue_selection_dialog = hue_selection_dialog
         self.hue = hue_selection_dialog.hue
         
