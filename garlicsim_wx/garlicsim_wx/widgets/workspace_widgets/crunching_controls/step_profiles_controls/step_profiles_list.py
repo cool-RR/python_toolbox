@@ -14,8 +14,7 @@ import garlicsim, garlicsim_wx
 from garlicsim_wx.widgets import WorkspaceWidget
 from garlicsim_wx.misc.colors import hue_to_dark_color
 
-from .step_profile_entry import StepProfileEntry
-from .x_color_control import XColorControl
+from .color_control import ColorControl
 
 
 class StepProfilesList(hypertreelist.HyperTreeList):
@@ -74,7 +73,7 @@ class StepProfilesList(hypertreelist.HyperTreeList):
                 item = self.step_profiles_to_items[step_profile]
             except KeyError:
                 #entry = StepProfileEntry(self, step_profile)
-                color_control = XColorControl(self, color)
+                color_control = ColorControl(self, color)
                 item = self.AppendItem(self.root_item, '', ct_type=2, wnd=color_control)
                 item.step_profile = step_profile
                 item.color_control = color_control

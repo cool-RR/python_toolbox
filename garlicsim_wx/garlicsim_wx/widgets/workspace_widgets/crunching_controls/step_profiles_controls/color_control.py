@@ -5,13 +5,18 @@ import wx
 import garlicsim_wx
 
 
-class XColorControl(wx.Window):
+class ColorControl(wx.Window):
     def __init__(self, step_profiles_list, color=None):
         wx.Window.__init__(self, step_profiles_list.GetMainWindow(),
                            size=(25, 10), style=wx.SIMPLE_BORDER)
+
         self.color = color or wx.Color(0, 0, 0)
-        self.Bind(wx.EVT_PAINT, self.on_paint)
+        
         self._pen = wx.Pen(wx.Color(0, 0, 0), width=0, style=wx.TRANSPARENT)
+        
+        self.Bind(wx.EVT_PAINT, self.on_paint)
+        self.Bind(wx.EVT_LEFT_DOWN, self.on_mouse_left_down)
+        
         
     
     def on_paint(self, event):
@@ -22,6 +27,10 @@ class XColorControl(wx.Window):
         dc.Destroy()
         
     
+    def on_mouse_left_down(self, event):
+        1/0
+        
+        
     def set_color(self, color):
         if self.color != color:
             self.color = color
