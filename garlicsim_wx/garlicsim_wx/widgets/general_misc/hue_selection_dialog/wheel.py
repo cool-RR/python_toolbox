@@ -13,7 +13,7 @@ from garlicsim_wx.general_misc import color_tools
 BIG_LENGTH = 301
 THICKNESS = 21
 AA_THICKNESS = 2
-RADIUS = int((LENGTH / 2) - THICKNESS - 25)
+RADIUS = int((BIG_LENGTH / 2) - THICKNESS - 25)
 
 
 @caching.cache
@@ -51,14 +51,23 @@ def make_bitmap(lightness=1, saturation=1):
                 
                 aa_ratio = aa_distance / AA_THICKNESS
                 
-                final_rgb = \
-                    color_tools.mix_rgb(aa_ratio, background_color, raw_rgb)
-                    
+                #final_rgb = \
+                    #color_tools.mix_rgb(aa_ratio, background_color, raw_rgb)
+            
+            else:
+                aa_ratio = 0
+                #final_rgb = raw_rgb
+                
+                
+            color = wx.Color(*raw_rgb, alpha=((1 - aa_ratio) * 255))
+            pen = wx.Pen(color)
+            
+            dc.DrawPoint(x, y)
             
         
     
-    dc.SetPen(wx.Pen('red'))
-    dc.DrawLine(0, 0, 100, 100)
+    #dc.SetPen(wx.Pen('red'))
+    #dc.DrawLine(0, 0, 100, 100)
     dc.Destroy()
     return bitmap
 
