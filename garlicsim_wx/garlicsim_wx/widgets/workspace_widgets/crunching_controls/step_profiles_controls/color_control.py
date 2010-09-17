@@ -4,6 +4,7 @@ import wx
 
 from garlicsim_wx.widgets.general_misc.hue_selection_dialog \
      import HueSelectionDialog
+from garlicsim_wx.general_misc import wx_tools
 
 import garlicsim_wx
 
@@ -31,8 +32,10 @@ class ColorControl(wx.Window):
         
     
     def on_mouse_left_down(self, event):
+        old_hls = wx_tools.wx_color_to_hls(self.color)
         hue_selection_dialog = \
-            HueSelectionDialog(self, setter=lambda color: None, lightness=0.3,
+            HueSelectionDialog(self, setter=lambda color: None,
+                               old_hls=old_hls, lightness=0.3,
                                title='Select hue for step profile')
         hue_selection_dialog.ShowModal()
         

@@ -21,7 +21,7 @@ class HueSelectionDialog(CuteDialog):
 
         self.saturation = saturation
         
-        self.old_hls = old_hls
+        self.old_hls = old_hls # tododoc: fix to match give l and s
         
         self.setter = setter
         
@@ -65,7 +65,12 @@ class HueSelectionDialog(CuteDialog):
 
         
         self.SetSizer(self.main_v_sizer)
-        self.main_v_sizer.Fit()
+        self.main_v_sizer.Fit(self)
         
         
+    def on_ok(self, event):
+        pass
         
+    
+    def on_cancel(self, event):
+        pass

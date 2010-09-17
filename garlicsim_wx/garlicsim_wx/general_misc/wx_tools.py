@@ -48,11 +48,11 @@ def wx_color_to_html_color(color):
 
 
 def hls_to_wx_color(hls):
-    return wx.Color(*colorsys.hls_to_rgb(hls))
+    return wx.Color(*colorsys.hls_to_rgb(*hls))
 
 
 def wx_color_to_hls(color):
-    return colorsys.rgb_to_hls(color.RGB)
+    return colorsys.rgb_to_hls(color.red, color.blue, color.green)
 
 
 def post_event(evt_handler, event_binder, source=None):
