@@ -12,8 +12,11 @@ from garlicsim_wx.general_misc import color_tools
 
 BIG_LENGTH = 301
 THICKNESS = 21
+HALF_THICKNESS = THICKNESS / 2
 AA_THICKNESS = 2
 RADIUS = int((BIG_LENGTH / 2) - THICKNESS - 25)
+
+two_pi = math.pi * 2
 
 
 @caching.cache
@@ -27,8 +30,8 @@ def make_bitmap(lightness=1, saturation=1):
     dc.DrawRectangle(-5, 5, BIG_LENGTH + 10, BIG_LENGTH + 10)
     
     center_x = center_y = BIG_LENGTH // 2 
-    wheel_start_radius = RADIUS - THICKNESS / 2
-    wheel_end_radius = RADIUS + THICKNESS / 2
+    wheel_start_radius = RADIUS - HALF_THICKNESS
+    wheel_end_radius = RADIUS + HALF_THICKNESS
     background_color = wx_tools.get_background_color()
     
     for x, y in itertools.product(xrange(BIG_LENGTH), xrange(BIG_LENGTH)):
@@ -38,11 +41,11 @@ def make_bitmap(lightness=1, saturation=1):
            (wheel_end_radius + AA_THICKNESS):
             
             angle = math.atan2((x - center_x), (y - center_y))
-            hue = (angle % math.pi) / math.pi
+            hue = (angle % two_pi) / two_pi
             hls = (hue, lightness, saturation)
-            #raw_rgb = colorsys.hls_to_rgb(hue, lightness, saturation)
+            raw_rgb = colorsys.hls_to_rgb(hue, lightness, saturation)
             
-            if abs(distance - RADIUS) > THICKNESS:
+            if abs(distance - RADIUS) > HALF_THICKNESS:
                 
                 # This pixel requires some anti-aliasing.
                 
@@ -53,12 +56,11 @@ def make_bitmap(lightness=1, saturation=1):
                 
                 aa_ratio = aa_distance / AA_THICKNESS
                 
-                #final_rgb = \
-                    #color_tools.mix_rgb(aa_ratio, background_color, raw_rgb)
+                final_rgb = \
+                    color_tools.mix_rgb(aa_ratio, background_color, raw_rgb)
             
             else:
-                aa_ratio = 0
-                #final_rgb = raw_rgb    
+                final_rgb = raw_rgb    
                 
             color = wx_tools.hls_to_wx_color(hls, alpha=((1 - aa_ratio) * 255))
             pen = wx.Pen(color)
@@ -95,6 +97,10 @@ class Wheel(wx.Panel):
         ox, oy = ((4 - bw) / 2 , (4 - bh) / 2) #tododoc: test and doc
         
         dc.DrawBitmap(self.bitmap, ox, oy)
+        
+        dc.SetPen(wx.Pen(wx.Color(255, 0, 0, 50)))
+        dc.DrawCircle(200, 200, 50)
+                
         
         dc.Destroy()
         
