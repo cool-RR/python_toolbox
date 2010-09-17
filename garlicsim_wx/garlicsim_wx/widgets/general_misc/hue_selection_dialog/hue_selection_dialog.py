@@ -38,7 +38,7 @@ class HueSelectionDialog(CuteDialog):
         
         self.wheel = Wheel(self)
         
-        self.h_sizer.Add(self.wheel, 0, wx.ALL, border=10)
+        self.h_sizer.Add(self.wheel, 0)
         
         self.v_sizer = wx.BoxSizer(wx.VERTICAL)
         
@@ -46,18 +46,20 @@ class HueSelectionDialog(CuteDialog):
         
         self.comparer = Comparer(self)
         
-        self.v_sizer.Add(self.comparer, 0, wx.ALL, border=10)
+        self.v_sizer.Add(self.comparer, 0, wx.RIGHT | wx.TOP | wx.BOTTOM,
+                         border=10)
         
         self.textual = Textual(self)
         
-        self.v_sizer.Add(self.textual, 0, wx.ALL, border=10)
+        self.v_sizer.Add(self.textual, 0, wx.RIGHT | wx.TOP | wx.BOTTOM,
+                         border=10)
                 
         self.dialog_button_sizer = wx.StdDialogButtonSizer()
         
         self.main_v_sizer.Add(self.dialog_button_sizer, 0,
                               wx.ALIGN_CENTER | wx.ALL, border=10)
         
-        self.ok_button = wx.Button(self, wx.ID_OK, 'Ok', size=(70, 30))
+        self.ok_button = wx.Button(self, wx.ID_OK, 'Okay', size=(70, 30))
         self.dialog_button_sizer.AddButton(self.ok_button)
         self.ok_button.SetDefault()
         self.dialog_button_sizer.SetAffirmativeButton(self.ok_button)

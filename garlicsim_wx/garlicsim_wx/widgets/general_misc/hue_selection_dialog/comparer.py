@@ -5,8 +5,10 @@ from garlicsim_wx.general_misc import wx_tools
 
 class Comparer(wx.Panel):
     def __init__(self, hue_selection_dialog):
+        style = wx.SIMPLE_BORDER if wx.Platform == '__WXGTK__' else \
+                wx.SUNKEN_BORDER
         wx.Panel.__init__(self, parent=hue_selection_dialog, size=(75, 90),
-                          style=wx.SUNKEN_BORDER)
+                          style=style)
         self.SetDoubleBuffered(True)
         self.hue_selection_dialog = hue_selection_dialog
         self.hue = hue_selection_dialog.hue
