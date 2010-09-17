@@ -128,20 +128,40 @@ class Wheel(wx.Panel):
         
         
     def on_mouse(self, event):
+        
+        center_x = center_y = BIG_LENGTH // 2 
+        x, y = event.GetPosition()
+        distance = ((x - center_x) ** 2 + (y - center_y) ** 2) ** 0.5
+        inside_wheel = (SMALL_RADIUS <= distance <= BIG_RADIUS) # tododoc: doc
+
+        
+        if inside_wheel and not self._cursor_set_to_bullseye:
+            
+            self.SetCursor(wx.CURSOR_BULLSEYE)
+            self._cursor_set_to_bullseye = True
+            
+        elif not inside_wheel and not self.HasCapture() and \
+             self._cursor_set_to_bullseye:
+            
+            self.SetCursor(wx.CURSOR_DEFAULT)
+            self._cursor_set_to_bullseye = False
+
+            
         if event.LeftIsDown():
             
-            center_x = center_y = BIG_LENGTH // 2 
-            x, y = event.GetPosition()
-            distance = ((x - center_x) ** 2 + (y - center_y) ** 2) ** 0.5
-            
-            if SMALL_RADIUS <= distance <= BIG_RADIUS:
+            if inside_wheel and not self.HasCapture():
+                self.CaptureMouse()
                 
-                # We have a left-down on the wheel. (And not on the background.)
-                
+            if self.HasCapture():
                 angle = math.atan2((x - center_x), (y - center_y))
-                hue = (angle + math.pi) / (math.pi * 
-                                           2)
+                hue = (angle + math.pi) / (math.pi * 2)
                 self.hue_selection_dialog.setter(hue)
+                
+            
+        else: # Left mouse button is up
+            if self.HasCapture():
+                self.ReleaseMouse()
+            
                 
         
     def _calculate_angle(self):
