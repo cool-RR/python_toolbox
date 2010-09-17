@@ -6,6 +6,7 @@
 from __future__ import division
 
 import warnings
+import colorsys
 
 import wx
 
@@ -44,6 +45,14 @@ def wx_color_to_html_color(color):
     (green_blue, red) = divmod(rgb, 256)
     (blue, green) = divmod(green_blue, 256)
     return '#%02x%02x%02x' % (red, green, blue)
+
+
+def hls_to_wx_color(hls):
+    return wx.Color(*colorsys.hls_to_rgb(hls))
+
+
+def wx_color_to_hls(color):
+    return colorsys.rgb_to_hls(color.RGB)
 
 
 def post_event(evt_handler, event_binder, source=None):
