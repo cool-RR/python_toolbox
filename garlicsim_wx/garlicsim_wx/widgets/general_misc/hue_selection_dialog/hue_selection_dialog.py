@@ -51,8 +51,7 @@ class HueSelectionDialog(CuteDialog):
         self.dialog_button_sizer = wx.StdDialogButtonSizer()
         
         self.main_v_sizer.Add(self.dialog_button_sizer, 0,
-                              wx.ALL | wx.EXPAND | wx.ALIGN_CENTER,
-                              border=10)
+                              wx.ALIGN_CENTER | wx.ALL, border=10)
         
         self.ok_button = wx.Button(self, wx.ID_OK, 'Ok', size=(70, 30))
         self.dialog_button_sizer.AddButton(self.ok_button)
@@ -63,7 +62,6 @@ class HueSelectionDialog(CuteDialog):
         self.cancel_button = wx.Button(self, wx.ID_CANCEL, 'Cancel',
                                        size=(70, 30))
         self.dialog_button_sizer.AddButton(self.cancel_button)
-        self.dialog_button_sizer.SetNegativeButton(self.cancel_button)
         self.Bind(wx.EVT_BUTTON, self.on_cancel, source=self.cancel_button)
         self.dialog_button_sizer.Realize()
 
