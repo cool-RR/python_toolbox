@@ -37,8 +37,10 @@ def make_bitmap(lightness=1, saturation=1):
         if (wheel_start_radius - AA_THICKNESS) <= distance <= \
            (wheel_end_radius + AA_THICKNESS):
             
-            hue = math.atan2((x - center_x), (y - center_y))
-            raw_rgb = colorsys.hls_to_rgb(hue, lightness, saturation)
+            angle = math.atan2((x - center_x), (y - center_y))
+            hue = (angle % math.pi) / math.pi
+            hls = (hue, lightness, saturation)
+            #raw_rgb = colorsys.hls_to_rgb(hue, lightness, saturation)
             
             if abs(distance - RADIUS) > THICKNESS:
                 
@@ -56,13 +58,15 @@ def make_bitmap(lightness=1, saturation=1):
             
             else:
                 aa_ratio = 0
-                #final_rgb = raw_rgb
+                #final_rgb = raw_rgb    
                 
-                
-            color = wx.Color(*raw_rgb, alpha=((1 - aa_ratio) * 255))
+            color = wx_tools.hls_to_wx_color(hls, alpha=((1 - aa_ratio) * 255))
             pen = wx.Pen(color)
+            dc.SetPen(pen)
             
             dc.DrawPoint(x, y)
+            #dc.DrawRectangle(x, y, 10, 10)
+            
             
         
     
