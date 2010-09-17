@@ -62,6 +62,7 @@ class StepProfilesList(hypertreelist.HyperTreeList):
         self.gui_project.step_profiles_set_modified_emitter.add_output(
             self.update
         )
+  
         
     def update(self):
 
