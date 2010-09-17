@@ -114,13 +114,14 @@ class Wheel(wx.Panel):
         # Drawing dashed line which marks the selected color:
         
         gc = wx.GraphicsContext.Create(dc)
+        assert isinstance(gc, wx.GraphicsContext)
         gc.SetPen(self._pen)
         cx, cy = BIG_LENGTH // 2, BIG_LENGTH // 2
         start_x, start_y = cx + SMALL_RADIUS * math.sin(self.angle), \
                            cy + SMALL_RADIUS * math.cos(self.angle)
         end_x, end_y = cx + BIG_RADIUS * math.sin(self.angle), \
                        cy + BIG_RADIUS * math.cos(self.angle)
-        gc.DrawLine(start_x, start_y, end_x, end_y)
+        gc.StrokeLine(start_x, start_y, end_x, end_y)
                 
         
         dc.Destroy()
