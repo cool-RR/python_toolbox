@@ -38,6 +38,7 @@ class ColorControl(wx.Window):
                                old_hls=old_hls, lightness=0.3,
                                title='Select hue for step profile')
         hue_selection_dialog.ShowModal()
+        hue_selection_dialog.Destroy()
         
         
     def set_color(self, color):

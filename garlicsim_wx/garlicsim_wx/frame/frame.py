@@ -322,6 +322,7 @@ class Frame(wx.Frame):
             if not we_are_main_program:
                 warning_dialog = \
                     garlicsim_wx.widgets.misc.NotMainProgramWarningDialog(self)
+                # tododoc: possibly I need to .Destroy this dialog
                 if warning_dialog.ShowModal() != wx.ID_YES:
                     return
         
