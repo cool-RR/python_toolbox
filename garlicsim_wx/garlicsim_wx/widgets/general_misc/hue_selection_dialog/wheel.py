@@ -37,7 +37,7 @@ def make_bitmap(lightness=1, saturation=1):
         if (wheel_start_radius - AA_THICKNESS) <= distance <= \
            (wheel_end_radius + AA_THICKNESS):
             
-            hue = math.asin((x - center_x)/(y - center_y))
+            hue = math.atan2((x - center_x), (y - center_y))
             raw_rgb = colorsys.hls_to_rgb(hue, lightness, saturation)
             
             if abs(distance - RADIUS) > THICKNESS:
