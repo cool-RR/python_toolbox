@@ -99,6 +99,7 @@ class Wheel(wx.Panel):
                            else wx.Color(0, 0, 0),
                            width=2,
                            style=wx.DOT)
+        self._cursor_set_to_bullseye = False
         
         self.Bind(wx.EVT_PAINT, self.on_paint)
         self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse)
@@ -137,13 +138,13 @@ class Wheel(wx.Panel):
         
         if inside_wheel and not self._cursor_set_to_bullseye:
             
-            self.SetCursor(wx.CURSOR_BULLSEYE)
+            self.SetCursor(wx.StockCursor(wx.CURSOR_BULLSEYE))
             self._cursor_set_to_bullseye = True
             
         elif not inside_wheel and not self.HasCapture() and \
              self._cursor_set_to_bullseye:
             
-            self.SetCursor(wx.CURSOR_DEFAULT)
+            self.SetCursor(wx.StockCursor(wx.CURSOR_DEFAULT))
             self._cursor_set_to_bullseye = False
 
             

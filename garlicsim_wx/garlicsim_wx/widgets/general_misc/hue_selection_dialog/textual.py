@@ -7,6 +7,8 @@ class Textual(wx.Panel):
         self.hue_selection_dialog = hue_selection_dialog
         self.hue = hue_selection_dialog.hue
         
+        self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)
+        
         
         
     def update(self):

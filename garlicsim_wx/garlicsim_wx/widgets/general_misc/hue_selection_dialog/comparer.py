@@ -7,6 +7,7 @@ class Comparer(wx.Panel):
     def __init__(self, hue_selection_dialog):
         wx.Panel.__init__(self, parent=hue_selection_dialog, size=(75, 90),
                           style=wx.SUNKEN_BORDER)
+        self.SetDoubleBuffered(True)
         self.hue_selection_dialog = hue_selection_dialog
         self.hue = hue_selection_dialog.hue
         self.old_hls = hue_selection_dialog.old_hls
@@ -15,6 +16,8 @@ class Comparer(wx.Panel):
         self.old_brush = wx.Brush(self.old_color)
         self._pen = wx.Pen(wx.Color(0, 0, 0), width=0, style=wx.TRANSPARENT)
         self._calculate()
+        
+        self.SetCursor(wx.StockCursor(wx.CURSOR_BULLSEYE))
         
         self.Bind(wx.EVT_PAINT, self.on_paint)
         self.Bind(wx.EVT_LEFT_DOWN, self.on_mouse_left_down)
