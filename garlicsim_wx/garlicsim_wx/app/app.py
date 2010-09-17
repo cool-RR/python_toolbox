@@ -41,7 +41,12 @@ class App(wx.PySimpleApp):
         self.new_gui_project_simpack_name = new_gui_project_simpack_name
         self.load_gui_project_file_path = load_gui_project_file_path
         super(App, self).__init__()
+        #self.SetCallFilterEvent(True) #tododoc kill
         
+    #def FilterEvent(self, event):
+        #if hasattr(wx, 'meow'):
+            #print(event)
+        #return None
     
     def OnInit(self):
         
@@ -78,3 +83,4 @@ class App(wx.PySimpleApp):
             )
             
         return True
+    

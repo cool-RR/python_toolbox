@@ -1,6 +1,8 @@
+from __future__ import division
+
 import wx
 
-def ratio_to_round_degrees(hue):
+def ratio_to_round_degrees(ratio):
     return int(ratio * 360)
 
 def degrees_to_ratio(degrees):
@@ -16,30 +18,38 @@ class Textual(wx.Panel):
         self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)
         
         self.hue_static_text = wx.StaticText(self, label='Hue:')
-        #self.hue_static_text = wx.StaticText(self, label=''.join((chr(x) for x in range(256))))
         
-        self.main_v_sizer.Add(self.hue_static_text, 0, wx.ALIGN_LEFT | wx.BOTTOM,
-                              border=5)
+        self.main_v_sizer.Add(self.hue_static_text, 0,
+                              wx.ALIGN_LEFT | wx.BOTTOM, border=5)
         
         self.h_sizer = wx.BoxSizer(wx.HORIZONTAL)
         
         self.main_v_sizer.Add(self.h_sizer, 0)
         
-        self.spin_ctrl = wx.SpinCtrl(self, min=0, max=359, size=(60, -1))
+        self.spin_ctrl = wx.SpinCtrl(self, min=0, max=359,
+                                     initial=ratio_to_round_degrees(self.hue),
+                                     size=(60, -1), style=wx.SP_WRAP)
         
         self.h_sizer.Add(self.spin_ctrl, 0)
         
-        #chr(248)
         self.degree_static_text = wx.StaticText(self, label=unichr(176))
-        #self.degree_static_text.SetFont(
-            #wx.Font(12, wx.MODERN, wx.NORMAL, wx.NORMAL)
-        #)
         
         self.h_sizer.Add(self.degree_static_text, 0)
         
         self.SetSizerAndFit(self.main_v_sizer)
+        
+        self.Bind(wx.EVT_SPINCTRL, self.on_spin, source=self.spin_ctrl)
                     
         
     def update(self):
         if self.hue != self.hue_selection_dialog.hue:
             self.hue = self.hue_selection_dialog.hue
+            self.spin_ctrl.SetValue(ratio_to_round_degrees(self.hue))
+    
+            
+    def on_spin(self, event):
+        self.hue_selection_dialog.setter(
+            degrees_to_ratio(
+                self.spin_ctrl.GetValue()
+            )
+        )
