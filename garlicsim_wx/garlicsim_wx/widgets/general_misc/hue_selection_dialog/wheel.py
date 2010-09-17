@@ -14,7 +14,7 @@ BIG_LENGTH = 221
 THICKNESS = 21
 HALF_THICKNESS = THICKNESS / 2
 AA_THICKNESS = 1.5
-RADIUS = int((BIG_LENGTH / 2) - THICKNESS - 25)
+RADIUS = int((BIG_LENGTH / 2) - THICKNESS - 5)
 SMALL_RADIUS = RADIUS - HALF_THICKNESS
 BIG_RADIUS = RADIUS + HALF_THICKNESS
 
@@ -42,7 +42,7 @@ def make_bitmap(lightness=1, saturation=1):
         if (SMALL_RADIUS - AA_THICKNESS) <= distance <= \
            (BIG_RADIUS + AA_THICKNESS):
             
-            angle = math.atan2((x - center_x), (y - center_y))
+            angle = -math.atan2((x - center_x), (y - center_y))
             hue = (angle + math.pi) / two_pi
             hls = (hue, lightness, saturation)
             raw_rgb = colorsys.hls_to_rgb(hue, lightness, saturation)
@@ -154,7 +154,7 @@ class Wheel(wx.Panel):
                 self.CaptureMouse()
                 
             if self.HasCapture():
-                angle = math.atan2((x - center_x), (y - center_y))
+                angle = -math.atan2((x - center_x), (y - center_y))
                 hue = (angle + math.pi) / (math.pi * 2)
                 self.hue_selection_dialog.setter(hue)
                 
@@ -166,7 +166,7 @@ class Wheel(wx.Panel):
                 
         
     def _calculate_angle(self):
-        self.angle = (2 * self.hue - 1) * math.pi
+        self.angle = - (2 * self.hue - 1) * math.pi
         
         
     def update(self):

@@ -38,7 +38,8 @@ class HueSelectionDialog(CuteDialog):
         
         self.wheel = Wheel(self)
         
-        self.h_sizer.Add(self.wheel, 0, wx.ALL, border=10)
+        self.h_sizer.Add(self.wheel, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL,
+                         border=10)
         
         self.v_sizer = wx.BoxSizer(wx.VERTICAL)
         

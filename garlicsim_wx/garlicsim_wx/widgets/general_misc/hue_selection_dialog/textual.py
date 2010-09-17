@@ -39,6 +39,7 @@ class Textual(wx.Panel):
         self.SetSizerAndFit(self.main_v_sizer)
         
         self.Bind(wx.EVT_SPINCTRL, self.on_spin, source=self.spin_ctrl)
+        self.Bind(wx.EVT_TEXT, self.on_text, source=self.spin_ctrl)
                     
         
     def update(self):
@@ -48,6 +49,13 @@ class Textual(wx.Panel):
     
             
     def on_spin(self, event):
+        self.hue_selection_dialog.setter(
+            degrees_to_ratio(
+                self.spin_ctrl.GetValue()
+            )
+        )
+            
+    def on_text(self, event):
         self.hue_selection_dialog.setter(
             degrees_to_ratio(
                 self.spin_ctrl.GetValue()
