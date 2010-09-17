@@ -9,7 +9,7 @@ from .textual import Textual
 
 class HueSelectionDialog(CuteDialog):
     
-    def __init__(self, parent, setter, old_hls, lightness=1, saturation=1,
+    def __init__(self, parent, getter, setter, lightness=1, saturation=1,
                  id=-1, title='Select hue', pos=wx.DefaultPosition,
                  size=wx.DefaultSize, style=wx.DEFAULT_DIALOG_STYLE,
                  name=wx.DialogNameStr):
@@ -21,9 +21,13 @@ class HueSelectionDialog(CuteDialog):
 
         self.saturation = saturation
         
-        self.old_hls = old_hls # tododoc: fix to match give l and s
+        self.hue = getter()
         
+        self.old_hls = (self.hue, lightness, saturation)
+                
         self.setter = setter
+        
+        self.getter = getter
         
         
         self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)
@@ -76,3 +80,9 @@ class HueSelectionDialog(CuteDialog):
     
     def on_cancel(self, event):
         self.EndModal(wx.ID_CANCEL)
+        
+    def update(self):
+        self.hue = self.getter()
+        self.wheel.update()
+        self.comparer.update()
+        self.textual.update()

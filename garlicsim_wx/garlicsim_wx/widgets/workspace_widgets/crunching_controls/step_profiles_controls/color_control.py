@@ -35,17 +35,28 @@ class ColorControl(wx.Window):
     
     def on_mouse_left_down(self, event):
         old_hls = wx_tools.wx_color_to_hls(self.color)
-        step_profiles_to_hues = \
-            self.step_profiles_list.frame.gui_project.step_profiles_to_hues
+        gui_project = self.step_profiles_list.frame.gui_project
+        step_profiles_to_hues = gui_project.step_profiles_to_hues
         
+        getter = lambda: \
+                 step_profiles_to_hues.__getitem__(self.step_profile)
         setter = lambda color: \
                  step_profiles_to_hues.__setitem__(self.step_profile, color)
         
         hue_selection_dialog = \
-            HueSelectionDialog(self, setter, old_hls=old_hls, lightness=0.3,
+            HueSelectionDialog(self, getter, setter, lightness=0.3,
                                title='Select hue for step profile')
-        hue_selection_dialog.ShowModal()
-        hue_selection_dialog.Destroy()
+        
+        gui_project.step_profiles_to_hues_modified_emitter.add_output(
+            hue_selection_dialog.update
+        )
+        try:
+            hue_selection_dialog.ShowModal()
+        finally:
+            hue_selection_dialog.Destroy()
+            gui_project.step_profiles_to_hues_modified_emitter.remove_output(
+                hue_selection_dialog.update
+            )
         
         
     def set_color(self, color):
