@@ -144,6 +144,8 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
         dc = NiftyPaintDC(self, self.gui_project,
                           self.CalcScrolledPosition((0, 0)), self)
         
+        dc.SetPen(pen)
+        
         dc.SetBackground(wx_tools.get_background_brush())
         dc.Clear()
         
@@ -211,6 +213,8 @@ class NiftyPaintDC(wx.BufferedPaintDC):
     
     def __init__(self, window, gui_project, origin, tree_browser, *args, **kwargs):
         wx.BufferedPaintDC.__init__(self, window, *args, **kwargs)
+        self.gc = wx.GraphicsContext.Create(self)
+        assert isinstance(self.gc, wx.GraphicsContext)
         self.gui_project = gui_project
         self.origin = origin
         self.tree_browser = tree_browser
@@ -251,7 +255,9 @@ class NiftyPaintDC(wx.BufferedPaintDC):
         if make_block_stripe is True:
 
             bitmap = self.tree_browser.elements["Block"]
-            self.DrawBitmapPoint(bitmap, point, useMask=True)
+            bitmap_size = bitmap.GetSize()
+            self.gc.DrawBitmap(bitmap, point[0], point[1],
+                               bitmap_size[0], bitmap_size[1])
             bitmap_size = bitmap.GetSize()
             second_bitmap = self.tree_browser.elements[type]
 
@@ -269,13 +275,17 @@ class NiftyPaintDC(wx.BufferedPaintDC):
                                bitmap_size[1])
             
             self.SetClippingRegionAsRegion(region)
-            self.DrawBitmapPoint(second_bitmap, point, useMask=True)
+            self.gc.DrawBitmap(
+                second_bitmap, point[0], point[1], second_bitmap.GetSize()[0],
+                second_bitmap.GetSize()[1]
+            )
             self.DestroyClippingRegion()
 
         else:
             bitmap = self.tree_browser.elements[type]
-            self.DrawBitmapPoint(bitmap, point, useMask=True)
             bitmap_size = bitmap.GetSize()
+            self.gc.DrawBitmap(bitmap, point[0], point[1],
+                               bitmap_size[0], bitmap_size[1])
 
         temp = (point[0],
                 point[1],
