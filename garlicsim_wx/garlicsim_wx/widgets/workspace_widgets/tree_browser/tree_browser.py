@@ -224,6 +224,14 @@ class NiftyPaintDC(wx.BufferedPaintDC):
         
 
     def draw_sub_tree(self, point, tree, start):
+
+        if start.step_profile:
+            color = garlicsim_wx.misc.colors.hue_to_dark_color(
+                self.gui_project.step_profiles_to_hues[start.step_profile]
+            )
+        else:
+            color = wx.Color(0, 0, 0)
+        
         make_block_stripe = False
 
         if isinstance(start, garlicsim.data_structures.Block):
@@ -256,7 +264,11 @@ class NiftyPaintDC(wx.BufferedPaintDC):
 
         if make_block_stripe is True:
 
-            bitmap = self.tree_browser.elements["Block"]
+            bitmap = wx_tools.color_replaced_bitmap(
+                self.tree_browser.elements["Block"],
+                (0, 0, 0),
+                (0, 0, 0)
+            )
             bitmap_size = bitmap.GetSize()
             self.gc.DrawBitmap(bitmap, point[0], point[1],
                                bitmap_size[0], bitmap_size[1])

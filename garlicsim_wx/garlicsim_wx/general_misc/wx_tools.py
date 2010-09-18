@@ -121,3 +121,11 @@ def iter_rects_of_region(region):
         
 
 
+def color_replaced_bitmap(bitmap, old_rgb, new_rgb):
+    old_r, old_g, old_b = old_rgb
+    new_r, new_g, new_b = new_rgb
+    image = wx.ImageFromBitmap(bitmap)
+    assert isinstance(image, wx.Image)
+    image.Replace(old_r, old_g, old_b, new_r, new_g, new_b)
+    return wx.BitmapFromImage(image)
+    
