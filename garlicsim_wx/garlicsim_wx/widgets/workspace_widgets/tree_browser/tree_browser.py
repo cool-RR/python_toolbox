@@ -285,10 +285,9 @@ class NiftyPaintDC(wx.BufferedPaintDC):
                 floor(point[0] + 2 + (bitmap_size[0] - 4) * slice[0]),
                 ceil(point[0] + 2 + (bitmap_size[0] - 4) * slice[1])
             ]
-            region = wx.Region(screen_slice[0], point[1] + 2,
-                               )
             
-            self.gc.SetPen(wx.TRANSPARENT_PEN)
+            self.pen.SetWidth(0)
+            self.gc.SetPen(self.pen)
             self.gc.SetBrush(wx.Brush(wx.Color(255, 153, 51)))
             self.gc.DrawRectangle(screen_slice[0], point[1] + 2,
                                   screen_slice[1] - screen_slice[0],
@@ -348,6 +347,8 @@ class NiftyPaintDC(wx.BufferedPaintDC):
             else:
                 color = wx.Color(0, 0, 0)
             
+
+            self.pen.SetWidth(1)
             self.pen.SetColour(color)
             self.gc.SetPen(self.pen)
             
@@ -380,6 +381,7 @@ class NiftyPaintDC(wx.BufferedPaintDC):
             else:
                 color = wx.Color(0, 0, 0)
             
+            self.pen.SetWidth(1)
             self.pen.SetColour(color)
             self.gc.SetPen(self.pen)
             
