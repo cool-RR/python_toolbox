@@ -26,6 +26,6 @@ class CuteDialog(wx.Dialog):
         
     def ShowModal(self):
         if wx.Platform == '__WXMAC__':
-            wx.CallAfter(lambda: self.Centre(wx.BOTH))
+            self.Centre(wx.BOTH)
         return super(CuteDialog, self).ShowModal()
     
