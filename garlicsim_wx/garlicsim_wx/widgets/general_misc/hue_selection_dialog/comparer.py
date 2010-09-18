@@ -13,7 +13,7 @@ class Comparer(wx.Panel):
         self.hue_selection_dialog = hue_selection_dialog
         self.hue = hue_selection_dialog.hue
         self.old_hls = hue_selection_dialog.old_hls
-        self.old_hue = hue_selection_dialog.old_hls[0]
+        self.old_hue = hue_selection_dialog.old_hue
         self.old_color = wx_tools.hls_to_wx_color(self.old_hls)
         self.old_brush = wx.Brush(self.old_color)
         self._pen = wx.Pen(wx.Color(0, 0, 0), width=0, style=wx.TRANSPARENT)

@@ -37,15 +37,18 @@ def make_bitmap(lightness=1, saturation=1):
     )
     
     for x, y in itertools.product(xrange(BIG_LENGTH), xrange(BIG_LENGTH)):
-        distance = ((x - center_x) ** 2 + (y - center_y) ** 2) ** 0.5
+        
+        # This is a big loop so the code is optimized to keep it fast.
+        
+        rx, ry = (x - center_x), (y - center_y)
+        distance = (rx ** 2 + ry ** 2) ** 0.5
         
         if (SMALL_RADIUS - AA_THICKNESS) <= distance <= \
            (BIG_RADIUS + AA_THICKNESS):
             
-            angle = -math.atan2((x - center_x), (y - center_y))
+            angle = -math.atan2(rx, ry)
             hue = (angle + math.pi) / two_pi
-            hls = (hue, lightness, saturation)
-            raw_rgb = colorsys.hls_to_rgb(hue, lightness, saturation)
+            rgb = colorsys.hls_to_rgb(hue, lightness, saturation)
             
             if abs(distance - RADIUS) > HALF_THICKNESS:
                 
@@ -58,27 +61,18 @@ def make_bitmap(lightness=1, saturation=1):
                 
                 aa_ratio = aa_distance / AA_THICKNESS
                 
-                final_rgb = color_tools.mix_rgb(
+                rgb = color_tools.mix_rgb(
                     aa_ratio,
                     background_color_rgb,
-                    raw_rgb
+                    rgb
                 )
-            
-            else:
-                final_rgb = raw_rgb    
                 
-            color = wx_tools.rgb_to_wx_color(final_rgb)
+            color = wx_tools.rgb_to_wx_color(rgb)
             pen = wx.Pen(color)
             dc.SetPen(pen)
             
             dc.DrawPoint(x, y)
-            #dc.DrawRectangle(x, y, 10, 10)
-            
-            
         
-    
-    #dc.SetPen(wx.Pen('red'))
-    #dc.DrawLine(0, 0, 100, 100)
     dc.Destroy()
     return bitmap
 

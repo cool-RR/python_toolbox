@@ -23,7 +23,9 @@ class HueSelectionDialog(CuteDialog):
         
         self.hue = getter()
         
-        self.old_hls = (self.hue, lightness, saturation)
+        self.old_hue = self.hue
+        
+        self.old_hls = (self.old_hue, lightness, saturation)
                 
         self.setter = setter
         
@@ -80,7 +82,9 @@ class HueSelectionDialog(CuteDialog):
         
     
     def on_cancel(self, event):
+        self.setter(self.old_hue)
         self.EndModal(wx.ID_CANCEL)
+        
         
     def update(self):
         self.hue = self.getter()
