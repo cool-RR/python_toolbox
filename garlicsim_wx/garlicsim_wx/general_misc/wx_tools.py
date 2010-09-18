@@ -68,6 +68,14 @@ def wx_color_to_rgb(wx_color):
     )
 
 
+def wx_color_to_big_rgb(wx_color):
+    return (
+        wx_color.red,
+        wx_color.blue,
+        wx_color.green
+    )
+
+
 def post_event(evt_handler, event_binder, source=None):
     '''Post an event to an evt_handler.'''
     # todo: Use wherever I post events

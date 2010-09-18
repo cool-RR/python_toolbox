@@ -103,17 +103,23 @@ class StepProfile(ArgumentsProfile):
         # So we start with kwargs:
         
         if 'step_function' in kwargs:
-            step_function = kwargs['step_function']
+            kwargs_copy = kwargs.copy()
+            step_function = kwargs_copy.pop('step_function')
             
             get_step_type(step_function)
             # Just so things will break if it's not a step function. If the user
             # specified 'step_function', he's not going to get away with it not
             # being an actual step function.
 
-            kwargs_copy = kwargs.copy()
-            del kwargs_copy['step_function']
-            
             return StepProfile(step_function, *args, **kwargs_copy)
+        
+        
+        if 'step_profile' in kwargs: # tododoc
+            kwargs_copy = kwargs.copy()
+            step_profile = kwargs.pop('step_profile')
+            
+            assert isinstance(step_profile, StepProfile)
+            return step_profile
 
         
         # No step function in kwargs. We'll try args:
@@ -121,6 +127,9 @@ class StepProfile(ArgumentsProfile):
         elif args:
             
             candidate = args[0]
+            
+            if isinstance(candidate, StepProfile):
+                return step_profile
             
             try:
                 get_step_type(candidate)

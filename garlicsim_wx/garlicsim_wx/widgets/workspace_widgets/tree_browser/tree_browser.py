@@ -267,13 +267,14 @@ class NiftyPaintDC(wx.BufferedPaintDC):
             bitmap = wx_tools.color_replaced_bitmap(
                 self.tree_browser.elements["Block"],
                 (0, 0, 0),
-                (0, 0, 0)
+                wx_tools.wx_color_to_big_rgb(color)
             )
             bitmap_size = bitmap.GetSize()
             self.gc.DrawBitmap(bitmap, point[0], point[1],
                                bitmap_size[0], bitmap_size[1])
             bitmap_size = bitmap.GetSize()
             second_bitmap = self.tree_browser.elements[type]
+            
 
             slice = [None, None]
             length = float(len(start))
@@ -284,9 +285,9 @@ class NiftyPaintDC(wx.BufferedPaintDC):
                 floor(point[0] + 2 + (bitmap_size[0] - 4) * slice[0]),
                 ceil(point[0] + 2 + (bitmap_size[0] - 4) * slice[1])
             ]
-            region = wx.Region(screen_slice[0], point[1],
+            region = wx.Region(screen_slice[0], point[1] + 2,
                                screen_slice[1] - screen_slice[0],
-                               bitmap_size[1])
+                               bitmap_size[1] - 4)
             
             self.SetClippingRegionAsRegion(region)
             self.gc.DrawBitmap(
@@ -296,7 +297,11 @@ class NiftyPaintDC(wx.BufferedPaintDC):
             self.DestroyClippingRegion()
 
         else:
-            bitmap = self.tree_browser.elements[type]
+            bitmap = wx_tools.color_replaced_bitmap(
+                self.tree_browser.elements[type],
+                (0, 0, 0),
+                wx_tools.wx_color_to_big_rgb(color)
+            )
             bitmap_size = bitmap.GetSize()
             self.gc.DrawBitmap(bitmap, point[0], point[1],
                                bitmap_size[0], bitmap_size[1])
