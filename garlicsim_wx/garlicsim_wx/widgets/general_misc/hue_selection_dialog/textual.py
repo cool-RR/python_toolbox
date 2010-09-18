@@ -47,6 +47,8 @@ class Textual(wx.Panel):
         self.spin_ctrl = wx.SpinCtrl(self, min=0, max=359,
                                      initial=ratio_to_round_degrees(self.hue),
                                      size=(70, -1), style=wx.SP_WRAP)
+        if wx.Platform == '__WXMAC__':
+            self.spin_ctrl.SetValue(ratio_to_round_degrees(self.hue))
         
         self.h_sizer.Add(self.spin_ctrl, 0)
         
