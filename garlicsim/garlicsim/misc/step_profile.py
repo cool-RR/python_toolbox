@@ -129,7 +129,7 @@ class StepProfile(ArgumentsProfile):
             candidate = args[0]
             
             if isinstance(candidate, StepProfile):
-                return step_profile
+                return candidate
             
             try:
                 get_step_type(candidate)
