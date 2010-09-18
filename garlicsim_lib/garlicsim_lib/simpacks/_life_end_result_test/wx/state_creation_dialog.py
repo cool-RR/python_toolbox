@@ -50,10 +50,10 @@ class StateCreationDialog(CuteDialog):
         vbox = wx.BoxSizer(wx.VERTICAL)
 
         last_hbox = wx.BoxSizer(wx.HORIZONTAL)
-        ok = wx.Button(self, -1, 'Ok', size=(70, 30))
+        ok = wx.Button(self, -1, 'Create state')
         ok.SetDefault()
         self.Bind(wx.EVT_BUTTON, self.on_ok, id=ok.GetId())
-        cancel = wx.Button(self, -1, 'Cancel', size=(70, 30))
+        cancel = wx.Button(self, -1, 'Cancel')
         self.Bind(wx.EVT_BUTTON, self.on_cancel, id=cancel.GetId())
         last_hbox.Add(ok, 0)
         last_hbox.Add(cancel, 0, wx.LEFT, 5)

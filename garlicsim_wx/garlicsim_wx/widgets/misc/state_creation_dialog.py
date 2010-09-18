@@ -47,11 +47,11 @@ doesn't define `create_root`.'''
         # todo: add slick way to add args/kwargs
 
         last_hbox = wx.StdDialogButtonSizer()
-        ok = wx.Button(self, wx.ID_OK, 'Ok', size=(70, 30))
+        ok = wx.Button(self, wx.ID_OK, 'Create state')
         ok.SetDefault()
         last_hbox.SetAffirmativeButton(ok)
         self.Bind(wx.EVT_BUTTON, self.on_ok, id=ok.GetId())
-        cancel = wx.Button(self, wx.ID_CANCEL, 'Cancel', size=(70, 30))
+        cancel = wx.Button(self, wx.ID_CANCEL, 'Cancel')
         self.Bind(wx.EVT_BUTTON, self.on_cancel, id=cancel.GetId())
         last_hbox.AddButton(ok)
         last_hbox.AddButton(cancel)

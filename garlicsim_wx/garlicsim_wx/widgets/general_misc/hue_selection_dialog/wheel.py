@@ -106,7 +106,7 @@ class Wheel(wx.Panel):
         
     
     def on_paint(self, event):
-        dc = wx.PaintDC(self)
+        dc = wx.BufferedPaintDC(self)
                     
         dc.DrawBitmap(self.bitmap, 0, 0)
 
@@ -123,6 +123,9 @@ class Wheel(wx.Panel):
         end_x, end_y = cx + BIG_RADIUS * math.sin(self.angle), \
                        cy + BIG_RADIUS * math.cos(self.angle)
         gc.StrokeLine(start_x, start_y, end_x, end_y)
+
+        #dc.SetPen(self._pen)
+        #dc.DrawLine(start_x, start_y, end_x, end_y)
                 
         
         dc.Destroy()
