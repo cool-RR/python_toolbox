@@ -357,12 +357,15 @@ class NiftyPaintDC(wx.BufferedPaintDC):
                 self.draw_end(temp, tree, end)
             del temp
             
-            if kid.step_profile:
+            if end.step_profile:
                 color = garlicsim_wx.misc.colors.hue_to_dark_color(
-                    self.gui_project.step_profiles_to_hues[kid.step_profile]
+                    self.gui_project.step_profiles_to_hues[end.step_profile]
                     )
             else:
                 color = wx.Color(0, 0, 0)
+            
+            self.pen.SetColour(color)
+            self.gc.SetPen(self.pen)
             
             self.gc.StrokeLine(line_start[0], line_start[1],
                                line_end[0], line_end[1])
