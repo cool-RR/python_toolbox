@@ -17,6 +17,8 @@ class TreeMember(object):
     This is an abstract base class for all kinds of objects that are members of
     a tree.
     '''
+    # todo: add .step_profile as abstract
+    
     __metaclass__ = abc.ABCMeta
   
     @abc.abstractmethod

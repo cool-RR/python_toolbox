@@ -50,11 +50,14 @@ class Block(TreeMember):
     def __init__(self, node_list):
         '''Construct a block from the members of node_list.'''
         self.alive = True
+        self.step_profile = None
         self.__node_list = []
         self.add_node_list(node_list)
 
+        
     def soft_get_block(self):
         return self
+    
     
     def append_node(self, node):
         '''
@@ -71,9 +74,10 @@ class Block(TreeMember):
             # If the node list is [], let's make it [node].
             self.__node_list.append(node)
             node.block = self
+            self.step_profile = node.step_profile
             return
         
-        if node.step_profile != self.get_step_profile():
+        if node.step_profile != self.step_profile:
             raise BlockError('Tried to add node which has a different step '
                              'profile.')
             
@@ -121,12 +125,12 @@ class Block(TreeMember):
         if not logic_tools.all_equal((node.step_profile for node
                                       in node_list)):
             raise BlockError("Tried to add node list that doesn't share the "
-                             "same step options profile.")
+                             "same step profile.")
         
         sample_step_profile = node_list[0].step_profile
         
         if self.__node_list and \
-           sample_step_profile != self.get_step_profile():
+           sample_step_profile != self.step_profile:
             raise BlockError("Tried to add nodelist which contains node that "
                              "has a different step profile.")
         
@@ -147,6 +151,7 @@ class Block(TreeMember):
             self.__node_list = list(node_list)
             for node in node_list:
                 node.block = self
+            self.step_profile = sample_step_profile
             return
         
         if node_list[0].parent == self.__node_list[-1]:
@@ -282,15 +287,6 @@ class Block(TreeMember):
         return self.__node_list.index(node)
     
     
-    def get_step_profile(self):
-        '''
-        Get the step profile of the nodes in this block.
-        
-        The same profile is used in all of the nodes in the block.
-        '''
-        assert self.alive
-        return self.__node_list[0].step_profile
-     
     def is_overlapping(self, tree_member):
         '''
         Return whether this block overlaps with the given tree member.
@@ -410,7 +406,7 @@ class Block(TreeMember):
                (
                    address_tools.get_address(type(self), shorten=True),
                    len(self),
-                   self.get_step_profile(),
+                   self.step_profile,
                    hex(id(self))
                )
         
