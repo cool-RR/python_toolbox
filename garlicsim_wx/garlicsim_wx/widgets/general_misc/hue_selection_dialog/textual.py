@@ -13,6 +13,15 @@ def degrees_to_ratio(degrees):
     return degrees / 360
 
 
+class Freezer(object):
+    def __init__(self, textual):
+        self.textual = textual
+    def __enter__(self, *args, **kwargs):
+        self.textual.frozen += 1
+    def __exit__(self, *args, **kwargs):
+        self.textual.frozen -= 1
+
+
 class Textual(wx.Panel):
     def __init__(self, hue_selection_dialog):
         wx.Panel.__init__(self, parent=hue_selection_dialog, size=(75, 100))
@@ -20,6 +29,9 @@ class Textual(wx.Panel):
         
         self.hue_selection_dialog = hue_selection_dialog
         self.hue = hue_selection_dialog.hue
+        
+        self.frozen = 0
+        self.freezer = Freezer(self)
         
         self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)
         
@@ -49,7 +61,7 @@ class Textual(wx.Panel):
                     
         
     def update(self):
-        if self.hue != self.hue_selection_dialog.hue:
+        if not self.frozen and self.hue != self.hue_selection_dialog.hue:
             self.hue = self.hue_selection_dialog.hue
             self.spin_ctrl.SetValue(ratio_to_round_degrees(self.hue))
     
@@ -62,8 +74,9 @@ class Textual(wx.Panel):
         )
             
     def on_text(self, event):
-        self.hue_selection_dialog.setter(
-            degrees_to_ratio(
-                self.spin_ctrl.GetValue()
+        with self.freezer:
+            self.hue_selection_dialog.setter(
+                degrees_to_ratio(
+                    self.spin_ctrl.GetValue()
+                )
             )
-        )
