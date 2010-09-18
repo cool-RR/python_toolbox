@@ -18,8 +18,9 @@ import garlicsim_wx.general_misc.vectorish as vectorish
 from garlicsim_wx.general_misc import emitters
 from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
+
 import garlicsim
-import garlicsim_wx
+import garlicsim_wx.misc.colors
 from garlicsim_wx.widgets import WorkspaceWidget
 
 from . import images as __images_package
@@ -136,15 +137,8 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
             
             return
 
-
-        pen = wx.Pen('Black', 1, wx.SOLID)
-        pen.SetCap(wx.CAP_PROJECTING)
-        pen.SetJoin(wx.JOIN_ROUND)
-
         dc = NiftyPaintDC(self, self.gui_project,
                           self.CalcScrolledPosition((0, 0)), self)
-        
-        dc.SetPen(pen)
         
         dc.SetBackground(wx_tools.get_background_brush())
         dc.Clear()
@@ -213,11 +207,19 @@ class NiftyPaintDC(wx.BufferedPaintDC):
     
     def __init__(self, window, gui_project, origin, tree_browser, *args, **kwargs):
         wx.BufferedPaintDC.__init__(self, window, *args, **kwargs)
-        self.gc = wx.GraphicsContext.Create(self)
-        assert isinstance(self.gc, wx.GraphicsContext)
+        
         self.gui_project = gui_project
         self.origin = origin
         self.tree_browser = tree_browser
+        
+        self.gc = wx.GraphicsContext.Create(self)
+        assert isinstance(self.gc, wx.GraphicsContext)
+        
+        self.pen = pen = wx.Pen(wx.Color(0, 0, 0), 1, wx.SOLID)
+        pen.SetCap(wx.CAP_PROJECTING)
+        pen.SetJoin(wx.JOIN_ROUND)
+        
+        self.SetPen(pen); self.gc.SetPen(pen)
         
         
 
@@ -314,7 +316,7 @@ class NiftyPaintDC(wx.BufferedPaintDC):
                 point,
                 (
                     self_width + 1,
-                 total_height + bitmap_size[1] // 2
+                    total_height + bitmap_size[1] // 2
                 )
             )
             
@@ -322,7 +324,19 @@ class NiftyPaintDC(wx.BufferedPaintDC):
             (new_width, new_height) = \
                 self.draw_sub_tree(temp, tree, kid.soft_get_block())
             del temp
-            self.DrawLinePoint(line_start, line_end)
+        
+            if kid.step_profile:
+                color = garlicsim_wx.misc.colors.hue_to_dark_color(
+                    self.gui_project.step_profiles_to_hues[kid.step_profile]
+                    )
+            else:
+                color = wx.Color(0, 0, 0)
+            
+            self.pen.SetColour(color)
+            self.gc.SetPen(self.pen)
+            
+            self.gc.StrokeLine(line_start[0], line_start[1],
+                               line_end[0], line_end[1])
             max_width = max(max_width, self_width + new_width)
             total_height += new_height
             
@@ -342,7 +356,16 @@ class NiftyPaintDC(wx.BufferedPaintDC):
             (new_width, new_height) = \
                 self.draw_end(temp, tree, end)
             del temp
-            self.DrawLinePoint(line_start, line_end)
+            
+            if kid.step_profile:
+                color = garlicsim_wx.misc.colors.hue_to_dark_color(
+                    self.gui_project.step_profiles_to_hues[kid.step_profile]
+                    )
+            else:
+                color = wx.Color(0, 0, 0)
+            
+            self.gc.StrokeLine(line_start[0], line_start[1],
+                               line_end[0], line_end[1])
             max_width = max(max_width, self_width + new_width)
             total_height += new_height
 
