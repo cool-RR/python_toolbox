@@ -13,7 +13,7 @@
 # Python Code By:
 #
 # Andrea Gavana, @ 23 Dec 2005
-# Latest Revision: 19 Aug 2010, 22.00 GMT
+# Latest Revision: 21 Sep 2010, 23.00 GMT
 #
 # For All Kind Of Problems, Requests Of Enhancements And Bug Reports, Please
 # Write To Me At:
@@ -359,28 +359,6 @@ class AuiManagerEvent(wx.PyCommandEvent):
         self.veto_flag = False
         self.canveto_flag = True
         self.dc = None
-
-
-    def Clone(self):
-        """
-        Returns a copy of the event.
-
-        Any event that is posted to the wxPython event system for later action (via
-        `wx.EvtHandler.AddPendingEvent` or `wx.PostEvent`) must implement this method.
-        All wxPython events fully implement this method, but any derived events
-        implemented by the user should also implement this method just in case they
-        (or some event derived from them) are ever posted.
-
-        All wxPython events implement a copy constructor, so the easiest way of
-        implementing the L{Clone} function is to implement a copy constructor for a new
-        event (call it `MyEvent`) and then define the L{Clone} function like this::
-
-            def Clone(self):
-                return MyEvent(self)
-
-        """
-
-        return AuiManagerEvent(self)
 
 
     def SetManager(self, mgr):
@@ -4872,10 +4850,19 @@ class AuiManager(wx.EvtHandler):
             
         elif pane_info.IsNotebookPage():
             # if we are a notebook page, remove ourselves...
-            notebook = self._notebooks[pane_info.notebook_id]
-            id = notebook.GetPageIndex(pane_info.window)
-            notebook.RemovePage(id)
-        
+            # the  code would index out of bounds 
+            # if the last page of a sub-notebook was closed
+            # because the notebook would be deleted, before this
+            # code is executed.
+            # This code just prevents an out-of bounds error.
+            if self._notebooks:
+                nid = pane_info.notebook_id
+                if nid >= 0 and nid < len(self._notebooks):
+                    notebook = self._notebooks[nid]
+                    page_idx = notebook.GetPageIndex(pane_info.window)
+                    if page_idx >= 0:
+                        notebook.RemovePage(page_idx)
+                                
         # now we need to either destroy or hide the pane
         to_destroy = 0
         if pane_info.IsDestroyOnClose():
@@ -6454,41 +6441,37 @@ class AuiManager(wx.EvtHandler):
             
             else:
             
-                # Check page-ordering...
+                # Correct page ordering. The original wxPython code
+                # for this did not work properly, and would misplace 
+                # windows causing errors.
                 self._notebooks[nb_idx] = notebook
                 pages = notebook.GetPageCount()
                 selected = notebook.GetPage(notebook.GetSelection())
                 reordered = False
 
-                for page in xrange(pages):
-                
-                    win = notebook.GetPage(page)
-                    pane = self.GetPane(win)
-                    
-                    if pane.IsOk():
-                    
-                        lowest = pane.dock_pos
-                        where = -1
-                        
-                        # Now look for panes with lower dock_poss
-                        for look in xrange(page + 1, pages):
-                            w = notebook.GetPage(look)
-                            other = self.GetPane(w)
-                            if other.IsOk():
-                                if other.dock_pos < lowest:
-                                    where = look
-                                    lowest = other.dock_pos
-                                    pane = self.SetAttributes(pane, self.GetAttributes(other))
-                        
-                        if where > 0:                        
-                            # We need to move a new pane into slot "page"
-                            notebook.RemovePage(where)
-                            title = (pane.caption == "" and [pane.name] or [pane.caption])[0]
-                            notebook.InsertPage(page, pane.window, title)
-                            reordered = True
-                        
-                        # Now that we've move it, we can "normalise" the value.
-                        pane.dock_pos = page
+                # Take each page out of the notebook, group it with
+                # its current pane, and sort the list by pane.dock_pos
+                # order
+                pages_and_panes = []
+                for idx in reversed(range(pages)):
+                    page = notebook.GetPage(idx)
+                    pane = self.GetPane(page)
+                    pages_and_panes.append((page, pane))
+                    notebook.RemovePage(idx)
+                sorted_pnp = sorted(pages_and_panes, key=lambda tup: tup[1].dock_pos)
+
+                # Grab the attributes from the panes which are ordered
+                # correctly, and copy those attributes to the original
+                # panes. (This avoids having to change the ordering
+                # of self._panes) Then, add the page back into the notebook
+                sorted_attributes = [self.GetAttributes(tup[1])
+                                     for tup in sorted_pnp]
+                for attrs, tup in zip(sorted_attributes, pages_and_panes):
+                    pane = tup[1]
+                    self.SetAttributes(pane, attrs)
+                    notebook.AddPage(pane.window, pane.caption)
+
+                reordered = True
                     
                 if reordered:
                     notebook.SetSelection(notebook.GetPageIndex(selected), True)
