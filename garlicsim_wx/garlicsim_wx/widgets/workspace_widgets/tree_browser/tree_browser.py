@@ -29,7 +29,10 @@ images_package = __images_package.__name__
 
 connector_length = 10 # length of connecting line between elements
 
-my_color_replaced_bitmap = caching.cache(max_size=80)(wx_tools.color_replaced_bitmap)
+my_color_replaced_bitmap = \
+    caching.cache(max_size=80)(wx_tools.color_replaced_bitmap)
+#my_color_replaced_bitmap = lambda x, *args: x
+
 
 class TreeBrowser(ScrolledPanel, WorkspaceWidget):
     '''Widget for browsing a garlicsim.data_structures.Tree.'''
@@ -308,9 +311,9 @@ class NiftyPaintDC(wx.BufferedPaintDC):
             self.gc.DrawBitmap(bitmap, point[0], point[1],
                                bitmap_size[0], bitmap_size[1])
 
-        temp = (point[0],
+        temp = (point[0] + 1,
                 point[1],
-                point[0] + bitmap_size[0],
+                point[0] + bitmap_size[0] - 2,
                 point[1] + bitmap_size[1])
         
         self.clickable_map[temp] = start
