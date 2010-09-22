@@ -12,13 +12,14 @@ def profile_ready(start_on=False, off_after=False, sort=1):
                 decorated.original_function # This line puts it in locals, weird
                 base_profile.runctx(
                     'result = decorated.original_function(*args, **kwargs)',
-                    globals(), locals(), sort=sort
+                    globals(), locals(), sort=decorated.sort
                 )
                 return locals()['result']
             else: # decorated.profiling_on is False
                 return decorated.original_function(*args, **kwargs)
         decorated.original_function = function
         decorated.off_after = off_after
+        decorated.sort = sort
         decorated.profiling_on = start_on
         functools.update_wrapper(decorated, function)
         return decorated
