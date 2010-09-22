@@ -288,6 +288,7 @@ class NiftyPaintDC(wx.BufferedPaintDC):
             ]
             
             self.pen.SetWidth(0)
+            self.pen.SetStyle(wx.TRANSPARENT)
             self.gc.SetPen(self.pen)
             self.gc.SetBrush(wx.Brush(wx.Color(255, 153, 51)))
             self.gc.DrawRectangle(screen_slice[0], point[1] + 4,
@@ -349,6 +350,8 @@ class NiftyPaintDC(wx.BufferedPaintDC):
                 color = wx.Color(0, 0, 0)
             
             self.pen.SetColour(wx.Color(0, 0, 0))
+            self.pen.SetWidth(1)
+            self.pen.SetStyle(wx.SOLID)
             self.gc.SetPen(self.pen)
             
             self.gc.StrokeLine(line_start[0], line_start[1],
@@ -381,6 +384,8 @@ class NiftyPaintDC(wx.BufferedPaintDC):
                 color = wx.Color(0, 0, 0)
             
             self.pen.SetColour(wx.Color(0, 0, 0))
+            self.pen.SetWidth(1)
+            self.pen.SetStyle(wx.SOLID)
             self.gc.SetPen(self.pen)
             
             self.gc.StrokeLine(line_start[0], line_start[1],
