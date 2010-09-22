@@ -199,11 +199,5 @@ class StepProfile(ArgumentsProfile):
                self.args == other.args and self.kwargs == other.kwargs
 
     
-    def __hash__(self):
-        # Defining __hash__ because there's __eq__ which makes the default
-        # __hash__ disappear on Python 3.
-        return id(self)
-
-    
     def __ne__(self, other):
         return not self.__eq__(other)

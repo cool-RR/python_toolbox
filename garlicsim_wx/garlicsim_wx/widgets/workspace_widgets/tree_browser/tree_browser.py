@@ -226,36 +226,36 @@ class NiftyPaintDC(wx.BufferedPaintDC):
     def draw_sub_tree(self, point, tree, start):
 
         if start.step_profile:
-            color = garlicsim_wx.misc.colors.hue_to_dark_color(
+            color = garlicsim_wx.misc.colors.hue_to_light_color(
                 self.gui_project.step_profiles_to_hues[start.step_profile]
             )
         else:
-            color = wx.Color(0, 0, 0)
+            color = wx.Color(204, 204, 204)
         
         make_block_stripe = False
 
         if isinstance(start, garlicsim.data_structures.Block):
             
-            type = "Block"
+            type = 'Block'
             kids = start[-1].children
             if start == self.active_soft_block:
                 make_block_stripe = True
-                type = "Active " + type
+                type = 'Active ' + type
                 
         elif isinstance(start, garlicsim.data_structures.Node):
             
             kids = start.children
             
             if start.touched:
-                type = "Touched"
+                type = 'Touched'
             else:
-                type = "Untouched"
+                type = 'Untouched'
                 
             if start.still_in_editing:
                 type = 'Unfinalized ' + type
                     
             if start == self.active_soft_block:
-                type = "Active " + type
+                type = 'Active ' + type
                 
         else:
             
@@ -265,8 +265,8 @@ class NiftyPaintDC(wx.BufferedPaintDC):
         if make_block_stripe is True:
 
             bitmap = wx_tools.color_replaced_bitmap(
-                self.tree_browser.elements["Block"],
-                (0, 0, 0),
+                self.tree_browser.elements['Block'],
+                (0, 255, 0),
                 wx_tools.wx_color_to_big_rgb(color)
             )
             bitmap_size = bitmap.GetSize()
@@ -282,12 +282,12 @@ class NiftyPaintDC(wx.BufferedPaintDC):
             slice[1] = slice[0] + (1 / length)
 
             screen_slice = [
-                floor(point[0] + 2 + (bitmap_size[0] - 4) * slice[0]),
-                ceil(point[0] + 2 + (bitmap_size[0] - 4) * slice[1])
+                floor(point[0] + 4 + (bitmap_size[0] - 8) * slice[0]),
+                ceil(point[0] + 4 + (bitmap_size[0] - 8) * slice[1])
             ]
-            region = wx.Region(screen_slice[0], point[1] + 2,
+            region = wx.Region(screen_slice[0], point[1] + 4,
                                screen_slice[1] - screen_slice[0],
-                               bitmap_size[1] - 4)
+                               bitmap_size[1] - 8)
             
             self.SetClippingRegionAsRegion(region)
             self.gc.DrawBitmap(
@@ -299,7 +299,7 @@ class NiftyPaintDC(wx.BufferedPaintDC):
         else:
             bitmap = wx_tools.color_replaced_bitmap(
                 self.tree_browser.elements[type],
-                (0, 0, 0),
+                (0, 255, 0),
                 wx_tools.wx_color_to_big_rgb(color)
             )
             bitmap_size = bitmap.GetSize()
@@ -343,13 +343,13 @@ class NiftyPaintDC(wx.BufferedPaintDC):
             del temp
         
             if kid.step_profile:
-                color = garlicsim_wx.misc.colors.hue_to_dark_color(
+                color = garlicsim_wx.misc.colors.hue_to_light_color(
                     self.gui_project.step_profiles_to_hues[kid.step_profile]
                     )
             else:
                 color = wx.Color(0, 0, 0)
             
-            self.pen.SetColour(color)
+            self.pen.SetColour(wx.Color(0, 0, 0))
             self.gc.SetPen(self.pen)
             
             self.gc.StrokeLine(line_start[0], line_start[1],
@@ -375,13 +375,13 @@ class NiftyPaintDC(wx.BufferedPaintDC):
             del temp
             
             if end.step_profile:
-                color = garlicsim_wx.misc.colors.hue_to_dark_color(
+                color = garlicsim_wx.misc.colors.hue_to_light_color(
                     self.gui_project.step_profiles_to_hues[end.step_profile]
                     )
             else:
                 color = wx.Color(0, 0, 0)
             
-            self.pen.SetColour(color)
+            self.pen.SetColour(wx.Color(0, 0, 0))
             self.gc.SetPen(self.pen)
             
             self.gc.StrokeLine(line_start[0], line_start[1],

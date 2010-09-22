@@ -12,7 +12,7 @@ from garlicsim_wx.general_misc import emitters
 
 import garlicsim, garlicsim_wx
 from garlicsim_wx.widgets import WorkspaceWidget
-from garlicsim_wx.misc.colors import hue_to_dark_color
+from garlicsim_wx.misc.colors import hue_to_light_color
 
 from .color_control import ColorControl
 
@@ -73,7 +73,7 @@ class StepProfilesList(hypertreelist.HyperTreeList):
             try:
                 item = self.step_profiles_to_items[step_profile]
             except KeyError:
-                color = hue_to_dark_color(
+                color = hue_to_light_color(
                     self.gui_project.step_profiles_to_hues[step_profile]
                 )
                 color_control = ColorControl(self, step_profile, color)
@@ -95,7 +95,7 @@ class StepProfilesList(hypertreelist.HyperTreeList):
     def update_colors(self):
         
         for item in self.items:
-            color = hue_to_dark_color(
+            color = hue_to_light_color(
                 self.gui_project.step_profiles_to_hues[
                     item.step_profile
                 ]

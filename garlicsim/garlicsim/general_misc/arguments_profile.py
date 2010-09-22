@@ -303,9 +303,11 @@ class ArgumentsProfile(object):
     
     def __hash__(self): #tododoc: test in dict
         return hash(
-            self.function,
-            self.args,
-            tuple(self.kwargs)
+            (
+                self.function,
+                self.args,
+                tuple(self.kwargs)
+            )
         )
                     
 

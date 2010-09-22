@@ -45,7 +45,7 @@ class ColorControl(wx.Window):
                  step_profiles_to_hues.__setitem__(self.step_profile, color)
         
         hue_selection_dialog = \
-            HueSelectionDialog(self.frame, getter, setter, lightness=0.3,
+            HueSelectionDialog(self.frame, getter, setter, lightness=0.8,
                                title='Select hue for step profile')
         
         gui_project.step_profiles_to_hues_modified_emitter.add_output(
