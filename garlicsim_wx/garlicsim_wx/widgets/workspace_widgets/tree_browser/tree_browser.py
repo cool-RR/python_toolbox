@@ -80,8 +80,9 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
             self.gui_project.emitter_system.make_emitter(
                 inputs=(
                     self.needs_tree_remapping_emitter,
+                    self.gui_project.step_profiles_to_hues_modified_emitter,
                     self.gui_project.active_node_changed_or_modified_emitter,
-                    self.gui_project.tree_modified_on_path_emitter,                
+                    self.gui_project.tree_modified_on_path_emitter,
                     # Note that if there's a non-structure tree change not on
                     # the path it won't affect us.
                 ),

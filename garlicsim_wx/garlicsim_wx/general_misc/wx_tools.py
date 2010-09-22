@@ -71,8 +71,8 @@ def wx_color_to_rgb(wx_color):
 def wx_color_to_big_rgb(wx_color):
     return (
         wx_color.red,
-        wx_color.blue,
-        wx_color.green
+        wx_color.green,
+        wx_color.blue
     )
 
 
