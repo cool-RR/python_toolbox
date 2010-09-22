@@ -15,7 +15,7 @@ images_package = __images_package.__name__
 N_FRAMES = 87
 N_BLURRED_GEAR_FRAMES = 6
 
-@caching.cache
+@caching.cache()
 def get_image_raw(i):
     '''Get image number `i` of the gear, when 0 <= i <= (N_FRAMES - 1).'''
     
@@ -33,7 +33,7 @@ def get_image_raw(i):
     return bitmap
             
 
-@caching.cache
+@caching.cache()
 def get_blur_image_raw(i):
     '''
     Get image number `i` of the blurred gear.
@@ -57,7 +57,7 @@ def get_blur_image_raw(i):
     return bitmap
 
 
-@caching.cache
+@caching.cache()
 def get_blurred_gear_image(i, j):
     '''
     Get image number `i` of the gear, with motion blur number `j`.
@@ -86,7 +86,7 @@ def get_blurred_gear_image_by_ratio(i, r):
     )
 
 
-@caching.cache
+@caching.cache()
 def get_image_size():
     '''Get the size of these images here.'''
     return get_image_raw(0).GetSize()

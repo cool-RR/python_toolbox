@@ -17,7 +17,7 @@ def get_from_state(state):
     return _get_from_state_class(state_class)
     
 
-@caching.cache
+@caching.cache()
 def _get_from_state_class(state_class):
     '''
     Find the simpack that a state class belongs to.

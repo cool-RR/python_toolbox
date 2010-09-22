@@ -7,7 +7,7 @@ This module defines the Infinity class and related exceptions.
 See their documentation for more info.
 '''
 
-from garlicsim.misc import GarlicSimException
+from garlicsim.general_misc.exceptions import CuteException
 from garlicsim.general_misc import math_tools
 
 
@@ -28,7 +28,7 @@ def is_nonfractional(x):
     except:
         return False
     
-class InfinityRaceError(GarlicSimException):
+class InfinityRaceError(CuteException):
     '''
     An "infinity race" between two infinite sizes.
     
@@ -37,7 +37,7 @@ class InfinityRaceError(GarlicSimException):
     it impossible to determine what the result of the computation would be.
     '''
 
-class InfinityError(GarlicSimException):
+class InfinityError(CuteException):
     '''Infinity-related exception.'''
 
     

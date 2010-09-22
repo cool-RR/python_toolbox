@@ -21,7 +21,7 @@ BIG_RADIUS = RADIUS + HALF_THICKNESS
 two_pi = math.pi * 2
 
 
-@caching.cache
+@caching.cache()
 def make_bitmap(lightness=1, saturation=1):
     bitmap = wx.EmptyBitmap(BIG_LENGTH, BIG_LENGTH)
     assert isinstance(bitmap, wx.Bitmap)

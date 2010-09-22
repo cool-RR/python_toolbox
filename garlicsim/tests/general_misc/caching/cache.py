@@ -3,7 +3,6 @@ import weakref
 
 from garlicsim.general_misc.caching import cache
 
-
 def counting_func(a=1, b=2, *args, **kwargs):
     if not hasattr(counting_func, 'i'):
         counting_func.i = 0
@@ -15,43 +14,56 @@ def counting_func(a=1, b=2, *args, **kwargs):
         
 def test_cache_basic():
     
-    my_func = cache(counting_func)
+    f = cache()(counting_func)
     
-    assert my_func() == my_func() == my_func(1, 2) == my_func(a=1, b=2)
+    assert f() == f() == f(1, 2) == f(a=1, b=2)
     
-    assert my_func() != my_func('boo')
+    assert f() != f('boo')
     
-    assert my_func('boo') == my_func('boo') == my_func(a='boo')
+    assert f('boo') == f('boo') == f(a='boo')
     
-    assert my_func('boo') != my_func(meow='frrr')
+    assert f('boo') != f(meow='frrr')
     
-    assert my_func(meow='frrr') == my_func(1, meow='frrr') == my_func(a=1, meow='frrr')
+    assert f(meow='frrr') == f(1, meow='frrr') == f(a=1, meow='frrr')
     
 
 def test_cache_weakref():
     
-    my_func = cache(counting_func)
+    f = cache()(counting_func)
     
     class A(object): pass
     
     a = A()
-    result = my_func(a)
-    assert result == my_func(a) == my_func(a) == my_func(a)
+    result = f(a)
+    assert result == f(a) == f(a) == f(a)
     a_ref = weakref.ref(a)    
     del a
     gc.collect()
     assert a_ref() is None
     
     a = A()
-    result = my_func(meow=a)
-    assert result == my_func(meow=a) == my_func(meow=a) == my_func(meow=a)
+    result = f(meow=a)
+    assert result == f(meow=a) == f(meow=a) == f(meow=a)
     a_ref = weakref.ref(a)
     del a
     gc.collect()
     assert a_ref() is None
     
     
+def test_cache_max_size():
     
+    f = cache(max_size=3)(counting_func)
     
+    r1, r2, r3 = f(1), f(2), f(3)
+    
+    assert f(1) == f(1) == r1 == f(1)
+    assert f(2) == f(2) == r2 == f(2)
+    assert f(3) == f(3) == r3 == f(3)
+    
+    r4 = f(4)
+    
+    assert f(1) != r1 # Now we recalculated f(1) so we forgot f(2)
+    assert f(3) == f(3) == r3 == f(3)
+    assert f(4) == f(4) == r4 == f(4)
     
     

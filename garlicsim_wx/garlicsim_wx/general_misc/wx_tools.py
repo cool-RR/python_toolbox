@@ -13,7 +13,7 @@ import wx
 from garlicsim.general_misc import caching
 
 
-@caching.cache
+@caching.cache()
 def get_background_color():
     '''Get the default garlicsim_wx background color'''
     
@@ -34,7 +34,7 @@ def get_background_color():
         return wx.Color(212, 208, 200)
 
 
-@caching.cache
+@caching.cache()
 def get_background_brush():
     '''Get the default garlicsim_wx background brush.'''
     return wx.Brush(get_background_color())
