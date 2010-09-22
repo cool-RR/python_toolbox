@@ -16,6 +16,7 @@ from wx.lib.scrolledpanel import ScrolledPanel
 
 import garlicsim_wx.general_misc.vectorish as vectorish
 from garlicsim_wx.general_misc import emitters
+from garlicsim.general_misc import caching
 from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
 
@@ -28,6 +29,7 @@ images_package = __images_package.__name__
 
 connector_length = 10 # length of connecting line between elements
 
+my_color_replaced_bitmap = caching.cache(max_size=80)(wx_tools.color_replaced_bitmap)
 
 class TreeBrowser(ScrolledPanel, WorkspaceWidget):
     '''Widget for browsing a garlicsim.data_structures.Tree.'''
@@ -265,7 +267,7 @@ class NiftyPaintDC(wx.BufferedPaintDC):
 
         if make_block_stripe is True:
 
-            bitmap = wx_tools.color_replaced_bitmap(
+            bitmap = my_color_replaced_bitmap(
                 self.tree_browser.elements['Block'],
                 (0, 255, 0),
                 wx_tools.wx_color_to_big_rgb(color)
@@ -297,7 +299,7 @@ class NiftyPaintDC(wx.BufferedPaintDC):
                                   
 
         else:
-            bitmap = wx_tools.color_replaced_bitmap(
+            bitmap = my_color_replaced_bitmap(
                 self.tree_browser.elements[type],
                 (0, 255, 0),
                 wx_tools.wx_color_to_big_rgb(color)
