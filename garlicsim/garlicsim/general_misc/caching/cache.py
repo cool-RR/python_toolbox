@@ -52,7 +52,7 @@ def cache(max_size=Infinity):
                 except KeyError:
                     cached.cache[sleek_call_args] = value = function(*args, **kwargs)
                     if len(cached.cache) > max_size:
-                        cached.cache.popitem()
+                        cached.cache.popitem(last=False)
                     return value
                     
             cached.cache = cache_dict

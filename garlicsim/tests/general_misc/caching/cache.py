@@ -54,16 +54,16 @@ def test_cache_max_size():
     
     f = cache(max_size=3)(counting_func)
     
-    r1, r2, r3 = f(1), f(2), f(3)
+    r0, r1, r2 = f(0), f(1), f(2)
     
+    assert f(0) == f(0) == r0 == f(0)
     assert f(1) == f(1) == r1 == f(1)
     assert f(2) == f(2) == r2 == f(2)
-    assert f(3) == f(3) == r3 == f(3)
     
-    r4 = f(4)
+    r3 = f(3)
     
-    assert f(1) != r1 # Now we recalculated f(1) so we forgot f(2)
+    assert f(0) != r0 # Now we recalculated f(0) so we forgot f(1)
+    assert f(2) == f(2) == r2 == f(2)
     assert f(3) == f(3) == r3 == f(3)
-    assert f(4) == f(4) == r4 == f(4)
     
     
