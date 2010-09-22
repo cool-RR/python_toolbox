@@ -3,11 +3,11 @@ import functools
 from . import base_profile
 
 
-def profile_ready(start_on=False, off_after=True, sort=1):
+def profile_ready(start_on=False, off_after=False, sort=1):
     def decorator(function):
         def decorated(*args, **kwargs):
             if decorated.profiling_on:
-                if off_after:
+                if decorated.off_after:
                     decorated.profiling_on = False
                 decorated.original_function # This line puts it in locals, weird
                 base_profile.runctx(
@@ -18,6 +18,7 @@ def profile_ready(start_on=False, off_after=True, sort=1):
             else: # decorated.profiling_on is False
                 return decorated.original_function(*args, **kwargs)
         decorated.original_function = function
+        decorated.off_after = off_after
         decorated.profiling_on = start_on
         functools.update_wrapper(decorated, function)
         return decorated

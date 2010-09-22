@@ -12,7 +12,9 @@ def call_and_check_if_profiled(f):
     f()
     sys.stdout = old_stdout
     
-    dump = string_io.get_value()
+    dump = string_io.getvalue()
+    
+    sys.stdout.write(dump)
     
     segments_found = [(segment in dump) for segment in segments]
     
