@@ -286,16 +286,14 @@ class NiftyPaintDC(wx.BufferedPaintDC):
                 floor(point[0] + 4 + (bitmap_size[0] - 8) * slice[0]),
                 ceil(point[0] + 4 + (bitmap_size[0] - 8) * slice[1])
             ]
-            region = wx.Region(screen_slice[0], point[1] + 4,
-                               screen_slice[1] - screen_slice[0],
-                               bitmap_size[1] - 8)
             
-            self.SetClippingRegionAsRegion(region)
-            self.gc.DrawBitmap(
-                second_bitmap, point[0], point[1], second_bitmap.GetSize()[0],
-                second_bitmap.GetSize()[1]
-            )
-            self.DestroyClippingRegion()
+            self.pen.SetWidth(0)
+            self.gc.SetPen(self.pen)
+            self.gc.SetBrush(wx.Brush(wx.Color(255, 153, 51)))
+            self.gc.DrawRectangle(screen_slice[0], point[1] + 4,
+                                  screen_slice[1] - screen_slice[0],
+                                  bitmap_size[1] - 8)
+                                  
 
         else:
             bitmap = wx_tools.color_replaced_bitmap(
