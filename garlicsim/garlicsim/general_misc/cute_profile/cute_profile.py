@@ -3,7 +3,7 @@ import functools
 from . import base_profile
 
 
-def ready_to_profile(start_on=False, off_after=True, sort=1):
+def profile_ready(start_on=False, off_after=True, sort=1):
     def decorator(function):
         def decorated(*args, **kwargs):
             if decorated.profiling_on:
@@ -28,7 +28,7 @@ def ready_to_profile(start_on=False, off_after=True, sort=1):
 
 if __name__ == '__main__':
     
-    @ready_to_profile(start_on=True)
+    @profile_ready(start_on=True)
     def f():
         import time
         time.sleep(0.01)

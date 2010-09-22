@@ -9,7 +9,7 @@ def runctx(statement, globals, locals, filename=None, sort=-1):
 
     statement and filename have the same semantics as profile.run
     """
-    prof = cProfile.Profile()
+    prof = Profile()
     result = None
     try:
         try:
