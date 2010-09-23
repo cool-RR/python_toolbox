@@ -81,7 +81,12 @@ class StepProfilesList(hypertreelist.HyperTreeList):
                 item.step_profile = step_profile
                 item.color_control = color_control
                 self.step_profiles_to_items[step_profile] = item
-                self.SetItemText(item, step_profile.__repr__(short_form=True), 1)
+                self.SetItemText(
+                    item,
+                    step_profile.__repr__(short_form=True,
+                                          root=self.gui_project.simpack),
+                    1
+                )
                 
             item.color_control.SetSize((item.color_control.GetSize()[0],
                                        item.GetHeight() - 4))
