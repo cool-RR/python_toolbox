@@ -216,6 +216,7 @@ class Tree(object):
                 ends = member[-1].ends
             elif isinstance(member, End):
                 children = ()
+                ends = ()
             else:
                 children = member.children
                 ends = member.ends

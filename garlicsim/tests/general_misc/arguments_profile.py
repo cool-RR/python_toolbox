@@ -259,3 +259,20 @@ def test_method_equality():
     
     assert ArgumentsProfile(c1.my_method, 7, 'meow') != \
            ArgumentsProfile(c2.my_method, 7, 'meow')
+    
+
+def test_unhashable():
+    def func(a, b, c=3, d=4, **kwargs):
+        pass
+    
+    a1 = ArgumentsProfile(func, 7, {1: 2})
+    assert a1.args == (7, {1: 2})
+    assert not a1.kwargs
+    hash(a1)
+    
+    a2 = ArgumentsProfile(func, 7, set([1, [3, 4]]), meow=[1, 2, {1: [1, 2]}])
+    assert a2.args == (7, set([1, [3, 4]]))
+    assert a2.kwargs == OrderedDict(
+        (('meow', [1, 2, {1: [1, 2]}]),)
+    )
+    hash(a2)

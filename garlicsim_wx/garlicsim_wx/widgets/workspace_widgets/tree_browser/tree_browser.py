@@ -411,7 +411,18 @@ class NiftyPaintDC(wx.BufferedPaintDC):
 
         assert isinstance(start, garlicsim.data_structures.End)
         
-        bitmap = self.tree_browser.elements['Untouched End']
+        if start.step_profile:
+            color = garlicsim_wx.misc.colors.hue_to_light_color(
+                self.gui_project.step_profiles_to_hues[start.step_profile]
+            )
+        else:
+            color = wx.Color(204, 204, 204)
+        
+        bitmap = my_color_replaced_bitmap(
+            self.tree_browser.elements['Untouched End'],
+            (0, 255, 0),
+            wx_tools.wx_color_to_big_rgb(color)
+        )
         self.DrawBitmapPoint(bitmap, point, useMask=True)
         bitmap_size = bitmap.GetSize()
 
