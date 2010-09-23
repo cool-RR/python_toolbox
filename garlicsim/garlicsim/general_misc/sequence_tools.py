@@ -5,3 +5,4 @@ def heads(sequence, include_empty=False, include_full=True):
     if include_full:
         yield sequence[:]
         
+        

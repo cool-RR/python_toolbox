@@ -1,3 +1,5 @@
+#tododoc: test
+
 from garlicsim.general_misc.infinity import Infinity
 
 
