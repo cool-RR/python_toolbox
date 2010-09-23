@@ -423,6 +423,8 @@ class GuiProject(object):
         
     def set_default_buffer(self, default_buffer):
         self.default_buffer = default_buffer
+        self.project.ensure_buffer(self.active_node,
+                                   clock_buffer=self.default_buffer)
         self.default_buffer_modified_emitter.emit()
     
         
@@ -723,8 +725,6 @@ class GuiProject(object):
         
         self.project.ensure_buffer(self.active_node, self.default_buffer)
 
-        
-    
     
     def _update_step_profiles_set(self):
 

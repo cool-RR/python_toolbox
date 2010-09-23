@@ -8,6 +8,15 @@ import garlicsim, garlicsim_wx
 from garlicsim_wx.general_misc import wx_tools
 
 
+class Freezer(object):
+    def __init__(self, autocrunch_controls):
+        self.autocrunch_controls = autocrunch_controls
+    def __enter__(self, *args, **kwargs):
+        self.autocrunch_controls.frozen += 1
+    def __exit__(self, *args, **kwargs):
+        self.autocrunch_controls.frozen -= 1
+        
+
 class AutocrunchControls(wx.Panel):
 
     def __init__(self, parent, frame):
@@ -19,6 +28,9 @@ class AutocrunchControls(wx.Panel):
         wx.Panel.__init__(self, parent, -1)
         
         self.SetBackgroundColour(wx_tools.get_background_color())
+                
+        self.frozen = 0
+        self.freezer = Freezer(self)
         
         self.main_h_sizer = wx.BoxSizer(wx.HORIZONTAL)
         
@@ -64,6 +76,7 @@ class AutocrunchControls(wx.Panel):
                   source=self.check_box)
         
         self.Bind(wx.EVT_SPINCTRL, self.on_spin, self.spin_ctrl)
+        self.Bind(wx.EVT_TEXT, self.on_text, self.spin_ctrl)
         
         self.gui_project.default_buffer_modified_emitter.add_output(
             self.update_spin_ctrl
@@ -89,18 +102,28 @@ class AutocrunchControls(wx.Panel):
             self.gui_project.default_buffer = 0
             self.spin_ctrl.Disable()
         
+    def _update_gui_project(self):
+        self.gui_project.set_default_buffer(self.spin_ctrl.GetValue())
+        
             
     def on_spin(self, event):
-        self.gui_project.default_buffer = self.spin_ctrl.GetValue()
+        self._update_gui_project()
+        event.Skip()
+            
+        
+    def on_text(self, event):
+        with self.freezer:
+            self._update_gui_project()
         event.Skip()
         
         
     def update_spin_ctrl(self):
-        value = self.gui_project.default_buffer or \
-                self.gui_project._default_buffer_before_cancellation or \
-                0
-        self.spin_ctrl.SetValue(value)
-        self.spin_ctrl.Enable(bool(value))
+        if not self.frozen:
+            value = self.gui_project.default_buffer or \
+                    self.gui_project._default_buffer_before_cancellation or \
+                    0
+            self.spin_ctrl.SetValue(value)
+            self.spin_ctrl.Enable(bool(value))
         
         
     def update_check_box(self):
