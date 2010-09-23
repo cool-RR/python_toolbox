@@ -79,7 +79,7 @@ class ProcessCruncher(BaseCruncher):
         
         Causes it to shut down as soon as it receives the order.
         '''
-        self.order_queue.put("retire")
+        self.order_queue.put('retire')
         
         
     def update_crunching_profile(self, profile):

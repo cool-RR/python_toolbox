@@ -17,6 +17,10 @@ from garlicsim.asynchronous_crunching import \
      BaseCruncher, CrunchingProfile, ObsoleteCruncherError
 
 
+def my_print(x): #tododoc: kill
+    print(x)
+    sys.stdout.flush()
+
 
 class Process(multiprocessing.Process):
     def __init__(self, step_iterator_getter, initial_state, crunching_profile):
@@ -79,6 +83,7 @@ class Process(multiprocessing.Process):
         try:
             self.main_loop()
         except ObsoleteCruncherError:
+            my_print('%s died of ObsoleteCruncherError' % self)
             return
 
     def main_loop(self):
@@ -106,8 +111,10 @@ class Process(multiprocessing.Process):
                 order = self.get_order()
                 if order:
                     self.process_order(order) 
+            my_print('%s died of iterator end' % self)
         except garlicsim.misc.WorldEnd:
-            self.work_queue.put(garlicsim.asynchronous_crunching.misc.EndMarker())
+            self.work_queue.put(garlicsim.asynchronous_crunching.misc.EndMarker())            
+            my_print('%s died of worldend' % self)
         
     def check_crunching_profile(self, state):
         '''
