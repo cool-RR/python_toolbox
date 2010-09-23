@@ -214,7 +214,10 @@ class GuiProject(object):
             )
             
             self.tree_structure_modified_emitter = es.make_emitter(
-                outputs=(self.tree_modified_emitter,),
+                outputs=(
+                    self.tree_modified_emitter,
+                    self._update_step_profiles_set
+                    ),
                 name='tree_structure_modified',
             )
             
@@ -722,6 +725,32 @@ class GuiProject(object):
         
         self.project.ensure_buffer(self.active_node, self.default_buffer)
 
+    
+    def _update_step_profiles_set(self):
+
+        # todo: inefficient shit going on here.
+        
+        tree_members_iterator = self.project.tree.iterate_tree_members(
+            include_blockful_nodes=False
+        )
+        
+        current_step_profiles = \
+            [tree_member.step_profile for tree_member in tree_members_iterator]
+        
+        try:
+            current_step_profiles.remove(None)
+        except ValueError:
+            pass
+        
+        for step_profile in self.step_profiles:
+            if step_profile not in current_step_profiles:
+                self.step_profiles.remove(step_profile)
+        
+        for step_profile in current_step_profiles:
+            if step_profile not in self.step_profiles:
+                self.step_profiles.add(step_profile)
+                
+    
         
     def __getstate__(self):
         my_dict = dict(self.__dict__)
@@ -743,4 +772,7 @@ class GuiProject(object):
     
     def __setstate__(self, pickled_project):
         raise Exception
+    
+    
+    
     

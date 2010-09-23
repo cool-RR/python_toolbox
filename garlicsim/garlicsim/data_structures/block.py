@@ -47,6 +47,9 @@ class Block(TreeMember):
     check its ".block" attribute.
 
     '''
+    # todo: Possibly add a `children` property that will get from the last node.
+    # Will simplify a lot of code. (Possibly `parent` too.)
+    
     def __init__(self, node_list):
         '''Construct a block from the members of node_list.'''
         self.alive = True

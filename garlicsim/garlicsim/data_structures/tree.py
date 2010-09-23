@@ -188,6 +188,29 @@ class Tree(object):
         return result
     
     
+    def iterate_tree_members(self, include_blockful_nodes=True):
+        members_to_explore = self.roots[:]
+        while members_to_explore:
+            member = members_to_explore.pop()
+            yield member
+            if isinstance(member, Block):
+                if include_blockful_nodes:
+                    for node in member:
+                        yield node
+                children = member[-1].children
+                ends = member[-1].ends
+            elif isinstance(member, End):
+                children = ()
+            else:
+                children = member.children
+                ends = member.ends
+            
+            members_to_explore += children
+            members_to_explore += ends
+        
+        
+    
+    
     def delete_node_selection(self, node_selection):
         '''
         Delete a node selection from the tree.
