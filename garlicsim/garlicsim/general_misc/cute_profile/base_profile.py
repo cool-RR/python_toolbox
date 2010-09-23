@@ -1,7 +1,10 @@
-try:
-    from cProfile import *
-except ImportError:
-    from profile import *
+
+from cProfile import *
+
+from .pstats_troubleshooting import troubleshoot_pstats
+troubleshoot_pstats()
+del troubleshoot_pstats
+
 
 def runctx(statement, globals, locals, filename=None, sort=-1):
     """Run statement under profiler, supplying your own globals and locals,
@@ -22,3 +25,4 @@ def runctx(statement, globals, locals, filename=None, sort=-1):
         else:
             result = prof.print_stats(sort)
     return result
+
