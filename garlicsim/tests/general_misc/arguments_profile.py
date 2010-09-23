@@ -220,5 +220,42 @@ def test_many_defaultfuls_and_star_args_and_star_kwargs():
     assert a2.kwargs == OrderedDict(
         (('blue', True), ('zany', True), ('_wet', False), ('__funky', None))
     )
+
+    
+def test_method_equality():
+    # This tests for a bug where functions are compared with `is` instead of
+    # `==`, which causes failure with both bound and unbound methods.
+    
+    class C(object):
+        def my_method(self, *args):
+            pass
+
+    c1 = C()
+    c2 = C()
+        
+    assert ArgumentsProfile(C.my_method, c1) == \
+           ArgumentsProfile(C.my_method, c1)
+    
+    assert ArgumentsProfile(C.my_method, c1, 7, 'meow') == \
+           ArgumentsProfile(C.my_method, c1, 7, 'meow')
+    
+    assert ArgumentsProfile(C.my_method, c1) != \
+           ArgumentsProfile(C.my_method, c1, 7, 'meow')
     
     
+    
+    assert ArgumentsProfile(C.my_method, c1) != ArgumentsProfile(c1.my_method)
+    
+    assert ArgumentsProfile(C.my_method, c2) != ArgumentsProfile(c1.my_method)
+    
+    assert ArgumentsProfile(c1.my_method) == ArgumentsProfile(c1.my_method)
+    
+    assert ArgumentsProfile(c1.my_method, 7, 'meow') == \
+           ArgumentsProfile(c1.my_method, 7, 'meow')
+    
+    assert ArgumentsProfile(c1.my_method) != ArgumentsProfile(c1.my_method, 7, 'meow')
+    
+    assert ArgumentsProfile(c1.my_method) != ArgumentsProfile(c2.my_method)
+    
+    assert ArgumentsProfile(c1.my_method, 7, 'meow') != \
+           ArgumentsProfile(c2.my_method, 7, 'meow')

@@ -195,8 +195,7 @@ class StepProfile(ArgumentsProfile):
     
     def __eq__(self, other):
         return isinstance(other, StepProfile) and \
-               self.step_function is other.step_function and \
-               self.args == other.args and self.kwargs == other.kwargs
+               ArgumentsProfile.__eq__(self, other)
 
     
     def __ne__(self, other):

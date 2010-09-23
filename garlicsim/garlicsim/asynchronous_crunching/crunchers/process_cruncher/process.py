@@ -2,7 +2,6 @@
 # This program is distributed under the LGPL2.1 license.
 
 
-
 import multiprocessing
 import copy
 import Queue
@@ -15,11 +14,6 @@ except Exception: pass
 import garlicsim
 from garlicsim.asynchronous_crunching import \
      BaseCruncher, CrunchingProfile, ObsoleteCruncherError
-
-
-def my_print(x): #tododoc: kill
-    print(x)
-    sys.stdout.flush()
 
 
 class Process(multiprocessing.Process):
@@ -82,10 +76,11 @@ class Process(multiprocessing.Process):
         '''
         try:
             self.main_loop()
-        except ObsoleteCruncherError:
-            my_print('%s died of ObsoleteCruncherError' % self)
+        except ObsoleteCruncherError as e:
+            my_print('%s died of ObsoleteCruncherError(%s)' % (self, e.message))
             return
 
+        
     def main_loop(self):
         '''
         The main loop of the cruncher.
@@ -115,7 +110,8 @@ class Process(multiprocessing.Process):
         except garlicsim.misc.WorldEnd:
             self.work_queue.put(garlicsim.asynchronous_crunching.misc.EndMarker())            
             my_print('%s died of worldend' % self)
-        
+
+            
     def check_crunching_profile(self, state):
         '''
         Check if the cruncher crunched enough states. If so retire.
@@ -156,6 +152,8 @@ class Process(multiprocessing.Process):
     def process_crunching_profile_order(self, order):
         '''Process an order to update the crunching profile.'''
         if self.crunching_profile.step_profile != order.step_profile:
+            my_print(self.crunching_profile.step_profile)
+            my_print(order.step_profile)
             raise ObsoleteCruncherError('Step profile changed; Shutting down. '
                                         'Crunching manager should create a '
                                         'new cruncher.')

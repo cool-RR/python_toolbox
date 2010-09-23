@@ -294,9 +294,16 @@ class ArgumentsProfile(object):
             
                     
     def __eq__(self, other):
+        # todo: maybe raise warning when unbound method is compared with same
+        # method just bound with the object passed to the unbound method, and
+        # the result of both functions would be the same, but we're not smart
+        # enough to say it's the same arguments profile, so raise a warning.
         if not isinstance(other, ArgumentsProfile):
             return NotImplemented
-        return (self.function is other.function) and \
+        # Note that we're comparing the functions with a `==` here. This lesson
+        # cost me a couple of days: `MyClass.method == MyClass.method` but
+        # `MyClass.method is not MyClass.method`.
+        return (self.function == other.function) and \
                (self.args == other.args) and \
                (self.kwargs == other.kwargs)
     

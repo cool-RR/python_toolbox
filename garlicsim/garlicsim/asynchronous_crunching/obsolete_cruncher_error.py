@@ -16,3 +16,4 @@ class ObsoleteCruncherError(BaseException):
     should therefore be stopped.
     '''
     # Inherits from BaseException because it is an exit exception
+    # todo: I heard that BaseException.message is deprecated! Problematic?

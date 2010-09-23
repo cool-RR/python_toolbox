@@ -28,7 +28,7 @@ from .misc import EndMarker
 __all__ = ['CrunchingManager', 'DefaultCruncher', 'DefaultHistoryCruncher']
 
 
-DefaultCruncher = crunchers.ProcessCruncher
+DefaultCruncher = crunchers.ThreadCruncher
 '''Cruncher class to be used by default in non-history-dependent simulations.'''
 
 
