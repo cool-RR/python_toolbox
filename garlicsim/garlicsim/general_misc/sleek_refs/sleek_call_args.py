@@ -40,10 +40,15 @@ class SleekCallArgs(object):
         
         self.args_refs = CuteSleekValueDictionary(self.destroy, call_args)
         
-        # Calling hash now so it will get cached for the future; In the future
-        # the `.args`, `.star_args` and `.star_kwargs` attributes may change, so
-        # we must record the hash now:
-        hash(self)
+        # In the future the `.args`, `.star_args` and `.star_kwargs` attributes
+        # may change, so we must record the hash now:
+        self._hash = hash(
+            (
+                tuple(sorted(tuple(self.args))),
+                self.star_args,
+                tuple(sorted(tuple(self.star_kwargs)))
+            )
+        )
         
         
     
@@ -66,17 +71,7 @@ class SleekCallArgs(object):
         
     
     def __hash__(self):
-        if hasattr(self, '_hash'):
-            return self._hash
-        else:
-            self._hash = hash(
-                (
-                    tuple(sorted(tuple(self.args))),
-                    self.star_args,
-                    tuple(sorted(tuple(self.star_kwargs)))
-                )
-            )
-            return self._hash
+        return self._hash
 
     
     def __eq__(self, other):

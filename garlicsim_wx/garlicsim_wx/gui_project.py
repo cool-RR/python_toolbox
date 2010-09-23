@@ -22,7 +22,8 @@ import wx.py.shell
 
 from garlicsim.general_misc import queue_tools
 from garlicsim.general_misc import dict_tools
-from general_misc.stringsaver import s2i,i2s
+from garlicsim.general_misc import cute_profile
+from general_misc.stringsaver import s2i, i2s
 from garlicsim.general_misc.infinity import Infinity
 from garlicsim.general_misc import binary_search
 from garlicsim_wx.general_misc.emitting_ordered_set import EmittingOrderedSet
@@ -450,16 +451,15 @@ class GuiProject(object):
         '''Get the active state, i.e. the state of the active node.'''
         return self.active_node.state if self.active_node is not None else None
                 
-
     
     def _set_active_node(self, node):
         '''Set the active node, displaying it onscreen. Internal use.'''
         if self.active_node is not node:
-            self.active_node = node        
+            self.active_node = node
             self.active_node_changed_emitter.emit()
 
-        
-    
+     
+    @cute_profile.profile_ready(off_after=True)
     def set_active_node(self, node, modify_path=True):
         '''
         Set the active node, displaying it onscreen.
