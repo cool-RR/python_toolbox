@@ -126,7 +126,11 @@ class StepProfile(ArgumentsProfile):
                 
             else: # step_profile is not None
                 if not isinstance(step_profile, StepProfile):
-                    raise Gar
+                    raise GarlicSimException(
+                        "You passed in %s as a keyword argument with a "
+                        "keyword of `step_profile`, but it's not a step "
+                        "profile." % step_profile
+                    )
                 return step_profile
 
         
