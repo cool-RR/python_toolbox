@@ -186,6 +186,21 @@ class Tree(object):
         for root in self.roots:
             result += root.all_possible_paths()
         return result
+
+
+    def get_step_profiles(self):
+        tree_members_iterator = \
+            self.iterate_tree_members(include_blockful_nodes=False)
+        
+        step_profiles = \
+            [tree_member.step_profile for tree_member in tree_members_iterator]
+        
+        try:
+            step_profiles.remove(None)
+        except ValueError:
+            pass
+        
+        return step_profiles
     
     
     def iterate_tree_members(self, include_blockful_nodes=True):

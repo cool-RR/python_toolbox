@@ -22,7 +22,6 @@ import wx.py.shell
 
 from garlicsim.general_misc import queue_tools
 from garlicsim.general_misc import dict_tools
-from garlicsim.general_misc import cute_profile
 from general_misc.stringsaver import s2i, i2s
 from garlicsim.general_misc.infinity import Infinity
 from garlicsim.general_misc import binary_search
@@ -462,7 +461,6 @@ class GuiProject(object):
             self.active_node_changed_emitter.emit()
 
      
-    @cute_profile.profile_ready(off_after=True)
     def set_active_node(self, node, modify_path=True):
         '''
         Set the active node, displaying it onscreen.
@@ -725,31 +723,12 @@ class GuiProject(object):
         
         self.project.ensure_buffer(self.active_node, self.default_buffer)
 
+        
+    
     
     def _update_step_profiles_set(self):
 
-        # todo: inefficient shit going on here.
-        
-        tree_members_iterator = self.project.tree.iterate_tree_members(
-            include_blockful_nodes=False
-        )
-        
-        current_step_profiles = \
-            [tree_member.step_profile for tree_member in tree_members_iterator]
-        
-        try:
-            current_step_profiles.remove(None)
-        except ValueError:
-            pass
-        
-        for step_profile in self.step_profiles:
-            if step_profile not in current_step_profiles:
-                self.step_profiles.remove(step_profile)
-        
-        for step_profile in current_step_profiles:
-            if step_profile not in self.step_profiles:
-                self.step_profiles.add(step_profile)
-                
+        self.step_profiles |= self.project.tree.get_step_profiles()                
     
         
     def __getstate__(self):
