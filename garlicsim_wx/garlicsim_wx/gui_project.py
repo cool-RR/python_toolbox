@@ -611,8 +611,11 @@ class GuiProject(object):
         #todo: maybe not let to do it from unfinalized touched node?
         
         node = self.active_node
-        self.project.begin_crunching(self.active_node,
-                                     self.default_buffer or 1)
+        self.project.begin_crunching(
+            self.active_node,
+            self.default_buffer or 1,
+            step_profile=self.active_node.step_profile
+        )
 
 
     def fork_by_editing(self, e=None):

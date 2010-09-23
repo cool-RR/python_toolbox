@@ -12,6 +12,7 @@ import copy
 from garlicsim.general_misc import caching
 from garlicsim.general_misc.arguments_profile import ArgumentsProfile
 from garlicsim.general_misc import address_tools
+from garlicsim.misc.exceptions import GarlicSimException
 
 from garlicsim.misc.simpack_grokker.get_step_type import get_step_type
 
@@ -116,10 +117,17 @@ class StepProfile(ArgumentsProfile):
         
         if 'step_profile' in kwargs: # tododoc
             kwargs_copy = kwargs.copy()
-            step_profile = kwargs.pop('step_profile')
+            step_profile = kwargs_copy.pop('step_profile')
             
-            assert isinstance(step_profile, StepProfile)
-            return step_profile
+            if step_profile is None:
+                # We let the user specify `step_profile=None` if he wants to get
+                # the default step profile.
+                return StepProfile(default_step_function)
+                
+            else: # step_profile is not None
+                if not isinstance(step_profile, StepProfile):
+                    raise Gar
+                return step_profile
 
         
         # No step function in kwargs. We'll try args:
