@@ -72,6 +72,7 @@ def test_cache_unhashable_arguments():
     
     f = cache()(counting_func)
     
+    
     assert f(set((1, 2))) == f(set((1, 2)))
     
     assert f(7, set((1, 2))) != f(8, set((1, 2)))

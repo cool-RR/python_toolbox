@@ -49,14 +49,10 @@ class StepProfilesList(hypertreelist.HyperTreeList):
         
         self.items = self.root_item._children
         
-        #self.static_text = wx.StaticText(self.GetMainWindow(), -1, 'boobiesqqq')
-        
-        #item = self.AppendItem(self.root_item, '', ct_type=1, wnd=self.static_text)
-        #self.SetItemText(item, 'muaww', 1)
+        self.Bind(wx.EVT_RIGHT_UP, self.on_tree_item_menu)
+        self.Bind(wx.EVT_TREE_ITEM_MENU, self.on_tree_item_menu)
         
         
-        #self.AppendItem(self.root_item, 'ass', ct_type=2, wnd=None)
-        #self.AppendItem(self.root_item, 'tits', ct_type=2, wnd=None)
         
         self.gui_project.step_profiles_set_modified_emitter.add_output(
             self.update
@@ -65,6 +61,7 @@ class StepProfilesList(hypertreelist.HyperTreeList):
         self.gui_project.step_profiles_to_hues_modified_emitter.add_output(
             self.update_colors
         )
+        
   
         
     def update(self):
@@ -106,3 +103,7 @@ class StepProfilesList(hypertreelist.HyperTreeList):
                 ]
             )
             item.color_control.set_color(color)
+            
+    def on_tree_item_menu(self, event):
+        1/0
+        pass

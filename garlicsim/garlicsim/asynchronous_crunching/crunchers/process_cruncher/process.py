@@ -77,7 +77,6 @@ class Process(multiprocessing.Process):
         try:
             self.main_loop()
         except ObsoleteCruncherError as e:
-            my_print('%s died of ObsoleteCruncherError(%s)' % (self, e.message))
             return
 
         
@@ -106,10 +105,8 @@ class Process(multiprocessing.Process):
                 order = self.get_order()
                 if order:
                     self.process_order(order) 
-            my_print('%s died of iterator end' % self)
         except garlicsim.misc.WorldEnd:
             self.work_queue.put(garlicsim.asynchronous_crunching.misc.EndMarker())            
-            my_print('%s died of worldend' % self)
 
             
     def check_crunching_profile(self, state):
@@ -152,8 +149,6 @@ class Process(multiprocessing.Process):
     def process_crunching_profile_order(self, order):
         '''Process an order to update the crunching profile.'''
         if self.crunching_profile.step_profile != order.step_profile:
-            my_print(self.crunching_profile.step_profile)
-            my_print(order.step_profile)
             raise ObsoleteCruncherError('Step profile changed; Shutting down. '
                                         'Crunching manager should create a '
                                         'new cruncher.')
