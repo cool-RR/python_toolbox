@@ -2,7 +2,6 @@
 
 from garlicsim.general_misc.infinity import Infinity
 
-
 def cheat_hash_object(thing):
     try:
         return hash(thing)
@@ -10,6 +9,25 @@ def cheat_hash_object(thing):
         return id(thing)
 
     
+def cheat_hash_set(my_set):
+    hashables = set()
+    unhashables = set()
+    for thing in my_set:
+        try:
+            hash(thing)
+        except:
+            unhashables.add(thing)
+        else:
+            hashables.add(thing)
+            
+    return hash(
+        (
+            frozenset(hashables),
+            tuple(sorted(cheat_hash(thing) for thing in unhashables))
+        )
+    )    
+
+
 def cheat_hash_sequence(my_sequence):
     hashables = []
     unhashables = []
@@ -23,7 +41,7 @@ def cheat_hash_sequence(my_sequence):
             
     return hash(
         (
-            hashables,
+            tuple(hashables),
             tuple(cheat_hash(thing) for thing in unhashables)
         )
     )    
@@ -42,7 +60,7 @@ def cheat_hash_dict(my_dict):
             
     return hash(
         (
-            sorted(hashable_items),
+            tuple(sorted(hashable_items)),
             tuple(cheat_hash(thing) for thing in sorted(unhashable_items))
         )
     )
@@ -52,13 +70,14 @@ dispatch_map = {
     object: cheat_hash_object,
     tuple: cheat_hash_sequence,
     list: cheat_hash_sequence,
-    dict: cheat_hash_dict
+    dict: cheat_hash_dict,
+    set: cheat_hash_set
 }
 
 def cheat_hash(thing):
     thing_type = type(thing)
     matching_types = \
-        [type_ for type_ in dispatch_map if issubclass(thing_type, type)]
+        [type_ for type_ in dispatch_map if issubclass(thing_type, type_)]
     
     mro = thing_type.mro()
     
