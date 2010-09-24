@@ -1,7 +1,7 @@
 import copy
 
-from garlicsim.general_misc import cheat_hash as cheat_hash_module
-from garlicsim.general_misc.cheat_hash import cheat_hash
+from garlicsim.general_misc import cheat_hashing
+from garlicsim.general_misc.cheat_hashing import cheat_hash
 
 
 def test_cheat_hash():

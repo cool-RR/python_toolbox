@@ -2,6 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 from garlicsim.general_misc.third_party import inspect
+from garlicsim.general_misc import cheat_hashing
 from garlicsim.general_misc.third_party.ordered_dict import OrderedDict
 from garlicsim.general_misc import dict_tools
 from garlicsim.general_misc import cmp_tools
@@ -291,6 +292,16 @@ class ArgumentsProfile(object):
             
         # All phases completed! This arguments profile is canonical and ready.
         #######################################################################
+        
+        self._hash = cheat_hashing.cheat_hash(
+            (
+                self.function,
+                self.args,
+                tuple(self.kwargs)
+            )
+        )
+        
+        
             
                     
     def __eq__(self, other):
@@ -309,13 +320,7 @@ class ArgumentsProfile(object):
     
     
     def __hash__(self): #tododoc: test in dict
-        return hash(
-            (
-                self.function,
-                self.args,
-                tuple(self.kwargs)
-            )
-        )
+        return self._hash
                     
 
     
