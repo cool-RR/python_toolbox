@@ -24,17 +24,3 @@ def profile_ready(start_on=False, off_after=False, sort=1):
         functools.update_wrapper(decorated, function)
         return decorated
     return decorator
-
-
-
-
-if __name__ == '__main__':
-    
-    @profile_ready(start_on=True)
-    def f():
-        import time
-        time.sleep(0.01)
-        return 7
-    
-    print f()
-    
