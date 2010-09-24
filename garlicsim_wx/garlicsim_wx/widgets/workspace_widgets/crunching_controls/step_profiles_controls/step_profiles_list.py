@@ -9,12 +9,17 @@ from garlicsim_wx.general_misc.third_party import hypertreelist
 from garlicsim_wx.general_misc.third_party import aui
 from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
 from garlicsim_wx.general_misc import emitters
+from garlicsim_wx.general_misc import wx_tools
 
 import garlicsim, garlicsim_wx
 from garlicsim_wx.widgets import WorkspaceWidget
 from garlicsim_wx.misc.colors import hue_to_light_color
 
 from .color_control import ColorControl
+
+
+EVT_COMMAND_TREE_ITEM_RIGHT_CLICK = \
+    wx.PyEventBinder(wx.wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, 1)
 
 
 class StepProfilesList(hypertreelist.HyperTreeList):
@@ -49,8 +54,16 @@ class StepProfilesList(hypertreelist.HyperTreeList):
         
         self.items = self.root_item._children
         
-        self.Bind(wx.EVT_RIGHT_UP, self.on_tree_item_menu)
+        
+        # Hackishly generating context menu event and tree item menu event from
+        # these three events:
+        self.Bind(EVT_COMMAND_TREE_ITEM_RIGHT_CLICK,
+                  self.on_command_tree_item_right_click)
+        self.Bind(wx.EVT_KEY_DOWN, self.on_key_down)
+        self.Bind(wx.EVT_RIGHT_UP, self.on_right_up)
+        
         self.Bind(wx.EVT_TREE_ITEM_MENU, self.on_tree_item_menu)
+        self.Bind(wx.EVT_CONTEXT_MENU, self.on_context_menu)
         
         
         
@@ -104,6 +117,51 @@ class StepProfilesList(hypertreelist.HyperTreeList):
             )
             item.color_control.set_color(color)
             
+
+    # tododoc: move these (and bindings) to my HyperTreeList subclass:
+    
+    def on_command_tree_item_right_click(self, event):
+        wx_tools.post_event(self, wx.EVT_TREE_ITEM_MENU, self)
+        
+        
+    def on_right_up(self, event):
+        item = self._main_win._anchor.HitTest(
+            self._main_win.CalcUnscrolledPosition(
+                wx.Point(event.GetX(), event.GetY())
+                ),
+            self,
+            flags,
+            self._curColumn,
+            0
+        )
+        assert item is self.GetSelection()
+        if selection is not None:
+            wx_tools.post_event(self, wx.EVT_TREE_ITEM_MENU, self, _item=item)
+        else:
+            wx_tools.post_event(self, wx.EVT_CONTEXT_MENU, self)
+        
+            
+    def on_key_down(self, event):
+        # Hacky, either the OS or wxPython should be doing this:
+        key = wx_tools.Key.get_from_key_event(event)
+        if key in wx_tools.menu_keys:
+            selection = self.GetSelection()
+            if selection is not None:
+                wx_tools.post_event(self, wx.EVT_TREE_ITEM_MENU, self,
+                                    _item=selection)
+            else:
+                wx_tools.post_event(self, wx.EVT_CONTEXT_MENU, self)
+        else:
+            event.Skip()
+        
+        
+            
     def on_tree_item_menu(self, event):
+        raise str(event._item)
+        pass
+    
+            
+    def on_context_menu(self, event):
         1/0
         pass
+    

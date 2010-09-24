@@ -76,10 +76,12 @@ def wx_color_to_big_rgb(wx_color):
     )
 
 
-def post_event(evt_handler, event_binder, source=None):
+def post_event(evt_handler, event_binder, source=None, **kwargs):
     '''Post an event to an evt_handler.'''
     # todo: Use wherever I post events
     event = wx.PyEvent(source.GetId() if source else 0)
+    for key, value in kwargs.iteritems():
+        setattr(event, key, value)
     event.SetEventType(event_binder.evtType[0])
     wx.PostEvent(evt_handler, event)
     
@@ -119,6 +121,8 @@ class Key(object):
                self.shift == other.shift and \
                self.alt == other.alt
         
+menu_keys = [Key(wx.WXK_MENU), Key(wx.WXK_WINDOWS_MENU),
+             Key(wx.WXK_F10, shift=True)]
     
 def iter_rects_of_region(region):
     '''Iterate over the rects of a region.'''
