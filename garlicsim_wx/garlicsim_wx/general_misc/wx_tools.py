@@ -80,8 +80,8 @@ def post_event(evt_handler, event_binder, source=None, **kwargs):
     '''Post an event to an evt_handler.'''
     # todo: Use wherever I post events
     event = wx.PyEvent(source.GetId() if source else 0)
-    for key, value in kwargs.iteritems():
-        setattr(event, key, value)
+    #for key, value in kwargs.iteritems():
+        #setattr(event, key, value)
     event.SetEventType(event_binder.evtType[0])
     wx.PostEvent(evt_handler, event)
     

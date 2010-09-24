@@ -5,6 +5,7 @@ import pkg_resources
 import wx
 import weakref
 from garlicsim_wx.general_misc.third_party import hypertreelist
+from garlicsim_wx.general_misc.third_party import customtreectrl
 
 from garlicsim_wx.general_misc.third_party import aui
 from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
@@ -121,7 +122,14 @@ class StepProfilesList(hypertreelist.HyperTreeList):
     # tododoc: move these (and bindings) to my HyperTreeList subclass:
     
     def on_command_tree_item_right_click(self, event):
-        wx_tools.post_event(self, wx.EVT_TREE_ITEM_MENU, self)
+        
+        event = hypertreelist.TreeEvent(
+            customtreectrl.wxEVT_TREE_ITEM_MENU,
+            self.GetId(),
+            item=event.GetItem()
+        )
+        event.SetEventObject(self)
+        wx.PostEvent(self, event)
         
         
     def on_right_up(self, event):
@@ -129,14 +137,23 @@ class StepProfilesList(hypertreelist.HyperTreeList):
             self._main_win.CalcUnscrolledPosition(
                 wx.Point(event.GetX(), event.GetY())
                 ),
-            self,
-            flags,
-            self._curColumn,
+            self._main_win,
+            0,
+            self._main_win._curColumn,
             0
-        )
-        assert item is self.GetSelection()
-        if selection is not None:
-            wx_tools.post_event(self, wx.EVT_TREE_ITEM_MENU, self, _item=item)
+        )[0]
+        if item:
+            assert item is self.GetSelection()
+            
+            event = hypertreelist.TreeEvent(
+                customtreectrl.wxEVT_TREE_ITEM_MENU,
+                self.GetId(),
+                item=item
+            )
+            event.SetEventObject(self)
+            wx.PostEvent(self, event)
+            #self.GetEventHandler().ProcessEvent(event)
+            
         else:
             wx_tools.post_event(self, wx.EVT_CONTEXT_MENU, self)
         
@@ -147,8 +164,15 @@ class StepProfilesList(hypertreelist.HyperTreeList):
         if key in wx_tools.menu_keys:
             selection = self.GetSelection()
             if selection is not None:
-                wx_tools.post_event(self, wx.EVT_TREE_ITEM_MENU, self,
-                                    _item=selection)
+                
+                event = hypertreelist.TreeEvent(
+                    customtreectrl.wxEVT_TREE_ITEM_MENU,
+                    self.GetId(),
+                    item=selection
+                )
+                event.SetEventObject(self)
+                self.GetEventHandler().ProcessEvent(event)
+                
             else:
                 wx_tools.post_event(self, wx.EVT_CONTEXT_MENU, self)
         else:
