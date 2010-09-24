@@ -49,17 +49,23 @@ class CuteHyperTreeList(HyperTreeList):
         if item:
             assert item is self.GetSelection()
             
-            event = hypertreelist.TreeEvent(
+            new_event = hypertreelist.TreeEvent(
                 customtreectrl.wxEVT_TREE_ITEM_MENU,
                 self.GetId(),
                 item=item
             )
-            event.SetEventObject(self)
-            wx.PostEvent(self, event)
-            #self.GetEventHandler().ProcessEvent(event)
+            new_event.SetEventObject(self)
+            wx.PostEvent(self, new_event)
             
         else:
-            wx_tools.post_event(self, wx.EVT_CONTEXT_MENU, self)
+            new_event = wx.ContextMenuEvent(
+                wx.wxEVT_CONTEXT_MENU,
+                self.GetId(),
+                event.GetLogicalPosition()
+            )
+            new_event.SetEventObject(self)
+            wx.PostEvent(self, new_event)
+            #wx_tools.post_event(self, wx.EVT_CONTEXT_MENU, self, meow='qw')
         
             
     def on_key_down(self, event):

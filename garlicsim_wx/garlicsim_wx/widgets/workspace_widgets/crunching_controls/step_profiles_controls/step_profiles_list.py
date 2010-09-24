@@ -118,11 +118,17 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
     
             
     def on_context_menu(self, event):
-        abs_position = event.GetPosition()
-        if abs_position == wx.DefaultPosition:
+
+        try:
+            abs_position = event.GetPosition()
+        except AttributeError:
+            raise
             position = (0, 0)
         else:
-            position = self.ScreenToClient(abs_position)
+            if abs_position == wx.DefaultPosition:
+                position = (0, 0)
+            else:
+                position = self.ScreenToClient(abs_position)
             
         self.PopupMenu(self.blank_context_menu, position)
     
