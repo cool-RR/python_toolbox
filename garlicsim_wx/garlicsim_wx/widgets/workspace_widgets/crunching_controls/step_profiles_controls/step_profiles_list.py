@@ -15,8 +15,9 @@ import garlicsim, garlicsim_wx
 from garlicsim_wx.widgets import WorkspaceWidget
 from garlicsim_wx.misc.colors import hue_to_light_color
 
-from .color_control import ColorControl
 
+from .color_control import ColorControl
+from .blank_context_menu import BlankContextMenu
 
 
 class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
@@ -51,11 +52,12 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
         
         self.items = self.root_item._children
         
-        
+        self.blank_context_menu = BlankContextMenu(self)
         
         
         self.Bind(wx.EVT_TREE_ITEM_MENU, self.on_tree_item_menu)
         self.Bind(wx.EVT_CONTEXT_MENU, self.on_context_menu)
+        
         
         
         
@@ -116,6 +118,14 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
     
             
     def on_context_menu(self, event):
+        abs_position = event.GetPosition()
+        if abs_position == wx.DefaultPosition:
+            position = (0, 0)
+        else:
+            position = self.ScreenToClient(abs_position)
+            
+        self.PopupMenu(self.blank_context_menu, position)
+    
+    def on_new_step_profile_button(self, event):
         1/0
-        pass
     
