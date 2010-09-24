@@ -7,7 +7,7 @@ from garlicsim.general_misc.sleek_refs import (SleekCallArgs,
 from .shared import _is_weakreffable, A, counter
 
 
-def test_sleek_call_args():
+def test():
     
     volatile_things = [A(), 1, 4.5, 'meow', u'woof', [1, 2], (1, 2), {1: 2},
                        set([1, 2, 3])]
@@ -32,3 +32,21 @@ def test_sleek_call_args():
     gc.collect()
     assert len(sca_dict) == 1
     
+    
+def test_unhashable():
+    
+    
+    a2 = ArgumentsProfile(func, 7, ({'a': 'b'},), set([1, (3, 4)]),
+                          meow=[1, 2, {1: [1, 2]}])
+    assert a2.args == (7, ({'a': 'b'},), set([1, (3, 4)]))
+    assert a2.kwargs == OrderedDict(
+        (('meow', [1, 2, {1: [1, 2]}]),)
+    )
+    
+    a3 = ArgumentsProfile(func, *(), b=({'a': 'b'},), c=set([1, (3, 4)]), a=7,
+                          meow=[1, 2, {1: [1, 2]}])
+    assert a2.args == (7, ({'a': 'b'},), set([1, (3, 4)]))
+    assert a2.kwargs == OrderedDict(
+        (('meow', [1, 2, {1: [1, 2]}]),)
+    )
+    assert hash(a2) == hash(a3)

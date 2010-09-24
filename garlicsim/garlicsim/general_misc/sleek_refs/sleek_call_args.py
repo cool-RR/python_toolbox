@@ -1,9 +1,9 @@
 from garlicsim.general_misc.third_party import inspect
-
-# tododoc: break down to package
+from garlicsim.general_misc import cheat_hashing
 
 from .sleek_ref import SleekRef
 from .cute_sleek_value_dictionary import CuteSleekValueDictionary
+
 
 __all__ = ['SleekCallArgs']
 
@@ -42,11 +42,11 @@ class SleekCallArgs(object):
         
         # In the future the `.args`, `.star_args` and `.star_kwargs` attributes
         # may change, so we must record the hash now:
-        self._hash = hash(
+        self._hash = cheat_hashing.cheat_hash(
             (
-                tuple(sorted(tuple(self.args))),
+                self.args,
                 self.star_args,
-                tuple(sorted(tuple(self.star_kwargs)))
+                self.star_kwargs
             )
         )
         

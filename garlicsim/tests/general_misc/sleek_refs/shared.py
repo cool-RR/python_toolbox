@@ -14,7 +14,7 @@ class A(object):
         pass
 
     
-def counter(_=None):
+def counter(*args, **kwargs):
     if not hasattr(counter, 'count'):
         counter.count = 0
     result = counter.count

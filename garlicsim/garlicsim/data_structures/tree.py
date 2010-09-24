@@ -193,11 +193,11 @@ class Tree(object):
             self.iterate_tree_members(include_blockful_nodes=False)
         
         step_profiles = \
-            [tree_member.step_profile for tree_member in tree_members_iterator]
+            set(tree_member.step_profile for tree_member in tree_members_iterator)
         
         try:
             step_profiles.remove(None)
-        except ValueError:
+        except KeyError:
             pass
         
         return step_profiles
