@@ -47,6 +47,7 @@ def test_cache_weakref():
     a_ref = weakref.ref(a)
     del a
     gc.collect()
+    
     assert a_ref() is None
     
     
@@ -66,4 +67,17 @@ def test_cache_max_size():
     assert f(2) == f(2) == r2 == f(2)
     assert f(3) == f(3) == r3 == f(3)
     
+
+def test_cache_unhashable_arguments():
+    
+    f = cache()(counting_func)
+    
+    assert f(set((1, 2))) == f(set((1, 2)))
+    
+    assert f(7, set((1, 2))) != f(8, set((1, 2)))
+    
+    assert f('boo') != f(meow='frrr')
+    
+    assert f(meow={1: [1, 2], 2: frozenset([3, 'b'])}) == \
+           f(1, meow={1: [1, 2], 2: frozenset([3, 'b'])})
     

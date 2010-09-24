@@ -7,15 +7,11 @@ from garlicsim.general_misc.sleek_refs import (SleekCallArgs,
 from .shared import _is_weakreffable, A, counter
 
 
+def f(*args, **kwargs):
+    pass
+
+
 def test():
-    
-    volatile_things = [A(), 1, 4.5, 'meow', u'woof', [1, 2], (1, 2), {1: 2},
-                       set([1, 2, 3])]
-    unvolatile_things = [A.s, __builtins__, list, type,  list.append, str.join,
-                         sum]
-    def f(*args, **kwargs):
-        pass
-    
     sca_dict = {}
     
     args = (1, 2)
@@ -35,18 +31,32 @@ def test():
     
 def test_unhashable():
     
+    sca_dict = {}
     
-    a2 = ArgumentsProfile(func, 7, ({'a': 'b'},), set([1, (3, 4)]),
-                          meow=[1, 2, {1: [1, 2]}])
-    assert a2.args == (7, ({'a': 'b'},), set([1, (3, 4)]))
-    assert a2.kwargs == OrderedDict(
-        (('meow', [1, 2, {1: [1, 2]}]),)
-    )
+    args = ([1, 2], {1: [1, 2]}, set(['a', 1]))
+    sca1 = SleekCallArgs(sca_dict, f, *args)
+    hash(sca1)
+    sca_dict[sca1] = 'meow'
+    del args
+    gc.collect()
+    # GCed because there's a `set` in `args`, and it's weakreffable:
+    assert len(sca_dict) == 0
     
-    a3 = ArgumentsProfile(func, *(), b=({'a': 'b'},), c=set([1, (3, 4)]), a=7,
-                          meow=[1, 2, {1: [1, 2]}])
-    assert a2.args == (7, ({'a': 'b'},), set([1, (3, 4)]))
-    assert a2.kwargs == OrderedDict(
-        (('meow', [1, 2, {1: [1, 2]}]),)
-    )
-    assert hash(a2) == hash(a3)
+    kwargs = {
+        'a': {1: 2},
+        'b': [
+            set(),
+            set(
+                (
+                    frozenset((3, 4)),
+                )
+            )
+        ]
+    }
+    sca2 = SleekCallArgs(sca_dict, f, **kwargs)
+    hash(sca2)
+    sca_dict[sca2] = 'meow'
+    del kwargs
+    gc.collect()
+    # Not GCed because all objects in kwargs are not weakreffable:
+    assert len(sca_dict) == 1
