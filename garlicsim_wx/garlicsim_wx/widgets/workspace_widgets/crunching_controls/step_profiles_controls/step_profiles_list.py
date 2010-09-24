@@ -18,6 +18,7 @@ from garlicsim_wx.misc.colors import hue_to_light_color
 
 from .color_control import ColorControl
 from .blank_context_menu import BlankContextMenu
+from .step_profile_context_menu import StepProfileContextMenu
 
 
 class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
@@ -53,6 +54,7 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
         self.items = self.root_item._children
         
         self.blank_context_menu = BlankContextMenu(self)
+        self.step_profile_context_menu = StepProfileContextMenu(self)
         
         
         self.Bind(wx.EVT_TREE_ITEM_MENU, self.on_tree_item_menu)
@@ -81,7 +83,8 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
                     self.gui_project.step_profiles_to_hues[step_profile]
                 )
                 color_control = ColorControl(self, step_profile, color)
-                item = self.AppendItem(self.root_item, '', ct_type=2, wnd=color_control)
+                item = self.AppendItem(self.root_item, '', ct_type=2,
+                                       wnd=color_control)
                 item.step_profile = step_profile
                 item.color_control = color_control
                 self.step_profiles_to_items[step_profile] = item
@@ -114,24 +117,49 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
 
         
     def on_tree_item_menu(self, event):
-        raise Exception(str(event._item))
+        abs_position = event.GetPoint()
+        
+        if abs_position == wx.DefaultPosition:
+            position = (0, 0) # todo: take position smartly
+        else:
+            position = self.ScreenToClient(abs_position)
+            
+        self.PopupMenu(self.step_profile_context_menu, position)
     
             
     def on_context_menu(self, event):
 
-        try:
-            abs_position = event.GetPosition()
-        except AttributeError:
-            raise
+        abs_position = event.GetPosition()
+        
+        if abs_position == wx.DefaultPosition:
             position = (0, 0)
         else:
-            if abs_position == wx.DefaultPosition:
-                position = (0, 0)
-            else:
-                position = self.ScreenToClient(abs_position)
+            position = self.ScreenToClient(abs_position)
             
         self.PopupMenu(self.blank_context_menu, position)
     
+        
     def on_new_step_profile_button(self, event):
         1/0
+
+        
+    def on_fork_by_crunching_button(self, event):
+        1/0
+
+        
+    def on_select_tree_members_button(self, event):
+        1/0
+
+        
+    def on_change_color_button(self, event):
+        1/0
+
+        
+    def on_duplicate_and_edit_button(self, event):
+        1/0
+
+        
+    def on_delete_button(self, event):
+        1/0
     
+        

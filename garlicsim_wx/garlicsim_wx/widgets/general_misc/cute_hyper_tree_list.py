@@ -18,22 +18,26 @@ class CuteHyperTreeList(HyperTreeList):
                                validator, name)
         
         # Hackishly generating context menu event and tree item menu event from
-        # these three events:
+        # these events:
         self.Bind(EVT_COMMAND_TREE_ITEM_RIGHT_CLICK,
                   self.on_command_tree_item_right_click)
         self.Bind(wx.EVT_KEY_DOWN, self.on_key_down)
         self.Bind(wx.EVT_RIGHT_UP, self.on_right_up)
+        self.Bind(wx.EVT_CONTEXT_MENU, self.on_context_menu)
 
+        
+    
         
     def on_command_tree_item_right_click(self, event):
         
-        event = hypertreelist.TreeEvent(
+        new_event = hypertreelist.TreeEvent(
             customtreectrl.wxEVT_TREE_ITEM_MENU,
             self.GetId(),
-            item=event.GetItem()
+            item=event.GetItem(),
+            point=self.ClientToScreen(event.GetPoint())
         )
-        event.SetEventObject(self)
-        wx.PostEvent(self, event)
+        new_event.SetEventObject(self)
+        wx.PostEvent(self, new_event)
         
         
     def on_right_up(self, event):
@@ -52,7 +56,8 @@ class CuteHyperTreeList(HyperTreeList):
             new_event = hypertreelist.TreeEvent(
                 customtreectrl.wxEVT_TREE_ITEM_MENU,
                 self.GetId(),
-                item=item
+                item=item,
+                point=self.ClientToScreen(event.GetPosition())
             )
             new_event.SetEventObject(self)
             wx.PostEvent(self, new_event)
@@ -61,7 +66,7 @@ class CuteHyperTreeList(HyperTreeList):
             new_event = wx.ContextMenuEvent(
                 wx.wxEVT_CONTEXT_MENU,
                 self.GetId(),
-                event.GetLogicalPosition()
+                self.ClientToScreen(event.GetPosition())
             )
             new_event.SetEventObject(self)
             wx.PostEvent(self, new_event)
@@ -75,16 +80,33 @@ class CuteHyperTreeList(HyperTreeList):
             selection = self.GetSelection()
             if selection is not None:
                 
-                event = hypertreelist.TreeEvent(
+                new_event = hypertreelist.TreeEvent(
                     customtreectrl.wxEVT_TREE_ITEM_MENU,
                     self.GetId(),
-                    item=selection
+                    item=selection,
                 )
-                event.SetEventObject(self)
-                self.GetEventHandler().ProcessEvent(event)
+                new_event.SetEventObject(self)
+                self.GetEventHandler().ProcessEvent(new_event)
                 
             else:
                 wx_tools.post_event(self, wx.EVT_CONTEXT_MENU, self)
         else:
             event.Skip()
 
+
+    def on_context_menu(self, event):
+        
+        abs_position = event.GetPosition()
+        item = self.GetSelection()
+        
+        if abs_position == wx.DefaultPosition and item:
+            new_event = hypertreelist.TreeEvent(
+                customtreectrl.wxEVT_TREE_ITEM_MENU,
+                self.GetId(),
+                item=item,
+            )
+            new_event.SetEventObject(self)
+            wx.PostEvent(self, new_event)
+            return
+        else:
+            event.Skip()
