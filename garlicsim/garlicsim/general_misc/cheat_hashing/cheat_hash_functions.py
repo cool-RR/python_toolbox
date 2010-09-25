@@ -2,7 +2,7 @@
 def cheat_hash_object(thing):
     try:
         return hash(thing)
-    except:
+    except Exception:
         return id(thing)
 
     
@@ -12,7 +12,7 @@ def cheat_hash_set(my_set):
     for thing in my_set:
         try:
             hash(thing)
-        except:
+        except Exception:
             unhashables.add(thing)
         else:
             hashables.add(thing)
@@ -31,7 +31,7 @@ def cheat_hash_sequence(my_sequence):
     for thing in my_sequence:
         try:
             hash(thing)
-        except:
+        except Exception:
             unhashables.append(thing)
         else:
             hashables.append(thing)
@@ -50,7 +50,7 @@ def cheat_hash_dict(my_dict):
     for key, value in my_dict.iteritems():
         try:
             hash((key, value))
-        except:
+        except Exception:
             unhashable_items.append((key, value))
         else:
             hashable_items.append((key, value))

@@ -18,14 +18,14 @@ def is_floatable(x):
     try:
         float(x)
         return True
-    except:
+    except Exception:
         return False
 
 def is_nonfractional(x):
     try:
         int(x)
         return int(x) == x
-    except:
+    except Exception:
         return False
     
 class InfinityRaceError(CuteException):
