@@ -74,11 +74,7 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
             try:
                 item = self.step_profiles_to_items[step_profile]
             except KeyError:
-                hue = self.gui_project.step_profiles_to_hues[step_profile]
-                #color = hue_to_light_color(
-                    #hue
-                #)
-                hue_control = HueControl(self, step_profile, hue)
+                hue_control = HueControl(self, step_profile)
                 item = self.AppendItem(self.root_item, '', ct_type=2,
                                        wnd=hue_control)
                 item.step_profile = step_profile

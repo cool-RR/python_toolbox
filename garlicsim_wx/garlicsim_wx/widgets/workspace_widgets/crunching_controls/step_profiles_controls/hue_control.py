@@ -12,7 +12,7 @@ class HueControl(GenericHueControl):
     # tododoc: possible confusion, this is called HueProfile in the
     # `step_profiles_controls` package, but it's good for a specific purpose,
     # and the dialog uses a different hue control.
-    def __init__(self, step_profiles_list, step_profile, hue):
+    def __init__(self, step_profiles_list, step_profile):
         
         self.step_profile = step_profile
         

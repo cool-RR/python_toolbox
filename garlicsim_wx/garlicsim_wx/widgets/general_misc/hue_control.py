@@ -12,8 +12,8 @@ class HueControl(wx.Window):
     '''
     
     '''
-    def __init__(self, parent, getter, setter, emitter, lightness, saturation,
-                 dialog_title='Select hue', size=(25, 10)):
+    def __init__(self, parent, getter, setter, emitter=None, lightness=1,
+                 saturation=1, dialog_title='Select hue', size=(25, 10)):
         
         wx.Window.__init__(self, parent, size=size, style=wx.SIMPLE_BORDER)
         
@@ -21,7 +21,7 @@ class HueControl(wx.Window):
         
         self.setter = setter
                 
-        assert isinstance(emitter, Emitter)
+        assert isinstance(emitter, Emitter) or emitter is None
         self.emitter = emitter
         
         self.lightness = lightness
@@ -36,7 +36,8 @@ class HueControl(wx.Window):
         self.Bind(wx.EVT_PAINT, self.on_paint)
         self.Bind(wx.EVT_LEFT_DOWN, self.on_mouse_left_down)
         
-        self.emitter.add_output(self.update)
+        if self.emitter:
+            self.emitter.add_output(self.update)
         
     
     def on_paint(self, event):
@@ -78,5 +79,6 @@ class HueControl(wx.Window):
 
         
     def Destroy(self):
-        self.emitter.remove_output(self.update)
+        if self.emitter:
+            self.emitter.remove_output(self.update)
         super(HueControl, self).Destroy()
