@@ -13,18 +13,23 @@ class HueControl(wx.Window):
     
     '''
     def __init__(self, parent, getter, setter, emitter, lightness, saturation,
-                 size=(25, 10)):
+                 dialog_title='Select hue', size=(25, 10)):
         
         wx.Window.__init__(self, parent, size=size, style=wx.SIMPLE_BORDER)
         
         self.getter = getter
+        
         self.setter = setter
                 
         assert isinstance(emitter, Emitter)
         self.emitter = emitter
         
         self.lightness = lightness
+        
         self.saturation = saturation
+        
+        self.dialog_title = dialog_title
+        
         
         self._pen = wx.Pen(wx.Color(0, 0, 0), width=0, style=wx.TRANSPARENT)
         
@@ -54,20 +59,16 @@ class HueControl(wx.Window):
     def open_editing_dialog(self):
         old_hue = self.getter()
         
-        hue_selection_dialog = \
-            HueSelectionDialog(self.GetTopLevelParent(), self.getter,
-                               self.setter, lightness=self.lightness,
-                               saturation=self.saturation,
-                               title='Select hue for step profile')
+        hue_selection_dialog = HueSelectionDialog(
+            self.GetTopLevelParent(), self.getter, self.setter, self.emitter,
+            lightness=self.lightness, saturation=self.saturation,
+            title=self.dialog_title
+        )
         
-        self.emitter.add_output(hue_selection_dialog.update) # tododoc: put emitter in dialog
         try:
             hue_selection_dialog.ShowModal()
         finally:
             hue_selection_dialog.Destroy()
-            gui_project.step_profiles_to_hues_modified_emitter.remove_output(
-                hue_selection_dialog.update
-            )
 
             
     def update(self):
@@ -76,3 +77,4 @@ class HueControl(wx.Window):
         
     def Destroy(self):
         self.emitter.remove_output(self.update)
+        super(HueControl, self).Destroy()

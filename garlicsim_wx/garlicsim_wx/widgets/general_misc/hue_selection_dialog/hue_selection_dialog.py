@@ -99,3 +99,7 @@ class HueSelectionDialog(CuteDialog):
         self.wheel.update()
         self.comparer.update()
         self.textual.update()
+        
+    def Destroy(self):
+        self.emitter.remove_output(self.update)
+        super(HueSelectionDialog, self).Destroy()
