@@ -119,10 +119,6 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
     def get_selected_step_profile(self):
         selection = self.GetSelection()
         return selection.step_profile if selection else None
-            
-    
-    def open_step_profile_editing_dialog(self, step_profile=None):
-        pass
 
 
     def delete_step_profile(self, step_profile):

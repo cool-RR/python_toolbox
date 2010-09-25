@@ -9,6 +9,7 @@ from garlicsim_wx.general_misc import wx_tools
 import garlicsim, garlicsim_wx
 
 from .step_profiles_list import StepProfilesList
+from .step_profile_dialog import StepProfileDialog
 
 from . import images as __images_package
 images_package = __images_package.__name__
@@ -19,8 +20,11 @@ class StepProfilesControls(wx.Panel):
     
     def __init__(self, parent, frame, *args, **kwargs):
         
-        assert isinstance(frame, garlicsim_wx.Frame)
         self.frame = frame
+        assert isinstance(self.frame, garlicsim_wx.Frame)
+        
+        self.gui_project = frame.gui_project
+        assert isinstance(self.gui_project, garlicsim_wx.GuiProject)
         
         wx.Panel.__init__(self, parent, *args, **kwargs)
         
@@ -38,7 +42,7 @@ class StepProfilesControls(wx.Panel):
         self.main_v_sizer.Add(self.step_profiles_list, 1,
                               wx.EXPAND | wx.BOTTOM, 8)
         
-        self.button_h_sizer = wx.BoxSizer(wx.HORIZONTAL) 
+        self.button_h_sizer = wx.BoxSizer(wx.HORIZONTAL)
         
         self.main_v_sizer.Add(self.button_h_sizer, 0, wx.ALIGN_RIGHT)
         
@@ -70,4 +74,18 @@ class StepProfilesControls(wx.Panel):
         
         self.SetSizer(self.main_v_sizer)
         
-
+            
+    
+    def open_step_profile_editing_dialog(self, step_profile=None):
+        step_profile_dialog = StepProfileDialog(self.frame, step_profile)
+        
+        try:
+            step_profile_dialog.ShowModal()
+            step_profile = step_profile_dialog.step_profile
+            hue = step_profile_dialog.hue
+        finally:
+            step_profile_dialog.Destroy()
+            
+        assert step_profile not in self.gui_project.step_profiles
+        self.gui_project.step_profiles_to_hues[step_profile] = hue
+        self.gui_project.step_profiles.add(step_profile)
