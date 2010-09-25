@@ -35,6 +35,10 @@ class ColorControl(wx.Window):
         
     
     def on_mouse_left_down(self, event):
+        self.open_editing_dialog()
+      
+        
+    def open_editing_dialog(self):
         old_hls = wx_tools.wx_color_to_hls(self.color)
         gui_project = self.step_profiles_list.frame.gui_project
         step_profiles_to_hues = gui_project.step_profiles_to_hues
@@ -58,8 +62,8 @@ class ColorControl(wx.Window):
             gui_project.step_profiles_to_hues_modified_emitter.remove_output(
                 hue_selection_dialog.update
             )
-        
-        
+
+            
     def set_color(self, color):
         if self.color != color:
             self.color = color

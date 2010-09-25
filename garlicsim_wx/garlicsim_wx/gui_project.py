@@ -344,9 +344,9 @@ class GuiProject(object):
         Initialization related to the widgets which make up the gui project.
         '''
         
-        self.frame.Bind(wx.EVT_MENU, self.fork_by_editing,
+        self.frame.Bind(wx.EVT_MENU, self.on_fork_by_editing_button,
                          id=s2i("Fork by editing"))
-        self.frame.Bind(wx.EVT_MENU, self.fork_by_crunching,
+        self.frame.Bind(wx.EVT_MENU, self.on_fork_by_crunching_button,
                          id=s2i("Fork by crunching"))
         
         
@@ -357,6 +357,14 @@ class GuiProject(object):
         wx.CallAfter(self.make_state_creation_dialog)
         
 
+    def on_fork_by_crunching_button(self, event):
+        self.fork_by_crunching()
+        
+        
+    def on_fork_by_editing_button(self, event):
+        self.fork_by_editing()
+
+        
     def set_path(self, path):
         '''Set the path.'''
         self.path = path
@@ -604,24 +612,30 @@ class GuiProject(object):
         self.last_tracked_real_time = current_real_time
         
 
-    def fork_by_crunching(self, e=None):
+    def fork_by_crunching(self, *args, **kwargs):
         '''
         Fork the simulation from the active node.
         
         Used for forking the simulation without modifying any states. Creates
         a new node from the active node via natural simulation.
+
+        Any *args or **kwargs will be packed in a StepProfile object and passed
+        to the step function. You may pass a StepProfile yourself, as the only
+        argument, and it will be noticed and used. If nothing is passed in *args
+        or **kwargs, the step profile of the active node will be used.
         '''
         #todo: maybe not let to do it from unfinalized touched node?
         
         node = self.active_node
-        self.project.begin_crunching(
-            self.active_node,
-            self.default_buffer or 1,
-            step_profile=self.active_node.step_profile
-        )
+        
+        if not args and not kwargs:
+            kwargs = {'step_profile': node.step_profile}
+            
+        self.project.begin_crunching(node, self.default_buffer or 1,
+                                     *args, **kwargs)
 
 
-    def fork_by_editing(self, e=None):
+    def fork_by_editing(self):
         '''
         Fork the simulation from the active node by editing.
         

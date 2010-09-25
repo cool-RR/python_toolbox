@@ -32,6 +32,7 @@ class StepProfileContextMenu(cute_menu.CuteMenu):
         self.Bind(wx.EVT_MENU,
                   step_profiles_list.on_select_tree_members_button,
                   source=self.select_tree_members_button)
+        self.select_tree_members_button.Enable(False)
         
         
         self.AppendSeparator()

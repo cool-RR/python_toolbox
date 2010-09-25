@@ -205,7 +205,7 @@ class Project(object):
         If there are already jobs on that node, they will all be crunched
         independently of each other to create different forks.
         
-        Any args or kwargs will be packed in a StepProfile object and passed to
+        Any *args or **kwargs will be packed in a StepProfile object and passed to
         the step function. You may pass a StepProfile yourself, as the only
         argument, and it will be noticed and used.
         

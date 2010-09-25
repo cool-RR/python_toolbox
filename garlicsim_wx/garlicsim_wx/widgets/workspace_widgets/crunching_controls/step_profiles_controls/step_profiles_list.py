@@ -144,15 +144,16 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
 
         
     def on_fork_by_crunching_button(self, event):
-        1/0
+        self.gui_project.fork_by_crunching(self.GetSelection().step_profile)
 
         
     def on_select_tree_members_button(self, event):
-        1/0
+        raise NotImplementedError()
 
         
     def on_change_color_button(self, event):
-        1/0
+        item = self.GetSelection()
+        item.color_control.open_editing_dialog()
 
         
     def on_duplicate_and_edit_button(self, event):
