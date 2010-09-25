@@ -40,7 +40,7 @@ class StepFunctionInput(wx.ComboBox):
         try:
             thing = self.step_profile_dialog.address_to_object(text)
         except Exception:
-            return
+            self.set_step_function_candidate
         else:
             try:
                 garlicsim.misc.simpack_grokker.get_step_type(thing)
@@ -70,6 +70,8 @@ class StepFunctionInput(wx.ComboBox):
                 else:
                     raise Exception("`%s` is a not a step function; It's not "
                                     "even a callable." % text)
+            else:
+                self.step_profile_dialog.set_step_function(thing)
             
         
     
