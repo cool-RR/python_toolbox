@@ -21,8 +21,7 @@ class HueControl(wx.Window):
         
         self.setter = setter
                 
-        assert isinstance(emitter, Emitter) or emitter is None
-        self.emitter = emitter
+        
         
         self.lightness = lightness
         
@@ -36,8 +35,22 @@ class HueControl(wx.Window):
         self.Bind(wx.EVT_PAINT, self.on_paint)
         self.Bind(wx.EVT_LEFT_DOWN, self.on_mouse_left_down)
         
-        if self.emitter:
+        if emitter:
+            assert isinstance(emitter, Emitter)
+            self.emitter = emitter
             self.emitter.add_output(self.update)
+        else:
+            assert emitter is None
+            self.emitter = Emitter(
+                outputs=(self.update,),
+                name='hue_modified'
+            )
+            old_setter = self.setter
+            def new_setter(value):
+                old_setter(value)
+                self.emitter.emit()
+            self.setter = new_setter
+            
         
     
     def on_paint(self, event):
@@ -79,6 +92,5 @@ class HueControl(wx.Window):
 
         
     def Destroy(self):
-        if self.emitter:
-            self.emitter.remove_output(self.update)
+        self.emitter.remove_output(self.update)
         super(HueControl, self).Destroy()

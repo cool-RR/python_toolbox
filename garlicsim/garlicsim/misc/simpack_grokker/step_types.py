@@ -9,27 +9,33 @@ from garlicsim.misc import step_iterators
 
 class SimpleStep(BaseStepType):
     step_iterator_class = step_iterators.StepIterator
+    verbose_name = 'simple step function'
 
 
 class StepGenerator(BaseStepType):
+    verbose_name = 'step generator'
     pass
     
     
 class HistoryStep(BaseStepType):
     step_iterator_class = step_iterators.HistoryStepIterator
+    verbose_name = 'history step function'
 
 
 class HistoryStepGenerator(BaseStepType):
+    verbose_name = 'history step generator'
     pass
 
 
 class InplaceStep(BaseStepType):
     inplace_step_iterator_class = 7
+    verbose_name = 'inplace step function'
     pass
 
 
 class InplaceStepGenerator(BaseStepType):
     inplace_step_iterator_class = 7
+    verbose_name = 'inplace step generator'
     pass
 
 

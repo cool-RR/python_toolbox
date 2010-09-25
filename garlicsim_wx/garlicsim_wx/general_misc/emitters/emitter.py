@@ -45,6 +45,7 @@ class Emitter(object):
     The callables that you register as outputs are functions that need to be
     called when the original event that caused the `emit` action happens.
     '''
+    # todo: Let user put a single input/output
         
     def __init__(self, inputs=(), outputs=(), name=None):
         '''

@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the SimpackGrokker class and the InvalidSimpack exception.
+This module defines the SimpackGrokker class and the InvalidSimpacktododoc exception.
 
 See their documentation for more details.
 '''
@@ -61,7 +61,7 @@ class SimpackGrokker(object):
 
 
         state_methods = dict(
-            (name , value) for (name, value) in
+            (name, value) for (name, value) in
             misc_tools.getted_vars(State).iteritems() if callable(value)
         )
 
@@ -76,9 +76,9 @@ class SimpackGrokker(object):
                 self.step_functions[step_type].append(method)
             
         
-        all_step_functions = reduce(list.__add__,
+        self.all_step_functions = reduce(list.__add__,
                                     self.step_functions.itervalues())
-        if not all_step_functions:
+        if not self.all_step_functions:
             raise InvalidSimpack("The %s simpack has not defined any kind "
                                  "of step function." % simpack.__name__)
         

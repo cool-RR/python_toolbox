@@ -1,6 +1,10 @@
 import wx
 
+from garlicsim.general_misc import address_tools
 from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
+
+import garlicsim
+import garlicsim_wx
 
 from .static_function_text import StaticFunctionText
 from .step_function_input import StepFunctionInput
@@ -15,11 +19,41 @@ class StepProfileDialog(CuteDialog):
         
         self.step_profiles_controls = step_profiles_controls
         
+        self.gui_project = step_profiles_controls.gui_project
+        assert isinstance(self.gui_project, garlicsim_wx.GuiProject)
+        
+        self.simpack = self.gui_project.simpack
+        
+        self.simpack_grokker = simpack_grokker = \
+            self.gui_project.simpack_grokker
+        
+        
         CuteDialog.__init__(self, step_profiles_controls.frame,
                             title='Create a new step profile')
         
-        self.original_step_profile = step_profile
+        self.original_step_profile = original_step_profile = step_profile
+        
+        del step_profile        
+        
+        
+        self.hue = self.gui_project.step_profiles_to_hues.default_factory()
 
+        
+        if original_step_profile:
+            initial_step_function_address = self.step_function_to_name(
+                original_step_profile.step_function
+            )
+        else:
+            if len(simpack_grokker.all_step_functions) >= 2:
+                initial_step_function_address = ''
+            else: # len(simpack_grokker.all_step_functions) == 1
+                initial_step_function_address = self.step_function_to_name(
+                    simpack_grokker.default_step_function
+                )
+        
+            
+        #######################################################################
+        # Setting up sizers and widgets:
         
         self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)
         
@@ -43,8 +77,31 @@ class StepProfileDialog(CuteDialog):
             border=10
         )
         
+
+        self.hue_control = \
+            garlicsim_wx.widgets.general_misc.hue_control.HueControl(
+                self,
+                lambda: getattr(self, 'hue'),
+                lambda hue: setattr(self, 'hue', hue),
+                emitter=None,
+                lightness=0.8,
+                saturation=1,
+                dialog_title='Select hue for new step profile',
+                size=(25, 20)
+            )
         
-        self.step_function_input = StepFunctionInput(self)
+        self.h_sizer.Add(
+            self.hue_control,
+            0,
+            wx.ALIGN_TOP | wx.ALL,            
+            border=5
+        )
+        
+        
+        self.step_function_input = StepFunctionInput(
+            self,
+            value=initial_step_function_address
+        )
         
         self.h_sizer.Add(
             self.step_function_input,
@@ -59,8 +116,8 @@ class StepProfileDialog(CuteDialog):
         self.h_sizer.Add(
             self.argument_list,
             1,
-            wx.EXPAND | wx.ALL,
-            border=5
+            wx.EXPAND | wx.RIGHT,
+            border=15
         )
         
         
@@ -88,12 +145,25 @@ class StepProfileDialog(CuteDialog):
         self.SetSizer(self.main_v_sizer)
         self.main_v_sizer.Fit(self)
         
+        # Finished setting up sizers and widgets.
+        #######################################################################
+        
+        
+    def step_function_to_name(self, step_function):
+        return address_tools.get_address(
+            step_function,
+            root=self.simpack,
+            shorten=True
+        )
     
     def on_ok(self, event):
-        pass
+        # ...
+        self.EndModal(wx.ID_OK)
     
     
     def on_cancel(self, event):
-        pass
+        # ...
+        self.EndModal(wx.ID_CANCEL)
+        
                          
         
