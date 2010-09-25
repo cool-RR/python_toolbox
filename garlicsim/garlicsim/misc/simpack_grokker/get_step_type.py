@@ -13,6 +13,8 @@ from .step_types import (SimpleStep, StepGenerator, HistoryStep,
 
 
 def get_step_type(step_function):
+    # todo: have this raise a specific exception when getting something other
+    # than a step function
     step_type_attribute = getattr(step_function, 'step_type', None)
     if step_type_attribute:
         return step_type_attribute

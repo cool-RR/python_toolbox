@@ -40,14 +40,14 @@ class StepProfileDialog(CuteDialog):
 
         
         if original_step_profile:
-            initial_step_function_address = self.step_function_to_name(
+            initial_step_function_address = self.step_function_to_address(
                 original_step_profile.step_function
             )
         else:
             if len(simpack_grokker.all_step_functions) >= 2:
                 initial_step_function_address = ''
             else: # len(simpack_grokker.all_step_functions) == 1
-                initial_step_function_address = self.step_function_to_name(
+                initial_step_function_address = self.step_function_to_address(
                     simpack_grokker.default_step_function
                 )
         
@@ -149,15 +149,24 @@ class StepProfileDialog(CuteDialog):
         #######################################################################
         
         
-    def step_function_to_name(self, step_function):
+    def step_function_to_address(self, step_function):
         return address_tools.get_address(
             step_function,
+            root=self.simpack,
+            shorten=True
+        )
+        
+    
+    def address_to_step_function(self, address):
+        return address_tools.get_object_by_address(
+            address,
             root=self.simpack,
             shorten=True
         )
     
     def on_ok(self, event):
         # ...
+        self.step_profile = 7
         self.EndModal(wx.ID_OK)
     
     
