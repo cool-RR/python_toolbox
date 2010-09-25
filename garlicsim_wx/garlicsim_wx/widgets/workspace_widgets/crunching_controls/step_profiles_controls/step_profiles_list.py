@@ -25,12 +25,13 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
     '''tododoc'''
     # tododoc: set max size dynamically according to number of profiles
     
-    def __init__(self, parent, frame):
+    def __init__(self, step_profiles_controls, frame):
         
         self.frame = frame
         assert isinstance(self.frame, garlicsim_wx.Frame)
         self.gui_project = frame.gui_project
         assert isinstance(self.gui_project, garlicsim_wx.GuiProject)
+        self.step_profiles_controls = step_profiles_controls
         
         cute_hyper_tree_list.CuteHyperTreeList.__init__(
             self,
@@ -115,7 +116,19 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
             item.color_control.set_color(color)
             
 
-        
+    def get_selected_step_profile(self):
+        selection = self.GetSelection()
+        return selection.step_profile if selection else None
+            
+    
+    def open_step_profile_editing_dialog(self, step_profile=None):
+        pass
+
+
+    def delete_step_profile(self, step_profile):
+        1/0 # tododoc
+    
+    
     def on_tree_item_menu(self, event):
         abs_position = event.GetPoint()
         
@@ -137,14 +150,16 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
             position = self.ScreenToClient(abs_position)
             
         self.PopupMenu(self.blank_context_menu, position)
-    
+        
         
     def on_new_step_profile_button(self, event):
-        1/0
+        self.step_profiles_controls.open_step_profile_editing_dialog()
 
         
     def on_fork_by_crunching_button(self, event):
-        self.gui_project.fork_by_crunching(self.GetSelection().step_profile)
+        self.gui_project.fork_by_crunching(
+            self.get_selected_step_profile()
+        )
 
         
     def on_select_tree_members_button(self, event):
@@ -157,10 +172,12 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
 
         
     def on_duplicate_and_edit_button(self, event):
-        1/0
+        self.step_profiles_controls.open_step_profile_editing_dialog(
+            self.get_selected_step_profile()
+        )
 
         
     def on_delete_button(self, event):
-        1/0
+        self.delete_step_profile(self.get_selected_step_profile())
     
         
