@@ -38,7 +38,7 @@ class StepProfilesControls(wx.Panel):
         self.main_v_sizer.Add(self.step_profiles_list, 1,
                               wx.EXPAND | wx.BOTTOM, 8)
         
-        self.button_h_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        self.button_h_sizer = wx.BoxSizer(wx.HORIZONTAL) 
         
         self.main_v_sizer.Add(self.button_h_sizer, 0, wx.ALIGN_RIGHT)
         
