@@ -56,6 +56,9 @@ class Emitter(OriginalEmitter):
         '''
         Add an emitter as an input to this emitter.
 
+        Every time that emitter will emit, it will cause this emitter to emit as
+        well.
+        
         Emitter must be member of this emitter's emitter system.
         '''
         assert emitter in self.emitter_system.emitters
@@ -65,7 +68,12 @@ class Emitter(OriginalEmitter):
         '''
         Add an emitter or a callable as an output to this emitter.
         
-        If it's an emitter, it must be member of this emitter's emitter system.
+        If adding a callable, every time this emitter will emit the callable
+        will be called.
+        
+        If adding an emitter, every time this emitter will emit the output
+        emitter will emit as well. Note that the output emitter must be a member
+        of this emitter's emitter system.
         '''
         if isinstance(thing, Emitter):
             assert thing in self.emitter_system.emitters

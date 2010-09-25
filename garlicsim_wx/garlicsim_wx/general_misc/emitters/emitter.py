@@ -177,7 +177,12 @@ class Emitter(object):
             children_callable_outputs.union(self._get_callable_outputs())
 
     def add_input(self, emitter):
-        '''Add an emitter as an input to this emitter.'''
+        '''
+        Add an emitter as an input to this emitter.
+
+        Every time that emitter will emit, it will cause this emitter to emit as
+        well.
+        '''
         assert isinstance(emitter, Emitter)
         self._inputs.add(emitter)
         emitter._outputs.add(self)
@@ -191,7 +196,15 @@ class Emitter(object):
         emitter._recalculate_total_callable_outputs_recursively()
     
     def add_output(self, thing):
-        '''Add an emitter or a callable as an output to this emitter.'''
+        '''
+        Add an emitter or a callable as an output to this emitter.
+        
+        If adding a callable, every time this emitter will emit the callable
+        will be called.
+        
+        If adding an emitter, every time this emitter will emit the output
+        emitter will emit as well.
+        '''
         assert isinstance(thing, Emitter) or callable(thing)
         self._outputs.add(thing)
         if isinstance(thing, Emitter):

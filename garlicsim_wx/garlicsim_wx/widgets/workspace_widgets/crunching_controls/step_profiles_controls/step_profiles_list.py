@@ -16,7 +16,7 @@ from garlicsim_wx.widgets import WorkspaceWidget
 from garlicsim_wx.misc.colors import hue_to_light_color
 
 
-from .color_control import ColorControl
+from .hue_control import HueControl
 from .blank_context_menu import BlankContextMenu
 from .step_profile_context_menu import StepProfileContextMenu
 
@@ -80,14 +80,15 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
             try:
                 item = self.step_profiles_to_items[step_profile]
             except KeyError:
-                color = hue_to_light_color(
-                    self.gui_project.step_profiles_to_hues[step_profile]
-                )
-                color_control = ColorControl(self, step_profile, color)
+                hue = self.gui_project.step_profiles_to_hues[step_profile]
+                #color = hue_to_light_color(
+                    #hue
+                #)
+                hue_control = HueControl(self, step_profile, hue)
                 item = self.AppendItem(self.root_item, '', ct_type=2,
-                                       wnd=color_control)
+                                       wnd=hue_control)
                 item.step_profile = step_profile
-                item.color_control = color_control
+                item.hue_control = hue_control
                 self.step_profiles_to_items[step_profile] = item
                 self.SetItemText(
                     item,
@@ -96,13 +97,13 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
                     1
                 )
                 
-            item.color_control.SetSize((item.color_control.GetSize()[0],
+            item.hue_control.SetSize((item.hue_control.GetSize()[0],
                                        item.GetHeight() - 4))
         
         for item in self.items:
             if item.step_profile not in self.gui_project.step_profiles:
                 self.Delete(item)
-                item.color_control.Destroy()
+                item.hue_control.Destroy()
                 
                 
     def update_colors(self):
@@ -113,7 +114,7 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
                     item.step_profile
                 ]
             )
-            item.color_control.set_color(color)
+            item.hue_control.set_color(color)
             
 
     def get_selected_step_profile(self):
@@ -164,7 +165,7 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
         
     def on_change_color_button(self, event):
         item = self.GetSelection()
-        item.color_control.open_editing_dialog()
+        item.hue_control.open_editing_dialog()
 
         
     def on_duplicate_and_edit_button(self, event):

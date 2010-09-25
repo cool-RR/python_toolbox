@@ -2,40 +2,28 @@ import colorsys
 
 import wx
 
-from garlicsim_wx.widgets.general_misc.hue_selection_dialog \
-     import HueSelectionDialog
-from garlicsim_wx.general_misc import wx_tools
+from garlicsim_wx.widgets.general_misc.hue_control import HueControl
 
 import garlicsim_wx
 
 
-class ColorControl(wx.Window):
-    def __init__(self, step_profiles_list, step_profile, color):
-        wx.Window.__init__(self, step_profiles_list.GetMainWindow(),
-                           size=(25, 10), style=wx.SIMPLE_BORDER)
+class HueControl(HueControl):
+    # tododoc: possible confusion, this is called HueProfile in the
+    # `step_profiles_controls` package, but it's good for a specific purpose,
+    # and the dialog uses a different hue control.
+    def __init__(self, step_profiles_list, step_profile, hue):
+        HueControl.__init__(
+            self,
+            step_profiles_list.GetMainWindow(),
+            lightness=0.8,
+            saturation=1,
+            size=(25, 10)
+        )
                 
         self.step_profiles_list = step_profiles_list
         self.frame = self.step_profiles_list.frame
         self.step_profile = step_profile
-        self.color = color
-        
-        self._pen = wx.Pen(wx.Color(0, 0, 0), width=0, style=wx.TRANSPARENT)
-        
-        self.Bind(wx.EVT_PAINT, self.on_paint)
-        self.Bind(wx.EVT_LEFT_DOWN, self.on_mouse_left_down)
-        
-        
-    
-    def on_paint(self, event):
-        dc = wx.PaintDC(self)
-        dc.SetBrush(wx.Brush(self.color))
-        dc.SetPen(self._pen)
-        dc.DrawRectangle(0, 0, *self.GetSize())
-        dc.Destroy()
-        
-    
-    def on_mouse_left_down(self, event):
-        self.open_editing_dialog()
+        self.hue = hue
       
         
     def open_editing_dialog(self):
@@ -64,7 +52,3 @@ class ColorControl(wx.Window):
             )
 
             
-    def set_color(self, color):
-        if self.color != color:
-            self.color = color
-            self.Refresh()

@@ -1,6 +1,7 @@
 import wx
 
 from garlicsim_wx.widgets.general_misc import CuteDialog
+from garlicsim_wx.general_misc.emitters import Emitter
 
 from .wheel import Wheel
 from .comparer import Comparer
@@ -9,13 +10,19 @@ from .textual import Textual
 
 class HueSelectionDialog(CuteDialog):
     
-    def __init__(self, parent, getter, setter, lightness=1, saturation=1,
-                 id=-1, title='Select hue', pos=wx.DefaultPosition,
-                 size=wx.DefaultSize, style=wx.DEFAULT_DIALOG_STYLE,
-                 name=wx.DialogNameStr):
+    def __init__(self, parent, getter, setter, emitter, lightness=1,
+                 saturation=1, id=-1, title='Select hue', pos=wx.DefaultPosition,
+                 size=wx.DefaultSize, style=wx.DEFAULT_DIALOG_STYLE, name=wx.DialogNameStr):
 
         
         CuteDialog.__init__(self, parent, id, title, pos, size, style, name)
+        
+        self.getter = getter
+        
+        self.setter = setter
+        
+        assert isinstance(emitter, Emitter)
+        self.emitter = emitter
         
         self.lightness = lightness
 
@@ -26,10 +33,8 @@ class HueSelectionDialog(CuteDialog):
         self.old_hue = self.hue
         
         self.old_hls = (self.old_hue, lightness, saturation)
-                
-        self.setter = setter
         
-        self.getter = getter
+        
         
         
         self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)
@@ -75,6 +80,9 @@ class HueSelectionDialog(CuteDialog):
         
         self.SetSizer(self.main_v_sizer)
         self.main_v_sizer.Fit(self)
+        
+        
+        self.emitter.add_output(self.update)
         
         
     def on_ok(self, event):
