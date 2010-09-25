@@ -76,7 +76,7 @@ class Process(multiprocessing.Process):
         '''
         try:
             self.main_loop()
-        except ObsoleteCruncherError as e:
+        except ObsoleteCruncherError:
             return
 
         

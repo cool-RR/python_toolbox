@@ -87,8 +87,8 @@ class StepFunctionInput(wx.ComboBox):
     def on_kill_focus(self, event):
         try:
             self.parse_text_and_set()
-        except Exception as e:
+        except Exception as exception:
             self.step_profile_dialog.static_function_text.set_error_text(
-                e.message
+                exception.message
             )
         event.Skip()
