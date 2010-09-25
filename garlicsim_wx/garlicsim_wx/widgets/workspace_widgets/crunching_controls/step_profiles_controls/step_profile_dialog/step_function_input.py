@@ -24,7 +24,7 @@ class StepFunctionInput(wx.ComboBox):
                 del step_functions_list[value]
             except Exception:
                 pass
-            step_functions_list.insert(value, 0)
+            step_functions_list.insert(0, value)
         
         wx.ComboBox.__init__(self, step_profile_dialog, value=value,
                              choices=step_functions_list, size=(200, -1))
@@ -38,11 +38,11 @@ class StepFunctionInput(wx.ComboBox):
 
         
     def try_to_parse_text_and_set(self):
-        text = self.GetValue()
+        text = str(self.GetValue())
         try:
             thing = self.step_profile_dialog.address_to_object(text)
         except Exception:
-            self.set_step_function_candidate
+            return
         else:
             try:
                 garlicsim.misc.simpack_grokker.get_step_type(thing)
@@ -53,11 +53,11 @@ class StepFunctionInput(wx.ComboBox):
                 
     
     def parse_text_and_set(self):
-        text = self.GetValue()
+        text = str(self.GetValue())
         try:
             thing = self.step_profile_dialog.address_to_object(text)
         except Exception:
-            raise Exception("Unable to resolve `%s` into a step function." \
+            raise Exception("Unable to resolve '%s' into a step function." \
                             % text)
         else:
             try:
