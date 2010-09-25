@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 import pkg_resources
-import wx
+import wx.lib.scrolledpanel
 
 from garlicsim_wx.general_misc.third_party import aui
 from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
@@ -17,16 +17,19 @@ from .cruncher_controls import CruncherControls
 from .autocrunch_controls import AutocrunchControls
 
 
-class CrunchingControls(wx.Panel, WorkspaceWidget):
+class CrunchingControls(wx.lib.scrolledpanel.ScrolledPanel, WorkspaceWidget):
     
     _WorkspaceWidget__name = 'Crunching'
 
     def __init__(self, frame):
-        wx.Panel.__init__(self, frame, -1, size=(184, 128),
-                          style=wx.SUNKEN_BORDER)
+        wx.lib.scrolledpanel.ScrolledPanel.__init__(self, frame, -1,
+                                                    size=(184, 128),
+                                                    style=wx.SUNKEN_BORDER)
         WorkspaceWidget.__init__(self, frame)
         
         self.SetBackgroundColour(wx_tools.get_background_color())
+        
+        self.SetupScrolling()
         
         
         assert isinstance(self.gui_project, garlicsim_wx.GuiProject)
