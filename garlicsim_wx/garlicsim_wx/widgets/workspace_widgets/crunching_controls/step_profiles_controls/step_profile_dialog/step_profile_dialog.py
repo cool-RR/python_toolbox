@@ -147,6 +147,12 @@ class StepProfileDialog(CuteDialog):
         
         # Finished setting up sizers and widgets.
         #######################################################################
+    
+        
+    def set_step_function(self, step_function):
+        self.step_function = step_function
+        self.static_function_text.set_step_function(step_function)
+        # tododoc update the argument list
         
         
     def step_function_to_address(self, step_function):
@@ -163,6 +169,7 @@ class StepProfileDialog(CuteDialog):
             root=self.simpack,
             shorten=True
         )
+
     
     def on_ok(self, event):
         # ...

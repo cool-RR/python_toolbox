@@ -32,10 +32,12 @@ class StepFunctionInput(wx.ComboBox):
         self.Bind(wx.EVT_TEXT, self.on_text)
         self.Bind(wx.EVT_COMBOBOX, self.on_combo_box)
         
-        self.try_to_parse_text()
+        self.Bind(wx.EVT_KILL_FOCUS, self.on_kill_focus)
+        
+        self.try_to_parse_text_and_set()
 
         
-    def try_to_parse_text(self):
+    def try_to_parse_text_and_set(self):
         text = self.GetValue()
         try:
             thing = self.step_profile_dialog.address_to_object(text)
@@ -50,7 +52,7 @@ class StepFunctionInput(wx.ComboBox):
                 self.step_profile_dialog.set_step_function(thing)
                 
     
-    def parse_text(self):
+    def parse_text_and_set(self):
         text = self.GetValue()
         try:
             thing = self.step_profile_dialog.address_to_object(text)
@@ -74,12 +76,19 @@ class StepFunctionInput(wx.ComboBox):
                 self.step_profile_dialog.set_step_function(thing)
             
         
-    
     def on_text(self, event):
-        self.try_to_parse_text()
+        self.try_to_parse_text_and_set()
     
         
     def on_combo_box(self, event):
-        self.try_to_parse_text()
+        self.try_to_parse_text_and_set()
         
         
+    def on_kill_focus(self, event):
+        try:
+            self.parse_text_and_set()
+        except Exception as e:
+            self.step_profile_dialog.static_function_text.set_error_text(
+                e.message
+            )
+        event.Skip()
