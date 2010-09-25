@@ -42,9 +42,11 @@ class HueControl(wx.Window):
     def on_paint(self, event):
         dc = wx.PaintDC(self)
         color = wx_tools.hls_to_wx_color(
-            self.getter(),
-            self.lightness,
-            self.saturation
+            (
+                self.getter(),
+                self.lightness,
+                self.saturation
+            )
         )
         dc.SetBrush(wx.Brush(color))
         dc.SetPen(self._pen)

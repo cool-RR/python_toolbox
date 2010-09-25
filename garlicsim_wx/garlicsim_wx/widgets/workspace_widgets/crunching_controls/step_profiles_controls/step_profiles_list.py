@@ -62,14 +62,8 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
         self.Bind(wx.EVT_CONTEXT_MENU, self.on_context_menu)
         
         
-        
-        
         self.gui_project.step_profiles_set_modified_emitter.add_output(
             self.update
-        )
-        
-        self.gui_project.step_profiles_to_hues_modified_emitter.add_output(
-            self.update_colors
         )
         
   
@@ -106,17 +100,7 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
                 item.hue_control.Destroy()
                 
                 
-    def update_colors(self):
-        
-        for item in self.items:
-            color = hue_to_light_color(
-                self.gui_project.step_profiles_to_hues[
-                    item.step_profile
-                ]
-            )
-            item.hue_control.set_color(color)
-            
-
+    
     def get_selected_step_profile(self):
         selection = self.GetSelection()
         return selection.step_profile if selection else None

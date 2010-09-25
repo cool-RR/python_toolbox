@@ -2,12 +2,13 @@ import colorsys
 
 import wx
 
-from garlicsim_wx.widgets.general_misc.hue_control import HueControl
+from garlicsim_wx.widgets.general_misc.hue_control \
+     import HueControl as GenericHueControl
 
 import garlicsim_wx
 
 
-class HueControl(HueControl):
+class HueControl(GenericHueControl):
     # tododoc: possible confusion, this is called HueProfile in the
     # `step_profiles_controls` package, but it's good for a specific purpose,
     # and the dialog uses a different hue control.
@@ -20,11 +21,17 @@ class HueControl(HueControl):
         self.gui_project = self.frame.gui_project
         
         getter = lambda: \
-            step_profiles_to_hues.__getitem__(self.step_profile)
-        setter = lambda hue: \
-            step_profiles_to_hues.__setitem__(self.step_profile, hue)
+               self.gui_project.step_profiles_to_hues.__getitem__(
+                   self.step_profile
+               )
         
-        HueControl.__init__(
+        setter = lambda hue: \
+               self.gui_project.step_profiles_to_hues.__setitem__(
+                   self.step_profile,
+                   hue
+               )
+        
+        GenericHueControl.__init__(
             self,
             step_profiles_list.GetMainWindow(),
             getter=getter,
