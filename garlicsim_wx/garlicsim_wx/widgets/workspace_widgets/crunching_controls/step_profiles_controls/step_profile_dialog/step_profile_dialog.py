@@ -2,6 +2,7 @@ import wx
 
 from garlicsim.general_misc import address_tools
 from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
+from garlicsim_wx.widgets.general_misc.error_dialog import ErrorDialog
 
 import garlicsim
 import garlicsim_wx
@@ -171,8 +172,17 @@ class StepProfileDialog(CuteDialog):
 
     
     def on_ok(self, event):
-        # ...
-        self.step_profile = 7
+        try:
+            self.step_function_input.parse_text_and_set()
+        except Exception as exception:
+            error_dialog = ErrorDialog(self, exception.message)
+            error_dialog.ShowModal()
+            self.SetFocus(self.step_function_input)
+            return
+        # tododoc: add args:
+        self.step_profile = garlicsim.misc.StepProfile(self.step_function)
+        if self.step_profile in self.gui_project.step_profiles:
+            
         self.EndModal(wx.ID_OK)
     
     

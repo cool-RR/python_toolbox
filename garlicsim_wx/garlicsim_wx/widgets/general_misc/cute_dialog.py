@@ -21,7 +21,9 @@ class CuteDialog(wx.Dialog):
     2. Uses garlicsim_wx's default background color.
     '''
     def __init__(self, *args, **kwargs):
-        wx.Dialog.__init__(self, *args, **kwargs)
+        isinstance(kwargs, dict)
+        if not kwargs.pop('skip_dialog_init', False):
+            wx.Dialog.__init__(self, *args, **kwargs)
         self.SetBackgroundColour(wx_tools.get_background_color())
         
     def ShowModal(self):
