@@ -35,7 +35,7 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
         
         cute_hyper_tree_list.CuteHyperTreeList.__init__(
             self,
-            parent,
+            step_profiles_controls,
             style=wx.SIMPLE_BORDER,
             agwStyle=(
                 wx.TR_FULL_ROW_HIGHLIGHT | \

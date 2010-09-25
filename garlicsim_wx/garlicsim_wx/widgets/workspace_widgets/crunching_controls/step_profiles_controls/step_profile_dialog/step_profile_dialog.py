@@ -3,6 +3,8 @@ import wx
 from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
 
 from .static_function_text import StaticFunctionText
+from .step_function_input import StepFunctionInput
+from .argument_list import ArgumentList
 
 
 class StepProfileDialog(CuteDialog):
@@ -12,7 +14,6 @@ class StepProfileDialog(CuteDialog):
     def __init__(self, step_profiles_controls, step_profile=None):
         
         self.step_profiles_controls = step_profiles_controls
-        assert isinstance(self.step_profiles_controls, StepProfileControls)
         
         CuteDialog.__init__(self, step_profiles_controls.frame,
                             title='Create a new step profile')
@@ -43,7 +44,24 @@ class StepProfileDialog(CuteDialog):
         )
         
         
-        self.h_sizer.Add(wx.StaticText(self, label='Placeholder'))
+        self.step_function_input = StepFunctionInput(self)
+        
+        self.h_sizer.Add(
+            self.step_function_input,
+            0,
+            wx.ALIGN_TOP | wx.ALL,            
+            border=5
+        )
+        
+        
+        self.argument_list = ArgumentList(self)
+        
+        self.h_sizer.Add(
+            self.argument_list,
+            1,
+            wx.EXPAND | wx.ALL,
+            border=5
+        )
         
         
         self.dialog_button_sizer = wx.StdDialogButtonSizer()
@@ -79,5 +97,3 @@ class StepProfileDialog(CuteDialog):
         pass
                          
         
-
-from ..step_profiles_controls import StepProfilesControls

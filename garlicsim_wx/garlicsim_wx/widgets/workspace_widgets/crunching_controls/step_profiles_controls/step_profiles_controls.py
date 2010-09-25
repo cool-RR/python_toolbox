@@ -77,7 +77,7 @@ class StepProfilesControls(wx.Panel):
             
     
     def open_step_profile_editing_dialog(self, step_profile=None):
-        step_profile_dialog = StepProfileDialog(self.frame, step_profile)
+        step_profile_dialog = StepProfileDialog(self, step_profile)
         
         try:
             step_profile_dialog.ShowModal()
