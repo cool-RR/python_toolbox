@@ -104,7 +104,7 @@ class StepProfileDialog(CuteDialog):
         
             
         #######################################################################
-        # Setting up sizers and widgets:
+        # Setting up widgets and sizers:
         
         self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)
         
@@ -162,7 +162,10 @@ class StepProfileDialog(CuteDialog):
         )
         
         
-        self.argument_list = ArgumentList(self)
+        self.argument_list = ArgumentList(
+            self,
+            original_step_function if original_step_profile else None
+        )
         
         self.h_sizer.Add(
             self.argument_list,

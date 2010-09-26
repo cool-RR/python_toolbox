@@ -21,15 +21,16 @@ class ArgumentList(wx.Panel):
         
         self.font = wx.Font(12, wx.MODERN, wx.NORMAL, wx.NORMAL)
         
-        self.bold_font = wx.Font(12, wx.MODERN, wx.FONTWEIGHT_BOLD, wx.NORMAL)
+        self.bold_font = wx.Font(12, wx.MODERN, wx.NORMAL, wx.FONTWEIGHT_BOLD)
         
         self.step_function = None
-        
-        self.build_for_step_function(step_function)
         
         self.main_h_sizer = wx.BoxSizer(wx.HORIZONTAL)
         
         self.SetSizer(self.main_h_sizer)
+        
+        self.build_for_step_function(step_function)
+        
 
         
     def build_for_step_function(self, step_function):
@@ -52,6 +53,7 @@ class ArgumentList(wx.Panel):
         ]
         
         
+        self.main_h_sizer
         
         self.opening_bracket = OpeningBracket(self)
         
