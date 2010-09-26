@@ -86,11 +86,15 @@ class WorkspaceWidget(object):
         else:
             event.Skip()
 
-            
-    def on_workspace_widget_menu_select(self, event):
+
+    def show():
         aui_pane_info = self.get_aui_pane_info()
         if aui_pane_info.IsShown() is False:
             aui_pane_info.Show()
             self.aui_manager.Update()
         self.SetFocus()
+            
+            
+    def on_workspace_widget_menu_select(self, event):
+        self.show()
     

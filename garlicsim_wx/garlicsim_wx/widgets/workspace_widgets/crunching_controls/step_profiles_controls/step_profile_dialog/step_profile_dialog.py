@@ -10,6 +10,7 @@ import garlicsim_wx
 from .static_function_text import StaticFunctionText
 from .step_function_input import StepFunctionInput
 from .argument_list import ArgumentList
+from .already_exists_dialog import AlreadyExistsDialog
 
 
 class StepProfileDialog(CuteDialog):
@@ -22,6 +23,8 @@ class StepProfileDialog(CuteDialog):
         
         self.gui_project = step_profiles_controls.gui_project
         assert isinstance(self.gui_project, garlicsim_wx.GuiProject)
+        
+        self.frame = step_profiles_controls.frame
         
         self.simpack = self.gui_project.simpack
         
@@ -180,9 +183,11 @@ class StepProfileDialog(CuteDialog):
             self.SetFocus(self.step_function_input)
             return
         # tododoc: add args:
-        self.step_profile = garlicsim.misc.StepProfile(self.step_function)
-        if self.step_profile in self.gui_project.step_profiles:
-            pass
+        step_profile = self.step_profile = \
+            garlicsim.misc.StepProfile(self.step_function)
+        if step_profile in self.gui_project.step_profiles:
+            dialog = AlreadyExistsDialog(self, step_profile)
+            dialog.ShowModal()
         self.EndModal(wx.ID_OK)
     
     
