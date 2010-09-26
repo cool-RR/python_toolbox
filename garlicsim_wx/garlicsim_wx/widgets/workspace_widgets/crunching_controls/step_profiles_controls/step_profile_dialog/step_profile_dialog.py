@@ -3,6 +3,7 @@ import collections
 import wx
 
 from garlicsim.general_misc import address_tools
+from garlicsim.general_misc.third_party import inspect
 from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
 from garlicsim_wx.widgets.general_misc.error_dialog import ErrorDialog
 
@@ -45,7 +46,15 @@ class StepProfileDialog(CuteDialog):
         
         self.hue = self.gui_project.step_profiles_to_hues.default_factory()
         
-        self.step_functions_to_argument_dicts = StepFunctionsToArgumentDicts()
+        self.step_functions_to_argument_dicts = \
+            StepFunctionsToArgumentDicts()
+        
+        self.step_functions_to_star_args = \
+            collections.defaultdict(lambda: [])
+        
+        self.step_functions_to_star_kwargs = \
+            collections.defaultdict(lambda: {})
+
         
         if original_step_profile:
             original_step_function = original_step_profile.step_function
@@ -57,9 +66,33 @@ class StepProfileDialog(CuteDialog):
                 lambda: '',
                 original_step_profile.getcallargs_result
             )
-            
+
             self.step_functions_to_argument_dicts[original_step_function] = \
                 original_argument_dict
+            
+
+            original_arg_spec = inspect.getargspec(original_step_function)
+            
+            
+            if original_arg_spec.varargs:
+                star_args_value = original_step_profile.getcallargs_result[
+                    original_arg_spec.varargs
+                ]
+                
+                self.step_functions_to_star_args[original_step_function] = \
+                    star_args_value
+            
+            
+            if original_arg_spec.keywords:
+                star_kwargs_value = original_step_profile.getcallargs_result[
+                    original_arg_spec.keywords
+                ]
+                
+                self.step_functions_to_star_kwargs[original_step_function] = \
+                    star_kwargs_value
+                
+            
+            
             
         else:
             if len(simpack_grokker.all_step_functions) >= 2:

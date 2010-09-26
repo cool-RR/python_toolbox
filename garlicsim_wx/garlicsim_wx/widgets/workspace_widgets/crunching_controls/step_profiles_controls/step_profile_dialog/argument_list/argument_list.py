@@ -59,3 +59,10 @@ class ArgumentList(wx.Panel):
             if not value and (arg_name in arg_spec.defaults):
                 value = arg_dict[arg_name] = repr(arg_spec.defaults[arg_name])
             arg = Arg(self, arg_name, value)
+            self.args.append(arg)
+        
+        
+        self.star_args = []
+        
+        if arg_spec.varargs:
+            
