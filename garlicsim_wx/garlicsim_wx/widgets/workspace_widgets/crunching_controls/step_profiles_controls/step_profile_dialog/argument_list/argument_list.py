@@ -38,6 +38,16 @@ class ArgumentList(wx.Panel):
             step_function
         ]
         
+        star_arg_list = self.step_profile_dialog.step_functions_to_star_args[
+            step_function
+        ]
+        
+        star_kwarg_dict = self.step_profile_dialog.step_functions_to_star_kwargs[
+            step_function
+        ]
+        
+        
+        
         self.opening_bracket = OpeningBracket(self)
         
         self.main_h_sizer.Add(self.opening_bracket, 0,
@@ -51,18 +61,36 @@ class ArgumentList(wx.Panel):
         self.main_h_sizer.Add(self.placeholder, 0,
                               wx.ALIGN_BOTTOM | wx.ALL, border=5)
         
+        
         self.args = []
         
         for arg_name in arg_spec.args:
-            isinstance(arg_dict, dict)
+            
             value = arg_dict[arg_name]
             if not value and (arg_name in arg_spec.defaults):
                 value = arg_dict[arg_name] = repr(arg_spec.defaults[arg_name])
-            arg = Arg(self, arg_name, value)
+            arg = Arg(self, arg_name, value)            
             self.args.append(arg)
+            self.main_h_sizer.Add(arg, 0, wx.ALIGN_BOTTOM | wx.ALL, border=5)
         
         
         self.star_args = []
         
         if arg_spec.varargs:
+            for star_arg_value in star_arg_list:
+                star_arg = StarArg(self, repr(star_arg_value))
+                self.star_args.append(star_arg)
+                self.main_h_sizer.Add(star_arg, 0, wx.ALIGN_BOTTOM | wx.ALL,
+                                      border=5)
+        
+        
+        self.star_kwargs = []
+        
+        if arg_spec.keywords:
+            for name, value in star_kwarg_dict:
+                star_kwarg = StarKwarg(self, name, repr(value))
+                self.star_kwargs.append(star_kwarg)
+                self.main_h_sizer.Add(star_kwarg, 0, wx.ALIGN_BOTTOM | wx.ALL,
+                                      border=5)
+        
             
