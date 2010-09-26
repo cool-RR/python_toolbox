@@ -98,8 +98,13 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
                 
     
     def get_selected_step_profile(self):
+        
         selection = self.GetSelection()
-        return selection.step_profile if selection else None
+        # Checking it's not the root:
+        if selection and (not selection.HasChildren()):
+            return selection.step_profile
+        else:
+            return None
 
 
     def delete_step_profile(self, step_profile):

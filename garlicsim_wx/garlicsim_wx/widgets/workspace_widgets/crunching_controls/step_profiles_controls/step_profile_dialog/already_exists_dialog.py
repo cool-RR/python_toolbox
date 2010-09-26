@@ -60,10 +60,16 @@ class AlreadyExistsDialog(CuteDialog):
         
         
     def on_take_me_to_it_button(self, event):
-        # tododoc: test that it really puts the focus there. maybe callafter?
-        wx.CallAfter(self._put_focus_on_step_profile, self.frame,
-                     self.step_profile)
+        # tododoc: currently not really working, solve this.
+        #wx.CallAfter(_put_focus_on_step_profile, self.frame,
+                     #self.step_profile)
         self.EndModal(wx.ID_OK)
+        step_profiles_list = self.frame.crunching_controls.\
+                             step_profiles_controls.step_profiles_list
+        step_profiles_list.SetFocus()
+        item = step_profiles_list.step_profiles_to_items[self.step_profile]
+        step_profiles_list.SelectItem(item)
+        self.frame.crunching_controls.show()
         
     
     
@@ -71,11 +77,3 @@ class AlreadyExistsDialog(CuteDialog):
         self.EndModal(wx.ID_CANCEL)
         
     
-    @staticmethod
-    def _put_focus_on_step_profile(frame, step_profile):
-        step_profiles_list = \
-            frame.crunching_controls.step_profiles_controls.step_profiles_list
-        step_profiles_list.SetFocus()
-        item = step_profiles_list.step_profiles_to_items[step_profile]
-        step_profiles_list.SelectItem(item)
-        frame.crunching_controls.show()

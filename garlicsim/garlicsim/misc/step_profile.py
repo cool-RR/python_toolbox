@@ -21,6 +21,7 @@ __all__ = ['StepProfile']
 
 
 class StatePlaceholder(object): # tododoc: make uninstanciable
+    # tododoc: bad name, it can also be a history browser
     pass
 
 
