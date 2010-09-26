@@ -4,7 +4,8 @@ import collections
 class StepFunctionsToArgumentDicts(collections.defaultdict):
 
     def __init__(self, dict_or_iterable={}):
-        collections.defaultdict.__init__(self.default_factory,
+        collections.defaultdict.__init__(self,
+                                         self.default_factory,
                                          dict_or_iterable)
     
         
