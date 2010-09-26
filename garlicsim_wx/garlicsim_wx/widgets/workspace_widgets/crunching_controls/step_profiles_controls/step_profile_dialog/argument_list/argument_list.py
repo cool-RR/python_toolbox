@@ -5,6 +5,7 @@ from garlicsim.general_misc.third_party import inspect
 from .opening_bracket import OpeningBracket
 from .state_placeholder import StatePlaceholder
 from .history_browser_placeholder import HistoryBrowserPlaceholder
+from .comma import Comma
 from .arg import Arg
 from .star_arg import StarArg
 from .star_kwarg import StarKwarg
@@ -17,6 +18,10 @@ class ArgumentList(wx.Panel):
         self.gui_project = step_profile_dialog.gui_project
         
         wx.Panel.__init__(self, step_profile_dialog)
+        
+        self.font = wx.Font(12, wx.MODERN, wx.NORMAL, wx.NORMAL)
+        
+        self.bold_font = wx.Font(12, wx.MODERN, wx.FONTWEIGHT_BOLD, wx.NORMAL)
         
         self.step_function = None
         
@@ -65,7 +70,8 @@ class ArgumentList(wx.Panel):
         self.args = []
         
         for arg_name in arg_spec.args:
-            
+            self.main_h_sizer.Add(Comma(self), 0, wx.ALIGN_BOTTOM | wx.ALL,
+                                  border=5)
             value = arg_dict[arg_name]
             if not value and (arg_name in arg_spec.defaults):
                 value = arg_dict[arg_name] = repr(arg_spec.defaults[arg_name])
@@ -78,6 +84,8 @@ class ArgumentList(wx.Panel):
         
         if arg_spec.varargs:
             for star_arg_value in star_arg_list:
+                self.main_h_sizer.Add(Comma(self), 0, wx.ALIGN_BOTTOM | wx.ALL,
+                                  border=5)
                 star_arg = StarArg(self, repr(star_arg_value))
                 self.star_args.append(star_arg)
                 self.main_h_sizer.Add(star_arg, 0, wx.ALIGN_BOTTOM | wx.ALL,
@@ -88,9 +96,13 @@ class ArgumentList(wx.Panel):
         
         if arg_spec.keywords:
             for name, value in star_kwarg_dict:
+                self.main_h_sizer.Add(Comma(self), 0, wx.ALIGN_BOTTOM | wx.ALL,
+                                  border=5)
                 star_kwarg = StarKwarg(self, name, repr(value))
                 self.star_kwargs.append(star_kwarg)
                 self.main_h_sizer.Add(star_kwarg, 0, wx.ALIGN_BOTTOM | wx.ALL,
                                       border=5)
         
-            
+        self.closing_bracket = ClosingBracket(self)
+        
+        
