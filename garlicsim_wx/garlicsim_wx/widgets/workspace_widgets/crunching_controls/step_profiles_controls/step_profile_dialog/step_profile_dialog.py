@@ -182,7 +182,7 @@ class StepProfileDialog(CuteDialog):
         # tododoc: add args:
         self.step_profile = garlicsim.misc.StepProfile(self.step_function)
         if self.step_profile in self.gui_project.step_profiles:
-            
+            pass
         self.EndModal(wx.ID_OK)
     
     
