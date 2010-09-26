@@ -183,11 +183,19 @@ class StepProfileDialog(CuteDialog):
             self.SetFocus(self.step_function_input)
             return
         # tododoc: add args:
-        step_profile = self.step_profile = \
-            garlicsim.misc.StepProfile(self.step_function)
+        step_profile = garlicsim.misc.StepProfile(self.step_function)
         if step_profile in self.gui_project.step_profiles:
             dialog = AlreadyExistsDialog(self, step_profile)
-            dialog.ShowModal()
+            result = dialog.ShowModal() 
+            if result == wx.ID_OK:
+                self.EndModal(wx.ID_CANCEL)
+                return
+            else:
+                assert result == wx.ID_CANCEL
+                return
+        else: # step_profile not in self.gui_project.step_profiles
+            self.step_profile = step_profile
+                
         self.EndModal(wx.ID_OK)
     
     

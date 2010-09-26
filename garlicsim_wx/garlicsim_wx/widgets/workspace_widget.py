@@ -87,7 +87,7 @@ class WorkspaceWidget(object):
             event.Skip()
 
 
-    def show():
+    def show(self):
         aui_pane_info = self.get_aui_pane_info()
         if aui_pane_info.IsShown() is False:
             aui_pane_info.Show()

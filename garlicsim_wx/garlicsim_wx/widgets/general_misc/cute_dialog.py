@@ -27,7 +27,7 @@ class CuteDialog(wx.Dialog):
         self.SetBackgroundColour(wx_tools.get_background_color())
         
     def ShowModal(self):
-        if wx.Platform == '__WXMAC__':
+        if True: #wx.Platform == '__WXMAC__':
             self.Centre(wx.BOTH)
         return super(CuteDialog, self).ShowModal()
     

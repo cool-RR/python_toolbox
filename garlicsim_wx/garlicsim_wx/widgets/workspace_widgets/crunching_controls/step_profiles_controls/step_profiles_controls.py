@@ -81,14 +81,14 @@ class StepProfilesControls(wx.Panel):
         
         try:
             if step_profile_dialog.ShowModal() == wx.ID_OK:
-                step_profile = step_profile_dialog.step_profile
-                hue = step_profile_dialog.hue
+                new_step_profile = step_profile_dialog.step_profile
+                new_hue = step_profile_dialog.hue
             else:
-                step_profile = hue = None
+                new_step_profile = new_hue = None
         finally:
             step_profile_dialog.Destroy()
             
-        if step_profile:
-            assert step_profile not in self.gui_project.step_profiles
-            self.gui_project.step_profiles_to_hues[step_profile] = hue
-            self.gui_project.step_profiles.add(step_profile)
+        if new_step_profile:
+            assert new_step_profile not in self.gui_project.step_profiles
+            self.gui_project.step_profiles_to_hues[new_step_profile] = new_hue
+            self.gui_project.step_profiles.add(new_step_profile)
