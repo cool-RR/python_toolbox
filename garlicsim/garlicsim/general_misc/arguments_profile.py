@@ -293,6 +293,7 @@ class ArgumentsProfile(object):
         # All phases completed! This arguments profile is canonical and ready.
         #######################################################################
         
+        # Caching the hash, since its computation can take a long time:
         self._hash = cheat_hashing.cheat_hash(
             (
                 self.function,

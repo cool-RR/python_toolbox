@@ -1,3 +1,5 @@
+import collections
+
 import wx
 
 from garlicsim.general_misc import address_tools
@@ -11,6 +13,7 @@ from .static_function_text import StaticFunctionText
 from .step_function_input import StepFunctionInput
 from .argument_list import ArgumentList
 from .already_exists_dialog import AlreadyExistsDialog
+from .step_functions_to_argument_dicts import StepFunctionsToArgumentDicts
 
 
 class StepProfileDialog(CuteDialog):
@@ -41,12 +44,23 @@ class StepProfileDialog(CuteDialog):
         
         
         self.hue = self.gui_project.step_profiles_to_hues.default_factory()
-
+        
+        self.step_functions_to_argument_dicts = StepFunctionsToArgumentDicts()
         
         if original_step_profile:
+            original_step_function = original_step_profile.step_function
             initial_step_function_address = self.step_function_to_address(
-                original_step_profile.step_function
+                original_step_function
             )
+
+            original_argument_dict = collections.defaultdict(
+                lambda: '',
+                original_step_profile.getcallargs_result
+            )
+            
+            self.step_functions_to_argument_dicts[original_step_function] = \
+                original_argument_dict
+            
         else:
             if len(simpack_grokker.all_step_functions) >= 2:
                 initial_step_function_address = ''
