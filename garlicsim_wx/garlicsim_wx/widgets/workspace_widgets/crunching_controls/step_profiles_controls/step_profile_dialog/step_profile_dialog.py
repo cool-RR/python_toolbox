@@ -39,6 +39,8 @@ class StepProfileDialog(CuteDialog):
         CuteDialog.__init__(self, step_profiles_controls.frame,
                             title='Create a new step profile')
         
+        self.SetDoubleBuffered(True)
+        
         self.original_step_profile = original_step_profile = step_profile
         
         del step_profile        
