@@ -12,7 +12,7 @@ class StarKwargBox(wx.StaticBox):
         wx.StaticBox.__init__(self, argument_control,
                               label='Additional keyword arguments')
         
-        self.sizer = wx.StaticBoxSizer(self, wx.HORIZONTAL)
+        self.sizer = wx.StaticBoxSizer(self, wx.VERTICAL)
         
         self.step_function = step_function
         

@@ -124,7 +124,7 @@ class StepProfileDialog(CuteDialog):
         self.main_v_sizer.Add(
             self.h_sizer,
             0,
-            wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND | wx.ALL,            
+            wx.ALIGN_CENTER_HORIZONTAL | wx.ALL,            
             border=10
         )
         
@@ -165,16 +165,16 @@ class StepProfileDialog(CuteDialog):
         )
         
         
-        self.argument_list = ArgumentList(
+        self.argument_control = ArgumentControl(
             self,
             original_step_function if original_step_profile else None
         )
         
-        self.h_sizer.Add(
-            self.argument_list,
+        self.main_v_sizer.Add(
+            self.argument_control,
             1,
-            wx.ALIGN_TOP | wx.TOP,
-            border=(5 if wx.Platform=='__WXMAC__' else 0)
+            wx.ALIGN_CENTER_HORIZONTAL | wx.TOP,
+            border=0
         )
         
         

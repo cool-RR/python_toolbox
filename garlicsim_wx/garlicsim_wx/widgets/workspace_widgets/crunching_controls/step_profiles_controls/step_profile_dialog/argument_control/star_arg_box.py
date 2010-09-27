@@ -12,7 +12,7 @@ class StarArgBox(wx.StaticBox):
         wx.StaticBox.__init__(self, argument_control,
                               label='Additional arguments')
         
-        self.sizer = wx.StaticBoxSizer(self, wx.HORIZONTAL)
+        self.sizer = wx.StaticBoxSizer(self, wx.VERTICAL)
         
         self.step_function = step_function
         
