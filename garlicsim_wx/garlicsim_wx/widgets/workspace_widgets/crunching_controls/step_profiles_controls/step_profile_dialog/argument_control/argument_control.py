@@ -1,6 +1,7 @@
 import wx
 
 from garlicsim.general_misc.third_party import inspect
+from garlicsim_wx.general_misc import wx_tools
 
 from .arg_box import ArgBox
 from .star_arg_box import StarArgBox
@@ -32,69 +33,72 @@ class ArgumentControl(wx.Panel):
             return
 
         self.step_function = step_function
+
+        with wx_tools.WindowFreezer(self):
         
-        self.main_h_sizer.Clear(deleteWindows=True)
-        #self.DestroyChildren()
-        
-        arg_spec = inspect.getargspec(step_function)
-        
-        step_profile_dialog = self.step_profile_dialog
-        
-        arg_dict = step_profile_dialog.step_functions_to_argument_dicts[
-            step_function
-        ]
-        
-        star_arg_list = step_profile_dialog.step_functions_to_star_args[
-            step_function
-        ]
-        
-        star_kwarg_dict = step_profile_dialog.step_functions_to_star_kwargs[
-            step_function
-        ]
-        
-        
-        if arg_spec.args:
-            self.arg_box = ArgBox(self, step_function)
-            self.main_h_sizer.Add(self.arg_box.sizer, 0, wx.ALL, border=10)
-        else:
-            self.arg_box = None
-            self.main_h_sizer.Add(
-                Placeholder(self, '(No named arguments)'),
-                0,
-                wx.ALL,
-                border=10
-            )
+            self.main_h_sizer.Clear(deleteWindows=True)
+            #self.DestroyChildren()
             
-        
-        if arg_spec.varargs:
-            self.star_arg_box = StarArgBox(self, step_function)
-            self.main_h_sizer.Add(self.star_arg_box.sizer, 0, wx.ALL,
-                                  border=10)
-        else:
-            self.star_arg_box = None
-            self.main_h_sizer.Add(
-                Placeholder(self, '(No additional positional arguments)'),
-                0,
-                wx.ALL,
-                border=10
-            )
+            arg_spec = inspect.getargspec(step_function)
+            
+            step_profile_dialog = self.step_profile_dialog
+            
+            arg_dict = step_profile_dialog.\
+                     step_functions_to_argument_dicts[step_function]
+            
+            star_arg_list = step_profile_dialog.\
+                          step_functions_to_star_args[step_function]
+            
+            star_kwarg_dict = step_profile_dialog.\
+                            step_functions_to_star_kwargs[step_function]
+            
+            
+            if arg_spec.args:
+                self.arg_box = ArgBox(self, step_function)
+                self.main_h_sizer.Add(self.arg_box.sizer, 0, wx.ALL, border=10)
+            else:
+                self.arg_box = None
+                self.main_h_sizer.Add(
+                    Placeholder(self, '(No named arguments)'),
+                    0,
+                    wx.ALL,
+                    border=10
+                )
                 
             
-        if arg_spec.keywords:
-            self.star_kwarg_box = StarKwargBox(self, step_function)
-            self.main_h_sizer.Add(self.star_kwarg_box.sizer, 0, wx.ALL,
-                                  border=10)
-        else:
-            self.star_kwarg_box = None
-            self.main_h_sizer.Add(
-                Placeholder(self, '(No additional keyword arguments)'),
-                0,
-                wx.ALL,
-                border=10
-            )
+            if arg_spec.varargs:
+                self.star_arg_box = StarArgBox(self, step_function)
+                self.main_h_sizer.Add(self.star_arg_box.sizer, 0, wx.ALL,
+                                      border=10)
+            else:
+                self.star_arg_box = None
+                self.main_h_sizer.Add(
+                    Placeholder(self, '(No additional positional arguments)'),
+                    0,
+                    wx.ALL,
+                    border=10
+                )
+                    
+                
+            if arg_spec.keywords:
+                self.star_kwarg_box = StarKwargBox(self, step_function)
+                self.main_h_sizer.Add(self.star_kwarg_box.sizer, 0, wx.ALL,
+                                      border=10)
+            else:
+                self.star_kwarg_box = None
+                self.main_h_sizer.Add(
+                    Placeholder(self, '(No additional keyword arguments)'),
+                    0,
+                    wx.ALL,
+                    border=10
+                )
+                
             
+            self.main_h_sizer.Fit(self)
+            self.Layout()
+            self.step_profile_dialog.main_v_sizer.Fit(self.step_profile_dialog)
+            self.step_profile_dialog.Layout()
         
-        self.main_h_sizer.Fit(self)
-        self.Layout()
-        self.step_profile_dialog.main_v_sizer.Fit(self.step_profile_dialog)
-        self.step_profile_dialog.Layout()
+        
+        self.step_profile_dialog.Refresh()
+        

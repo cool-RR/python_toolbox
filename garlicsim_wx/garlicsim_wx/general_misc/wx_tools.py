@@ -154,3 +154,13 @@ def color_replaced_bitmap(bitmap, old_rgb, new_rgb):
     image.Replace(old_r, old_g, old_b, new_r, new_g, new_b)
     return wx.BitmapFromImage(image)
     
+
+class WindowFreezer(object):
+    def __init__(self, window):
+        assert isinstance(window, wx.Window)
+        self.window = window
+    def __enter__(self, *args, **kwargs):
+        self.window.Freeze()
+    def __exit__(self, *args, **kwargs):
+        self.window.Thaw()
+        

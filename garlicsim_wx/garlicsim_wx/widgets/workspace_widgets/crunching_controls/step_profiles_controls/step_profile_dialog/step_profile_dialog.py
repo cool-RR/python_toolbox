@@ -125,7 +125,7 @@ class StepProfileDialog(CuteDialog):
         self.main_v_sizer.Add(
             self.static_function_text,
             0,
-            wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND | wx.ALL,
+            wx.ALIGN_CENTER_HORIZONTAL | wx.ALL,
             border=10
         )
 

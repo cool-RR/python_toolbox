@@ -14,7 +14,7 @@ class StaticFunctionText(wx.StaticText):
         self.step_function = None
         
         wx.StaticText.__init__(self, step_profile_dialog,
-                               style=wx.ALIGN_CENTRE_HORIZONTAL)
+                               style=wx.ALIGN_CENTER_HORIZONTAL)
         self.SetMinSize((300, 25))
         self.SetBackgroundColour(wx_tools.get_background_color())
         self.Wrap(300)

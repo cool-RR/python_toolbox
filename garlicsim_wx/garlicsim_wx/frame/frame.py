@@ -403,6 +403,8 @@ class Frame(wx.Frame):
         # todo: should create StateReprViewer only if the simpack got no
         # workspace widgets
         
+        #with wx_tools.WindowFreezer(self):
+            
         self.tree_browser = workspace_widgets.TreeBrowser(self)
         self.aui_manager.AddPane(
             self.tree_browser,
