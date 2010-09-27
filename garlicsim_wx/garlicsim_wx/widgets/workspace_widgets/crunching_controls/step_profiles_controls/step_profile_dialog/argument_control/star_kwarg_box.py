@@ -14,33 +14,25 @@ class StarKwargBox(wx.StaticBox):
         
         self.sizer = wx.StaticBoxSizer(self, wx.HORIZONTAL)
         
-        
-        self.step_function = None
-        
-        
-        self.SetSizer(self.main_h_sizer)
-        
+        self.step_function = step_function
         
         arg_spec = inspect.getargspec(step_function)
         
-        
-        star_kwarg_dict = self.step_profile_dialog.step_functions_to_star_kwargs[
-            step_function
-        ]
+        star_kwarg_dict = \
+            argument_control.step_profile_dialog.step_functions_to_star_kwargs[
+                step_function
+            ]
                 
         
         self.star_kwargs = []
         
-        if arg_spec.keywords:
-            for name, value in star_kwarg_dict:
-                self.main_h_sizer.Add(Comma(self), 0,
-                                      wx.ALIGN_CENTER_HORIZONTAL)
-                star_kwarg = StarKwarg(self, name, repr(value))
-                self.star_kwargs.append(star_kwarg)
-                self.main_h_sizer.Add(star_kwarg, 0,
-                                      wx.ALIGN_CENTER_HORIZONTAL)
+        for name, value in star_kwarg_dict:
+            star_kwarg = StarKwarg(argument_control, name, repr(value))
+            self.star_kwargs.append(star_kwarg)
+            self.sizer.Add(star_kwarg, 0)
+            
+        empty_star_kwarg = StarKwarg(argument_control, '', '')
+        self.star_kwargs.append(empty_star_kwarg)
+        self.sizer.Add(empty_star_kwarg, 0)
         
-        self.closing_bracket = ClosingBracket(self)
         
-        self.main_h_sizer.Add(self.closing_bracket, 0,
-                              wx.ALIGN_CENTER_HORIZONTAL)

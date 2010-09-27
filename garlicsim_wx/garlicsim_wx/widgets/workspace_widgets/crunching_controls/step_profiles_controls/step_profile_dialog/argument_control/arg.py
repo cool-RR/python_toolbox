@@ -11,9 +11,7 @@ class Arg(wx.Panel):
         
         self.main_h_sizer = wx.BoxSizer(wx.HORIZONTAL)
         
-        self.name_static_text = wx.StaticText(self, label=('%s=' % name))
-        
-        self.name_static_text.SetFont(argument_list.font)
+        self.name_static_text = wx.StaticText(self, label=('%s: ' % name))
         
         self.main_h_sizer.Add(self.name_static_text, 0, wx.EXPAND)
         
