@@ -7,15 +7,17 @@ class Arg(wx.Panel):
         wx.Panel.__init__(self, argument_list)
         
         self.argument_list = argument_list
-        name = self.name
+        self.name = name
         
-        self.main_h_sizer = wx.Sizer(wx.HORIZONTAL)
+        self.main_h_sizer = wx.BoxSizer(wx.HORIZONTAL)
         
         self.name_static_text = wx.StaticText(self, label=('%s=' % name))
         
+        self.name_static_text.SetFont(argument_list.font)
+        
         self.main_h_sizer.Add(self.name_static_text, 0, wx.EXPAND)
         
-        self.text_ctrl = wx.TextCtrl(self, size=(200, -1), value=value)
+        self.text_ctrl = wx.TextCtrl(self, size=(100, -1), value=value)
         
         self.main_h_sizer.Add(self.text_ctrl, 0, wx.EXPAND)
         

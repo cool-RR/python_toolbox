@@ -53,12 +53,11 @@ class ArgumentList(wx.Panel):
         ]
         
         
-        self.main_h_sizer
         
         self.opening_bracket = OpeningBracket(self)
         
         self.main_h_sizer.Add(self.opening_bracket, 0,
-                              wx.ALIGN_BOTTOM | wx.ALL, border=5)
+                              wx.ALIGN_TOP | 0, border=5)
         
         
         self.placeholder = \
@@ -66,31 +65,31 @@ class ArgumentList(wx.Panel):
             history_dependent else HistoryBrowserPlaceholder(self)
         
         self.main_h_sizer.Add(self.placeholder, 0,
-                              wx.ALIGN_BOTTOM | wx.ALL, border=5)
+                              wx.ALIGN_TOP | 0, border=5)
         
         
         self.args = []
         
-        for arg_name in arg_spec.args:
-            self.main_h_sizer.Add(Comma(self), 0, wx.ALIGN_BOTTOM | wx.ALL,
+        for i, arg_name in list(enumerate(arg_spec.args))[1:]:
+            self.main_h_sizer.Add(Comma(self), 0, wx.ALIGN_TOP | 0,
                                   border=5)
-            value = arg_dict[arg_name]
+            value = repr(arg_dict[arg_name])
             if not value and (arg_name in arg_spec.defaults):
-                value = arg_dict[arg_name] = repr(arg_spec.defaults[arg_name])
+                value = arg_dict[arg_name] = repr(arg_spec.defaults[i])
             arg = Arg(self, arg_name, value)            
             self.args.append(arg)
-            self.main_h_sizer.Add(arg, 0, wx.ALIGN_BOTTOM | wx.ALL, border=5)
+            self.main_h_sizer.Add(arg, 0, wx.ALIGN_TOP | 0, border=5)
         
         
         self.star_args = []
         
         if arg_spec.varargs:
             for star_arg_value in star_arg_list:
-                self.main_h_sizer.Add(Comma(self), 0, wx.ALIGN_BOTTOM | wx.ALL,
+                self.main_h_sizer.Add(Comma(self), 0, wx.ALIGN_TOP | 0,
                                   border=5)
                 star_arg = StarArg(self, repr(star_arg_value))
                 self.star_args.append(star_arg)
-                self.main_h_sizer.Add(star_arg, 0, wx.ALIGN_BOTTOM | wx.ALL,
+                self.main_h_sizer.Add(star_arg, 0, wx.ALIGN_TOP | 0,
                                       border=5)
         
         
@@ -98,13 +97,14 @@ class ArgumentList(wx.Panel):
         
         if arg_spec.keywords:
             for name, value in star_kwarg_dict:
-                self.main_h_sizer.Add(Comma(self), 0, wx.ALIGN_BOTTOM | wx.ALL,
+                self.main_h_sizer.Add(Comma(self), 0, wx.ALIGN_TOP | 0,
                                   border=5)
                 star_kwarg = StarKwarg(self, name, repr(value))
                 self.star_kwargs.append(star_kwarg)
-                self.main_h_sizer.Add(star_kwarg, 0, wx.ALIGN_BOTTOM | wx.ALL,
+                self.main_h_sizer.Add(star_kwarg, 0, wx.ALIGN_TOP | 0,
                                       border=5)
         
         self.closing_bracket = ClosingBracket(self)
         
-        
+        self.main_h_sizer.Add(self.closing_bracket, 0,
+                              wx.ALIGN_TOP | 0, border=5)

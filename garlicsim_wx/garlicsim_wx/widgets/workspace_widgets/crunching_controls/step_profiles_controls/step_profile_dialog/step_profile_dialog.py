@@ -144,8 +144,8 @@ class StepProfileDialog(CuteDialog):
         self.h_sizer.Add(
             self.hue_control,
             0,
-            wx.ALIGN_TOP | wx.ALL,            
-            border=5
+            wx.ALIGN_TOP | 0,
+            #border=5
         )
         
         
@@ -157,8 +157,8 @@ class StepProfileDialog(CuteDialog):
         self.h_sizer.Add(
             self.step_function_input,
             0,
-            wx.ALIGN_TOP | wx.ALL,            
-            border=5
+            wx.ALIGN_TOP,
+            #border=5
         )
         
         
@@ -170,8 +170,8 @@ class StepProfileDialog(CuteDialog):
         self.h_sizer.Add(
             self.argument_list,
             1,
-            wx.EXPAND | wx.RIGHT,
-            border=15
+            wx.ALIGN_TOP,
+            #border=15
         )
         
         
