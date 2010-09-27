@@ -1,10 +1,13 @@
 import wx
 
+from garlicsim_wx.general_misc import wx_tools
+
 
 
 class Arg(wx.Panel):
     def __init__(self, argument_control, name, value=''):
         wx.Panel.__init__(self, argument_control)
+        self.SetBackgroundColour(wx_tools.get_background_color())
         
         self.argument_control = argument_control
         self.name = name

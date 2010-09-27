@@ -24,7 +24,7 @@ class StepFunctionInput(wx.ComboBox):
                 step_functions_list.remove(value)
             step_functions_list.insert(0, value)
         
-        width = 250 if wx.Platform == '__WXMAC__' else 150
+        width = 150 if wx.Platform == '__WXMSW__' else 250
             
         wx.ComboBox.__init__(self, step_profile_dialog, value=value,
                              choices=step_functions_list, size=(width, -1))
