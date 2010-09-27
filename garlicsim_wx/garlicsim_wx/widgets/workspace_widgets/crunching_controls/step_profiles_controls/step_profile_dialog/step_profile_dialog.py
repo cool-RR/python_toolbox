@@ -144,9 +144,12 @@ class StepProfileDialog(CuteDialog):
         self.h_sizer.Add(
             self.hue_control,
             0,
-            wx.ALIGN_TOP | 0,
-            #border=5
+            wx.ALIGN_TOP | wx.TOP,
+            border=(5 if wx.Platform=='__WXMAC__' else 0)
         )
+        
+        
+        self.h_sizer.AddSpacer(5)
         
         
         self.step_function_input = StepFunctionInput(
@@ -170,8 +173,8 @@ class StepProfileDialog(CuteDialog):
         self.h_sizer.Add(
             self.argument_list,
             1,
-            wx.ALIGN_TOP,
-            #border=15
+            wx.ALIGN_TOP | wx.TOP,
+            border=(5 if wx.Platform=='__WXMAC__' else 0)
         )
         
         
