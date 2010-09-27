@@ -5,31 +5,43 @@ from garlicsim_wx.general_misc import wx_tools
 import garlicsim
 
 
-class StaticFunctionText(wx.StaticText):
-    # center align, have some redness when not a (step) function
+class StaticFunctionText(wx.Panel):
     def __init__(self, step_profile_dialog):
         
         self.step_profile_dialog = step_profile_dialog
         
         self.step_function = None
         
-        wx.StaticText.__init__(self, step_profile_dialog,
-                               style=wx.ALIGN_CENTER_HORIZONTAL)
+        wx.Panel.__init__(self, step_profile_dialog)
+        
+        self.text = wx.StaticText(self, style=wx.ALIGN_CENTER_HORIZONTAL)
+        
         self.SetMinSize((300, 25))
-        self.SetBackgroundColour(wx_tools.get_background_color())
-        self.Wrap(300)
+        
+        self.text.SetBackgroundColour(wx_tools.get_background_color())
+        
+        self.text.Wrap(300)
         
         self.Bind(wx.EVT_SIZE, self.on_size)
         
+        self.main_h_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        
+        self.v_sizer = wx.BoxSizer(wx.VERTICAL)
+        
+        self.main_h_sizer.Add(self.v_sizer, 1, wx.ALIGN_CENTER_VERTICAL)
+        
+        self.v_sizer.Add(self.text, 0, wx.ALIGN_CENTER_HORIZONTAL)
+        
+        self.SetSizer(self.main_h_sizer)
         
         self._error_color = wx.Color(255, 200, 200)
         self._success_color = wx.Color(200, 255, 200)
         
         
     def set_error_text(self, error_text):
-        self.SetLabel(error_text)
-        self.Wrap(300)
-        self.SetBackgroundColour(self._error_color)
+        self.text.SetLabel(error_text)
+        self.text.Wrap(300)
+        self.text.SetBackgroundColour(self._error_color)
         #self.step_profile_dialog.main_v_sizer.Fit(self.step_profile_dialog)
         #self.Fit()
         
@@ -41,9 +53,9 @@ class StaticFunctionText(wx.StaticText):
                 self.step_profile_dialog.step_function_to_address(step_function),
                 step_type.verbose_name
             )
-            self.SetLabel(label)
-            self.Wrap(300)
-            self.SetBackgroundColour(self._success_color)
+            self.text.SetLabel(label)
+            self.text.Wrap(300)
+            self.text.SetBackgroundColour(self._success_color)
 
     
     def on_size(self, event):

@@ -391,6 +391,7 @@ class Frame(wx.Frame):
         
         return nodes_added
     
+    
     def __setup_gui_project(self, gui_project):
         '''
         Setup a newly-created gui project.

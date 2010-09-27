@@ -44,6 +44,9 @@ class WorkspaceWidget(object):
     
     def __init__(self, frame):
         
+        
+        self.Hide()
+        
         self.frame = frame
         assert isinstance(self.frame, garlicsim_wx.Frame)
         
