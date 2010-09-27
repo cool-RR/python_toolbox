@@ -31,7 +31,7 @@ class ArgBox(wx.StaticBox):
         self.args = []
         
         for i, arg_name in list(enumerate(arg_spec.args))[1:]:
-            value = repr(arg_dict[arg_name])
+            value = arg_dict[arg_name]
             if not value and (arg_name in arg_spec.defaults):
                 value = arg_dict[arg_name] = repr(arg_spec.defaults[i])
             arg = Arg(argument_control, arg_name, value)

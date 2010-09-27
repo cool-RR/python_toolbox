@@ -11,6 +11,8 @@ class StaticFunctionText(wx.StaticText):
         
         self.step_profile_dialog = step_profile_dialog
         
+        self.step_function = None
+        
         wx.StaticText.__init__(self, step_profile_dialog,
                                style=wx.ALIGN_CENTRE_HORIZONTAL)
         self.SetMinSize((300, 25))
@@ -18,6 +20,7 @@ class StaticFunctionText(wx.StaticText):
         self.Wrap(300)
         
         self.Bind(wx.EVT_SIZE, self.on_size)
+        
         
         self._error_color = wx.Color(255, 200, 200)
         self._success_color = wx.Color(200, 255, 200)
@@ -32,14 +35,15 @@ class StaticFunctionText(wx.StaticText):
         
         
     def set_step_function(self, step_function):
-        step_type = garlicsim.misc.simpack_grokker.get_step_type(step_function)
-        label = '%s is a %s.' % (
-            self.step_profile_dialog.step_function_to_address(step_function),
-            step_type.verbose_name
-        )
-        self.SetLabel(label)
-        self.Wrap(300)
-        self.SetBackgroundColour(self._success_color)
+        if step_function != self.step_function:
+            step_type = garlicsim.misc.simpack_grokker.get_step_type(step_function)
+            label = '%s is a %s.' % (
+                self.step_profile_dialog.step_function_to_address(step_function),
+                step_type.verbose_name
+            )
+            self.SetLabel(label)
+            self.Wrap(300)
+            self.SetBackgroundColour(self._success_color)
 
     
     def on_size(self, event):

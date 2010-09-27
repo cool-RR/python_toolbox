@@ -59,14 +59,19 @@ class StepProfileDialog(CuteDialog):
 
         
         if original_step_profile:
+            
             original_step_function = original_step_profile.step_function
+
+            self.step_function = original_step_function
+            
             initial_step_function_address = self.step_function_to_address(
                 original_step_function
             )
 
             original_argument_dict = collections.defaultdict(
                 lambda: '',
-                original_step_profile.getcallargs_result
+                ((key, repr(value)) for (key, value) in 
+                 original_step_profile.getcallargs_result.iteritems())
             )
 
             self.step_functions_to_argument_dicts[original_step_function] = \
@@ -82,7 +87,7 @@ class StepProfileDialog(CuteDialog):
                 ]
                 
                 self.step_functions_to_star_args[original_step_function] = \
-                    star_args_value
+                    [repr(value) for value in star_args_value]
             
             
             if original_arg_spec.keywords:
@@ -91,12 +96,16 @@ class StepProfileDialog(CuteDialog):
                 ]
                 
                 self.step_functions_to_star_kwargs[original_step_function] = \
-                    star_kwargs_value
+                    dict((key, repr(value)) for (key, value) in
+                          star_kwargs_value.iteritems())
                 
             
             
             
         else:
+            
+            self.step_function = None
+            
             if len(simpack_grokker.all_step_functions) >= 2:
                 initial_step_function_address = ''
             else: # len(simpack_grokker.all_step_functions) == 1
@@ -211,9 +220,10 @@ class StepProfileDialog(CuteDialog):
     
         
     def set_step_function(self, step_function):
-        self.step_function = step_function
-        self.static_function_text.set_step_function(step_function)
-        self.argument_control.set_step_function(step_function)
+        if step_function != self.step_function:
+            self.step_function = step_function
+            self.static_function_text.set_step_function(step_function)
+            self.argument_control.set_step_function(step_function)
         
         
     def step_function_to_address(self, step_function):

@@ -30,6 +30,9 @@ class ArgumentControl(wx.Panel):
     def set_step_function(self, step_function):
         if self.step_function == step_function:
             return
+
+        self.step_function = step_function
+        
         self.main_h_sizer.Clear(deleteWindows=True)
         #self.DestroyChildren()
         

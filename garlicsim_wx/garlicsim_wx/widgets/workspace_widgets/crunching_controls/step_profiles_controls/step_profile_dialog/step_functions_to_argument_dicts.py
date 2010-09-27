@@ -20,7 +20,7 @@ class StepFunctionsToArgumentDicts(collections.defaultdict):
         for key in all_dict_keys:
             all_values = [d[key] for d in all_dicts if key in d]
             if all_values:
-                value = max(all_values, lambda value: len(repr(value)))
+                value = max(all_values, key=lambda value: len(value))
                 result[key] = value
         return result
         
