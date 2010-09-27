@@ -13,6 +13,7 @@ class SimpleStep(BaseStepType):
 
 
 class StepGenerator(BaseStepType):
+    step_iterator_class = step_iterators.StepGeneratorIterator
     verbose_name = 'step generator'
     pass
     

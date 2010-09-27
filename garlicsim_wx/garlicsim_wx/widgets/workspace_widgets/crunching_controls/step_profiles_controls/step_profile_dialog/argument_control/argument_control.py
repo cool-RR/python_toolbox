@@ -5,6 +5,7 @@ from garlicsim.general_misc.third_party import inspect
 from .arg_box import ArgBox
 from .star_arg_box import StarArgBox
 from .star_kwarg_box import StarKwargBox
+from .placeholder import Placeholder
 
 
 class ArgumentControl(wx.Panel):
@@ -53,7 +54,12 @@ class ArgumentControl(wx.Panel):
             self.main_h_sizer.Add(self.arg_box.sizer, 0, wx.ALL, border=10)
         else:
             self.arg_box = None
-            self.main_h_sizer.Add(self.box_size, 0, wx.ALL, border=10)
+            self.main_h_sizer.Add(
+                Placeholder(self, '(No named arguments)'),
+                0,
+                wx.ALL,
+                border=10
+            )
             
         
         if arg_spec.varargs:
@@ -62,7 +68,12 @@ class ArgumentControl(wx.Panel):
                                   border=10)
         else:
             self.star_arg_box = None
-            self.main_h_sizer.Add(self.box_size, 0, wx.ALL, border=10)
+            self.main_h_sizer.Add(
+                Placeholder(self, '(No additional positional arguments)'),
+                0,
+                wx.ALL,
+                border=10
+            )
                 
             
         if arg_spec.keywords:
@@ -71,7 +82,12 @@ class ArgumentControl(wx.Panel):
                                   border=10)
         else:
             self.star_kwarg_box = None
-            self.main_h_sizer.Add(self.box_size, 0, wx.ALL, border=10)
+            self.main_h_sizer.Add(
+                Placeholder(self, '(No additional keyword arguments)'),
+                0,
+                wx.ALL,
+                border=10
+            )
             
         
         self.main_h_sizer.Fit(self)

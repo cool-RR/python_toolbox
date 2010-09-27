@@ -11,6 +11,7 @@ import colorsys
 import wx
 
 from garlicsim.general_misc import caching
+from garlicsim_wx.general_misc import color_tools
 
 
 @caching.cache()
@@ -74,6 +75,15 @@ def wx_color_to_big_rgb(wx_color):
         wx_color.green,
         wx_color.blue
     )
+
+
+def mix_wx_color(ratio, color1, color2):
+    rgb = color_tools.mix_rgb(
+        ratio,
+        wx_color_to_rgb(color1),
+        wx_color_to_rgb(color2)
+    )
+    return rgb_to_wx_color(rgb)
 
 
 def post_event(evt_handler, event_binder, source=None, **kwargs):

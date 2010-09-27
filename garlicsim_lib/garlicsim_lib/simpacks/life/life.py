@@ -50,6 +50,13 @@ class State(garlicsim.data_structures.State):
         new_state.board = new_board
         return new_state
 
+
+    def step_generator(self, krazy=False):
+        current_state = self
+        while True:
+            current_state = current_state.step()
+            yield current_state
+    
     
     #@garlicsim.misc.caching.state_cache
     #def get_n_live_cells(self):

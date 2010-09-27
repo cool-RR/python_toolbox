@@ -37,6 +37,7 @@ class StepIterator(BaseStepIterator):
         self.current_state = state
         
         self.step_profile = copy.deepcopy(step_profile)
+        # todo: deepcopy redundant?
         
         self.step_function = step_profile.step_function
         
