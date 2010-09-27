@@ -19,9 +19,10 @@ class ArgumentList(wx.Panel):
         
         wx.Panel.__init__(self, step_profile_dialog)
         
-        self.font = wx.Font(12, wx.MODERN, wx.NORMAL, wx.NORMAL)
+        self.font = wx.Font(10, wx.FONTFAMILY_DEFAULT, wx.NORMAL, wx.NORMAL)
         
-        self.bold_font = wx.Font(12, wx.MODERN, wx.NORMAL, wx.FONTWEIGHT_BOLD)
+        self.bold_font = wx.Font(10, wx.FONTFAMILY_DEFAULT, wx.NORMAL,
+                                 wx.NORMAL)
         
         self.step_function = None
         

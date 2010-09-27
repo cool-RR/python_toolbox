@@ -27,7 +27,7 @@ class StepFunctionInput(wx.ComboBox):
             step_functions_list.insert(0, value)
         
         wx.ComboBox.__init__(self, step_profile_dialog, value=value,
-                             choices=step_functions_list, size=(100, -1))
+                             choices=step_functions_list, size=(150, -1))
         
         self.Bind(wx.EVT_TEXT, self.on_text)
         self.Bind(wx.EVT_COMBOBOX, self.on_combo_box)
