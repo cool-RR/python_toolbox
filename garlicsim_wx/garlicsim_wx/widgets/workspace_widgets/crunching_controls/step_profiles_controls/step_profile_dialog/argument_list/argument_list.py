@@ -57,54 +57,51 @@ class ArgumentList(wx.Panel):
         self.opening_bracket = OpeningBracket(self)
         
         self.main_h_sizer.Add(self.opening_bracket, 0,
-                              wx.ALIGN_CENTER_HORIZONTAL | 0, border=5)
+                              wx.ALIGN_CENTER_HORIZONTAL)
         
         
         self.placeholder = \
             StatePlaceholder(self) if not self.gui_project.simpack_grokker.\
             history_dependent else HistoryBrowserPlaceholder(self)
         
-        self.main_h_sizer.Add(self.placeholder, 0,
-                              wx.ALIGN_CENTER_HORIZONTAL | 0, border=5)
+        self.main_h_sizer.Add(self.placeholder, 0, wx.ALIGN_CENTER_HORIZONTAL)
         
         
         self.args = []
         
         for i, arg_name in list(enumerate(arg_spec.args))[1:]:
-            self.main_h_sizer.Add(Comma(self), 0, wx.ALIGN_CENTER_HORIZONTAL | 0,
-                                  border=5)
+            self.main_h_sizer.Add(Comma(self), 0, wx.ALIGN_CENTER_HORIZONTAL)
             value = repr(arg_dict[arg_name])
             if not value and (arg_name in arg_spec.defaults):
                 value = arg_dict[arg_name] = repr(arg_spec.defaults[i])
             arg = Arg(self, arg_name, value)            
             self.args.append(arg)
-            self.main_h_sizer.Add(arg, 0, wx.ALIGN_CENTER_HORIZONTAL | 0, border=5)
+            self.main_h_sizer.Add(arg, 0, wx.ALIGN_CENTER_HORIZONTAL)
         
         
         self.star_args = []
         
         if arg_spec.varargs:
             for star_arg_value in star_arg_list:
-                self.main_h_sizer.Add(Comma(self), 0, wx.ALIGN_CENTER_HORIZONTAL | 0,
-                                  border=5)
+                self.main_h_sizer.Add(Comma(self), 0,
+                                      wx.ALIGN_CENTER_HORIZONTAL)
                 star_arg = StarArg(self, repr(star_arg_value))
                 self.star_args.append(star_arg)
-                self.main_h_sizer.Add(star_arg, 0, wx.ALIGN_CENTER_HORIZONTAL | 0,
-                                      border=5)
+                self.main_h_sizer.Add(star_arg, 0, wx.ALIGN_CENTER_HORIZONTAL)
         
         
         self.star_kwargs = []
         
         if arg_spec.keywords:
             for name, value in star_kwarg_dict:
-                self.main_h_sizer.Add(Comma(self), 0, wx.ALIGN_CENTER_HORIZONTAL | 0,
-                                  border=5)
+                self.main_h_sizer.Add(Comma(self), 0,
+                                      wx.ALIGN_CENTER_HORIZONTAL)
                 star_kwarg = StarKwarg(self, name, repr(value))
                 self.star_kwargs.append(star_kwarg)
-                self.main_h_sizer.Add(star_kwarg, 0, wx.ALIGN_CENTER_HORIZONTAL | 0,
-                                      border=5)
+                self.main_h_sizer.Add(star_kwarg, 0,
+                                      wx.ALIGN_CENTER_HORIZONTAL)
         
         self.closing_bracket = ClosingBracket(self)
         
         self.main_h_sizer.Add(self.closing_bracket, 0,
-                              wx.ALIGN_CENTER_HORIZONTAL | 0, border=5)
+                              wx.ALIGN_CENTER_HORIZONTAL)
