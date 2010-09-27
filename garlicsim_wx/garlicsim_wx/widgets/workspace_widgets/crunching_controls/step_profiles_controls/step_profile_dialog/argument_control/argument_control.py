@@ -23,14 +23,15 @@ class ArgumentControl(wx.Panel):
         
         self.SetSizer(self.main_h_sizer)
         
-        self.build_for_step_function(step_function)
+        self.set_step_function(step_function)
         
 
         
-    def build_for_step_function(self, step_function):
+    def set_step_function(self, step_function):
         if self.step_function == step_function:
             return
-        self.DestroyChildren()
+        self.main_h_sizer.Clear(deleteWindows=True)
+        #self.DestroyChildren()
         
         arg_spec = inspect.getargspec(step_function)
         

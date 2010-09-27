@@ -204,12 +204,14 @@ class StepProfileDialog(CuteDialog):
         
         # Finished setting up sizers and widgets.
         #######################################################################
+        
+        # wx.CallAfter(self.step_function_input.try_to_parse_text_and_set)
     
         
     def set_step_function(self, step_function):
         self.step_function = step_function
         self.static_function_text.set_step_function(step_function)
-        # tododoc update the argument list
+        self.argument_control.set_step_function(step_function)
         
         
     def step_function_to_address(self, step_function):

@@ -20,10 +20,8 @@ class StepFunctionInput(wx.ComboBox):
         # If there's an initial value from an existing step profile, make sure
         # it's first on the list:
         if value:
-            try:
-                del step_functions_list[value]
-            except Exception:
-                pass
+            if value in step_functions_list:
+                step_functions_list.remove(value)
             step_functions_list.insert(0, value)
         
         width = 250 if wx.Platform == '__WXMAC__' else 150
@@ -35,8 +33,6 @@ class StepFunctionInput(wx.ComboBox):
         self.Bind(wx.EVT_COMBOBOX, self.on_combo_box)
         
         self.Bind(wx.EVT_KILL_FOCUS, self.on_kill_focus)
-        
-        self.try_to_parse_text_and_set()
 
         
     def try_to_parse_text_and_set(self):
