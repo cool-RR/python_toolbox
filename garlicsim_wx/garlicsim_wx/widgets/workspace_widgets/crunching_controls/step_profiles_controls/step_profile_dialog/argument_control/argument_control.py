@@ -16,7 +16,8 @@ class ArgumentControl(wx.Panel):
         
         wx.Panel.__init__(self, step_profile_dialog)
         
-        self.box_size = wx.Size(200, -1)
+        self.box_size = wx.Size(250, -1) if wx.Platform == '__WXMAC__' \
+                        else wx.Size(200, -1)
         
         self.step_function = None
         
