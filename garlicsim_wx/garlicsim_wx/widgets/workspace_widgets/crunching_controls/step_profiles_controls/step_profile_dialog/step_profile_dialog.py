@@ -12,7 +12,7 @@ import garlicsim_wx
 
 from .static_function_text import StaticFunctionText
 from .step_function_input import StepFunctionInput
-from .argument_list import ArgumentList
+from .argument_control import ArgumentControl
 from .already_exists_dialog import AlreadyExistsDialog
 from .step_functions_to_argument_dicts import StepFunctionsToArgumentDicts
 
