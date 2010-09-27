@@ -92,3 +92,6 @@ class ArgumentControl(wx.Panel):
             
         
         self.main_h_sizer.Fit(self)
+        self.Layout()
+        self.step_profile_dialog.main_v_sizer.Fit(self.step_profile_dialog)
+        self.step_profile_dialog.Layout()
