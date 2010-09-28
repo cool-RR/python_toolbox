@@ -13,7 +13,8 @@ from garlicsim.general_misc.third_party.ordered_dict import OrderedDict
 def cache(max_size=Infinity):
     # todo idea: figure how how complex the function's argspec is, and then
     # compile a function accordingly, so functions with a simple argspec won't
-    # have to go through so much shit.
+    # have to go through so much shit. update: probably it will help only for
+    # completely argumentless function. so do one for those.
 
     if max_size == Infinity:
         
