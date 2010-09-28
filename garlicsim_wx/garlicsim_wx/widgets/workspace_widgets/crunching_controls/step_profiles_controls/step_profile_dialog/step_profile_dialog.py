@@ -235,6 +235,8 @@ class StepProfileDialog(CuteDialog):
                 self.step_function = step_function
                 self.static_function_text.set_step_function(step_function)
                 self.argument_control.set_step_function(step_function)
+        elif step_function != self.static_function_text.step_function:
+            self.static_function_text.set_step_function(step_function)
         
         
     def step_function_to_address(self, step_function):
@@ -253,8 +255,9 @@ class StepProfileDialog(CuteDialog):
 
     
     def ShowModal(self):
-        wx.CallAfter(self.step_function_input.try_to_parse_text_and_set)
+        wx.CallLater(3000, self.step_function_input.try_to_parse_text_and_set)
         return super(StepProfileDialog, self).ShowModal()
+    
     
     def on_ok(self, event):
         try:

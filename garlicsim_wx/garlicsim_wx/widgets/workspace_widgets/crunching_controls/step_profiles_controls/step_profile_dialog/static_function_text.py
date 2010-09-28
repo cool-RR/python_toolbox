@@ -40,13 +40,17 @@ class StaticFunctionText(wx.Panel):
         
         self._error_color = wx.Color(255, 200, 200)
         self._success_color = wx.Color(200, 255, 200)
+
+        self.valid_step_function = True
         
-        self.set_step_function(step_function)
+        
         
         
     def set_error_text(self, error_text):
         self.text.SetLabel(error_text)
         self.text.Wrap(self.width - 10)
+        self.step_function = None
+        
         #self.SetBackgroundColour(self._error_color)
         self.Layout()
         #self.step_profile_dialog.main_v_sizer.Fit(self.step_profile_dialog)
