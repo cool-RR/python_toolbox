@@ -739,10 +739,8 @@ class GuiProject(object):
         self.active_node_finalized_emitter.emit()
         
         self.project.ensure_buffer(self.active_node, self.default_buffer)
-
-
+        
     
-    @cute_profile.profile_ready(condition=lambda f, self, *args, **kwargs: len(self.project.tree.get_step_profiles()) == 1, sort=2)
     def _update_step_profiles_set(self):
         self.step_profiles |= self.project.tree.get_step_profiles()                
     
