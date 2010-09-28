@@ -1,4 +1,5 @@
 import wx
+import pkg_resources
 
 from garlicsim.general_misc import caching
 from garlicsim_wx.general_misc import wx_tools
@@ -18,7 +19,7 @@ def get_bitmap():
     return wx.BitmapFromImage(
         wx.ImageFromStream(
             stream,
-            wx.BITMAP_TYPE_PNG
+            wx.BITMAP_TYPE_ANY
         )
     )
 
@@ -35,10 +36,11 @@ class StarAdder(wx.BitmapButton):
         self.argument_control = argument_control
         
         wx.BitmapButton.__init__(self, argument_control, bitmap=get_bitmap())
-        
+                
         self.Bind(wx.EVT_BUTTON, self.on_button)
         
     def on_button(self, event):
         wx_tools.post_event(self, EVT_STAR_ADDER_PRESSED, source=self)
         event.Skip()
             
+        

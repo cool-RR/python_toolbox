@@ -265,7 +265,7 @@ class StepProfileDialog(CuteDialog):
         except Exception as exception:
             error_dialog = ErrorDialog(self, exception.args[0])
             error_dialog.ShowModal()
-            self.SetFocus(self.step_function_input)
+            self.step_function_input.SetFocus()
             return
         # tododoc: add args:
         step_profile = garlicsim.misc.StepProfile(self.step_function)
