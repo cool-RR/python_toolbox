@@ -1,6 +1,7 @@
 import wx
 
 from garlicsim.general_misc.third_party import inspect
+from garlicsim_wx.general_misc import wx_tools
 
 from .star_arg import StarArg
 from .star_adder import StarAdder, EVT_STAR_ADDER_PRESSED
@@ -47,7 +48,16 @@ class StarArgBox(wx.StaticBox):
     def on_star_adder_pressed(self, event):
         star_arg = StarArg(self.argument_control)
         self.star_args.append(star_arg)
-        self.sizer.Insert(len(self.sizer.GetChildren()), star_arg, 0,
+        self.sizer.Insert(len(self.sizer.GetChildren()) - 1, star_arg, 0,
                           wx.EXPAND | wx.ALL, border=5)
+
+        with wx_tools.WindowFreezer(self.Parent.Parent):
         
-        self.Layout()
+            self.Parent.main_h_sizer.Fit(self.Parent)
+            self.Parent.Layout()
+            self.Parent.Parent.main_v_sizer.Fit(self.Parent.Parent)
+            self.Parent.Parent.Layout()
+        
+        
+        #self.Parent.Parent.Layout()
+        #self.Parent.Parent.Parent.Layout()
