@@ -107,7 +107,7 @@ class GuiProject(object):
            self.project.simpack_grokker.settings.FORCE_CRUNCHER is None and \
            'ProcessCruncher' in vars(crunchers):
             
-            0#self.project.crunching_manager.Cruncher = crunchers.ProcessCruncher
+            self.project.crunching_manager.Cruncher = crunchers.ProcessCruncher
         
         #######################################################################
             
@@ -629,11 +629,20 @@ class GuiProject(object):
         
         node = self.active_node
         
-        if not args and not kwargs:
-            kwargs = {'step_profile': node.step_profile}
+        if args or kwargs:
+            step_profile = \
+                garlicsim.misc.StepProfile.build_with_default_step_function(
+                    node.step_profile.step_function,
+                    *args,
+                    **kwargs
+                )
+        else: # (not args) and (not kwargs)
+            step_profile = node.step_profile
+        
+        kwargs = {'step_profile': step_profile}
             
         self.project.begin_crunching(node, self.default_buffer or 1,
-                                     *args, **kwargs)
+                                     step_profile)
 
 
     def fork_by_editing(self):
