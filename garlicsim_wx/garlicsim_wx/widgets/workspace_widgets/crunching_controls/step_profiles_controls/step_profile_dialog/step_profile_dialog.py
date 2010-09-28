@@ -255,7 +255,7 @@ class StepProfileDialog(CuteDialog):
 
     
     def ShowModal(self):
-        wx.CallLater(3000, self.step_function_input.try_to_parse_text_and_set)
+        wx.CallAfter(self.step_function_input.try_to_parse_text_and_set)
         return super(StepProfileDialog, self).ShowModal()
     
     
