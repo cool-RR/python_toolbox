@@ -739,9 +739,10 @@ class GuiProject(object):
         
         self.project.ensure_buffer(self.active_node, self.default_buffer)
 
-    
-    def _update_step_profiles_set(self):
 
+    from garlicsim.general_misc import cute_profile
+    @cute_profile.profile_ready(condition=lambda f, self, *args, **kwargs: len(self.project.tree.get_step_profiles()) == 0)
+    def _update_step_profiles_set(self):
         self.step_profiles |= self.project.tree.get_step_profiles()                
     
         
