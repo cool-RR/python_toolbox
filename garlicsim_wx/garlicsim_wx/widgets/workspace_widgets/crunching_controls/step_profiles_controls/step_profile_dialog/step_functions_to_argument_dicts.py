@@ -14,7 +14,8 @@ class StepFunctionsToArgumentDicts(collections.defaultdict):
         all_dicts = self.values()
         all_dict_keys = reduce(
             set.union,
-            [set(d.keys()) for d in all_dicts]
+            [set(d.keys()) for d in all_dicts],
+            set()
         )
         result = collections.defaultdict(lambda: '')
         for key in all_dict_keys:
