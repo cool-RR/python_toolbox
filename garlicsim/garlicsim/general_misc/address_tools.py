@@ -155,7 +155,7 @@ def get_address(obj, root=None, shorten=None):
     
     elif isinstance(obj, types.MethodType):
         address = '.'.join((obj.__module__, obj.im_class.__name__,
-                                      obj.__name__))
+                            obj.__name__))
         assert get_object_by_address(address) == obj
         
     else:

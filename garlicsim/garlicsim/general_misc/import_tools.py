@@ -6,7 +6,10 @@
 import sys
 import os.path
 import imp
+
 from garlicsim.general_misc import package_finder
+from garlicsim.general_misc import caching
+
 
 def import_by_path(path, name=None):
     '''
@@ -80,6 +83,7 @@ def normal_import(module_name):
         return __import__(module_name)
     
 
+@caching.cache() # todo: clear cache if sys.path changes
 def import_if_exists(module_name, silent_fail=False):
     '''
     Import module by name and return it, only if it exists.

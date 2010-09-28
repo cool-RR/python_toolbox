@@ -4,7 +4,7 @@ from . import base_profile
 
 
 
-def profile_ready(condition=None, off_after=True, sort=1):
+def profile_ready(condition=None, off_after=True, sort=2):
     # todo: add condition option
     
     def decorator(function):
