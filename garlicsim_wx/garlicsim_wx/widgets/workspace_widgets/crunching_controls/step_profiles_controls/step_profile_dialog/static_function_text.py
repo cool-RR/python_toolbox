@@ -6,7 +6,7 @@ import garlicsim
 
 
 class StaticFunctionText(wx.Panel):
-    def __init__(self, step_profile_dialog):
+    def __init__(self, step_profile_dialog, step_function=None):
         
         self.step_profile_dialog = step_profile_dialog
         
@@ -22,7 +22,7 @@ class StaticFunctionText(wx.Panel):
         
         self.SetMinSize((self.width, 25))
         
-        self.SetBackgroundColour(wx_tools.get_background_color())
+        #self.SetBackgroundColour(wx_tools.get_background_color())
         
         self.text.Wrap(self.width - 10)
         
@@ -41,11 +41,13 @@ class StaticFunctionText(wx.Panel):
         self._error_color = wx.Color(255, 200, 200)
         self._success_color = wx.Color(200, 255, 200)
         
+        self.set_step_function(step_function)
+        
         
     def set_error_text(self, error_text):
         self.text.SetLabel(error_text)
         self.text.Wrap(self.width - 10)
-        self.SetBackgroundColour(self._error_color)
+        #self.SetBackgroundColour(self._error_color)
         self.Layout()
         #self.step_profile_dialog.main_v_sizer.Fit(self.step_profile_dialog)
         #self.Fit()
@@ -63,7 +65,7 @@ class StaticFunctionText(wx.Panel):
             )
             self.text.SetLabel(label)
             self.text.Wrap(self.width - 10)
-            self.SetBackgroundColour(self._success_color)
+            #self.SetBackgroundColour(self._success_color)
             self.Layout()
 
     

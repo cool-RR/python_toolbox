@@ -5,6 +5,7 @@ import wx
 from garlicsim.general_misc import address_tools
 from garlicsim.general_misc.third_party import inspect
 from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
+from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.widgets.general_misc.error_dialog import ErrorDialog
 
 import garlicsim
@@ -170,11 +171,14 @@ class StepProfileDialog(CuteDialog):
             self.step_function_input,
             0,
             wx.ALIGN_CENTER_VERTICAL,
-            #border=5
         )
         
         
-        self.static_function_text = StaticFunctionText(self)
+        self.static_function_text = StaticFunctionText(
+            self,
+            step_function=original_step_function if original_step_profile \
+                          else None
+        )
         
         self.h_sizer.Add(
             self.static_function_text,
@@ -223,15 +227,14 @@ class StepProfileDialog(CuteDialog):
         
         # Finished setting up sizers and widgets.
         #######################################################################
-        
-        # wx.CallAfter(self.step_function_input.try_to_parse_text_and_set)
     
         
     def set_step_function(self, step_function):
         if step_function != self.step_function:
-            self.step_function = step_function
-            self.static_function_text.set_step_function(step_function)
-            self.argument_control.set_step_function(step_function)
+            with wx_tools.WindowFreezer(self): 
+                self.step_function = step_function
+                self.static_function_text.set_step_function(step_function)
+                self.argument_control.set_step_function(step_function)
         
         
     def step_function_to_address(self, step_function):
@@ -248,6 +251,10 @@ class StepProfileDialog(CuteDialog):
             root=self.simpack
         )
 
+    
+    def ShowModal(self):
+        wx.CallAfter(self.step_function_input.try_to_parse_text_and_set)
+        return super(StepProfileDialog, self).ShowModal()
     
     def on_ok(self, event):
         try:

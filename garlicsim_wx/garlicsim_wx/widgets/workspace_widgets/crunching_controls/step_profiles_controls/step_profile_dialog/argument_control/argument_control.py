@@ -37,7 +37,7 @@ class ArgumentControl(wx.Panel):
 
         self.step_function = step_function
 
-        with wx_tools.WindowFreezer(self):
+        for i in (1,):
         
             self.main_h_sizer.Clear(deleteWindows=True)
             #self.DestroyChildren()
