@@ -51,7 +51,7 @@ class State(garlicsim.data_structures.State):
         return new_state
 
 
-    def step_generator(self, krazy=False):
+    def step_generator(self, krazy=False, *args):
         current_state = self
         while True:
             current_state = current_state.step(krazy=krazy)
