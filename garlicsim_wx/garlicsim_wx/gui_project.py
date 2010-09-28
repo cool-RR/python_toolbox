@@ -25,6 +25,7 @@ from garlicsim.general_misc import dict_tools
 from general_misc.stringsaver import s2i, i2s
 from garlicsim.general_misc.infinity import Infinity
 from garlicsim.general_misc import binary_search
+from garlicsim.general_misc import cute_profile
 from garlicsim_wx.general_misc.emitting_ordered_set import EmittingOrderedSet
 from garlicsim_wx.general_misc.emitting_weak_key_default_dict import \
      EmittingWeakKeyDefaultDict
@@ -740,8 +741,8 @@ class GuiProject(object):
         self.project.ensure_buffer(self.active_node, self.default_buffer)
 
 
-    from garlicsim.general_misc import cute_profile
-    @cute_profile.profile_ready(condition=lambda f, self, *args, **kwargs: len(self.project.tree.get_step_profiles()) == 0)
+    
+    @cute_profile.profile_ready(condition=lambda f, self, *args, **kwargs: len(self.project.tree.get_step_profiles()) == 1, sort=2)
     def _update_step_profiles_set(self):
         self.step_profiles |= self.project.tree.get_step_profiles()                
     
