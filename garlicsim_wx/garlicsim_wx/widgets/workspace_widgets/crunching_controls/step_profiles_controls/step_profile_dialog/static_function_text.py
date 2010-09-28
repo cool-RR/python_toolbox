@@ -44,20 +44,25 @@ class StaticFunctionText(wx.Panel):
         self.text.SetLabel(error_text)
         self.text.Wrap(300)
         self.text.SetBackgroundColour(self._error_color)
+        self.Layout()
         #self.step_profile_dialog.main_v_sizer.Fit(self.step_profile_dialog)
         #self.Fit()
         
         
     def set_step_function(self, step_function):
         if step_function != self.step_function:
-            step_type = garlicsim.misc.simpack_grokker.get_step_type(step_function)
+            step_type = \
+                garlicsim.misc.simpack_grokker.get_step_type(step_function)
+            step_function_address = self.step_profile_dialog.\
+                                    step_function_to_address(step_function)
             label = '%s is a %s.' % (
-                self.step_profile_dialog.step_function_to_address(step_function),
+                step_function_address,
                 step_type.verbose_name
             )
             self.text.SetLabel(label)
             self.text.Wrap(300)
             self.text.SetBackgroundColour(self._success_color)
+            self.Layout()
 
     
     def on_size(self, event):

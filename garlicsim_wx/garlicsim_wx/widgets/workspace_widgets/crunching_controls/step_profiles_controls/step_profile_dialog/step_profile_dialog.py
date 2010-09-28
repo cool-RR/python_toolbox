@@ -118,17 +118,16 @@ class StepProfileDialog(CuteDialog):
         # Setting up widgets and sizers:
         
         self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)
-        
-        
-        self.static_function_text = StaticFunctionText(self)
-        
-        self.main_v_sizer.Add(
-            self.static_function_text,
-            0,
-            wx.ALIGN_CENTER_HORIZONTAL | wx.ALL,
-            border=10
-        )
 
+        
+        
+        self.static_text = wx.StaticText(self, label="Choose a step function:")
+        
+        self.main_v_sizer.Add(self.static_text,
+                              0,
+                              wx.EXPAND | wx.TOP | wx.LEFT | wx.RIGHT,
+                              border=10)
+        
         
         self.h_sizer = wx.BoxSizer(wx.HORIZONTAL)
         
@@ -139,7 +138,7 @@ class StepProfileDialog(CuteDialog):
             border=10
         )
         
-
+        
         self.hue_control = \
             garlicsim_wx.widgets.general_misc.hue_control.HueControl(
                 self,
@@ -155,9 +154,8 @@ class StepProfileDialog(CuteDialog):
         self.h_sizer.Add(
             self.hue_control,
             0,
-            wx.ALIGN_CENTER_VERTICAL )#| _wx.TOP,
-        #border=(5 if wx.Platform=='__WXMAC__' else 0)
-        #)
+            wx.ALIGN_CENTER_VERTICAL
+        )
         
         
         self.h_sizer.AddSpacer(5)
@@ -173,6 +171,16 @@ class StepProfileDialog(CuteDialog):
             0,
             wx.ALIGN_CENTER_VERTICAL,
             #border=5
+        )
+        
+        
+        self.static_function_text = StaticFunctionText(self)
+        
+        self.h_sizer.Add(
+            self.static_function_text,
+            0,
+            wx.ALIGN_CENTER_VERTICAL | wx.LEFT,
+            border=15
         )
         
         
