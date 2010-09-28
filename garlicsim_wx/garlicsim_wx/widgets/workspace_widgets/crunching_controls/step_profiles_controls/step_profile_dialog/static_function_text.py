@@ -10,6 +10,8 @@ class StaticFunctionText(wx.Panel):
         
         self.step_profile_dialog = step_profile_dialog
         
+        self.width = 400 if wx.Platform == '__WXMSW__' else 500
+        
         self.step_function = None
         
         wx.Panel.__init__(self, step_profile_dialog)
@@ -18,11 +20,11 @@ class StaticFunctionText(wx.Panel):
         
         self.text = wx.StaticText(self, style=wx.ALIGN_CENTER_HORIZONTAL)
         
-        self.SetMinSize((300, 25))
+        self.SetMinSize((self.width, 25))
         
-        self.text.SetBackgroundColour(wx_tools.get_background_color())
+        self.SetBackgroundColour(wx_tools.get_background_color())
         
-        self.text.Wrap(300)
+        self.text.Wrap(self.width - 10)
         
         self.Bind(wx.EVT_SIZE, self.on_size)
         
@@ -42,8 +44,8 @@ class StaticFunctionText(wx.Panel):
         
     def set_error_text(self, error_text):
         self.text.SetLabel(error_text)
-        self.text.Wrap(300)
-        self.text.SetBackgroundColour(self._error_color)
+        self.text.Wrap(self.width - 10)
+        self.SetBackgroundColour(self._error_color)
         self.Layout()
         #self.step_profile_dialog.main_v_sizer.Fit(self.step_profile_dialog)
         #self.Fit()
@@ -60,8 +62,8 @@ class StaticFunctionText(wx.Panel):
                 step_type.verbose_name
             )
             self.text.SetLabel(label)
-            self.text.Wrap(300)
-            self.text.SetBackgroundColour(self._success_color)
+            self.text.Wrap(self.width - 10)
+            self.SetBackgroundColour(self._success_color)
             self.Layout()
 
     
