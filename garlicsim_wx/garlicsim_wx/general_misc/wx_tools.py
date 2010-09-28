@@ -92,7 +92,8 @@ def post_event(evt_handler, event_binder, source=None, **kwargs):
     # todo: possibly it's a problem that I'm using PyEvent here for any type of
     # event, because every event has its own type. but i don't know how to get
     # the event type from `event_binder`. problem.
-    event = wx.PyCommandEvent(source.GetId() if source else 0)
+    event = wx.PyCommandEvent(event_binder.evtType[0],
+                              source.GetId() if source else 0)
     for key, value in kwargs.iteritems():
         setattr(event, key, value)
     event.SetEventType(event_binder.evtType[0])
