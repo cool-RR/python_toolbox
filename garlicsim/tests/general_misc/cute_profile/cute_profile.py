@@ -61,7 +61,7 @@ def test_method():
         def __init__(self):
             self.x = 0
                 
-        @cute_profile.profile_ready()
+        @cute_profile.profile_ready(off_after=False)
         def increment(self):
             sum([1, 2, 3])
             self.x += 1
