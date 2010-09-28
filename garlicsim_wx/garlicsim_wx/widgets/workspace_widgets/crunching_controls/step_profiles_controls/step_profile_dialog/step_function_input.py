@@ -76,7 +76,7 @@ class StepFunctionInput(wx.ComboBox):
         
     def on_text(self, event):
         self.try_to_parse_text_and_set()
-    
+        
         
     def on_combo_box(self, event):
         self.try_to_parse_text_and_set()
@@ -88,6 +88,6 @@ class StepFunctionInput(wx.ComboBox):
                 self.parse_text_and_set()
             except Exception as exception:
                 self.step_profile_dialog.static_function_text.set_error_text(
-                    exception.message
+                    exception.args[0]
                 )
             event.Skip()

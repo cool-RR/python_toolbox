@@ -263,7 +263,7 @@ class StepProfileDialog(CuteDialog):
         try:
             self.step_function_input.parse_text_and_set()
         except Exception as exception:
-            error_dialog = ErrorDialog(self, exception.message)
+            error_dialog = ErrorDialog(self, exception.args[0])
             error_dialog.ShowModal()
             self.SetFocus(self.step_function_input)
             return
