@@ -164,3 +164,14 @@ class WindowFreezer(object):
     def __exit__(self, *args, **kwargs):
         self.window.Thaw()
         
+        
+class CursorChanger(object):
+    def __init__(self, window, cursor):
+        assert isinstance(window, wx.Window)
+        self.window = window
+        self.cursor = cursor
+        self.old_cursor = window.GetCursor()
+    def __enter__(self, *args, **kwargs):
+        self.window.SetCursor(self.cursor)
+    def __exit__(self, *args, **kwargs):
+        self.window.SetCursor(self.old_cursor)

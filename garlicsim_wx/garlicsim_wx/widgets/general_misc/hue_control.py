@@ -75,11 +75,12 @@ class HueControl(wx.Window):
     def open_editing_dialog(self):
         old_hue = self.getter()
         
-        hue_selection_dialog = HueSelectionDialog(
-            self.GetTopLevelParent(), self.getter, self.setter, self.emitter,
-            lightness=self.lightness, saturation=self.saturation,
-            title=self.dialog_title
-        )
+        with wx_tools.CursorChanger(self, wx.StockCursor(wx.CURSOR_WAIT)):
+            hue_selection_dialog = HueSelectionDialog(
+                self.GetTopLevelParent(), self.getter, self.setter, self.emitter,
+                lightness=self.lightness, saturation=self.saturation,
+                title=self.dialog_title
+            )
         
         try:
             hue_selection_dialog.ShowModal()
