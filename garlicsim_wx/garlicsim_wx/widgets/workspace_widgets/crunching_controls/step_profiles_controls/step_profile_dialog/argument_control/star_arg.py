@@ -17,13 +17,13 @@ class StarArg(wx.Panel):
         
         self.main_h_sizer = wx.BoxSizer(wx.HORIZONTAL)
         
-        self.text_ctrl = ValueTextCtrl(
+        self.value_text_ctrl = ValueTextCtrl(
             self,
             value=value,
             root=argument_control.gui_project.simpack
         )
         
-        self.main_h_sizer.Add(self.text_ctrl, 1,
+        self.main_h_sizer.Add(self.value_text_ctrl, 1,
                               wx.ALIGN_CENTER_VERTICAL)
         
         self.close_button = CloseButton(self)
@@ -40,7 +40,7 @@ class StarArg(wx.Panel):
         self.star_arg_box.remove(self)
         
     def get_value_string(self):
-        return self.text_ctrl.GetValue()
+        return self.value_text_ctrl.GetValue()
         
         
         

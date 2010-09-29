@@ -67,6 +67,16 @@ class StarKwargBox(wx.StaticBox):
         
             
     def remove(self, star_kwarg):
+        index = self.star_kwargs.index(star_kwarg)
+        
+        if index >= 1:
+            place_to_put_focus_in = \
+                self.star_kwargs[index - 1].value_text_ctrl
+        elif len(self.star_kwargs) >= 2:
+            place_to_put_focus_in = \
+                self.star_kwargs[1].value_text_ctrl
+        else:
+            place_to_put_focus_in = self.star_adder
         
         with wx_tools.WindowFreezer(self.Parent.Parent):
             self.star_kwargs.remove(star_kwarg)
@@ -74,3 +84,5 @@ class StarKwargBox(wx.StaticBox):
             star_kwarg.DestroyChildren()
             star_kwarg.Destroy()
             self.layout()
+            
+        place_to_put_focus_in.SetFocus()

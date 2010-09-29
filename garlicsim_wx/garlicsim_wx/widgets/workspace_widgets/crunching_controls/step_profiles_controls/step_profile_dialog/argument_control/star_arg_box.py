@@ -69,10 +69,22 @@ class StarArgBox(wx.StaticBox):
         
             
     def remove(self, star_arg):
-        #index = self.star_arg_box.star_args.index(self)
+        index = self.star_args.index(star_arg)
+        
+        if index >= 1:
+            place_to_put_focus_in = \
+                self.star_args[index - 1].value_text_ctrl
+        elif len(self.star_args) >= 2:
+            place_to_put_focus_in = \
+                self.star_args[1].value_text_ctrl
+        else:
+            place_to_put_focus_in = self.star_adder
+            
         with wx_tools.WindowFreezer(self.Parent.Parent):
             self.star_args.remove(star_arg)
             self.sizer.Remove(star_arg)
             star_arg.DestroyChildren()
             star_arg.Destroy()
             self.layout()
+        
+        place_to_put_focus_in.SetFocus()
