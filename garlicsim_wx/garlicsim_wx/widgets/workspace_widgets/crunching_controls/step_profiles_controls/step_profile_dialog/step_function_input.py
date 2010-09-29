@@ -5,6 +5,8 @@ import wx
 import garlicsim_wx
 import garlicsim
 
+from .argument_control import colors
+
 
 class StepFunctionInput(wx.ComboBox):
     # tododoc: if hitting on step function and it's not in the list, add it as
@@ -29,6 +31,10 @@ class StepFunctionInput(wx.ComboBox):
         wx.ComboBox.__init__(self, step_profile_dialog, value=value,
                              choices=step_functions_list, size=(width, -1))
         
+        self._original_background_color = self.GetBackgroundColour()
+        
+        self.error_mode = False
+        
         self.Bind(wx.EVT_TEXT, self.on_text)
         self.Bind(wx.EVT_COMBOBOX, self.on_combo_box)
         
@@ -40,14 +46,22 @@ class StepFunctionInput(wx.ComboBox):
         try:
             thing = self.step_profile_dialog.address_to_object(text)
         except Exception:
+            if self.error_mode:
+                self.SetBackgroundColour(colors.get_error_background_color())
             return
         else:
             try:
                 garlicsim.misc.simpack_grokker.get_step_type(thing)
             except Exception:
+                if self.error_mode:
+                    self.SetBackgroundColour(
+                        colors.get_error_background_color()
+                    )
                 return
             else:
                 self.step_profile_dialog.set_step_function(thing)
+                if self.error_mode:
+                    self.SetBackgroundColour(self._original_background_color())
                 
     
     def parse_text_and_set(self):
@@ -83,6 +97,7 @@ class StepFunctionInput(wx.ComboBox):
         
         
     def on_kill_focus(self, event):
+        event.Skip()
         if self.FindFocus() != self:
             try:
                 self.parse_text_and_set()
@@ -90,4 +105,7 @@ class StepFunctionInput(wx.ComboBox):
                 self.step_profile_dialog.static_function_text.set_error_text(
                     exception.args[0]
                 )
-            event.Skip()
+                self.error_mode = True
+            else:
+                self.error_mode = False
+                
