@@ -50,6 +50,8 @@ class StarArgBox(wx.StaticBox):
         
         with wx_tools.WindowFreezer(self.Parent.Parent):
             star_arg = StarArg(self.argument_control, self)
+            star_arg.MoveBeforeInTabOrder(self.star_adder)
+            star_arg.SetFocus()
             self.star_args.append(star_arg)
             self.sizer.Insert(len(self.sizer.GetChildren()) - 1, star_arg, 0,
                               wx.EXPAND | wx.ALL, border=5)
@@ -65,6 +67,7 @@ class StarArgBox(wx.StaticBox):
             self.Parent.Parent.main_v_sizer.Fit(self.Parent.Parent)
             self.Parent.Parent.Layout()
         
+            
     def remove(self, star_arg):
         #index = self.star_arg_box.star_args.index(self)
         with wx_tools.WindowFreezer(self.Parent.Parent):
