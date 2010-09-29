@@ -10,6 +10,7 @@ from garlicsim_wx.widgets.general_misc.error_dialog import ErrorDialog
 
 import garlicsim
 import garlicsim_wx
+from garlicsim.misc import StepProfile
 
 from .static_function_text import StaticFunctionText
 from .step_function_input import StepFunctionInput
@@ -270,7 +271,7 @@ class StepProfileDialog(CuteDialog):
             return
         
         try:
-            self.argument_control.save()
+            step_profile = self.argument_control.save()
             # ...
         except ResolveFailed, resolve_failed_exception:
             error_dialog = ErrorDialog(self, resolve_failed_exception.message)
@@ -278,9 +279,11 @@ class StepProfileDialog(CuteDialog):
             error_dialog.Destroy()
             resolve_failed_exception.widget.SetFocus()
             return
-            
-        # tododoc: add args:
-        step_profile = garlicsim.misc.StepProfile(self.step_function)
+        
+        StepProfile.create_from_dld_format(
+            self.argument_control.
+        
+        
         if step_profile in self.gui_project.step_profiles:
             dialog = AlreadyExistsDialog(self, step_profile)
             result = dialog.ShowModal() 

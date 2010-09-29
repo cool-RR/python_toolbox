@@ -302,6 +302,14 @@ class ArgumentsProfile(object):
             )
         )
         
+    
+    @staticmethod
+    def create_from_dld_format(function, args_dict, star_args_list,
+                               star_kwargs_dict):
+        args_spec = inspect.getargspec(function)
+        new_args = [args_dict[name] for name in args_spec.args] + \
+                   list(star_args_list)
+        return ArgumentsProfile(function, *new_args, **star_kwargs_dict)
         
             
                     
