@@ -67,10 +67,10 @@ class StarKwargBox(wx.StaticBox):
         
             
     def remove(self, star_kwarg):
-        #index = self.star_kwarg_box.star_kwargs.index(self)
+        
         with wx_tools.WindowFreezer(self.Parent.Parent):
             self.star_kwargs.remove(star_kwarg)
             self.sizer.Remove(star_kwarg)
             star_kwarg.DestroyChildren()
-            star_kwargy.Destroy()
+            star_kwarg.Destroy()
             self.layout()

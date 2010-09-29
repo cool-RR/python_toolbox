@@ -18,18 +18,18 @@ class StarKwarg(wx.Panel):
         self.main_h_sizer = wx.BoxSizer(wx.HORIZONTAL)
         
         self.name_text_ctrl = wx.TextCtrl(self, value=name)
-        
-        self.main_h_sizer.Add(self.name_text_ctrl, 0.4,
+        self.name_text_ctrl.SetMinSize((10, -1))
+        self.main_h_sizer.Add(self.name_text_ctrl, 4,
                               wx.ALIGN_CENTER_VERTICAL)
                 
-        self.static_text = wx.StaticText(self, label=(': ' % name))
+        self.static_text = wx.StaticText(self, label=(': '))
         
-        self.main_h_sizer.Add(self.star_kwarg_box, 0,
+        self.main_h_sizer.Add(self.static_text, 0,
                               wx.ALIGN_CENTER_VERTICAL)
         
         self.value_text_ctrl = wx.TextCtrl(self, value=value)
-        
-        self.main_h_sizer.Add(self.value_text_ctrl, 0.6,
+        self.value_text_ctrl.SetMinSize((10, -1))
+        self.main_h_sizer.Add(self.value_text_ctrl, 6,
                               wx.ALIGN_CENTER_VERTICAL)
         
         self.close_button = CloseButton(self)
