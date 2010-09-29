@@ -1,8 +1,10 @@
 import wx
 
 from garlicsim.general_misc.third_party import inspect
+from garlicsim_wx.general_misc import wx_tools
 
 from .star_kwarg import StarKwarg
+from .star_adder import StarAdder, EVT_STAR_ADDER_PRESSED
 
 
 class StarKwargBox(wx.StaticBox):
@@ -12,7 +14,12 @@ class StarKwargBox(wx.StaticBox):
         wx.StaticBox.__init__(self, argument_control,
                               label='Additional keyword arguments')
         
+        self.SetMinSize(argument_control.box_size)
+        self.SetMaxSize(argument_control.box_size)
+        
         self.sizer = wx.StaticBoxSizer(self, wx.VERTICAL)
+        
+        self.sizer.SetMinSize(argument_control.box_size)
         
         self.step_function = step_function
         
@@ -22,17 +29,48 @@ class StarKwargBox(wx.StaticBox):
             argument_control.step_profile_dialog.step_functions_to_star_kwargs[
                 step_function
             ]
-                
         
         self.star_kwargs = []
         
         for name, value in star_kwarg_dict:
-            star_kwarg = StarKwarg(argument_control, name, repr(value))
+            star_kwarg = StarKwarg(argument_control, self, name, value)
             self.star_kwargs.append(star_kwarg)
-            self.sizer.Add(star_kwarg, 0)
+            self.sizer.Add(star_kwarg, 0, wx.EXPAND | wx.ALL, border=5)
             
-        empty_star_kwarg = StarKwarg(argument_control, '', '')
-        self.star_kwargs.append(empty_star_kwarg)
-        self.sizer.Add(empty_star_kwarg, 0)
+        self.star_adder = StarAdder(argument_control)
+        self.sizer.Add(self.star_adder, 0, wx.EXPAND | wx.ALL, border=5)
+        
+        self.Parent.Bind(EVT_STAR_ADDER_PRESSED, self.on_star_adder_pressed,
+                         source=self.star_adder)
         
         
+    def on_star_adder_pressed(self, event):
+        
+        with wx_tools.WindowFreezer(self.Parent.Parent):
+            star_kwarg = StarKwarg(self.argument_control, self)
+            star_kwarg.MoveBeforeInTabOrder(self.star_adder)
+            star_kwarg.SetFocus()
+            self.star_kwargs.append(star_kwarg)
+            self.sizer.Insert(len(self.sizer.GetChildren()) - 1, star_kwarg, 0,
+                              wx.EXPAND | wx.ALL, border=5)
+            self.layout()
+
+        
+    def layout(self):
+
+        with wx_tools.WindowFreezer(self.Parent.Parent):
+        
+            self.Parent.main_h_sizer.Fit(self.Parent)
+            self.Parent.Layout()
+            self.Parent.Parent.main_v_sizer.Fit(self.Parent.Parent)
+            self.Parent.Parent.Layout()
+        
+            
+    def remove(self, star_kwarg):
+        #index = self.star_kwarg_box.star_kwargs.index(self)
+        with wx_tools.WindowFreezer(self.Parent.Parent):
+            self.star_kwargs.remove(star_kwarg)
+            self.sizer.Remove(star_kwarg)
+            star_kwarg.DestroyChildren()
+            star_kwargy.Destroy()
+            self.layout()
