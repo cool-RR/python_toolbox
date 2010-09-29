@@ -46,8 +46,8 @@ class EditMenu(CuteMenu):
         self.cut_button = self.Append(
             wx.ID_CUT,
             'Cu&t\tCtrl+XX',
-            ''' Cut the current selection, copying to the clipboard and \
-deleting it from the simulation'''
+            ' Cut the current selection, copying to the clipboard and '
+            'deleting it from the simulation'
         )
         self.cut_button.Enable(False)
         
@@ -98,8 +98,8 @@ deleting it from the simulation'''
         self.invert_selection_button = self.Append(
             -1,
             'Invert selection\tCtrl+Shift+I',
-            ''' Select all the nodes that aren't selected, and deselect \
-those that are selected'''
+            " Select all the nodes that aren't selected, and deselect those "
+            "that are selected"
         )
         self.invert_selection_button.Enable(False)
         

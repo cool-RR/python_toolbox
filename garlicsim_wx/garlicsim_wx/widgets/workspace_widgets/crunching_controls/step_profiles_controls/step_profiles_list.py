@@ -135,7 +135,7 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
         
         
     def on_new_step_profile_button(self, event):
-        self.step_profiles_controls.open_step_profile_editing_dialog()
+        self.step_profiles_controls.show_step_profile_editing_dialog()
 
         
     def on_fork_by_crunching_button(self, event):
@@ -154,7 +154,7 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
 
         
     def on_duplicate_and_edit_button(self, event):
-        self.step_profiles_controls.open_step_profile_editing_dialog(
+        self.step_profiles_controls.show_step_profile_editing_dialog(
             self.get_selected_step_profile()
         )
 

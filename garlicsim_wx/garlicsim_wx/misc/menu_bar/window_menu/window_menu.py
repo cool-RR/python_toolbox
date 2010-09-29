@@ -34,8 +34,8 @@ class WindowMenu(CuteMenu):
             -1,
             '&Workspace',
             self.workspace_menu,
-            ''' Manipulate the workspace, i.e. the arrangement of widgets \
-on the screen'''
+            " Manipulate the workspace, i.e. the arrangement of widgets on "
+            "the screen"
         )
         self.workspace_menu_button.Enable(False)
         
@@ -46,8 +46,8 @@ on the screen'''
         self.crunching_controls_button = self.Append( #tododoc: don't forget enablings for these buttons
             -1,
             '&Crunching',
-            ''' Show/hide the crunching tool, which lets you control how your \
-simulation is crunched'''
+            " Go to the crunching tool, which lets you control how your "
+            "simulation is crunched"
         )       
         #self.crunching_controls_button.Enable(False)
         
@@ -64,7 +64,7 @@ simulation is crunched'''
         #self.local_nodes_examiner_button = self.Append(
             #-1,
             #'&Local nodes examiner',
-            #''' Show/hide the local nodes examiner, which lets you manipulate \
+            #''' Go to  the local nodes examiner, which lets you manipulate \
 #tree nodes one-by-one'''
         #)       
         #self.local_nodes_examiner_button.Enable(False)
@@ -82,8 +82,8 @@ simulation is crunched'''
         self.playback_controls_button = self.Append(
             -1,
             '&Playback',
-            ''' Show/hide the playback controls, which let you control the \
-onscreen playback of the simulation'''
+            " Go to the playback controls, which let you control the onscreen "
+            "playback of the simulation"
         )       
         #self.playback_controls_button.Enable(False)
         
@@ -100,8 +100,7 @@ onscreen playback of the simulation'''
         self.seek_bar_button = self.Append(
             -1,
             'Seek-&bar',
-            ''' Show/hide the seek-bar, which lets you navigate the active tododoc\
-timeline'''
+            " Go to the seek-bar, which lets you navigate the active timeline" #tododoc
         )       
         #self.seek_bar_button.Enable(False)
         
@@ -118,8 +117,8 @@ timeline'''
         self.shell_button = self.Append(
             -1,
             '&Shell',
-            ''' Show/hide the shell, which lets you analyze your simulation \
-using arbitrary Python code'''
+            " Go to the shell, which lets you analyze your simulation using "
+            "arbitrary Python code"
         )       
         #self.shell_button.Enable(False)
         
@@ -136,7 +135,7 @@ using arbitrary Python code'''
         #self.toolbox_button = self.Append(
             #-1,
             #'Toolbo&x',
-            #''' Show/hide the toolbox, in which you can choose between \
+            #''' Go to the toolbox, in which you can choose between \
 #different tools to use in the other widgets'''
         #)       
         #self.toolbox_button.Enable(False)
@@ -154,8 +153,7 @@ using arbitrary Python code'''
         self.tree_browser_button = self.Append(
             -1,
             '&Tree browser',
-            ''' Show/hide the tree browser, which lets you navigate the time \
-tree'''
+            " Go to the tree browser, which lets you navigate the time tree"
         )       
         #self.tree_browser_button.Enable(False)
         

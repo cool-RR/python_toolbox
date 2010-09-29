@@ -26,8 +26,8 @@ class NodeMenu(CuteMenu):
         self.fork_by_editing_button = self.Append(
             -1,
             'Fork by &editing',
-            ''' Fork the simulation by making a copy of the active node and \
-editing it'''
+            " Fork the simulation by making a copy of the active node and "
+            "editing it"
         )
         
         frame.Bind(

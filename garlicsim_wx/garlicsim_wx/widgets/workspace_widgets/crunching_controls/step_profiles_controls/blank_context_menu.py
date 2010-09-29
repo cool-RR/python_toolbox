@@ -14,7 +14,7 @@ class BlankContextMenu(cute_menu.CuteMenu):
         
         self.new_step_profile_button = self.Append(
             -1,
-            'Create new step profile...',
+            'Create step profile...',
             ' Create a new step profile'
         )
         self.Bind(wx.EVT_MENU,

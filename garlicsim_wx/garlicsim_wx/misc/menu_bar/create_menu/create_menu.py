@@ -41,8 +41,8 @@ class CreateMenu(CuteMenu):
         self.create_step_profile_button = self.Append(
             -1, 
             'Create step &profile...',
-            ''' Create a new step profile, which can modify the world rules \
-under which the simulation crunches'''
+            ' Create a new step profile, which can modify the world rules '
+            'under which the simulation crunches'
         )
         self.create_step_profile_button.Enable(False)
         

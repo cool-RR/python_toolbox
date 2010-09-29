@@ -42,8 +42,8 @@ class OnlineResourcesMenu(CuteMenu):
         self.online_documentation_button = self.Append(
             -1,
             'Online &documentation...',
-            ''' Open the online version of GarlicSim's documentation in your \
-browser'''
+            " Open the online version of GarlicSim's documentation in your "
+            "browser"
         )
         frame.Bind(
             wx.EVT_MENU,

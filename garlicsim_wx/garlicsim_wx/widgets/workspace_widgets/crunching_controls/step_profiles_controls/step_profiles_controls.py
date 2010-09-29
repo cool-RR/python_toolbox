@@ -74,9 +74,16 @@ class StepProfilesControls(wx.Panel):
         
         self.SetSizer(self.main_v_sizer)
         
+        
+        self.Bind(wx.EVT_BUTTON, self.on_new_button, source=self.new_button)
+        self.Bind(wx.EVT_BUTTON, self.on_delete_button, source=self.delete_button)
+        
             
     
-    def open_step_profile_editing_dialog(self, step_profile=None):
+    def show_step_profile_editing_dialog(self, step_profile=None):
+        '''
+        None for creating new step profile
+        '''
         step_profile_dialog = StepProfileDialog(self, step_profile)
         
         try:
@@ -92,3 +99,18 @@ class StepProfilesControls(wx.Panel):
             assert new_step_profile not in self.gui_project.step_profiles
             self.gui_project.step_profiles_to_hues[new_step_profile] = new_hue
             self.gui_project.step_profiles.add(new_step_profile)
+
+            
+
+    def show_delete_dialog(self, step_profile):
+        raise NotImplementedError()
+            
+            
+    def on_new_button(self, event):
+        self.show_step_profile_editing_dialog(step_profile=None)
+    
+    
+    def on_delete_button(self, event):
+        self.show_delete_dialog(
+            self.step_profiles_list.get_selected_step_profile()
+        )
