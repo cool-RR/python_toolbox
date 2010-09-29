@@ -72,12 +72,12 @@ class StepProfileDialog(CuteDialog):
 
             original_argument_dict = collections.defaultdict(
                 lambda: '',
-                ((key, repr(value)) for (key, value) in 
-                 original_step_profile.getcallargs_result.iteritems())
+                original_step_profile.getcallargs_result
             )
 
             self.step_functions_to_argument_dicts[original_step_function] = \
-                original_argument_dict
+                dict((key, repr(value)) for (key, value) in 
+                 original_argument_dict.iteritems())
             
 
             original_arg_spec = inspect.getargspec(original_step_function)

@@ -35,7 +35,7 @@ class StarArgBox(wx.StaticBox):
         self.star_args = []
         
         for star_arg_value in star_arg_list:
-            star_arg = StarArg(argument_control, self, repr(star_arg_value))
+            star_arg = StarArg(argument_control, self, star_arg_value)
             self.star_args.append(star_arg)
             self.sizer.Add(star_arg, 0, wx.EXPAND | wx.ALL, border=5)
             
