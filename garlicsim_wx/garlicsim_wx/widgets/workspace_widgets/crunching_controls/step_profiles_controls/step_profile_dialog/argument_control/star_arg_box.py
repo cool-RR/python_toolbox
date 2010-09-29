@@ -35,7 +35,7 @@ class StarArgBox(wx.StaticBox):
         self.star_args = []
         
         for star_arg_value in star_arg_list + ['qwe']:
-            star_arg = StarArg(argument_control, repr(star_arg_value))
+            star_arg = StarArg(argument_control, self, repr(star_arg_value))
             self.star_args.append(star_arg)
             self.sizer.Add(star_arg, 0, wx.EXPAND | wx.ALL, border=5)
             
@@ -45,11 +45,18 @@ class StarArgBox(wx.StaticBox):
         self.Parent.Bind(EVT_STAR_ADDER_PRESSED, self.on_star_adder_pressed,
                          source=self.star_adder)
         
+        
     def on_star_adder_pressed(self, event):
-        star_arg = StarArg(self.argument_control)
-        self.star_args.append(star_arg)
-        self.sizer.Insert(len(self.sizer.GetChildren()) - 1, star_arg, 0,
-                          wx.EXPAND | wx.ALL, border=5)
+        
+        with wx_tools.WindowFreezer(self.Parent.Parent):
+            star_arg = StarArg(self.argument_control, self)
+            self.star_args.append(star_arg)
+            self.sizer.Insert(len(self.sizer.GetChildren()) - 1, star_arg, 0,
+                              wx.EXPAND | wx.ALL, border=5)
+            self.layout()
+
+        
+    def layout(self):
 
         with wx_tools.WindowFreezer(self.Parent.Parent):
         
@@ -58,6 +65,11 @@ class StarArgBox(wx.StaticBox):
             self.Parent.Parent.main_v_sizer.Fit(self.Parent.Parent)
             self.Parent.Parent.Layout()
         
-        
-        #self.Parent.Parent.Layout()
-        #self.Parent.Parent.Parent.Layout()
+    def remove(self, star_arg):
+        #index = self.star_arg_box.star_args.index(self)
+        with wx_tools.WindowFreezer(self.Parent.Parent):
+            self.star_args.remove(star_arg)
+            self.sizer.Remove(star_arg)
+            star_arg.DestroyChildren()
+            star_arg.Destroy()
+            self.layout()
