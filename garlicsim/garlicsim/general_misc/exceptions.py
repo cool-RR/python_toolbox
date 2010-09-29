@@ -9,17 +9,17 @@ class CuteException(Exception):
     Exception that uses its first line of documentation in lieu of a message.
     '''
 
-    def __init__(self, msg=None):
-        # We use `None` as the default for `msg`, so the user can input '' to
+    def __init__(self, message=None):
+        # We use `None` as the default for `message`, so the user can input '' to
         # force an empty message.
         
-        if msg is None:
+        if message is None:
             if self.__doc__ and (type(self) is not CuteException):
-                msg = self.__doc__.strip().split('\n')[0] 
+                message = self.__doc__.strip().split('\n')[0] 
                 # Getting the first line of the documentation
             else:
-                msg = ''
+                message = ''
                 
-        Exception.__init__(self, msg)
+        Exception.__init__(self, message)
 
         

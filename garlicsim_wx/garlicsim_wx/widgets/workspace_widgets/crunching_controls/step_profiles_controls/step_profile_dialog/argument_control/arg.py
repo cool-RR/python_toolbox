@@ -28,3 +28,6 @@ class Arg(wx.Panel):
         self.SetSizer(self.main_h_sizer)
         
         #self.main_h_sizer.Fit(self)
+        
+    def get_value_string(self):
+        return self.text_ctrl.GetValue()

@@ -1,12 +1,15 @@
 import wx
 
 from garlicsim.general_misc.third_party import inspect
+from garlicsim.general_misc import address_tools
+from garlicsim.misc import exceptions
 from garlicsim_wx.general_misc import wx_tools
 
 from .arg_box import ArgBox
 from .star_arg_box import StarArgBox
 from .star_kwarg_box import StarKwargBox
 from .placeholder import Placeholder
+from .exceptions import ResolveFailed
 
 
 class ArgumentControl(wx.Panel):
@@ -122,5 +125,11 @@ class ArgumentControl(wx.Panel):
         
         arg_dict.clear()
         for arg in self.arg_box.args:
-            pass
-            
+            name = arg.name
+            value_string = arg.get_value_string()
+            try:
+                value = address_tools.resolve(value_string)
+            except Exception:
+                raise ResolveFailed("Can't resolve '%s' to a Python "
+                                    "object." % value_string, arg)
+            arg_dict[name] = value

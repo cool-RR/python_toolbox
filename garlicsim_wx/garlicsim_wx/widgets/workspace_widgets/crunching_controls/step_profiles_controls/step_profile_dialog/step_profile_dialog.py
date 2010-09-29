@@ -13,7 +13,7 @@ import garlicsim_wx
 
 from .static_function_text import StaticFunctionText
 from .step_function_input import StepFunctionInput
-from .argument_control import ArgumentControl
+from .argument_control import ArgumentControl, ResolveFailed
 from .already_exists_dialog import AlreadyExistsDialog
 from .step_functions_to_argument_dicts import StepFunctionsToArgumentDicts
 
@@ -262,11 +262,23 @@ class StepProfileDialog(CuteDialog):
     def on_ok(self, event):
         try:
             self.step_function_input.parse_text_and_set()
-        except Exception as exception:
+        except Exception, exception:
             error_dialog = ErrorDialog(self, exception.args[0])
             error_dialog.ShowModal()
+            error_dialog.Destroy()
             self.step_function_input.SetFocus()
             return
+        
+        try:
+            self.argument_control.save()
+            # ...
+        except ResolveFailed, resolve_failed_exception:
+            error_dialog = ErrorDialog(self, resolve_failed_exception.message)
+            error_dialog.ShowModal()
+            error_dialog.Destroy()
+            resolve_failed_exception.widget.SetFocus()
+            return
+            
         # tododoc: add args:
         step_profile = garlicsim.misc.StepProfile(self.step_function)
         if step_profile in self.gui_project.step_profiles:
