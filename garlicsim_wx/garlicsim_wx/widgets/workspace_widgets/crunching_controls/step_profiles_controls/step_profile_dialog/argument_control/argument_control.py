@@ -103,3 +103,24 @@ class ArgumentControl(wx.Panel):
         
         self.step_profile_dialog.Refresh()
         
+
+    def save(self):
+        
+        step_profile_dialog = self.step_profile_dialog
+        step_function = self.step_function
+
+        
+        arg_dict = step_profile_dialog.\
+                 step_functions_to_argument_dicts[step_function]
+        
+        star_arg_list = step_profile_dialog.\
+                      step_functions_to_star_args[step_function]
+        
+        star_kwarg_dict = step_profile_dialog.\
+                        step_functions_to_star_kwargs[step_function]
+        
+        
+        arg_dict.clear()
+        for arg in self.arg_box.args:
+            pass
+            

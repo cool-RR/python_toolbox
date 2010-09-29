@@ -81,6 +81,7 @@ def get_object_by_address(address, root=None, _parent_object=None):
 
     # todo: should know what exception this will raise if the address is bad /
     # object doesn't exist.
+    # todo: probably allow `namespace` argument
     if root:        
         if isinstance(root, basestring):
             root = get_object_by_address(root)
@@ -186,3 +187,11 @@ def get_address(obj, root=None, shorten=None):
     
     return address
 
+
+def resolve(address, root=None):
+    # sktechy for now
+    try:
+        return eval(address)
+    except (NameError, AttributeError):
+        return get_object_by_address(address, root)
+    
