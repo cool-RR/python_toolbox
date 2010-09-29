@@ -3,6 +3,7 @@
 
 '''This module defines miscellaneous tools.'''
 
+import re
 import math
 import types
 
@@ -30,3 +31,10 @@ def getted_vars(thing, _getattr=getattr):
     # is unsuccessful.
     my_vars = vars(thing)
     return dict((name, _getattr(thing, name)) for name in my_vars.iterkeys())
+
+
+
+_ascii_variable_pattern = re.compile('^[a-zA-Z_][0-9a-zA-Z_]*$')
+def is_legal_ascii_variable_name(name):    
+    return isinstance(name, str) and bool(_ascii_variable_pattern.match(name))
+    

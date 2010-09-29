@@ -1,7 +1,9 @@
 import wx
 
+from garlicsim.general_misc import misc_tools
 from garlicsim_wx.general_misc import wx_tools
 
+from .name_text_ctrl import NameTextCtrl
 from .close_button import CloseButton
 
 
@@ -17,8 +19,7 @@ class StarKwarg(wx.Panel):
         
         self.main_h_sizer = wx.BoxSizer(wx.HORIZONTAL)
         
-        self.name_text_ctrl = wx.TextCtrl(self, value=name)
-        self.name_text_ctrl.SetMinSize((10, -1))
+        self.name_text_ctrl = NameTextCtrl(self, value=name)
         self.main_h_sizer.Add(self.name_text_ctrl, 4,
                               wx.ALIGN_CENTER_VERTICAL)
                 
@@ -41,6 +42,7 @@ class StarKwarg(wx.Panel):
         
         self.Bind(wx.EVT_BUTTON, lambda event: self.remove(),
                   source=self.close_button)
+        
 
         
     def remove(self):
@@ -54,6 +56,3 @@ class StarKwarg(wx.Panel):
     def get_value_string(self):
         return self.value_text_ctrl.GetValue()
         
-        
-        
-            
