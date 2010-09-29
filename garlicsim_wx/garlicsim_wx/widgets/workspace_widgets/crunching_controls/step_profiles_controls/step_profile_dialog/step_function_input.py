@@ -47,21 +47,19 @@ class StepFunctionInput(wx.ComboBox):
             thing = self.step_profile_dialog.address_to_object(text)
         except Exception:
             if self.error_mode:
-                self.SetBackgroundColour(colors.get_error_background_color())
+                self._set_error_background()
             return
         else:
             try:
                 garlicsim.misc.simpack_grokker.get_step_type(thing)
             except Exception:
                 if self.error_mode:
-                    self.SetBackgroundColour(
-                        colors.get_error_background_color()
-                    )
+                    _set_error_background()
                 return
             else:
                 self.step_profile_dialog.set_step_function(thing)
                 if self.error_mode:
-                    self.SetBackgroundColour(self._original_background_color())
+                    self._set_normal_background()
                 
     
     def parse_text_and_set(self):
@@ -106,6 +104,18 @@ class StepFunctionInput(wx.ComboBox):
                     exception.args[0]
                 )
                 self.error_mode = True
+                self._set_error_background()
             else:
                 self.error_mode = False
+                self._set_normal_background()
+
                 
+    def _set_error_background(self):
+        self.SetBackgroundColour(colors.get_error_background_color())
+        self.Refresh()
+            
+    
+    def _set_normal_background(self):
+        self.SetBackgroundColour(self._original_background_color)
+        self.Refresh()
+    
