@@ -126,10 +126,22 @@ class ArgumentControl(wx.Panel):
         arg_dict.clear()
         for arg in self.arg_box.args:
             name = arg.name
-            value_string = arg.get_value_string()
+            value_string = arg.get_value_string() 
             try:
-                value = address_tools.resolve(value_string)
+                address_tools.resolve(value_string) # Not saving, just one to catch error
             except Exception:
                 raise ResolveFailed("Can't resolve '%s' to a Python "
                                     "object." % value_string, arg)
-            arg_dict[name] = value
+            arg_dict[name] = value_string
+        
+            
+        if self.star_arg_box:
+            del star_arg_list[:]
+            for star_arg in self.star_arg_box.star_args:
+                value_string = star_arg.get_value_string()
+                try:
+                    address_tools.resolve(value_string)
+                except Exception:
+                    raise ResolveFailed("Can't resolve '%s' to a Python "
+                                        "object." % value_string, star_arg)
+                star_arg_list.append(value_string)

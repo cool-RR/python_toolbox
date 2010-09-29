@@ -279,9 +279,25 @@ class StepProfileDialog(CuteDialog):
             error_dialog.Destroy()
             resolve_failed_exception.widget.SetFocus()
             return
+
+        step_function = self.step_function
         
-        StepProfile.create_from_dld_format(
-            self.argument_control.
+        
+        step_profile = StepProfile.create_from_dld_format(
+            
+            step_function,
+            
+            dict((key, address_tools.resolve(value_string)) for 
+                 (key, value_string) in self.\
+                 step_functions_to_argument_dicts[step_function].iteritems()),
+            
+            [address_tools.resolve(value_string) for value_string in 
+             self.step_functions_to_star_args[step_function]],
+            
+            dict((key, address_tools.resolve(value_string)) for 
+                 (key, value_String) in
+                 self.step_functions_to_star_kwargs[step_function].iteritems())
+        )
         
         
         if step_profile in self.gui_project.step_profiles:

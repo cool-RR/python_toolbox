@@ -34,6 +34,9 @@ class StarArg(wx.Panel):
     def remove(self):
         self.star_arg_box.remove(self)
         
+    def get_value_string(self):
+        return self.text_ctrl.GetValue()
+        
         
         
             

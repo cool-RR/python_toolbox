@@ -190,6 +190,12 @@ def get_address(obj, root=None, shorten=None):
 
 def resolve(address, root=None):
     # sktechy for now
+    # tododoc: create reverse
+    
+    # Resolving '' to None:
+    if address == '':
+        return None
+    
     try:
         return eval(address)
     except (NameError, AttributeError):
