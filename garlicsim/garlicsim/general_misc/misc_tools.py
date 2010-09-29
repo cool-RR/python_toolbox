@@ -36,5 +36,5 @@ def getted_vars(thing, _getattr=getattr):
 
 _ascii_variable_pattern = re.compile('^[a-zA-Z_][0-9a-zA-Z_]*$')
 def is_legal_ascii_variable_name(name):    
-    return isinstance(name, str) and bool(_ascii_variable_pattern.match(name))
+    return bool(_ascii_variable_pattern.match(name))
     

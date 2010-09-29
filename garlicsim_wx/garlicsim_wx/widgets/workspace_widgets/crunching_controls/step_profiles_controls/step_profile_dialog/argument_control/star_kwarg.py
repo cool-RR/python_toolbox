@@ -4,6 +4,7 @@ from garlicsim.general_misc import misc_tools
 from garlicsim_wx.general_misc import wx_tools
 
 from .name_text_ctrl import NameTextCtrl
+from .value_text_ctrl import ValueTextCtrl
 from .close_button import CloseButton
 
 
@@ -28,8 +29,11 @@ class StarKwarg(wx.Panel):
         self.main_h_sizer.Add(self.static_text, 0,
                               wx.ALIGN_CENTER_VERTICAL)
         
-        self.value_text_ctrl = wx.TextCtrl(self, value=value)
-        self.value_text_ctrl.SetMinSize((10, -1))
+        self.value_text_ctrl = ValueTextCtrl(
+            self,
+            value=value,
+            root=argument_control.gui_project.simpack
+        )
         self.main_h_sizer.Add(self.value_text_ctrl, 6,
                               wx.ALIGN_CENTER_VERTICAL)
         

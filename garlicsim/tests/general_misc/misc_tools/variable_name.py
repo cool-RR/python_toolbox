@@ -5,7 +5,7 @@ def test():
     legals = ['qwerqw', 'wer23434f3', 'VDF4vr', '_4523ga', 'AGF___43___4_',
               '_', '__', '___']
     illegals = ['1dgfads', 'aga`fdg', '-haeth', '4gag5h+sdfh.', '.afdg',
-                'fdga"adfg', 'afdga afd', u'asdf']
+                'fdga"adfg', 'afdga afd']
     
     for legal in legals:
         assert is_legal_ascii_variable_name(legal)

@@ -3,6 +3,7 @@ import wx
 from garlicsim_wx.general_misc import wx_tools
 
 from .close_button import CloseButton
+from .value_text_ctrl import ValueTextCtrl
 
 class StarArg(wx.Panel):
     def __init__(self, argument_control, star_arg_box, value=''):
@@ -16,7 +17,11 @@ class StarArg(wx.Panel):
         
         self.main_h_sizer = wx.BoxSizer(wx.HORIZONTAL)
         
-        self.text_ctrl = wx.TextCtrl(self, value=value)
+        self.text_ctrl = ValueTextCtrl(
+            self,
+            value=value,
+            root=argument_control.gui_project.simpack
+        )
         
         self.main_h_sizer.Add(self.text_ctrl, 1,
                               wx.ALIGN_CENTER_VERTICAL)

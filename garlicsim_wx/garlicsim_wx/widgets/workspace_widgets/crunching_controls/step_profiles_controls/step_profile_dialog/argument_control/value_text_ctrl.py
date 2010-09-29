@@ -1,17 +1,19 @@
-
 import wx
 
-from garlicsim.general_misc import misc_tools
+from garlicsim.general_misc import address_tools
 
 from . import colors
 
 
-class NameTextCtrl(wx.TextCtrl):
+class ValueTextCtrl(wx.TextCtrl):
     
-    def __init__(self, parent, value=''):
+    def __init__(self, parent, value='', root=None):
         
         wx.TextCtrl.__init__(self, parent, value=value)
+        
         self._original_background_color = self.GetBackgroundColour()
+        
+        self.root = root
         
         self.SetMinSize((10, -1))
         
@@ -23,7 +25,14 @@ class NameTextCtrl(wx.TextCtrl):
         
     
     def _check_validity_and_color(self):
-        is_valid = misc_tools.is_legal_ascii_variable_name(self.GetValue())
+        
+        try:
+            address_tools.resolve(str(self.GetValue()), root=self.root)
+        except Exception:
+            is_valid = False
+        else:
+            is_valid = True
+            
         if is_valid:
             self.SetBackgroundColour(self._original_background_color)
         else: # not is_valid
