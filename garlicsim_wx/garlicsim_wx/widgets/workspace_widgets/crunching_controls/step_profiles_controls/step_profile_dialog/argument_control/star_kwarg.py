@@ -54,7 +54,7 @@ class StarKwarg(wx.Panel):
         
         
     def get_name_string(self):
-        return self.name_text_ctrl.GetValue()
+        return str(self.name_text_ctrl.GetValue())
     
     
     def get_value_string(self):

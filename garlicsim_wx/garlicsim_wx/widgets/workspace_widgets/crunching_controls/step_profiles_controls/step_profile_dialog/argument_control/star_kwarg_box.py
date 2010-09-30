@@ -32,7 +32,7 @@ class StarKwargBox(wx.StaticBox):
         
         self.star_kwargs = []
         
-        for name, value in star_kwarg_dict:
+        for name, value in star_kwarg_dict.iteritems():
             star_kwarg = StarKwarg(argument_control, self, name, value)
             self.star_kwargs.append(star_kwarg)
             self.sizer.Add(star_kwarg, 0, wx.EXPAND | wx.ALL, border=5)

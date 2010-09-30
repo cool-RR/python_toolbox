@@ -167,21 +167,23 @@ class ArgumentControl(wx.Panel):
             for star_kwarg in self.star_kwarg_box.star_kwargs:
                 name = star_kwarg.get_name_string()
                 if not misc_tools.is_legal_ascii_variable_name(name):
-                    resolve_failed = ResolveFailed(
-                        "'%s' is not a legal name for a variable." % name,
-                        star_kwarg.name_text_ctrl
-                    )
+                    if not resolve_failed:
+                        resolve_failed = ResolveFailed(
+                            "'%s' is not a legal name for a variable." % name,
+                            star_kwarg.name_text_ctrl
+                        )
                     continue
                 value_string = star_kwarg.get_value_string()
                 try:
                     # Not storing, just checking if it'll raise an error:
                     address_tools.resolve(value_string)
                 except Exception:
-                    resolve_failed = ResolveFailed(
-                        "Can't resolve '%s' to a Python "
-                        "object." % value_string,
-                        star_kwarg.value_text_ctrl
-                    )
+                    if not resolve_failed:
+                        resolve_failed = ResolveFailed(
+                            "Can't resolve '%s' to a Python "
+                            "object." % value_string,
+                            star_kwarg.value_text_ctrl
+                        )
                 else:
                     star_kwarg_dict[name] = value_string
                 

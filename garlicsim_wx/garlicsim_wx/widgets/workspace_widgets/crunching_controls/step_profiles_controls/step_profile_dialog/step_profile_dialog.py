@@ -296,7 +296,7 @@ class StepProfileDialog(CuteDialog):
              self.step_functions_to_star_args[step_function]],
             
             dict((key, address_tools.resolve(value_string)) for 
-                 (key, value_String) in
+                 (key, value_string) in
                  self.step_functions_to_star_kwargs[step_function].iteritems())
         )
         
