@@ -23,23 +23,17 @@ class Shell(wx.py.shell.Shell, WorkspaceWidget):
     # todo: After every command in shell, must make the top emitter emit
     # todo: Make one namespace for the entire program.
     def __init__(self, frame):
-        locals_for_shell = {
-            'f': frame,
-            'gp': frame.gui_project,
-            'p': frame.gui_project.project,
-            't': frame.gui_project.project.tree,
-            'garlicsim': garlicsim,
-            'garlicsim_wx': garlicsim_wx,
-            'wx': wx,
-        }
         wx.py.shell.Shell.__init__(self, frame, size=(100, 100),
-                                   locals=locals_for_shell,
+                                   locals=frame.gui_project.namespace,
                                    style=wx.SUNKEN_BORDER)
         WorkspaceWidget.__init__(self, frame)
         
-        # Obscure: This causes the `site` module to add `help` and a few others
+        self.setLocalShell
+        
+        # Obscure:
+        import site; del site
+        # This causes the `site` module to add `help` and a few others
         # to `__builtin__`. For some reason `site` isn't imported when frozen
         # with py2exe, so here we make sure to import it.
-        import site; del site
         
     

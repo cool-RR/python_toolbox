@@ -26,6 +26,7 @@ from general_misc.stringsaver import s2i, i2s
 from garlicsim.general_misc.infinity import Infinity
 from garlicsim.general_misc import binary_search
 from garlicsim.general_misc import cute_profile
+from garlicsim.general_misc import import_tools
 from garlicsim_wx.general_misc.emitting_ordered_set import EmittingOrderedSet
 from garlicsim_wx.general_misc.emitting_weak_key_default_dict import \
      EmittingWeakKeyDefaultDict
@@ -172,7 +173,40 @@ class GuiProject(object):
             emitter=None,
             default_factory=StepProfileHueDefaultFactory(self)
         )
-
+        
+        #######################################################################
+        # Setting up namespace:
+        
+        self.namespace = {
+            'f': frame,
+            'frame': frame,
+            'gp': self,
+            'gui_project': self,
+            'p': self.project,
+            'project': self.project,
+            't': self.project.tree,
+            'tree': self.project.tree,
+            'gs': garlicsim,
+            'garlicsim': garlicsim,
+            'gs_wx': garlicsim_wx,
+            'garlicsim_wx': garlicsim_wx,
+            'wx': wx,
+            'simpack': self.simpack,
+            self.simpack.__name__.rsplit('.')[-1]: self.simpack,
+        }
+        
+        garlicsim_lib = import_tools.import_if_exists('garlicsim_lib',
+                                                      silent_fail=True)
+        if garlicsim_lib:
+            self.namespace.update({
+                'gs_lib': garlicsim_lib,
+                'garlicsim_lib': garlicsim_lib,
+            })
+                
+        # Finished setting up namespace.
+        #######################################################################
+        
+            
         self.__init_emitters()
         self.__init_menu_enablings()
         
