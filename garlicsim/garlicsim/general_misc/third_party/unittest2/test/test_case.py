@@ -4,9 +4,9 @@ import re
 
 from copy import deepcopy
 
-import unittest2
+from garlicsim.general_misc.third_party import unittest2
 
-from unittest2.test.support import (
+from garlicsim.general_misc.third_party.unittest2.test.support import (
     OldTestResult, EqualityMixin, HashingMixin, LoggingResult
 )
 

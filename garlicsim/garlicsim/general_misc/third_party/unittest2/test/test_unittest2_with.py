@@ -1,7 +1,7 @@
 from __future__ import with_statement
 
-import unittest2
-from unittest2.test.support import OldTestResult, catch_warnings
+from garlicsim.general_misc.third_party import unittest2
+from garlicsim.general_misc.third_party.unittest2.test.support import OldTestResult, catch_warnings
 
 import warnings
 # needed to enable the deprecation warnings

@@ -5,7 +5,7 @@ unittest2 is a backport of the new features added to the unittest testing
 framework in Python 2.7. It is tested to run on Python 2.4 - 2.6.
 
 To use unittest2 instead of unittest simply replace ``import unittest`` with
-``import unittest2``.
+``from garlicsim.general_misc.third_party import unittest2``.
 
 
 Copyright (c) 1999-2003 Steve Purcell
@@ -37,22 +37,22 @@ __version__ = '0.5.1'
 __all__.extend(['getTestCaseNames', 'makeSuite', 'findTestCases'])
 
 
-from unittest2.collector import collector
-from unittest2.result import TestResult
-from unittest2.case import (
+from garlicsim.general_misc.third_party.unittest2.collector import collector
+from garlicsim.general_misc.third_party.unittest2.result import TestResult
+from garlicsim.general_misc.third_party.unittest2.case import (
     TestCase, FunctionTestCase, SkipTest, skip, skipIf,
     skipUnless, expectedFailure
 )
-from unittest2.suite import BaseTestSuite, TestSuite
-from unittest2.loader import (
+from garlicsim.general_misc.third_party.unittest2.suite import BaseTestSuite, TestSuite
+from garlicsim.general_misc.third_party.unittest2.loader import (
     TestLoader, defaultTestLoader, makeSuite, getTestCaseNames,
     findTestCases
 )
-from unittest2.main import TestProgram, main, main_
-from unittest2.runner import TextTestRunner, TextTestResult
+from garlicsim.general_misc.third_party.unittest2.main import TestProgram, main, main_
+from garlicsim.general_misc.third_party.unittest2.runner import TextTestRunner, TextTestResult
 
 try:
-    from unittest2.signals import (
+    from garlicsim.general_misc.third_party.unittest2.signals import (
         installHandler, registerResult, removeResult, removeHandler
     )
 except ImportError:

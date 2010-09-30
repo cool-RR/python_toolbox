@@ -1,9 +1,9 @@
 import pickle
 
 from cStringIO import StringIO
-from unittest2.test.support import LoggingResult, OldTestResult
+from garlicsim.general_misc.third_party.unittest2.test.support import LoggingResult, OldTestResult
 
-import unittest2
+from garlicsim.general_misc.third_party import unittest2
 
 
 class Test_TextTestRunner(unittest2.TestCase):

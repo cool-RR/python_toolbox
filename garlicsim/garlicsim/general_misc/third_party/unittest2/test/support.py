@@ -1,7 +1,7 @@
 import sys
 import warnings
 
-import unittest2
+from garlicsim.general_misc.third_party import unittest2
 
 
 def resultFactory(*_):

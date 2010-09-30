@@ -1,7 +1,7 @@
 from cStringIO import StringIO
 
 import sys
-import unittest2
+from garlicsim.general_misc.third_party import unittest2
 
 hasInstallHandler = hasattr(unittest2, 'installHandler')
 

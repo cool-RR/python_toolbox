@@ -7,13 +7,13 @@ import re
 import unittest
 import warnings
 
-from unittest2 import result
-from unittest2.util import (
+from garlicsim.general_misc.third_party.unittest2 import result
+from garlicsim.general_misc.third_party.unittest2.util import (
     safe_repr, safe_str, strclass,
     unorderable_list_difference
 )
 
-from unittest2.compatibility import wraps
+from garlicsim.general_misc.third_party.unittest2.compatibility import wraps
 
 __unittest = True
 

@@ -1,7 +1,7 @@
-from unittest2.test.support import EqualityMixin, LoggingResult
+from garlicsim.general_misc.third_party.unittest2.test.support import EqualityMixin, LoggingResult
 
 import sys
-import unittest2
+from garlicsim.general_misc.third_party import unittest2
 
 class Test(object):
     class Foo(unittest2.TestCase):

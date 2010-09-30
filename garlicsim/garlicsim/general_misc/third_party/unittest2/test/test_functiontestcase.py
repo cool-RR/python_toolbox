@@ -1,6 +1,6 @@
-import unittest2
+from garlicsim.general_misc.third_party import unittest2
 
-from unittest2.test.support import LoggingResult
+from garlicsim.general_misc.third_party.unittest2.test.support import LoggingResult
 
 
 class Test_FunctionTestCase(unittest2.TestCase):

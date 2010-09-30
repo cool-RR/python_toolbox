@@ -1,7 +1,7 @@
 import signal
 import weakref
 
-from unittest2.compatibility import wraps
+from garlicsim.general_misc.third_party.unittest2.compatibility import wraps
 
 __unittest = True
 

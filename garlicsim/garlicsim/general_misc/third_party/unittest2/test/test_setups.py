@@ -2,8 +2,8 @@ import sys
 
 from cStringIO import StringIO
 
-import unittest2
-from unittest2.test.support import resultFactory
+from garlicsim.general_misc.third_party import unittest2
+from garlicsim.general_misc.third_party.unittest2.test.support import resultFactory
 
 
 class TestSetups(unittest2.TestCase):

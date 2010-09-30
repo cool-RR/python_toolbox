@@ -2,7 +2,7 @@ import sys
 import textwrap
 from StringIO import StringIO
 
-import unittest2
+from garlicsim.general_misc.third_party import unittest2
 
 
 class Test_TestResult(unittest2.TestCase):

@@ -4,7 +4,7 @@ from garlicsim.general_misc.sleek_refs import (SleekCallArgs,
                                                SleekRef,
                                                CuteSleekValueDictionary)
 
-from .shared import _is_weakreffable, A, counter
+from ..shared import _is_weakreffable, A, counter
         
         
 def test_cute_sleek_value_dictionary():

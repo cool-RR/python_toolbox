@@ -4,10 +4,10 @@ import sys
 import time
 import unittest
 
-from unittest2 import result
+from garlicsim.general_misc.third_party.unittest2 import result
 
 try:
-    from unittest2.signals import registerResult
+    from garlicsim.general_misc.third_party.unittest2.signals import registerResult
 except ImportError:
     def registerResult(_):
         pass
