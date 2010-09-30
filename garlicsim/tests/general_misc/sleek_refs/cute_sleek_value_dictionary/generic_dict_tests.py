@@ -53,11 +53,12 @@ class GenericDictTest(unittest2.TestCase):
     def test_values(self):
         d = CuteSleekValueDictionary(null_callback)
         self.assertEqual(d.values(), [])
-        d = CuteSleekValueDictionary(null_callback, {1:2})
+        d = CuteSleekValueDictionary(null_callback, {1: 2})
         self.assertEqual(d.values(), [2])
 
         self.assertRaises(TypeError, d.values, None)
 
+        
     def test_items(self):
         d = CuteSleekValueDictionary(null_callback)
         self.assertEqual(d.items(), [])
