@@ -85,37 +85,66 @@ def get_object(address, root=None, namespace={}):
     # todo: should know what exception this will raise if the address is bad /
     # object doesn't exist.
     # todo: probably allow `namespace` argument
-    if root:        
+    
+    ###########################################################################
+    # Before we start, we do some analysis of `root` and `namespace`:
+    
+    # We are letting the user inputs (base)strings for `root` and `namespace`,
+    # so if he did that, we'll get the actual objects.
+    
+    if root:
+        # First for `root`:
         if isinstance(root, basestring):
             root = get_object(root)
         root_short_name = root.__name__.rsplit('.', 1)[-1]
+        
+    if namespace:
+        # And then for `namespace`:
+        if isinstance(namespace, basestring):
+            namespace = get_object(namespace)
+        
+        # For the namespace, the user can give either a parent object
+        # (`getattr(namespace, address) is obj`) or a dict-like namespace
+        # (`namespace[address] is obj`).
+        #
+        # Here we extract the actual namespace and call it `namespace_dict`:
+            
+        if hasattr(namespace, '__getitem__') and hasattr(namespace, 'keys'):
+            parent_object = None
+            namespace_dict = namespace
+            
+        else:
+            parent_object = namespace
+            namespace_dict = vars(parent_object)
+            
+        
+    # Finished analyzing `root` and `namespace`.
+    ###########################################################################
     
-    if not _parent_object:
-        # We were called directly by the user.
+    if not namespace:
         
         if '.' not in address:
             # We were called directly by the user with an address with no dots.
             # There are limited options on what it can be: Either the root, or a
             # builtin, or a module. We try all three:
             if root and (address == root_short_name):
-                return root
+                return root # Option 1: The root.
             else:
                 try:
-                    return eval(address)
+                    return eval(address) # Option 2: A builtin.
                 except NameError:
-                    return __import__(address)
+                    return __import__(address) # Option 3: A module.
                 
         else: # '.' in address
             first_object_address, second_object_address = \
                 address.rsplit('.', 1)
-            first_object = get_object(first_object_address,
-                                                 root=root)
+            first_object = get_object(first_object_address, root=root)
             second_object = get_object(second_object_address,
-                                                  _parent_object=first_object)
+                                       namespace=first_object)
             return second_object
 
         
-    else: # _parent_object is not none
+    else: # We got a namespace
         
         if '.' not in address:
             
