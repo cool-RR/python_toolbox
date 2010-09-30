@@ -1,5 +1,8 @@
 import gc
 import weakref
+
+from garlicsim.general_misc import sequence_tools
+
 from garlicsim.general_misc.sleek_refs import (SleekCallArgs,
                                                SleekRef,
                                                CuteSleekValueDict)
@@ -83,19 +86,32 @@ def test_one_by_one():
         
 def test_none():
     # Test that CSVD can handle a value of None
+
+    d = {
+        1: None,
+        2: None,
+        (1,): None,
+        (1, (1,)): None,
+        sum: None,
+        None: None
+    }
+    
     csvd = CuteSleekValueDict(
         counter,
-        {
-            1: None,
-            2: None,
-            (1,): None,
-            (1, (1,)): None,
-            sum: None,
-            None: 3
-        }
+        d
     )
     
-    list(csvd.items())
+
+    assert sequence_tools.are_equal_regardless_of_order(csvd.keys(),
+                                                        d.keys())
+    
+    assert sequence_tools.are_equal_regardless_of_order(csvd.values(),
+                                                        d.values())
+    
+    assert sequence_tools.are_equal_regardless_of_order(csvd.items(),
+                                                        d.items())
+    
+
     for key in csvd.iterkeys():
         assert key in csvd
         assert csvd[key] is None
