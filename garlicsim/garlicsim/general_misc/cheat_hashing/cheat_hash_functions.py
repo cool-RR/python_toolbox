@@ -1,4 +1,8 @@
 
+# todo: there are some recommended hash implementations in `_abcoll`, maybe
+# they'll help
+
+
 def cheat_hash_object(thing):
     try:
         return hash(thing)

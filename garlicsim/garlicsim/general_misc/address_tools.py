@@ -10,7 +10,7 @@ from garlicsim.general_misc import caching
 # `__all__` (if one exists)
 
 
-def _tail_shorten(address, root=None):
+def _tail_shorten(address, root=None, namespace={}):
     '''
     '''
     if '.' not in address:
@@ -18,8 +18,8 @@ def _tail_shorten(address, root=None):
         return address
     
     parent_address, child_name = address.rsplit('.', 1)
-    parent = get_object(parent_address, root=root)
-    child = get_object(address, root=root)
+    parent = get_object(parent_address, root=root, namespace=namespace)
+    child = get_object(address, root=root, namespace=namespace)
     
     current_parent_address = parent_address
     
@@ -36,7 +36,7 @@ def _tail_shorten(address, root=None):
             break
         
         current_parent = get_object(current_parent_address,
-                                               root=root)
+                                    root=root, namespace=namespace)
         
         candidate_child = getattr(current_parent, child_name, None)
         
@@ -48,8 +48,9 @@ def _tail_shorten(address, root=None):
     return '.'.join((last_successful_parent_address, child_name))
 
 
-def shorten_address(address, root=None):
+def shorten_address(address, root=None, namespace={}):
     '''
+    
     Note: does shortening by dropping intermediate nodes, doesn't do
     root-shortening
     '''
@@ -70,7 +71,7 @@ def shorten_address(address, root=None):
             # everything. So I change `i` to `None`.
             
         head = '.'.join(address_parts[:i])
-        new_head = _tail_shorten(head, root=root)
+        new_head = _tail_shorten(head, root=root, namespace=namespace)
         if new_head != head:
             # Something was shortened!
             new_address = new_address.replace(head, new_head, 1)
@@ -79,7 +80,7 @@ def shorten_address(address, root=None):
     return new_address
 
 
-def get_object(address, root=None, _parent_object=None):
+def get_object(address, root=None, namespace={}):
 
     # todo: should know what exception this will raise if the address is bad /
     # object doesn't exist.
@@ -170,9 +171,20 @@ def get_address(obj, shorten=False, root=None, namespace={}):
         
         if isinstance(root, basestring):
             root = get_object(root)
-        
-        root_short_name = root.__name__.rsplit('.', 1)[-1]
             
+        if isinstance(namespace, basestring):
+            namespace = get_object(namespace)
+
+            
+        if hasattr(namespace, '__getitem__') and hasattr(namespace, 'keys'):
+            namespace_dict = namespace
+        else:
+            namespace_dict = vars(namespace)
+        
+        namespace_dict_keys = namespace_dict_values.keys()
+        namespace_dict_values = namespace_dict_values.values()
+
+        
         address_parts = address.split('.')
         heads = ['.'.join(address_parts[:i]) for i in
                  range(1, len(address_parts) + 1)]
@@ -180,20 +192,28 @@ def get_address(obj, shorten=False, root=None, namespace={}):
         # 'garlicsim.misc.step_copy', 'garlicsim.misc.step_copy.StepCopy']
         
         for head in reversed(heads):
-            if get_object(head) is root:
+            object_ = get_object(head)
+            if object_ is root:
+                root_short_name = root.__name__.rsplit('.', 1)[-1]
                 address = address.replace(head, root_short_name, 1)
                 break
+            elif object_ in namespace_dict_values:
+                fitting_keys = [key for key in namespace_dict_keys if 
+                                namespace_dict[key] is object_]
+                key = min(fitting_keys, len)
+                address = address.replace(head, key, 1)
                 
     if shorten:
-        address = shorten_address(address, root=root)
+        address = shorten_address(address, root=root, namespace=namespace)
     
     return address
 
 
-def resolve(address, root=None):
+def resolve(address, root=None, namespace={}):
     # sktechy for now    
     # tododoc: create reverse. repr won't do because it puts <> around classes
     # and stuff
+    # tododoc: make sure namespace works here
     
     # Resolving '' to None:
     if address == '':
