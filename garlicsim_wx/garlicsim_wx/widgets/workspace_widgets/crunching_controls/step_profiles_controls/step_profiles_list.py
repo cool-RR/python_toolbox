@@ -48,7 +48,7 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
         self.step_profiles_to_items = weakref.WeakKeyDictionary()
         
         self.AddColumn('', width=50)
-        self.AddColumn('', width=150)
+        self.AddColumn('', width=300)
         self.SetMainColumn(0)
         self.root_item = self.AddRoot('')
         
@@ -60,6 +60,9 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
         
         self.Bind(wx.EVT_TREE_ITEM_MENU, self.on_tree_item_menu)
         self.Bind(wx.EVT_CONTEXT_MENU, self.on_context_menu)
+        
+        
+        self.Bind(wx.EVT_TREE_BEGIN_DRAG, self.on_tree_begin_drag)
         
         
         self.gui_project.step_profiles_set_modified_emitter.add_output(
@@ -163,3 +166,9 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
         self.delete_step_profile(self.get_selected_step_profile())
     
         
+    def on_tree_begin_drag(self, event):
+        event.Allow()
+        
+        
+    def on_tree_end_drag(self, event):
+        event.Allow()

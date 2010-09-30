@@ -283,6 +283,7 @@ class StepProfileDialog(CuteDialog):
 
         step_function = self.step_function
         
+        arg_spec = inspect.getargspec(step_function)
         
         step_profile = StepProfile.create_from_dld_format(
             
@@ -290,7 +291,8 @@ class StepProfileDialog(CuteDialog):
             
             dict((key, address_tools.resolve(value_string)) for 
                  (key, value_string) in self.\
-                 step_functions_to_argument_dicts[step_function].iteritems()),
+                 step_functions_to_argument_dicts[step_function].iteritems()
+                 if key in arg_spec.args),
             
             [address_tools.resolve(value_string) for value_string in 
              self.step_functions_to_star_args[step_function]],
