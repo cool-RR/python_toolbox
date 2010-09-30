@@ -39,7 +39,15 @@ def test_get_address():
     
     result = get_address(email.encoders, root=email.encoders)
     assert result == 'encoders'
-    assert get_object(result, root=email.encoders) is \
+    assert get_object(result, root=email.encoders) is email.encoders
+    
+    result = get_address(email.encoders, namespace=email)
+    assert result == 'encoders'
+    assert get_object(result, namespace=email) is email.encoders
+    
+    result = get_address(email.encoders, root=email.encoders, namespace=email)
+    assert result == 'encoders'
+    assert get_object(result, root=email.encoders, namespace=email) is \
            email.encoders
     
     
@@ -49,18 +57,42 @@ def test_get_address():
     import garlicsim
     result = get_address(garlicsim.data_structures.state.State)
     assert result == 'garlicsim.data_structures.state.State'
-    assert get_object(result) is \
-           garlicsim.data_structures.state.State
+    assert get_object(result) is garlicsim.data_structures.state.State
     
     result = get_address(garlicsim.data_structures.state.State, shorten=True)
     assert result == 'garlicsim.data_structures.State'
-    assert get_object(result) is \
-           garlicsim.data_structures.state.State
+    assert get_object(result) is garlicsim.data_structures.state.State
     
     result = get_address(garlicsim.Project, shorten=True)
     assert result == 'garlicsim.Project'
-    assert get_object(result) is \
-           garlicsim.Project
+    assert get_object(result) is garlicsim.Project
+    
+    # When a root or namespace is given, it's top priority to use it, even if it
+    # prevents shorterning and results in an overall longer address:
+    result = get_address(garlicsim.Project, shorten=True,
+                         root=garlicsim.asynchronous_crunching)
+    assert result == 'asynchronous_crunching.Project'
+    assert get_object(result) is garlicsim.Project
+    
+    result = get_address(garlicsim.Project, shorten=True,
+                         namespace=garlicsim)
+    assert result == 'asynchronous_crunching.Project'
+    assert get_object(result) is garlicsim.Project
+    
+    result = get_address(garlicsim.Project, shorten=True,
+                         namespace=garlicsim.__dict__)
+    assert result == 'asynchronous_crunching.Project'
+    assert get_object(result) is garlicsim.Project
+    
+    result = get_address(garlicsim.Project, shorten=True,
+                         namespace='garlicsim')
+    assert result == 'asynchronous_crunching.Project'
+    assert get_object(result) is garlicsim.Project
+    
+    result = get_address(garlicsim.Project, shorten=True,
+                         namespace='garlicsim.__dict__')
+    assert result == 'asynchronous_crunching.Project'
+    assert get_object(result) is garlicsim.Project
     
     result = get_address(garlicsim.data_structures.state.State, root=garlicsim)
     assert result == 'garlicsim.data_structures.state.State'
@@ -82,6 +114,10 @@ def test_get_address():
     assert result == 'life.life.State.step'
     
     result = get_address(garlicsim_lib.simpacks.life.life.State.step,
+                         namespace=garlicsim_lib.simpacks)
+    assert result == 'life.life.State.step'
+    
+    result = get_address(garlicsim_lib.simpacks.life.life.State.step,
                          root=garlicsim_lib.simpacks.life, shorten=True)
     assert result == 'life.State.step'
     
@@ -96,10 +132,19 @@ def test_get_address():
     result = get_address(z, root=w)
     assert result == 'w.x.y.z'
     
-    result = get_address(z, root=w, shorten=True)
+    result = get_address(z, shorten=True, root=w)
     assert result == 'w.y.z'
     
-    result = get_address(z, root=w.x, shorten=True)
+    result = get_address(z, shorten=True, root=w)
+    assert result == 'w.y.z'
+    
+    result = get_address(z, shorten=True, root=w, namespace='email')
+    assert result == 'w.y.z'
+    
+    result = get_address(z, shorten=True, root=garlicsim, namespace='w')
+    assert result == 'x.y.z'
+    
+    result = get_address(z, shorten=True, root=w.x)
     assert result == 'x.y.z'
     
     

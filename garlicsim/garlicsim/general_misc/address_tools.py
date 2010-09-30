@@ -137,11 +137,11 @@ def get_object(address, root=None, _parent_object=None):
                 address.rsplit('.', 1)
             first_object = get_object(first_object_address, _parent_object)
             second_object = get_object(second_object_address,
-                                                  _parent_object=first_object)
+                                       _parent_object=first_object)
             return second_object
     
 
-def get_address(obj, root=None, shorten=None, namespace={}):
+def get_address(obj, shorten=False, root=None, namespace={}):
     
     # todo: Support classes inside classes. Currently doesn't work because
     # Python doesn't tell us inside in which class an inner class was defined.

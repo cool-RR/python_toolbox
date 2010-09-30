@@ -192,7 +192,7 @@ class GuiProject(object):
             'garlicsim_wx': garlicsim_wx,
             'wx': wx,
             'simpack': self.simpack,
-            self.simpack.__name__.rsplit('.')[-1]: self.simpack,
+            self.simpack.__name__.rsplit('.', 1)[-1]: self.simpack,
         }
         
         garlicsim_lib = import_tools.import_if_exists('garlicsim_lib',
