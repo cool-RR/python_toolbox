@@ -167,13 +167,15 @@ class CuteSleekValueDictionary(UserDict.UserDict):
             return wr()
 
         
-    def update(self, dict=None, **kwargs):
-        d = self.data
-        if dict is not None:
-            if not hasattr(dict, "items"):
-                dict = type({})(dict)
-            for key, o in dict.items():
+    def update(self, *other_dicts, **kwargs):
+        d = self.data        
+        if other_dicts:
+            (other_dict,) = other_dicts        
+            if not hasattr(other_dict, "items"):
+                other_dict = type({})(other_dict)
+            for key, o in other_dict.items():
                 d[key] = KeyedSleekRef(o, self._remove, key)
+                
         if len(kwargs):
             self.update(kwargs)
 
@@ -198,6 +200,14 @@ class CuteSleekValueDictionary(UserDict.UserDict):
             if o is not None:
                 L.append(o)
         return L
+    
+    
+    @classmethod
+    def fromkeys(cls, iterable, value=None, callback=(lambda: None)):
+        d = cls(callback)
+        for key in iterable:
+            d[key] = value
+        return d
 
 
 class KeyedSleekRef(SleekRef):

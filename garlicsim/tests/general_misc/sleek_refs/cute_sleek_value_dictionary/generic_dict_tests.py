@@ -245,27 +245,70 @@ class GenericDictTest(unittest2.TestCase):
             [(1, 2, 3)]
         )
 
+        
     def test_fromkeys(self):
-        self.assertEqual(dict.fromkeys('abc'), CuteSleekValueDictionary(null_callback, {'a':None, 'b':None, 'c':None}))
+        self.assertEqual(
+            CuteSleekValueDictionary.fromkeys('abc'),
+            CuteSleekValueDictionary(null_callback,
+                                     {'a': None, 'b': None, 'c': None}
+                                     )
+        )
+        
         d = CuteSleekValueDictionary(null_callback)
         self.assertIsNot(d.fromkeys('abc'), d)
-        self.assertEqual(d.fromkeys('abc'), CuteSleekValueDictionary(null_callback, {'a':None, 'b':None, 'c':None}))
-        self.assertEqual(d.fromkeys((4,5),0), CuteSleekValueDictionary(null_callback, {4:0, 5:0}))
-        self.assertEqual(d.fromkeys([]), CuteSleekValueDictionary(null_callback))
+        self.assertEqual(
+            d.fromkeys('abc'),
+            CuteSleekValueDictionary(null_callback,
+                                     {'a': None, 'b': None, 'c': None})
+        )
+        self.assertEqual(
+            d.fromkeys((4, 5), 0),
+            CuteSleekValueDictionary(null_callback, {4: 0, 5: 0})
+        )
+        self.assertEqual(
+            d.fromkeys([]),
+            CuteSleekValueDictionary(null_callback)
+        )
+        
         def g():
             yield 1
-        self.assertEqual(d.fromkeys(g()), CuteSleekValueDictionary(null_callback, {1:None}))
-        self.assertRaises(TypeError, CuteSleekValueDictionary(null_callback).fromkeys, 3)
-        class dictlike(dict): pass
-        self.assertEqual(dictlike.fromkeys('a'), CuteSleekValueDictionary(null_callback, {'a':None}))
-        self.assertEqual(dictlike().fromkeys('a'), CuteSleekValueDictionary(null_callback, {'a':None}))
-        self.assertIsInstance(dictlike.fromkeys('a'), dictlike)
-        self.assertIsInstance(dictlike().fromkeys('a'), dictlike)
-        class mydict(dict):
+        self.assertEqual(
+            d.fromkeys(g()),
+            CuteSleekValueDictionary(null_callback, {1: None})
+        )
+        
+        self.assertRaises(
+            TypeError,
+            CuteSleekValueDictionary(null_callback).fromkeys,
+            3
+        )
+
+        class CSVDoid(CuteSleekValueDictionary): pass
+        self.assertEqual(
+            CSVDoid.fromkeys('a'),
+            CuteSleekValueDictionary(null_callback, {'a': None})
+        )
+        self.assertEqual(
+            CSVDoid().fromkeys('a'),
+            CuteSleekValueDictionary(null_callback, {'a': None})
+        )
+        self.assertIsInstance(
+            CSVDoid.fromkeys('a'),
+            CSVDoid
+        )
+        self.assertIsInstance(
+            CSVDoid().fromkeys('a'),
+            CSVDoid
+        )
+
+        class myCSVD(CuteSleekValueDictionary):
             def __new__(cls):
                 return UserDict.UserDict()
-        ud = mydict.fromkeys('ab')
-        self.assertEqual(ud, CuteSleekValueDictionary(null_callback, {'a':None, 'b':None}))
+        ud = myCSVD.fromkeys('ab')
+        self.assertEqual(
+            ud,
+            CuteSleekValueDictionary(null_callback, {'a': None, 'b': None})
+        )
         self.assertIsInstance(ud, UserDict.UserDict)
         self.assertRaises(TypeError, dict.fromkeys)
 
