@@ -66,7 +66,11 @@ class WeakKeyDefaultDict(UserDict.UserDict, object): #todo: needs testing
         try:
             return self.data[ref(key)]
         except KeyError:
-            return self.__missing__(key)
+            missing_method = getattr(type(self), '__missing__', None)
+            if missing_method:
+                return missing_method(key)
+            else:
+                raise
 
     def __setitem__(self, key, value):
         self.data[ref(key, self._remove)] = value

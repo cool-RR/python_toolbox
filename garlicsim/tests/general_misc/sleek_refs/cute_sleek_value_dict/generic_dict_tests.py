@@ -318,7 +318,7 @@ class GenericDictTest(unittest2.TestCase):
         class Exc(Exception): pass
 
         class badCSVD1(CuteSleekValueDict):
-            def __init__(self):
+            def __init__(self, callback):
                 raise Exc()
 
         self.assertRaises(Exc, badCSVD1.fromkeys, [1])
@@ -515,7 +515,7 @@ class GenericDictTest(unittest2.TestCase):
         class D(CuteSleekValueDict):
             def __missing__(self, key):
                 return 42
-        d = D(CuteSleekValueDict(null_callback, {1: 2, 3: 4}))
+        d = D(null_callback, CuteSleekValueDict(null_callback, {1: 2, 3: 4}))
         self.assertEqual(d[1], 2)
         self.assertEqual(d[3], 4)
         self.assertNotIn(2, d)
@@ -525,32 +525,32 @@ class GenericDictTest(unittest2.TestCase):
         class E(CuteSleekValueDict):
             def __missing__(self, key):
                 raise RuntimeError(key)
-        e = E()
+        e = E(null_callback)
         with self.assertRaises(RuntimeError) as c:
             e[42]
         self.assertEqual(c.exception.args, (42,))
 
-        #class F(dict):
-            #def __init__(self):
-                ## An instance variable __missing__ should have no effect
-                #self.__missing__ = lambda key: None
-        #f = F()
-        #with self.assertRaises(KeyError) as c:
-            #f[42]
+        class F(dict):
+            def __init__(self):
+                # An instance variable __missing__ should have no effect
+                self.__missing__ = lambda key: None
+        f = F()
+        with self.assertRaises(KeyError) as c:
+            f[42]
         #self.assertEqual(c.exception.args, (42,))
 
-        #class G(dict):
-            #pass
-        #g = G()
-        #with self.assertRaises(KeyError) as c:
-            #g[42]
+        class G(dict):
+            pass
+        g = G()
+        with self.assertRaises(KeyError) as c:
+            g[42]
         #self.assertEqual(c.exception.args, (42,))
 
-    #def test_tuple_keyerror(self):
-        ## SF #1576657
-        #d = CuteSleekValueDict(null_callback)
-        #with self.assertRaises(KeyError) as c:
-            #d[(1,)]
+    def test_tuple_keyerror(self):
+        # SF #1576657
+        d = CuteSleekValueDict(null_callback)
+        with self.assertRaises(KeyError) as c:
+            d[(1,)]
         #self.assertEqual(c.exception.args, ((1,),))
 
         

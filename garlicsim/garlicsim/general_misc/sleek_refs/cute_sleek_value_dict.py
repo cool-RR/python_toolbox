@@ -9,7 +9,7 @@ from .sleek_ref import SleekRef
 __all__ = ['CuteSleekValueDict']
 
 
-class CuteSleekValueDict(UserDict.UserDict):
+class CuteSleekValueDict(UserDict.UserDict, object):
     """Mapping class that references values weakly.
 
     Entries in the dictionary will be discarded when no strong
@@ -33,11 +33,21 @@ class CuteSleekValueDict(UserDict.UserDict):
 
         
     def __getitem__(self, key):
-        o = self.data[key]()
-        if o is None:
-            raise KeyError, key
-        else:
-            return o
+        try:            
+            o = self.data[key]()
+            if o is None:
+                raise KeyError, key
+            else:
+                return o
+        except KeyError:
+            missing_method = getattr(type(self), '__missing__', None)
+            if missing_method:
+                return missing_method(self, key)
+            else:
+                raise
+            
+            
+        
 
         
     def __contains__(self, key):
