@@ -3,7 +3,8 @@ from garlicsim.general_misc.address_tools import (get_address,
 
 
 prefix = __name__ + '.'    
-    
+
+
 def test_get_address():
     
     ###########################################################################
@@ -145,7 +146,7 @@ def test_get_address():
     assert result == 'w.y.z'
     
     result = get_address(z, shorten=True, root=garlicsim, namespace=w)
-    assert result == 'x.y.z'
+    assert result == 'y.z'
     
     result = get_address(z, shorten=True, root=w.x)
     assert result == 'x.y.z'
