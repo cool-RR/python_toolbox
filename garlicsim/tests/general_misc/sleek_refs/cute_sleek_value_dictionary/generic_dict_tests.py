@@ -13,6 +13,7 @@ null_callback = lambda: None
 
 
 class GenericDictTest(unittest2.TestCase):
+    
     def test_constructor(self):
         # calling built-in types without argument must return empty
         self.assertEqual(
@@ -24,6 +25,7 @@ class GenericDictTest(unittest2.TestCase):
             CuteSleekValueDictionary(null_callback)
         )
 
+        
     def test_bool(self):
         self.assertIs(
             not CuteSleekValueDictionary(null_callback),
@@ -36,6 +38,7 @@ class GenericDictTest(unittest2.TestCase):
             True
         )
 
+        
     def test_keys(self):
         d = CuteSleekValueDictionary(null_callback)
         self.assertEqual(d.keys(), [])
@@ -46,6 +49,7 @@ class GenericDictTest(unittest2.TestCase):
 
         self.assertRaises(TypeError, d.keys, None)
 
+        
     def test_values(self):
         d = CuteSleekValueDictionary(null_callback)
         self.assertEqual(d.values(), [])
