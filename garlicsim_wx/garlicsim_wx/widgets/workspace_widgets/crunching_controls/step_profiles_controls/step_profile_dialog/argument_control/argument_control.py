@@ -38,6 +38,12 @@ class ArgumentControl(wx.Panel):
     def set_step_function(self, step_function):
         if self.step_function == step_function:
             return
+        
+        if self.step_function is not None:
+            try:
+                self.save()
+            except ResolveFailed:
+                pass
 
         self.step_function = step_function
 
@@ -126,22 +132,23 @@ class ArgumentControl(wx.Panel):
         resolve_failed = None
         
         
-        arg_dict.clear()
-        for arg in self.arg_box.args:
-            name = arg.name
-            value_string = arg.get_value_string() 
-            try:
-                # Not storing, just checking if it'll raise an error:
-                address_tools.resolve(value_string)
-            except Exception:
-                if not resolve_failed:
-                    resolve_failed = ResolveFailed(
-                        "Can't resolve '%s' to a Python "
-                        "object." % value_string,
-                        arg.value_text_ctrl
-                    )
-            else:
-                arg_dict[name] = value_string
+        if self.arg_box:
+            arg_dict.clear()
+            for arg in self.arg_box.args:
+                name = arg.name
+                value_string = arg.get_value_string() 
+                try:
+                    # Not storing, just checking if it'll raise an error:
+                    address_tools.resolve(value_string)
+                except Exception:
+                    if not resolve_failed:
+                        resolve_failed = ResolveFailed(
+                            "Can't resolve '%s' to a Python "
+                            "object." % value_string,
+                            arg.value_text_ctrl
+                        )
+                else:
+                    arg_dict[name] = value_string
         
             
         if self.star_arg_box:

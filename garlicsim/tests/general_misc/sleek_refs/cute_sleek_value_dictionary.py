@@ -80,3 +80,24 @@ def test_cute_sleek_value_dictionary_one_by_one():
         gc.collect()
         assert counter() == count + 1
         
+        
+def test_none():
+    # Test that CSVD can handle a value of None
+    csvd = CuteSleekValueDictionary(
+        counter,
+        {
+            1: None,
+            2: None,
+            (1,): None,
+            (1, (1,)): None,
+            sum: None
+        }
+    )
+    
+    list(csvd.items())
+    for key in csvd.iterkeys():
+        assert key in csvd
+        assert csvd[key] is None
+    
+    
+        

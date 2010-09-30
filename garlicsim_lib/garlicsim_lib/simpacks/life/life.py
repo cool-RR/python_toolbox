@@ -39,7 +39,7 @@ class State(garlicsim.data_structures.State):
         return State.create_root(width, height, fill='random')
                                  
     
-    def step(self, useless=None, krazy=None):
+    def step(self, useless=None, krazy=None, *args):
         old_board = self.board
         new_board = Board(parent=old_board)
         new_state = State()
@@ -56,6 +56,8 @@ class State(garlicsim.data_structures.State):
         while True:
             current_state = current_state.step(krazy=krazy)
             yield current_state
+            
+    def whatever_step(self, **kwargs): pass
     
     
     #@garlicsim.misc.caching.state_cache
