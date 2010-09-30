@@ -72,27 +72,30 @@ def test_get_address():
     result = get_address(garlicsim.Project, shorten=True,
                          root=garlicsim.asynchronous_crunching)
     assert result == 'asynchronous_crunching.Project'
-    assert get_object(result) is garlicsim.Project
+    assert get_object(result, root=garlicsim.asynchronous_crunching) is \
+           garlicsim.Project
     
     result = get_address(garlicsim.Project, shorten=True,
                          namespace=garlicsim)
-    assert result == 'asynchronous_crunching.Project'
-    assert get_object(result) is garlicsim.Project
+    assert result == 'Project'
+    assert get_object(result, namespace=garlicsim) is garlicsim.Project
     
     result = get_address(garlicsim.Project, shorten=True,
                          namespace=garlicsim.__dict__)
-    assert result == 'asynchronous_crunching.Project'
-    assert get_object(result) is garlicsim.Project
+    assert result == 'Project'
+    assert get_object(result, namespace=garlicsim.__dict__) is \
+           garlicsim.Project
     
     result = get_address(garlicsim.Project, shorten=True,
                          namespace='garlicsim')
-    assert result == 'asynchronous_crunching.Project'
-    assert get_object(result) is garlicsim.Project
+    assert result == 'Project'
+    assert get_object(result, namespace='garlicsim') is garlicsim.Project
     
     result = get_address(garlicsim.Project, shorten=True,
                          namespace='garlicsim.__dict__')
-    assert result == 'asynchronous_crunching.Project'
-    assert get_object(result) is garlicsim.Project
+    assert result == 'Project'
+    assert get_object(result, namespace='garlicsim.__dict__') is \
+           garlicsim.Project
     
     result = get_address(garlicsim.data_structures.state.State, root=garlicsim)
     assert result == 'garlicsim.data_structures.state.State'

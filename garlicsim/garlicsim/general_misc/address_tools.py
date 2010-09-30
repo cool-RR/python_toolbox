@@ -3,6 +3,8 @@ import types
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import caching
 
+# tododoc: split to `get_object` and `get_address`
+
 # tododoc: add caching to all functions, after fixing caching with
 # ArgumentsProfile to accept kwargs.
 
@@ -84,7 +86,6 @@ def get_object(address, root=None, namespace={}):
 
     # todo: should know what exception this will raise if the address is bad /
     # object doesn't exist.
-    # todo: probably allow `namespace` argument
     
     ###########################################################################
     # Before we start, we do some analysis of `root` and `namespace`:
@@ -124,7 +125,7 @@ def get_object(address, root=None, namespace={}):
     if not namespace:
         
         if '.' not in address:
-            # We were called directly by the user with an address with no dots.
+            # We were called without a namespace with an address with no dots.
             # There are limited options on what it can be: Either the root, or a
             # builtin, or a module. We try all three:
             if root and (address == root_short_name):
@@ -148,32 +149,48 @@ def get_object(address, root=None, namespace={}):
         
         if '.' not in address:
             
-            if isinstance(_parent_object, types.ModuleType) and \
-               hasattr(_parent_object, '__path__'):
-                                
-                # `_parent_object` is a package. The wanted object may be a
-                # module. Let's try importing it:
+            if parent_object:
                 
-                import_tools.import_if_exists(
-                    '.'.join((_parent_object.__name__, address)),
-                    silent_fail=True
-                )
-                # Not keeping reference, just importing so we could get later
-                
-            return getattr(_parent_object, address)
+                if isinstance(parent_object, types.ModuleType) and \
+                   hasattr(parent_object, '__path__'):
+                                    
+                    # `parent_object` is a package. The wanted object may be a
+                    # module. Let's try importing it:
+                    
+                    import_tools.import_if_exists(
+                        '.'.join((parent_object.__name__, address)),
+                        silent_fail=True
+                    )
+                    # Not keeping reference, just importing so we could get
+                    # later
+            
+            # We know we have a `namespace_dict` to take the object from, and we
+            # might have a `parent_object` we can take the object from by using
+            # `getattr`. We always have a `namespace_dict`, but not always a
+            # `parent_object`.
+            #
+            # We are going to prefer to do `getattr` from `parent_object`, if
+            # one exists, rather than using `namespace_dict`. This is because
+            # some attributes may not be present on an object's `__dict__`, and
+            # we want to be able to catch them:
+            if parent_object:
+                return getattr(parent_object, address)
+            else:
+                return namespace_dict.get(address)
         
         else: # '.' in address
             first_object_address, second_object_address = \
                 address.rsplit('.', 1)
-            first_object = get_object(first_object_address, _parent_object)
+            first_object = get_object(first_object_address,
+                                      namespace=parent_object)
             second_object = get_object(second_object_address,
-                                       _parent_object=first_object)
+                                       namespace=parent_object)
             return second_object
     
 
 def get_address(obj, shorten=False, root=None, namespace={}):
     
-    # todo: Support classes inside classes. Currently doesn't work because
+    # todo: Support classes inside classes. Cursrently doesn't work because
     # Python doesn't tell us inside in which class an inner class was defined.
     # We'll probably have to do some kind of search.
     
@@ -204,14 +221,15 @@ def get_address(obj, shorten=False, root=None, namespace={}):
         if isinstance(namespace, basestring):
             namespace = get_object(namespace)
 
+        if namespace:
+            if hasattr(namespace, '__getitem__') and hasattr(namespace, 'keys'):
+                namespace_dict = namespace
+            else:
+                namespace_dict = vars(namespace)
             
-        if hasattr(namespace, '__getitem__') and hasattr(namespace, 'keys'):
-            namespace_dict = namespace
-        else:
-            namespace_dict = vars(namespace)
-        
-        namespace_dict_keys = namespace_dict_values.keys()
-        namespace_dict_values = namespace_dict_values.values()
+            namespace_dict_keys = namespace_dict.keys()
+            namespace_dict_values = namespace_dict.values()
+            
 
         
         address_parts = address.split('.')
@@ -222,15 +240,17 @@ def get_address(obj, shorten=False, root=None, namespace={}):
         
         for head in reversed(heads):
             object_ = get_object(head)
-            if object_ is root:
-                root_short_name = root.__name__.rsplit('.', 1)[-1]
-                address = address.replace(head, root_short_name, 1)
-                break
-            elif object_ in namespace_dict_values:
-                fitting_keys = [key for key in namespace_dict_keys if 
-                                namespace_dict[key] is object_]
-                key = min(fitting_keys, len)
-                address = address.replace(head, key, 1)
+            if root:
+                if object_ is root:
+                    root_short_name = root.__name__.rsplit('.', 1)[-1]
+                    address = address.replace(head, root_short_name, 1)
+                    break
+            if namespace:
+                if object_ in namespace_dict_values:
+                    fitting_keys = [key for key in namespace_dict_keys if
+                                    namespace_dict[key] is object_]
+                    key = min(fitting_keys, key=len)
+                    address = address.replace(head, key, 1)
                 
     if shorten:
         address = shorten_address(address, root=root, namespace=namespace)
