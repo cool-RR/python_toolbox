@@ -50,6 +50,8 @@ def _tail_shorten(address, root=None):
 
 def shorten_address(address, root=None):
     '''
+    Note: does shortening by dropping intermediate nodes, doesn't do
+    root-shortening
     '''
     if '.' not in address:
         # Nothing to shorten
@@ -139,7 +141,7 @@ def get_object_by_address(address, root=None, _parent_object=None):
             return second_object
     
 
-def get_address(obj, root=None, shorten=None):
+def get_address(obj, root=None, shorten=None, namespace={}):
     
     # todo: Support classes inside classes. Currently doesn't work because
     # Python doesn't tell us inside in which class an inner class was defined.
@@ -147,7 +149,7 @@ def get_address(obj, root=None, shorten=None):
     
     if not (isinstance(obj, types.ModuleType) or hasattr(obj, '__module__')):
         raise Exception("%s is not a module, nor does not have a `__module__` "
-                        "attribute, therefore we can't get it's address." % \
+                        "attribute, therefore we can't get its address." % \
                         obj)
     
     if isinstance(obj, types.ModuleType):
@@ -164,7 +166,7 @@ def get_address(obj, root=None, shorten=None):
         assert get_object_by_address(address) is obj
         
         
-    if root:
+    if root or namespace:
         
         if isinstance(root, basestring):
             root = get_object_by_address(root)
@@ -189,8 +191,9 @@ def get_address(obj, root=None, shorten=None):
 
 
 def resolve(address, root=None):
-    # sktechy for now
-    # tododoc: create reverse
+    # sktechy for now    
+    # tododoc: create reverse. repr won't do because it puts <> around classes
+    # and stuff
     
     # Resolving '' to None:
     if address == '':
