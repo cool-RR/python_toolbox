@@ -2,6 +2,7 @@ import wx
 
 from garlicsim.general_misc.third_party import inspect
 from garlicsim.general_misc import address_tools
+from garlicsim.general_misc import misc_tools
 from garlicsim.misc import exceptions
 from garlicsim_wx.general_misc import wx_tools
 
@@ -122,17 +123,25 @@ class ArgumentControl(wx.Panel):
         star_kwarg_dict = step_profile_dialog.\
                         step_functions_to_star_kwargs[step_function]
         
+        resolve_failed = None
+        
         
         arg_dict.clear()
         for arg in self.arg_box.args:
             name = arg.name
             value_string = arg.get_value_string() 
             try:
-                address_tools.resolve(value_string) # Not saving, just one to catch error
+                # Not storing, just checking if it'll raise an error:
+                address_tools.resolve(value_string)
             except Exception:
-                raise ResolveFailed("Can't resolve '%s' to a Python "
-                                    "object." % value_string, arg)
-            arg_dict[name] = value_string
+                if not resolve_failed:
+                    resolve_failed = ResolveFailed(
+                        "Can't resolve '%s' to a Python "
+                        "object." % value_string,
+                        arg.value_text_ctrl
+                    )
+            else:
+                arg_dict[name] = value_string
         
             
         if self.star_arg_box:
@@ -140,8 +149,42 @@ class ArgumentControl(wx.Panel):
             for star_arg in self.star_arg_box.star_args:
                 value_string = star_arg.get_value_string()
                 try:
+                    # Not storing, just checking if it'll raise an error:
                     address_tools.resolve(value_string)
                 except Exception:
-                    raise ResolveFailed("Can't resolve '%s' to a Python "
-                                        "object." % value_string, star_arg)
-                star_arg_list.append(value_string)
+                    if not resolve_failed:
+                        resolve_failed = ResolveFailed(
+                            "Can't resolve '%s' to a Python "
+                            "object." % value_string,
+                            star_arg.value_text_ctrl
+                        )
+                else:
+                    star_arg_list.append(value_string)
+                
+                    
+        if self.star_kwarg_box:
+            star_kwarg_dict.clear()
+            for star_kwarg in self.star_kwarg_box.star_kwargs:
+                name = star_kwarg.get_name_string()
+                if not misc_tools.is_legal_ascii_variable_name(name):
+                    resolve_failed = ResolveFailed(
+                        "'%s' is not a legal name for a variable." % name,
+                        star_kwarg.name_text_ctrl
+                    )
+                    continue
+                value_string = star_kwarg.get_value_string()
+                try:
+                    # Not storing, just checking if it'll raise an error:
+                    address_tools.resolve(value_string)
+                except Exception:
+                    resolve_failed = ResolveFailed(
+                        "Can't resolve '%s' to a Python "
+                        "object." % value_string,
+                        star_kwarg.value_text_ctrl
+                    )
+                else:
+                    star_kwarg_dict[name] = value_string
+                
+        
+        if resolve_failed:
+            raise resolve_failed
