@@ -48,6 +48,15 @@ class CuteSleekValueDictionary(UserDict.UserDict):
         return o is not None
 
     
+    def __eq__(self, other):
+        if len(self) != len(other):
+            return False
+        for key, value in self.iteritems():
+            if other[key] != value:
+                return False
+        return True
+            
+    
     has_key = __contains__
 
     
@@ -94,10 +103,10 @@ class CuteSleekValueDictionary(UserDict.UserDict):
 
     
     def iteritems(self):
-        for wr in self.data.itervalues():
+        for key, wr in self.data.iteritems():
             value = wr()
             if value is not None:
-                yield wr.key, value
+                yield key, value
 
                 
     def iterkeys(self):

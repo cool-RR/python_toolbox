@@ -143,34 +143,48 @@ class GenericDictTest(unittest2.TestCase):
 
         
     def test_clear(self):
-        d = CuteSleekValueDictionary(null_callback, {1:1, 2:2, 3:3})
+        d = CuteSleekValueDictionary(null_callback, {1: 1, 2: 2, 3: 3})
         d.clear()
         self.assertEqual(d, CuteSleekValueDictionary(null_callback))
 
         self.assertRaises(TypeError, d.clear, None)
 
+        
     def test_update(self):
         d = CuteSleekValueDictionary(null_callback)
-        d.update(CuteSleekValueDictionary(null_callback, {1:100}))
-        d.update(CuteSleekValueDictionary(null_callback, {2:20}))
-        d.update(CuteSleekValueDictionary(null_callback, {1:1, 2:2, 3:3}))
-        self.assertEqual(d, CuteSleekValueDictionary(null_callback, {1:1, 2:2, 3:3}))
+        d.update(CuteSleekValueDictionary(null_callback, {1: 100}))
+        d.update({2: 20})
+        d.update(CuteSleekValueDictionary(null_callback, {1: 1, 2: 2, 3: 3}))
+        self.assertEqual(
+            d,
+            CuteSleekValueDictionary(null_callback, {1: 1, 2: 2, 3: 3})
+        )
 
         d.update()
-        self.assertEqual(d, CuteSleekValueDictionary(null_callback, {1:1, 2:2, 3:3}))
+        self.assertEqual(
+            d,
+            CuteSleekValueDictionary(null_callback, {1: 1, 2: 2, 3: 3})
+        )
 
         self.assertRaises((TypeError, AttributeError), d.update, None)
 
         class SimpleUserDict:
             def __init__(self):
-                self.d = CuteSleekValueDictionary(null_callback, {1:1, 2:2, 3:3})
+                self.d = CuteSleekValueDictionary(
+                    null_callback,
+                    {1: 1, 2: 2, 3: 3}
+                )
             def keys(self):
                 return self.d.keys()
             def __getitem__(self, i):
                 return self.d[i]
+            
         d.clear()
         d.update(SimpleUserDict())
-        self.assertEqual(d, CuteSleekValueDictionary(null_callback, {1:1, 2:2, 3:3}))
+        self.assertEqual(
+            d,
+            CuteSleekValueDictionary(null_callback, {1: 1, 2: 2, 3: 3})
+        )
 
         class Exc(Exception): pass
 
@@ -221,9 +235,15 @@ class GenericDictTest(unittest2.TestCase):
             def next(self):
                 raise Exc()
 
-        self.assertRaises(Exc, CuteSleekValueDictionary(null_callback).update, badseq())
+        self.assertRaises(Exc,
+                          CuteSleekValueDictionary(null_callback).update,
+                          badseq())
 
-        self.assertRaises(ValueError, CuteSleekValueDictionary(null_callback).update, [(1, 2, 3)])
+        self.assertRaises(
+            ValueError,
+            CuteSleekValueDictionary(null_callback).update,
+            [(1, 2, 3)]
+        )
 
     def test_fromkeys(self):
         self.assertEqual(dict.fromkeys('abc'), CuteSleekValueDictionary(null_callback, {'a':None, 'b':None, 'c':None}))
