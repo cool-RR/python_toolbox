@@ -6,10 +6,10 @@ from garlicsim.general_misc.third_party import inspect
 from .sleek_ref import SleekRef
 
 
-__all__ = ['CuteSleekValueDictionary']
+__all__ = ['CuteSleekValueDict']
 
 
-class CuteSleekValueDictionary(UserDict.UserDict):
+class CuteSleekValueDict(UserDict.UserDict):
     """Mapping class that references values weakly.
 
     Entries in the dictionary will be discarded when no strong

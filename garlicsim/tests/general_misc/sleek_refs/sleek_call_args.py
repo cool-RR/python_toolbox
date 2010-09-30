@@ -2,7 +2,7 @@ import gc
 import weakref
 from garlicsim.general_misc.sleek_refs import (SleekCallArgs,
                                                SleekRef,
-                                               CuteSleekValueDictionary)
+                                               CuteSleekValueDict)
 
 from .shared import _is_weakreffable, A, counter
 

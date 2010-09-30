@@ -6,7 +6,7 @@ import weakref
 
 from garlicsim.general_misc.third_party import unittest2
 
-from garlicsim.general_misc.sleek_refs import CuteSleekValueDictionary
+from garlicsim.general_misc.sleek_refs import CuteSleekValueDict
 
 
 null_callback = lambda: None
@@ -17,32 +17,32 @@ class GenericDictTest(unittest2.TestCase):
     def test_constructor(self):
         # calling built-in types without argument must return empty
         self.assertEqual(
-            CuteSleekValueDictionary(null_callback),
-            CuteSleekValueDictionary(null_callback)
+            CuteSleekValueDict(null_callback),
+            CuteSleekValueDict(null_callback)
         )
         self.assertIsNot(
-            CuteSleekValueDictionary(null_callback),
-            CuteSleekValueDictionary(null_callback)
+            CuteSleekValueDict(null_callback),
+            CuteSleekValueDict(null_callback)
         )
 
         
     def test_bool(self):
         self.assertIs(
-            not CuteSleekValueDictionary(null_callback),
+            not CuteSleekValueDict(null_callback),
             True
         )
-        self.assertTrue(CuteSleekValueDictionary(null_callback, {1: 2}))
-        self.assertIs(bool(CuteSleekValueDictionary(null_callback)), False)
+        self.assertTrue(CuteSleekValueDict(null_callback, {1: 2}))
+        self.assertIs(bool(CuteSleekValueDict(null_callback)), False)
         self.assertIs(
-            bool(CuteSleekValueDictionary(null_callback, {1: 2})),
+            bool(CuteSleekValueDict(null_callback, {1: 2})),
             True
         )
 
         
     def test_keys(self):
-        d = CuteSleekValueDictionary(null_callback)
+        d = CuteSleekValueDict(null_callback)
         self.assertEqual(d.keys(), [])
-        d = CuteSleekValueDictionary(null_callback, {'a': 1, 'b': 2})
+        d = CuteSleekValueDict(null_callback, {'a': 1, 'b': 2})
         k = d.keys()
         self.assertTrue(d.has_key('a'))
         self.assertTrue(d.has_key('b'))
@@ -51,28 +51,28 @@ class GenericDictTest(unittest2.TestCase):
 
         
     def test_values(self):
-        d = CuteSleekValueDictionary(null_callback)
+        d = CuteSleekValueDict(null_callback)
         self.assertEqual(d.values(), [])
-        d = CuteSleekValueDictionary(null_callback, {1: 2})
+        d = CuteSleekValueDict(null_callback, {1: 2})
         self.assertEqual(d.values(), [2])
 
         self.assertRaises(TypeError, d.values, None)
 
         
     def test_items(self):
-        d = CuteSleekValueDictionary(null_callback)
+        d = CuteSleekValueDict(null_callback)
         self.assertEqual(d.items(), [])
 
-        d = CuteSleekValueDictionary(null_callback, {1: 2})
+        d = CuteSleekValueDict(null_callback, {1: 2})
         self.assertEqual(d.items(), [(1, 2)])
 
         self.assertRaises(TypeError, d.items, None)
 
         
     def test_has_key(self):
-        d = CuteSleekValueDictionary(null_callback)
+        d = CuteSleekValueDict(null_callback)
         self.assertFalse(d.has_key('a'))
-        d = CuteSleekValueDictionary(null_callback, {'a': 1, 'b': 2})
+        d = CuteSleekValueDict(null_callback, {'a': 1, 'b': 2})
         k = d.keys()
         k.sort()
         self.assertEqual(k, ['a', 'b'])
@@ -81,11 +81,11 @@ class GenericDictTest(unittest2.TestCase):
 
         
     def test_contains(self):
-        d = CuteSleekValueDictionary(null_callback)
+        d = CuteSleekValueDict(null_callback)
         self.assertNotIn('a', d)
         self.assertFalse('a' in d)
         self.assertTrue('a' not in d)
-        d = CuteSleekValueDictionary(null_callback, {'a': 1, 'b': 2})
+        d = CuteSleekValueDict(null_callback, {'a': 1, 'b': 2})
         self.assertIn('a', d)
         self.assertIn('b', d)
         self.assertNotIn('c', d)
@@ -94,14 +94,14 @@ class GenericDictTest(unittest2.TestCase):
 
         
     def test_len(self):
-        d = CuteSleekValueDictionary(null_callback)
+        d = CuteSleekValueDict(null_callback)
         self.assertEqual(len(d), 0)
-        d = CuteSleekValueDictionary(null_callback, {'a': 1, 'b': 2})
+        d = CuteSleekValueDict(null_callback, {'a': 1, 'b': 2})
         self.assertEqual(len(d), 2)
 
         
     def test_getitem(self):
-        d = CuteSleekValueDictionary(null_callback, {'a': 1, 'b': 2})
+        d = CuteSleekValueDict(null_callback, {'a': 1, 'b': 2})
         self.assertEqual(d['a'], 1)
         self.assertEqual(d['b'], 2)
         d['c'] = 3
@@ -111,7 +111,7 @@ class GenericDictTest(unittest2.TestCase):
         del d['b']
         self.assertEqual(
             d,
-            CuteSleekValueDictionary(null_callback, {'a': 4, 'c': 3})
+            CuteSleekValueDict(null_callback, {'a': 4, 'c': 3})
         )
 
         self.assertRaises(TypeError, d.__getitem__)
@@ -122,7 +122,7 @@ class GenericDictTest(unittest2.TestCase):
             def __hash__(self):
                 return 24
 
-        d = CuteSleekValueDictionary(null_callback)
+        d = CuteSleekValueDict(null_callback)
         d[BadEq()] = 42
         self.assertRaises(KeyError, d.__getitem__, 23)
 
@@ -143,34 +143,34 @@ class GenericDictTest(unittest2.TestCase):
 
         
     def test_clear(self):
-        d = CuteSleekValueDictionary(null_callback, {1: 1, 2: 2, 3: 3})
+        d = CuteSleekValueDict(null_callback, {1: 1, 2: 2, 3: 3})
         d.clear()
-        self.assertEqual(d, CuteSleekValueDictionary(null_callback))
+        self.assertEqual(d, CuteSleekValueDict(null_callback))
 
         self.assertRaises(TypeError, d.clear, None)
 
         
     def test_update(self):
-        d = CuteSleekValueDictionary(null_callback)
-        d.update(CuteSleekValueDictionary(null_callback, {1: 100}))
+        d = CuteSleekValueDict(null_callback)
+        d.update(CuteSleekValueDict(null_callback, {1: 100}))
         d.update({2: 20})
-        d.update(CuteSleekValueDictionary(null_callback, {1: 1, 2: 2, 3: 3}))
+        d.update(CuteSleekValueDict(null_callback, {1: 1, 2: 2, 3: 3}))
         self.assertEqual(
             d,
-            CuteSleekValueDictionary(null_callback, {1: 1, 2: 2, 3: 3})
+            CuteSleekValueDict(null_callback, {1: 1, 2: 2, 3: 3})
         )
 
         d.update()
         self.assertEqual(
             d,
-            CuteSleekValueDictionary(null_callback, {1: 1, 2: 2, 3: 3})
+            CuteSleekValueDict(null_callback, {1: 1, 2: 2, 3: 3})
         )
 
         self.assertRaises((TypeError, AttributeError), d.update, None)
 
         class SimpleUserDict:
             def __init__(self):
-                self.d = CuteSleekValueDictionary(
+                self.d = CuteSleekValueDict(
                     null_callback,
                     {1: 1, 2: 2, 3: 3}
                 )
@@ -183,7 +183,7 @@ class GenericDictTest(unittest2.TestCase):
         d.update(SimpleUserDict())
         self.assertEqual(
             d,
-            CuteSleekValueDictionary(null_callback, {1: 1, 2: 2, 3: 3})
+            CuteSleekValueDict(null_callback, {1: 1, 2: 2, 3: 3})
         )
 
         class Exc(Exception): pass
@@ -236,61 +236,61 @@ class GenericDictTest(unittest2.TestCase):
                 raise Exc()
 
         self.assertRaises(Exc,
-                          CuteSleekValueDictionary(null_callback).update,
+                          CuteSleekValueDict(null_callback).update,
                           badseq())
 
         self.assertRaises(
             ValueError,
-            CuteSleekValueDictionary(null_callback).update,
+            CuteSleekValueDict(null_callback).update,
             [(1, 2, 3)]
         )
 
         
     def test_fromkeys(self):
         self.assertEqual(
-            CuteSleekValueDictionary.fromkeys('abc'),
-            CuteSleekValueDictionary(null_callback,
+            CuteSleekValueDict.fromkeys('abc'),
+            CuteSleekValueDict(null_callback,
                                      {'a': None, 'b': None, 'c': None}
                                      )
         )
         
-        d = CuteSleekValueDictionary(null_callback)
+        d = CuteSleekValueDict(null_callback)
         self.assertIsNot(d.fromkeys('abc'), d)
         self.assertEqual(
             d.fromkeys('abc'),
-            CuteSleekValueDictionary(null_callback,
+            CuteSleekValueDict(null_callback,
                                      {'a': None, 'b': None, 'c': None})
         )
         self.assertEqual(
             d.fromkeys((4, 5), 0),
-            CuteSleekValueDictionary(null_callback, {4: 0, 5: 0})
+            CuteSleekValueDict(null_callback, {4: 0, 5: 0})
         )
         self.assertEqual(
             d.fromkeys([]),
-            CuteSleekValueDictionary(null_callback)
+            CuteSleekValueDict(null_callback)
         )
         
         def g():
             yield 1
         self.assertEqual(
             d.fromkeys(g()),
-            CuteSleekValueDictionary(null_callback, {1: None})
+            CuteSleekValueDict(null_callback, {1: None})
         )
         
         self.assertRaises(
             TypeError,
-            CuteSleekValueDictionary(null_callback).fromkeys,
+            CuteSleekValueDict(null_callback).fromkeys,
             3
         )
 
-        class CSVDoid(CuteSleekValueDictionary): pass
+        class CSVDoid(CuteSleekValueDict): pass
         self.assertEqual(
             CSVDoid.fromkeys('a'),
-            CuteSleekValueDictionary(null_callback, {'a': None})
+            CuteSleekValueDict(null_callback, {'a': None})
         )
         self.assertEqual(
             CSVDoid(null_callback).fromkeys('a'),
-            CuteSleekValueDictionary(null_callback, {'a': None})
+            CuteSleekValueDict(null_callback, {'a': None})
         )
         self.assertIsInstance(
             CSVDoid.fromkeys('a'),
@@ -301,23 +301,23 @@ class GenericDictTest(unittest2.TestCase):
             CSVDoid
         )
 
-        class myCSVD(CuteSleekValueDictionary):
+        class myCSVD(CuteSleekValueDict):
             def __new__(cls):
                 return UserDict.UserDict()
         ud = myCSVD.fromkeys('ab')
         self.assertEqual(
             ud,
-            CuteSleekValueDictionary(null_callback, {'a': None, 'b': None})
+            CuteSleekValueDict(null_callback, {'a': None, 'b': None})
         )
         self.assertIsInstance(
             ud,            
             UserDict.UserDict
         )
-        self.assertRaises(TypeError, CuteSleekValueDictionary.fromkeys)
+        self.assertRaises(TypeError, CuteSleekValueDict.fromkeys)
 
         class Exc(Exception): pass
 
-        class badCSVD1(CuteSleekValueDictionary):
+        class badCSVD1(CuteSleekValueDict):
             def __init__(self):
                 raise Exc()
 
@@ -329,7 +329,7 @@ class GenericDictTest(unittest2.TestCase):
             def next(self):
                 raise Exc()
 
-        self.assertRaises(Exc, CuteSleekValueDictionary.fromkeys, BadSeq())
+        self.assertRaises(Exc, CuteSleekValueDict.fromkeys, BadSeq())
 
         class badCSVD2(dict):
             def __setitem__(self, key, value):
@@ -338,30 +338,30 @@ class GenericDictTest(unittest2.TestCase):
         self.assertRaises(Exc, badCSVD2.fromkeys, [1])
 
         # test fast path for dictionary inputs
-        d = CuteSleekValueDictionary(null_callback, zip(range(6), range(6)))
+        d = CuteSleekValueDict(null_callback, zip(range(6), range(6)))
         self.assertEqual(
-            CuteSleekValueDictionary.fromkeys(d, 0),
-            CuteSleekValueDictionary(null_callback, zip(range(6), [0]*6)))
+            CuteSleekValueDict.fromkeys(d, 0),
+            CuteSleekValueDict(null_callback, zip(range(6), [0]*6)))
 
         
     def test_copy(self):
-        d = CuteSleekValueDictionary(null_callback, {1: 1, 2: 2, 3: 3})
+        d = CuteSleekValueDict(null_callback, {1: 1, 2: 2, 3: 3})
         self.assertEqual(
             d.copy(),
-            CuteSleekValueDictionary(null_callback, {1: 1, 2: 2, 3: 3})
+            CuteSleekValueDict(null_callback, {1: 1, 2: 2, 3: 3})
         )
         self.assertEqual(
-            CuteSleekValueDictionary(null_callback).copy(),
-            CuteSleekValueDictionary(null_callback)
+            CuteSleekValueDict(null_callback).copy(),
+            CuteSleekValueDict(null_callback)
         )
         self.assertRaises(TypeError, d.copy, None)
 
         
     def test_get(self):
-        d = CuteSleekValueDictionary(null_callback)
+        d = CuteSleekValueDict(null_callback)
         self.assertIs(d.get('c'), None)
         self.assertEqual(d.get('c', 3), 3)
-        d = CuteSleekValueDictionary(null_callback, {'a': 1, 'b': 2})
+        d = CuteSleekValueDict(null_callback, {'a': 1, 'b': 2})
         self.assertIs(d.get('c'), None)
         self.assertEqual(d.get('c', 3), 3)
         self.assertEqual(d.get('a'), 1)
@@ -370,7 +370,7 @@ class GenericDictTest(unittest2.TestCase):
         self.assertRaises(TypeError, d.get, None, None, None)
 
     def test_setdefault(self):
-        d = CuteSleekValueDictionary(null_callback)
+        d = CuteSleekValueDict(null_callback)
         self.assertIs(d.setdefault('key0'), None)
         d.setdefault('key0', [])
         self.assertIs(d.setdefault('key0'), None)
@@ -402,8 +402,8 @@ class GenericDictTest(unittest2.TestCase):
             # +1: b is a.copy()
             for log2size in range(12):
                 size = 2**log2size
-                a = CuteSleekValueDictionary(null_callback)
-                b = CuteSleekValueDictionary(null_callback)
+                a = CuteSleekValueDict(null_callback)
+                b = CuteSleekValueDict(null_callback)
                 for i in range(size):
                     a[repr(i)] = i
                     if copymode < 0:
@@ -419,13 +419,13 @@ class GenericDictTest(unittest2.TestCase):
                 self.assertFalse(a)
                 self.assertFalse(b)
 
-        d = CuteSleekValueDictionary(null_callback)
+        d = CuteSleekValueDict(null_callback)
         self.assertRaises(KeyError, d.popitem)
 
         
     def test_pop(self):
         # Tests for pop with specified key
-        d = CuteSleekValueDictionary(null_callback)
+        d = CuteSleekValueDict(null_callback)
         k, v = 'abc', 'def'
         d[k] = v
         self.assertRaises(KeyError, d.pop, 'ghi')
@@ -439,7 +439,7 @@ class GenericDictTest(unittest2.TestCase):
         # (for 64-bit archs).  See SF bug #689659.
         x = 4503599627370496L
         y = 4503599627370496
-        h = CuteSleekValueDictionary(
+        h = CuteSleekValueDict(
             null_callback,
             {x: 'anything', y: 'something else'}
         )
@@ -469,7 +469,7 @@ class GenericDictTest(unittest2.TestCase):
         
     def test_mutatingiteration(self):
         # changing dict size during iteration
-        d = CuteSleekValueDictionary(null_callback)
+        d = CuteSleekValueDict(null_callback)
         d[1] = 1
         with self.assertRaises(RuntimeError):
             for i in d:
@@ -478,12 +478,12 @@ class GenericDictTest(unittest2.TestCase):
                 
     def test_le(self):
         self.assertFalse(
-            CuteSleekValueDictionary(null_callback) < \
-            CuteSleekValueDictionary(null_callback)
+            CuteSleekValueDict(null_callback) < \
+            CuteSleekValueDict(null_callback)
         )
         self.assertFalse(
-            CuteSleekValueDictionary(null_callback, {1: 2}) < \
-            CuteSleekValueDictionary(null_callback, {1L: 2L})
+            CuteSleekValueDict(null_callback, {1: 2}) < \
+            CuteSleekValueDict(null_callback, {1L: 2L})
         )
 
         class Exc(Exception): pass
@@ -494,8 +494,8 @@ class GenericDictTest(unittest2.TestCase):
             def __hash__(self):
                 return 42
 
-        d1 = CuteSleekValueDictionary(null_callback, {BadCmp(): 1})
-        d2 = CuteSleekValueDictionary(null_callback, {1: 1})
+        d1 = CuteSleekValueDict(null_callback, {BadCmp(): 1})
+        d2 = CuteSleekValueDict(null_callback, {1: 1})
 
         with self.assertRaises(Exc):
             d1 < d2
@@ -503,26 +503,26 @@ class GenericDictTest(unittest2.TestCase):
             
     def test_missing(self):
         # Make sure dict doesn't have a __missing__ method
-        self.assertFalse(hasattr(CuteSleekValueDictionary, "__missing__"))
+        self.assertFalse(hasattr(CuteSleekValueDict, "__missing__"))
         self.assertFalse(
-            hasattr(CuteSleekValueDictionary(null_callback), "__missing__")
+            hasattr(CuteSleekValueDict(null_callback), "__missing__")
         )
         # Test several cases:
         # (D) subclass defines __missing__ method returning a value
         # (E) subclass defines __missing__ method raising RuntimeError
         # (F) subclass sets __missing__ instance variable (no effect)
         # (G) subclass doesn't define __missing__ at a all
-        class D(CuteSleekValueDictionary):
+        class D(CuteSleekValueDict):
             def __missing__(self, key):
                 return 42
-        d = D(CuteSleekValueDictionary(null_callback, {1: 2, 3: 4}))
+        d = D(CuteSleekValueDict(null_callback, {1: 2, 3: 4}))
         self.assertEqual(d[1], 2)
         self.assertEqual(d[3], 4)
         self.assertNotIn(2, d)
         self.assertNotIn(2, d.keys())
         self.assertEqual(d[2], 42)
 
-        class E(CuteSleekValueDictionary):
+        class E(CuteSleekValueDict):
             def __missing__(self, key):
                 raise RuntimeError(key)
         e = E()
@@ -548,7 +548,7 @@ class GenericDictTest(unittest2.TestCase):
 
     #def test_tuple_keyerror(self):
         ## SF #1576657
-        #d = CuteSleekValueDictionary(null_callback)
+        #d = CuteSleekValueDict(null_callback)
         #with self.assertRaises(KeyError) as c:
             #d[(1,)]
         #self.assertEqual(c.exception.args, ((1,),))
@@ -568,11 +568,11 @@ class GenericDictTest(unittest2.TestCase):
                     raise CustomException
                 return other
 
-        d = CuteSleekValueDictionary(null_callback)
+        d = CuteSleekValueDict(null_callback)
         x1 = BadDictKey()
         x2 = BadDictKey()
         d[x1] = 1
-        locals()['CuteSleekValueDictionary'] = CuteSleekValueDictionary
+        locals()['CuteSleekValueDict'] = CuteSleekValueDict
         locals()['null_callback'] = null_callback
         for stmt in ['d[x2] = 2',
                      'z = d[x2]',
@@ -581,7 +581,7 @@ class GenericDictTest(unittest2.TestCase):
                      'd.get(x2)',
                      'd.setdefault(x2, 42)',
                      'd.pop(x2)',
-                     'd.update(CuteSleekValueDictionary(null_callback, {x2: 2}))']:
+                     'd.update(CuteSleekValueDict(null_callback, {x2: 2}))']:
             with self.assertRaises(CustomException):
                 exec stmt in locals()
 
@@ -594,7 +594,7 @@ class GenericDictTest(unittest2.TestCase):
         # exactly the right order, and I can't think of a randomized approach
         # that would be *likely* to hit a failing case in reasonable time.
 
-        d = CuteSleekValueDictionary(null_callback)
+        d = CuteSleekValueDict(null_callback)
         for i in range(5):
             d[i] = i
         for i in range(5):
@@ -614,7 +614,7 @@ class GenericDictTest(unittest2.TestCase):
                 if resizing:
                     d.clear()
                 return False
-        d = CuteSleekValueDictionary(null_callback)
+        d = CuteSleekValueDict(null_callback)
         resizing = False
         d[X()] = 1
         d[X()] = 2
@@ -630,25 +630,25 @@ class GenericDictTest(unittest2.TestCase):
         # Bug #3537: if an empty but presized dict with a size larger
         # than 7 was in the freelist, it triggered an assertion failure
         with self.assertRaises(ZeroDivisionError):
-            d = CuteSleekValueDictionary(
+            d = CuteSleekValueDict(
                 null_callback,
                 {'a': 1 // 0, 'b': None, 'c': None, 'd': None, 'e': None,
                  'f': None, 'g': None, 'h': None}
             )
-        d = CuteSleekValueDictionary(null_callback)
+        d = CuteSleekValueDict(null_callback)
 
     
     def test_container_iterator(self):
         # Bug #3680: tp_traverse was not implemented for dictiter objects
         class C(object):
             pass
-        iterators = (CuteSleekValueDictionary.iteritems,
-                     CuteSleekValueDictionary.itervalues,
-                     CuteSleekValueDictionary.iterkeys)
+        iterators = (CuteSleekValueDict.iteritems,
+                     CuteSleekValueDict.itervalues,
+                     CuteSleekValueDict.iterkeys)
         for i in iterators:
             obj = C()
             ref = weakref.ref(obj)
-            container = CuteSleekValueDictionary(null_callback, {obj: 1})
+            container = CuteSleekValueDict(null_callback, {obj: 1})
             obj.x = i(container)
             del obj, container
             gc.collect()

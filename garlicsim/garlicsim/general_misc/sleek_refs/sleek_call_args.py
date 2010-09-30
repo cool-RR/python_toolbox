@@ -2,7 +2,7 @@ from garlicsim.general_misc.third_party import inspect
 from garlicsim.general_misc import cheat_hashing
 
 from .sleek_ref import SleekRef
-from .cute_sleek_value_dictionary import CuteSleekValueDictionary
+from .cute_sleek_value_dict import CuteSleekValueDict
 
 
 __all__ = ['SleekCallArgs']
@@ -35,10 +35,10 @@ class SleekCallArgs(object):
         if star_kwargs_name:            
             star_kwargs = call_args.pop(star_kwargs_name, {})
             if star_kwargs:
-                self.star_kwargs_refs = CuteSleekValueDictionary(self.destroy,
+                self.star_kwargs_refs = CuteSleekValueDict(self.destroy,
                                                                 star_kwargs)
         
-        self.args_refs = CuteSleekValueDictionary(self.destroy, call_args)
+        self.args_refs = CuteSleekValueDict(self.destroy, call_args)
         
         # In the future the `.args`, `.star_args` and `.star_kwargs` attributes
         # may change, so we must record the hash now:
