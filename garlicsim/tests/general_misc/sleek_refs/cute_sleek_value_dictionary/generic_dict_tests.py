@@ -309,16 +309,19 @@ class GenericDictTest(unittest2.TestCase):
             ud,
             CuteSleekValueDictionary(null_callback, {'a': None, 'b': None})
         )
-        self.assertIsInstance(ud, UserDict.UserDict)
-        self.assertRaises(TypeError, dict.fromkeys)
+        self.assertIsInstance(
+            ud,            
+            UserDict.UserDict
+        )
+        self.assertRaises(TypeError, CuteSleekValueDictionary.fromkeys)
 
         class Exc(Exception): pass
 
-        class baddict1(dict):
+        class badCSVD1(CuteSleekValueDictionary):
             def __init__(self):
                 raise Exc()
 
-        self.assertRaises(Exc, baddict1.fromkeys, [1])
+        self.assertRaises(Exc, badCSVD1.fromkeys, [1])
 
         class BadSeq(object):
             def __iter__(self):
@@ -326,24 +329,34 @@ class GenericDictTest(unittest2.TestCase):
             def next(self):
                 raise Exc()
 
-        self.assertRaises(Exc, dict.fromkeys, BadSeq())
+        self.assertRaises(Exc, CuteSleekValueDictionary.fromkeys, BadSeq())
 
-        class baddict2(dict):
+        class badCSVD2(dict):
             def __setitem__(self, key, value):
                 raise Exc()
 
-        self.assertRaises(Exc, baddict2.fromkeys, [1])
+        self.assertRaises(Exc, badCSVD2.fromkeys, [1])
 
         # test fast path for dictionary inputs
         d = CuteSleekValueDictionary(null_callback, zip(range(6), range(6)))
-        self.assertEqual(dict.fromkeys(d, 0), CuteSleekValueDictionary(null_callback, zip(range(6), [0]*6)))
+        self.assertEqual(
+            CuteSleekValueDictionary.fromkeys(d, 0),
+            CuteSleekValueDictionary(null_callback, zip(range(6), [0]*6)))
 
+        
     def test_copy(self):
-        d = CuteSleekValueDictionary(null_callback, {1:1, 2:2, 3:3})
-        self.assertEqual(d.copy(), CuteSleekValueDictionary(null_callback, {1:1, 2:2, 3:3}))
-        self.assertEqual(CuteSleekValueDictionary(null_callback).copy(), CuteSleekValueDictionary(null_callback))
+        d = CuteSleekValueDictionary(null_callback, {1: 1, 2: 2, 3: 3})
+        self.assertEqual(
+            d.copy(),
+            CuteSleekValueDictionary(null_callback, {1: 1, 2: 2, 3: 3})
+        )
+        self.assertEqual(
+            CuteSleekValueDictionary(null_callback).copy(),
+            CuteSleekValueDictionary(null_callback)
+        )
         self.assertRaises(TypeError, d.copy, None)
 
+        
     def test_get(self):
         d = CuteSleekValueDictionary(null_callback)
         self.assertIs(d.get('c'), None)
@@ -357,7 +370,6 @@ class GenericDictTest(unittest2.TestCase):
         self.assertRaises(TypeError, d.get, None, None, None)
 
     def test_setdefault(self):
-        # dict.setdefault()
         d = CuteSleekValueDictionary(null_callback)
         self.assertIs(d.setdefault('key0'), None)
         d.setdefault('key0', [])
@@ -383,8 +395,8 @@ class GenericDictTest(unittest2.TestCase):
         x.fail = True
         self.assertRaises(Exc, d.setdefault, x, [])
 
+        
     def test_popitem(self):
-        # dict.popitem()
         for copymode in -1, +1:
             # -1: b has same structure as a
             # +1: b is a.copy()
@@ -410,6 +422,7 @@ class GenericDictTest(unittest2.TestCase):
         d = CuteSleekValueDictionary(null_callback)
         self.assertRaises(KeyError, d.popitem)
 
+        
     def test_pop(self):
         # Tests for pop with specified key
         d = CuteSleekValueDictionary(null_callback)
@@ -426,7 +439,10 @@ class GenericDictTest(unittest2.TestCase):
         # (for 64-bit archs).  See SF bug #689659.
         x = 4503599627370496L
         y = 4503599627370496
-        h = CuteSleekValueDictionary(null_callback, {x: 'anything', y: 'something else'})
+        h = CuteSleekValueDictionary(
+            null_callback,
+            {x: 'anything', y: 'something else'}
+        )
         self.assertEqual(h[x], h[y])
 
         self.assertEqual(d.pop(k, v), v)
@@ -450,6 +466,7 @@ class GenericDictTest(unittest2.TestCase):
         x.fail = True
         self.assertRaises(Exc, d.pop, x)
 
+        
     def test_mutatingiteration(self):
         # changing dict size during iteration
         d = CuteSleekValueDictionary(null_callback)
@@ -458,9 +475,16 @@ class GenericDictTest(unittest2.TestCase):
             for i in d:
                 d[i+1] = 1
 
+                
     def test_le(self):
-        self.assertFalse(CuteSleekValueDictionary(null_callback) < CuteSleekValueDictionary(null_callback))
-        self.assertFalse(CuteSleekValueDictionary(null_callback, {1: 2}) < CuteSleekValueDictionary(null_callback, {1L: 2L}))
+        self.assertFalse(
+            CuteSleekValueDictionary(null_callback) < \
+            CuteSleekValueDictionary(null_callback)
+        )
+        self.assertFalse(
+            CuteSleekValueDictionary(null_callback, {1: 2}) < \
+            CuteSleekValueDictionary(null_callback, {1L: 2L})
+        )
 
         class Exc(Exception): pass
 
@@ -476,16 +500,19 @@ class GenericDictTest(unittest2.TestCase):
         with self.assertRaises(Exc):
             d1 < d2
 
+            
     def test_missing(self):
         # Make sure dict doesn't have a __missing__ method
-        self.assertFalse(hasattr(dict, "__missing__"))
-        self.assertFalse(hasattr(CuteSleekValueDictionary(null_callback), "__missing__"))
+        self.assertFalse(hasattr(CuteSleekValueDictionary, "__missing__"))
+        self.assertFalse(
+            hasattr(CuteSleekValueDictionary(null_callback), "__missing__")
+        )
         # Test several cases:
         # (D) subclass defines __missing__ method returning a value
         # (E) subclass defines __missing__ method raising RuntimeError
         # (F) subclass sets __missing__ instance variable (no effect)
         # (G) subclass doesn't define __missing__ at a all
-        class D(dict):
+        class D(CuteSleekValueDictionary):
             def __missing__(self, key):
                 return 42
         d = D(CuteSleekValueDictionary(null_callback, {1: 2, 3: 4}))
@@ -495,7 +522,7 @@ class GenericDictTest(unittest2.TestCase):
         self.assertNotIn(2, d.keys())
         self.assertEqual(d[2], 42)
 
-        class E(dict):
+        class E(CuteSleekValueDictionary):
             def __missing__(self, key):
                 raise RuntimeError(key)
         e = E()
@@ -526,6 +553,7 @@ class GenericDictTest(unittest2.TestCase):
             #d[(1,)]
         #self.assertEqual(c.exception.args, ((1,),))
 
+        
     def test_bad_key(self):
         # Dictionary lookups should fail if __cmp__() raises an exception.
         class CustomException(Exception):
@@ -557,6 +585,7 @@ class GenericDictTest(unittest2.TestCase):
             with self.assertRaises(CustomException):
                 exec stmt in locals()
 
+                
     def test_resize1(self):
         # Dict resizing bug, found by Jack Jansen in 2.2 CVS development.
         # This version got an assert failure in debug build, infinite loop in
@@ -573,6 +602,7 @@ class GenericDictTest(unittest2.TestCase):
         for i in range(5, 9):  # i==8 was the problem
             d[i] = i
 
+            
     def test_resize2(self):
         # Another dict resizing bug (SF bug #1456209).
         # This caused Segmentation faults or Illegal instructions.
@@ -595,12 +625,16 @@ class GenericDictTest(unittest2.TestCase):
         resizing = True
         d[9] = 6
 
+        
     def test_empty_presized_dict_in_freelist(self):
         # Bug #3537: if an empty but presized dict with a size larger
         # than 7 was in the freelist, it triggered an assertion failure
         with self.assertRaises(ZeroDivisionError):
-            d = {'a': 1 // 0, 'b': None, 'c': None, 'd': None, 'e': None,
+            d = CuteSleekValueDictionary(
+                null_callback,
+                {'a': 1 // 0, 'b': None, 'c': None, 'd': None, 'e': None,
                  'f': None, 'g': None, 'h': None}
+            )
         d = CuteSleekValueDictionary(null_callback)
 
     
@@ -608,7 +642,9 @@ class GenericDictTest(unittest2.TestCase):
         # Bug #3680: tp_traverse was not implemented for dictiter objects
         class C(object):
             pass
-        iterators = (dict.iteritems, dict.itervalues, dict.iterkeys)
+        iterators = (CuteSleekValueDictionary.iteritems,
+                     CuteSleekValueDictionary.itervalues,
+                     CuteSleekValueDictionary.iterkeys)
         for i in iterators:
             obj = C()
             ref = weakref.ref(obj)
