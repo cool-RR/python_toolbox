@@ -63,11 +63,12 @@ class GenericDictTest(unittest2.TestCase):
         d = CuteSleekValueDictionary(null_callback)
         self.assertEqual(d.items(), [])
 
-        d = CuteSleekValueDictionary(null_callback, {1:2})
+        d = CuteSleekValueDictionary(null_callback, {1: 2})
         self.assertEqual(d.items(), [(1, 2)])
 
         self.assertRaises(TypeError, d.items, None)
 
+        
     def test_has_key(self):
         d = CuteSleekValueDictionary(null_callback)
         self.assertFalse(d.has_key('a'))
@@ -78,6 +79,7 @@ class GenericDictTest(unittest2.TestCase):
 
         self.assertRaises(TypeError, d.has_key)
 
+        
     def test_contains(self):
         d = CuteSleekValueDictionary(null_callback)
         self.assertNotIn('a', d)
@@ -90,12 +92,14 @@ class GenericDictTest(unittest2.TestCase):
 
         self.assertRaises(TypeError, d.__contains__)
 
+        
     def test_len(self):
         d = CuteSleekValueDictionary(null_callback)
         self.assertEqual(len(d), 0)
         d = CuteSleekValueDictionary(null_callback, {'a': 1, 'b': 2})
         self.assertEqual(len(d), 2)
 
+        
     def test_getitem(self):
         d = CuteSleekValueDictionary(null_callback, {'a': 1, 'b': 2})
         self.assertEqual(d['a'], 1)
@@ -105,7 +109,10 @@ class GenericDictTest(unittest2.TestCase):
         self.assertEqual(d['c'], 3)
         self.assertEqual(d['a'], 4)
         del d['b']
-        self.assertEqual(d, CuteSleekValueDictionary(null_callback, {'a': 4, 'c': 3}))
+        self.assertEqual(
+            d,
+            CuteSleekValueDictionary(null_callback, {'a': 4, 'c': 3})
+        )
 
         self.assertRaises(TypeError, d.__getitem__)
 
@@ -134,6 +141,7 @@ class GenericDictTest(unittest2.TestCase):
         x.fail = True
         self.assertRaises(Exc, d.__getitem__, x)
 
+        
     def test_clear(self):
         d = CuteSleekValueDictionary(null_callback, {1:1, 2:2, 3:3})
         d.clear()
