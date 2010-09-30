@@ -24,10 +24,10 @@ class CuteSleekValueDict(UserDict.UserDict, object):
 
     def __init__(self, callback, *args, **kwargs):
         self.callback = callback
-        def remove(wr, sleek_ref_to_csvd=weakref.ref(self)):
+        def remove(sleek_ref, sleek_ref_to_csvd=weakref.ref(self)):
             csvd = sleek_ref_to_csvd()
             if csvd is not None:
-                del csvd.data[wr.key]
+                del csvd.data[sleek_ref.key]
                 csvd.callback()
         self._remove = remove
         UserDict.UserDict.__init__(self, *args, **kwargs)
@@ -41,7 +41,7 @@ class CuteSleekValueDict(UserDict.UserDict, object):
             if missing_method:
                 return missing_method(self, key)
             else:
-                raise
+                raise KeyError(key)
             
         
     def __contains__(self, key):
@@ -79,7 +79,7 @@ class CuteSleekValueDict(UserDict.UserDict, object):
     def copy(self):
         new_csvd = type(self)(self.callback)
         new_csvd.update(self)
-        return new
+        return new_csvd
         
     
     __copy__ = copy
@@ -93,19 +93,25 @@ class CuteSleekValueDict(UserDict.UserDict, object):
 
             
     def items(self):
-        L = []
-        for key, wr in self.data.items():
-            o = wr()
-            if o is not None:
-                L.append((key, o))
-        return L
+        my_items = []
+        for key, sleek_ref in self.data.items():
+            try:
+                thing = sleek_ref()
+            except SleekRefDied:
+                pass
+            else:
+                my_items.append((key, thing))
+        return my_items
 
     
     def iteritems(self):
-        for key, wr in self.data.iteritems():
-            value = wr()
-            if value is not None:
-                yield key, value
+        for key, sleek_ref in self.data.iteritems():
+            try:
+                thing = sleek_ref()
+            except SleekRefDied:
+                pass
+            else:
+                yield key, thing
 
                 
     def iterkeys(self):
@@ -128,42 +134,40 @@ class CuteSleekValueDict(UserDict.UserDict, object):
         """
         return self.data.itervalues()
 
+    
     def itervalues(self):
-        for wr in self.data.itervalues():
-            obj = wr()
-            if obj is not None:
-                yield obj
+        for sleek_ref in self.data.itervalues():
+            try:
+                yield sleek_ref()
+            except SleekRefDied:
+                pass
 
                 
     def popitem(self):
-        while 1:
-            key, wr = self.data.popitem()
-            o = wr()
-            if o is not None:
-                return key, o
+        while True:
+            key, sleek_ref = self.data.popitem()
+            try:
+                return key, sleek_ref()
+            except SleekRefDied:
+                pass
 
             
     def pop(self, key, *args):
         try:
-            o = self.data.pop(key)()
-        except KeyError:
+            return self.data.pop(key)()
+        except (KeyError, SleekRefDied):
             if args:
-                return args[0]
-            raise
-        if o is None:
-            raise KeyError, key
-        else:
-            return o
-
+                (default,) = args
+                return default
+            raise KeyError(key)
+        
         
     def setdefault(self, key, default=None):
         try:
-            wr = self.data[key]
+            return self[key]
         except KeyError:
-            self.data[key] = KeyedSleekRef(default, self._remove, key)
+            self[key] = default
             return default
-        else:
-            return wr()
 
         
     def update(self, *other_dicts, **kwargs):
@@ -171,11 +175,11 @@ class CuteSleekValueDict(UserDict.UserDict, object):
         if other_dicts:
             (other_dict,) = other_dicts        
             if not hasattr(other_dict, 'items'):
-                other_dict = type({})(other_dict)
-            for key, o in other_dict.items():
-                d[key] = KeyedSleekRef(o, self._remove, key)
+                other_dict = dict(other_dict)
+            for key, value in other_dict.items():
+                self[key] = value
                 
-        if len(kwargs):
+        if kwargs:
             self.update(kwargs)
 
             
@@ -193,20 +197,21 @@ class CuteSleekValueDict(UserDict.UserDict, object):
 
     
     def values(self):
-        L = []
-        for wr in self.data.values():
-            o = wr()
-            if o is not None:
-                L.append(o)
-        return L
+        my_values = []
+        for sleek_ref in self.data.values():
+            try:
+                my_values.append(sleek_ref())
+            except SleekRefDied:
+                pass
+        return my_values
     
     
     @classmethod
     def fromkeys(cls, iterable, value=None, callback=(lambda: None)):
-        d = cls(callback)
+        new_csvd = cls(callback)
         for key in iterable:
-            d[key] = value
-        return d
+            new_csvd[key] = value
+        return new_csvd
 
 
 class KeyedSleekRef(SleekRef):
