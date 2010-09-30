@@ -21,14 +21,14 @@ class Arg(wx.Panel):
         self.main_h_sizer.Add(self.name_static_text, 0,
                               wx.ALIGN_CENTER_VERTICAL)
         
-        self.text_ctrl = ValueTextCtrl(
+        self.value_text_ctrl = ValueTextCtrl(
             self,
             #size=(100, -1),
             value=value,
             root=argument_control.gui_project.simpack
         )
         
-        self.main_h_sizer.Add(self.text_ctrl, 1,
+        self.main_h_sizer.Add(self.value_text_ctrl, 1,
                               wx.ALIGN_CENTER_VERTICAL)
         
         self.SetSizer(self.main_h_sizer)
@@ -36,4 +36,4 @@ class Arg(wx.Panel):
         #self.main_h_sizer.Fit(self)
         
     def get_value_string(self):
-        return self.text_ctrl.GetValue()
+        return self.value_text_ctrl.GetValue()

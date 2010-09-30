@@ -24,7 +24,6 @@ class CuteSleekValueDictionary(UserDict.UserDict):
     def __init__(self, callback, *args, **kw):
         self.callback = callback
         def remove(wr, selfref=weakref.ref(self)):
-            # print('removing') # tododoc: kill
             self = selfref()
             if self is not None:
                 del self.data[wr.key]
@@ -32,6 +31,7 @@ class CuteSleekValueDictionary(UserDict.UserDict):
         self._remove = remove
         UserDict.UserDict.__init__(self, *args, **kw)
 
+        
     def __getitem__(self, key):
         o = self.data[key]()
         if o is None:
@@ -39,6 +39,7 @@ class CuteSleekValueDictionary(UserDict.UserDict):
         else:
             return o
 
+        
     def __contains__(self, key):
         try:
             o = self.data[key]()
@@ -46,27 +47,29 @@ class CuteSleekValueDictionary(UserDict.UserDict):
             return False
         return o is not None
 
-    def has_key(self, key):
-        try:
-            o = self.data[key]()
-        except KeyError:
-            return False
-        return o is not None
+    
+    has_key = __contains__
 
+    
     def __repr__(self): # tododoc
         return "<WeakValueDictionary at %s>" % id(self)
 
+    
     def __setitem__(self, key, value):
         self.data[key] = KeyedSleekRef(value, self._remove, key)
 
+        
     '''def copy(self):
         new = WeakValueDictionary()
         for key, wr in self.data.items():
             o = wr()
             if o is not None:
                 new[key] = o
-        return new''' # tododoc
+        return new
+         __copy__ = copy
+        ''' # tododoc
 
+    
     def get(self, key, default=None):
         try:
             wr = self.data[key]
@@ -80,6 +83,7 @@ class CuteSleekValueDictionary(UserDict.UserDict):
             else:
                 return o
 
+            
     def items(self):
         L = []
         for key, wr in self.data.items():
@@ -88,18 +92,22 @@ class CuteSleekValueDictionary(UserDict.UserDict):
                 L.append((key, o))
         return L
 
+    
     def iteritems(self):
         for wr in self.data.itervalues():
             value = wr()
             if value is not None:
                 yield wr.key, value
 
+                
     def iterkeys(self):
         return self.data.iterkeys()
 
+    
     def __iter__(self):
         return self.data.iterkeys()
 
+    
     def itervaluerefs(self):
         """Return an iterator that yields the weak references to the values.
 
@@ -118,6 +126,7 @@ class CuteSleekValueDictionary(UserDict.UserDict):
             if obj is not None:
                 yield obj
 
+                
     def popitem(self):
         while 1:
             key, wr = self.data.popitem()
@@ -125,6 +134,7 @@ class CuteSleekValueDictionary(UserDict.UserDict):
             if o is not None:
                 return key, o
 
+            
     def pop(self, key, *args):
         try:
             o = self.data.pop(key)()
@@ -137,6 +147,7 @@ class CuteSleekValueDictionary(UserDict.UserDict):
         else:
             return o
 
+        
     def setdefault(self, key, default=None):
         try:
             wr = self.data[key]
@@ -146,6 +157,7 @@ class CuteSleekValueDictionary(UserDict.UserDict):
         else:
             return wr()
 
+        
     def update(self, dict=None, **kwargs):
         d = self.data
         if dict is not None:
@@ -156,6 +168,7 @@ class CuteSleekValueDictionary(UserDict.UserDict):
         if len(kwargs):
             self.update(kwargs)
 
+            
     def valuerefs(self):
         """Return a list of weak references to the values.
 
@@ -168,6 +181,7 @@ class CuteSleekValueDictionary(UserDict.UserDict):
         """
         return self.data.values()
 
+    
     def values(self):
         L = []
         for wr in self.data.values():
@@ -191,6 +205,7 @@ class KeyedSleekRef(SleekRef):
         self = SleekRef.__new__(type)
         return self
 
+    
     def __init__(self, ob, callback, key):
         super(KeyedSleekRef, self).__init__(ob, callback)
         if self.ref:
