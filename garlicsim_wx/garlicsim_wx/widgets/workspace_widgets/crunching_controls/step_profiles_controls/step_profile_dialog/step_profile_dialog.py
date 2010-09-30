@@ -249,7 +249,7 @@ class StepProfileDialog(CuteDialog):
         
     
     def address_to_object(self, address):
-        return address_tools.get_object_by_address(
+        return address_tools.get_object(
             address,
             root=self.simpack
         )

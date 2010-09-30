@@ -18,8 +18,8 @@ def _tail_shorten(address, root=None):
         return address
     
     parent_address, child_name = address.rsplit('.', 1)
-    parent = get_object_by_address(parent_address, root=root)
-    child = get_object_by_address(address, root=root)
+    parent = get_object(parent_address, root=root)
+    child = get_object(address, root=root)
     
     current_parent_address = parent_address
     
@@ -35,7 +35,7 @@ def _tail_shorten(address, root=None):
             # We've reached the top module and it's successful, can break now.
             break
         
-        current_parent = get_object_by_address(current_parent_address,
+        current_parent = get_object(current_parent_address,
                                                root=root)
         
         candidate_child = getattr(current_parent, child_name, None)
@@ -79,14 +79,14 @@ def shorten_address(address, root=None):
     return new_address
 
 
-def get_object_by_address(address, root=None, _parent_object=None):
+def get_object(address, root=None, _parent_object=None):
 
     # todo: should know what exception this will raise if the address is bad /
     # object doesn't exist.
     # todo: probably allow `namespace` argument
     if root:        
         if isinstance(root, basestring):
-            root = get_object_by_address(root)
+            root = get_object(root)
         root_short_name = root.__name__.rsplit('.', 1)[-1]
     
     if not _parent_object:
@@ -107,9 +107,9 @@ def get_object_by_address(address, root=None, _parent_object=None):
         else: # '.' in address
             first_object_address, second_object_address = \
                 address.rsplit('.', 1)
-            first_object = get_object_by_address(first_object_address,
+            first_object = get_object(first_object_address,
                                                  root=root)
-            second_object = get_object_by_address(second_object_address,
+            second_object = get_object(second_object_address,
                                                   _parent_object=first_object)
             return second_object
 
@@ -135,8 +135,8 @@ def get_object_by_address(address, root=None, _parent_object=None):
         else: # '.' in address
             first_object_address, second_object_address = \
                 address.rsplit('.', 1)
-            first_object = get_object_by_address(first_object_address, _parent_object)
-            second_object = get_object_by_address(second_object_address,
+            first_object = get_object(first_object_address, _parent_object)
+            second_object = get_object(second_object_address,
                                                   _parent_object=first_object)
             return second_object
     
@@ -154,22 +154,22 @@ def get_address(obj, root=None, shorten=None, namespace={}):
     
     if isinstance(obj, types.ModuleType):
         address = obj.__name__
-        assert get_object_by_address(address) is obj
+        assert get_object(address) is obj
     
     elif isinstance(obj, types.MethodType):
         address = '.'.join((obj.__module__, obj.im_class.__name__,
                             obj.__name__))
-        assert get_object_by_address(address) == obj
+        assert get_object(address) == obj
         
     else:
         address= '.'.join((obj.__module__, obj.__name__))
-        assert get_object_by_address(address) is obj
+        assert get_object(address) is obj
         
         
     if root or namespace:
         
         if isinstance(root, basestring):
-            root = get_object_by_address(root)
+            root = get_object(root)
         
         root_short_name = root.__name__.rsplit('.', 1)[-1]
             
@@ -180,7 +180,7 @@ def get_address(obj, root=None, shorten=None, namespace={}):
         # 'garlicsim.misc.step_copy', 'garlicsim.misc.step_copy.StepCopy']
         
         for head in reversed(heads):
-            if get_object_by_address(head) is root:
+            if get_object(head) is root:
                 address = address.replace(head, root_short_name, 1)
                 break
                 
@@ -202,5 +202,5 @@ def resolve(address, root=None):
     try:
         return eval(address)
     except (NameError, AttributeError):
-        return get_object_by_address(address, root)
+        return get_object(address, root)
     
