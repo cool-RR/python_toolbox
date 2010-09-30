@@ -16,7 +16,9 @@ def test_cheat_hash():
         set((1, 2, 3.4)),
         [1, [1, 2], 3],
         [1, {frozenset((1, 2)): 'meow'}, 3],
-        sum
+        sum,
+        None,
+        (None, {None: None})
     ]
     
     things_copy = copy.deepcopy(things)
