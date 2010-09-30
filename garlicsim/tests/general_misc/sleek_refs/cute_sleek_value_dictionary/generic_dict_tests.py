@@ -289,7 +289,7 @@ class GenericDictTest(unittest2.TestCase):
             CuteSleekValueDictionary(null_callback, {'a': None})
         )
         self.assertEqual(
-            CSVDoid().fromkeys('a'),
+            CSVDoid(null_callback).fromkeys('a'),
             CuteSleekValueDictionary(null_callback, {'a': None})
         )
         self.assertIsInstance(
@@ -297,7 +297,7 @@ class GenericDictTest(unittest2.TestCase):
             CSVDoid
         )
         self.assertIsInstance(
-            CSVDoid().fromkeys('a'),
+            CSVDoid(null_callback).fromkeys('a'),
             CSVDoid
         )
 
@@ -656,5 +656,3 @@ class GenericDictTest(unittest2.TestCase):
     
 
     
-
-
