@@ -7,7 +7,7 @@ from garlicsim.general_misc.sleek_refs import (SleekCallArgs,
 from ..shared import _is_weakreffable, A, counter
         
         
-def test_cute_sleek_value_dict():
+def test():
     volatile_things = [A(), 1, 4.5, 'meow', u'woof', [1, 2], (1, 2), {1: 2},
                        set([1, 2, 3])]
     unvolatile_things = [A.s, __builtins__, list, type,  list.append, str.join,
@@ -45,7 +45,7 @@ def test_cute_sleek_value_dict():
         assert counter() == count + 1
         
         
-def test_cute_sleek_value_dict_one_by_one():
+def test_one_by_one():
     volatile_things = [A(), 1, 4.5, 'meow', u'woof', [1, 2], (1, 2), {1: 2},
                        set([1, 2, 3])]
     unvolatile_things = [A.s, __builtins__, list, type,  list.append, str.join,
@@ -90,7 +90,8 @@ def test_none():
             2: None,
             (1,): None,
             (1, (1,)): None,
-            sum: None
+            sum: None,
+            None: 3
         }
     )
     

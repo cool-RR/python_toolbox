@@ -46,9 +46,6 @@ class CuteSleekValueDict(UserDict.UserDict, object):
             else:
                 raise
             
-            
-        
-
         
     def __contains__(self, key):
         try:
