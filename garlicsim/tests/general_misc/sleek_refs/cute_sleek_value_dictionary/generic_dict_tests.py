@@ -426,28 +426,28 @@ class DictTest(unittest2.TestCase):
             e[42]
         self.assertEqual(c.exception.args, (42,))
 
-        class F(dict):
-            def __init__(self):
-                # An instance variable __missing__ should have no effect
-                self.__missing__ = lambda key: None
+        #class F(dict):
+            #def __init__(self):
+                ## An instance variable __missing__ should have no effect
+                #self.__missing__ = lambda key: None
         #f = F()
         #with self.assertRaises(KeyError) as c:
             #f[42]
         #self.assertEqual(c.exception.args, (42,))
 
-        class G(dict):
-            pass
-        g = G()
-        with self.assertRaises(KeyError) as c:
-            g[42]
-        self.assertEqual(c.exception.args, (42,))
+        #class G(dict):
+            #pass
+        #g = G()
+        #with self.assertRaises(KeyError) as c:
+            #g[42]
+        #self.assertEqual(c.exception.args, (42,))
 
-    def test_tuple_keyerror(self):
-        # SF #1576657
-        d = {}
-        with self.assertRaises(KeyError) as c:
-            d[(1,)]
-        self.assertEqual(c.exception.args, ((1,),))
+    #def test_tuple_keyerror(self):
+        ## SF #1576657
+        #d = {}
+        #with self.assertRaises(KeyError) as c:
+            #d[(1,)]
+        #self.assertEqual(c.exception.args, ((1,),))
 
     def test_bad_key(self):
         # Dictionary lookups should fail if __cmp__() raises an exception.
