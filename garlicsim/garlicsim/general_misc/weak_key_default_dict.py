@@ -68,7 +68,7 @@ class WeakKeyDefaultDict(UserDict.UserDict, object): #todo: needs testing
         except KeyError:
             missing_method = getattr(type(self), '__missing__', None)
             if missing_method:
-                return missing_method(key)
+                return missing_method(self, key)
             else:
                 raise
 
