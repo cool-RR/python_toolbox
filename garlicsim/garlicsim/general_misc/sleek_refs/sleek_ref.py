@@ -2,17 +2,15 @@ import weakref
 import UserDict
 
 from garlicsim.general_misc.third_party import inspect
-from garlicsim.general_misc.exceptions import CuteException
+
+from .exceptions import SleekRefDied
+
 
 __all__ = ['SleekRef']
 
 
 class Ref(weakref.ref):
     # To allow data attributes.
-    pass
-
-
-class SleekRefDied(CuteException):
     pass
 
 
