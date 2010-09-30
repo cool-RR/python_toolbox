@@ -144,7 +144,7 @@ def test_get_address():
     result = get_address(z, shorten=True, root=w, namespace='email')
     assert result == 'w.y.z'
     
-    result = get_address(z, shorten=True, root=garlicsim, namespace='w')
+    result = get_address(z, shorten=True, root=garlicsim, namespace=w)
     assert result == 'x.y.z'
     
     result = get_address(z, shorten=True, root=w.x)

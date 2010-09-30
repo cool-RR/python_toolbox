@@ -122,19 +122,22 @@ def get_object(address, root=None, namespace={}):
     # Finished analyzing `root` and `namespace`.
     ###########################################################################
     
+    # Let's rule out the easy option that the requested object is the root:
+    if root and (address == root_short_name):
+        return root
+    
+    
     if not namespace:
         
         if '.' not in address:
             # We were called without a namespace with an address with no dots.
-            # There are limited options on what it can be: Either the root, or a
-            # builtin, or a module. We try all three:
-            if root and (address == root_short_name):
-                return root # Option 1: The root.
-            else:
-                try:
-                    return eval(address) # Option 2: A builtin.
-                except NameError:
-                    return __import__(address) # Option 3: A module.
+            # There are limited options on what it can be: Either the root (we
+            # ruled that out above), or a builtin, or a module. We try the last
+            # two:
+            try:
+                return eval(address) # Option 1: A builtin.
+            except NameError:
+                return __import__(address) # Option 2: A module.
                 
         else: # '.' in address
             first_object_address, second_object_address = \
@@ -181,10 +184,10 @@ def get_object(address, root=None, namespace={}):
         else: # '.' in address
             first_object_address, second_object_address = \
                 address.rsplit('.', 1)
-            first_object = get_object(first_object_address,
+            first_object = get_object(first_object_address, root=root,
                                       namespace=parent_object)
             second_object = get_object(second_object_address,
-                                       namespace=parent_object)
+                                       namespace=first_object)
             return second_object
     
 
