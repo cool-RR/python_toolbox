@@ -18,6 +18,7 @@ class A(object):
 
 prefix = __name__ + '.'
 
+
 def test_get_object():
 
     ###########################################################################
@@ -26,14 +27,16 @@ def test_get_object():
     assert get_object(prefix + 'A') is A
     assert get_object(prefix + 'A.B') is A.B
     assert get_object(prefix + 'A.method') == A.method
+    assert get_object('method', namespace=A) == A.method
     assert get_object(prefix + 'A.B.deep_method') == A.B.deep_method
+    assert get_object('B.deep_method', namespace=A) == A.B.deep_method
     assert get_object(prefix + 'A.C.D') is A.C.D
     assert get_object(prefix + 'A.C.D.deeper_method') == \
            A.C.D.deeper_method
     
     assert get_object('D.deeper_method', root=(prefix + 'A.C.D')) == \
            A.C.D.deeper_method
-    assert get_object('D.deeper_method', root=A.C.D) == \
+    assert get_object('D.deeper_method', root=A.C.D, namespace='email') == \
            A.C.D.deeper_method
     assert get_object('A', root=A) == A
 
@@ -43,6 +46,7 @@ def test_get_object():
     
     result = get_object('email')
     import email
+    import marshal
     assert result is email
     
     assert get_object('email') is \
@@ -57,7 +61,15 @@ def test_get_object():
     assert result is email.encoders.base64.b32decode
     
     result = get_object('base64.b32decode',
-                                   root='email.email.encoders.base64')
+                        root='email.email.encoders.base64')
+    assert result is email.encoders.base64.b32decode
+    
+    result = get_object('base64.b32decode',
+                        namespace='email.email.encoders')
+    assert result is email.encoders.base64.b32decode
+    
+    result = get_object('base64.b32decode', root=marshal,
+                        namespace='email.email.encoders')
     assert result is email.encoders.base64.b32decode
     
     
@@ -68,12 +80,20 @@ def test_get_object():
     import garlicsim
     assert garlicsim.general_misc is result
     
-    result = get_object('garlicsim.misc.persistent.'
-                                   'cross_process_persistent.'
-                                   'CrossProcessPersistent.personality')
-    assert result is garlicsim.misc.persistent.cross_process_persistent.\
-                     CrossProcessPersistent.personality
+    result = get_object('garlicsim.misc.persistent.cross_process_persistent.'
+                        'CrossProcessPersistent.personality')
+    result2 = get_object('misc.CrossProcessPersistent.personality',
+                         namespace=garlicsim)
+    result3 = get_object('persistent.CrossProcessPersistent.personality',
+                         root=garlicsim.misc.persistent,
+                         namespace='email')
+    assert result is result2 is result3 is garlicsim.misc.persistent.\
+           cross_process_persistent.CrossProcessPersistent.personality
     
     result = get_object('data_structures.end.End',
-                                   root=garlicsim.data_structures)
-    assert result is garlicsim.data_structures.end.End
+                        root=garlicsim.data_structures)
+    result2 = get_object('data_structures.End',
+                        root=garlicsim.data_structures)
+    result3 = get_object('data_structures.End', namespace='garlicsim')
+    assert result is result2 is garlicsim.data_structures.end.End
+    
