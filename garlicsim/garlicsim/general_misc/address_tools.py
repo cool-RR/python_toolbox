@@ -1,4 +1,5 @@
 import types
+import re
 
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import caching
@@ -10,6 +11,11 @@ from garlicsim.general_misc import caching
 
 # todo: when shortening, check that we're not using stuff that was excluded from
 # `__all__` (if one exists)
+
+
+_address_pattern = re.compile(
+    '^([a-zA-Z_][0-9a-zA-Z_]*)(\.[a-zA-Z_][0-9a-zA-Z_]*)*$'
+)
 
 
 def _tail_shorten(address, root=None, namespace={}):
@@ -56,6 +62,10 @@ def shorten_address(address, root=None, namespace={}):
     Note: does shortening by dropping intermediate nodes, doesn't do
     root-shortening
     '''
+
+    if not _address_pattern.match(address):
+        raise ValueError("'%s' is not a legal address." % address)
+    
     if '.' not in address:
         # Nothing to shorten
         return address
@@ -86,6 +96,9 @@ def get_object(address, root=None, namespace={}):
 
     # todo: should know what exception this will raise if the address is bad /
     # object doesn't exist.
+    
+    if not _address_pattern.match(address):
+        raise ValueError("'%s' is not a legal address." % address)
     
     ###########################################################################
     # Before we start, we do some analysis of `root` and `namespace`:
@@ -179,7 +192,7 @@ def get_object(address, root=None, namespace={}):
             if parent_object:
                 return getattr(parent_object, address)
             else:
-                return namespace_dict.get(address)
+                return namespace_dict[address]
         
         else: # '.' in address
             first_object_address, second_object_address = \
