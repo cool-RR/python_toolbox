@@ -72,8 +72,10 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
   
         
     def update(self):
+        
+        gui_project = self.gui_project
 
-        for step_profile in self.gui_project.step_profiles:
+        for step_profile in gui_project.step_profiles:
             try:
                 item = self.step_profiles_to_items[step_profile]
             except KeyError:
@@ -86,7 +88,8 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
                 self.SetItemText(
                     item,
                     step_profile.__repr__(short_form=True,
-                                          root=self.gui_project.simpack),
+                                          root=gui_project.simpack,
+                                          namespace=gui_project.namespace),
                     1
                 )
                 
@@ -94,7 +97,7 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
                                        item.GetHeight() - 4))
         
         for item in self.items:
-            if item.step_profile not in self.gui_project.step_profiles:
+            if item.step_profile not in gui_project.step_profiles:
                 self.Delete(item)
                 item.hue_control.Destroy()
                 

@@ -24,7 +24,8 @@ class AlreadyExistsDialog(CuteDialog):
             label='The step profile `%s` already exists.' % \
                 step_profile.__repr__(
                     short_form=True,
-                    root=self.frame.gui_project.simpack
+                    root=self.frame.gui_project.simpack,
+                    namespace=self.frame.gui_project.namespace
                 )
         )
         

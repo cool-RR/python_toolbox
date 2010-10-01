@@ -157,7 +157,7 @@ class StepProfile(ArgumentsProfile):
             return StepProfile(default_step_function, *args, **kwargs)
                 
     
-    def __repr__(self, short_form=False, root=None):
+    def __repr__(self, short_form=False, root=None, namespace={}):
         '''
         Get a string representation of the step profile.
         
@@ -178,7 +178,8 @@ class StepProfile(ArgumentsProfile):
             step_function_address = address_tools.get_address(
                 self.step_function,
                 shorten=True,
-                root=root
+                root=root,
+                namespace=namespace
             )
             final_big_string = ', '.join(
                 filter(
