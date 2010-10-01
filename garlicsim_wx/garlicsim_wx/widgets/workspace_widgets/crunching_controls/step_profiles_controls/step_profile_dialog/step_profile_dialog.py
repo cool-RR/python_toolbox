@@ -66,7 +66,7 @@ class StepProfileDialog(CuteDialog):
 
             self.step_function = original_step_function
             
-            initial_step_function_address = self.step_function_to_address(
+            initial_step_function_address = self.object_to_address(
                 original_step_function
             )
 
@@ -76,7 +76,7 @@ class StepProfileDialog(CuteDialog):
             )
 
             self.step_functions_to_argument_dicts[original_step_function] = \
-                dict((key, repr(value)) for (key, value) in 
+                dict((key, self.object_to_address(value)) for (key, value) in
                  original_argument_dict.iteritems())
             
 
@@ -89,7 +89,8 @@ class StepProfileDialog(CuteDialog):
                 ]
                 
                 self.step_functions_to_star_args[original_step_function] = \
-                    [repr(value) for value in star_args_value]
+                    [self.object_to_address(value) for value in
+                     star_args_value]
             
             
             if original_arg_spec.keywords:
@@ -98,8 +99,8 @@ class StepProfileDialog(CuteDialog):
                 ]
                 
                 self.step_functions_to_star_kwargs[original_step_function] = \
-                    dict((key, repr(value)) for (key, value) in
-                          star_kwargs_value.iteritems())
+                    dict((key, self.object_to_address(value)) for (key, value)
+                         in star_kwargs_value.iteritems())
                 
             
             
@@ -111,7 +112,7 @@ class StepProfileDialog(CuteDialog):
             if len(simpack_grokker.all_step_functions) >= 2:
                 initial_step_function_address = ''
             else: # len(simpack_grokker.all_step_functions) == 1
-                initial_step_function_address = self.step_function_to_address(
+                initial_step_function_address = self.object_to_address(
                     simpack_grokker.default_step_function
                 )
         

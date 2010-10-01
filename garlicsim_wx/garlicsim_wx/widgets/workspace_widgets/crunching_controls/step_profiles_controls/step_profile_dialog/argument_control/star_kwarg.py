@@ -31,8 +31,7 @@ class StarKwarg(wx.Panel):
         
         self.value_text_ctrl = ValueTextCtrl(
             self,
-            value=value,
-            root=argument_control.gui_project.simpack
+            value=value
         )
         self.main_h_sizer.Add(self.value_text_ctrl, 6,
                               wx.ALIGN_CENTER_VERTICAL)

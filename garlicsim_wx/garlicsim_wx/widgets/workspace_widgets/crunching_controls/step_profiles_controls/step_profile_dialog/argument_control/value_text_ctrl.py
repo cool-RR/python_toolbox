@@ -26,8 +26,7 @@ class ValueTextCtrl(wx.TextCtrl):
         
         try:
             self.Parent.argument_control.step_profile_dialog.address_to_object(
-                str(self.GetValue()),
-                root=self.root
+                str(self.GetValue())
             )
         except Exception:
             is_valid = False

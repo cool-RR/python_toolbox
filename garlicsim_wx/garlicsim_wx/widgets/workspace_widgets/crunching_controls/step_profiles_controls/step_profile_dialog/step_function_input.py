@@ -15,7 +15,7 @@ class StepFunctionInput(wx.ComboBox):
         self.step_profile_dialog = step_profile_dialog
         self.simpack_grokker = step_profile_dialog.simpack_grokker
         step_functions_list = [
-            step_profile_dialog.step_function_to_address(step_function) for
+            step_profile_dialog.object_to_address(step_function) for
             step_function in self.simpack_grokker.all_step_functions
         ]
         
