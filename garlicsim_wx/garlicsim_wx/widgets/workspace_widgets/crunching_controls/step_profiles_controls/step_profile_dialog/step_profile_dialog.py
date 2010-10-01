@@ -240,18 +240,20 @@ class StepProfileDialog(CuteDialog):
             self.static_function_text.set_step_function(step_function)
         
         
-    def step_function_to_address(self, step_function):
+    def object_to_address(self, step_function):
         return address_tools.get_address(
             step_function,
+            shorten=True,
             root=self.simpack,
-            shorten=True
+            namespace=self.gui_project.namespace
         )
         
     
     def address_to_object(self, address):
-        return address_tools.get_object(
+        return address_tools.resolve(
             address,
-            root=self.simpack
+            root=self.simpack,
+            namespace=self.gui_project.namespace
         )
 
     
@@ -289,15 +291,15 @@ class StepProfileDialog(CuteDialog):
             
             step_function,
             
-            dict((key, address_tools.resolve(value_string)) for 
+            dict((key, self.address_to_object(value_string)) for 
                  (key, value_string) in self.\
                  step_functions_to_argument_dicts[step_function].iteritems()
                  if key in arg_spec.args),
             
-            [address_tools.resolve(value_string) for value_string in 
+            [self.address_to_object(value_string) for value_string in 
              self.step_functions_to_star_args[step_function]],
             
-            dict((key, address_tools.resolve(value_string)) for 
+            dict((key, self.address_to_object(value_string)) for 
                  (key, value_string) in
                  self.step_functions_to_star_kwargs[step_function].iteritems())
         )

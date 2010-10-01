@@ -1,7 +1,5 @@
 import wx
 
-from garlicsim.general_misc import address_tools
-
 from . import colors
 
 
@@ -27,7 +25,10 @@ class ValueTextCtrl(wx.TextCtrl):
     def _check_validity_and_color(self):
         
         try:
-            address_tools.resolve(str(self.GetValue()), root=self.root)
+            self.Parent.argument_control.step_profile_dialog.address_to_object(
+                str(self.GetValue()),
+                root=self.root
+            )
         except Exception:
             is_valid = False
         else:

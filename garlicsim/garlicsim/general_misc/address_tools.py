@@ -266,6 +266,7 @@ def resolve(address, root=None, namespace={}):
     # tododoc: create reverse. repr won't do because it puts <> around classes
     # and stuff
     # tododoc: make sure namespace works here
+    # tododoc: write tests for this
     
     # Resolving '' to None:
     if address == '':
@@ -274,5 +275,5 @@ def resolve(address, root=None, namespace={}):
     try:
         return eval(address)
     except (NameError, AttributeError):
-        return get_object(address, root)
+        return get_object(address, root, namespace)
     

@@ -1,7 +1,6 @@
 import wx
 
 from garlicsim.general_misc.third_party import inspect
-from garlicsim.general_misc import address_tools
 from garlicsim.general_misc import misc_tools
 from garlicsim.misc import exceptions
 from garlicsim_wx.general_misc import wx_tools
@@ -139,7 +138,7 @@ class ArgumentControl(wx.Panel):
                 value_string = arg.get_value_string() 
                 try:
                     # Not storing, just checking if it'll raise an error:
-                    address_tools.resolve(value_string)
+                    self.step_profile_dialog.address_to_object(value_string)
                 except Exception:
                     if not resolve_failed:
                         resolve_failed = ResolveFailed(
@@ -157,7 +156,7 @@ class ArgumentControl(wx.Panel):
                 value_string = star_arg.get_value_string()
                 try:
                     # Not storing, just checking if it'll raise an error:
-                    address_tools.resolve(value_string)
+                    self.step_profile_dialog.address_to_object(value_string)
                 except Exception:
                     if not resolve_failed:
                         resolve_failed = ResolveFailed(
@@ -183,7 +182,7 @@ class ArgumentControl(wx.Panel):
                 value_string = star_kwarg.get_value_string()
                 try:
                     # Not storing, just checking if it'll raise an error:
-                    address_tools.resolve(value_string)
+                    self.step_profile_dialog.address_to_object(value_string)
                 except Exception:
                     if not resolve_failed:
                         resolve_failed = ResolveFailed(
