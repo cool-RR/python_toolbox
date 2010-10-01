@@ -2,6 +2,7 @@ import types
 import re
 
 from garlicsim.general_misc import import_tools
+from garlicsim.general_misc import dict_tools
 from garlicsim.general_misc import caching
 
 # tododoc: split to `get_object` and `get_address`
@@ -197,23 +198,28 @@ def get_object(address, root=None, namespace={}):
         else: # '.' in address
             first_object_address, second_object_address = \
                 address.rsplit('.', 1)
-            first_object = get_object(first_object_address, root=root,
-                                      namespace=parent_object)
-            second_object = get_object(second_object_address,
-                                       namespace=first_object)
+            first_object = get_object(
+                first_object_address,
+                root=root,
+                namespace=parent_object or namespace_dict
+            )
+            second_object = get_object(
+                second_object_address,
+                namespace=first_object
+            )
             return second_object
     
 
 def get_address(obj, shorten=False, root=None, namespace={}):
     
-    # todo: Support classes inside classes. Cursrently doesn't work because
+    # todo: Support classes inside classes. Currently doesn't work because
     # Python doesn't tell us inside in which class an inner class was defined.
     # We'll probably have to do some kind of search.
     
     if not (isinstance(obj, types.ModuleType) or hasattr(obj, '__module__')):
         raise Exception("%s is not a module, nor does not have a `__module__` "
                         "attribute, therefore we can't get its address." % \
-                        obj)
+                        (obj,))
     
     if isinstance(obj, types.ModuleType):
         address = obj.__name__
@@ -239,10 +245,16 @@ def get_address(obj, shorten=False, root=None, namespace={}):
 
         if namespace:
             if hasattr(namespace, '__getitem__') and hasattr(namespace, 'keys'):
-                namespace_dict = namespace
+                original_namespace_dict = namespace
             else:
-                namespace_dict = vars(namespace)
-            
+                original_namespace_dict = vars(namespace)
+
+            namespace_dict = dict_tools.filter_items(
+                original_namespace_dict,
+                lambda key, value:
+                    (getattr(value, '__name__', '').endswith(key))
+            )
+                
             namespace_dict_keys = namespace_dict.keys()
             namespace_dict_values = namespace_dict.values()
             

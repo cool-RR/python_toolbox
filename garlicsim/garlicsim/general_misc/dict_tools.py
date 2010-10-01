@@ -6,6 +6,13 @@
 import copy
 
 
+def filter_items(d, condition, _dict_constructor=dict):
+    # condition is a `lambda key, value` function
+    return _dict_constructor(
+        (key, value) for (key, value) in d.iteritems() if condition(key, value)
+    )
+
+
 def get_list(d, iterable):
     return [d[key] for key in iterable]
 

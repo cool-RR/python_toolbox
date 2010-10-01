@@ -152,7 +152,31 @@ def test_get_address():
     assert result == 'x.y.z'
     
     
-
+    ###########################################################################
+    # 
+    
+    import email.encoders
+    import marshal
+    
+    result = get_address(
+        email,
+        shorten=True,
+        namespace={'e': email}
+    )
+    assert result == 'email'
+    
+    result = get_address(
+        email.encoders,
+        namespace={'e': email, 'email': email}
+    )
+    assert result == 'email.encoders'
+    
+    result = get_address(
+        email.encoders,
+        root=marshal,
+        namespace={'e': email, 'email': email}
+    )
+    assert result == 'email.encoders'
     
     
     
