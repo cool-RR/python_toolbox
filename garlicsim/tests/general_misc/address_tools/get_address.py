@@ -188,3 +188,6 @@ def test_get_address():
     assert describe([object, email.encoders, marshal]) == \
            '[object, email.encoders, marshal]'
     
+    assert describe([email.encoders, 7, (1, 3), marshal]) == \
+           '[email.encoders, 7, (1, 3), marshal]'
+    

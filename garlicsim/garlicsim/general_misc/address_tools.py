@@ -287,6 +287,11 @@ def _get_address(obj, shorten=False, root=None, namespace={}):
                 
     if shorten:
         address = shorten_address(address, root=root, namespace=namespace)
+        
+    if address.startswith('__builtin__.'):
+        shorter_address = address.replace('__builtin__.', '', 1)
+        if _get_object_by_address(shorter_address) == obj:
+            address = shorter_address
     
     return address
 
@@ -356,7 +361,7 @@ def describe(obj, shorten=False, root=None, namespace={}):
                 object_winner = object_candidate
                 pretty_address = _get_address(object_winner, root=root,
                                               namespace=namespace)                
-                current_result.replace(ugly_repr, pretty_address)
+                current_result = current_result.replace(ugly_repr, pretty_address)
                 current_result_changed = True
           
         if current_result_changed:
