@@ -131,19 +131,36 @@ def _get_object_by_address(address, root=None, namespace={}):
             return second_object
     
 
-def resolve(address, root=None, namespace={}):
+def resolve(string, root=None, namespace={}):
     # sktechy for now
     # tododoc: make sure namespace works here
     # tododoc: write tests for this
     
     # Resolving '' to None:
-    if address == '':
+    if string == '':
         return None
     
+    if _address_pattern.match(string):
+        return _get_object_by_address(string, root=root, namespace=namespace)
+
+    our_namespace = {}
+    our_namespace.update(namespace)
+    
+    addresses = _address_pattern.findall(string)
+    
+    for address in addresses:
+        try:
+            thing = _get_object_by_address(address, root=root,
+                                           namespace=namespace)
+        except Exception:
+            pass
+        else:
+            
+        
+        
     try:
-        return eval(address)
+        return eval(string)
     except (NameError, AttributeError):
-        return _get_object_by_address(address, root, namespace)
     
 
 from .object_to_string import describe, _get_address
