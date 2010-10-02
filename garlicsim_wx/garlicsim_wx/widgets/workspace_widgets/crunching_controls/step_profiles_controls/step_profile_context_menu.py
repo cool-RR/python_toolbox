@@ -64,7 +64,7 @@ class StepProfileContextMenu(cute_menu.CuteMenu):
             ' Delete this step profile'
         )
         self.Bind(wx.EVT_MENU,
-                  step_profiles_list.on_delete_button,
+                  step_profiles_list.step_profiles_controls.on_delete_button,
                   source=self.delete_button)
         
         

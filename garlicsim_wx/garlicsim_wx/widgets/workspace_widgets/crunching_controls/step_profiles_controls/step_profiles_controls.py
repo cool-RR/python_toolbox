@@ -119,7 +119,11 @@ class StepProfilesControls(wx.Panel):
             error_dialog = ErrorDialog(
                 self,
                 "The step profile `%s` is currently used in the tree; It may "
-                "not be deleted." % step_profile
+                "not be deleted." % step_profile.__repr__(
+                    short_form=True,
+                    root=self.gui_project.simpack,
+                    namespace=self.gui_project.namespace
+                )
             )
             error_dialog.ShowModal()
             return

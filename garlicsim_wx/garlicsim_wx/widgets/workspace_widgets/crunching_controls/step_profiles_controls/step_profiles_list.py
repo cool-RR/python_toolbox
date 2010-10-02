@@ -76,6 +76,10 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
     def update(self):
         
         gui_project = self.gui_project
+        
+        for step_profile, item in self.step_profiles_to_items.items():
+            if item not in self.items:
+                del self.step_profiles_to_items[step_profile]
 
         for step_profile in gui_project.step_profiles:
             try:
@@ -101,7 +105,7 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
         for item in self.items:
             if item.step_profile not in gui_project.step_profiles:
                 self.Delete(item)
-                item.hue_control.Destroy()
+                #item.hue_control.Destroy() Apparently gets destroyed before
                 
                 
     
@@ -113,10 +117,6 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
             return selection.step_profile
         else:
             return None
-
-
-    def delete_step_profile(self, step_profile):
-        1/0 # tododoc
     
     
     def on_tree_item_menu(self, event):
@@ -166,10 +166,6 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
             self.get_selected_step_profile()
         )
 
-        
-    def on_delete_button(self, event):
-        self.delete_step_profile(self.get_selected_step_profile())
-    
         
     def on_tree_begin_drag(self, event):
         event.Allow()
