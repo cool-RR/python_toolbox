@@ -71,6 +71,10 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
             self.update
         )
         
+        self.gui_project.active_step_profile_changed_emitter.add_output(
+            self.update_active_step_profile_indicator
+        )
+        
   
         
     def update(self):
@@ -107,7 +111,18 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
                 self.Delete(item)
                 #item.hue_control.Destroy() Apparently gets destroyed before
                 
-                
+               
+    def update_active_step_profile_indicator(self):
+        active_step_profile = self.gui_project.get_active_step_profile()
+        for item in self.items():
+            active_step_profile_indicator = \
+                item.step_profile_item_panel.active_step_profile_indicator
+            step_profile = item.step_profile
+            if step_profile == active_step_profile:
+                active_step_profile_indicator.set_active()
+            else:
+                active_step_profile_indicator.set_inactive()
+        
     
     def get_selected_step_profile(self):
         

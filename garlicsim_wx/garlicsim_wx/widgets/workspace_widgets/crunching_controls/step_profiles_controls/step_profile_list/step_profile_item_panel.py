@@ -2,11 +2,12 @@
 import wx
 
 from .active_step_profile_indicator import ActiveStepProfileIndicator
-from ..hue_control import HueControl
+from .hue_control import HueControl
 
 class StepProfileItemPanel(wx.Panel):
     def __init__(self, step_profiles_list, step_profile):
         self.step_profiles_list = step_profiles_list
+        self.frame = step_profiles_list.frame
         self.step_profile = step_profile
         wx.Panel.__init__(
             self,
@@ -25,4 +26,6 @@ class StepProfileItemPanel(wx.Panel):
                               wx.EXPAND | wx.RIGHT, border=5)
         
         
-        self.hue_control
+        self.hue_control = HueControl(self, step_profile)
+        
+        self.main_h_sizer.Add(self.active_step_profile_indicator, 0, wx.EXPAND)

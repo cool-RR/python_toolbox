@@ -176,6 +176,8 @@ class GuiProject(object):
             default_factory=StepProfileHueDefaultFactory(self)
         )
         
+        self._tracked_step_profile = None
+        
         #######################################################################
         # Setting up namespace:
         
@@ -300,7 +302,12 @@ class GuiProject(object):
                 inputs=(
                     self.active_node_changed_emitter,
                     self.active_node_modified_emitter,
-                )
+                ),
+                outputs=(self.__check_if_step_profile_changed,)
+            )
+            
+            self.active_step_profile_changed_emitter = es.make_emitter(
+                name='active_step_profile_changed'
             )
             
             self.path_changed_emitter = es.make_emitter(
@@ -328,9 +335,9 @@ class GuiProject(object):
             )
     
             self.official_playing_speed_modified_emitter = es.make_emitter(
-                    outputs=(self.update_defacto_playing_speed,),
-                    name='official_playing_speed_modified',
-                )
+                outputs=(self.update_defacto_playing_speed,),
+                name='official_playing_speed_modified',
+            )
             
             self.active_node_finalized_emitter = es.make_emitter(
                 inputs=(self.active_node_modified_emitter,),
@@ -364,8 +371,9 @@ class GuiProject(object):
                 outputs=(self.frame._recalculate_all_menus,),
                 name='all_menus_need_recalculation_emitter'
             )
+            
+            
 
-    
     def __init_menu_enablings(self):
         '''Connect the functions that (en/dis)able menus to the emitters.'''
         for menu in [self.frame.menu_bar.node_menu,
@@ -794,6 +802,13 @@ class GuiProject(object):
     def _update_step_profiles_set(self):
         self.step_profiles |= self.project.tree.get_step_profiles()                
     
+    
+    def __check_if_step_profile_changed(self):
+        active_step_profile = self.get_active_step_profile()
+        if active_step_profile != self._tracked_step_profile:
+            self._tracked_step_profile = active_step_profile
+            self.active_step_profile_changed_emitter.emit()
+        
         
     def __getstate__(self):
         my_dict = dict(self.__dict__)

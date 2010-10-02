@@ -12,12 +12,12 @@ class HueControl(GenericHueControl):
     # tododoc: possible confusion, this is called HueProfile in the
     # `step_profiles_controls` package, but it's good for a specific purpose,
     # and the dialog uses a different hue control.
-    def __init__(self, step_profiles_list, step_profile):
+    def __init__(self, step_profile_item_panel, step_profile):
         
         self.step_profile = step_profile
         
-        self.step_profiles_list = step_profiles_list
-        self.frame = self.step_profiles_list.frame
+        self.step_profile_item_panel = step_profile_item_panel
+        self.frame = self.step_profile_item_panel.frame
         self.gui_project = self.frame.gui_project
         
         getter = lambda: \
@@ -33,7 +33,7 @@ class HueControl(GenericHueControl):
         
         GenericHueControl.__init__(
             self,
-            step_profiles_list.GetMainWindow(),
+            step_profile_item_panel,
             getter=getter,
             setter=setter,
             emitter=self.gui_project.step_profiles_to_hues_modified_emitter,
