@@ -179,3 +179,12 @@ def test_get_address():
     assert result == 'email.encoders'
     
     
+    ###########################################################################
+    # 
+    
+    import email.encoders
+    import marshal
+    
+    assert describe([object, email.encoders, marshal]) == \
+           '[object, email.encoders, marshal]'
+    
