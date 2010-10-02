@@ -23,6 +23,7 @@ def _get_object_by_address(address, root=None, namespace={}):
     
     if not _address_pattern.match(address):
         raise ValueError("'%s' is not a legal address." % address)
+        # tododoc change to assert
     
     ###########################################################################
     # Before we start, we do some analysis of `root` and `namespace`:

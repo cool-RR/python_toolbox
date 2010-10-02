@@ -72,7 +72,7 @@ def shorten_address(address, root=None, namespace={}):
 
     if not _address_pattern.match(address):
         raise ValueError("'%s' is not a legal address." % address)
-        # tododoc: test
+        # tododoc change to assert
     
     if '.' not in address:
         # Nothing to shorten

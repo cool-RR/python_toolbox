@@ -1,3 +1,5 @@
+import nose.tools
+
 from garlicsim.general_misc.address_tools import describe, resolve
 
 
@@ -124,4 +126,17 @@ def test_address_in_expression():
     assert resolve('garlicsim if 4 else e', namespace={'e': email}) is \
            garlicsim
     
+
+def test_illegal_input():
     
+    nose.tools.assert_raises(Exception,
+                             resolve,
+                             'asdgfasdgas if 4 else asdfasdfa ')
+    
+    nose.tools.assert_raises(Exception,
+                             resolve,
+                             'dgf sdfg sdfga ')
+    
+    nose.tools.assert_raises(Exception,
+                             resolve,
+                             '4- ')
