@@ -8,7 +8,8 @@ from garlicsim.general_misc import caching
 
 # Doing at bottom:
 # from .object_to_string import describe, _get_address
-from .shared import _address_pattern, _get_parent_and_dict_from_namespace
+from .shared import (_contained_address_pattern, _address_pattern,
+                     _get_parent_and_dict_from_namespace)
 
 
 # tododoc: add caching to all functions, after fixing caching with
@@ -51,6 +52,8 @@ def _get_object_by_address(address, root=None, namespace={}):
     # Let's rule out the easy option that the requested object is the root:
     if root and (address == root_short_name):
         return root
+    
+    
     
     
     if not namespace:
@@ -140,7 +143,7 @@ def resolve(string, root=None, namespace={}):
     our_namespace = {}
     our_namespace.update(namespace_dict)
     
-    re_matches = re_tools.searchall(_address_pattern, string)
+    re_matches = re_tools.searchall(_contained_address_pattern, string)
     addresses = [re_match.group('address') for re_match in re_matches]
     
     for address in addresses:

@@ -7,7 +7,8 @@ from garlicsim.general_misc import caching
 
 # Doing at bottom:
 # from .string_to_object import _get_object_by_address, resolve
-from .shared import _address_pattern, _get_parent_and_dict_from_namespace
+from .shared import (_address_pattern, _contained_address_pattern,
+                     _get_parent_and_dict_from_namespace)
 
 # tododoc: add caching to all functions, after fixing caching with
 # ArgumentsProfile to accept kwargs.

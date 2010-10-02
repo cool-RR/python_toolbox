@@ -91,6 +91,9 @@ def test_garlicsim():
     result3 = resolve('data_structures.End', namespace='garlicsim')
     assert result is result2 is garlicsim.data_structures.end.End
     
+    import email
+    assert resolve('garlicsim', namespace={'e': email})
+    
     
 def test_address_in_expression():
         
@@ -116,4 +119,7 @@ def test_address_in_expression():
                    namespace=garlicsim) == \
            {garlicsim.asynchronous_crunching.Project: garlicsim.simulate}
 
+    assert resolve('garlicsim if 4 else e', namespace={'e': email}) is \
+           garlicsim
+    
     

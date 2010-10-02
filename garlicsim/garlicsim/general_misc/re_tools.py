@@ -2,6 +2,10 @@ import re
 
 
 def searchall(pattern, string, flags=0):
+    '''
+    
+    note: only non-overlapping
+    '''
     if isinstance(pattern, basestring):
         pattern = re.compile(pattern, flags=flags)
     matches = []
