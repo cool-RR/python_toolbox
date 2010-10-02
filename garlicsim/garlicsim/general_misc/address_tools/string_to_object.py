@@ -3,11 +3,13 @@ import re
 
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import dict_tools
+from garlicsim.general_misc import re_tools
 from garlicsim.general_misc import caching
 
 # Doing at bottom:
 # from .object_to_string import describe, _get_address
 from .shared import _address_pattern
+
 
 # tododoc: add caching to all functions, after fixing caching with
 # ArgumentsProfile to accept kwargs.
@@ -146,7 +148,8 @@ def resolve(string, root=None, namespace={}):
     our_namespace = {}
     our_namespace.update(namespace)
     
-    addresses = _address_pattern.findall(string)
+    re_matches = re_tools.searchall(_address_pattern, string)
+    addresses = [re_match.groups('address') for re_match in re_matches]
     
     for address in addresses:
         try:
