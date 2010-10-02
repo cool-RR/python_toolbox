@@ -8,6 +8,7 @@ class ActiveStepProfileIndicator(wx.Window):
         self.step_profile_item_panel = step_profile_item_panel
         self.active = False
         wx.Window.__init__(self, step_profile_item_panel, size=(10, -1))
+        self.SetBackgroundColour(step_profile_item_panel.GetBackgroundColour())
         self.Bind(wx.EVT_PAINT, self.on_paint)
         
     
@@ -25,7 +26,7 @@ class ActiveStepProfileIndicator(wx.Window):
         
     def on_paint(self, event):
         dc = wx.BufferedPaintDC(self)
-        dc.SetBackground(wx.Brush(self.GetBackgroundColour()))
+        #dc.SetBackground(wx.Brush(self.GetBackgroundColour()))
         dc.Clear()
         if self.active:
             gc = wx.GraphicsContext.Create(dc)

@@ -37,7 +37,7 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
             step_profiles_controls,
             style=wx.SIMPLE_BORDER,
             agwStyle=(
-                wx.TR_FULL_ROW_HIGHLIGHT | \
+                #wx.TR_FULL_ROW_HIGHLIGHT | \
                 wx.TR_ROW_LINES | \
                 wx.TR_HIDE_ROOT | \
                 cute_hyper_tree_list.TR_NO_HEADER
@@ -48,7 +48,7 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
         
         self.AddColumn('', width=50)
         self.AddColumn('', width=300)
-        self.SetMainColumn(0)
+        self.SetMainColumn(1)
         self.root_item = self.AddRoot('')
         
         self.items = self.root_item._children
@@ -93,7 +93,8 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
                 step_profile_item_panel = StepProfileItemPanel(self,
                                                                step_profile)
                 item = self.AppendItem(self.root_item, '',
-                                       wnd=step_profile_item_panel)
+                                       )#wnd=step_profile_item_panel)
+                item.SetWindow(step_profile_item_panel, 0)
                 item.step_profile = step_profile
                 item.step_profile_item_panel = step_profile_item_panel
                 self.step_profiles_to_items[step_profile] = item

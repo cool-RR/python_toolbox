@@ -14,6 +14,11 @@ class StepProfileItemPanel(wx.Panel):
             step_profiles_list.GetMainWindow()
         )
         
+        
+        self.SetBackgroundColour(
+            step_profiles_list.GetMainWindow().GetBackgroundColour()
+        )
+        
         self.main_h_sizer = wx.BoxSizer(wx.HORIZONTAL)
         
         
