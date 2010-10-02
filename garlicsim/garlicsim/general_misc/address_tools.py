@@ -327,17 +327,11 @@ def describe(obj, shorten=False, root=None, namespace={}):
     
     ugly_reprs = []
     first_run = True
-    
-    while ugly_reprs or first_run:
-        
-        first_run = False
-        
-        
-    
-        
         
         
     while True:
+
+        current_result_changed = False
         
         ugly_reprs = _unresolvable_string_pattern.findall(current_result)
         
@@ -350,9 +344,12 @@ def describe(obj, shorten=False, root=None, namespace={}):
             
             address_of_ugly_repr = re_match.groups()[0]
             
-            object_candidate = _get_object_by_address(address_of_ugly_repr)
-            # (Not using `root` and `namespace` cause it's an address
-            # manufactured by `repr`.)
+            try:
+                object_candidate = _get_object_by_address(address_of_ugly_repr)
+                # (Not using `root` and `namespace` cause it's an address
+                # manufactured by `repr`.)
+            except Exception:
+                continue
             
             if repr(object_candidate) == ugly_repr:
                 # We have a winner!
@@ -360,10 +357,14 @@ def describe(obj, shorten=False, root=None, namespace={}):
                 pretty_address = _get_address(object_winner, root=root,
                                               namespace=namespace)                
                 current_result.replace(ugly_repr, pretty_address)
-                break
+                current_result_changed = True
           
-        # If no ugly_repr 
+        if current_result_changed:
+            continue
+        
         break
+    
+    return current_result
                 
             
             
