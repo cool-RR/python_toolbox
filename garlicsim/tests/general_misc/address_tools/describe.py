@@ -5,7 +5,7 @@ from garlicsim.general_misc.address_tools import (describe,
 prefix = __name__ + '.'    
 
 
-def test_get_address():
+#def test_locally_defined_class():
     
     ###########################################################################
     # Testing for locally defined class:
@@ -30,8 +30,7 @@ def test_get_address():
     #assert resolve(result, root='A.C.D') == A.C.D.deeper_method
     
     
-    ###########################################################################
-    # Testing for standard-library module:
+def test_stdlib():
     
     import email.encoders
     result = describe(email.encoders)
@@ -52,8 +51,7 @@ def test_get_address():
            email.encoders
     
     
-    ###########################################################################
-    # Testing for garlicsim:
+def test_garlicsim():
     
     import garlicsim
     result = describe(garlicsim.data_structures.state.State)
@@ -126,8 +124,9 @@ def test_get_address():
     assert result == 'life.State.step'
     
     
-    ###########################################################################
-    # Testing for local modules:
+def test_local_modules():
+    
+    import garlicsim
     
     from .sample_module_tree import w
     
@@ -152,8 +151,7 @@ def test_get_address():
     assert result == 'x.y.z'
     
     
-    ###########################################################################
-    # 
+def test_ignore_confusing_namespace():
     
     import email.encoders
     import marshal
@@ -179,8 +177,8 @@ def test_get_address():
     assert result == 'email.encoders'
     
     
-    ###########################################################################
-    # 
+    
+def test_address_in_expression():
     
     import email.encoders
     import marshal
