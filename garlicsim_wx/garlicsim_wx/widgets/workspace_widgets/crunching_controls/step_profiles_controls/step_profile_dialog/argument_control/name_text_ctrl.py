@@ -40,4 +40,5 @@ class NameTextCtrl(wx.TextCtrl):
     def on_kill_focus(self, event):
         event.Skip()
         if self.FindFocus() != self:
-            self.error_mode = not self._check_validity_and_color()
+            if not self._check_validity_and_color() and not self.error_mode:
+                self.error_mode = True

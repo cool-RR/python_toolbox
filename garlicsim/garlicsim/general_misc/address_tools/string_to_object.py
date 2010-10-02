@@ -12,8 +12,7 @@ from .shared import (_contained_address_pattern, _address_pattern,
                      _get_parent_and_dict_from_namespace)
 
 
-# tododoc: add caching to all functions, after fixing caching with
-# ArgumentsProfile to accept kwargs.
+# tododoc: add caching to some functions
 
 
 def _get_object_by_address(address, root=None, namespace={}):

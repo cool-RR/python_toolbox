@@ -69,6 +69,7 @@ class StepProfilesControls(wx.Panel):
         self.delete_button.SetToolTipString(
             'Delete the selected step profile.'
         )
+        self.delete_button.Disable()
         
         self.button_h_sizer.Add(self.delete_button, 0, wx.RIGHT, 8)
         
@@ -77,7 +78,13 @@ class StepProfilesControls(wx.Panel):
         
         self.Bind(wx.EVT_BUTTON, self.on_new_button, source=self.new_button)
         self.Bind(wx.EVT_BUTTON, self.on_delete_button, source=self.delete_button)
+
         
+    def _recalculate(self):
+        if self.step_profiles_list.get_selected_step_profile():
+            self.delete_button.Enable()
+        else: # self.step_profiles_list.get_selected_step_profile() is None
+            self.delete_button.Disable()
             
     
     def show_step_profile_editing_dialog(self, step_profile=None):

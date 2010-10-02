@@ -106,7 +106,6 @@ class StepFunctionInput(wx.ComboBox):
                 self.error_mode = True
                 self._set_error_background()
             else:
-                self.error_mode = False
                 self._set_normal_background()
 
                 
