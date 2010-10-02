@@ -155,12 +155,12 @@ def resolve(string, root=None, namespace={}):
         except Exception:
             pass
         else:
+            big_parent_name = address.split('.', 1)[0]
+            big_parent = _get_object_by_address(big_parent_name, root=root,
+                                                namespace=namespace)
+            our_namespace[big_parent_name] = big_parent
             
-        
-        
-    try:
-        return eval(string)
-    except (NameError, AttributeError):
+    return eval(string, our_namespace)
     
 
 from .object_to_string import describe, _get_address

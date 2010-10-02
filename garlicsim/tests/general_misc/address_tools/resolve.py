@@ -93,11 +93,27 @@ def test_garlicsim():
     
     
 def test_address_in_expression():
+        
+    result = resolve('[object, email.encoders, marshal]')
+    import email, marshal, garlicsim
+    assert result == [object, email.encoders, marshal]
     
-    assert describe([object, email.encoders, marshal]) == \
-           '[object, email.encoders, marshal]'
+    assert resolve('[email.encoders, 7, (1, 3), marshal]') == \
+           [email.encoders, 7, (1, 3), marshal]
     
-    assert describe([email.encoders, 7, (1, 3), marshal]) == \
-           '[email.encoders, 7, (1, 3), marshal]'
+    result = resolve('{email: marshal, object: 7, garlicsim: garlicsim}')
+    import garlicsim
+    assert result == {email: marshal, object: 7, garlicsim: garlicsim}
+    
+    assert resolve('{email: marshal, object: 7, garlicsim: garlicsim}') == \
+           {email: marshal, object: 7, garlicsim: garlicsim}
+    
+    assert resolve('{Project: simulate}', namespace=garlicsim) == \
+           {garlicsim.Project: garlicsim.simulate}
+    
+    assert resolve('{asynchronous_crunching.Project: simulate}',
+                   root=garlicsim.asynchronous_crunching,
+                   namespace=garlicsim) == \
+           {garlicsim.asynchronous_crunching.Project: garlicsim.simulate}
 
     
