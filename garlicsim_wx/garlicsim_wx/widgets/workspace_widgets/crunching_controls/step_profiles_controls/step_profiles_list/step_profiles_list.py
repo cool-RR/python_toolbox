@@ -74,6 +74,8 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
             self.update_active_step_profile_indicator
         )
         
+        self.update_active_step_profile_indicator()
+        
   
         
     def update(self):
@@ -104,7 +106,10 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
                 )
                 
             item.step_profile_item_panel.SetSize(
-                (item.hue_control.GetSize()[0], item.GetHeight() - 4)
+                (
+                    item.step_profile_item_panel.GetSize()[0],
+                    item.GetHeight() - 4
+                )
             )
         
         for item in self.items:

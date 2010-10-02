@@ -35,7 +35,7 @@ class ActiveStepProfileIndicator(wx.Window):
             path.AddLineToPoint((1/4) * w, (2/3) * h)
             path.AddLineToPoint((1/4) * w, (1/3) * h)
             gc.SetPen(wx.TRANSPARENT_PEN)
-            gc.SetBrush(wx.Brush(wx.color((0, 0, 0))))
+            gc.SetBrush(wx.Brush(wx.Color(0, 0, 0)))
             gc.DrawPath(path)
             gc.Destroy()
         
