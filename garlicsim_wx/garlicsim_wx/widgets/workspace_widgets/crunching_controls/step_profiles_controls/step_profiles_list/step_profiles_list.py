@@ -15,8 +15,6 @@ import garlicsim, garlicsim_wx
 from garlicsim_wx.widgets import WorkspaceWidget
 from garlicsim_wx.misc.colors import hue_to_light_color
 
-
-from .hue_control import HueControl
 from .blank_context_menu import BlankContextMenu
 from .step_profile_context_menu import StepProfileContextMenu
 
