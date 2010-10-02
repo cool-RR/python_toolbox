@@ -101,6 +101,8 @@ class GuiProject(object):
         self.project = project or garlicsim.Project(simpack_grokker)
         '''The project encapsulated in this gui project.'''
         
+        assert isinstance(self.project, garlicsim.Project)
+        
 
         ### Choosing a Cruncher class: ########################################
         

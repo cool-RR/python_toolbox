@@ -5,8 +5,10 @@ import pkg_resources
 import wx
 
 from garlicsim_wx.general_misc import wx_tools
+from garlicsim_wx.widgets.general_misc.error_dialog import ErrorDialog
 
-import garlicsim, garlicsim_wx
+import garlicsim
+import garlicsim_wx
 
 from .step_profiles_list import StepProfilesList
 from .step_profile_dialog import StepProfileDialog
@@ -109,8 +111,20 @@ class StepProfilesControls(wx.Panel):
 
             
 
-    def show_delete_dialog(self, step_profile):
-        raise NotImplementedError()
+    def try_delete_step_profile(self, step_profile):
+        # todo: in the future, make this dialog offer to delete the nodes with
+        # the step profile.
+        tree_step_profiles = self.gui_project.project.tree.get_step_profiles()
+        if step_profile in tree_step_profiles:
+            error_dialog = ErrorDialog(
+                self,
+                "The step profile `%s` is currently used in the tree; It may "
+                "not be deleted." % step_profile
+            )
+            error_dialog.ShowModal()
+            return
+        else:
+            self.gui_project.step_profiles.remove(step_profile)
             
             
     def on_new_button(self, event):
@@ -118,6 +132,6 @@ class StepProfilesControls(wx.Panel):
     
     
     def on_delete_button(self, event):
-        self.show_delete_dialog(
+        self.try_delete_step_profile(
             self.step_profiles_list.get_selected_step_profile()
         )
