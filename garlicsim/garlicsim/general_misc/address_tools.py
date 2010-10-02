@@ -5,7 +5,7 @@ from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import dict_tools
 from garlicsim.general_misc import caching
 
-# tododoc: split to `get_object` and `get_address`
+# tododoc: split to `_get_object_by_address` and `_get_address`
 
 # tododoc: add caching to all functions, after fixing caching with
 # ArgumentsProfile to accept kwargs.
@@ -27,8 +27,9 @@ def _tail_shorten(address, root=None, namespace={}):
         return address
     
     parent_address, child_name = address.rsplit('.', 1)
-    parent = get_object(parent_address, root=root, namespace=namespace)
-    child = get_object(address, root=root, namespace=namespace)
+    parent = _get_object_by_address(parent_address, root=root,
+                                    namespace=namespace)
+    child = _get_object_by_address(address, root=root, namespace=namespace)
     
     current_parent_address = parent_address
     
@@ -44,7 +45,7 @@ def _tail_shorten(address, root=None, namespace={}):
             # We've reached the top module and it's successful, can break now.
             break
         
-        current_parent = get_object(current_parent_address,
+        current_parent = _get_object_by_address(current_parent_address,
                                     root=root, namespace=namespace)
         
         candidate_child = getattr(current_parent, child_name, None)
@@ -93,7 +94,7 @@ def shorten_address(address, root=None, namespace={}):
     return new_address
 
 
-def get_object(address, root=None, namespace={}):
+def _get_object_by_address(address, root=None, namespace={}):
 
     # todo: should know what exception this will raise if the address is bad /
     # object doesn't exist.
@@ -110,13 +111,13 @@ def get_object(address, root=None, namespace={}):
     if root:
         # First for `root`:
         if isinstance(root, basestring):
-            root = get_object(root)
+            root = _get_object_by_address(root)
         root_short_name = root.__name__.rsplit('.', 1)[-1]
         
     if namespace:
         # And then for `namespace`:
         if isinstance(namespace, basestring):
-            namespace = get_object(namespace)
+            namespace = _get_object_by_address(namespace)
         
         # For the namespace, the user can give either a parent object
         # (`getattr(namespace, address) is obj`) or a dict-like namespace
@@ -156,8 +157,9 @@ def get_object(address, root=None, namespace={}):
         else: # '.' in address
             first_object_address, second_object_address = \
                 address.rsplit('.', 1)
-            first_object = get_object(first_object_address, root=root)
-            second_object = get_object(second_object_address,
+            first_object = _get_object_by_address(first_object_address,
+                                                  root=root)
+            second_object = _get_object_by_address(second_object_address,
                                        namespace=first_object)
             return second_object
 
@@ -198,19 +200,19 @@ def get_object(address, root=None, namespace={}):
         else: # '.' in address
             first_object_address, second_object_address = \
                 address.rsplit('.', 1)
-            first_object = get_object(
+            first_object = _get_object_by_address(
                 first_object_address,
                 root=root,
                 namespace=parent_object or namespace_dict
             )
-            second_object = get_object(
+            second_object = _get_object_by_address(
                 second_object_address,
                 namespace=first_object
             )
             return second_object
     
 
-def get_address(obj, shorten=False, root=None, namespace={}):
+def _get_address(obj, shorten=False, root=None, namespace={}):
     
     # todo: Support classes inside classes. Currently doesn't work because
     # Python doesn't tell us inside in which class an inner class was defined.
@@ -223,28 +225,31 @@ def get_address(obj, shorten=False, root=None, namespace={}):
     
     if isinstance(obj, types.ModuleType):
         address = obj.__name__
-        assert get_object(address) is obj
+        assert _get_object_by_address(address) is obj
     
     elif isinstance(obj, types.MethodType):
         address = '.'.join((obj.__module__, obj.im_class.__name__,
                             obj.__name__))
-        assert get_object(address) == obj
+        assert _get_object_by_address(address) == obj
         
     else:
         address= '.'.join((obj.__module__, obj.__name__))
-        assert get_object(address) is obj
+        assert _get_object_by_address(address) is obj
         
         
     if root or namespace:
         
         if isinstance(root, basestring):
-            root = get_object(root)
+            root = _get_object_by_address(root)
             
         if isinstance(namespace, basestring):
-            namespace = get_object(namespace)
+            namespace = _get_object_by_address(namespace)
+
 
         if namespace:
-            if hasattr(namespace, '__getitem__') and hasattr(namespace, 'keys'):
+            
+            if hasattr(namespace, '__getitem__') and \
+               hasattr(namespace, 'keys'):
                 original_namespace_dict = namespace
             else:
                 original_namespace_dict = vars(namespace)
@@ -267,7 +272,7 @@ def get_address(obj, shorten=False, root=None, namespace={}):
         # 'garlicsim.misc.step_copy', 'garlicsim.misc.step_copy.StepCopy']
         
         for head in reversed(heads):
-            object_ = get_object(head)
+            object_ = _get_object_by_address(head)
             if root:
                 if object_ is root:
                     root_short_name = root.__name__.rsplit('.', 1)[-1]
@@ -300,5 +305,67 @@ def resolve(address, root=None, namespace={}):
     try:
         return eval(address)
     except (NameError, AttributeError):
-        return get_object(address, root, namespace)
+        return _get_object_by_address(address, root, namespace)
+    
+    
+_unresolvable_string_pattern = re.compile("<[^<>]*?'[^<>]*?'[^<>]*?>")
+
+
+_address_in_unresolvable_string_pattern = re.compile("[^']*?'([^']*?)'[^']*?")
+
+    
+def describe(obj, shorten=False, root=None, namespace={}):
+    #tododoc: test this
+    
+    if isinstance(obj, types.ModuleType) or hasattr(obj, '__module__'):
+        
+        return _get_address(obj, shorten=shorten, root=root,
+                            namespace=namespace)
+    
+    raw_result = repr(obj)
+    current_result = raw_result
+    
+    ugly_reprs = []
+    first_run = True
+    
+    while ugly_reprs or first_run:
+        
+        first_run = False
+        
+        
+    
+        
+        
+        
+    while True:
+        
+        ugly_reprs = _unresolvable_string_pattern.findall(current_result)
+        
+        for ugly_repr in ugly_reprs:
+            
+            re_match = _address_in_unresolvable_string_pattern.match(ugly_repr)
+            
+            if not re_match:
+                continue
+            
+            address_of_ugly_repr = re_match.groups()[0]
+            
+            object_candidate = _get_object_by_address(address_of_ugly_repr)
+            # (Not using `root` and `namespace` cause it's an address
+            # manufactured by `repr`.)
+            
+            if repr(object_candidate) == ugly_repr:
+                # We have a winner!
+                object_winner = object_candidate
+                pretty_address = _get_address(object_winner, root=root,
+                                              namespace=namespace)                
+                current_result.replace(ugly_repr, pretty_address)
+                break
+          
+        # If no ugly_repr 
+        break
+                
+            
+            
+    
     
