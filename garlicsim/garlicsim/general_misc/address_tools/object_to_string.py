@@ -71,6 +71,7 @@ def shorten_address(address, root=None, namespace={}):
 
     if not _address_pattern.match(address):
         raise ValueError("'%s' is not a legal address." % address)
+        # tododoc: test
     
     if '.' not in address:
         # Nothing to shorten
@@ -109,7 +110,7 @@ def _get_address(obj, shorten=False, root=None, namespace={}):
     if not (isinstance(obj, types.ModuleType) or hasattr(obj, '__module__')):
         raise Exception("%s is not a module, nor does not have a `__module__` "
                         "attribute, therefore we can't get its address." % \
-                        (obj,))
+                        (obj,)) # tododoc: test
     
     if isinstance(obj, types.ModuleType):
         address = obj.__name__
