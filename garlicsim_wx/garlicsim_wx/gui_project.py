@@ -498,7 +498,11 @@ class GuiProject(object):
 
     def get_active_state(self):
         '''Get the active state, i.e. the state of the active node.'''
-        return self.active_node.state if self.active_node is not None else None
+        return self.active_node.state if self.active_node else None
+
+    
+    def get_active_step_profile(self):
+        return self.active_node.step_profile if self.active_node else None
                 
     
     def _set_active_node(self, node):
