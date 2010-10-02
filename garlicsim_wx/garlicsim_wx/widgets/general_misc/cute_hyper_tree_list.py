@@ -11,19 +11,19 @@ EVT_COMMAND_TREE_ITEM_RIGHT_CLICK = \
 
 class CuteHyperTreeList(HyperTreeList):
     
-    def __init__(self, parent, id=wx.ID_ANY, pos=wx.DefaultPosition, size=wx.DefaultSize,
-                 style=0, agwStyle=wx.TR_DEFAULT_STYLE, validator=wx.DefaultValidator,
-                 name="HyperTreeList"):
+    def __init__(self, parent, id=wx.ID_ANY, pos=wx.DefaultPosition,
+                 size=wx.DefaultSize, style=0, agwStyle=wx.TR_DEFAULT_STYLE,
+                 validator=wx.DefaultValidator, name="HyperTreeList"):
         HyperTreeList.__init__(self, parent, id, pos, size, style, agwStyle,
                                validator, name)
         
         # Hackishly generating context menu event and tree item menu event from
         # these events:
-        self.Bind(EVT_COMMAND_TREE_ITEM_RIGHT_CLICK,
-                  self.on_command_tree_item_right_click)
-        self.Bind(wx.EVT_KEY_DOWN, self.on_key_down)
-        self.Bind(wx.EVT_RIGHT_UP, self.on_right_up)
-        self.Bind(wx.EVT_CONTEXT_MENU, self.on_context_menu)
+        self.GetMainWindow().Bind(EVT_COMMAND_TREE_ITEM_RIGHT_CLICK,
+                                  self.on_command_tree_item_right_click)
+        self.GetMainWindow().Bind(wx.EVT_KEY_DOWN, self.on_key_down)
+        self.GetMainWindow().Bind(wx.EVT_RIGHT_UP, self.on_right_up)
+        self.GetMainWindow().Bind(wx.EVT_CONTEXT_MENU, self.__on_context_menu)
 
         
     
@@ -94,7 +94,7 @@ class CuteHyperTreeList(HyperTreeList):
             event.Skip()
 
 
-    def on_context_menu(self, event):
+    def __on_context_menu(self, event):
         
         abs_position = event.GetPosition()
         item = self.GetSelection()

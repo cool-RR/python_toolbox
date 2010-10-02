@@ -668,7 +668,8 @@ class GuiProject(object):
         if args or kwargs:
             step_profile = \
                 garlicsim.misc.StepProfile.build_with_default_step_function(
-                    node.step_profile.step_function,
+                    node.step_profile.step_function if node.step_profile \
+                    else None,
                     *args,
                     **kwargs
                 )

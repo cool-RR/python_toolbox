@@ -97,6 +97,9 @@ class StepProfile(ArgumentsProfile):
         # tododoc: it's confusing thinking who should give the
         # `default_step_function`. make this clear in docstring, or possibly
         # make a function that returns a function.
+        
+        # tododoc: test it works with default_step_function=None, assuming some
+        # step function is given, possibly in a step profile
 
         # We have two candidates to check now: args[0] and
         # kwargs['step_function']. We'll check the kwargs one first, because

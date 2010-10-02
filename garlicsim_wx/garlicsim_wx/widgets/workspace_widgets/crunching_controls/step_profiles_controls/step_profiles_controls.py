@@ -114,6 +114,8 @@ class StepProfilesControls(wx.Panel):
     def try_delete_step_profile(self, step_profile):
         # todo: in the future, make this dialog offer to delete the nodes with
         # the step profile.
+        if step_profile is None:
+            return
         tree_step_profiles = self.gui_project.project.tree.get_step_profiles()
         if step_profile in tree_step_profiles:
             error_dialog = ErrorDialog(
