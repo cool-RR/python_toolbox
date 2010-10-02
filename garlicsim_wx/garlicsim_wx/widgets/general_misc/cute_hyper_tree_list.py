@@ -20,15 +20,15 @@ class CuteHyperTreeList(HyperTreeList):
         # Hackishly generating context menu event and tree item menu event from
         # these events:
         self.GetMainWindow().Bind(EVT_COMMAND_TREE_ITEM_RIGHT_CLICK,
-                                  self.on_command_tree_item_right_click)
-        self.GetMainWindow().Bind(wx.EVT_KEY_DOWN, self.on_key_down)
-        self.GetMainWindow().Bind(wx.EVT_RIGHT_UP, self.on_right_up)
+                                  self.__on_command_tree_item_right_click)
+        self.GetMainWindow().Bind(wx.EVT_KEY_DOWN, self.__on_key_down)
+        self.GetMainWindow().Bind(wx.EVT_RIGHT_UP, self.__on_right_up)
         self.GetMainWindow().Bind(wx.EVT_CONTEXT_MENU, self.__on_context_menu)
 
         
     
         
-    def on_command_tree_item_right_click(self, event):
+    def __on_command_tree_item_right_click(self, event):
         
         new_event = hypertreelist.TreeEvent(
             customtreectrl.wxEVT_TREE_ITEM_MENU,
@@ -40,7 +40,7 @@ class CuteHyperTreeList(HyperTreeList):
         wx.PostEvent(self, new_event)
         
         
-    def on_right_up(self, event):
+    def __on_right_up(self, event):
         item = self._main_win._anchor.HitTest(
             self._main_win.CalcUnscrolledPosition(
                 wx.Point(event.GetX(), event.GetY())
@@ -73,7 +73,7 @@ class CuteHyperTreeList(HyperTreeList):
             #wx_tools.post_event(self, wx.EVT_CONTEXT_MENU, self, meow='qw')
         
             
-    def on_key_down(self, event):
+    def __on_key_down(self, event):
         # Hacky, either the OS or wxPython should be doing this:
         key = wx_tools.Key.get_from_key_event(event)
         if key in wx_tools.menu_keys:
@@ -100,6 +100,7 @@ class CuteHyperTreeList(HyperTreeList):
         item = self.GetSelection()
         
         if abs_position == wx.DefaultPosition and item:
+            #event.Veto()
             new_event = hypertreelist.TreeEvent(
                 customtreectrl.wxEVT_TREE_ITEM_MENU,
                 self.GetId(),

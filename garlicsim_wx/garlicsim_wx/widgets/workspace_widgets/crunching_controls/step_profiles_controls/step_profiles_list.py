@@ -112,22 +112,31 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
     def get_selected_step_profile(self):
         
         selection = self.GetSelection()
-        # Checking it's not the root:
-        if selection and (not selection.HasChildren()):
+        if selection and (selection != self.root_item):
             return selection.step_profile
         else:
             return None
     
     
     def on_tree_item_menu(self, event):
-        abs_position = event.GetPoint()
+        abs_position = event.GetPoint() or wx.DefaultPosition
         
         if abs_position == wx.DefaultPosition:
             position = (0, 0) # todo: take position smartly
         else:
             position = self.ScreenToClient(abs_position)
+
+        if self.get_selected_step_profile() is not None:
+            self.PopupMenu(self.step_profile_context_menu, position)
+        else:
+            new_event = wx.ContextMenuEvent(
+                wx.wxEVT_CONTEXT_MENU,
+                self.GetId(),
+                abs_position #self.ClientToScreen(abs_position)
+            )
+            new_event.SetEventObject(self)
+            wx.PostEvent(self, new_event)
             
-        self.PopupMenu(self.step_profile_context_menu, position)
     
             
     def on_context_menu(self, event):
