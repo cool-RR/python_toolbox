@@ -5,6 +5,7 @@ class ActiveStepProfileIndicator(wx.Window):
     def __init__(self, step_profile_item_panel, step_profile):
         self.step_profile_item_panel = step_profile_item_panel
         self.active = False
+        wx.Window.__init__(self, step_profile_item_panel)
         self.Bind(wx.EVT_PAINT, self.on_paint)
         
     

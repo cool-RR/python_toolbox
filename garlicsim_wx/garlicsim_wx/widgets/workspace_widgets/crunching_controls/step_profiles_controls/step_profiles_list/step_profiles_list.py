@@ -17,6 +17,7 @@ from garlicsim_wx.misc.colors import hue_to_light_color
 
 from .blank_context_menu import BlankContextMenu
 from .step_profile_context_menu import StepProfileContextMenu
+from .step_profile_item_panel import StepProfileItemPanel
 
 
 class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
@@ -87,11 +88,12 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
             try:
                 item = self.step_profiles_to_items[step_profile]
             except KeyError:
-                hue_control = HueControl(self, step_profile)
-                item = self.AppendItem(self.root_item, '', ct_type=0, #2,
-                                       wnd=hue_control)
+                step_profile_item_panel = StepProfileItemPanel(self,
+                                                               step_profile)
+                item = self.AppendItem(self.root_item, '',
+                                       wnd=step_profile_item_panel)
                 item.step_profile = step_profile
-                item.hue_control = hue_control
+                item.step_profile_item_panel = step_profile_item_panel
                 self.step_profiles_to_items[step_profile] = item
                 self.SetItemText(
                     item,
@@ -101,18 +103,20 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
                     1
                 )
                 
-            item.hue_control.SetSize((item.hue_control.GetSize()[0],
-                                       item.GetHeight() - 4))
+            item.step_profile_item_panel.SetSize(
+                (item.hue_control.GetSize()[0], item.GetHeight() - 4)
+            )
         
         for item in self.items:
             if item.step_profile not in gui_project.step_profiles:
                 self.Delete(item)
-                #item.hue_control.Destroy() Apparently gets destroyed before
+                # item.step_profile_item_panel.Destroy()
+                # Apparently gets destroyed before
                 
                
     def update_active_step_profile_indicator(self):
         active_step_profile = self.gui_project.get_active_step_profile()
-        for item in self.items():
+        for item in self.items:
             active_step_profile_indicator = \
                 item.step_profile_item_panel.active_step_profile_indicator
             step_profile = item.step_profile
