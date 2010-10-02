@@ -37,7 +37,7 @@ def test_locally_defined_class():
     assert resolve('A', root=A) == A
 
     
-def test_stdlib():
+def test_stdlib():    
     
     result = resolve('email')
     import email
@@ -66,6 +66,8 @@ def test_stdlib():
     result = resolve('base64.b32decode', root=marshal,
                         namespace='email.email.encoders')
     assert result is email.encoders.base64.b32decode
+    
+    assert resolve('object') is object
     
     
 def test_garlicsim():

@@ -44,86 +44,66 @@ def _get_object_by_address(address, root=None, namespace={}):
         parent_object, namespace_dict = _get_parent_and_dict_from_namespace(
             namespace
         )
+    else:
+        parent_object, namespace_dict = None, None
             
         
     # Finished analyzing `root` and `namespace`.
     ###########################################################################
     
     # Let's rule out the easy option that the requested object is the root:
-    if root and (address == root_short_name):
-        return root
     
     
+    if '.' not in address:
     
+        if root and (address == root_short_name):
+            return root
     
-    if not namespace:
+        if parent_object:
+                
+            if isinstance(parent_object, types.ModuleType) and \
+               hasattr(parent_object, '__path__'):
+                                
+                # `parent_object` is a package. The wanted object may be a
+                # module. Let's try importing it:
+                
+                import_tools.import_if_exists(
+                    '.'.join((parent_object.__name__, address)),
+                    silent_fail=True
+                )
+                # Not keeping reference, just importing so we could get later
         
-        if '.' not in address:
-            # We were called without a namespace with an address with no dots.
-            # There are limited options on what it can be: Either the root (we
-            # ruled that out above), or a builtin, or a module. We try the last
-            # two:
+        # We know we have a `namespace_dict` to take the object from, and we
+        # might have a `parent_object` we can take the object from by using
+        # `getattr`. We always have a `namespace_dict`, but not always a
+        # `parent_object`.
+        #
+        # We are going to prefer to do `getattr` from `parent_object`, if one
+        # exists, rather than using `namespace_dict`. This is because some
+        # attributes may not be present on an object's `__dict__`, and we want
+        # to be able to catch them:
+        if parent_object and hasattr(parent_object, address):
+            return getattr(parent_object, address)
+        elif namespace_dict and (address in namespace_dict):
+            return namespace_dict[address]
+        else:
             try:
-                return eval(address) # Option 1: A builtin.
-            except NameError:
-                return __import__(address) # Option 2: A module.
-                
-        else: # '.' in address
-            first_object_address, second_object_address = \
-                address.rsplit('.', 1)
-            first_object = _get_object_by_address(first_object_address,
-                                                  root=root)
-            second_object = _get_object_by_address(second_object_address,
-                                       namespace=first_object)
-            return second_object
+                return eval(address) # In case it's a builtin.
+            except:
+                return __import__(address) # Last option: A module
+    
+            
+    else: # '.' in address
+        
+        first_object_address, second_object_address = address.rsplit('.', 1)
+        
+        first_object = _get_object_by_address(first_object_address, root=root,
+                                              namespace=namespace)
 
-        
-    else: # We got a namespace
-        
-        if '.' not in address:
-            
-            if parent_object:
-                
-                if isinstance(parent_object, types.ModuleType) and \
-                   hasattr(parent_object, '__path__'):
-                                    
-                    # `parent_object` is a package. The wanted object may be a
-                    # module. Let's try importing it:
-                    
-                    import_tools.import_if_exists(
-                        '.'.join((parent_object.__name__, address)),
-                        silent_fail=True
-                    )
-                    # Not keeping reference, just importing so we could get
-                    # later
-            
-            # We know we have a `namespace_dict` to take the object from, and we
-            # might have a `parent_object` we can take the object from by using
-            # `getattr`. We always have a `namespace_dict`, but not always a
-            # `parent_object`.
-            #
-            # We are going to prefer to do `getattr` from `parent_object`, if
-            # one exists, rather than using `namespace_dict`. This is because
-            # some attributes may not be present on an object's `__dict__`, and
-            # we want to be able to catch them:
-            if parent_object:
-                return getattr(parent_object, address)
-            else:
-                return namespace_dict[address]
-        
-        else: # '.' in address
-            first_object_address, second_object_address = \
-                address.rsplit('.', 1)
-            first_object = _get_object_by_address(
-                first_object_address,
-                root=root,
-                namespace=parent_object or namespace_dict
-            )
-            second_object = _get_object_by_address(
-                second_object_address,
-                namespace=first_object
-            )
-            return second_object
+        second_object = _get_object_by_address(second_object_address,
+                                                   namespace=first_object)
+
+        return second_object
     
 
 def resolve(string, root=None, namespace={}):
