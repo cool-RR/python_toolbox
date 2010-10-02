@@ -7,7 +7,7 @@ from garlicsim.general_misc import caching
 
 # Doing at bottom:
 # from .string_to_object import _get_object_by_address, resolve
-from .shared import _address_pattern
+from .shared import _address_pattern, _get_parent_and_dict_from_namespace
 
 # tododoc: add caching to all functions, after fixing caching with
 # ArgumentsProfile to accept kwargs.
@@ -137,11 +137,8 @@ def _get_address(obj, shorten=False, root=None, namespace={}):
 
         if namespace:
             
-            if hasattr(namespace, '__getitem__') and \
-               hasattr(namespace, 'keys'):
-                original_namespace_dict = namespace
-            else:
-                original_namespace_dict = vars(namespace)
+            (_useless, original_namespace_dict) = \
+                _get_parent_and_dict_from_namespace(namespace)
 
             namespace_dict = dict_tools.filter_items(
                 original_namespace_dict,

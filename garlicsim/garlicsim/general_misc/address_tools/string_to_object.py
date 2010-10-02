@@ -8,7 +8,7 @@ from garlicsim.general_misc import caching
 
 # Doing at bottom:
 # from .object_to_string import describe, _get_address
-from .shared import _address_pattern
+from .shared import _address_pattern, _get_parent_and_dict_from_namespace
 
 
 # tododoc: add caching to all functions, after fixing caching with
@@ -39,20 +39,10 @@ def _get_object_by_address(address, root=None, namespace={}):
         # And then for `namespace`:
         if isinstance(namespace, basestring):
             namespace = _get_object_by_address(namespace)
-        
-        # For the namespace, the user can give either a parent object
-        # (`getattr(namespace, address) is obj`) or a dict-like namespace
-        # (`namespace[address] is obj`).
-        #
-        # Here we extract the actual namespace and call it `namespace_dict`:
             
-        if hasattr(namespace, '__getitem__') and hasattr(namespace, 'keys'):
-            parent_object = None
-            namespace_dict = namespace
-            
-        else:
-            parent_object = namespace
-            namespace_dict = vars(parent_object)
+        parent_object, namespace_dict = _get_parent_and_dict_from_namespace(
+            namespace
+        )
             
         
     # Finished analyzing `root` and `namespace`.
@@ -145,11 +135,13 @@ def resolve(string, root=None, namespace={}):
     if _address_pattern.match(string):
         return _get_object_by_address(string, root=root, namespace=namespace)
 
+    (_useless, namespace_dict) = _get_parent_and_dict_from_namespace(namespace)
+    
     our_namespace = {}
-    our_namespace.update(namespace)
+    our_namespace.update(namespace_dict)
     
     re_matches = re_tools.searchall(_address_pattern, string)
-    addresses = [re_match.groups('address') for re_match in re_matches]
+    addresses = [re_match.group('address') for re_match in re_matches]
     
     for address in addresses:
         try:
