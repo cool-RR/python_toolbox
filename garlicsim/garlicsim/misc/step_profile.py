@@ -175,7 +175,7 @@ class StepProfile(ArgumentsProfile):
         
             
         if short_form:
-            step_function_address = address_tools.get_address(
+            step_function_address = address_tools.describe(
                 self.step_function,
                 shorten=True,
                 root=root,

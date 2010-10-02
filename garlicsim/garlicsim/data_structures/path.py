@@ -687,7 +687,7 @@ class Path(object):
         '''
         return '<%s of length %s at %s>' % \
                (
-                   address_tools.get_address(type(self), shorten=True),
+                   address_tools.describe(type(self), shorten=True),
                    len(self),
                    hex(id(self))
                )

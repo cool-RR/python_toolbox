@@ -399,7 +399,7 @@ Untouched nodes can't be edited, so they have no concept of being finalized.'''
         '''
         return '<%s%s, %s%s%s, %s, %sat %s>' % \
             (
-                address_tools.get_address(type(self), shorten=True),
+                address_tools.describe(type(self), shorten=True),
                 ' with clock %s' % self.state.clock if hasattr(self.state, 'clock') else '',
                 'root, ' if (self.parent is None) else '',
                 'leaf, ' if (len(self.children) == 0) else '',

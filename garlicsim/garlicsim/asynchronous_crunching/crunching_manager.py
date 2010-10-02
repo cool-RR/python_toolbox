@@ -330,7 +330,7 @@ class CrunchingManager(object):
                                    
         return '<%s currently employing %s crunchers to handle %s jobs at %s>' % \
                (
-                   address_tools.get_address(type(self), shorten=True),
+                   address_tools.describe(type(self), shorten=True),
                    crunchers_count,
                    job_count,
                    hex(id(self))

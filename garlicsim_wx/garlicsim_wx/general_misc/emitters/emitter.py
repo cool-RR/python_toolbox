@@ -271,7 +271,7 @@ class Emitter(object):
         0x1c013d0>
         '''
         return '<%s %sat %s>' % (
-            address_tools.get_address(type(self), shorten=True),
+            address_tools.describe(type(self), shorten=True),
             ''.join(("'", self.name, "' ")) if self.name else '',
             hex(id(self))
         )

@@ -161,7 +161,7 @@ class End(TreeMember):
         
         return '<%s from state with clock %s, crunched with %s, at %s>' % \
             (
-                address_tools.get_address(type(self), shorten=True),
+                address_tools.describe(type(self), shorten=True),
                 self.parent.state.clock,
                 self.step_profile,
                 hex(id(self))

@@ -117,7 +117,7 @@ class NodeRange(object):
         return '<%s, from %s %s to %s %s, containing %s nodes total, at %s>' \
                % (
                    
-                   address_tools.get_address(type(self), shorten=True),
+                   address_tools.describe(type(self), shorten=True),
                    
                    'block that starts at clock' if isinstance(self.start, Block) \
                    else 'node with clock',

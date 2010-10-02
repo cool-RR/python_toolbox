@@ -520,7 +520,7 @@ class Project(object):
         return '''<%s containing %s nodes and employing %s crunchers at \
 %s>''' % \
                (
-                   address_tools.get_address(type(self), shorten=True),
+                   address_tools.describe(type(self), shorten=True),
                    nodes_count,
                    crunchers_count,
                    hex(id(self))

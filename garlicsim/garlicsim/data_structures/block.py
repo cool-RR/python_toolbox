@@ -407,7 +407,7 @@ class Block(TreeMember):
         assert self.alive # todo: say "Dead block"
         return '<%s of length %s, crunched with %s at %s>' % \
                (
-                   address_tools.get_address(type(self), shorten=True),
+                   address_tools.describe(type(self), shorten=True),
                    len(self),
                    self.step_profile,
                    hex(id(self))

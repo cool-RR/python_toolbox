@@ -25,7 +25,7 @@ def _get_from_state_class(state_class):
     Internal use.
     '''
     assert state_class.__name__ == 'State' # remove this limitation
-    short_address = address_tools.get_address(state_class, shorten=True)
+    short_address = address_tools.describe(state_class, shorten=True)
     simpack_name = '.'.join(short_address.split('.')[:-1])
     simpack = __import__(simpack_name, fromlist=[''])
     try:

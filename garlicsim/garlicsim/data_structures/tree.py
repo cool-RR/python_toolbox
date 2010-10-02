@@ -315,7 +315,7 @@ class Tree(object):
         '''
         return '<%s with %s roots, %s nodes and %s possible paths at %s>' % \
                (
-                   address_tools.get_address(type(self), shorten=True),
+                   address_tools.describe(type(self), shorten=True),
                    len(self.roots),
                    len(self.nodes),
                    len(self.all_possible_paths()),

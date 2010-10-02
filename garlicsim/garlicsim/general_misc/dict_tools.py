@@ -3,8 +3,6 @@
 
 '''Defines several functions that may be useful when working with dicts.'''
 
-import copy
-
 
 def filter_items(d, condition, _dict_constructor=dict):
     # condition is a `lambda key, value` function
@@ -45,4 +43,3 @@ def fancy_string(d, indent=0):
     return temp2
     
     
-del copy    

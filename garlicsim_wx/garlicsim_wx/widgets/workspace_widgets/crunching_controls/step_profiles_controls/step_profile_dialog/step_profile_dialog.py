@@ -242,7 +242,7 @@ class StepProfileDialog(CuteDialog):
         
         
     def object_to_address(self, step_function):
-        return address_tools.get_address(
+        return address_tools.describe(
             step_function,
             shorten=True,
             root=self.simpack,
