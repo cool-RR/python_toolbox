@@ -275,8 +275,7 @@ class StepProfileDialog(CuteDialog):
             return
         
         try:
-            step_profile = self.argument_control.save()
-            # ...
+            self.argument_control.save()
         except ResolveFailed, resolve_failed_exception:
             error_dialog = ErrorDialog(self, resolve_failed_exception.message)
             error_dialog.ShowModal()

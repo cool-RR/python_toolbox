@@ -30,7 +30,9 @@ def get_step_type(step_function):
 
 
 def _get_step_type(step_function):
-    assert callable(step_function)
+    if not callable(step_function):
+        raise GarlicSimException("%s is not a callable object, so it can't be "
+                                 "a step function." % step_function)
     name = step_function.__name__
     if 'step' not in name:
         raise GarlicSimException(
