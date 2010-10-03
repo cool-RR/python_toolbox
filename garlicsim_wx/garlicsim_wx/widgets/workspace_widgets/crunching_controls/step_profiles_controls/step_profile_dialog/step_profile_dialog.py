@@ -38,7 +38,7 @@ class StepProfileDialog(CuteDialog):
             self.gui_project.simpack_grokker
         
         
-        CuteDialog.__init__(self, step_profiles_controls.frame,
+        CuteDialog.__init__(self, step_profiles_controls,
                             title='Create a new step profile')
         
         self.SetDoubleBuffered(True)
