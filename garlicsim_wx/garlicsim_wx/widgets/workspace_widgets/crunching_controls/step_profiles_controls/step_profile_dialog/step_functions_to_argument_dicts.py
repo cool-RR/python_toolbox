@@ -1,15 +1,11 @@
 import collections
 
 
-class StepFunctionsToArgumentDicts(collections.defaultdict):
-
-    def __init__(self, dict_or_iterable={}):
-        collections.defaultdict.__init__(self,
-                                         self.default_factory,
-                                         dict_or_iterable)
+class StepFunctionsToArgumentDicts(dict):
+    #tododoc: repr
     
         
-    def default_factory(self):
+    def __missing__(self, key):
         # For now this function is not very well-thought-out.
         all_dicts = self.values()
         all_dict_keys = reduce(
