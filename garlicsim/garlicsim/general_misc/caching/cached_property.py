@@ -31,7 +31,7 @@ class CachedProperty(object):
         
     def __get__(self, obj, our_type=None):
 
-        if not obj: # tododoc: bad condition! object can bool to False. write tests.
+        if obj is None: # tododoc: bad condition! object can bool to False. write tests.
             # We're being accessed from the class itself, not from an object
             return self
         

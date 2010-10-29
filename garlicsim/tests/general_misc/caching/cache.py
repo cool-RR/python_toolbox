@@ -12,7 +12,7 @@ def counting_func(a=1, b=2, *args, **kwargs):
         counting_func.i = (counting_func.i + 1)
 
         
-def test_cache_basic():
+def test_basic():
     
     f = cache()(counting_func)
     
@@ -27,7 +27,7 @@ def test_cache_basic():
     assert f(meow='frrr') == f(1, meow='frrr') == f(a=1, meow='frrr')
     
 
-def test_cache_weakref():
+def test_weakref():
     
     f = cache()(counting_func)
     
@@ -51,7 +51,7 @@ def test_cache_weakref():
     assert a_ref() is None
     
     
-def test_cache_max_size():
+def test_max_size():
     
     f = cache(max_size=3)(counting_func)
     
@@ -68,7 +68,7 @@ def test_cache_max_size():
     assert f(3) == f(3) == r3 == f(3)
     
 
-def test_cache_unhashable_arguments():
+def test_unhashable_arguments():
     
     f = cache()(counting_func)
     

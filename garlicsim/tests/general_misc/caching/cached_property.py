@@ -34,17 +34,18 @@ def test_as_decorator():
     class B(object):
         @CachedProperty
         def personality(self):
-            if not hasattr(counting_func, 'i'):
-                counting_func.i = 0
+            if not hasattr(B.personality, 'i'):
+                B.personality.i = 0
             try:
-                return counting_func.i
+                return B.personality.i
             finally:
-                counting_func.i = (counting_func.i + 1) % 10
+                B.personality.i = (B.personality.i + 1)
     
     assert isinstance(B.personality, CachedProperty)                
                 
     b1 = B()
     assert b1.personality == b1.personality == b1.personality
+
     
     b2 = B()
     assert b2.personality == b2.personality == b2.personality 
@@ -83,12 +84,12 @@ def test_on_false_object():
     class C(object):
         @CachedProperty
         def personality(self):
-            if not hasattr(counting_func, 'i'):
-                counting_func.i = 0
+            if not hasattr(C.personality, 'i'):
+                C.personality.i = 0
             try:
-                return counting_func.i
+                return C.personality.i
             finally:
-                counting_func.i = (counting_func.i + 1) % 10
+                C.personality.i = (C.personality.i + 1)
         
         def __bool__(self):
             return False
@@ -98,9 +99,11 @@ def test_on_false_object():
     assert isinstance(C.personality, CachedProperty)
                 
     c1 = C()
+    assert not c1
     assert c1.personality == c1.personality == c1.personality
     
     c2 = C()
+    assert not c2
     assert c2.personality == c2.personality == c2.personality 
     
     assert c2.personality == c1.personality + 1
