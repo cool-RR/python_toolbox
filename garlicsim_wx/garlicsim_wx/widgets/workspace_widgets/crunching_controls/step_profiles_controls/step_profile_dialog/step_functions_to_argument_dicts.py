@@ -1,24 +1,21 @@
 import collections
 
+from garlicsim.general_misc import introspection_tools
+from garlicsim.general_misc import address_tools
+
 
 class StepFunctionsToArgumentDicts(dict):
     #tododoc: repr
-    
+    def __init__(self, describe_function, *args, **kwargs):
+        dict.__init__(self, *args, **kwargs)
+        self.describe = describe_function
         
-    def __missing__(self, key):
-        # For now this function is not very well-thought-out.
-        all_dicts = self.values()
-        all_dict_keys = reduce(
-            set.union,
-            [set(d.keys()) for d in all_dicts],
-            set()
+    def __missing__(self, step_function):
+        defaults = introspection_tools.get_default_args_dict(step_function)
+        return collections.defaultdict(
+            lambda: '',
+            dict(
+                (key, self.describe(value)) for (key, value) in
+                defaults.iteritems()
+            )
         )
-        result = collections.defaultdict(lambda: '')
-        for key in all_dict_keys:
-            all_values = [d[key] for d in all_dicts if key in d]
-            if all_values:
-                value = max(all_values, key=lambda value: len(value))
-                result[key] = value
-        return result
-        
-    

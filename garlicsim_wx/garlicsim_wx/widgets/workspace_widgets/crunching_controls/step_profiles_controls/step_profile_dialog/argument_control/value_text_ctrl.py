@@ -25,7 +25,7 @@ class ValueTextCtrl(wx.TextCtrl):
     def _check_validity_and_color(self):
         
         try:
-            self.Parent.argument_control.step_profile_dialog.address_to_object(
+            self.Parent.argument_control.step_profile_dialog.resolve(
                 str(self.GetValue())
             )
         except Exception:

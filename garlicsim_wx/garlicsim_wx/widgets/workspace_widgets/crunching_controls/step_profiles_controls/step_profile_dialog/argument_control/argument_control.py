@@ -138,7 +138,7 @@ class ArgumentControl(wx.Panel):
                 value_string = arg.get_value_string() 
                 try:
                     # Not storing, just checking if it'll raise an error:
-                    self.step_profile_dialog.address_to_object(value_string)
+                    self.step_profile_dialog.resolve(value_string)
                 except Exception:
                     if not resolve_failed:
                         resolve_failed = ResolveFailed(
@@ -156,7 +156,7 @@ class ArgumentControl(wx.Panel):
                 value_string = star_arg.get_value_string()
                 try:
                     # Not storing, just checking if it'll raise an error:
-                    self.step_profile_dialog.address_to_object(value_string)
+                    self.step_profile_dialog.resolve(value_string)
                 except Exception:
                     if not resolve_failed:
                         resolve_failed = ResolveFailed(
@@ -182,7 +182,7 @@ class ArgumentControl(wx.Panel):
                 value_string = star_kwarg.get_value_string()
                 try:
                     # Not storing, just checking if it'll raise an error:
-                    self.step_profile_dialog.address_to_object(value_string)
+                    self.step_profile_dialog.resolve(value_string)
                 except Exception:
                     if not resolve_failed:
                         resolve_failed = ResolveFailed(

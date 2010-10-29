@@ -15,7 +15,7 @@ class StepFunctionInput(wx.ComboBox):
         self.step_profile_dialog = step_profile_dialog
         self.simpack_grokker = step_profile_dialog.simpack_grokker
         step_functions_list = [
-            step_profile_dialog.object_to_address(step_function) for
+            step_profile_dialog.describe(step_function) for
             step_function in self.simpack_grokker.all_step_functions
         ]
         
@@ -44,7 +44,7 @@ class StepFunctionInput(wx.ComboBox):
     def try_to_parse_text_and_set(self):
         text = str(self.GetValue())
         try:
-            thing = self.step_profile_dialog.address_to_object(text)
+            thing = self.step_profile_dialog.resolve(text)
         except Exception:
             if self.error_mode:
                 self._set_error_background()
@@ -65,7 +65,7 @@ class StepFunctionInput(wx.ComboBox):
     def parse_text_and_set(self):
         text = str(self.GetValue())
         try:
-            thing = self.step_profile_dialog.address_to_object(text)
+            thing = self.step_profile_dialog.resolve(text)
         except Exception:
             raise Exception("Error: Unable to resolve '%s' into a step "
                             "function." % text)

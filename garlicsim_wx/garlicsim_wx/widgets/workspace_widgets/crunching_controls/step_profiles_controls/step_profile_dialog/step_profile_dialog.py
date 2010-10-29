@@ -51,7 +51,7 @@ class StepProfileDialog(CuteDialog):
         self.hue = self.gui_project.step_profiles_to_hues.default_factory()
         
         self.step_functions_to_argument_dicts = \
-            StepFunctionsToArgumentDicts()
+            StepFunctionsToArgumentDicts(self.describe)
         
         self.step_functions_to_star_args = \
             collections.defaultdict(lambda: [])
@@ -66,7 +66,7 @@ class StepProfileDialog(CuteDialog):
 
             self.step_function = original_step_function
             
-            initial_step_function_address = self.object_to_address(
+            initial_step_function_address = self.describe(
                 original_step_function
             )
 
@@ -76,7 +76,7 @@ class StepProfileDialog(CuteDialog):
             )
 
             self.step_functions_to_argument_dicts[original_step_function] = \
-                dict((key, self.object_to_address(value)) for (key, value) in
+                dict((key, self.describe(value)) for (key, value) in
                  original_argument_dict.iteritems())
             
 
@@ -89,7 +89,7 @@ class StepProfileDialog(CuteDialog):
                 ]
                 
                 self.step_functions_to_star_args[original_step_function] = \
-                    [self.object_to_address(value) for value in
+                    [self.describe(value) for value in
                      star_args_value]
             
             
@@ -99,7 +99,7 @@ class StepProfileDialog(CuteDialog):
                 ]
                 
                 self.step_functions_to_star_kwargs[original_step_function] = \
-                    dict((key, self.object_to_address(value)) for (key, value)
+                    dict((key, self.describe(value)) for (key, value)
                          in star_kwargs_value.iteritems())
                 
             
@@ -112,7 +112,7 @@ class StepProfileDialog(CuteDialog):
             if len(simpack_grokker.all_step_functions) >= 2:
                 initial_step_function_address = ''
             else: # len(simpack_grokker.all_step_functions) == 1
-                initial_step_function_address = self.object_to_address(
+                initial_step_function_address = self.describe(
                     simpack_grokker.default_step_function
                 )
         
@@ -241,7 +241,7 @@ class StepProfileDialog(CuteDialog):
             self.static_function_text.set_step_function(step_function)
         
         
-    def object_to_address(self, step_function):
+    def describe(self, step_function):
         return address_tools.describe(
             step_function,
             shorten=True,
@@ -250,7 +250,7 @@ class StepProfileDialog(CuteDialog):
         )
         
     
-    def address_to_object(self, address):
+    def resolve(self, address):
         return address_tools.resolve(
             address,
             root=self.simpack,
@@ -291,15 +291,15 @@ class StepProfileDialog(CuteDialog):
             
             step_function,
             
-            dict((key, self.address_to_object(value_string)) for 
+            dict((key, self.resolve(value_string)) for 
                  (key, value_string) in self.\
                  step_functions_to_argument_dicts[step_function].iteritems()
                  if key in arg_spec.args),
             
-            [self.address_to_object(value_string) for value_string in 
+            [self.resolve(value_string) for value_string in 
              self.step_functions_to_star_args[step_function]],
             
-            dict((key, self.address_to_object(value_string)) for 
+            dict((key, self.resolve(value_string)) for 
                  (key, value_string) in
                  self.step_functions_to_star_kwargs[step_function].iteritems())
         )

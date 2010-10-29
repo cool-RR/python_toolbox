@@ -63,7 +63,7 @@ class StaticFunctionText(wx.Panel):
             step_type = \
                 garlicsim.misc.simpack_grokker.get_step_type(step_function)
             step_function_address = self.step_profile_dialog.\
-                                    object_to_address(step_function)
+                                    describe(step_function)
             label = '`%s` is a %s.' % (
                 step_function_address,
                 step_type.verbose_name

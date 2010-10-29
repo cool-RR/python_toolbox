@@ -2,7 +2,9 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''A module for simulating Conway's Game of Life.'''
+#tododoc: rename to `state.py`
 
+import email # tododoc: for tests, kill this before release
 import random
 import itertools
 
@@ -39,7 +41,7 @@ class State(garlicsim.data_structures.State):
         return State.create_root(width, height, fill='random')
                                  
     
-    def step(self, useless=None, krazy=None, *args):
+    def step(self, useless=None, krazy=None, more_useless=[7, {email: ()}], *args):
         old_board = self.board
         new_board = Board(parent=old_board)
         new_state = State()
