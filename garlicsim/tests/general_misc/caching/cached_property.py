@@ -13,23 +13,23 @@ def counting_func(self):
         counting_func.i = (counting_func.i + 1)
     
         
-def test_cached_property():
+def test():
         
     class A(object):
         personality = CachedProperty(counting_func)
     
     assert isinstance(A.personality, CachedProperty)
         
-    a = A()
-    assert a.personality == a.personality == a.personality
+    a1 = A()
+    assert a1.personality == a1.personality == a1.personality
     
     a2 = A()
     assert a2.personality == a2.personality == a2.personality 
     
-    assert a2.personality == a.personality + 1        
+    assert a2.personality == a1.personality + 1        
 
 
-def test_cached_property_as_decorator():
+def test_as_decorator():
         
     class B(object):
         @CachedProperty
@@ -43,38 +43,64 @@ def test_cached_property_as_decorator():
     
     assert isinstance(B.personality, CachedProperty)                
                 
-    b = B()
-    assert b.personality == b.personality == b.personality
+    b1 = B()
+    assert b1.personality == b1.personality == b1.personality
     
     b2 = B()
     assert b2.personality == b2.personality == b2.personality 
     
-    assert b2.personality == b.personality + 1
+    assert b2.personality == b1.personality + 1
         
     
-def test_cached_property_with_name():
+def test_with_name():
         
     class A(object):
         personality = CachedProperty(counting_func, name='personality')
     
-    a = A()
-    assert a.personality == a.personality == a.personality
+    a1 = A()
+    assert a1.personality == a1.personality == a1.personality
     
     a2 = A()
     assert a2.personality == a2.personality == a2.personality 
     
-    assert a2.personality == a.personality + 1
+    assert a2.personality == a1.personality + 1
         
     
-def test_cached_property_with_wrong_name():
+def test_with_wrong_name():
         
     class A(object):
         personality = CachedProperty(counting_func, name='meow')
     
-    a = A()
-    assert a.personality == a.meow == a.personality - 1 == a.personality - 2
+    a1 = A()
+    assert a1.personality == a1.meow == a1.personality - 1 == a1.personality - 2
     
     a2 = A()
     assert a2.personality == a2.meow == a2.personality - 1 == a2.personality - 2
     
     
+def test_on_false_object():
+    
+    class C(object):
+        @CachedProperty
+        def personality(self):
+            if not hasattr(counting_func, 'i'):
+                counting_func.i = 0
+            try:
+                return counting_func.i
+            finally:
+                counting_func.i = (counting_func.i + 1) % 10
+        
+        def __bool__(self):
+            return False
+        
+        __nonzero__ = __bool__
+        
+    assert isinstance(C.personality, CachedProperty)
+                
+    c1 = C()
+    assert c1.personality == c1.personality == c1.personality
+    
+    c2 = C()
+    assert c2.personality == c2.personality == c2.personality 
+    
+    assert c2.personality == c1.personality + 1
