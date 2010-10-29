@@ -21,13 +21,25 @@ class CuteDialog(wx.Dialog):
     2. Uses garlicsim_wx's default background color.
     '''
     def __init__(self, *args, **kwargs):
-        isinstance(kwargs, dict)
         if not kwargs.pop('skip_dialog_init', False):
             wx.Dialog.__init__(self, *args, **kwargs)
         self.SetBackgroundColour(wx_tools.get_background_color())
         
     def ShowModal(self):
         if True: #wx.Platform == '__WXMAC__':
-            self.Centre(wx.BOTH)
+            #self.Centre(wx.BOTH)
+            def try_center():
+                try:
+                    wx_tools.center_on_top_level_parent(self)
+                except Exception:
+                    # Solve problem, fuck `try` and lambdize.
+                    # Problem:
+                    # http://groups.google.com/group/wxpython-users/
+                    # browse_thread/thread/63a30859da024c9e
+                    pass
+                
+            wx.CallAfter(try_center)
+                
+            
         return super(CuteDialog, self).ShowModal()
     
