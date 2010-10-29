@@ -18,12 +18,11 @@ class CachedProperty(object):
             personality = CachedProperty(_get_personality)
     
     '''#tododoc: test as decorator
-    #tododoc: probably rename to CachedProperty, think
     def __init__(self, getter, name=None):
         '''
         Construct the cached property.
         
-        You may optionally pass in the name the this property has in the class;
+        You may optionally pass in the name that this property has in the class;
         This will save a bit of processing later.
         '''
         self.getter = getter
@@ -32,7 +31,7 @@ class CachedProperty(object):
         
     def __get__(self, obj, our_type=None):
 
-        if not obj:
+        if not obj: # tododoc: bad condition! object can bool to False. write tests.
             # We're being accessed from the class itself, not from an object
             return self
         
