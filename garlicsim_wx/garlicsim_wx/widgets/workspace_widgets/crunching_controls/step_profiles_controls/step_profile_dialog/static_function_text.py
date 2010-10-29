@@ -59,6 +59,7 @@ class StaticFunctionText(wx.Panel):
         
     def set_step_function(self, step_function):
         if step_function != self.step_function:
+            self.step_function = step_function
             step_type = \
                 garlicsim.misc.simpack_grokker.get_step_type(step_function)
             step_function_address = self.step_profile_dialog.\
