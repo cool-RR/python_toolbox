@@ -38,7 +38,8 @@ class CuteDialog(wx.Dialog):
                     # browse_thread/thread/63a30859da024c9e
                     pass
                 
-            wx.CallAfter(try_center)
+            #wx.CallAfter(try_center)
+            try_center()
                 
             
         return super(CuteDialog, self).ShowModal()
