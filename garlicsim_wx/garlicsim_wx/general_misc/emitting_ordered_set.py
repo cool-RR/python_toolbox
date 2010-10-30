@@ -5,7 +5,7 @@ class EmittingOrderedSet(OrderedSet):
     def __init__(self, emitter, items=()):
         if emitter:
             assert isinstance(emitter, Emitter)
-            self.emitter = emitter
+        self.emitter = emitter
         OrderedSet.__init__(self, items)
         
     def add(self, key):
