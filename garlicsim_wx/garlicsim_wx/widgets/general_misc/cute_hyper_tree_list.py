@@ -40,16 +40,22 @@ class CuteHyperTreeList(HyperTreeList):
         wx.PostEvent(self, new_event)
         
         
-    def __on_right_up(self, event):
-        item = self._main_win._anchor.HitTest(
-            self._main_win.CalcUnscrolledPosition(
-                wx.Point(event.GetX(), event.GetY())
-                ),
+    def _point_to_item(self, point):
+        return self._main_win._anchor.HitTest(
+            wx.Point(*point),
             self._main_win,
             0,
             self._main_win._curColumn,
             0
         )[0]
+
+    
+    def __on_right_up(self, event):
+        item = self._point_to_item(
+            self._main_win.CalcUnscrolledPosition(
+                event.GetPosition()
+            )
+        )
         if item:
             assert item is self.GetSelection()
             
@@ -95,16 +101,22 @@ class CuteHyperTreeList(HyperTreeList):
 
 
     def __on_context_menu(self, event):
-        
         abs_position = event.GetPosition()
-        item = self.GetSelection()
+        position = abs_position - self.ScreenPosition
+        selected_item = self.GetSelection()
+        hit_item = self._point_to_item(position)
         
-        if abs_position == wx.DefaultPosition and item:
+        if hit_item and (hit_item != selected_item):
+            self._main_win.SelectItem(hit_item)
+            selected_item = self.GetSelection()
+            assert hit_item == selected_item
+            
+        if selected_item:
             #event.Veto()
             new_event = hypertreelist.TreeEvent(
                 customtreectrl.wxEVT_TREE_ITEM_MENU,
                 self.GetId(),
-                item=item,
+                item=selected_item,
             )
             new_event.SetEventObject(self)
             wx.PostEvent(self, new_event)
