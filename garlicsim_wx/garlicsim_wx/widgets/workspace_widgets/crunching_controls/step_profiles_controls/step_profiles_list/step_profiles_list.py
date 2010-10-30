@@ -190,7 +190,7 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
         
     def on_change_color_button(self, event):
         item = self.GetSelection()
-        item.hue_control.open_editing_dialog()
+        item.step_profile_item_panel.hue_control.open_editing_dialog()
 
         
     def on_duplicate_and_edit_button(self, event):

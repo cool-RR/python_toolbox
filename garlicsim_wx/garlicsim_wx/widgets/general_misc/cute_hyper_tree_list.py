@@ -117,6 +117,7 @@ class CuteHyperTreeList(HyperTreeList):
                 customtreectrl.wxEVT_TREE_ITEM_MENU,
                 self.GetId(),
                 item=selected_item,
+                point=(position + self.ScreenPosition)
             )
             new_event.SetEventObject(self)
             wx.PostEvent(self, new_event)
