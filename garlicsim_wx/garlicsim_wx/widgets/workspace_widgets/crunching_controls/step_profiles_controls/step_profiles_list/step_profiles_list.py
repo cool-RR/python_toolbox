@@ -56,6 +56,7 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
         self.blank_context_menu = BlankContextMenu(self)
         self.step_profile_context_menu = StepProfileContextMenu(self)
         
+        self.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.on_tree_item_activated)
         
         self.Bind(wx.EVT_TREE_ITEM_MENU, self.on_tree_item_menu)
         self.Bind(wx.EVT_CONTEXT_MENU, self.on_context_menu)
@@ -139,6 +140,13 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
             return selection.step_profile
         else:
             return None
+        
+        
+    def on_tree_item_activated(self, event):
+        assert event.GetItem() == self.GetSelection()
+        self.step_profiles_controls.show_step_profile_editing_dialog(
+            self.get_selected_step_profile()
+        )
     
     
     def on_tree_item_menu(self, event):
