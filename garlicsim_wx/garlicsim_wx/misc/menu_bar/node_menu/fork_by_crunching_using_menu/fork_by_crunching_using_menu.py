@@ -14,7 +14,7 @@ from garlicsim_wx.general_misc.cute_menu import CuteMenu
 
 class ForkByCrunchingUsingMenu(CuteMenu):
     def __init__(self, frame):
-        super(NodeMenu, self).__init__()
+        super(ForkByCrunchingUsingMenu, self).__init__()
         self.frame = frame
         self._build()
     
@@ -31,7 +31,7 @@ class ForkByCrunchingUsingMenu(CuteMenu):
             '&New step profile...',
             ' Create a new step profile'
         )
-        frame.Bind(self.on_new_step_profile_button, wx.EVT_BUTTON,
+        frame.Bind(wx.EVT_BUTTON, self.on_new_step_profile_button,
                    self.new_step_profile_button)
         
         
@@ -40,6 +40,8 @@ class ForkByCrunchingUsingMenu(CuteMenu):
     
         
     def _recalculate(self):
+        if not self.frame.gui_project:
+            return
         step_profiles = self.frame.gui_project.step_profiles
         items = self.GetMenuItems()
         

@@ -54,7 +54,7 @@ class NodeMenu(CuteMenu):
         self.fork_by_crunching_using_menu_button = self.AppendMenu(
             -1,
             'Fork by crunching &using',
-            self.fork_by_crunching_using_menu
+            self.fork_by_crunching_using_menu,
             (' Fork by crunching from the active node using specified step '
              'profile')
         )
