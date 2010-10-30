@@ -82,8 +82,6 @@ class GuiProject(object):
         self.frame = frame
         '''The frame that this gui project lives in.'''
         
-        assert isinstance(self.frame, frame)
-        
         if isinstance(simpack, garlicsim.misc.SimpackGrokker):
             simpack_grokker = simpack            
             simpack = simpack_grokker.simpack
@@ -263,9 +261,7 @@ class GuiProject(object):
             self.tree_structure_modified_emitter = es.make_emitter(
                 outputs=(
                     self.tree_modified_emitter,
-                    self._update_step_profiles_set,
-                    self.frame.menu_bar.node_menu.\
-                    fork_by_crunching_using_menu._recalculate
+                    self._update_step_profiles_set
                     ),
                 name='tree_structure_modified',
             )
@@ -366,6 +362,10 @@ class GuiProject(object):
             
             self.step_profiles_set_modified_emitter = es.make_emitter(
                 name='step_profiles_set_modified',
+                outputs=(
+                    self.frame.menu_bar.node_menu.\
+                    fork_by_crunching_using_menu._recalculate,
+                )
             )
             self.step_profiles.set_emitter(
                 self.step_profiles_set_modified_emitter
