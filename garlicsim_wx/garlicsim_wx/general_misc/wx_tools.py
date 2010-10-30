@@ -138,20 +138,33 @@ class Key(object):
 menu_keys = [Key(wx.WXK_MENU), Key(wx.WXK_WINDOWS_MENU),
              Key(wx.WXK_F10, shift=True)]
 
-def create_navigation_key_event_from_key_event(key_event):
+def navigate_from_key_event(key_event):
     # tododoc: should find existing implementation
     # http://groups.google.com/group/wxpython-users/browse_thread/thread/
     # f59b9b73ebc6fed5?hl=en
     key = Key.get_from_key_event(key_event)
     
-    if key in [Key(wx.WXK_TAB), Key(wx.WXK_TAB, shift=True)]:
-        navigation_key_event = wx.NavigationKeyEvent()
-        navigation_key_event.SetFromTab()
-        if key == Key(wx.WXK_TAB):
-            navigation_key_event.SetDirection(True)
-        else: # key == Key(wx.WXK_TAB, shift=True)
-            navigation_key_event.SetDirection(False)
-        wx.PostEvent(key_event.GetEventObject(), navigation_key_event)
+    if key in [Key(wx.WXK_TAB), Key(wx.WXK_TAB, shift=True),
+               Key(wx.WXK_TAB, cmd=True),
+               Key(wx.WXK_TAB, cmd=True, shift=True)]:
+        
+        window = key_event.GetEventObject()
+        
+        flags = 0
+        
+        if key.shift:
+            flags |= wx.NavigationKeyEvent.IsBackward
+        else: # not key.shift
+            flags |= wx.NavigationKeyEvent.IsForward
+        
+        if key.cmd:
+            flags |= wx.NavigationKeyEvent.WinChange
+            
+        window.Navigate(flags)
+        return True
+    
+    else:
+        return False
             
 
     

@@ -81,6 +81,8 @@ class CuteHyperTreeList(HyperTreeList):
         
             
     def __on_key_down(self, event):
+        if wx_tools.navigate_from_key_event(event):
+            return
         # Hacky, either the OS or wxPython should be doing this:
         key = wx_tools.Key.get_from_key_event(event)
         if key in wx_tools.menu_keys:
