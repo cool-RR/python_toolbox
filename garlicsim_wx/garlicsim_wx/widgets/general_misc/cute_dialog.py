@@ -26,21 +26,21 @@ class CuteDialog(wx.Dialog):
         self.SetBackgroundColour(wx_tools.get_background_color())
         
     def ShowModal(self):
-        if True: #wx.Platform == '__WXMAC__':
+        #if True: #wx.Platform == '__WXMAC__':
             #self.Centre(wx.BOTH)
-            def try_center():
-                try:
-                    wx_tools.center_on_top_level_parent(self)
-                except Exception:
-                    # Solve problem, fuck `try` and lambdize.
-                    # Problem:
-                    # http://groups.google.com/group/wxpython-users/
-                    # browse_thread/thread/63a30859da024c9e
-                    pass
+            #def try_center():
+                #try:
+                    #wx_tools.center_on_top_level_parent(self)
+                #except Exception:
+                    ## Solve problem, fuck `try` and lambdize.
+                    ## Problem:
+                    ## http://groups.google.com/group/wxpython-users/
+                    ## browse_thread/thread/63a30859da024c9e
+                    #pass
                 
-            #wx.CallAfter(try_center)
-            try_center()
+            ##wx.CallAfter(try_center)
+            #try_center()
                 
-            
+        self.Centre(wx.BOTH)
         return super(CuteDialog, self).ShowModal()
     
