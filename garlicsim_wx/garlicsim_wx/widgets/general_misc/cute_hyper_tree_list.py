@@ -14,6 +14,7 @@ class CuteHyperTreeList(HyperTreeList):
     def __init__(self, parent, id=wx.ID_ANY, pos=wx.DefaultPosition,
                  size=wx.DefaultSize, style=0, agwStyle=wx.TR_DEFAULT_STYLE,
                  validator=wx.DefaultValidator, name="HyperTreeList"):
+        style |= wx.WANTS_CHARS
         HyperTreeList.__init__(self, parent, id, pos, size, style, agwStyle,
                                validator, name)
         

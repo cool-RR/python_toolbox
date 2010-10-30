@@ -137,6 +137,23 @@ class Key(object):
         
 menu_keys = [Key(wx.WXK_MENU), Key(wx.WXK_WINDOWS_MENU),
              Key(wx.WXK_F10, shift=True)]
+
+def create_navigation_key_event_from_key_event(key_event):
+    # tododoc: should find existing implementation
+    # http://groups.google.com/group/wxpython-users/browse_thread/thread/
+    # f59b9b73ebc6fed5?hl=en
+    key = Key.get_from_key_event(key_event)
+    
+    if key in [Key(wx.WXK_TAB), Key(wx.WXK_TAB, shift=True)]:
+        navigation_key_event = wx.NavigationKeyEvent()
+        navigation_key_event.SetFromTab()
+        if key == Key(wx.WXK_TAB):
+            navigation_key_event.SetDirection(True)
+        else: # key == Key(wx.WXK_TAB, shift=True)
+            navigation_key_event.SetDirection(False)
+        wx.PostEvent(key_event.GetEventObject(), navigation_key_event)
+            
+
     
 def iter_rects_of_region(region):
     '''Iterate over the rects of a region.'''
