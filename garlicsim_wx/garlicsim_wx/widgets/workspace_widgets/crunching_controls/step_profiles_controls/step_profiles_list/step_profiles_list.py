@@ -234,4 +234,4 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
             
     def on_set_focus(self, event):
         if self.frame.FindFocus() == self:
-            self.GetMainWindow().SetFocus()
+            self.GetMainWindow().SetFocusIgnoringChildren()
