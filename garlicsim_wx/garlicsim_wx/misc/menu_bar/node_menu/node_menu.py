@@ -11,6 +11,8 @@ import wx
 
 from garlicsim_wx.general_misc.cute_menu import CuteMenu
 
+from .fork_by_crunching_using_menu import ForkByCrunchingUsingMenu
+
 
 class NodeMenu(CuteMenu):
     '''Menu for manipulating the active node.'''
@@ -46,6 +48,15 @@ class NodeMenu(CuteMenu):
             wx.EVT_MENU,
             lambda event: frame.gui_project.fork_by_crunching(),
             self.fork_by_crunching_button
+        )
+
+        self.fork_by_crunching_using_menu = ForkByCrunchingUsingMenu(frame)
+        self.fork_by_crunching_using_menu_button = self.AppendMenu(
+            -1,
+            'Fork by crunching &using',
+            self.fork_by_crunching_using_menu
+            (' Fork by crunching from the active node using specified step '
+             'profile')
         )
 
         

@@ -22,9 +22,7 @@ class ForkByCrunchingUsingMenu(CuteMenu):
         
         frame = self.frame
         
-        self.AppendSeparator()
-        
-        
+
         self.AppendSeparator()
         
         
@@ -42,7 +40,8 @@ class ForkByCrunchingUsingMenu(CuteMenu):
     
         
     def _recalculate(self):
-        raise NotImplementedError#tododoc
-        0
+        step_profiles = self.frame.gui_project.step_profiles
+        items = self.GetMenuItems()
+        
         
     
