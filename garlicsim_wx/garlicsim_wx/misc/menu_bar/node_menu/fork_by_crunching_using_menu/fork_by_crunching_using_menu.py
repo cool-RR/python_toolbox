@@ -43,7 +43,12 @@ class ForkByCrunchingUsingMenu(CuteMenu):
         if not self.frame.gui_project:
             return
         step_profiles = self.frame.gui_project.step_profiles
-        items = self.GetMenuItems()
+        
+        # Getting the existing menu items, while slicing out the separator and
+        # "New step profile..." button:
+        items = list(self.GetMenuItems())[:-2]
+        
+        
         
         
     
