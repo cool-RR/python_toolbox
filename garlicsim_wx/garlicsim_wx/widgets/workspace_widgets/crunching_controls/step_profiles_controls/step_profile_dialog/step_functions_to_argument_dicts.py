@@ -12,10 +12,12 @@ class StepFunctionsToArgumentDicts(dict):
         
     def __missing__(self, step_function):
         defaults = introspection_tools.get_default_args_dict(step_function)
-        return collections.defaultdict(
+        result = collections.defaultdict(
             lambda: '',
             dict(
                 (key, self.describe(value)) for (key, value) in
                 defaults.iteritems()
             )
         )
+        self[step_function] = result
+        return result
