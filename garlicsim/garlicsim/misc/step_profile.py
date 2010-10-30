@@ -167,10 +167,20 @@ class StepProfile(ArgumentsProfile):
         Example output:
         StepProfile(<unbound method State.step>, 'billinear', t=7)
         '''
+        
+        if short_form:            
+            describe = lambda thing: address_tools.describe(
+                thing,
+                shorten=True,
+                root=root,
+                namespace=namespace
+            )
+        else: # not short_form
+            describe = repr
 
-        args_string = ', '.join((repr(thing) for thing in self.args))
+        args_string = ', '.join((describe(thing) for thing in self.args))
         kwargs_string = ', '.join(
-            ('='.join((str(key), repr(value))) for
+            ('='.join((str(key), describe(value))) for
             (key, value) in self.kwargs.iteritems())
         )
         strings = filter(None, (args_string, kwargs_string))
@@ -178,12 +188,7 @@ class StepProfile(ArgumentsProfile):
         
             
         if short_form:
-            step_function_address = address_tools.describe(
-                self.step_function,
-                shorten=True,
-                root=root,
-                namespace=namespace
-            )
+            step_function_address = describe(self.step_function)
             final_big_string = ', '.join(
                 filter(
                     None,
@@ -203,7 +208,7 @@ class StepProfile(ArgumentsProfile):
                 filter(
                     None,
                     (
-                        repr(self.step_function),
+                        describe(self.step_function),
                         big_string
                     )
                 )
