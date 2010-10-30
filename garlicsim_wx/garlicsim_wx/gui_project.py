@@ -169,7 +169,14 @@ class GuiProject(object):
         "pseudo".
         '''
         
-        self.step_profiles = EmittingOrderedSet(emitter=None)
+        self.step_profiles = EmittingOrderedSet(
+            emitter=None,
+            items=(
+                garlicsim.misc.StepProfile(
+                    self.simpack_grokker.default_step_function
+                    ),
+            )
+        )
         
         self.step_profiles_to_hues = EmittingWeakKeyDefaultDict(
             emitter=None,

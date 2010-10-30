@@ -2,11 +2,11 @@ from garlicsim.general_misc.ordered_set import OrderedSet, KEY, PREV, NEXT
 from garlicsim_wx.general_misc.emitters import Emitter
 
 class EmittingOrderedSet(OrderedSet):
-    def __init__(self, emitter, iterable=()):
+    def __init__(self, emitter, items=()):
         if emitter:
             assert isinstance(emitter, Emitter)
             self.emitter = emitter
-        OrderedSet.__init__(self, iterable)
+        OrderedSet.__init__(self, items)
         
     def add(self, key):
         if key not in self.map:
