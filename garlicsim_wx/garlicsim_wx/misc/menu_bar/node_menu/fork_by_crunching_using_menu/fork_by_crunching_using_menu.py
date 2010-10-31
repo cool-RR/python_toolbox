@@ -53,30 +53,43 @@ class ForkByCrunchingUsingMenu(CuteMenu):
             return
         step_profiles = gui_project.step_profiles
         
+        def insert_step_profile(step_profile, index):
+            step_profile_text = step_profile.__repr__(
+                short_form=True,
+                root=gui_project.simpack,
+                namespace=gui_project.namespace
+            )
+            new_item = self.Insert(
+                index,
+                -1,
+                step_profile_text,
+                'Fork by crunching using %s' % step_profile_text
+            )
+            new_item.step_profile = step_profile
+            
         items = self._get_step_profile_items()
         items_iterator = iter(items)
+        
+        step_profiles_enumerator = enumerate(step_profiles)
 
-        try:
-            current_item = items_iterator.next()
-            
-            for i, step_profile in enumerate(step_profiles):
+        while True:
+            try:
+                current_item = items_iterator.next()
+            except StopIteration:
+                for i, step_profile in step_profiles_enumerator:
+                    insert_step_profile(step_profile, i)
+                break
+            else:
+                while True:
+                    i, step_profile = step_profiles_enumerator.next()                
+                    if current_item.step_profile == step_profile:
+                        break
+                    else:
+                        if current_item.step_profile not in step_profiles:
+                            self.RemoveItem(current_item)
+                        else:
+                            insert_step_profile(step_profile, i)
                 
-                if current_item.step_profile == step_profile:
-                    current_item = items_iterator.next()
-                    continue
-                step_profile_text = step_profile.__repr__(
-                    short_form=True,
-                    root=gui_project.simpack,
-                    namespace=gui_project.namespace
-                )
-                new_item = self.Insert(
-                    i,
-                    -1,
-                    step_profile_text,
-                    'Fork by crunching using %s' % step_profile_text
-                )
-        except StopIteration:
-            pass
         
         updated_items = self._get_step_profile_items()
         for item, step_profile in izip(updated_items, step_profiles):
