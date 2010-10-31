@@ -89,7 +89,7 @@ class ForkByCrunchingUsingMenu(CuteMenu):
                 namespace=gui_project.namespace
             )
             new_item = wx.MenuItem(
-                None,
+                self,
                 -1,
                 step_profile_text,
                 'Fork by crunching using %s' % step_profile_text
