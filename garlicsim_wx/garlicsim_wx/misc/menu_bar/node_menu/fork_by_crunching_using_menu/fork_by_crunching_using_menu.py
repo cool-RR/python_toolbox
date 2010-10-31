@@ -40,13 +40,34 @@ class ForkByCrunchingUsingMenu(CuteMenu):
     
         
     def _recalculate(self):
-        if not self.frame.gui_project:
+        gui_project = self.frame.gui_project
+        if not gui_project:
             return
-        step_profiles = self.frame.gui_project.step_profiles
+        step_profiles = gui_project.step_profiles
         
         # Getting the existing menu items, while slicing out the separator and
         # "New step profile..." button:
         items = list(self.GetMenuItems())[:-2]
+        items_iterator = iter(items)
+        
+        for i, step_profile in enumerate(step_profiles):
+            current_item = items_iterator.next()
+            if current_item.step_profile == step_profile:
+                continue
+            step_profile_text = step_profile.__repr__(
+                short_form=True,
+                root=gui_project.simpack,
+                namespace=gui_project.namespace
+            )
+            new_item = self.Insert(
+                i,
+                -1,
+                step_profile_text,
+                'Fork by crunching using %s' % step_profile_text
+            )
+                
+            
+            
         
         
         
