@@ -61,11 +61,6 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
         self.Bind(wx.EVT_SIZE, self.on_size)
         self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse_event)
 
-        self.menu = garlicsim_wx.general_misc.cute_menu.CuteMenu.add_menus(
-            [garlicsim_wx.misc.menu_bar.node_menu.NodeMenu(self.frame),
-             garlicsim_wx.misc.menu_bar.block_menu.BlockMenu(self.frame)]
-        )
-        
         self.tree_remapping_flag = False
         self.recalculation_flag = False
         
@@ -190,7 +185,7 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
             else:
                 self.gui_project.set_active_node(thing)
                 
-            self.PopupMenu(self.menu, e.GetPosition())
+            self.PopupMenu(self.frame.context_menu, e.GetPosition())
 
 
     def search_map(self, x, y):
