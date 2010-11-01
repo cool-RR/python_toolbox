@@ -108,6 +108,8 @@ class StepProfilesControls(wx.Panel):
             assert new_step_profile not in self.gui_project.step_profiles
             self.gui_project.step_profiles_to_hues[new_step_profile] = new_hue
             self.gui_project.step_profiles.add(new_step_profile)
+            
+        return new_step_profile
 
             
 

@@ -41,6 +41,13 @@ class ForkByCrunchingUsingMenu(CuteMenu):
         
         
     def on_new_step_profile_button(self, event):
+        import garlicsim_wx
+        assert isinstance(self.frame, garlicsim_wx.Frame)
+        self.frame.crunching_controls.show()
+        new_step_profile = self.frame.crunching_controls.\
+            step_profiles_controls.show_step_profile_editing_dialog()
+        self.frame.gui_project.fork_by_crunching(step_profile=new_step_profile)
+        
         raise NotImplementedError#tododoc
     
 
@@ -77,6 +84,9 @@ class ForkByCrunchingUsingMenu(CuteMenu):
         needed_items = filter(None, step_profiles_to_items.values())
         unneeded_items = [item for item in items if (item not in needed_items)]
         
+        for unneeded_item in unneeded_items:
+            self.frame.Unbind(wx.EVT_MENU, unneeded_item)
+        
         for item in items:
             self.RemoveItem(item)
             
@@ -99,6 +109,12 @@ class ForkByCrunchingUsingMenu(CuteMenu):
             )
             self.item_ids_to_step_profiles[new_item.Id] = step_profile
             step_profiles_to_items[itemless_step_profile] = new_item
+            self.frame.Bind(
+                wx.EVT_MENU,
+                lambda event:
+                    gui_project.fork_by_crunching(step_profile=step_profile),
+                new_item
+            )
             
         for i, item in enumerate(step_profiles_to_items.itervalues()):
             self.InsertItem(i, item)
