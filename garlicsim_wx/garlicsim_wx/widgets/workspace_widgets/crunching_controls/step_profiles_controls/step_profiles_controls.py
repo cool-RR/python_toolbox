@@ -101,6 +101,8 @@ class StepProfilesControls(wx.Panel):
                 new_hue = step_profile_dialog.hue
             else:
                 new_step_profile = new_hue = None
+                already_existing_step_profile = \
+                    step_profile_dialog.step_profile
         finally:
             step_profile_dialog.Destroy()
             
@@ -109,7 +111,7 @@ class StepProfilesControls(wx.Panel):
             self.gui_project.step_profiles_to_hues[new_step_profile] = new_hue
             self.gui_project.step_profiles.add(new_step_profile)
             
-        return new_step_profile
+        return new_step_profile or already_existing_step_profile
 
             
 

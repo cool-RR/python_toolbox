@@ -44,11 +44,9 @@ class ForkByCrunchingUsingMenu(CuteMenu):
         import garlicsim_wx
         assert isinstance(self.frame, garlicsim_wx.Frame)
         self.frame.crunching_controls.show()
-        new_step_profile = self.frame.crunching_controls.\
+        step_profile = self.frame.crunching_controls.\
             step_profiles_controls.show_step_profile_editing_dialog()
-        self.frame.gui_project.fork_by_crunching(step_profile=new_step_profile)
-        
-        raise NotImplementedError#tododoc
+        self.frame.gui_project.fork_by_crunching(step_profile=step_profile)
     
 
     def _get_step_profile_items(self):

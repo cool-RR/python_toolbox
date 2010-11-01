@@ -309,6 +309,7 @@ class StepProfileDialog(CuteDialog):
             dialog = AlreadyExistsDialog(self, step_profile)
             result = dialog.ShowModal() 
             if result == wx.ID_OK:
+                self.step_profile = step_profile
                 self.EndModal(wx.ID_CANCEL)
                 return
             else:
