@@ -23,7 +23,11 @@ class StepProfileDialog(CuteDialog):
     # tododoc: this class will be responsible for checking if the new step
     # profile is already present in the step_profiles set.
     
-    def __init__(self, step_profiles_controls, step_profile=None):
+    def __init__(self, step_profiles_controls, step_profile=None,
+                 and_fork=False):
+        '''
+        `and_fork` just affects labels, actual forking is not done here.
+        '''
         
         self.step_profiles_controls = step_profiles_controls
         
@@ -32,14 +36,17 @@ class StepProfileDialog(CuteDialog):
         
         self.frame = step_profiles_controls.frame
         
+        self.and_fork = and_fork
+        
         self.simpack = self.gui_project.simpack
         
         self.simpack_grokker = simpack_grokker = \
             self.gui_project.simpack_grokker
         
-        
+        title = 'Create a new step profile' if not and_fork else \
+                'Create a new step profile and fork with it'
         CuteDialog.__init__(self, step_profiles_controls.GetTopLevelParent(),
-                            title='Create a new step profile')
+                            title=title)
         
         self.SetDoubleBuffered(True)
         
@@ -212,7 +219,9 @@ class StepProfileDialog(CuteDialog):
             border=10
         )
         
-        self.ok_button = wx.Button(self, wx.ID_OK, 'Create step profile')
+        ok_title = 'Create step profile' if not and_fork else \
+                   'Create step profile and fork with it'
+        self.ok_button = wx.Button(self, wx.ID_OK, title)
         self.dialog_button_sizer.AddButton(self.ok_button)
         self.ok_button.SetDefault()
         self.dialog_button_sizer.SetAffirmativeButton(self.ok_button)
@@ -306,7 +315,8 @@ class StepProfileDialog(CuteDialog):
         
         
         if step_profile in self.gui_project.step_profiles:
-            dialog = AlreadyExistsDialog(self, step_profile)
+            dialog = AlreadyExistsDialog(self, step_profile,
+                                         and_fork=self.and_fork)
             result = dialog.ShowModal() 
             if result == wx.ID_OK:
                 self.step_profile = step_profile
@@ -323,6 +333,7 @@ class StepProfileDialog(CuteDialog):
     
     def on_cancel(self, event):
         # ...
+        self.step_profile = None
         self.EndModal(wx.ID_CANCEL)
         
                          

@@ -36,17 +36,15 @@ class ForkByCrunchingUsingMenu(CuteMenu):
             '&New step profile...',
             ' Create a new step profile'
         )
-        frame.Bind(wx.EVT_BUTTON, self.on_new_step_profile_button,
+        frame.Bind(wx.EVT_MENU, self.on_new_step_profile_button,
                    self.new_step_profile_button)
         
         
     def on_new_step_profile_button(self, event):
-        import garlicsim_wx
-        assert isinstance(self.frame, garlicsim_wx.Frame)
         self.frame.crunching_controls.show()
-        step_profile = self.frame.crunching_controls.\
-            step_profiles_controls.show_step_profile_editing_dialog()
-        self.frame.gui_project.fork_by_crunching(step_profile=step_profile)
+        self.frame.crunching_controls.step_profiles_controls.\
+            show_step_profile_editing_dialog(and_fork=True)
+        
     
 
     def _get_step_profile_items(self):

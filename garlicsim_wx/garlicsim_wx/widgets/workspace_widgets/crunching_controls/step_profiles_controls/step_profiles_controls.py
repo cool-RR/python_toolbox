@@ -79,7 +79,8 @@ class StepProfilesControls(wx.Panel):
         
         
         self.Bind(wx.EVT_BUTTON, self.on_new_button, source=self.new_button)
-        self.Bind(wx.EVT_BUTTON, self.on_delete_button, source=self.delete_button)
+        self.Bind(wx.EVT_BUTTON, self.on_delete_button,
+                  source=self.delete_button)
 
         
     def _recalculate(self):
@@ -89,11 +90,13 @@ class StepProfilesControls(wx.Panel):
             self.delete_button.Disable()
             
     
-    def show_step_profile_editing_dialog(self, step_profile=None):
+    def show_step_profile_editing_dialog(self, step_profile=None,
+                                         and_fork=False):
         '''
         None for creating new step profile
         '''
-        step_profile_dialog = StepProfileDialog(self, step_profile)
+        step_profile_dialog = StepProfileDialog(self, step_profile,
+                                                and_fork=and_fork)
         
         try:
             if step_profile_dialog.ShowModal() == wx.ID_OK:
@@ -101,8 +104,7 @@ class StepProfilesControls(wx.Panel):
                 new_hue = step_profile_dialog.hue
             else:
                 new_step_profile = new_hue = None
-                already_existing_step_profile = \
-                    step_profile_dialog.step_profile
+                step_profile_dialog.step_profile
         finally:
             step_profile_dialog.Destroy()
             
@@ -111,7 +113,10 @@ class StepProfilesControls(wx.Panel):
             self.gui_project.step_profiles_to_hues[new_step_profile] = new_hue
             self.gui_project.step_profiles.add(new_step_profile)
             
-        return new_step_profile or already_existing_step_profile
+        if and_fork and step_profile_dialog.step_profile:
+            self.frame.gui_project.fork_by_crunching(
+                step_profile_dialog.step_profile
+            )
 
             
 
