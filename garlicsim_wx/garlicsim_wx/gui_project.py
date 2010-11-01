@@ -365,6 +365,8 @@ class GuiProject(object):
                 outputs=(
                     self.frame.menu_bar.node_menu.\
                     fork_by_crunching_using_menu._recalculate,
+                    self.frame.context_menu.\
+                    fork_by_crunching_using_menu._recalculate
                 )
             )
             self.step_profiles.set_emitter(

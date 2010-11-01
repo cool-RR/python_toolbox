@@ -10,6 +10,7 @@ See its documentation for more info.
 from itertools import izip
 
 from garlicsim.general_misc.third_party.ordered_dict import OrderedDict
+from garlicsim.general_misc.sleek_refs import CuteSleekValueDict
 import wx
 
 from garlicsim_wx.general_misc.cute_menu import CuteMenu
@@ -19,6 +20,7 @@ class ForkByCrunchingUsingMenu(CuteMenu):
     def __init__(self, frame):
         super(ForkByCrunchingUsingMenu, self).__init__()
         self.frame = frame
+        self.item_ids_to_step_profiles = CuteSleekValueDict(lambda: None)
         self._build()
     
     def _build(self):
@@ -57,8 +59,9 @@ class ForkByCrunchingUsingMenu(CuteMenu):
         items = self._get_step_profile_items()
         
         def find_item_of_step_profile(step_profile):
-            matching_items = [item for item in items if
-                              item.step_profile == step_profile]
+            matching_items = \
+                [item for item in items if 
+                self.item_ids_to_step_profiles[item.Id] == step_profile]
             assert len(matching_items) in [0, 1]
             if matching_items:
                 (matching_item,) = matching_items
@@ -94,16 +97,16 @@ class ForkByCrunchingUsingMenu(CuteMenu):
                 step_profile_text,
                 'Fork by crunching using %s' % step_profile_text
             )
-            new_item.step_profile = step_profile
+            self.item_ids_to_step_profiles[new_item.Id] = step_profile
             step_profiles_to_items[itemless_step_profile] = new_item
             
         for i, item in enumerate(step_profiles_to_items.itervalues()):
             self.InsertItem(i, item)
-                
+            
         
         updated_items = self._get_step_profile_items()
         for item, step_profile in izip(updated_items, step_profiles):
-            assert item.step_profile == step_profile
+            assert self.item_ids_to_step_profiles[item.Id] == step_profile
             
         
                 
