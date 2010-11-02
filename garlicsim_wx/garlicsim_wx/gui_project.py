@@ -21,6 +21,7 @@ import wx.lib.scrolledpanel
 import wx.py.shell
 
 from garlicsim.general_misc import queue_tools
+from garlicsim.general_misc import pickle_tools
 from garlicsim.general_misc import dict_tools
 from general_misc.stringsaver import s2i, i2s
 from garlicsim.general_misc.infinity import Infinity
@@ -830,6 +831,9 @@ class GuiProject(object):
         del my_dict['timer_for_playing']
         del my_dict['simpack_grokker']
         del my_dict['simpack_wx_grokker']
+        my_dict['namespace'] = pickle_tools.filter_dict_to_picklable(
+            my_dict['namespace']
+        )
 
         for (key, value) in my_dict.items():
             
