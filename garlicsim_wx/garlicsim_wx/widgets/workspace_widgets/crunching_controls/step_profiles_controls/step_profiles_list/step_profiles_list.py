@@ -47,7 +47,7 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
         self.step_profiles_to_items = weakref.WeakKeyDictionary()
         
         self.AddColumn('', width=50)
-        self.AddColumn('', width=300)
+        self.AddColumn('', width=600)
         self.SetMainColumn(1)
         self.root_item = self.AddRoot('')
         
