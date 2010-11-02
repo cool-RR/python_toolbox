@@ -50,6 +50,8 @@ class AlreadyExistsDialog(CuteDialog):
         
         self.keep_editing_button = wx.Button(self, label='Keep editing')
         
+        self.SetEscapeId(self.keep_editing_button.Id)
+        
         self.button_sizer.Add(self.keep_editing_button, 0, wx.EXPAND | wx.ALL,
                               border=10)
         

@@ -28,18 +28,18 @@ class StateCreationDialog(CuteDialog): # make base class
 
         vbox = wx.BoxSizer(wx.VERTICAL)
         self.messy_check_box = messy_check_box = wx.CheckBox(self, -1, 'Messy')
-        tool_tip_string = '''Make a messy chaotic state, useful for \
-test-driving the simpack.'''
+        tool_tip_string = ('Make a messy chaotic state, useful for '
+                           'test-driving the simpack.')
         messy_check_box.SetValue(True)
         if State.create_root is None or State.create_messy_root is None:
             messy_check_box.Disable()
             if State.create_messy_root is None:
                 messy_check_box.SetValue(False)
-                tool_tip_string += ''' Not available because the simpack \
-doesn't define `create_messy_root`.'''
+                tool_tip_string += (" Not available because the simpack "
+                                    "doesn't define `create_messy_root`.")
             else:
-                tool_tip_string += ''' Can't be canceled because the simpack \
-doesn't define `create_root`.'''
+                tool_tip_string += (" Can't be canceled because the simpack "
+                                    "doesn't define `create_root`.")
         messy_check_box.SetToolTipString(tool_tip_string)
         
         vbox.Add(messy_check_box, 0, wx.ALL, 10)

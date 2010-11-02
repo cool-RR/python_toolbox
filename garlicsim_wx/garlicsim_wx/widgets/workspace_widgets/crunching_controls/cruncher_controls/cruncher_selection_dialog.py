@@ -14,4 +14,5 @@ from garlicsim_wx.widgets import WorkspaceWidget
     
 
 class CruncherSelectionDialog(wx.Dialog):
+    # tododoc: make it respect Esc. (SetEscapeId)
     pass
