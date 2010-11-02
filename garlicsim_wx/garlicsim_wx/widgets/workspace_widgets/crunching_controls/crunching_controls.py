@@ -23,7 +23,6 @@ class CrunchingControls(wx.lib.scrolledpanel.ScrolledPanel, WorkspaceWidget):
 
     def __init__(self, frame):
         wx.lib.scrolledpanel.ScrolledPanel.__init__(self, frame, -1,
-                                                    size=(184, 128),
                                                     style=wx.SUNKEN_BORDER)
         WorkspaceWidget.__init__(self, frame)
         

@@ -516,6 +516,7 @@ class GuiProject(object):
             root = self.project.root_this_state(state)
             self.tree_structure_modified_not_on_path_emitter.emit()
             self.set_active_node(root)
+        self.frame.SetFocus()
         
 
     def get_active_state(self):
