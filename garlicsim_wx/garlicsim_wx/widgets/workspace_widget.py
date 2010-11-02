@@ -95,6 +95,8 @@ class WorkspaceWidget(object):
         if aui_pane_info.IsShown() is False:
             aui_pane_info.Show()
             self.aui_manager.Update()
+        if isinstance(self.Parent, aui.AuiNotebook):
+            self.Parent.SetSelectionToWindow(self)
         self.SetFocus()
             
             

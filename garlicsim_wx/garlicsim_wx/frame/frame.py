@@ -12,7 +12,7 @@ from __future__ import with_statement
 import os
 import sys
 import random
-import cPickle as pickle_module # tododoc: change to c
+import pickle as pickle_module # tododoc: change to c
 import subprocess
 import webbrowser
 import traceback
