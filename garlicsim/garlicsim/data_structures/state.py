@@ -9,7 +9,8 @@ See its documentation for more info.
 
 from garlicsim.general_misc import misc_tools
 from garlicsim.general_misc import address_tools
-from garlicsim.general_misc.function_anchoring_type import FunctionAnchoringType
+from garlicsim.general_misc.function_anchoring_type import \
+     FunctionAnchoringType
 
 import garlicsim
 

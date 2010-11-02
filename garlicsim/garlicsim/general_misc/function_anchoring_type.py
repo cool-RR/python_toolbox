@@ -10,6 +10,7 @@ from garlicsim.general_misc import import_tools
 
 
 class FunctionAnchoringType(type):
+    # tododoc: consider putting this only in _py3
     def __new__(self, name, bases, namespace_dict):
         my_type = type.__new__(self, name, bases, namespace_dict)
         my_getted_vars = misc_tools.getted_vars(my_type)
@@ -21,6 +22,7 @@ class FunctionAnchoringType(type):
             function_name = function.__name__
             anchor_address = '.'.join((module_name, function_name))
             try:
+                # tododoc: fucking shit here
                 already_defined_object = \
                     misc_tools.get_object_from_address(anchor_address)
             except AttributeError:
@@ -28,7 +30,7 @@ class FunctionAnchoringType(type):
                 # This is the normal case.
                 setattr(module, function_name, function)
             else:
-                # Something already exists at the anchor address; Let's be
+                # Something already exists at the anchor address; let's be
                 # careful.
                 if already_defined_object is not function:
                     raise Exception # toododoc

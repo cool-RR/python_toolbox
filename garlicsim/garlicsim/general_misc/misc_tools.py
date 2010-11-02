@@ -27,8 +27,8 @@ def frange(start, finish=None, step=1.):
     
 
 def getted_vars(thing, _getattr=getattr):
-    # todo: can make "fallback" option, to use value from original `vars` if get
-    # is unsuccessful.
+    # todo: can make "fallback" option, to use value from original `vars` if
+    # get is unsuccessful.
     my_vars = vars(thing)
     return dict((name, _getattr(thing, name)) for name in my_vars.iterkeys())
 
