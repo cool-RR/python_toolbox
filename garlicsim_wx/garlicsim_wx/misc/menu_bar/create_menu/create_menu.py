@@ -44,7 +44,12 @@ class CreateMenu(CuteMenu):
             ' Create a new step profile, which can modify the world rules '
             'under which the simulation crunches'
         )
-        self.create_step_profile_button.Enable(False)
+        frame.Bind(
+            wx.EVT_MENU,
+            lambda event: frame.crunching_controls.step_profiles_controls.\
+                          show_step_profile_editing_dialog(),
+            self.create_step_profile_button
+        )
         
         
     def _recalculate(self):

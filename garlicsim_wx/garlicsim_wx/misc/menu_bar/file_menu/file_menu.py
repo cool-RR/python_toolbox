@@ -73,6 +73,17 @@ class FileMenu(CuteMenu):
                 
         
         self.AppendSeparator()
+        
+        
+        self.new_simpack_button = self.Append(
+            -1,
+            'New simpack...',
+            ' Create a new simulation package'
+        )
+        self.new_simpack_button.Enable(False)
+                
+        
+        self.AppendSeparator()
 
         
         self.export_menu = ExportMenu(frame)
@@ -90,7 +101,7 @@ class FileMenu(CuteMenu):
         
         self.print_button = self.Append(
             wx.ID_PRINT,
-            'Print...\tCtrl+P',
+            '&Print...\tCtrl+P',
             ' Print the current state of the simulation'
         )
         self.print_button.Enable(False)

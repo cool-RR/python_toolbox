@@ -34,7 +34,7 @@ class ForkByCrunchingUsingMenu(CuteMenu):
         self.new_step_profile_button = self.Append(
             -1,
             '&New step profile...',
-            ' Create a new step profile'
+            ' Create a new step profile and fork with it'
         )
         frame.Bind(wx.EVT_MENU, self.on_new_step_profile_button,
                    self.new_step_profile_button)

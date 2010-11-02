@@ -459,7 +459,7 @@ class Frame(wx.Frame):
             .Left().Row(0)\
             .BestSize(400, 600)\
             .Caption(self.crunching_controls.get_uppercase_name())
-            .CloseButton(False)
+            .CloseButton(True)
         )
         
         """
