@@ -51,7 +51,10 @@ class CruncherSelectionDialog(CuteDialog):
         
         self.cruncher_text = wx.StaticText(
             self,
-            label=help(garlicsim.asynchronous_crunching.crunchers.ThreadCruncher)
+            label=string_tools.docstring_trim(
+                garlicsim.asynchronous_crunching.crunchers.ThreadCruncher.\
+                __doc__
+            )
         )
         
         self.h_sizer.Add(self.cruncher_text, 1, wx.EXPAND)
