@@ -306,12 +306,12 @@ class GuiProject(object):
             )
             
             self.active_node_changed_or_modified_emitter = es.make_emitter(
-                name='active_node_changed_or_modified',
                 inputs=(
                     self.active_node_changed_emitter,
                     self.active_node_modified_emitter,
                 ),
-                outputs=(self.__check_if_step_profile_changed,)
+                outputs=(self.__check_if_step_profile_changed,),
+                name='active_node_changed_or_modified'
             )
             
             self.active_step_profile_changed_emitter = es.make_emitter(
@@ -362,13 +362,13 @@ class GuiProject(object):
             )
             
             self.step_profiles_set_modified_emitter = es.make_emitter(
-                name='step_profiles_set_modified',
                 outputs=(
                     self.frame.menu_bar.node_menu.\
                     fork_by_crunching_using_menu._recalculate,
                     self.frame.context_menu.\
                     fork_by_crunching_using_menu._recalculate
-                )
+                ),
+                name='step_profiles_set_modified'
             )
             self.step_profiles.set_emitter(
                 self.step_profiles_set_modified_emitter
@@ -384,6 +384,10 @@ class GuiProject(object):
             self.all_menus_need_recalculation_emitter = es.make_emitter(
                 outputs=(self.frame._recalculate_all_menus,),
                 name='all_menus_need_recalculation_emitter'
+            )
+            
+            self.cruncher_type_changed_emitter = es.make_emitter(
+                name='cruncher_type_changed_emitter'
             )
             
             

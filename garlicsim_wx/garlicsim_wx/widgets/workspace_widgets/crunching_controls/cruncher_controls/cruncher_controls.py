@@ -8,6 +8,8 @@ from garlicsim_wx.general_misc import wx_tools
 
 import garlicsim, garlicsim_wx
 
+from .cruncher_selection_dialog import CruncherSelectionDialog
+
     
 class CruncherControls(wx.Panel):
     '''tododoc'''
@@ -16,6 +18,7 @@ class CruncherControls(wx.Panel):
         
         assert isinstance(frame, garlicsim_wx.Frame)
         self.frame = frame
+        self.gui_project = frame.gui_project
         
         wx.Panel.__init__(self, parent, *args, **kwargs)
         
@@ -30,8 +33,7 @@ class CruncherControls(wx.Panel):
         
         self.main_v_sizer.Add(self.title_text, 0)
         
-        self.cruncher_in_use_static_text = \
-            wx.StaticText(self, -1, 'CookieMonsterCruncher')
+        self.cruncher_in_use_static_text = wx.StaticText(self, -1, '')
         self.cruncher_in_use_static_text.SetFont(
             wx.Font(14, wx.MODERN, wx.NORMAL, wx.NORMAL)
         )
@@ -41,8 +43,25 @@ class CruncherControls(wx.Panel):
         
         
         self.change_cruncher_button = wx.Button(self, -1, 'Change...')
+        self.Bind(wx.EVT_BUTTON, self.on_change_cruncher_button,
+                  self.change_cruncher_button)
         
         self.main_v_sizer.Add(self.change_cruncher_button, 0,
                               wx.ALIGN_RIGHT, 0)
+        
+        self.gui_project.cruncher_type_changed_emitter.add_output(
+            self._recalculate
+        )
+        
+        
+    def on_change_cruncher_button(self, event):
+        cruncher_selection_dialog = CruncherSelectionDialog()
+        cruncher_selection_dialog.ShowModal()
+        
+    
+    def _recalculate(self):
+        self.cruncher_in_use_static_text.SetLabel(
+            self.gui_project.project.crunching_manager.Cruncher.__name__
+        )
         
 
