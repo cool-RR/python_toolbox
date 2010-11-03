@@ -55,7 +55,7 @@ class CruncherControls(wx.Panel):
         
         
     def on_change_cruncher_button(self, event):
-        cruncher_selection_dialog = CruncherSelectionDialog()
+        cruncher_selection_dialog = CruncherSelectionDialog(self)
         cruncher_selection_dialog.ShowModal()
         
     

@@ -4,6 +4,7 @@
 import wx
 
 from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
+from garlicsim.general_misc import string_tools
 
 import garlicsim
 import garlicsim_wx
