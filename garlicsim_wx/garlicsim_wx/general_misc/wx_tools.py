@@ -159,8 +159,11 @@ def navigate_from_key_event(key_event):
         
         if key.cmd:
             flags |= wx.NavigationKeyEvent.WinChange
-            
-        window.Navigate(flags)
+        
+        current_window = window
+        while not current_window.HasFlag(wx.TAB_TRAVERSAL):
+            current_window = current_window.Parent
+        assert current_window.Navigate(flags) is True
         return True
     
     else:
