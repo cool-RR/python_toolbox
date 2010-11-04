@@ -17,7 +17,7 @@ class CruncherSelectionDialog(CuteDialog):
             self,
             cruncher_controls.GetTopLevelParent(),
             title='Choose a cruncher type',
-            size=(500, 300)
+            size=(700, 300)
         )
         
         self.frame = cruncher_controls.frame
@@ -50,7 +50,7 @@ class CruncherSelectionDialog(CuteDialog):
             ]
         )
         
-        self.h_sizer.Add(self.cruncher_list_box, 1, wx.EXPAND | wx.ALL,
+        self.h_sizer.Add(self.cruncher_list_box, 2, wx.EXPAND | wx.ALL,
                               border=10)
         
         self.cruncher_text = wx.StaticText(
@@ -61,7 +61,7 @@ class CruncherSelectionDialog(CuteDialog):
             )
         )
         
-        self.h_sizer.Add(self.cruncher_text, 1, wx.EXPAND | wx.ALL,
+        self.h_sizer.Add(self.cruncher_text, 3, wx.EXPAND | wx.ALL,
                               border=10)
         
         self.dialog_button_sizer = wx.StdDialogButtonSizer()
