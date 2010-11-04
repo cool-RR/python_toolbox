@@ -139,9 +139,6 @@ menu_keys = [Key(wx.WXK_MENU), Key(wx.WXK_WINDOWS_MENU),
              Key(wx.WXK_F10, shift=True)]
 
 def navigate_from_key_event(key_event):
-    # tododoc: should find existing implementation
-    # http://groups.google.com/group/wxpython-users/browse_thread/thread/
-    # f59b9b73ebc6fed5?hl=en
     key = Key.get_from_key_event(key_event)
     
     if key in [Key(wx.WXK_TAB), Key(wx.WXK_TAB, shift=True),
@@ -160,10 +157,11 @@ def navigate_from_key_event(key_event):
         if key.cmd:
             flags |= wx.NavigationKeyEvent.WinChange
         
+        
         current_window = window
-        while not current_window.HasFlag(wx.TAB_TRAVERSAL):
+        while not current_window.Parent.HasFlag(wx.TAB_TRAVERSAL):
             current_window = current_window.Parent
-        assert current_window.Navigate(flags) is True
+        current_window.Navigate(flags)
         return True
     
     else:
