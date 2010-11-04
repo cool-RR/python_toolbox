@@ -33,6 +33,7 @@ class CruncherSelectionDialog(CuteDialog):
                    "cruncher will affect how and where that algorithm will be "
                    "run.")
         )
+        self.general_text.Wrap(self.general_text.Size[0])
         
         self.main_v_sizer.Add(self.general_text, 0, wx.EXPAND | wx.ALL,
                               border=10)
@@ -60,6 +61,8 @@ class CruncherSelectionDialog(CuteDialog):
                 __doc__
             )
         )
+        self.cruncher_text.Wrap(self.cruncher_text.Size[0])
+        self.cruncher_text.SetSize(self.cruncher_text.GetEffectiveMinSize())
         
         self.h_sizer.Add(self.cruncher_text, 3, wx.EXPAND | wx.ALL,
                               border=10)
