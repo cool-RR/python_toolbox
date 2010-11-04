@@ -11,12 +11,13 @@ import garlicsim_wx
     
 
 class CruncherSelectionDialog(CuteDialog):
-    # tododoc: make it respect Esc. (SetEscapeId)
+    # tododoc: make it respect Esc. (SetEscapeId or ID_CANCEL)
     def __init__(self, cruncher_controls):
         CuteDialog.__init__(
             self,
             cruncher_controls.GetTopLevelParent(),
-            title='Choose a cruncher type'
+            title='Choose a cruncher type',
+            size=(500, 300)
         )
         
         self.frame = cruncher_controls.frame
@@ -33,21 +34,24 @@ class CruncherSelectionDialog(CuteDialog):
                    "run.")
         )
         
-        self.main_v_sizer.Add(self.general_text, 0, wx.EXPAND)
+        self.main_v_sizer.Add(self.general_text, 0, wx.EXPAND | wx.ALL,
+                              border=10)
         
         self.h_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        
+        self.main_v_sizer.Add(self.h_sizer, 1, wx.EXPAND)
         
         self.cruncher_list_box = wx.ListBox(
             self,
             choices=[
                 'ThreadCruncher',
                 'ProcessCruncher',
-                'NanoThreadCruncher (Not available)',
                 'PiCloudCruncher (Not available)'
             ]
         )
         
-        self.h_sizer.Add(self.cruncher_list_box, 1, wx.EXPAND)
+        self.h_sizer.Add(self.cruncher_list_box, 1, wx.EXPAND | wx.ALL,
+                              border=10)
         
         self.cruncher_text = wx.StaticText(
             self,
@@ -57,10 +61,32 @@ class CruncherSelectionDialog(CuteDialog):
             )
         )
         
-        self.h_sizer.Add(self.cruncher_text, 1, wx.EXPAND)
+        self.h_sizer.Add(self.cruncher_text, 1, wx.EXPAND | wx.ALL,
+                              border=10)
         
+        self.dialog_button_sizer = wx.StdDialogButtonSizer()
         
+        self.main_v_sizer.Add(self.dialog_button_sizer, 0,
+                              wx.ALIGN_CENTER | wx.ALL, border=10)
         
+        self.ok_button = wx.Button(self, wx.ID_OK, 'Okay')
+        self.dialog_button_sizer.AddButton(self.ok_button)
+        self.ok_button.SetDefault()
+        self.dialog_button_sizer.SetAffirmativeButton(self.ok_button)
+        self.Bind(wx.EVT_BUTTON, self.on_ok, source=self.ok_button)
+        
+        self.cancel_button = wx.Button(self, wx.ID_CANCEL, 'Cancel')
+        self.dialog_button_sizer.AddButton(self.cancel_button)
+        self.Bind(wx.EVT_BUTTON, self.on_cancel, source=self.cancel_button)
+        self.dialog_button_sizer.Realize()
         
         self.SetSizer(self.main_v_sizer)
+        self.Layout()
+
+        
+    def on_ok(self, event):
+        1/0
     
+        
+    def on_cancel(self, event):
+        1/0

@@ -3,7 +3,7 @@
 
 '''This module defines string-related tools.'''
 
-
+import sys
 import re
 
 
