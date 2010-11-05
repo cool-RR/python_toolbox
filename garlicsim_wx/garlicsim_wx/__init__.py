@@ -11,7 +11,7 @@ non-programmers.
 This program is intended for Python versions 2.5 and 2.6.
 '''
 
-import bootstrap
+from . import bootstrap
 
 import sys
 import os.path
