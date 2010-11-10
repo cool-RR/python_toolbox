@@ -63,6 +63,7 @@ class CruncherSelectionDialog(CuteDialog):
                 __doc__
             )
         )
+        #self.general_text.SetSize((self.ClientSize[0] - 20, -1))
         self.cruncher_text.Wrap(self.cruncher_text.Size[0])
         self.cruncher_text.SetSize(self.cruncher_text.GetEffectiveMinSize())
         
@@ -90,8 +91,8 @@ class CruncherSelectionDialog(CuteDialog):
 
         
     def on_ok(self, event):
-        1/0
+        return
     
         
     def on_cancel(self, event):
-        1/0
+        return
