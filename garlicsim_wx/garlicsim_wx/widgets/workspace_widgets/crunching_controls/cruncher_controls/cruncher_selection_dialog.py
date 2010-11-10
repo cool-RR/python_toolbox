@@ -32,7 +32,7 @@ class CruncherSelectionDialog(CuteDialog):
                    "cruncher will affect how and where that algorithm will be "
                    "run.")
         )
-        self.general_text.SetSize((self.ClientSize[0] - 20, -1))
+        #self.general_text.SetSize((self.ClientSize[0] - 20, -1))
         self.general_text.Wrap(self.ClientSize[0] - 20)
                                   
         self.general_text.Wrap(self.general_text.Size[0])
@@ -42,7 +42,7 @@ class CruncherSelectionDialog(CuteDialog):
         
         self.h_sizer = wx.BoxSizer(wx.HORIZONTAL)
         
-        self.main_v_sizer.Add(self.h_sizer, 1, wx.EXPAND)
+        self.main_v_sizer.Add(self.h_sizer, 0, wx.EXPAND)
         
         self.cruncher_list_box = wx.ListBox(
             self,
@@ -64,10 +64,12 @@ class CruncherSelectionDialog(CuteDialog):
             )
         )
         #self.general_text.SetSize((self.ClientSize[0] - 20, -1))
-        self.cruncher_text.Wrap(self.cruncher_text.Size[0])
-        self.cruncher_text.SetSize(self.cruncher_text.GetEffectiveMinSize())
+        self.cruncher_text.Wrap(
+            self.ClientSize[0] - self.cruncher_list_box.BestSize[0] - 20
+        )
+        #self.cruncher_text.SetSize(self.cruncher_text.GetEffectiveMinSize())
         
-        self.h_sizer.Add(self.cruncher_text, 3, wx.EXPAND | wx.ALL,
+        self.h_sizer.Add(self.cruncher_text, 3, wx.EXPAND | wx.ALL | wx.ADJUST_MINSIZE,
                               border=10)
         
         self.dialog_button_sizer = wx.StdDialogButtonSizer()
@@ -88,11 +90,13 @@ class CruncherSelectionDialog(CuteDialog):
         
         self.SetSizer(self.main_v_sizer)
         self.Layout()
+        self.main_v_sizer.Fit(self)
 
         
     def on_ok(self, event):
-        return
+        self.EndModal(wx.ID_OK)#tododoc
     
         
     def on_cancel(self, event):
-        return
+        self.EndModal(wx.ID_CANCEL)#tododoc
+    
