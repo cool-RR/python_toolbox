@@ -19,7 +19,6 @@ class CruncherSelectionDialog(CuteDialog):
             title='Choose a cruncher type',
             size=(700, 300)
         )
-        
         self.frame = cruncher_controls.frame
         self.gui_project = cruncher_controls.gui_project
         
@@ -33,6 +32,9 @@ class CruncherSelectionDialog(CuteDialog):
                    "cruncher will affect how and where that algorithm will be "
                    "run.")
         )
+        self.general_text.SetSize((self.ClientSize[0] - 20, -1))
+        self.general_text.Wrap(self.ClientSize[0] - 20)
+                                  
         self.general_text.Wrap(self.general_text.Size[0])
         
         self.main_v_sizer.Add(self.general_text, 0, wx.EXPAND | wx.ALL,
