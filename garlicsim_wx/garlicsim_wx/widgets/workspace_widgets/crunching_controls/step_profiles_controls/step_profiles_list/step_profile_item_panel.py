@@ -33,7 +33,8 @@ class StepProfileItemPanel(wx.Panel):
         
         self.hue_control = HueControl(self, step_profile)
         
-        self.main_h_sizer.Add(self.hue_control, 0, wx.EXPAND)
+        self.main_h_sizer.Add(self.hue_control, 0,
+                              wx.EXPAND | wx.BOTTOM | wx.TOP, border=2)
         
         self.SetSizer(self.main_h_sizer)
         

@@ -108,19 +108,13 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
                                           namespace=gui_project.namespace),
                     1
                 )
-                
-            item.step_profile_item_panel.SetSize(
-                (
-                    item.step_profile_item_panel.GetSize()[0],
-                    item.GetHeight() - 4
-                )
-            )
         
         for item in self.items:
             if item.step_profile not in gui_project.step_profiles:
                 self.Delete(item)
                 # item.step_profile_item_panel.Destroy()
                 # Apparently gets destroyed before
+            
                 
                
     def update_active_step_profile_indicator(self):
