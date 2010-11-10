@@ -64,7 +64,8 @@ class HueControl(wx.Window):
         )
         dc.SetBrush(wx.Brush(color))
         dc.SetPen(self._pen)
-        dc.DrawRectangle(0, 0, *self.GetSize())
+        width, height = self.GetSize()
+        dc.DrawRectangle(-5, -5, width+10, height+10)
         dc.Destroy()
         
     
