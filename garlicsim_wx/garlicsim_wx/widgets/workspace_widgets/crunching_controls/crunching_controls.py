@@ -63,6 +63,11 @@ class CrunchingControls(wx.lib.scrolledpanel.ScrolledPanel, WorkspaceWidget):
         self.main_v_sizer.Add(self.cruncher_controls, 0,
                               wx.EXPAND | wx.ALL, 10)
         
+        self.autocrunch_controls.SetFocus()
+        # We do this so when the user switches to this widget for the first
+        # time, the focus will be on the autocrunch controls. I'm not sure this
+        # is the wisest way to do this, since this sets the global focus and not
+        # just the local.
         
         
         """
