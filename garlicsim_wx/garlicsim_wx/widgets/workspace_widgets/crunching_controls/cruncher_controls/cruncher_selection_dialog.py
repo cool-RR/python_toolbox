@@ -4,7 +4,6 @@
 import wx
 
 from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
-from garlicsim.general_misc import string_tools
 
 import garlicsim
 import garlicsim_wx
@@ -58,24 +57,10 @@ class CruncherSelectionDialog(CuteDialog):
         self.h_sizer.Add(self.cruncher_list_box, 2, wx.EXPAND | wx.ALL,
                               border=10)
         
-        self.cruncher_text_scrolled_panel = wx.lib.scrolledpanel.ScrolledPanel(self)
+        self.cruncher_text_scrolled_panel = CruncherTextScrolledPanel(self)
         
-        
-        self.cruncher_text = wx.StaticText(
-            self,
-            label=string_tools.docstring_trim(
-                garlicsim.asynchronous_crunching.crunchers.ThreadCruncher.\
-                __doc__
-            )
-        )
-        #self.general_text.SetSize((self.ClientSize[0] - 20, -1))
-        self.cruncher_text.Wrap(
-            self.ClientSize[0] - self.cruncher_list_box.BestSize[0] - 20
-        )
-        #self.cruncher_text.SetSize(self.cruncher_text.GetEffectiveMinSize())
-        
-        self.h_sizer.Add(self.cruncher_text, 3, wx.EXPAND | wx.ALL | wx.ADJUST_MINSIZE,
-                              border=10)
+        self.h_sizer.Add(self.cruncher_text_scrolled_panel, 3,
+                         wx.EXPAND | wx.ALL, border=10)
         
         self.dialog_button_sizer = wx.StdDialogButtonSizer()
         
