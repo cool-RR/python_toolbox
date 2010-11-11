@@ -46,7 +46,7 @@ class ProcessCruncher(BaseCruncher):
     '''
     
     
-    gui_explanation = \
+    gui_explanation = string_tools.docstring_trim(
     '''
     ProcessCruncher:
     
@@ -55,7 +55,7 @@ class ProcessCruncher(BaseCruncher):
      - Able to run on a different core of the process than the main process or
        other ProcessCrunchers, thus utilizing the full power of the processor.
      '''
-    gui_explanation = string_tools.docstring_trim(gui_explanation)
+    )
     
     def __init__(self, crunching_manager, initial_state, crunching_profile):
         

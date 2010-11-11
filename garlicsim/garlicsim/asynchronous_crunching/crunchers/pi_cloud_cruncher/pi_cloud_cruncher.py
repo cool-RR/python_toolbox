@@ -49,7 +49,7 @@ def step_and_go(step, state, step_profile, clock_target, time_to_run):
 
 class PiCloudCruncher(BaseCruncher, threading.Thread):
     
-    gui_explanation = \
+    gui_explanation = string_tools.docstring_trim(
     '''
     PiCloudCruncher:
     
@@ -61,7 +61,7 @@ class PiCloudCruncher(BaseCruncher, threading.Thread):
      - Requires a working internet connection and a PiCloud account. Visit
        http://picloud.com to get one.
      '''
-    gui_explanation = string_tools.docstring_trim(gui_explanation)
+    )
     
     def __init__(self, crunching_manager, initial_state, crunching_profile):
         BaseCruncher.__init__(self, crunching_manager,

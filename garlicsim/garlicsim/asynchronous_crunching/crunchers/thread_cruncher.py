@@ -48,7 +48,7 @@ class ThreadCruncher(BaseCruncher, threading.Thread):
        ProcessCruncher because of shared memory.
     '''
     
-    gui_explanation = \
+    gui_explanation = string_tools.docstring_trim(
     '''
     ThreadCruncher:
     
@@ -64,7 +64,7 @@ class ThreadCruncher(BaseCruncher, threading.Thread):
      - On a single-core computer, it may be faster than ProcessCruncher because
        of shared memory.
      '''
-    gui_explanation = string_tools.docstring_trim(gui_explanation)
+    )
     
     
     def __init__(self, crunching_manager, initial_state, crunching_profile):
