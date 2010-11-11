@@ -35,6 +35,8 @@ class BaseCruncher(object):
     
     __metaclass__ = abc.ABCMeta
     
+    gui_explanation = None
+    
     def __init__(self, crunching_manager, initial_state, crunching_profile):
         
         self.crunching_manager = crunching_manager

@@ -14,10 +14,8 @@ class CruncherTextScrolledPanel(wx.lib.scrolledpanel.ScrolledPanel):
         self.main_v_sizer = wx.BoxSizer(wx.HORIZONTAL)
         self.cruncher_text = wx.StaticText(
             self,
-            label=string_tools.docstring_trim(
-                garlicsim.asynchronous_crunching.crunchers.ThreadCruncher.\
-                __doc__
-            )
+            label=garlicsim.asynchronous_crunching.crunchers.ThreadCruncher.\
+                  gui_explanation
         )
         self.main_v_sizer.Add(self.cruncher_text, 1, wx.EXPAND)
         

@@ -13,6 +13,8 @@ import threading
 import Queue
 import copy
 
+from garlicsim.general_misc import string_tools
+
 import garlicsim
 from garlicsim.asynchronous_crunching import \
      BaseCruncher, HistoryBrowser, ObsoleteCruncherError, CrunchingProfile
@@ -45,6 +47,26 @@ class ThreadCruncher(BaseCruncher, threading.Thread):
     4. On a single-core computer, ThreadCruncher may be faster than
        ProcessCruncher because of shared memory.
     '''
+    
+    gui_explanation = \
+    '''
+    ThreadCruncher is cruncher that works from a thread.
+    
+    ThreadCruncher is able to handle simulations that are history-dependent.
+    
+    ThreadCruncher is based on the threading module, which is stabler and more
+    mature than the multiprocessing module.
+    
+    ThreadCruncher is much easier to debug than ProcessCruncher, since there are
+    currently many more tools for debugging Python threads than Python
+    processes.
+    
+    On a single-core computer, ThreadCruncher may be faster than ProcessCruncher
+    because of shared memory.
+    '''
+    gui_explanation = string_tools.docstring_trim(gui_explanation)
+    
+    
     def __init__(self, crunching_manager, initial_state, crunching_profile):
         BaseCruncher.__init__(self, crunching_manager,
                               initial_state, crunching_profile)
