@@ -8,7 +8,9 @@ from garlicsim.general_misc import string_tools
 
 import garlicsim
 import garlicsim_wx
-    
+
+from .cruncher_text_scrolled_panel import CruncherTextScrolledPanel
+
 
 class CruncherSelectionDialog(CuteDialog):
     # tododoc: make it respect Esc. (SetEscapeId or ID_CANCEL)
@@ -55,6 +57,9 @@ class CruncherSelectionDialog(CuteDialog):
         
         self.h_sizer.Add(self.cruncher_list_box, 2, wx.EXPAND | wx.ALL,
                               border=10)
+        
+        self.cruncher_text_scrolled_panel = wx.lib.scrolledpanel.ScrolledPanel(self)
+        
         
         self.cruncher_text = wx.StaticText(
             self,
