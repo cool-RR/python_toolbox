@@ -10,6 +10,7 @@ import threading
 import time
 
 from garlicsim.general_misc import import_tools
+from garlicsim.general_misc import string_tools
 
 import garlicsim
 from garlicsim.asynchronous_crunching import \
@@ -47,7 +48,21 @@ def step_and_go(step, state, step_profile, clock_target, time_to_run):
 
 
 class PiCloudCruncher(BaseCruncher, threading.Thread):
-
+    
+    gui_explanation = \
+    '''
+    PiCloudCruncher:
+    
+     - Works by using the `cloud` module supplied by PiCloud, Inc.
+     
+     - Offloads the crunching into the cloud, relieving this computer of the CPU
+       stress.
+     
+     - Requires a working internet connection and a PiCloud account. Visit
+       http://picloud.com to get one.
+     '''
+    gui_explanation = string_tools.docstring_trim(gui_explanation)
+    
     def __init__(self, crunching_manager, initial_state, crunching_profile):
         BaseCruncher.__init__(self, crunching_manager,
                               initial_state, crunching_profile)

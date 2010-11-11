@@ -17,6 +17,8 @@ import Queue
 import sys
 import os
 
+from garlicsim.general_misc import string_tools
+
 import garlicsim
 from garlicsim.asynchronous_crunching import \
      BaseCruncher, CrunchingProfile, ObsoleteCruncherError
@@ -34,14 +36,26 @@ class ProcessCruncher(BaseCruncher):
     from the main program, and then it repeatedly applies the step function of
     the simulation to produce more states. Those states are then put in the
     cruncher's work_queue. They are then taken by the main program when
-    Project.sync_crunchers is called, and put into the tree.
+    `Project.sync_crunchers` is called, and put into the tree.
         
-    Read more about crunchers in the documentation of the crunchers package.
+    Read more about crunchers in the documentation of the `crunchers` package.
     
     The advantage of ProcessCruncher over ThreadCruncher is that
     ProcessCruncher is able to run on a different core of the processor
     in the machine, thus using the full power of the processor.
     '''
+    
+    
+    gui_explanation = \
+    '''
+    ProcessCruncher:
+    
+     - Works from a `multiprocessing.Process`.
+    
+     - Able to run on a different core of the process than the main process or
+       other ProcessCrunchers, thus utilizing the full power of the processor.
+     '''
+    gui_explanation = string_tools.docstring_trim(gui_explanation)
     
     def __init__(self, crunching_manager, initial_state, crunching_profile):
         

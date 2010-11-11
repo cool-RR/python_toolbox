@@ -31,9 +31,9 @@ class ThreadCruncher(BaseCruncher, threading.Thread):
     from the main program, and then it repeatedly applies the step function of
     the simulation to produce more states. Those states are then put in the
     cruncher's work_queue. They are then taken by the main program when
-    Project.sync_crunchers is called, and put into the tree.
+    `Project.sync_crunchers` is called, and put into the tree.
         
-    Read more about crunchers in the documentation of the crunchers package.
+    Read more about crunchers in the documentation of the `crunchers` package.
     
     The advantages of ThreadCruncher over ProcessCruncher are:
     1. ThreadCruncher is able to handle simulations that are history-dependent,
@@ -50,20 +50,20 @@ class ThreadCruncher(BaseCruncher, threading.Thread):
     
     gui_explanation = \
     '''
-    ThreadCruncher is cruncher that works from a thread.
+    ThreadCruncher:
     
-    ThreadCruncher is able to handle simulations that are history-dependent.
+     - Works from a `threading.Thread`.
     
-    ThreadCruncher is based on the threading module, which is stabler and more
-    mature than the multiprocessing module.
+     - Able to handle simulations that are history-dependent.
     
-    ThreadCruncher is much easier to debug than ProcessCruncher, since there are
-    currently many more tools for debugging Python threads than Python
-    processes.
+     - Based on the `threading` module, which is stabler and more mature than
+       the `multiprocessing` module.
     
-    On a single-core computer, ThreadCruncher may be faster than ProcessCruncher
-    because of shared memory.
-    '''
+     - Easy to debug.
+    
+     - On a single-core computer, it may be faster than ProcessCruncher because
+       of shared memory.
+     '''
     gui_explanation = string_tools.docstring_trim(gui_explanation)
     
     
