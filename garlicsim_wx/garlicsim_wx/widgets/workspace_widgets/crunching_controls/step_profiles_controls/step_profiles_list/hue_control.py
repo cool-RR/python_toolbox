@@ -40,7 +40,7 @@ class HueControl(GenericHueControl):
             lightness=0.8,
             saturation=1,
             dialog_title='Select hue for step profile',
-            size=(25, 10)
+            size=(25, 18)
         )
 
         self.SetBackgroundColour(step_profile_item_panel.GetBackgroundColour())
