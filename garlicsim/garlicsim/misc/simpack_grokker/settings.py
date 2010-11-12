@@ -7,17 +7,17 @@ This module defines the Settings class.
 See its documentation for more info.
 '''
 
-import misc
+from . import misc
 
 class Settings(object):
     '''A set of settings for a simpack.'''
     # todo: subclass from a pretty vars-shower
     
-    def __init__(self):
-
-        self.FORCE_CRUNCHER = None
+    def __init__(self, simpack_grokker):
+        
+        self.FORCE_CRUNCHER = misc.DefaultForceCruncher(simpack_grokker)
         '''
-        A cruncher that this simpack insists on using.
+        A cruncher that this simpack insists on using.tododoc
         
         This is useful because some simpacks can't be used with certain kinds of
         crunchers.

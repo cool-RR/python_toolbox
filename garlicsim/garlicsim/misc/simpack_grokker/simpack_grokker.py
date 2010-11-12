@@ -124,7 +124,7 @@ class SimpackGrokker(object):
         # our simpack is a module or some other kind of object. So if it's a
         # module, we'll `try` to import `settings`.
         
-        self.settings = Settings()        
+        self.settings = Settings(self)
         
         if isinstance(self.simpack, types.ModuleType) and \
            not hasattr(self.simpack, 'settings'):

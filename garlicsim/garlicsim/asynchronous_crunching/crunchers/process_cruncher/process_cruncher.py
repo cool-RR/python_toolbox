@@ -56,6 +56,12 @@ class ProcessCruncher(BaseCruncher):
        other ProcessCrunchers, thus utilizing the full power of the processor.
      '''
     )
+
+    
+    @staticmethod
+    def can_be_used_with_simpack_grokker(simpack_grokker):
+        return (not simpack_grokker.history_dependent)
+    
     
     def __init__(self, crunching_manager, initial_state, crunching_profile):
         

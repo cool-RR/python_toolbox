@@ -35,6 +35,14 @@ class PiCloudCruncher(BaseCruncher, threading.Thread):
      '''
     )
     
+    
+    @staticmethod
+    def can_be_used_with_simpack_grokker(simpack_grokker):
+        # Hardcodingly returns False:
+        return False
+        # Since this is just a dummy class.
+    
+    
     def __init__(self, *args, **kwargs):
         raise NotImplementedError("PiCloudCruncher is not implemented in this "
                                   "version! This is just a dummy class. "

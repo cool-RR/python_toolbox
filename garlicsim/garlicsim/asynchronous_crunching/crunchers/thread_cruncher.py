@@ -67,6 +67,11 @@ class ThreadCruncher(BaseCruncher, threading.Thread):
     )
     
     
+    @staticmethod
+    def can_be_used_with_simpack_grokker(simpack_grokker):
+        return True
+    
+    
     def __init__(self, crunching_manager, initial_state, crunching_profile):
         BaseCruncher.__init__(self, crunching_manager,
                               initial_state, crunching_profile)

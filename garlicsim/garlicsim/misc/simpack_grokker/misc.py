@@ -11,3 +11,13 @@ def default_determinism_function(step_profile):
     deterministic.
     '''
     return None
+
+
+class DefaultForceCruncher(object):
+    def __init__(self, simpack_grokker):
+        self.simpack_grokker = simpack_grokker
+    def __call__(self, cruncher_type):
+        return cruncher_type.can_be_used_with_simpack_grokker(
+            self.simpack_grokker
+        )
+
