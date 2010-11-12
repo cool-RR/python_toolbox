@@ -20,7 +20,6 @@ import garlicsim.general_misc.caching
 from garlicsim.misc import (AutoClockGenerator, InvalidSimpack,
                             GarlicSimException, simpack_tools)
 from garlicsim.misc import step_iterators as step_iterators_module
-from garlicsim.asynchronous_crunching import crunchers
 from . import misc
 
 from .settings import Settings
@@ -163,7 +162,9 @@ class SimpackGrokker(object):
                 
 
     def __init_analysis_cruncher_types(self):
+        from garlicsim.asynchronous_crunching import crunchers, BaseCruncher
         simpack = self.simpack
+        
         self.cruncher_types_availability = {}
         
         FORCE_CRUNCHER = self.settings.FORCE_CRUNCHER

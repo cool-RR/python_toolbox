@@ -108,7 +108,7 @@ class GuiProject(object):
         ### Using ProcessCruncher if possible: ################################
         
         if 'ProcessCruncher' in vars(crunchers) and \
-           crunchers.ProcessCruncher in self.project.crunching_manager.\
+           crunchers.ProcessCruncher in simpack_grokker.\
                                         available_cruncher_types:
            
             self.project.crunching_manager.cruncher_type = \
