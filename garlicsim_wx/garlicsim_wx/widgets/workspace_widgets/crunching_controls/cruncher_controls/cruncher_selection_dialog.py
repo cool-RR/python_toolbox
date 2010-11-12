@@ -3,6 +3,7 @@
 
 import wx
 
+from garlicsim.general_misc.third_party.ordered_dict import OrderedDict
 from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
 
 import garlicsim
@@ -49,24 +50,19 @@ class CruncherSelectionDialog(CuteDialog):
             self.gui_project.project.simpack_grokker.\
             cruncher_types_availability
 
-        cruncher_names_list = []
+        cruncher_titles = OrderedDict()
         
         for cruncher_type, availability in cruncher_types_availability.items():
             if availability == True:
-                cruncher_names_list.append(cruncher_type.__name__)
+                title = cruncher_type.__name__
             else:
                 assert availability == False
-                cruncher_names_list.append(
-                    '%s (not available)' % cruncher_type.__name__
-                )
+                title = '%s (not available)' % cruncher_type.__name__
+            cruncher_titles[title] = cruncher_type
         
         self.cruncher_list_box = wx.ListBox(
             self,
-            choices=[
-                'ThreadCruncher',
-                'ProcessCruncher',
-                'PiCloudCruncher (Not available)'
-            ]
+            choices=cruncher_titles.keys()
         )
         
         self.h_sizer.Add(self.cruncher_list_box, 2, wx.EXPAND | wx.ALL,
