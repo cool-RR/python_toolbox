@@ -11,7 +11,8 @@ class StepProfileItemPanel(wx.Panel):
         self.step_profile = step_profile
         wx.Panel.__init__(
             self,
-            step_profiles_list.GetMainWindow()
+            step_profiles_list.GetMainWindow(),
+            size=(40, 18)
         )
         
         
