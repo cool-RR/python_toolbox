@@ -15,6 +15,7 @@ from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import misc_tools
 from garlicsim.general_misc import cute_iter_tools
 from garlicsim.general_misc.reasoned_bool import ReasonedBool
+from garlicsim.general_misc.third_party.ordered_dict import OrderedDict
 import garlicsim.general_misc.caching
 
 from garlicsim.misc import (AutoClockGenerator, InvalidSimpack,
@@ -165,35 +166,39 @@ class SimpackGrokker(object):
         from garlicsim.asynchronous_crunching import crunchers, BaseCruncher
         simpack = self.simpack
         
-        self.cruncher_types_availability = {}
+        self.cruncher_types_availability = OrderedDict()
         
         FORCE_CRUNCHER = self.settings.FORCE_CRUNCHER
         
         if FORCE_CRUNCHER is None:
             self.available_cruncher_types = crunchers.cruncher_types_list[:]
-            return
+            for available_cruncher_type in self.available_cruncher_types:
+                self.cruncher_types_availability[available_cruncher_type] = \
+                    True
 
         
         if isinstance(FORCE_CRUNCHER, basestring):
             (cruncher_type,) = \
-                [cruncher_type for cruncher_type in
+                [cruncher_type_ for cruncher_type_ in
                  crunchers.cruncher_types_list if
-                 cruncher_type.__name__ == FORCE_CRUNCHER]
+                 cruncher_type_.__name__ == FORCE_CRUNCHER]
             self.available_cruncher_types = [cruncher_type]
+            self.cruncher_types_availability[cruncher_type] = True
         
             ### Giving unavailability reasons: ################################
             #                                                                 #
             unavailable_cruncher_types = \
-                set(crunchers.cruncher_types_list).\
-                difference(set(self.available_cruncher_types))        
+                [cruncher_type_ for cruncher_type_ in
+                 crunchers.cruncher_types_list if cruncher_type_ not in
+                 self.available_cruncher_types]
             self.cruncher_types_availability.update(dict(
                 (
                     unavailable_cruncher_type,
                     ReasonedBool(
                         False,
-                        'The `%s` simpack specified `%s` as the only available '
-                        'cruncher type' % (simpack.__name__,
-                                           cruncher_type.__name__)
+                        'The `%s` simpack specified `%s` as the only '
+                        'available cruncher type' % (simpack.__name__,
+                                                     cruncher_type.__name__)
                     )
                 ) for unavailable_cruncher_type in unavailable_cruncher_types
             ))
@@ -204,20 +209,22 @@ class SimpackGrokker(object):
         elif isinstance(FORCE_CRUNCHER, BaseCruncher):
             cruncher_type = FORCE_CRUNCHER
             self.available_cruncher_types = [cruncher_type]
+            self.cruncher_types_availability[cruncher_type] = True
             
             ### Giving unavailability reasons: ################################
             #                                                                 #
             unavailable_cruncher_types = \
-                set(crunchers.cruncher_types_list).\
-                difference(set(self.available_cruncher_types))
+                [cruncher_type_ for cruncher_type_ in
+                 crunchers.cruncher_types_list if cruncher_type_ not in
+                 self.available_cruncher_types]
             self.cruncher_types_availability.update(dict(
                 (
                     unavailable_cruncher_type,
                     ReasonedBool(
                         False,
-                        'The `%s` simpack specified `%s` as the only available '
-                        'cruncher type' % (simpack.__name__,
-                                           cruncher_type.__name__)                   
+                        'The `%s` simpack specified `%s` as the only '
+                        'available cruncher type' % (simpack.__name__,
+                                                     cruncher_type.__name__)                   
                     )
                 ) for unavailable_cruncher_type in unavailable_cruncher_types
             ))
@@ -230,19 +237,21 @@ class SimpackGrokker(object):
             for item in FORCE_CRUNCHER:
                 if isinstance(item, basestring):
                     cruncher_type = \
-                        [cruncher_type for cruncher_type in
+                        [cruncher_type_ for cruncher_type_ in
                          crunchers.cruncher_types_list if
-                         cruncher_type.__name__ == item]
+                         cruncher_type_.__name__ == item]
                 else:
                     assert isinstance(item, BaseCruncher)
                     cruncher_type = item
                 self.available_cruncher_types.append(cruncher_type)
+                self.cruncher_types_availability[cruncher_type] = True
 
             ### Giving unavailability reasons: ################################
             #                                                                 #
             unavailable_cruncher_types = \
-                set(crunchers.cruncher_types_list).\
-                difference(set(self.available_cruncher_types))
+                [cruncher_type_ for cruncher_type_ in
+                 crunchers.cruncher_types_list if cruncher_type_ not in
+                 self.available_cruncher_types]
             self.cruncher_types_availability.update(dict(
                 (
                     unavailable_cruncher_type,
@@ -262,16 +271,17 @@ class SimpackGrokker(object):
         elif callable(FORCE_CRUNCHER):
             assert not isinstance(FORCE_CRUNCHER, BaseCruncher)
             self.available_cruncher_types = \
-                [cruncher_type for cruncher_type in
+                [cruncher_type_ for cruncher_type_ in
                  crunchers.cruncher_types_list if
-                 FORCE_CRUNCHER(cruncher_type)]
+                 FORCE_CRUNCHER(cruncher_type_)]
             self.cruncher_type = self.available_cruncher_types[0]
             
             ### Giving unavailability reasons: ################################
             #                                                                 #
             unavailable_cruncher_types = \
-                set(crunchers.cruncher_types_list).\
-                difference(set(self.available_cruncher_types))
+                [cruncher_type_ for cruncher_type_ in
+                 crunchers.cruncher_types_list if cruncher_type_ not in
+                 self.available_cruncher_types]
             for unavailable_cruncher_type in unavailable_cruncher_types:
                 reason = getattr(
                     FORCE_CRUNCHER(unavailable_cruncher_type),
@@ -285,8 +295,10 @@ class SimpackGrokker(object):
             #                                                                 #
             ###################################################################
             
-        for available_cruncher_type in self.available_cruncher_types:
-            self.cruncher_types_availability[available_cruncher_type] = True
+        #######################################################################
+            
+        
+            
     
     def step(self, state_or_history_browser, step_profile):
         '''
@@ -303,8 +315,7 @@ class SimpackGrokker(object):
                                                step_profile)
         return step_iterator.next()
     
-        
-    
+            
     def get_step_iterator(self, state_or_history_browser, step_profile):
         '''
         Step generator for crunching states of the simulation.
