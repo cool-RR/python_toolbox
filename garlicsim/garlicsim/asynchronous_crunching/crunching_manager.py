@@ -20,7 +20,8 @@ import garlicsim
 import garlicsim.data_structures
 import garlicsim.misc
 import crunchers
-from crunching_profile import CrunchingProfile
+from .crunching_profile import CrunchingProfile
+from .base_cruncher import BaseCruncher
 from garlicsim.misc.step_profile import StepProfile
 from .misc import EndMarker
 
@@ -28,12 +29,8 @@ from .misc import EndMarker
 __all__ = ['CrunchingManager', 'DefaultCruncher', 'DefaultHistoryCruncher']
 
 
-DefaultCruncher = crunchers.ThreadCruncher
-'''Cruncher class to be used by default in non-history-dependent simulations.'''
-
-
-DefaultHistoryCruncher = crunchers.ThreadCruncher
-'''Cruncher class to be used by default in history-dependent simulations.'''
+cruncher_types = [crunchers.ThreadCruncher, crunchers.ProcessCruncher,
+                  crunchers.PiCloudCruncher]
 
 
 @garlicsim.general_misc.third_party.decorator.decorator
@@ -64,18 +61,8 @@ class CrunchingManager(object):
     and delete the jobs when they are completed.
     '''
     def __init__(self, project):        
+        
         self.project = project
-        
-
-        FORCE_CRUNCHER = project.simpack_grokker.settings.FORCE_CRUNCHER
-        
-        if FORCE_CRUNCHER is not None:
-            self.Cruncher = FORCE_CRUNCHER
-        else:
-            history_dependent = project.simpack_grokker.history_dependent
-            
-            self.Cruncher = DefaultHistoryCruncher if history_dependent \
-                            else DefaultCruncher
         
         self.jobs = []
         '''
@@ -105,7 +92,35 @@ class CrunchingManager(object):
         This is used to update the crunchers if the crunching profile for the
         job they're working on has changed.
         '''
+        
+        self.__init_cruncher_types()
 
+        
+    def __init_cruncher_types(self):
+        
+        FORCE_CRUNCHER = self.project.simpack_grokker.settings.FORCE_CRUNCHER
+        
+        if isinstance(FORCE_CRUNCHER, basestring):
+            (self.Cruncher,) = \
+                [cruncher_type for cruncher_type in cruncher_types if
+                 cruncher_type.__name__ == FORCE_CRUNCHER]
+            return
+        
+        elif isinstance(FORCE_CRUNCHER, BaseCruncher):
+            self.Cruncher = FORCE_CRUNCHER
+            return
+        
+        elif callable(FORCE_CRUNCHER):
+            assert not isinstance(FORCE_CRUNCHER, BaseCruncher)
+            usable_cruncher_types = \
+                [cruncher_type for cruncher_type in cruncher_types if
+                 FORCE_CRUNCHER(cruncher_type)]
+            
+        else:
+            history_dependent = project.simpack_grokker.history_dependent
+            
+            self.Cruncher = DefaultHistoryCruncher if history_dependent \
+                            else DefaultCruncher
         
     @with_tree_lock
     def sync_crunchers(self):
