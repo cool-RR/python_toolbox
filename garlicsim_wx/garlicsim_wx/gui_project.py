@@ -109,7 +109,7 @@ class GuiProject(object):
         
         if 'ProcessCruncher' in vars(crunchers) and \
            crunchers.ProcessCruncher in self.project.crunching_manager.\
-                                        usable_cruncher_types:
+                                        available_cruncher_types:
            
             self.project.crunching_manager.cruncher_type = \
                 crunchers.ProcessCruncher

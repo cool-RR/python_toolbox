@@ -10,6 +10,7 @@ import time
 
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import string_tools
+from garlicsim.general_misc.reasoned_bool import ReasonedBool
 
 import garlicsim
 from garlicsim.asynchronous_crunching import \
@@ -17,6 +18,11 @@ from garlicsim.asynchronous_crunching import \
 
 
 __all__ = ['PiCloudCruncher']    
+
+
+apology = ("PiCloudCruncher is not implemented in this version! This is just "
+           "a dummy class. PiCloudCruncher is scheduled to be released in "
+           "GarlicSim 0.7, which will be available in mid-2011.")
 
 
 class PiCloudCruncher(BaseCruncher, threading.Thread):
@@ -36,16 +42,13 @@ class PiCloudCruncher(BaseCruncher, threading.Thread):
     )
     
     
+    
     @staticmethod
     def can_be_used_with_simpack_grokker(simpack_grokker):
-        # Hardcodingly returns False:
-        return False
-        # Since this is just a dummy class.
-    
+        return ReasonedBool(
+            False,
+            apology
+        )
     
     def __init__(self, *args, **kwargs):
-        raise NotImplementedError("PiCloudCruncher is not implemented in this "
-                                  "version! This is just a dummy class. "
-                                  "PiCloudCruncher is scheduled to be "
-                                  "released in GarlicSim 0.7, which will be "
-                                  "available in mid-2011.")
+        raise NotImplementedError(apology)

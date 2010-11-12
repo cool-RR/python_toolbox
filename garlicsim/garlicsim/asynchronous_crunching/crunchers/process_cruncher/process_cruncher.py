@@ -22,8 +22,10 @@ from garlicsim.general_misc import string_tools
 import garlicsim
 from garlicsim.asynchronous_crunching import \
      BaseCruncher, CrunchingProfile, ObsoleteCruncherError
+from garlicsim.general_misc.reasoned_bool import ReasonedBool
 
 from .process import Process
+
 
 __all__ = ['ProcessCruncher']    
 
@@ -60,7 +62,14 @@ class ProcessCruncher(BaseCruncher):
     
     @staticmethod
     def can_be_used_with_simpack_grokker(simpack_grokker):
-        return (not simpack_grokker.history_dependent)
+        if simpack_grokker.history_dependent:
+            return ReasonedBool(
+                False,
+                "ProcessCruncher can't be used in history-dependent "
+                "simulations because processes don't share memory."
+            )
+        else:
+            return True
     
     
     def __init__(self, crunching_manager, initial_state, crunching_profile):
