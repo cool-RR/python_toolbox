@@ -169,12 +169,6 @@ class SimpackGrokker(object):
         self.cruncher_types_availability = OrderedDict()
         
         FORCE_CRUNCHER = self.settings.FORCE_CRUNCHER
-        
-        if FORCE_CRUNCHER is None:
-            self.available_cruncher_types = crunchers.cruncher_types_list[:]
-            for available_cruncher_type in self.available_cruncher_types:
-                self.cruncher_types_availability[available_cruncher_type] = \
-                    True
 
         
         if isinstance(FORCE_CRUNCHER, basestring):
@@ -275,6 +269,9 @@ class SimpackGrokker(object):
                  crunchers.cruncher_types_list if
                  FORCE_CRUNCHER(cruncher_type_)]
             self.cruncher_type = self.available_cruncher_types[0]
+            for available_cruncher_type in self.available_cruncher_types:
+                self.cruncher_types_availability[available_cruncher_type] = \
+                    True
             
             ### Giving unavailability reasons: ################################
             #                                                                 #
