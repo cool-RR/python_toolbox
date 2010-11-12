@@ -45,6 +45,21 @@ class CruncherSelectionDialog(CuteDialog):
         
         self.main_v_sizer.Add(self.h_sizer, 0, wx.EXPAND)
         
+        cruncher_types_availability = \
+            self.gui_project.project.simpack_grokker.\
+            cruncher_types_availability
+
+        cruncher_names_list = []
+        
+        for cruncher_type, availability in cruncher_types_availability.items():
+            if availability == True:
+                cruncher_names_list.append(cruncher_type.__name__)
+            else:
+                assert availability == False
+                cruncher_names_list.append(
+                    '%s (not available)' % cruncher_type.__name__
+                )
+        
         self.cruncher_list_box = wx.ListBox(
             self,
             choices=[

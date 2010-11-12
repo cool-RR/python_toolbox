@@ -13,6 +13,7 @@ from garlicsim.general_misc import import_tools
 import garlicsim.general_misc.caching
 
 import garlicsim_wx
+from garlicsim.asynchronous_crunching import crunchers
 
 from .settings import Settings
 
@@ -20,7 +21,9 @@ from .settings import Settings
 class SimpackWxGrokker(object):
     '''Encapsulates a simpack_wx and gives useful information and tools.'''
     
+    
     __metaclass__ = garlicsim.general_misc.caching.CachedType
+
     
     def __init__(self, simpack):
         self.simpack = simpack
@@ -44,7 +47,6 @@ class SimpackWxGrokker(object):
         
         self.__init_analysis_settings()
     
-        
     
     def __init_analysis_settings(self):
         '''Analyze the simpack_wx to produce a Settings object.'''
@@ -86,5 +88,4 @@ class SimpackWxGrokker(object):
                     setattr(self.settings, key, actual_value)
             # todo: currently throws away unrecognized attributes from the
             # simpack's settings.
-                
-    
+        

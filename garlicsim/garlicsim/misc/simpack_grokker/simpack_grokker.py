@@ -13,12 +13,15 @@ import imp
 
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import misc_tools
+from garlicsim.general_misc import cute_iter_tools
+from garlicsim.general_misc.reasoned_bool import ReasonedBool
 import garlicsim.general_misc.caching
 
 from garlicsim.misc import (AutoClockGenerator, InvalidSimpack,
                             GarlicSimException, simpack_tools)
 from garlicsim.misc import step_iterators as step_iterators_module
-import misc
+from garlicsim.asynchronous_crunching import crunchers
+from . import misc
 
 from .settings import Settings
 from .get_step_type import get_step_type
@@ -40,6 +43,7 @@ class SimpackGrokker(object):
         self.simpack = simpack
         self.__init_analysis()
         self.__init_analysis_settings()
+        self.__init_analysis_cruncher_types()
 
         
     def __init_analysis(self):
@@ -157,7 +161,131 @@ class SimpackGrokker(object):
             # todo: currently throws away unrecognized attributes from the
             # simpack's settings.
                 
-    
+
+    def __init_analysis_cruncher_types(self):
+        simpack = self.simpack
+        self.cruncher_types_availability = {}
+        
+        FORCE_CRUNCHER = self.settings.FORCE_CRUNCHER
+        
+        if FORCE_CRUNCHER is None:
+            self.available_cruncher_types = crunchers.cruncher_types_list[:]
+            return
+
+        
+        if isinstance(FORCE_CRUNCHER, basestring):
+            (cruncher_type,) = \
+                [cruncher_type for cruncher_type in
+                 crunchers.cruncher_types_list if
+                 cruncher_type.__name__ == FORCE_CRUNCHER]
+            self.available_cruncher_types = [cruncher_type]
+        
+            ### Giving unavailability reasons: ################################
+            #                                                                 #
+            unavailable_cruncher_types = \
+                set(crunchers.cruncher_types_list).\
+                difference(set(self.available_cruncher_types))        
+            self.cruncher_types_availability.update(dict(
+                (
+                    unavailable_cruncher_type,
+                    ReasonedBool(
+                        False,
+                        'The `%s` simpack specified `%s` as the only available '
+                        'cruncher type' % (simpack.__name__,
+                                           cruncher_type.__name__)
+                    )
+                ) for unavailable_cruncher_type in unavailable_cruncher_types
+            ))
+            #                                                                 #
+            ###################################################################
+
+        
+        elif isinstance(FORCE_CRUNCHER, BaseCruncher):
+            cruncher_type = FORCE_CRUNCHER
+            self.available_cruncher_types = [cruncher_type]
+            
+            ### Giving unavailability reasons: ################################
+            #                                                                 #
+            unavailable_cruncher_types = \
+                set(crunchers.cruncher_types_list).\
+                difference(set(self.available_cruncher_types))
+            self.cruncher_types_availability.update(dict(
+                (
+                    unavailable_cruncher_type,
+                    ReasonedBool(
+                        False,
+                        'The `%s` simpack specified `%s` as the only available '
+                        'cruncher type' % (simpack.__name__,
+                                           cruncher_type.__name__)                   
+                    )
+                ) for unavailable_cruncher_type in unavailable_cruncher_types
+            ))
+            #                                                                 #
+            ###################################################################
+            
+        
+        elif cute_iter_tools.is_iterable(FORCE_CRUNCHER):            
+            self.available_cruncher_types = []
+            for item in FORCE_CRUNCHER:
+                if isinstance(item, basestring):
+                    cruncher_type = \
+                        [cruncher_type for cruncher_type in
+                         crunchers.cruncher_types_list if
+                         cruncher_type.__name__ == item]
+                else:
+                    assert isinstance(item, BaseCruncher)
+                    cruncher_type = item
+                self.available_cruncher_types.append(cruncher_type)
+
+            ### Giving unavailability reasons: ################################
+            #                                                                 #
+            unavailable_cruncher_types = \
+                set(crunchers.cruncher_types_list).\
+                difference(set(self.available_cruncher_types))
+            self.cruncher_types_availability.update(dict(
+                (
+                    unavailable_cruncher_type,
+                    ReasonedBool(
+                        False,
+                        'The `%s` simpack specified a list of available '
+                        'crunchers and `%s` is not in it.' % (simpack.__name__,
+                        unavailable_cruncher_type.__name__)
+                    )
+                        
+                ) for unavailable_cruncher_type in unavailable_cruncher_types
+            ))
+            #                                                                 #
+            ###################################################################
+            
+        
+        elif callable(FORCE_CRUNCHER):
+            assert not isinstance(FORCE_CRUNCHER, BaseCruncher)
+            self.available_cruncher_types = \
+                [cruncher_type for cruncher_type in
+                 crunchers.cruncher_types_list if
+                 FORCE_CRUNCHER(cruncher_type)]
+            self.cruncher_type = self.available_cruncher_types[0]
+            
+            ### Giving unavailability reasons: ################################
+            #                                                                 #
+            unavailable_cruncher_types = \
+                set(crunchers.cruncher_types_list).\
+                difference(set(self.available_cruncher_types))
+            for unavailable_cruncher_type in unavailable_cruncher_types:
+                reason = getattr(
+                    FORCE_CRUNCHER(unavailable_cruncher_type),
+                    'reason',
+                    'No reason was given for `%s` not being accepted.' % \
+                    unavailable_cruncher_type.__name__
+                )
+                self.cruncher_types_availability[
+                    unavailable_cruncher_type
+                    ] = ReasonedBool(False, reason)
+            #                                                                 #
+            ###################################################################
+            
+        for available_cruncher_type in self.available_cruncher_types:
+            self.cruncher_types_availability[available_cruncher_type] = True
     
     def step(self, state_or_history_browser, step_profile):
         '''
