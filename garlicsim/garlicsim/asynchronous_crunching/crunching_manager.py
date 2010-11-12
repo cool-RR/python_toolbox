@@ -19,7 +19,7 @@ from garlicsim.general_misc import cute_iter_tools
 import garlicsim
 import garlicsim.data_structures
 import garlicsim.misc
-import crunchers
+from . import crunchers
 from .crunching_profile import CrunchingProfile
 from .base_cruncher import BaseCruncher
 from garlicsim.misc.step_profile import StepProfile
@@ -27,10 +27,6 @@ from .misc import EndMarker
 
 
 __all__ = ['CrunchingManager']
-
-
-cruncher_types = [crunchers.ThreadCruncher, crunchers.ProcessCruncher,
-                  crunchers.PiCloudCruncher]
 
 
 @garlicsim.general_misc.third_party.decorator.decorator
@@ -103,20 +99,21 @@ class CrunchingManager(object):
         FORCE_CRUNCHER = self.project.simpack_grokker.settings.FORCE_CRUNCHER
         
         if FORCE_CRUNCHER is None:
-            self.available_cruncher_types = cruncher_types[:]
+            self.available_cruncher_types = crunchers.cruncher_types_list[:]
             return
 
         
         if isinstance(FORCE_CRUNCHER, basestring):
             (self.cruncher_type,) = \
-                [cruncher_type for cruncher_type in cruncher_types if
+                [cruncher_type for cruncher_type in
+                 crunchers.cruncher_types_list if
                  cruncher_type.__name__ == FORCE_CRUNCHER]
             self.available_cruncher_types = [self.cruncher_type]
         
             ### Giving unavailability reasons: ################################
             #                                                                 #
             unavailable_cruncher_types = \
-                set(cruncher_types).\
+                set(crunchers.cruncher_types_list).\
                 difference(set(self.available_cruncher_types))        
             self.reasons_for_unavailability.update(dict(
                 (
@@ -138,7 +135,7 @@ class CrunchingManager(object):
             ### Giving unavailability reasons: ################################
             #                                                                 #
             unavailable_cruncher_types = \
-                set(cruncher_types).\
+                set(crunchers.cruncher_types_list).\
                 difference(set(self.available_cruncher_types))
             self.reasons_for_unavailability.update(dict(
                 (
@@ -158,7 +155,8 @@ class CrunchingManager(object):
             for item in FORCE_CRUNCHER:
                 if isinstance(item, basestring):
                     cruncher_type = \
-                        [cruncher_type for cruncher_type in cruncher_types if
+                        [cruncher_type for cruncher_type in
+                         crunchers.cruncher_types_list if
                          cruncher_type.__name__ == item]
                     self.available_cruncher_types.append(cruncher_type)
                 else:
@@ -168,7 +166,7 @@ class CrunchingManager(object):
             ### Giving unavailability reasons: ################################
             #                                                                 #
             unavailable_cruncher_types = \
-                set(cruncher_types).\
+                set(crunchers.cruncher_types_list).\
                 difference(set(self.available_cruncher_types))
             self.reasons_for_unavailability.update(dict(
                 (
@@ -186,20 +184,27 @@ class CrunchingManager(object):
         elif callable(FORCE_CRUNCHER):
             assert not isinstance(FORCE_CRUNCHER, BaseCruncher)
             self.available_cruncher_types = \
-                [cruncher_type for cruncher_type in cruncher_types if
+                [cruncher_type for cruncher_type in
+                 crunchers.cruncher_types_list if
                  FORCE_CRUNCHER(cruncher_type)]
             self.cruncher_type = self.available_cruncher_types[0]
             
             ### Giving unavailability reasons: ################################
             #                                                                 #
             unavailable_cruncher_types = \
-                set(cruncher_types).\
+                set(crunchers.cruncher_types_list).\
                 difference(set(self.available_cruncher_types))
             for unavailable_cruncher_type in unavailable_cruncher_types:
-                reason = getattr(FORCE_CRUNCHER(cruncher_type), 'reason', None)
-                if reason is not None:
-                    self.reasons_for_unavailability\
-                        [unavailable_cruncher_type] = reason
+                reason = getattr(
+                    FORCE_CRUNCHER(unavailable_cruncher_type),
+                    'reason',
+                    'No reason was given for `%s` not being accepted' % \
+                    unavailable_cruncher_type.__name__
+                )
+                self.reasons_for_unavailability[unavailable_cruncher_type] = \
+                    reason
+                    
+                
             #                                                                 #
             ###################################################################
             return

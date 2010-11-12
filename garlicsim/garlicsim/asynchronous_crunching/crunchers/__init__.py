@@ -24,11 +24,17 @@ cruncher you should use for your project depends on the situation.
 See the documentation for the different crunchers for more info.
 '''
 
-from thread_cruncher import ThreadCruncher
-from .pi_cloud_cruncher import PiCloudCruncher
+cruncher_types_list = []
+
+from .thread_cruncher import ThreadCruncher
+cruncher_types_list.append(ThreadCruncher)
+
 try:
-    from process_cruncher import ProcessCruncher
+    from .process_cruncher import ProcessCruncher
+    cruncher_types_list.append(ProcessCruncher)    
 except ImportError:
+    # todo: Do the thing that gives the error only if the module isn't
+    # avaialable, *not* if it raises some ImportError itself.
     try:
         import multiprocessing
     except ImportError:
@@ -39,3 +45,6 @@ except ImportError:
                       "processor cores for crunching.")
     else:
         raise
+    
+from .pi_cloud_cruncher import PiCloudCruncher
+cruncher_types_list.append(PiCloudCruncher)
