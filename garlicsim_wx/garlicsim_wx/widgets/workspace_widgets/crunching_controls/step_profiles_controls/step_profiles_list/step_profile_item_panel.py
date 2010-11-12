@@ -12,7 +12,7 @@ class StepProfileItemPanel(wx.Panel):
         wx.Panel.__init__(
             self,
             step_profiles_list.GetMainWindow(),
-            size=(40, 20)
+            size=(40, 18)
         )
         
         
@@ -35,8 +35,8 @@ class StepProfileItemPanel(wx.Panel):
         self.hue_control = HueControl(self, step_profile)
         
         self.main_h_sizer.Add(self.hue_control, 0,
-                              wx.EXPAND | wx.BOTTOM | wx.TOP, border=1)
+                              wx.EXPAND | wx.BOTTOM | wx.TOP, border=2)
         
         self.SetSizer(self.main_h_sizer)
-        
+        self.Layout()
         #self.main_h_sizer.Fit(self)
