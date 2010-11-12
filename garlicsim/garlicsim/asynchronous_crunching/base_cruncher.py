@@ -34,8 +34,10 @@ class BaseCruncher(object):
     '''
     
     __metaclass__ = abc.ABCMeta
+
     
     gui_explanation = None
+
     
     def __init__(self, crunching_manager, initial_state, crunching_profile):
         
@@ -52,8 +54,17 @@ class BaseCruncher(object):
         self.crunching_profile = copy.deepcopy(crunching_profile)
         assert isinstance(self.crunching_profile,
                           garlicsim.asynchronous_crunching.CrunchingProfile)
-    
         
+    
+    @abc.abstractmethod
+    def can_be_used_with_simpack_grokker(simpack_grokker):
+        '''tododoc.
+        
+        (Static method.)
+        '''
+        pass
+        
+    
     @abc.abstractmethod
     def retire(self):
         '''Retire the cruncher, making it shut down.'''

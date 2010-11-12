@@ -26,7 +26,7 @@ from garlicsim.misc.step_profile import StepProfile
 from .misc import EndMarker
 
 
-__all__ = ['CrunchingManager', 'DefaultCruncher', 'DefaultHistoryCruncher']
+__all__ = ['CrunchingManager']
 
 
 cruncher_types = [crunchers.ThreadCruncher, crunchers.ProcessCruncher,
