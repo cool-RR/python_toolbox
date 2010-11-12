@@ -94,7 +94,7 @@ def simpack_check(simpack, cruncher):
     
     project = garlicsim.Project(simpack)
     
-    project.crunching_manager.Cruncher = cruncher
+    project.crunching_manager.cruncher_type = cruncher
     
     assert project.tree.lock._ReadWriteLock__writer is None
     

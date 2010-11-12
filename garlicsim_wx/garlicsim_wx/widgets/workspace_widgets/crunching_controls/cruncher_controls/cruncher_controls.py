@@ -61,7 +61,7 @@ class CruncherControls(wx.Panel):
     
     def _recalculate(self):
         self.cruncher_in_use_static_text.SetLabel(
-            self.gui_project.project.crunching_manager.Cruncher.__name__
+            self.gui_project.project.crunching_manager.cruncher_type.__name__
         )
         
 

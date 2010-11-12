@@ -100,27 +100,42 @@ class CrunchingManager(object):
         
         FORCE_CRUNCHER = self.project.simpack_grokker.settings.FORCE_CRUNCHER
         
+        if FORCE_CRUNCHER is None:
+            self.usable_cruncher_types = cruncher_types[:]
+        
         if isinstance(FORCE_CRUNCHER, basestring):
-            (self.Cruncher,) = \
+            (self.cruncher_type,) = \
                 [cruncher_type for cruncher_type in cruncher_types if
                  cruncher_type.__name__ == FORCE_CRUNCHER]
+            self.usable_cruncher_types = [self.cruncher_type]
             return
         
         elif isinstance(FORCE_CRUNCHER, BaseCruncher):
-            self.Cruncher = FORCE_CRUNCHER
+            self.cruncher_type = FORCE_CRUNCHER
+            self.usable_cruncher_types = [self.cruncher_type]
             return
+        
+        elif cute_iter_tools.is_iterable(FORCE_CRUNCHER):            
+            self.usable_cruncher_types = []
+            for item in FORCE_CRUNCHER:
+                if isinstance(item, basestring):
+                    cruncher_type = \
+                        [cruncher_type for cruncher_type in cruncher_types if
+                         cruncher_type.__name__ == item]
+                    self.usable_cruncher_types.append(cruncher_type)
+                else:
+                    assert isinstance(item, BaseCruncher)
+                    self.usable_cruncher_types.append(self.cruncher_type)
+                    return
         
         elif callable(FORCE_CRUNCHER):
             assert not isinstance(FORCE_CRUNCHER, BaseCruncher)
-            usable_cruncher_types = \
+            self.usable_cruncher_types = \
                 [cruncher_type for cruncher_type in cruncher_types if
                  FORCE_CRUNCHER(cruncher_type)]
-            
-        else:
-            history_dependent = project.simpack_grokker.history_dependent
-            
-            self.Cruncher = DefaultHistoryCruncher if history_dependent \
-                            else DefaultCruncher
+            self.cruncher_type = self.usable_cruncher_types[0]
+            return
+        
         
     @with_tree_lock
     def sync_crunchers(self):
@@ -262,7 +277,7 @@ class CrunchingManager(object):
         crunching_profile = job.crunching_profile
         
         if node.still_in_editing is False:
-            cruncher = self.Cruncher(self, node.state, crunching_profile)
+            cruncher = self.cruncher_type(self, node.state, crunching_profile)
             cruncher.start()
             self.crunchers[job] = cruncher
             

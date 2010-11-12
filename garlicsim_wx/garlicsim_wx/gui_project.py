@@ -105,13 +105,14 @@ class GuiProject(object):
         assert isinstance(self.project, garlicsim.Project)
         
 
-        ### Choosing a Cruncher class: ########################################
+        ### Using ProcessCruncher if possible: ################################
         
-        if self.project.simpack_grokker.history_dependent is False and \
-           self.project.simpack_grokker.settings.FORCE_CRUNCHER is None and \
-           'ProcessCruncher' in vars(crunchers):
-            
-            self.project.crunching_manager.Cruncher = crunchers.ProcessCruncher
+        if 'ProcessCruncher' in vars(crunchers) and \
+           crunchers.ProcessCruncher in self.project.crunching_manager.\
+                                        usable_cruncher_types:
+           
+            self.project.crunching_manager.cruncher_type = \
+                crunchers.ProcessCruncher
         
         #######################################################################
             
