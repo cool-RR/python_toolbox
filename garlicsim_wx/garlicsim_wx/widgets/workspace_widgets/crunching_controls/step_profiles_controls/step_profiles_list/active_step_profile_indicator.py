@@ -4,7 +4,7 @@ import wx
 
 
 class ActiveStepProfileIndicator(wx.Window):
-    def __init__(self, step_profile_item_panel, step_profile, size=(10, -1)):
+    def __init__(self, step_profile_item_panel, step_profile, size=(10, 15)):
         self.step_profile_item_panel = step_profile_item_panel
         self.active = False
         wx.Window.__init__(self, step_profile_item_panel, size=size)

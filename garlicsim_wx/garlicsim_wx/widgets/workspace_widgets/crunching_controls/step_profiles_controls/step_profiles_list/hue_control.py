@@ -31,7 +31,7 @@ class HueControl(GenericHueControl):
                    hue
                )
         
-        size = (25, -1)
+        size = (25, 15)
         
         GenericHueControl.__init__(
             self,
@@ -45,7 +45,7 @@ class HueControl(GenericHueControl):
             size=size
         )
         
-        self.SetMinSize((25, -1))
+        self.SetMinSize(size)
 
         self.SetBackgroundColour(step_profile_item_panel.GetBackgroundColour())
         
