@@ -46,7 +46,7 @@ class CruncherSelectionDialog(CuteDialog):
         
         self.main_v_sizer.Add(self.h_sizer, 0, wx.EXPAND)
         
-        cruncher_types_availability = \
+        self.cruncher_types_availability = cruncher_types_availability = \
             self.gui_project.project.simpack_grokker.\
             cruncher_types_availability
 
