@@ -90,7 +90,8 @@ class HueControl(wx.Window):
 
             
     def update(self):
-        self.Refresh()
+        if self: # Protecting from dead object
+            self.Refresh()
 
         
     def Destroy(self):
