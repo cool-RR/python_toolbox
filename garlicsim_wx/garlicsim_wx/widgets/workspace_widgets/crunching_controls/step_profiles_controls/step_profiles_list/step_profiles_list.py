@@ -89,8 +89,6 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
             if item not in self.items:
                 del self.step_profiles_to_items[step_profile]
                 
-        started_empty = (len(self.items) == 0)
-
         for step_profile in gui_project.step_profiles:
             try:
                 item = self.step_profiles_to_items[step_profile]
@@ -118,8 +116,9 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
                 # Apparently gets destroyed before
 
         
-        if started_empty and len(self.items) >= 1:
-            self.SelectItem(self.items[0])
+        if (self.items) and (self.GetSelection() not in self.items):
+            self.SelectItem(self.items[-1])
+            
             
                 
                
