@@ -29,13 +29,14 @@ class StepProfileItemPanel(wx.Panel):
         )
         
         self.main_h_sizer.Add(self.active_step_profile_indicator, 0,
-                              wx.EXPAND | wx.RIGHT, border=5)
+                              wx.EXPAND | wx.TOP | wx.BOTTOM, border=3)
         
+        self.main_h_sizer.AddSpacer((5, -1))
         
         self.hue_control = HueControl(self, step_profile)
         
         self.main_h_sizer.Add(self.hue_control, 0,
-                              wx.EXPAND | wx.BOTTOM | wx.TOP, border=2)
+                              wx.EXPAND | wx.BOTTOM | wx.TOP, border=3)
         
         self.SetSizer(self.main_h_sizer)
         self.Layout()
