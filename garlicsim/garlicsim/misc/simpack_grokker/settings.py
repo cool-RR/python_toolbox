@@ -15,7 +15,7 @@ class Settings(object):
     
     def __init__(self, simpack_grokker):
         
-        self.FORCE_CRUNCHER = misc.DefaultForceCruncher(simpack_grokker)
+        self.CRUNCHERS = misc.DefaultForceCruncher(simpack_grokker)
         '''
         A cruncher that this simpack insists on using.tododoc
         

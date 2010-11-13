@@ -168,14 +168,14 @@ class SimpackGrokker(object):
         
         self.cruncher_types_availability = OrderedDict()
         
-        FORCE_CRUNCHER = self.settings.FORCE_CRUNCHER
+        CRUNCHERS = self.settings.CRUNCHERS
 
         
-        if isinstance(FORCE_CRUNCHER, basestring):
+        if isinstance(CRUNCHERS, basestring):
             (cruncher_type,) = \
                 [cruncher_type_ for cruncher_type_ in
                  crunchers.cruncher_types_list if
-                 cruncher_type_.__name__ == FORCE_CRUNCHER]
+                 cruncher_type_.__name__ == CRUNCHERS]
             self.available_cruncher_types = [cruncher_type]
             self.cruncher_types_availability[cruncher_type] = True
         
@@ -200,8 +200,8 @@ class SimpackGrokker(object):
             ###################################################################
 
         
-        elif isinstance(FORCE_CRUNCHER, BaseCruncher):
-            cruncher_type = FORCE_CRUNCHER
+        elif isinstance(CRUNCHERS, BaseCruncher):
+            cruncher_type = CRUNCHERS
             self.available_cruncher_types = [cruncher_type]
             self.cruncher_types_availability[cruncher_type] = True
             
@@ -226,9 +226,9 @@ class SimpackGrokker(object):
             ###################################################################
             
         
-        elif cute_iter_tools.is_iterable(FORCE_CRUNCHER):            
+        elif cute_iter_tools.is_iterable(CRUNCHERS):            
             self.available_cruncher_types = []
-            for item in FORCE_CRUNCHER:
+            for item in CRUNCHERS:
                 if isinstance(item, basestring):
                     cruncher_type = \
                         [cruncher_type_ for cruncher_type_ in
@@ -262,12 +262,12 @@ class SimpackGrokker(object):
             ###################################################################
             
         
-        elif callable(FORCE_CRUNCHER):
-            assert not isinstance(FORCE_CRUNCHER, BaseCruncher)
+        elif callable(CRUNCHERS):
+            assert not isinstance(CRUNCHERS, BaseCruncher)
             self.available_cruncher_types = \
                 [cruncher_type_ for cruncher_type_ in
                  crunchers.cruncher_types_list if
-                 FORCE_CRUNCHER(cruncher_type_)]
+                 CRUNCHERS(cruncher_type_)]
             self.cruncher_type = self.available_cruncher_types[0]
             for available_cruncher_type in self.available_cruncher_types:
                 self.cruncher_types_availability[available_cruncher_type] = \
@@ -281,7 +281,7 @@ class SimpackGrokker(object):
                  self.available_cruncher_types]
             for unavailable_cruncher_type in unavailable_cruncher_types:
                 reason = getattr(
-                    FORCE_CRUNCHER(unavailable_cruncher_type),
+                    CRUNCHERS(unavailable_cruncher_type),
                     'reason',
                     'No reason was given for `%s` not being accepted.' % \
                     unavailable_cruncher_type.__name__
