@@ -4,10 +4,11 @@ import wx
 
 
 class ActiveStepProfileIndicator(wx.Window):
-    def __init__(self, step_profile_item_panel, step_profile):
+    def __init__(self, step_profile_item_panel, step_profile, size=(10, -1)):
         self.step_profile_item_panel = step_profile_item_panel
         self.active = False
-        wx.Window.__init__(self, step_profile_item_panel, size=(10, -1))
+        wx.Window.__init__(self, step_profile_item_panel, size=size)
+        self.SetMinSize(size)
         self.SetBackgroundColour(step_profile_item_panel.GetBackgroundColour())
         self.Bind(wx.EVT_PAINT, self.on_paint)
         #self.Bind(wx.EVT_SET_FOCUS, self.on_set_focus)

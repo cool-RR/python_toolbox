@@ -31,6 +31,8 @@ class HueControl(GenericHueControl):
                    hue
                )
         
+        size = (25, -1)
+        
         GenericHueControl.__init__(
             self,
             step_profile_item_panel,
@@ -40,9 +42,12 @@ class HueControl(GenericHueControl):
             lightness=0.8,
             saturation=1,
             dialog_title='Select hue for step profile',
-            size=(25, -1)
+            size=size
         )
+        
+        self.SetMinSize((25, -1))
 
         self.SetBackgroundColour(step_profile_item_panel.GetBackgroundColour())
+        
         
             
