@@ -2,7 +2,9 @@ import cPickle as pickle_module
 
 
 def is_atomically_pickleable(thing):
-    sdfsd
+    if hasattr(thing, 'is_pickleable'):
+        return thing.is_pickleable
+    
     pass
 
 """

@@ -1,3 +1,6 @@
+import threading
+import multiprocessing
+
 from garlicsim.general_misc import pickle_tools
 
 # We're importing `pickle_module` from `pickle_tools`, so we get the exact same
@@ -16,15 +19,29 @@ def is_pickle_successful(thing):
         return thing == unpickled_thing
 
     
-def test_simple_pickleables():
+def test_simple_atomically_pickleables():
     pickleables = [
-        1,
-        1.1,
-        -3,
-        'roar',
-        u'Meow!',
+        None, True, False,
+        1, 1.1, -3, 3+4.5j,
+        'roar', u'Meow!',
         {1: 3, 'frr': 'meow'},
         ['one', 'two', (3, 4)],
         set([1, 2, 3, 1]),
         frozenset((1, 2, 3, 1, 'meow', frozenset())),
+        sum, slice, type
     ]
+    
+    atomically_pickleables = [
+        set([threading.Lock()]),
+        [multiprocessing.Lock()],
+    ]
+    
+    for thing in pickleables:
+        assert pickle_tools.is_atomically_pickleable(thing)
+        assert is_pickle_successful(thing)
+        
+    for thing in atomically_pickleablespickleables:
+        assert pickle_tools.is_atomically_pickleable(thing)
+        
+        
+        
