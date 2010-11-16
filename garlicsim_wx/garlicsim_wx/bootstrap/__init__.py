@@ -6,3 +6,4 @@ This is a bootstrap package for garlicsim_wx. See module bootstrap here.
 '''
 
 from . import bootstrap
+from . import bootstrap_wx

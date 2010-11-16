@@ -1,11 +1,17 @@
 import cPickle as pickle_module
 
+from garlicsim.general_misc import caching
+
 
 def is_atomically_pickleable(thing):
-    if hasattr(thing, 'is_pickleable'):
-        return thing.is_pickleable
-    
-    pass
+    return _is_type_atomically_pickleable(type(thing))
+    import pickle, copy_reg
+
+
+@caching.cache()
+def _is_type_atomically_pickleable(my_type):
+    if hasattr(my_type, 'is_pickleable'):
+        return my_type.is_pickleable
 
 """
 from cPickle import Pickler, Unpickler, UnpicklingError 
