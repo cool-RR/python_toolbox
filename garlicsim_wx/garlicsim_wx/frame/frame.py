@@ -639,8 +639,8 @@ class Frame(wx.Frame):
             try:
                 sys.setrecursionlimit(10000)
                 with open(path, 'wb') as my_file:
-                    picklable_vars = self.gui_project.__getstate__()
-                    pickle_module.dump(picklable_vars, my_file, protocol=2)
+                    pickleable_vars = self.gui_project.__getstate__()
+                    pickle_module.dump(pickleable_vars, my_file, protocol=2)
 
             except Exception, exception:
                 error_dialog = wx.MessageDialog(

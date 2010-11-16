@@ -27,7 +27,7 @@ class State(object):
     When a state is created, a `.clock` attribute must be assigned to it,
     specifying what time it is in this state.
 
-    A state object must always be picklable, as do all the attributes assigned
+    A state object must always be pickleable, as do all the attributes assigned
     to it.
     '''
     

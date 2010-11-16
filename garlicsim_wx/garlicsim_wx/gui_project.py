@@ -61,17 +61,17 @@ class GuiProject(object):
 
     
     @staticmethod
-    def load_from_vars(frame, picklable_vars):
+    def load_from_vars(frame, pickleable_vars):
         '''Take vars that were just unpickled and build a GuiProject from them.'''
 
         simpack, project = (
-            picklable_vars['simpack'],
-            picklable_vars['project']
+            pickleable_vars['simpack'],
+            pickleable_vars['project']
         )
         
         gui_project = GuiProject(simpack, frame, project, virgin=False)
         
-        for (key, value) in picklable_vars.iteritems():
+        for (key, value) in pickleable_vars.iteritems():
             setattr(gui_project, key, value)
         
         return gui_project
@@ -837,7 +837,7 @@ class GuiProject(object):
         del my_dict['timer_for_playing']
         del my_dict['simpack_grokker']
         del my_dict['simpack_wx_grokker']
-        my_dict['namespace'] = pickle_tools.filter_dict_to_picklable(
+        my_dict['namespace'] = pickle_tools.filter_dict_to_pickleable(
             my_dict['namespace']
         )
 
