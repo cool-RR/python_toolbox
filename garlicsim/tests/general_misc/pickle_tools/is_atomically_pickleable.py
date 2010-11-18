@@ -1,6 +1,8 @@
 import threading
 import multiprocessing
 
+import wx
+
 from garlicsim.general_misc import pickle_tools
 
 # We're importing `pickle_module` from `pickle_tools`, so we get the exact same
@@ -34,6 +36,33 @@ def test_simple_atomically_pickleables():
     atomically_pickleables = [
         set([threading.Lock()]),
         [multiprocessing.Lock()],
+    ]
+    
+    for thing in pickleables:
+        assert pickle_tools.is_atomically_pickleable(thing)
+        assert is_pickle_successful(thing)
+        
+    for thing in atomically_pickleablespickleables:
+        assert pickle_tools.is_atomically_pickleable(thing)
+        
+        
+def test_simple_non_atomically_pickleables():
+    non_pickleables = [
+        threading.Lock(),
+        threading.RLock(),
+        threading.Condition(),
+        threading.BoundedSemaphore(),
+        threading.currentThread(),
+        threading.Semaphore(),
+        multiprocessing.Lock(),
+        multiprocessing.BoundedSemaphore(),
+        multiprocessing.Condition(),
+        multiprocessing.JoinableQueue(),
+        multiprocessing.Manager(),
+        multiprocessing.Pool(),
+        multiprocessing.Queue(),
+        multiprocessing.RLock(),
+        multiprocessing.Semaphore(),
     ]
     
     for thing in pickleables:

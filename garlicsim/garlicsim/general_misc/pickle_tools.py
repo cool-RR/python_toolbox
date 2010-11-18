@@ -12,6 +12,13 @@ def is_atomically_pickleable(thing):
 def _is_type_atomically_pickleable(my_type):
     if hasattr(my_type, 'is_pickleable'):
         return my_type.is_pickleable
+    
+if __name__ == '__main__':
+    import threading, multiprocessing, pickle
+    rl = threading.RLock()
+    f = open(r'c:\Users\User\delete_me', 'r')
+    f.__reduce__(2)
+    pickle.dumps(rl)
 
 """
 from cPickle import Pickler, Unpickler, UnpicklingError 
