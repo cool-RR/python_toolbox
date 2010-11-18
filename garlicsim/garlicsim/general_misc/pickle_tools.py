@@ -17,7 +17,7 @@ if __name__ == '__main__':
     import threading, multiprocessing, pickle
     rl = threading.RLock()
     f = open(r'c:\Users\User\delete_me', 'r')
-    f.__reduce__(2)
+    f.__reduce__()
     pickle.dumps(rl)
 
 """
