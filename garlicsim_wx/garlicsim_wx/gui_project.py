@@ -71,6 +71,10 @@ class GuiProject(object):
         
         gui_project = GuiProject(simpack, frame, project, virgin=False)
         
+        unpickled_namespace = pickleable_vars.pop('namespace', None)
+        if unpickled_namespace:
+            gui_project.namespace.update(unpickled_namespace)
+        
         for (key, value) in pickleable_vars.iteritems():
             setattr(gui_project, key, value)
         
@@ -831,6 +835,13 @@ class GuiProject(object):
         del my_dict['timer_for_playing']
         del my_dict['simpack_grokker']
         del my_dict['simpack_wx_grokker']
+        
+        my_namespace = my_dict['namespace'] = my_dict['namespace'].copy()
+        try:
+            del my_namespace['__builtins__']
+        except KeyError:
+            pass
+        
 
         for (key, value) in my_dict.items():
             

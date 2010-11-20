@@ -10,6 +10,7 @@ import copy_reg
 import types
 import __builtin__
 
+
 ###############################################################################
 
 def reduce_method(method):
@@ -28,7 +29,9 @@ def reduce_method(method):
 
 copy_reg.pickle(types.MethodType, reduce_method)
 
+
 ###############################################################################
+
 
 def __import__(*args, **kwargs):
     '''Wrapper for the builtin `__import__`'''
@@ -41,5 +44,21 @@ def reduce_module(module):
     return (__import__, (module.__name__, {}, {}, [''])) # fromlist cruft
 
 copy_reg.pickle(types.ModuleType, reduce_module)
+
+
+###############################################################################
+
+
+def _get_ellipsis():
+    return Ellipsis
+
+def reduce_ellipsis(method):
+    return (
+        _get_ellipsis,
+        ()
+    )
+
+copy_reg.pickle(types.EllipsisType, reduce_ellipsis)
+
 
 ###############################################################################
