@@ -189,7 +189,8 @@ def _get_address(obj, shorten=False, root=None, namespace={}):
     
 def describe(obj, shorten=False, root=None, namespace={}):
     
-    if isinstance(obj, types.ModuleType) or hasattr(obj, '__module__'):
+    if isinstance(obj, types.ModuleType) or \
+       (hasattr(obj, '__module__') and hasattr(obj, '__name__')):
         
         return _get_address(obj, shorten=shorten, root=root,
                             namespace=namespace)

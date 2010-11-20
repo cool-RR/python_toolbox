@@ -189,3 +189,9 @@ def test_address_in_expression():
     assert describe([email.encoders, 7, (1, 3), marshal]) == \
            '[email.encoders, 7, (1, 3), marshal]'
     
+
+def test_specific_objects():
+    import multiprocessing
+    lock = multiprocessing.Lock()
+    describe(lock)
+    
