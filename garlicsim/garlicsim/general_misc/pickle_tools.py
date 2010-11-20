@@ -5,16 +5,23 @@ from garlicsim.general_misc import caching
 
 def is_atomically_pickleable(thing):
     return _is_type_atomically_pickleable(type(thing))
-    import pickle, copy_reg
 
 
 @caching.cache()
 def _is_type_atomically_pickleable(my_type):
     if hasattr(my_type, 'is_pickleable'):
         return my_type.is_pickleable
+    # tododoc This is done by stupid whitelisting temporarily:
+    import thread, multiprocessing
+    atomically_unpickleable_types = \
+        (file, thread.LockType, multiprocessing.synchronize.Lock)
+    if issubclass(my_type, atomically_unpickleable_types):
+        return False
+    else:
+        return True
     
 if __name__ == '__main__':
-    import threading, multiprocessing, pickle
+    import threading, multiprocessing, pickle, copy_reg
     rl = threading.RLock()
     f = open(r'c:\Users\User\delete_me', 'r')
     f.__reduce__()

@@ -14,7 +14,7 @@ from garlicsim.general_misc.pickle_tools import pickle_module
 def is_pickle_successful(thing):
     try:
         string = pickle_module.dumps(thing)
-        unpickled_thing = pickle_module.loads(thing)
+        unpickled_thing = pickle_module.loads(string)
     except Exception:
         return False
     else:
@@ -42,7 +42,7 @@ def test_simple_atomically_pickleables():
         assert pickle_tools.is_atomically_pickleable(thing)
         assert is_pickle_successful(thing)
         
-    for thing in atomically_pickleablespickleables:
+    for thing in atomically_pickleables:
         assert pickle_tools.is_atomically_pickleable(thing)
         
         
