@@ -73,7 +73,3 @@ if __name__ == '__main__':
     f = open(r'c:\Users\User\delete_me', 'r')
     f.__reduce__()
     pickle.dumps(rl)
-
-"""
-
-"""

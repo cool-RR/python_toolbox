@@ -12,7 +12,6 @@ from __future__ import with_statement
 import os
 import sys
 import random
-import pickle as pickle_module # tododoc: change to c
 import subprocess
 import webbrowser
 import traceback
@@ -23,6 +22,7 @@ import pkg_resources
 
 from garlicsim.general_misc import dict_tools
 from garlicsim.general_misc import string_tools
+from garlicsim.general_misc import pickle_tools
 from garlicsim_wx.general_misc import thread_timer
 from garlicsim_wx.general_misc import wx_tools
 
@@ -586,11 +586,13 @@ class Frame(wx.Frame):
         '''
         
         old_recursion_limit = sys.getrecursionlimit()
+        
             
         try:
             sys.setrecursionlimit(10000)
             with open(path, 'rb') as my_file:
-                gui_project_vars = pickle_module.load(my_file)
+                unpickler = pickle_tools.CuteUnpickler(my_file)
+                gui_project_vars = unpickler.load()
                 
         except Exception, exception:
             dialog = wx.MessageDialog(
@@ -640,7 +642,8 @@ class Frame(wx.Frame):
                 sys.setrecursionlimit(10000)
                 with open(path, 'wb') as my_file:
                     pickleable_vars = self.gui_project.__getstate__()
-                    pickle_module.dump(pickleable_vars, my_file, protocol=2)
+                    pickler = pickle_tools.CutePickler(my_file, protocol=2)
+                    pickler.dump(pickleable_vars)
 
             except Exception, exception:
                 error_dialog = wx.MessageDialog(
