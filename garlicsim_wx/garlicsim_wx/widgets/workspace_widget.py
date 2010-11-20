@@ -40,6 +40,9 @@ class WorkspaceWidget(object):
 
     _WorkspaceWidget__name = None
     '''The display name of the widget. Default is class name.'''
+    
+    ## Just for those times when we don't in
+    #is_atomically_pickleable = False
 
     
     def __init__(self, frame):

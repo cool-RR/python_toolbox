@@ -6,7 +6,10 @@ from garlicsim.general_misc import address_tools
 
 
 def is_atomically_pickleable(thing):
-    return _is_type_atomically_pickleable(type(thing))
+    # Using __class__ instead of type because of goddamned old-style classes.
+    # tododoc: make test.
+    my_type = thing.__class__ 
+    return _is_type_atomically_pickleable(my_type)
 
 
 @caching.cache()
