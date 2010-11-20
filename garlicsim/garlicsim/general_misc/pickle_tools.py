@@ -1,6 +1,8 @@
+import re
 import cPickle as pickle_module
 
 from garlicsim.general_misc import caching
+from garlicsim.general_misc import address_tools
 
 
 def is_atomically_pickleable(thing):
@@ -19,17 +21,7 @@ def _is_type_atomically_pickleable(my_type):
         return False
     else:
         return True
-    
-if __name__ == '__main__':
-    import threading, multiprocessing, pickle, copy_reg
-    rl = threading.RLock()
-    f = open(r'c:\Users\User\delete_me', 'r')
-    f.__reduce__()
-    pickle.dumps(rl)
-
-"""
-from cPickle import Pickler, Unpickler, UnpicklingError 
- 
+  
  
 class FilteredObject: 
     def __init__(self, about): 
@@ -37,65 +29,39 @@ class FilteredObject:
     def __repr__(self): 
         return 'FilteredObject(%s)' % repr(self.about) 
 
-    
-import cPickle 
+_filtered_string_pattern = re.compile(
+    r'^Filtered by pickle_tools \((?P<description>.*?)\)$'
+)
  
-def persistent_id(obj): 
-    if isinstance(obj, wxObject): 
-        return "filtered:wxObject" 
-    else: 
-        return None 
- 
-class FilteredObject: 
-    def __init__(self, about): 
-        self.about = about 
-    def __repr__(self): 
-        return 'FilteredObject(%s)' % repr(self.about) 
- 
-def persistent_load(obj_id): 
-    if obj_id.startswith('filtered:'): 
-        return FilteredObject(obj_id[9:]) 
-    else: 
-        raise cPickle.UnpicklingError('Invalid persistent id') 
- 
-def dump_filtered(obj, file): 
-    p = cPickle.Pickler(file) 
-    p.persistent_id = persistent_id 
-    p.dump(obj) 
- 
-def load_filtered(file):
-    u = cPickle.Unpickler(file) 
-    u.persistent_load = persistent_load 
-    return u.load() 
-
- 
-class MyPickler(object): 
- 
-    def __init__(self, file, protocol=0): 
-        pickler = Pickler(file, protocol) 
+class CutePickler(object): 
+    '''Not subclassing because cPickle.Pickler doesn't support subclassing.'''
+    def __init__(self, file_, protocol=0): 
+        pickler = self.pickler = pickle_module.Pickler(file_, protocol) 
         pickler.persistent_id = self.persistent_id 
-        self.dump = pickler.dump 
-        self.clear_memo = pickler.clear_memo 
+        self.dump, self.dumps, self.clear_memo = \
+            pickler.dump, pickler.dumps, pickler.clear_memo
  
     def persistent_id(self, obj): 
-        if not hasattr(obj, '__getstate__') and not isinstance(obj, 
-            (basestring, int, long, float, tuple, list, set, dict)): 
-            return "filtered:%s" % type(obj) 
-        else: 
+        if is_atomically_pickleable(obj): 
             return None 
+        else:
+            return 'Filtered by pickle_tools (%s)' % \
+                   address_tools.describe(obj)
  
+    
+class CuteUnpickler(object): 
+    '''Not subclassing because cPickle.Pickler doesn't support subclassing.'''
+    def __init__(self, file_): 
+        unpickler = self.unpickler = pickle_module.Unpickler(file_) 
+        unpickler.persistent_load = self.persistent_load
+        self.load, self.loads, self.noload = \
+            unpickler.load, unpickler.loads, unpickler.noload
  
-class MyUnpickler(object): 
- 
-    def __init__(self, file): 
-        unpickler = Unpickler(file) 
-        unpickler.persistent_load = self.persistent_load 
-        self.load = unpickler.load 
-        self.noload = unpickler.noload 
- 
-    def persistent_load(self, obj_id): 
-        if obj_id.startswith('filtered:'): 
-            return FilteredObject(obj_id[9:]) 
+    def persistent_load(self, id_string):
+        match = _filtered_string_pattern.match(id_string)
+        if match:
+            description = match.groupdict()['description']            
+            return FilteredObject(description) 
         else: 
             raise UnpicklingError('Invalid persistent id') 
  
@@ -117,5 +83,15 @@ if __name__ == '__main__':
  
     assert obj['a'] == 1 
     assert isinstance(obj['b'], FilteredObject) 
-    assert obj['b'].about 
+    assert obj['b'].about     
+    
+if __name__ == '__main__':
+    import threading, multiprocessing, pickle, copy_reg
+    rl = threading.RLock()
+    f = open(r'c:\Users\User\delete_me', 'r')
+    f.__reduce__()
+    pickle.dumps(rl)
+
+"""
+
 """
