@@ -831,9 +831,6 @@ class GuiProject(object):
         del my_dict['timer_for_playing']
         del my_dict['simpack_grokker']
         del my_dict['simpack_wx_grokker']
-        my_dict['namespace'] = pickle_tools.filter_dict_to_pickleable(
-            my_dict['namespace']
-        )
 
         for (key, value) in my_dict.items():
             

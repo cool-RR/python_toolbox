@@ -1,5 +1,5 @@
 import re
-import cPickle as pickle_module
+import pickle as pickle_module
 
 from garlicsim.general_misc import caching
 from garlicsim.general_misc import address_tools
@@ -54,8 +54,12 @@ class CuteUnpickler(object):
     def __init__(self, file_): 
         unpickler = self.unpickler = pickle_module.Unpickler(file_) 
         unpickler.persistent_load = self.persistent_load
-        self.load, self.noload = \
-            unpickler.load, unpickler.noload
+        self.load = unpickler.load
+        self.noload = getattr(unpickler, 'noload', None)
+        # (Defaulting to `None` because `pickle.Unpickler` doesn't have
+        # `noload`.)
+
+            
  
     def persistent_load(self, id_string):
         match = _filtered_string_pattern.match(id_string)
