@@ -28,8 +28,6 @@ class Shell(wx.py.shell.Shell, WorkspaceWidget):
                                    style=wx.SUNKEN_BORDER)
         WorkspaceWidget.__init__(self, frame)
         
-        self.setLocalShell
-        
         # Obscure:
         import site; del site
         # This causes the `site` module to add `help` and a few others
@@ -37,3 +35,6 @@ class Shell(wx.py.shell.Shell, WorkspaceWidget):
         # with py2exe, so here we make sure to import it.
         
     
+    def setLocalShell(self):
+        # Making it a no-op to avoid reference to retarded ShellFacade.
+        pass

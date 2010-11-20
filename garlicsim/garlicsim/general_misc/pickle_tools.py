@@ -7,8 +7,9 @@ from garlicsim.general_misc import address_tools
 
 def is_atomically_pickleable(thing):
     # Using __class__ instead of type because of goddamned old-style classes.
-    # tododoc: make test.
-    my_type = thing.__class__ 
+    # And using `type` as a fallback because goddamned old-style classes don't
+    # have `__class__`. tododoc: make tests.
+    my_type = getattr(thing, '__class__', None) or type(thing) 
     return _is_type_atomically_pickleable(my_type)
 
 
