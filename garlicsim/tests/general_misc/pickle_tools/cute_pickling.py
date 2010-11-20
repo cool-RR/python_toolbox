@@ -82,15 +82,16 @@ def test(): #tododoc: rename
     assert thing.e == unpickled_thing.e
     assert thing.f == unpickled_thing.f
     assert thing.g == unpickled_thing.g
-    assert thing.h == unpickled_thing.h
+    # Regarding `.h`, we just check the type cause there's no `__eq__`:
+    assert type(thing.h) == type(unpickled_thing.h)
     
     assert thing.x != unpickled_thing.x
     assert thing.y != unpickled_thing.y
     assert thing.z != unpickled_thing.z
     
-    assert isinstance(thing.x, pickle_tools.FilteredObject)
-    assert isinstance(thing.y, pickle_tools.FilteredObject)
-    assert isinstance(thing.z, pickle_tools.FilteredObject)
+    assert isinstance(unpickled_thing.x, pickle_tools.FilteredObject)
+    assert isinstance(unpickled_thing.y, pickle_tools.FilteredObject)
+    assert isinstance(unpickled_thing.z, pickle_tools.FilteredObject)
     
     
     
