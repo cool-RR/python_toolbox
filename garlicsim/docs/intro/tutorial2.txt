@@ -273,11 +273,11 @@ won't raise :exc:`WorldEnd <garlicsim.misc.WorldEnd>`, it will indeed
 keep on simulating until the end of time, or until you kill the Python process,
 whichever comes sooner.)
 
-Also note that the reason we have to import this :const:`Infinity
+(The reason we have to import this :const:`Infinity
 <garlicsim.general_misc.infinity.Infinity>` thing is just for
 backwards-compatibility with Python 2.5; If you use Python 2.6 or above, you may
 simply use the builtin :const:`float('inf')` instead of :const:`Infinity
-<garlicsim.general_misc.infinity.Infinity>`.
+<garlicsim.general_misc.infinity.Infinity>`.)
 
 So anyway, let's check out that new state:
 
