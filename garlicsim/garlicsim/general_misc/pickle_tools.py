@@ -38,8 +38,8 @@ class CutePickler(object):
     def __init__(self, file_, protocol=0): 
         pickler = self.pickler = pickle_module.Pickler(file_, protocol) 
         pickler.persistent_id = self.persistent_id 
-        self.dump, self.dumps, self.clear_memo = \
-            pickler.dump, pickler.dumps, pickler.clear_memo
+        self.dump, self.clear_memo = \
+            pickler.dump, pickler.clear_memo
  
     def persistent_id(self, obj): 
         if is_atomically_pickleable(obj): 
@@ -66,24 +66,6 @@ class CuteUnpickler(object):
             raise UnpicklingError('Invalid persistent id') 
  
  
-if __name__ == '__main__': 
-    from cStringIO import StringIO 
- 
-    class UnpickleableThing(object): 
-        pass 
- 
-    f = StringIO() 
-    p = MyPickler(f) 
-    p.dump({'a': 1, 'b': UnpickleableThing()}) 
- 
-    f.seek(0) 
-    u = MyUnpickler(f) 
-    obj = u.load() 
-    print obj 
- 
-    assert obj['a'] == 1 
-    assert isinstance(obj['b'], FilteredObject) 
-    assert obj['b'].about     
     
 if __name__ == '__main__':
     import threading, multiprocessing, pickle, copy_reg
