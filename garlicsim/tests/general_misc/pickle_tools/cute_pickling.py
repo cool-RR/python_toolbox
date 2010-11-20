@@ -12,12 +12,17 @@ import wx
 from garlicsim.general_misc import pickle_tools
 from garlicsim.general_misc.pickle_tools import CutePickler, CuteUnpickler
 
+from .shared import PicklableObject, UnpicklableObject
+
 
 #class ComparableObject(Object):
     #def __eq__(self, other):
         #return type(self) is type(other) and \
                #vars(self) == vars(other)
     #pass
+    
+class Object(object):
+    pass
 
 
 def test_totally_pickleable():
@@ -40,3 +45,53 @@ def test_totally_pickleable():
         unpickler = CuteUnpickler(stream) 
         unpickled_thing = unpickler.load() 
         assert unpickled_thing == thing
+        
+
+        
+def test(): #tododoc: rename
+    
+    totally_pickleable_things = [
+        [1, 2, (3, 4)],
+        {1: 2, 3: set((1, 2, 3))},
+        None, True, False,
+        (1, 2, 'meow'),
+        u'qweqweqasd',
+        PicklableObject()
+    ]
+    
+    thing = Object()
+    thing.a, thing.b, thing.c, thing.d, thing.e, thing.f, thing.g, thing.h = \
+         totally_pickleable_things
+    
+    thing.x = threading.Lock()
+    thing.y = multiprocessing.Lock()
+    thing.z = UnpicklableObject()
+    
+    stream = StringIO() 
+    pickler = CutePickler(stream)
+    pickler.dump(thing) 
+
+    stream.seek(0) 
+    unpickler = CuteUnpickler(stream) 
+    unpickled_thing = unpickler.load() 
+    
+    assert thing.a == unpickled_thing.a
+    assert thing.b == unpickled_thing.b
+    assert thing.c == unpickled_thing.c
+    assert thing.d == unpickled_thing.d
+    assert thing.e == unpickled_thing.e
+    assert thing.f == unpickled_thing.f
+    assert thing.g == unpickled_thing.g
+    assert thing.h == unpickled_thing.h
+    
+    assert thing.x != unpickled_thing.x
+    assert thing.y != unpickled_thing.y
+    assert thing.z != unpickled_thing.z
+    
+    assert isinstance(thing.x, pickle_tools.FilteredObject)
+    assert isinstance(thing.y, pickle_tools.FilteredObject)
+    assert isinstance(thing.z, pickle_tools.FilteredObject)
+    
+    
+    
+    

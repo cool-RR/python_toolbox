@@ -11,10 +11,10 @@ def is_atomically_pickleable(thing):
 
 @caching.cache()
 def _is_type_atomically_pickleable(my_type):
-    if hasattr(my_type, 'is_pickleable'):
-        return my_type.is_pickleable
+    if hasattr(my_type, 'is_atomically_pickleable'):
+        return my_type.is_atomically_pickleable
     # tododoc This is done by stupid whitelisting temporarily:
-    import thread, multiprocessing
+    import thread, multiprocessing.synchronize
     atomically_unpickleable_types = \
         (file, thread.LockType, multiprocessing.synchronize.Lock)
     if issubclass(my_type, atomically_unpickleable_types):
@@ -54,8 +54,8 @@ class CuteUnpickler(object):
     def __init__(self, file_): 
         unpickler = self.unpickler = pickle_module.Unpickler(file_) 
         unpickler.persistent_load = self.persistent_load
-        self.load, self.loads, self.noload = \
-            unpickler.load, unpickler.loads, unpickler.noload
+        self.load, self.noload = \
+            unpickler.load, unpickler.noload
  
     def persistent_load(self, id_string):
         match = _filtered_string_pattern.match(id_string)
