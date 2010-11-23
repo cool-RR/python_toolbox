@@ -13,10 +13,12 @@ def test():
     
     assert a.meow() == meow(a) == 1
     
-    @monkeypatching_tools.monkeypatch_method(A, roar)
+    @monkeypatching_tools.monkeypatch_method(A, 'roar')
     def woof(a):
         return 2
     
     assert a.roar() == woof(a) == 2
     
     assert not hasattr(a, 'woof')
+    
+    del meow, woof
