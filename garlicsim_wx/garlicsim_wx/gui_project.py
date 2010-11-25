@@ -48,7 +48,8 @@ class GuiProject(object):
     # is_atomically_pickleable = False
     
     
-    def __init__(self, simpack, frame, project=None, virgin=True):
+    def __init__(self, simpack, frame, project=None, _step_profiles=[],
+                 _step_profiles_to_hues={}, virgin=True):
         '''
         Construct the gui project.
         
@@ -62,10 +63,9 @@ class GuiProject(object):
         if virgin:
             self.__init_virgin()
 
-    
-    
-        
-    def __init_general(self, simpack, frame, project=None):
+            
+    def __init_general(self, simpack, frame, project=None, _step_profiles=[],
+                       _step_profiles_to_hues={}):
         '''General initialization.'''
         
         self.frame = frame
@@ -165,12 +165,13 @@ class GuiProject(object):
         
         self.step_profiles = EmittingOrderedSet(
             emitter=None,
-            items=(self.default_step_profile,)
+            items=(_step_profiles + [self.default_step_profile])
         )
         
         self.step_profiles_to_hues = EmittingWeakKeyDefaultDict(
-            emitter=None,
-            default_factory=StepProfileHueDefaultFactory(self)
+            None,
+            StepProfileHueDefaultFactory(self),
+            _step_profiles_to_hues
         )
         
         self._tracked_step_profile = None
@@ -820,14 +821,13 @@ class GuiProject(object):
         del my_dict['simpack_grokker']
         del my_dict['simpack_wx_grokker']
         
-        ## Getting rid of emitter:
-        #del my_dict['step_profiles']
-        #my_dict['step_profiles'] = list(self.step_profiles)
+        # Getting rid of emitter:
+        del my_dict['step_profiles']
+        my_dict['step_profiles'] = list(self.step_profiles)
         
-        ## Getting rid of emitter:
-        #del my_dict['step_profiles']
-        #my_dict['step_profiles'] = list(self.step_profiles_to_hues)
-        
+        # Getting rid of emitter and default factory:
+        del my_dict['step_profiles_to_hues']
+        my_dict['step_profiles_to_hues'] = dict(self.step_profiles_to_hues)
         
         
         my_namespace = my_dict['namespace'] = my_dict['namespace'].copy()
@@ -862,7 +862,19 @@ class GuiProject(object):
             pickleable_vars['project']
         )
         
-        gui_project = GuiProject(simpack, frame, project, virgin=False)
+        step_profiles = pickleable_vars.pop('step_profiles', [])
+        step_profiles_to_hues = pickleable_vars.pop(
+            'step_profiles_to_hues',
+            {}
+        )
+        
+        gui_project = GuiProject(
+            simpack, frame, project,
+            _step_profiles=step_profiles,
+            _step_profiles_to_hues=step_profiles_to_hues,
+            virgin=False
+        )
+        
         
         unpickled_namespace = pickleable_vars.pop('namespace', None)
         if unpickled_namespace:
