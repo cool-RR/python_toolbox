@@ -44,6 +44,9 @@ from garlicsim_wx.general_misc import emitters
 
 class GuiProject(object):
     '''Encapsulates a project for use with a wxPython interface.'''
+        
+    is_atomically_pickleable = False
+    
     
     def __init__(self, simpack, frame, project=None, virgin=True):
         '''
@@ -63,6 +66,8 @@ class GuiProject(object):
     @staticmethod
     def load_from_vars(frame, pickleable_vars):
         '''Take vars that were just unpickled and build a GuiProject from them.'''
+        # todo: document the reason/discussion that we're pickling the vars and
+        # not the gui project itself.
 
         simpack, project = (
             pickleable_vars['simpack'],

@@ -46,7 +46,11 @@ class Emitter(object):
     called when the original event that caused the `emit` action happens.
     '''
     # todo: Let user put a single input/output
-        
+    
+    
+    is_atomically_pickleable = False
+
+    
     def __init__(self, inputs=(), outputs=(), name=None):
         '''
         Construct the emitter.
