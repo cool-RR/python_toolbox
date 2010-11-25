@@ -45,7 +45,7 @@ from garlicsim_wx.general_misc import emitters
 class GuiProject(object):
     '''Encapsulates a project for use with a wxPython interface.'''
         
-    is_atomically_pickleable = False
+    # is_atomically_pickleable = False
     
     
     def __init__(self, simpack, frame, project=None, virgin=True):

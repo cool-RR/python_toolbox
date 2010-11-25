@@ -39,3 +39,22 @@ class EmittingWeakKeyDefaultDict(WeakKeyDefaultDict):
         if self.emitter:
             self.emitter.emit()
         return result
+    
+    def __reduce__(self):
+        """
+        __reduce__ must return a 5-tuple as follows:
+
+           - factory function
+           - tuple of args for the factory function
+           - additional state (here None)
+           - sequence iterator (here None)
+           - dictionary iterator (yielding successive (key, value) pairs
+
+           This API is used by pickle.py and copy.py.
+        """
+        if self.emitter:
+            parameters = (self.emitter, self.default_factory)
+        else: # not self.emitter
+            parameters = (self.default_factory)
+            
+        return (type(self), parameters, None, None, self.iteritems())
