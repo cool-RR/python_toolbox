@@ -63,27 +63,6 @@ class GuiProject(object):
             self.__init_virgin()
 
     
-    @staticmethod
-    def load_from_vars(frame, pickleable_vars):
-        '''Take vars that were just unpickled and build a GuiProject from them.'''
-        # todo: document the reason/discussion that we're pickling the vars and
-        # not the gui project itself.
-
-        simpack, project = (
-            pickleable_vars['simpack'],
-            pickleable_vars['project']
-        )
-        
-        gui_project = GuiProject(simpack, frame, project, virgin=False)
-        
-        unpickled_namespace = pickleable_vars.pop('namespace', None)
-        if unpickled_namespace:
-            gui_project.namespace.update(unpickled_namespace)
-        
-        for (key, value) in pickleable_vars.iteritems():
-            setattr(gui_project, key, value)
-        
-        return gui_project
     
         
     def __init_general(self, simpack, frame, project=None):
@@ -841,6 +820,16 @@ class GuiProject(object):
         del my_dict['simpack_grokker']
         del my_dict['simpack_wx_grokker']
         
+        ## Getting rid of emitter:
+        #del my_dict['step_profiles']
+        #my_dict['step_profiles'] = list(self.step_profiles)
+        
+        ## Getting rid of emitter:
+        #del my_dict['step_profiles']
+        #my_dict['step_profiles'] = list(self.step_profiles_to_hues)
+        
+        
+        
         my_namespace = my_dict['namespace'] = my_dict['namespace'].copy()
         try:
             del my_namespace['__builtins__']
@@ -862,5 +851,25 @@ class GuiProject(object):
         raise Exception
     
     
-    
+    @staticmethod
+    def load_from_vars(frame, pickleable_vars):
+        '''Take vars that were just unpickled and build a GuiProject from them.'''
+        # todo: document the reason/discussion that we're pickling the vars and
+        # not the gui project itself.
+
+        simpack, project = (
+            pickleable_vars['simpack'],
+            pickleable_vars['project']
+        )
+        
+        gui_project = GuiProject(simpack, frame, project, virgin=False)
+        
+        unpickled_namespace = pickleable_vars.pop('namespace', None)
+        if unpickled_namespace:
+            gui_project.namespace.update(unpickled_namespace)
+        
+        for (key, value) in pickleable_vars.iteritems():
+            setattr(gui_project, key, value)
+        
+        return gui_project
     
