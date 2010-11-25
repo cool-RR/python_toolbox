@@ -28,11 +28,13 @@ class WeakKeyDefaultDict(UserDict.UserDict, object): #todo: needs testing
             raise KeyError(key)
 
     def __repr__(self, recurse=set()):
+        type_name = type(self).__name__
         if id(self) in recurse:
-            return "WeakKeyDefaultDict(...)"
+            return "%s(...)" % type_name
         try:
             recurse.add(id(self))
-            return "WeakKeyDefaultDict(%s, %s)" % (
+            return "%s(%s, %s)" % (
+                type_name,
                 repr(self.default_factory),
                 super(WeakKeyDefaultDict, self).__repr__()
             )

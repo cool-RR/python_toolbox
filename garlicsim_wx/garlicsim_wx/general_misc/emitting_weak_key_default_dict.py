@@ -2,6 +2,7 @@ from garlicsim.general_misc.weak_key_default_dict import WeakKeyDefaultDict
 
 
 class EmittingWeakKeyDefaultDict(WeakKeyDefaultDict):
+    # tododoc: make __repr__
     def __init__(self, emitter, *args, **kwargs):
         super(EmittingWeakKeyDefaultDict, self).__init__(*args, **kwargs)
         self.emitter = emitter
@@ -52,9 +53,9 @@ class EmittingWeakKeyDefaultDict(WeakKeyDefaultDict):
 
            This API is used by pickle.py and copy.py.
         """
-        if self.emitter:
+        if self.default_factory:
             parameters = (self.emitter, self.default_factory)
-        else: # not self.emitter
-            parameters = (self.default_factory)
+        else: # not self.default_factory
+            parameters = (self.emitter)
             
         return (type(self), parameters, None, None, self.iteritems())
