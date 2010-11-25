@@ -215,7 +215,7 @@ should be done.
     had no concept of ending the simulation. Life simulations continue to
     infinity, regardless if the board becomes empty or repetitive or whatever.
     
-    Some simulations have a concept of "simulation end", and some just don't.
+    Some simulations have a concept of "simulation end," and some just don't.
 
 Let's explore our new simpack!
 ==============================
