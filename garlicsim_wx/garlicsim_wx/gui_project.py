@@ -813,7 +813,7 @@ class GuiProject(object):
             self.active_step_profile_changed_emitter.emit()
         
         
-    def __getstate__(self):
+    def __reduce__(self):
         my_dict = dict(self.__dict__)
         
         del my_dict['frame']
@@ -844,19 +844,18 @@ class GuiProject(object):
                 
                 del my_dict[key]
             
-        return my_dict
+        return (GuiProject.load_from_vars, (my_dict,))
 
-    
-    def __setstate__(self, pickled_project):
-        raise Exception
     
     
     @staticmethod
-    def load_from_vars(frame, pickleable_vars):
+    def load_from_vars(pickleable_vars):
         '''Take vars that were just unpickled and build a GuiProject from them.'''
         # todo: document the reason/discussion that we're pickling the vars and
         # not the gui project itself.
 
+        frame = garlicsim_wx.active_frame # tododoc: Make this as unhacky as possible
+        
         simpack, project = (
             pickleable_vars['simpack'],
             pickleable_vars['project']
@@ -885,3 +884,6 @@ class GuiProject(object):
         
         return gui_project
     
+load_from_vars = GuiProject.load_from_vars
+# tododoc: done because (c)pickle has a problem with static method, figure out
+# nicer solution

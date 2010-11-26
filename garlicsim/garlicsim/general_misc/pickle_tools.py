@@ -13,20 +13,28 @@ def is_atomically_pickleable(thing):
     return _is_type_atomically_pickleable(my_type)
 
 
-@caching.cache()
 def _is_type_atomically_pickleable(my_type):
+    try:
+        return _is_type_atomically_pickleable.cache[my_type]
+    except KeyError:
+        pass
     if hasattr(my_type, 'is_atomically_pickleable'):
+        _is_type_atomically_pickleable.cache[my_type] = \
+            my_type.is_atomically_pickleable
         return my_type.is_atomically_pickleable
     # tododoc This is done by stupid whitelisting temporarily:
     import thread, multiprocessing.synchronize
     atomically_unpickleable_types = \
         (file, thread.LockType, multiprocessing.synchronize.Lock)
     if issubclass(my_type, atomically_unpickleable_types):
+        _is_type_atomically_pickleable.cache[my_type] = False
         return False
     else:
+        _is_type_atomically_pickleable.cache[my_type] = True
         return True
-  
+_is_type_atomically_pickleable.cache = {}
  
+
 class FilteredObject: 
     def __init__(self, about): 
         self.about = about 

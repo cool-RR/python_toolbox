@@ -43,6 +43,7 @@ class Frame(wx.Frame):
     This window allows the user to create and manipulate gui projects.
     '''
     def __init__(self, *args, **keywords):
+         # tododoc: keywords -> kwargs in whole project
         
         wx.Frame.__init__(self, *args, **keywords)
         
@@ -53,6 +54,8 @@ class Frame(wx.Frame):
         self.SetIcons(garlicsim_wx.misc.icon_bundle.get_icon_bundle())
         
         self.Bind(wx.EVT_CLOSE, self.on_close)        
+        
+        garlicsim_wx.active_frame = self
         
         self.tree_browser = None
         self.seek_bar = None
@@ -592,7 +595,7 @@ class Frame(wx.Frame):
             sys.setrecursionlimit(10000)
             with open(path, 'rb') as my_file:
                 unpickler = pickle_tools.CuteUnpickler(my_file)
-                gui_project_vars = unpickler.load()
+                gui_project = unpickler.load()
                 
         except Exception, exception:
             dialog = wx.MessageDialog(
@@ -605,20 +608,8 @@ class Frame(wx.Frame):
         
         finally:
             sys.setrecursionlimit(old_recursion_limit)
-                
-        if gui_project_vars:
-            try:
-                gui_project = GuiProject.load_from_vars(self, gui_project_vars)
-            except Exception, exception:
-                error_dialog = wx.MessageDialog(
-                    self,
-                    'Error opening file:\n' + traceback.format_exc(),
-                    style=(wx.OK | wx.ICON_ERROR)
-                )
-                error_dialog.ShowModal()
-                error_dialog.Destroy()
-                
-            self.__setup_gui_project(gui_project)
+                        
+        self.__setup_gui_project(gui_project)
 
     
     
@@ -641,9 +632,8 @@ class Frame(wx.Frame):
             try:
                 sys.setrecursionlimit(10000)
                 with open(path, 'wb') as my_file:
-                    pickleable_vars = self.gui_project.__getstate__()
                     pickler = pickle_tools.CutePickler(my_file, protocol=2)
-                    pickler.dump(pickleable_vars)
+                    pickler.dump(self.gui_project)
 
             except Exception, exception:
                 error_dialog = wx.MessageDialog(
