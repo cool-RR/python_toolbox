@@ -48,24 +48,21 @@ class GuiProject(object):
     # is_atomically_pickleable = False
     
     
-    def __init__(self, simpack, frame, project=None, _step_profiles=[],
-                 _step_profiles_to_hues={}, virgin=True):
+    def __init__(self, simpack, frame, project=None):
         '''
         Construct the gui project.
         
         `simpack` is the simpack (or grokker) to use. `frame` is the frame in
-        which this gui project will live. `virgin` should remain True in normal
-        usage, it's set to False only when loading a GuiProject from file.
+        which this gui project will live.
         '''
         # This is broken down into a few parts.
         self.__init_general(simpack, frame, project)
         self.__init_gui()
-        if virgin:
-            self.__init_virgin()
+        if not self.project.tree.roots:
+            wx.CallAfter(self.make_state_creation_dialog)
 
             
-    def __init_general(self, simpack, frame, project=None, _step_profiles=[],
-                       _step_profiles_to_hues={}):
+    def __init_general(self, simpack, frame, project=None):
         '''General initialization.'''
         
         self.frame = frame
@@ -165,13 +162,12 @@ class GuiProject(object):
         
         self.step_profiles = EmittingOrderedSet(
             emitter=None,
-            items=(_step_profiles + [self.default_step_profile])
+            items=(self.default_step_profile,)
         )
         
         self.step_profiles_to_hues = EmittingWeakKeyDefaultDict(
-            None,
-            StepProfileHueDefaultFactory(self),
-            _step_profiles_to_hues
+            emitter=None,
+            default_factory=StepProfileHueDefaultFactory(self),
         )
         
         self._tracked_step_profile = None
@@ -396,12 +392,6 @@ class GuiProject(object):
         self.frame.Bind(wx.EVT_MENU, self.on_fork_by_crunching_button,
                          id=s2i("Fork by crunching"))
         
-        
-    def __init_virgin(self):
-        '''
-        Initialization done when gui project is actually created, not loaded.
-        '''
-        wx.CallAfter(self.make_state_creation_dialog)
         
 
     def on_fork_by_crunching_button(self, event):
@@ -845,7 +835,7 @@ class GuiProject(object):
                 del my_dict[key]
             
         return (
-            GuiProject.load_from_vars,
+            GuiProject._reconstruct,
             (self.simpack, self.project),
             my_dict
         )
@@ -873,23 +863,21 @@ class GuiProject(object):
     
     
     @staticmethod
-    def load_from_vars(simpack, project):
+    def _reconstruct(simpack, project):
         '''Take vars that were just unpickled and build a GuiProject from them.'''
         # todo: document the reason/discussion that we're pickling the vars and
         # not the gui project itself.
 
-        frame = garlicsim_wx.active_frame # tododoc: Make this as unhacky as possible
+        frame = garlicsim_wx.active_frame
+        # tododoc: Make Frame inherit from "InstanceHolder" instead
         
-        gui_project = GuiProject(
-            simpack, frame, project,
-            virgin=False
-        )
+        gui_project = GuiProject(simpack, frame, project)
         
         
         
         
         return gui_project
     
-load_from_vars = GuiProject.load_from_vars
-# tododoc: done because (c)pickle has a problem with static method, figure out
-# nicer solution
+_reconstruct = GuiProject._reconstruct
+# Done because static methods cannot be pickled, because they are desciptors
+# which return a function and (c)pickle sucks at functions defined in classes.
