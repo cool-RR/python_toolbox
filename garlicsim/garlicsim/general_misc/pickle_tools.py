@@ -24,9 +24,9 @@ def _is_type_atomically_pickleable(my_type):
         return my_type.is_atomically_pickleable
     # tododoc This is done by stupid whitelisting temporarily:
     import thread, multiprocessing.synchronize
-    atomically_unpickleable_types = \
+    atomically_non_pickleable_types = \
         (file, thread.LockType, multiprocessing.synchronize.Lock)
-    if issubclass(my_type, atomically_unpickleable_types):
+    if issubclass(my_type, atomically_non_pickleable_types):
         _is_type_atomically_pickleable.cache[my_type] = False
         return False
     else:
@@ -35,11 +35,14 @@ def _is_type_atomically_pickleable(my_type):
 _is_type_atomically_pickleable.cache = {}
  
 
-class FilteredObject: 
+class FilteredObject(object): 
     def __init__(self, about): 
         self.about = about 
     def __repr__(self): 
         return 'FilteredObject(%s)' % repr(self.about) 
+    def __getattr__(self, key):
+        return FilteredObject('%s.%s' % (self.about, key))
+        
 
 _filtered_string_pattern = re.compile(
     r'^Filtered by pickle_tools \((?P<description>.*?)\)$'

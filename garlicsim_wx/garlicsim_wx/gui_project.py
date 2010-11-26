@@ -855,8 +855,9 @@ class GuiProject(object):
             )
             
         if 'namespace' in my_dict:
-            namespace = my_dict.pop('namespace')
-            self.namespace.update(namespace) # Needs to be more sophisticated
+            pickled_namespace = my_dict.pop('namespace')
+            pickled_namespace.update(self.namespace)
+            self.namespace.update(pickled_namespace)
         
         for (key, value) in my_dict.iteritems():
             setattr(self, key, value)

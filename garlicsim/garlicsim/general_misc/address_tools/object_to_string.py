@@ -140,10 +140,13 @@ def _get_address(obj, shorten=False, root=None, namespace={}):
             (_useless, original_namespace_dict) = \
                 _get_parent_and_dict_from_namespace(namespace)
 
+            def my_filter(key, value):
+                name = getattr(value, '__name__', '')
+                return isinstance(name, basestring) and name.endswith(key)
+            
             namespace_dict = dict_tools.filter_items(
                 original_namespace_dict,
-                lambda key, value:
-                    (getattr(value, '__name__', '').endswith(key))
+                my_filter
             )
                 
             namespace_dict_keys = namespace_dict.keys()
