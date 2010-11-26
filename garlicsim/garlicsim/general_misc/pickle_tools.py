@@ -62,7 +62,9 @@ class CutePickler(object):
  
     
 class CuteUnpickler(object): 
-    '''Not subclassing because cPickle.Pickler doesn't support subclassing.'''
+    '''
+    Not subclassing because cPickle.Unpickler doesn't support subclassing.
+    '''
     def __init__(self, file_): 
         unpickler = self.unpickler = pickle_module.Unpickler(file_) 
         unpickler.persistent_load = self.persistent_load

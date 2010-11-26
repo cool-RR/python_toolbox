@@ -12,7 +12,7 @@ import wx
 from garlicsim.general_misc import pickle_tools
 from garlicsim.general_misc.pickle_tools import CutePickler, CuteUnpickler
 
-from .shared import PicklableObject, UnpicklableObject
+from .shared import PickleableObject, NonPickleableObject
 
 
 #class ComparableObject(Object):
@@ -56,7 +56,7 @@ def test(): #tododoc: rename
         None, True, False,
         (1, 2, 'meow'),
         u'qweqweqasd',
-        PicklableObject()
+        PickleableObject()
     ]
     
     thing = Object()
@@ -65,7 +65,7 @@ def test(): #tododoc: rename
     
     thing.x = threading.Lock()
     thing.y = multiprocessing.Lock()
-    thing.z = UnpicklableObject()
+    thing.z = NonPickleableObject()
     
     stream = StringIO() 
     pickler = CutePickler(stream)

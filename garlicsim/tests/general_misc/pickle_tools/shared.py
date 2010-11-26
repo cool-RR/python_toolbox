@@ -1,8 +1,8 @@
 
-class PicklableObject(object):
+class PickleableObject(object):
     is_atomically_pickleable = True
     
 
-class UnpicklableObject(object):
+class NonPickleableObject(object):
     is_atomically_pickleable = False
     
