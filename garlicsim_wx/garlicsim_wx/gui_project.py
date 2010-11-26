@@ -868,8 +868,8 @@ class GuiProject(object):
             namespace = my_dict.pop('namespace')
             self.namespace.update(namespace) # Needs to be more sophisticated
         
-        for (key, value) in pickleable_vars.iteritems():
-            setattr(gui_project, key, value)
+        for (key, value) in my_dict.iteritems():
+            setattr(self, key, value)
     
     
     @staticmethod

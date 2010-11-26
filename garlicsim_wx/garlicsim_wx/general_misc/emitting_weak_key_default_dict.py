@@ -35,8 +35,8 @@ class EmittingWeakKeyDefaultDict(WeakKeyDefaultDict):
             self.emitter.emit()
         return result
     
-    def clear(self, key, value):
-        result = super(EmittingWeakKeyDefaultDict, self).clear(self)
+    def clear(self):
+        result = super(EmittingWeakKeyDefaultDict, self).clear()
         if self.emitter:
             self.emitter.emit()
         return result
