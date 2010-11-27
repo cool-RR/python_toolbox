@@ -68,6 +68,8 @@ class GuiProject(object):
         self.frame = frame
         '''The frame that this gui project lives in.'''
         
+        assert isinstance(self.frame, garlicsim_wx.Frame)
+        
         if isinstance(simpack, garlicsim.misc.SimpackGrokker):
             simpack_grokker = simpack            
             simpack = simpack_grokker.simpack
@@ -819,6 +821,9 @@ class GuiProject(object):
         del my_dict['step_profiles_to_hues']
         my_dict['step_profiles_to_hues'] = dict(self.step_profiles_to_hues)
         
+        if self.frame.shell:
+            my_dict['shell_history'] = self.frame.shell.GetText()
+        
         
         my_namespace = my_dict['namespace'] = my_dict['namespace'].copy()
         try:
@@ -858,6 +863,11 @@ class GuiProject(object):
             pickled_namespace = my_dict.pop('namespace')
             pickled_namespace.update(self.namespace)
             self.namespace.update(pickled_namespace)
+            
+        if 'shell_history' in my_dict:
+            shell_history = my_dict.pop('shell_history')
+            if self.frame.shell:
+                self.frame.shell.SetText(shell_history)
         
         for (key, value) in my_dict.iteritems():
             setattr(self, key, value)
@@ -865,7 +875,8 @@ class GuiProject(object):
     
     @staticmethod
     def _reconstruct(simpack, project):
-        '''Take vars that were just unpickled and build a GuiProject from them.'''
+        '''Take vars that were just unpickled and build a GuiProject from
+        them.'''
         # todo: document the reason/discussion that we're pickling the vars and
         # not the gui project itself.
 
