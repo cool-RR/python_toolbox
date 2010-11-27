@@ -13,7 +13,7 @@
 # Python Code By:
 #
 # Andrea Gavana, @ 23 Dec 2005
-# Latest Revision: 21 Sep 2010, 23.00 GMT
+# Latest Revision: 01 Oct 2010, 23.00 GMT
 #
 # For All Kind Of Problems, Requests Of Enhancements And Bug Reports, Please
 # Write To Me At:
@@ -118,6 +118,9 @@ if wx.Platform == "__WXMSW__":
         _winxptheme = True
     except ImportError:
         pass
+
+# wxPython version string
+_VERSION_STRING = wx.VERSION_STRING
 
 # AUI Events
 wxEVT_AUI_PANE_BUTTON = wx.NewEventType()
@@ -3096,7 +3099,12 @@ class AuiFloatingFrame(wx.MiniFrame):
         self._last2_rect = wx.Rect(*self._last_rect)
         self._last_rect = wx.Rect(*win_rect)
 
-        if not wx.GetMouseState().LeftDown():
+        if _VERSION_STRING < "2.9":
+            leftDown = wx.GetMouseState().LeftDown()
+        else:
+            leftDown = wx.GetMouseState().LeftIsDown()
+
+        if not leftDown:
             return
 
         if not self._moving:        
@@ -3120,7 +3128,12 @@ class AuiFloatingFrame(wx.MiniFrame):
         """
 
         if self._moving:        
-            if not wx.GetMouseState().LeftDown():            
+            if _VERSION_STRING < "2.9":
+                leftDown = wx.GetMouseState().LeftDown()
+            else:
+                leftDown = wx.GetMouseState().LeftIsDown()
+
+            if not leftDown:
                 self._moving = False
                 self.OnMoveFinished()
             else:            
@@ -3219,7 +3232,12 @@ class AuiFloatingFrame(wx.MiniFrame):
         if self._fly_timer.IsRunning():
             return
 
-        if wx.GetMouseState().LeftDown():
+        if _VERSION_STRING < "2.9":
+            leftDown = wx.GetMouseState().LeftDown()
+        else:
+            leftDown = wx.GetMouseState().LeftIsDown()
+
+        if leftDown:
             return
         
         rect = wx.Rect(*self.GetScreenRect())
@@ -6444,10 +6462,10 @@ class AuiManager(wx.EvtHandler):
                 # Correct page ordering. The original wxPython code
                 # for this did not work properly, and would misplace 
                 # windows causing errors.
+                notebook.Freeze()
                 self._notebooks[nb_idx] = notebook
                 pages = notebook.GetPageCount()
                 selected = notebook.GetPage(notebook.GetSelection())
-                reordered = False
 
                 # Take each page out of the notebook, group it with
                 # its current pane, and sort the list by pane.dock_pos
@@ -6471,12 +6489,9 @@ class AuiManager(wx.EvtHandler):
                     self.SetAttributes(pane, attrs)
                     notebook.AddPage(pane.window, pane.caption)
 
-                reordered = True
-                    
-                if reordered:
-                    notebook.SetSelection(notebook.GetPageIndex(selected), True)
-
+                notebook.SetSelection(notebook.GetPageIndex(selected), True)
                 notebook.DoSizing()
+                notebook.Thaw()
 
                 # It's a keeper.
                 remap_ids[nb] = nb_idx
@@ -7994,10 +8009,12 @@ class AuiManager(wx.EvtHandler):
         state = AUI_BUTTON_STATE_NORMAL
 
         if part.rect.Contains(pt):
-            if wx.VERSION < (2,9):
+
+            if _VERSION_STRING < "2.9":
                 leftDown = wx.GetMouseState().LeftDown()
             else:
                 leftDown = wx.GetMouseState().LeftIsDown()
+
             if leftDown:
                 state = AUI_BUTTON_STATE_PRESSED
             else:
@@ -9563,7 +9580,13 @@ class AuiManager(wx.EvtHandler):
 
         # when release the button out of the window.
         # TODO: a better fix is needed.
-        if not wx.GetMouseState().LeftDown():
+
+        if _VERSION_STRING < "2.9":
+            leftDown = wx.GetMouseState().LeftDown()
+        else:
+            leftDown = wx.GetMouseState().LeftIsDown()
+        
+        if not leftDown:
             self._action = actionNone
             self.OnLeftUp_DragToolbarPane(eventOrPt)
 

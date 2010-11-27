@@ -21,6 +21,9 @@ from aui_utilities import GetBaseColour, MakeDisabledBitmap
 import framemanager
 from aui_constants import *
 
+# wxPython version string
+_VERSION_STRING = wx.VERSION_STRING
+
 # AuiToolBar events
 wxEVT_COMMAND_AUITOOLBAR_TOOL_DROPDOWN = wx.NewEventType()
 wxEVT_COMMAND_AUITOOLBAR_OVERFLOW_CLICK = wx.NewEventType()
@@ -2539,8 +2542,13 @@ class AuiToolBar(wx.PyControl):
 
         # find out if the mouse cursor is inside the dropdown rectangle
         if overflow_rect.Contains((pt.x, pt.y)):
+
+            if _VERSION_STRING < "2.9":
+                leftDown = wx.GetMouseState().LeftDown()
+            else:
+                leftDown = wx.GetMouseState().LeftIsDown()
         
-            if wx.GetMouseState().LeftDown():
+            if leftDown:
                 overflow_state = AUI_BUTTON_STATE_PRESSED
             else:
                 overflow_state = AUI_BUTTON_STATE_HOVER

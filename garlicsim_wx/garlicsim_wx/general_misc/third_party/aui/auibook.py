@@ -17,6 +17,7 @@ __date__ = "31 March 2009"
 
 import wx
 import types
+import datetime
 
 from wx.lib.expando import ExpandoTextCtrl
 
@@ -326,7 +327,8 @@ class AuiNotebookPage(object):
         self.renamable = False          # If True, a tab can be renamed by a left double-click
         
         self.text_colour = wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNTEXT)
-
+        
+        self.access_time = datetime.datetime.now() # Last time this page was selected
 
     def IsMultiline(self):
         """ Returns whether the tab contains multiline text. """
@@ -664,22 +666,30 @@ class TabNavigatorWindow(wx.Dialog):
 
         :param `book`: the actual L{AuiNotebook}.
         """
-
+        # Index of currently selected page
         selection = book.GetSelection()
+        # Total number of pages
         count = book.GetPageCount()
+        # List of (index, AuiNotebookPage)
+        pages = list(enumerate(book.GetTabContainer().GetPages()))
+        if book.GetAGWWindowStyleFlag() & AUI_NB_ORDER_BY_ACCESS:
+            # Sort pages using last access time. Most recently used is the 
+            # first in line
+            pages.sort(
+                key = lambda element: element[1].access_time, 
+                reverse = True
+            )
+        else:
+            # Manually add the current selection as first item
+            # Remaining ones are added in the next loop
+            del pages[selection]
+            self._listBox.Append(book.GetPageText(selection))
+            self._indexMap.append(selection)
         
-        self._listBox.Append(book.GetPageText(selection))
-        self._indexMap.append(selection)
+        for (index, page) in pages:
+            self._listBox.Append(book.GetPageText(index))
+            self._indexMap.append(index)
         
-        for c in xrange(count):
-        
-            # Skip selected page
-            if c == selection:
-                continue
-
-            self._listBox.Append(book.GetPageText(c))
-            self._indexMap.append(c)
-
         # Select the next entry after the current selection
         self._listBox.SetSelection(0)
         dummy = wx.NavigationKeyEvent()
@@ -2611,7 +2621,8 @@ class AuiNotebook(wx.PyPanel):
 
         self.InitNotebook(agwStyle)
 
-
+    def GetTabContainer(self):
+        return self._tabs
     def InitNotebook(self, agwStyle):
         """
         Contains common initialization code called by all constructors.
@@ -3053,7 +3064,7 @@ class AuiNotebook(wx.PyPanel):
         :see: L{SetAGWWindowStyleFlag} for a list of possible AGW-specific window styles.
         """
 
-        return self._agwFlags        
+        return self._agwFlags
         
 
     def AddPage(self, page, caption, select=False, bitmap=wx.NullBitmap, disabled_bitmap=wx.NullBitmap, control=None):
@@ -3724,8 +3735,11 @@ class AuiNotebook(wx.PyPanel):
         :param `new_page`: the index of the new selection;
         :param `force`: whether to force the selection or not.
         """
-        
         wnd = self._tabs.GetWindowFromIdx(new_page)
+        
+        #Update page access time
+        self._tabs.GetPages()[new_page].access_time = datetime.datetime.now()
+        
         if not wnd or not self.GetEnabled(new_page):
             return self._curpage
 
@@ -3733,7 +3747,7 @@ class AuiNotebook(wx.PyPanel):
         # however, clicking again on a tab should give it the focus.
         if new_page == self._curpage and not force:
         
-            ctrl, ctrl_idx = self.FindTab(wnd)            
+            ctrl, ctrl_idx = self.FindTab(wnd)
             if wx.Window.FindFocus() != ctrl:
                 ctrl.SetFocus()
             
@@ -4349,6 +4363,7 @@ class AuiNotebook(wx.PyPanel):
                 
                 src_tab = dest_tabs.GetWindowFromIdx(src_idx)
                 dest_tabs.MovePage(src_tab, dest_idx)
+                self._tabs.MovePage(self._tabs.GetPage(src_idx).window, dest_idx)
                 dest_tabs.SetActivePage(dest_idx)
                 dest_tabs.DoShowHide()
                 dest_tabs.Refresh()

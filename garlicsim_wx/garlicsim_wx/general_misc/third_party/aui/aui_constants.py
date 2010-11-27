@@ -216,6 +216,8 @@ cannot be dragged far enough outside of the notebook to become
 floating pages. """
 AUI_NB_DRAW_DND_TAB        = 1 << 20
 """ Draws an image representation of a tab while dragging. """
+AUI_NB_ORDER_BY_ACCESS     = 1 << 21
+""" Tab navigation order by last access time. """
 
 AUI_NB_DEFAULT_STYLE = AUI_NB_TOP | AUI_NB_TAB_SPLIT | AUI_NB_TAB_MOVE | \
                        AUI_NB_SCROLL_BUTTONS | AUI_NB_CLOSE_ON_ACTIVE_TAB | \

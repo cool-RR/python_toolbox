@@ -3,7 +3,7 @@
 # Inspired By And Heavily Based On wxGenericTreeCtrl.
 #
 # Andrea Gavana, @ 17 May 2006
-# Latest Revision: 26 Aug 2010, 10.00 GMT
+# Latest Revision: 01 Oct 2010, 23.00 GMT
 #
 #
 # TODO List
@@ -231,6 +231,9 @@ _PIXELS_PER_UNIT = 10
 # Start editing the current item after half a second (if the mouse hasn't
 # been clicked/moved)
 _DELAY = 500
+
+# wxPython version string
+_VERSION_STRING = wx.VERSION_STRING
 
 # ----------------------------------------------------------------------------
 # Constants
@@ -2402,7 +2405,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
 
         # A constant to use my translation of RendererNative.DrawTreeItemButton
         # if the wxPython version is less than 2.6.2.1.
-        if wx.VERSION_STRING < "2.6.2.1":
+        if _VERSION_STRING < "2.6.2.1":
             self._drawingfunction = DrawTreeItemButton
         else:
             self._drawingfunction = wx.RendererNative.Get().DrawTreeItemButton
@@ -2519,7 +2522,10 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         if checkbox:
             render.DrawCheckBox(self, mdc, (0, 0, x, y), flag)
         else:
-            render.DrawRadioButton(self, mdc, (0, 0, x, y), flag)
+            if _VERSION_STRING < "2.9":
+                render.DrawRadioButton(self, mdc, (0, 0, x, y), flag)
+            else:
+                render.DrawRadioBitmap(self, mdc, (0, 0, x, y), flag)
 
         mdc.SelectObject(wx.NullBitmap)
         bmp.SetMaskColour(mask)
