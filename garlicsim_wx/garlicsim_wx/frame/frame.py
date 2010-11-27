@@ -531,7 +531,9 @@ class Frame(wx.Frame):
         
         if gui_project._temp_shell_history is not None:
             assert isinstance(gui_project._temp_shell_history, basestring)
-            self.frame.shell.SetText(gui_project._temp_shell_history)
+            self.shell.SetText('')
+            self.shell.write(gui_project._temp_shell_history)
+            self.shell.push('')
             gui_project._temp_shell_history = None
         
         self.aui_manager.Update()
