@@ -403,6 +403,8 @@ class Frame(wx.Frame):
         Internal use.
         '''
         
+        assert isinstance(gui_project, GuiProject)
+        
         self.gui_project = gui_project
         
         # todo: should create StateReprViewer only if the simpack got no
@@ -526,6 +528,11 @@ class Frame(wx.Frame):
             self.big_widgets.append(big_widget)
 
         """
+        
+        if gui_project._temp_shell_history is not None:
+            assert isinstance(gui_project._temp_shell_history, basestring)
+            self.frame.shell.SetText(gui_project._temp_shell_history)
+            gui_project._temp_shell_history = None
         
         self.aui_manager.Update()
         

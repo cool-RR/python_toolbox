@@ -174,6 +174,9 @@ class GuiProject(object):
         
         self._tracked_step_profile = None
         
+        self._temp_shell_history = None
+        '''Deleted immediately after.'''
+        
         #######################################################################
         # Setting up namespace:
         
@@ -822,7 +825,7 @@ class GuiProject(object):
         my_dict['step_profiles_to_hues'] = dict(self.step_profiles_to_hues)
         
         if self.frame.shell:
-            my_dict['shell_history'] = self.frame.shell.GetText()
+            my_dict['_temp_shell_history'] = self.frame.shell.GetText()
         
         
         my_namespace = my_dict['namespace'] = my_dict['namespace'].copy()
@@ -863,11 +866,6 @@ class GuiProject(object):
             pickled_namespace = my_dict.pop('namespace')
             pickled_namespace.update(self.namespace)
             self.namespace.update(pickled_namespace)
-            
-        if 'shell_history' in my_dict:
-            shell_history = my_dict.pop('shell_history')
-            if self.frame.shell:
-                self.frame.shell.SetText(shell_history)
         
         for (key, value) in my_dict.iteritems():
             setattr(self, key, value)
