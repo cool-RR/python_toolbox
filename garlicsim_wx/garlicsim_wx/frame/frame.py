@@ -542,6 +542,7 @@ class Frame(wx.Frame):
             gui_project._temp_shell_command_history = None
         
             
+            
         self.aui_manager.Update()
         
         self.gui_project.emitter_system.top_emitter.emit()
