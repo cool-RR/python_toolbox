@@ -91,8 +91,8 @@ class ForkByCrunchingUsingMenu(CuteMenu):
             (step_profiles_to_items[step_profile] is None)
         ]
         
-        for itemless_step_profile in itemless_step_profiles:
-            step_profile_text = itemless_step_profile.__repr__(
+        for step_profile in itemless_step_profiles:
+            step_profile_text = step_profile.__repr__(
                 short_form=True,
                 root=gui_project.simpack,
                 namespace=gui_project.namespace
@@ -104,7 +104,7 @@ class ForkByCrunchingUsingMenu(CuteMenu):
                 'Fork by crunching using %s' % step_profile_text
             )
             self.item_ids_to_step_profiles[new_item.Id] = step_profile
-            step_profiles_to_items[itemless_step_profile] = new_item
+            step_profiles_to_items[step_profile] = new_item
             self.frame.Bind(
                 wx.EVT_MENU,
                 lambda event:

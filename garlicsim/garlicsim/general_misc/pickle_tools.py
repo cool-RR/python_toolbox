@@ -1,5 +1,5 @@
 import re
-import pickle as pickle_module
+import cPickle as pickle_module
 
 from garlicsim.general_misc import caching
 from garlicsim.general_misc import address_tools
