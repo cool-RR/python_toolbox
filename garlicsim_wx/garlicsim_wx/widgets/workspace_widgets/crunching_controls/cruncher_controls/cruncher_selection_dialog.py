@@ -67,6 +67,7 @@ class CruncherSelectionDialog(CuteDialog):
             self,
             choices=cruncher_titles.keys()
         )
+        self.cruncher_list_box.SetMinSize((150, 100))
         
         
         self.h_sizer.Add(self.cruncher_list_box, 2, wx.EXPAND | wx.ALL,
