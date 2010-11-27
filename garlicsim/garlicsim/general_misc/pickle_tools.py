@@ -1,5 +1,6 @@
 import re
-import cPickle as pickle_module
+import pickle as pickle_module
+import copy_reg
 
 from garlicsim.general_misc import caching
 from garlicsim.general_misc import address_tools
@@ -13,25 +14,49 @@ def is_atomically_pickleable(thing):
     return _is_type_atomically_pickleable(my_type)
 
 
-def _is_type_atomically_pickleable(my_type):
+def _is_type_atomically_pickleable(type_, thing=None):
     try:
-        return _is_type_atomically_pickleable.cache[my_type]
+        return _is_type_atomically_pickleable.cache[type_]
     except KeyError:
         pass
-    if hasattr(my_type, 'is_atomically_pickleable'):
-        _is_type_atomically_pickleable.cache[my_type] = \
-            my_type.is_atomically_pickleable
-        return my_type.is_atomically_pickleable
-    # tododoc This is done by stupid whitelisting temporarily:
-    import thread, multiprocessing.synchronize
-    atomically_non_pickleable_types = \
-        (file, thread.LockType, multiprocessing.synchronize.Lock)
-    if issubclass(my_type, atomically_non_pickleable_types):
-        _is_type_atomically_pickleable.cache[my_type] = False
-        return False
+    
+    if thing is not None:
+        assert isinstance(thing, type_)
+        
+    if hasattr(type_, '_is_atomically_pickleable'):
+        _is_type_atomically_pickleable.cache[type_] = \
+            type_._is_atomically_pickleable
+        return type_.is_atomically_pickleable
+    
+    reduce_function = copy_reg.dispatch_table.get(type_)
+    if reduce_function:
+        reduce_result = reduce_function(thing)
     else:
-        _is_type_atomically_pickleable.cache[my_type] = True
-        return True
+        # Check for a __reduce_ex__ method, fall back to __reduce__
+        reduce_function = getattr(thing, '__reduce_ex__', None)
+        if reduce_function:
+            reduce_result = reduce_function(protocol=2)
+        else:
+            reduce_function = getattr(thing, '__reduce__', None)
+            if reduce_function:
+                reduce_result = reduce_function()
+            else:
+                raise PicklingError("Can't pickle %r object: %r" %
+                                    (type_.__name__, thing))
+    
+    
+    
+    ## tododoc This is done by stupid whitelisting temporarily:
+    #import thread, multiprocessing.synchronize
+    #atomically_non_pickleable_types = \
+        #(file, thread.LockType, multiprocessing.synchronize.Lock)
+    #if issubclass(my_type, atomically_non_pickleable_types):
+        #_is_type_atomically_pickleable.cache[my_type] = False
+        #return False
+    #else:
+        #_is_type_atomically_pickleable.cache[my_type] = True
+        #return True
+        
 _is_type_atomically_pickleable.cache = {}
  
 
