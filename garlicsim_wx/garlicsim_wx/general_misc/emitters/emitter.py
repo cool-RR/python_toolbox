@@ -48,7 +48,7 @@ class Emitter(object):
     # todo: Let user put a single input/output
     
     
-    is_atomically_pickleable = False
+    _is_atomically_pickleable = False
 
     
     def __init__(self, inputs=(), outputs=(), name=None):
