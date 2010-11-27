@@ -11,7 +11,7 @@ def is_atomically_pickleable(thing):
     # And using `type` as a fallback because goddamned old-style classes don't
     # have `__class__`. tododoc: make tests.
     my_type = getattr(thing, '__class__', None) or type(thing) 
-    return _is_type_atomically_pickleable(my_type)
+    return _is_type_atomically_pickleable(my_type, thing)
 
 
 def _is_type_atomically_pickleable(type_, thing=None):
@@ -23,38 +23,68 @@ def _is_type_atomically_pickleable(type_, thing=None):
     if thing is not None:
         assert isinstance(thing, type_)
         
-    if hasattr(type_, '_is_atomically_pickleable'):
-        _is_type_atomically_pickleable.cache[type_] = \
-            type_._is_atomically_pickleable
-        return type_.is_atomically_pickleable
+    cache = _is_type_atomically_pickleable.cache
     
-    reduce_function = copy_reg.dispatch_table.get(type_)
-    if reduce_function:
-        reduce_result = reduce_function(thing)
-    else:
-        # Check for a __reduce_ex__ method, fall back to __reduce__
-        reduce_function = getattr(thing, '__reduce_ex__', None)
+    def get_result():
+        
+        if hasattr(type_, '_is_atomically_pickleable'):
+            cache[type_] = type_._is_atomically_pickleable
+            return type_.is_atomically_pickleable
+        
+        if not hasattr(thing, '__class__'):
+            cache[type_] = False
+            return False
+        
+        reduce_function = copy_reg.dispatch_table.get(type_)
         if reduce_function:
-            reduce_result = reduce_function(protocol=2)
-        else:
-            reduce_function = getattr(thing, '__reduce__', None)
-            if reduce_function:
-                reduce_result = reduce_function()
+            try:
+                reduce_result = reduce_function(thing)
+            except TypeError, exception:
+                assert "can't pickle" in exception.args[0] # todo: turn to warning
+                cache[type_] = False
+                return False
             else:
-                raise PicklingError("Can't pickle %r object: %r" %
-                                    (type_.__name__, thing))
-    
+                cache[type_] = True
+                return True
+        
+        reduce_function = getattr(type_, '__reduce_ex__', None)
+        if reduce_function:
+            try:
+                reduce_result = reduce_function(thing, 2) # argument is protocol
+            except TypeError, exception:
+                assert "can't pickle" in exception.args[0] # todo: turn to warning
+                cache[type_] = False
+                return False
+            else:
+                cache[type_] = True
+                return True
+            
+        reduce_function = getattr(type_, '__reduce__', None)
+        if reduce_function:
+            try:
+                reduce_result = reduce_function(thing)
+            except TypeError, exception:
+                assert "can't pickle" in exception.args[0] # todo: turn to warning
+                cache[type_] = False
+                return False
+            else:
+                cache[type_] = True
+                return True
+        
+        cache[type_] = False
+        return False
+
     
     
     ## tododoc This is done by stupid whitelisting temporarily:
     #import thread, multiprocessing.synchronize
     #atomically_non_pickleable_types = \
         #(file, thread.LockType, multiprocessing.synchronize.Lock)
-    #if issubclass(my_type, atomically_non_pickleable_types):
-        #_is_type_atomically_pickleable.cache[my_type] = False
+    #if issubclass(type_, atomically_non_pickleable_types):
+        #cache[type_] = False
         #return False
     #else:
-        #_is_type_atomically_pickleable.cache[my_type] = True
+        #cache[type_] = True
         #return True
         
 _is_type_atomically_pickleable.cache = {}
