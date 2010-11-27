@@ -24,8 +24,7 @@ class CruncherSelectionDialog(CuteDialog):
         self.frame = cruncher_controls.frame
         self.gui_project = cruncher_controls.gui_project
         
-        self.selected_cruncher_type = \
-            self.gui_project.project.crunching_manager.cruncher_type
+        self.selected_cruncher_type = None
         
         self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)
         
@@ -67,15 +66,20 @@ class CruncherSelectionDialog(CuteDialog):
             self,
             choices=cruncher_titles.keys()
         )
-        self.cruncher_list_box.SetMinSize((150, 100))
+        self.cruncher_list_box.SetMinSize((250, 100))
         
+        self.cruncher_list_box.Select(
+            cruncher_titles.values().index(
+                self.gui_project.project.crunching_manager.cruncher_type
+            )
+        )
         
-        self.h_sizer.Add(self.cruncher_list_box, 2, wx.EXPAND | wx.ALL,
+        self.h_sizer.Add(self.cruncher_list_box, 2*0, wx.EXPAND | wx.ALL,
                               border=10)
         
         self.cruncher_text_scrolled_panel = CruncherTextScrolledPanel(self)
         
-        self.h_sizer.Add(self.cruncher_text_scrolled_panel, 3,
+        self.h_sizer.Add(self.cruncher_text_scrolled_panel, 3*0,
                          wx.EXPAND | wx.ALL, border=10)
         
         self.dialog_button_sizer = wx.StdDialogButtonSizer()
@@ -100,7 +104,10 @@ class CruncherSelectionDialog(CuteDialog):
         
         self.SetSizer(self.main_v_sizer)
         self.Layout()
+        self.general_text.Wrap(self.general_text.Size[0])
         self.main_v_sizer.Fit(self)
+        
+        self.update()
 
         
     def on_ok(self, event):
@@ -109,9 +116,14 @@ class CruncherSelectionDialog(CuteDialog):
         
     def on_cancel(self, event):
         self.EndModal(wx.ID_CANCEL)#tododoc
-    
+
+        
     def on_list_box_change(self, event):
         event.Skip()
+        self.update()
+        
+        
+    def update(self):
         cruncher_types = self.cruncher_titles.values()
         selected_cruncher_type = cruncher_types[
             self.cruncher_list_box.GetSelection()
@@ -119,4 +131,3 @@ class CruncherSelectionDialog(CuteDialog):
         if selected_cruncher_type is not self.selected_cruncher_type:
             self.selected_cruncher_type = selected_cruncher_type
             self.cruncher_text_scrolled_panel.update()
-        

@@ -12,7 +12,7 @@ class CruncherTextScrolledPanel(wx.lib.scrolledpanel.ScrolledPanel):
         self.cruncher_selection_dialog = cruncher_selection_dialog
         wx.lib.scrolledpanel.ScrolledPanel.__init__(self, cruncher_selection_dialog)
         self.SetBackgroundColour(wx_tools.get_background_color())
-        self.SetMinSize((500, 300))
+        self.SetMinSize((530, 300))
         
         self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)
         
