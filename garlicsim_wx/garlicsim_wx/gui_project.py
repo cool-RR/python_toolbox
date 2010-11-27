@@ -177,6 +177,9 @@ class GuiProject(object):
         self._temp_shell_history = None
         '''Deleted immediately after.'''
         
+        self._temp_shell_command_history = None
+        '''Deleted immediately after.'''
+        
         #######################################################################
         # Setting up namespace:
         
@@ -826,6 +829,8 @@ class GuiProject(object):
         
         if self.frame.shell:
             my_dict['_temp_shell_history'] = self.frame.shell.GetText()
+            my_dict['_temp_shell_command_history'] = \
+                self.frame.shell.history[:]
         
         
         my_namespace = my_dict['namespace'] = my_dict['namespace'].copy()

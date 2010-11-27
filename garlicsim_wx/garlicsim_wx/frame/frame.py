@@ -535,7 +535,13 @@ class Frame(wx.Frame):
             self.shell.write(gui_project._temp_shell_history)
             self.shell.push('')
             gui_project._temp_shell_history = None
+            
+        if gui_project._temp_shell_command_history is not None:
+            assert isinstance(gui_project._temp_shell_command_history, list)
+            self.shell.history = gui_project._temp_shell_command_history[:]
+            gui_project._temp_shell_command_history = None
         
+            
         self.aui_manager.Update()
         
         self.gui_project.emitter_system.top_emitter.emit()
