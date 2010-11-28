@@ -135,6 +135,7 @@ class CruncherSelectionDialog(CuteDialog):
                 '`%s` is not available.' % self.selected_cruncher_type.__name__
             )
             error_dialog.ShowModal()
+            error_dialog.Destroy()
         
         
     def on_cancel(self, event):
@@ -154,3 +155,7 @@ class CruncherSelectionDialog(CuteDialog):
         if selected_cruncher_type is not self.selected_cruncher_type:
             self.selected_cruncher_type = selected_cruncher_type
             self.cruncher_text_scrolled_panel.update()
+            
+    def EndModal(self, *args, **kwargs): # for debugging, remove
+        0
+        super(CruncherSelectionDialog, self).EndModal(*args, **kwargs)
