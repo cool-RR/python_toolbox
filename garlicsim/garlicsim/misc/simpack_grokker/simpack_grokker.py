@@ -57,7 +57,7 @@ class SimpackGrokker(object):
             raise InvalidSimpack("The %s simpack does not define a `State` "
                                  "class." % simpack.__name__)
         
-        if not issubclass(State, garlicsim.data_structures.State):
+        if not misc_tools.is_subclass(State, garlicsim.data_structures.State):
             raise InvalidSimpack("The %s simpack defines a State class, but "
                                  "it's not a subclass of "
                                  "`garlicsim.data_structures.State`." % \
@@ -200,7 +200,7 @@ class SimpackGrokker(object):
             ###################################################################
 
         
-        elif isinstance(CRUNCHERS, BaseCruncher):
+        elif misc_tools.is_subclass(CRUNCHERS, BaseCruncher):
             cruncher_type = CRUNCHERS
             self.available_cruncher_types = [cruncher_type]
             self.cruncher_types_availability[cruncher_type] = True
@@ -226,16 +226,16 @@ class SimpackGrokker(object):
             ###################################################################
             
         
-        elif cute_iter_tools.is_iterable(CRUNCHERS):            
+        elif cute_iter_tools.is_iterable(CRUNCHERS):
             self.available_cruncher_types = []
             for item in CRUNCHERS:
                 if isinstance(item, basestring):
-                    cruncher_type = \
+                    (cruncher_type,) = \
                         [cruncher_type_ for cruncher_type_ in
                          crunchers.cruncher_types_list if
                          cruncher_type_.__name__ == item]
                 else:
-                    assert isinstance(item, BaseCruncher)
+                    assert misc_tools.is_subclass(item, BaseCruncher)
                     cruncher_type = item
                 self.available_cruncher_types.append(cruncher_type)
                 self.cruncher_types_availability[cruncher_type] = True
@@ -268,7 +268,6 @@ class SimpackGrokker(object):
                 [cruncher_type_ for cruncher_type_ in
                  crunchers.cruncher_types_list if
                  CRUNCHERS(cruncher_type_)]
-            self.cruncher_type = self.available_cruncher_types[0]
             for available_cruncher_type in self.available_cruncher_types:
                 self.cruncher_types_availability[available_cruncher_type] = \
                     True

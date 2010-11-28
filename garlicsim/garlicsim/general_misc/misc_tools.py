@@ -10,6 +10,16 @@ import types
 from . import import_tools
 
 
+def is_subclass(candidate, base_class):
+    '''
+    You may pass in a tuple of base classes instead of just one, and it will
+    check whether `candidate` is a subclass of any of these base classes.
+    '''
+    # The reason to use this wrapper is that `issubclass` sometimes fails on
+    # non-type candidates. (Python issue 10569.)
+    return isinstance(candidate, (type, types.ClassType)) and \
+           issubclass(candidate, base_class)
+
 def frange(start, finish=None, step=1.):
     '''
     Make a list containing an arithmetic progression of numbers.
