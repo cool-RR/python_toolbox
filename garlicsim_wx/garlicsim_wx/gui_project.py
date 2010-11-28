@@ -676,6 +676,8 @@ class GuiProject(object):
         to the step function. You may pass a StepProfile yourself, as the only
         argument, and it will be noticed and used. If nothing is passed in *args
         or **kwargs, the step profile of the active node will be used.
+        
+        Returns the job.
         '''
         #todo: maybe not let to do it from unfinalized touched node?
         
@@ -694,8 +696,8 @@ class GuiProject(object):
         
         kwargs = {'step_profile': step_profile}
             
-        self.project.begin_crunching(node, self.default_buffer or 1,
-                                     step_profile)
+        return self.project.begin_crunching(node, self.default_buffer or 1,
+                                            step_profile)
 
 
     def fork_by_editing(self):
@@ -767,11 +769,12 @@ class GuiProject(object):
             # (b) Changed the soft block it's pointing to.            
             #
             # The thing is, if there was a structural modification in the tree,
-            # this condition must be True. Therefore we call this here:
+            # this condition must be True. So we report a structure
+            # modification:
             
             self.tree_structure_modified_at_unknown_location_emitter.emit()
             
-            # Even though we are not sure that the tree structure was modified;
+            # Even though we are not sure that the tree structure was modified.
             # We have to play it safe. And since this condition doesn't happen
             # most of the time when crunching, we're not wasting too much
             # rendering time by assuming this is a structural modification.
