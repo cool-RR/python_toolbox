@@ -2,10 +2,10 @@ from garlicsim.general_misc import pickle_tools
 pickle_module = pickle_tools.pickle_module
 
 
-import multiprocessing, threading
+import StringIO
 
-l = threading.RLock() #l = multiprocessing.RLock()
+i = StringIO.StringIO()
 
-#pickle_tools.is_atomically_pickleable(l)
+pickle_module.dumps(i)
 
-pickle_module.dumps(l)
+0

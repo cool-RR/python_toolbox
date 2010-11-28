@@ -27,19 +27,30 @@ def _is_type_atomically_pickleable(type_, thing=None):
     def get_result():
         
         if hasattr(type_, '_is_atomically_pickleable'):
-            return type_.is_atomically_pickleable
+            return type_._is_atomically_pickleable
         
         # Weird special case: `threading.Lock` objects don't have `__class__`.
         # We assume that objects that don't have `__class__` can't be pickled.
         if not hasattr(thing, '__class__'):
             return False
         
+        
+        def confirm_legit_pickling_exception(exception):
+            message = exception.args[0]
+            segments = [
+                "can't pickle",
+                'should only be shared between processes through inheritance',
+                'cannot be passed between processes or pickled'
+            ]
+            assert any((segment in message) for segment in segments)
+            # todo: turn to warning
+        
         reduce_function = copy_reg.dispatch_table.get(type_)
         if reduce_function:
             try:
                 reduce_result = reduce_function(thing)
-            except TypeError, exception:
-                assert "can't pickle" in exception.args[0] # todo: turn to warning
+            except Exception, exception:
+                confirm_legit_pickling_exception(exception)
                 return False
             else:
                 return True
@@ -48,8 +59,8 @@ def _is_type_atomically_pickleable(type_, thing=None):
         if reduce_function:
             try:
                 reduce_result = reduce_function(thing, 2) # argument is protocol
-            except TypeError, exception:
-                assert "can't pickle" in exception.args[0] # todo: turn to warning
+            except Exception, exception:
+                confirm_legit_pickling_exception(exception)
                 return False
             else:
                 return True
@@ -58,8 +69,8 @@ def _is_type_atomically_pickleable(type_, thing=None):
         if reduce_function:
             try:
                 reduce_result = reduce_function(thing)
-            except TypeError, exception:
-                assert "can't pickle" in exception.args[0] # todo: turn to warning
+            except Exception, exception:
+                confirm_legit_pickling_exception(exception)
                 return False
             else:
                 return True

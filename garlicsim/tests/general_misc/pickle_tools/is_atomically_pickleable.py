@@ -1,4 +1,4 @@
-import threading, multiprocessing
+import threading, multiprocessing, StringIO, cStringIO
 
 # We're importing `pickle_module` from `pickle_tools`, so we get the exact same
 # pickle module it's using. (Giving it the freedom to change between `cPickle`
@@ -8,6 +8,8 @@ from garlicsim.general_misc.pickle_tools import pickle_module
 import wx
 
 from garlicsim.general_misc import pickle_tools
+
+from .shared import PickleableObject, NonPickleableObject
 
 
 def is_pickle_successful(thing):
@@ -29,6 +31,7 @@ def test_simple_atomically_pickleables():
         ['one', 'two', (3, 4)],
         set([1, 2, 3, 1]),
         frozenset((1, 2, 3, 1, 'meow', frozenset())),
+        StringIO.StringIO(),
         sum, slice, type
     ]
     
@@ -49,10 +52,6 @@ def test_non_atomically_pickleables():
 
     non_pickleables = [
         threading.Lock(),
-        threading.Condition(),
-        threading.BoundedSemaphore(),
-        threading.currentThread(),
-        threading.Semaphore(),
         multiprocessing.Lock(),
         multiprocessing.BoundedSemaphore(),
         multiprocessing.Condition(),
@@ -61,8 +60,10 @@ def test_non_atomically_pickleables():
         multiprocessing.Queue(),
         multiprocessing.RLock(),
         multiprocessing.Semaphore(),
+        NonPickleableObject(),
+        cStringIO.StringIO()
     ]
-
+    #tododoc: test on both StringIOs too
         
     for thing in non_pickleables:
         assert not pickle_tools.is_atomically_pickleable(thing)
