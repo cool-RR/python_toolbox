@@ -3,7 +3,7 @@
 # Inspired By And Heavily Based On wx.gizmos.TreeListCtrl.
 #
 # Andrea Gavana, @ 08 May 2006
-# Latest Revision: 21 Sep 2010, 23.00 GMT
+# Latest Revision: 28 Nov 2010, 16.00 GMT
 #
 #
 # TODO List
@@ -214,7 +214,7 @@ License And Version
 
 HyperTreeList is distributed under the wxPython license.
 
-Latest Revision: Andrea Gavana @ 21 Sep 2010, 23.00 GMT
+Latest Revision: Andrea Gavana @ 28 Nov 2010, 16.00 GMT
 
 Version 1.2
 
@@ -1853,7 +1853,7 @@ class EditTextCtrl(wx.TextCtrl):
 
         keycode = event.GetKeyCode()
 
-        if keycode == wx.WXK_RETURN:
+        if keycode in [wx.WXK_RETURN, wx.WXK_NUMPAD_ENTER]:
             self._aboutToFinish = True
             # Notify the owner about the changes
             self.AcceptChanges()

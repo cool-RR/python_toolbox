@@ -3,7 +3,7 @@
 # Inspired By And Heavily Based On wxGenericTreeCtrl.
 #
 # Andrea Gavana, @ 17 May 2006
-# Latest Revision: 01 Oct 2010, 23.00 GMT
+# Latest Revision: 28 Nov 2010, 16.00 GMT
 #
 #
 # TODO List
@@ -209,7 +209,7 @@ License And Version
 
 CustomTreeCtrl is distributed under the wxPython license. 
 
-Latest Revision: Andrea Gavana @ 26 Aug 2010, 10.00 GMT
+Latest Revision: Andrea Gavana @ 28 Nov 2010, 16.00 GMT
 
 Version 2.3
 
@@ -1162,7 +1162,7 @@ class TreeTextCtrl(ExpandoTextCtrl):
         keycode = event.GetKeyCode()
         shiftDown = event.ShiftDown()
 
-        if keycode == wx.WXK_RETURN:
+        if keycode in [wx.WXK_RETURN, wx.WXK_NUMPAD_ENTER]:
             if shiftDown:
                 event.Skip()
             else:
@@ -6266,7 +6266,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
             event.SetEventObject(self)
             self.GetEventHandler().ProcessEvent(event)
                 
-        elif keyCode in [wx.WXK_RETURN, wx.WXK_SPACE]:
+        elif keyCode in [wx.WXK_RETURN, wx.WXK_SPACE, wx.WXK_NUMPAD_ENTER]:
 
             if not self.IsItemEnabled(self._current):
                 event.Skip()
