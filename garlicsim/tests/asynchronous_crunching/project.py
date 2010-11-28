@@ -18,12 +18,15 @@ import nose
 
 from garlicsim.general_misc import cute_iter_tools
 from garlicsim.general_misc import math_tools
+from garlicsim.general_misc.infinity import Infinity
 
 import garlicsim
 from garlicsim_lib.simpacks import life
 from garlicsim_lib.simpacks import prisoner
 from garlicsim_lib.simpacks import _history_test
 from garlicsim_lib.simpacks import queue
+
+from .shared import MustachedThreadCruncher
 
 FUZZ = 0.0001
 '''Fuzziness of floats.'''
@@ -37,18 +40,18 @@ def simpack_test():
     
     simpacks = [life, prisoner, _history_test, queue]
     
-    crunchers = \
+    cruncher_types = \
         [garlicsim.asynchronous_crunching.crunchers.ThreadCruncher,
          garlicsim.asynchronous_crunching.crunchers.ProcessCruncher]
     
-    crunchers = [garlicsim.asynchronous_crunching.crunchers.ThreadCruncher]
+    cruncher_types = [garlicsim.asynchronous_crunching.crunchers.ThreadCruncher]
     # Until multiprocessing shit is solved
     
-    for simpack, cruncher in cute_iter_tools.product(simpacks, crunchers):
-        yield simpack_check, simpack, cruncher
+    for simpack, cruncher_type in cute_iter_tools.product(simpacks, cruncher_types):
+        yield simpack_check, simpack, cruncher_type
 
         
-def simpack_check(simpack, cruncher):
+def simpack_check(simpack, cruncher_type):
     
     my_simpack_grokker = garlicsim.misc.SimpackGrokker(simpack)
     
@@ -94,7 +97,7 @@ def simpack_check(simpack, cruncher):
     
     project = garlicsim.Project(simpack)
     
-    project.crunching_manager.cruncher_type = cruncher
+    project.crunching_manager.cruncher_type = cruncher_type
     
     assert project.tree.lock._ReadWriteLock__writer is None
     
@@ -276,6 +279,39 @@ def simpack_check(simpack, cruncher):
         assert kid_node.parent is parent_node
         
     assert len(project.tree.nodes) == number_of_nodes + 10
+    
+    ### Testing cruncher type switching: ######################################
+    
+    job_1 = project.begin_crunching(root, clock_buffer=Infinity)
+    job_2 = project.begin_crunching(root, clock_buffer=Infinity)
+    
+    assert len(project.crunching_manager.crunchers) == 0
+    assert project.sync_crunchers() == 0
+    assert len(project.crunching_manager.crunchers) == 2
+    (cruncher_1, cruncher_2) = project.crunching_manager.crunchers.values()
+    assert type(cruncher_1) is cruncher_type
+    assert type(cruncher_2) is cruncher_type
+    
+    time.sleep(0.2) # Letting the crunchers start working
+    
+    project.crunching_manager.cruncher_type = MustachedThreadCruncher
+    project.sync_crunchers()
+    assert len(project.crunching_manager.crunchers) == 2
+    (cruncher_1, cruncher_2) = project.crunching_manager.crunchers.values()
+    assert type(cruncher_1) is MustachedThreadCruncher
+    assert type(cruncher_2) is MustachedThreadCruncher
+    
+    project.crunching_manager.cruncher_type = cruncher_type
+    project.sync_crunchers()
+    assert len(project.crunching_manager.crunchers) == 2
+    (cruncher_1, cruncher_2) = project.crunching_manager.crunchers.values()
+    assert type(cruncher_1) is cruncher_type
+    assert type(cruncher_2) is cruncher_type
+    
+    ### Finished testing cruncher type switching. #############################
+    
+    
+    
         
     
     

@@ -514,6 +514,10 @@ class Project(object):
         # Todo: better have the simpack mentioned here, not doing it cause it's
         # currently in a module wrapper.
         
+        # todo: show cruncher types, even listing for different types if there
+        # are different types. Length is not a problem because this is a rare
+        # condition.
+        
         nodes_count = len(self.tree.nodes)
         crunchers_count = len(self.crunching_manager.crunchers)
                                    
