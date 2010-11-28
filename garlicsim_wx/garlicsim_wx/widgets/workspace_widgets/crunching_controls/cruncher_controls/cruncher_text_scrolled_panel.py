@@ -21,7 +21,6 @@ class CruncherTextScrolledPanel(wx.lib.scrolledpanel.ScrolledPanel):
             label=''
         )
         self.cruncher_text.Wrap(self._get_wrap_width())
-        self.cruncher_text.SetBackgroundColour(wx.Color(220, 220, 255))
         self.main_v_sizer.Add(self.cruncher_text, 0, wx.EXPAND)
         
         self.main_v_sizer.AddSpacer((1, 20))
