@@ -71,3 +71,24 @@ def test_non_atomically_pickleables():
     assert not pickle_tools.is_atomically_pickleable(NonPickleableObject())
     # Not trying to actually pickle this test object, cause it will actually
     # work.
+
+    
+def test_partially_pickleables():
+    '''
+    "Partially-pickleable" means an object which is atomically pickleable but
+    not pickleable.
+    '''
+    
+    x = PickleableObject()
+    x.lock = threading.Lock()
+    
+    partially_pickleables = [
+        x,
+        [threading.Lock()],
+        {1: multiprocessing.Lock(), 2: 3},
+        set([multiprocessing.Lock(), x])
+    ]
+    
+    for thing in partially_pickleables:
+        assert pickle_tools.is_atomically_pickleable(thing)
+        assert not is_pickle_successful(thing)
