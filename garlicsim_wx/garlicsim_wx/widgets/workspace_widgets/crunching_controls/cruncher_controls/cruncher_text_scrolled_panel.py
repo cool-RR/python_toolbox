@@ -2,6 +2,7 @@
 import wx
 
 from garlicsim.general_misc import string_tools
+from garlicsim_wx.general_misc import wx_tools
 
 import garlicsim
 
@@ -19,7 +20,10 @@ class CruncherTextScrolledPanel(wx.lib.scrolledpanel.ScrolledPanel):
             label=''
         )
         self.cruncher_text.Wrap(self._get_wrap_width())
-        self.main_v_sizer.Add(self.cruncher_text, 1, wx.EXPAND)
+        self.cruncher_text.SetBackgroundColour(wx.Color(220, 220, 255))
+        self.main_v_sizer.Add(self.cruncher_text, 0, wx.EXPAND)
+        
+        self.main_v_sizer.AddSpacer((1, 20))
         
         self.cruncher_unavailability_text = wx.StaticText(
             self,
@@ -27,9 +31,9 @@ class CruncherTextScrolledPanel(wx.lib.scrolledpanel.ScrolledPanel):
         )
         self.cruncher_unavailability_text.Wrap(self._get_wrap_width())
         self.cruncher_unavailability_text.SetForegroundColour(
-            wx.Colour(100, 0, 0)
+            wx.Colour(170, 0, 0)
         )
-        self.main_v_sizer.Add(self.cruncher_unavailability_text, 1, wx.EXPAND)
+        self.main_v_sizer.Add(self.cruncher_unavailability_text, 0, wx.EXPAND)
         
         #self.general_text.SetSize((self.ClientSize[0] - 20, -1))
         #self.cruncher_text.Wrap(
@@ -39,19 +43,23 @@ class CruncherTextScrolledPanel(wx.lib.scrolledpanel.ScrolledPanel):
         self.SetSizer(self.main_v_sizer)
         self.SetupScrolling()
         
+        
     def _get_wrap_width(self):
         return (self.GetClientSize()[0] - 10)
-        
+
+    
     def update(self):
-        cruncher_type = self.cruncher_selection_dialog.selected_cruncher_type
-        self.cruncher_text.SetLabel(cruncher_type.gui_explanation)
-        self.cruncher_text.Wrap(self._get_wrap_width())
-        availability = \
-            self.cruncher_selection_dialog.cruncher_types_availability[
-                cruncher_type
-            ]
-        unavailibility_text = getattr(availability, 'reason', '') if \
-                              (availability == False) else ''
-        self.cruncher_unavailability_text.SetLabel(unavailibility_text)
-        self.cruncher_unavailability_text.Wrap(self._get_wrap_width())
-        self.SetupScrolling()
+        with wx_tools.WindowFreezer(self):
+            cruncher_type = self.cruncher_selection_dialog.selected_cruncher_type
+            self.cruncher_text.SetLabel(cruncher_type.gui_explanation)
+            self.cruncher_text.Wrap(self._get_wrap_width())
+            availability = \
+                self.cruncher_selection_dialog.cruncher_types_availability[
+                    cruncher_type
+                ]
+            unavailibility_text = getattr(availability, 'reason', '') if \
+                                  (availability == False) else ''
+            self.cruncher_unavailability_text.SetLabel(unavailibility_text)
+            self.cruncher_unavailability_text.Wrap(self._get_wrap_width())
+            self.main_v_sizer.Layout()
+            self.SetupScrolling()
