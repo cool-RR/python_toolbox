@@ -5,6 +5,7 @@ import wx
 
 from garlicsim.general_misc.third_party.ordered_dict import OrderedDict
 from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
+from garlicsim_wx.widgets.general_misc.error_dialog import ErrorDialog
 
 import garlicsim
 import garlicsim_wx
@@ -101,6 +102,8 @@ class CruncherSelectionDialog(CuteDialog):
         
         self.Bind(wx.EVT_LISTBOX, self.on_list_box_change,
                   self.cruncher_list_box)
+        self.Bind(wx.EVT_LISTBOX_DCLICK, self.on_list_box_double_click,
+                  self.cruncher_list_box)
         
         self.SetSizer(self.main_v_sizer)
         self.Layout()
@@ -111,11 +114,28 @@ class CruncherSelectionDialog(CuteDialog):
 
         
     def on_ok(self, event):
-        self.gui_project.project.crunching_manager.cruncher_type = \
-            self.selected_cruncher_type
-        self.gui_project.cruncher_type_changed_emitter.emit()
-        self.EndModal(wx.ID_OK)
-    
+        event.Skip()
+        self.try_to_change_cruncher_type_and_end_modal()
+        
+        
+    def on_list_box_double_click(self, event):
+        event.Skip()
+        self.try_to_change_cruncher_type_and_end_modal()
+        
+
+    def try_to_change_cruncher_type_and_end_modal(self):
+        if self.cruncher_types_availability[self.selected_cruncher_type]:
+            self.gui_project.project.crunching_manager.cruncher_type = \
+                self.selected_cruncher_type
+            self.gui_project.cruncher_type_changed_emitter.emit()
+            self.EndModal(wx.ID_OK)
+        else: # Selected cruncher type is unavailable
+            error_dialog = ErrorDialog(
+                self,
+                '`%s` is not available.' % self.selected_cruncher_type.__name__
+            )
+            error_dialog.ShowModal()
+        
         
     def on_cancel(self, event):
         self.EndModal(wx.ID_CANCEL)
