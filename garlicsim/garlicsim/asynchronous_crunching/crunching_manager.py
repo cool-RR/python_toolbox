@@ -167,11 +167,12 @@ class CrunchingManager(object):
                 
                 crunching_profile = job.crunching_profile
                 
-                if cruncher.is_alive():
+                if cruncher.is_alive() and \
+                   (type(cruncher) is self.cruncher_type):
                     
-                    # The job is not the done, and the cruncher's still working.
-                    # In this case, the only thing left to do is check if the
-                    # crunching profile changed.
+                    # The job is not done, the cruncher's still working and it
+                    # is of the right type. In this case, the only thing left to
+                    # do is check if the crunching profile changed.
 
                     # First we'll check if the step profile changed:
                     
@@ -201,9 +202,14 @@ class CrunchingManager(object):
                         
                         continue
                         
-                else: # cruncher.is_alive() is False
+                else: 
                     
-                    # Cruncher died; We'll create another:
+                    # Either the cruncher died, or it is of the wrong type. The
+                    # latter happens when the user changes
+                    # `crunching_manager.cruncher_type` in the middle of
+                    # simulating. In any case, this cruncher is done for.
+                    
+                    cruncher.retire() # In case it's not totally dead
                     
                     self.__conditional_create_cruncher(job)
                     

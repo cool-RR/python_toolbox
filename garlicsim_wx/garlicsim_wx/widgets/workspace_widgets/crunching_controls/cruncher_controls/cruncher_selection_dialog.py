@@ -111,11 +111,14 @@ class CruncherSelectionDialog(CuteDialog):
 
         
     def on_ok(self, event):
-        self.EndModal(wx.ID_OK)#tododoc
+        self.gui_project.project.crunching_manager.cruncher_type = \
+            self.selected_cruncher_type
+        self.gui_project.cruncher_type_changed_emitter.emit()
+        self.EndModal(wx.ID_OK)
     
         
     def on_cancel(self, event):
-        self.EndModal(wx.ID_CANCEL)#tododoc
+        self.EndModal(wx.ID_CANCEL)
 
         
     def on_list_box_change(self, event):
