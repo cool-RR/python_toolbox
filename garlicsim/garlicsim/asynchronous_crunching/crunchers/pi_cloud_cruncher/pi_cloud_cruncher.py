@@ -21,7 +21,7 @@ __all__ = ['PiCloudCruncher']
 
 
 apology = ("PiCloudCruncher is not implemented in this version! This is just "
-           "a dummy class. PiCloudCruncher is scheduled to be released in "
+           "a placeholder. PiCloudCruncher is scheduled to be released in "
            "GarlicSim 0.7, which will be available in mid-2011.")
 
 
@@ -35,11 +35,13 @@ class PiCloudCruncher(BaseCruncher, threading.Thread):
      
      - Offloads the crunching into the cloud, relieving this computer of the CPU
        stress.
-     
+       
      - Requires a working internet connection and a PiCloud account. Visit
        http://picloud.com to get one.
-     '''
-    )
+       
+     - Costs money, charged by the millisecond. It's really cheap though. See
+       the PiCloud website for pricing details.
+    ''')
     
     
     
