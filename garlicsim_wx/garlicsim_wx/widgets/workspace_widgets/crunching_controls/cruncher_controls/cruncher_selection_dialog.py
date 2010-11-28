@@ -14,7 +14,6 @@ from .cruncher_text_scrolled_panel import CruncherTextScrolledPanel
 
 
 class CruncherSelectionDialog(CuteDialog):
-    # tododoc: make it respect Esc. (SetEscapeId or ID_CANCEL)
     def __init__(self, cruncher_controls):
         CuteDialog.__init__(
             self,

@@ -119,7 +119,7 @@ class GuiProject(object):
         The job of the playing leaf, which should be crunched to infinity.
         '''
         
-        self.default_buffer = 100 # Should be a mechanism for setting !tododoc
+        self.default_buffer = 5 # Should be a mechanism for setting !tododoc
         '''The default clock buffer to crunch from an active node.'''
         # tododoc: rename to autocrunch?
         
@@ -478,8 +478,9 @@ class GuiProject(object):
         
     def set_default_buffer(self, default_buffer):
         self.default_buffer = default_buffer
-        self.project.ensure_buffer(self.active_node,
-                                   clock_buffer=self.default_buffer)
+        if self.active_node:
+            self.project.ensure_buffer(self.active_node,
+                                       clock_buffer=self.default_buffer)
         self.default_buffer_modified_emitter.emit()
     
         
