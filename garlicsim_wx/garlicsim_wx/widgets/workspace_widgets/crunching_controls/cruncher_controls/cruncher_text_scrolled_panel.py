@@ -41,8 +41,11 @@ class CruncherTextScrolledPanel(wx.lib.scrolledpanel.ScrolledPanel):
         cruncher_type = self.cruncher_selection_dialog.selected_cruncher_type
         self.cruncher_text.SetLabel(cruncher_type.gui_explanation)
         availability = \
-            self.cruncher_selection_dialog.cruncher_types_availability
+            self.cruncher_selection_dialog.cruncher_types_availability[
+                cruncher_type
+            ]
         if availability == False:
             self.cruncher_unavailability_text.SetLabel(
+                #'Ooga booga Ooga booga Ooga booga Ooga booga Ooga booga ',
                 getattr(availability, 'reason', '')
             )
