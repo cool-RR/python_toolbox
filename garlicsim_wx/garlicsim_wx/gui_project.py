@@ -119,7 +119,7 @@ class GuiProject(object):
         The job of the playing leaf, which should be crunched to infinity.
         '''
         
-        self.default_buffer = 5 # Should be a mechanism for setting !tododoc
+        self.default_buffer = 100 # Should be a mechanism for setting !tododoc
         '''The default clock buffer to crunch from an active node.'''
         # tododoc: rename to autocrunch?
         
@@ -827,7 +827,7 @@ class GuiProject(object):
     def _if_forked_by_crunching_recently_switch_to_new_path(self):
         if self._job_and_node_of_recent_fork_by_crunching:
             job, old_node = self._job_and_node_of_recent_fork_by_crunching
-            new_node = job.crunching_profile.node
+            new_node = job.node
             
             if new_node is not old_node:
                 new_path = new_node.make_containing_path()

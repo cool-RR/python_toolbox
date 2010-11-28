@@ -220,7 +220,9 @@ class Project(object):
         
         job = Job(node, crunching_profile)
         
-        return self.crunching_manager.jobs.append(job)
+        self.crunching_manager.jobs.append(job)
+        
+        return job
     
 
     def sync_crunchers(self):
