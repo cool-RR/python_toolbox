@@ -23,16 +23,15 @@ def _is_type_atomically_pickleable(type_, thing=None):
     if thing is not None:
         assert isinstance(thing, type_)
         
-    cache = _is_type_atomically_pickleable.cache
-    
+    # Sub-function in order to do caching without crowding the main algorithm:
     def get_result():
         
         if hasattr(type_, '_is_atomically_pickleable'):
-            cache[type_] = type_._is_atomically_pickleable
             return type_.is_atomically_pickleable
         
+        # Weird special case: `threading.Lock` objects don't have `__class__`.
+        # We assume that objects that don't have `__class__` can't be pickled.
         if not hasattr(thing, '__class__'):
-            cache[type_] = False
             return False
         
         reduce_function = copy_reg.dispatch_table.get(type_)
@@ -41,10 +40,8 @@ def _is_type_atomically_pickleable(type_, thing=None):
                 reduce_result = reduce_function(thing)
             except TypeError, exception:
                 assert "can't pickle" in exception.args[0] # todo: turn to warning
-                cache[type_] = False
                 return False
             else:
-                cache[type_] = True
                 return True
         
         reduce_function = getattr(type_, '__reduce_ex__', None)
@@ -53,10 +50,8 @@ def _is_type_atomically_pickleable(type_, thing=None):
                 reduce_result = reduce_function(thing, 2) # argument is protocol
             except TypeError, exception:
                 assert "can't pickle" in exception.args[0] # todo: turn to warning
-                cache[type_] = False
                 return False
             else:
-                cache[type_] = True
                 return True
             
         reduce_function = getattr(type_, '__reduce__', None)
@@ -65,15 +60,15 @@ def _is_type_atomically_pickleable(type_, thing=None):
                 reduce_result = reduce_function(thing)
             except TypeError, exception:
                 assert "can't pickle" in exception.args[0] # todo: turn to warning
-                cache[type_] = False
                 return False
             else:
-                cache[type_] = True
                 return True
         
-        cache[type_] = False
         return False
 
+    result = get_result()
+    _is_type_atomically_pickleable.cache[type_] = result
+    return result
     
     
     ## tododoc This is done by stupid whitelisting temporarily:

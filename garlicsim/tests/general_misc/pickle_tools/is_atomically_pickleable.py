@@ -45,11 +45,10 @@ def test_simple_atomically_pickleables():
         assert pickle_tools.is_atomically_pickleable(thing)
         
         
-def test_simple_non_atomically_pickleables():
+def test_non_atomically_pickleables():
 
     non_pickleables = [
         threading.Lock(),
-        threading.RLock(),
         threading.Condition(),
         threading.BoundedSemaphore(),
         threading.currentThread(),
@@ -66,11 +65,7 @@ def test_simple_non_atomically_pickleables():
 
         
     for thing in non_pickleables:
-        assert pickle_tools.is_atomically_pickleable(thing)
-        assert is_pickle_successful(thing)
-        
-
-    for thing in atomically_pickleablespickleables:
-        assert pickle_tools.is_atomically_pickleable(thing)
+        assert not pickle_tools.is_atomically_pickleable(thing)
+        assert not is_pickle_successful(thing)
     
         
