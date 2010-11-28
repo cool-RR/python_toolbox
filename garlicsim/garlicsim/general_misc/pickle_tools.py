@@ -1,5 +1,6 @@
 import re
 import pickle as pickle_module
+import pickle
 import copy_reg
 
 from garlicsim.general_misc import caching
@@ -34,6 +35,8 @@ def _is_type_atomically_pickleable(type_, thing=None):
         if not hasattr(thing, '__class__'):
             return False
         
+        if not issubclass(type_, object):
+            return True
         
         def confirm_legit_pickling_exception(exception):
             message = exception.args[0]
@@ -45,6 +48,9 @@ def _is_type_atomically_pickleable(type_, thing=None):
             assert any((segment in message) for segment in segments)
             # todo: turn to warning
         
+        if type_ in pickle.Pickler.dispatch:
+            return True
+            
         reduce_function = copy_reg.dispatch_table.get(type_)
         if reduce_function:
             try:
@@ -58,7 +64,7 @@ def _is_type_atomically_pickleable(type_, thing=None):
         reduce_function = getattr(type_, '__reduce_ex__', None)
         if reduce_function:
             try:
-                reduce_result = reduce_function(thing, 2) # argument is protocol
+                reduce_result = reduce_function(thing, 0) # argument is protocol
             except Exception, exception:
                 confirm_legit_pickling_exception(exception)
                 return False

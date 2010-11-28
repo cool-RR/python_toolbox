@@ -2,9 +2,9 @@ from garlicsim.general_misc import pickle_tools
 pickle_module = pickle_tools.pickle_module
 
 
-import StringIO
+import cStringIO
 
-i = StringIO.StringIO()
+i = cStringIO.StringIO()
 
 pickle_module.dumps(i)
 

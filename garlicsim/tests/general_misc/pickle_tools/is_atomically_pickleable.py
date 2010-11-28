@@ -19,7 +19,7 @@ def is_pickle_successful(thing):
     except Exception:
         return False
     else:
-        return thing == unpickled_thing
+        return True
 
     
 def test_simple_atomically_pickleables():
@@ -60,7 +60,6 @@ def test_non_atomically_pickleables():
         multiprocessing.Queue(),
         multiprocessing.RLock(),
         multiprocessing.Semaphore(),
-        NonPickleableObject(),
         cStringIO.StringIO()
     ]
     #tododoc: test on both StringIOs too
@@ -69,4 +68,6 @@ def test_non_atomically_pickleables():
         assert not pickle_tools.is_atomically_pickleable(thing)
         assert not is_pickle_successful(thing)
     
-        
+    assert not pickle_tools.is_atomically_pickleable(NonPickleableObject())
+    # Not trying to actually pickle this test object, cause it will actually
+    # work.
