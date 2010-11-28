@@ -182,6 +182,8 @@ class GuiProject(object):
         self._temp_shell_command_history = None
         '''Deleted immediately after.'''
         
+        self._job_and_node_of_recent_fork_by_crunching = None
+        
         #######################################################################
         # Setting up namespace:
         
@@ -252,7 +254,8 @@ class GuiProject(object):
             self.tree_structure_modified_emitter = es.make_emitter(
                 outputs=(
                     self.tree_modified_emitter,
-                    self._update_step_profiles_set
+                    self._update_step_profiles_set,
+                    self._if_forked_by_crunching_recently_switch_to_new_path,
                     ),
                 name='tree_structure_modified',
             )
@@ -696,8 +699,12 @@ class GuiProject(object):
         
         kwargs = {'step_profile': step_profile}
             
-        return self.project.begin_crunching(node, self.default_buffer or 1,
-                                            step_profile)
+        job = self.project.begin_crunching(node, self.default_buffer or 1,
+                                           step_profile)
+        
+        self._job_and_node_of_recent_fork_by_crunching = (job, node)
+        
+        return job
 
 
     def fork_by_editing(self):
@@ -816,6 +823,21 @@ class GuiProject(object):
             self._tracked_step_profile = active_step_profile
             self.active_step_profile_changed_emitter.emit()
         
+        
+    def _if_forked_by_crunching_recently_switch_to_new_path(self):
+        if self._job_and_node_of_recent_fork_by_crunching:
+            job, old_node = self._job_and_node_of_recent_fork_by_crunching
+            new_node = job.crunching_profile.node
+            
+            if new_node is not old_node:
+                new_path = new_node.make_containing_path()
+                
+                assert old_node in new_path
+                # Cause `new_node` was born out of `old_node`.
+                
+                self.set_path(new_path)
+                self._job_and_node_of_recent_fork_by_crunching = None
+            
         
     def __reduce__(self):
         my_dict = dict(self.__dict__)
