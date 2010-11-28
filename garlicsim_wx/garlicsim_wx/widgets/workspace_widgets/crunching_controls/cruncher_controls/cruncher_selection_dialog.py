@@ -24,6 +24,9 @@ class CruncherSelectionDialog(CuteDialog):
         self.frame = cruncher_controls.frame
         self.gui_project = cruncher_controls.gui_project
         
+        self.selected_cruncher_type = \
+            self.gui_project.project.crunching_manager.cruncher_type
+        
         self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)
         
         self.general_text = wx.StaticText(
@@ -50,7 +53,7 @@ class CruncherSelectionDialog(CuteDialog):
             self.gui_project.project.simpack_grokker.\
             cruncher_types_availability
 
-        cruncher_titles = OrderedDict()
+        self.cruncher_titles = cruncher_titles = OrderedDict()
         
         for cruncher_type, availability in cruncher_types_availability.items():
             if availability == True:
@@ -64,6 +67,7 @@ class CruncherSelectionDialog(CuteDialog):
             self,
             choices=cruncher_titles.keys()
         )
+        
         
         self.h_sizer.Add(self.cruncher_list_box, 2, wx.EXPAND | wx.ALL,
                               border=10)
@@ -89,6 +93,10 @@ class CruncherSelectionDialog(CuteDialog):
         self.Bind(wx.EVT_BUTTON, self.on_cancel, source=self.cancel_button)
         self.dialog_button_sizer.Realize()
         
+        
+        self.Bind(wx.EVT_LISTBOX, self.on_list_box_change,
+                  self.cruncher_list_box)
+        
         self.SetSizer(self.main_v_sizer)
         self.Layout()
         self.main_v_sizer.Fit(self)
@@ -101,3 +109,13 @@ class CruncherSelectionDialog(CuteDialog):
     def on_cancel(self, event):
         self.EndModal(wx.ID_CANCEL)#tododoc
     
+    def on_list_box_change(self, event):
+        event.Skip()
+        cruncher_types = self.cruncher_titles.values()
+        selected_cruncher_type = cruncher_types[
+            self.cruncher_list_box.GetSelection()
+        ]
+        if selected_cruncher_type is not self.selected_cruncher_type:
+            self.selected_cruncher_type = selected_cruncher_type
+            self.cruncher_text_scrolled_panel.update()
+        
