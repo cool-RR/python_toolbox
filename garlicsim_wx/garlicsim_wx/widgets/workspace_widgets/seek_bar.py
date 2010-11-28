@@ -166,12 +166,11 @@ class SeekBar(wx.Panel, WorkspaceWidget):
     def draw_small_numbers(self, dc, numbers):
         dc.SetPen(wx.Pen('#000000'))
         dc.SetFont(
-            wx.Font(9,
+            wx.Font(8,
                     wx.FONTFAMILY_DEFAULT,
                     wx.FONTSTYLE_NORMAL,
                     wx.FONTWEIGHT_NORMAL,
-                    False,
-                    'Courier 10 Pitch')
+                    False)
         )
         
         for number in numbers:
@@ -182,12 +181,11 @@ class SeekBar(wx.Panel, WorkspaceWidget):
     def draw_big_numbers(self, dc, numbers):
         dc.SetPen(wx.Pen('#000000'))
         dc.SetFont(
-            wx.Font(9,
+            wx.Font(8,
                     wx.FONTFAMILY_DEFAULT,
                     wx.FONTSTYLE_NORMAL,
                     wx.FONTWEIGHT_BOLD,
-                    False,
-                    'Courier 10 Pitch')
+                    False)
         )
         
         for number in numbers:
