@@ -54,8 +54,9 @@ class ProcessCruncher(BaseCruncher):
     
      - Works from a `multiprocessing.Process`.
     
-     - Able to run on a different core of the process than the main process or
-       other ProcessCrunchers, thus utilizing the full power of the processor.
+     - Able to run on a different core of the processor than the main process 
+       or other ProcessCrunchers, thus utilizing the full power of the
+       processor.
      '''
     )
 

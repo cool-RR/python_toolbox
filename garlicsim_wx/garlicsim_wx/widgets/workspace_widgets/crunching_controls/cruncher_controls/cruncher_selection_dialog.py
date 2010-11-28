@@ -155,6 +155,6 @@ class CruncherSelectionDialog(CuteDialog):
             self.selected_cruncher_type = selected_cruncher_type
             self.cruncher_text_scrolled_panel.update()
             
-    def EndModal(self, *args, **kwargs): # for debugging, remove
-        0
-        super(CruncherSelectionDialog, self).EndModal(*args, **kwargs)
+    def ShowModal(self):
+        self.cruncher_list_box.SetFocus()
+        return super(CruncherSelectionDialog, self).ShowModal()
