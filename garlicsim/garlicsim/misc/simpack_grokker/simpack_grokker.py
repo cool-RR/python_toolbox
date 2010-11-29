@@ -293,7 +293,12 @@ class SimpackGrokker(object):
             
         #######################################################################
             
-        
+        else:
+            raise InvalidSimpack("The CRUNCHERS setting must be either a "
+                                 "cruncher type (or name string), a list of "
+                                 "cruncher types, or a filter function for "
+                                 "cruncher types. You supplied `%s`, which is "
+                                 "neither." % CRUNCHERS)
             
     
     def step(self, state_or_history_browser, step_profile):

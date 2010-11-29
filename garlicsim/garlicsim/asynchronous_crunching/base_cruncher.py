@@ -73,7 +73,7 @@ class BaseCruncher(object):
     
     @abc.abstractmethod
     def update_crunching_profile(self, profile):
-        '''Update the cruncher's crunching profile.'''
+        '''Update the cruncher's crunching profile.''' #tododoc: abstract or not?
         self.order_queue.put(profile)
         
     
