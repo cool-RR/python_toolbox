@@ -3,6 +3,7 @@
 
 '''Defines miscellaneous objects for `simpack_grokker`.'''
 
+
 def default_determinism_function(step_profile):
     '''
     The default determinism function.

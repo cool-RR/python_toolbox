@@ -332,3 +332,7 @@ a tt {
 .nb {
     color: #009030 !important;
 }
+
+div.highlight {
+    background: none;
+}
