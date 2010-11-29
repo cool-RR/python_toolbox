@@ -20,3 +20,4 @@ garlicsim_wx/*.exe
 */docs/_deployed_build/*
 
 *.coverage
+htmlcov
