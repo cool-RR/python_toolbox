@@ -1,0 +1,1 @@
+@set PYTHONPATH=;../;../../garlicsim_lib;../../garlicsim_wx;
