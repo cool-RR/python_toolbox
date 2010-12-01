@@ -163,6 +163,8 @@ class SimpackGrokker(object):
                 
 
     def __init_analysis_cruncher_types(self):
+        
+        # todo: possibly fix CRUNCHERS to some canonical state in `.settings`
         from garlicsim.asynchronous_crunching import crunchers, BaseCruncher
         simpack = self.simpack
         
@@ -218,7 +220,7 @@ class SimpackGrokker(object):
                         False,
                         'The `%s` simpack specified `%s` as the only '
                         'available cruncher type' % (simpack.__name__,
-                                                     cruncher_type.__name__)                   
+                                                     cruncher_type.__name__)
                     )
                 ) for unavailable_cruncher_type in unavailable_cruncher_types
             ))
@@ -336,6 +338,9 @@ class SimpackGrokker(object):
         
     
     def get_inplace_step_iterator(self, state, step_profile):
+        raise NotImplementedError('inplace steps are not yet '
+                                  'supported. They will probably become '
+                                  'available in GarlicSim 0.7 in mid-2011.')
         step_function = step_profile.step_function
         step_type = get_step_type(step_function)
         

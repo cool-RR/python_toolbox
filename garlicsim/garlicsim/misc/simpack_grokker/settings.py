@@ -22,7 +22,6 @@ class Settings(object):
         This is useful because some simpacks can't be used with certain kinds of
         crunchers.
         '''
-        # todo: allow both list and single
         
         self.DETERMINISM_FUNCTION = misc.default_determinism_function
         '''
