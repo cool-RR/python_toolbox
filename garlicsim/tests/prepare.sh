@@ -1,0 +1,1 @@
+export PYTHONPATH="/home/coolrr/Desktop/GarlicSim/garlicsim:/home/coolrr/Desktop/GarlicSim/garlicsim_lib:/home/coolrr/Desktop/GarlicSim/garlicsim_wx:"
