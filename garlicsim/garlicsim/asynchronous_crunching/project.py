@@ -535,6 +535,9 @@ class Project(object):
     
     
     def build_step_profile(self, *args, **kwargs):
+        '''
+        there's one here in addition to that in the simpack grokker because the default step function here can be changed
+        '''
         return garlicsim.misc.StepProfile.build_with_default_step_function(
             self.default_step_function,
             *args,

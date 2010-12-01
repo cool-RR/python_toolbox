@@ -14,6 +14,7 @@ import imp
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import misc_tools
 from garlicsim.general_misc import cute_iter_tools
+from garlicsim.general_misc import sequence_tools
 from garlicsim.general_misc.reasoned_bool import ReasonedBool
 from garlicsim.general_misc.third_party.ordered_dict import OrderedDict
 import garlicsim.general_misc.caching
@@ -69,38 +70,39 @@ class SimpackGrokker(object):
             misc_tools.getted_vars(State).iteritems() if callable(value)
         )
 
-        self.step_functions = dict((step_type, []) for step_type in
-                                   step_types.step_types_list)
+        self.step_functions_by_type = dict((step_type, []) for step_type in
+                                           step_types.step_types_list)
         
 
         for method in state_methods.itervalues():
             
             if 'step' in method.__name__:
                 step_type = get_step_type(method)
-                self.step_functions[step_type].append(method)
+                self.step_functions_by_type[step_type].append(method)
             
         
-        self.all_step_functions = reduce(list.__add__,
-                                    self.step_functions.itervalues())
+        self.all_step_functions = sequence_tools.flatten(
+            self.step_functions_by_type.itervalues()
+        )
         if not self.all_step_functions:
             raise InvalidSimpack("The %s simpack has not defined any kind "
                                  "of step function." % simpack.__name__)
         
                 
-        if self.step_functions[step_types.HistoryStep] or \
-           self.step_functions[step_types.HistoryStepGenerator]:
+        if self.step_functions_by_type[step_types.HistoryStep] or \
+           self.step_functions_by_type[step_types.HistoryStepGenerator]:
             
             self.history_dependent = True
             
             self.default_step_function = (
-                self.step_functions[step_types.HistoryStepGenerator] + \
-                self.step_functions[step_types.HistoryStep]
+                self.step_functions_by_type[step_types.HistoryStepGenerator] + \
+                self.step_functions_by_type[step_types.HistoryStep]
             )[0]
             
-            if self.step_functions[step_types.SimpleStep] or \
-               self.step_functions[step_types.StepGenerator] or \
-               self.step_functions[step_types.InplaceStep] or \
-               self.step_functions[step_types.InplaceStepGenerator]:
+            if self.step_functions_by_type[step_types.SimpleStep] or \
+               self.step_functions_by_type[step_types.StepGenerator] or \
+               self.step_functions_by_type[step_types.InplaceStep] or \
+               self.step_functions_by_type[step_types.InplaceStepGenerator]:
                 
                 raise InvalidSimpack("The %s simpack is defining both a "
                                      "history-dependent step and a "
@@ -111,10 +113,10 @@ class SimpackGrokker(object):
             self.history_dependent = False
             
             self.default_step_function = (
-                self.step_functions[step_types.StepGenerator] + \
-                self.step_functions[step_types.SimpleStep] + \
-                self.step_functions[step_types.InplaceStepGenerator] + \
-                self.step_functions[step_types.InplaceStep]
+                self.step_functions_by_type[step_types.StepGenerator] + \
+                self.step_functions_by_type[step_types.SimpleStep] + \
+                self.step_functions_by_type[step_types.InplaceStepGenerator] +\
+                self.step_functions_by_type[step_types.InplaceStep]
             )[0]
             
         
@@ -360,4 +362,10 @@ class SimpackGrokker(object):
         
         return inplace_step_iterator
     
-        
+
+    def build_step_profile(self, *args, **kwargs):
+        return garlicsim.misc.StepProfile.build_with_default_step_function(
+            self.default_step_function,
+            *args,
+            **kwargs
+        )
