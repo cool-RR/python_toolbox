@@ -7,7 +7,7 @@ from garlicsim.general_misc import re_tools
 from garlicsim.general_misc import caching
 
 # Doing at bottom:
-# from .object_to_string import describe, _get_address
+# from . import object_to_string
 from .shared import (_contained_address_pattern, _address_pattern,
                      _get_parent_and_dict_from_namespace)
 
@@ -16,6 +16,8 @@ from .shared import (_contained_address_pattern, _address_pattern,
 
 
 def _get_object_by_address(address, root=None, namespace={}):
+    
+    # todotod: unprivatize since is useful for user
 
     # todo: should know what exception this will raise if the address is bad /
     # object doesn't exist.
@@ -141,4 +143,4 @@ def resolve(string, root=None, namespace={}):
     return eval(string, our_namespace)
     
 
-from .object_to_string import describe, _get_address
+from . import object_to_string

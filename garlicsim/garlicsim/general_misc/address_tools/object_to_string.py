@@ -102,6 +102,7 @@ def shorten_address(address, root=None, namespace={}):
     
 
 def _get_address(obj, shorten=False, root=None, namespace={}):
+    # tododoc: Unprivatize since this is useful for users
     
     # todo: Support classes inside classes. Currently doesn't work because
     # Python doesn't tell us inside in which class an inner class was defined.

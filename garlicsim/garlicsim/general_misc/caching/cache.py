@@ -25,11 +25,13 @@ def cache(max_size=Infinity):
             cache_dict = {}
             
             def cached(*args, **kwargs):
-                sleek_call_args = SleekCallArgs(cache_dict, function, *args, **kwargs)
+                sleek_call_args = \
+                    SleekCallArgs(cache_dict, function, *args, **kwargs)
                 try:
                     return cached.cache[sleek_call_args]
                 except KeyError:
-                    cached.cache[sleek_call_args] = value = function(*args, **kwargs)
+                    cached.cache[sleek_call_args] = value = \
+                          function(*args, **kwargs)
                     return value
                     
             cached.cache = cache_dict

@@ -12,7 +12,6 @@ import glob
 import os
 import types
 
-from garlicsim.general_misc import address_tools
 
 def get_packages(root, include_self=False, recursive=False, self_in_name=True):
     '''
@@ -20,6 +19,7 @@ def get_packages(root, include_self=False, recursive=False, self_in_name=True):
     
     `root` may be a module, package, or a path.
     # todo: module? really?
+    # todo: allow dotted address like in `get_packages_and_modules_filenames`
     '''
     
     if isinstance(root, types.ModuleType):
@@ -69,11 +69,18 @@ def get_packages_and_modules_filenames(root, recursive=False):
         root_module = root
         root_path = os.path.dirname(root_module.__file__)
     elif isinstance(root, basestring):
+        from garlicsim.general_misc import address_tools
         # `root` is a basestring, it may be either a path or a dotted address.
-        if root
-        if os.path check if its a path
-        root_path = os.path.abspath(root)
-        # Not making root_module, it might not be imported.
+        try:
+            root_module = \
+                address_tools.string_to_object._get_object_by_address(root)
+        except Exception:
+            # It's a path!
+            root_path = os.path.abspath(root)
+            # Not making root_module, it might not be imported.
+        else:
+            root_path = os.path.dirname(root_module.__file__)
+        
     
     root_module_name = os.path.split(root_path)[1]
 

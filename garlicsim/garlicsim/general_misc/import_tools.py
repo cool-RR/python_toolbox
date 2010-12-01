@@ -66,10 +66,14 @@ def import_all(package, exclude='__init__', silent_fail=False):
     
     for (path, name) in names.items():
         try:
-            d[name] = import_by_path(path, name)
+            module = import_by_path(path, name)
         except Exception:
             if not silent_fail:
                 raise
+        d[name] = module
+        short_module_name = name.rsplit('.', 1)[-1]
+        if not hasattr(package, short_module_name):
+            setattr(package, short_module_name, module)
     
     return d
 
