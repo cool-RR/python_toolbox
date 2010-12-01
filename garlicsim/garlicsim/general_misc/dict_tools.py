@@ -53,3 +53,5 @@ def reverse_with_tuple_values(d):
     # Tuplizing:
     for key, value in new_dict.copy().iteritems():
         new_dict[key] = tuple(value)
+        
+    return new_dict

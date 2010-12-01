@@ -66,7 +66,7 @@ def import_all(package, exclude='__init__', silent_fail=False):
     
     for (path, name) in names.items():
         try:
-            d[name] = import_by_path(path, name)
+            d[name] = normal_import(name)
         except Exception:
             if not silent_fail:
                 raise

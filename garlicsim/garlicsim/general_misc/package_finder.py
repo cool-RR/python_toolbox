@@ -14,6 +14,7 @@ import types
 
 from garlicsim.general_misc import dict_tools
 
+_extensions_by_priority = ['.pyo', '.pyc', '.pyw', '.py']
 
 def get_packages(root, include_self=False, recursive=False, self_in_name=True):
     '''
@@ -95,10 +96,28 @@ def get_packages_and_modules_filenames(root, recursive=False):
                 result += [os.path.join(entry, thing) for thing in
                            inner_results]
     
+    # Filtering: (tododoc: doc)
+                
     filename_to_module_name = dict((
         (filename, os.path.splitext(filename)[0]) for filename in result
     ))
-    module_namesdict_tools.reverse_with_tuple_values(filenames_to_module_names)
+    module_name_to_filenames = \
+        dict_tools.reverse_with_tuple_values(filename_to_module_name)
+    
+    for module_name, filenames in module_name_to_filenames.iteritems():
+        if len(filenames) <= 1:
+            # Does this save us from the case of packages?
+            continue
+        filenames_by_priority = sorted(
+            filenames,
+            key=lambda filename:
+                _extensions_by_priority.index(os.path.splitext(filename)[1]),
+        )
+        redundant_filenames = filenames_by_priority[1:]
+        for redundant_filename in redundant_filenames:
+            result.remove(redundant_filename)
+        
+    # Done filtering
     
     return [os.path.join(os.path.dirname(full_path), entry) for entry in result]
 
