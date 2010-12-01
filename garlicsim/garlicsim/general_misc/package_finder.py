@@ -108,10 +108,12 @@ def get_packages_and_modules_filenames(root, recursive=False):
     
     return [os.path.join(os.path.dirname(full_path), entry) for entry in result]
 
+
 def is_package(path):
     '''Is the given path a Python package?'''
     return os.path.isdir(path) and \
            glob.glob(os.path.join(path, '__init__.*'))
+
 
 def is_module(path):
     '''Is the given path a Python single-file module?'''
