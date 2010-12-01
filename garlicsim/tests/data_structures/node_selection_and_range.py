@@ -9,7 +9,7 @@ import garlicsim
 from garlicsim import data_structures as ds
 from garlicsim_lib.simpacks import life
 
-def node_selection_and_range_test():
+def test_node_selection_and_range():
     root_state = life.State.create_root(2, 2)
     project = garlicsim.Project(life)
     tree = project.tree

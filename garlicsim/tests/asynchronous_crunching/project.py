@@ -36,7 +36,7 @@ def _is_deterministic(simpack):
     return simpack.__name__.split('.')[-1] == 'life'
 
 
-def simpack_test():
+def test_simpack():
     
     simpacks = [life, prisoner, _history_test, queue]
     
@@ -44,14 +44,18 @@ def simpack_test():
         [garlicsim.asynchronous_crunching.crunchers.ThreadCruncher,
          garlicsim.asynchronous_crunching.crunchers.ProcessCruncher]
     
-    cruncher_types = [garlicsim.asynchronous_crunching.crunchers.ThreadCruncher]
+    cruncher_types = [
+        garlicsim.asynchronous_crunching.crunchers.ThreadCruncher
+    ]
     # Until multiprocessing shit is solved
     
-    for simpack, cruncher_type in cute_iter_tools.product(simpacks, cruncher_types):
-        yield simpack_check, simpack, cruncher_type
+    for simpack, cruncher_type in \
+        cute_iter_tools.product(simpacks, cruncher_types):
+        
+        yield check_simpack, simpack, cruncher_type
 
         
-def simpack_check(simpack, cruncher_type):
+def check_simpack(simpack, cruncher_type):
     
     my_simpack_grokker = garlicsim.misc.SimpackGrokker(simpack)
     

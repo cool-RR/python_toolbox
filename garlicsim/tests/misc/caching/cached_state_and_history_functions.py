@@ -8,7 +8,7 @@ import garlicsim
 from garlicsim_lib.simpacks import life
 from garlicsim.misc import caching
 
-def cached_state_function_test():
+def test_cached_state_function():
     
     def live_cells(state):
         live_cells.called_flag = True
@@ -55,7 +55,7 @@ def cached_state_function_test():
     
     
     
-def cached_history_function_test():
+def test_cached_history_function():
     
     @caching.history_cache
     def changes(history_browser):
