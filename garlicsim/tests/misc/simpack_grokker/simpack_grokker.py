@@ -1,7 +1,10 @@
+import os
+
 import nose
 
 from garlicsim.general_misc import sequence_tools
 from garlicsim.general_misc import import_tools
+from garlicsim.general_misc import path_tools
 
 import garlicsim
 from garlicsim.misc.simpack_grokker import (SimpackGrokker, Settings,
@@ -11,10 +14,21 @@ from garlicsim.misc.simpack_grokker.base_step_type import BaseStepType
 
 def test_simpacks():
     from . import sample_simpacks
+    
+    # Collecting all the test simpacks:
     simpacks = import_tools.import_all(sample_simpacks).values()
+    
+    # Making sure that we didn't miss any simpack by counting the number of
+    # sub-folders in the `sample_simpacks` folders:
+    sample_simpacks_dir = os.path.dirname(sample_simpacks.__file__)
+    assert len(path_tools.list_sub_folders(sample_simpacks_dir)) == \
+           len(simpacks)
+    
     for simpack in simpacks:
+
         # Making `_settings_for_testing` available:
         import_tools.import_all(simpack)
+        
         yield check_simpack, simpack
 
         
