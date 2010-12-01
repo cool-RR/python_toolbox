@@ -17,7 +17,7 @@ from .shared import (_contained_address_pattern, _address_pattern,
 
 def _get_object_by_address(address, root=None, namespace={}):
     
-    # todotod: unprivatize since is useful for user
+    # tododoc: unprivatize since is useful for user
 
     # todo: should know what exception this will raise if the address is bad /
     # object doesn't exist.

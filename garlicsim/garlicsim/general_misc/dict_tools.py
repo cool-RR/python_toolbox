@@ -42,4 +42,14 @@ def fancy_string(d, indent=0):
     
     return temp2
     
+
+def reverse_with_tuple_values(d):
+    new_dict = {}
+    for key, value in d.iteritems():
+        if value not in new_dict:
+            new_dict[value] = []
+        new_dict[value].append(key)
     
+    # Tuplizing:
+    for key, value in new_dict.copy().iteritems():
+        new_dict[key] = tuple(value)

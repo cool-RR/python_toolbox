@@ -12,6 +12,8 @@ import glob
 import os
 import types
 
+from garlicsim.general_misc import dict_tools
+
 
 def get_packages(root, include_self=False, recursive=False, self_in_name=True):
     '''
@@ -19,7 +21,6 @@ def get_packages(root, include_self=False, recursive=False, self_in_name=True):
     
     `root` may be a module, package, or a path.
     # todo: module? really?
-    # todo: allow dotted address like in `get_packages_and_modules_filenames`
     '''
     
     if isinstance(root, types.ModuleType):
@@ -58,9 +59,7 @@ def get_packages_and_modules_filenames(root, recursive=False):
     '''
     Find the filenames of all of the packages and modules inside the package.
     
-    `root` may be a module, package, a filesystem path, or a dotted address of a
-    module/package.
-    
+    `root` may be a module, package, or a path.
     todo: module? really?
     todo: needs testing
     '''
@@ -68,19 +67,9 @@ def get_packages_and_modules_filenames(root, recursive=False):
     if isinstance(root, types.ModuleType):
         root_module = root
         root_path = os.path.dirname(root_module.__file__)
-    elif isinstance(root, basestring):
-        from garlicsim.general_misc import address_tools
-        # `root` is a basestring, it may be either a path or a dotted address.
-        try:
-            root_module = \
-                address_tools.string_to_object._get_object_by_address(root)
-        except Exception:
-            # It's a path!
-            root_path = os.path.abspath(root)
-            # Not making root_module, it might not be imported.
-        else:
-            root_path = os.path.dirname(root_module.__file__)
-        
+    elif isinstance(root, str):
+        root_path = os.path.abspath(root)
+        # Not making root_module, it might not be imported.
     
     root_module_name = os.path.split(root_path)[1]
 
@@ -106,14 +95,17 @@ def get_packages_and_modules_filenames(root, recursive=False):
                 result += [os.path.join(entry, thing) for thing in
                            inner_results]
     
+    filename_to_module_name = dict((
+        (filename, os.path.splitext(filename)[0]) for filename in result
+    ))
+    module_namesdict_tools.reverse_with_tuple_values(filenames_to_module_names)
+    
     return [os.path.join(os.path.dirname(full_path), entry) for entry in result]
-
 
 def is_package(path):
     '''Is the given path a Python package?'''
     return os.path.isdir(path) and \
            glob.glob(os.path.join(path, '__init__.*'))
-
 
 def is_module(path):
     '''Is the given path a Python single-file module?'''
