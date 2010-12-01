@@ -72,8 +72,8 @@ def import_all(package, exclude='__init__', silent_fail=False):
                 raise
         d[name] = module
         short_module_name = name.rsplit('.', 1)[-1]
-        if not hasattr(package, short_module_name):
-            setattr(package, short_module_name, module)
+        #if not hasattr(package, short_module_name):
+            #setattr(package, short_module_name, module)
     
     return d
 
