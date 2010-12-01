@@ -1,6 +1,7 @@
 import nose
 
 from garlicsim.general_misc import sequence_tools
+from garlicsim.general_misc import import_tools
 
 import garlicsim
 from garlicsim.misc.simpack_grokker import (SimpackGrokker, Settings,
@@ -8,10 +9,18 @@ from garlicsim.misc.simpack_grokker import (SimpackGrokker, Settings,
 from garlicsim.misc.simpack_grokker.base_step_type import BaseStepType
 
 
-def test():
+def test_simpacks():
+    from . import sample_simpacks
+    simpacks = import_tools.import_all(sample_simpacks)
+    for simpack in simpacks:
+        # Making `_settings_for_testing` available:
+        import_tools.import_all(simpack)
+        yield check_simpack, simpack
 
-    from .sample_simpacks import simpack
+        
+def check_simpack(simpack):
 
+    _settings_for_testing = simpack._settings_for_testing
     
     simpack_grokker = SimpackGrokker(simpack)
     
@@ -26,7 +35,8 @@ def test():
     assert (not step_profile.args) and (not step_profile.kwargs)
 
     
-    assert len(simpack_grokker.all_step_functions) == 1
+    assert len(simpack_grokker.all_step_functions) == \
+           _settings_for_testing.N_STEP_FUNCTIONS 
 
     
     state = simpack.State.create_root()
@@ -43,7 +53,8 @@ def test():
     )
 
     
-    assert simpack_grokker.default_step_function == simpack.State.step
+    assert simpack_grokker.default_step_function == \
+           _settings_for_testing.DEFAULT_STEP_FUNCTION
 
     
     nose.tools.assert_raises(NotImplementedError,
@@ -57,7 +68,8 @@ def test():
     # tododoc: make separate tests for iterator
 
     
-    assert not simpack_grokker.history_dependent
+    assert simpack_grokker.history_dependent == \
+           _settings_for_testing.HISTORY_DEPENDENT
 
     
     settings = simpack_grokker.settings
@@ -79,8 +91,7 @@ def test():
         issubclass(get_step_type(step_function), BaseStepType) for 
         step_function in all_step_functions
     )
-    assert len(all_step_functions) == 1
-    
+    assert len(all_step_functions) == _settings_for_testing.N_STEP_FUNCTIONS
     
     
     

@@ -41,7 +41,7 @@ def import_all(package, exclude='__init__', silent_fail=False):
     Import all the modules and packages that live inside the given package.
     
     This is not recursive. Modules and packages defined inside a subpackage
-    will not be imported (of course, that subpackage itself may import them
+    will not be imported. (Of course, that subpackage itself may import them
     anyway.)
     
     You may specify a module/package to exclude, which is by default
