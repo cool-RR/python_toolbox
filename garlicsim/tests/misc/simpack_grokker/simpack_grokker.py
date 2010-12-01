@@ -58,6 +58,8 @@ def check_simpack(simpack):
 
     
     assert simpack_grokker.available_cruncher_types == \
+           simpack._settings_for_testing.CRUNCHERS_LIST
+    assert simpack_grokker.available_cruncher_types == \
            [cruncher for cruncher, availability in 
             simpack_grokker.cruncher_types_availability.items()
             if availability]    
