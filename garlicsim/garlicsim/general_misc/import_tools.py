@@ -21,6 +21,11 @@ def import_by_path(path, name=None):
     "hammer", will be used, which might cause problems in some cases. (Like
     when using multiprocessing.)
     '''
+    # tododoc: importing by path did a lot of trouble. i think i'm not even
+    # using this function anymore, if so it may be removed, though I might want
+    # it for the future when letting people specify external simpacks. or maybe
+    # i'll just change `sys.path` when people want to import an external
+    # simpack?
     short_name = os.path.splitext(os.path.split(path)[1])[0]
     if name is None: name = short_name
     path_to_dir = os.path.dirname(path)
