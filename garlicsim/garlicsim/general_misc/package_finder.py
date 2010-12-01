@@ -12,6 +12,8 @@ import glob
 import os
 import types
 
+from garlicsim.general_misc import address_tools
+
 def get_packages(root, include_self=False, recursive=False, self_in_name=True):
     '''
     Find all sub-packages.
@@ -56,7 +58,9 @@ def get_packages_and_modules_filenames(root, recursive=False):
     '''
     Find the filenames of all of the packages and modules inside the package.
     
-    `root` may be a module, package, or a path.
+    `root` may be a module, package, a filesystem path, or a dotted address of a
+    module/package.
+    
     todo: module? really?
     todo: needs testing
     '''
@@ -64,7 +68,10 @@ def get_packages_and_modules_filenames(root, recursive=False):
     if isinstance(root, types.ModuleType):
         root_module = root
         root_path = os.path.dirname(root_module.__file__)
-    elif isinstance(root, str):
+    elif isinstance(root, basestring):
+        # `root` is a basestring, it may be either a path or a dotted address.
+        if root
+        if os.path check if its a path
         root_path = os.path.abspath(root)
         # Not making root_module, it might not be imported.
     
