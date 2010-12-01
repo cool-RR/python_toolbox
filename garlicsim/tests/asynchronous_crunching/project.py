@@ -101,6 +101,12 @@ def check_simpack(simpack, cruncher_type):
     
     project = garlicsim.Project(simpack)
     
+    # Ensure that `Project.__init__` can take simpack grokker:
+    alterante_project = garlicsim.Project(my_simpack_grokker)
+    project.simpack is alterante_project.simpack
+    project.simpack_grokker is alterante_project.simpack_grokker
+    
+    
     project.crunching_manager.cruncher_type = cruncher_type
     
     assert project.tree.lock._ReadWriteLock__writer is None
