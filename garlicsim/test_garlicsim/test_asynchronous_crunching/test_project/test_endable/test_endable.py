@@ -35,7 +35,7 @@ def test_endable():
     simpacks = import_tools.import_all(sample_endable_simpacks).values()
     
     # Making sure that we didn't miss any simpack by counting the number of
-    # sub-folders in the `sample_simpacks` folders:
+    # sub-folders in the `sample_endable_simpacks` folders:
     sample_endable_simpacks_dir = \
         os.path.dirname(sample_endable_simpacks.__file__)
     assert len(path_tools.list_sub_folders(sample_endable_simpacks_dir)) == \
@@ -52,6 +52,9 @@ def test_endable():
     for simpack, cruncher_type in \
         cute_iter_tools.product(simpacks, cruncher_types):
         
+        # Making `_settings_for_testing` available:
+        import_tools.import_all(simpack)
+        
         yield check, simpack, cruncher_type
 
         
@@ -64,6 +67,10 @@ def check(simpack, cruncher_type):
     
     assert my_simpack_grokker is garlicsim.misc.SimpackGrokker(simpack)
     # Ensuring caching works.
+    
+    assert garlicsim.misc.simpack_grokker.get_step_type(
+        my_simpack_grokker.default_step_function
+    ) == simpack._settings_for_testing.STEP_FUNCTION_TYPE
     
     step_profile = my_simpack_grokker.build_step_profile()
     deterministic = \
