@@ -67,11 +67,9 @@ def check_simpack(simpack, cruncher_type):
         my_simpack_grokker.default_step_function
     )
     
-    state = simpack.State.create_messy_root() if \
-          simpack.State.create_messy_root else \
-          simpack.State.create_root()
+    state = simpack.State.create_root()
     
-    new_state = garlicsim.simulate(state, 3)
+    new_state = garlicsim.simulate(state)
     
     result = garlicsim.list_simulate(state, 3)
     for item in result:

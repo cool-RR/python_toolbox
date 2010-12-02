@@ -89,14 +89,21 @@ class CrunchingManager(object):
         job they're working on has changed.
         '''
         
-        try:
-            self.cruncher_type = \
-                self.project.simpack_grokker.available_cruncher_types[0]
-        except IndexError:
+        available_cruncher_types = \
+            self.project.simpack_grokker.available_cruncher_types
+        
+        if not available_cruncher_types:
             raise garlicsim.misc.GarlicSimException(
                 "The `%s` simpack doesn't allow using any of the cruncher "
                 "types we have installed." % self.project.simpack.__name__
             )
+            
+        
+        self.cruncher_type = available_cruncher_types[0]
+        '''
+        
+        note that the user is allowed to set this directly.
+        '''
         
         
     @with_tree_lock
