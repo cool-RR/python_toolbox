@@ -4,6 +4,7 @@
 
 from __future__ import division
 
+import os
 import types
 import time
 import itertools
@@ -13,12 +14,13 @@ import nose
 
 from garlicsim.general_misc import cute_iter_tools
 from garlicsim.general_misc import math_tools
+from garlicsim.general_misc import path_tools
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc.infinity import Infinity
 
 import garlicsim
 
-from .shared import MustachedThreadCruncher
+#from .shared import MustachedThreadCruncher
 
 FUZZ = 0.0001
 '''Fuzziness of floats.'''
@@ -50,10 +52,10 @@ def test_endable():
     for simpack, cruncher_type in \
         cute_iter_tools.product(simpacks, cruncher_types):
         
-        yield check_simpack, simpack, cruncher_type
+        yield check, simpack, cruncher_type
 
         
-def check_simpack(simpack, cruncher_type):
+def check(simpack, cruncher_type):
     
     # tododoc: note somewhere visible: all simpacks end when they see a
     # world-state with clock reading of 4 or more.
@@ -68,6 +70,9 @@ def check_simpack(simpack, cruncher_type):
         my_simpack_grokker.settings.DETERMINISM_FUNCTION(step_profile)
     
     state = simpack.State.create_root()
+    
+    ### First, let's run for short periods so it doesn't end: #################
+    #                                                                         #
     
     # Whether we run the simulation for one, two, three, or four iterations, the
     # simulation doesn't end.
@@ -93,11 +98,33 @@ def check_simpack(simpack, cruncher_type):
     iter_result_in_list = list(iter_result)
     del iter_result
     assert len(iter_result_in_list) == len(result) == 4
-    if deterministic:
-        assert iter_result_in_list == result
-        assert iter_result_in_list[-1] == new_state == result[-1]
+    
+    #                                                                         #
+    ### Done running for short periods so it doesn't end. #####################
+    
+    ### Now, let's run it for longer periods to make it end: ##################
+    #                                                                         #
+    
+    for i in [5, 6, 7]:
+        new_state = garlicsim.simulate(state, i)
+        assert new_state.clock == 4
+    
+    result = garlicsim.list_simulate(state, 7)
+    
+    assert isinstance(result, list)
+    assert len(result) == 4
         
     
+    iter_result = garlicsim.iter_simulate(state, 7)
+        
+    assert not hasattr(iter_result, '__getitem__')
+    assert hasattr(iter_result, '__iter__')
+    iter_result_in_list = list(iter_result)
+    del iter_result
+    assert len(iter_result_in_list) == len(result) == 4
+        
+    #                                                                         #
+    ### Done running for longer periods to make it end. #######################
     
     #project = garlicsim.Project(simpack)
     
