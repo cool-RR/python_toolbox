@@ -62,19 +62,16 @@ class BaseCruncher(object):
         
         (Static method.)
         '''
-        pass
         
     
     @abc.abstractmethod
     def retire(self):
         '''Retire the cruncher, making it shut down.'''
-        pass
     
     
     @abc.abstractmethod
     def update_crunching_profile(self, profile):
-        '''Update the cruncher's crunching profile.''' #tododoc: abstract or not?
-        self.order_queue.put(profile)
+        '''Update the cruncher's crunching profile.'''
         
     
     @abc.abstractmethod

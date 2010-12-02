@@ -22,5 +22,5 @@ proj.directory-list = [{'dirloc': loc('.'),
                         'watch_for_changes': True}]
 proj.file-type = 'shared'
 proj.main-file = loc('run_gui.py')
-testing.auto-test-file-specs = ('tests/*.py',)
+testing.auto-test-file-specs = ('garlicsim_test/test*',)
 testing.test-framework = {None: 'nose'}
