@@ -180,7 +180,6 @@ def check(simpack, cruncher_type):
     assert len(project.tree.all_possible_paths()) == 2
     
     node_3 = my_path.next_node(node_1)
-    assert node_3.state.clock == 2
     
     #                                                                         #
     ### Done running for short periods asynchronically so it doesn't end. #####
@@ -188,20 +187,28 @@ def check(simpack, cruncher_type):
     ### Now, let's run it for longer periods asynchronically to make it end: ##
     #                                                                         #
     
+    assert node_3.state.clock == 2
     project.begin_crunching(node_3, 3)
     
     total_nodes_added = 0
     while project.crunching_manager.jobs:
         time.sleep(0.1)
         total_nodes_added += project.sync_crunchers()
-    assert total_nodes_added == 3
-        
-    assert len(project.tree.nodes) == 11
+    assert total_nodes_added == 2 # Would have been 3 without the end!
+    
+    # So now `node_3`'s path has an end:
+    ended_path = node_3.make_containing_path()
+    isinstance(ended_path, garlicsim.data_structures.Path)
+    (end,) = ended_path.get_ends_of_last_node() # (Asserting there's one end.)
+    assert isinstance(end, garlicsim.data_structures.End)
+    
+    assert len(project.tree.nodes) == 10
     
     paths = project.tree.all_possible_paths()
     assert len(paths) == 3
     
-    assert set(len(p) for p in paths) == set([5, x + 1, 3 + y])
+    assert [len(p) for p in paths] == [5, 5, 5]
+    
     
     
     project.ensure_buffer(node_3, 3)

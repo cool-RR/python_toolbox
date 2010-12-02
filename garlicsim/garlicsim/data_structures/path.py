@@ -35,7 +35,7 @@ class PathLookupError(PathError, LookupError):
 class PathOutOfRangeError(PathError, IndexError):
     '''Nodes are requested from the path which are out of its range.'''
 
-class EndNotReached(PathError):
+class EndNotReached(PathError): 
     '''
     An end node/block is specified but it turns out not to be on the path.
     '''
@@ -395,6 +395,7 @@ class Path(object):
             return answer
         raise PathOutOfRangeError
 
+    
     def get_last_node(self, start=None):
         '''
         Get the last node in the path.
@@ -414,7 +415,11 @@ class Path(object):
         else: # thing is None
             raise PathOutOfRangeError("You asked for the last node in the "
                                       "path, but it's completely empty.")
-    
+
+    def get_ends_of_last_node(self, start=None):
+        last_node = self.get_last_node(start=start)
+        return last_node.ends
+        
         
     def get_node_by_clock(self, clock, rounding=binary_search.CLOSEST,
                           end_node=None):

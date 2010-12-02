@@ -191,8 +191,8 @@ Untouched nodes can't be edited, so they have no concept of being finalized.'''
                 paths += kid.all_possible_paths()
             return paths
         else: # fork is None and real_thing is the final node of the path
-            # In this case there are no forks after our node, we just return
-            # the past_path which we have driven to its end. (Not that it has
+            # In this case there are no forks after our node, we just return the
+            # past_path which we have driven to its last node. (Not that it has
             # any forks to decide on anyway.)
             return [past_path]
     
