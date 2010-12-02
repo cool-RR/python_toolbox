@@ -63,6 +63,9 @@ def check(simpack, cruncher_type):
     # tododoc: note somewhere visible: all simpacks end when they see a
     # world-state with clock reading of 4 or more.
     
+    assert simpack._settings_for_testing.ENDABLE is True
+    assert simpack._settings_for_testing.CONSTANT_CLOCK_INTERVAL == 1
+    
     my_simpack_grokker = garlicsim.misc.SimpackGrokker(simpack)
     
     assert my_simpack_grokker is garlicsim.misc.SimpackGrokker(simpack)
@@ -133,85 +136,49 @@ def check(simpack, cruncher_type):
     #                                                                         #
     ### Done running for longer periods to make it end. #######################
     
-    #project = garlicsim.Project(simpack)
-    
-    ## Ensure that `Project.__init__` can take simpack grokker:
-    #alterante_project = garlicsim.Project(my_simpack_grokker)
-    #project.simpack is alterante_project.simpack
-    #project.simpack_grokker is alterante_project.simpack_grokker
     
     
-    #project.crunching_manager.cruncher_type = cruncher_type
+    project = garlicsim.Project(simpack)
+        
+    project.crunching_manager.cruncher_type = cruncher_type
     
-    #assert project.tree.lock._ReadWriteLock__writer is None
+    assert project.tree.lock._ReadWriteLock__writer is None
     
-    #root = project.root_this_state(state)
+    root = project.root_this_state(state)
     
-    #project.begin_crunching(root, 4)
+    project.begin_crunching(root, 4)
 
-    #total_nodes_added = 0    
-    #while project.crunching_manager.jobs:
-        #time.sleep(0.1)
-        #total_nodes_added += project.sync_crunchers()
+    total_nodes_added = 0    
+    while project.crunching_manager.jobs:
+        time.sleep(0.1)
+        total_nodes_added += project.sync_crunchers()
         
-    #x = total_nodes_added
+    assert total_nodes_added == 4
     
-    #if x < 4:
-        ## For simpacks with long time intervals, we make sure at least 4 nodes
-        ## were created.
-        #path = root.make_containing_path()
-        #leaf = path[-1]
-        #project.simulate(
-            #leaf,
-            #math_tools.round_to_int(4 - x, up=True)
-        #)
-        #x += path.__len__(start=path.next_node(leaf))
-            
-    #assert len(project.tree.nodes) == x + 1
-    #assert len(project.tree.roots) == 1
+    assert len(project.tree.nodes) == 5
+    assert len(project.tree.roots) == 1
     
-    #paths = project.tree.all_possible_paths()
+    paths = project.tree.all_possible_paths()
     
-    #assert len(paths) == 1
+    assert len(paths) == 1
     
-    #(my_path,) = paths
+    (my_path,) = paths
         
-    #assert len(my_path) == x + 1
+    assert len(my_path) == 5
     
-    #node_1 = my_path[1]
+    node_1 = my_path[1]
+    assert node_1.state.clock == 1
     
-    #node_2 = project.simulate(node_1, 3)
+    node_2 = project.simulate(node_1, 3)
     
-    #assert len(project.tree.nodes) == x + 1 + 3
-    #assert len(project.tree.roots) == 1
+    assert len(project.tree.nodes) == 8
+    assert len(project.tree.roots) == 1
     
-    #assert len(project.tree.all_possible_paths()) == 2
-    
-    #try:
-        #pickled_project = pickle.dumps(project, protocol=2)
-    #except RuntimeError as runtime_error:
-        #assert 'maximum recursion' in runtime_error.message
-    #else:
-        #unpickled_project = cPickle.loads(pickled_project)
-        #path_pairs = itertools.izip(project.tree.all_possible_paths(),
-                                    #unpickled_project.tree.all_possible_paths())
-        
-        #if isinstance(
-            #simpack.State.__eq__,
-            #(types.FunctionType, types.MethodType, types.UnboundMethodType)
-        #):
-            
-            #for path_of_original, path_of_duplicate in path_pairs:
-                
-                #state_pairs = itertools.izip(path_of_original.states(),
-                                             #path_of_duplicate.states())
-                #for state_of_original, state_of_duplicate in state_pairs:
-                    
-                    #assert state_of_original == state_of_duplicate
+    assert len(project.tree.all_possible_paths()) == 2
             
     
-    
-    #node_3 = my_path.next_node(node_1)
+    node_3 = my_path.next_node(node_1)
+    assert node_3.state.clock == 2
     
     #project.begin_crunching(node_3, 3)
     
