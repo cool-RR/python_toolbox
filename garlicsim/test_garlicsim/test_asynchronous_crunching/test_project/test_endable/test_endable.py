@@ -88,7 +88,7 @@ def check(simpack, cruncher_type):
         assert isinstance(item, simpack.State)
     
     assert isinstance(result, list)
-    assert len(result) == 4
+    assert len(result) == 5
         
     
     iter_result = garlicsim.iter_simulate(state, 4)
@@ -97,7 +97,7 @@ def check(simpack, cruncher_type):
     assert hasattr(iter_result, '__iter__')
     iter_result_in_list = list(iter_result)
     del iter_result
-    assert len(iter_result_in_list) == len(result) == 4
+    assert len(iter_result_in_list) == len(result) == 5
     
     #                                                                         #
     ### Done running for short periods so it doesn't end. #####################
@@ -112,7 +112,7 @@ def check(simpack, cruncher_type):
     result = garlicsim.list_simulate(state, 7)
     
     assert isinstance(result, list)
-    assert len(result) == 4
+    assert len(result) == 5
         
     
     iter_result = garlicsim.iter_simulate(state, 7)
@@ -121,7 +121,7 @@ def check(simpack, cruncher_type):
     assert hasattr(iter_result, '__iter__')
     iter_result_in_list = list(iter_result)
     del iter_result
-    assert len(iter_result_in_list) == len(result) == 4
+    assert len(iter_result_in_list) == len(result) == 5
         
     #                                                                         #
     ### Done running for longer periods to make it end. #######################

@@ -7,7 +7,7 @@ class State(garlicsim.data_structures.State):
         pass
     
     def step(self):
-        if getattr(self, 'clock', 0) >= 3:
+        if getattr(self, 'clock', 0) >= 4:
             raise WorldEnd
         return State()
         
