@@ -39,8 +39,7 @@ class TreeMember(object):
         
         If it's not a part of a block, return itself.
         '''
-        raise NotImplementedError
-
+        
     
     @abc.abstractmethod
     def make_containing_path(self):
@@ -51,7 +50,6 @@ class TreeMember(object):
         This will return the one which points to the newest possible forks.
         Returns the path.
         '''
-        raise NotImplementedError
         
     
     @abc.abstractmethod
@@ -63,7 +61,6 @@ class TreeMember(object):
         identical to one of the paths given here, because these other paths may
         specify decisions that are not even on the same root as these paths.
         '''
-        raise NotImplementedError
     
     
     @abc.abstractmethod
@@ -75,7 +72,6 @@ class TreeMember(object):
         This will return a path that doesn't specify any decisions after this
         tree member.
         '''
-        raise NotImplementedError
 
 
     @abc.abstractmethod
@@ -102,7 +98,6 @@ class TreeMember(object):
         }
             
         '''
-        raise NotImplementedError
 
     
     @abc.abstractmethod
@@ -117,8 +112,6 @@ class TreeMember(object):
         `round` is False, it will raise a LookupError.
         '''
 
-        raise NotImplementedError
-
     
     @abc.abstractmethod
     def get_root(self):
@@ -128,7 +121,6 @@ class TreeMember(object):
         This means the node which is the parent of the parent of the parent
         of... the parent of this tree member.
         '''
-        raise NotImplementedError
     
     
     @abc.abstractmethod
@@ -136,9 +128,3 @@ class TreeMember(object):
         '''
         Return whether this tree member overlaps with the given tree member.
         '''
-        raise NotImplementedError
-    
-        
-
-
-

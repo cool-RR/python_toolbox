@@ -130,6 +130,9 @@ def check(simpack, cruncher_type):
         project_description
     )
     
+    # Assert the job cruncher is not unequal to itself:
+    assert not job.crunching_profile.__ne__(job.crunching_profile)
+    
     ## Finished interlude to test `__repr__` methods. #########################
         
     job.crunching_profile.raise_clock_target(different_huge_number)
