@@ -7,7 +7,14 @@ This module defines the Job class.
 See its documentation for more info.
 '''
 
+import garlicsim
+
+# At bottom:
+# from .crunching_profile import CrunchingProfile
+
+
 __all__ = ['Job']
+
 
 class Job(object):
     '''
@@ -20,9 +27,11 @@ class Job(object):
     
     def __init__(self, node, crunching_profile):
         
+        assert isinstance(node, garlicsim.data_structures.Node)
         self.node = node
         '''The node from which we need to crunch.'''
         
+        assert isinstance(crunching_profile, CrunchingProfile)
         self.crunching_profile = crunching_profile
         '''The crunching profile to be used for crunching.'''
         
@@ -57,3 +66,5 @@ class Job(object):
         stuff.append("crunching_profile=%s" % self.crunching_profile)
         temp = ", ".join(stuff)
         return ("Job(%s)" % temp)
+    
+from .crunching_profile import CrunchingProfile

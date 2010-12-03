@@ -9,7 +9,9 @@ See its documentation for more information.
 
 import garlicsim.misc
 
+
 __all__ = ['CrunchingProfile']
+
 
 class CrunchingProfile(object):
     '''Instructions that a cruncher follows when crunching the simulation.'''
@@ -23,10 +25,9 @@ class CrunchingProfile(object):
         '''
         
         self.clock_target = clock_target
-        '''
-        We crunch until we get a state with a clock of `.clock_target` or higher.
-        '''
-        
+        '''We crunch until we get a clock of `.clock_target` or higher.'''
+
+        assert isinstance(step_profile, garlicsim.misc.StepProfile)
         self.step_profile = step_profile
         '''The step profile we want to be used with the step function.'''
   
@@ -66,8 +67,6 @@ class CrunchingProfile(object):
         stuff.append("step_profile=%s" % self.step_profile)
         temp = ", ".join(stuff)
         return ("CrunchingProfile(%s)" % temp)
-    
-    
     
     
     

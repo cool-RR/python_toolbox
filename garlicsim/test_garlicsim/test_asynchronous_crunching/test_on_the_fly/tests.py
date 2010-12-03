@@ -87,17 +87,62 @@ def check(simpack, cruncher_type):
     
     ### Test changing step profile on the fly: ################################
     #                                                                         #
+    
     # For simpacks providing more than one step function, we'll test changing
     # between them. This will exercise crunchers' ability to receieve a
     # `CrunchingProfile` and react appropriately.
     if simpack._settings_for_testing.N_STEP_FUNCTIONS >= 2:        
+        
+        def run_sync_crunchers_until_we_get_at_least_one_node():
+            while project.sync_crunchers():
+                time.sleep(0.1)
+        
         default_step_function, alternate_step_function = \
             my_simpack_grokker.all_step_functions[:2]
+        job = project.begin_crunching(root, Infinity)
+        assert job.crunching_profile.step_profile.step_function == \
+               default_step_function
+        run_sync_crunchers_until_we_get_at_least_one_node()
+        (cruncher,) = project.crunching_manager.crunchers.values()
+        alternate_step_profile = \
+            garlicsim.misc.StepProfile(alternate_step_function)
+        job.crunching_profile.step_profile = alternate_step_profile
+        # Letting our crunching manager get a new cruncher for our new step
+        # profile:
+        run_sync_crunchers_until_we_get_at_least_one_node()
+        (new_cruncher,) = project.crunching_manager.crunchers.values()
+        assert new_cruncher is not cruncher
+        last_node_with_default_step_profile = job.node
+        assert not last_node_with_default_step_profile.children # It's a leaf
+        assert last_node_with_default_step_profile.step_profile == \
+               default_step_function
+        # Another `sync_crunchers`:
+        run_sync_crunchers_until_we_get_at_least_one_node()
+        # And now we have some new nodes with the alternate step profile.
+        (first_node_with_alternate_step_profile,) = \
+            last_node_with_default_step_profile.children
+        path = last_node_with_default_step_profile.make_containing_path()
+ 
+        nodes_with_alternate_step_profile = list(
+            path.__iter__(start=first_node_with_alternate_step_profile)
+        )
+        for node in nodes_with_alternate_step_profile:
+            assert node.step_profile == alternate_step_profile
+        
+        # Deleting jobs so the crunchers will stop:
+        del project.crunching_manager.jobs[:]
+        project.sync_crunchers()
+        assert not project.crunching_manager.jobs
+        assert not project.crunching_manager.crunchers
+        
+        
+        
     
     #                                                                         #
-    ### Finished testing changing step profile on the fly: ####################
+    ### Finished testing changing step profile on the fly. ####################
     
     ### Testing cruncher type switching: ######################################
+    #                                                                         #
     
     job_1 = project.begin_crunching(root, clock_buffer=Infinity)
     job_2 = project.begin_crunching(root, clock_buffer=Infinity)
@@ -128,8 +173,11 @@ def check(simpack, cruncher_type):
     # Deleting jobs so the crunchers will stop:
     del project.crunching_manager.jobs[:]
     project.sync_crunchers()
+    assert not project.crunching_manager.jobs
+    assert not project.crunching_manager.crunchers
     
-    ### Finished testing cruncher type switching. #############################    
+    #                                                                         #
+    ### Finished testing cruncher type switching. #############################
     
     
     
