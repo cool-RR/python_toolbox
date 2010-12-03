@@ -16,14 +16,20 @@ def dump(queue):
     return list(iterate(queue))
 
 
-def iterate(queue, block=False):
+def iterate(queue, block=False, limit_to_original_size=False):
     '''Iterate over the items in the queue.'''
-    
-    while True:
-        try:
-            yield queue.get(block=block)
-        except Queue.Empty:
-            raise StopIteration
+    if limit_to_original_size:
+        for i in xrange(queue.qsize()):
+            try:
+                yield queue.get(block=block)
+            except Queue.Empty:
+                raise StopIteration
+    else: # not limit_to_original_size
+        while True:
+            try:
+                yield queue.get(block=block)
+            except Queue.Empty:
+                raise StopIteration
 
 
 def get_item(queue, i):

@@ -45,6 +45,10 @@ class HistoryStepIterator(BaseStepIterator):
         self.current_state = None
                     
         self.auto_clock_generator = AutoClockGenerator()
+        
+        self.auto_clock_generator.make_clock(
+            self.history_browser.get_last_state()
+        )
             
         self.step_profile_changed = False
         

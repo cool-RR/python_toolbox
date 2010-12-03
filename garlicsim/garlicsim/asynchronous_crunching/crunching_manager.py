@@ -293,7 +293,12 @@ class CrunchingManager(object):
         counter = 0
         self.step_profiles[cruncher] # tododoc: wtf this line?
         
-        for thing in queue_tools.iterate(cruncher.work_queue):
+        queue_iterator = queue_tools.iterate(
+            cruncher.work_queue,
+            limit_to_original_size=True
+        )
+        
+        for thing in queue_iterator:
             
             if isinstance(thing, garlicsim.data_structures.State):
                 counter += 1
