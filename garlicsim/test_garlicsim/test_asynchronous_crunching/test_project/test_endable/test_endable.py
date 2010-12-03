@@ -73,7 +73,7 @@ def check(simpack, cruncher_type):
     
     assert garlicsim.misc.simpack_grokker.get_step_type(
         my_simpack_grokker.default_step_function
-    ) == simpack._settings_for_testing.STEP_FUNCTION_TYPE
+    ) == simpack._settings_for_testing.DEFAULT_STEP_FUNCTION_TYPE
     
     step_profile = my_simpack_grokker.build_step_profile()
     deterministic = \
