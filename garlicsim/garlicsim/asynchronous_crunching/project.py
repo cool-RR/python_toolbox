@@ -523,8 +523,7 @@ class Project(object):
         nodes_count = len(self.tree.nodes)
         crunchers_count = len(self.crunching_manager.crunchers)
                                    
-        return '''<%s containing %s nodes and employing %s crunchers at \
-%s>''' % \
+        return '<%s containing %s nodes and employing %s crunchers at %s>' % \
                (
                    address_tools.describe(type(self), shorten=True),
                    nodes_count,
