@@ -102,7 +102,20 @@ def check(simpack, cruncher_type):
     run_sync_crunchers_until_we_get_at_least_one_node()
     (cruncher,) = project.crunching_manager.crunchers.values()
     
-    ## A little interlude to test `__repr__` methods: #########################
+    ## An interlude to test `__repr__` methods: ###############################
+    
+    step_profile_description = repr(job.crunching_profile.step_profile)
+    assert step_profile_description == \
+        'StepProfile(%s)' % simpack._settings_for_testing.DEFAULT_STEP_FUNCTION
+    
+    crunching_profile_description = repr(job.crunching_profile)
+    assert crunching_profile_description == \
+           'CrunchingProfile(clock_target=%d, step_profile=%s)' % \
+           (huge_number, step_profile_description)
+    
+    job_description = repr(job)
+    assert job_description == 'Job(node=%s, crunching_profile=%s)' % \
+           (repr(job.node), crunching_profile_description)
     
     crunching_manager_description = repr(project.crunching_manager)
     assert re.match(
@@ -117,7 +130,7 @@ def check(simpack, cruncher_type):
         project_description
     )
     
-    ## Finished little interlude to test `__repr__` methods. ##################
+    ## Finished interlude to test `__repr__` methods. #########################
         
     job.crunching_profile.raise_clock_target(different_huge_number)
     # Letting our crunching manager update our cruncher about the new clock
