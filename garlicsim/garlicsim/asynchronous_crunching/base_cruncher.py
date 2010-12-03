@@ -17,9 +17,11 @@ import garlicsim
 
 class BaseCruncher(object):
     '''
+    
+    
     A cruncher receives a state from the main program, and then it repeatedly
     applies the step function of the simulation to produce more states. Those
-    states are then put in the cruncher's `work_queue`. They are then taken by
+    states are then put in the cruncher's `.work_queue`. They are then taken by
     the main program when `Project.sync_crunchers` is called, and put into the
     tree.
 

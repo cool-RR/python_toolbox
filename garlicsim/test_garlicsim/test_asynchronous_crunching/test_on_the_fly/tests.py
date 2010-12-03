@@ -4,6 +4,7 @@
 
 from __future__ import division
 
+import re
 import os
 import types
 import time
@@ -101,6 +102,23 @@ def check(simpack, cruncher_type):
     run_sync_crunchers_until_we_get_at_least_one_node()
     (cruncher,) = project.crunching_manager.crunchers.values()
     
+    ## A little interlude to test `__repr__` methods: #########################
+    
+    crunching_manager_description = repr(project.crunching_manager)
+    assert re.match(
+        ('^<.*?CrunchingManager currently employing 1 crunchers to '
+         'handle 1 jobs at .*?>$'),
+        crunching_manager_description
+    )
+    
+    project_description = repr(project)
+    assert re.match(
+        '<.*?Project containing .*? nodes and employing 1 crunchers at .*?>',
+        project_description
+    )
+    
+    ## Finished little interlude to test `__repr__` methods. ##################
+        
     job.crunching_profile.raise_clock_target(different_huge_number)
     # Letting our crunching manager update our cruncher about the new clock
     # target:

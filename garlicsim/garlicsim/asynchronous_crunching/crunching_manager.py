@@ -316,9 +316,6 @@ class CrunchingManager(object):
                               step_profile=self.step_profiles[cruncher])
                 job.resulted_in_end = True
                 
-                
-            elif isinstance(thing, StepProfile):
-                self.step_profiles[cruncher] = thing
             else:
                 raise Exception('Unexpected object %s in work queue' % thing)
                         
