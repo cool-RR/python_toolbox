@@ -77,6 +77,7 @@ def check_simpack(simpack):
                              simpack_grokker.get_inplace_step_iterator,
                              state,
                              step_profile)
+
     
     
     assert simpack_grokker.history_dependent == \
@@ -88,7 +89,12 @@ def check_simpack(simpack):
     assert callable(settings.DETERMINISM_FUNCTION)
 
     
-    assert isinstance(simpack_grokker.step(state, step_profile), simpack.State)
+    if not simpack_grokker.history_dependent:
+        assert isinstance(simpack_grokker.step(state, step_profile),
+                          simpack.State)        
+        iterator = simpack_grokker.get_step_iterator(state, step_profile)
+        assert iterator.__iter__() is iterator
+        # tododoc: make separate tests for iterator
 
     
     step_types = simpack_grokker.step_functions_by_type.keys()
