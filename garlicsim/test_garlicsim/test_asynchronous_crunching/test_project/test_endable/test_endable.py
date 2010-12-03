@@ -251,8 +251,9 @@ def check(simpack, cruncher_type):
         assert kid_node.parent is parent_node
         
     assert len(project.tree.nodes) == 14
- 
-    
+
+        
+        
     
     
         

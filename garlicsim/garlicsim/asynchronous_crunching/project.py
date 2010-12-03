@@ -532,7 +532,6 @@ class Project(object):
                )
         
     
-    
     def build_step_profile(self, *args, **kwargs):
         '''
         there's one here in addition to that in the simpack grokker because the default step function here can be changed
