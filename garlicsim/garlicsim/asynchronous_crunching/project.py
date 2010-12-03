@@ -412,7 +412,7 @@ class Project(object):
             garlicsim.synchronous_crunching.HistoryBrowser(path, end_node=node)
         
         iterator = self.simpack_grokker.get_step_iterator(history_browser,
-                                                       step_profile)
+                                                          step_profile)
         finite_iterator = cute_iter_tools.shorten(iterator, iterations)
         finite_iterator_with_lock = cute_iter_tools.iter_with(
             finite_iterator,
@@ -425,6 +425,10 @@ class Project(object):
         
         try:
             for current_state in finite_iterator_with_lock:
+                                
+                current_node = self.tree.add_state(current_state,
+                                                   parent=current_node,
+                                                   step_profile=step_profile)
                 
                 history_browser.end_node = current_node
                 history_browser.path = current_node.make_containing_path()
@@ -436,10 +440,6 @@ class Project(object):
                 # path not to lead to the end_node anymore.                
                 # todo optimize: The fact we recreate a path every time might be
                 # costly.
-                
-                current_node = self.tree.add_state(current_state,
-                                                   parent=current_node,
-                                                   step_profile=step_profile)
                     
                 yield current_node
         

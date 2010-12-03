@@ -20,7 +20,7 @@ from garlicsim.general_misc.infinity import Infinity
 
 import garlicsim
 
-#from .shared import MustachedThreadCruncher
+from ..shared import MustachedThreadCruncher
 
 FUZZ = 0.0001
 '''Fuzziness of floats.'''
@@ -229,7 +229,7 @@ def check(simpack, cruncher_type):
     assert len(project.tree.all_possible_paths()) == 4
     assert len(project.tree.nodes) == 11
     
-    iterator = project.iter_simulate(node_1, 10)    
+    iterator = project.iter_simulate(node_1, 10)
     new_node = iterator.next()
     assert new_node is node_1
     assert len(project.tree.nodes) == 11
@@ -242,7 +242,8 @@ def check(simpack, cruncher_type):
     assert len(project.tree.nodes) == 12
     
     bunch_of_new_nodes = tuple(iterator)
-    for parent_node, kid_node in cute_iter_tools.consecutive_pairs(bunch_of_new_nodes):
+    consecutive_pairs = cute_iter_tools.consecutive_pairs(bunch_of_new_nodes)
+    for parent_node, kid_node in consecutive_pairs:
         assert project.tree.lock._ReadWriteLock__writer is None
         assert isinstance(parent_node, garlicsim.data_structures.Node)
         assert isinstance(kid_node, garlicsim.data_structures.Node)
@@ -250,40 +251,7 @@ def check(simpack, cruncher_type):
         assert kid_node.parent is parent_node
         
     assert len(project.tree.nodes) == 14
-    
-    ### Testing cruncher type switching: ######################################
-    
-    job_1 = project.begin_crunching(root, clock_buffer=Infinity)
-    job_2 = project.begin_crunching(root, clock_buffer=Infinity)
-    
-    assert len(project.crunching_manager.crunchers) == 0
-    assert project.sync_crunchers() == 0
-    assert len(project.crunching_manager.crunchers) == 2
-    (cruncher_1, cruncher_2) = project.crunching_manager.crunchers.values()
-    assert type(cruncher_1) is cruncher_type
-    assert type(cruncher_2) is cruncher_type
-    
-    time.sleep(0.2) # Letting the crunchers start working
-    
-    project.crunching_manager.cruncher_type = MustachedThreadCruncher
-    project.sync_crunchers()
-    assert len(project.crunching_manager.crunchers) == 2
-    (cruncher_1, cruncher_2) = project.crunching_manager.crunchers.values()
-    assert type(cruncher_1) is MustachedThreadCruncher
-    assert type(cruncher_2) is MustachedThreadCruncher
-    
-    project.crunching_manager.cruncher_type = cruncher_type
-    project.sync_crunchers()
-    assert len(project.crunching_manager.crunchers) == 2
-    (cruncher_1, cruncher_2) = project.crunching_manager.crunchers.values()
-    assert type(cruncher_1) is cruncher_type
-    assert type(cruncher_2) is cruncher_type
-    
-    # Deleting jobs so the crunchers will stop:
-    del project.crunching_manager.jobs[:]
-    project.sync_crunchers()
-    
-    ### Finished testing cruncher type switching. #############################
+ 
     
     
     
