@@ -9,6 +9,7 @@ import types
 import time
 import itertools
 import cPickle, pickle
+import decimal
 
 import nose
 
@@ -84,19 +85,46 @@ def check(simpack, cruncher_type):
     assert project.tree.lock._ReadWriteLock__writer is None
     
     root = project.root_this_state(state)
+
+    def run_sync_crunchers_until_we_get_at_least_one_node():
+        while not project.sync_crunchers():
+            time.sleep(0.1)
+
+    ### Test changing clock target on the fly: ################################
+    #                                                                         #
+
+    huge_number = decimal.Decimal('1E20')
+    different_huge_number = huge_number + 1
+    assert different_huge_number - huge_number == 1
+    
+    job = project.begin_crunching(root, huge_number)    
+    run_sync_crunchers_until_we_get_at_least_one_node()
+    (cruncher,) = project.crunching_manager.crunchers.values()
+    
+    job.crunching_profile.raise_clock_target(different_huge_number)
+    # Letting our crunching manager update our cruncher about the new clock
+    # target:
+    project.sync_crunchers()
+    (same_cruncher,) = project.crunching_manager.crunchers.values()
+    assert same_cruncher is cruncher
+    
+    # Deleting jobs so the cruncher will stop:
+    del project.crunching_manager.jobs[:]
+    project.sync_crunchers()
+    assert not project.crunching_manager.jobs
+    assert not project.crunching_manager.crunchers
+    
+    #                                                                         #
+    ### Finish testing changing clock target on the fly. ######################
     
     ### Test changing step profile on the fly: ################################
     #                                                                         #
     
     # For simpacks providing more than one step function, we'll test changing
-    # between them. This will exercise crunchers' ability to receieve a
-    # `CrunchingProfile` and react appropriately.
+    # between them. This will exercise the crunching manager's policy of
+    # switching crunchers immediately when the step profile for a job gets
+    # changed.
     if simpack._settings_for_testing.N_STEP_FUNCTIONS >= 2:        
-        
-        def run_sync_crunchers_until_we_get_at_least_one_node():
-            while not project.sync_crunchers():
-                time.sleep(0.1)
-        
         default_step_function, alternate_step_function = \
             my_simpack_grokker.all_step_functions[:2]
         job = project.begin_crunching(root, Infinity)
@@ -129,15 +157,12 @@ def check(simpack, cruncher_type):
         for node in nodes_with_alternate_step_profile:
             assert node.step_profile == alternate_step_profile
         
-        # Deleting jobs so the crunchers will stop:
+        # Deleting jobs so the cruncher will stop:
         del project.crunching_manager.jobs[:]
         project.sync_crunchers()
         assert not project.crunching_manager.jobs
         assert not project.crunching_manager.crunchers
         
-        
-        
-    
     #                                                                         #
     ### Finished testing changing step profile on the fly. ####################
     

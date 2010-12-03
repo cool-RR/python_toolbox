@@ -38,7 +38,7 @@ class CrunchingProfile(object):
         return state.clock >= self.clock_target
     
     def raise_clock_target(self, clock_target):
-        '''If .clock_target is lower than the given clock_target, raise it.'''
+        '''Make `.clock_target` at least as big as the given `clock_target`.'''
         if self.clock_target < clock_target:
             self.clock_target = clock_target
     
