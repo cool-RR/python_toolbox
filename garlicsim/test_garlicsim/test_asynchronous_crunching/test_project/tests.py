@@ -152,65 +152,14 @@ def check(simpack, cruncher_type):
     
     ### Test changing step profile on the fly: ################################
     #                                                                         #
-    
     # For simpacks providing more than one step function, we'll test changing
     # between them. This will exercise crunchers' ability to receieve a
     # `CrunchingProfile` and react appropriately.
-    #if simpack._settings_for_testing.N_STEP_FUNCTIONS >= 2:        
-        #default_step_function, alternate_step_function = \
-            #my_simpack_grokker.all_step_functions[:2]
+    if simpack._settings_for_testing.N_STEP_FUNCTIONS >= 2:        
+        default_step_function, alternate_step_function = \
+            my_simpack_grokker.all_step_functions[:2]
     
     #                                                                         #
     ### Finished testing changing step profile on the fly: ####################
     
-    #### Testing cruncher type switching: ######################################
-    ##                                                                         #
     
-    #job_1 = project.begin_crunching(root, clock_buffer=Infinity)
-    #job_2 = project.begin_crunching(root, clock_buffer=Infinity)
-    
-    #assert len(project.crunching_manager.crunchers) == 0
-    #assert project.sync_crunchers() == 0
-    #assert len(project.crunching_manager.crunchers) == 2
-    #(cruncher_1, cruncher_2) = project.crunching_manager.crunchers.values()
-    #assert type(cruncher_1) is cruncher_type
-    #assert type(cruncher_2) is cruncher_type
-    
-    #time.sleep(0.2) # Letting the crunchers start working
-    
-    #project.crunching_manager.cruncher_type = MustachedThreadCruncher
-    #project.sync_crunchers()
-    #assert len(project.crunching_manager.crunchers) == 2
-    #(cruncher_1, cruncher_2) = project.crunching_manager.crunchers.values()
-    #assert type(cruncher_1) is MustachedThreadCruncher
-    #assert type(cruncher_2) is MustachedThreadCruncher
-    
-    #project.crunching_manager.cruncher_type = cruncher_type
-    #project.sync_crunchers()
-    #assert len(project.crunching_manager.crunchers) == 2
-    #(cruncher_1, cruncher_2) = project.crunching_manager.crunchers.values()
-    #assert type(cruncher_1) is cruncher_type
-    #assert type(cruncher_2) is cruncher_type
-    
-    ## Deleting jobs so the crunchers will stop:
-    #del project.crunching_manager.jobs[:]
-    #project.sync_crunchers()
-    
-    ##                                                                         #
-    #### Finished testing cruncher type switching. #############################
-    
-    
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-            
