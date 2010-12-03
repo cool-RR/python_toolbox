@@ -1,5 +1,8 @@
+import time
+
 import garlicsim.data_structures
 from garlicsim.misc import WorldEnd
+
 
 class State(garlicsim.data_structures.State):
     
@@ -9,6 +12,8 @@ class State(garlicsim.data_structures.State):
     @staticmethod
     def history_step(history_browser):
         assert isinstance(history_browser, garlicsim.misc.BaseHistoryBrowser)
+        
+        time.sleep(0.1)
         last_state = history_browser.get_last_state()
         last_state_clock = getattr(last_state, 'clock', 0)
         if last_state_clock >= 4:

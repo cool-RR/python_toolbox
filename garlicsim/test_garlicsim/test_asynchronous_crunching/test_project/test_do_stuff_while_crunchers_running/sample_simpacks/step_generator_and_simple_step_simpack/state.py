@@ -1,5 +1,8 @@
+import time
+
 import garlicsim.data_structures
 from garlicsim.misc import WorldEnd
+
 
 class State(garlicsim.data_structures.State):
     
@@ -8,7 +11,8 @@ class State(garlicsim.data_structures.State):
     
     def step_generator(self):
         current_state = self
-        while True:    
+        while True:
+            time.sleep(0.1)
             if current_state.clock >= 4:
                 raise WorldEnd
             old_clock = getattr(current_state, 'clock', 0)
@@ -17,6 +21,7 @@ class State(garlicsim.data_structures.State):
             yield current_state
     
     def step(self):
+        time.sleep(0.1)
         if getattr(self, 'clock', 0) >= 4:
             raise WorldEnd
         return State()

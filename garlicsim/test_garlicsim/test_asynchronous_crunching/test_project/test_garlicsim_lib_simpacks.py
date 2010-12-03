@@ -290,39 +290,7 @@ def check(simpack, cruncher_type):
         
     assert len(project.tree.nodes) == number_of_nodes + 10
     
-    ### Testing cruncher type switching: ######################################
     
-    job_1 = project.begin_crunching(root, clock_buffer=Infinity)
-    job_2 = project.begin_crunching(root, clock_buffer=Infinity)
-    
-    assert len(project.crunching_manager.crunchers) == 0
-    assert project.sync_crunchers() == 0
-    assert len(project.crunching_manager.crunchers) == 2
-    (cruncher_1, cruncher_2) = project.crunching_manager.crunchers.values()
-    assert type(cruncher_1) is cruncher_type
-    assert type(cruncher_2) is cruncher_type
-    
-    time.sleep(0.2) # Letting the crunchers start working
-    
-    project.crunching_manager.cruncher_type = MustachedThreadCruncher
-    project.sync_crunchers()
-    assert len(project.crunching_manager.crunchers) == 2
-    (cruncher_1, cruncher_2) = project.crunching_manager.crunchers.values()
-    assert type(cruncher_1) is MustachedThreadCruncher
-    assert type(cruncher_2) is MustachedThreadCruncher
-    
-    project.crunching_manager.cruncher_type = cruncher_type
-    project.sync_crunchers()
-    assert len(project.crunching_manager.crunchers) == 2
-    (cruncher_1, cruncher_2) = project.crunching_manager.crunchers.values()
-    assert type(cruncher_1) is cruncher_type
-    assert type(cruncher_2) is cruncher_type
-    
-    # Deleting jobs so the crunchers will stop:
-    del project.crunching_manager.jobs[:]
-    project.sync_crunchers()
-    
-    ### Finished testing cruncher type switching. #############################
     
     
     

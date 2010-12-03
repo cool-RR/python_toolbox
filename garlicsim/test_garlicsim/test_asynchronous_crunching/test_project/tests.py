@@ -150,16 +150,6 @@ def check(simpack, cruncher_type):
     
     node_3 = my_path.next_node(node_1)
     
-    ### Test changing step profile on the fly: ################################
-    #                                                                         #
-    # For simpacks providing more than one step function, we'll test changing
-    # between them. This will exercise crunchers' ability to receieve a
-    # `CrunchingProfile` and react appropriately.
-    if simpack._settings_for_testing.N_STEP_FUNCTIONS >= 2:        
-        default_step_function, alternate_step_function = \
-            my_simpack_grokker.all_step_functions[:2]
     
-    #                                                                         #
-    ### Finished testing changing step profile on the fly: ####################
     
     
