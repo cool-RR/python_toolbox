@@ -34,6 +34,7 @@ class HistoryStepIterator(BaseStepIterator):
     # todo: make stuff private here?
     def __init__(self, history_browser, step_profile):
         
+        assert isinstance(history_browser, garlicsim.misc.BaseHistoryBrowser)
         self.history_browser = history_browser
         
         self.history_step_function = step_profile.step_function

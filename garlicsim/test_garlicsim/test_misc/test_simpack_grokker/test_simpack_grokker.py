@@ -77,12 +77,7 @@ def check_simpack(simpack):
                              simpack_grokker.get_inplace_step_iterator,
                              state,
                              step_profile)
-
     
-    iterator = simpack_grokker.get_step_iterator(state, step_profile)
-    assert iterator.__iter__() is iterator
-    # tododoc: make separate tests for iterator
-
     
     assert simpack_grokker.history_dependent == \
            _settings_for_testing.HISTORY_DEPENDENT
