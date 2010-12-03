@@ -109,7 +109,7 @@ def check(simpack, cruncher_type):
         job.crunching_profile.step_profile = alternate_step_profile
         # Letting our crunching manager get a new cruncher for our new step
         # profile:
-        run_sync_crunchers_until_we_get_at_least_one_node()
+        project.sync_crunchers()
         (new_cruncher,) = project.crunching_manager.crunchers.values()
         assert new_cruncher is not cruncher
         last_node_with_default_step_profile = job.node
