@@ -73,31 +73,22 @@ class SimpackGrokker(object):
         self.step_functions_by_type = dict((step_type, []) for step_type in
                                            step_types.step_types_list)
         
-
+        
         for method in state_methods.itervalues():
-            
             if 'step' in method.__name__:
                 step_type = get_step_type(method)
                 self.step_functions_by_type[step_type].append(method)
             
-        
-        self.all_step_functions = sequence_tools.flatten(
-            self.step_functions_by_type.itervalues()
-        )
-        if not self.all_step_functions:
-            raise InvalidSimpack("The %s simpack has not defined any kind "
-                                 "of step function." % simpack.__name__)
-        
                 
         if self.step_functions_by_type[step_types.HistoryStep] or \
            self.step_functions_by_type[step_types.HistoryStepGenerator]:
             
             self.history_dependent = True
-            
-            self.default_step_function = (
+
+            self.all_step_functions = (
                 self.step_functions_by_type[step_types.HistoryStepGenerator] + \
                 self.step_functions_by_type[step_types.HistoryStep]
-            )[0]
+            )
             
             if self.step_functions_by_type[step_types.SimpleStep] or \
                self.step_functions_by_type[step_types.StepGenerator] or \
@@ -112,13 +103,25 @@ class SimpackGrokker(object):
             
             self.history_dependent = False
             
-            self.default_step_function = (
+            self.all_step_functions = (
                 self.step_functions_by_type[step_types.StepGenerator] + \
                 self.step_functions_by_type[step_types.SimpleStep] + \
                 self.step_functions_by_type[step_types.InplaceStepGenerator] +\
                 self.step_functions_by_type[step_types.InplaceStep]
-            )[0]
+            )
             
+        self.all_step_functions = self.all_step_functions # (Just for docs.)
+        '''
+        
+        Sorted by priority.
+        '''
+               
+        if not self.all_step_functions:
+            raise InvalidSimpack("The %s simpack has not defined any kind "
+                                 "of step function." % simpack.__name__)
+        
+        self.default_step_function = self.all_step_functions[0]
+        '''tododoc.'''
         
         
     

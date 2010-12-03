@@ -94,7 +94,7 @@ def check(simpack, cruncher_type):
     if simpack._settings_for_testing.N_STEP_FUNCTIONS >= 2:        
         
         def run_sync_crunchers_until_we_get_at_least_one_node():
-            while project.sync_crunchers():
+            while not project.sync_crunchers():
                 time.sleep(0.1)
         
         default_step_function, alternate_step_function = \
@@ -114,8 +114,8 @@ def check(simpack, cruncher_type):
         assert new_cruncher is not cruncher
         last_node_with_default_step_profile = job.node
         assert not last_node_with_default_step_profile.children # It's a leaf
-        assert last_node_with_default_step_profile.step_profile == \
-               default_step_function
+        assert last_node_with_default_step_profile.\
+               step_profile.step_function == default_step_function
         # Another `sync_crunchers`:
         run_sync_crunchers_until_we_get_at_least_one_node()
         # And now we have some new nodes with the alternate step profile.
