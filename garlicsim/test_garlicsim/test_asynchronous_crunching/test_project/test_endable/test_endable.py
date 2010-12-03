@@ -136,7 +136,7 @@ def check(simpack, cruncher_type):
     #                                                                         #
     ### Done running for longer periods synchronically to make it end. ########
     
-    
+    ### Setting up a project to run asynchronous tests:
     
     project = garlicsim.Project(simpack)
         
@@ -197,7 +197,7 @@ def check(simpack, cruncher_type):
     assert total_nodes_added == 2 # Would have been 3 without the end!
     
     # So now `node_3`'s path has an end:
-    ended_path = node_3.make_containing_path()
+    ended_path = node_3.all_possible_paths()[1]
     isinstance(ended_path, garlicsim.data_structures.Path)
     (end,) = ended_path.get_ends_of_last_node() # (Asserting there's one end.)
     assert isinstance(end, garlicsim.data_structures.End)
@@ -210,79 +210,36 @@ def check(simpack, cruncher_type):
     assert [len(p) for p in paths] == [5, 5, 5]
     
     
-    
-    project.ensure_buffer(node_3, 3)
-
-    total_nodes_added = 0
+    # Ensuring buffer from `node_3` won't add a single node since we have a path
+    # to an end:
+    project.ensure_buffer(node_3, 10)
+    project.ensure_buffer(node_3, 1000)
+    project.ensure_buffer(node_3, Infinity)
+    total_nodes_added = 0    
     while project.crunching_manager.jobs:
         time.sleep(0.1)
         total_nodes_added += project.sync_crunchers()
-    
-    assert len(project.tree.nodes) == x + y + 4 + total_nodes_added
-    assert len(project.tree.all_possible_paths()) == 3
-    
-    assert project.tree.lock._ReadWriteLock__writer is None
-    
-    two_paths = node_3.all_possible_paths()
-    
-    assert len(two_paths) == 2
-    (path_1, path_2) = two_paths
-    get_clock_buffer = lambda path: (path[-1].state.clock - node_3.state.clock)
-    (clock_buffer_1, clock_buffer_2) = [get_clock_buffer(p) for p in two_paths]
-    
-    project.ensure_buffer_on_path(node_3, path_1, get_clock_buffer(path_1) * 1.2)
-    
-    total_nodes_added = 0
-    while project.crunching_manager.jobs:
-        time.sleep(0.1)
-        total_nodes_added += project.sync_crunchers()
-    
-    (old_clock_buffer_1, old_clock_buffer_2) = (clock_buffer_1, clock_buffer_2)
-    (clock_buffer_1, clock_buffer_2) = [get_clock_buffer(p) for p in two_paths]
-    
-    assert clock_buffer_1 / old_clock_buffer_1 >= 1.2 - FUZZ
-    assert clock_buffer_2 == old_clock_buffer_2
-    
-    project.ensure_buffer_on_path(node_3, path_2, get_clock_buffer(path_2) * 1.3)
-    
-    total_nodes_added = 0
-    while project.crunching_manager.jobs:
-        time.sleep(0.1)
-        total_nodes_added += project.sync_crunchers()
-    
-    (old_clock_buffer_1, old_clock_buffer_2) = (clock_buffer_1, clock_buffer_2)
-    (clock_buffer_1, clock_buffer_2) = [get_clock_buffer(p) for p in two_paths]
-    
-    assert clock_buffer_1 == old_clock_buffer_1
-    assert clock_buffer_2 / old_clock_buffer_2 >= 1.3 - FUZZ
+    assert len(project.tree.nodes) == 10
     
     
     
     plain_root = project.create_root()
     
     assert len(project.tree.roots) == 2
-    
     assert len(project.tree.all_possible_paths()) == 4
+    assert len(project.tree.nodes) == 11
     
-    
-    
-    assert project.tree.lock._ReadWriteLock__writer is None
-    
-    number_of_nodes = len(project.tree.nodes)
-    iterator = project.iter_simulate(node_1, 10)
-    
-    assert project.tree.lock._ReadWriteLock__writer is None
-    
+    iterator = project.iter_simulate(node_1, 10)    
     new_node = iterator.next()
     assert new_node is node_1
-    assert len(project.tree.nodes) == number_of_nodes
+    assert len(project.tree.nodes) == 11
     
     assert project.tree.lock._ReadWriteLock__writer is None
     
     new_node = iterator.next()
     assert new_node is not node_1
     assert new_node.parent is node_1
-    assert len(project.tree.nodes) == number_of_nodes + 1
+    assert len(project.tree.nodes) == 12
     
     bunch_of_new_nodes = tuple(iterator)
     for parent_node, kid_node in cute_iter_tools.consecutive_pairs(bunch_of_new_nodes):
@@ -292,7 +249,7 @@ def check(simpack, cruncher_type):
         assert parent_node.children == [kid_node]
         assert kid_node.parent is parent_node
         
-    assert len(project.tree.nodes) == number_of_nodes + 10
+    assert len(project.tree.nodes) == 14
     
     ### Testing cruncher type switching: ######################################
     
@@ -321,6 +278,10 @@ def check(simpack, cruncher_type):
     (cruncher_1, cruncher_2) = project.crunching_manager.crunchers.values()
     assert type(cruncher_1) is cruncher_type
     assert type(cruncher_2) is cruncher_type
+    
+    # Deleting jobs so the crunchers will stop:
+    del project.crunching_manager.jobs[:]
+    project.sync_crunchers()
     
     ### Finished testing cruncher type switching. #############################
     

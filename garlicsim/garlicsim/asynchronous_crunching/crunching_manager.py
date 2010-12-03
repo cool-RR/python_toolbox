@@ -163,6 +163,10 @@ class CrunchingManager(object):
             # We'll take work from the cruncher and put in the tree, updating
             # the job to point at `new_leaf`, which is the node (leaf)
             # containing the most recent state produced by the cruncher.
+            #
+            # tododoc: the comment above is a bit wrong, the cruncher may have
+            # stopped by a WorldEnd. (Or possibly other reasons I haven't
+            # thought of.)
             
             cruncher = self.crunchers[job]
             
@@ -287,7 +291,7 @@ class CrunchingManager(object):
         
         current = node
         counter = 0
-        self.step_profiles[cruncher]
+        self.step_profiles[cruncher] # tododoc: wtf this line?
         
         for thing in queue_tools.iterate(cruncher.work_queue):
             

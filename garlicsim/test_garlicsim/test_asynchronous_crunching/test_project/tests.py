@@ -318,6 +318,10 @@ def check_simpack(simpack, cruncher_type):
     assert type(cruncher_1) is cruncher_type
     assert type(cruncher_2) is cruncher_type
     
+    # Deleting jobs so the crunchers will stop:
+    del project.crunching_manager.jobs[:]
+    project.sync_crunchers()
+    
     ### Finished testing cruncher type switching. #############################
     
     
