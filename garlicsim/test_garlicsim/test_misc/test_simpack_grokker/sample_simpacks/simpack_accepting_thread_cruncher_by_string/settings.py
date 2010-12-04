@@ -1,1 +1,1 @@
-CRUNCHERS = ['ThreadCruncher']
+CRUNCHERS = 'ThreadCruncher'

@@ -343,7 +343,7 @@ class SimpackGrokker(object):
         
     
     def get_inplace_step_iterator(self, state, step_profile):
-        raise NotImplementedError('inplace steps are not yet '
+        raise NotImplementedError('Inplace steps are not yet '
                                   'supported. They will probably become '
                                   'available in GarlicSim 0.7 in mid-2011.')
         step_function = step_profile.step_function

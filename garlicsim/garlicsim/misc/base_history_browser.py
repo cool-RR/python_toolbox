@@ -30,13 +30,13 @@ class BaseHistoryBrowser(object):
     @abc.abstractmethod
     def get_last_state(self):
         '''Get the last state in the timeline. Identical to __getitem__(-1).'''
-        pass
-    
+
+        
     @abc.abstractmethod
     def __getitem__(self, i):
         '''Get a state by its position in the timeline.'''
-        pass
-    
+
+                
     @abc.abstractmethod
     def get_state_by_monotonic_function(self, function, value, rounding):
         '''
@@ -47,14 +47,13 @@ class BaseHistoryBrowser(object):
         See documentation of garlicsim.general_misc.binary_search.roundings for
         details about rounding options.
         '''
-        pass
-    
+        
+        
     @abc.abstractmethod
     def __len__(self):
         '''Get the length of the timeline in nodes.'''
-        pass
     
-    
+        
     def get_state_by_clock(self, clock, rounding=binary_search.CLOSEST):
         '''
         Get a state by specifying desired clock time.
