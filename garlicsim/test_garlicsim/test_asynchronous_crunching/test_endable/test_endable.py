@@ -206,7 +206,7 @@ def check(simpack, cruncher_type):
     
     assert len(get_all_ends()) == 1
     
-    # So now `node_3`'s path has an end:
+    # So now `node_3`'s newer path has an end:
     ended_path = node_3.all_possible_paths()[1]
     isinstance(ended_path, garlicsim.data_structures.Path)
     (end,) = ended_path.get_ends_of_last_node() # (Asserting there's one end.)
@@ -233,6 +233,21 @@ def check(simpack, cruncher_type):
     
     # These `ensure_buffer_on_path` calls shouldn't have added any ends:
     assert len(get_all_ends()) == 1
+    
+    # But `node_3` has the older path coming out of it which goes all the way to
+    # clock 4 but doesn't terminate in an `End`:
+    other_path = node_3.all_possible_paths()[0]
+    assert other_path.get_ends_of_last_node() == []
+    
+    # And when we `ensure_buffer` from `node_3`, it will ensure a buffer on that
+    # path also, and cause an `End` to be created there:
+    project.ensure_buffer(node_3, 1000)
+    total_nodes_added = 0    
+    while project.crunching_manager.jobs:
+        time.sleep(0.1)
+        total_nodes_added += project.sync_crunchers()
+    assert len(project.tree.nodes) == 10
+    assert len(get_all_ends()) == 2
     
     
     plain_root = project.create_root()
@@ -264,7 +279,7 @@ def check(simpack, cruncher_type):
         
     assert len(project.tree.nodes) == 14
 
-    assert len(get_all_ends()) == 2
+    assert len(get_all_ends()) == 3
     
         
     tree_members_iterator = \
@@ -300,7 +315,7 @@ def check(simpack, cruncher_type):
     
     ends = [member for member in tree_members if 
             isinstance(member, garlicsim.data_structures.End)]
-    assert len(ends) == 2
+    assert len(ends) == 3
     for end in ends:
         assert end in tree_members_including_blockful_nodes
         
