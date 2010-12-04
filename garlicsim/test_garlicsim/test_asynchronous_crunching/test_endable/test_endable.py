@@ -223,8 +223,8 @@ def check(simpack, cruncher_type):
     # Ensuring buffer on `ended_path` from `node_3` won't add a single node or
     # end since we have a path to an existing end:
     project.ensure_buffer_on_path(node_3, ended_path, 10)
-    project.ensure_buffer(node_3, ended_path, 1000)
-    project.ensure_buffer(node_3, ended_path, Infinity)
+    project.ensure_buffer_on_path(node_3, ended_path, 1000)
+    project.ensure_buffer_on_path(node_3, ended_path, Infinity)
     total_nodes_added = 0    
     while project.crunching_manager.jobs:
         time.sleep(0.1)
