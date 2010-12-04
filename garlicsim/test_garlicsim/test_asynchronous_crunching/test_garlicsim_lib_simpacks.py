@@ -281,7 +281,8 @@ def check(simpack, cruncher_type):
     assert len(project.tree.nodes) == number_of_nodes + 1
     
     bunch_of_new_nodes = tuple(iterator)
-    for parent_node, kid_node in cute_iter_tools.consecutive_pairs(bunch_of_new_nodes):
+    consecutive_nodes = cute_iter_tools.consecutive_pairs(bunch_of_new_nodes)
+    for parent_node, kid_node in consecutive_nodes:
         assert project.tree.lock._ReadWriteLock__writer is None
         assert isinstance(parent_node, garlicsim.data_structures.Node)
         assert isinstance(kid_node, garlicsim.data_structures.Node)
@@ -289,6 +290,29 @@ def check(simpack, cruncher_type):
         assert kid_node.parent is parent_node
         
     assert len(project.tree.nodes) == number_of_nodes + 10
+    
+    ### Testing path methods: #################################################
+    #                                                                         #
+
+    empty_path = garlicsim.data_structures.Path(project.tree)
+    assert len(empty_path) == 0
+    assert list(empty_path) == []
+    
+    for (path, other_path) in [(path_1, path_2), (path_2, path_1)]:
+        assert isinstance(path, garlicsim.data_structures.Path)
+        assert path[-1] is path.get_last_node()
+        node_list = list(path)
+        reversed_node_list = list(reversed(path))
+        assert node_list == list(reversed(reversed_node_list))
+        assert list(path.iterate_blockwise()) == \
+            list(reversed(list(path.iterate_blockwise_reversed(end=path[-1]))))
+        stranger_node = other_path[-1] 
+        assert stranger_node not in path
+        
+    
+    #                                                                         #
+    ### Finished testing path methods. ########################################
+    
     
     
     
