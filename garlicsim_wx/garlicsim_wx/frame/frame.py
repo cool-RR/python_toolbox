@@ -23,6 +23,7 @@ import pkg_resources
 from garlicsim.general_misc import dict_tools
 from garlicsim.general_misc import string_tools
 from garlicsim.general_misc import pickle_tools
+from garlicsim.general_misc.temp_value_setters import TempRecursionLimitSetter
 from garlicsim_wx.general_misc import thread_timer
 from garlicsim_wx.general_misc import wx_tools
 
@@ -604,26 +605,20 @@ class Frame(wx.Frame):
         Internal use.
         '''
         
-        old_recursion_limit = sys.getrecursionlimit()
-        
-            
-        try:
-            sys.setrecursionlimit(10000)
-            with open(path, 'rb') as my_file:
-                unpickler = pickle_tools.CuteUnpickler(my_file)
-                gui_project = unpickler.load()
+        with TempRecursionLimitSetter(10000):
+            try:
+                with open(path, 'rb') as my_file:
+                    unpickler = pickle_tools.CuteUnpickler(my_file)
+                    gui_project = unpickler.load()
                 
-        except Exception, exception:
-            dialog = wx.MessageDialog(
-                self,
-                'Error opening file:\n' + traceback.format_exc(),
-                style=(wx.OK | wx.ICON_ERROR)
-            )
-            dialog.ShowModal()
-            return
-        
-        finally:
-            sys.setrecursionlimit(old_recursion_limit)
+            except Exception, exception:
+                dialog = wx.MessageDialog(
+                    self,
+                    'Error opening file:\n' + traceback.format_exc(),
+                    style=(wx.OK | wx.ICON_ERROR)
+                )
+                dialog.ShowModal()
+                return
                         
         self.__setup_gui_project(gui_project)
 
@@ -643,25 +638,20 @@ class Frame(wx.Frame):
         if save_dialog.ShowModal() == wx.ID_OK:
             path = save_dialog.GetPath()
             
-            old_recursion_limit = sys.getrecursionlimit()
-            
-            try:
-                sys.setrecursionlimit(10000)
-                with open(path, 'wb') as my_file:
-                    pickler = pickle_tools.CutePickler(my_file, protocol=2)
-                    pickler.dump(self.gui_project)
-
-            except Exception, exception:
-                error_dialog = wx.MessageDialog(
-                    self,
-                    'Error saving to file:\n' + traceback.format_exc(),
-                    style=(wx.OK | wx.ICON_ERROR)
-                )
-                error_dialog.ShowModal()
-                error_dialog.Destroy()
-            
-            finally:
-                sys.setrecursionlimit(old_recursion_limit)
+            with TempRecursionLimitSetter(10000):
+                try:
+                    with open(path, 'wb') as my_file:
+                        pickler = pickle_tools.CutePickler(my_file, protocol=2)
+                        pickler.dump(self.gui_project)
+    
+                except Exception, exception:
+                    error_dialog = wx.MessageDialog(
+                        self,
+                        'Error saving to file:\n' + traceback.format_exc(),
+                        style=(wx.OK | wx.ICON_ERROR)
+                    )
+                    error_dialog.ShowModal()
+                    error_dialog.Destroy()
             
             
         save_dialog.Destroy()
