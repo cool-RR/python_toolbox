@@ -20,3 +20,8 @@ def verify_sample_simpack_settings(sample_simpack):
     for cruncher_type in sft.CRUNCHERS_LIST:
         assert issubclass(cruncher_type,
                           garlicsim.asynchronous_crunching.BaseCruncher)
+        
+    # Making sure there aren't any extraneous settings, so we'll know we checked
+    # everything:
+    settings_names = [name for name in dir(sft) if name.isupper()]
+    assert len(settings_names) == 7
