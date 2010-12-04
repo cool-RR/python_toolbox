@@ -148,9 +148,32 @@ def check(simpack, cruncher_type):
     assert len(project.tree.roots) == 1
     
     assert len(project.tree.all_possible_paths()) == 2
+
+    block_1, block_2 = [node.block for node in node_1.children]
+    assert isinstance(block_1, garlicsim.data_structures.Block)
+    assert isinstance(block_2, garlicsim.data_structures.Block)
+ 
+    tree_members_iterator = project.tree.iterate_tree_members()
+    assert tree_members_iterator.__iter__() is tree_members_iterator
+    tree_members = list(tree_members_iterator)
+    assert (block_1 in tree_members) and (block_2 in tree_members)
     
-    node_3 = my_path.next_node(node_1)
+    tree_members_iterator_including_blockful_nodes = \
+        project.tree.iterate_tree_members(include_blockful_nodes=True)
+    assert tree_members_iterator_including_blockful_nodes.__iter__() is \
+        tree_members_iterator_including_blockful_nodes
+    tree_members_including_blockful_nodes = \
+        list(tree_members_iterator_including_blockful_nodes)
     
+    blockful_nodes = \
+        [member for member in tree_members_including_blockful_nodes if 
+         member not in tree_members]
+    for blockful_node in blockful_nodes:
+        assert isinstance(blockful_node, garlicsim.data_structures.Node)
+        assert isinstance(blockful_node.block, garlicsim.data_structures.Block)
+        assert blockful_node.block is blockful_node.soft_get_block()
+    assert set(tree_members).\
+        issubset(set(tree_members_including_blockful_nodes))
     
     
     

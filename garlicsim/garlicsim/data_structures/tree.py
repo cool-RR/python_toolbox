@@ -221,7 +221,7 @@ class Tree(object):
                 children = member.children
                 ends = member.ends
             
-            members_to_explore += children
+            members_to_explore += [kid.soft_get_block() for kid in children]
             members_to_explore += ends
         
         

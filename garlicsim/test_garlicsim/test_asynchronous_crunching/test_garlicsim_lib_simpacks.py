@@ -352,7 +352,7 @@ def check(simpack, cruncher_type):
             second_on_block,
             second_to_last_on_block
         )
-    ) == list(block[1:-1:-1])
+    ) == list(block[-2:0:-1])
     
     ### Testing path methods: #################################################
     #                                                                         #
