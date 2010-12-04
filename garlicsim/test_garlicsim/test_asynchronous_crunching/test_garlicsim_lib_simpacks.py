@@ -204,7 +204,7 @@ def check(simpack, cruncher_type):
     paths = project.tree.all_possible_paths()
     assert len(paths) == 3
     
-    assert set(len(p) for p in paths) == set([5, x + 1, 3 + y])
+    assert [len(p) for p in paths] == [x + 1, 3 + y, 5]
     
     
     project.ensure_buffer(node_3, 3)
@@ -295,7 +295,12 @@ def check(simpack, cruncher_type):
     assert alternate_path == plain_root.make_containing_path()
     assert len(alternate_path) == 6
     all_except_root = list(alternate_path)[1:]
-    assert plain_root.get_all_leaves() is alternate_path[-1]
+    
+    ((_key, _value),) = plain_root.get_all_leaves().items()
+    assert _key is alternate_path[-1]
+    assert _value['nodes_distance'] == 5
+    assert 'clock_distance' in _value # Can't know the value of that.
+    
     block = all_except_root[0].block
     assert isinstance(block, garlicsim.data_structures.Block)
     for node in all_except_root:
