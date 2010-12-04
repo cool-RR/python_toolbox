@@ -21,6 +21,7 @@ from garlicsim.general_misc import math_tools
 from garlicsim.general_misc import path_tools
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc.infinity import Infinity
+from garlicsim.general_misc.ordered_set import OrderedSet
 
 import garlicsim
 
@@ -175,5 +176,7 @@ def check(simpack, cruncher_type):
     assert set(tree_members).\
         issubset(set(tree_members_including_blockful_nodes))
     
-    
+    tree_step_profiles = project.tree.get_step_profiles()
+    assert isinstance(tree_step_profiles, OrderedSet)
+    assert tree_step_profiles == [step_profile]
     

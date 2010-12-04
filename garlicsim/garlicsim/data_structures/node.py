@@ -196,7 +196,8 @@ class Node(TreeMember):
             # past_path which we have driven to its last node. (Not that it has
             # any forks to decide on anyway.)
             return [past_path]
-    
+
+        
     def make_past_path(self):
         '''
         Create a path that contains this node.
@@ -220,6 +221,7 @@ class Node(TreeMember):
 
         return path
 
+    
     def get_all_leaves(self, max_nodes_distance=None, max_clock_distance=None):
         '''
         Get all leaves that are descendents of this node.
@@ -338,7 +340,8 @@ class Node(TreeMember):
                             "node's ancestry line doesn't go back that far."
                         )
                 
-                return parent_of_first.get_ancestor(- wanted_index - 1, round=round)
+                return parent_of_first.get_ancestor(-wanted_index-1,
+                                                    round=round)
         
         assert self.block is None
         if self.parent:
@@ -366,13 +369,16 @@ class Node(TreeMember):
                 lowest = lowest.block[0]
         return lowest
     
+    
     def is_last_on_block(self):
         '''Return whether the node the last one on its block.'''
         return self.block and (self.block.index(self) == len(self.block) - 1)
+
     
     def is_first_on_block(self):
         '''Return whether the node the first one on its block.'''
         return self.block and (self.block.index(self) == 0)
+
     
     def is_overlapping(self, tree_member):
         '''
@@ -388,7 +394,8 @@ class Node(TreeMember):
         else:
             assert isinstance(tree_member, Block)
             return (self in tree_member)
-    
+
+        
     def __repr__(self):
         '''
         Get a string representation of the node.

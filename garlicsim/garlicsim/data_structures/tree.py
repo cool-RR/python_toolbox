@@ -11,6 +11,7 @@ import copy
 
 from garlicsim.general_misc import misc_tools
 from garlicsim.general_misc import address_tools
+from garlicsim.general_misc.ordered_set import OrderedSet
 
 import garlicsim.misc
 from garlicsim.misc import GarlicSimException
@@ -192,8 +193,9 @@ class Tree(object):
         tree_members_iterator = \
             self.iterate_tree_members(include_blockful_nodes=False)
         
-        step_profiles = \
-            set(tree_member.step_profile for tree_member in tree_members_iterator)
+        step_profiles = OrderedSet(
+            tree_member.step_profile for tree_member in tree_members_iterator
+        )
         
         try:
             step_profiles.remove(None)
