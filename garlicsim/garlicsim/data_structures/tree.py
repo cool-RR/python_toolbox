@@ -197,10 +197,8 @@ class Tree(object):
             tree_member.step_profile for tree_member in tree_members_iterator
         )
         
-        try:
+        if None in step_profiles:
             step_profiles.remove(None)
-        except KeyError:
-            pass
         
         return step_profiles
     

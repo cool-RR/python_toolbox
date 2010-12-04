@@ -17,6 +17,7 @@ from garlicsim.general_misc import math_tools
 from garlicsim.general_misc import path_tools
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc.infinity import Infinity
+from garlicsim.general_misc.ordered_set import OrderedSet
 
 import garlicsim
 
@@ -146,6 +147,12 @@ def check(simpack, cruncher_type):
     
     root = project.root_this_state(state)
     
+    def get_all_ends():
+        return [member for member in project.tree.iterate_tree_members() if 
+                isinstance(member, garlicsim.data_structures.End)]
+    
+    assert len(get_all_ends()) == 0
+    
     ### Running for short periods asynchronically so it doesn't end: ##########
     #                                                                         #
     
@@ -181,6 +188,8 @@ def check(simpack, cruncher_type):
     
     node_3 = my_path.next_node(node_1)
     
+    assert len(get_all_ends()) == 0
+    
     #                                                                         #
     ### Done running for short periods asynchronically so it doesn't end. #####
     
@@ -195,6 +204,8 @@ def check(simpack, cruncher_type):
         time.sleep(0.1)
         total_nodes_added += project.sync_crunchers()
     assert total_nodes_added == 2 # Would have been 3 without the end!
+    
+    assert len(get_all_ends()) == 1
     
     # So now `node_3`'s path has an end:
     ended_path = node_3.all_possible_paths()[1]
@@ -252,10 +263,46 @@ def check(simpack, cruncher_type):
         
     assert len(project.tree.nodes) == 14
 
-        
-        
+    # Generate two more ends:
+    for i in range(2):
+        project.simulate(node_3, Infinity)
+    
+    tree_members_iterator = \
+        project.tree.iterate_tree_members(include_blockful_nodes=False)
+    assert tree_members_iterator.__iter__() is tree_members_iterator
+    tree_members = list(tree_members_iterator)
+    for tree_member in tree_members:
+        if isinstance(tree_member, garlicsim.data_structures.Node):
+            assert tree_member.block is None
+            
+    tree_members_iterator_including_blockful_nodes = \
+        project.tree.iterate_tree_members()
+    assert tree_members_iterator_including_blockful_nodes.__iter__() is \
+        tree_members_iterator_including_blockful_nodes
+    tree_members_including_blockful_nodes = \
+        list(tree_members_iterator_including_blockful_nodes)
     
     
+    blockful_nodes = \
+        [member for member in tree_members_including_blockful_nodes if 
+         member not in tree_members]
+    assert len(blockful_nodes) >= 1
+    for blockful_node in blockful_nodes:
+        assert isinstance(blockful_node, garlicsim.data_structures.Node)
+        assert isinstance(blockful_node.block, garlicsim.data_structures.Block)
+        assert blockful_node.block is blockful_node.soft_get_block()
+    assert set(tree_members).\
+        issubset(set(tree_members_including_blockful_nodes))
+    
+    tree_step_profiles = project.tree.get_step_profiles()
+    assert isinstance(tree_step_profiles, OrderedSet)
+    assert tree_step_profiles == [step_profile]
+    
+    ends = [member for member in tree_members if 
+            isinstance(member, garlicsim.data_structures.End)]
+    assert len(ends) == 3
+    for end in ends:
+        assert end in tree_members_including_blockful_nodes
         
     
     

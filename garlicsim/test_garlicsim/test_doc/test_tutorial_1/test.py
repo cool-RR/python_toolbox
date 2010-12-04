@@ -51,7 +51,7 @@ def test():
     )    
     assert repr(path[-1]) == (
         '<garlicsim.data_structures.Node with clock 50, leaf, untouched, '
-        'belongs to a block, crunched with StepProfile(<unbound method '
+        'blockful, crunched with StepProfile(<unbound method '
         'State.step_generator>), at %s>' %
         hex(id(path[-1])))
     _state = path[-1].state

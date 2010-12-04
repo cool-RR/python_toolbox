@@ -154,10 +154,14 @@ def check(simpack, cruncher_type):
     assert isinstance(block_1, garlicsim.data_structures.Block)
     assert isinstance(block_2, garlicsim.data_structures.Block)
  
-    tree_members_iterator = project.tree.iterate_tree_members()
+    tree_members_iterator = \
+        project.tree.iterate_tree_members(include_blockful_nodes=False)
     assert tree_members_iterator.__iter__() is tree_members_iterator
     tree_members = list(tree_members_iterator)
     assert (block_1 in tree_members) and (block_2 in tree_members)
+    for tree_member in tree_members:
+        if isinstance(tree_member, garlicsim.data_structures.Node):
+            assert tree_member.block is None
     
     tree_members_iterator_including_blockful_nodes = \
         project.tree.iterate_tree_members(include_blockful_nodes=True)

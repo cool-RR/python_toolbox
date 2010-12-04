@@ -412,7 +412,7 @@ class Node(TreeMember):
                 'root, ' if (self.parent is None) else '',
                 'leaf, ' if (len(self.children) == 0) else '',
                 'touched' if self.touched else 'untouched',
-                'belongs to a block' if self.block else 'blockless',
+                'blockful' if self.block else 'blockless',
                 'crunched with %s, ' % self.step_profile if self.step_profile else '',
                 hex(id(self))
             )
