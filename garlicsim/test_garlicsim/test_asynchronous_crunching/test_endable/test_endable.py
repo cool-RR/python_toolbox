@@ -186,8 +186,6 @@ def check(simpack, cruncher_type):
     
     assert len(project.tree.all_possible_paths()) == 2
     
-    node_3 = my_path.next_node(node_1)
-    
     assert len(get_all_ends()) == 0
     
     #                                                                         #
@@ -196,6 +194,7 @@ def check(simpack, cruncher_type):
     ### Now, let's run it for longer periods asynchronically to make it end: ##
     #                                                                         #
     
+    node_3 = my_path.next_node(node_1)
     assert node_3.state.clock == 2
     project.begin_crunching(node_3, 3)
     
@@ -221,18 +220,18 @@ def check(simpack, cruncher_type):
     assert [len(p) for p in paths] == [5, 5, 5]
     
     
-    # Ensuring buffer from `node_3` won't add a single node or end since we have
-    # a path to an existing end:
-    project.ensure_buffer(node_3, 10)
-    project.ensure_buffer(node_3, 1000)
-    project.ensure_buffer(node_3, Infinity)
+    # Ensuring buffer on `ended_path` from `node_3` won't add a single node or
+    # end since we have a path to an existing end:
+    project.ensure_buffer_on_path(node_3, ended_path, 10)
+    project.ensure_buffer(node_3, ended_path, 1000)
+    project.ensure_buffer(node_3, ended_path, Infinity)
     total_nodes_added = 0    
     while project.crunching_manager.jobs:
         time.sleep(0.1)
         total_nodes_added += project.sync_crunchers()
     assert len(project.tree.nodes) == 10
     
-    # These `ensure_buffer` calls shouldn't have added any ends:
+    # These `ensure_buffer_on_path` calls shouldn't have added any ends:
     assert len(get_all_ends()) == 1
     
     
