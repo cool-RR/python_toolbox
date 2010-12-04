@@ -206,6 +206,12 @@ def check(simpack, cruncher_type):
     
     assert [len(p) for p in paths] == [x + 1, 3 + y, 5]
     
+    for (_path_1, _path_2) in cute_iter_tools.consecutive_pairs(paths):
+        assert _path_1._get_higher_path(node=root) == _path_2
+        
+    for _path in paths:
+        assert _path.copy() == _path
+    
     
     project.ensure_buffer(node_3, 3)
 
@@ -292,6 +298,7 @@ def check(simpack, cruncher_type):
     assert len(project.tree.nodes) == number_of_nodes + 5
     
     (alternate_path,) = plain_root.all_possible_paths()
+    assert isinstance(alternate_path, garlicsim.data_structures.Path)
     assert alternate_path == plain_root.make_containing_path()
     assert len(alternate_path) == 6
     all_except_root = list(alternate_path)[1:]
@@ -330,6 +337,22 @@ def check(simpack, cruncher_type):
             assert block[0] is node
         
     assert set(all_except_root) == set(block)
+    
+    second_on_block = block[1]
+    second_to_last_on_block = block[-2]
+    assert second_to_last_on_block.state.clock > second_on_block.state.clock
+    assert list(
+        alternate_path.iterate_blockwise(
+            second_on_block,
+            second_to_last_on_block
+        )
+    ) == list(block[1:-1])
+    assert list(
+        alternate_path.iterate_blockwise_reversed(
+            second_on_block,
+            second_to_last_on_block
+        )
+    ) == list(block[1:-1:-1])
     
     ### Testing path methods: #################################################
     #                                                                         #
