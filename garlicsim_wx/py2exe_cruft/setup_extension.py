@@ -2,12 +2,12 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Module for packaging garlicsim_wx as executable using py2exe.
+Module for packaging `garlicsim_wx` as an executable using `py2exe`.
 
-Normally the contents of this module would be in setup.py; But py2exe introduces
-so much cruft, and I wanted to keep it away from my setup.py. So setup.py
-imports this module when it gets a `py2exe` command. This module should not be
-used otherwise.
+Normally the contents of this module would be in `setup.py`; But `py2exe`
+introduces so much cruft, and I wanted to keep it away from my `setup.py`. So
+`setup.py` imports this module when it gets a `py2exe` command. This module
+should not be used otherwise.
 
 This module assumes that the `garlicsim` and `garlicsim_lib` folders are
 alongside the `garlicsim_wx` folder, as in the official git repo of GarlicSim.

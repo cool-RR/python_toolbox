@@ -70,6 +70,9 @@ def test():
         '52 nodes and 2 possible paths at %s>' % hex(id(project.tree))
     )
     project.ensure_buffer(root, 50)
+    _result = project.sync_crunchers()
+    assert repr(_result) == '<0 nodes were added to the tree>'
+    (cruncher,) = project.crunching_manager.crunchers.values()
     while cruncher.is_alive():
         time.sleep(0.1)
     _result = project.sync_crunchers()
