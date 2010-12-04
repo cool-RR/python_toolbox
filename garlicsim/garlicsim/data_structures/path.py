@@ -138,7 +138,10 @@ class Path(object):
     def __reversed__(self):
         '''Iterate on the nodes in the path from end to start.'''
         # todo: may add start and end
-        current_node = self[-1]
+        try:
+            current_node = self[-1]
+        except PathOutOfRangeError:
+            raise StopIteration
         while current_node is not None:
             yield current_node
             current_node = current_node.parent
@@ -208,13 +211,19 @@ class Path(object):
                 raise StopIteration
     
             
-    def iterate_blockwise_reversed(self, end, start=None):
+    def iterate_blockwise_reversed(self, start=None, end=None):
         '''
         Iterate backwards on the path, yielding blocks when possible.
         
-        You must specify an `end`. You may optionally specify a `start`. Both of
-        these may be either nodes or blocks.
+        tododocYou must specify an `end`. You may optionally specify a `start`.
+        Both of these may be either nodes or blocks.
         '''
+        if end is None:
+            try:
+                end = self.get_last_node()
+            except PathOutOfRangeError:
+                raise StopIteration
+        
         current = end
         if isinstance(end, Node) and end.block is not None and \
            end.is_last_on_block() is False:

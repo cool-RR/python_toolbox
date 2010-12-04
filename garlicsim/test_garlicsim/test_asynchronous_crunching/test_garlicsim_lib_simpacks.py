@@ -297,6 +297,10 @@ def check(simpack, cruncher_type):
     empty_path = garlicsim.data_structures.Path(project.tree)
     assert len(empty_path) == 0
     assert list(empty_path) == []
+    assert list(reversed(empty_path)) == []
+    assert list(empty_path.iterate_blockwise()) == []
+    assert list(empty_path.iterate_blockwise_reversed()) == []
+    
     
     for (path, other_path) in [(path_1, path_2), (path_2, path_1)]:
         assert isinstance(path, garlicsim.data_structures.Path)
@@ -308,6 +312,10 @@ def check(simpack, cruncher_type):
             list(reversed(list(path.iterate_blockwise_reversed(end=path[-1]))))
         stranger_node = other_path[-1] 
         assert stranger_node not in path
+        nose.tools.assert_raises(
+            garlicsim.data_structures.path.EndNotReached,
+            lambda: list(path.__iter__(end=stranger_node))
+        )
         
     
     #                                                                         #
