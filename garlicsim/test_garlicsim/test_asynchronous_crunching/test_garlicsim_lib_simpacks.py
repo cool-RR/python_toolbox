@@ -265,7 +265,7 @@ def check(simpack, cruncher_type):
     assert project.tree.lock._ReadWriteLock__writer is None
     
     number_of_nodes = len(project.tree.nodes)
-    iterator = project.iter_simulate(plain_root, 10)
+    iterator = project.iter_simulate(plain_root, 5)
     
     assert project.tree.lock._ReadWriteLock__writer is None
     
@@ -289,19 +289,21 @@ def check(simpack, cruncher_type):
         assert parent_node.children == [kid_node]
         assert kid_node.parent is parent_node
         
-    assert len(project.tree.nodes) == number_of_nodes + 10
+    assert len(project.tree.nodes) == number_of_nodes + 5
     
     (alternate_path,) = plain_root.all_possible_paths()
     assert alternate_path == plain_root.make_containing_path()
-    assert len(alternate_path) == 11
+    assert len(alternate_path) == 6
     all_except_root = list(alternate_path)[1:]
     assert plain_root.get_all_leaves() is alternate_path[-1]
     block = all_except_root[0].block
+    assert isinstance(block, garlicsim.data_structures.Block)
     for node in all_except_root:
         assert isinstance(node, garlicsim.data_structures.Node)
         assert node.block is node.soft_get_block() is block
         nose.tools.assert_raises(garlicsim.data_structures.NodeError,
                                  node.finalize)
+        assert node.get_root() is plain_root
         assert node.get_ancestor(generations=0) is node
         assert node.get_ancestor(generations=Infinity, round=True) is \
             plain_root
@@ -313,8 +315,16 @@ def check(simpack, cruncher_type):
             garlicsim.data_structures.node.NodeLookupError,
             lambda: node.get_ancestor(generations=100, round=False)
         )
+        if node.is_last_on_block():
+            assert block[-1] is node
+            assert node.get_ancestor(generations=2, round=False) is \
+                block[-3]
+            assert node.get_ancestor(generations=1, round=True) is \
+                block[-2] is node.parent
+        if node.is_first_on_block():
+            assert block[0] is node
         
-    assert set
+    assert set(all_except_root) == set(block)
     
     ### Testing path methods: #################################################
     #                                                                         #
