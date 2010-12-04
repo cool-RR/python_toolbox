@@ -221,8 +221,8 @@ def check(simpack, cruncher_type):
     assert [len(p) for p in paths] == [5, 5, 5]
     
     
-    # Ensuring buffer from `node_3` won't add a single node since we have a path
-    # to an end:
+    # Ensuring buffer from `node_3` won't add a single node or end since we have
+    # a path to an existing end:
     project.ensure_buffer(node_3, 10)
     project.ensure_buffer(node_3, 1000)
     project.ensure_buffer(node_3, Infinity)
@@ -232,6 +232,8 @@ def check(simpack, cruncher_type):
         total_nodes_added += project.sync_crunchers()
     assert len(project.tree.nodes) == 10
     
+    # These `ensure_buffer` calls shouldn't have added any ends:
+    assert len(get_all_ends()) == 1
     
     
     plain_root = project.create_root()
@@ -263,10 +265,9 @@ def check(simpack, cruncher_type):
         
     assert len(project.tree.nodes) == 14
 
-    # Generate two more ends:
-    for i in range(2):
-        project.simulate(node_3, Infinity)
+    assert len(get_all_ends()) == 2
     
+        
     tree_members_iterator = \
         project.tree.iterate_tree_members(include_blockful_nodes=False)
     assert tree_members_iterator.__iter__() is tree_members_iterator
@@ -300,7 +301,7 @@ def check(simpack, cruncher_type):
     
     ends = [member for member in tree_members if 
             isinstance(member, garlicsim.data_structures.End)]
-    assert len(ends) == 3
+    assert len(ends) == 2
     for end in ends:
         assert end in tree_members_including_blockful_nodes
         
