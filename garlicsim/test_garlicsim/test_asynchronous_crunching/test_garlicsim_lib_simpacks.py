@@ -265,19 +265,19 @@ def check(simpack, cruncher_type):
     assert project.tree.lock._ReadWriteLock__writer is None
     
     number_of_nodes = len(project.tree.nodes)
-    iterator = project.iter_simulate(node_1, 10)
+    iterator = project.iter_simulate(plain_root, 10)
     
     assert project.tree.lock._ReadWriteLock__writer is None
     
     new_node = iterator.next()
-    assert new_node is node_1
+    assert new_node is plain_root
     assert len(project.tree.nodes) == number_of_nodes
     
     assert project.tree.lock._ReadWriteLock__writer is None
     
     new_node = iterator.next()
-    assert new_node is not node_1
-    assert new_node.parent is node_1
+    assert new_node is not plain_root
+    assert new_node.parent is plain_root
     assert len(project.tree.nodes) == number_of_nodes + 1
     
     bunch_of_new_nodes = tuple(iterator)
@@ -290,6 +290,31 @@ def check(simpack, cruncher_type):
         assert kid_node.parent is parent_node
         
     assert len(project.tree.nodes) == number_of_nodes + 10
+    
+    (alternate_path,) = plain_root.all_possible_paths()
+    assert alternate_path == plain_root.make_containing_path()
+    assert len(alternate_path) == 11
+    all_except_root = list(alternate_path)[1:]
+    assert plain_root.get_all_leaves() is alternate_path[-1]
+    block = all_except_root[0].block
+    for node in all_except_root:
+        assert isinstance(node, garlicsim.data_structures.Node)
+        assert node.block is node.soft_get_block() is block
+        nose.tools.assert_raises(garlicsim.data_structures.NodeError,
+                                 node.finalize)
+        assert node.get_ancestor(generations=0) is node
+        assert node.get_ancestor(generations=Infinity, round=True) is \
+            plain_root
+        nose.tools.assert_raises(
+            garlicsim.data_structures.node.NodeLookupError,
+            lambda: node.get_ancestor(generations=Infinity, round=False)
+        )
+        nose.tools.assert_raises(
+            garlicsim.data_structures.node.NodeLookupError,
+            lambda: node.get_ancestor(generations=100, round=False)
+        )
+        
+    assert set
     
     ### Testing path methods: #################################################
     #                                                                         #

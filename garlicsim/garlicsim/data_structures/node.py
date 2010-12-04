@@ -129,11 +129,12 @@ class Node(TreeMember):
         '''
         if self.still_in_editing is False:
             if self.touched:
-                message = '''You tried to finalize a touched node, but it has \
-already been finalized.'''
+                message = ("You tried to finalize a touched node, but it has "
+                           "already been finalized.")
             else: # self.touched is False
-                message = '''You tried to finalize an untouched node. \
-Untouched nodes can't be edited, so they have no concept of being finalized.'''
+                message = ("You tried to finalize an untouched node. "
+                           "Untouched nodes can't be edited, so they have no "
+                           "concept of being finalized.")
             raise NodeError(message)
         
         self.still_in_editing = False
@@ -303,7 +304,7 @@ Untouched nodes can't be edited, so they have no concept of being finalized.'''
         ancestor should be above the current node. `round` determines how this
         method will behave if it was asked for too many generations back, and
         not enough existed. If `round` is True, it will return the root. If
-        `round` is False, it will raise a LookupError.
+        `round` is False, it will raise a `NodeLookupError`.
         '''
 
         assert generations >= 0
