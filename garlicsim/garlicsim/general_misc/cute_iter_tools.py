@@ -78,11 +78,14 @@ def shorten(iterable, n):
         raise StopIteration
     
     assert isinstance(n, int)
-    counter = 0
-    for thing in iterable:
-        if counter >= n: raise StopIteration
+
+    if n == 0:
+        raise StopIteration
+    
+    for i, thing in enumerate(iterable):
         yield thing
-        counter += 1
+        if i + 1 == n: # Checking `i + 1` to avoid pulling an extra item.
+            raise StopIteration
         
         
 def enumerate(reversable, reverse_index=False):
