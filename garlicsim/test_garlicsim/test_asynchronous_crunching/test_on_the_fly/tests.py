@@ -22,11 +22,9 @@ from garlicsim.general_misc.infinity import Infinity
 
 import garlicsim
 
+import test_garlicsim
+
 from ..shared import MustachedThreadCruncher
-
-FUZZ = 0.0001
-'''Fuzziness of floats.'''
-
 
 
 def test():
@@ -50,9 +48,10 @@ def test():
         #garlicsim.asynchronous_crunching.crunchers.ProcessCruncher
     ]
     
-    
     for simpack, cruncher_type in \
         cute_iter_tools.product(simpacks, cruncher_types):
+     
+        test_garlicsim.verify_sample_simpack_settings(simpack)
         
         # Making `_settings_for_testing` available:
         import_tools.import_all(simpack)

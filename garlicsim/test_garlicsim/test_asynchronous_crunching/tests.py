@@ -24,10 +24,9 @@ from garlicsim.general_misc.infinity import Infinity
 
 import garlicsim
 
-from .shared import MustachedThreadCruncher
+import test_garlicsim
 
-FUZZ = 0.0001
-'''Fuzziness of floats.'''
+from .shared import MustachedThreadCruncher
 
 
 def test():
@@ -57,6 +56,8 @@ def test():
         
         # Making `_settings_for_testing` available:
         import_tools.import_all(simpack)
+        
+        test_garlicsim.verify_sample_simpack_settings(simpack)
         
         yield check, simpack, cruncher_type
 

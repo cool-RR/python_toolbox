@@ -11,6 +11,8 @@ from garlicsim.misc.simpack_grokker import (SimpackGrokker, Settings,
                                             get_step_type)
 from garlicsim.misc.simpack_grokker.base_step_type import BaseStepType
 
+import test_garlicsim
+
 
 def test_simpacks():
     from . import sample_simpacks
@@ -28,6 +30,8 @@ def test_simpacks():
 
         # Making `_settings_for_testing` available:
         import_tools.import_all(simpack)
+        
+        test_garlicsim.verify_sample_simpack_settings(simpack)
         
         yield check_simpack, simpack
 
