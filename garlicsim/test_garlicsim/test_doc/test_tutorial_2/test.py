@@ -4,6 +4,7 @@ import os.path
 import shutil
 import tempfile
 import re
+import glob
 
 from garlicsim.general_misc.temp_value_setters import \
     TempWorkingDirectorySetter
@@ -69,8 +70,6 @@ class State(garlicsim.data_structures.State):
         return State(balance=5000)"""
 
 def test():
-    # tododoc: do this. Don't forget to test the simpack works.
-    
     # Asserting we don't have a `_coin_flip` on path already in some other
     # place:
     assert not import_tools.exists('_coin_flip')
@@ -92,20 +91,7 @@ def test():
             with open(state_module_path, 'w') as state_file:
                 state_file.write(state_module_contents_for_coinflip)
                 
-             
-            #string_to_replace = re.search(
-                #'    # This is your State subclass.*$',
-                #state_file_contents
-            #)
-            #state_file_contents.replace(
-                #string_to_replace,
-                
-            #)
-            #fixed_state_file_contents = state_file_contents.replace('''\
-            
-            #)
-            #with open(state_module_path, 'r') as state_file_for_reading:
-            
+                         
             with sys_tools.TempSysPathAdder(temp_dir):
                 import _coin_flip
                 state = _coin_flip.State.create_root()
@@ -158,10 +144,42 @@ def test():
         shutil.rmtree(temp_dir)
 
         
+_help_text = '''\
+This is a script for creating a skeleton for a garlicsim simpack. Use this when
+you want to make a new simpack to have the basic folders and files created for
+you.
+
+    Usage: start_simpack.py my_simpack_name
+
+The simpack will be created in the current path, in a directory with the name of
+the simpack.'''
+        
+
 def test_implicit_help():
-    pass#tododoc
+    temp_dir = tempfile.mkdtemp(prefix='temp_garlicsim_')
+    try:
+        with TempWorkingDirectorySetter(temp_dir):
+            with sys_tools.OutputCapturer() as output_capturer:
+                garlicsim.scripts.start_simpack.execute(
+                    argv=['start_simpack.py']
+                )
+            assert output_capturer.output == _help_text + '\n'
+            assert glob.glob('*') == []
+            
+    finally:
+        shutil.rmtree(temp_dir)
         
 
 def test_explicit_help():
-    pass#tododoc
-    
+    temp_dir = tempfile.mkdtemp(prefix='temp_garlicsim_')
+    try:
+        with TempWorkingDirectorySetter(temp_dir):
+            with sys_tools.OutputCapturer() as output_capturer:
+                garlicsim.scripts.start_simpack.execute(
+                    argv=['start_simpack.py', '--help']
+                )
+            assert output_capturer.output == _help_text + '\n'
+            assert glob.glob('*') == []
+            
+    finally:
+        shutil.rmtree(temp_dir)
