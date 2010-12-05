@@ -137,9 +137,8 @@ The simpack will be created in the current path, in a directory with the name of
 the simpack.'''
     return
 
-    
-if __name__ == '__main__':
-
+ 
+def start():
     if len(sys.argv) != 2:
         show_help()
         sys.exit()
@@ -150,5 +149,8 @@ if __name__ == '__main__':
         sys.exit()
     
     start_simpack(os.curdir, arg)
+
+
+if __name__ == '__main__':
+    start()
     
-        
