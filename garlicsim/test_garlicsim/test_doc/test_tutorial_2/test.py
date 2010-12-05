@@ -18,9 +18,10 @@ def test():
     try:
         with TempWorkingDirectorySetter(temp_dir):
             output = sys_tools.execute('%s my_simpack' % start_simpack_file)
-            assert output == ("`my_simpack` created successfully! Explore the"
+            print(output)
+            assert output == ("`my_simpack` created successfully! Explore the "
                               "`my_simpack` folder and start filling in the "
-                              "contents of your new simpack." % (name, name))
+                              "contents of your new simpack.")
             
             
     finally:
