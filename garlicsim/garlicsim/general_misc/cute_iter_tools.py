@@ -20,7 +20,9 @@ def consecutive_pairs(iterable, wrap_around=False):
     Example: if the iterable is [0, 1, 2, 3], then its `consecutive_pairs` would
     be [(0, 1), (1, 2), (2, 3)]. (Except it would be an iterator and not an
     actual list.)
-    '''# tododoc wrap_around
+    
+    wrap_around
+    '''
 
     iterator = iter(iterable)
     

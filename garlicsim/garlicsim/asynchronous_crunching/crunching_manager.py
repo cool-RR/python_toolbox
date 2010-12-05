@@ -290,7 +290,6 @@ class CrunchingManager(object):
         
         current = node
         counter = 0
-        self.step_profiles[cruncher] # tododoc: wtf this line?
         
         queue_iterator = queue_tools.iterate(
             cruncher.work_queue,

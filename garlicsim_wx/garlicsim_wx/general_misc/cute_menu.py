@@ -56,7 +56,7 @@ class CuteMenu(wx.Menu):
         )
         
     def _get_number_in_menu_bar(self):
-        # tododoc: check if we even have a menu bar, otherwise throw helpful
+        # todo: check if we even have a menu bar, otherwise throw helpful
         # exception.
         menu_bar = self.GetMenuBar()
         for (i, (menu, title)) in enumerate(menu_bar.GetMenus()):
