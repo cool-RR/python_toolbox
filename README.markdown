@@ -13,7 +13,7 @@
 
 [Mailing lists](http://docs.garlicsim.org/misc/mailing-lists.html)
 
-If you wish, it's possible to just run the gui and play with it without installing anything. To do so, download the repo and run the `run_gui.py` file in the root folder.
+If you wish, it's possible to just run the GUI and play with it without installing anything. To do so, download the repo and run the `run_gui.py` file in the root folder.
 
 
 # What is GarlicSim? #
@@ -52,13 +52,11 @@ To subscribe just send an email. These lists are hosted by [librelist](http://li
 
 # Core and GUI #
 
-This repository contains three packages: `garlicsim`, which is the core logic, `garlicsim_lib`, which is a collection of simpacks, and `garlicsim_wx`, which is the wxPython-based GUI. 
-
-The `garlicsim` package is the important one, and its code is well-organized and very readable.
+This repository contains three packages: `garlicsim`, which is the core logic, `garlicsim_lib`, which is a collection of simpacks, and `garlicsim_wx`, which is the wxPython-based GUI.
 
 The `garlicsim` and `garlicsim_lib` packages are distributed under the **LGPL2.1 license**. 
 
-`garlicsim_wx` is in a less mature state than `garlicsim`. Also, it is not licensed as open source. (Though the source code is available and not obfuscated.) I have not yet decided if the gui will be developed as an open source project or as commercial software, so in the meantime it is officially closed source.
+`garlicsim_wx` is not licensed as open source. (Though the source code is available and not obfuscated.) I have not yet decided if the GUI will be developed as an open source project or as commercial software, so in the meantime it is officially closed source.
 
 If you require an official license, [contact me](mailto:cool-rr@cool-rr.com) and I'll probably give you one.
 

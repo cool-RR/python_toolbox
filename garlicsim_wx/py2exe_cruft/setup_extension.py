@@ -253,7 +253,7 @@ packages_to_include_with_all_submodules = [
     
     'garlicsim', 'garlicsim_lib',
     
-    'numpy', 'scipy'
+    'numpy'
     
 ]
 

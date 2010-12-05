@@ -44,7 +44,7 @@ Optional but recommended:
 For some simpacks in ``garlicsim_lib``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* `SciPy and NumPy`_
+* `NumPy`_
  
 
 For ``garlicsim_wx``
@@ -128,5 +128,5 @@ interpreter:
 .. _Backport of the multiprocessing module: http://pypi.python.org/pypi/multiprocessing/
 .. _Python for Windows Extensions: http://sourceforge.net/projects/pywin32
 .. _Psyco: http://psyco.sourceforge.net
-.. _SciPy and NumPy: http://scipy.org/Download
+.. _NumPy: http://scipy.org/Download
 .. _wxPython 2.8.10.1 or above: http://wxpython.org/download.php

@@ -41,11 +41,11 @@ class State(garlicsim.data_structures.State):
         return State.create_root(width, height, fill='random')
                                  
     
-    def step(self, survival=[2, 3], creation=[3], randomness=0):
+    def step(self, birth=[3], survival=[2, 3], randomness=0):
         old_board = self.board
         new_board = Board(parent=old_board,
+                          birth=birth,
                           survival=survival,
-                          creation=creation,
                           randomness=randomness)
         new_state = State()
         new_state.board = new_board
@@ -87,7 +87,7 @@ class State(garlicsim.data_structures.State):
 class Board(object):
     '''Represents a Life board.''' 
     def __init__(self, width=None, height=None, fill="empty", parent=None,
-                 survival=[2, 3], creation=[3], randomness=0):
+                 birth=[3], survival=[2, 3], randomness=0):
         '''
         If `parent` is specified, makes a board which is descendent from the
         parent.
@@ -103,8 +103,8 @@ class Board(object):
                         y, 
                         parent.cell_will_become(x,
                                                 y,
+                                                birth=birth,
                                                 survival=survival,
-                                                creation=creation,
                                                 randomness=randomness)
                     )
             return
@@ -152,7 +152,7 @@ class Board(object):
                     result += 1
         return result
 
-    def cell_will_become(self, x, y, survival=[2, 3], creation=[3],
+    def cell_will_become(self, x, y, birth=[3], survival=[2, 3],
                          randomness=0):
         '''
         Return what value a specified cell will have after an iteration of the
@@ -168,7 +168,7 @@ class Board(object):
             else:
                 return False
         else: # self.get(x, y) is False
-            if n in creation:
+            if n in birth:
                 return True
             else:
                 return False
