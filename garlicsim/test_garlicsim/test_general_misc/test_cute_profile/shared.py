@@ -1,22 +1,19 @@
 import sys
-from StringIO import StringIO
 
+from garlicsim.general_misc.sys_tools import OutputCapturer
 from garlicsim.general_misc import logic_tools
 
 segments = ('function calls in', 'Ordered by', 'ncalls', 'tottime', 'percall',
             'cumtime')
 
 def call_and_check_if_profiled(f):
-    old_stdout = sys.stdout
-    sys.stdout = string_io = StringIO()
-    f()
-    sys.stdout = old_stdout
     
-    dump = string_io.getvalue()
+    with OutputCapturer() as output_capturer:
+        f()
     
-    sys.stdout.write(dump)
-    
-    segments_found = [(segment in dump) for segment in segments]
+    output = output_capturer.final_value
+        
+    segments_found = [(segment in output) for segment in segments]
     
     if not logic_tools.all_equal(segments_found):
         raise Exception("Some segments were found, but some weren't; Can't "

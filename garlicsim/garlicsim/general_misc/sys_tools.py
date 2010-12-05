@@ -1,3 +1,4 @@
+import os
 import sys
 import cStringIO
 
@@ -6,7 +7,11 @@ from garlicsim.general_misc.temp_value_setters import TempValueSetter
 
 class OutputCapturer(object):
     '''
+
     
+    with OutputCapturer as output_capturer:
+        do_stuff()
+    output_capturer.final_value # <-- String containing all output
     '''
     def __init__(self):
         self.string_io = cStringIO.StringIO()
@@ -23,5 +28,8 @@ class OutputCapturer(object):
         self.final_value = self.string_io.getvalue()
 
 
-def execute(commmand):
-    pass # tododoc
+def execute(command):
+    with OutputCapturer() as output_capturer:
+        os.system(command) # Throwing away the exit status
+    return output_capturer.final_value
+    

@@ -106,8 +106,8 @@ def start_simpack(containing_folder, name):
             _make_writeable(dest_file)
         except Exception:
             pass
-    print("%s simpack created successfully! Explore the %s folder and start "
-          "filling in the contents of your new simpack." % (name, name))
+    print("`%s` simpack created successfully! Explore the `%s` folder and "
+          "start filling in the contents of your new simpack." % (name, name))
                 
     
 def _make_writeable(filename):
