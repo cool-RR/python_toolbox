@@ -256,11 +256,11 @@ class Tree(object):
         # stitched to the new parent, but I'm currently forcing it to be false
         # because I haven't decided yet how I will handle stitching.
         
-        head_node = node_range.start if isinstance(node_range.start, Node) \
-                     else node_range.start[0]
+        head_node = node_range.head if isinstance(node_range.head, Node) \
+                     else node_range.head[0]
         
-        tail_node = node_range.end if isinstance(node_range.end, Node) \
-                     else node_range.end[-1]
+        tail_node = node_range.tail if isinstance(node_range.tail, Node) \
+                     else node_range.tail[-1]
         
         if head_node in self.roots:
             self.roots.remove(head_node)

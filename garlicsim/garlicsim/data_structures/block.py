@@ -243,7 +243,7 @@ class Block(TreeMember):
             if self.alive is False:                
                 return
             
-            if i >= 1:                
+            if i.start >= 1:
                 self.split(head_node.parent)
                 
             if head_node.block is not None:
