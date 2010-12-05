@@ -17,7 +17,7 @@ class CachedProperty(object):
         
             personality = CachedProperty(_get_personality)
     
-    '''#tododoc: test as decorator
+    '''
     def __init__(self, getter, name=None):
         '''
         Construct the cached property.

@@ -1,6 +1,4 @@
 
-# tododoc: Must use weakref, otherwise all garbage-collection goes kaput!
-
 import functools
 import weakref
 
@@ -15,6 +13,9 @@ def cache(max_size=Infinity):
     # compile a function accordingly, so functions with a simple argspec won't
     # have to go through so much shit. update: probably it will help only for
     # completely argumentless function. so do one for those.
+    
+    # todo: if user put a function instead of `max_size`, give helpful exception
+    # message.
 
     if max_size == Infinity:
         
@@ -49,11 +50,13 @@ def cache(max_size=Infinity):
             cache_dict = OrderedDict()
             
             def cached(*args, **kwargs):
-                sleek_call_args = SleekCallArgs(cache_dict, function, *args, **kwargs)
+                sleek_call_args = \
+                    SleekCallArgs(cache_dict, function, *args, **kwargs)
                 try:
                     return cached.cache[sleek_call_args]
                 except KeyError:
-                    cached.cache[sleek_call_args] = value = function(*args, **kwargs)
+                    cached.cache[sleek_call_args] = value = \
+                        function(*args, **kwargs)
                     if len(cached.cache) > max_size:
                         cached.cache.popitem(last=False)
                     return value

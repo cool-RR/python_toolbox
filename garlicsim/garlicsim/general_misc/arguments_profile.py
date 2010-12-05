@@ -328,7 +328,7 @@ class ArgumentsProfile(object):
                (self.kwargs == other.kwargs)
     
     
-    def __hash__(self): #tododoc: test in dict
+    def __hash__(self):
         return self._hash
                     
 

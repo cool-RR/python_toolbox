@@ -1,15 +1,9 @@
-
-# tododoc: Must use weakref, otherwise all garbage-collection goes kaput!
-
-
 from garlicsim.general_misc.sleek_refs import SleekCallArgs
 
 
-# tododoc __all__
-
-
 class SelfPlaceholder(object):
-    pass # todo: make uninstanciable
+    # todo: make uninstanciable
+    pass 
 
 
 class CachedType(type):

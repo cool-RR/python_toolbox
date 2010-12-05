@@ -60,7 +60,7 @@ class BaseCruncher(object):
     
     @abc.abstractmethod
     def can_be_used_with_simpack_grokker(simpack_grokker):
-        '''tododoc.
+        '''
         
         (Static method.)
         '''

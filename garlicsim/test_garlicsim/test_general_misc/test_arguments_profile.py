@@ -284,3 +284,8 @@ def test_unhashable():
         (('meow', [1, 2, {1: [1, 2]}]),)
     )
     assert hash(a2) == hash(a3)
+    
+    d = {a1: 1, a2: 2}
+    assert d[a1] == 1
+    assert d[a2] == 2
+    
