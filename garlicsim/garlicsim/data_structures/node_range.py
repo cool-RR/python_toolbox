@@ -18,11 +18,11 @@ from block import Block
 class NodeRange(object):
     '''A consecutive range of nodes.'''
 
-    def __init__(self, start, tail):
+    def __init__(self, head, tail):
         '''
         Construct a NodeRange.
         
-        `start` is the node or block in which this range starts.
+        `head` is the node or block in which this range starts.
         
         `tail` is the node or block in which this range ends.
         '''

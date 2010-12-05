@@ -44,7 +44,7 @@ class Block(TreeMember):
         4. All members share the same step_profile.
 
     If you want to check whether a certain node is in a block or not,
-    check its ".block" attribute.
+    check its `.block` attribute.
 
     '''
     # todo: Possibly add a `children` property that will get from the last node.
@@ -88,14 +88,14 @@ class Block(TreeMember):
         # If the flow reached here, the block is not empty.
         last_in_block = self.__node_list[-1]
         if node.parent == last_in_block:
-            # We're appending the node to the end of the block.
+            # We're appending the node to the tail of the block.
             self.__node_list.append(node)
             node.block = self
             return
         
         first_in_block = self.__node_list[0]
         if node == first_in_block.parent:
-            # We're appending the node to the start of the block.
+            # We're appending the node to the head of the block.
             self.__node_list.insert(0, node)
             node.block = self
             return
@@ -243,7 +243,7 @@ class Block(TreeMember):
             if self.alive is False:                
                 return
             
-            if i.start >= 1:                
+            if i >= 1:                
                 self.split(head_node.parent)
                 
             if head_node.block is not None:

@@ -59,10 +59,10 @@ class NodeSelection(object):
         # equality.
         first, second = None, None
         for (r1, r2) in cute_iter_tools.orderless_combinations(self.ranges, 2):
-            if r1.start in r2:
+            if r1.head in r2:
                 second, first = r1, r2
                 break
-            elif r2.start in r1:
+            elif r2.head in r1:
                 first, second = r1, r2
                 break
             else:
@@ -76,7 +76,7 @@ class NodeSelection(object):
                         break
                 if current.parent is first.end:
                     self.ranges.remove(first)
-                    new_range = NodeRange(head=first.start, tail=second.end)
+                    new_range = NodeRange(head=first.head, tail=second.end)
                 else:
                     new_range = NodeRange(head=current, tail=second.end)
                 self.ranges.append(new_range)
