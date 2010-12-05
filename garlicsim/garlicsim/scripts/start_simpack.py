@@ -138,11 +138,13 @@ the simpack.'''
     return
 
  
-def start():
-    if len(sys.argv) != 2:
+def start(argv=None):
+    if argv is None:
+        argv = sys.argv
+    if len(argv) != 2:
         show_help()
         sys.exit()
-    arg = sys.argv[1]
+    arg = argv[1]
 
     if arg == '--help':
         show_help()

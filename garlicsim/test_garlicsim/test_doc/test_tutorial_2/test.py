@@ -17,8 +17,9 @@ def test():
     temp_dir = tempfile.mkdtemp(prefix='temp_garlicsim_')
     try:
         with TempWorkingDirectorySetter(temp_dir):
-            output = sys_tools.execute('%s my_simpack' % start_simpack_file)
-            print(output)
+            with sys_tools.OutputCapturer() as output_capturer:
+                garlicsim.scripts.start_simpack.start(argv=my_simpack)
+            output = 
             assert output == ("`my_simpack` created successfully! Explore the "
                               "`my_simpack` folder and start filling in the "
                               "contents of your new simpack.")

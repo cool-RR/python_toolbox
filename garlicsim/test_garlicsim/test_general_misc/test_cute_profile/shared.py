@@ -11,7 +11,7 @@ def call_and_check_if_profiled(f):
     with OutputCapturer() as output_capturer:
         f()
     
-    output = output_capturer.final_value
+    output = output_capturer.output
         
     segments_found = [(segment in output) for segment in segments]
     
