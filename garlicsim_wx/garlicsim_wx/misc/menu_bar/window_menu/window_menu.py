@@ -180,7 +180,7 @@ class WindowMenu(CuteMenu):
         frame.Bind(
             wx.EVT_MENU,
             lambda event: wx.CallAfter(
-                frame.SetFocus()
+                frame.SetFocus
             ),
             source=self.focus_on_window_button
         )
