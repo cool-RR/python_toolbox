@@ -129,6 +129,7 @@ def test():
                             new_state.last_bet_result))
                     assert new_state.balance <= 6000
                     if new_state.balance == 6000:
+                        assert new_state.last_bet_result > 0
                         got_winner = True
                         continue
                     else:
@@ -137,6 +138,19 @@ def test():
                             (-2) * new_state.last_bet_result
                         got_loser = True
                         continue
+                    
+                    states = garlicsim.list_simulate(state, Infinity)
+                    len(states)
+                    assert re.match(
+                        r'^\[5000(, \d+)+\]$',
+                        repr([s.balance for s in states])
+                    )
+                    
+                    def get_end_balance():
+                        return garlicsim.simulate(state, Infinity).balance
+                    results = [get_end_balance() for i in range(100)]
+                    assert 3000 < (sum(results) / len(results)) < 6000
+                    assert 0.4 < (results.count(6000)/len(results)) < 0.95
             
             
             
