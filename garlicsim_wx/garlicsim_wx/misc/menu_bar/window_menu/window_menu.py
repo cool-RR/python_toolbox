@@ -165,6 +165,25 @@ class WindowMenu(CuteMenu):
             ),
             source=self.tree_browser_button
         )
+        
+        
+        self.AppendSeparator()
+        
+        
+        self.focus_on_window_button = self.Append(
+            -1,
+            '&Focus on window',
+            " Bring the keyboard focus back from a widget to the GarlicSim "
+            "window"
+        )
+        
+        frame.Bind(
+            wx.EVT_MENU,
+            lambda event: wx.CallAfter(
+                frame.SetFocus()
+            ),
+            source=self.focus_on_window_button
+        )
     
         self.workspace_widgets_buttons = [
             self.crunching_controls_button,
