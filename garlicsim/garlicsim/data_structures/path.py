@@ -22,8 +22,8 @@ from block import Block
 # We are doing `from tree import Tree` in the bottom of the file.
 
 
-__all__ = ['Path', 'PathError', 'PathOutOfRangeError', 'EndNotReached',
-           'StartNotReached']
+__all__ = ['Path', 'PathError', 'PathOutOfRangeError', 'TailNotReached',
+           'HeadNotReached']
 
 
 class PathError(GarlicSimException):
@@ -35,14 +35,14 @@ class PathLookupError(PathError, LookupError):
 class PathOutOfRangeError(PathError, IndexError):
     '''Nodes are requested from the path which are out of its range.'''
 
-class EndNotReached(PathError): 
+class TailNotReached(PathError): 
     '''
     An end node/block is specified but it turns out not to be on the path.
     '''
     # todo: consider subclass from one of the obscure exceptions like
     # LookupError
 
-class StartNotReached(PathError):
+class HeadNotReached(PathError):
     '''
     A start node/block is specified but it turns out not to be on the path.
     '''
@@ -131,7 +131,7 @@ class Path(object):
                 current = self.next_node(current)           
             except PathOutOfRangeError:
                 if end is not None:
-                    raise EndNotReached
+                    raise TailNotReached
                 raise StopIteration
 
             
@@ -179,7 +179,7 @@ class Path(object):
                     current = self.next_node(current)
                 except PathOutOfRangeError:
                     if end is not None:
-                        raise EndNotReached
+                        raise TailNotReached
                     raise StopIteration
                 
         while True:
@@ -207,7 +207,7 @@ class Path(object):
                 current = self.next_node(current)
             except PathOutOfRangeError:
                 if end is not None:
-                    raise EndNotReached
+                    raise TailNotReached
                 raise StopIteration
     
             
@@ -245,7 +245,7 @@ class Path(object):
                 current = current[0].parent
             if current is None:
                 if start is not None:
-                    raise StartNotReached
+                    raise HeadNotReached
                 raise StopIteration
                 
         while True:
@@ -273,7 +273,7 @@ class Path(object):
                 current = current[0].parent
             if current is None:
                 if start is not None:
-                    raise StartNotReached
+                    raise HeadNotReached
                 raise StopIteration
             
 

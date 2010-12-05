@@ -376,7 +376,7 @@ def check(simpack, cruncher_type):
         stranger_node = other_path[-1] 
         assert stranger_node not in path
         nose.tools.assert_raises(
-            garlicsim.data_structures.path.EndNotReached,
+            garlicsim.data_structures.path.TailNotReached,
             lambda: list(path.__iter__(tail=stranger_node))
         )
         
