@@ -37,14 +37,14 @@ class PathOutOfRangeError(PathError, IndexError):
 
 class TailNotReached(PathError): 
     '''
-    An end node/block is specified but it turns out not to be on the path.
+    A tail node/block is specified but it turns out not to be on the path.
     '''
     # todo: consider subclass from one of the obscure exceptions like
     # LookupError
 
 class HeadNotReached(PathError):
     '''
-    A start node/block is specified but it turns out not to be on the path.
+    A head node/block is specified but it turns out not to be on the path.
     '''
     
 
