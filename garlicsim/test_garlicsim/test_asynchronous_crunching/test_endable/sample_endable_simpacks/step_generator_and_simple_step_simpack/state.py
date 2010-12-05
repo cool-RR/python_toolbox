@@ -1,5 +1,5 @@
 import garlicsim.data_structures
-from garlicsim.misc import WorldEnd
+from garlicsim.misc import WorldEnded
 
 class State(garlicsim.data_structures.State):
     
@@ -10,7 +10,7 @@ class State(garlicsim.data_structures.State):
         current_state = self
         while True:    
             if current_state.clock >= 4:
-                raise WorldEnd
+                raise WorldEnded
             old_clock = getattr(current_state, 'clock', 0)
             current_state = State()
             current_state.clock = old_clock + 1
@@ -18,7 +18,7 @@ class State(garlicsim.data_structures.State):
     
     def step(self):
         if getattr(self, 'clock', 0) >= 4:
-            raise WorldEnd
+            raise WorldEnded
         return State()
             
     @staticmethod

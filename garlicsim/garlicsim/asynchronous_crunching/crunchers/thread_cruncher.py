@@ -140,7 +140,7 @@ class ThreadCruncher(BaseCruncher, threading.Thread):
                 order = self.get_order()
                 if order:
                     self.process_order(order)
-        except garlicsim.misc.WorldEnd:
+        except garlicsim.misc.WorldEnded:
             self.work_queue.put(garlicsim.asynchronous_crunching.misc.EndMarker())
 
         

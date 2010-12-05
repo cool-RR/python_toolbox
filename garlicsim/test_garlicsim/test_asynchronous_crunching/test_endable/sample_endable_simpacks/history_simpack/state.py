@@ -1,5 +1,5 @@
 import garlicsim.data_structures
-from garlicsim.misc import WorldEnd
+from garlicsim.misc import WorldEnded
 
 class State(garlicsim.data_structures.State):
     
@@ -12,7 +12,7 @@ class State(garlicsim.data_structures.State):
         last_state = history_browser.get_last_state()
         last_state_clock = getattr(last_state, 'clock', 0)
         if last_state_clock >= 4:
-            raise WorldEnd
+            raise WorldEnded
         new_state = State()
         new_state.clock = last_state_clock + 1
         return new_state

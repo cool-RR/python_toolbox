@@ -42,7 +42,7 @@ class State(garlicsim.data_structures.State):
     def step(self, useless=None, krazy=None):
         number_of_live_cells = self.get_n_live_cells()
         if number_of_live_cells < (self.board.width * self.board.height) / 10.:
-            raise garlicsim.misc.WorldEnd
+            raise garlicsim.misc.WorldEnded
             
         old_board = self.board        
         new_board = Board(parent=old_board)

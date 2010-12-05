@@ -18,7 +18,7 @@ class InvalidSimpack(GarlicSimException):
 class SimpackError(GarlicSimException):
     '''A simpack behaved unexpectedly.'''
     
-class WorldEnd(GarlicSimException):
+class WorldEnded(GarlicSimException):
     '''The simulation has ended.'''
 
     

@@ -83,7 +83,7 @@ def _history_list_simulate(simpack_grokker, state, iterations,
     try:
         for current_state in finite_iterator:
             current_node = tree.add_state(current_state, parent=current_node)
-    except garlicsim.misc.WorldEnd:
+    except garlicsim.misc.WorldEnded:
         world_ended = True
     
     # Not doing anything with `world_ended` yet
@@ -123,7 +123,7 @@ def _non_history_list_simulate(simpack_grokker, state, iterations,
     try:
         for current_state in finite_iterator:
             current_node = tree.add_state(current_state, parent=current_node)
-    except garlicsim.misc.WorldEnd:
+    except garlicsim.misc.WorldEnded:
         world_ended = True
 
     # Not doing anything with `world_ended` yet

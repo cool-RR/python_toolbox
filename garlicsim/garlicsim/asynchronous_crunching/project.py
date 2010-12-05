@@ -318,7 +318,7 @@ class Project(object):
                     # first node we work on one straight timeline and we don't
                     # fork the tree any more.
         
-        except garlicsim.misc.WorldEnd:
+        except garlicsim.misc.WorldEnded:
             self.tree.make_end(current_node, step_profile)
             
         return current_node
@@ -355,7 +355,7 @@ class Project(object):
                 current_node = self.tree.add_state(current_state,
                                                    parent=current_node,
                                                    step_profile=step_profile)
-        except garlicsim.misc.WorldEnd:
+        except garlicsim.misc.WorldEnded:
             self.tree.make_end(current_node, step_profile)
             
         return current_node
@@ -443,7 +443,7 @@ class Project(object):
                     
                 yield current_node
         
-        except garlicsim.misc.WorldEnd:
+        except garlicsim.misc.WorldEnded:
             self.tree.make_end(current_node, step_profile)
                 
     
@@ -486,7 +486,7 @@ class Project(object):
                                                    step_profile=step_profile)
                 yield current_node
         
-        except garlicsim.misc.WorldEnd:
+        except garlicsim.misc.WorldEnded:
             self.tree.make_end(current_node, step_profile)
             
     

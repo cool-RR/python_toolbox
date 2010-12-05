@@ -165,7 +165,7 @@ class CrunchingManager(object):
             # containing the most recent state produced by the cruncher.
             #
             # tododoc: the comment above is a bit wrong, the cruncher may have
-            # stopped by a WorldEnd. (Or possibly other reasons I haven't
+            # stopped by a WorldEnded. (Or possibly other reasons I haven't
             # thought of.)
             
             cruncher = self.crunchers[job]
