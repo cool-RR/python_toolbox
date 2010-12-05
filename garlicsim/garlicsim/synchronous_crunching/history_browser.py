@@ -40,10 +40,10 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         
         self.tail_node = tail_node
         '''
-        An optional end node, in which the path ends.
+        An optional tail node, in which the path ends.
         
         If not specified, it will be None, meaning that the path would go on
-        until its natural end.
+        until its last node.
         
         If this option is specified, you will have to update the tail_node of
         the history browser every time you use the step function. (That's

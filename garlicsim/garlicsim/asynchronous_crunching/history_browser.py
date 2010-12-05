@@ -18,7 +18,9 @@ import garlicsim.general_misc.third_party.decorator
 import garlicsim.misc
 from obsolete_cruncher_error import ObsoleteCruncherError
 
+
 __all__ = ["HistoryBrowser"]
+
 
 @garlicsim.general_misc.third_party.decorator.decorator
 def with_self(method, *args, **kwargs):
@@ -27,6 +29,7 @@ def with_self(method, *args, **kwargs):
     with self:
         return method(*args, **kwargs)
 
+    
 class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
     '''
     A device for requesting information about the history of the simulation.
@@ -231,7 +234,7 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         
         our_node = self.__get_our_node()
         our_path = our_node.make_containing_path()
-        path_length = our_path.__len__(end = our_node)
+        path_length = our_path.__len__(tail=our_node)
         
         return queue_length + path_length
     

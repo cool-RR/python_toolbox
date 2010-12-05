@@ -68,17 +68,17 @@ class NodeSelection(object):
             else:
                 pass
         if first is not None and second is not None:
-            if second.end in first:
+            if second.tail in first:
                 pass
-            else: # second.end not in first
+            else: # second.tail not in first
                 for current in second:
                     if current not in first:
                         break
-                if current.parent is first.end:
+                if current.parent is first.tail:
                     self.ranges.remove(first)
-                    new_range = NodeRange(head=first.head, tail=second.end)
+                    new_range = NodeRange(head=first.head, tail=second.tail)
                 else:
-                    new_range = NodeRange(head=current, tail=second.end)
+                    new_range = NodeRange(head=current, tail=second.tail)
                 self.ranges.append(new_range)
               
             self.ranges.remove(second)
