@@ -12,7 +12,7 @@ from .cruncher_selection_dialog import CruncherSelectionDialog
 
     
 class CruncherControls(wx.Panel):
-    '''tododoc'''
+    ''''''
     
     def __init__(self, parent, frame, *args, **kwargs):
         

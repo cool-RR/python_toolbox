@@ -136,7 +136,7 @@ class CrunchingManager(object):
                 del self.crunchers[job]
 
                 
-        # In this point all the crunchers in `self.crunchers` have an active job
+        # In this point all the crunchers in `.crunchers` have an active job
         # associated with them.
         #
         # Now we'll iterate over the active jobs.
@@ -159,14 +159,13 @@ class CrunchingManager(object):
 
             # job in self.crunchers
             #
-            # Okay, so it's an active job with an active cruncher working on it.
-            # We'll take work from the cruncher and put in the tree, updating
-            # the job to point at `new_leaf`, which is the node (leaf)
-            # containing the most recent state produced by the cruncher.
+            # Okay, so it's an active job. We'll take work from the cruncher and
+            # put in the tree, updating the job to point at `new_leaf`, which is
+            # the node (leaf) containing the most recent state produced by the
+            # cruncher.
             #
-            # tododoc: the comment above is a bit wrong, the cruncher may have
-            # stopped by a WorldEnded. (Or possibly other reasons I haven't
-            # thought of.)
+            # The cruncher may either be active and crunching, or it may have
+            # stopped, (because of a `WorldEnded` exception, or other reasons.)
             
             cruncher = self.crunchers[job]
             
@@ -226,7 +225,7 @@ class CrunchingManager(object):
                     # `crunching_manager.cruncher_type` in the middle of
                     # simulating. In any case, this cruncher is done for.
                     
-                    cruncher.retire() # In case it's not totally dead
+                    cruncher.retire() # In case it's not totally dead.
                     
                     self.__conditional_create_cruncher(job)
                     
