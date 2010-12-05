@@ -5,14 +5,19 @@ import garlicsim
 
 # CRUNCHERS = garlicsim.asynchronous_crunching.crunchers.ThreadCruncher
 
-# A cruncher that this simpack insists on using.  
+# A cruncher type that this simpack insists on using.  
 # 
-# This is useful because some simpacks can't be used with certain kinds of
-# crunchers.
+# This should be used only when a simpack has a special reason to use a specific
+# cruncher type only.
+#
+# You may specify a cruncher type by string or by class. You may specify a
+# sequence of cruncher types by priority, or a filter function that takes a
+# cruncher type and returns whether the simpack allows using it.j
 
 
 
-# DETERMINISM_FUNCTION = garlicsim.misc.simpack_grokker.misc.default_determinism_function
+# DETERMINISM_FUNCTION = \
+#     garlicsim.misc.simpack_grokker.misc.default_determinism_function
 
 # Function that takes a step profile and says whether its deterministic.
 #
