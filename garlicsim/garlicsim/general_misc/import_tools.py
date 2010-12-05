@@ -126,4 +126,12 @@ def import_if_exists(module_name, silent_fail=False):
         
     return normal_import(module_name)
     
-    
+
+def exists(module_name):
+    assert '.' not in module_name
+    try:
+        imp.find_module(module_name)
+    except ImportError:
+        return False
+    else:
+        return True
