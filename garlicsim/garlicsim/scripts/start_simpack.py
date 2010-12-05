@@ -138,21 +138,21 @@ the simpack.'''
     return
 
  
-def start(argv=None):
+def execute(argv=None):
     if argv is None:
         argv = sys.argv
     if len(argv) != 2:
         show_help()
-        sys.exit()
+        return
     arg = argv[1]
 
     if arg == '--help':
         show_help()
-        sys.exit()
+        return
     
     start_simpack(os.curdir, arg)
 
 
 if __name__ == '__main__':
-    start()
+    execute()
     

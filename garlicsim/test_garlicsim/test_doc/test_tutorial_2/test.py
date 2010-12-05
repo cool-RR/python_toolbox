@@ -18,11 +18,13 @@ def test():
     try:
         with TempWorkingDirectorySetter(temp_dir):
             with sys_tools.OutputCapturer() as output_capturer:
-                garlicsim.scripts.start_simpack.start(argv=my_simpack)
-            output = 
-            assert output == ("`my_simpack` created successfully! Explore the "
-                              "`my_simpack` folder and start filling in the "
-                              "contents of your new simpack.")
+                garlicsim.scripts.start_simpack.execute(
+                    argv=['start_simpack.py', 'my_simpack']
+                )
+            assert output_capturer.output == \
+                ("`my_simpack` simpack created successfully! Explore the "
+                 "`my_simpack` folder and start filling in the contents of "
+                 "your new simpack.\n")
             
             
     finally:
