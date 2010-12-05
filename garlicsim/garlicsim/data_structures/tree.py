@@ -256,18 +256,18 @@ class Tree(object):
         # stitched to the new parent, but I'm currently forcing it to be false
         # because I haven't decided yet how I will handle stitching.
         
-        start_node = node_range.start if isinstance(node_range.start, Node) \
+        head_node = node_range.start if isinstance(node_range.start, Node) \
                      else node_range.start[0]
         
-        end_node = node_range.end if isinstance(node_range.end, Node) \
+        tail_node = node_range.end if isinstance(node_range.end, Node) \
                      else node_range.end[-1]
         
-        if start_node in self.roots:
-            self.roots.remove(start_node)
+        if head_node in self.roots:
+            self.roots.remove(head_node)
                         
-        big_parent = start_node.parent
+        big_parent = head_node.parent
         if big_parent is not None:
-            big_parent.children.remove(start_node)
+            big_parent.children.remove(head_node)
         
         outside_children = node_range.get_outside_children()
             
@@ -286,7 +286,7 @@ class Tree(object):
                 
         if current_block is not None:
             del current_block[current_block.index(last_block_change) :
-                              current_block.index(end_node)]
+                              current_block.index(tail_node)]
                     
         parent_to_use = big_parent if (stitch is True) else None
         for node in outside_children:
@@ -300,7 +300,7 @@ class Tree(object):
     def move_node_range(self, node_range):
         pass
     
-    def copy_node_range(self, node_range, start=None, end=None):
+    def copy_node_range(self, node_range, head=None, tail=None):
         pass
     """
 

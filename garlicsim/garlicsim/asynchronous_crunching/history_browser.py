@@ -89,7 +89,7 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
             new_index = index + queue_size
             our_node = self.__get_our_node()
             path = our_node.make_containing_path()
-            result_node = path.__getitem__(new_index, end=our_node)
+            result_node = path.__getitem__(new_index, tail=our_node)
             return result_node.state
             
     
@@ -101,11 +101,11 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         our_node = self.__get_our_node()
         path = our_node.make_containing_path()
         try:
-            result_node = path.__getitem__(index, end=our_node)
+            result_node = path.__getitem__(index, tail=our_node)
             return result_node.state
         
         except IndexError:
-            path_length = path.__len__(end=our_node)
+            path_length = path.__len__(tail=our_node)
             # todo: Probably inefficient: We're plowing through the path again.
             new_index = index - path_length
             try:
@@ -191,7 +191,7 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         new_function = lambda node: function(node.state)
         
         result_in_nodes = path.get_node_by_monotonic_function \
-            (new_function, value, binary_search.BOTH, end_node=our_node)
+            (new_function, value, binary_search.BOTH, tail_node=our_node)
         
         result = [(node.state if node is not None else None) \
                   for node in result_in_nodes]

@@ -131,7 +131,7 @@ def check(simpack, cruncher_type):
             leaf,
             math_tools.round_to_int(4 - x, up=True)
         )
-        x += path.__len__(start=path.next_node(leaf))
+        x += path.__len__(head=path.next_node(leaf))
             
     assert len(project.tree.nodes) == x + 1
     assert len(project.tree.roots) == 1
@@ -196,7 +196,7 @@ def check(simpack, cruncher_type):
             leaf,
             math_tools.round_to_int(3 - y, up=True)
         )
-        y += path.__len__(start=path.next_node(leaf))
+        y += path.__len__(head=path.next_node(leaf))
     
     
     assert len(project.tree.nodes) == x + y + 4
@@ -372,12 +372,12 @@ def check(simpack, cruncher_type):
         reversed_node_list = list(reversed(path))
         assert node_list == list(reversed(reversed_node_list))
         assert list(path.iterate_blockwise()) == \
-            list(reversed(list(path.iterate_blockwise_reversed(end=path[-1]))))
+            list(reversed(list(path.iterate_blockwise_reversed(tail=path[-1]))))
         stranger_node = other_path[-1] 
         assert stranger_node not in path
         nose.tools.assert_raises(
             garlicsim.data_structures.path.EndNotReached,
-            lambda: list(path.__iter__(end=stranger_node))
+            lambda: list(path.__iter__(tail=stranger_node))
         )
         
     

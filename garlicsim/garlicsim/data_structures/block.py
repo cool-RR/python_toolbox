@@ -236,18 +236,18 @@ class Block(TreeMember):
             
             assert 0 <= i.start <= i.stop < len(self)
             
-            start_node, end_node = [self[index] for index in (i.start, i.stop)]
+            head_node, tail_node = [self[index] for index in (i.start, i.stop)]
             
-            self.split(end_node)
+            self.split(tail_node)
 
             if self.alive is False:                
                 return
             
             if i.start >= 1:                
-                self.split(start_node.parent)
+                self.split(head_node.parent)
                 
-            if start_node.block is not None:
-                start_node.block.delete()
+            if head_node.block is not None:
+                head_node.block.delete()
             
         else:
             raise NotImplementedError

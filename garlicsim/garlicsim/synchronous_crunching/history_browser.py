@@ -31,34 +31,34 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
     quite simple; it recieves a path in its constructor and it handles all
     state requests from that path.
     '''
-    def __init__(self, path, end_node=None):
+    def __init__(self, path, tail_node=None):
         #todo: maybe not require path, just calculate from node?
         self.path = path
         '''
         This is the path, from which all states will be taken when requested.
         '''
         
-        self.end_node = end_node
+        self.tail_node = tail_node
         '''
         An optional end node, in which the path ends.
         
         If not specified, it will be None, meaning that the path would go on
         until its natural end.
         
-        If this option is specified, you will have to update the end_node of
+        If this option is specified, you will have to update the tail_node of
         the history browser every time you use the step function. (That's
         because you've added a node to the tree, and that node should now be
-        the end_node.)
+        the tail_node.)
         '''
      
     def get_last_state(self):
         '''Get the last state in the timeline. Identical to __getitem__(-1).'''
-        return self.end_node.state if self.end_node else self[-1]
+        return self.tail_node.state if self.tail_node else self[-1]
     
     def __getitem__(self, index):
         '''Get a state by its position in the timeline.'''
         assert isinstance(index, int)
-        return self.path.__getitem__(index, end=self.end_node).state
+        return self.path.__getitem__(index, tail=self.tail_node).state
     
     def get_state_by_monotonic_function(self, function, value,
                                         rounding=binary_search.CLOSEST):
@@ -74,7 +74,7 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         
         new_function = lambda node: function(node.state)
         result_in_nodes = self.path.get_node_by_monotonic_function \
-                        (new_function, value, rounding, end_node=self.end_node)
+                        (new_function, value, rounding, tail_node=self.tail_node)
         
         if rounding is binary_search.BOTH:
             result = [(node.state if node is not None else None) \
@@ -87,5 +87,5 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
     
     def __len__(self):
         '''Get the length of the timeline in nodes.'''
-        return self.path.__len__(end=self.end_node)
+        return self.path.__len__(tail=self.tail_node)
     

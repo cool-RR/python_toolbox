@@ -181,7 +181,7 @@ class Node(TreeMember):
         past_path = self.make_past_path()
         paths = []
         fork = None
-        for thing in past_path.iterate_blockwise(start=self):
+        for thing in past_path.iterate_blockwise(head=self):
             real_thing = thing[-1] if isinstance(thing, Block) else thing
             if len(real_thing.children):
                 fork = real_thing

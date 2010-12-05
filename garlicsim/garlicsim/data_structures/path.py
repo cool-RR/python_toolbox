@@ -86,7 +86,7 @@ class Path(object):
          # dictoids.
 
          
-    def __len__(self, start=None, end=None):
+    def __len__(self, head=None, tail=None):
         '''
         Get the length of the path in nodes.
         
@@ -97,10 +97,10 @@ class Path(object):
             return 0
             
         return sum(len(thing) for thing in 
-                   self.iterate_blockwise(start=start, end=end))
+                   self.iterate_blockwise(head=start, tail=end))
 
 
-    def __iter__(self, start=None, end=None):
+    def __iter__(self, head=None, tail=None):
         '''
         Iterate over the nodes in the path.
         
@@ -147,7 +147,7 @@ class Path(object):
             current_node = current_node.parent
             
             
-    def iterate_blockwise(self, start=None, end=None):
+    def iterate_blockwise(self, head=None, tail=None):
         '''
         Iterate on the path, yielding blocks when possible.
         
@@ -211,7 +211,7 @@ class Path(object):
                 raise StopIteration
     
             
-    def iterate_blockwise_reversed(self, start=None, end=None):
+    def iterate_blockwise_reversed(self, head=None, tail=None):
         '''
         Iterate backwards on the path, yielding blocks when possible.
         
@@ -277,12 +277,12 @@ class Path(object):
                 raise StopIteration
             
 
-    def __contains__(self, thing, start=None, end=None):
+    def __contains__(self, thing, head=None, tail=None):
         '''Return whether the path contains the specified node/block.'''
         
         assert isinstance(thing, Node) or isinstance(thing, Block)
 
-        for candidate in self.iterate_blockwise(start=start, end=end):
+        for candidate in self.iterate_blockwise(head=start, tail=end):
             if candidate is thing:
                 return True
             elif isinstance(candidate, Block) and thing in candidate:
@@ -324,7 +324,7 @@ class Path(object):
 
     
 
-    def __getitem__(self, index, end=None):
+    def __getitem__(self, index, tail=None):
         '''
         Get a node by its index number in the path.
 
@@ -336,12 +336,12 @@ class Path(object):
         
         
         if index >= 0:
-            return self.__get_item_positive(index, end=end)
+            return self.__get_item_positive(index, tail=end)
         else:
-            return self.__get_item_negative(index, end=end)
+            return self.__get_item_negative(index, tail=end)
 
         
-    def __get_item_negative(self, index, end=None):
+    def __get_item_negative(self, index, tail=None):
         '''
         Get a node by its index number in the path. Negative indices only.
 
@@ -369,7 +369,7 @@ class Path(object):
         
         my_index += 1
             
-        for thing in self.iterate_blockwise_reversed(end=end):
+        for thing in self.iterate_blockwise_reversed(tail=end):
             my_index -= len(thing)
             if my_index <= index:
                 if isinstance(thing, Block):
@@ -381,7 +381,7 @@ class Path(object):
         raise PathOutOfRangeError
         
     
-    def __get_item_positive(self, index, end=None):
+    def __get_item_positive(self, index, tail=None):
         '''
         Get a node by its index number in the path. Positive indices only.
 
@@ -390,7 +390,7 @@ class Path(object):
         # todo: supports blocks?
         my_index = -1
         answer = None
-        for thing in self.iterate_blockwise(end=end):
+        for thing in self.iterate_blockwise(tail=end):
             my_index += len(thing)
             if my_index >= index:
                 if isinstance(thing, Block):
@@ -405,7 +405,7 @@ class Path(object):
         raise PathOutOfRangeError
 
     
-    def get_last_node(self, start=None):
+    def get_last_node(self, head=None):
         '''
         Get the last node in the path.
         
@@ -414,7 +414,7 @@ class Path(object):
 
         thing = None # Setting to None before loop, so we know if loop was empty
         
-        for thing in self.iterate_blockwise(start=start):
+        for thing in self.iterate_blockwise(head=start):
             pass
 
         if isinstance(thing, Block):
@@ -425,13 +425,13 @@ class Path(object):
             raise PathOutOfRangeError("You asked for the last node in the "
                                       "path, but it's completely empty.")
 
-    def get_ends_of_last_node(self, start=None):
-        last_node = self.get_last_node(start=start)
+    def get_ends_of_last_node(self, head=None):
+        last_node = self.get_last_node(head=start)
         return last_node.ends
         
         
     def get_node_by_clock(self, clock, rounding=binary_search.CLOSEST,
-                          end_node=None):
+                          tail_node=None):
         '''
         Get a node according to its clock.
         
@@ -443,12 +443,12 @@ class Path(object):
         return self.get_node_by_monotonic_function(function=my_function,
                                                    value=clock,
                                                    rounding=rounding,
-                                                   end_node=end_node)    
+                                                   tail_node=tail_node)    
         
     
     def get_node_by_monotonic_function(self, function, value,
                                        rounding=binary_search.CLOSEST,
-                                       end_node=None):
+                                       tail_node=None):
         '''
         Get a node by specifying a measure function and a desired value.
         
@@ -463,11 +463,11 @@ class Path(object):
         both = \
              self.__get_node_by_monotonic_function_with_both_rounding(function,
                                                                       value)
-        if end_node is not None:
+        if tail_node is not None:
             new_both = list(both)
-            end_clock = end_node.state.clock
+            end_clock = tail_node.state.clock
             if new_both[0] and new_both[0].state.clock >= end_clock:
-                new_both[0] = end_node
+                new_both[0] = tail_node
             if new_both[1] and new_both[1].state.clock >= end_clock:
                 new_both[1] = None
             both = new_both

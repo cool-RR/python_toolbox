@@ -80,7 +80,7 @@ def history_cache(function, *args, **kwargs):
                 history_browser = \
                     garlicsim.synchronous_crunching.HistoryBrowser(
                         path=path,
-                        end_node=node
+                        tail_node=node
                     )
             value = function(history_browser)
             cached.node_cache[node] = value

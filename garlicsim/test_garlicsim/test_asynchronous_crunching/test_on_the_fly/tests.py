@@ -185,7 +185,7 @@ def check(simpack, cruncher_type):
         path = last_node_with_default_step_profile.make_containing_path()
  
         nodes_with_alternate_step_profile = list(
-            path.__iter__(start=first_node_with_alternate_step_profile)
+            path.__iter__(head=first_node_with_alternate_step_profile)
         )
         for node in nodes_with_alternate_step_profile:
             assert node.step_profile == alternate_step_profile

@@ -348,8 +348,8 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         '''Handler for when the to_start button gets pressed.'''
         try:
             if self.gui_project.path is None: return
-            start_node = self.gui_project.path[0]
-            self.gui_project.set_active_node(start_node)
+            head_node = self.gui_project.path[0]
+            self.gui_project.set_active_node(head_node)
         except garlicsim.data_structures.path.PathOutOfRangeError:
             return
         
@@ -357,8 +357,8 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         '''Handler for when the to_end button gets pressed.'''
         try:
             if self.gui_project.path is None: return
-            end_node = self.gui_project.path[-1]
-            self.gui_project.set_active_node(end_node)
+            tail_node = self.gui_project.path[-1]
+            self.gui_project.set_active_node(tail_node)
         except garlicsim.data_structures.path.PathOutOfRangeError:
             return
     

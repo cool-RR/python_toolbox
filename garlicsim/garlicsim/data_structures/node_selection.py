@@ -76,9 +76,9 @@ class NodeSelection(object):
                         break
                 if current.parent is first.end:
                     self.ranges.remove(first)
-                    new_range = NodeRange(start=first.start, end=second.end)
+                    new_range = NodeRange(head=first.start, tail=second.end)
                 else:
-                    new_range = NodeRange(start=current, end=second.end)
+                    new_range = NodeRange(head=current, tail=second.end)
                 self.ranges.append(new_range)
               
             self.ranges.remove(second)
