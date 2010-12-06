@@ -201,7 +201,8 @@ class CursorChanger(object):
     def __init__(self, window, cursor):
         assert isinstance(window, wx.Window)
         self.window = window
-        self.cursor = cursor
+        self.cursor = cursor if isinstance(cursor, wx.Cursor) \
+            else wx.StockCursor(cursor)
         self.old_cursor = window.GetCursor()
     def __enter__(self, *args, **kwargs):
         self.window.SetCursor(self.cursor)

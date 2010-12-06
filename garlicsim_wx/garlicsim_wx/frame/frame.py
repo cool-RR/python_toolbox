@@ -237,7 +237,8 @@ class Frame(wx.Frame):
             if self.gui_project is not None and \
                self.gui_project.active_node is not None:
                 
-                node = self.gui_project.active_node.get_ancestor(20, round=True)
+                node = self.gui_project.active_node.get_ancestor(20,
+                                                                 round=True)
                 if node:
                     self.gui_project.set_active_node(node)
         
@@ -297,7 +298,7 @@ class Frame(wx.Frame):
         self.aui_manager.UnInit()
         self.Destroy()
         garlicsim_wx.general_misc.cute_base_timer.CuteBaseTimer.\
-                    stop_timers_by_frame(self)
+            stop_timers_by_frame(self)
         event.Skip()        
         self.background_timer.stop()
 
@@ -347,7 +348,8 @@ class Frame(wx.Frame):
                 
             program_to_run.append('__garlicsim_wx_new=%s' % simpack.__name__)
          
-            subprocess.Popen(program_to_run)
+            with wx_tools.CursorChanger(self, wx.CURSOR_WAIT):
+                subprocess.Popen(program_to_run)
             
             return
             
@@ -358,8 +360,9 @@ class Frame(wx.Frame):
         Internal use.
         '''
         assert self.gui_project is None
-        gui_project = GuiProject(simpack, self)
-        self.__setup_gui_project(gui_project)
+        with wx_tools.CursorChanger(self, wx.CURSOR_WAIT):
+            gui_project = GuiProject(simpack, self)
+            self.__setup_gui_project(gui_project)
 
         
     def on_exit_menu_button(self, event):
@@ -569,7 +572,8 @@ class Frame(wx.Frame):
                 if dialog.ShowModal() != wx.ID_YES:
                     return
                 
-        wildcard = 'GarlicSim Simulation Pickle (*.gssp)|*.gssp|All files (*)|*|'
+        wildcard = ('GarlicSim Simulation Pickle (*.gssp)|'
+                    '*.gssp|All files (*)|*|')
         
         # Todo: something more sensible here. Ideally should be last place you
         # saved in, but for starters can be desktop.
@@ -590,11 +594,11 @@ class Frame(wx.Frame):
                     program = [sys.executable]
                 else:
                     program = [sys.executable, os.path.abspath(sys.argv[0])]
-                    # Todo: what if some other program is launching my code?
                     
                 program.append(path)
              
-                subprocess.Popen(program)
+                with wx_tools.CursorChanger(self, wx.CURSOR_WAIT):
+                    subprocess.Popen(program)
                         
         
     
@@ -608,8 +612,9 @@ class Frame(wx.Frame):
         with TempRecursionLimitSetter(10000):
             try:
                 with open(path, 'rb') as my_file:
-                    unpickler = pickle_tools.CuteUnpickler(my_file)
-                    gui_project = unpickler.load()
+                    with wx_tools.CursorChanger(self, wx.CURSOR_WAIT):
+                        unpickler = pickle_tools.CuteUnpickler(my_file)
+                        gui_project = unpickler.load()
                 
             except Exception, exception:
                 dialog = wx.MessageDialog(
@@ -628,21 +633,24 @@ class Frame(wx.Frame):
         '''Raise a dialog for saving a gui project to file.'''
         
         assert self.gui_project is not None
-        wildcard = 'GarlicSim Simulation Pickle (*.gssp)|*.gssp|All files (*)|*|'
+        wildcard = ('GarlicSim Simulation Pickle (*.gssp)|'
+                    '*.gssp|All files (*)|*|')
         folder = os.getcwd()
         
         save_dialog = wx.FileDialog(self, message='Save file as...',
-                                 defaultDir=folder, defaultFile='',
-                                 wildcard=wildcard,
-                                 style=wx.SAVE | wx.OVERWRITE_PROMPT)
+                                    defaultDir=folder, defaultFile='',
+                                    wildcard=wildcard,
+                                    style=wx.SAVE | wx.OVERWRITE_PROMPT)
         if save_dialog.ShowModal() == wx.ID_OK:
             path = save_dialog.GetPath()
             
             with TempRecursionLimitSetter(10000):
                 try:
                     with open(path, 'wb') as my_file:
-                        pickler = pickle_tools.CutePickler(my_file, protocol=2)
-                        pickler.dump(self.gui_project)
+                        with wx_tools.CursorChanger(self, wx.CURSOR_WAIT):
+                            pickler = pickle_tools.CutePickler(my_file,
+                                                               protocol=2)
+                            pickler.dump(self.gui_project)
     
                 except Exception, exception:
                     error_dialog = wx.MessageDialog(
