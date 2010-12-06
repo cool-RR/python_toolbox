@@ -36,7 +36,7 @@ class SleekCallArgs(object):
             star_kwargs = call_args.pop(star_kwargs_name, {})
             if star_kwargs:
                 self.star_kwargs_refs = CuteSleekValueDict(self.destroy,
-                                                                star_kwargs)
+                                                           star_kwargs)
         
         self.args_refs = CuteSleekValueDict(self.destroy, call_args)
         

@@ -2,7 +2,7 @@ from garlicsim.general_misc.weak_key_default_dict import WeakKeyDefaultDict
 
 
 class EmittingWeakKeyDefaultDict(WeakKeyDefaultDict):
-    # tododoc: make __repr__
+    
     def __init__(self, emitter, *args, **kwargs):
         super(EmittingWeakKeyDefaultDict, self).__init__(*args, **kwargs)
         self.emitter = emitter
@@ -40,6 +40,14 @@ class EmittingWeakKeyDefaultDict(WeakKeyDefaultDict):
         if self.emitter:
             self.emitter.emit()
         return result
+    
+    def __repr__(self):
+        return '%s(%s, %s, %s)' % (
+            type(self).__name__,
+            self.emitter,
+            self.default_factory,
+            dict(self)
+        )
     
     def __reduce__(self):
         """

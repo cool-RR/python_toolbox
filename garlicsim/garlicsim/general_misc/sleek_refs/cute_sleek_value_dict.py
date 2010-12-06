@@ -24,8 +24,8 @@ class CuteSleekValueDict(UserDict.UserDict, object):
 
     def __init__(self, callback, *args, **kwargs):
         self.callback = callback
-        def remove(sleek_ref, sleek_ref_to_csvd=weakref.ref(self)):
-            csvd = sleek_ref_to_csvd()
+        def remove(sleek_ref, weak_ref_to_csvd=weakref.ref(self)):
+            csvd = weak_ref_to_csvd()
             if csvd is not None:
                 del csvd.data[sleek_ref.key]
                 csvd.callback()
@@ -65,7 +65,7 @@ class CuteSleekValueDict(UserDict.UserDict, object):
     has_key = __contains__
 
     
-    def __repr__(self): # tododoc
+    def __repr__(self):
         return 'CuteSleekValueDict(%s, %s)' % (
             self.callback,
             dict(self)

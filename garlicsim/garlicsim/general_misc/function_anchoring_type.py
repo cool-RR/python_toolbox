@@ -11,8 +11,10 @@ from garlicsim.general_misc import import_tools
 
 class FunctionAnchoringType(type):
     # tododoc: consider putting this only in _py3
-    def __new__(self, name, bases, namespace_dict):
-        my_type = type.__new__(self, name, bases, namespace_dict)
+    def __new__(mcls, name, bases, namespace_dict):
+        my_type = super(FunctionAnchoringType, mcls).__new__(name,
+                                                             bases,
+                                                             namespace_dict)
         my_getted_vars = misc_tools.getted_vars(my_type)
         functions_to_anchor = [value for value in my_getted_vars.itervalues()
                                if isinstance(value, types.FunctionType)]

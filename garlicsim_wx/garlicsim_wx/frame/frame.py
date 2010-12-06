@@ -43,10 +43,8 @@ class Frame(wx.Frame):
     
     This window allows the user to create and manipulate gui projects.
     '''
-    def __init__(self, *args, **keywords):
-         # tododoc: keywords -> kwargs in whole project
-        
-        wx.Frame.__init__(self, *args, **keywords)
+    def __init__(self, *args, **kwargs):
+        wx.Frame.__init__(self, *args, **kwargs)
         
         self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM | wx.BG_STYLE_COLOUR)
         self.SetBackgroundColour(wx_tools.get_background_color())
@@ -327,9 +325,11 @@ class Frame(wx.Frame):
             if not we_are_main_program:
                 warning_dialog = \
                     garlicsim_wx.widgets.misc.NotMainProgramWarningDialog(self)
-                # tododoc: possibly I need to .Destroy this dialog
-                if warning_dialog.ShowModal() != wx.ID_YES:
-                    return
+                try:
+                    if warning_dialog.ShowModal() != wx.ID_YES:
+                        return
+                finally:
+                    warning_dialog.Destroy()
         
         dialog = garlicsim_wx.widgets.misc.SimpackSelectionDialog(self)
         

@@ -6,9 +6,9 @@ class SelfPlaceholder(object):
     pass 
 
 
-class CachedType(type):
-    def __new__(self, *args, **kwargs):
-        result = type.__new__(self, *args, **kwargs)
+class CachedType(type): #tododoc: test
+    def __new__(mcls, *args, **kwargs):
+        result = super(CachedType, mcls).__new__(*args, **kwargs)
         result.__cache = {}
         return result
     
