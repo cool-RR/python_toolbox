@@ -208,18 +208,3 @@ class CursorChanger(object):
     def __exit__(self, *args, **kwargs):
         self.window.SetCursor(self.old_cursor)
         
-def center_on_top_level_parent(window):
-    # tododoc: Can try to avoid edges of screen    
-    # tododoc: possibly this function is redundant and I should just always
-    # create dialogs on top level widgets
-    real_top_level_parent = window.GetParent().GetTopLevelParent()
-    real_top_level_parent_pos = real_top_level_parent.GetScreenPosition()
-    center_point = (
-        real_top_level_parent_pos[0] + 0.5 * real_top_level_parent.Size[0],
-        real_top_level_parent_pos[1] + 0.5 * real_top_level_parent.Size[1],
-    )
-    wanted_pos = (
-        int(center_point[0] - 0.5 * window.Size[0]),
-        int(center_point[1] - 0.5 * window.Size[1]),
-    )
-    window.Move(wanted_pos)
