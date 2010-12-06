@@ -17,7 +17,7 @@ class Settings(object):
         
         self.CRUNCHERS = misc.DefaultForceCruncher(simpack_grokker)
         '''
-        A cruncher that this simpack insists on using.tododoc
+        A cruncher that this simpack insists on using.FIX
         
         This is useful because some simpacks can't be used with certain kinds of
         crunchers.

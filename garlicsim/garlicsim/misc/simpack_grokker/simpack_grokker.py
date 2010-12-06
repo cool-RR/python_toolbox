@@ -121,7 +121,7 @@ class SimpackGrokker(object):
                                  "of step function." % simpack.__name__)
         
         self.default_step_function = self.all_step_functions[0]
-        '''tododoc.'''
+        ''' '''
         
         
     

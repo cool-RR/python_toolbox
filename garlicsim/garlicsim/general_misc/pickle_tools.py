@@ -155,9 +155,3 @@ class CuteUnpickler(object):
  
  
     
-if __name__ == '__main__':
-    import threading, multiprocessing, pickle, copy_reg
-    rl = threading.RLock()
-    f = open(r'c:\Users\User\delete_me', 'r')
-    f.__reduce__()
-    pickle.dumps(rl)
