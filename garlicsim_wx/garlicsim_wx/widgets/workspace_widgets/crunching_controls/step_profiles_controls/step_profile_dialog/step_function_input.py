@@ -41,9 +41,10 @@ class StepFunctionInput(wx.ComboBox):
         self.Bind(wx.EVT_KILL_FOCUS, self.on_kill_focus)
 
         
-    def select_step_function(self, step_function):
-        add step function to choices
-        self.step_profile_dialog.set_step_function(thing)
+    def select_step_function(self, step_function, step_function_string):
+        if step_function_string not in self.GetItems():
+            self.Append(step_function_string)
+        self.step_profile_dialog.set_step_function(step_function)
         
         
     def try_to_parse_text_and_set(self):
@@ -62,8 +63,7 @@ class StepFunctionInput(wx.ComboBox):
                     self._set_error_background()
                 return
             else:
-                
-                self.select_step_function(thing)
+                self.select_step_function(thing, text)
                 if self.error_mode:
                     self._set_normal_background()
                 
@@ -89,7 +89,7 @@ class StepFunctionInput(wx.ComboBox):
                     raise Exception("Error `%s` is a not a step function; "
                                     "It's not even a callable." % text)
             else:
-                self.select_step_function(thing)
+                self.select_step_function(thing, text)
             
         
     def on_text(self, event):
