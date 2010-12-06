@@ -7,6 +7,8 @@ from __future__ import with_statement
 
 import Queue
 
+from garlicsim.general_misc import caching
+
 
 class _Sentinel(object):
     pass
@@ -22,24 +24,20 @@ def dump(queue):
 
 
 def iterate(queue, block=False, limit_to_original_size=False):
-    '''
-    Iterate over the items in the queue.
-    
-    `limit_to_original_size` uses a sentinel, which can be a problem for queues
-    with a finite size which may get full, or if other code is `get`ting items
-    from the queue while we iterate.    
-    '''
+    '''Iterate over the items in the queue.'''
     if limit_to_original_size:
-        queue.put(_Sentinel)
-    while True:
-        try:
-            thing = queue.get(block=block)
-            if thing is _Sentinel:
-                assert limit_to_original_size
+        assert _platform_supports_qsize()
+        for i in xrange(queue.qsize()):
+            try:
+                yield queue.get(block=block)
+            except Queue.Empty:
                 raise StopIteration
-            yield thing
-        except Queue.Empty:
-            raise StopIteration
+    else: # not limit_to_original_size
+        while True:
+            try:
+                yield queue.get(block=block)
+            except Queue.Empty:
+                raise StopIteration
 
 
 def get_item(queue, i):
@@ -62,3 +60,14 @@ def queue_as_list(queue):
     '''
     with queue.mutex:
         return list(queue.queue)
+    
+
+@caching.cache()
+def _platform_supports_qsize():
+    queue = Queue()
+    try:
+        queue.qsize()
+    except NotImplementedError:
+        return False
+    else:
+        return True
