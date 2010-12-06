@@ -6,8 +6,10 @@
 from __future__ import with_statement
 
 import Queue as queue_module
+import sys
 
 from garlicsim.general_misc import caching
+from garlicsim.general_misc import import_tools
 
 
 class _Sentinel(object):
@@ -23,10 +25,22 @@ def dump(queue):
     return list(iterate(queue))
 
 
-def iterate(queue, block=False, limit_to_original_size=False):
+def iterate(queue, block=False, limit_to_original_size=False,
+            prefetch_if_no_qsize=False):
     '''Iterate over the items in the queue.'''
     if limit_to_original_size:
-        assert _platform_supports_qsize()
+        if not _platform_supports_multiprocessing_qsize():
+            if prefetch_if_no_qsize:
+                for item in dump(queue):
+                    yield item
+                raise StopIteration
+            raise NotImplementedError(
+                "This platform doesn't support `qsize` for `multiprocessing` "
+                "queues, so you can't iterate on it while limiting to "
+                "original queue size. What you can do is set "
+                "`prefetch_if_no_qsize=True` to have the entire queue "
+                "prefetched before yielding the items."
+            )
         for i in xrange(queue.qsize()):
             try:
                 yield queue.get(block=block)
@@ -63,10 +77,14 @@ def queue_as_list(queue):
     
 
 @caching.cache()
-def _platform_supports_qsize():
-    queue = queue_module.Queue()
+def _platform_supports_multiprocessing_qsize():
+    if 'multiprocessing' not in sys.modules:
+        if not import_tools.exists('multiprocessing'):
+            return False
+    import multiprocessing
+    multiprocessing_queue = multiprocessing.Queue()
     try:
-        queue.qsize()
+        multiprocessing_queue.qsize()
     except NotImplementedError:
         return False
     else:

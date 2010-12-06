@@ -291,13 +291,11 @@ class CrunchingManager(object):
         current = node
         counter = 0
         
-        if queue_tools._platform_supports_qsize():
-            queue_iterator = queue_tools.iterate(
-                cruncher.work_queue,
-                limit_to_original_size=True
-            )
-        else: # Platform doesn't support `qsize`. I'm looking at you Mac OS.
-            queue_iterator = iter(queue_tools.dump(cruncher.work_queue))
+        queue_iterator = queue_tools.iterate(
+            cruncher.work_queue,
+            limit_to_original_size=True,
+            prefetch_if_no_qsize=True
+        )
         
         for thing in queue_iterator:
             
