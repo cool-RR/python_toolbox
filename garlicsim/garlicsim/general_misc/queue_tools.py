@@ -5,7 +5,7 @@
 
 from __future__ import with_statement
 
-import Queue
+import Queue as queue_module
 
 from garlicsim.general_misc import caching
 
@@ -30,13 +30,13 @@ def iterate(queue, block=False, limit_to_original_size=False):
         for i in xrange(queue.qsize()):
             try:
                 yield queue.get(block=block)
-            except Queue.Empty:
+            except queue_module.Empty:
                 raise StopIteration
     else: # not limit_to_original_size
         while True:
             try:
                 yield queue.get(block=block)
-            except Queue.Empty:
+            except queue_module.Empty:
                 raise StopIteration
 
 
@@ -64,7 +64,7 @@ def queue_as_list(queue):
 
 @caching.cache()
 def _platform_supports_qsize():
-    queue = Queue()
+    queue = queue_module.Queue()
     try:
         queue.qsize()
     except NotImplementedError:
