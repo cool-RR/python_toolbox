@@ -38,7 +38,10 @@ class TempValueSetter(object):
         
         self.old_value = self.getter()
         self.setter(self.value)
+
+        # because of mac changing working directory:
+        self._value_right_after_setting = self.getter()
         
     def __exit__(self, *args, **kwargs):
-        assert self.getter() == self.value
+        assert self.getter() == self._value_right_after_setting
         self.setter(self.old_value)
