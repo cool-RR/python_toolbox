@@ -6,9 +6,9 @@ class SelfPlaceholder(object):
     pass 
 
 
-class CachedType(type): #tododoc: test
+class CachedType(type):
     def __new__(mcls, *args, **kwargs):
-        result = super(CachedType, mcls).__new__(*args, **kwargs)
+        result = super(CachedType, mcls).__new__(mcls, *args, **kwargs)
         result.__cache = {}
         return result
     
@@ -23,5 +23,5 @@ class CachedType(type): #tododoc: test
             return cls.__cache[sleek_call_args]
         except KeyError:
             cls.__cache[sleek_call_args] = value = \
-                type.__call__(cls, *args, **kwargs)
+                super(CachedType, cls).__call__(cls, *args, **kwargs)
             return value
