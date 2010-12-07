@@ -184,10 +184,14 @@ class GuiProject(object):
         
         self._job_and_node_of_recent_fork_by_crunching = None
         
-        #######################################################################
-        # Setting up namespace:
+        ### Setting up namespace: #############################################
+        #                                                                     # 
         
         self.namespace = {
+            
+            '__name__': '__garlicsim_shell__',
+            # This will become `.__module__` of classes and functions.
+            
             'f': frame, 'frame': frame,
             'gp': self, 'gui_project': self,
             'p': self.project, 'project': self.project,
@@ -206,9 +210,9 @@ class GuiProject(object):
                 'gs_lib': garlicsim_lib,
                 'garlicsim_lib': garlicsim_lib,
             })
-                
-        # Finished setting up namespace.
-        #######################################################################
+        
+        #                                                                     #
+        ### Finished setting up namespace. ####################################
         
             
         self.__init_emitters()

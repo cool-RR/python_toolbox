@@ -1,6 +1,6 @@
 import re
-import pickle as pickle_module
-import pickle
+import cPickle as pickle_module
+import pickle # Importing just to get dispatch table, not pickling with it.
 import copy_reg
 
 from garlicsim.general_misc import caching
