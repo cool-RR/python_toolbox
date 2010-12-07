@@ -112,14 +112,18 @@ class StepProfilesControls(wx.Panel):
             assert new_step_profile not in self.gui_project.step_profiles
             self.gui_project.step_profiles_to_hues[new_step_profile] = new_hue
             self.gui_project.step_profiles.add(new_step_profile)
+            self.step_profiles_list.select_step_profile(new_step_profile)
+            
+            
+        if not and_fork:
+            self.step_profiles_list.real_set_focus()
             
         if and_fork and step_profile_dialog.step_profile:
             self.frame.gui_project.fork_by_crunching(
                 step_profile_dialog.step_profile
             )
-
             
-
+            
     def try_delete_step_profile(self, step_profile):
         # todo: in the future, make this dialog offer to delete the nodes with
         # the step profile.

@@ -143,6 +143,14 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
             return None
         
         
+    def select_step_profile(self, step_profile):
+        item = self.step_profiles_to_items[step_profile]
+        self.SelectItem(item)
+
+        
+    def real_set_focus(self):
+        self.GetMainWindow().SetFocusIgnoringChildren()
+        
     def on_tree_item_activated(self, event):
         assert event.GetItem() == self.GetSelection()
         self.step_profiles_controls.show_step_profile_editing_dialog(
@@ -234,3 +242,4 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
     def on_set_focus(self, event):
         if self.frame.FindFocus() == self:
             self.GetMainWindow().SetFocusIgnoringChildren()
+            

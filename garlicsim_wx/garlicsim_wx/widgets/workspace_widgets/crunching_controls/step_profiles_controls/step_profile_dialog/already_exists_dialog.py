@@ -71,15 +71,11 @@ class AlreadyExistsDialog(CuteDialog):
         self.EndModal(wx.ID_OK)
         step_profiles_list = self.frame.crunching_controls.\
                              step_profiles_controls.step_profiles_list
-        item = step_profiles_list.step_profiles_to_items[self.step_profile]
-        step_profiles_list.SelectItem(item)
+        step_profiles_list.select_step_profile(self.step_profile)
         self.frame.crunching_controls.show()
 
         # Hacky, since `wx.CallAfter` doesn't work for this:
-        wx.CallLater(
-            200,
-            step_profiles_list.GetMainWindow().SetFocusIgnoringChildren
-        )
+        wx.CallLater(200, step_profiles_list.real_set_focus)
         
     
     
