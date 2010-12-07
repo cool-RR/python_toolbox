@@ -92,7 +92,7 @@ class GuiProject(object):
         assert isinstance(self.project, garlicsim.Project)
         
 
-        ### If it's a new project, use ProcessCruncher if available: ##########
+        ### If it's a new project, use `ProcessCruncher` if available: ########
         #                                                                     #
         
         if (not project): # Note this is the project given as an argument
