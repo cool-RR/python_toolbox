@@ -47,9 +47,7 @@ class CruncherControls(wx.Panel):
                   self.change_cruncher_button)
         
         self.main_v_sizer.Add(self.change_cruncher_button, 0,
-                              wx.ALIGN_RIGHT, 0)
-        
-        self.main_v_sizer.AddSpacer((-1, 10))
+                              wx.ALIGN_RIGHT | wx.BOTTOM, 5)
         
         self.gui_project.cruncher_type_changed_emitter.add_output(
             self._recalculate
