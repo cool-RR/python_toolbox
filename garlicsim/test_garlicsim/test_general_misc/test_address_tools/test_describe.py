@@ -195,3 +195,33 @@ def test_specific_objects():
     lock = multiprocessing.Lock()
     describe(lock)
     
+    
+def test_bad_module_name():
+    
+    import email
+
+    non_sensical_module_name = '__whoop_dee_doo___rrrar'
+    
+    my_locals = locals().copy()
+    my_locals['__name__'] = non_sensical_module_name
+    
+    exec 'def f(): pass' in my_locals
+    exec ('class A(object):\n'
+          '    def m(self): pass') in my_locals
+    
+    f, A = my_locals['f'], my_locals['A']
+    
+    assert describe(f) == \
+        '.'.join((non_sensical_module_name, 'f'))
+    assert describe(f, shorten=True, root=email, namespace={}) == \
+        '.'.join((non_sensical_module_name, 'f'))
+    
+    assert describe(A) == \
+        '.'.join((non_sensical_module_name, 'A'))
+    assert describe(A, shorten=True, root=email, namespace={}) == \
+        '.'.join((non_sensical_module_name, 'A'))
+    
+    assert describe(A.m) == \
+        '.'.join((non_sensical_module_name, 'A.m'))
+    assert describe(A.m, shorten=True, root=email, namespace={}) == \
+        '.'.join((non_sensical_module_name, 'A.m'))

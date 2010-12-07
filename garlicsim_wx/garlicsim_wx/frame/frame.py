@@ -653,8 +653,12 @@ class Frame(wx.Frame):
                 try:
                     with open(path, 'wb') as my_file:
                         with wx_tools.CursorChanger(self, wx.CURSOR_WAIT):
-                            pickler = pickle_tools.CutePickler(my_file,
-                                                               protocol=2)
+                            pickler = pickle_tools.CutePickler(
+                                my_file,
+                                protocol=2,
+                                pre_filter=lambda thing:
+                                    (getattr(thing, '__module__', None) != '__garlicsim_shell__')
+                            )
                             pickler.dump(self.gui_project)
     
                 except Exception, exception:

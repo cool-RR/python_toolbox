@@ -115,17 +115,26 @@ def _get_address(obj, shorten=False, root=None, namespace={}):
     
     if isinstance(obj, types.ModuleType):
         address = obj.__name__
-        assert _get_object_by_address(address) is obj
-    
     elif isinstance(obj, types.MethodType):
         address = '.'.join((obj.__module__, obj.im_class.__name__,
                             obj.__name__))
-        assert _get_object_by_address(address) == obj
-        
     else:
         address= '.'.join((obj.__module__, obj.__name__))
-        assert _get_object_by_address(address) is obj
+
+    try:
+        object_candidate = _get_object_by_address(address)
+        is_same_object = \
+            (obj == object_candidate) if isinstance(obj, types.ModuleType) \
+            else (obj is object_candidate)
+    except Exception:
+        confirmed_object_address = False
+    else:
+        confirmed_object_address = is_same_object
         
+    if not confirmed_object_address:
+        # Don't try to shorten or anything, since we can't even access the
+        # object.
+        return address
         
     if root or namespace:
         
