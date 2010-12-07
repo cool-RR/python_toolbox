@@ -65,8 +65,8 @@ class AutocrunchControls(wx.Panel):
             0
         )
         
-        #######################################################################
-        # Setting up event handling and emitter connections:
+        ### Setting up event handling and emitter connections: ################
+        #                                                                     #
         
         self.gui_project.default_buffer_modified_emitter.add_output(
             self.update_check_box
@@ -81,6 +81,9 @@ class AutocrunchControls(wx.Panel):
         self.gui_project.default_buffer_modified_emitter.add_output(
             self.update_spin_ctrl
         )
+        
+        #                                                                     #
+        ### Finished setting up event handling and emitter connections. #######
         
         
     def on_check_box(self, event):
