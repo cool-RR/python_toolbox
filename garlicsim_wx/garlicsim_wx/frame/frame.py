@@ -578,7 +578,7 @@ class Frame(wx.Frame):
                     return
                 
         wildcard = ('GarlicSim Simulation Pickle (*.gssp)|'
-                    '*.gssp|All files (*)|*|')
+                    '*.gssp|All files (*.*)|*.*|')
         
         # Todo: something more sensible here. Ideally should be last place you
         # saved in, but for starters can be desktop.
