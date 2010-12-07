@@ -61,7 +61,7 @@ class CrunchingControls(wx.lib.scrolledpanel.ScrolledPanel, WorkspaceWidget):
         self.cruncher_controls = CruncherControls(self, frame, -1)
         
         self.main_v_sizer.Add(self.cruncher_controls, 0,
-                              wx.EXPAND | wx.ALL, 10)
+                              wx.EXPAND | wx.LEFT | wx.TOP | wx.RIGHT, 10)
         
         self.autocrunch_controls.SetFocus()
         # We do this so when the user switches to this widget for the first
