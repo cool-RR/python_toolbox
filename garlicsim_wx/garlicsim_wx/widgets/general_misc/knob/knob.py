@@ -73,6 +73,8 @@ class Knob(wx.Panel):
         
         wx.Panel.__init__(self, parent, *args, **kwargs)
         
+        self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
+        
         self.original_bitmap = wx.BitmapFromImage(
             wx.ImageFromStream(
                 pkg_resources.resource_stream(images_package, 'knob.png'),
