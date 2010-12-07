@@ -108,7 +108,7 @@ def test_garlicsim():
     assert result == 'garlicsim_lib.simpacks.life.life.State.step'
     
     result = describe(garlicsim_lib.simpacks.life.life.State.step,
-                         shorten=True)
+                      shorten=True)
     assert result == 'garlicsim_lib.simpacks.life.State.step'
     
     result = describe(garlicsim_lib.simpacks.life.life.State.step,

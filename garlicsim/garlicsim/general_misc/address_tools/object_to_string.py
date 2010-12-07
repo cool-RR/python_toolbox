@@ -124,7 +124,7 @@ def _get_address(obj, shorten=False, root=None, namespace={}):
     try:
         object_candidate = _get_object_by_address(address)
         is_same_object = \
-            (obj == object_candidate) if isinstance(obj, types.ModuleType) \
+            (obj == object_candidate) if isinstance(obj, types.MethodType) \
             else (obj is object_candidate)
     except Exception:
         confirmed_object_address = False
