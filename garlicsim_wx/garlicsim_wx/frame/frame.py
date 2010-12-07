@@ -52,9 +52,14 @@ class Frame(wx.Frame):
         self.SetDoubleBuffered(True)
         self.SetIcons(garlicsim_wx.misc.icon_bundle.get_icon_bundle())
         
-        self.Bind(wx.EVT_CLOSE, self.on_close)        
+        self.Bind(wx.EVT_CLOSE, self.on_close)
         
-        garlicsim_wx.active_frame = self
+        self.app = wx.GetApp()
+        ''' '''
+        
+        assert isinstance(self.app, garlicsim_wx.App)
+        
+        garlicsim_wx.active_frame = self # tododoc: warn if there's another one
         
         self.tree_browser = None
         self.seek_bar = None

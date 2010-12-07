@@ -60,6 +60,7 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
         self.Bind(wx.EVT_PAINT, self.on_paint)
         self.Bind(wx.EVT_SIZE, self.on_size)
         self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse_event)
+        self.Bind(wx.EVT_KEY_DOWN, self.on_key_down)
 
         self.tree_remapping_flag = False
         self.recalculation_flag = False
@@ -201,6 +202,9 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
                     return thing
         return None
 
+                
+    def on_key_down(self, event):
+        self.frame.ProcessEvent(event)
 
 
 class NiftyPaintDC(wx.BufferedPaintDC):

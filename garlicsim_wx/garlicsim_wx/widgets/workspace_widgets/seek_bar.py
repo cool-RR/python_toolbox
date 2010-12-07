@@ -43,6 +43,7 @@ class SeekBar(wx.Panel, WorkspaceWidget):
         self.Bind(wx.EVT_PAINT, self.on_paint)
         self.Bind(wx.EVT_SIZE, self.on_size)
         self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse_event)
+        self.Bind(wx.EVT_KEY_DOWN, self.on_key_down)
 
         self.zoom = 1.
         self.start = 0.
@@ -194,14 +195,14 @@ class SeekBar(wx.Panel, WorkspaceWidget):
             dc.DrawText(str(number), (number - width / 2), 12)
 
 
-    def on_mouse_event(self, e):
+    def on_mouse_event(self, event):
         #todo: should catch drag to outside of the window        
         # todo: use EVT_CONTEXT_MENU, in tree browser and others too
-        if e.RightDown():
+        if event.RightDown():
             self.gui_project.stop_playing()
 
             reselect_node = False
-            new_thing = e.GetPositionTuple()[0]
+            new_thing = event.GetPositionTuple()[0]
             if self.gui_project.active_node is None:
                 reselect_node=True
             else:
@@ -219,15 +220,15 @@ class SeekBar(wx.Panel, WorkspaceWidget):
 
             if self.gui_project.active_node is not None:
                 self.gui_project.frame.Refresh()
-                self.PopupMenu(self.frame.context_menu, e.GetPosition())
+                self.PopupMenu(self.frame.context_menu, event.GetPosition())
 
 
 
-        if e.LeftDClick():
+        if event.LeftDClick():
             self.gui_project.toggle_playing()
             
-        if e.LeftDown():# or e.RightDown():
-            thing = e.GetPositionTuple()[0]
+        if event.LeftDown():# or event.RightDown():
+            thing = event.GetPositionTuple()[0]
             node = self.gui_project.path.get_node_occupying_timepoint \
                  (self.unscreenify(thing))
 
@@ -239,32 +240,38 @@ class SeekBar(wx.Panel, WorkspaceWidget):
                 self.gui_project.set_active_node(node, modify_path=False)
 
 
-        if e.LeftIsDown():
-            thing = e.GetPositionTuple()[0]
+        if event.LeftIsDown():
+            thing = event.GetPositionTuple()[0]
             node = self.gui_project.path.get_node_occupying_timepoint \
                  (self.unscreenify(thing))
             if node is not None:
                 self.gui_project.set_active_node(node, modify_path=False)
                 
-        if e.LeftUp():
+        if event.LeftUp():
             if self.was_playing_before_mouse_click:
                 self.gui_project.start_playing()
                 self.was_playing_before_mouse_click = False
                 
-        if e.Leaving():
+        if event.Leaving():
             if self.was_playing_before_mouse_click:
                 self.gui_project.start_playing()
                 self.was_playing_before_mouse_click = False
                 self.was_playing_before_mouse_click_but_then_paused_and_mouse_left = True
                 
-        if e.Entering():
+        if event.Entering():
             if self.was_playing_before_mouse_click_but_then_paused_and_mouse_left:
                 self.gui_project.stop_playing()
                 self.was_playing_before_mouse_click = True
                 self.was_playing_before_mouse_click_but_then_paused_and_mouse_left = False
 
+                
+    def on_key_down(self, event):
+        self.frame.ProcessEvent(event)
 
-    def on_size(self, e):
+        
+    def on_size(self, event):
         self.Refresh()
-        if e is not None:
-            e.Skip()
+        if event is not None:
+            event.Skip()
+
+            
