@@ -491,17 +491,23 @@ class Project(object):
             
     
     def __getstate__(self):
-        my_dict = dict(self.__dict__)
+        project_vars = dict(self.__dict__)
         
-        del my_dict['crunching_manager']
-        del my_dict['simpack_grokker']
+        del project_vars['crunching_manager']
+        del project_vars['simpack_grokker']
         
-        return my_dict
+        project_vars['___cruncher_type_of_crunching_manager'] = \
+            self.crunching_manager.cruncher_type
+        
+        return project_vars
     
     
-    def __setstate__(self, pickled_project):
-        self.__init__(pickled_project["simpack"])
-        self.__dict__.update(pickled_project)
+    def __setstate__(self, project_vars):
+        self.__init__(project_vars["simpack"])
+        self.__dict__.update(project_vars)
+        self.crunching_manager.cruncher_type = \
+            project_vars['___cruncher_type_of_crunching_manager']
+            
         
         
     def __repr__(self):
