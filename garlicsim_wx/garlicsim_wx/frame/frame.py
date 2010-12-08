@@ -33,10 +33,12 @@ import garlicsim_wx.widgets
 import garlicsim_wx.misc
 from garlicsim_wx.widgets import workspace_widgets
 
-from . import misc
-
 from . import images as __images_package
 images_package = __images_package.__name__
+
+
+wildcard_text = ('GarlicSim Simulation Pickle (*.gssp)|*.gssp|'
+                 'All files (*)|*')
 
 
 class Frame(wx.Frame):
@@ -587,8 +589,7 @@ class Frame(wx.Frame):
 
         open_dialog = wx.FileDialog(self, message='Choose a file',
                                     defaultDir=folder, defaultFile='',
-                                    wildcard=misc.wildcard_text, )#style=wx.OPEN)
-        #open_dialog = wx.FileDialog(self)
+                                    wildcard=wildcard_text, style=wx.OPEN)
         if open_dialog.ShowModal() == wx.ID_OK:
             path = open_dialog.GetPath()
             
@@ -643,7 +644,7 @@ class Frame(wx.Frame):
         
         save_dialog = wx.FileDialog(self, message='Save file as...',
                                     defaultDir=folder, defaultFile='',
-                                    wildcard=misc.wildcard_text,
+                                    wildcard=wildcard_text,
                                     style=wx.SAVE | wx.OVERWRITE_PROMPT)
         if save_dialog.ShowModal() == wx.ID_OK:
             path = save_dialog.GetPath()
