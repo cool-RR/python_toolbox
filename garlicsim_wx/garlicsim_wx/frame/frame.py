@@ -33,6 +33,8 @@ import garlicsim_wx.widgets
 import garlicsim_wx.misc
 from garlicsim_wx.widgets import workspace_widgets
 
+from . import misc
+
 from . import images as __images_package
 images_package = __images_package.__name__
 
@@ -576,9 +578,6 @@ class Frame(wx.Frame):
                     garlicsim_wx.widgets.misc.NotMainProgramWarningDialog(self)
                 if dialog.ShowModal() != wx.ID_YES:
                     return
-                
-        wildcard = ('GarlicSim Simulation Pickle (*.gssp)|'
-                    '*.gssp|All files (*.*)|*.*|')
         
         # Todo: something more sensible here. Ideally should be last place you
         # saved in, but for starters can be desktop.
@@ -588,7 +587,7 @@ class Frame(wx.Frame):
 
         open_dialog = wx.FileDialog(self, message='Choose a file',
                                     defaultDir=folder, defaultFile='',
-                                    wildcard=wildcard, style=wx.OPEN)
+                                    wildcard=misc.wildcard_text, style=wx.OPEN)
         if open_dialog.ShowModal() == wx.ID_OK:
             path = open_dialog.GetPath()
             
@@ -638,13 +637,12 @@ class Frame(wx.Frame):
         '''Raise a dialog for saving a gui project to file.'''
         
         assert self.gui_project is not None
-        wildcard = ('GarlicSim Simulation Pickle (*.gssp)|'
-                    '*.gssp|All files (*)|*|')
+        
         folder = os.getcwd()
         
         save_dialog = wx.FileDialog(self, message='Save file as...',
                                     defaultDir=folder, defaultFile='',
-                                    wildcard=wildcard,
+                                    wildcard=misc.wildcard_text,
                                     style=wx.SAVE | wx.OVERWRITE_PROMPT)
         if save_dialog.ShowModal() == wx.ID_OK:
             path = save_dialog.GetPath()
