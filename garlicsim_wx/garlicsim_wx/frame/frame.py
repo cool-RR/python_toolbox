@@ -585,9 +585,10 @@ class Frame(wx.Frame):
         
         gui_project_vars = None
 
-        open_dialog = wx.FileDialog(self, message='Choose a file',
-                                    defaultDir=folder, defaultFile='',
-                                    wildcard=misc.wildcard_text, style=wx.OPEN)
+        #open_dialog = wx.FileDialog(self, message='Choose a file',
+                                    #defaultDir=folder, defaultFile='',
+                                    #wildcard=misc.wildcard_text, style=wx.OPEN)
+        open_dialog = wx.FileDialog(self)
         if open_dialog.ShowModal() == wx.ID_OK:
             path = open_dialog.GetPath()
             
