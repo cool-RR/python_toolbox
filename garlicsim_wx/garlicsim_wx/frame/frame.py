@@ -9,7 +9,7 @@ See its documentation for more information.
 
 from __future__ import with_statement
 
-import os
+import os.path
 import sys
 import random
 import subprocess
@@ -24,6 +24,7 @@ from garlicsim.general_misc import dict_tools
 from garlicsim.general_misc import string_tools
 from garlicsim.general_misc.temp_value_setters import TempRecursionLimitSetter
 from garlicsim_wx.general_misc import thread_timer
+from garlicsim_wx.general_misc import misc_tools
 from garlicsim_wx.general_misc import wx_tools
 
 import garlicsim
@@ -652,6 +653,11 @@ class Frame(wx.Frame):
                                     style=wx.SAVE | wx.OVERWRITE_PROMPT)
         if save_dialog.ShowModal() == wx.ID_OK:
             path = save_dialog.GetPath()
+            
+            # Adding extension if got a plain file because wxPython doesn't give
+            # the checkbox that's supposed to do it on Mac:
+            path = misc_tools.add_extension_if_plain(path, '.gssp')
+            
             
             with TempRecursionLimitSetter(10000):
                 try:

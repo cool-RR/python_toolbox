@@ -1,6 +1,9 @@
 from __future__ import division
 
+import os.path
+
 from garlicsim.general_misc import cute_iter_tools
+
 
 def find_clear_place_on_circle(circle_points, circle_size=1):
 
@@ -39,4 +42,14 @@ def find_clear_place_on_circle(circle_points, circle_size=1):
     
     return result
         
-        
+    
+def add_extension_if_plain(path, extension):
+    
+    if extension:
+        assert extension.startswith('.')
+    
+    (without_extension, existing_extension) = os.path.splitext(path)
+    if existing_extension:
+        return path
+    else: # not existing_extension
+        return without_extension + extension

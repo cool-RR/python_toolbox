@@ -39,9 +39,19 @@ class State(garlicsim.data_structures.State):
     @staticmethod
     def create_messy_root(width=45, height=25):
         return State.create_root(width, height, fill='random')
-                                 
     
-    def step(self, birth=[3], survival=[2, 3], randomness=0):
+
+    def step_generator(self, birth=[3], survival=[2, 3], randomness=0):
+        # This isn't really more efficient than regular step; This is just a
+        # demonstration that `garlicsim` can handle step generators.
+        current_state = self
+        while True:
+            current_state = current_state.step(birth=birth, survival=survival,
+                                               randomness=randomness)
+            yield current_state
+    
+    
+    def step(self, birth=[3], survival=[2, 3], randomness=0, *args, **kwargs):
         old_board = self.board
         new_board = Board(parent=old_board,
                           birth=birth,
@@ -51,9 +61,6 @@ class State(garlicsim.data_structures.State):
         new_state.board = new_board
         return new_state
     
-    def ignore_this_step(self, *args, **kwargs):
-        # tododoc: del me
-        return new_state        
     
     #def whatever_step(self, **kwargs): pass
     
