@@ -1,6 +1,7 @@
 from garlicsim.general_misc.infinity import Infinity
 
-from .cheat_hash_functions import *
+from .cheat_hash_functions import (cheat_hash_dict, cheat_hash_object, 
+                                   cheat_hash_sequence, cheat_hash_set)
 
 
 dispatch_map = {

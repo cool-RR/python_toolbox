@@ -1,4 +1,4 @@
-from garlicsim.general_misc.third_party import inspect
+from garlicsim.general_misc import cute_inspect
 from garlicsim.general_misc import cheat_hashing
 
 from .sleek_ref import SleekRef
@@ -17,11 +17,11 @@ class SleekCallArgs(object):
         
         self.containing_dict = containing_dict
         
-        args_spec = inspect.getargspec(function)
+        args_spec = cute_inspect.getargspec(function)
         star_args_name, star_kwargs_name = \
                       args_spec.varargs, args_spec.keywords
         
-        call_args = inspect.getcallargs(function, *args, **kwargs)
+        call_args = cute_inspect.getcallargs(function, *args, **kwargs)
         del args, kwargs
         
         self.star_args_refs = []

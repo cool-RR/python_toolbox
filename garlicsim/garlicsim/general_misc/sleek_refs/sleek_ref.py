@@ -1,7 +1,7 @@
 import weakref
 import UserDict
 
-from garlicsim.general_misc.third_party import inspect
+from garlicsim.general_misc import cute_inspect
 
 from .exceptions import SleekRefDied
 

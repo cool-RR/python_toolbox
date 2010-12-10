@@ -1,8 +1,6 @@
 import weakref
 import UserDict
 
-from garlicsim.general_misc.third_party import inspect
-
 from .sleek_ref import SleekRef
 from .exceptions import SleekRefDied
 
