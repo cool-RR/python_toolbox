@@ -51,7 +51,7 @@ class State(garlicsim.data_structures.State):
         new_state.board = new_board
         return new_state
     
-    def step(self, *args, **kwargs):
+    def ignore_this_step(self, *args, **kwargs):
         # tododoc: del me
         return new_state        
     
