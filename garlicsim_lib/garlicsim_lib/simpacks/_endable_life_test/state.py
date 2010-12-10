@@ -4,7 +4,6 @@
 '''A module for simulating Conway's Game of Life.'''
 #tododoc: rename to `state.py`
 
-import email # tododoc: for tests, kill this before release
 import random
 import itertools
 
@@ -46,6 +45,13 @@ class State(garlicsim.data_structures.State):
         # demonstration that `garlicsim` can handle step generators.
         current_state = self
         while True:
+            
+            if current_state.get_n_live_cells() < \
+               (current_state.board.width * \
+                current_state.board.height) / 10.:
+                
+                raise garlicsim.misc.WorldEnded
+            
             current_state = current_state.step(birth=birth, survival=survival,
                                                randomness=randomness)
             yield current_state
@@ -62,13 +68,10 @@ class State(garlicsim.data_structures.State):
         return new_state
     
     
-    #def whatever_step(self, **kwargs): pass
-    
-    
-    #@garlicsim.misc.caching.state_cache
-    #def get_n_live_cells(self):
-        #'''Return how many live cells there are in the board.'''
-        #return self.board._Board__list.count(True)
+    @garlicsim.misc.caching.state_cache
+    def get_n_live_cells(self):
+        '''Return how many live cells there are in the board.'''
+        return self.board._Board__list.count(True)
 
     def __repr__(self):
         return self.board.__repr__()

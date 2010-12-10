@@ -1,4 +1,4 @@
-from ..life import State#, changes
+from ..state import State#, changes
 from . import widgets
 from state_creation_dialog import StateCreationDialog
 

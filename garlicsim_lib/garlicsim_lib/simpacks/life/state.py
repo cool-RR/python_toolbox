@@ -2,6 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''A module for simulating Conway's Game of Life.'''
+#tododoc: rename to `state.py`
 
 import random
 import itertools
@@ -37,23 +38,28 @@ class State(garlicsim.data_structures.State):
     @staticmethod
     def create_messy_root(width=45, height=25):
         return State.create_root(width, height, fill='random')
-                                 
     
-    def step(self, useless=None, krazy=None):
-        number_of_live_cells = self.get_n_live_cells()
-        if number_of_live_cells < (self.board.width * self.board.height) / 10.:
-            raise garlicsim.misc.WorldEnded
-            
-        old_board = self.board        
-        new_board = Board(parent=old_board)
+
+    def step_generator(self, birth=[3], survival=[2, 3], randomness=0):
+        # This isn't really more efficient than regular step; This is just a
+        # demonstration that `garlicsim` can handle step generators.
+        current_state = self
+        while True:
+            current_state = current_state.step(birth=birth, survival=survival,
+                                               randomness=randomness)
+            yield current_state
+    
+    
+    def step(self, birth=[3], survival=[2, 3], randomness=0, *args, **kwargs):
+        old_board = self.board
+        new_board = Board(parent=old_board,
+                          birth=birth,
+                          survival=survival,
+                          randomness=randomness)
         new_state = State()
-        if krazy:
-            new_state.board = \
-                Board(old_board.width, old_board.height, fill='random')
-            return new_state
         new_state.board = new_board
         return new_state
-
+    
     
     @garlicsim.misc.caching.state_cache
     def get_n_live_cells(self):
@@ -69,7 +75,7 @@ class State(garlicsim.data_structures.State):
     def __ne__(self, other):
         return not self.__eq__(other)
     
-    def __sub__(self, other): # experimental, test
+    def __sub__(self, other): # todo: experimental, test
         if isinstance(other, State):
             return sum(
                 (x-y) for (x, y) in itertools.izip(
@@ -86,7 +92,8 @@ class State(garlicsim.data_structures.State):
 
 class Board(object):
     '''Represents a Life board.''' 
-    def __init__(self, width=None, height=None, fill="empty", parent=None):
+    def __init__(self, width=None, height=None, fill="empty", parent=None,
+                 birth=[3], survival=[2, 3], randomness=0):
         '''
         If `parent` is specified, makes a board which is descendent from the
         parent.
@@ -97,7 +104,15 @@ class Board(object):
             self.__list = [None] * parent.width * parent.height
             for x in xrange(parent.width):
                 for y in xrange(parent.height):
-                    self.set(x, y, parent.cell_will_become(x, y))
+                    self.set(
+                        x, 
+                        y, 
+                        parent.cell_will_become(x,
+                                                y,
+                                                birth=birth,
+                                                survival=survival,
+                                                randomness=randomness)
+                    )
             return
                 
         assert fill in ["empty", "full", "random"]
@@ -143,19 +158,23 @@ class Board(object):
                     result += 1
         return result
 
-    def cell_will_become(self, x, y):
+    def cell_will_become(self, x, y, birth=[3], survival=[2, 3],
+                         randomness=0):
         '''
         Return what value a specified cell will have after an iteration of the
         simulation.
         '''
+        if randomness:
+            if random.random() <= randomness:
+                return random.choice([True, False])
         n = self.get_true_neighbors_count(x, y)
         if self.get(x, y) is True:
-            if 2<=n<=3:
+            if n in survival:
                 return True
             else:
                 return False
         else: # self.get(x, y) is False
-            if n==3:
+            if n in birth:
                 return True
             else:
                 return False
@@ -175,6 +194,7 @@ class Board(object):
 
    
 
+"""
 @garlicsim.misc.caching.history_cache
 def changes(history_browser):
     '''
@@ -192,6 +212,7 @@ def changes(history_browser):
         if board._Board__list[i] != last_board._Board__list[i]:
             counter += 1
     return counter
+"""
 
 def determinism_function(step_profile):
     try:

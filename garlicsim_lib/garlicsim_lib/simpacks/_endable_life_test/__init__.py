@@ -3,7 +3,7 @@
 
 '''A simulation package for Conway's Game of Life.'''
 
-from life import *
+from .state import *
     
 
 
