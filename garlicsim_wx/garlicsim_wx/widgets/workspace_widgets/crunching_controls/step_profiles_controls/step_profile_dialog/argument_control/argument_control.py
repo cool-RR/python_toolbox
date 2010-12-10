@@ -1,6 +1,6 @@
 import wx
 
-from garlicsim.general_misc.third_party import inspect
+from garlicsim.general_misc import cute_inspect
 from garlicsim.general_misc import misc_tools
 from garlicsim.misc import exceptions
 from garlicsim_wx.general_misc import wx_tools
@@ -49,7 +49,7 @@ class ArgumentControl(wx.Panel):
         self.main_h_sizer.Clear(deleteWindows=True)
         #self.DestroyChildren()
         
-        arg_spec = inspect.getargspec(step_function)
+        arg_spec = cute_inspect.getargspec(step_function)
         
         step_profile_dialog = self.step_profile_dialog
         

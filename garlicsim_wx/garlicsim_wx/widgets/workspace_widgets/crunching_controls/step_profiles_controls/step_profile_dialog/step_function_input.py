@@ -105,7 +105,7 @@ class StepFunctionInput(wx.ComboBox):
         if self.FindFocus() != self:
             try:
                 self.parse_text_and_set()
-            except Exception as exception:
+            except Exception, exception:
                 self.step_profile_dialog.static_function_text.set_error_text(
                     exception.args[0]
                 )

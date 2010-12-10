@@ -1,6 +1,6 @@
 import wx
 
-from garlicsim.general_misc.third_party import inspect
+from garlicsim.general_misc import cute_inspect
 
 from .arg import Arg
 
@@ -21,7 +21,7 @@ class ArgBox(wx.StaticBox):
         
         self.step_function = step_function
         
-        arg_spec = inspect.getargspec(step_function)
+        arg_spec = cute_inspect.getargspec(step_function)
         
         arg_dict = argument_control.step_profile_dialog.\
             step_functions_to_argument_dicts[

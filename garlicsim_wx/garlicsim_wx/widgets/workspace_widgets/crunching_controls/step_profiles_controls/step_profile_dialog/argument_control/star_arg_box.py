@@ -1,6 +1,8 @@
+from __future__ import with_statement
+
 import wx
 
-from garlicsim.general_misc.third_party import inspect
+from garlicsim.general_misc import cute_inspect
 from garlicsim_wx.general_misc import wx_tools
 
 from .star_arg import StarArg
@@ -24,7 +26,7 @@ class StarArgBox(wx.StaticBox):
         
         self.step_function = step_function
         
-        arg_spec = inspect.getargspec(step_function)
+        arg_spec = cute_inspect.getargspec(step_function)
         
         star_arg_list = \
             argument_control.step_profile_dialog.step_functions_to_star_args[

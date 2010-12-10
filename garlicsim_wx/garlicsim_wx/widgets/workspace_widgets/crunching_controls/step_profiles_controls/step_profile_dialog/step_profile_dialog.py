@@ -1,9 +1,11 @@
+from __future__ import with_statement
+
 import collections
 
 import wx
 
 from garlicsim.general_misc import address_tools
-from garlicsim.general_misc.third_party import inspect
+from garlicsim.general_misc import cute_inspect
 from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
 from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.widgets.general_misc.error_dialog import ErrorDialog
@@ -87,7 +89,7 @@ class StepProfileDialog(CuteDialog):
                  original_argument_dict.iteritems())
             
 
-            original_arg_spec = inspect.getargspec(original_step_function)
+            original_arg_spec = cute_inspect.getargspec(original_step_function)
             
             
             if original_arg_spec.varargs:
@@ -294,7 +296,7 @@ class StepProfileDialog(CuteDialog):
 
         step_function = self.step_function
         
-        arg_spec = inspect.getargspec(step_function)
+        arg_spec = cute_inspect.getargspec(step_function)
         
         step_profile = StepProfile.create_from_dld_format(
             

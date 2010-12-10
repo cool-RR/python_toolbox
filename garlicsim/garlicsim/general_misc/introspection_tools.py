@@ -1,10 +1,10 @@
-from garlicsim.general_misc.third_party import inspect
+from garlicsim.general_misc import cute_inspect
 
 from garlicsim.general_misc.third_party.ordered_dict import OrderedDict
 
 # tododoc: test
 def get_default_args_dict(function):
-    arg_spec = inspect.getargspec(function)
+    arg_spec = cute_inspect.getargspec(function)
     (s_args, s_star_args, s_star_kwargs, s_defaults) = arg_spec
         
     # `getargspec` has a weird policy, when inspecting a function with no
