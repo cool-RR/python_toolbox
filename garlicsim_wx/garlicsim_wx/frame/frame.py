@@ -53,7 +53,7 @@ class Frame(wx.Frame):
         self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM | wx.BG_STYLE_COLOUR)
         self.SetBackgroundColour(wx_tools.get_background_color())
         
-        self.SetDoubleBuffered(True)
+        #self.SetDoubleBuffered(True)
         self.SetIcons(garlicsim_wx.misc.icon_bundle.get_icon_bundle())
         
         self.Bind(wx.EVT_CLOSE, self.on_close)
