@@ -10,8 +10,8 @@ See its documentation for more info.
 import wx
 from garlicsim_wx.general_misc.third_party import aui
 
-from aui_dock_art import AuiDockArt
-from aui_tab_art import AuiTabArt
+from .aui_dock_art import AuiDockArt
+from .aui_tab_art import AuiTabArt
 
 
 class AuiManager(aui.AuiManager):
@@ -21,7 +21,10 @@ class AuiManager(aui.AuiManager):
  
         self.SetArtProvider(AuiDockArt())
         
-        self.TabArtProvider = AuiTabArt
+        self.tab_art_provider = AuiTabArt()
+        
+        self.SetAutoNotebookTabArt(self.tab_art_provider)
+        
         
         
     def CreateNotebook(self):
@@ -30,20 +33,20 @@ class AuiManager(aui.AuiManager):
         
         notebook = aui.AuiManager.CreateNotebook(self)
 
-        tab_art_provider = self.TabArtProvider()
+        #tab_art_provider = self.TabArtProvider()
 
-        notebook.SetArtProvider(tab_art_provider)
+        #notebook.SetArtProvider(tab_art_provider)
         
-        notebook.SetNormalFont(tab_art_provider.GetNormalFont())
-        notebook.SetSelectedFont(tab_art_provider.GetSelectedFont())
-        notebook.SetMeasuringFont(tab_art_provider.GetMeasuringFont())
+        notebook.SetNormalFont(self.tab_art_provider.GetNormalFont())
+        notebook.SetSelectedFont(self.tab_art_provider.GetSelectedFont())
+        notebook.SetMeasuringFont(self.tab_art_provider.GetMeasuringFont())
                 
-        self.Update()
+        #self.Update()
         
         # Possibly hacky:
-        aui_pane_info = self.GetPane(notebook)
-        aui_pane_info.Gripper(True)
+        #aui_pane_info = self.GetPane(notebook)
+        #aui_pane_info.Gripper(True)
         
-        self.Update()
+        #self.Update()
         
         return notebook
