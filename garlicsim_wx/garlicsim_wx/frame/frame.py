@@ -409,6 +409,7 @@ class Frame(wx.Frame):
         return nodes_added
     
     
+    
     def __setup_gui_project(self, gui_project):
         '''
         Setup a newly-created gui project.
@@ -423,140 +424,143 @@ class Frame(wx.Frame):
         # todo: should create StateReprViewer only if the simpack got no
         # workspace widgets
         
-        #with wx_tools.WindowFreezer(self):
+        with wx_tools.WindowFreezer(self):
             
-        self.tree_browser = workspace_widgets.TreeBrowser(self)
-        self.aui_manager.AddPane(
-            self.tree_browser,
-            aui.AuiPaneInfo()\
-            .Bottom().Row(0)\
-            .BestSize(1000, 100).MinSize(200, 50).MaxSize(10000, 250)\
-            .Caption(self.tree_browser.get_uppercase_name())
-            .Floatable(False)\
-            .CloseButton(False)
-        )
-        
-        self.playback_controls = workspace_widgets.PlaybackControls(self)
-        self.aui_manager.AddPane(
-            self.playback_controls,
-            aui.AuiPaneInfo()\
-            .Bottom()\
-            .BestSize(184, 128).MinSize(184, 128).MaxSize(184, 128)\
-            .Caption(self.playback_controls.get_uppercase_name())
-            .Resizable(False)\
-            .CloseButton(False)        
-        )
-        
-        self.seek_bar = workspace_widgets.SeekBar(self)
-        self.aui_manager.AddPane(
-            self.seek_bar,
-            aui.AuiPaneInfo()\
-            .Bottom().Row(1)\
-            .BestSize(600, 40).MinSize(200, 40).MaxSize(10000, 100)\
-            .Caption(self.seek_bar.get_uppercase_name())
-            .Floatable(False)\
-            .CloseButton(False)
-        )
-        
-        self.shell = workspace_widgets.Shell(self)
-        self.aui_manager.AddPane(
-            self.shell,
-            aui.AuiPaneInfo()\
-            .Right().Row(0)\
-            .BestSize(400, 600)\
-            .Caption(self.shell.get_uppercase_name())
-            .MaximizeButton(True)\
-            .CloseButton(False)
-        )
-        
-        
-        self.crunching_controls = workspace_widgets.CrunchingControls(self)
-        self.aui_manager.AddPane(
-            self.crunching_controls,
-            aui.AuiPaneInfo()\
-            .Left().Row(0)\
-            .BestSize(280, 600)\
-            .Caption(self.crunching_controls.get_uppercase_name())
-            .CloseButton(True)
-        )
-        
-        """
-        self.state_repr_viewer = workspace_widgets.StateReprViewer(self)
-        self.aui_manager.AddPane(
-            self.state_repr_viewer,
-            aui.AuiPaneInfo()\
-            .BestSize(300, 300)\
-            .MaximizeButton(True)\
-            .Center()\
-            .Caption(self.state_repr_viewer.get_uppercase_name())
-            .Floatable(False)\
-            .CloseButton(False)
-        )
-        """
-        settings_wx = self.gui_project.simpack_wx_grokker.settings
-        
-
-        big_widget_class = settings_wx.BIG_WORKSPACE_WIDGETS[0] if \
-                         settings_wx.BIG_WORKSPACE_WIDGETS else \
-                         workspace_widgets.StateReprViewer
-
-        self.big_widget = big_widget_class(self)
-        self.aui_manager.AddPane(
-            self.big_widget,
-            aui.AuiPaneInfo()\
-            .BestSize(300, 300)\
-            .MaximizeButton(True)\
-            .Center()\
-            .Caption(self.big_widget.get_uppercase_name())
-            .Floatable(False)\
-            .CloseButton(False)
-        )
-        
-        if isinstance(self.big_widget, workspace_widgets.StateReprViewer):
-            self.state_repr_viewer = self.big_widget
-        
-        """
-        big_widget_classes = \
-            settings_wx.BIG_WORKSPACE_WIDGETS #+ \
-        #    [workspace_widgets['StateReprViewer']]
-        
-        self.big_widgets = []
-        # todo: not the right way, should be easy listing of all widget
-        
-        
-        for i, BigWidget in enumerate(big_widget_classes):
-            big_widget = BigWidget(self)
+            self.tree_browser = workspace_widgets.TreeBrowser(self)
             self.aui_manager.AddPane(
-                big_widget,
+                self.tree_browser,
+                aui.AuiPaneInfo()\
+                .Bottom().Row(0)\
+                .BestSize(1000, 100).MinSize(200, 50).MaxSize(10000, 250)\
+                .Caption(self.tree_browser.get_uppercase_name())
+                .Floatable(False)\
+                .CloseButton(False)
+            )
+            
+            self.playback_controls = workspace_widgets.PlaybackControls(self)
+            self.aui_manager.AddPane(
+                self.playback_controls,
+                aui.AuiPaneInfo()\
+                .Bottom()\
+                .BestSize(184, 128).MinSize(184, 128).MaxSize(184, 128)\
+                .Caption(self.playback_controls.get_uppercase_name())
+                .Resizable(False)\
+                .CloseButton(False)\
+                .Gripper(True)
+            )
+            
+            self.seek_bar = workspace_widgets.SeekBar(self)
+            self.aui_manager.AddPane(
+                self.seek_bar,
+                aui.AuiPaneInfo()\
+                .Bottom().Row(1)\
+                .BestSize(600, 40).MinSize(200, 40).MaxSize(10000, 100)\
+                .Caption(self.seek_bar.get_uppercase_name())
+                .Floatable(False)\
+                .CloseButton(False)
+            )
+            
+            self.shell = workspace_widgets.Shell(self)
+            self.aui_manager.AddPane(
+                self.shell,
+                aui.AuiPaneInfo()\
+                .Right().Row(0)\
+                .BestSize(400, 600)\
+                .Caption(self.shell.get_uppercase_name())
+                .MaximizeButton(True)\
+                .CloseButton(False)\
+                .Gripper(True)
+            )
+            
+            
+            self.crunching_controls = workspace_widgets.CrunchingControls(self)
+            self.aui_manager.AddPane(
+                self.crunching_controls,
+                aui.AuiPaneInfo()\
+                .Left().Row(0)\
+                .BestSize(280, 600)\
+                .Caption(self.crunching_controls.get_uppercase_name())
+                .CloseButton(True)\
+                .Gripper(True)
+            )
+            
+            """
+            self.state_repr_viewer = workspace_widgets.StateReprViewer(self)
+            self.aui_manager.AddPane(
+                self.state_repr_viewer,
                 aui.AuiPaneInfo()\
                 .BestSize(300, 300)\
                 .MaximizeButton(True)\
                 .Center()\
-                .Caption(big_widget.get_uppercase_name())\
+                .Caption(self.state_repr_viewer.get_uppercase_name())
                 .Floatable(False)\
-                .CloseButton(False),
-                target=self.state_repr_viewer.get_aui_pane_info()
+                .CloseButton(False)
             )
-            #.NotebookPage(notebook_id, i)\
-            self.big_widgets.append(big_widget)
-
-        """
-        
-        if gui_project._temp_shell_history is not None:
-            assert isinstance(gui_project._temp_shell_history, basestring)
-            self.shell.SetText('')
-            self.shell.write(gui_project._temp_shell_history)
-            self.shell.push('')
-            gui_project._temp_shell_history = None
+            """
+            settings_wx = self.gui_project.simpack_wx_grokker.settings
             
-        if gui_project._temp_shell_command_history is not None:
-            assert isinstance(gui_project._temp_shell_command_history, list)
-            self.shell.history = gui_project._temp_shell_command_history[:]
-            gui_project._temp_shell_command_history = None
-        
+    
+            big_widget_class = settings_wx.BIG_WORKSPACE_WIDGETS[0] if \
+                             settings_wx.BIG_WORKSPACE_WIDGETS else \
+                             workspace_widgets.StateReprViewer
+    
+            self.big_widget = big_widget_class(self)
+            self.aui_manager.AddPane(
+                self.big_widget,
+                aui.AuiPaneInfo()\
+                .BestSize(300, 300)\
+                .MaximizeButton(True)\
+                .Center()\
+                .Caption(self.big_widget.get_uppercase_name())
+                .Floatable(False)\
+                .CloseButton(False)
+            )
+            
+            if isinstance(self.big_widget, workspace_widgets.StateReprViewer):
+                self.state_repr_viewer = self.big_widget
+            
+            """
+            big_widget_classes = \
+                settings_wx.BIG_WORKSPACE_WIDGETS #+ \
+            #    [workspace_widgets['StateReprViewer']]
+            
+            self.big_widgets = []
+            # todo: not the right way, should be easy listing of all widget
             
             
-        self.aui_manager.Update()
+            for i, BigWidget in enumerate(big_widget_classes):
+                big_widget = BigWidget(self)
+                self.aui_manager.AddPane(
+                    big_widget,
+                    aui.AuiPaneInfo()\
+                    .BestSize(300, 300)\
+                    .MaximizeButton(True)\
+                    .Center()\
+                    .Caption(big_widget.get_uppercase_name())\
+                    .Floatable(False)\
+                    .CloseButton(False),
+                    target=self.state_repr_viewer.get_aui_pane_info()
+                )
+                #.NotebookPage(notebook_id, i)\
+                self.big_widgets.append(big_widget)
+    
+            """
+            
+            if gui_project._temp_shell_history is not None:
+                assert isinstance(gui_project._temp_shell_history, basestring)
+                self.shell.SetText('')
+                self.shell.write(gui_project._temp_shell_history)
+                self.shell.push('')
+                gui_project._temp_shell_history = None
+                
+            if gui_project._temp_shell_command_history is not None:
+                assert isinstance(gui_project._temp_shell_command_history, list)
+                self.shell.history = gui_project._temp_shell_command_history[:]
+                gui_project._temp_shell_command_history = None
+            
+                
+                
+            self.aui_manager.Update()
         
         self.gui_project.emitter_system.top_emitter.emit()
         

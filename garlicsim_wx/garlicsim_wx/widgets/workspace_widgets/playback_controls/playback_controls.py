@@ -70,6 +70,7 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
                           style=wx.SUNKEN_BORDER)
         WorkspaceWidget.__init__(self, frame)
         
+        self.SetDoubleBuffered(True)
         #self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
         self.SetBackgroundColour(wx_tools.get_background_color())
         

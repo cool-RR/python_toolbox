@@ -41,6 +41,7 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
                                style=wx.SUNKEN_BORDER)
         WorkspaceWidget.__init__(self, frame)
         
+        self.SetDoubleBuffered(True)
         self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM | wx.BG_STYLE_COLOUR)
         self.SetBackgroundColour(wx_tools.get_background_color())
         

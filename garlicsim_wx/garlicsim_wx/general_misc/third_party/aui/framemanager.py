@@ -54,7 +54,7 @@ Panes can be added quite easily::
     self._mgr.Update()
 
 
-Later on, the positions can be modified easily. The following will float an
+Later on, the positions can be modified easily. The following will  an
 existing pane in a tool window::
 
     self._mgr.GetPane(text1).Float()
