@@ -10,7 +10,7 @@ See its documentation for more information.
 import copy
 
 from garlicsim.general_misc import caching
-from garlicsim.general_misc.third_party import inspect
+from garlicsim.general_misc import cute_inspect
 from garlicsim.general_misc.arguments_profile import ArgumentsProfile
 from garlicsim.general_misc import address_tools
 from garlicsim.misc.exceptions import GarlicSimException
@@ -219,7 +219,7 @@ class StepProfile(ArgumentsProfile):
     @staticmethod
     def create_from_dld_format(step_function, args_dict, star_args_list,
                                star_kwargs_dict):
-        args_spec = inspect.getargspec(step_function)
+        args_spec = cute_inspect.getargspec(step_function)
         new_args = [args_dict[name] for name in args_spec.args[1:]] + \
                    list(star_args_list)
         return StepProfile(step_function, *new_args, **star_kwargs_dict)

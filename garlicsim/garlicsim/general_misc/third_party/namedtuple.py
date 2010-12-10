@@ -1,5 +1,12 @@
 # Ram's note: This is cut out of Python 2.7's `collections` module.
 
+
+from keyword import iskeyword as _iskeyword
+from operator import itemgetter as _itemgetter, eq as _eq
+from garlicsim.general_misc.third_party.ordered_dict import OrderedDict
+import sys as _sys
+
+
 ################################################################################
 ### namedtuple
 ################################################################################

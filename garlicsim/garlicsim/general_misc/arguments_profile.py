@@ -1,7 +1,7 @@
 # Copyright 2009-2010 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-from garlicsim.general_misc.third_party import inspect
+from garlicsim.general_misc import cute_inspect
 from garlicsim.general_misc import cheat_hashing
 from garlicsim.general_misc.third_party.ordered_dict import OrderedDict
 from garlicsim.general_misc import dict_tools
@@ -31,7 +31,7 @@ class ArgumentsProfile(object):
         self.args = ()
         self.kwargs = OrderedDict()
         
-        args_spec = inspect.getargspec(function)
+        args_spec = cute_inspect.getargspec(function)
         
         (s_args, s_star_args, s_star_kwargs, s_defaults) = args_spec
         
@@ -41,9 +41,9 @@ class ArgumentsProfile(object):
         if s_defaults is None:
             s_defaults = ()
         
-        getcallargs_result = inspect.getcallargs(function,
-                                                 *raw_args,
-                                                 **raw_kwargs)
+        getcallargs_result = cute_inspect.getcallargs(function,
+                                                      *raw_args,
+                                                      **raw_kwargs)
         
         self.getcallargs_result = getcallargs_result # todo: rename?
         
@@ -306,7 +306,7 @@ class ArgumentsProfile(object):
     @staticmethod
     def create_from_dld_format(function, args_dict, star_args_list,
                                star_kwargs_dict):
-        args_spec = inspect.getargspec(function)
+        args_spec = cute_inspect.getargspec(function)
         new_args = [args_dict[name] for name in args_spec.args] + \
                    list(star_args_list)
         return ArgumentsProfile(function, *new_args, **star_kwargs_dict)
