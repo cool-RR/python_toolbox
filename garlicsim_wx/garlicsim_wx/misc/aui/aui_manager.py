@@ -29,24 +29,11 @@ class AuiManager(aui.AuiManager):
         
     def CreateNotebook(self):
         
-        # todo: try to use Andrea's new "automatic" notebook tab art provider
-        
         notebook = aui.AuiManager.CreateNotebook(self)
 
-        #tab_art_provider = self.TabArtProvider()
-
-        #notebook.SetArtProvider(tab_art_provider)
-        
         notebook.SetNormalFont(self.tab_art_provider.GetNormalFont())
         notebook.SetSelectedFont(self.tab_art_provider.GetSelectedFont())
         notebook.SetMeasuringFont(self.tab_art_provider.GetMeasuringFont())
                 
-        #self.Update()
-        
-        # Possibly hacky:
-        #aui_pane_info = self.GetPane(notebook)
-        #aui_pane_info.Gripper(True)
-        
-        #self.Update()
         
         return notebook
