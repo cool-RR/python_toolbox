@@ -44,4 +44,6 @@ class AuiManager(aui.AuiManager):
         aui_pane_info = self.GetPane(notebook)
         aui_pane_info.Gripper(True)
         
+        self.Update()
+        
         return notebook
