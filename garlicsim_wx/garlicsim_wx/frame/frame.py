@@ -22,7 +22,6 @@ import pkg_resources
 
 from garlicsim.general_misc import dict_tools
 from garlicsim.general_misc import string_tools
-from garlicsim.general_misc import pickle_tools
 from garlicsim.general_misc.temp_value_setters import TempRecursionLimitSetter
 from garlicsim_wx.general_misc import thread_timer
 from garlicsim_wx.general_misc import wx_tools
@@ -32,6 +31,7 @@ from garlicsim_wx.gui_project import GuiProject
 import garlicsim_wx.widgets
 import garlicsim_wx.misc
 from garlicsim_wx.widgets import workspace_widgets
+from garlicsim_wx import misc
 
 from . import images as __images_package
 images_package = __images_package.__name__
@@ -623,7 +623,7 @@ class Frame(wx.Frame):
             try:
                 with open(path, 'rb') as my_file:
                     with wx_tools.CursorChanger(self, wx.CURSOR_WAIT):
-                        unpickler = pickle_tools.CuteUnpickler(my_file)
+                        unpickler = misc.pickling.Unpickler(my_file)
                         gui_project = unpickler.load()
                 
             except Exception, exception:
@@ -657,11 +657,9 @@ class Frame(wx.Frame):
                 try:
                     with open(path, 'wb') as my_file:
                         with wx_tools.CursorChanger(self, wx.CURSOR_WAIT):
-                            pickler = pickle_tools.CutePickler(
+                            pickler = misc.pickling.Pickler(
                                 my_file,
                                 protocol=2,
-                                pre_filter=lambda thing:
-                                    (getattr(thing, '__module__', None) != '__garlicsim_shell__')
                             )
                             pickler.dump(self.gui_project)
     

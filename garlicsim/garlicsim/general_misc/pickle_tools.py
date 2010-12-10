@@ -117,10 +117,9 @@ _filtered_string_pattern = re.compile(
  
 class CutePickler(object): 
     '''Not subclassing because cPickle.Pickler doesn't support subclassing.'''
-    def __init__(self, file_, protocol=0, pre_filter=None): 
+    def __init__(self, file_, protocol=0): 
         pickler = self.pickler = pickle_module.Pickler(file_, protocol) 
-        pickler.persistent_id = self.persistent_id 
-        self.pre_filter = pre_filter
+        pickler.persistent_id = self.persistent_id
         self.dump, self.clear_memo = \
             pickler.dump, pickler.clear_memo
  
@@ -135,6 +134,9 @@ class CutePickler(object):
         else:
             return 'Filtered by pickle_tools (%s)' % \
                    address_tools.describe(obj)
+        
+    def pre_filter(self, thing):
+        return True
  
     
 class CuteUnpickler(object): 

@@ -37,6 +37,10 @@ class AuiManager(aui.AuiManager):
         notebook.SetNormalFont(tab_art_provider.GetNormalFont())
         notebook.SetSelectedFont(tab_art_provider.GetSelectedFont())
         notebook.SetMeasuringFont(tab_art_provider.GetMeasuringFont())
+                
+        aui_pane_info = self.GetPane(notebook)
+        aui_pane_info.Gripper(True)
 
+        self.Update()
         
         return notebook
