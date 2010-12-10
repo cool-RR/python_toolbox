@@ -5,10 +5,15 @@ from garlicsim.asynchronous_crunching.crunchers import PiCloudCruncher
 
 def test_pi_cloud_cruncher():
     
-    nose.tools.assert_raises(TypeError, PiCloudCruncher)
+    # Allowing either `TypeError` or `NotImplementedError`:
+    try:
+        nose.tools.assert_raises(TypeError, PiCloudCruncher)
+    except Exception:
+        nose.tools.assert_raises(NotImplementedError, PiCloudCruncher)
     
+        
     from test_garlicsim.test_misc.test_simpack_grokker.sample_simpacks import \
-         simpack
+        simpack
     simpack_grokker = garlicsim.misc.SimpackGrokker(simpack)
     
     availability = \
