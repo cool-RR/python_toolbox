@@ -113,7 +113,7 @@ def test_non_atomically_pickleables():
         threading.Lock(),
         cStringIO.StringIO()
     ]
-    #tododoc: test on both StringIOs too
+    #blocktododoc: test on both StringIOs too
         
     for thing in non_pickleables:
         assert not pickle_tools.is_atomically_pickleable(thing)

@@ -21,8 +21,8 @@ from .step_profile_item_panel import StepProfileItemPanel
 
 
 class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
-    '''tododoc'''
-    # tododoc: set max size dynamically according to number of profiles
+    '''blocktododoc'''
+    # blocktododoc: set max size dynamically according to number of profiles
     
     def __init__(self, step_profiles_controls, frame):
         

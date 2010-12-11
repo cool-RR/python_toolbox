@@ -1,4 +1,4 @@
-#tododoc: test condition
+#blocktododoc: test condition
 from garlicsim.general_misc import cute_profile
 
 from .shared import call_and_check_if_profiled

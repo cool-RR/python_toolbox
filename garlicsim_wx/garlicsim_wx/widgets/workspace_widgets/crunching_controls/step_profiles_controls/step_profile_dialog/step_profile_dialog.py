@@ -22,7 +22,7 @@ from .step_functions_to_argument_dicts import StepFunctionsToArgumentDicts
 
 
 class StepProfileDialog(CuteDialog):
-    # tododoc: this class will be responsible for checking if the new step
+    # blocktododoc: this class will be responsible for checking if the new step
     # profile is already present in the step_profiles set.
     
     def __init__(self, step_profiles_controls, step_profile=None,

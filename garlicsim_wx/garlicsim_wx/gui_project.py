@@ -119,9 +119,9 @@ class GuiProject(object):
         The job of the playing leaf, which should be crunched to infinity.
         '''
         
-        self.default_buffer = 100 # Should be a mechanism for setting !tododoc
+        self.default_buffer = 100 # Should be a mechanism for setting !blocktododoc
         '''The default clock buffer to crunch from an active node.'''
-        # tododoc: rename to autocrunch?
+        # blocktododoc: rename to autocrunch?
         
         self._default_buffer_before_cancellation = None
 
@@ -916,7 +916,7 @@ class GuiProject(object):
         # not the gui project itself.
 
         frame = garlicsim_wx.active_frame
-        # tododoc: Make Frame inherit from "InstanceHolder" instead
+        # blocktododoc: Make Frame inherit from "InstanceHolder" instead
         
         gui_project = GuiProject(simpack, frame, project)
         

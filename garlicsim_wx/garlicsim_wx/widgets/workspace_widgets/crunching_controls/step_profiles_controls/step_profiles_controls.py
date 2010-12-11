@@ -18,7 +18,7 @@ images_package = __images_package.__name__
 
     
 class StepProfilesControls(wx.Panel):
-    '''tododoc'''
+    '''blocktododoc'''
     
     def __init__(self, parent, frame, *args, **kwargs):
         

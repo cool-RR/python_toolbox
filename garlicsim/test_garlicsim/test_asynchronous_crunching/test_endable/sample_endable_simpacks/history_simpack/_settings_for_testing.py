@@ -9,4 +9,5 @@ DEFAULT_STEP_FUNCTION_TYPE = \
     garlicsim.misc.simpack_grokker.step_types.HistoryStep
 CONSTANT_CLOCK_INTERVAL = 1
 ENDABLE = True
+VALID = True
 CRUNCHERS_LIST = [garlicsim.asynchronous_crunching.crunchers.ThreadCruncher]

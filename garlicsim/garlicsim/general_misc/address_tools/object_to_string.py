@@ -10,7 +10,7 @@ from garlicsim.general_misc import caching
 from .shared import (_address_pattern, _contained_address_pattern,
                      _get_parent_and_dict_from_namespace)
 
-# tododoc: add caching to some functions
+# blocktododoc: add caching to some functions
 
 # todo: when shortening, check that we're not using stuff that was excluded from
 # `__all__` (if one exists)
@@ -71,7 +71,7 @@ def shorten_address(address, root=None, namespace={}):
 
     if not _address_pattern.match(address):
         raise ValueError("'%s' is not a legal address." % address)
-        # tododoc change to assert
+        # blocktododoc change to assert
     
     if '.' not in address:
         # Nothing to shorten
@@ -102,7 +102,7 @@ def shorten_address(address, root=None, namespace={}):
     
 
 def _get_address(obj, shorten=False, root=None, namespace={}):
-    # tododoc: Unprivatize since this is useful for users
+    # blocktododoc: Unprivatize since this is useful for users
     
     # todo: Support classes inside classes. Currently doesn't work because
     # Python doesn't tell us inside in which class an inner class was defined.
@@ -111,7 +111,7 @@ def _get_address(obj, shorten=False, root=None, namespace={}):
     if not (isinstance(obj, types.ModuleType) or hasattr(obj, '__module__')):
         raise Exception("%s is not a module, nor does not have a `__module__` "
                         "attribute, therefore we can't get its address." % \
-                        (obj,)) # tododoc: test
+                        (obj,)) # blocktododoc: test
     
     if isinstance(obj, types.ModuleType):
         address = obj.__name__

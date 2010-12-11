@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the WorkspaceWidget class. tododoc event
+Defines the WorkspaceWidget class. tododoc: talk about event
 
 See its documentation for more info.
 '''
@@ -22,7 +22,6 @@ EVT_WORKSPACE_WIDGET_MENU_SELECT = wx.PyEventBinder(
     wxEVT_WORKSPACE_WIDGET_MENU_SELECT,
     1
 )
-# tododoc
 
 
 class WorkspaceWidget(object):

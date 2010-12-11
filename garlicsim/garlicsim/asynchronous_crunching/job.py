@@ -59,7 +59,7 @@ class Job(object):
         step_profile=StepProfile(<unbound method State.step>)))
         '''
         # todo: too long, should shorten
-        # tododoc: use short step profile form
+        # blocktododoc: use short step profile form
         
         stuff = []
         stuff.append("node=%s" % self.node)

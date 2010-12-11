@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''A module for simulating Conway's Game of Life.'''
-#tododoc: rename to `state.py`
+#blocktododoc: rename to `state.py`
 
 import random
 import itertools

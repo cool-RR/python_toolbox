@@ -96,7 +96,7 @@ def get_packages_and_modules_filenames(root, recursive=False):
                 result += [os.path.join(entry, thing) for thing in
                            inner_results]
     
-    # Filtering: (tododoc: doc)
+    # Filtering: (blocktododoc: doc)
                 
     filename_to_module_name = dict((
         (filename, os.path.splitext(filename)[0]) for filename in result

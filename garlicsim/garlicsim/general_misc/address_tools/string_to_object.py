@@ -12,19 +12,19 @@ from .shared import (_contained_address_pattern, _address_pattern,
                      _get_parent_and_dict_from_namespace)
 
 
-# tododoc: add caching to some functions
+# blocktododoc: add caching to some functions
 
 
 def _get_object_by_address(address, root=None, namespace={}):
     
-    # tododoc: unprivatize since is useful for user
+    # blocktododoc: unprivatize since is useful for user
 
     # todo: should know what exception this will raise if the address is bad /
     # object doesn't exist.
     
     if not _address_pattern.match(address):
         raise ValueError("'%s' is not a legal address." % address)
-        # tododoc change to assert
+        # blocktododoc change to assert
     
     ###########################################################################
     # Before we start, we do some analysis of `root` and `namespace`:
@@ -110,8 +110,8 @@ def _get_object_by_address(address, root=None, namespace={}):
 
 def resolve(string, root=None, namespace={}):
     # sktechy for now
-    # tododoc: make sure namespace works here
-    # tododoc: write tests for this
+    # blocktododoc: make sure namespace works here
+    # blocktododoc: write tests for this
     
     # Resolving '' to None:
     if string == '':

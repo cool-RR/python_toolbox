@@ -61,7 +61,7 @@ def test_endable():
         
 def check(simpack, cruncher_type):
     
-    # tododoc: note somewhere visible: all simpacks end when they see a
+    # blocktododoc: note somewhere visible: all simpacks end when they see a
     # world-state with clock reading of 4 or more.
     
     assert simpack._settings_for_testing.ENDABLE is True

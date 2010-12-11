@@ -60,7 +60,7 @@ class StepProfileContextMenu(cute_menu.CuteMenu):
         
         self.delete_button = self.Append(
             -1,
-            'D&elete...\tDel', # tododoc: Can Del work?
+            'D&elete...\tDel', # blocktododoc: Can Del work?
             ' Delete this step profile'
         )
         self.Bind(wx.EVT_MENU,

@@ -10,7 +10,7 @@ from garlicsim.general_misc import import_tools
 
 
 class FunctionAnchoringType(type):
-    # tododoc: consider putting this only in _py3
+    # blocktododoc: consider putting this only in _py3
     def __new__(mcls, name, bases, namespace_dict):
         my_type = super(FunctionAnchoringType, mcls).__new__(mcls,
                                                              name,
@@ -25,7 +25,7 @@ class FunctionAnchoringType(type):
             function_name = function.__name__
             anchor_address = '.'.join((module_name, function_name))
             try:
-                # tododoc: fucking shit here
+                # blocktododoc: fucking shit here
                 already_defined_object = \
                     misc_tools.get_object_from_address(anchor_address)
             except AttributeError:

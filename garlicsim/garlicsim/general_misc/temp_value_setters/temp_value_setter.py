@@ -26,10 +26,10 @@ class TempValueSetter(object):
             self.setter = lambda value: setattr(parent, attribute_name, value)
             
         self.getter = self.getter
-        '''tododoc'''
+        '''blocktododoc'''
         
         self.setter = self.setter
-        '''tododoc'''
+        '''blocktododoc'''
         
         self.value = value
 

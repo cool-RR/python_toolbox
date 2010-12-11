@@ -43,7 +43,7 @@ class WindowMenu(CuteMenu):
         self.AppendSeparator()
         
         
-        self.crunching_controls_button = self.Append( #tododoc: don't forget enablings for these buttons
+        self.crunching_controls_button = self.Append( #blocktododoc: don't forget enablings for these buttons
             -1,
             '&Crunching',
             " Go to the crunching tool, which lets you control how your "
@@ -100,7 +100,7 @@ class WindowMenu(CuteMenu):
         self.seek_bar_button = self.Append(
             -1,
             'Seek-&bar',
-            " Go to the seek-bar, which lets you navigate the active timeline" #tododoc
+            " Go to the seek-bar, which lets you navigate the active timeline" #blocktododoc
         )       
         #self.seek_bar_button.Enable(False)
         

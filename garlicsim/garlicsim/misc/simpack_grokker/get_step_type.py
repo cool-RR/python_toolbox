@@ -41,7 +41,7 @@ def _get_step_type(step_function):
             "it. If you want GarlicSim to use it as a step function, give it "
             "a `.step_type` attribute pointing to a step type. (Like "
             "`garlicsim.misc.simpack_grokker.step_types.SimpleStep`.)" \
-            % step_function) #tododoc: test this
+            % step_funTction) #blocktododoc: test this
     
     if 'inplace_step_generator' in name:
         raise NotImplementedError('`inplace_step_generator` not yet '

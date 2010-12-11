@@ -21,8 +21,8 @@ from garlicsim.misc.simpack_grokker.get_step_type import get_step_type
 __all__ = ['StepProfile']
 
 
-class StatePlaceholder(object): # tododoc: make uninstanciable
-    # tododoc: bad name, it can also be a history browser
+class StatePlaceholder(object): # blocktododoc: make uninstanciable
+    # blocktododoc: bad name, it can also be a history browser
     pass
 
 
@@ -94,11 +94,11 @@ class StepProfile(ArgumentsProfile):
         The user may put the step function as the first positional argument, or
         as the 'step_function' keyword argument. 
         '''
-        # tododoc: it's confusing thinking who should give the
+        # blocktododoc: it's confusing thinking who should give the
         # `default_step_function`. make this clear in docstring, or possibly
         # make a function that returns a function.
         
-        # tododoc: test it works with default_step_function=None, assuming some
+        # blocktododoc: test it works with default_step_function=None, assuming some
         # step function is given, possibly in a step profile
 
         # We have two candidates to check now: args[0] and
@@ -120,7 +120,7 @@ class StepProfile(ArgumentsProfile):
             return StepProfile(step_function, *args, **kwargs_copy)
         
         
-        if 'step_profile' in kwargs: # tododoc
+        if 'step_profile' in kwargs: # blocktododoc
             kwargs_copy = kwargs.copy()
             step_profile = kwargs_copy.pop('step_profile')
             

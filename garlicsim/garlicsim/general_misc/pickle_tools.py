@@ -10,7 +10,7 @@ from garlicsim.general_misc import address_tools
 def is_atomically_pickleable(thing):
     # Using __class__ instead of type because of goddamned old-style classes.
     # And using `type` as a fallback because goddamned old-style classes don't
-    # have `__class__`. tododoc: make tests.
+    # have `__class__`. blocktododoc: make tests.
     my_type = getattr(thing, '__class__', None) or type(thing) 
     return _is_type_atomically_pickleable(my_type, thing)
 
@@ -88,7 +88,7 @@ def _is_type_atomically_pickleable(type_, thing=None):
     return result
     
     
-    ## tododoc This is done by stupid whitelisting temporarily:
+    ## blocktododoc This is done by stupid whitelisting temporarily:
     #import thread, multiprocessing.synchronize
     #atomically_non_pickleable_types = \
         #(file, thread.LockType, multiprocessing.synchronize.Lock)

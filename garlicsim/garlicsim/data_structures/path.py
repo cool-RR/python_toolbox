@@ -215,7 +215,7 @@ class Path(object):
         '''
         Iterate backwards on the path, yielding blocks when possible.
         
-        tododocYou must specify an `tail`. You may optionally specify a `head`.
+        blocktododocYou must specify an `tail`. You may optionally specify a `head`.
         Both of these may be either nodes or blocks.
         '''
         if tail is None:

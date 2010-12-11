@@ -84,8 +84,8 @@ class Wheel(wx.Panel):
         self.SetDoubleBuffered(True)
         self.hue_selection_dialog = hue_selection_dialog
         self.hue = hue_selection_dialog.hue
-        self.lightness = hue_selection_dialog.lightness # tododoc: needed?
-        self.saturation = hue_selection_dialog.saturation # tododoc: needed?
+        self.lightness = hue_selection_dialog.lightness # blocktododoc: needed?
+        self.saturation = hue_selection_dialog.saturation # blocktododoc: needed?
         self.bitmap = make_bitmap(hue_selection_dialog.lightness,
                                   hue_selection_dialog.saturation)
         self._calculate_angle()
@@ -130,7 +130,7 @@ class Wheel(wx.Panel):
         center_x = center_y = BIG_LENGTH // 2 
         x, y = event.GetPosition()
         distance = ((x - center_x) ** 2 + (y - center_y) ** 2) ** 0.5
-        inside_wheel = (SMALL_RADIUS <= distance <= BIG_RADIUS) # tododoc: doc
+        inside_wheel = (SMALL_RADIUS <= distance <= BIG_RADIUS) # blocktododoc: doc
 
         
         if inside_wheel and not self._cursor_set_to_bullseye:
