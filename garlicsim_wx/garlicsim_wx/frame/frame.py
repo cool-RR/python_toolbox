@@ -14,6 +14,7 @@ import sys
 import random
 import subprocess
 import webbrowser
+import warnings
 import traceback
 
 import wx
@@ -64,7 +65,11 @@ class Frame(wx.Frame):
         
         assert isinstance(self.app, garlicsim_wx.App)
         
-        garlicsim_wx.active_frame = self # tododoc: warn if there's another one
+        if hasattr(garlicsim_wx, '_active_frame'):
+            warnings.warn('`garlicsim_wx` already had an `_active_frame` '
+                          'property before we created this frame! It should '
+                          'not have one.')
+        garlicsim_wx._active_frame = self
         
         self.tree_browser = None
         self.seek_bar = None
