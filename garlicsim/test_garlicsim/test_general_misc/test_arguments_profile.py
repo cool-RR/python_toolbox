@@ -289,7 +289,8 @@ def test_unhashable():
 
     
 def test_unhashable_star_empty():
-
+    def func(a, b, c=3, d=4, **kwargs):
+        pass
     assert sys.version_info[0] == 2
     assert sys.version_info[1] >= 5
     if sys.version_info[1] == 5:
@@ -309,7 +310,7 @@ def test_unhashable_star_empty():
     # so as to not prevent Python 2.5 from being able to compile this module:
     exec("a3 = ArgumentsProfile(func, *(), b=({'a': 'b'},),"
                                "c=set([1, (3, 4)]), a=7,"
-                               "meow=[1, 2, {1: [1, 2]}]")
+                               "meow=[1, 2, {1: [1, 2]}])")
     assert a3.args == (7, ({'a': 'b'},), set([1, (3, 4)]))
     assert a3.kwargs == OrderedDict(
         (('meow', [1, 2, {1: [1, 2]}]),)
