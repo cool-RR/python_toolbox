@@ -51,5 +51,6 @@ class State(object):
 
     create_root = None
     create_messy_root = None
+    __eq__ = None
     # Just so we could easily check whether a subclass implemented these.
         
