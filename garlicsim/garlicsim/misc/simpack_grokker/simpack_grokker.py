@@ -55,11 +55,11 @@ class SimpackGrokker(object):
         try:
             State = simpack.State
         except AttributeError:
-            raise InvalidSimpack("The %s simpack does not define a `State` "
+            raise InvalidSimpack("The `%s` simpack does not define a `State` "
                                  "class." % simpack.__name__)
         
         if not misc_tools.is_subclass(State, garlicsim.data_structures.State):
-            raise InvalidSimpack("The %s simpack defines a State class, but "
+            raise InvalidSimpack("The `%s` simpack defines a State class, but "
                                  "it's not a subclass of "
                                  "`garlicsim.data_structures.State`." % \
                                  simpack.__name__)
@@ -95,7 +95,7 @@ class SimpackGrokker(object):
                self.step_functions_by_type[step_types.InplaceStep] or \
                self.step_functions_by_type[step_types.InplaceStepGenerator]:
                 
-                raise InvalidSimpack("The %s simpack is defining both a "
+                raise InvalidSimpack("The `%s` simpack is defining both a "
                                      "history-dependent step and a "
                                      "non-history-dependent step - which "
                                      "is forbidden." % simpack.__name__)
@@ -117,7 +117,7 @@ class SimpackGrokker(object):
         '''
                
         if not self.all_step_functions:
-            raise InvalidSimpack("The %s simpack has not defined any kind "
+            raise InvalidSimpack("The `%s` simpack has not defined any kind "
                                  "of step function." % simpack.__name__)
         
         self.default_step_function = self.all_step_functions[0]
@@ -301,7 +301,7 @@ class SimpackGrokker(object):
         #######################################################################
             
         else:
-            raise InvalidSimpack("The CRUNCHERS setting must be either a "
+            raise InvalidSimpack("The `CRUNCHERS` setting must be either a "
                                  "cruncher type (or name string), a list of "
                                  "cruncher types, or a filter function for "
                                  "cruncher types. You supplied `%s`, which is "
@@ -352,8 +352,8 @@ class SimpackGrokker(object):
         if step_type not in (step_types.InplaceStep,
                              step_types.InplaceStepGenerator):
 
-            raise GarlicSimException("Can't get inplace step iterator for %s, "
-                                     "which is a non-inplace step "
+            raise GarlicSimException("Can't get inplace step iterator for "
+                                     "`%s`, which is a non-inplace step "
                                      "function." % step_function)
             
         inplace_step_iterator_class = step_type.inplace_step_iterator_class

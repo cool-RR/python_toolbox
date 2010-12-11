@@ -1,9 +1,17 @@
+from garlicsim.general_misc.reasoned_bool import ReasonedBool
+
 import garlicsim
+from garlicsim.misc import InvalidSimpack
+
 
 from .state import State
 
 ENDABLE = False
-VALID = True
+VALID = ReasonedBool(
+    False,
+    reason=InvalidSimpack("The `simpack_without_step_function` simpack has "
+                          "not defined any kind of step function.")
+)
 CONSTANT_CLOCK_INTERVAL = None
 HISTORY_DEPENDENT = False
 N_STEP_FUNCTIONS = 1
