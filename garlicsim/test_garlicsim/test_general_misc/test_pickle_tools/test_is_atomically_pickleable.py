@@ -9,7 +9,6 @@ import cStringIO
 # and `pickle`.)
 from garlicsim.general_misc.pickle_tools import pickle_module
 
-import wx
 import nose
 
 from garlicsim.general_misc import import_tools

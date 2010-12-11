@@ -8,7 +8,6 @@ import tempfile
 from garlicsim.general_misc.pickle_tools import pickle_module
 
 import nose
-import wx
 
 from garlicsim.general_misc import import_tools
 
