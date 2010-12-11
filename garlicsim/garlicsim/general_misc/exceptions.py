@@ -21,5 +21,13 @@ class CuteException(Exception):
                 message = ''
                 
         Exception.__init__(self, message)
+        
+        self.message = message
+        '''
+        
+        We provide this `.message` attribute despite `BaseException.message`
+        being deprecated in Python. The message can also be accessed as the
+        Python-approved `BaseException.args[0]`.
+        '''
 
         
