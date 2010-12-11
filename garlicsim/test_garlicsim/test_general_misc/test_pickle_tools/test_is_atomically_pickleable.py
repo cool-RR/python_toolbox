@@ -98,7 +98,7 @@ def test_partially_pickleables_multiprocessing():
     
     partially_pickleables = [
         x,
-        [multiprocessing.BoundedSephamore()],
+        [multiprocessing.BoundedSemaphore()],
         {1: multiprocessing.Lock(), 2: 3},
         set([multiprocessing.Queue(), x])
     ]
