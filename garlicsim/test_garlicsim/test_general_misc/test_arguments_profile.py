@@ -1,3 +1,5 @@
+import sys
+
 from garlicsim.general_misc.arguments_profile import ArgumentsProfile
 from garlicsim.general_misc.third_party.ordered_dict import OrderedDict
 
@@ -276,16 +278,23 @@ def test_unhashable():
     assert a2.kwargs == OrderedDict(
         (('meow', [1, 2, {1: [1, 2]}]),)
     )
-    
-    a3 = ArgumentsProfile(func, *(), b=({'a': 'b'},), c=set([1, (3, 4)]), a=7,
-                          meow=[1, 2, {1: [1, 2]}])
-    assert a2.args == (7, ({'a': 'b'},), set([1, (3, 4)]))
-    assert a2.kwargs == OrderedDict(
-        (('meow', [1, 2, {1: [1, 2]}]),)
-    )
-    assert hash(a2) == hash(a3)
-    
+
     d = {a1: 1, a2: 2}
     assert d[a1] == 1
     assert d[a2] == 2
+    
+    # Python 2.5 can't compile the following, so we're only letting Python 2.6
+    # and newer to compile it:
+    assert sys.version_info[0] == 2
+    if sys.version_info[1] >= 6:
+
+        exec("a3 = ArgumentsProfile(func, *(), b=({'a': 'b'},),"
+                                   "c=set([1, (3, 4)]), a=7,"
+                                   "meow=[1, 2, {1: [1, 2]}]")
+        assert a3.args == (7, ({'a': 'b'},), set([1, (3, 4)]))
+        assert a3.kwargs == OrderedDict(
+            (('meow', [1, 2, {1: [1, 2]}]),)
+        )
+        assert hash(a2) == hash(a3)
+    
     
