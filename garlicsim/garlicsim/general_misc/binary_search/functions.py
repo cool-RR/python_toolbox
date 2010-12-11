@@ -82,7 +82,8 @@ def binary_search(sequence, function, value, rounding=CLOSEST):
     if low_value >= value:
 
         if rounding is BOTH:
-            return [None if low_value > value else sequence[low], sequence[low]]
+            return tuple(None if low_value > value else
+                         sequence[low], sequence[low])
         
         if rounding in (HIGH, HIGH_OTHERWISE_LOW, CLOSEST) or \
            (low_value==value and rounding is EXACT):
@@ -140,8 +141,9 @@ def binary_search(sequence, function, value, rounding=CLOSEST):
     
     both = (sequence[low], sequence[high])
     
-    return make_both_data_into_preferred_rounding(both, function,\
+    return make_both_data_into_preferred_rounding(both, function,
                                                   value, rounding)
+
 
 def make_both_data_into_preferred_rounding(both, function, value, rounding):
     '''
@@ -176,8 +178,7 @@ def make_both_data_into_preferred_rounding(both, function, value, rounding):
     
     elif rounding is EXACT:
         results = [state for state in both if
-                   (state is not None and function(state) == value)
-                   ]
+                   (state is not None and function(state) == value)]
         return results[0] if results else None
     
     elif rounding in (CLOSEST, CLOSEST_IF_BOTH):
