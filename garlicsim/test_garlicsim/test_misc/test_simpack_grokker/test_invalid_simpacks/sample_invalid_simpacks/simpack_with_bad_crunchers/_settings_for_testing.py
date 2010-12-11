@@ -9,13 +9,15 @@ from .state import State
 ENDABLE = False
 VALID = ReasonedBool(
     False,
-    reason=InvalidSimpack("The `simpack_with_wrong_state_class` simpack "
-                          "defines a `State` class, but it's not a subclass "
-                          "of `garlicsim.data_structures.State`.")
+    reason=InvalidSimpack("The `CRUNCHERS` setting must be either a "
+                          "cruncher type (or name string), a list of "
+                          "cruncher types, or a filter function for "
+                          "cruncher types. You supplied `None`, which is "
+                          "neither.")
 )
 CONSTANT_CLOCK_INTERVAL = None
 HISTORY_DEPENDENT = False
-N_STEP_FUNCTIONS = 0
+N_STEP_FUNCTIONS = 1
 DEFAULT_STEP_FUNCTION = None
 DEFAULT_STEP_FUNCTION_TYPE = None
 CRUNCHERS_LIST = \
