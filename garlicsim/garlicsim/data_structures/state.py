@@ -51,6 +51,8 @@ class State(object):
 
     create_root = None
     create_messy_root = None
-    __eq__ = None
-    # Just so we could easily check whether a subclass implemented these.
+    
+    # Python 2.5 doesn't have `type.__eq__`, so we supply one:
+    __eq__ = lambda self, other: (id(self) == id(other))
+    
         

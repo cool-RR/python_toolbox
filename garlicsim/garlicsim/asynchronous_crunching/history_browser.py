@@ -196,8 +196,8 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         result_in_nodes = path.get_node_by_monotonic_function \
             (new_function, value, binary_search.BOTH, tail_node=our_node)
         
-        result = [(node.state if node is not None else None) \
-                  for node in result_in_nodes]
+        result = tuple((node.state if node is not None else None) \
+                       for node in result_in_nodes)
         
         return result
     

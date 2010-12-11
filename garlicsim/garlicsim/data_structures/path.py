@@ -466,11 +466,11 @@ class Path(object):
         if tail_node is not None:
             new_both = list(both)
             end_clock = tail_node.state.clock
-            if new_both[0] and new_both[0].state.clock >= end_clock:
+            if new_both[0] and new_both[0].state.clock > end_clock:
                 new_both[0] = tail_node
-            if new_both[1] and new_both[1].state.clock >= end_clock:
+            if new_both[1] and new_both[1].state.clock > end_clock:
                 new_both[1] = None
-            both = new_both
+            both = tuple(new_both)
             
         binary_search_profile = \
             binary_search.BinarySearchProfile(self, function, value, both)
