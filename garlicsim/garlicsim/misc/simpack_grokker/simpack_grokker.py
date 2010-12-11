@@ -75,8 +75,11 @@ class SimpackGrokker(object):
         
         
         for method in state_methods.itervalues():
-            if 'step' in method.__name__:
+            try:
                 step_type = get_step_type(method)
+            except Exception:
+                pass
+            else:
                 self.step_functions_by_type[step_type].append(method)
             
                 
