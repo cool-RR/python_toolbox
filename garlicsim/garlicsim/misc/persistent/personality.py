@@ -8,7 +8,8 @@ See its documentation for more information.
 '''
 
 import colorsys
-from persistent import Persistent
+from .persistent import Persistent
+
 
 class Personality(object):
     '''
@@ -30,7 +31,7 @@ class Personality(object):
 
         assert isinstance(persistent, Persistent)
         
-        import human_names
+        from . import human_names
 
         color_resolution = 100
         
