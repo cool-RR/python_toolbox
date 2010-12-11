@@ -98,10 +98,8 @@ def binary_search(sequence, function, value, rounding=CLOSEST):
     if high_value <= value:
 
         if rounding is BOTH:
-            return [
-                sequence[high],
-                None if high_value < value else sequence[high]
-            ]
+            return (sequence[high],
+                    None if high_value < value else sequence[high])
         
         if rounding in (LOW, LOW_OTHERWISE_HIGH, CLOSEST) or \
            (low_value==value and rounding is EXACT):
