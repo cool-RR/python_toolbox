@@ -1,4 +1,4 @@
-import threading, multiprocessing
+import threading
 from cStringIO import StringIO 
 import tempfile
 
@@ -7,19 +7,16 @@ import tempfile
 # and `pickle`.)
 from garlicsim.general_misc.pickle_tools import pickle_module
 
+import nose
 import wx
+
+from garlicsim.general_misc import import_tools
 
 from garlicsim.general_misc import pickle_tools
 from garlicsim.general_misc.pickle_tools import CutePickler, CuteUnpickler
 
 from .shared import PickleableObject, NonPickleableObject
 
-
-#class ComparableObject(Object):
-    #def __eq__(self, other):
-        #return type(self) is type(other) and \
-               #vars(self) == vars(other)
-    #pass
     
 class Object(object):
     pass
@@ -48,7 +45,55 @@ def test_totally_pickleable():
         
 
         
-def test(): #tododoc: rename
+def test_without_multiprocessing():
+   
+    totally_pickleable_things = [
+        [1, 2, (3, 4)],
+        {1: 2, 3: set((1, 2, 3))},
+        None, True, False,
+        (1, 2, 'meow'),
+        u'qweqweqasd',
+        PickleableObject()
+    ]
+    
+    thing = Object()
+    thing.a, thing.b, thing.c, thing.d, thing.e, thing.f, thing.g, thing.h = \
+         totally_pickleable_things
+    
+    thing.x = threading.Lock()
+    thing.z = NonPickleableObject()
+    
+    stream = StringIO() 
+    pickler = CutePickler(stream)
+    pickler.dump(thing) 
+
+    stream.seek(0) 
+    unpickler = CuteUnpickler(stream) 
+    unpickled_thing = unpickler.load() 
+    
+    assert thing.a == unpickled_thing.a
+    assert thing.b == unpickled_thing.b
+    assert thing.c == unpickled_thing.c
+    assert thing.d == unpickled_thing.d
+    assert thing.e == unpickled_thing.e
+    assert thing.f == unpickled_thing.f
+    assert thing.g == unpickled_thing.g
+    # Regarding `.h`, we just check the type cause there's no `__eq__`:
+    assert type(thing.h) == type(unpickled_thing.h)
+    
+    assert thing.x != unpickled_thing.x
+    assert thing.z != unpickled_thing.z
+    
+    assert isinstance(unpickled_thing.x, pickle_tools.FilteredObject)
+    assert isinstance(unpickled_thing.z, pickle_tools.FilteredObject)
+    
+    
+def test():
+   
+    if not import_tools.exists('multiprocessing'):
+        raise nose.SkipTest('`multiprocessing` is not installed.')
+    
+    import multiprocessing
     
     totally_pickleable_things = [
         [1, 2, (3, 4)],
@@ -92,6 +137,7 @@ def test(): #tododoc: rename
     assert isinstance(unpickled_thing.x, pickle_tools.FilteredObject)
     assert isinstance(unpickled_thing.y, pickle_tools.FilteredObject)
     assert isinstance(unpickled_thing.z, pickle_tools.FilteredObject)
+    
     
     
     
