@@ -10,9 +10,12 @@ See its documentation for more info.
 import garlicsim.general_misc.third_party.abc as abc
 from garlicsim.general_misc import binary_search
 
+
 __all__ = ["HistoryBrowser"]
 
+
 get_state_clock = lambda state: state.clock
+
 
 class BaseHistoryBrowser(object):
     '''
@@ -25,7 +28,9 @@ class BaseHistoryBrowser(object):
     This is an abstract base class from which all history browsers should
     subclass.
     '''
+    
     __metaclass__ = abc.ABCMeta
+
     
     @abc.abstractmethod
     def get_last_state(self):
@@ -44,8 +49,8 @@ class BaseHistoryBrowser(object):
         
         The function must be a monotonic rising function on the timeline.
         
-        See documentation of garlicsim.general_misc.binary_search.roundings for
-        details about rounding options.
+        See documentation of `garlicsim.general_misc.binary_search.roundings`
+        for details about rounding options.
         '''
         
         
@@ -58,8 +63,8 @@ class BaseHistoryBrowser(object):
         '''
         Get a state by specifying desired clock time.
         
-        See documentation of garlicsim.general_misc.binary_search.roundings for
-        details about rounding options.
+        See documentation of `garlicsim.general_misc.binary_search.roundings`
+        for details about rounding options.
         '''
         assert issubclass(rounding, binary_search.Rounding)
         return self.get_state_by_monotonic_function\

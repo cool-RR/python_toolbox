@@ -209,7 +209,7 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         
         The function must by a monotonic rising function on the timeline.
         
-        See documentation of garlicsim.general_misc.binary_search.roundings for
+        See documentation of `garlicsim.general_misc.binary_search.roundings` for
         details about rounding options.
         '''
         assert issubclass(rounding, binary_search.Rounding)
