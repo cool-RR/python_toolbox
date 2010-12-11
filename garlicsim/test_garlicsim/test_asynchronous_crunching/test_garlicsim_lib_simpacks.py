@@ -40,14 +40,12 @@ def test():
     
     simpacks = [life, prisoner, _history_test, queue]
     
-    cruncher_types = \
-        [garlicsim.asynchronous_crunching.crunchers.ThreadCruncher,
-         garlicsim.asynchronous_crunching.crunchers.ProcessCruncher]
-    
     cruncher_types = [
-        garlicsim.asynchronous_crunching.crunchers.ThreadCruncher
+        garlicsim.asynchronous_crunching.crunchers.ThreadCruncher,
+        #garlicsim.asynchronous_crunching.crunchers.ProcessCruncher
+        # Until multiprocessing shit is solved
     ]
-    # Until multiprocessing shit is solved
+    
     
     for simpack, cruncher_type in \
         cute_iter_tools.product(simpacks, cruncher_types):

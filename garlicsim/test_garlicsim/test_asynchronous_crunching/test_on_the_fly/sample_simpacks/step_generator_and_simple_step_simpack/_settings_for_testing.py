@@ -9,5 +9,10 @@ DEFAULT_STEP_FUNCTION_TYPE = \
 DEFAULT_STEP_FUNCTION = State.step_generator
 CONSTANT_CLOCK_INTERVAL = 1
 ENDABLE = True
-CRUNCHERS_LIST = [garlicsim.asynchronous_crunching.crunchers.ThreadCruncher,
-                  garlicsim.asynchronous_crunching.crunchers.ProcessCruncher]
+CRUNCHERS_LIST = \
+    [garlicsim.asynchronous_crunching.crunchers.ThreadCruncher] + \
+    (
+        [garlicsim.asynchronous_crunching.crunchers.ProcessCruncher] if 
+        hasattr(garlicsim.asynchronous_crunching.crunchers, 'ProcessCruncher')
+        else []
+    )
