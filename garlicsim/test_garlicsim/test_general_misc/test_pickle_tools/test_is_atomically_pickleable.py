@@ -1,6 +1,8 @@
 from __future__ import with_statement
 
-import threading, multiprocessing, StringIO, cStringIO
+import threading
+import StringIO
+import cStringIO
 
 # We're importing `pickle_module` from `pickle_tools`, so we get the exact same
 # pickle module it's using. (Giving it the freedom to change between `cPickle`
@@ -8,6 +10,9 @@ import threading, multiprocessing, StringIO, cStringIO
 from garlicsim.general_misc.pickle_tools import pickle_module
 
 import wx
+import nose
+
+from garlicsim.general_misc import import_tools
 
 from garlicsim.general_misc import pickle_tools
 
@@ -39,7 +44,7 @@ def test_simple_atomically_pickleables():
     
     atomically_pickleables = [
         set([threading.Lock()]),
-        [multiprocessing.Lock()],
+        [threading.Lock()],
     ]
     
     for thing in pickleables:
@@ -50,10 +55,14 @@ def test_simple_atomically_pickleables():
         assert pickle_tools.is_atomically_pickleable(thing)
         
         
-def test_non_atomically_pickleables():
+def test_non_atomically_pickleables_multiprocessing():
+    
+    if not import_tools.exists('multiprocessing'):
+        raise nose.SkipTest('`multiprocessing` is not installed.')
+    
+    import multiprocessing
 
     non_pickleables = [
-        threading.Lock(),
         multiprocessing.Lock(),
         multiprocessing.BoundedSemaphore(),
         multiprocessing.Condition(),
@@ -62,6 +71,47 @@ def test_non_atomically_pickleables():
         multiprocessing.Queue(),
         multiprocessing.RLock(),
         multiprocessing.Semaphore(),
+    ]
+        
+    for thing in non_pickleables:
+        assert not pickle_tools.is_atomically_pickleable(thing)
+        assert not is_pickle_successful(thing)
+    
+    assert not pickle_tools.is_atomically_pickleable(NonPickleableObject())
+    # Not trying to actually pickle this test object, cause it will actually
+    # work.
+
+    
+def test_partially_pickleables_multiprocessing():
+    '''
+    "Partially-pickleable" means an object which is atomically pickleable but
+    not pickleable.
+    '''
+
+    if not import_tools.exists('multiprocessing'):
+        raise nose.SkipTest('`multiprocessing` is not installed.')
+    
+    import multiprocessing
+    
+    x = PickleableObject()
+    x.lock = threading.Lock()
+    
+    partially_pickleables = [
+        x,
+        [multiprocessing.BoundedSephamore()],
+        {1: multiprocessing.Lock(), 2: 3},
+        set([multiprocessing.Queue(), x])
+    ]
+    
+    for thing in partially_pickleables:
+        assert pickle_tools.is_atomically_pickleable(thing)
+        assert not is_pickle_successful(thing)
+        
+        
+def test_non_atomically_pickleables():
+
+    non_pickleables = [
+        threading.Lock(),
         cStringIO.StringIO()
     ]
     #tododoc: test on both StringIOs too
@@ -87,8 +137,8 @@ def test_partially_pickleables():
     partially_pickleables = [
         x,
         [threading.Lock()],
-        {1: multiprocessing.Lock(), 2: 3},
-        set([multiprocessing.Lock(), x])
+        {1: threading.Lock(), 2: 3},
+        set([threading.Lock(), x])
     ]
     
     for thing in partially_pickleables:
