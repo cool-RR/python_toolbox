@@ -319,6 +319,16 @@ def check(simpack, cruncher_type):
     for end in ends:
         assert end in tree_members_including_blockful_nodes
         
+    ### Testing `Project.simulate`: ###########################################
+    #                                                                         #
     
+    project.simulate(root, 4)
+    assert len(get_all_ends()) == 3
+    
+    project.simulate(root, 5)
+    assert len(get_all_ends()) == 4
+    
+    #                                                                         #    
+    ### Finished testing `Project.simulate`. ##################################
     
     

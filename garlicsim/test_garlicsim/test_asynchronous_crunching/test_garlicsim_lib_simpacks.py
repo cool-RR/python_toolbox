@@ -380,7 +380,12 @@ def check(simpack, cruncher_type):
     ### Finished testing path methods. ########################################
     
     
-    
+    if simpack.State.create_messy_root is not None:
+        messy_root = project.create_messy_root()
+        assert len(project.tree.roots) == 3
+        assert messy_root is project.tree.roots[-1]
+        assert isinstance(messy_root.state, simpack.State)
+        
     
     
     

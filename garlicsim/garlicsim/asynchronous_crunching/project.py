@@ -291,7 +291,7 @@ class Project(object):
             garlicsim.synchronous_crunching.HistoryBrowser(path, tail_node=node)
         
         iterator = self.simpack_grokker.get_step_iterator(history_browser,
-                                                       step_profile)
+                                                          step_profile)
         finite_iterator = cute_iter_tools.shorten(iterator, iterations)
         
         current_node = node
