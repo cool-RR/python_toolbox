@@ -160,10 +160,7 @@ def check(simpack, cruncher_type):
         path_pairs = itertools.izip(project.tree.all_possible_paths(),
                                     unpickled_project.tree.all_possible_paths())
         
-        if isinstance(
-            simpack.State.__eq__,
-            (types.FunctionType, types.MethodType, types.UnboundMethodType)
-        ):
+        if simpack.State.__eq__ != garlicsim.data_structures.State.__eq__:
             
             for path_of_original, path_of_duplicate in path_pairs:
                 
