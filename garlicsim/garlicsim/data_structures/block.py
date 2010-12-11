@@ -305,7 +305,7 @@ class Block(TreeMember):
             return (self is tree_member)
         else:
             assert isinstance(tree_member, Node)
-            return (self in tree_member)
+            return (tree_member in self)
     
     
     def make_containing_path(self):
@@ -379,12 +379,11 @@ class Block(TreeMember):
         `generations` specifies the number of generation that the returned
         ancestor should be above the current block. `round` determines how this
         method will behave if it was asked for too many generations back, and
-        not enough existed. If `round` is True, it will return the root. If
-        `round` is False, it will raise a LookupError.
+        not enough existed. If `round` is `True`, it will return the root. If
+        `round` is `False`, it will raise a `NodeLookupError`.
         '''
         return self[0].get_ancestor(generations, round)
 
-    
     
     def get_root(self):
         '''

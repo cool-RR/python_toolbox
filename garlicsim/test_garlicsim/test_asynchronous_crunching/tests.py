@@ -153,6 +153,21 @@ def check(simpack, cruncher_type):
     block_1, block_2 = [node.block for node in node_1.children]
     assert isinstance(block_1, garlicsim.data_structures.Block)
     assert isinstance(block_2, garlicsim.data_structures.Block)
+    assert block_1.soft_get_block() is block_1
+    assert block_2.soft_get_block() is block_2
+    assert block_1.is_overlapping(block_1)
+    assert block_2.is_overlapping(block_2)
+    assert not block_1.is_overlapping(block_2)
+    assert not block_2.is_overlapping(block_1)
+    block_path_1 = block_1.make_containing_path()
+    block_path_2 = block_2.make_containing_path()
+    assert block_path_1 == block_path_1
+    assert block_path_1 != block_path_2
+    assert (block_1[0] in block_path_1) and (block_1[-1] in block_path_1)
+    assert (block_2[0] in block_path_2) and (block_2[-1] in block_path_2)
+    assert block_1.get_root() is block_2.get_root()
+    
+        
  
     tree_members_iterator = \
         project.tree.iterate_tree_members(include_blockful_nodes=False)

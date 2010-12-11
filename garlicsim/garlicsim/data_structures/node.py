@@ -305,8 +305,8 @@ class Node(TreeMember):
         `generations` specifies the number of generation that the returned
         ancestor should be above the current node. `round` determines how this
         method will behave if it was asked for too many generations back, and
-        not enough existed. If `round` is True, it will return the root. If
-        `round` is False, it will raise a `NodeLookupError`.
+        not enough existed. If `round` is `True`, it will return the root. If
+        `round` is `False`, it will raise a `NodeLookupError`.
         '''
 
         assert generations >= 0
