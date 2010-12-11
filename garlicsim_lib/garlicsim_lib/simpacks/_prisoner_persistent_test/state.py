@@ -12,7 +12,7 @@ random.seed()
 
 import garlicsim.data_structures
 from garlicsim.misc import StepCopy
-from garlicsim.misc import CrossProcessPersistent
+from garlicsim.general_misc.persistent import CrossProcessPersistent
 
 ROUNDS = 7
 NUMBER_OF_PLAYERS = 70

@@ -8,7 +8,7 @@ See its documentation for more information.
 '''
 
 from garlicsim.general_misc.copy_mode import CopyMode
-from garlicsim.misc.persistent import DontCopyPersistent
+from garlicsim.general_misc.persistent import DontCopyPersistent
 
 class StepCopy(DontCopyPersistent, CopyMode):
     '''

@@ -9,21 +9,19 @@ These objects are important enough to be defined near the root of the
 `garlicsim` package but not important enough to be put in the main namespace.
 '''
 
-from step_copy import StepCopy
-from exceptions import (InvalidSimpack, SimpackError, GarlicSimWarning,
-                        CuteException, GarlicSimException, WorldEnded)
-from auto_clock_generator import AutoClockGenerator
-from base_history_browser import BaseHistoryBrowser
-from base_step_iterator import BaseStepIterator
-import step_iterators
-import persistent
-from persistent import Persistent, CrossProcessPersistent
-from step_profile import StepProfile
-from nodes_added import NodesAdded
-from simpack_grokker import SimpackGrokker
-import caching
-import settings_constants
-import simpack_tools
+from .step_copy import StepCopy
+from .exceptions import (InvalidSimpack, SimpackError, GarlicSimWarning,
+                         CuteException, GarlicSimException, WorldEnded)
+from .auto_clock_generator import AutoClockGenerator
+from .base_history_browser import BaseHistoryBrowser
+from .base_step_iterator import BaseStepIterator
+from . import step_iterators
+from .step_profile import StepProfile
+from .nodes_added import NodesAdded
+from .simpack_grokker import SimpackGrokker
+from . import caching
+from . import settings_constants
+from . import simpack_tools
 
 
 

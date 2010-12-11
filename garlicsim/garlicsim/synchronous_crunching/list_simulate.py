@@ -38,8 +38,10 @@ def list_simulate(state, iterations, *args, **kwargs):
     )
     
     if not hasattr(state, 'clock'):
-        state = copy.deepcopy(state,
-                              garlicsim.misc.persistent.DontCopyPersistent())
+        state = copy.deepcopy(
+            state,
+            garlicsim.general_misc.persistent.DontCopyPersistent()
+        )
         state.clock = 0
                       
     if simpack_grokker.history_dependent:

@@ -79,7 +79,7 @@ class Tree(object):
         '''
         new_state = copy.deepcopy(
             template_node.state,
-            garlicsim.misc.persistent.DontCopyPersistent()
+            garlicsim.general_misc.persistent.DontCopyPersistent()
         )
 
         parent = template_node.parent

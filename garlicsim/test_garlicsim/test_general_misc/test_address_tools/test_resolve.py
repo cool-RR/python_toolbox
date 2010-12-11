@@ -78,14 +78,15 @@ def test_garlicsim():
     import garlicsim
     assert garlicsim.general_misc is result
     
-    result = resolve('garlicsim.misc.persistent.cross_process_persistent.'
-                        'CrossProcessPersistent.personality')
-    result2 = resolve('misc.CrossProcessPersistent.personality',
+    result = resolve('garlicsim.general_misc.persistent.'
+                     'cross_process_persistent.'
+                     'CrossProcessPersistent.personality')
+    result2 = resolve('general_misc.CrossProcessPersistent.personality',
                          namespace=garlicsim)
     result3 = resolve('persistent.CrossProcessPersistent.personality',
-                         root=garlicsim.misc.persistent,
+                         root=garlicsim.general_misc.persistent,
                          namespace='email')
-    assert result is result2 is result3 is garlicsim.misc.persistent.\
+    assert result is result2 is result3 is garlicsim.general_misc.persistent.\
            cross_process_persistent.CrossProcessPersistent.personality
     
     result = resolve('data_structures.end.End',
