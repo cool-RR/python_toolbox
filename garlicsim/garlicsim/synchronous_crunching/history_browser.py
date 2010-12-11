@@ -77,8 +77,8 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
                         (new_function, value, rounding, tail_node=self.tail_node)
         
         if rounding is binary_search.BOTH:
-            result = [(node.state if node is not None else None) \
-                      for node in result_in_nodes]
+            result = tuple((node.state if node is not None else None)
+                           for node in result_in_nodes)
         else:
             result = result_in_nodes.state if result_in_nodes is not None \
                    else None

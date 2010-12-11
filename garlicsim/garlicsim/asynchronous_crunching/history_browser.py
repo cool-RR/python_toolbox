@@ -170,7 +170,7 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
                 else: # queue_result[0] == None
                     # Getting tricky: The result is somewhere in the middle
                     # between the queue and the tree.
-                    combined_result = [tree_result[0], queue_result[1]]
+                    combined_result = (tree_result[0], queue_result[1])
                     return binary_search.make_both_data_into_preferred_rounding\
                            (combined_result, function, value, rounding)
     
