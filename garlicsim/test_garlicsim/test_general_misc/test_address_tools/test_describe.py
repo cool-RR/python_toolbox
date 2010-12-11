@@ -1,3 +1,7 @@
+import nose
+
+from garlicsim.general_misc import import_tools
+
 from garlicsim.general_misc.address_tools import (describe,
                                                   resolve)
 
@@ -104,22 +108,22 @@ def test_garlicsim():
     
     import garlicsim_lib.simpacks.life
     
-    result = describe(garlicsim_lib.simpacks.life.life.State.step)
-    assert result == 'garlicsim_lib.simpacks.life.life.State.step'
+    result = describe(garlicsim_lib.simpacks.life.state.State.step)
+    assert result == 'garlicsim_lib.simpacks.life.state.State.step'
     
-    result = describe(garlicsim_lib.simpacks.life.life.State.step,
+    result = describe(garlicsim_lib.simpacks.life.state.State.step,
                       shorten=True)
     assert result == 'garlicsim_lib.simpacks.life.State.step'
     
-    result = describe(garlicsim_lib.simpacks.life.life.State.step,
+    result = describe(garlicsim_lib.simpacks.life.state.State.step,
                          root=garlicsim_lib.simpacks.life)
-    assert result == 'life.life.State.step'
+    assert result == 'life.state.State.step'
     
-    result = describe(garlicsim_lib.simpacks.life.life.State.step,
+    result = describe(garlicsim_lib.simpacks.life.state.State.step,
                          namespace=garlicsim_lib.simpacks)
-    assert result == 'life.life.State.step'
+    assert result == 'life.state.State.step'
     
-    result = describe(garlicsim_lib.simpacks.life.life.State.step,
+    result = describe(garlicsim_lib.simpacks.life.state.State.step,
                          root=garlicsim_lib.simpacks.life, shorten=True)
     assert result == 'life.State.step'
     
@@ -191,6 +195,8 @@ def test_address_in_expression():
     
 
 def test_specific_objects():
+    if not import_tools.exists('multiprocessing'):
+        raise nose.SkipTest('`multiprocessing` not installed')
     import multiprocessing
     lock = multiprocessing.Lock()
     describe(lock)

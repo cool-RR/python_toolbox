@@ -1,3 +1,5 @@
+from __future__ import with_statement
+
 import threading, multiprocessing, StringIO, cStringIO
 
 # We're importing `pickle_module` from `pickle_tools`, so we get the exact same

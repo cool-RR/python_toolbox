@@ -153,7 +153,7 @@ def check(simpack, cruncher_type):
     
     try:
         pickled_project = pickle.dumps(project, protocol=2)
-    except RuntimeError as runtime_error:
+    except RuntimeError, runtime_error:
         assert 'maximum recursion' in runtime_error.message
     else:
         unpickled_project = cPickle.loads(pickled_project)

@@ -1,11 +1,13 @@
 from __future__ import with_statement
 
+import sys
 import UserDict
 import random
 import string
 import gc
 import weakref
 
+import nose
 from garlicsim.general_misc.third_party import unittest2
 
 from garlicsim.general_misc.sleek_refs import CuteSleekValueDict
@@ -642,6 +644,10 @@ class GenericDictTest(unittest2.TestCase):
     
     def test_container_iterator(self):
         # Bug #3680: tp_traverse was not implemented for dictiter objects
+
+        if sys.version_info[:2] == (2, 5):
+            raise nose.SkipTest('Bug 3680 will not be fixed in Python 2.5')
+        
         class C(object):
             pass
         iterators = (CuteSleekValueDict.iteritems,

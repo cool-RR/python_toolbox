@@ -78,7 +78,7 @@ Let's check out this state:
     ### #  ## ####  ## ### ####   # # #### #
     # #  # ##  # # #  #   # # ##  ### ## # #
     >>> type(state)
-    <class 'garlicsim_lib.simpacks.life.life.State'>
+    <class 'garlicsim_lib.simpacks.life.state.State'>
 
 
     

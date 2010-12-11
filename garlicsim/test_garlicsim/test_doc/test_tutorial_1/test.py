@@ -8,7 +8,7 @@ def test():
     state = life.State.create_messy_root()
     assert life_board_pattern.match(repr(state))
     assert repr(type(state)) == \
-        "<class 'garlicsim_lib.simpacks.life.life.State'>"
+        "<class 'garlicsim_lib.simpacks.life.state.State'>"
     new_state = garlicsim.simulate(state)
     assert life_board_pattern.match(repr(new_state))
     new_state = garlicsim.simulate(state, 20)
