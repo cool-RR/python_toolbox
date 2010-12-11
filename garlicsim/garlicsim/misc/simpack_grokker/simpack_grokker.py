@@ -56,13 +56,13 @@ class SimpackGrokker(object):
             State = simpack.State
         except AttributeError:
             raise InvalidSimpack("The `%s` simpack does not define a `State` "
-                                 "class." % simpack.__name__)
+                                 "class." % simpack.__name__.rsplit('.')[-1])
         
         if not misc_tools.is_subclass(State, garlicsim.data_structures.State):
             raise InvalidSimpack("The `%s` simpack defines a State class, but "
                                  "it's not a subclass of "
                                  "`garlicsim.data_structures.State`." % \
-                                 simpack.__name__)
+                                 simpack.__name__.rsplit('.')[-1])
 
 
         state_methods = dict(
@@ -98,7 +98,8 @@ class SimpackGrokker(object):
                 raise InvalidSimpack("The `%s` simpack is defining both a "
                                      "history-dependent step and a "
                                      "non-history-dependent step - which "
-                                     "is forbidden." % simpack.__name__)
+                                     "is forbidden." % \
+                                     simpack.__name__.rsplit('.')[-1])
         else: # No history step defined
             
             self.history_dependent = False
@@ -118,7 +119,8 @@ class SimpackGrokker(object):
                
         if not self.all_step_functions:
             raise InvalidSimpack("The `%s` simpack has not defined any kind "
-                                 "of step function." % simpack.__name__)
+                                 "of step function." % \
+                                 simpack.__name__.rsplit('.')[-1])
         
         self.default_step_function = self.all_step_functions[0]
         ''' '''
@@ -143,7 +145,7 @@ class SimpackGrokker(object):
             # imported yet."
             
             settings_module_name = ''.join((
-                self.simpack.__name__,
+                self.simpack.__name__.rsplit('.')[-1],
                 '.settings'
             ))
             
@@ -198,8 +200,9 @@ class SimpackGrokker(object):
                     ReasonedBool(
                         False,
                         'The `%s` simpack specified `%s` as the only '
-                        'available cruncher type' % (simpack.__name__,
-                                                     cruncher_type.__name__)
+                        'available cruncher type' % \
+                        (simpack.__name__.rsplit('.')[-1],
+                         cruncher_type.__name__)
                     )
                 ) for unavailable_cruncher_type in unavailable_cruncher_types
             ))
@@ -224,7 +227,7 @@ class SimpackGrokker(object):
                     ReasonedBool(
                         False,
                         'The `%s` simpack specified `%s` as the only '
-                        'available cruncher type' % (simpack.__name__,
+                        'available cruncher type' % (simpack.__name__.rsplit('.')[-1],
                                                      cruncher_type.__name__)
                     )
                 ) for unavailable_cruncher_type in unavailable_cruncher_types
@@ -259,8 +262,9 @@ class SimpackGrokker(object):
                     ReasonedBool(
                         False,
                         'The `%s` simpack specified a list of available '
-                        'crunchers and `%s` is not in it.' % (simpack.__name__,
-                        unavailable_cruncher_type.__name__)
+                        'crunchers and `%s` is not in it.' % \
+                        (simpack.__name__.rsplit('.')[-1],
+                         unavailable_cruncher_type.__name__)
                     )
                         
                 ) for unavailable_cruncher_type in unavailable_cruncher_types

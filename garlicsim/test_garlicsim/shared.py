@@ -10,11 +10,13 @@ def verify_sample_simpack_settings(sample_simpack):
     bool(sft.VALID)
     assert isinstance(sft.HISTORY_DEPENDENT, bool)
     assert isinstance(sft.N_STEP_FUNCTIONS, int)
-    assert callable(sft.DEFAULT_STEP_FUNCTION)
-    assert issubclass(
-        sft.DEFAULT_STEP_FUNCTION_TYPE,
-        garlicsim.misc.simpack_grokker.base_step_type.BaseStepType
-    )
+    if sft.DEFAULT_STEP_FUNCTION is not None:
+        assert callable(sft.DEFAULT_STEP_FUNCTION)
+    if sft.DEFAULT_STEP_FUNCTION_TYPE is not None:
+        assert issubclass(
+            sft.DEFAULT_STEP_FUNCTION_TYPE,
+            garlicsim.misc.simpack_grokker.base_step_type.BaseStepType
+        )
     assert isinstance(sft.CONSTANT_CLOCK_INTERVAL, int) or \
            sft.CONSTANT_CLOCK_INTERVAL is None
     assert isinstance(sft.CRUNCHERS_LIST, list)
