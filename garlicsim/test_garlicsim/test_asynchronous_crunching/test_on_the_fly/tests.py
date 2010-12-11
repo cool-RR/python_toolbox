@@ -10,7 +10,6 @@ import types
 import time
 import itertools
 import cPickle, pickle
-import decimal
 
 import nose
 
@@ -93,7 +92,7 @@ def check(simpack, cruncher_type):
     ### Test changing clock target on the fly: ################################
     #                                                                         #
 
-    huge_number = decimal.Decimal('1E20')
+    huge_number = 10 ** 20
     different_huge_number = huge_number + 1
     assert different_huge_number - huge_number == 1
     
