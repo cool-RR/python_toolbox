@@ -59,8 +59,8 @@ class SimpackGrokker(object):
                                  "class." % simpack.__name__.rsplit('.')[-1])
         
         if not misc_tools.is_subclass(State, garlicsim.data_structures.State):
-            raise InvalidSimpack("The `%s` simpack defines a State class, but "
-                                 "it's not a subclass of "
+            raise InvalidSimpack("The `%s` simpack defines a `State` class, "
+                                 "but it's not a subclass of "
                                  "`garlicsim.data_structures.State`." % \
                                  simpack.__name__.rsplit('.')[-1])
 
