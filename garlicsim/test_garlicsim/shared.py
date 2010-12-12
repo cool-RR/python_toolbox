@@ -8,7 +8,7 @@ def verify_sample_simpack_settings(sample_simpack):
     sft = sample_simpack._settings_for_testing
     assert isinstance(sft.ENDABLE, bool)
     bool(sft.VALID)
-    assert issubclass(sft.PROBLEM, Exception) or (sft.PROBLEM is None)
+    assert (sft.PROBLEM is None) or issubclass(sft.PROBLEM, Exception)
     assert isinstance(sft.HISTORY_DEPENDENT, bool)
     assert isinstance(sft.N_STEP_FUNCTIONS, int)
     if sft.DEFAULT_STEP_FUNCTION is not None:
