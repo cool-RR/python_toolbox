@@ -5,7 +5,6 @@ from .state import State
 
 PROBLEM = SyntaxError
 ENDABLE = False
-PROBLEM = None
 VALID = False
 CONSTANT_CLOCK_INTERVAL = None
 HISTORY_DEPENDENT = False
