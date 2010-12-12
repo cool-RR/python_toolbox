@@ -78,8 +78,8 @@ class StepProfile(ArgumentsProfile):
         self.step_function = self.function
         
     
-    @caching.cache()    
     @staticmethod
+    @caching.cache()    
     def build_parser(default_step_function):
         '''
         tododoc Create step profile, allowing the user to not specify step function.
