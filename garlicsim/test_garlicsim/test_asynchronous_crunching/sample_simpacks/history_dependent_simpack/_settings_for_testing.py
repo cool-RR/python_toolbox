@@ -3,6 +3,7 @@ import garlicsim
 from .state import State
 
 ENDABLE = False
+PROBLEM = None
 VALID = True
 CONSTANT_CLOCK_INTERVAL = None
 HISTORY_DEPENDENT = True

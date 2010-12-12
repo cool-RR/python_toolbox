@@ -7,6 +7,7 @@ from garlicsim.misc import InvalidSimpack
 from .state import State
 
 ENDABLE = False
+PROBLEM = None
 VALID = ReasonedBool(
     False,
     reason=InvalidSimpack("The `simpack_without_step_function` simpack has "

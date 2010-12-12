@@ -3,7 +3,7 @@ import garlicsim
 from .state import State
 
 
-PROBLEM = ImportError
+PROBLEM = SyntaxError
 ENDABLE = False
 VALID = False
 CONSTANT_CLOCK_INTERVAL = None

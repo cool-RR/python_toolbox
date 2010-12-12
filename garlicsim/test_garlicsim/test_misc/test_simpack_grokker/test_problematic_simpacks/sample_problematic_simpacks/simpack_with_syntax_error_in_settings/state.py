@@ -1,7 +1,7 @@
 import garlicsim.data_structures
 
 
-class State(object):
+class State(garlicsim.data_structures.State):
     
     def __init__(self):
         pass

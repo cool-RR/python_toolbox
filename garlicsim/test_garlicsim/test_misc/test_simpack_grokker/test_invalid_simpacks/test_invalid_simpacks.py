@@ -27,12 +27,7 @@ def test_simpacks():
            len(simpacks)
     
     for simpack in simpacks:
-
-        # Making `_settings_for_testing` available:
-        import_tools.import_all(simpack)
-        
         test_garlicsim.verify_sample_simpack_settings(simpack)
-        
         yield check_simpack, simpack
 
         

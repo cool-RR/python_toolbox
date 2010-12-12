@@ -7,6 +7,7 @@ from .state import State
 
 
 ENDABLE = False
+PROBLEM = None
 VALID = ReasonedBool(
     False,
     reason=InvalidSimpack("The `simpack_with_bad_state_class` simpack "

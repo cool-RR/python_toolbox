@@ -9,6 +9,7 @@ DEFAULT_STEP_FUNCTION_TYPE = \
 DEFAULT_STEP_FUNCTION = State.step_generator
 CONSTANT_CLOCK_INTERVAL = 1
 ENDABLE = True
+PROBLEM = None
 VALID = True
 CRUNCHERS_LIST = \
     [garlicsim.asynchronous_crunching.crunchers.ThreadCruncher] + \

@@ -148,7 +148,7 @@ class SimpackGrokker(object):
             # imported yet."
             
             settings_module_name = ''.join((
-                self.simpack.__name__.rsplit('.')[-1],
+                self.simpack.__name__, # blocktodo: may need to remove same from simpack_wx_grokker too
                 '.settings'
             ))
             

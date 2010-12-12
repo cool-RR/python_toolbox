@@ -50,12 +50,7 @@ def test():
     
     for simpack, cruncher_type in \
         cute_iter_tools.product(simpacks, cruncher_types):
-     
         test_garlicsim.verify_sample_simpack_settings(simpack)
-        
-        # Making `_settings_for_testing` available:
-        import_tools.import_all(simpack)
-        
         yield check, simpack, cruncher_type
 
         

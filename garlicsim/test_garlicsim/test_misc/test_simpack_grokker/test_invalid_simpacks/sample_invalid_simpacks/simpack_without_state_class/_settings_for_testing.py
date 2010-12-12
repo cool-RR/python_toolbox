@@ -6,6 +6,7 @@ from garlicsim.misc import InvalidSimpack
 
 
 ENDABLE = False
+PROBLEM = None
 VALID = ReasonedBool(
     False,
     reason=InvalidSimpack("The `simpack_without_state_class` simpack does not "

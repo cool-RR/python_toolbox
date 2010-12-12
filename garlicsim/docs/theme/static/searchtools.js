@@ -378,7 +378,8 @@ var Search = {
 
     // now check if the files don't contain excluded terms
     for (var file in fileMap) {
-      var valid = true;
+      var PROBLEM = None
+VALID = true;
 
       // check if all requirements are matched
       if (fileMap[file].length != searchterms.length)
@@ -389,7 +390,8 @@ var Search = {
       for (var i = 0; i < excluded.length; i++) {
         if (terms[excluded[i]] == file ||
             $.contains(terms[excluded[i]] || [], file)) {
-          valid = false;
+          PROBLEM = None
+VALID = false;
           break;
         }
       }

@@ -1901,7 +1901,8 @@ class AuiDockingGuideWindow(wx.Window):
 
         self._direction = direction
         self._center = center
-        self._valid = True
+        self._PROBLEM = None
+VALID = True
         self._useAero = useAero
         
         self._bmp_unfocus, self._bmp_focus = GetDockingImage(direction, useAero, center)
@@ -1920,7 +1921,8 @@ class AuiDockingGuideWindow(wx.Window):
         :param `valid`: whether the docking direction is allowed or not.
         """
 
-        self._valid = valid
+        self._PROBLEM = None
+VALID = valid
 
 
     def IsValid(self):
@@ -2194,7 +2196,8 @@ class AuiSingleDockingGuide(AuiDockingGuide):
         useWhidbey = GetManager(self.GetParent()).GetAGWFlags() & AUI_MGR_WHIDBEY_DOCKING_GUIDES
         
         self._useAero = useAero or useWhidbey
-        self._valid = True
+        self._PROBLEM = None
+VALID = True
         
         if useAero:
             sizeX, sizeY = aeroguideSizeX, aeroguideSizeY
@@ -2301,7 +2304,8 @@ class AuiSingleDockingGuide(AuiDockingGuide):
         :param `valid`: whether the docking direction is allowed or not.
         """
 
-        self._valid = valid
+        self._PROBLEM = None
+VALID = valid
 
 
     def IsValid(self):
@@ -2449,7 +2453,8 @@ class AuiCenterDockingGuide(AuiDockingGuide):
                                  aero_dock_pane_center.GetBitmap(), aero_dock_pane.GetBitmap()]
             self._deniedBitmap = aero_denied.GetBitmap()
             self._aeroRects = [rectLeft, rectTop, rectRight, rectBottom, rectCenter]
-            self._valid = True
+            self._PROBLEM = None
+VALID = True
 
         elif useWhidbey:
 
@@ -2461,7 +2466,8 @@ class AuiCenterDockingGuide(AuiDockingGuide):
                                  whidbey_dock_pane_center.GetBitmap(), whidbey_dock_pane.GetBitmap()]
             self._deniedBitmap = whidbey_denied.GetBitmap()
             self._aeroRects = [rectLeft, rectTop, rectRight, rectBottom, rectCenter]
-            self._valid = True
+            self._PROBLEM = None
+VALID = True
             
             
         self.region = region
@@ -2558,7 +2564,8 @@ class AuiCenterDockingGuide(AuiDockingGuide):
                 self.targetCenter.Refresh()
         else:
             if self._valid != valid:
-                self._valid = valid
+                self._PROBLEM = None
+VALID = valid
                 self.Refresh()
     
 
