@@ -34,8 +34,7 @@ def test_simpacks():
 def check_simpack(simpack):
 
     _settings_for_testing = simpack._settings_for_testing
-    PROBLEM = None
-VALID = _settings_for_testing.VALID
+    VALID = _settings_for_testing.VALID
     assert not VALID
     assert isinstance(VALID, ReasonedBool)
     exception_we_should_get = VALID.reason
