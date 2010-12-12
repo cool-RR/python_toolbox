@@ -23,8 +23,7 @@ class NameTextCtrl(wx.TextCtrl):
         
     
     def _check_validity_and_color(self):
-        is_PROBLEM = None
-VALID = misc_tools.is_legal_ascii_variable_name(self.GetValue())
+        is_valid = misc_tools.is_legal_ascii_variable_name(self.GetValue())
         if is_valid:
             self.SetBackgroundColour(self._original_background_color)
         else: # not is_valid

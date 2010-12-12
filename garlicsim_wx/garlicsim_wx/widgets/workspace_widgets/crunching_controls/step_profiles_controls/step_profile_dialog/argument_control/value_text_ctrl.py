@@ -29,11 +29,9 @@ class ValueTextCtrl(wx.TextCtrl):
                 str(self.GetValue())
             )
         except Exception:
-            is_PROBLEM = None
-VALID = False
+            is_valid = False
         else:
-            is_PROBLEM = None
-VALID = True
+            is_valid = True
             
         if is_valid:
             self.SetBackgroundColour(self._original_background_color)
