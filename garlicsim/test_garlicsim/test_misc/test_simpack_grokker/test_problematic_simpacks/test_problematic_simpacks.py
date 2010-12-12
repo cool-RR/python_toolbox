@@ -40,18 +40,15 @@ def test_simpacks():
 def check_simpack(simpack):
 
     _settings_for_testing = simpack._settings_for_testing
-    VALID = _settings_for_testing.VALID
-    assert not VALID
-    assert isinstance(VALID, ReasonedBool)
-    exception_we_should_get = VALID.reason
-    assert isinstance(exception_we_should_get, InvalidSimpack)
+    PROBLEM = _settings_for_testing.PROBLEM
+    assert PROBLEM
+    assert issubclass(PROBLEM, Exception)
     
     try:
         SimpackGrokker(simpack)
     except Exception, exception:
-        assert type(exception) == type(exception_we_should_get)
-        assert exception.message == exception_we_should_get.message
+        assert type(exception) is PROBLEM
         
     else:
         raise Exception("`SimpackGrokker` shouldn't have been created because "
-                        "the simpack is invalid.")
+                        "the simpack is problematic.")
