@@ -14,22 +14,23 @@ import test_garlicsim
 
 
 def test_simpacks():
-    from . import sample_invalid_simpacks
+    from . import sample_problematic_simpacks
     
     # Collecting all the test simpacks:
-    simpacks = import_tools.import_all(sample_invalid_simpacks).values()
+    simpacks = import_tools.import_all(sample_problematic_simpacks).values()
     
     # Making sure that we didn't miss any simpack by counting the number of
-    # sub-folders in the `sample_invalid_simpacks` folders:
-    sample_invalid_simpacks_dir = \
-        os.path.dirname(sample_invalid_simpacks.__file__)
-    assert len(path_tools.list_sub_folders(sample_invalid_simpacks_dir)) == \
-           len(simpacks)
+    # sub-folders in the `sample_problematic_simpacks` folders:
+    sample_problematic_simpacks_dir = \
+        os.path.dirname(sample_problematic_simpacks.__file__)
+    assert len(
+        path_tools.list_sub_folders(sample_problematic_simpacks_dir)
+        ) == len(simpacks)
     
     for simpack in simpacks:
 
         # Making `_settings_for_testing` available:
-        import_tools.import_all(simpack)
+        __import__(simpack.__name__ + '._settings_for_testing')
         
         test_garlicsim.verify_sample_simpack_settings(simpack)
         
