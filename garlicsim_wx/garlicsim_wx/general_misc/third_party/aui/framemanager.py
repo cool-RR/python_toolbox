@@ -1901,8 +1901,7 @@ class AuiDockingGuideWindow(wx.Window):
 
         self._direction = direction
         self._center = center
-        self._PROBLEM = None
-VALID = True
+        self._valid = True
         self._useAero = useAero
         
         self._bmp_unfocus, self._bmp_focus = GetDockingImage(direction, useAero, center)
@@ -1921,8 +1920,7 @@ VALID = True
         :param `valid`: whether the docking direction is allowed or not.
         """
 
-        self._PROBLEM = None
-VALID = valid
+        self._valid = valid
 
 
     def IsValid(self):
@@ -2196,8 +2194,7 @@ class AuiSingleDockingGuide(AuiDockingGuide):
         useWhidbey = GetManager(self.GetParent()).GetAGWFlags() & AUI_MGR_WHIDBEY_DOCKING_GUIDES
         
         self._useAero = useAero or useWhidbey
-        self._PROBLEM = None
-VALID = True
+        self._valid = True
         
         if useAero:
             sizeX, sizeY = aeroguideSizeX, aeroguideSizeY
@@ -2304,8 +2301,7 @@ VALID = True
         :param `valid`: whether the docking direction is allowed or not.
         """
 
-        self._PROBLEM = None
-VALID = valid
+        self._valid = valid
 
 
     def IsValid(self):
@@ -2453,8 +2449,7 @@ class AuiCenterDockingGuide(AuiDockingGuide):
                                  aero_dock_pane_center.GetBitmap(), aero_dock_pane.GetBitmap()]
             self._deniedBitmap = aero_denied.GetBitmap()
             self._aeroRects = [rectLeft, rectTop, rectRight, rectBottom, rectCenter]
-            self._PROBLEM = None
-VALID = True
+            self._valid = True
 
         elif useWhidbey:
 
@@ -2466,8 +2461,7 @@ VALID = True
                                  whidbey_dock_pane_center.GetBitmap(), whidbey_dock_pane.GetBitmap()]
             self._deniedBitmap = whidbey_denied.GetBitmap()
             self._aeroRects = [rectLeft, rectTop, rectRight, rectBottom, rectCenter]
-            self._PROBLEM = None
-VALID = True
+            self._valid = True
             
             
         self.region = region
@@ -2564,8 +2558,7 @@ VALID = True
                 self.targetCenter.Refresh()
         else:
             if self._valid != valid:
-                self._PROBLEM = None
-VALID = valid
+                self._valid = valid
                 self.Refresh()
     
 
