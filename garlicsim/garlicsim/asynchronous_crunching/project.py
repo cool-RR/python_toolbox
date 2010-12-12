@@ -542,12 +542,12 @@ class Project(object):
         '''
         there's one here in addition to that in the simpack grokker because the default step function here can be changed
         '''
-        parse_arugments_to_step_profile = \
+        parse_arguments_to_step_profile = \
             garlicsim.misc.StepProfile.build_parser(
                 self.default_step_function
             )
         
-        step_profile = parse_arugments_to_step_profile(*args, **kwargs)
+        step_profile = parse_arguments_to_step_profile(*args, **kwargs)
         return step_profile
         
         

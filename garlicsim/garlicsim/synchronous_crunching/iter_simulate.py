@@ -34,10 +34,10 @@ def iter_simulate(state, iterations, *args, **kwargs):
     '''
     simpack_grokker = garlicsim.misc.SimpackGrokker.create_from_state(state)
     
-    parse_arugments_to_step_profile = garlicsim.misc.StepProfile.build_parser(
+    parse_arguments_to_step_profile = garlicsim.misc.StepProfile.build_parser(
         simpack_grokker.default_step_function
     )
-    step_profile = parse_arugments_to_step_profile(*args, **kwargs)
+    step_profile = parse_arguments_to_step_profile(*args, **kwargs)
     
     
     if not hasattr(state, 'clock'):
