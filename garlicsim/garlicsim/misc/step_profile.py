@@ -77,12 +77,12 @@ class StepProfile(ArgumentsProfile):
         
         self.step_function = self.function
         
-        
+    
+    @caching.cache()    
     @staticmethod
-    def build_with_default_step_function(default_step_function, *args,
-                                         **kwargs):
+    def build_parser(default_step_function):
         '''
-        Create step profile, allowing the user to not specify step function.
+        tododoc Create step profile, allowing the user to not specify step function.
         
         Most of the time when simulating, there is one default step function
         that should be used if no other step function was explicitly specified.
@@ -98,66 +98,78 @@ class StepProfile(ArgumentsProfile):
         # `default_step_function`. make this clear in docstring, or possibly
         # make a function that returns a function.
         
-        # blocktododoc: test it works with default_step_function=None, assuming some
-        # step function is given, possibly in a step profile
+        # blocktododoc: test it works with default_step_function=None, assuming
+        # some step function is given, possibly in a step profile
 
-        # We have two candidates to check now: args[0] and
-        # kwargs['step_function']. We'll check the kwargs one first, because
-        # that's more explicit and there's less chance we'll be catching some
-        # other object by mistake.
-        #
-        # So we start with kwargs:
+        def parse_arguments_to_step_profile(*args, **kwargs):
         
-        if 'step_function' in kwargs:
-            kwargs_copy = kwargs.copy()
-            step_function = kwargs_copy.pop('step_function')
+            # We have two candidates to check now: args[0] and
+            # kwargs['step_function']. We'll check the kwargs one first, because
+            # that's more explicit and there's less chance we'll be catching
+            # some other object by mistake.
+            #
+            # So we start with kwargs:
             
-            get_step_type(step_function)
-            # Just so things will break if it's not a step function. If the user
-            # specified 'step_function', he's not going to get away with it not
-            # being an actual step function.
-
-            return StepProfile(step_function, *args, **kwargs_copy)
-        
-        
-        if 'step_profile' in kwargs: # blocktododoc
-            kwargs_copy = kwargs.copy()
-            step_profile = kwargs_copy.pop('step_profile')
-            
-            if step_profile is None:
-                # We let the user specify `step_profile=None` if he wants to get
-                # the default step profile.
-                return StepProfile(default_step_function)
+            if 'step_function' in kwargs:
+                kwargs_copy = kwargs.copy()
+                step_function = kwargs_copy.pop('step_function')
                 
-            else: # step_profile is not None
-                if not isinstance(step_profile, StepProfile):
-                    raise GarlicSimException(
-                        "You passed in %s as a keyword argument with a "
-                        "keyword of `step_profile`, but it's not a step "
-                        "profile." % step_profile
+                get_step_type(step_function)
+                # Just so things will break if it's not a step function. If the
+                # user specified 'step_function', he's not going to get away
+                # with it not being an actual step function.
+    
+                return StepProfile(step_function, *args, **kwargs_copy)
+            
+            
+            if 'step_profile' in kwargs: # blocktododoc
+                kwargs_copy = kwargs.copy()
+                step_profile = kwargs_copy.pop('step_profile')
+                
+                if step_profile is None:
+                    # We let the user specify `step_profile=None` if he wants to
+                    # get the default step profile.
+                    return StepProfile(default_step_function)
+                    
+                else: # step_profile is not None
+                    if not isinstance(step_profile, StepProfile):
+                        raise GarlicSimException(
+                            "You passed in %s as a keyword argument with a "
+                            "keyword of `step_profile`, but it's not a step "
+                            "profile." % step_profile
+                        )
+                    return step_profile
+    
+            
+            # No step function in kwargs. We'll try args:
+            
+            elif args:
+                
+                candidate = args[0]
+                
+                if isinstance(candidate, StepProfile):
+                    return candidate
+                
+                try:
+                    get_step_type(candidate)
+                except Exception:
+                    return StepProfile(
+                        default_step_function,
+                        *args,
+                        **kwargs
                     )
-                return step_profile
-
-        
-        # No step function in kwargs. We'll try args:
-        
-        elif args:
+                else:
+                    args_copy = args[1:]
+                    return StepProfile(
+                        default_step_function,
+                        *args_copy,
+                        **kwargs
+                    )
             
-            candidate = args[0]
-            
-            if isinstance(candidate, StepProfile):
-                return candidate
-            
-            try:
-                get_step_type(candidate)
-            except Exception:
-                return StepProfile(default_step_function, *args, **kwargs)
             else:
-                args_copy = args[1:]
-                return StepProfile(default_step_function, *args_copy, **kwargs)
+                return StepProfile(default_step_function, *args, **kwargs)
         
-        else:
-            return StepProfile(default_step_function, *args, **kwargs)
+        return parse_arguments_to_step_profile
                 
     
     def __repr__(self, short_form=False, root=None, namespace={}):

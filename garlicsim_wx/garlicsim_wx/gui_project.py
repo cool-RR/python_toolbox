@@ -691,6 +691,7 @@ class GuiProject(object):
         node = self.active_node
         
         if args or kwargs:
+            parse = garlicsim.misc.StepProfile.build_parser(
             step_profile = \
                 garlicsim.misc.StepProfile.build_with_default_step_function(
                     node.step_profile.step_function if node.step_profile \
