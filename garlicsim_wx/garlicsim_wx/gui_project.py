@@ -691,14 +691,12 @@ class GuiProject(object):
         node = self.active_node
         
         if args or kwargs:
-            parse = garlicsim.misc.StepProfile.build_parser(
-            step_profile = \
-                garlicsim.misc.StepProfile.build_with_default_step_function(
-                    node.step_profile.step_function if node.step_profile \
-                    else None,
-                    *args,
-                    **kwargs
+            parse_arguments_to_step_profile = \
+                garlicsim.misc.StepProfile.build_parser(
+                    node.step_profile.step_function if node.step_profile
+                    else None
                 )
+            step_profile = parse_arguments_to_step_profile(*args, **kwargs)
         else: # (not args) and (not kwargs)
             step_profile = node.step_profile
         

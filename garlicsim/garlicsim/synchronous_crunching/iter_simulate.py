@@ -33,11 +33,12 @@ def iter_simulate(state, iterations, *args, **kwargs):
     argument.) You may also pass in an existing step profile as first argument.    
     '''
     simpack_grokker = garlicsim.misc.SimpackGrokker.create_from_state(state)
-    step_profile = garlicsim.misc.StepProfile.build_with_default_step_function(
-        simpack_grokker.default_step_function,
-        *args,
-        **kwargs
+    
+    parse_arugments_to_step_profile = garlicsim.misc.StepProfile.build_parser(
+        simpack_grokker.default_step_function
     )
+    step_profile = parse_arugments_to_step_profile(*args, **kwargs)
+    
     
     if not hasattr(state, 'clock'):
         state = copy.deepcopy(

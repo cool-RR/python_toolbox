@@ -373,9 +373,11 @@ class SimpackGrokker(object):
         return inplace_step_iterator
     
 
-    def build_step_profile(self, *args, **kwargs):
-        return garlicsim.misc.StepProfile.build_with_default_step_function(
-            self.default_step_function,
-            *args,
-            **kwargs
-        )
+    def build_step_profile(self, *args, **kwargs): # blocktodo: probably rename to parse
+        parse_arugments_to_step_profile = \
+            garlicsim.misc.StepProfile.build_parser(
+                self.default_step_function
+            )
+        
+        step_profile = parse_arugments_to_step_profile(*args, **kwargs)
+        return step_profile
