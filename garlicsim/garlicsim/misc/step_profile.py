@@ -216,13 +216,13 @@ class StepProfile(ArgumentsProfile):
             return '%s(%s)' % (type(self).__name__, final_big_string)
     
 
-    @staticmethod
-    def create_from_dld_format(step_function, args_dict, star_args_list,
+    @classmethod
+    def create_from_dld_format(cls, step_function, args_dict, star_args_list,
                                star_kwargs_dict):
         args_spec = cute_inspect.getargspec(step_function)
         new_args = [args_dict[name] for name in args_spec.args[1:]] + \
                    list(star_args_list)
-        return StepProfile(step_function, *new_args, **star_kwargs_dict)
+        return cls(step_function, *new_args, **star_kwargs_dict)
         
     
     def __eq__(self, other):

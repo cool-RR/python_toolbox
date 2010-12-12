@@ -303,13 +303,13 @@ class ArgumentsProfile(object):
         )
         
     
-    @staticmethod
-    def create_from_dld_format(function, args_dict, star_args_list,
+    @classmethod
+    def create_from_dld_format(cls, function, args_dict, star_args_list,
                                star_kwargs_dict):
         args_spec = cute_inspect.getargspec(function)
         new_args = [args_dict[name] for name in args_spec.args] + \
                    list(star_args_list)
-        return ArgumentsProfile(function, *new_args, **star_kwargs_dict)
+        return cls(function, *new_args, **star_kwargs_dict)
         
             
                     
