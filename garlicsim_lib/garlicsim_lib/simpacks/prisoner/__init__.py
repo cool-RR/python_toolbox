@@ -6,4 +6,4 @@ A simulation package for a repeating game of prisoner's dillema between a
 population of players with different strategies.
 '''
 
-from state import *
+from .state import State

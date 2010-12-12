@@ -3,4 +3,4 @@
 
 '''A history-dependent simpack for testing garlicsim.'''
 
-from state import *
+from .state import State
