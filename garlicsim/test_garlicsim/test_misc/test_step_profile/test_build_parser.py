@@ -1,4 +1,4 @@
-import nose
+import nose.tools
 
 import garlicsim
 
@@ -35,10 +35,18 @@ def test():
     
     assert different_step_profile != step_profile
     
+    
+    
 
     alternate_step_profile = alternate_parse()
     assert alternate_step_profile == alternate_parse(z=3) == \
            alternate_parse(1, y=2)
+    assert alternate_parse(step_profile.step_function, 4, 5, 6) == \
+           alternate_parse(
+               step_function=step_profile.step_function, a=4, b=5, c=6
+               ) == \
+           parse(4, 5, 6)
+    
     
     assert none_parse(step_profile) == step_profile
     assert none_parse(step_profile=step_profile) == step_profile
@@ -46,16 +54,15 @@ def test():
     assert none_parse(step_profile.step_function) == step_profile
     assert none_parse(step_function=alternate_step_profile.step_function) == \
            alternate_step_profile
-    
-    # blocktodo: make this test complete
+    assert none_parse(alternate_step_profile.step_function, 2) == \
+           alternate_parse(x=2)
     
     # Step function or step profile must be given to `none_parse`:
-    nose.assert_raises(
+    nose.tools.assert_raises(
         Exception,
         lambda: none_parse(1, 2, 3, 4, 5)
     )
     
-    
-    
-    
-    
+    nose.tools.assert_raises(
+        Exception,
+        
