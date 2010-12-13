@@ -25,7 +25,12 @@ def test():
         sample_simpack.State.step,
         1, 2, 3
     )
-    assert step_profile == alternate_parse(step_profile) == none_parse(step_profile) == alternate_parse(step_profile=step_profile)
+    assert step_profile == \
+           alternate_parse(step_profile) == \
+           none_parse(step_profile) == \
+           alternate_parse(step_profile=step_profile)
+    
+    assert parse(step_profile=None) == step_profile
     
     
     different_step_profile = parse(4, 5, 6, meow='frrr')
@@ -46,7 +51,7 @@ def test():
                step_function=step_profile.step_function, a=4, b=5, c=6
                ) == \
            parse(4, 5, 6)
-    
+    assert alternate_parse(step_profile=step_profile) == step_profile
     
     assert none_parse(step_profile) == step_profile
     assert none_parse(step_profile=step_profile) == step_profile
