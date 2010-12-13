@@ -9,7 +9,7 @@ class State(garlicsim.data_structures.State):
     def step(self, a=1, b=2, c=3, *args, **kwargs):
         return State()
     
-    def alternate_step(self):
+    def alternate_step(self, x=1, y=2, z=3):
         return State()
     
     @staticmethod

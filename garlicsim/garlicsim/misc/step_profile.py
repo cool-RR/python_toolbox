@@ -161,7 +161,7 @@ class StepProfile(ArgumentsProfile):
                 else:
                     args_copy = args[1:]
                     return StepProfile(
-                        default_step_function,
+                        candidate,
                         *args_copy,
                         **kwargs
                     )
