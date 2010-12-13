@@ -63,6 +63,8 @@ def test():
         lambda: none_parse(1, 2, 3, 4, 5)
     )
     
+    # `alternate_step` doesn't take **kwargs:
     nose.tools.assert_raises(
         Exception,
-        
+        lambda: alternate_parse(boom='kaplaow')
+    )
