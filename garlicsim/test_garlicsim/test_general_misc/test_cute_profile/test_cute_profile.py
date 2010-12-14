@@ -103,4 +103,87 @@ def test_method():
     assert a.x == 12
     
     
+
+def test_condition():
+
+    x = 7
+    
+    @cute_profile.profile_ready(condition=lambda function, y: x == y,
+                                off_after=False)
+    def f(y):
+        pass
+    
+    # Condition is `False`:
+    assert call_and_check_if_profiled(lambda: f(5)) is False
+    assert call_and_check_if_profiled(lambda: f(6)) is False
+    
+    # Condition is `True`:
+    assert call_and_check_if_profiled(lambda: f(7)) is True
+    
+    # So now profiling is on regardless of condition:
+    assert call_and_check_if_profiled(lambda: f(8)) is True
+    assert call_and_check_if_profiled(lambda: f(9)) is True
+    assert call_and_check_if_profiled(lambda: f(4)) is True
+    assert call_and_check_if_profiled(lambda: f('frr')) is True
+    
+    # Setting profiling off:
+    f.profiling_on = False
+        
+    # So no profiling now:
+    assert call_and_check_if_profiled(lambda: f(4)) is False
+    assert call_and_check_if_profiled(lambda: f('frr')) is False
+    
+    # Until the condition becomes `True` again: (And this time, for fun, with a
+    # different `x`:)
+    x = 9
+    assert call_and_check_if_profiled(lambda: f(9)) is True
+    
+    # So now, again, profiling is on regardless of condition:
+    assert call_and_check_if_profiled(lambda: f(4)) is True
+    assert call_and_check_if_profiled(lambda: f('frr')) is True
+    
+    # Let's give it a try with `.off_after = True`:
+    f.off_after = True
+    
+    # Setting profiling off again:
+    f.profiling_on = False
+    
+    # And for fun set a different `x`:
+    x = 'wow'
+    
+    # Now profiling is on only when the condition is fulfilled, and doesn't stay
+    # on after:
+    assert call_and_check_if_profiled(lambda: f('ooga')) is False
+    assert call_and_check_if_profiled(lambda: f('booga')) is False
+    assert call_and_check_if_profiled(lambda: f('wow')) is True
+    assert call_and_check_if_profiled(lambda: f('meow')) is False
+    assert call_and_check_if_profiled(lambda: f('kabloom')) is False
+    
+    # In fact, after successful profiling the condition gets reset to `None`:
+    assert f.condition is None
+    
+    # So now if we'll call the function again, even if the (former) condition is
+    # `True`, there will be no profiling:
+    assert call_and_check_if_profiled(lambda: f(9)) is False
+    
+    # So if we want to use a condition again, we have to set it ourselves:
+    f.condition = lambda f, y: isinstance(y, float)
+    
+    # And again (since `.off_after == True`) profiling will turn on for just one
+    # time when the condition evaluates to `True` :
+    assert call_and_check_if_profiled(lambda: f('kabloom')) is False
+    assert call_and_check_if_profiled(lambda: f(3)) is False
+    assert call_and_check_if_profiled(lambda: f(3.1)) is True
+    assert call_and_check_if_profiled(lambda: f(3.1)) is False
+    assert call_and_check_if_profiled(lambda: f(-4.9)) is False
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     

@@ -1,4 +1,4 @@
-from .state import *
+from .state import State, determinism_function
 
 DETERMINISM_FUNCTION = determinism_function
 

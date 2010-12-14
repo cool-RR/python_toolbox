@@ -27,6 +27,10 @@ from ..shared import MustachedThreadCruncher
 
 
 def test_endable():
+    '''
+    
+    all simpacks end when they get a world-state with clock reading of 4 or more.
+    '''
     
     from . import sample_endable_simpacks
     
@@ -56,8 +60,7 @@ def test_endable():
         
 def check(simpack, cruncher_type):
     
-    # blocktododoc: note somewhere visible: all simpacks end when they see a
-    # world-state with clock reading of 4 or more.
+    # blocktododoc: note somewhere visible: 
     
     assert simpack._settings_for_testing.ENDABLE is True
     assert simpack._settings_for_testing.CONSTANT_CLOCK_INTERVAL == 1

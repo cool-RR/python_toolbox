@@ -7,6 +7,7 @@ import colorsys
 import wx
 
 from garlicsim.general_misc import caching
+from garlicsim.general_misc import cute_iter_tools
 from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.general_misc import color_tools
 
@@ -36,7 +37,7 @@ def make_bitmap(lightness=1, saturation=1):
         wx_tools.get_background_color()
     )
     
-    for x, y in itertools.product(xrange(BIG_LENGTH), xrange(BIG_LENGTH)):
+    for x, y in cute_iter_tools.product(xrange(BIG_LENGTH), xrange(BIG_LENGTH)):
         
         # This is a big loop so the code is optimized to keep it fast.
         
@@ -84,15 +85,15 @@ class Wheel(wx.Panel):
         self.SetDoubleBuffered(True)
         self.hue_selection_dialog = hue_selection_dialog
         self.hue = hue_selection_dialog.hue
-        self.lightness = hue_selection_dialog.lightness # blocktododoc: needed?
-        self.saturation = hue_selection_dialog.saturation # blocktododoc: needed?
         self.bitmap = make_bitmap(hue_selection_dialog.lightness,
                                   hue_selection_dialog.saturation)
         self._calculate_angle()
-        self._pen = wx.Pen(wx.Color(255, 255, 255) if self.lightness < 0.5 \
-                           else wx.Color(0, 0, 0),
-                           width=2,
-                           style=wx.DOT)
+        self._pen = wx.Pen(
+            wx.Color(255, 255, 255) if hue_selection_dialog.lightness < 0.5
+            else wx.Color(0, 0, 0),
+            width=2,
+            style=wx.DOT
+        )
         self._cursor_set_to_bullseye = False
         
         self.Bind(wx.EVT_PAINT, self.on_paint)
@@ -130,7 +131,7 @@ class Wheel(wx.Panel):
         center_x = center_y = BIG_LENGTH // 2 
         x, y = event.GetPosition()
         distance = ((x - center_x) ** 2 + (y - center_y) ** 2) ** 0.5
-        inside_wheel = (SMALL_RADIUS <= distance <= BIG_RADIUS) # blocktododoc: doc
+        inside_wheel = (SMALL_RADIUS <= distance <= BIG_RADIUS) # tododoc
 
         
         if inside_wheel and not self._cursor_set_to_bullseye:

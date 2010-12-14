@@ -93,7 +93,6 @@ def check_simpack(simpack):
                           simpack.State)        
         iterator = simpack_grokker.get_step_iterator(state, step_profile)
         assert iterator.__iter__() is iterator
-        # blocktododoc: make separate tests for iterator
 
     
     step_types = simpack_grokker.step_functions_by_type.keys()

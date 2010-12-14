@@ -34,8 +34,8 @@ class WindowMenu(CuteMenu):
             -1,
             '&Workspace',
             self.workspace_menu,
-            " Manipulate the workspace, i.e. the arrangement of widgets on "
-            "the screen"
+            ' Manipulate the workspace, i.e. the arrangement of widgets on '
+            'the screen'
         )
         self.workspace_menu_button.Enable(False)
         
@@ -43,11 +43,11 @@ class WindowMenu(CuteMenu):
         self.AppendSeparator()
         
         
-        self.crunching_controls_button = self.Append( #blocktododoc: don't forget enablings for these buttons
+        self.crunching_controls_button = self.Append(
             -1,
             '&Crunching',
-            " Go to the crunching tool, which lets you control how your "
-            "simulation is crunched"
+            ' Go to the crunching tool, which lets you control how your '
+            'simulation is crunched'
         )       
         #self.crunching_controls_button.Enable(False)
         
@@ -82,8 +82,8 @@ class WindowMenu(CuteMenu):
         self.playback_controls_button = self.Append(
             -1,
             '&Playback',
-            " Go to the playback controls, which let you control the onscreen "
-            "playback of the simulation"
+            ' Go to the playback controls, which let you control the onscreen '
+            'playback of the simulation'
         )       
         #self.playback_controls_button.Enable(False)
         
@@ -100,7 +100,7 @@ class WindowMenu(CuteMenu):
         self.seek_bar_button = self.Append(
             -1,
             'Seek-&bar',
-            " Go to the seek-bar, which lets you navigate the active timeline" #blocktododoc
+            ' Go to the seek-bar, which lets you navigate the active timeline'
         )       
         #self.seek_bar_button.Enable(False)
         
@@ -117,8 +117,8 @@ class WindowMenu(CuteMenu):
         self.shell_button = self.Append(
             -1,
             '&Shell',
-            " Go to the shell, which lets you analyze your simulation using "
-            "arbitrary Python code"
+            ' Go to the shell, which lets you analyze your simulation using '
+            'arbitrary Python code'
         )       
         #self.shell_button.Enable(False)
         
@@ -153,7 +153,7 @@ class WindowMenu(CuteMenu):
         self.tree_browser_button = self.Append(
             -1,
             '&Tree browser',
-            " Go to the tree browser, which lets you navigate the time tree"
+            ' Go to the tree browser, which lets you navigate the time tree'
         )       
         #self.tree_browser_button.Enable(False)
         
