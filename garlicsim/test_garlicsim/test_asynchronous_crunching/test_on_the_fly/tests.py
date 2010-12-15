@@ -17,6 +17,7 @@ import nose
 from garlicsim.general_misc import cute_iter_tools
 from garlicsim.general_misc import math_tools
 from garlicsim.general_misc import path_tools
+from garlicsim.general_misc import address_tools
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc.infinity import Infinity
 
@@ -102,10 +103,18 @@ def check(simpack, cruncher_type):
     assert step_profile_description == \
         'StepProfile(%s)' % simpack._settings_for_testing.DEFAULT_STEP_FUNCTION
     
+    short_step_profile_description = \
+            job.crunching_profile.step_profile.__repr__(short_form=True)
+    assert short_step_profile_description == \
+        '%s(<state>)' % address_tools.describe(
+            simpack._settings_for_testing.DEFAULT_STEP_FUNCTION,
+            shorten=True
+        )
+    
     crunching_profile_description = repr(job.crunching_profile)
     assert crunching_profile_description == \
            'CrunchingProfile(clock_target=%d, step_profile=%s)' % \
-           (huge_number, step_profile_description)
+           (huge_number, short_step_profile_description)
     
     job_description = repr(job)
     assert job_description == 'Job(node=%s, crunching_profile=%s)' % \
