@@ -21,8 +21,7 @@ from garlicsim.misc.simpack_grokker.get_step_type import get_step_type
 __all__ = ['StepProfile']
 
 
-class Placeholder(object): # blocktododoc: make uninstanciable
-    # blocktododoc: bad name, it can also be a history browser
+class Placeholder(object): # todo: make uninstanciable
     pass
 
 

@@ -5,7 +5,6 @@ from garlicsim.general_misc import address_tools
 
 
 class StepFunctionsToArgumentDicts(dict):
-    #blocktododoc: repr
     def __init__(self, describe_function, *args, **kwargs):
         dict.__init__(self, *args, **kwargs)
         self.describe = describe_function
@@ -21,3 +20,7 @@ class StepFunctionsToArgumentDicts(dict):
         )
         self[step_function] = result
         return result
+    
+    # todo: Make `__repr__`. In the mean time we use this in order to not
+    # confuse the user by looking like a `dict`:
+    __repr__ = object.__repr__
