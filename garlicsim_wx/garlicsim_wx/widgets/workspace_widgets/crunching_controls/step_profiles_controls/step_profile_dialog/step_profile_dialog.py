@@ -280,8 +280,10 @@ class StepProfileDialog(CuteDialog):
             self.step_function_input.parse_text_and_set()
         except Exception, exception:
             error_dialog = ErrorDialog(self, exception.args[0])
-            error_dialog.ShowModal()
-            error_dialog.Destroy()
+            try:
+                error_dialog.ShowModal()
+            finally:
+                error_dialog.Destroy()
             self.step_function_input.SetFocus()
             return
         
@@ -289,8 +291,10 @@ class StepProfileDialog(CuteDialog):
             self.argument_control.save()
         except ResolveFailed, resolve_failed_exception:
             error_dialog = ErrorDialog(self, resolve_failed_exception.message)
-            error_dialog.ShowModal()
-            error_dialog.Destroy()
+            try:
+                error_dialog.ShowModal()
+            finally:
+                error_dialog.Destroy()
             resolve_failed_exception.widget.SetFocus()
             return
 
@@ -317,9 +321,11 @@ class StepProfileDialog(CuteDialog):
         
         
         if step_profile in self.gui_project.step_profiles:
-            dialog = AlreadyExistsDialog(self, step_profile,
-                                         and_fork=self.and_fork)
-            result = dialog.ShowModal() 
+            result = AlreadyExistsDialog.create_show_modal_and_destroy(
+                self,
+                step_profile,
+                and_fork=self.and_fork
+            )
             if result == wx.ID_OK:
                 self.step_profile = step_profile
                 self.EndModal(wx.ID_CANCEL)

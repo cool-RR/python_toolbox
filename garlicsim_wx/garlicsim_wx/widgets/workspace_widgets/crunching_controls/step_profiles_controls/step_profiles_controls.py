@@ -137,7 +137,7 @@ class StepProfilesControls(wx.Panel):
             return
         tree_step_profiles = self.gui_project.project.tree.get_step_profiles()
         if step_profile in tree_step_profiles:
-            error_dialog = ErrorDialog(
+            ErrorDialog.create_show_modal_and_destroy(
                 self,
                 "The step profile `%s` is currently used in the tree; it may "
                 "not be deleted." % step_profile.__repr__(
@@ -146,7 +146,6 @@ class StepProfilesControls(wx.Panel):
                     namespace=self.gui_project.namespace
                 )
             )
-            error_dialog.ShowModal()
             return
         else:
             self.gui_project.step_profiles.remove(step_profile)

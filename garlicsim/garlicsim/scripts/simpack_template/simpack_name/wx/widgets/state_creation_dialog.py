@@ -35,7 +35,6 @@ class StateCreationDialog(CuteDialog):
             pass
         else:
             state = None
-        self.Destroy()
         return state
         
 

@@ -72,8 +72,10 @@ class StateCreationDialog(CuteDialog):
         def complain(message):
             dialog = wx.MessageDialog(self, message, "Error",
                                       wx.ICON_ERROR | wx.OK)
-            dialog.ShowModal()
-            dialog.Destroy()
+            try:
+                dialog.ShowModal()
+            finally:
+                dialog.Destroy()
 
         self.info = {}
 
