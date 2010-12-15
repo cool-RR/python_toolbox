@@ -99,11 +99,8 @@ def shorten_address(address, root=None, namespace={}):
     return new_address
 
 
-    
-
-def _get_address(obj, shorten=False, root=None, namespace={}):
-    # blocktododoc: Unprivatize since this is useful for users
-    
+@caching.cache()
+def get_address(obj, shorten=False, root=None, namespace={}):
     # todo: Support classes inside classes. Currently doesn't work because
     # Python doesn't tell us inside in which class an inner class was defined.
     # We'll probably have to do some kind of search.
@@ -205,7 +202,7 @@ def describe(obj, shorten=False, root=None, namespace={}):
     if isinstance(obj, types.ModuleType) or \
        (hasattr(obj, '__module__') and hasattr(obj, '__name__')):
         
-        return _get_address(obj, shorten=shorten, root=root,
+        return get_address(obj, shorten=shorten, root=root,
                             namespace=namespace)
     
     raw_result = repr(obj)
@@ -240,7 +237,7 @@ def describe(obj, shorten=False, root=None, namespace={}):
             if repr(object_candidate) == ugly_repr:
                 # We have a winner!
                 object_winner = object_candidate
-                pretty_address = _get_address(object_winner, root=root,
+                pretty_address = get_address(object_winner, root=root,
                                               namespace=namespace)                
                 current_result = current_result.replace(ugly_repr, pretty_address)
                 current_result_changed = True
