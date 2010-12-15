@@ -16,7 +16,7 @@ from garlicsim.general_misc.infinity import Infinity
 from garlicsim.misc import StepCopy
 import garlicsim
 
-import events as events_module
+from . import events as events_module
 
 
 #todo: math error here:
@@ -64,12 +64,10 @@ class State(garlicsim.data_structures.State):
 
     
     
-    def step(self, t=None):
+    def step(self): #, t=None):
         '''Step function.'''
         # todo good idea: t=None means step to next client. If given int just do
         # many steps. (What with cut last?)
-        
-        assert t is None # for now
         
         new_state = copy.deepcopy(self, StepCopy())
         time_passed = new_state.event_set.do_next_event()
