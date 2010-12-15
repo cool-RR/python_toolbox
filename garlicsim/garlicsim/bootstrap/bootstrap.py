@@ -20,7 +20,7 @@ if sys.version_info[1] <= 4:
 
 def __check_prerequisites():
     '''
-    Check that all modules required for garlicsim are installed.
+    Check that all modules required for `garlicsim` are installed.
     
     Returns a list of some imported modules: A reference to this list should be
     kept alive so to prevent the imported modules from being garbage-collected,

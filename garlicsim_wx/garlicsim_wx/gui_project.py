@@ -119,9 +119,12 @@ class GuiProject(object):
         The job of the playing leaf, which should be crunched to infinity.
         '''
         
-        self.default_buffer = 100 # Should be a mechanism for setting !blocktododoc
-        '''The default clock buffer to crunch from an active node.'''
-        # blocktododoc: rename to autocrunch?
+        self.default_buffer = 100
+        '''
+        The default clock buffer to crunch from an active node.
+
+        For the user it is called "Autocrunch".
+        '''
         
         self._default_buffer_before_cancellation = None
 

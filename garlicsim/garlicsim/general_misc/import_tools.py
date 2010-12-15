@@ -11,34 +11,6 @@ from garlicsim.general_misc import package_finder
 from garlicsim.general_misc import caching
 
 
-def import_by_path(path, name=None):
-    '''
-    Import module/package by path.
-    
-    You may specify a name: This is helpful only if it's an hierarchical name,
-    i.e. a name with dots like "orange.claw.hammer". This will become the
-    imported module's __name__ attribute. Otherwise only the short name,
-    "hammer", will be used, which might cause problems in some cases. (Like
-    when using multiprocessing.)
-    '''
-    # blocktododoc: importing by path did a lot of trouble. i think i'm not even
-    # using this function anymore, if so it may be removed, though I might want
-    # it for the future when letting people specify external simpacks. or maybe
-    # i'll just change `sys.path` when people want to import an external
-    # simpack?
-    short_name = os.path.splitext(os.path.split(path)[1])[0]
-    if name is None: name = short_name
-    path_to_dir = os.path.dirname(path)
-    my_file = None
-    try:
-        (my_file, pathname, description) = \
-            imp.find_module(short_name, [path_to_dir])
-        module = imp.load_module(name, my_file, pathname, description)
-    finally:
-        if my_file is not None:
-            my_file.close()
-        
-    return module
     
 
 def import_all(package, exclude='__init__', silent_fail=False):
@@ -135,3 +107,31 @@ def exists(module_name):
         return False
     else:
         return True
+    
+    
+    
+# Unused for now:
+
+#def import_by_path(path, name=None):
+    #'''
+    #Import module/package by path.
+    
+    #You may specify a name: This is helpful only if it's an hierarchical name,
+    #i.e. a name with dots like "orange.claw.hammer". This will become the
+    #imported module's __name__ attribute. Otherwise only the short name,
+    #"hammer", will be used, which might cause problems in some cases. (Like
+    #when using multiprocessing.)
+    #'''
+    #short_name = os.path.splitext(os.path.split(path)[1])[0]
+    #if name is None: name = short_name
+    #path_to_dir = os.path.dirname(path)
+    #my_file = None
+    #try:
+        #(my_file, pathname, description) = \
+            #imp.find_module(short_name, [path_to_dir])
+        #module = imp.load_module(name, my_file, pathname, description)
+    #finally:
+        #if my_file is not None:
+            #my_file.close()
+        
+    #return module
