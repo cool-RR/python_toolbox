@@ -6,6 +6,7 @@
 
 from garlicsim.general_misc import misc_tools
 from garlicsim.general_misc import address_tools
+from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import caching
 
 import garlicsim.misc.simpack_grokker
@@ -27,7 +28,7 @@ def _get_from_state_class(state_class):
     assert state_class.__name__ == 'State' # remove this limitation
     short_address = address_tools.describe(state_class, shorten=True)
     simpack_name = '.'.join(short_address.split('.')[:-1])
-    simpack = __import__(simpack_name, fromlist=[''])
+    simpack = import_tools.normal_import(simpack_name)
     try:
         garlicsim.misc.simpack_grokker.SimpackGrokker(simpack)
         # Not saving the reference: But it'll get cached because SimpackGrokker

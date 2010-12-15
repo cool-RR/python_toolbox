@@ -52,6 +52,12 @@ def import_all(package, exclude='__init__', silent_fail=False):
 
 
 def normal_import(module_name):
+    '''
+    
+    This function avoids a weird bug in Linux, where importing using
+    `__import__` can lead to a `module.__name__` containing two consecutive
+    dots.
+    '''
     if '.' in module_name:
         package_name, submodule_name = module_name.rsplit('.', 1)
         package = __import__(module_name)
