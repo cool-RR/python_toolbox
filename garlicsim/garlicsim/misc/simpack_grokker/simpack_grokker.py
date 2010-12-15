@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the SimpackGrokker class and the InvalidSimpackblocktododoc exception.
+This module defines the SimpackGrokker class and the InvalidSimpack tododoc exception.
 
 See their documentation for more details.
 '''
