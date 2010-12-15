@@ -60,13 +60,15 @@ class CrunchingProfile(object):
         Get a string representation of the crunching profile.
         
         Example output:
-        CrunchingProfile(clock_target=Infinity, step_profile=StepProfile(<unbound method State.step>))
+        
+            CrunchingProfile(clock_target=Infinity,
+            step_profile=StepProfile(<unbound method State.step>))
         '''
         stuff = []
-        stuff.append("clock_target=%s" % self.clock_target)
-        stuff.append("step_profile=%s" % self.step_profile)
+        stuff.append('clock_target=%s' % self.clock_target)
+        stuff.append('step_profile=%s' % self.step_profile.__repr__(short_form=True))
         temp = ", ".join(stuff)
-        return ("CrunchingProfile(%s)" % temp)
+        return ('CrunchingProfile(%s)' % temp)
     
     
     

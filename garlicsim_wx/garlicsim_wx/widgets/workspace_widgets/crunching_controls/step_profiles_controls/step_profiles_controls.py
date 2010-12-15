@@ -18,7 +18,7 @@ images_package = __images_package.__name__
 
     
 class StepProfilesControls(wx.Panel):
-    '''blocktododoc'''
+    '''tododoc'''
     
     def __init__(self, parent, frame, *args, **kwargs):
         
@@ -95,6 +95,12 @@ class StepProfilesControls(wx.Panel):
         '''
         None for creating new step profile
         '''
+        
+        # todo: It's a bitch that there's logic here for handling what happens
+        # after the dialog is finished. Because there's related logic in the
+        # dialog itself. Ideally the logic should be in one of those places
+        # only, not spread between them.
+        
         step_profile_dialog = StepProfileDialog(self, step_profile,
                                                 and_fork=and_fork)
         
