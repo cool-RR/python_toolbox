@@ -6,11 +6,11 @@ import types
 
 from garlicsim.general_misc import misc_tools
 from garlicsim.general_misc import import_tools
+from garlicsim.general_misc import address_tools
 
 
 
 class FunctionAnchoringType(type):
-    # blocktododoc: consider putting this only in _py3
     def __new__(mcls, name, bases, namespace_dict):
         my_type = super(FunctionAnchoringType, mcls).__new__(mcls,
                                                              name,
@@ -25,9 +25,7 @@ class FunctionAnchoringType(type):
             function_name = function.__name__
             anchor_address = '.'.join((module_name, function_name))
             try:
-                # blocktododoc: fucking shit here
-                already_defined_object = \
-                    misc_tools.get_object_from_address(anchor_address)
+                already_defined_object = address_tools.resolve(anchor_address)
             except AttributeError:
                 # Good, there is no object defined under our anchor address.
                 # This is the normal case.
@@ -36,7 +34,9 @@ class FunctionAnchoringType(type):
                 # Something already exists at the anchor address; let's be
                 # careful.
                 if already_defined_object is not function:
-                    raise Exception # toododoc
+                    raise Exception("An object `%s.%s` already exists! Can't "
+                                    "anchor function." % \
+                                    (module_name, function_name))
         return my_type
                     
     

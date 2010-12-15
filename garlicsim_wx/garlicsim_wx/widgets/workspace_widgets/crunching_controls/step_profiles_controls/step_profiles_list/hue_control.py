@@ -9,9 +9,6 @@ import garlicsim_wx
 
 
 class HueControl(GenericHueControl):
-    # blocktododoc: possible confusion, this is called HueProfile in the
-    # `step_profiles_controls` package, but it's good for a specific purpose,
-    # and the dialog uses a different hue control.
     def __init__(self, step_profile_item_panel, step_profile):
         
         self.step_profile = step_profile

@@ -91,7 +91,7 @@ class State(garlicsim.data_structures.State):
 
 class Board(object):
     '''Represents a Life board.''' 
-    def __init__(self, width=None, height=None, fill="empty", parent=None,
+    def __init__(self, width=None, height=None, fill='empty', parent=None,
                  birth=[3], survival=[2, 3], randomness=0):
         '''
         If `parent` is specified, makes a board which is descendent from the
@@ -114,13 +114,13 @@ class Board(object):
                     )
             return
                 
-        assert fill in ["empty", "full", "random"]
+        assert fill in ['empty', 'full', 'random']
         
-        if fill == "empty":
+        if fill == 'empty':
             make_cell = lambda: False
-        elif fill == "full":
+        elif fill == 'full':
             make_cell = lambda: True
-        elif fill == "random":    
+        elif fill == 'random':    
             make_cell = lambda: random.choice([True, False])
 
         self.width, self.height = (width, height)
