@@ -14,6 +14,7 @@ import pkgutil
 import wx
 
 from garlicsim.general_misc.cmp_tools import underscore_hating_cmp
+from garlicsim.general_misc import import_tools
 from garlicsim_wx.general_misc import wx_tools
 
 
@@ -45,8 +46,7 @@ class SimpackSelectionDialog(wx.SingleChoiceDialog):
     def get_simpack_selection(self):
         '''Import the selected simpack and return it.'''
         string = self.GetStringSelection()
-        result = __import__('garlicsim_lib.simpacks.' + string,
-                            fromlist=[''])
+        result = import_tools.normal_import('garlicsim_lib.simpacks.' + string)
         return result
 
 

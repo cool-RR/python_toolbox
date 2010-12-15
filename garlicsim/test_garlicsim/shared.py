@@ -4,7 +4,9 @@ import garlicsim
 
 
 def verify_sample_simpack_settings(sample_simpack):
-    __import__(sample_simpack.__name__ + '._settings_for_testing')
+    import_tools.normal_import(
+        sample_simpack.__name__ + '._settings_for_testing'
+    )
     sft = sample_simpack._settings_for_testing
     assert isinstance(sft.ENDABLE, bool)
     bool(sft.VALID)

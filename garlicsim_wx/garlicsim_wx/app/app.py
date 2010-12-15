@@ -11,6 +11,8 @@ import functools
 
 import wx
 
+from garlicsim.general_misc import import_tools
+
 import garlicsim_wx
 
 
@@ -56,10 +58,8 @@ class App(wx.PySimpleApp):
         self.SetTopWindow(frame)
         
         if self.new_gui_project_simpack_name is not None:
-            simpack = __import__(
-                self.new_gui_project_simpack_name,
-                fromlist=['']
-            )
+            simpack = \
+                import_tools.normal_import(self.new_gui_project_simpack_name)
             
             wx.CallAfter(
                 functools.partial(

@@ -98,7 +98,7 @@ def import_if_exists(module_name, silent_fail=False):
                 raise
 
     # Not actually using the result of `imp.find_module`, just want to know that
-    # it worked and the module exists. We'll let the conventional `__import__`
+    # it worked and the module exists. We'll let the conventional `__import__` tododoc
     # find the module again, assuming its finding procedure will work exactly
     # the same as imp's.
         
