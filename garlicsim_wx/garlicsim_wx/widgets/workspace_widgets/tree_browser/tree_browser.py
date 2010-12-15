@@ -149,7 +149,10 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
         (self.clickable_map, (width, height)) = \
             dc.draw_tree(self.gui_project.project.tree)
         
+        dc.Destroy() # This weird dc requires destroying
+        
         self.SetVirtualSize((width,height))
+        
         
     def on_size(self, e=None):
         self.Refresh()
