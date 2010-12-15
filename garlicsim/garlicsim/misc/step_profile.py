@@ -21,7 +21,7 @@ from garlicsim.misc.simpack_grokker.get_step_type import get_step_type
 __all__ = ['StepProfile']
 
 
-class StatePlaceholder(object): # blocktododoc: make uninstanciable
+class Placeholder(object): # blocktododoc: make uninstanciable
     # blocktododoc: bad name, it can also be a history browser
     pass
 
@@ -65,14 +65,14 @@ class StepProfile(ArgumentsProfile):
         
         if isinstance(candidate, StepProfile):
             ArgumentsProfile.__init__(self, candidate.step_function,
-                                      *((StatePlaceholder,) + candidate.args),
+                                      *((Placeholder,) + candidate.args),
                                       **candidate.kwargs)
         else:
             ArgumentsProfile.__init__(self, step_function,
-                                      *((StatePlaceholder,) + args),
+                                      *((Placeholder,) + args),
                                       **kwargs)
 
-        assert self.args[0] is StatePlaceholder
+        assert self.args[0] is Placeholder
         self.args = self.args[1:]
         
         self.step_function = self.function
@@ -94,12 +94,7 @@ class StepProfile(ArgumentsProfile):
         The user may put the step function as the first positional argument, or
         as the 'step_function' keyword argument. 
         '''
-        # blocktododoc: it's confusing thinking who should give the
-        # `default_step_function`. make this clear in docstring, or possibly
-        # make a function that returns a function.
         
-        # blocktododoc: test it works with default_step_function=None, assuming
-        # some step function is given, possibly in a step profile
 
         def parse_arguments_to_step_profile(*args, **kwargs):
         
@@ -122,7 +117,7 @@ class StepProfile(ArgumentsProfile):
                 return StepProfile(step_function, *args, **kwargs_copy)
             
             
-            if 'step_profile' in kwargs: # blocktododoc
+            if 'step_profile' in kwargs: # tododoc
                 kwargs_copy = kwargs.copy()
                 step_profile = kwargs_copy.pop('step_profile')
                 

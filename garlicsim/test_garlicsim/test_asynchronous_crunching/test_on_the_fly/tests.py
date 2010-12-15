@@ -143,6 +143,8 @@ def check(simpack, cruncher_type):
     # target:
     project.sync_crunchers()
     (same_cruncher,) = project.crunching_manager.crunchers.values()
+    # todo: On slow machines cruncher doesn't get created fast enough for the
+    # above assert to work. Probably make some function that waits for it.
     assert same_cruncher is cruncher
     
     # Deleting jobs so the cruncher will stop:
