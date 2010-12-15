@@ -1,1 +1,1 @@
-from about_dialog import AboutDialog
+from .about_dialog import AboutDialog

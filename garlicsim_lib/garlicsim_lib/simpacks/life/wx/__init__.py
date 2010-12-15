@@ -3,4 +3,4 @@
 
 '''`wx` package for `life`.'''
 
-import state_creation_dialog, widgets
+from . import state_creation_dialog, widgets

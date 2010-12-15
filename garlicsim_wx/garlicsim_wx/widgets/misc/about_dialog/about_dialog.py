@@ -18,7 +18,7 @@ import garlicsim_wx.general_misc.cute_timer
 from garlicsim_wx.widgets.general_misc import CuteDialog
 
 import garlicsim_wx
-from bitmap_viewer import BitmapViewer
+from .bitmap_viewer import BitmapViewer
 
 from . import images as __images_package
 images_package = __images_package.__name__
@@ -155,5 +155,4 @@ class AboutDialog(CuteDialog):
         self.timer.Stop()
         wx.Dialog.EndModal(self, *args, **kwargs)
 
-        
         

@@ -510,7 +510,10 @@ class GuiProject(object):
         '''Create a dialog for creating a root state.'''
         Dialog = self.simpack_wx_grokker.settings.STATE_CREATION_DIALOG
         dialog = Dialog(self.frame)
-        state = dialog.start()
+        try:
+            state = dialog.start()
+        finally:
+            dialog.Destroy()
         if state:
             root = self.project.root_this_state(state)
             self.tree_structure_modified_not_on_path_emitter.emit()
