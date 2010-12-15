@@ -102,9 +102,9 @@ def get_address(obj, shorten=False, root=None, namespace={}):
     # We'll probably have to do some kind of search.
     
     if not (isinstance(obj, types.ModuleType) or hasattr(obj, '__module__')):
-        raise Exception("%s is not a module, nor does not have a `__module__` "
-                        "attribute, therefore we can't get its address." % \
-                        (obj,)) # blocktododoc: test
+        raise Exception("`%s` is not a module, nor does it have a "
+                        "`.__module__` attribute, therefore we can't get its "
+                        "address." % (obj,))
     
     if isinstance(obj, types.ModuleType):
         address = obj.__name__

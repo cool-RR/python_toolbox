@@ -9,8 +9,6 @@ from .argument_control import colors
 
 
 class StepFunctionInput(wx.ComboBox):
-    # blocktododoc: if hitting on step function and it's not in the list, add it as
-    # last
     def __init__(self, step_profile_dialog, value):
         self.step_profile_dialog = step_profile_dialog
         self.simpack_grokker = step_profile_dialog.simpack_grokker

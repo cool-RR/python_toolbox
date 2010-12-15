@@ -29,14 +29,11 @@ def _get_from_state_class(state_class):
     short_address = address_tools.describe(state_class, shorten=True)
     simpack_name = '.'.join(short_address.split('.')[:-1])
     simpack = import_tools.normal_import(simpack_name)
-    try:
-        garlicsim.misc.simpack_grokker.SimpackGrokker(simpack)
-        # Not saving the reference: But it'll get cached because SimpackGrokker
-        # is a CachedType.
-    except garlicsim.misc.InvalidSimpack:
-        raise garlicsim.misc.GarlicSimException("Could not guess simpack "
-                                                "correctly from state object.")
-        # blocktododoc: This might mask a real InvalidSimpack exception
+        
+    garlicsim.misc.simpack_grokker.SimpackGrokker(simpack)
+    # Not saving the reference: But it'll get cached because `SimpackGrokker` is
+    # a `CachedType`.
+        
     return simpack
     
     

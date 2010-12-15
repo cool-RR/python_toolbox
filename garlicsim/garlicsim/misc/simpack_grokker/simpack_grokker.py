@@ -148,7 +148,7 @@ class SimpackGrokker(object):
             # imported yet."
             
             settings_module_name = ''.join((
-                self.simpack.__name__, # blocktodo: may need to remove same from simpack_wx_grokker too
+                self.simpack.__name__,
                 '.settings'
             ))
             
@@ -373,7 +373,7 @@ class SimpackGrokker(object):
         return inplace_step_iterator
     
 
-    def build_step_profile(self, *args, **kwargs): # blocktodo: probably rename to parse
+    def build_step_profile(self, *args, **kwargs):
         parse_arguments_to_step_profile = \
             garlicsim.misc.StepProfile.build_parser(
                 self.default_step_function

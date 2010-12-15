@@ -88,16 +88,6 @@ def _is_type_atomically_pickleable(type_, thing=None):
     return result
     
     
-    ## blocktododoc This is done by stupid whitelisting temporarily:
-    #import thread, multiprocessing.synchronize
-    #atomically_non_pickleable_types = \
-        #(file, thread.LockType, multiprocessing.synchronize.Lock)
-    #if issubclass(type_, atomically_non_pickleable_types):
-        #cache[type_] = False
-        #return False
-    #else:
-        #cache[type_] = True
-        #return True
         
 _is_type_atomically_pickleable.cache = {}
  
