@@ -5,6 +5,8 @@ from garlicsim.general_misc import import_tools
 from garlicsim.general_misc.address_tools import (describe,
                                                   resolve)
 
+import garlicsim
+
 
 prefix = __name__ + '.'    
 
@@ -231,3 +233,11 @@ def test_bad_module_name():
         '.'.join((non_sensical_module_name, 'A.m'))
     assert describe(A.m, shorten=True, root=email, namespace={}) == \
         '.'.join((non_sensical_module_name, 'A.m'))
+    
+
+def test_function_in_something():
+    if garlicsim.__version_info__ <= (0, 6, 0):
+        raise nose.SkipTest("This test doesn't pass in `garlicsim` version "
+                            "0.6 and below.")
+    assert describe({1: sum}) == '{1: sum}'
+    assert describe((sum, sum, list, chr)) == '(sum, sum, list, chr)'

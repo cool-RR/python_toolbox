@@ -15,19 +15,16 @@ from .shared import (_contained_address_pattern, _address_pattern,
 # blocktododoc: add caching to some functions
 
 
-def _get_object_by_address(address, root=None, namespace={}):
+def get_object_by_address(address, root=None, namespace={}):
     
-    # blocktododoc: unprivatize since is useful for user
-
     # todo: should know what exception this will raise if the address is bad /
     # object doesn't exist.
     
     if not _address_pattern.match(address):
         raise ValueError("'%s' is not a legal address." % address)
-        # blocktododoc change to assert
     
     ###########################################################################
-    # Before we start, we do some analysis of `root` and `namespace`:
+    # Before we start, we do some analysis of `root` and `namespace`:         #
     
     # We are letting the user inputs (base)strings for `root` and `namespace`,
     # so if he did that, we'll get the actual objects.
@@ -35,13 +32,13 @@ def _get_object_by_address(address, root=None, namespace={}):
     if root:
         # First for `root`:
         if isinstance(root, basestring):
-            root = _get_object_by_address(root)
+            root = get_object_by_address(root)
         root_short_name = root.__name__.rsplit('.', 1)[-1]
         
     if namespace:
         # And then for `namespace`:
         if isinstance(namespace, basestring):
-            namespace = _get_object_by_address(namespace)
+            namespace = get_object_by_address(namespace)
             
         parent_object, namespace_dict = _get_parent_and_dict_from_namespace(
             namespace
@@ -50,7 +47,7 @@ def _get_object_by_address(address, root=None, namespace={}):
         parent_object, namespace_dict = None, None
             
         
-    # Finished analyzing `root` and `namespace`.
+    # Finished analyzing `root` and `namespace`.                              #
     ###########################################################################
     
     # Let's rule out the easy option that the requested object is the root:
@@ -99,10 +96,10 @@ def _get_object_by_address(address, root=None, namespace={}):
         
         first_object_address, second_object_address = address.rsplit('.', 1)
         
-        first_object = _get_object_by_address(first_object_address, root=root,
+        first_object = get_object_by_address(first_object_address, root=root,
                                               namespace=namespace)
 
-        second_object = _get_object_by_address(second_object_address,
+        second_object = get_object_by_address(second_object_address,
                                                    namespace=first_object)
 
         return second_object
@@ -110,15 +107,13 @@ def _get_object_by_address(address, root=None, namespace={}):
 
 def resolve(string, root=None, namespace={}):
     # sktechy for now
-    # blocktododoc: make sure namespace works here
-    # blocktododoc: write tests for this
     
     # Resolving '' to None:
     if string == '':
         return None
     
     if _address_pattern.match(string):
-        return _get_object_by_address(string, root=root, namespace=namespace)
+        return get_object_by_address(string, root=root, namespace=namespace)
 
     (_useless, namespace_dict) = _get_parent_and_dict_from_namespace(namespace)
     
@@ -130,13 +125,13 @@ def resolve(string, root=None, namespace={}):
     
     for address in addresses:
         try:
-            thing = _get_object_by_address(address, root=root,
+            thing = get_object_by_address(address, root=root,
                                            namespace=namespace)
         except Exception:
             pass
         else:
             big_parent_name = address.split('.', 1)[0]
-            big_parent = _get_object_by_address(big_parent_name, root=root,
+            big_parent = get_object_by_address(big_parent_name, root=root,
                                                 namespace=namespace)
             our_namespace[big_parent_name] = big_parent
             

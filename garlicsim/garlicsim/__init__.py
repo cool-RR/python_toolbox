@@ -19,14 +19,18 @@ package.
 This program is intended for Python versions 2.5, 2.6 and 2.7.
 '''
 
-from . import bootstrap
-import general_misc
-import general_misc.monkeypatch_copy_reg
-import misc
-from asynchronous_crunching import Project
-from synchronous_crunching import simulate, list_simulate, iter_simulate
+import garlicsim.bootstrap
+import garlicsim.general_misc
+import garlicsim.general_misc.version_info
+import garlicsim.general_misc.monkeypatch_copy_reg
+import garlicsim.misc
+from garlicsim.asynchronous_crunching import Project
+from garlicsim.synchronous_crunching import simulate, list_simulate, iter_simulate
+
 
 __all__ = ['Project', 'simulate', 'list_simulate', 'iter_simulate']
 
+
+__version_info__ = general_misc.version_info.VersionInfo(0, 5, 1)
 __version__ = '0.5.1'
 

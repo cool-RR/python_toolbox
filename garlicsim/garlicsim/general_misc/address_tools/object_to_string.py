@@ -31,9 +31,9 @@ def _tail_shorten(address, root=None, namespace={}):
         return address
     
     parent_address, child_name = address.rsplit('.', 1)
-    parent = _get_object_by_address(parent_address, root=root,
+    parent = get_object_by_address(parent_address, root=root,
                                     namespace=namespace)
-    child = _get_object_by_address(address, root=root, namespace=namespace)
+    child = get_object_by_address(address, root=root, namespace=namespace)
     
     current_parent_address = parent_address
     
@@ -49,7 +49,7 @@ def _tail_shorten(address, root=None, namespace={}):
             # We've reached the top module and it's successful, can break now.
             break
         
-        current_parent = _get_object_by_address(current_parent_address,
+        current_parent = get_object_by_address(current_parent_address,
                                     root=root, namespace=namespace)
         
         candidate_child = getattr(current_parent, child_name, None)
@@ -122,7 +122,7 @@ def _get_address(obj, shorten=False, root=None, namespace={}):
         address= '.'.join((obj.__module__, obj.__name__))
 
     try:
-        object_candidate = _get_object_by_address(address)
+        object_candidate = get_object_by_address(address)
         is_same_object = \
             (obj == object_candidate) if isinstance(obj, types.MethodType) \
             else (obj is object_candidate)
@@ -139,10 +139,10 @@ def _get_address(obj, shorten=False, root=None, namespace={}):
     if root or namespace:
         
         if isinstance(root, basestring):
-            root = _get_object_by_address(root)
+            root = get_object_by_address(root)
             
         if isinstance(namespace, basestring):
-            namespace = _get_object_by_address(namespace)
+            namespace = get_object_by_address(namespace)
 
 
         if namespace:
@@ -171,7 +171,7 @@ def _get_address(obj, shorten=False, root=None, namespace={}):
         # 'garlicsim.misc.step_copy', 'garlicsim.misc.step_copy.StepCopy']
         
         for head in reversed(heads):
-            object_ = _get_object_by_address(head)
+            object_ = get_object_by_address(head)
             if root:
                 if object_ is root:
                     root_short_name = root.__name__.rsplit('.', 1)[-1]
@@ -191,7 +191,7 @@ def _get_address(obj, shorten=False, root=None, namespace={}):
         
     if address.startswith('__builtin__.'):
         shorter_address = address.replace('__builtin__.', '', 1)
-        if _get_object_by_address(shorter_address) == obj:
+        if get_object_by_address(shorter_address) == obj:
             address = shorter_address
 
             
@@ -231,7 +231,7 @@ def describe(obj, shorten=False, root=None, namespace={}):
             address_of_ugly_repr = re_match.groups()[0]
             
             try:
-                object_candidate = _get_object_by_address(address_of_ugly_repr)
+                object_candidate = get_object_by_address(address_of_ugly_repr)
                 # (Not using `root` and `namespace` cause it's an address
                 # manufactured by `repr`.)
             except Exception:
@@ -255,4 +255,4 @@ def describe(obj, shorten=False, root=None, namespace={}):
             
             
     
-from .string_to_object import _get_object_by_address, resolve
+from .string_to_object import get_object_by_address, resolve
