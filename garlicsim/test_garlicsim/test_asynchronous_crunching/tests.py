@@ -72,7 +72,7 @@ def check(simpack, cruncher_type):
         my_simpack_grokker.default_step_function
     ) == simpack._settings_for_testing.DEFAULT_STEP_FUNCTION_TYPE
     
-    step_profile = my_simpack_grokker.parse_arguments_to_step_profile()
+    step_profile = my_simpack_grokker.build_step_profile()
     deterministic = \
         my_simpack_grokker.settings.DETERMINISM_FUNCTION(step_profile)
     

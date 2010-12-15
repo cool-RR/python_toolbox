@@ -42,7 +42,7 @@ def check_simpack(simpack):
     assert simpack_grokker is SimpackGrokker(simpack)
 
     
-    step_profile = simpack_grokker.parse_arguments_to_step_profile()
+    step_profile = simpack_grokker.build_step_profile()
     assert step_profile.function == simpack_grokker.default_step_function
     assert isinstance(step_profile, garlicsim.misc.StepProfile)
     assert (not step_profile.args) and (not step_profile.kwargs)
