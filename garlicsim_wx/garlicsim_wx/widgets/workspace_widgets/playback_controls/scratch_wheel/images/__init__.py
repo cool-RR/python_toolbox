@@ -71,7 +71,6 @@ def get_blurred_gear_image(i, j):
     dc = wx.MemoryDC(bitmap)
     dc.DrawBitmap(image, 0, 0)
     dc.DrawBitmap(blur, 0, 0, True)
-    dc.Destroy()
     bitmap.image_raw = image
     bitmap.blur_raw = blur
     return bitmap

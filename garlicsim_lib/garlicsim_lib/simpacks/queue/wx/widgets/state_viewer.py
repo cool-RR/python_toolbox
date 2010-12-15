@@ -67,7 +67,6 @@ class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,
         dc.Clear()
         
         if state is None:
-            dc.Destroy()
             return
         
         dc.SetBackgroundMode(wx.SOLID)
@@ -169,8 +168,7 @@ class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,
         
 
         
-        dc.Destroy()
-        """
+                """
 
         self.SetVirtualSize(
             (

@@ -96,7 +96,6 @@ class BoardViewer(scrolled.ScrolledPanel,
         dc.DrawRectangle(0, 0, w, h)
         
         if board is None:
-            dc.Destroy()
             return
         
         white_brush = wx.Brush('White')
@@ -115,8 +114,7 @@ class BoardViewer(scrolled.ScrolledPanel,
         transparent_pen = wx.Pen('#000000', 0, wx.TRANSPARENT)
         
         dc.DrawRectangleList(rectangles, transparent_pen, brushes)
-        dc.Destroy()
-        
+                
     def on_paint(self, event):
         '''Paint event handler.'''
         
@@ -137,8 +135,7 @@ class BoardViewer(scrolled.ScrolledPanel,
         dc.DrawBitmapPoint(self._buffer_bitmap,
                            self.CalcScrolledPosition((0, 0)))
         
-        dc.Destroy()
-        
+                
         
     def on_size(self, event):
         '''EVT_SIZE handler.'''

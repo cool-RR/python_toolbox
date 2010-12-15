@@ -162,8 +162,7 @@ class SeekBar(wx.Panel, WorkspaceWidget):
         self.draw_small_numbers(dc, smallliners)
         self.draw_big_numbers(dc, bigliners)
         
-        dc.Destroy()
-
+        
 
     def draw_small_numbers(self, dc, numbers):
         dc.SetPen(wx.Pen('#000000'))

@@ -68,8 +68,7 @@ class HueControl(wx.Window):
         dc.SetPen(self._pen)
         width, height = self.GetSize()
         dc.DrawRectangle(-5, -5, width+10, height+10)
-        dc.Destroy()
-        
+                
     
     def on_mouse_left_down(self, event):
         self.open_editing_dialog()

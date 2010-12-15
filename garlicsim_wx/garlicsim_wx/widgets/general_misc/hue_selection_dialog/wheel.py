@@ -74,7 +74,6 @@ def make_bitmap(lightness=1, saturation=1):
             
             dc.DrawPoint(x, y)
         
-    dc.Destroy()
     return bitmap
 
 
@@ -123,8 +122,7 @@ class Wheel(wx.Panel):
         #dc.DrawLine(start_x, start_y, end_x, end_y)
                 
         
-        dc.Destroy()
-        
+                
         
     def on_mouse(self, event):
         

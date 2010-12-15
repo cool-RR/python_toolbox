@@ -21,8 +21,7 @@ class BitmapViewer(wx.Panel):
         '''EVT_PAINT handler.'''
         dc = wx.PaintDC(self)
         dc.DrawBitmap(self._bitmap, 0, 0)
-        dc.Destroy()
-        
+                
     def set_bitmap(self, bitmap):
         '''Set the bitmap that the viewer will display.'''
         self._bitmap = bitmap

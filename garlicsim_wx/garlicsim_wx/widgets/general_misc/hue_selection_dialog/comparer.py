@@ -53,8 +53,7 @@ class Comparer(wx.Panel):
         dc.SetBrush(self.old_brush)
         dc.DrawRectangle(0, (h // 2), w, (h // 2) + 1)
         
-        dc.Destroy()
-        
+                
     
     def on_mouse_left_down(self, event):
         x, y = event.GetPosition()

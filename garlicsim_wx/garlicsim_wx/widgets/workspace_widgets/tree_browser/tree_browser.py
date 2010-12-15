@@ -150,8 +150,7 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
             dc.draw_tree(self.gui_project.project.tree)
         
         self.SetVirtualSize((width,height))
-        dc.Destroy()
-
+        
     def on_size(self, e=None):
         self.Refresh()
         if e is not None:

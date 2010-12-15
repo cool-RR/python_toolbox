@@ -44,9 +44,7 @@ class StateViewer(wx.Panel,
         dc = wx.PaintDC(self)
         
         # ...
-        
-        dc.Destroy()
-        
+                
         
     def on_size(self, event):
         # An EVT_SIZE handler. Just some wxPython thing that I think you're
