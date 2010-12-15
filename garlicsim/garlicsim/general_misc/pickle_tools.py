@@ -2,16 +2,15 @@ import re
 import cPickle as pickle_module
 import pickle # Importing just to get dispatch table, not pickling with it.
 import copy_reg
+import types
 
 from garlicsim.general_misc import caching
 from garlicsim.general_misc import address_tools
+from garlicsim.general_misc import misc_tools
 
 
 def is_atomically_pickleable(thing):
-    # Using __class__ instead of type because of goddamned old-style classes.
-    # And using `type` as a fallback because goddamned old-style classes don't
-    # have `__class__`. blocktododoc: make tests.
-    my_type = getattr(thing, '__class__', None) or type(thing) 
+    my_type = misc_tools.get_actual_type(thing)
     return _is_type_atomically_pickleable(my_type, thing)
 
 
@@ -32,7 +31,8 @@ def _is_type_atomically_pickleable(type_, thing=None):
         
         # Weird special case: `threading.Lock` objects don't have `__class__`.
         # We assume that objects that don't have `__class__` can't be pickled.
-        if not hasattr(thing, '__class__'):
+        if not hasattr(thing, '__class__') and \
+           (not isinstance(thing, types.ClassType)):
             return False
         
         if not issubclass(type_, object):

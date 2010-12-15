@@ -227,7 +227,7 @@ class Knob(wx.Panel):
         gc.Rotate(self.current_angle)
         gc.DrawEllipse(-13.5, -13.5, 27, 27)
         gc.DrawBitmap(self.original_bitmap, -13, -13, 26, 26)
-        # blocktododoc: find out on wxpython-users if I need to destroy gc and\or dc
+        
         #gc.DrawEllipse(5,5,2,2)
         #gc.DrawEllipse(100,200,500,500)
         

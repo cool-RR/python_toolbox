@@ -10,8 +10,6 @@ from garlicsim.general_misc import caching
 from .shared import (_address_pattern, _contained_address_pattern,
                      _get_parent_and_dict_from_namespace)
 
-# blocktododoc: add caching to some functions
-
 # todo: when shortening, check that we're not using stuff that was excluded from
 # `__all__` (if one exists)
 
@@ -69,9 +67,7 @@ def shorten_address(address, root=None, namespace={}):
     root-shortening
     '''
 
-    if not _address_pattern.match(address):
-        raise ValueError("'%s' is not a legal address." % address)
-        # blocktododoc change to assert
+    assert _address_pattern.match(address)
     
     if '.' not in address:
         # Nothing to shorten
