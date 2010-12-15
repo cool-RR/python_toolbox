@@ -10,6 +10,8 @@ import copy_reg
 import types
 import __builtin__
 
+from garlicsim.general_misc import import_tools
+
 
 ###############################################################################
 
@@ -33,15 +35,9 @@ copy_reg.pickle(types.MethodType, reduce_method)
 ###############################################################################
 
 
-def __import__(*args, **kwargs):
-    '''Wrapper for the builtin `__import__`'''
-    # todo: This is needed when debugging in Wing, cause Wing replaces
-    # `__import__` with its own. This feels bad.
-    return __builtin__.__import__(*args, **kwargs)
-
 def reduce_module(module):
     '''Reducer for modules.'''
-    return (__import__, (module.__name__, {}, {}, [''])) # fromlist cruft
+    return (import_tools.normal_import, (module.__name__,))
 
 copy_reg.pickle(types.ModuleType, reduce_module)
 
