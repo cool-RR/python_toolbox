@@ -3,5 +3,5 @@
 
 '''`wx` package for the `queue` simpack.'''
 
-import settings
-import widgets
+from . import settings
+from . import widgets

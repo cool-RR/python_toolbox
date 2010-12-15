@@ -890,7 +890,7 @@ class GuiProject(object):
         
         if 'step_profiles' in my_dict:
             self.step_profiles.clear()
-            self.step_profiles |= my_dict.pop('step_profiles') # Not idiomatic
+            self.step_profiles |= my_dict.pop('step_profiles') # todo: Not idiomatic
             
         if 'step_profiles_to_hues' in my_dict:
             self.step_profiles_to_hues.clear()
@@ -914,8 +914,8 @@ class GuiProject(object):
         # todo: document the reason/discussion that we're pickling the vars and
         # not the gui project itself.
 
-        frame = garlicsim_wx.active_frame
-        # blocktododoc: Make Frame inherit from "InstanceHolder" instead
+        frame = garlicsim_wx._active_frame
+        # todo: Make Frame inherit from "InstanceHolder" instead
         
         gui_project = GuiProject(simpack, frame, project)
         

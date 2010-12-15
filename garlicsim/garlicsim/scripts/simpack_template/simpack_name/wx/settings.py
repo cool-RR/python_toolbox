@@ -1,5 +1,5 @@
-# import widgets.state_viewer
-# import widgets.state_creation_dialog
+# from . import widgets.state_viewer
+# from . import widgets.state_creation_dialog
 
 
 # BIG_WORKSPACE_WIDGETS = widgets.state_viewer.StateViewer

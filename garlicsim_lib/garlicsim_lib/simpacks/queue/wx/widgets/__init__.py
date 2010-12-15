@@ -3,4 +3,4 @@
 
 '''Custom widgets for the `queue` simpack.'''
 
-from state_viewer import StateViewer
+from .state_viewer import StateViewer
