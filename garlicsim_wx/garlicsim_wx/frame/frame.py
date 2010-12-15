@@ -349,12 +349,14 @@ class Frame(wx.Frame):
         
         dialog = garlicsim_wx.widgets.misc.SimpackSelectionDialog(self)
         
-        if dialog.ShowModal() == wx.ID_OK:
-            simpack = dialog.get_simpack_selection()
-        else:
+        try:
+            if dialog.ShowModal() == wx.ID_OK:
+                simpack = dialog.get_simpack_selection()
+            else:
+                dialog.Destroy()
+                return
+        finally:
             dialog.Destroy()
-            return
-        dialog.Destroy()
 
         
         if self.gui_project is None:
@@ -588,8 +590,11 @@ class Frame(wx.Frame):
             if not we_are_main_program:
                 dialog = \
                     garlicsim_wx.widgets.misc.NotMainProgramWarningDialog(self)
-                if dialog.ShowModal() != wx.ID_YES:
-                    return
+                try:
+                    if dialog.ShowModal() != wx.ID_YES:
+                        return
+                finally:
+                    dialog.Destroy()
         
         # Todo: something more sensible here. Ideally should be last place you
         # saved in, but for starters can be desktop.
@@ -600,21 +605,24 @@ class Frame(wx.Frame):
         open_dialog = wx.FileDialog(self, message='Choose a file',
                                     defaultDir=folder, defaultFile='',
                                     wildcard=wildcard_text, style=wx.OPEN)
-        if open_dialog.ShowModal() == wx.ID_OK:
-            path = open_dialog.GetPath()
-            
-            if self.gui_project is None:
-                self._open_gui_project_from_path(path)
-            else:
-                if hasattr(sys, 'frozen'):
-                    program = [sys.executable]
+        try:
+            if open_dialog.ShowModal() == wx.ID_OK:
+                path = open_dialog.GetPath()
+                
+                if self.gui_project is None:
+                    self._open_gui_project_from_path(path)
                 else:
-                    program = [sys.executable, os.path.abspath(sys.argv[0])]
-                    
-                program.append(path)
-             
-                with wx_tools.CursorChanger(self, wx.CURSOR_WAIT):
-                    subprocess.Popen(program)
+                    if hasattr(sys, 'frozen'):
+                        program = [sys.executable]
+                    else:
+                        program = [sys.executable, os.path.abspath(sys.argv[0])]
+                        
+                    program.append(path)
+                 
+                    with wx_tools.CursorChanger(self, wx.CURSOR_WAIT):
+                        subprocess.Popen(program)
+        finally:
+            open_dialog.Destroy()
                         
         
     
@@ -638,7 +646,10 @@ class Frame(wx.Frame):
                     'Error opening file:\n' + traceback.format_exc(),
                     style=(wx.OK | wx.ICON_ERROR)
                 )
-                dialog.ShowModal()
+                try:
+                    dialog.ShowModal()
+                finally:
+                    dialog.Destroy()
                 return
                         
         self.__setup_gui_project(gui_project)
@@ -656,35 +667,37 @@ class Frame(wx.Frame):
                                     defaultDir=folder, defaultFile='',
                                     wildcard=wildcard_text,
                                     style=wx.SAVE | wx.OVERWRITE_PROMPT)
-        if save_dialog.ShowModal() == wx.ID_OK:
-            path = save_dialog.GetPath()
+        try:
+            if save_dialog.ShowModal() == wx.ID_OK:
+                path = save_dialog.GetPath()
+                
+                # Adding extension if got a plain file because wxPython doesn't
+                # give the checkbox that's supposed to do it on Mac:
+                path = misc_tools.add_extension_if_plain(path, '.gssp')
+                
+                
+                with TempRecursionLimitSetter(10000):
+                    try:
+                        with open(path, 'wb') as my_file:
+                            with wx_tools.CursorChanger(self, wx.CURSOR_WAIT):
+                                pickler = misc.pickling.Pickler(
+                                    my_file,
+                                    protocol=2,
+                                )
+                                pickler.dump(self.gui_project)
+        
+                    except Exception, exception:
+                        error_dialog = wx.MessageDialog(
+                            self,
+                            'Error saving to file:\n' + traceback.format_exc(),
+                            style=(wx.OK | wx.ICON_ERROR)
+                        )
+                        error_dialog.ShowModal()
+                        error_dialog.Destroy()
             
-            # Adding extension if got a plain file because wxPython doesn't give
-            # the checkbox that's supposed to do it on Mac:
-            path = misc_tools.add_extension_if_plain(path, '.gssp')
             
-            
-            with TempRecursionLimitSetter(10000):
-                try:
-                    with open(path, 'wb') as my_file:
-                        with wx_tools.CursorChanger(self, wx.CURSOR_WAIT):
-                            pickler = misc.pickling.Pickler(
-                                my_file,
-                                protocol=2,
-                            )
-                            pickler.dump(self.gui_project)
-    
-                except Exception, exception:
-                    error_dialog = wx.MessageDialog(
-                        self,
-                        'Error saving to file:\n' + traceback.format_exc(),
-                        style=(wx.OK | wx.ICON_ERROR)
-                    )
-                    error_dialog.ShowModal()
-                    error_dialog.Destroy()
-            
-            
-        save_dialog.Destroy()
+        finally:
+            save_dialog.Destroy()
     
     """    
     def delete_gui_project(self,gui_project):

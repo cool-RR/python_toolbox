@@ -168,7 +168,7 @@ class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,
         
 
         
-                """
+        """
 
         self.SetVirtualSize(
             (

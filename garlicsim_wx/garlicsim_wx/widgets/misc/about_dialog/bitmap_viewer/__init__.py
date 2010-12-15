@@ -7,4 +7,4 @@ Defines the BitmapViewer class.
 See its documentation for more info.
 '''
 
-from bitmap_viewer import BitmapViewer
+from .bitmap_viewer import BitmapViewer

@@ -7,4 +7,4 @@ Defines the SimpackSelectionDialog class.
 See its documentation for more info.
 '''
 
-from simpack_selection_dialog import SimpackSelectionDialog
+from .simpack_selection_dialog import SimpackSelectionDialog
