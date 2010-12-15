@@ -110,7 +110,6 @@ class StepProfilesControls(wx.Panel):
                 new_hue = step_profile_dialog.hue
             else:
                 new_step_profile = new_hue = None
-                step_profile_dialog.step_profile
         finally:
             step_profile_dialog.Destroy()
             
