@@ -152,11 +152,11 @@ class Angel(Player):
     def play(self, round):
         return True
 
-class Asshole(Player):
+class Devil(Player):
     def play(self, round):
         return False
 
-class Smarty(Player):
+class TitForTat(Player):
     def play(self, round):
         if round == 0:
             return True
@@ -167,7 +167,7 @@ class Smarty(Player):
         self.last_play = move
 
 
-player_types=[Angel, Asshole, Smarty]
+player_types=[Angel, Devil, TitForTat]
 
 def how_many_players_of_certain_type(pool, type):
     n = 0

@@ -37,8 +37,8 @@ class StateViewer(wx.Panel, garlicsim_wx.widgets.WorkspaceWidget):
         
         color_dict = {
             prisoner.Angel: wx.NamedColor("White"),
-            prisoner.Asshole: wx.NamedColor("Black"),
-            prisoner.Smarty: wx.NamedColor("Blue")
+            prisoner.Devil: wx.NamedColor("Black"),
+            prisoner.TitForTat: wx.NamedColor("Blue")
         }
         
         font = wx.Font(12, wx.SWISS, wx.NORMAL, wx.BOLD, True, 'Arial')
