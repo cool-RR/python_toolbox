@@ -11,8 +11,6 @@
 # other one will use it. I think this will save many sequence accesses, and some
 # sequences can be expensive.
 #
-# todo: decide already if we return only tuples or only lists. Probably tuples.
-#
 # todo: ensure there are no `if variable` checks where we're thinking of None
 # but the variable might be False
 
@@ -82,8 +80,8 @@ def binary_search(sequence, function, value, rounding=CLOSEST):
     if low_value >= value:
 
         if rounding is BOTH:
-            return tuple(None if low_value > value else
-                         sequence[low], sequence[low])
+            return tuple((None if low_value > value else
+                          sequence[low], sequence[low]))
         
         if rounding in (HIGH, HIGH_OTHERWISE_LOW, CLOSEST) or \
            (low_value==value and rounding is EXACT):
