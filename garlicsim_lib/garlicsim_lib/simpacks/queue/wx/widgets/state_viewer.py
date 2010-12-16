@@ -19,7 +19,7 @@ from garlicsim_wx.general_misc import wx_tools
 
 
 def make_wx_color((r, g, b)):
-    return wx.Color(255*r, 255*g, 255*b)
+    return wx.Colour(255*r, 255*g, 255*b)
 
 
 class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,

@@ -19,20 +19,20 @@ def get_background_color():
     '''Get the default garlicsim_wx background color'''
     
     if wx.Platform == '__WXMSW__':
-        # return wx.Color(212, 208, 200)
+        # return wx.Colour(212, 208, 200)
         return wx.SystemSettings.GetColour(wx.SYS_COLOUR_MENUBAR)
     elif wx.Platform == '__WXMAC__':
-        return wx.Color(232, 232, 232)
+        return wx.Colour(232, 232, 232)
     elif wx.Platform == '__WXGTK__':
         # Until SYS_COLOUR_* get their act togother, we're using Windows colors
         # for Linux.
-        return wx.Color(212, 208, 200)
+        return wx.Colour(212, 208, 200)
     
     else:
         warnings.warn("Unidentified platform! It's neither '__WXGTK__', "
                       "'__WXMAC__' nor '__WXMSW__'. Things might not work "
                       "properly.")
-        return wx.Color(212, 208, 200)
+        return wx.Colour(212, 208, 200)
 
 
 @caching.cache()
@@ -58,7 +58,7 @@ def wx_color_to_hls(wx_color):
 
 def rgb_to_wx_color(rgb, alpha=255):
     r, g, b = rgb
-    return wx.Color(r * 255, g * 255, b * 255, alpha)
+    return wx.Colour(r * 255, g * 255, b * 255, alpha)
 
 
 def wx_color_to_rgb(wx_color):

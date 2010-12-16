@@ -88,8 +88,8 @@ class Wheel(wx.Panel):
                                   hue_selection_dialog.saturation)
         self._calculate_angle()
         self._pen = wx.Pen(
-            wx.Color(255, 255, 255) if hue_selection_dialog.lightness < 0.5
-            else wx.Color(0, 0, 0),
+            wx.Colour(255, 255, 255) if hue_selection_dialog.lightness < 0.5
+            else wx.Colour(0, 0, 0),
             width=2,
             style=wx.DOT
         )

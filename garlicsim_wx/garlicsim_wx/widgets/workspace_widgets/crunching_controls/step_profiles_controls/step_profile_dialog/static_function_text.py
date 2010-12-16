@@ -38,8 +38,8 @@ class StaticFunctionText(wx.Panel):
         
         self.SetSizer(self.main_h_sizer)
         
-        self._error_color = wx.Color(255, 200, 200)
-        self._success_color = wx.Color(200, 255, 200)
+        self._error_color = wx.Colour(255, 200, 200)
+        self._success_color = wx.Colour(200, 255, 200)
 
         self.valid_step_function = True
         

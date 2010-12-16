@@ -16,7 +16,7 @@ class Comparer(wx.Panel):
         self.old_hue = hue_selection_dialog.old_hue
         self.old_color = wx_tools.hls_to_wx_color(self.old_hls)
         self.old_brush = wx.Brush(self.old_color)
-        self._pen = wx.Pen(wx.Color(0, 0, 0), width=0, style=wx.TRANSPARENT)
+        self._pen = wx.Pen(wx.Colour(0, 0, 0), width=0, style=wx.TRANSPARENT)
         self._calculate()
         
         self.SetCursor(wx.StockCursor(wx.CURSOR_BULLSEYE))

@@ -223,7 +223,7 @@ class NiftyPaintDC(wx.BufferedPaintDC):
         self.gc = wx.GraphicsContext.Create(self)
         assert isinstance(self.gc, wx.GraphicsContext)
         
-        self.pen = pen = wx.Pen(wx.Color(0, 0, 0), 1, wx.SOLID)
+        self.pen = pen = wx.Pen(wx.Colour(0, 0, 0), 1, wx.SOLID)
         pen.SetCap(wx.CAP_PROJECTING)
         pen.SetJoin(wx.JOIN_ROUND)
         
@@ -238,7 +238,7 @@ class NiftyPaintDC(wx.BufferedPaintDC):
                 self.gui_project.step_profiles_to_hues[start.step_profile]
             )
         else:
-            color = wx.Color(204, 204, 204)
+            color = wx.Colour(204, 204, 204)
         
         make_block_stripe = False
 
@@ -297,7 +297,7 @@ class NiftyPaintDC(wx.BufferedPaintDC):
             self.pen.SetWidth(0)
             self.pen.SetStyle(wx.TRANSPARENT)
             self.gc.SetPen(self.pen)
-            self.gc.SetBrush(wx.Brush(wx.Color(255, 153, 51)))
+            self.gc.SetBrush(wx.Brush(wx.Colour(255, 153, 51)))
             self.gc.DrawRectangle(screen_slice[0], point[1] + 4,
                                   screen_slice[1] - screen_slice[0],
                                   bitmap_size[1] - 8)
@@ -354,9 +354,9 @@ class NiftyPaintDC(wx.BufferedPaintDC):
                     self.gui_project.step_profiles_to_hues[kid.step_profile]
                     )
             else:
-                color = wx.Color(0, 0, 0)
+                color = wx.Colour(0, 0, 0)
             
-            self.pen.SetColour(wx.Color(0, 0, 0))
+            self.pen.SetColour(wx.Colour(0, 0, 0))
             self.pen.SetWidth(1)
             self.pen.SetStyle(wx.SOLID)
             self.gc.SetPen(self.pen)
@@ -388,9 +388,9 @@ class NiftyPaintDC(wx.BufferedPaintDC):
                     self.gui_project.step_profiles_to_hues[end.step_profile]
                     )
             else:
-                color = wx.Color(0, 0, 0)
+                color = wx.Colour(0, 0, 0)
             
-            self.pen.SetColour(wx.Color(0, 0, 0))
+            self.pen.SetColour(wx.Colour(0, 0, 0))
             self.pen.SetWidth(1)
             self.pen.SetStyle(wx.SOLID)
             self.gc.SetPen(self.pen)
@@ -418,7 +418,7 @@ class NiftyPaintDC(wx.BufferedPaintDC):
                 self.gui_project.step_profiles_to_hues[start.step_profile]
             )
         else:
-            color = wx.Color(204, 204, 204)
+            color = wx.Colour(204, 204, 204)
         
         bitmap = my_color_replaced_bitmap(
             self.tree_browser.elements['Untouched End'],

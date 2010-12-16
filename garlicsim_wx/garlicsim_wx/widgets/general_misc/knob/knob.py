@@ -90,7 +90,7 @@ class Knob(wx.Panel):
         self.SetCursor(cursor_collection.get_open_grab())
         
         
-        self._knob_house_brush = wx.Brush(wx.Color(0, 0, 0))
+        self._knob_house_brush = wx.Brush(wx.Colour(0, 0, 0))
         '''Brush used to paint the circle around the knob.'''
         
         self.current_angle = 0

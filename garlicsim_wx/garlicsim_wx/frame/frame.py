@@ -680,11 +680,12 @@ class Frame(wx.Frame):
                     try:
                         with open(path, 'wb') as my_file:
                             with wx_tools.CursorChanger(self, wx.CURSOR_WAIT):
-                                pickler = misc.pickling.Pickler(
-                                    my_file,
-                                    protocol=2,
-                                )
-                                pickler.dump(self.gui_project)
+                                with self.gui_project.project.tree.lock.read:
+                                    pickler = misc.pickling.Pickler(
+                                        my_file,
+                                        protocol=2,
+                                    )
+                                    pickler.dump(self.gui_project)
         
                     except Exception, exception:
                         error_dialog = wx.MessageDialog(
