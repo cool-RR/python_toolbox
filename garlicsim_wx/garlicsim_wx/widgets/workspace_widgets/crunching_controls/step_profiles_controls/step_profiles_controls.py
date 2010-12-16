@@ -32,9 +32,7 @@ class StepProfilesControls(wx.Panel):
         
         self.SetBackgroundColour(wx_tools.get_background_color())
         
-        self.SetToolTip(wx.ToolTip(
-            'Add, remove or organize step profiles.'
-        ))
+        self.SetToolTipString('Add, remove or organize step profiles.')
 
         
         self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)
