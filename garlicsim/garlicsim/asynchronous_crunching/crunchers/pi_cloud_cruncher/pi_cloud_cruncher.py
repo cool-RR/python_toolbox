@@ -31,6 +31,16 @@ class PiCloudCruncher(BaseCruncher):
     
     The real `PiCloudCruncher` will probably be released in GarlicSim 0.7 in
     mid-2011.
+    
+    `PiCloudCruncher` will be able to crunch the simulation on the cloud using
+    PiCloud, a proprietary cloud solution. Visit http://picloud.com for more
+    details.
+    
+    This will relieve the user's computer from crunching the simulation,
+    allowing parallel computation of many tree forks.
+    
+    Using `PiCloudCruncher` will require an internet connection and a paid
+    PiCloud account. (It's really cheap though.)
     '''
     
     gui_explanation = string_tools.docstring_trim(
@@ -53,10 +63,17 @@ class PiCloudCruncher(BaseCruncher):
     
     @staticmethod
     def can_be_used_with_simpack_grokker(simpack_grokker):
+        '''
+        Return whether this cruncher type can be used with a simpack grokker.
+        
+        Since this class is just a placeholder, the answer is invariably
+        `False`.
+        '''
         return ReasonedBool(
             False,
             apology
         )
+    
     
     def __init__(self, *args, **kwargs):
         raise NotImplementedError(apology)

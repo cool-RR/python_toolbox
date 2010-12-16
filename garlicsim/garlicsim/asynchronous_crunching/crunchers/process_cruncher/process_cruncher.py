@@ -64,6 +64,9 @@ class ProcessCruncher(BaseCruncher):
     
     @staticmethod
     def can_be_used_with_simpack_grokker(simpack_grokker):
+        '''
+        Return whether this cruncher type can be used with a simpack grokker.
+        '''
         if simpack_grokker.history_dependent:
             return ReasonedBool(
                 False,

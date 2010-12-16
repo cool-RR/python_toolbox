@@ -61,6 +61,9 @@ class BaseCruncher(object):
     @abc.abstractmethod
     def can_be_used_with_simpack_grokker(simpack_grokker):
         '''
+        Return whether this cruncher type can be used with a simpack grokker.
+        '''
+        '''
         
         (Static method.)
         '''
