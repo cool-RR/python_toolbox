@@ -1,6 +1,7 @@
-# Copyright 2009-2011 Ram Rachum. This work is licensed under a Creative Commons
-# Attribution-Share Alike 2.5 Israel License, which may be obtained at
-# http://creativecommons.org/licenses/by-sa/2.5/il/
+..
+   Copyright 2009-2011 Ram Rachum. This work is licensed under a Creative
+   Commons Attribution-Share Alike 2.5 Israel License, which may be obtained at
+   http://creativecommons.org/licenses/by-sa/2.5/il/
 
 .. _topics-asynchronous-crunching:
 
