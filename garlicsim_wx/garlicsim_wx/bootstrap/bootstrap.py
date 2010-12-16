@@ -46,21 +46,23 @@ def __check_prerequisites():
     def check_wx():
         try:
             import wx
-            if wx.__version__ < '2.8.10.1': # todo: fallible version comparison
+            wx_version = tuple(int(x) for x in wx.__version__.split('.'))
+            if not ((2, 8, 10, 1) <= wx_version < (2, 9, 1, 1)):
                 warnings.warn("You have wxPython version %s installed, while "
-                              "version 2.8.10.1 is needed. This program will "
-                              "try to run now, and if you're lucky it will "
-                              "work alright, but if any problem comes up, try "
-                              "upgrading wxPython. To do that, download and "
-                              "install the latest version from "
+                              "version 2.8.10.1 or higher (but lower than "
+                              "2.9) is needed. This program will try to run "
+                              "now, and if you're lucky it will work alright, "
+                              "but if any problem comes up, try upgrading "
+                              "wxPython. To do that, download and install the "
+                              "latest version from "
                               "http://wxpython.org" % wx.__version__)
             return [wx]
         except ImportError:
-            raise MissingModule("wxPython (version 2.8.10.1 and upwards) is "
-                                "required, but it's not currently installed "
-                                "on your system. Please go download it at "
-                                "http://wxpython.org, install it, then try "
-                                "again.")
+            raise MissingModule("wxPython (version 2.8.10.1 and upwards, but "
+                                "lower than 2.9) is required, but it's not "
+                                "currently installed on your system. Please "
+                                "go download it at http://wxpython.org, "
+                                "install it, then try again.")
     
 
     checkers = [check_garlicsim, check_wx]

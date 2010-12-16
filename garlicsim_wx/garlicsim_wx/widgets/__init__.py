@@ -3,7 +3,7 @@
 
 '''This package defines wxPython widgets.'''
 
-from workspace_widget import WorkspaceWidget
-import misc
-import general_misc
-import workspace_widgets
+from .workspace_widget import WorkspaceWidget
+from . import misc
+from . import general_misc
+from . import workspace_widgets
