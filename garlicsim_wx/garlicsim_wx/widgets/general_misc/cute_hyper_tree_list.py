@@ -14,6 +14,10 @@ class CuteHyperTreeList(HyperTreeList):
     def __init__(self, parent, id=wx.ID_ANY, pos=wx.DefaultPosition,
                  size=wx.DefaultSize, style=0, agwStyle=wx.TR_DEFAULT_STYLE,
                  validator=wx.DefaultValidator, name="HyperTreeList"):
+        
+        # todo: when scrolling with scrollwheel and reaching top, should
+        # probably scroll up parent window.
+        
         style |= wx.WANTS_CHARS
         HyperTreeList.__init__(self, parent, id, pos, size, style, agwStyle,
                                validator, name)
@@ -27,7 +31,6 @@ class CuteHyperTreeList(HyperTreeList):
         self.GetMainWindow().Bind(wx.EVT_CONTEXT_MENU, self.__on_context_menu)
 
         
-    
         
     def __on_command_tree_item_right_click(self, event):
         
