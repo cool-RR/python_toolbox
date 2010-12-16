@@ -50,7 +50,7 @@ For some simpacks in ``garlicsim_lib``
 For ``garlicsim_wx``
 ^^^^^^^^^^^^^^^^^^^^
 
-* `wxPython 2.8.10.1 or above`_
+* `wxPython 2.8.10.1 or above (but below 2.9)`_
 
 
 
@@ -129,4 +129,4 @@ interpreter:
 .. _Python for Windows Extensions: http://sourceforge.net/projects/pywin32
 .. _Psyco: http://psyco.sourceforge.net
 .. _NumPy: http://scipy.org/Download
-.. _wxPython 2.8.10.1 or above: http://wxpython.org/download.php
+.. _wxPython 2.8.10.1 or above (but below 2.9): http://wxpython.org/download.php
