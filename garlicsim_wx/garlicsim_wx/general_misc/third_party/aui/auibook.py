@@ -1787,7 +1787,7 @@ class AuiTabCtrl(wx.PyControl, AuiTabContainer):
         self._is_dragging = False
         self._click_tab = None
         self._pressed_button = None
-
+        
         wnd = self.TabHitTest(event.GetX(), event.GetY())
         
         if wnd is not None:
@@ -1822,7 +1822,7 @@ class AuiTabCtrl(wx.PyControl, AuiTabContainer):
 
         :param `event`: a `wx.MouseCaptureLostEvent` event to be processed.        
         """
-        
+
         if self._is_dragging:
             self._is_dragging = False
             self._on_button = False
@@ -1849,6 +1849,9 @@ class AuiTabCtrl(wx.PyControl, AuiTabContainer):
         self._on_button = False
         
         if self._is_dragging:
+
+            if self.HasCapture():
+                self.ReleaseMouse()
             
             self._is_dragging = False
             if self._drag_image:
@@ -1856,9 +1859,6 @@ class AuiTabCtrl(wx.PyControl, AuiTabContainer):
                 del self._drag_image
                 self._drag_image = None
                 self.GetParent().Refresh()
-
-            if self.HasCapture():
-                self.ReleaseMouse()
 
             evt = AuiNotebookEvent(wxEVT_COMMAND_AUINOTEBOOK_END_DRAG, self.GetId())
             evt.SetSelection(self.GetIdxFromWindow(self._click_tab))
@@ -2055,6 +2055,9 @@ class AuiTabCtrl(wx.PyControl, AuiTabContainer):
         if not event.LeftIsDown() or self._click_pt == wx.Point(-1, -1):
             return
 
+        if not self.HasCapture():
+            return
+        
         wnd = self.TabHitTest(pos.x, pos.y)
 
         if not self._is_dragging:
@@ -2621,8 +2624,13 @@ class AuiNotebook(wx.PyPanel):
 
         self.InitNotebook(agwStyle)
 
+
     def GetTabContainer(self):
+        """ Returns the instance of L{AuiTabContainer}. """
+
         return self._tabs
+
+    
     def InitNotebook(self, agwStyle):
         """
         Contains common initialization code called by all constructors.
