@@ -12,7 +12,7 @@
 
 # SMALL_WORKSPACE_WIDGETS = []
 
-# (05.15.2010 - Still not implemented, sorry.)
+# (01.01.2011 - Still not implemented, sorry.)
 #
 # Small widgets to show the in frame. These must be instances of
 # garlicsim_wx.widgets.workspace_widget.
@@ -22,7 +22,7 @@
 
 # SEEK_BAR_GRAPHS = []
 
-# (05.15.2010 - Still not implemented, sorry.)
+# (01.01.2011 - Still not implemented, sorry.)
 #
 # List of scalar functions that should be shown as graphs in the seek bar.
 #

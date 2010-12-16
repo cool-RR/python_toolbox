@@ -1,4 +1,4 @@
-# Copyright 2009-2010 Ram Rachum. No part of this program may be used, copied
+# Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
@@ -64,7 +64,7 @@ class AboutDialog(CuteDialog):
             <html>
                 <body bgcolor="%s" color="%s">
                     <div align="center"> <font size="1">
-                        &copy; 2009-2010 Ram Rachum (a.k.a. cool-RR)
+                        &copy; 2009-2011 Ram Rachum (a.k.a. cool-RR)
                         <br />                        
                         No part of this program may be used, copied or
                         distributed without explicit written permission from Ram

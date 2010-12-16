@@ -60,7 +60,7 @@ The `garlicsim` and `garlicsim_lib` packages are distributed under the **LGPL2.1
 
 If you require an official license, [contact me](mailto:cool-rr@cool-rr.com) and I'll probably give you one.
 
-Both packages are copyright 2009-2010 Ram Rachum. 
+Both packages are copyright 2009-2011 Ram Rachum. 
 
 
 # Python versions #
