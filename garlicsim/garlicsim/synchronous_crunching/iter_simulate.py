@@ -27,7 +27,7 @@ def iter_simulate(state, iterations, *args, **kwargs):
     This returns a generator that yields all the states one-by-one, from the
     initial state to the final one.
     
-    If you wish, in *args and **kwargs you may specify simulation parameters
+    If you wish, in `*args` and `**kwargs` you may specify simulation parameters
     and/or a specific step function to use. (You may specify a step function
     either as the first positional argument or the `step_function` keyword
     argument.) You may also pass in an existing step profile as first argument.    

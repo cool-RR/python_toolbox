@@ -685,7 +685,7 @@ class GuiProject(object):
         Used for forking the simulation without modifying any states. Creates
         a new node from the active node via natural simulation.
 
-        Any *args or **kwargs will be packed in a StepProfile object and passed
+        Any `*args` or `**kwargs` will be packed in a StepProfile object and passed
         to the step function. You may pass a StepProfile yourself, as the only
         argument, and it will be noticed and used. If nothing is passed in *args
         or **kwargs, the step profile of the active node will be used.

@@ -177,7 +177,7 @@ def test_many_defaultfuls_and_star_args():
     a2 = ArgumentsProfile(func, 'one', 'two', 'three', 'four', 'five', 'roar')
     assert a1 == a2
         
-    # Specifying *args, so can't specify pre-*args arguments by keyword:
+    # Specifying `*args`, so can't specify pre-`*args` arguments by keyword:
     a3 = ArgumentsProfile(func, 'one', 'two', 'three', 'four', 'five', 'roar',
                           'meow_frr')
     assert a3.args == ('one', 'two', 'three', 'four', 'five', 'roar',
