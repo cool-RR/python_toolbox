@@ -18,15 +18,21 @@ import os.path
 
 import wx
 
-import misc
-from frame import Frame
-from gui_project import GuiProject
-from app import App
+import garlicsim.general_misc.version_info
+
+import garlicsim
+
+
+from . import misc
+from .frame import Frame
+from .gui_project import GuiProject
+from .app import App
 
 
 __all__ = ['Frame', 'GuiProject', 'start']
 
 
+__version_info__ = garlicsim.general_misc.version_info.VersionInfo(0, 5, 1)
 __version__ = '0.5.1'
 
 
