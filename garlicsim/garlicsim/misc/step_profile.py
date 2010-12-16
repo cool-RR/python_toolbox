@@ -15,6 +15,8 @@ from garlicsim.general_misc.arguments_profile import ArgumentsProfile
 from garlicsim.general_misc import address_tools
 from garlicsim.misc.exceptions import GarlicSimException
 
+import garlicsim
+
 from garlicsim.misc.simpack_grokker.get_step_type import get_step_type
 
 
@@ -174,7 +176,14 @@ class StepProfile(ArgumentsProfile):
         StepProfile(<unbound method State.step>, 'billinear', t=7)
         '''
         
-        if short_form:            
+        if short_form:
+            
+            if root is None:
+                # Let's try to guess the simpack to have a shorter result:
+                root = self._guess_simpack()
+                # (When `_guess_simpack` fails, it returns `None`, so we're
+                # safe.)
+                    
             describe = lambda thing: address_tools.describe(
                 thing,
                 shorten=True,
@@ -238,3 +247,20 @@ class StepProfile(ArgumentsProfile):
     
     def __ne__(self, other):
         return not self.__eq__(other)
+    
+    
+    def _guess_simpack(self):
+        # Try to find the simpack.
+        try:
+            module = \
+                address_tools.resolve(self.step_function.__module__)
+        except Exception:
+            return None
+        else:
+            if hasattr(module, 'State'):
+                if issubclass(module.State, garlicsim.data_structures.State):
+                    return garlicsim.misc.simpack_tools.\
+                           _get_from_state_class(module.State)
+                
+                
+                

@@ -405,17 +405,17 @@ class Node(TreeMember):
         block, crunched with StepProfile(<unbound method State.step>), at
         0x1ffde70>
         '''
-        return '<%s%s, %s%s%s, %s, %sat %s>' % \
-            (
-                address_tools.describe(type(self), shorten=True),
-                ' with clock %s' % self.state.clock if hasattr(self.state, 'clock') else '',
-                'root, ' if (self.parent is None) else '',
-                'leaf, ' if (len(self.children) == 0) else '',
-                'touched' if self.touched else 'untouched',
-                'blockful' if self.block else 'blockless',
-                'crunched with %s, ' % self.step_profile if self.step_profile else '',
-                hex(id(self))
-            )
+        return '<%s%s, %s%s%s, %s, %sat %s>' % (
+            address_tools.describe(type(self), shorten=True),
+            ' with clock %s' % self.state.clock if hasattr(self.state, 'clock') else '',
+            'root, ' if (self.parent is None) else '',
+            'leaf, ' if (len(self.children) == 0) else '',
+            'touched' if self.touched else 'untouched',
+            'blockful' if self.block else 'blockless',
+            'crunched with %s, ' % self.step_profile.__repr__(short_form=True)
+            if self.step_profile else '',
+            hex(id(self))
+        )
 
 from path import Path
 from block import Block
