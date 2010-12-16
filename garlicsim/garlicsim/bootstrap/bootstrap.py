@@ -51,4 +51,18 @@ def __check_prerequisites():
     
     return modules
 
+
+def __check_problematic_psyco_version():
+    if 'psyco' in sys.modules:
+        psyco = sys.modules['psyco']
+        if psyco.version_info[0] >= 2:
+            import warnings
+            warnings.warn("You seem to have Psyco version 2 (or newer) "
+                          "installed. It might conflict with `garlicsim`, so "
+                          "you may want to avoid using it. Psyco version 1.6 "
+                          "is fine and recommended.")
+
 __modules_list = __check_prerequisites()
+
+__check_problematic_psyco_version()
+
