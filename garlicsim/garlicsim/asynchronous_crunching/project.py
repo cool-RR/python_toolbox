@@ -195,22 +195,25 @@ class Project(object):
         return self.tree.fork_to_edit(template_node)
 
     
-    def begin_crunching(self, node, clock_buffer=None, *args, **kwargs):
+    def begin_crunching(self, node, clock_buffer, *args, **kwargs):
         '''
         Start a new crunching job from `node`, possibly forking the simulation.
         
-        On the next call to .sync_crunchers, a cruncher will start working on
+        On the next call to `.sync_crunchers`, a cruncher will start working on
         the new job.
         
         If there are already jobs on that node, they will all be crunched
         independently of each other to create different forks.
         
-        Any *args or **kwargs will be packed in a StepProfile object and passed to
-        the step function. You may pass a StepProfile yourself, as the only
-        argument, and it will be noticed and used.
+        Any `*args` or `**kwargs` will be packed in a `StepProfile` object and
+        passed to the step function. You may pass a `StepProfile` yourself, as
+        the only argument, and it will be noticed and used.
         
         Returns the job.
         '''
+        
+        # todo: Inputting `clock_buffer=None` should produce infinitesimal clock
+        # buffer.
         
         step_profile = self.build_step_profile(*args, **kwargs)
         
