@@ -66,7 +66,10 @@ Alright! In the :file:`coin_clip` directory we will find the new files. This is 
             (The wx folder isn't important now)
         
 
-You should browse this folder yourself, and go over the files. These are the abridged contents of the most important file, :file:`state.py`, which you should read::
+You should browse this folder yourself, and go over the files. These are the
+abridged contents of the most important file, :file:`state.py`, which you should
+read::
+
 
     import garlicsim.data_structures
     
