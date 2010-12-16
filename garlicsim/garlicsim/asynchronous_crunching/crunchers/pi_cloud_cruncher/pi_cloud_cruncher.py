@@ -1,31 +1,37 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-import copy
-import Queue
-import sys
-import os
-import threading
-import time
+'''
+This module defines the `PiCloudCruncher` class, which is merely a placeholder.
 
-from garlicsim.general_misc import import_tools
+See its documentation for more information.
+
+The real `PiCloudCruncher` will probably be released in GarlicSim 0.7 in
+mid-2011.
+'''
+
 from garlicsim.general_misc import string_tools
 from garlicsim.general_misc.reasoned_bool import ReasonedBool
 
 import garlicsim
-from garlicsim.asynchronous_crunching import \
-     BaseCruncher, CrunchingProfile, ObsoleteCruncherError
+from garlicsim.asynchronous_crunching import BaseCruncher
 
 
 __all__ = ['PiCloudCruncher']    
 
 
-apology = ("PiCloudCruncher is not implemented in this version! This is just "
-           "a placeholder. PiCloudCruncher is scheduled to be released in "
-           "GarlicSim 0.7, which will be available in mid-2011.")
+apology = ('PiCloudCruncher is not implemented in this version! This is just '
+           'a placeholder. PiCloudCruncher is scheduled to be released in '
+           'GarlicSim 0.7, which will be available in mid-2011.')
 
 
-class PiCloudCruncher(BaseCruncher, threading.Thread):
+class PiCloudCruncher(BaseCruncher):
+    '''
+    Placeholder for the real `PiCloudCruncher`, which could crunch on PiCloud.
+    
+    The real `PiCloudCruncher` will probably be released in GarlicSim 0.7 in
+    mid-2011.
+    '''
     
     gui_explanation = string_tools.docstring_trim(
     '''

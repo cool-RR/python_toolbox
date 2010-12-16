@@ -2,14 +2,12 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the ProcessCruncher class.
+This module defines the `PiCloudCruncher` class, which is merely a placeholder.
 
 See its documentation for more information.
 
-This module requires the multiprocessing package to be installed. It is part of
-the standard library for Python 2.6 and above, but not for earlier versions. A
-backport of it for Python 2.5 is available at
-http://pypi.python.org/pypi/multiprocessing.
+The real `PiCloudCruncher` will probably be released in GarlicSim 0.7 in
+mid-2011.
 '''
 
 from .pi_cloud_cruncher import PiCloudCruncher
