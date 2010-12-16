@@ -30,6 +30,11 @@ class AutocrunchControls(wx.Panel):
         wx.Panel.__init__(self, parent, -1)
         
         self.SetBackgroundColour(wx_tools.get_background_color())
+        
+        tooltip_text = ('Set the clock buffer that will be crunched '
+                        'automatically from the active node.')
+        
+        self.SetToolTip(wx.ToolTip(tooltip_text))
                 
         self.frozen = 0
         self.freezer = Freezer(self)
@@ -40,6 +45,8 @@ class AutocrunchControls(wx.Panel):
         
         self.check_box = wx.CheckBox(self, -1, 'Autocrunch: ')
         
+        self.check_box.SetToolTip(wx.ToolTip(tooltip_text))
+        
         self.main_h_sizer.Add(
             self.check_box,
             0,
@@ -48,6 +55,8 @@ class AutocrunchControls(wx.Panel):
         )
         
         self.spin_ctrl = wx.SpinCtrl(self, -1, max=10000000)
+        
+        self.spin_ctrl.SetToolTip(wx.ToolTip(tooltip_text))
         
         
         self.main_h_sizer.Add(self.spin_ctrl, 0,

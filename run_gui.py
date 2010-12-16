@@ -18,10 +18,9 @@ for path in [path_to_garlicsim, path_to_garlicsim_lib, path_to_garlicsim_wx]:
         sys.path.append(path)
 
 arguments = sys.argv[1:]
-debug = '-debug' in arguments
 
 use_psyco = False
-if not debug:
+if not ('--psyco=off' in arguments):
     try:
         import psyco
         use_psyco = True
