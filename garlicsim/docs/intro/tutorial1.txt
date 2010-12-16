@@ -410,8 +410,8 @@ doing at clock 50:
     
     >>> path[-1]
     <garlicsim.data_structures.Node with clock 50, leaf, untouched,
-    belongs to a block, crunched with StepProfile(<unbound method 
-    State.step_generator>), at 0x1cd9070>
+    belongs to a block, crunched with life.State.step_generator(<state>),
+    at %s>, at 0x1cd9070>
     >>> 
     >>> 
     >>> path[-1].state

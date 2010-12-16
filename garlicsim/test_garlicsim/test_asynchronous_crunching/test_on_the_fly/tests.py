@@ -108,7 +108,8 @@ def check(simpack, cruncher_type):
     assert short_step_profile_description == \
         '%s(<state>)' % address_tools.describe(
             simpack._settings_for_testing.DEFAULT_STEP_FUNCTION,
-            shorten=True
+            shorten=True,
+            root=simpack,
         )
     
     crunching_profile_description = repr(job.crunching_profile)
