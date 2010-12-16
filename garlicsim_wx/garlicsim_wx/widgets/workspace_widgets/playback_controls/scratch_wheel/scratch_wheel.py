@@ -286,6 +286,11 @@ class ScratchWheel(wx.Panel):
         # 'Disable'
         # todo: make check: if left up and has capture, release capture
 
+        
+        # If the gui project has no active path, we can't navigate on it at all:
+        if self.gui_project.path is None:
+            return
+        
         self.Refresh()
         
         (w, h) = self.GetClientSize()
@@ -293,7 +298,8 @@ class ScratchWheel(wx.Panel):
         (rx, ry) = (x/w, y/h)
         
         if e.LeftDown():
-            self.angle_while_dragging = self.grabbed_angle = self._expanded_pos_to_angle(rx)
+            self.angle_while_dragging = self.grabbed_angle = \
+                self._expanded_pos_to_angle(rx)
             self.d_angle_while_dragging = 0
             self.desired_clock_while_dragging = self.grabbed_pseudoclock = \
                 self.gui_project.pseudoclock
