@@ -23,7 +23,7 @@ del /S/Q "%1\*.pyc"
 del /S/Q "%1\*.pyo"
 
 echo.-----------
-echo.%1 simpack created successfully! Explore the %1 folder and start
+echo.`%1` simpack created successfully! Explore the %1 folder and start
 echo.filling in the contents of your new simpack.
 
 :end
