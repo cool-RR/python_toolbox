@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the ExportMenu class.
+Defines the `ExportMenu` class.
 
 See its documentation for more info.
 '''

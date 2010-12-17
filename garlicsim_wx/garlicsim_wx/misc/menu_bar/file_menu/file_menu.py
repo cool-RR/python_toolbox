@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the FileMenu class.
+Defines the `FileMenu` class.
 
 See its documentation for more info.
 '''

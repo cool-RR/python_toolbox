@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-A module that defines the Path class and a few related exceptions.
+A module that Defines the `Path` class and a few related exceptions.
 
 See its documentation for more information.
 '''

@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the SimpackSelectionDialog class.
+Defines the `SimpackSelectionDialog` class.
 
 See its documentation for more info.
 '''

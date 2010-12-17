@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the SnapMap class.
+Defines the `SnapMap` class.
 
 See its documentation for more info.
 '''

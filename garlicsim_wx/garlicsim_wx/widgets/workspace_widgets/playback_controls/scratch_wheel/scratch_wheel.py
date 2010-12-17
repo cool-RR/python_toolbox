@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the ScratchWheel class.
+Defines the `ScratchWheel` class.
 
 See its documentation for more info.
 '''

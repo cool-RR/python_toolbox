@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the NodeMenu class.
+Defines the `NodeMenu` class.
 
 See its documentation for more info.
 '''

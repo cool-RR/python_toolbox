@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the CuteDialog class.
+Defines the `CuteDialog` class.
 
 See its documentation for more info.
 '''

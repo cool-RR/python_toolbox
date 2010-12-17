@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-Defines the TreeMember class.
+Defines the `TreeMember` class.
 
 See its documentation for more information.
 '''

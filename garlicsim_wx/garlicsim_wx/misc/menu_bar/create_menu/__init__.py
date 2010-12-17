@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the CreateMenu class.
+Defines the `CreateMenu` class.
 
 See its documentation for more info.
 '''

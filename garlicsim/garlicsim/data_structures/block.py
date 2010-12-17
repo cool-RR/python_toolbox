@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-A module that defines the Block class and the related BlockError exception.
+A module that Defines the `Block` class and the related BlockError exception.
 
 See the documentation of Block for more information.
 '''

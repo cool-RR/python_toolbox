@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-Defines the BinarySearchProfile class.
+Defines the `BinarySearchProfile` class.
 
 See its documentation for more info.
 '''

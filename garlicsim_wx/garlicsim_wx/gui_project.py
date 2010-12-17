@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the GuiProject class.
+Defines the `GuiProject` class.
 
 See its documentation for more info.
 '''

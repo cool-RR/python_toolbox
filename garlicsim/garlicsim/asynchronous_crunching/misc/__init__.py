@@ -3,4 +3,4 @@
 
 '''Defines miscellanous objects.'''
 
-from end_marker import EndMarker
+from .end_marker import EndMarker

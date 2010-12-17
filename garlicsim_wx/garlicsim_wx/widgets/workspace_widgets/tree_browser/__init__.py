@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-This package defines the TreeBrowser class.
+This package Defines the `TreeBrowser` class.
 
 See its documentation in the `tree_browser.py` module for more information.
 '''

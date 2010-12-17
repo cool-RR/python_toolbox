@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the Knob class.
+Defines the `Knob` class.
 
 See its documentation for more info.
 '''

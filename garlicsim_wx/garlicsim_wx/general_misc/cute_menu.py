@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the CuteMenu class.
+Defines the `CuteMenu` class.
 
 See its documentation for more information.
 '''

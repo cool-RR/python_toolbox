@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the WorkspaceMenu class.
+Defines the `WorkspaceMenu` class.
 
 See its documentation for more info.
 '''

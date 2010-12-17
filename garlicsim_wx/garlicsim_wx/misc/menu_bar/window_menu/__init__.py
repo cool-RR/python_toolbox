@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the WindowMenu class.
+Defines the `WindowMenu` class.
 
 See its documentation for more info.
 '''

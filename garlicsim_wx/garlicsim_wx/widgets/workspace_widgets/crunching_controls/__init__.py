@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the PlaybackControls class.
+Defines the `PlaybackControls` class.
 
 See its documentation for more info.
 '''

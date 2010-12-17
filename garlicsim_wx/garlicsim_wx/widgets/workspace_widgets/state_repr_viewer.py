@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the StateReprViewer class.
+Defines the `StateReprViewer` class.
 
 See its documentation for more info.
 '''

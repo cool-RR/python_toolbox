@@ -181,7 +181,7 @@ class ThreadCruncher(threading.Thread, BaseCruncher):
         
     def get_order(self):
         '''
-        Attempt to read an order from the order_queue, if one has been sent.
+        Attempt to read an order from the `.order_queue`, if one has been sent.
         
         Returns the order.
         '''
@@ -192,7 +192,7 @@ class ThreadCruncher(threading.Thread, BaseCruncher):
 
         
     def process_order(self, order):
-        '''Process an order receieved from order_queue.'''
+        '''Process an order receieved from `.order_queue`.'''
         if order == 'retire':
             raise ObsoleteCruncherError("Cruncher received a 'retire' order; "
                                         "Shutting down.")

@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-A module that defines the Node class and the related NodeError exception.
+A module that Defines the `Node` class and the related NodeError exception.
 
 See documentation of Node for more information.
 '''

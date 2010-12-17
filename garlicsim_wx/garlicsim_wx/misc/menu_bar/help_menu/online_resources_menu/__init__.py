@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the OnlineResourcesMenu class.
+Defines the `OnlineResourcesMenu` class.
 
 See its documentation for more info.
 '''

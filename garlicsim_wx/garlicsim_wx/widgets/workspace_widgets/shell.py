@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the Shell class.
+Defines the `Shell` class.
 
 See its documentation for more info.
 '''

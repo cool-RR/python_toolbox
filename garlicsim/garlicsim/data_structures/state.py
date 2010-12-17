@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-A module that defines the State class.
+A module that Defines the `State` class.
 
 See its documentation for more info.
 '''

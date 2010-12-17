@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the CuteTimer class.
+Defines the `CuteTimer` class.
 
 See its documentation for more information.
 '''

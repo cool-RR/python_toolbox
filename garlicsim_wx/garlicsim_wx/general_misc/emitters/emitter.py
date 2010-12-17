@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the Emitter class.
+Defines the `Emitter` class.
 
 See its documentation for more info.
 '''

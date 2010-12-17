@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the WorkspaceWidget class. tododoc: talk about event
+Defines the `WorkspaceWidget` class. tododoc: talk about event
 
 See its documentation for more info.
 '''

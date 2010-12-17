@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the EditMenu class.
+Defines the `EditMenu` class.
 
 See its documentation for more info.
 '''

@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the BitmapViewer class.
+Defines the `BitmapViewer` class.
 
 See its documentation for more info.
 '''

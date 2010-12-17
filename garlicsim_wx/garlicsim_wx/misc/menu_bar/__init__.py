@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the MenuBar class.
+Defines the `MenuBar` class.
 
 See its documentation for more info.
 '''

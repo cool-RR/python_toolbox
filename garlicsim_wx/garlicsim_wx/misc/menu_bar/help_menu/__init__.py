@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the HelpMenu class.
+Defines the `HelpMenu` class.
 
 See its documentation for more info.
 '''

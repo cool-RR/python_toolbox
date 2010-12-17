@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the NotMainProgramWarningDialog class.
+Defines the `NotMainProgramWarningDialog` class.
 
 See its documentation for more info.
 '''

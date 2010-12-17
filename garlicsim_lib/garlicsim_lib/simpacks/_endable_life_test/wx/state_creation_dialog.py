@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-Defines the StateCreationDialog class.
+Defines the `StateCreationDialog` class.
 
 See its documentation for more info.
 '''

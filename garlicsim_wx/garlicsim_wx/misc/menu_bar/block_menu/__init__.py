@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the BlockMenu class.
+Defines the `BlockMenu` class.
 
 See its documentation for more info.
 '''
