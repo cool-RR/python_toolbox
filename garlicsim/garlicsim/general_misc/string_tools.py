@@ -27,7 +27,7 @@ def camelcase_to_spacecase(s):
     return s[0] + ''.join(character_process(c) for c in s[1:])
 
 
-def docstring_trim(docstring, remove_lone_linebreaks=True):
+def docstring_trim(docstring):
     if not docstring:
         return ''
     # Convert tabs to spaces (following the normal Python rules)
@@ -50,9 +50,5 @@ def docstring_trim(docstring, remove_lone_linebreaks=True):
     while trimmed and not trimmed[0]:
         trimmed.pop(0)
         
-    #if remove_lone_linebreaks:
-        #temp = [(line if line else '\n\n') for line in trimmed]
-        #return ''.join(temp)
-    #else: # not remove_lone_linebreaks
     return '\n'.join(trimmed)
     

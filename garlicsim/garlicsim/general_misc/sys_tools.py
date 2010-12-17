@@ -62,8 +62,8 @@ class TempSysPathAdder(object):
             sys.path.remove(entry)
         
 
-def execute(command):
-    with OutputCapturer() as output_capturer:
-        subprocess.Popen('command', shell=True)
-    return output_capturer.output
+#def execute(command):
+    #with OutputCapturer() as output_capturer:
+        #subprocess.Popen(command, shell=True)
+    #return output_capturer.output
     

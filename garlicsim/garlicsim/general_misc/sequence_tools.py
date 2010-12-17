@@ -18,5 +18,4 @@ def flatten(iterable):
         first_item = iterator.next()
     except StopIteration:
         return []
-    type_ = type(first_item)
     return sum(iterator, first_item)

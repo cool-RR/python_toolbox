@@ -48,7 +48,7 @@ copy_reg.pickle(types.ModuleType, reduce_module)
 def _get_ellipsis():
     return Ellipsis
 
-def reduce_ellipsis(method):
+def reduce_ellipsis(ellipsis):
     return (
         _get_ellipsis,
         ()

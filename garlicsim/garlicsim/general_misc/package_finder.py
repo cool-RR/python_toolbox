@@ -72,8 +72,6 @@ def get_packages_and_modules_filenames(root, recursive=False):
         root_path = os.path.abspath(root)
         # Not making root_module, it might not be imported.
     
-    root_module_name = os.path.split(root_path)[1]
-
     ######################################################
     
     result = []
