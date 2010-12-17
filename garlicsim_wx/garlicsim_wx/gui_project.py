@@ -26,7 +26,6 @@ from garlicsim.general_misc import dict_tools
 from general_misc.stringsaver import s2i, i2s
 from garlicsim.general_misc.infinity import Infinity
 from garlicsim.general_misc import binary_search
-from garlicsim.general_misc import cute_profile
 from garlicsim.general_misc import import_tools
 from garlicsim_wx.general_misc.emitting_ordered_set import EmittingOrderedSet
 from garlicsim_wx.general_misc.emitting_weak_key_default_dict import \

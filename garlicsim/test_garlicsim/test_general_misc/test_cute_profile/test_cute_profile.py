@@ -178,11 +178,3 @@ def test_condition():
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
