@@ -16,7 +16,16 @@ from garlicsim.general_misc import import_tools
 import garlicsim
 from garlicsim.asynchronous_crunching import BaseCruncher
 
-from .process import Process
+
+multiprocessing_missing_text = (
+    "`ProcessCruncher` can't be used because the "
+    "`multiprocessing` module isn't installed.%s" % (
+        (
+            "You may find a backport of it for Python 2.5 here: "
+            "http://pypi.python.org/pypi/multiprocessing"
+        ) if sys.version_info[:2] <= (2, 5) else ''
+    )
+)
 
         
 class ProcessCruncher(BaseCruncher):
@@ -55,6 +64,11 @@ class ProcessCruncher(BaseCruncher):
         BaseCruncher.__init__(self, crunching_manager, initial_state, 
                               crunching_profile)
         
+        if not import_tools.exists('multiprocessing'):
+            raise Exception(multiprocessing_missing_text)
+        
+        from .process import Process
+        
         self.process = Process(
             self.project.simpack_grokker.get_step_iterator,
             initial_state,
@@ -86,16 +100,9 @@ class ProcessCruncher(BaseCruncher):
         '''
         
         if not import_tools.exists('multiprocessing'):
-            backport_advice = (
-                "You may find a backport of it for Python 2.5 here: "
-                "http://pypi.python.org/pypi/multiprocessing"
-            )
             return ReasonedBool(
                 False,
-                "`ProcessCruncher` can't be used because the "
-                "`multiprocessing` module isn't installed.%s" % (
-                    backport_advice if sys.version_info[:2] == (2, 5) else ''
-                )
+                multiprocessing_missing_text
             )
         
         elif simpack_grokker.history_dependent:
