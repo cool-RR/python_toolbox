@@ -1,5 +1,4 @@
 from garlicsim.general_misc import import_tools
-
 from garlicsim.general_misc.reasoned_bool import ReasonedBool
 
 import garlicsim
