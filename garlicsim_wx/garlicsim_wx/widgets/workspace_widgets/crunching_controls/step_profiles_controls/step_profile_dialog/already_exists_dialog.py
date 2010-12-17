@@ -45,10 +45,15 @@ class AlreadyExistsDialog(CuteDialog):
                               'Take me to it and fork with it'
         self.take_me_to_it_button = wx.Button(self, label=take_me_to_it_label)
         
+        # Allowing keyboard-navigation and Esc on Ubuntu:
+        self.take_me_to_it_button.SetFocus()
+        
         self.button_sizer.Add(self.take_me_to_it_button, 0, wx.EXPAND | wx.ALL,
                               border=10)
         
         self.keep_editing_button = wx.Button(self, label='Keep editing')
+        
+        
         
         self.SetEscapeId(self.keep_editing_button.Id)
         
