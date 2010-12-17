@@ -1,3 +1,5 @@
+from garlicsim.general_misc import import_tools
+
 import garlicsim
 
 from .state import State
@@ -15,6 +17,6 @@ CRUNCHERS_LIST = \
     [garlicsim.asynchronous_crunching.crunchers.ThreadCruncher] + \
     (
         [garlicsim.asynchronous_crunching.crunchers.ProcessCruncher] if 
-        hasattr(garlicsim.asynchronous_crunching.crunchers, 'ProcessCruncher')
+        import_tools.exists('mulitprocessing')
         else []
     )
