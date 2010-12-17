@@ -12,6 +12,8 @@ import copy
 
 from garlicsim.general_misc.third_party import abc
 
+from garlicsim.general_misc import abc_tools
+
 import garlicsim
 
 
@@ -58,7 +60,7 @@ class BaseCruncher(object):
                           garlicsim.asynchronous_crunching.CrunchingProfile)
         
     
-    @abc.abstractmethod
+    @abc_tools.abstract_static_method
     def can_be_used_with_simpack_grokker(simpack_grokker):
         '''
         Return whether this cruncher type can be used with a simpack grokker.
@@ -82,3 +84,4 @@ class BaseCruncher(object):
     @abc.abstractmethod
     def is_alive(self):
         '''Report whether the cruncher is alive and crunching.'''
+        
