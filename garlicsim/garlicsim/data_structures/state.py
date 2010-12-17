@@ -44,8 +44,8 @@ class State(object):
         return '<%s %sat %s>' % \
                (
                    address_tools.describe(type(self), shorten=True),
-                   'with clock %s ' % self.clock if hasattr(self, 'clock') \
-                                      else '',
+                   ('with clock %s ' % self.clock) if hasattr(self, 'clock')
+                   else '',
                    hex(id(self))
                )
 

@@ -149,7 +149,7 @@ class CuteUnpickler(object):
             description = match.groupdict()['description']            
             return FilteredObject(description) 
         else: 
-            raise UnpicklingError('Invalid persistent id') 
+            raise pickle_module.UnpicklingError('Invalid persistent id')
  
  
     
