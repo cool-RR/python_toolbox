@@ -21,7 +21,7 @@ multiprocessing_missing_text = (
     "`ProcessCruncher` can't be used because the "
     "`multiprocessing` module isn't installed.%s" % (
         (
-            "You may find a backport of it for Python 2.5 here: "
+            " You may find a backport of it for Python 2.5 here: "
             "http://pypi.python.org/pypi/multiprocessing"
         ) if sys.version_info[:2] <= (2, 5) else ''
     )
@@ -48,7 +48,7 @@ class ProcessCruncher(BaseCruncher):
     
     gui_explanation = string_tools.docstring_trim(
     '''
-    ProcessCruncher:
+    `ProcessCruncher`:
     
      - Works from a `multiprocessing.Process`.
     

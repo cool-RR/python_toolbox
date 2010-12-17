@@ -21,7 +21,7 @@ from garlicsim.asynchronous_crunching import \
 __all__ = ['ThreadCruncher']
 
 
-class ThreadCruncher(BaseCruncher, threading.Thread):
+class ThreadCruncher(threading.Thread, BaseCruncher):
     '''
     ThreadCruncher is cruncher that works from a thread.
     
@@ -33,22 +33,23 @@ class ThreadCruncher(BaseCruncher, threading.Thread):
         
     Read more about crunchers in the documentation of the `crunchers` package.
     
-    The advantages of ThreadCruncher over ProcessCruncher are:
-    1. ThreadCruncher is able to handle simulations that are history-dependent,
-       which would have been very hard to implement in a Process, since
-       processes don't share memory, and threads do share memory trivially.
-    2. ThreadCruncher is based on the threading module, which is stabler and
-       more mature than the multiprocessing module.
-    3. ThreadCruncher is much easier to debug than ProcessCruncher, since there
-       are currently many more tools for debugging Python threads than Python
-       processes.
-    4. On a single-core computer, ThreadCruncher may be faster than
-       ProcessCruncher because of shared memory.
+    The advantages of `ThreadCruncher` over `ProcessCruncher` are:
+    1. `ThreadCruncher` is able to handle simulations that are
+       history-dependent, which would have been very hard to implement in a 
+       Process, since processes don't share memory, while threads do share
+       memory trivially.
+    2. `ThreadCruncher` is based on the `threading` module, which is stabler
+       and more mature than the `multiprocessing` module.
+    3. `ThreadCruncher` is much easier to debug than `ProcessCruncher`, since
+       there are currently many more tools for debugging Python threads than
+       Python processes.
+    4. On a single-core computer, `ThreadCruncher` may be faster than
+       `ProcessCruncher` because of shared memory.
     '''
     
     gui_explanation = string_tools.docstring_trim(
     '''
-    ThreadCruncher:
+    `ThreadCruncher`:
     
      - Works from a `threading.Thread`.
     
@@ -59,7 +60,7 @@ class ThreadCruncher(BaseCruncher, threading.Thread):
     
      - Easy to debug.
     
-     - On a single-core computer, it may be faster than ProcessCruncher because
+     - On a single-core computer, it may be faster than `ProcessCruncher` because
        of shared memory.
      '''
     )
@@ -68,7 +69,9 @@ class ThreadCruncher(BaseCruncher, threading.Thread):
     @staticmethod
     def can_be_used_with_simpack_grokker(simpack_grokker):
         '''
-        Return whether this cruncher type can be used with a simpack grokker.
+        Return whether `ThreadCruncher` can be used with a simpack grokker.
+        
+        The answer is always `True`.
         '''
         return True
     
@@ -82,8 +85,6 @@ class ThreadCruncher(BaseCruncher, threading.Thread):
             self.project.simpack_grokker.get_step_iterator
         self.history_dependent = self.project.simpack_grokker.history_dependent
         
-        self.last_clock = initial_state.clock
-        
         self.daemon = True
 
         self.work_queue = Queue.Queue()
@@ -91,10 +92,8 @@ class ThreadCruncher(BaseCruncher, threading.Thread):
         Queue for putting completed work to be picked up by the main thread.
         
         In this queue the cruncher will put the states that it produces, in
-        chronological order. If the cruncher is being given a new crunching
-        profile which has a new and different step profile, the cruncher
-        will put the new step profile in this queue in order to signal that
-        from that point on, all states were crunched with that step profile.
+        chronological order. If the cruncher reaches a simulation ends, it will
+        put an `EndMarker` in this queue.
         '''
 
         self.order_queue = Queue.Queue()
@@ -105,23 +104,43 @@ class ThreadCruncher(BaseCruncher, threading.Thread):
         '''
         Internal method.
         
-        This is called when the cruncher is started. It just calls the main_loop
-        method in a try clause, excepting ObsoleteCruncherError; That exception
-        means that the cruncher has been retired in the middle of its job, so it
-        is propagated up to this level, where it causes the cruncher to
-        terminate.
+        This is called when the cruncher is started. It just calls the
+        `main_loop` method in a `try` clause, excepting `ObsoleteCruncherError`;
+        That exception means that the cruncher has been retired in the middle of
+        its job, so it is propagated up to this level, where it causes the
+        cruncher to terminate.
         '''
         try:
             self.main_loop()
         except ObsoleteCruncherError:
             return
 
+        
     def main_loop(self):
         '''
         The main loop of the cruncher.
         
-        Crunches the simulations repeatedly until the crunching profile is
-        satisfied or a 'retire' order is received.
+        Crunches the simulations repeatedly until either:
+
+         1. The crunching profile is satisfied. (i.e. we have reached a
+            high-enough clock reading,)
+        
+        or
+        
+         2. A 'retire' order has been received,
+         
+        or 
+        
+         3. We have reached a simulation end. (i.e. the step function raised
+            `WorldEnded`.)
+            
+        or 
+        
+         4. We have received a new crunching profile which has a different step
+            profile than the one we started with. We can't change step profile
+            on the fly, so we simply retire and let the crunching manager 
+            recruit a new cruncher.
+            
         '''
         
         self.step_profile = self.crunching_profile.step_profile

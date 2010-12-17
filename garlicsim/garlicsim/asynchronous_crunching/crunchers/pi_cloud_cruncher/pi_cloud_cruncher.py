@@ -17,9 +17,6 @@ import garlicsim
 from garlicsim.asynchronous_crunching import BaseCruncher
 
 
-__all__ = ['PiCloudCruncher']    
-
-
 apology = ('PiCloudCruncher is not implemented in this version! This is just '
            'a placeholder. PiCloudCruncher is scheduled to be released in '
            'GarlicSim 0.7, which will be available in mid-2011.')
@@ -45,7 +42,7 @@ class PiCloudCruncher(BaseCruncher):
     
     gui_explanation = string_tools.docstring_trim(
     '''
-    PiCloudCruncher:
+    `PiCloudCruncher`:
     
      - Works by using the `cloud` module supplied by PiCloud, Inc.
      
@@ -64,7 +61,7 @@ class PiCloudCruncher(BaseCruncher):
     @staticmethod
     def can_be_used_with_simpack_grokker(simpack_grokker):
         '''
-        Return whether this cruncher type can be used with a simpack grokker.
+        Return whether `PiCloudCruncher` can be used with a simpack grokker.
         
         Since this class is just a placeholder, the answer is invariably
         `False`.
