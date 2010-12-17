@@ -24,27 +24,47 @@ cruncher you should use for your project depends on the situation.
 See the documentation for the different crunchers for more info.
 '''
 
+
 cruncher_types_list = []
+
+
+### Adding `ThreadCruncher`: ##################################################
+#                                                                             #
 
 from .thread_cruncher import ThreadCruncher
 cruncher_types_list.append(ThreadCruncher)
 
-try:
+#                                                                             #
+### Finished adding `ThreadCruncher`. #########################################
+
+
+### Adding `ProcessCruncher` if `multiprocessing` is available: ###############
+#                                                                             #
+
+from garlicsim.general_misc import import_tools
+
+if import_tools.exists('multiprocessing'):
     from .process_cruncher import ProcessCruncher
-    cruncher_types_list.append(ProcessCruncher)    
-except ImportError:
-    # todo: Do the thing that gives the error only if the module isn't
-    # avaialable, *not* if it raises some ImportError itself.
-    try:
-        import multiprocessing
-    except ImportError:
-        import warnings
-        warnings.warn("You don't have the multiprocessing package installed. "
-                      "GarlicSim will run, but it won't be able to use "
-                      "ProcessCruncher in order to take advantage of multiple "
-                      "processor cores for crunching.")
-    else:
-        raise
-    
+    cruncher_types_list.append(ProcessCruncher)
+else:
+    import warnings
+    warnings.warn("You don't have the `multiprocessing` package installed. "
+                  "GarlicSim will run, but it won't be able to use "
+                  "`ProcessCruncher` in order to take advantage of multiple "
+                  "processor cores for crunching.")
+del import_tools
+
+#                                                                             #
+### Finished adding `ProcessCruncher`. ########################################
+
+
+
+### Adding `PiCloudCruncher` dummy: ###########################################
+#                                                                             #
+
 from .pi_cloud_cruncher import PiCloudCruncher
 cruncher_types_list.append(PiCloudCruncher)
+
+#                                                                             #
+### Finished adding `PiCloudCruncher` dummy. ##################################
+
