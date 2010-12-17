@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the DontCopyPersistent class.
+This module defines the `DontCopyPersistent` class.
 
 See its documentation for more information.
 '''

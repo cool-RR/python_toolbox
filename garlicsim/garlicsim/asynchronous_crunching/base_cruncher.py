@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the BaseCruncher class.
+This module defines the `BaseCruncher` class.
 
 See its documentation for more information. See the `crunchers` package for a
 collection of crunchers.

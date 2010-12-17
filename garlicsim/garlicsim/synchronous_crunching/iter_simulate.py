@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the iter_simulate function.
+This module defines the `iter_simulate` function.
 
 See its documentation for more info.
 '''

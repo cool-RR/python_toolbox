@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-This module defines the SimpackWxGrokker class.
+This module defines the `SimpackWxGrokker` class.
 
 See its documentation for more info.
 '''

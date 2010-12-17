@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-This module defines the AboutDialog class.
+This module defines the `AboutDialog` class.
 
 See its documentation for more info.
 '''

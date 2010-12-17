@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-This module defines the SeekBar class.
+This module defines the `SeekBar` class.
 
 See its documentation for more info.
 '''

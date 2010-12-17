@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the Job class.
+This module defines the `Job` class.
 
 See its documentation for more info.
 '''

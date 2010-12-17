@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the Persistent class and some related classes.
+This module defines the `Persistent` class and some related classes.
 
 See documentation of Persistent and CrossProcessPersistent for more info.
 '''

@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the Infinity class and related exceptions.
+This module defines the `Infinity` class and related exceptions.
 
 See their documentation for more info.
 '''

@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-This module defines the StateCreationDialog class.
+This module defines the `StateCreationDialog` class.
 
 See its documentation for more info.
 '''

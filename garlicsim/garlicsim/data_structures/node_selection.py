@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the NodeSelection class.
+This module defines the `NodeSelection` class.
 
 See its documentation for more info.
 '''

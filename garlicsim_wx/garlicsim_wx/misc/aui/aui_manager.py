@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-This module defines the AuiManager class.
+This module defines the `AuiManager` class.
 
 See its documentation for more info.
 '''

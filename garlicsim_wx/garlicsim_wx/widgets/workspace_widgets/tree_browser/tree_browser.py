@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-This module defines the TreeBrowser class. See its documentation for more info.
+This module defines the `TreeBrowser` class. See its documentation for more info.
 '''
 #todo: I think the refresh should be made more efficient
 

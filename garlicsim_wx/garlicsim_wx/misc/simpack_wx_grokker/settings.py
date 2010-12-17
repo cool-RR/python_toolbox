@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-This module defines the Settings class.
+This module defines the `Settings` class.
 
 See its documentation for more info.
 '''

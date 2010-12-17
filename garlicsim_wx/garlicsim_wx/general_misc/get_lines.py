@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-This module defines the get_lines function. See its documentation for more
+This module defines the `get_lines` function. See its documentation for more
 info.
 '''
 
