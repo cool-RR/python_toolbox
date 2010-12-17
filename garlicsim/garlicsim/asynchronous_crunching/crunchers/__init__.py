@@ -7,10 +7,11 @@ A collection of crunchers, which are workers that crunch the simulation.
 See also `garlicsim.asynchronous_crunching.base_cruncher.BaseCruncher` and its
 documentation. It is the abstract base class for all of the crunchers here.
 
-A cruncher receives a state from the main program, and then it repeatedly
-applies the step function of the simulation to produce more states. Those states
-are then put in the cruncher's `work_queue`. They are then taken by the main
-program when `Project.sync_crunchers` is called, and put into the tree.
+A cruncher receives a state (or a history browser) from the main program, and
+then it repeatedly applies the step function of the simulation to produce more
+states. Those states are then put in the cruncher's `work_queue`. They are then
+taken by the main program when `Project.sync_crunchers` is called, and put into
+the tree.
 
 The cruncher also receives a crunching profile from the main program. The
 crunching profile specifes how far the cruncher should crunch the simulation,

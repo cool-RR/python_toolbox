@@ -19,40 +19,52 @@ import garlicsim
 
 class BaseCruncher(object):
     '''
+    A worker that produces new simulation states using the step function.
     
-    
-    A cruncher receives a state from the main program, and then it repeatedly
-    applies the step function of the simulation to produce more states. Those
-    states are then put in the cruncher's `.work_queue`. They are then taken by
-    the main program when `Project.sync_crunchers` is called, and put into the
-    tree.
+    A cruncher receives a state (or a history browser) from the main program,
+    and then it repeatedly applies the step function of the simulation to
+    produce more states. Those states are then put in the cruncher's
+    `.work_queue`. They are then taken by the main program when
+    `Project.sync_crunchers` is called, and put into the tree.
 
     The cruncher also receives a crunching profile from the main program. The
     crunching profile specifes how far the cruncher should crunch the
     simulation, and which arguments it should pass to the step function.
     
-    This package may define different crunchers which work in different ways,
-    but are to a certain extent interchangable. Different kinds of crunchers
-    have different advantages and disadvantges relatively to each other, and
-    which cruncher you should use for your project depends on the situation.
+    This is an abstract base class. For a collection of actual crunchers, check
+    out the `crunchers` package. It contains different crunchers which work in
+    different ways, but are to a certain extent interchangable. Different kinds
+    of crunchers have different advantages and disadvantges relatively to each
+    other, and which cruncher you should use for your project depends on the
+    situation.
     '''
     
     __metaclass__ = abc.ABCMeta
 
     
     gui_explanation = None
+    '''
+    A relatively non-technical explanation about the cruncher type.
+    
+    This will be displayed to GUI users who may not be programmers.
+    '''
 
     
     def __init__(self, crunching_manager, initial_state, crunching_profile):
         
         self.crunching_manager = crunching_manager
+        '''
+        Crunching manager which recruites, manages and retires this cruncher.
+        '''
         assert isinstance(self.crunching_manager,
                           garlicsim.asynchronous_crunching.CrunchingManager)
         
         self.project = crunching_manager.project
+        '''The project on which this cruncher operates.'''
         assert isinstance(self.project, garlicsim.Project)
         
         self.initial_state = initial_state
+        '''The initial state given to the cruncher.'''
         assert isinstance(self.initial_state, garlicsim.data_structures.State)
         
         self.crunching_profile = copy.deepcopy(crunching_profile)
