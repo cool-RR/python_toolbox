@@ -68,6 +68,7 @@ class BaseCruncher(object):
         assert isinstance(self.initial_state, garlicsim.data_structures.State)
         
         self.crunching_profile = copy.deepcopy(crunching_profile)
+        '''The crunching profile that this cruncher will adhere to.'''
         assert isinstance(self.crunching_profile,
                           garlicsim.asynchronous_crunching.CrunchingProfile)
         
@@ -76,8 +77,6 @@ class BaseCruncher(object):
     def can_be_used_with_simpack_grokker(simpack_grokker):
         '''
         Return whether this cruncher type can be used with a simpack grokker.
-        '''
-        '''
         
         (Static method.)
         '''
