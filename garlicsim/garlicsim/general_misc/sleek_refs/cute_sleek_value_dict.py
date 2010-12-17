@@ -169,7 +169,7 @@ class CuteSleekValueDict(UserDict.UserDict, object):
 
         
     def update(self, *other_dicts, **kwargs):
-        d = self.data        
+        
         if other_dicts:
             (other_dict,) = other_dicts        
             if not hasattr(other_dict, 'items'):
@@ -222,8 +222,8 @@ class KeyedSleekRef(SleekRef):
 
     """
 
-    def __new__(type, thing, callback, key):
-        self = SleekRef.__new__(type)
+    def __new__(cls, thing, callback, key):
+        self = SleekRef.__new__(cls)
         return self
 
     

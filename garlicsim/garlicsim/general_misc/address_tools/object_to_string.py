@@ -29,8 +29,6 @@ def _tail_shorten(address, root=None, namespace={}):
         return address
     
     parent_address, child_name = address.rsplit('.', 1)
-    parent = get_object_by_address(parent_address, root=root,
-                                    namespace=namespace)
     child = get_object_by_address(address, root=root, namespace=namespace)
     
     current_parent_address = parent_address
@@ -48,7 +46,8 @@ def _tail_shorten(address, root=None, namespace={}):
             break
         
         current_parent = get_object_by_address(current_parent_address,
-                                    root=root, namespace=namespace)
+                                               root=root,
+                                               namespace=namespace)
         
         candidate_child = getattr(current_parent, child_name, None)
         
@@ -205,7 +204,6 @@ def describe(obj, shorten=False, root=None, namespace={}):
     current_result = raw_result
     
     ugly_reprs = []
-    first_run = True
         
         
     while True:

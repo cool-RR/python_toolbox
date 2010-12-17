@@ -82,10 +82,10 @@ class SimpackWxGrokker(object):
             
             original_settings = getattr(self.simpack_wx, 'settings')
         
-            for (key, value) in vars(self.settings).iteritems():
-                if hasattr(original_settings, key):
-                    actual_value = getattr(original_settings, key)
-                    setattr(self.settings, key, actual_value)
+            for setting_name in vars(self.settings).keys():
+                if hasattr(original_settings, setting_name):
+                    value = getattr(original_settings, setting_name)
+                    setattr(self.settings, setting_name, value)
             # todo: currently throws away unrecognized attributes from the
             # simpack's settings.
         

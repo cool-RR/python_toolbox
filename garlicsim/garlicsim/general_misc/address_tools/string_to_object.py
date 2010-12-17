@@ -86,7 +86,7 @@ def get_object_by_address(address, root=None, namespace={}):
         else:
             try:
                 return eval(address) # In case it's a builtin.
-            except:
+            except Exception:
                 return __import__(address) # Last option: A module
     
             
@@ -123,8 +123,7 @@ def resolve(string, root=None, namespace={}):
     
     for address in addresses:
         try:
-            thing = get_object_by_address(address, root=root,
-                                           namespace=namespace)
+            get_object_by_address(address, root=root, namespace=namespace)
         except Exception:
             pass
         else:

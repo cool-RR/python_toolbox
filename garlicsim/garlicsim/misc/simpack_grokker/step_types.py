@@ -15,7 +15,6 @@ class SimpleStep(BaseStepType):
 class StepGenerator(BaseStepType):
     step_iterator_class = step_iterators.StepGeneratorIterator
     verbose_name = 'step generator'
-    pass
     
     
 class HistoryStep(BaseStepType):
@@ -25,19 +24,16 @@ class HistoryStep(BaseStepType):
 
 class HistoryStepGenerator(BaseStepType):
     verbose_name = 'history step generator'
-    pass
-
-
+    
+    
 class InplaceStep(BaseStepType):
     inplace_step_iterator_class = 7
     verbose_name = 'inplace step function'
-    pass
-
-
+    
+    
 class InplaceStepGenerator(BaseStepType):
     inplace_step_iterator_class = 7
     verbose_name = 'inplace step generator'
-    pass
 
 
 step_types_list = [SimpleStep, StepGenerator, HistoryStep,
