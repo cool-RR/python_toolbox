@@ -55,7 +55,7 @@ def _walk_folder(package_name, folder):
                 yield path
         
 
-def _make_path_to_file(file):
+def _make_path_to_file(file_):
     '''
     Create the folders needed before creating a file.
     
@@ -63,12 +63,12 @@ def _make_path_to_file(file):
     folders up to the file, so the file could be later created without thinking
     whether these folders exist or not.
     '''
-    dir = os.path.split(file)[0]
-    if os.path.isdir(dir):
+    folder = os.path.split(file_)[0]
+    if os.path.isdir(folder):
         return
-    parent_dir = os.path.split(dir)[0]
-    _make_path_to_file(dir)
-    os.mkdir(dir)
+    parent_folder = os.path.split(folder)[0]
+    _make_path_to_file_(folder)
+    os.mkdir(folder)
     
                 
     
