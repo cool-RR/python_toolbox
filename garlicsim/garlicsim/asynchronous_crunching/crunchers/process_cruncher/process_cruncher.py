@@ -7,11 +7,14 @@ This module defines the `ProcessCruncher` class.
 See its documentation for more information.
 '''
 
+import sys
+
+from garlicsim.general_misc.reasoned_bool import ReasonedBool
 from garlicsim.general_misc import string_tools
+from garlicsim.general_misc import import_tools
 
 import garlicsim
 from garlicsim.asynchronous_crunching import BaseCruncher
-from garlicsim.general_misc.reasoned_bool import ReasonedBool
 
 from .process import Process
 
@@ -45,24 +48,6 @@ class ProcessCruncher(BaseCruncher):
        processor.
      '''
     )
-
-    
-    @staticmethod
-    def can_be_used_with_simpack_grokker(simpack_grokker):
-        '''
-        Return whether `ProcessCruncher` can be used with `simpack_grokker`.
-        
-        `ProcessCruncher` can be used if and only if the simpack is not
-        history-dependent.
-        '''
-        if simpack_grokker.history_dependent:
-            return ReasonedBool(
-                False,
-                "ProcessCruncher can't be used in history-dependent "
-                "simulations because processes don't share memory."
-            )
-        else:
-            return True
     
     
     def __init__(self, crunching_manager, initial_state, crunching_profile):
@@ -88,7 +73,41 @@ class ProcessCruncher(BaseCruncher):
         
         self.order_queue = self.process.order_queue
         '''Queue for receiving instructions from the main thread.'''
+     
+    
+    @staticmethod
+    def can_be_used_with_simpack_grokker(simpack_grokker):
+        '''
+        Return whether `ProcessCruncher` can be used with `simpack_grokker`.
         
+        For `ProcessCruncher` to be usable, the `multiprocessing` module must be
+        installed. Assuming it's installed, `ProcessCruncher` can be used if and
+        only if the simpack is not history-dependent.
+        '''
+        
+        if not import_tools.exists('multiprocessing'):
+            backport_advice = (
+                "You may find a backport of it for Python 2.5 here: "
+                "http://pypi.python.org/pypi/multiprocessing"
+            )
+            return ReasonedBool(
+                False,
+                "`ProcessCruncher` can't be used because the "
+                "`multiprocessing` module isn't installed.%s" % (
+                    backport_advice if sys.version_info[:2] == (2, 5) else ''
+                )
+            )
+        
+        elif simpack_grokker.history_dependent:
+            return ReasonedBool(
+                False,
+                "`ProcessCruncher` can't be used in history-dependent "
+                "simulations because processes don't share memory."
+            )
+        
+        else:
+            return True
+
         
     def start(self):
         '''
