@@ -72,6 +72,13 @@ class BaseCruncher(object):
         
     
     @abc.abstractmethod
+    def start(self):
+        '''
+        Start the cruncher so it will start crunching and delivering states.
+        '''
+    
+        
+    @abc.abstractmethod
     def retire(self):
         '''Retire the cruncher, making it shut down.'''
     

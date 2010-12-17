@@ -1,15 +1,21 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
+'''
+This module defines the `Process` class.
+
+See its documentation for more info.
+'''
 
 import multiprocessing
-import copy
 import Queue
 import sys
 import os
 
-try: import garlicsim.general_misc.process_priority
-except Exception: pass
+try:
+    import garlicsim.general_misc.process_priority
+except Exception:
+    pass
 
 import garlicsim
 from garlicsim.asynchronous_crunching import \
@@ -17,13 +23,21 @@ from garlicsim.asynchronous_crunching import \
 
 
 class Process(multiprocessing.Process):
-    def __init__(self, step_iterator_getter, initial_state, crunching_profile):
-        
+    '''The actual system process used by `ProcessCruncher`.'''
+    
+    def __init__(self, step_iterator_getter, initial_state, crunching_profile):        
         multiprocessing.Process.__init__(self)
         
         self.step_iterator_getter = step_iterator_getter
+        '''
+        Function that return a step iterator given a state and step profile.
+        '''
+        
         self.initial_state = initial_state
-        self.last_clock = self.initial_state.clock
+        '''
+        First state given to the process from which it crunches more states.
+        '''       
+        
         self.crunching_profile = crunching_profile
         
         self.daemon = True
@@ -33,10 +47,8 @@ class Process(multiprocessing.Process):
         Queue for putting completed work to be picked up by the main thread.
         
         In this queue the cruncher will put the states that it produces, in
-        chronological order. If the cruncher is being given a new crunching
-        profile which has a new and different step profile, the cruncher
-        will put the new step profile in this queue in order to signal that
-        from that point on, all states were crunched with that step profile.
+        chronological order. If the cruncher reaches a simulation ends, it will
+        put an `EndMarker` in this queue.
         '''
         
         self.order_queue = multiprocessing.Queue()
@@ -64,14 +76,15 @@ class Process(multiprocessing.Process):
             except Exception:
                 pass
 
+            
     def run(self):
         '''
         Internal method.
         
         This is called when the cruncher is started. It just calls the
-        main_loop method in a try clause, excepting ObsoleteCruncherError;
-        That exception means that the cruncher has been retired in the middle
-        of its job, so it is propagated up to this level, where it causes the
+        `main_loop` method in a try clause, excepting `ObsoleteCruncherError`;
+        That exception means that the cruncher has been retired in the middle of
+        its job, so it is propagated up to this level, where it causes the
         cruncher to terminate.
         '''
         try:
@@ -84,8 +97,27 @@ class Process(multiprocessing.Process):
         '''
         The main loop of the cruncher.
         
-        Crunches the simulations repeatedly until the crunching profile is
-        satisfied or a 'retire' order is received.
+        Crunches the simulations repeatedly until either:
+
+         1. The crunching profile is satisfied. (i.e. we have reached a
+            high-enough clock reading,)
+        
+        or
+        
+         2. A 'retire' order has been received,
+         
+        or 
+        
+         3. We have reached a simulation end. (i.e. the step function raised
+            `WorldEnded`.)
+            
+        or 
+        
+         4. We have received a new crunching profile which has a different step
+            profile than the one we started with. We can't change step profile
+            on the fly, so we simply retire and let the crunching manager 
+            recruit a new cruncher.
+            
         '''
         self.set_low_priority()
         
@@ -106,7 +138,9 @@ class Process(multiprocessing.Process):
                 if order:
                     self.process_order(order) 
         except garlicsim.misc.WorldEnded:
-            self.work_queue.put(garlicsim.asynchronous_crunching.misc.EndMarker())            
+            self.work_queue.put(
+                garlicsim.asynchronous_crunching.misc.EndMarker()
+            )
 
             
     def check_crunching_profile(self, state):
@@ -124,7 +158,7 @@ class Process(multiprocessing.Process):
         
     def get_order(self):
         '''
-        Attempt to read an order from the order_queue, if one has been sent.
+        Attempt to read an order from the `.order_queue`, if one has been sent.
         
         Returns the order.
         '''
@@ -135,7 +169,7 @@ class Process(multiprocessing.Process):
     
         
     def process_order(self, order):
-        '''Process an order receieved from order_queue.'''
+        '''Process an order receieved from `.order_queue`.'''
         
         if order == 'retire':
             raise ObsoleteCruncherError("Cruncher received a 'retire' order; "

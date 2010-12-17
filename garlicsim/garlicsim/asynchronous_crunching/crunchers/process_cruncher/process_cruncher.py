@@ -5,35 +5,20 @@
 This module defines the `ProcessCruncher` class.
 
 See its documentation for more information.
-
-This module requires the multiprocessing package to be installed. It is part of
-the standard library for Python 2.6 and above, but not for earlier versions. A
-backport of it for Python 2.5 is available at
-http://pypi.python.org/pypi/multiprocessing.
 '''
-
-import multiprocessing
-import copy
-import Queue
-import sys
-import os
 
 from garlicsim.general_misc import string_tools
 
 import garlicsim
-from garlicsim.asynchronous_crunching import \
-     BaseCruncher, CrunchingProfile, ObsoleteCruncherError
+from garlicsim.asynchronous_crunching import BaseCruncher
 from garlicsim.general_misc.reasoned_bool import ReasonedBool
 
 from .process import Process
 
-
-__all__ = ['ProcessCruncher']    
-
         
 class ProcessCruncher(BaseCruncher):
     '''
-    ProcessCruncher is a type of cruncher the works from a process.
+    Cruncher that crunches from a process.
     
     A cruncher is a worker which crunches the simulation. It receives a state
     from the main program, and then it repeatedly applies the step function of
@@ -43,9 +28,9 @@ class ProcessCruncher(BaseCruncher):
         
     Read more about crunchers in the documentation of the `crunchers` package.
     
-    The advantage of ProcessCruncher over ThreadCruncher is that
-    ProcessCruncher is able to run on a different core of the processor
-    in the machine, thus using the full power of the processor.
+    The advantage of `ProcessCruncher` over `ThreadCruncher` is that
+    `ProcessCruncher` is able to run on a different core of the processor in the
+    machine, thus using the full power of the processor.
     '''
     
     
@@ -65,7 +50,10 @@ class ProcessCruncher(BaseCruncher):
     @staticmethod
     def can_be_used_with_simpack_grokker(simpack_grokker):
         '''
-        Return whether this cruncher type can be used with a simpack grokker.
+        Return whether `ProcessCruncher` can be used with `simpack_grokker`.
+        
+        `ProcessCruncher` can be used if and only if the simpack is not
+        history-dependent.
         '''
         if simpack_grokker.history_dependent:
             return ReasonedBool(
@@ -79,24 +67,23 @@ class ProcessCruncher(BaseCruncher):
     
     def __init__(self, crunching_manager, initial_state, crunching_profile):
         
-        BaseCruncher.__init__(self, crunching_manager,
-                              initial_state, crunching_profile)
+        BaseCruncher.__init__(self, crunching_manager, initial_state, 
+                              crunching_profile)
         
         self.process = Process(
             self.project.simpack_grokker.get_step_iterator,
             initial_state,
             crunching_profile
         )
+        '''The actual process which does the crunching.'''
         
         self.work_queue = self.process.work_queue
         '''
         Queue for putting completed work to be picked up by the main thread.
         
         In this queue the cruncher will put the states that it produces, in
-        chronological order. If the cruncher is being given a new crunching
-        profile which has a new and different step profile, the cruncher
-        will put the new step profile in this queue in order to signal that
-        from that point on, all states were crunched with that step profile.
+        chronological order. If the cruncher reaches a simulation ends, it will
+        put an `EndMarker` in this queue.
         '''
         
         self.order_queue = self.process.order_queue
@@ -104,6 +91,9 @@ class ProcessCruncher(BaseCruncher):
         
         
     def start(self):
+        '''
+        Start the cruncher so it will start crunching and delivering states.
+        '''
         self.process.start()
 
             
@@ -122,6 +112,7 @@ class ProcessCruncher(BaseCruncher):
         
         
     def is_alive(self):
+        '''Report whether the cruncher is alive and crunching.'''
         return self.process.is_alive()
         
         

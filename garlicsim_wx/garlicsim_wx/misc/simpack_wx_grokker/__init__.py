@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-This module defines the SimpackWxGrokker and the Settings classes.
+This module defines the `SimpackWxGrokker` and the Settings classes.
 
 See their documentation for more info.
 '''

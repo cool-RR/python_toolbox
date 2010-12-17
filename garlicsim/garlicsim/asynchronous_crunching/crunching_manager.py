@@ -277,12 +277,12 @@ class CrunchingManager(object):
         '''
         Take work from cruncher and add to tree at the specified job's node.
         
-        If `retire` is set to True, retires the cruncher. Keep in mind that if
-        the cruncher gives an EndMarker, it will be retired regardless of the
+        If `retire` is set to `True`, retires the cruncher. Keep in mind that if
+        the cruncher gives an `EndMarker`, it will be retired regardless of the
         `retire` argument.
         
-        Returns (number, leaf), where `number` is the number of nodes that were
-        added, and `leaf` is the last node that was added.
+        Returns `(number, leaf)`, where `number` is the number of nodes that
+        were added, and `leaf` is the last node that was added.
         '''
         
         tree = self.project.tree
@@ -316,7 +316,7 @@ class CrunchingManager(object):
                 job.resulted_in_end = True
                 
             else:
-                raise Exception('Unexpected object %s in work queue' % thing)
+                raise Exception('Unexpected object `%s` in work queue' % thing)
                         
         if retire or job.resulted_in_end:
             cruncher.retire()
