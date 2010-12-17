@@ -2,9 +2,9 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the App class.
+Defines the `App` class.
 
 See its documentation for more info.
 '''
 
-from app import App
+from .app import App

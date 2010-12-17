@@ -2,9 +2,9 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the Frame class.
+Defines the `Frame` class.
 
 See its documentation for more info.
 '''
 
-from frame import Frame
+from .frame import Frame

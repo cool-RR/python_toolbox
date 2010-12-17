@@ -22,6 +22,6 @@ CRUNCHERS_LIST = \
     [garlicsim.asynchronous_crunching.crunchers.ThreadCruncher] + \
     (
         [garlicsim.asynchronous_crunching.crunchers.ProcessCruncher] if 
-        import_tools.exists('mulitprocessing')
+        import_tools.exists('multiprocessing')
         else []
     )
