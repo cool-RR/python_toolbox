@@ -17,24 +17,30 @@ from garlicsim.general_misc import cute_iter_tools
 
 from garlicsim.misc import GarlicSimException
 
-from node import Node
-from block import Block
-# We are doing `from tree import Tree` in the bottom of the file.
+from .node import Node
+from .block import Block
+# from .tree import Tree (at bottom of the file)
 
 
 __all__ = ['Path', 'PathError', 'PathOutOfRangeError', 'TailNotReached',
            'HeadNotReached']
 
 
+### Definining path-related exceptions: #######################################
+#                                                                             #
+
 class PathError(GarlicSimException):
     '''Path-related exception.'''
 
+    
 class PathLookupError(PathError, LookupError):
     '''Path-related exception.'''    
+
     
 class PathOutOfRangeError(PathError, IndexError):
     '''Nodes are requested from the path which are out of its range.'''
 
+    
 class TailNotReached(PathError): 
     '''
     A tail node/block is specified but it turns out not to be on the path.
@@ -42,10 +48,14 @@ class TailNotReached(PathError):
     # todo: consider subclass from one of the obscure exceptions like
     # LookupError
 
+    
 class HeadNotReached(PathError):
     '''
     A head node/block is specified but it turns out not to be on the path.
     '''
+
+#                                                                             #
+### Finished definining path-related exceptions. ##############################
     
 
 class Path(object):
@@ -56,9 +66,9 @@ class Path(object):
     line through it. Therefore, a path object contains information about which
     child to choose when going through a node which has multiple children.
     
-    Some of Path's method accept `head` and `tail` parameters for specifying a
-    sub-range inside the path. It should be noted that this range will include
-    both endpoints.
+    Some of `Path`'s method accept `head` and `tail` parameters for specifying
+    a sub-range inside the path. It should be noted that this range will
+    include both endpoints.
     '''
     
     def __init__(self, tree, root=None, decisions={}):
@@ -136,7 +146,7 @@ class Path(object):
 
             
     def __reversed__(self):
-        '''Iterate on the nodes in the path from tail to head.'''
+        '''Iterate over the nodes in the path in reverse order.'''
         # todo: may add head and tail
         try:
             current_node = self[-1]
@@ -151,7 +161,7 @@ class Path(object):
         '''
         Iterate on the path, yielding blocks when possible.
         
-        You can optionally specify `head` and/or `tail`, which may be either
+        You may optionally specify `head` and/or `tail`, which may be either
         nodes or blocks.
         '''
 
@@ -215,8 +225,8 @@ class Path(object):
         '''
         Iterate backwards on the path, yielding blocks when possible.
         
-        tododoc You must specify an `tail`. You may optionally specify a `head`.
-        Both of these may be either nodes or blocks.
+        You may optionally specify `head` and/or `tail`, which may be either
+        nodes or blocks.
         '''
         if tail is None:
             try:
@@ -278,7 +288,12 @@ class Path(object):
             
 
     def __contains__(self, thing, head=None, tail=None):
-        '''Return whether the path contains the specified node/block.'''
+        '''
+        Return whether the path contains the specified node/block.
+
+        You may optionally specify `head` and/or `tail`, which may be either
+        nodes or blocks.
+        '''
         
         assert isinstance(thing, Node) or isinstance(thing, Block)
 
@@ -328,7 +343,7 @@ class Path(object):
         '''
         Get a node by its index number in the path.
 
-        You can optionally specify a tail node.
+        You may optionally specify a `tail` node.
         '''
         #todo: allow slicing? make Path.states for this and for iterating?
         #todo: generalize `tail` to blocks
@@ -345,7 +360,7 @@ class Path(object):
         '''
         Get a node by its index number in the path. Negative indices only.
 
-        You can optionally specify an tail node in which the path ends.
+        You may optionally specify a `tail`.
         '''
         if tail is None:
             tail = self.get_last_node()
@@ -385,7 +400,7 @@ class Path(object):
         '''
         Get a node by its index number in the path. Positive indices only.
 
-        You can optionally specify an tail node in which the path ends.
+        You may optionally specify a `tail` node.
         '''
         # todo: supports blocks?
         my_index = -1
@@ -409,7 +424,7 @@ class Path(object):
         '''
         Get the last node in the path.
         
-        You can optionally specify `head`, which may be either a node or block.
+        You may optionally specify `head`, which may be either a node or block.
         '''
 
         thing = None # Setting to None before loop, so we know if loop was empty
@@ -435,8 +450,10 @@ class Path(object):
         '''
         Get a node according to its clock.
         
-        See documentation of `binary_search.roundings` for details about rounding
-        options.
+        See documentation of `binary_search.roundings` for details about
+        rounding options.
+        
+        You may optionally specify a `tail_node`.
         '''
         
         my_function = lambda node: node.state.clock
@@ -454,8 +471,10 @@ class Path(object):
         
         The function must be a monotonic rising function on the timeline.
         
-        See documentation of `binary_search.roundings` for details about rounding
-        options.
+        See documentation of `binary_search.roundings` for details about
+        rounding options.
+        
+        You may optionally specify a `tail_node`.
         '''
         
         assert issubclass(rounding, binary_search.Rounding)
@@ -487,8 +506,8 @@ class Path(object):
         
         The rounding option used is `binary_search.BOTH`.
         
-        Note that this function does not let you specify an tail node. Currently
-        we're not optimizing for the case where you have an tail node and this
+        Note that this function does not let you specify a tail node. Currently
+        we're not optimizing for the case where you have a tail node and this
         function might waste resources exploring beyond it.
         '''
         
@@ -598,10 +617,12 @@ class Path(object):
         '''
         Get the existing time segment between `start_time` and `end_time`.
         
-        Example: In the path the first node's clock reading is 3.2, the last is
-        7.6.
-        `start_time` is 2 and `end_time` is 5.
-        The function will return [3.2, 5].
+        Example: 
+        
+            In the path the first node's clock reading is 3.2, the last is
+            7.6.
+            `start_time` is 2 and `end_time` is 5.
+            The function will return [3.2, 5].
         '''
 
         clock_of_first = self.root.state.clock
@@ -731,4 +752,4 @@ class Path(object):
         return self.__eq__(other)
     
     
-from tree import Tree
+from .tree import Tree

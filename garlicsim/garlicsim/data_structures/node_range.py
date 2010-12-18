@@ -66,6 +66,8 @@ class NodeRange(object):
 
     
     def __contains__(self, node):
+        '''Return whether `node` is in this node range.'''
+        # todo: can do blocks?
         path = self.make_path()
         return path.__contains__(node, head=self.head, tail=self.tail)
 
@@ -107,8 +109,7 @@ class NodeRange(object):
     
     def copy(self):
         '''Shallow-copy the node range.'''
-        klass = type(self)
-        return klass(self.head, self.tail)
+        return type(self)(self.head, self.tail)
 
     __copy__ = copy
 
@@ -126,10 +127,10 @@ class NodeRange(object):
                    
                    address_tools.describe(type(self), shorten=True),
                    
-                   'block that starts at clock' if isinstance(self.head, Block) \
+                   'block that starts at clock' if isinstance(self.head, Block)
                    else 'node with clock',
                    
-                   self.head[0].state.clock if isinstance(self.head, Block) \
+                   self.head[0].state.clock if isinstance(self.head, Block)
                    else self.head.state.clock,
                    
                    'block that ends at clock' if \
@@ -138,11 +139,11 @@ class NodeRange(object):
                    self.tail[-1].state.clock if isinstance(self.tail, Block) \
                    else self.tail.state.clock,
                    
-                cute_iter_tools.get_length(self),
+                   cute_iter_tools.get_length(self),
                 
-                hex(id(self))
+                   hex(id(self))
                )
-
+    
     
     def __eq__(self, other):
         if not isinstance(other, NodeRange):
