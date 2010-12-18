@@ -18,7 +18,7 @@ class SleekRef(object):
     def __init__(self, thing, callback=None):
         self.callback = callback
         if callback and not callable(callback):
-            raise Exception('%s is not a callable object.' % callback)
+            raise TypeError('%s is not a callable object.' % callback)
         
         self.is_none = (thing is None)
         

@@ -10,9 +10,6 @@ See its documentation for more information.
 import garlicsim.misc
 
 
-__all__ = ['CrunchingProfile']
-
-
 class CrunchingProfile(object):
     '''Instructions that a cruncher follows when crunching the simulation.'''
     
@@ -31,29 +28,34 @@ class CrunchingProfile(object):
         self.step_profile = step_profile
         '''The step profile we want to be used with the step function.'''
   
+        
     def state_satisfies(self, state):
         '''
         Check whether a state has a clock high enough to satisfy this profile.
         '''
         return state.clock >= self.clock_target
+
     
     def raise_clock_target(self, clock_target):
         '''Make `.clock_target` at least as big as the given `clock_target`.'''
         if self.clock_target < clock_target:
             self.clock_target = clock_target
     
+            
     def __eq__(self, other):
         return isinstance(other, CrunchingProfile) and \
                self.clock_target == other.clock_target and \
                self.step_profile == other.step_profile
 
-    def __hash__(self):
-        # Defining __hash__ because there's __eq__ which makes the default
-        # __hash__ disappear on Python 3.
-        return id(self)
+    
+    __hash__ = None
+    def z__hash__(self):
+        return hash((self.clock_target, self.step_profile))
 
+    
     def __ne__(self, other):
         return not self.__eq__(other)
+
     
     def __repr__(self):
         '''

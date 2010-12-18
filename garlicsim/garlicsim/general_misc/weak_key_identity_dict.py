@@ -1,89 +1,73 @@
-import UserDict
-from weakref import ref
+import weakref
 
-class WeakKeyDefaultDict(UserDict.UserDict, object): #todo: needs testing
+
+__all__ = ['WeakKeyIdentityDict']
+
+
+class IdentityRef(weakref.ref):
     
     def __init__(self, *args, **kwargs):
-        self.default_factory = None
-        if 'default_factory' in kwargs:
-            self.default_factory = kwargs.pop('default_factory')
-        elif len(args) > 0 and callable(args[0]):
-            self.default_factory = args[0]
-            args = args[1:]
+        weakref.ref.__init__(self, *args, **kwargs)
+        self._hash = None
         
+        
+    def __hash__(self):
+        if self._hash:
+            return self._hash
+        thing = self()
+        if thing is None:
+            raise TypeError("Object was already garbage-collected and you "
+                            "didn't hash it while it was alive.")
+        else:
+            return hash(thing)
+
+
+class WeakKeyIdentityDict(UserDict.UserDict):
+    """ tododoc Mapping class that references keys weakly.
+
+    Entries in the dictionary will be discarded when there is no
+    longer a strong reference to the key. This can be used to
+    associate additional data with an object owned by other parts of
+    an application without adding attributes to those objects. This
+    can be especially useful with objects that override attribute
+    accesses.
+    """
+
+    def __init__(self, dict_=None):
         self.data = {}
         def remove(k, selfref=ref(self)):
             self = selfref()
             if self is not None:
                 del self.data[k]
         self._remove = remove
-        if args:
-            self.update(args[0])
-
-            
-    def __missing__(self, key):
-        if self.default_factory is not None:
-            self[key] = value = self.default_factory()
-            return value
-        else: # self.default_factory is None
-            raise KeyError(key)
+        if dict_ is not None: self.update(dict_)
 
         
-    def __repr__(self, recurse=set()):
-        type_name = type(self).__name__
-        if id(self) in recurse:
-            return "%s(...)" % type_name
-        try:
-            recurse.add(id(self))
-            return "%s(%s, %s)" % (
-                type_name,
-                repr(self.default_factory),
-                super(WeakKeyDefaultDict, self).__repr__()
-            )
-        finally:
-            recurse.remove(id(self))
-
-            
-    def copy(self): # todo: needs testing
-        return type(self)(self, default_factory=self.default_factory)
-    
-    __copy__ = copy
-
-    
-    def __reduce__(self):
-        """
-        __reduce__ must return a 5-tuple as follows:
-
-           - factory function
-           - tuple of args for the factory function
-           - additional state (here None)
-           - sequence iterator (here None)
-           - dictionary iterator (yielding successive (key, value) pairs
-
-           This API is used by pickle.py and copy.py.
-        """
-        return (type(self), (self.default_factory,), None, None, self.iteritems())
-
-    
     def __delitem__(self, key):
         del self.data[ref(key)]
 
         
     def __getitem__(self, key):
-        try:
-            return self.data[ref(key)]
-        except KeyError:
-            missing_method = getattr(type(self), '__missing__', None)
-            if missing_method:
-                return missing_method(self, key)
-            else:
-                raise
+        return self.data[ref(key)]
 
-            
+    
+    def __repr__(self):
+        return "<tododocWeakKeyDictionary at %s>" % id(self)
+
+    
     def __setitem__(self, key, value):
         self.data[ref(key, self._remove)] = value
 
         
+    def copy(self):
+        new = WeakKeyDictionary()
+        for key, value in self.data.items():
+            o = key()
+            if o is not None:
+                new[o] = value
+        return new
+
+    
     def get(self, key, default=None):
         return self.data.get(ref(key),default)
 
@@ -132,6 +116,7 @@ class WeakKeyDefaultDict(UserDict.UserDict, object): #todo: needs testing
         """
         return self.data.iterkeys()
 
+    
     def iterkeys(self):
         for wr in self.data.iterkeys():
             obj = wr()
@@ -193,5 +178,3 @@ class WeakKeyDefaultDict(UserDict.UserDict, object): #todo: needs testing
                 d[ref(key, self._remove)] = value
         if len(kwargs):
             self.update(kwargs)
-            
-            
