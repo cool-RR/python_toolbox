@@ -16,42 +16,32 @@ from garlicsim.misc import BaseStepIterator, SimpackError, AutoClockGenerator
 
 class HistoryStepIterator(BaseStepIterator):
     '''
-    An iterator that uses a simpack's step to produce states.
+    An iterator that uses a simpack's history step function to produce states.
     
-    The StepIterator uses under the hood the simpack's step function, be it a
-    simple step function or a step generator. Using a StepIterator instead of
-    using the simpack's step has a few advantages:
-    
-    1. The StepIterator automatically adds clock readings if the states are
-       missing them.
-    2. It's possible to change the step profile while iterating.    
-    3. Unless the step function raises `WorldEnded` to end the simulation, this
-       iterator is guaranteed to be infinite, even if the simpack's iterator is
-       finite.
-    
-    And possibly more.  
+    The step iterator automatically adds `.clock` readings if the states
+    produced by the step function are missing them.
     '''
-    # todo: make stuff private here?
+    
     def __init__(self, history_browser, step_profile):
         
         assert isinstance(history_browser, garlicsim.misc.BaseHistoryBrowser)
         self.history_browser = history_browser
+        '''The history browser that the history step function will use.'''
         
         self.history_step_function = step_profile.step_function
+        '''The history step function that will produce states for us.'''
         
         self.step_profile = copy.deepcopy(step_profile)
-        
-        self.raw_iterator = None
-        
-        self.current_state = None
-                    
+        '''
+        The step profile which contains the arguments given to step function.
+        '''
+           
         self.auto_clock_generator = AutoClockGenerator()
+        '''Auto-clock generator which ensure all states have `.clock`.'''
         
         self.auto_clock_generator.make_clock(
             self.history_browser.get_last_state()
         )
-            
-        self.step_profile_changed = False
         
         
     def __iter__(self): return self
@@ -59,16 +49,16 @@ class HistoryStepIterator(BaseStepIterator):
     
     def next(self):
         '''Crunch the next state.'''
-        self.current_state = self.history_step_function(
+        state =self.history_step_function(
             self.history_browser,
             *self.step_profile.args,
             **self.step_profile.kwargs
         )
-        self.auto_clock(self.current_state)
+        self._auto_clock(state)
         return self.current_state
     
         
-    def auto_clock(self, state):
+    def _auto_clock(self, state):
         '''If the state has no clock reading, give it one automatically.'''
         state.clock = self.auto_clock_generator.make_clock(state)
 

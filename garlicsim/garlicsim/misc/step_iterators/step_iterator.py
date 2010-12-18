@@ -58,11 +58,11 @@ class StepIterator(BaseStepIterator):
         self.current_state = self.step_function(self.current_state,
                                                 *self.step_profile.args,
                                                 **self.step_profile.kwargs)
-        self.auto_clock(self.current_state)
+        self._auto_clock(self.current_state)
         return self.current_state
                 
         
-    def auto_clock(self, state):
+    def _auto_clock(self, state):
         '''If the state has no clock reading, give it one automatically.'''
         state.clock = self.auto_clock_generator.make_clock(state)
         

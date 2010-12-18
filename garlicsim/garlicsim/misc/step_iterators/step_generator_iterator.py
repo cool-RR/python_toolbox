@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the `StepIterator` class.
+This module defines the `StepGeneratorIterator` class.
 
 See its documentation for more information.
 '''
@@ -16,13 +16,13 @@ from garlicsim.misc import BaseStepIterator, SimpackError, AutoClockGenerator
 
 class StepGeneratorIterator(BaseStepIterator):
     '''
-    An iterator that uses a simpack's step to produce states.
+    An iterator that uses a simpack's step generator to produce states.
     
-    The StepIterator uses under the hood the simpack's step function, be it a
-    simple step function or a step generator. Using a StepIterator instead of
-    using the simpack's step has a few advantages:
+    A step iterator uses the simpack's original step function (or generator)
+    under the hood. Using a step iterator instead of using the simpack's step
+    has a few advantages:
     
-    1. The StepIterator automatically adds clock readings if the states are
+    1. The step iterator automatically adds clock readings if the states are
        missing them.
     2. It's possible to change the step profile while iterating.    
     3. Unless the step function raises `WorldEnded` to end the simulation, this
@@ -31,7 +31,7 @@ class StepGeneratorIterator(BaseStepIterator):
     
     And possibly more.  
     '''
-    # todo: make stuff private here?
+    
     def __init__(self, state, step_profile):
         
         self.current_state = state
@@ -73,11 +73,11 @@ class StepGeneratorIterator(BaseStepIterator):
                                    '`StopIteration` without yielding even one '
                                    'state.' % self.step_profile.step_function)
                 
-        self.auto_clock(self.current_state)
+        self._auto_clock(self.current_state)
         return self.current_state
                 
         
-    def auto_clock(self, state):
+    def _auto_clock(self, state):
         '''If the state has no clock reading, give it one automatically.'''
         state.clock = self.auto_clock_generator.make_clock(state)
         
