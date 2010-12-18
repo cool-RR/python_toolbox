@@ -65,15 +65,7 @@ def _history_iter_simulate(simpack_grokker, state, iterations):
     
     This returns a generator that yields all the states one-by-one, from the
     initial state to the final one.
-    
-    Returns a list that spans all the states, from the initial one given to
-    the final one.
     '''
-    
-    if step_profile is None:
-        step_profile = garlicsim.misc.StepProfile(
-            simpack_grokker.default_step_function
-        )
     
     tree = garlicsim.data_structures.Tree()
     root = tree.add_state(state, parent=None)
@@ -101,8 +93,7 @@ def _history_iter_simulate(simpack_grokker, state, iterations):
     raise StopIteration
     
 
-def _non_history_iter_simulate(simpack_grokker, state, iterations,
-                               step_profile=None):
+def _non_history_iter_simulate(simpack_grokker, state, iterations):
     '''
     Simulate from the given state for the given number of iterations.
     
@@ -112,15 +103,7 @@ def _non_history_iter_simulate(simpack_grokker, state, iterations,
     
     This returns a generator that yields all the states one-by-one, from the
     initial state to the final one.
-    
-    Returns a list that spans all the states, from the initial one given to
-    the final one.
     '''
-
-    if step_profile is None:
-        step_profile = garlicsim.misc.StepProfile(
-            simpack_grokker.default_step_function
-        )
     
     iterator = simpack_grokker.get_step_iterator(state, step_profile)
     finite_iterator = cute_iter_tools.shorten(iterator, iterations)

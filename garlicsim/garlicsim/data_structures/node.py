@@ -19,7 +19,7 @@ from .tree_member import TreeMember
 # from .block import Block (at bottom of file.)
 
 
-__all__ = [.Node., .NodeError., .NodeLookupError.]
+__all__ = ['Node', 'NodeError', 'NodeLookupError']
 
 
 class NodeError(GarlicSimException):
