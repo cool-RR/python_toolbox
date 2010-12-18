@@ -60,8 +60,6 @@ def _history_list_simulate(simpack_grokker, state, iterations,
 
     (Internal function for history-dependent simulations only.)    
     
-    A simpack grokker must be passed as the first parameter.
-    
     Returns a list that spans all the states, from the initial one given to
     the final one.
     '''
@@ -94,8 +92,6 @@ def _non_history_list_simulate(simpack_grokker, state, iterations):
     Simulate from the given state for the given number of iterations.
     
     (Internal function for non-history-dependent simulations only.)
-
-    A simpack grokker must be passed as the first parameter.
     
     Returns a list that spans all the states, from the initial one given to
     the final one.

@@ -52,21 +52,14 @@ def simulate(state, iterations=1, *args, **kwargs):
                                       step_profile)
 
     
-def __history_simulate(simpack_grokker, state, iterations=1, step_profile=None):
+def __history_simulate(simpack_grokker, state, iterations, step_profile):
     '''    
     Simulate from the given state for the given number of iterations.
     
     (Internal function, for history-dependent simulations only)
-
-    A simpack grokker must be passed as the first parameter. A step profile may
-    be passed to be used with the step function.
     
     Returns the final state of the simulation.
     '''
-    if step_profile is None:
-            step_profile = garlicsim.misc.StepProfile(
-                simpack_grokker.default_step_function
-            )
             
     tree = garlicsim.data_structures.Tree()
     root = tree.add_state(state, parent=None)
@@ -91,15 +84,11 @@ def __history_simulate(simpack_grokker, state, iterations=1, step_profile=None):
     return final_state
 
 
-def __non_history_simulate(simpack_grokker, state, iterations=1,
-                           step_profile=None):
+def __non_history_simulate(simpack_grokker, state, iterations, step_profile):
     '''
     Simulate from the given state for the given number of iterations.
     
     (Internal function, for non-history-dependent simulations only.)
-
-    A simpack grokker must be passed as the first parameter. A step profile may
-    be passed to be used with the step function.
     
     Returns the final state of the simulation.
     '''

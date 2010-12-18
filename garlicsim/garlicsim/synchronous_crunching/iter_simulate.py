@@ -61,8 +61,6 @@ def _history_iter_simulate(simpack_grokker, state, iterations):
     
     (Internal function for history-dependent simulations only.)
 
-    A simpack grokker must be passed as the first parameter.
-    
     This returns a generator that yields all the states one-by-one, from the
     initial state to the final one.
     '''
@@ -99,8 +97,6 @@ def _non_history_iter_simulate(simpack_grokker, state, iterations):
     
     (Internal function for non-history-dependent simulations only.)
 
-    A simpack grokker must be passed as the first parameter.
-    
     This returns a generator that yields all the states one-by-one, from the
     initial state to the final one.
     '''
