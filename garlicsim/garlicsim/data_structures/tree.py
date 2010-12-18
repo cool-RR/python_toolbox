@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-A module that Defines the `Tree` class and the related TreeError exception.
+Defines the `Tree` class and the related `TreeError` exception.
 
 See their documentation for more information.
 '''

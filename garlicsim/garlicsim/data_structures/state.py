@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-A module that Defines the `State` class.
+Defines the `State` class.
 
 See its documentation for more info.
 '''
@@ -24,7 +24,7 @@ class State(object):
     All the information about the state of the simulation should be saved in
     attributes of the state object.
 
-    When a state is created, a `.clock` attribute must be assigned to it,
+    When a state is created, a `.clock` attribute should be assigned to it,
     specifying what time it is in this state.
 
     A state object must always be pickleable, as do all the attributes assigned
