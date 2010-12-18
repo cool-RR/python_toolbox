@@ -211,9 +211,6 @@ class MappingTestCase(TestBase):
         self.assertEqual(count, 2)
 
         
-from test import mapping_tests
-
-
 class WeakKeyIdentityDictTestCase(
     forked_mapping_tests.BasicTestMappingProtocol
     ):
