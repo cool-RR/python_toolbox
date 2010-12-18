@@ -24,6 +24,11 @@ from garlicsim.asynchronous_crunching import \
 
 class Process(multiprocessing.Process):
     '''The actual system process used by `ProcessCruncher`.'''
+    # One of the reasons that `Process` is a separate entity from
+    # `ProcessCruncher` is that because the way the `multiprocessing` module
+    # works, all arguments to `Process.__init__` must be pickleable, which would
+    # prevent us from getting the crunching manager as an argument, since it's
+    # not pickleable.
     
     def __init__(self, step_iterator_getter, initial_state, crunching_profile):        
         multiprocessing.Process.__init__(self)

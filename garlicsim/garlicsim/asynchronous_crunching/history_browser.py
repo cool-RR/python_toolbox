@@ -16,7 +16,7 @@ import garlicsim.general_misc.queue_tools as queue_tools
 import garlicsim.general_misc.third_party.decorator
 
 import garlicsim.misc
-from obsolete_cruncher_error import ObsoleteCruncherError
+from .obsolete_cruncher_error import ObsoleteCruncherError
 
 
 __all__ = ["HistoryBrowser"]
@@ -34,21 +34,22 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
     '''
     A device for requesting information about the history of the simulation.
     
-    A HistoryBrowser is a device for requesting information about the history of
-    the simulation. It is intended to be used by ThreadCruncher in simulations
-    that are history-dependent.
+    A `HistoryBrowser` is a device for requesting information about the history
+    of the simulation. It is intended to be used by `ThreadCruncher` in
+    simulations that are history-dependent.
     
-    With a HistoryBrowser one can request states from the simulation's timeline.
-    States can be requested by clock time or position in the timeline or by
-    other measures; See documentation for this class's methods.
+    With a `HistoryBrowser` one can request states from the simulation's
+    timeline. States can be requested by clock time or position in the timeline
+    or by other measures; See documentation for this class's methods.
     
     Since we do not know whether the states we request have been implemented in
-    the tree already, or they are still in the work_queue, it's the job of the
-    HistoryBrowser to find that out. This is done transperantly for the user.
+    the tree already, or they are still in the `.work_queue`, it's the job of
+    the `HistoryBrowser` to find that out. This is done transperantly for the
+    user.
     
-    When using a HistoryBroswer, the lock of the project's tree is acquired for
-    reading. That acquiring action can also be invoked by using HistoryBrowser
-    as a context manager.
+    When using a `HistoryBroswer`, the lock of the project's tree is acquired
+    for reading. That acquiring action can also be invoked by using
+    `HistoryBrowser` as a context manager.
     '''
     
     def __init__(self, cruncher):
@@ -57,18 +58,24 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         self.tree = self.project.tree
         self.tree_lock = self.project.tree.lock
     
+        
     def __enter__(self, *args, **kwargs):
         '''Acquire the lock of the project's tree for reading.'''
         self.tree_lock.acquireRead()
-    
+
+        
     def __exit__(self, *args, **kwargs):
         '''Release the project's tree_lock.'''
         self.tree_lock.release()
-     
+
+        
     @with_self
     def get_last_state(self):
-        '''Get the last state in the timeline. Identical to __getitem__(-1).'''
+        '''
+        Get the last state in the timeline. Identical to `.__getitem__(-1)`.
+        '''
         return self[-1]
+
     
     @with_self
     def __getitem__(self, index):
@@ -78,7 +85,8 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
             return self.__get_item_negative(index)
         else: # index >= 0
             return self.__get_item_positive(index)
-    
+
+        
     @with_self
     def __get_item_negative(self, index):
         '''
@@ -116,21 +124,22 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
             except IndexError:
                 queue_length = self.cruncher.work_queue.qsize()
                 timeline_length = queue_length + path_length
-                message = "You asked for node number " + str(index) + \
-                          " while the timeline has only " + timeline_length + \
-                          " states, comprised by " + path_length + \
-                          " states in the tree and " + queue_length + \
-                          " states in the queue."
+                message = 'You asked for node number ' + str(index) + \
+                          ' while the timeline has only ' + timeline_length + \
+                          ' states, comprised by ' + path_length + \
+                          ' states in the tree and ' + queue_length + \
+                          ' states in the queue.'
                 raise IndexError(message)
-        
+
+            
     @with_self
     def __get_item_from_queue(self, index):
         '''
         Obtain an item by index number from the work_queue of our cruncher.
         '''
-        item = queue_tools.get_item(self.cruncher.work_queue, index)
-        return item
-        
+        return queue_tools.get_item(self.cruncher.work_queue, index)
+
+    
     @with_self
     def get_state_by_monotonic_function(self, function, value,
                                         rounding=binary_search.CLOSEST):
@@ -179,6 +188,7 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
                 # The queue is just totally empty.
                 return binary_search.make_both_data_into_preferred_rounding \
                        (tree_result, function, value, rounding)
+
             
     @with_self   
     def __get_both_states_by_monotonic_function_from_tree(self, function, value):
@@ -219,6 +229,7 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         
         return binary_search.binary_search\
                (queue_as_list, function, value, rounding)
+
     
     @with_self
     def __len__(self):
@@ -237,6 +248,7 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         path_length = our_path.__len__(tail=our_node)
         
         return queue_length + path_length
+
     
     @with_self
     def __get_our_node(self):

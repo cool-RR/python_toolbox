@@ -95,9 +95,8 @@ class GuiProject(object):
         #                                                                     #
         
         if (not project): # Note this is the project given as an argument
-            if 'ProcessCruncher' in vars(crunchers) and \
-               crunchers.ProcessCruncher in simpack_grokker.\
-                                            available_cruncher_types:
+            if (crunchers.ProcessCruncher in 
+                simpack_grokker.available_cruncher_types):
                 
                 self.project.crunching_manager.cruncher_type = \
                     crunchers.ProcessCruncher
