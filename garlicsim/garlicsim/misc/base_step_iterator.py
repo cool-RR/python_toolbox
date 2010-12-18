@@ -7,7 +7,6 @@ This module defines the `BaseStepIterator` class.
 See its documentation for more information.
 '''
 
-
 import copy
 
 from garlicsim.general_misc.third_party import abc
@@ -25,6 +24,9 @@ class BaseStepIterator(Iterator, object):
     
     The step iterator automatically adds `.clock` readings if the states
     produced by the step function are missing them.
+    
+    This is an abstract base class; The `garlicsim.misc.step_iterators` package
+    contains a collection of step iterators, one for each step type.
     '''
     __metaclass__ = abc.ABCMeta
 

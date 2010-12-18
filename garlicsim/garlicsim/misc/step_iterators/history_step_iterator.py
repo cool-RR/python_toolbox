@@ -7,9 +7,6 @@ This module defines the `HistoryStepIterator` class.
 See its documentation for more information.
 '''
 
-
-import copy
-
 import garlicsim
 from garlicsim.misc import BaseStepIterator, SimpackError, AutoClockGenerator
 
@@ -31,7 +28,7 @@ class HistoryStepIterator(BaseStepIterator):
         self.history_step_function = step_profile.step_function
         '''The history step function that will produce states for us.'''
         
-        self.step_profile = copy.deepcopy(step_profile)
+        self.step_profile = step_profile
         '''
         The step profile which contains the arguments given to step function.
         '''
