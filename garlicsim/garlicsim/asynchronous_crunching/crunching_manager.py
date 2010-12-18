@@ -57,6 +57,7 @@ class CrunchingManager(object):
     jobs. It will then take work from these crunchers, put it into the tree,
     and delete the jobs when they are completed.
     '''
+  
     def __init__(self, project):        
         
         self.project = project
@@ -166,9 +167,9 @@ class CrunchingManager(object):
             # job in self.crunchers
             #
             # Okay, so it's an active job. We'll take work from the cruncher and
-            # put in the tree, updating the job to point at `new_leaf`, which is
-            # the node (leaf) containing the most recent state produced by the
-            # cruncher.
+            # put it in the tree, updating the job to point at `new_leaf`, which
+            # is the node (leaf) containing the most recent state produced by
+            # the cruncher.
             #
             # The cruncher may either be active and crunching, or it may have
             # stopped, (because of a `WorldEnded` exception, or other reasons.)
@@ -186,6 +187,10 @@ class CrunchingManager(object):
             # crunching profile, if that has been changed on the job.
             
             if not job.is_done():
+                
+                # (We have called `job.is_done` again because the job's node may
+                # have changed, and possibly the new node *does* satisfy the
+                # job's crunching profile that the previous node didn't.)
                 
                 crunching_profile = job.crunching_profile
                 
