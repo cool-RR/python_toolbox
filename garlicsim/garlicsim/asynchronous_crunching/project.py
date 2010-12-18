@@ -381,11 +381,11 @@ class Project(object):
         This returns a generator that yields all the nodes one-by-one, from the
         initial node to the final one.
             
-        If you wish, in `*args` and `**kwargs` you may specify simulation parameters
-        and/or a specific step function to use. (You may specify a step function
-        either as the first positional argument or the `step_function` keyword
-        argument.) You may also pass in an existing step profile as first
-        argument.
+        If you wish, in `*args` and `**kwargs` you may specify simulation
+        parameters and/or a specific step function to use. (You may specify a
+        step function either as the first positional argument or the
+        `step_function` keyword argument.) You may also pass in an existing
+        step profile as first argument.
         '''
         
         step_profile = self.build_step_profile(*args, **kwargs)
@@ -399,7 +399,7 @@ class Project(object):
         
                 
     def __history_dependent_iter_simulate(self, node, iterations,
-                                          step_profile=None):
+                                          step_profile):
         '''
         Simulate from the given node for the given number of iterations.
         
@@ -414,12 +414,11 @@ class Project(object):
         A step profile may be passed to be used with the step function.
         '''
         
-        if step_profile is None:
-            step_profile = self.build_step_profile()
-        
         path = node.make_containing_path()
-        history_browser = \
-            garlicsim.synchronous_crunching.HistoryBrowser(path, tail_node=node)
+        history_browser = garlicsim.synchronous_crunching.HistoryBrowser(
+            path,
+            tail_node=node
+        )
         
         iterator = self.simpack_grokker.get_step_iterator(history_browser,
                                                           step_profile)
@@ -443,13 +442,14 @@ class Project(object):
                 history_browser.tail_node = current_node
                 history_browser.path = current_node.make_containing_path()
                 # Similarly to the `__history_dependent_simulate` method, here
-                # we also need to recreate the path. But in this case we need to
-                # do it not only on the first run, but on *each* run of the
+                # we also need to recreate the path. But in this case we need
+                # to do it not only on the first run, but on *each* run of the
                 # loop, because this is a generator, and the user may wreak
                 # havoc with the tree between `yield`s, causing our original
-                # path not to lead to the tail_node anymore.                
-                # todo optimize: The fact we recreate a path every time might be
-                # costly.
+                # path not to lead to the `tail_node` anymore.
+                
+                # todo optimize: The fact we recreate a path every time might
+                # be costly.
                     
                 yield current_node
         
@@ -472,9 +472,6 @@ class Project(object):
         
         A step profile may be passed to be used with the step function.
         '''
-        
-        if step_profile is None:
-            step_profile = self.build_step_profile()
 
         state = node.state
                 
@@ -501,7 +498,7 @@ class Project(object):
             
     
     def __getstate__(self):
-        project_vars = dict(self.__dict__)
+        project_vars = dict(vars(self))
         
         del project_vars['crunching_manager']
         del project_vars['simpack_grokker']
@@ -529,8 +526,7 @@ class Project(object):
         <garlicsim.Project containing 101 nodes and employing 4 crunchers at
         0x1f668d0>
         '''
-        # Todo: better have the simpack mentioned here, not doing it cause it's
-        # currently in a module wrapper.
+        # Todo: better have the simpack mentioned here
         
         # todo: show cruncher types, even listing for different types if there
         # are different types. Length is not a problem because this is a rare
@@ -550,6 +546,8 @@ class Project(object):
     
     def build_step_profile(self, *args, **kwargs):
         '''
+        Build a step profile tododoc
+        
         there's one here in addition to that in the simpack grokker because the default step function here can be changed
         '''
         parse_arguments_to_step_profile = \
