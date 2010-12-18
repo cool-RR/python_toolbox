@@ -2,8 +2,9 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the `CrunchingManager` class. See its documentation for more
-information.
+This module defines the `CrunchingManager` class.
+
+See its documentation for more information.
 '''
 
 from __future__ import with_statement
@@ -64,7 +65,7 @@ class CrunchingManager(object):
         '''
         The jobs that the crunching manager will be responsible for doing.
         
-        These are of the class garlicsim.asynchronous_crunching.Job.
+        These are of the class `garlicsim.asynchronous_crunching.Job`.
         '''
         
         self.crunchers = {}
@@ -75,7 +76,7 @@ class CrunchingManager(object):
         Dict that maps each cruncher to its step options profile.
         
         This exists because if the step profile for a job changes, we need to
-        retire the cruncher and make a new ones; Crunchers can't change step
+        retire the cruncher and make a new one; Crunchers can't change step
         profiles on the fly. So we use this dict to track which step profile
         each cruncher uses.
         '''
@@ -86,7 +87,7 @@ class CrunchingManager(object):
         A change tracker which tracks changes made to crunching profiles.
         
         This is used to update the crunchers if the crunching profile for the
-        job they're working on has changed.
+        job they're working on has been changed.
         '''
         
         available_cruncher_types = \
@@ -101,8 +102,13 @@ class CrunchingManager(object):
         
         self.cruncher_type = available_cruncher_types[0]
         '''
+        The cruncher type that we will use to crunch the simulation.
         
-        note that the user is allowed to set this directly.
+        All crunchers that the crunching manager will create will be of this
+        type. The user may assign a different cruncher type to `.cruncher_type`,
+        and on the next call to `.sync_crunchers` the crunching manager will
+        retire all the existing crunchers and replace them with crunchers of the
+        new type.
         '''
         
         
