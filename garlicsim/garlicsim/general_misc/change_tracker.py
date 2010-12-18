@@ -30,8 +30,8 @@ class ChangeTracker(object):
         Checks in an object for change tracking.
         
         The first time you check in an object, it will return True. Every time
-        .check_in will be called with the same object, it will return whether the
-        object changed since the last time it was checked in.
+        .check_in will be called with the same object, it will return whether
+        the object changed since the last time it was checked in.
         '''
         
         new_pickle = cPickle.dumps(thing)
