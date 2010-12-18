@@ -21,7 +21,7 @@ from garlicsim.general_misc import math_tools
 from garlicsim.general_misc import path_tools
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc.infinity import Infinity
-from garlicsim.general_misc.ordered_set import OrderedSet
+from garlicsim.general_misc.nifty_collections import OrderedSet
 
 import garlicsim
 

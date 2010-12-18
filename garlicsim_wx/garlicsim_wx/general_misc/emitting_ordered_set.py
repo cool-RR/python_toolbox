@@ -1,5 +1,9 @@
-from garlicsim.general_misc.ordered_set import OrderedSet, KEY, PREV, NEXT
+from garlicsim.general_misc.nifty_collections.ordered_set import (
+    OrderedSet, KEY, PREV, NEXT
+)
 from garlicsim_wx.general_misc.emitters import Emitter
+
+__all__ = ['EmittingOrderedSet']
 
 class EmittingOrderedSet(OrderedSet):
     def __init__(self, emitter, items=()):

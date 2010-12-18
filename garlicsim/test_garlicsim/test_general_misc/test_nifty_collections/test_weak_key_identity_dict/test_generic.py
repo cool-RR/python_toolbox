@@ -7,7 +7,7 @@ import operator
 
 from test_garlicsim.third_party import forked_mapping_tests
 
-from garlicsim.general_misc.weak_key_identity_dict import WeakKeyIdentityDict
+from garlicsim.general_misc.nifty_collections import WeakKeyIdentityDict
 
 # Used in ReferencesTestCase.test_ref_created_during_del() .
 ref_from_del = None

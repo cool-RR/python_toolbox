@@ -11,7 +11,7 @@ import copy
 
 from garlicsim.general_misc import misc_tools
 from garlicsim.general_misc import address_tools
-from garlicsim.general_misc.ordered_set import OrderedSet
+from garlicsim.general_misc.nifty_collections import OrderedSet
 
 import garlicsim.misc
 from garlicsim.misc import GarlicSimException

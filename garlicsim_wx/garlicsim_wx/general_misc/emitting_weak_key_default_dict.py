@@ -1,4 +1,4 @@
-from garlicsim.general_misc.weak_key_default_dict import WeakKeyDefaultDict
+from garlicsim.general_misc.nifty_collections import WeakKeyDefaultDict
 
 
 class EmittingWeakKeyDefaultDict(WeakKeyDefaultDict):
