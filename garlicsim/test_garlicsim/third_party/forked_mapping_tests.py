@@ -1,5 +1,7 @@
 from garlicsim.general_misc.third_party import unittest2
 
+__test__ = False
+
 class BasicTestMappingProtocol(unittest2.TestCase):
     # This base class can be used to check that an object conforms to the
     # mapping protocol
