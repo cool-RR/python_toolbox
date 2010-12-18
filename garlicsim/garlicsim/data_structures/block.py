@@ -13,8 +13,9 @@ from garlicsim.general_misc import address_tools
 
 from garlicsim.misc import GarlicSimException
 
-from tree_member import TreeMember
-# We are doing `from node import Node` in the bottom of the file.
+from .tree_member import TreeMember
+# from .node import Node (at bottom of file.)
+
 
 __all__ = ["Block", "BlockError"]
 
@@ -41,24 +42,30 @@ class Block(TreeMember):
         2. All members, except the last one, must have no ends, and no
            children except their successor in the block.
         3. The last node may have any kinds of children and ends.
-        4. All members share the same step_profile.
+        4. All members share the same `.step_profile`.
 
     If you want to check whether a certain node is in a block or not,
     check its `.block` attribute.
 
     '''
-    # todo: Possibly add a `children` property that will get from the last node.
-    # Will simplify a lot of code. (Possibly `parent` too.)
+    # todo: Possibly add a `children` property that will get from the last
+    # node. Will simplify a lot of code. (Possibly `parent` too.)
     
     def __init__(self, node_list):
-        '''Construct a block from the members of node_list.'''
+        '''Construct a block from the members of `node_list`.'''
+        
         self.alive = True
+        '''Flag saying whether this block is alive.'''
+        
         self.step_profile = None
+        '''Step profile with which all the nodes in the block were crunched.'''
+        
         self.__node_list = []
         self.add_node_list(node_list)
 
         
     def soft_get_block(self):
+        '''Get the block.'''
         return self
     
     
@@ -74,7 +81,7 @@ class Block(TreeMember):
         assert self.alive
         
         if not self.__node_list:
-            # If the node list is [], let's make it [node].
+            # If the node list is `[]`, let's make it `[node]`.
             self.__node_list.append(node)
             node.block = self
             self.step_profile = node.step_profile
@@ -109,9 +116,12 @@ class Block(TreeMember):
         Add a list of nodes to the block.
         
         These nodes must already be successive to each other.
+        
         Also, one of the following conditions must be true:
+        
             1. The first node in the list is a child of the last node in the
                block.
+               
             2. The last node in the list is the parent of the first node in
                the block.
         '''
@@ -412,4 +422,4 @@ class Block(TreeMember):
                    hex(id(self))
                )
         
-from node import Node
+from .node import Node

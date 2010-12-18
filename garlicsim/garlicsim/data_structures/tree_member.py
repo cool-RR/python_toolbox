@@ -26,8 +26,8 @@ class TreeMember(object):
         '''
         Get the length of the tree member.
         
-        For a node or an end, this will be 1. For a block, it will be the number
-        of contained nodes.
+        For a node or an end, this will be 1. For a block, it will be the
+        number of contained nodes.
         '''
         raise NotImplementedError
 
@@ -57,9 +57,10 @@ class TreeMember(object):
         '''
         Get a list of all possible paths that contain this tree member.
         
-        Note: There may be paths that contain this tree member which will not be
-        identical to one of the paths given here, because these other paths may
-        specify decisions that are not even on the same root as these paths.
+        Note: There may be paths that contain this tree member which will not
+        be identical to one of the paths given here, because these other paths
+        may specify decisions that are not even on the same root as these
+        paths.
         '''
     
     
@@ -106,10 +107,10 @@ class TreeMember(object):
         Get an ancestor of this tree member.
         
         `generations` specifies the number of generation that the returned
-        ancestor should be above the current tree member. `round` determines how
-        this method will behave if it was asked for too many generations back,
-        and not enough existed. If `round` is `True`, it will return the root.
-        If `round` is `False`, it will raise a `NodeLookupError`.
+        ancestor should be above the current tree member. `round` determines
+        how this method will behave if it was asked for too many generations
+        back, and not enough existed. If `round` is `True`, it will return the
+        root. If `round` is `False`, it will raise a `NodeLookupError`.
         '''
 
     

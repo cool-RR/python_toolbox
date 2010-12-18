@@ -266,7 +266,7 @@ class Path(object):
                         raise StopIteration
                     elif head in current.block:
                         index_of_head = current.block.index(head)
-                        for thing in current.block[ : (index_of_head - 1) : -1 ]:
+                        for thing in current.block[:(index_of_head - 1):-1]:
                             yield thing
                         raise StopIteration
                 else: # head is None
@@ -329,8 +329,8 @@ class Path(object):
         if len(kids) > 1:
             kid = kids[0]
             # Whether it should take `kids[0]` or `kids[-1]` is a subject for
-            # debate. The question is, when you update the tree, do you want the
-            # old paths to point to the new nodes or the old?
+            # debate. The question is, when you update the tree, do you want
+            # the old paths to point to the new nodes or the old?
             self.decisions[real_thing] = kid
             return kid
 
@@ -348,7 +348,6 @@ class Path(object):
         #todo: allow slicing? make Path.states for this and for iterating?
         #todo: generalize `tail` to blocks
         assert isinstance(index, int)
-        
         
         if index >= 0:
             return self.__get_item_positive(index, tail=tail)
@@ -427,7 +426,8 @@ class Path(object):
         You may optionally specify `head`, which may be either a node or block.
         '''
 
-        thing = None # Setting to None before loop, so we know if loop was empty
+        # Setting to `None` before loop, so we know if loop was empty:
+        thing = None 
         
         for thing in self.iterate_blockwise(head=head):
             pass
@@ -440,7 +440,9 @@ class Path(object):
             raise PathOutOfRangeError("You asked for the last node in the "
                                       "path, but it's completely empty.")
 
+        
     def get_ends_of_last_node(self, head=None):
+        '''Get the ends of the last node in the path.'''
         last_node = self.get_last_node(head=head)
         return last_node.ends
         
@@ -484,10 +486,10 @@ class Path(object):
                                                                       value)
         if tail_node is not None:
             new_both = list(both)
-            end_clock = tail_node.state.clock
-            if new_both[0] and new_both[0].state.clock > end_clock:
+            tail_clock = tail_node.state.clock
+            if new_both[0] and new_both[0].state.clock > tail_clock:
                 new_both[0] = tail_node
-            if new_both[1] and new_both[1].state.clock > end_clock:
+            if new_both[1] and new_both[1].state.clock > tail_clock:
                 new_both[1] = None
             both = tuple(new_both)
             
@@ -602,12 +604,12 @@ class Path(object):
         Get the node which "occupies" the given timepoint.
         
         A node is considered to "occupy" a timepoint if it is the
-        highest-clocked node before the timepoint, AND there exists another node
-        which has a clock higher than timepoint (that higher node is not
+        highest-clocked node before the timepoint, AND there exists another
+        node which has a clock higher than timepoint (that higher node is not
         returned, it just has to exist for the first node to qualify as
         "occupying".)
         
-        If no such node exists, returns None.
+        If no such node exists, returns `None`.
         '''
         return self.get_node_by_clock(timepoint,
                                       rounding=binary_search.LOW_IF_BOTH)
@@ -660,15 +662,16 @@ class Path(object):
         '''
         Get a lower path than this one.
         
-        "Lower" means that in some point in the past the other path goes through
-        a child node with a lower index number (in `children`) than this path.
+        "Lower" means that in some point in the past the other path goes
+        through a child node with a lower index number (in `children`) than
+        this path.
         
         This method will return the highest path that is just below this path.
         '''
-        return self._get_higher_path(node, reverse=True)
+        return self._get_higher_path(node, _reverse=True)
                 
     
-    def _get_higher_path(self, node, reverse=False):
+    def _get_higher_path(self, node, _reverse=False):
         '''
         Get a higher path than this one.
         
@@ -679,7 +682,7 @@ class Path(object):
         This method will return the lowest path that is just above this path.
         '''
 
-        my_iter = __builtin__.reversed if reverse else iter
+        my_iter = __builtin__.reversed if _reverse else iter
         
         wanted_clock = node.state.clock
         
@@ -688,18 +691,18 @@ class Path(object):
                 continue
             my_index = parent.children.index(kid)
 
-            if reverse:
+            if _reverse:
                 if my_index > 0:
                     kids_to_try = parent.children[:my_index]
                     break
             
-            if not reverse:
+            if not _reverse:
                 if my_index < len(parent.children) -1:
                     kids_to_try = parent.children[my_index+1:]
                     break
         else:
             raise PathLookupError('This path is the %s one.' % \
-                                  ('lowest' if reverse else 'highest'))
+                                  ('lowest' if _reverse else 'highest'))
         
         for node in my_iter(kids_to_try):
             paths = node.all_possible_paths() # todo: make reversed argument
@@ -708,9 +711,9 @@ class Path(object):
                 if path[-1].state.clock >= wanted_clock:
                     return path
         
-        raise PathLookupError("This path is the %s one which extends enough "
-                              "in the future to the clock of the specified  "
-                              "node." % ('lowest' if reverse else 'highest'))
+        raise PathLookupError('This path is the %s one which extends enough '
+                              'in the future to the clock of the specified  '
+                              'node.' % ('lowest' if _reverse else 'highest'))
                
             
     def __repr__(self):
@@ -743,11 +746,13 @@ class Path(object):
     
     __copy__ = copy
     
+    
     def __eq__(self, other):
         # Currently horribly inefficient
         assert isinstance(other, Path)
         return list(self) == list(other)
-        
+
+    
     def __req__(self, other):
         return self.__eq__(other)
     
