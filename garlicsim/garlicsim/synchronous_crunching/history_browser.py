@@ -72,14 +72,18 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         
         The function must be a monotonic rising function on the timeline.
         
-        See documentation of `binary_search.roundings` for details about rounding
-        options.
+        See documentation of `binary_search.roundings` for details about
+        rounding options.
         '''
         assert issubclass(rounding, binary_search.Rounding)
         
         new_function = lambda node: function(node.state)
-        result_in_nodes = self.path.get_node_by_monotonic_function \
-                        (new_function, value, rounding, tail_node=self.tail_node)
+        result_in_nodes = self.path.get_node_by_monotonic_function(
+            new_function,
+            value,
+            rounding,
+            tail_node=self.tail_node
+        )
         
         if rounding is binary_search.BOTH:
             result = tuple((node.state if node is not None else None)
@@ -89,8 +93,10 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
                    else None
             
         return result
+
     
     def __len__(self):
         '''Get the length of the timeline in nodes.'''
         return self.path.__len__(tail=self.tail_node)
+    
     
