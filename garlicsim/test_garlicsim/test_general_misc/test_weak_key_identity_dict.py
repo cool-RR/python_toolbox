@@ -77,7 +77,8 @@ class MappingTestCase(TestBase):
         return dict_, objects
 
 
-    def check_popitem(self, key1, value1, key2, value2):
+    def test_weak_keyed_dict_popitem(self):
+        key1, value1, key2, value2 = C(), "value 1", C(), "value 2"
         weakdict = WeakKeyIdentityDict()
         weakdict[key1] = value1
         weakdict[key2] = value2
@@ -95,27 +96,21 @@ class MappingTestCase(TestBase):
         else:
             self.assertTrue(v is value2)
 
-            
-
-    def test_weak_keyed_dict_popitem(self):
-        self.check_popitem(WeakKeyIdentityDict,
-                           C(), "value 1", C(), "value 2")
-
         
-    def test_weak_keyed_dict_setdefault(self, key, value1, value2):
+    def test_weak_keyed_dict_setdefault(self):
         key, value1, value2 = C(), "value 1", "value 2"
         self.assertTrue(value1 is not value2,
                         "invalid test"
                         " -- value parameters must be distinct objects")
         weakdict = WeakKeyIdentityDict()
         o = weakdict.setdefault(key, value1)
-        self.assertIs(o, value1)
+        assert o is value1
         self.assertIn(key, weakdict)
         self.assertIs(weakdict.get(key), value1)
         self.assertIs(weakdict[key], value1)
 
         o = weakdict.setdefault(key, value2)
-        self.assertIs(o, value1)
+        assert o is value1
         self.assertIn(key, weakdict)
         self.assertIs(weakdict.get(key), value1)
         self.assertIs(weakdict[key], value1)
@@ -133,13 +128,13 @@ class MappingTestCase(TestBase):
         for k in weakdict.keys():
             assert k in dict_
             v = dict_.get(k)
-            assert v in weakdict[k]
-            assert v in weakdict.get(k)
+            assert v is weakdict[k]
+            assert v is weakdict.get(k)
         for k in dict_.keys():
             assert k in weakdict
             v = dict_[k]
-            self.assertIs(v, weakdict[k])
-            self.assertIs(v, weakdict.get(k))
+            assert v is weakdict[k]
+            assert v is weakdict.get(k)
             
         
     def test_weak_keyed_delitem(self):
