@@ -11,8 +11,8 @@ from garlicsim.general_misc import cute_iter_tools
 from garlicsim.general_misc import misc_tools
 from garlicsim.general_misc import address_tools
 
-from node import Node
-from block import Block
+from .node import Node
+from .block import Block
 
 
 class NodeRange(object):
@@ -37,7 +37,7 @@ class NodeRange(object):
     def make_path(self):
         '''Make a path that goes through this node range.'''
         node_around_tail = self.tail if isinstance(self.tail, Node) else \
-                          self.tail[0]
+                           self.tail[0]
         return node_around_tail.make_containing_path()
 
     
@@ -51,9 +51,11 @@ class NodeRange(object):
         path = self.make_path()
         assert (self.head in path.__iter__(tail=self.tail))
         
+        
     def __iter__(self):
         '''Iterate on the nodes in this range.'''
         return self.make_path().__iter__(head=self.head, tail=self.tail)
+
     
     def iterate_blockwise(self):
         '''
@@ -62,9 +64,11 @@ class NodeRange(object):
         path = self.make_path()
         return path.iterate_blockwise(head=self.head, tail=self.tail)
 
+    
     def __contains__(self, node):
         path = self.make_path()
         return path.__contains__(node, head=self.head, tail=self.tail)
+
     
     def clone_with_blocks_dissolved(self):
         '''
@@ -84,6 +88,7 @@ class NodeRange(object):
             new_tail = self.tail
         
         return NodeRange(new_head, new_tail)
+
     
     def get_outside_children(self):
         '''
@@ -98,13 +103,15 @@ class NodeRange(object):
             outside_children += [child for child in candidate.children if child
                                  not in self]
         return outside_children
-            
+
+    
     def copy(self):
         '''Shallow-copy the node range.'''
         klass = type(self)
         return klass(self.head, self.tail)
 
     __copy__ = copy
+
     
     def __repr__(self):
         '''
@@ -135,6 +142,7 @@ class NodeRange(object):
                 
                 hex(id(self))
                )
+
     
     def __eq__(self, other):
         if not isinstance(other, NodeRange):
@@ -142,6 +150,8 @@ class NodeRange(object):
         r1 = self.clone_with_blocks_dissolved()
         r2 = other.clone_with_blocks_dissolved()
         return (r1.head is r2.head) and (r1.tail is r2.tail)
+
     
     def __req__(self, other):
         return self.__eq__(other)
+    

@@ -10,10 +10,11 @@ See its documentation for more information.
 from garlicsim.general_misc import misc_tools
 from garlicsim.general_misc import address_tools
 
-from tree_member import TreeMember
-from node import Node
-
+from .tree_member import TreeMember
+from .node import Node
+# from .block import Block (At bottom of file)
     
+
 class End(TreeMember):
     '''
     An end of the simulation.
@@ -55,7 +56,7 @@ class End(TreeMember):
         '''
         Just return `self`.
         
-        (This is a method of all TreeMembers that returns the block that the
+        (This is a method of all `TreeMember`s that returns the block that the
         tree member belongs to, if there is one. But an end never belongs to a
         block.)
         '''
@@ -75,14 +76,13 @@ class End(TreeMember):
         '''
         Get a list of all possible paths that lead to this end.
         
-        (This method was invented for nodes and blocks and makes sense for them;
-        For an end, it will just return the one single path that leads to it,
-        since there can't be any forks after an end.)
+        (This method was invented for nodes and blocks and makes sense for
+        them; For an end, it will just return the one single path that leads to
+        it, since there can't be any forks after an end.)
         
-        Note: There may be paths that contain this node which will not be
-        identical to one of the paths given here, because these other paths
-        may specify decisions that are not even on the same root as these
-        paths.
+        Note: There may be paths that contain this end which will not be
+        identical to one of the paths given here, because these other paths may
+        specify decisions that are not even on the same root as these paths.
         '''
         return self.parent.all_possible_paths()
     
@@ -91,8 +91,8 @@ class End(TreeMember):
         '''
         Create a path that leads to this end.
         
-        (This method was invented for nodes and blocks and makes sense for them;
-        For an end, the "past path" is identical to the one made by
+        (This method was invented for nodes and blocks and makes sense for
+        them; For an end, the "past path" is identical to the one made by
         `make_containing_path`, since there can't be any forks after an end.)
         
         Returns the path.
@@ -104,9 +104,9 @@ class End(TreeMember):
         '''
         Get `{}`.
         
-        (This method was invented for nodes and blocks and makes sense for them;
-        There are no leaves, or anything else for that matter, that come after
-        an end.)
+        (This method was invented for nodes and blocks and makes sense for
+        them; There are no leaves, or anything else for that matter, that come
+        after an end.)
         '''
         
         return {}
@@ -156,7 +156,7 @@ class End(TreeMember):
         
         Example output:        
         <garlicsim.data_structures.End from state with clock 6.5, crunched with
-        StepProfile(<unbound method State.step>), at 0x1ffde70>
+        life.State.step(<state>), at 0x1ffde70>
         '''
         
         return '<%s from state with clock %s, crunched with %s, at %s>' % \
@@ -168,5 +168,5 @@ class End(TreeMember):
             )
         
 
-from block import Block
+from .block import Block
 
