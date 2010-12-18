@@ -49,8 +49,7 @@ class CrunchingProfile(object):
 
     
     __hash__ = None
-    def z__hash__(self):
-        return hash((self.clock_target, self.step_profile))
+    # `CrunchingProfile` is mutable so it should never be hashed.
 
     
     def __ne__(self, other):
@@ -64,13 +63,13 @@ class CrunchingProfile(object):
         Example output:
         
             CrunchingProfile(clock_target=Infinity,
-            step_profile=StepProfile(<unbound method State.step>))
+            step_profile=life.State.step(<state>))
         '''
-        stuff = []
-        stuff.append('clock_target=%s' % self.clock_target)
-        stuff.append('step_profile=%s' % self.step_profile.__repr__(short_form=True))
-        temp = ", ".join(stuff)
-        return ('CrunchingProfile(%s)' % temp)
+        return 'CrunchingProfile(clock_target=%s, step_profile=%s)' % (
+            self.clock_target,
+            self.step_profile.__repr__(short_form=True)
+        )
+        
     
     
     
