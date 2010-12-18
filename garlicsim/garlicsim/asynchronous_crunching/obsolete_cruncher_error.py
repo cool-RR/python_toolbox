@@ -15,5 +15,6 @@ class ObsoleteCruncherError(BaseException):
     decided that the work assigned to this cruncher is no longer wanted, and
     should therefore be stopped.
     '''
-    # Inherits from BaseException because it is an exit exception
-    # todo: I heard that BaseException.message is deprecated! Problematic?
+    # Inherits from BaseException because it is an exit exception    
+    # todo: I heard that `BaseException.message` is deprecated! Problematic?
+    # Maybe make `CuteBaseException`?

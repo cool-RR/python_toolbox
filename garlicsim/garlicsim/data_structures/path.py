@@ -435,7 +435,7 @@ class Path(object):
         '''
         Get a node according to its clock.
         
-        See documentation of binary_search.roundings for details about rounding
+        See documentation of `binary_search.roundings` for details about rounding
         options.
         '''
         
@@ -454,7 +454,7 @@ class Path(object):
         
         The function must be a monotonic rising function on the timeline.
         
-        See documentation of binary_search.roundings for details about rounding
+        See documentation of `binary_search.roundings` for details about rounding
         options.
         '''
         

@@ -148,8 +148,8 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         
         The function must be a monotonic rising function on the timeline.
         
-        See documentation of binary_search.roundings for details about rounding
-        options.
+        See documentation of `binary_search.roundings` for details about
+        rounding options.
         '''
         
         assert issubclass(rounding, binary_search.Rounding)
@@ -171,16 +171,19 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
                 return binary_search.make_both_data_into_preferred_rounding\
                        (queue_result, function, value, rounding)
             elif none_count == 1:
-                # The result is either before the past edge of the queue or after its future edge.
+                # The result is either before the past edge of the queue or
+                # after its future edge.
                 if queue_result[1] is None:
                     # The result is beyond the future edge of the queue.
-                    return binary_search.make_both_data_into_preferred_rounding\
+                    return binary_search.\
+                           make_both_data_into_preferred_rounding\
                            (queue_result, function, value, rounding)
                 else: # queue_result[0] == None
                     # Getting tricky: The result is somewhere in the middle
                     # between the queue and the tree.
                     combined_result = (tree_result[0], queue_result[1])
-                    return binary_search.make_both_data_into_preferred_rounding\
+                    return binary_search.\
+                           make_both_data_into_preferred_rounding\
                            (combined_result, function, value, rounding)
     
             else:
@@ -191,13 +194,14 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
 
             
     @with_self   
-    def __get_both_states_by_monotonic_function_from_tree(self, function, value):
+    def __get_both_states_by_monotonic_function_from_tree(self, function,
+                                                          value):
         '''
         Get two states from the tree with value surrounding the desired value.
 
         The function must be a monotonic rising function on the timeline.
         
-        This uses the binary_search.BOTH rounding. See its documentation.        
+        This uses the `binary_search.BOTH` rounding. See its documentation.
         '''
         our_node = self.__get_our_node()
         path = our_node.make_containing_path()
@@ -211,6 +215,7 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         
         return result
     
+    
     @with_self
     def __get_state_by_monotonic_function_from_queue(
         self, function, value, rounding=binary_search.CLOSEST):
@@ -219,8 +224,8 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         
         The function must by a monotonic rising function on the timeline.
         
-        See documentation of `garlicsim.general_misc.binary_search.roundings` for
-        details about rounding options.
+        See documentation of `garlicsim.general_misc.binary_search.roundings`
+        for details about rounding options.
         '''
         assert issubclass(rounding, binary_search.Rounding)
         queue = self.cruncher.work_queue
@@ -237,7 +242,7 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         Get the length of the timeline in nodes.
         
         This means the sum of:
-        1. The length of the work_queue of our cruncher.
+        1. The length of the `.work_queue` of our cruncher.
         2. The length of the path in the tree which leads to our node, up to
            our node.
         '''

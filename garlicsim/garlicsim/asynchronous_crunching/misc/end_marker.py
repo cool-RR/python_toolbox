@@ -14,11 +14,11 @@ class EndMarker(object):
     
     This is used only in endable simulations. When the step function raises a
     `WorldEnded` exception, signifying that the simulation has ended, the
-    cruncher will place an `EndMarker` in the work queue. (Where otherwise states
-    will be placed.)
+    cruncher will place an `EndMarker` in the work queue. (Where otherwise
+    states will be placed.)
     
-    The crunching manager will recognize the `EndMarker` and put an `End` to the
-    timeline.
+    The crunching manager will recognize the `EndMarker` and put an `End` to 
+    the timeline.
     '''
-    # todo: should allow putting a message, given by the `WorldEnded`, that will
-    # be attached to the `End`.
+    # todo: should allow putting a message, given by the `WorldEnded`, that 
+    # will be attached to the `End`.

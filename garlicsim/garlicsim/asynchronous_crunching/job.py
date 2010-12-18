@@ -13,9 +13,6 @@ import garlicsim
 # from .crunching_profile import CrunchingProfile
 
 
-__all__ = ['Job']
-
-
 class Job(object):
     '''
     A job of crunching the simulation from a given node.
@@ -36,7 +33,9 @@ class Job(object):
         '''The crunching profile to be used for crunching.'''
         
         self.resulted_in_end = False
-        '''Flag marking that the job has resulted in an end of the simulation.'''
+        '''
+        Flag marking that the job has resulted in an end of the simulation.
+        '''
   
         
     def is_done(self):
@@ -54,10 +53,9 @@ class Job(object):
         Example output: 
 
             Job(node=<garlicsim.data_structures.node.Node with clock 17,
-            untouched, blockful, crunched with
-            StepProfile(<unbound method State.step>), at 0x20664b0>,
-            crunching_profile=CrunchingProfile(clock_target=100,
-            step_profile=StepProfile(<unbound method State.step>)))
+            untouched, blockful, crunched with life.State.step(<state>),
+            at 0x20664b0>, crunching_profile=CrunchingProfile(clock_target=100,
+            step_profile=life.State.step(<state>))
         '''
         # todo: too long, should shorten
         
@@ -66,5 +64,6 @@ class Job(object):
         stuff.append("crunching_profile=%s" % self.crunching_profile)
         temp = ", ".join(stuff)
         return ("Job(%s)" % temp)
+    
     
 from .crunching_profile import CrunchingProfile
