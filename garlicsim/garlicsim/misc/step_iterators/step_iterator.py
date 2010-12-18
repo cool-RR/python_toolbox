@@ -49,10 +49,7 @@ class StepIterator(BaseStepIterator):
             
         self.step_profile_changed = False
         
-            
-    def __iter__(self): return self
-    
-    
+        
     def next(self):
         '''Crunch the next state.'''
         self.current_state = self.step_function(self.current_state,

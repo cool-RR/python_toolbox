@@ -49,9 +49,6 @@ class StepGeneratorIterator(BaseStepIterator):
         self.step_profile_changed = False
         
             
-    def __iter__(self): return self
-    
-    
     def __build_raw_iterator(self):
         self.raw_iterator = self.step_profile.step_function(
             self.current_state,

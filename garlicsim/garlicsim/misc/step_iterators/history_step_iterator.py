@@ -43,19 +43,16 @@ class HistoryStepIterator(BaseStepIterator):
             self.history_browser.get_last_state()
         )
         
-        
-    def __iter__(self): return self
-
     
     def next(self):
         '''Crunch the next state.'''
-        state =self.history_step_function(
+        state = self.history_step_function(
             self.history_browser,
             *self.step_profile.args,
             **self.step_profile.kwargs
         )
         self._auto_clock(state)
-        return self.current_state
+        return state
     
         
     def _auto_clock(self, state):
