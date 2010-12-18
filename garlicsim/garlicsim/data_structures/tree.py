@@ -16,9 +16,10 @@ from garlicsim.general_misc.nifty_collections import OrderedSet
 import garlicsim.misc
 from garlicsim.misc import GarlicSimException
 
-
-# `from block import Block` in the bottom of the file.
-# `from node import Node` in the bottom of the file.
+# In bottom of file:
+# `from .node import Node`
+# `from .block import Block`
+# `from .end import End`
 
 
 __all__ = ["Tree", "TreeError"]
@@ -27,6 +28,7 @@ __all__ = ["Tree", "TreeError"]
 class TreeError(GarlicSimException):
     '''Tree-related exception.'''
 
+    
 class Tree(object):
     '''
     A time tree, (generalization of timeline,) of the simulation.
@@ -59,8 +61,8 @@ class Tree(object):
         A read-write lock that guards access to the tree.
         
         We need such a thing because some simulations are history-dependent and
-        require reading from the tree in the same time that sync_crunchers could
-        potentially be writing to it.
+        require reading from the tree in the same time that `.sync_crunchers`
+        could potentially be writing to it.
         '''
 
         
@@ -72,8 +74,8 @@ class Tree(object):
         the new node is usually modified by the user after it is created, and
         after that the node is finalized and used in simulation.
         
-        This is useful when you want to make some changes in the world state and
-        see what they will cause in the simulation.
+        This is useful when you want to make some changes in the world state
+        and see what they will cause in the simulation.
         
         Returns the node.
         '''
@@ -94,7 +96,7 @@ class Tree(object):
     def add_state(self, state, parent=None, step_profile=None,
                   template_node=None):
         '''
-        Wrap state in node and add to tree.
+        Wrap `state` in a node and add to the tree.
         
         Returns the node.
         '''
@@ -123,10 +125,10 @@ class Tree(object):
         if template_node is not None:
             if parent != template_node.parent:
                 raise TreeError("Parent you specified and parent of "
-                                "template_node aren't the same!")
+                                "`template_node` aren't the same!")
             if not node.touched:
                 raise TreeError("You tried adding an untouched state to a "
-                                "tree while specifying a template_node.")
+                                "tree while specifying a `template_node`.")
             template_node.derived_nodes.append(node)
             
 
@@ -190,6 +192,7 @@ class Tree(object):
 
 
     def get_step_profiles(self):
+        '''Get an ordered set of all the step profiles used in this tree.'''
         tree_members_iterator = \
             self.iterate_tree_members(include_blockful_nodes=False)
         
@@ -204,6 +207,13 @@ class Tree(object):
     
     
     def iterate_tree_members(self, include_blockful_nodes=True):
+        '''
+        Iterate over all the members (nodes, blocks, ends) in this tree.
+        
+        By default, all nodes will be included; You may specify
+        `include_blockful_nodes=False` to exclude them. (Their block will be
+        included.)
+        '''
         members_to_explore = self.roots[:]
         while members_to_explore:
             member = members_to_explore.pop()
@@ -252,9 +262,9 @@ class Tree(object):
         '''
         
         stitch = False
-        # todo: this is supposed to be an argument allowing the children to be
-        # stitched to the new parent, but I'm currently forcing it to be false
-        # because I haven't decided yet how I will handle stitching.
+        # todo: This is supposed to be an argument allowing the children to be
+        # stitched to the new parent, but I'm currently forcing it to be
+        # `False` because I haven't decided yet how I will handle stitching.
         
         head_node = node_range.head if isinstance(node_range.head, Node) \
                      else node_range.head[0]
@@ -329,12 +339,12 @@ class Tree(object):
         return my_dict
     
     
-    def __setstate__(self, pickled_tree):
+    def __setstate__(self, pickled_tree_state):
         self.__init__()
-        self.__dict__.update(pickled_tree)
+        self.__dict__.update(pickled_tree_state)
         
         
     
-from node import Node
-from block import Block
-from end import End
+from .node import Node
+from .block import Block
+from .end import End
