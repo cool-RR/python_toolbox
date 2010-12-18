@@ -7,8 +7,9 @@ This module defines the `ChangeTracker` class.
 See its documentation for more information.
 '''
 
-import weakref
 import cPickle
+
+from garlicsim.general_misc.weak_key_identity_dict import WeakKeyIdentityDict
 
 
 class ChangeTracker(object): 
@@ -21,7 +22,8 @@ class ChangeTracker(object):
     '''
     
     def __init__(self):
-        self.library = weakref.WeakKeyDictionary()
+        self.library = WeakKeyIdentityDict()
+        
         
     def check_in(self, thing):
         '''        

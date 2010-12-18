@@ -1,4 +1,5 @@
 import weakref
+import UserDict
 
 
 __all__ = ['WeakKeyIdentityDict']
@@ -6,20 +7,13 @@ __all__ = ['WeakKeyIdentityDict']
 
 class IdentityRef(weakref.ref):
     
-    def __init__(self, *args, **kwargs):
-        weakref.ref.__init__(self, *args, **kwargs)
-        self._hash = None
+    def __init__(self, thing, callback=None):
+        weakref.ref.__init__(self, thing, callback)
+        self._hash = id(thing)
         
         
     def __hash__(self):
-        if self._hash:
-            return self._hash
-        thing = self()
-        if thing is None:
-            raise TypeError("Object was already garbage-collected and you "
-                            "didn't hash it while it was alive.")
-        else:
-            return hash(thing)
+        return self._hash
 
 
 class WeakKeyIdentityDict(UserDict.UserDict):
@@ -35,7 +29,7 @@ class WeakKeyIdentityDict(UserDict.UserDict):
 
     def __init__(self, dict_=None):
         self.data = {}
-        def remove(k, selfref=ref(self)):
+        def remove(k, selfref=weakref.ref(self)):
             self = selfref()
             if self is not None:
                 del self.data[k]
@@ -44,11 +38,11 @@ class WeakKeyIdentityDict(UserDict.UserDict):
 
         
     def __delitem__(self, key):
-        del self.data[ref(key)]
+        del self.data[IdentityRef(key)]
 
         
     def __getitem__(self, key):
-        return self.data[ref(key)]
+        return self.data[IdentityRef(key)]
 
     
     def __repr__(self):
@@ -56,11 +50,11 @@ class WeakKeyIdentityDict(UserDict.UserDict):
 
     
     def __setitem__(self, key, value):
-        self.data[ref(key, self._remove)] = value
+        self.data[IdentityRef(key, self._remove)] = value
 
         
     def copy(self):
-        new = WeakKeyDictionary()
+        new = WeakKeyIdentityDict()
         for key, value in self.data.items():
             o = key()
             if o is not None:
@@ -69,20 +63,12 @@ class WeakKeyIdentityDict(UserDict.UserDict):
 
     
     def get(self, key, default=None):
-        return self.data.get(ref(key),default)
-
-    
-    def has_key(self, key):
-        try:
-            wr = ref(key)
-        except TypeError:
-            return 0
-        return wr in self.data
+        return self.data.get(IdentityRef(key),default)
 
     
     def __contains__(self, key):
         try:
-            wr = ref(key)
+            wr = IdentityRef(key)
         except TypeError:
             return 0
         return wr in self.data
@@ -162,11 +148,11 @@ class WeakKeyIdentityDict(UserDict.UserDict):
 
             
     def pop(self, key, *args):
-        return self.data.pop(ref(key), *args)
+        return self.data.pop(IdentityRef(key), *args)
 
     
     def setdefault(self, key, default=None):
-        return self.data.setdefault(ref(key, self._remove),default)
+        return self.data.setdefault(IdentityRef(key, self._remove),default)
 
     
     def update(self, dict=None, **kwargs):
@@ -175,6 +161,6 @@ class WeakKeyIdentityDict(UserDict.UserDict):
             if not hasattr(dict, "items"):
                 dict = type({})(dict)
             for key, value in dict.items():
-                d[ref(key, self._remove)] = value
+                d[IdentityRef(key, self._remove)] = value
         if len(kwargs):
             self.update(kwargs)
