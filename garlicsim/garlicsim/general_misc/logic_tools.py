@@ -10,13 +10,13 @@ def all_equal(iterable, exhaustive=False):
     '''
     Return whether all elements in the iterable are equal to each other.
     
-    If `exhaustive` is set to False, it's assumed that the equality relation is
-    transitive, therefore not every member is tested against every other member.
-    So in a list of size n, n-1 equality checks will be made.
+    If `exhaustive` is set to `False`, it's assumed that the equality relation
+    is transitive, therefore not every member is tested against every other
+    member. So in a list of size `n`, `n-1` equality checks will be made.
     
-    If `exhaustive` is set to True, every member will be checked against every
-    other member. So in a list of size n, (n*(n-1))/2 equality checks will be
-    made.
+    If `exhaustive` is set to `True`, every member will be checked against
+    every other member. So in a list of size `n`, `(n*(n-1))/2` equality checks
+    will be made.
     '''
     # todo: Maybe I should simply check if `len(set(iterable)) == 1`?
     

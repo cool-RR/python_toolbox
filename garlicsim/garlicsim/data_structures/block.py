@@ -144,7 +144,7 @@ class Block(TreeMember):
         
         if self.__node_list and \
            sample_step_profile != self.step_profile:
-            raise BlockError("Tried to add nodelist which contains node that "
+            raise BlockError("Tried to add node list which contains node that "
                              "has a different step profile.")
         
         # We now make sure the node_list is successive, untouched, and has no
@@ -322,8 +322,8 @@ class Block(TreeMember):
         '''
         Create a path that contains this block.
         
-        There may be multiple different paths that contain this block. This will
-        return the one which points to the newest possible forks.
+        There may be multiple different paths that contain this block. This
+        will return the one which points to the newest possible forks.
         
         Returns the path.
         '''
@@ -359,8 +359,8 @@ class Block(TreeMember):
         Get all leaves that are descendents of this block.
         
         Only leaves with a distance of at most `max_nodes_distance` in nodes or
-        `max_clock_distance` in clock are returned. (Note this is an OR relation
-        between the two condintions)
+        `max_clock_distance` in clock are returned. (Note this is an OR
+        relation between the two condintions)
         
         Returns a dict of the form:
         
@@ -411,14 +411,14 @@ class Block(TreeMember):
         
         Example output:
         <garlicsim.data_structures.Block of length 40 crunched with
-        StepProfile(<unbound method State.step>, t=0.1) at 0x1c84d70>
+        life.State.step(<state>), t=0.1) at 0x1c84d70>
         '''
         assert self.alive # todo: say "Dead block"
         return '<%s of length %s, crunched with %s at %s>' % \
                (
                    address_tools.describe(type(self), shorten=True),
                    len(self),
-                   self.step_profile,
+                   self.step_profile.__repr__(short_form=True),
                    hex(id(self))
                )
         
