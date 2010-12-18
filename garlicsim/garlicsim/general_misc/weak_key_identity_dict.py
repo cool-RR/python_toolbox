@@ -16,7 +16,7 @@ class IdentityRef(weakref.ref):
         return self._hash
 
 
-class WeakKeyIdentityDict(UserDict.UserDict):
+class WeakKeyIdentityDict(UserDict.UserDict, object):
     """ tododoc Mapping class that references keys weakly.
 
     Entries in the dictionary will be discarded when there is no

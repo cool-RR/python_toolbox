@@ -31,8 +31,8 @@ class Tree(object):
     '''
     A time tree, (generalization of timeline,) of the simulation.
 
-    A tree is used within a project to organize everything that is happenning in
-    the simulation.
+    A tree is used within a project to organize everything that is happenning
+    in the simulation.
     
     Often, when doing a simulation, the tree will be a degenerate tree, i.e. a
     straight, long succession of nodes with no more than one child each. The

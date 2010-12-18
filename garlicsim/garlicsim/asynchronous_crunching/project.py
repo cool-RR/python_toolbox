@@ -20,11 +20,13 @@ import garlicsim.data_structures
 import garlicsim.misc.simpack_grokker
 import garlicsim.misc.step_profile
 
-from crunching_manager import CrunchingManager
-from job import Job
-from crunching_profile import CrunchingProfile
+from .crunching_manager import CrunchingManager
+from .job import Job
+from .crunching_profile import CrunchingProfile
+
 
 __all__ = ["Project"]
+
 
 @garlicsim.general_misc.third_party.decorator.decorator
 def with_tree_lock(method, *args, **kwargs):
@@ -46,33 +48,42 @@ class Project(object):
 
     A project contains within it a tree.
         
-    The crunching is taken care of by the CrunchingManager which is a part of
-    every project. The CrunchingManager employs ThreadCrunchers and/or
-    ProcessCrunchers to get the work done. To make the CrunchingManager take
-    work from the crunchers and coordinate them, call the sync_crunchers method
-    of the project.
+    The crunching is taken care of by the `CrunchingManager` which is a part of
+    every project. The `CrunchingManager` employs crunchers (which may be, for
+    example, worker threads or worker processes,) to get the work done. To make
+    the crunching manager take work from the crunchers and coordinate them, 
+    call the `.sync_crunchers` method of the project.
     
     The crunching manager contains a list of jobs as an attribute `.jobs`. See
-    documentation for garlicsim.asynchronous_crunching.Job for more info about
-    jobs. The crunching manager will employ crunchers in order to complete the
-    jobs. It will then take work from these crunchers, put it into the tree,
-    and delete the jobs when they are completed.
+    documentation for `garlicsim.asynchronous_crunching.Job` for more info 
+    about jobs. The crunching manager will employ crunchers in order to 
+    complete the jobs. It will then take work from these crunchers, put it 
+    into the tree, and delete the jobs when they are completed.
     '''
 
     def __init__(self, simpack):
         
         if isinstance(simpack, garlicsim.misc.SimpackGrokker):
-            self.simpack_grokker = simpack            
-            self.simpack = self.simpack_grokker.simpack
-        else: # The simpack we got is an actual simpack
-            self.simpack = simpack
-            self.simpack_grokker = garlicsim.misc.SimpackGrokker(simpack)
+            # The user entered a simpack grokker instead of a simpack; Let's be
+            # nice and handle it.
+            simpack_grokker = simpack
+            simpack = simpack_grokker.simpack
+            
+            
+        self.simpack = simpack
+        '''The simpack determines what kind of simulation we're doing.'''
+        
+        self.simpack_grokker = garlicsim.misc.SimpackGrokker(simpack)
+        '''Encapsulates our simpack and gives useful information and tools.'''
 
         self.tree = garlicsim.data_structures.Tree()
+        '''The time tree in which we store all simulation states.'''
         
         self.crunching_manager = CrunchingManager(self)
+        '''Crunching manager which recruits, manages and retires crunchers.'''
         
         self.default_step_function = self.simpack_grokker.default_step_function
+        '''The step function that we use by default.'''
     
 
     def create_root(self, *args, **kwargs):
@@ -187,8 +198,8 @@ class Project(object):
         the new node is usually modified by the user after it is created, and
         after that the node is finalized and used in simulation.
         
-        This is useful when you want to make some changes in the world state and
-        see what they will cause in the simulation.
+        This is useful when you want to make some changes in the world state
+        and see what they will cause in the simulation.
         
         Returns the node.
         '''
@@ -205,15 +216,15 @@ class Project(object):
         If there are already jobs on that node, they will all be crunched
         independently of each other to create different forks.
         
-        Any `*args` or `**kwargs` will be packed in a `StepProfile` object and
-        passed to the step function. You may pass a `StepProfile` yourself, as
-        the only argument, and it will be noticed and used.
+        Any `*args` or `**kwargs` will be packed in a `StepProfile` and passed
+        to the step function. You may pass a `StepProfile` yourself and it will
+        be noticed and used.
         
         Returns the job.
         '''
         
-        # todo: Inputting `clock_buffer=None` should produce infinitesimal clock
-        # buffer.
+        # todo: Inputting `clock_buffer=None` should produce infinitesimal
+        # clock buffer.
         
         step_profile = self.build_step_profile(*args, **kwargs)
         
@@ -250,11 +261,11 @@ class Project(object):
         The results are implemented the results into the tree. Note that the
         crunching for this is done synchronously, i.e. in the currrent thread.
         
-        If you wish, in `*args` and `**kwargs` you may specify simulation parameters
-        and/or a specific step function to use. (You may specify a step function
-        either as the first positional argument or the `step_function` keyword
-        argument.) You may also pass in an existing step profile as first
-        argument.
+        If you wish, in `*args` and `**kwargs` you may specify simulation
+        parameters and/or a specific step function to use. (You may specify a
+        step function either as the first positional argument or the
+        `step_function` keyword argument.) You may also pass in an existing
+        step profile as first argument.
         
         Returns the final node.
         '''
@@ -272,7 +283,7 @@ class Project(object):
         
     @with_tree_lock        
     def __history_dependent_simulate(self, node, iterations,
-                                     step_profile=None):
+                                     step_profile):
         '''
         Simulate from the given node for the given number of iterations.
         
@@ -286,8 +297,7 @@ class Project(object):
         Returns the final node.
         '''
         
-        if step_profile is None:
-            step_profile = self.build_step_profile()
+        step_profile = self.build_step_profile()
         
         path = node.make_containing_path()
         history_browser = \
@@ -313,13 +323,13 @@ class Project(object):
                     # Because just after the first run we've created the first
                     # new node, possibly causing a fork. Because of the new
                     # fork, the original path that we created at the beginning
-                    # of this method will get confused and take the old timeline
-                    # instead of the new timeline. (And it wouldn't even have
-                    # the tail_node to stop it, because that would be on the new
-                    # timeline.) So we create a new path for the history
-                    # browser. We only need to do this once, because after the
-                    # first node we work on one straight timeline and we don't
-                    # fork the tree any more.
+                    # of this method will get confused and take the old
+                    # timeline instead of the new timeline. (And it wouldn't
+                    # even have the `tail_node` to stop it, because that would
+                    # be on the new timeline.) So we create a new path for the
+                    # history browser. We only need to do this once, because
+                    # after the first node we work on one straight timeline and
+                    # we don't fork the tree any more.
         
         except garlicsim.misc.WorldEnded:
             self.tree.make_end(current_node, step_profile)
@@ -329,7 +339,7 @@ class Project(object):
     
     @with_tree_lock
     def __non_history_dependent_simulate(self, node, iterations,
-                                         step_profile=None):
+                                         step_profile):
         '''
         Simulate from the given node for the given number of iterations.
         
@@ -343,9 +353,6 @@ class Project(object):
         Returns the final node.
         '''
         
-        if step_profile is None:
-            step_profile = self.build_step_profile()
-
         state = node.state
                 
         iterator = self.simpack_grokker.get_step_iterator(state, step_profile)
