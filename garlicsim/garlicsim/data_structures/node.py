@@ -2,9 +2,9 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-A module that Defines the `Node` class and the related NodeError exception.
+Defines the `Node` class and related exceptions.
 
-See documentation of Node for more information.
+See documentation of `Node` for more information.
 '''
 
 from garlicsim.general_misc.infinity import Infinity
@@ -13,13 +13,13 @@ from garlicsim.general_misc import address_tools
 
 from garlicsim.misc import GarlicSimException
 
-from state import State
-from tree_member import TreeMember
-# We are doing `from block import Block` in the bottom of the file.
-# We are doing `from path import Path` in the bottom of the file.
+from .state import State
+from .tree_member import TreeMember
+# from .path import Path (at bottom of file.)
+# from .block import Block (at bottom of file.)
 
 
-__all__ = ["Node", "NodeError"]
+__all__ = [.Node., .NodeError., .NodeLookupError.]
 
 
 class NodeError(GarlicSimException):
@@ -49,8 +49,8 @@ class Node(TreeMember):
         
         `tree` is the tree in which this node resides. `state` is the state it
         should contain. `parent` is its parent node in the tree, which may be
-        None for a root. `step_profile` is the step profile with which the state
-        was crunched, which may be None for a state that was created from
+        `None` for a root. `step_profile` is the step profile with which the
+        state was crunched, which may be None for a state that was created from
         scratch. `touched` is whether the state was modified/created from
         scratch, in contrast to having been produced by crunching.
         '''
@@ -66,11 +66,11 @@ class Node(TreeMember):
         
         self.step_profile = step_profile
         '''
-        The step options profile with which the contained state was created.
+        The step profile with which the contained state was created.
         
-        For an untouched node, this must be a real StepProfile, even an empty
-        one. Only a touched node which was created from scratch should have
-        None for its step profile.
+        For an untouched node, this must be a real `StepProfile`. Only a
+        touched node which was created from scratch should have `None` for its
+        step profile.
         '''
         
         self.touched = touched
@@ -78,7 +78,7 @@ class Node(TreeMember):
         
         self.block = None
         '''
-        A node may be a member of a block. See class Block for more details.
+        A node may be a member of a block. See class `Block` for more details.
         '''
 
         self.children = []
@@ -86,7 +86,7 @@ class Node(TreeMember):
         A list of:
             1. Nodes whose states were produced by simulation from this node.
             2. Nodes who were "created by editing" from one of the nodes in the
-            aforementioned set.
+               aforementioned set.
         '''
 
         self.derived_nodes = []
@@ -124,13 +124,13 @@ class Node(TreeMember):
         Finalize the node, assuming it's in currectly in editing mode.
         
         Before an edited node is finalized, it cannot be crunched from and
-        cannot have children. (i.e. nodes that follow it in time.) After getting
-        finalized, it may be crunched from and be assigned children.
+        cannot have children. (i.e. nodes that follow it in time.) After
+        getting finalized, it may be crunched from and be assigned children.
         '''
         if self.still_in_editing is False:
             if self.touched:
-                message = ("You tried to finalize a touched node, but it has "
-                           "already been finalized.")
+                message = ('You tried to finalize a touched node, but it has '
+                           'already been finalized.')
             else: # self.touched is False
                 message = ("You tried to finalize an untouched node. "
                            "Untouched nodes can't be edited, so they have no "
@@ -163,7 +163,7 @@ class Node(TreeMember):
         
         path.get_last_node()
         # Calling this will make the path notice the forks in the nodes beyond
-        # this node and put them in its `decisions` dict.
+        # this node and put them in its `.decisions` dict.
         
         return path
     
@@ -192,9 +192,9 @@ class Node(TreeMember):
                 paths += kid.all_possible_paths()
             return paths
         else: # fork is None and real_thing is the final node of the path
-            # In this case there are no forks after our node, we just return the
-            # past_path which we have driven to its last node. (Not that it has
-            # any forks to decide on anyway.)
+            # In this case there are no forks after our node, we just return
+            # the past_path which we have driven to its last node. (Not that it
+            # has any forks to decide on anyway.)
             return [past_path]
 
         
@@ -250,14 +250,14 @@ class Node(TreeMember):
         if max_clock_distance is None:
             max_clock_distance = Infinity
                     
-        nodes = {self: {"nodes_distance": 0, "clock_distance": 0}}
+        nodes = {self: {'nodes_distance': 0, 'clock_distance': 0}}
         leaves = {}
 
         while nodes:
             item = nodes.popitem()
             node = item[0]
-            nodes_distance = item[1]["nodes_distance"]
-            clock_distance = item[1]["clock_distance"]
+            nodes_distance = item[1]['nodes_distance']
+            clock_distance = item[1]['clock_distance']
             
             if nodes_distance > max_nodes_distance and \
                clock_distance > max_clock_distance:
@@ -268,16 +268,16 @@ class Node(TreeMember):
             if not kids:
                 # We have a leaf!
                 leaves[node] = {
-                    "nodes_distance": nodes_distance,
-                    "clock_distance": clock_distance,
+                    'nodes_distance': nodes_distance,
+                    'clock_distance': clock_distance,
                 }
                 continue
             
             if (node.block is None) or node.is_last_on_block():
                 for kid in kids:
                     nodes[kid] = {
-                        "nodes_distance": nodes_distance + 1,
-                        "clock_distance": kid.state.clock - self.state.clock,
+                        'nodes_distance': nodes_distance + 1,
+                        'clock_distance': kid.state.clock - self.state.clock,
                     }
                 continue
             else:
@@ -290,8 +290,8 @@ class Node(TreeMember):
 
                 last = block[-1]
                 nodes[last] = {
-                    "nodes_distance": nodes_distance + rest_of_block,
-                    "clock_distance": last.state.clock - self.state.clock,
+                    'nodes_distance': nodes_distance + rest_of_block,
+                    'clock_distance': last.state.clock - self.state.clock,
                 }
                 continue
             
@@ -328,7 +328,7 @@ class Node(TreeMember):
             wanted_index = our_index - generations
             if wanted_index >= 0:
                 return block[wanted_index]
-            else: # wanted index < 0
+            else: # wanted_index < 0
                 first_node = block[0]
                 parent_of_first = first_node.parent
                 if parent_of_first is None:
@@ -382,7 +382,7 @@ class Node(TreeMember):
     
     def is_overlapping(self, tree_member):
         '''
-        Return whether this node overlaps with the given tree_member.
+        Return whether this node overlaps with the given `tree_member`.
         
         `tree_member` may be a node, in which case overlapping means being the
         same node. `tree_member` can also be a block, in which case overlapping
@@ -401,9 +401,8 @@ class Node(TreeMember):
         Get a string representation of the node.
         
         Example output:        
-        <garlicsim.data_structures.Node with clock 6.5, untouched, belongs to a
-        block, crunched with StepProfile(<unbound method State.step>), at
-        0x1ffde70>
+        <garlicsim.data_structures.Node with clock 6.5, untouched, blockful,
+        crunched with life.State.step(<state>), at 0x1ffde70>
         '''
         return '<%s%s, %s%s%s, %s, %sat %s>' % (
             address_tools.describe(type(self), shorten=True),
@@ -417,7 +416,7 @@ class Node(TreeMember):
             hex(id(self))
         )
 
-from path import Path
-from block import Block
+from .path import Path
+from .block import Block
 
 

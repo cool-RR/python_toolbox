@@ -10,8 +10,9 @@ See its documentation for more info.
 from garlicsim.misc import GarlicSimException
 from garlicsim.general_misc import cute_iter_tools
 
-from node import Node
-from node_range import NodeRange
+from .node import Node
+from .node_range import NodeRange
+
 
 __all__ = ['NodeSelection']
 
@@ -24,12 +25,13 @@ class NodeSelection(object):
     '''
     A selection of nodes.
     
-    A NodeSelection could be described as a "set" of nodes, though the nodes are
-    not specified one by one, but as a collection of node ranges.
+    A `NodeSelection` could be described as a "set" of nodes, though the nodes
+    are not specified one by one, but as a collection of node ranges.
     '''
+    
     def __init__(self, ranges=()):
         '''
-        Construct the NodeSelection.
+        Construct the `NodeSelection`.
         
         `ranges` is a list of node ranges that this selection will be made of.
         '''
@@ -38,7 +40,7 @@ class NodeSelection(object):
         
     def compact(self):
         '''
-        Compact the NodeSelection.
+        Compact the `NodeSelection`.
         
         This'll make it use the minimum number of node ranges while still
         containing exactly the same nodes.
@@ -52,10 +54,11 @@ class NodeSelection(object):
         except CompletelyCompact:
             return
             
+        
     def __partially_compact(self):
         '''Try to make the NodeSelection a bit more compact.'''
-        # todo: consider defining a canonic decomposition of a node selection to
-        # node ranges. This will make a few things easier, like checking
+        # todo: consider defining a canonic decomposition of a node selection
+        # to node ranges. This will make a few things easier, like checking
         # equality.
         first, second = None, None
         for (r1, r2) in cute_iter_tools.orderless_combinations(self.ranges, 2):
@@ -85,35 +88,40 @@ class NodeSelection(object):
             return
         else:
             raise CompletelyCompact
-    
+
+        
     def __iter__(self):
-        '''Iterate over the nodes that are members of this NodeSelection.'''
+        '''Iterate over the nodes that are members of this `NodeSelection`.'''
         for node_range in self.ranges:
             for node in node_range:
                 yield node
-    
+
+                
     def __or__(self, other):
-        '''Perform a union between two NodeSelections and return the result.'''
+        '''Perform union between two `NodeSelections` and return the result.'''
         assert isinstance(other, NodeSelection)
         return NodeSelection(self.ranges + other.ranges)
     
+    
     def __ror__(self, other):
         return self.__or__(other)
+
     
     def __eq__(self, other):
         # Currently horribly inefficient
         if not isinstance(other, NodeSelection):
             return False # todo: should be NotImplemented?
         return set(self) == set(other)
-        
+
+    
     def __req__(self, other):
         return self.__eq__(other)
+
     
     def copy(self):
-        '''Shallow-copy the NodeSelection.'''
+        '''Shallow-copy the `NodeSelection`.'''
         klass = type(self)
         return klass((node_range.copy() for node_range in self.ranges))
-    
     
     __copy__ = copy
     
