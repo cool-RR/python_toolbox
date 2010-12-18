@@ -105,15 +105,15 @@ class MappingTestCase(TestBase):
         weakdict = WeakKeyIdentityDict()
         o = weakdict.setdefault(key, value1)
         assert o is value1
-        self.assertIn(key, weakdict)
-        self.assertIs(weakdict.get(key), value1)
-        self.assertIs(weakdict[key], value1)
+        assert key in weakdict
+        assert weakdict.get(key) is value1
+        assert weakdict[key] is value1
 
         o = weakdict.setdefault(key, value2)
         assert o is value1
-        self.assertIn(key, weakdict)
-        self.assertIs(weakdict.get(key), value1)
-        self.assertIs(weakdict[key], value1)
+        assert key in weakdict
+        assert weakdict.get(key) is value1
+        assert weakdict[key] is value1
 
         
     def test_update(self):
