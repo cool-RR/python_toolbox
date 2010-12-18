@@ -94,6 +94,21 @@ class StepProfile(ArgumentsProfile):
         
         The user may put the step function as the first positional argument, or
         as the 'step_function' keyword argument. 
+        
+        tododoc: use this:
+        
+        Build a step profile smartly.
+        
+        The canonical way to build a step profile is to provide it with a step
+        function, `*args` and `**kwargs`. But in this function we're being a
+        little smarter so the user will have less work.
+        
+        You do not need to enter a step function; We will use the default one,
+        unless you specify a different one as `step_function`.
+        
+        You may also pass in a step profile as `step_profile`, and it will be
+        noticed and used.
+        
         '''
         
 

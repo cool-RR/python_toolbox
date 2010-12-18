@@ -546,10 +546,22 @@ class Project(object):
     
     def build_step_profile(self, *args, **kwargs):
         '''
-        Build a step profile tododoc
+        Build a step profile smartly.
         
-        there's one here in addition to that in the simpack grokker because the default step function here can be changed
+        The canonical way to build a step profile is to provide it with a step
+        function, `*args` and `**kwargs`. But in this function we're being a
+        little smarter so the user will have less work.
+        
+        You do not need to enter a step function; We will use the default one,
+        unless you specify a different one as `step_function`.
+        
+        You may also pass in a step profile as `step_profile`, and it will be
+        noticed and used.
         '''
+        # We are providing this method despite the fact that the simpack
+        # grokker already provides a `.build_step_profile` method; This is
+        # because here we are using the *project's* default step function,
+        # which the user is allowed to change.
         parse_arguments_to_step_profile = \
             garlicsim.misc.StepProfile.build_parser(
                 self.default_step_function
