@@ -55,7 +55,7 @@ def iter_simulate(state, iterations, *args, **kwargs):
                                           step_profile)
 
     
-def _history_iter_simulate(simpack_grokker, state, iterations):
+def _history_iter_simulate(simpack_grokker, state, iterations, step_profile):
     '''
     Simulate from the given state for the given number of iterations.
     
@@ -91,7 +91,8 @@ def _history_iter_simulate(simpack_grokker, state, iterations):
     raise StopIteration
     
 
-def _non_history_iter_simulate(simpack_grokker, state, iterations):
+def _non_history_iter_simulate(simpack_grokker, state, iterations,
+                               step_profile):
     '''
     Simulate from the given state for the given number of iterations.
     
