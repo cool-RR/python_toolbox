@@ -34,7 +34,7 @@ class HistoryStepIterator(BaseStepIterator):
         '''
            
         self.auto_clock_generator = AutoClockGenerator()
-        '''Auto-clock generator which ensure all states have `.clock`.'''
+        '''Auto-clock generator which ensures all states have `.clock`.'''
         
         self.auto_clock_generator.make_clock(
             self.history_browser.get_last_state()

@@ -44,7 +44,7 @@ class StepGeneratorIterator(BaseStepIterator):
         self.__build_raw_generator()
                     
         self.auto_clock_generator = AutoClockGenerator()
-        '''Auto-clock generator which ensure all states have `.clock`.'''
+        '''Auto-clock generator which ensures all states have `.clock`.'''
         
         self.auto_clock_generator.make_clock(self.current_state)
         

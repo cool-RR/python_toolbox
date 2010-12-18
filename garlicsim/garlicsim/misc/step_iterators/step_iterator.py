@@ -7,7 +7,6 @@ This module defines the `StepIterator` class.
 See its documentation for more information.
 '''
 
-
 import garlicsim
 from garlicsim.misc import BaseStepIterator, SimpackError, AutoClockGenerator
 
@@ -36,7 +35,7 @@ class StepIterator(BaseStepIterator):
         '''
         
         self.auto_clock_generator = AutoClockGenerator()
-        '''Auto-clock generator which ensure all states have `.clock`.'''
+        '''Auto-clock generator which ensures all states have `.clock`.'''
         
         self.auto_clock_generator.make_clock(self.current_state)
         
