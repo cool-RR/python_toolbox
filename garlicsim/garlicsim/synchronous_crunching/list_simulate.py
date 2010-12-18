@@ -16,7 +16,7 @@ import garlicsim.misc
 from . import history_browser as history_browser_module # Avoiding name clash
 
 
-__all__ = ["list_simulate"]
+__all__ = ['list_simulate']
 
 
 def list_simulate(state, iterations, *args, **kwargs):

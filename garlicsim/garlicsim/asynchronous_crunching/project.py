@@ -265,7 +265,7 @@ class Project(object):
         parameters and/or a specific step function to use. (You may specify a
         step function either as the first positional argument or the
         `step_function` keyword argument.) You may also pass in an existing
-        step profile as first argument.
+        step profile.
         
         Returns the final node.
         '''
@@ -300,8 +300,10 @@ class Project(object):
         step_profile = self.build_step_profile()
         
         path = node.make_containing_path()
-        history_browser = \
-            garlicsim.synchronous_crunching.HistoryBrowser(path, tail_node=node)
+        history_browser = garlicsim.synchronous_crunching.HistoryBrowser(
+            path,
+            tail_node=node
+        )
         
         iterator = self.simpack_grokker.get_step_iterator(history_browser,
                                                           step_profile)
@@ -385,7 +387,7 @@ class Project(object):
         parameters and/or a specific step function to use. (You may specify a
         step function either as the first positional argument or the
         `step_function` keyword argument.) You may also pass in an existing
-        step profile as first argument.
+        step profile.
         '''
         
         step_profile = self.build_step_profile(*args, **kwargs)

@@ -16,7 +16,7 @@ import garlicsim.misc
 import history_browser as history_browser_module # Avoiding name clash
 
 
-__all__ = ["iter_simulate"]
+__all__ = ['iter_simulate']
 
 
 
@@ -49,14 +49,13 @@ def iter_simulate(state, iterations, *args, **kwargs):
                       
     if simpack_grokker.history_dependent:
         return _history_iter_simulate(simpack_grokker, state, iterations,
-                                       step_profile)
+                                      step_profile)
     else: # It's a non-history-dependent simpack
         return _non_history_iter_simulate(simpack_grokker, state, iterations,
-                                           step_profile)
+                                          step_profile)
 
     
-def _history_iter_simulate(simpack_grokker, state, iterations,
-                           step_profile=None):
+def _history_iter_simulate(simpack_grokker, state, iterations):
     '''
     Simulate from the given state for the given number of iterations.
     
