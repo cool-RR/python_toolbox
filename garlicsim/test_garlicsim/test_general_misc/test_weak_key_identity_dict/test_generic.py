@@ -6,8 +6,7 @@ import weakref
 import operator
 
 from test import test_support
-from test_garlicsim.third_party.forked_mapping_tests import \
-    BasicTestMappingProtocol
+from test_garlicsim.third_party import forked_mapping_tests
 
 from garlicsim.general_misc.weak_key_identity_dict import WeakKeyIdentityDict
 
@@ -215,7 +214,9 @@ class MappingTestCase(TestBase):
 from test import mapping_tests
 
 
-class WeakKeyIdentityDictTestCase(BasicTestMappingProtocol):
+class WeakKeyIdentityDictTestCase(
+    forked_mapping_tests.BasicTestMappingProtocol
+    ):
     """Check that WeakKeyDictionary conforms to the mapping protocol"""
     __ref = {Object("key1"):1, Object("key2"):2, Object("key3"):3}
     type2test = WeakKeyIdentityDict

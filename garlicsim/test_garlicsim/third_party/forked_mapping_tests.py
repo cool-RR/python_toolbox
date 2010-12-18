@@ -56,12 +56,6 @@ class BasicTestMappingProtocol(unittest2.TestCase):
             self.assertIn(k, d)
         for k in self.other:
             self.assertNotIn(k, d)
-        #has_key
-        with test_support.check_py3k_warnings(quiet=True):
-            for k in self.reference:
-                self.assertTrue(d.has_key(k))
-            for k in self.other:
-                self.assertFalse(d.has_key(k))
         #cmp
         self.assertEqual(cmp(p,p), 0)
         self.assertEqual(cmp(d,d), 0)
