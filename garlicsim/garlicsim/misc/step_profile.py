@@ -23,8 +23,8 @@ from garlicsim.misc.simpack_grokker.step_type import BaseStep
 __all__ = ['StepProfile']
 
 
-class Placeholder(object): # todo: make uninstanciable
-    pass
+class Placeholder(object):
+    '''A placeholder used instead of a state or a history browser.'''
 
 
 class StepProfile(ArgumentsProfile):
@@ -37,25 +37,28 @@ class StepProfile(ArgumentsProfile):
 
     The step profile contains three things:
     
-      1. A reference to the step fucntion.
-      2. A list of arguments.
-      3. A dict of keyword arguments
+      1. A reference to the step fucntion. (`.step_function`)
+      2. A `tuple` of arguments. (`.args`)
+      3. A `dict` of keyword arguments. (`.kwargs`)
       
     For example, if you're doing a simulation of Newtonian Mechanics, you can
     create a step profile with `kwargs` of {'G': 3.0} in order to change the
     graviational constant of the simulation on-the-fly.
     '''
-    # todo: perhaps this should be based on an ArgumentsProfile after all?
-    # In __repr__ and stuff we'll just check self's class. How does Python
-    # do it when you subclass its builtin types?
 
     
     __metaclass__ = caching.CachedType
     
     
     def __init__(self, step_function, *args, **kwargs):
+        '''
+        Construct the step profile.
         
-        # Perhaps we were passed a StepProfile object instead of args
+        Give the `*args` and/or `**kwargs` that you want to use for the step
+        function.
+        '''
+        
+        # Perhaps we were passed a `StepProfile` object instead of args
         # and kwargs? If so load that one, cause we're all cool and nice.
         candidate = None
         if len(args) == 1 and len(kwargs) == 0:
@@ -74,48 +77,48 @@ class StepProfile(ArgumentsProfile):
                                       **kwargs)
 
         assert self.args[0] is Placeholder
+        
         self.args = self.args[1:]
+        '''The `*args` that will be passed to the step function.'''
+        
+        self.kwargs = self.kwargs
+        '''The `*kwargs` that will be passed to the step function.'''
         
         self.step_function = self.function
+        '''The step function that will be used to crunch the simulation.'''
         
     
     @staticmethod
     @caching.cache()    
     def build_parser(default_step_function):
         '''
-        tododoc Create step profile, allowing the user to not specify step function.
-        
-        Most of the time when simulating, there is one default step function
-        that should be used if no other step function was explicitly specified.
-        But then again, we also want to allow the user to specify a step
-        function if he desires. So we get the (*args, **kwargs) pair from the
-        user, and we need to guess whether the user passed in a step function
-        for to use, or didn't, and if he didn't we'll use the default one.
-        
-        The user may put the step function as the first positional argument, or
-        as the 'step_function' keyword argument. 
-        
-        tododoc: use this:
-        
-        Build a step profile smartly.
+        Create a parser which builds a step profile smartly.
         
         The canonical way to build a step profile is to provide it with a step
-        function, `*args` and `**kwargs`. But in this function we're being a
+        function, `*args` and `**kwargs`. But in the parser we're being a
         little smarter so the user will have less work.
         
-        You do not need to enter a step function; We will use the default one,
-        unless you specify a different one as `step_function`.
-        
-        You may also pass in a step profile as `step_profile`, and it will be
-        noticed and used.
-        
+        A `default_step_function` must be given, which the parser will use if
+        no other step function will be given to it.
         '''
         
-
         def parse_arguments_to_step_profile(*args, **kwargs):
+            '''
+            Build a step profile smartly.
+        
+            The canonical way to build a step profile is to provide it with a
+            step function, `*args` and `**kwargs`. But in this function we're
+            being a little smarter so the user will have less work.
+            
+            You do not need to enter a step function; We will use the default
+            one, unless you specify a different one as `step_function`.
+            
+            You may also pass in a step profile as `step_profile`, and it will
+            be noticed and used.
+            '''
         
             # We have two candidates to check now: `args[0]` and
-            # `kwargs['step_function']`. We'll check the kwargs one first, because
+            # `kwargs['step_function']`. We'll check the latter first, because
             # that's more explicit and there's less chance we'll be catching
             # some other object by mistake.
             #
@@ -133,13 +136,13 @@ class StepProfile(ArgumentsProfile):
                 return StepProfile(step_function, *args, **kwargs_copy)
             
             
-            if 'step_profile' in kwargs: # tododoc
+            if 'step_profile' in kwargs:
                 kwargs_copy = kwargs.copy()
                 step_profile = kwargs_copy.pop('step_profile')
                 
                 if step_profile is None:
-                    # We let the user specify `step_profile=None` if he wants to
-                    # get the default step profile.
+                    # We let the user specify `step_profile=None` if he wants
+                    # to get the default step profile.
                     return StepProfile(default_step_function)
                     
                 else: # step_profile is not None
@@ -161,21 +164,14 @@ class StepProfile(ArgumentsProfile):
                 if isinstance(candidate, StepProfile):
                     return candidate
                 
-                if BaseStep.__instancecheck__(candidate):
+                elif BaseStep.__instancecheck__(candidate):
                     args_copy = args[1:]
                     return StepProfile(
                         candidate,
                         *args_copy,
                         **kwargs
                     )
-                
-                else:
-                    return StepProfile(
-                        default_step_function,
-                        *args,
-                        **kwargs
-                    )
-                    
+                  
             
             else:
                 return StepProfile(default_step_function, *args, **kwargs)
