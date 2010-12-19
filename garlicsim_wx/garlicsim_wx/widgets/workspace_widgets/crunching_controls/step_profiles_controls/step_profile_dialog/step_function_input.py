@@ -54,16 +54,18 @@ class StepFunctionInput(wx.ComboBox):
                 self._set_error_background()
             return
         else:
-            try:
-                garlicsim.misc.simpack_grokker.get_step_type(thing)
-            except Exception:
-                if self.error_mode:
-                    self._set_error_background()
-                return
-            else:
+            step_type = garlicsim.misc.simpack_grokker.step_type.BaseStep.\
+                      get_step_type(thing)
+            if step_type:
                 self.select_step_function(thing, text)
                 if self.error_mode:
                     self._set_normal_background()
+            else:
+                assert step_type is None
+                if self.error_mode:
+                    self._set_error_background()
+                return
+                
                 
     
     def parse_text_and_set(self):
