@@ -12,13 +12,11 @@ import types
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import misc_tools
 from garlicsim.general_misc import cute_iter_tools
-from garlicsim.general_misc import sequence_tools
 from garlicsim.general_misc.reasoned_bool import ReasonedBool
 from garlicsim.general_misc.third_party.ordered_dict import OrderedDict
-import garlicsim.general_misc.caching
+from garlicsim.general_misc import caching
 
-from garlicsim.misc import (AutoClockGenerator, InvalidSimpack,
-                            GarlicSimException, simpack_tools)
+from garlicsim.misc import InvalidSimpack, simpack_tools
 from garlicsim.misc import step_iterators as step_iterators_module
 from . import misc
 
@@ -34,6 +32,9 @@ class SimpackGrokker(object):
 
     @staticmethod
     def create_from_state(state):
+        '''
+        Create a simpack grokker from a state object, possibly using cached.
+        '''
         simpack = simpack_tools.get_from_state(state)
         return SimpackGrokker(simpack)
     
@@ -70,6 +71,7 @@ class SimpackGrokker(object):
 
         self.step_functions_by_type = dict((step_type, []) for step_type in
                                            step_types.step_types_list)
+        '''dict mapping from each step type to step functions of that type.'''
         
         
         for method in state_methods.itervalues():
@@ -84,7 +86,7 @@ class SimpackGrokker(object):
             self.history_dependent = True
 
             self.all_step_functions = (
-                self.step_functions_by_type[step_types.HistoryStepGenerator] + \
+                self.step_functions_by_type[step_types.HistoryStepGenerator] +
                 self.step_functions_by_type[step_types.HistoryStep]
             )
             

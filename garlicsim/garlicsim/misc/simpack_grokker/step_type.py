@@ -7,6 +7,7 @@ Defines the `StepType` class and its base instance, `BaseStep`.
 See its documentation for more details.
 '''
 # todo: does this mixed abc enforce anything, with our custom `__call__`?
+# todo: allow function with 'step' to opt-out of being a step function
 
 import types
 
