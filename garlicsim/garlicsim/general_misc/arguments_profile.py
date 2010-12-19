@@ -95,7 +95,7 @@ class ArgumentsProfile(object):
         
         # The number of args which have default values:
         n_defaultful_args = len(s_defaults)
-        # The word "defaultful" means "something which has a default".
+        # The word "defaultful" means "something which has a default."
         
         
         #######################################################################
@@ -111,10 +111,10 @@ class ArgumentsProfile(object):
         #######################################################################
         # Phase 2: We now have to deal with args that have a default. Some of
         # them, possibly none and possibly all of them, should be given
-        # positionally. Some of them, possibly none, should be given by keyword.
-        # And some of them, possibly none and possibly all of them, should not be
-        # given at all. It is our job to figure out in which way each argument
-        # should be given.
+        # positionally. Some of them, possibly none, should be given by
+        # keyword. And some of them, possibly none and possibly all of them,
+        # should not be given at all. It is our job to figure out in which way
+        # each argument should be given.
         
         # In this variable:
         n_defaultful_args_to_specify_positionally = None
@@ -124,7 +124,7 @@ class ArgumentsProfile(object):
         defaultful_args = s_args[-n_defaultful_args:] if n_defaultful_args \
                           else []
         
-        # Dict that maps from argument name to default value:
+        # `dict` that maps from argument name to default value:
         defaults = OrderedDict(zip(defaultful_args, s_defaults))
         
         defaultful_args_differing_from_defaults = set((
@@ -133,26 +133,27 @@ class ArgumentsProfile(object):
         ))
         
         if s_star_args and getcallargs_result[s_star_args]:
-            # We have some arguments that go into *args! This means that we
+            # We have some arguments that go into `*args`! This means that we
             # don't even need to think hard, we can already be sure that we're
             # going to have to specify *all* of the defaultful arguments
             # positionally, otherwise it will be impossible to put arguments in
-            # *args.
+            # `*args`.
             n_defaultful_args_to_specify_positionally = n_defaultful_args
             
             
         else:
 
-            # Dict mapping from each defaultful arg to the "price" of specifying
-            # its value:
-            prices_of_values = OrderedDict(
-                ((defaultful_arg, len(repr(getcallargs_result[defaultful_arg]))) for 
-                 defaultful_arg in defaultful_args)
-            )
-            # The price is simply the string length of the value's repr.
+            # `dict` mapping from each defaultful arg to the "price" of
+            # specifying its value:
+            prices_of_values = OrderedDict((
+                (defaultful_arg, len(repr(getcallargs_result[defaultful_arg])))
+                 for defaultful_arg in defaultful_args
+            ))
+            # The price is simply the string length of the value's `repr`.
             
-            # Dict mapping from each defaultful arg to the "price" of specifying
-            # it as a keyword (not including the length of the value):
+            # `dict` mapping from each defaultful arg to the "price" of
+            # specifying it as a keyword (not including the length of the
+            # value):
             prices_of_keyword_prefixes = OrderedDict(
                 ((defaultful_arg, len(defaultful_arg)+1) for 
                  defaultful_arg in defaultful_args)
@@ -169,16 +170,18 @@ class ArgumentsProfile(object):
             total_price_for_n_dasp_candidate = OrderedDict()
             # (The `n_dasp` here is an abbreivation of the
             # `n_defaultful_args_to_specify_positionally` variable defined
-            # before.)            
-            # After we have the price for each option, we'll select the one with
-            # the lowest price.
+            # before.)
+            #
+            # After we have the price for each option, we'll select the one
+            # with the lowest price.
             
             # One thing to do before iterating on the candidates is to find out
             # whether the "lonely comma discount" is in effect.
+            #
             # The "lonely comma discount" is given when there's nothing but
-            # defaultful arguments to this function, and therefore the number of
-            # ", " strings needed here is not `candidate`, but `candidate - 1`,
-            # unless of course candidate is zero.
+            # defaultful arguments to this function, and therefore the number
+            # of ", " strings needed here is not `candidate`, but `candidate -
+            # 1`, unless of course candidate is zero.
             
             if not defaultless_args and \
                 (not s_star_args or not getcallargs_result[s_star_args]) and \
@@ -283,8 +286,10 @@ class ArgumentsProfile(object):
             
         defaultful_args_to_specify_positionally = \
             defaultful_args[:n_defaultful_args_to_specify_positionally]
-        self.args += tuple((getcallargs_result[defaultful_arg] for defaultful_arg
-                      in defaultful_args_to_specify_positionally))
+        self.args += tuple(
+            (getcallargs_result[defaultful_arg] for defaultful_arg
+             in defaultful_args_to_specify_positionally)
+        )
         
         # Now we add those specified by keyword:
 
@@ -303,7 +308,7 @@ class ArgumentsProfile(object):
             
             assert not self.kwargs
             # Just making sure that no non-star args were specified by keyword,
-            # which would make it impossible for us to put stuff in *args.
+            # which would make it impossible for us to put stuff in `*args`.
             
             self.args += getcallargs_result[s_star_args]        
 
@@ -313,8 +318,8 @@ class ArgumentsProfile(object):
         
         if s_star_kwargs and getcallargs_result[s_star_kwargs]:
             
-            # We can't just add the **kwargs as is; We need to add them according
-            # to canonical ordering. So we need to sort them first.
+            # We can't just add the `**kwargs` as is; We need to add them
+            # according to canonical ordering. So we need to sort them first.
             
             unsorted_star_kwargs_names = \
                 getcallargs_result[s_star_kwargs].keys()
@@ -352,6 +357,13 @@ class ArgumentsProfile(object):
     @classmethod
     def create_from_dld_format(cls, function, args_dict, star_args_list,
                                star_kwargs_dict):
+        '''
+        Create an arguments profile from data given in "dict-list-dict" format.
+        
+        The "dict-list-dict" format means that in addition to a function, we
+        get a `dict` of arguments, a `list` of `*args`, and a `dict` of
+        `**kwargs`.
+        '''
         args_spec = cute_inspect.getargspec(function)
         new_args = [args_dict[name] for name in args_spec.args] + \
                    list(star_args_list)
