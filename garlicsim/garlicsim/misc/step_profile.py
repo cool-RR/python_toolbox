@@ -173,8 +173,8 @@ class StepProfile(ArgumentsProfile):
                     )
                   
             
-            else:
-                return StepProfile(default_step_function, *args, **kwargs)
+            
+            return StepProfile(default_step_function, *args, **kwargs)
         
         return parse_arguments_to_step_profile
                 

@@ -146,14 +146,15 @@ def test():
 
         
 _help_text = '''\
-This is a script for creating a skeleton for a garlicsim simpack. Use this when
-you want to make a new simpack to have the basic folders and files created for
-you.
+This is a script for creating a skeleton for a `garlicsim` simpack. Use this
+when you want to make a new simpack to have the basic folders and files created
+for you.
 
     Usage: start_simpack.py my_simpack_name
 
-The simpack will be created in the current path, in a directory with the name of
-the simpack.'''
+The simpack will be created in the current path, in a directory with the name
+of the simpack.
+'''
         
 
 def test_implicit_help():
