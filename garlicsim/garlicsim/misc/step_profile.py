@@ -17,7 +17,7 @@ from garlicsim.misc.exceptions import GarlicSimException
 
 import garlicsim
 
-from garlicsim.misc.simpack_grokker.get_step_type import get_step_type
+from garlicsim.misc.simpack_grokker.base_step import BaseStep
 
 
 __all__ = ['StepProfile']
@@ -125,10 +125,10 @@ class StepProfile(ArgumentsProfile):
                 kwargs_copy = kwargs.copy()
                 step_function = kwargs_copy.pop('step_function')
                 
-                get_step_type(step_function)
-                # Just so things will break if it's not a step function. If the
-                # user specified 'step_function', he's not going to get away
-                # with it not being an actual step function.
+                
+                assert BaseStep.__instancecheck__(step_function)
+                # If the user specified 'step_function', he's not going to get
+                # away with it not being an actual step function.
     
                 return StepProfile(step_function, *args, **kwargs_copy)
             
@@ -161,21 +161,21 @@ class StepProfile(ArgumentsProfile):
                 if isinstance(candidate, StepProfile):
                     return candidate
                 
-                try:
-                    get_step_type(candidate)
-                except Exception:
-                    return StepProfile(
-                        default_step_function,
-                        *args,
-                        **kwargs
-                    )
-                else:
+                if BaseStep.__instancecheck__(candidate):
                     args_copy = args[1:]
                     return StepProfile(
                         candidate,
                         *args_copy,
                         **kwargs
                     )
+                
+                else:
+                    return StepProfile(
+                        default_step_function,
+                        *args,
+                        **kwargs
+                    )
+                    
             
             else:
                 return StepProfile(default_step_function, *args, **kwargs)

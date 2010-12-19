@@ -9,7 +9,7 @@ from garlicsim.general_misc import path_tools
 import garlicsim
 from garlicsim.misc.simpack_grokker import (SimpackGrokker, Settings,
                                             get_step_type)
-from garlicsim.misc.simpack_grokker.base_step_type import BaseStep
+from garlicsim.misc.simpack_grokker.base_step import BaseStep
 
 import test_garlicsim
 
