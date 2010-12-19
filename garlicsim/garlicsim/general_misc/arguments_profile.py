@@ -1,6 +1,12 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
+'''
+Defines the `ArgumentsProfile` class.
+
+See its documentation for more details.
+'''
+
 from garlicsim.general_misc import cute_inspect
 from garlicsim.general_misc import cheat_hashing
 from garlicsim.general_misc.third_party.ordered_dict import OrderedDict
@@ -15,10 +21,50 @@ from garlicsim.general_misc import cmp_tools
 
 class ArgumentsProfile(object):
     '''
-    Note this should be used only on functions that don't modify argmunets
+    A canonical arguments profile for a function.
+    
+    (This should be used only on function that don't modify the arguments they
+    receive.)
+    
+    What is an arguments profile and what is it good for?
+    
+    It's possible to call the same function with the same arguments in
+    different ways. For example, take this function:
+
+        def f(a, bb=2, ccc=3, **kwargs):
+            return (a, bb, ccc)
+            
+    You can call it like `f(1)` or `f(a=1)` or `f(1, ccc=3, bb=2, **{})` or
+    many other different ways which will result in exactly the same arguments.
+    
+    To organize the different ways a function can be called, an arguments
+    profile provides a canonical way to call the function, so all the different
+    examples in the last paragraphs would be reduced to the same canonical
+    arguments profile. (In this case `f(1)`.)
+    
+    The canonical arguments profile is defined as the one which satisfies the
+    following criteria, with the first one being the most important, the second
+    one being a tie-breaker to the first, and the third one being a tie-breaker
+    to the second:
+    
+     1. It has as few characters as possible. (e.g. `f(1)` is better than    
+        `f(1, 2)`.)
+        
+     2. It has as many keyword arguments as possible. (e.g. `f(bb=3)` is
+        better than `f(1, 3)`.)
+        
+     3. The extraneous keywords (i.e. `**kwargs`) are sorted alphabetically, 
+        with "_" being the highest/last character. (e.g. `f(1, cat=7, meow=7,
+        _house=7)` is better than `f(1, _house=7, meow=7, cat=7)`)
+    
     '''
     
     def __init__(self, function, *args, **kwargs):
+        '''
+        Construct the arguments profile.
+        
+        `*args` and `**kwargs` are the arguments that go into the `function`.
+        '''
         
         if not callable(function):
             raise Exception('%s is not a callable object.' % function)
