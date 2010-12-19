@@ -60,6 +60,12 @@ class StepType(abc.ABCMeta):
 
     
     def __instancecheck__(cls, thing):
+        '''
+        Check whether `thing` is a step function of this type.
+        
+        Given the base class `BaseType` as `cls`, it will check whether `thing`
+        is a step function in general.
+        '''
         
         step_type = StepType.get_step_type(thing)
         if step_type:
@@ -71,6 +77,7 @@ class StepType(abc.ABCMeta):
     
     @staticmethod
     def get_step_type(thing):
+        '''Get what type of step function `thing` is.'''
         
         if hasattr(thing, '_BaseStepType__step_type'):
             return thing._BaseStepType__step_type
@@ -99,7 +106,6 @@ class StepType(abc.ABCMeta):
                 [step_type for step_type in step_types if
                  step_type.name_identifier == maximal_matching_name_identifier]
         
-            
         actual_function = (
             thing.im_func if
             isinstance(thing, types.MethodType)
@@ -117,6 +123,14 @@ class BaseStep(object):
 
 
     name_identifier = abc.abstractproperty()
+    '''
+    String that automatically identifies a step function's type.
+    
+    For example, `StepGenerator` has a `.name_identifier` of
+    `'step_generator'`, so any function containing it (like
+    `my_cool_step_generator`) will be automatically identified as a step
+    generator.
+    '''
     
     
     verbose_name = abc.abstractproperty()
