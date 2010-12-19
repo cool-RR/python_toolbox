@@ -4,7 +4,6 @@
 '''Defines various tools for working with simpacks.'''
 
 
-from garlicsim.general_misc import misc_tools
 from garlicsim.general_misc import address_tools
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import caching
@@ -31,8 +30,8 @@ def _get_from_state_class(state_class):
     simpack = import_tools.normal_import(simpack_name)
         
     garlicsim.misc.simpack_grokker.SimpackGrokker(simpack)
-    # Not saving the reference: But it'll get cached because `SimpackGrokker` is
-    # a `CachedType`.
+    # Not saving the reference: But it'll get cached because `SimpackGrokker`
+    # is a `CachedType`.
         
     return simpack
     

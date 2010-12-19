@@ -11,7 +11,7 @@ import garlicsim.general_misc.third_party.abc as abc
 from garlicsim.general_misc import binary_search
 
 
-__all__ = ["HistoryBrowser"]
+__all__ = ['BaseHistoryBrowser']
 
 
 get_state_clock = lambda state: state.clock
@@ -34,7 +34,11 @@ class BaseHistoryBrowser(object):
     
     @abc.abstractmethod
     def get_last_state(self):
-        '''Get the last state in the timeline. Identical to __getitem__(-1).'''
+        '''
+        Get the last state in the timeline.
+        
+        Identical to `.__getitem__(-1).`
+        '''
 
         
     @abc.abstractmethod
@@ -69,3 +73,5 @@ class BaseHistoryBrowser(object):
         assert issubclass(rounding, binary_search.Rounding)
         return self.get_state_by_monotonic_function\
                (function=get_state_clock, value=clock, rounding=rounding)
+    
+    
