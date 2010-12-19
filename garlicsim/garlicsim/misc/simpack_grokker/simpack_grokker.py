@@ -2,14 +2,12 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the `SimpackGrokker` class and the InvalidSimpack tododoc exception.
+This module defines the `SimpackGrokker` class.
 
-See their documentation for more details.
+See its documentation for more details.
 '''
 
-import functools
 import types
-import imp
 
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import misc_tools
@@ -25,7 +23,7 @@ from garlicsim.misc import step_iterators as step_iterators_module
 from . import misc
 
 from .settings import Settings
-from .step_type import BaseStep
+from .step_type import StepType
 from . import step_types
 
 
@@ -75,7 +73,7 @@ class SimpackGrokker(object):
         
         
         for method in state_methods.itervalues():
-            step_type = BaseStep.get_step_type(method)
+            step_type = StepType.get_step_type(method)
             if step_type:
                 self.step_functions_by_type[step_type].append(method)
             
@@ -337,7 +335,7 @@ class SimpackGrokker(object):
         '''
         
         step_function = step_profile.step_function
-        step_type = BaseStep.get_step_type(step_function)
+        step_type = StepType.get_step_type(step_function)
         step_iterator_class = step_type.step_iterator_class
 
         step_iterator = step_iterator_class(state_or_history_browser,
@@ -351,7 +349,7 @@ class SimpackGrokker(object):
                                   'supported. They will probably become '
                                   'available in GarlicSim 0.7 in mid-2011.')
         #step_function = step_profile.step_function
-        #step_type = BaseStep.get_step_type(step_function)
+        #step_type = StepType.get_step_type(step_function)
         
         #if step_type not in (step_types.InplaceStep,
                              #step_types.InplaceStepGenerator):
