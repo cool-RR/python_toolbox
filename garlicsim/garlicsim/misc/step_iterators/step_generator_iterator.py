@@ -41,8 +41,8 @@ class StepGeneratorIterator(BaseStepIterator):
         The step profile which contains the arguments given to step function.
         '''
         
-        self.available_cruncher_types = self.available_cruncher_types
-        '''The cruncher types that this simpack can use.'''
+        self.auto_clock_generator = AutoClockGenerator()
+        '''Auto-clock generator which ensures all states have `.clock`.'''
         
         self.__build_raw_generator()
                     

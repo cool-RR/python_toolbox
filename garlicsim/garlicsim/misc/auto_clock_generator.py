@@ -13,7 +13,7 @@ import garlicsim.general_misc.third_party.decorator
 __all__ = ['AutoClockGenerator']
 
 
-@garlicsim.general_misc.third_party.decorator
+@garlicsim.general_misc.third_party.decorator.decorator
 def store(method, *args, **kwargs):
     '''Decorator for saving current state's clock for next autoclocking.'''
     self = args[0]

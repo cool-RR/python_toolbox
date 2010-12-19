@@ -16,6 +16,7 @@ from garlicsim.general_misc.reasoned_bool import ReasonedBool
 from garlicsim.general_misc.third_party.ordered_dict import OrderedDict
 from garlicsim.general_misc import caching
 
+import garlicsim
 from garlicsim.misc import InvalidSimpack, simpack_tools
 from garlicsim.misc import step_iterators as step_iterators_module
 from . import misc
@@ -28,7 +29,7 @@ from . import step_types
 class SimpackGrokker(object):
     '''Encapsulates a simpack and gives useful information and tools.'''
     
-    __metaclass__ = garlicsim.general_misc.caching.CachedType
+    __metaclass__ = caching.CachedType
 
     @staticmethod
     def create_from_state(state):

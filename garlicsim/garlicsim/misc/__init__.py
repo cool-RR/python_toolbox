@@ -11,7 +11,7 @@ These objects are important enough to be defined near the root of the
 
 from .step_copy import StepCopy
 from .exceptions import (InvalidSimpack, SimpackError, GarlicSimWarning,
-                         CuteException, GarlicSimException, WorldEnded)
+                         GarlicSimException, WorldEnded)
 from .auto_clock_generator import AutoClockGenerator
 from .base_history_browser import BaseHistoryBrowser
 from .base_step_iterator import BaseStepIterator
