@@ -20,7 +20,7 @@ from garlicsim.general_misc import caching
 
 
 
-class BaseStepType(object):
+class BaseStep(object):
     '''
     A type of step function.
     
@@ -76,7 +76,7 @@ class BaseStepType(object):
             return False
         
         all_name_identifiers = \
-            [cls_.name_identifier for cls_ in BaseStepType.__subclasses__()]
+            [cls_.name_identifier for cls_ in BaseStep.__subclasses__()]
              
         if any((cls.name_identifier in name_identifier_) for 
                name_identifier_ in all_name_identifiers):
@@ -87,7 +87,7 @@ class BaseStepType(object):
     
     @staticmethod
     def get_step_type(thing):
-        step_types = BaseStepType.__subclasses__()
+        step_types = BaseStep.__subclasses__()
         matches = dict((step_type, step_type.__instancecheck__(thing)) for 
                        step_type in step_types)
         matching_step_types = [step_type for (step_type, match) in

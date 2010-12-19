@@ -12,8 +12,8 @@ from .step_types import (SimpleStep, StepGenerator, HistoryStep,
                          InplaceStepGenerator)
 
 
-from garlicsim.misc.simpack_grokker.base_step_type import BaseStepType
-get_step_type = BaseStepType.get_step_type
+from garlicsim.misc.simpack_grokker.base_step_type import BaseStep
+get_step_type = BaseStep.get_step_type
 
 #def get_step_type(step_function):
     

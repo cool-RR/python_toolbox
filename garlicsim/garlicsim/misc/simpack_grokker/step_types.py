@@ -9,18 +9,18 @@ See documentation for
 '''
 # todo: can do __instancehook__ shit later
 
-from .base_step_type import BaseStepType
+from .base_step_type import BaseStep
 from garlicsim.misc import step_iterators
 
 
-class SimpleStep(BaseStepType):
+class SimpleStep(BaseStep):
     '''The simplest steps function. Takes a state and returns a new one.'''
     step_iterator_class = step_iterators.StepIterator
     name_identifier = 'step'
     verbose_name = 'simple step function'
 
 
-class StepGenerator(BaseStepType):
+class StepGenerator(BaseStep):
     '''
     A step generator takes an initial state and keeps yielding states from it.
     
@@ -33,7 +33,7 @@ class StepGenerator(BaseStepType):
     verbose_name = 'step generator'
     
     
-class HistoryStep(BaseStepType):
+class HistoryStep(BaseStep):
     '''
     A history step function takes a history browser and returns a new state.
     
@@ -46,7 +46,7 @@ class HistoryStep(BaseStepType):
     verbose_name = 'history step function'
 
 
-class HistoryStepGenerator(BaseStepType):
+class HistoryStepGenerator(BaseStep):
     '''
     A history step generator takes a history browser and yields new states.
     
@@ -61,7 +61,7 @@ class HistoryStepGenerator(BaseStepType):
     verbose_name = 'history step generator'
     
     
-class InplaceStep(BaseStepType):
+class InplaceStep(BaseStep):
     '''
     Inplace step function takes a state and modifies it to be the next state.
     
@@ -79,7 +79,7 @@ class InplaceStep(BaseStepType):
     verbose_name = 'inplace step function'
     
     
-class InplaceStepGenerator(BaseStepType):
+class InplaceStepGenerator(BaseStep):
     '''
     Inplace step generator is a step generator that does the step in-place.
     
