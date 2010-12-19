@@ -10,6 +10,7 @@ See its dcoumentation for more details.
 # todo: inherit from uninstanciable.
 # todo: should this be a metaclass?
 # todo: this abc doesn't enforce anything since we don't instantiate.
+# todo: cool idea: allow using this class as a decorator to step functions
 
 from garlicsim.general_misc.third_party import abc
 
