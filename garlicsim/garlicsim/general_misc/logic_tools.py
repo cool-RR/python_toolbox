@@ -35,7 +35,7 @@ def logic_max(iterable, relation=lambda a, b: (a >= b)):
     
     for candidate in sequence:
         if all(relation(candidate, thing) for thing in sequence):
-            maximal_elements.append(thing)
+            maximal_elements.append(candidate)
     
     return maximal_elements
         

@@ -28,7 +28,11 @@ class StepType(abc.ABCMeta):
     def __instancecheck__(cls, thing):
         
         step_type = StepType.get_step_type(thing)
-        return issubclass(cls, step_type)
+        if step_type:
+            return issubclass(cls, step_type)
+        else:
+            assert step_type is None
+            return False
         
     
 
@@ -63,6 +67,9 @@ class StepType(abc.ABCMeta):
         if hasattr(thing, '_BaseStepType__step_type'):
             return thing._BaseStepType__step_type
         
+        if not callable(thing) or not hasattr(thing, '__name__'):
+            return None
+        
         step_types = BaseStep.__subclasses__()
         
         all_name_identifiers = [cls_.name_identifier for cls_ in step_types]        
@@ -80,7 +87,9 @@ class StepType(abc.ABCMeta):
                 relation=str.__contains__
             )
             
-            step_type = maximal_matching_name_identifier
+            (step_type,) = \
+                [step_type for step_type in step_types if
+                 step_type.name_identifier == maximal_matching_name_identifier]
         
             
         actual_function = (
@@ -88,9 +97,9 @@ class StepType(abc.ABCMeta):
             isinstance(thing, types.MethodType)
             else thing
         )
-        actual_function._BaseStepType__step_type = matching_step_type
+        actual_function._BaseStepType__step_type = step_type
             
-        return matching_step_type
+        return step_type
         
         
         
