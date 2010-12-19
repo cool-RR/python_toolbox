@@ -6,11 +6,9 @@ Defines the `BaseStepType` class.
 
 See its documentation for more details.
 '''
-# todo: can do __instancehook__ shit later
-# todo: inherit from uninstanciable.
+
 # todo: should this be a metaclass?
-# todo: this abc doesn't enforce anything since we don't instantiate.
-# todo: cool idea: allow using this class as a decorator to step functions
+# todo: does this mixed abc enforce anything, with our custom `__call__`?
 
 import types
 
