@@ -3,4 +3,6 @@
 
 '''Defines settings.'''
 
-from settings import *
+
+from .settings import (Setting, DeterminismSetting, DETERMINISTIC,
+                       SUPPOSEDLY_DETERMINISTIC, UNDETERMINISTIC)

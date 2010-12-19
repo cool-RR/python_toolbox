@@ -3,6 +3,7 @@
 
 '''Defines settings.'''
 
+
 class Setting(object):
     '''
     A setting.
@@ -14,7 +15,7 @@ class DeterminismSetting(Setting):
     '''
     A setting of determinism.
     
-    When GarlicSim knows that a certain step profile is deterministic, it can
+    When `garlicsim` knows that a certain step profile is deterministic, it can
     help it analyze the simulation. For example, it lets GarlicSim detect when
     the simulation has reached a constant/repetitive state.
     '''
