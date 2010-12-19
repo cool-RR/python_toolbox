@@ -5,6 +5,7 @@
 
 from garlicsim.general_misc.exceptions import CuteException
 
+
 class GarlicSimException(CuteException):
     '''GarlicSim-related exception.'''
 
@@ -22,4 +23,4 @@ class WorldEnded(GarlicSimException):
     '''The simulation has ended.'''
 
     
-    
+del CuteException

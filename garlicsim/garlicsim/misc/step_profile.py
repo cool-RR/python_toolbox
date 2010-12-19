@@ -183,8 +183,16 @@ class StepProfile(ArgumentsProfile):
         '''
         Get a string representation of the step profile.
         
-        Example output:
-        StepProfile(<unbound method State.step>, 'billinear', t=7)
+        Example output with `short_form=False`:
+        
+            StepProfile(<unbound method State.step>, 'billinear', t=7)
+            
+        Use `short_form=True` for the shorter form:
+        
+            my_simpack.State.step(<state>, 'billinear', t=7)
+            
+        `root` and `namespace` will be used for shortening the function
+        address.
         '''
         
         if short_form:
@@ -245,23 +253,21 @@ class StepProfile(ArgumentsProfile):
     @classmethod
     def create_from_dld_format(cls, step_function, args_dict, star_args_list,
                                star_kwargs_dict):
+        '''
+        Create a step profile from data given in the "dict-list-dict" format.
+        
+        The "dict-list-dict" format means that in addition to a step function,
+        we get a `dict` of arguments, a `list` of `*args`, and a `dict` of
+        `**kwargs`.
+        '''
         args_spec = cute_inspect.getargspec(step_function)
         new_args = [args_dict[name] for name in args_spec.args[1:]] + \
                    list(star_args_list)
         return cls(step_function, *new_args, **star_kwargs_dict)
         
     
-    def __eq__(self, other):
-        return isinstance(other, StepProfile) and \
-               ArgumentsProfile.__eq__(self, other)
-
-    
-    def __ne__(self, other):
-        return not self.__eq__(other)
-    
-    
     def _guess_simpack(self):
-        # Try to find the simpack.
+        '''`try` to guess the simpack that this step profile belongs to.'''
         try:
             module = \
                 address_tools.resolve(self.step_function.__module__)
@@ -275,3 +281,13 @@ class StepProfile(ArgumentsProfile):
                 
                 
                 
+                           
+    def __eq__(self, other):
+        return isinstance(other, StepProfile) and \
+               ArgumentsProfile.__eq__(self, other)
+
+    
+    def __ne__(self, other):
+        return not self.__eq__(other)
+    
+    
