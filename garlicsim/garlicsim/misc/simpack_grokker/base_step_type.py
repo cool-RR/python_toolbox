@@ -19,6 +19,7 @@ from garlicsim.general_misc.third_party import abc
 from garlicsim.general_misc import caching
 
 
+
 class BaseStepType(object):
     '''
     A type of step function.
@@ -62,7 +63,7 @@ class BaseStepType(object):
             actual_function._BaseStepType__step_type = step_type
         return step_type
         
-        
+    
     @classmethod
     def __raw_instance_check(cls, thing):
         #tododoc: justify lines
