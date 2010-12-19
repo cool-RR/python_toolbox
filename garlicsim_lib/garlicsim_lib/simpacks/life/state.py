@@ -50,7 +50,7 @@ class State(garlicsim.data_structures.State):
             yield current_state
     
     
-    def inplace_step(self, birth=[3], survival=[2, 3], randomness=0, *args, **kwargs):
+    def step(self, birth=[3], survival=[2, 3], randomness=0, *args, **kwargs):
         old_board = self.board
         new_board = Board(parent=old_board,
                           birth=birth,

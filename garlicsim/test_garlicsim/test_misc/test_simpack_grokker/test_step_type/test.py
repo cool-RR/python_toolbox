@@ -1,3 +1,5 @@
+import sys
+
 import nose.tools
 
 from garlicsim.misc.simpack_grokker.step_type import BaseStep, StepType
@@ -15,6 +17,9 @@ def test():
         
 def test_uncached_step_function():
     
+    if sys.version_info[:2] <= (2, 5):
+        raise nose.SkipTest("Python 2.5 doesn't use `__instancecheck__`.")
+    
     def my_step(state):
         raise NotImplementedError()
     
@@ -26,3 +31,18 @@ def test_uncached_step_function():
     assert hasattr(my_step, '_BaseStepType__step_type')
     
     assert isinstance(my_step, step_types_module.SimpleStep)
+     
+        
+def test_uncached_step_function_25():
+    
+    def my_step(state):
+        raise NotImplementedError()
+    
+    assert not hasattr(my_step, '_BaseStepType__step_type')
+    
+    assert BaseStep.__instancecheck__(my_step)
+    
+    
+    assert hasattr(my_step, '_BaseStepType__step_type')
+    
+    assert step_types_module.SimpleStep.__instancecheck__(my_step)
