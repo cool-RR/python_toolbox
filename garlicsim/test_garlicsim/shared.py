@@ -18,7 +18,7 @@ def verify_sample_simpack_settings(sample_simpack):
     if sft.DEFAULT_STEP_FUNCTION_TYPE is not None:
         assert issubclass(
             sft.DEFAULT_STEP_FUNCTION_TYPE,
-            garlicsim.misc.simpack_grokker.base_step.BaseStep
+            garlicsim.misc.simpack_grokker.step_type.BaseStep
         )
     assert isinstance(sft.CONSTANT_CLOCK_INTERVAL, int) or \
            sft.CONSTANT_CLOCK_INTERVAL is None

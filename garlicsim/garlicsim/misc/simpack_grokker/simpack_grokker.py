@@ -25,7 +25,7 @@ from garlicsim.misc import step_iterators as step_iterators_module
 from . import misc
 
 from .settings import Settings
-from .get_step_type import get_step_type
+from .step_type import BaseStep
 from . import step_types
 
 
@@ -75,7 +75,7 @@ class SimpackGrokker(object):
         
         
         for method in state_methods.itervalues():
-            step_type = get_step_type(method)
+            step_type = BaseStep.get_step_type(method)
             if step_type:
                 self.step_functions_by_type[step_type].append(method)
             
@@ -337,7 +337,7 @@ class SimpackGrokker(object):
         '''
         
         step_function = step_profile.step_function
-        step_type = get_step_type(step_function)
+        step_type = BaseStep.get_step_type(step_function)
         step_iterator_class = step_type.step_iterator_class
 
         step_iterator = step_iterator_class(state_or_history_browser,
@@ -350,24 +350,24 @@ class SimpackGrokker(object):
         raise NotImplementedError('Inplace steps are not yet '
                                   'supported. They will probably become '
                                   'available in GarlicSim 0.7 in mid-2011.')
-        step_function = step_profile.step_function
-        step_type = get_step_type(step_function)
+        #step_function = step_profile.step_function
+        #step_type = BaseStep.get_step_type(step_function)
         
-        if step_type not in (step_types.InplaceStep,
-                             step_types.InplaceStepGenerator):
+        #if step_type not in (step_types.InplaceStep,
+                             #step_types.InplaceStepGenerator):
 
-            raise GarlicSimException("Can't get inplace step iterator for "
-                                     "`%s`, which is a non-inplace step "
-                                     "function." % step_function)
+            #raise GarlicSimException("Can't get inplace step iterator for "
+                                     #"`%s`, which is a non-inplace step "
+                                     #"function." % step_function)
             
-        inplace_step_iterator_class = step_type.inplace_step_iterator_class
+        #inplace_step_iterator_class = step_type.inplace_step_iterator_class
 
-        inplace_step_iterator = inplace_step_iterator_class(
-            state_or_history_browser,
-            step_profile
-        )
+        #inplace_step_iterator = inplace_step_iterator_class(
+            #state_or_history_browser,
+            #step_profile
+        #)
         
-        return inplace_step_iterator
+        #return inplace_step_iterator
     
 
     def build_step_profile(self, *args, **kwargs):

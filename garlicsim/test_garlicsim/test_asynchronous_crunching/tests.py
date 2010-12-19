@@ -68,7 +68,7 @@ def check(simpack, cruncher_type):
     
     assert not simpack._settings_for_testing.ENDABLE
     
-    assert garlicsim.misc.simpack_grokker.get_step_type(
+    assert garlicsim.misc.simpack_grokker.step_type.BaseStep.get_step_type(
         my_simpack_grokker.default_step_function
     ) == simpack._settings_for_testing.DEFAULT_STEP_FUNCTION_TYPE
     

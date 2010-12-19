@@ -7,9 +7,8 @@ from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import path_tools
 
 import garlicsim
-from garlicsim.misc.simpack_grokker import (SimpackGrokker, Settings,
-                                            get_step_type)
-from garlicsim.misc.simpack_grokker.base_step import BaseStep
+from garlicsim.misc.simpack_grokker import SimpackGrokker, Settings
+from garlicsim.misc.simpack_grokker.step_type import BaseStep
 
 import test_garlicsim
 
@@ -103,7 +102,7 @@ def check_simpack(simpack):
         simpack_grokker.step_functions_by_type.values()
     )
     assert all(
-        issubclass(get_step_type(step_function), BaseStep) for 
+        issubclass(BaseStep.get_step_type(step_function), BaseStep) for
         step_function in all_step_functions
     )
     assert len(all_step_functions) == _settings_for_testing.N_STEP_FUNCTIONS

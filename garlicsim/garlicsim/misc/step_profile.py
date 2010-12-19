@@ -17,7 +17,7 @@ from garlicsim.misc.exceptions import GarlicSimException
 
 import garlicsim
 
-from garlicsim.misc.simpack_grokker.base_step import BaseStep
+from garlicsim.misc.simpack_grokker.step_type import BaseStep
 
 
 __all__ = ['StepProfile']

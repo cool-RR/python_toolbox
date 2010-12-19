@@ -74,9 +74,12 @@ class StepFunctionInput(wx.ComboBox):
             raise Exception("Error: Unable to resolve '%s' into a step "
                             "function." % text)
         else:
-            try:
-                step_type = garlicsim.misc.simpack_grokker.get_step_type(thing)
-            except Exception:
+            step_type = garlicsim.misc.simpack_grokker.step_type.BaseStep.\
+                      get_step_type(thing)
+            if step_type:
+                self.select_step_function(thing, text)
+            else:
+                assert step_type is None
                 if callable(thing):
                     type_description = 'function' if \
                                      isinstance(thing, types.FunctionType) \
@@ -86,8 +89,7 @@ class StepFunctionInput(wx.ComboBox):
                 else:
                     raise Exception("Error `%s` is a not a step function; "
                                     "It's not even a callable." % text)
-            else:
-                self.select_step_function(thing, text)
+                
             
         
     def on_text(self, event):

@@ -8,7 +8,6 @@ See their documentation for more info.
 '''
 
 from . import step_types
-from .get_step_type import get_step_type
 from .settings import Settings
 from .simpack_grokker import SimpackGrokker
 
