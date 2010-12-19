@@ -19,3 +19,8 @@ def flatten(iterable):
     except StopIteration:
         return []
     return sum(iterator, first_item)
+
+
+#def is_sequence(thing):
+    #return hasattr(thing, '__len__') and hasattr(thing, '__getitem__') and hasattr(thing, '__iter__') and 
+    #pass

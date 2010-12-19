@@ -3,7 +3,7 @@
 
 '''This module defines logic-related tools.'''
 
-import garlicsim.general_misc.cute_iter_tools as cute_iter_tools
+from garlicsim.general_misc import cute_iter_tools
 
 
 def all_equal(iterable, exhaustive=False):
@@ -26,3 +26,16 @@ def all_equal(iterable, exhaustive=False):
         pairs = cute_iter_tools.consecutive_pairs(iterable)
         
     return all(a==b for (a, b) in pairs)
+
+
+def logic_max(iterable, relation=lambda a, b: (a >= b)):
+    sequence = list(iterable)
+    
+    maximal_elements = []
+    
+    for candidate in sequence:
+        if all(relation(candidate, thing) for thing in sequence):
+            maximal_elements.append(thing)
+    
+    return maximal_elements
+        

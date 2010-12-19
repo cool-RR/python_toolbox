@@ -14,6 +14,7 @@ import types
 
 from garlicsim.general_misc.third_party import abc
 
+from garlicsim.general_misc import logic_tools
 from garlicsim.general_misc import caching
 
 
@@ -25,73 +26,72 @@ class StepType(abc.ABCMeta):
 
     
     def __instancecheck__(cls, thing):
-        if hasattr(thing, '_BaseStepType__step_type'):
-            return issubclass(thing._BaseStepType__step_type, cls)
-        if cls is BaseStep:
-            return (StepType.get_step_type(thing) is not None)
         
-        else:
-            match = cls.__raw_instance_check(thing)
-            if match:    
-                actual_function = (
-                    thing.im_func if
-                    isinstance(thing, types.MethodType)
-                    else thing
-                )
-                actual_function._BaseStepType__step_type = cls
-                
-        return match
+        step_type = StepType.get_step_type(thing)
+        return issubclass(cls, step_type)
+        
     
 
-    def __raw_instance_check(cls, thing):
-        #tododoc: justify lines
-        if not callable(thing):
-            return False
+    #def __raw_instance_check(cls, thing):
+        ##tododoc: justify lines
+        #if not callable(thing):
+            #return False
         
-        match = cls.name_identifier in thing.__name__
+        #match = cls.name_identifier in thing.__name__
         
-        if match is False:
-            return False
+        #if match is False:
+            #return False
         
-        all_name_identifiers = \
-            [cls_.name_identifier for cls_ in BaseStep.__subclasses__()]
+        #all_name_identifiers = \
+            #[cls_.name_identifier for cls_ in BaseStep.__subclasses__()]
              
-        superseding_name_identifiers = \
-            [name_identifier for name_identifier in all_name_identifiers if
-             (cls.name_identifier in name_identifier) and
-             (cls.name_identifier is not name_identifier)]
+        #superseding_name_identifiers = \
+            #[name_identifier for name_identifier in all_name_identifiers if
+             #(cls.name_identifier in name_identifier) and
+             #(cls.name_identifier is not name_identifier)]
         
-        if any((superseding_name_identifier in thing.__name__) for
-               superseding_name_identifier in superseding_name_identifiers):
-            return False
+        #if any((superseding_name_identifier in thing.__name__) for
+               #superseding_name_identifier in superseding_name_identifiers):
+            #return False
         
-        return True
+        #return True
     
 
     @staticmethod
     def get_step_type(thing):
+        
+        if hasattr(thing, '_BaseStepType__step_type'):
+            return thing._BaseStepType__step_type
+        
         step_types = BaseStep.__subclasses__()
-        matches = dict((step_type, step_type.__instancecheck__(thing)) for 
-                       step_type in step_types)
-        matching_step_types = [step_type for (step_type, match) in
-                               matches.iteritems() if match is True]
         
-        assert 0 <= len(matching_step_types) <= 1
-        
-        if matching_step_types:
-            (matching_step_type,) = matching_step_types
-            
-            actual_function = (
-                thing.im_func if
-                isinstance(thing, types.MethodType)
-                else thing
-            )
-            actual_function._BaseStepType__step_type = matching_step_type
+        all_name_identifiers = [cls_.name_identifier for cls_ in step_types]        
                 
-            return matching_step_type
+        matching_name_identifiers = \
+            [name_identifier for name_identifier in all_name_identifiers if
+             name_identifier in thing.__name__]
+        
+        if not matching_name_identifiers:
+            step_type = None
+                    
         else:
-            return None
-    
+            (maximal_matching_name_identifier,) = logic_tools.logic_max(
+                matching_name_identifiers,
+                relation=str.__contains__
+            )
+            
+            step_type = maximal_matching_name_identifier
+        
+            
+        actual_function = (
+            thing.im_func if
+            isinstance(thing, types.MethodType)
+            else thing
+        )
+        actual_function._BaseStepType__step_type = matching_step_type
+            
+        return matching_step_type
+        
         
         
         #if 'step' not in name:
