@@ -19,52 +19,29 @@ from garlicsim.general_misc.third_party import abc
 from garlicsim.general_misc import caching
 
 
+class StepType(abc.ABCMeta):
 
-class BaseStep(object):
-    '''
-    A type of step function.
-    
-    There are several different types of step functions with different
-    advantages and disadvantages. See the
-    `garlicsim.misc.simpack_grokker.step_types` package for a collection of
-    various step types.
-    '''
-    __metaclass__ = abc.ABCMeta
-
-
-    name_identifier = abc.abstractproperty()
-    
-    
-    verbose_name = abc.abstractproperty()
-    '''The verbose name of the step type.'''
-
-    
-    step_iterator_class = abc.abstractproperty()
-    '''The step iterator class used for steps of this step type.'''
-
-
-    @classmethod
     def __call__(cls, step_function):
         step_function._BaseStepType__step_type = cls
         return step_function
+
     
-    
-    @classmethod
     def __instancecheck__(cls, thing):
         if hasattr(thing, '_BaseStepType__step_type'):
-            return thing._BaseStepType__step_type
+            return thing._BaseStepType__step_type is cls
         else:
-            step_type = cls.__raw_instance_check(thing)
-            actual_function = (
-                thing.im_func if
-                isinstance(thing, types.MethodType)
-                else thing
-            )
-            actual_function._BaseStepType__step_type = step_type
-        return step_type
-        
+            match = cls.__raw_instance_check(thing)
+            if match:    
+                actual_function = (
+                    thing.im_func if
+                    isinstance(thing, types.MethodType)
+                    else thing
+                )
+                actual_function._BaseStepType__step_type = cls
+                
+        return match
     
-    @classmethod
+
     def __raw_instance_check(cls, thing):
         #tododoc: justify lines
         if not callable(thing):
@@ -78,13 +55,18 @@ class BaseStep(object):
         all_name_identifiers = \
             [cls_.name_identifier for cls_ in BaseStep.__subclasses__()]
              
-        if any((cls.name_identifier in name_identifier_) for 
-               name_identifier_ in all_name_identifiers):
+        superseding_name_identifiers = \
+            [name_identifier for name_identifier in all_name_identifiers if
+             (cls.name_identifier in name_identifier) and
+             (cls.name_identifier is not name_identifier)]
+        
+        if any((superseding_name_identifier in thing.__name__) for
+               superseding_name_identifier in superseding_name_identifiers):
             return False
         
         return True
-        
     
+
     @staticmethod
     def get_step_type(thing):
         step_types = BaseStep.__subclasses__()
@@ -138,5 +120,29 @@ class BaseStep(object):
         #else:
             #assert 'step' in name
             #return SimpleStep
-        
+
+
+            
+class BaseStep(object):
+    '''
+    A type of step function.
+    
+    There are several different types of step functions with different
+    advantages and disadvantages. See the
+    `garlicsim.misc.simpack_grokker.step_types` package for a collection of
+    various step types.
+    '''
+    __metaclass__ = StepType
+
+
+    name_identifier = abc.abstractproperty()
+    
+    
+    verbose_name = abc.abstractproperty()
+    '''The verbose name of the step type.'''
+
+    
+    step_iterator_class = abc.abstractproperty()
+    '''The step iterator class used for steps of this step type.'''    
+    
     

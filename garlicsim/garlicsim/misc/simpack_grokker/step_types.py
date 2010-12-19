@@ -14,7 +14,7 @@ from garlicsim.misc import step_iterators
 
 
 class SimpleStep(BaseStep):
-    '''The simplest steps function. Takes a state and returns a new one.'''
+    '''The simplest step function. Takes a state and returns a new one.'''
     step_iterator_class = step_iterators.StepIterator
     name_identifier = 'step'
     verbose_name = 'simple step function'
