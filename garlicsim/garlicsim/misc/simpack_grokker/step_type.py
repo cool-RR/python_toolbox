@@ -25,9 +25,11 @@ class StepType(abc.ABCMeta):
 
     
     def __instancecheck__(cls, thing):
-         # blocktodo: test for when calling with BaseStep without prior cache
         if hasattr(thing, '_BaseStepType__step_type'):
             return issubclass(thing._BaseStepType__step_type, cls)
+        if cls is BaseStep:
+            return (StepType.get_step_type(thing) is not None)
+        
         else:
             match = cls.__raw_instance_check(thing)
             if match:    
@@ -78,6 +80,14 @@ class StepType(abc.ABCMeta):
         
         if matching_step_types:
             (matching_step_type,) = matching_step_types
+            
+            actual_function = (
+                thing.im_func if
+                isinstance(thing, types.MethodType)
+                else thing
+            )
+            actual_function._BaseStepType__step_type = matching_step_type
+                
             return matching_step_type
         else:
             return None

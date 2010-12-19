@@ -11,3 +11,18 @@ def test():
     for step_type in step_types:
         assert issubclass(step_type, BaseStep)
         assert type(step_type) is StepType
+     
+        
+def test_uncached_step_function():
+    
+    def my_step(state):
+        raise NotImplementedError()
+    
+    assert not hasattr(my_step, '_BaseStepType__step_type')
+    
+    assert isinstance(my_step, BaseStep)
+    
+    
+    assert hasattr(my_step, '_BaseStepType__step_type')
+    
+    assert isinstance(my_step, step_types_module.SimpleStep)
