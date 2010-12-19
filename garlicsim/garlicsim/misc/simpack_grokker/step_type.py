@@ -2,12 +2,10 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-Defines the `BaseStepType` class.
+Defines the `StepType` class and its base instance, `BaseStep`.
 
 See its documentation for more details.
 '''
-
-# todo: should this be a metaclass?
 # todo: does this mixed abc enforce anything, with our custom `__call__`?
 
 import types
@@ -19,8 +17,25 @@ from garlicsim.general_misc import caching
 
 
 class StepType(abc.ABCMeta):
+    '''
+    A type of step function.
+    
+    There are several different types of step functions with different
+    advantages and disadvantages. See the
+    `garlicsim.misc.simpack_grokker.step_types` package for a collection of
+    various step types.
+    '''
 
     def __call__(cls, step_function):
+        '''
+        Create a step function.
+        
+        Only necessary for step functions that don't have a valid name
+        identifier (like "step") in their name.
+        
+        Usually used as a decorator.
+        '''
+        
         step_function._BaseStepType__step_type = cls
         return step_function
 
@@ -77,14 +92,8 @@ class StepType(abc.ABCMeta):
         
                 
 class BaseStep(object):
-    '''
-    A type of step function.
+    '''Abstract step function. See documentation of `StepType`.'''
     
-    There are several different types of step functions with different
-    advantages and disadvantages. See the
-    `garlicsim.misc.simpack_grokker.step_types` package for a collection of
-    various step types.
-    '''
     __metaclass__ = StepType
 
 

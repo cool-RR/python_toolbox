@@ -5,9 +5,8 @@
 A collection of step types.
 
 See documentation for
-`garlicsim.misc.simpack_grokker.step_type.BaseStepType` for more details.
+`garlicsim.misc.simpack_grokker.step_type.StepType` for more details.
 '''
-# todo: can do __instancehook__ shit later
 
 from .step_type import BaseStep
 from garlicsim.misc import step_iterators

@@ -8,7 +8,7 @@ def default_determinism_function(step_profile):
     '''
     The default determinism function.
     
-    Just returns None, meaning we have no idea whether the step profile is
+    Just returns `None`, meaning we have no idea whether the step profile is
     deterministic.
     '''
     return None
