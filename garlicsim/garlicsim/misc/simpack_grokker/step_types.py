@@ -16,6 +16,7 @@ from garlicsim.misc import step_iterators
 class SimpleStep(BaseStepType):
     '''The simplest steps function. Takes a state and returns a new one.'''
     step_iterator_class = step_iterators.StepIterator
+    name_identifier = 'step'
     verbose_name = 'simple step function'
 
 
@@ -28,6 +29,7 @@ class StepGenerator(BaseStepType):
     of all the local variables are.
     '''
     step_iterator_class = step_iterators.StepGeneratorIterator
+    name_identifier = 'step_generator'
     verbose_name = 'step generator'
     
     
@@ -40,6 +42,7 @@ class HistoryStep(BaseStepType):
     some types of simulations.
     '''
     step_iterator_class = step_iterators.HistoryStepIterator
+    name_identifier = 'history_step'
     verbose_name = 'history step function'
 
 
@@ -54,6 +57,7 @@ class HistoryStepGenerator(BaseStepType):
     (1.1.2011 - Not yet implemented, sorry.)
     '''
     step_iterator_class = None
+    name_identifier = 'history_step_generator'
     verbose_name = 'history step generator'
     
     
@@ -71,6 +75,7 @@ class InplaceStep(BaseStepType):
     (1.1.2011 - Not yet implemented, sorry.)
     '''
     inplace_step_iterator_class = None
+    name_identifier = 'inplace_step'
     verbose_name = 'inplace step function'
     
     
@@ -88,6 +93,7 @@ class InplaceStepGenerator(BaseStepType):
     (1.1.2011 - Not yet implemented, sorry.)
     '''
     inplace_step_iterator_class = None
+    name_identifier = 'inplace_step_generator'
     verbose_name = 'inplace step generator'
 
 

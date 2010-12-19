@@ -4,7 +4,7 @@
 '''
 Defines the `BaseStepType` class.
 
-See its dcoumentation for more details.
+See its documentation for more details.
 '''
 # todo: can do __instancehook__ shit later
 # todo: inherit from uninstanciable.
@@ -13,6 +13,8 @@ See its dcoumentation for more details.
 # todo: cool idea: allow using this class as a decorator to step functions
 
 from garlicsim.general_misc.third_party import abc
+
+from garlicsim.general_misc import caching
 
 
 class BaseStepType(object):
@@ -25,9 +27,109 @@ class BaseStepType(object):
     various step types.
     '''
     __metaclass__ = abc.ABCMeta
+
+
+    name_identifier = abc.abstractproperty()
+    
     
     verbose_name = abc.abstractproperty()
     '''The verbose name of the step type.'''
+
     
     step_iterator_class = abc.abstractproperty()
     '''The step iterator class used for steps of this step type.'''
+
+
+    @classmethod
+    def __call__(cls, step_function):
+        step_function._BaseStepType__step_type = cls
+        return step_function
+    
+    
+    @classmethod
+    def __instancecheck__(cls, thing):
+        if hasattr(thing, '_BaseStepType__step_type'):
+            return thing._BaseStepType__step_type
+        else:
+            step_type = cls.__raw_instance_check(thing)
+            actual_function = (
+                thing.im_func if
+                isinstance(step_function, types.MethodType)
+                else thing
+            )
+            actual_function._BaseStepType__step_type = step_type
+        return step_type
+        
+        
+    @classmethod
+    def __raw_instance_check(cls, thing):
+        #tododoc: justify lines
+        if not callable(thing):
+            return False
+        
+        match = cls.name_identifier in thing.__name__
+        
+        if match is False:
+            return False
+        
+        all_name_identifiers = \
+            [cls_.name_identifier for cls_ in BaseStepType.__subclasses__]
+             
+        if any((cls.name_identifier in name_identifier_) for 
+               name_identifier_ in all_name_identifiers):
+            return False
+        
+        return True
+        
+    
+    @staticmethod
+    def get_step_type(thing):
+        step_types = BaseStepType.__subclasses__()
+        matches = dict((step_type, step_type.__instancecheck__(thing)) for 
+                       step_type in step_types)
+        matching_step_types = [step_type for (step_type, match) in matches
+                               if match is True]
+        
+        assert 0 <= len(matching_step_types) <= 1
+        
+        
+    
+        
+        
+        #if 'step' not in name:
+            #raise GarlicSimException(
+                #"%s is not a step function-- It doesn't have the word 'step' in "
+                #"it. If you want GarlicSim to use it as a step function, give it "
+                #"a `.step_type` attribute pointing to a step type. (Like "
+                #"`garlicsim.misc.simpack_grokker.step_types.SimpleStep`.)" \
+                #% thing)
+        
+        #if 'inplace_step_generator' in name:
+            #raise NotImplementedError('`inplace_step_generator` not yet '
+                                      #'supported. It will probably become '
+                                      #'available in GarlicSim 0.7 in mid-2011.')
+            #return InplaceStepGenerator
+        
+        #elif 'inplace_step' in name:
+            #raise NotImplementedError('`inplace_step` not yet '
+                                      #'supported. It will probably become '
+                                      #'available in GarlicSim 0.7 in mid-2011.')
+            #return InplaceStep
+        
+        #elif 'history_step_generator' in name:
+            #raise NotImplementedError('`history_step_generator` not yet. '
+                                      #'supported. It will probably become '
+                                      #'available in GarlicSim 0.7 in mid-2011.')
+            #return HistoryStepGenerator
+        
+        #elif 'step_generator' in name:
+            #return StepGenerator
+        
+        #elif 'history_step' in name:
+            #return HistoryStep
+        
+        #else:
+            #assert 'step' in name
+            #return SimpleStep
+        
+    
