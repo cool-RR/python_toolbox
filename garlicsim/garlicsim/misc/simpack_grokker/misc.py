@@ -14,7 +14,8 @@ def default_determinism_function(step_profile):
     return None
 
 
-class DefaultForceCruncher(object):
+class DefaultCRUNCHERS(object):
+    '''The default `CRUNCHERS` setting, which just asks the simpack grokker.'''
     def __init__(self, simpack_grokker):
         self.simpack_grokker = simpack_grokker
     def __call__(self, cruncher_type):
