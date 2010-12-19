@@ -29,7 +29,7 @@ class StepType(abc.ABCMeta):
         
         step_type = StepType.get_step_type(thing)
         if step_type:
-            return issubclass(cls, step_type)
+            return issubclass(step_type, cls)
         else:
             assert step_type is None
             return False
