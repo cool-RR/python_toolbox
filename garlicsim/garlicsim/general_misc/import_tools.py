@@ -9,8 +9,6 @@ import imp
 
 from garlicsim.general_misc import package_finder
 from garlicsim.general_misc import caching
-
-
     
 
 def import_all(package, exclude='__init__', silent_fail=False):
@@ -53,10 +51,17 @@ def import_all(package, exclude='__init__', silent_fail=False):
 
 def normal_import(module_name):
     '''
+    Import a module.
     
-    This function avoids a weird bug in Linux, where importing using
-    `__import__` can lead to a `module.__name__` containing two consecutive
-    dots.
+    This function has several advantages over `__import__`:
+    
+     1. It avoids the weird `fromlist=['']` that you need to give `__import__`
+        in order for it to return the specific module you requested instead of 
+        the outermost package, and
+    
+     2. It avoids a weird bug in Linux, where importing using `__import__` can
+        lead to a `module.__name__` containing two consecutive dots.
+        
     '''
     if '.' in module_name:
         package_name, submodule_name = module_name.rsplit('.', 1)
@@ -71,8 +76,13 @@ def import_if_exists(module_name, silent_fail=False):
     '''
     Import module by name and return it, only if it exists.
     
-    If `silent_fail` is True, will return None if the module doesn't exist. If
-    `silent_fail` is False, will raise ImportError.
+    If `silent_fail` is `True`, will return `None` if the module doesn't exist.
+    If `silent_fail` is False, will raise `ImportError`.
+    
+    `silent_fail` applies only to whether the module exists or not; If it does
+    exist, but there's an error importing it... *release the hounds.*
+    
+    I mean, we just raise the error.
     '''    
     if '.' in module_name:
         package_name, submodule_name = module_name.rsplit('.', 1)
@@ -97,15 +107,22 @@ def import_if_exists(module_name, silent_fail=False):
             else: # silent_fail is False
                 raise
 
-    # Not actually using the result of `imp.find_module`, just want to know that
-    # it worked and the module exists. We'll let the conventional `__import__` tododoc
-    # find the module again, assuming its finding procedure will work exactly
-    # the same as imp's.
+    # Not actually using the result of `imp.find_module`, just want to know
+    # that it worked and the module exists. We'll let `normal_import` find the
+    # module again, assuming its finding procedure will work exactly the same
+    # as `imp`'s.
         
     return normal_import(module_name)
     
 
 def exists(module_name):
+    '''
+    Return whether a module by the name `module_name` exists.
+    
+    This seems to be the best way to carefully import a module.
+    
+    Currently implemented for top-level packages only. (i.e. no dots.)
+    '''
     assert '.' not in module_name
     try:
         imp.find_module(module_name)

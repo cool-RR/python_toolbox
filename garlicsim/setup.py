@@ -36,7 +36,8 @@ Visit http://garlicsim.org for more info.
 my_classifiers = [
     'Development Status :: 3 - Alpha',
     'Intended Audience :: Science/Research',
-    'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',
+    ('License :: OSI Approved :: GNU Library or Lesser General '
+     'Public License (LGPL)'),
     'Programming Language :: Python',
     'Programming Language :: Python :: 2.5',
     'Programming Language :: Python :: 2.6',

@@ -7,6 +7,7 @@ This module defines tools related to copying and deepcopying operations.
 
 import copy
 
+
 def deepcopy_as_simple_object(thing, memo=None):
     '''
     Deepcopy an object as a simple `object`, ignoring any __deepcopy__ method.
