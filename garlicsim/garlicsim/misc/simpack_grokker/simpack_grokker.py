@@ -90,10 +90,10 @@ class SimpackGrokker(object):
                 self.step_functions_by_type[step_types.HistoryStep]
             )
             
-            if self.step_functions_by_type[step_types.SimpleStep] or \
-               self.step_functions_by_type[step_types.StepGenerator] or \
-               self.step_functions_by_type[step_types.InplaceStep] or \
-               self.step_functions_by_type[step_types.InplaceStepGenerator]:
+            if (self.step_functions_by_type[step_types.SimpleStep] or
+                self.step_functions_by_type[step_types.StepGenerator] or
+                self.step_functions_by_type[step_types.InplaceStep] or
+                self.step_functions_by_type[step_types.InplaceStepGenerator]):
                 
                 raise InvalidSimpack("The `%s` simpack is defining both a "
                                      "history-dependent step and a "
@@ -111,10 +111,15 @@ class SimpackGrokker(object):
                 self.step_functions_by_type[step_types.InplaceStep]
             )
             
-        self.all_step_functions = self.all_step_functions # (Just for docs.)
-        '''
+            
+        # (no-op assignments, just for docs:)
         
-        Sorted by priority.
+        self.history_dependent = self.history_dependent
+        '''Flag saying whether the simpack looks at previous states.'''
+        
+        self.all_step_functions = self.all_step_functions
+        '''
+        All the step functions that the simpack provides, sorted by priority.
         '''
                
         if not self.all_step_functions:
@@ -123,16 +128,17 @@ class SimpackGrokker(object):
                                  simpack.__name__.rsplit('.')[-1])
         
         self.default_step_function = self.all_step_functions[0]
-        ''' '''
+        '''
+        The default step function. Will be used if we don't specify another.
+        '''
         
         
-    
     def __init_analysis_settings(self):
         '''Analyze the simpack to produce a Settings object.'''
-        # todo: consider doing this in Settings.__init__
+        # todo: consider doing this in `Settings.__init__`
         
-        # We want to access the `.settings` of our simpack, but we don't know if
-        # our simpack is a module or some other kind of object. So if it's a
+        # We want to access the `.settings` of our simpack, but we don't know
+        # if our simpack is a module or some other kind of object. So if it's a
         # module, we'll `try` to import `settings`.
         
         self.settings = Settings(self)
@@ -141,8 +147,8 @@ class SimpackGrokker(object):
            not hasattr(self.simpack, 'settings'):
             
             # The `if` that we did here means: "If there's reason to suspect
-            # that self.simpack.settings is a module that exists but hasn't been
-            # imported yet."
+            # that `self.simpack.settings` is a module that exists but hasn't
+            # been imported yet."
             
             settings_module_name = ''.join((
                 self.simpack.__name__,
@@ -155,8 +161,8 @@ class SimpackGrokker(object):
             # does *not* keep a reference to it. We'll access `settings` as
             # an attribute of the simpack below.
             
-        # Checking if there are original settings at all. If there aren't, we're
-        # done.
+        # Checking if there are original settings at all. If there aren't,
+        # we're done.
         if hasattr(self.simpack, 'settings'):
             
             original_settings = getattr(self.simpack, 'settings')
@@ -170,12 +176,17 @@ class SimpackGrokker(object):
                 
 
     def __init_analysis_cruncher_types(self):
+        '''Figure out which crunchers this simpack can use.'''
         
-        # todo: possibly fix CRUNCHERS to some canonical state in `.settings`
+        # todo: possibly fix `CRUNCHERS` to some canonical state in `.settings`
         from garlicsim.asynchronous_crunching import crunchers, BaseCruncher
         simpack = self.simpack
         
         self.cruncher_types_availability = OrderedDict()
+        '''dict mapping from cruncher type to whether it can be used.'''
+        
+        self.available_cruncher_types = []
+        '''The cruncher types that this simpack can use.'''
         
         CRUNCHERS = self.settings.CRUNCHERS
 
@@ -200,7 +211,7 @@ class SimpackGrokker(object):
                     ReasonedBool(
                         False,
                         'The `%s` simpack specified `%s` as the only '
-                        'available cruncher type' % \
+                        'available cruncher type.' % \
                         (simpack.__name__.rsplit('.')[-1],
                          cruncher_type.__name__)
                     )
@@ -227,8 +238,9 @@ class SimpackGrokker(object):
                     ReasonedBool(
                         False,
                         'The `%s` simpack specified `%s` as the only '
-                        'available cruncher type' % (simpack.__name__.rsplit('.')[-1],
-                                                     cruncher_type.__name__)
+                        'available cruncher type.' % \
+                        (simpack.__name__.rsplit('.')[-1],
+                         cruncher_type.__name__)
                     )
                 ) for unavailable_cruncher_type in unavailable_cruncher_types
             ))
@@ -266,7 +278,7 @@ class SimpackGrokker(object):
                         (simpack.__name__.rsplit('.')[-1],
                          unavailable_cruncher_type.__name__)
                     )
-                        
+                    
                 ) for unavailable_cruncher_type in unavailable_cruncher_types
             ))
             #                                                                 #
@@ -310,8 +322,8 @@ class SimpackGrokker(object):
                                  "cruncher types, or a filter function for "
                                  "cruncher types. You supplied `%s`, which is "
                                  "neither." % CRUNCHERS)
-            
-    
+
+        
     def step(self, state_or_history_browser, step_profile):
         '''
         Perform a step of the simulation.
@@ -319,7 +331,6 @@ class SimpackGrokker(object):
         The step profile will specify which parameters to pass to the simpack's
         step function.
         '''
-    
         # todo: probably inefficient, but this method is probably not used much
         # anyway.
         
@@ -330,7 +341,7 @@ class SimpackGrokker(object):
             
     def get_step_iterator(self, state_or_history_browser, step_profile):
         '''
-        Step generator for crunching states of the simulation.
+        Get a step iterator for crunching states of the simulation.
         
         The step profile will specify which parameters to pass to the simpack's
         step function.
@@ -340,13 +351,16 @@ class SimpackGrokker(object):
         step_type = StepType.get_step_type(step_function)
         step_iterator_class = step_type.step_iterator_class
 
-        step_iterator = step_iterator_class(state_or_history_browser,
-                                            step_profile)
-        
-        return step_iterator
+        return step_iterator_class(state_or_history_browser,
+                                   step_profile)
         
     
     def get_inplace_step_iterator(self, state, step_profile):
+        '''
+        Get an inplace step iterator which modifies the state in-place.
+        
+        Not yet implemented, sorry.
+        '''
         raise NotImplementedError('Inplace steps are not yet '
                                   'supported. They will probably become '
                                   'available in GarlicSim 0.7 in mid-2011.')
