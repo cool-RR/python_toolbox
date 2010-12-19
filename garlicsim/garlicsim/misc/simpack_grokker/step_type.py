@@ -24,6 +24,25 @@ class StepType(abc.ABCMeta):
     advantages and disadvantages. See the
     `garlicsim.misc.simpack_grokker.step_types` package for a collection of
     various step types.
+    
+    You don't need to interact with step types (i.e. instances of this
+    metaclass) in order to make step functions; If they have the appropriate
+    name identifier in their name, they will be associated with a step type
+    automaticaly. For example, a function called `meow_step_generator` will
+    automatically be identified as a `StepGenerator`. (Which is one example of
+    an instance of this metaclass.) So `isinstance(meow_step_generator,
+    StepGenerator)` will be `True` and
+    `StepType.get_step_type(meow_step_generator)` will be `StepGenerator`.
+    
+    One place where you do need to use this class is if your step function has
+    a custom name. For example, you have a function `yambambula` and you want
+    it to be identified as a `StepGenerator`. So you define it like this:
+    
+        @garlicsim.misc.simpack_grokker.step_types.StepGenerator
+        def yambambula(self):
+           ...
+    
+    Then the `yambambula` function will be identified as a step generator.
     '''
 
     def __call__(cls, step_function):
