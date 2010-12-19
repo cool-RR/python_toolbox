@@ -12,6 +12,8 @@ See its documentation for more details.
 # todo: this abc doesn't enforce anything since we don't instantiate.
 # todo: cool idea: allow using this class as a decorator to step functions
 
+import types
+
 from garlicsim.general_misc.third_party import abc
 
 from garlicsim.general_misc import caching
@@ -54,7 +56,7 @@ class BaseStepType(object):
             step_type = cls.__raw_instance_check(thing)
             actual_function = (
                 thing.im_func if
-                isinstance(step_function, types.MethodType)
+                isinstance(thing, types.MethodType)
                 else thing
             )
             actual_function._BaseStepType__step_type = step_type
@@ -73,7 +75,7 @@ class BaseStepType(object):
             return False
         
         all_name_identifiers = \
-            [cls_.name_identifier for cls_ in BaseStepType.__subclasses__]
+            [cls_.name_identifier for cls_ in BaseStepType.__subclasses__()]
              
         if any((cls.name_identifier in name_identifier_) for 
                name_identifier_ in all_name_identifiers):
@@ -87,12 +89,16 @@ class BaseStepType(object):
         step_types = BaseStepType.__subclasses__()
         matches = dict((step_type, step_type.__instancecheck__(thing)) for 
                        step_type in step_types)
-        matching_step_types = [step_type for (step_type, match) in matches
-                               if match is True]
+        matching_step_types = [step_type for (step_type, match) in
+                               matches.iteritems() if match is True]
         
         assert 0 <= len(matching_step_types) <= 1
         
-        
+        if matching_step_types:
+            (matching_step_type,) = matching_step_types
+            return matching_step_type
+        else:
+            return None
     
         
         
