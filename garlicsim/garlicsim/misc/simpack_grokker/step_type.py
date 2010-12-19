@@ -35,32 +35,6 @@ class StepType(abc.ABCMeta):
             return False
         
     
-
-    #def __raw_instance_check(cls, thing):
-        ##tododoc: justify lines
-        #if not callable(thing):
-            #return False
-        
-        #match = cls.name_identifier in thing.__name__
-        
-        #if match is False:
-            #return False
-        
-        #all_name_identifiers = \
-            #[cls_.name_identifier for cls_ in BaseStep.__subclasses__()]
-             
-        #superseding_name_identifiers = \
-            #[name_identifier for name_identifier in all_name_identifiers if
-             #(cls.name_identifier in name_identifier) and
-             #(cls.name_identifier is not name_identifier)]
-        
-        #if any((superseding_name_identifier in thing.__name__) for
-               #superseding_name_identifier in superseding_name_identifiers):
-            #return False
-        
-        #return True
-    
-
     @staticmethod
     def get_step_type(thing):
         
@@ -101,46 +75,7 @@ class StepType(abc.ABCMeta):
             
         return step_type
         
-        
-        
-        #if 'step' not in name:
-            #raise GarlicSimException(
-                #"%s is not a step function-- It doesn't have the word 'step' in "
-                #"it. If you want GarlicSim to use it as a step function, give it "
-                #"a `.step_type` attribute pointing to a step type. (Like "
-                #"`garlicsim.misc.simpack_grokker.step_types.SimpleStep`.)" \
-                #% thing)
-        
-        #if 'inplace_step_generator' in name:
-            #raise NotImplementedError('`inplace_step_generator` not yet '
-                                      #'supported. It will probably become '
-                                      #'available in GarlicSim 0.7 in mid-2011.')
-            #return InplaceStepGenerator
-        
-        #elif 'inplace_step' in name:
-            #raise NotImplementedError('`inplace_step` not yet '
-                                      #'supported. It will probably become '
-                                      #'available in GarlicSim 0.7 in mid-2011.')
-            #return InplaceStep
-        
-        #elif 'history_step_generator' in name:
-            #raise NotImplementedError('`history_step_generator` not yet. '
-                                      #'supported. It will probably become '
-                                      #'available in GarlicSim 0.7 in mid-2011.')
-            #return HistoryStepGenerator
-        
-        #elif 'step_generator' in name:
-            #return StepGenerator
-        
-        #elif 'history_step' in name:
-            #return HistoryStep
-        
-        #else:
-            #assert 'step' in name
-            #return SimpleStep
-
-
-            
+                
 class BaseStep(object):
     '''
     A type of step function.

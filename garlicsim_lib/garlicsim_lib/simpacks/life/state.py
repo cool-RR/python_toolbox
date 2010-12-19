@@ -26,6 +26,7 @@ class State(garlicsim.data_structures.State):
         state = State()
         state.board = Board.create_diehard(width, height)
         return state
+
     
     @staticmethod
     def create_root(width=45, height=25, fill='empty'):
@@ -49,7 +50,7 @@ class State(garlicsim.data_structures.State):
             yield current_state
     
     
-    def step(self, birth=[3], survival=[2, 3], randomness=0, *args, **kwargs):
+    def inplace_step(self, birth=[3], survival=[2, 3], randomness=0, *args, **kwargs):
         old_board = self.board
         new_board = Board(parent=old_board,
                           birth=birth,

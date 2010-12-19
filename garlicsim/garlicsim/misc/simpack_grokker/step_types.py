@@ -13,6 +13,12 @@ from .step_type import BaseStep
 from garlicsim.misc import step_iterators
 
 
+def _raise_not_implemented_error(cls):
+    raise NotImplementedError('`%s` not yet supported. It will probably '
+                              'become available in GarlicSim 0.7 in '
+                              'mid-2011.' % cls.__name__)
+
+
 class SimpleStep(BaseStep):
     '''The simplest step function. Takes a state and returns a new one.'''
     step_iterator_class = step_iterators.StepIterator
@@ -56,7 +62,7 @@ class HistoryStepGenerator(BaseStep):
     
     (1.1.2011 - Not yet implemented, sorry.)
     '''
-    step_iterator_class = None
+    step_iterator_class = property(_raise_not_implemented_error)
     name_identifier = 'history_step_generator'
     verbose_name = 'history step generator'
     
@@ -74,7 +80,8 @@ class InplaceStep(BaseStep):
     
     (1.1.2011 - Not yet implemented, sorry.)
     '''
-    inplace_step_iterator_class = None
+    step_iterator_class = property(_raise_not_implemented_error)
+    inplace_step_iterator_class = property(_raise_not_implemented_error)
     name_identifier = 'inplace_step'
     verbose_name = 'inplace step function'
     
@@ -92,7 +99,8 @@ class InplaceStepGenerator(BaseStep):
     
     (1.1.2011 - Not yet implemented, sorry.)
     '''
-    inplace_step_iterator_class = None
+    step_iterator_class = property(_raise_not_implemented_error)
+    inplace_step_iterator_class = property(_raise_not_implemented_error)
     name_identifier = 'inplace_step_generator'
     verbose_name = 'inplace step generator'
 
