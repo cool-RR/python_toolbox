@@ -4,6 +4,6 @@
 '''
 This package defines a variety of general tools.
 
-These tools are completely decoupled from `garlicsim` and do not belong anywhere
-else.
+These tools are completely decoupled from the rest of `garlicsim` and have
+nothing to do with computer simulations.
 '''
