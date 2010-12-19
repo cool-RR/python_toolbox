@@ -114,12 +114,12 @@ class StepProfile(ArgumentsProfile):
 
         def parse_arguments_to_step_profile(*args, **kwargs):
         
-            # We have two candidates to check now: args[0] and
-            # kwargs['step_function']. We'll check the kwargs one first, because
+            # We have two candidates to check now: `args[0]` and
+            # `kwargs['step_function']`. We'll check the kwargs one first, because
             # that's more explicit and there's less chance we'll be catching
             # some other object by mistake.
             #
-            # So we start with kwargs:
+            # So we start with `kwargs`:
             
             if 'step_function' in kwargs:
                 kwargs_copy = kwargs.copy()
@@ -152,7 +152,7 @@ class StepProfile(ArgumentsProfile):
                     return step_profile
     
             
-            # No step function in kwargs. We'll try args:
+            # No step function in `kwargs`. We'll try `args`:
             
             elif args:
                 
