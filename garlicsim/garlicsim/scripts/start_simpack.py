@@ -29,19 +29,20 @@ you.
 
     Usage: start_simpack.py my_simpack_name
 
-The simpack will be created in the current path, in a directory with the name of
-the simpack.'''
+The simpack will be created in the current path, in a directory with the name
+of the simpack.
+'''
 
     
 def _walk_folder(package_name, folder):
     '''
-    Walk on subfolders of a folder using pkg_resources.
+    Walk on subfolders of a folder using `pkg_resources`.
 
     `package_name` is the name of the package in which this folder lives.
     `folder` is the path of the folder.
     
-    Of course, since we are operating using pkg_resources, all paths are
-    relative to the pkg_resources-managed package.
+    Of course, since we are operating using `pkg_resources`, all paths are
+    relative to the `pkg_resources`-managed package.
     '''
     folders = [folder]
     
@@ -77,8 +78,8 @@ def start_simpack(containing_folder, name):
     Create a new simpack.
     
     This is the main function of this module. `containing_folder` is the folder
-    in which the simpack folder should be created. `name` is the name of the new
-    simpack, which will also be the name of its folder.
+    in which the simpack folder should be created. `name` is the name of the
+    new simpack, which will also be the name of its folder.
     """
     
     if not re.search(r'^[_a-zA-Z]\w*$', name): # If not valid folder name.
@@ -104,7 +105,10 @@ def start_simpack(containing_folder, name):
         
         _make_path_to_file(dest_file)
         
-        with pkg_resources.resource_stream(simpack_template_package_name, file) as source:
+        with pkg_resources.resource_stream(
+            simpack_template_package_name, file
+            ) as source:
+            
             with open(dest_file, 'wb') as destination:
                 
                 string_to_write = source.read().replace('simpack_name', name)

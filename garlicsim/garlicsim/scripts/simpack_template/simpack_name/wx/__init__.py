@@ -5,8 +5,8 @@
 # `garlicsim_wx`-- Just not very prettily.
 #
 # To make your simulation be prettier, you should start with filling in a state
-# viewer. That's in the `wx/widgets/state_viewer.py` module. You may also make a
-# state creation dialog, in `wx/widgets/state_creation_dialog`.
+# viewer. That's in the `wx/widgets/state_viewer.py` module. You may also make
+# a state creation dialog, in `wx/widgets/state_creation_dialog`.
 #
 # When you're done, don't forget to visit `wx/settings.py` to link to the new
 # classes you created.

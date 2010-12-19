@@ -26,10 +26,11 @@ class StateCreationDialog(CuteDialog):
 
         
     def start(self):
-        # The `start` method will be used by `garlicsim_wx` after the dialog has
-        # been created to make the dialog appear on the screen, and to create a
-        # state object from the data that the dialog has collected from the
-        # user. Returns a state, or None if the user hit "cancel" or something.
+        # The `start` method will be used by `garlicsim_wx` after the dialog
+        # has been created to make the dialog appear on the screen, and to
+        # create a state object from the data that the dialog has collected
+        # from the user. Returns a state, or `None` if the user hit "cancel" or
+        # something.
         if self.ShowModal() == wx.ID_OK:
             # state = ...
             pass

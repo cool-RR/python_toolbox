@@ -12,7 +12,7 @@ class StateViewer(wx.Panel,
             
         # We need to call the __init__ of both our base classes:
         wx.Panel.__init__(self, frame,
-                                        style=wx.SUNKEN_BORDER)        
+                          style=wx.SUNKEN_BORDER)        
         garlicsim_wx.widgets.WorkspaceWidget.__init__(self, frame)
         
         self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM) # Solves Windows flicker

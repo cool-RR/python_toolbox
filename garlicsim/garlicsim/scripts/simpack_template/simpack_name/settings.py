@@ -3,17 +3,19 @@ from .state import State
 import garlicsim
 
 
+########### *All* of the settings in this module are optional. ################
+
+
 # CRUNCHERS = garlicsim.asynchronous_crunching.crunchers.ThreadCruncher
 
-# A cruncher type that this simpack insists on using.  
+# Crunchers that this simpack says it can use.
 # 
-# This should be used only when a simpack has a special reason to use a specific
-# cruncher type only.
-#
-# You may specify a cruncher type by string or by class. You may specify a
-# sequence of cruncher types by priority, or a filter function that takes a
-# cruncher type and returns whether the simpack allows using it.j
-
+# Crunchers can be specified in different ways. You may specify a cruncher
+# type, or the string name of a cruncher type, or a list of either of those, or
+# a filter function for cruncher types.
+# 
+# This is useful because some simpacks can't be used with certain kinds of
+# crunchers.
 
 
 # DETERMINISM_FUNCTION = \
@@ -26,12 +28,12 @@ import garlicsim
 # on the step profile.)
 #
 # This is useful because it allows garlicsim to detect if a simulation has
-# reached a repititive state, so it can stop the crunching right there and avoid
-# wasting resources. (01.01.2011 - Still not implemented, sorry.)
+# reached a repititive state, so it can stop the crunching right there and
+# avoid wasting resources. (01.01.2011 - Still not implemented, sorry.)
 #
-# Note that this function does not return True or False: It returns a
+# Note that this function does not return `True` or `False`: It returns a
 # `DeterminismSetting` class. For details about those, see documentation in
-# garlicsim.misc.settings_constants.settings.
+# `garlicsim.misc.settings_constants.settings`.
 #
-# The function will return None if it's unknown whether the step profile is
+# The function will return `None` if it's unknown whether the step profile is
 # deterministic.
