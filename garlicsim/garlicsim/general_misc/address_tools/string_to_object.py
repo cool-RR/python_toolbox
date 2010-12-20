@@ -62,8 +62,16 @@ def get_object_by_address(address, root=None, namespace={}):
     ###########################################################################
     
     
+    ###########################################################################
+    # The implementation is recursive: We handle the case of a single-level
+    # address, like 'email'. If we get a multi-level address (i.e. contains a
+    # dot,) like 'email.encoders', we use this function twice, first to get
+    # `email`, and then from it to get `email.encoders`.
     
     if '.' not in address:
+        
+        ### Here we solve the basic case of a single-level address: ###########
+        #                                                                     #
         
         # Let's rule out the easy option that the requested object is the root:
         if root and (address == root_short_name):
@@ -100,20 +108,32 @@ def get_object_by_address(address, root=None, namespace={}):
             try:
                 return eval(address) # In case it's a builtin.
             except Exception:
-                return __import__(address) # Last option: A module
-    
+                # Last option, it's a module:
+                return import_tools.normal_import(address)
+        
+        #                                                                     #
+        ### Finished solving the basic case of a single-level address. ########
             
+        
     else: # '.' in address
+        
+        ### If we get a composite address, we solve recursively: ##############
+        #                                                                     #
         
         first_object_address, second_object_address = address.rsplit('.', 1)
         
         first_object = get_object_by_address(first_object_address, root=root,
-                                              namespace=namespace)
+                                             namespace=namespace)
 
         second_object = get_object_by_address(second_object_address,
-                                                   namespace=first_object)
-
+                                              namespace=first_object)
+        
         return second_object
+    
+        #                                                                     #
+        ### Finished solving recursively for a composite address. #############
+        
+        
     
 
 def resolve(string, root=None, namespace={}):
