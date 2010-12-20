@@ -1,3 +1,8 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''Module for describing Python objects as strings.'''
+
 import types
 import re
 
@@ -10,53 +15,73 @@ from garlicsim.general_misc import caching
 from .shared import (_address_pattern, _contained_address_pattern,
                      _get_parent_and_dict_from_namespace)
 
-# todo: when shortening, check that we're not using stuff that was excluded from
-# `__all__` (if one exists)
-
-
+# maybe todo: when shortening, check that we're not using stuff that was
+# excluded from `__all__` (if one exists)
 
 
 _unresolvable_string_pattern = re.compile("<[^<>]*?'[^<>]*?'[^<>]*?>")
+'''Pattern for unresorvable strings, like "<type 'list'>".'''
+
 
 _address_in_unresolvable_string_pattern = re.compile("[^']*?'([^']*?)'[^']*?")
+'''
+Pattern for extracting address from unresorvable strings.
+
+For example, matching "type 'list'" would result in `match.groups() ==
+('list',)`.
+'''
 
 
-def _tail_shorten(address, root=None, namespace={}):
-    '''
-    '''
-    if '.' not in address:
-        # Nothing to shorten
-        return address
+def describe(obj, shorten=False, root=None, namespace={}):
     
-    parent_address, child_name = address.rsplit('.', 1)
-    child = get_object_by_address(address, root=root, namespace=namespace)
+    if isinstance(obj, types.ModuleType) or \
+       (hasattr(obj, '__module__') and hasattr(obj, '__name__')):
+        
+        return get_address(obj, shorten=shorten, root=root,
+                            namespace=namespace)
     
-    current_parent_address = parent_address
+    raw_result = repr(obj)
+    current_result = raw_result
     
-    last_successful_parent_address = current_parent_address
-    
+    ugly_reprs = []
+        
+        
     while True:
-        # Removing the last component from the parent address:
-        current_parent_address = '.'.join(
-            current_parent_address.split('.')[:-1]
-        )
+
+        current_result_changed = False
         
-        if not current_parent_address:
-            # We've reached the top module and it's successful, can break now.
-            break
+        ugly_reprs = _unresolvable_string_pattern.findall(current_result)
         
-        current_parent = get_object_by_address(current_parent_address,
-                                               root=root,
-                                               namespace=namespace)
+        for ugly_repr in ugly_reprs:
+            
+            re_match = _address_in_unresolvable_string_pattern.match(ugly_repr)
+            
+            if not re_match:
+                continue
+            
+            address_of_ugly_repr = re_match.groups()[0]
+            
+            try:
+                object_candidate = get_object_by_address(address_of_ugly_repr)
+                # (Not using `root` and `namespace` cause it's an address
+                # manufactured by `repr`.)
+            except Exception:
+                continue
+            
+            if repr(object_candidate) == ugly_repr:
+                # We have a winner!
+                object_winner = object_candidate
+                pretty_address = get_address(object_winner, root=root,
+                                              namespace=namespace)                
+                current_result = current_result.replace(ugly_repr, pretty_address)
+                current_result_changed = True
+          
+        if current_result_changed:
+            continue
         
-        candidate_child = getattr(current_parent, child_name, None)
-        
-        if candidate_child is child:
-            last_successful_parent_address = current_parent_address
-        else:
-            break
-        
-    return '.'.join((last_successful_parent_address, child_name))
+        break
+    
+    return current_result
 
 
 def shorten_address(address, root=None, namespace={}):
@@ -191,59 +216,43 @@ def get_address(obj, shorten=False, root=None, namespace={}):
 
         
 
-    
-def describe(obj, shorten=False, root=None, namespace={}):
-    
-    if isinstance(obj, types.ModuleType) or \
-       (hasattr(obj, '__module__') and hasattr(obj, '__name__')):
-        
-        return get_address(obj, shorten=shorten, root=root,
-                            namespace=namespace)
-    
-    raw_result = repr(obj)
-    current_result = raw_result
-    
-    ugly_reprs = []
-        
-        
-    while True:
 
-        current_result_changed = False
-        
-        ugly_reprs = _unresolvable_string_pattern.findall(current_result)
-        
-        for ugly_repr in ugly_reprs:
-            
-            re_match = _address_in_unresolvable_string_pattern.match(ugly_repr)
-            
-            if not re_match:
-                continue
-            
-            address_of_ugly_repr = re_match.groups()[0]
-            
-            try:
-                object_candidate = get_object_by_address(address_of_ugly_repr)
-                # (Not using `root` and `namespace` cause it's an address
-                # manufactured by `repr`.)
-            except Exception:
-                continue
-            
-            if repr(object_candidate) == ugly_repr:
-                # We have a winner!
-                object_winner = object_candidate
-                pretty_address = get_address(object_winner, root=root,
-                                              namespace=namespace)                
-                current_result = current_result.replace(ugly_repr, pretty_address)
-                current_result_changed = True
-          
-        if current_result_changed:
-            continue
-        
-        break
+def _tail_shorten(address, root=None, namespace={}):
+    '''
+    '''
+    if '.' not in address:
+        # Nothing to shorten
+        return address
     
-    return current_result
-                
-            
-            
+    parent_address, child_name = address.rsplit('.', 1)
+    child = get_object_by_address(address, root=root, namespace=namespace)
+    
+    current_parent_address = parent_address
+    
+    last_successful_parent_address = current_parent_address
+    
+    while True:
+        # Removing the last component from the parent address:
+        current_parent_address = '.'.join(
+            current_parent_address.split('.')[:-1]
+        )
+        
+        if not current_parent_address:
+            # We've reached the top module and it's successful, can break now.
+            break
+        
+        current_parent = get_object_by_address(current_parent_address,
+                                               root=root,
+                                               namespace=namespace)
+        
+        candidate_child = getattr(current_parent, child_name, None)
+        
+        if candidate_child is child:
+            last_successful_parent_address = current_parent_address
+        else:
+            break
+        
+    return '.'.join((last_successful_parent_address, child_name))
+
     
 from .string_to_object import get_object_by_address, resolve
