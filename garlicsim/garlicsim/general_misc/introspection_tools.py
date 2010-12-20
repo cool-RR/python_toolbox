@@ -1,8 +1,15 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''Defines various introspection tools, similar to the stdlib's `inspect`.'''
+
 from garlicsim.general_misc import cute_inspect
 
 from garlicsim.general_misc.third_party.ordered_dict import OrderedDict
 
+
 def get_default_args_dict(function):
+    '''''' a aa a a
     arg_spec = cute_inspect.getargspec(function)
     (s_args, s_star_args, s_star_kwargs, s_defaults) = arg_spec
         
