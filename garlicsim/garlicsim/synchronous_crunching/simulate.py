@@ -14,7 +14,7 @@ from garlicsim.general_misc import cute_iter_tools
 
 import garlicsim
 import garlicsim.misc
-import history_browser as history_browser_module # Avoiding name clash
+from . import history_browser as history_browser_module # Avoiding name clash
 
 __all__ = ["simulate"]
 

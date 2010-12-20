@@ -6,7 +6,7 @@ See documentation of class `ReadWriteLock` defined in this module.
 '''
 # todo: organize.
 
-import original_read_write_lock
+from . import original_read_write_lock
 
 
 __all__ = ['ReadWriteLock']

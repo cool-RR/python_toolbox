@@ -18,12 +18,12 @@ import uuid
 import weakref
 import colorsys
 
-from copy_modes import DontCopyPersistent
+from .copy_modes import DontCopyPersistent
 from garlicsim.general_misc import caching
 from garlicsim.general_misc import copy_tools
 
-from persistent import Persistent
-from personality import Personality
+from .persistent import Persistent
+from .personality import Personality
 
 
 library = weakref.WeakValueDictionary()
