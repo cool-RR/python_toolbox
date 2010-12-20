@@ -84,9 +84,12 @@ def describe(obj, shorten=False, root=None, namespace={}):
         ugly_reprs = _unresolvable_string_pattern.findall(current_result)
         
         for ugly_repr in ugly_reprs:
+            # An `ugly_repr` is something like "<type 'list'>"
             
+            # We try to extract an address from it:...
             re_match = _address_in_unresolvable_string_pattern.match(ugly_repr)
-            
+        
+            # ...But if we can't, we just let it go ugly:
             if not re_match:
                 continue
             
@@ -99,15 +102,24 @@ def describe(obj, shorten=False, root=None, namespace={}):
             except Exception:
                 continue
             
+
             if repr(object_candidate) == ugly_repr:
-                # We have a winner!
+
+                # We have a winner! We found the actual object that this
+                # `ugly_repr` was trying to refer to:
                 object_winner = object_candidate
+                
+                # Let's replace `ugly_repr` with the actual address of the
+                # object:
                 pretty_address = get_address(object_winner, root=root,
-                                              namespace=namespace)                
-                current_result = current_result.replace(ugly_repr, pretty_address)
+                                              namespace=namespace)
+                current_result = current_result.replace(ugly_repr,
+                                                        pretty_address)
                 current_result_changed = True
           
         if current_result_changed:
+            # We `continue` on the while loop, just in case some `ugly_repr` we
+            # might be able to fix is still there:
             continue
         
         break
