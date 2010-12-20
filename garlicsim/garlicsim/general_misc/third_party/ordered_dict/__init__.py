@@ -4,19 +4,10 @@
 '''
 Defines the `OrderedDict` class.
 
-See its documentation for more details.
+We are **not even `try`ing** to use the `OrderedDict` that might be in the
+`collections` module, because that one doesn't have a `move_to_end` method.
 
-If we're using a sufficiently advanced Python version which has
-`collections.OrderedDict`, we'll use that instead.
+See its documentation for more details.
 '''
 
-import collections
-
-
-if 'OrderedDict' in vars(collections):
-    from collections import OrderedDict
-else:
-    from .ordereddict import OrderedDict
-
-    
-del collections
+from .ordereddict import OrderedDict
