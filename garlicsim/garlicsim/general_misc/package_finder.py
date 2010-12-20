@@ -105,7 +105,7 @@ def get_packages_and_modules_filenames(root, recursive=False):
         (filename, os.path.splitext(filename)[0]) for filename in result
     ))
     module_name_to_filenames = \
-        dict_tools.reverse_with_tuple_values(filename_to_module_name)
+        dict_tools.reverse_with_set_values(filename_to_module_name)
     
     for module_name, filenames in module_name_to_filenames.iteritems():
         if len(filenames) <= 1:

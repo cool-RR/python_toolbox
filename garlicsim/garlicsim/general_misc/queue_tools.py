@@ -1,7 +1,7 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''Defines several functions that may be useful when working with queues.'''
+'''Defines various functions for working with queues.'''
 
 from __future__ import with_statement
 
@@ -10,10 +10,6 @@ import sys
 
 from garlicsim.general_misc import caching
 from garlicsim.general_misc import import_tools
-
-
-class _Sentinel(object):
-    pass
 
 
 def dump(queue):
@@ -26,11 +22,16 @@ def dump(queue):
 
 
 def iterate(queue, block=False, limit_to_original_size=False,
-            prefetch_if_no_qsize=False):
-    '''Iterate over the items in the queue.'''
+            _prefetch_if_no_qsize=False):
+    '''
+    Iterate over the items in the queue.
+    
+    `limit_to_original_size=True` will limit the number of the items fetched to
+    the original number of items in the queue in the beginning.
+    '''
     if limit_to_original_size:
         if not _platform_supports_multiprocessing_qsize():
-            if prefetch_if_no_qsize:
+            if _prefetch_if_no_qsize:
                 for item in dump(queue):
                     yield item
                 raise StopIteration
@@ -38,7 +39,7 @@ def iterate(queue, block=False, limit_to_original_size=False,
                 "This platform doesn't support `qsize` for `multiprocessing` "
                 "queues, so you can't iterate on it while limiting to "
                 "original queue size. What you can do is set "
-                "`prefetch_if_no_qsize=True` to have the entire queue "
+                "`_prefetch_if_no_qsize=True` to have the entire queue "
                 "prefetched before yielding the items."
             )
         for i in xrange(queue.qsize()):
@@ -58,8 +59,8 @@ def get_item(queue, i):
     '''
     Get an item from the queue by index number without removing any items.
     
-    Note: This was designed for Queue.Queue. Don't try to use this, for
-    example, on multiprocessing.Queue.
+    Note: This was designed for `Queue.Queue`. Don't try to use this, for
+    example, on `multiprocessing.Queue`.
     '''
     with queue.mutex:
         return queue.queue[i]
@@ -67,10 +68,10 @@ def get_item(queue, i):
     
 def queue_as_list(queue):
     '''
-    Get all the items in the queue as a list without removing them.
+    Get all the items in the queue as a `list` without removing them.
     
-    Note: This was designed for Queue.Queue. Don't try to use this, for
-    example, on multiprocessing.Queue.
+    Note: This was designed for `Queue.Queue`. Don't try to use this, for
+    example, on `multiprocessing.Queue`.
     '''
     with queue.mutex:
         return list(queue.queue)
@@ -78,6 +79,11 @@ def queue_as_list(queue):
 
 @caching.cache()
 def _platform_supports_multiprocessing_qsize():
+    '''
+    Return whether this platform supports `multiprocessing.Queue().qsize()`.
+    
+    I'm looking at you, Mac OS.
+    '''
     if 'multiprocessing' not in sys.modules:
         if not import_tools.exists('multiprocessing'):
             return False

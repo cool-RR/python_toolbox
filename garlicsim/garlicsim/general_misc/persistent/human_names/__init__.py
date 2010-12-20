@@ -1,7 +1,7 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''This package provides a list of human names as `name_list`.'''
+'''Provides a list of human names as `name_list`.'''
 
 import pkg_resources
 

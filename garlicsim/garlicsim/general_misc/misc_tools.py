@@ -24,7 +24,7 @@ def is_subclass(candidate, base_class):
 
 def frange(start, finish=None, step=1.):
     '''
-    Make a list containing an arithmetic progression of numbers.
+    Make a `list` containing an arithmetic progression of numbers.
 
     This is an extension of the builtin `range`; It allows using floating point
     numbers.
@@ -58,7 +58,8 @@ def getted_vars(thing, _getattr=getattr):
 
 
 _ascii_variable_pattern = re.compile('^[a-zA-Z_][0-9a-zA-Z_]*$')
-def is_legal_ascii_variable_name(name):    
+def is_legal_ascii_variable_name(name):
+    '''Return whether `name` is a legal name for a Python variable.'''
     return bool(_ascii_variable_pattern.match(name))
 
 
@@ -72,16 +73,17 @@ def get_actual_type(thing):
     
     return getattr(thing, '__class__', None) or type(thing)
     # Using `.__class__` instead of `type` because of goddamned old-style
-    # classes. When you do `type` on an instance of an old-style class, you just
-    # get the useless `InstanceType`. But wait, there's more! We can't just take
-    # `thing.__class__` because the old-style classes themselves, i.e. the
-    # classes and not the instances, do not have a `.__class__` attribute at
-    # all! Therefore we are using `type` as a fallback.
+    # classes. When you do `type` on an instance of an old-style class, you
+    # just get the useless `InstanceType`. But wait, there's more! We can't
+    # just take `thing.__class__` because the old-style classes themselves,
+    # i.e. the classes and not the instances, do not have a `.__class__`
+    # attribute at all! Therefore we are using `type` as a fallback.
     #
     # I don't like old-style classes, that's what I'm saying.
     
     
 def is_number(x):
+    '''Return whether `x` is a number.'''
     try:
         x + 1
     except Exception:

@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the `CrossProcessPersistent` class.
+Defines the `CrossProcessPersistent` class.
 
 See its documentation for more information.
 
@@ -18,10 +18,10 @@ import uuid
 import weakref
 import colorsys
 
-from .copy_modes import DontCopyPersistent
 from garlicsim.general_misc import caching
 from garlicsim.general_misc import copy_tools
 
+from .copy_modes import DontCopyPersistent
 from .persistent import Persistent
 from .personality import Personality
 
@@ -39,34 +39,31 @@ class CrossProcessPersistent(Persistent):
     '''
     Object that sometimes shouldn't really be duplicated.
 
-    Say some plain object references a CrossProcessPersistent object. Then that
-    plain object gets deepcopied with the DontCopyPersistent copy mode. The
-    plain object will get deepcopied, but the CrossProcessPersistent object
-    under it will not! The new copy of the plain object will refer to the same
-    old copy of the CrossProcessPersistent object.
+    Say some plain object references a `CrossProcessPersistent` object. Then
+    that plain object gets deepcopied with the `DontCopyPersistent` copy mode.
+    The plain object will get deepcopied, but the `CrossProcessPersistent`
+    object under it will not! The new copy of the plain object will refer to
+    the same old copy of the `CrossProcessPersistent` object.
     
     This is useful for objects which are read-only and possibly heavy. You may
-    use Persistent as a base class for these kinds of objects.
+    use `CrossProcessPersistent` as a base class for these kinds of objects.
     
-    When copying a CrossProcessPersistent, it is not really copied; The new
-    "copy" is just the same object. 
-    
-    Keep in mind that a CrossProcessPersistent is read-only. This means that
+    Keep in mind that a `CrossProcessPersistent` is read-only. This means that
     starting from the first time that it is copied or put in a queue, it should
     not be changed.
 
-    There is no mechanism that enforces that the user doesn't change the object,
-    so the user must remember not to change it.
+    There is no mechanism that enforces that the user doesn't change the
+    object, so the user must remember not to change it.
     
-    What this class adds over Persistent, is that when a CrossProcessPersistent
-    is passed around between processes in queues, each process retains only one
-    copy of it.
+    What this class adds over `Persistent`, is that when a
+    `CrossProcessPersistent` is passed around between processes in queues, each
+    process retains only one copy of it.
     
     Note: This class is still experimental.
     '''
     def __new__(cls, *args, **kwargs):
         
-        # Here we need to check in what context __new__ was called.
+        # Here we need to check in what context `__new__` was called.
         # There are two options:
         #     1. The object is being created.
         #     2. The object is being unpickled.
@@ -116,11 +113,11 @@ class CrossProcessPersistent(Persistent):
             
     def __deepcopy__(self, memo):
         '''
-        Deepcopy the object. If DontCopyPersistent is given, only mock-copy.
+        Deepcopy the object. If `DontCopyPersistent` is given, only mock-copy.
         
-        When this method receieves an instance of DontCopyPersistent as a memo
-        dictionary, it will not actually deepcopy the object but only return a
-        reference to the original object.
+        When this method receieves an instance of `DontCopyPersistent` as a
+        memo dictionary, it will not actually `deepcopy` the object but only
+        return a reference to the original object.
         '''
         if isinstance(memo, DontCopyPersistent):
             memo[id(self)] = self

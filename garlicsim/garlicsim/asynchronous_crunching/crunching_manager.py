@@ -288,9 +288,9 @@ class CrunchingManager(object):
         '''
         Take work from cruncher and add to tree at the specified job's node.
         
-        If `retire` is set to `True`, retires the cruncher. Keep in mind that if
-        the cruncher gives an `EndMarker`, it will be retired regardless of the
-        `retire` argument.
+        If `retire` is set to `True`, retires the cruncher. Keep in mind that
+        if the cruncher gives an `EndMarker`, it will be retired regardless of
+        the `retire` argument.
         
         Returns `(number, leaf)`, where `number` is the number of nodes that
         were added, and `leaf` is the last node that was added.
@@ -305,7 +305,7 @@ class CrunchingManager(object):
         queue_iterator = queue_tools.iterate(
             cruncher.work_queue,
             limit_to_original_size=True,
-            prefetch_if_no_qsize=True
+            _prefetch_if_no_qsize=True
         )
         
         for thing in queue_iterator:
