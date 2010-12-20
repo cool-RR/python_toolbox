@@ -9,7 +9,16 @@ from garlicsim.general_misc.third_party.ordered_dict import OrderedDict
 
 
 def get_default_args_dict(function):
-    ''''''
+    '''
+    Get ordered dict from arguments which have a default to their default.
+    
+    Example:
+    
+        >>> def f(a, b, c=1, d='meow'): pass
+        >>> get_default_args_dict(f)
+        OrderedDict([('c', 1), ('d', 'meow')])
+        
+    '''
     arg_spec = cute_inspect.getargspec(function)
     (s_args, s_star_args, s_star_kwargs, s_defaults) = arg_spec
         
