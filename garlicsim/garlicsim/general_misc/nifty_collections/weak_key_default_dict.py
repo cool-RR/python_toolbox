@@ -1,9 +1,37 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''
+Defines the `WeakKeyDefaultDict` class.
+
+See its documentation for more details.
+'''
+# todo: revamp
+
 import UserDict
 from weakref import ref
 
+
 class WeakKeyDefaultDict(UserDict.UserDict, object): #todo: needs testing
+    '''
+    A weak key dictionary which can use a default factory.
+    
+    This is a combination of `weakref.WeakKeyDictionary` and
+    `collections.defaultdict`.
+    
+    The keys are referenced weakly, so if there are no more references to the
+    key, it gets removed from this dict.
+    
+    If a "default factory" is supplied, when a key is attempted that doesn't
+    exist the default factory will be called to create its new value.
+    '''
     
     def __init__(self, *args, **kwargs):
+        '''
+        Construct the `WeakKeyDefaultDict`.
+        
+        You may supply a `default_factory` as a keyword argument.
+        '''
         self.default_factory = None
         if 'default_factory' in kwargs:
             self.default_factory = kwargs.pop('default_factory')
@@ -22,6 +50,7 @@ class WeakKeyDefaultDict(UserDict.UserDict, object): #todo: needs testing
 
             
     def __missing__(self, key):
+        '''Get a value for a key which isn't currently registered.'''
         if self.default_factory is not None:
             self[key] = value = self.default_factory()
             return value
@@ -62,7 +91,8 @@ class WeakKeyDefaultDict(UserDict.UserDict, object): #todo: needs testing
 
            This API is used by pickle.py and copy.py.
         """
-        return (type(self), (self.default_factory,), None, None, self.iteritems())
+        return \
+            (type(self), (self.default_factory,), None, None, self.iteritems())
 
     
     def __delitem__(self, key):
@@ -105,6 +135,7 @@ class WeakKeyDefaultDict(UserDict.UserDict, object): #todo: needs testing
 
     
     def items(self):
+        """ D.items() -> list of D's (key, value) pairs, as 2-tuples """
         L = []
         for key, value in self.data.items():
             o = key()
@@ -114,6 +145,7 @@ class WeakKeyDefaultDict(UserDict.UserDict, object): #todo: needs testing
 
     
     def iteritems(self):
+        """ D.iteritems() -> an iterator over the (key, value) items of D """
         for wr, value in self.data.iteritems():
             key = wr()
             if key is not None:
@@ -132,17 +164,21 @@ class WeakKeyDefaultDict(UserDict.UserDict, object): #todo: needs testing
         """
         return self.data.iterkeys()
 
+    
     def iterkeys(self):
+        """ D.iterkeys() -> an iterator over the keys of D """
         for wr in self.data.iterkeys():
             obj = wr()
             if obj is not None:
                 yield obj
 
+                
     def __iter__(self):
         return self.iterkeys()
 
     
     def itervalues(self):
+        """ D.itervalues() -> an iterator over the values of D """
         return self.data.itervalues()
 
     
@@ -160,6 +196,7 @@ class WeakKeyDefaultDict(UserDict.UserDict, object): #todo: needs testing
 
     
     def keys(self):
+        """ D.keys() -> list of D's keys """
         L = []
         for wr in self.data.keys():
             o = wr()
@@ -169,6 +206,8 @@ class WeakKeyDefaultDict(UserDict.UserDict, object): #todo: needs testing
 
     
     def popitem(self):
+        """ D.popitem() -> (k, v), remove and return some (key, value) pair 
+        as a 2-tuple; but raise KeyError if D is empty """
         while 1:
             key, value = self.data.popitem()
             o = key()
@@ -177,14 +216,22 @@ class WeakKeyDefaultDict(UserDict.UserDict, object): #todo: needs testing
 
             
     def pop(self, key, *args):
+        """ D.pop(k[,d]) -> v, remove specified key and return the 
+        corresponding value. If key is not found, d is returned if given,
+        otherwise KeyError is raised """
         return self.data.pop(ref(key), *args)
 
     
     def setdefault(self, key, default=None):
+        """D.setdefault(k[,d]) -> D.get(k,d), also set D[k]=d if k not in D"""
         return self.data.setdefault(ref(key, self._remove),default)
 
     
     def update(self, dict=None, **kwargs):
+        """D.update(E, **F) -> None. Update D from E and F: for k in E: D[k] =
+        E[k] (if E has keys else: for (k, v) in E: D[k] = v) then: for k in F:
+        D[k] = F[k] """
+        
         d = self.data
         if dict is not None:
             if not hasattr(dict, "items"):

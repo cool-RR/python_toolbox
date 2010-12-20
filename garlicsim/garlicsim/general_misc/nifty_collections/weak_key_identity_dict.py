@@ -1,3 +1,13 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''
+Defines the `WeakKeyDefaultDict` class.
+
+See its documentation for more details.
+'''
+# todo: revamp
+
 import weakref
 import UserDict
 
