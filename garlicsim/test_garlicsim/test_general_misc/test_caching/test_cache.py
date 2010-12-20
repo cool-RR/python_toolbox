@@ -1,7 +1,10 @@
 import gc
 import weakref
 
+import nose.tools
+
 from garlicsim.general_misc.caching import cache
+
 
 def counting_func(a=1, b=2, *args, **kwargs):
     if not hasattr(counting_func, 'i'):
@@ -81,4 +84,25 @@ def test_unhashable_arguments():
     
     assert f(meow={1: [1, 2], 2: frozenset([3, 'b'])}) == \
            f(1, meow={1: [1, 2], 2: frozenset([3, 'b'])})
+    
+    
+def test_function_instead_of_max_size():
+
+    def confusedly_put_function_as_max_size():
+        exec('@cache\n'
+             'def f():\n'
+             '    pass')
+        
+    try:
+        confusedly_put_function_as_max_size()
+    except TypeError, exception:
+        assert type(exception) is TypeError
+        assert exception.args[0] == (
+            'You entered the callable `%s` where you should have '
+            'entered the `max_size` for the cache. You probably '
+            'used `@cache`, while you should have used `@cache()`'
+        )
+    else:
+        raise Exception('Should have gotten `TypeError`.')
+    
     

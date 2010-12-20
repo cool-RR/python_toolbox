@@ -1,3 +1,11 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''
+Defines the `CachedProperty` class.
+
+See its documentation for more details.
+'''
 
 
 class CachedProperty(object):
@@ -22,8 +30,8 @@ class CachedProperty(object):
         '''
         Construct the cached property.
         
-        You may optionally pass in the name that this property has in the class;
-        This will save a bit of processing later.
+        You may optionally pass in the name that this property has in the
+        class; This will save a bit of processing later.
         '''
         self.getter = getter
         self.our_name = name

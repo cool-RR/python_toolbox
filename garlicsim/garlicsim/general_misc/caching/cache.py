@@ -1,9 +1,17 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''
+Defines the `cache` decorator.
+
+See its documentation for more details.
+'''
 
 import functools
-import weakref
 
 from garlicsim.general_misc.sleek_refs import SleekCallArgs
 from garlicsim.general_misc.infinity import infinity
+from garlicsim.general_misc import misc_tools
 from garlicsim.general_misc.third_party.ordered_dict import OrderedDict
 
 
@@ -14,8 +22,10 @@ def cache(max_size=infinity):
     # have to go through so much shit. update: probably it will help only for
     # completely argumentless function. so do one for those.
     
-    # todo: if user put a function instead of `max_size`, give helpful exception
-    # message.
+    if callable(max_size) and not misc_tools.is_number(max_size):
+        raise TypeError('You entered the callable `%s` where you should have '
+                        'entered the `max_size` for the cache. You probably '
+                        'used `@cache`, while you should have used `@cache()`')
 
     if max_size == infinity:
         

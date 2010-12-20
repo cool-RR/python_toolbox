@@ -7,8 +7,6 @@ import re
 import math
 import types
 
-from . import import_tools
-
 
 def is_subclass(candidate, base_class):
     '''
@@ -67,5 +65,13 @@ def get_actual_type(thing):
     #
     # I don't like old-style classes, that's what I'm saying.
     
+    
+def is_number(x):
+    try:
+        x + 1
+    except Exception:
+        return False
+    else:
+        return True
     
     
