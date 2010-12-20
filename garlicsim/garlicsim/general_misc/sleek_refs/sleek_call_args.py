@@ -1,3 +1,13 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''
+Defines the `SleekRef` class and various data types using it.
+
+See documentation of `SleekRef` for more details. `SleekCallArgs` and
+`CuteSleekValueDict` are data types which rely on `SleekRef`.
+'''
+
 from garlicsim.general_misc import cute_inspect
 from garlicsim.general_misc import cheat_hashing
 
