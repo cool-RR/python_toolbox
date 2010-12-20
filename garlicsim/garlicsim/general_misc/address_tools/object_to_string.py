@@ -282,17 +282,34 @@ def shorten_address(address, root=None, namespace={}):
             # get everything. So I change `i` to `None`.
             
         head = '.'.join(address_parts[:i])
+
+        # Let me explain what `head` is. Assume we got an address of
+        # `a.b.c.d.e`, which is shortable to `a.b.d.e`. (Dropping the `c`
+        # node.) So in this for loop we're iterating over the differnt "heads"
+        # of the address. So `head` will first be `a.b`, then on the next
+        # iteration `a.b.c`, then `a.b.c.d`, then finally `a.b.c.d.e`. (We're
+        # skipping the first head `a` because a single-level address can't be
+        # shortened.)
+        
+        # For every `head`, we try to `_tail_shorten` it:
         new_head = _tail_shorten(head, root=root, namespace=namespace)
+        
         if new_head != head:
-            # Something was shortened!
+            # Tail-shortening was successful! So something like `a.b.c.d` was
+            # shortened to `a.b.d`. We replace the old address with the new
+            # short one:
             new_address = new_address.replace(head, new_head, 1)
             address_parts = address.split('.')
             
+    # After we looped on all the different possible heads of the address and
+    # tail-shortened each of them that we can, `new_address` has the
+    # maximally-shortened address:
     return new_address
 
 
 def _tail_shorten(address, root=None, namespace={}):
     '''
+    Shorten 
     '''
     if '.' not in address:
         # Nothing to shorten
