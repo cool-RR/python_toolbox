@@ -18,13 +18,14 @@ def sign(x):
 
 def round_to_int(x, up=False):
     '''
-    Round a number to an int.
+    Round a number to an `int`.
     
     This is mostly used for floating points. By default, it will round the
-    number down, unless the `up` argument is set to True and then it will round
-    up.
+    number down, unless the `up` argument is set to `True` and then it will
+    round up.
     
-    If you want to round a number to the closest int, just use int(round(x)).
+    If you want to round a number to the closest `int`, just use
+    `int(round(x))`.
     '''
     rounded_down = int(x // 1)
     if up:
