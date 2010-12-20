@@ -16,7 +16,7 @@ from .shared import (_address_pattern, _contained_address_pattern,
                      _get_parent_and_dict_from_namespace)
 
 # maybe todo: when shortening, check that we're not using stuff that was
-# excluded from `__all__` (if one exists)
+# excluded from `__all__`(if one exists.)
 
 
 _unresolvable_string_pattern = re.compile("<[^<>]*?'[^<>]*?'[^<>]*?>")
@@ -129,12 +129,19 @@ def describe(obj, shorten=False, root=None, namespace={}):
 
 @caching.cache()
 def get_address(obj, shorten=False, root=None, namespace={}):
+    '''
+    Get the address of a Python object.
+    
+    This only works for objects that have addresses, like modules, classes,
+    functions, methods, etc. It usually doesn't work on instances created
+    during the program. (e.g. `[1, 2]` doesn't have an address.)
+    '''
     # todo: Support classes inside classes. Currently doesn't work because
     # Python doesn't tell us inside in which class an inner class was defined.
     # We'll probably have to do some kind of search.
     
     if not (isinstance(obj, types.ModuleType) or hasattr(obj, '__module__')):
-        raise Exception("`%s` is not a module, nor does it have a "
+        raise TypeError("`%s` is not a module, nor does it have a "
                         "`.__module__` attribute, therefore we can't get its "
                         "address." % (obj,))
     
@@ -146,26 +153,37 @@ def get_address(obj, shorten=False, root=None, namespace={}):
     else:
         address= '.'.join((obj.__module__, obj.__name__))
 
+    # Now our attempt at an address is in `address`. Let's `try` to resolve
+    # that address to see if it's right and we get the same object:        
     try:
         object_candidate = get_object_by_address(address)
+    except Exception:
+        confirmed_object_address = False 
+    else:
         is_same_object = \
             (obj == object_candidate) if isinstance(obj, types.MethodType) \
             else (obj is object_candidate)
-    except Exception:
-        confirmed_object_address = False
-    else:
         confirmed_object_address = is_same_object
         
     if not confirmed_object_address:
-        # Don't try to shorten or anything, since we can't even access the
-        # object.
+        # We weren't able to confirm that the `address` we got is the correct
+        # one for this object, so we won't even try to shorten it in any way,
+        # just return what we got and hoped we didn't disappoint the user too
+        # badly:
         return address
-        
+
+    assert confirmed_object_address is True
+    # We confirmed we got the right `address`! Now we can try to shorten it
+    # some, if the user specified so in the arguments:
+
+    ### Shortening the address using `root` and/or `namespace`: ###############
+    #                                                                         #
+    
     if root or namespace:
         
+        # Ensuring `root` and `namespace` are actual objects:
         if isinstance(root, basestring):
-            root = get_object_by_address(root)
-            
+            root = get_object_by_address(root)            
         if isinstance(namespace, basestring):
             namespace = get_object_by_address(namespace)
 
@@ -209,7 +227,10 @@ def get_address(obj, shorten=False, root=None, namespace={}):
                     key = min(fitting_keys, key=len)
                     address = address.replace(head, key, 1)
 
+    #                                                                         #
+    ### Finshed shortening address using `root` and/or `namespace`. ###########
                     
+    
     if shorten:
         address = shorten_address(address, root=root, namespace=namespace)
         
