@@ -16,7 +16,7 @@ from garlicsim.general_misc import cute_iter_tools
 from garlicsim.general_misc import math_tools
 from garlicsim.general_misc import path_tools
 from garlicsim.general_misc import import_tools
-from garlicsim.general_misc.infinity import Infinity
+from garlicsim.general_misc.infinity import infinity
 from garlicsim.general_misc.nifty_collections import OrderedSet
 
 import garlicsim
@@ -220,7 +220,7 @@ def check(simpack, cruncher_type):
     # end since we have a path to an existing end:
     project.ensure_buffer_on_path(node_3, ended_path, 10)
     project.ensure_buffer_on_path(node_3, ended_path, 1000)
-    project.ensure_buffer_on_path(node_3, ended_path, Infinity)
+    project.ensure_buffer_on_path(node_3, ended_path, infinity)
     total_nodes_added = 0    
     while project.crunching_manager.jobs:
         time.sleep(0.1)

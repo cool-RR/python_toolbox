@@ -18,7 +18,7 @@ import nose
 
 from garlicsim.general_misc import cute_iter_tools
 from garlicsim.general_misc import math_tools
-from garlicsim.general_misc.infinity import Infinity
+from garlicsim.general_misc.infinity import infinity
 
 import garlicsim
 from garlicsim_lib.simpacks import life
@@ -312,11 +312,11 @@ def check(simpack, cruncher_type):
                                  node.finalize)
         assert node.get_root() is plain_root
         assert node.get_ancestor(generations=0) is node
-        assert node.get_ancestor(generations=Infinity, round=True) is \
+        assert node.get_ancestor(generations=infinity, round=True) is \
             plain_root
         nose.tools.assert_raises(
             garlicsim.data_structures.node.NodeLookupError,
-            lambda: node.get_ancestor(generations=Infinity, round=False)
+            lambda: node.get_ancestor(generations=infinity, round=False)
         )
         nose.tools.assert_raises(
             garlicsim.data_structures.node.NodeLookupError,

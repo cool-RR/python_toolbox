@@ -104,12 +104,12 @@ def test():
                 "{'balance': %s, 'clock': %s, 'last_bet_result': %s}" % \
                 (new_state.balance, new_state.clock, new_state.last_bet_result)
                 
-                from garlicsim.general_misc.infinity import Infinity
+                from garlicsim.general_misc.infinity import infinity
                 
                 got_winner = False
                 got_loser = False
                 while not (got_winner and got_loser):
-                    new_state = garlicsim.simulate(state, Infinity)
+                    new_state = garlicsim.simulate(state, infinity)
                     assert repr(vars(new_state)) == \
                            ("{'balance': %s, 'clock': %s, 'last_bet_result': "
                             "%s}" % (new_state.balance, new_state.clock,
@@ -126,7 +126,7 @@ def test():
                         got_loser = True
                         continue
                     
-                    states = garlicsim.list_simulate(state, Infinity)
+                    states = garlicsim.list_simulate(state, infinity)
                     len(states)
                     assert re.match(
                         r'^\[5000(, \d+)+\]$',
@@ -134,7 +134,7 @@ def test():
                     )
                     
                     def get_end_balance():
-                        return garlicsim.simulate(state, Infinity).balance
+                        return garlicsim.simulate(state, infinity).balance
                     results = [get_end_balance() for i in range(100)]
                     assert 3000 < (sum(results) / len(results)) < 6000
                     assert 0.4 < (results.count(6000)/len(results)) < 0.95

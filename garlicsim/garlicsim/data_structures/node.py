@@ -7,7 +7,7 @@ Defines the `Node` class and related exceptions.
 See documentation of `Node` for more information.
 '''
 
-from garlicsim.general_misc.infinity import Infinity
+from garlicsim.general_misc.infinity import infinity
 from garlicsim.general_misc import misc_tools
 from garlicsim.general_misc import address_tools
 
@@ -246,9 +246,9 @@ class Node(TreeMember):
             
         '''
         if max_nodes_distance is None:
-            max_nodes_distance = Infinity
+            max_nodes_distance = infinity
         if max_clock_distance is None:
-            max_clock_distance = Infinity
+            max_clock_distance = infinity
                     
         nodes = {self: {'nodes_distance': 0, 'clock_distance': 0}}
         leaves = {}

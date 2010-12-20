@@ -271,21 +271,21 @@ Simulating without a state limit
 Okay, but let's say we don't want to simulate just 5 states. We want to simulate
 until the gambler either gets $6,000 or loses too much money and quits. To do this, we simulate "to infinity":
     
-    >>> from garlicsim.general_misc.infinity import Infinity
-    >>> new_state = garlicsim.simulate(state, Infinity)
+    >>> from garlicsim.general_misc.infinity import infinity
+    >>> new_state = garlicsim.simulate(state, infinity)
     
-That :const:`Infinity <garlicsim.general_misc.infinity.Infinity>` simply
+That :const:`infinity <garlicsim.general_misc.infinity.infinity>` simply
 represents infinity, and it means: "Simulate until the simulation ends itself
 with a :exc:`WorldEnded <garlicsim.misc.WorldEnded>`." (If the simulation
 won't raise :exc:`WorldEnded <garlicsim.misc.WorldEnded>`, it will indeed
 keep on simulating until the end of time, or until you kill the Python process,
 whichever comes sooner.)
 
-(The reason we have to import this :const:`Infinity
-<garlicsim.general_misc.infinity.Infinity>` thing is just for
+(The reason we have to import this :const:`infinity
+<garlicsim.general_misc.infinity.infinity>` thing is just for
 backwards-compatibility with Python 2.5; If you use Python 2.6 or above, you may
-simply use the builtin :const:`float('inf')` instead of :const:`Infinity
-<garlicsim.general_misc.infinity.Infinity>`.)
+simply use the builtin :const:`float('inf')` instead of :const:`infinity
+<garlicsim.general_misc.infinity.infinity>`.)
 
 So anyway, let's check out that new state:
 
@@ -294,7 +294,7 @@ So anyway, let's check out that new state:
 
 This gambler made it to $6,000. Let's check another:
     
-    >>> new_state = garlicsim.simulate(state, Infinity)
+    >>> new_state = garlicsim.simulate(state, infinity)
     >>> vars(new_state)
     {'balance': 2200, 'clock': 8, 'last_bet_result': -1600}
     
@@ -303,7 +303,7 @@ money to continue the gambling scheme.
 
 Let's play with :func:`list_simulate <garlcsim.list_simulate>`:
     
-    >>> states = garlicsim.list_simulate(state, Infinity)
+    >>> states = garlicsim.list_simulate(state, infinity)
     >>> len(states)
     26
     >>> [s.balance for s in states]
@@ -322,7 +322,7 @@ betting scheme is any good. Let's run the simulation 1,000 times and get a list
 of the end balances:
 
     >>> def get_end_balance():
-    ...     return garlicsim.simulate(state, Infinity).balance
+    ...     return garlicsim.simulate(state, infinity).balance
     ...
     >>> results = [get_end_balance() for i in range(1000)]
     >>> results

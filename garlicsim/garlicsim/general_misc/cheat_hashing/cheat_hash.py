@@ -1,4 +1,4 @@
-from garlicsim.general_misc.infinity import Infinity
+from garlicsim.general_misc.infinity import infinity
 
 from .cheat_hash_functions import (cheat_hash_dict, cheat_hash_object, 
                                    cheat_hash_sequence, cheat_hash_set)
@@ -22,7 +22,7 @@ def cheat_hash(thing):
     
     matching_type = min(
         matching_types,
-        key=lambda type_: (mro.index(type_) if type_ in mro else Infinity)
+        key=lambda type_: (mro.index(type_) if type_ in mro else infinity)
     )
     
     return dispatch_map[matching_type](thing)

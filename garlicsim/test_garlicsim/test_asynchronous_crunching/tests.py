@@ -20,7 +20,7 @@ from garlicsim.general_misc import cute_iter_tools
 from garlicsim.general_misc import math_tools
 from garlicsim.general_misc import path_tools
 from garlicsim.general_misc import import_tools
-from garlicsim.general_misc.infinity import Infinity
+from garlicsim.general_misc.infinity import infinity
 from garlicsim.general_misc.nifty_collections import OrderedSet
 
 import garlicsim

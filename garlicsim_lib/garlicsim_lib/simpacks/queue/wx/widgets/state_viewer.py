@@ -14,7 +14,7 @@ import wx.lib.scrolledpanel
 
 import garlicsim
 import garlicsim_wx
-from garlicsim.general_misc.infinity import Infinity
+from garlicsim.general_misc.infinity import infinity
 from garlicsim_wx.general_misc import wx_tools
 
 
@@ -134,7 +134,7 @@ class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,
         ############  Draw population:
         #######################################################################
 
-        assert state.population.size == Infinity
+        assert state.population.size == infinity
         
         dc.SetTextBackground('#d4d0c8')
         dc.SetTextForeground('#000000')

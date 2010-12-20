@@ -1,6 +1,6 @@
 import nose.tools
 
-from garlicsim.general_misc.infinity import Infinity
+from garlicsim.general_misc.infinity import infinity
 from garlicsim.general_misc import cute_iter_tools
 from garlicsim.general_misc.cute_iter_tools import shorten
 
@@ -17,8 +17,8 @@ def test():
     assert list(shorten(my_range, 3)) == range(3)
     assert list(shorten(my_range, 4)) == range(4)
     
-    assert list(shorten(my_range, Infinity)) == my_range
-    assert list(shorten(iter(my_range), Infinity)) == my_range
+    assert list(shorten(my_range, infinity)) == my_range
+    assert list(shorten(iter(my_range), infinity)) == my_range
 
     
 def test_dont_pull_extra_item():
@@ -34,7 +34,7 @@ def test_dont_pull_extra_item():
     iterator_1 = shorten(generator(), 4)
     nose.tools.assert_raises(Exception, lambda: list(iterator_1))
     
-    iterator_2 = shorten(generator(), Infinity)
+    iterator_2 = shorten(generator(), infinity)
     nose.tools.assert_raises(Exception, lambda: list(iterator_2))
     
     iterator_3 = shorten(generator(), 3)

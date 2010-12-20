@@ -19,7 +19,7 @@ from garlicsim.general_misc import math_tools
 from garlicsim.general_misc import path_tools
 from garlicsim.general_misc import address_tools
 from garlicsim.general_misc import import_tools
-from garlicsim.general_misc.infinity import Infinity
+from garlicsim.general_misc.infinity import infinity
 
 import garlicsim
 
@@ -167,7 +167,7 @@ def check(simpack, cruncher_type):
     if simpack._settings_for_testing.N_STEP_FUNCTIONS >= 2:        
         default_step_function, alternate_step_function = \
             my_simpack_grokker.all_step_functions[:2]
-        job = project.begin_crunching(root, Infinity)
+        job = project.begin_crunching(root, infinity)
         assert job.crunching_profile.step_profile.step_function == \
                default_step_function
         run_sync_crunchers_until_we_get_at_least_one_node()
@@ -209,8 +209,8 @@ def check(simpack, cruncher_type):
     ### Testing cruncher type switching: ######################################
     #                                                                         #
     
-    job_1 = project.begin_crunching(root, clock_buffer=Infinity)
-    job_2 = project.begin_crunching(root, clock_buffer=Infinity)
+    job_1 = project.begin_crunching(root, clock_buffer=infinity)
+    job_2 = project.begin_crunching(root, clock_buffer=infinity)
     
     assert len(project.crunching_manager.crunchers) == 0
     assert project.sync_crunchers() == 0

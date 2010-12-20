@@ -24,7 +24,7 @@ from garlicsim.general_misc import queue_tools
 from garlicsim.general_misc import pickle_tools
 from garlicsim.general_misc import dict_tools
 from general_misc.stringsaver import s2i, i2s
-from garlicsim.general_misc.infinity import Infinity
+from garlicsim.general_misc.infinity import infinity
 from garlicsim.general_misc import binary_search
 from garlicsim.general_misc import import_tools
 from garlicsim_wx.general_misc.emitting_ordered_set import EmittingOrderedSet
@@ -567,7 +567,7 @@ class GuiProject(object):
                     self.infinity_job.node.state.clock + self.default_buffer
                 self.infinity_job = self.project.ensure_buffer_on_path(node,
                                                                        self.path,
-                                                                       Infinity)   
+                                                                       infinity)   
         
         
     def __modify_path_to_include_active_node(self):
@@ -592,7 +592,7 @@ class GuiProject(object):
         
         self.infinity_job = \
             self.project.ensure_buffer_on_path(self.active_node, self.path,
-                                                 Infinity)
+                                                 infinity)
         
         self.timer_for_playing.Start(1000//25)
         

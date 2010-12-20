@@ -10,7 +10,7 @@ from __future__ import with_statement
 import itertools
 import __builtin__
 
-from garlicsim.general_misc.infinity import Infinity
+from garlicsim.general_misc.infinity import infinity
 
 
 def consecutive_pairs(iterable, wrap_around=False):
@@ -74,7 +74,7 @@ def shorten(iterable, n):
     `n` may be infinite.
     '''
 
-    if n == Infinity:
+    if n == infinity:
         for thing in iterable:
             yield thing
         raise StopIteration

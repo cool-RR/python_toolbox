@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the `Infinity` class and related exceptions.
+This module defines the `infinity` class and related exceptions.
 
 See their documentation for more info.
 '''
@@ -11,7 +11,7 @@ from garlicsim.general_misc.exceptions import CuteException
 from garlicsim.general_misc import math_tools
 
 
-__all__ = ['Infinity', 'InfinityError', 'InfinityRaceError']
+__all__ = ['infinity', 'InfinityError', 'InfinityRaceError']
 
 
 def is_floatable(x):
@@ -38,29 +38,29 @@ class InfinityRaceError(CuteException):
     '''
 
 class InfinityError(CuteException):
-    '''Infinity-related exception.'''
+    '''infinity-related exception.'''
 
     
-class InfinityClass(object):
+class Infinity(object):
     '''
     A class for infinity numbers.
     
-    There are only two distinct instances of this class: Infinity and
-    (-Infinity).
+    There are only two distinct instances of this class: infinity and
+    (-infinity).
     '''
     #todo: add __assign__ or whatever it's called
     #todo: add more interoperability with float(inf). (Need to detect its
     #existance)    
-    #todo: calling it InfinityClass is a bit wrong./
+    #todo: calling it Infinity is a bit wrong./
     
     def __init__(self, direction=1):
         self.direction = direction
         
     def __abs__(self):
-        return Infinity
+        return infinity
     
     def __add__(self, other):
-        if isinstance(other, InfinityClass):
+        if isinstance(other, Infinity):
             if self.direction == other.direction:
                 return self
             else:
@@ -72,7 +72,7 @@ class InfinityClass(object):
         return self.__add__(-other)
     
     def __cmp__(self, other):
-        if isinstance(other, InfinityClass):
+        if isinstance(other, Infinity):
             d_cmp = cmp(self.direction, other.direction)
             if d_cmp != 0:
                 return d_cmp
@@ -83,30 +83,30 @@ class InfinityClass(object):
         else:
             raise NotImplementedError
     def __div__(self, other):
-        if isinstance(other, InfinityClass):
+        if isinstance(other, Infinity):
             raise InfinityRaceError
         elif is_floatable(other):
             s = math_tools.sign(other)
             if s==0:
                 raise InfinityRaceError
             else:
-                return InfinityClass(direction=self.direction * s)
+                return Infinity(direction=self.direction * s)
             
     def __float__(self):
         raise ValueError("Can't convert infinite number to float")
     
     def __mul__(self, other):
-        if isinstance(other, InfinityClass):
-            return InfinityClass(self.direction * other.direction)
+        if isinstance(other, Infinity):
+            return Infinity(self.direction * other.direction)
         elif is_floatable(other):
             s = math_tools.sign(other)
             if s==0:
                 raise InfinityRaceError
             else:
-                return InfinityClass(direction=self.direction * s)
+                return Infinity(direction=self.direction * s)
             
     def __neg__(self):
-        return InfinityClass(-self.direction)
+        return Infinity(-self.direction)
     
     def __nonzero__(self):
         return True
@@ -115,7 +115,7 @@ class InfinityClass(object):
         return self
     
     def __pow__(self, other):
-        if isinstance(other, InfinityClass):
+        if isinstance(other, Infinity):
             raise object # todo
         elif is_floatable(other):
             s = math_tools.sign(other)
@@ -133,16 +133,16 @@ class InfinityClass(object):
                             return 0
                         if s==1:
                             if s % 2 == 0:                                
-                                return InfinityClass()
+                                return Infinity()
                             else:                    
-                                return InfinityClass(-1)                            
+                                return Infinity(-1)                            
                     else: # is_nonfractional(other) is False
                         raise ValueError("Negative number cannot be raised "
                                          "to a fractional power")            
           
                 
     def __rpow__(self, other):
-        if isinstance(other, InfinityClass):
+        if isinstance(other, Infinity):
             return other.__pow__(self)
         elif not is_floatable(other):
             raise NotImplementedError
@@ -162,7 +162,7 @@ class InfinityClass(object):
     
     def __eq__(self, other):
 
-        if isinstance(other, InfinityClass):
+        if isinstance(other, Infinity):
             return other.direction == self.direction
         
         elif isinstance(other, float):
@@ -196,9 +196,9 @@ class InfinityClass(object):
             suffix=''
         else: # self.direction == -1
             suffix='-'
-        return suffix + 'Infinity'
+        return suffix + 'infinity'
         
 
-Infinity = InfinityClass()
+infinity = Infinity()
 
 

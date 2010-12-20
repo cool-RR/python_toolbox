@@ -62,7 +62,7 @@ class CrunchingProfile(object):
         
         Example output:
         
-            CrunchingProfile(clock_target=Infinity,
+            CrunchingProfile(clock_target=infinity,
             step_profile=life.State.step(<state>))
         '''
         return 'CrunchingProfile(clock_target=%s, step_profile=%s)' % (

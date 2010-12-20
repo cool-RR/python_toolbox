@@ -12,7 +12,7 @@ import copy
 import numpy
 import numpy.random
 
-from garlicsim.general_misc.infinity import Infinity
+from garlicsim.general_misc.infinity import infinity
 from garlicsim.misc import StepCopy
 import garlicsim
 
@@ -39,7 +39,7 @@ class State(garlicsim.data_structures.State):
         self.population = population
 
     @staticmethod
-    def create_root(n_servers=3, population_size=Infinity, mean_arrival=1,
+    def create_root(n_servers=3, population_size=infinity, mean_arrival=1,
                     mean_service=3):
         
         event_set = events_module.EventSet()
@@ -216,13 +216,13 @@ clients were served total.>''' % \
 
 class Population(object):
     '''A population which generates clients.'''
-    def __init__(self, event_set, facility, size=Infinity, mean_arrival=1):
+    def __init__(self, event_set, facility, size=infinity, mean_arrival=1):
         '''
         Constructor.
         
         `mean_arrival` is the mean time between arrivals.
         '''
-        assert size == Infinity
+        assert size == infinity
         self.identity = garlicsim.general_misc.persistent.CrossProcessPersistent()
         self.size = size
         self.mean_arrival = mean_arrival

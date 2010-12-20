@@ -1,4 +1,4 @@
-from garlicsim.general_misc.infinity import Infinity
+from garlicsim.general_misc.infinity import infinity
 from garlicsim.general_misc import binary_search
 
 import garlicsim.data_structures
@@ -32,15 +32,15 @@ class State(garlicsim.data_structures.State):
                 assert first_state.clock < second_state.clock <= \
                        second_to_last_state.clock < last_state.clock
             
-        assert history_browser.get_state_by_clock(-Infinity) is first_state
-        assert history_browser.get_state_by_clock(Infinity) is last_state
+        assert history_browser.get_state_by_clock(-infinity) is first_state
+        assert history_browser.get_state_by_clock(infinity) is last_state
         
         assert history_browser.get_state_by_clock(
-            -Infinity,
+            -infinity,
             binary_search.roundings.BOTH
         ) == (None, first_state)
         assert history_browser.get_state_by_clock(
-            Infinity,
+            infinity,
             binary_search.roundings.BOTH
         ) == (last_state, None)
         
