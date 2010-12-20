@@ -17,6 +17,31 @@ from garlicsim.general_misc.third_party.ordered_dict import OrderedDict
 
 
 def cache(max_size=infinity):
+    '''
+    Cache a function, saving results so they won't have to be computed again.
+    
+    This decorator understands function arguments. For example, it understands
+    that for a function like this:
+    
+        def f(a, b=2):
+            return whatever
+            
+    The calls `f(1)` or `f(1, 2)` or `f(b=2, a=1)` are all identical, and a
+    cached result saved for one of these calls will be used for the others.
+    
+    All the arguments are sleekreffed to prevent memory leaks. Sleekref is a
+    variation of weakref. Sleekref is when you try to weakref an object, but if
+    it's non-weakreffable, like a `list` or a `dict`, you maintain a normal,
+    strong reference to it. (See documentation of
+    `garlicsim.general_misc.sleek_refs` for more details.) Thanks to
+    sleekreffing you can avoid memory leaks when using weakreffable arguments,
+    but if you ever want to use non-weakreffable arguments you are still able
+    to. (Assuming you don't mind the memory leaks.)
+    
+    You may optionally specify a `max_size` for maximum number of cached
+    results to store; Old entries are thrown away according to a "least
+    recently calculated" alogrithm. (I'll be happy to see a patch to LRU.)
+    '''
     # todo idea: figure how how complex the function's argspec is, and then
     # compile a function accordingly, so functions with a simple argspec won't
     # have to go through so much shit. update: probably it will help only for
