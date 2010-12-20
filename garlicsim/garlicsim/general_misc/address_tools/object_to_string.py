@@ -309,7 +309,18 @@ def shorten_address(address, root=None, namespace={}):
 
 def _tail_shorten(address, root=None, namespace={}):
     '''
-    Shorten 
+    Shorten an address by eliminating tails. Internal function.
+    
+    When we say tail here, we mean a tail ending just before the final node of
+    the address, not including the final one. For example, the tails of
+    'a.b.c.d.e' would be 'd', 'c.d', 'b.c.d' and 'a.b.c.d'.
+    
+    For example, if given an address 'a.b.c.d.e', we'll check if we can access
+    the same object with 'a.b.c.e'. If so we try 'a.b.e'. If so we try 'a.e'.
+    When it stops working, we take the last address that worked and return it.
+    
+    Note: `root` and `namespace` are only provided in order to access the
+    object. This function doesn't do root- or namespace-shortening.
     '''
     if '.' not in address:
         # Nothing to shorten
