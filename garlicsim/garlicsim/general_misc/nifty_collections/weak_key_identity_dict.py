@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-Defines the `WeakKeyDefaultDict` class.
+Defines the `WeakKeyIdentityDict` class.
 
 See its documentation for more details.
 '''
@@ -16,6 +16,7 @@ __all__ = ['WeakKeyIdentityDict']
 
 
 class IdentityRef(weakref.ref):
+    '''A weak reference to an object, hashed by identity and not contents.'''
     
     def __init__(self, thing, callback=None):
         weakref.ref.__init__(self, thing, callback)
@@ -27,14 +28,17 @@ class IdentityRef(weakref.ref):
 
 
 class WeakKeyIdentityDict(UserDict.UserDict, object):
-    """ tododoc Mapping class that references keys weakly.
-
-    Entries in the dictionary will be discarded when there is no
-    longer a strong reference to the key. This can be used to
-    associate additional data with an object owned by other parts of
-    an application without adding attributes to those objects. This
-    can be especially useful with objects that override attribute
-    accesses.
+    """
+    A weak key dictionary which cares about the keys' identities.
+    
+    This is a fork of `weakref.WeakKeyDictionary`. Like in the original
+    `WeakKeyDictionary`, the keys are referenced weakly, so if there are no
+    more references to the key, it gets removed from this dict.
+    
+    The difference is that `WeakKeyIdentityDict` cares about the keys'
+    identities and not their contents, so even unhashable objects like lists
+    can be used as keys. The value will be tied to the object's identity and
+    not its contents.
     """
 
     def __init__(self, dict_=None):
@@ -64,6 +68,7 @@ class WeakKeyIdentityDict(UserDict.UserDict, object):
 
         
     def copy(self):
+        """ D.copy() -> a shallow copy of D """
         new = WeakKeyIdentityDict()
         for key, value in self.data.items():
             o = key()
@@ -73,6 +78,7 @@ class WeakKeyIdentityDict(UserDict.UserDict, object):
 
     
     def get(self, key, default=None):
+        """ D.get(k[,d]) -> D[k] if k in D, else d.  d defaults to None. """
         return self.data.get(IdentityRef(key),default)
 
     
@@ -88,6 +94,7 @@ class WeakKeyIdentityDict(UserDict.UserDict, object):
     
     
     def items(self):
+        """ D.items() -> list of D's (key, value) pairs, as 2-tuples """
         L = []
         for key, value in self.data.items():
             o = key()
@@ -97,6 +104,7 @@ class WeakKeyIdentityDict(UserDict.UserDict, object):
 
     
     def iteritems(self):
+        """ D.iteritems() -> an iterator over the (key, value) items of D """
         for wr, value in self.data.iteritems():
             key = wr()
             if key is not None:
@@ -117,6 +125,7 @@ class WeakKeyIdentityDict(UserDict.UserDict, object):
 
     
     def iterkeys(self):
+        """ D.iterkeys() -> an iterator over the keys of D """
         for wr in self.data.iterkeys():
             obj = wr()
             if obj is not None:
@@ -127,6 +136,7 @@ class WeakKeyIdentityDict(UserDict.UserDict, object):
 
     
     def itervalues(self):
+        """ D.itervalues() -> an iterator over the values of D """
         return self.data.itervalues()
 
     
@@ -144,6 +154,7 @@ class WeakKeyIdentityDict(UserDict.UserDict, object):
 
     
     def keys(self):
+        """ D.keys() -> list of D's keys """
         L = []
         for wr in self.data.keys():
             o = wr()
@@ -153,7 +164,9 @@ class WeakKeyIdentityDict(UserDict.UserDict, object):
 
     
     def popitem(self):
-        while 1:
+        """ D.popitem() -> (k, v), remove and return some (key, value) pair 
+        as a 2-tuple; but raise KeyError if D is empty """
+        while True:
             key, value = self.data.popitem()
             o = key()
             if o is not None:
@@ -161,14 +174,22 @@ class WeakKeyIdentityDict(UserDict.UserDict, object):
 
             
     def pop(self, key, *args):
+        """ D.pop(k[,d]) -> v, remove specified key and return the
+        corresponding value. If key is not found, d is returned if given,
+        otherwise KeyError is raised """
         return self.data.pop(IdentityRef(key), *args)
 
     
     def setdefault(self, key, default=None):
+        """D.setdefault(k[,d]) -> D.get(k,d), also set D[k]=d if k not in D"""
         return self.data.setdefault(IdentityRef(key, self._remove),default)
 
     
     def update(self, dict=None, **kwargs):
+        """ D.update(E, **F) -> None. Update D from E and F: for k in E: D[k] =
+        E[k] (if E has keys else: for (k, v) in E: D[k] = v) then: for k in F:
+        D[k] = F[k] """
+        
         d = self.data
         if dict is not None:
             if not hasattr(dict, "items"):
