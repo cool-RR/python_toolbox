@@ -1,13 +1,15 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''Module for resolving strings into Python objects.'''
+
 import types
-import re
 
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import dict_tools
 from garlicsim.general_misc import re_tools
-from garlicsim.general_misc import caching
 
-# Doing at bottom:
-# from . import object_to_string
+# from . import object_to_string (at bottom of file.)
 from .shared import (_contained_address_pattern, _address_pattern,
                      _get_parent_and_dict_from_namespace)
 
@@ -104,7 +106,19 @@ def get_object_by_address(address, root=None, namespace={}):
     
 
 def resolve(string, root=None, namespace={}):
-    # sktechy for now
+    '''
+    Resolve an address into a Python object.
+    
+    For example:
+    
+        >>> address_tools.resolve('[list, [1, 2], email]')
+        [<type 'list'>, [1, 2], <module 'email' from
+        'c:\Python27\lib\email\__init__.pyc'>]
+        
+    `root` is an object (usually a module) whose attributes will be looked at
+    when searching for the object. `namespace` is a `dict` whose keys will be
+    searched as well.    
+    '''
     
     # Resolving '' to None:
     if string == '':

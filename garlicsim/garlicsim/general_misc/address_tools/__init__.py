@@ -4,8 +4,8 @@
 '''
 Module for manipulating Python addresses.
 
-Use `resolve` to turn an address into an object, and `describe` to turn an
-object into a string.
+Use `resolve` to turn a string description into an object, and `describe` to
+turn an object into a string.
 
 For example:
 
@@ -15,8 +15,8 @@ For example:
     <type 'list'>
     >>> address_tools.describe([1, 2, {3: 4}])
     '[1, 2, {3: 4}]'
-    >>> address_tools.resolve('email.encoders')
-    <module 'email.encoders' from 'c:\Python27\lib\email\encoders.pyc'>
+    >>> address_tools.resolve('{email.encoders: 1}')
+    {<module 'email.encoders' from 'c:\Python27\lib\email\encoders.pyc'>: 1}
     
 '''
 
