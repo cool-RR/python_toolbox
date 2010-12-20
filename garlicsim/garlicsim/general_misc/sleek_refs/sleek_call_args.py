@@ -31,7 +31,7 @@ class SleekCallArgs(object):
     
     All the argument values are sleekreffed to avoid memory leaks. (See
     documentation of `garlicsim.general_misc.sleek_refs.SleekRef` for more
-    details.
+    details.)
     '''
     # What if we one of the args gets gc'ed before this SCA gets added to the
     # dictionary? It will render this SCA invalid, but we'll still be in the

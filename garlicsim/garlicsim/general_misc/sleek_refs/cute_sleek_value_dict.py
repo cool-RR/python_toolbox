@@ -2,11 +2,9 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-Defines the `SleekRef` class and various data types using it.
+Defines the `CuteSleekValueDict` class.
 
-See documentation of `SleekRef` for more details. `SleekCallArgs` and
-`CuteSleekValueDict` are data types which rely on `SleekRef`.
-
+See its documentation for more details.
 '''
 
 import weakref
@@ -20,10 +18,18 @@ __all__ = ['CuteSleekValueDict']
 
 
 class CuteSleekValueDict(UserDict.UserDict, object):
-    """Mapping class that references values weakly.
-
-    Entries in the dictionary will be discarded when no strong
-    reference to the value exists anymore
+    """
+    A dictionary which sleekrefs its values and propagates their callback.
+    
+    When a value is garbage-collected, it (1) removes itself from this dict and
+    (2) calls the dict's own `callback` function.
+    
+    This class is like `weakref.WeakValueDictionary`, except (a) it uses
+    sleekrefs instead of weakrefs and (b) when a value dies, it calls a
+    callback.
+    
+    See documentation of `garlicsim.general_misc.sleek_refs.SleekRef` for more
+    details about sleekreffing.
     """
     # We inherit the constructor without worrying about the input
     # dictionary; since it uses our .update() method, we get the right
