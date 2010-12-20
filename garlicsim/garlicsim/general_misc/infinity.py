@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the `infinity` class and related exceptions.
+This module defines the `Infinity` class and related exceptions.
 
 See their documentation for more info.
 '''
@@ -21,12 +21,14 @@ def is_floatable(x):
     except Exception:
         return False
 
+    
 def is_nonfractional(x):
     try:
         int(x)
         return int(x) == x
     except Exception:
         return False
+        
     
 class InfinityRaceError(CuteException):
     '''
@@ -37,6 +39,7 @@ class InfinityRaceError(CuteException):
     it impossible to determine what the result of the computation would be.
     '''
 
+    
 class InfinityError(CuteException):
     '''infinity-related exception.'''
 
@@ -184,7 +187,7 @@ class Infinity(object):
             else:
                 return False
             
-        else: # other is not any kind of infinity
+        else: # `other` is not any kind of infinity
             return False
         
     

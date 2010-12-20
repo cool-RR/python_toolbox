@@ -1,3 +1,9 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''
+Wraps the `cProfile` module, fixing a little bug in `runctx`.
+'''
 
 from cProfile import *
 

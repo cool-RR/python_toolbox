@@ -1,3 +1,12 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''
+Defines the `troubleshoot_pstats` function.
+
+See its documentation for more details.
+'''
+
 import os
 
 from garlicsim.general_misc import import_tools
@@ -5,13 +14,13 @@ from garlicsim.general_misc import import_tools
 
 def troubleshoot_pstats():
     '''
+    Let the user know if there might be an error importing `pstats`.
     
     Raises an exception if it thinks it caught the problem. So if this function
     didn't raise an exception, it means it didn't manage to diagnose the
     problem.
     '''    
-    if import_tools.import_if_exists('pstats', silent_fail=True) is None and \
-       os.name == 'posix':
+    if not import_tools.exists('pstats') and os.name == 'posix':
         
         raise ImportError(
             "The required `pstats` Python module is not installed on your "

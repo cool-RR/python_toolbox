@@ -14,20 +14,17 @@ from .temp_value_setter import TempValueSetter
 
 class TempRecursionLimitSetter(TempValueSetter):
     '''
-    Context manager for temporarily setting a value to a variable.
+    Context manager for temporarily changing the recurstion limit.
     
-    The value is set to the variable before the suite starts, and gets reset
-    back to the old value after the suite finishes.
+    The temporary recursion limit comes into effect before the suite starts,
+    and the original recursion limit returns after the suite finishes.
     '''
     
     def __init__(self, recursion_limit):
         '''
-        Construct the `TempValueSetter`.
+        Construct the `TempRecursionLimitSetter`.
         
-        `variable` may be either an (`object`, `attribute_string`) pair or a
-        `(getter, setter)` pair.
-        
-        `value` is the temporary value to set to the variable.
+        `recursion_limit` is the temporary recursion limit to use.
         '''
         assert isinstance(recursion_limit, int)
         TempValueSetter.__init__(
