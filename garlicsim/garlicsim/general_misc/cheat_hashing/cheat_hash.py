@@ -1,3 +1,12 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''
+Defines the `cheat_hash` function for cheat-hashing mutable objects.
+
+See its documentation for more details.
+'''
+
 from garlicsim.general_misc.infinity import infinity
 
 from .cheat_hash_functions import (cheat_hash_dict, cheat_hash_object, 
@@ -11,9 +20,21 @@ dispatch_map = {
     dict: cheat_hash_dict,
     set: cheat_hash_set
 }
+'''`dict` mapping from a type to a function that cheat-hashes it.'''
 
 
 def cheat_hash(thing):
+    '''
+    Cheat-hash an object. Works on mutable objects.
+    
+    This is a replacement for `hash` which generates something like an hash for
+    an object, even if it is mutable, unhashable and/or refers to
+    mutable/unhashable objects.
+    
+    This is intended for situtations where you have mutable objects that you
+    never modify, and you want to be able to hash them despite Python not
+    letting you.
+    '''
     thing_type = type(thing)
     matching_types = \
         [type_ for type_ in dispatch_map if issubclass(thing_type, type_)]

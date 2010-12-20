@@ -24,7 +24,8 @@ class ArgumentsProfile(object):
     A canonical arguments profile for a function.
     
     (This should be used only on function that don't modify the arguments they
-    receive.)
+    receive. Also, you should never modify any arguments you use in an
+    arguments profile, even outside the function.)
     
     What is an arguments profile and what is it good for?
     

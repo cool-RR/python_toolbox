@@ -1,3 +1,7 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''Defines functions for `cheat_hash`ing various types.'''
 
 # todo: there are some recommended hash implementations in `_abcoll`, maybe
 # they'll help

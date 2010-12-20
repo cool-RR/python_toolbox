@@ -238,7 +238,8 @@ class Knob(wx.Panel):
       
     def on_mouse(self, event):
         '''EVT_MOUSE_EVENTS handler.'''
-        # todo: maybe right click should give context menu with 'Sensitivity...'
+        # todo: maybe right click should give context menu with
+        # 'Sensitivity...'        
         # todo: make check: if left up and has capture, release capture
 
         self.Refresh()
