@@ -16,7 +16,18 @@ from .shared import (_contained_address_pattern, _address_pattern,
 
 
 def get_object_by_address(address, root=None, namespace={}):
+    '''
+    Get an object by its address.
     
+    For example:
+    
+        >>> get_object_by_address('email.encoders')
+        <module 'email.encoders' from 'c:\Python27\lib\email\encoders.pyc'>
+    
+    `root` is an object (usually a module) whose attributes will be looked at
+    when searching for the object. `namespace` is a `dict` whose keys will be
+    searched as well.    
+    '''
     # todo: should know what exception this will raise if the address is bad /
     # object doesn't exist.
     
@@ -24,9 +35,9 @@ def get_object_by_address(address, root=None, namespace={}):
         raise ValueError("'%s' is not a legal address." % address)
     
     ###########################################################################
-    # Before we start, we do some analysis of `root` and `namespace`:         #
+    # Before we start, we do some pre-processing of `root` and `namespace`:   #
     
-    # We are letting the user inputs (base)strings for `root` and `namespace`,
+    # We are letting the user input (base)strings for `root` and `namespace`,
     # so if he did that, we'll get the actual objects.
     
     if root:
@@ -47,14 +58,14 @@ def get_object_by_address(address, root=None, namespace={}):
         parent_object, namespace_dict = None, None
             
         
-    # Finished analyzing `root` and `namespace`.                              #
+    # Finished pre-processing `root` and `namespace`.                         #
     ###########################################################################
     
-    # Let's rule out the easy option that the requested object is the root:
     
     
     if '.' not in address:
-    
+        
+        # Let's rule out the easy option that the requested object is the root:
         if root and (address == root_short_name):
             return root
     
@@ -70,7 +81,7 @@ def get_object_by_address(address, root=None, namespace={}):
                     '.'.join((parent_object.__name__, address)),
                     silent_fail=True
                 )
-                # Not keeping reference, just importing so we could get later
+                # Not keeping reference, just importing so we could get later.
         
         # We know we have a `namespace_dict` to take the object from, and we
         # might have a `parent_object` we can take the object from by using
@@ -107,7 +118,10 @@ def get_object_by_address(address, root=None, namespace={}):
 
 def resolve(string, root=None, namespace={}):
     '''
-    Resolve an address into a Python object.
+    Resolve an address into a Python object. A more powerful version of `eval`.
+    
+    The main advantage it has over `eval` is that it automatically imports
+    whichever modules are needed to resolve the string.
     
     For example:
     
@@ -117,24 +131,36 @@ def resolve(string, root=None, namespace={}):
         
     `root` is an object (usually a module) whose attributes will be looked at
     when searching for the object. `namespace` is a `dict` whose keys will be
-    searched as well.    
+    searched as well.
     '''
     
-    # Resolving '' to None:
+    # Resolving '' to `None`:
     if string == '':
         return None
     
-    if _address_pattern.match(string):
+    # If the string is a simple address, like 'email.encoders', our job is
+    # easy:
+    if _address_pattern.match(string):        
         return get_object_by_address(string, root=root, namespace=namespace)
 
+    # Getting the true namespace `dict`:
     (_useless, namespace_dict) = _get_parent_and_dict_from_namespace(namespace)
     
+    # We're putting items into `our_namespace` instead of using the given
+    # namespace `dict`:...
     our_namespace = {}
     our_namespace.update(namespace_dict)
+    # ...because we intend to modify it, and we don't want to be modifying the
+    # user's arguments.
     
+    # The string that we have is not a plain address, but it may contain plain
+    # addresses. For example, '{email.encoders: 1}' contains an address. We
+    # find all these contained addresses:
     re_matches = re_tools.searchall(_contained_address_pattern, string)
     addresses = [re_match.group('address') for re_match in re_matches]
     
+    # We make sure all the addresses are (1) imported and (2) in
+    # `our_namespace` dict, so we could access them when we `eval` the string:
     for address in addresses:
         try:
             get_object_by_address(address, root=root, namespace=namespace)
@@ -146,6 +172,7 @@ def resolve(string, root=None, namespace={}):
                                                 namespace=namespace)
             our_namespace[big_parent_name] = big_parent
             
+    
     return eval(string, our_namespace)
     
 
