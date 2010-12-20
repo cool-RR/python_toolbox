@@ -1,3 +1,7 @@
+# Ram's note: This is cut out of Python 2.6's `abc` module. If we could get a
+# 2.5-compliant port of `WeakSet`, we'll be able to upgrade to the `abc` module
+# of Python 2.7.
+
 # Copyright 2007 Google, Inc. All Rights Reserved.
 # Licensed to PSF under a Contributor Agreement.
 

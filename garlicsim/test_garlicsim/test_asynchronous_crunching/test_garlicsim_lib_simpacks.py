@@ -2,9 +2,6 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-Test module for garlicsim.
-
-I'm just starting to learn testing, so go easy on me.
 '''
 
 from __future__ import division

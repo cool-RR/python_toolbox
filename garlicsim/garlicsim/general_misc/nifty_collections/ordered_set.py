@@ -1,8 +1,26 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''
+Defines the `OrderedSet` class.
+
+See its documentation for more details.
+'''
+# todo: revamp
+
 from garlicsim.general_misc.third_party import abcs_collection
+
 
 KEY, PREV, NEXT = range(3)
 
+
 class OrderedSet(abcs_collection.MutableSet):
+    '''
+    A set with an order.
+    
+    You can also think of this as a list which doesn't allow duplicate items
+    and whose `__contains__` method is O(1).
+    '''
 
     def __init__(self, iterable=None):
         self.end = end = [] 
@@ -18,12 +36,22 @@ class OrderedSet(abcs_collection.MutableSet):
         return key in self.map
 
     def add(self, key):
+        """
+        Add an element to a set.
+    
+        This has no effect if the element is already present.
+        """
         if key not in self.map:
             end = self.end
             curr = end[PREV]
             curr[NEXT] = end[PREV] = self.map[key] = [key, curr, end]
 
     def discard(self, key):
+        """
+        Remove an element from a set if it is a member.
+    
+        If the element is not a member, do nothing.
+        """
         if key in self.map:        
             key, prev, next = self.map.pop(key)
             prev[NEXT] = next
@@ -44,6 +72,7 @@ class OrderedSet(abcs_collection.MutableSet):
             curr = curr[PREV]
 
     def pop(self, last=True):
+        """Remove and return an arbitrary set element."""
         if not self:
             raise KeyError('set is empty')
         key = reversed(self).next() if last else iter(self).next()
