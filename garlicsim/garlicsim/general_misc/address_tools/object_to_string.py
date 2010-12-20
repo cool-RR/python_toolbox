@@ -192,11 +192,11 @@ def get_address(obj, shorten=False, root=None, namespace={}):
             
             (_useless, original_namespace_dict) = \
                 _get_parent_and_dict_from_namespace(namespace)
-
+            
             def my_filter(key, value):
                 name = getattr(value, '__name__', '')
                 return isinstance(name, basestring) and name.endswith(key)
-            
+
             namespace_dict = dict_tools.filter_items(
                 original_namespace_dict,
                 my_filter
@@ -205,13 +205,16 @@ def get_address(obj, shorten=False, root=None, namespace={}):
             namespace_dict_keys = namespace_dict.keys()
             namespace_dict_values = namespace_dict.values()
             
-
-        
+            
+        # Split to address parts:
         address_parts = address.split('.')
+        # e.g., `['garlicsim', 'misc', 'step_copy', 'StepCopy']`.
+        
         heads = ['.'.join(address_parts[:i]) for i in
-                 range(1, len(address_parts) + 1)]
-        # heads is something like: ['garlicsim', 'garlicsim.misc',
-        # 'garlicsim.misc.step_copy', 'garlicsim.misc.step_copy.StepCopy']
+                 xrange(1, len(address_parts) + 1)]
+        # `heads` is something like: `['garlicsim', 'garlicsim.misc',
+        # 'garlicsim.misc.step_copy', 'garlicsim.misc.step_copy.StepCopy']`
+
         
         for head in reversed(heads):
             object_ = get_object_by_address(head)
@@ -230,11 +233,15 @@ def get_address(obj, shorten=False, root=None, namespace={}):
     #                                                                         #
     ### Finshed shortening address using `root` and/or `namespace`. ###########
                     
-    
+
+    # If user specified `shorten=True`, let the dedicated `shorten_address`
+    # function drop redundant intermediate nodes:
     if shorten:
         address = shorten_address(address, root=root, namespace=namespace)
         
-        
+    
+    # A little fix to avoid describing something like `list` as
+    # `__builtin__.list`:
     if address.startswith('__builtin__.'):
         shorter_address = address.replace('__builtin__.', '', 1)
         if get_object_by_address(shorter_address) == obj:
@@ -259,7 +266,7 @@ def shorten_address(address, root=None, namespace={}):
     assert _address_pattern.match(address)
     
     if '.' not in address:
-        # Nothing to shorten
+        # It's a single-level address; Nothing to shorten.
         return address
     
     original_address_parts = address.split('.')
