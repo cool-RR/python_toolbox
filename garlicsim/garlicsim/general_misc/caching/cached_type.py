@@ -1,3 +1,12 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''
+Defines the `CachedType` metaclass.
+
+See its documentation for more details.
+'''
+
 from garlicsim.general_misc.sleek_refs import SleekCallArgs
 
 
