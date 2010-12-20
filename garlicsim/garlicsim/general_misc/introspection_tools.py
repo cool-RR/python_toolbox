@@ -9,7 +9,7 @@ from garlicsim.general_misc.third_party.ordered_dict import OrderedDict
 
 
 def get_default_args_dict(function):
-    '''''' a aa a a
+    ''''''
     arg_spec = cute_inspect.getargspec(function)
     (s_args, s_star_args, s_star_kwargs, s_defaults) = arg_spec
         
