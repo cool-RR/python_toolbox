@@ -2,8 +2,9 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines functions related to finding Python packages. See
-documentation of get_packages for more info.
+Defines functions related to finding Python packages.
+
+See documentation of get_packages for more info.
 
 This module is hacky.
 '''
@@ -14,7 +15,10 @@ import types
 
 from garlicsim.general_misc import dict_tools
 
+
 _extensions_by_priority = ['.pyo', '.pyc', '.pyw', '.py']
+'''List of possible extenstions of Python modules, ordered by priority.'''
+
 
 def get_packages(root, include_self=False, recursive=False, self_in_name=True):
     '''
@@ -70,7 +74,7 @@ def get_packages_and_modules_filenames(root, recursive=False):
         root_path = os.path.dirname(root_module.__file__)
     elif isinstance(root, str):
         root_path = os.path.abspath(root)
-        # Not making root_module, it might not be imported.
+        # Not making `root_module`, it might not be imported.
     
     ######################################################
     
@@ -94,7 +98,8 @@ def get_packages_and_modules_filenames(root, recursive=False):
                 result += [os.path.join(entry, thing) for thing in
                            inner_results]
     
-    # Filtering: (tododoc)
+    ### Filtering out duplicate filenames for the same module: ################
+    #                                                                         #
                 
     filename_to_module_name = dict((
         (filename, os.path.splitext(filename)[0]) for filename in result
@@ -115,14 +120,19 @@ def get_packages_and_modules_filenames(root, recursive=False):
         for redundant_filename in redundant_filenames:
             result.remove(redundant_filename)
         
-    # Done filtering
+    #                                                                         #
+    ### Done filtering duplicate filenames for the same module. ###############
     
-    return [os.path.join(os.path.dirname(full_path), entry) for entry in result]
+    
+    return [os.path.join(os.path.dirname(full_path), entry) for entry in
+            result]
+
 
 def is_package(path):
     '''Is the given path a Python package?'''
     return os.path.isdir(path) and \
            glob.glob(os.path.join(path, '__init__.*'))
+
 
 def is_module(path):
     '''Is the given path a Python single-file module?'''
