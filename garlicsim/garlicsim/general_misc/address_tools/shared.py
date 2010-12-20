@@ -1,14 +1,23 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''Various objects and tools for `address_tools`.'''
+
 import re
 
 
 _address_pattern = re.compile(
     "^(?P<address>([a-zA-Z_][0-9a-zA-Z_]*)(\.[a-zA-Z_][0-9a-zA-Z_]*)*)$"
 )
+'''Pattern for Python addresses, like 'email.encoders'.'''
 
 
 _contained_address_pattern = re.compile(
     "(?P<address>([a-zA-Z_][0-9a-zA-Z_]*)(\.[a-zA-Z_][0-9a-zA-Z_]*)*)"
 )
+'''
+Pattern for strings containing Python addresses, like '{email.encoders: 1}'.
+'''
 
 
 def _get_parent_and_dict_from_namespace(namespace):
