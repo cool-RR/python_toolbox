@@ -2,18 +2,20 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines a function called set_process_priority. See its
-documentation for more info.
+Defines the `set_process_priority` function.
+
+See its documentation for more info.
 '''
 
-import  win32process, win32con, win32api
+import win32process, win32con, win32api
 
 def set_process_priority(priority, pid=None):
     '''
     Set the priority of a Windows process.
     
     Priority is a value between 0-5 where 2 is normal priority. Default sets
-    the priority of the current Python process but can take any valid process ID.
+    the priority of the current Python process but can take any valid process
+    ID.
     '''
     
     priorityclasses = [

@@ -10,8 +10,8 @@ class CuteException(Exception):
     '''
 
     def __init__(self, message=None):
-        # We use `None` as the default for `message`, so the user can input '' to
-        # force an empty message.
+        # We use `None` as the default for `message`, so the user can input ''
+        # to force an empty message.
         
         if message is None:
             if self.__doc__ and (type(self) is not CuteException):
@@ -24,6 +24,7 @@ class CuteException(Exception):
         
         self.message = message
         '''
+        The message of the exception, detailing what went wrong.
         
         We provide this `.message` attribute despite `BaseException.message`
         being deprecated in Python. The message can also be accessed as the
