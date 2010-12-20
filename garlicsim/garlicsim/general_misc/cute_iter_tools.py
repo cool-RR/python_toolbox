@@ -1,7 +1,7 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''Defines functions that may be useful when working with iterators.'''
+'''Defines functions for manipulating iterators.'''
 # todo: make something like `filter` except it returns first found, or raises
 # exception
 
@@ -17,13 +17,13 @@ def consecutive_pairs(iterable, wrap_around=False):
     '''
     Iterate over successive pairs from the iterable.
     
-    Example: if the iterable is [0, 1, 2, 3], then its `consecutive_pairs` would
-    be [(0, 1), (1, 2), (2, 3)]. (Except it would be an iterator and not an
-    actual list.)
-    
-    wrap_around
+    If `wrap_around=True`, will include a `(last_item, first_item)` pair at the
+    end.
+        
+    Example: if the iterable is [0, 1, 2, 3], then its `consecutive_pairs`
+    would be `[(0, 1), (1, 2), (2, 3)]`. (Except it would be an iterator and
+    not an actual list.)
     '''
-
     iterator = iter(iterable)
     
     try:
@@ -51,8 +51,8 @@ def orderless_combinations(iterable, n, start=0):
     
     Example:
     
-    orderless_combinations([1, 2, 3, 4], n=2) would be, in list form: [[1, 2],
-    [1, 3], [1, 4], [2, 3], [2, 4], [3, 4]].
+    `orderless_combinations([1, 2, 3, 4], n=2)` would be, in list form:
+    `[[1, 2], [1, 3], [1, 4], [2, 3], [2, 4], [3, 4]]`.
     '''
     # todo: optimize or find 3rd party tool
     
@@ -124,11 +124,15 @@ def product(*args, **kwargs):
     '''
     Cartesian product of input iterables.
 
-    Equivalent to nested for-loops in a generator expression. For example,
-    `product(A, B)` returns the same as ((x,y) for x in A for y in B).
+    Equivalent to nested for-loops in a generator expression. `product(A, B)`
+    returns the same as `((x,y) for x in A for y in B)`.
     
-    product('ABCD', 'xy') --> Ax Ay Bx By Cx Cy Dx Dy
-    product(range(2), repeat=3) --> 000 001 010 011 100 101 110 111
+    More examples:
+    
+        list(product('ABC', 'xy')) == ['Ax', 'Ay', 'Bx', 'By', 'Cx', 'Cy']
+        
+        list(product(range(2), repeat=2) == ['00', '01', '10', '11']
+        
     '''
     # todo: revamp
     pools = map(tuple, args) * kwargs.get('repeat', 1)
