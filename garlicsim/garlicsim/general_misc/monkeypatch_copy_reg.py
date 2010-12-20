@@ -22,7 +22,7 @@ def reduce_method(method):
         (
             
             method.im_self or method.im_class,
-            # im_self for bound methods, im_class for unbound methods.
+            # `im_self` for bound methods, `im_class` for unbound methods.
             
             method.im_func.__name__
         
@@ -46,9 +46,11 @@ copy_reg.pickle(types.ModuleType, reduce_module)
 
 
 def _get_ellipsis():
+    '''Get the `Ellipsis`.'''
     return Ellipsis
 
 def reduce_ellipsis(ellipsis):
+    '''Reducer for `Ellipsis`.'''
     return (
         _get_ellipsis,
         ()
@@ -58,3 +60,5 @@ copy_reg.pickle(types.EllipsisType, reduce_ellipsis)
 
 
 ###############################################################################
+
+
