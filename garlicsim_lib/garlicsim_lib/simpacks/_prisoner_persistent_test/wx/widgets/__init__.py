@@ -5,4 +5,4 @@
 Widgets for `prisoner`.
 '''
 
-from state_viewer import StateViewer
+from .state_viewer import StateViewer

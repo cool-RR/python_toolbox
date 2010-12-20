@@ -7,4 +7,4 @@ Defines the `ExportMenu` class.
 See its documentation for more info.
 '''
 
-from export_menu import ExportMenu
+from .export_menu import ExportMenu

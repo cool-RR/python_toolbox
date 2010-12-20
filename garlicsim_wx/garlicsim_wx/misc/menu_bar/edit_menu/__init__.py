@@ -1,1 +1,1 @@
-from edit_menu import EditMenu
+from .edit_menu import EditMenu

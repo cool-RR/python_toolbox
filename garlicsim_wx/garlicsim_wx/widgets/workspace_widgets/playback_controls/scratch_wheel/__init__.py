@@ -7,6 +7,6 @@ Defines the `ScratchWheel` class.
 See its documentation for more info.
 '''
 
-from scratch_wheel import ScratchWheel
+from .scratch_wheel import ScratchWheel
 
 __all__ = ["ScratchWheel"]

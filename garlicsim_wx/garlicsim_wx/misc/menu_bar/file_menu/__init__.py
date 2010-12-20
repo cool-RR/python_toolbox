@@ -7,4 +7,4 @@ Defines the `FileMenu` class.
 See its documentation for more info.
 '''
 
-from file_menu import FileMenu
+from .file_menu import FileMenu

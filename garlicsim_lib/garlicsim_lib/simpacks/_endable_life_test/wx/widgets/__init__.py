@@ -3,4 +3,4 @@
 
 '''Defines widgets to be used for life in garlicsim_wx.'''
 
-from board_viewer import BoardViewer
+from .board_viewer import BoardViewer

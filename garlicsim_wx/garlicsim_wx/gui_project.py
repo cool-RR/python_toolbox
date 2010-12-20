@@ -23,7 +23,7 @@ import wx.py.shell
 from garlicsim.general_misc import queue_tools
 from garlicsim.general_misc import pickle_tools
 from garlicsim.general_misc import dict_tools
-from general_misc.stringsaver import s2i, i2s
+from .general_misc.stringsaver import s2i, i2s
 from garlicsim.general_misc.infinity import infinity
 from garlicsim.general_misc import binary_search
 from garlicsim.general_misc import import_tools

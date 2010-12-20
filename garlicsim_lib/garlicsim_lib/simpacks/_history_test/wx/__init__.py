@@ -3,4 +3,4 @@
 
 '''A `wx` package for `_history_test`.'''
 
-import widgets
+from . import widgets

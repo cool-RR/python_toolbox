@@ -3,4 +3,4 @@
 
 '''A collection of cursors.'''
 
-from cursor_collection import *
+from .cursor_collection import *

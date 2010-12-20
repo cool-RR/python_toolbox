@@ -7,4 +7,4 @@ Defines the `HelpMenu` class.
 See its documentation for more info.
 '''
 
-from help_menu import HelpMenu
+from .help_menu import HelpMenu

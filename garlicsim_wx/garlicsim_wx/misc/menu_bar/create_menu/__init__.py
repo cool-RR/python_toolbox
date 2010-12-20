@@ -7,4 +7,4 @@ Defines the `CreateMenu` class.
 See its documentation for more info.
 '''
 
-from create_menu import CreateMenu
+from .create_menu import CreateMenu

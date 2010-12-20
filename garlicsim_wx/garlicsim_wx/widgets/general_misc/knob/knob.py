@@ -20,7 +20,7 @@ from garlicsim_wx.general_misc import cursor_collection
 from garlicsim.general_misc import binary_search
 from garlicsim.general_misc import cute_iter_tools
 
-from snap_map import SnapMap
+from .snap_map import SnapMap
 
 from . import images as __images_package
 images_package = __images_package.__name__

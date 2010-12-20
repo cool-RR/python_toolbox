@@ -22,7 +22,7 @@ from garlicsim.general_misc import math_tools
 from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
 
 import garlicsim, garlicsim_wx
-import images
+from . import images
 
 
 __all__ = ["ScratchWheel"]

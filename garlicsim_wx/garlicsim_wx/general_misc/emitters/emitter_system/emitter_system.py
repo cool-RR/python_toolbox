@@ -12,7 +12,7 @@ from __future__ import with_statement
 import itertools
 from garlicsim.general_misc import cute_iter_tools
 
-from emitter import Emitter
+from .emitter import Emitter
 
 
 class FreezeCacheRebuildingContextManager(object):

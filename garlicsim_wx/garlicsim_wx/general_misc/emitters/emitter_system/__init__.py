@@ -8,5 +8,5 @@ See documentation of EmitterSystem for more info.
 '''
 
 
-from emitter_system import EmitterSystem
-from emitter import Emitter
+from .emitter_system import EmitterSystem
+from .emitter import Emitter

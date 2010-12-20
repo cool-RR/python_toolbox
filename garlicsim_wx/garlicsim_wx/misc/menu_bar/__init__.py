@@ -7,4 +7,4 @@ Defines the `MenuBar` class.
 See its documentation for more info.
 '''
 
-from menu_bar import MenuBar
+from .menu_bar import MenuBar

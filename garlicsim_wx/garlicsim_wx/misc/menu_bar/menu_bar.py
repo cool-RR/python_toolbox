@@ -9,13 +9,13 @@ See its documentation for more info.
 
 import wx
 
-from file_menu import FileMenu
-from edit_menu import EditMenu
-from create_menu import CreateMenu
-from node_menu import NodeMenu
-from block_menu import BlockMenu
-from window_menu import WindowMenu
-from help_menu import HelpMenu
+from .file_menu import FileMenu
+from .edit_menu import EditMenu
+from .create_menu import CreateMenu
+from .node_menu import NodeMenu
+from .block_menu import BlockMenu
+from .window_menu import WindowMenu
+from .help_menu import HelpMenu
 
 
 class MenuBar(wx.MenuBar):

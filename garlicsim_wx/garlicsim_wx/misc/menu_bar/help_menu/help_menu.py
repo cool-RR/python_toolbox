@@ -13,7 +13,7 @@ from garlicsim_wx.general_misc.cute_menu import CuteMenu
 
 import garlicsim_wx
 
-from online_resources_menu import OnlineResourcesMenu
+from .online_resources_menu import OnlineResourcesMenu
 
 
 class HelpMenu(CuteMenu):

@@ -7,4 +7,4 @@ Defines the `BlockMenu` class.
 See its documentation for more info.
 '''
 
-from block_menu import BlockMenu
+from .block_menu import BlockMenu

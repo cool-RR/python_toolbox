@@ -7,4 +7,4 @@ Defines the `Knob` class.
 See its documentation for more info.
 '''
 
-from knob import *
+from .knob import *

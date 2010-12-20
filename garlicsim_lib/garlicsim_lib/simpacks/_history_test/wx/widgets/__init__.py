@@ -3,4 +3,4 @@
 
 '''A package of widgets.'''
 
-from state_viewer import StateViewer
+from .state_viewer import StateViewer

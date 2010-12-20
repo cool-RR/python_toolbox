@@ -19,7 +19,7 @@ from garlicsim_wx.widgets.general_misc import Knob
 
 import garlicsim, garlicsim_wx
 from garlicsim_wx.widgets import WorkspaceWidget
-from scratch_wheel import ScratchWheel
+from .scratch_wheel import ScratchWheel
 
 from . import images as __images_package
 images_package = __images_package.__name__

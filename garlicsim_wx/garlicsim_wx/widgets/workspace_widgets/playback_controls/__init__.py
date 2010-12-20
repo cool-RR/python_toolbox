@@ -7,6 +7,6 @@ Defines the `PlaybackControls` class.
 See its documentation for more info.
 '''
 
-from playback_controls import PlaybackControls
+from .playback_controls import PlaybackControls
 
 __all__ = ["PlaybackControls"]

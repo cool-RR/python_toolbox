@@ -1,6 +1,6 @@
 from ..state import State#, changes
 from . import widgets
-from state_creation_dialog import StateCreationDialog
+from .state_creation_dialog import StateCreationDialog
 
 #SEEK_BAR_GRAPHS = [State.get_n_live_cells, changes]
 BIG_WORKSPACE_WIDGETS = [widgets.BoardViewer]

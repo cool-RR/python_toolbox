@@ -7,4 +7,4 @@ Defines the `WindowMenu` class.
 See its documentation for more info.
 '''
 
-from window_menu import WindowMenu
+from .window_menu import WindowMenu

@@ -5,5 +5,5 @@
 An emitter mechanism, a variation on the publisher-subscriber design pattern.
 '''
 
-from emitter import Emitter
-from emitter_system import EmitterSystem
+from .emitter import Emitter
+from .emitter_system import EmitterSystem

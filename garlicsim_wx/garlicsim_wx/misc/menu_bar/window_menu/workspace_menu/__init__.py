@@ -7,4 +7,4 @@ Defines the `WorkspaceMenu` class.
 See its documentation for more info.
 '''
 
-from workspace_menu import WorkspaceMenu
+from .workspace_menu import WorkspaceMenu

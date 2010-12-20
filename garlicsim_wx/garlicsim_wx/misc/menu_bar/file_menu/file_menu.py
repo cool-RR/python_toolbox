@@ -11,7 +11,7 @@ import wx
 
 from garlicsim_wx.general_misc.cute_menu import CuteMenu
 
-from export_menu import ExportMenu
+from .export_menu import ExportMenu
 
 
 class FileMenu(CuteMenu):

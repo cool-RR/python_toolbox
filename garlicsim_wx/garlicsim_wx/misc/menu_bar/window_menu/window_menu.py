@@ -14,7 +14,7 @@ from garlicsim_wx.general_misc import wx_tools
 
 from garlicsim_wx.widgets.workspace_widget import \
      EVT_WORKSPACE_WIDGET_MENU_SELECT
-from workspace_menu import WorkspaceMenu
+from .workspace_menu import WorkspaceMenu
 
 
 class WindowMenu(CuteMenu):

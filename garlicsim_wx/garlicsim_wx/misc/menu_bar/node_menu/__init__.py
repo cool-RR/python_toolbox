@@ -1,1 +1,1 @@
-from node_menu import NodeMenu
+from .node_menu import NodeMenu

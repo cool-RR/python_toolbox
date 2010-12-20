@@ -7,4 +7,4 @@ Defines the `OnlineResourcesMenu` class.
 See its documentation for more info.
 '''
 
-from online_resources_menu import OnlineResourcesMenu
+from .online_resources_menu import OnlineResourcesMenu

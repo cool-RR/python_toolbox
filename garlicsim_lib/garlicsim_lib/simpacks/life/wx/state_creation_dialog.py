@@ -16,7 +16,7 @@ import wx
 from garlicsim_wx.widgets.general_misc import CuteDialog
 
 import garlicsim.data_structures
-import widgets
+from . import widgets
 
 
 class StateCreationDialog(CuteDialog):

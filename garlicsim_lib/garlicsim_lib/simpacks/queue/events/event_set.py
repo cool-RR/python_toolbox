@@ -9,7 +9,7 @@ See its documentation for more information.
 
 import numpy
 
-from event import Event
+from .event import Event
 
 class EventSet(object):
     '''A set of events that happen in the same "world".'''
