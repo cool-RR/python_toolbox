@@ -33,18 +33,49 @@ For example, matching "type 'list'" would result in `match.groups() ==
 
 
 def describe(obj, shorten=False, root=None, namespace={}):
+    '''
+    Describe a Python object has a string.
     
+    For example:
+
+        >>> describe([1, 2, {3: email.encoders}])
+        '[1, 2, {3: 4}]'
+    
+    
+    All the parameters are used for trying to give as short of a description as
+    possible. The shortening is done only for addresses within the string.
+    (Like 'email.encoders'.)
+    
+    `shorten=True` would try to skip redundant intermediate nodes. For example,
+    if asked to describe `garlicsim.synchronous_crunching.simulate` with
+    `shorten` on, it will return `garlicsim.simulate`, because the `simulate`
+    function is available at this shorter address as well.
+    
+    The parameters `root` and `namespace` help shorten addresses some more.
+    It's assumed we can express any address in relation to `root`, or in
+    relation to an item in `namespace`. For example, if `root=garlicsim` or
+    `namespace=garlicsim.__dict__`, we could describe `garlicsim.simulate` as
+    simply 'simulate'.
+    '''
+    
+    # If it's the easy case of a module/function/class or something like that,
+    # we solve it by simply using `get_address`:
     if isinstance(obj, types.ModuleType) or \
        (hasattr(obj, '__module__') and hasattr(obj, '__name__')):
         
         return get_address(obj, shorten=shorten, root=root,
                             namespace=namespace)
     
-    raw_result = repr(obj)
-    current_result = raw_result
     
-    ugly_reprs = []
-        
+    # What we do is take a `repr` of the object, and try to make it less ugly.
+    # For example, given the object `{3: email.encoders}`:
+    raw_result = repr(obj)
+    # Our `raw_result` would be "{3: <module 'email.encoders' from
+    # 'c:\Python25\lib\email\encoders.pyc'>}", which is not pretty at all. Our
+    # goal is to take all these <nasty parts> from that string and replacing
+    # them with the actual addresses of the objects, if possible.
+    
+    current_result = raw_result
         
     while True:
 
