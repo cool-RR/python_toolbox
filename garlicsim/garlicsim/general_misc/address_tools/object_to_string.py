@@ -48,7 +48,7 @@ def describe(obj, shorten=False, root=None, namespace={}):
     
     `shorten=True` would try to skip redundant intermediate nodes. For example,
     if asked to describe `garlicsim.synchronous_crunching.simulate` with
-    `shorten` on, it will return `garlicsim.simulate`, because the `simulate`
+    `shorten` on, it will return 'garlicsim.simulate', because the `simulate`
     function is available at this shorter address as well.
     
     The parameters `root` and `namespace` help shorten addresses some more.
@@ -125,41 +125,6 @@ def describe(obj, shorten=False, root=None, namespace={}):
         break
     
     return current_result
-
-
-def shorten_address(address, root=None, namespace={}):
-    '''
-    
-    Note: does shortening by dropping intermediate nodes, doesn't do
-    root-shortening
-    '''
-
-    assert _address_pattern.match(address)
-    
-    if '.' not in address:
-        # Nothing to shorten
-        return address
-    
-    original_address_parts = address.split('.')
-    address_parts = original_address_parts[:]
-    
-    new_address = address
-    
-    for i in range(2 - len(original_address_parts), 1):
-        
-        if i == 0:
-            i = None
-            # Yeah, this is weird. When `i == 0`, I want to slice `[:i]` and get
-            # everything. So I change `i` to `None`.
-            
-        head = '.'.join(address_parts[:i])
-        new_head = _tail_shorten(head, root=root, namespace=namespace)
-        if new_head != head:
-            # Something was shortened!
-            new_address = new_address.replace(head, new_head, 1)
-            address_parts = address.split('.')
-            
-    return new_address
 
 
 @caching.cache()
@@ -257,7 +222,45 @@ def get_address(obj, shorten=False, root=None, namespace={}):
             
     return address
 
+
+def shorten_address(address, root=None, namespace={}):
+    '''
+    Shorten an address by dropping redundant intermediate nodes.
+    
+    For example, 'garlicsim.synchronous_crunching.simulate' could be shortened
+    to 'garlicsim.simulate', because the `simulate` function is available at
+    this shorter address as well.
+    
+    Note: `root` and `namespace` are only provided in order to access the
+    object. This function doesn't do root- or namespace-shortening.
+    '''
+
+    assert _address_pattern.match(address)
+    
+    if '.' not in address:
+        # Nothing to shorten
+        return address
+    
+    original_address_parts = address.split('.')
+    address_parts = original_address_parts[:]
+    
+    new_address = address
+    
+    for i in range(2 - len(original_address_parts), 1):
         
+        if i == 0:
+            i = None
+            # Yeah, this is weird. When `i == 0`, I want to slice `[:i]` and
+            # get everything. So I change `i` to `None`.
+            
+        head = '.'.join(address_parts[:i])
+        new_head = _tail_shorten(head, root=root, namespace=namespace)
+        if new_head != head:
+            # Something was shortened!
+            new_address = new_address.replace(head, new_head, 1)
+            address_parts = address.split('.')
+            
+    return new_address
 
 
 def _tail_shorten(address, root=None, namespace={}):
