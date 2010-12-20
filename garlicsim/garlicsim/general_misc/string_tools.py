@@ -13,7 +13,8 @@ def camelcase_to_underscore(s):
     
     Example: camelcase_to_underscore('HelloWorld') == 'hello_world'
     '''
-    return re.sub('(((?<=[a-z])[A-Z])|([A-Z](?![A-Z]|$)))', '_\\1', s).lower().strip('_')
+    return re.sub('(((?<=[a-z])[A-Z])|([A-Z](?![A-Z]|$)))', '_\\1', s).\
+           lower().strip('_')
 
 
 def camelcase_to_spacecase(s):
@@ -28,6 +29,7 @@ def camelcase_to_spacecase(s):
 
 
 def docstring_trim(docstring):
+    '''Trim a docstring, removing redundant tabs.'''
     if not docstring:
         return ''
     # Convert tabs to spaces (following the normal Python rules)

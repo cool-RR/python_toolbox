@@ -34,8 +34,8 @@ from .app import App
 __all__ = ['Frame', 'GuiProject', 'start']
 
 
-__version_info__ = garlicsim.general_misc.version_info.VersionInfo(0, 5, 1)
-__version__ = '0.5.1'
+__version_info__ = garlicsim.general_misc.version_info.VersionInfo(0, 6, 0)
+__version__ = '0.6.0'
 
 
 def start():

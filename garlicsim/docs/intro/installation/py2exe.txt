@@ -12,8 +12,8 @@ All-in-one Windows installer for GarlicSim
 If you don't have Python installed on your system, or you don't even know what
 Python is, (and you use Windows,) this is for you:
 
-`Download all-in-one Windows GarlicSim 0.5.1 installer
-<http://github.com/downloads/cool-RR/GarlicSim/GarlicSim-0.5.1.exe>`_
+`Download all-in-one Windows GarlicSim 0.6.0 installer
+<http://github.com/downloads/cool-RR/GarlicSim/GarlicSim-0.6.0.exe>`_
 
 This installer will give you `garlicsim`, `garlicsim_lib` and `garlicsim_wx`.
 
