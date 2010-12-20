@@ -31,12 +31,7 @@ class CuteSleekValueDict(UserDict.UserDict, object):
     See documentation of `garlicsim.general_misc.sleek_refs.SleekRef` for more
     details about sleekreffing.
     """
-    # We inherit the constructor without worrying about the input
-    # dictionary; since it uses our .update() method, we get the right
-    # checks (if the other dictionary is a WeakValueDictionary,
-    # objects are unwrapped on the way out, and we always wrap on the
-    # way in).
-
+    
     def __init__(self, callback, *args, **kwargs):
         self.callback = callback
         def remove(sleek_ref, weak_ref_to_csvd=weakref.ref(self)):
@@ -92,6 +87,7 @@ class CuteSleekValueDict(UserDict.UserDict, object):
 
         
     def copy(self):
+        '''Shallow copy the `CuteSleekValueDict`.'''
         new_csvd = type(self)(self.callback)
         new_csvd.update(self)
         return new_csvd
@@ -101,6 +97,7 @@ class CuteSleekValueDict(UserDict.UserDict, object):
         
 
     def get(self, key, default=None):
+        """ D.get(k[,d]) -> D[k] if k in D, else d.  d defaults to None. """
         try:
             return self.data[key]()
         except (KeyError, SleekRefDied):
@@ -108,6 +105,7 @@ class CuteSleekValueDict(UserDict.UserDict, object):
 
             
     def items(self):
+        """ D.items() -> list of D's (key, value) pairs, as 2-tuples """
         my_items = []
         for key, sleek_ref in self.data.items():
             try:
@@ -120,6 +118,7 @@ class CuteSleekValueDict(UserDict.UserDict, object):
 
     
     def iteritems(self):
+        """ D.iteritems() -> an iterator over the (key, value) items of D """
         for key, sleek_ref in self.data.iteritems():
             try:
                 thing = sleek_ref()
@@ -130,6 +129,7 @@ class CuteSleekValueDict(UserDict.UserDict, object):
 
                 
     def iterkeys(self):
+        """ D.iterkeys() -> an iterator over the keys of D """
         return self.data.iterkeys()
 
     
@@ -151,6 +151,7 @@ class CuteSleekValueDict(UserDict.UserDict, object):
 
     
     def itervalues(self):
+        """ D.itervalues() -> an iterator over the values of D """
         for sleek_ref in self.data.itervalues():
             try:
                 yield sleek_ref()
@@ -159,6 +160,8 @@ class CuteSleekValueDict(UserDict.UserDict, object):
 
                 
     def popitem(self):
+        """ D.popitem() -> (k, v), remove and return some (key, value) pair 
+        as a 2-tuple; but raise KeyError if D is empty """
         while True:
             key, sleek_ref = self.data.popitem()
             try:
@@ -168,6 +171,9 @@ class CuteSleekValueDict(UserDict.UserDict, object):
 
             
     def pop(self, key, *args):
+        """ D.pop(k[,d]) -> v, remove specified key and return the 
+        corresponding value. If key is not found, d is returned if given,
+        otherwise KeyError is raised """
         try:
             return self.data.pop(key)()
         except (KeyError, SleekRefDied):
@@ -178,6 +184,7 @@ class CuteSleekValueDict(UserDict.UserDict, object):
         
         
     def setdefault(self, key, default=None):
+        """D.setdefault(k[,d]) -> D.get(k,d), also set D[k]=d if k not in D"""
         try:
             return self[key]
         except KeyError:
@@ -186,7 +193,9 @@ class CuteSleekValueDict(UserDict.UserDict, object):
 
         
     def update(self, *other_dicts, **kwargs):
-        
+        """D.update(E, **F) -> None. Update D from E and F: for k in E: D[k] =
+        E[k] (if E has keys else: for (k, v) in E: D[k] = v) then: for k in F:
+        D[k] = F[k] """
         if other_dicts:
             (other_dict,) = other_dicts        
             if not hasattr(other_dict, 'items'):
@@ -212,6 +221,7 @@ class CuteSleekValueDict(UserDict.UserDict, object):
 
     
     def values(self):
+        """ D.values() -> list of D's values """
         my_values = []
         for sleek_ref in self.data.values():
             try:
@@ -223,6 +233,8 @@ class CuteSleekValueDict(UserDict.UserDict, object):
     
     @classmethod
     def fromkeys(cls, iterable, value=None, callback=(lambda: None)):
+        """ dict.fromkeys(S[,v]) -> New csvdict with keys from S and values
+        equal to v. v defaults to None. """
         new_csvd = cls(callback)
         for key in iterable:
             new_csvd[key] = value
@@ -230,14 +242,7 @@ class CuteSleekValueDict(UserDict.UserDict, object):
 
 
 class KeyedSleekRef(SleekRef):
-    """Specialized reference that includes a key corresponding to the value.
-
-    This is used in the WeakValueDictionary to avoid having to create
-    a function object for each key stored in the mapping.  A shared
-    callback object can use the 'key' attribute of a KeyedSleekRef instead
-    of getting a reference to the key from an enclosing scope.
-
-    """
+    """Sleekref whose weakref (if one exists) holds reference to a key."""
 
     def __new__(cls, thing, callback, key):
         self = SleekRef.__new__(cls)
