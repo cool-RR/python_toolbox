@@ -1,3 +1,5 @@
+# Ram's note: This is cut out of Python 2.7's `_abcoll` module.
+
 # Copyright 2007 Google, Inc. All Rights Reserved.
 # Licensed to PSF under a Contributor Agreement.
 
