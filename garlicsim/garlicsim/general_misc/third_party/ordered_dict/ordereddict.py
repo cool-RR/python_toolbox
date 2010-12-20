@@ -134,18 +134,18 @@ class OrderedDict(dict, DictMixin):
 
         '''
         link = self.__map[key]
-        link_prev = link.prev
-        link_next = link.next
-        link_prev.next = link_next
-        link_next.prev = link_prev
-        root = self.__root
+        link_prev = link[1]
+        link_next = link[2]
+        link_prev[2] = link_next
+        link_next[1] = link_prev
+        end = self.__end
         if last:
-            last = root.prev
-            link.prev = last
-            link.next = root
-            last.next = root.prev = link
+            last = end[1]
+            link[1] = last
+            link[2] = end
+            last[2] = end[1] = link
         else:
-            first = root.next
-            link.prev = root
-            link.next = first
-            root.next = first.prev = link
+            first = end[2]
+            link[1] = end
+            link[2] = first
+            end[2] = first[1] = link

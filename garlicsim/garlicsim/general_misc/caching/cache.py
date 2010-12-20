@@ -40,7 +40,7 @@ def cache(max_size=infinity):
     
     You may optionally specify a `max_size` for maximum number of cached
     results to store; Old entries are thrown away according to a "least
-    recently calculated" alogrithm.
+    recently calculated" alogrithm. tododoc
     '''
     # todo idea: figure how how complex the function's argspec is, and then
     # compile a function accordingly, so functions with a simple argspec won't
@@ -88,7 +88,9 @@ def cache(max_size=infinity):
                 sleek_call_args = \
                     SleekCallArgs(cache_dict, function, *args, **kwargs)
                 try:
-                    return cached.cache[sleek_call_args]
+                    result = cached.cache[sleek_call_args]
+                    cached.cache.move_to_end(sleek_call_args)
+                    return result
                 except KeyError:
                     cached.cache[sleek_call_args] = value = \
                         function(*args, **kwargs)

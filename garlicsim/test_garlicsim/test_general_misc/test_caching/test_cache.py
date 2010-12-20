@@ -70,28 +70,30 @@ def test_lru():
     assert f(2) == f(2) == r2 == f(2)
     assert f(3) == f(3) == r3 == f(3)
     
+    new_r1 = f(1)
+    
     # Requesting these:
     f(3)
     f(1)
     # So `f(2)` will be the least-recently-used.
     
-    r4 = f(4) # Bam! `f(2)` should have been thrown out.
+    r4 = f(4) # Now `f(2)` has been thrown out.
     
     new_r2 = f(2) # And now `f(3)` is thrown out
     assert f(2) != r2
     
-    assert f(1) == r1 == f(1)
+    assert f(1) == new_r1 == f(1)
     assert f(4) == r4 == f(4)
     assert f(2) == new_r2 == f(2)
     
     # Now `f(1)` is the least-recently-used.
     
-    r5 = f(5) # Now `f(1)` should have been thrown out.
+    r5 = f(5) # Now `f(1)` has been thrown out.
     
     assert f(4) == r4 == f(4)
     assert f(5) == r5 == f(5)
     
-    assert f(1) != r1
+    assert f(1) != new_r1
     
 
 def test_unhashable_arguments():
