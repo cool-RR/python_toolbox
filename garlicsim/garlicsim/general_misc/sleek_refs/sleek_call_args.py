@@ -2,10 +2,9 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-Defines the `SleekRef` class and various data types using it.
+Defines the `SleekCallArgs` class.
 
-See documentation of `SleekRef` for more details. `SleekCallArgs` and
-`CuteSleekValueDict` are data types which rely on `SleekRef`.
+See its documentation for more details.
 '''
 
 from garlicsim.general_misc import cute_inspect
