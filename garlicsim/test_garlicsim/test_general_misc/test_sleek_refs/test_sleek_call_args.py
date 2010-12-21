@@ -1,3 +1,8 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''Testing module for `garlicsim.general_misc.sleek_refs.SleekCallArgs`.'''
+
 import gc
 import weakref
 from garlicsim.general_misc.sleek_refs import (SleekCallArgs,
@@ -12,6 +17,7 @@ def f(*args, **kwargs):
 
 
 def test():
+    '''Test the basic workings of `SleekCallArgs`.'''
     sca_dict = {}
     
     args = (1, 2)
@@ -30,7 +36,7 @@ def test():
     
     
 def test_unhashable():
-    
+    '''Test `SleekCallArgs` on unhashable arguments.'''
     sca_dict = {}
     
     args = ([1, 2], {1: [1, 2]}, set(['a', 1]))
@@ -58,5 +64,6 @@ def test_unhashable():
     sca_dict[sca2] = 'meow'
     del kwargs
     gc.collect()
-    # Not GCed because all objects in kwargs are not weakreffable:
+    # Not GCed because all objects in `kwargs` are not weakreffable:
     assert len(sca_dict) == 1
+    

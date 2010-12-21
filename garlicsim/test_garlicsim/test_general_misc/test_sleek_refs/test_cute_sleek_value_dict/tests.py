@@ -1,3 +1,10 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''
+Testing module for `garlicsim.general_misc.sleek_refs.CuteSleekValueDict`.
+'''
+
 import gc
 import weakref
 
@@ -11,6 +18,7 @@ from ..shared import _is_weakreffable, A, counter
         
         
 def test():
+    '''Test the basic workings of `CuteSleekValueDict`.'''
     volatile_things = [A(), 1, 4.5, 'meow', u'woof', [1, 2], (1, 2), {1: 2},
                        set([1, 2, 3])]
     unvolatile_things = [A.s, __builtins__, list, type,  list.append, str.join,
@@ -85,7 +93,7 @@ def test_one_by_one():
         
         
 def test_none():
-    # Test that CSVD can handle a value of None
+    '''Test that `CuteSleekValueDict` can handle a value of `None`.'''
 
     d = {
         1: None,

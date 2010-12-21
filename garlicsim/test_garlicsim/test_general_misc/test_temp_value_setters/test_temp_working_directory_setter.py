@@ -1,15 +1,24 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''
+Testing `garlicsim.general_misc.temp_value_setters.TempWorkingDirectorySetter`.
+'''
+
 from __future__ import with_statement
 
 import os
 import shutil
 import tempfile
 
-from garlicsim.general_misc.temp_value_setters import TempWorkingDirectorySetter
+from garlicsim.general_misc.temp_value_setters import \
+     TempWorkingDirectorySetter
 
 class MyException(Exception):
     pass
 
 def test():
+    '''Test basic workings of `TempWorkingDirectorySetter`.'''
     temp_dir = tempfile.mkdtemp(prefix='temp_garlicsim_')
     try:
         old_cwd = os.getcwd()
@@ -34,6 +43,7 @@ def test():
     
     
 def test_exception():
+    '''Test `TempWorkingDirectorySetter` recovering from exception in suite.'''
     # Not using `assert_raises` here because getting the `with` suite in there
     # would be tricky.
     temp_dir = tempfile.mkdtemp(prefix='temp_garlicsim_')

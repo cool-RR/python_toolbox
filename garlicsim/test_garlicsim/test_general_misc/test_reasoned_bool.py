@@ -1,7 +1,12 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''Testing module for `garlicsim.general_misc.reasoned_bool.ReasonedBool`.'''
 
 from garlicsim.general_misc.reasoned_bool import ReasonedBool
 
 def test():
+    '''Test the basic workings of `ReasonedBool`.'''
     assert True == ReasonedBool(True)
     assert True == ReasonedBool(True, "Because I feel like it")
     assert ReasonedBool(True)

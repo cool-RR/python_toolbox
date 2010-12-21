@@ -1,3 +1,8 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''Testing module for `garlicsim.general_misc.sleek_refs.SleekRef`.'''
+
 import gc
 import weakref
 
@@ -12,6 +17,7 @@ from .shared import _is_weakreffable, A, counter
 
     
 def test_sleek_ref():
+    '''Test the basic workings of `SleekRef`.'''
 
     volatile_things = [A(), 1, 4.5, 'meow', u'woof', [1, 2], (1, 2), {1: 2},
                        set([1, 2, 3]), (None, 3, {None: 4})]

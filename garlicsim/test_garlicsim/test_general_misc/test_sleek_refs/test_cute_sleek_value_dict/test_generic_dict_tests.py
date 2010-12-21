@@ -1,3 +1,8 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''Run generic `dict` tests on `CuteSleekValueDict`.'''
+
 from __future__ import with_statement
 
 import sys
