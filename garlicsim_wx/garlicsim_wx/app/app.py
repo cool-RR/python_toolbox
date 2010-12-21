@@ -34,13 +34,14 @@ class App(wx.PySimpleApp):
         In order to start a new simulation on startup, pass the name of the
         simpack as `new_gui_project_simpack_name`.
         
-        In order to load a simulation from file on startup, pass the path to the
-        file as `load_gui_project_file_path`.
+        In order to load a simulation from file on startup, pass the path to
+        the file as `load_gui_project_file_path`.
         
         (At most one of these can be done.)
         '''
         self.frame = None
-        assert not (new_gui_project_simpack_name and load_gui_project_file_path)
+        assert not (new_gui_project_simpack_name and
+                    load_gui_project_file_path)
         self.new_gui_project_simpack_name = new_gui_project_simpack_name
         self.load_gui_project_file_path = load_gui_project_file_path
         super(App, self).__init__()
