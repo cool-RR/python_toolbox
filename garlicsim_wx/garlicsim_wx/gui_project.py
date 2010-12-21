@@ -9,20 +9,10 @@ See its documentation for more info.
 
 from __future__ import with_statement
 
-import warnings
-import copy
-import functools
-import Queue
 import time
-import weakref
 
 import wx
-import wx.lib.scrolledpanel
-import wx.py.shell
 
-from garlicsim.general_misc import queue_tools
-from garlicsim.general_misc import pickle_tools
-from garlicsim.general_misc import dict_tools
 from .general_misc.stringsaver import s2i, i2s
 from garlicsim.general_misc.infinity import infinity
 from garlicsim.general_misc import binary_search
@@ -33,7 +23,6 @@ from garlicsim_wx.general_misc.emitting_weak_key_default_dict import \
 from garlicsim_wx.misc.step_profile_hue_default_factory import \
      StepProfileHueDefaultFactory
 from garlicsim_wx.general_misc import thread_timer
-from garlicsim_wx.general_misc import wx_tools
 
 import garlicsim
 from garlicsim.asynchronous_crunching import crunchers
@@ -43,9 +32,6 @@ from garlicsim_wx.general_misc import emitters
 
 class GuiProject(object):
     '''Encapsulates a project for use with a wxPython interface.'''
-        
-    # is_atomically_pickleable = False
-    
     
     def __init__(self, simpack, frame, project=None):
         '''
@@ -125,9 +111,14 @@ class GuiProject(object):
         '''
         
         self._default_buffer_before_cancellation = None
+        '''
+        The value of the default buffer before buffering was cancelled.
+
+        When buffering will be enabled again, it will be set to this value.
+        '''
 
         self.timer_for_playing = thread_timer.ThreadTimer(self.frame)
-        '''Contains the wx.Timer object used when playing the simulation.'''
+        '''Contains the timer object used when playing the simulation.'''
         
         self.frame.Bind(thread_timer.EVT_THREAD_TIMER, self.__play_next,
                         self.timer_for_playing)
@@ -155,38 +146,36 @@ class GuiProject(object):
         The current pseudoclock.
         
         The pseudoclock is *something like* the clock of the current active
-        node. But not exactly. We're letting the pseudoclock slide more smoothly
-        from one node to its neighbor, instead of jumping. This is in order to
-        make some things smoother in the program. This is also why it's called
-        "pseudo".
+        node. But not exactly. We're letting the pseudoclock slide more
+        smoothly from one node to its neighbor, instead of jumping. This is in
+        order to make some things smoother in the program. This is also why
+        it's called "pseudo".
         '''
         
         self.default_step_profile = garlicsim.misc.StepProfile(
             self.simpack_grokker.default_step_function
         )
+        '''The step profile that will be used be default.'''
         
         self.step_profiles = EmittingOrderedSet(
             emitter=None,
             items=(self.default_step_profile,)
         )
+        '''An ordered set of step profiles that the user may use.'''
         
         self.step_profiles_to_hues = EmittingWeakKeyDefaultDict(
             emitter=None,
             default_factory=StepProfileHueDefaultFactory(self),
         )
+        '''Mapping from step profile to hue that represents it in GUI.'''
         
         self._tracked_step_profile = None
-        
         self._temp_shell_history = None
-        '''Deleted immediately after.'''
-        
         self._temp_shell_command_history = None
-        '''Deleted immediately after.'''
-        
         self._job_and_node_of_recent_fork_by_crunching = None
         
         ### Setting up namespace: #############################################
-        #                                                                     # 
+        #                                                                     #
         
         self.namespace = {
             
@@ -203,6 +192,7 @@ class GuiProject(object):
             'simpack': self.simpack,
             self.simpack.__name__.rsplit('.', 1)[-1]: self.simpack,
         }
+        '''Namespace that will be used in shell and other places.'''
         
         garlicsim_lib = import_tools.import_if_exists('garlicsim_lib',
                                                       silent_fail=True)
@@ -297,7 +287,8 @@ class GuiProject(object):
             self.active_node_changed_emitter = es.make_emitter(
                 name='active_node_changed'
             )
-            # todo: should possibly take input from pseudoclock_modified_emitter
+            # todo: should possibly take input from
+            # `pseudoclock_modified_emitter`
             
             self.active_node_modified_emitter = es.make_emitter(
                 name='active_node_modified'
@@ -405,23 +396,25 @@ class GuiProject(object):
         Initialization related to the widgets which make up the gui project.
         '''
         
-        self.frame.Bind(wx.EVT_MENU, self.on_fork_by_editing_button,
+        self.frame.Bind(wx.EVT_MENU, self.on_fork_by_editing_menu_item,
                          id=s2i("Fork by editing"))
-        self.frame.Bind(wx.EVT_MENU, self.on_fork_by_crunching_button,
+        self.frame.Bind(wx.EVT_MENU, self.on_fork_by_crunching_menu_item,
                          id=s2i("Fork by crunching"))
         
         
 
-    def on_fork_by_crunching_button(self, event):
+    def on_fork_by_crunching_menu_item(self, event):
+        '''Event handler for "Fork by crunching" menu item.'''
         self.fork_by_crunching()
         
         
-    def on_fork_by_editing_button(self, event):
+    def on_fork_by_editing_menu_item(self, event):
+        '''Event handler for "Fork by editing" menu item.'''
         self.fork_by_editing()
 
         
     def set_path(self, path):
-        '''Set the path.'''
+        '''Set the path to `path`.'''
         self.path = path
         self.path_changed_emitter.emit()
         
@@ -447,10 +440,10 @@ class GuiProject(object):
         If value is outside the range of the current path, you'll get the clock
         of the closest edge node.
         
-        The active node will be changed to one which is close to the desired
-        pseudoclock. In `rounding` use `binary_search.LOW_OTHERWISE_HIGH` to get
-        the node just below, or `binary_search.HIGH_OTHERWISE_LOW` to get the
-        node just above.
+        The active node will be changed to one which is close to the
+        `desired_pseudoclock`. In `rounding` use
+        `binary_search.LOW_OTHERWISE_HIGH` to get the node just below, or
+        `binary_search.HIGH_OTHERWISE_LOW` to get the node just above.
         
         See documentation for these two options for more details.
         '''
@@ -485,6 +478,7 @@ class GuiProject(object):
 
         
     def set_default_buffer(self, default_buffer):
+        '''Set the default buffer, saying how far we should crunch ahead.'''
         self.default_buffer = default_buffer
         if self.active_node:
             self.project.ensure_buffer(self.active_node,
@@ -525,6 +519,7 @@ class GuiProject(object):
 
     
     def get_active_step_profile(self):
+        '''Get the active step profile, i.e. step profile of active node.'''
         return self.active_node.step_profile if self.active_node else None
                 
     
@@ -565,13 +560,14 @@ class GuiProject(object):
             if self.infinity_job:
                 self.infinity_job.crunching_profile.clock_target = \
                     self.infinity_job.node.state.clock + self.default_buffer
-                self.infinity_job = self.project.ensure_buffer_on_path(node,
-                                                                       self.path,
-                                                                       infinity)   
+                self.infinity_job = \
+                    self.project.ensure_buffer_on_path(node,
+                                                       self.path,
+                                                       infinity)   
         
         
     def __modify_path_to_include_active_node(self):
-        '''Ensure that self.path includes the active node.'''
+        '''Ensure that `.path` includes the active node.'''
         if self.path is None:
             self.set_path(self.active_node.make_containing_path())
         else:
@@ -592,7 +588,7 @@ class GuiProject(object):
         
         self.infinity_job = \
             self.project.ensure_buffer_on_path(self.active_node, self.path,
-                                                 infinity)
+                                               infinity)
         
         self.timer_for_playing.Start(1000//25)
         
@@ -683,10 +679,11 @@ class GuiProject(object):
         Used for forking the simulation without modifying any states. Creates
         a new node from the active node via natural simulation.
 
-        Any `*args` or `**kwargs` will be packed in a StepProfile object and passed
-        to the step function. You may pass a StepProfile yourself, as the only
-        argument, and it will be noticed and used. If nothing is passed in *args
-        or **kwargs, the step profile of the active node will be used.
+        Any `*args` or `**kwargs` will be packed in a `StepProfile` object and
+        passed to the step function. You may pass a `StepProfile` yourself, as
+        the only argument, and it will be noticed and used. If nothing is
+        passed in `*args` or `**kwargs`, the step profile of the active node
+        will be used.
         
         Returns the job.
         '''
@@ -733,7 +730,7 @@ class GuiProject(object):
         '''
         Take work from the crunchers, and give them new instructions if needed.
         
-        (This is a wrapper for Project.sync_crunchers() with some gui-related
+        (This is a wrapper for `Project.sync_crunchers()` with some gui-related
         additions.)
         
         Talks with all the crunchers, takes work from them for implementing
@@ -745,20 +742,21 @@ class GuiProject(object):
         '''
         
         # This method basically has two tasks. The first one is to take work
-        # from the crunchers and retire/recruit/redirect them as necessary. This
-        # is done by `Project.sync_crunchers`, which we call here, so that's not
-        # the tricky part here.
+        # from the crunchers and retire/recruit/redirect them as necessary.
+        # This is done by `Project.sync_crunchers`, which we call here, so
+        # that's not the tricky part here.
         #
         # The second task is the tricky part. We want to know just how much the
         # tree was modified during this action. And the tricky thing is that
         # `Project.sync_crunchers` won't do that for us, so we're going to have
-        # to try to deduce how much the tree modified ourselves, just by looking
-        # at the `jobs` list before and after calling `Project.sync_crunchers`.
+        # to try to deduce how much the tree modified ourselves, just by
+        # looking at the `jobs` list before and after calling
+        # `Project.sync_crunchers`.
         #
         # And when I say "to know how much the tree modified", I mean mainly to
         # know if the modification is a structural modification, or just some
-        # blocks getting fatter. And the reason we want to know this is so we'll
-        # know whether to update various workspace widgets.
+        # blocks getting fatter. And the reason we want to know this is so
+        # we'll know whether to update various workspace widgets.
         
         jobs = self.project.crunching_manager.jobs
         
@@ -783,7 +781,7 @@ class GuiProject(object):
             # (b) Changed the soft block it's pointing to.            
             #
             # The thing is, if there was a structural modification in the tree,
-            # this condition must be True. So we report a structure
+            # this condition must be `True`. So we report a structure
             # modification:
             
             self.tree_structure_modified_at_unknown_location_emitter.emit()
@@ -793,20 +791,20 @@ class GuiProject(object):
             # most of the time when crunching, we're not wasting too much
             # rendering time by assuming this is a structural modification.
             
-            # Note that we didn't check if `added_nodes > 0`: This is because if
-            # an `End` was added to the tree, it wouldn't have been counted in
-            # `added_nodes`.
+            # Note that we didn't check if `added_nodes > 0`: This is because
+            # if an `End` was added to the tree, it wouldn't have been counted
+            # in `added_nodes`.
             
         elif added_nodes > 0:
             
-            # If this condition is True, we know as a fact that there was no
+            # If this condition is `True`, we know as a fact that there was no
             # structural modification, and we know as a fact that some blocks
             # have gotten fatter.
             
             self.tree_modified_at_unknown_location_emitter.emit()
             
         # todo: It would be hard but nice to know whether the tree changes were
-        # on the path. This could save some rendering on SeekBar.
+        # on the path. This could save some rendering on `SeekBar`.
             
         return added_nodes
 
@@ -821,10 +819,12 @@ class GuiProject(object):
         
     
     def _update_step_profiles_set(self):
-        self.step_profiles |= self.project.tree.get_step_profiles()                
+        '''Update the step profiles set to include ones used in the tree.'''
+        self.step_profiles |= self.project.tree.get_step_profiles()
     
     
     def __check_if_step_profile_changed(self):
+        '''Check if the active step profile has changed.'''
         active_step_profile = self.get_active_step_profile()
         if active_step_profile != self._tracked_step_profile:
             self._tracked_step_profile = active_step_profile
@@ -832,6 +832,7 @@ class GuiProject(object):
         
         
     def _if_forked_by_crunching_recently_switch_to_new_path(self):
+        '''If user did "fork by crunching" and new path is ready, switch to.'''
         if self._job_and_node_of_recent_fork_by_crunching:
             job, old_node = self._job_and_node_of_recent_fork_by_crunching
             new_node = job.node
@@ -894,7 +895,8 @@ class GuiProject(object):
         
         if 'step_profiles' in my_dict:
             self.step_profiles.clear()
-            self.step_profiles |= my_dict.pop('step_profiles') # todo: Not idiomatic
+            self.step_profiles |= my_dict.pop('step_profiles')
+            # todo: Last line not idiomatic
             
         if 'step_profiles_to_hues' in my_dict:
             self.step_profiles_to_hues.clear()
@@ -913,21 +915,18 @@ class GuiProject(object):
     
     @staticmethod
     def _reconstruct(simpack, project):
-        '''Take vars that were just unpickled and build a GuiProject from
-        them.'''
-        # todo: document the reason/discussion that we're pickling the vars and
-        # not the gui project itself.
+        '''Reconstruct a pickled gui project.'''
 
         frame = garlicsim_wx._active_frame
-        # todo: Make Frame inherit from "InstanceHolder" instead
+        # todo: Make Frame inherit from some "InstanceHolder" instead
         
         gui_project = GuiProject(simpack, frame, project)
         
-        
-        
-        
         return gui_project
     
+    
 _reconstruct = GuiProject._reconstruct
-# Done because static methods cannot be pickled, because they are desciptors
-# which return a function and (c)pickle sucks at functions defined in classes.
+# Anchored because static methods cannot be pickled, because they are
+# desciptors which return a function and (c)pickle sucks at functions defined
+# in classes.
+
