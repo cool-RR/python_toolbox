@@ -60,7 +60,7 @@ def test_cached_history_function():
     @caching.history_cache
     def changes(history_browser):
         '''
-        Return how many cells changed between the most recent state and its parent.
+        Return how many cells changed between most recent state and its parent.
         '''
         changes.called_flag = True
         try:
