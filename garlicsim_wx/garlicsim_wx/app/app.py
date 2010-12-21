@@ -8,6 +8,7 @@ See its documentation for more information.
 '''
 
 import functools
+import sys
 
 import wx
 
@@ -18,9 +19,9 @@ import garlicsim_wx
 
 class App(wx.PySimpleApp):
     '''
-    A garlicsim_wx App.
+    A `garlicsim_wx` application.
     
-    The App is responsible for spawning a Frame.
+    The `App` is responsible for spawning a `Frame`.
     '''
     # todo: need to think if i allow frames with no app. on one hand good idea,
     # to allow people to start a garlicsim_wx frame in their own app. on other
@@ -44,12 +45,15 @@ class App(wx.PySimpleApp):
         self.load_gui_project_file_path = load_gui_project_file_path
         super(App, self).__init__()
         
+        if '--wx-debug=on' not in sys.argv:
+            self.SetAssertMode(wx.PYAPP_ASSERT_SUPPRESS)
+        
     
     def OnInit(self):
         
         frame = garlicsim_wx.Frame(
             parent=None,
-            title="GarlicSim",
+            title='GarlicSim',
             size=(1140, 850)
         )
         
