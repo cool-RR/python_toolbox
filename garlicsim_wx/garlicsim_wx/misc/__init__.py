@@ -5,7 +5,8 @@
 Defines several miscellaneous objects.
 
 These objects are important enough to be defined near the root of the
-`garlicsim_wx` package but not important enough to be put in the main namespace.
+`garlicsim_wx` package but not important enough to be put in the main
+namespace.
 '''
 
 from .simpack_wx_grokker import SimpackWxGrokker

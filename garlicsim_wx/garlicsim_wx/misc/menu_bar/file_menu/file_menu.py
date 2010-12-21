@@ -116,6 +116,7 @@ class FileMenu(CuteMenu):
             ' Close GarlicSim')              
         
         frame.Bind(wx.EVT_MENU, frame.on_exit_menu_button, self.exit_button)
+
         
     def _recalculate(self):
         self.save_button.Enable(

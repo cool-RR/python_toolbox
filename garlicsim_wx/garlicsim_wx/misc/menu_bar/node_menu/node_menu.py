@@ -55,8 +55,8 @@ class NodeMenu(CuteMenu):
             -1,
             'Fork by crunching &using',
             self.fork_by_crunching_using_menu,
-            (' Fork by crunching from the active node using specified step '
-             'profile')
+            ' Fork by crunching from the active node using specified step '
+            'profile'
         )
 
         

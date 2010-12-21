@@ -2,9 +2,9 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the `NodeMenu` class.
+Defines the `ForkByCrunchingUsingMenu` class.
 
-See its documentation for more info.
+See its documentation for more details.
 '''
 
 from itertools import izip
@@ -45,9 +45,9 @@ class ForkByCrunchingUsingMenu(CuteMenu):
         self.frame.crunching_controls.step_profiles_controls.\
             show_step_profile_editing_dialog(and_fork=True)
         
-    
 
     def _get_step_profile_items(self):
+        '''Get the menu items which correspond to step profiles.'''
         # Getting the existing menu items, while slicing out the separator and
         # "New step profile..." button:
         return list(self.GetMenuItems())[:-2]
@@ -62,6 +62,7 @@ class ForkByCrunchingUsingMenu(CuteMenu):
         items = self._get_step_profile_items()
         
         def find_item_of_step_profile(step_profile):
+            '''Find the menu item corresponding to `step_profile`.'''
             matching_items = \
                 [item for item in items if 
                 self.item_ids_to_step_profiles[item.Id] == step_profile]
@@ -123,9 +124,3 @@ class ForkByCrunchingUsingMenu(CuteMenu):
         
                 
             
-            
-        
-        
-        
-        
-    

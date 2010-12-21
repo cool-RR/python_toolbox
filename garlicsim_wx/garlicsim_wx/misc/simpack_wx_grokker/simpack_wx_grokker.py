@@ -52,9 +52,9 @@ class SimpackWxGrokker(object):
         '''Analyze the simpack_wx to produce a Settings object.'''
         # todo: consider doing this in Settings.__init__
         
-        # We want to access the `.settings` of our simpack_wx, but we don't know if
-        # our simpack_wx is a module or some other kind of object. So if it's a
-        # module, we'll try to import `settings`.
+        # We want to access the `.settings` of our simpack_wx, but we don't
+        # know if our simpack_wx is a module or some other kind of object. So
+        # if it's a module, we'll try to import `settings`.
         
         self.settings = Settings()        
         
@@ -76,8 +76,8 @@ class SimpackWxGrokker(object):
             # *not* keep a reference to it. We'll access `settings` as an
             # attribute of the simpack_wx below.
             
-        # Checking if there are original settings at all. If there aren't, we're
-        # done.
+        # Checking if there are original settings at all. If there aren't,
+        # we're done.
         if self.simpack_wx and hasattr(self.simpack_wx, 'settings'):
             
             original_settings = getattr(self.simpack_wx, 'settings')

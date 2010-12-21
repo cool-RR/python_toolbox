@@ -67,8 +67,8 @@ class AboutDialog(CuteDialog):
                         &copy; 2009-2011 Ram Rachum (a.k.a. cool-RR)
                         <br />                        
                         No part of this program may be used, copied or
-                        distributed without explicit written permission from Ram
-                        Rachum.
+                        distributed without explicit written permission from
+                        Ram Rachum.
                         <br />
                     </font></div>
                     <div> 
