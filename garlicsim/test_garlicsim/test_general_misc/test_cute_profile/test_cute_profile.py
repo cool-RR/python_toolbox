@@ -1,9 +1,17 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''
+Testing module for `garlicsim.general_misc.cute_profile`.
+'''
+
 from garlicsim.general_misc import cute_profile
 
 from .shared import call_and_check_if_profiled
 
 
 def func(x, y, z=3):
+    '''Function that does some meaningless number-juggling.'''
     sum([1, 2, 3])
     set([1, 2]) | set([2, 3])
     return x, y, z
@@ -11,7 +19,7 @@ def func(x, y, z=3):
 
 
 def test_simple():
-    
+    '''Test the basic workings of `profile_ready`.'''
     f = cute_profile.profile_ready()(func)
     assert call_and_check_if_profiled(lambda: f(1, 2)) is False
     assert call_and_check_if_profiled(lambda: f(1, 2)) is False
@@ -55,6 +63,7 @@ def test_simple():
     
     
 def test_method():
+    '''Test that `profile_ready` works as a method decorator.'''
     
     class A(object):
         def __init__(self):
@@ -104,6 +113,7 @@ def test_method():
     
 
 def test_condition():
+    '''Test the `condition` argument of `profile_ready`.'''
 
     x = 7
     
@@ -150,8 +160,8 @@ def test_condition():
     # And for fun set a different `x`:
     x = 'wow'
     
-    # Now profiling is on only when the condition is fulfilled, and doesn't stay
-    # on after:
+    # Now profiling is on only when the condition is fulfilled, and doesn't
+    # stay on after:
     assert call_and_check_if_profiled(lambda: f('ooga')) is False
     assert call_and_check_if_profiled(lambda: f('booga')) is False
     assert call_and_check_if_profiled(lambda: f('wow')) is True
@@ -161,15 +171,15 @@ def test_condition():
     # In fact, after successful profiling the condition gets reset to `None`:
     assert f.condition is None
     
-    # So now if we'll call the function again, even if the (former) condition is
-    # `True`, there will be no profiling:
+    # So now if we'll call the function again, even if the (former) condition
+    # is `True`, there will be no profiling:
     assert call_and_check_if_profiled(lambda: f(9)) is False
     
     # So if we want to use a condition again, we have to set it ourselves:
     f.condition = lambda f, y: isinstance(y, float)
     
-    # And again (since `.off_after == True`) profiling will turn on for just one
-    # time when the condition evaluates to `True` :
+    # And again (since `.off_after == True`) profiling will turn on for just
+    # one time when the condition evaluates to `True` :
     assert call_and_check_if_profiled(lambda: f('kabloom')) is False
     assert call_and_check_if_profiled(lambda: f(3)) is False
     assert call_and_check_if_profiled(lambda: f(3.1)) is True

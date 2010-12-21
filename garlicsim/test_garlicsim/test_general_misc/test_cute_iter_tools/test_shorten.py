@@ -1,3 +1,8 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''Testing module for `garlicsim.general_misc.cute_iter_tools.shorten`.'''
+
 import nose.tools
 
 from garlicsim.general_misc.infinity import infinity
@@ -6,6 +11,7 @@ from garlicsim.general_misc.cute_iter_tools import shorten
 
 
 def test():
+    '''Test basic workings of `shorten`.'''
     my_range = [0, 1, 2, 3, 4]
 
     short_iterator = shorten(my_range, 3)

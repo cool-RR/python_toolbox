@@ -1,9 +1,17 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''
+Testing module for `garlicsim.general_misc.persistent.personality.Personality`.
+'''
+
 import colorsys
 
 from garlicsim.general_misc.persistent import CrossProcessPersistent
 
 
 def test():
+    '''Test the basic workings of `Personality`.'''
     cpp_1 = CrossProcessPersistent()
     cpp_2 = CrossProcessPersistent()
     cpp_3 = CrossProcessPersistent()

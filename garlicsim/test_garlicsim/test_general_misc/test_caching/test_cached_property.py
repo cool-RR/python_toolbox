@@ -1,3 +1,10 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''
+Testing module for `garlicsim.general_misc.caching.CachedProperty`.
+'''
+
 import nose
 
 from garlicsim.general_misc.caching import (cache, CachedType,
@@ -5,6 +12,7 @@ from garlicsim.general_misc.caching import (cache, CachedType,
 
 
 def counting_func(self):
+    '''Function that returns a bigger number every time.'''
     if not hasattr(counting_func, 'i'):
         counting_func.i = 0
     try:
@@ -14,7 +22,7 @@ def counting_func(self):
     
         
 def test():
-        
+    '''Test basic workings of `CachedProperty`.'''    
     class A(object):
         personality = CachedProperty(counting_func)
     
@@ -30,7 +38,7 @@ def test():
 
 
 def test_as_decorator():
-        
+    '''Test `CachedProperty` can work as a decorator.'''
     class B(object):
         @CachedProperty
         def personality(self):
@@ -54,7 +62,7 @@ def test_as_decorator():
         
     
 def test_with_name():
-        
+    '''Test `CachedProperty` works with correct name argument.'''
     class A(object):
         personality = CachedProperty(counting_func, name='personality')
     
@@ -68,18 +76,22 @@ def test_with_name():
         
     
 def test_with_wrong_name():
+    '''Test `CachedProperty`'s behavior with wrong name argument.'''
         
     class A(object):
         personality = CachedProperty(counting_func, name='meow')
     
     a1 = A()
-    assert a1.personality == a1.meow == a1.personality - 1 == a1.personality - 2
+    assert a1.personality == a1.meow == a1.personality - 1 == \
+           a1.personality - 2
     
     a2 = A()
-    assert a2.personality == a2.meow == a2.personality - 1 == a2.personality - 2
+    assert a2.personality == a2.meow == a2.personality - 1 == \
+           a2.personality - 2
     
     
 def test_on_false_object():
+    '''Test `CachedProperty` on class that evaluates to `False`.'''
     
     class C(object):
         @CachedProperty

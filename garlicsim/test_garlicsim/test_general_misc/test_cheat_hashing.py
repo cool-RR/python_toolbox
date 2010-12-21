@@ -1,10 +1,17 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''
+Testing module for `garlicsim.general_misc.abc_tools.abstract_static_method`.
+'''
+
 import copy
 
-from garlicsim.general_misc import cheat_hashing
 from garlicsim.general_misc.cheat_hashing import cheat_hash
 
 
 def test_cheat_hash():
+    '''Test `cheat_hash` on various objects.'''
     
     things = [
         1,

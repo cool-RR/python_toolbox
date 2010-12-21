@@ -1,3 +1,10 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''
+Testing module for `garlicsim.general_misc.caching.cache`.
+'''
+
 import gc
 import weakref
 
@@ -7,6 +14,7 @@ from garlicsim.general_misc.caching import cache
 
 
 def counting_func(a=1, b=2, *args, **kwargs):
+    '''Function that returns a bigger number every time.'''
     if not hasattr(counting_func, 'i'):
         counting_func.i = 0
     try:
@@ -16,7 +24,7 @@ def counting_func(a=1, b=2, *args, **kwargs):
 
         
 def test_basic():
-    
+    '''Test basic workings of `cache`.'''
     f = cache()(counting_func)
     
     assert f() == f() == f(1, 2) == f(a=1, b=2)
@@ -31,7 +39,7 @@ def test_basic():
     
 
 def test_weakref():
-    
+    '''Test that `cache` weakrefs weakreffable arguments.'''
     f = cache()(counting_func)
     
     class A(object): pass
@@ -55,6 +63,7 @@ def test_weakref():
     
     
 def test_lru():
+    '''Test the least-recently-used algorithm for forgetting cached results.'''
     
     f = cache(max_size=3)(counting_func)
     
@@ -97,6 +106,7 @@ def test_lru():
     
 
 def test_unhashable_arguments():
+    '''Test `cache` works with unhashable arguments.'''
     
     f = cache()(counting_func)
     
@@ -112,6 +122,7 @@ def test_unhashable_arguments():
     
     
 def test_function_instead_of_max_size():
+    '''Test user gets a helpful exception when doing `@cache`.'''
 
     def confusedly_put_function_as_max_size():
         exec('@cache\n'

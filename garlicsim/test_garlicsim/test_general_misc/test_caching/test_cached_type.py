@@ -1,7 +1,15 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''
+Testing module for `garlicsim.general_misc.caching.CachedType`.
+'''
 
 from garlicsim.general_misc.caching import CachedType
 
+
 def counting_func(a=1, b=2, *args, **kwargs):
+    '''Function that returns a bigger number every time.'''
     if not hasattr(counting_func, 'i'):
         counting_func.i = 0
     try:
@@ -11,7 +19,7 @@ def counting_func(a=1, b=2, *args, **kwargs):
 
         
 def test():
-    
+    '''Test basic workings of `CachedType`.'''
     class A(object):
         __metaclass__ = CachedType
         def __init__(self, a=1, b=2, *args, **kwargs):

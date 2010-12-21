@@ -1,3 +1,8 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''Testing module for `CutePickler` and `CuteUnpickler`.'''
+
 import threading
 from cStringIO import StringIO 
 import tempfile
@@ -22,7 +27,7 @@ class Object(object):
 
 
 def test_totally_pickleable():
-    
+    '''Test cute-(un)pickling on totally pickleable objects.'''
     
     totally_pickleable_things = [
         [1, 2, (3, 4)],
@@ -45,7 +50,9 @@ def test_totally_pickleable():
 
         
 def test_without_multiprocessing():
-   
+    '''
+    Test cute-(un)pickling on various objects, not incl. `multiprocessing`.
+    '''
     totally_pickleable_things = [
         [1, 2, (3, 4)],
         {1: 2, 3: set((1, 2, 3))},
@@ -88,7 +95,7 @@ def test_without_multiprocessing():
     
     
 def test():
-   
+    '''Test cute-(un)pickling on various objects.'''
     if not import_tools.exists('multiprocessing'):
         raise nose.SkipTest('`multiprocessing` is not installed.')
     

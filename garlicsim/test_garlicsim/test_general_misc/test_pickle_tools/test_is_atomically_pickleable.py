@@ -1,3 +1,8 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''Testing module for `is_atomically_pickleable`.'''
+
 from __future__ import with_statement
 
 import threading
@@ -19,6 +24,7 @@ from .shared import PickleableObject, NonPickleableObject
 
 
 def is_pickle_successful(thing):
+    '''`try` to pickle `thing` and return whether it worked.'''
     try:
         string = pickle_module.dumps(thing)
         unpickled_thing = pickle_module.loads(string)
@@ -29,6 +35,7 @@ def is_pickle_successful(thing):
 
     
 def test_simple_atomically_pickleables():
+    '''Test `is_atomically_pickleable` on atomically pickleable objects.'''
     pickleables = [
         None, True, False,
         1, 1.1, -3, 3+4.5j,
@@ -54,7 +61,13 @@ def test_simple_atomically_pickleables():
         assert pickle_tools.is_atomically_pickleable(thing)
         
         
+        
 def test_non_atomically_pickleables_multiprocessing():
+    '''
+    Test `is_atomically_pickleable` on non-atomically pickleable objects.
+    
+    Not including `multiprocessing` objects.
+    '''
     
     if not import_tools.exists('multiprocessing'):
         raise nose.SkipTest('`multiprocessing` is not installed.')
@@ -108,6 +121,7 @@ def test_partially_pickleables_multiprocessing():
         
         
 def test_non_atomically_pickleables():
+    '''Test `is_atomically_pickleable` on non-atomically pickleable objects.'''
 
     non_pickleables = [
         threading.Lock(),
@@ -125,6 +139,8 @@ def test_non_atomically_pickleables():
     
 def test_partially_pickleables():
     '''
+    Test `is_atomically_pickleable` on partially pickleable objects.
+    
     "Partially-pickleable" means an object which is atomically pickleable but
     not pickleable.
     '''
@@ -158,6 +174,7 @@ class AtomicallyPickleable:
         
         
 def test_old_style_classes():
+    '''Test `is_atomically_pickleable` on old style classes objects.'''
     
     # I hate old-style classes. I hope they'll die soon.
     

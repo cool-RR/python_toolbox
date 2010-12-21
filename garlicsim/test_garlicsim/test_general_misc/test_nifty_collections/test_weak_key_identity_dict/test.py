@@ -1,13 +1,19 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''Testing module for `WeakKeyIdentityDict`.'''
+
 import nose
 
 from garlicsim.general_misc.nifty_collections import WeakKeyIdentityDict
 
 
 class WeakreffableList(list):
-    pass
+    '''A `list` subclass which can be weakreffed.'''
 
 
 def test():
+    '''Test the basic workings of `WeakKeyIdentityDict`.'''
     wki_dict = WeakKeyIdentityDict()
     my_weakreffable_list = WeakreffableList([1, 2])
     wki_dict[my_weakreffable_list] = 7
