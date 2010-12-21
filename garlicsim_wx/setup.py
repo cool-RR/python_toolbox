@@ -19,21 +19,23 @@ if sys.version_info[1] <= 4:
 
 
 if 'py2exe' in sys.argv:
-    # We have a separate file for doing stuff that is needed when packaging with
-    # py2exe.
-    import py2exe_cruft.setup_extension
+    # We have a separate file for doing stuff that is needed when packaging
+    # with `py2exe`.
+    from . import py2exe_cruft
+    from .py2exe_cruft import setup_extension as _
 
 
 def get_garlicsim_wx_packages():
     '''
-    Get all the packages in garlicsim_wx.
+    Get all the packages in `garlicsim_wx`.
     
-    This returns an answer in the form: ['garlicsim_wx.frame',
-    'garlicsim_wx.widgets', 'garlicsim_wx.misc', ...]
+    This returns an answer in the form: `['garlicsim_wx.frame',
+    'garlicsim_wx.widgets', 'garlicsim_wx.misc', ...]`
     '''
     return ['garlicsim_wx.' + p for p
             in setuptools.find_packages('./garlicsim_wx')] + \
            ['garlicsim_wx']
+
 
 garlicsim_wx_packages = get_garlicsim_wx_packages()
 
@@ -95,8 +97,8 @@ if 'py2exe' in sys.argv:
     path_to_add = os.path.abspath('./py2exe_cruft')
     if path_to_add not in sys.path:
         sys.path.append(path_to_add)
-        # Adding it because there's some dll there that we need, and py2exe
-        # looks on sys.path.
+        # Adding it because there's some dll there that we need, and `py2exe`
+        # looks on `sys.path`.
     
     setup_kwargs.update(py2exe_cruft.setup_extension.py2exe_kwargs)
 

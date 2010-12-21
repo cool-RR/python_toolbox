@@ -19,8 +19,8 @@ import imp
 import sys, os.path, glob
 import pkgutil
 
-# This module is meant to be imported from the garlicsim_wx setup.py file, and
-# should not be used otherwise:
+# This module is meant to be imported from the `garlicsim_wx` `setup.py` file,
+# and should not be used otherwise:
 assert any('setup.py' in s for s in sys.argv)
 
 path_to_garlicsim = os.path.abspath('../garlicsim')
@@ -51,17 +51,19 @@ def package_to_path(package):
     The path will be relative to the folder that contains the root package.
     
     Example:
-    package_to_path('numpy.core') == 'numpy/core'
+        
+        package_to_path('numpy.core') == 'numpy/core'
+        
     '''
     return package.replace('.', '/')
 
 
 def get_garlicsim_packages():
     '''
-    Get all the packages in garlicsim.
+    Get all the packages in `garlicsim`.
     
-    This returns an answer in the form: ['garlicsim.data_structures',
-    'garlicsim.bootstrap', 'garlicsim.misc', ...]
+    This returns an answer in the form: `['garlicsim.data_structures',
+    'garlicsim.bootstrap', 'garlicsim.misc', ...]`
     '''
     return ['garlicsim.' + p for p
             in setuptools.find_packages('../garlicsim/garlicsim')] + \
@@ -72,10 +74,10 @@ garlicsim_packages = get_garlicsim_packages()
 
 def get_garlicsim_lib_packages():
     '''
-    Get all the packages in garlicsim_lib.
+    Get all the packages in `garlicsim_lib`.
     
-    This returns an answer in the form: ['garlicsim_lib.simpacks.life',
-    'garlicsim_lib.simpacks.prisoner', ...]
+    This returns an answer in the form: `['garlicsim_lib.simpacks.life',
+    'garlicsim_lib.simpacks.prisoner', ...]`
     '''
     return ['garlicsim_lib.' + p for p
             in setuptools.find_packages('../garlicsim_lib/garlicsim_lib')] + \
@@ -86,10 +88,10 @@ garlicsim_lib_packages = get_garlicsim_lib_packages()
 
 def get_garlicsim_wx_packages():
     '''
-    Get all the packages in garlicsim_wx.
+    Get all the packages in `garlicsim_wx`.
     
-    This returns an answer in the form: ['garlicsim_wx.frame',
-    'garlicsim_wx.widgets', 'garlicsim_wx.misc', ...]
+    This returns an answer in the form: `['garlicsim_wx.frame',
+    'garlicsim_wx.widgets', 'garlicsim_wx.misc', ...]`
     '''
     return ['garlicsim_wx.' + p for p
             in setuptools.find_packages('garlicsim_wx')] + \
@@ -100,11 +102,11 @@ garlicsim_wx_packages = get_garlicsim_wx_packages()
 
 def get_garlicsim_data_files():
     '''
-    Get garlicsim's data files.
+    Get `garlicsim`'s data files.
     
-    This returns a list of tuples, where the second item in each tuple is a list
-    of files and the first item is the path to which these files should be
-    copied when doing the py2exe packaging.
+    This returns a list of tuples, where the second item in each tuple is a
+    list of files and the first item is the path to which these files should be
+    copied when doing the `py2exe` packaging.
     '''
     total_data_files = []
     for package in garlicsim_packages:
@@ -119,11 +121,11 @@ def get_garlicsim_data_files():
 
 def get_garlicsim_lib_data_files():
     '''
-    Get garlicsim_lib's data files.
+    Get `garlicsim_lib`'s data files.
     
-    This returns a list of tuples, where the second item in each tuple is a list
-    of files and the first item is the path to which these files should be
-    copied when doing the py2exe packaging.
+    This returns a list of tuples, where the second item in each tuple is a
+    list of files and the first item is the path to which these files should be
+    copied when doing the `py2exe` packaging.
     '''
     total_data_files = []
     for package in garlicsim_lib_packages:
@@ -138,11 +140,11 @@ def get_garlicsim_lib_data_files():
 
 def get_garlicsim_wx_data_files():
     '''
-    Get garlicsim_wx's data files.
+    Get `garlicsim_wx`'s data files.
     
-    This returns a list of tuples, where the second item in each tuple is a list
-    of files and the first item is the path to which these files should be
-    copied when doing the py2exe packaging.
+    This returns a list of tuples, where the second item in each tuple is a
+    list of files and the first item is the path to which these files should be
+    copied when doing the `py2exe` packaging.
     '''
     total_data_files = []
     for package in garlicsim_wx_packages:
@@ -153,12 +155,13 @@ def get_garlicsim_wx_data_files():
         total_data_files.append(('lib/' + path, data_files))
     return total_data_files
 
+
 def get_garlicsim_script_files():
     '''
-    Get garlicsim's script files.
+    Get `garlicsim`'s script files.
     
-    This returns a list of tuples, where the second item in each tuple is a list
-    of files and the first item is the path to which these files should be
+    This returns a list of tuples, where the second item in each tuple is a
+    list of files and the first item is the path to which these files should be
     copied when doing the py2exe packaging.
     '''
     total_script_files = []
@@ -176,11 +179,11 @@ def get_garlicsim_script_files():
 
 def get_dlls_and_stuff():
     '''
-    Get some miscellaneous files that need to be copied to py2exe_dist.
+    Get some miscellaneous files that need to be copied to `py2exe_dist`.
     
-    This returns a list of tuples, where the second item in each tuple is a list
-    of files and the first item is the path to which these files should be
-    copied when doing the py2exe packaging.
+    This returns a list of tuples, where the second item in each tuple is a
+    list of files and the first item is the path to which these files should be
+    copied when doing the `py2exe` packaging.
     '''
     total_data_files = []
     path_to_folder = './py2exe_cruft/dlls_and_stuff'
@@ -225,8 +228,9 @@ def get_all_submodules(package_name):
     
     Example:
     
-    get_all_subpackages('numpy') == ['numpy.compat._inspect',
-    'numpy.compat.setup', 'numpy.compat.setupscons', ... ]
+        get_all_subpackages('numpy') == ['numpy.compat._inspect',
+        'numpy.compat.setup', 'numpy.compat.setupscons', ... ]
+        
     '''
     package_path = cute_find_module(package_name)
     
@@ -247,8 +251,8 @@ def get_all_submodules(package_name):
 
 
 # This is a list of packages that should be included in the library, with all
-# their submodules. In theory, the `packages` option of py2exe should take care
-# of it, but it has bugs in it so we're doing this ourselves.
+# their submodules. In theory, the `packages` option of `py2exe` should take
+# care of it, but it has bugs in it so we're doing this ourselves.
 packages_to_include_with_all_submodules = [
     
     'garlicsim', 'garlicsim_lib',
@@ -286,14 +290,16 @@ py2exe_kwargs = {
     'data_files': get_all_data_files(),
     
     # We don't really have a zipfile, this is the path to the library folder:
-    'zipfile': 'lib/library.zip',
-    # Keep in mind that this `library.zip` filename here will simply be ignored.
+    'zipfile': 'lib/library.zip',    
+    # Keep in mind that this `library.zip` filename here will simply be
+    # ignored.
     
     'options': {
         'py2exe': {
             'dist_dir': 'py2exe_dist',
             
-            # We prefer to have all the files in a folder instead of a zip file.
+            # We prefer to have all the files in a folder instead of a zip
+            # file.            
             'skip_archive': True,
             
             'includes': includes,
