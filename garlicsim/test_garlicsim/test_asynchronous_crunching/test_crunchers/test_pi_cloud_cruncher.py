@@ -1,7 +1,11 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
 import nose.tools
 
 import garlicsim
 from garlicsim.asynchronous_crunching.crunchers import PiCloudCruncher
+
 
 def test_pi_cloud_cruncher():
     

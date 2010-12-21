@@ -1,8 +1,7 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''
-'''
+'''Test `garlicsim_lib` simpacks.'''
 
 from __future__ import division
 
@@ -34,7 +33,7 @@ def _is_deterministic(simpack):
 
 
 def test():
-    
+    '''Test `garlicsim_lib` simpacks.'''
     simpacks = [life, prisoner, _history_test, queue]
     
     cruncher_types = [

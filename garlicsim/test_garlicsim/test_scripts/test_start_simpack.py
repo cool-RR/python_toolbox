@@ -1,3 +1,19 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+from __future__ import with_statement
+
+import tempfile
+import shutil
+import glob
+
+from garlicsim.general_misc import sys_tools
+from garlicsim.general_misc.temp_value_setters import \
+     TempWorkingDirectorySetter
+
+import garlicsim.scripts
+
+
 _help_text = '''\
 This is a script for creating a skeleton for a `garlicsim` simpack. Use this
 when you want to make a new simpack to have the basic folders and files created

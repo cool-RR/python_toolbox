@@ -29,7 +29,7 @@ from ..shared import MustachedThreadCruncher
 
 
 def test():
-    
+    '''Test changing things while crunching.'''
     from . import sample_simpacks
     
     # Collecting all the test simpacks:

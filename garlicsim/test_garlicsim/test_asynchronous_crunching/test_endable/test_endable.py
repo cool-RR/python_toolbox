@@ -28,8 +28,10 @@ from ..shared import MustachedThreadCruncher
 
 def test_endable():
     '''
+    Test handling of endable simpacks.
     
-    all simpacks end when they get a world-state with clock reading of 4 or more.
+    All simpacks end when they get a world-state with clock reading of 4 or
+    more.
     '''
     
     from . import sample_endable_simpacks
@@ -81,8 +83,8 @@ def check(simpack, cruncher_type):
     ### Running for short periods synchronically so it doesn't end: ###########
     #                                                                         #
     
-    # Whether we run the simulation for one, two, three, or four iterations, the
-    # simulation doesn't end.
+    # Whether we run the simulation for one, two, three, or four iterations,
+    # the simulation doesn't end.
     prev_state = state
     for i in [1, 2, 3, 4]:
         new_state = garlicsim.simulate(state, i)
@@ -324,7 +326,7 @@ def check(simpack, cruncher_type):
     project.simulate(root, 5)
     assert len(get_all_ends()) == 4
     
-    #                                                                         #    
+    #                                                                         #
     ### Finished testing `Project.simulate`. ##################################
     
     
