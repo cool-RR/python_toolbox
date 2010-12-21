@@ -1,6 +1,8 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
+'''Tests for `node_selection` and `node_range`.'''
+
 import copy
 import nose
 from garlicsim.general_misc import logic_tools
@@ -10,6 +12,7 @@ from garlicsim import data_structures as ds
 from garlicsim_lib.simpacks import life
 
 def test_node_selection_and_range():
+    '''Test `node_selection` and `node_range`.'''
     root_state = life.State.create_root(2, 2)
     project = garlicsim.Project(life)
     tree = project.tree

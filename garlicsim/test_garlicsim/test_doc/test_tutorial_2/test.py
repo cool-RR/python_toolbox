@@ -1,3 +1,8 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''Testing module for tutorial-2.'''
+
 from __future__ import with_statement
 from __future__ import division
 
@@ -71,6 +76,7 @@ class State(garlicsim.data_structures.State):
         return State(balance=5000)"""
 
 def test():
+    '''Test tutorial-2.'''
     # Asserting we don't have a `_coin_flip` on path already in some other
     # place:
     assert not import_tools.exists('_coin_flip')
@@ -145,43 +151,3 @@ def test():
         shutil.rmtree(temp_dir)
 
         
-_help_text = '''\
-This is a script for creating a skeleton for a `garlicsim` simpack. Use this
-when you want to make a new simpack to have the basic folders and files created
-for you.
-
-    Usage: start_simpack.py my_simpack_name
-
-The simpack will be created in the current path, in a directory with the name
-of the simpack.
-'''
-        
-
-def test_implicit_help():
-    temp_dir = tempfile.mkdtemp(prefix='temp_garlicsim_')
-    try:
-        with TempWorkingDirectorySetter(temp_dir):
-            with sys_tools.OutputCapturer() as output_capturer:
-                garlicsim.scripts.start_simpack.execute(
-                    argv=['start_simpack.py']
-                )
-            assert output_capturer.output == _help_text + '\n'
-            assert glob.glob('*') == []
-            
-    finally:
-        shutil.rmtree(temp_dir)
-        
-
-def test_explicit_help():
-    temp_dir = tempfile.mkdtemp(prefix='temp_garlicsim_')
-    try:
-        with TempWorkingDirectorySetter(temp_dir):
-            with sys_tools.OutputCapturer() as output_capturer:
-                garlicsim.scripts.start_simpack.execute(
-                    argv=['start_simpack.py', '--help']
-                )
-            assert output_capturer.output == _help_text + '\n'
-            assert glob.glob('*') == []
-            
-    finally:
-        shutil.rmtree(temp_dir)

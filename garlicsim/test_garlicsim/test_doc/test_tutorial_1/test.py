@@ -1,7 +1,13 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''Testing module for tutorial-1.'''
+
 import re
 import time
 
 def test():
+    '''Test tutorial-1.'''
     life_board_pattern = re.compile('^(([ #]{45}\n){24})([ #]{45})$')
     import garlicsim
     from garlicsim_lib.simpacks import life

@@ -1,9 +1,18 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''Tools for testing `garlicsim`.'''
+
+
 from garlicsim.general_misc import import_tools
 
 import garlicsim
 
 
 def verify_sample_simpack_settings(sample_simpack):
+    '''
+    Verfiy that `sample_simpack` has all the testing flags with valid values.
+    '''
     import_tools.normal_import(
         sample_simpack.__name__ + '._settings_for_testing'
     )
@@ -27,7 +36,7 @@ def verify_sample_simpack_settings(sample_simpack):
         assert issubclass(cruncher_type,
                           garlicsim.asynchronous_crunching.BaseCruncher)
         
-    # Making sure there aren't any extraneous settings, so we'll know we checked
-    # everything:
+    # Making sure there aren't any extraneous settings, so we'll know we
+    # checked everything:
     settings_names = [name for name in dir(sft) if name.isupper()]
     assert len(settings_names) == 9
