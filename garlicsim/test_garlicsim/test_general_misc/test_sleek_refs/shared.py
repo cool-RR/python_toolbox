@@ -23,7 +23,7 @@ class A(object):
 
     
 def counter(*args, **kwargs):
-    '''Function that returns a higher number every time it's called.''''
+    '''Function that returns a higher number every time it's called.'''
     if not hasattr(counter, 'count'):
         counter.count = 0
     result = counter.count
