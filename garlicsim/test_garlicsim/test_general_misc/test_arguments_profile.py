@@ -1,3 +1,10 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''
+Testing module for `garlicsim.general_misc.arguments_profile.ArgumentsProfile`.
+'''
+
 from __future__ import with_statement
 
 import sys
@@ -9,6 +16,9 @@ from garlicsim.general_misc.third_party.ordered_dict import OrderedDict
 
 
 def test_only_defaultless():
+    '''
+    Test `ArgumentsProfile` on a function with defaultless arguments only.
+    '''
     def func(a, b, c):
         pass
     
@@ -19,11 +29,15 @@ def test_only_defaultless():
     a2 = ArgumentsProfile(func, 1, c=3, b=2)
     a3 = ArgumentsProfile(func, c=3, a=1, b=2)
     a4 = ArgumentsProfile(func, 1, **{'c': 3, 'b': 2})
-    a5 = ArgumentsProfile(func, **OrderedDict((('c', 3), ('b',  2), ('a',  1))))
+    a5 = \
+        ArgumentsProfile(func, **OrderedDict((('c', 3), ('b',  2), ('a',  1))))
     assert a1 == a2 == a3 == a4 == a5
     
     
 def test_simplest_defaultful():
+    '''
+    Test `ArgumentsProfile` on a function with defaultful arguments.
+    '''
     def func(a, b, c='three', d='four'):
         pass
     
@@ -62,6 +76,9 @@ def test_simplest_defaultful():
         
     
 def test_defaultful_long_first():
+    '''
+    Test `ArgumentsProfile` on function with long first defaultful argument.
+    '''
     def func(a, b, creativity=3, d=4):
         pass
     
@@ -85,6 +102,13 @@ def test_defaultful_long_first():
     
     
 def test_defaultful_long_last():
+    '''
+    Test `ArgumentsProfile` on function with long last defaultful argument.
+    
+    The point is that `ArgumentsProfile` prefers specifying all arguments
+    leading to the last long one rather than specifying the keyword, because it
+    results in a shorter overall call.
+    '''
     def func(a, b, c=3, dragon=4):
         pass
     
@@ -108,6 +132,10 @@ def test_defaultful_long_last():
     
     
 def test_many_defaultfuls_some_long():
+    '''
+    Test `ArgumentsProfile` with many defaultful arguments, some of them long.
+    '''
+    
     def func(a, b, c=3, dragon=4, e=5, f=6, glide=7, human=8):
         pass
         
@@ -128,6 +156,9 @@ def test_many_defaultfuls_some_long():
     
     
 def test_many_defaultfuls_some_long_2():
+    '''
+    Test `ArgumentsProfile` with many defaultful arguments, some of them long.
+    '''
     def func(a, b, c=3, dragon=4, e=5, f=6, glide=7, human=8, iris=9):
         pass
         
@@ -139,7 +170,8 @@ def test_many_defaultfuls_some_long_2():
     a3 = ArgumentsProfile(func, 1, 2, 3, glide='boom')
     assert a1 == a2 == a3
     
-    a4 = ArgumentsProfile(func, 1, 2, glide='boom', human='pow', iris='badabang')
+    a4 = ArgumentsProfile(func, 1, 2, glide='boom',
+                          human='pow', iris='badabang')
     a5 = ArgumentsProfile(func, 1, 2, 3, 4, 5, 6, 'boom', 'pow', 'badabang')
     assert a4 == a5
     assert a4.args == (1, 2, 3, 4, 5, 6, 'boom', 'pow', 'badabang')
@@ -147,6 +179,7 @@ def test_many_defaultfuls_some_long_2():
     
     
 def test_defaultful_and_star_args():
+    '''Test `ArgumentsProfile` with defaultful arguments and `*args`.'''
     def func(a, b, c=3, draconian=4, *args):
         pass
         
@@ -167,6 +200,7 @@ def test_defaultful_and_star_args():
     
     
 def test_many_defaultfuls_and_star_args():
+    '''Test `ArgumentsProfile` with many defaultful arguments and `*args`.'''
     def func(a, b, c='three', d='four', e='five', f='six', *args):
         pass
     
@@ -186,6 +220,7 @@ def test_many_defaultfuls_and_star_args():
     
     
 def test_defaultfuls_and_star_kwargs():
+    '''Test `ArgumentsProfile` with defaultful arguments and `**kwargs`.'''
     def func(a, b, c=3, d=4, **kwargs):
         pass
     
@@ -207,7 +242,10 @@ def test_defaultfuls_and_star_kwargs():
     assert a2 == a3 == a4
     
 
-def test_many_defaultfuls_and_star_args_and_star_kwargs():    
+def test_many_defaultfuls_and_star_args_and_star_kwargs():
+    '''
+    Test `ArgumentsProfile` with defaultful arguments, `*args` and `**kwargs`.
+    '''
     def func(a, b, c='three', d='four', e='five', f='six', *args, **kwargs):
         pass
     
@@ -229,8 +267,11 @@ def test_many_defaultfuls_and_star_args_and_star_kwargs():
 
     
 def test_method_equality():
-    # This tests for a bug where functions are compared with `is` instead of
-    # `==`, which causes failure with both bound and unbound methods.
+    '''
+    Test for bug where methods are compared with `is` instead of `==`.
+    
+    This causes failure with both bound and unbound methods.
+    '''
     
     class C(object):
         def my_method(self, *args):
@@ -259,7 +300,8 @@ def test_method_equality():
     assert ArgumentsProfile(c1.my_method, 7, 'meow') == \
            ArgumentsProfile(c1.my_method, 7, 'meow')
     
-    assert ArgumentsProfile(c1.my_method) != ArgumentsProfile(c1.my_method, 7, 'meow')
+    assert ArgumentsProfile(c1.my_method) != ArgumentsProfile(c1.my_method, 7,
+                                                              'meow')
     
     assert ArgumentsProfile(c1.my_method) != ArgumentsProfile(c2.my_method)
     
@@ -268,6 +310,7 @@ def test_method_equality():
     
 
 def test_unhashable():
+    '''Test hashing of `ArgumentsProfile` that has unhashable arguments.'''
     def func(a, b, c=3, d=4, **kwargs):
         pass
     
@@ -289,6 +332,8 @@ def test_unhashable():
 
     
 def test_unhashable_star_empty():
+    '''Test `ArgumentsProfile` hashing and handling of `*()`.'''
+    
     def func(a, b, c=3, d=4, **kwargs):
         pass
     assert sys.version_info[0] == 2

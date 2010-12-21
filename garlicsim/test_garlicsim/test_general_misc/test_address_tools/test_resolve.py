@@ -1,8 +1,14 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''Testing module for `garlicsim.general_misc.address_tools.resolve`.'''
+
 import nose.tools
 
 from garlicsim.general_misc.address_tools import describe, resolve
 
 
+# Class tree we'll try to some resolvings on:
 class A(object):
     def method(self):
         pass
@@ -21,6 +27,7 @@ prefix = __name__ + '.'
 
 
 def test_locally_defined_class():
+    '''Test `resolve` on a locally defined class tree.'''
     
     assert resolve(prefix + 'A') is A
     assert resolve(prefix + 'A.B') is A.B
@@ -40,6 +47,7 @@ def test_locally_defined_class():
 
     
 def test_stdlib():    
+    '''Test `resolve` on stdlib modules.'''
     
     result = resolve('email')
     import email
@@ -73,6 +81,7 @@ def test_stdlib():
     
     
 def test_garlicsim():
+    '''Test `resolve` on `garlicsim` modules.'''
     
     result = resolve('garlicsim.general_misc')
     import garlicsim
@@ -130,6 +139,7 @@ def test_address_in_expression():
     
 
 def test_illegal_input():
+    '''Test `resolve` raises exception when given illegal input.'''
     
     nose.tools.assert_raises(Exception,
                              resolve,

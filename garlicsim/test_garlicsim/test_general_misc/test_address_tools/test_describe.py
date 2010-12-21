@@ -1,42 +1,51 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''Testing module for `garlicsim.general_misc.address_tools.describe`.'''
+
 import nose
 
 from garlicsim.general_misc import import_tools
 
+import garlicsim
 from garlicsim.general_misc.address_tools import (describe,
                                                   resolve)
 
-import garlicsim
+
+prefix = __name__ + '.'
 
 
-prefix = __name__ + '.'    
 
-
-#def test_locally_defined_class():
+def test_locally_defined_class():
     
     ###########################################################################
     # Testing for locally defined class:
     
-    # Currently these tests are commented out, because `describe` doesn't
-    # support nested classes yet.
     
-    #result = describe(A.B)
-    #assert result == prefix + 'A.B'
-    #assert resolve(result) is A.B
+    if garlicsim.__version_info__ <= (0, 6, 0):
+        raise nose.SkipTest("This test doesn't pass in `garlicsim` version "
+                            "0.6 and below, because `describe` doesn't "
+                            "support nested classes yet.")
     
-    #result = describe(A.C.D.deeper_method)
-    #assert result == prefix + 'A.C.D.deeper_method'
-    #assert resolve(result) == A.C.D.deeper_method
+    result = describe(A.B)
+    assert result == prefix + 'A.B'
+    assert resolve(result) is A.B
     
-    #result = describe(A.C.D.deeper_method, root=A.C)
-    #assert result == 'C.D.deeper_method'
-    #assert resolve(result, root=A.C) == A.C.D.deeper_method
+    result = describe(A.C.D.deeper_method)
+    assert result == prefix + 'A.C.D.deeper_method'
+    assert resolve(result) == A.C.D.deeper_method
     
-    #result = describe(A.C.D.deeper_method, root='A.C.D')
-    #assert result == 'D.deeper_method'
-    #assert resolve(result, root='A.C.D') == A.C.D.deeper_method
+    result = describe(A.C.D.deeper_method, root=A.C)
+    assert result == 'C.D.deeper_method'
+    assert resolve(result, root=A.C) == A.C.D.deeper_method
+    
+    result = describe(A.C.D.deeper_method, root='A.C.D')
+    assert result == 'D.deeper_method'
+    assert resolve(result, root='A.C.D') == A.C.D.deeper_method
     
     
 def test_stdlib():
+    '''Test `describe` for various stdlib modules.'''
     
     import email.encoders
     result = describe(email.encoders)
@@ -58,6 +67,7 @@ def test_stdlib():
     
     
 def test_garlicsim():
+    '''Test `describe` for various `garlicsim` modules.'''
     
     import garlicsim
     result = describe(garlicsim.data_structures.state.State)
@@ -72,16 +82,16 @@ def test_garlicsim():
     assert result == 'garlicsim.Project'
     assert resolve(result) is garlicsim.Project
     
-    # When a root or namespace is given, it's top priority to use it, even if it
-    # prevents shorterning and results in an overall longer address:
+    # When a root or namespace is given, it's top priority to use it, even if
+    # it prevents shorterning and results in an overall longer address:
     result = describe(garlicsim.Project, shorten=True,
-                         root=garlicsim.asynchronous_crunching)
+                      root=garlicsim.asynchronous_crunching)
     assert result == 'asynchronous_crunching.Project'
     assert resolve(result, root=garlicsim.asynchronous_crunching) is \
            garlicsim.Project
     
     result = describe(garlicsim.Project, shorten=True,
-                         namespace=garlicsim)
+                      namespace=garlicsim)
     assert result == 'Project'
     assert resolve(result, namespace=garlicsim) is garlicsim.Project
     
@@ -92,12 +102,12 @@ def test_garlicsim():
            garlicsim.Project
     
     result = describe(garlicsim.Project, shorten=True,
-                         namespace='garlicsim')
+                      namespace='garlicsim')
     assert result == 'Project'
     assert resolve(result, namespace='garlicsim') is garlicsim.Project
     
     result = describe(garlicsim.Project, shorten=True,
-                         namespace='garlicsim.__dict__')
+                      namespace='garlicsim.__dict__')
     assert result == 'Project'
     assert resolve(result, namespace='garlicsim.__dict__') is \
            garlicsim.Project
@@ -118,20 +128,20 @@ def test_garlicsim():
     assert result == 'garlicsim_lib.simpacks.life.State.step'
     
     result = describe(garlicsim_lib.simpacks.life.state.State.step,
-                         root=garlicsim_lib.simpacks.life)
+                      root=garlicsim_lib.simpacks.life)
     assert result == 'life.state.State.step'
     
     result = describe(garlicsim_lib.simpacks.life.state.State.step,
-                         namespace=garlicsim_lib.simpacks)
+                      namespace=garlicsim_lib.simpacks)
     assert result == 'life.state.State.step'
     
     result = describe(garlicsim_lib.simpacks.life.state.State.step,
-                         root=garlicsim_lib.simpacks.life, shorten=True)
+                      root=garlicsim_lib.simpacks.life, shorten=True)
     assert result == 'life.State.step'
     
     
 def test_local_modules():
-    
+    '''Test `describe` on local, relatively-imported modules.'''
     import garlicsim
     
     from .sample_module_tree import w
@@ -158,7 +168,7 @@ def test_local_modules():
     
     
 def test_ignore_confusing_namespace():
-    
+    '''Test that `describe` doesn't use a confusing namespace item.'''
     import email.encoders
     import marshal
     
@@ -167,7 +177,7 @@ def test_ignore_confusing_namespace():
         shorten=True,
         namespace={'e': email}
     )
-    assert result == 'email'
+    assert result == 'email' # Not shortening to 'e', that would be confusing.
     
     result = describe(
         email.encoders,
@@ -185,6 +195,7 @@ def test_ignore_confusing_namespace():
     
     
 def test_address_in_expression():
+    '''Test `describe` works for an address inside an expression.'''
     
     import email.encoders
     import marshal
@@ -196,7 +207,8 @@ def test_address_in_expression():
            '[email.encoders, 7, (1, 3), marshal]'
     
 
-def test_specific_objects():
+def test_multiprocessing_lock():
+    '''Test `describe` works for `multiprocessing.Lock()`.'''
     if not import_tools.exists('multiprocessing'):
         raise nose.SkipTest('`multiprocessing` not installed')
     import multiprocessing
@@ -205,6 +217,14 @@ def test_specific_objects():
     
     
 def test_bad_module_name():
+    '''
+    Test `describe` works for objects with bad `__module__` attribute.
+    
+    The `__module__` attribute usually says where an object can be reached. But
+    in some cases, like when working in a shell, you can't really access the
+    objects from that non-existant module. So `describe` must not fail for
+    these cases.
+    '''
     
     import email
 
@@ -236,6 +256,7 @@ def test_bad_module_name():
     
 
 def test_function_in_something():
+    '''Test `describe` doesn't fail when describing `{1: sum}`.'''
     if garlicsim.__version_info__ <= (0, 6, 0):
         raise nose.SkipTest("This test doesn't pass in `garlicsim` version "
                             "0.6 and below.")
