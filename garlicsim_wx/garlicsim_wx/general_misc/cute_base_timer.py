@@ -21,7 +21,7 @@ class CuteBaseTimer(object):
         '''Stop all the timers that are associated with the given frame.'''
         for timer in CuteBaseTimer.__timers:
             ancestor = timer.__parent
-            while ancestor is not None:
+            while ancestor:
                 if ancestor == frame:
                     timer.Stop()
                     break

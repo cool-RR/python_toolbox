@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Bootstrap module for garlicsim_wx.
+Bootstrap module for `garlicsim_wx`.
 
 It checks all prerequisites are installed.
 '''
@@ -24,8 +24,8 @@ def __check_prerequisites():
     
     Returns a list of some imported modules: A reference to this list should be
     kept alive so to prevent the imported modules from being garbage-collected,
-    which would cause Python to load them twice, which would needlessly increase
-    startup time.
+    which would cause Python to load them twice, which would needlessly
+    increase startup time.
     '''
     
     modules = []

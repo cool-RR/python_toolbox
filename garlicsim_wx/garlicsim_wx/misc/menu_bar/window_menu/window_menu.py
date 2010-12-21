@@ -49,7 +49,6 @@ class WindowMenu(CuteMenu):
             ' Go to the crunching tool, which lets you control how your '
             'simulation is crunched'
         )       
-        #self.crunching_controls_button.Enable(False)
         
         frame.Bind(
             wx.EVT_MENU,
@@ -61,13 +60,13 @@ class WindowMenu(CuteMenu):
         )
         
         
-        #self.local_nodes_examiner_button = self.Append(
-            #-1,
-            #'&Local nodes examiner',
-            #''' Go to  the local nodes examiner, which lets you manipulate \
-#tree nodes one-by-one'''
-        #)       
-        #self.local_nodes_examiner_button.Enable(False)
+        self.local_nodes_examiner_button = self.Append(
+            -1,
+            '&Local nodes examiner',
+            ' Go to the local nodes examiner, which lets you manipulate '
+            'tree nodes one-by-one'
+        )       
+        self.local_nodes_examiner_button.Enable(False)
         
         #frame.Bind(
             #wx.EVT_MENU,
@@ -85,7 +84,6 @@ class WindowMenu(CuteMenu):
             ' Go to the playback controls, which let you control the onscreen '
             'playback of the simulation'
         )       
-        #self.playback_controls_button.Enable(False)
         
         frame.Bind(
             wx.EVT_MENU,
@@ -102,7 +100,6 @@ class WindowMenu(CuteMenu):
             'Seek-&bar',
             ' Go to the seek-bar, which lets you navigate the active timeline'
         )       
-        #self.seek_bar_button.Enable(False)
         
         frame.Bind(
             wx.EVT_MENU,
@@ -119,8 +116,7 @@ class WindowMenu(CuteMenu):
             '&Shell',
             ' Go to the shell, which lets you analyze your simulation using '
             'arbitrary Python code'
-        )       
-        #self.shell_button.Enable(False)
+        )               
         
         frame.Bind(
             wx.EVT_MENU,
@@ -132,13 +128,13 @@ class WindowMenu(CuteMenu):
         )
         
         
-        #self.toolbox_button = self.Append(
-            #-1,
-            #'Toolbo&x',
-            #''' Go to the toolbox, in which you can choose between \
-#different tools to use in the other widgets'''
-        #)       
-        #self.toolbox_button.Enable(False)
+        self.toolbox_button = self.Append(
+            -1,
+            'Toolbo&x',
+            ' Go to the toolbox, in which you can choose between '
+            'different tools to use in the other widgets'
+        )       
+        self.toolbox_button.Enable(False)
         
         #frame.Bind(
             #wx.EVT_MENU,
@@ -155,7 +151,6 @@ class WindowMenu(CuteMenu):
             '&Tree browser',
             ' Go to the tree browser, which lets you navigate the time tree'
         )       
-        #self.tree_browser_button.Enable(False)
         
         frame.Bind(
             wx.EVT_MENU,
