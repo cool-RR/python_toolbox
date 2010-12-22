@@ -1,3 +1,12 @@
+# Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Defines the `CruncherTextScrolledPanel` class.
+
+See its documentation for more details.
+'''
+
 from __future__ import with_statement
 
 import wx
@@ -9,9 +18,12 @@ import garlicsim
 
 
 class CruncherTextScrolledPanel(wx.lib.scrolledpanel.ScrolledPanel):
+    '''Widget for showing information about the selected cruncher type.'''
+    
     def __init__(self, cruncher_selection_dialog):
         self.cruncher_selection_dialog = cruncher_selection_dialog
-        wx.lib.scrolledpanel.ScrolledPanel.__init__(self, cruncher_selection_dialog)
+        wx.lib.scrolledpanel.ScrolledPanel.__init__(self,
+                                                    cruncher_selection_dialog)
         self.SetBackgroundColour(wx_tools.get_background_color())
         self.SetMinSize((530, 300))
         
@@ -50,8 +62,10 @@ class CruncherTextScrolledPanel(wx.lib.scrolledpanel.ScrolledPanel):
 
     
     def update(self):
+        '''Update to show information about the current cruncher type.'''
         with wx_tools.WindowFreezer(self):
-            cruncher_type = self.cruncher_selection_dialog.selected_cruncher_type
+            cruncher_type = \
+                self.cruncher_selection_dialog.selected_cruncher_type
             self.cruncher_text.SetLabel(cruncher_type.gui_explanation)
             self.cruncher_text.Wrap(self._get_wrap_width())
             availability = \

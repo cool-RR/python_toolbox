@@ -1,6 +1,12 @@
 # Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
 # or distributed without explicit written permission from Ram Rachum.
 
+'''
+Defines the `CruncherSelectionDialog` class.
+
+See its documentation for more details.
+'''
+
 import wx
 
 from garlicsim.general_misc.third_party.ordered_dict import OrderedDict
@@ -14,6 +20,7 @@ from .cruncher_text_scrolled_panel import CruncherTextScrolledPanel
 
 
 class CruncherSelectionDialog(CuteDialog):
+    '''Dialog for changing the cruncher type used in the gui project.'''
     def __init__(self, cruncher_controls):
         CuteDialog.__init__(
             self,
@@ -146,6 +153,9 @@ class CruncherSelectionDialog(CuteDialog):
         
         
     def update(self):
+        '''
+        Update the text widget that explains about the current cruncher type.
+        '''
         cruncher_types = self.cruncher_titles.values()
         selected_cruncher_type = cruncher_types[
             self.cruncher_list_box.GetSelection()
@@ -153,6 +163,7 @@ class CruncherSelectionDialog(CuteDialog):
         if selected_cruncher_type is not self.selected_cruncher_type:
             self.selected_cruncher_type = selected_cruncher_type
             self.cruncher_text_scrolled_panel.update()
+            
             
     def ShowModal(self):
         self.cruncher_list_box.SetFocus()

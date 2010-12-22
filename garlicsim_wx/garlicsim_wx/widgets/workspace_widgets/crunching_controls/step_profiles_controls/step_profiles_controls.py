@@ -1,6 +1,12 @@
 # Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
 # or distributed without explicit written permission from Ram Rachum.
 
+'''
+Defines the `` class.
+
+See its documentation for more details.
+'''
+
 import pkg_resources
 import wx
 
@@ -18,7 +24,7 @@ images_package = __images_package.__name__
 
     
 class StepProfilesControls(wx.Panel):
-    '''tododoc'''
+    '''Widget for manipulating the step profiles used in the gui project.'''
     
     def __init__(self, parent, frame, *args, **kwargs):
         
@@ -95,7 +101,13 @@ class StepProfilesControls(wx.Panel):
     def show_step_profile_editing_dialog(self, step_profile=None,
                                          and_fork=False):
         '''
-        None for creating new step profile
+        Show a dialog for creating a new step profile.
+        
+        `step_profile` is the step profile that will be used as a template; use
+        `None` to start from scratch.
+                
+        Set `and_fork=True` to fork with the new (or identical existing) step
+        profile after the dialog is done.
         '''
         
         # todo: It's a bitch that there's logic here for handling what happens
@@ -132,6 +144,9 @@ class StepProfilesControls(wx.Panel):
             
             
     def try_delete_step_profile(self, step_profile):
+        '''
+        Try to delete `step_profile`, raising dialog if it's used in the tree.
+        '''
         # todo: in the future, make this dialog offer to delete the nodes with
         # the step profile.
         if step_profile is None:
