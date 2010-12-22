@@ -28,7 +28,7 @@ images_package = __images_package.__name__
 
 class Knob(wx.Panel):
     '''
-    A knob that sets a real value between -infinity and infinity.
+    A knob that sets a real value between `-infinity` and `infinity`.
     
     (Not really touching infinity.)
     
@@ -36,16 +36,17 @@ class Knob(wx.Panel):
     variable.
 
 
-    There are three "scales" that one should keep in mind when working with Knob:
+    There are three "scales" that one should keep in mind when working with
+    Knob:
     
     1. The "value" scale, which is the value that the actual final variable
-       gets. It spans from -infinity to infinity.
+       gets. It spans from `-infinity` to `infinity`.
     
     2. The "angle" scale, which is the angle in which the knob appears on
-        the screen. It span from (-(5/6) * pi) to ((5/6) * pi).
+        the screen. It spans from `(-(5/6) * pi)` to `((5/6) * pi)`.
     
     3. As a more convenient mediator between them there's the "ratio" scale,
-       which spans from -1 to 1, and is mapped linearly to "angle".
+       which spans from `-1` to `1`, and is mapped linearly to "angle".
     
     
     The knob has snap points that can be modified with `.set_snap_point` and
@@ -291,9 +292,6 @@ class Knob(wx.Panel):
     """
         
 
-        
-        
-        
         
         
         

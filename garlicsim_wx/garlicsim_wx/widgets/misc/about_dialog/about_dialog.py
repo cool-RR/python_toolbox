@@ -15,7 +15,7 @@ import wx.html
 
 from garlicsim_wx.general_misc import wx_tools
 import garlicsim_wx.general_misc.cute_timer
-from garlicsim_wx.widgets.general_misc import CuteDialog
+from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
 
 import garlicsim_wx
 from .bitmap_viewer import BitmapViewer

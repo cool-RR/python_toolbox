@@ -1,3 +1,12 @@
+# Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Defines the `Textual` class.
+
+See its documentation for more details.
+'''
+
 from __future__ import division
 from __future__ import with_statement
 
@@ -15,6 +24,16 @@ def degrees_to_ratio(degrees):
 
 
 class Freezer(object):
+    '''
+    Freezer for not changing the `Textual`'s text value.
+
+    Used as a context manager. Anything that happens inside the `with` suite
+    will not cause the `Textual` to update its text value.
+    
+    This is useful because when the `Textual`'s value changes, some platforms
+    automatically select all the text in the `Textual`, which is really
+    annoying if you're just typing in it.
+    '''
     def __init__(self, textual):
         self.textual = textual
     def __enter__(self, *args, **kwargs):
@@ -24,6 +43,7 @@ class Freezer(object):
 
 
 class Textual(wx.Panel):
+    '''Display (and allow modifying) the hue as a number 0-359.'''
     def __init__(self, hue_selection_dialog):
         wx.Panel.__init__(self, parent=hue_selection_dialog, size=(75, 100))
         self.SetBackgroundColour(wx_tools.get_background_color())
@@ -64,6 +84,7 @@ class Textual(wx.Panel):
                     
         
     def update(self):
+        '''Update to show the new hue.'''
         if not self.frozen and self.hue != self.hue_selection_dialog.hue:
             self.hue = self.hue_selection_dialog.hue
             self.spin_ctrl.SetValue(ratio_to_round_degrees(self.hue))

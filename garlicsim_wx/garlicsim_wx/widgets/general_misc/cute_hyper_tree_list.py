@@ -1,3 +1,12 @@
+# Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Defines the `CuteHyperTreeList` class.
+
+See its documentation for more details.
+'''
+
 from garlicsim_wx.widgets.general_misc.third_party import hypertreelist
 from garlicsim_wx.widgets.general_misc.third_party import customtreectrl
 from garlicsim_wx.widgets.general_misc.third_party.hypertreelist import *
@@ -7,13 +16,15 @@ from garlicsim_wx.general_misc import wx_tools
 
 EVT_COMMAND_TREE_ITEM_RIGHT_CLICK = \
     wx.PyEventBinder(wx.wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, 1)
+'''Event saying that a tree item was right clicked.'''
 
 
 class CuteHyperTreeList(HyperTreeList):
+    '''An improved `HyperTreeList`.'''
     
     def __init__(self, parent, id=wx.ID_ANY, pos=wx.DefaultPosition,
                  size=wx.DefaultSize, style=0, agwStyle=wx.TR_DEFAULT_STYLE,
-                 validator=wx.DefaultValidator, name="HyperTreeList"):
+                 validator=wx.DefaultValidator, name='HyperTreeList'):
         
         # todo: when scrolling with scrollwheel and reaching top, should
         # probably scroll up parent window.
@@ -30,7 +41,6 @@ class CuteHyperTreeList(HyperTreeList):
         self.GetMainWindow().Bind(wx.EVT_RIGHT_UP, self.__on_right_up)
         self.GetMainWindow().Bind(wx.EVT_CONTEXT_MENU, self.__on_context_menu)
 
-        
         
     def __on_command_tree_item_right_click(self, event):
         
@@ -80,7 +90,6 @@ class CuteHyperTreeList(HyperTreeList):
             )
             new_event.SetEventObject(self)
             wx.PostEvent(self, new_event)
-            #wx_tools.post_event(self, wx.EVT_CONTEXT_MENU, self, meow='qw')
         
             
     def __on_key_down(self, event):
@@ -118,7 +127,6 @@ class CuteHyperTreeList(HyperTreeList):
             assert hit_item == selected_item
             
         if selected_item:
-            #event.Veto()
             new_event = hypertreelist.TreeEvent(
                 customtreectrl.wxEVT_TREE_ITEM_MENU,
                 self.GetId(),

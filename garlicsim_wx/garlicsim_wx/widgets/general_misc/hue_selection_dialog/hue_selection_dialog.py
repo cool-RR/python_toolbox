@@ -1,6 +1,15 @@
+# Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Defines the `HueSelectionDialog` class.
+
+See its documentation for more details.
+'''
+
 import wx
 
-from garlicsim_wx.widgets.general_misc import CuteDialog
+from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
 from garlicsim_wx.general_misc.emitters import Emitter
 
 from .wheel import Wheel
@@ -9,10 +18,12 @@ from .textual import Textual
 
 
 class HueSelectionDialog(CuteDialog):
+    '''Dialog for changing a hue.'''
     
     def __init__(self, parent, getter, setter, emitter, lightness=1,
-                 saturation=1, id=-1, title='Select hue', pos=wx.DefaultPosition,
-                 size=wx.DefaultSize, style=wx.DEFAULT_DIALOG_STYLE, name=wx.DialogNameStr):
+                 saturation=1, id=-1, title='Select hue',
+                 pos=wx.DefaultPosition, size=wx.DefaultSize,
+                 style=wx.DEFAULT_DIALOG_STYLE, name=wx.DialogNameStr):
 
         
         CuteDialog.__init__(self, parent, id, title, pos, size, style, name)
@@ -95,10 +106,12 @@ class HueSelectionDialog(CuteDialog):
         
         
     def update(self):
+        '''If hue changed, update all widgets to show the new hue.'''
         self.hue = self.getter()
         self.wheel.update()
         self.comparer.update()
         self.textual.update()
+        
         
     def Destroy(self):
         self.emitter.remove_output(self.update)

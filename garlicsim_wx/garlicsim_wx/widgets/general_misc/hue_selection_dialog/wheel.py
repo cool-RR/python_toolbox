@@ -1,3 +1,12 @@
+# Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Defines the `Wheel` class.
+
+See its documentation for more details.
+'''
+
 from __future__ import division
 
 import itertools
@@ -14,7 +23,7 @@ from garlicsim_wx.general_misc import color_tools
 BIG_LENGTH = 221
 THICKNESS = 21
 HALF_THICKNESS = THICKNESS / 2
-AA_THICKNESS = 1.5
+AA_THICKNESS = 1.5 # Thickness of the anti-aliasing circle.
 RADIUS = int((BIG_LENGTH / 2) - THICKNESS - 5)
 SMALL_RADIUS = RADIUS - HALF_THICKNESS
 BIG_RADIUS = RADIUS + HALF_THICKNESS
@@ -24,6 +33,7 @@ two_pi = math.pi * 2
 
 @caching.cache()
 def make_bitmap(lightness=1, saturation=1):
+    '''Make the bitmap of the color wheel.'''
     bitmap = wx.EmptyBitmap(BIG_LENGTH, BIG_LENGTH)
     assert isinstance(bitmap, wx.Bitmap)
     dc = wx.MemoryDC(bitmap)
@@ -37,7 +47,8 @@ def make_bitmap(lightness=1, saturation=1):
         wx_tools.get_background_color()
     )
     
-    for x, y in cute_iter_tools.product(xrange(BIG_LENGTH), xrange(BIG_LENGTH)):
+    for x, y in cute_iter_tools.product(xrange(BIG_LENGTH),
+                                        xrange(BIG_LENGTH)):
         
         # This is a big loop so the code is optimized to keep it fast.
         
@@ -78,6 +89,9 @@ def make_bitmap(lightness=1, saturation=1):
 
 
 class Wheel(wx.Panel):
+    '''
+    Color wheel displaying current hue and allows moving to different hue.
+    '''
     def __init__(self, hue_selection_dialog):
         wx.Panel.__init__(self, parent=hue_selection_dialog,
                           size=(BIG_LENGTH, BIG_LENGTH))
@@ -162,10 +176,12 @@ class Wheel(wx.Panel):
                 
         
     def _calculate_angle(self):
+        '''Calculate the angle to represent current hue and put in `.angle`.'''
         self.angle = - (2 * self.hue - 1) * math.pi
         
         
     def update(self):
+        '''If hue changed, show new hue.'''
         if self.hue != self.hue_selection_dialog.hue:
             self.hue = self.hue_selection_dialog.hue
             self._calculate_angle()

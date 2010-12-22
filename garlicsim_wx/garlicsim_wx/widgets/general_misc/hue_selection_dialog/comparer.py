@@ -1,9 +1,19 @@
+# Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Defines the `Comparer` class.
+
+See its documentation for more details.
+'''
+
 import wx
 
 from garlicsim_wx.general_misc import wx_tools
 
 
 class Comparer(wx.Panel):
+    '''Shows the new hue compared to the old hue before dialog was started.'''
     def __init__(self, hue_selection_dialog):
         style = wx.SIMPLE_BORDER if wx.Platform == '__WXGTK__' else \
                 wx.SUNKEN_BORDER
@@ -26,6 +36,7 @@ class Comparer(wx.Panel):
         
         
     def _calculate(self):
+        '''Create a brush for showing the new hue.'''
         self.color = wx_tools.hls_to_wx_color(
             (self.hue,
              self.hue_selection_dialog.lightness,
@@ -35,6 +46,7 @@ class Comparer(wx.Panel):
         
         
     def update(self):
+        '''If hue changed, show new hue.'''
         if self.hue != self.hue_selection_dialog.hue:
             self.hue = self.hue_selection_dialog.hue
             self._calculate()

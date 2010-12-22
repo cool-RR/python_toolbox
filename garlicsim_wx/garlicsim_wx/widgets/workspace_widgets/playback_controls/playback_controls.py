@@ -15,7 +15,7 @@ from garlicsim_wx.general_misc import thread_timer
 from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
 from garlicsim_wx.general_misc import emitters
 from garlicsim_wx.general_misc import wx_tools
-from garlicsim_wx.widgets.general_misc import Knob
+from garlicsim_wx.widgets.general_misc.knob import Knob
 
 import garlicsim, garlicsim_wx
 from garlicsim_wx.widgets import WorkspaceWidget

@@ -23,7 +23,7 @@ class Freezer(object):
     Used as a context manager. Anything that happens inside the `with` suite
     will not cause the `SpinCtrl` to update its text value.
     
-    This is useful because when the `SpinCtrl`'s value changes, some platform
+    This is useful because when the `SpinCtrl`'s value changes, some platforms
     automatically select all the text in the `SpinCtrl`, which is really
     annoying if you're just typing in it.
     '''

@@ -9,7 +9,7 @@ See its documentation for more info.
 
 import wx
 
-from garlicsim_wx.widgets.general_misc import CuteDialog
+from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
 
 
 class StateCreationDialog(CuteDialog): # make base class

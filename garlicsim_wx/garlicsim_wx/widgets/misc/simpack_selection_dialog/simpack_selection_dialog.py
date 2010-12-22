@@ -15,7 +15,7 @@ import wx
 
 from garlicsim.general_misc.cmp_tools import underscore_hating_cmp
 from garlicsim.general_misc import import_tools
-from garlicsim_wx.widgets.general_misc import CuteDialog
+from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
 
 
 class SimpackSelectionDialog(CuteDialog, wx.SingleChoiceDialog):

@@ -1,6 +1,6 @@
 import wx
 import garlicsim.data_structures
-from garlicsim_wx.widgets.general_misc import CuteDialog
+from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
 
 
 
