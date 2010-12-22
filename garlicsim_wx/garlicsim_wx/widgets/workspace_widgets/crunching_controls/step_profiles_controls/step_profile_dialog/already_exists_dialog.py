@@ -1,3 +1,12 @@
+# Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Defines the `AlreadyExistsDialog` class.
+
+See its documentation for more details.
+'''
+
 import wx
 
 from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
@@ -6,9 +15,19 @@ import garlicsim_wx
 
 
 class AlreadyExistsDialog(CuteDialog):
+    '''
+    Dialog alerting that the step profile you tried to create already exists.
+    
+    The user may either go to the existing step profile, or keep editing this
+    one.
+    '''
     def __init__(self, step_profile_dialog, step_profile, and_fork=False):
         '''
-        `and_fork` just affects labels, actual forking is not done here.
+        Construct the `AlreadyExistsDialog`.
+        
+        Set `and_fork=True` if you intend to fork right after getting the step
+        profile, though note it will only affect the labels; the actual forking
+        is not done here.
         '''
         self.step_profile_dialog = step_profile_dialog
         self.frame = step_profile_dialog.frame

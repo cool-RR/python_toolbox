@@ -1,3 +1,12 @@
+# Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Defines the `StaticFunctionText` class.
+
+See its documentation for more details.
+'''
+
 import wx
 
 from garlicsim_wx.general_misc import wx_tools
@@ -6,6 +15,8 @@ import garlicsim
 
 
 class StaticFunctionText(wx.Panel):
+    '''Static text showing information about the current step function.'''
+    
     def __init__(self, step_profile_dialog, step_function=None):
         
         self.step_profile_dialog = step_profile_dialog
@@ -47,17 +58,16 @@ class StaticFunctionText(wx.Panel):
         
         
     def set_error_text(self, error_text):
+        '''Set the error text to show.'''
         self.text.SetLabel(error_text)
         self.text.Wrap(self.width - 10)
         self.step_function = None
         
-        #self.SetBackgroundColour(self._error_color)
         self.Layout()
-        #self.step_profile_dialog.main_v_sizer.Fit(self.step_profile_dialog)
-        #self.Fit()
         
         
     def set_step_function(self, step_function):
+        '''Set the step function to show information about.'''
         if step_function != self.step_function:
             self.step_function = step_function
             step_type = garlicsim.misc.simpack_grokker.step_type.BaseStep.\
@@ -72,7 +82,3 @@ class StaticFunctionText(wx.Panel):
             self.text.Wrap(self.width - 10)
             #self.SetBackgroundColour(self._success_color)
             self.Layout()
-
-    
-    def on_size(self, event):
-        0#self.Wrap(self.GetSize()[0])
