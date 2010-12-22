@@ -75,7 +75,7 @@ class CrunchingControls(wx.lib.scrolledpanel.ScrolledPanel, WorkspaceWidget):
         
         self.main_v_sizer.AddSpacer((1, 20))
         
-        self.cruncher_controls = CruncherControls(self, frame, -1)
+        self.cruncher_controls = CruncherControls(self, frame)
         
         self.main_v_sizer.Add(self.cruncher_controls, 0,
                               wx.EXPAND | wx.LEFT | wx.TOP | wx.RIGHT, 10)

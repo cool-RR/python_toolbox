@@ -2,10 +2,10 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-This module defines the `TreeBrowser` class. See its documentation for more info.
-'''
-#todo: I think the refresh should be made more efficient
+This module defines the `TreeBrowser` class.
 
+See its documentation for more info.
+'''
 
 import os
 from math import *
@@ -27,21 +27,22 @@ from garlicsim_wx.widgets import WorkspaceWidget
 from . import images as __images_package
 images_package = __images_package.__name__
 
+
 connector_length = 10 # length of connecting line between elements
+
 
 my_color_replaced_bitmap = \
     caching.cache(max_size=80)(wx_tools.color_replaced_bitmap)
-#my_color_replaced_bitmap = lambda x, *args: x
 
 
 class TreeBrowser(ScrolledPanel, WorkspaceWidget):
-    '''Widget for browsing a garlicsim.data_structures.Tree.'''
-    def __init__(self, frame): # todo: on mouse drag should pause like seek bar does
+    '''Widget for browsing a `garlicsim.data_structures.Tree`.'''
+    def __init__(self, frame):
+        # todo: on mouse drag should pause like seek bar does
         ScrolledPanel.__init__(self, frame, size=(100, 100),
                                style=wx.SUNKEN_BORDER)
         WorkspaceWidget.__init__(self, frame)
         
-        self.SetDoubleBuffered(True)
         self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM | wx.BG_STYLE_COLOUR)
         self.SetBackgroundColour(wx_tools.get_background_color())
         
@@ -213,7 +214,8 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
 class NiftyPaintDC(wx.BufferedPaintDC):
     '''A PaintDC used to paint the tree in a tree browser.'''
     
-    def __init__(self, window, gui_project, origin, tree_browser, *args, **kwargs):
+    def __init__(self, window, gui_project, origin, tree_browser, *args,
+                 **kwargs):
         wx.BufferedPaintDC.__init__(self, window, *args, **kwargs)
         
         self.gui_project = gui_project
@@ -367,7 +369,7 @@ class NiftyPaintDC(wx.BufferedPaintDC):
             total_height += new_height
             
         
-        ends = start.ends if isinstance(start, garlicsim.data_structures.Node) \
+        ends = start.ends if isinstance(start, garlicsim.data_structures.Node)\
              else start[-1].ends
         for end in ends:
             line_end = vectorish.add(
@@ -471,7 +473,8 @@ class NiftyPaintDC(wx.BufferedPaintDC):
                 self.active_soft_block = None
     
             sizes = []
-            pos = vectorish.add((connector_length, connector_length), self.origin)
+            pos = vectorish.add((connector_length, connector_length),
+                                self.origin)
             for root in tree.roots:
                 size = self.draw_sub_tree(
                     pos,
@@ -481,7 +484,8 @@ class NiftyPaintDC(wx.BufferedPaintDC):
                 pos = vectorish.add(pos, (size[0], 0))
                 sizes.append(size)
             
-            width = sum(size[0] for size in sizes) + (connector_length * len(sizes))
+            width = sum(size[0] for size in sizes) + \
+                  (connector_length * len(sizes))
             height = max(size[1] for size in sizes) + connector_length
             return (self.clickable_map, (width, height))
 

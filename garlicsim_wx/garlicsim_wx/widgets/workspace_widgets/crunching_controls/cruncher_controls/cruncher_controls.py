@@ -12,15 +12,15 @@ from .cruncher_selection_dialog import CruncherSelectionDialog
 
     
 class CruncherControls(wx.Panel):
-    ''''''
+    '''Widget for viewing/changing the active cruncher type.'''
     
-    def __init__(self, parent, frame, *args, **kwargs):
+    def __init__(self, parent, frame):
         
         assert isinstance(frame, garlicsim_wx.Frame)
         self.frame = frame
         self.gui_project = frame.gui_project
         
-        wx.Panel.__init__(self, parent, *args, **kwargs)
+        wx.Panel.__init__(self, parent)
         
         self.SetBackgroundColour(wx_tools.get_background_color())
         
@@ -63,6 +63,7 @@ class CruncherControls(wx.Panel):
         
     
     def _recalculate(self):
+        '''Ensure we display the correct current cruncher type.'''
         self.cruncher_in_use_static_text.SetLabel(
             self.gui_project.project.crunching_manager.cruncher_type.__name__
         )

@@ -20,9 +20,6 @@ import garlicsim
 import garlicsim_wx
 
 
-__all__ = ["SeekBar"]
-
-
 class SeekBar(wx.Panel, WorkspaceWidget):
     '''
     Seek-bar widget, allowing navigation and visualization of the active path.
@@ -37,7 +34,6 @@ class SeekBar(wx.Panel, WorkspaceWidget):
         wx.Panel.__init__(self, frame, size=(100, 100), style=wx.SUNKEN_BORDER)
         WorkspaceWidget.__init__(self, frame)
         
-        self.SetDoubleBuffered(True)
         self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM | wx.BG_STYLE_COLOUR)
         self.SetBackgroundColour(wx_tools.get_background_color())
         
@@ -56,7 +52,8 @@ class SeekBar(wx.Panel, WorkspaceWidget):
         '''Translate from on-screen coordinate to time point.'''
 
         self.was_playing_before_mouse_click = None
-        self.was_playing_before_mouse_click_but_then_paused_and_mouse_left = None
+        self.was_playing_before_mouse_click_but_then_paused_and_mouse_left = \
+            None
         self.active_triangle_width = 13 # Must be odd number
 
         self.view_changed_flag = False
@@ -133,11 +130,13 @@ class SeekBar(wx.Panel, WorkspaceWidget):
             dc.SetBrush(wx.Brush('#FF9933'))
             dc.SetPen(wx.Pen('#000000', 1, wx.TRANSPARENT))
             if active_inside is True:
-                dc.DrawRectangle(math.floor(screen_active_start),
-                                 1,
-                                 math.ceil(screen_active_end-screen_active_start),
-                                 h-6)
-                triangle_half_width = math.ceil(self.active_triangle_width / 2.0)
+                dc.DrawRectangle(
+                    math.floor(screen_active_start),
+                    1,
+                    math.ceil(screen_active_end-screen_active_start),
+                    h-6)
+                triangle_half_width = \
+                    math.ceil(self.active_triangle_width / 2.0)
                 dc.SetClippingRegionAsRegion(occupied_region)
                 dc.DrawPolygon(
                         ((screen_active_start - triangle_half_width, h - 5),
@@ -206,7 +205,8 @@ class SeekBar(wx.Panel, WorkspaceWidget):
             if self.gui_project.active_node is None:
                 reselect_node=True
             else:
-                thing = self.screenify(self.gui_project.active_node.state.clock)
+                thing = \
+                    self.screenify(self.gui_project.active_node.state.clock)
                 if abs(thing - new_thing) >= 8:
                     reselect_node = True
 
@@ -216,7 +216,8 @@ class SeekBar(wx.Panel, WorkspaceWidget):
                          (self.unscreenify(new_thing))
                 
                 if new_node is not None:
-                    self.gui_project.set_active_node(new_node, modify_path=False)
+                    self.gui_project.set_active_node(new_node,
+                                                     modify_path=False)
 
             if self.gui_project.active_node is not None:
                 self.gui_project.frame.Refresh()

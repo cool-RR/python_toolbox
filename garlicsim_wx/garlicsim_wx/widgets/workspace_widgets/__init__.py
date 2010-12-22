@@ -1,9 +1,7 @@
 # Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
 # or distributed without explicit written permission from Ram Rachum.
 
-'''
-Widgets used in the workspace.
-'''
+'''Widgets used in the workspace.'''
 
 from .state_repr_viewer import StateReprViewer
 from .shell import Shell
