@@ -17,7 +17,7 @@ __all__ = ["StateReprViewer"]
 class StateReprViewer(wx.Panel, WorkspaceWidget):
     '''Widget for showing the repr of the active state.'''
     def __init__(self, frame):
-        wx.Panel.__init__(self, frame, size=(300, 300))
+        wx.Panel.__init__(self, frame, size=(300, 300), style=wx.SUNKEN_BORDER)
         WorkspaceWidget.__init__(self, frame)
 
         self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)

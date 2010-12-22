@@ -11,9 +11,7 @@ from __future__ import with_statement
 
 import os.path
 import sys
-import random
 import subprocess
-import webbrowser
 import warnings
 import traceback
 
@@ -21,8 +19,6 @@ import wx
 from garlicsim_wx.general_misc.third_party import aui
 import pkg_resources
 
-from garlicsim.general_misc import dict_tools
-from garlicsim.general_misc import string_tools
 from garlicsim.general_misc.temp_value_setters import TempRecursionLimitSetter
 from garlicsim_wx.general_misc import thread_timer
 from garlicsim_wx.general_misc import misc_tools
