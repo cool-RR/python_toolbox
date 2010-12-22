@@ -15,10 +15,10 @@ import wx
 
 from garlicsim.general_misc.cmp_tools import underscore_hating_cmp
 from garlicsim.general_misc import import_tools
-from garlicsim_wx.general_misc import wx_tools
+from garlicsim_wx.widgets.general_misc import CuteDialog
 
 
-class SimpackSelectionDialog(wx.SingleChoiceDialog):
+class SimpackSelectionDialog(CuteDialog, wx.SingleChoiceDialog):
     '''Dialog for selecting a simpack when creating a new gui project.'''
     
     def __init__(self, parent):
@@ -31,7 +31,8 @@ class SimpackSelectionDialog(wx.SingleChoiceDialog):
             self.list_of_simpacks,
             wx.CHOICEDLG_STYLE
         )
-        self.SetBackgroundColour(wx_tools.get_background_color())
+        CuteDialog.__init__(self, parent, skip_dialog_init=True)
+        
         
     def make_simpack_list(self):
         '''Make a list of available simpacks.'''

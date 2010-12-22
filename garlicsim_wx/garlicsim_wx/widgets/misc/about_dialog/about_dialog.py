@@ -30,8 +30,7 @@ class AboutDialog(CuteDialog):
    
         wx.Dialog.__init__(self, frame, title='About GarlicSim',
                            size=(628, 600))
-        
-        self.SetBackgroundColour(wx_tools.get_background_color())
+        CuteDialog.__init__(self, frame, skip_dialog_init=True)
         
         self.SetDoubleBuffered(True)
         

@@ -10,7 +10,7 @@ See its documentation for more info.
 import wx
 
 class BitmapViewer(wx.Panel):
-    '''Widget for viewing a bitmap. Similar to StaticBitmap.'''
+    '''Widget for viewing a bitmap. Similar to `StaticBitmap`.'''
     def __init__(self, *args, **kwargs):
         wx.Panel.__init__(self, *args, **kwargs)
         #self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)

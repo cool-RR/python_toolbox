@@ -72,6 +72,7 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         
         #self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
         self.SetBackgroundColour(wx_tools.get_background_color())
+        self.SetDoubleBuffered(True)
         
         
         assert isinstance(self.gui_project, garlicsim_wx.GuiProject)
