@@ -16,7 +16,7 @@ from garlicsim_wx.widgets.general_misc import cute_hyper_tree_list
 import garlicsim, garlicsim_wx
 from garlicsim_wx.widgets import WorkspaceWidget
 
-from .blank_context_menu import BlankContextMenu
+from .free_context_menu import FreeContextMenu
 from .step_profile_context_menu import StepProfileContextMenu
 from .step_profile_item_panel import StepProfileItemPanel
 
@@ -65,7 +65,7 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
         
         self.items = self.root_item._children
         
-        self.blank_context_menu = BlankContextMenu(self)
+        self.free_context_menu = FreeContextMenu(self)
         self.step_profile_context_menu = StepProfileContextMenu(self)
         
         self.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.on_tree_item_activated)
@@ -207,7 +207,7 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
         else:
             position = self.ScreenToClient(abs_position)
             
-        self.PopupMenu(self.blank_context_menu, position)
+        self.PopupMenu(self.free_context_menu, position)
         
         
     def on_new_step_profile_button(self, event):

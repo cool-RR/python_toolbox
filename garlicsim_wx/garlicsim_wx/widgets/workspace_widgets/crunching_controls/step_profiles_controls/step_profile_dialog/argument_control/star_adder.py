@@ -1,3 +1,12 @@
+# Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Defines the `StarAdder` class.
+
+See its documentation for more details.
+'''
+
 import wx
 import pkg_resources
 
@@ -10,6 +19,7 @@ images_package = __images_package.__name__
 
 @caching.cache()
 def get_bitmap():
+    '''Get the "+" bitmap used for the star adder button.'''
 
     stream = pkg_resources.resource_stream(
         images_package,
@@ -29,6 +39,7 @@ EVT_STAR_ADDER_PRESSED = wx.PyEventBinder(
     wxEVT_STAR_ADDER_PRESSED,
     1
 )
+'''Event saying that a star adder button was pressed.'''
 
 
 class StarAdder(wx.BitmapButton):

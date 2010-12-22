@@ -1,10 +1,31 @@
+# Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Defines the `StepProfileItemPanel` class.
+
+See its documentation for more details.
+'''
 
 import wx
 
 from .active_step_profile_indicator import ActiveStepProfileIndicator
 from .hue_control import HueControl
 
+
 class StepProfileItemPanel(wx.Panel):
+    '''
+    Panel to display next to a step profile in the step profiles list.
+    
+    This panel contains:
+    
+     1. `ActiveStepProfileIndicator` for indicating which step profile is 
+        active.
+        
+     2. `HueControl` for viewing and changing the hue associated with a step
+        profile.
+        
+    '''
     def __init__(self, step_profiles_list, step_profile):
         self.step_profiles_list = step_profiles_list
         self.frame = step_profiles_list.frame
@@ -40,4 +61,5 @@ class StepProfileItemPanel(wx.Panel):
         
         self.SetSizer(self.main_h_sizer)
         self.Layout()
-        #self.main_h_sizer.Fit(self)
+        
+        

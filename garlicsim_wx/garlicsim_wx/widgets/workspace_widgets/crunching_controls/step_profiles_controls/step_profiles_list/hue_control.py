@@ -2,7 +2,7 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the `` class.
+Defines the `HueControl` class.
 
 See its documentation for more details.
 '''
@@ -18,6 +18,9 @@ import garlicsim_wx
 
 
 class HueControl(GenericHueControl):
+    '''
+    Control for viewing and changing the hue associated with a step profile.
+    '''
     def __init__(self, step_profile_item_panel, step_profile):
         
         self.step_profile = step_profile

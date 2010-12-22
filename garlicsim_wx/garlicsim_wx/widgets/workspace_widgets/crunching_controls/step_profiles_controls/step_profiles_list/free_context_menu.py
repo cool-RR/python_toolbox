@@ -1,14 +1,27 @@
+# Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Defines the `FreeContextMenu` class.
+
+See its documentation for more details.
+'''
+
 import wx
 from garlicsim_wx.general_misc import cute_menu
 
-class BlankContextMenu(cute_menu.CuteMenu):
-    # todo: rename? blank sounds like it's empty
+
+class FreeContextMenu(cute_menu.CuteMenu):
+    '''
+    Context menu shown in `StepProfilesList` when no step profile is selected.
+    '''
     def __init__(self, step_profiles_list):
-        super(BlankContextMenu, self).__init__()
+        super(FreeContextMenu, self).__init__()
         self.step_profiles_list = step_profiles_list
         self._build()
         
     def _build(self):
+        '''Build the context menu.'''
         
         step_profiles_list = self.step_profiles_list
         
