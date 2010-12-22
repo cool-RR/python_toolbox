@@ -1,3 +1,12 @@
+# Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Defines the `StarArgBox` class.
+
+See its documentation for more details.
+'''
+
 from __future__ import with_statement
 
 import wx
@@ -8,9 +17,13 @@ from garlicsim_wx.general_misc import wx_tools
 from .star_arg import StarArg
 from .star_adder import StarAdder, EVT_STAR_ADDER_PRESSED
 
-# Note the most confusing thing about this class (and it's two brothers): It's
-# not really the parent of the widgets it creates. This cost me many hours.
+
 class StarArgBox(wx.StaticBox):
+    '''
+    Static box for specifying extraneous args (`*args`) to the step function.
+    
+    Note that this static box is not the parent of the widget it creates.
+    '''
     def __init__(self, argument_control, step_function):
         self.argument_control = argument_control
         
@@ -71,6 +84,7 @@ class StarArgBox(wx.StaticBox):
         
             
     def remove(self, star_arg):
+        '''Remove a `StarArg` from this box.'''
         index = self.star_args.index(star_arg)
         
         if index >= 1:

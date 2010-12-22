@@ -6,6 +6,12 @@ from .arg import Arg
 
 
 class ArgBox(wx.StaticBox):
+    
+    '''
+    tododoc Static box for specifying extraneous args (`*args`) to the step function.
+    
+    Note that this static box is not the parent of the widget it creates.
+    '''
     def __init__(self, argument_control, step_function):
         self.argument_control = argument_control
         

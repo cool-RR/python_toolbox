@@ -1,8 +1,16 @@
+# Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Defines the `ArgumentControl` class.
+
+See its documentation for more details.
+'''
+
 import wx
 
 from garlicsim.general_misc import cute_inspect
 from garlicsim.general_misc import misc_tools
-from garlicsim.misc import exceptions
 from garlicsim_wx.general_misc import wx_tools
 
 from .arg_box import ArgBox
@@ -13,6 +21,7 @@ from .exceptions import ResolveFailed
 
 
 class ArgumentControl(wx.Panel):
+    '''Widget for specifying arguments to a step function.'''
     def __init__(self, step_profile_dialog, step_function=None):
         self.step_profile_dialog = step_profile_dialog
         self.gui_project = step_profile_dialog.gui_project
@@ -32,9 +41,9 @@ class ArgumentControl(wx.Panel):
         
         self.set_step_function(step_function)
         
-
         
     def set_step_function(self, step_function):
+        '''Set the step function for which we are specifying arguments.'''
         if self.step_function == step_function:
             return
         
@@ -47,7 +56,6 @@ class ArgumentControl(wx.Panel):
         self.step_function = step_function
 
         self.main_h_sizer.Clear(deleteWindows=True)
-        #self.DestroyChildren()
         
         arg_spec = cute_inspect.getargspec(step_function)
         
@@ -114,19 +122,29 @@ class ArgumentControl(wx.Panel):
         
 
     def save(self):
+        '''
+        Save all arguments to the dialog, unless there's an error resolving.
+        
+        The arguments will be saved to the following attributes of the dialog:
+        
+         *  `.step_functions_to_argument_dicts[step_function]`
+         *  `.step_functions_to_star_args[step_function]`
+         *  `.step_functions_to_star_kwargs[step_function]`
+        
+        '''
         
         step_profile_dialog = self.step_profile_dialog
         step_function = self.step_function
 
         
         arg_dict = step_profile_dialog.\
-                 step_functions_to_argument_dicts[step_function]
+            step_functions_to_argument_dicts[step_function]
         
         star_arg_list = step_profile_dialog.\
-                      step_functions_to_star_args[step_function]
+            step_functions_to_star_args[step_function]
         
         star_kwarg_dict = step_profile_dialog.\
-                        step_functions_to_star_kwargs[step_function]
+            step_functions_to_star_kwargs[step_function]
         
         resolve_failed = None
         

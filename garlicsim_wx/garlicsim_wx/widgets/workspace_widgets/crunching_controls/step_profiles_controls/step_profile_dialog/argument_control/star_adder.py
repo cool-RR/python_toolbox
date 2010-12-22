@@ -43,6 +43,7 @@ EVT_STAR_ADDER_PRESSED = wx.PyEventBinder(
 
 
 class StarAdder(wx.BitmapButton):
+    '''Button for adding an entry for another star-arg or star-kwarg.'''
     def __init__(self, argument_control):
         self.argument_control = argument_control
         

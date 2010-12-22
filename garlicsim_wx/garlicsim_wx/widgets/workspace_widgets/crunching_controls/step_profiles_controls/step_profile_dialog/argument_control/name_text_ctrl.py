@@ -1,3 +1,11 @@
+# Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Defines the `` class.
+
+See its documentation for more details.
+'''
 
 import wx
 
@@ -7,7 +15,7 @@ from . import colors
 
 
 class NameTextCtrl(wx.TextCtrl):
-    
+    '''Widget for entering an argument name.'''
     def __init__(self, parent, value=''):
         
         wx.TextCtrl.__init__(self, parent, value=value)
@@ -23,6 +31,9 @@ class NameTextCtrl(wx.TextCtrl):
         
     
     def _check_validity_and_color(self):
+        '''
+        Check whether the value is a valid name, if it isn't show error color.
+        '''
         is_valid = misc_tools.is_legal_ascii_variable_name(self.GetValue())
         if is_valid:
             self.SetBackgroundColour(self._original_background_color)
