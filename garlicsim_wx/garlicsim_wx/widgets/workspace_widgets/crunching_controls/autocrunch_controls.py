@@ -1,6 +1,12 @@
 # Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
 # or distributed without explicit written permission from Ram Rachum.
 
+'''
+Defines the `` class.
+
+See its documentation for more details.
+'''
+
 from __future__ import with_statement
 
 import wx
@@ -11,6 +17,16 @@ from garlicsim_wx.general_misc import wx_tools
 
 
 class Freezer(object):
+    '''
+    Freezer for not changing the `SpinCtrl`'s text value.
+
+    Used as a context manager. Anything that happens inside the `with` suite
+    will not cause the `SpinCtrl` to update its text value.
+    
+    This is useful because when the `SpinCtrl`'s value changes, some platform
+    automatically select all the text in the `SpinCtrl`, which is really
+    annoying if you're just typing in it.
+    '''
     def __init__(self, autocrunch_controls):
         self.autocrunch_controls = autocrunch_controls
     def __enter__(self, *args, **kwargs):
@@ -117,6 +133,7 @@ class AutocrunchControls(wx.Panel):
             self.spin_ctrl.Disable()
         
     def _update_gui_project(self):
+        '''Update the gui project with the autocrunch value that we have.'''
         self.gui_project.set_default_buffer(self.spin_ctrl.GetValue())
         
             
@@ -132,6 +149,7 @@ class AutocrunchControls(wx.Panel):
         
         
     def update_spin_ctrl(self):
+        '''Update the `SpinCtrl` with the gui project's autocrunch value.'''
         if not self.frozen:
             value = self.gui_project.default_buffer or \
                     self.gui_project._default_buffer_before_cancellation or \
@@ -141,6 +159,9 @@ class AutocrunchControls(wx.Panel):
         
         
     def update_check_box(self):
+        '''
+        Update the `CheckBox` on whether autocrunch is on in the gui project.
+        '''
         self.check_box.SetValue(
             bool(self.gui_project.default_buffer)
         )

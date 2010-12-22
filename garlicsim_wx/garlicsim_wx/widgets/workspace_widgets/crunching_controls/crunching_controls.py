@@ -1,13 +1,15 @@
 # Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
 # or distributed without explicit written permission from Ram Rachum.
 
-import pkg_resources
+'''
+Defines the `CrunchingControls` class.
+
+See its documentation for more details.
+'''
+
 import wx.lib.scrolledpanel
 
-from garlicsim_wx.general_misc.third_party import aui
-from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
 from garlicsim_wx.general_misc import wx_tools
-from garlicsim_wx.general_misc import emitters
 
 import garlicsim, garlicsim_wx
 from garlicsim_wx.widgets import WorkspaceWidget
@@ -18,6 +20,21 @@ from .autocrunch_controls import AutocrunchControls
 
 
 class CrunchingControls(wx.lib.scrolledpanel.ScrolledPanel, WorkspaceWidget):
+    '''
+    Widget for controlling the crunching of the simulations.
+    
+    Contains three parts:
+    
+     1. `AutocrunchControls` for setting how far we should automatically
+        crunch.
+        
+     2. `StepProfilesControls` for manipulating step profiles that are used 
+        (or will be used) in the tree.
+        
+     3. `CruncherControls` for displaying which cruncher type is active and 
+        switching to a different cruncher type.
+    
+    '''
     
     _WorkspaceWidget__name = 'Crunching'
 
@@ -66,12 +83,9 @@ class CrunchingControls(wx.lib.scrolledpanel.ScrolledPanel, WorkspaceWidget):
         self.autocrunch_controls.SetFocus()
         # We do this so when the user switches to this widget for the first
         # time, the focus will be on the autocrunch controls. I'm not sure this
-        # is the wisest way to do this, since this sets the global focus and not
-        # just the local.
-        
+        # is the wisest way to do this, since this sets the global focus and
+        # not just the local.
 
-
-        
         
     def on_size(self, event):
         '''EVT_SIZE handler.'''

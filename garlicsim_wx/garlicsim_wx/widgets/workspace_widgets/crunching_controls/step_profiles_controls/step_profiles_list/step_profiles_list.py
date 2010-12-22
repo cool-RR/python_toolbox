@@ -1,19 +1,20 @@
 # Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
 # or distributed without explicit written permission from Ram Rachum.
 
-import pkg_resources
+'''
+Defines the `StepProfilesList` class.
+
+See its documentation for more details.
+'''
+
 import wx
 import weakref
 
-from garlicsim_wx.general_misc.third_party import aui
-from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
-from garlicsim_wx.general_misc import emitters
 from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.widgets.general_misc import cute_hyper_tree_list
 
 import garlicsim, garlicsim_wx
 from garlicsim_wx.widgets import WorkspaceWidget
-from garlicsim_wx.misc.colors import hue_to_light_color
 
 from .blank_context_menu import BlankContextMenu
 from .step_profile_context_menu import StepProfileContextMenu
@@ -21,7 +22,18 @@ from .step_profile_item_panel import StepProfileItemPanel
 
 
 class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
-    '''tododoc'''
+    '''
+    List of step profiles.
+    
+    The list has all the step profiles that are used in the tree, and also the
+    step profiles that the user created but aren't in the tree yet.
+    
+    The `StepProfilesList` allows the user to add new step profiles (possibly
+    by using existing ones as templates, or by starting from scratch,) to
+    delete existing step profiles, and to change the hue used to identify the
+    step profile in the GUI.
+    
+    '''
     # todo: set max size dynamically according to number of profiles
     
     def __init__(self, step_profiles_controls, frame):
@@ -82,6 +94,7 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
   
         
     def update(self):
+        '''Ensure we're showing exactly the gui project's step profiles.'''
         
         gui_project = self.gui_project
         
@@ -123,6 +136,9 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
                 
                
     def update_active_step_profile_indicator(self):
+        '''
+        Ensure we're putting the active step profile marker on the active one.
+        '''
         active_step_profile = self.gui_project.get_active_step_profile()
         for item in self.items:
             active_step_profile_indicator = \
@@ -135,7 +151,7 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
         
     
     def get_selected_step_profile(self):
-        
+        '''Get the step profile that's currently selected.'''
         selection = self.GetSelection()
         if selection and (selection != self.root_item):
             return selection.step_profile
@@ -144,12 +160,15 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
         
         
     def select_step_profile(self, step_profile):
+        '''Select `step_profile`.'''
         item = self.step_profiles_to_items[step_profile]
         self.SelectItem(item)
 
         
     def real_set_focus(self):
+        '''Set focus on the `StepProfilesList`. Bypasses some cruft.'''
         self.GetMainWindow().SetFocusIgnoringChildren()
+        
         
     def on_tree_item_activated(self, event):
         assert event.GetItem() == self.GetSelection()

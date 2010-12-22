@@ -2,11 +2,9 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the `PlaybackControls` class.
+Defines the `CrunchingControls` class.
 
 See its documentation for more info.
 '''
 
 from .crunching_controls import CrunchingControls
-
-__all__ = ['CrunchingControls']
