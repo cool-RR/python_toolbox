@@ -13,15 +13,7 @@ from garlicsim_wx.general_misc import wx_tools
 
 
 class CuteDialog(wx.Dialog):
-    '''
-    Dialog.
-    
-    Differences from wx.Dialog:
-    
-     1. Works around a Mac bug by centering itself on the screen.
-     
-     2. Uses `garlicsim_wx`'s default background color.
-    '''
+    '''Improved dialog.'''
     def __init__(self, *args, **kwargs):
         if not kwargs.pop('skip_dialog_init', False):
             wx.Dialog.__init__(self, *args, **kwargs)
