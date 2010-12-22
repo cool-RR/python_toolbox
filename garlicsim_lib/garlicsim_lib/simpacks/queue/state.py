@@ -66,8 +66,8 @@ class State(garlicsim.data_structures.State):
     
     def step(self): #, t=None):
         '''Step function.'''
-        # todo good idea: t=None means step to next client. If given int just do
-        # many steps. (What with cut last?)
+        # todo good idea: t=None means step to next client. If given int just
+        # do many steps. (What with cut last?)
         
         new_state = copy.deepcopy(self, StepCopy())
         time_passed = new_state.event_set.do_next_event()
@@ -91,7 +91,8 @@ class Server(object):
         `mean_service` is the mean time it takes to service a client.
         '''
         
-        self.identity = garlicsim.general_misc.persistent.CrossProcessPersistent()
+        self.identity = \
+            garlicsim.general_misc.persistent.CrossProcessPersistent()
         
         self.event_set = event_set        
         self.facility = facility
@@ -137,15 +138,18 @@ class Server(object):
     
     def __repr__(self):
         if self.is_busy():
-            return '<Server (busy) who served %s clients>' % self.client_counter
+            return '<Server (busy) who served %s clients>' % \
+                   self.client_counter
         else:
-            return '<Server (free) who served %s clients>' % self.client_counter
+            return '<Server (free) who served %s clients>' % \
+                   self.client_counter
         
 
 class Client(object):
     '''A client which needs to be served in the facility.'''
     def __init__(self):
-        self.identity = garlicsim.general_misc.persistent.CrossProcessPersistent()
+        self.identity = \
+            garlicsim.general_misc.persistent.CrossProcessPersistent()
 
         
 class Facility(object):
@@ -153,7 +157,8 @@ class Facility(object):
     
     def __init__(self, event_set, servers=[], clients=[]):
         
-        self.identity = garlicsim.general_misc.persistent.CrossProcessPersistent()
+        self.identity =\
+            garlicsim.general_misc.persistent.CrossProcessPersistent()
         self.event_set = event_set
         self.servers = servers
         self.clients = clients
@@ -204,13 +209,14 @@ class Facility(object):
         
     
     def __repr__(self):
-        return '''<facility with %s clients, %s of which stand in queue. %s \
-clients were served total.>''' % \
-            (
-                len(self.clients),
-                len(self.waiting_clients),
-                self.finished_client_count()
-            )
+        return ('<facility with %s clients, %s of which stand in queue. %s '
+                'clients were served total.>''' % \
+                (
+                    len(self.clients),
+                    len(self.waiting_clients),
+                    self.finished_client_count()
+                )
+                )
         
                     
 
@@ -223,7 +229,8 @@ class Population(object):
         `mean_arrival` is the mean time between arrivals.
         '''
         assert size == infinity
-        self.identity = garlicsim.general_misc.persistent.CrossProcessPersistent()
+        self.identity = \
+            garlicsim.general_misc.persistent.CrossProcessPersistent()
         self.size = size
         self.mean_arrival = mean_arrival
         self.event_set = event_set

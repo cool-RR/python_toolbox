@@ -82,3 +82,7 @@ class StaticFunctionText(wx.Panel):
             self.text.Wrap(self.width - 10)
             #self.SetBackgroundColour(self._success_color)
             self.Layout()
+
+    
+    def on_size(self, event):
+        pass
