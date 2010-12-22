@@ -101,7 +101,7 @@ class ScratchWheel(wx.Panel):
         '''Velocity in which the scratch wheel will get maximal motion blur.'''
         
         self.velocity_time_sampling_minimum = 0.07
-        '''The minimum interval over which we can measure the gear's velocity.'''
+        '''Minimum interval over which we can measure the gear's velocity.'''
         
         self.was_playing_before_drag = None
         '''Flag saying if playback was active before user grabbed the gear.'''
@@ -110,11 +110,11 @@ class ScratchWheel(wx.Panel):
         '''
         Timer to use for updating the motion blur bitmap.
         
-        The motion blur bitmap must get updated periodically as long as its last
-        value was non-zero, even if the user doesn't touch anything. This is
-        because we don't want to have a situtation where the user dragged fast,
-        got a high motion blur, left the scratch wheel, and then the wheel is
-        frozen with a high motion blur.
+        The motion blur bitmap must get updated periodically as long as its
+        last value was non-zero, even if the user doesn't touch anything. This
+        is because we don't want to have a situtation where the user dragged
+        fast, got a high motion blur, left the scratch wheel, and then the
+        wheel is frozen with a high motion blur.
         '''
         
         self.Bind(wx.EVT_TIMER,
@@ -260,8 +260,8 @@ class ScratchWheel(wx.Panel):
         
         if self.recalculation_flag:
             self._recalculate(possibly_refresh=False)
-            # We make sure `_recalculate` won't refresh, because that would make
-            # an infinite loop
+            # We make sure `_recalculate` won't refresh, because that would
+            # make an infinite loop
             
         bw, bh = self.GetWindowBorderSize()
         
@@ -287,7 +287,8 @@ class ScratchWheel(wx.Panel):
         # todo: make check: if left up and has capture, release capture
 
         
-        # If the gui project has no active path, we can't navigate on it at all:
+        # If the gui project has no active path, we can't navigate on it at
+        # all:
         if self.gui_project.path is None:
             return
         
@@ -318,7 +319,8 @@ class ScratchWheel(wx.Panel):
             if not self.HasCapture():
                 return
             self.angle_while_dragging = self._expanded_pos_to_angle(rx)
-            self.d_angle_while_dragging = (self.angle_while_dragging - self.grabbed_angle)
+            self.d_angle_while_dragging = \
+                (self.angle_while_dragging - self.grabbed_angle)
             
             desired_pseudoclock = self.grabbed_pseudoclock + \
                 (self.d_angle_while_dragging / self.clock_factor)
