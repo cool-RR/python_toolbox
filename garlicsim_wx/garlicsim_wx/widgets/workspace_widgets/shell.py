@@ -21,7 +21,6 @@ class Shell(wx.py.shell.Shell, WorkspaceWidget):
     This is useful for examining the simulation.
     '''
     # todo: After every command in shell, must make the top emitter emit
-    # todo: Make one namespace for the entire program.
     def __init__(self, frame):
         wx.py.shell.Shell.__init__(self, frame, size=(100, 100),
                                    locals=frame.gui_project.namespace,
@@ -36,5 +35,5 @@ class Shell(wx.py.shell.Shell, WorkspaceWidget):
         
     
     def setLocalShell(self):
-        # Making it a no-op to avoid reference to retarded ShellFacade.
+        # Making it a no-op to avoid reference to retarded `ShellFacade`.
         pass
