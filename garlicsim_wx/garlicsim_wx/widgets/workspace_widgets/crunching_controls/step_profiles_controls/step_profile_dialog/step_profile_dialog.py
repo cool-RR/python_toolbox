@@ -1,3 +1,12 @@
+# Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Defines the `StepProfileDialog` class.
+
+See its documentation for more details.
+'''
+
 from __future__ import with_statement
 
 import collections
@@ -22,11 +31,17 @@ from .step_functions_to_argument_dicts import StepFunctionsToArgumentDicts
 
 
 class StepProfileDialog(CuteDialog):
+    '''Dialog for creating a new step profile, possibly from template.'''
     
     def __init__(self, step_profiles_controls, step_profile=None,
                  and_fork=False):
         '''
-        `and_fork` just affects labels, actual forking is not done here.
+        Construct the `StepProfileDialog`.
+        
+        If given a `step_profile`, use it as a template. If it's `None`, start
+        from scratch. Set `and_fork=True` if you intend to fork right after
+        getting the step profile, though note it will only affect the labels;
+        the actual forking is not done here.
         '''
         
         self.step_profiles_controls = step_profiles_controls
@@ -241,6 +256,7 @@ class StepProfileDialog(CuteDialog):
     
         
     def set_step_function(self, step_function):
+        '''Set the step function to be used in our new step profile.'''
         if step_function != self.step_function:
             with wx_tools.WindowFreezer(self): 
                 self.step_function = step_function
@@ -251,6 +267,7 @@ class StepProfileDialog(CuteDialog):
         
         
     def describe(self, step_function):
+        '''Describe `step_function` as a string.'''
         return address_tools.describe(
             step_function,
             shorten=True,
@@ -260,6 +277,7 @@ class StepProfileDialog(CuteDialog):
         
     
     def resolve(self, address):
+        '''Resolve `address` into a Python object.'''
         return address_tools.resolve(
             address,
             root=self.simpack,

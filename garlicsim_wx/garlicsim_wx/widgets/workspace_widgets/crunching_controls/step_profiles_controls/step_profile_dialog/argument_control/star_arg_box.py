@@ -22,7 +22,7 @@ class StarArgBox(wx.StaticBox):
     '''
     Static box for specifying extraneous args (`*args`) to the step function.
     
-    Note that this static box is not the parent of the widget it creates.
+    Note that this static box is not the parent of the widgets it creates.
     '''
     def __init__(self, argument_control, step_function):
         self.argument_control = argument_control

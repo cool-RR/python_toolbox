@@ -1,3 +1,12 @@
+# Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Defines the `StepFunctionsToArgumentDicts` class.
+
+See its documentation for more details.
+'''
+
 import collections
 
 from garlicsim.general_misc import introspection_tools
@@ -5,6 +14,12 @@ from garlicsim.general_misc import address_tools
 
 
 class StepFunctionsToArgumentDicts(dict):
+    '''
+    Dictionary mapping from a step function to an argument `dict`.
+    
+    This acts like a `defaultdict`. The default value for a new step function
+    is a `dict` specifying the function's default values for the arguments.
+    '''
     def __init__(self, describe_function, *args, **kwargs):
         dict.__init__(self, *args, **kwargs)
         self.describe = describe_function

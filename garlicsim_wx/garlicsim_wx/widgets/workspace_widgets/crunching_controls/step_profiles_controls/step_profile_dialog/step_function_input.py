@@ -1,3 +1,12 @@
+# Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Defines the `StepFunctionInput` class.
+
+See its documentation for more details.
+'''
+
 import types
 
 import wx
@@ -9,6 +18,12 @@ from .argument_control import colors
 
 
 class StepFunctionInput(wx.ComboBox):
+    '''
+    Widget for specifying a step function.
+    
+    The step function is usually specified with the dropdown menu, but if it
+    isn't in the simpack, it can be specified by typing in its address.
+    '''
     def __init__(self, step_profile_dialog, value):
         self.step_profile_dialog = step_profile_dialog
         self.simpack_grokker = step_profile_dialog.simpack_grokker
@@ -40,6 +55,9 @@ class StepFunctionInput(wx.ComboBox):
 
         
     def select_step_function(self, step_function, step_function_string):
+        '''
+        Select `step_function`, with `step_function_string` being its address.
+        '''
         if step_function_string not in self.GetItems():
             self.Append(step_function_string)
         self.step_profile_dialog.set_step_function(step_function)
@@ -91,7 +109,6 @@ class StepFunctionInput(wx.ComboBox):
                 else:
                     raise Exception("Error `%s` is a not a step function; "
                                     "It's not even a callable." % text)
-                
             
         
     def on_text(self, event):
@@ -118,11 +135,13 @@ class StepFunctionInput(wx.ComboBox):
 
                 
     def _set_error_background(self):
+        '''Set the background of the control to an error color.'''
         self.SetBackgroundColour(colors.get_error_background_color())
         self.Refresh()
             
     
     def _set_normal_background(self):
+        '''Set the background of the control to a non-error color.'''
         self.SetBackgroundColour(self._original_background_color)
         self.Refresh()
     

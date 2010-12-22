@@ -1,9 +1,19 @@
+# Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Defines the `ValueTextCtrl` class.
+
+See its documentation for more details.
+'''
+
 import wx
 
 from . import colors
 
 
 class ValueTextCtrl(wx.TextCtrl):
+    '''Widget for inputting a Python expression for an argument value.'''
     
     def __init__(self, parent, value='', root=None):
         
@@ -23,7 +33,9 @@ class ValueTextCtrl(wx.TextCtrl):
         
     
     def _check_validity_and_color(self):
-        
+        '''
+        Check whether the expression is valid, if it isn't show error color.
+        '''
         try:
             self.Parent.argument_control.step_profile_dialog.resolve(
                 str(self.GetValue())

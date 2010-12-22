@@ -1,3 +1,12 @@
+# Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Defines the `ArgBox` class.
+
+See its documentation for more details.
+'''
+
 import wx
 
 from garlicsim.general_misc import cute_inspect
@@ -5,12 +14,11 @@ from garlicsim.general_misc import cute_inspect
 from .arg import Arg
 
 
-class ArgBox(wx.StaticBox):
-    
+class ArgBox(wx.StaticBox):    
     '''
-    tododoc Static box for specifying extraneous args (`*args`) to the step function.
+    Static box for specifying arguments to the step function.
     
-    Note that this static box is not the parent of the widget it creates.
+    Note that this static box is not the parent of the widgets it creates.
     '''
     def __init__(self, argument_control, step_function):
         self.argument_control = argument_control

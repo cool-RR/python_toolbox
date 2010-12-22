@@ -1,3 +1,12 @@
+# Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Defines the `StarKwargBox` class.
+
+See its documentation for more details.
+'''
+
 from __future__ import with_statement
 
 import wx
@@ -10,11 +19,10 @@ from .star_adder import StarAdder, EVT_STAR_ADDER_PRESSED
 
 
 class StarKwargBox(wx.StaticBox):
-    
     '''
-    tododoc Static box for specifying extraneous args (`*args`) to the step function.
+    Static box for specifying `**kwargs` to the step function.
     
-    Note that this static box is not the parent of the widget it creates.
+    Note that this static box is not the parent of the widgets it creates.
     '''
     def __init__(self, argument_control, step_function):
         self.argument_control = argument_control
@@ -75,6 +83,7 @@ class StarKwargBox(wx.StaticBox):
         
             
     def remove(self, star_kwarg):
+        '''Remove a `StarKwarg` from this `StarKwargBox`.'''
         index = self.star_kwargs.index(star_kwarg)
         
         if index >= 1:
@@ -94,3 +103,5 @@ class StarKwargBox(wx.StaticBox):
             self.layout()
             
         place_to_put_focus_in.SetFocus()
+        
+        

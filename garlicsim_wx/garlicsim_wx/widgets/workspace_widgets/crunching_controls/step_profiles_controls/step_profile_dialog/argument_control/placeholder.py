@@ -1,11 +1,20 @@
+# Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''
+Defines the `Placeholder` class.
+
+See its documentation for more details.
+'''
+
 import wx
 
 from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.general_misc import color_tools
 
 
-
 class Placeholder(wx.StaticText):
+    '''Placeholder for functions that don't have extraneous arguments.'''
     def __init__(self, argument_control, label):
         self.argument_control = argument_control
         

@@ -19,7 +19,7 @@ from .close_button import CloseButton
 
 class StarKwarg(wx.Panel):
     '''
-    Widget for adding an extraneous keyword argument.
+    Widget for specifying an extraneous keyword argument (for `**kwargs`).
     
     Allows used to type both a keyword name and a value to be assigned to it.
     '''
