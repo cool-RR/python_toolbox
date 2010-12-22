@@ -12,14 +12,14 @@ class Emitter(OriginalEmitter):
     '''
     An emitter you can `emit` from to call all its callable outputs.
     
-    This is an extension of the original Emitter, see its documentation for more
-    info.
+    This is an extension of the original `Emitter`, see its documentation for
+    more info.
     
     What this adds is that it keeps track of which emitter system this emitter
     belongs to, and it allows freezing the cache rebuilding for better speed
     when adding many emitters to the system.
     
-    See documentation of EmitterSystem for more info.
+    See documentation of `EmitterSystem` for more info.
     '''
 
     def __init__(self, emitter_system, inputs=(), outputs=(), name=None):
@@ -50,14 +50,16 @@ class Emitter(OriginalEmitter):
         Will not do anything if `_cache_rebuilding_frozen` is positive.
         '''
         if self.emitter_system._cache_rebuilding_frozen == 0:
-            OriginalEmitter._recalculate_total_callable_outputs_recursively(self)
+            OriginalEmitter._recalculate_total_callable_outputs_recursively(
+                self
+            )
         
     def add_input(self, emitter): # todo: ability to add plural in same method
         '''
         Add an emitter as an input to this emitter.
 
-        Every time that emitter will emit, it will cause this emitter to emit as
-        well.
+        Every time that emitter will emit, it will cause this emitter to emit
+        as well.
         
         Emitter must be member of this emitter's emitter system.
         '''
@@ -72,8 +74,8 @@ class Emitter(OriginalEmitter):
         will be called.
         
         If adding an emitter, every time this emitter will emit the output
-        emitter will emit as well. Note that the output emitter must be a member
-        of this emitter's emitter system.
+        emitter will emit as well. Note that the output emitter must be a
+        member of this emitter's emitter system.
         '''
         if isinstance(thing, Emitter):
             assert thing in self.emitter_system.emitters

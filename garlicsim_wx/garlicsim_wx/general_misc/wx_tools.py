@@ -16,7 +16,7 @@ from garlicsim_wx.general_misc import color_tools
 
 @caching.cache()
 def get_background_color():
-    '''Get the default garlicsim_wx background color'''
+    '''Get the default `garlicsim_wx` background color'''
     
     if wx.Platform == '__WXMSW__':
         # return wx.Colour(212, 208, 200)
@@ -24,8 +24,8 @@ def get_background_color():
     elif wx.Platform == '__WXMAC__':
         return wx.Colour(232, 232, 232)
     elif wx.Platform == '__WXGTK__':
-        # Until SYS_COLOUR_* get their act togother, we're using Windows colors
-        # for Linux.
+        # Until `SYS_COLOUR_*` get their act togother, we're using Windows
+        # colors for Linux.
         return wx.Colour(212, 208, 200)
     
     else:
@@ -42,6 +42,7 @@ def get_background_brush():
 
 
 def wx_color_to_html_color(wx_color):
+    '''Convert a wxPython color to an HTML color string.'''
     rgb = wx_color.GetRGB()
     (green_blue, red) = divmod(rgb, 256)
     (blue, green) = divmod(green_blue, 256)
@@ -49,19 +50,23 @@ def wx_color_to_html_color(wx_color):
 
 
 def hls_to_wx_color(hls, alpha=255):
+    '''Convert an HLS color to a wxPython color.'''
     return rgb_to_wx_color(colorsys.hls_to_rgb(*hls), alpha=alpha)
 
 
 def wx_color_to_hls(wx_color):
+    '''Convert a wxPython color to an HLS color.'''
     return colorsys.rgb_to_hls(wx_color.red, wx_color.blue, wx_color.green)
 
 
 def rgb_to_wx_color(rgb, alpha=255):
+    '''Convert an RGB color to a wxPython color.'''
     r, g, b = rgb
     return wx.Colour(r * 255, g * 255, b * 255, alpha)
 
 
 def wx_color_to_rgb(wx_color):
+    '''Convert a wxPython color to an RGB color.'''
     return (
         wx_color.red / 255,
         wx_color.blue / 255,
@@ -70,6 +75,7 @@ def wx_color_to_rgb(wx_color):
 
 
 def wx_color_to_big_rgb(wx_color):
+    '''Convert a wxPython color to a big (i.e. `int`) RGB color.'''
     return (
         wx_color.red,
         wx_color.green,
@@ -78,6 +84,7 @@ def wx_color_to_big_rgb(wx_color):
 
 
 def mix_wx_color(ratio, color1, color2):
+    '''Mix two wxPython colors according to the given `ratio`.'''
     rgb = color_tools.mix_rgb(
         ratio,
         wx_color_to_rgb(color1),
@@ -137,8 +144,15 @@ class Key(object):
         
 menu_keys = [Key(wx.WXK_MENU), Key(wx.WXK_WINDOWS_MENU),
              Key(wx.WXK_F10, shift=True)]
+'''Keys used for raising a context menu.'''
+
 
 def navigate_from_key_event(key_event):
+    '''
+    Figure out if `key_event` is a navigation button press, if so navigate.
+    
+    Returns whether there was navigation action or not.
+    '''
     key = Key.get_from_key_event(key_event)
     
     if key in [Key(wx.WXK_TAB), Key(wx.WXK_TAB, shift=True),
@@ -179,6 +193,7 @@ def iter_rects_of_region(region):
 
 
 def color_replaced_bitmap(bitmap, old_rgb, new_rgb):
+    '''Replace all appearances of `old_rgb` with `new_rgb` in `bitmap`.'''
     old_r, old_g, old_b = old_rgb
     new_r, new_g, new_b = new_rgb
     image = wx.ImageFromBitmap(bitmap)
@@ -188,6 +203,7 @@ def color_replaced_bitmap(bitmap, old_rgb, new_rgb):
     
 
 class WindowFreezer(object):
+    '''Context manager for having `window` frozen while the suite executes.'''
     def __init__(self, window):
         assert isinstance(window, wx.Window)
         self.window = window
@@ -198,7 +214,14 @@ class WindowFreezer(object):
         
         
 class CursorChanger(object):
+    '''Context manager for showing specified cursor while suite executes.'''
     def __init__(self, window, cursor):
+        '''
+        Construct the `CursorChanger`.
+        
+        `cursor` may be either a `wx.Cursor` object or a constant like
+        `wx.CURSOR_BULLSEYE`.
+        '''
         assert isinstance(window, wx.Window)
         self.window = window
         self.cursor = cursor if isinstance(cursor, wx.Cursor) \

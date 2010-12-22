@@ -49,13 +49,16 @@ class CuteMenu(wx.Menu):
     
     
     def enable_in_menu_bar(self, enable=True):
+        '''Enable (or disable) this menu in its containing menu bar.'''
         menu_bar = self.GetMenuBar()
         menu_bar.EnableTop(
             self._get_number_in_menu_bar(),
             enable
         )
         
+        
     def _get_number_in_menu_bar(self):
+        '''Get the index number of this menu in its containing menu bar.'''
         # todo: check if we even have a menu bar, otherwise throw helpful
         # exception.
         menu_bar = self.GetMenuBar()

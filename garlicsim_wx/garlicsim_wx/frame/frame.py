@@ -558,7 +558,8 @@ class Frame(wx.Frame):
                 gui_project._temp_shell_history = None
                 
             if gui_project._temp_shell_command_history is not None:
-                assert isinstance(gui_project._temp_shell_command_history, list)
+                assert isinstance(gui_project._temp_shell_command_history,
+                                  list)
                 self.shell.history = gui_project._temp_shell_command_history[:]
                 gui_project._temp_shell_command_history = None
             
@@ -611,7 +612,8 @@ class Frame(wx.Frame):
                     if hasattr(sys, 'frozen'):
                         program = [sys.executable]
                     else:
-                        program = [sys.executable, os.path.abspath(sys.argv[0])]
+                        program = \
+                            [sys.executable, os.path.abspath(sys.argv[0])]
                         
                     program.append(path)
                  
@@ -620,8 +622,7 @@ class Frame(wx.Frame):
         finally:
             open_dialog.Destroy()
                         
-        
-    
+            
     def _open_gui_project_from_path(self, path):
         '''
         Open a gui project saved to a file specified by `path`.
@@ -691,7 +692,6 @@ class Frame(wx.Frame):
                         )
                         error_dialog.ShowModal()
                         error_dialog.Destroy()
-            
             
         finally:
             save_dialog.Destroy()

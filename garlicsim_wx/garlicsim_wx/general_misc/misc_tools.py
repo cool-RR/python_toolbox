@@ -1,3 +1,8 @@
+# Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''Defines miscellaneous tools.'''
+
 from __future__ import division
 
 import os.path
@@ -6,6 +11,14 @@ from garlicsim.general_misc import cute_iter_tools
 
 
 def find_clear_place_on_circle(circle_points, circle_size=1):
+    '''
+    Find the point on a circle that's the farthest away from other points.
+    
+    Given an interval `(0, circle_size)` and a bunch of points in it, find a
+    place for a new point that is as far away from the other points as
+    possible. (Since this is a circle, there's wraparound, e.g. the end of the
+    interval connects to the start.)
+    '''
 
     # Before starting, taking care of two edge cases:
     if not circle_points:
@@ -44,6 +57,7 @@ def find_clear_place_on_circle(circle_points, circle_size=1):
         
     
 def add_extension_if_plain(path, extension):
+    '''Add `extenstion` to a file path if it doesn't have an extenstion.'''
     
     if extension:
         assert extension.startswith('.')
@@ -53,3 +67,4 @@ def add_extension_if_plain(path, extension):
         return path
     else: # not existing_extension
         return without_extension + extension
+    

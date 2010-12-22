@@ -25,18 +25,18 @@ class Emitter(object):
     
     The emitter idea is a variation on the publisher-subscriber design pattern.
 
-    Every emitter has a set of inputs and a set of outputs. The inputs, if there
-    are any, must be emitters themselves. So when you `emit` on any of this
-    emitter's inputs, it's as if you `emit`ted on this emitter as well.
+    Every emitter has a set of inputs and a set of outputs. The inputs, if
+    there are any, must be emitters themselves. So when you `emit` on any of
+    this emitter's inputs, it's as if you `emit`ted on this emitter as well.
     (Recursively, of course.)
     
     The outputs are a bit different. An emitter can have as outputs both (a)
     other emitters and (b) callable objects. (Which means, functions or
     function-like objects.)
     
-    There's no need to explain (a): If `emitter_1` has as an output `emitter_2`,
-    then `emitter_2` has as an input `emitter_1`, which works like how we
-    explained above about inputs.
+    There's no need to explain (a): If `emitter_1` has as an output
+    `emitter_2`, then `emitter_2` has as an input `emitter_1`, which works like
+    how we explained above about inputs.
     
     But now (b): An emitter can have callables as outputs. (Without these, the
     emitter idea won't have much use.) These callables simply get called
@@ -79,7 +79,8 @@ class Emitter(object):
         '''
         A cache of total callable outputs.
         
-        This means the callable outputs of this emitter and any output emitters.
+        This means the callable outputs of this emitter and any output
+        emitters.
         '''
         
         self._recalculate_total_callable_outputs()        
@@ -185,8 +186,8 @@ class Emitter(object):
         '''
         Add an emitter as an input to this emitter.
 
-        Every time that emitter will emit, it will cause this emitter to emit as
-        well.
+        Every time that emitter will emit, it will cause this emitter to emit
+        as well.
         '''
         assert isinstance(emitter, Emitter)
         self._inputs.add(emitter)
@@ -262,8 +263,8 @@ class Emitter(object):
         # Note that this function gets called many times, so it should be
         # optimized for speed.
         for callable_output in self.__total_callable_outputs_cache:
-            # We are using the cache directly instead of calling the getter, for
-            # speed.
+            # We are using the cache directly instead of calling the getter,
+            # for speed.
             callable_output()
     
     def __repr__(self):
