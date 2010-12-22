@@ -26,6 +26,7 @@ class State(garlicsim.data_structures.State):
         state = State()
         state.board = Board.create_diehard(width, height)
         return state
+
     
     @staticmethod
     def create_root(width=45, height=25, fill='empty'):
@@ -98,7 +99,7 @@ class State(garlicsim.data_structures.State):
 
 class Board(object):
     '''Represents a Life board.''' 
-    def __init__(self, width=None, height=None, fill="empty", parent=None,
+    def __init__(self, width=None, height=None, fill='empty', parent=None,
                  birth=[3], survival=[2, 3], randomness=0):
         '''
         If `parent` is specified, makes a board which is descendent from the
@@ -121,13 +122,13 @@ class Board(object):
                     )
             return
                 
-        assert fill in ["empty", "full", "random"]
+        assert fill in ['empty', 'full', 'random']
         
-        if fill == "empty":
+        if fill == 'empty':
             make_cell = lambda: False
-        elif fill == "full":
+        elif fill == 'full':
             make_cell = lambda: True
-        elif fill == "random":    
+        elif fill == 'random':    
             make_cell = lambda: random.choice([True, False])
 
         self.width, self.height = (width, height)
@@ -198,6 +199,18 @@ class Board(object):
         return not self.__eq__(other)
 
 
+
+def determinism_function(step_profile):
+    try:
+        if step_profile.args[1] is True or \
+           step_profile.kwargs['krazy'] is True:
+            return garlicsim.misc.settings_constants.UNDETERMINISTIC
+    except LookupError:
+        pass
+    
+    return garlicsim.misc.settings_constants.DETERMINISTIC
+
+
    
 
 """
@@ -219,12 +232,3 @@ def changes(history_browser):
             counter += 1
     return counter
 """
-
-def determinism_function(step_profile):
-    try:
-        if step_profile.args[1] is True or step_profile.kwargs['krazy'] is True:
-            return garlicsim.misc.settings_constants.UNDETERMINISTIC
-    except LookupError:
-        pass
-    
-    return garlicsim.misc.settings_constants.DETERMINISTIC

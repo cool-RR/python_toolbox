@@ -60,7 +60,7 @@ class WeakKeyIdentityDict(UserDict.UserDict, object):
 
     
     def __repr__(self):
-        return "<tododocWeakKeyDictionary at %s>" % id(self)
+        return "<WeakKeyIdentityDict at %s>" % id(self)
 
     
     def __setitem__(self, key, value):

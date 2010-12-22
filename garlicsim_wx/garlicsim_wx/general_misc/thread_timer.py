@@ -19,7 +19,8 @@ from garlicsim_wx.general_misc import cute_base_timer
 
 
 wxEVT_THREAD_TIMER = wx.NewEventType()
-EVT_THREAD_TIMER = wx.PyEventBinder(wxEVT_THREAD_TIMER, 1) #tododoc
+EVT_THREAD_TIMER = wx.PyEventBinder(wxEVT_THREAD_TIMER, 1)
+'''Event saying that a `ThreadTimer` has fired.'''
 
 
 class ThreadTimer(cute_base_timer.CuteBaseTimer):

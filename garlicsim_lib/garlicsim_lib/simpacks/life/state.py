@@ -192,6 +192,18 @@ class Board(object):
         return not self.__eq__(other)
 
 
+
+def determinism_function(step_profile):
+    try:
+        if step_profile.args[1] is True or \
+           step_profile.kwargs['krazy'] is True:
+            return garlicsim.misc.settings_constants.UNDETERMINISTIC
+    except LookupError:
+        pass
+    
+    return garlicsim.misc.settings_constants.DETERMINISTIC
+
+
    
 
 """
@@ -213,12 +225,3 @@ def changes(history_browser):
             counter += 1
     return counter
 """
-
-def determinism_function(step_profile):
-    try:
-        if step_profile.args[1] is True or step_profile.kwargs['krazy'] is True:
-            return garlicsim.misc.settings_constants.UNDETERMINISTIC
-    except LookupError:
-        pass
-    
-    return garlicsim.misc.settings_constants.DETERMINISTIC
