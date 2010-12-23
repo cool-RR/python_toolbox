@@ -21,8 +21,7 @@ if sys.version_info[1] <= 4:
 if 'py2exe' in sys.argv:
     # We have a separate file for doing stuff that is needed when packaging
     # with `py2exe`.
-    from . import py2exe_cruft
-    from .py2exe_cruft import setup_extension as _
+    import py2exe_cruft.setup_extension
 
 
 def get_garlicsim_wx_packages():
