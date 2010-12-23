@@ -26,7 +26,10 @@ Installing ``garlicsim_lib`` is not mandatory.
 Requirements
 ------------
 
-* `Python 3.1`_. If you use Python 2.x, use
+For ``garlicsim``
+^^^^^^^^^^^^^^^^^
+
+* `Python 3.1`_ or above. If you use Python 2.x, use
   :ref:`this fork of GarlicSim instead <intro-installation-python-2.x>`.
  
 * Either `setuptools`_ or `Distribute`_.
@@ -36,6 +39,12 @@ Optional but recommended:
 
 * on Windows only: `Python for Windows Extensions`_.
 
+
+For some simpacks in ``garlicsim_lib``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* `NumPy`_
+ 
 
 Installation methods
 ====================
@@ -83,4 +92,5 @@ Some binaries for Windows are available:
 .. _setuptools: http://pypi.python.org/pypi/setuptools
 .. _Distribute: http://pypi.python.org/pypi/distribute
 .. _Python for Windows Extensions: http://sourceforge.net/projects/pywin32
+.. _NumPy: http://scipy.org/Download
 .. _wxPython: http://wxpython.org/download.php

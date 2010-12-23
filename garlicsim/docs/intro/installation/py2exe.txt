@@ -17,4 +17,4 @@ Python is, (and you use Windows,) this is for you:
 
 This installer will give you `garlicsim`, `garlicsim_lib` and `garlicsim_wx`.
 
-A similiar all-in-one installer for Mac will become available by 2011.
+A similiar all-in-one installer for Mac will become available in 2011.
