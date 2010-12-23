@@ -102,23 +102,11 @@ Windows binaries
 
 Some binaries for Windows are available:
 
-For Python 2.5:
+For Python 2.5, Python 2.6 and Python 2.7:
 
-* `garlicsim Windows installer for Python 2.5 <http://pypi.python.org/packages/2.5/g/garlicsim/garlicsim-0.6.0.win32-py2.5.msi>`_
-* `garlicsim_lib Windows installer for Python 2.5 <http://pypi.python.org/packages/2.5/g/garlicsim_lib/garlicsim_lib-0.6.0.win32-py2.5.msi>`_
-* `garlicsim_wx Windows installer for Python 2.5 <http://pypi.python.org/packages/2.5/g/garlicsim_wx/garlicsim_wx-0.6.0.win32-py2.5.msi>`_
-  
-For Python 2.6:
-
-* `garlicsim Windows installer for Python 2.6 <http://pypi.python.org/packages/2.6/g/garlicsim/garlicsim-0.6.0.win32-py2.6.msi>`_
-* `garlicsim_lib Windows installer for Python 2.6 <http://pypi.python.org/packages/2.6/g/garlicsim_lib/garlicsim_lib-0.6.0.win32-py2.6.msi>`_
-* `garlicsim_wx Windows installer for Python 2.6 <http://pypi.python.org/packages/2.6/g/garlicsim_wx/garlicsim_wx-0.6.0.win32-py2.6.msi>`_
-  
-For Python 2.7:
-
-* `garlicsim Windows installer for Python 2.7 <http://pypi.python.org/packages/2.7/g/garlicsim/garlicsim-0.6.0.win32-py2.7.msi>`_
-* `garlicsim_lib Windows installer for Python 2.7 <http://pypi.python.org/packages/2.7/g/garlicsim_lib/garlicsim_lib-0.6.0.win32-py2.7.msi>`_
-* `garlicsim_wx Windows installer for Python 2.7 <http://pypi.python.org/packages/2.7/g/garlicsim_wx/garlicsim_wx-0.6.0.win32-py2.7.msi>`_
+* `garlicsim Windows installer <http://pypi.python.org/packages/any/g/garlicsim/garlicsim-0.6.0.win32.msi>`_
+* `garlicsim_lib Windows installer <http://pypi.python.org/packages/any/g/garlicsim_lib/garlicsim_lib-0.6.0.win32.msi>`_
+* `garlicsim_wx Windows installer <http://pypi.python.org/packages/any/g/garlicsim_wx/garlicsim_wx-0.6.0.win32.msi>`_
 
 
 To start the GUI
