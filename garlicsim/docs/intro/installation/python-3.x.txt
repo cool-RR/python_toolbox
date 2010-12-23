@@ -84,8 +84,8 @@ Windows binaries
 
 Some binaries for Windows are available:
 
-* `garlicsim Windows installer (for Python 3.x) <http://pypi.python.org/packages/3.1/g/garlicsim_py3/garlicsim_py3-0.6.0.win32.msi>`_
-* `garlicsim_lib Windows installer (for Python 3.x) <http://pypi.python.org/packages/3.1/g/garlicsim_lib_py3/garlicsim_lib_py3-0.6.0.win32.msi>`_
+* `garlicsim Windows installer (for Python 3.x) <http://pypi.python.org/packages/any/g/garlicsim_py3/garlicsim_py3-0.6.0.win32.msi>`_
+* `garlicsim_lib Windows installer (for Python 3.x) <http://pypi.python.org/packages/any/g/garlicsim_lib_py3/garlicsim_lib_py3-0.6.0.win32.msi>`_
   
 
 .. _Python 3.1: http://www.python.org/download/releases/3.1.2/
