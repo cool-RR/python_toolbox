@@ -37,9 +37,9 @@ Step functions
   history browser. A history browser is a device for obtaining states from the
   history of the simulation.
 
-* ``history_step_generator(history_browser, *args, **kwargs)`` - A history
-  step function that yields new states repeatedly similiarly to a
-  ``step_generator``.
+* ``history_step_generator(history_browser, *args, **kwargs)`` - (Not
+  implemented yet, sorry.) A history step function that yields new states
+  repeatedly similiarly to a ``step_generator``.
 
 
 Other definitions
