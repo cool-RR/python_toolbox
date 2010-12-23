@@ -125,7 +125,7 @@ class AboutDialog(CuteDialog):
 
         
         self.timer = garlicsim_wx.general_misc.cute_timer.CuteTimer(self)
-        self.timer.Start(40)
+        self.timer.Start(40, oneShot=True)
         self.Bind(wx.EVT_TIMER, self.on_timer, self.timer)
         
         self._rotate_image_hue()
@@ -148,6 +148,7 @@ class AboutDialog(CuteDialog):
         t = time.time()
         new_image.RotateHue((t / 50.) % 1)
         self.bitmap_viewer.set_bitmap(wx.BitmapFromImage(new_image))
+        self.timer.Start(40, oneShot=True)
 
         
     def EndModal(self, *args, **kwargs):
