@@ -127,8 +127,14 @@ getting:
 
 This looks totally different than the board we've seen before! The simulation
 was crunched according to different world laws-- Specifically, different
-birth/suvival numbers.
+`birth/suvival numbers`_. This is why the board looks totally different. It's
+essentially a different world.
+
+tododoc. Title here? where is this going?
+
+
            
 .. _Classical Mechanics: http://en.wikipedia.org/wiki/Classical_mechanics
 .. _Special Relativity: http://en.wikipedia.org/wiki/Special_relativity
 .. _change the gravitational constant: http://www.youtube.com/watch?v=5xdbPhnfFEI&t=25s
+.. _birth/suvival numbers: http://en.wikipedia.org/wiki/Conway's_Game_of_Life#Variations_on_Life
