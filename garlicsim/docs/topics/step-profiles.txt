@@ -5,6 +5,130 @@
 
 .. _topics-step-profiles:
 
-=============
-Step profiles
-=============
+==============================================
+Step profiles - Changing world laws on the fly
+==============================================
+
+A step profile is a set of world rules to be used in a simulation. For example,
+if you're doing a simulation in Physics, you have a bunch of world rules that
+the simulation adheres to. Forces are computed according to various constants,
+and then the acceleration is computed by using ``F = m a``. These are the world
+rules for your simulation. And by using a different step profile, you can use a
+different set of world rules in the same simulation. For example, do you want
+to see how your world would look like if you'd `change the gravitational
+constant`_? Or use a different equation instead of ``F = m a``, so you could
+switch between `Classical Mechanics`_ and `Special Relativity`_? You can do it
+all by using a different step profile.
+
+
+Conway's Game of Life as an example of different world laws
+===========================================================
+
+Let's play around with step profiles in the :mod:`life
+<garlicsim_lib.simpacks.life>` simpack.
+
+    >>> import garlicsim
+    >>> from garlicsim_lib.simpacks import life
+
+Let's generate a messy state:    
+
+    >>> state = life.State.create_messy_root()
+    >>> state
+     ## # ## #  ## # # #### # ######  # ### ###  
+     # # ##  #  ## ##  ##  ####  # # #   #  ### #
+    # # ##     ####  # # #   ##    ##  # # # ### 
+    ###     ## ##  ##   #### ##      ##   #### ##
+     #####  ###  # # ### #### #  #  #   ### ##   
+      # #  ## #    ###  # #### ####     #    #  #
+     ##  ##  #  # # ####   ###  #  #   #  ##  #  
+    # ##   # ## ####   #  #     # #    ### ##  # 
+    ### ## # # # ####  # ##  #  #  # #  #   # # #
+    # # ####   # ####  ### ## ######  #  # # #   
+    #  ##  ##  ##   ###### #  ## ####     #    # 
+    #  # #  # # #   #   # #######   ###  #   #   
+    ######       ######  #####  ## # ##  #  ##  #
+      #    #####  # #  # #  # #      #  ## ######
+      #   ### # # ###   #  # # # # ##    ##    ##
+        ### # ##    # #### # ###  ##  #  #   #   
+      ##     #  #### ### # #        ##     ###  #
+      ##  ####   # ### #  ##  ## ####   # ##   # 
+        #           ## #  # ###### #### ###  #   
+    #  #  #  ##  #  ####       ## ##  #   ## # ##
+    ###   ## ####         #  ## # # ######      #
+    ##  #   ##  ##   ## ##### ## ##    #  ### # #
+      #  # ##  ######   ### ###  # ## #    ##  ##
+    # #  # #### ##  ###  #### ### #  #  #  ##  ##
+          # ##### #  ## #    # ##  ### ####### ##
+
+
+The above is a completely random board, from which we will run the Life
+simulation. Now, if we run Life for 20 iterations, we get something like this:
+
+    >>> garlicsim.simulate(state, 20)
+                  ##  #  #     # ###     #       
+                      # #       #   ##    ##     
+                     ###            #    #       
+                    ###                  ###     
+                                       ## #      
+                                #         ##     
+             #            ##    ##      # ##     
+             ##           ##             ##      
+               #                         ###     
+           # ###                  #        ####  
+         ##           #       # ## #     #  #  # 
+       ## ##  ##     # #     ###   #    # # #   #
+    #####   # # #    # #    #            # ##    
+    ##                #         ##           #  #
+     ### ##                 ##   ###   #     #   
+    ####     ##                #      # #        
+    #       #  #              ## ##  #   #      #
+    #   #                     ###   ##   #      #
+        # #  # #         #    ###   ##  ###      
+        # #  # ##       # #    # # #   ###       
+          # #           ##      ## #   ## #     #
+    #   ###  # ##               #      ####    # 
+          #   #   ##             ##   #   #     #
+                 #  #          # ###  #   ###    
+                  ###   #     #   #   #   ###    
+
+If you looked at a few Life boards in your life (heh,) you'd recognize a few
+classic Life patterns.
+
+Now, let's use a different step profile to run the Life simulation under
+different world laws. Look at the command we're typing and the output we're
+getting:
+
+    >>> garlicsim.simulate(state, 20, birth=[0], survival=[1, 2])
+     #### ##   ##########   ######## # ########  
+          ##   #####   ##   ######## #     ####  
+     #######   #####   #############   #   ####  
+    ####   #####   #   ############   #    ######
+    #### # #####   ################ #     #######
+    #### # ####    ###############   #    ###   #
+    #### #   ##   #############    # # ######   #
+    ####   #      ##########      #    ######   #
+    ###### # # #############         #  ####  # #
+      #### # # #############   #####  # #### #   
+    # ####     ######################   ####   ##
+      ##   ##########   ######################   
+    ####   ########## #  ###############   ######
+    ####   ####     #  # #   ###########   ######
+    ########### ### ##   # #     ######        ##
+     ##########     ###### # ### ###### ##   #   
+     ####      ###########       ####        #  #
+     ##   ##   ############ # ####### # # ##   # 
+    ##  #      #   ###   ## # ####### # #    #   
+    ## #  # ####   ###   ##   #######        #   
+    ##    # ####   #     ############   ##       
+    #   #   ######## ## #############   #####   #
+    # #  # #########    #####################   #
+    # #  # #########################   ##########
+           ##############   ######## # ##########
+
+This looks totally different than the board we've seen before! The simulation
+was crunched according to different world laws-- Specifically, different
+birth/suvival numbers.
+           
+.. _Classical Mechanics: http://en.wikipedia.org/wiki/Classical_mechanics
+.. _Special Relativity: http://en.wikipedia.org/wiki/Special_relativity
+.. _change the gravitational constant: http://www.youtube.com/watch?v=5xdbPhnfFEI&t=25s
