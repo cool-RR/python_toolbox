@@ -296,7 +296,7 @@ This is the same natural life state we got before.
 
 Now, let's bring our "alternate Life" arguments into this project:
 
-    >>> project.begin_crunching(root, 20, birth=[0], survival=[1])
+    >>> project.begin_crunching(root, 20, birth=[0], survival=[1, 2])
     Job(node=<garlicsim.data_structures.Node with clock 0, root, touched,
     blockless, at 0xf88f70>, crunching_profile=CrunchingProfile(
     clock_target=20, step_profile=life.State.step_generator(<state>, [0],
@@ -347,16 +347,16 @@ Let's observe the node that holds the above state:
 
     >>> new_path[-1]
     <garlicsim.data_structures.Node with clock 20, leaf, untouched, blockful,
-    crunched with life.State.step_generator(<state>, [0], [1]), at 0xfed730>
+    crunched with life.State.step_generator(<state>, [0], [1, 2]), at 0xfed730>
     
 We get a bunch of useful info about the node: Among these things, we get the
 step function and arguments that were used to crunch that node: ``crunched with
-life.State.step_generator(<state>, [0], [1])``.
+life.State.step_generator(<state>, [0], [1, 2])``.
 
 Let's look at the step profile on the node directly:
 
     >>> new_path[-1].step_profile
-    StepProfile(<unbound method State.step_generator>, [0], [1])
+    StepProfile(<unbound method State.step_generator>, [0], [1, 2])
 
 This is the time to ask:
 
@@ -400,11 +400,86 @@ node that they were cloned from.
 Blocks have a step profile too
 ==============================
 
-:class:`Block <garlicsim.data_structures.Block>`s have a ``.step_profile``
-attribute too; Whichever step profile is there is the step profile that was
-used for crunching each of the nodes in the block. Indeed, one of the
-conditions regarding blocks is that all the member nodes have been crunched
-using the same step profile and share the same ``.step_profile`` attribute.
+Blocks have a ``.step_profile`` attribute too; Whichever step profile is there
+is the step profile that was used for crunching each of the nodes in the
+:class:`Block <garlicsim.data_structures.Block>`. Indeed, one of the conditions
+regarding blocks is that all the member nodes have been crunched using the same
+step profile and share the same ``.step_profile`` attribute. Nodes that don't
+share the same step profile will not be grouped together in a :class:`Block
+<garlicsim.data_structures.Block>` in the first place.
+
+-------------------------------------------------------------------------------
+
+Let's check out the step profiles in the :class:`Project <garlicsim.Project>`
+we made before. Remember, ``old_path`` is the path in which we used natural
+Life constants, and ``new_path`` is the path in which we used our "alternate
+Life" constants:
+
+    >>> old_path[0] # That's the root node containing the initial random state:
+    <garlicsim.data_structures.Node with clock 0, root, touched, blockless,
+    at 0xf88f70>
+    >>> assert old_path[0].step_profile is None # Since it's our root.
+    >>> 
+    >>> old_path[-1] # That's the naturally-crunched node:
+    <garlicsim.data_structures.Node with clock 20, leaf, untouched, blockful,
+    crunched with life.State.step_generator(<state>), at 0xfdf370>\
+    >>>
+    >>> old_path[-1].step_profile # This is its step profile:
+    StepProfile(<unbound method State.step_generator>)
+    >>> 
+    >>> old_path[-1].block # And its block:
+    <garlicsim.data_structures.Block of length 20, crunched with
+    life.State.step_generator(<state>) at 0xfd0c50>
+    >>> # We can see that the block knows it has been crunched with an
+    >>> # argument-less step profile:
+    >>> old_path[-1].block.step_profile
+    StepProfile(<unbound method State.step_generator>)
+    >>>
+    >>>
+    >>> new_path[-1].block # This is our "alternate Life" block:
+    <garlicsim.data_structures.Block of length 20, crunched with
+    life.State.step_generator(<state>, [0], [1, 2]) at 0xfed2b0>
+    >>> # This block knows it has been crunched with our "alternate Life"
+    >>> # step profile:
+    >>> new_path[-1].block.step_profile
+    StepProfile(<unbound method State.step_generator>, [0], [1, 2])
+    >>>
+    >>> node = new_path[-1]
+    >>> project.begin_crunching(node, 1, project.build_step_profile())
+    Job(node=<garlicsim.data_structures.Node with clock 20, leaf, untouched,
+    blockful, crunched with life.State.step_generator(<state>, [0], [1, 2]),
+    at 0xfed730>, crunching_profile=CrunchingProfile(clock_target=21,
+    step_profile=life.State.step_generator(<state>)))
+    >>> project.sync_crunchers()
+    <0 nodes were added to the tree>
+    >>> project.sync_crunchers()
+    <1 nodes were added to the tree>
+    >>> new_path[-1].state
+             #                                   
+            # #                        #         
+             #                       #  #        
+                 #                  ####         
+                # #                #  #          
+                 #                               
+                                      #          
+                                      #          
+                                      #          
+                                     #           
+              #                     #            
+             # #                   #             
+              #                  #  #            
+      #                                          
+    #  #                        #  #  #          
+     ##                          #   # #         
+    ##    #                           #        # 
+         # #                                 ## #
+          #      #                             # 
+                # #                           ## 
+        #        #    #                          
+      #  #           # #                       # 
+                      #                       #  
+     #  #                                        
+      #                                          
 
 
 
