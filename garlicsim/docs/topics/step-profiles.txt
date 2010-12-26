@@ -343,9 +343,28 @@ See what we did there? We fed the arguments into
 This is the same "alternate Life" state we saw before when using
 :func:`garlicsim.simulate`.
 
+Let's observe the node that holds the above state:
+
+    >>> new_path[-1]
+    <garlicsim.data_structures.Node with clock 20, leaf, untouched, blockful,
+    crunched with life.State.step_generator(<state>, [0], [1]), at 0xfed730>
+    
+We get a bunch of useful info about the node: Among these things, we get the
+step function and arguments that were used to crunch that node: `crunched with
+life.State.step_generator(<state>, [0], [1])`.
+
+Let's look at the step profile on the node directly:
+
+    >>> new_path[-1].step_profile
+    StepProfile(<unbound method State.step_generator>, [0], [1])
+
+This is the time to ask:
 
 
+What is a step profile?
+=======================
 
+A step profile 
            
 .. _Classical Mechanics: http://en.wikipedia.org/wiki/Classical_mechanics
 .. _Special Relativity: http://en.wikipedia.org/wiki/Special_relativity
