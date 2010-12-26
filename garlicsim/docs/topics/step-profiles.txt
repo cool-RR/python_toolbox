@@ -350,8 +350,8 @@ Let's observe the node that holds the above state:
     crunched with life.State.step_generator(<state>, [0], [1]), at 0xfed730>
     
 We get a bunch of useful info about the node: Among these things, we get the
-step function and arguments that were used to crunch that node: `crunched with
-life.State.step_generator(<state>, [0], [1])`.
+step function and arguments that were used to crunch that node: ``crunched with
+life.State.step_generator(<state>, [0], [1])``.
 
 Let's look at the step profile on the node directly:
 
