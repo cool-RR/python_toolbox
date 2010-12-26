@@ -247,8 +247,101 @@ That's right, we can use step profiles to use different step functions in the
 same :class:`Project <garlicsim.Project>`. More about switching step functions
 later.
 
+Let's start a :mod:`life <garlicsim_lib.simpacks.life>` project and run it for
+20 iterations without specifying any arguments:
 
+    >>> project = garlicsim.Project(life)
+    >>> root = project.root_this_state(state)
+    >>> project.begin_crunching(root, 20)
+    Job(node=<garlicsim.data_structures.Node with clock 0, root, leaf, touched,
+    blockless, at 0xf88f70>, crunching_profile=CrunchingProfile(clock_target=20,
+    step_profile=life.State.step_generator(<state>)))
+    >>> project.sync_crunchers()
+    <0 nodes were added to the tree>
+    >>> # Give it a few seconds to crunch before calling .sync_crunchers again:
+    >>> project.sync_crunchers()
+    <20 nodes were added to the tree>
+    >>> (path,) = project.tree.all_possible_paths()
+    >>> path[-1]
+    <garlicsim.data_structures.Node with clock 20, leaf, untouched, blockful,
+    crunched with life.State.step_generator(<state>), at 0xfdf370>
+    >>> path[-1].state
+                  ##  #  #     # ###     #       
+                      # #       #   ##    ##     
+                     ###            #    #       
+                    ###                  ###     
+                                       ## #      
+                                #         ##     
+             #            ##    ##      # ##     
+             ##           ##             ##      
+               #                         ###     
+           # ###                  #        ####  
+         ##           #       # ## #     #  #  # 
+       ## ##  ##     # #     ###   #    # # #   #
+    #####   # # #    # #    #            # ##    
+    ##                #         ##           #  #
+     ### ##                 ##   ###   #     #   
+    ####     ##                #      # #        
+    #       #  #              ## ##  #   #      #
+    #   #                     ###   ##   #      #
+        # #  # #         #    ###   ##  ###      
+        # #  # ##       # #    # # #   ###       
+          # #           ##      ## #   ## #     #
+    #   ###  # ##               #      ####    # 
+          #   #   ##             ##   #   #     #
+                 #  #          # ###  #   ###    
+                  ###   #     #   #   #   ###    
 
+This is the same natural life state we got before.
+
+Now, let's bring our "alternate Life" arguments into this project:
+
+    >>> project.begin_crunching(root, 20, birth=[0], survival=[1])
+    Job(node=<garlicsim.data_structures.Node with clock 0, root, touched,
+    blockless, at 0xf88f70>, crunching_profile=CrunchingProfile(
+    clock_target=20, step_profile=life.State.step_generator(<state>, [0],
+    [1, 2])))
+    
+See what we did there? We fed the arguments into
+:meth:`Project.begin_crunching` the same way we did it for
+:func:`garlicsim.simulate`. Let's crunch the simulation and see the result
+    
+    >>> project.sync_crunchers()
+    <0 nodes were added to the tree>
+    >>> # Give it a few seconds to crunch before calling .sync_crunchers again:
+    >>> project.sync_crunchers()
+    <20 nodes were added to the tree>
+    >>> old_path, new_path = project.tree.all_possible_paths()
+    >>> asserd old_path == path # This is the path we had before
+    >>> new_path[-1].state
+    #### ##   ##########   ######## # ########  
+          ##   #####   ##   ######## #     ####  
+     #######   #####   #############   #   ####  
+    ####   #####   #   ############   #    ######
+    #### # #####   ################ #     #######
+    #### # ####    ###############   #    ###   #
+    #### #   ##   #############    # # ######   #
+    ####   #      ##########      #    ######   #
+    ###### # # #############         #  ####  # #
+      #### # # #############   #####  # #### #   
+    # ####     ######################   ####   ##
+      ##   ##########   ######################   
+    ####   ########## #  ###############   ######
+    ####   ####     #  # #   ###########   ######
+    ########### ### ##   # #     ######        ##
+     ##########     ###### # ### ###### ##   #   
+     ####      ###########       ####        #  #
+     ##   ##   ############ # ####### # # ##   # 
+    ##  #      #   ###   ## # ####### # #    #   
+    ## #  # ####   ###   ##   #######        #   
+    ##    # ####   #     ############   ##       
+    #   #   ######## ## #############   #####   #
+    # #  # #########    #####################   #
+    # #  # #########################   ##########
+           ##############   ######## # ##########
+    
+This is the same "alternate Life" state we saw before when using
+:func:`garlicsim.simulate`.
 
 
            
