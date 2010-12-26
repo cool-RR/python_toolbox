@@ -21,8 +21,8 @@ switch between `Classical Mechanics`_ and `Special Relativity`_? You can do it
 all by using a different step profile.
 
 
-Conway's Game of Life as an example of different world laws
-===========================================================
+Example: Different world laws in Conway's Life
+==============================================
 
 Let's play around with step profiles in the :mod:`life
 <garlicsim_lib.simpacks.life>` simpack.
@@ -130,19 +130,32 @@ was crunched according to different world laws-- Specifically, different
 `birth/suvival numbers`_. This is why the board looks totally different. It's
 essentially a different world.
 
-
-tododoc figure out title. where is this going?
-==============================================
+-------------------------------------------------------------------------------
 
 What happened there? We gave a couple of keyword arguments, ``birth`` and
 ``survival``, to :func:`garlicsim.simulate`, and it affected how the simulation
 was run. You can probably guess what ``birth`` and ``survival`` mean in the
 context of Life simulation: They mean how many live neighbors a cell should
-have for it to become alive (i.e. ``birth``), or stay alive (i.e. ``survival.)
+have for it to become alive (i.e. ``birth``), or stay alive (i.e. ``survival``.)
 
-But Life is only a case study for us; We want to understand what
-:mod:``garlicsim`` did here exactly and how we can use arguments in our own
-simpacks.
+But Life is only a case study for us; We want to understand what GarlicSim did
+here exactly and how we can use arguments in our own simpacks.
+
+
+Where did these arguments came from?
+====================================
+
+Where did the ``birth`` and ``survival`` arguments came from? Who decided that
+GarlicSim could run Life simulations under different birth/survival numbers?
+
+**Answer:** It was all defined in the simpack, in the step function itself.
+
+This is how :mod:`life <garlicsim_lib.simpacks.life>`'s step function looks
+like:
+
+
+
+
 
 
            
