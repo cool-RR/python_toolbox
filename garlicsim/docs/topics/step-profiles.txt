@@ -127,7 +127,7 @@ getting:
 
 This looks totally different than the board we've seen before! The simulation
 was crunched according to different world laws-- Specifically, different
-`birth/suvival numbers`_. This is why the board looks totally different. It's
+`birth/survival numbers`_. This is why the board looks totally different. It's
 essentially a different world.
 
 -------------------------------------------------------------------------------
@@ -156,7 +156,7 @@ like::
     def step_generator(self, birth=[3], survival=[2, 3], randomness=0):    
         pass # ... Step function's content ...
 
-The step function itself recieves these arguments, and then it uses these
+The step function itself receives these arguments, and then it uses these
 arguments when creating the new world state.
 
 .. admonition:: Default values for arguments
@@ -167,7 +167,7 @@ arguments when creating the new world state.
     to figure out which arguments the simpack is expecting.
     
 But we didn't call :meth:`step_generator <life.State.step_generator>` directly
-with these argumens; we called :func:`garlicsim.simulate`. When called with
+with these arguments; we called :func:`garlicsim.simulate`. When called with
 additional arguments, :func:`garlicsim.simulate` simply passes them on to the
 step function.
 
@@ -443,16 +443,25 @@ Life" constants:
     >>> # step profile:
     >>> new_path[-1].block.step_profile
     StepProfile(<unbound method State.step_generator>, [0], [1, 2])
+
     
-Blas
-    
-    >>>
-    >>> node = new_path[-1]
+Combining different step profiles in the same timeline
+======================================================
+
+What we did about is combine two different step profiles in the same
+:class:`Tree <garlicsim.data_structures.Tree>`. As a final exercise, we'll
+combine two different step profiles in the same time-line:
+
+    >>> node = new_path[-1] # This is the node with the "alternate Life" state.
     >>> project.begin_crunching(node, 1, project.build_step_profile())
     Job(node=<garlicsim.data_structures.Node with clock 20, leaf, untouched,
     blockful, crunched with life.State.step_generator(<state>, [0], [1, 2]),
     at 0xfed730>, crunching_profile=CrunchingProfile(clock_target=21,
     step_profile=life.State.step_generator(<state>)))
+    
+(What the :meth:`Project.build_step_profile` method above did is create an
+argument-less step profile.)
+    
     >>> project.sync_crunchers()
     <0 nodes were added to the tree>
     >>> project.sync_crunchers()
@@ -485,9 +494,31 @@ Blas
       #                                          
 
 
+In one step almost all the live cells became dead immediately under the
+standard Life rules.
+
+Now our path has a mixture of two different step profiles::
+      
+    >>> list(new_path.iterate_blockwise())
+    [
+        <garlicsim.data_structures.Node with clock 0, root, touched, blockless,
+        at 0xf88f70>,
+        
+        <garlicsim.data_structures.Block of length 20, crunched with
+        life.State.step_generator(<state>, [0], [1, 2]) at 0xfed2b0>,
+        
+        <garlicsim.data_structures.Block of length 1, crunched with
+        life.State.step_generator(<state>) at 0xfede70>        
+    ]
+    
+-------------------------------------------------------------------------------
+
+These were a few basic manipulations of step profiles. For more info about step
+profiles, you can check out the `documented source code
+<https://github.com/cool-RR/GarlicSim/blob/master/garlicsim/garlicsim/misc/step_profile.py>`_.
 
 
 .. _Classical Mechanics: http://en.wikipedia.org/wiki/Classical_mechanics
 .. _Special Relativity: http://en.wikipedia.org/wiki/Special_relativity
 .. _change the gravitational constant: http://www.youtube.com/watch?v=5xdbPhnfFEI&t=25s
-.. _birth/suvival numbers: http://en.wikipedia.org/wiki/Conway's_Game_of_Life#Variations_on_Life
+.. _birth/survival numbers: http://en.wikipedia.org/wiki/Conway's_Game_of_Life#Variations_on_Life
