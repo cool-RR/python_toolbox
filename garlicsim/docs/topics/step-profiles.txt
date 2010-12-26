@@ -130,6 +130,12 @@ was crunched according to different world laws-- Specifically, different
 `birth/suvival numbers`_. This is why the board looks totally different. It's
 essentially a different world.
 
+
+tododoc figure out title
+========================
+
+What happened there? We gave a couple of keyword arguments, ``birth`` and ``survival``
+
 tododoc. Title here? where is this going?
 
 
