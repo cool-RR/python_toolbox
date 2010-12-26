@@ -443,6 +443,9 @@ Life" constants:
     >>> # step profile:
     >>> new_path[-1].block.step_profile
     StepProfile(<unbound method State.step_generator>, [0], [1, 2])
+    
+Blas
+    
     >>>
     >>> node = new_path[-1]
     >>> project.begin_crunching(node, 1, project.build_step_profile())
