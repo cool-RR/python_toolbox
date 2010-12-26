@@ -364,7 +364,20 @@ This is the time to ask:
 What is a step profile?
 =======================
 
-A step profile 
+A step profile contains all there is to know about *how* a state was crunched.
+That includes three things:
+
+  1. ``step_profile.step_function``: The step function that was used.
+  2. ``step_profile.args``: A :class:`tuple` of positional arguments. 
+  3. ``step_profile.args``: A :class:`dict` of keyword arguments.
+
+When you know all three of the above, you know exactly how the state was
+created.
+
+Step profiles are of the :class:`garlicsim.misc.StepProfile`, which is defined
+in the :mod:`garlicsim.misc.step_profile` module. `Explore its source code
+<https://github.com/cool-RR/GarlicSim/blob/master/garlicsim/garlicsim/misc/step_profile.py>`_
+to learn more about how it works.
            
 .. _Classical Mechanics: http://en.wikipedia.org/wiki/Classical_mechanics
 .. _Special Relativity: http://en.wikipedia.org/wiki/Special_relativity
