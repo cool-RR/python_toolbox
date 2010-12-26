@@ -312,7 +312,7 @@ See what we did there? We fed the arguments into
     >>> project.sync_crunchers()
     <20 nodes were added to the tree>
     >>> old_path, new_path = project.tree.all_possible_paths()
-    >>> asserd old_path == path # This is the path we had before
+    >>> assert old_path == path # This is the path we had before
     >>> new_path[-1].state
     #### ##   ##########   ######## # ########  
           ##   #####   ##   ######## #     ####  
@@ -342,6 +342,8 @@ See what we did there? We fed the arguments into
     
 This is the same "alternate Life" state we saw before when using
 :func:`garlicsim.simulate`.
+
+
 
 
            
