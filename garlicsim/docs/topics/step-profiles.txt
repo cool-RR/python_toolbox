@@ -151,8 +151,101 @@ GarlicSim could run Life simulations under different birth/survival numbers?
 **Answer:** It was all defined in the simpack, in the step function itself.
 
 This is how :mod:`life <garlicsim_lib.simpacks.life>`'s step function looks
-like:
+like::
 
+    def step_generator(self, birth=[3], survival=[2, 3], randomness=0):    
+        pass # ... Step function's content ...
+
+The step function itself recieves these arguments, and then it uses these
+arguments when creating the new world state.
+
+.. admonition:: Default values for arguments
+
+    Note that if a step function allows arguments, each and every argument
+    *must* have a default value. (as in ``birth=[3]``.) This is so the step
+    function could always be run with just a state, without requiring the user
+    to figure out which arguments the simpack is expecting.
+    
+But we didn't call :meth:`step_generator <life.State.step_generator>` directly
+with these argumens; we called :func:`garlicsim.simulate`. When called with
+additional arguments, :func:`garlicsim.simulate` simply passes them on to the
+step function.
+
+We can specify arguments to :func:`garlicsim.list_simulate` and
+:func:`garlicsim.iter_simulate` in the same way:
+
+    >>> garlicsim.list_simulate(state, 20, birth=[0], survival=[1, 2])[-1]
+     #### ##   ##########   ######## # ########  
+          ##   #####   ##   ######## #     ####  
+     #######   #####   #############   #   ####  
+    ####   #####   #   ############   #    ######
+    #### # #####   ################ #     #######
+    #### # ####    ###############   #    ###   #
+    #### #   ##   #############    # # ######   #
+    ####   #      ##########      #    ######   #
+    ###### # # #############         #  ####  # #
+      #### # # #############   #####  # #### #   
+    # ####     ######################   ####   ##
+      ##   ##########   ######################   
+    ####   ########## #  ###############   ######
+    ####   ####     #  # #   ###########   ######
+    ########### ### ##   # #     ######        ##
+     ##########     ###### # ### ###### ##   #   
+     ####      ###########       ####        #  #
+     ##   ##   ############ # ####### # # ##   # 
+    ##  #      #   ###   ## # ####### # #    #   
+    ## #  # ####   ###   ##   #######        #   
+    ##    # ####   #     ############   ##       
+    #   #   ######## ## #############   #####   #
+    # #  # #########    #####################   #
+    # #  # #########################   ##########
+           ##############   ######## # ##########
+    >>>
+    >>> list(
+    ...     garlicsim.iter_simulate(state, 20, birth=[0], survival=[1, 2])
+    ... )[-1]
+     #### ##   ##########   ######## # ########  
+          ##   #####   ##   ######## #     ####  
+     #######   #####   #############   #   ####  
+    ####   #####   #   ############   #    ######
+    #### # #####   ################ #     #######
+    #### # ####    ###############   #    ###   #
+    #### #   ##   #############    # # ######   #
+    ####   #      ##########      #    ######   #
+    ###### # # #############         #  ####  # #
+      #### # # #############   #####  # #### #   
+    # ####     ######################   ####   ##
+      ##   ##########   ######################   
+    ####   ########## #  ###############   ######
+    ####   ####     #  # #   ###########   ######
+    ########### ### ##   # #     ######        ##
+     ##########     ###### # ### ###### ##   #   
+     ####      ###########       ####        #  #
+     ##   ##   ############ # ####### # # ##   # 
+    ##  #      #   ###   ## # ####### # #    #   
+    ## #  # ####   ###   ##   #######        #   
+    ##    # ####   #     ############   ##       
+    #   #   ######## ## #############   #####   #
+    # #  # #########    #####################   #
+    # #  # #########################   ##########
+           ##############   ######## # ##########
+
+
+That was simple. So what do we need "step profiles" for?
+========================================================
+
+In the case of synchronous simulation (i.e. :func:`simulate
+<garlicsim.simulate>`, :func:`list_simulate <garlicsim.list_simulate>` and
+:func:`iter_simulate <garlicsim.iter_simulate>`,) passing arguments was so
+straightforward that we didn't need to think about step profiles at all. But
+when dealing with *a*\ synchronous simulation, i.e. the
+:class:`garlicsim.Project` class, step profiles are a powerful way to keep
+track of exactly which states were crunched using which step function and which
+arguments.
+
+That's right, we can use step profiles to use different step functions in the
+same :class:`Project <garlicsim.Project>`. More about switching step functions
+later.
 
 
 
