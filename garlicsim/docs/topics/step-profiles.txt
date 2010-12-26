@@ -378,7 +378,35 @@ Step profiles are of the :class:`garlicsim.misc.StepProfile`, which is defined
 in the :mod:`garlicsim.misc.step_profile` module. `Explore its source code
 <https://github.com/cool-RR/GarlicSim/blob/master/garlicsim/garlicsim/misc/step_profile.py>`_
 to learn more about how it works.
-           
+
+
+How step profiles are used in the tree
+======================================
+
+We accessed our step profile before from the node; Every :class:`Node
+<garlicsim.data_structures.Node>` has a ``.step_profile`` attribute which
+contains the step profile with which it was crunched. Note though that the
+nodes that you create with functions like :meth:`create_root
+<garlicsim.Project.create_root>` and :meth:`create_messy_root
+<garlicsim.Project.create_messy_root>` will have a ``.step_profile`` attribute
+equal to :data:`None`; The reasoning is that since they were created
+"artificially" and not by crunching, they should not have an actual step
+profile.
+
+Edited nodes will have the same ``.step_profile`` attribute as the template
+node that they were cloned from.
+
+
+Blocks have a step profile too
+==============================
+
+:class:`Block <garlicsim.data_structures.Block>`s have a ``.step_profile``
+attribute too; Whichever step profile is there is the step profile that was
+used for crunching each of the nodes in the block. Indeed, one of the
+conditions regarding blocks is that all the member nodes have been crunched
+using the same step profile and share the same ``.step_profile`` attribute.
+
+
 .. _Classical Mechanics: http://en.wikipedia.org/wiki/Classical_mechanics
 .. _Special Relativity: http://en.wikipedia.org/wiki/Special_relativity
 .. _change the gravitational constant: http://www.youtube.com/watch?v=5xdbPhnfFEI&t=25s
