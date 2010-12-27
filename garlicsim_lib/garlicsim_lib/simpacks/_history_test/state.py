@@ -7,7 +7,6 @@ from math import pi
 import random
 random.seed()
 
-from garlicsim.misc import StepCopy
 import garlicsim.data_structures
 
 class State(garlicsim.data_structures.State):
@@ -33,7 +32,7 @@ class State(garlicsim.data_structures.State):
     def history_step(history_browser, t=0.1):
     
         last_state = history_browser.get_last_state()
-        new_state = copy.deepcopy(last_state, StepCopy())
+        new_state = garlicsim.misc.state_deepcopy.state_deepcopy(last_state)
         new_state.clock += t
         
         useless_state = history_browser.get_state_by_clock(10000000)

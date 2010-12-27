@@ -40,10 +40,7 @@ def simulate(state, iterations=1, *args, **kwargs):
     if not hasattr(state, 'clock'):
         # blocktodo: make mechanism to prevent deepcopying twice, both here and
         # in inplace crap
-        state = copy.deepcopy(
-            state,
-            garlicsim.general_misc.persistent.DontCopyPersistent()
-        )
+        state = garlicsim.misc.state_deepcopy.state_deepcopy(state)
         state.clock = 0
     
     if simpack_grokker.history_dependent:
@@ -98,10 +95,7 @@ def __non_history_simulate(simpack_grokker, state, iterations, step_profile):
     # We try to get an inplace step iterator, if our simpack supplies one.
     # Otherwise we use a regular one.
     if simpack_grokker.is_inplace_iterator_available(step_profile) is True:
-        state_copy = copy.deepcopy(
-            state,
-            garlicsim.general_misc.persistent.DontCopyPersistent()
-        )
+        state_copy = garlicsim.misc.state_deepcopy.state_deepcopy(state)
         iterator = \
             simpack_grokker.get_inplace_step_iterator(state_copy, step_profile)
         

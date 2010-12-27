@@ -11,7 +11,6 @@ import random
 random.seed()
 
 import garlicsim.data_structures
-from garlicsim.misc import StepCopy
 
 ROUNDS = 7
 NUMBER_OF_PLAYERS = 70
@@ -56,7 +55,7 @@ class State(garlicsim.data_structures.State):
         
     def step(self):
         
-        state = copy.deepcopy(self, StepCopy())
+        state = garlicsim.misc.state_deepcopy.state_deepcopy(self)
         state.clock += 1
     
         state.round += 1

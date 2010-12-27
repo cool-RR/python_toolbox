@@ -9,7 +9,7 @@ These objects are important enough to be defined near the root of the
 `garlicsim` package but not important enough to be put in the main namespace.
 '''
 
-from .step_copy import StepCopy
+from . import state_deepcopy
 from .exceptions import (InvalidSimpack, SimpackError, GarlicSimWarning,
                          GarlicSimException, WorldEnded)
 from .auto_clock_generator import AutoClockGenerator

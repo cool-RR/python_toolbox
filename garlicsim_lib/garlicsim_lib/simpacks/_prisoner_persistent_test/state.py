@@ -11,7 +11,6 @@ import random
 random.seed()
 
 import garlicsim.data_structures
-from garlicsim.misc import StepCopy
 from garlicsim.general_misc.persistent import CrossProcessPersistent
 
 ROUNDS = 7
@@ -32,7 +31,7 @@ class State(garlicsim.data_structures.State):
         self.round = round
         self.match = match
         self.player_pool = player_pool
-        self.handicap = Handicap("The thing", meow="The meow")
+        self.handicap = Handicap('The thing', meow='The meow')
     
     @staticmethod
     def create_root():
@@ -66,7 +65,7 @@ class State(garlicsim.data_structures.State):
         
     def step(self):
         
-        state = copy.deepcopy(self, StepCopy())
+        state = garlicsim.misc.state_deepcopy.state_deepcopy(self)
         state.clock += 1
     
         state.round += 1

@@ -7,11 +7,13 @@ This module defines the `StepCopy` class.
 See its documentation for more information.
 '''
 
+import copy
+
 from garlicsim.general_misc.copy_mode import CopyMode
 from garlicsim.general_misc.persistent import DontCopyPersistent
 
 
-class StepCopy(DontCopyPersistent, CopyMode):
+class StateCopy(DontCopyPersistent, CopyMode):
     '''
     A copy mode used in a step function to generate the next state.
     
@@ -20,3 +22,8 @@ class StepCopy(DontCopyPersistent, CopyMode):
     should pass `StepCopy()` into the `deepcopy` function as a memo. This
     assures that certain objects get copied in the right way for this context.
     '''
+
+    
+def state_deepcopy(thing):
+    return copy.deepcopy(thing,
+                         StateCopy())

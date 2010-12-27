@@ -13,7 +13,6 @@ import numpy
 import numpy.random
 
 from garlicsim.general_misc.infinity import infinity
-from garlicsim.misc import StepCopy
 import garlicsim
 
 from . import events as events_module
@@ -69,7 +68,7 @@ class State(garlicsim.data_structures.State):
         # todo good idea: t=None means step to next client. If given int just
         # do many steps. (What with cut last?)
         
-        new_state = copy.deepcopy(self, StepCopy())
+        new_state = garlicsim.misc.state_deepcopy.state_deepcopy(self)
         time_passed = new_state.event_set.do_next_event()
         
         new_state.clock = self.clock + time_passed

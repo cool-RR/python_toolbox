@@ -36,10 +36,8 @@ class DuplicatingStepIterator(BaseStepIterator):
         
     def next(self):
         '''Crunch the next state.'''
-        new_state = copy.deepcopy(
-            self.current_state,
-            memo=garlicsim.general_misc.persistent.DontCopyPersistent()
-        )
+        new_state = \
+            garlicsim.misc.state_deepcopy.state_deepcopy(self.current_state)
         
         return_value = self.step_function(new_state,
                                           *self.step_profile.args,

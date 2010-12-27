@@ -40,10 +40,8 @@ class DuplicatingStepGeneratorIterator(BaseStepIterator):
     
     def __build_raw_generator(self):
         '''Build a raw generator which will provide the states for us.'''
-        self._state_of_raw_generator = copy.deepcopy(
-            self.current_state,
-            memo=garlicsim.general_misc.persistent.DontCopyPersistent()
-        )
+        self._state_of_raw_generator = \
+            garlicsim.misc.state_deepcopy.state_deepcopy(self.current_state)
         self.raw_generator = self.step_profile.step_function(
             self._state_of_raw_generator,
             *self.step_profile.args,
@@ -65,9 +63,8 @@ class DuplicatingStepGeneratorIterator(BaseStepIterator):
                 
             self._auto_clock(self._state_of_raw_generator)
                 
-            self.current_state = copy.deepcopy(
-                self._state_of_raw_generator,
-                memo=garlicsim.general_misc.persistent.DontCopyPersistent()
+            self.current_state = garlicsim.misc.state_deepcopy.state_deepcopy(
+                self._state_of_raw_generator
             )
             
         except StopIteration:

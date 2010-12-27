@@ -79,10 +79,8 @@ class Tree(object):
         
         Returns the node.
         '''
-        new_state = copy.deepcopy(
-            template_node.state,
-            garlicsim.general_misc.persistent.DontCopyPersistent()
-        )
+        new_state = \
+            garlicsim.misc.state_deepcopy.state_deepcopy(template_node.state)
 
         parent = template_node.parent
         new_step_profile = copy.copy(template_node.step_profile)
