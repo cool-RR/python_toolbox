@@ -58,7 +58,7 @@ def check(simpack, cruncher_type):
     
     my_simpack_grokker = garlicsim.misc.SimpackGrokker(simpack)
     
-    assert not simpack._settings_for_testing.DEFAULT_STEP_FUNCTION_TYPE in \
+    assert simpack._settings_for_testing.DEFAULT_STEP_FUNCTION_TYPE in \
            [garlicsim.misc.simpack_grokker.step_types.InplaceStep,
             garlicsim.misc.simpack_grokker.step_types.InplaceStepGenerator]
     
@@ -74,13 +74,16 @@ def check(simpack, cruncher_type):
     assert state.clock == 0
     
     state_1 = garlicsim.simulate(state)
+    assert state.clock == 0
     assert state_1.clock == 1
     assert state_1 is not state
     assert state_1.list is not state.list
     assert state_1.cross_process_persistent is state.cross_process_persistent
     
     state_2 = garlicsim.simulate(state, 2)
-    assert state_1.clock == 2
+    assert state.clock == 0
+    assert state_1.clock == 1
+    assert state_2.clock == 2
     assert state_2 is not state
     assert state_2.list is not state.list
     assert state_2.cross_process_persistent is state.cross_process_persistent

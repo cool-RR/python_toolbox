@@ -34,16 +34,22 @@ class DuplicatingStepGeneratorIterator(BaseStepIterator):
         '''Auto-clock generator which ensures all states have `.clock`.'''
         
         self.auto_clock_generator.make_clock(self.current_state)
+        
+        self.__build_raw_generator()
 
     
     def __build_raw_generator(self):
         '''Build a raw generator which will provide the states for us.'''
-        self.raw_generator = self.step_profile.step_function(
+        self._state_of_raw_generator = copy.deepcopy(
             self.current_state,
+            memo=garlicsim.general_misc.persistent.DontCopyPersistent()
+        )
+        self.raw_generator = self.step_profile.step_function(
+            self._state_of_raw_generator,
             *self.step_profile.args,
             **self.step_profile.kwargs
         )
-        self._state_of_raw_generator = self.current_state
+        
     
     
     def next(self):
