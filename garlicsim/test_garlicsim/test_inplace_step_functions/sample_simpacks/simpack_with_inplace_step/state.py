@@ -5,7 +5,7 @@ class State(garlicsim.data_structures.State):
     
     def __init__(self):
         self.list = []
-        self.identity = \
+        self.cross_process_persistent = \
             garlicsim.general_misc.persistent.CrossProcessPersistent()
         self.clock = 0
 
