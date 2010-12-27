@@ -25,8 +25,10 @@ def store(method, *args, **kwargs):
 class AutoClockGenerator(object):
     '''Device for creating clock readings for states that don't have them.'''
     
-    def __init__(self):
+    def __init__(self, detect_static=False):
         self.last_state_clock = None
+        self.detect_static = detect_static
+        
 
         
     @store
@@ -43,7 +45,11 @@ class AutoClockGenerator(object):
         attach it to the state himself.
         '''
         if hasattr(state, 'clock'):
-            return state.clock
+            if not self.detect_static:
+                return state.clock
+            else: # self.detect_static is True
+                if state.clock == self.last_state_clock:
+                    return state.clock + 1
         else:
             if self.last_state_clock is not None: # can be 0
                 return self.last_state_clock + 1

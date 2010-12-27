@@ -74,7 +74,7 @@ class InplaceStep(BaseStep):
     (1.1.2011 - Not yet implemented, sorry.)
     '''
     step_iterator_class = step_iterators.DuplicatingStepIterator
-    inplace_step_iterator_class = NotImplemented
+    inplace_step_iterator_class = step_iterators.InplaceStepIterator
     name_identifier = 'inplace_step'
     verbose_name = 'inplace step function'
     
@@ -93,7 +93,7 @@ class InplaceStepGenerator(BaseStep):
     (1.1.2011 - Not yet implemented, sorry.)
     '''
     step_iterator_class = step_iterators.DuplicatingStepGeneratorIterator
-    inplace_step_iterator_class = NotImplemented
+    inplace_step_iterator_class = step_iterators.InplaceStepGeneratorIterator
     name_identifier = 'inplace_step_generator'
     verbose_name = 'inplace step generator'
 

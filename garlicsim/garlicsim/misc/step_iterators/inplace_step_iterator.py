@@ -8,7 +8,7 @@ import garlicsim
 from garlicsim.misc import BaseStepIterator, SimpackError, AutoClockGenerator
 
 
-class DuplicatingStepIterator(BaseStepIterator):
+class InplaceStepIterator(BaseStepIterator):
     
     def __init__(self, state, step_profile):
         
@@ -36,10 +36,6 @@ class DuplicatingStepIterator(BaseStepIterator):
         
     def next(self):
         '''Crunch the next state.'''
-        new_state = copy.deepcopy(
-            self.current_state,
-            memo=garlicsim.general_misc.persistent.DontCopyPersistent()
-        )
         
         return_value = self.step_function(new_state,
                                           *self.step_profile.args,

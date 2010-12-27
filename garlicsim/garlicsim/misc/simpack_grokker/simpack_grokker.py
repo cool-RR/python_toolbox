@@ -350,9 +350,8 @@ class SimpackGrokker(object):
         
         step_function = step_profile.step_function
         step_type = StepType.get_step_type(step_function)
-        step_iterator_class = step_type.step_iterator_class
-
-        return step_iterator_class(state_or_history_browser,
+        
+        return step_type.step_iterator_class(state_or_history_browser,
                                    step_profile)
         
     
@@ -362,28 +361,18 @@ class SimpackGrokker(object):
         
         Not yet implemented, sorry. 
         '''
-        raise NotImplementedError('Inplace steps are not yet '
-                                  'supported. They will probably become '
-                                  'available in GarlicSim 0.7 in mid-2011.')
-        blocktodo
-        #step_function = step_profile.step_function
-        #step_type = StepType.get_step_type(step_function)
         
-        #if step_type not in (step_types.InplaceStep,
-                             #step_types.InplaceStepGenerator):
-
-            #raise GarlicSimException("Can't get inplace step iterator for "
-                                     #"`%s`, which is a non-inplace step "
-                                     #"function." % step_function)
-            
-        #inplace_step_iterator_class = step_type.inplace_step_iterator_class
-
-        #inplace_step_iterator = inplace_step_iterator_class(
-            #state_or_history_browser,
-            #step_profile
-        #)
+        step_function = step_profile.step_function
+        step_type = StepType.get_step_type(step_function)
         
-        #return inplace_step_iterator
+        if step_type not in (step_types.InplaceStep,
+                             step_types.InplaceStepGenerator):
+            return None
+        
+        return step_type.inplace_step_iterator_class(
+            state_or_history_browser,
+            step_profile
+        )
     
 
     def build_step_profile(self, *args, **kwargs):

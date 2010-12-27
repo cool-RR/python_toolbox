@@ -16,7 +16,7 @@ import garlicsim
 import garlicsim.misc
 from . import history_browser as history_browser_module # Avoiding name clash
 
-__all__ = ["simulate"]
+__all__ = ['simulate']
 
 
 def simulate(state, iterations=1, *args, **kwargs):
@@ -79,7 +79,7 @@ def __history_simulate(simpack_grokker, state, iterations, step_profile):
         pass
         
     final_state = current_state
-    # Which is still here as the last value from the for loop
+    # Which is still here as the last value from the `for` loop
     
     return final_state
 
@@ -92,12 +92,14 @@ def __non_history_simulate(simpack_grokker, state, iterations, step_profile):
     
     Returns the final state of the simulation.
     '''
-    if step_profile is None:
-            step_profile = garlicsim.misc.StepProfile(
-                simpack_grokker.default_step_function
-            )
-            
-    iterator = simpack_grokker.get_step_iterator(state, step_profile)
+    
+    # We try to get an inplace step iterator, if our simpack supplies one.
+    # Otherwise we use a regular one.
+    iterator = \
+        simpack_grokker.get_inplace_step_iterator(state, step_profile) or \
+        simpack_grokker.get_step_iterator(state, step_profile)
+    
+    
     finite_iterator = cute_iter_tools.shorten(iterator, iterations)
     current_state = state
     
@@ -108,6 +110,6 @@ def __non_history_simulate(simpack_grokker, state, iterations, step_profile):
         pass    
     
     final_state = current_state
-    # Which is still here as the last value from the for loop
+    # Which is still here as the last value from the `for` loop
     
     return final_state

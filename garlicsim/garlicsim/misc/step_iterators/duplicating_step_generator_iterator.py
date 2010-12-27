@@ -30,7 +30,7 @@ class DuplicatingStepGeneratorIterator(BaseStepIterator):
         The step profile which contains the arguments given to step function.
         '''
         
-        self.auto_clock_generator = AutoClockGenerator()
+        self.auto_clock_generator = AutoClockGenerator(detect_static=True)
         '''Auto-clock generator which ensures all states have `.clock`.'''
         
         self.auto_clock_generator.make_clock(self.current_state)
@@ -56,10 +56,12 @@ class DuplicatingStepGeneratorIterator(BaseStepIterator):
         '''Crunch the next state.'''
         try:        
             try:
-                self.raw_generator.next()
+                yielded_value = self.raw_generator.next()
             except StopIteration:
                 self.__build_raw_generator()
-                self.raw_generator.next()
+                yielded_value = self.raw_generator.next()
+                
+            assert yielded_value is None
                 
             self._auto_clock(self._state_of_raw_generator)
                 
@@ -69,9 +71,9 @@ class DuplicatingStepGeneratorIterator(BaseStepIterator):
             )
             
         except StopIteration:
-                raise SimpackError('The step generator %s raised '
-                                   '`StopIteration` without yielding even one '
-                                   'state.' % self.step_profile.step_function)
+                raise SimpackError('The inplace step generator `%s` raised '
+                                   '`StopIteration` without yielding even '
+                                   'once.' % self.step_profile.step_function)
                 
         return self.current_state
                 
