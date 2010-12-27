@@ -50,6 +50,8 @@ class AutoClockGenerator(object):
             else: # self.detect_static is True
                 if state.clock == self.last_state_clock:
                     return state.clock + 1
+                else:
+                    return state.clock
         else:
             if self.last_state_clock is not None: # can be 0
                 return self.last_state_clock + 1

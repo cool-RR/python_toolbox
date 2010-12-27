@@ -367,12 +367,21 @@ class SimpackGrokker(object):
         
         if step_type not in (step_types.InplaceStep,
                              step_types.InplaceStepGenerator):
-            return None
+            raise Exception('tododoc')
         
         return step_type.inplace_step_iterator_class(
-            state_or_history_browser,
+            state,
             step_profile
         )
+    
+    
+    def is_inplace_iterator_available(self, step_profile):
+        step_function = step_profile.step_function
+        step_type = StepType.get_step_type(step_function)
+        
+        return (step_type in (step_types.InplaceStep,
+                              step_types.InplaceStepGenerator))
+        
     
 
     def build_step_profile(self, *args, **kwargs):
