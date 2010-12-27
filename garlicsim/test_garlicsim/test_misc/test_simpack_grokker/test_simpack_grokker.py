@@ -72,13 +72,6 @@ def check_simpack(simpack):
     
     assert simpack_grokker.default_step_function == \
            _settings_for_testing.DEFAULT_STEP_FUNCTION
-
-    
-    nose.tools.assert_raises(NotImplementedError,
-                             simpack_grokker.get_inplace_step_iterator,
-                             state,
-                             step_profile)
-
     
     
     assert simpack_grokker.history_dependent == \
