@@ -1,6 +1,8 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
+'''Testing module for `garlicsim.asynchronous_crunching`.'''
+
 from __future__ import division
 
 import os
@@ -21,8 +23,11 @@ import garlicsim
 
 import test_garlicsim
 
+from .shared import MustachedThreadCruncher
+
 
 def test():
+    '''Test `garlicsim.asynchronous_crunching`.'''
     
     from . import sample_simpacks
     
@@ -55,10 +60,9 @@ def check(simpack, cruncher_type):
     
     my_simpack_grokker = garlicsim.misc.SimpackGrokker(simpack)
     
-    assert my_simpack_grokker is garlicsim.misc.SimpackGrokker(simpack)
-    # Ensuring caching works.
-    
-    assert not simpack._settings_for_testing.ENDABLE
+    assert not simpack._settings_for_testing.DEFAULT_STEP_FUNCTION_TYPE in \
+           [garlicsim.misc.simpack_grokker.step_types.InplaceStep,
+            garlicsim.misc.simpack_grokker.step_types.InplaceStepGenerator]
     
     assert garlicsim.misc.simpack_grokker.step_type.StepType.get_step_type(
         my_simpack_grokker.default_step_function
