@@ -92,7 +92,7 @@ class InplaceStepGenerator(BaseStep):
     
     (1.1.2011 - Not yet implemented, sorry.)
     '''
-    step_iterator_class = NotImplemented
+    step_iterator_class = step_iterators.DuplicatingStepGeneratorIterator
     inplace_step_iterator_class = NotImplemented
     name_identifier = 'inplace_step_generator'
     verbose_name = 'inplace step generator'

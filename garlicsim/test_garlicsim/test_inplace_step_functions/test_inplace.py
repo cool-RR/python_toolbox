@@ -23,8 +23,6 @@ import garlicsim
 
 import test_garlicsim
 
-from .shared import MustachedThreadCruncher
-
 
 def test():
     '''Test `garlicsim.asynchronous_crunching`.'''

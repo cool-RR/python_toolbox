@@ -2,6 +2,8 @@
 # This program is distributed under the LGPL2.1 license.
 
 
+import copy
+
 import garlicsim
 from garlicsim.misc import BaseStepIterator, SimpackError, AutoClockGenerator
 
@@ -34,10 +36,18 @@ class DuplicatingStepIterator(BaseStepIterator):
         
     def next(self):
         '''Crunch the next state.'''
-        self.current_state = self.step_function(self.current_state,
-                                                *self.step_profile.args,
-                                                **self.step_profile.kwargs)
-        self._auto_clock(self.current_state)
+        new_state = copy.deepcopy(
+            self.current_state,
+            memo=garlicsim.general_misc.persistent.DontCopyPersistent()
+        )
+        
+        return_value = self.step_function(new_state,
+                                          *self.step_profile.args,
+                                          **self.step_profile.kwargs)
+        assert return_value is None
+        
+        self._auto_clock(new_state)
+        self.current_state = new_state
         return self.current_state
                 
         

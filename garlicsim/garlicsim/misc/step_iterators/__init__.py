@@ -11,3 +11,5 @@ from .step_iterator import StepIterator
 from .step_generator_iterator import StepGeneratorIterator
 from .history_step_iterator import HistoryStepIterator
 from .duplicating_step_iterator import DuplicatingStepIterator
+from .duplicating_step_generator_iterator import \
+    DuplicatingStepGeneratorIterator
