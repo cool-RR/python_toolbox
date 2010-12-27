@@ -360,8 +360,9 @@ class SimpackGrokker(object):
         '''
         Get an inplace step iterator which modifies the state in-place.
         
-        Not yet implemented, sorry.
+        Not yet implemented, sorry. 
         '''
+        blocktodo
         raise NotImplementedError('Inplace steps are not yet '
                                   'supported. They will probably become '
                                   'available in GarlicSim 0.7 in mid-2011.')
