@@ -362,10 +362,10 @@ class SimpackGrokker(object):
         
         Not yet implemented, sorry. 
         '''
-        blocktodo
         raise NotImplementedError('Inplace steps are not yet '
                                   'supported. They will probably become '
                                   'available in GarlicSim 0.7 in mid-2011.')
+        blocktodo
         #step_function = step_profile.step_function
         #step_type = StepType.get_step_type(step_function)
         
