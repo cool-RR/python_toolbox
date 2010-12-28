@@ -118,7 +118,27 @@ def check(simpack, cruncher_type):
     assert state_10.cross_process_persistent is state.cross_process_persistent
     assert n_state_deepcopy_operations == state_deepcopy_counter.call_count
     
+
+    ###########################################################################
+    #                                                                         #
     
+    with StateDeepcopyCounter() as state_deepcopy_counter:
+        garlicsim.list_simulate(state, 3)
+    n_state_deepcopy_operations_for_3_in_list = \
+        state_deepcopy_counter.call_count
+    
+    with StateDeepcopyCounter() as state_deepcopy_counter:
+        garlicsim.list_simulate(state, 4)
+    n_state_deepcopy_operations_for_4_in_list = \
+        state_deepcopy_counter.call_count
+    
+    assert n_state_deepcopy_operations_for_4_in_list > \
+           n_state_deepcopy_operations_for_3_in_list
+    
+    #                                                                         #
+    ###########################################################################
+        
+        
     prev_state = state
     for i in [1, 2, 3, 4]:
         new_state = garlicsim.simulate(state, i)
