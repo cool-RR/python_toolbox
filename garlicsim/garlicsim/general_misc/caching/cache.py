@@ -9,6 +9,8 @@ See its documentation for more details.
 
 import functools
 
+from garlicsim.general_misc.third_party import decorator as decorator_module
+
 from garlicsim.general_misc.sleek_refs import SleekCallArgs
 from garlicsim.general_misc.infinity import infinity
 from garlicsim.general_misc import misc_tools
@@ -54,6 +56,7 @@ def cache(max_size=infinity):
 
     if max_size == infinity:
         
+        @decorator_module.decorator
         def decorator(function):
             # In case we're being given a function that is already cached:
             if hasattr(function, 'cache'): return function
@@ -78,6 +81,7 @@ def cache(max_size=infinity):
         
     else: # max_size < infinity
         
+        @decorator_module.decorator
         def decorator(function):
             # In case we're being given a function that is already cached:
             if hasattr(function, 'cache'): return function

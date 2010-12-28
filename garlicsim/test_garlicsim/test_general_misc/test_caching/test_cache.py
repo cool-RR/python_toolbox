@@ -144,7 +144,8 @@ def test_function_instead_of_max_size():
     
     
 def test_signature_perservation():
-    # blocktodo: test for more complex signatures
+    # blocktodo: test for more complex signatures, both with `max_size` and
+    # without.
     
     f = cache()(counting_func)
 
