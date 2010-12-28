@@ -52,7 +52,8 @@ def cache(max_size=infinity):
     if callable(max_size) and not misc_tools.is_number(max_size):
         raise TypeError('You entered the callable `%s` where you should have '
                         'entered the `max_size` for the cache. You probably '
-                        'used `@cache`, while you should have used `@cache()`')
+                        'used `@cache`, while you should have used '
+                        '`@cache()`' % max_size)
 
     if max_size == infinity:
         

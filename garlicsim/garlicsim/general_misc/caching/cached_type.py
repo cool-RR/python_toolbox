@@ -43,10 +43,12 @@ class CachedType(type):
     but if you ever want to use non-weakreffable arguments you are still able
     to. (Assuming you don't mind the memory leaks.)
     '''
+    
     def __new__(mcls, *args, **kwargs):
         result = super(CachedType, mcls).__new__(mcls, *args, **kwargs)
         result.__cache = {}
         return result
+
     
     def __call__(cls, *args, **kwargs):
         sleek_call_args = SleekCallArgs(

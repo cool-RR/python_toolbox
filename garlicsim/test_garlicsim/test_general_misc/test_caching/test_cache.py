@@ -134,6 +134,7 @@ def test_function_instead_of_max_size():
         confusedly_put_function_as_max_size()
     except TypeError, exception:
         assert type(exception) is TypeError
+        assert '%s' not in exception.args[0]
         assert exception.args[0] == (
             'You entered the callable `%s` where you should have '
             'entered the `max_size` for the cache. You probably '
