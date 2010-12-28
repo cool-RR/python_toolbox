@@ -7,7 +7,14 @@ This module defines the `` class.
 See its documentation for more information.
 '''
 
+from garlicsim.general_misc.third_party import decorator as decorator_module
 
-def trace(function):
-    def inner_function(*args, **kwargs)
+
+@decorator_module.decorator
+def count_calls(function, *args, **kwargs):
     
+    if not hasattr(function, 'call_count'):
+        function.call_count = 0
+        
+    function.call_count +=1
+    return function(*args, **kwargs)
