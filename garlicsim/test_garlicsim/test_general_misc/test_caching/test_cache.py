@@ -11,6 +11,7 @@ import weakref
 import nose.tools
 
 from garlicsim.general_misc.caching import cache
+from garlicsim.general_misc import cute_inspect
 
 
 def counting_func(a=1, b=2, *args, **kwargs):
@@ -140,5 +141,16 @@ def test_function_instead_of_max_size():
         )
     else:
         raise Exception('Should have gotten `TypeError`.')
+    
+    
+def test_signature_perservation():
+    # blocktodo: test for more complex signatures
+    
+    f = cache()(counting_func)
+
+    # Foreplay:
+    assert f() == f() == f(1, 2) == f(a=1, b=2)
+    
+    assert cute_inspect.getargspec(f) == cute_inspect.getargspec(counting_func)
     
     
