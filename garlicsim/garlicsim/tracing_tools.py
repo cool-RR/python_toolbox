@@ -7,5 +7,7 @@ This module defines the `` class.
 See its documentation for more information.
 '''
 
+
 def trace(function):
     def inner_function(*args, **kwargs)
+    
