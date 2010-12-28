@@ -154,4 +154,13 @@ def test_signature_perservation():
     
     assert cute_inspect.getargspec(f) == cute_inspect.getargspec(counting_func)
     
+    def my_func(qq, zz=1, yy=2, *args):
+        pass
+    
+    my_func_cached = cache(max_size=7)(my_func)
+    
+    assert cute_inspect.getargspec(my_func) == \
+        cute_inspect.getargspec(my_func_cached)
+    
+    
     

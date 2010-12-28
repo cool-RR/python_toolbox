@@ -5,7 +5,7 @@
 Defines the `cache` decorator.
 
 See its documentation for more details.
-'''
+'''# blocktodo: if zdecorator remains, rename to decorator
 
 import functools
 
@@ -56,14 +56,13 @@ def cache(max_size=infinity):
 
     if max_size == infinity:
         
-        @decorator_module.decorator
-        def decorator(function):
+        def zdecorator(function):
             # In case we're being given a function that is already cached:
             if hasattr(function, 'cache'): return function
             
             cache_dict = {}
             
-            def cached(*args, **kwargs):
+            def cached(function, *args, **kwargs):
                 sleek_call_args = \
                     SleekCallArgs(cache_dict, function, *args, **kwargs)
                 try:
@@ -72,23 +71,20 @@ def cache(max_size=infinity):
                     cached.cache[sleek_call_args] = value = \
                           function(*args, **kwargs)
                     return value
-                    
+                
             cached.cache = cache_dict
             
-            functools.update_wrapper(cached, function)
-            
-            return cached
+            return decorator_module.decorator(cached, function)
         
     else: # max_size < infinity
         
-        @decorator_module.decorator
-        def decorator(function):
+        def zdecorator(function): 
             # In case we're being given a function that is already cached:
             if hasattr(function, 'cache'): return function
             
             cache_dict = OrderedDict()
             
-            def cached(*args, **kwargs):
+            def cached(function, *args, **kwargs):
                 sleek_call_args = \
                     SleekCallArgs(cache_dict, function, *args, **kwargs)
                 try:
@@ -104,8 +100,6 @@ def cache(max_size=infinity):
                     
             cached.cache = cache_dict
             
-            functools.update_wrapper(cached, function)
-            
-            return cached
+            return decorator_module.decorator(cached, function)
         
-    return decorator
+    return zdecorator
