@@ -63,8 +63,6 @@ class TempValueSetter(object):
         
         self.setter(self.value)
 
-        # because of mac changing working directory:
-        
         # In `__exit__` we'll want to check if anyone changed the value of the
         # variable in the suite, which is unallowed. But we can't compare to
         # `.value`, because sometimes when you set a value to a variable, some
@@ -75,6 +73,8 @@ class TempValueSetter(object):
         # So here we record the value right after setting, and after any
         # possible processing the system did to it:
         self._value_right_after_setting = self.getter()
+        
+        return self
         
         
     def __exit__(self, *args, **kwargs):

@@ -5,7 +5,7 @@
 Defines the `cache` decorator.
 
 See its documentation for more details.
-'''# blocktodo: if zdecorator remains, rename to decorator
+'''
 
 import functools
 
@@ -57,7 +57,7 @@ def cache(max_size=infinity):
 
     if max_size == infinity:
         
-        def zdecorator(function):
+        def decorator(function):
             # In case we're being given a function that is already cached:
             if hasattr(function, 'cache'): return function
             
@@ -79,7 +79,7 @@ def cache(max_size=infinity):
         
     else: # max_size < infinity
         
-        def zdecorator(function): 
+        def decorator(function): 
             # In case we're being given a function that is already cached:
             if hasattr(function, 'cache'): return function
             
@@ -103,4 +103,4 @@ def cache(max_size=infinity):
             
             return decorator_module.decorator(cached, function)
         
-    return zdecorator
+    return decorator

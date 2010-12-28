@@ -52,10 +52,12 @@ class TempFunctionCallCounter(TempValueSetter):
         TempValueSetter.__init__(
             self,
             (first, second),
-            value=call_counting_function
+            value=self.call_counting_function
         )
         
         
-    call_count = property(lambda self: self.call_counting_function.call_count)
+    call_count = property(
+        lambda self: getattr(self.call_counting_function, 'call_count', 0)
+    )
     
     

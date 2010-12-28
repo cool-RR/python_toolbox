@@ -18,10 +18,19 @@ from garlicsim.general_misc import path_tools
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc.infinity import infinity
 from garlicsim.general_misc.nifty_collections import OrderedSet
+from garlicsim.general_misc.temp_value_setters import \
+    TempFunctionCallCounter
 
 import garlicsim
 
 import test_garlicsim
+
+class StateDeepcopyCounter(TempFunctionCallCounter):
+    def __init__(self):
+        TempFunctionCallCounter.__init__(
+            self,
+            garlicsim.misc.state_deepcopy.state_deepcopy
+        )
 
 
 def test():
@@ -73,20 +82,41 @@ def check(simpack, cruncher_type):
     state = simpack.State.create_root()
     assert state.clock == 0
     
-    state_1 = garlicsim.simulate(state)
+    
+    with StateDeepcopyCounter() as state_deepcopy_counter:
+        state_1 = garlicsim.simulate(state)
     assert state.clock == 0
     assert state_1.clock == 1
     assert state_1 is not state
     assert state_1.list is not state.list
     assert state_1.cross_process_persistent is state.cross_process_persistent
+    n_state_deepcopy_operations = state_deepcopy_counter.call_count
+    assert 1 <= n_state_deepcopy_operations <= 2
     
-    state_2 = garlicsim.simulate(state, 2)
+    
+    with StateDeepcopyCounter() as state_deepcopy_counter:
+        state_2 = garlicsim.simulate(state, 2)
     assert state.clock == 0
     assert state_1.clock == 1
     assert state_2.clock == 2
     assert state_2 is not state
     assert state_2.list is not state.list
     assert state_2.cross_process_persistent is state.cross_process_persistent
+    assert n_state_deepcopy_operations == state_deepcopy_counter.call_count
+
+    
+    with StateDeepcopyCounter() as state_deepcopy_counter:
+        state_10 = garlicsim.simulate(state, 10)
+    assert state.clock == 0
+    assert state_1.clock == 1
+    assert state_2.clock == 2
+    assert state_10.clock == 10
+    assert state_10 is not state
+    assert state_10 is not state_2
+    assert state_10.list is not state.list
+    assert state_10.list is not state_2.list
+    assert state_10.cross_process_persistent is state.cross_process_persistent
+    assert n_state_deepcopy_operations == state_deepcopy_counter.call_count
     
     
     prev_state = state

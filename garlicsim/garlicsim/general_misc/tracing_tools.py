@@ -10,11 +10,14 @@ See its documentation for more information.
 from garlicsim.general_misc.third_party import decorator as decorator_module
 
 
-@decorator_module.decorator
-def count_calls(function, *args, **kwargs):
+def _count_calls(function, *args, **kwargs):
     
     if not hasattr(function, 'call_count'):
         function.call_count = 0
         
     function.call_count +=1
     return function(*args, **kwargs)
+
+def count_calls(function):
+    decorated_function = decorator_module.decorator(_count_calls, function)
+    return decorated_function
