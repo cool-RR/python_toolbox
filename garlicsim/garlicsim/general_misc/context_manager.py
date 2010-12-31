@@ -9,6 +9,8 @@ See its documentation for more information.
 # todo: use tests of contextlib too
 # todo: test on pypy
 # todo: allow both generator and non-generator in `run`.
+# todo: for case of decorated generator, possibly make getstate (or whatever)
+# that will cause it to be pickled by reference to the decorated function
 
 import types
 
@@ -18,7 +20,34 @@ from garlicsim.general_misc import misc_tools
 from garlicsim.general_misc import monkeypatching_tools
 
 
+class ContextManagerTypeType(type):
+    
+    def __call__(cls, *args):
+        if len(args) == 1:
+            # decorating
+            (function,) = args
+            assert callable(function)
+            name = function.__name__
+            bases = (ContextManager,)
+            namespace_dict = {}
+            context_manager_type = \
+                type.__call__(cls, name, bases, {'manage_context': function})
+        
+            @monkeypatching_tools.monkeypatch_method(context_manager_type)
+            def __init__(self, *args, **kwargs):
+                self._args, self._kwargs = args, kwargs
+                self._generator = None
+                
+            return context_manager_type
+            
+        else:
+            return type.__call__(cls, *args)
+
+
 class ContextManagerType(type):
+    
+    __metaclass__ = ContextManagerTypeType
+    
     def __new__(mcls, *args, **kwargs):
         type_ = super(ContextManagerType, mcls).__new__(mcls, *args, **kwargs)
     
@@ -41,10 +70,10 @@ class ContextManagerType(type):
     
     def _use_generator_for_context_management(cls):
         
-        @monkeypatching_tools.monkeypatch_method(type_)
+        @monkeypatching_tools.monkeypatch_method(cls)
         def __enter__(self):
             assert self._generator is None
-            self._generator = self.manage_context()
+            self._generator = self.manage_context(self._args, self._kwargs)
             assert isinstance(self._generator, types.GeneratorType)
             
             try:
@@ -52,7 +81,7 @@ class ContextManagerType(type):
             except StopIteration:
                 raise RuntimeError("generator didn't yield")
         
-        @monkeypatching_tools.monkeypatch_method(type_)
+        @monkeypatching_tools.monkeypatch_method(cls)
         def __exit__(self, type_, value, traceback):
             
             assert isinstance(self._generator, types.GeneratorType)
@@ -87,10 +116,7 @@ class ContextManagerType(type):
                     #
                     if sys.exc_info()[1] is not value:
                         raise
-
-    def __call__(cls, *args, **kwargs):
-        1/0
-        pass
+                    
 
 class ContextManager(object):
     
