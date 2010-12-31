@@ -33,8 +33,8 @@ def get_mro_depth_of_method(type_, method_name):
     assert method is not None
 
     for deepest_index, base_class in reversed(list(enumerate(mro))):
-        if not hasattr(base_class, method_name) or \
-           getattr(base_class, method_name) != method:
+        if hasattr(base_class, method_name) and \
+           getattr(base_class, method_name) == method:
             break
         
     return deepest_index
