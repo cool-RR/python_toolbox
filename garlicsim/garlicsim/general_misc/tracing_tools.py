@@ -11,7 +11,7 @@ from garlicsim.general_misc.third_party import decorator as decorator_module
 
 
 def count_calls(function):
-    '''
+    ''''''
     def _count_calls(function, *args, **kwargs):
         decorated_function.call_count += 1
         return function(*args, **kwargs)
