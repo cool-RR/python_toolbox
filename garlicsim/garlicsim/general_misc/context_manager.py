@@ -22,17 +22,17 @@ class ContextManagerType(type):
     def __new__(mcls, *args, **kwargs):
         type_ = super(ContextManagerType, mcls).__new__(mcls, *args, **kwargs)
     
-        mro_depth_of_run = \
-            misc_tools.get_mro_depth_of_method(type_, 'run')
+        mro_depth_of_manage_context = \
+            misc_tools.get_mro_depth_of_method(type_, 'manage_context')
         mro_depth_of_enter = \
             misc_tools.get_mro_depth_of_method(type_, '__enter__')
         mro_depth_of_exit = \
             misc_tools.get_mro_depth_of_method(type_, '__exit__')
         
         assert mro_depth_of_enter == mro_depth_of_exit != \
-            mro_depth_of_run        
+            mro_depth_of_manage_context        
         
-        if mro_depth_of_run < mro_depth_of_enter:
+        if mro_depth_of_manage_context < mro_depth_of_enter:
             type_._use_generator_for_context_management()
         
         return result
@@ -43,7 +43,7 @@ class ContextManagerType(type):
         @monkeypatching_tools.monkeypatch_method(type_)
         def __enter__(self):
             assert self._generator is None
-            self._generator = self.run()
+            self._generator = self.manage_context()
             assert isinstance(self._generator, types.GeneratorType)
             
             try:
@@ -87,6 +87,9 @@ class ContextManagerType(type):
                     if sys.exc_info()[1] is not value:
                         raise
 
+    def __call__(cls, *args, **kwargs):
+        1/0
+        pass
 
 class ContextManager(object):
     
@@ -98,10 +101,16 @@ class ContextManager(object):
                 return function(*args, **kwargs)
         return decorator_module.decorator(inner, function)
     
+    
     def __enter__(self):
         pass
+
     
     def __exit__(self, *args, **kwargs):
+        pass
+    
+
+    def manage_context(self):
         pass
     
     
