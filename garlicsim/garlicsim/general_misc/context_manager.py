@@ -13,6 +13,7 @@ See its documentation for more information.
 # that will cause it to be pickled by reference to the decorated function
 
 import types
+import sys
 
 from garlicsim.general_misc.third_party import decorator as decorator_module
 
@@ -30,8 +31,12 @@ class ContextManagerTypeType(type):
             name = function.__name__
             bases = (ContextManager,)
             namespace_dict = {}
-            context_manager_type = \
-                type.__call__(cls, name, bases, {'manage_context': function})
+            context_manager_type = type.__call__(
+                cls,
+                name,
+                bases,
+                {'manage_context': staticmethod(function)}
+            )
         
             @monkeypatching_tools.monkeypatch_method(context_manager_type)
             def __init__(self, *args, **kwargs):
@@ -73,7 +78,7 @@ class ContextManagerType(type):
         @monkeypatching_tools.monkeypatch_method(cls)
         def __enter__(self):
             assert self._generator is None
-            self._generator = self.manage_context(self._args, self._kwargs)
+            self._generator = self.manage_context(*self._args, **self._kwargs)
             assert isinstance(self._generator, types.GeneratorType)
             
             try:
@@ -123,9 +128,9 @@ class ContextManager(object):
     __metaclass__ = ContextManagerType
     
     def __call__(self, function):
-        def inner(*args, **kwargs):
+        def inner(function_, *args, **kwargs):
             with self:
-                return function(*args, **kwargs)
+                return function_(*args, **kwargs)
         return decorator_module.decorator(inner, function)
     
     
