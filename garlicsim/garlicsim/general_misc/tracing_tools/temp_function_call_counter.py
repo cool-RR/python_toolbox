@@ -12,8 +12,8 @@ import sys
 from garlicsim.general_misc import cute_iter_tools
 from garlicsim.general_misc import address_tools
 
-from .temp_value_setter import TempValueSetter
-from garlicsim.general_misc.tracing_tools import count_calls
+from garlicsim.general_misc.temp_value_setters import TempValueSetter
+from .count_calls import count_calls
 
 
 class TempFunctionCallCounter(TempValueSetter):

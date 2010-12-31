@@ -18,8 +18,7 @@ from garlicsim.general_misc import path_tools
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc.infinity import infinity
 from garlicsim.general_misc.nifty_collections import OrderedSet
-from garlicsim.general_misc.temp_value_setters import \
-    TempFunctionCallCounter
+from garlicsim.general_misc.tracing_tools import TempFunctionCallCounter
 
 import garlicsim
 
