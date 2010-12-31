@@ -7,6 +7,8 @@ import re
 import math
 import types
 
+from garlicsim.general_misc import cute_iter_tools
+
 
 def is_subclass(candidate, base_class):
     '''
@@ -30,10 +32,9 @@ def get_mro_depth_of_method(type_, method_name):
     method = getattr(mro[0], method_name)
     assert method is not None
 
-    for deepest_index, base_class in enumerate(mro):
+    for deepest_index, base_class in reversed(list(enumerate(mro))):
         if not hasattr(base_class, method_name) or \
            getattr(base_class, method_name) != method:
-            deepest_index -= 1
             break
         
     return deepest_index
