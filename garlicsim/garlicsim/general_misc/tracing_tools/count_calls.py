@@ -2,7 +2,9 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-Defines tools for tracing `` class.
+Defines the `count_calls` decorator.
+
+See its documentation for more details.
 '''
 
 from garlicsim.general_misc.third_party import decorator as decorator_module

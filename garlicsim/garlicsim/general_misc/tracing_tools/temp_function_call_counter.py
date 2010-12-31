@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-Defines the `` class.
+Defines the `TempFunctionCallCounter` context manager.
 
 See its documentation for more details.
 '''
