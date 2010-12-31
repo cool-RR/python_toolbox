@@ -22,20 +22,21 @@ class ContextManagerType(type):
     def __new__(mcls, *args, **kwargs):
         type_ = super(ContextManagerType, mcls).__new__(mcls, *args, **kwargs)
     
-        mro_depth_of_manage_context = \
-            misc_tools.get_mro_depth_of_method(type_, 'manage_context')
-        mro_depth_of_enter = \
-            misc_tools.get_mro_depth_of_method(type_, '__enter__')
-        mro_depth_of_exit = \
-            misc_tools.get_mro_depth_of_method(type_, '__exit__')
+        if hasattr(type_, 'manage_context'):
+            mro_depth_of_manage_context = \
+                misc_tools.get_mro_depth_of_method(type_, 'manage_context')
+            mro_depth_of_enter = \
+                misc_tools.get_mro_depth_of_method(type_, '__enter__')
+            mro_depth_of_exit = \
+                misc_tools.get_mro_depth_of_method(type_, '__exit__')
+            
+            assert mro_depth_of_enter == mro_depth_of_exit != \
+                mro_depth_of_manage_context
+            
+            if mro_depth_of_manage_context < mro_depth_of_enter:
+                type_._use_generator_for_context_management()
         
-        assert mro_depth_of_enter == mro_depth_of_exit != \
-            mro_depth_of_manage_context        
-        
-        if mro_depth_of_manage_context < mro_depth_of_enter:
-            type_._use_generator_for_context_management()
-        
-        return result
+        return type_
 
     
     def _use_generator_for_context_management(cls):
@@ -107,10 +108,6 @@ class ContextManager(object):
 
     
     def __exit__(self, *args, **kwargs):
-        pass
-    
-
-    def manage_context(self):
         pass
     
     
