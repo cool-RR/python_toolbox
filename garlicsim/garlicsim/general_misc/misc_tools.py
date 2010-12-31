@@ -22,6 +22,23 @@ def is_subclass(candidate, base_class):
            issubclass(candidate, base_class)
 
 
+def get_mro_depth_of_method(type_, method_name):
+    assert isinstance(method_name, basestring)
+    mro = type_.mro()
+    
+    assert mro[0] is type_
+    method = getattr(mro[0], method_name)
+    assert method is not None
+
+    for deepest_index, base_class in enumerate(mro):
+        if not hasattr(base_class, method_name) or \
+           getattr(base_class, method_name) != method:
+            deepest_index -= 1
+            break
+        
+    return deepest_index
+
+
 def frange(start, finish=None, step=1.):
     '''
     Make a `list` containing an arithmetic progression of numbers.

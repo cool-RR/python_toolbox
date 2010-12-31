@@ -10,6 +10,13 @@ See its documentation for more information.
 from garlicsim.general_misc.third_party import decorator as decorator_module
 
 
+class ContextManagerType(type):
+    def __new__(mcls, *args, **kwargs):
+        type_ = super(ContextManagerType, mcls).__new__(mcls, *args, **kwargs)
+        mro
+        return result
+
+
 class ContextManager(object):
     
     def __call__(self, function):
