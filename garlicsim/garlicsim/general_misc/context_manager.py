@@ -8,6 +8,7 @@ See its documentation for more information.
 '''
 # todo: use tests of contextlib too
 # todo: test on pypy
+# todo: allow both generator and non-generator in `run`.
 
 import types
 
@@ -102,3 +103,5 @@ class ContextManager(object):
     
     def __exit__(self, *args, **kwargs):
         pass
+    
+    
