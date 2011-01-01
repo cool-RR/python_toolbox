@@ -19,4 +19,13 @@ def test():
     with TempRecursionLimitSetter(old_recursion_limit + 3):
         assert sys.getrecursionlimit() == old_recursion_limit + 3
     assert sys.getrecursionlimit() == old_recursion_limit
-    
+
+
+def test_as_decorator():
+    old_recursion_limit = sys.getrecursionlimit()
+    @TempRecursionLimitSetter(1234)
+    def f():
+        assert sys.getrecursionlimit() == 1234
+    assert sys.getrecursionlimit() == old_recursion_limit
+    f()
+    assert sys.getrecursionlimit() == old_recursion_limit

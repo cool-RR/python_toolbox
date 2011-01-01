@@ -78,4 +78,28 @@ def test_exception():
     finally:
         shutil.rmtree(temp_dir)
     
-    
+def test_as_decorator():
+    '''Test basic workings of `TempWorkingDirectorySetter`.'''
+    temp_dir = tempfile.mkdtemp(prefix='temp_garlicsim_')
+    try:
+        old_cwd = os.getcwd()
+        @TempWorkingDirectorySetter(temp_dir)
+        def f():
+            # Note that on Mac OS, the working dir will be phrased differently,
+            # so we can't do `assert os.getcwd() == temp_dir`. Instead we'll
+            # create a small file and check we can access it:
+            
+            with open('just_a_file', 'w') as my_file:
+                my_file.write("One two three.")
+            
+            with open('just_a_file', 'r') as my_file:
+                assert my_file.read() == "One two three."
+                
+        f()
+        
+        with open(os.path.join(temp_dir, 'just_a_file'), 'r') as my_file:
+            assert my_file.read() == "One two three."
+        
+        assert os.getcwd() == old_cwd
+    finally:
+        shutil.rmtree(temp_dir)

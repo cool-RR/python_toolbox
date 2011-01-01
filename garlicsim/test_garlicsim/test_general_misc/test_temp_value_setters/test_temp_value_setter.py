@@ -38,3 +38,19 @@ def test_setter_getter():
     with TempValueSetter((getter, setter), 2):
         assert a.x == 2
     assert a.x == 1
+    
+
+def test_as_decorator():
+    '''
+    Test `TempValueSetter` with variable inputted as `(obj, attribute_name)`.
+    '''
+    def a():
+        pass
+    a.x = 1
+    
+    @TempValueSetter((a, 'x'), 2)
+    def f():
+        assert a.x == 2
+    assert a.x == 1
+    f()
+    assert a.x == 1

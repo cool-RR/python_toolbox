@@ -168,15 +168,16 @@ def test_enter_exit():
     class MyContextManager(ContextManager):
         def __init__(self, value):
             self.value = value
+            self._former_values = []
         
         def __enter__(self):
             global flag
-            self._former_value = flag
+            self._former_values.append(flag)
             flag = self.value
             
         def __exit__(self, type_=None, value=None, traceback=None):
             global flag
-            flag = self._former_value
+            flag = self._former_values.pop()
     
     check_context_manager_type(MyContextManager,
                                self_returning=False,
@@ -188,15 +189,16 @@ def test_error_catching_enter_exit():
     class MyContextManager(ContextManager):
         def __init__(self, value):
             self.value = value
+            self._former_values = []
         
         def __enter__(self):
             global flag
-            self._former_value = flag
+            self._former_values.append(flag)
             flag = self.value
             
         def __exit__(self, type_=None, value=None, traceback=None):
             global flag, exception_type_caught
-            flag = self._former_value
+            flag = self._former_values.pop()
             if type_:
                 exception_type_caught = type_
                 return True
@@ -211,16 +213,17 @@ def test_self_returning_enter_exit():
     class MyContextManager(ContextManager):
         def __init__(self, value):
             self.value = value
+            self._former_values = []
         
         def __enter__(self):
             global flag
-            self._former_value = flag
+            self._former_values.append(flag)
             flag = self.value
             return self
             
         def __exit__(self, type_=None, value=None, traceback=None):
             global flag
-            flag = self._former_value
+            flag = self._former_values.pop()
     
     check_context_manager_type(MyContextManager,
                                self_returning=True,
@@ -232,16 +235,17 @@ def test_error_catching_self_returning_enter_exit():
     class MyContextManager(ContextManager):
         def __init__(self, value):
             self.value = value
+            self._former_values = []
         
         def __enter__(self):
             global flag
-            self._former_value = flag
+            self._former_values.append(flag)
             flag = self.value
             return self
             
         def __exit__(self, type_=None, value=None, traceback=None):
             global flag, exception_type_caught
-            flag = self._former_value
+            flag = self._former_values.pop()
             if type_:
                 exception_type_caught = type_
                 return True
