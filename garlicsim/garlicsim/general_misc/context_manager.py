@@ -18,7 +18,7 @@ See its documentation for more information.
 # `AbstractContextManagerType` elsewhere.
 
 
-
+from __future__ import with_statement
 
 import types
 import sys
@@ -131,7 +131,7 @@ class ContextManagerType(type):
                 try:
                     generator.throw(type_, value, traceback)
                     raise RuntimeError("generator didn't stop after throw()")
-                except StopIteration as exc:
+                except StopIteration, exc:
                     # Suppress the exception *unless* it's the same exception that
                     # was passed to throw().  This prevents a StopIteration
                     # raised inside the "with" statement from being suppressed
