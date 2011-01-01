@@ -308,11 +308,11 @@ def check_context_manager_type(context_manager_type,
         assert flag == 123
     assert flag is None
     
-    with context_manager_type(1) as context_manager_1:
+    with context_manager_type(1) as return_value_1:
         assert flag == 1
-        with context_manager_type(2) as context_manager_2:
+        with context_manager_type(2) as return_value_2:
             assert flag == 2
-            with context_manager_1:
+            with return_value_1 or context_manager_type(1):
                 assert flag == 1
             assert flag == 2
         assert flag == 1
@@ -422,11 +422,11 @@ def check_context_manager_type(context_manager_type,
 
     
     try:
-        with context_manager_type(1) as context_manager_1:
+        with context_manager_type(1) as return_value_1:
             assert flag == 1
-            with context_manager_type(2) as context_manager_2:
+            with context_manager_type(2) as return_value_2:
                 assert flag == 2
-                with context_manager_1:
+                with return_value_1 or ContextManager(1):
                     assert flag == 1
                     raise NotImplementedError
                 assert flag == 2

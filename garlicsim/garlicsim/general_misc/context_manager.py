@@ -14,8 +14,10 @@ See its documentation for more information.
 # todo: for case of decorated generator, possibly make getstate (or whatever)
 # that will cause it to be pickled by reference to the decorated function
 
-# blocktodo: must allow nested use, i.e. using context manager inside the with
-# clause which already uses it. make tests.
+# todo: make `ContextManager` an abstract class? Will save on doing
+# `AbstractContextManagerType` elsewhere.
+
+
 
 
 import types
@@ -52,7 +54,7 @@ class ContextManagerTypeType(type):
             @monkeypatching_tools.monkeypatch_method(context_manager_type)
             def __init__(self, *args, **kwargs):
                 self._args, self._kwargs = args, kwargs
-                self._generator = None
+                self._ContextManager__generators = []
                 
             return context_manager_type
             
@@ -88,29 +90,35 @@ class ContextManagerType(type):
         
         @monkeypatching_tools.monkeypatch_method(cls)
         def __enter__(self):
-            assert getattr(self, '_generator', None) is None
-            self._generator = self.manage_context(
+            if not hasattr(self, '_ContextManager__generators'):
+                self._ContextManager__generators = []
+            
+            new_generator = self.manage_context(
                 *getattr(self, '_args', ()),
                 **getattr(self, '_kwargs', {})
             )
-            assert isinstance(self._generator, types.GeneratorType)
+            assert isinstance(new_generator, types.GeneratorType)
+            self._ContextManager__generators.append(new_generator)
+            
             
             try:
-                generator_return_value = self._generator.next()
+                generator_return_value = new_generator.next()
                 return self if (generator_return_value is SelfHook) else \
                        generator_return_value
             
             except StopIteration:
                 raise RuntimeError("generator didn't yield")
         
+            
         @monkeypatching_tools.monkeypatch_method(cls)
         def __exit__(self, type_, value, traceback):
-            
-            assert isinstance(self._generator, types.GeneratorType)
+
+            generator = self._ContextManager__generators.pop()
+            assert isinstance(generator, types.GeneratorType)
             
             if type_ is None:
                 try:
-                    self._generator.next()
+                    generator.next()
                 except StopIteration:
                     return
                 else:
@@ -121,7 +129,7 @@ class ContextManagerType(type):
                     # tell if we get the same exception back
                     value = type_()
                 try:
-                    self._generator.throw(type_, value, traceback)
+                    generator.throw(type_, value, traceback)
                     raise RuntimeError("generator didn't stop after throw()")
                 except StopIteration as exc:
                     # Suppress the exception *unless* it's the same exception that
