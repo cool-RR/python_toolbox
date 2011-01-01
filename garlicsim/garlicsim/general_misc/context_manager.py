@@ -21,6 +21,11 @@ from garlicsim.general_misc import misc_tools
 from garlicsim.general_misc import monkeypatching_tools
 
 
+class SelfHook(object):
+    # todo: make uninstantiable
+    pass
+
+
 class ContextManagerTypeType(type):
     
     def __call__(cls, *args):
