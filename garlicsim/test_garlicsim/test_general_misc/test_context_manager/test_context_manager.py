@@ -25,55 +25,7 @@ def test_generator():
         finally:
             flag = former_value
             
-    assert flag is None
-    assert exception_caught is None
-    
-    with MyContextManager(7):
-        assert flag == 7
-        
-    assert flag is None
-    assert exception_caught is None
-    
-    my_context_manager = MyContextManager(1.1)
-    with my_context_manager:
-        assert flag == 1.1
-    
-    assert flag is None
-    assert exception_caught is None
-
-    @MyContextManager('meow')
-    def f():
-        assert flag == 'meow'
-        
-    f()
-    assert flag is None
-    assert exception_caught is None
-    
-    
-    with MyContextManager(7):
-        assert flag == 7
-        raise TypeError('ooga booga')
-    
-    assert type(exception_caught) is TypeError
-    assert exception_caught.args[0] == 'ooga booga'
-    exception_caught = None
-        
-    assert flag is None
-    assert exception_caught is None
-    
-    my_context_manager = MyContextManager(1.1)
-    with my_context_manager:
-        assert flag == 1.1
-    
-    assert flag is None
-    assert exception_caught is None
-
-    @MyContextManager('meow')
-    def f():
-        assert flag == 'meow'
-        
-    f()
-    assert flag is None
+    check_context_manager_type(MyContextManager)
     
 
     
@@ -92,22 +44,7 @@ def test_manage_context():
             finally:
                 flag = former_value
             
-    assert flag is None
-    with MyContextManager(7):
-        assert flag == 7
-    assert flag is None
-    
-    my_context_manager = MyContextManager(1.1)
-    with my_context_manager:
-        assert flag == 1.1
-    assert flag is None
-
-    @MyContextManager('meow')
-    def f():
-        assert flag == 'meow'
-        
-    f()
-    assert flag is None
+    check_context_manager_type(MyContextManager)
 
     
 def test_enter_exit():
@@ -125,22 +62,8 @@ def test_enter_exit():
             global flag
             flag = self._former_value
             
-    assert flag is None
-    with MyContextManager(7):
-        assert flag == 7
-    assert flag is None
     
-    my_context_manager = MyContextManager(1.1)
-    with my_context_manager:
-        assert flag == 1.1
-    assert flag is None
-
-    @MyContextManager('meow')
-    def f():
-        assert flag == 'meow'
-        
-    f()
-    assert flag is None
+    check_context_manager_type(MyContextManager)
 
     
 def check_context_manager_type(context_manager_type):
@@ -171,6 +94,7 @@ def check_context_manager_type(context_manager_type):
     assert flag is None
     assert exception_caught is None
     
+    # Now while raising exceptions:
     
     with context_manager_type(7):
         assert flag == 7
@@ -181,7 +105,6 @@ def check_context_manager_type(context_manager_type):
     exception_caught = None
         
     assert flag is None
-    assert exception_caught is None
     
     my_context_manager = context_manager_type(1.1)
     with my_context_manager:
@@ -193,6 +116,10 @@ def check_context_manager_type(context_manager_type):
     @context_manager_type('meow')
     def f():
         assert flag == 'meow'
+        1/0
         
     f()
     assert flag is None
+    assert type(exception_caught) is ZeroDivisionError
+    exception_caught = None
+    
