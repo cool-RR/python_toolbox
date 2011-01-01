@@ -290,6 +290,34 @@ def check_context_manager_type(context_manager_type,
     assert flag is None
     assert exception_type_caught is None
     
+    my_context_manager = context_manager_type(123)
+    assert flag is None
+    with my_context_manager:
+        assert flag == 123
+        with my_context_manager:
+            assert flag == 123
+            with my_context_manager:
+                assert flag == 123
+                with my_context_manager:
+                    assert flag == 123
+                    with my_context_manager:
+                        assert flag == 123
+                    assert flag == 123
+                assert flag == 123
+            assert flag == 123
+        assert flag == 123
+    assert flag is None
+    
+    with context_manager_type(1) as context_manager_1:
+        assert flag == 1
+        with context_manager_type(2) as context_manager_2:
+            assert flag == 2
+            with context_manager_1:
+                assert flag == 1
+            assert flag == 2
+        assert flag == 1
+    assert flag is None
+    
     # Now while raising exceptions:
     
     try:
@@ -359,4 +387,60 @@ def check_context_manager_type(context_manager_type,
     assert flag is None
     
     exception_type_caught = None
+    
+    
+    my_context_manager = context_manager_type(123)
+    assert flag is None
+    try:
+        with my_context_manager:
+            assert flag == 123
+            with my_context_manager:
+                assert flag == 123
+                with my_context_manager:
+                    assert flag == 123
+                    with my_context_manager:
+                        assert flag == 123
+                        with my_context_manager:
+                            assert flag == 123
+                            raise StopIteration
+                        assert flag == 123
+                    assert flag == 123
+                assert flag == 123
+            assert flag == 123
+            
+    except Exception, exception:
+        assert not error_catching
+        assert exception_type_caught is None
+        assert type(exception) is StopIteration
+        
+    else:
+        assert error_catching
+        assert exception_type_caught is StopIteration
+        exception_type_caught = None
+        
+    assert flag is None
+
+    
+    try:
+        with context_manager_type(1) as context_manager_1:
+            assert flag == 1
+            with context_manager_type(2) as context_manager_2:
+                assert flag == 2
+                with context_manager_1:
+                    assert flag == 1
+                    raise NotImplementedError
+                assert flag == 2
+            assert flag == 1
+            
+    except Exception, exception:
+        assert not error_catching
+        assert exception_type_caught is None
+        assert type(exception) is NotImplementedError
+        
+    else:
+        assert error_catching
+        assert exception_type_caught is NotImplementedError
+        exception_type_caught = None
+        
+    assert flag is None
     

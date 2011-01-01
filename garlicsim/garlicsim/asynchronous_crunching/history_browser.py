@@ -11,8 +11,9 @@ from __future__ import with_statement
 
 import threading
 
-import garlicsim.general_misc.binary_search as binary_search
-import garlicsim.general_misc.queue_tools as queue_tools
+from garlicsim.general_misc import binary_search
+from garlicsim.general_misc import queue_tools
+from garlicsim.general_misc import abc_tools
 import garlicsim.general_misc.third_party.decorator
 from garlicsim.general_misc.context_manager import ContextManager
 
@@ -52,6 +53,9 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser, ContextManager):
     for reading. That acquiring action can also be invoked by using
     `HistoryBrowser` as a context manager.
     '''
+    
+    __metaclass__ = abc_tools.AbstractContextManagerType
+    
     
     def __init__(self, cruncher):
         self.cruncher = cruncher
