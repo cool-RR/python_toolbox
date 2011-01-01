@@ -6,11 +6,14 @@ This module defines the `ContextManager` class.
 
 See its documentation for more information.
 '''
-# todo: use tests of contextlib too
 # todo: test on pypy
-# todo: allow both generator and non-generator in `run`.
+
+# todo: allow `__enter__` and `__exit__` on different level, just not different
+# sides of `manager_context`
+
 # todo: for case of decorated generator, possibly make getstate (or whatever)
 # that will cause it to be pickled by reference to the decorated function
+
 
 import types
 import sys

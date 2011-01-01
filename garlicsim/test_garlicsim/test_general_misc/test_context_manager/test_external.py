@@ -136,9 +136,10 @@ class TestContextDecorator(unittest2.TestCase):
     def test_contextdecorator_with_exception(self):
         context = MyContextManager()
 
-        with self.assertRaisesRegex(NameError, 'foo'):
+        def f():
             with context:
                 raise NameError('foo')
+        self.assertRaises(NameError, f)
         self.assertIsNotNone(context.exc)
         self.assertIs(context.exc[0], NameError)
 
@@ -170,8 +171,7 @@ class TestContextDecorator(unittest2.TestCase):
             self.assertTrue(context.started)
             raise NameError('foo')
 
-        with self.assertRaisesRegex(NameError, 'foo'):
-            test()
+        self.assertRaises(NameError, test)
         self.assertIsNotNone(context.exc)
         self.assertIs(context.exc[0], NameError)
 
@@ -207,7 +207,9 @@ class TestContextDecorator(unittest2.TestCase):
 
 
     def test_typo_enter(self):
-        class MyContextManager(ContextDecorator):
+        if garlicsim.__version_info__ <= (0, 6, 0):
+            raise nose.SkipTest
+        class MyContextManager(ContextManager):
             def __unter__(self):
                 pass
             def __exit__(self, *exc):
@@ -219,7 +221,9 @@ class TestContextDecorator(unittest2.TestCase):
 
 
     def test_typo_exit(self):
-        class MyContextManager(ContextDecorator):
+        if garlicsim.__version_info__ <= (0, 6, 0):
+            raise nose.SkipTest
+        class MyContextManager(ContextManager):
             def __enter__(self):
                 pass
             def __uxit__(self, *exc):
@@ -231,6 +235,7 @@ class TestContextDecorator(unittest2.TestCase):
 
 
     def test_contextdecorator_as_mixin(self):
+        
         class somecontext(object):
             started = False
             exc = None
@@ -242,7 +247,7 @@ class TestContextDecorator(unittest2.TestCase):
             def __exit__(self, *exc):
                 self.exc = exc
 
-        class MyContextManager(somecontext, ContextDecorator):
+        class MyContextManager(somecontext, ContextManager):
             pass
 
         context = MyContextManager()
