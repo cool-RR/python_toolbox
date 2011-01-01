@@ -5,10 +5,13 @@ from garlicsim.general_misc.context_manager import (ContextManager,
                                                     ContextManagerType)
 
 flag = None
+exception_caught = None
 
 
 def test_generator():
     
+    global exception_caught
+    assert exception_caught is None
     
     @ContextManagerType
     def MyContextManager(value):
@@ -17,18 +20,26 @@ def test_generator():
         flag = value
         try:
             yield
+        except Exception, exception:
+            exception_caught = exception
         finally:
             flag = former_value
             
     assert flag is None
+    assert exception_caught is None
+    
     with MyContextManager(7):
         assert flag == 7
+        
     assert flag is None
+    assert exception_caught is None
     
     my_context_manager = MyContextManager(1.1)
     with my_context_manager:
         assert flag == 1.1
+    
     assert flag is None
+    assert exception_caught is None
 
     @MyContextManager('meow')
     def f():
@@ -36,6 +47,34 @@ def test_generator():
         
     f()
     assert flag is None
+    assert exception_caught is None
+    
+    
+    with MyContextManager(7):
+        assert flag == 7
+        raise TypeError('ooga booga')
+    
+    assert type(exception_caught) is TypeError
+    assert exception_caught.args[0] == 'ooga booga'
+    exception_caught = None
+        
+    assert flag is None
+    assert exception_caught is None
+    
+    my_context_manager = MyContextManager(1.1)
+    with my_context_manager:
+        assert flag == 1.1
+    
+    assert flag is None
+    assert exception_caught is None
+
+    @MyContextManager('meow')
+    def f():
+        assert flag == 'meow'
+        
+    f()
+    assert flag is None
+    
 
     
 def test_manage_context():
@@ -47,9 +86,9 @@ def test_manage_context():
         def manage_context(self):
             global flag
             former_value = flag
-            flag = value
+            flag = self.value
             try:
-                yield my_context_manager
+                yield self
             finally:
                 flag = former_value
             
@@ -70,20 +109,21 @@ def test_manage_context():
     f()
     assert flag is None
 
+    
 def test_enter_exit():
     
-    class MyClassGenerator(ContextManager):
+    class MyContextManager(ContextManager):
         def __init__(self, value):
             self.value = value
         
         def __enter__(self):
             global flag
-            former_value = flag
-            flag = value
+            self._former_value = flag
+            flag = self.value
             
         def __exit__(self, *args, **kwargs):
             global flag
-            flag = former_value
+            flag = self._former_value
             
     assert flag is None
     with MyContextManager(7):
@@ -103,3 +143,56 @@ def test_enter_exit():
     assert flag is None
 
     
+def check_context_manager_type(context_manager_type):
+    
+    global flag, exception_caught
+    
+    assert flag is None
+    assert exception_caught is None
+    
+    with context_manager_type(7):
+        assert flag == 7
+        
+    assert flag is None
+    assert exception_caught is None
+    
+    my_context_manager = context_manager_type(1.1)
+    with my_context_manager:
+        assert flag == 1.1
+    
+    assert flag is None
+    assert exception_caught is None
+
+    @context_manager_type('meow')
+    def f():
+        assert flag == 'meow'
+        
+    f()
+    assert flag is None
+    assert exception_caught is None
+    
+    
+    with context_manager_type(7):
+        assert flag == 7
+        raise TypeError('ooga booga')
+    
+    assert type(exception_caught) is TypeError
+    assert exception_caught.args[0] == 'ooga booga'
+    exception_caught = None
+        
+    assert flag is None
+    assert exception_caught is None
+    
+    my_context_manager = context_manager_type(1.1)
+    with my_context_manager:
+        assert flag == 1.1
+    
+    assert flag is None
+    assert exception_caught is None
+
+    @context_manager_type('meow')
+    def f():
+        assert flag == 'meow'
+        
+    f()
+    assert flag is None

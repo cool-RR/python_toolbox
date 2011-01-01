@@ -77,8 +77,11 @@ class ContextManagerType(type):
         
         @monkeypatching_tools.monkeypatch_method(cls)
         def __enter__(self):
-            assert self._generator is None
-            self._generator = self.manage_context(*self._args, **self._kwargs)
+            assert getattr(self, '_generator', None) is None
+            self._generator = self.manage_context(
+                *getattr(self, '_args', ()),
+                **getattr(self, '_kwargs', {})
+            )
             assert isinstance(self._generator, types.GeneratorType)
             
             try:
@@ -125,7 +128,9 @@ class ContextManagerType(type):
 
 class ContextManager(object):
     
+    
     __metaclass__ = ContextManagerType
+
     
     def __call__(self, function):
         def inner(function_, *args, **kwargs):
@@ -138,7 +143,7 @@ class ContextManager(object):
         pass
 
     
-    def __exit__(self, *args, **kwargs):
+    def __exit__(self, type_=None, value=None, traceback=None):
         pass
     
     
