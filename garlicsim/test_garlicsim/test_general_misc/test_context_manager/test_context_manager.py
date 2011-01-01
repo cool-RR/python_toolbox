@@ -6,7 +6,7 @@ from garlicsim.general_misc.context_manager import (ContextManager,
                                                     SelfHook)
 
 flag = None
-exception_caught = None
+exception_type_caught = None
 
 
 
@@ -14,7 +14,7 @@ exception_caught = None
 def test_generator():
     @ContextManagerType
     def MyContextManager(value):
-        global flag, exception_caught
+        global flag, exception_type_caught
         former_value = flag
         flag = value
         try:
@@ -31,13 +31,13 @@ def test_error_catching_generator():
     
     @ContextManagerType
     def MyContextManager(value):
-        global flag, exception_caught
+        global flag, exception_type_caught
         former_value = flag
         flag = value
         try:
             yield
         except Exception, exception:
-            exception_caught = exception
+            exception_type_caught = type(exception)
         finally:
             flag = former_value
             
@@ -49,7 +49,7 @@ def test_error_catching_generator():
 def test_self_returning_generator():
     @ContextManagerType
     def MyContextManager(value):
-        global flag, exception_caught
+        global flag, exception_type_caught
         former_value = flag
         flag = value
         try:
@@ -66,19 +66,19 @@ def test_self_returning_generator():
 def test_self_returning_error_catching_generator():
     @ContextManagerType
     def MyContextManager(value):
-        global flag, exception_caught
+        global flag, exception_type_caught
         former_value = flag
         flag = value
         try:
             yield SelfHook
         except Exception, exception:
-            exception_caught = exception
+            exception_type_caught = type(exception)
         finally:
             flag = former_value
             
     check_context_manager_type(MyContextManager,
                                self_returning=True,
-                               error_catching=False)    
+                               error_catching=True)
     
 def test_manage_context():
     
@@ -87,7 +87,7 @@ def test_manage_context():
             self.value = value
         
         def manage_context(self):
-            global flag, exception_caught
+            global flag, exception_type_caught
             former_value = flag
             flag = self.value
             try:
@@ -107,13 +107,13 @@ def test_error_catching_manage_context():
             self.value = value
         
         def manage_context(self):
-            global flag, exception_caught
+            global flag, exception_type_caught
             former_value = flag
             flag = self.value
             try:
                 yield
             except Exception, exception:
-                exception_caught = exception
+                exception_type_caught = type(exception)
             finally:
                 flag = former_value
             
@@ -148,13 +148,13 @@ def test_self_returning_error_catching_manage_context():
             self.value = value
         
         def manage_context(self):
-            global flag, exception_caught
+            global flag, exception_type_caught
             former_value = flag
             flag = self.value
             try:
                 yield self
             except Exception, exception:
-                exception_caught = exception
+                exception_type_caught = type(exception)
             finally:
                 flag = former_value
             
@@ -195,10 +195,10 @@ def test_error_catching_enter_exit():
             flag = self.value
             
         def __exit__(self, type_=None, value=None, traceback=None):
-            global flag, exception_caught
+            global flag, exception_type_caught
             flag = self._former_value
             if type_:
-                exception_caught = value
+                exception_type_caught = type_
                 return True
     
     check_context_manager_type(MyContextManager,
@@ -240,10 +240,10 @@ def test_error_catching_self_returning_enter_exit():
             return self
             
         def __exit__(self, type_=None, value=None, traceback=None):
-            global flag, exception_caught
+            global flag, exception_type_caught
             flag = self._former_value
             if type_:
-                exception_caught = value
+                exception_type_caught = type_
                 return True
     
     check_context_manager_type(MyContextManager,
@@ -255,10 +255,10 @@ def check_context_manager_type(context_manager_type,
                                self_returning,
                                error_catching):
     
-    global flag, exception_caught
+    global flag, exception_type_caught
     
     assert flag is None
-    assert exception_caught is None
+    assert exception_type_caught is None
     
     with context_manager_type(7) as return_value:
         assert flag == 7
@@ -268,7 +268,7 @@ def check_context_manager_type(context_manager_type,
             assert return_value is None
         
     assert flag is None
-    assert exception_caught is None
+    assert exception_type_caught is None
     
     my_context_manager = context_manager_type(1.1)
     assert isinstance(my_context_manager, context_manager_type)
@@ -280,7 +280,7 @@ def check_context_manager_type(context_manager_type,
             assert return_value is None
     
     assert flag is None
-    assert exception_caught is None
+    assert exception_type_caught is None
 
     @context_manager_type('meow')
     def f():
@@ -288,7 +288,7 @@ def check_context_manager_type(context_manager_type,
         
     f()
     assert flag is None
-    assert exception_caught is None
+    assert exception_type_caught is None
     
     # Now while raising exceptions:
     
@@ -304,15 +304,12 @@ def check_context_manager_type(context_manager_type,
         
     except Exception, exception:
         assert not error_catching
-        assert exception_caught is None
         assert type(exception) is TypeError
-        assert exception.args[0] == 'ooga booga'
         
     else:
         assert error_catching
-        assert type(exception_caught) is TypeError
-        assert exception_caught.args[0] == 'ooga booga'
-        exception_caught = None
+        assert exception_type_caught is TypeError
+        exception_type_caught = None
         
     assert flag is None
     
@@ -329,17 +326,17 @@ def check_context_manager_type(context_manager_type,
     
     except Exception, exception:
         assert not error_catching
-        assert exception_caught is None
+        assert exception_type_caught is None
         assert type(exception) is KeyError
         
     else:
         assert error_catching
-        assert type(exception_caught) is KeyError
-        exception_caught = None
+        assert exception_type_caught is KeyError
+        exception_type_caught = None
         
     
     assert flag is None
-    assert exception_caught is None
+    assert exception_type_caught is None
 
     @context_manager_type('meow')
     def f():
@@ -351,17 +348,15 @@ def check_context_manager_type(context_manager_type,
         f()
     except Exception, exception:
         assert not error_catching
-        assert exception_caught is None
+        assert exception_type_caught is None
         assert type(exception) is ZeroDivisionError
         
     else:
         assert error_catching
-        assert (type(exception_caught) is ZeroDivisionError) or \
-               (isinstance(exception_caught, basestring) and
-                'zero' in exception_caught)
-        exception_caught = None
+        assert exception_type_caught is ZeroDivisionError
+        exception_type_caught = None
         
     assert flag is None
     
-    exception_caught = None
+    exception_type_caught = None
     
