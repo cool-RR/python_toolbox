@@ -90,7 +90,10 @@ class ContextManagerType(type):
             assert isinstance(self._generator, types.GeneratorType)
             
             try:
-                return self._generator.next()
+                generator_return_value = self._generator.next()
+                return self if (generator_return_value is SelfHook) else \
+                       generator_return_value
+            
             except StopIteration:
                 raise RuntimeError("generator didn't yield")
         
