@@ -4,6 +4,7 @@
 '''Testing module for `garlicsim.asynchronous_crunching`.'''
 
 from __future__ import division
+from __future__ import with_statement
 
 import os
 import types

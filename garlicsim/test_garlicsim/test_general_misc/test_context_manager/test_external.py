@@ -1,5 +1,7 @@
 """Unit tests for contextlib.py, and other context managers."""
 
+from __future__ import with_statement
+
 import sys
 
 import nose
@@ -71,7 +73,7 @@ class ContextManagerTestCase(unittest2.TestCase):
             state.append(1)
             try:
                 yield 42
-            except ZeroDivisionError as e:
+            except ZeroDivisionError, e:
                 state.append(e.args[0])
                 self.assertEqual(state, [1, 42, 999])
         with woohoo() as x:
@@ -101,7 +103,7 @@ class ContextManagerTestCase(unittest2.TestCase):
         self.assertEqual(baz.__name__,'baz')
         self.assertEqual(baz.foo, 'bar')
 
-    @unittest2.skipIf(sys.flags.optimize >= 2,
+    @unittest2.skipIf(hasattr(sys, 'flags') and sys.flags.optimize >= 2,
                       "Docstrings are omitted with -O2 and above")
     def test_contextmanager_doc_attrib(self):
         if garlicsim.__version_info__ <= (0, 6, 1):
