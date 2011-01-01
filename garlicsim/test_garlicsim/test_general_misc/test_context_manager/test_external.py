@@ -82,6 +82,8 @@ class ContextManagerTestCase(unittest2.TestCase):
         self.assertEqual(state, [1, 42, 999])
 
     def _create_contextmanager_attribs(self):
+        if garlicsim.__version_info__ <= (0, 6, 0):
+            raise nose.SkipTest
         def attribs(**kw):
             def decorate(func):
                 for k,v in kw.items():
