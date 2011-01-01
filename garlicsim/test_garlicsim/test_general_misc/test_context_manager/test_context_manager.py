@@ -426,7 +426,7 @@ def check_context_manager_type(context_manager_type,
             assert flag == 1
             with context_manager_type(2) as return_value_2:
                 assert flag == 2
-                with return_value_1 or ContextManager(1):
+                with return_value_1 or context_manager_type(1):
                     assert flag == 1
                     raise NotImplementedError
                 assert flag == 2
