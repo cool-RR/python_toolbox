@@ -15,7 +15,7 @@ def test_generator():
     
     @ContextManagerType
     def MyContextManager(value):
-        global flag
+        global flag, exception_caught
         former_value = flag
         flag = value
         try:
@@ -36,11 +36,13 @@ def test_manage_context():
             self.value = value
         
         def manage_context(self):
-            global flag
+            global flag, exception_caught
             former_value = flag
             flag = self.value
             try:
                 yield self
+            except Exception, exception:
+                exception_caught = exception
             finally:
                 flag = former_value
             
@@ -58,10 +60,12 @@ def test_enter_exit():
             self._former_value = flag
             flag = self.value
             
-        def __exit__(self, *args, **kwargs):
-            global flag
+        def __exit__(self, type_=None, value=None, traceback=None):
+            global flag, exception_caught
             flag = self._former_value
-            
+            if type_:
+                exception_caught = value
+                return True
     
     check_context_manager_type(MyContextManager)
 
@@ -120,6 +124,8 @@ def check_context_manager_type(context_manager_type):
         
     f()
     assert flag is None
-    assert type(exception_caught) is ZeroDivisionError
+    assert (type(exception_caught) is ZeroDivisionError) or \
+           (isinstance(exception_caught, basestring) and
+            'zero' in exception_caught)
     exception_caught = None
     
