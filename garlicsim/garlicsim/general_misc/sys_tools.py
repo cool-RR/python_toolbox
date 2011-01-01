@@ -39,7 +39,7 @@ class OutputCapturer(ContextManager):
         self.output = self.string_io.getvalue()
 
         
-class TempSysPathAdder(object):
+class TempSysPathAdder(ContextManager):
     '''
     Context manager for temporarily adding paths to `sys.path`.
     

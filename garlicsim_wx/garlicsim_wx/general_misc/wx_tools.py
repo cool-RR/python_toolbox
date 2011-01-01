@@ -11,6 +11,7 @@ import colorsys
 import wx
 
 from garlicsim.general_misc import caching
+from garlicsim.general_misc.context_manager import ContextManager
 from garlicsim_wx.general_misc import color_tools
 
 
@@ -202,18 +203,18 @@ def color_replaced_bitmap(bitmap, old_rgb, new_rgb):
     return wx.BitmapFromImage(image)
     
 
-class WindowFreezer(object):
+class WindowFreezer(ContextManager):
     '''Context manager for having `window` frozen while the suite executes.'''
     def __init__(self, window):
         assert isinstance(window, wx.Window)
         self.window = window
-    def __enter__(self, *args, **kwargs):
+    def __enter__(self):
         self.window.Freeze()
     def __exit__(self, *args, **kwargs):
         self.window.Thaw()
         
         
-class CursorChanger(object):
+class CursorChanger(ContextManager):
     '''Context manager for showing specified cursor while suite executes.'''
     def __init__(self, window, cursor):
         '''
@@ -227,7 +228,7 @@ class CursorChanger(object):
         self.cursor = cursor if isinstance(cursor, wx.Cursor) \
             else wx.StockCursor(cursor)
         self.old_cursor = window.GetCursor()
-    def __enter__(self, *args, **kwargs):
+    def __enter__(self):
         self.window.SetCursor(self.cursor)
     def __exit__(self, *args, **kwargs):
         self.window.SetCursor(self.old_cursor)

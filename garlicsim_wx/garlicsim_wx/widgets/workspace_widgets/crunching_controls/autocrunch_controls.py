@@ -13,10 +13,11 @@ import wx
 
 import garlicsim, garlicsim_wx
 
+from garlicsim.general_misc.context_manager import ContextManager
 from garlicsim_wx.general_misc import wx_tools
 
 
-class Freezer(object):
+class Freezer(ContextManager):
     '''
     Freezer for not changing the `SpinCtrl`'s text value.
 
@@ -27,10 +28,13 @@ class Freezer(object):
     automatically select all the text in the `SpinCtrl`, which is really
     annoying if you're just typing in it.
     '''
+    
     def __init__(self, autocrunch_controls):
         self.autocrunch_controls = autocrunch_controls
-    def __enter__(self, *args, **kwargs):
+        
+    def __enter__(self):
         self.autocrunch_controls.frozen += 1
+        
     def __exit__(self, *args, **kwargs):
         self.autocrunch_controls.frozen -= 1
         

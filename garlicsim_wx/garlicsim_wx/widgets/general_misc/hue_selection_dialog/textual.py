@@ -13,6 +13,7 @@ from __future__ import with_statement
 import wx
 
 from garlicsim_wx.general_misc import wx_tools
+from garlicsim.general_misc.context_manager import ContextManager
 
 
 def ratio_to_round_degrees(ratio):
@@ -23,7 +24,7 @@ def degrees_to_ratio(degrees):
     return degrees / 360
 
 
-class Freezer(object):
+class Freezer(ContextManager):
     '''
     Freezer for not changing the `Textual`'s text value.
 
@@ -36,7 +37,7 @@ class Freezer(object):
     '''
     def __init__(self, textual):
         self.textual = textual
-    def __enter__(self, *args, **kwargs):
+    def __enter__(self):
         self.textual.frozen += 1
     def __exit__(self, *args, **kwargs):
         self.textual.frozen -= 1

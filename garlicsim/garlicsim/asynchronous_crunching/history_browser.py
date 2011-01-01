@@ -14,6 +14,7 @@ import threading
 import garlicsim.general_misc.binary_search as binary_search
 import garlicsim.general_misc.queue_tools as queue_tools
 import garlicsim.general_misc.third_party.decorator
+from garlicsim.general_misc.context_manager import ContextManager
 
 import garlicsim.misc
 from .obsolete_cruncher_error import ObsoleteCruncherError
@@ -30,7 +31,7 @@ def with_self(method, *args, **kwargs):
         return method(*args, **kwargs)
 
     
-class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
+class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser, ContextManager):
     '''
     A device for requesting information about the history of the simulation.
     
@@ -59,14 +60,9 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         self.tree_lock = self.project.tree.lock
     
         
-    def __enter__(self):
-        '''Acquire the lock of the project's tree for reading.'''
-        self.tree_lock.acquireRead()
-
-        
-    def __exit__(self, *args, **kwargs):
-        '''Release the lock of the project's tree.'''
-        self.tree_lock.release()
+    def manage_context(self):
+        with self.tree_lock.read:
+            yield self
 
         
     @with_self

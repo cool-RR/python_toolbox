@@ -11,11 +11,12 @@ from __future__ import with_statement
 
 import itertools
 from garlicsim.general_misc import cute_iter_tools
+from garlicsim.general_misc.context_manager import ContextManager
 
 from .emitter import Emitter
 
 
-class FreezeCacheRebuildingContextManager(object):
+class FreezeCacheRebuildingContextManager(ContextManager):
     '''
     Context manager for freezing the cache rebuilding in an emitter system.
     
@@ -39,19 +40,19 @@ class FreezeCacheRebuildingContextManager(object):
             
 class EmitterSystem(object):
     '''
-    A system of emitters, representing a set of possible events in a program
+    A system of emitters, representing a set of possible events in a program.
     
-    EmitterSystem offers a few advantages over using plain emitters.
+    `EmitterSystem` offers a few advantages over using plain emitters.
     
     There are the `bottom_emitter` and `top_emitter`, which allow, respectively,
     to keep track of each `emit`ting that goes on, and to generate an `emit`ting
     that affects all emitters in the system.
     
-    The EmitterSystem also offers a context manager, `.freeze_cache_rebuilding`.
-    When you do actions using this context manager, the emitters will not
-    rebuild their cache when changing their inputs/outputs. When the outermost
-    context manager has exited, all the caches for these emitters will get
-    rebuilt.
+    The `EmitterSystem` also offers a context manager,
+    `.freeze_cache_rebuilding`. When you do actions using this context manager,
+    the emitters will not rebuild their cache when changing their
+    inputs/outputs. When the outermost context manager has exited, all the
+    caches for these emitters will get rebuilt.
     '''
     # possible future idea: there is the idea of optimizing by cutting redundant
     # links between boxes. I'm a bit suspicious of it. The next logical step is
@@ -88,6 +89,7 @@ class EmitterSystem(object):
         emitter = Emitter(self, inputs, outputs, name)
         self.emitters.add(emitter)
         return emitter
+
     
     def remove_emitter(self, emitter):
         '''
@@ -96,6 +98,7 @@ class EmitterSystem(object):
         with self.freeze_cache_rebuilding:
             emitter.disconnect_from_all()
         self.emitters.remove(emitter)
+        
         
     def _recalculate_all_cache(self):
         '''Recalculate the cache for all the emitters.'''
