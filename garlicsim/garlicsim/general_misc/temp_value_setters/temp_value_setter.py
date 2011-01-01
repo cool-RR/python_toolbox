@@ -8,9 +8,10 @@ See its documentation for more details.
 '''
 
 from garlicsim.general_misc import address_tools
+from garlicsim.general_misc.context_manager import ContextManager
 
 
-class TempValueSetter(object):
+class TempValueSetter(ContextManager):
     '''
     Context manager for temporarily setting a value to a variable.
     

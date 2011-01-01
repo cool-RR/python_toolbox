@@ -11,10 +11,11 @@ import sys
 import cStringIO
 import subprocess
 
+from garlicsim.general_misc.context_manager import ContextManager
 from garlicsim.general_misc.temp_value_setters import TempValueSetter
 
 
-class OutputCapturer(object):
+class OutputCapturer(ContextManager):
     '''
     Context manager for catching all system output generated during suite.
 
@@ -31,13 +32,10 @@ class OutputCapturer(object):
         self._temp_stdout_setter = \
             TempValueSetter((sys, 'stdout'), self.string_io)
         self.output = None
-    
-    def __enter__(self):
-        self._temp_stdout_setter.__enter__()
-        return self
-    
-    def __exit__(self, *args, **kwargs):
-        self._temp_stdout_setter.__exit__(*args, **kwargs)
+        
+    def manage_context(self):
+        with self._temp_stdout_setter:
+            yield self
         self.output = self.string_io.getvalue()
 
         

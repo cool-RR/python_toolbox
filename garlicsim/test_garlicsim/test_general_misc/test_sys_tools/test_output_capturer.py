@@ -23,4 +23,3 @@ def test_nested():
             print('456')
         assert output_capturer_2.output == '456\n'
     assert output_capturer_1.output == '123\n'
-        

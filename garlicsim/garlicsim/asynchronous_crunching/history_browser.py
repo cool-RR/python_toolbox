@@ -59,13 +59,13 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser):
         self.tree_lock = self.project.tree.lock
     
         
-    def __enter__(self, *args, **kwargs):
+    def __enter__(self):
         '''Acquire the lock of the project's tree for reading.'''
         self.tree_lock.acquireRead()
 
         
     def __exit__(self, *args, **kwargs):
-        '''Release the project's tree_lock.'''
+        '''Release the lock of the project's tree.'''
         self.tree_lock.release()
 
         
