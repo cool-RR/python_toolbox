@@ -4,19 +4,102 @@
 '''
 Defines the `ContextManager` and `ContextManagerType` classes.
 
-These classes allow greater freedom when using context managers; See
-`ContextDecorator`'s documentation for more details, or `ContextManagerType`'s
-documentation for more details about creating a context manager from a
-generator.
+These classes allow for greater freedom both when (a) defining context managers
+and when (b) using them.
+
+Inherit all your context managers from `ContextManager` (or decorate your
+generator functions with `ContextManagerType`) to enjoy all the benefits
+described below.
+
+
+Defining context managers
+-------------------------
+
+There are 3 different ways in which context managers can be defined, and each
+has their own advantages and disadvantages over the others.
+
+ 1. The classic way to define a context manager is to define a class with 
+    `__enter__` and `__exit__` methods. This is allowed, and if you do this
+    you should still inherit from `ContextManager`. Example:
+     
+        class MyContextManager(ContextManager):
+            def __enter__(self):
+                pass # preparation
+            def __exit__(self, type_=None, value=None, traceback=None):
+                pass # cleanup
+     
+ 2. As a decorated generator, like so:
+    
+        @ContextManagerType
+        def MyContextManager():
+            try:
+                yield
+            finally:
+                pass # clean-up
+                
+    This usage is nothing new; It's also available when using the standard
+    library's `contextlib.contextmanager` decorator. One thing that is allowed
+    here that `contextlib` doesn't allow is to yield the context manager itself
+    by doing `yield SelfHook`.
+    
+ 3. The third and novel way is by defining a class with a `manage_context`
+    method which returns a decorator. Example:
+    
+        class MyContextManager(ContextManager):
+            def manage_context(self):
+                do_some_prepartion()
+                try:
+                    with some_lock:
+                        yield self
+                finally:
+                    do_some_cleanup()
+                    
+    This approach is sometimes cleaner than defining `__enter__` and
+    `__exit__`; Especially when using another context manager inside
+    `manage_context`. In our example we did `with some_lock` in our
+    `manage_context`, which is shorter and more idiomatic than calling
+    `some_lock.__enter__` in an `__enter__` method and `some_lock.__exit__` in
+    an `__exit__` method.
+    
+    
+These were the different ways of *defining* a context manager. Now let's see
+the different ways of *using* a context manager:
+
+
+Using context managers
+----------------------
+
+There are 2 different ways in which context managers can be used:
+
+ 1. The plain old honest-to-Guido `with` keyword:
+ 
+       with MyContextManager() as my_context_manager:
+           do_stuff()
+           
+ 2. As a decorator to a function
+ 
+        @MyContextManager()
+        def do_stuff():
+           pass # doing stuff
+           
+    When the `do_stuff` function will be called, the context manager will be
+    used. This functionality is also available in the standard library of
+    Python 3.2+ by using `contextlib.ContextDecorator`, but here it is combined
+    with all the other goodies given by `ContextManager`.
+
+    
+That's it. Inherit all your context managers from `ContextManager` (or decorate
+your generator functions with `ContextManagerType`) to enjoy all these
+benefits.
 '''
 
-# blocktodo: make overriding tests: `manage_context` overriding
-# `manage_context`, `manage_context` overriding enter/exit, enter/exit
-# overriding enter/exit, enter/exit overriding `manage_context`, enter
-# overriding `manage_context` (should raise error) etc.
+# blocktodo: make tests: `__enter__` overriding `manage_context` (should raise error)
+# etc.
 
 # blocktodo: allow `__enter__` and `__exit__` on different level, just not
-# different sides of `manage_context`
+# different sides of `manage_context`. make tests.
+
+# blocktodo: test signature perservation
 
 # todo: for case of decorated generator, possibly make getstate (or whatever)
 # that will cause it to be pickled by reference to the decorated function
@@ -125,7 +208,9 @@ class ContextManagerType(abc.ABCMeta):
         '''
         Create either `ContextManager` itself or a subclass of it.
         
-        If a `manage_context` method is available
+        For subclasses of `ContextManager`, if a `manage_context` method is
+        available, we will use `__enter__` and `__exit__` that will use the
+        generator returned by `manage_context`.
         '''
         if 'manage_context' in namespace:
             manage_context = namespace['manage_context']
@@ -144,9 +229,9 @@ class ContextManagerType(abc.ABCMeta):
         )
         
     
-                    
-
 class ContextManager(object):
+    '''
+    '''
     
     
     __metaclass__ = ContextManagerType

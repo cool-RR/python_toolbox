@@ -64,7 +64,6 @@ def test_self_returning_generator():
                                error_catching=False)
     
 
-
 def test_self_returning_error_catching_generator():
     @ContextManagerType
     def MyContextManager(value):
@@ -165,6 +164,97 @@ def test_self_returning_error_catching_manage_context():
                                error_catching=True)
 
     
+def test_manage_context_overriding_generator():
+    
+    @ContextManagerType
+    def MyBaseContextManager(value):
+        raise Exception('This code is supposed to be overridden.')
+        yield
+    
+    class MyContextManager(MyBaseContextManager):
+        def __init__(self, value):
+            self.value = value
+        
+        def manage_context(self):
+            global flag, exception_type_caught
+            former_value = flag
+            flag = self.value
+            try:
+                yield self
+            except Exception, exception:
+                exception_type_caught = type(exception)
+            finally:
+                flag = former_value
+            
+    check_context_manager_type(MyContextManager,
+                               self_returning=True,
+                               error_catching=True)
+    
+    
+def test_manage_context_overriding_manage_context():
+        
+    class MyBaseContextManager(ContextManager):
+        def __init__(self, value):
+            self.value = value
+        
+        def manage_context(self):
+            raise Exception('This code is supposed to be overridden.')
+            yield
+            
+    class MyContextManager(MyBaseContextManager):
+        def __init__(self, value):
+            self.value = value
+        
+        def manage_context(self):
+            global flag, exception_type_caught
+            former_value = flag
+            flag = self.value
+            try:
+                yield self
+            except Exception, exception:
+                exception_type_caught = type(exception)
+            finally:
+                flag = former_value
+            
+    check_context_manager_type(MyContextManager,
+                               self_returning=True,
+                               error_catching=True)
+    
+    
+def test_manage_context_overriding_enter_exit():
+    
+    class MyBaseContextManager(ContextManager):
+        def __init__(self, value):
+            self.value = value
+            self._former_values = []
+        
+        def __enter__(self):
+            raise Exception('This code is supposed to be overridden.')
+            
+        def __exit__(self, type_=None, value=None, traceback=None):
+            raise Exception('This code is supposed to be overridden.')
+
+            
+    class MyContextManager(MyBaseContextManager):
+        def __init__(self, value):
+            self.value = value
+        
+        def manage_context(self):
+            global flag, exception_type_caught
+            former_value = flag
+            flag = self.value
+            try:
+                yield self
+            except Exception, exception:
+                exception_type_caught = type(exception)
+            finally:
+                flag = former_value
+            
+    check_context_manager_type(MyContextManager,
+                               self_returning=True,
+                               error_catching=True)
+    
+    
 def test_enter_exit():
     
     class MyContextManager(ContextManager):
@@ -255,8 +345,108 @@ def test_error_catching_self_returning_enter_exit():
     check_context_manager_type(MyContextManager,
                                self_returning=True,
                                error_catching=True)
-
     
+    
+def test_enter_exit_overriding_generator():
+    
+    @ContextManagerType
+    def MyBaseContextManager(value):
+        raise Exception('This code is supposed to be overridden.')
+        yield
+        
+    class MyContextManager(MyBaseContextManager):
+        def __init__(self, value):
+            self.value = value
+            self._former_values = []
+        
+        def __enter__(self):
+            global flag
+            self._former_values.append(flag)
+            flag = self.value
+            return self
+            
+        def __exit__(self, type_=None, value=None, traceback=None):
+            global flag, exception_type_caught
+            flag = self._former_values.pop()
+            if type_:
+                exception_type_caught = type_
+                return True
+    
+    check_context_manager_type(MyContextManager,
+                               self_returning=True,
+                               error_catching=True)
+
+
+def test_enter_exit_overriding_manage_context():
+    
+    class MyBaseContextManager(ContextManager):
+        def __init__(self, value):
+            self.value = value
+        
+        def manage_context(self):
+            raise Exception('This code is supposed to be overridden.')
+            yield
+    
+    class MyContextManager(MyBaseContextManager):
+        def __init__(self, value):
+            self.value = value
+            self._former_values = []
+        
+        def __enter__(self):
+            global flag
+            self._former_values.append(flag)
+            flag = self.value
+            return self
+            
+        def __exit__(self, type_=None, value=None, traceback=None):
+            global flag, exception_type_caught
+            flag = self._former_values.pop()
+            if type_:
+                exception_type_caught = type_
+                return True
+    
+    check_context_manager_type(MyContextManager,
+                               self_returning=True,
+                               error_catching=True)
+
+
+def test_enter_exit_overriding_enter_exit():
+    
+    class MyBaseContextManager(ContextManager):
+        def __init__(self, value):
+            self.value = value
+            self._former_values = []
+        
+        def __enter__(self):
+            raise Exception('This code is supposed to be overridden.')
+            
+        def __exit__(self, type_=None, value=None, traceback=None):
+            raise Exception('This code is supposed to be overridden.')
+        
+    
+    class MyContextManager(MyBaseContextManager):
+        def __init__(self, value):
+            self.value = value
+            self._former_values = []
+        
+        def __enter__(self):
+            global flag
+            self._former_values.append(flag)
+            flag = self.value
+            return self
+            
+        def __exit__(self, type_=None, value=None, traceback=None):
+            global flag, exception_type_caught
+            flag = self._former_values.pop()
+            if type_:
+                exception_type_caught = type_
+                return True
+    
+    check_context_manager_type(MyContextManager,
+                               self_returning=True,
+                               error_catching=True)
+
+
 def check_context_manager_type(context_manager_type,
                                self_returning,
                                error_catching):
