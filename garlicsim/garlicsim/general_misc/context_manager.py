@@ -101,6 +101,8 @@ benefits.
 
 # blocktodo: test signature perservation
 
+# todo: test using as abc with other abstract functions
+
 # todo: for case of decorated generator, possibly make getstate (or whatever)
 # that will cause it to be pickled by reference to the decorated function
 
