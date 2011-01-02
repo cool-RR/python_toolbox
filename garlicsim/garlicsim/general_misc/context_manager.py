@@ -22,6 +22,7 @@ from __future__ import with_statement
 
 import types
 import sys
+from garlicsim.general_misc.third_party import abc
 
 from garlicsim.general_misc.third_party import decorator as decorator_module
 
@@ -44,7 +45,7 @@ class ContextManagerTypeType(type):
             name = function.__name__
             bases = (ContextManager,)
             namespace_dict = {}
-            context_manager_type = type.__call__(
+            context_manager_type = super(ContextManagerTypeType, cls).__call__(
                 cls,
                 name,
                 bases,
@@ -59,15 +60,15 @@ class ContextManagerTypeType(type):
             return context_manager_type
             
         else:
-            return type.__call__(cls, *args)
+            return super(ContextManagerTypeType, cls).__call__(*args)
 
 
-class ContextManagerType(type):
+class ContextManagerType(abc.ABCMeta):
     
     __metaclass__ = ContextManagerTypeType
     
     def __new__(mcls, *args, **kwargs):
-        type_ = super(ContextManagerType, mcls).__new__(mcls, *args, **kwargs)
+        type_ = super(ContextManagerType, mcls).__new__(*args, **kwargs)
     
         if hasattr(type_, 'manage_context'):
             mro_depth_of_manage_context = \
@@ -161,10 +162,12 @@ class ContextManager(object):
         return decorator_module.decorator(inner, function)
     
     
+    @abc.abstractmethod
     def __enter__(self):
         pass
 
     
+    @abc.abstractmethod
     def __exit__(self, type_=None, value=None, traceback=None):
         pass
     
