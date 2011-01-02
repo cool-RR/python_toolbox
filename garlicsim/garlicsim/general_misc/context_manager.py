@@ -66,90 +66,23 @@ class ContextManagerType(abc.ABCMeta):
     
     def __new__(mcls, name, bases, namespace):
         
-        type_ = super(ContextManagerType, mcls).__new__(
+        if 'manage_context' in namespace:
+            manage_context = namespace['manage_context']
+            assert '__enter__' not in namespace
+            assert '__exit__' not in namespace
+            namespace['__enter__'] = \
+                ContextManager.__enter_using_manage_context
+            namespace['__exit__'] = \
+                ContextManager.__exit_using_manage_context
+        
+        return super(ContextManagerType, mcls).__new__(
             mcls,
             name,
             bases,
             namespace
         )
+        
     
-        if hasattr(type_, 'manage_context'):
-            mro_depth_of_manage_context = \
-                misc_tools.get_mro_depth_of_method(type_, 'manage_context')
-            mro_depth_of_enter = \
-                misc_tools.get_mro_depth_of_method(type_, '__enter__')
-            mro_depth_of_exit = \
-                misc_tools.get_mro_depth_of_method(type_, '__exit__')
-            
-            assert mro_depth_of_enter == mro_depth_of_exit != \
-                mro_depth_of_manage_context
-            
-            if mro_depth_of_manage_context < mro_depth_of_enter:
-                type_._use_generator_for_context_management()
-        
-        return type_
-
-    
-    def _use_generator_for_context_management(cls):
-        
-        @monkeypatching_tools.monkeypatch_method(cls)
-        def __enter__(self):
-            if not hasattr(self, '_ContextManager__generators'):
-                self._ContextManager__generators = []
-            
-            new_generator = self.manage_context(
-                *getattr(self, '_args', ()),
-                **getattr(self, '_kwargs', {})
-            )
-            assert isinstance(new_generator, types.GeneratorType)
-            self._ContextManager__generators.append(new_generator)
-            
-            
-            try:
-                generator_return_value = new_generator.next()
-                return self if (generator_return_value is SelfHook) else \
-                       generator_return_value
-            
-            except StopIteration:
-                raise RuntimeError("generator didn't yield")
-        
-            
-        @monkeypatching_tools.monkeypatch_method(cls)
-        def __exit__(self, type_, value, traceback):
-
-            generator = self._ContextManager__generators.pop()
-            assert isinstance(generator, types.GeneratorType)
-            
-            if type_ is None:
-                try:
-                    generator.next()
-                except StopIteration:
-                    return
-                else:
-                    raise RuntimeError("generator didn't stop")
-            else:
-                if value is None:
-                    # Need to force instantiation so we can reliably
-                    # tell if we get the same exception back
-                    value = type_()
-                try:
-                    generator.throw(type_, value, traceback)
-                    raise RuntimeError("generator didn't stop after throw()")
-                except StopIteration, exc:
-                    # Suppress the exception *unless* it's the same exception that
-                    # was passed to throw().  This prevents a StopIteration
-                    # raised inside the "with" statement from being suppressed
-                    return exc is not value
-                except:
-                    # only re-raise if it's *not* the exception that was
-                    # passed to throw(), because __exit__() must not raise
-                    # an exception unless __exit__() itself failed.  But throw()
-                    # has to raise the exception to signal propagation, so this
-                    # fixes the impedance mismatch between the throw() protocol
-                    # and the __exit__() protocol.
-                    #
-                    if sys.exc_info()[1] is not value:
-                        raise
                     
 
 class ContextManager(object):
@@ -175,3 +108,59 @@ class ContextManager(object):
         pass
     
     
+    def __enter_using_manage_context(self):
+        if not hasattr(self, '_ContextManager__generators'):
+            self._ContextManager__generators = []
+        
+        new_generator = self.manage_context(
+            *getattr(self, '_args', ()),
+            **getattr(self, '_kwargs', {})
+        )
+        assert isinstance(new_generator, types.GeneratorType)
+        self._ContextManager__generators.append(new_generator)
+        
+        
+        try:
+            generator_return_value = new_generator.next()
+            return self if (generator_return_value is SelfHook) else \
+                   generator_return_value
+        
+        except StopIteration:
+            raise RuntimeError("generator didn't yield")
+    
+        
+    def __exit_using_manage_context(self, type_, value, traceback):
+
+        generator = self._ContextManager__generators.pop()
+        assert isinstance(generator, types.GeneratorType)
+        
+        if type_ is None:
+            try:
+                generator.next()
+            except StopIteration:
+                return
+            else:
+                raise RuntimeError("generator didn't stop")
+        else:
+            if value is None:
+                # Need to force instantiation so we can reliably
+                # tell if we get the same exception back
+                value = type_()
+            try:
+                generator.throw(type_, value, traceback)
+                raise RuntimeError("generator didn't stop after throw()")
+            except StopIteration, exc:
+                # Suppress the exception *unless* it's the same exception that
+                # was passed to throw().  This prevents a StopIteration
+                # raised inside the "with" statement from being suppressed
+                return exc is not value
+            except:
+                # only re-raise if it's *not* the exception that was
+                # passed to throw(), because __exit__() must not raise
+                # an exception unless __exit__() itself failed.  But throw()
+                # has to raise the exception to signal propagation, so this
+                # fixes the impedance mismatch between the throw() protocol
+                # and the __exit__() protocol.
+                #
+                if sys.exc_info()[1] is not value:
+                    raise
