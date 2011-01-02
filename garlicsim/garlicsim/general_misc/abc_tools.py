@@ -20,8 +20,3 @@ class abstract_static_method(staticmethod):
     def __init__(self, function):
         super(abstract_static_method, self).__init__(function)
         function.__isabstractmethod__ = True
-
-
-class AbstractContextManagerType(context_manager_module.ContextManagerType,
-                                 abc.ABCMeta): blocktodo kill this
-    pass

@@ -14,9 +14,6 @@ See its documentation for more information.
 # todo: for case of decorated generator, possibly make getstate (or whatever)
 # that will cause it to be pickled by reference to the decorated function
 
-# todo: make `ContextManager` an abstract class? Will save on doing
-# `AbstractContextManagerType` elsewhere.
-
 
 from __future__ import with_statement
 
@@ -67,8 +64,14 @@ class ContextManagerType(abc.ABCMeta):
     
     __metaclass__ = ContextManagerTypeType
     
-    def __new__(mcls, *args, **kwargs):
-        type_ = super(ContextManagerType, mcls).__new__(mcls, *args, **kwargs)
+    def __new__(mcls, name, bases, namespace):
+        
+        type_ = super(ContextManagerType, mcls).__new__(
+            mcls,
+            name,
+            bases,
+            namespace
+        )
     
         if hasattr(type_, 'manage_context'):
             mro_depth_of_manage_context = \
