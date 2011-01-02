@@ -11,31 +11,44 @@ from garlicsim.general_misc.context_manager import (ContextManager,
 
 def test_abstractness():
     
-    def f():
-        class EmptyContextManager(ContextManager):
+    class EmptyContextManager(ContextManager):
+        pass
+
+    class EnterlessContextManager(ContextManager):
+        def __exit__(self, type_, value, traceback):
             pass
+        
+    class ExitlessContextManager(ContextManager):
+        def __enter__(self):
+            pass
+        
+    def f():
+        EmptyContextManager()
     
     def g():
-        class EnterlessContextManager(ContextManager):
-            def __exit__(self, type_, value, traceback):
-                pass
+        EnterlessContextManager()
     
     def h():
-        class ExitlessContextManager(ContextManager):
-            def __enter__(self):
-                pass
+        ExitlessContextManager()
+        
         
     nose.tools.assert_raises(TypeError, f)
     nose.tools.assert_raises(TypeError, g)
     nose.tools.assert_raises(TypeError, h)
-    
+
+
+def test_can_instantiate_when_defining_manage_context():
     class MyContextManager(ContextManager):
         def manage_context(self):
             yield self
-    
+    MyContextManager()
+
+
+def test_can_instantiate_when_defining_enter_exit():
     class AnotherContextManager(ContextManager):
         def __enter__(self):
             pass
         def __exit__(self, type_, value, traceback):
             pass
+    AnotherContextManager()
     

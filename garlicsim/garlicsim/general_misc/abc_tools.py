@@ -23,5 +23,5 @@ class abstract_static_method(staticmethod):
 
 
 class AbstractContextManagerType(context_manager_module.ContextManagerType,
-                                 abc.ABCMeta):
+                                 abc.ABCMeta): blocktodo kill this
     pass

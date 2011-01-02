@@ -68,7 +68,7 @@ class ContextManagerType(abc.ABCMeta):
     __metaclass__ = ContextManagerTypeType
     
     def __new__(mcls, *args, **kwargs):
-        type_ = super(ContextManagerType, mcls).__new__(*args, **kwargs)
+        type_ = super(ContextManagerType, mcls).__new__(mcls, *args, **kwargs)
     
         if hasattr(type_, 'manage_context'):
             mro_depth_of_manage_context = \
