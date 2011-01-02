@@ -231,6 +231,9 @@ class ContextManagerType(abc.ABCMeta):
     
 class ContextManager(object):
     '''
+    Allows running preperation code before a given suite and cleanup after.
+    
+    
     '''
     
     
