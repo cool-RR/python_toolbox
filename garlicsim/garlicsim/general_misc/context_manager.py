@@ -22,8 +22,6 @@ import sys
 from garlicsim.general_misc.third_party import abc
 
 from garlicsim.general_misc.third_party import decorator as decorator_module
-
-from garlicsim.general_misc import misc_tools
 from garlicsim.general_misc import monkeypatching_tools
 
 
@@ -43,7 +41,6 @@ class ContextManagerTypeType(type):
             bases = (ContextManager,)
             namespace_dict = {}
             context_manager_type = super(ContextManagerTypeType, cls).__call__(
-                cls,
                 name,
                 bases,
                 {'manage_context': staticmethod(function)}
@@ -71,9 +68,9 @@ class ContextManagerType(abc.ABCMeta):
             assert '__enter__' not in namespace
             assert '__exit__' not in namespace
             namespace['__enter__'] = \
-                ContextManager.__enter_using_manage_context
+                ContextManager._ContextManager__enter_using_manage_context
             namespace['__exit__'] = \
-                ContextManager.__exit_using_manage_context
+                ContextManager._ContextManager__exit_using_manage_context
         
         return super(ContextManagerType, mcls).__new__(
             mcls,
