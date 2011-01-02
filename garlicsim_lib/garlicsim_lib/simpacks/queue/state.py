@@ -63,17 +63,13 @@ class State(garlicsim.data_structures.State):
 
     
     
-    def step(self): #, t=None):
-        '''Step function.'''
+    def inplace_step(self): #, t=None):
+        '''Inplace step function.'''
         # todo good idea: t=None means step to next client. If given int just
         # do many steps. (What with cut last?)
         
-        new_state = garlicsim.misc.state_deepcopy.state_deepcopy(self)
-        time_passed = new_state.event_set.do_next_event()
-        
-        new_state.clock = self.clock + time_passed
-        
-        return new_state
+        time_passed = self.event_set.do_next_event()
+        self.clock += time_passed
 
 
 

@@ -53,22 +53,19 @@ class State(garlicsim.data_structures.State):
         return state
     
         
-    def step(self):
-        
-        state = garlicsim.misc.state_deepcopy.state_deepcopy(self)
-        state.clock += 1
+    def inplace_step(self):
+        # blocktodo: remove this and diff with persistent test
+        self.clock += 1
     
-        state.round += 1
-        if state.round == ROUNDS:
-            state.round = -1
-            state.match += 1
-            state.prepare_for_new_match()
-            return state
+        self.round += 1
+        if self.round == ROUNDS:
+            self.round = -1
+            self.match += 1
+            self.prepare_for_new_match()
+            return
     
-        for pair in state.pairs:
-            play_game(pair, state.round)
-    
-        return state
+        for pair in self.pairs:
+            play_game(pair, self.round)
     
     
     def prepare_for_new_match(self):
