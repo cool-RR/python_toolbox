@@ -3,6 +3,8 @@
 
 from __future__ import with_statement
 
+import sys
+
 import nose
 
 from garlicsim.general_misc.context_manager import (ContextManager,
@@ -10,6 +12,9 @@ from garlicsim.general_misc.context_manager import (ContextManager,
                                                     SelfHook)
 
 def test_abstractness():
+    
+    if sys.version_info[:2] <= (2, 5):
+        raise nose.SkipTest("Python 2.5 doesn't enforce abstractness.")
     
     class EmptyContextManager(ContextManager):
         pass
