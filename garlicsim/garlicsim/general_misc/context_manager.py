@@ -2,14 +2,21 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the `ContextManager` class.
+Defines the `ContextManager` and `ContextManagerType` classes.
 
-See its documentation for more information.
+These classes allow greater freedom when using context managers; See
+`ContextDecorator`'s documentation for more details, or `ContextManagerType`'s
+documentation for more details about creating a context manager from a
+generator.
 '''
-# blocktodo: test on pypy
+
+# blocktodo: make overriding tests: `manage_context` overriding
+# `manage_context`, `manage_context` overriding enter/exit, enter/exit
+# overriding enter/exit, enter/exit overriding `manage_context`, enter
+# overriding `manage_context` (should raise error) etc.
 
 # blocktodo: allow `__enter__` and `__exit__` on different level, just not
-# different sides of `manager_context`
+# different sides of `manage_context`
 
 # todo: for case of decorated generator, possibly make getstate (or whatever)
 # that will cause it to be pickled by reference to the decorated function
@@ -22,47 +29,104 @@ import sys
 from garlicsim.general_misc.third_party import abc
 
 from garlicsim.general_misc.third_party import decorator as decorator_module
-from garlicsim.general_misc import monkeypatching_tools
 
 
 class SelfHook(object):
+    '''
+    Hook that a context manager can yield in order to yield itself.
+
+    This is useful in context managers which are created from a generator,
+    where the user can't do `yield self` because `self` doesn't exist yet.
+    
+    Example:
+    
+        @ContextGeneratorType
+        def MyContextManager(lock):
+            with lock.read:
+                yield SelfHook
+                
+        with MyContextManager(my_lock) as my_context_manager:
+            assert isinstance(my_context_manager, MyContextManager)
+    
+    '''
     # todo: make uninstantiable
-    pass
 
 
 class ContextManagerTypeType(type):
+    '''Metaclass for `ContextManagerType`. Shouldn't be used directly.'''
     
     def __call__(cls, *args):
+        '''
+        Create a new `ContextManager`.
+        
+        This can work in two ways, depending on which arguments are given:
+        
+         1. The classic `type.__call__` way. If `name, bases, namespace` are
+            passed in, `type.__call__` will be used normally.
+            
+         2. As a decorator for a generator function. For example:
+            
+                @ContextManagerType
+                def MyContextManager():
+                    try:
+                        yield
+                    finally:
+                        pass # clean-up
+                        
+            What happens here is that the function (in this case
+            `MyContextManager`) is passed directly into
+            `ContextManagerTypeType.__call__`. So we create a new
+            `ContextManager` subclass for it, and use the original generator as
+            its `.manage_context` function.
+                        
+        '''
         if len(args) == 1:
-            # decorating
             (function,) = args
             assert callable(function)
             name = function.__name__
             bases = (ContextManager,)
-            namespace_dict = {}
-            context_manager_type = super(ContextManagerTypeType, cls).__call__(
+            namespace_dict = {
+                'manage_context': staticmethod(function),
+                '__init__': ContextManager.\
+                            _ContextManager__init_lone_manage_context
+            }
+            return super(ContextManagerTypeType, cls).__call__(
                 name,
                 bases,
-                {'manage_context': staticmethod(function)}
+                namespace_dict
             )
-        
-            @monkeypatching_tools.monkeypatch_method(context_manager_type)
-            def __init__(self, *args, **kwargs):
-                self._args, self._kwargs = args, kwargs
-                self._ContextManager__generators = []
-                
-            return context_manager_type
             
         else:
             return super(ContextManagerTypeType, cls).__call__(*args)
 
 
 class ContextManagerType(abc.ABCMeta):
+    '''
+    Metaclass for `ContextManager`.
+    
+    Use this directly as a decorator to create a `ContextManager` from a
+    generator function.
+    
+    Example:
+    
+        @ContextManagerType
+        def MyContextManager():
+            try:
+                yield
+            finally:
+                pass # clean-up
+                
+    '''
     
     __metaclass__ = ContextManagerTypeType
+
     
     def __new__(mcls, name, bases, namespace):
+        '''
+        Create either `ContextManager` itself or a subclass of it.
         
+        If a `manage_context` method is available
+        '''
         if 'manage_context' in namespace:
             manage_context = namespace['manage_context']
             assert '__enter__' not in namespace
@@ -104,14 +168,20 @@ class ContextManager(object):
     def __exit__(self, type_=None, value=None, traceback=None):
         pass
     
+
+    def __init_lone_manage_context(self, *args, **kwargs):
+        self._ContextManager__args = args
+        self._ContextManager__kwargs = kwargs
+        self._ContextManager__generators = []
+    
     
     def __enter_using_manage_context(self):
         if not hasattr(self, '_ContextManager__generators'):
             self._ContextManager__generators = []
         
         new_generator = self.manage_context(
-            *getattr(self, '_args', ()),
-            **getattr(self, '_kwargs', {})
+            *getattr(self, '_ContextManager__args', ()),
+            **getattr(self, '_ContextManager__kwargs', {})
         )
         assert isinstance(new_generator, types.GeneratorType)
         self._ContextManager__generators.append(new_generator)
