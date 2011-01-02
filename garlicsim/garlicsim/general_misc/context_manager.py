@@ -201,6 +201,11 @@ class ContextManagerType(abc.ABCMeta):
             finally:
                 pass # clean-up
                 
+    The resulting context manager could be called either with the `with`
+    keyword or by using it as a decorator to a function.
+                
+    For more details, see documentation of the containing module,
+    `garlicsim.general_misc.context_manager`.
     '''
     
     __metaclass__ = ContextManagerTypeType
@@ -235,7 +240,17 @@ class ContextManager(object):
     '''
     Allows running preperation code before a given suite and cleanup after.
     
+    To make a context manager, use `ContextManager` as a base class and either
+    (a) define `__enter__` and `__exit__` methods or (b) define a
+    `manage_context` method that returns a generator. An alternative way to
+    create a context manager is to define a generator function and decorate it
+    with `ContextManagerType`.
     
+    In any case, the resulting context manager could be called either with the
+    `with` keyword or by using it as a decorator to a function.
+                
+    For more details, see documentation of the containing module,
+    `garlicsim.general_misc.context_manager`.
     '''
     
     
@@ -243,6 +258,7 @@ class ContextManager(object):
 
     
     def __call__(self, function):
+        '''Decorate `function` to use this context manager when it's called.'''
         def inner(function_, *args, **kwargs):
             with self:
                 return function_(*args, **kwargs)
@@ -251,21 +267,30 @@ class ContextManager(object):
     
     @abc.abstractmethod
     def __enter__(self):
-        pass
+        '''Prepare for suite execution.'''
 
     
     @abc.abstractmethod
     def __exit__(self, type_=None, value=None, traceback=None):
-        pass
+        '''Cleanup after suite execution.'''
     
 
     def __init_lone_manage_context(self, *args, **kwargs):
+        '''
+        Initialize a `ContextManager` made from a lone generator function.
+        '''
         self._ContextManager__args = args
         self._ContextManager__kwargs = kwargs
         self._ContextManager__generators = []
     
     
     def __enter_using_manage_context(self):
+        '''
+        Prepare for suite execution.
+        
+        This is used as `__enter__` for context managers that use a
+        `manage_context` function.
+        '''
         if not hasattr(self, '_ContextManager__generators'):
             self._ContextManager__generators = []
         
@@ -287,7 +312,12 @@ class ContextManager(object):
     
         
     def __exit_using_manage_context(self, type_, value, traceback):
-
+        '''
+        Cleanup after suite execution.
+        
+        This is used as `__exit__` for context managers that use a
+        `manage_context` function.
+        '''
         generator = self._ContextManager__generators.pop()
         assert isinstance(generator, types.GeneratorType)
         

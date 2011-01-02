@@ -1,6 +1,8 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
+'''Test the `garlicsim.general_misc.context_manager` module.'''
+
 from __future__ import with_statement
 
 from garlicsim.general_misc.context_manager import (ContextManager,
@@ -11,9 +13,8 @@ flag = None
 exception_type_caught = None
 
 
-
-
 def test_generator():
+    '''Test a context manager made from a generator.'''
     @ContextManagerType
     def MyContextManager(value):
         global flag, exception_type_caught
@@ -30,6 +31,7 @@ def test_generator():
     
 
 def test_error_catching_generator():
+    '''Test an error-catching context manager made from a generator.'''
     
     @ContextManagerType
     def MyContextManager(value):
@@ -49,6 +51,7 @@ def test_error_catching_generator():
 
 
 def test_self_returning_generator():
+    '''Test a self-returning context manager made from a generator.'''
     @ContextManagerType
     def MyContextManager(value):
         global flag, exception_type_caught
@@ -65,6 +68,9 @@ def test_self_returning_generator():
     
 
 def test_self_returning_error_catching_generator():
+    '''
+    Test a self-returning error-catching context manager made from a generator.
+    '''
     @ContextManagerType
     def MyContextManager(value):
         global flag, exception_type_caught
@@ -81,8 +87,9 @@ def test_self_returning_error_catching_generator():
                                self_returning=True,
                                error_catching=True)
     
-def test_manage_context():
     
+def test_manage_context():
+    '''Test a context manager that uses a `manage_context` method.'''
     class MyContextManager(ContextManager):
         def __init__(self, value):
             self.value = value
@@ -102,7 +109,7 @@ def test_manage_context():
         
     
 def test_error_catching_manage_context():
-    
+    '''Test an error-catching `manage_context`-powered context manager.'''
     class MyContextManager(ContextManager):
         def __init__(self, value):
             self.value = value
@@ -122,8 +129,9 @@ def test_error_catching_manage_context():
                                self_returning=False,
                                error_catching=True)
     
-def test_self_returning_manage_context():
     
+def test_self_returning_manage_context():
+    '''Test a self-returning `manage_context`-powered context manager.'''
     class MyContextManager(ContextManager):
         def __init__(self, value):
             self.value = value
@@ -143,7 +151,9 @@ def test_self_returning_manage_context():
     
     
 def test_self_returning_error_catching_manage_context():
-    
+    '''
+    Test a self-returning error-catching `manage_context` context manager.
+    '''
     class MyContextManager(ContextManager):
         def __init__(self, value):
             self.value = value
@@ -165,7 +175,9 @@ def test_self_returning_error_catching_manage_context():
 
     
 def test_manage_context_overriding_generator():
-    
+    '''
+    Test a `manage_context` context manager overriding one made from generator.
+    '''
     @ContextManagerType
     def MyBaseContextManager(value):
         raise Exception('This code is supposed to be overridden.')
@@ -192,7 +204,9 @@ def test_manage_context_overriding_generator():
     
     
 def test_manage_context_overriding_manage_context():
-        
+    '''
+    Test a `manage_context`-powered context manager overriding another one.
+    '''    
     class MyBaseContextManager(ContextManager):
         def __init__(self, value):
             self.value = value
@@ -222,6 +236,9 @@ def test_manage_context_overriding_manage_context():
     
     
 def test_manage_context_overriding_enter_exit():
+    '''
+    Test `manage_context` context manager overriding one made from enter/exit.
+    '''
     
     class MyBaseContextManager(ContextManager):
         def __init__(self, value):
@@ -256,7 +273,7 @@ def test_manage_context_overriding_enter_exit():
     
     
 def test_enter_exit():
-    
+    '''Test an enter/exit context manager.'''
     class MyContextManager(ContextManager):
         def __init__(self, value):
             self.value = value
@@ -277,7 +294,7 @@ def test_enter_exit():
 
     
 def test_error_catching_enter_exit():
-    
+    '''Test an error-catching enter/exit context manager.'''
     class MyContextManager(ContextManager):
         def __init__(self, value):
             self.value = value
@@ -301,7 +318,7 @@ def test_error_catching_enter_exit():
 
     
 def test_self_returning_enter_exit():
-    
+    '''Test a self-returning enter/exit context manager.'''
     class MyContextManager(ContextManager):
         def __init__(self, value):
             self.value = value
@@ -323,7 +340,7 @@ def test_self_returning_enter_exit():
 
     
 def test_error_catching_self_returning_enter_exit():
-    
+    '''Test an error-catching self-returning enter/exit context manager.'''
     class MyContextManager(ContextManager):
         def __init__(self, value):
             self.value = value
@@ -348,7 +365,9 @@ def test_error_catching_self_returning_enter_exit():
     
     
 def test_enter_exit_overriding_generator():
-    
+    '''
+    Test an enter/exit context manager overriding one made from generator.
+    '''
     @ContextManagerType
     def MyBaseContextManager(value):
         raise Exception('This code is supposed to be overridden.')
@@ -378,7 +397,9 @@ def test_enter_exit_overriding_generator():
 
 
 def test_enter_exit_overriding_manage_context():
-    
+    '''
+    Test enter/exit context manager overriding one made from `manage_context`.
+    '''
     class MyBaseContextManager(ContextManager):
         def __init__(self, value):
             self.value = value
@@ -411,6 +432,7 @@ def test_enter_exit_overriding_manage_context():
 
 
 def test_enter_exit_overriding_enter_exit():
+    '''Test an enter/exit context manager overriding another one.'''
     
     class MyBaseContextManager(ContextManager):
         def __init__(self, value):
@@ -450,6 +472,15 @@ def test_enter_exit_overriding_enter_exit():
 def check_context_manager_type(context_manager_type,
                                self_returning,
                                error_catching):
+    '''
+    Run checks on a context manager.
+    
+    `self_returning` is a flag saying whether the context manager's `__enter__`
+    method returns itself. (For the `as` keyword after `with`.)
+    
+    `error_catching` says whether the context manager catches exceptions it
+    gets and updates the `exception_type_caught` global.
+    '''
     
     global flag, exception_type_caught
     
