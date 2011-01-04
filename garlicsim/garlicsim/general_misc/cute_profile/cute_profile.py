@@ -9,6 +9,8 @@ See its documentation for more details.
 
 import functools
 
+from garlicsim.general_misc.third_party import decorator as decorator_module
+
 from . import base_profile
 
 
@@ -49,41 +51,48 @@ def profile_ready(condition=None, off_after=True, sort=2):
     
     def decorator(function):
         
-        def decorated(*args, **kwargs):
+        def inner(function_, *args, **kwargs):
             
-            if decorated.condition is not None:
+            if decorated_function.condition is not None:
                 
-                if decorated.condition is True or \
-                   decorated.condition(decorated.original_function, *args,
-                                       **kwargs):
+                if decorated_function.condition is True or \
+                   decorated_function.condition(
+                       decorated_function.original_function,
+                       *args,
+                       **kwargs
+                       ):
                     
-                    decorated.profiling_on = True
+                    decorated_function.profiling_on = True
                     
-            if decorated.profiling_on:
+            if decorated_function.profiling_on:
                 
-                if decorated.off_after:
-                    decorated.profiling_on = False
-                    decorated.condition = None
+                if decorated_function.off_after:
+                    decorated_function.profiling_on = False
+                    decorated_function.condition = None
                     
                 # This line puts it in locals, weird:
-                decorated.original_function
+                decorated_function.original_function
                 
                 base_profile.runctx(
-                    'result = decorated.original_function(*args, **kwargs)',
-                    globals(), locals(), sort=decorated.sort
+                    'result = '
+                    'decorated_function.original_function(*args, **kwargs)',
+                    globals(), locals(), sort=decorated_function.sort
                 )                
                 return locals()['result']
             
-            else: # decorated.profiling_on is False
+            else: # decorated_function.profiling_on is False
                 
-                return decorated.original_function(*args, **kwargs)
+                return decorated_function.original_function(*args, **kwargs)
             
-        decorated.original_function = function
-        decorated.profiling_on = None
-        decorated.condition = condition
-        decorated.off_after = off_after
-        decorated.sort = sort
-        functools.update_wrapper(decorated, function)
-        return decorated
+        decorated_function = decorator_module.decorator(inner, function)
+        
+        decorated_function.original_function = function
+        decorated_function.profiling_on = None
+        decorated_function.condition = condition
+        decorated_function.off_after = off_after
+        decorated_function.sort = sort
+        
+        return decorated_function
+    
     return decorator
 
