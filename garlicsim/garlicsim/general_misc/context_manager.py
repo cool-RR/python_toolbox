@@ -122,8 +122,9 @@ class SelfHook(object):
     '''
     Hook that a context manager can yield in order to yield itself.
 
-    This is useful in context managers which are created from a generator,
-    where the user can't do `yield self` because `self` doesn't exist yet.
+    This is useful in context managers which are created from a generator
+    function, where the user can't do `yield self` because `self` doesn't exist
+    yet.
     
     Example:
     
