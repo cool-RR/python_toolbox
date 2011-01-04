@@ -106,6 +106,9 @@ benefits.
 
 # todo: test using as abc with other abstract functions
 
+# todo: can make a helpful exception message for when the user decorates with
+# `ContextManager` instead of `ContextManagerType`
+
 # todo: for case of decorated generator, possibly make getstate (or whatever)
 # that will cause it to be pickled by reference to the decorated function
 
