@@ -20,7 +20,7 @@ class RaiseAssertor(ContextManager):
     def manage_context(self):
         try:
             yield self
-        except self.exception_type as exception:
+        except self.exception_type, exception:
             self.exception = exception
             if self.text:
                 message = exception.args[0]
