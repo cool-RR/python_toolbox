@@ -62,6 +62,12 @@ has their own advantages and disadvantages over the others.
     `some_lock.__enter__` in an `__enter__` method and `some_lock.__exit__` in
     an `__exit__` method.
     
+    Another advantage of this approach over `__enter__` and `__exit__` is that
+    it's better at handling exceptions, since any exceptions would be raised
+    inside `manage_context` where we could `except` them, which is much more
+    idiomatic than the way `__exit__` handles exceptions, which is by
+    receieving their type and returning whether to swallow them or not.
+    
     
 These were the different ways of *defining* a context manager. Now let's see
 the different ways of *using* a context manager:
