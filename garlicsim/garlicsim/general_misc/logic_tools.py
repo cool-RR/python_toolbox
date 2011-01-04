@@ -18,7 +18,8 @@ def all_equal(iterable, exhaustive=False):
     every other member. So in a list of size `n`, `(n*(n-1))/2` equality checks
     will be made.
     '''
-    # todo: Maybe I should simply check if `len(set(iterable)) == 1`?
+    # todo: Maybe I should simply check if `len(set(iterable)) == 1`? Will not
+    # work for unhashables.
     
     if exhaustive is True:
         pairs = cute_iter_tools.orderless_combinations(iterable, 2)        

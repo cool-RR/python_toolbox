@@ -13,8 +13,8 @@ from garlicsim.general_misc.cute_testing import RaiseAssertor
 def test_basic():
     with RaiseAssertor(Exception):
         raise Exception
-    with RaiseAssertor(TypeError):
-        raise Exception
+    with RaiseAssertor(Exception):
+        raise TypeError
     
     def f():
         with RaiseAssertor(ZeroDivisionError):
@@ -26,6 +26,8 @@ def test_basic():
         assert isinstance(raise_assertor, RaiseAssertor)
         with RaiseAssertor(RuntimeError):
             {}[0]
+            
+    assert isinstance(raise_assertor.exception, Exception)
             
 
 def test_decorator():

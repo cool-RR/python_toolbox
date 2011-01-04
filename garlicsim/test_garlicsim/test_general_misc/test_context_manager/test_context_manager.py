@@ -5,6 +5,8 @@
 
 from __future__ import with_statement
 
+from garlicsim.general_misc import cute_testing
+
 from garlicsim.general_misc.context_manager import (ContextManager,
                                                     ContextManagerType,
                                                     SelfHook)
@@ -487,16 +489,22 @@ def check_context_manager_type(context_manager_type,
     assert flag is None
     assert exception_type_caught is None
     
+    ### Testing simple case: ##################################################
+    #                                                                         #
     with context_manager_type(7) as return_value:
         assert flag == 7
         if self_returning:
             assert isinstance(return_value, context_manager_type)
         else: # self_returning is False
             assert return_value is None
+    #                                                                         #
+    ### Finished testing simple case. #########################################
         
     assert flag is None
     assert exception_type_caught is None
     
+    ### Testing creating context manager before `with`: #######################
+    #                                                                         #
     my_context_manager = context_manager_type(1.1)
     assert isinstance(my_context_manager, context_manager_type)
     with my_context_manager as return_value:
@@ -505,10 +513,14 @@ def check_context_manager_type(context_manager_type,
             assert return_value is my_context_manager
         else: # self_returning is False
             assert return_value is None
+    #                                                                         #
+    ### Finished testing creating context manager before `with`. ##############
     
     assert flag is None
     assert exception_type_caught is None
 
+    ### Testing decorated function: ###########################################
+    #                                                                         #
     @context_manager_type('meow')
     def f():
         assert flag == 'meow'
@@ -516,7 +528,31 @@ def check_context_manager_type(context_manager_type,
     f()
     assert flag is None
     assert exception_type_caught is None
+    #                                                                         #
+    ### Finished testing decorated function. ##################################
     
+    ### Testing manually decorated function: ##################################
+    #                                                                         #
+    def g(a, b=2, **kwargs):
+        assert flag == 'meow'
+        
+    new_g = context_manager_type('meow')(g)
+        
+    with cute_testing.RaiseAssertor():
+        g('whatever')
+        
+    assert flag is None
+    assert exception_type_caught is None
+
+    new_g('whatever')
+    assert flag is None
+    assert exception_type_caught is None
+    cute_testing.assert_same_signature(g, new_g)
+    #                                                                         #
+    ### Finished testing manually decorated function. #########################
+    
+    ### Testing deep nesting: #################################################
+    #                                                                         #
     my_context_manager = context_manager_type(123)
     assert flag is None
     with my_context_manager:
@@ -544,11 +580,17 @@ def check_context_manager_type(context_manager_type,
             assert flag == 2
         assert flag == 1
     assert flag is None
+    #                                                                         #
+    ### Finished testing deep nesting. ########################################
     
-    # Now while raising exceptions:
     
-    try:
+    ###########################################################################
+    ###########################################################################
+    ### Now while raising exceptions:
         
+    ### Testing simple case: ##################################################
+    #                                                                         #
+    try:    
         with context_manager_type(7) as return_value:
             assert flag == 7
             if self_returning:
@@ -565,9 +607,13 @@ def check_context_manager_type(context_manager_type,
         assert error_catching
         assert exception_type_caught is TypeError
         exception_type_caught = None
+    #                                                                         #
+    ### Finished testing simple case. #########################################
         
     assert flag is None
     
+    ### Testing creating context manager before `with`: #######################
+    #                                                                         #
     my_context_manager = context_manager_type(1.1)
     assert isinstance(my_context_manager, context_manager_type) 
     try:
@@ -588,34 +634,68 @@ def check_context_manager_type(context_manager_type,
         assert error_catching
         assert exception_type_caught is KeyError
         exception_type_caught = None
+    #                                                                         #
+    ### Finished testing creating context manager before `with`. ##############
         
-    
     assert flag is None
     assert exception_type_caught is None
 
+    ### Testing decorated function: ###########################################
+    #                                                                         #
     @context_manager_type('meow')
     def f():
         assert flag == 'meow'
         1/0
-        
     
     try:
         f()
     except Exception, exception:
         assert not error_catching
         assert exception_type_caught is None
-        assert type(exception) is ZeroDivisionError
-        
+        assert type(exception) is ZeroDivisionError        
     else:
         assert error_catching
         assert exception_type_caught is ZeroDivisionError
         exception_type_caught = None
+    #                                                                         #
+    ### Finished testing decorated function. ##################################
         
     assert flag is None
-    
     exception_type_caught = None
     
+    ### Testing manually decorated function: ##################################
+    #                                                                         #
+    def g(a, b=2, **kwargs):
+        assert flag == 'meow'
+        eval('Ooga booga I am a syntax error.')
+
+    with cute_testing.RaiseAssertor(AssertionError):
+        g('whatever')
+        
+    assert flag is None
+    assert exception_type_caught is None
     
+    new_g = context_manager_type('meow')(g)
+        
+    assert flag is None
+    assert exception_type_caught is None
+    cute_testing.assert_same_signature(g, new_g)
+    
+    try:
+        new_g('whatever')
+    except Exception, exception:
+        assert not error_catching
+        assert exception_type_caught is None
+        assert type(exception) is SyntaxError
+    else:
+        assert error_catching
+        assert exception_type_caught is SyntaxError
+        exception_type_caught = None
+    #                                                                         #
+    ### Finished testing manually decorated function. ########################
+    
+    ### Testing deep nesting: #################################################
+    #                                                                         #
     my_context_manager = context_manager_type(123)
     assert flag is None
     try:
@@ -670,4 +750,6 @@ def check_context_manager_type(context_manager_type,
         exception_type_caught = None
         
     assert flag is None
+    #                                                                         #
+    ### Finished testing deep nesting. ########################################
     

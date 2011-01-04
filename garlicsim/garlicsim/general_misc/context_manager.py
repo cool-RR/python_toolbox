@@ -106,8 +106,6 @@ benefits.
 # blocktodo: allow `__enter__` and `__exit__` on different level, just not
 # different sides of `manage_context`. make tests.
 
-# blocktodo: test signature perservation
-
 # todo: review the few external tests that I'm skipping.
 
 # todo: test using as abc with other abstract functions
