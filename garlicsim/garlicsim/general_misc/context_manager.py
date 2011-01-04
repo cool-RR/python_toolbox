@@ -32,10 +32,11 @@ has their own advantages and disadvantages over the others.
     
         @ContextManagerType
         def MyContextManager():
+            # preparation
             try:
                 yield
             finally:
-                pass # clean-up
+                pass # cleanup
                 
     This usage is nothing new; It's also available when using the standard
     library's `contextlib.contextmanager` decorator. One thing that is allowed
@@ -156,10 +157,11 @@ class ContextManagerTypeType(type):
             
                 @ContextManagerType
                 def MyContextManager():
+                    # preparation
                     try:
                         yield
                     finally:
-                        pass # clean-up
+                        pass # cleanup
                         
             What happens here is that the function (in this case
             `MyContextManager`) is passed directly into
@@ -199,10 +201,11 @@ class ContextManagerType(abc.ABCMeta):
     
         @ContextManagerType
         def MyContextManager():
+            # preparation
             try:
                 yield
             finally:
-                pass # clean-up
+                pass # cleanup
                 
     The resulting context manager could be called either with the `with`
     keyword or by using it as a decorator to a function.
