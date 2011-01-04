@@ -236,8 +236,20 @@ class ContextManagerType(abc.ABCMeta):
         '''
         if 'manage_context' in namespace:
             manage_context = namespace['manage_context']
-            assert '__enter__' not in namespace
-            assert '__exit__' not in namespace
+            if '__enter__' in namespace:
+                raise Exception(
+                    'You defined both an `__enter__` method and a '
+                    '`manage_context` method-- That is unallowed. You need to '
+                    '*either* define a `manage_context` method *or* an '
+                    '`__enter__` and `__exit__` pair.'
+                )
+            if '__exit__' in namespace:
+                raise Exception(
+                    'You defined both an `__exit__` method and a '
+                    '`manage_context` method-- That is unallowed. You need to '
+                    '*either* define a `manage_context` method *or* an '
+                    '`__enter__` and `__exit__` pair.'
+                )
             namespace['__enter__'] = \
                 ContextManager._ContextManager__enter_using_manage_context
             namespace['__exit__'] = \
