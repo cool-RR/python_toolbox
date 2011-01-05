@@ -5,7 +5,12 @@
 Defines the `ContextManager` and `ContextManagerType` classes.
 
 These classes allow for greater freedom both when (a) defining context managers
-and when (b) using them.
+and when (b) using them. It allows defining context managers either by (1)
+using the classic `__enter__` and `__exit__` interface, or (2) using a
+stand-alone generator function or (3) using a class that defines a
+`manage_context` generator function. In addition, the `ContextManager` class
+allows using a context manager as a decorator to a function, which for some
+cases is a better alternative than using the `with` keyword.
 
 Inherit all your context managers from `ContextManager` (or decorate your
 generator functions with `ContextManagerType`) to enjoy all the benefits
@@ -37,6 +42,10 @@ has their own advantages and disadvantages over the others.
                 yield
             finally:
                 pass # cleanup
+                
+    The advantage of this approach is its brevity, and it may be a good fit for
+    relatively simple context managers that don't require defining an actual
+    class.
                 
     This usage is nothing new; It's also available when using the standard
     library's `contextlib.contextmanager` decorator. One thing that is allowed
