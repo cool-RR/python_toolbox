@@ -75,7 +75,7 @@ has their own advantages and disadvantages over the others.
     it's better at handling exceptions, since any exceptions would be raised
     inside `manage_context` where we could `except` them, which is much more
     idiomatic than the way `__exit__` handles exceptions, which is by
-    receieving their type and returning whether to swallow them or not.
+    receiving their type and returning whether to swallow them or not.
     
     
 These were the different ways of *defining* a context manager. Now let's see
