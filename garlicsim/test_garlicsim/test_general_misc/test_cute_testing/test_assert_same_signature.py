@@ -10,8 +10,8 @@ from __future__ import with_statement
 from garlicsim.general_misc.third_party import decorator as decorator_module
 
 from garlicsim.general_misc.cute_testing import (assert_same_signature,
-                                                 RaiseAssertor)
-
+                                                 RaiseAssertor,
+                                                 Failure)
 
 
 def test():
@@ -24,9 +24,9 @@ def test():
         pass
     
     assert_same_signature(f, g)
-    with RaiseAssertor(Exception):
+    with RaiseAssertor(Failure):
         assert_same_signature(f, h)
-    with RaiseAssertor(Exception):
+    with RaiseAssertor(Failure):
         assert_same_signature(f, g)
         
         
@@ -36,7 +36,7 @@ def test():
     )
     
     assert_same_signature(f, g, new_f)
-    with RaiseAssertor(Exception):
+    with RaiseAssertor(Failure):
         assert_same_signature(new_f, h)
         
         
@@ -46,11 +46,11 @@ def test():
     )
     
     assert_same_signature(h, new_h)
-    with RaiseAssertor(Exception):
+    with RaiseAssertor(Failure):
         assert_same_signature(new_h, new_f)
-    with RaiseAssertor(Exception):
+    with RaiseAssertor(Failure):
         assert_same_signature(new_h, new_f, g)
-    with RaiseAssertor(Exception):
+    with RaiseAssertor(Failure):
         assert_same_signature(new_h, f)
         
                               
