@@ -82,7 +82,7 @@ class SimpackSelectionDialog(CuteDialog):
 
         
     def on_add_folder_containing_simpacks_button(self, event):
-        a a
+        wx.fold
         
         
     def on_ok(self, event):

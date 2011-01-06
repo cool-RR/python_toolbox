@@ -4,13 +4,10 @@
 '''
 Defines the `ContextManager` and `ContextManagerType` classes.
 
-These classes allow for greater freedom both when (a) defining context managers
-and when (b) using them. It allows defining context managers either by (1)
-using the classic `__enter__` and `__exit__` interface, or (2) using a
-stand-alone generator function or (3) using a class that defines a
-`manage_context` generator function. In addition, the `ContextManager` class
-allows using a context manager as a decorator to a function, which for some
-cases is a better alternative than using the `with` keyword.
+Using these classes to define context managers allows using such context
+managers as decorators (in addition to their normal use) and supports writing
+context managers in a new form called `manage_context`. (As well as the
+original forms).
 
 Inherit all your context managers from `ContextManager` (or decorate your
 generator functions with `ContextManagerType`) to enjoy all the benefits
@@ -59,17 +56,25 @@ has their own advantages and disadvantages over the others.
             def manage_context(self):
                 do_some_preparation()
                 try:
-                    with some_lock:
+                    with other_context_manager:
                         yield self
                 finally:
                     do_some_cleanup()
                     
     This approach is sometimes cleaner than defining `__enter__` and
     `__exit__`; Especially when using another context manager inside
-    `manage_context`. In our example we did `with some_lock` in our
-    `manage_context`, which is shorter and more idiomatic than calling
-    `some_lock.__enter__` in an `__enter__` method and `some_lock.__exit__` in
-    an `__exit__` method.
+    `manage_context`. In our example we did `with other_context_manager` in our
+    `manage_context`, which is shorter and more idiomatic than the equivalent
+    classic definition:
+
+    class MyContextManager(ContextManager):
+            def __enter__(self):
+                do_some_preparation()
+                other_context_manager.__enter__()
+            def __exit__(self, *exc):
+                result = other_context_manager.__exit__(*exc)
+                do_some_cleanup()
+                return result
     
     Another advantage of this approach over `__enter__` and `__exit__` is that
     it's better at handling exceptions, since any exceptions would be raised
