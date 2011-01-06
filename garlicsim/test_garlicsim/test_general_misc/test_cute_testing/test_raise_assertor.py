@@ -12,6 +12,10 @@ import nose
 from garlicsim.general_misc.cute_testing import RaiseAssertor, Failure
 
 
+class MyException(Exception):
+    pass
+
+
 def test_basic():
     with RaiseAssertor(Exception):
         raise Exception
@@ -20,9 +24,9 @@ def test_basic():
     
     def f():
         with RaiseAssertor(ZeroDivisionError):
-            raise Exception
+            raise MyException
         
-    nose.tools.assert_raises(Failure, f)
+    nose.tools.assert_raises(MyException, f)
     
     with RaiseAssertor(Exception) as raise_assertor:
         assert isinstance(raise_assertor, RaiseAssertor)
