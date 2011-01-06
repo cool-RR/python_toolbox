@@ -51,6 +51,12 @@ def start():
     new_gui_project_simpack_name = None
     load_gui_project_file_path = None
     
+    for arg in args:
+        if arg.startswith('__garlicsim_wx_path_to_add='):
+            path_to_add = arg[27:]
+            if path_to_add not in sys.path:
+                sys.path.append(path_to_add)
+    
     if args:
         arg = args[0]        
         if arg.startswith('__garlicsim_wx_new='):

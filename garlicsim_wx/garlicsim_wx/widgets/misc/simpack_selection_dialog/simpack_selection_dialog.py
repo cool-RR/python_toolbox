@@ -112,7 +112,8 @@ class SimpackSelectionDialog(CuteDialog):
                 
         
     def on_ok(self, event):
-        self.EndModal(wx.ID_OK)       
+        if self.list_box.GetStringSelection():
+            self.EndModal(wx.ID_OK)       
         
         
     def on_cancel(self, event):

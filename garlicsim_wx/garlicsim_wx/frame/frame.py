@@ -22,6 +22,7 @@ import pkg_resources
 from garlicsim.general_misc.temp_value_setters import TempRecursionLimitSetter
 from garlicsim_wx.general_misc import thread_timer
 from garlicsim_wx.general_misc import misc_tools
+from garlicsim.general_misc import path_tools
 from garlicsim_wx.general_misc import wx_tools
 
 import garlicsim
@@ -79,7 +80,12 @@ class Frame(wx.Frame):
         '''The current gui project.'''
         
         self.alternate_simpack_paths = []
-        
+        for arg in sys.argv[1:]:
+            if arg.startswith('__garlicsim_wx_path_to_add='):
+                path_to_add = arg[27:]
+                if path_to_add not in self.alternate_simpack_paths:
+                    self.alternate_simpack_paths.append(path_to_add)
+                    
         self.CreateStatusBar()
         
         self.__init_menus()
@@ -361,6 +367,8 @@ class Frame(wx.Frame):
         else:    
                 
             program_to_run.append('__garlicsim_wx_new=%s' % simpack.__name__)
+            program_to_run.append('__garlicsim_wx_path_to_add=%s' % \
+                                  path_tools.get_root_path_of_module(simpack))
          
             with wx_tools.CursorChanger(self, wx.CURSOR_WAIT):
                 subprocess.Popen(program_to_run)
