@@ -31,7 +31,8 @@ def get_packages(root, include_self=False, recursive=False, self_in_name=True):
     if isinstance(root, types.ModuleType):
         root_module = root
         root_path = os.path.dirname(root_module.__file__)
-    elif isinstance(root, str):
+    else:
+        assert isinstance(root, basestring)
         root_path = os.path.abspath(root)
         # Not making root_module, it might not be imported.
     

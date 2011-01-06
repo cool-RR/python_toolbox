@@ -9,6 +9,7 @@ import imp
 
 from garlicsim.general_misc import package_finder
 from garlicsim.general_misc import caching
+
     
 
 def import_all(package, exclude='__init__', silent_fail=False):
@@ -130,8 +131,7 @@ def exists(module_name):
         return False
     else:
         return True
-    
-    
+
     
 # Unused for now:
 
