@@ -28,13 +28,11 @@ class SimpackSelectionDialog(CuteDialog):
         CuteDialog.__init__(
             self,
             frame,
-            'Choose simulation package',
+            title='Choose simulation package',
         )
         
         assert isinstance(frame, garlicsim_wx.Frame)
         self.frame = frame
-        
-        self.update_simpack_list()
         
         self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)
         
@@ -44,11 +42,14 @@ class SimpackSelectionDialog(CuteDialog):
         )
         self.main_v_sizer.Add(self.static_text, 0, wx.EXPAND)
         
-        self.list_box = wx.ListBox(self, self.list_of_simpacks)
-        self.main_v_sizer.Add(self.list_box, 0, wx.EXPAND)
+        self.list_box = wx.ListBox(self)
+        self.main_v_sizer.Add(self.list_box, 0, wx.EXPAND | wx.ALL, 10)
         
         self.horizontal_line_1 = wx.StaticLine(self)
-        self.main_v_sizer.Add(self.horizontal_line_1, 0, wx.EXPAND)
+        self.main_v_sizer.Add(self.horizontal_line_1,
+                              0,
+                              wx.EXPAND | wx.ALL,
+                              10)
         
         self.add_folder_containing_simpacks_button = wx.Button(
             self,
@@ -62,13 +63,10 @@ class SimpackSelectionDialog(CuteDialog):
                   self.add_folder_containing_simpacks_button)
         
         self.horizontal_line_2 = wx.StaticLine(self)
-        self.main_v_sizer.Add(self.horizontal_line_2, 0, wx.EXPAND)
-        
-        self.dialog_button_sizer = wx.StdDialogButtonSizer()
-        
-        self.main_v_sizer.Add(self.dialog_button_sizer, 0,
-                              wx.ALIGN_CENTER | wx.ALL, border=10)
-        
+        self.main_v_sizer.Add(self.horizontal_line_2,
+                              0,
+                              wx.EXPAND | wx.ALL,
+                              10)
         
         self.dialog_button_sizer = wx.StdDialogButtonSizer()
         
@@ -86,7 +84,11 @@ class SimpackSelectionDialog(CuteDialog):
         self.Bind(wx.EVT_BUTTON, self.on_cancel, source=self.cancel_button)
         self.dialog_button_sizer.Realize()
         
-
+        self.update_simpack_list()
+        
+        self.SetSizer(self.main_v_sizer)
+        self.Layout()
+        
         
     def on_add_folder_containing_simpacks_button(self, event):
         dir_dialog = wx.DirDialog(self,
@@ -105,7 +107,11 @@ class SimpackSelectionDialog(CuteDialog):
                 
         
     def on_ok(self, event):
-        self.EndModal(wx.ID_OK)
+        self.EndModal(wx.ID_OK)       
+        
+        
+    def on_cancel(self, event):
+        self.EndModal(wx.ID_CANCEL)
         
         
     def update_simpack_list(self):
@@ -125,7 +131,7 @@ class SimpackSelectionDialog(CuteDialog):
 
     def get_simpack_selection(self):
         '''Import the selected simpack and return it.'''
-        string = self.GetStringSelection()
+        string = self.list_box.GetStringSelection()
         result = import_tools.normal_import(string)
         return result
 
