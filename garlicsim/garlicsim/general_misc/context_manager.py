@@ -76,34 +76,7 @@ has their own advantages and disadvantages over the others.
     it's better at handling exceptions, since any exceptions would be raised
     inside `manage_context` where we could `except` them, which is much more
     idiomatic than the way `__exit__` handles exceptions, which is by receiving
-    their type and returning whether to swallow them or not. For example, this:
-    
-        class RaiseAssertor(ContextManager):
-            """Assert that an exception was raised in the suite."""
-            def __init__(self, exception_type):
-                self.exception_type = exception_type
-            def manage_context(self):
-                try:
-                    yield self
-                except self.exception_type:
-                    pass
-                else:
-                    raise Exception("Our exception type wasn't raised!")
-                    
-    Is clearer than the equivalent classic definition:
-    
-        class RaiseAssertor(object):
-            """Assert that an exception was raised in the suite."""
-            def __init__(self, exception_type):
-                self.exception_type = exception_type
-            def __enter__(self):
-                return self
-            def __exit__(self, exc_type, exc_value, tb):
-                if exc_type and issubclass(exc_type, self.exception):
-                    return True
-                else:
-                    raise Exception("Our exception type wasn't raised!")
-    
+    their type and returning whether to swallow them or not.
     
 These were the different ways of *defining* a context manager. Now let's see
 the different ways of *using* a context manager:
