@@ -8,6 +8,7 @@ See its documentation for more info.
 '''
 
 import os
+import sys
 import glob
 import pkgutil
 
@@ -82,7 +83,15 @@ class SimpackSelectionDialog(CuteDialog):
 
         
     def on_add_folder_containing_simpacks_button(self, event):
-        wx.fold
+        dir_dialog = wx.DirDialog(self,
+                                  'Choose folder containing simpacks:',
+                                  wx.DD_DEFAULT_STYLE | wx.DD_DIR_MUST_EXIST)
+        try:
+            dir_dialog_return_value = dir_dialog.ShowModal()
+        finally:
+            dialog.Destroy()
+            
+        if dir
         
         
     def on_ok(self, event):

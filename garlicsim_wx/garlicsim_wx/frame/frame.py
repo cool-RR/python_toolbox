@@ -41,7 +41,7 @@ wildcard_text = ('GarlicSim Simulation Pickle (*.gssp)|*.gssp|'
 
 class Frame(wx.Frame):
     '''
-    The main window of garlicsim_wx.
+    The main window of `garlicsim_wx`.
     
     This window allows the user to create and manipulate gui projects.
     '''
@@ -57,13 +57,12 @@ class Frame(wx.Frame):
         self.Bind(wx.EVT_CLOSE, self.on_close)
         
         self.app = wx.GetApp()
-        ''' '''
         
         assert isinstance(self.app, garlicsim_wx.App)
         
         if hasattr(garlicsim_wx, '_active_frame'):
             warnings.warn('`garlicsim_wx` already had an `_active_frame` '
-                          'property before we created this frame! It should '
+                          'attribute before we created this frame! It should '
                           'not have one.')
         garlicsim_wx._active_frame = self
         
@@ -78,6 +77,8 @@ class Frame(wx.Frame):
                 
         self.gui_project = None
         '''The current gui project.'''
+        
+        self.alternate_simpack_paths = []
         
         self.CreateStatusBar()
         
