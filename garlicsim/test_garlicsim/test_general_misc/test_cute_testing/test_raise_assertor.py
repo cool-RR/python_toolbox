@@ -24,8 +24,6 @@ def test_basic():
         
     nose.tools.assert_raises(Failure, f)
     
-    
-    
     with RaiseAssertor(Exception) as raise_assertor:
         assert isinstance(raise_assertor, RaiseAssertor)
         with RaiseAssertor(RuntimeError):
