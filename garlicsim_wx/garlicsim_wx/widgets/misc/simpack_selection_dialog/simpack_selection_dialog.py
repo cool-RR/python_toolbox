@@ -18,17 +18,22 @@ from garlicsim.general_misc.cmp_tools import underscore_hating_cmp
 from garlicsim.general_misc import import_tools
 from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
 
+import garlicsim_wx
+
 
 class SimpackSelectionDialog(CuteDialog):
     '''Dialog for selecting a simpack when creating a new gui project.'''
     
-    def __init__(self, parent):
-        self.make_simpack_list()
+    def __init__(self, frame):
+        self.update_simpack_list()
         CuteDialog.__init__(
             self,
-            parent,
+            frame,
             'Choose simulation package',
         )
+        
+        assert isinstance(frame, garlicsim_wx.Frame)
+        self.frame = frame
         
         self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)
         
@@ -91,13 +96,18 @@ class SimpackSelectionDialog(CuteDialog):
         finally:
             dialog.Destroy()
             
-        if dir
-        
+        if dir_dialog_return_value == wx.OK:
+            path = dir_dialog.GetParent()
+            if path not in self.frame.alternate_simpack_paths:
+                self.frame.alternate_simpack_paths.append(path)
+                self.update_simpack_list
+                
         
     def on_ok(self, event):
         self.EndModal(wx.ID_OK)
         
-    def make_simpack_list(self):
+        
+    def update_simpack_list(self):
         '''Make a list of available simpacks.'''
         import garlicsim_lib.simpacks as simpacks
         self.list_of_simpacks = [
