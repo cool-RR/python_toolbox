@@ -9,7 +9,7 @@ import re
 
 import nose
 
-from garlicsim.general_misc.cute_testing import RaiseAssertor
+from garlicsim.general_misc.cute_testing import RaiseAssertor, Failure
 
 
 def test_basic():
@@ -22,7 +22,9 @@ def test_basic():
         with RaiseAssertor(ZeroDivisionError):
             raise Exception
         
-    nose.tools.assert_raises(Exception, f)
+    nose.tools.assert_raises(Failure, f)
+    
+    
     
     with RaiseAssertor(Exception) as raise_assertor:
         assert isinstance(raise_assertor, RaiseAssertor)
