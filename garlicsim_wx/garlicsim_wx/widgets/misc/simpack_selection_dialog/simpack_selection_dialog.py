@@ -107,6 +107,8 @@ class SimpackSelectionDialog(CuteDialog):
             if path not in self.frame.alternate_simpack_paths:
                 self.frame.alternate_simpack_paths.append(path)
                 self.update_simpack_list()
+            if path not in sys.path:
+                sys.path.append(path)
                 
         
     def on_ok(self, event):
@@ -125,10 +127,12 @@ class SimpackSelectionDialog(CuteDialog):
             in pkgutil.iter_modules(simpacks.__path__)
         ]
         for alternate_path in self.frame.alternate_simpack_paths:
-            self.list_of_simpacks += package_finder.get_packages(
-                alternate_path,
-                self_in_name=False
-            )
+            self.list_of_simpacks += [
+                package_name[1:] for package_name in package_finder.get_packages(
+                    alternate_path,
+                    self_in_name=False
+                )
+            ]
         self.list_of_simpacks.sort(cmp=underscore_hating_cmp)
         self.list_box.SetItems(self.list_of_simpacks)
         
