@@ -55,32 +55,54 @@ has their own advantages and disadvantages over the others.
         class MyContextManager(ContextManager):
             def manage_context(self):
                 do_some_preparation()
-                try:
-                    with other_context_manager:
-                        yield self
-                finally:
-                    do_some_cleanup()
+                with other_context_manager:
+                    yield self
                     
     This approach is sometimes cleaner than defining `__enter__` and
     `__exit__`; Especially when using another context manager inside
     `manage_context`. In our example we did `with other_context_manager` in our
-    `manage_context`, which is shorter and more idiomatic than the equivalent
-    classic definition:
+    `manage_context`, which is shorter, more idiomatic and less
+    double-underscore-y than the equivalent classic definition:
 
-    class MyContextManager(ContextManager):
-            def __enter__(self):
-                do_some_preparation()
-                other_context_manager.__enter__()
-            def __exit__(self, *exc):
-                result = other_context_manager.__exit__(*exc)
-                do_some_cleanup()
-                return result
+        class MyContextManager(object):
+                def __enter__(self):
+                    do_some_preparation()
+                    other_context_manager.__enter__()
+                    return self
+                def __exit__(self, *exc):
+                    return other_context_manager.__exit__(*exc)
     
     Another advantage of this approach over `__enter__` and `__exit__` is that
     it's better at handling exceptions, since any exceptions would be raised
     inside `manage_context` where we could `except` them, which is much more
-    idiomatic than the way `__exit__` handles exceptions, which is by
-    receiving their type and returning whether to swallow them or not.
+    idiomatic than the way `__exit__` handles exceptions, which is by receiving
+    their type and returning whether to swallow them or not. For example, this:
+    
+        class RaiseAssertor(ContextManager):
+            """Assert that an exception was raised in the suite."""
+            def __init__(self, exception_type):
+                self.exception_type = exception_type
+            def manage_context(self):
+                try:
+                    yield self
+                except self.exception_type:
+                    pass
+                else:
+                    raise Exception("Our exception type wasn't raised!")
+                    
+    Is clearer than the equivalent classic definition:
+    
+        class RaiseAssertor(object):
+            """Assert that an exception was raised in the suite."""
+            def __init__(self, exception_type):
+                self.exception_type = exception_type
+            def __enter__(self):
+                return self
+            def __exit__(self, exc_type, exc_value, tb):
+                if exc_type and issubclass(exc_type, self.exception):
+                    return True
+                else:
+                    raise Exception("Our exception type wasn't raised!")
     
     
 These were the different ways of *defining* a context manager. Now let's see
