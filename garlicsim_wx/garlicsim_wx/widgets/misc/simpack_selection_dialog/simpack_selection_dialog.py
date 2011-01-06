@@ -25,7 +25,6 @@ class SimpackSelectionDialog(CuteDialog):
     '''Dialog for selecting a simpack when creating a new gui project.'''
     
     def __init__(self, frame):
-        self.update_simpack_list()
         CuteDialog.__init__(
             self,
             frame,
@@ -34,6 +33,8 @@ class SimpackSelectionDialog(CuteDialog):
         
         assert isinstance(frame, garlicsim_wx.Frame)
         self.frame = frame
+        
+        self.update_simpack_list()
         
         self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)
         
@@ -100,7 +101,7 @@ class SimpackSelectionDialog(CuteDialog):
             path = dir_dialog.GetParent()
             if path not in self.frame.alternate_simpack_paths:
                 self.frame.alternate_simpack_paths.append(path)
-                self.update_simpack_list
+                self.update_simpack_list()
                 
         
     def on_ok(self, event):
@@ -111,16 +112,21 @@ class SimpackSelectionDialog(CuteDialog):
         '''Make a list of available simpacks.'''
         import garlicsim_lib.simpacks as simpacks
         self.list_of_simpacks = [
-            module_name for (importer, module_name, is_package)
+            ('garlicsim_lib.simpacks.' + module_name) for (_, module_name, _)
             in pkgutil.iter_modules(simpacks.__path__)
         ]
+        for alternate_path in self.frame.alternate_simpack_paths:
+            self.list_of_simpacks += \
+                [module_name for (_, module_name, _) in 
+                pkgutil.iter_modules(simpacks.__path__)]
         self.list_of_simpacks.sort(cmp=underscore_hating_cmp)
+        self.list_box.SetItems(self.list_of_simpacks)
         
 
     def get_simpack_selection(self):
         '''Import the selected simpack and return it.'''
         string = self.GetStringSelection()
-        result = import_tools.normal_import('garlicsim_lib.simpacks.' + string)
+        result = import_tools.normal_import(string)
         return result
 
 
