@@ -7,12 +7,36 @@ Defines the `Shell` class.
 See its documentation for more info.
 '''
 
+import sys
+import pprint
+
 import wx.py.shell
+
+from garlicsim.general_misc import temp_value_setters
 
 from garlicsim_wx.widgets import WorkspaceWidget
 import garlicsim
 import garlicsim_wx
 
+
+def display_hook(value):
+    if value is not None:
+        try:
+            import __builtin__
+            __builtin__._ = value
+        except ImportError:
+            __builtins__._ = value
+        pprint.pprint(value)
+
+
+class TempDisplayHookSetter(temp_value_setters.TempValueSetter):
+    def __init__(self):
+        temp_value_setters.TempValueSetter.__init__(
+            self,
+            (sys, 'displayhook'),
+            display_hook
+        )
+        
 
 class Shell(wx.py.shell.Shell, WorkspaceWidget):
     '''
@@ -37,3 +61,8 @@ class Shell(wx.py.shell.Shell, WorkspaceWidget):
     def setLocalShell(self):
         # Making it a no-op to avoid reference to retarded `ShellFacade`.
         pass
+    
+    
+    def push(self, command, silent = False):
+        with TempDisplayHookSetter():
+            return wx.py.shell.Shell.push(self, command, silent=silent)
