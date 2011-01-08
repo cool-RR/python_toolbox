@@ -79,7 +79,7 @@ class Frame(wx.Frame):
         self.gui_project = None
         '''The current gui project.'''
         
-        self.alternate_simpack_paths = []
+        self.simpack_places = []
         for arg in sys.argv[1:]:
             if arg.startswith('__garlicsim_wx_path_to_add='):
                 path_to_add = arg[27:]

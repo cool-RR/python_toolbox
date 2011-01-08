@@ -20,10 +20,12 @@ import os.path
 
 import wx
 
+from garlicsim.general_misc import path_tools
+
 import garlicsim.general_misc.version_info
-
 import garlicsim
-
+import garlicsim_wx
+import garlicsim_lib
 
 from . import misc
 from .frame import Frame
@@ -51,12 +53,22 @@ def start():
     new_gui_project_simpack_name = None
     load_gui_project_file_path = None
     
-    for arg in args:
-        if arg.startswith('__garlicsim_wx_path_to_add='):
-            path_to_add = arg[27:]
-            if path_to_add not in sys.path:
-                sys.path.append(path_to_add)
+    garlicsim_wx.simpack_places = [
+        (
+            path_tools.get_root_path_of_module(garlicsim_lib),
+            'garlicsim_lib.simpacks.'
+        )
+    ]
     
+    for arg in args:
+        if arg.startswith('__garlicsim_wx_simpack_place='):
+            simpack_place = arg[29:].split(',')
+            simpack_places.append(simpack_place)
+    
+    for path, module_prefix in simpack_places:
+        if path not in sys.path:
+            sys.path.append(path)
+            
     if args:
         arg = args[0]        
         if arg.startswith('__garlicsim_wx_new='):

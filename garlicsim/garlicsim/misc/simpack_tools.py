@@ -34,5 +34,3 @@ def _get_from_state_class(state_class):
     # is a `CachedType`.
         
     return simpack
-    
-    

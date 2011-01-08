@@ -17,6 +17,7 @@ def list_sub_folders(path):
     return folders
 
 
+
 def get_root_path_of_module(module):
     assert isinstance(module, types.ModuleType)
     module_name = module.__name__
@@ -32,3 +33,4 @@ def get_root_path_of_module(module):
         result = dir_path
     assert result in sys.path
     return result
+
