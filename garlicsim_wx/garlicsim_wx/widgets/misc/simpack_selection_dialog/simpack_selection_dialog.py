@@ -132,7 +132,7 @@ class SimpackSelectionDialog(CuteDialog):
                 sys.path.append(path)
                 
             if package_prefix:
-                assert package_prefix[-1] = '.'
+                assert package_prefix[-1] == '.'
                 package = address_tools.resolve(package_prefix[:-1])
                 path_to_search = path_tools.get_path_of_package(package)
             else: # not package_prefix
@@ -140,7 +140,7 @@ class SimpackSelectionDialog(CuteDialog):
                 
             list_of_simpacks_in_simpack_place = [
                 (package_prefix + package_name[1:]) for package_name in
-                package_finder.get_packages(path, self_in_name=False)
+                package_finder.get_packages(path_to_search, self_in_name=False)
             ]
             list_of_simpacks_in_simpack_place.sort(cmp=underscore_hating_cmp)
             
