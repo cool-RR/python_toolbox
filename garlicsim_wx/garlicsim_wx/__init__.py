@@ -63,9 +63,10 @@ def start():
     for arg in args:
         if arg.startswith('__garlicsim_wx_simpack_place='):
             simpack_place = arg[29:].split(',')
-            simpack_places.append(simpack_place)
+            if simpack_place not in garlicsim_wx.simpack_places:
+                garlicsim_wx.simpack_places.append(simpack_place)
     
-    for path, module_prefix in simpack_places:
+    for path, module_prefix in garlicsim_wx.simpack_places:
         if path not in sys.path:
             sys.path.append(path)
             

@@ -16,6 +16,8 @@ import setuptools
 import wx
 
 from garlicsim.general_misc.cmp_tools import underscore_hating_cmp
+from garlicsim.general_misc import address_tools
+from garlicsim.general_misc import path_tools
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import package_finder
 from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
@@ -122,19 +124,28 @@ class SimpackSelectionDialog(CuteDialog):
         
     def update_simpack_list(self):
         '''Make a list of available simpacks.'''
-        import garlicsim_lib.simpacks as simpacks
-        self.list_of_simpacks = [
-            ('garlicsim_lib.simpacks.' + module_name) for (_, module_name, _)
-            in pkgutil.iter_modules(simpacks.__path__)
-        ]
-        for alternate_path in self.frame.alternate_simpack_paths:
-            self.list_of_simpacks += [
-                package_name[1:] for package_name in package_finder.get_packages(
-                    alternate_path,
-                    self_in_name=False
-                )
+        
+        self.list_of_simpacks = []
+        
+        for path, package_prefix in garlicsim_wx.simpack_places:
+            if path not in sys.path:
+                sys.path.append(path)
+                
+            if package_prefix:
+                assert package_prefix[-1] = '.'
+                package = address_tools.resolve(package_prefix[:-1])
+                path_to_search = path_tools.get_path_of_package(package)
+            else: # not package_prefix
+                path_to_search = path
+                
+            list_of_simpacks_in_simpack_place = [
+                (package_prefix + package_name[1:]) for package_name in
+                package_finder.get_packages(path, self_in_name=False)
             ]
-        self.list_of_simpacks.sort(cmp=underscore_hating_cmp)
+            list_of_simpacks_in_simpack_place.sort(cmp=underscore_hating_cmp)
+            
+            self.list_of_simpacks += list_of_simpacks_in_simpack_place
+            
         self.list_box.SetItems(self.list_of_simpacks)
         
 

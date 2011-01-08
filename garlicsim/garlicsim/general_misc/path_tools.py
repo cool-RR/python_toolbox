@@ -17,6 +17,12 @@ def list_sub_folders(path):
     return folders
 
 
+def get_path_of_package(package):
+    path = package.__file__
+    dir_path, file_name = os.path.split(path)
+    assert '__init__' in file_name
+    return os.path.normpath(os.path.join(dir_path, '..'))
+
 
 def get_root_path_of_module(module):
     assert isinstance(module, types.ModuleType)

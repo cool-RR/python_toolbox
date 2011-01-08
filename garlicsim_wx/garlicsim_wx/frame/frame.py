@@ -78,13 +78,6 @@ class Frame(wx.Frame):
                 
         self.gui_project = None
         '''The current gui project.'''
-        
-        self.simpack_places = []
-        for arg in sys.argv[1:]:
-            if arg.startswith('__garlicsim_wx_path_to_add='):
-                path_to_add = arg[27:]
-                if path_to_add not in self.alternate_simpack_paths:
-                    self.alternate_simpack_paths.append(path_to_add)
                     
         self.CreateStatusBar()
         
@@ -367,8 +360,9 @@ class Frame(wx.Frame):
         else:    
                 
             program_to_run.append('__garlicsim_wx_new=%s' % simpack.__name__)
-            program_to_run.append('__garlicsim_wx_path_to_add=%s' % \
-                                  path_tools.get_root_path_of_module(simpack))
+            for simpack_place in garlicsim_wx.simpack_places:
+                program_to_run.append('__garlicsim_wx_simpack_place=%s' % \
+                                      ','.join(simpack_place))
          
             with wx_tools.CursorChanger(self, wx.CURSOR_WAIT):
                 subprocess.Popen(program_to_run)
