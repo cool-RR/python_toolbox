@@ -96,7 +96,9 @@ class SimpackSelectionDialog(CuteDialog):
     def on_add_folder_containing_simpacks_button(self, event):
         dir_dialog = wx.DirDialog(
             self,
-            'Choose folder containing simpacks:',
+            'Choose folder containing simpacks. Note that you need to choose '
+            'the folder that *contains* your simpack, and not the simpack '
+            'folder itself.',
             style=wx.DD_DEFAULT_STYLE | wx.DD_DIR_MUST_EXIST
         )
         try:
@@ -106,8 +108,8 @@ class SimpackSelectionDialog(CuteDialog):
             
         if dir_dialog_return_value == wx.ID_OK:
             path = dir_dialog.GetPath()
-            if path not in self.frame.alternate_simpack_paths:
-                self.frame.alternate_simpack_paths.append(path)
+            if path not in zip(garlicsim_wx.simpack_places)[0]:
+                garlicsim_wx.simpack_places.append((path, ''))
                 self.update_simpack_list()
             if path not in sys.path:
                 sys.path.append(path)
