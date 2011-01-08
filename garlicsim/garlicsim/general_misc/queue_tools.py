@@ -12,6 +12,10 @@ from garlicsim.general_misc import caching
 from garlicsim.general_misc import import_tools
 
 
+def is_multiprocessing_queue(queue):
+    return queue.__module__.startswith('multiprocessing')
+
+
 def dump(queue):
     '''
     Empty all pending items in a queue and return them in a list.
@@ -30,7 +34,10 @@ def iterate(queue, block=False, limit_to_original_size=False,
     the original number of items in the queue in the beginning.
     '''
     if limit_to_original_size:
-        if not _platform_supports_multiprocessing_qsize():
+        
+        if is_multiprocessing_queue(queue) and \
+           _platform_supports_multiprocessing_qsize():
+            
             if _prefetch_if_no_qsize:
                 for item in dump(queue):
                     yield item

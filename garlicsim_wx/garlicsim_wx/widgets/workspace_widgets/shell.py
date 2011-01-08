@@ -7,6 +7,8 @@ Defines the `Shell` class.
 See its documentation for more info.
 '''
 
+from __future__ import with_statement
+
 import sys
 import pprint
 
