@@ -87,6 +87,8 @@ class SimpackSelectionDialog(CuteDialog):
         self.dialog_button_sizer.Realize()
         
         self.update_simpack_list()
+        if self.list_of_simpacks:
+            self.list_box.Select(0)
         
         self.SetSizer(self.main_v_sizer)
         self.Fit()

@@ -62,7 +62,7 @@ def start():
     
     for arg in args:
         if arg.startswith('__garlicsim_wx_simpack_place='):
-            simpack_place = arg[29:].split(',')
+            simpack_place = tuple(arg[29:].split(','))
             if simpack_place not in garlicsim_wx.simpack_places:
                 garlicsim_wx.simpack_places.append(simpack_place)
     
