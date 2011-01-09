@@ -7,6 +7,9 @@ import sys
 import os.path
 import multiprocessing
 
+
+# "Almost importing" entire Python standard library, so it will all get
+# packaged with `py2exe`:
 if False:
     # The `if False` is important here, even though `almost_import_stdlib`
     # already has one wrapping it inside, because `almost_import_stdlib.py`
@@ -14,12 +17,14 @@ if False:
     # an `ImportError`.
     import almost_import_stdlib
 
+
 use_psyco = False
-try:
-    import psyco
-    use_psyco = True
-except ImportError:
-    pass
+if not ('--psyco=off' in sys.argv):
+    try:
+        import psyco
+        use_psyco = True
+    except ImportError:
+        pass
     
     
 if __name__ == '__main__':

@@ -11,11 +11,11 @@ import sys
 
 
 if sys.version_info[0] >= 3:
-    raise Exception("This package is not compatible with Python 3.x. Use "
-                    "`garlicsim_py3` instead.")
+    raise Exception('This package is not compatible with Python 3.x. Use '
+                    '`garlicsim_py3` instead.')
 if sys.version_info[1] <= 4:
-    raise Exception("This package requires Python 2.5 and upwards. (Not "
-                    "including 3.x).")
+    raise Exception('This package requires Python 2.5 and upwards. (Not '
+                    'including 3.x).')
 
 
 def get_packages():
@@ -55,7 +55,7 @@ setuptools.setup(
     url='http://garlicsim.org',
     packages=get_packages(),
     scripts=['garlicsim/scripts/start_simpack.py'],
-    license="LGPL v2.1",
+    license='LGPL v2.1',
     long_description = my_long_description,
     classifiers = my_classifiers,
     include_package_data = True,
