@@ -83,7 +83,9 @@ setup_kwargs = {
     'author_email': 'cool-rr@cool-rr.com',
     'url': 'http://garlicsim.org',
     'packages': garlicsim_wx_packages,
-    'scripts': ['garlicsim_wx/scripts/GarlicSim.py'],
+    'entry_points': {
+        'gui_scripts': ['garlicsim_wx.scripts.GarlicSim'],
+        },
     'license': 'Proprietary',
     'long_description': my_long_description,
     'classifiers': my_classifiers,
