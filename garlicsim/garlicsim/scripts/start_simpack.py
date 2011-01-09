@@ -143,7 +143,7 @@ def show_help():
     print(_help_text)
 
  
-def execute(argv=None):
+def start(argv=None):
     if argv is None:
         argv = sys.argv
     if len(argv) != 2:
@@ -159,5 +159,5 @@ def execute(argv=None):
 
 
 if __name__ == '__main__':
-    execute()
+    start()
     

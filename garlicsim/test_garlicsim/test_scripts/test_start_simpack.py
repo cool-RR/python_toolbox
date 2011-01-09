@@ -32,7 +32,7 @@ def test_implicit_help():
     try:
         with TempWorkingDirectorySetter(temp_dir):
             with sys_tools.OutputCapturer() as output_capturer:
-                garlicsim.scripts.start_simpack.execute(
+                garlicsim.scripts.start_simpack.start(
                     argv=['start_simpack.py']
                 )
             assert output_capturer.output == _help_text + '\n'
@@ -48,7 +48,7 @@ def test_explicit_help():
     try:
         with TempWorkingDirectorySetter(temp_dir):
             with sys_tools.OutputCapturer() as output_capturer:
-                garlicsim.scripts.start_simpack.execute(
+                garlicsim.scripts.start_simpack.start(
                     argv=['start_simpack.py', '--help']
                 )
             assert output_capturer.output == _help_text + '\n'

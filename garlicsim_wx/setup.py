@@ -84,7 +84,7 @@ setup_kwargs = {
     'url': 'http://garlicsim.org',
     'packages': garlicsim_wx_packages,
     'entry_points': {
-        'gui_scripts': ['garlicsim_wx.scripts.GarlicSim'],
+        'gui_scripts': ['garlicsim_wx.scripts.GarlicSim:start'],
         },
     'license': 'Proprietary',
     'long_description': my_long_description,

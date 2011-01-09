@@ -85,7 +85,7 @@ def test():
     try:
         with TempWorkingDirectorySetter(temp_dir):
             with sys_tools.OutputCapturer() as output_capturer:
-                garlicsim.scripts.start_simpack.execute(
+                garlicsim.scripts.start_simpack.start(
                     argv=['start_simpack.py', '_coin_flip']
                 )
             assert output_capturer.output == \
