@@ -55,7 +55,8 @@ setuptools.setup(
     url='http://garlicsim.org',
     packages=get_packages(),
     entry_points={
-        'console_scripts': ['garlicsim.scripts.start_simpack:start'],
+        'console_scripts': ['start_simpack='
+                            'garlicsim.scripts.start_simpack:start'],
     },
     license='LGPL v2.1',
     long_description = my_long_description,
