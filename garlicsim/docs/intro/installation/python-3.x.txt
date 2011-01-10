@@ -32,7 +32,7 @@ For ``garlicsim``
 * `Python 3.1`_ or above. If you use Python 2.x, use
   :ref:`this fork of GarlicSim instead <intro-installation-python-2.x>`.
  
-* Either `setuptools`_ or `Distribute`_.
+* `distribute`_.
 
 
 Optional but recommended:
@@ -52,17 +52,17 @@ Installation methods
 You may choose from one of these installation methods:
 
 
-``easy_install``
-----------------
+``pip``
+-------
 
-You can use ``easy_install`` in the standard way to install. Keep in mind that
+You can use ``pip`` in the standard way to install. Keep in mind that
 the packages' names on PyPI are suffixed with "_py3":
 
-* ``easy_install garlicsim_py3``
+* ``pip install garlicsim_py3``
 
 and/or
 
-* ``easy_install garlicsim_lib_py3``
+* ``pip install garlicsim_lib_py3``
 
 
 Installing from source
@@ -89,8 +89,7 @@ Some binaries for Windows are available:
   
 
 .. _Python 3.1: http://www.python.org/download/releases/3.1.2/
-.. _setuptools: http://pypi.python.org/pypi/setuptools
-.. _Distribute: http://pypi.python.org/pypi/distribute
+.. _distribute: http://pypi.python.org/pypi/distribute
 .. _Python for Windows Extensions: http://sourceforge.net/projects/pywin32
 .. _NumPy: http://scipy.org/Download
 .. _wxPython: http://wxpython.org/download.php

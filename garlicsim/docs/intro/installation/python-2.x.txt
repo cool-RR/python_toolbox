@@ -34,7 +34,7 @@ For ``garlicsim``
   <http://python.org/download/releases/2.6.5>`_. If you use Python 3.x, use
   :ref:`this fork of GarlicSim instead <intro-installation-python-3.x>`.
  
-* Either `setuptools`_ or `Distribute`_.
+* `distribute`_.
 
 And for users of Python 2.5 only:
 
@@ -65,20 +65,20 @@ Installation methods
 You may choose from one of these installation methods:
 
 
-``easy_install``
-----------------
+``pip``
+-------
 
-You can use ``easy_install`` in the standard way to install:
+You can use ``pip`` in the standard way to install:
 
-* ``easy_install garlicsim``
-
-and/or
-
-* ``easy_install garlicsim_lib``
+* ``pip install garlicsim``
 
 and/or
 
-* ``easy_install garlicsim_wx``
+* ``pip install garlicsim_lib``
+
+and/or
+
+* ``pip install garlicsim_wx``
 
 
 Installing from source
@@ -112,18 +112,13 @@ For Python 2.5, Python 2.6 and Python 2.7:
 To start the GUI
 ================
 
-In order to start the GUI after you install it, type the following in the Python
-interpreter:
+In order to start the GUI after you install it, run the :command:`GarlicSim`
+script is in your Python scripts folder. In Windows it's done like this::
 
-  >>> import garlicsim_wx
-  >>> if __name__ == '__main__': # Needed for multiprocessing
-  ...     garlicsim_wx.start()
-  ...
-
-
-
-.. _setuptools: http://pypi.python.org/pypi/setuptools
-.. _Distribute: http://pypi.python.org/pypi/distribute
+    c:\> c:\python26\Scripts\GarlicSim.exe
+    
+    
+.. _distribute: http://pypi.python.org/pypi/distribute
 .. _Backport of the multiprocessing module: http://pypi.python.org/pypi/multiprocessing/
 .. _Python for Windows Extensions: http://sourceforge.net/projects/pywin32
 .. _Psyco: http://psyco.sourceforge.net
