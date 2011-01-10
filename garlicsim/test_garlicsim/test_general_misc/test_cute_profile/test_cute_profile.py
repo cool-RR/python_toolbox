@@ -7,6 +7,7 @@ Testing module for `garlicsim.general_misc.cute_profile`.
 
 from garlicsim.general_misc import cute_profile
 from garlicsim.general_misc import cute_inspect
+from garlicsim.general_misc import cute_testing
 
 from .shared import call_and_check_if_profiled
 
@@ -190,5 +191,7 @@ def test_condition():
     
 def test_signature_perservation():
     '''Test that the `profile_ready` decorator preserves function signature.'''
-    assert cute_inspect.getargspec(func) == \
-           cute_inspect.getargspec(cute_profile.profile_ready()(func))
+    cute_testing.assert_same_signature(
+        func,
+        cute_profile.profile_ready()(func)
+    )

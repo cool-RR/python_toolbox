@@ -13,6 +13,7 @@ import nose.tools
 
 from garlicsim.general_misc.caching import cache
 from garlicsim.general_misc import cute_inspect
+from garlicsim.general_misc import cute_testing
 
 
 def counting_func(a=1, b=2, *args, **kwargs):
@@ -151,19 +152,18 @@ def test_signature_perservation():
     # without.
     
     f = cache()(counting_func)
-
-    # Foreplay:
     assert f() == f() == f(1, 2) == f(a=1, b=2)
-    
-    assert cute_inspect.getargspec(f) == cute_inspect.getargspec(counting_func)
+    cute_testing.assert_same_signature(f, counting_func)
     
     def my_func(qq, zz=1, yy=2, *args):
         pass
-    
     my_func_cached = cache(max_size=7)(my_func)
+    cute_testing.assert_same_signature(my_func, my_func_cached)
     
-    assert cute_inspect.getargspec(my_func) == \
-        cute_inspect.getargspec(my_func_cached)
+    def my_other_func(**kwargs):
+        pass
+    my_func_cached = cache()(my_func)
+    cute_testing.assert_same_signature(my_func, my_func_cached)
     
     
     
