@@ -16,18 +16,18 @@ General notes
 -------------
 
 Keep in mind that for Python 3.x, the GarlicSim project is comprised of two
-packages: ``garlicsim`` and ``garlicsim_lib``. ``garlicsim`` is the core logic
-and ``garlicsim_lib`` is a collection of simpacks. (There is no GUI in Python
-3.x because wxPython doesn't support it.)
+packages: :mod:`garlicsim` and :mod:`garlicsim_lib`. :mod:`garlicsim` is the
+core logic and :mod:`garlicsim_lib` is a collection of simpacks. (There is no
+GUI for Python 3.x because wxPython doesn't support it.)
 
-Installing ``garlicsim_lib`` is not mandatory.
+Installing :mod:`garlicsim_lib` is not mandatory.
 
 
 Requirements
 ------------
 
-For ``garlicsim``
-^^^^^^^^^^^^^^^^^
+For :mod:`garlicsim`
+^^^^^^^^^^^^^^^^^^^^
 
 * `Python 3.1`_ or above. If you use Python 2.x, use
   :ref:`this fork of GarlicSim instead <intro-installation-python-2.x>`.
@@ -40,8 +40,8 @@ Optional but recommended:
 * on Windows only: `Python for Windows Extensions`_.
 
 
-For some simpacks in ``garlicsim_lib``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+For some simpacks in :mod:`garlicsim_lib`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * `NumPy`_
  

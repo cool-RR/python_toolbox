@@ -15,6 +15,7 @@ Python is, (and you use Windows,) this is for you:
 `Download all-in-one Windows GarlicSim 0.6.0 installer
 <http://github.com/downloads/cool-RR/GarlicSim/GarlicSim-0.6.0.exe>`_
 
-This installer will give you `garlicsim`, `garlicsim_lib` and `garlicsim_wx`.
+This installer will give you :mod:`garlicsim`, :mod:`garlicsim_lib` and
+:mod:`garlicsim_wx`.
 
 A similiar all-in-one installer for Mac will become available in 2011.
