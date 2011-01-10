@@ -10,8 +10,8 @@ import garlicsim.general_misc.version_info
 import garlicsim
 
 
-__version_info__ = garlicsim.general_misc.version_info.VersionInfo(0, 6, 0)
-__version__ = '0.6.0'
+__version_info__ = garlicsim.general_misc.version_info.VersionInfo(0, 6, 1)
+__version__ = '0.6.1'
 
 
 if sys.version_info[0] >= 3:
