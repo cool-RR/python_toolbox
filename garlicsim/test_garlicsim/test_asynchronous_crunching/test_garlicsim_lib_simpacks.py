@@ -36,17 +36,14 @@ def test():
     '''Test `garlicsim_lib` simpacks.'''
     simpacks = [life, prisoner, _history_test, queue]
     
-    cruncher_types = [
-        garlicsim.asynchronous_crunching.crunchers.ThreadCruncher,
-        #garlicsim.asynchronous_crunching.crunchers.ProcessCruncher
-        # Until multiprocessing shit is solved
-    ]
-    
-    
-    for simpack, cruncher_type in \
-        cute_iter_tools.product(simpacks, cruncher_types):
+    for simpack in simpacks:
         
-        yield check, simpack, cruncher_type
+        cruncher_types = \
+            garlicsim.misc.SimpackGrokker(simpack).available_cruncher_types
+        
+        for cruncher_type in cruncher_types:
+            yield check, simpack, cruncher_type
+        
 
         
 def check(simpack, cruncher_type):

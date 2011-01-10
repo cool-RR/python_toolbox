@@ -46,18 +46,15 @@ def test_endable():
     assert len(path_tools.list_sub_folders(sample_endable_simpacks_dir)) == \
            len(simpacks)
     
-    cruncher_types = [
-        garlicsim.asynchronous_crunching.crunchers.ThreadCruncher,
-        
-        # Until multiprocessing shit is solved, this is commented-out:
-        #garlicsim.asynchronous_crunching.crunchers.ProcessCruncher
-    ]
-    
-    
-    for simpack, cruncher_type in \
-        cute_iter_tools.product(simpacks, cruncher_types):
+    for simpack in simpacks:
+
         test_garlicsim.verify_sample_simpack_settings(simpack)
-        yield check, simpack, cruncher_type
+        
+        cruncher_types = \
+            garlicsim.misc.SimpackGrokker(simpack).available_cruncher_types
+        
+        for cruncher_type in cruncher_types:
+            yield check, simpack, cruncher_type
 
         
 def check(simpack, cruncher_type):
