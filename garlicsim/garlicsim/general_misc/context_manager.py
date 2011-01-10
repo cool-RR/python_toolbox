@@ -269,12 +269,24 @@ class ContextManagerType(abc.ABCMeta):
             namespace
         )
         
-        if not result_class.__is_the_base_context_manager_class() and
-            ('manage_context' not in namespace) and (result_class.__enter__ ==
-            ContextManager.__enter_using_manage_context):
+        
+        if (
+            (not result_class.__is_the_base_context_manager_class())
             
-            assert result_class.__exit__ == \
-                   ContextManager.__exit_using_manage_context
+            and
+            
+           ('manage_context' not in namespace)
+           
+           and
+           
+           (getattr(result_class.__enter__, 'im_func',
+            result_class.__enter__) == ContextManager.\
+            _ContextManager__enter_using_manage_context.im_func)
+           ):
+            
+            assert getattr(result_class.__exit__, 'im_func',
+                result_class.__exit__) == ContextManager.\
+                __exit_using_manage_context.im_func
             
             # What this `if` and `assert` just checked for is: Is this a class
             # that doesn't define `manage_context`, but whose base context
@@ -315,7 +327,7 @@ class ContextManagerType(abc.ABCMeta):
         return (
             (cls.__name__ == 'ContextManager') and
             (cls.__module__ == 'garlicsim.general_misc.context_manager') and
-            (cls.mro() == [object])            
+            (cls.mro() == [cls, object])
         )
                 
     
