@@ -36,16 +36,32 @@ def __check_prerequisites():
     def check_garlicsim():
         try:
             import garlicsim
-            return [garlicsim]
         except ImportError:
             raise MissingModule("`garlicsim` is required, but it's not "
                                 "currently installed on your system. Go to "
                                 "http://garlicsim.org and follow the "
                                 "instructions for installation.")
+        else:
+            if garlicsim.__version_info__ < (0, 6, 0):
+                raise MissingModule("You have `garlicsim` version %s, while "
+                                    "version 0.6.0 is required. Go to "
+                                    "http://garlicsim.org and follow the "
+                                    "instructions for installation." %
+                                    garlicsim.__version_info__)
+            return [garlicsim]
     
     def check_wx():
         try:
             import wx
+            
+        except ImportError:
+            raise MissingModule("wxPython (version 2.8.10.1 and upwards, but "
+                                "lower than 2.9) is required, but it's not "
+                                "currently installed on your system. Please "
+                                "go download it at http://wxpython.org, "
+                                "install it, then try again.")
+        
+        else:
             wx_version = tuple(int(x) for x in wx.__version__.split('.'))
             if not ((2, 8, 10, 1) <= wx_version < (2, 9, 1, 1)):
                 warnings.warn("You have wxPython version %s installed, while "
@@ -57,12 +73,6 @@ def __check_prerequisites():
                               "latest version from "
                               "http://wxpython.org" % wx.__version__)
             return [wx]
-        except ImportError:
-            raise MissingModule("wxPython (version 2.8.10.1 and upwards, but "
-                                "lower than 2.9) is required, but it's not "
-                                "currently installed on your system. Please "
-                                "go download it at http://wxpython.org, "
-                                "install it, then try again.")
     
 
     checkers = [check_garlicsim, check_wx]
