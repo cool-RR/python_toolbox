@@ -54,7 +54,6 @@ class State(garlicsim.data_structures.State):
     
         
     def inplace_step(self):
-        # blocktodo: remove this and diff with persistent test
         self.clock += 1
     
         self.round += 1

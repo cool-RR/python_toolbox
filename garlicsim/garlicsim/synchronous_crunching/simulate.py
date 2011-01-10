@@ -78,7 +78,7 @@ def __history_simulate(simpack_grokker, state, iterations, step_profile):
         pass
         
     final_state = current_state
-    # Which is still here as the last value from the `for` loop
+    # Which is still here as the last value from the `for` loop.
     
     return final_state
 
@@ -112,6 +112,6 @@ def __non_history_simulate(simpack_grokker, state, iterations, step_profile):
         pass    
     
     final_state = current_state
-    # Which is still here as the last value from the `for` loop
+    # Which is still here as the last value from the `for` loop.
     
     return final_state
