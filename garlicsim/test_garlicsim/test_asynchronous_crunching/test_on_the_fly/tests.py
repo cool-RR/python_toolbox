@@ -229,7 +229,7 @@ def check(simpack, cruncher_type):
     
     project.crunching_manager.cruncher_type = cruncher_type
     project.sync_crunchers()
-    print(project.crunching_manager.crunchers);assert len(project.crunching_manager.crunchers) == 2
+    assert len(project.crunching_manager.crunchers) == 2
     (cruncher_1, cruncher_2) = project.crunching_manager.crunchers.values()
     assert type(cruncher_1) is cruncher_type
     assert type(cruncher_2) is cruncher_type
