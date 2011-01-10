@@ -10,7 +10,7 @@ DEFAULT_STEP_FUNCTION_TYPE = \
     garlicsim.misc.simpack_grokker.step_types.StepGenerator
 DEFAULT_STEP_FUNCTION = State.step_generator
 CONSTANT_CLOCK_INTERVAL = 1
-ENDABLE = True
+ENDABLE = False
 PROBLEM = None
 VALID = True
 CRUNCHERS_LIST = \

@@ -10,8 +10,6 @@ class State(garlicsim.data_structures.State):
     
     def step(self):
         time.sleep(0.1)
-        if getattr(self, 'clock', 0) >= 4:
-            raise WorldEnded
         return State()
         
     @staticmethod

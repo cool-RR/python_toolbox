@@ -16,8 +16,6 @@ class State(garlicsim.data_structures.State):
         time.sleep(0.1)
         last_state = history_browser.get_last_state()
         last_state_clock = getattr(last_state, 'clock', 0)
-        if last_state_clock >= 4:
-            raise WorldEnded
         new_state = State()
         new_state.clock = last_state_clock + 1
         return new_state
