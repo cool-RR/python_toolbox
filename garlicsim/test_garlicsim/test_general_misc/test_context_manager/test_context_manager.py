@@ -470,7 +470,76 @@ def test_enter_exit_overriding_enter_exit():
                                self_returning=True,
                                error_catching=True)
 
-
+    
+def test_enter_subclassing_exit():
+    '''
+    Test one defining `__enter__` subclassing from one that defines `__exit__`.
+    '''
+    
+    class MyBaseContextManager(ContextManager):
+        def __init__(self, value):
+            self.value = value
+            self._former_values = []
+            
+        def __exit__(self, type_=None, value=None, traceback=None):
+            global flag, exception_type_caught
+            flag = self._former_values.pop()
+            if type_:
+                exception_type_caught = type_
+                return True
+        
+    
+    class MyContextManager(MyBaseContextManager):
+        def __init__(self, value):
+            self.value = value
+            self._former_values = []
+        
+        def __enter__(self):
+            global flag
+            self._former_values.append(flag)
+            flag = self.value
+            return self
+    
+    check_context_manager_type(MyContextManager,
+                               self_returning=True,
+                               error_catching=True)
+    
+    
+def test_exit_subclassing_enter():
+    '''
+    Test one defining `__exit__` subclassing from one that defines `__enter__`.
+    '''
+    
+    class MyBaseContextManager(ContextManager):
+        def __init__(self, value):
+            self.value = value
+            self._former_values = []
+            
+        def __enter__(self):
+            global flag
+            self._former_values.append(flag)
+            flag = self.value
+            return self
+        
+    
+    class MyContextManager(MyBaseContextManager):
+        def __init__(self, value):
+            self.value = value
+            self._former_values = []
+            
+        def __exit__(self, type_=None, value=None, traceback=None):
+            global flag, exception_type_caught
+            flag = self._former_values.pop()
+            if type_:
+                exception_type_caught = type_
+                return True
+        
+    
+    check_context_manager_type(MyContextManager,
+                               self_returning=True,
+                               error_catching=True)
+    
+    
 def check_context_manager_type(context_manager_type,
                                self_returning,
                                error_catching):

@@ -109,12 +109,6 @@ your generator functions with `ContextManagerType`) to enjoy all these
 benefits.
 '''
 
-# blocktodo: make tests: `__enter__` overriding `manage_context` (should raise error)
-# etc.
-
-# blocktodo: allow `__enter__` and `__exit__` on different level, just not
-# different sides of `manage_context`. make tests.
-
 # todo: review the few external tests that I'm skipping.
 
 # todo: test using as abc with other abstract functions
