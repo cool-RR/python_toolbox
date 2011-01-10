@@ -141,6 +141,7 @@ def check(simpack, cruncher_type):
     # Letting our crunching manager update our cruncher about the new clock
     # target:
     project.sync_crunchers()
+    assert not job.is_done()
     (same_cruncher,) = project.crunching_manager.crunchers.values()
     # todo: On slow machines cruncher doesn't get created fast enough for the
     # above assert to work. Probably make some function that waits for it.
@@ -228,7 +229,7 @@ def check(simpack, cruncher_type):
     
     project.crunching_manager.cruncher_type = cruncher_type
     project.sync_crunchers()
-    assert len(project.crunching_manager.crunchers) == 2
+    print(project.crunching_manager.crunchers);assert len(project.crunching_manager.crunchers) == 2
     (cruncher_1, cruncher_2) = project.crunching_manager.crunchers.values()
     assert type(cruncher_1) is cruncher_type
     assert type(cruncher_2) is cruncher_type
