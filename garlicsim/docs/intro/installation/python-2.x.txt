@@ -94,13 +94,13 @@ source packages:
 * `garlicsim_wx source package .tar.gz <http://pypi.python.org/packages/source/g/garlicsim_wx/garlicsim_wx-0.6.0.tar.gz>`_
   `.zip <http://pypi.python.org/packages/source/g/garlicsim_wx/garlicsim_wx-0.6.0.zip>`_
 
-Use the standard ``python setup.py install`` to install.
+You may use the standard ``python setup.py install`` to install.
 
 
 Windows binaries
 ----------------
 
-Some binaries for Windows are available:
+Binaries for Windows are available:
 
 For Python 2.5, Python 2.6 and Python 2.7:
 

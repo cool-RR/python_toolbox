@@ -36,14 +36,28 @@ def __check_prerequisites():
     def check_pkg_resources():
         try:
             import pkg_resources
-            return [pkg_resources]
         except ImportError:
             raise MissingModule("`pkg_resources` is required, but it's not "
                                 "currently installed on your system. It comes "
-                                "with either `setuptools` or `distribute`, so "
-                                "please find either one of these on the "
-                                "internet and install it, then try again.")
+                                "with `distribute`, so please install it "
+                                "according to the instructions here: "
+                                "pypi.python.org/pypi/distribute")
+        else:
+            return [pkg_resources]
     
+    def check_distribute():  
+        import pkg_resources
+        try:
+            pkg_resources.require('distribute')
+        except pkg_resources.DistributionNotFound:
+            raise MissingModule("`distribute` is required, but it's not "
+                                "currently installed on your system. please "
+                                "install it according to the instructions "
+                                "here: pypi.python.org/pypi/distribute")
+        else:
+             # Returning empty list because we didn't import `distribute`:
+            return []
+        
     checkers = [check_pkg_resources]
     
     for checker in checkers:
