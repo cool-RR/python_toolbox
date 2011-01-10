@@ -38,8 +38,8 @@ def simulate(state, iterations=1, *args, **kwargs):
     step_profile = parse_arguments_to_step_profile(*args, **kwargs)
 
     if not hasattr(state, 'clock'):
-        # blocktodo: make mechanism to prevent deepcopying twice, both here and
-        # in inplace crap
+        # todo: make mechanism to prevent deepcopying twice, both here and
+        # in inplace handling.
         state = garlicsim.misc.state_deepcopy.state_deepcopy(state)
         state.clock = 0
     
