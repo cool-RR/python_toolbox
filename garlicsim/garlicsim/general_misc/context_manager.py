@@ -261,18 +261,68 @@ class ContextManagerType(abc.ABCMeta):
                 ContextManager._ContextManager__enter_using_manage_context
             namespace['__exit__'] = \
                 ContextManager._ContextManager__exit_using_manage_context
-        
-        return super(ContextManagerType, mcls).__new__(
+            
+        result_class = super(ContextManagerType, mcls).__new__(
             mcls,
             name,
             bases,
             namespace
         )
         
+        if not result_class.__is_the_base_context_manager_class() and
+            ('manage_context' not in namespace) and (result_class.__enter__ ==
+            ContextManager.__enter_using_manage_context):
+            
+            assert result_class.__exit__ == \
+                   ContextManager.__exit_using_manage_context
+            
+            # What this `if` and `assert` just checked for is: Is this a class
+            # that doesn't define `manage_context`, but whose base context
+            # manager class *does* define `manage_context` and use it for
+            # context management?
+            #
+            # If so, this new class *may* override `manage_context` by defining
+            # its own `__enter__` `__exit__` methods; But we have to make sure
+            # that it defines both of them, because if only one of them is
+            # defined, say `__enter__`, it will not have an `__exit__` to work
+            # with.
+            
+            defines_enter = '__enter__' in namespace
+            defines_exit = '__exit__' in namespace
+            
+            if defines_enter and not defines_exit:
+                raise Exception("The %s class defines an `__enter__` method, "
+                                "but not an `__exit__` method; We cannot use "
+                                "the `__exit__` method of its base context "
+                                "manager class because it uses the "
+                                "`manage_context` generator function." %
+                                result_class)
+            
+            if defines_exit and not defines_enter:
+                raise Exception("The %s class defines an `__exit__` method, "
+                                "but not an `__enter__` method; We cannot use "
+                                "the `__enter__` method of its base context "
+                                "manager class because it uses the "
+                                "`manage_context` generator function." %
+                                result_class)
+            
+        return result_class
+
+    
+    def __is_the_base_context_manager_class(cls):
+        '''tododoc'''
+        
+        return (
+            (cls.__name__ == 'ContextManager') and
+            (cls.__module__ == 'garlicsim.general_misc.context_manager') and
+            (cls.mro() == [object])            
+        )
+                
+    
     
 class ContextManager(object):
     '''
-    Allows running prepasration code before a given suite and cleanup after.
+    Allows running preparation code before a given suite and cleanup after.
     
     To make a context manager, use `ContextManager` as a base class and either
     (a) define `__enter__` and `__exit__` methods or (b) define a

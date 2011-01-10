@@ -37,7 +37,37 @@ def test_defining_exit_and_manage_context():
         class MyContextManager(ContextManager):
             def manage_context(self):
                 yield self
-            def __exit__(self):
+            def __exit__(self, *exc):
+                pass
+
+            
+def test_defining_enter_on_top_of_manage_context():
+    
+    class MyBaseContextManager(ContextManager):
+        def manage_context(self):
+            yield self
+            
+    with cute_testing.RaiseAssertor(
+        Exception,
+        "defines an `__enter__` method, but not an `__exit__` method"
+        ):
+        
+        class MyContextManager(ContextManager):
+            def __enter__(self):
                 return self
             
-
+            
+def test_defining_exit_on_top_of_manage_context():
+    
+    class MyBaseContextManager(ContextManager):
+        def manage_context(self):
+            yield self
+            
+    with cute_testing.RaiseAssertor(
+        Exception,
+        "defines an `__exit__` method, but not an `__enter__` method"
+        ):
+        
+        class MyContextManager(ContextManager):
+            def __exit__(self, *exc):
+                pass
