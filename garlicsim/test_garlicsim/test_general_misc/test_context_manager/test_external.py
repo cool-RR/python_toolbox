@@ -84,7 +84,7 @@ class ContextManagerTestCase(unittest2.TestCase):
         self.assertEqual(state, [1, 42, 999])
 
     def _create_contextmanager_attribs(self):
-        if garlicsim.__version_info__ <= (0, 6, 0):
+        if garlicsim.__version_info__ <= (0, 6, 1):
             raise nose.SkipTest
         def attribs(**kw):
             def decorate(func):
@@ -211,7 +211,7 @@ class TestContextDecorator(unittest2.TestCase):
 
 
     def test_typo_enter(self):
-        if garlicsim.__version_info__ <= (0, 6, 0):
+        if garlicsim.__version_info__ <= (0, 6, 1):
             raise nose.SkipTest
         class MyContextManager(ContextManager):
             def __unter__(self):
@@ -225,7 +225,7 @@ class TestContextDecorator(unittest2.TestCase):
 
 
     def test_typo_exit(self):
-        if garlicsim.__version_info__ <= (0, 6, 0):
+        if garlicsim.__version_info__ <= (0, 6, 1):
             raise nose.SkipTest
         class MyContextManager(ContextManager):
             def __enter__(self):

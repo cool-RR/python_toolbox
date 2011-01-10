@@ -22,7 +22,7 @@ def test_locally_defined_class():
     # Testing for locally defined class:
     
     
-    if garlicsim.__version_info__ <= (0, 6, 0):
+    if garlicsim.__version_info__ <= (0, 6, 1):
         raise nose.SkipTest("This test doesn't pass in `garlicsim` version "
                             "0.6 and below, because `describe` doesn't "
                             "support nested classes yet.")
@@ -257,7 +257,7 @@ def test_bad_module_name():
 
 def test_function_in_something():
     '''Test `describe` doesn't fail when describing `{1: sum}`.'''
-    if garlicsim.__version_info__ <= (0, 6, 0):
+    if garlicsim.__version_info__ <= (0, 6, 1):
         raise nose.SkipTest("This test doesn't pass in `garlicsim` version "
                             "0.6 and below.")
     assert describe({1: sum}) == '{1: sum}'
