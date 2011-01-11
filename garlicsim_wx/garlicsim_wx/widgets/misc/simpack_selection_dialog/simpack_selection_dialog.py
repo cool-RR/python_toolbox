@@ -93,6 +93,8 @@ class SimpackSelectionDialog(CuteDialog):
         self.SetSizer(self.main_v_sizer)
         self.Layout()
         
+        self.list_box.SetFocus()
+        
         
     def on_add_folder_containing_simpacks_button(self, event):
         '''Handler for "Add folders containing simpacks" button.'''
