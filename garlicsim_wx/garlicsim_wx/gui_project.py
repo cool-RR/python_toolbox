@@ -10,7 +10,6 @@ See its documentation for more info.
 from __future__ import with_statement
 
 import time
-import sys
 
 import wx
 
@@ -18,8 +17,6 @@ from .general_misc.stringsaver import s2i, i2s
 from garlicsim.general_misc.infinity import infinity
 from garlicsim.general_misc import binary_search
 from garlicsim.general_misc import import_tools
-from garlicsim.general_misc import cute_iter_tools
-from garlicsim.general_misc import path_tools
 from garlicsim_wx.general_misc.emitting_ordered_set import EmittingOrderedSet
 from garlicsim_wx.general_misc.emitting_weak_key_default_dict import \
      EmittingWeakKeyDefaultDict
@@ -921,12 +918,6 @@ class GuiProject(object):
 
         frame = garlicsim_wx._active_frame
         # todo: Make Frame inherit from some "InstanceHolder" instead
-        
-        #if cute_iter_tools.is_iterable(simpack):
-            #simpack_name, path_to_add = simpack
-            #if path_to_add not in sys.path:
-                #sys.path.append(path_to_add)
-            #simpack = import_tools.normal_import(simpack_name)
         
         gui_project = GuiProject(simpack, frame, project)
         
