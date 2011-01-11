@@ -19,7 +19,7 @@ class Failure(CuteException, AssertionError):
 
 class RaiseAssertor(ContextManager):
     '''
-    #Asserts that a certain exception was raised in the suite. You may use a
+    Asserts that a certain exception was raised in the suite. You may use a
     snippet of text that must appear in the exception message or a regex that
     the exception message must match.
     
