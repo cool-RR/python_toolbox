@@ -25,6 +25,7 @@ import test_garlicsim
 
 
 def test():
+    '''Test `garlicsim.asynchronous_crunching`.'''
     
     from . import sample_simpacks
     
