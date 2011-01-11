@@ -23,6 +23,7 @@ import wx
 from garlicsim.general_misc import path_tools
 
 import garlicsim.general_misc.version_info
+
 import garlicsim
 import garlicsim_wx
 import garlicsim_lib
@@ -53,6 +54,8 @@ def start():
     new_gui_project_simpack_name = None
     load_gui_project_file_path = None
     
+    ### Adding simpack places that we were given: #############################
+    #                                                                         #
     garlicsim_wx.simpack_places = [
         (
             path_tools.get_root_path_of_module(garlicsim_lib),
@@ -69,6 +72,8 @@ def start():
     for path, module_prefix in garlicsim_wx.simpack_places:
         if path not in sys.path:
             sys.path.append(path)
+    #                                                                         #
+    ### Finished adding simpack places that we were given. ####################
             
     if args:
         arg = args[0]        

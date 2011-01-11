@@ -8,6 +8,7 @@
 import sys 
 import os.path
 
+
 use_psyco = False
 if not ('--psyco=off' in sys.argv):
     try:
