@@ -25,8 +25,23 @@ def test_basic():
     def f():
         with RaiseAssertor(ZeroDivisionError):
             raise MyException
-        
     nose.tools.assert_raises(MyException, f)
+    with RaiseAssertor(MyException):
+        f()
+    
+    def g():
+        with RaiseAssertor(Exception):
+            pass
+    nose.tools.assert_raises(Failure, f)
+    with RaiseAssertor(Failure):
+        g()
+    
+    def h():
+        with RaiseAssertor(RuntimeError, 'booga'):
+            pass
+    nose.tools.assert_raises(Failure, f)
+    with RaiseAssertor(Failure):
+        f()    
     
     with RaiseAssertor(Exception) as raise_assertor:
         assert isinstance(raise_assertor, RaiseAssertor)
