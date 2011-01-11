@@ -14,6 +14,9 @@ from garlicsim.general_misc.context_manager import (ContextManager,
                                                     SelfHook)
 
 def test_defining_enter_and_manage_context():
+    '''
+    Test context manager class defining both `__enter__` and `manage_context`.
+    '''
     
     with cute_testing.RaiseAssertor(
         Exception,
@@ -28,6 +31,9 @@ def test_defining_enter_and_manage_context():
 
             
 def test_defining_exit_and_manage_context():
+    '''
+    Test context manager class defining both `__exit__` and `manage_context`.
+    '''
     
     with cute_testing.RaiseAssertor(
         Exception,
@@ -42,7 +48,9 @@ def test_defining_exit_and_manage_context():
 
             
 def test_defining_enter_on_top_of_manage_context():
-    
+    '''
+    Test an `__enter__`-definer inheriting from a `manage_context`-definer.
+    '''
     class MyBaseContextManager(ContextManager):
         def manage_context(self):
             yield self
@@ -58,6 +66,9 @@ def test_defining_enter_on_top_of_manage_context():
             
             
 def test_defining_exit_on_top_of_manage_context():
+    '''
+    Test an `__exit__`-definer inheriting from a `manage_context`-definer.
+    '''
     
     class MyBaseContextManager(ContextManager):
         def manage_context(self):

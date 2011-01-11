@@ -41,9 +41,7 @@ def test_setter_getter():
     
 
 def test_as_decorator():
-    '''
-    Test `TempValueSetter` with variable inputted as `(obj, attribute_name)`.
-    '''
+    '''Test `TempValueSetter` used as a decorator.'''
     def a():
         pass
     a.x = 1

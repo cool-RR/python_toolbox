@@ -1,4 +1,7 @@
-"""Unit tests for contextlib.py, and other context managers."""
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''Tests taken from Python's `contextlib'.'''
 
 from __future__ import with_statement
 

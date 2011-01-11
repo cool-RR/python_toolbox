@@ -79,7 +79,7 @@ def test_exception():
         shutil.rmtree(temp_dir)
     
 def test_as_decorator():
-    '''Test basic workings of `TempWorkingDirectorySetter`.'''
+    '''Test `TempWorkingDirectorySetter` used as a decorator.'''
     temp_dir = tempfile.mkdtemp(prefix='temp_garlicsim_')
     try:
         old_cwd = os.getcwd()
