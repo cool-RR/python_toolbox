@@ -68,7 +68,7 @@ You may choose from one of these installation methods:
 ``pip``
 -------
 
-You can use ``pip`` in the standard way to install:
+You can use `pip`_ in the standard way to install:
 
 * ``pip install garlicsim``
 
@@ -118,7 +118,7 @@ like this::
 
     c:\> c:\python26\Scripts\GarlicSim.exe
     
-    
+.. _pip: http://pypi.python.org/pypi/pip
 .. _distribute: http://pypi.python.org/pypi/distribute
 .. _Backport of the multiprocessing module: http://pypi.python.org/pypi/multiprocessing/
 .. _Python for Windows Extensions: http://sourceforge.net/projects/pywin32
