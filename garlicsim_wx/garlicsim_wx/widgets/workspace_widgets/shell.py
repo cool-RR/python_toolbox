@@ -21,17 +21,27 @@ import garlicsim
 import garlicsim_wx
 
 
-def display_hook(value):
-    if value is not None:
+def display_hook(thing):
+    '''
+    Print a representation of an object.
+    
+    This uses `pprint` rather than the default Python display hook which uses
+    `print`. This is used as a temporary display hook when working in the shell
+    so that the shell will pretty-print all objects.
+    '''
+    if thing is not None:
         try:
             import __builtin__
-            __builtin__._ = value
+            __builtin__._ = thing
         except ImportError:
-            __builtins__._ = value
-        pprint.pprint(value)
+            __builtins__._ = thing
+        pprint.pprint(thing)
 
 
 class TempDisplayHookSetter(temp_value_setters.TempValueSetter):
+    '''
+    Temporarily sets the system's display hook to be our pretty-printing one.
+    '''
     def __init__(self):
         temp_value_setters.TempValueSetter.__init__(
             self,
@@ -65,6 +75,12 @@ class Shell(wx.py.shell.Shell, WorkspaceWidget):
         pass
     
     
-    def push(self, command, silent = False):
+    def push(self, command, silent=False):
+        '''
+        Send command to the interpreter for execution.
+        
+        If the command evaluates to some Python object, it will be
+        pretty-printed in the shell.
+        '''
         with TempDisplayHookSetter():
             return wx.py.shell.Shell.push(self, command, silent=silent)
