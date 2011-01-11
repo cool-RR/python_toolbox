@@ -51,14 +51,14 @@ def __check_prerequisites():
             pkg_resources.require('distribute')
         except pkg_resources.DistributionNotFound:
             raise MissingModule("`distribute` is required, but it's not "
-                                "currently installed on your system. please "
+                                "currently installed on your system. Please "
                                 "install it according to the instructions "
                                 "here: pypi.python.org/pypi/distribute")
         else:
              # Returning empty list because we didn't import `distribute`:
             return []
         
-    checkers = [check_pkg_resources]
+    checkers = [check_pkg_resources, check_distribute]
     
     for checker in checkers:
         modules += checker()
