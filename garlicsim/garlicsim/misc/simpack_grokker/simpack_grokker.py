@@ -357,9 +357,9 @@ class SimpackGrokker(object):
     
     def get_inplace_step_iterator(self, state, step_profile):
         '''
-        Get an inplace step iterator which modifies the state in-place.
+        Get an inplace step iterator which modifies the state in place.
         
-        Not yet implemented, sorry. 
+        
         '''
         
         step_function = step_profile.step_function
@@ -367,7 +367,10 @@ class SimpackGrokker(object):
         
         if step_type not in (step_types.InplaceStep,
                              step_types.InplaceStepGenerator):
-            raise Exception('tododoc')
+            raise Exception("Can't get an inplace step iterator for the step "
+                            "function you're using, because it's not an "
+                            "inplace step function, it's a %s." % 
+                            step_type.verbose_name)
         
         return step_type.inplace_step_iterator_class(
             state,

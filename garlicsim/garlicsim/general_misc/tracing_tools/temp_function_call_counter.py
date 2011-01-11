@@ -43,8 +43,9 @@ class TempFunctionCallCounter(TempValueSetter):
                 parent_object_address, function_name = address.rsplit('.', 1)
                 parent_object = address_tools.resolve(parent_object_address)
             except Exception:
-                raise Exception("couldn't guess from function, please do "
-                                "getter/setter or parent/name") # tododoc
+                raise Exception("Couldn't obtain parent/name pair from "
+                                "function; Supply one manually or "
+                                "alternatively supply a getter/setter pair.")
             first, second = parent_object, function_name
             
         self.call_counting_function = count_calls(actual_function)

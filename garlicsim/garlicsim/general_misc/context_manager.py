@@ -316,7 +316,13 @@ class ContextManagerType(abc.ABCMeta):
 
     
     def __is_the_base_context_manager_class(cls):
-        '''tododoc'''
+        '''
+        Return whether `cls` is `ContextManager`.
+        
+        #It's an ugly method, but unfortunately it's necessary because at one
+        point we want to test if a class is `ContextManager` before
+        `ContextManager` is defined in this module.
+        '''
         
         return (
             (cls.__name__ == 'ContextManager') and
