@@ -18,6 +18,7 @@ def list_sub_folders(path):
 
 
 def get_path_of_package(package):
+    '''Get the path of a Python package, i.e. where its modules would be.'''
     path = package.__file__
     dir_path, file_name = os.path.split(path)
     assert '__init__' in file_name
@@ -25,6 +26,14 @@ def get_path_of_package(package):
 
 
 def get_root_path_of_module(module):
+    '''
+    Get the root path of a module.
+    
+    This is the path that should be in `sys.path` for the module to be
+    importable. Note that this would give the same answer for
+    `my_package.my_sub_package.my_module` as for `my_package`; It only cares
+    about the root module.
+    '''
     assert isinstance(module, types.ModuleType)
     module_name = module.__name__
     root_module_name = module_name.split('.', 1)[0]
