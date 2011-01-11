@@ -32,6 +32,7 @@ class SimpackSelectionDialog(CuteDialog):
             self,
             frame,
             title='Choose simulation package',
+            size=(-1, 400)
         )
         
         assert isinstance(frame, garlicsim_wx.Frame)
@@ -46,7 +47,7 @@ class SimpackSelectionDialog(CuteDialog):
         self.main_v_sizer.Add(self.static_text, 0, wx.EXPAND | wx.ALL, 10)
         
         self.list_box = wx.ListBox(self)
-        self.main_v_sizer.Add(self.list_box, 0, wx.EXPAND | wx.ALL, 10)
+        self.main_v_sizer.Add(self.list_box, 1, wx.EXPAND | wx.ALL, 10)
         self.list_box.Bind(wx.EVT_LEFT_DCLICK, self.on_ok, self.list_box)
         
         self.add_folder_containing_simpacks_button = wx.Button(
@@ -90,7 +91,6 @@ class SimpackSelectionDialog(CuteDialog):
             self.list_box.Select(0)
         
         self.SetSizer(self.main_v_sizer)
-        self.Fit()
         self.Layout()
         
         
