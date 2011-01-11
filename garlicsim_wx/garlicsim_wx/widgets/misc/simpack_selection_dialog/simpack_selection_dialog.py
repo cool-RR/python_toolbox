@@ -11,7 +11,6 @@ import os
 import sys
 import glob
 import pkgutil
-import setuptools
 
 import wx
 
@@ -96,6 +95,7 @@ class SimpackSelectionDialog(CuteDialog):
         
         
     def on_add_folder_containing_simpacks_button(self, event):
+        '''Handler for "Add folders containing simpacks" button.'''
         dir_dialog = wx.DirDialog(
             self,
             'Choose folder containing simpacks. Note that you need to choose '
@@ -118,16 +118,18 @@ class SimpackSelectionDialog(CuteDialog):
                 
         
     def on_ok(self, event):
+        '''Handler for "Ok" button.'''
         if self.list_box.GetStringSelection():
             self.EndModal(wx.ID_OK)       
         
         
     def on_cancel(self, event):
+        '''Handler for "Cancel" button.'''
         self.EndModal(wx.ID_CANCEL)
         
         
     def update_simpack_list(self):
-        '''Make a list of available simpacks.'''
+        '''Update the list of available simpacks.'''
         
         self.list_of_simpacks = []
         

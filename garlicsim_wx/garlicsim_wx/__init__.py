@@ -40,6 +40,21 @@ __all__ = ['Frame', 'GuiProject', 'start']
 __version_info__ = garlicsim.general_misc.version_info.VersionInfo(0, 6, 1)
 __version__ = '0.6.1'
 
+simpack_places = []
+'''
+Places were simpacks may be found, described as `(path, package_prefix)` pairs.
+
+The `path` part says the path that simpacks should be imported with; i.e., the
+path that should be in `sys.path` for the simpack to be importable.
+
+The `package_prefix` part, which may be an empty string, is the hierarchy of
+packages up to the simpacks. For example, a simpack place may have a package
+prefix of `'garlicsim_lib.simpacks.'`, in which case `garlicsim_wx` will try to
+import any simpacks that are in the `garlicsim_lib.simpacks` package. If an
+empty string is given, the path itself will be used without going into any
+packages inside of it.
+'''
+
 
 def start():
     '''Start the GUI.'''
