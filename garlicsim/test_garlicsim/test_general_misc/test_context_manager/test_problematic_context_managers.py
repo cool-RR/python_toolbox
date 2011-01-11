@@ -52,7 +52,7 @@ def test_defining_enter_on_top_of_manage_context():
         "defines an `__enter__` method, but not an `__exit__` method"
         ):
         
-        class MyContextManager(ContextManager):
+        class MyContextManager(MyBaseContextManager):
             def __enter__(self):
                 return self
             
@@ -68,6 +68,6 @@ def test_defining_exit_on_top_of_manage_context():
         "defines an `__exit__` method, but not an `__enter__` method"
         ):
         
-        class MyContextManager(ContextManager):
+        class MyContextManager(MyBaseContextManager):
             def __exit__(self, *exc):
                 pass
