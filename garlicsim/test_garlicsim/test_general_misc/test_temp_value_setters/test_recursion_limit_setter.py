@@ -22,6 +22,7 @@ def test():
 
 
 def test_as_decorator():
+    '''Test `TempRecursionLimitSetter` when used as a decorator.'''
     old_recursion_limit = sys.getrecursionlimit()
     @TempRecursionLimitSetter(1234)
     def f():

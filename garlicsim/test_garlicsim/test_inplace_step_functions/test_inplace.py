@@ -1,7 +1,7 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''Testing module for `garlicsim.asynchronous_crunching`.'''
+'''Testing module for inplace step functions.'''
 
 from __future__ import division
 from __future__ import with_statement
@@ -25,7 +25,9 @@ import garlicsim
 
 import test_garlicsim
 
+
 class StateDeepcopyCounter(TempFunctionCallCounter):
+    '''Counts how many times `state_deepcopy` was called.'''
     def __init__(self):
         TempFunctionCallCounter.__init__(
             self,
@@ -34,7 +36,7 @@ class StateDeepcopyCounter(TempFunctionCallCounter):
 
 
 def test():
-    '''Test `garlicsim.asynchronous_crunching`.'''
+    '''Test inplace step functions.'''
     
     from . import sample_simpacks
     
@@ -61,7 +63,9 @@ def test():
 
         
 def check(simpack, cruncher_type):
-    
+    '''
+    Run checks on a simpack that uses inplace step functions.
+    '''
     my_simpack_grokker = garlicsim.misc.SimpackGrokker(simpack)
     
     assert simpack._settings_for_testing.DEFAULT_STEP_FUNCTION_TYPE in \

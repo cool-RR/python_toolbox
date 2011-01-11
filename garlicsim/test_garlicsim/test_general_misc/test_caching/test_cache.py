@@ -12,7 +12,6 @@ import weakref
 import nose.tools
 
 from garlicsim.general_misc.caching import cache
-from garlicsim.general_misc import cute_inspect
 from garlicsim.general_misc import cute_testing
 
 
@@ -132,19 +131,17 @@ def test_function_instead_of_max_size():
              'def f():\n'
              '    pass')
         
-    try:
-        confusedly_put_function_as_max_size()
-    except TypeError, exception:
-        assert type(exception) is TypeError
-        assert '%s' not in exception.args[0]
-        assert re.match(
+    with cute_testing.RaiseAssertor(
+        TypeError,
+        re.compile(
             'You entered the callable `.*?` where you should have '
             'entered the `max_size` for the cache. You probably '
-            'used `@cache`, while you should have used `@cache\(\)`',
-            exception.args[0]
+            'used `@cache`, while you should have used `@cache\(\)`'
         )
-    else:
-        raise Exception('Should have gotten `TypeError`.')
+    ):
+        
+        confusedly_put_function_as_max_size()
+    
     
     
 def test_signature_perservation():

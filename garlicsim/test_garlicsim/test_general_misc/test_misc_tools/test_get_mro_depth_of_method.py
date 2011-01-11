@@ -2,16 +2,14 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the `` class.
-
-See its documentation for more information.
+Testing module for `garlicsim.general_misc.misc_tools.get_mro_depth_of_method`.
 '''
 
 from garlicsim.general_misc.misc_tools import get_mro_depth_of_method
 
 
 def test():
-    
+    '''Test the basic workings of `get_mro_depth_of_method`.'''
     class A(object):
         def a_method(self):
             pass

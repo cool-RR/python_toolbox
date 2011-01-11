@@ -15,6 +15,7 @@ from garlicsim.general_misc.cute_testing import (assert_same_signature,
 
 
 def test():
+    '''Test the basic workings of `assert_same_signature`.'''
     
     def f(a, b=1, **kwargs):
         pass

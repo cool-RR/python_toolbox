@@ -17,6 +17,7 @@ class MyException(Exception):
 
 
 def test_basic():
+    '''Test the basic workings of `RaiseAssertor`.'''
     with RaiseAssertor(Exception):
         raise Exception
     with RaiseAssertor(Exception):
@@ -52,7 +53,7 @@ def test_basic():
             
 
 def test_decorator():
-    
+    '''Test using `RaiseAssertor` as a decorator.'''
     @RaiseAssertor(ZeroDivisionError)
     def f():
         1/0
@@ -61,7 +62,9 @@ def test_decorator():
 
     
 def test_string():
-    
+    '''
+    Test using `RaiseAssertor` specifying sub-string of the exception message.
+    '''
     with RaiseAssertor(Exception, 'wer'):
         raise TypeError('123qwerty456')
     
@@ -75,6 +78,9 @@ def test_string():
         
         
 def test_regex():
+    '''
+    Test using `RaiseAssertor` specifying regex pattern for exception message.
+    '''
     with RaiseAssertor(Exception, re.compile('^123\w*?456$')):
         raise TypeError('123qwerty456')
     
