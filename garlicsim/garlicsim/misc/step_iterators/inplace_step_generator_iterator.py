@@ -1,7 +1,12 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
+'''
+This module defines the `InplaceStepGeneratorIterator` class.
 
+See its documentation for more information.
+'''
+blocktodo, working on this file
 import copy
 
 import garlicsim
@@ -9,6 +14,21 @@ from garlicsim.misc import BaseStepIterator, SimpackError, AutoClockGenerator
 
 
 class InplaceStepGeneratorIterator(BaseStepIterator):
+    '''
+    Step iterator that uses an inplace step generator to perform step in place.
+    
+    A step iterator uses the simpack's original step function (or in this case
+    inplace step generator) under the hood.
+    
+    This is an *inplace* step iterator; It doesn't produce new states, it
+    modifies an existing one in place. It alway
+    
+    The step iterator automatically adds `.clock` readings if the states
+    produced by the step function are missing them.
+    
+    If the simpack's step generator will terminate, this iterator will make a
+    fresh one without alerting the user.
+    '''
     
     def __init__(self, state, step_profile):
         
@@ -37,14 +57,13 @@ class InplaceStepGeneratorIterator(BaseStepIterator):
 
     
     def __build_raw_generator(self):
-        '''Build a raw generator which will provide the states for us.'''
+        '''Build a raw generator which will perform steps for us.'''
         self.raw_generator = self.step_profile.step_function(
             self.current_state,
             *self.step_profile.args,
             **self.step_profile.kwargs
         )
         
-    
     
     def next(self):
         '''Crunch the next state.'''

@@ -93,7 +93,11 @@ def __non_history_simulate(simpack_grokker, state, iterations, step_profile):
     '''
     
     # We try to get an inplace step iterator, if our simpack supplies one.
-    # Otherwise we use a regular one.
+    # Otherwise we use a regular one. The reason we do it here in
+    # `__non_history_simulate` is because this function gives the user only the
+    # final state, without keeping any states in between. Therefore we can
+    # afford doing the steps inplace, and we get better performance because we
+    # don't deepcopy states.
     if simpack_grokker.is_inplace_iterator_available(step_profile) is True:
         state_copy = garlicsim.misc.state_deepcopy.state_deepcopy(state)
         iterator = \
