@@ -46,6 +46,7 @@ class AutocrunchControls(wx.Panel):
         assert isinstance(frame, garlicsim_wx.Frame)
         self.frame = frame
         self.gui_project = frame.gui_project
+        assert isinstance(self.gui_project, garlicsim_wx.GuiProject)
         
         wx.Panel.__init__(self, parent, -1)
         
@@ -125,10 +126,11 @@ class AutocrunchControls(wx.Panel):
             self.gui_project._default_buffer_before_cancellation = None
             self.spin_ctrl.SetValue(new_autocrunch)
             self.spin_ctrl.Enable()
-            self.gui_project.project.ensure_buffer(
-                self.gui_project.active_node,
-                clock_buffer=new_autocrunch
-            )
+            if self.gui_project.active_node:
+                self.gui_project.project.ensure_buffer(
+                    self.gui_project.active_node,
+                    clock_buffer=new_autocrunch
+                )
         else: # Checkbox got unchecked
             autocrunch_to_store = self.spin_ctrl.GetValue() or 100
             self.gui_project._default_buffer_before_cancellation = \
