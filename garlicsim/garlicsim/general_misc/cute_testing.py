@@ -1,4 +1,4 @@
-# Copyright 2009-2011 Ram Rachum.
+'# Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
 '''This module defines tools for testing.'''
@@ -18,13 +18,34 @@ class Failure(CuteException, AssertionError):
         
 
 class RaiseAssertor(ContextManager):
+    '''
+    #Asserts that a certain exception was raised in the suite. You may use a
+    snippet of text that must appear in the exception message or a regex that
+    the exception message must match.
+    
+    Example:
+    
+        with RaiseAssertor(ZeroDivisionError, 'modulo by zero'):
+            1/0
+    
+    '''
     
     def __init__(self, exception_type=Exception, text=''):
+        '''
+        Construct the `RaiseAssertor`.
+        
+        `exception_type` is an exception type that the exception must be of;
+        `text` may be either a snippet of text that must appear in the
+        exception's message, or a regex pattern that the exception message must
+        match.
+        '''
         self.exception_type = exception_type
         self.text = text
         self.exception = None
         
+        
     def manage_context(self):
+        '''Manage the `RaiseAssertor'`s context.'''
         try:
             yield self
         except self.exception_type, exception:
@@ -51,6 +72,8 @@ class RaiseAssertor(ContextManager):
 
                     
 def assert_same_signature(*callables):
+    '''Assert that all the `callables` have the same function signature.'''
     arg_specs = [cute_inspect.getargspec(callable_) for callable_ in callables]
     if not logic_tools.all_equal(arg_specs, exhaustive=True):
         raise Failure('Not all the callables have the same signature.')
+    

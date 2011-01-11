@@ -34,6 +34,7 @@ class OutputCapturer(ContextManager):
         self.output = None
         
     def manage_context(self):
+        '''Manage the `OutputCapturer`'s context.'''
         with self._temp_stdout_setter:
             yield self
         self.output = self.string_io.getvalue()
