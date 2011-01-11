@@ -23,13 +23,29 @@ def store(method, *args, **kwargs):
 
 
 class AutoClockGenerator(object):
-    '''Device for creating clock readings for states that don't have them.'''
+    '''
+    Device for ensuring that states have good clock readings.
+    
+    This is useful so the user could be lazy and not write code that advances
+    the clock reading of a state.
+    
+    If we get a state with no clock reading, we give it a clock reading of one
+    plus the last state's clock reading.
+    
+    If `detect_static` is set to `True`, we give the same treatment to states
+    that have a clock reading which is identical to the last state's.
+    '''
     
     def __init__(self, detect_static=False):
+        '''
+        Construct the auto-clock generator.
+        
+        If `detect_static` is set to `True`, we also check if a state's clock
+        is is identical to the last state's clock. If so we advance it by one.
+        '''
         self.last_state_clock = None
         self.detect_static = detect_static
         
-
         
     @store
     def make_clock(self, state):

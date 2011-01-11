@@ -1,6 +1,11 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
+'''
+This module defines the `InplaceStepIterator` class.
+
+See its documentation for more information.
+'''
 
 import copy
 
@@ -61,7 +66,7 @@ class InplaceStepIterator(BaseStepIterator):
         
     def _auto_clock(self, state):
         '''
-        If the raw generator didn't advance the state's clock, advance it by 1.
+        If the step function didn't advance the state's clock, advance it by 1.
         '''
         state.clock = self.auto_clock_generator.make_clock(state)
         

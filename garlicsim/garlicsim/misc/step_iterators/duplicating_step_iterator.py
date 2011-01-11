@@ -17,7 +17,9 @@ class DuplicatingStepIterator(BaseStepIterator):
     '''
     An iterator that uses a simpack's inplace step function to produce states.
     
-    Despite the fact that this iterator uses an *inplace* step function under the hood, the blocktodo 
+    Despite the fact that this iterator uses an *inplace* step function under
+    the hood, it produces a new distinct state on every iteration. It does that
+    by deepcopying the state on every iteration.
     
     The step iterator automatically increments the state's `.clock` by 1 if the
     original step function doesn't change the `.clock` itself.
@@ -34,7 +36,7 @@ class DuplicatingStepIterator(BaseStepIterator):
                __instancecheck__(step_profile.step_function)
         
         self.step_function = step_profile.step_function
-        '''The step function that will produce states for us.'''
+        '''The step function that will perform step for us.'''
         
         self.step_profile = step_profile
         '''
@@ -63,7 +65,9 @@ class DuplicatingStepIterator(BaseStepIterator):
                 
         
     def _auto_clock(self, state):
-        '''If the state has no clock reading, give it one automatically.'''
+        '''
+        If the step function didn't advance the state's clock, advance it by 1.
+        '''
         state.clock = self.auto_clock_generator.make_clock(state)
         
 

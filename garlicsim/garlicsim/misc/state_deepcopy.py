@@ -2,9 +2,9 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the `StepCopy` class.
+This module defines the `StateCopy` class and `state_deepcopy` function.
 
-See its documentation for more information.
+See their documentation for more information.
 '''
 
 import copy
@@ -24,6 +24,12 @@ class StateCopy(DontCopyPersistent, CopyMode):
     '''
 
     
-def state_deepcopy(thing):
-    return copy.deepcopy(thing,
+def state_deepcopy(state):
+    '''
+    Deepcopy a state, producing an identical duplicate state.
+    
+    One of the differences between this and plain `deepcopy` is that this
+    function makes sure not to copy `Persistent` objects.
+    '''
+    return copy.deepcopy(state,
                          StateCopy())

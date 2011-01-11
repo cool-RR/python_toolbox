@@ -1,6 +1,11 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
+'''
+This module defines the `DuplicatingStepGeneratorIterator` class.
+
+See its documentation for more information.
+'''
 
 import copy
 
@@ -9,6 +14,16 @@ from garlicsim.misc import BaseStepIterator, SimpackError, AutoClockGenerator
 
 
 class DuplicatingStepGeneratorIterator(BaseStepIterator):
+    '''
+    An iterator that uses a simpack's inplace step generator to produce states.
+    
+    Despite the fact that this iterator uses an *inplace* step generator under
+    the hood, it produces a new distinct state on every iteration. It does that
+    by deepcopying the state on every iteration.
+    
+    The step iterator automatically increments the state's `.clock` by 1 if the
+    original step generator doesn't change the `.clock` itself.
+    '''
     
     def __init__(self, state, step_profile):
         
@@ -23,7 +38,7 @@ class DuplicatingStepGeneratorIterator(BaseStepIterator):
                __instancecheck__(step_profile.step_function)
         
         self.step_function = step_profile.step_function
-        '''The step function that will produce states for us.'''
+        '''The step function that will perform step for us.'''
         
         self.step_profile = step_profile
         '''
@@ -31,7 +46,7 @@ class DuplicatingStepGeneratorIterator(BaseStepIterator):
         '''
         
         self.auto_clock_generator = AutoClockGenerator(detect_static=True)
-        '''Auto-clock generator which ensures all states have `.clock`.'''
+        '''Auto-clock generator which ensures all states have good `.clock`.'''
         
         self.auto_clock_generator.make_clock(self.current_state)
         
@@ -39,7 +54,7 @@ class DuplicatingStepGeneratorIterator(BaseStepIterator):
 
     
     def __build_raw_generator(self):
-        '''Build a raw generator which will provide the states for us.'''
+        '''Build a raw generator which will perform step for us.'''
         self._state_of_raw_generator = \
             garlicsim.misc.state_deepcopy.state_deepcopy(self.current_state)
         self.raw_generator = self.step_profile.step_function(
@@ -76,7 +91,9 @@ class DuplicatingStepGeneratorIterator(BaseStepIterator):
                 
         
     def _auto_clock(self, state):
-        '''If the state has no clock reading, give it one automatically.'''
+        '''
+        If the raw generator didn't advance the state's clock, advance it by 1.
+        '''
         state.clock = self.auto_clock_generator.make_clock(state)
         
 
