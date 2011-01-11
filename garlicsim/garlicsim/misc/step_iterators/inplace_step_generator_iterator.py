@@ -6,7 +6,7 @@ This module defines the `InplaceStepGeneratorIterator` class.
 
 See its documentation for more information.
 '''
-blocktodo, working on this file
+
 import copy
 
 import garlicsim
@@ -21,10 +21,11 @@ class InplaceStepGeneratorIterator(BaseStepIterator):
     inplace step generator) under the hood.
     
     This is an *inplace* step iterator; It doesn't produce new states, it
-    modifies an existing one in place. It alway
+    modifies an existing one in place. It keeps yielding the same state, except
+    it modifies it on each iteration.
     
-    The step iterator automatically adds `.clock` readings if the states
-    produced by the step function are missing them.
+    The step iterator automatically increments the state's `.clock` by 1 if the
+    step generator doesn't change the `.clock` itself.
     
     If the simpack's step generator will terminate, this iterator will make a
     fresh one without alerting the user.
@@ -49,7 +50,7 @@ class InplaceStepGeneratorIterator(BaseStepIterator):
         '''
         
         self.auto_clock_generator = AutoClockGenerator(detect_static=True)
-        '''Auto-clock generator which ensures all states have `.clock`.'''
+        '''Auto-clock generator which ensures all states have good `.clock`.'''
         
         self.auto_clock_generator.make_clock(self.current_state)
         
@@ -87,8 +88,8 @@ class InplaceStepGeneratorIterator(BaseStepIterator):
                 
         
     def _auto_clock(self, state):
-        '''If the state has no clock reading, give it one automatically.'''
+        '''
+        If the raw generator didn't advance the state's clock, advance it by 1.
+        '''
         state.clock = self.auto_clock_generator.make_clock(state)
         
-
-    

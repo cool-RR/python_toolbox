@@ -9,6 +9,19 @@ from garlicsim.misc import BaseStepIterator, SimpackError, AutoClockGenerator
 
 
 class InplaceStepIterator(BaseStepIterator):
+    '''
+    Step iterator that uses an inplace step function to perform step in place.
+    
+    A step iterator uses the simpack's original step function (in this case
+    inplace step function) under the hood.
+    
+    This is an *inplace* step iterator; It doesn't produce new states, it
+    modifies an existing one in place. It keeps yielding the same state, except
+    it modifies it on each iteration.
+    
+    The step iterator automatically increments the state's `.clock` by 1 if the
+    original step function doesn't change the `.clock` itself.
+    '''
     
     def __init__(self, state, step_profile):
         
@@ -21,7 +34,7 @@ class InplaceStepIterator(BaseStepIterator):
                __instancecheck__(step_profile.step_function)
         
         self.step_function = step_profile.step_function
-        '''The step function that will produce states for us.'''
+        '''The step function that will perform step for us.'''
         
         self.step_profile = step_profile
         '''
@@ -29,7 +42,7 @@ class InplaceStepIterator(BaseStepIterator):
         '''
         
         self.auto_clock_generator = AutoClockGenerator(detect_static=True)
-        '''Auto-clock generator which ensures all states have `.clock`.'''
+        '''Auto-clock generator which ensures all states have good `.clock`.'''
         
         self.auto_clock_generator.make_clock(self.current_state)
         
@@ -47,8 +60,8 @@ class InplaceStepIterator(BaseStepIterator):
                 
         
     def _auto_clock(self, state):
-        '''If the state has no clock reading, give it one automatically.'''
+        '''
+        If the raw generator didn't advance the state's clock, advance it by 1.
+        '''
         state.clock = self.auto_clock_generator.make_clock(state)
         
-
-    
