@@ -41,6 +41,11 @@ class RaiseAssertor(ContextManager):
                     if not self.text.match(message):
                         raise Failure("A `%s` was raised but it didn't match "
                                       "the given regex." % self.exception_type)
+        except BaseException, different_exception:
+            raise Failure(
+                "%s was excpected, but a different exception %s was raised "
+                "instead." % (self.exception_type, type(different_exception))
+            )
         else:
             raise Failure("%s wasn't raised." % self.exception_type)
 

@@ -264,47 +264,57 @@ class ContextManagerType(abc.ABCMeta):
         )
         
         
-        if (
-            (not result_class.__is_the_base_context_manager_class())
+        if (not result_class.__is_the_base_context_manager_class()) and \
+           ('manage_context' not in namespace) and \
+           hasattr(result_class, 'manage_context'):
             
-            and
-            
-           ('manage_context' not in namespace)
-           
-           and
-           
-           (getattr(result_class.__enter__, 'im_func',
-            result_class.__enter__) == ContextManager.\
-            _ContextManager__enter_using_manage_context.im_func)
-           ):
-            
-            assert getattr(result_class.__exit__, 'im_func',
-                result_class.__exit__) == ContextManager.\
-                __exit_using_manage_context.im_func
-            
-            # What this `if` and `assert` just checked for is: Is this a class
-            # that doesn't define `manage_context`, but whose base context
-            # manager class *does* define `manage_context` and use it for
-            # context management?
+            # What this `if` just checked for is: Is this a class that doesn't
+            # define `manage_context`, but whose base context manager class
+            # *does* define `manage_context`?
             #
-            # If so, this new class *may* override `manage_context` by defining
-            # its own `__enter__` `__exit__` methods; But we have to make sure
-            # that it defines both of them, because if only one of them is
-            # defined, say `__enter__`, it will not have an `__exit__` to work
+            # If so, we need to be careful. It's okay for this class to be
+            # using the enter/exit pair provided by the base `manage_context`;
+            # It's also okay for this class to override these with its own
+            # `__enter__` and `__exit__` implementations; But it's *not* okay
+            # for this class to define just one of these methods, say
+            # `__enter__`, because then it will not have an `__exit__` to work
             # with.
             
-            defines_enter = '__enter__' in namespace
-            defines_exit = '__exit__' in namespace
+            existing_manage_context = result_class.manage_context
             
-            if defines_enter and not defines_exit:
+            base_class = existing_manage_context.im_class
+            '''Base class that defines the `manage_context` that we inherit.'''
+            
+            our_enter_uses_manage_context = (
+                getattr(result_class.__enter__, 'im_func',
+                result_class.__enter__) == ContextManager.\
+                _ContextManager__enter_using_manage_context.im_func
+            )
+            
+            our_exit_uses_manage_context = (
+                getattr(result_class.__exit__, 'im_func',
+                result_class.__exit__) == ContextManager.\
+                _ContextManager__exit_using_manage_context.im_func
+            )
+            
+            if our_exit_uses_manage_context and not \
+               our_enter_uses_manage_context:
+                
+                assert '__enter__' in namespace
+            
                 raise Exception("The %s class defines an `__enter__` method, "
                                 "but not an `__exit__` method; We cannot use "
                                 "the `__exit__` method of its base context "
                                 "manager class because it uses the "
                                 "`manage_context` generator function." %
                                 result_class)
+
             
-            if defines_exit and not defines_enter:
+            if our_enter_uses_manage_context and not \
+               our_exit_uses_manage_context:
+                
+                assert '__exit__' in namespace
+                
                 raise Exception("The %s class defines an `__exit__` method, "
                                 "but not an `__enter__` method; We cannot use "
                                 "the `__enter__` method of its base context "
