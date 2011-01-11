@@ -70,8 +70,6 @@ class InplaceStep(BaseStep):
     (which is necessary in order to make a tree,) `garlicsim` will
     automatically `deepcopy` all the states given from the inplace step
     function. So it can be used both ways.
-    
-    (1.1.2011 - Not yet implemented, sorry.)
     '''
     step_iterator_class = step_iterators.DuplicatingStepIterator
     inplace_step_iterator_class = step_iterators.InplaceStepIterator
@@ -89,8 +87,6 @@ class InplaceStepGenerator(BaseStep):
     The inplace step generator combines the advantages an inplace step function
     and a step generator: It works as a generator which can be more convenient
     and it allows modifying the state in-place to improve performance.
-    
-    (1.1.2011 - Not yet implemented, sorry.)
     '''
     step_iterator_class = step_iterators.DuplicatingStepGeneratorIterator
     inplace_step_iterator_class = step_iterators.InplaceStepGeneratorIterator

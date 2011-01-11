@@ -15,12 +15,12 @@ Introductions to all the key parts of GarlicSim you'll need to know:
 
    what-is-garlicsim
    time-tree
+   step-functions
    step-profiles
    
 ..
    synchronous-crunching
    asynchronous-crunching
-   step-functions
    persistent
    history-dependent-simulations
    

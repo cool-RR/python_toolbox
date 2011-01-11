@@ -5,18 +5,84 @@
 
 .. _topics-step-functions:
 
-=========================
-Writing the step function
-=========================
+=============================================
+The step function -- The heart of the simpack
+=============================================
 
-The basic step function
-=======================
+The step function is the most important part of a simpack. The step function
+contains the world laws and tells GarlicSim how to calculate the next world
+state in a simulation.
+
+Writing a simple step function is easy and we'll show how to do it below; After
+you've mastered that, we'll show you more advanced ways to define and use step
+functions. We'll also show you the different kinds of step functions that
+GarlicSim allows.
+
+Different kinds of step functions
+=================================
+
+Below we will show the different kinds of step functions. Keep in mind that
+your step function's type will be determined automatically from its name; For
+example, a step function called ``step`` (or ``my_step`` or ``step_alternate``)
+will be automatically identified as a simple step function; As another example,
+a step function called ``history_step_generator`` (or
+``faster_history_step_generator`` or ``my_awesome_history_step_generator``)
+will be automatically identified as a history step generator.
+
+If you wish to give a different name to your step function and specify its type
+manually, you can do that by decorating the step function with the step type.
+
+
+The simple step function
+------------------------
+
+Also known as :class:`garlicsim.misc.simpack_grokker.step_types.SimpleStep`.
+
+Here's an example of a ``State`` class that defines a simple step function
+which is only two lines long::
+
+    class State(garlicsim.data_structures.State):
+    
+        def __init__(self, height):
+            self.height = height
+            
+        def step(self):
+            return State(self.height + 1)
+        
+In this step function we created a new state object, set one of its attributes,
+and returned it. This is enough for GarlicSim to use this simpack to generate
+states.
+
+Do notice one thing we *didn't* do: We didn't set clock readings to our states.
+When you simulate with GarlicSim, every state always gets a ``.clock``
+attribute which says its clock reading. The step function usually assigns this
+``.clock`` attribute, but when it doesn't, (such as in the example above,)
+GarlicSim automatically gives each state a clock reading. Newly-created states
+get a clock of 0 by default, and on every step the new state's clock reading
+will be higher by 1 than that of the original state.
+
 
 The inplace step function
-=========================
+-------------------------
+
 
 The step generator
-==================
+------------------
+
 
 The inplace step generator
-==========================
+--------------------------
+
+
+The history step function
+-------------------------
+
+
+The history step generator
+--------------------------
+
+
+
+Step functions can take arguments
+=================================
+
