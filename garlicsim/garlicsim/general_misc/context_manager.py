@@ -409,7 +409,8 @@ class ContextManager(object):
                    generator_return_value
         
         except StopIteration:
-            raise RuntimeError("generator didn't yield")
+            raise RuntimeError("The generator didn't yield even one time; It "
+                               "must yield one time exactly.")
     
         
     def __exit_using_manage_context(self, type_, value, traceback):
@@ -428,7 +429,10 @@ class ContextManager(object):
             except StopIteration:
                 return
             else:
-                raise RuntimeError("generator didn't stop")
+                raise RuntimeError(
+                    "The generator didn't stop after the yield; Possibly you "
+                    "have more than one `yield` in the generator function? "
+                    "The generator function must yield exactly one time.")
         else:
             if value is None:
                 # Need to force instantiation so we can reliably
@@ -436,7 +440,6 @@ class ContextManager(object):
                 value = type_()
             try:
                 generator.throw(type_, value, traceback)
-                raise RuntimeError("generator didn't stop after throw()")
             except StopIteration, exc:
                 # Suppress the exception *unless* it's the same exception that
                 # was passed to throw().  This prevents a StopIteration
@@ -452,3 +455,10 @@ class ContextManager(object):
                 #
                 if sys.exc_info()[1] is not value:
                     raise
+            else:
+                raise RuntimeError(
+                    "The generator didn't stop after calling its `.throw()`; "
+                    "Possibly you have more than one `yield` in the generator "
+                    "function? The generator function must yield exactly one "
+                    "time."
+                )

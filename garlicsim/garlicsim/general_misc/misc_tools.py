@@ -7,8 +7,6 @@ import re
 import math
 import types
 
-from garlicsim.general_misc import cute_iter_tools
-
 
 def is_subclass(candidate, base_class):
     '''
@@ -25,6 +23,12 @@ def is_subclass(candidate, base_class):
 
 
 def get_mro_depth_of_method(type_, method_name):
+    '''
+    Get the mro-depth of a method.
+    
+    This means, the index number in `type_`'s MRO of the base class that
+    defines this method.
+    '''
     assert isinstance(method_name, basestring)
     mro = type_.mro()
     

@@ -61,6 +61,9 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser, ContextManager):
     
         
     def manage_context(self):
+        '''
+        Manage the `HistoryBrowser` context, using the tree lock in read mode.
+        '''
         with self.tree_lock.read:
             yield self
 

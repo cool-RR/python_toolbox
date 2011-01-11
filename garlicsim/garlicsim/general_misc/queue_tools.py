@@ -13,6 +13,7 @@ from garlicsim.general_misc import import_tools
 
 
 def is_multiprocessing_queue(queue):
+    '''Return whether `queue` is a multiprocessing queue.'''
     return queue.__module__.startswith('multiprocessing')
 
 
@@ -36,7 +37,7 @@ def iterate(queue, block=False, limit_to_original_size=False,
     if limit_to_original_size:
         
         if is_multiprocessing_queue(queue) and \
-           _platform_supports_multiprocessing_qsize():
+           not _platform_supports_multiprocessing_qsize():
             
             if _prefetch_if_no_qsize:
                 for item in dump(queue):
