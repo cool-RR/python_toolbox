@@ -22,7 +22,6 @@ import pkg_resources
 from garlicsim.general_misc.temp_value_setters import TempRecursionLimitSetter
 from garlicsim_wx.general_misc import thread_timer
 from garlicsim_wx.general_misc import misc_tools
-from garlicsim.general_misc import path_tools
 from garlicsim_wx.general_misc import wx_tools
 
 import garlicsim
@@ -58,6 +57,7 @@ class Frame(wx.Frame):
         self.Bind(wx.EVT_CLOSE, self.on_close)
         
         self.app = wx.GetApp()
+        '''The GarlicSim `App` that created this frame.'''
         
         assert isinstance(self.app, garlicsim_wx.App)
         
@@ -78,7 +78,7 @@ class Frame(wx.Frame):
                 
         self.gui_project = None
         '''The current gui project.'''
-                    
+        
         self.CreateStatusBar()
         
         self.__init_menus()
