@@ -1,6 +1,11 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
+'''
+This module defines the `DuplicatingStepIterator` class.
+
+See its documentation for more information.
+'''
 
 import copy
 
@@ -9,6 +14,14 @@ from garlicsim.misc import BaseStepIterator, SimpackError, AutoClockGenerator
 
 
 class DuplicatingStepIterator(BaseStepIterator):
+    '''
+    An iterator that uses a simpack's inplace step function to produce states.
+    
+    Despite the fact that this iterator uses an *inplace* step function under the hood, the blocktodo 
+    
+    The step iterator automatically increments the state's `.clock` by 1 if the
+    original step function doesn't change the `.clock` itself.
+    '''
     
     def __init__(self, state, step_profile):
         
