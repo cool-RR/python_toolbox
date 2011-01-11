@@ -32,7 +32,7 @@ def test_basic():
     def g():
         with RaiseAssertor(Exception):
             pass
-    nose.tools.assert_raises(Failure, f)
+    nose.tools.assert_raises(Failure, g)
     with RaiseAssertor(Failure):
         g()
     
