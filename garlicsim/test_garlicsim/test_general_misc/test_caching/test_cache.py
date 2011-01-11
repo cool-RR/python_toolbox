@@ -145,6 +145,7 @@ def test_function_instead_of_max_size():
     
     
 def test_signature_perservation():
+    '''Test that a function's signature is perserved after decorating.'''
     
     f = cache()(counting_func)
     assert f() == f() == f(1, 2) == f(a=1, b=2)
