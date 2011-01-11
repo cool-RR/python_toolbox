@@ -280,11 +280,6 @@ class ContextManagerType(abc.ABCMeta):
             # `__enter__`, because then it will not have an `__exit__` to work
             # with.
             
-            existing_manage_context = result_class.manage_context
-            
-            base_class = existing_manage_context.im_class
-            '''Base class that defines the `manage_context` that we inherit.'''
-            
             our_enter_uses_manage_context = (
                 getattr(result_class.__enter__, 'im_func',
                 result_class.__enter__) == ContextManager.\

@@ -27,7 +27,7 @@ def test():
     with RaiseAssertor(Failure):
         assert_same_signature(f, h)
     with RaiseAssertor(Failure):
-        assert_same_signature(f, g)
+        assert_same_signature(g, h)
         
         
     new_f = decorator_module.decorator(
@@ -53,5 +53,5 @@ def test():
     with RaiseAssertor(Failure):
         assert_same_signature(new_h, f)
         
-                              
+    assert_same_signature(new_h, h, new_h, new_h)                         
                             
