@@ -109,9 +109,11 @@ def start_simpack(containing_folder, name):
             simpack_template_package_name, file
             ) as source:
             
-            with open(dest_file, 'wb') as destination:
+            with open(dest_file, 'w') as destination:
                 
-                string_to_write = source.read().replace('simpack_name', name)
+                string_to_write = source.read()\
+                                .replace('simpack_name', name)
+                                
                 
                 destination.write(string_to_write)
             
