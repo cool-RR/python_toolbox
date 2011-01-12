@@ -183,12 +183,70 @@ value of :func:`garlicsim.simulate`.)
 The history step function
 -------------------------
 
+The history step function is also known as
+:class:`garlicsim.misc.simpack_grokker.step_types.HistoryStep`.
 
+The history step function is very different from all the other step functions.
+In all the other step functions, it is assumed that all the step function needs
+to have is the last world state, and from that it can calculate the new state.
+That is true for many kinds of simulations, but not for all. Some simulation
+steps need access to the complete history of the simulation in order to
+calculate the next state. (This is true, for example, in some simulations of
+radiation.)
+
+Here's an example of a history step function::
+
+    class State(garlicsim.data_structures.State):
+    
+        def __init__(self, height):
+            self.height = height
+            
+        @staticmethod
+        def history_step(history_browser):
+            last_state = history_browser.get_last_state()
+            state_three_seconds_ago = history_browser.get_state_by_clock(
+                last_state.clock - 3
+            )
+            return State(
+                height=(state_three_seconds_ago.height + 1)
+            )
+        
+As you can see, the history step function doesn't even receive a state object;
+It's a static method.
+
+What the history step function does receieve is a history browser, of the class
+:class:`BaseHistoryBrowser<garlicsim.misc.base_history_browser.BaseHistoryBrowser>`.
+A history browser lets you explore the history of the simulation by retrieving
+states from it. For example, the :meth:`.get_state_by_clock
+<garlicsim.misc.base_history_browser.BaseHistoryBrowser.get_state_by_clock>`
+method shown above gets a state from the timeline according to its clock
+reading. You may also request states by index number, like so::
+
+    second_to_last_state = history_browser[-2]
+    
+A simpack which uses a history step function is also called a
+"history-dependent" simpack, and it may not use any non-history-dependent step
+functions. Note that you cannot use :class:`ProcessCruncher
+<garlicsim.asynchronous_crunching.crunchers.ProcessCruncher>` with
+history-dependent simpacks.
+
+        
 The history step generator
 --------------------------
 
+The history step generator is also known as
+:class:`garlicsim.misc.simpack_grokker.step_types.HistoryStepGenerator`.
+
+The history step generator combines the advantages of a step generator with the
+history-dependent approach.
+
+As of GarlicSim 0.6.1, the history step generator is not yet implemented. Sorry.
 
 
 Step functions can take arguments
 =================================
 
+
+
+Defining multiple step functions in the same simpack
+====================================================
