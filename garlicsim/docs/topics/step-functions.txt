@@ -167,9 +167,17 @@ iteration it yields, and after being called again it modifies the state in
 place again, ad infinitum.
 
 Note that the inplace step generator doesn't :py:keyword:`yield` any states; It
-always :py:keyword:`yield`\s :data:`None`. It has no need to
-:py:keyword:`yield` any states, since it's changing the state itself, not
-creating any new state objects.
+always yields :data:`None`. It has no need to :py:keyword:`yield` any states,
+since it's changing the state itself, not creating any new state objects.
+
+Similiarly to the inplace step function, GarlicSim will take care to duplicate
+any states before they are being fed into the inplace step generator; This will
+be done in :class:`garlicsim.Project`, :func:`garlicsim.list_simulate` and
+:func:`garlicsim.iter_simulate`, but not in :func:`garlicsim.simulate` which
+will actually perform the state in place to enjoy better performance. (Note
+that the initial state *will* be duplicated, but all the simulation iterations
+will be done in place on the copy, and then it will be returned as the return
+value of :func:`garlicsim.simulate`.)
 
 
 The history step function
