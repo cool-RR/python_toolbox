@@ -86,27 +86,44 @@ have to. Example::
             
 The inplace step function changes the state in place instead of returning a new
 state. An inplace step function doesn't return anything. (i.e., it returns
-:data:`None`.)
-
-The modified state will still have all of the old attributes it had. (In this
-example ``weight`` and ``spin``.)`
+:data:`None`.) The modified state will still have all of the old attributes it
+had. (In this example ``weight`` and ``spin``.)
 
 But wait, you say. How can we modify a state in place? GarlicSim needs to keep
 all the states in a time tree as constants, if states will be modified in
 place, it will ruin the whole thing!
 
 Well, GarlicSim is smart, and when it uses an inplace step function, it
-duplicates the state before feeding it to the function, so that the original
-state is left unaltered.
+duplicates the state before feeding it to the step function on every iteration,
+so that the original state and all produced states that go to the tree are left
+unaltered.
 
 GarlicSim will also advance the new state's clock by one if the inplace step
 function didn't advance it itself.
 
-One more advatnage tododoc
+One more advatnage that the inplace step has is that if you use
+:func:`garlicsim.simulate` with it, the step will actually be done in place for
+better performance, without duplicating on every iteration. For example, if you
+give :func:`garlicsim.simulate` an initial state and tell it to do 100
+iterations, it will first deepcopy your initial state, then perform 100
+iterations of the inplace step function *in place*, and then return the
+resulting state. This is done only in :func:`garlicsim.simulate`, and not in
+:class:`garlicsim.Project`, because :func:`garlicsim.simulate` is the only
+function that doesn't reveal the interim states to the user, so we can afford
+not to keep them as constants.
 
 
 The step generator
 ------------------
+
+The step generator is also known as
+:class:`garlicsim.misc.simpack_grokker.step_types.StepGenerator`.
+
+You can write your step as a generator. Example::
+
+    boobz
+    
+asdasda
 
 
 The inplace step generator
