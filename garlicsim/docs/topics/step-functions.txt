@@ -102,7 +102,7 @@ GarlicSim will also advance the new state's clock by one if the inplace step
 function didn't advance it itself. This feature is available on all step
 function types.
 
-One more advatnage that the inplace step has is that if you use
+One more advantage that the inplace step has is that if you use
 :func:`garlicsim.simulate` with it, the step will actually be done in place for
 better performance, without duplicating on every iteration. For example, if you
 give :func:`garlicsim.simulate` an initial state and tell it to do 100
@@ -170,7 +170,7 @@ Note that the inplace step generator doesn't :py:keyword:`yield` any states; It
 always yields :data:`None`. It has no need to :py:keyword:`yield` any states,
 since it's changing the state itself, not creating any new state objects.
 
-Similiarly to the inplace step function, GarlicSim will take care to duplicate
+Similarly to the inplace step function, GarlicSim will take care to duplicate
 any states before they are being fed into the inplace step generator; This will
 be done in :class:`garlicsim.Project`, :func:`garlicsim.list_simulate` and
 :func:`garlicsim.iter_simulate`, but not in :func:`garlicsim.simulate` which
@@ -214,7 +214,7 @@ Here's an example of a history step function::
 As you can see, the history step function doesn't even receive a state object;
 It's a static method.
 
-What the history step function does receieve is a history browser, of the class
+What the history step function does receive is a history browser, of the class
 :class:`BaseHistoryBrowser<garlicsim.misc.base_history_browser.BaseHistoryBrowser>`.
 A history browser lets you explore the history of the simulation by retrieving
 states from it. For example, the :meth:`.get_state_by_clock
