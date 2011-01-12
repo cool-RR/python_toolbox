@@ -112,11 +112,11 @@ For Python 2.5, Python 2.6 and Python 2.7:
 To start the GUI
 ================
 
-In order to start the GUI after you install it, run the :command:`GarlicSim`
+In order to start the GUI after you install it, run the :command:`GarlicSim.py`
 script which is located in your Python scripts folder. In Windows it's done
 like this::
 
-    c:\> c:\python26\Scripts\GarlicSim.exe
+    c:\> c:\python26\Scripts\GarlicSim.py
     
 .. _pip: http://pypi.python.org/pypi/pip
 .. _distribute: http://pypi.python.org/pypi/distribute
