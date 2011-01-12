@@ -23,7 +23,7 @@ class StepGenerator(BaseStep):
     '''
     A step generator takes an initial state and keeps yielding states from it.
     
-    Some steps are easier to write as step generator, because every time they
+    Some steps are easier to write as a step generator, because every time they
     yield a state they remember in which line they paused and what the values
     of all the local variables are.
     '''

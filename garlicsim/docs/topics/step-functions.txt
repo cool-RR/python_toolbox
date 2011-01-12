@@ -99,7 +99,8 @@ so that the original state and all produced states that go to the tree are left
 unaltered.
 
 GarlicSim will also advance the new state's clock by one if the inplace step
-function didn't advance it itself.
+function didn't advance it itself. This feature is available on all step
+function types.
 
 One more advatnage that the inplace step has is that if you use
 :func:`garlicsim.simulate` with it, the step will actually be done in place for
@@ -119,15 +120,56 @@ The step generator
 The step generator is also known as
 :class:`garlicsim.misc.simpack_grokker.step_types.StepGenerator`.
 
-You can write your step as a generator. Example::
+You can write your step as a :py:term:`generator`. Example::
 
-    boobz
+    class State(garlicsim.data_structures.State):
     
-asdasda
+        def __init__(self, height):
+            self.height = height
+            
+        def step_generator(self):
+            current_state = self
+            while True:
+                current_state = State(current_state.height + 1)
+                yield state
+                
+Instead of a step function that returns states, we have a generator that keeps
+:py:keyword:`yield`\ing states indefinitely.
+
+Some steps are easier to write as a step generator, because every time they yield
+a state they remember in which line they paused and what the values of all the
+local variables are.
 
 
 The inplace step generator
 --------------------------
+
+The inplace step generator is also known as
+:class:`garlicsim.misc.simpack_grokker.step_types.InplaceStepGenerator`.
+
+The inplace step generator combines the advantages of the inplace step function
+with those of the step generator. Example::
+
+    class State(garlicsim.data_structures.State):
+    
+        def __init__(self, height, weight, spin):
+            self.height = height
+            self.weight = weight
+            self.spin = spin
+            
+        def inplace_step_generator(self):
+            while True:
+                self.height += 1
+                yield
+                
+The inplace step generator changes the state in place, and after every
+iteration it yields, and after being called again it modifies the state in
+place again, ad infinitum.
+
+Note that the inplace step generator doesn't :py:keyword:`yield` any states; It
+always :py:keyword:`yield`\s :data:`None`. It has no need to
+:py:keyword:`yield` any states, since it's changing the state itself, not
+creating any new state objects.
 
 
 The history step function
