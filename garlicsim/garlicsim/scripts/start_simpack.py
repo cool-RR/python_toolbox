@@ -108,7 +108,7 @@ def start_simpack(containing_folder, name):
         source_file_name = pkg_resources.resource_filename(
             simpack_template_package_name, file
         )
-        with open(source_file_name, 'r') as source:
+        with open(source_file_name, 'Ur') as source:
             
             with open(dest_file, 'w') as destination:
                 
