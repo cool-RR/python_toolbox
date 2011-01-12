@@ -4,7 +4,7 @@ import garlicsim.data_structures
 
 
 class State(garlicsim.data_structures.State):
-    # This is your `State subclass. Your state objects should contain all the
+    # This is your `State` subclass. Your state objects should contain all the
     # information there is about a moment of time in your simulation.
     
     def __init__(self):

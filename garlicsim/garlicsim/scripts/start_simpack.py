@@ -104,10 +104,11 @@ def start_simpack(containing_folder, name):
         )
         
         _make_path_to_file(dest_file)
-        
-        with pkg_resources.resource_stream(
+
+        source_file_name = pkg_resources.resource_filename(
             simpack_template_package_name, file
-            ) as source:
+        )
+        with open(source_file_name, 'r') as source:
             
             with open(dest_file, 'w') as destination:
                 
