@@ -51,7 +51,7 @@ def __check_prerequisites():
             pkg_resources.require('distribute')
         except pkg_resources.DistributionNotFound:
             raise MissingModule("`distribute` is required, but it's not "
-                                "currently installed on yourN system. Please "
+                                "currently installed on your system. Please "
                                 "install it according to the instructions "
                                 "here: pypi.python.org/pypi/distribute")
         else:
