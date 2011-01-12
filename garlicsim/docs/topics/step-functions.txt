@@ -246,7 +246,68 @@ As of GarlicSim 0.6.1, the history step generator is not yet implemented. Sorry.
 Step functions can take arguments
 =================================
 
+Step functions always take the world state (or history browser) as a first
+argument. But, step functions can also take other optional arguments. For
+example::
+
+    class State(garlicsim.data_structures.State):
+    
+        def __init__(self, height):
+            self.height = height
+            
+        def step(self, time_interval=1):
+            new_state = State(self.height + time_interval)
+            new_state.clock = self.clock + time_interval
+            return new_state
+            
+In this example we used an argument called ``time_interval``, which determined
+how big of a time interval we use between states in the timeline. You can
+invent your own step function arguments for all kinds of purposes. A few
+examples are: Changing physical constants in a Physics simulation, changing
+birth/survival numbers in cellular automata, changing the number of customers
+that come to a queue every second in a Queueing Theory simulation, etc.
+
+.. admonition:: Default values for arguments
+
+    Note that if a step function allows arguments, each and every argument
+    *must* have a default value. (as in ``t=1``.) This is so the step function
+    could always be run with just a state, without requiring the user to figure
+    out which arguments the simpack is expecting.
+    
+To learn how to use step function arguments when running a simulation,
+:ref:`check out the article about step profiles <topics-step-profiles>`\.
 
 
 Defining multiple step functions in the same simpack
 ====================================================
+
+You can define more than one step function in your simpack. For example::
+
+    class State(garlicsim.data_structures.State):
+    
+        def __init__(self, height):
+            self.height = height
+            
+        def step(self):
+            return State(self.height + 1)
+            
+        def my_other_step(self):
+            new_state = State(self.height + 1)
+            return new_state
+            
+        def inplace_step_generator(self):
+            while True:
+                self.height += 1
+                yield
+                
+As you can see above, you can have different kinds of step functions in the
+same ``State`` class.
+
+This is useful because sometimes you want to implement several simulation
+algorithms and to be able to use them all in one simulation time-tree in order
+to compare their results side-by-side.
+
+When running the simulation, you can specify which step function you want to
+use. For example, when using :func:`garlicsim.simulate`, you may give an
+argument ``step_function=my_simpack.State.my_cool_inplace_step`` to make it use
+the step function you specify.

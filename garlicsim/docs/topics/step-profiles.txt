@@ -244,8 +244,7 @@ track of exactly which states were crunched using which step function and which
 arguments.
 
 That's right, we can use step profiles to use different step functions in the
-same :class:`Project <garlicsim.Project>`. More about switching step functions
-later.
+same :class:`Project <garlicsim.Project>`.
 
 Let's start a :mod:`life <garlicsim_lib.simpacks.life>` project and run it for
 20 iterations without specifying any arguments:
