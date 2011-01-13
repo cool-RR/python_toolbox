@@ -620,7 +620,11 @@ class Frame(wx.Frame):
                             [sys.executable, os.path.abspath(sys.argv[0])]
                         
                     program.append(path)
-                 
+            
+                    for simpack_place in garlicsim_wx.simpack_places:
+                        program.append('__garlicsim_wx_simpack_place=%s' % \
+                                       ','.join(simpack_place))
+                    
                     with wx_tools.CursorChanger(self, wx.CURSOR_WAIT):
                         subprocess.Popen(program)
         finally:
