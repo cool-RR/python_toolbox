@@ -88,11 +88,8 @@ GarlicSim is pure-Python and thus doesn't require building. These are the three
 source packages:
 
 * `garlicsim source package .tar.gz <http://pypi.python.org/packages/source/g/garlicsim/garlicsim-0.6.1.tar.gz>`_
-  `.zip <http://pypi.python.org/packages/source/g/garlicsim/garlicsim-0.6.1.zip>`_
 * `garlicsim_lib source package .tar.gz <http://pypi.python.org/packages/source/g/garlicsim_lib/garlicsim_lib-0.6.1.tar.gz>`_
-  `.zip <http://pypi.python.org/packages/source/g/garlicsim_lib/garlicsim_lib-0.6.1.zip>`_
 * `garlicsim_wx source package .tar.gz <http://pypi.python.org/packages/source/g/garlicsim_wx/garlicsim_wx-0.6.1.tar.gz>`_
-  `.zip <http://pypi.python.org/packages/source/g/garlicsim_wx/garlicsim_wx-0.6.1.zip>`_
 
 You may use the standard ``python setup.py install`` to install.
 
