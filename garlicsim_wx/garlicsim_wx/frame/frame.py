@@ -586,7 +586,8 @@ class Frame(wx.Frame):
                 main_script = os.path.abspath(sys.argv[0])
                 program_to_run = [sys.executable, main_script]
                 we_are_main_program = ('run_gui' in main_script) or \
-                                    ('garlicsim_wx' in main_script)
+                                    ('garlicsim_wx' in main_script) or \
+                                    ('GarlicSim' in main_script)
             
             if not we_are_main_program:
                 dialog = \
