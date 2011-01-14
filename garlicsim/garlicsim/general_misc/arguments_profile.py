@@ -14,11 +14,6 @@ from garlicsim.general_misc import dict_tools
 from garlicsim.general_misc import cmp_tools
 
 
-# Our grand definition of canonical: As few characters as possible, and after
-# that as many keyword arguments as possible, with extraneous keyword arguments
-# ordered alphabetically (with "_" as the highest character, so anything
-# starting with "_" will be at the end.)
-
 class ArgumentsProfile(object):
     '''
     A canonical arguments profile for a function.
