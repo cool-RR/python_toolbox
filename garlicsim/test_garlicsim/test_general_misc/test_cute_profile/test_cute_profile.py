@@ -188,7 +188,7 @@ def test_condition():
     assert call_and_check_if_profiled(lambda: f(-4.9)) is False
     
     
-def test_signature_perservation():
+def test_signature_preservation():
     '''Test that the `profile_ready` decorator preserves function signature.'''
     cute_testing.assert_same_signature(
         func,
