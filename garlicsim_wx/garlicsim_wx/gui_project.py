@@ -683,30 +683,33 @@ class GuiProject(object):
         passed to the step function. You may pass a `StepProfile` yourself, as
         the only argument, and it will be noticed and used. If nothing is
         passed in `*args` or `**kwargs`, the step profile of the active node
-        will be used.
+        will be used, unless it doesn't have a step profile, in which case the
+        default step profile will be used.
         
         Returns the job.
         '''
         #todo: maybe not let to do it from unfinalized touched node?
         
-        node = self.active_node
-        
-        if args or kwargs:
+        if not args and not kwargs and self.active_node.step_profile:
+            step_profile = self.active_node.step_profile
+        elif args or kwargs:
             parse_arguments_to_step_profile = \
                 garlicsim.misc.StepProfile.build_parser(
-                    node.step_profile.step_function if node.step_profile
-                    else None
+                    self.active_node.step_profile.step_function if
+                    self.active_node.step_profile else
+                    self.simpack_grokker.default_step_function
                 )
             step_profile = parse_arguments_to_step_profile(*args, **kwargs)
-        else: # (not args) and (not kwargs)
-            step_profile = node.step_profile
-        
-        kwargs = {'step_profile': step_profile}
+        else:
+            assert not self.active_node.step_profile
+            step_profile = self.default_step_profile
             
-        job = self.project.begin_crunching(node, self.default_buffer or 1,
+        job = self.project.begin_crunching(self.active_node,
+                                           self.default_buffer or 1,
                                            step_profile)
         
-        self._job_and_node_of_recent_fork_by_crunching = (job, node)
+        self._job_and_node_of_recent_fork_by_crunching = (job,
+                                                          self.active_node)
         
         return job
 
