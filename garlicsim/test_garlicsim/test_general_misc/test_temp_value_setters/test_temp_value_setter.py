@@ -39,7 +39,24 @@ def test_setter_getter():
         assert a.x == 2
     assert a.x == 1
     
+    
+def test_dict_key():
+    '''Test `TempValueSetter` with variable inputted as `(dict, key)`.'''
+    a = {1: 2}
+    
+    assert a[1] == 2
+    with TempValueSetter((a, 1), 'meow'):
+        assert a[1] == 'meow'
+    assert a[1] == 2
+    
+    b = {}
+    
+    assert sum not in b
+    with TempValueSetter((b, sum), 7):
+        assert b[sum] == 7
+    assert sum not in b
 
+    
 def test_as_decorator():
     '''Test `TempValueSetter` used as a decorator.'''
     def a():

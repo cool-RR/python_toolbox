@@ -6,6 +6,7 @@
 import nose
 
 from garlicsim.general_misc import import_tools
+from garlicsim.general_misc.temp_value_setters import TempValueSetter
 
 import garlicsim
 from garlicsim.general_misc.address_tools import (describe,
@@ -262,3 +263,24 @@ def test_function_in_something():
                             "0.6 and below.")
     assert describe({1: sum}) == '{1: sum}'
     assert describe((sum, sum, list, chr)) == '(sum, sum, list, chr)'
+    
+
+def test_function_in_main():
+
+    ###########################################################################
+    # We can't really define a function in `__main__` in this test, so we
+    # emulate it:
+    with TempValueSetter((locals(), '__name__'), '__main__'):
+        def f(x):
+            pass
+    assert f.__module__ == '__main__'
+    import __main__
+    __main__.f = f
+    del __main__, f
+    #
+    ###########################################################################
+    
+    assert describe(f) == '__main__.f'
+    assert resolve(describe(f)) is f
+    
+    

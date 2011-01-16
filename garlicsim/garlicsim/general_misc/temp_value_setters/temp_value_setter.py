@@ -11,6 +11,13 @@ from garlicsim.general_misc import address_tools
 from garlicsim.general_misc.context_manager import ContextManager
 
 
+__all__ = ['TempValueSetter']
+
+
+class NotInDict(object):
+    pass
+
+
 class TempValueSetter(ContextManager):
     '''
     Context manager for temporarily setting a value to a variable.
@@ -23,25 +30,35 @@ class TempValueSetter(ContextManager):
         '''
         Construct the `TempValueSetter`.
         
-        `variable` may be either an (`object`, `attribute_string`) pair or a
-        `(getter, setter)` pair.
+        `variable` may be either an `(object, attribute_string)`, a `(dict,
+        key)` pair, or a (getter, setter)` pair.
         
         `value` is the temporary value to set to the variable.
         '''
         try:
             first, second = variable
         except Exception:
-            raise Exception("`variable` must be either `(my_object, "
-                            "'my_attribute')` or `(getter, setter)`.")
-        if callable(second):
+            raise Exception("`variable` must be either an `(object, "
+                            "attribute_string)` pair, a `(dict, key)` pair, "
+                            "or a `(getter, setter)` pair.")
+        if hasattr(first, '__getitem__') and hasattr(first, 'get') and \
+           hasattr(first, '__setitem__') and hasattr(first, '__delitem__'):
+            self.getter = lambda: first.get(second, NotInDict)
+            self.setter = lambda value: (first.__setitem__(second, value) if 
+                                         value is not NotInDict else
+                                         first.__delitem__(second))
+            
+        elif callable(second):
             if not callable(first):
-                raise Exception("`variable` must be either `(my_object, "
-                                "'my_attribute')` or `(getter, setter)`.")
+                raise Exception("`variable` must be either an `(object, "
+                                "attribute_string)` pair, a `(dict, key)` "
+                                "pair, or a `(getter, setter)` pair.")
             self.getter, self.setter = first, second
         else:
             if not isinstance(second, basestring):
-                raise Exception("`variable` must be either `(my_object, "
-                                "'my_attribute')` or `(getter, setter)`.")
+                raise Exception("`variable` must be either an `(object, "
+                                "attribute_string)` pair, a `(dict, key)` "
+                                "pair, or a `(getter, setter)` pair.")
             
             parent, attribute_name = first, second
             self.getter = lambda: getattr(parent, attribute_name)
@@ -84,5 +101,4 @@ class TempValueSetter(ContextManager):
         assert self.getter() == self._value_right_after_setting
         
         self.setter(self.old_value)
-        
         
