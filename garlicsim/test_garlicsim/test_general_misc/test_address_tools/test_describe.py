@@ -266,17 +266,18 @@ def test_function_in_something():
     
 
 def test_function_in_main():
+    '''Test that a function defined in `__main__` is well-described.'''
 
     ###########################################################################
     # We can't really define a function in `__main__` in this test, so we
     # emulate it:
-    with TempValueSetter((locals(), '__name__'), '__main__'):
+    with TempValueSetter((globals(), '__name__'), '__main__'):
         def f(x):
             pass
     assert f.__module__ == '__main__'
     import __main__
     __main__.f = f
-    del __main__, f
+    del __main__
     #
     ###########################################################################
     
