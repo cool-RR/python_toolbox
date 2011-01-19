@@ -65,6 +65,8 @@ get a clock of 0 by default, and on every step the new state's clock reading
 will be higher by 1 than that of the original state.
 
 
+.. _inplace-step-function:
+
 The inplace step function
 -------------------------
 
@@ -116,6 +118,8 @@ function that doesn't reveal the interim states to the user, so we can afford
 not to keep them as constants.
 
 
+.. _step-generator:
+
 The step generator
 ------------------
 
@@ -142,6 +146,8 @@ Some steps are easier to write as a step generator, because every time they yiel
 a state they remember in which line they paused and what the values of all the
 local variables are.
 
+
+.. _inplace-step-generator:
 
 The inplace step generator
 --------------------------
@@ -181,6 +187,8 @@ that the initial state *will* be duplicated, but all the simulation iterations
 will be done in place on the copy, and then it will be returned as the return
 value of :func:`garlicsim.simulate`.)
 
+
+.. _history-step-function:
 
 The history step function
 -------------------------
@@ -233,6 +241,8 @@ functions. Note that you cannot use :class:`ProcessCruncher
 history-dependent simpacks.
 
         
+.. _history-step-generator:
+
 The history step generator
 --------------------------
 

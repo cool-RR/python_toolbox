@@ -25,8 +25,11 @@ The simpack may also contain a ``settings.py`` module which specifies a few
 settings, all of them optional.
 
 
+Mandatory definitions
+=====================
+
 The ``State`` class
-===================
+-------------------
 
 The simpack must define a ``State`` class, which must inherit from
 :class:`garlicsim.data_structures.State`. The ``State`` class must be available
@@ -40,7 +43,7 @@ Example ``State`` class::
 
         
 Step function(s)
-================
+----------------
 
 The step function is the most important part of your simpack, and, (not
 counting the ``State`` class itself,) it's the only definition that your
@@ -54,31 +57,53 @@ non-history-dependent ones.)
 :ref:`More detailed explanations about step functions can be found here.
 <topics-step-functions>`
 
-* :ref:`Simple step function <simple-step-function>` -- This is the simple step function,
-  which takes a state and returns a new state that follows it in time.
+* ``def step(self, <optional defaultful arguments>):`` -- :ref:`Simple step function
+  <simple-step-function>` -- A simple step function, which takes a state and
+  returns a new state that follows it in time.
+  
+* ``def inplace_step(self, <optional defaultful arguments>):`` -- :ref:`Inplace
+  step function <inplace-step-function>` -- An inplace step function, which takes
+  a state and modifies it in place to be "the next state".
 
-* ``State.step_generator(self, *args, **kwargs)`` - This works similarly to the
-  simple step function, except it's a step generator. This means that instead of
-  returning one state, it yields new states repeatedly.
+* ``def step_generator(self, <optional defaultful arguments>):`` -- :ref:`Step
+  generator <step-generator>` -- A step generator, taking an initial state and
+  :keyword:`yield`\s new states indefinitely.
 
-* ``history_step(history_browser, *args, **kwargs)`` - A simple history step is
-  like a normal simple step, except it's intended for history-dependent
-  simulations only, and thus does not receive a state but an object called an
-  history browser. A history browser is a device for obtaining states from the
-  history of the simulation.
+* ``def inplace_step_generator(self, <optional defaultful arguments>):`` --
+  :ref:`Inplace step generator <inplace-step-generator>` -- An inplace step
+  generator, taking an initial state and, on every iteration, modifies it in
+  place to be "the next state".
 
-* ``history_step_generator(history_browser, *args, **kwargs)`` - (Not
-  implemented yet, sorry.) A history step function that yields new states
-  repeatedly similiarly to a ``step_generator``.
+* ``def history_step(history_browser, <optional defaultful arguments>):`` --
+  :ref:`History step function <history-step-function>` -- A history step function
+  takes an history browser instead of a state. The history browser allows it to
+  inspect the entire history of the simulation. Returns the next state. Is
+  usually a ``staticmethod``.
 
+* (Not yet implemented, sorry:) ``def history_step_generator(history_browser,
+  <optional defaultful arguments>):`` -- :ref:`History step generator
+  <history-step-generator>` -- A history step generator takes an history browser
+  instead of a state. The history browser allows it to inspect the entire history
+  of the simulation. Keeps :keyword:`yield`\ing new states indefinitely. Is
+  usually a ``staticmethod``.
+  
 
-Other definitions
-=================
+Non-mandatory definitions
+=========================
 
-* ``State.create_root(*args, **kwargs)`` - Create a plain state, i.e. a state
-  which is empty and featureless, like an empty canvas.
+State creation methods
+----------------------
 
-* ``State.create_messy_root(*args, **kwargs)`` - Create a messy state, i.e. a
-  state which is random and has interesting features. This is mainly intended
-  for testing the simulation.
+You may define methods for creating new states objects. These should be made
+inside the ``State`` class as ``staticmethod``\s.
+
+* ``def create_root(<optional defaultful arguments>):`` - Create a plain state,
+  i.e. a state which is empty and featureless, like an empty canvas.
+
+* ``def create_messy_root(<optional defaultful arguments>):`` - Create a messy 
+  state, i.e. a state which is random and has interesting features. This is 
+  mainly intended for playing around with the simulation, which is very 
+  important.
+  
+
 
