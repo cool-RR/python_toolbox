@@ -8,7 +8,7 @@ import garlicsim
 
 # CRUNCHERS = garlicsim.asynchronous_crunching.crunchers.ThreadCruncher
 
-# Crunchers that this simpack says it can use.
+# Cruncher types that this simpack says it can use.
 # 
 # Crunchers can be specified in different ways. You may specify a cruncher
 # type, or the string name of a cruncher type, or a list of either of those, or
