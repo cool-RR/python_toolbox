@@ -33,6 +33,8 @@ If you wish to give a different name to your step function and specify its type
 manually, you can do that by decorating the step function with the step type.
 
 
+.. _simple-step-function:
+
 The simple step function
 ------------------------
 

@@ -42,15 +42,20 @@ Example ``State`` class::
 Step function(s)
 ================
 
-The step function is the most important part of your simpack, and (not counting
-the ``State`` class) it's the only definition that your simpack *must* make.
+The step function is the most important part of your simpack, and, (not
+counting the ``State`` class itself,) it's the only definition that your
+simpack *must* make.
 
 There are several different kinds of step functions, as will be detailed below.
 You only have to define *one* step function, but you *may* define multiple step
-functions, from multiple types.
+functions, from multiple types. (Just don't mix history-dependent ones with
+non-history-dependent ones.)
 
-* ``State.step(self, *args, **kwargs)`` - This is the simple step function,
-  which takes a state and returns a state that follows it in time.
+:ref:`More detailed explanations about step functions can be found here.
+<topics-step-functions>`
+
+* :ref:`Simple step function <simple-step-function>` -- This is the simple step function,
+  which takes a state and returns a new state that follows it in time.
 
 * ``State.step_generator(self, *args, **kwargs)`` - This works similarly to the
   simple step function, except it's a step generator. This means that instead of
