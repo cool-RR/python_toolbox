@@ -10,7 +10,7 @@ from garlicsim.general_misc.temp_value_setters import TempValueSetter
 
 
 class Object(object):
-    pass 
+    pass
 
 
 def test_simple():
