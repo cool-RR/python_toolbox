@@ -9,46 +9,101 @@
 Simpack API
 ===========
 
-(This document is still incomplete.)
-   
-There are only two mandatory definitions that a simpack has to make: A ``State``
-class and a step function. There are several different kinds of step functions,
-as will be detailed below. Defining just one is sufficient.
+This document explains how to write a GarlicSim simpack. In order to get
+started quickly with your simpack, it is recommended that you use the
+:command:`start_simpack.py` script. (Launch ``start_simpack.py --help`` for
+details.) This script will create a simpack skeleton with all the required
+definitions, so you could easily fill the contents in instead of creating files
+manually.
 
-All of the other definitions are optional, and provide added functionality.
+Every simpack *must* define a ``State`` class, which contains the most
+important part of the simpack: The step function. The ``State`` class may also
+define a few other helpful bits for added functionality, like a
+``create_messy_root`` method, but these are not mandatory.
 
-Most of the step functions (and some of the other definitions) should be defined
-as methods of the ``State`` class.
-
-
-Step functions
-==============
-
-* ``State.step(self, *args, **kwargs)`` - This is the simple step function,
-  which takes a state and returns a state that follows it in time.
-
-* ``State.step_generator(self, *args, **kwargs)`` - This works similarly to the
-  simple step function, except it's a step generator. This means that instead of
-  returning one state, it yields new states repeatedly.
-
-* ``history_step(history_browser, *args, **kwargs)`` - A simple history step is
-  like a normal simple step, except it's intended for history-dependent
-  simulations only, and thus does not receive a state but an object called an
-  history browser. A history browser is a device for obtaining states from the
-  history of the simulation.
-
-* ``history_step_generator(history_browser, *args, **kwargs)`` - (Not
-  implemented yet, sorry.) A history step function that yields new states
-  repeatedly similiarly to a ``step_generator``.
+The simpack may also contain a ``settings.py`` module which specifies a few
+settings, all of them optional.
 
 
-Other definitions
-=================
+Mandatory definitions
+=====================
 
-* ``State.create_root(*args, **kwargs)`` - Create a plain state, i.e. a state
-  which is empty and featureless, like an empty canvas.
+The ``State`` class
+-------------------
 
-* ``State.create_messy_root(*args, **kwargs)`` - Create a messy state, i.e. a
-  state which is random and has interesting features. This is mainly intended
-  for testing the simulation.
+The simpack must define a ``State`` class, which must inherit from
+:class:`garlicsim.data_structures.State`. The ``State`` class must be available
+from the root namespace of your simpack; This is usually done by putting a
+``from .state import State`` line in your simpack's ``__init__.py``.
+
+Example ``State`` class::
+
+    class State(garlicsim.data_structures.State):
+        # Your step function(s) here...
+
+        
+Step function(s)
+----------------
+
+The step function is the most important part of your simpack, and, (not
+counting the ``State`` class itself,) it's the only definition that your
+simpack *must* make.
+
+There are several different kinds of step functions, as will be detailed below.
+You only have to define *one* step function, but you *may* define multiple step
+functions, from multiple types. (Just don't mix history-dependent ones with
+non-history-dependent ones.)
+
+:ref:`More detailed explanations about step functions can be found here.
+<topics-step-functions>`
+
+* ``def step(self, <optional defaultful arguments>):`` -- :ref:`Simple step function
+  <simple-step-function>` -- A simple step function, which takes a state and
+  returns a new state that follows it in time.
+  
+* ``def inplace_step(self, <optional defaultful arguments>):`` -- :ref:`Inplace
+  step function <inplace-step-function>` -- An inplace step function, which takes
+  a state and modifies it in place to be "the next state".
+
+* ``def step_generator(self, <optional defaultful arguments>):`` -- :ref:`Step
+  generator <step-generator>` -- A step generator, taking an initial state and
+  :keyword:`yield`\s new states indefinitely.
+
+* ``def inplace_step_generator(self, <optional defaultful arguments>):`` --
+  :ref:`Inplace step generator <inplace-step-generator>` -- An inplace step
+  generator, taking an initial state and, on every iteration, modifies it in
+  place to be "the next state".
+
+* ``def history_step(history_browser, <optional defaultful arguments>):`` --
+  :ref:`History step function <history-step-function>` -- A history step function
+  takes an history browser instead of a state. The history browser allows it to
+  inspect the entire history of the simulation. Returns the next state. Is
+  usually a ``staticmethod``.
+
+* (Not yet implemented, sorry:) ``def history_step_generator(history_browser,
+  <optional defaultful arguments>):`` -- :ref:`History step generator
+  <history-step-generator>` -- A history step generator takes an history browser
+  instead of a state. The history browser allows it to inspect the entire history
+  of the simulation. Keeps :keyword:`yield`\ing new states indefinitely. Is
+  usually a ``staticmethod``.
+  
+
+Non-mandatory definitions
+=========================
+
+State creation methods
+----------------------
+
+You may define methods for creating new states objects. These should be made
+inside the ``State`` class as ``staticmethod``\s.
+
+* ``def create_root(<optional defaultful arguments>):`` - Create a plain state,
+  i.e. a state which is empty and featureless, like an empty canvas.
+
+* ``def create_messy_root(<optional defaultful arguments>):`` - Create a messy 
+  state, i.e. a state which is random and has interesting features. This is 
+  mainly intended for playing around with the simulation, which is very 
+  important.
+  
+
 
