@@ -106,4 +106,9 @@ inside the ``State`` class as ``staticmethod``\s.
   important.
   
 
+``settings.py`` module
+----------------------
 
+You may define a bunch of definitions, listed below, as globals in a
+``settings.py`` module. (You may also have a ``settings`` *package* instead, or
+any other kind of ``settings`` object that holds settings as attributes.)
