@@ -10,7 +10,20 @@ Simpack API
 ===========
 
 (This document is still incomplete.)
-   
+
+This document explains how to write a GarlicSim simpack. In order to get
+started quickly with your simpack, it is recommended that you use the
+:command:`start_simpack.py` script. (Launch ``start_simpack.py --help`` for
+details.)
+
+Every simpack *must* define a ``State`` class, which contains the most
+important part of the simpack: The step function. The ``State`` class may also
+define a few other helpful bits, like a ``create_messy_root`` method, but these
+are not mandatory.
+
+The simpack may also contain a ``settings.py`` module which specifies a few 
+
+
 There are only two mandatory definitions that a simpack has to make: A ``State``
 class and a step function. There are several different kinds of step functions,
 as will be detailed below. Defining just one is sufficient.
