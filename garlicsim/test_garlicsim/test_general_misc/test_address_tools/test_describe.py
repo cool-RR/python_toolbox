@@ -3,6 +3,8 @@
 
 '''Testing module for `garlicsim.general_misc.address_tools.describe`.'''
 
+from __future__ import with_statement
+
 import nose
 
 from garlicsim.general_misc import import_tools

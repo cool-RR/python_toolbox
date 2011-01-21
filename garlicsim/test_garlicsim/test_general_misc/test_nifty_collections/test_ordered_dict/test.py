@@ -3,6 +3,8 @@
 
 '''Testing module for `nifty_collections.ordered_dict.OrderedDict`.'''
 
+from __future__ import with_statement
+
 from garlicsim.general_misc import cute_testing
 
 from garlicsim.general_misc.nifty_collections.ordered_dict import OrderedDict

@@ -5,6 +5,8 @@
 Testing module for `garlicsim.general_misc.caching.cache`.
 '''
 
+from __future__ import with_statement
+
 import re
 import gc
 import weakref
