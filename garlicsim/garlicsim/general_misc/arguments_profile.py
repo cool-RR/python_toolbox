@@ -339,6 +339,11 @@ class ArgumentsProfile(object):
         #######################################################################
         
         self._arguments = OrderedDict(getcallargs_result)
+        #self._arguments.sort(
+            #key=lambda name: (
+                #name in self.kwargs,
+                #self.kwargs.)
+        #)
         
         
         

@@ -3,6 +3,8 @@
 
 '''Testing module for `nifty_collections.ordered_dict.OrderedDict`.'''
 
+from garlicsim.general_misc import cute_testing
+
 from garlicsim.general_misc.nifty_collections.ordered_dict import OrderedDict
 
 
@@ -30,3 +32,23 @@ def test_sort():
     
     ordered_dict.sort(key=(lambda x: -x))
     assert ordered_dict == ordered_dict_copy
+    
+    
+def test_index():
+    ordered_dict = OrderedDict(((1, 'a'), (2, 'b'), (3, 'c')))
+    assert ordered_dict.index(1) == 0
+    assert ordered_dict.index(3) == 2
+    assert ordered_dict.index(2) == 1
+    
+    ordered_dict[2] = 'b'
+    
+    assert ordered_dict.index(1) == 0
+    assert ordered_dict.index(3) == 2
+    assert ordered_dict.index(2) == 1
+    
+    ordered_dict['meow'] = 'frr'
+    
+    assert ordered_dict.index('meow') == 3
+    
+    with cute_testing.RaiseAssertor(KeyError):
+        ordered_dict.index('Non-existing key')

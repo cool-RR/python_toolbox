@@ -158,3 +158,12 @@ class OrderedDict(dict, DictMixin):
         for key in sorted_keys[1:]:
             self.move_to_end(key)
         
+            
+    def index(self, key):
+        if key not in self:
+            raise KeyError
+        for i, key_ in enumerate(self):
+            if key_ == key:
+                return i
+        raise RuntimeError
+                
