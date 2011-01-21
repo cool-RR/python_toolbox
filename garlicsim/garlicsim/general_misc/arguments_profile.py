@@ -54,6 +54,8 @@ class ArgumentsProfile(object):
         with "_" being the highest/last character. (e.g. `f(1, cat=7, meow=7,
         _house=7)` is better than `f(1, _house=7, meow=7, cat=7)`)
     
+    tododoc ordereddict-like behavior, '*'
+        
     '''
     
     def __init__(self, function, *args, **kwargs):
@@ -336,23 +338,29 @@ class ArgumentsProfile(object):
             
             self.kwargs.update(sorted_star_kwargs)
             
-        # All phases completed! This arguments profile is canonical and ready.
+        # All phases completed! This arguments profile is canonical and ready. tododoc?
         #######################################################################
         
-        _arguments = OrderedDict(getcallargs_result)
-        if s_star_args:
-            del _arguments[s_star_args]
-        if s_star_kwargs:
-            del _arguments[s_star_kwargs]
-        _arguments.sort(
-            key=lambda name: (
-                name in self.kwargs,
-                (self.kwargs.index(name) if (name in self.kwargs)
-                 else s_args.index(name))
+        _arguments = OrderedDict()
+        
+        dict_of_positional_arguments = OrderedDict(
+            dict_tools.filter_items(
+                getcallargs_result,
+                lambda key, value: ((key not in self.kwargs) and \
+                                    (key != s_star_args) and \
+                                    (key != s_star_kwargs))
             )
         )
+        dict_of_positional_arguments.sort(key=s_args.index)
+        _arguments.update(dict_of_positional_arguments)
+        
+        if s_star_args:
+            _arguments['*'] = getcallargs_result[s_star_args]
+            
+        _arguments.update(self.kwargs)
         
         self._arguments = _arguments
+        ''' '''
         
         # Caching the hash, since its computation can take a long time:
         self._hash = cheat_hashing.cheat_hash(

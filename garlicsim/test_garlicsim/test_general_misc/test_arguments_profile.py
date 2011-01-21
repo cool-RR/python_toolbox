@@ -272,8 +272,8 @@ def test_defaultfuls_and_star_kwargs():
     for arg_prof in [a2, a3, a4, a5]:
         # Testing `.iteritems`:
         assert OrderedDict(arg_prof) == OrderedDict(
-            ('a', 1), ('b', 2), ('c', 3), ('d', 'bombastic'), ('blue', True),
-            ('zany', True)
+            (('a', 1), ('b', 2), ('c', 3), ('d', 'bombastic'), ('blue', True),
+             ('zany', True))
         )
         
         ### Testing `.__getitem__`: ###########################################
@@ -289,7 +289,7 @@ def test_defaultfuls_and_star_kwargs():
         
         ### Testing `.get`: ###################################################
         #                                                                     #
-        assert arg_prof.get('d') == arg_prof.get('a', 7) == 'bombastic'
+        assert arg_prof.get('d') == arg_prof.get('d', 7) == 'bombastic'
         assert arg_prof.get('non_existing_key', 7) == 7
         assert arg_prof.get('non_existing_key') is None
         #                                                                     #
@@ -338,9 +338,67 @@ def test_many_defaultfuls_and_star_args_and_star_kwargs():
                        'meow_frr')
     assert a2.kwargs == OrderedDict(
         (('blue', True), ('zany', True), ('_wet', False), ('__funky', None))
-    )    
+    )
     
-    OrderedDict(a2)
+    a3 = ArgumentsProfile(func, 'one', 'two', 'three', 'four', 'five',
+                          'bombastic', 'meow_frr', zany=True, __funky=None
+                          blue=True, _wet=False, **OrderedDict())
+    assert a2 == a3
+    
+    
+    for arg_prof in [a2, a3]:
+        # Testing `.iteritems`:
+        assert OrderedDict(arg_prof) == OrderedDict(
+            (('a', 'one'), ('b', 'two'), ('c', 'three'), ('d', 'four'),
+             ('e', 'five'), ('f', 'bombastic'), ('*', ('meow_frr')),
+             ('blue', True), ('zany', True), ('_wet', False),
+             ('__funky', None))
+        )
+        
+        ### Testing `.__getitem__`: ###########################################
+        #                                                                     #
+        assert (arg_prof['a'], arg_prof['b'], arg_prof['c'], arg_prof['d'],
+                arg_prof['e'], arg_prof['f'], arg_prof['*'], arg_prof['blue'],
+                arg_prof['zany'],  arg_prof['_wet'], arg_prof['__funky']) == \
+               ('one', 'two', 'three', 'four', 'five', 'bombastic',
+                ('meow_frr',), True, True, False, None)
+        
+        with cute_testing.RaiseAssertor(KeyError):
+            arg_prof['non_existing_key']
+        #                                                                     #
+        ### Finished testing `.__getitem__`. ##################################
+        
+        ### Testing `.get`: ###################################################
+        #                                                                     #
+        assert arg_prof.get('d') == arg_prof.get('d', 7) == 'four'
+        assert arg_prof.get('non_existing_key', 7) == 7
+        assert arg_prof.get('non_existing_key') is None
+        #                                                                     #
+        ### Finished testing `.get`. ##########################################
+        
+        ### Testing `.iterkeys`, `.keys` and `__iter__`: ######################
+        #                                                                     #
+        assert list(arg_prof.iterkeys()) == arg_prof.keys() == \
+            list(arg_prof) == \
+            ('a', 'b', 'c', 'd', 'e', 'f', '*', 'blue', 'zany', '_wet',
+             '__funky')
+        #                                                                     #
+        ### Finished testing `.iterkeys`, `.keys` and `__iter__`. #############
+        
+        ### Testing `.itervalues` and `.values`: ##############################
+        #                                                                     #
+        assert list(arg_prof.itervalues()) == arg_prof.values() == \
+            ('one', 'two', 'three', 'four', 'five', 'bombastic', ('meow_frr',),
+             True, True, False, None)
+        #                                                                     #
+        ### Finished testing `.itervalues` and `.values`. #####################
+        
+        ### Testing `.__contains__`: ##########################################
+        #                                                                     #
+        for key in arg_prof:
+            assert key in arg_prof
+        #                                                                     #
+        ### Finished testing `.__contains__`. #################################
 
     
 def test_method_equality():

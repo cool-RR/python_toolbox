@@ -4,13 +4,14 @@
 '''Defines several functions that may be useful when working with dicts.'''
 
 
-def filter_items(d, condition, _dict_constructor=dict):
+def filter_items(d, condition):
     '''
-    Get new `dict` with items from `d` that satisfy the `condition` functions.
+    Get new `dict` tododoc with items from `d` that satisfy the `condition` functions.
     
     `condition` is a function that takes a key and a value.
     '''
-    return _dict_constructor(
+    dict_type = type(d)
+    return dict_type(
         (key, value) for (key, value) in d.iteritems() if condition(key, value)
     )
 
