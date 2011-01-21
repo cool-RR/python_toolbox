@@ -35,7 +35,7 @@ def test_only_defaultless():
     assert a1 == a2 == a3 == a4 == a5
     
     for arg_prof in [a1, a2, a3, a4, a5]:
-        # Testing `.iteritems`:
+        
         assert dict(arg_prof) == {'a': 1, 'b': 2, 'c': 3}
         
         ### Testing `.__getitem__`: ###########################################
@@ -50,8 +50,7 @@ def test_only_defaultless():
         #                                                                     #
         assert arg_prof.get('a') == arg_prof.get('a', 'asdfasdf') == 1
         assert arg_prof.get('non_existing_key', 7) == 7
-        with cute_testing.RaiseAssertor(KeyError):
-            arg_prof.get('non_existing_key')
+        assert arg_prof.get('non_existing_key') is None
         #                                                                     #
         ### Finished testing `.get`. ##########################################
             
@@ -264,6 +263,26 @@ def test_defaultfuls_and_star_kwargs():
     a5 = ArgumentsProfile(func, 1, 2, 3, 'bombastic', zany=True, blue=True)
     assert a2 == a3 == a4
     
+    for arg_prof in [a2, a3, a4]:
+        # Testing `.iteritems`:
+        assert dict(arg_prof) == {'a': 1, 'b': 2, 'd': 'bombastic'} tododoc
+        
+        ### Testing `.__getitem__`: ###########################################
+        #                                                                     #
+        assert (arg_prof['a'], arg_prof['b'], arg_prof['c']) == (1, 2, 3)
+        with cute_testing.RaiseAssertor(KeyError):
+            arg_prof['non_existing_key']
+        #                                                                     #
+        ### Finished testing `.__getitem__`. ##################################
+        
+        ### Testing `.get`: ###################################################
+        #                                                                     #
+        assert arg_prof.get('a') == arg_prof.get('a', 'asdfasdf') == 1
+        assert arg_prof.get('non_existing_key', 7) == 7
+        assert arg_prof.get('non_existing_key') is None
+        #                                                                     #
+        ### Finished testing `.get`. ##########################################
+    
 
 def test_many_defaultfuls_and_star_args_and_star_kwargs():
     '''
@@ -286,7 +305,7 @@ def test_many_defaultfuls_and_star_args_and_star_kwargs():
                        'meow_frr')
     assert a2.kwargs == OrderedDict(
         (('blue', True), ('zany', True), ('_wet', False), ('__funky', None))
-    )
+    )    
 
     
 def test_method_equality():

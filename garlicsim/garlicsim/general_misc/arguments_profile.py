@@ -87,8 +87,6 @@ class ArgumentsProfile(object):
                                                       *raw_args,
                                                       **raw_kwargs)
         
-        self._getcallargs_result = getcallargs_result # todo: rename?
-        
         # The number of args which have default values:
         n_defaultful_args = len(s_defaults)
         # The word "defaultful" means "something which has a default."
@@ -340,6 +338,10 @@ class ArgumentsProfile(object):
         # All phases completed! This arguments profile is canonical and ready.
         #######################################################################
         
+        self._arguments = OrderedDict(getcallargs_result)
+        
+        
+        
         # Caching the hash, since its computation can take a long time:
         self._hash = cheat_hashing.cheat_hash(
             (
@@ -354,8 +356,8 @@ class ArgumentsProfile(object):
         return self._getcallargs_result.__getitem__(key)
         
     
-    def get(self, key, *defaults):
-        return self._getcallargs_result.get(key, *defaults)
+    def get(self, key, default=None):
+        return self._getcallargs_result.get(key, default)
     
     
     def __iter__(self):
