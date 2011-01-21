@@ -31,12 +31,18 @@ def test_only_defaultless():
     a3 = ArgumentsProfile(func, c=3, a=1, b=2)
     a4 = ArgumentsProfile(func, 1, **{'c': 3, 'b': 2})
     a5 = \
-        ArgumentsProfile(func, **OrderedDict((('c', 3), ('b',  2), ('a',  1))))
+        ArgumentsProfile(func, **OrderedDict((('c', 3), ('b', 2), ('a', 1))))
     assert a1 == a2 == a3 == a4 == a5
     
     for arg_prof in [a1, a2, a3, a4, a5]:
         
+        ### Testing `.iteritems`: #############################################
+        #                                                                     #
         assert dict(arg_prof) == {'a': 1, 'b': 2, 'c': 3}
+        assert OrderedDict(arg_prof) == \
+            OrderedDict((('a', 1), ('b', 2), ('c', 3)))
+        #                                                                     #
+        ### Finished testing `.iteritems`. ####################################
         
         ### Testing `.__getitem__`: ###########################################
         #                                                                     #

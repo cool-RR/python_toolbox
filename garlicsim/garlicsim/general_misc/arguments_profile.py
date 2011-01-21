@@ -12,6 +12,7 @@ from garlicsim.general_misc import cheat_hashing
 from garlicsim.general_misc.nifty_collections import OrderedDict
 from garlicsim.general_misc import dict_tools
 from garlicsim.general_misc import cmp_tools
+from garlicsim.general_misc.infinity import infinity
 
 
 class ArgumentsProfile(object):
@@ -339,13 +340,13 @@ class ArgumentsProfile(object):
         #######################################################################
         
         self._arguments = OrderedDict(getcallargs_result)
-        #self._arguments.sort(
-            #key=lambda name: (
-                #name in self.kwargs,
-                #self.kwargs.)
-        #)
-        
-        
+        self._arguments.sort(
+            key=lambda name: (
+                name in self.kwargs,
+                (self.kwargs.index(name) if (name in self.kwargs)
+                 else s_args.index(name))
+            )
+        )
         
         # Caching the hash, since its computation can take a long time:
         self._hash = cheat_hashing.cheat_hash(
@@ -377,6 +378,7 @@ class ArgumentsProfile(object):
     def items(self):
         ''' '''
         return self._getcallargs_result.items()
+    
     
     def keys(self):
         ''' '''
