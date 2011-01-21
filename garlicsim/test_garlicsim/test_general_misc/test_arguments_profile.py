@@ -350,7 +350,7 @@ def test_many_defaultfuls_and_star_args_and_star_kwargs():
         # Testing `.iteritems`:
         assert OrderedDict(arg_prof) == OrderedDict(
             (('a', 'one'), ('b', 'two'), ('c', 'three'), ('d', 'four'),
-             ('e', 'five'), ('f', 'bombastic'), ('*', ('meow_frr')),
+             ('e', 'five'), ('f', 'bombastic'), ('*', ('meow_frr',)),
              ('blue', True), ('zany', True), ('_wet', False),
              ('__funky', None))
         )
