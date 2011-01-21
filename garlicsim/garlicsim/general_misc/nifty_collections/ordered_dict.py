@@ -20,6 +20,8 @@
 #     FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 #     OTHER DEALINGS IN THE SOFTWARE.
 
+# blocktodo: move out of third party
+
 from UserDict import DictMixin
 
 class OrderedDict(dict, DictMixin):
@@ -149,3 +151,10 @@ class OrderedDict(dict, DictMixin):
             link[1] = end
             link[2] = first
             end[2] = first[1] = link
+
+    
+    def sort(self, key):
+        sorted_keys = sorted(self.keys())
+        for key in sorted_keys[1:]:
+            self.move_to_end(key)
+        
