@@ -256,7 +256,7 @@ def test_defaultfuls_and_star_kwargs():
     assert a1.args == (1, 2)
     assert not a1.kwargs
     
-    # Alphabetic ordering among the **kwargs, but `d` is first because it's a
+    # Alphabetic ordering among the `**kwargs`, but `d` is first because it's a
     # non-star:
     a2 = ArgumentsProfile(func, 1, 2, d='bombastic', zany=True, blue=True)
     assert a2.args == (1, 2)
@@ -267,15 +267,21 @@ def test_defaultfuls_and_star_kwargs():
     a3 = ArgumentsProfile(func, 1, b=2, blue=True, d='bombastic', zany=True)
     a4 = ArgumentsProfile(func, zany=True, a=1, b=2, blue=True, d='bombastic')
     a5 = ArgumentsProfile(func, 1, 2, 3, 'bombastic', zany=True, blue=True)
-    assert a2 == a3 == a4
+    assert a2 == a3 == a4 == a5
     
-    for arg_prof in [a2, a3, a4]:
+    for arg_prof in [a2, a3, a4, a5]:
         # Testing `.iteritems`:
-        assert dict(arg_prof) == {'a': 1, 'b': 2, 'd': 'bombastic'} tododoc
+        assert OrderedDict(arg_prof) == OrderedDict(
+            ('a', 1), ('b', 2), ('c', 3), ('d', 'bombastic'), ('blue', True),
+            ('zany', True)
+        )
         
         ### Testing `.__getitem__`: ###########################################
         #                                                                     #
-        assert (arg_prof['a'], arg_prof['b'], arg_prof['c']) == (1, 2, 3)
+        assert (arg_prof['a'], arg_prof['b'], arg_prof['c'], arg_prof['d'],
+                arg_prof['blue'], arg_prof['zany']) == \
+               (1, 2, 3, 'bombastic', True, True)
+        
         with cute_testing.RaiseAssertor(KeyError):
             arg_prof['non_existing_key']
         #                                                                     #
@@ -283,11 +289,32 @@ def test_defaultfuls_and_star_kwargs():
         
         ### Testing `.get`: ###################################################
         #                                                                     #
-        assert arg_prof.get('a') == arg_prof.get('a', 'asdfasdf') == 1
+        assert arg_prof.get('d') == arg_prof.get('a', 7) == 'bombastic'
         assert arg_prof.get('non_existing_key', 7) == 7
         assert arg_prof.get('non_existing_key') is None
         #                                                                     #
         ### Finished testing `.get`. ##########################################
+        
+        ### Testing `.iterkeys`, `.keys` and `__iter__`: ######################
+        #                                                                     #
+        assert list(arg_prof.iterkeys()) == arg_prof.keys() == \
+            list(arg_prof) == ('a', 'b', 'c', 'd', 'blue', 'zany')
+        #                                                                     #
+        ### Finished testing `.iterkeys`, `.keys` and `__iter__`. #############
+        
+        ### Testing `.itervalues` and `.values`: ##############################
+        #                                                                     #
+        assert list(arg_prof.itervalues()) == arg_prof.values() == \
+            (1, 2, 3, 'bombastic', True, True)
+        #                                                                     #
+        ### Finished testing `.itervalues` and `.values`. #####################
+        
+        ### Testing `.__contains__`: ##########################################
+        #                                                                     #
+        for key in arg_prof:
+            assert key in arg_prof
+        #                                                                     #
+        ### Finished testing `.__contains__`. #################################
     
 
 def test_many_defaultfuls_and_star_args_and_star_kwargs():
@@ -312,6 +339,8 @@ def test_many_defaultfuls_and_star_args_and_star_kwargs():
     assert a2.kwargs == OrderedDict(
         (('blue', True), ('zany', True), ('_wet', False), ('__funky', None))
     )    
+    
+    OrderedDict(a2)
 
     
 def test_method_equality():

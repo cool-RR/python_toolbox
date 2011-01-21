@@ -339,14 +339,20 @@ class ArgumentsProfile(object):
         # All phases completed! This arguments profile is canonical and ready.
         #######################################################################
         
-        self._arguments = OrderedDict(getcallargs_result)
-        self._arguments.sort(
+        _arguments = OrderedDict(getcallargs_result)
+        if s_star_args:
+            del _arguments[s_star_args]
+        if s_star_kwargs:
+            del _arguments[s_star_kwargs]
+        _arguments.sort(
             key=lambda name: (
                 name in self.kwargs,
                 (self.kwargs.index(name) if (name in self.kwargs)
                  else s_args.index(name))
             )
         )
+        
+        self._arguments = _arguments
         
         # Caching the hash, since its computation can take a long time:
         self._hash = cheat_hashing.cheat_hash(
@@ -359,50 +365,50 @@ class ArgumentsProfile(object):
         
         
     def __getitem__(self, key):
-        return self._getcallargs_result.__getitem__(key)
+        return self._arguments.__getitem__(key)
         
     
     def get(self, key, default=None):
-        return self._getcallargs_result.get(key, default)
+        return self._arguments.get(key, default)
     
     
     def __iter__(self):
-        return self._getcallargs_result.__iter__()
+        return self._arguments.__iter__()
     
     
     def iteritems(self):
         ''' '''
-        return self._getcallargs_result.iteritems()
+        return self._arguments.iteritems()
     
     
     def items(self):
         ''' '''
-        return self._getcallargs_result.items()
+        return self._arguments.items()
     
     
     def keys(self):
         ''' '''
-        return self._getcallargs_result.keys()
+        return self._arguments.keys()
     
     
     def values(self):
         ''' '''
-        return self._getcallargs_result.values()
+        return self._arguments.values()
 
     
     def iterkeys(self):
         ''' '''
-        return self._getcallargs_result.iterkeys()
+        return self._arguments.iterkeys()
     
     
     def itervalues(self):        
         ''' '''
-        return self._getcallargs_result.itervalues()
+        return self._arguments.itervalues()
     
     
     def __contains__(self, key):
         ''' '''
-        return self._getcallargs_result.__contains__(key)
+        return self._arguments.__contains__(key)
     
     
     
