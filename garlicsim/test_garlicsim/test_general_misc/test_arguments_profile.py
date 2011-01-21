@@ -297,15 +297,15 @@ def test_defaultfuls_and_star_kwargs():
         
         ### Testing `.iterkeys`, `.keys` and `__iter__`: ######################
         #                                                                     #
-        assert list(arg_prof.iterkeys()) == arg_prof.keys() == \
-            list(arg_prof) == ('a', 'b', 'c', 'd', 'blue', 'zany')
+        assert list(arg_prof.iterkeys()) == list(arg_prof.keys()) == \
+            list(arg_prof) == ['a', 'b', 'c', 'd', 'blue', 'zany']
         #                                                                     #
         ### Finished testing `.iterkeys`, `.keys` and `__iter__`. #############
         
         ### Testing `.itervalues` and `.values`: ##############################
         #                                                                     #
-        assert list(arg_prof.itervalues()) == arg_prof.values() == \
-            (1, 2, 3, 'bombastic', True, True)
+        assert list(arg_prof.itervalues()) == list(arg_prof.values()) == \
+            [1, 2, 3, 'bombastic', True, True]
         #                                                                     #
         ### Finished testing `.itervalues` and `.values`. #####################
         
@@ -341,7 +341,7 @@ def test_many_defaultfuls_and_star_args_and_star_kwargs():
     )
     
     a3 = ArgumentsProfile(func, 'one', 'two', 'three', 'four', 'five',
-                          'bombastic', 'meow_frr', zany=True, __funky=None
+                          'bombastic', 'meow_frr', zany=True, __funky=None,
                           blue=True, _wet=False, **OrderedDict())
     assert a2 == a3
     
@@ -378,18 +378,18 @@ def test_many_defaultfuls_and_star_args_and_star_kwargs():
         
         ### Testing `.iterkeys`, `.keys` and `__iter__`: ######################
         #                                                                     #
-        assert list(arg_prof.iterkeys()) == arg_prof.keys() == \
+        assert list(arg_prof.iterkeys()) == list(arg_prof.keys()) == \
             list(arg_prof) == \
-            ('a', 'b', 'c', 'd', 'e', 'f', '*', 'blue', 'zany', '_wet',
-             '__funky')
+            ['a', 'b', 'c', 'd', 'e', 'f', '*', 'blue', 'zany', '_wet',
+             '__funky']
         #                                                                     #
         ### Finished testing `.iterkeys`, `.keys` and `__iter__`. #############
         
         ### Testing `.itervalues` and `.values`: ##############################
         #                                                                     #
-        assert list(arg_prof.itervalues()) == arg_prof.values() == \
-            ('one', 'two', 'three', 'four', 'five', 'bombastic', ('meow_frr',),
-             True, True, False, None)
+        assert list(arg_prof.itervalues()) == list(arg_prof.values()) == \
+            ['one', 'two', 'three', 'four', 'five', 'bombastic', ('meow_frr',),
+             True, True, False, None]
         #                                                                     #
         ### Finished testing `.itervalues` and `.values`. #####################
         
