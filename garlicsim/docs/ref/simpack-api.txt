@@ -167,3 +167,9 @@ Note that this function does not return `True` or `False`: It returns a
 
 The function will return `None` if it's unknown whether the step profile is
 deterministic.
+
+Example::
+
+    def DETERMINISM_FUNCTION(step_profile):
+        if step_profile.step_function = State.step:
+            if step_profile
