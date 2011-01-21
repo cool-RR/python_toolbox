@@ -9,7 +9,7 @@ See its documentation for more details.
 
 from itertools import izip
 
-from garlicsim.general_misc.third_party.ordered_dict import OrderedDict
+from garlicsim.general_misc.nifty_collections import OrderedDict
 from garlicsim.general_misc.sleek_refs import CuteSleekValueDict
 import wx
 

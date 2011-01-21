@@ -12,7 +12,7 @@ import sys
 import nose
 
 from garlicsim.general_misc.arguments_profile import ArgumentsProfile
-from garlicsim.general_misc.third_party.ordered_dict import OrderedDict
+from garlicsim.general_misc.nifty_collections import OrderedDict
 from garlicsim.general_misc import cute_testing
 
 

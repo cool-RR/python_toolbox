@@ -153,8 +153,8 @@ class OrderedDict(dict, DictMixin):
             end[2] = first[1] = link
 
     
-    def sort(self, key):
-        sorted_keys = sorted(self.keys())
+    def sort(self, key=None):
+        sorted_keys = sorted(self.keys(), key=key)
         for key in sorted_keys[1:]:
             self.move_to_end(key)
         

@@ -6,7 +6,7 @@ Testing for `garlicsim.general_misc.introspection_tools.get_default_args_dict`.
 '''
 
 from garlicsim.general_misc.introspection_tools import get_default_args_dict
-from garlicsim.general_misc.third_party.ordered_dict import OrderedDict
+from garlicsim.general_misc.nifty_collections import OrderedDict
 
 
 def test():

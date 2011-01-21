@@ -3,7 +3,7 @@
 
 from keyword import iskeyword as _iskeyword
 from operator import itemgetter as _itemgetter, eq as _eq
-from garlicsim.general_misc.third_party.ordered_dict import OrderedDict
+from garlicsim.general_misc.nifty_collections import OrderedDict
 import sys as _sys
 
 
