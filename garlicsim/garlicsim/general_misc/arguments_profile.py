@@ -87,7 +87,7 @@ class ArgumentsProfile(object):
                                                       *raw_args,
                                                       **raw_kwargs)
         
-        self.getcallargs_result = getcallargs_result # todo: rename?
+        self._getcallargs_result = getcallargs_result # todo: rename?
         
         # The number of args which have default values:
         n_defaultful_args = len(s_defaults)
