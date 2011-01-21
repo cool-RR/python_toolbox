@@ -18,7 +18,7 @@ class ArgumentsProfile(object):
     '''
     A canonical arguments profile for a function.
     
-    (This should be used only on function that don't modify the arguments they
+    (This should be used only on functions that don't modify the arguments they
     receive. Also, you should never modify any arguments you use in an
     arguments profile, even outside the function.)
     
@@ -349,6 +349,54 @@ class ArgumentsProfile(object):
             )
         )
         
+        
+    def __getitem__(self, key):
+        return self._getcallargs_result.__getitem__(key)
+        
+    
+    def get(self, key, *defaults):
+        return self._getcallargs_result.get(key, *defaults)
+    
+    
+    def __iter__(self):
+        return self._getcallargs_result.__iter__()
+    
+    
+    def iteritems(self):
+        ''' '''
+        return self._getcallargs_result.iteritems()
+    
+    
+    def items(self):
+        ''' '''
+        return self._getcallargs_result.items()
+    
+    def keys(self):
+        ''' '''
+        return self._getcallargs_result.keys()
+    
+    
+    def values(self):
+        ''' '''
+        return self._getcallargs_result.values()
+
+    
+    def iterkeys(self):
+        ''' '''
+        return self._getcallargs_result.iterkeys()
+    
+    
+    def itervalues(self):        
+        ''' '''
+        return self._getcallargs_result.itervalues()
+    
+    
+    def __contains__(self, key):
+        ''' '''
+        return self._getcallargs_result.__contains__(key)
+    
+    
+    
     
     @classmethod
     def create_from_dld_format(cls, function, args_dict, star_args_list,

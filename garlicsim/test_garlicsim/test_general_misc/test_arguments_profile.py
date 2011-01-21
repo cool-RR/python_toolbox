@@ -13,6 +13,7 @@ import nose
 
 from garlicsim.general_misc.arguments_profile import ArgumentsProfile
 from garlicsim.general_misc.third_party.ordered_dict import OrderedDict
+from garlicsim.general_misc import cute_testing
 
 
 def test_only_defaultless():
@@ -32,6 +33,28 @@ def test_only_defaultless():
     a5 = \
         ArgumentsProfile(func, **OrderedDict((('c', 3), ('b',  2), ('a',  1))))
     assert a1 == a2 == a3 == a4 == a5
+    
+    for arg_prof in [a1, a2, a3, a4, a5]:
+        # Testing `.iteritems`:
+        assert dict(arg_prof) == {'a': 1, 'b': 2, 'c': 3}
+        
+        ### Testing `.__getitem__`: ###########################################
+        #                                                                     #
+        assert (arg_prof['a'], arg_prof['b'], arg_prof['c']) == (1, 2, 3)
+        with cute_testing.RaiseAssertor(KeyError):
+            arg_prof['non_existing_key']
+        #                                                                     #
+        ### Finished testing `.__getitem__`. ##################################
+        
+        ### Testing `.get`: ###################################################
+        #                                                                     #
+        assert arg_prof.get('a') == arg_prof.get('a', 'asdfasdf') == 1
+        assert arg_prof.get('non_existing_key', 7) == 7
+        with cute_testing.RaiseAssertor(KeyError):
+            arg_prof.get('non_existing_key')
+        #                                                                     #
+        ### Finished testing `.get`. ##########################################
+            
     
     
 def test_simplest_defaultful():
