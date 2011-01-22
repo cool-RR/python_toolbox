@@ -5,7 +5,7 @@
 
 '''A little module to start the `garlicsim_wx` GUI without installing it.'''
 
-import sys 
+import sys
 import os.path
 
 
