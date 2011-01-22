@@ -6,5 +6,5 @@ source =
     garlicsim_wx
 
 [report]
-# Gotta ignore errors
+# Gotta ignore errors because I create temporary code files:
 ignore_errors= = True

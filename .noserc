@@ -1,0 +1,7 @@
+[nosetests]
+exclude = unittest2
+where = garlicsim/test_garlicsim
+
+cover-erase = True
+
+with-xunit = True
