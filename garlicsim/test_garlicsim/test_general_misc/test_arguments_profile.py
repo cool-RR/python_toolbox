@@ -246,6 +246,13 @@ def test_many_defaultfuls_and_star_args():
                        'meow_frr')
     assert not a3.kwargs
     
+    a4 = ArgumentsProfile(func, 'one', 'two', 'three', 'four', 'five', 'six',
+                          3, 1, 4, 1, 5, 9, 2)
+    assert a4.args == ('one', 'two', 'three', 'four', 'five', 'six',
+                       3, 1, 4, 1, 5, 9, 2)
+    assert not a4.kwargs
+    assert a4['*'] == (3, 1, 4, 1, 5, 9, 2)
+    
     
 def test_defaultfuls_and_star_kwargs():
     '''Test `ArgumentsProfile` with defaultful arguments and `**kwargs`.'''
