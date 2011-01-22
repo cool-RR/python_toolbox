@@ -129,9 +129,9 @@ def test_function_instead_of_max_size():
     '''Test user gets a helpful exception when doing `@cache`.'''
 
     def confusedly_put_function_as_max_size():
-        exec('@cache\n'
-             'def f():\n'
-             '    pass')
+        @cache
+        def f():
+            pass
         
     with cute_testing.RaiseAssertor(
         TypeError,
