@@ -7,4 +7,4 @@ source =
 
 [report]
 # Gotta ignore errors because I create temporary code files:
-ignore_errors= = True
+ignore_errors = True
