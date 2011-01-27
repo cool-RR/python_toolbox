@@ -9,10 +9,11 @@ import garlicsim
 # CRUNCHERS = garlicsim.asynchronous_crunching.crunchers.ThreadCruncher
 
 # Cruncher types that this simpack says it can use.
-# 
-# Crunchers can be specified in different ways. You may specify a cruncher
-# type, or the string name of a cruncher type, or a list of either of those, or
-# a filter function for cruncher types.
+#
+# Cruncher types can be specified in different ways. You may specify either (a)
+# a cruncher type, or (b) the string name of a cruncher type, or (c) a list of
+# either of those (sorted by priority,) or (d) a filter function for cruncher
+# types.
 # 
 # This is useful because some simpacks can't be used with certain kinds of
 # crunchers.
