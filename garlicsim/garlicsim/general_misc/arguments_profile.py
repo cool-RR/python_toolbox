@@ -9,16 +9,17 @@ See its documentation for more details.
 
 from garlicsim.general_misc import cute_inspect
 from garlicsim.general_misc import cheat_hashing
-from garlicsim.general_misc.third_party.ordered_dict import OrderedDict
+from garlicsim.general_misc.nifty_collections import OrderedDict
 from garlicsim.general_misc import dict_tools
 from garlicsim.general_misc import cmp_tools
+from garlicsim.general_misc.infinity import infinity
 
 
 class ArgumentsProfile(object):
     '''
     A canonical arguments profile for a function.
     
-    (This should be used only on function that don't modify the arguments they
+    (This should be used only on functions that don't modify the arguments they
     receive. Also, you should never modify any arguments you use in an
     arguments profile, even outside the function.)
     
@@ -53,6 +54,8 @@ class ArgumentsProfile(object):
         with "_" being the highest/last character. (e.g. `f(1, cat=7, meow=7,
         _house=7)` is better than `f(1, _house=7, meow=7, cat=7)`)
     
+    tododoc ordereddict-like behavior, '*'
+        
     '''
     
     def __init__(self, function, *args, **kwargs):
@@ -86,8 +89,6 @@ class ArgumentsProfile(object):
         getcallargs_result = cute_inspect.getcallargs(function,
                                                       *raw_args,
                                                       **raw_kwargs)
-        
-        self.getcallargs_result = getcallargs_result # todo: rename?
         
         # The number of args which have default values:
         n_defaultful_args = len(s_defaults)
@@ -337,8 +338,29 @@ class ArgumentsProfile(object):
             
             self.kwargs.update(sorted_star_kwargs)
             
-        # All phases completed! This arguments profile is canonical and ready.
+        # All phases completed! This arguments profile is canonical and ready. tododoc?
         #######################################################################
+        
+        _arguments = OrderedDict()
+        
+        dict_of_positional_arguments = OrderedDict(
+            dict_tools.filter_items(
+                getcallargs_result,
+                lambda key, value: ((key not in self.kwargs) and \
+                                    (key != s_star_args) and \
+                                    (key != s_star_kwargs))
+            )
+        )
+        dict_of_positional_arguments.sort(key=s_args.index)
+        _arguments.update(dict_of_positional_arguments)
+        
+        if s_star_args:
+            _arguments['*'] = getcallargs_result[s_star_args]
+            
+        _arguments.update(self.kwargs)
+        
+        self._arguments = _arguments
+        ''' '''
         
         # Caching the hash, since its computation can take a long time:
         self._hash = cheat_hashing.cheat_hash(
@@ -349,6 +371,55 @@ class ArgumentsProfile(object):
             )
         )
         
+        
+    def __getitem__(self, key):
+        return self._arguments.__getitem__(key)
+        
+    
+    def get(self, key, default=None):
+        return self._arguments.get(key, default)
+    
+    
+    def __iter__(self):
+        return self._arguments.__iter__()
+    
+    
+    def iteritems(self):
+        ''' '''
+        return self._arguments.iteritems()
+    
+    
+    def items(self):
+        ''' '''
+        return self._arguments.items()
+    
+    
+    def keys(self):
+        ''' '''
+        return self._arguments.keys()
+    
+    
+    def values(self):
+        ''' '''
+        return self._arguments.values()
+
+    
+    def iterkeys(self):
+        ''' '''
+        return self._arguments.iterkeys()
+    
+    
+    def itervalues(self):        
+        ''' '''
+        return self._arguments.itervalues()
+    
+    
+    def __contains__(self, key):
+        ''' '''
+        return self._arguments.__contains__(key)
+    
+    
+    
     
     @classmethod
     def create_from_dld_format(cls, function, args_dict, star_args_list,

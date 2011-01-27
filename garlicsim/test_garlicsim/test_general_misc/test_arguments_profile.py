@@ -12,7 +12,8 @@ import sys
 import nose
 
 from garlicsim.general_misc.arguments_profile import ArgumentsProfile
-from garlicsim.general_misc.third_party.ordered_dict import OrderedDict
+from garlicsim.general_misc.nifty_collections import OrderedDict
+from garlicsim.general_misc import cute_testing
 
 
 def test_only_defaultless():
@@ -30,8 +31,35 @@ def test_only_defaultless():
     a3 = ArgumentsProfile(func, c=3, a=1, b=2)
     a4 = ArgumentsProfile(func, 1, **{'c': 3, 'b': 2})
     a5 = \
-        ArgumentsProfile(func, **OrderedDict((('c', 3), ('b',  2), ('a',  1))))
+        ArgumentsProfile(func, **OrderedDict((('c', 3), ('b', 2), ('a', 1))))
     assert a1 == a2 == a3 == a4 == a5
+    
+    for arg_prof in [a1, a2, a3, a4, a5]:
+        
+        ### Testing `.iteritems`: #############################################
+        #                                                                     #
+        assert dict(arg_prof) == {'a': 1, 'b': 2, 'c': 3}
+        assert OrderedDict(arg_prof) == \
+            OrderedDict((('a', 1), ('b', 2), ('c', 3)))
+        #                                                                     #
+        ### Finished testing `.iteritems`. ####################################
+        
+        ### Testing `.__getitem__`: ###########################################
+        #                                                                     #
+        assert (arg_prof['a'], arg_prof['b'], arg_prof['c']) == (1, 2, 3)
+        with cute_testing.RaiseAssertor(KeyError):
+            arg_prof['non_existing_key']
+        #                                                                     #
+        ### Finished testing `.__getitem__`. ##################################
+        
+        ### Testing `.get`: ###################################################
+        #                                                                     #
+        assert arg_prof.get('a') == arg_prof.get('a', 'asdfasdf') == 1
+        assert arg_prof.get('non_existing_key', 7) == 7
+        assert arg_prof.get('non_existing_key') is None
+        #                                                                     #
+        ### Finished testing `.get`. ##########################################
+            
     
     
 def test_simplest_defaultful():
@@ -218,6 +246,13 @@ def test_many_defaultfuls_and_star_args():
                        'meow_frr')
     assert not a3.kwargs
     
+    a4 = ArgumentsProfile(func, 'one', 'two', 'three', 'four', 'five', 'six',
+                          3, 1, 4, 1, 5, 9, 2)
+    assert a4.args == ('one', 'two', 'three', 'four', 'five', 'six',
+                       3, 1, 4, 1, 5, 9, 2)
+    assert not a4.kwargs
+    assert a4['*'] == (3, 1, 4, 1, 5, 9, 2)
+    
     
 def test_defaultfuls_and_star_kwargs():
     '''Test `ArgumentsProfile` with defaultful arguments and `**kwargs`.'''
@@ -228,7 +263,7 @@ def test_defaultfuls_and_star_kwargs():
     assert a1.args == (1, 2)
     assert not a1.kwargs
     
-    # Alphabetic ordering among the **kwargs, but `d` is first because it's a
+    # Alphabetic ordering among the `**kwargs`, but `d` is first because it's a
     # non-star:
     a2 = ArgumentsProfile(func, 1, 2, d='bombastic', zany=True, blue=True)
     assert a2.args == (1, 2)
@@ -239,7 +274,54 @@ def test_defaultfuls_and_star_kwargs():
     a3 = ArgumentsProfile(func, 1, b=2, blue=True, d='bombastic', zany=True)
     a4 = ArgumentsProfile(func, zany=True, a=1, b=2, blue=True, d='bombastic')
     a5 = ArgumentsProfile(func, 1, 2, 3, 'bombastic', zany=True, blue=True)
-    assert a2 == a3 == a4
+    assert a2 == a3 == a4 == a5
+    
+    for arg_prof in [a2, a3, a4, a5]:
+        # Testing `.iteritems`:
+        assert OrderedDict(arg_prof) == OrderedDict(
+            (('a', 1), ('b', 2), ('c', 3), ('d', 'bombastic'), ('blue', True),
+             ('zany', True))
+        )
+        
+        ### Testing `.__getitem__`: ###########################################
+        #                                                                     #
+        assert (arg_prof['a'], arg_prof['b'], arg_prof['c'], arg_prof['d'],
+                arg_prof['blue'], arg_prof['zany']) == \
+               (1, 2, 3, 'bombastic', True, True)
+        
+        with cute_testing.RaiseAssertor(KeyError):
+            arg_prof['non_existing_key']
+        #                                                                     #
+        ### Finished testing `.__getitem__`. ##################################
+        
+        ### Testing `.get`: ###################################################
+        #                                                                     #
+        assert arg_prof.get('d') == arg_prof.get('d', 7) == 'bombastic'
+        assert arg_prof.get('non_existing_key', 7) == 7
+        assert arg_prof.get('non_existing_key') is None
+        #                                                                     #
+        ### Finished testing `.get`. ##########################################
+        
+        ### Testing `.iterkeys`, `.keys` and `__iter__`: ######################
+        #                                                                     #
+        assert list(arg_prof.iterkeys()) == list(arg_prof.keys()) == \
+            list(arg_prof) == ['a', 'b', 'c', 'd', 'blue', 'zany']
+        #                                                                     #
+        ### Finished testing `.iterkeys`, `.keys` and `__iter__`. #############
+        
+        ### Testing `.itervalues` and `.values`: ##############################
+        #                                                                     #
+        assert list(arg_prof.itervalues()) == list(arg_prof.values()) == \
+            [1, 2, 3, 'bombastic', True, True]
+        #                                                                     #
+        ### Finished testing `.itervalues` and `.values`. #####################
+        
+        ### Testing `.__contains__`: ##########################################
+        #                                                                     #
+        for key in arg_prof:
+            assert key in arg_prof
+        #                                                                     #
+        ### Finished testing `.__contains__`. #################################
     
 
 def test_many_defaultfuls_and_star_args_and_star_kwargs():
@@ -264,6 +346,66 @@ def test_many_defaultfuls_and_star_args_and_star_kwargs():
     assert a2.kwargs == OrderedDict(
         (('blue', True), ('zany', True), ('_wet', False), ('__funky', None))
     )
+    
+    a3 = ArgumentsProfile(func, 'one', 'two', 'three', 'four', 'five',
+                          'bombastic', 'meow_frr', zany=True, __funky=None,
+                          blue=True, _wet=False, **OrderedDict())
+    assert a2 == a3
+    
+    
+    for arg_prof in [a2, a3]:
+        # Testing `.iteritems`:
+        assert OrderedDict(arg_prof) == OrderedDict(
+            (('a', 'one'), ('b', 'two'), ('c', 'three'), ('d', 'four'),
+             ('e', 'five'), ('f', 'bombastic'), ('*', ('meow_frr',)),
+             ('blue', True), ('zany', True), ('_wet', False),
+             ('__funky', None))
+        )
+        
+        ### Testing `.__getitem__`: ###########################################
+        #                                                                     #
+        assert (arg_prof['a'], arg_prof['b'], arg_prof['c'], arg_prof['d'],
+                arg_prof['e'], arg_prof['f'], arg_prof['*'], arg_prof['blue'],
+                arg_prof['zany'],  arg_prof['_wet'], arg_prof['__funky']) == \
+               ('one', 'two', 'three', 'four', 'five', 'bombastic',
+                ('meow_frr',), True, True, False, None)
+        
+        with cute_testing.RaiseAssertor(KeyError):
+            arg_prof['non_existing_key']
+        #                                                                     #
+        ### Finished testing `.__getitem__`. ##################################
+        
+        ### Testing `.get`: ###################################################
+        #                                                                     #
+        assert arg_prof.get('d') == arg_prof.get('d', 7) == 'four'
+        assert arg_prof.get('non_existing_key', 7) == 7
+        assert arg_prof.get('non_existing_key') is None
+        #                                                                     #
+        ### Finished testing `.get`. ##########################################
+        
+        ### Testing `.iterkeys`, `.keys` and `__iter__`: ######################
+        #                                                                     #
+        assert list(arg_prof.iterkeys()) == list(arg_prof.keys()) == \
+            list(arg_prof) == \
+            ['a', 'b', 'c', 'd', 'e', 'f', '*', 'blue', 'zany', '_wet',
+             '__funky']
+        #                                                                     #
+        ### Finished testing `.iterkeys`, `.keys` and `__iter__`. #############
+        
+        ### Testing `.itervalues` and `.values`: ##############################
+        #                                                                     #
+        assert list(arg_prof.itervalues()) == list(arg_prof.values()) == \
+            ['one', 'two', 'three', 'four', 'five', 'bombastic', ('meow_frr',),
+             True, True, False, None]
+        #                                                                     #
+        ### Finished testing `.itervalues` and `.values`. #####################
+        
+        ### Testing `.__contains__`: ##########################################
+        #                                                                     #
+        for key in arg_prof:
+            assert key in arg_prof
+        #                                                                     #
+        ### Finished testing `.__contains__`. #################################
 
     
 def test_method_equality():

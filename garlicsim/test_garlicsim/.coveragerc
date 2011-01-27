@@ -1,0 +1,10 @@
+[run]
+branch = True
+source =
+    garlicsim
+    garlicsim_lib
+    garlicsim_wx
+
+[report]
+# Gotta ignore errors because I create temporary code files:
+ignore_errors = True

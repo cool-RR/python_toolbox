@@ -3,6 +3,8 @@
 
 '''Testing module for `garlicsim.general_misc.address_tools.describe`.'''
 
+from __future__ import with_statement
+
 import nose
 
 from garlicsim.general_misc import import_tools
@@ -236,7 +238,7 @@ def test_bad_module_name():
     
     exec 'def f(): pass' in my_locals
     exec ('class A(object):\n'
-          '    def m(self): pass') in my_locals
+          '    def m(self): pass\n') in my_locals
     
     f, A = my_locals['f'], my_locals['A']
     
