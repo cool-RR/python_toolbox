@@ -6,7 +6,7 @@
 
 from garlicsim.general_misc import import_tools
 
-import garlicsim
+import garlicsim 
 
 
 def verify_sample_simpack_settings(sample_simpack):
