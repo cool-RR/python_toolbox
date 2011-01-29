@@ -134,7 +134,7 @@ def check(simpack, cruncher_type):
     
     ### Setting up a project to run asynchronous tests:
     
-    project = garlicsim.Project(simpack) 
+    project = garlicsim.Project(simpack)
         
     project.crunching_manager.cruncher_type = cruncher_type
     
