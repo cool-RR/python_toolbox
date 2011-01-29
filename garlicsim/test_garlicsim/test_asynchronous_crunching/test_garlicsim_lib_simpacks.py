@@ -178,7 +178,7 @@ def check(simpack, cruncher_type):
     if y < 3:
         # For simpacks with long time intervals, we make sure at least 3 nodes
         # were created.
-        path = node_3.make_containing_path()
+        path = node_3.children[1].make_containing_path()
         leaf = path[-1]
         project.simulate(
             leaf,
