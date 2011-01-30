@@ -3,7 +3,7 @@
 
 '''Test the `garlicsim.general_misc.context_manager` module.'''
 
-from __future__ import with_statement
+from __future__ import with_statement 
 
 from garlicsim.general_misc import cute_testing
 
