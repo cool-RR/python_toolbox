@@ -19,5 +19,8 @@ garlicsim_wx/*.exe
 */docs/_build/*
 */docs/_deployed_build/*
 
+nosetests.xml
+
+coverage.xml
 *.coverage
 htmlcov
