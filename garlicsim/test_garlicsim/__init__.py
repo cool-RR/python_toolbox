@@ -18,7 +18,7 @@ def __bootstrap():
                 'garlicsim_lib'
             )
         )
-        sys.path.append(garlicsim_lib_candidate_path) 
+        sys.path.append(garlicsim_lib_candidate_path)
     if not import_tools.exists('garlicsim_wx'):
         garlicsim_wx_candidate_path = os.path.realpath(
             os.path.join(
