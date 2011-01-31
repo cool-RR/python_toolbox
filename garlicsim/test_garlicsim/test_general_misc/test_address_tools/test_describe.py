@@ -27,7 +27,7 @@ def test_locally_defined_class():
     
     if garlicsim.__version_info__ <= (0, 6, 1):
         raise nose.SkipTest("This test doesn't pass in `garlicsim` version "
-                            "0.6 and below, because `describe` doesn't "
+                            "0.6.1 and below, because `describe` doesn't "
                             "support nested classes yet.")
     
     result = describe(A.B)
@@ -262,7 +262,7 @@ def test_function_in_something():
     '''Test `describe` doesn't fail when describing `{1: sum}`.'''
     if garlicsim.__version_info__ <= (0, 6, 1):
         raise nose.SkipTest("This test doesn't pass in `garlicsim` version "
-                            "0.6 and below.")
+                            "0.6.1 and below.")
     assert describe({1: sum}) == '{1: sum}'
     assert describe((sum, sum, list, chr)) == '(sum, sum, list, chr)'
     
