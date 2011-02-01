@@ -59,7 +59,7 @@ has their own advantages and disadvantages over the others.
                     yield self
                     
     This approach is sometimes cleaner than defining `__enter__` and
-    `__exit__`; Especially when using another context manager inside
+    `__exit__`; especially when using another context manager inside
     `manage_context`. In our example we did `with other_context_manager` in our
     `manage_context`, which is shorter, more idiomatic and less
     double-underscore-y than the equivalent classic definition:
