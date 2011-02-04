@@ -52,7 +52,7 @@ class Settings(object):
         List of scalar state functions given by the simpack.
         
         A scalar state function is a function from a state to a real number.
-        These should be decorated by `garlicsim.misc.cached.state_cache`.
+        These should be decorated by `garlicsim.misc.cached.state_cache`. tododoc
         '''
         
         self.SCALAR_HISTORY_FUNCTIONS = []

@@ -3,4 +3,4 @@
 
 '''Package for caching of functions that take states or history browsers.'''
 
-from .decorators import state_cache, history_cache
+from .decorators import history_cache

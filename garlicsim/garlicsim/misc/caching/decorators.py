@@ -2,6 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
+tododoc perhaps reorganize
 Provides decorators to cache state- or history-dependent functions.
 
 `state_cache` is for functions that take a state. `history_cache` is for
@@ -17,34 +18,6 @@ import weakref
 import functools
 
 import garlicsim
-
-        
-def state_cache(function):
-    '''
-    Caching decorator for state functions.
-    
-    This decorator should be used only on functions that have exactly one
-    argument which is a state. (For example, in a Physics simulation you might
-    want a function that takes a state and outputs the kinetic energy of that
-    state.)
-    
-    On any subsequent calls to the function given the same state, the
-    pre-calcluated value will be given from the cache instead of calculating it
-    again.
-    '''
-    if hasattr(function, 'state_cache'): return function
-    
-    def cached(state):
-        assert isinstance(state, garlicsim.data_structures.State)
-        if state in cached.state_cache:
-            return cached.state_cache[state]
-        else:
-            cached.state_cache[state] = value = function(state)
-            return value
-            
-    cached.state_cache = weakref.WeakKeyDictionary()
-    
-    return decorator_tools.decorator(cached, function)
 
 
 def history_cache(function, *args, **kwargs):
