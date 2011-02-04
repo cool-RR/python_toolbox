@@ -79,6 +79,7 @@ def cache(max_size=infinity):
             
             result = decorator_tools.decorator(cached, function)
             result.cache_clear = cached._cache.clear
+            return result
         
     else: # max_size < infinity
         
@@ -107,5 +108,6 @@ def cache(max_size=infinity):
             
             result = decorator_tools.decorator(cached, function)
             result.cache_clear = cached._cache.clear
+            return result
         
     return decorator
