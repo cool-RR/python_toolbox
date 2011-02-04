@@ -68,7 +68,7 @@ class State(garlicsim.data_structures.State):
         return new_state
     
     
-    @garlicsim.misc.caching.state_cache
+    @garlicsim.general_misc.caching.cache()
     def get_n_live_cells(self):
         '''Return how many live cells there are in the board.'''
         return self.board._Board__list.count(True)

@@ -16,8 +16,6 @@ from __future__ import with_statement
 import weakref
 import functools
 
-from garlicsim.general_misc import decorator_tools
-
 import garlicsim
 
         
@@ -88,4 +86,6 @@ def history_cache(function, *args, **kwargs):
             
     cached.node_cache = weakref.WeakKeyDictionary()
     
-    return decorator_tools.decorator(cached, function)
+    functools.update_wrapper(cached, function)
+    
+    return cached

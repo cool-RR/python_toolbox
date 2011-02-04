@@ -14,7 +14,7 @@ def test_cached_state_function():
         live_cells.called_flag = True
         return state.board._Board__list.count(True)
     
-    cached_live_cells = caching.state_cache(live_cells)
+    cached_live_cells = garlicsim.general_misc.caching.cache()(live_cells)
     
     s = life.State.create_root(5, 5)
     
