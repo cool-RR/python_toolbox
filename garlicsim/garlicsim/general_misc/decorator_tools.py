@@ -18,9 +18,11 @@ def decorator(caller, func=None):
         evaldict = func.func_globals.copy()
         evaldict['_call_'] = caller
         evaldict['_func_'] = func
-        return michele_decorator_module.FunctionMaker.create(
+        result = michele_decorator_module.FunctionMaker.create(
             func, "return _call_(_func_, %(shortsignature)s)",
             evaldict, undecorated=func)
+        result.__wrapped__ = func
+        return result
     else: # returns a decorator
         if isinstance(caller, functools.partial):
             return functools.partial(decorator, caller)

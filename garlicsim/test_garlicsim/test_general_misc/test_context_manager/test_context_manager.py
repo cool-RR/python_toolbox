@@ -616,7 +616,7 @@ def check_context_manager_type(context_manager_type,
     new_g('whatever')
     assert flag is None
     assert exception_type_caught is None
-    cute_testing.assert_polite_wrapper(g, new_g)
+    cute_testing.assert_polite_wrapper(new_g, g)
     #                                                                         #
     ### Finished testing manually decorated function. #########################
     
