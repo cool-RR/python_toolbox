@@ -188,6 +188,25 @@ def test_condition():
     assert call_and_check_if_profiled(lambda: f(-4.9)) is False
     
     
+def test_perfects():
+    
+    def get_divisors(x):
+        return [i for i in xrange(1, x) if (x % i == 0)]
+    
+    def is_perfect(x):
+        return sum(get_divisors(x)) == x
+    
+    @cute_profile.profile_ready()
+    def get_perfects(top):
+        return [i for i in xrange(1, top) if is_perfect(i)]
+    
+    result = get_perfects(1000)
+    get_perfects.profiling_on = True
+    def f():
+        assert result == get_perfects(1000)
+    assert call_and_check_if_profiled(f) is True
+    
+    
 def test_polite_wrapper():
     '''tododocTest that the `profile_ready` decorator preserves function signature.'''
     cute_testing.assert_polite_wrapper(
