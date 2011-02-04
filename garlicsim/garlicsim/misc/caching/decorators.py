@@ -9,16 +9,18 @@ functions that take a history browser.
 '''
 #todo: make sure the cache gets lost on pickling
 #todo: append to function's docstring?
+# blocktodo: test polite decoration
 
 from __future__ import with_statement
 
 import weakref
 import functools
 
+from garlicsim.general_misc import decorator_tools
+
 import garlicsim
 
         
-
 def state_cache(function):
     '''
     Caching decorator for state functions.
@@ -44,9 +46,7 @@ def state_cache(function):
             
     cached.state_cache = weakref.WeakKeyDictionary()
     
-    functools.update_wrapper(cached, function)
-    
-    return cached
+    return decorator_tools.decorator(cached, function)
 
 
 def history_cache(function, *args, **kwargs):
@@ -88,6 +88,4 @@ def history_cache(function, *args, **kwargs):
             
     cached.node_cache = weakref.WeakKeyDictionary()
     
-    functools.update_wrapper(cached, function)
-    
-    return cached
+    return decorator_tools.decorator(cached, function)

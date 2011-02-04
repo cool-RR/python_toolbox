@@ -126,7 +126,7 @@ import types
 import sys
 from garlicsim.general_misc.third_party import abc
 
-from garlicsim.general_misc.third_party import decorator as decorator_module
+from garlicsim.general_misc import decorator_tools
 
 
 class SelfHook(object):
@@ -363,7 +363,7 @@ class ContextManager(object):
         def inner(function_, *args, **kwargs):
             with self:
                 return function_(*args, **kwargs)
-        return decorator_module.decorator(inner, function)
+        return decorator_tools.decorator(inner, function)
     
     
     @abc.abstractmethod

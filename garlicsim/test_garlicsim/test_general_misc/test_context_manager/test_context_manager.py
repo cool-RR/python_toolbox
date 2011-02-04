@@ -616,7 +616,7 @@ def check_context_manager_type(context_manager_type,
     new_g('whatever')
     assert flag is None
     assert exception_type_caught is None
-    cute_testing.assert_same_signature(g, new_g)
+    cute_testing.assert_polite_wrapper(g, new_g)
     #                                                                         #
     ### Finished testing manually decorated function. #########################
     
@@ -748,7 +748,7 @@ def check_context_manager_type(context_manager_type,
         
     assert flag is None
     assert exception_type_caught is None
-    cute_testing.assert_same_signature(g, new_g)
+    cute_testing.assert_polite_wrapper(g, new_g)
     
     try:
         new_g('whatever')

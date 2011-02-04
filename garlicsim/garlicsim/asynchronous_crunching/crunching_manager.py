@@ -9,8 +9,8 @@ See its documentation for more information.
 
 from __future__ import with_statement
 
-import garlicsim.general_misc.queue_tools as queue_tools
-import garlicsim.general_misc.third_party.decorator
+from garlicsim.general_misc import queue_tools
+from garlicsim.general_misc import decorator_tools
 import garlicsim.general_misc.change_tracker
 from garlicsim.general_misc.infinity import infinity
 from garlicsim.general_misc import misc_tools
@@ -30,7 +30,7 @@ from .misc import EndMarker
 __all__ = ['CrunchingManager']
 
 
-@garlicsim.general_misc.third_party.decorator.decorator
+@decorator_tools.decorator
 def with_tree_lock(method, *args, **kwargs):
     '''
     Decorator for using the tree lock (in write mode) as a context manager.

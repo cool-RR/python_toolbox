@@ -9,6 +9,7 @@ import re
 
 import nose
 
+from garlicsim.general_misc import cute_testing
 from garlicsim.general_misc.cute_testing import RaiseAssertor, Failure
 
 
@@ -59,6 +60,8 @@ def test_decorator():
         1/0
         
     f()
+    
+    cute_testing.assert_polite_wrapper(f, f.__wrapped__)
 
     
 def test_string():

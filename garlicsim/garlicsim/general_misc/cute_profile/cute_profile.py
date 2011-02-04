@@ -9,7 +9,7 @@ See its documentation for more details.
 
 import functools
 
-from garlicsim.general_misc.third_party import decorator as decorator_module
+from garlicsim.general_misc import decorator_tools
 
 from . import base_profile
 
@@ -84,7 +84,7 @@ def profile_ready(condition=None, off_after=True, sort=2):
                 
                 return decorated_function.original_function(*args, **kwargs)
             
-        decorated_function = decorator_module.decorator(inner, function)
+        decorated_function = decorator_tools.decorator(inner, function)
         
         decorated_function.original_function = function
         decorated_function.profiling_on = None

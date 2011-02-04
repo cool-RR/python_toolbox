@@ -9,7 +9,7 @@ See its documentation for more details.
 
 import functools
 
-from garlicsim.general_misc.third_party import decorator as decorator_module
+from garlicsim.general_misc import decorator_tools
 
 from garlicsim.general_misc.sleek_refs import SleekCallArgs
 from garlicsim.general_misc.infinity import infinity
@@ -75,7 +75,7 @@ def cache(max_size=infinity):
                 
             cached.cache = cache_dict
             
-            return decorator_module.decorator(cached, function)
+            return decorator_tools.decorator(cached, function)
         
     else: # max_size < infinity
         
@@ -101,6 +101,6 @@ def cache(max_size=infinity):
                     
             cached.cache = cache_dict
             
-            return decorator_module.decorator(cached, function)
+            return decorator_tools.decorator(cached, function)
         
     return decorator

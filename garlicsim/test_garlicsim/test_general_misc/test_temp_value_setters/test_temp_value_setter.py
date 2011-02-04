@@ -6,6 +6,9 @@ Testing module for `garlicsim.general_misc.temp_value_setters.TempValueSetter`.
 '''
 
 from __future__ import with_statement
+
+from garlicsim.general_misc import cute_testing
+
 from garlicsim.general_misc.temp_value_setters import TempValueSetter
 
 
@@ -69,3 +72,5 @@ def test_as_decorator():
     assert a.x == 1
     f()
     assert a.x == 1
+    
+    cute_testing.assert_polite_wrapper(f, f.__wrapped__)

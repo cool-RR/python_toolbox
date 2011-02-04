@@ -7,13 +7,13 @@ This module defines the `AutoClockGenerator` class.
 See its documentation for more info.
 '''
 
-import garlicsim.general_misc.third_party.decorator
+from garlicsim.general_misc import decorator_tools
 
 
 __all__ = ['AutoClockGenerator']
 
 
-@garlicsim.general_misc.third_party.decorator.decorator
+@decorator_tools.decorator
 def store(method, *args, **kwargs):
     '''Decorator for saving current state's clock for next autoclocking.'''
     self = args[0]
