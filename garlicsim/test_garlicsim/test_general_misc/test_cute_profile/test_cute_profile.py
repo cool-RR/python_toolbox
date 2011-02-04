@@ -191,6 +191,6 @@ def test_condition():
 def test_polite_wrapper():
     '''tododocTest that the `profile_ready` decorator preserves function signature.'''
     cute_testing.assert_polite_wrapper(
-        func,
-        cute_profile.profile_ready()(func)
+        cute_profile.profile_ready()(func),
+        func
     )
