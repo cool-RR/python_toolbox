@@ -61,7 +61,7 @@ def test_decorator():
         
     f()
     
-    cute_testing.assert_polite_wrapper(f, f.__wrapped__)
+    cute_testing.assert_polite_wrapper(f)
 
     
 def test_string():

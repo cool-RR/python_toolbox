@@ -73,4 +73,4 @@ def test_as_decorator():
     f()
     assert a.x == 1
     
-    cute_testing.assert_polite_wrapper(f, f.__wrapped__)
+    cute_testing.assert_polite_wrapper(f)
