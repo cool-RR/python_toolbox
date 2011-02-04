@@ -164,6 +164,22 @@ def test_signature_preservation():
     cute_testing.assert_same_signature(my_func, my_func_cached)
     
     
-def test_no_public_cache():
+def test_api():
+    
     f = cache()(counting_func)
-    assert not hasattr(f, 'cache')
+    g = cache(max_size=3)(counting_func)
+    
+    for cached_function in (f, g):
+    
+        assert not hasattr(cached_function, 'cache')
+        cute_testing.assert_polite_wrapper(cached_function, counting_func)
+        
+        result_1 = cached_function(1)
+        assert cached_function(1) == result_1 == cached_function(1)
+        
+        cached_function.cache_clear()
+        
+        result_2 = cached_function(1)
+        
+        assert cached_function(1) == result_2 == cached_function(1)
+        assert result_1 != result_2 == cached_function(1) != result_1

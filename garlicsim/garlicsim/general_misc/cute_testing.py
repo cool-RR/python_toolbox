@@ -77,3 +77,9 @@ def assert_same_signature(*callables):
     if not logic_tools.all_equal(arg_specs, exhaustive=True):
         raise Failure('Not all the callables have the same signature.')
     
+
+def assert_polite_wrapper(wrapper, wrapped):
+    assert_same_signature(wrapper, wrapped)
+    for attribute in ('__module__', '__name__', '__doc__', '__annotations__'):
+        assert getattr(wrapper, attribute) == getattr(wrapped, attribute)
+    assert wrapper.__wrapped__ == wrapped
