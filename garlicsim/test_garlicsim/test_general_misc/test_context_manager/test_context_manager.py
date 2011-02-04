@@ -607,7 +607,7 @@ def check_context_manager_type(context_manager_type,
         
     new_g = context_manager_type('meow')(g)
         
-    with cute_testing.RaiseAssertor():
+    with cute_testing.RaiseAssertor(AssertionError):
         g('whatever')
         
     assert flag is None
@@ -748,7 +748,7 @@ def check_context_manager_type(context_manager_type,
         
     assert flag is None
     assert exception_type_caught is None
-    cute_testing.assert_polite_wrapper(g, new_g)
+    cute_testing.assert_polite_wrapper(new_g, g)
     
     try:
         new_g('whatever')
