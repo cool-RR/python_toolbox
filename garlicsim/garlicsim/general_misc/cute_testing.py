@@ -79,6 +79,8 @@ def assert_same_signature(*callables):
     
 
 def assert_polite_wrapper(wrapper, wrapped=None):
+    # blocktodo: should be checking attributes? see what the newest
+    # `functools.wraps` does.
     if wrapped is None:
         wrapped = wrapped.__wrapped__
     assert_same_signature(wrapper, wrapped)

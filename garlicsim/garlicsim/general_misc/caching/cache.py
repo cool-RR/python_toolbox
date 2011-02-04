@@ -6,6 +6,7 @@ Defines the `cache` decorator.
 
 See its documentation for more details.
 '''
+# blocktodo: test double-caching of function
 
 import functools
 
@@ -59,7 +60,7 @@ def cache(max_size=infinity):
         
         def decorator(function):
             # In case we're being given a function that is already cached:
-            if hasattr(function, 'cache'): return function
+            if getattr(function, 'is_cached', False): return function
             
             cache_dict = {}
             
@@ -67,21 +68,23 @@ def cache(max_size=infinity):
                 sleek_call_args = \
                     SleekCallArgs(cache_dict, function, *args, **kwargs)
                 try:
-                    return cached.cache[sleek_call_args]
+                    return cached._cache[sleek_call_args]
                 except KeyError:
-                    cached.cache[sleek_call_args] = value = \
+                    cached._cache[sleek_call_args] = value = \
                           function(*args, **kwargs)
                     return value
                 
-            cached.cache = cache_dict
+            cached._cache = cache_dict
+            cached.is_cached = True
             
-            return decorator_tools.decorator(cached, function)
+            result = decorator_tools.decorator(cached, function)
+            result.cache_clear = cached._cache.clear
         
     else: # max_size < infinity
         
         def decorator(function): 
             # In case we're being given a function that is already cached:
-            if hasattr(function, 'cache'): return function
+            if getattr(function, 'is_cached', False): return function
             
             cache_dict = OrderedDict()
             
@@ -89,18 +92,20 @@ def cache(max_size=infinity):
                 sleek_call_args = \
                     SleekCallArgs(cache_dict, function, *args, **kwargs)
                 try:
-                    result = cached.cache[sleek_call_args]
-                    cached.cache.move_to_end(sleek_call_args)
+                    result = cached._cache[sleek_call_args]
+                    cached._cache.move_to_end(sleek_call_args)
                     return result
                 except KeyError:
-                    cached.cache[sleek_call_args] = value = \
+                    cached._cache[sleek_call_args] = value = \
                         function(*args, **kwargs)
-                    if len(cached.cache) > max_size:
-                        cached.cache.popitem(last=False)
+                    if len(cached._cache) > max_size:
+                        cached._cache.popitem(last=False)
                     return value
                     
-            cached.cache = cache_dict
+            cached._cache = cache_dict
+            cached.is_cached = True
             
-            return decorator_tools.decorator(cached, function)
+            result = decorator_tools.decorator(cached, function)
+            result.cache_clear = cached._cache.clear
         
     return decorator
