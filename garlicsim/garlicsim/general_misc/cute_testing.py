@@ -86,7 +86,7 @@ def assert_polite_wrapper(wrapper, wrapped=None):
     # blocktodo: should be checking attributes? see what the newest
     # `functools.wraps` does.
     if wrapped is None:
-        wrapped = wrapped.__wrapped__
+        wrapped = wrapper.__wrapped__
     assert_same_signature(wrapper, wrapped)
     for attribute in ('__module__', '__name__', '__doc__', '__annotations__'):
         assert getattr(wrapper, attribute, _MissingAttribute) == \
