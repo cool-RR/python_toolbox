@@ -15,7 +15,7 @@ from garlicsim.general_misc import logic_tools
 
 class Failure(CuteException, AssertionError):
     '''A test has failed.'''
-        
+
 
 class RaiseAssertor(ContextManager):
     '''
@@ -77,6 +77,10 @@ def assert_same_signature(*callables):
     if not logic_tools.all_equal(arg_specs, exhaustive=True):
         raise Failure('Not all the callables have the same signature.')
     
+    
+class _MissingAttribute(object):
+    pass
+    # todo: make uninstanciable
 
 def assert_polite_wrapper(wrapper, wrapped=None):
     # blocktodo: should be checking attributes? see what the newest
@@ -85,5 +89,6 @@ def assert_polite_wrapper(wrapper, wrapped=None):
         wrapped = wrapped.__wrapped__
     assert_same_signature(wrapper, wrapped)
     for attribute in ('__module__', '__name__', '__doc__', '__annotations__'):
-        assert getattr(wrapper, attribute) == getattr(wrapped, attribute)
+        assert getattr(wrapper, attribute, _MissingAttribute) == \
+               getattr(wrapped, attribute, _MissingAttribute)
     assert wrapper.__wrapped__ == wrapped
