@@ -55,6 +55,8 @@ def orderless_combinations(iterable, n, start=0):
     `[[1, 2], [1, 3], [1, 4], [2, 3], [2, 4], [3, 4]]`.
     '''
     # todo: optimize or find 3rd party tool
+    # blocktodo: allow n=None for all different numbers, or perhaps a slice
+    # object
     
     if n == 1:
         for thing in itertools.islice(iterable, start, None):
