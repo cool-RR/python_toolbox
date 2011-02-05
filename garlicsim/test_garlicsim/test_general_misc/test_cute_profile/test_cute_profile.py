@@ -200,10 +200,10 @@ def test_perfects():
     def get_perfects(top):
         return [i for i in xrange(1, top) if is_perfect(i)]
     
-    result = get_perfects(1000)
+    result = get_perfects(30)
     get_perfects.profiling_on = True
     def f():
-        assert result == get_perfects(1000)
+        assert get_perfects(30) == result
     assert call_and_check_if_profiled(f) is True
     
     
