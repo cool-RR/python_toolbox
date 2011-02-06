@@ -7,3 +7,4 @@ from . import forked_inspect
 
 getargspec = forked_inspect.getargspec
 getcallargs = forked_inspect.getcallargs
+getsource = forked_inspect.getsource

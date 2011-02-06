@@ -10,13 +10,16 @@ import os.path
 import shutil
 import tempfile
 import re
+import types
 import glob
 
 from garlicsim.general_misc.temp_value_setters import \
     TempWorkingDirectorySetter
 from garlicsim.general_misc import sys_tools
 from garlicsim.general_misc import import_tools
+from garlicsim.general_misc import cute_inspect
 
+import garlicsim.scripts.simpack_template.simpack_name.state
 import garlicsim.scripts.start_simpack
 start_simpack_file = garlicsim.scripts.start_simpack.__file__
 
@@ -94,7 +97,14 @@ def test():
                  "your new simpack.\n")
             simpack_path = os.path.join(temp_dir, '_coin_flip')
             assert os.path.isdir(simpack_path)
+                                                                      
             state_module_path = os.path.join(simpack_path, 'state.py')
+            
+            check_module_was_copied_with_correct_newlines(
+                state_module_path,
+                garlicsim.scripts.simpack_template.simpack_name.state
+            )
+            
             with open(state_module_path, 'w') as state_file:
                 state_file.write(state_module_contents_for_coinflip)
                 
@@ -149,5 +159,20 @@ def test():
             
     finally:
         shutil.rmtree(temp_dir)
-
+    
         
+def check_module_was_copied_with_correct_newlines(destination_path,
+                                                  source_module):
+    
+    assert os.path.isfile(destination_path)
+    assert isinstance(source_module, types.ModuleType)
+    
+    number_of_newlines = cute_inspect.getsource(source_module).count('\n')
+    
+    with file(destination_path, 'rb') as destination_file:
+        destination_string = destination_file.read()
+        
+    assert destination_string.count(os.linesep) == number_of_newlines
+    
+    if os.linesep == '\n':
+        assert '\r\n' not in destination_string
