@@ -70,14 +70,16 @@ class RaiseAssertor(ContextManager):
             if self.assert_exact_type:
                 if self.exception_type is not type(exception):
                     assert issubclass(type(exception), self.exception_type)
-                    raise Failure("The exception `%s` was raised, and it *is* "
-                                  "an instance of the `%s` we were expecting; "
-                                  "but its type is not `%s`, it's `%s`, which "
-                                  "is a subclass of `%s`, but you specified "
-                                  "`assert_exact_type=True`, so subclasses "
-                                  "aren't acceptable" % (exception,
-                                  self.exception_type, self.exception_type,
-                                  type(exception), self.exception_type))
+                    raise Failure(
+                        "The exception `%s` was raised, and it *is* an "
+                        "instance of the `%s` we were expecting; but its type "
+                        "is not `%s`, it's `%s`, which is a subclass of `%s`, "
+                        "but you specified `assert_exact_type=True`, so "
+                        "subclasses aren't acceptable." % (repr(exception),
+                        self.exception_type.__name__,
+                        self.exception_type.__name__, type(exception).__name__,
+                        self.exception_type.__name__)
+                    )
             if self.text:
                 message = exception.args[0]
                 if isinstance(self.text, basestring):
