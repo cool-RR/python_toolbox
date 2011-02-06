@@ -142,18 +142,18 @@ def test():
                         got_loser = True
                         continue
                     
-                    states = garlicsim.list_simulate(state, infinity)
-                    len(states)
-                    assert re.match(
-                        r'^\[5000(, \d+)+\]$',
-                        repr([s.balance for s in states])
-                    )
-                    
-                    def get_end_balance():
-                        return garlicsim.simulate(state, infinity).balance
-                    results = [get_end_balance() for i in range(100)]
-                    assert 3000 < (sum(results) / len(results)) < 6000
-                    assert 0.4 < (results.count(6000)/len(results)) < 0.95
+                states = garlicsim.list_simulate(state, infinity)
+                len(states)
+                assert re.match(
+                    r'^\[5000(, \d+)+\]$',
+                    repr([s.balance for s in states])
+                )
+                
+                def get_end_balance():
+                    return garlicsim.simulate(state, infinity).balance
+                results = [get_end_balance() for i in range(100)]
+                assert 3000 < (sum(results) / len(results)) < 6000
+                assert 0.4 < (results.count(6000)/len(results)) < 0.95
             
             
             
