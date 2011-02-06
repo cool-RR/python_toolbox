@@ -4,6 +4,7 @@ source =
     garlicsim
     garlicsim_lib
     garlicsim_wx
+    test_garlicsim
 
 [report]
 # Gotta ignore errors because I create temporary code files:
