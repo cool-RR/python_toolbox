@@ -1,6 +1,8 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
+from __future__ import with_statement
+
 import os
 
 import nose
