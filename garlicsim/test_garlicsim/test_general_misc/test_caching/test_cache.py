@@ -180,3 +180,6 @@ def test_api():
         
         assert cached_function(1) == result_2 == cached_function(1)
         assert result_1 != result_2 == cached_function(1) != result_1
+        
+        # Asserting we're not using `dict.clear` or something:
+        assert cached_function.cache_clear.__name__ == 'cache_clear'

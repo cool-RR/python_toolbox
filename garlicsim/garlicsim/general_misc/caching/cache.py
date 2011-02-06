@@ -57,14 +57,15 @@ def cache(max_size=infinity):
                         'used `@cache`, while you should have used '
                         '`@cache()`' % max_size)
 
-    if max_size == infinity:
+    def decorator(function):
         
-        def decorator(function):
-            # In case we're being given a function that is already cached:
-            if getattr(function, 'is_cached', False): return function
+        # In case we're being given a function that is already cached:
+        if getattr(function, 'is_cached', False): return function
+        
+        if max_size == infinity:
             
             cache_dict = {}
-            
+
             def cached(function, *args, **kwargs):
                 sleek_call_args = \
                     SleekCallArgs(cache_dict, function, *args, **kwargs)
@@ -74,12 +75,8 @@ def cache(max_size=infinity):
                     cached._cache[sleek_call_args] = value = \
                           function(*args, **kwargs)
                     return value
-        
-    else: # max_size < infinity
-        
-        def decorator(function): 
-            # In case we're being given a function that is already cached:
-            if getattr(function, 'is_cached', False): return function
+    
+        else: # max_size < infinity
             
             cache_dict = OrderedDict()
             
@@ -100,12 +97,13 @@ def cache(max_size=infinity):
         cached._cache = cache_dict
         cached.is_cached = True
         
+        result = decorator_tools.decorator(cached, function)
+        
         def cache_clear():
             '''Clear the cache, deleting all saved results.'''
-            cache.clear()
-            
-        result = decorator_tools.decorator(cached, function)
-        result.cache_clear = cached._cache.clear
+            cached._cache.clear()    
+        result.cache_clear = cache_clear
+        
         return result
         
     return decorator
