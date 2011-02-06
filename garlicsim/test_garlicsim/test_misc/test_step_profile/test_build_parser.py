@@ -4,6 +4,7 @@
 import nose.tools
 
 import garlicsim
+from test_garlicsim.shared import verify_sample_simpack_settings
 
 from garlicsim.misc import StepProfile
 
@@ -11,6 +12,7 @@ from . import sample_simpack
 
 
 def test():
+    verify_sample_simpack_settings(sample_simpack)
     simpack_grokker = garlicsim.misc.SimpackGrokker(sample_simpack)
     
     parse = \
