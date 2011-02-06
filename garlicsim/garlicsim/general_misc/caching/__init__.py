@@ -3,6 +3,7 @@
 
 '''Defines various caching tools.'''
 
+# todo: examine thread-safety
 
 from .cache import cache
 from .cached_type import CachedType

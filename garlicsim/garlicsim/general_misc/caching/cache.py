@@ -7,6 +7,7 @@ Defines the `cache` decorator.
 See its documentation for more details.
 '''
 # blocktodo: test double-caching of function
+# todo: examine thread-safety
 
 import functools
 
@@ -73,13 +74,6 @@ def cache(max_size=infinity):
                     cached._cache[sleek_call_args] = value = \
                           function(*args, **kwargs)
                     return value
-                
-            cached._cache = cache_dict
-            cached.is_cached = True
-            
-            result = decorator_tools.decorator(cached, function)
-            result.cache_clear = cached._cache.clear
-            return result
         
     else: # max_size < infinity
         
@@ -103,11 +97,15 @@ def cache(max_size=infinity):
                         cached._cache.popitem(last=False)
                     return value
                     
-            cached._cache = cache_dict
-            cached.is_cached = True
+        cached._cache = cache_dict
+        cached.is_cached = True
+        
+        def cache_clear():
+            '''Clear the cache, deleting all saved results.'''
+            cache.clear()
             
-            result = decorator_tools.decorator(cached, function)
-            result.cache_clear = cached._cache.clear
-            return result
+        result = decorator_tools.decorator(cached, function)
+        result.cache_clear = cached._cache.clear
+        return result
         
     return decorator
