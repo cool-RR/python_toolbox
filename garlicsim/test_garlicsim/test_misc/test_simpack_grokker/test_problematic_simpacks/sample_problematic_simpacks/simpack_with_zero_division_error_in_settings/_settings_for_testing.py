@@ -5,7 +5,7 @@ import garlicsim
 from .state import State
 
 
-PROBLEM = SyntaxError
+PROBLEM = ZeroDivisionError
 ENDABLE = False
 VALID = False
 CONSTANT_CLOCK_INTERVAL = None
