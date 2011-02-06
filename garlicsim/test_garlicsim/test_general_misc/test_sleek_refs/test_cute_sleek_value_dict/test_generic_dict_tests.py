@@ -19,6 +19,7 @@ from garlicsim.general_misc.sleek_refs import CuteSleekValueDict
 
 
 null_callback = lambda: None
+null_callback()
 
 
 class GenericDictTest(unittest2.TestCase):

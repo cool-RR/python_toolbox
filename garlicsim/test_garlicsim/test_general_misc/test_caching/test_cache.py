@@ -130,8 +130,7 @@ def test_function_instead_of_max_size():
 
     def confusedly_put_function_as_max_size():
         @cache
-        def f():
-            pass
+        def f(): pass
         
     with cute_testing.RaiseAssertor(
         TypeError,
@@ -153,13 +152,11 @@ def test_signature_preservation():
     assert f() == f() == f(1, 2) == f(a=1, b=2)
     cute_testing.assert_same_signature(f, counting_func)
     
-    def my_func(qq, zz=1, yy=2, *args):
-        pass
+    def my_func(qq, zz=1, yy=2, *args): pass
     my_func_cached = cache(max_size=7)(my_func)
     cute_testing.assert_same_signature(my_func, my_func_cached)
     
-    def my_other_func(**kwargs):
-        pass
+    def my_other_func(**kwargs): pass
     my_func_cached = cache()(my_func)
     cute_testing.assert_same_signature(my_func, my_func_cached)
     

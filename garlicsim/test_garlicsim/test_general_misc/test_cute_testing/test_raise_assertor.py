@@ -94,3 +94,25 @@ def test_regex():
     with RaiseAssertor(Failure):
         with RaiseAssertor(OSError, re.compile('^123\w*?456$')):
             raise SyntaxError('123qwerty456')
+        
+
+def test_assert_exact_type():
+    
+    with RaiseAssertor(LookupError):
+        raise KeyError("Look at me, I'm a KeyError")
+    
+    error_message = \
+        ("The exception `KeyError(\"Look at me, I'm a KeyError\")` was raised, and it *is* "
+         "an instance of the `LookupError` we were expecting; "
+         "but its type is not `LookupError`, it's `KeyError`, which "
+         "is a subclass of `LookupError`, but you specified "
+         "`assert_exact_type=True`, so subclasses "
+         "aren't acceptable")
+    
+    with RaiseAssertor(Failure, error_message):
+        with RaiseAssertor(LookupError, assert_exact_type=True):
+            raise KeyError("Look at me, I'm a KeyError")    
+    
+        
+        
+        

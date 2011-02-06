@@ -7,6 +7,7 @@ import nose
 
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import path_tools
+from garlicsim.general_misc import cute_testing
 from garlicsim.general_misc.reasoned_bool import ReasonedBool
 
 import garlicsim
@@ -41,12 +42,6 @@ def check_simpack(simpack):
     PROBLEM = _settings_for_testing.PROBLEM
     assert PROBLEM
     assert issubclass(PROBLEM, Exception)
-    
-    try:
+           
+    with cute_testing.RaiseAssertor(PROBLEM, assert_exact_type=True):
         SimpackGrokker(simpack)
-    except Exception, exception:
-        assert type(exception) is PROBLEM
-        
-    else:
-        raise Exception("`SimpackGrokker` shouldn't have been created because "
-                        "the simpack is problematic.")

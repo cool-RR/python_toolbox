@@ -64,6 +64,7 @@ def test_as_decorator():
     '''Test `TempValueSetter` used as a decorator.'''
     def a():
         pass
+    a()
     a.x = 1
     
     @TempValueSetter((a, 'x'), 2)
