@@ -215,15 +215,13 @@ def check(simpack, cruncher_type):
     assert [len(p) for p in paths] == [5, 5, 5]
     
     
-    # Ensuring buffer on `ended_path` from `node_3` won't add a single node or
-    # end since we have a path to an existing end:
+    # Ensuring buffer on `ended_path` from `node_3` won't cause a new job to be
+    # created since we have a path to an existing end:
     project.ensure_buffer_on_path(node_3, ended_path, 10)
     project.ensure_buffer_on_path(node_3, ended_path, 1000)
     project.ensure_buffer_on_path(node_3, ended_path, infinity)
     total_nodes_added = 0    
-    while project.crunching_manager.jobs:
-        time.sleep(0.1)
-        total_nodes_added += project.sync_crunchers()
+    assert not project.crunching_manager.jobs
     assert len(project.tree.nodes) == 10
     
     # These `ensure_buffer_on_path` calls shouldn't have added any ends:
