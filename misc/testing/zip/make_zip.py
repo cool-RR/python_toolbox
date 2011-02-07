@@ -66,7 +66,7 @@ def zip_folder(folder, zip_path, ignored_extenstions=[]):
 #                                                                             #
 # tododoc: helpful error messages:
 assert __name__ == '__main__'
-module_path = os.path.split(__file__)[0]
+module_path = os.path.realpath(os.path.split(__file__)[0])
 assert module_path.endswith(os.path.sep.join(('misc', 'testing', 'zip')))
 repo_root_path = os.path.realpath(os.path.join(module_path, '../../..'))
 assert os.path.realpath(os.getcwd()) == repo_root_path
