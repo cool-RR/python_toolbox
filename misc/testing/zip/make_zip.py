@@ -1,9 +1,12 @@
 #!/usr/bin/env python
+
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
 '''
 '''
+
+# blocktodo: should work with python 3, try it
 
 from __future__ import with_statement
 
@@ -12,9 +15,16 @@ import zipfile
 import contextlib
 import shutil
 
-def zipdir(basedir, archivename, ignored_extenstions=[]):
+def zip_folder(folder, zip_path, ignored_extenstions=[]):
+    '''
+    note: creates a folder inside the zip with the same name of the original
+    folder, in contrast to other implementation which put all of the files on
+    the root level of the zip.
+    
+    Doesn't put empty folders in the zip file.
+    '''
     # blocktodo: make pretty
-    assert os.path.isdir(basedir)
+    assert os.path.isdir(folder)
     
     ### Ensuring ignored extensions start with '.': ###########################
     #                                                                         #
@@ -28,28 +38,31 @@ def zipdir(basedir, archivename, ignored_extenstions=[]):
     ### Finished ensuring ignored extensions start with '.'. ##################
             
     with contextlib.closing(
-        zipfile.ZipFile(archivename, 'w', zipfile.ZIP_DEFLATED)
-        ) as z:
-        for root, dirs, files in os.walk(basedir):
-            #NOTE: ignore empty directories
-            for fn in files:
-                extension = os.path.splitext(fn)[1]
+        zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED)
+        ) as zip_file:
+        
+        for root, subfolders, files in os.walk(folder):
+            
+            for file_path in files:
+                
+                extension = os.path.splitext(file_path)[1]
                 if extension in ignored_extenstions:
                     continue
-                absfn = os.path.join(root, fn)
-                zfn = absfn[len(basedir)+len(os.sep):] #XXX: relative path
-                z.write(absfn, zfn)
+                
+                absolute_file_path = os.path.join(root, file_path)
+                
+                destination_file_path = \
+                    absolute_file_path[(len(folder) + len(os.sep)):]
+                print(absolute_file_path)
+                zip_file.write(absolute_file_path, destination_file_path)
 
                 
-# todo: define function for zipping a folder, then use it to make garlicsim,
-# garlicsim_lib and garlicsim_wx in build folder
-
 ###############################################################################
 #                                                                             #
 # tododoc: helpful error messages:
 assert __name__ == '__main__'
 module_path = os.path.split(__file__)[0]
-assert module_path.endswith(os.path.sep.join('misc', 'testing', 'zip'))
+assert module_path.endswith(os.path.sep.join(('misc', 'testing', 'zip')))
 repo_root_path = os.path.realpath(os.path.join(module_path, '../../..'))
 assert os.path.realpath(os.getcwd()) == repo_root_path
 assert module_path == \
@@ -75,8 +88,10 @@ for package_name in package_names:
     assert os.path.isdir(package_path)
     zip_destination_path = os.path.join(build_folder,
                                         (package_name + '.zip'))    
-    zipdir(package_path, zip_destination_path,
-           ignored_extenstions=['.pyc', '.pyo'])
+    zip_folder(package_path, zip_destination_path,
+               ignored_extenstions=['.pyc', '.pyo'])
 #                                                                             #
 ### Finished zipping packages into zip files. #################################
 
+# todo: can make some test here that checks that the files were zipped properly
+# and no pyo or pyc files were copied.
