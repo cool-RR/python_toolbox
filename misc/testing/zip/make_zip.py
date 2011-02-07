@@ -9,6 +9,7 @@
 # blocktodo: should work with python 3, try it
 
 from __future__ import with_statement
+from __future__ import print_function
 
 import os.path
 import zipfile
@@ -23,8 +24,10 @@ def zip_folder(folder, zip_path, ignored_extenstions=[]):
     
     Doesn't put empty folders in the zip file.
     '''
-    # blocktodo: make pretty
     assert os.path.isdir(folder)
+    source_folder = os.path.realpath(folder)
+    
+    zip_name = os.path.splitext(os.path.split(zip_path)[1])[0]
     
     ### Ensuring ignored extensions start with '.': ###########################
     #                                                                         #
@@ -41,7 +44,7 @@ def zip_folder(folder, zip_path, ignored_extenstions=[]):
         zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED)
         ) as zip_file:
         
-        for root, subfolders, files in os.walk(folder):
+        for root, subfolders, files in os.walk(source_folder):
             
             for file_path in files:
                 
@@ -51,9 +54,11 @@ def zip_folder(folder, zip_path, ignored_extenstions=[]):
                 
                 absolute_file_path = os.path.join(root, file_path)
                 
-                destination_file_path = \
-                    absolute_file_path[(len(folder) + len(os.sep)):]
-                print(absolute_file_path)
+                destination_file_path = os.path.join(
+                    zip_name,
+                    absolute_file_path[(len(source_folder) + len(os.sep)):]
+                )
+                
                 zip_file.write(absolute_file_path, destination_file_path)
 
                 
@@ -74,8 +79,12 @@ assert module_path == \
 #                                                                             #
 build_folder = os.path.join(module_path, 'build')
 if os.path.exists(build_folder):
+    print('Deleting old `build` folder...', end='')
     shutil.rmtree(build_folder)
+    print('Done.')
+print('Creating `build` folder...', end='')
 os.mkdir(build_folder)
+print('Done.')
 #                                                                             #
 ### Finished preparing build folder. ##########################################
 
@@ -84,14 +93,23 @@ os.mkdir(build_folder)
 package_names = ['garlicsim', 'garlicsim_lib', 'garlicsim_wx']
 
 for package_name in package_names:
+    
+    print("Preparing to zip folder ''..." % package_name, end='')
     package_path = os.path.join(repo_root_path, package_name, package_name)
     assert os.path.isdir(package_path)
     zip_destination_path = os.path.join(build_folder,
-                                        (package_name + '.zip'))    
+                                        (package_name + '.zip'))
+    
+    print('Zipping...', end='')
     zip_folder(package_path, zip_destination_path,
                ignored_extenstions=['.pyc', '.pyo'])
+    
+    print('Done.')
 #                                                                             #
 ### Finished zipping packages into zip files. #################################
 
-# todo: can make some test here that checks that the files were zipped properly
-# and no pyo or pyc files were copied.
+print('Finished zipping all folders.')
+
+# todo: can make some test here that checks that the files were zipped
+# properly, have a correct data, and no pyo or pyc files were copied.
+
