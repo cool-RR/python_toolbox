@@ -79,10 +79,10 @@ assert module_path == \
 #                                                                             #
 build_folder = os.path.join(module_path, 'build')
 if os.path.exists(build_folder):
-    print('Deleting old `build` folder...', end='')
+    print('Deleting old `build` folder... ', end='')
     shutil.rmtree(build_folder)
     print('Done.')
-print('Creating `build` folder...', end='')
+print('Creating `build` folder... ', end='')
 os.mkdir(build_folder)
 print('Done.')
 #                                                                             #
@@ -94,13 +94,13 @@ package_names = ['garlicsim', 'garlicsim_lib', 'garlicsim_wx']
 
 for package_name in package_names:
     
-    print("Preparing to zip folder ''..." % package_name, end='')
+    print("Preparing to zip folder '%s'... " % package_name, end='')
     package_path = os.path.join(repo_root_path, package_name, package_name)
     assert os.path.isdir(package_path)
     zip_destination_path = os.path.join(build_folder,
                                         (package_name + '.zip'))
     
-    print('Zipping...', end='')
+    print('Zipping... ', end='')
     zip_folder(package_path, zip_destination_path,
                ignored_extenstions=['.pyc', '.pyo'])
     
