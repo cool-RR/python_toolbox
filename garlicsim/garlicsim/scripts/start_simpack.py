@@ -104,19 +104,18 @@ def start_simpack(containing_folder, name):
         )
         
         _make_path_to_file(dest_file)
-
-        source_file_name = pkg_resources.resource_filename(
-            simpack_template_package_name, file
-        )
-        with open(source_file_name, 'rU') as source:
+        
+        source_string = \
+            pkg_resources.resource_string(simpack_template_package_name, file)
             
-            with open(dest_file, 'w') as destination:
-                
-                string_to_write = source.read()\
-                                .replace('simpack_name', name)
-                                
-                
-                destination.write(string_to_write)
+        with open(dest_file, 'w') as destination:
+            
+            string_to_write = source_string\
+                            .replace('\r', '')\
+                            .replace('simpack_name', name)
+                            
+            
+            destination.write(string_to_write)
             
         try:
             shutil.copymode('/'.join(('simpack_template', file)), dest_file)
