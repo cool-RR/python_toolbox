@@ -94,7 +94,7 @@ def start_simpack(containing_folder, name):
     
     os.mkdir(folder)
     
-    for file in _walk_folder(simpack_template_package_name, './simpack_name'):
+    for file in _walk_folder(simpack_template_package_name, 'simpack_name'):
         
         if os.path.splitext(file)[1] in ('.pyc', '.pyo'):
             continue
