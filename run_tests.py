@@ -165,6 +165,7 @@ if __name__ == '__main__':
     testing_from_zip = '--from-zip' in argv
     if testing_from_zip:
         argv.remove('--from-zip')
+        prepare_zip_testing()
         
     # Adding test packages to arguments to have Nose take tests from them:
     argv += ['%s/test_%s' % (package_name, package_name) for 
