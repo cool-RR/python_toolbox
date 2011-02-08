@@ -123,6 +123,8 @@ def exists(module_name):
     This seems to be the best way to carefully import a module.
     
     Currently implemented for top-level packages only. (i.e. no dots.)
+    
+    Doesn't support modules imported from a zip file.
     '''
     assert '.' not in module_name
     try:

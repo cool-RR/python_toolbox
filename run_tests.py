@@ -32,6 +32,8 @@ def exists(module_name):
     This seems to be the best way to carefully import a module.
     
     Currently implemented for top-level packages only. (i.e. no dots.)
+    
+    Doesn't support modules imported from a zip file.
     '''
     assert '.' not in module_name
     try:
@@ -96,7 +98,10 @@ if __name__ == '__main__':
     if testing_from_zip:
         argv.remove('--from-zip')
         result = os.system(
-            os.path.join(our_path, 'misc', 'testing', 'zip', 'make_zip.py')
+            '"%s"' % \
+            os.path.realpath(
+                os.path.join(our_path, 'misc', 'testing', 'zip', 'make_zip.py')
+            )
         )
         
         if result != 0:
@@ -113,7 +118,6 @@ if __name__ == '__main__':
             )
             assert zip_file not in sys.path
             sys.path.append(zip_file)
-            assert exists(package_name)
             package = __import__(package_name)
             assert '.zip' in package.__name__
             
