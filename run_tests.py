@@ -15,17 +15,24 @@ import sys
 import nose
 
 our_path = os.path.realpath(os.path.split(__file__)[0])
-#test_suites = [
-    #os.path.realpath(
-        #os.path.join(our_path, package_name + '/test_' + package_name)
-        #) for package_name in ['garlicsim', 'garlicsim_lib', 'garlicsim_wx']
-#]
 
-class TestProgram(nose.core.TestProgram):    
+if os.path.realpath(os.getcwd()) != our_path:
+    raise Exception("This script may only be launched from its own folder, "
+                    "i.e., when the folder that it's located in is the "
+                    "working directory.")
+
+
+class TestProgram(nose.core.TestProgram):
+    '''
+    Tester for GarlicSim.
+    
+    We subclass `nose.core.TestProgram` to make it collect test configurations
+    from all the different packages in this repo.
+    '''
     def makeConfig(self, env, plugins=None):
-        """Load a Config, pre-filled with user config files if any are
-        found.
-        """
+        '''
+        Load a Config, pre-filled with user config files if any are found.
+        '''
         cfg_files = ['garlicsim/setup.cfg',
                      'garlicsim_lib/setup.cfg',
                      'garlicsim_wx/setup.cfg']
@@ -38,11 +45,21 @@ class TestProgram(nose.core.TestProgram):
 
     
 class Config(nose.config.Config):
-    ''' '''
+    '''
+    Nose configuration.
+    '''
         
     def configureWhere(self, where):
-        """Configure the working directory or directories for the test run.
-        """
+        '''
+        Configure the working directory or directories for the test run.
+        
+        We override `nose.config.Config.configureWhere` to avoid adding
+        together the locations from all the `setup.cfg` files, because Nose
+        doesn't handle that well. So we use this script's path, which doesn't
+        have any tests on it, as the official 'where' directory, while we pass
+        the real test folders as arguments to `TestProgram`, without any
+        `--where` flag.
+        '''
         return nose.config.Config.configureWhere(
             self,
             our_path
@@ -52,9 +69,6 @@ class Config(nose.config.Config):
 if __name__ == '__main__':
     
     argv = sys.argv[:]
-    #argv.append('--where=garlicsim/test_garlicsim,'
-                        #'garlicsim_lib/test_garlicsim_lib,'
-                        #'garlicsim_wx/test_garlicsim_wx')
     
     if '--from-zip' in argv:
         argv.remove('--from-zip')
