@@ -91,7 +91,11 @@ class Config(nose.config.Config):
         )
 
     
-def prepare_zip_testing():    
+def prepare_zip_testing():
+    
+    print('Preparing to zip GarlicSim packages, and then run tests with '
+          'GarlicSim imported from zip files.')
+    
     result = os.system(
         '"%s"' % \
         os.path.realpath(
@@ -105,7 +109,9 @@ def prepare_zip_testing():
     for package_name in package_names:
         assert not exists(package_name)
         assert package_name not in sys.modules
-    
+
+    print('Importing all GarlicSim packages from zip files... ', end='')
+        
     for i, package_name in enumerate(package_names):
         zip_file = os.path.realpath(
             os.path.join(our_path, 'misc', 'testing', 'zip', 'build',
@@ -115,7 +121,8 @@ def prepare_zip_testing():
         sys.path.append(zip_file)
         package = __import__(package_name)
         assert '.zip' in package.__file__
-    print('Imported all GarlicSim packages from zip files.')
+    
+    print('Done.')
     
     
 def ensure_zip_testing_was_legit():
@@ -159,6 +166,8 @@ package_names = ['garlicsim', 'garlicsim_lib', 'garlicsim_wx']
 
 
 if __name__ == '__main__':
+    
+    print('Preparing to run tests using Python %s' % sys.version)
     
     argv = sys.argv[:]
     
