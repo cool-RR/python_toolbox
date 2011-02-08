@@ -16,6 +16,7 @@ import zipfile
 import contextlib
 import shutil
 
+
 def zip_folder(folder, zip_path, ignored_extenstions=[]):
     '''
     note: creates a folder inside the zip with the same name of the original
