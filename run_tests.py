@@ -23,9 +23,27 @@ class TestProgram(nose.core.TestProgram):
             manager = nose.core.PluginManager(plugins=plugins)
         else:
             manager = nose.core.DefaultPluginManager()
-        return nose.core.Config(
+        return Config(
             env=env, files=cfg_files, plugins=manager)
 
     
+class Config(nose.config.Config):
+    ''' '''
+        
+    def configureWhere(self, where):
+        """Configure the working directory or directories for the test run.
+        """
+        return nose.config.Config.configureWhere(
+            ['garlicsim/test_garlicsim',
+             'garlicsim_lib/test_garlicsim_lib',
+             'garlicsim_wx/test_garlicsim_wx']
+        )
+
+    
 if __name__ == '__main__':
-    TestProgram()
+    
+    argv = sys.argv[:]
+    argv.append('--where=garlicsim/test_garlicsim,'
+                        'garlicsim_lib/test_garlicsim_lib,'
+                        'garlicsim_wx/test_garlicsim_wx')
+    TestProgram(argv=argv)
