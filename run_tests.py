@@ -53,7 +53,7 @@ if __name__ == '__main__':
     #argv.append('--where=garlicsim/test_garlicsim,'
                         #'garlicsim_lib/test_garlicsim_lib,'
                         #'garlicsim_wx/test_garlicsim_wx')
-    argv += ['garlicsim/test_garlicsim',
-             'garlicsim_lib/test_garlicsim_lib',
-             'garlicsim_wx/test_garlicsim_wx'][::-1]
+    argv += ['"garlicsim/test_garlicsim"',
+             '"garlicsim_lib/test_garlicsim_lib"',
+             '"garlicsim_wx/test_garlicsim_wx"'][::-1]
     TestProgram(argv=argv)
