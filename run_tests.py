@@ -11,6 +11,8 @@
 # blocktodo: make friendly error message if launched from wrong path
 # blocktodo: add help message
 
+from __future__ import print_function
+
 import os.path
 import sys
 import imp
@@ -165,8 +167,8 @@ if __name__ == '__main__':
         argv.remove('--from-zip')
         
     # Adding test packages to arguments to have Nose take tests from them:
-    argv += \
-        ['%s/test_%s' % package_name for package_name in package_names][::-1]
+    argv += ['%s/test_%s' % (package_name, package_name) for 
+             package_name in package_names][::-1]
     # (Reversing package order for now, to put the shorter tests first.)
     
     ###########################################################################    
