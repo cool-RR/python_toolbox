@@ -51,9 +51,9 @@ class FunctionAnchoringType(type):
             function_name = function.__name__
             anchor_address = '.'.join((module_name, function_name))
             
-            # Since this metaclass is a hacky solution as it is, let's be
-            # careful and ensure no object is already defined by the same name
-            # in the module level:
+            # Since this metaclass is a hacky enough solution as it is, let's
+            # be careful and ensure no object is already defined by the same
+            # name in the module level:
             try:
                 already_defined_object = address_tools.resolve(anchor_address)
             except AttributeError:
