@@ -172,12 +172,15 @@ if __name__ == '__main__':
              package_name in package_names][::-1]
     # (Reversing package order for now, to put the shorter tests first.)
     
-    ###########################################################################    
-    # This is the heavy line, which actually causes Nose to start running
-    # tests:
-    TestProgram(argv=argv)
-    ###########################################################################    
     
-    if testing_from_zip:
-        ensure_zip_testing_was_legit(package_names, sys, os)
+    try:
+        #######################################################################
+        # This is the heavy line, which actually causes Nose to start running
+        # tests:
+        TestProgram(argv=argv)
+        #######################################################################
+    
+    finally:
+        if testing_from_zip:
+            ensure_zip_testing_was_legit(package_names, sys, os)
 
