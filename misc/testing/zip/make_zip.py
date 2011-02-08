@@ -4,6 +4,12 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
+
+Note: The only reason we create zip files with numbers (e.g. '1.zip') instead
+of names (e.g. 'garlicsim_lib.zip') is for Windows XP compatibility; Windows XP
+limits the length of a path that a file may have, so we can't afford to have a
+15-letter long zip name, and then under that serve the GarlicSim packages,
+because it will cause Python to raise an `ImportError` under Windows XP.
 '''
 
 # blocktodo: should work with python 3, try it
@@ -93,13 +99,13 @@ print('Done.')
 #                                                                             #
 package_names = ['garlicsim', 'garlicsim_lib', 'garlicsim_wx']
 
-for package_name in package_names:
+for i, package_name in enumerate(package_names):
     
     print("Preparing to zip folder '%s'... " % package_name, end='')
     package_path = os.path.join(repo_root_path, package_name, package_name)
     assert os.path.isdir(package_path)
     zip_destination_path = os.path.join(build_folder,
-                                        (package_name + '.zip'))
+                                        (str(i) + '.zip'))
     
     print('Zipping... ', end='')
     zip_folder(package_path, zip_destination_path,

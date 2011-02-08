@@ -107,14 +107,14 @@ if __name__ == '__main__':
         if result != 0:
             exit(result)
             
-        for package_name in package_names:
+        for i, package_name in enumerate(package_names):
             assert not exists(package_name)
             assert package_name not in sys.modules
         
         for package_name in package_names:
             zip_file = os.path.realpath(
                 os.path.join(our_path, 'misc', 'testing', 'zip', 'build',
-                             (package_name + '.zip'))
+                             (str(i) + '.zip'))
             )
             assert zip_file not in sys.path
             sys.path.append(zip_file)
