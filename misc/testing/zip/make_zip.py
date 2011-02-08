@@ -35,6 +35,7 @@ def zip_folder(folder, zip_path, ignored_extenstions=[]):
     source_folder = os.path.realpath(folder)
     
     zip_name = os.path.splitext(os.path.split(zip_path)[1])[0]
+    source_folder_name = os.path.split(source_folder)[1]
     
     ### Ensuring ignored extensions start with '.': ###########################
     #                                                                         #
@@ -62,7 +63,7 @@ def zip_folder(folder, zip_path, ignored_extenstions=[]):
                 absolute_file_path = os.path.join(root, file_path)
                 
                 destination_file_path = os.path.join(
-                    zip_name,
+                    source_folder_name,
                     absolute_file_path[(len(source_folder) + len(os.sep)):]
                 )
                 
