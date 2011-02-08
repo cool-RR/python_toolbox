@@ -120,7 +120,7 @@ if __name__ == '__main__':
             sys.path.append(zip_file)
             package = __import__(package_name)
             assert '.zip' in package.__file__
-            
+        print('Imported all GarlicSim packages from zip files.')
         
     argv += ['garlicsim/test_garlicsim',
              'garlicsim_lib/test_garlicsim_lib',
