@@ -49,13 +49,12 @@ class FunctionAnchoringType(type):
             module_name = function.__module__
             module = sys.modules[module_name]
             function_name = function.__name__
-            anchor_address = '.'.join((module_name, function_name))
             
             # Since this metaclass is a hacky enough solution as it is, let's
             # be careful and ensure no object is already defined by the same
-            # name in the module level:
+            # name in the module level: (todotest)
             try:
-                already_defined_object = address_tools.resolve(anchor_address)
+                already_defined_object = getattr(module_name, function_name)
             except AttributeError:
                 # Good, there is no object defined under our anchor address.
                 # This is the normal case.
