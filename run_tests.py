@@ -182,5 +182,5 @@ if __name__ == '__main__':
     
     finally:
         if testing_from_zip:
-            ensure_zip_testing_was_legit(package_names, sys, os)
+            ensure_zip_testing_was_legit()
 
