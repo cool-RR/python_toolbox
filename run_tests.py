@@ -119,7 +119,7 @@ if __name__ == '__main__':
             assert zip_file not in sys.path
             sys.path.append(zip_file)
             package = __import__(package_name)
-            assert '.zip' in package.__name__
+            assert '.zip' in package.__file__
             
         
     argv += ['garlicsim/test_garlicsim',
@@ -131,4 +131,4 @@ if __name__ == '__main__':
         for package_name in package_names:
             assert package_name in sys.modules
             package = sys.modules[package_name]
-            assert '.zip' in package.__name__
+            assert '.zip' in package.__file__
