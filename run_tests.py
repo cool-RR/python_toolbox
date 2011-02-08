@@ -12,7 +12,10 @@
 
 import os.path
 import sys
+import imp
+
 import nose
+
 
 our_path = os.path.realpath(os.path.split(__file__)[0])
 
@@ -21,6 +24,23 @@ if os.path.realpath(os.getcwd()) != our_path:
                     "i.e., when the folder that it's located in is the "
                     "working directory.")
 
+
+def exists(module_name):
+    '''
+    Return whether a module by the name `module_name` exists.
+    
+    This seems to be the best way to carefully import a module.
+    
+    Currently implemented for top-level packages only. (i.e. no dots.)
+    '''
+    assert '.' not in module_name
+    try:
+        imp.find_module(module_name)
+    except ImportError:
+        return False
+    else:
+        return True
+        
 
 class TestProgram(nose.core.TestProgram):
     '''
@@ -70,7 +90,10 @@ if __name__ == '__main__':
     
     argv = sys.argv[:]
     
-    if '--from-zip' in argv:
+    package_names = ['garlicsim', 'garlicsim_lib', 'garlicsim_wx']
+    
+    testing_from_zip = '--from-zip' in argv
+    if testing_from_zip:
         argv.remove('--from-zip')
         result = os.system(
             os.path.join(our_path, 'misc', 'testing', 'zip', 'make_zip.py')
@@ -79,10 +102,29 @@ if __name__ == '__main__':
         if result != 0:
             exit(result)
             
-        assert no
+        for package_name in package_names:
+            assert not exists(package_name)
+            assert package_name not in sys.modules
         
+        for package_name in package_names:
+            zip_file = os.path.realpath(
+                os.path.join(our_path, 'misc', 'testing', 'zip', 'build',
+                             (package_name + '.zip'))
+            )
+            assert zip_file not in sys.path
+            sys.path.append(zip_file)
+            assert exists(package_name)
+            package = __import__(package_name)
+            assert '.zip' in package.__name__
+            
         
     argv += ['garlicsim/test_garlicsim',
              'garlicsim_lib/test_garlicsim_lib',
              'garlicsim_wx/test_garlicsim_wx'][::-1]
     TestProgram(argv=argv)
+    
+    if testing_from_zip:
+        for package_name in package_names:
+            assert package_name in sys.modules
+            package = sys.modules[package_name]
+            assert '.zip' in package.__name__
