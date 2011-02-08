@@ -8,8 +8,16 @@
 # blocktodo: make friendly error message if `nose` is missing
 # blocktodo: make friendly error message if launched from wrong path
 
+import os.path
 import sys
 import nose
+
+our_path = os.path.realpath(os.path.split(__file__)[0])
+test_suites = [
+    os.path.realpath(
+        os.path.join(our_path, package_name + '/test_' + package_name)
+        ) for package_name in ['garlicsim', 'garlicsim_lib', 'garlicsim_wx']
+]
 
 class TestProgram(nose.core.TestProgram):    
     def makeConfig(self, env, plugins=None):
@@ -34,16 +42,15 @@ class Config(nose.config.Config):
         """Configure the working directory or directories for the test run.
         """
         return nose.config.Config.configureWhere(
-            ['garlicsim/test_garlicsim',
-             'garlicsim_lib/test_garlicsim_lib',
-             'garlicsim_wx/test_garlicsim_wx']
+            self,
+            test_suites
         )
 
     
 if __name__ == '__main__':
     
     argv = sys.argv[:]
-    argv.append('--where=garlicsim/test_garlicsim,'
-                        'garlicsim_lib/test_garlicsim_lib,'
-                        'garlicsim_wx/test_garlicsim_wx')
+    #argv.append('--where=garlicsim/test_garlicsim,'
+                        #'garlicsim_lib/test_garlicsim_lib,'
+                        #'garlicsim_wx/test_garlicsim_wx')
     TestProgram(argv=argv)
