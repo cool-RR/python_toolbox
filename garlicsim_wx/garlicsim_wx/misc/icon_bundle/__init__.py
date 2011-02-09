@@ -1,4 +1,4 @@
-
+# tododoc: this module looks like crap
 import pkg_resources
 
 import wx

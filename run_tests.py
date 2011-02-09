@@ -15,15 +15,12 @@ GarlicSim-specific arguments:
     
 '''
 
-# blocktodo: add help message
-
 import os.path
 import sys
 import imp
 
 
 our_path = os.path.realpath(os.path.split(__file__)[0])
-
 if os.path.realpath(os.getcwd()) != our_path:
     raise Exception("This script may only be launched from its own folder, "
                     "i.e., when the folder that it's located in is the "
@@ -48,6 +45,7 @@ def exists(module_name):
     else:
         return True
 
+    
 try:
     import nose
 except ImportError:
@@ -62,11 +60,16 @@ class TestProgram(nose.core.TestProgram):
     Tester for GarlicSim.
     
     We subclass `nose.core.TestProgram` to make it collect test configurations
-    from all the different packages in this repo.
+    from all the different packages in this repo, and use our own `Config`
+    class.
     '''
     def makeConfig(self, env, plugins=None):
         '''
         Load a Config, pre-filled with user config files if any are found.
+        
+        We override `nose.core.TestProgram.makeConfig` to make it collect test
+        configurations from all the different packages in this repo, and use
+        our own `Config` class.
         '''
         cfg_files = ['garlicsim/setup.cfg',
                      'garlicsim_lib/setup.cfg',
@@ -80,10 +83,7 @@ class TestProgram(nose.core.TestProgram):
 
     
 class Config(nose.config.Config):
-    '''
-    Nose configuration.
-    '''
-        
+    '''Nose configuration.''' 
     def configureWhere(self, where):
         '''
         Configure the working directory or directories for the test run.
@@ -102,6 +102,7 @@ class Config(nose.config.Config):
 
     
 def prepare_zip_testing():
+    '''Zip all GarlicSim modules and import them for testing.'''
     
     sys.stdout.write('Preparing to zip GarlicSim packages, and then run tests '
                      'with GarlicSim imported from zip files.\n')
@@ -176,7 +177,12 @@ package_names = ['garlicsim', 'garlicsim_lib', 'garlicsim_wx']
 
 
 if __name__ == '__main__':
+    
     argv = sys.argv[:]
+    
+    if '--help' in argv:
+        sys.stdout.write(__doc__ + '\n')
+        exit()
     
     sys.stdout.write('Preparing to run tests using Python %s\n' % sys.version)    
     

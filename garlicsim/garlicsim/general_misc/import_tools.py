@@ -6,6 +6,7 @@
 import sys
 import os.path
 import imp
+import zipimport
 
 from garlicsim.general_misc import package_finder
 from garlicsim.general_misc import caching
@@ -114,7 +115,22 @@ def import_if_exists(module_name, silent_fail=False):
     # as `imp`'s.
         
     return normal_import(module_name)
-    
+
+
+def _module_exists_in_some_zip_path(module_name):
+    assert '.' not in module_name
+    zip_paths = [path for path in sys.path if '.zip' in path]
+    # todo: Find better way to filter zip paths.
+    for zip_path in zip_paths:
+        zip_importer = zipimport.zipimporter(zip_path)
+        try:
+            zip_importer.find_module(module_name)
+        except ImportError:
+            continue
+        else:
+            return True
+    return False
+
 
 def exists(module_name):
     '''
@@ -130,7 +146,7 @@ def exists(module_name):
     try:
         imp.find_module(module_name)
     except ImportError:
-        return False
+        return _module_exists_in_some_zip_path(module_name)
     else:
         return True
 

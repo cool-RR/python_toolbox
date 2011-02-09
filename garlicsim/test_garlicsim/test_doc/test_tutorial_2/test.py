@@ -84,7 +84,7 @@ def test():
     # place:
     assert not import_tools.exists('_coin_flip')
     
-    temp_dir = tempfile.mkdtemp(prefix='temp_garlicsim_')
+    temp_dir = tempfile.mkdtemp(prefix='temp_test_garlicsim_')
     try:
         with TempWorkingDirectorySetter(temp_dir):
             with sys_tools.OutputCapturer() as output_capturer:

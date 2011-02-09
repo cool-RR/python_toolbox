@@ -28,7 +28,7 @@ of the simpack.
 
 def test_implicit_help():
     '''Test help text comes up when giving no arguments.'''
-    temp_dir = tempfile.mkdtemp(prefix='temp_garlicsim_')
+    temp_dir = tempfile.mkdtemp(prefix='temp_test_garlicsim_')
     try:
         with TempWorkingDirectorySetter(temp_dir):
             with sys_tools.OutputCapturer() as output_capturer:
@@ -44,7 +44,7 @@ def test_implicit_help():
 
 def test_explicit_help():
     '''Test help text comes up when '--help' argument.'''
-    temp_dir = tempfile.mkdtemp(prefix='temp_garlicsim_')
+    temp_dir = tempfile.mkdtemp(prefix='temp_test_garlicsim_')
     try:
         with TempWorkingDirectorySetter(temp_dir):
             with sys_tools.OutputCapturer() as output_capturer:
