@@ -45,49 +45,23 @@ def helpful_decorator_builder(decorator_builder):
     Do not use this on decorators that may take a function object as their
     first argument.
     
-    Note: When used on a class, replaces the class's `__call__` method
-    *in-place*, without creating a new class. It returns the same class that
-    was fed into it.
-    
-    blocktodo: What about decorated classes?
+    Cannot be used on classes
     '''
 
-    is_class = isinstance(decorator_builder, type)
-    if is_class:
-        decorator_builder_class = decorator_builder
-        old_call_function = decorator_builder_class.__call__
-        def decorator_builder(class_, *args, **kwargs):
-            return old_call_function(class_,
-                                     *args, **kwargs)
-    else: # We're decorating a normal function:
-        assert isinstance(decorator_builder, types.FunctionType)
+    assert isinstance(decorator_builder, types.FunctionType)
     
-    def inner(_, *args, **kwargs):
+    def inner(same_decorator_builder, *args, **kwargs):
         
         if args and isinstance(args[0], types.FunctionType):            
             function = args[0]
             function_name = function.__name__
-            decorator_builder_name = _.__name__
+            decorator_builder_name = decorator_builder.__name__
             raise TypeError('It seems that you forgot to add parentheses '
                             'after `@%s` when decorating the `%s` '
                             'function.' % (decorator_builder_name,
                             function_name))
         else:
-            if is_class:
-                return decorator_builder(_, *args, **kwargs)
-            else:
-                return decorator_builder(*args, **kwargs)
+            return decorator_builder(*args, **kwargs)
         
-    if is_class:
-        #from garlicsim.general_misc import monkeypatching_tools
-        #monkeypatching_tools.monkeypatch_method(
-            #decorator_builder_class,
-            #name='__call__'
-            #)(inner)
-        decorator_builder_class.__call__ = classmethod(inner)
-        
-        return decorator_builder_class
-        
-    else: # We're decorating a normal function:
-        return decorator(inner, decorator_builder)
+    return decorator(inner, decorator_builder)
         

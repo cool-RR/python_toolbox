@@ -336,7 +336,6 @@ class ContextManagerType(abc.ABCMeta):
         )
                 
     
-@decorator_tools.helpful_decorator_builder
 class ContextManager(object):
     '''
     Allows running preparation code before a given suite and cleanup after.
