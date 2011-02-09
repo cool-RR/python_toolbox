@@ -51,30 +51,32 @@ def helpful_decorator_builder(decorator_builder):
     
     blocktodo: What about decorated classes?
     '''
+
     is_class = isinstance(decorator_builder, type)
     if is_class:
         decorator_builder_class = decorator_builder
         old_call_function = decorator_builder_class.__call__
-        def decorator_builder(*args, **kwargs):
-            return old_call_function(decorator_builder_class,
+        def decorator_builder(class_, *args, **kwargs):
+            return old_call_function(class_,
                                      *args, **kwargs)
     else: # We're decorating a normal function:
         assert isinstance(decorator_builder, types.FunctionType)
-        
-    decorator_builder_name = decorator_builder.__name__
     
     def inner(_, *args, **kwargs):
         
-        if args and isinstance(args[0], types.FunctionType):
-            
+        if args and isinstance(args[0], types.FunctionType):            
             function = args[0]
             function_name = function.__name__
+            decorator_builder_name = _.__name__
             raise TypeError('It seems that you forgot to add parentheses '
                             'after `@%s` when decorating the `%s` '
                             'function.' % (decorator_builder_name,
                             function_name))
         else:
-            return decorator_builder(*args, **kwargs)
+            if is_class:
+                return decorator_builder(_, *args, **kwargs)
+            else:
+                return decorator_builder(*args, **kwargs)
         
     if is_class:
         #from garlicsim.general_misc import monkeypatching_tools
