@@ -9,6 +9,7 @@
 
 # blocktodo: make friendly error message if `nose` is missing
 # blocktodo: make friendly error message if launched from wrong path
+# blocktodo: add help message
 
 import os.path
 import sys
@@ -88,47 +89,105 @@ class Config(nose.config.Config):
         )
 
     
+def prepare_zip_testing():
+    
+    sys.stdout.write('Preparing to zip GarlicSim packages, and then run tests '
+                     'with GarlicSim imported from zip files.\n')
+    
+    result = os.system(
+        '"%s"' % \
+        os.path.realpath(
+            os.path.join(our_path, 'misc', 'testing', 'zip', 'make_zip.py')
+        )
+    )
+    
+    if result != 0:
+        exit(result)
+        
+    for package_name in package_names:
+        assert not exists(package_name)
+        assert package_name not in sys.modules
+
+    sys.stdout.write('Importing all GarlicSim packages from zip files... ')
+        
+    for i, package_name in enumerate(package_names):
+        zip_file = os.path.realpath(
+            os.path.join(our_path, 'misc', 'testing', 'zip', 'build',
+                         (str(i) + '.zip'))
+        )
+        assert zip_file not in sys.path
+        sys.path.append(zip_file)
+        package = __import__(package_name)
+        assert '.zip' in package.__file__
+    
+    sys.stdout.write('Done.\n')
+    
+    
+def ensure_zip_testing_was_legit():
+    '''
+    Ensure GarlicSim packages were indeed used from zip.
+    
+    This is used only in `--from-zip` testing, to ensure that the GarlicSim
+    packages weren't used from the source folders accidentally.
+    '''
+    sys.stdout.write('Confirming all GarlicSim packages were used from zip '
+                     'files... ')
+    for i, package_name in enumerate(package_names):
+        assert package_name in sys.modules
+        package = sys.modules[package_name]
+        assert '.zip' in package.__file__
+        
+        raw_module_names = \
+            [module_name for module_name in sys.modules.keys() if
+             module_name.split('.')[0] == package_name]
+        
+        # Filtering out module names that map to `None`, because of a bug,
+        # probably in `zipimport`, which litters `sys.modules` with
+        # non-sense modules:
+        
+        module_names = [module_name for module_name in raw_module_names if
+                        sys.modules[module_name] is not None]
+        
+        module_paths = [sys.modules[module_name].__file__ for
+                        module_name in module_names]
+        
+        zip_file_name = str(i) + '.zip'
+        snippet_from_real_folder_path = \
+            os.path.sep.join((package_name, package_name))
+        for module_path in module_paths:
+            assert zip_file_name in module_path
+            assert snippet_from_real_folder_path not in module_path
+    sys.stdout.write('Done.\n')
+
+    
+package_names = ['garlicsim', 'garlicsim_lib', 'garlicsim_wx']            
+
+
 if __name__ == '__main__':
     
-    argv = sys.argv[:]
+    sys.stdout.write('Preparing to run tests using Python %s\n' % sys.version)
     
-    package_names = ['garlicsim', 'garlicsim_lib', 'garlicsim_wx']
+    argv = sys.argv[:]
     
     testing_from_zip = '--from-zip' in argv
     if testing_from_zip:
         argv.remove('--from-zip')
-        result = os.system(
-            '"%s"' % \
-            os.path.realpath(
-                os.path.join(our_path, 'misc', 'testing', 'zip', 'make_zip.py')
-            )
-        )
+        prepare_zip_testing()
         
-        if result != 0:
-            exit(result)
-            
-        for package_name in package_names:
-            assert not exists(package_name)
-            assert package_name not in sys.modules
-        
-        for i, package_name in enumerate(package_names):
-            zip_file = os.path.realpath(
-                os.path.join(our_path, 'misc', 'testing', 'zip', 'build',
-                             (str(i) + '.zip'))
-            )
-            assert zip_file not in sys.path
-            sys.path.append(zip_file)
-            package = __import__(package_name)
-            assert '.zip' in package.__file__
-        sys.stdout.write('Imported all GarlicSim packages from zip files.\n')
-        
-    argv += ['garlicsim/test_garlicsim',
-             'garlicsim_lib/test_garlicsim_lib',
-             'garlicsim_wx/test_garlicsim_wx'][::-1]
-    TestProgram(argv=argv)
+    # Adding test packages to arguments to have Nose take tests from them:
+    argv += ['%s/test_%s' % (package_name, package_name) for 
+             package_name in package_names][::-1]
+    # (Reversing package order for now, to put the shorter tests first.)
     
-    if testing_from_zip:
-        for package_name in package_names:
-            assert package_name in sys.modules
-            package = sys.modules[package_name]
-            assert '.zip' in package.__file__
+    
+    try:
+        #######################################################################
+        # This is the heavy line, which actually causes Nose to start running
+        # tests:
+        TestProgram(argv=argv)
+        #######################################################################
+    
+    finally:
+        if testing_from_zip:
+            ensure_zip_testing_was_legit()
+
