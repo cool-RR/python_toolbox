@@ -135,12 +135,10 @@ def _module_exists_in_some_zip_path(module_name):
             # raise `ZipImportError`. todo: should find smarter way of catching
             # this, excepting `ZipImportError` is not a good idea.
         
-        try:
-            zip_importer.find_module(module_name)
-        except ImportError:
-            continue
-        else:
+        if zip_importer.find_module(module_name) is not None:    
             return True
+        else:
+            continue
         
     return False
 
