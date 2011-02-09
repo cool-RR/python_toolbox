@@ -119,16 +119,29 @@ def import_if_exists(module_name, silent_fail=False):
 
 def _module_exists_in_some_zip_path(module_name):
     assert '.' not in module_name
+    
     zip_paths = [path for path in sys.path if '.zip' in path]
     # todo: Find better way to filter zip paths.
+    
     for zip_path in zip_paths:
-        zip_importer = zipimport.zipimporter(zip_path)
+
+        # Trying to create a zip imported:
+        try:
+            zip_importer = zipimport.zipimporter(zip_path)
+        except zipimport.ZipImportError:
+            continue
+            # Excepted `ZipImportError` because we may have zip paths in
+            # `sys.path` that don't really exist, which causes `zipimport` to
+            # raise `ZipImportError`. todo: should find smarter way of catching
+            # this, excepting `ZipImportError` is not a good idea.
+        
         try:
             zip_importer.find_module(module_name)
         except ImportError:
             continue
         else:
             return True
+        
     return False
 
 

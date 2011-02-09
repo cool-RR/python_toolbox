@@ -169,7 +169,7 @@ def check_module_was_copied_with_correct_newlines(destination_path,
     
     number_of_newlines = cute_inspect.getsource(source_module).count('\n')
     
-    with file(destination_path, 'rb') as destination_file:
+    with open(destination_path, 'rb') as destination_file:
         destination_string = destination_file.read()
         
     assert destination_string.count(os.linesep) == number_of_newlines
