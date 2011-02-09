@@ -15,8 +15,8 @@ because it will cause Python to raise an `ImportError` under Windows XP.
 # blocktodo: should work with python 3, try it
 
 from __future__ import with_statement
-from __future__ import print_function
 
+import sys
 import os.path
 import zipfile
 import contextlib
@@ -87,12 +87,12 @@ assert module_path == \
 #                                                                             #
 build_folder = os.path.join(module_path, 'build')
 if os.path.exists(build_folder):
-    print('Deleting old `build` folder... ', end='')
+    sys.stdout.write('Deleting old `build` folder... ')
     shutil.rmtree(build_folder)
-    print('Done.')
-print('Creating `build` folder... ', end='')
+    sys.stdout.write('Done.\n')
+sys.stdout.write('Creating `build` folder... ')
 os.mkdir(build_folder)
-print('Done.')
+sys.stdout.write('Done.\n')
 #                                                                             #
 ### Finished preparing build folder. ##########################################
 
@@ -102,21 +102,21 @@ package_names = ['garlicsim', 'garlicsim_lib', 'garlicsim_wx']
 
 for i, package_name in enumerate(package_names):
     
-    print("Preparing to zip folder '%s'... " % package_name, end='')
+    sys.stdout.write("Preparing to zip folder '%s'... " % package_name)
     package_path = os.path.join(repo_root_path, package_name, package_name)
     assert os.path.isdir(package_path)
     zip_destination_path = os.path.join(build_folder,
                                         (str(i) + '.zip'))
     
-    print('Zipping... ', end='')
+    sys.stdout.write('Zipping... ')
     zip_folder(package_path, zip_destination_path,
                ignored_extenstions=['.pyc', '.pyo'])
     
-    print('Done.')
+    sys.stdout.write('Done.\n')
 #                                                                             #
 ### Finished zipping packages into zip files. #################################
 
-print('Finished zipping all folders.')
+sys.stdout.write('Finished zipping all folders.\n')
 
 # todo: can make some test here that checks that the files were zipped
 # properly, have a correct data, and no pyo or pyc files were copied.
