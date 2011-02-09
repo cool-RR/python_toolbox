@@ -200,6 +200,7 @@ class ContextManagerTypeType(type):
             return super(ContextManagerTypeType, cls).__call__(*args)
 
 
+@decorator_tools.helpful_decorator_builder
 class ContextManagerType(abc.ABCMeta):
     '''
     Metaclass for `ContextManager`.

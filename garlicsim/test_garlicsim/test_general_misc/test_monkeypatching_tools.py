@@ -3,6 +3,8 @@
 
 '''Testing module for `garlicsim.general_misc.monkeypatching_tools`.'''
 
+from garlicsim.general_misc import cute_testing
+
 from garlicsim.general_misc import monkeypatching_tools
 
 
@@ -29,3 +31,19 @@ def test():
     assert not hasattr(a, 'woof')
     
     del meow, woof
+    
+    
+def test_helpful_message_when_forgetting_parentheses():
+    '''Test user gets a helpful exception when when forgetting parentheses.'''
+
+    def confusedly_forget_parentheses():
+        @monkeypatching_tools.monkeypatch_method
+        def f(): pass
+        
+    with cute_testing.RaiseAssertor(
+        TypeError,
+        'It seems that you forgot to add parentheses after '
+        '`@monkeypatch_method` when decorating the `f` function.'
+    ):
+        
+        confusedly_forget_parentheses()

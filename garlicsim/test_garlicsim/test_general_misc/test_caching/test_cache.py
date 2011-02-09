@@ -125,10 +125,10 @@ def test_unhashable_arguments():
            f(1, meow={1: [1, 2], 2: frozenset([3, 'b'])})
     
     
-def test_function_instead_of_max_size():
+def test_helpful_message_when_forgetting_parentheses():
     '''Test user gets a helpful exception when when forgetting parentheses.'''
 
-    def confusedly_put_function_as_max_size():
+    def confusedly_forget_parentheses():
         @cache
         def f(): pass
         
@@ -138,7 +138,7 @@ def test_function_instead_of_max_size():
         'decorating the `f` function.'
     ):
         
-        confusedly_put_function_as_max_size()
+        confusedly_forget_parentheses()
     
     
     

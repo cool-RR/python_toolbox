@@ -42,22 +42,47 @@ def decorator(caller, func=None):
 def helpful_decorator_builder(decorator_builder):
     '''
     
-    Safe to use only on decorators that cannot take a function as their first
-    argument.
+    Do not use this on decorators that may take a function object as their
+    first argument.
+    
+    Note: When used on a class, replaces the class's `__call__` method
+    *in-place*, without creating a new class. It returns the same class that
+    was fed into it.
     
     blocktodo: What about decorated classes?
     '''
-    if isinstance(decorator_builder, type):
-        raise NotImplementedError # blocktodo: maybe think about this.
-    name = decorator_builder.__name__
-    def inner(*args, **kwargs):
-        if (not kwargs) and len(args) == 1 \
-           and isinstance(args[0], types.FunctionType):
-            (function,) = args
+    is_class = isinstance(decorator_builder, type)
+    if is_class:
+        decorator_builder_class = decorator_builder
+        decorator_builder = decorator_builder.__call__
+    else: # We're decorating a normal function:
+        assert isinstance(decorator_builder, types.FunctionType)
+        
+    decorator_builder_name = decorator_builder.__name__
+    
+    def inner(same_decorator_builder, *args, **kwargs):
+        
+        assert same_decorator_builder == decorator_builder
+        
+        if args and isinstance(args[0], types.FunctionType):
+            
+            function = args[0]
             function_name = function.__name__
-            raise Exception('It seems that you forgot to add parentheses '
+            raise TypeError('It seems that you forgot to add parentheses '
                             'after `@%s` when decorating the `%s` '
-                            'function.' % (name, function_name))
+                            'function.' % (decorator_builder_name,
+                            function_name))
         else:
             return decorator_builder(*args, **kwargs)
+        
+    my_decorator = decorator(inner, decorator_builder)
+        
+    if is_class:
+        from garlicsim.general_misc import monkeypatching_tools
+        monkeypatching_tools.monkeypatch_method(decorator_builder_class)\
+                                               (my_decorator)
+        return decorator_builder_class
+        
+    else: # We're decorating a normal function:
+        return my_decorator
         
