@@ -42,6 +42,10 @@ def test_zip():
         
         with sys_tools.TempSysPathAdder(temp_zip_path):
             assert exists('zip_imported_module_bla_bla')
+            import zip_imported_module_bla_bla
+            assert zip_imported_module_bla_bla.__doc__ == \
+                   ('Module for testing `import_tools.exists` on zip-archived '
+                    'modules.')
             
     finally:
         shutil.rmtree(temp_dir)
