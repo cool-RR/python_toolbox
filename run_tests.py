@@ -4,11 +4,17 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
+Script for running tests on all GarlicSim packages together.
 
+Nose is used to run the tests, and any arguments will be passed to Nose; type
+`nosetests --help` to see Nose's list of arguments.
+
+GarlicSim-specific arguments:
+
+    --from-zip  Zip GarlicSim and import the modules from a zip file
+    
 '''
 
-# blocktodo: make friendly error message if `nose` is missing
-# blocktodo: make friendly error message if launched from wrong path
 # blocktodo: add help message
 
 import os.path
@@ -170,10 +176,9 @@ package_names = ['garlicsim', 'garlicsim_lib', 'garlicsim_wx']
 
 
 if __name__ == '__main__':
-    
-    sys.stdout.write('Preparing to run tests using Python %s\n' % sys.version)
-    
     argv = sys.argv[:]
+    
+    sys.stdout.write('Preparing to run tests using Python %s\n' % sys.version)    
     
     testing_from_zip = '--from-zip' in argv
     if testing_from_zip:
