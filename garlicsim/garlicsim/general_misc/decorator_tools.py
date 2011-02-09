@@ -54,15 +54,16 @@ def helpful_decorator_builder(decorator_builder):
     is_class = isinstance(decorator_builder, type)
     if is_class:
         decorator_builder_class = decorator_builder
-        decorator_builder = decorator_builder.__call__
+        old_call_function = decorator_builder_class.__call__
+        def decorator_builder(*args, **kwargs):
+            return old_call_function(decorator_builder_class,
+                                     *args, **kwargs)
     else: # We're decorating a normal function:
         assert isinstance(decorator_builder, types.FunctionType)
         
     decorator_builder_name = decorator_builder.__name__
     
-    def inner(same_decorator_builder, *args, **kwargs):
-        
-        assert same_decorator_builder == decorator_builder
+    def inner(_, *args, **kwargs):
         
         if args and isinstance(args[0], types.FunctionType):
             
@@ -75,14 +76,16 @@ def helpful_decorator_builder(decorator_builder):
         else:
             return decorator_builder(*args, **kwargs)
         
-    my_decorator = decorator(inner, decorator_builder)
-        
     if is_class:
-        from garlicsim.general_misc import monkeypatching_tools
-        monkeypatching_tools.monkeypatch_method(decorator_builder_class)\
-                                               (my_decorator)
+        #from garlicsim.general_misc import monkeypatching_tools
+        #monkeypatching_tools.monkeypatch_method(
+            #decorator_builder_class,
+            #name='__call__'
+            #)(inner)
+        decorator_builder_class.__call__ = classmethod(inner)
+        
         return decorator_builder_class
         
     else: # We're decorating a normal function:
-        return my_decorator
+        return decorator(inner, decorator_builder)
         

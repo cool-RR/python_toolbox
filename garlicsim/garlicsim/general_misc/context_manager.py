@@ -200,7 +200,6 @@ class ContextManagerTypeType(type):
             return super(ContextManagerTypeType, cls).__call__(*args)
 
 
-@decorator_tools.helpful_decorator_builder
 class ContextManagerType(abc.ABCMeta):
     '''
     Metaclass for `ContextManager`.
@@ -337,7 +336,7 @@ class ContextManagerType(abc.ABCMeta):
         )
                 
     
-    
+@decorator_tools.helpful_decorator_builder
 class ContextManager(object):
     '''
     Allows running preparation code before a given suite and cleanup after.
