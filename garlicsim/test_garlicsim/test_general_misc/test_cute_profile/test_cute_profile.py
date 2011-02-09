@@ -213,3 +213,22 @@ def test_polite_wrapper():
         cute_profile.profile_ready()(func),
         func
     )
+
+    
+def test_forgotten_parentheses():
+    '''Test user gets a helpful exception when forgetting parentheses.'''
+
+    #def confusedly_put_function_as_max_size():
+        #@cache
+        #def f(): pass
+        
+    #with cute_testing.RaiseAssertor(
+        #TypeError,
+        #re.compile(
+            #'You entered the callable `.*?` where you should have '
+            #'entered the `max_size` for the cache. You probably '
+            #'used `@cache`, while you should have used `@cache\(\)`'
+        #)
+    #):
+        
+        #confusedly_put_function_as_max_size()

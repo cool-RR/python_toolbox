@@ -19,7 +19,7 @@ from garlicsim.general_misc import misc_tools
 from garlicsim.general_misc.nifty_collections import OrderedDict
 
 
-
+@decorator_tools.helpful_decorator_builder
 def cache(max_size=infinity):
     '''
     Cache a function, saving results so they won't have to be computed again.
@@ -50,12 +50,6 @@ def cache(max_size=infinity):
     # compile a function accordingly, so functions with a simple argspec won't
     # have to go through so much shit. update: probably it will help only for
     # completely argumentless function. so do one for those.
-    
-    if callable(max_size) and not misc_tools.is_number(max_size):
-        raise TypeError('You entered the callable `%s` where you should have '
-                        'entered the `max_size` for the cache. You probably '
-                        'used `@cache`, while you should have used '
-                        '`@cache()`' % max_size)
 
     def decorator(function):
         

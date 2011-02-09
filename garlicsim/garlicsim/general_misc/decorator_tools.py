@@ -5,6 +5,7 @@
 
 import functools
 import inspect
+import types
 
 from garlicsim.general_misc.third_party import decorator as \
                                                michele_decorator_module
@@ -37,6 +38,26 @@ def decorator(caller, func=None):
             evaldict, undecorated=caller,
             doc=caller.__doc__, module=caller.__module__)
 
+ 
+def helpful_decorator_builder(decorator_builder):
+    '''
     
-
-
+    Safe to use only on decorators that cannot take a function as their first
+    argument.
+    
+    blocktodo: What about decorated classes?
+    '''
+    if isinstance(decorator_builder, type):
+        raise NotImplementedError # blocktodo: maybe think about this.
+    name = decorator_builder.__name__
+    def inner(*args, **kwargs):
+        if (not kwargs) and len(args) == 1 \
+           and isinstance(args[0], types.FunctionType):
+            (function,) = args
+            function_name = function.__name__
+            raise Exception('It seems that you forgot to add parentheses '
+                            'after `@%s` when decorating the `%s` '
+                            'function.' % (name, function_name))
+        else:
+            return decorator_builder(*args, **kwargs)
+        

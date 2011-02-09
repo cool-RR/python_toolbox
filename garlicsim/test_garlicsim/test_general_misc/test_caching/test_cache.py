@@ -126,7 +126,7 @@ def test_unhashable_arguments():
     
     
 def test_function_instead_of_max_size():
-    '''Test user gets a helpful exception when doing `@cache`.'''
+    '''Test user gets a helpful exception when when forgetting parentheses.'''
 
     def confusedly_put_function_as_max_size():
         @cache
@@ -134,11 +134,8 @@ def test_function_instead_of_max_size():
         
     with cute_testing.RaiseAssertor(
         TypeError,
-        re.compile(
-            'You entered the callable `.*?` where you should have '
-            'entered the `max_size` for the cache. You probably '
-            'used `@cache`, while you should have used `@cache\(\)`'
-        )
+        'It seems that you forgot to add parentheses after `@cache` when '
+        'decorating the `f` function.'
     ):
         
         confusedly_put_function_as_max_size()
