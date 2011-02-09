@@ -23,7 +23,7 @@ resources_package = __resources_package.__name__
 def test_zip():
     '''Test `exists` works on zip-imported modules.'''
     
-    assert not exists('zip_imported_module_bla_bla')
+    assert not exists('zip_imported_module_bla_bla') 
     
     zip_string = pkg_resources.resource_string(resources_package,
                                                'archive_with_module.zip')
