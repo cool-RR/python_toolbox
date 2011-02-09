@@ -89,6 +89,8 @@ class ArgumentsProfile(object):
         getcallargs_result = cute_inspect.getcallargs(function,
                                                       *raw_args,
                                                       **raw_kwargs)
+        self.getcallargs_result = getcallargs_result
+        
         
         # The number of args which have default values:
         n_defaultful_args = len(s_defaults)
