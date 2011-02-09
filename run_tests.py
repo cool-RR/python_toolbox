@@ -15,8 +15,6 @@ import os.path
 import sys
 import imp
 
-import nose
-
 
 our_path = os.path.realpath(os.path.split(__file__)[0])
 
@@ -43,8 +41,16 @@ def exists(module_name):
         return False
     else:
         return True
-        
 
+try:
+    import nose
+except ImportError:
+    import warnings
+    warnings.warn('Is Nose installed? It must be for the GarlicSim tests to '
+                  'run.')
+    raise
+    
+    
 class TestProgram(nose.core.TestProgram):
     '''
     Tester for GarlicSim.
