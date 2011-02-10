@@ -24,10 +24,10 @@ def assert_no_unknown_folders():
            set(('garlicsim_wx', 'test_garlicsim_wx', 'py2exe_cruft'))
 
 folders_to_delete = []
-for folder_name in ['build', 'garlicsim_wx.egg-info', 'py2exe_dist']:
-    folder_path = os.path.join('garlicsim_wx', folder_name)
-    if os.path.isdir(folder_path):
-        folders_to_delete.append(folder_path)
+for folder in ['garlicsim_wx\\build', 'garlicsim_wx\\garlicsim_wx.egg-info',
+               'py2exe_dist']:
+    if os.path.exists(folder):
+        folders_to_delete.append(folder)
 
 if folders_to_delete:
     sys.stdout.write('Preparing to delete old build folders.\n')
