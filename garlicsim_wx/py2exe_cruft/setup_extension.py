@@ -271,7 +271,7 @@ def get_all_submodules(package_name):
     subpackage_names = [(package_name + '.' + m) for m in 
                         setuptools.find_packages(package_path)]
     
-    modules = []
+    modules = [package_name]
     for subpackage_name in subpackage_names:
         subpackage_path = cute_find_module(subpackage_name)
         modules += [
@@ -294,7 +294,6 @@ packages_to_include_with_all_submodules = [
     'numpy',
     
     # For testing:
-    
     'test_garlicsim', 'test_garlicsim_lib', 'test_garlicsim_wx',    
     'nose', 'coverage',
     

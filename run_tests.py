@@ -26,10 +26,11 @@ if frozen:
     our_path = os.path.split(sys.executable)[0]
 else: # not frozen
     our_path = os.path.realpath(os.path.split(__file__)[0])
-    if os.path.realpath(os.getcwd()) != our_path:
-        raise Exception("This script may only be launched from its own "
-                        "folder, i.e., when the folder that it's located in "
-                        "is the working directory.")
+    
+if os.path.realpath(os.getcwd()) != our_path:
+    raise Exception("This script may only be launched from its own "
+                    "folder, i.e., when the folder that it's located in "
+                    "is the working directory.")
 
 
 def exists(module_name):
@@ -208,7 +209,7 @@ if __name__ == '__main__':
         prepare_zip_testing()
         
     # Adding test packages to arguments to have Nose take tests from them:
-    argv += package_names[::-1]
+    argv += test_packages_paths[::-1]
     # (Reversing package order for now, to put the shorter tests first.)
     
     
