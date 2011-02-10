@@ -327,6 +327,13 @@ py2exe_kwargs = {
         }
         ],
     
+    'console': [
+        {
+            'script': '../run_tests.py',
+        }
+        ],
+    
+    
     'data_files': get_all_data_files(),
     
     # We don't really have a zipfile, this is the path to the library folder:

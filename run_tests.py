@@ -19,11 +19,15 @@ import os.path
 import sys
 import imp
 
-our_path = os.path.realpath(os.path.split(__file__)[0])
-if os.path.realpath(os.getcwd()) != our_path:
-    raise Exception("This script may only be launched from its own folder, "
-                    "i.e., when the folder that it's located in is the "
-                    "working directory.")
+
+frozen = getattr(sys, 'frozen', None)
+
+if not frozen:
+    our_path = os.path.realpath(os.path.split(__file__)[0])
+    if os.path.realpath(os.getcwd()) != our_path:
+        raise Exception("This script may only be launched from its own "
+                        "folder, i.e., when the folder that it's located in "
+                        "is the working directory.")
 
 
 def exists(module_name):
