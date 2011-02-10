@@ -34,16 +34,16 @@ def test_endable():
     more.
     '''
     
-    from . import sample_endable_simpacks
+    from . import sample_simpacks
     
     # Collecting all the test simpacks:
-    simpacks = import_tools.import_all(sample_endable_simpacks).values()
+    simpacks = import_tools.import_all(sample_simpacks).values()
     
     # Making sure that we didn't miss any simpack by counting the number of
-    # sub-folders in the `sample_endable_simpacks` folders:
-    sample_endable_simpacks_dir = \
-        os.path.dirname(sample_endable_simpacks.__file__)
-    assert len(path_tools.list_sub_folders(sample_endable_simpacks_dir)) == \
+    # sub-folders in the `sample_simpacks` folders:
+    sample_simpacks_dir = \
+        os.path.dirname(sample_simpacks.__file__)
+    assert len(path_tools.list_sub_folders(sample_simpacks_dir)) == \
            len(simpacks)
     
     for simpack in simpacks:
