@@ -22,7 +22,9 @@ import imp
 
 frozen = getattr(sys, 'frozen', None)
 
-if not frozen:
+if frozen:
+    
+else: # not frozen
     our_path = os.path.realpath(os.path.split(__file__)[0])
     if os.path.realpath(os.getcwd()) != our_path:
         raise Exception("This script may only be launched from its own "
@@ -176,7 +178,8 @@ def ensure_zip_testing_was_legit():
     sys.stdout.write('Done.\n')
 
     
-package_names = ['garlicsim', 'garlicsim_lib', 'garlicsim_wx']            
+package_names = ['garlicsim', 'garlicsim_lib', 'garlicsim_wx']
+
 
 
 if __name__ == '__main__':
