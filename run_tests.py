@@ -161,6 +161,84 @@ def wantFile(self, file):
     return wanted    
 nose.selector.Selector.wantFile = \
     types.MethodType(wantFile, None, nose.selector.Selector)
+
+
+def loadTestsFromDir(self, path):
+    """Load tests from the directory at path. This is a generator
+    -- each suite of tests from a module or other file is yielded
+    and is expected to be executed before the next file is
+    examined.
+    """
+    locals().update(nose.loader.__dict__)
+    log.debug("load from dir %s", path)
+    plugins = self.config.plugins
+    plugins.beforeDirectory(path)
+    if self.config.addPaths:
+        paths_added = add_path(path, self.config)
+
+    entries = os.listdir(path)
+    sort_list(entries, regex_last_key(self.config.testMatch))
+    for entry in entries:
+        # this hard-coded initial-dot test will be removed:
+        # http://code.google.com/p/python-nose/issues/detail?id=82
+        if entry.startswith('.'):
+            continue
+        entry_path = op_abspath(op_join(path, entry))
+        is_file = op_isfile(entry_path)
+        wanted = False
+        if is_file:
+            is_dir = False
+            wanted = self.selector.wantFile(entry_path)
+        else:
+            is_dir = op_isdir(entry_path)
+            if is_dir:
+                # this hard-coded initial-underscore test will be removed:
+                # http://code.google.com/p/python-nose/issues/detail?id=82
+                if entry.startswith('_'):
+                    continue
+                wanted = self.selector.wantDirectory(entry_path)
+        is_package = ispackage(entry_path)
+        if wanted:
+            if is_file:
+                plugins.beforeContext()
+                ### Identifying python files: #################################
+                #                                                             #
+                if '.py' in entry[-4:]:
+                    yield self.loadTestsFromName(
+                        entry_path, discovered=True)
+                else:
+                    yield self.loadTestsFromFile(entry_path)
+                #                                                             #
+                ### Finished identifying Python files. ########################
+                plugins.afterContext()
+            elif is_package:
+                # Load the entry as a package: given the full path,
+                # loadTestsFromName() will figure it out
+                yield self.loadTestsFromName(
+                    entry_path, discovered=True)
+            else:
+                # Another test dir in this one: recurse lazily
+                yield self.suiteClass(
+                    lambda: self.loadTestsFromDir(entry_path))
+    tests = []
+    for test in plugins.loadTestsFromDir(path):
+        tests.append(test)
+    # TODO: is this try/except needed?
+    try:
+        if tests:
+            yield self.suiteClass(tests)
+    except (KeyboardInterrupt, SystemExit):
+        raise
+    except:
+        yield self.suiteClass([Failure(*sys.exc_info())])
+    
+    # pop paths
+    if self.config.addPaths:
+        for p in paths_added:
+          remove_path(p)
+    plugins.afterDirectory(path)
+nose.loader.TestLoader.loadTestsFromDir = \
+    types.MethodType(loadTestsFromDir, None, nose.loader.TestLoader)
 #                                                                             #
 ### Finished tweaking Nose code. ##############################################
 
