@@ -23,7 +23,7 @@ import imp
 frozen = getattr(sys, 'frozen', None)
 
 if frozen:
-    
+    our_path = os.path.split(sys.executable)[0]
 else: # not frozen
     our_path = os.path.realpath(os.path.split(__file__)[0])
     if os.path.realpath(os.getcwd()) != our_path:
@@ -76,9 +76,12 @@ class TestProgram(nose.core.TestProgram):
         configurations from all the different packages in this repo, and use
         our own `Config` class.
         '''
-        cfg_files = ['garlicsim/setup.cfg',
-                     'garlicsim_lib/setup.cfg',
-                     'garlicsim_wx/setup.cfg']
+        if frozen:
+            cfg_files = ['setup.cfg']
+        else: # not frozen
+            cfg_files = ['garlicsim/setup.cfg',
+                         'garlicsim_lib/setup.cfg',
+                         'garlicsim_wx/setup.cfg']
         if plugins:
             manager = nose.core.PluginManager(plugins=plugins)
         else:
@@ -111,6 +114,8 @@ def prepare_zip_testing():
     
     sys.stdout.write('Preparing to zip GarlicSim packages, and then run tests '
                      'with GarlicSim imported from zip files.\n')
+    
+    assert not frozen
     
     result = os.system(
         '"%s"' % \
@@ -179,7 +184,12 @@ def ensure_zip_testing_was_legit():
 
     
 package_names = ['garlicsim', 'garlicsim_lib', 'garlicsim_wx']
-
+if frozen:
+    test_packages_paths = ['lib/test_%s' % (package_name, package_name) for
+                           package_name in package_names]
+else: # not frozen
+    test_packages_paths = ['%s/test_%s' % (package_name, package_name) for
+                           package_name in package_names]
 
 
 if __name__ == '__main__':
@@ -198,8 +208,7 @@ if __name__ == '__main__':
         prepare_zip_testing()
         
     # Adding test packages to arguments to have Nose take tests from them:
-    argv += ['%s/test_%s' % (package_name, package_name) for 
-             package_name in package_names][::-1]
+    argv += package_names[::-1]
     # (Reversing package order for now, to put the shorter tests first.)
     
     
