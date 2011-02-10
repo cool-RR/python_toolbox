@@ -185,7 +185,7 @@ def ensure_zip_testing_was_legit():
     
 package_names = ['garlicsim', 'garlicsim_lib', 'garlicsim_wx']
 if frozen:
-    test_packages_paths = ['lib/test_%s' % (package_name, package_name) for
+    test_packages_paths = ['lib/test_%s' % package_name for
                            package_name in package_names]
 else: # not frozen
     test_packages_paths = ['%s/test_%s' % (package_name, package_name) for
