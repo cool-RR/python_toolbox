@@ -24,7 +24,7 @@ if folders_to_delete:
     for folder_to_delete in folders_to_delete:
         sys.stdout.write("Deleting the '%s' folder... " % folder_to_delete)
         shutil.rmtree(folder_to_delete)
-        sys.stdout.write('Done.')
+        sys.stdout.write('Done.\n')
 else: # No folders to delete
     sys.stdout.write('No previous build folders to delete, all clean.\n')
 
