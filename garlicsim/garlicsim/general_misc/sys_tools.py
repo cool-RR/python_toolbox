@@ -81,7 +81,10 @@ class TempSysPathAdder(ContextManager):
             assert entry in sys.path 
             
             sys.path.remove(entry)
-        
+
+            
+frozen = getattr(sys, 'frozen', None)
+
 
 # May want in future:
 #def execute(command):
