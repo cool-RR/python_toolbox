@@ -119,9 +119,10 @@ def wantFile(self, file):
     include, and not match exclude. Files that match ignore are *never*
     wanted, regardless of plugin, testMatch, include or exclude settings.
     """
+    log = nose.selector.log
     # never, ever load files that match anything in ignore
     # (.* _* and *setup*.py by default)
-    base = op_basename(file)
+    base = nose.selector.op_basename(file)
     ignore_matches = [ ignore_this for ignore_this in self.ignoreFiles
                        if ignore_this.search(base) ]
     if ignore_matches:
@@ -131,7 +132,7 @@ def wantFile(self, file):
     if not self.config.includeExe and os.access(file, os.X_OK):
         log.info('%s is executable; skipped', file)
         return False
-    dummy, ext = op_splitext(base)
+    dummy, ext = nose.selector.op_splitext(base)
     pysrc = ext == '.py'
     is_binary_python_module = (ext in ['.pyc', '.pyo'])
 
@@ -149,7 +150,7 @@ def wantFile(self, file):
     log.debug("wantFile %s? %s", file, wanted)
     return wanted    
 nose.selector.Selector.wantFile = \
-    types.MethodType(wantFile, None, nose.selector.Selector.wantFile)
+    types.MethodType(wantFile, None, nose.selector.Selector)
 #                                                                             #
 ### Finished tweaking Nose code. ##############################################
 
