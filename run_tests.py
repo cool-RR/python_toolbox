@@ -113,12 +113,16 @@ class Config(nose.config.Config):
 
 
 def wantFile(self, file):
-    """Is the file a wanted test file?
-
-    The file must be a python source file and match testMatch or
-    include, and not match exclude. Files that match ignore are *never*
-    wanted, regardless of plugin, testMatch, include or exclude settings.
-    """
+    '''
+    Is the file a wanted test file?
+    
+    We are overriding `nose.selector.Selector.wantFile` by monkeypatching it;
+    the original implementation doesn't take tests from `.pyc` and `.pyo`
+    files, which is problematic for us because when packaging with `py2exe`, we
+    get only `.pyc` files in the distribution. So here we override it to take
+    `.pyc` and `.pyo` files, but only if they don't have a source module
+    associated with them, so we won't run the same test twice.
+    '''
     log = nose.selector.log
     # never, ever load files that match anything in ignore
     # (.* _* and *setup*.py by default)
@@ -134,6 +138,9 @@ def wantFile(self, file):
         return False
     dummy, ext = nose.selector.op_splitext(base)
     pysrc = ext == '.py'
+    
+    ### Taking sourceless binary python files: ################################
+    #                                                                         #
     is_binary_python_module = (ext in ['.pyc', '.pyo'])
 
     if is_binary_python_module:
@@ -143,6 +150,9 @@ def wantFile(self, file):
     
     wanted = self.matches(base) and (pysrc or 
          (is_binary_python_module and not has_corresponding_source_file))
+    #                                                                         #
+    ### Finished taking sourceless binary python files. #######################
+    
     plug_wants = self.plugins.wantFile(file)
     if plug_wants is not None:
         log.debug("plugin setting want %s to %s", file, plug_wants)
