@@ -4,21 +4,21 @@
 import nose.tools
 
 import garlicsim
-from test_garlicsim.shared import verify_sample_simpack_settings
+from test_garlicsim.shared import verify_simpack_settings
 
 from garlicsim.misc import StepProfile
 
-from . import sample_simpack
+from . import simpack
 
 
 def test():
-    verify_sample_simpack_settings(sample_simpack)
-    simpack_grokker = garlicsim.misc.SimpackGrokker(sample_simpack)
+    verify_simpack_settings(simpack)
+    simpack_grokker = garlicsim.misc.SimpackGrokker(simpack)
     
     parse = \
-        StepProfile.build_parser(sample_simpack.State.step)
+        StepProfile.build_parser(simpack.State.step)
     alternate_parse = \
-        StepProfile.build_parser(sample_simpack.State.alternate_step)
+        StepProfile.build_parser(simpack.State.alternate_step)
     none_parse = \
         StepProfile.build_parser(None)
     
@@ -27,7 +27,7 @@ def test():
     
     step_profile = parse(1, 2, 3)
     assert step_profile == default_step_profile == StepProfile(
-        sample_simpack.State.step,
+        simpack.State.step,
         1, 2, 3
     )
     assert step_profile == \
