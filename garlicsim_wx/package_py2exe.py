@@ -14,6 +14,8 @@ import sys
 assert os.path.realpath(os.getcwd()) == \
        os.path.realpath(os.path.split(__file__)[0])
 
+assert __name__ == '__main__'
+
 def assert_no_unknown_folders():
     existing_folders = \
         set([name for name in os.listdir('.') if os.path.isdir(name)])
