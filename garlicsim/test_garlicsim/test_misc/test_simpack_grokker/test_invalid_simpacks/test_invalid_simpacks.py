@@ -1,6 +1,8 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
+'''Testing module for invalid simpacks.'''
+
 import os
 
 import nose
@@ -17,6 +19,7 @@ import test_garlicsim
 
 
 def test_simpacks():
+    '''Test invalid simpacks.'''
     from . import simpacks as invalid_simpacks_package
     
     # Collecting all the test simpacks:
@@ -35,7 +38,7 @@ def test_simpacks():
 
         
 def check_simpack(simpack):
-
+    '''Check that the invalid `simpack` raises the correct exception.'''
     _test_settings = simpack._test_settings
     VALID = _test_settings.VALID
     assert not VALID

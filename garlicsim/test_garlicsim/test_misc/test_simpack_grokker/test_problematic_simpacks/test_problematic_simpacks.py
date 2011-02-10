@@ -1,6 +1,8 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
+'''Testing module for problematic simpacks.'''
+
 from __future__ import with_statement
 
 import os
@@ -20,6 +22,7 @@ import test_garlicsim
 
 
 def test_simpacks():
+    '''Test problematic simpacks.'''
     from . import simpacks as problematic_simpacks_package
     
     # Collecting all the test simpacks:
@@ -39,7 +42,7 @@ def test_simpacks():
 
         
 def check_simpack(simpack):
-
+    '''Check that the problematic `simpack` raises the correct exception.'''
     _test_settings = simpack._test_settings
     PROBLEM = _test_settings.PROBLEM
     assert PROBLEM
