@@ -34,7 +34,7 @@ def test_simpacks():
         ) == len(simpacks)
     
     for simpack in simpacks:
-        test_garlicsim.verify_sample_simpack_settings(simpack)
+        test_garlicsim.verify_simpack_settings(simpack)
         yield check_simpack, simpack
 
         

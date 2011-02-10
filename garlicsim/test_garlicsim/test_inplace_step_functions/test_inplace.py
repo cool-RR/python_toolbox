@@ -52,7 +52,7 @@ def test():
     
     for simpack in simpacks:        
         
-        test_garlicsim.verify_sample_simpack_settings(simpack)
+        test_garlicsim.verify_simpack_settings(simpack)
         
         cruncher_types = \
             garlicsim.misc.SimpackGrokker(simpack).available_cruncher_types

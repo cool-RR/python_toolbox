@@ -3,7 +3,7 @@
 
 '''Testing package for `garlicsim`.'''
 
-from .shared import verify_sample_simpack_settings
+from .shared import verify_simpack_settings
 
 
 def __bootstrap():
