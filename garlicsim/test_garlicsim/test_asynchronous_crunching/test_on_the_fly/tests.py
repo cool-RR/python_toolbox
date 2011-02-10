@@ -63,7 +63,7 @@ def check(simpack, cruncher_type):
     
     assert garlicsim.misc.simpack_grokker.step_type.StepType.get_step_type(
         my_simpack_grokker.default_step_function
-    ) == simpack._settings_for_testing.DEFAULT_STEP_FUNCTION_TYPE
+    ) == simpack._test_settings.DEFAULT_STEP_FUNCTION_TYPE
     
     step_profile = my_simpack_grokker.build_step_profile()
     deterministic = \
@@ -99,13 +99,13 @@ def check(simpack, cruncher_type):
     
     step_profile_description = repr(job.crunching_profile.step_profile)
     assert step_profile_description == \
-        'StepProfile(%s)' % simpack._settings_for_testing.DEFAULT_STEP_FUNCTION
+        'StepProfile(%s)' % simpack._test_settings.DEFAULT_STEP_FUNCTION
     
     short_step_profile_description = \
             job.crunching_profile.step_profile.__repr__(short_form=True)
     assert short_step_profile_description == \
         '%s(<state>)' % address_tools.describe(
-            simpack._settings_for_testing.DEFAULT_STEP_FUNCTION,
+            simpack._test_settings.DEFAULT_STEP_FUNCTION,
             shorten=True,
             root=simpack,
         )
@@ -163,7 +163,7 @@ def check(simpack, cruncher_type):
     # between them. This will exercise the crunching manager's policy of
     # switching crunchers immediately when the step profile for a job gets
     # changed.
-    if simpack._settings_for_testing.N_STEP_FUNCTIONS >= 2:        
+    if simpack._test_settings.N_STEP_FUNCTIONS >= 2:        
         default_step_function, alternate_step_function = \
             my_simpack_grokker.all_step_functions[:2]
         job = project.begin_crunching(root, infinity)

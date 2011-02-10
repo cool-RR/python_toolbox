@@ -59,8 +59,8 @@ def test_endable():
         
 def check(simpack, cruncher_type):
     
-    assert simpack._settings_for_testing.ENDABLE is True
-    assert simpack._settings_for_testing.CONSTANT_CLOCK_INTERVAL == 1
+    assert simpack._test_settings.ENDABLE is True
+    assert simpack._test_settings.CONSTANT_CLOCK_INTERVAL == 1
     
     my_simpack_grokker = garlicsim.misc.SimpackGrokker(simpack)
     
@@ -69,7 +69,7 @@ def check(simpack, cruncher_type):
     
     assert garlicsim.misc.simpack_grokker.step_type.StepType.get_step_type(
         my_simpack_grokker.default_step_function
-    ) == simpack._settings_for_testing.DEFAULT_STEP_FUNCTION_TYPE
+    ) == simpack._test_settings.DEFAULT_STEP_FUNCTION_TYPE
     
     step_profile = my_simpack_grokker.build_step_profile()
     deterministic = \

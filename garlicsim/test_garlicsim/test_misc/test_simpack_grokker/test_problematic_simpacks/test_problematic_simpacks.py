@@ -40,8 +40,8 @@ def test_simpacks():
         
 def check_simpack(simpack):
 
-    _settings_for_testing = simpack._settings_for_testing
-    PROBLEM = _settings_for_testing.PROBLEM
+    _test_settings = simpack._test_settings
+    PROBLEM = _test_settings.PROBLEM
     assert PROBLEM
     assert issubclass(PROBLEM, Exception)
            

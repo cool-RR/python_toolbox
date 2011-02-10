@@ -14,9 +14,9 @@ def verify_sample_simpack_settings(sample_simpack):
     Verfiy that `sample_simpack` has all the testing flags with valid values.
     '''
     import_tools.normal_import(
-        sample_simpack.__name__ + '._settings_for_testing'
+        sample_simpack.__name__ + '._test_settings'
     )
-    sft = sample_simpack._settings_for_testing
+    sft = sample_simpack._test_settings
     assert isinstance(sft.ENDABLE, bool)
     bool(sft.VALID)
     assert (sft.PROBLEM is None) or issubclass(sft.PROBLEM, Exception)
