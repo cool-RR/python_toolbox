@@ -257,7 +257,12 @@ packages_to_include_with_all_submodules = [
     
     'garlicsim', 'garlicsim_lib',
     
-    'numpy'
+    'numpy',
+    
+    # For testing:
+    
+    'test_garlicsim', 'test_garlicsim_lib', 'test_garlicsim_wx',    
+    'nose', 'coverage',
     
 ]
 
@@ -287,6 +292,14 @@ py2exe_kwargs = {
             ]
         }
         ],
+    
+    'console': [
+        {
+            'script': 'py2exe_cruft/python.py',
+        }
+        ],
+    
+    
     'data_files': get_all_data_files(),
     
     # We don't really have a zipfile, this is the path to the library folder:

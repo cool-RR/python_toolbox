@@ -19,7 +19,6 @@ import os.path
 import sys
 import imp
 
-
 our_path = os.path.realpath(os.path.split(__file__)[0])
 if os.path.realpath(os.getcwd()) != our_path:
     raise Exception("This script may only be launched from its own folder, "

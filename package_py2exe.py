@@ -18,15 +18,16 @@ assert os.path.realpath(os.getcwd()) == \
 assert __name__ == '__main__'
 
 def assert_no_unknown_folders():
-    existing_folders = \
-        set([name for name in os.listdir('.') if os.path.isdir(name)])
+    existing_folders = set([name for name in os.listdir('garlicsim_wx') if
+                            os.path.isdir(os.path.join('garlicsim_wx', name))])
     assert existing_folders == \
            set(('garlicsim_wx', 'test_garlicsim_wx', 'py2exe_cruft'))
 
 folders_to_delete = []
-for folder in ['build', 'garlicsim_wx.egg-info', 'py2exe_dist']:
-    if os.path.isdir(folder):
-        folders_to_delete.append(folder)
+for folder_name in ['build', 'garlicsim_wx.egg-info', 'py2exe_dist']:
+    folder_path = os.path.join('garlicsim_wx', folder_name)
+    if os.path.isdir(folder_path):
+        folders_to_delete.append(folder_path)
 
 if folders_to_delete:
     sys.stdout.write('Preparing to delete old build folders.\n')
@@ -41,4 +42,9 @@ else: # No folders to delete
 
 sys.stdout.write('Launching py2exe.\n')
 
-sys.exit(os.system(sys.executable + ' setup.py py2exe'))
+old_cwd = os.getcwd()
+os.chdir('garlicsim_wx')
+try:
+    sys.exit(os.system(sys.executable + ' setup.py py2exe'))
+finally:
+    os.chdir(old_cwd)
