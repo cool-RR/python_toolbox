@@ -308,8 +308,12 @@ py2exe_kwargs = {
     # ignored.
     
     'options': {
+        
         'py2exe': {
-            'dist_dir': 'py2exe_dist',
+            
+            # Putting distribution files in `py2exe_dist` at the root of the\
+            # repo:            
+            'dist_dir': '../py2exe_dist',
             
             # We prefer to have all the files in a folder instead of a zip
             # file.            
