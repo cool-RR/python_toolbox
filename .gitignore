@@ -16,6 +16,8 @@ garlicsim_wx/*.egg-info
 garlicsim_wx/build
 garlicsim_wx/*.exe
 
+py2exe_dist
+
 */docs/_build/*
 */docs/_deployed_build/*
 
