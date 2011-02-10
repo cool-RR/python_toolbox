@@ -9,7 +9,7 @@ from garlicsim.general_misc import import_tools
 import garlicsim 
 
 
-def verify_sample_simpack_settings(sample_simpack):
+def verify_simpack_settings(sample_simpack):
     '''
     Verfiy that `sample_simpack` has all the testing flags with valid values.
     '''
