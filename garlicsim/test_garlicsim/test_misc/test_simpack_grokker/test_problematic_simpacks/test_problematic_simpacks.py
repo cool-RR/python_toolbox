@@ -20,7 +20,7 @@ import test_garlicsim
 
 
 def test_simpacks():
-    from . import problematic_simpacks as problematic_simpacks_package
+    from . import simpacks as problematic_simpacks_package
     
     # Collecting all the test simpacks:
     simpacks = import_tools.import_all(problematic_simpacks_package).values()
