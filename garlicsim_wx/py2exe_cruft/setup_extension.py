@@ -269,9 +269,10 @@ def get_all_submodules(package_name):
     package_path = cute_find_module(package_name)
     
     subpackage_names = [(package_name + '.' + m) for m in 
-                        setuptools.find_packages(package_path)]
+                        setuptools.find_packages(package_path)] + \
+                     [package_name]
     
-    modules = [package_name]
+    modules = []
     for subpackage_name in subpackage_names:
         subpackage_path = cute_find_module(subpackage_name)
         modules += [

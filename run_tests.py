@@ -18,6 +18,7 @@ GarlicSim-specific arguments:
 import os.path
 import sys
 import imp
+import types
 
 
 frozen = getattr(sys, 'frozen', None)
@@ -51,7 +52,8 @@ def exists(module_name):
     else:
         return True
 
-    
+### Tweaking nose code: #######################################################
+#                                                                             #
 try:
     import nose
 except ImportError:
@@ -60,7 +62,7 @@ except ImportError:
                   'run.')
     raise
     
-    
+
 class TestProgram(nose.core.TestProgram):
     '''
     Tester for GarlicSim.
@@ -109,7 +111,51 @@ class Config(nose.config.Config):
             our_path
         )
 
+
+def wantFile(self, file):
+    """Is the file a wanted test file?
+
+    The file must be a python source file and match testMatch or
+    include, and not match exclude. Files that match ignore are *never*
+    wanted, regardless of plugin, testMatch, include or exclude settings.
+    """
+    # never, ever load files that match anything in ignore
+    # (.* _* and *setup*.py by default)
+    base = op_basename(file)
+    ignore_matches = [ ignore_this for ignore_this in self.ignoreFiles
+                       if ignore_this.search(base) ]
+    if ignore_matches:
+        log.debug('%s matches ignoreFiles pattern; skipped',
+                  base) 
+        return False
+    if not self.config.includeExe and os.access(file, os.X_OK):
+        log.info('%s is executable; skipped', file)
+        return False
+    dummy, ext = op_splitext(base)
+    pysrc = ext == '.py'
+    is_binary_python_module = (ext in ['.pyc', '.pyo'])
+
+    if is_binary_python_module:
+        corresponding_python_source_file = (os.path.splitext(file)[0] + '.py')
+        has_corresponding_source_file = \
+            os.path.exists(corresponding_python_source_file)
     
+    wanted = self.matches(base) and (pysrc or 
+         (is_binary_python_module and not has_corresponding_source_file))
+    plug_wants = self.plugins.wantFile(file)
+    if plug_wants is not None:
+        log.debug("plugin setting want %s to %s", file, plug_wants)
+        wanted = plug_wants
+    log.debug("wantFile %s? %s", file, wanted)
+    return wanted    
+nose.selector.Selector.wantFile = \
+    types.MethodType(wantFile, None, nose.selector.Selector.wantFile)
+#                                                                             #
+### Finished tweaking Nose code. ##############################################
+
+    
+### Defining functions for testing from zip archives: #########################
+#                                                                             #
 def prepare_zip_testing():
     '''Zip all GarlicSim modules and import them for testing.'''
     
@@ -182,6 +228,8 @@ def ensure_zip_testing_was_legit():
             assert zip_file_name in module_path
             assert snippet_from_real_folder_path not in module_path
     sys.stdout.write('Done.\n')
+#                                                                             #
+### Finished defining functions for testing from zip archives. ################
 
     
 package_names = ['garlicsim', 'garlicsim_lib', 'garlicsim_wx']
@@ -192,6 +240,7 @@ else: # not frozen
     test_packages_paths = ['%s/test_%s' % (package_name, package_name) for
                            package_name in package_names]
 
+###############################################################################
 
 if __name__ == '__main__':
     
