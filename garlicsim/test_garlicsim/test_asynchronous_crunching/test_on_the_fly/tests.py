@@ -30,16 +30,16 @@ from ..shared import MustachedThreadCruncher
 
 def test():
     '''Test changing things while crunching.'''
-    from . import sample_simpacks
+    from . import simpacks
     
     # Collecting all the test simpacks:
-    simpacks = import_tools.import_all(sample_simpacks).values()
+    simpacks = import_tools.import_all(simpacks).values()
     
     # Making sure that we didn't miss any simpack by counting the number of
-    # sub-folders in the `sample_simpacks` folders:
-    sample_simpacks_dir = \
-        os.path.dirname(sample_simpacks.__file__)
-    assert len(path_tools.list_sub_folders(sample_simpacks_dir)) == \
+    # sub-folders in the `simpacks` folders:
+    simpacks_dir = \
+        os.path.dirname(simpacks.__file__)
+    assert len(path_tools.list_sub_folders(simpacks_dir)) == \
            len(simpacks)
     
     for simpack in simpacks:

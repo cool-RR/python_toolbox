@@ -17,16 +17,16 @@ import test_garlicsim
 
 
 def test_simpacks():
-    from . import sample_invalid_simpacks
+    from . import invalid_simpacks
     
     # Collecting all the test simpacks:
-    simpacks = import_tools.import_all(sample_invalid_simpacks).values()
+    simpacks = import_tools.import_all(simpacks).values()
     
     # Making sure that we didn't miss any simpack by counting the number of
-    # sub-folders in the `sample_invalid_simpacks` folders:
-    sample_invalid_simpacks_dir = \
-        os.path.dirname(sample_invalid_simpacks.__file__)
-    assert len(path_tools.list_sub_folders(sample_invalid_simpacks_dir)) == \
+    # sub-folders in the `simpacks` folders:
+    simpacks_dir = \
+        os.path.dirname(simpacks.__file__)
+    assert len(path_tools.list_sub_folders(simpacks_dir)) == \
            len(simpacks)
     
     for simpack in simpacks:
