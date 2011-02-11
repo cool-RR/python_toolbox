@@ -32,8 +32,10 @@ if frozen:
     our_path = os.path.split(sys.executable)[0]
 else: # not frozen
     our_path = os.path.realpath(os.path.split(__file__)[0])
-    
 
+    
+### Defining import-related utilities: ########################################
+#                                                                             #
 def exists(module_name):
     '''
     Return whether a module by the name `module_name` exists.
@@ -52,6 +54,24 @@ def exists(module_name):
     else:
         return True
 
+def import_by_path(path, name=None):
+    '''Import module/package by path.'''
+    short_name = os.path.splitext(os.path.split(path)[1])[0]
+    if name is None: name = short_name
+    path_to_dir = os.path.dirname(path)
+    my_file = None
+    try:
+        (my_file, pathname, description) = \
+            imp.find_module(short_name, [path_to_dir])
+        module = imp.load_module(name, my_file, pathname, description)
+    finally:
+        if my_file is not None:
+            my_file.close()
+        
+    return module
+#                                                                             #
+### Finished defining import-related utilities. ###############################
+    
 ### Tweaking Nose code: #######################################################
 #                                                                             #
 try:
@@ -245,21 +265,7 @@ nose.loader.TestLoader.loadTestsFromDir = \
 #                                                                             #
 ### Finished tweaking Nose code. ##############################################
 
-def import_by_path(path, name=None):
-    '''Import module/package by path.'''
-    short_name = os.path.splitext(os.path.split(path)[1])[0]
-    if name is None: name = short_name
-    path_to_dir = os.path.dirname(path)
-    my_file = None
-    try:
-        (my_file, pathname, description) = \
-            imp.find_module(short_name, [path_to_dir])
-        module = imp.load_module(name, my_file, pathname, description)
-    finally:
-        if my_file is not None:
-            my_file.close()
-        
-    return module
+
 
     
 package_names = ['garlicsim', 'garlicsim_lib', 'garlicsim_wx']
@@ -294,8 +300,6 @@ if __name__ == '__main__':
     
     if testing_from_zip:
         argv.remove('--from-zip')
-        import imp
-        importlib.import_module
         zip_testing_utilities = import_by_path(
             os.path.join(our_path, 'misc', 'testing', 'zip', 'testing_utilities')
         )

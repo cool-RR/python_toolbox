@@ -11,10 +11,11 @@ import sys
 import os.path
 
 
+frozen = getattr(sys, 'frozen', None)
 our_path = os.path.realpath(os.path.split(__file__)[0])
 
 
-def prepare_zip_testing():
+def prepare_zip_testing(package_names):
     '''Zip all GarlicSim modules and import them for testing.'''
     
     sys.stdout.write('Preparing to zip GarlicSim packages, and then run tests '
@@ -47,7 +48,7 @@ def prepare_zip_testing():
     sys.stdout.write('Done.\n')
     
     
-def ensure_zip_testing_was_legit():
+def ensure_zip_testing_was_legit(package_names):
     '''
     Ensure GarlicSim packages were indeed used from zip.
     
