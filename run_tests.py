@@ -11,7 +11,8 @@ Nose is used to run the tests, and any arguments will be passed to Nose; type
 
 GarlicSim-specific arguments:
 
-    --from-zip  Zip GarlicSim and import the modules from a zip file
+    --from-zip     Zip GarlicSim and import the modules from a zip file
+    --from-py2exe  Package GarlicSim with py2exe and test from there
     
 '''
 
@@ -28,10 +29,10 @@ if frozen:
 else: # not frozen
     our_path = os.path.realpath(os.path.split(__file__)[0])
     
-if os.path.realpath(os.getcwd()) != our_path:
-    raise Exception("This script may only be launched from its own "
-                    "folder, i.e., when the folder that it's located in "
-                    "is the working directory.")
+#if os.path.realpath(os.getcwd()) != our_path:
+    #raise Exception("This script may only be launched from its own "
+                    #"folder, i.e., when the folder that it's located in "
+                    #"is the working directory.")
 
 
 def exists(module_name):
@@ -80,11 +81,11 @@ class TestProgram(nose.core.TestProgram):
         our own `Config` class.
         '''
         if frozen:
-            cfg_files = ['setup.cfg']
+            cfg_files = [os.path.join(our_path, 'setup.cfg')]
         else: # not frozen
-            cfg_files = ['garlicsim/setup.cfg',
-                         'garlicsim_lib/setup.cfg',
-                         'garlicsim_wx/setup.cfg']
+            cfg_files = [os.path.join(our_path, 'garlicsim/setup.cfg'),
+                         os.path.join(our_path, 'garlicsim_lib/setup.cfg'),
+                         os.path.join(our_path, 'garlicsim_wx/setup.cfg')]
         if plugins:
             manager = nose.core.PluginManager(plugins=plugins)
         else:
@@ -326,11 +327,12 @@ def ensure_zip_testing_was_legit():
     
 package_names = ['garlicsim', 'garlicsim_lib', 'garlicsim_wx']
 if frozen:
-    test_packages_paths = ['lib/test_%s' % package_name for
-                           package_name in package_names]
+    test_packages_paths = [os.path.join(our_path, 'lib/test_%s') % package_name
+                           for package_name in package_names]
 else: # not frozen
-    test_packages_paths = ['%s/test_%s' % (package_name, package_name) for
-                           package_name in package_names]
+    test_packages_paths = \
+        [os.path.join(our_path, ('%s/test_%s' % (package_name, package_name)))
+         for package_name in package_names]
 
 ###############################################################################
 
@@ -349,9 +351,26 @@ if __name__ == '__main__':
     sys.stdout.write('Preparing to run tests using Python %s\n' % sys.version)    
     
     testing_from_zip = '--from-zip' in argv
+    testing_from_py2exe = ('--from-py2exe' in argv) or frozen
+    
+    assert not (testing_from_zip and testing_from_py2exe)
+    
     if testing_from_zip:
         argv.remove('--from-zip')
         prepare_zip_testing()
+        
+    if testing_from_py2exe and not frozen:
+        argv.remove('--from-py2exe')
+        
+        temp_result = \
+            os.system(sys.executable + ' %s' % os.path.join(our_path,
+                      'package_for_windows.py'))
+        if temp_result != 0:
+            sys.exit(temp_result)
+            
+        sys.exit(os.system('%s' % os.path.join(our_path,
+                      'py2exe_dist\\run_tests.exe %s' % argv)))
+            
         
     # Adding test packages to arguments to have Nose take tests from them:
     argv += test_packages_paths[::-1]
