@@ -170,7 +170,8 @@ def loadTestsFromDir(self, path):
     examined.
     """
     from nose.loader import (log, add_path, op_abspath, op_isfile, op_isdir,
-                             Failure, remove_path, sort_list, regex_last_key)
+                             Failure, remove_path, sort_list, regex_last_key,
+                             op_join, ispackage)
     
     log.debug("load from dir %s", path)
     plugins = self.config.plugins
@@ -334,6 +335,10 @@ else: # not frozen
 ###############################################################################
 
 if __name__ == '__main__':
+    
+    if exists('multiprocessing'):
+        import multiprocessing
+        multiprocessing.freeze_support()
     
     argv = sys.argv[:]
     
