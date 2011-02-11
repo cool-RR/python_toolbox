@@ -46,9 +46,9 @@ class TestProgram(nose.core.TestProgram):
             cfg_files = [os.path.join(repo_root_path, 'setup.cfg')]
         else: # not frozen
             cfg_files = [
-                os.path.join(repo_root_path, 'garlicsim/setup.cfg'),
-                os.path.join(repo_root_path, 'garlicsim_lib/setup.cfg'),
-                os.path.join(repo_root_path, 'garlicsim_wx/setup.cfg')
+                os.path.join(repo_root_path, 'garlicsim', 'setup.cfg'),
+                os.path.join(repo_root_path, 'garlicsim_lib', 'setup.cfg'),
+                os.path.join(repo_root_path, 'garlicsim_wx', 'setup.cfg')
             ]
         if plugins:
             manager = nose.core.PluginManager(plugins=plugins)
