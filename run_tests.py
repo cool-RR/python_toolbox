@@ -363,12 +363,12 @@ if __name__ == '__main__':
         argv.remove('--from-py2exe')
         
         temp_result = \
-            os.system(sys.executable + ' %s' % os.path.join(our_path,
+            os.system(sys.executable + ' "%s"' % os.path.join(our_path,
                       'package_for_windows.py'))
         if temp_result != 0:
             sys.exit(temp_result)
             
-        sys.exit(os.system('%s' % os.path.join(our_path,
+        sys.exit(os.system('"%s"' % os.path.join(our_path,
                       'py2exe_dist\\run_tests.exe %s' % argv)))
             
         
