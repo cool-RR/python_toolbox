@@ -9,10 +9,30 @@ Used by `run_tests.py` in the GarlicSim repo root.
 
 import sys
 import os.path
+import imp
 
 
 frozen = getattr(sys, 'frozen', None)
 our_path = os.path.realpath(os.path.split(__file__)[0])
+
+
+def exists(module_name):
+    '''
+    Return whether a module by the name `module_name` exists.
+    
+    This seems to be the best way to carefully import a module.
+    
+    Currently implemented for top-level packages only. (i.e. no dots.)
+    
+    Doesn't support modules imported from a zip file.
+    '''
+    assert '.' not in module_name
+    try:
+        imp.find_module(module_name)
+    except ImportError:
+        return False
+    else:
+        return True
 
 
 def prepare_zip_testing(package_names):
