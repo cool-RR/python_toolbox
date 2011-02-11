@@ -169,7 +169,8 @@ def loadTestsFromDir(self, path):
     and is expected to be executed before the next file is
     examined.
     """
-    from nose.loader import *
+    from nose.loader import (log, add_path, op_abspath, op_isfile, op_isdir,
+                             Failure, remove_path)
     
     log.debug("load from dir %s", path)
     plugins = self.config.plugins
