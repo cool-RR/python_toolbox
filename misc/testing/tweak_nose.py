@@ -9,9 +9,13 @@ See its documentation for more information.
 
 import os.path
 import sys
+import types
 
+
+frozen = getattr(sys, 'frozen', None)
 our_path = os.path.realpath(os.path.split(__file__)[0])
 repo_root_path = os.path.realpath(os.path.join(our_path, '..', '..'))
+
 
 try:
     import nose
