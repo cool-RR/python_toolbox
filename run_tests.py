@@ -170,7 +170,7 @@ def loadTestsFromDir(self, path):
     examined.
     """
     from nose.loader import (log, add_path, op_abspath, op_isfile, op_isdir,
-                             Failure, remove_path, sort_list)
+                             Failure, remove_path, sort_list, regex_last_key)
     
     log.debug("load from dir %s", path)
     plugins = self.config.plugins
