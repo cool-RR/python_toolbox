@@ -34,8 +34,6 @@ else: # not frozen
     our_path = os.path.realpath(os.path.split(__file__)[0])
 
     
-### Defining import-related utilities: ########################################
-#                                                                             #
 def exists(module_name):
     '''
     Return whether a module by the name `module_name` exists.
@@ -53,25 +51,8 @@ def exists(module_name):
         return False
     else:
         return True
-
-def import_by_path(path, name=None):
-    '''Import module/package by path.'''
-    short_name = os.path.splitext(os.path.split(path)[1])[0]
-    if name is None: name = short_name
-    path_to_dir = os.path.dirname(path)
-    my_file = None
-    try:
-        (my_file, pathname, description) = \
-            imp.find_module(short_name, [path_to_dir])
-        module = imp.load_module(name, my_file, pathname, description)
-    finally:
-        if my_file is not None:
-            my_file.close()
-        
-    return module
-#                                                                             #
-### Finished defining import-related utilities. ###############################
     
+
 ### Tweaking nose: ############################################################
 #                                                                             #
 try:
@@ -82,7 +63,6 @@ except ImportError:
                   'run.')
     raise
     
-
 class TestProgram(nose.core.TestProgram):
     '''
     Tester for GarlicSim.
@@ -113,7 +93,6 @@ class TestProgram(nose.core.TestProgram):
             manager = nose.core.DefaultPluginManager()
         return Config(
             env=env, files=cfg_files, plugins=manager)
-
     
 class Config(nose.config.Config):
     '''Nose configuration.''' 
@@ -132,7 +111,6 @@ class Config(nose.config.Config):
             self,
             our_path
         )
-
 
 def wantFile(self, file):
     '''
@@ -183,7 +161,6 @@ def wantFile(self, file):
     return wanted    
 nose.selector.Selector.wantFile = \
     types.MethodType(wantFile, None, nose.selector.Selector)
-
 
 def loadTestsFromDir(self, path):
     """Load tests from the directory at path. This is a generator
@@ -271,7 +248,7 @@ nose.loader.TestLoader.loadTestsFromDir = \
 package_names = ['garlicsim', 'garlicsim_lib', 'garlicsim_wx']
 if frozen:
     test_packages_paths = [os.path.join(our_path, 'lib', 'test_%s' %
-                            package_name) for package_name in package_names]
+                           package_name) for package_name in package_names]
     
 else: # not frozen
     test_packages_paths = \
