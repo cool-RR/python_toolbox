@@ -368,8 +368,8 @@ if __name__ == '__main__':
         if temp_result != 0:
             sys.exit(temp_result)
             
-        sys.exit(os.system('"%s"' % os.path.join(our_path,
-                      'py2exe_dist\\run_tests.exe %s' % argv)))
+        sys.exit(os.system('"%s" %s' % (os.path.join(our_path,
+                           'py2exe_dist\\run_tests.exe'), ' '.join(argv))))
             
         
     # Adding test packages to arguments to have Nose take tests from them:
