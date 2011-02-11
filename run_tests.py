@@ -387,4 +387,6 @@ if __name__ == '__main__':
     finally:
         if testing_from_zip:
             ensure_zip_testing_was_legit()
+        elif testing_from_py2exe:
+            sys.stdout.write('Finished testing from py2exe distribution.\n')
 
