@@ -169,7 +169,8 @@ def loadTestsFromDir(self, path):
     and is expected to be executed before the next file is
     examined.
     """
-    locals().update(nose.loader.__dict__)
+    from nose.loader import *
+    
     log.debug("load from dir %s", path)
     plugins = self.config.plugins
     plugins.beforeDirectory(path)
