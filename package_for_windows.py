@@ -14,6 +14,9 @@ import shutil
 import os.path
 import sys
 
+if os.name != 'nt':
+    raise Exception('Py2exe may only be used on Windows.')
+
 repo_root_path = os.path.realpath(os.path.split(__file__)[0])
 garlicsim_wx_path = os.path.join(repo_root_path, 'garlicsim_wx')
 assert __name__ == '__main__'
