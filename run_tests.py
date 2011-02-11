@@ -80,12 +80,12 @@ tweak_nose = import_by_path(
 
 package_names = ['garlicsim', 'garlicsim_lib', 'garlicsim_wx']
 if frozen:
-    test_packages_paths = [os.path.join(our_path, 'lib/test_%s') % package_name
-                           for package_name in package_names]
+    test_packages_paths = [os.path.join(our_path, 'lib', 'test_%s' %
+                            package_name) for package_name in package_names]
     
 else: # not frozen
     test_packages_paths = \
-        [os.path.join(our_path, ('%s/test_%s' % (package_name, package_name)))
+        [os.path.join(our_path, package_name, 'test_%s' % package_name)
          for package_name in package_names]
 
 ###############################################################################
