@@ -18,6 +18,12 @@ import os.path
 import sys
 import glob
 
+
+repo_root_path = os.path.realpath(os.path.split(__file__)[0])
+garlicsim_wx_path = os.path.join(repo_root_path, 'garlicsim_wx')
+assert __name__ == '__main__'
+
+
 if os.name != 'nt':
     raise Exception('Py2exe may only be used on Windows.')
 
@@ -29,9 +35,32 @@ if produce_installer:
 else: # not produce_installer
     sys.stdout.write('Preparing to package GarlicSim with py2exe.\n')
 
-repo_root_path = os.path.realpath(os.path.split(__file__)[0])
-garlicsim_wx_path = os.path.join(repo_root_path, 'garlicsim_wx')
-assert __name__ == '__main__'
+if produce_installer:
+    ### Figuring out location of inno setup compiler: #########################
+    #                                                                         #
+    issc_specifiers = [arg for arg in sys.argv if arg.startswith('--issc=')]
+    if issc_specifiers:
+        (issc_specifier,) == issc_specifiers
+        path_to_issc = issc_specifiers[7:]
+        if path_to_issc[0] == path_to_issc[-1] == '"':
+            path_to_issc = path_to_issc[1:-1]
+        if not os.path.isfile(path_to_issc):
+            raise Exception('The path to `ISSC.exe` that you specified does '
+                            'not exist. Make sure to include the `.exe` file '
+                            'itself in the path.')
+    else:
+        path_to_issc = \
+            'c:\\Program Files\\Inno Setup 5\\ISCC.exe'
+        if not os.path.isfile(path_to_issc):
+            raise Exception("The Inno Setup compiler `ISSC.exe` could not be "
+                            "found. If you don't have Inno Setup installed, "
+                            "install it. If it's installed and you still get "
+                            "this message, specify the path to `ISSC.exe` by "
+                            "using the `--issc=[PATH]` flag.")
+        
+    #                                                                         #
+    ### Finished figuring out location of Inno Setup compiler. ################
+    
 
 ### Deleting old build files: #################################################
 #                                                                             #
@@ -104,31 +133,6 @@ if produce_installer:
     
     sys.stdout.write('Preparing to create Windows installer using Inno '
                      'Setup.\n')
-    
-    ### Figuring out location of inno setup compiler: #########################
-    #                                                                         #
-    issc_specifiers = [arg for arg in sys.argv if arg.startswith('--issc=')]
-    if issc_specifiers:
-        (issc_specifier,) == issc_specifiers
-        path_to_issc = issc_specifiers[7:]
-        if path_to_issc[0] == path_to_issc[-1] == '"':
-            path_to_issc = path_to_issc[1:-1]
-        if not os.path.isfile(path_to_issc):
-            raise Exception('The path to `ISSC.exe` that you specified does '
-                            'not exist. Make sure to include the `.exe` file '
-                            'itself in the path.')
-    else:
-        path_to_issc = \
-            'c:\\Program Files\\Inno Setup 5\\ISCC.exe'
-        if not os.path.isfile(path_to_issc):
-            raise Exception("The Inno Setup compiler `ISSC.exe` could not be "
-                            "found. If you don't have Inno Setup installed, "
-                            "install it. If it's installed and you still get "
-                            "this message, specify the path to `ISSC.exe` by "
-                            "using the `--issc=[PATH]` flag.")
-        
-    #                                                                         #
-    ### Finished figuring out location of Inno Setup compiler. ################
     
     os.chdir(garlicsim_wx_path)
     try:
