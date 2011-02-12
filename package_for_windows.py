@@ -4,13 +4,21 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Defines the `` class.
+Script for packaging GarlicSim for Windows users.
 
-See its documentation for more information.
+Run without arguments to package GarlicSim using `py2exe` into the
+`py2exe_dist`.
 
+Options:
 
- --issc=[PATH]
-tododoc
+    --installer [OR] -i
+        After running py2exe, produce an installer using Inno Setup
+        
+    --issc=[PATH]
+        Path to `issc.exe`, (needed only if it's in a non-standard location)
+        
+    --help
+        Show this help screen
 '''
 
 import shutil
@@ -23,6 +31,10 @@ repo_root_path = os.path.realpath(os.path.split(__file__)[0])
 garlicsim_wx_path = os.path.join(repo_root_path, 'garlicsim_wx')
 assert __name__ == '__main__'
 
+
+if '--help' in sys.argv:
+    sys.stdout.write(__doc__ + '\n')
+    exit()
 
 if os.name != 'nt':
     raise Exception('Py2exe may only be used on Windows.')

@@ -6,15 +6,22 @@
 '''
 Script for running tests on all GarlicSim packages together.
 
-Nose is used to run the tests, and any arguments will be passed to Nose; type
-`nosetests --help` to see Nose's list of arguments.
+Nose is used to run the tests, and any extraneous arguments will be passed to
+Nose; type `nosetests --help` to see Nose's list of arguments.
 
 GarlicSim-specific arguments:
 
-    --from-zip            Test GarlicSim when import from zip files
-    --from-py2exe         Test GarlicSim when imported from py2exe distribution
-    --from-win-installer  Test GarlicSim when installed from Windows installer
+    --from-zip
+        Test GarlicSim when import from zip files
     
+    --from-py2exe
+        Test GarlicSim when imported from py2exe distribution
+        
+    --from-win-installer
+        Test GarlicSim when installed from Windows installer
+
+    --help
+        Show this help screen
 '''
 
 # blocktodo: --from-win-installer
@@ -295,6 +302,7 @@ if __name__ == '__main__':
     
     testing_from_zip = '--from-zip' in argv
     testing_from_py2exe = ('--from-py2exe' in argv) or frozen
+    testing_from_installer = ('--from-installer' in argv) or frozen
     
     assert not (testing_from_zip and testing_from_py2exe)
     
