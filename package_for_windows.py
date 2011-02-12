@@ -21,10 +21,10 @@ if os.name != 'nt':
 produce_installer = ('--installer' in sys.argv) or ('-i' in sys.argv)
 
 if produce_installer:
-    sys.stdout('Preparing to package GarlicSim with py2exe and produce '
-               'Windows installer.\n')
+    sys.stdout.write('Preparing to package GarlicSim with py2exe and produce '
+                     'Windows installer.\n')
 else: # not produce_installer
-    sys.stdout('Preparing to package GarlicSim with py2exe.\n')
+    sys.stdout.write('Preparing to package GarlicSim with py2exe.\n')
 
 repo_root_path = os.path.realpath(os.path.split(__file__)[0])
 garlicsim_wx_path = os.path.join(repo_root_path, 'garlicsim_wx')
@@ -67,9 +67,9 @@ if produce_installer:
         sys.stdout.write('Preparing to remove old installer file%s.\n' % \
                          ('s' if (len(existing_installers) > 1) else ''))
         for existing_installer in existing_installers:
-            sys.stdout('Removing old `%s` file... ' % existing_installer)
+            sys.stdout.write('Removing old `%s` file... ' % existing_installer)
             os.remove(existing_installer)
-            sys.stdout('Done.')
+            sys.stdout.write('Done.')
 
 sys.stdout.write('Working area clean.\n')
 #                                                                             #
@@ -84,25 +84,28 @@ sys.stdout.write('Launching py2exe.\n')
 old_cwd = os.getcwd()
 os.chdir(garlicsim_wx_path)
 try:
-    temp_result = os.system(sys.executable + ' setup.py py2exe'))
-else:
+    temp_result = os.system('"%s" setup.py py2exe' % sys.executable)
     if temp_result != 0:
         sys.exit(temp_result)
 finally:
     os.chdir(old_cwd)
 
-sys.stdout('Py2exe packaging complete. Distribution in the `py2exe_dist` '
-           'folder.')
+sys.stdout.write('Py2exe packaging complete. Distribution in the '
+                 '`py2exe_dist` folder.')
 #                                                                             #
 ### Finished packaging with py2exe. ###########################################
     
-os.chdir(repo_root_path)
-try:
-    temp_result = os.system(
-        os.path.join(repo_root_path, ' installer_script.iss')
-    )
-else:
-    if temp_result != 0:
-        sys.exit(temp_result)
-finally:
-    os.chdir(old_cwd)
+### Creating windows installer with inno setup: ###############################
+#                                                                             #
+if produce_installer:
+    os.chdir(repo_root_path)
+    try:
+        sys.exit(
+            os.system(
+                os.path.join(repo_root_path, 'installer_script.iss')
+            )
+        )
+    finally:
+        os.chdir(old_cwd)
+#                                                                             #
+### Finished creating Windows installer with Inno Setup. ######################
