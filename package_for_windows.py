@@ -132,7 +132,7 @@ if produce_installer:
     
     os.chdir(repo_root_path)
     try:
-        create_installer_command = '"%s" "%s"' % (
+        create_installer_command = 'echo "%s" "%s"' % (
             path_to_issc,
             os.path.join(garlicsim_wx_path, 'installer_script.iss')
         )
