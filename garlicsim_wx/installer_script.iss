@@ -19,7 +19,7 @@ DefaultGroupName=GarlicSim
 AllowNoIcons=yes
 LicenseFile=py2exe_dist/lib/garlicsim_wx/copyright.txt
 OutputDir=.
-OutputBaseFilename=GarlicSim
+OutputBaseFilename=GarlicSim-0.6.1
 Compression=lzma
 SolidCompression=yes
 
