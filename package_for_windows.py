@@ -7,6 +7,9 @@
 Defines the `` class.
 
 See its documentation for more information.
+
+
+ --issc=[PATH]
 tododoc
 '''
 
@@ -90,19 +93,48 @@ try:
 finally:
     os.chdir(old_cwd)
 
-sys.stdout.write('Py2exe packaging complete. Distribution in the '
-                 '`py2exe_dist` folder.')
+sys.stdout.write('Py2exe packaging complete. Distribution files are in the '
+                 '`py2exe_dist` folder.\n')
 #                                                                             #
 ### Finished packaging with py2exe. ###########################################
     
 ### Creating windows installer with inno setup: ###############################
 #                                                                             #
 if produce_installer:
+    
+    ### Figuring out location of inno setup compiler: #########################
+    #                                                                         #
+    issc_specifiers = [arg for arg in sys.argv if arg.startswith('--issc=')]
+    if issc_specifiers:
+        (issc_specifier,) == issc_specifiers
+        path_to_issc = issc_specifiers[7:]
+        if path_to_issc[0] == path_to_issc[-1] = '"':
+            path_to_issc = path_to_issc[1:-1]
+        if not os.path.isfile(path_to_issc):
+            raise Exception('The path to `ISSC.exe` that you specified does '
+                            'not exist. Make sure to include the `.exe` file '
+                            'itself in the path.')
+    else:
+        path_to_issc = \
+            'c:\Program Files\Inno Setup 5\ISCC.exe'
+        if not os.path.isfile(path_to_issc):
+            raise Exception("The Inno Setup compiler `ISSC.exe` could not be "
+                            "found. If you don't have Inno Setup installed, "
+                            "install it. If it's installed and you still get "
+                            "this message, specify the path to `ISSC.exe` by "
+                            "using the `--issc=[PATH]` flag.")
+        
+    #                                                                         #
+    ### Finished figuring out location of Inno Setup compiler. ################
+    
     os.chdir(repo_root_path)
     try:
         sys.exit(
             os.system(
-                os.path.join(repo_root_path, 'installer_script.iss')
+                '"%s" "%s"' % (
+                    path_to_issc,
+                    os.path.join(garlicsim_wx_path, 'installer_script.iss')
+                )
             )
         )
     finally:
