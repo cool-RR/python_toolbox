@@ -302,9 +302,9 @@ if __name__ == '__main__':
     
     testing_from_zip = '--from-zip' in argv
     testing_from_py2exe = ('--from-py2exe' in argv) or \
-                          (frozen and 'py2exe_dist' in our_path)
+        ((frozen is not None) and ('py2exe_dist' in our_path))
     testing_from_win_installer = ('--from-installer' in argv) or \
-                               (frozen and 'run_tests.exe' in sys.executable)
+        ((frozen is not None) and ('run_tests.exe' in sys.executable))
     
     if testing_from_zip + testing_from_py2exe + testing_from_win_installer > 1:
         raise Exception("Can test either from repo, or from zip, or from "
