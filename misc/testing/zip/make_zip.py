@@ -4,6 +4,10 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
+Zip all the GarlicSim packages into zip archives in the `build` folder.
+
+This is used for testing that GarlicSim works properly when running from zip
+archive.
 
 Note: The only reason we create zip files with numbers (e.g. '1.zip') instead
 of names (e.g. 'garlicsim_lib.zip') is for Windows XP compatibility; Windows XP
@@ -70,52 +74,56 @@ def zip_folder(folder, zip_path, ignored_extenstions=[]):
                 zip_file.write(absolute_file_path, destination_file_path)
 
                 
-###############################################################################
-#                                                                             #
-assert __name__ == '__main__'
-module_path = os.path.realpath(os.path.split(__file__)[0])
-assert module_path.endswith(os.path.sep.join(('misc', 'testing', 'zip')))
-repo_root_path = os.path.realpath(os.path.join(module_path, '../../..'))
-assert module_path == \
-    os.path.realpath(os.path.join(repo_root_path, 'misc', 'testing', 'zip'))
-#                                                                             #
-###############################################################################
-       
-### Preparing build folder: ###################################################
-#                                                                             #
-build_folder = os.path.join(module_path, 'build')
-if os.path.exists(build_folder):
-    sys.stdout.write('Deleting old `build` folder... ')
-    shutil.rmtree(build_folder)
+    
+def make_zip():
+    ###########################################################################
+    #                                                                         #
+    module_path = os.path.realpath(os.path.split(__file__)[0])
+    assert module_path.endswith(os.path.sep.join(('misc', 'testing', 'zip')))
+    repo_root_path = os.path.realpath(os.path.join(module_path, '../../..'))
+    assert module_path == os.path.realpath(
+        os.path.join(repo_root_path, 'misc', 'testing', 'zip')
+    )
+    #                                                                         #
+    ###########################################################################
+           
+    ### Preparing build folder: ###############################################
+    #                                                                         #
+    build_folder = os.path.join(module_path, 'build')
+    if os.path.exists(build_folder):
+        sys.stdout.write('Deleting old `build` folder... ')
+        shutil.rmtree(build_folder)
+        sys.stdout.write('Done.\n')
+    sys.stdout.write('Creating `build` folder... ')
+    os.mkdir(build_folder)
     sys.stdout.write('Done.\n')
-sys.stdout.write('Creating `build` folder... ')
-os.mkdir(build_folder)
-sys.stdout.write('Done.\n')
-#                                                                             #
-### Finished preparing build folder. ##########################################
-
-### Zipping packages into zip files: ##########################################
-#                                                                             #
-package_names = ['garlicsim', 'garlicsim_lib', 'garlicsim_wx']
-
-for i, package_name in enumerate(package_names):
+    #                                                                         #
+    ### Finished preparing build folder. ######################################
     
-    sys.stdout.write("Preparing to zip folder '%s'... " % package_name)
-    package_path = os.path.join(repo_root_path, package_name, package_name)
-    assert os.path.isdir(package_path)
-    zip_destination_path = os.path.join(build_folder,
-                                        (str(i) + '.zip'))
+    ### Zipping packages into zip files: ######################################
+    #                                                                         #
+    package_names = ['garlicsim', 'garlicsim_lib', 'garlicsim_wx']
     
-    sys.stdout.write('Zipping... ')
-    zip_folder(package_path, zip_destination_path,
-               ignored_extenstions=['.pyc', '.pyo'])
+    for i, package_name in enumerate(package_names):
+        
+        sys.stdout.write("Preparing to zip folder '%s'... " % package_name)
+        package_path = os.path.join(repo_root_path, package_name, package_name)
+        assert os.path.isdir(package_path)
+        zip_destination_path = os.path.join(build_folder,
+                                            (str(i) + '.zip'))
+        
+        sys.stdout.write('Zipping... ')
+        zip_folder(package_path, zip_destination_path,
+                   ignored_extenstions=['.pyc', '.pyo'])
+        
+        sys.stdout.write('Done.\n')
+    #                                                                         #
+    ### Finished zipping packages into zip files. #############################
     
-    sys.stdout.write('Done.\n')
-#                                                                             #
-### Finished zipping packages into zip files. #################################
+    sys.stdout.write('Finished zipping all folders.\n')
+    
+    # todo: can make some test here that checks that the files were zipped
+    # properly, have a correct data, and no pyo or pyc files were copied.
 
-sys.stdout.write('Finished zipping all folders.\n')
-
-# todo: can make some test here that checks that the files were zipped
-# properly, have a correct data, and no pyo or pyc files were copied.
-
+if __name__ == '__main__':
+    make_zip()
