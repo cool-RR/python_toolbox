@@ -130,7 +130,7 @@ if produce_installer:
     #                                                                         #
     ### Finished figuring out location of Inno Setup compiler. ################
     
-    os.chdir(repo_root_path)
+    os.chdir(garlicsim_wx_path)
     try:
         # (There are no less than six quotes in this command, because of weird
         # `cmd.exe /C` conventions.)
