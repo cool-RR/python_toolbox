@@ -1,5 +1,9 @@
 # blocktodo take original tests
 
+from operator import itemgetter as _itemgetter, eq as _eq
+import heapq as _heapq
+from itertools import repeat as _repeat, chain as _chain, starmap as _starmap, \
+                      ifilter as _ifilter, imap as _imap
 
 class Counter(dict):
     '''Dict subclass for counting hashable items.  Sometimes called a bag
