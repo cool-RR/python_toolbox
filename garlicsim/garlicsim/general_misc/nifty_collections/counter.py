@@ -109,7 +109,7 @@ class Counter(dict):
 
         '''
         # Emulate Bag.do from Smalltalk and Multiset.begin from C++.
-        return _chain.from_iterable(_starmap(_repeat, self.iteritems()))
+        return _chain(*_starmap(_repeat, self.iteritems()))
 
     # Override dict methods where necessary
 

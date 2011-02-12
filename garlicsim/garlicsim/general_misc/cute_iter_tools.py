@@ -111,7 +111,16 @@ def enumerate(reversable, reverse_index=False):
     
 def is_iterable(thing):
     '''Return whether an object is iterable.'''
-    return hasattr(type(thing), '__iter__')
+    if hasattr(type(thing), '__iter__'):
+        return True
+    else:
+        try:
+            iter(thing)
+        except TypeError:
+            return False
+        else:
+            return True
+        
 
 
 def get_length(iterable):
@@ -136,7 +145,7 @@ def product(*args, **kwargs):
         list(product(range(2), repeat=2) == ['00', '01', '10', '11']
         
     '''
-    # todo: revamp
+    # todo: revamp, probably take from stdlib
     pools = map(tuple, args) * kwargs.get('repeat', 1)
     result = [[]]
     for pool in pools:
