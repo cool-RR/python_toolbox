@@ -132,11 +132,12 @@ if produce_installer:
     
     os.chdir(repo_root_path)
     try:
-        create_installer_command = 'echo "%s" "%s"' % (
+        # (There are no less than six quotes in this command, because of weird
+        # `cmd.exe /C` conventions.)
+        create_installer_command = '""%s" "%s""' % (
             path_to_issc,
             os.path.join(garlicsim_wx_path, 'installer_script.iss')
         )
-        print(create_installer_command)
         sys.exit(os.system(create_installer_command))
     finally:
         os.chdir(old_cwd)
