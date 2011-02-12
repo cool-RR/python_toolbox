@@ -44,7 +44,10 @@ def prepare_zip_testing(package_names):
     assert not frozen
     
     result = os.system(
-        '"%s"' % os.path.realpath(os.path.join(our_path, 'make_zip.py'))
+        '""%s" "%s""' % (
+            sys.executable,
+            os.path.realpath(os.path.join(our_path, 'make_zip.py')),
+            )
     )
     
     if result != 0:
