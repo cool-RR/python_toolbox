@@ -77,6 +77,7 @@ setup_kwargs = {
         'garlicsim_lib == 0.6.1'
         ],
     
+    'tests_require': ['nose>=1.0.0'],
     'description': \
         'GUI for garlicsim, a Pythonic framework for computer simulations',
     'author': 'Ram Rachum',

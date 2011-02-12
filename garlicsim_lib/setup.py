@@ -50,6 +50,7 @@ setuptools.setup(
     version='0.6.1',
     requires=['garlicsim (== 0.6.1)'],
     install_requires=['garlicsim == 0.6.1'],
+    tests_require=['nose>=1.0.0'],
     description='Collection of GarlicSim simulation packages',
     author='Ram Rachum',
     author_email='cool-rr@cool-rr.com',

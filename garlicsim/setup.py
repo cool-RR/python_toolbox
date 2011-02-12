@@ -52,7 +52,7 @@ setuptools.setup(
     requires=['distribute'],
     test_suite='nose.collector',
     install_requires=['distribute'],
-    tests_require=['nose'],
+    tests_require=['nose>=1.0.0'],
     description='Pythonic framework for working with simulations',
     author='Ram Rachum',
     author_email='cool-rr@cool-rr.com',

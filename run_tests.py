@@ -88,6 +88,9 @@ except ImportError:
     warnings.warn('Is Nose installed? It must be for the GarlicSim tests to '
                   'run.')
     raise
+
+if nose.__versioninfo__ < (1, 0, 0):
+    raise Exception('Nose version 1.0.0 or higher is required to run tests.')
     
 class TestProgram(nose.core.TestProgram):
     '''
