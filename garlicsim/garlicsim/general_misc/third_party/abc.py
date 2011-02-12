@@ -1,11 +1,23 @@
-# Ram's note: This is cut out of Python 2.6's `abc` module. If we could get a
+# Ram's notes: This is cut out of Python 2.6's `abc` module. If we could get a
 # 2.5-compliant port of `WeakSet`, we'll be able to upgrade to the `abc` module
 # of Python 2.7.
+#
+# I modified the original module to use my own `_is_subclass` instead of the
+# builtin `issubclass`. `_is_subclass` looks for an existing
+# `__subclasscheck__` method before calling `issubclass`, which is critical on
+# Python 2.5 which doesn't support `__subclasscheck__` natively.
 
 # Copyright 2007 Google, Inc. All Rights Reserved.
 # Licensed to PSF under a Contributor Agreement.
 
 """Abstract Base Classes (ABCs) according to PEP 3119."""
+
+
+def _is_subclass(a, b):
+    if hasattr(b, '__subclasscheck__'):
+        return b.__subclasscheck__(a)
+    else:
+        return issubclass(a, b)
 
 
 def abstractmethod(funcobj):
@@ -102,11 +114,11 @@ class ABCMeta(type):
         """Register a virtual subclass of an ABC."""
         if not isinstance(cls, type):
             raise TypeError("Can only register classes")
-        if issubclass(subclass, cls):
+        if _is_subclass(subclass, cls):
             return  # Already a subclass
         # Subtle: test for cycles *after* testing for "already a subclass";
         # this means we allow X.register(X) and interpret it as a no-op.
-        if issubclass(cls, subclass):
+        if _is_subclass(cls, subclass):
             # This would create a cycle, which is bad for the algorithm below
             raise RuntimeError("Refusing to create an inheritance cycle")
         cls._abc_registry.add(subclass)
@@ -165,12 +177,12 @@ class ABCMeta(type):
             return True
         # Check if it's a subclass of a registered class (recursive)
         for rcls in cls._abc_registry:
-            if issubclass(subclass, rcls):
+            if _is_subclass(subclass, rcls):
                 cls._abc_cache.add(subclass)
                 return True
         # Check if it's a subclass of a subclass (recursive)
         for scls in cls.__subclasses__():
-            if issubclass(subclass, scls):
+            if _is_subclass(subclass, scls):
                 cls._abc_cache.add(subclass)
                 return True
         # No dice; update negative cache
