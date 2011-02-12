@@ -111,7 +111,7 @@ def enumerate(reversable, reverse_index=False):
     
 def is_iterable(thing):
     '''Return whether an object is iterable.'''
-    return hasattr(thing, '__iter__')
+    return hasattr(type(thing), '__iter__')
 
 
 def get_length(iterable):
