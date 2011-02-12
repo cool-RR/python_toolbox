@@ -6,6 +6,8 @@
 # builtin `issubclass`. `_is_subclass` looks for an existing
 # `__subclasscheck__` method before calling `issubclass`, which is critical on
 # Python 2.5 which doesn't support `__subclasscheck__` natively.
+#
+# I made some other modificiations.
 
 # Copyright 2007 Google, Inc. All Rights Reserved.
 # Licensed to PSF under a Contributor Agreement.
@@ -188,3 +190,6 @@ class ABCMeta(type):
         # No dice; update negative cache
         cls._abc_negative_cache.add(subclass)
         return False
+
+    def __subclasshook__(self, candidate):
+        return NotImplemented
