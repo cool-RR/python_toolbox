@@ -102,6 +102,9 @@ sys.stdout.write('Py2exe packaging complete. Distribution files are in the '
 #                                                                             #
 if produce_installer:
     
+    sys.stdout.write('Preparing to create Windows installer using Inno '
+                     'Setup.\n')
+    
     ### Figuring out location of inno setup compiler: #########################
     #                                                                         #
     issc_specifiers = [arg for arg in sys.argv if arg.startswith('--issc=')]
@@ -116,7 +119,7 @@ if produce_installer:
                             'itself in the path.')
     else:
         path_to_issc = \
-            'c:\Program Files\Inno Setup 5\ISCC.exe'
+            'c:\\Program Files\\Inno Setup 5\\ISCC.exe'
         if not os.path.isfile(path_to_issc):
             raise Exception("The Inno Setup compiler `ISSC.exe` could not be "
                             "found. If you don't have Inno Setup installed, "
@@ -129,6 +132,12 @@ if produce_installer:
     
     os.chdir(repo_root_path)
     try:
+        print(
+            '"%s" "%s"' % (
+                path_to_issc,
+                os.path.join(garlicsim_wx_path, 'installer_script.iss')
+            )
+        )
         sys.exit(
             os.system(
                 '"%s" "%s"' % (
