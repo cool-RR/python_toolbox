@@ -40,7 +40,7 @@ if produce_installer:
     #                                                                         #
     issc_specifiers = [arg for arg in sys.argv if arg.startswith('--issc=')]
     if issc_specifiers:
-        (issc_specifier,) == issc_specifiers
+        (issc_specifier,) = issc_specifiers
         path_to_issc = issc_specifiers[7:]
         if path_to_issc[0] == path_to_issc[-1] == '"':
             path_to_issc = path_to_issc[1:-1]
