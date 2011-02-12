@@ -11,6 +11,8 @@ from garlicsim.general_misc.third_party.abcs_collection import Mapping
 
 from garlicsim.general_misc.third_party import unittest2
 
+from garlicsim.general_misc import misc_tools
+
 from garlicsim.general_misc.nifty_collections import Counter
 
 
@@ -22,8 +24,8 @@ class TestCounter(unittest2.TestCase):
         self.assertEqual(c, Counter(a=3, b=2, c=1))
         self.assertIsInstance(c, dict)
         self.assertIsInstance(c, Mapping)
-        self.assertTrue(issubclass(Counter, dict))
-        self.assertTrue(issubclass(Counter, Mapping))
+        self.assertTrue(misc_tools.is_subclass(Counter, dict))
+        self.assertTrue(misc_tools.is_subclass(Counter, Mapping))
         self.assertEqual(len(c), 3)
         self.assertEqual(sum(c.values()), 6)
         self.assertEqual(sorted(c.values()), [1, 2, 3])

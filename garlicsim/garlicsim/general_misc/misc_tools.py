@@ -7,6 +7,8 @@ import re
 import math
 import types
 
+from garlicsim.general_misc import cute_iter_tools
+
 
 def is_subclass(candidate, base_class):
     '''
@@ -15,11 +17,18 @@ def is_subclass(candidate, base_class):
     You may pass in a tuple of base classes instead of just one, and it will
     check whether `candidate` is a subclass of any of these base classes.
     
-    The advantage of this over the built-in `issubclass` is that it doesn't
+    tododoc The advantage of this over the built-in `issubclass` is that it doesn't
     throw an exception if `candidate` is not a type. (Python issue 10569.)
     '''
-    return isinstance(candidate, (type, types.ClassType)) and \
-           issubclass(candidate, base_class)
+    if cute_iter_tools.is_iterable(base_class):
+        return any(is_subclass(candidate, single_base_class) for 
+                   single_base_class in base_class)
+    elif not isinstance(candidate, (type, types.ClassType)):
+        return False
+    elif hasattr(base_class, '__subclasscheck__'):
+        return base_class.__subclasscheck__(candidate)
+    else:
+        return issubclass(candidate, base_class)
 
 
 def get_mro_depth_of_method(type_, method_name):
