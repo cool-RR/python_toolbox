@@ -301,17 +301,15 @@ if __name__ == '__main__':
     sys.stdout.write('Preparing to run tests using Python %s\n' % sys.version)    
     
     testing_from_zip = '--from-zip' in argv
-    testing_from_py2exe = ('--from-py2exe' in argv) or frozen
-    testing_from_installer = ('--from-installer' in argv) or frozen
+    testing_from_py2exe = ('--from-py2exe' in argv) or \
+                          (frozen and 'py2exe_dist' in our_path)
+    testing_from_win_installer = ('--from-installer' in argv) or \
+                               (frozen and 'run_tests.exe' in sys.executable)
     
-    assert not (testing_from_zip and testing_from_py2exe)
-    
-    if testing_from_zip:
-        argv.remove('--from-zip')
-        zip_testing_utilities = import_by_path(
-            os.path.join(our_path, 'misc', 'testing', 'zip', 'testing_utilities')
-        )
-        zip_testing_utilities.prepare_zip_testing(package_names)
+    if testing_from_zip + testing_from_py2exe + testing_from_win_installer > 1:
+        raise Exception("Can test either from repo, or from zip, or from "
+                        "py2exe, or from windows installer. Can't have more "
+                        "than one.")
         
     if testing_from_py2exe and not frozen:
         argv.remove('--from-py2exe')
@@ -323,8 +321,27 @@ if __name__ == '__main__':
             sys.exit(temp_result)
             
         sys.exit(os.system('"%s" %s' % (os.path.join(our_path,
-                           'py2exe_dist\\run_tests.exe'), ' '.join(argv))))
+                           'py2exe_dist', 'run_tests.exe'), ' '.join(argv))))
+    
+    if testing_from_win_installer and not frozen:
+        argv.remove('--from-win-installer')
+        
+        temp_result = \
+            os.system(sys.executable + ' "%s"' % os.path.join(our_path,
+                      'package_for_windows.py --installer'))
+        if temp_result != 0:
+            sys.exit(temp_result)
             
+        sys.exit(os.system('"%s" %s' % (os.path.join(our_path,
+                           'py2exe_dist', 'run_tests.exe'), ' '.join(argv))))
+        pass
+    
+    if testing_from_zip:
+        argv.remove('--from-zip')
+        zip_testing_utilities = import_by_path(
+            os.path.join(our_path, 'misc', 'testing', 'zip', 'testing_utilities')
+        )
+        zip_testing_utilities.prepare_zip_testing(package_names)
         
     # Adding test packages to arguments to have Nose take tests from them:
     argv += test_packages_paths[::-1]
