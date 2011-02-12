@@ -51,7 +51,7 @@ def find_clear_place_on_circle(circle_points, circle_size=1):
     
     winner = winners[0]
     
-    result = winner + (maximum_clear_space / 2)
+    result = (winner + (maximum_clear_space / 2)) % circle_size
     
     return result
         

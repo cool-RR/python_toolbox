@@ -3,8 +3,10 @@
 
 '''Testing module for `find_clear_place_on_circle`.'''
 
+import nose.tools
+
 from garlicsim_wx.general_misc.misc_tools import find_clear_place_on_circle
 
 def test_wraparound():
     result = find_clear_place_on_circle((0.3, 0.5, 0.8), 1)
-    assert result == 0.05
+    nose.tools.assert_almost_equal(result, 0.05)
