@@ -42,13 +42,16 @@ def prepare_zip_testing(package_names):
                      'with GarlicSim imported from zip files.\n')
     
     assert not frozen
-    
-    result = os.system(
-        '""%s" "%s""' % (
+
+    command_for_making_zip = '"%s" "%s"' % (
             sys.executable,
             os.path.realpath(os.path.join(our_path, 'make_zip.py')),
-            )
     )
+    
+    if os.name == 'nt': # Conforming to weird Windows standards:
+        command_for_making_zip = '"%s"' % command_for_making_zip
+        
+    result = os.system(command_for_making_zip)
     
     if result != 0:
         exit(result)
