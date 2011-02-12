@@ -132,20 +132,12 @@ if produce_installer:
     
     os.chdir(repo_root_path)
     try:
-        print(
-            '"%s" "%s"' % (
-                path_to_issc,
-                os.path.join(garlicsim_wx_path, 'installer_script.iss')
-            )
+        create_installer_command = '"%s" "%s"' % (
+            path_to_issc,
+            os.path.join(garlicsim_wx_path, 'installer_script.iss')
         )
-        sys.exit(
-            os.system(
-                '"%s" "%s"' % (
-                    path_to_issc,
-                    os.path.join(garlicsim_wx_path, 'installer_script.iss')
-                )
-            )
-        )
+        print(create_installer_command)
+        sys.exit(os.system(create_installer_command))
     finally:
         os.chdir(old_cwd)
 #                                                                             #
