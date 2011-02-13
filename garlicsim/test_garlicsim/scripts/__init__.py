@@ -3,4 +3,4 @@
 
 '''Testing package for `garlicsim`.'''
 
-from . import invoke_nose
+from . import _test_garlicsim
