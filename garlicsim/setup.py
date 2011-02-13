@@ -18,10 +18,20 @@ if sys.version_info[1] <= 4:
                     'including 3.x).')
 
 
-def get_packages():
+def get_garlicsim_packages():
+    # tododoc all functions across all setup.py files
     return ['garlicsim.' + p for p in
             setuptools.find_packages('./garlicsim')] + \
            ['garlicsim']
+
+def get_test_garlicsim_packages():
+    return ['test_garlicsim.' + p for p in
+            setuptools.find_packages('./test_garlicsim')] + \
+           ['test_garlicsim']
+
+def get_packages():
+    return get_garlicsim_packages() + get_test_garlicsim_packages()
+
 
 my_long_description = \
 '''\
