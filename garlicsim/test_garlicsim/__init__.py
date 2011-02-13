@@ -3,7 +3,15 @@
 
 '''Testing package for `garlicsim`.'''
 
+import os.path
+
+import nose
+
 from .shared import verify_simpack_settings
+
+
+if nose.__versioninfo__ < (1, 0, 0):
+    raise Exception('Nose version 1.0.0 or higher is required to run tests.')
 
 
 def __bootstrap():
@@ -68,3 +76,13 @@ def __bootstrap():
         
         
 __bootstrap()
+
+
+def invoke_nose(additional_arguments=[]):
+    our_path = os.path.realpath(os.path.split(__file__)[0])
+    arguments = [
+        #'--where="%s"' % our_path,
+        '--verbose',
+        ] + additional_arguments
+    nose.run(defaultTest='test_garlicsim', argv=arguments)
+    
