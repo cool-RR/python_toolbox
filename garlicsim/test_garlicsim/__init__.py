@@ -86,6 +86,7 @@ _default_nose_arguments = [
     '--cover-erase',
     '--cover-package=garlicsim,garlicsim_lib,garlicsim_wx,'
                     'test_garlicsim,test_garlicsim_lib,test_garlicsim_wx',
+    '--exe', # Needed because `setup.py` makes our test modules executable
 ]
 
 
