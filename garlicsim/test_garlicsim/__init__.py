@@ -3,6 +3,7 @@
 
 '''Testing package for `garlicsim`.'''
 
+import sys
 import os.path
 
 import nose
@@ -78,11 +79,16 @@ def __bootstrap():
 __bootstrap()
 
 
-def invoke_nose(additional_arguments=[]):
-    our_path = os.path.realpath(os.path.split(__file__)[0])
-    arguments = [
-        #'--where="%s"' % our_path,
-        '--verbose',
-        ] + additional_arguments
-    nose.run(defaultTest='test_garlicsim', argv=arguments)
+_default_nose_arguments = [   
+    '--verbosity=3',
+    '--detailed-errors',
+    '--with-xunit',
+    '--cover-erase',
+    '--cover-package=garlicsim,garlicsim_lib,garlicsim_wx,'
+                    'test_garlicsim,test_garlicsim_lib,test_garlicsim_wx',
+]
+
+
+def invoke_nose(arguments=_default_nose_arguments):
+    nose.run(defaultTest='test_garlicsim', argv=([sys.argv[0]] + arguments))
     
