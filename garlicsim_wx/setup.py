@@ -11,11 +11,15 @@ import glob
 import setuptools
 
 
+### Ensuring correct Python version: ##########################################
+#                                                                             #
 if sys.version_info[0] >= 3:
     raise Exception('This package is not compatible with Python 3.x.')
 if sys.version_info[1] <= 4:
     raise Exception('This package requires Python 2.5 and upwards. (Not '
                     'including 3.x).')
+#                                                                             #
+### Finished ensuring correct Python version. #################################
 
 
 if 'py2exe' in sys.argv:

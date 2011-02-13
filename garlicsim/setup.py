@@ -10,26 +10,58 @@ import setuptools
 import sys
 
 
+### Ensuring correct Python version: ##########################################
+#                                                                             #
 if sys.version_info[0] >= 3:
     raise Exception('This package is not compatible with Python 3.x. Use '
                     '`garlicsim_py3` instead.')
 if sys.version_info[1] <= 4:
     raise Exception('This package requires Python 2.5 and upwards. (Not '
                     'including 3.x).')
+#                                                                             #
+### Finished ensuring correct Python version. #################################
 
 
 def get_garlicsim_packages():
-    # tododoc all functions across all setup.py files
+    '''
+    Get all the packages in `garlicsim`.
+    
+    Returns something like:
+    
+        ['garlicsim', 'garlicsim.misc',
+        'garlicsim.general_misc.nifty_collections', ... ]
+        
+    '''
     return ['garlicsim.' + p for p in
             setuptools.find_packages('./garlicsim')] + \
            ['garlicsim']
 
+
 def get_test_garlicsim_packages():
+    '''
+    Get all the packages in `test_garlicsim`.
+    
+    Returns something like:
+    
+        ['test_garlicsim', 'test_garlicsim.test_misc',
+        'test_garlicsim.test_general_misc.test_nifty_collections', ... ]
+        
+    '''
     return ['test_garlicsim.' + p for p in
             setuptools.find_packages('./test_garlicsim')] + \
            ['test_garlicsim']
 
+
 def get_packages():
+    '''
+    Get all the packages in `garlicsim` and `test_garlicsim`.
+    
+    Returns something like:
+    
+        ['test_garlicsim', 'garlicsim', 'garlicsim.misc',
+        'test_garlicsim.test_general_misc.test_nifty_collections', ... ]
+        
+    '''
     return get_garlicsim_packages() + get_test_garlicsim_packages()
 
 
@@ -44,7 +76,7 @@ Visit http://garlicsim.org for more info.
 '''
 
 my_classifiers = [
-    'Development Status :: 3 - Alpha',
+    'Development Status :: 4 - Beta',
     'Intended Audience :: Science/Research',
     ('License :: OSI Approved :: GNU Library or Lesser General '
      'Public License (LGPL)'),
