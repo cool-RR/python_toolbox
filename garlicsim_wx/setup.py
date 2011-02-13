@@ -32,15 +32,41 @@ def get_garlicsim_wx_packages():
     '''
     Get all the packages in `garlicsim_wx`.
     
-    This returns an answer in the form: `['garlicsim_wx.frame',
-    'garlicsim_wx.widgets', 'garlicsim_wx.misc', ...]`
+    Returns something like:
+    
+        ['garlicsim_wx', 'garlicsim_wx.app', 'garlicsim_wx.widgets', ... ]
+        
     '''
-    return ['garlicsim_wx.' + p for p
-            in setuptools.find_packages('./garlicsim_wx')] + \
+    return ['garlicsim_wx.' + p for p in
+            setuptools.find_packages('./garlicsim_wx')] + \
            ['garlicsim_wx']
 
 
-garlicsim_wx_packages = get_garlicsim_wx_packages()
+def get_test_garlicsim_wx_packages():
+    '''
+    Get all the packages in `test_garlicsim_wx`.
+    
+    Returns something like:
+    
+        ['test_garlicsim_wx', 'test_garlicsim_wx.test_import', ...]
+        
+    '''
+    return ['test_garlicsim_wx.' + p for p in
+            setuptools.find_packages('./test_garlicsim_wx')] + \
+           ['test_garlicsim_wx']
+
+
+def get_packages():
+    '''
+    Get all the packages in `garlicsim_wx` and `test_garlicsim_wx`.
+    
+    Returns something like:
+    
+        ['test_garlicsim_wx', 'garlicsim_wx', 'garlicsim_wx.app',
+        'test_garlicsim_wx.test_import', ... ]
+        
+    '''
+    return get_garlicsim_wx_packages() + get_test_garlicsim_wx_packages()
 
 
 my_long_description = \
@@ -87,8 +113,9 @@ setup_kwargs = {
     'author': 'Ram Rachum',
     'author_email': 'cool-rr@cool-rr.com',
     'url': 'http://garlicsim.org',
-    'packages': garlicsim_wx_packages,
-    'scripts': ['garlicsim_wx/scripts/GarlicSim.py'],
+    'packages': get_packages(),
+    'scripts': ['garlicsim_wx/scripts/GarlicSim.py',
+                'test_garlicsim_wx/scripts/_test_garlicsim_wx.py'],
     'license': 'Proprietary',
     'long_description': my_long_description,
     'classifiers': my_classifiers,

@@ -3,6 +3,15 @@
 
 '''Testing package for `garlicsim_lib`.'''
 
+import sys
+import os.path
+
+import nose
+
+
+if nose.__versioninfo__ < (1, 0, 0):
+    raise Exception('Nose version 1.0.0 or higher is required to run tests.')
+
 
 def __bootstrap():
     '''
@@ -66,3 +75,20 @@ def __bootstrap():
         
         
 __bootstrap()
+
+
+_default_nose_arguments = [   
+    '--verbosity=3',
+    '--detailed-errors',
+    '--with-xunit',
+    '--cover-erase',
+    '--cover-package=garlicsim,garlicsim_lib,garlicsim_wx,'
+                    'test_garlicsim,test_garlicsim_lib,test_garlicsim_wx',
+    '--exe', # Needed because `setup.py` makes our test modules executable
+]
+
+
+def invoke_nose(arguments=_default_nose_arguments):
+    nose.run(defaultTest='test_garlicsim_lib',
+             argv=([sys.argv[0]] + arguments))
+    
