@@ -307,7 +307,7 @@ if __name__ == '__main__':
     testing_from_py2exe = ('--from-py2exe' in argv) or \
         ((frozen is not None) and ('win_dist' in our_path))
     testing_from_win_installer = ('--from-installer' in argv) or \
-        ((frozen is not None) and ('run_tests.exe' in sys.executable))
+        ((frozen is not None) and glob.glob(os.path.join(our_path, 'unins*')))
     
     if testing_from_zip + testing_from_py2exe + testing_from_win_installer > 1:
         raise Exception("Can test either from repo, or from zip, or from "
@@ -316,6 +316,8 @@ if __name__ == '__main__':
         
     if testing_from_py2exe and not frozen:
         argv.remove('--from-py2exe')
+        
+        sys.stdout.write('Running tests from `py2exe` distribution.\n')
         
         temp_result = \
             os.system(sys.executable + ' "%s"' % os.path.join(our_path,
@@ -328,6 +330,9 @@ if __name__ == '__main__':
     
     if testing_from_win_installer and not frozen:
         argv.remove('--from-win-installer')
+        
+        sys.stdout.write('Running tests from Windows Inno Setup '
+                         'installation.\n')
         
         temp_result = \
             os.system(sys.executable + ' "%s"' % os.path.join(our_path,
@@ -345,6 +350,11 @@ if __name__ == '__main__':
             os.path.join(our_path, 'misc', 'testing', 'zip', 'testing_utilities')
         )
         zip_testing_utilities.prepare_zip_testing(package_names)
+        
+    if not (testing_from_zip or testing_from_py2exe or
+            testing_from_win_installer):
+        
+        sys.stdout.write('Running tests directly from GarlicSim repo.\n')
         
     # Adding test packages to arguments to have Nose take tests from them:
     argv += test_packages_paths[::-1]
