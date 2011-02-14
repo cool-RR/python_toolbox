@@ -397,5 +397,7 @@ if __name__ == '__main__':
         if testing_from_zip:
             zip_testing_utilities.ensure_zip_testing_was_legit(package_names)
         elif testing_from_py2exe:
-            sys.stdout.write('Finished testing from py2exe distribution.\n')
+            sys.stdout.write('Finished testing from `py2exe` distribution.\n')
+        elif testing_from_win_installer:
+            sys.stdout.write('Finished testing from Windows installation.\n')
 
