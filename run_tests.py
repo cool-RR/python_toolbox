@@ -309,7 +309,7 @@ if __name__ == '__main__':
     testing_from_py2exe = ('--from-py2exe' in argv) or \
         ((frozen is not None) and ('win_dist' in our_path))
     testing_from_win_installer = bool(
-        ('--from-installer' in argv) or
+        ('--from-win-installer' in argv) or
         ((frozen is not None) and glob.glob(os.path.join(our_path, 'unins*')))
     )
     
