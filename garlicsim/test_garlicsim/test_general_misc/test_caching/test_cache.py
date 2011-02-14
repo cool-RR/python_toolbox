@@ -180,3 +180,12 @@ def test_api():
         
         # Asserting we're not using `dict.clear` or something:
         assert cached_function.cache_clear.__name__ == 'cache_clear'
+        
+        
+def test_double_caching():
+    
+    f = cache()(counting_func)
+    g = cache()(f)
+    
+    assert f is g
+    

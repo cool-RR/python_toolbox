@@ -89,7 +89,6 @@ def cache(max_size=infinity):
                     return value
                     
         cached._cache = cache_dict
-        cached.is_cached = True
         
         result = decorator_tools.decorator(cached, function)
         
@@ -97,6 +96,8 @@ def cache(max_size=infinity):
             '''Clear the cache, deleting all saved results.'''
             cached._cache.clear()    
         result.cache_clear = cache_clear
+        
+        result.is_cached = True
         
         return result
         
