@@ -107,7 +107,7 @@ def shorten(iterable, n):
             raise StopIteration
         
         
-def enumerate(reversable, reverse_index=False):
+def enumerate(reversible, reverse_index=False):
     '''
     Iterate over `(i, item)` pairs, where `i` is the index number of `item`.
     
@@ -117,9 +117,9 @@ def enumerate(reversable, reverse_index=False):
     zero.
     '''
     if reverse_index is False:
-        return __builtin__.enumerate(reversable)
+        return __builtin__.enumerate(reversible)
     else:
-        my_list = list(__builtin__.enumerate(reversed(reversable)))
+        my_list = list(__builtin__.enumerate(reversed(reversible)))
         my_list.reverse()
         return my_list
 
