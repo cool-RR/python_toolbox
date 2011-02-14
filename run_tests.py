@@ -326,9 +326,16 @@ if __name__ == '__main__':
             
             argv.remove('--from-py2exe')
             
-            temp_result = \
-                os.system(sys.executable + ' "%s"' % os.path.join(our_path,
-                          'make_distribution.py'))
+            temp_result = os.system(
+                '""%s" "%s""' % (
+                    sys.executable,
+                    os.path.join(
+                        our_path,
+                        'make_distribution.py'
+                    )
+                )
+            )
+            
             if temp_result != 0:
                 sys.exit(temp_result)
                 
@@ -342,15 +349,23 @@ if __name__ == '__main__':
         sys.stdout.write('Running tests from Windows Inno Setup '
                          'installation.\n')
 
-        temp_result = \
-            os.system(sys.executable + ' "%s"' % os.path.join(our_path,
-                      'make_distribution.py --installer'))
+        temp_result = os.system(
+                '""%s" "%s" --installer"' % (
+                    sys.executable,
+                    os.path.join(
+                        our_path,
+                        'make_distribution.py'
+                    )
+                )
+            )
+        
         if temp_result != 0:
             sys.exit(temp_result)
             
         sys.stdout.write('Now please manually run the `GarlicSim-x.y.z.exe` '
                          'installer and then run `run_tests.exe` in the '
                          'installation folder. Sorry about that.\n')
+        sys.exit(0)
     
     if testing_from_zip:
         argv.remove('--from-zip')
