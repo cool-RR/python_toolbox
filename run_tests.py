@@ -321,6 +321,10 @@ if __name__ == '__main__':
         
     if testing_from_py2exe:
         
+        if os.name != 'nt':
+            raise Exception("Can't run tests from `py2exe` on a non-Windows "
+                            "platform.")
+        
         sys.stdout.write('Running tests from `py2exe` distribution.\n')
     
         if not frozen:
@@ -346,29 +350,36 @@ if __name__ == '__main__':
             )
 
             
-    if testing_from_win_installer and not frozen:
+    if testing_from_win_installer:
+        
+        if os.name != 'nt':
+            raise Exception("Can't run tests from Windows installation on "
+                            "a non-Windows platform.")
+        
         argv.remove('--from-win-installer')
         
         sys.stdout.write('Running tests from Windows Inno Setup '
                          'installation.\n')
 
-        temp_result = os.system(
-                '""%s" "%s" --installer"' % (
-                    sys.executable,
-                    os.path.join(
-                        our_path,
-                        'make_distribution.py'
+        if not frozen:
+            
+            temp_result = os.system(
+                    '""%s" "%s" --installer"' % (
+                        sys.executable,
+                        os.path.join(
+                            our_path,
+                            'make_distribution.py'
+                        )
                     )
                 )
-            )
-        
-        if temp_result != 0:
-            sys.exit(temp_result)
             
-        sys.stdout.write('Now please manually run the `GarlicSim-x.y.z.exe` '
-                         'installer and then run `run_tests.exe` in the '
-                         'installation folder. Sorry about that.\n')
-        sys.exit(0)
+            if temp_result != 0:
+                sys.exit(temp_result)
+                
+            sys.stdout.write('Now please manually run the `GarlicSim-x.y.z.exe` '
+                             'installer and then run `run_tests.exe` in the '
+                             'installation folder. Sorry about that.\n')
+            sys.exit(0)
     
     if testing_from_zip:
         argv.remove('--from-zip')
