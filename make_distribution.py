@@ -6,35 +6,24 @@
 '''
 Script for packaging GarlicSim as a complete program to end users.
 
-Currently implemented only for Windows.
+Currently implemented only for Windows, using `py2exe`.
+
+The distribution files for Windows will be put in a `win_dist` folder.
 
 Options:
 
-    General:
-
-    	--help
-    	    Show this help screen
-
-    Different operating systems:
-    
-        --win [OR] -w
-            Create a Windows distribution.
-    
-        --mac [OR] -m
-            Create a Mac distribution. Not implemented yet.
-    
-        --deb [OR] -d
-            Create a Debian Linux distribution. Not implemented yet.
-    
-            
-        --installer [OR] -i
-            After running py2exe, produce an installer using Inno Setup
-            
-    Windows-only options:        
-            
-        --issc=[PATH]            
-            Path to `issc.exe`, needed only if (a) making a Windows installer
-            and (b) `issc.exe` is in a non-standard location)
+    --help
+        Show this help screen    
+        
+    --installer [OR] -i
+        After making distribution directory, create installer.
+        On Windows uses Inno Setup.
+        
+Windows-only options:        
+        
+    --issc=[PATH]            
+        Path to `issc.exe`, needed only if (a) making a Windows installer
+        and (b) `issc.exe` is in a non-standard location)
         
 '''
 
@@ -53,7 +42,15 @@ if '--help' in sys.argv:
     sys.stdout.write(__doc__ + '\n')
     exit()
 
-if os.name != 'nt':
+operating_systems_dict = {
+    'nt': 'win',
+    'posix': 'linux',
+    'darwin': 'mac'
+}
+
+operating_system = operating_systems_dict[os.name]
+    
+if operating_system != 'win':
     raise Exception('Py2exe may only be used on Windows.')
 
 produce_installer = ('--installer' in sys.argv) or ('-i' in sys.argv)

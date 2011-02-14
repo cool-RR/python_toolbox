@@ -16,6 +16,8 @@ garlicsim_wx/*.egg-info
 garlicsim_wx/build
 
 win_dist
+deb_dist
+mac_dist
 
 */docs/_build/*
 */docs/_deployed_build/*
