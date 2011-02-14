@@ -318,20 +318,24 @@ if __name__ == '__main__':
                         "py2exe, or from windows installer. Can't have more "
                         "than one.")
         
-    if testing_from_py2exe and not frozen:
-        argv.remove('--from-py2exe')
+    if testing_from_py2exe:
         
         sys.stdout.write('Running tests from `py2exe` distribution.\n')
-        
-        temp_result = \
-            os.system(sys.executable + ' "%s"' % os.path.join(our_path,
-                      'package_for_windows.py'))
-        if temp_result != 0:
-            sys.exit(temp_result)
-            
-        sys.exit(os.system('"%s" %s' % (os.path.join(our_path,
-                           'win_dist', 'run_tests.exe'), ' '.join(argv))))
     
+        if not frozen:
+            
+            argv.remove('--from-py2exe')
+            
+            temp_result = \
+                os.system(sys.executable + ' "%s"' % os.path.join(our_path,
+                          'package_for_windows.py'))
+            if temp_result != 0:
+                sys.exit(temp_result)
+                
+            sys.exit(os.system('"%s" %s' % (os.path.join(our_path,
+                               'win_dist', 'run_tests.exe'), ' '.join(argv))))
+
+            
     if testing_from_win_installer and not frozen:
         argv.remove('--from-win-installer')
         
