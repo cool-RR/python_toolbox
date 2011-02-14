@@ -328,7 +328,7 @@ if __name__ == '__main__':
             
             temp_result = \
                 os.system(sys.executable + ' "%s"' % os.path.join(our_path,
-                          'package_for_windows.py'))
+                          'make_distribution.py'))
             if temp_result != 0:
                 sys.exit(temp_result)
                 
@@ -344,7 +344,7 @@ if __name__ == '__main__':
 
         temp_result = \
             os.system(sys.executable + ' "%s"' % os.path.join(our_path,
-                      'package_for_windows.py --installer'))
+                      'make_distribution.py --installer'))
         if temp_result != 0:
             sys.exit(temp_result)
             
