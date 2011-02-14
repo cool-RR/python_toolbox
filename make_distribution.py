@@ -8,7 +8,7 @@ Script for packaging GarlicSim as a complete program to end users.
 
 Currently implemented only for Windows, using `py2exe`.
 
-The distribution files for Windows will be put in a `win_dist` folder.
+The distribution files for Windows will be put in the `win_dist` folder.
 
 Options:
 
@@ -17,7 +17,7 @@ Options:
         
     --installer [OR] -i
         After making distribution directory, create installer.
-        On Windows uses Inno Setup.
+        On Windows, this uses Inno Setup.
         
 Windows-only options:        
         
@@ -58,10 +58,11 @@ if operating_system != 'win':
 produce_installer = ('--installer' in sys.argv) or ('-i' in sys.argv)
 
 if produce_installer:
-    sys.stdout.write('Preparing to package GarlicSim with py2exe and produce '
-                     'Windows installer.\n')
+    sys.stdout.write('Preparing to package GarlicSim for Windows users using '
+                     'py2exe and produce Windows installer.\n')
 else: # not produce_installer
-    sys.stdout.write('Preparing to package GarlicSim with py2exe.\n')
+    sys.stdout.write('Preparing to package GarlicSim for Windows users using '
+                     'py2exe.\n')
 
 if produce_installer:
     ### Figuring out location of Inno Setup compiler: #########################
