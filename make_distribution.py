@@ -51,7 +51,9 @@ operating_systems_dict = {
 operating_system = operating_systems_dict[os.name]
     
 if operating_system != 'win':
-    raise Exception('Py2exe may only be used on Windows.')
+    raise NotImplementedError("You're not on Windows, and making a "
+                              "distribution on Linux or Mac is not yet "
+                              "supported.")
 
 produce_installer = ('--installer' in sys.argv) or ('-i' in sys.argv)
 
@@ -62,7 +64,7 @@ else: # not produce_installer
     sys.stdout.write('Preparing to package GarlicSim with py2exe.\n')
 
 if produce_installer:
-    ### Figuring out location of inno setup compiler: #########################
+    ### Figuring out location of Inno Setup compiler: #########################
     #                                                                         #
     issc_specifiers = [arg for arg in sys.argv if arg.startswith('--issc=')]
     if issc_specifiers:
@@ -71,17 +73,17 @@ if produce_installer:
         if path_to_issc[0] == path_to_issc[-1] == '"':
             path_to_issc = path_to_issc[1:-1]
         if not os.path.isfile(path_to_issc):
-            raise Exception('The path to `ISSC.exe` that you specified does '
+            raise Exception('The path to `issc.exe` that you specified does '
                             'not exist. Make sure to include the `.exe` file '
                             'itself in the path.')
     else:
         path_to_issc = \
             'c:\\Program Files\\Inno Setup 5\\ISCC.exe'
         if not os.path.isfile(path_to_issc):
-            raise Exception("The Inno Setup compiler `ISSC.exe` could not be "
+            raise Exception("The Inno Setup compiler `issc.exe` could not be "
                             "found. If you don't have Inno Setup installed, "
                             "install it. If it's installed and you still get "
-                            "this message, specify the path to `ISSC.exe` by "
+                            "this message, specify the path to `issc.exe` by "
                             "using the `--issc=[PATH]` flag.")
         
     #                                                                         #
@@ -133,8 +135,6 @@ sys.stdout.write('Working area clean.\n')
 #                                                                             #
 ### Finished deleting old build files. ########################################
 
-
-
 ### Packaging with py2exe: ####################################################
 #                                                                             #
 sys.stdout.write('Launching py2exe.\n')
@@ -153,10 +153,10 @@ sys.stdout.write('Py2exe packaging complete. Distribution files are in the '
 #                                                                             #
 ### Finished packaging with py2exe. ###########################################
     
-### Creating windows installer with inno setup: ###############################
-#                                                                             #
+
 if produce_installer:
-    
+    ### Creating windows installer with Inno Setup: ###########################
+    #                                                                         #
     sys.stdout.write('Preparing to create Windows installer using Inno '
                      'Setup.\n')
     
@@ -171,5 +171,6 @@ if produce_installer:
         sys.exit(os.system(create_installer_command))
     finally:
         os.chdir(old_cwd)
-#                                                                             #
-### Finished creating Windows installer with Inno Setup. ######################
+
+    #                                                                         #
+    ### Finished creating Windows installer with Inno Setup. ##################
