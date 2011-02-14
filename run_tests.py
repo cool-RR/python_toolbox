@@ -18,8 +18,10 @@ GarlicSim-specific arguments:
         Test GarlicSim when imported from py2exe distribution
         
     --from-win-installer
-        Test GarlicSim when installed from Windows installer.
-        Currently not implemented; 
+        Test GarlicSim when installed from Windows installer.        
+        Currently not fully implemented; Only creates a Windows installer for
+        you as `GarlicSim-x.y.z.exe`, you have to run it yourself and then run
+        `run_tests.exe` in the installation folder.
 
     --help
         Show this help screen
@@ -335,16 +337,16 @@ if __name__ == '__main__':
         
         sys.stdout.write('Running tests from Windows Inno Setup '
                          'installation.\n')
-        # blocktodo
+
         temp_result = \
             os.system(sys.executable + ' "%s"' % os.path.join(our_path,
                       'package_for_windows.py --installer'))
         if temp_result != 0:
             sys.exit(temp_result)
             
-        sys.exit(os.system('"%s" %s' % (os.path.join(our_path,
-                           'win_dist', 'run_tests.exe'), ' '.join(argv))))
-        pass
+        sys.stdout.write('Now please manually run the `GarlicSim-x.y.z.exe` '
+                         'installer and then run `run_tests.exe` in the '
+                         'installation folder. Sorry about that.\n')
     
     if testing_from_zip:
         argv.remove('--from-zip')
