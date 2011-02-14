@@ -29,6 +29,7 @@ Windows-only options:
 
 import shutil
 import os.path
+import platform
 import sys
 import glob
 
@@ -42,15 +43,9 @@ if '--help' in sys.argv:
     sys.stdout.write(__doc__ + '\n')
     exit()
 
-operating_systems_dict = {
-    'nt': 'win',
-    'posix': 'linux',
-    'darwin': 'mac'
-}
-
-operating_system = operating_systems_dict[os.name]
+operating_system = platform.system()
     
-if operating_system != 'win':
+if operating_system != 'Windows':
     raise NotImplementedError("You're not on Windows, and making a "
                               "distribution on Linux or Mac is not yet "
                               "supported.")
@@ -156,7 +151,7 @@ sys.stdout.write('Py2exe packaging complete. Distribution files are in the '
     
 
 if produce_installer:
-    ### Creating windows installer with Inno Setup: ###########################
+    ### Creating Windows installer with Inno Setup: ###########################
     #                                                                         #
     sys.stdout.write('Preparing to create Windows installer using Inno '
                      'Setup.\n')
