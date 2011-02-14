@@ -65,7 +65,12 @@ def orderless_combinations(iterable, n=None, start=0):
         for (i, thing) in itertools.islice(enumerate(iterable), start, None):
             for sub_result in orderless_combinations(iterable, n-1, start=i+1):
                 yield [thing] + sub_result
-        for iterator in orderless_combinations
+        length = len(list(iterable)) - start # blocktodo, dude, seriously, sequence.
+        iterators = (orderless_combinations(iterable, n=i, start=start) for i
+                     in xrange(length))
+        for item in itertools.chain(*iterators):
+            yield item
+        
     elif n == 1:
         for thing in itertools.islice(iterable, start, None):
             yield [thing]
