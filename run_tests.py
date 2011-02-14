@@ -298,6 +298,7 @@ if __name__ == '__main__':
         multiprocessing.freeze_support()
     
     argv = ([sys.executable] + sys.argv[:]) if frozen else sys.argv[:]
+    print(argv)
     
     if '--help' in argv:
         sys.stdout.write(__doc__ + '\n')
