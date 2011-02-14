@@ -41,13 +41,13 @@ def consecutive_pairs(iterable, wrap_around=False):
         yield (current, first_item)
 
         
-def orderless_combinations(iterable, n, start=0):
+def orderless_combinations(iterable, n=None, start=0):
     '''
     Iterate over combinations of items from the iterable.
 
-    `n` specifies the number of items. `start` specifies the member number from
-    which to start giving combinations. (Keep the default of 0 for doing the
-    whole iterable.)
+    `n` specifies the number of items. `start` specifies the index number of
+    the member from which to start giving combinations. (Keep the default of 0
+    for doing the whole iterable.)
     
     Example:
     
@@ -57,13 +57,23 @@ def orderless_combinations(iterable, n, start=0):
     # todo: optimize or find 3rd party tool
     # blocktodo: allow n=None for all different numbers, or perhaps a slice
     # object
+    # blocktodo: test    
+    # blocktodo: move to sequence tools? doesn't it try to exhaust the iterable
+    # many times?
     
-    if n == 1:
+    if n is None:
+        for (i, thing) in itertools.islice(enumerate(iterable), start, None):
+            for sub_result in orderless_combinations(iterable, n-1, start=i+1):
+                yield [thing] + sub_result
+        for iterator in orderless_combinations
+    elif n == 1:
         for thing in itertools.islice(iterable, start, None):
             yield [thing]
-    for (i, thing) in itertools.islice(enumerate(iterable), start, None):
-        for sub_result in orderless_combinations(iterable, n-1, start=i+1):
-            yield [thing] + sub_result
+    else:
+        assert n > 1
+        for (i, thing) in itertools.islice(enumerate(iterable), start, None):
+            for sub_result in orderless_combinations(iterable, n-1, start=i+1):
+                yield [thing] + sub_result
     
     
 def shorten(iterable, n):

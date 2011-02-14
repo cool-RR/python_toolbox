@@ -6,7 +6,6 @@ Defines the `cache` decorator.
 
 See its documentation for more details.
 '''
-# blocktodo: test double-caching of function
 # todo: examine thread-safety
 
 import functools
