@@ -356,7 +356,8 @@ if __name__ == '__main__':
             raise Exception("Can't run tests from Windows installation on "
                             "a non-Windows platform.")
         
-        argv.remove('--from-win-installer')
+        if '--from-win-installer' in argv:            
+            argv.remove('--from-win-installer')
         
         sys.stdout.write('Running tests from Windows Inno Setup '
                          'installation.\n')
