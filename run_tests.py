@@ -339,8 +339,10 @@ if __name__ == '__main__':
             if temp_result != 0:
                 sys.exit(temp_result)
                 
-            sys.exit(os.system('"%s" %s' % (os.path.join(our_path,
-                               'win_dist', 'run_tests.exe'), ' '.join(argv))))
+            sys.exit(
+                os.system('"%s" %s' % (os.path.join(our_path,
+                          'win_dist', 'run_tests.exe'), ' '.join(argv[1:])))
+            )
 
             
     if testing_from_win_installer and not frozen:
