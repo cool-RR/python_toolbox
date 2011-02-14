@@ -12,7 +12,7 @@ Nose; type `nosetests --help` to see Nose's list of arguments.
 GarlicSim-specific arguments:
 
     --from-zip
-        Test GarlicSim when import from zip files
+        Test GarlicSim when imported from zip files
     
     --from-py2exe
         Test GarlicSim when imported from py2exe distribution
