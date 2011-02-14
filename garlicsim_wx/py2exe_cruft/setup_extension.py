@@ -213,7 +213,7 @@ def get_garlicsim_script_files():
 
 def get_dlls_and_stuff():
     '''
-    Get some miscellaneous files that need to be copied to `py2exe_dist`.
+    Get some miscellaneous files that need to be copied to `win_dist`.
     
     This returns a list of tuples, where the second item in each tuple is a
     list of files and the first item is the path to which these files should be
@@ -240,7 +240,7 @@ def get_dlls_and_stuff():
 
 def get_all_data_files():
     '''
-    Get all the data files that need to be copied to py2exe_dist.
+    Get all the data files that need to be copied to win_dist.
     
     This includes the data files for the `garlicsim`, `garlicsim_lib` and
     `garlicsim_wx` packages, and some miscellaneous data files.
@@ -345,9 +345,9 @@ py2exe_kwargs = {
         
         'py2exe': {
             
-            # Putting distribution files in `py2exe_dist` at the root of the\
+            # Putting distribution files in `win_dist` at the root of the\
             # repo:            
-            'dist_dir': '../py2exe_dist',
+            'dist_dir': '../win_dist',
             
             # We prefer to have all the files in a folder instead of a zip
             # file.            

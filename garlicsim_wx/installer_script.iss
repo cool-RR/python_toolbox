@@ -17,7 +17,7 @@ ChangesEnvironment=yes
 DefaultDirName={pf}\GarlicSim
 DefaultGroupName=GarlicSim
 AllowNoIcons=yes
-LicenseFile=../py2exe_dist/lib/garlicsim_wx/copyright.txt
+LicenseFile=../win_dist/lib/garlicsim_wx/copyright.txt
 OutputDir=..
 OutputBaseFilename=GarlicSim-0.6.1
 Compression=lzma
@@ -40,8 +40,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 
 [Files]
-Source: "../py2exe_dist/GarlicSim.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "../py2exe_dist/*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "../win_dist/GarlicSim.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "../win_dist/*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

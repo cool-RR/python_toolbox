@@ -4,13 +4,22 @@
 # or distributed without explicit written permission from Ram Rachum.
 
 '''
-Script for packaging GarlicSim for Windows users.
+Script for packaging GarlicSim as a complete program to end users.
 
-Run without arguments to package GarlicSim using `py2exe` into the
-`py2exe_dist`.
+Currently implemented only for Windows.
 
-Options:
+Different op:
 
+    --win [OR] -w
+        Create a Windows distribution.
+
+    --mac [OR] -m
+        Create a Mac distribution.
+
+    --deb [OR] -d
+        Create a Debian Linux distribution.
+
+        
     --installer [OR] -i
         After running py2exe, produce an installer using Inno Setup
         
@@ -87,7 +96,7 @@ def assert_no_unknown_folders():
 folders_to_delete = []
 for folder in [os.path.join(garlicsim_wx_path, 'build'),
                os.path.join(garlicsim_wx_path, 'garlicsim_wx.egg-info'),
-               os.path.join(repo_root_path, 'py2exe_dist')]:
+               os.path.join(repo_root_path, 'win_dist')]:
     if os.path.exists(folder):
         folders_to_delete.append(folder)
 
@@ -135,7 +144,7 @@ finally:
     os.chdir(old_cwd)
 
 sys.stdout.write('Py2exe packaging complete. Distribution files are in the '
-                 '`py2exe_dist` folder.\n')
+                 '`win_dist` folder.\n')
 #                                                                             #
 ### Finished packaging with py2exe. ###########################################
     

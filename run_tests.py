@@ -305,7 +305,7 @@ if __name__ == '__main__':
     
     testing_from_zip = '--from-zip' in argv
     testing_from_py2exe = ('--from-py2exe' in argv) or \
-        ((frozen is not None) and ('py2exe_dist' in our_path))
+        ((frozen is not None) and ('win_dist' in our_path))
     testing_from_win_installer = ('--from-installer' in argv) or \
         ((frozen is not None) and ('run_tests.exe' in sys.executable))
     
@@ -324,7 +324,7 @@ if __name__ == '__main__':
             sys.exit(temp_result)
             
         sys.exit(os.system('"%s" %s' % (os.path.join(our_path,
-                           'py2exe_dist', 'run_tests.exe'), ' '.join(argv))))
+                           'win_dist', 'run_tests.exe'), ' '.join(argv))))
     
     if testing_from_win_installer and not frozen:
         argv.remove('--from-win-installer')
@@ -336,7 +336,7 @@ if __name__ == '__main__':
             sys.exit(temp_result)
             
         sys.exit(os.system('"%s" %s' % (os.path.join(our_path,
-                           'py2exe_dist', 'run_tests.exe'), ' '.join(argv))))
+                           'win_dist', 'run_tests.exe'), ' '.join(argv))))
         pass
     
     if testing_from_zip:
