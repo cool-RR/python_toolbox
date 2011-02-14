@@ -18,18 +18,18 @@ GarlicSim-specific arguments:
         Test GarlicSim when imported from py2exe distribution
         
     --from-win-installer
-        Test GarlicSim when installed from Windows installer
+        Test GarlicSim when installed from Windows installer.
+        Currently not implemented; 
 
     --help
         Show this help screen
 '''
 
-# blocktodo: --from-win-installer
-
 import os.path
 import sys
 import imp
 import types
+import glob
 
 
 frozen = getattr(sys, 'frozen', None)
@@ -333,7 +333,7 @@ if __name__ == '__main__':
         
         sys.stdout.write('Running tests from Windows Inno Setup '
                          'installation.\n')
-        
+        # blocktodo
         temp_result = \
             os.system(sys.executable + ' "%s"' % os.path.join(our_path,
                       'package_for_windows.py --installer'))
