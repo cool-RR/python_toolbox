@@ -8,26 +8,34 @@ Script for packaging GarlicSim as a complete program to end users.
 
 Currently implemented only for Windows.
 
-Different op:
+Options:
 
-    --win [OR] -w
-        Create a Windows distribution.
+    General:
 
-    --mac [OR] -m
-        Create a Mac distribution.
+    	--help
+    	    Show this help screen
 
-    --deb [OR] -d
-        Create a Debian Linux distribution.
-
+    Different operating systems:
+    
+        --win [OR] -w
+            Create a Windows distribution.
+    
+        --mac [OR] -m
+            Create a Mac distribution. Not implemented yet.
+    
+        --deb [OR] -d
+            Create a Debian Linux distribution. Not implemented yet.
+    
+            
+        --installer [OR] -i
+            After running py2exe, produce an installer using Inno Setup
+            
+    Windows-only options:        
+            
+        --issc=[PATH]            
+            Path to `issc.exe`, needed only if (a) making a Windows installer
+            and (b) `issc.exe` is in a non-standard location)
         
-    --installer [OR] -i
-        After running py2exe, produce an installer using Inno Setup
-        
-    --issc=[PATH]
-        Path to `issc.exe`, (needed only if it's in a non-standard location)
-        
-    --help
-        Show this help screen
 '''
 
 import shutil
