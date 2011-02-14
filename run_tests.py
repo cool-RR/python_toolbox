@@ -232,7 +232,7 @@ def loadTestsFromDir(self, path):
         if wanted:
             if is_file:
                 plugins.beforeContext()
-                ### Identifying python files: #################################
+                ### Identifying Python files: #################################
                 #                                                             #
                 if '.py' in entry[-4:]:
                     yield self.loadTestsFromName(
@@ -306,8 +306,10 @@ if __name__ == '__main__':
     testing_from_zip = '--from-zip' in argv
     testing_from_py2exe = ('--from-py2exe' in argv) or \
         ((frozen is not None) and ('win_dist' in our_path))
-    testing_from_win_installer = ('--from-installer' in argv) or \
+    testing_from_win_installer = bool(
+        ('--from-installer' in argv) or
         ((frozen is not None) and glob.glob(os.path.join(our_path, 'unins*')))
+    )
     
     if testing_from_zip + testing_from_py2exe + testing_from_win_installer > 1:
         raise Exception("Can test either from repo, or from zip, or from "
