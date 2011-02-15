@@ -25,7 +25,8 @@ def cache(max_size=infinity):
     
     This decorator understands function arguments. For example, it understands
     that for a function like this:
-    
+
+        @cache()
         def f(a, b=2):
             return whatever
             

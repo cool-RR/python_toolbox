@@ -9,7 +9,7 @@ It checks all prerequisites are installed.
 
 import sys
 
-### Confirming correct python version: ########################################
+### Confirming correct Python version: ########################################
 #                                                                             #
 if sys.version_info[0] >= 3:
     raise Exception('This package is not compatible with Python 3.x. Use '
