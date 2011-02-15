@@ -15,7 +15,8 @@ __all__ = ['TempValueSetter']
 
 
 class NotInDict(object):
-    pass
+    '''Object signifying that the key was not found in the dict.'''
+    # todo: make uninstanciable
 
 
 class TempValueSetter(ContextManager):
@@ -31,10 +32,17 @@ class TempValueSetter(ContextManager):
         Construct the `TempValueSetter`.
         
         `variable` may be either an `(object, attribute_string)`, a `(dict,
-        key)` pair, or a (getter, setter)` pair.
+        key)` pair, or a `(getter, setter)` pair.
         
         `value` is the temporary value to set to the variable.
         '''
+
+        #######################################################################
+        # We let the user input either an `(object, attribute_string)`, a
+        # `(dict, key)` pair, or a `(getter, setter)` pair. So now it's our job
+        # to inspect `variable` and figure out which one of these options the
+        # user chose, and then obtain from that a `(getter, setter)` pair that
+        # we could use.
         try:
             first, second = variable
         except Exception:
@@ -43,18 +51,25 @@ class TempValueSetter(ContextManager):
                             "or a `(getter, setter)` pair.")
         if hasattr(first, '__getitem__') and hasattr(first, 'get') and \
            hasattr(first, '__setitem__') and hasattr(first, '__delitem__'):
+            # `first` is a dictoid; so we were probably handed a `(dict, key)`
+            # pair.
             self.getter = lambda: first.get(second, NotInDict)
             self.setter = lambda value: (first.__setitem__(second, value) if 
                                          value is not NotInDict else
                                          first.__delitem__(second))
+            ### Finished handling the `(dict, key)` case. ###
             
         elif callable(second):
+            # `second` is a dictoid; so we were probably handed a `(getter,
+            # setter)` pair.
             if not callable(first):
                 raise Exception("`variable` must be either an `(object, "
                                 "attribute_string)` pair, a `(dict, key)` "
                                 "pair, or a `(getter, setter)` pair.")
             self.getter, self.setter = first, second
+            ### Finished handling the `(getter, setter)` case. ###
         else:
+            # All that's left is the `(object, attribute_string)` case.
             if not isinstance(second, basestring):
                 raise Exception("`variable` must be either an `(object, "
                                 "attribute_string)` pair, a `(dict, key)` "
@@ -63,6 +78,12 @@ class TempValueSetter(ContextManager):
             parent, attribute_name = first, second
             self.getter = lambda: getattr(parent, attribute_name)
             self.setter = lambda value: setattr(parent, attribute_name, value)
+            ### Finished handling the `(object, attribute_string)` case. ###
+
+        #
+        #
+        ### Finished obtaining a `(getter, setter)` pair from `variable`. #####
+        
             
         self.getter = self.getter
         '''Getter for getting the current value of the variable.'''
