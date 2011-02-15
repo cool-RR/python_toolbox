@@ -50,12 +50,9 @@ def combinations(sequence, n=None, start=0):
     # blocktodo: test    
     
     if n is None:
-        for (i, thing) in itertools.islice(enumerate(sequence), start, None):
-            for sub_result in combinations(sequence, n-1, start=i+1):
-                yield [thing] + sub_result
         length = len(sequence) - start
         iterators = (combinations(sequence, n=i, start=start) for i
-                     in xrange(length))
+                     in xrange(1, length + 1))
         for item in itertools.chain(*iterators):
             yield item
         
@@ -65,7 +62,7 @@ def combinations(sequence, n=None, start=0):
     else:
         assert n > 1
         for (i, thing) in itertools.islice(enumerate(sequence), start, None):
-            for sub_result in combinations(sequence, n-1, start=i+1):
+            for sub_result in combinations(sequence, n - 1, start=(i + 1)):
                 yield [thing] + sub_result
 
 
