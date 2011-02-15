@@ -7,7 +7,8 @@
 # `__subclasscheck__` method before calling `issubclass`, which is critical on
 # Python 2.5 which doesn't support `__subclasscheck__` natively.
 #
-# I made some other modificiations.
+# I also included a no-op base `__subclasshook__` method, because Python 2.5
+# objects don't have one.
 
 # Copyright 2007 Google, Inc. All Rights Reserved.
 # Licensed to PSF under a Contributor Agreement.
@@ -16,6 +17,11 @@
 
 
 def _is_subclass(a, b):
+    '''
+    Is `a` a subclass of `b`?
+    
+    Looks for `__subclasscheck__` manually, for Python 2.5 compatibility.
+    '''
     if hasattr(b, '__subclasscheck__'):
         return b.__subclasscheck__(a)
     else:
