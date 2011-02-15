@@ -57,8 +57,8 @@ def zip_folder(folder, zip_path, ignored_patterns=[]):
             
             for file_path in files:
                 
-                if any(ignored_re_pattern.match(file_path) for
-                       ignored_re_pattern in ignored_re_patterns):
+                if any(ignored_re_pattern.match(os.path.join(root, file_path))
+                       for ignored_re_pattern in ignored_re_patterns):
                     continue
                 
                 absolute_file_path = os.path.join(root, file_path)
