@@ -21,36 +21,33 @@ because it will cause Python to raise an `ImportError` under Windows XP.
 from __future__ import with_statement
 
 import sys
+import re
+import fnmatch
 import os.path
 import zipfile
 import contextlib
 import shutil
 
 
-def zip_folder(folder, zip_path, ignored_extenstions=[]):
+def zip_folder(folder, zip_path, ignored_patterns=[]):
     '''
+
     note: creates a folder inside the zip with the same name of the original
     folder, in contrast to other implementation which put all of the files on
     the root level of the zip.
     
     Doesn't put empty folders in the zip file.
+    
+    tododoc ignored_patterns, they're fnmatch style
     '''
     assert os.path.isdir(folder)
     source_folder = os.path.realpath(folder)
     
+    ignored_re_patterns = [re.compile(fnmatch.translate(ignored_pattern)) for
+                           ignored_pattern in ignored_patterns]
+    
     zip_name = os.path.splitext(os.path.split(zip_path)[1])[0]
     source_folder_name = os.path.split(source_folder)[1]
-    
-    ### Ensuring ignored extensions start with '.': ###########################
-    #                                                                         #
-    for ignored_extenstion in ignored_extenstions:
-        if not ignored_extenstion.startswith('.'):
-            ignored_extenstions[
-                ignored_extenstions.index(ignored_extenstion)
-                ] = \
-            ('.' + ignored_extenstion)
-    #                                                                         #
-    ### Finished ensuring ignored extensions start with '.'. ##################
             
     with contextlib.closing(
         zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED)
@@ -60,9 +57,9 @@ def zip_folder(folder, zip_path, ignored_extenstions=[]):
             
             for file_path in files:
                 
-                extension = os.path.splitext(file_path)[1]
-                if extension in ignored_extenstions:
-                    continue
+                for ignored_re_pattern in ignored_re_patterns:
+                    if ignored_re_pattern.match(file_path):
+                        continue
                 
                 absolute_file_path = os.path.join(root, file_path)
                 
@@ -114,7 +111,7 @@ def make_zip():
         
         sys.stdout.write('Zipping... ')
         zip_folder(package_path, zip_destination_path,
-                   ignored_extenstions=['.pyc', '.pyo'])
+                   ignored_patterns=['*.pyc', '*.pyo', '*__pycache__*'])
         
         sys.stdout.write('Done.\n')
     #                                                                         #

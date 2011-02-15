@@ -20,7 +20,6 @@
 #     FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 #     OTHER DEALINGS IN THE SOFTWARE.
 
-# blocktodo: move out of third party
 
 from UserDict import DictMixin
 
