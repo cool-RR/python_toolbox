@@ -54,9 +54,39 @@ class ArgumentsProfile(object):
         with "_" being the highest/last character. (e.g. `f(1, cat=7, meow=7,
         _house=7)` is better than `f(1, _house=7, meow=7, cat=7)`)
     
-    tododoc ordereddict-like behavior, '*'
+    tododoc ordereddict-like behavior, '*', test docs below
+    
+    # Accessing the data of an arguments profile #
+    
+    Say you have this function:
+    
+        def f(x, y, *args, **kwargs):
+            pass
+    
+    And you create an arguments profile:
+    
+        arguments_profile = ArgumentsProfile(f, 1, 2, 3, 4, meow='frr')
+            
+    There are two ways to access the data of this arguments profile:
+    
+     1. Use `arguments_profile.args` and `arguments_profile.kwargs`, which are,
+        respectively, a tuple of positional arguments and an ordered dict of
+        keyword arguments. In this case, `.args` would be `(1, 2, 3, 4)` and
+        `.kwargs` would be `OrderedDict((('meow', 'frr'),))`.
+        
+     2. Use `arguments_profile`'s ordered-dict-like interface. A few examples:
+     
+            arguments_profile['x'] == 1
+            arguments_profile['y'] == 2
+            arguments_profile['*'] == (3, 4)
+            arguments_profile['meow'] == 'frr'
+            
+        The special asterisk argument indicates the arguments that go into
+        `*args`.
         
     '''
+    # todo: we're using an ad-hoc third way, `self.getcallargs_result`, think
+    # hard about that...
     
     def __init__(self, function, *args, **kwargs):
         '''
@@ -74,7 +104,11 @@ class ArgumentsProfile(object):
         del args, kwargs
         
         self.args = ()
+        '''Tuple of positional arguments.'''
+        
         self.kwargs = OrderedDict()
+        '''Ordered dict of keyword arguments.'''
+        
         
         args_spec = cute_inspect.getargspec(function)
         
@@ -371,7 +405,7 @@ class ArgumentsProfile(object):
         _arguments.update(self.kwargs)
         
         self._arguments = _arguments
-        ''' '''
+        '''Ordered dict of arguments, both positional- and keyword-.'''
         
         # Caching the hash, since its computation can take a long time:
         self._hash = cheat_hashing.cheat_hash(
@@ -383,55 +417,54 @@ class ArgumentsProfile(object):
         )
         
         
+    def __getitem__(self, argument_name):
+        '''Get the value of a specified argument.'''
+        return self._arguments.__getitem__(argument_name)
         
-        
-    def __getitem__(self, key):
-        return self._arguments.__getitem__(key)
-        
     
-    def get(self, key, default=None):
-        return self._arguments.get(key, default)
-    
-    
-    def __iter__(self):
-        return self._arguments.__iter__()
-    
-    
-    def iteritems(self):
-        ''' '''
-        return self._arguments.iteritems()
-    
-    
-    def items(self):
-        ''' '''
-        return self._arguments.items()
+    def get(self, argument_name, default=None):
+        '''Get the value of a specified argument, if not found get `default`.'''
+        return self._arguments.get(key, argument_name)
     
     
     def keys(self):
-        ''' '''
+        '''Get all the argument names.'''
         return self._arguments.keys()
     
     
     def values(self):
-        ''' '''
+        '''Get all the argument values.'''
         return self._arguments.values()
-
+    
+    
+    def items(self):
+        '''Get a tuple of all the `(argument_name, argument_value)` item.'''
+        return self._arguments.items()
+    
+    
+    def __iter__(self):
+        '''Iterate on the argument names according to their order.'''
+        return self._arguments.__iter__()
+    
     
     def iterkeys(self):
-        ''' '''
+        '''Iterate on the argument names according to their order.'''
         return self._arguments.iterkeys()
     
     
     def itervalues(self):        
-        ''' '''
+        '''Iterate on the argument value according to their order.'''
         return self._arguments.itervalues()
+        
+    
+    def iteritems(self):
+        '''Iterate on `(argument_name, argument_value)` items by their order.'''
+        return self._arguments.iteritems()
     
     
-    def __contains__(self, key):
-        ''' '''
-        return self._arguments.__contains__(key)
-    
-    
+    def __contains__(self, argument_name):
+        '''Return whether the arguments profile contains the given argument.'''
+        return self._arguments.__contains__(argument_name)
     
     
     @classmethod
@@ -469,6 +502,3 @@ class ArgumentsProfile(object):
     def __hash__(self):
         return self._hash
                     
-
-    
-    
