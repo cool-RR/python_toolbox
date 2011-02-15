@@ -96,6 +96,10 @@ class ArgumentsProfile(object):
         n_defaultful_args = len(s_defaults)
         # The word "defaultful" means "something which has a default."
         
+        #######################################################################
+        #######################################################################
+        # Now we'll create the arguments profile, using a 4-phases algorithm. #
+        #                                                                     #
         
         #######################################################################
         # Phase 1: We specify all the args that don't have a default as
@@ -340,8 +344,13 @@ class ArgumentsProfile(object):
             
             self.kwargs.update(sorted_star_kwargs)
             
-        # All phases completed! This arguments profile is canonical and ready. tododoc?
+        # Our 4-phases algorithm is done! The argument profile is canonical.  #
         #######################################################################
+        #######################################################################
+        
+        
+        #######################################################################
+        # Now a bit of post-processing:
         
         _arguments = OrderedDict()
         
@@ -372,6 +381,8 @@ class ArgumentsProfile(object):
                 tuple(self.kwargs)
             )
         )
+        
+        
         
         
     def __getitem__(self, key):
