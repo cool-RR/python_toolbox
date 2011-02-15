@@ -113,8 +113,9 @@ class _MissingAttribute(object):
     # todo: make uninstanciable
 
 def assert_polite_wrapper(wrapper, wrapped=None):
-    # blocktodo: should be checking attributes? see what the newest
-    # `functools.wraps` does.
+    # todo: in all decorators, should be examining the wrapped function's dict
+    # and update the new one with it. can't test for this here though, cause
+    # the decorator has the right to change them.
     if wrapped is None:
         wrapped = wrapper.__wrapped__
     assert_same_signature(wrapper, wrapped)

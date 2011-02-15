@@ -35,19 +35,16 @@ def combinations(sequence, n=None, start=0):
     '''
     Iterate over combinations of items from the sequence.
 
-    `n` specifies the number of items. `start` specifies the index number of
-    the member from which to start giving combinations. (Keep the default of 0
-    for doing the whole sequence.)
+    `n` specifies the number of items. (Use `None` for all possible sizes
+    together.) `start` specifies the index number of the member from which to
+    start giving combinations. (Keep the default of `0` for doing the whole
+    sequence.)
     
     Example:
     
     `combinations([1, 2, 3, 4], n=2)` would be, in list form: `[[1, 2], [1, 3],
     [1, 4], [2, 3], [2, 4], [3, 4]]`.
     '''
-    # todo: optimize or find 3rd party tool
-    # blocktodo: allow n=None for all different numbers, or perhaps a slice
-    # object
-    # blocktodo: test    
     
     if n is None:
         length = len(sequence) - start
