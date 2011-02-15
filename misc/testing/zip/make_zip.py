@@ -16,8 +16,6 @@ limits the length of a path that a file may have, so we can't afford to have a
 because it will cause Python to raise an `ImportError` under Windows XP.
 '''
 
-# blocktodo: should work with python 3, try it
-
 from __future__ import with_statement
 
 import sys
