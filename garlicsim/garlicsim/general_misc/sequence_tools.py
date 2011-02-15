@@ -3,6 +3,8 @@
 
 '''Defines various tools for manipulating sequences.'''
 
+import itertools
+
         
 def are_equal_regardless_of_order(seq1, seq2):
     '''
@@ -27,6 +29,45 @@ def flatten(iterable):
     except StopIteration:
         return []
     return sum(iterator, first_item)
+
+
+def orderless_combinations(sequence, n=None, start=0):
+    '''
+    Iterate over combinations of items from the sequence.
+
+    `n` specifies the number of items. `start` specifies the index number of
+    the member from which to start giving combinations. (Keep the default of 0
+    for doing the whole sequence.)
+    
+    Example:
+    
+    `orderless_combinations([1, 2, 3, 4], n=2)` would be, in list form:
+    `[[1, 2], [1, 3], [1, 4], [2, 3], [2, 4], [3, 4]]`.
+    '''
+    # todo: optimize or find 3rd party tool
+    # blocktodo: allow n=None for all different numbers, or perhaps a slice
+    # object
+    # blocktodo: test    
+    
+    if n is None:
+        for (i, thing) in itertools.islice(enumerate(sequence), start, None):
+            for sub_result in orderless_combinations(sequence, n-1, start=i+1):
+                yield [thing] + sub_result
+        length = len(sequence) - start
+        iterators = (orderless_combinations(sequence, n=i, start=start) for i
+                     in xrange(length))
+        for item in itertools.chain(*iterators):
+            yield item
+        
+    elif n == 1:
+        for thing in itertools.islice(sequence, start, None):
+            yield [thing]
+    else:
+        assert n > 1
+        for (i, thing) in itertools.islice(enumerate(sequence), start, None):
+            for sub_result in orderless_combinations(sequence, n-1, start=i+1):
+                yield [thing] + sub_result
+
 
 
 ### Not using now, might want in future:
