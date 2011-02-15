@@ -23,7 +23,7 @@ def all_equal(iterable, exhaustive=False):
     # work for unhashables.
     
     if exhaustive is True:
-        pairs = sequence_tools.orderless_combinations(list(iterable), 2)
+        pairs = sequence_tools.combinations(list(iterable), 2)
     else: # exhaustive is False
         pairs = cute_iter_tools.consecutive_pairs(iterable)
         

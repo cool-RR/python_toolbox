@@ -61,7 +61,7 @@ class NodeSelection(object):
         # to node ranges. This will make a few things easier, like checking
         # equality.
         first, second = None, None
-        for (r1, r2) in sequence_tools.orderless_combinations(self.ranges, 2):
+        for (r1, r2) in sequence_tools.combinations(self.ranges, 2):
             if r1.head in r2:
                 second, first = r1, r2
                 break
