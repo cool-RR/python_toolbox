@@ -60,5 +60,6 @@ def history_cache(function, *args, **kwargs):
     cached.node_cache = weakref.WeakKeyDictionary()
     
     functools.update_wrapper(cached, function)
+    cached.__wrapped__ = function
     
     return cached

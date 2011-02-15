@@ -112,13 +112,14 @@ class _MissingAttribute(object):
     pass
     # todo: make uninstanciable
 
-def assert_polite_wrapper(wrapper, wrapped=None):
+def assert_polite_wrapper(wrapper, wrapped=None, same_signature=True):
     # todo: in all decorators, should be examining the wrapped function's dict
     # and update the new one with it. can't test for this here though, cause
     # the decorator has the right to change them.
     if wrapped is None:
         wrapped = wrapper.__wrapped__
-    assert_same_signature(wrapper, wrapped)
+    if same_signature:
+        assert_same_signature(wrapper, wrapped)
     for attribute in ('__module__', '__name__', '__doc__', '__annotations__'):
         assert getattr(wrapper, attribute, _MissingAttribute) == \
                getattr(wrapped, attribute, _MissingAttribute)
