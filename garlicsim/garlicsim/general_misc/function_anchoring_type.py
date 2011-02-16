@@ -52,7 +52,7 @@ class FunctionAnchoringType(type):
             
             # Since this metaclass is a hacky enough solution as it is, let's
             # be careful and ensure no object is already defined by the same
-            # name in the module level: (todotest)
+            # name in the module level: (blocktodotest)
             try:
                 already_defined_object = getattr(module_name, function_name)
             except AttributeError:
