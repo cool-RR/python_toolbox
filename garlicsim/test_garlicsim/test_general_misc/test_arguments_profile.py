@@ -394,6 +394,14 @@ def test_many_defaultfuls_and_star_args_and_star_kwargs():
         #                                                                     #
         ### Finished testing `.itervalues` and `.values`. #####################
         
+        ### Testing `.iteritems` and `.items`: ################################
+        #                                                                     #
+        items_1 = list(arg_prof.iteritems())
+        items_2 = arg_prof.items()
+        assert items_1 == items_2 == zip(arg_prof.keys(), arg_prof.values())
+        #                                                                     #
+        ### Finished testing `.iteritems` and `.items`. #######################
+        
         ### Testing `.__contains__`: ##########################################
         #                                                                     #
         for key in arg_prof:
