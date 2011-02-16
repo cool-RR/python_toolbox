@@ -3,12 +3,15 @@
 
 '''Testing module for invalid simpacks.'''
 
+from __future__ import with_statement
+
 import os
 
 import nose
 
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import path_tools
+from garlicsim.general_misc import cute_testing
 from garlicsim.general_misc.reasoned_bool import ReasonedBool
 
 import garlicsim
@@ -26,7 +29,7 @@ def test_simpacks():
     simpacks = import_tools.import_all(invalid_simpacks_package).values()
     
     # Making sure that we didn't miss any simpack by counting the number of
-    # sub-folders in the `invalid_simpacks_package` folders:
+    # sub-folders in the `simpacks` folder:
     simpacks_dir = \
         os.path.dirname(invalid_simpacks_package.__file__)
     assert len(path_tools.list_sub_folders(simpacks_dir)) == \
@@ -46,12 +49,8 @@ def check_simpack(simpack):
     exception_we_should_get = VALID.reason
     assert isinstance(exception_we_should_get, InvalidSimpack)
     
-    try:
-        SimpackGrokker(simpack)
-    except Exception, exception:
-        assert type(exception) == type(exception_we_should_get)
-        assert exception.message == exception_we_should_get.message
+    with cute_testing.RaiseAssertor(type(exception_we_should_get),
+                                    exception_we_should_get.message,
+                                    assert_exact_type=True):
         
-    else:
-        raise Exception("`SimpackGrokker` shouldn't have been created because "
-                        "the simpack is invalid.")
+        SimpackGrokker(simpack)
