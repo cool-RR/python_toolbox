@@ -1,22 +1,22 @@
-# tododoc: this module looks like crap
+# Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
+# or distributed without explicit written permission from Ram Rachum.
+
+'''Defines an icon bundle for GarlicSim.'''
+
+
 import pkg_resources
 
 import wx
 
+from garlicsim.general_misc import caching
 
 
-_icon_bundle = None
-
+@caching.cache()
 def get_icon_bundle():
-    
-    global _icon_bundle
-    
-    if _icon_bundle:
-        return _icon_bundle
+    '''Get GarlicSim's icon bundle.'''
 
     from . import images as __images_package
     images_package = __images_package.__name__
-
 
     icons = []
     for size in [16, 24, 32, 48, 96, 128, 256]:
@@ -38,10 +38,9 @@ def get_icon_bundle():
         # todo: should probably be loading the bitmaps from the .ico file, to
         # save on storing all those PNGs.
                     
-    
-    _icon_bundle = wx.IconBundle()
+    icon_bundle = wx.IconBundle()
     
     for icon in icons:
-        _icon_bundle.AddIcon(icon)
+        icon_bundle.AddIcon(icon)
     
-    return _icon_bundle
+    return icon_bundle

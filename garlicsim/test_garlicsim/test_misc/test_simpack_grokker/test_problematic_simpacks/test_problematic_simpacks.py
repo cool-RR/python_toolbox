@@ -29,7 +29,7 @@ def test_simpacks():
     simpacks = import_tools.import_all(problematic_simpacks_package).values()
     
     # Making sure that we didn't miss any simpack by counting the number of
-    # sub-folders in the `problematic_simpacks_package` folders:
+    # sub-folders in the `simpacks` folder:
     simpacks_dir = \
         os.path.dirname(problematic_simpacks_package.__file__)
     assert len(

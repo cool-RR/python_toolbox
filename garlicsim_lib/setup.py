@@ -66,7 +66,7 @@ def get_packages():
 
 my_long_description = \
 '''\
-A collection of GarlicSim simulation packages, for various scientific fields.
+Collection of GarlicSim simulation packages, for various scientific fields.
 
 To be used with `garlicsim` and possibly `garlicsim_wx`.
 

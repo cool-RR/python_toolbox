@@ -89,6 +89,7 @@ _default_nose_arguments = [
 
 
 def invoke_nose(arguments=_default_nose_arguments):
+    '''Start Nose using this `test_garlicsim_lib` test package.'''
     nose.run(defaultTest='test_garlicsim_lib',
              argv=([sys.argv[0]] + arguments))
     
