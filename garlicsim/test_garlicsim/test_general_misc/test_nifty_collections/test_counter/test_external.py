@@ -151,7 +151,8 @@ class TestCounter(unittest2.TestCase):
 
         elements = 'abcdef'
         for i in range(100):
-            # verify that random multisets with no repeats are exactly like sets
+            # verify that random multisets with no repeats are exactly like
+            # sets
             p = Counter(dict((elem, randrange(0, 2)) for elem in elements))
             q = Counter(dict((elem, randrange(0, 2)) for elem in elements))
             for counterop, setop in [
@@ -166,10 +167,16 @@ class TestCounter(unittest2.TestCase):
     def test_subtract(self):
         c = Counter(a=-5, b=0, c=5, d=10, e=15,g=40)
         c.subtract(a=1, b=2, c=-3, d=10, e=20, f=30, h=-50)
-        self.assertEqual(c, Counter(a=-6, b=-2, c=8, d=0, e=-5, f=-30, g=40, h=50))
+        self.assertEqual(
+            c,
+            Counter(a=-6, b=-2, c=8, d=0, e=-5, f=-30, g=40, h=50)
+        )
         c = Counter(a=-5, b=0, c=5, d=10, e=15,g=40)
         c.subtract(Counter(a=1, b=2, c=-3, d=10, e=20, f=30, h=-50))
-        self.assertEqual(c, Counter(a=-6, b=-2, c=8, d=0, e=-5, f=-30, g=40, h=50))
+        self.assertEqual(
+            c,
+            Counter(a=-6, b=-2, c=8, d=0, e=-5, f=-30, g=40, h=50)
+        )
         c = Counter('aaabbcd')
         c.subtract('aaaabbcce')
         self.assertEqual(c, Counter(a=-1, b=0, c=-1, d=1, e=-1))

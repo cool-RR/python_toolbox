@@ -97,7 +97,7 @@ def test_regex():
         
 
 def test_assert_exact_type():
-    
+    '''Test `RaiseAssertor`'s `assert_exact_type` option.'''
     with RaiseAssertor(LookupError):
         raise KeyError("Look at me, I'm a KeyError")
     

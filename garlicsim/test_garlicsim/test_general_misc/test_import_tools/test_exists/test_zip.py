@@ -3,7 +3,8 @@
 
 '''Testing `import_tools.exists` on modules available through zip archives.'''
 
-# todo: test package in zip, zip in zip, multiple root-level modules in zip.
+# todotest: test package in zip, zip in zip, multiple root-level modules in
+# zip.
 
 from __future__ import with_statement
 
@@ -21,6 +22,7 @@ from garlicsim.general_misc.import_tools import exists
 
 from . import resources as __resources_package
 resources_package = __resources_package.__name__
+
 
 def test_zip():
     '''Test `exists` works on zip-imported modules.'''

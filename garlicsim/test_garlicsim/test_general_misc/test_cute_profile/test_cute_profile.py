@@ -189,6 +189,7 @@ def test_condition():
     
     
 def test_perfects():
+    '''Test `cute_profile` on a function that finds perfect numbers.'''
     
     def get_divisors(x):
         return [i for i in xrange(1, x) if (x % i == 0)]
@@ -208,7 +209,12 @@ def test_perfects():
     
     
 def test_polite_wrapper():
-    '''tododocTest that the `profile_ready` decorator preserves function signature.'''
+    '''
+    Test that `profile_ready` decorator produces a polite function wrapper.
+    
+    e.g. that the name, documentation and signature of the original function
+    are used in the wrapper function, and a few other things.
+    '''
     cute_testing.assert_polite_wrapper(
         cute_profile.profile_ready()(func),
         func
