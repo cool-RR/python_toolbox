@@ -421,7 +421,7 @@ class ArgumentsProfile(object):
         
     
     def get(self, argument_name, default=None):
-        '''Get the value of a specified argument, if not found get `default`.'''
+        '''Get the value of a specified argument, if missing get `default`.'''
         return self._arguments.get(key, argument_name)
     
     
@@ -456,7 +456,7 @@ class ArgumentsProfile(object):
         
     
     def iteritems(self):
-        '''Iterate on `(argument_name, argument_value)` items by their order.'''
+        '''Iterate on `(argument_name, argument_value)` items by order.'''
         return self._arguments.iteritems()
     
     
