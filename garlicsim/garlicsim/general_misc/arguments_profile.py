@@ -54,8 +54,6 @@ class ArgumentsProfile(object):
         with "_" being the highest/last character. (e.g. `f(1, cat=7, meow=7,
         _house=7)` is better than `f(1, _house=7, meow=7, cat=7)`)
     
-    tododoc ordereddict-like behavior, '*', test docs below
-    
     # Accessing the data of an arguments profile #
     
     Say you have this function:
