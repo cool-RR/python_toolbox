@@ -3,7 +3,6 @@
 
 '''Defines an icon bundle for GarlicSim.'''
 
-
 import pkg_resources
 
 import wx

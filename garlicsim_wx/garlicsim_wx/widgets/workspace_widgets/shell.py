@@ -66,6 +66,9 @@ class Shell(wx.py.shell.Shell, WorkspaceWidget):
         # We used to import `site` here to get `help` and others when frozen,
         # but now `garlicsim` has `bootstrap_py2exe` which bundles its own
         # version of `site` which creates `help` and a few other builtins.
+        import __builtin__
+        assert 'help' in __builtin__.__dict__
+        del __builtin__
         
     
     def setLocalShell(self):
