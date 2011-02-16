@@ -5,8 +5,16 @@
 '''
 Script for starting a new simpack.
 
+This is a script for creating a skeleton for a `garlicsim` simpack. Use this
+when you want to make a new simpack to have the basic folders and files created
+for you.
+
 Usage:
-start_simpack.py quantum_mechanics
+
+    start_simpack.py my_simpack_name
+
+The simpack will be created in the current path, in a directory with the name
+of the simpack.
 '''
 
 from __future__ import with_statement
@@ -20,18 +28,6 @@ import pkg_resources
 
 from garlicsim.scripts import simpack_template
 simpack_template_package_name = simpack_template.__name__
-
-
-_help_text =  '''\
-This is a script for creating a skeleton for a `garlicsim` simpack. Use this
-when you want to make a new simpack to have the basic folders and files created
-for you.
-
-    Usage: start_simpack.py my_simpack_name
-
-The simpack will be created in the current path, in a directory with the name
-of the simpack.
-'''
 
     
 def _walk_folder(package_name, folder):
@@ -113,7 +109,6 @@ def start_simpack(containing_folder, name):
             string_to_write = source_string\
                             .replace('\r', '')\
                             .replace('simpack_name', name)
-                            
             
             destination.write(string_to_write)
             
@@ -141,8 +136,8 @@ def _make_writeable(filename):
 
         
 def show_help():
-    '''Print some help text that describes how to use this script'''
-    print(_help_text)
+    '''Print some help text that describes how to use this script.'''
+    print(__doc__)
 
  
 def start(argv=None):

@@ -422,7 +422,7 @@ class ArgumentsProfile(object):
     
     def get(self, argument_name, default=None):
         '''Get the value of a specified argument, if missing get `default`.'''
-        return self._arguments.get(key, argument_name)
+        return self._arguments.get(argument_name, default)
     
     
     def keys(self):

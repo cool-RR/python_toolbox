@@ -84,6 +84,11 @@ class TempSysPathAdder(ContextManager):
 
             
 frozen = getattr(sys, 'frozen', None)
+'''
+The "frozen string", if we are frozen, otherwise `None`.
+
+This is useful for checking if we are frozen, e.g. with py2exe.
+'''
 
 
 # May want in future:

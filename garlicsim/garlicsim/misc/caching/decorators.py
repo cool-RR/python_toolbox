@@ -2,12 +2,12 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-tododoc perhaps reorganize
-Provides decorators to cache state- or history-dependent functions.
+This module defines the `history_cache` decorator.
 
-`state_cache` is for functions that take a state. `history_cache` is for
-functions that take a history browser.
+See its documentation for more information.
 '''
+
+# todo perhaps reorganize
 #todo: make sure the cache gets lost on pickling
 
 from __future__ import with_statement

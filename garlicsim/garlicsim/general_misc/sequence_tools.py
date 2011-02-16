@@ -37,8 +37,8 @@ def combinations(sequence, n=None, start=0):
 
     `n` specifies the number of items. (Use `None` for all possible sizes
     together.) `start` specifies the index number of the member from which to
-    start giving combinations. (Keep the default of `0` for doing the whole
-    sequence.)
+    start giving combinations. (Keep the default of `start=0` for doing the
+    whole sequence.)
     
     Example:
     
@@ -61,7 +61,6 @@ def combinations(sequence, n=None, start=0):
         for (i, thing) in itertools.islice(enumerate(sequence), start, None):
             for sub_result in combinations(sequence, n - 1, start=(i + 1)):
                 yield [thing] + sub_result
-
 
 
 ### Not using now, might want in future:

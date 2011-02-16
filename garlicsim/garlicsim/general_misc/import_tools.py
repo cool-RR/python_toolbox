@@ -118,6 +118,11 @@ def import_if_exists(module_name, silent_fail=False):
 
 
 def _module_exists_in_some_zip_path(module_name):
+    '''
+    Return whether a module by the name `module_name` exists in a zip archive.
+    
+    Used internally by `exists`.
+    '''
     assert '.' not in module_name
     
     zip_paths = [path for path in sys.path if '.zip' in path]
@@ -125,15 +130,17 @@ def _module_exists_in_some_zip_path(module_name):
     
     for zip_path in zip_paths:
 
-        # Trying to create a zip imported:
+        # Trying to create a zip importer:
         try:
             zip_importer = zipimport.zipimporter(zip_path)
         except zipimport.ZipImportError:
             continue
             # Excepted `ZipImportError` because we may have zip paths in
             # `sys.path` that don't really exist, which causes `zipimport` to
-            # raise `ZipImportError`. todo: should find smarter way of catching
-            # this, excepting `ZipImportError` is not a good idea.
+            # raise `ZipImportError`.
+            #
+            # todo: should find smarter way of catching this, excepting
+            # `ZipImportError` is not a good idea.
         
         if zip_importer.find_module(module_name) is not None:    
             return True
@@ -151,7 +158,7 @@ def exists(module_name):
     
     Currently implemented for top-level packages only. (i.e. no dots.)
     
-    (Supports modules imported from a zip file.)
+    Supports modules imported from a zip file.
     '''
     assert '.' not in module_name
     try:
