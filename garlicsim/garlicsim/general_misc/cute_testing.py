@@ -109,10 +109,19 @@ def assert_same_signature(*callables):
     
     
 class _MissingAttribute(object):
-    pass
+    '''Object signifying that an attribute was not found.'''
     # todo: make uninstanciable
 
+    
 def assert_polite_wrapper(wrapper, wrapped=None, same_signature=True):
+    '''
+    Assert that `wrapper` is a polite function wrapper around `wrapped`.
+    
+    A function wrapper (usually created by a decorator) has a few
+    responsibilties; maintain the same name, signature, documentation etc. of
+    the original function, and a few others. Here we check that the wrapper did
+    all of those things.
+    '''
     # todo: in all decorators, should be examining the wrapped function's dict
     # and update the new one with it. can't test for this here though, cause
     # the decorator has the right to change them.
@@ -124,3 +133,4 @@ def assert_polite_wrapper(wrapper, wrapped=None, same_signature=True):
         assert getattr(wrapper, attribute, _MissingAttribute) == \
                getattr(wrapped, attribute, _MissingAttribute)
     assert wrapper.__wrapped__ == wrapped
+    

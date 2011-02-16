@@ -97,7 +97,6 @@ def is_iterable(thing):
             return True
         
 
-
 def get_length(iterable):
     '''Get the length of an iterable.'''
     i = 0
