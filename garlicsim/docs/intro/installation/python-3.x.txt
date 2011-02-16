@@ -71,8 +71,8 @@ Installing from source
 GarlicSim is pure-Python and thus doesn't require building. These are the three
 source packages:
 
-* `garlicsim source package (for Python 3.x) .tar.gz <http://pypi.python.org/packages/source/g/garlicsim_py3/garlicsim_py3-0.6.1.tar.gz>`_
-* `garlicsim_lib source package (for Python 3.x) .tar.gz <http://pypi.python.org/packages/source/g/garlicsim_lib_py3/garlicsim_lib_py3-0.6.1.tar.gz>`_
+* `garlicsim source package (for Python 3.x) .tar.gz <http://pypi.python.org/packages/source/g/garlicsim_py3/garlicsim_py3-0.6.2.tar.gz>`_
+* `garlicsim_lib source package (for Python 3.x) .tar.gz <http://pypi.python.org/packages/source/g/garlicsim_lib_py3/garlicsim_lib_py3-0.6.2.tar.gz>`_
 
 You may use the standard ``python setup.py install`` to install.
 
@@ -82,8 +82,8 @@ Windows binaries
 
 Binaries for Windows are available:
 
-* `garlicsim Windows installer (for Python 3.x) <http://pypi.python.org/packages/any/g/garlicsim_py3/garlicsim_py3-0.6.1.win32.msi>`_
-* `garlicsim_lib Windows installer (for Python 3.x) <http://pypi.python.org/packages/any/g/garlicsim_lib_py3/garlicsim_lib_py3-0.6.1.win32.msi>`_
+* `garlicsim Windows installer (for Python 3.x) <http://pypi.python.org/packages/any/g/garlicsim_py3/garlicsim_py3-0.6.2.win32.msi>`_
+* `garlicsim_lib Windows installer (for Python 3.x) <http://pypi.python.org/packages/any/g/garlicsim_lib_py3/garlicsim_lib_py3-0.6.2.win32.msi>`_
   
 
 .. _Python 3.1: http://www.python.org/download/releases/3.1.3/

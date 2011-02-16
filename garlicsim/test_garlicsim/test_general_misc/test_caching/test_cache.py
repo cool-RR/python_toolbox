@@ -1,9 +1,7 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''
-Testing module for `garlicsim.general_misc.caching.cache`.
-'''
+'''Testing module for `garlicsim.general_misc.caching.cache`.'''
 
 from __future__ import with_statement
 
@@ -159,7 +157,7 @@ def test_signature_preservation():
     
     
 def test_api():
-    
+    '''Test the API of cached functions.'''
     f = cache()(counting_func)
     g = cache(max_size=3)(counting_func)
     
@@ -183,7 +181,7 @@ def test_api():
         
         
 def test_double_caching():
-    
+    '''Test that `cache` detects and prevents double-caching of functions.'''
     f = cache()(counting_func)
     g = cache()(f)
     

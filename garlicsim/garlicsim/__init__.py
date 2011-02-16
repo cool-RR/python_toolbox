@@ -32,6 +32,6 @@ from garlicsim.synchronous_crunching import (simulate, list_simulate,
 __all__ = ['Project', 'simulate', 'list_simulate', 'iter_simulate']
 
 
-__version_info__ = garlicsim.general_misc.version_info.VersionInfo(0, 6, 1)
-__version__ = '0.6.1'
+__version_info__ = garlicsim.general_misc.version_info.VersionInfo(0, 6, 2)
+__version__ = '0.6.2'
 

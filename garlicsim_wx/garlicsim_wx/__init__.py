@@ -37,8 +37,8 @@ from .app import App
 __all__ = ['Frame', 'GuiProject', 'start']
 
 
-__version_info__ = garlicsim.general_misc.version_info.VersionInfo(0, 6, 1)
-__version__ = '0.6.1'
+__version_info__ = garlicsim.general_misc.version_info.VersionInfo(0, 6, 2)
+__version__ = '0.6.2'
 
 simpack_places = []
 '''

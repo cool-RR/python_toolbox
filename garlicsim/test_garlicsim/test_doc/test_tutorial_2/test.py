@@ -166,8 +166,8 @@ def assert_module_was_copied_with_correct_newlines(destination_path,
     '''
     Assert `source_module` was copied to `destination_path` with good newlines.
     
-    e.g, on Linux the file should use '\n' for newlines, on Windows it should
-    use '\r\n'.
+    e.g, on Linux/Mac the file should use '\n' for newlines, on Windows it
+    should use '\r\n'.
     '''
     
     assert os.path.isfile(destination_path)

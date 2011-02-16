@@ -25,7 +25,7 @@ def test_garlicsim_wx_doesnt_import():
     # just assume that `nose` imported only `garlicsim` without importing
     # `garlicsim.general_misc.cute_profile`.
     
-    if garlicsim.__version_info__ <= (0, 6, 1):
+    if garlicsim.__version_info__ <= (0, 6, 2):
         raise nose.SkipTest("Don't know how to ensure nose/wing start test "
                             "with nothing imported")
     import garlicsim_wx

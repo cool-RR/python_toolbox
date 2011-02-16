@@ -46,9 +46,9 @@ def __check_prerequisites():
                                 "http://garlicsim.org and follow the "
                                 "instructions for installation.")
         else:
-            if garlicsim.__version_info__ < (0, 6, 1):
+            if garlicsim.__version_info__ < (0, 6, 2):
                 raise MissingModule("You have `garlicsim` version %s, while "
-                                    "version 0.6.1 is required. Go to "
+                                    "version 0.6.2 is required. Go to "
                                     "http://garlicsim.org and follow the "
                                     "instructions for installation." %
                                     garlicsim.__version_info__)

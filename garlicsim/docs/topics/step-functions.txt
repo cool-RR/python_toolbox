@@ -252,7 +252,7 @@ The history step generator is also known as
 The history step generator combines the advantages of a step generator with the
 history-dependent approach.
 
-As of GarlicSim 0.6.1, the history step generator is not yet implemented. Sorry.
+As of GarlicSim 0.6.2, the history step generator is not yet implemented. Sorry.
 
 
 Step functions can take arguments
