@@ -31,13 +31,13 @@ def test():
             # create a small file and check we can access it:
             
             with open('just_a_file', 'w') as my_file:
-                my_file.write("One two three.")
+                my_file.write('One two three.')
             
             with open('just_a_file', 'r') as my_file:
-                assert my_file.read() == "One two three."
+                assert my_file.read() == 'One two three.'
         
         with open(os.path.join(temp_dir, 'just_a_file'), 'r') as my_file:
-            assert my_file.read() == "One two three."
+            assert my_file.read() == 'One two three.'
         
         assert os.getcwd() == old_cwd
     finally:
@@ -59,27 +59,28 @@ def test_exception():
                 # Instead we'll create a small file and check we can access it:
                 
                 with open('just_a_file', 'w') as my_file:
-                    my_file.write("One two three.")
+                    my_file.write('One two three.')
                 
                 with open('just_a_file', 'r') as my_file:
-                    assert my_file.read() == "One two three."
+                    assert my_file.read() == 'One two three.'
                 
                 raise MyException
             
         except MyException:
 
             with open(os.path.join(temp_dir, 'just_a_file'), 'r') as my_file:
-                assert my_file.read() == "One two three."
+                assert my_file.read() == 'One two three.'
                 
         else:
             raise Exception
         
         with open(os.path.join(temp_dir, 'just_a_file'), 'r') as my_file:
-            assert my_file.read() == "One two three."
+            assert my_file.read() == 'One two three.'
         
     finally:
         shutil.rmtree(temp_dir)
-    
+
+        
 def test_as_decorator():
     '''Test `TempWorkingDirectorySetter` used as a decorator.'''
     temp_dir = tempfile.mkdtemp(prefix='temp_test_garlicsim_')
@@ -92,17 +93,17 @@ def test_as_decorator():
             # create a small file and check we can access it:
             
             with open('just_a_file', 'w') as my_file:
-                my_file.write("One two three.")
+                my_file.write('One two three.')
             
             with open('just_a_file', 'r') as my_file:
-                assert my_file.read() == "One two three."
+                assert my_file.read() == 'One two three.'
                 
         f()
         
         cute_testing.assert_polite_wrapper(f)
         
         with open(os.path.join(temp_dir, 'just_a_file'), 'r') as my_file:
-            assert my_file.read() == "One two three."
+            assert my_file.read() == 'One two three.'
         
         assert os.getcwd() == old_cwd
     finally:

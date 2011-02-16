@@ -1,7 +1,7 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''Testing module for `garlicsim.general_misc.cute_iter_tools.shorten`.'''
+'''Testing module for `garlicsim.general_misc.sequence_tools.combinations`.'''
 
 import nose.tools
 
@@ -41,7 +41,7 @@ def test():
     
     
 def test_all_sizes():
-    
+    '''Test using `n=None` so combinations of all sizes are returned.'''
     assert list(combinations(xrange(4))) == sequence_tools.flatten(
         list(combinations(xrange(4), i)) for i in xrange(1, 4+1)
     )

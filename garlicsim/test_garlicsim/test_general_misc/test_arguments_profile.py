@@ -20,8 +20,7 @@ def test_only_defaultless():
     '''
     Test `ArgumentsProfile` on a function with defaultless arguments only.
     '''
-    def func(a, b, c):
-        pass
+    def func(a, b, c): pass
     
     a1 = ArgumentsProfile(func, 1, 2, 3)
     assert a1.args == (1, 2, 3)
@@ -30,8 +29,7 @@ def test_only_defaultless():
     a2 = ArgumentsProfile(func, 1, c=3, b=2)
     a3 = ArgumentsProfile(func, c=3, a=1, b=2)
     a4 = ArgumentsProfile(func, 1, **{'c': 3, 'b': 2})
-    a5 = \
-        ArgumentsProfile(func, **OrderedDict((('c', 3), ('b', 2), ('a', 1))))
+    a5 = ArgumentsProfile(func, **OrderedDict((('c', 3), ('b', 2), ('a', 1))))
     assert a1 == a2 == a3 == a4 == a5
     
     for arg_prof in [a1, a2, a3, a4, a5]:
@@ -66,8 +64,7 @@ def test_simplest_defaultful():
     '''
     Test `ArgumentsProfile` on a function with defaultful arguments.
     '''
-    def func(a, b, c='three', d='four'):
-        pass
+    def func(a, b, c='three', d='four'): pass
     
     a1 = ArgumentsProfile(func, 'one', 'two')
     assert a1.args == ('one', 'two')
@@ -107,8 +104,7 @@ def test_defaultful_long_first():
     '''
     Test `ArgumentsProfile` on function with long first defaultful argument.
     '''
-    def func(a, b, creativity=3, d=4):
-        pass
+    def func(a, b, creativity=3, d=4): pass
     
     a1 = ArgumentsProfile(func, 1, 2)
     assert a1.args == (1, 2)
@@ -137,8 +133,7 @@ def test_defaultful_long_last():
     leading to the last long one rather than specifying the keyword, because it
     results in a shorter overall call.
     '''
-    def func(a, b, c=3, dragon=4):
-        pass
+    def func(a, b, c=3, dragon=4): pass
     
     a1 = ArgumentsProfile(func, 1, 2)
     assert a1.args == (1, 2)
@@ -164,8 +159,7 @@ def test_many_defaultfuls_some_long():
     Test `ArgumentsProfile` with many defaultful arguments, some of them long.
     '''
     
-    def func(a, b, c=3, dragon=4, e=5, f=6, glide=7, human=8):
-        pass
+    def func(a, b, c=3, dragon=4, e=5, f=6, glide=7, human=8): pass
         
     a1 = ArgumentsProfile(func, 1, 2, glide='boom')
     assert a1.args == (1, 2)
@@ -187,8 +181,7 @@ def test_many_defaultfuls_some_long_2():
     '''
     Test `ArgumentsProfile` with many defaultful arguments, some of them long.
     '''
-    def func(a, b, c=3, dragon=4, e=5, f=6, glide=7, human=8, iris=9):
-        pass
+    def func(a, b, c=3, dragon=4, e=5, f=6, glide=7, human=8, iris=9): pass
         
     a1 = ArgumentsProfile(func, 1, 2, glide='boom')
     assert a1.args == (1, 2)
@@ -208,8 +201,7 @@ def test_many_defaultfuls_some_long_2():
     
 def test_defaultful_and_star_args():
     '''Test `ArgumentsProfile` with defaultful arguments and `*args`.'''
-    def func(a, b, c=3, draconian=4, *args):
-        pass
+    def func(a, b, c=3, draconian=4, *args): pass
         
     a1 = ArgumentsProfile(func, 1, 2)
     assert a1.args == (1, 2)
@@ -229,8 +221,7 @@ def test_defaultful_and_star_args():
     
 def test_many_defaultfuls_and_star_args():
     '''Test `ArgumentsProfile` with many defaultful arguments and `*args`.'''
-    def func(a, b, c='three', d='four', e='five', f='six', *args):
-        pass
+    def func(a, b, c='three', d='four', e='five', f='six', *args): pass
     
     a1 = ArgumentsProfile(func, 'one', 'two', f='roar')
     assert a1.args == ('one', 'two')
@@ -256,8 +247,7 @@ def test_many_defaultfuls_and_star_args():
     
 def test_defaultfuls_and_star_kwargs():
     '''Test `ArgumentsProfile` with defaultful arguments and `**kwargs`.'''
-    def func(a, b, c=3, d=4, **kwargs):
-        pass
+    def func(a, b, c=3, d=4, **kwargs): pass
     
     a1 = ArgumentsProfile(func, 1, 2)
     assert a1.args == (1, 2)
@@ -320,6 +310,8 @@ def test_defaultfuls_and_star_kwargs():
         #                                                                     #
         for key in arg_prof:
             assert key in arg_prof
+        assert 'agaofgnafgadf' not in arg_prof
+        assert '**' not in arg_prof
         #                                                                     #
         ### Finished testing `.__contains__`. #################################
     
@@ -330,6 +322,8 @@ def test_many_defaultfuls_and_star_args_and_star_kwargs():
     '''
     def func(a, b, c='three', d='four', e='five', f='six', *args, **kwargs):
         pass
+    
+    func(None, None)
     
     a1 = ArgumentsProfile(func, 'one', 'two', f='boomboomboom', __awesome=True,
                           big=True)

@@ -62,9 +62,7 @@ def test_dict_key():
     
 def test_as_decorator():
     '''Test `TempValueSetter` used as a decorator.'''
-    def a():
-        pass
-    a()
+    def a(): pass
     a.x = 1
     
     @TempValueSetter((a, 'x'), 2)
