@@ -40,7 +40,7 @@ def test_endable():
     simpacks = import_tools.import_all(simpacks_package).values()
     
     # Making sure that we didn't miss any simpack by counting the number of
-    # sub-folders in the `simpacks_package` folders:
+    # sub-folders in the `simpacks` folder:
     simpacks_dir = \
         os.path.dirname(simpacks_package.__file__)
     assert len(path_tools.list_sub_folders(simpacks_dir)) == \

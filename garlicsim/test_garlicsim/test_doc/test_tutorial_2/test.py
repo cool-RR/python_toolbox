@@ -100,7 +100,7 @@ def test():
                                                                       
             state_module_path = os.path.join(simpack_path, 'state.py')
             
-            check_module_was_copied_with_correct_newlines(
+            assert_module_was_copied_with_correct_newlines(
                 state_module_path,
                 garlicsim.scripts.simpack_template.simpack_name.state
             )
@@ -161,8 +161,14 @@ def test():
         shutil.rmtree(temp_dir)
     
         
-def check_module_was_copied_with_correct_newlines(destination_path,
-                                                  source_module):
+def assert_module_was_copied_with_correct_newlines(destination_path,
+                                                   source_module):
+    '''
+    Assert `source_module` was copied to `destination_path` with good newlines.
+    
+    e.g, on Linux the file should use '\n' for newlines, on Windows it should
+    use '\r\n'.
+    '''
     
     assert os.path.isfile(destination_path)
     assert isinstance(source_module, types.ModuleType)
