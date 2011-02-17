@@ -126,7 +126,7 @@ setup_kwargs = {
 
 if 'py2exe' in sys.argv:
     
-    path_to_add = os.path.abspath('./py2exe_cruft')
+    path_to_add = os.path.realpath('./py2exe_cruft')
     if path_to_add not in sys.path:
         sys.path.append(path_to_add)
         # Adding it because there's some dll there that we need, and `py2exe`
