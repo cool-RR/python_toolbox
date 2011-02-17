@@ -5,6 +5,8 @@
 
 import itertools
 
+from garlicsim.general_misc.nifty_collections import Counter
+
         
 def are_equal_regardless_of_order(seq1, seq2):
     '''
@@ -13,7 +15,7 @@ def are_equal_regardless_of_order(seq1, seq2):
     
     Currently will fail for items that have problems with comparing.
     '''
-    return sorted(seq1) == sorted(seq2)
+    return Counter(seq1) == Counter(seq2)
         
 
 def flatten(iterable):
