@@ -60,7 +60,7 @@ class TempValueSetter(ContextManager):
             ### Finished handling the `(dict, key)` case. ###
             
         elif callable(second):
-            # `second` is a dictoid; so we were probably handed a `(getter,
+            # `second` is a callable; so we were probably handed a `(getter,
             # setter)` pair.
             if not callable(first):
                 raise Exception("`variable` must be either an `(object, "
