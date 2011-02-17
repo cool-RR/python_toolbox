@@ -15,7 +15,6 @@ alongside the `garlicsim_wx` folder, as in the official git repo of GarlicSim.
 
 # todo: this module needs to be rewritten.
 
-
 import setuptools
 import py2exe
 import imp
@@ -339,21 +338,21 @@ def get_all_data_files():
 
 def get_all_submodules(package_name):
     '''
-    Get all submodules of a package, recursively.
+    Get all submodules of a package, recursively, including itself.
     
     This includes both modules and packages.
     
     Example:
     
-        get_all_subpackages('numpy') == ['numpy.compat._inspect',
+        get_all_subpackages('numpy') == ['numpy', 'numpy.compat._inspect',
         'numpy.compat.setup', 'numpy.compat.setupscons', ... ]
         
     '''
     package_path = cute_find_module(package_name)
     
-    subpackage_names = [(package_name + '.' + m) for m in 
-                        setuptools.find_packages(package_path)] + \
-                     [package_name]
+    subpackage_names = [package_name] + \
+        [(package_name + '.' + m) for m in
+         setuptools.find_packages(package_path)]
     
     modules = []
     for subpackage_name in subpackage_names:
@@ -428,7 +427,7 @@ py2exe_kwargs = {
         
         'py2exe': {
             
-            # Putting distribution files in `win_dist` at the root of the\
+            # Putting distribution files in `win_dist` at the root of the
             # repo:            
             'dist_dir': '../win_dist',
             
@@ -438,6 +437,7 @@ py2exe_kwargs = {
             
             'includes': includes,
             
+            # A nasty bug was solved by this:
             'dll_excludes': ['UxTheme.dll'],
             
         }
