@@ -13,6 +13,9 @@ This module assumes that the `garlicsim` and `garlicsim_lib` folders are
 alongside the `garlicsim_wx` folder, as in the official git repo of GarlicSim.
 '''
 
+# todo: this module needs to be rewritten.
+
+
 import setuptools
 import py2exe
 import imp
@@ -259,7 +262,7 @@ def get_test_garlicsim_wx_data_files():
     for package in test_garlicsim_wx_packages:
         path = package_to_path(package)
         all_files_and_folders = \
-            glob.glob(path_to_test_garlicsim_wx + '/' + path + '/*')
+            glob.glob(path + '/*')
         data_files = [f for f in all_files_and_folders if
                       (not '.py' in f[-4:]) and (not os.path.isdir(f))]
         total_data_files.append(('lib/' + path, data_files))
