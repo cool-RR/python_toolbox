@@ -29,14 +29,16 @@ import shutil
 
 def zip_folder(folder, zip_path, ignored_patterns=[]):
     '''
-
-    note: creates a folder inside the zip with the same name of the original
+    Zip `folder` into a zip file specified by `zip_path`.
+    
+    Note: Creates a folder inside the zip with the same name of the original
     folder, in contrast to other implementation which put all of the files on
     the root level of the zip.
     
-    Doesn't put empty folders in the zip file.
+    `ignored_patterns` are fnmatch-style patterns specifiying file-paths to
+    ignore.
     
-    tododoc ignored_patterns, they're fnmatch style
+    Any empty sub-folders will be ignored.
     '''
     assert os.path.isdir(folder)
     source_folder = os.path.realpath(folder)
@@ -69,8 +71,12 @@ def zip_folder(folder, zip_path, ignored_patterns=[]):
                 zip_file.write(absolute_file_path, destination_file_path)
 
                 
-    
 def make_zip():
+    '''
+    Zip all the GarlicSim packages into zip archives in the `build` folder.
+    
+    This cleans any previous zip archives from the `build` folder.
+    '''
     ###########################################################################
     #                                                                         #
     module_path = os.path.realpath(os.path.split(__file__)[0])

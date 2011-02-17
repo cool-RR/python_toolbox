@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-Defines utilities for testing GarlicSim from zip.
+Defines utilities for testing GarlicSim from a zip archive.
 
 Used by `run_tests.py` in the GarlicSim repo root.
 '''
