@@ -89,6 +89,7 @@ if produce_installer:
 ### Deleting old build files: #################################################
 #                                                                             #
 def assert_no_unknown_folders():
+    '''Assert there are no unknown folders in `garlicsim_wx`.'''
     existing_folders = set(
         [name for name in os.listdir(garlicsim_wx_path) if
          os.path.isdir(os.path.join(garlicsim_wx_path, name))]

@@ -38,7 +38,7 @@ frozen = getattr(sys, 'frozen', None)
 
 
 if frozen:
-    our_path = os.path.split(sys.executable)[0]
+    our_path = os.path.realpath(os.path.split(sys.executable)[0])
 else: # not frozen
     our_path = os.path.realpath(os.path.split(__file__)[0])
 
@@ -170,7 +170,7 @@ def wantFile(self, file):
     dummy, ext = nose.selector.op_splitext(base)
     pysrc = ext == '.py'
     
-    ### Taking sourceless binary python files: ################################
+    ### Taking sourceless binary Python files: ################################
     #                                                                         #
     is_binary_python_module = (ext in ['.pyc', '.pyo'])
 
@@ -182,7 +182,7 @@ def wantFile(self, file):
     wanted = self.matches(base) and (pysrc or 
          (is_binary_python_module and not has_corresponding_source_file))
     #                                                                         #
-    ### Finished taking sourceless binary python files. #######################
+    ### Finished taking sourceless binary Python files. #######################
     
     plug_wants = self.plugins.wantFile(file)
     if plug_wants is not None:
@@ -303,7 +303,8 @@ if __name__ == '__main__':
         sys.stdout.write(__doc__ + '\n')
         exit()
     
-    sys.stdout.write('Preparing to run tests using Python %s\n' % sys.version)    
+    sys.stdout.write('Preparing to run tests using Python %s\n' % \
+                     sys.version)    
     
     testing_from_zip = '--from-zip' in argv
     testing_from_py2exe = ('--from-py2exe' in argv) or \
@@ -315,7 +316,7 @@ if __name__ == '__main__':
     
     if testing_from_zip + testing_from_py2exe + testing_from_win_installer > 1:
         raise Exception("Can test either from repo, or from zip, or from "
-                        "py2exe, or from windows installer. Can't have more "
+                        "py2exe, or from Windows installer. Can't have more "
                         "than one.")
         
     if testing_from_py2exe:
@@ -376,15 +377,18 @@ if __name__ == '__main__':
             if temp_result != 0:
                 sys.exit(temp_result)
                 
-            sys.stdout.write('Now please manually run the `GarlicSim-x.y.z.exe` '
-                             'installer and then run `run_tests.exe` in the '
-                             'installation folder. Sorry about that.\n')
+            sys.stdout.write(
+                'Now please manually run the `GarlicSim-x.y.z.exe` '
+                'installer and then run `run_tests.exe` in the '
+                'installation folder. Sorry about that.\n'
+            )
             sys.exit(0)
     
     if testing_from_zip:
         argv.remove('--from-zip')
         zip_testing_utilities = import_by_path(
-            os.path.join(our_path, 'misc', 'testing', 'zip', 'testing_utilities')
+            os.path.join(our_path, 'misc', 'testing', 'zip',
+                         'testing_utilities')
         )
         zip_testing_utilities.prepare_zip_testing(package_names)
         
@@ -412,4 +416,6 @@ if __name__ == '__main__':
             sys.stdout.write('Finished testing from `py2exe` distribution.\n')
         elif testing_from_win_installer:
             sys.stdout.write('Finished testing from Windows installation.\n')
+        else:
+            sys.stdout.write('Finished testing from repo.\n')
 
