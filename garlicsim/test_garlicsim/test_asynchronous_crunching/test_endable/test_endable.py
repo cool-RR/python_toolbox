@@ -28,6 +28,15 @@ from ..shared import MustachedThreadCruncher
 
 def non_ending_inplace_step(state):
     '''A no-op inplace step that doesn't end the simulation.'''
+    pass
+
+
+def non_ending_history_step(history_browser):
+    '''A minimal history step that doesn't end the simulation.'''
+    old_state = history_browser[-1]
+    new_state = garlicsim.misc.state_deepcopy.state_deepcopy(old_state)
+    new_state.clock += 1
+    return new_state
 
 
 def test_endable():
@@ -331,8 +340,11 @@ def check(simpack, cruncher_type):
     ### Testing end creation in middle of block: ##############################
     #                                                                         #
     
+    my_non_ending_step = non_ending_history_step if \
+        my_simpack_grokker.history_dependent else non_ending_inplace_step
+    
     nodes_in_tree = len(project.tree.nodes)
-    nodes = list(project.iter_simulate(root, 8, non_ending_inplace_step))
+    nodes = list(project.iter_simulate(root, 8, my_non_ending_step))
     assert len(project.tree.nodes) == nodes_in_tree + 8
     
     middle_node = nodes[-4]
