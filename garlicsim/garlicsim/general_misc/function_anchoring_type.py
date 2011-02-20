@@ -43,8 +43,9 @@ class FunctionAnchoringType(type):
         my_getted_vars = misc_tools.getted_vars(my_type)
         # Repeat after me: "Getted, not dict."
         
-        functions_to_anchor = [value for value in my_getted_vars.itervalues()
-                               if isinstance(value, types.FunctionType)]
+        functions_to_anchor = [value for key, value in my_getted_vars.items()
+                               if isinstance(value, types.FunctionType) and not
+                               misc_tools.is_magic_variable_name(key)]
         for function in functions_to_anchor:
             module_name = function.__module__
             module = sys.modules[module_name]
@@ -54,7 +55,7 @@ class FunctionAnchoringType(type):
             # be careful and ensure no object is already defined by the same
             # name in the module level: (todotest)
             try:
-                already_defined_object = getattr(module_name, function_name)
+                already_defined_object = getattr(module, function_name)
             except AttributeError:
                 # Good, there is no object defined under our anchor address.
                 # This is the normal case.
