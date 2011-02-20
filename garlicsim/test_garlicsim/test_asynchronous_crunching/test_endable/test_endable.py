@@ -338,9 +338,12 @@ def check(simpack, cruncher_type):
     middle_node = nodes[-4]
     assert middle_node.state.clock == 5
     assert nodes[1].block == middle_node.block == nodes[-1].block
+    assert len(middle_node.block) == 8
+    
 
     project.begin_crunching(middle_node, infinity, step_profile)
     total_nodes_added = 0
+    assert project.crunching_manager.jobs
     while project.crunching_manager.jobs:
         time.sleep(0.1)
         total_nodes_added += project.sync_crunchers()
@@ -348,6 +351,8 @@ def check(simpack, cruncher_type):
     
     assert len(middle_node.ends) == 1
     assert middle_node.block is not nodes[-1].block
+    assert len(middle_node.block) == 5
+    assert len(nodes[-1].block) == 3
         
     #                                                                         #
     ### Finished testing end creation in middle of block. #####################

@@ -45,6 +45,9 @@ class End(TreeMember):
         self.step_profile = step_profile
         '''The step options profile with which the end was reached.'''
         
+        if parent.block and not parent.is_last_on_block():
+            parent.block.split(parent)
+        
         
     def __len__(self):
         '''Just return 1. This is useful because of blocks.'''
