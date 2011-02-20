@@ -27,7 +27,7 @@ from ..shared import MustachedThreadCruncher
 
 
 def non_ending_inplace_step(state):
-    pass
+    '''A no-op inplace step that doesn't end the simulation.'''
 
 
 def test_endable():
@@ -330,19 +330,25 @@ def check(simpack, cruncher_type):
     
     ### Testing end creation in middle of block: ##############################
     #                                                                         #
+    
     nodes_in_tree = len(project.tree.nodes)
     nodes = list(project.iter_simulate(root, 8, non_ending_inplace_step))
     assert len(project.tree.nodes) == nodes_in_tree + 8
     
-    middle_node = nodes[-3]
-    assert middle_node.clock == 5
+    middle_node = nodes[-4]
+    assert middle_node.state.clock == 5
     assert nodes[1].block == middle_node.block == nodes[-1].block
 
-    project.begin_crunching(middle_node, step_profile, infinity)
+    project.begin_crunching(middle_node, infinity, step_profile)
+    total_nodes_added = 0
     while project.crunching_manager.jobs:
         time.sleep(0.1)
         total_nodes_added += project.sync_crunchers()
+    assert total_nodes_added == 0
     
+    assert len(middle_node.ends) == 1
+    assert middle_node.block is not nodes[-1].block
+        
     #                                                                         #
     ### Finished testing end creation in middle of block. #####################
     
