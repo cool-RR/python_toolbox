@@ -43,12 +43,16 @@ class TempValueSetter(ContextManager):
         # to inspect `variable` and figure out which one of these options the
         # user chose, and then obtain from that a `(getter, setter)` pair that
         # we could use.
+        
+        bad_input_exception = Exception(
+            '`variable` must be either an `(object, attribute_string)` pair, '
+            'a `(dict, key)` pair, or a `(getter, setter)` pair.'
+        )
+        
         try:
             first, second = variable
         except Exception:
-            raise Exception("`variable` must be either an `(object, "
-                            "attribute_string)` pair, a `(dict, key)` pair, "
-                            "or a `(getter, setter)` pair.")
+            raise bad_input_exception
         if hasattr(first, '__getitem__') and hasattr(first, 'get') and \
            hasattr(first, '__setitem__') and hasattr(first, '__delitem__'):
             # `first` is a dictoid; so we were probably handed a `(dict, key)`
@@ -63,17 +67,13 @@ class TempValueSetter(ContextManager):
             # `second` is a callable; so we were probably handed a `(getter,
             # setter)` pair.
             if not callable(first):
-                raise Exception("`variable` must be either an `(object, "
-                                "attribute_string)` pair, a `(dict, key)` "
-                                "pair, or a `(getter, setter)` pair.")
+                raise bad_input_exception
             self.getter, self.setter = first, second
             ### Finished handling the `(getter, setter)` case. ###
         else:
             # All that's left is the `(object, attribute_string)` case.
             if not isinstance(second, basestring):
-                raise Exception("`variable` must be either an `(object, "
-                                "attribute_string)` pair, a `(dict, key)` "
-                                "pair, or a `(getter, setter)` pair.")
+                raise bad_input_exception
             
             parent, attribute_name = first, second
             self.getter = lambda: getattr(parent, attribute_name)
