@@ -36,7 +36,7 @@ class End(TreeMember):
         '''
         The parent node of this end.
         
-        Note that this parent node will not have this end as a child; It will
+        Note that this parent node will not have this end as a child; it will
         list the end in its `.ends` attribute.
         '''
         

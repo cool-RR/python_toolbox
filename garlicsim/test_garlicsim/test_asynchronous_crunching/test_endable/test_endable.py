@@ -26,6 +26,10 @@ import test_garlicsim
 from ..shared import MustachedThreadCruncher
 
 
+def non_ending_inplace_step(state):
+    pass
+
+
 def test_endable():
     '''
     Test handling of endable simpacks.
@@ -323,5 +327,24 @@ def check(simpack, cruncher_type):
     
     #                                                                         #
     ### Finished testing `Project.simulate`. ##################################
+    
+    ### Testing end creation in middle of block: ##############################
+    #                                                                         #
+    nodes_in_tree = len(project.tree.nodes)
+    nodes = list(project.iter_simulate(root, 8, non_ending_inplace_step))
+    assert len(project.tree.nodes) == nodes_in_tree + 8
+    
+    middle_node = nodes[-3]
+    assert middle_node.clock == 5
+    assert nodes[1].block == middle_node.block == nodes[-1].block
+
+    project.begin_crunching(middle_node, step_profile, infinity)
+    while project.crunching_manager.jobs:
+        time.sleep(0.1)
+        total_nodes_added += project.sync_crunchers()
+    
+    #                                                                         #
+    ### Finished testing end creation in middle of block. #####################
+    
     
     
