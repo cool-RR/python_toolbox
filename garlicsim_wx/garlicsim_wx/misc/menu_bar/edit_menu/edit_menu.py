@@ -44,7 +44,7 @@ class EditMenu(CuteMenu):
         
                 
         self.cut_button = self.Append(
-            wx.ID_CUT,
+            -1, # Make it `wx.ID_CUT` after solved 11.04 bugs
             'Cu&t', # Add '\tCtrl+X' after solved bug
             ' Cut the current selection, copying to the clipboard and '
             'deleting it from the simulation'
@@ -53,7 +53,7 @@ class EditMenu(CuteMenu):
         
                 
         self.copy_button = self.Append(
-            wx.ID_COPY,
+            -1, # Make it `wx.ID_COPY` after solved 11.04 bugs
             '&Copy', # Add '\tCtrl+C' after solved bug
             ' Copy the current selection to the clipboard'
         )
@@ -61,7 +61,7 @@ class EditMenu(CuteMenu):
         
                 
         self.paste_button = self.Append(
-            wx.ID_PASTE,
+            -1, # Make it `wx.ID_PASTE` after solved 11.04 bugs
             '&Paste', # Add '\tCtrl+V' after solved bug
             ' Paste the content of the clipboard into the simulation'
         )
