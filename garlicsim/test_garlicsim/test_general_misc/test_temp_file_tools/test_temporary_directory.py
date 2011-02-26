@@ -5,6 +5,11 @@
 
 '''
 
+from __future__ import with_statement
+
+import re
+import tempfile
+
 import nose.tools
 from garlicsim.general_misc.third_party import unittest2
 
@@ -51,7 +56,7 @@ class TestCase(unittest2.TestCase):
                      % nbase)
 
         
-class test_TemporaryDirectory():
+class test_TemporaryDirectory(TestCase):
     '''Test TemporaryDirectory().'''
 
     def do_create(self, dir=None, pre="", suf="", recurse=1):
@@ -66,7 +71,7 @@ class test_TemporaryDirectory():
         if recurse:
             self.do_create(tmp.name, pre, suf, recurse-1)
         with open(os.path.join(tmp.name, "test.txt"), "wb") as f:
-            f.write(b"Hello world!")
+            f.write("Hello world!")
         return tmp
 
     def test_mkdtemp_failure(self):

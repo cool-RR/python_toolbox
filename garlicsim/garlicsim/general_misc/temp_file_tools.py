@@ -8,6 +8,7 @@ from __future__ import with_statement
 import tempfile
 import sys
 import os as _os
+import warnings as _warnings
 
 from garlicsim.general_misc.context_manager import ContextManager
 
@@ -25,7 +26,8 @@ class TemporaryDirectory(ContextManager):
     in it are removed.
     '''
 
-    def __init__(self, suffix='', prefix=template, dir=None):
+
+    def __init__(self, suffix='', prefix=tempfile.template, dir=None):
         self._closed = False
         self.name = None # Handle mkdtemp throwing an exception
         self.name = tempfile.mkdtemp(suffix, prefix, dir)
@@ -40,7 +42,7 @@ class TemporaryDirectory(ContextManager):
         if self.name and not self._closed:
             try:
                 self._rmtree(self.name)
-            except (TypeError, AttributeError) as ex:
+            except (TypeError, AttributeError), ex:
                 # Issue #10188: Emit a warning on stderr
                 # if the directory could not be cleaned
                 # up due to missing globals
