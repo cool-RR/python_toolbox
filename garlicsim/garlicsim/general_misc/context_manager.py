@@ -461,3 +461,8 @@ class ContextManager(object):
                     "function? The generator function must yield exactly one "
                     "time."
                 )
+            
+            
+class BlankContextManager(ContextManager):
+    def manage_context(self):
+        yield self

@@ -11,7 +11,8 @@ import sys
 import cStringIO
 import subprocess
 
-from garlicsim.general_misc.context_manager import ContextManager
+from garlicsim.general_misc.context_manager import (ContextManager,
+                                                    BlankContextManager)
 from garlicsim.general_misc.temp_value_setters import TempValueSetter
 
 
@@ -26,17 +27,30 @@ class OutputCapturer(ContextManager):
             
         assert output_capturer.output == 'woo!\n'
         
+    tododoc and todotest stderr stdout
     '''
-    def __init__(self):
+    def __init__(self, stdout=True, stderr=True):
         self.string_io = cStringIO.StringIO()
-        self._temp_stdout_setter = \
-            TempValueSetter((sys, 'stdout'), self.string_io)
+        
+        if stdout:
+            self._stdout_temp_setter = \
+                TempValueSetter((sys, 'stdout'), self.string_io)
+        else: # not stdout
+            self._stdout_temp_setter = BlankContextManager
+            
+        if stderr:
+            self._stderr_temp_setter = \
+                TempValueSetter((sys, 'stderr'), self.string_io)
+        else: # not stderr
+            self._stderr_temp_setter = BlankContextManager
+            
         self.output = None
         
     def manage_context(self):
         '''Manage the `OutputCapturer`'s context.'''
-        with self._temp_stdout_setter:
-            yield self
+        with self._stdout_temp_setter:
+            with self._stderr_temp_setter:
+                yield self
         self.output = self.string_io.getvalue()
 
         

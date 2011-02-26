@@ -23,13 +23,13 @@ class TestCase(unittest2.TestCase):
     str_check = re.compile(r'[a-zA-Z0-9_-]{6}$')
 
     def setUp(self):
-        self._warnings_manager = support.check_warnings()
+        #self._warnings_manager = support.check_warnings()
         self._warnings_manager.__enter__()
         warnings.filterwarnings('ignore', category=RuntimeWarning,
                                 message='mktemp', module=__name__)
 
     def tearDown(self):
-        self._warnings_manager.__exit__(None, None, None)
+        pass #self._warnings_manager.__exit__(None, None, None)
 
 
     def failOnException(self, what, ei=None):
