@@ -74,7 +74,7 @@ class TemporaryDirectory(ContextManager):
     _remove = staticmethod(_os.remove)
     _rmdir = staticmethod(_os.rmdir)
     _os_error = _os.error
-    _warn = _warnings.warn
+    _warn = staticmethod(_warnings.warn)
 
     def _rmtree(self, path):
         # Essentially a stripped down version of shutil.rmtree.  We can't

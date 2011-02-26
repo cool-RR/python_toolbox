@@ -8,7 +8,9 @@
 from __future__ import with_statement
 
 import re
+import os
 import tempfile
+import warnings
 
 import nose.tools
 from garlicsim.general_misc.third_party import unittest2
@@ -16,7 +18,12 @@ from garlicsim.general_misc.third_party import unittest2
 import garlicsim
 
 from garlicsim.general_misc.temp_file_tools import TemporaryDirectory
+from garlicsim.general_misc.sys_tools import OutputCapturer
 
+has_stat = hasattr(os, 'stat')
+if has_stat:
+    import stat
+    
 
 class TestCase(unittest2.TestCase):
 
@@ -24,7 +31,7 @@ class TestCase(unittest2.TestCase):
 
     def setUp(self):
         #self._warnings_manager = support.check_warnings()
-        self._warnings_manager.__enter__()
+        #self._warnings_manager.__enter__()
         warnings.filterwarnings('ignore', category=RuntimeWarning,
                                 message='mktemp', module=__name__)
 
@@ -123,7 +130,7 @@ class test_TemporaryDirectory(TestCase):
                 modules.append(stat)
             # Currently broken, so suppress the warning
             # that is otherwise emitted on stdout
-            with support.captured_stderr() as err:
+            with OutputCapturer(stdout=False, stderr=True) as output_capturer:
                 with NulledModules(*modules):
                     d.cleanup()
             # Currently broken, so stop spurious exception by
@@ -151,15 +158,17 @@ class test_TemporaryDirectory(TestCase):
             modules = [os, os.path]
             if has_stat:
                 modules.append(stat)
-            with support.captured_stderr() as err:
+            with OutputCapturer(stdout=False, stderr=True) as output_capturer:
                 with NulledModules(*modules):
                     d.cleanup()
+            output_capturer
             message = err.getvalue().replace('\\\\', '\\')
             self.assertIn("while cleaning up",  message)
             self.assertIn(d.name,  message)
 
             # Check for the resource warning
-            with support.check_warnings(('Implicitly', ResourceWarning), quiet=False):
+            with support.check_warnings(('Implicitly', ResourceWarning),
+                                        quiet=False):
                 warnings.filterwarnings("always", category=ResourceWarning)
                 d.__del__()
             self.assertFalse(os.path.exists(d.name),
