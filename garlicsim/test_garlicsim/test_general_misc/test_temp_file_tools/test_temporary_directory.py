@@ -9,6 +9,7 @@ from __future__ import with_statement
 
 import re
 import os
+import sys
 import tempfile
 import warnings
 
