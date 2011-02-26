@@ -24,6 +24,9 @@ class TemporaryDirectory(ContextManager):
 
     Upon exiting the context, the directory and everthing contained
     in it are removed.
+    
+    blocktodo: should this act on __init__ or on __enter__? wait for answer
+    from python-dev
     '''
 
 
