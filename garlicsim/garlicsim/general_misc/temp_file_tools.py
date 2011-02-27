@@ -34,7 +34,7 @@ class TemporaryFolder(ContextManager):
     def __enter__(self):
         assert not self._closed
         self.path = tempfile.mkdtemp(suffix=self.suffix, prefix=self.prefix)
-        return self
+        return self.path
 
     
     def __exit__(self, type_, value, traceback):

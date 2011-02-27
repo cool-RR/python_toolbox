@@ -17,23 +17,24 @@ from garlicsim.general_misc.temp_file_tools import TemporaryFolder
 
 def test_basic():
     '''Test the basic working of `TemporaryFolder`.'''
-    with TemporaryFolder() as t1:
-        assert str(t1) == t1.path
-        assert os.path.exists(t1.path)
-        assert os.path.isdir(t1.path)
+    with TemporaryFolder() as tf1path:
+        assert isinstance(tf1path, str)
+        assert os.path.exists(tf1path)
+        assert os.path.isdir(tf1path)
         
-        with TemporaryFolder() as t2:
-            assert str(t2) == t2.path
-            assert os.path.exists(str(t2))
-            assert os.path.isdir(str(t2))
+        tf2 = TemporaryFolder()
+        with tf2 as tf2path:
+            assert str(tf2) == tf2.path == tf2path
+            assert os.path.exists(str(tf2))
+            assert os.path.isdir(str(tf2))
             
-        assert not os.path.exists(str(t2))
-        assert not os.path.isdir(str(t2))
+        assert not os.path.exists(str(tf2))
+        assert not os.path.isdir(tf2path)
                 
-        assert os.path.exists(t1.path)
-        assert os.path.isdir(t1.path)
+        assert os.path.exists(tf1path)
+        assert os.path.isdir(tf1path)
         
-        file_path = os.path.join(t1.path, 'my_file')
+        file_path = os.path.join(tf1path, 'my_file')
         with open(file_path, 'w') as my_file:
             my_file.write('Woo hoo!')
         
@@ -43,8 +44,8 @@ def test_basic():
         with open(file_path, 'r') as my_file:
             assert my_file.read() == 'Woo hoo!'
             
-    assert not os.path.exists(t1.path)
-    assert not os.path.isdir(t1.path)
+    assert not os.path.exists(tf1path)
+    assert not os.path.isdir(tf1path)
     
     assert not os.path.exists(file_path)
     assert not os.path.isdir(file_path)

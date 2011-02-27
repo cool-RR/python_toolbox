@@ -18,6 +18,7 @@ from garlicsim.general_misc.temp_value_setters import \
 from garlicsim.general_misc import sys_tools
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import cute_inspect
+from garlicsim.general_misc import temp_file_tools
 
 import garlicsim.scripts.simpack_template.simpack_name.state
 import garlicsim.scripts.start_simpack
@@ -84,18 +85,19 @@ def test():
     # place:
     assert not import_tools.exists('_coin_flip')
     
-    temp_dir = tempfile.mkdtemp(prefix='temp_test_garlicsim_')
-    try:
-        with TempWorkingDirectorySetter(temp_dir):
+    with temp_file_tools.TemporaryFolder(prefix='temp_test_garlicsim_') \
+                                                          as temp_folder:
+        temp_folder_path = temp_folder.path
+        with TempWorkingDirectorySetter(temp_folder_path):
             with sys_tools.OutputCapturer() as output_capturer:
                 garlicsim.scripts.start_simpack.start(
                     argv=['start_simpack.py', '_coin_flip']
                 )
             assert output_capturer.output == \
-                ("`_coin_flip` simpack created successfully! Explore the "
-                 "`_coin_flip` folder and start filling in the contents of "
-                 "your new simpack.\n")
-            simpack_path = os.path.join(temp_dir, '_coin_flip')
+                ('`_coin_flip` simpack created successfully! Explore the '
+                 '`_coin_flip` folder and start filling in the contents of '
+                 'your new simpack.\n')
+            simpack_path = os.path.join(temp_folder_path, '_coin_flip')
             assert os.path.isdir(simpack_path)
                                                                       
             state_module_path = os.path.join(simpack_path, 'state.py')
@@ -109,7 +111,7 @@ def test():
                 state_file.write(state_module_contents_for_coinflip)
                 
                          
-            with sys_tools.TempSysPathAdder(temp_dir):
+            with sys_tools.TempSysPathAdder(temp_folder_path):
                 import _coin_flip
                 state = _coin_flip.State.create_root()
                 assert repr(vars(state)) == \
@@ -156,9 +158,6 @@ def test():
                 assert 0.4 < (results.count(6000)/len(results)) < 0.95
             
             
-            
-    finally:
-        shutil.rmtree(temp_dir)
     
         
 def assert_module_was_copied_with_correct_newlines(destination_path,
