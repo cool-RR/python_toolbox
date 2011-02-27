@@ -24,7 +24,7 @@ living cells and organisms.
     If you're having trouble going through this tutorial, you may ask for help in 
     `GarlicSim's mailing list`_.
     
-    .. _GarlicSim's mailing list: mailto:garlicsim@librelist.org
+    .. _GarlicSim's mailing list: https://groups.google.com/forum/#!forum/garlicsim
 
 Basic simulation commands using the :mod:`life <garlicsim_lib.simpacks.life>` simpack
 =====================================================================================

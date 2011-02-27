@@ -43,11 +43,13 @@ Current screenshot, showing the [Game of Life](http://en.wikipedia.org/wiki/Conw
 
 # Mailing lists #
 
-The main mailing list is **[garlicsim@librelist.org](mailto:garlicsim@librelist.org)**.
+All general discussion happens at **[the GarlicSim Google
+Group](https://groups.google.com/forum/#!forum/garlicsim)**. If you need help
+with GarlicSim, you're welcome to post your question and we'll try to help you.
 
-The development mailing list is **[garlicsim.dev@librelist.org](mailto:garlicsim.dev@librelist.org)**.
-
-To subscribe just send an email. These lists are hosted by [librelist](http://librelist.org), which is currently slightly experimental.
+The development mailing list is
+**[GarlicSim-dev](https://groups.google.com/forum/#!forum/garlicsim-dev)**.
+This is where we discuss the development of GarlicSim itself.
 
 
 # Core and GUI #

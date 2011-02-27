@@ -370,4 +370,3 @@ same chance of getting $6,000 at the end. Though that is the subject for another
 simulation...
 
 .. _expected value: http://en.wikipedia.org/wiki/Expected_value
-.. _mailing list: garlicsim@librelist.org
