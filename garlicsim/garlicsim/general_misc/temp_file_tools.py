@@ -12,12 +12,12 @@ from garlicsim.general_misc.context_manager import ContextManager
 
 
 
-class TemporaryDirectory(ContextManager):
+class TemporaryFolder(ContextManager):
     '''tododoc Create and return a temporary directory.  This has the same
     behavior as mkdtemp but can be used as a context manager.  For
     example:
 
-        with TemporaryDirectory() as tmpdir:
+        with TemporaryFolder() as tmpdir:
             ...
 
     Upon exiting the context, the directory and everthing contained
