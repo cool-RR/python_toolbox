@@ -11,7 +11,7 @@ Mailing Lists
 
 If you need help with GarlicSim, post a message on `the GarlicSim Google Group
 <https://groups.google.com/forum/#!forum/garlicsim>`_. If you need any kind of
-help, or have anything to say, say it here. You'll get a quick response.
+help, or have anything to say, say it there. You'll get a quick response.
 
 If you want to help on the development of GarlicSim itself, come say hello on
 `the GarlicSim-dev Google Group
