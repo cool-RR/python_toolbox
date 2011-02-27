@@ -32,6 +32,8 @@ class TemporaryDirectory(ContextManager):
 
         
     def __enter__(self):
+        assert not self._closed
+        self.path = tempfile.mkdtemp(suffix=self.suffix, prefix=self.prefix)
         return self
 
     
@@ -39,3 +41,7 @@ class TemporaryDirectory(ContextManager):
         assert not self._closed
         shutil.rmtree(self.path)
         self._closed = True
+        
+    
+    def __str__(self):        
+        return self.path or ''
