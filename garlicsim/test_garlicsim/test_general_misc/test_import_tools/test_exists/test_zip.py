@@ -18,6 +18,7 @@ import nose.tools
 from garlicsim.general_misc import sys_tools
 from garlicsim.general_misc import cute_testing
 from garlicsim.general_misc import import_tools
+from garlicsim.general_misc import temp_file_tools
 from garlicsim.general_misc.import_tools import exists
 
 from . import resources as __resources_package
@@ -32,11 +33,10 @@ def test_zip():
     zip_string = pkg_resources.resource_string(resources_package,
                                                'archive_with_module.zip')
     
-    temp_dir = tempfile.mkdtemp(prefix='temp_test_garlicsim_')
-    
-    try:
+    with temp_file_tools.TemporaryFolder(prefix='temp_test_garlicsim_') \
+                                                          as temp_folder:
 
-        temp_zip_path = os.path.join(temp_dir, 'archive_with_module.zip')
+        temp_zip_path = os.path.join(temp_folder, 'archive_with_module.zip')
         
         with open(temp_zip_path, 'wb') as temp_zip_file:
             
@@ -51,5 +51,3 @@ def test_zip():
                    ('Module for testing `import_tools.exists` on zip-archived '
                     'modules.')
             
-    finally:
-        shutil.rmtree(temp_dir)

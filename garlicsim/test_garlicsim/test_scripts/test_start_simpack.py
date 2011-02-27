@@ -8,6 +8,7 @@ import shutil
 import glob
 
 from garlicsim.general_misc import sys_tools
+from garlicsim.general_misc import temp_file_tools
 from garlicsim.general_misc.temp_value_setters import \
      TempWorkingDirectorySetter
 
@@ -32,31 +33,25 @@ of the simpack.
 
 def test_implicit_help():
     '''Test help text comes up when giving no arguments.'''
-    temp_dir = tempfile.mkdtemp(prefix='temp_test_garlicsim_')
-    try:
-        with TempWorkingDirectorySetter(temp_dir):
+    with temp_file_tools.TemporaryFolder(prefix='temp_test_garlicsim_') \
+                                                          as temp_folder:
+        with TempWorkingDirectorySetter(temp_folder):
             with sys_tools.OutputCapturer() as output_capturer:
                 garlicsim.scripts.start_simpack.start(
                     argv=['start_simpack.py']
                 )
             assert output_capturer.output == _help_text + '\n'
             assert glob.glob('*') == []
-            
-    finally:
-        shutil.rmtree(temp_dir)
         
 
 def test_explicit_help():
     '''Test help text comes up when '--help' argument.'''
-    temp_dir = tempfile.mkdtemp(prefix='temp_test_garlicsim_')
-    try:
-        with TempWorkingDirectorySetter(temp_dir):
+    with temp_file_tools.TemporaryFolder(prefix='temp_test_garlicsim_') \
+                                                          as temp_folder:
+        with TempWorkingDirectorySetter(temp_folder):
             with sys_tools.OutputCapturer() as output_capturer:
                 garlicsim.scripts.start_simpack.start(
                     argv=['start_simpack.py', '--help']
                 )
             assert output_capturer.output == _help_text + '\n'
             assert glob.glob('*') == []
-            
-    finally:
-        shutil.rmtree(temp_dir)

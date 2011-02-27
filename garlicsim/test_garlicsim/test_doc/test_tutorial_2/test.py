@@ -87,8 +87,7 @@ def test():
     
     with temp_file_tools.TemporaryFolder(prefix='temp_test_garlicsim_') \
                                                           as temp_folder:
-        temp_folder_path = temp_folder.path
-        with TempWorkingDirectorySetter(temp_folder_path):
+        with TempWorkingDirectorySetter(temp_folder):
             with sys_tools.OutputCapturer() as output_capturer:
                 garlicsim.scripts.start_simpack.start(
                     argv=['start_simpack.py', '_coin_flip']
@@ -97,7 +96,7 @@ def test():
                 ('`_coin_flip` simpack created successfully! Explore the '
                  '`_coin_flip` folder and start filling in the contents of '
                  'your new simpack.\n')
-            simpack_path = os.path.join(temp_folder_path, '_coin_flip')
+            simpack_path = os.path.join(temp_folder, '_coin_flip')
             assert os.path.isdir(simpack_path)
                                                                       
             state_module_path = os.path.join(simpack_path, 'state.py')
@@ -111,7 +110,7 @@ def test():
                 state_file.write(state_module_contents_for_coinflip)
                 
                          
-            with sys_tools.TempSysPathAdder(temp_folder_path):
+            with sys_tools.TempSysPathAdder(temp_folder):
                 import _coin_flip
                 state = _coin_flip.State.create_root()
                 assert repr(vars(state)) == \
