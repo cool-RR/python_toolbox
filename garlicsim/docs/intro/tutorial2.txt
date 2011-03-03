@@ -369,5 +369,11 @@ from the beginning, and then double that if you lost, and you would have had the
 same chance of getting $6,000 at the end. Though that is the subject for another
 simulation...
 
+What's next
+===========
+
+Check out :ref:`tutorial part 3 <intro-tutorial3>`, where we'll learn how to
+load our new simpack into the GarlicSim GUI!
+
 .. _expected value: http://en.wikipedia.org/wiki/Expected_value
 .. _mailing list: garlicsim@librelist.org

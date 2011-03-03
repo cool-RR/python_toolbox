@@ -15,24 +15,45 @@ In this **optional** tutorial, we will load our simpack into
 :mod:`garlicsim_wx`, which is the GarlicSim GUI.
 
 GUI is an abbreviation of `Graphical User Interface`_. What it means is that
-it's a program like Word or Photoshop, with windows, menus and buttons and
-other graphical widgets. This is what it looks like:
+it's a program like Word or Photoshop, with windows, menus, buttons and other
+graphical widgets. This is what it looks like on Windows 7:
 
 .. image:: /images/medium_screenshot.png
     :align: center
+    
+The GarlicSim GUI works on the three major operating systems: Windows XP/7, Mac
+OS, and Linux.
 
-tododoc: thumbnailed screenshot here
 
-Some people, usually hard-core programmers, don't like GUIs. So please note:
-:mod:`garlicsim_wx`, a.k.a. the GarlicSim GUI, is a **completely optional**
-part of GarlicSim. If you prefer working with :mod:`garlicsim` in the shell,
-you can keep doing that, and you can ``import garlicsim`` in your project and
-use it as a normal Python package without even installing :mod:`garlicsim_wx`,
-which is completely separated from :mod:`garlicsim`.
+.. admonition:: The GUI is optional
 
-Motivation for our simpack
-==========================
+    Some people, usually hard-core programmers, don't like GUIs. So please
+    note: :mod:`garlicsim_wx`, a.k.a. the GarlicSim GUI, is a **completely
+    optional** part of GarlicSim. If you prefer working with :mod:`garlicsim`
+    in the shell, you can keep doing that, and you can ``import garlicsim`` in
+    your project and use it as a normal Python package without even installing
+    :mod:`garlicsim_wx`, which is completely separated from :mod:`garlicsim`.
+    
+This tutorial assumes that you have :mod:`garlicsim_wx` installed; if you
+don't, :ref:`go here <intro-installation-python-2.x>` to install it.
 
+Loading a simpack into :mod:`garlicsim_wx` without any preparations
+===================================================================
+
+Launch the GarlicSim GUI::
+
+    c:\> GarlicSim.py
+    
+If you installed :mod:`garlicsim_wx` propertly, the GUI would now open up with
+no simulation loaded.
+
+Let's start a new simulation project. Choose ``File -> New...``, and you'll get
+this dialog:
+
+.. image:: /images/screenshot_choose_simpack.png
+    :align: center
+
+    
 A few years ago, I was talking with a friend of mine about gambling. He said, "I
 thought of a really sure-fire way to win money at a coinflip game. (Where it's
 50/50 chance between doubling your money and losing it.) You bet $100. If you
@@ -386,5 +407,6 @@ Around 70%. Not bad, assuming you don't mind losing a lot of money on the other
 from the beginning, and then double that if you lost, and you would have had the
 same chance of getting $6,000 at the end. Though that is the subject for another
 simulation...
+
 
 .. _Graphical User Interface: http://en.wikipedia.org/wiki/Graphical_user_interface
