@@ -18,7 +18,8 @@ GUI is an abbreviation of `Graphical User Interface`_. What it means is that
 it's a program like Word or Photoshop, with windows, menus and buttons and
 other graphical widgets. This is what it looks like:
 
-
+.. image:: /images/medium_screenshot.png
+    :align: center
 
 tododoc: win7 screenshot here
 
