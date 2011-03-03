@@ -323,6 +323,11 @@ a tt {
 }
 
 
+img.align-center {
+    display: block;
+    margin: 0 auto;
+}
+
 /* Overriding Pygments here, because it's hard to extend it properly: */
 
 .nf {
@@ -336,3 +341,5 @@ a tt {
 div.highlight {
     background: none;
 }
+
+/* Done overriding Pygments */

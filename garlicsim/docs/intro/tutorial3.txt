@@ -21,7 +21,7 @@ other graphical widgets. This is what it looks like:
 .. image:: /images/medium_screenshot.png
     :align: center
 
-tododoc: win7 screenshot here
+tododoc: thumbnailed screenshot here
 
 Some people, usually hard-core programmers, don't like GUIs. So please note:
 :mod:`garlicsim_wx`, a.k.a. the GarlicSim GUI, is a **completely optional**
@@ -347,7 +347,7 @@ of the end balances:
     [6000, 2300, 6000, 6000, 6000, 2100, 6000, 6000, <... Truncated>]
     
 Let's get the average amount of money that a gambler ends up with. This should
-let us get a good approximation to the `expected value`_ of this scheme:
+let us get a good approximation to the expected value of this scheme:
     
     >>> sum(results) / len(results)
     4931.3000000000002
