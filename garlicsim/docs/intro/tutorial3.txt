@@ -14,7 +14,11 @@ simpack, ``coin_flip``. We played around with the simpack on the Python shell.
 In this **optional** tutorial, we will load our simpack into
 :mod:`garlicsim_wx`, which is the GarlicSim GUI.
 
-GUI is an abbreviation of `Graphical User Interface`_. What it means is that it's a program with windows and tododoc
+GUI is an abbreviation of `Graphical User Interface`_. What it means is that
+it's a program like Word or Photoshop, with windows, menus and buttons and
+other graphical widgets. This is what it looks like:
+
+
 
 tododoc: win7 screenshot here
 
