@@ -322,10 +322,13 @@ a tt {
     background: #black;
 }
 
-
 img.align-center {
     display: block;
     margin: 0 auto;
+}
+
+.accelerator {
+    text-decoration: underline;
 }
 
 /* Overriding Pygments here, because it's hard to extend it properly: */
