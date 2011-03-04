@@ -56,7 +56,26 @@ and you'll get this dialog:
     :align: center
     :alt: GarlicSim GUI showing the "Choose simpack" dialog
 
+(Again, this screenshot is from Windows 7; if you use a different operating
+system, the interface will look different for you, but don't worry, it'll
+function exactly the same.)
+
+In this dialog the GUI asks us which simpack to use for our new simulation. If
+you want to get to know the GarlicSim GUI, you can have a go at one of the
+bundled simpacks, especially :mod:`garlicsim_lib.simpacks.life`; you can start
+a :mod:`life <garlicsim_lib.simpacks.life>` simulation and try to click all the
+different buttons and menus on the screen to figure out what everything does.
+Assuming you already did that, let's load our own ``coin_flip`` simpack.
+
+Click the :guilabel:`&Add folder containing simpacks...` button. This will open
+a window where you browse around your computer and choose a folder. Choose the
+folder that *contains* the ``coin_flip`` folder that we created in :ref:`the
+previous tutorial <intro-tutorial2>`\ . (Joining us only now? :download:`Click
+here <blocktodo>` to download the ``coin_flip`` simpack.)
     
+
+blocktodo: was here
+
 A few years ago, I was talking with a friend of mine about gambling. He said, "I
 thought of a really sure-fire way to win money at a coinflip game. (Where it's
 50/50 chance between doubling your money and losing it.) You bet $100. If you
