@@ -46,7 +46,7 @@ Launch the GarlicSim GUI::
 
     c:\> GarlicSim.py
     
-If you installed :mod:`garlicsim_wx` propertly, the GUI would now open up with
+If you installed :mod:`garlicsim_wx` properly, the GUI would now open up with
 no simulation loaded.
 
 Let's start a new simulation project. Choose :menuselection:`&File --> &New`,
