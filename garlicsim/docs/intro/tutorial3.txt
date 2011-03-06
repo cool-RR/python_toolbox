@@ -74,11 +74,20 @@ previous tutorial <intro-tutorial2>`\ . (Joining us only now? :download:`Click
 here <downloads/coin_flip.zip>` to download the ``coin_flip`` simpack.)
 
 After you did that, a ``coin_flip`` entry will be added to your simpacks list.
-Choose it and press :guilabel:`Create &project`. You started a new project! You
-would see something like this:
+Choose it and press :guilabel:`Create &project`. Your new project was created!
+You would see something like this:
     
 blocktodo screenshot
 
+Now, we're not going to explain every widget on the GarlicSim GUI in this
+tutorial. But one thing you can notice is the State Viewer. The State Viewer
+displays the current world state. Every simpack displays something different in
+the State Viewer; for example, the :mod:`life <garlicsim_lib.simpacks.life>`
+simpack displays the Life two-dimensional grid, while a physics simpack may
+display a 3D view of bodies colliding.
+
+Because every simpack describes a different
+kind of world, 
 
 blocktodo: was here
 
