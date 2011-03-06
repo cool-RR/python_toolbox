@@ -83,8 +83,22 @@ Now, we're not going to explain every widget on the GarlicSim GUI in this
 tutorial. But one thing you can notice is the State Viewer. The State Viewer
 displays the current world state. Every simpack displays something different in
 the State Viewer; for example, the :mod:`life <garlicsim_lib.simpacks.life>`
-simpack displays the Life two-dimensional grid, while a physics simpack may
-display a 3D view of bodies colliding.
+simpack displays the Life two-dimensional grid, while a Newtonian Physics
+simpack may display a 3D view of bodies colliding.
+
+As you can see in the above screenshot, our ``coin_flip`` simpack displays a
+textual representation of the world state. This is a "no-frills" State Viewer
+that every simpack gets for free. So if your simpack works with
+:mod:`garlicsim`, you can load it into the GUI without programming *anything*,
+and you'll get a basic, no-frills but workable view of the world state in your
+simulation.
+
+Creating dedicated widgets for your simpack
+===========================================
+
+Okay, so it's nice to have basic no-frills widgets for our simpack, but we want
+more. We want to customize how :mod:`garlicsim_wx` displays our state, so it
+will be a pretty graphical display instead of a textual one.
 
 Because every simpack describes a different
 kind of world, 
@@ -101,8 +115,8 @@ If you win *that*, you still have a net win of $100, etc."
 "I guess you have a small chance of losing all your money, that's the drawback."
 
 "Yeah, but you're almost sure to win the $100. So let's say you come to the
-casino with $5,000, and you want to make $1,000. You use my method 10 times in a
-row, and you almost certainly win $1,000!"
+casino with $5,000, and you want to make $1,000. You use my method 10 times in
+a row, and you almost certainly win $1,000!"
 
 "Well, I don't know..."
 
