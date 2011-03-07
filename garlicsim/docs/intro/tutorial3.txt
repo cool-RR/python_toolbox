@@ -71,8 +71,7 @@ Click the :guilabel:`&Add folder containing simpacks...` button. This will open
 a window where you browse around your computer and choose a folder. Choose the
 folder that *contains* the ``coin_flip`` folder that we created in :ref:`the
 previous tutorial <intro-tutorial2>`\ . (Joining us only now? :download:`Click
-here <downloads/coin_flip.zip>` to download the ``coin_flip`` simpack.
-blocktodo: create it)
+here <downloads/coin_flip.zip>` to download the ``coin_flip`` simpack.)
 
 After you did that, a ``coin_flip`` entry will be added to your simpacks list.
 Choose it and press :guilabel:`Create &project`. Your new project was created!
