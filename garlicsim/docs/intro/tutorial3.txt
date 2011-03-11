@@ -105,7 +105,8 @@ will be a pretty graphical display instead of a textual one.
 Let's look at ``coin_flip``\'s folder structure. Note that there is a
 ``coin_flip/wx`` subpackage; this is where you put your GUI definitions. Go
 into the ``coin_flip/wx/widgets/state_viewer.py`` module. You may read the
-helpful comments in that module; and then replace it with the following code::
+helpful comments in that module; and then replace it with the following GUI
+code::
 
     from __future__ import division
     
@@ -244,7 +245,7 @@ helpful comments in that module; and then replace it with the following code::
 
 
 Now go to ``coin_flip/wx/settings.py`` to enable this :class:`StateViewer`
-class. Ensure that file starts with the following::
+class. Ensure that this file starts with the following::
 
     from .widgets import state_viewer as _
     from .widgets import state_creation_dialog as _
@@ -255,13 +256,6 @@ class. Ensure that file starts with the following::
     
     
     BIG_WORKSPACE_WIDGETS = [widgets.state_viewer.StateViewer]
-    
-    # Widgets to show in the middle of the frame. These must be instances of
-    # `garlicsim_wx.widgets.workspace_widget`.
-    #
-    # This is where you usually put your main widget that displays your states.
-    
-    # ...
 
 Okay, we're ready to rock.
     
