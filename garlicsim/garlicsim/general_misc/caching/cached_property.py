@@ -31,7 +31,7 @@ class CachedProperty(object):
         Construct the cached property.
         
         You may optionally pass in the name that this property has in the
-        class; This will save a bit of processing later.
+        class; this will save a bit of processing later.
         '''
         self.getter = getter
         self.our_name = name

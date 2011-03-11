@@ -80,7 +80,7 @@ class CrossProcessPersistent(Persistent):
             if thing:
                 thing._CrossProcessPersistent__skip_setstate = True
                 return thing
-            else: # This object does not exist in our library yet; Let's add it
+            else: # This object does not exist in our library yet; let's add it
                 thing = super(CrossProcessPersistent, cls).__new__(cls)
                 thing._CrossProcessPersistent__uuid = received_uuid
                 library[received_uuid] = thing

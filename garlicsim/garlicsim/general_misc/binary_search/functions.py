@@ -48,7 +48,7 @@ def binary_search(sequence, function, value, rounding=CLOSEST):
     tuple may be `None`)
     
     Note: This function uses `None` to express its inability to find any
-    matches; Therefore, you better not use it on sequences in which None is a
+    matches; therefore, you better not use it on sequences in which None is a
     possible item.
     
     For documentation of rounding options, check `binary_search.roundings`.

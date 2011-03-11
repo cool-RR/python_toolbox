@@ -77,7 +77,7 @@ class CrunchingManager(object):
         Dict that maps each cruncher to its step options profile.
         
         This exists because if the step profile for a job changes, we need to
-        retire the cruncher and make a new one; Crunchers can't change step
+        retire the cruncher and make a new one; crunchers can't change step
         profiles on the fly. So we use this dict to track which step profile
         each cruncher uses.
         '''
@@ -245,7 +245,7 @@ class CrunchingManager(object):
                     
             else: # job.is_done() is True
                 
-                # The job is done; We remove it from the job list, and retire
+                # The job is done; we remove it from the job list, and retire
                 # and delete the cruncher.
                 
                 self.jobs.remove(job)

@@ -4,7 +4,7 @@
 '''
 Module for packaging `garlicsim_wx` as an executable using `py2exe`.
 
-Normally the contents of this module would be in `setup.py`; But `py2exe`
+Normally the contents of this module would be in `setup.py`; but `py2exe`
 introduces so much cruft, and I wanted to keep it away from my `setup.py`. So
 `setup.py` imports this module when it gets a `py2exe` command. This module
 should not be used otherwise.

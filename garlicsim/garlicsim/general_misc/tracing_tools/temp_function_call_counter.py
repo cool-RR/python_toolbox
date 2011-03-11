@@ -55,7 +55,7 @@ class TempFunctionCallCounter(TempValueSetter):
                 parent_object = address_tools.resolve(parent_object_address)
             except Exception:
                 raise Exception("Couldn't obtain parent/name pair from "
-                                "function; Supply one manually or "
+                                "function; supply one manually or "
                                 "alternatively supply a getter/setter pair.")
             first, second = parent_object, function_name
             

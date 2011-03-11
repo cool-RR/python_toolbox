@@ -24,7 +24,7 @@ living cells and organisms.
     If you're having trouble going through this tutorial, you may ask for help in 
     `GarlicSim's mailing list`_.
     
-    .. _GarlicSim's mailing list: mailto:garlicsim@librelist.org
+    .. _GarlicSim's mailing list: https://groups.google.com/forum/#!forum/garlicsim
 
 Basic simulation commands using the :mod:`life <garlicsim_lib.simpacks.life>` simpack
 =====================================================================================
@@ -126,7 +126,7 @@ Let's experiment with :func:`simulate <garlicsim.simulate>` first:
 What the :func:`simulate <garlicsim.simulate>` function did is apply the step
 function of :mod:`life <garlicsim_lib.simpacks.life>` exactly one time. This
 means this new board is what you get from one iteration of the Life simulation.
-We can see it has a bit more structure in it; There are clusters of dead and of
+We can see it has a bit more structure in it; there are clusters of dead and of
 live cells.
 
 What we can do now is supply the :func:`simulate <garlicsim.simulate>` function
@@ -263,7 +263,7 @@ The :class:`Project <garlicsim.Project>` class
 Before we'll create a :class:`Project <garlicsim.Project>` and play around with
 it, I'd like to show you a diagram that describes the inner workings of a
 :class:`Project <garlicsim.Project>`. You're not expected to understand what it
-all means right now; We're just taking a quick peek under the hood.
+all means right now; we're just taking a quick peek under the hood.
 
 .. image:: /images/project.png
     :align: center
@@ -277,7 +277,7 @@ to pass the simpack into it, like so:
 
 :class:`Project <garlicsim.Project>` is the main device used for doing
 simulations in GarlicSim. A project contains a :class:`Tree
-<garlicsim.data_structures.Tree>` within it; This is a time tree, in which we
+<garlicsim.data_structures.Tree>` within it; this is a time tree, in which we
 organize our simulation data. A time tree is generalization of a time line.
 Trees are useful, because they give you the ability to "split" or "fork" the
 simulation at any node you wish, allowing you to explore and analyze different
@@ -287,7 +287,7 @@ Aside from the tree, :class:`Project <garlicsim.Project>` provides powerful
 tools for crunching the simulation. We're going to explain these tools in
 greater depth later, but for now let's just play around with our new project.
 
-In the last section, we played around with a random Life board; This time, we
+In the last section, we played around with a random Life board; this time, we
 will use a specific, famous board called "`Diehard`_"::
 
     >>> state = life.State.create_diehard()
@@ -319,7 +319,7 @@ will use a specific, famous board called "`Diehard`_"::
                                                  
     >>> 
     
-`Diehard`_ is a kind of `Metushelah`_; A small, seemingly innocent state that
+`Diehard`_ is a kind of `Metushelah`_; a small, seemingly innocent state that
 creates a lot of chaos before it eventually dies down, after many simulation
 steps.
 
@@ -343,7 +343,7 @@ info about our node:
 The ``clock 0`` thing means that the clock reading of this node's state is zero.
 The states that will succeed it will have incrementing clock readings. The
 "blockless" thing means that this node is not part of a :class:`Block
-<garlicsim.data_structures.Block>`; More on blocks later.
+<garlicsim.data_structures.Block>`; more on blocks later.
 
 So now our tree has only one node, which is its root. Let's do some crunching to
 add more nodes.
@@ -366,7 +366,7 @@ completed from the workers to implement into the tree. We will explain all about
 :class:`CrunchingManager <garlicsim.asynchronous_crunching.CrunchingManager>`
 later on. For now we will note that by default, the crunching of a
 :class:`Project <garlicsim.Project>` is done on an auxiliary :class:`Thread
-<threading.Thread>`; But by using different cruncher types, it can be done on an
+<threading.Thread>`; but by using different cruncher types, it can be done on an
 auxiliary :class:`Process <multiprocessing.Process>` or even `on a cloud`_.
 
 After a few seconds have passed, we call :meth:`sync_crunchers
@@ -380,7 +380,7 @@ how many nodes were added to the tree. This return value is actually a subclass
 of :class:`int`, with a pretty representation which makes it easy to understand
 its context. It can be manipulated like any other :class:`int`.
 
-(If you got less than 50 nodes added to the tree, don't worry; Just hit
+(If you got less than 50 nodes added to the tree, don't worry; just hit
 :meth:`sync_crunchers <garlicsim.Project.sync_crunchers>` again after a few
 seconds, and by then it should get you the rest of the nodes.)
 
@@ -393,7 +393,7 @@ tree:
 
 Our tree has only one possible :class:`Path <garlicsim.data_structures.Path>` in
 it. A :class:`Path <garlicsim.data_structures.Path>` represents one timeline
-inside a time tree; A direct line of nodes which succeed each other.
+inside a time tree; a direct line of nodes which succeed each other.
 
 Since we didn't make any forks in our tree, it is currently a `degenerate`_
 tree-- It's simply a timeline. So there is only one possible path that goes

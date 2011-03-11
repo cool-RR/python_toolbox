@@ -43,7 +43,7 @@ def cache(max_size=infinity):
     to. (Assuming you don't mind the memory leaks.)
     
     You may optionally specify a `max_size` for maximum number of cached
-    results to store; Old entries are thrown away according to a
+    results to store; old entries are thrown away according to a
     least-recently-used alogrithm. (Often abbreivated LRU.)
     '''
     # todo idea: figure how how complex the function's argspec is, and then
