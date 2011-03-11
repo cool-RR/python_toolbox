@@ -102,6 +102,13 @@ Okay, so it's nice to have basic no-frills widgets for our simpack, but we want
 more. We want to customize how :mod:`garlicsim_wx` displays our state, so it
 will be a pretty graphical display instead of a textual one.
 
+.. admonition:: You need to know wxPython
+
+    In order to code your own customized state viewer, you need to be familiar
+    with `wxPython`_. I recommend `this wxPython tutorial`_.
+    
+
+
 Let's look at ``coin_flip``\'s folder structure. Note that there is a
 ``coin_flip/wx`` subpackage; this is where you put your GUI definitions. Go
 into the ``coin_flip/wx/widgets/state_viewer.py`` module. You may read the
@@ -242,8 +249,7 @@ code::
             # An EVT_SIZE handler. Just some wxPython thing that I think you're
             # supposed to do.
             self.Refresh()
-
-
+            
 Now go to ``coin_flip/wx/settings.py`` to enable this :class:`StateViewer`
 class. Ensure that this file starts with the following::
 
@@ -268,3 +274,5 @@ What's next
 
 This is the end of the tutorial series for now. To understand more about
 GarlicSim, read the :ref:`topical guides <topics-index>`.
+
+.. _wxPython: http://wxpython.org

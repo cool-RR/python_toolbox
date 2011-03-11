@@ -376,4 +376,3 @@ Check out :ref:`tutorial part 3 <intro-tutorial3>`, where we'll learn how to
 load our new simpack into the GarlicSim GUI!
 
 .. _expected value: http://en.wikipedia.org/wiki/Expected_value
-.. _mailing list: garlicsim@librelist.org
