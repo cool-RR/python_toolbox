@@ -266,7 +266,9 @@ Okay, we're ready to rock.
 
 Load the simulation again, and now we'll have a nice graphical display:
 
-blocktodo gif animation
+.. image:: /images/coin_flip_customized_gui.gif
+    :align: center
+    :alt: Customized GUI for the coin-flip simulation
 
 What's next
 ===========
