@@ -102,9 +102,169 @@ Okay, so it's nice to have basic no-frills widgets for our simpack, but we want
 more. We want to customize how :mod:`garlicsim_wx` displays our state, so it
 will be a pretty graphical display instead of a textual one.
 
-Because every simpack describes a different
-kind of world, 
+Let's look at ``coin_flip``\'s folder structure. Note that there is a
+``coin_flip/wx`` subpackage; this is where you put your GUI definitions. Go
+into the ``coin_flip/wx/widgets/state_viewer.py`` module. You may read the
+helpful comments in that module; and then replace it with the following code::
 
+    from __future__ import division
+    
+    import itertools
+    
+    import wx
+    
+    import garlicsim_wx
+    
+    
+    class StateViewer(wx.Panel,
+                      garlicsim_wx.widgets.WorkspaceWidget):
+        # Here you create a widget that will display your state graphically on the
+        # screen.
+        
+        def __init__(self, frame):
+                
+            # We need to call the __init__ of both our base classes:
+            wx.Panel.__init__(self, frame,
+                              style=wx.SUNKEN_BORDER)        
+            garlicsim_wx.widgets.WorkspaceWidget.__init__(self, frame)
+            
+            self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM) # Solves Windows flicker
+            
+            self.state = None
+            
+            self.Bind(wx.EVT_PAINT, self.on_paint)
+            self.Bind(wx.EVT_SIZE, self.on_size)
+            
+            # ...
+            
+    
+            # This next bit will cause the widget to get updated every time the
+            # active state in the GUI is changed:
+            self.gui_project.active_node_changed_emitter.add_output(
+                lambda: self.set_state(self.gui_project.get_active_state())
+            )
+    
+    
+        def set_state(self, state):
+            # Here you set the state to be displayed.
+            self.state = state
+            self.Refresh()
+            
+            
+        def on_paint(self, event):
+            # This is your EVT_PAINT handler, which draws the state on the widget.
+    
+            event.Skip()
+            
+            ### Creating brushes and pens: ########################################
+            #                                                                     #
+            background_brush = wx.Brush(self.GetBackgroundColour())
+            blue_brush = wx.Brush(wx.NamedColor('Blue'))
+            gold_brush = wx.Brush(wx.NamedColor('Gold'))
+            
+            black_pen = wx.Pen(wx.NamedColor('Black'), width=1.5)
+            red_pen = wx.Pen(wx.NamedColor('Red'), width=1.5)
+            #                                                                     #
+            ### Finished creating brushes and pens. ###############################
+            
+            dc = wx.BufferedPaintDC(self)
+            dc.SetBackground(background_brush)
+            dc.Clear()
+            if self.state is None:
+                return
+            
+            gc = wx.GraphicsContext.Create(dc)
+            assert isinstance(gc, wx.GraphicsContext)
+            client_width, client_height = self.GetClientSize()
+            
+            ### Writing balance amount as text: ###################################
+            #                                                                     #
+            dc.SetFont(wx.Font(20, wx.FONTFAMILY_DEFAULT,
+                               wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL))
+            dc.DrawLabel(
+                str(self.state.balance),
+                wx.Rect(0, (client_height - 40), client_width, 40),
+                wx.ALIGN_CENTER_HORIZONTAL | wx.ALIGN_CENTER_VERTICAL
+            )
+            #                                                                     #
+            ### Finished writing balance amount as text. ##########################
+            
+            ### Calculating number of coins: ######################################
+            #                                                                     #
+            n_coins_won = (self.state.last_bet_result // 100) if \
+                          self.state.last_bet_result > 0 else 0
+            n_coins_lost = (-self.state.last_bet_result // 100) if \
+                           self.state.last_bet_result < 0 else 0
+            n_static_coins = (self.state.balance // 100) - n_coins_won
+            #                                                                     #
+            ### Finished calculating number of coins. #############################
+            
+            def iterate_coin_positions():
+                '''Generator for positioning coins in two vertical stacks.'''
+                left_x = (client_width / 2) - 50
+                right_x = (client_width / 2) + 50
+                for i in itertools.count():
+                    y = (client_height - 50) - (6 * i)
+                    yield (left_x, y)
+                    yield (right_x, y)
+            
+            def draw_coin(coin_position):
+                x, y = coin_position
+                gc.DrawEllipse((x - 40), (y - 10), 80, 20)
+                    
+            ### Drawing coins: ####################################################
+            #                                                                     #
+            coin_positions_iterator = iterate_coin_positions()
+            
+            gc.SetBrush(blue_brush)
+            gc.SetPen(black_pen)
+            for i in range(n_static_coins): # Drawing static coins:
+                coin_position = coin_positions_iterator.next()
+                draw_coin(coin_position)
+            
+            gc.SetBrush(wx.TRANSPARENT_BRUSH)
+            gc.SetPen(red_pen)
+            for i in range(n_coins_lost): # Drawing lost coins if any:
+                coin_position = coin_positions_iterator.next()
+                draw_coin(coin_position)
+                
+            gc.SetBrush(gold_brush)
+            gc.SetPen(black_pen)
+            for i in range(n_coins_won): # Drawing won coins if any:
+                coin_position = coin_positions_iterator.next()
+                draw_coin(coin_position)        
+            #                                                                     #
+            ### Finished drawing coins. ###########################################
+            
+            
+        def on_size(self, event):
+            # An EVT_SIZE handler. Just some wxPython thing that I think you're
+            # supposed to do.
+            self.Refresh()
+
+
+Now go to ``coin_flip/wx/settings.py`` to enable this :class:`StateViewer`
+class. Ensure that file starts with the following::
+
+    from .widgets import state_viewer as _
+    from .widgets import state_creation_dialog as _
+    from . import widgets
+    
+    
+    ########### *All* of the settings in this module are optional. ################
+    
+    
+    BIG_WORKSPACE_WIDGETS = [widgets.state_viewer.StateViewer]
+    
+    # Widgets to show in the middle of the frame. These must be instances of
+    # `garlicsim_wx.widgets.workspace_widget`.
+    #
+    # This is where you usually put your main widget that displays your states.
+    
+    # ...
+
+Okay, we're ready to rock.
+    
 blocktodo: was here
 
 A few years ago, I was talking with a friend of mine about gambling. He said, "I
