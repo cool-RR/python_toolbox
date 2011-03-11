@@ -6,7 +6,7 @@
 ########### *All* of the settings in this module are optional. ################
 
 
-# BIG_WORKSPACE_WIDGETS = widgets.state_viewer.StateViewer
+# BIG_WORKSPACE_WIDGETS = [widgets.state_viewer.StateViewer]
 
 # Widgets to show in the middle of the frame. These must be instances of
 # `garlicsim_wx.widgets.workspace_widget`.
