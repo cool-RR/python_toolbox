@@ -253,7 +253,7 @@ Now go to ``coin_flip/wx/settings.py`` to enable this :class:`StateViewer`
 class. Ensure that this file starts with the following::
 
     from .widgets import state_viewer as _
-    from .widgets import state_creation_dialog as _
+    # from .widgets import state_creation_dialog as _
     from . import widgets
     
     
