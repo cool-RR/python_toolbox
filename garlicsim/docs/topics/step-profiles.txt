@@ -138,7 +138,7 @@ was run. You can probably guess what ``birth`` and ``survival`` mean in the
 context of Life simulation: They mean how many live neighbors a cell should
 have for it to become alive (i.e. ``birth``), or stay alive (i.e. ``survival``.)
 
-But Life is only a case study for us; We want to understand what GarlicSim did
+But Life is only a case study for us; we want to understand what GarlicSim did
 here exactly and how we can use arguments in our own simpacks.
 
 
@@ -382,13 +382,13 @@ to learn more about how it works.
 How step profiles are used in the tree
 ======================================
 
-We accessed our step profile before from the node; Every :class:`Node
+We accessed our step profile before from the node; every :class:`Node
 <garlicsim.data_structures.Node>` has a ``.step_profile`` attribute which
 contains the step profile with which it was crunched. Note though that the
 nodes that you create with functions like :meth:`create_root
 <garlicsim.Project.create_root>` and :meth:`create_messy_root
 <garlicsim.Project.create_messy_root>` will have a ``.step_profile`` attribute
-equal to :data:`None`; The reasoning is that since they were created
+equal to :data:`None`; the reasoning is that since they were created
 "artificially" and not by crunching, they should not have an actual step
 profile.
 
@@ -399,7 +399,7 @@ node that they were cloned from.
 Blocks have a step profile too
 ==============================
 
-Blocks have a ``.step_profile`` attribute too; Whichever step profile is there
+Blocks have a ``.step_profile`` attribute too; whichever step profile is there
 is the step profile that was used for crunching each of the nodes in the
 :class:`Block <garlicsim.data_structures.Block>`. Indeed, one of the conditions
 regarding blocks is that all the member nodes have been crunched using the same

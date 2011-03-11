@@ -41,7 +41,7 @@ class State(garlicsim.data_structures.State):
     
 
     def step_generator(self, birth=[3], survival=[2, 3], randomness=0):
-        # This isn't really more efficient than regular step; This is just a
+        # This isn't really more efficient than regular step; this is just a
         # demonstration that `garlicsim` can handle step generators.
         current_state = self
         while True:

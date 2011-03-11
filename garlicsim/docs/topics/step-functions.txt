@@ -13,7 +13,7 @@ The step function is the most important part of a simpack. The step function
 contains the world laws and tells GarlicSim how to calculate the next world
 state in a simulation.
 
-Writing a simple step function is easy and we'll show how to do it below; After
+Writing a simple step function is easy and we'll show how to do it below; after
 you've mastered that, we'll show you more advanced ways to define and use step
 functions. We'll also show you the different kinds of step functions that
 GarlicSim allows.
@@ -22,9 +22,9 @@ Different kinds of step functions
 =================================
 
 Below we will show the different kinds of step functions. Keep in mind that
-your step function's type will be determined automatically from its name; For
+your step function's type will be determined automatically from its name; for
 example, a step function called ``step`` (or ``my_step`` or ``step_alternate``)
-will be automatically identified as a simple step function; As another example,
+will be automatically identified as a simple step function; as another example,
 a step function called ``history_step_generator`` (or
 ``faster_history_step_generator`` or ``my_awesome_history_step_generator``)
 will be automatically identified as a history step generator.
@@ -174,12 +174,12 @@ The inplace step generator changes the state in place, and after every
 iteration it yields, and after being called again it modifies the state in
 place again, ad infinitum.
 
-Note that the inplace step generator doesn't :py:keyword:`yield` any states; It
+Note that the inplace step generator doesn't :py:keyword:`yield` any states; it
 always yields :data:`None`. It has no need to :py:keyword:`yield` any states,
 since it's changing the state itself, not creating any new state objects.
 
 Similarly to the inplace step function, GarlicSim will take care to duplicate
-any states before they are being fed into the inplace step generator; This will
+any states before they are being fed into the inplace step generator; this will
 be done in :class:`garlicsim.Project`, :func:`garlicsim.list_simulate` and
 :func:`garlicsim.iter_simulate`, but not in :func:`garlicsim.simulate` which
 will actually perform the state in place to enjoy better performance. (Note

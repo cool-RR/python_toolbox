@@ -50,7 +50,7 @@ class HistoryStepGenerator(BaseStep):
     A history step generator takes a history browser and yields new states.
     
     This combines the advantages of a history step function and a step
-    generator; It works as a generator which can be more convenient and it can
+    generator; it works as a generator which can be more convenient and it can
     look at the simulation history which is necessary for some simulations.
     
     (1.1.2011 - Not yet implemented, sorry.)
