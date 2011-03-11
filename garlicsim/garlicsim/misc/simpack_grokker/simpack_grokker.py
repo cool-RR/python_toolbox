@@ -405,7 +405,7 @@ class SimpackGrokker(object):
         function, `*args` and `**kwargs`. But in this function we're being a
         little smarter so the user will have less work.
         
-        You do not need to enter a step function; We will use the default one,
+        You do not need to enter a step function; we will use the default one,
         unless you specify a different one as `step_function`.
         
         You may also pass in a step profile as `step_profile`, and it will be

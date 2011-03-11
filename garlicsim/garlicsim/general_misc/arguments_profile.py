@@ -353,7 +353,7 @@ class ArgumentsProfile(object):
         
         if s_star_kwargs and getcallargs_result[s_star_kwargs]:
             
-            # We can't just add the `**kwargs` as is; We need to add them
+            # We can't just add the `**kwargs` as is; we need to add them
             # according to canonical ordering. So we need to sort them first.
             
             unsorted_star_kwargs_names = \

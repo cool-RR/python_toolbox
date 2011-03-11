@@ -16,7 +16,7 @@ class ActiveStepProfileIndicator(wx.Window):
     '''
     Widget for indicating which step profile is active.
     
-    This widget appears next to *every* step profile in the list; But only for
+    This widget appears next to *every* step profile in the list; but only for
     the active step profile it shows a little black triangle, while for the
     others it shows nothing.
     '''

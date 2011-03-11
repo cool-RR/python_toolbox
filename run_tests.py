@@ -19,7 +19,7 @@ GarlicSim-specific arguments:
         
     --from-win-installer
         Test GarlicSim when installed from Windows installer.        
-        Currently not fully implemented; Only creates a Windows installer for
+        Currently not fully implemented; only creates a Windows installer for
         you as `GarlicSim-x.y.z.exe`, you have to run it yourself and then run
         `run_tests.exe` in the installation folder.
 

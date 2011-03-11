@@ -23,7 +23,7 @@ class BaseHistoryBrowser(object):
 
     With a `HistoryBrowser` one can request states from the simulation's
     timeline. States can be requested by clock time or position in the timeline
-    or by other measures; See documentation for this class's methods.
+    or by other measures; see documentation for this class's methods.
     
     This is an abstract base class from which all history browsers should
     subclass.

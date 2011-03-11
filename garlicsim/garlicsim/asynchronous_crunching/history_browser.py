@@ -41,7 +41,7 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser, ContextManager):
     
     With a `HistoryBrowser` one can request states from the simulation's
     timeline. States can be requested by clock time or position in the timeline
-    or by other measures; See documentation for this class's methods.
+    or by other measures; see documentation for this class's methods.
     
     Since we do not know whether the states we request have been implemented in
     the tree already, or they are still in the `.work_queue`, it's the job of

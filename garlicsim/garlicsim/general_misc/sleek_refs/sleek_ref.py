@@ -41,7 +41,7 @@ class SleekRef(object):
     you are still able to. (Assuming you don't mind the memory leaks or stop
     them some other way.)
     
-    When you call a dead sleekref, it doesn't return `None` like weakref; It
+    When you call a dead sleekref, it doesn't return `None` like weakref; it
     raises `SleekRefDied`. Therefore, unlike weakref, you can store `None` in a
     sleekref.
     '''
