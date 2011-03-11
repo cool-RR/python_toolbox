@@ -27,7 +27,7 @@ class StepType(abc.ABCMeta):
     various step types.
     
     You don't need to interact with step types (i.e. instances of this
-    metaclass) in order to make step functions; If they have the appropriate
+    metaclass) in order to make step functions; if they have the appropriate
     name identifier in their name, they will be associated with a step type
     automaticaly. For example, a function called `meow_step_generator` will
     automatically be identified as a `StepGenerator`. (Which is one example of

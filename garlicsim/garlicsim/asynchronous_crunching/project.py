@@ -67,7 +67,7 @@ class Project(object):
     def __init__(self, simpack):
         
         if isinstance(simpack, garlicsim.misc.SimpackGrokker):
-            # The user entered a simpack grokker instead of a simpack; Let's be
+            # The user entered a simpack grokker instead of a simpack; let's be
             # nice and handle it.
             simpack_grokker = simpack
             simpack = simpack_grokker.simpack
@@ -557,14 +557,14 @@ class Project(object):
         function, `*args` and `**kwargs`. But in this function we're being a
         little smarter so the user will have less work.
         
-        You do not need to enter a step function; We will use the default one,
+        You do not need to enter a step function; we will use the default one,
         unless you specify a different one as `step_function`.
         
         You may also pass in a step profile as `step_profile`, and it will be
         noticed and used.
         '''
         # We are providing this method despite the fact that the simpack
-        # grokker already provides a `.build_step_profile` method; This is
+        # grokker already provides a `.build_step_profile` method; this is
         # because here we are using the *project's* default step function,
         # which the user is allowed to change.
         parse_arguments_to_step_profile = \

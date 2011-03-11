@@ -188,7 +188,7 @@ class Process(multiprocessing.Process):
     def process_crunching_profile_order(self, order):
         '''Process an order to update the crunching profile.'''
         if self.crunching_profile.step_profile != order.step_profile:
-            raise ObsoleteCruncherError('Step profile changed; Shutting down. '
+            raise ObsoleteCruncherError('Step profile changed; shutting down. '
                                         'Crunching manager should create a '
                                         'new cruncher.')
         self.crunching_profile = order

@@ -33,7 +33,7 @@ The ``State`` class
 
 The simpack must define a ``State`` class, which must inherit from
 :class:`garlicsim.data_structures.State`. The ``State`` class must be available
-from the root namespace of your simpack; This is usually done by putting a
+from the root namespace of your simpack; this is usually done by putting a
 ``from .state import State`` line in your simpack's ``__init__.py``.
 
 Example ``State`` class::

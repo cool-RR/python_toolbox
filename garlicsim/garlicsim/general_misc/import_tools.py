@@ -81,7 +81,7 @@ def import_if_exists(module_name, silent_fail=False):
     If `silent_fail` is `True`, will return `None` if the module doesn't exist.
     If `silent_fail` is False, will raise `ImportError`.
     
-    `silent_fail` applies only to whether the module exists or not; If it does
+    `silent_fail` applies only to whether the module exists or not; if it does
     exist, but there's an error importing it... *release the hounds.*
     
     I mean, we just raise the error.

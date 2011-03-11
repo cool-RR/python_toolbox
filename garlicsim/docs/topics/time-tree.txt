@@ -59,7 +59,7 @@ What is a natural fork?
 
 A natural fork, also called **fork by crunching**, is only relevant in
 simulations which have some random non-deterministic factor in their step
-function. You can make a natural fork in deterministic simulations as well; But
+function. You can make a natural fork in deterministic simulations as well; but
 that would be of little use, because the second timeline will be identical to
 the first.
 
@@ -89,7 +89,7 @@ To make a natural fork in your project's tree, call
 amount of time you want to have crunched on your new fork. (Of course, you may
 crunch it further whenever you want.)
 
-Don't forget to call :meth:`Project.sync_crunchers` twice after this; The first
+Don't forget to call :meth:`Project.sync_crunchers` twice after this; the first
 time is for starting the crunchers, the second time is for collecting the work
 from them.
 

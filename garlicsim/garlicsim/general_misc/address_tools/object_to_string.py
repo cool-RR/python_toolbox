@@ -266,7 +266,7 @@ def shorten_address(address, root=None, namespace={}):
     assert _address_pattern.match(address)
     
     if '.' not in address:
-        # It's a single-level address; Nothing to shorten.
+        # It's a single-level address; nothing to shorten.
         return address
     
     original_address_parts = address.split('.')

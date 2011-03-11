@@ -44,7 +44,7 @@ has their own advantages and disadvantages over the others.
     relatively simple context managers that don't require defining an actual
     class.
                 
-    This usage is nothing new; It's also available when using the standard
+    This usage is nothing new; it's also available when using the standard
     library's `contextlib.contextmanager` decorator. One thing that is allowed
     here that `contextlib` doesn't allow is to yield the context manager itself
     by doing `yield SelfHook`.
@@ -275,7 +275,7 @@ class ContextManagerType(abc.ABCMeta):
             # If so, we need to be careful. It's okay for this class to be
             # using the enter/exit pair provided by the base `manage_context`;
             # It's also okay for this class to override these with its own
-            # `__enter__` and `__exit__` implementations; But it's *not* okay
+            # `__enter__` and `__exit__` implementations; but it's *not* okay
             # for this class to define just one of these methods, say
             # `__enter__`, because then it will not have an `__exit__` to work
             # with.
@@ -298,7 +298,7 @@ class ContextManagerType(abc.ABCMeta):
                 assert '__enter__' in namespace
             
                 raise Exception("The %s class defines an `__enter__` method, "
-                                "but not an `__exit__` method; We cannot use "
+                                "but not an `__exit__` method; we cannot use "
                                 "the `__exit__` method of its base context "
                                 "manager class because it uses the "
                                 "`manage_context` generator function." %
@@ -311,7 +311,7 @@ class ContextManagerType(abc.ABCMeta):
                 assert '__exit__' in namespace
                 
                 raise Exception("The %s class defines an `__exit__` method, "
-                                "but not an `__enter__` method; We cannot use "
+                                "but not an `__enter__` method; we cannot use "
                                 "the `__enter__` method of its base context "
                                 "manager class because it uses the "
                                 "`manage_context` generator function." %
@@ -408,7 +408,7 @@ class ContextManager(object):
                    generator_return_value
         
         except StopIteration:
-            raise RuntimeError("The generator didn't yield even one time; It "
+            raise RuntimeError("The generator didn't yield even one time; it "
                                "must yield one time exactly.")
     
         
@@ -429,7 +429,7 @@ class ContextManager(object):
                 return
             else:
                 raise RuntimeError(
-                    "The generator didn't stop after the yield; Possibly you "
+                    "The generator didn't stop after the yield; possibly you "
                     "have more than one `yield` in the generator function? "
                     "The generator function must yield exactly one time.")
         else:
