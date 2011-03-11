@@ -271,8 +271,11 @@ blocktodo gif animation
 What's next
 ===========
 
-This is the end of the tutorial series for now. To understand more about
-GarlicSim, read the :ref:`topical guides <topics-index>`.
+This is the end of the tutorial series for now. To learn more about GarlicSim,
+read the :ref:`topical guides <topics-index>` or `say hello on the mailing
+list`_.
 
+.. _Graphical User Interface: http://en.wikipedia.org/wiki/Graphical_user_interface
 .. _wxPython: http://wxpython.org
 .. _Jan Bodnar's wxPython tutorial: http://www.zetcode.com/wxpython/
+.. _say hello on the mailing list: https://groups.google.com/forum/#!forum/garlicsim
