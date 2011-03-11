@@ -222,7 +222,7 @@ Here's an example of a history step function::
             )
         
 As you can see, the history step function doesn't even receive a state object;
-It's a static method.
+it's a static method.
 
 What the history step function does receive is a history browser, of the class
 :class:`BaseHistoryBrowser<garlicsim.misc.base_history_browser.BaseHistoryBrowser>`.

@@ -90,7 +90,7 @@ the simulation.
 In the terminology of GarlicSim, we shorten the term "world state" into simply
 **state**. A state is actually a class, defined as
 :class:`garlicsim.data_structures.State`. The class itself doesn't define much;
-Every simulation will make its own ``State`` subclass and store data in its
+every simulation will make its own ``State`` subclass and store data in its
 state instances as data attributes. For example, the basketball simulation might
 store a floating-point number in ``state.height``.
 
