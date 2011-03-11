@@ -8,8 +8,8 @@
 
 # BIG_WORKSPACE_WIDGETS = [widgets.state_viewer.StateViewer]
 
-# Widgets to show in the middle of the frame. These must be instances of
-# `garlicsim_wx.widgets.workspace_widget`.
+# Widgets to show in the middle of the frame. These must be subclasses of
+# `garlicsim_wx.widgets.workspace_widget.WorkspaceWidget`.
 #
 # This is where you usually put your main widget that displays your states.
 
@@ -18,8 +18,8 @@
 
 # (01.01.2011 - Still not implemented, sorry.)
 #
-# Small widgets to show in the frame. These must be instances of
-# `garlicsim_wx.widgets.workspace_widget`.
+# Small widgets to show in the frame. These must be subclasses of
+# `garlicsim_wx.widgets.workspace_widget.WorkspaceWidget`.
 #
 # This is where you usually put small tools.
 
