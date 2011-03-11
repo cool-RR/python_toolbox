@@ -105,9 +105,8 @@ will be a pretty graphical display instead of a textual one.
 .. admonition:: You need to know wxPython
 
     In order to code your own customized state viewer, you need to be familiar
-    with `wxPython`_. I recommend `this wxPython tutorial`_.
-    
-
+    with `wxPython`_. If this is your first time with wxPython, I recommend
+    following `Jan Bodnar's wxPython tutorial`_.
 
 Let's look at ``coin_flip``\'s folder structure. Note that there is a
 ``coin_flip/wx`` subpackage; this is where you put your GUI definitions. Go
@@ -276,3 +275,4 @@ This is the end of the tutorial series for now. To understand more about
 GarlicSim, read the :ref:`topical guides <topics-index>`.
 
 .. _wxPython: http://wxpython.org
+.. _Jan Bodnar's wxPython tutorial: http://www.zetcode.com/wxpython/
