@@ -1,5 +1,6 @@
-# from . import widgets.state_viewer
-# from . import widgets.state_creation_dialog
+# from .widgets import state_viewer as _
+# from .widgets import state_creation_dialog as _
+# from . import widgets
 
 
 ########### *All* of the settings in this module are optional. ################
