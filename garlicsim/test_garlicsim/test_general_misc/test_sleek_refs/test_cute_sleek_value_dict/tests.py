@@ -24,7 +24,7 @@ def test():
     unvolatile_things = [A.s, __builtins__, list, type,  list.append, str.join,
                          sum]
     
-    # Using len(csvd) as our key; Just to guarantee we're not running over an
+    # Using len(csvd) as our key; just to guarantee we're not running over an
     # existing key.
         
     csvd = CuteSleekValueDict(counter)
@@ -62,7 +62,7 @@ def test_one_by_one():
     unvolatile_things = [A.s, __builtins__, list, type,  list.append, str.join,
                          sum]
     
-    # Using len(csvd) as our key; Just to guarantee we're not running over an
+    # Using len(csvd) as our key; just to guarantee we're not running over an
     # existing key.
         
     while volatile_things:

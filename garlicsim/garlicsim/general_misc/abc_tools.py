@@ -8,7 +8,7 @@ class abstract_static_method(staticmethod):
     '''
     A combination of `abc.abstractmethod` and `staticmethod`.
     
-    This class is good only for documentation; It doesn't enforce overriding
+    This class is good only for documentation; it doesn't enforce overriding
     methods to be static.
     '''
     __slots__ = ()

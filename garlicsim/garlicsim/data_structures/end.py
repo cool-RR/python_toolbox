@@ -20,7 +20,7 @@ class End(TreeMember):
     An end of the simulation.
     
     An `End` signifies that the simulation has ended. This is relevant in only
-    some simpacks; Some simpacks have a concept of ending the simulation, and
+    some simpacks; some simpacks have a concept of ending the simulation, and
     some don't. When a simulation was crunched and reached its end on some
     timeline, the last node on that timeline will have an `End` object added to
     its `.ends` list.
@@ -80,7 +80,7 @@ class End(TreeMember):
         Get a list of all possible paths that lead to this end.
         
         (This method was invented for nodes and blocks and makes sense for
-        them; For an end, it will just return the one single path that leads to
+        them; for an end, it will just return the one single path that leads to
         it, since there can't be any forks after an end.)
         
         Note: There may be paths that contain this end which will not be
@@ -95,7 +95,7 @@ class End(TreeMember):
         Create a path that leads to this end.
         
         (This method was invented for nodes and blocks and makes sense for
-        them; For an end, the "past path" is identical to the one made by
+        them; for an end, the "past path" is identical to the one made by
         `make_containing_path`, since there can't be any forks after an end.)
         
         Returns the path.
@@ -108,7 +108,7 @@ class End(TreeMember):
         Get `{}`.
         
         (This method was invented for nodes and blocks and makes sense for
-        them; There are no leaves, or anything else for that matter, that come
+        them; there are no leaves, or anything else for that matter, that come
         after an end.)
         '''
         

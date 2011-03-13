@@ -208,7 +208,7 @@ class Tree(object):
         '''
         Iterate over all the members (nodes, blocks, ends) in this tree.
         
-        By default, all nodes will be included; You may specify
+        By default, all nodes will be included; you may specify
         `include_blockful_nodes=False` to exclude them. (Their block will be
         included.)
         '''

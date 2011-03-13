@@ -65,7 +65,7 @@ def frange(start, finish=None, step=1.):
     '''
     Make a `list` containing an arithmetic progression of numbers.
 
-    This is an extension of the builtin `range`; It allows using floating point
+    This is an extension of the builtin `range`; it allows using floating point
     numbers.
     '''
     if finish is None:

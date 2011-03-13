@@ -1,0 +1,283 @@
+..
+   Copyright 2009-2011 Ram Rachum. This work is licensed under a Creative
+   Commons Attribution-Share Alike 2.5 Israel License, which may be obtained at
+   http://creativecommons.org/licenses/by-sa/2.5/il/
+
+.. _intro-tutorial3:
+
+============================================================
+Tutorial part 3: Optional: Loading your simpack into the GUI
+============================================================
+
+In :ref:`part 2 <intro-tutorial2>` of the tutorial, we created our very first
+simpack, ``coin_flip``. We played around with the simpack on the Python shell.
+In this **optional** tutorial, we will load our simpack into
+:mod:`garlicsim_wx`, which is the GarlicSim GUI.
+
+GUI is an abbreviation of `Graphical User Interface`_. What it means is that
+it's a program like Word or Photoshop, with windows, menus, buttons and other
+graphical widgets. This is what it looks like on Windows 7:
+
+.. image:: /images/screenshot.png
+    :align: center
+    :alt: GarlicSim GUI on Windows 7
+    :width: 550 px
+    
+The GarlicSim GUI works on the three major operating systems: Windows XP/7, Mac
+OS, and Linux.
+
+
+.. admonition:: The GUI is optional
+
+    Some people, usually hard-core programmers, don't like GUIs. So please
+    note: :mod:`garlicsim_wx`, a.k.a. the GarlicSim GUI, is a **completely
+    optional** part of GarlicSim. If you prefer working with :mod:`garlicsim`
+    in the shell, you can keep doing that, and you can ``import garlicsim`` in
+    your project and use it as a normal Python package without even installing
+    :mod:`garlicsim_wx`, which is completely separated from :mod:`garlicsim`.
+    
+This tutorial assumes that you have :mod:`garlicsim_wx` installed; if you
+don't, :ref:`go here <intro-installation-python-2.x>` to install it.
+
+Loading a simpack into :mod:`garlicsim_wx` without any preparations
+===================================================================
+
+Launch the GarlicSim GUI::
+
+    c:\> GarlicSim.py
+    
+If you installed :mod:`garlicsim_wx` properly, the GUI would now open up with
+no simulation loaded.
+
+Let's start a new simulation project. Choose :menuselection:`&File --> &New`,
+and you'll get this dialog:
+
+.. image:: /images/screenshot_choose_simpack.png
+    :align: center
+    :alt: GarlicSim GUI showing the "Choose simpack" dialog
+
+(Again, this screenshot is from Windows 7; if you use a different operating
+system, the interface will look different for you, but don't worry, it'll
+function exactly the same.)
+
+In this dialog the GUI asks us which simpack to use for our new simulation. If
+you want to get to know the GarlicSim GUI, you can have a go at one of the
+bundled simpacks, especially :mod:`garlicsim_lib.simpacks.life`; you can start
+a :mod:`life <garlicsim_lib.simpacks.life>` simulation and try to click all the
+different buttons and menus on the screen to figure out what everything does.
+Assuming you already did that, let's load our own ``coin_flip`` simpack.
+
+Click the :guilabel:`&Add folder containing simpacks...` button. This will open
+a window where you browse around your computer and choose a folder. Choose the
+folder that *contains* the ``coin_flip`` folder that we created in :ref:`the
+previous tutorial <intro-tutorial2>`\ . (Joining us only now? :download:`Click
+here <downloads/coin_flip.zip>` to download the ``coin_flip`` simpack.)
+
+After you did that, a ``coin_flip`` entry will be added to your simpacks list.
+Choose it and press :guilabel:`Create &project`. Your new project was created!
+You would see something like this:
+    
+.. image:: /images/screenshot_coin_flip_fresh.png
+    :align: center
+    :alt: GarlicSim GUI showing a no-frills simpacks
+
+Now, we're not going to explain every widget on the GarlicSim GUI in this
+tutorial. But one thing you can notice is the "State Viewer". The State Viewer
+displays the current world state. Every simpack displays something different in
+the State Viewer; for example, the :mod:`life <garlicsim_lib.simpacks.life>`
+simpack displays the Life two-dimensional grid, while a Newtonian Physics
+simpack may display a 3D view of bodies colliding.
+
+As you can see in the above screenshot, our ``coin_flip`` simpack displays a
+textual representation of the world state. This is why it's called a "State
+Repr Viewer". This is a "no-frills" State Viewer that every simpack gets for
+free. So if your simpack works with :mod:`garlicsim`, you can load it into the
+GUI without programming *anything*, and you'll get a basic, no-frills but
+workable view of the world state in your simulation.
+
+Creating dedicated widgets for your simpack
+===========================================
+
+Okay, so it's nice to have basic no-frills widgets for our simpack, but we want
+more. We want to customize how :mod:`garlicsim_wx` displays our state, so it
+will be a pretty graphical display instead of a textual one.
+
+.. admonition:: You need to know wxPython
+
+    In order to code your own customized state viewer, you need to be familiar
+    with `wxPython`_. If this is your first time with wxPython, I recommend
+    following `Jan Bodnar's wxPython tutorial`_.
+
+Let's look at ``coin_flip``\'s folder structure. Note that there is a
+``coin_flip/wx`` subpackage; this is where you put your GUI definitions. Go
+into the ``coin_flip/wx/widgets/state_viewer.py`` module. You may read the
+helpful comments in that module; and then replace it with the following GUI
+code::
+
+    from __future__ import division
+    
+    import itertools
+    
+    import wx
+    
+    import garlicsim_wx
+    
+    
+    class StateViewer(wx.Panel,
+                      garlicsim_wx.widgets.WorkspaceWidget):
+        # Here you create a widget that will display your state graphically on the
+        # screen.
+        
+        def __init__(self, frame):
+                
+            # We need to call the __init__ of both our base classes:
+            wx.Panel.__init__(self, frame,
+                              style=wx.SUNKEN_BORDER)        
+            garlicsim_wx.widgets.WorkspaceWidget.__init__(self, frame)
+            
+            self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM) # Solves Windows flicker
+            
+            self.state = None
+            
+            self.Bind(wx.EVT_PAINT, self.on_paint)
+            self.Bind(wx.EVT_SIZE, self.on_size)
+            
+            # ...
+            
+    
+            # This next bit will cause the widget to get updated every time the
+            # active state in the GUI is changed:
+            self.gui_project.active_node_changed_emitter.add_output(
+                lambda: self.set_state(self.gui_project.get_active_state())
+            )
+    
+    
+        def set_state(self, state):
+            # Here you set the state to be displayed.
+            self.state = state
+            self.Refresh()
+            
+            
+        def on_paint(self, event):
+            # This is your EVT_PAINT handler, which draws the state on the widget.
+    
+            event.Skip()
+            
+            ### Creating brushes and pens: ########################################
+            #                                                                     #
+            background_brush = wx.Brush(self.GetBackgroundColour())
+            blue_brush = wx.Brush(wx.NamedColor('Blue'))
+            gold_brush = wx.Brush(wx.NamedColor('Gold'))
+            
+            black_pen = wx.Pen(wx.NamedColor('Black'), width=1.5)
+            red_pen = wx.Pen(wx.NamedColor('Red'), width=1.5)
+            #                                                                     #
+            ### Finished creating brushes and pens. ###############################
+            
+            dc = wx.BufferedPaintDC(self)
+            dc.SetBackground(background_brush)
+            dc.Clear()
+            if self.state is None:
+                return
+            
+            gc = wx.GraphicsContext.Create(dc)
+            assert isinstance(gc, wx.GraphicsContext)
+            client_width, client_height = self.GetClientSize()
+            
+            ### Writing balance amount as text: ###################################
+            #                                                                     #
+            dc.SetFont(wx.Font(20, wx.FONTFAMILY_DEFAULT,
+                               wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL))
+            dc.DrawLabel(
+                str(self.state.balance),
+                wx.Rect(0, (client_height - 40), client_width, 40),
+                wx.ALIGN_CENTER_HORIZONTAL | wx.ALIGN_CENTER_VERTICAL
+            )
+            #                                                                     #
+            ### Finished writing balance amount as text. ##########################
+            
+            ### Calculating number of coins: ######################################
+            #                                                                     #
+            n_coins_won = (self.state.last_bet_result // 100) if \
+                          self.state.last_bet_result > 0 else 0
+            n_coins_lost = (-self.state.last_bet_result // 100) if \
+                           self.state.last_bet_result < 0 else 0
+            n_static_coins = (self.state.balance // 100) - n_coins_won
+            #                                                                     #
+            ### Finished calculating number of coins. #############################
+            
+            def iterate_coin_positions():
+                '''Generator for positioning coins in two vertical stacks.'''
+                left_x = (client_width / 2) - 50
+                right_x = (client_width / 2) + 50
+                for i in itertools.count():
+                    y = (client_height - 50) - (6 * i)
+                    yield (left_x, y)
+                    yield (right_x, y)
+            
+            def draw_coin(coin_position):
+                x, y = coin_position
+                gc.DrawEllipse((x - 40), (y - 10), 80, 20)
+                    
+            ### Drawing coins: ####################################################
+            #                                                                     #
+            coin_positions_iterator = iterate_coin_positions()
+            
+            gc.SetBrush(blue_brush)
+            gc.SetPen(black_pen)
+            for i in range(n_static_coins): # Drawing static coins:
+                coin_position = coin_positions_iterator.next()
+                draw_coin(coin_position)
+            
+            gc.SetBrush(wx.TRANSPARENT_BRUSH)
+            gc.SetPen(red_pen)
+            for i in range(n_coins_lost): # Drawing lost coins if any:
+                coin_position = coin_positions_iterator.next()
+                draw_coin(coin_position)
+                
+            gc.SetBrush(gold_brush)
+            gc.SetPen(black_pen)
+            for i in range(n_coins_won): # Drawing won coins if any:
+                coin_position = coin_positions_iterator.next()
+                draw_coin(coin_position)        
+            #                                                                     #
+            ### Finished drawing coins. ###########################################
+            
+            
+        def on_size(self, event):
+            # An EVT_SIZE handler. Just some wxPython thing that I think you're
+            # supposed to do.
+            self.Refresh()
+            
+Now go to ``coin_flip/wx/settings.py`` to enable this :class:`StateViewer`
+class. Ensure that this file starts with the following::
+
+    from .widgets import state_viewer as _
+    # from .widgets import state_creation_dialog as _
+    from . import widgets
+    
+    
+    ########### *All* of the settings in this module are optional. ################
+    
+    
+    BIG_WORKSPACE_WIDGETS = [widgets.state_viewer.StateViewer]
+
+Okay, we're ready to rock.
+
+Load the simulation again, and now we'll have a nice graphical display:
+
+.. image:: /images/coin_flip_customized_gui.gif
+    :align: center
+    :alt: Customized GUI for the coin-flip simulation
+
+What's next
+===========
+
+This is the end of the tutorial series for now. To learn more about GarlicSim,
+read the :ref:`topical guides <topics-index>` or `say hello on the mailing
+list`_.
+
+.. _Graphical User Interface: http://en.wikipedia.org/wiki/Graphical_user_interface
+.. _wxPython: http://wxpython.org
+.. _Jan Bodnar's wxPython tutorial: http://www.zetcode.com/wxpython/
+.. _say hello on the mailing list: https://groups.google.com/forum/#!forum/garlicsim

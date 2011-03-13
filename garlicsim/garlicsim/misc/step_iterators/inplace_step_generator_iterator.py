@@ -20,7 +20,7 @@ class InplaceStepGeneratorIterator(BaseStepIterator):
     A step iterator uses the simpack's original step function (or in this case
     inplace step generator) under the hood.
     
-    This is an *inplace* step iterator; It doesn't produce new states, it
+    This is an *inplace* step iterator; it doesn't produce new states, it
     modifies an existing one in place. It keeps yielding the same state, except
     it modifies it on each iteration.
     
