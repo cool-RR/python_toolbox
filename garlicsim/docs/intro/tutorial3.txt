@@ -18,10 +18,9 @@ GUI is an abbreviation of `Graphical User Interface`_. What it means is that
 it's a program like Word or Photoshop, with windows, menus, buttons and other
 graphical widgets. This is what it looks like on Windows 7:
 
-.. image:: /images/screenshot.png
+.. image:: /images/medium_screenshot.png
     :align: center
     :alt: GarlicSim GUI on Windows 7
-    :width: 550 px
     
 The GarlicSim GUI works on the three major operating systems: Windows XP/7, Mac
 OS, and Linux.
