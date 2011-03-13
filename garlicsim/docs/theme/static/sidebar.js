@@ -41,7 +41,7 @@ $(function() {
 
   // colors used by the current theme
   var dark_color = $('.related').css('background-color');
-  var light_color = '#999999' //$('.document').css('background-color');
+  var light_color = $('.document').css('background-color');
 
   function sidebar_is_collapsed() {
     return sidebarwrapper.is(':not(:visible)');
@@ -108,8 +108,8 @@ $(function() {
     sidebarbutton.css({
         'color': '#FFFFFF',
         // 'border-left': '1px solid ' + dark_color,
-        'background': '#999',
-        'opacity': '0.6',
+        'background-color': '#999999',
+        'opacity': '0.1',
         'font-size': '1.2em',
         'cursor': 'pointer',
         'height': bodywrapper.height(),
@@ -119,10 +119,10 @@ $(function() {
 
     sidebarbutton.hover(
       function () {
-          $(this).css('background-color', dark_color);
+          $(this).css('opacity', '0.15');
       },
       function () {
-          $(this).css('background-color', light_color);
+          $(this).css('opacity', '0.1');
       }
     );
   }
