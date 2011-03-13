@@ -1,3 +1,5 @@
+// Forked by Ram.
+
 /*
  * sidebar.js
  * ~~~~~~~~~~
@@ -62,7 +64,7 @@ $(function() {
         'margin-left': '0',
         'height': bodywrapper.height()
     });
-    sidebarbutton.find('span').text('»');
+    sidebarbutton.find('span').text(' ');
     sidebarbutton.attr('title', _('Expand sidebar'));
     document.cookie = 'sidebar=collapsed';
   }
@@ -75,7 +77,7 @@ $(function() {
         'margin-left': ssb_width_expanded-12,
         'height': bodywrapper.height()
     });
-    sidebarbutton.find('span').text('«');
+    sidebarbutton.find('span').text(' ');
     sidebarbutton.attr('title', _('Collapse sidebar'));
     document.cookie = 'sidebar=expanded';
   }
@@ -88,7 +90,7 @@ $(function() {
     });
     // create the button
     sidebar.append(
-        '<div id="sidebarbutton"><span>&laquo;</span></div>'
+        '<div id="sidebarbutton"><span>&nbsp;</span></div>'
     );
     var sidebarbutton = $('#sidebarbutton');
     light_color = sidebarbutton.css('background-color');
@@ -119,7 +121,11 @@ $(function() {
 
     sidebarbutton.hover(
       function () {
-          $(this).css('opacity', '0.15');
+          $(this).css({'opacity': '0.15',
+              '-webkit-transition': '200ms opacity',
+              '-moz-transition': '200ms opacity',
+              'transition': '200ms opacity',
+	  });
       },
       function () {
           $(this).css('opacity', '0.1');
