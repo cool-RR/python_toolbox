@@ -464,5 +464,6 @@ class ContextManager(object):
             
             
 class BlankContextManager(ContextManager):
+    '''A context manager that does nothing.'''
     def manage_context(self):
         yield self

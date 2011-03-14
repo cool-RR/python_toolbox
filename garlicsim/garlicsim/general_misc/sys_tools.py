@@ -27,7 +27,9 @@ class OutputCapturer(ContextManager):
             
         assert output_capturer.output == 'woo!\n'
         
-    tododoc and todotest stderr stdout
+    The boolean arguments `stdout` and `stderr` determine, respectively,
+    whether the standard-output and the standard-error streams will be
+    captured.
     '''
     def __init__(self, stdout=True, stderr=True):
         self.string_io = cStringIO.StringIO()
