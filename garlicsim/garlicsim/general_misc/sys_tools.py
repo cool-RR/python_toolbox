@@ -38,13 +38,13 @@ class OutputCapturer(ContextManager):
             self._stdout_temp_setter = \
                 TempValueSetter((sys, 'stdout'), self.string_io)
         else: # not stdout
-            self._stdout_temp_setter = BlankContextManager
+            self._stdout_temp_setter = BlankContextManager()
             
         if stderr:
             self._stderr_temp_setter = \
                 TempValueSetter((sys, 'stderr'), self.string_io)
         else: # not stderr
-            self._stderr_temp_setter = BlankContextManager
+            self._stderr_temp_setter = BlankContextManager()
             
         self.output = None
         

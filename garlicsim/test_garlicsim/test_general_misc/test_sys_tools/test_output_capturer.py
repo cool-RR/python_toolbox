@@ -34,15 +34,15 @@ def test_streams():
             print('Woo!')
             sys.stdout.write('frrr.')
             sys.stderr.write('qwerty')
-        assert stdout_output_capturer.value == 'Woo!\nfrrr.'
-        assert catch_all_output_capturer.value == 'qwerty'
+        assert stdout_output_capturer.output == 'Woo!\nfrrr.'
+        assert catch_all_output_capturer.output == 'qwerty'
         
         with OutputCapturer(False, False) as blank_output_capturer:
             print('zort')
             sys.stdout.write('zort')
             sys.stderr.write('zort')
-        assert blank_output_capturer.value == ''
-        assert catch_all_output_capturer.value.endswith('zort\nzortzort')
+        assert blank_output_capturer.output == ''
+        assert catch_all_output_capturer.output.endswith('zort\nzortzort')
         
         with OutputCapturer(stdout=False) as stderr_output_capturer:
             print('one')
@@ -54,10 +54,10 @@ def test_streams():
                 sys.stdout.write('spam')
                 sys.stderr.write('spam')
                 
-        assert stderr_output_capturer.value == 'three'
-        assert catch_all_output_capturer.value.endswith('one\ntwo')
-        assert 'spam' not in stderr_output_capturer.value
-        assert 'spam' not in catch_all_output_capturer.value
+        assert stderr_output_capturer.output == 'three'
+        assert catch_all_output_capturer.output.endswith('one\ntwo')
+        assert 'spam' not in stderr_output_capturer.output
+        assert 'spam' not in catch_all_output_capturer.output
         
             
         
