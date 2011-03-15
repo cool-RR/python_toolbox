@@ -21,5 +21,11 @@ this if you want to create your own simulation packages using GarlicSim. You'll
 need to be familiar with `Python`_ to do that. This will install the GarlicSim
 packages to your existing Python distribution.
 
+.. toctree::
+    :hidden:
+    
+    end_users/index
+    developers/index
+
 
 .. _Python: http://python.org
