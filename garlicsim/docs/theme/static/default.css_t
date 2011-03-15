@@ -345,4 +345,9 @@ div.highlight {
     background: none;
 }
 
+
+div.highlight * {
+    font-weight: normal !important;
+}
+
 /* Done overriding Pygments */
