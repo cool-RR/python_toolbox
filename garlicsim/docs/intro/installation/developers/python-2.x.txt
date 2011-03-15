@@ -110,7 +110,7 @@ To start the GUI
 ================
 
 In order to start the GUI after you install it, run the :command:`GarlicSim.py`
-script which is located in your Python scripts folder. In Windows it's done
+script which is located in your Python scripts folder. On Windows it's done
 like this::
 
     c:\> c:\python26\Scripts\GarlicSim.py
