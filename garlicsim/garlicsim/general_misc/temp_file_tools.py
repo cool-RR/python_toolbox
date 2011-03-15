@@ -13,15 +13,27 @@ from garlicsim.general_misc.context_manager import ContextManager
 
 
 class TemporaryFolder(ContextManager):
-    '''tododoc Create and return a temporary directory.  This has the same
-    behavior as mkdtemp but can be used as a context manager.  For
-    example:
-
-        with TemporaryFolder() as tmpdir:
-            ...
-
-    Upon exiting the context, the directory and everthing contained
-    in it are removed.
+    '''
+    Context manager that creates a temporary folder and deletes it after usage.
+    
+    After the suite finishes, the temporary folder and all its files and
+    subfolders will be deleted.
+    
+    Example:
+    
+        with TemporaryFolder() as temporary_folder_path:
+            
+            # We have a temporary folder!
+            assert os.path.isdir(temporary_folder_path)
+            
+            # We can create files in it:
+            open(os.path.join(temporary_folder_path, 'my_file'), 'w')
+            
+        # The suite is finished, now it's all cleaned:
+        assert not os.path.exists(temporary_folder_path)
+       
+    Use the `suffix` and `prefix` string arguments to dictate a suffix and/or a
+    prefix to the temporary folder's name in the filesystem.        
     '''
 
     def __init__(self, suffix='', prefix=tempfile.template):

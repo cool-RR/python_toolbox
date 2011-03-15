@@ -27,7 +27,9 @@ class OutputCapturer(ContextManager):
             
         assert output_capturer.output == 'woo!\n'
         
-    tododoc and todotest stderr stdout
+    The boolean arguments `stdout` and `stderr` determine, respectively,
+    whether the standard-output and the standard-error streams will be
+    captured.
     '''
     def __init__(self, stdout=True, stderr=True):
         self.string_io = cStringIO.StringIO()
@@ -36,22 +38,22 @@ class OutputCapturer(ContextManager):
             self._stdout_temp_setter = \
                 TempValueSetter((sys, 'stdout'), self.string_io)
         else: # not stdout
-            self._stdout_temp_setter = BlankContextManager
+            self._stdout_temp_setter = BlankContextManager()
             
         if stderr:
             self._stderr_temp_setter = \
                 TempValueSetter((sys, 'stderr'), self.string_io)
         else: # not stderr
-            self._stderr_temp_setter = BlankContextManager
-            
-        self.output = None
+            self._stderr_temp_setter = BlankContextManager()
         
     def manage_context(self):
         '''Manage the `OutputCapturer`'s context.'''
         with self._stdout_temp_setter:
             with self._stderr_temp_setter:
                 yield self
-        self.output = self.string_io.getvalue()
+        
+    output = property(lambda self: self.string_io.getvalue(),
+                      doc='''The string of output that was captured.''')
 
         
 class TempSysPathAdder(ContextManager):
