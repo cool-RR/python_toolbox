@@ -6,7 +6,7 @@
 .. _index:
 
 =======================
-garlicsim documentation
+GarlicSim Documentation
 =======================
 
 Contents:
