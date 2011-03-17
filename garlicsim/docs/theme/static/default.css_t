@@ -44,7 +44,7 @@ div.bodywrapper {
 {%- endif %}
 
 div.footer {
-    color: #CCC;
+    color: #444;
     width: 100%;
     padding: 9px 0 9px 0;
     text-align: center;
@@ -52,7 +52,7 @@ div.footer {
 }
 
 div.footer a {
-    color: #CCC;
+    color: #444;
     text-decoration: underline;
 }
 

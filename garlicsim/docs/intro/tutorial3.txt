@@ -36,7 +36,7 @@ OS, and Linux.
     :mod:`garlicsim_wx`, which is completely separated from :mod:`garlicsim`.
     
 This tutorial assumes that you have :mod:`garlicsim_wx` installed; if you
-don't, :ref:`go here <intro-installation-python-2.x>` to install it.
+don't, :ref:`go here <intro-installation-developers-python-2.x>` to install it.
 
 Loading a simpack into :mod:`garlicsim_wx` without any preparations
 ===================================================================

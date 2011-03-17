@@ -3,7 +3,7 @@
    Commons Attribution-Share Alike 2.5 Israel License, which may be obtained at
    http://creativecommons.org/licenses/by-sa/2.5/il/
 
-.. _intro-installation-python-3.x:
+.. _intro-installation-developers-python-3.x:
 
 ==================================
 Installing GarlicSim on Python 3.x
@@ -30,7 +30,7 @@ For :mod:`garlicsim`
 ^^^^^^^^^^^^^^^^^^^^
 
 * `Python 3.1`_ or above. If you use Python 2.x, use
-  :ref:`this fork of GarlicSim instead <intro-installation-python-2.x>`.
+  :ref:`this fork of GarlicSim instead <intro-installation-developers-python-2.x>`.
  
 * `distribute`_.
 
