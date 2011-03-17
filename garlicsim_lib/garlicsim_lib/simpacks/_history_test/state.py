@@ -5,7 +5,6 @@ import copy
 import math
 from math import pi
 import random
-random.seed()
 
 import garlicsim.data_structures
 

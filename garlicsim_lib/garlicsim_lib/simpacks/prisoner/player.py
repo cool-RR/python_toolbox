@@ -22,6 +22,12 @@ class PlayerType(abc.ABCMeta):
     def wx_color(self):
         import wx
         return wx.NamedColour(self.color or 'Red')
+    
+    @staticmethod
+    def create_random_strategy_player():
+        from .players import player_types_list
+        player_type = random.choice(player_types_list)
+        return player_type()
         
 
 
@@ -44,8 +50,3 @@ class BasePlayer(object):
         pass
     
     
-    @staticmethod
-    def create_random_strategy_player():
-        from .players import player_types_list
-        player_type = random.choice(player_types_list)
-        return player_type()

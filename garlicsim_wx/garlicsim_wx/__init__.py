@@ -96,6 +96,9 @@ def start():
             new_gui_project_simpack_name = arg[19:]
         elif os.path.isfile(arg):
             load_gui_project_file_path = arg
+            
+    import random
+    random.seed()
     
     app = App(new_gui_project_simpack_name=new_gui_project_simpack_name,
               load_gui_project_file_path=load_gui_project_file_path)

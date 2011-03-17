@@ -6,18 +6,17 @@ Simpack for a repeating game of prisoner's dillema with natural selection.
 '''
 
 import random
-random.seed()
 
 from garlicsim.general_misc import random_tools
 import garlicsim.data_structures
 
-from .player import BasePlayer
+from .player import BasePlayer, PlayerType
 from .players import player_types_list
 
 
 class State(garlicsim.data_structures.State):
     
-    def __init__(self, round, match, players, n_rounds=7):
+    def __init__(self, players, round=-1, match=0, n_rounds=7):
         self.round = round
         self.match = match
         self.players = players
@@ -27,11 +26,9 @@ class State(garlicsim.data_structures.State):
     @staticmethod
     def create_root(n_players=70, n_rounds=7):
         state = State(
-            round=-1,
-            match=0,
             players=[
-                player_types[i % len(player_types_list)]() for \
-                i in xrange(n_players)
+                player_types_list[i % len(player_types_list)]() for i
+                in xrange(n_players)
             ],
             n_rounds=n_rounds
         )
@@ -41,11 +38,8 @@ class State(garlicsim.data_structures.State):
     
     @staticmethod
     def create_messy_root(n_players=70, n_rounds=7):
-        global player_types
         state = State(
-            round=-1,
-            match=0,
-            players=[BasePlayer.create_random_strategy_player() for i
+            players=[PlayerType.create_random_strategy_player() for i
                      in xrange(n_players)],
             n_rounds=n_rounds
         )
@@ -74,7 +68,7 @@ class State(garlicsim.data_structures.State):
         '''
         loser = self.get_player_with_least_points()
         self.players.remove(loser)
-        self.players.append(BasePlayer.create_random_strategy_player())
+        self.players.append(PlayerType.create_random_strategy_player())
     
         self.pairs = random_tools.random_partition(self.players, 2)
         
