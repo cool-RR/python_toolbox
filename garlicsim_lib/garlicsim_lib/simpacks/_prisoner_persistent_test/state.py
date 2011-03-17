@@ -126,8 +126,8 @@ def play_game((x, y), round):
         x.points += -1
         y.points += -1
 
-    x.other_guy_played(y_move)
-    y.other_guy_played(x_move)
+    x.other_player_played(y_move)
+    y.other_player_played(x_move)
 
 def random_strategy_player():
     player = random.choice(player_types)
@@ -140,7 +140,7 @@ class Player(object):
     def play(self, *args, **kwargs):
         raise NotImplementedError
 
-    def other_guy_played(self,move):
+    def other_player_played(self,move):
         pass
 
 class Angel(Player):
@@ -158,7 +158,7 @@ class TitForTat(Player):
         else:
             return self.last_play
 
-    def other_guy_played(self, move):
+    def other_player_played(self, move):
         self.last_play = move
 
 

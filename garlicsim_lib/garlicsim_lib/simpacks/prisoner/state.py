@@ -10,42 +10,43 @@ random.seed()
 
 import garlicsim.data_structures
 
-ROUNDS = 7
-NUMBER_OF_PLAYERS = 70
+from .player import Player
+from .players import player_types_list
 
 
 class State(garlicsim.data_structures.State):
     
-    def __init__(self, round, match, player_pool):
+    def __init__(self, round, match, player_pool, n_rounds=7):
         self.round = round
         self.match = match
         self.player_pool = player_pool
+        self.n_rounds = n_rounds
+        
     
     @staticmethod
-    def create_root():
+    def create_root(n_players=70, n_rounds=7):
         global player_types
         state = State(
             round=-1,
             match=0,
             player_pool=[
                 player_types[i % len(player_types)]() for \
-                i in xrange(NUMBER_OF_PLAYERS)
-            ]
+                i in xrange(n_players)
+            ],
+            n_rounds=n_rounds
         )
         state.prepare_for_new_match()
         return state
     
     
     @staticmethod
-    def create_messy_root():
+    def create_messy_root(n_players=70, n_rounds=7):
         global player_types
         state = State(
             round=-1,
             match=0,
-            player_pool=[
-                random_strategy_player() for \
-                i in xrange(NUMBER_OF_PLAYERS)
-            ]
+            player_pool=[random_strategy_player() for i in xrange(n_players)],
+            n_rounds=n_rounds
         )
         state.prepare_for_new_match()
         return state
@@ -55,7 +56,7 @@ class State(garlicsim.data_structures.State):
         self.clock += 1
     
         self.round += 1
-        if self.round == ROUNDS:
+        if self.round == self.n_rounds:
             self.round = -1
             self.match += 1
             self.prepare_for_new_match()
@@ -114,43 +115,20 @@ def play_game((x, y), round):
         x.points += -1
         y.points += -1
 
-    x.other_guy_played(y_move)
-    y.other_guy_played(x_move)
+    x.other_player_played(y_move)
+    y.other_player_played(x_move)
 
 def random_strategy_player():
     player = random.choice(player_types)
     return player()
 
-class Player(object):
-    def __init__(self):
-        self.points = 0
-
-    def play(self, *args, **kwargs):
-        raise NotImplementedError
-
-    def other_guy_played(self,move):
-        pass
-
-class Angel(Player):
-    def play(self, round):
-        return True
-
-class Devil(Player):
-    def play(self, round):
-        return False
-
-class TitForTat(Player):
-    def play(self, round):
-        if round == 0:
-            return True
-        else:
-            return self.last_play
-
-    def other_guy_played(self, move):
-        self.last_play = move
 
 
-player_types=[Angel, Devil, TitForTat]
+    
+
+
+
+player_types = [Angel, Devil, TitForTat]
 
 def how_many_players_of_certain_type(pool, type):
     n = 0
