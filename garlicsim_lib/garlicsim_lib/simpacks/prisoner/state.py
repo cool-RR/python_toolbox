@@ -26,13 +26,11 @@ class State(garlicsim.data_structures.State):
     @staticmethod
     def create_root(n_players=70, n_rounds=7):
         state = State(
-            players=[
-                player_types_list[i % len(player_types_list)]() for i
-                in xrange(n_players)
-            ],
+            players=[player_types_list[i % len(player_types_list)]() for i
+                     in xrange(n_players)],
             n_rounds=n_rounds
         )
-        state._prepare_for_new_match()
+        state._prepare_for_new_match(replace_loser=False)
         return state
     
     
@@ -43,7 +41,7 @@ class State(garlicsim.data_structures.State):
                      in xrange(n_players)],
             n_rounds=n_rounds
         )
-        state._prepare_for_new_match()
+        state._prepare_for_new_match(replace_loser=False)
         return state
     
         
@@ -61,14 +59,17 @@ class State(garlicsim.data_structures.State):
             play_game(pair, self.round)
     
     
-    def _prepare_for_new_match(self):
+    def _prepare_for_new_match(self, replace_loser=True):
         '''
         Note: this function is not strictly a "step function":
         it manipulates the state that is given to it and then returns it.
         '''
-        loser = self.get_player_with_least_points()
-        self.players.remove(loser)
-        self.players.append(PlayerType.create_random_strategy_player())
+        assert self.round == -1
+        
+        if replace_loser:
+            loser = self.get_player_with_least_points()
+            self.players.remove(loser)
+            self.players.append(PlayerType.create_random_strategy_player())
     
         self.pairs = random_tools.random_partition(self.players, 2)
         
