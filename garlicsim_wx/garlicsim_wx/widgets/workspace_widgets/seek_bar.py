@@ -34,7 +34,7 @@ class SeekBar(wx.Panel, WorkspaceWidget):
         wx.Panel.__init__(self, frame, size=(100, 100), style=wx.SUNKEN_BORDER)
         WorkspaceWidget.__init__(self, frame)
         
-        self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM | wx.BG_STYLE_COLOUR)
+        self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
         self.SetBackgroundColour(wx_tools.get_background_color())
         
         self.Bind(wx.EVT_PAINT, self.on_paint)
