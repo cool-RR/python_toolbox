@@ -10,7 +10,10 @@ See its documentation for more information.
 from ..player import Player
 
 
-class TitForTat(Player):
+class TitForTat(BasePlayer):
+    
+    color = 'Blue'
+    
     def play(self, round):
         if round == 0:
             return True

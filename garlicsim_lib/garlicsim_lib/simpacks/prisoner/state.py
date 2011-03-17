@@ -10,7 +10,7 @@ random.seed()
 
 import garlicsim.data_structures
 
-from .player import Player
+from .player import BasePlayer
 from .players import player_types_list
 
 
@@ -44,7 +44,7 @@ class State(garlicsim.data_structures.State):
         state = State(
             round=-1,
             match=0,
-            players=[Player.create_random_strategy_player() for i
+            players=[BasePlayer.create_random_strategy_player() for i
                      in xrange(n_players)],
             n_rounds=n_rounds
         )
@@ -71,10 +71,9 @@ class State(garlicsim.data_structures.State):
         Note: this function is not strictly a "step function":
         it manipulates the state that is given to it and then returns it.
         '''
-        pool = self.players
-        loser = get_player_with_least_points(pool)
-        pool.remove(loser)
-        pool.append(create_random_strategy_player())
+        loser = self.get_player_with_least_points()
+        self.players.remove(loser)
+        self.players.append(BasePlayer.create_random_strategy_player())
     
         self.pairs = pair_pool(self.players)
         

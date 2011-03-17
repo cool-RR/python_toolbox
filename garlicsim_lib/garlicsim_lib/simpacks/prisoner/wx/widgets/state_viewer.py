@@ -35,12 +35,6 @@ class StateViewer(wx.Panel, garlicsim_wx.widgets.WorkspaceWidget):
         self.SetSizer(self.sizer_v)
         self.sizer_v.Layout()
         
-        color_dict = {
-            prisoner.players.Angel: wx.NamedColor('White'),
-            prisoner.players.Devil: wx.NamedColor('Black'),
-            prisoner.players.TitForTat: wx.NamedColor('Blue')
-        }
-        
         font = wx.Font(12, wx.SWISS, wx.NORMAL, wx.BOLD, True, 'Arial')
         self.pie_ctrl.GetLegend().SetLabelFont(font)
         self.pie_ctrl.SetAngle(math.pi)
@@ -50,7 +44,7 @@ class StateViewer(wx.Panel, garlicsim_wx.widgets.WorkspaceWidget):
             part = piectrl.PiePart()
             part.SetLabel(player_type.__name__)
             part.SetValue(1)
-            part.SetColour(color_dict[player_type])
+            part.SetColour(player_type.wx_color)
             self.pie_ctrl._series.append(part)
             self.pie_part_dict[player_type] = part
             
@@ -62,7 +56,7 @@ class StateViewer(wx.Panel, garlicsim_wx.widgets.WorkspaceWidget):
         '''Show a state onscreen.'''
         if state is None:
             return
-        for player_type in prisoner.player_types:
+        for player_type in prisoner.players.player_types_list:
             part = self.pie_part_dict[player_type]
             value = state.State.get_n_players_of_given_type(
                 state.players,

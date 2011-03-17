@@ -10,6 +10,9 @@ See its documentation for more information.
 from ..player import Player
 
 
-class Angel(Player):
+class Angel(BasePlayer):
+    
+    color = 'White'
+    
     def play(self, round):
         return True
