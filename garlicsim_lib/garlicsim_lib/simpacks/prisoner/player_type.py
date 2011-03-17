@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the `PlayerType` class.
+This module defines the `PlayerType` metaclass.
 
 See its documentation for more information.
 '''
