@@ -11,6 +11,8 @@ This section is still incomplete.
 The time tree
 =============
 
+**Source code**: `garlicsim/data_structures/tree.py`_
+
 :ref:`In the previous chapter <topics-what-is-garlicsim>` we defined the concept
 of a state. But in order to do a simulation, we need to put states in context
 with each other: We need to define a timeline of states that follow each other
@@ -130,3 +132,5 @@ may modify the ``.state`` of the new node as you wish, and then call
 
 ..
    todo: speak on other aspects of trees, like paths.
+   
+.. _garlicsim/data_structures/tree.py: https://github.com/cool-RR/GarlicSim/tree/master/garlicsim/garlicsim/data_structures/tree.py
