@@ -25,12 +25,11 @@ class State(garlicsim.data_structures.State):
     
     @staticmethod
     def create_root(n_players=70, n_rounds=7):
-        global player_types
         state = State(
             round=-1,
             match=0,
             players=[
-                player_types[i % len(player_types)]() for \
+                player_types[i % len(player_types_list)]() for \
                 i in xrange(n_players)
             ],
             n_rounds=n_rounds
@@ -45,7 +44,8 @@ class State(garlicsim.data_structures.State):
         state = State(
             round=-1,
             match=0,
-            players=[create_random_strategy_player() for i in xrange(n_players)],
+            players=[Player.create_random_strategy_player() for i
+                     in xrange(n_players)],
             n_rounds=n_rounds
         )
         state.prepare_for_new_match()
@@ -113,8 +113,8 @@ def play_game((x, y), round):
     x_move = x.play(round)
     y_move = y.play(round)
 
-    assert x_move in [True, False]
-    assert y_move in [True, False]
+    assert isinstance(x_move, bool)
+    assert isinstance(y_move, bool)
 
     if x_move == True and y_move == True:
         x.points += 1
@@ -133,9 +133,7 @@ def play_game((x, y), round):
     y.other_player_played(x_move)
 
     
-def create_random_strategy_player():
-    player = random.choice(player_types_list)
-    return player()
+
 
 
 

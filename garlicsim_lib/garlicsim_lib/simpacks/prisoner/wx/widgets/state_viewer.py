@@ -14,8 +14,7 @@ import wx.lib.agw.piectrl as piectrl
 
 import garlicsim_wx
 
-from ... import state as prisoner
-from garlicsim_lib.simpacks.prisoner import state
+from garlicsim_lib.simpacks import prisoner
 
 
 class StateViewer(wx.Panel, garlicsim_wx.widgets.WorkspaceWidget):
@@ -37,9 +36,9 @@ class StateViewer(wx.Panel, garlicsim_wx.widgets.WorkspaceWidget):
         self.sizer_v.Layout()
         
         color_dict = {
-            prisoner.Angel: wx.NamedColor("White"),
-            prisoner.Devil: wx.NamedColor("Black"),
-            prisoner.TitForTat: wx.NamedColor("Blue")
+            prisoner.players.Angel: wx.NamedColor('White'),
+            prisoner.players.Devil: wx.NamedColor('Black'),
+            prisoner.players.TitForTat: wx.NamedColor('Blue')
         }
         
         font = wx.Font(12, wx.SWISS, wx.NORMAL, wx.BOLD, True, 'Arial')
@@ -47,7 +46,7 @@ class StateViewer(wx.Panel, garlicsim_wx.widgets.WorkspaceWidget):
         self.pie_ctrl.SetAngle(math.pi)
     
         self.pie_part_dict = {}
-        for player_type in prisoner.player_types:
+        for player_type in prisoner.players.player_types_list:
             part = piectrl.PiePart()
             part.SetLabel(player_type.__name__)
             part.SetValue(1)

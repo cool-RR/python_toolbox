@@ -7,6 +7,9 @@ This module defines the `Player` class.
 See its documentation for more information.
 '''
 
+import random
+
+
 class Player(object):
     def __init__(self):
         self.points = 0
@@ -19,5 +22,5 @@ class Player(object):
     
     @staticmethod
     def create_random_strategy_player():
-        player = random.choice(player_types_list)
-        return player()
+        player_type = random.choice(player_types_list)
+        return player_type()
