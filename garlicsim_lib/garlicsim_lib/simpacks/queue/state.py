@@ -5,12 +5,11 @@
 Core module for `queue` simpack for simulations in Queueing Theory.
 '''
 
+from __future__ import division
+
 import Queue
 import random
 import copy
-
-import numpy
-import numpy.random
 
 from garlicsim.general_misc.infinity import infinity
 import garlicsim
@@ -26,7 +25,7 @@ def time_for_next_occurence(mean_time_for_next_occurence):
     Only for occurences that obey a Poisson distribution.
     '''
     mean = mean_time_for_next_occurence
-    return numpy.random.exponential(scale=mean)
+    return random.expovariate(1.0/mean)
 
 
 class State(garlicsim.data_structures.State):
