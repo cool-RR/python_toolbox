@@ -16,6 +16,7 @@ class TitForTat(BasePlayer):
     
     def play(self, round):
         if round == 0:
+            self.last_play = None
             return True
         else:
             return self.last_play

@@ -42,11 +42,11 @@ class BasePlayer(object):
 
         
     @abc.abstractmethod
-    def play(self, *args, **kwargs):
+    def play(self):
         ''''''
 
     
-    def other_player_played(self,move):
+    def other_player_played(self, move):
         pass
     
     
