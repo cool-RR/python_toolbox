@@ -33,3 +33,6 @@ def round_to_int(x, up=False):
                else rounded_down + 1
     else:
         return rounded_down
+
+def argmin(sequence):
+    return min(xrange(len(sequence)), key=lambda i: sequence[i])
