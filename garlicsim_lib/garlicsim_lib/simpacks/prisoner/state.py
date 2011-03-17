@@ -8,6 +8,7 @@ Simpack for a repeating game of prisoner's dillema with natural selection.
 import random
 random.seed()
 
+from garlicsim.general_misc import random_tools
 import garlicsim.data_structures
 
 from .player import BasePlayer
@@ -34,7 +35,7 @@ class State(garlicsim.data_structures.State):
             ],
             n_rounds=n_rounds
         )
-        state.prepare_for_new_match()
+        state._prepare_for_new_match()
         return state
     
     
@@ -48,7 +49,7 @@ class State(garlicsim.data_structures.State):
                      in xrange(n_players)],
             n_rounds=n_rounds
         )
-        state.prepare_for_new_match()
+        state._prepare_for_new_match()
         return state
     
         
@@ -59,14 +60,14 @@ class State(garlicsim.data_structures.State):
         if self.round == self.n_rounds:
             self.round = -1
             self.match += 1
-            self.prepare_for_new_match()
+            self._prepare_for_new_match()
             return
     
         for pair in self.pairs:
             play_game(pair, self.round)
     
     
-    def prepare_for_new_match(self):
+    def _prepare_for_new_match(self):
         '''
         Note: this function is not strictly a "step function":
         it manipulates the state that is given to it and then returns it.
@@ -75,38 +76,17 @@ class State(garlicsim.data_structures.State):
         self.players.remove(loser)
         self.players.append(BasePlayer.create_random_strategy_player())
     
-        self.pairs = pair_pool(self.players)
+        self.pairs = random_tools.random_partition(self.players, 2)
         
         
     def get_player_with_least_points(self):
-        assert len(self.players) > 0
-        loser = self.players[0]
-        for player in self.players:
-            if player.points < loser.points:
-                loser = player
-        return loser
+        return min(self.players, key=lambda player: player.points)
 
     
     def get_n_players_of_given_type(self, player_type):
-        return len([player for player in players
+        return len([player for player in self.players
                     if isinstance(player, player_type)])
 
-
-
-def pair_pool(players):
-    '''
-    Takes a player pool and returns a list of random pairs of players.
-    Every player will be a member of exactly one pair.
-    '''
-    assert len(players) % 2 == 0
-    result = []
-    pool = players[:]
-    while len(pool) > 0:
-        pair = random.sample(pool, 2)
-        result.append(pair)
-        pool.remove(pair[0])
-        pool.remove(pair[1])
-    return result
 
 def play_game((x, y), round):
     x_move = x.play(round)
@@ -115,16 +95,16 @@ def play_game((x, y), round):
     assert isinstance(x_move, bool)
     assert isinstance(y_move, bool)
 
-    if x_move == True and y_move == True:
+    if x_move is True and y_move is True:
         x.points += 1
         y.points += 1
-    elif x_move == True and y_move == False:
+    elif x_move is True and y_move is False:
         x.points += -4
         y.points += 2
-    elif x_move == False and y_move == True:
+    elif x_move is False and y_move is True:
         x.points += 2
         y.points += -4
-    elif x_move == False and y_move == False:
+    elif x_move is False and y_move is False:
         x.points += -1
         y.points += -1
 

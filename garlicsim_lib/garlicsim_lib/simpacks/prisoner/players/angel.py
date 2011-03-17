@@ -7,7 +7,7 @@ This module defines the `Angel` player type.
 See its documentation for more information.
 '''
 
-from ..player import Player
+from ..player import BasePlayer
 
 
 class Angel(BasePlayer):

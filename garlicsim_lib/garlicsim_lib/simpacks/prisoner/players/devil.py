@@ -7,7 +7,7 @@ This module defines the `Devil` player type.
 See its documentation for more information.
 '''
 
-from ..player import Player
+from ..player import BasePlayer
 
 
 class Devil(BasePlayer):

@@ -58,9 +58,6 @@ class StateViewer(wx.Panel, garlicsim_wx.widgets.WorkspaceWidget):
             return
         for player_type in prisoner.players.player_types_list:
             part = self.pie_part_dict[player_type]
-            value = state.State.get_n_players_of_given_type(
-                state.players,
-                player_type
-            )
+            value = state.get_n_players_of_given_type(player_type)
             part.SetValue(value)
         self.Refresh()

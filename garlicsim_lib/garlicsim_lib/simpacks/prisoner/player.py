@@ -7,6 +7,8 @@ This module defines the `Player` class.
 See its documentation for more information.
 '''
 
+from __future__ import absolute_import
+
 import random
 from garlicsim.general_misc.third_party import abc
 
@@ -35,7 +37,7 @@ class BasePlayer(object):
         
     @abc.abstractmethod
     def play(self, *args, **kwargs):
-        raise NotImplementedError
+        ''''''
 
     
     def other_player_played(self,move):
