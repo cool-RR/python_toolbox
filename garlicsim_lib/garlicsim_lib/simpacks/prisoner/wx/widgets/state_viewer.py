@@ -15,6 +15,7 @@ import wx.lib.agw.piectrl as piectrl
 import garlicsim_wx
 
 from ... import state as prisoner
+from garlicsim_lib.simpacks.prisoner import state
 
 
 class StateViewer(wx.Panel, garlicsim_wx.widgets.WorkspaceWidget):
@@ -64,8 +65,8 @@ class StateViewer(wx.Panel, garlicsim_wx.widgets.WorkspaceWidget):
             return
         for player_type in prisoner.player_types:
             part = self.pie_part_dict[player_type]
-            value = prisoner.how_many_players_of_certain_type(
-                state.player_pool,
+            value = state.State.get_n_players_of_given_type(
+                state.players,
                 player_type
             )
             part.SetValue(value)

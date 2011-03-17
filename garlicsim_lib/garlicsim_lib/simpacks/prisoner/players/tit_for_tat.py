@@ -7,6 +7,8 @@ This module defines the `TitForTat` player type.
 See its documentation for more information.
 '''
 
+from ..player import Player
+
 
 class TitForTat(Player):
     def play(self, round):

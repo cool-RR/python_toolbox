@@ -16,10 +16,10 @@ from .players import player_types_list
 
 class State(garlicsim.data_structures.State):
     
-    def __init__(self, round, match, player_pool, n_rounds=7):
+    def __init__(self, round, match, players, n_rounds=7):
         self.round = round
         self.match = match
-        self.player_pool = player_pool
+        self.players = players
         self.n_rounds = n_rounds
         
     
@@ -29,7 +29,7 @@ class State(garlicsim.data_structures.State):
         state = State(
             round=-1,
             match=0,
-            player_pool=[
+            players=[
                 player_types[i % len(player_types)]() for \
                 i in xrange(n_players)
             ],
@@ -45,7 +45,7 @@ class State(garlicsim.data_structures.State):
         state = State(
             round=-1,
             match=0,
-            player_pool=[random_strategy_player() for i in xrange(n_players)],
+            players=[create_random_strategy_player() for i in xrange(n_players)],
             n_rounds=n_rounds
         )
         state.prepare_for_new_match()
@@ -71,23 +71,37 @@ class State(garlicsim.data_structures.State):
         Note: this function is not strictly a "step function":
         it manipulates the state that is given to it and then returns it.
         '''
-        pool = self.player_pool
-        loser = player_with_least_points(pool)
+        pool = self.players
+        loser = get_player_with_least_points(pool)
         pool.remove(loser)
-        pool.append(random_strategy_player())
+        pool.append(create_random_strategy_player())
     
-        self.pairs = pair_pool(self.player_pool)
+        self.pairs = pair_pool(self.players)
+        
+        
+    def get_player_with_least_points(self):
+        assert len(self.players) > 0
+        loser = self.players[0]
+        for player in self.players:
+            if player.points < loser.points:
+                loser = player
+        return loser
+
+    
+    def get_n_players_of_given_type(self, player_type):
+        return len([player for player in players
+                    if isinstance(player, player_type)])
 
 
 
-def pair_pool(player_pool):
+def pair_pool(players):
     '''
     Takes a player pool and returns a list of random pairs of players.
     Every player will be a member of exactly one pair.
     '''
-    assert len(player_pool) % 2 == 0
+    assert len(players) % 2 == 0
     result = []
-    pool = player_pool[:]
+    pool = players[:]
     while len(pool) > 0:
         pair = random.sample(pool, 2)
         result.append(pair)
@@ -118,30 +132,13 @@ def play_game((x, y), round):
     x.other_player_played(y_move)
     y.other_player_played(x_move)
 
-def random_strategy_player():
-    player = random.choice(player_types)
+    
+def create_random_strategy_player():
+    player = random.choice(player_types_list)
     return player()
 
 
 
-    
 
 
-
-player_types = [Angel, Devil, TitForTat]
-
-def how_many_players_of_certain_type(pool, type):
-    n = 0
-    for player in pool:
-        if isinstance(player, type):
-            n += 1
-    return n
-
-def player_with_least_points(pool):
-    assert len(pool) > 0
-    loser = pool[0]
-    for player in pool:
-        if player.points < loser.points:
-            loser = player
-    return loser
 

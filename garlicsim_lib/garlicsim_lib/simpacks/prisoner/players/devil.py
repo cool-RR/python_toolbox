@@ -7,6 +7,8 @@ This module defines the `Devil` player type.
 See its documentation for more information.
 '''
 
+from ..player import Player
+
 
 class Devil(Player):
     def play(self, round):

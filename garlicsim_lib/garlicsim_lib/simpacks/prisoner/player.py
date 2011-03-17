@@ -16,3 +16,8 @@ class Player(object):
 
     def other_player_played(self,move):
         pass
+    
+    @staticmethod
+    def create_random_strategy_player():
+        player = random.choice(player_types_list)
+        return player()

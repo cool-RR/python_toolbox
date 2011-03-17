@@ -7,6 +7,8 @@ This module defines the `Angel` player type.
 See its documentation for more information.
 '''
 
+from ..player import Player
+
 
 class Angel(Player):
     def play(self, round):
