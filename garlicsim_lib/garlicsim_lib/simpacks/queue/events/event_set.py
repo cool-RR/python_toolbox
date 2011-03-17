@@ -7,8 +7,6 @@ This module defines the `EventSet` class.
 See its documentation for more information.
 '''
 
-import numpy
-
 from .event import Event
 
 class EventSet(object):
@@ -48,9 +46,6 @@ class EventSet(object):
     def get_closest_event(self):
         '''
         Get the closest pending event.
-        '''
-        if not self.events:
-            return None
-        times = [event.time_left for event in self.events]
-        closest_event = self.events[numpy.argmin(times)]
-        return closest_event
+        '''        
+        return min(self.events, key=lambda event: event.time_left) if \
+               self.events else None
