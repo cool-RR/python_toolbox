@@ -7,7 +7,7 @@ This module defines the `TitForTat` player type.
 See its documentation for more information.
 '''
 
-from ..player import BasePlayer
+from ..base_player import BasePlayer
 
 
 class TitForTat(BasePlayer):

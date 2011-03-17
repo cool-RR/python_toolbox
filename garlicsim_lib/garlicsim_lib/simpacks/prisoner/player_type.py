@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the `Player` class.
+This module defines the `PlayerType` class.
 
 See its documentation for more information.
 '''
@@ -30,23 +30,5 @@ class PlayerType(abc.ABCMeta):
         return player_type()
         
 
-
-class BasePlayer(object):
-    __metaclass__ = PlayerType
-
-    color = None
-    
-    
-    def __init__(self):
-        self.points = 0
-
-        
-    @abc.abstractmethod
-    def play(self):
-        ''''''
-
-    
-    def other_player_played(self, move):
-        pass
     
     

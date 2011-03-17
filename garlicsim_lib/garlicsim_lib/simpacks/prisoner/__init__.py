@@ -6,4 +6,4 @@ Simpack for a repeating game of prisoner's dillema with natural selection.
 '''
 
 from .state import State
-from .player import BasePlayer
+from .base_player import BasePlayer

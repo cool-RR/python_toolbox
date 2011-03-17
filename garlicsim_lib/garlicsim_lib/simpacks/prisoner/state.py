@@ -10,7 +10,7 @@ import random
 from garlicsim.general_misc import random_tools
 import garlicsim.data_structures
 
-from .player import BasePlayer, PlayerType
+from .player_type import PlayerType
 from .players import player_types_list
 
 
@@ -107,10 +107,4 @@ def play_game((x, y), round):
     y.other_player_played(x_move)
 
     
-
-
-
-
-
-
 
