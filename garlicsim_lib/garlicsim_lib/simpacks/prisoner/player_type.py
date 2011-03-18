@@ -19,9 +19,9 @@ class PlayerType(abc.ABCMeta):
     ''' '''
     
     @caching.CachedProperty
-    def wx_color(self):
+    def wx_color(cls):
         import wx
-        return wx.NamedColour(self.color or 'Red')
+        return wx.NamedColour(cls.color or 'Red')
     
     @staticmethod
     def create_random_strategy_player():

@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the `BasePlayer` class.
+This module defines the `BasePlayer` abstact base class.
 
 See its documentation for more information.
 '''
@@ -13,28 +13,63 @@ from .player_type import PlayerType
 
 
 class BasePlayer(object):
+    '''
+    A player that plays prisoner's dilemma, gaining and losing points.
+    
+    This is an abstract base class; subclass this to implement actual playing
+    strategies.
+    '''
+    
     __metaclass__ = PlayerType
 
     color = None
+    '''
+    Name of color that will represent this player class in a GUI. Optional.
+    '''
         
     def __init__(self):
+        
         self.points = 0
+        '''The number of points that the player has.'''
+        
         
     @abc.abstractmethod
-    def play(self, round):
-        ''' '''
+    def make_move(self, round):
+        '''
+        Decide which move to make.
+        
+        Abstract method.
+        
+        `round` is the round number in the match, starting with 0.
+        
+        Note that no information about the other player is given to this
+        method. Any state that a player subclass wants to have should be
+        created by it and saved as data attributes to the player instance.
+        
+        Returns a boolean, `True` is "be nice" and `False` is "be mean".
+        '''
+        
     
     def other_player_played(self, move):
+        '''
+        The other player played `move` in the last round.
+        
+        A player subclass may implement here something that saves this move and
+        takes it into account on subsequent rounds.
+        '''
         pass
     
     
     def play_game(player_1, player_2, round):
+        '''
+        
+        '''
         
         assert isinstance(player_1, BasePlayer)
         assert isinstance(player_2, BasePlayer)
     
-        player_1_move = player_1.play(round)
-        player_2_move = player_2.play(round)
+        player_1_move = player_1.make_move(round)
+        player_2_move = player_2.make_move(round)
     
         assert isinstance(player_1_move, bool)
         assert isinstance(player_2_move, bool)
