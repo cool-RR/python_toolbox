@@ -11,6 +11,7 @@ from garlicsim.general_misc import random_tools
 import garlicsim.data_structures
 
 from .player_type import PlayerType
+from .base_player import BasePlayer
 from .players import player_types_list
 
 
@@ -56,7 +57,7 @@ class State(garlicsim.data_structures.State):
             return
     
         for player_1, player_2 in self.player_pairs:
-            play_game(player_1, player_2, self.round)
+            BasePlayer.play_game(player_1, player_2, self.round)
     
     
     def _prepare_for_new_match(self, replace_loser=True):
@@ -83,32 +84,7 @@ class State(garlicsim.data_structures.State):
                     if isinstance(player, player_type)])
 
 
-def play_game(player_1, player_2, round):
-    
-    player_1_move = player_1.play(round)
-    player_2_move = player_2.play(round)
 
-    assert isinstance(player_1_move, bool)
-    assert isinstance(player_2_move, bool)
-
-    if player_1_move is True and player_2_move is True:
-        player_1.points += 1
-        player_2.points += 1
-        
-    elif player_1_move is True and player_2_move is False:
-        player_1.points += -4
-        player_2.points += 2
-        
-    elif player_1_move is False and player_2_move is True:
-        player_1.points += 2
-        player_2.points += -4
-        
-    elif player_1_move is False and player_2_move is False:
-        player_1.points += -1
-        player_2.points += -1
-
-    player_1.other_player_played(player_2_move)
-    player_2.other_player_played(player_1_move)
 
     
 
