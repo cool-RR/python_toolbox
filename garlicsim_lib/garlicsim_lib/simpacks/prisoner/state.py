@@ -95,8 +95,15 @@ class State(garlicsim.data_structures.State):
     
     def _prepare_for_new_match(self, replace_loser=True):
         '''
-        Note: this function is not strictly a "step function":
-        it manipulates the state that is given to it and then returns it.
+        Prepare a state with a `.round` of `-1` for the new match.
+        
+        Round -1 is a pseudo round in which the players get partitioned into
+        pairs randomly. The two players in each player will play against each
+        other in every round in the match, after which they'll be reassigned a
+        new opponent.
+        
+        If `replace_loser` is set to `True`, the player with the least points
+        will be removed and replaced with a player from a random player type.
         '''
         assert self.round == -1
         
@@ -109,15 +116,12 @@ class State(garlicsim.data_structures.State):
         
         
     def get_player_with_least_points(self):
+        '''Get the player which has the lowest number of points.'''
         return min(self.players, key=lambda player: player.points)
 
     
     def get_n_players_of_given_type(self, player_type):
+        '''Get the number of existing players of the type `player_type`.'''
         return len([player for player in self.players
                     if isinstance(player, player_type)])
-
-
-
-
-    
 

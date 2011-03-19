@@ -16,10 +16,11 @@ from garlicsim.general_misc import caching
 
 
 class PlayerType(abc.ABCMeta):
-    ''' '''
+    '''Metaclass for player types.'''
     
     @caching.CachedProperty
     def wx_color(cls):
+        '''The wxPython color that represents this player type in the GUI.'''
         import wx
         return wx.NamedColour(cls.color or 'Red')
     
