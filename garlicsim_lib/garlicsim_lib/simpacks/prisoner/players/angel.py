@@ -11,8 +11,10 @@ from ..base_player import BasePlayer
 
 
 class Angel(BasePlayer):
+    '''Player which always plays nice.'''
     
     color = 'White'
     
     def make_move(self, round):
+        '''Play nice.'''
         return True

@@ -3,6 +3,8 @@
 
 '''
 Simpack for a repeating game of prisoner's dillema with natural selection.
+
+tododoc
 '''
 
 from .state import State

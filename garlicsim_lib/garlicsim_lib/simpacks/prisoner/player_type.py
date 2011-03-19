@@ -32,6 +32,3 @@ class PlayerType(abc.ABCMeta):
         player_type = random.choice(player_types_list)
         return player_type()
         
-
-    
-    

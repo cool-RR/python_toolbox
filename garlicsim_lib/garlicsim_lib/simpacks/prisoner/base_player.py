@@ -76,6 +76,8 @@ class BasePlayer(object):
         assert isinstance(player_1_move, bool)
         assert isinstance(player_2_move, bool)
     
+        ### Calculating outcome of game in points for each player: ############
+        #                                                                     #
         if player_1_move is True and player_2_move is True:
             player_1.points += 1
             player_2.points += 1
@@ -91,6 +93,8 @@ class BasePlayer(object):
         elif player_1_move is False and player_2_move is False:
             player_1.points += -1
             player_2.points += -1
+        #                                                                     #
+        ### Finished calculating outcome of game in points for each player. ###
     
         player_1.other_player_played(player_2_move)
         player_2.other_player_played(player_1_move)
