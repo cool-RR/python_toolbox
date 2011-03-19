@@ -10,6 +10,10 @@ import garlicsim.data_structures
 
 
 class State(garlicsim.data_structures.State):
+    '''
+    World state. A frozen moment in time in the simulation world.
+    
+    '''
 
     @staticmethod
     def create_diehard(width=45, height=25):

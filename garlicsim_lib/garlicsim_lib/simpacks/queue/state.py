@@ -29,6 +29,10 @@ def time_for_next_occurence(mean_time_for_next_occurence):
 
 
 class State(garlicsim.data_structures.State):
+    '''
+    World state. A frozen moment in time in the simulation world.
+    
+    '''
     def __init__(self, event_set, facility, servers, population):
         garlicsim.data_structures.State.__init__(self)
         self.event_set = event_set

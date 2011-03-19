@@ -9,6 +9,10 @@ import random
 import garlicsim.data_structures
 
 class State(garlicsim.data_structures.State):
+    '''
+    World state. A frozen moment in time in the simulation world.
+    
+    '''
     
     def __init__(self, left, left_vel, right):
         self.left = left

@@ -16,9 +16,22 @@ from .players import player_types_list
 
 
 class State(garlicsim.data_structures.State):
+    '''World state. A frozen moment in time in the simulation world.'''
     
     def __init__(self, players, round=-1, match=0, n_rounds=7):
+        '''
+        Constructor.
+        
+        `players` is a list of players, i.e. instances of `BasePlayer`, that
+        will play against each other. `round` is the round number, with `-1`
+        being the preparation pseudo-round. `match` is the match number.
+        `n_rounds` is the number of rounds in a match.
+        '''
+        
         self.round = round
+        '''The round number, with `-1` being the preparation pseudo-round.'''
+        
+        
         self.match = match
         self.players = players
         self.n_rounds = n_rounds
