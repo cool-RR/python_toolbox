@@ -36,3 +36,5 @@ distribution of the population into different player types changes over time.
 
 from .state import State
 from .base_player import BasePlayer
+
+name = "Prisoner's Dilemma"

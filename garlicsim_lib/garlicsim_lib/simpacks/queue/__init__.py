@@ -4,3 +4,5 @@
 '''A simpack for simulations in Queueing Theory.'''
 
 from .state import State
+
+name = 'Queue'

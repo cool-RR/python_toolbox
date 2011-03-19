@@ -112,6 +112,10 @@ def test():
                          
             with sys_tools.TempSysPathAdder(temp_folder):
                 import _coin_flip
+                
+                assert _coin_flip.__doc__ == '_coin_flip description.'
+                assert _coin_flip.name == '_coin_flip'                
+                
                 state = _coin_flip.State.create_root()
                 assert repr(vars(state)) == \
                        "{'balance': 5000, 'last_bet_result': 0}"

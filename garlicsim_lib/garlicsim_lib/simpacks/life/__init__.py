@@ -5,6 +5,6 @@
 
 from .state import State
     
-
+name = "Conway's Game of Life"
 
     
