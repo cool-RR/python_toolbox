@@ -14,5 +14,5 @@ class Angel(BasePlayer):
     
     color = 'White'
     
-    def play(self, round):
+    def make_move(self, round):
         return True

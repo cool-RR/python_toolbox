@@ -69,7 +69,7 @@ class State(garlicsim.data_structures.State):
     def create_messy_root(n_players=70, n_rounds=7):
         '''Create a random and messy world state.'''
         state = State(
-            players=[PlayerType.create_random_strategy_player() for i
+            players=[PlayerType.create_player_of_random_type() for i
                      in xrange(n_players)],
             n_rounds=n_rounds
         )
@@ -110,7 +110,7 @@ class State(garlicsim.data_structures.State):
         if replace_loser:
             loser = self.get_player_with_least_points()
             self.players.remove(loser)
-            self.players.append(PlayerType.create_random_strategy_player())
+            self.players.append(PlayerType.create_player_of_random_type())
     
         self.player_pairs = random_tools.random_partition(self.players, 2)
         

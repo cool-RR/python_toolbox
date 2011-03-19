@@ -17,15 +17,17 @@ from garlicsim.general_misc import caching
 
 class PlayerType(abc.ABCMeta):
     '''Metaclass for player types.'''
-    
+        
     @caching.CachedProperty
     def wx_color(cls):
         '''The wxPython color that represents this player type in the GUI.'''
         import wx
         return wx.NamedColour(cls.color or 'Red')
     
+    
     @staticmethod
-    def create_random_strategy_player():
+    def create_player_of_random_type():
+        '''Create a player of a random player type.'''
         from .players import player_types_list
         player_type = random.choice(player_types_list)
         return player_type()

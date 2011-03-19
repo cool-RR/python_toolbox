@@ -62,9 +62,11 @@ class BasePlayer(object):
     
     def play_game(player_1, player_2, round):
         '''
+        Have `player_1` and `player_2` play against each other.
         
-        '''
-        
+        Each player will gain or lose points according to the outcome of the
+        game.
+        '''        
         assert isinstance(player_1, BasePlayer)
         assert isinstance(player_2, BasePlayer)
     

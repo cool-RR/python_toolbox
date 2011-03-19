@@ -14,7 +14,7 @@ class TitForTat(BasePlayer):
     
     color = 'Blue'
     
-    def play(self, round):
+    def make_move(self, round):
         if round == 0:
             self.last_play = None
             return True

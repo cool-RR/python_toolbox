@@ -26,7 +26,7 @@ class CachedProperty(object):
             personality = CachedProperty(_get_personality)
     
     '''
-    def __init__(self, getter, name=None):
+    def __init__(self, getter, doc=None, name=None):
         '''
         Construct the cached property.
         
@@ -35,6 +35,7 @@ class CachedProperty(object):
         '''
         self.getter = getter
         self.our_name = name
+        self.__doc__ = doc or getattr(getter, '__doc__', None)
         
         
     def __get__(self, obj, our_type=None):
