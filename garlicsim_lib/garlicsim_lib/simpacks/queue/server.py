@@ -24,11 +24,17 @@ class Server(identities.HasIdentity):
         '''
         identities.HasIdentity.__init__(self)
         
-        self.event_set = event_set        
+        self.event_set = event_set
+        '''Event set for events such as the end of a client's service.'''
+        
         self.facility = facility
+        '''The facility in which clients are served.'''
+        
         self.mean_service_time = mean_service_time
+        '''The mean time it takes the server to service a client.'''
         
         self.current_client = None
+        '''The current client being 
         
         self.finish_service_event = None
         '''

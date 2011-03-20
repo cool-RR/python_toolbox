@@ -66,7 +66,7 @@ class Facility(identities.HasIdentity):
         '''Generator that yields servers in the facility that are idle.'''
         for server in self.servers:
             if not server.is_busy():
-                yield idle_server
+                yield server
             
             
     def feed_client(self, server):

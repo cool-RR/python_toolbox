@@ -32,7 +32,7 @@ class State(garlicsim.data_structures.State):
         self.population = population
 
     @staticmethod
-    def create_root(n_servers=3, population_size=infinity, mean_arrival=1,
+    def create_root(n_servers=3, population_size=infinity, mean_arrival_time=1,
                     mean_service_time=3):
         
         event_set = events_module.EventSet()
@@ -48,7 +48,7 @@ class State(garlicsim.data_structures.State):
             event_set=event_set,
             facility=facility,
             size=population_size,
-            mean_arrival=mean_arrival
+            mean_arrival_time=mean_arrival_time
         )
         
         my_state = State(event_set, facility, servers, population)
