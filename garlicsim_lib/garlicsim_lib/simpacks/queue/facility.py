@@ -50,22 +50,24 @@ class Facility(identities.HasIdentity):
     def add_client(self, client):
         '''Add a new client to this facility, to be served by a server.'''
         self.clients.append(client)
-        self.waiting_clients.append(client)
-        if len(self.waiting_clients) == 1:
-            idle_servers_iterator = self.idle_servers_generator()
-            try:
-                idle_server = idle_servers_iterator.next()
-                self.waiting_clients.remove(client)
-                idle_server.service_client(client)
-            except StopIteration:
-                pass
+        if not self.waiting_clients: # Queue is empty, no waiting clients
+            # If there's an idle server, have it service the new client:
+            idle_servers = list(self.idle_servers_generator())
+            if idle_servers:
+                first_idle_server = idle_servers[0]
+                first_idle_server.service_client(client)
+            else:
+                self.waiting_clients.append(client)
+        else: # There are clients awaiting in the queue
+            self.waiting_clients.append(client)
+            
             
     def idle_servers_generator(self):
         '''Generator that yields servers in the facility that are idle.'''
-        inner_generator = (server for server in self.servers
-                           if (server.is_busy() is False))
-        for idle_server in inner_generator:
-            yield idle_server
+        for server in self.servers:
+            if not server.is_busy():
+                yield idle_server
+            
             
     def feed_client(self, server):
         '''
@@ -73,12 +75,11 @@ class Facility(identities.HasIdentity):
         
         The server must be idle.
         '''
-        assert server.is_busy() is False
-        try:
+        assert not server.is_busy()
+        if self.waiting_clients:
             client = self.waiting_clients.pop(0)
-        except IndexError:
-            return None
-        server.service_client(client)
+            server.service_client(client)
+        
     
     def finished_client_count(self):
         '''Return the number of clients that were served by all servers.'''

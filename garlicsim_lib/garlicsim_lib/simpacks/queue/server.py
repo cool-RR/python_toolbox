@@ -38,6 +38,7 @@ class Server(identities.HasIdentity):
         self.client_counter = 0
         '''A counter for the number of clients that this server served.'''
     
+        
     def service_client(self, client):
         '''
         Service a client.
