@@ -7,14 +7,15 @@ This module defines the `Client` class.
 See its documentation for more information.
 '''
 
+from garlicsim.general_misc import identities
+
 import garlicsim
 
 
-class Client(object):
+class Client(identities.HasIdentity):
     '''A client which needs to be served in the facility.'''
     def __init__(self):
-        self.identity = \
-            garlicsim.general_misc.persistent.CrossProcessPersistent()
+        identities.HasIdentity.__init__(self)
 
         
 

@@ -13,7 +13,6 @@ Note: This module is still experimental.
 todo: need to lock library to avoid thread trouble?
 '''
 
-
 import uuid
 import weakref
 
@@ -69,7 +68,7 @@ class CrossProcessPersistent(Persistent):
         # We check whether we are getting a uuid token. If we are, it's
         # unpickling. If we don't, it's creation.
         
-        if len(args)==1 and len(kwargs)==0 and isinstance(args[0], UuidToken):
+        if len(args) == 1 and (not kwargs) and isinstance(args[0], UuidToken):
             received_uuid = args[0].uuid
         else:
             received_uuid = None
@@ -93,9 +92,14 @@ class CrossProcessPersistent(Persistent):
             return thing
 
         
+    def has_same_uuid_as(self, other):
+        if not isinstance(other, CrossProcessPersistent):
+            return NotImplemented
+        return self.__uuid == other.__uuid
+        
     def __getstate__(self):
         my_dict = dict(self.__dict__)
-        del my_dict["_CrossProcessPersistent__uuid"]
+        del my_dict['_CrossProcessPersistent__uuid']
         return my_dict
 
     
@@ -104,7 +108,7 @@ class CrossProcessPersistent(Persistent):
 
     
     def __setstate__(self, state):
-        if self.__dict__.pop("_CrossProcessPersistent__skip_setstate", None):
+        if self.__dict__.pop('_CrossProcessPersistent__skip_setstate', None):
             return
         else:
             self.__dict__.update(state)
@@ -131,7 +135,10 @@ class CrossProcessPersistent(Persistent):
             return new_copy
 
         
-    personality = caching.CachedProperty(Personality)
+    personality = caching.CachedProperty(
+        Personality,
+        doc='''Personality containing a human name and two colors.'''
+    )
 
 
 

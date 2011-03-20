@@ -7,17 +7,17 @@ This module defines the `Server` class.
 See its documentation for more information.
 '''
 
+from garlicsim.general_misc import identities
+
 import garlicsim
 from .server import Server
 
 
-class Facility(object):
+class Facility(identities.HasIdentity):
     '''A facility in which there are servers serving clients.'''
     
     def __init__(self, event_set, servers=[], clients=[]):
-        
-        self.identity =\
-            garlicsim.general_misc.persistent.CrossProcessPersistent()
+        identities.HasIdentity.__init__(self)
         self.event_set = event_set
         self.servers = servers
         self.clients = clients

@@ -8,6 +8,7 @@ See its documentation for more information.
 '''
 
 from garlicsim.general_misc.infinity import infinity
+from garlicsim.general_misc import identities
 import garlicsim
 
 from . import math_tools
@@ -15,7 +16,7 @@ from . import math_tools
 from .client import Client
 
 
-class Population(object):
+class Population(identities.HasIdentity):
     '''A population which generates clients.'''
     def __init__(self, event_set, facility, size=infinity, mean_arrival=1):
         '''
@@ -23,9 +24,8 @@ class Population(object):
         
         `mean_arrival` is the mean time between arrivals.
         '''
+        identities.HasIdentity.__init__(self)
         assert size == infinity
-        self.identity = \
-            garlicsim.general_misc.persistent.CrossProcessPersistent()
         self.size = size
         self.mean_arrival = mean_arrival
         self.event_set = event_set

@@ -49,9 +49,8 @@ class CachedProperty(object):
         if not self.our_name:
             if not our_type:
                 our_type = type(obj)
-            (self.our_name,) = (key for (key, value) in 
-                                vars(our_type).iteritems()
-                                if value is self)
+            (self.our_name,) = (name for name in dir(our_type) if
+                                getattr(our_type, name) is self)
         
         setattr(obj, self.our_name, value)
         

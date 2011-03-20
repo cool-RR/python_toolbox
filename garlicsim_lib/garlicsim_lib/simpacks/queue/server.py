@@ -7,12 +7,13 @@ This module defines the `Server` class.
 See its documentation for more information.
 '''
 
+from garlicsim.general_misc import identities
 import garlicsim
 
 from . import math_tools
 
 
-class Server(object):
+class Server(identities.HasIdentity):
     '''A server which serves clients in a facility.'''
     
     def __init__(self, event_set, facility, mean_service):
@@ -21,9 +22,7 @@ class Server(object):
         
         `mean_service` is the mean time it takes to service a client.
         '''
-        
-        self.identity = \
-            garlicsim.general_misc.persistent.CrossProcessPersistent()
+        identities.HasIdentity.__init__(self)
         
         self.event_set = event_set        
         self.facility = facility
