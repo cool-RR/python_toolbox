@@ -43,7 +43,6 @@ class WorkspaceWidget(object):
     
     def __init__(self, frame):
         
-        
         self.Hide()
         
         self.frame = frame

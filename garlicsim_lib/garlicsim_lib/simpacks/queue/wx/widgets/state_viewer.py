@@ -18,10 +18,6 @@ from garlicsim.general_misc.infinity import infinity
 from garlicsim_wx.general_misc import wx_tools
 
 
-def make_wx_color((r, g, b)):
-    return wx.Colour(255*r, 255*g, 255*b)
-
-
 class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,
                   garlicsim_wx.widgets.WorkspaceWidget):
     '''Widget for showing a state of the `queue` simpack.'''
@@ -36,9 +32,9 @@ class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,
         
         self.Bind(wx.EVT_PAINT, self.on_paint)
         self.Bind(wx.EVT_SIZE, self.on_size)
-        #self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse_event)
         
         self.state = None
+        '''The current state being displayed.'''
         
         self.font = wx.Font(12, wx.FONTFAMILY_TELETYPE, wx.FONTSTYLE_NORMAL,
                             wx.FONTWEIGHT_BOLD, face='Courier New')        
@@ -55,6 +51,7 @@ class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,
         self.state = state
         self.Refresh()
 
+        
     def on_paint(self, event):
         '''Paint event handler.'''
         
@@ -72,13 +69,9 @@ class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,
         dc.SetBackgroundMode(wx.SOLID)
         dc.SetFont(self.font)
         
-
         
-        
-        #######################################################################
-        ############  Draw servers:
-        #######################################################################
-
+        ### Drawing servers: ##################################################
+        #                                                                     #
         servers = state.servers
         
         for (i, server) in enumerate(servers):
@@ -87,8 +80,8 @@ class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,
             
             name, light_color, dark_color = (
                 personality.human_name,
-                make_wx_color(personality.light_color),
-                make_wx_color(personality.dark_color)
+                wx_tools.rgb_to_wx_color(personality.light_color),
+                wx_tools.rgb_to_wx_color(personality.dark_color)
             )
             
             x0 = 10 + 200 * i
@@ -104,7 +97,7 @@ class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,
             dc.SetTextBackground(light_color)
             dc.SetTextForeground(dark_color)
                         
-            dc.DrawText('Server ' + name, x0, y0)
+            dc.DrawText('Server %s' % name, x0, y0)
             
             client = server.current_client
             
@@ -119,64 +112,53 @@ class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,
                 
                 client_name, client_light_color, client_dark_color = (
                     client_personality.human_name,
-                    make_wx_color(client_personality.light_color),
-                    make_wx_color(client_personality.dark_color)
+                    wx_tools.rgb_to_wx_color(client_personality.light_color),
+                    wx_tools.rgb_to_wx_color(client_personality.dark_color)
                 )
                 
                 dc.SetTextBackground(client_light_color)
                 dc.SetTextForeground(client_dark_color)
                 dc.DrawText(client_name, x0 + 10, y0 + 22)
+        #                                                                     #
+        ### Finished drawing servers. #########################################
                 
         
-        
-        
-        #######################################################################
-        ############  Draw population:
-        #######################################################################
-
+        ### Drawing population: ###############################################
+        #                                                                     #
         assert state.population.size == infinity
         
         dc.SetTextBackground('#d4d0c8')
         dc.SetTextForeground('#000000')
         
         dc.DrawTextList(['Population:', 'Infinite'], [(10, 70), (10, 89)])
+        #                                                                     #
+        ### Finished drawing population. ######################################
         
         
-        
-        #######################################################################
-        ############  Draw clients:
-        #######################################################################
-        
+        ### Drawing waiting clients: ##########################################
+        #                                                                     #
         dc.SetTextBackground('#d4d0c8')
         dc.SetTextForeground('#000000')
         
         dc.DrawText('Clients in queue:', 150, 70)
         
-        personalities = [client.personality for client in
-                         state.facility.waiting_clients]
+        waiting_clients = state.facility.waiting_clients
         
-        names = []; background_colors = []; foreground_colors = []
-        
-        for personality in personalities:
-            names.append(personality.human_name)
-            background_colors.append(make_wx_color(personality.light_color))
-            foreground_colors.append(make_wx_color(personality.dark_color))
-        
-        coords = [(150, 89 + (19 * i)) for i in range(len(personalities))]
-        
-        dc.DrawTextList(names, coords, foreground_colors, background_colors)
-        
-
-        
-        """
-
-        self.SetVirtualSize(
-            (
-                board.width * (self.square_size + self.border_width),
-                board.height * (self.square_size + self.border_width)
-            )
+        dc.DrawTextList(
+            textList=
+                [client.personality.human_name for client in waiting_clients],
+            coords=
+                [(150, 89 + (19 * i)) for i in range(len(waiting_clients))],
+            foregrounds=
+                [wx_tools.rgb_to_wx_color(client.personality.dark_color) for
+                 client in waiting_clients],
+            backgrounds=
+                [wx_tools.rgb_to_wx_color(client.personality.light_color) for
+                 client in waiting_clients]
         )
-        """
+        #                                                                     #
+        ### Finished drawing waiting clients. #################################
+        
 
     def on_size(self, event):
         '''Refresh the widget.'''
