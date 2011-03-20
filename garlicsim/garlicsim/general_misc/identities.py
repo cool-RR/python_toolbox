@@ -17,12 +17,12 @@ class HasIdentity(object):
         self.__identity = CrossProcessPersistent()
 
         
-    def same_identity(self, other):
+    def has_same_identity_as(self, other):
         if not isinstance(other, HasIdentity):
             return NotImplemented
         return self.__identity.has_same_uuid_as(other.__identity)
     
-    __and__ = same_identity
+    __and__ = has_same_identity_as
     
     
     @caching.CachedProperty
