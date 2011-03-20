@@ -137,4 +137,5 @@ def is_number(x):
     else:
         return True
     
-    
+def identity_function(thing):
+    return thing
