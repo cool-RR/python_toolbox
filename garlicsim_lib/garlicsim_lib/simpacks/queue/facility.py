@@ -69,7 +69,7 @@ class Facility(identities.HasIdentity):
     
     def __repr__(self):
         return ('<facility with %s clients, %s of which stand in queue. %s '
-                'clients were served total.>''' % \
+                'clients were served total.>' % \
                 (
                     len(self.clients),
                     len(self.waiting_clients),
