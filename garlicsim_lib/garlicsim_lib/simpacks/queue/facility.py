@@ -1,6 +1,15 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''
+This module defines the `Server` class.
+
+See its documentation for more information.
+'''
 
 import garlicsim
 from .server import Server
+
 
 class Facility(object):
     '''A facility in which there are servers serving clients.'''

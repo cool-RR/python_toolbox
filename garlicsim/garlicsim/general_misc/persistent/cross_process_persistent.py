@@ -16,7 +16,6 @@ todo: need to lock library to avoid thread trouble?
 
 import uuid
 import weakref
-import colorsys
 
 from garlicsim.general_misc import caching
 from garlicsim.general_misc import copy_tools

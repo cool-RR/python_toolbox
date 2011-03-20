@@ -40,28 +40,13 @@ class EventSet(object):
         '''
         if not self.events:
             raise Exception('No pending events.')
-        
-        first_event = self.events.pop()
-        simultaneous_events = [first_event]
-        time_to_next_event = first_event.time_left
-        
-        while True:
-            if self.events[0].time_left == time_to_next_event:
-                simultaneous_events.append(self.events.pop(0)
             
-        closest_event = self.get_closest_event()
+        closest_event = self.events.pop(0)
         
-        closest_event_time_left = closest_event.time_left
-        self.events.remove(closest_event)
         for event in self.events:
-            event.pass_time(closest_event_time_left)
-            assert event.time_left > 0 # making sure no other event gets done
-        closest_event.pass_time(closest_event_time_left)
+            event.time_left -= closest_event.time_left
+            
+        closest_event.action()
         
-        return closest_event_time_left
+        return closest_event.time_left
     
-    
-    def get_closest_event(self):
-        '''Get the closest pending event.'''
-        return min(self.events, key=lambda event: event.time_left) if \
-               self.events else None
