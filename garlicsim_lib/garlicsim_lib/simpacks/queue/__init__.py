@@ -27,3 +27,5 @@ servicing them according to a Poisson distribution.
 from .state import State
 
 name = 'Queue'
+
+tags = ['queueing-theory']

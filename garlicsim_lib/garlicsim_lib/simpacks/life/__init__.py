@@ -7,4 +7,4 @@ from .state import State
     
 name = "Conway's Game of Life"
 
-    
+tags = ['cellular-automata', "conway's-game-of-life", 'abstract']

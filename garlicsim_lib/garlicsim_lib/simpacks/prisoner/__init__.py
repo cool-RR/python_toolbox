@@ -38,3 +38,5 @@ from .state import State
 from .base_player import BasePlayer
 
 name = "Prisoner's Dilemma"
+
+tags = ['game-theory', "prisoner's-dilemma"]
