@@ -7,7 +7,8 @@ This module defines the `Client` class.
 See its documentation for more information.
 '''
 
-from garlicsim import garlicsim
+import garlicsim
+
 
 class Client(object):
     '''A client which needs to be served in the facility.'''

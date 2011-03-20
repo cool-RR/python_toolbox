@@ -1,6 +1,6 @@
 
-from garlicsim import garlicsim
-from . import server
+import garlicsim
+from .server import Server
 
 class Facility(object):
     '''A facility in which there are servers serving clients.'''
@@ -16,7 +16,7 @@ class Facility(object):
         
     def create_server(self, *args, **kwargs):
         '''Create a new server for this facility.'''
-        new_server = server.Server(self.event_set, self, *args, **kwargs)
+        new_server = Server(self.event_set, self, *args, **kwargs)
         self.servers.append(new_server)
         return new_server
     

@@ -10,6 +10,7 @@ See its documentation for more information.
 import copy
 import types
 
+
 class Event(object):
     '''
     An event.
@@ -23,17 +24,4 @@ class Event(object):
         self.time_left = time_left
         self.action = action
         self.done = False
-        
-    def pass_time(self, t):
-        '''
-        Make `t` time pass.
-        
-        If enough time passes, the event happens and the action gets executed.
-        In that case the return value of the action will be returned.
-        '''
-        self.time_left -= t
-        if (self.time_left <= 0)  and (not self.done):
-            return self.action()
-        else:
-            return None
         
