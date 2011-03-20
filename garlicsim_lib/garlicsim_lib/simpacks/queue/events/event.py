@@ -24,4 +24,6 @@ class Event(object):
         self.time_left = time_left
         self.action = action
         self.done = False
-        
+
+    def _get_time_left(self):
+        return self.time_left

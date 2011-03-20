@@ -7,9 +7,6 @@ This module defines the `EventSet` class.
 See its documentation for more information.
 '''
 
-from garlicsim.general_misc.third_party.sorted_collection import \
-                                                          SortedCollection
-
 from .event import Event
 
 
@@ -17,8 +14,8 @@ class EventSet(object):
     '''A set of events that happen in the same "world".'''
     
     def __init__(self):
-        self.events = SortedCollection(key=lambda event: event.time_left)
-        '''Sorted sequence of all the events in the system.'''
+        self.events = []
+        '''Sorted list of all the events in the system.'''
     
         
     def create_event(self, time_left, action):
@@ -28,7 +25,10 @@ class EventSet(object):
         Returns the new event.
         '''
         event = Event(time_left, action)
-        self.events.insert(event)
+        
+        self.events.append(event)
+        self.events.sort(key=Event._get_time_left)
+        
         return event
 
     
@@ -41,11 +41,14 @@ class EventSet(object):
         if not self.events:
             raise Exception('No pending events.')
         
-        simultaneous_events = [self.events]
-        time_to_next_event = 
+        first_event = self.events.pop()
+        simultaneous_events = [first_event]
+        time_to_next_event = first_event.time_left
         
         while True:
-            if 
+            if self.events[0].time_left == time_to_next_event:
+                simultaneous_events.append(self.events.pop(0)
+            
         closest_event = self.get_closest_event()
         
         closest_event_time_left = closest_event.time_left
