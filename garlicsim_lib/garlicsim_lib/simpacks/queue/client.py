@@ -13,7 +13,7 @@ import garlicsim
 
 
 class Client(identities.HasIdentity):
-    '''A client which needs to be served in the facility.'''
+    '''A client which needs to be served in a facility.'''
     def __init__(self):
         identities.HasIdentity.__init__(self)
 

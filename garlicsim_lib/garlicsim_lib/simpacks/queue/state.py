@@ -23,10 +23,7 @@ from .population import Population
 
 
 class State(garlicsim.data_structures.State):
-    '''
-    World state. A frozen moment in time in the simulation world.
-    
-    '''
+    '''World state. A frozen moment in time in the simulation world.'''
     def __init__(self, event_set, facility, servers, population):
         garlicsim.data_structures.State.__init__(self)
         self.event_set = event_set
@@ -36,14 +33,14 @@ class State(garlicsim.data_structures.State):
 
     @staticmethod
     def create_root(n_servers=3, population_size=infinity, mean_arrival=1,
-                    mean_service=3):
+                    mean_service_time=3):
         
         event_set = events_module.EventSet()
         
         facility = Facility(event_set=event_set)
         
         for i in range(n_servers):
-            facility.create_server(mean_service=mean_service)
+            facility.create_server(mean_service_time=mean_service_time)
             
         servers = facility.servers
         

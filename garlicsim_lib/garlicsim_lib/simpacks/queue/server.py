@@ -16,17 +16,17 @@ from . import math_tools
 class Server(identities.HasIdentity):
     '''A server which serves clients in a facility.'''
     
-    def __init__(self, event_set, facility, mean_service):
+    def __init__(self, event_set, facility, mean_service_time):
         '''
         Constructor.
         
-        `mean_service` is the mean time it takes to service a client.
+        `mean_service_time` is the mean time it takes to service a client.
         '''
         identities.HasIdentity.__init__(self)
         
         self.event_set = event_set        
         self.facility = facility
-        self.mean_service = mean_service
+        self.mean_service_time = mean_service_time
         
         self.current_client = None
         
@@ -47,7 +47,9 @@ class Server(identities.HasIdentity):
         assert self.current_client is None and \
                self.finish_service_event is None
         self.current_client = client
-        time_to_next = math_tools.time_for_next_occurence(self.mean_service)
+        time_to_next = math_tools.time_for_next_occurence(
+            self.mean_service_time
+        )
         self.finish_service_event = \
             self.event_set.create_event(time_to_next, self.finish_client)
         

@@ -18,16 +18,34 @@ class Facility(identities.HasIdentity):
     
     def __init__(self, event_set, servers=[], clients=[]):
         identities.HasIdentity.__init__(self)
-        self.event_set = event_set
-        self.servers = servers
-        self.clients = clients
-        self.waiting_clients = clients[:]
         
-    def create_server(self, *args, **kwargs):
+        self.event_set = event_set
+        '''
+        An event set for events such as servers finishing or clients arriving.
+        '''
+        
+        self.servers = servers
+        '''List of all the servers in the facility.'''
+        
+        self.clients = clients
+        '''
+        List of all the clients, both those getting served and those on queue.
+        '''
+        
+        self.waiting_clients = clients[:]
+        '''List of all the clients waiting in the queue.'''
+        
+        
+    def create_server(self, mean_service_time):
         '''Create a new server for this facility.'''
-        new_server = Server(self.event_set, self, *args, **kwargs)
+        new_server = Server(
+            event_set=self.event_set,
+            facility=self,
+            mean_service_time=mean_service_time
+        )
         self.servers.append(new_server)
         return new_server
+
     
     def add_client(self, client):
         '''Add a new client to this facility, to be served by a server.'''
