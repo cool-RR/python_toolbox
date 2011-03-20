@@ -34,7 +34,7 @@ class Server(identities.HasIdentity):
         '''The mean time it takes the server to service a client.'''
         
         self.current_client = None
-        '''The current client being 
+        '''The current client being serviced by this server.'''
         
         self.finish_service_event = None
         '''
@@ -54,11 +54,11 @@ class Server(identities.HasIdentity):
         assert self.current_client is None and \
                self.finish_service_event is None
         self.current_client = client
-        time_to_next = math_tools.time_for_next_occurence(
-            self.mean_service_time
+        self.finish_service_event = self.event_set.create_event(
+            math_tools.time_for_next_occurence(self.mean_service_time),
+            self.finish_client
         )
-        self.finish_service_event = \
-            self.event_set.create_event(time_to_next, self.finish_client)
+        
         
     def finish_client(self):
         '''Finish serving the currently served client.'''
@@ -74,14 +74,13 @@ class Server(identities.HasIdentity):
     def is_busy(self):
         '''Is this server busy serving a client?'''
         return (self.current_client is not None)
+
     
     def __repr__(self):
-        if self.is_busy():
-            return '<Server (busy) who served %s clients>' % \
-                   self.client_counter
-        else:
-            return '<Server (free) who served %s clients>' % \
-                   self.client_counter
+        return '<Server (%s) who served %s clients>' % (
+            'busy' if self.is_busy() else 'free',
+            self.client_counter
+        )
         
 
  
