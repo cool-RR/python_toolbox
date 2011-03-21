@@ -12,13 +12,21 @@ import random
 
 from garlicsim.general_misc import random_tools
 from garlicsim.general_misc.infinity import infinity
-
+from garlicsim.general_misc.persistent import CrossProcessPersistent
 
 import garlicsim.data_structures
 
 from .player_type import PlayerType
 from .base_player import BasePlayer
 from .players import player_types_list
+
+
+BaseForHandicap = [object, CrossProcessPersistent][1]
+
+class Handicap(BaseForHandicap):
+    def __init__(self, thing, meow):
+        self.thing, self.meow = thing, meow
+        self.big_list = [random.random() for i in range(100000)]
 
 
 class State(garlicsim.data_structures.State):
@@ -54,6 +62,8 @@ class State(garlicsim.data_structures.State):
         assert n_rounds >= 1
         self.n_rounds = n_rounds
         '''The number of rounds in a match.'''
+        
+        self.handicap = Handicap('The thing', meow='The meow')
         
     
     @staticmethod
