@@ -93,6 +93,7 @@ class CrossProcessPersistent(Persistent):
 
         
     def has_same_uuid_as(self, other):
+        '''Does `other` have the same uuid as us?'''
         if not isinstance(other, CrossProcessPersistent):
             return NotImplemented
         return self.__uuid == other.__uuid
