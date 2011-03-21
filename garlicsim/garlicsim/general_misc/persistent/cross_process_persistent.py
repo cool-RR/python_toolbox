@@ -97,7 +97,8 @@ class CrossProcessPersistent(Persistent):
         if not isinstance(other, CrossProcessPersistent):
             return NotImplemented
         return self.__uuid == other.__uuid
-        
+
+    
     def __getstate__(self):
         my_dict = dict(self.__dict__)
         del my_dict['_CrossProcessPersistent__uuid']
