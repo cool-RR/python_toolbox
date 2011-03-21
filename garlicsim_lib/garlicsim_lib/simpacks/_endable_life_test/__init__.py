@@ -4,6 +4,8 @@
 '''A simulation package for Conway's Game of Life.'''
 
 from .state import State
+
+# blocktodo: update from life
     
 
 
