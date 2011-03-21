@@ -4,7 +4,6 @@
 '''Settings module for the `wx` component of the `life` simpack.'''
 
 
-from ..state import State
 from . import widgets
 
 #SEEK_BAR_GRAPHS = [State.get_n_live_cells, changes]

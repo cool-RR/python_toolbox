@@ -14,6 +14,7 @@ import garlicsim_wx
 class BoardViewer(scrolled.ScrolledPanel,
                   garlicsim_wx.widgets.WorkspaceWidget):
     '''Widget for displaying a Life board.'''
+    
     def __init__(self, frame):
               
         scrolled.ScrolledPanel.__init__(self, frame,
@@ -41,7 +42,6 @@ class BoardViewer(scrolled.ScrolledPanel,
 
         self.redraw_needed_flag = True
         
-
         
     def unscreenify(self, x, y):
         '''Translate screen coordinates to board coordinates.'''
@@ -56,18 +56,21 @@ class BoardViewer(scrolled.ScrolledPanel,
         else:
             return None
 
+        
     def set_state(self, state):
         '''Set the state to be displayed.'''
         if state is not None:
             self.set_board(state.board)
-        
+
+            
     def set_board(self, board):
         '''Set the board to be displayed.'''
         if board is not self.board:
             self.board = board
             self.redraw_needed_flag = True
             self.Refresh()
-        
+
+            
     def _get_size_from_board(self):
         '''
         Get the size the widget should be by inspecting the size of the board.
@@ -79,6 +82,7 @@ class BoardViewer(scrolled.ScrolledPanel,
             )
         else:
             return (1, 1)
+
         
     def _draw_buffer_bitmap(self):
         '''Draw the buffer bitmap, which `on_paint` will draw to the screen.'''
@@ -114,7 +118,8 @@ class BoardViewer(scrolled.ScrolledPanel,
         transparent_pen = wx.Pen('#000000', 0, wx.TRANSPARENT)
         
         dc.DrawRectangleList(rectangles, transparent_pen, brushes)
-                
+
+        
     def on_paint(self, event):
         '''Paint event handler.'''
         
@@ -141,6 +146,7 @@ class BoardViewer(scrolled.ScrolledPanel,
         '''EVT_SIZE handler.'''
         self.Refresh()
         if event is not None:
+
             event.Skip()
 
     def on_mouse_event(self, event):
@@ -159,6 +165,5 @@ class BoardViewer(scrolled.ScrolledPanel,
                 new_board.set(x, y, new_value)
             
                 self.redraw_needed_flag = True
-
 
         self.Refresh()
