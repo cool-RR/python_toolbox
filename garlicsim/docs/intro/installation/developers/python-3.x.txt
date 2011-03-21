@@ -38,12 +38,6 @@ For :mod:`garlicsim`
 Optional but recommended:
 
 * on Windows only: `Python for Windows Extensions`_.
-
-
-For some simpacks in :mod:`garlicsim_lib`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-* `NumPy`_
  
 
 Installation methods
@@ -89,5 +83,4 @@ Binaries for Windows are available:
 .. _Python 3.1: http://www.python.org/download/releases/3.1.3/
 .. _distribute: http://pypi.python.org/pypi/distribute
 .. _Python for Windows Extensions: http://sourceforge.net/projects/pywin32
-.. _NumPy: http://scipy.org/Download
 .. _wxPython: http://wxpython.org/download.php

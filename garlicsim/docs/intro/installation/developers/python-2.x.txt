@@ -44,12 +44,6 @@ Optional but recommended:
 
 * `Psyco`_.
 * on Windows only: `Python for Windows Extensions`_.
-
-
-For some simpacks in :mod:`garlicsim_lib`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-* `NumPy`_
  
 
 For :mod:`garlicsim_wx`
@@ -120,5 +114,4 @@ like this::
 .. _Backport of the multiprocessing module: http://pypi.python.org/pypi/multiprocessing/
 .. _Python for Windows Extensions: http://sourceforge.net/projects/pywin32
 .. _Psyco: http://psyco.sourceforge.net
-.. _NumPy: http://scipy.org/Download
 .. _wxPython 2.8.10.1 or above (but below 2.9): http://wxpython.org/download.php
