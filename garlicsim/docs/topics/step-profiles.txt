@@ -9,6 +9,8 @@
 Step profiles - Changing world laws on the fly
 ==============================================
 
+**Source code**: `garlicsim/misc/step_profile.py`_
+
 A step profile is a set of world rules to be used in a simulation. For example,
 if you're doing a simulation in Physics, you have a bunch of world rules that
 the simulation adheres to. Forces are computed according to various constants,
@@ -521,3 +523,4 @@ profiles, you can check out the `documented source code
 .. _Special Relativity: http://en.wikipedia.org/wiki/Special_relativity
 .. _change the gravitational constant: http://www.youtube.com/watch?v=5xdbPhnfFEI&t=25s
 .. _birth/survival numbers: http://en.wikipedia.org/wiki/Conway's_Game_of_Life#Variations_on_Life
+.. _garlicsim/misc/step_profile.py: https://github.com/cool-RR/GarlicSim/tree/master/garlicsim/garlicsim/misc/step_profile.py
