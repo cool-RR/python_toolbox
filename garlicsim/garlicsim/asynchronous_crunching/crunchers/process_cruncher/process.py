@@ -47,7 +47,9 @@ class Process(multiprocessing.Process):
         
         self.daemon = True
 
-        self.work_queue = multiprocessing.Queue()
+        self.work_queue = multiprocessing.Queue(
+            garlicsim.asynchronous_crunching.CRUNCHER_QUEUE_SIZE
+        )
         '''
         Queue for putting completed work to be picked up by the main thread.
         
