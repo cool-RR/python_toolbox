@@ -19,3 +19,12 @@ from .project import Project
 from .job import Job
 from .crunching_manager import CrunchingManager
 
+
+CRUNCHER_QUEUE_SIZE = 100
+'''
+The `max_size` given to the crunchers' work queues.
+
+This is needed for simpacks with very fast step functions, because without a
+`max_size` the cruncher might work so fast that the GUI will never catch up
+with it.
+'''

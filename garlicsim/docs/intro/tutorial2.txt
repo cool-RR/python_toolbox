@@ -99,8 +99,8 @@ read::
             pass
         
             
-        @staticmethod
-        def create_root():
+        #@staticmethod
+        #def create_root():
             # In this function you create a root state. This usually becomes the
             # first state in your simulation. You can make this function do
             # something simple: For example, if you're simulating Life, you can make
@@ -114,8 +114,8 @@ read::
             pass
     
         
-        @staticmethod
-        def create_messy_root():
+        #@staticmethod
+        #def create_messy_root():
             # In this function you create a messy root state. This usually becomes the
             # first state in your simulation. 
             #

@@ -87,7 +87,9 @@ class ThreadCruncher(threading.Thread, BaseCruncher):
         
         self.daemon = True
 
-        self.work_queue = Queue.Queue()
+        self.work_queue = Queue.Queue(
+            garlicsim.asynchronous_crunching.CRUNCHER_QUEUE_SIZE
+        )
         '''
         Queue for putting completed work to be picked up by the main thread.
         
