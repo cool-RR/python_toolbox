@@ -23,12 +23,12 @@ class A(CrossProcessPersistent):
 
 
 def test():
-    cross_process_persistents = [A(), CrossProcessPersistent()]
     checkers = [_check_deepcopying]
+    cross_process_persistents = [A(), CrossProcessPersistent()]
     
     iterator = cute_iter_tools.product(
+        checkers,
         cross_process_persistents,
-        checkers
     )
     
     for checker, cross_process_persistent in iterator:
@@ -41,12 +41,15 @@ def _check_deepcopying(cross_process_persistent):
     
     cross_process_persistent_faux_deepcopy = copy.deepcopy(
         cross_process_persistent,
-        persistent.DontCopyPersistent
+        persistent.DontCopyPersistent()
     )
     assert cross_process_persistent_faux_deepcopy is cross_process_persistent
     
+    
+def _check_process_passing(cross_process_persistent):
+    pass
 
-
+    
 def test_helpful_warnings_for_old_protocols():
     pickle_modules = [pickle, cPickle]
     cross_process_persistents = [A(), CrossProcessPersistent()]
