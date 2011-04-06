@@ -9,10 +9,12 @@ See its documentation for more information.
 
 from garlicsim.general_misc.third_party import abc
 
+from garlicsim.general_misc import identities
+
 from .player_type import PlayerType
 
 
-class BasePlayer(object):
+class BasePlayer(identities.HasIdentity):
     '''
     A player that plays prisoner's dilemma, gaining and losing points.
     
@@ -28,6 +30,7 @@ class BasePlayer(object):
     '''
         
     def __init__(self):
+        identities.HasIdentity.__init__(self)
         
         self.points = 0
         '''The number of points that the player has.'''
