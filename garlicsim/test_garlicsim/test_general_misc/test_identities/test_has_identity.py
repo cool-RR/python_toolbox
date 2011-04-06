@@ -63,9 +63,9 @@ def test_has_identity():
     
     ### Testing picked-unpickled copies: ######################################
     #                                                                         #
-    x2 = pickle.loads(pickle.dumps(x0))
-    y2 = pickle.loads(pickle.dumps(y0))
-    z2 = pickle.loads(pickle.dumps(z0))
+    x2 = pickle.loads(pickle.dumps(x0, protocol=2))
+    y2 = pickle.loads(pickle.dumps(y0, protocol=2))
+    z2 = pickle.loads(pickle.dumps(z0, protocol=2))
     
     assert x2 & x1
     assert y2 & y1

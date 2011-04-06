@@ -63,8 +63,8 @@ class CrossProcessPersistent(Persistent):
         
         # Here we need to check in what context `__new__` was called.
         # There are two options:
-        #     1. The object is being created.
-        #     2. The object is being unpickled.
+        #   1. The object is being created.
+        #   2. The object is being unpickled.
         # We check whether we are getting a uuid token. If we are, it's
         # unpickling. If we don't, it's creation.
         
@@ -116,6 +116,17 @@ class CrossProcessPersistent(Persistent):
             self.__dict__.update(state)
 
             
+    def __reduce_ex__(self, protocol):
+        if protocol < 2:
+            raise Exception(
+                "You're trying to pickle a `CrossProcessPersistent` object "
+                "using protocol %s. You must use protocol 2 or "
+                "upwards." % protocol
+            )
+        else:
+            return object.__reduce_ex__(self, protocol)
+            
+        
     def __deepcopy__(self, memo):
         '''
         Deepcopy the object. If `DontCopyPersistent` is given, only mock-copy.
