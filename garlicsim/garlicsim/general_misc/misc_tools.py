@@ -138,4 +138,11 @@ def is_number(x):
         return True
     
 def identity_function(thing):
+    '''
+    Return `thing`.
+    
+    This function is useful when you want to use an identity function but can't
+    define a lambda one because it wouldn't be pickleable. Also using this
+    function might be faster as it's prepared in advance.
+    '''
     return thing

@@ -122,7 +122,7 @@ def test_on_false_object():
     
     
 def test_doc():
-            
+    '''Test the `doc` argument for setting the property's docstring.'''
     class A(object):
         personality = CachedProperty(counting_func)
         

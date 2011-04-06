@@ -41,7 +41,7 @@ def test_has_identity():
     assert not z0 & x0
     assert not y0 & z0
     assert not z0 & y0
-    # blocktodo: same identity only when use DontCopyPersistent, update docs too
+    
     ### Testing deepcopies: ###################################################
     #                                                                         #
     x1 = copy.deepcopy(x0)

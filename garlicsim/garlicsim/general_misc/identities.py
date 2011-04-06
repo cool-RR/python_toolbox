@@ -15,21 +15,22 @@ class HasIdentity(object):
     '''
     An object that has a persistent identity.
     
-    When you make deepcopies of this object, the new copies will have the same
-    "identity" as the original object:
+    When you make deepcopies of this object using `DontCopyPersistent()`, the
+    new copies will have the same "identity" as the original object:
     
         >>> class A(HasIdentity):
         ...     pass
         >>> a0 = A()
-        >>> a1 = copy.deepcopy(a0)
+        >>> a1 = copy.deepcopy(a0, DontCopyPersistent)
         >>> a0.has_same_identity_as(a1)
         True
         >>> a0 & a1 # Shortcut for `has_same_identity_as`
         True
-    
+        
+    (`DontCopyPersistent` is available as
+    `garlicsim.general_misc.persistent.DontCopyPersistent`)    
     '''
     def __init__(self):
-        
         self.__identity = CrossProcessPersistent()
         '''The object's persistent identity.'''
 
