@@ -7,12 +7,14 @@ Testing module for `garlicsim.general_misc.persistent.CrossProcessPersistent`.
 
 from __future__ import with_statement
 
+import multiprocessing
 import copy
 import pickle
 import cPickle
 
 from garlicsim.general_misc import cute_iter_tools
 from garlicsim.general_misc import cute_testing
+from garlicsim.general_misc import queue_tools
 
 from garlicsim.general_misc import persistent
 from garlicsim.general_misc.persistent import CrossProcessPersistent
@@ -23,19 +25,20 @@ class A(CrossProcessPersistent):
 
 
 def test():
-    checkers = [_check_deepcopying]
-    cross_process_persistents = [A(), CrossProcessPersistent()]
+    checkers = [_check_deepcopying, _check_process_passing]
+    cross_process_persistent_classes = [A, CrossProcessPersistent]
     
     iterator = cute_iter_tools.product(
         checkers,
-        cross_process_persistents,
+        cross_process_persistent_classes,
     )
     
-    for checker, cross_process_persistent in iterator:
-        yield checker, cross_process_persistent
+    for checker, cross_process_persistent_class in iterator:
+        yield checker, cross_process_persistent_class
     
         
-def _check_deepcopying(cross_process_persistent):
+def _check_deepcopying(cross_process_persistent_class):
+    cross_process_persistent = cross_process_persistent_class()
     cross_process_persistent_deepcopy = copy.deepcopy(cross_process_persistent)
     assert cross_process_persistent_deepcopy is not cross_process_persistent
     
@@ -46,8 +49,71 @@ def _check_deepcopying(cross_process_persistent):
     assert cross_process_persistent_faux_deepcopy is cross_process_persistent
     
     
-def _check_process_passing(cross_process_persistent):
-    pass
+class Process(multiprocessing.Process):
+    
+    def __init__(self):
+        multiprocessing.Process.__init__(self)
+        self.work_queue = multiprocessing.Queue()
+        self.processed_items_queue = multiprocessing.Queue()
+        self.message_queue = multiprocessing.Queue()
+        self.library = {}
+        
+    def run(self):
+        for number, item in queue_tools.iterate(self.work_queue, block=True):
+            if number in self.library:
+                assert self.library[number] is item
+                other_items = [value for (key, value) in self.library
+                               if key != number]
+                for other_item in other_items:
+                    assert other_item is not item
+                self.processed_items_queue.put(item)
+                self.message_queue.put('Asserted identity.')
+            else: # number not in self.library
+                self.library[number] = item
+                self.processed_items_queue.put(item)
+                self.message_queue.put('Stored object.')
+        
+    
+def _check_process_passing(cross_process_persistent_class):
+    
+    cpp_1 = cross_process_persistent_class()
+    cpp_2 = cross_process_persistent_class()
+    cpp_3 = cross_process_persistent_class()
+    
+    process = Process()
+    process.start()
+    
+    process.work_queue.put((1, cpp_1))
+    assert process.message_queue.get(timeout=10) == 'Stored object.'
+    assert process.processed_items_queue.get(timeout=10) is cpp_1
+    
+    process.work_queue.put((1, cpp_1))
+    assert process.message_queue.get(timeout=10) == 'Asserted identity.'
+    assert process.processed_items_queue.get(timeout=10) is cpp_1
+    
+    process.work_queue.put((2, cpp_2))
+    assert process.message_queue.get(timeout=10) == 'Stored object.'
+    assert process.processed_items_queue.get(timeout=10) is cpp_2
+    
+    process.work_queue.put((1, cpp_1))
+    assert process.message_queue.get(timeout=10) == 'Asserted identity.'
+    assert process.processed_items_queue.get(timeout=10) is cpp_1
+    
+    process.work_queue.put((2, cpp_2))
+    assert process.message_queue.get(timeout=10) == 'Asserted identity.'
+    assert process.processed_items_queue.get(timeout=10) is cpp_2
+    
+    process.work_queue.put((2, cpp_3))
+    assert process.message_queue.get(timeout=10) == 'Stored object.'
+    assert process.processed_items_queue.get(timeout=10) is cpp_3
+    
+    process.work_queue.put((2, cpp_3))
+    assert process.message_queue.get(timeout=10) == 'Asserted identity.'
+    assert process.processed_items_queue.get(timeout=10) is cpp_3
+    
+    process.work_queue.put((1, cpp_1))
+    assert process.message_queue.get(timeout=10) == 'Asserted identity.'
+    assert process.processed_items_queue.get(timeout=10) is cpp_1
 
     
 def test_helpful_warnings_for_old_protocols():
