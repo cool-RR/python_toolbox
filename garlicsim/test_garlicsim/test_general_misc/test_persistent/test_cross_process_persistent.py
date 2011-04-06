@@ -62,7 +62,7 @@ class Process(multiprocessing.Process):
         for number, item in queue_tools.iterate(self.work_queue, block=True):
             if number in self.library:
                 assert self.library[number] is item
-                other_items = [value for (key, value) in self.library
+                other_items = [value for (key, value) in self.library.items()
                                if key != number]
                 for other_item in other_items:
                     assert other_item is not item
@@ -103,11 +103,11 @@ def _check_process_passing(cross_process_persistent_class):
     assert process.message_queue.get(timeout=10) == 'Asserted identity.'
     assert process.processed_items_queue.get(timeout=10) is cpp_2
     
-    process.work_queue.put((2, cpp_3))
+    process.work_queue.put((3, cpp_3))
     assert process.message_queue.get(timeout=10) == 'Stored object.'
     assert process.processed_items_queue.get(timeout=10) is cpp_3
     
-    process.work_queue.put((2, cpp_3))
+    process.work_queue.put((3, cpp_3))
     assert process.message_queue.get(timeout=10) == 'Asserted identity.'
     assert process.processed_items_queue.get(timeout=10) is cpp_3
     
@@ -141,3 +141,7 @@ def _check_helpful_warnings_for_old_protocols(pickle_module,
     with cute_testing.RaiseAssertor(text=('protocol %s' % old_protocol)):
         pickle_module.dumps(cross_process_persistent,
                             protocol=old_protocol)
+        
+if __name__ == '__main__':
+    # blocktodo: kill this
+    _check_process_passing(CrossProcessPersistent)

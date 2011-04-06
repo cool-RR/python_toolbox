@@ -74,7 +74,7 @@ class CrossProcessPersistent(Persistent):
             received_uuid = None
             
         if received_uuid: # The object is being unpickled
-            thing = library.pop(received_uuid, None)
+            thing = library.get(received_uuid, None)
             if thing:
                 thing._CrossProcessPersistent__skip_setstate = True
                 return thing
