@@ -128,6 +128,8 @@ def _check_process_passing(cross_process_persistent_class):
     process.work_queue.put((1, cpp_1))
     assert process.message_queue.get(timeout=10) == 'Asserted identity.'
     assert process.processed_items_queue.get(timeout=10) is cpp_1
+    
+    process.terminate()
 
     
 def test_helpful_warnings_for_old_protocols():
