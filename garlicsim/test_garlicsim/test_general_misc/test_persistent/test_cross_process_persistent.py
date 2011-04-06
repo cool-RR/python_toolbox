@@ -25,6 +25,7 @@ class A(CrossProcessPersistent):
 
 
 def test():
+    '''Test the basic workings of `CrossProcessPersistent`.'''
     checkers = [_check_deepcopying, _check_process_passing]
     cross_process_persistent_classes = [A, CrossProcessPersistent]
     
@@ -38,6 +39,7 @@ def test():
     
         
 def _check_deepcopying(cross_process_persistent_class):
+    '''Test that CPPs maintain their identities when faux-deepcopied.'''
     cross_process_persistent = cross_process_persistent_class()
     cross_process_persistent_deepcopy = copy.deepcopy(cross_process_persistent)
     assert cross_process_persistent_deepcopy is not cross_process_persistent
@@ -50,13 +52,22 @@ def _check_deepcopying(cross_process_persistent_class):
     
     
 class Process(multiprocessing.Process):
+    '''Process used when testing to assert CPPs' identities.'''
     
     def __init__(self):
         multiprocessing.Process.__init__(self)
+        
         self.work_queue = multiprocessing.Queue()
+        '''Queue for receiving `(index, cpp)` pairs from main process.'''
+        
         self.processed_items_queue = multiprocessing.Queue()
+        '''Queue for giving back the main process the items it gives us.'''
+        
         self.message_queue = multiprocessing.Queue()
+        '''Queue for reporting to the main process about actions we do.'''
+        
         self.library = {}
+        '''Dict mapping from ints to CPPs.'''
         
     def run(self):
         for number, item in queue_tools.iterate(self.work_queue, block=True):
@@ -75,6 +86,9 @@ class Process(multiprocessing.Process):
         
     
 def _check_process_passing(cross_process_persistent_class):
+    '''
+    Test that CPPs maintain their identities when passed between processes.
+    '''
     
     cpp_1 = cross_process_persistent_class()
     cpp_2 = cross_process_persistent_class()
@@ -117,6 +131,9 @@ def _check_process_passing(cross_process_persistent_class):
 
     
 def test_helpful_warnings_for_old_protocols():
+    '''
+    Test that helpful errors are given when trying to pickle with old protocol.
+    '''
     pickle_modules = [pickle, cPickle]
     cross_process_persistents = [A(), CrossProcessPersistent()]
     old_protocols = [0, 1]
@@ -137,11 +154,10 @@ def test_helpful_warnings_for_old_protocols():
 def _check_helpful_warnings_for_old_protocols(pickle_module,
                                               cross_process_persistent,
                                               old_protocol):
+    '''
+    Test that helpful errors are given when trying to pickle with old protocol.
+    '''
     assert old_protocol < 2
     with cute_testing.RaiseAssertor(text=('protocol %s' % old_protocol)):
         pickle_module.dumps(cross_process_persistent,
                             protocol=old_protocol)
-        
-if __name__ == '__main__':
-    # blocktodo: kill this
-    _check_process_passing(CrossProcessPersistent)
