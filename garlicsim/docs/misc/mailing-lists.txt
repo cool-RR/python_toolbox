@@ -9,7 +9,7 @@
 Mailing Lists
 =============
 
-There are three mailing lists:
+There are three GarlicSim groups, a.k.a. mailing lists:
 
 - If you need help with GarlicSim, post a message on `the GarlicSim Google Group
   <https://groups.google.com/forum/#!forum/garlicsim>`_. If you need any kind of
