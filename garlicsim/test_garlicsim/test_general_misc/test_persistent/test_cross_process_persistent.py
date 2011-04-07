@@ -11,6 +11,7 @@ import multiprocessing
 import copy
 import pickle
 import cPickle
+from garlicsim.general_misc.third_party import abc
 
 from garlicsim.general_misc import cute_iter_tools
 from garlicsim.general_misc import cute_testing
@@ -20,8 +21,23 @@ from garlicsim.general_misc import persistent
 from garlicsim.general_misc.persistent import CrossProcessPersistent
 
 
-class A(CrossProcessPersistent):
-    pass    
+class AbstractCrossProcessPersistent(CrossProcessPersistent):
+    '''
+    An abstract cross-process persistent.
+    
+    This is needed to test CPP's interaction with `__abstractmethods__`.
+    '''
+    __metaclass__ = abc.ABCMeta
+    
+    @abc.abstractmethod
+    def f(self):
+        pass
+    
+class A(AbstractCrossProcessPersistent):
+    def f(self):
+        pass
+    
+
 
 
 def test():
@@ -131,6 +147,16 @@ def _check_process_passing(cross_process_persistent_class):
     
     process.terminate()
 
+
+def test_personality():
+    '''Test that a `CrossProcessPersistent` has a `.personality`.'''
+    a = A()
+    cross_process_persistent = CrossProcessPersistent()
+    assert isinstance(a.personality,
+                      persistent.Personality)
+    assert isinstance(cross_process_persistent.personality,
+                      persistent.Personality)
+    
     
 def test_helpful_warnings_for_old_protocols():
     '''
