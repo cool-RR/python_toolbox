@@ -50,7 +50,7 @@ class CachedProperty(object):
             if not our_type:
                 our_type = type(obj)
             (self.our_name,) = (name for name in dir(our_type) if
-                                getattr(our_type, name) is self)
+                                getattr(our_type, name, None) is self)
         
         setattr(obj, self.our_name, value)
         
