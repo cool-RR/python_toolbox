@@ -74,4 +74,4 @@ There is a [separate fork of GarlicSim](http://github.com/cool-RR/GarlicSim-for-
 
 # Current state #
 
-GarlicSim is at version 0.6.2, which is an alpha release. At this experimental stage of the project, backward compatibility will _not_ be maintained. However, I will be available to assist in issues related to backward compatibility.
+GarlicSim is at version 0.6.3, which is an alpha release. At this experimental stage of the project, backward compatibility will _not_ be maintained. However, I will be available to assist in issues related to backward compatibility.

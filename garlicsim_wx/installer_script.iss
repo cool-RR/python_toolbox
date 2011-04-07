@@ -7,7 +7,7 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{0D13DAF6-02E1-4DC4-B919-8B6A9FAE64A6}
 AppName=GarlicSim
-AppVerName=GarlicSim 0.6.2
+AppVerName=GarlicSim 0.6.3
 AppPublisher=Ram Rachum
 AppPublisherURL=http://garlicsim.org
 AppSupportURL=http://garlicsim.org
@@ -19,7 +19,7 @@ DefaultGroupName=GarlicSim
 AllowNoIcons=yes
 LicenseFile=../win_dist/lib/garlicsim_wx/copyright.txt
 OutputDir=..
-OutputBaseFilename=GarlicSim-0.6.2
+OutputBaseFilename=GarlicSim-0.6.3
 Compression=lzma
 SolidCompression=yes
 
