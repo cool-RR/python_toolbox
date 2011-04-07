@@ -1,5 +1,5 @@
-# Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
-# or distributed without explicit written permission from Ram Rachum.
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
 
 '''
 An emitter mechanism, a variation on the publisher-subscriber design pattern.

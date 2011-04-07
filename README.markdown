@@ -43,26 +43,16 @@ Current screenshot, showing the [Game of Life](http://en.wikipedia.org/wiki/Conw
 
 # Mailing lists #
 
-All general discussion happens at **[the GarlicSim Google
-Group](https://groups.google.com/forum/#!forum/garlicsim)**. If you need help
-with GarlicSim, you're welcome to post your question and we'll try to help you.
+All general discussion happens at **[the GarlicSim Google Group](https://groups.google.com/forum/#!forum/garlicsim)**. If you need help with GarlicSim, you're welcome to post your question and we'll try to help you.
 
-The development mailing list is
-**[GarlicSim-dev](https://groups.google.com/forum/#!forum/garlicsim-dev)**.
-This is where we discuss the development of GarlicSim itself.
+The development mailing list is **[GarlicSim-dev](https://groups.google.com/forum/#!forum/garlicsim-dev)**. This is where we discuss the development of GarlicSim itself.
 
 
 # Core and GUI #
 
 This repository contains three packages: `garlicsim`, which is the core logic, `garlicsim_lib`, which is a collection of simpacks, and `garlicsim_wx`, which is the wxPython-based GUI.
 
-The `garlicsim` and `garlicsim_lib` packages are distributed under the **LGPL2.1 license**. 
-
-`garlicsim_wx` is not licensed as open source. (Though the source code is available and not obfuscated.) I have not yet decided if the GUI will be developed as an open source project or as commercial software, so in the meantime it is officially closed source.
-
-If you require an official license, [contact me](mailto:cool-rr@cool-rr.com) and I'll probably give you one.
-
-Both packages are copyright 2009-2011 Ram Rachum. 
+They are all distributed under the **LGPL2.1 license**. 
 
 
 # Python versions #
