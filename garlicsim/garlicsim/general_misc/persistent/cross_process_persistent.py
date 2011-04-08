@@ -59,6 +59,10 @@ class CrossProcessPersistent(Persistent):
     
     Note: This class is still experimental.
     '''
+    
+    _is_atomically_pickleable = True
+    
+    
     def __new__(cls, *args, **kwargs):
         
         # Here we need to check in what context `__new__` was called.
