@@ -51,7 +51,7 @@ def __check_prerequisites():
                                     "version 0.6.3 is required. Go to "
                                     "http://garlicsim.org and follow the "
                                     "instructions for installation." %
-                                    garlicsim.__version_info__)
+                                    (garlicsim.__version_info__,))
             return [garlicsim]
     
     def check_wx():
@@ -75,7 +75,7 @@ def __check_prerequisites():
                               "but if any problem comes up, try upgrading "
                               "wxPython. To do that, download and install the "
                               "latest version from "
-                              "http://wxpython.org" % wx.__version__)
+                              "http://wxpython.org" % (wx.__version__,))
             return [wx]
     
 

@@ -7,14 +7,16 @@ Testing module for `garlicsim.general_misc.persistent.CrossProcessPersistent`.
 
 from __future__ import with_statement
 
-import multiprocessing
 import copy
 import pickle
 import cPickle
 from garlicsim.general_misc.third_party import abc
 
+import nose
+
 from garlicsim.general_misc import cute_iter_tools
 from garlicsim.general_misc import cute_testing
+from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import queue_tools
 
 from garlicsim.general_misc import persistent
@@ -66,45 +68,50 @@ def _check_deepcopying(cross_process_persistent_class):
     )
     assert cross_process_persistent_faux_deepcopy is cross_process_persistent
     
+if import_tools.exists('multiprocessing'):
     
-class Process(multiprocessing.Process):
-    '''Process used when testing to assert CPPs' identities.'''
+    import multiprocessing
     
-    def __init__(self):
-        multiprocessing.Process.__init__(self)
+    class Process(multiprocessing.Process):
+        '''Process used when testing to assert CPPs' identities.'''
         
-        self.work_queue = multiprocessing.Queue()
-        '''Queue for receiving `(index, cpp)` pairs from main process.'''
-        
-        self.processed_items_queue = multiprocessing.Queue()
-        '''Queue for giving back the main process the items it gives us.'''
-        
-        self.message_queue = multiprocessing.Queue()
-        '''Queue for reporting to the main process about actions we do.'''
-        
-        self.library = {}
-        '''Dict mapping from ints to CPPs.'''
-        
-    def run(self):
-        for number, item in queue_tools.iterate(self.work_queue, block=True):
-            if number in self.library:
-                assert self.library[number] is item
-                other_items = [value for (key, value) in self.library.items()
-                               if key != number]
-                for other_item in other_items:
-                    assert other_item is not item
-                self.processed_items_queue.put(item)
-                self.message_queue.put('Asserted identity.')
-            else: # number not in self.library
-                self.library[number] = item
-                self.processed_items_queue.put(item)
-                self.message_queue.put('Stored object.')
+        def __init__(self):
+            multiprocessing.Process.__init__(self)
+            
+            self.work_queue = multiprocessing.Queue()
+            '''Queue for receiving `(index, cpp)` pairs from main process.'''
+            
+            self.processed_items_queue = multiprocessing.Queue()
+            '''Queue for giving back the main process the items it gives us.'''
+            
+            self.message_queue = multiprocessing.Queue()
+            '''Queue for reporting to the main process about actions we do.'''
+            
+            self.library = {}
+            '''Dict mapping from ints to CPPs.'''
+            
+        def run(self):
+            for number, item in queue_tools.iterate(self.work_queue, block=True):
+                if number in self.library:
+                    assert self.library[number] is item
+                    other_items = [value for (key, value) in self.library.items()
+                                   if key != number]
+                    for other_item in other_items:
+                        assert other_item is not item
+                    self.processed_items_queue.put(item)
+                    self.message_queue.put('Asserted identity.')
+                else: # number not in self.library
+                    self.library[number] = item
+                    self.processed_items_queue.put(item)
+                    self.message_queue.put('Stored object.')
         
     
 def _check_process_passing(cross_process_persistent_class):
     '''
     Test that CPPs maintain their identities when passed between processes.
     '''
+    if not import_tools.exists('multiprocessing'):
+        raise nose.SkipTest('`multiprocessing` is not installed.')
     
     cpp_1 = cross_process_persistent_class()
     cpp_2 = cross_process_persistent_class()
