@@ -4,8 +4,10 @@
 '''Tools for monkeypatching.'''
 
 import types
+from garlicsim.general_misc import decorator_tools
 
 
+@decorator_tools.helpful_decorator_builder
 def monkeypatch_method(class_, name=None):
     '''
     Monkeypatch a method into a class.

@@ -25,7 +25,7 @@ class BaseStepIterator(Iterator, object):
     The step iterator automatically adds `.clock` readings if the states
     produced by the step function are missing them.
     
-    This is an abstract base class; The `garlicsim.misc.step_iterators` package
+    This is an abstract base class; the `garlicsim.misc.step_iterators` package
     contains a collection of step iterators, one for each step type.
     '''
     __metaclass__ = abc.ABCMeta

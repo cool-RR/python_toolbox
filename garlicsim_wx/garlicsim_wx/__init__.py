@@ -1,5 +1,5 @@
-# Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
-# or distributed without explicit written permission from Ram Rachum.
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
 
 '''
 A wxPython-based GUI for garlicsim.
@@ -37,8 +37,8 @@ from .app import App
 __all__ = ['Frame', 'GuiProject', 'start']
 
 
-__version_info__ = garlicsim.general_misc.version_info.VersionInfo(0, 6, 1)
-__version__ = '0.6.1'
+__version_info__ = garlicsim.general_misc.version_info.VersionInfo(0, 6, 3)
+__version__ = '0.6.3'
 
 simpack_places = []
 '''
@@ -96,6 +96,9 @@ def start():
             new_gui_project_simpack_name = arg[19:]
         elif os.path.isfile(arg):
             load_gui_project_file_path = arg
+            
+    import random
+    random.seed()
     
     app = App(new_gui_project_simpack_name=new_gui_project_simpack_name,
               load_gui_project_file_path=load_gui_project_file_path)

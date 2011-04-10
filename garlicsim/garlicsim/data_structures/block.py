@@ -17,7 +17,7 @@ from .tree_member import TreeMember
 # from .node import Node (at bottom of file.)
 
 
-__all__ = ["Block", "BlockError"]
+__all__ = ['Block', 'BlockError']
 
 
 class BlockError(GarlicSimException):
@@ -144,8 +144,8 @@ class Block(TreeMember):
         
         if self.__node_list and \
            sample_step_profile != self.step_profile:
-            raise BlockError("Tried to add node list which contains node that "
-                             "has a different step profile.")
+            raise BlockError('Tried to add node list which contains node that '
+                             'has a different step profile.')
         
         # We now make sure the node_list is successive, untouched, and has no
         # unwanted children.
@@ -157,7 +157,7 @@ class Block(TreeMember):
                                  "doesn't have exactly one child, and not as "
                                  "the last node in the block.")
             if node_list[i].touched:
-                raise BlockError("Tried to add touched nodes to block.")
+                raise BlockError('Tried to add touched nodes to block.')
         
         if not self.__node_list:
             # If the node list is empty, our job is simple.

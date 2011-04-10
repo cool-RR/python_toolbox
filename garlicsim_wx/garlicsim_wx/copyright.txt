@@ -1,3 +1,0 @@
-GarlicSim is based on the `garlicsim_wx` and `garlicsim` packages. Both of these packages are copyright 2009-2011 Ram Rachum. `garlicsim` is released under the LGPLv2.1 license, and may be distributed under that license. `garlicsim_wx` is not licensed for distribution, any may not be used, copied or distributed without explicit written permission from Ram Rachum.
-
-The GarlicSim program, as a whole, may not be used, copied or distributed without explicit written permission from Ram Rachum.

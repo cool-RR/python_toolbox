@@ -2,10 +2,9 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-Defines the `SleekRef` class and various data types using it.
+Defines the `SleekRef` class.
 
-See documentation of `SleekRef` for more details. `SleekCallArgs` and
-`CuteSleekValueDict` are data types which rely on `SleekRef`.
+See its documentation for more info.
 '''
 
 import weakref
@@ -41,7 +40,7 @@ class SleekRef(object):
     you are still able to. (Assuming you don't mind the memory leaks or stop
     them some other way.)
     
-    When you call a dead sleekref, it doesn't return `None` like weakref; It
+    When you call a dead sleekref, it doesn't return `None` like weakref; it
     raises `SleekRefDied`. Therefore, unlike weakref, you can store `None` in a
     sleekref.
     '''

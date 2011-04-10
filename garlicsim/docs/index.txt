@@ -6,7 +6,7 @@
 .. _index:
 
 =======================
-garlicsim documentation
+GarlicSim Documentation
 =======================
 
 Contents:
@@ -22,7 +22,7 @@ Contents:
 More documentation coming soon! If you have any questions or feedback, say hello
 on the `mailing list`_!
 
-.. _mailing list: mailto:garlicsim@librelist.org
+.. _mailing list: https://groups.google.com/forum/#!forum/garlicsim
 
 .. * :ref:`genindex`
 .. * :ref:`modindex`

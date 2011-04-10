@@ -1,7 +1,4 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
 
-import garlicsim
-
-# CRUNCHERS = garlicsim.asynchronous_crunching.crunchers.ThreadCruncher
-
-SCALAR_STATE_FUNCTIONS = []
-SCALAR_HISTORY_FUNCTIONS = []
+'''Settings modules for the `prisoner` simpack.'''

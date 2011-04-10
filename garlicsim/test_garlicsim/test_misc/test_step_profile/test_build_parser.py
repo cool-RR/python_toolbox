@@ -1,31 +1,34 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
+'''Testing module for `garlicsim.misc.StepProfile.build_parser`.'''
+
 import nose.tools
 
 import garlicsim
+from test_garlicsim.shared import verify_simpack_settings
 
 from garlicsim.misc import StepProfile
 
-from . import sample_simpack
+from . import simpack
 
 
 def test():
-    simpack_grokker = garlicsim.misc.SimpackGrokker(sample_simpack)
+    '''Test the basic workings of `StepProfile.build_parser`.'''
     
-    parse = \
-        StepProfile.build_parser(sample_simpack.State.step)
-    alternate_parse = \
-        StepProfile.build_parser(sample_simpack.State.alternate_step)
-    none_parse = \
-        StepProfile.build_parser(None)
+    verify_simpack_settings(simpack)
+    simpack_grokker = garlicsim.misc.SimpackGrokker(simpack)
+    
+    parse = StepProfile.build_parser(simpack.State.step)
+    alternate_parse = StepProfile.build_parser(simpack.State.alternate_step)
+    none_parse = StepProfile.build_parser(None)
     
     
     default_step_profile = parse()
     
     step_profile = parse(1, 2, 3)
     assert step_profile == default_step_profile == StepProfile(
-        sample_simpack.State.step,
+        simpack.State.step,
         1, 2, 3
     )
     assert step_profile == \
@@ -42,8 +45,6 @@ def test():
     assert different_step_profile == parse(step_profile=different_step_profile)
     
     assert different_step_profile != step_profile
-    
-    
     
 
     alternate_step_profile = alternate_parse()

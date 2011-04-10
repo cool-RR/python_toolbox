@@ -20,7 +20,7 @@ class End(TreeMember):
     An end of the simulation.
     
     An `End` signifies that the simulation has ended. This is relevant in only
-    some simpacks; Some simpacks have a concept of ending the simulation, and
+    some simpacks; some simpacks have a concept of ending the simulation, and
     some don't. When a simulation was crunched and reached its end on some
     timeline, the last node on that timeline will have an `End` object added to
     its `.ends` list.
@@ -36,7 +36,7 @@ class End(TreeMember):
         '''
         The parent node of this end.
         
-        Note that this parent node will not have this end as a child; It will
+        Note that this parent node will not have this end as a child; it will
         list the end in its `.ends` attribute.
         '''
         
@@ -44,6 +44,9 @@ class End(TreeMember):
         
         self.step_profile = step_profile
         '''The step options profile with which the end was reached.'''
+        
+        if parent.block and not parent.is_last_on_block():
+            parent.block.split(parent)
         
         
     def __len__(self):
@@ -77,7 +80,7 @@ class End(TreeMember):
         Get a list of all possible paths that lead to this end.
         
         (This method was invented for nodes and blocks and makes sense for
-        them; For an end, it will just return the one single path that leads to
+        them; for an end, it will just return the one single path that leads to
         it, since there can't be any forks after an end.)
         
         Note: There may be paths that contain this end which will not be
@@ -92,7 +95,7 @@ class End(TreeMember):
         Create a path that leads to this end.
         
         (This method was invented for nodes and blocks and makes sense for
-        them; For an end, the "past path" is identical to the one made by
+        them; for an end, the "past path" is identical to the one made by
         `make_containing_path`, since there can't be any forks after an end.)
         
         Returns the path.
@@ -105,7 +108,7 @@ class End(TreeMember):
         Get `{}`.
         
         (This method was invented for nodes and blocks and makes sense for
-        them; There are no leaves, or anything else for that matter, that come
+        them; there are no leaves, or anything else for that matter, that come
         after an end.)
         '''
         
@@ -120,7 +123,7 @@ class End(TreeMember):
         ancestor should be above the current end. `round` determines how this
         method will behave if it was asked for too many generations back, and
         not enough existed. If `round` is `True`, it will return the root. If
-        `round` is `False`, it will raise a `NodeLookupError`.
+        `round` is `False`, it will raise a `NodeLookupError`. 
         '''
 
         assert generations >= 0

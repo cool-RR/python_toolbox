@@ -90,7 +90,7 @@ the simulation.
 In the terminology of GarlicSim, we shorten the term "world state" into simply
 **state**. A state is actually a class, defined as
 :class:`garlicsim.data_structures.State`. The class itself doesn't define much;
-Every simulation will make its own ``State`` subclass and store data in its
+every simulation will make its own ``State`` subclass and store data in its
 state instances as data attributes. For example, the basketball simulation might
 store a floating-point number in ``state.height``.
 
@@ -106,11 +106,11 @@ thing as "the next moment in time", since time is continuous and between every
 two moments in time there is another moment. However, when doing computer
 simulations we assume that time is discrete, not continuous, because it makes it
 much easier for us to work with. We basically assume that time is not a
-continuous line, but a line made of points; If we take two adjacent points,
+continuous line, but a line made of points; if we take two adjacent points,
 there is a finite time interval between them, which might be a second or a
 minute or a year, depending on the context, and there are no other moments in
 that interval between them. This decision is of course a compromise, and it
-introduces inaccuracy into our simulations; However, that accuracy can be made
+introduces inaccuracy into our simulations; however, that accuracy can be made
 as small as desired by increasing the resolution of points in the timeline.
 
 Back to the step function. As we said, the step function takes the state in a
@@ -159,19 +159,19 @@ Every simulation has a simpack. But one simpack may be used in many simulations.
 If a simpack can be said to describe the laws of a certain world, then a
 simulation is a story within that world. For example, we may have a simpack for
 simulating bouncing basketballs, which will describe exactly how basketballs
-move and bounce; But if we will want to actually simulate a basketball, we will
+move and bounce; but if we will want to actually simulate a basketball, we will
 have to create a simulation associated with that simpack. The story of our
 specific basketball will be contained in the simulation, not in the simpack.
 
 Therefore, a simpack can be thought of as a "simulation type." We talked before
-about how important the step function is; The step function is defined within
+about how important the step function is; the step function is defined within
 the simpack.
 
 What we called "simulation" so far we'll also refer to as a **project**. This is
 because it's the name of the class corresponding to it:
 :class:`garlicsim.Project`.
 
-"Simpack", however, does not correspond to any class in GarlicSim; It is just a
+"Simpack", however, does not correspond to any class in GarlicSim; it is just a
 special kind of Python package [#f1]_ that defines a few key functions, among them the
 step function.
 

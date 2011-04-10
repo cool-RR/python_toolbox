@@ -5,8 +5,16 @@
 '''
 Script for starting a new simpack.
 
+This is a script for creating a skeleton for a `garlicsim` simpack. Use this
+when you want to make a new simpack to have the basic folders and files created
+for you.
+
 Usage:
-start_simpack.py quantum_mechanics
+
+    start_simpack.py my_simpack_name
+
+The simpack will be created in the current path, in a directory with the name
+of the simpack.
 '''
 
 from __future__ import with_statement
@@ -20,18 +28,6 @@ import pkg_resources
 
 from garlicsim.scripts import simpack_template
 simpack_template_package_name = simpack_template.__name__
-
-
-_help_text =  '''\
-This is a script for creating a skeleton for a `garlicsim` simpack. Use this
-when you want to make a new simpack to have the basic folders and files created
-for you.
-
-    Usage: start_simpack.py my_simpack_name
-
-The simpack will be created in the current path, in a directory with the name
-of the simpack.
-'''
 
     
 def _walk_folder(package_name, folder):
@@ -74,13 +70,13 @@ def _make_path_to_file(file_):
                 
     
 def start_simpack(containing_folder, name):
-    """
+    '''
     Create a new simpack.
     
     This is the main function of this module. `containing_folder` is the folder
     in which the simpack folder should be created. `name` is the name of the
     new simpack, which will also be the name of its folder.
-    """
+    '''
     
     if not re.search(r'^[_a-zA-Z]\w*$', name): # If not valid folder name.
         # Provide a smart error message, depending on the error.
@@ -88,13 +84,13 @@ def start_simpack(containing_folder, name):
             message = 'make sure the name begins with a letter or underscore'
         else:
             message = 'use only numbers, letters and underscores'
-        raise Exception("%r is not a valid simpack name. Please %s." %
+        raise Exception('%r is not a valid simpack name. Please %s.' %
                         (name, message))
     folder = os.path.join(containing_folder, name)
     
     os.mkdir(folder)
     
-    for file in _walk_folder(simpack_template_package_name, './simpack_name'):
+    for file in _walk_folder(simpack_template_package_name, 'simpack_name'):
         
         if os.path.splitext(file)[1] in ('.pyc', '.pyo'):
             continue
@@ -104,33 +100,31 @@ def start_simpack(containing_folder, name):
         )
         
         _make_path_to_file(dest_file)
-
-        source_file_name = pkg_resources.resource_filename(
-            simpack_template_package_name, file
-        )
-        with open(source_file_name, 'Ur') as source:
+        
+        source_string = \
+            pkg_resources.resource_string(simpack_template_package_name, file)
             
-            with open(dest_file, 'w') as destination:
-                
-                string_to_write = source.read()\
-                                .replace('simpack_name', name)
-                                
-                
-                destination.write(string_to_write)
+        with open(dest_file, 'w') as destination:
+            
+            string_to_write = source_string\
+                            .replace('\r', '')\
+                            .replace('simpack_name', name)
+            
+            destination.write(string_to_write)
             
         try:
             shutil.copymode('/'.join(('simpack_template', file)), dest_file)
             _make_writeable(dest_file)
         except Exception:
             pass
-    print("`%s` simpack created successfully! Explore the `%s` folder and "
-          "start filling in the contents of your new simpack." % (name, name))
+    print('`%s` simpack created successfully! Explore the `%s` folder and '
+          'start filling in the contents of your new simpack.' % (name, name))
                 
     
 def _make_writeable(filename):
-    """
+    '''
     Make sure that the file is writeable. Useful if our source is read-only.
-    """
+    '''
     import stat
     if sys.platform.startswith('java'):
         # On Jython there is no os.access()
@@ -142,8 +136,8 @@ def _make_writeable(filename):
 
         
 def show_help():
-    '''Print some help text that describes how to use this script'''
-    print(_help_text)
+    '''Print some help text that describes how to use this script.'''
+    print(__doc__)
 
  
 def start(argv=None):

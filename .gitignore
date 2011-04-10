@@ -14,10 +14,16 @@ garlicsim_lib/build
 garlicsim_wx/*dist
 garlicsim_wx/*.egg-info
 garlicsim_wx/build
-garlicsim_wx/*.exe
+
+win_dist
+deb_dist
+mac_dist
 
 */docs/_build/*
 */docs/_deployed_build/*
+
+build
+*.exe
 
 nosetests.xml
 

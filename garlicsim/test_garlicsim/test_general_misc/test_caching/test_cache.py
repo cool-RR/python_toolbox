@@ -1,9 +1,7 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''
-Testing module for `garlicsim.general_misc.caching.cache`.
-'''
+'''Testing module for `garlicsim.general_misc.caching.cache`.'''
 
 from __future__ import with_statement
 
@@ -125,24 +123,20 @@ def test_unhashable_arguments():
            f(1, meow={1: [1, 2], 2: frozenset([3, 'b'])})
     
     
-def test_function_instead_of_max_size():
-    '''Test user gets a helpful exception when doing `@cache`.'''
+def test_helpful_message_when_forgetting_parentheses():
+    '''Test user gets a helpful exception when when forgetting parentheses.'''
 
-    def confusedly_put_function_as_max_size():
+    def confusedly_forget_parentheses():
         @cache
-        def f():
-            pass
+        def f(): pass
         
     with cute_testing.RaiseAssertor(
         TypeError,
-        re.compile(
-            'You entered the callable `.*?` where you should have '
-            'entered the `max_size` for the cache. You probably '
-            'used `@cache`, while you should have used `@cache\(\)`'
-        )
+        'It seems that you forgot to add parentheses after `@cache` when '
+        'decorating the `f` function.'
     ):
         
-        confusedly_put_function_as_max_size()
+        confusedly_forget_parentheses()
     
     
     
@@ -153,19 +147,17 @@ def test_signature_preservation():
     assert f() == f() == f(1, 2) == f(a=1, b=2)
     cute_testing.assert_same_signature(f, counting_func)
     
-    def my_func(qq, zz=1, yy=2, *args):
-        pass
+    def my_func(qq, zz=1, yy=2, *args): pass
     my_func_cached = cache(max_size=7)(my_func)
     cute_testing.assert_same_signature(my_func, my_func_cached)
     
-    def my_other_func(**kwargs):
-        pass
+    def my_other_func(**kwargs): pass
     my_func_cached = cache()(my_func)
     cute_testing.assert_same_signature(my_func, my_func_cached)
     
     
 def test_api():
-    
+    '''Test the API of cached functions.'''
     f = cache()(counting_func)
     g = cache(max_size=3)(counting_func)
     
@@ -183,3 +175,15 @@ def test_api():
         
         assert cached_function(1) == result_2 == cached_function(1)
         assert result_1 != result_2 == cached_function(1) != result_1
+        
+        # Asserting we're not using `dict.clear` or something:
+        assert cached_function.cache_clear.__name__ == 'cache_clear'
+        
+        
+def test_double_caching():
+    '''Test that `cache` detects and prevents double-caching of functions.'''
+    f = cache()(counting_func)
+    g = cache()(f)
+    
+    assert f is g
+    

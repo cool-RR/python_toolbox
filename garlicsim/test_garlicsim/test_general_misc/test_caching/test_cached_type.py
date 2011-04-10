@@ -7,16 +7,6 @@ Testing module for `garlicsim.general_misc.caching.CachedType`.
 
 from garlicsim.general_misc.caching import CachedType
 
-
-def counting_func(a=1, b=2, *args, **kwargs):
-    '''Function that returns a bigger number every time.'''
-    if not hasattr(counting_func, 'i'):
-        counting_func.i = 0
-    try:
-        return counting_func.i
-    finally:
-        counting_func.i = (counting_func.i + 1)
-
         
 def test():
     '''Test basic workings of `CachedType`.'''

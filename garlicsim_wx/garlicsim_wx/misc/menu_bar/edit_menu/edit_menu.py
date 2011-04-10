@@ -1,5 +1,5 @@
-# Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
-# or distributed without explicit written permission from Ram Rachum.
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
 
 '''
 Defines the `EditMenu` class.
@@ -26,7 +26,7 @@ class EditMenu(CuteMenu):
         
         self.undo_button = self.Append(
             wx.ID_UNDO,
-            '&Undo\tCtrl+ZZ',
+            '&Undo', # todo: Add '\tCtrl+Z' after solved bug
             ' Undo the last operation'
         )
         self.undo_button.Enable(False)
@@ -34,7 +34,7 @@ class EditMenu(CuteMenu):
         
         self.redo_button = self.Append(
             wx.ID_REDO,
-            '&Redo\tCtrl+YY',
+            '&Redo', # todo: Add '\tCtrl+Y' after solved bug
             ' Redo the last operation that was undone'
         )
         self.redo_button.Enable(False)
@@ -44,8 +44,8 @@ class EditMenu(CuteMenu):
         
                 
         self.cut_button = self.Append(
-            wx.ID_CUT,
-            'Cu&t\tCtrl+XX',
+            -1, # todo: Make it `wx.ID_CUT` after solved 11.04 bugs
+            'Cu&t', # todo: Add '\tCtrl+X' after solved bug
             ' Cut the current selection, copying to the clipboard and '
             'deleting it from the simulation'
         )
@@ -53,16 +53,16 @@ class EditMenu(CuteMenu):
         
                 
         self.copy_button = self.Append(
-            wx.ID_COPY,
-            '&Copy\tCtrl+CC',
+            -1, # todo: Make it `wx.ID_COPY` after solved 11.04 bugs
+            '&Copy', # todo: Add '\tCtrl+C' after solved bug
             ' Copy the current selection to the clipboard'
         )
         self.copy_button.Enable(False)
         
                 
         self.paste_button = self.Append(
-            wx.ID_PASTE,
-            '&Paste\tCtrl+VV',
+            -1, # todo: Make it `wx.ID_PASTE` after solved 11.04 bugs
+            '&Paste', # todo: Add '\tCtrl+V' after solved bug
             ' Paste the content of the clipboard into the simulation'
         )
         self.paste_button.Enable(False)
@@ -70,7 +70,7 @@ class EditMenu(CuteMenu):
                 
         self.clear_button = self.Append(
             wx.ID_CLEAR,
-            'Cl&ear\tDelDel',
+            'Cl&ear', # todo: Add '\tDel' after solved bug
             ' Delete the current selection'
         )
         self.clear_button.Enable(False)
@@ -81,7 +81,7 @@ class EditMenu(CuteMenu):
 
         self.select_all_button = self.Append(
             wx.ID_SELECTALL,
-            'Select &All\tCtrl+AA',
+            'Select &All', # todo: Add '\tCtrl+A' after solved bug
             ' Select all the nodes'
         )
         self.select_all_button.Enable(False)

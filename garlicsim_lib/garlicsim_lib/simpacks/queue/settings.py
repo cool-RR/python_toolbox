@@ -1,3 +1,4 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
 
-SCALAR_STATE_FUNCTIONS = []
-SCALAR_HISTORY_FUNCTIONS = []
+'''Settings module for the `queue` simpack.'''

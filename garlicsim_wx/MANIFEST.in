@@ -1,3 +1,6 @@
 recursive-include garlicsim_wx *
 recursive-exclude garlicsim_wx *.pyc
-recursive-exclude garlicsim_wx *.pyc
+recursive-exclude garlicsim_wx *.pyo
+recursive-include test_garlicsim_wx *
+recursive-exclude test_garlicsim_wx *.pyc
+recursive-exclude test_garlicsim_wx *.pyo

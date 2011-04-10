@@ -9,9 +9,9 @@ import sys
 import os.path
 
 
-path_to_garlicsim = os.path.abspath('garlicsim')
-path_to_garlicsim_lib = os.path.abspath('garlicsim_lib')
-path_to_garlicsim_wx = os.path.abspath('garlicsim_wx')
+path_to_garlicsim = os.path.realpath('garlicsim')
+path_to_garlicsim_lib = os.path.realpath('garlicsim_lib')
+path_to_garlicsim_wx = os.path.realpath('garlicsim_wx')
 
 for path in [path_to_garlicsim, path_to_garlicsim_lib, path_to_garlicsim_wx]:
     if path not in sys.path:

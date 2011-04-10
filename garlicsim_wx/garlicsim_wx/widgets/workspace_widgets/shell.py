@@ -1,5 +1,5 @@
-# Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
-# or distributed without explicit written permission from Ram Rachum.
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
 
 '''
 Defines the `Shell` class.
@@ -63,11 +63,12 @@ class Shell(wx.py.shell.Shell, WorkspaceWidget):
                                    style=wx.SUNKEN_BORDER)
         WorkspaceWidget.__init__(self, frame)
         
-        # Obscure:
-        import site; del site
-        # This causes the `site` module to add `help` and a few others
-        # to `__builtin__`. For some reason `site` isn't imported when frozen
-        # with py2exe, so here we make sure to import it.
+        # We used to import `site` here to get `help` and others when frozen,
+        # but now `garlicsim` has `bootstrap_py2exe` which bundles its own
+        # version of `site` which creates `help` and a few other builtins.
+        import __builtin__
+        assert 'help' in __builtin__.__dict__
+        del __builtin__
         
     
     def setLocalShell(self):

@@ -30,18 +30,35 @@ class RaiseAssertor(ContextManager):
     
     '''
     
-    def __init__(self, exception_type=Exception, text=''):
+    def __init__(self, exception_type=Exception, text='',
+                 assert_exact_type=False):
         '''
         Construct the `RaiseAssertor`.
         
         `exception_type` is an exception type that the exception must be of;
         `text` may be either a snippet of text that must appear in the
         exception's message, or a regex pattern that the exception message must
-        match.
+        match. Specify `assert_exact_type=False` if you want to assert that the
+        exception is of the exact `exception_type` specified, and not a
+        subclass of it.
         '''
+        
         self.exception_type = exception_type
+        '''The type of exception that should be raised.'''
+        
         self.text = text
+        '''The snippet or regex that the exception message must match.'''
+        
         self.exception = None
+        '''The exception that was caught.'''
+        
+        self.assert_exact_type = assert_exact_type
+        '''
+        Flag saying whether we require an exact match to `exception_type`.
+        
+        If set to `False`, a subclass of `exception_type` will also be
+        acceptable.
+        '''
         
         
     def manage_context(self):
@@ -50,6 +67,19 @@ class RaiseAssertor(ContextManager):
             yield self
         except self.exception_type, exception:
             self.exception = exception
+            if self.assert_exact_type:
+                if self.exception_type is not type(exception):
+                    assert issubclass(type(exception), self.exception_type)
+                    raise Failure(
+                        "The exception `%s` was raised, and it *is* an "
+                        "instance of the `%s` we were expecting; but its type "
+                        "is not `%s`, it's `%s`, which is a subclass of `%s`, "
+                        "but you specified `assert_exact_type=True`, so "
+                        "subclasses aren't acceptable." % (repr(exception),
+                        self.exception_type.__name__,
+                        self.exception_type.__name__, type(exception).__name__,
+                        self.exception_type.__name__)
+                    )
             if self.text:
                 message = exception.args[0]
                 if isinstance(self.text, basestring):
@@ -79,16 +109,28 @@ def assert_same_signature(*callables):
     
     
 class _MissingAttribute(object):
-    pass
+    '''Object signifying that an attribute was not found.'''
     # todo: make uninstanciable
 
-def assert_polite_wrapper(wrapper, wrapped=None):
-    # blocktodo: should be checking attributes? see what the newest
-    # `functools.wraps` does.
+    
+def assert_polite_wrapper(wrapper, wrapped=None, same_signature=True):
+    '''
+    Assert that `wrapper` is a polite function wrapper around `wrapped`.
+    
+    A function wrapper (usually created by a decorator) has a few
+    responsibilties; maintain the same name, signature, documentation etc. of
+    the original function, and a few others. Here we check that the wrapper did
+    all of those things.
+    '''
+    # todo: in all decorators, should be examining the wrapped function's dict
+    # and update the new one with it. can't test for this here though, cause
+    # the decorator has the right to change them.
     if wrapped is None:
         wrapped = wrapper.__wrapped__
-    assert_same_signature(wrapper, wrapped)
+    if same_signature:
+        assert_same_signature(wrapper, wrapped)
     for attribute in ('__module__', '__name__', '__doc__', '__annotations__'):
         assert getattr(wrapper, attribute, _MissingAttribute) == \
                getattr(wrapped, attribute, _MissingAttribute)
     assert wrapper.__wrapped__ == wrapped
+    

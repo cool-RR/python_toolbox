@@ -12,8 +12,7 @@ from garlicsim.general_misc.sleek_refs import (SleekCallArgs,
 from .shared import _is_weakreffable, A, counter
 
 
-def f(*args, **kwargs):
-    pass
+def f(*args, **kwargs): pass
 
 
 def test():

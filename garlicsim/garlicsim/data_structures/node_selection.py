@@ -8,7 +8,7 @@ See its documentation for more info.
 '''
 
 from garlicsim.misc import GarlicSimException
-from garlicsim.general_misc import cute_iter_tools
+from garlicsim.general_misc import sequence_tools
 
 from .node import Node
 from .node_range import NodeRange
@@ -61,7 +61,7 @@ class NodeSelection(object):
         # to node ranges. This will make a few things easier, like checking
         # equality.
         first, second = None, None
-        for (r1, r2) in cute_iter_tools.orderless_combinations(self.ranges, 2):
+        for (r1, r2) in sequence_tools.combinations(self.ranges, 2):
             if r1.head in r2:
                 second, first = r1, r2
                 break

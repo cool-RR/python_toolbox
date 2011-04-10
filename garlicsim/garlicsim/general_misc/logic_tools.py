@@ -4,6 +4,7 @@
 '''This module defines logic-related tools.'''
 
 from garlicsim.general_misc import cute_iter_tools
+from garlicsim.general_misc import sequence_tools
 
 
 def all_equal(iterable, exhaustive=False):
@@ -22,7 +23,7 @@ def all_equal(iterable, exhaustive=False):
     # work for unhashables.
     
     if exhaustive is True:
-        pairs = cute_iter_tools.orderless_combinations(iterable, 2)        
+        pairs = sequence_tools.combinations(list(iterable), 2)
     else: # exhaustive is False
         pairs = cute_iter_tools.consecutive_pairs(iterable)
         

@@ -26,15 +26,16 @@ class CachedProperty(object):
             personality = CachedProperty(_get_personality)
     
     '''
-    def __init__(self, getter, name=None):
+    def __init__(self, getter, doc=None, name=None):
         '''
         Construct the cached property.
         
         You may optionally pass in the name that this property has in the
-        class; This will save a bit of processing later.
+        class; this will save a bit of processing later.
         '''
         self.getter = getter
         self.our_name = name
+        self.__doc__ = doc or getattr(getter, '__doc__', None)
         
         
     def __get__(self, obj, our_type=None):
@@ -48,9 +49,8 @@ class CachedProperty(object):
         if not self.our_name:
             if not our_type:
                 our_type = type(obj)
-            (self.our_name,) = (key for (key, value) in 
-                                vars(our_type).iteritems()
-                                if value is self)
+            (self.our_name,) = (name for name in dir(our_type) if
+                                getattr(our_type, name, None) is self)
         
         setattr(obj, self.our_name, value)
         

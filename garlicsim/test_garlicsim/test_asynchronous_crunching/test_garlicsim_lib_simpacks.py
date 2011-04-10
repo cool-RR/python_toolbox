@@ -144,24 +144,26 @@ def check(simpack, cruncher_type):
     
     assert len(project.tree.all_possible_paths()) == 2
     
-    try:
-        pickled_project = pickle.dumps(project, protocol=2)
-    except RuntimeError, runtime_error:
-        assert 'maximum recursion' in runtime_error.message
-    else:
-        unpickled_project = cPickle.loads(pickled_project)
-        path_pairs = itertools.izip(project.tree.all_possible_paths(),
-                                    unpickled_project.tree.all_possible_paths())
+    
+    ### Testing project pickling and unpickling: ##############################
+    #                                                                         #
+    pickled_project = pickle.dumps(project, protocol=2)
+    
+    unpickled_project = cPickle.loads(pickled_project)
+    path_pairs = itertools.izip(project.tree.all_possible_paths(),
+                                unpickled_project.tree.all_possible_paths())
+    
+    if simpack.State.__eq__ != garlicsim.data_structures.State.__eq__:
         
-        if simpack.State.__eq__ != garlicsim.data_structures.State.__eq__:
+        for path_of_original, path_of_duplicate in path_pairs:
             
-            for path_of_original, path_of_duplicate in path_pairs:
+            state_pairs = itertools.izip(path_of_original.states(),
+                                         path_of_duplicate.states())
+            for state_of_original, state_of_duplicate in state_pairs:
                 
-                state_pairs = itertools.izip(path_of_original.states(),
-                                             path_of_duplicate.states())
-                for state_of_original, state_of_duplicate in state_pairs:
-                    
-                    assert state_of_original == state_of_duplicate
+                assert state_of_original == state_of_duplicate
+    #                                                                         #
+    ### Finished testing project pickling and unpickling. #####################
             
     
     

@@ -1,5 +1,5 @@
-# Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
-# or distributed without explicit written permission from Ram Rachum.
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
 
 '''
 Defines the `Frame` class.
@@ -48,7 +48,7 @@ class Frame(wx.Frame):
     def __init__(self, *args, **kwargs):
         wx.Frame.__init__(self, *args, **kwargs)
         
-        self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM | wx.BG_STYLE_COLOUR)
+        self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
         self.SetBackgroundColour(wx_tools.get_background_color())
         
         self.SetDoubleBuffered(True)

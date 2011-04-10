@@ -99,8 +99,8 @@ read::
             pass
         
             
-        @staticmethod
-        def create_root():
+        #@staticmethod
+        #def create_root():
             # In this function you create a root state. This usually becomes the
             # first state in your simulation. You can make this function do
             # something simple: For example, if you're simulating Life, you can make
@@ -114,8 +114,8 @@ read::
             pass
     
         
-        @staticmethod
-        def create_messy_root():
+        #@staticmethod
+        #def create_messy_root():
             # In this function you create a messy root state. This usually becomes the
             # first state in your simulation. 
             #
@@ -229,7 +229,7 @@ Let's explore our new simpack!
 ==============================
 
 Now we're going to play with our simpack using the Python shell. Be sure that
-the new simpack is on your :attr:`sys.path`; An easy way would be to launch the
+the new simpack is on your :attr:`sys.path`; an easy way would be to launch the
 Python interpreter from the folder in which your simpack resides. (For example,
 if your simpack is at ``C:\coin_flip``, you'll want to launch Python from
 ``C:\``.)
@@ -283,7 +283,7 @@ whichever comes sooner.)
 
 (The reason we have to import this :const:`infinity
 <garlicsim.general_misc.infinity.infinity>` thing is just for
-backwards-compatibility with Python 2.5; If you use Python 2.6 or above, you may
+backwards-compatibility with Python 2.5; if you use Python 2.6 or above, you may
 simply use the builtin :const:`float('inf')` instead of :const:`infinity
 <garlicsim.general_misc.infinity.infinity>`.)
 
@@ -369,5 +369,10 @@ from the beginning, and then double that if you lost, and you would have had the
 same chance of getting $6,000 at the end. Though that is the subject for another
 simulation...
 
+What's next
+===========
+
+Check out :ref:`tutorial part 3 <intro-tutorial3>`, where we'll learn how to
+load our new simpack into the GarlicSim GUI!
+
 .. _expected value: http://en.wikipedia.org/wiki/Expected_value
-.. _mailing list: garlicsim@librelist.org

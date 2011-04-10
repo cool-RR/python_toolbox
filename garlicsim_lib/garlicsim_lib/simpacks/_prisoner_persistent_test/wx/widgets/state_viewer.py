@@ -1,4 +1,4 @@
-# Copyright 2009-2011 Ram Rachum.
+1# Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
 '''
@@ -14,7 +14,7 @@ import wx.lib.agw.piectrl as piectrl
 
 import garlicsim_wx
 
-from ... import state as prisoner
+from garlicsim_lib.simpacks import _prisoner_persistent_test as prisoner
 
 
 class StateViewer(wx.Panel, garlicsim_wx.widgets.WorkspaceWidget):
@@ -35,22 +35,16 @@ class StateViewer(wx.Panel, garlicsim_wx.widgets.WorkspaceWidget):
         self.SetSizer(self.sizer_v)
         self.sizer_v.Layout()
         
-        color_dict = {
-            prisoner.Angel: wx.NamedColor("White"),
-            prisoner.Devil: wx.NamedColor("Black"),
-            prisoner.TitForTat: wx.NamedColor("Blue")
-        }
-        
         font = wx.Font(12, wx.SWISS, wx.NORMAL, wx.BOLD, True, 'Arial')
         self.pie_ctrl.GetLegend().SetLabelFont(font)
         self.pie_ctrl.SetAngle(math.pi)
     
         self.pie_part_dict = {}
-        for player_type in prisoner.player_types:
+        for player_type in prisoner.players.player_types_list:
             part = piectrl.PiePart()
             part.SetLabel(player_type.__name__)
             part.SetValue(1)
-            part.SetColour(color_dict[player_type])
+            part.SetColour(player_type.wx_color)
             self.pie_ctrl._series.append(part)
             self.pie_part_dict[player_type] = part
             
@@ -62,11 +56,8 @@ class StateViewer(wx.Panel, garlicsim_wx.widgets.WorkspaceWidget):
         '''Show a state onscreen.'''
         if state is None:
             return
-        for player_type in prisoner.player_types:
+        for player_type in prisoner.players.player_types_list:
             part = self.pie_part_dict[player_type]
-            value = prisoner.how_many_players_of_certain_type(
-                state.player_pool,
-                player_type
-            )
+            value = state.get_n_players_of_given_type(player_type)
             part.SetValue(value)
         self.Refresh()

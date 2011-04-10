@@ -11,6 +11,7 @@ from garlicsim.general_misc.nifty_collections.ordered_dict import OrderedDict
 
 
 def test_sort():
+    '''Test the `OrderedDict.sort` method.'''
     ordered_dict = OrderedDict(((1, 'a'), (2, 'b'), (3, 'c')))
     ordered_dict_copy = ordered_dict.copy()
     assert ordered_dict == ordered_dict_copy
@@ -37,6 +38,7 @@ def test_sort():
     
     
 def test_index():
+    '''Test the `OrderedDict.index` method.'''
     ordered_dict = OrderedDict(((1, 'a'), (2, 'b'), (3, 'c')))
     assert ordered_dict.index(1) == 0
     assert ordered_dict.index(3) == 2

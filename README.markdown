@@ -7,7 +7,7 @@
 
 [Main documentation site](http://docs.garlicsim.org)
 
-[Installation](http://docs.garlicsim.org/intro/installation/python-2.x.html)
+[Installation](http://docs.garlicsim.org/intro/installation/developers/python-2.x.html)
 
 [FAQ](http://docs.garlicsim.org/misc/faq.html)
 
@@ -22,7 +22,7 @@ GarlicSim is an ambitious open-source project in the field of scientific computi
 
 GarlicSim is a platform for writing, running and analyzing simulations. It is general enough to handle any kind of simulation: Physics, game theory, epidemic spread, electronics, etc.
 
-When you're writing a simulation, about 90% of the code you write is boilerplate; Code that isn't directly related to the phenomenon you're simulating, but is necessary for your simulation to work. The aim of GarlicSim is to write that 90% of the code once and for all, and to do it well, so you could concentrate on the important 10%.
+When you're writing a simulation, about 90% of the code you write is boilerplate; code that isn't directly related to the phenomenon you're simulating, but is necessary for your simulation to work. The aim of GarlicSim is to write that 90% of the code once and for all, and to do it well, so you could concentrate on the important 10%.
 
 GarlicSim defines a new format for simulations. It's called a **simulation package**, and often abbreviated as **simpack**. For example, say you are interested in simulating the interaction of hurricane storms. It is up to you to write a simpack for this type of simulation. The simpack is simply a Python package which defines a few special functions according to the GarlicSim simpack API, the most important function being the **step function**.
 
@@ -43,24 +43,16 @@ Current screenshot, showing the [Game of Life](http://en.wikipedia.org/wiki/Conw
 
 # Mailing lists #
 
-The main mailing list is **[garlicsim@librelist.org](mailto:garlicsim@librelist.org)**.
+All general discussion happens at **[the GarlicSim Google Group](https://groups.google.com/forum/#!forum/garlicsim)**. If you need help with GarlicSim, you're welcome to post your question and we'll try to help you.
 
-The development mailing list is **[garlicsim.dev@librelist.org](mailto:garlicsim.dev@librelist.org)**.
-
-To subscribe just send an email. These lists are hosted by [librelist](http://librelist.org), which is currently slightly experimental.
+The development mailing list is **[GarlicSim-dev](https://groups.google.com/forum/#!forum/garlicsim-dev)**. This is where we discuss the development of GarlicSim itself.
 
 
 # Core and GUI #
 
 This repository contains three packages: `garlicsim`, which is the core logic, `garlicsim_lib`, which is a collection of simpacks, and `garlicsim_wx`, which is the wxPython-based GUI.
 
-The `garlicsim` and `garlicsim_lib` packages are distributed under the **LGPL2.1 license**. 
-
-`garlicsim_wx` is not licensed as open source. (Though the source code is available and not obfuscated.) I have not yet decided if the GUI will be developed as an open source project or as commercial software, so in the meantime it is officially closed source.
-
-If you require an official license, [contact me](mailto:cool-rr@cool-rr.com) and I'll probably give you one.
-
-Both packages are copyright 2009-2011 Ram Rachum. 
+They are all distributed under the **LGPL2.1 license**. 
 
 
 # Python versions #
@@ -72,4 +64,4 @@ There is a [separate fork of GarlicSim](http://github.com/cool-RR/GarlicSim-for-
 
 # Current state #
 
-GarlicSim is at version 0.6.1, which is an alpha release. At this experimental stage of the project, backward compatibility will _not_ be maintained. However, I will be available to assist in issues related to backward compatibility.
+GarlicSim is at version 0.6.3, which is an alpha release. At this experimental stage of the project, backward compatibility will _not_ be maintained. However, I will be available to assist in issues related to backward compatibility.

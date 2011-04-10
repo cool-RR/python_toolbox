@@ -33,7 +33,7 @@ The ``State`` class
 
 The simpack must define a ``State`` class, which must inherit from
 :class:`garlicsim.data_structures.State`. The ``State`` class must be available
-from the root namespace of your simpack; This is usually done by putting a
+from the root namespace of your simpack; this is usually done by putting a
 ``from .state import State`` line in your simpack's ``__init__.py``.
 
 Example ``State`` class::
@@ -161,15 +161,20 @@ This is useful because it allows GarlicSim to detect if a simulation has
 reached a repititive state, so it can stop the crunching right there and
 avoid wasting resources. (Still not implemented, sorry.)
 
-Note that this function does not return `True` or `False`: It returns a
-``DeterminismSetting`` class, from the
+Note that this function does not return :data:`True` or :data:`False`: It
+returns a ``DeterminismSetting`` class, from the
 :mod:`garlicsim.misc.settings_constants.settings` module.
 
-The function will return `None` if it's unknown whether the step profile is
+The function will return :data:`None` if it's unknown whether the step profile is
 deterministic.
 
 Example::
 
     def DETERMINISM_FUNCTION(step_profile):
-        if step_profile.step_function = State.step:
-            if step_profile
+        if step_profile.step_function == State.step:
+            if step_profile.randomness == 0:
+                return garlicsim.misc.settings_constants.DETERMINISTIC
+            else:
+                return garlicsim.misc.settings_constants.UNDETERMINISTIC
+        else:
+            return None

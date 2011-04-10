@@ -6,6 +6,7 @@
 import sys
 import os.path
 import imp
+import zipimport
 
 from garlicsim.general_misc import package_finder
 from garlicsim.general_misc import caching
@@ -80,7 +81,7 @@ def import_if_exists(module_name, silent_fail=False):
     If `silent_fail` is `True`, will return `None` if the module doesn't exist.
     If `silent_fail` is False, will raise `ImportError`.
     
-    `silent_fail` applies only to whether the module exists or not; If it does
+    `silent_fail` applies only to whether the module exists or not; if it does
     exist, but there's an error importing it... *release the hounds.*
     
     I mean, we just raise the error.
@@ -114,7 +115,40 @@ def import_if_exists(module_name, silent_fail=False):
     # as `imp`'s.
         
     return normal_import(module_name)
+
+
+def _module_exists_in_some_zip_path(module_name):
+    '''
+    Return whether a module by the name `module_name` exists in a zip archive.
     
+    Used internally by `exists`.
+    '''
+    assert '.' not in module_name
+    
+    zip_paths = [path for path in sys.path if '.zip' in path]
+    # todo: Find better way to filter zip paths.
+    
+    for zip_path in zip_paths:
+
+        # Trying to create a zip importer:
+        try:
+            zip_importer = zipimport.zipimporter(zip_path)
+        except zipimport.ZipImportError:
+            continue
+            # Excepted `ZipImportError` because we may have zip paths in
+            # `sys.path` that don't really exist, which causes `zipimport` to
+            # raise `ZipImportError`.
+            #
+            # todo: should find smarter way of catching this, excepting
+            # `ZipImportError` is not a good idea.
+        
+        if zip_importer.find_module(module_name) is not None:    
+            return True
+        else:
+            continue
+        
+    return False
+
 
 def exists(module_name):
     '''
@@ -123,12 +157,14 @@ def exists(module_name):
     This seems to be the best way to carefully import a module.
     
     Currently implemented for top-level packages only. (i.e. no dots.)
+    
+    Supports modules imported from a zip file.
     '''
     assert '.' not in module_name
     try:
         imp.find_module(module_name)
     except ImportError:
-        return False
+        return _module_exists_in_some_zip_path(module_name)
     else:
         return True
 

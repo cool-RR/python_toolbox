@@ -26,6 +26,19 @@ import test_garlicsim
 from ..shared import MustachedThreadCruncher
 
 
+def non_ending_inplace_step(state):
+    '''A no-op inplace step that doesn't end the simulation.'''
+    pass
+
+
+def non_ending_history_step(history_browser):
+    '''A minimal history step that doesn't end the simulation.'''
+    old_state = history_browser[-1]
+    new_state = garlicsim.misc.state_deepcopy.state_deepcopy(old_state)
+    new_state.clock += 1
+    return new_state
+
+
 def test_endable():
     '''
     Test handling of endable simpacks.
@@ -34,21 +47,21 @@ def test_endable():
     more.
     '''
     
-    from . import sample_endable_simpacks
+    from . import simpacks as simpacks_package
     
     # Collecting all the test simpacks:
-    simpacks = import_tools.import_all(sample_endable_simpacks).values()
+    simpacks = import_tools.import_all(simpacks_package).values()
     
     # Making sure that we didn't miss any simpack by counting the number of
-    # sub-folders in the `sample_endable_simpacks` folders:
-    sample_endable_simpacks_dir = \
-        os.path.dirname(sample_endable_simpacks.__file__)
-    assert len(path_tools.list_sub_folders(sample_endable_simpacks_dir)) == \
+    # sub-folders in the `simpacks` folder:
+    simpacks_dir = \
+        os.path.dirname(simpacks_package.__file__)
+    assert len(path_tools.list_sub_folders(simpacks_dir)) == \
            len(simpacks)
     
     for simpack in simpacks:
 
-        test_garlicsim.verify_sample_simpack_settings(simpack)
+        test_garlicsim.verify_simpack_settings(simpack)
         
         cruncher_types = \
             garlicsim.misc.SimpackGrokker(simpack).available_cruncher_types
@@ -59,8 +72,8 @@ def test_endable():
         
 def check(simpack, cruncher_type):
     
-    assert simpack._settings_for_testing.ENDABLE is True
-    assert simpack._settings_for_testing.CONSTANT_CLOCK_INTERVAL == 1
+    assert simpack._test_settings.ENDABLE is True
+    assert simpack._test_settings.CONSTANT_CLOCK_INTERVAL == 1
     
     my_simpack_grokker = garlicsim.misc.SimpackGrokker(simpack)
     
@@ -69,7 +82,7 @@ def check(simpack, cruncher_type):
     
     assert garlicsim.misc.simpack_grokker.step_type.StepType.get_step_type(
         my_simpack_grokker.default_step_function
-    ) == simpack._settings_for_testing.DEFAULT_STEP_FUNCTION_TYPE
+    ) == simpack._test_settings.DEFAULT_STEP_FUNCTION_TYPE
     
     step_profile = my_simpack_grokker.build_step_profile()
     deterministic = \
@@ -215,15 +228,13 @@ def check(simpack, cruncher_type):
     assert [len(p) for p in paths] == [5, 5, 5]
     
     
-    # Ensuring buffer on `ended_path` from `node_3` won't add a single node or
-    # end since we have a path to an existing end:
+    # Ensuring buffer on `ended_path` from `node_3` won't cause a new job to be
+    # created since we have a path to an existing end:
     project.ensure_buffer_on_path(node_3, ended_path, 10)
     project.ensure_buffer_on_path(node_3, ended_path, 1000)
     project.ensure_buffer_on_path(node_3, ended_path, infinity)
     total_nodes_added = 0    
-    while project.crunching_manager.jobs:
-        time.sleep(0.1)
-        total_nodes_added += project.sync_crunchers()
+    assert not project.crunching_manager.jobs
     assert len(project.tree.nodes) == 10
     
     # These `ensure_buffer_on_path` calls shouldn't have added any ends:
@@ -325,5 +336,38 @@ def check(simpack, cruncher_type):
     
     #                                                                         #
     ### Finished testing `Project.simulate`. ##################################
+    
+    ### Testing end creation in middle of block: ##############################
+    #                                                                         #
+    
+    my_non_ending_step = non_ending_history_step if \
+        my_simpack_grokker.history_dependent else non_ending_inplace_step
+    
+    nodes_in_tree = len(project.tree.nodes)
+    nodes = list(project.iter_simulate(root, 8, my_non_ending_step))
+    assert len(project.tree.nodes) == nodes_in_tree + 8
+    
+    middle_node = nodes[-4]
+    assert middle_node.state.clock == 5
+    assert nodes[1].block == middle_node.block == nodes[-1].block
+    assert len(middle_node.block) == 8
+    
+
+    project.begin_crunching(middle_node, infinity, step_profile)
+    total_nodes_added = 0
+    assert project.crunching_manager.jobs
+    while project.crunching_manager.jobs:
+        time.sleep(0.1)
+        total_nodes_added += project.sync_crunchers()
+    assert total_nodes_added == 0
+    
+    assert len(middle_node.ends) == 1
+    assert middle_node.block is not nodes[-1].block
+    assert len(middle_node.block) == 5
+    assert len(nodes[-1].block) == 3
+        
+    #                                                                         #
+    ### Finished testing end creation in middle of block. #####################
+    
     
     

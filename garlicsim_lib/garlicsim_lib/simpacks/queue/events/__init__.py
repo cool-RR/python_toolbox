@@ -4,7 +4,7 @@
 '''
 Package that defines an event system.
 
-See documentation for EventSet.
+See documentation of `EventSet` for more details.
 '''
 
 from .event import Event

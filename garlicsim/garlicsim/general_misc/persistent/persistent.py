@@ -13,7 +13,7 @@ Note: This module is still experimental
 todo: need to raise an exception if we're getting pickled with
 an old protocol?
 
-todo: make it polite to other similar classes
+todo: make it polite to other similar classes. Perhaps make it a metaclass?
 '''
 from .copy_modes import DontCopyPersistent
 from garlicsim.general_misc import copy_tools

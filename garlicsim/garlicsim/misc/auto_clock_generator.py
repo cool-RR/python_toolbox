@@ -52,8 +52,8 @@ class AutoClockGenerator(object):
         '''
         Obtain a clock reading for given state.
         
-        If the state already has one, return it; If not, return the clock
-        reading of the last state plus one; If this is the first state, return
+        If the state already has one, return it; if not, return the clock
+        reading of the last state plus one; if this is the first state, return
         0.
         
         Important: The new clock is not added to the state. The state is not

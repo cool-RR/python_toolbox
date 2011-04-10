@@ -1,5 +1,5 @@
-# Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
-# or distributed without explicit written permission from Ram Rachum.
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
 
 '''
 Bootstrap module for `garlicsim_wx`.
@@ -11,11 +11,15 @@ import warnings
 import sys
 
 
+### Confirming correct Python version: ########################################
+#                                                                             #
 if sys.version_info[0] >= 3:
-    raise Exception("This package is not compatible with Python 3.x.")
+    raise Exception('This package is not compatible with Python 3.x.')
 if sys.version_info[1] <= 4:
-    raise Exception("This package requires Python 2.5 and upwards. (Not "
-                    "including 3.x).")
+    raise Exception('This package requires Python 2.5 and upwards. (Not '
+                    'including 3.x).')
+#                                                                             #
+### Finished confirming correct Python version. ###############################
 
 
 def __check_prerequisites():
@@ -42,12 +46,12 @@ def __check_prerequisites():
                                 "http://garlicsim.org and follow the "
                                 "instructions for installation.")
         else:
-            if garlicsim.__version_info__ < (0, 6, 1):
+            if garlicsim.__version_info__ < (0, 6, 3):
                 raise MissingModule("You have `garlicsim` version %s, while "
-                                    "version 0.6.1 is required. Go to "
+                                    "version 0.6.3 is required. Go to "
                                     "http://garlicsim.org and follow the "
                                     "instructions for installation." %
-                                    garlicsim.__version_info__)
+                                    (garlicsim.__version_info__,))
             return [garlicsim]
     
     def check_wx():
@@ -71,7 +75,7 @@ def __check_prerequisites():
                               "but if any problem comes up, try upgrading "
                               "wxPython. To do that, download and install the "
                               "latest version from "
-                              "http://wxpython.org" % wx.__version__)
+                              "http://wxpython.org" % (wx.__version__,))
             return [wx]
     
 

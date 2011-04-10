@@ -7,6 +7,8 @@ import re
 import math
 import types
 
+from garlicsim.general_misc import cute_iter_tools
+
 
 def is_subclass(candidate, base_class):
     '''
@@ -15,11 +17,26 @@ def is_subclass(candidate, base_class):
     You may pass in a tuple of base classes instead of just one, and it will
     check whether `candidate` is a subclass of any of these base classes.
     
-    The advantage of this over the built-in `issubclass` is that it doesn't
-    throw an exception if `candidate` is not a type. (Python issue 10569.)
+    This has 2 advantages of over the built-in `issubclass`:
+    
+     1. It doesn't throw an exception if `candidate` is not a type. (Python
+        issue 10569.)
+     2. It manually checks for a `__subclasscheck__` method on `base_class`.
+        This is helpful for Python 2.5 compatibility because Python started
+        using `__subclasscheck__` in its built-in `issubclass` starting from
+        Python 2.6.
+        
     '''
-    return isinstance(candidate, (type, types.ClassType)) and \
-           issubclass(candidate, base_class)
+    # todo: disable ability to use nested iterables.
+    if cute_iter_tools.is_iterable(base_class):
+        return any(is_subclass(candidate, single_base_class) for 
+                   single_base_class in base_class)
+    elif not isinstance(candidate, (type, types.ClassType)):
+        return False
+    elif hasattr(base_class, '__subclasscheck__'):
+        return base_class.__subclasscheck__(candidate)
+    else:
+        return issubclass(candidate, base_class)
 
 
 def get_mro_depth_of_method(type_, method_name):
@@ -48,7 +65,7 @@ def frange(start, finish=None, step=1.):
     '''
     Make a `list` containing an arithmetic progression of numbers.
 
-    This is an extension of the builtin `range`; It allows using floating point
+    This is an extension of the builtin `range`; it allows using floating point
     numbers.
     '''
     if finish is None:
@@ -85,6 +102,13 @@ def is_legal_ascii_variable_name(name):
     return bool(_ascii_variable_pattern.match(name))
 
 
+def is_magic_variable_name(name):
+    '''Return whether `name` is a name of a magic variable (e.g. '__add__'.)'''
+    return is_legal_ascii_variable_name(name) and \
+           len(name) >= 5 and \
+           name[:2] == name[-2:] == '__'
+
+
 def get_actual_type(thing):
     '''
     Get the actual type (or class) of an object.
@@ -113,4 +137,12 @@ def is_number(x):
     else:
         return True
     
+def identity_function(thing):
+    '''
+    Return `thing`.
     
+    This function is useful when you want to use an identity function but can't
+    define a lambda one because it wouldn't be pickleable. Also using this
+    function might be faster as it's prepared in advance.
+    '''
+    return thing

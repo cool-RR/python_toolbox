@@ -12,7 +12,7 @@ from garlicsim.general_misc.caching import (cache, CachedType,
 
 
 def counting_func(self):
-    '''Function that returns a bigger number every time.'''
+    '''Return a bigger number every time.'''
     if not hasattr(counting_func, 'i'):
         counting_func.i = 0
     try:
@@ -34,7 +34,7 @@ def test():
     a2 = A()
     assert a2.personality == a2.personality == a2.personality 
     
-    assert a2.personality == a1.personality + 1        
+    assert a2.personality == a1.personality + 1
 
 
 def test_as_decorator():
@@ -119,3 +119,29 @@ def test_on_false_object():
     assert c2.personality == c2.personality == c2.personality 
     
     assert c2.personality == c1.personality + 1
+    
+    
+def test_doc():
+    '''Test the `doc` argument for setting the property's docstring.'''
+    class A(object):
+        personality = CachedProperty(counting_func)
+        
+    assert A.personality.__doc__ ==  'Return a bigger number every time.'
+    
+    
+    class B(object):
+        personality = CachedProperty(
+            counting_func,
+            doc='''Ooga booga.'''
+        )
+        
+    assert B.personality.__doc__ ==  'Ooga booga.'
+    
+    
+    class C(object):
+        undocced_property = CachedProperty(
+            lambda self: 1/0,
+        )
+        
+    assert C.undocced_property.__doc__ is None
+    

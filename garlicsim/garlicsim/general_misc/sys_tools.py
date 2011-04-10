@@ -11,7 +11,8 @@ import sys
 import cStringIO
 import subprocess
 
-from garlicsim.general_misc.context_manager import ContextManager
+from garlicsim.general_misc.context_manager import (ContextManager,
+                                                    BlankContextManager)
 from garlicsim.general_misc.temp_value_setters import TempValueSetter
 
 
@@ -26,18 +27,33 @@ class OutputCapturer(ContextManager):
             
         assert output_capturer.output == 'woo!\n'
         
+    The boolean arguments `stdout` and `stderr` determine, respectively,
+    whether the standard-output and the standard-error streams will be
+    captured.
     '''
-    def __init__(self):
+    def __init__(self, stdout=True, stderr=True):
         self.string_io = cStringIO.StringIO()
-        self._temp_stdout_setter = \
-            TempValueSetter((sys, 'stdout'), self.string_io)
-        self.output = None
+        
+        if stdout:
+            self._stdout_temp_setter = \
+                TempValueSetter((sys, 'stdout'), self.string_io)
+        else: # not stdout
+            self._stdout_temp_setter = BlankContextManager()
+            
+        if stderr:
+            self._stderr_temp_setter = \
+                TempValueSetter((sys, 'stderr'), self.string_io)
+        else: # not stderr
+            self._stderr_temp_setter = BlankContextManager()
         
     def manage_context(self):
         '''Manage the `OutputCapturer`'s context.'''
-        with self._temp_stdout_setter:
-            yield self
-        self.output = self.string_io.getvalue()
+        with self._stdout_temp_setter:
+            with self._stderr_temp_setter:
+                yield self
+        
+    output = property(lambda self: self.string_io.getvalue(),
+                      doc='''The string of output that was captured.''')
 
         
 class TempSysPathAdder(ContextManager):
@@ -81,7 +97,15 @@ class TempSysPathAdder(ContextManager):
             assert entry in sys.path 
             
             sys.path.remove(entry)
-        
+
+            
+frozen = getattr(sys, 'frozen', None)
+'''
+The "frozen string", if we are frozen, otherwise `None`.
+
+This is useful for checking if we are frozen, e.g. with py2exe.
+'''
+
 
 # May want in future:
 #def execute(command):

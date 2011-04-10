@@ -1,12 +1,17 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
+'''Testing module for invalid simpacks.'''
+
+from __future__ import with_statement
+
 import os
 
 import nose
 
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import path_tools
+from garlicsim.general_misc import cute_testing
 from garlicsim.general_misc.reasoned_bool import ReasonedBool
 
 import garlicsim
@@ -17,38 +22,35 @@ import test_garlicsim
 
 
 def test_simpacks():
-    from . import sample_invalid_simpacks
+    '''Test invalid simpacks.'''
+    from . import simpacks as invalid_simpacks_package
     
     # Collecting all the test simpacks:
-    simpacks = import_tools.import_all(sample_invalid_simpacks).values()
+    simpacks = import_tools.import_all(invalid_simpacks_package).values()
     
     # Making sure that we didn't miss any simpack by counting the number of
-    # sub-folders in the `sample_invalid_simpacks` folders:
-    sample_invalid_simpacks_dir = \
-        os.path.dirname(sample_invalid_simpacks.__file__)
-    assert len(path_tools.list_sub_folders(sample_invalid_simpacks_dir)) == \
+    # sub-folders in the `simpacks` folder:
+    simpacks_dir = \
+        os.path.dirname(invalid_simpacks_package.__file__)
+    assert len(path_tools.list_sub_folders(simpacks_dir)) == \
            len(simpacks)
     
     for simpack in simpacks:
-        test_garlicsim.verify_sample_simpack_settings(simpack)
+        test_garlicsim.verify_simpack_settings(simpack)
         yield check_simpack, simpack
 
         
 def check_simpack(simpack):
-
-    _settings_for_testing = simpack._settings_for_testing
-    VALID = _settings_for_testing.VALID
+    '''Check that the invalid `simpack` raises the correct exception.'''
+    _test_settings = simpack._test_settings
+    VALID = _test_settings.VALID
     assert not VALID
     assert isinstance(VALID, ReasonedBool)
     exception_we_should_get = VALID.reason
     assert isinstance(exception_we_should_get, InvalidSimpack)
     
-    try:
-        SimpackGrokker(simpack)
-    except Exception, exception:
-        assert type(exception) == type(exception_we_should_get)
-        assert exception.message == exception_we_should_get.message
+    with cute_testing.RaiseAssertor(type(exception_we_should_get),
+                                    exception_we_should_get.message,
+                                    assert_exact_type=True):
         
-    else:
-        raise Exception("`SimpackGrokker` shouldn't have been created because "
-                        "the simpack is invalid.")
+        SimpackGrokker(simpack)

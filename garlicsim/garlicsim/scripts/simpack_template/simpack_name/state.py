@@ -23,8 +23,8 @@ class State(garlicsim.data_structures.State):
         pass
     
         
-    @staticmethod
-    def create_root():
+    #@staticmethod
+    #def create_root():
         # In this function you create a root state. This usually becomes the
         # first state in your simulation. You can make this function do
         # something simple: For example, if you're simulating a Life cellular
@@ -35,11 +35,10 @@ class State(garlicsim.data_structures.State):
         # the width and height of the board using arguments to this function.
         #
         # This function returns the newly-created state.
-        pass
 
     
-    @staticmethod
-    def create_messy_root():
+    #@staticmethod
+    #def create_messy_root():
         # In this function you create a messy root state. This usually becomes
         # the first state in your simulation.
         #
@@ -53,12 +52,11 @@ class State(garlicsim.data_structures.State):
         # the width and height of the board using arguments to this function.
         #
         # This function returns the newly-created state.
-        pass
                                  
     
-    # def step_generator(self):
-    #     yield None
-    #     pass
+    #def step_generator(self):
+    #    yield None
+    #    pass
     #
     # Do you want to use a step generator as your step function? If so, you may
     # uncomment the above and fill it in, and it will be used instead of the

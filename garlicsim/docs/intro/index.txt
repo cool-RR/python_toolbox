@@ -11,7 +11,7 @@ Getting started
 
 Never worked with GarlicSim before?
 
-In 25 minutes you could grasp the fundamentals of GarlicSim and write your first
+In 35 minutes you could grasp the fundamentals of GarlicSim and write your first
 simulation package!
 
 .. toctree::
@@ -20,6 +20,7 @@ simulation package!
    Install GarlicSim (A few minutes) <installation/index>
    Tutorial part 1: Running your first simulation (10 minutes) <tutorial1>
    Tutorial part 2: Writing your first simulation package (10 minutes) <tutorial2>
+   Tutorial part 3: Optional: Loading your simpack into the GUI (10 minutes) <tutorial3>
    
 .. seealso::
 

@@ -10,13 +10,17 @@ import os.path
 import shutil
 import tempfile
 import re
+import types
 import glob
 
 from garlicsim.general_misc.temp_value_setters import \
     TempWorkingDirectorySetter
 from garlicsim.general_misc import sys_tools
 from garlicsim.general_misc import import_tools
+from garlicsim.general_misc import cute_inspect
+from garlicsim.general_misc import temp_file_tools
 
+import garlicsim.scripts.simpack_template.simpack_name.state
 import garlicsim.scripts.start_simpack
 start_simpack_file = garlicsim.scripts.start_simpack.__file__
 
@@ -81,26 +85,37 @@ def test():
     # place:
     assert not import_tools.exists('_coin_flip')
     
-    temp_dir = tempfile.mkdtemp(prefix='temp_garlicsim_')
-    try:
-        with TempWorkingDirectorySetter(temp_dir):
+    with temp_file_tools.TemporaryFolder(prefix='temp_test_garlicsim_') \
+                                                          as temp_folder:
+        with TempWorkingDirectorySetter(temp_folder):
             with sys_tools.OutputCapturer() as output_capturer:
                 garlicsim.scripts.start_simpack.start(
                     argv=['start_simpack.py', '_coin_flip']
                 )
             assert output_capturer.output == \
-                ("`_coin_flip` simpack created successfully! Explore the "
-                 "`_coin_flip` folder and start filling in the contents of "
-                 "your new simpack.\n")
-            simpack_path = os.path.join(temp_dir, '_coin_flip')
+                ('`_coin_flip` simpack created successfully! Explore the '
+                 '`_coin_flip` folder and start filling in the contents of '
+                 'your new simpack.\n')
+            simpack_path = os.path.join(temp_folder, '_coin_flip')
             assert os.path.isdir(simpack_path)
+                                                                      
             state_module_path = os.path.join(simpack_path, 'state.py')
+            
+            assert_module_was_copied_with_correct_newlines(
+                state_module_path,
+                garlicsim.scripts.simpack_template.simpack_name.state
+            )
+            
             with open(state_module_path, 'w') as state_file:
                 state_file.write(state_module_contents_for_coinflip)
                 
                          
-            with sys_tools.TempSysPathAdder(temp_dir):
+            with sys_tools.TempSysPathAdder(temp_folder):
                 import _coin_flip
+                
+                assert _coin_flip.__doc__ == '\n_coin_flip description.\n'
+                assert _coin_flip.name == '_coin_flip'                
+                
                 state = _coin_flip.State.create_root()
                 assert repr(vars(state)) == \
                        "{'balance': 5000, 'last_bet_result': 0}"
@@ -132,22 +147,40 @@ def test():
                         got_loser = True
                         continue
                     
-                    states = garlicsim.list_simulate(state, infinity)
-                    len(states)
-                    assert re.match(
-                        r'^\[5000(, \d+)+\]$',
-                        repr([s.balance for s in states])
-                    )
-                    
-                    def get_end_balance():
-                        return garlicsim.simulate(state, infinity).balance
-                    results = [get_end_balance() for i in range(100)]
-                    assert 3000 < (sum(results) / len(results)) < 6000
-                    assert 0.4 < (results.count(6000)/len(results)) < 0.95
+                states = garlicsim.list_simulate(state, infinity)
+                len(states)
+                assert re.match(
+                    r'^\[5000(, \d+)+\]$',
+                    repr([s.balance for s in states])
+                )
+                
+                def get_end_balance():
+                    return garlicsim.simulate(state, infinity).balance
+                results = [get_end_balance() for i in range(100)]
+                assert 3000 < (sum(results) / len(results)) < 6000
+                assert 0.4 < (results.count(6000)/len(results)) < 0.95
             
             
-            
-    finally:
-        shutil.rmtree(temp_dir)
-
+    
         
+def assert_module_was_copied_with_correct_newlines(destination_path,
+                                                   source_module):
+    '''
+    Assert `source_module` was copied to `destination_path` with good newlines.
+    
+    e.g, on Linux/Mac the file should use '\n' for newlines, on Windows it
+    should use '\r\n'.
+    '''
+    
+    assert os.path.isfile(destination_path)
+    assert isinstance(source_module, types.ModuleType)
+    
+    number_of_newlines = cute_inspect.getsource(source_module).count('\n')
+    
+    with open(destination_path, 'rb') as destination_file:
+        destination_string = destination_file.read()
+        
+    assert destination_string.count(os.linesep) == number_of_newlines
+    
+    if os.linesep == '\n':
+        assert '\r\n' not in destination_string

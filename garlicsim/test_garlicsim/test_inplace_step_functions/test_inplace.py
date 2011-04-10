@@ -38,21 +38,21 @@ class StateDeepcopyCounter(TempFunctionCallCounter):
 def test():
     '''Test inplace step functions.'''
     
-    from . import sample_simpacks
+    from . import simpacks as simpacks_package
     
     # Collecting all the test simpacks:
-    simpacks = import_tools.import_all(sample_simpacks).values()
+    simpacks = import_tools.import_all(simpacks_package).values()
     
     # Making sure that we didn't miss any simpack by counting the number of
-    # sub-folders in the `sample_simpacks` folders:
-    sample_simpacks_dir = \
-        os.path.dirname(sample_simpacks.__file__)
-    assert len(path_tools.list_sub_folders(sample_simpacks_dir)) == \
+    # sub-folders in the `simpacks` folder:
+    simpacks_dir = \
+        os.path.dirname(simpacks_package.__file__)
+    assert len(path_tools.list_sub_folders(simpacks_dir)) == \
            len(simpacks)
     
     for simpack in simpacks:        
         
-        test_garlicsim.verify_sample_simpack_settings(simpack)
+        test_garlicsim.verify_simpack_settings(simpack)
         
         cruncher_types = \
             garlicsim.misc.SimpackGrokker(simpack).available_cruncher_types
@@ -68,15 +68,15 @@ def check(simpack, cruncher_type):
     '''
     my_simpack_grokker = garlicsim.misc.SimpackGrokker(simpack)
     
-    assert simpack._settings_for_testing.DEFAULT_STEP_FUNCTION_TYPE in \
+    assert simpack._test_settings.DEFAULT_STEP_FUNCTION_TYPE in \
            [garlicsim.misc.simpack_grokker.step_types.InplaceStep,
             garlicsim.misc.simpack_grokker.step_types.InplaceStepGenerator]
     
     assert garlicsim.misc.simpack_grokker.step_type.StepType.get_step_type(
         my_simpack_grokker.default_step_function
-    ) == simpack._settings_for_testing.DEFAULT_STEP_FUNCTION_TYPE
+    ) == simpack._test_settings.DEFAULT_STEP_FUNCTION_TYPE
     
-    assert simpack._settings_for_testing.CONSTANT_CLOCK_INTERVAL == 1
+    assert simpack._test_settings.CONSTANT_CLOCK_INTERVAL == 1
     
     step_profile = my_simpack_grokker.build_step_profile()
     

@@ -1,5 +1,5 @@
-# Copyright 2009-2011 Ram Rachum. No part of this program may be used, copied
-# or distributed without explicit written permission from Ram Rachum.
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
 
 '''
 This module defines the `AboutDialog` class.
@@ -65,9 +65,7 @@ class AboutDialog(CuteDialog):
                     <div align="center"> <font size="1">
                         &copy; 2009-2011 Ram Rachum (a.k.a. cool-RR)
                         <br />                        
-                        No part of this program may be used, copied or
-                        distributed without explicit written permission from
-                        Ram Rachum.
+                        This program is distributed under the LGPL2.1 license.
                         <br />
                     </font></div>
                     <div> 

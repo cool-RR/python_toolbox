@@ -17,25 +17,25 @@ import test_garlicsim
 
 
 def test_simpacks():
-    from . import sample_simpacks
+    from . import simpacks as simpacks_package
     
     # Collecting all the test simpacks:
-    simpacks = import_tools.import_all(sample_simpacks).values()
+    simpacks = import_tools.import_all(simpacks_package).values()
     
     # Making sure that we didn't miss any simpack by counting the number of
-    # sub-folders in the `sample_simpacks` folders:
-    sample_simpacks_dir = os.path.dirname(sample_simpacks.__file__)
-    assert len(path_tools.list_sub_folders(sample_simpacks_dir)) == \
+    # sub-folders in the `simpacks` folder:
+    simpacks_dir = os.path.dirname(simpacks_package.__file__)
+    assert len(path_tools.list_sub_folders(simpacks_dir)) == \
            len(simpacks)
     
     for simpack in simpacks:
-        test_garlicsim.verify_sample_simpack_settings(simpack)
+        test_garlicsim.verify_simpack_settings(simpack)
         yield check_simpack, simpack
 
         
 def check_simpack(simpack):
 
-    _settings_for_testing = simpack._settings_for_testing
+    _test_settings = simpack._test_settings
     
     simpack_grokker = SimpackGrokker(simpack)
     
@@ -51,7 +51,7 @@ def check_simpack(simpack):
 
     
     assert len(simpack_grokker.all_step_functions) == \
-           _settings_for_testing.N_STEP_FUNCTIONS 
+           _test_settings.N_STEP_FUNCTIONS 
 
     
     state = simpack.State.create_root()
@@ -59,7 +59,7 @@ def check_simpack(simpack):
 
     
     assert simpack_grokker.available_cruncher_types == \
-           simpack._settings_for_testing.CRUNCHERS_LIST
+           simpack._test_settings.CRUNCHERS_LIST
     assert simpack_grokker.available_cruncher_types == \
            [cruncher for cruncher, availability in 
             simpack_grokker.cruncher_types_availability.items()
@@ -71,11 +71,11 @@ def check_simpack(simpack):
 
     
     assert simpack_grokker.default_step_function == \
-           _settings_for_testing.DEFAULT_STEP_FUNCTION
+           _test_settings.DEFAULT_STEP_FUNCTION
     
     
     assert simpack_grokker.history_dependent == \
-           _settings_for_testing.HISTORY_DEPENDENT
+           _test_settings.HISTORY_DEPENDENT
 
     
     settings = simpack_grokker.settings
@@ -101,7 +101,7 @@ def check_simpack(simpack):
         issubclass(StepType.get_step_type(step_function), BaseStep) for
         step_function in all_step_functions
     )
-    assert len(all_step_functions) == _settings_for_testing.N_STEP_FUNCTIONS
+    assert len(all_step_functions) == _test_settings.N_STEP_FUNCTIONS
     
     
     

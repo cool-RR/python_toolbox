@@ -18,6 +18,13 @@ from garlicsim.general_misc.third_party.unittest2.compatibility import wraps
 __unittest = True
 
 
+def _is_instance(a, b):
+    if hasattr(b, '__instancecheck__'):
+        return b.__instancecheck__(a)
+    else:
+        return isinstance(a, b)
+
+
 DIFF_OMITTED = ('\nDiff is %s characters long. '
                  'Set self.maxDiff to None to see it.')
 
@@ -961,13 +968,13 @@ class TestCase(unittest.TestCase):
     def assertIsInstance(self, obj, cls, msg=None):
         """Same as self.assertTrue(isinstance(obj, cls)), with a nicer
         default message."""
-        if not isinstance(obj, cls):
+        if not _is_instance(obj, cls):
             standardMsg = '%s is not an instance of %r' % (safe_repr(obj), cls)
             self.fail(self._formatMessage(msg, standardMsg))
 
     def assertNotIsInstance(self, obj, cls, msg=None):
         """Included for symmetry with assertIsInstance."""
-        if isinstance(obj, cls):
+        if _is_instance(obj, cls):
             standardMsg = '%s is an instance of %r' % (safe_repr(obj), cls)
             self.fail(self._formatMessage(msg, standardMsg))
 
