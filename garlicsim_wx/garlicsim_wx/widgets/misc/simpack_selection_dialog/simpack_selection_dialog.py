@@ -53,31 +53,55 @@ class SimpackSelectionDialog(CuteDialog):
         ### Finished setting up flex-grid-sizer. ##############################
         
         text_ctrl_0 = wx.TextCtrl(self)
-        self.flex_grid_sizer.Add(text_ctrl_0, 1, wx.EXPAND)
+        self.flex_grid_sizer.Add(text_ctrl_0, proportion=1, flag=wx.EXPAND)
         
         text_ctrl_1 = wx.TextCtrl(self)
-        self.flex_grid_sizer.Add(text_ctrl_1, 1, wx.EXPAND)
+        self.flex_grid_sizer.Add(text_ctrl_1, proportion=1, flag=wx.EXPAND)
         
-        text_ctrl_2 = wx.TextCtrl(self)
-        self.flex_grid_sizer.Add(text_ctrl_2, 0, wx.EXPAND)
+        #text_ctrl_2 = wx.TextCtrl(self)
+        #self.flex_grid_sizer.Add(text_ctrl_2, 0, wx.EXPAND)
         
         
         ### Building simpack-navigation buttons: ##############################
         #                                                                     #
 
-        self.simpack_navigation_sizer = wx.BoxSizer(wx.VERTICAL)
+        self.big_simpack_navigation_sizer = wx.BoxSizer(wx.VERTICAL)
+        self.flex_grid_sizer.Add(self.big_simpack_navigation_sizer,
+                                 proportion=0,
+                                 flag=wx.EXPAND)
         
-        self.add_folder_containing_simpacks_button = wx.Button(
+        self.add_simpacks_from_a_different_folder = wx.Button(
             self,
-            label='&Add folder containing simpacks...'
+            label='&Add simpacks from a different folder...'
         )
-        self.main_v_sizer.Add(self.add_folder_containing_simpacks_button,
-                              0,
-                              wx.EXPAND | wx.ALL,
-                              border=10)            
+        self.big_simpack_navigation_sizer.Add(
+            self.add_simpacks_from_a_different_folder,
+            proportion=0,
+            flag=wx.EXPAND | wx.ALL,
+            border=10
+        )
         self.Bind(wx.EVT_BUTTON,
                   self.on_add_folder_containing_simpacks_button,
-                  self.add_folder_containing_simpacks_button)
+                  self.add_simpacks_from_a_different_folder)
+        
+        self.small_simpack_navigation_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        self.big_simpack_navigation_sizer.Add(
+            self.small_simpack_navigation_sizer,
+            proportion=0,
+            flag=wx.EXPAND
+        )
+        
+        # blocktodo: if `wx.SearchCtrl` doesn't give us everything we need, can
+        # find something else.
+        self.search_ctrl = wx.SearchCtrl(self)
+        self.search_ctrl.ShowCancelButton(True)
+        self.search_ctrl.SetDescriptiveText('S&earch for simpacks...')
+        self.small_simpack_navigation_sizer.Add(
+            self.search_ctrl,
+            proportion=1,
+            flag=wx.EXPAND | wx.ALL,
+            border=10
+        )
         
         
         #                                                                     #
