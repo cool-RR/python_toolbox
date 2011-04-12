@@ -38,6 +38,26 @@ class SimpackSelectionDialog(CuteDialog):
         assert isinstance(frame, garlicsim_wx.Frame)
         self.frame = frame
         
+        self.flex_grid_sizer = wx.FlexGridSizer(rows=2, cols=2,
+                                                hgap=16, vgap=8)
+        
+        text_ctrl_0 = wx.TextCtrl(self)
+        self.flex_grid_sizer.Add(text_ctrl_0, 1, wx.EXPAND)
+        
+        text_ctrl_1 = wx.TextCtrl(self)
+        self.flex_grid_sizer.Add(text_ctrl_1, 1, wx.EXPAND)
+        
+        text_ctrl_2 = wx.TextCtrl(self)
+        self.flex_grid_sizer.Add(text_ctrl_2, 0, wx.EXPAND)
+        
+        text_ctrl_3 = wx.TextCtrl(self)
+        self.flex_grid_sizer.Add(text_ctrl_3, 0, wx.EXPAND)
+        
+        
+        self.SetSizer(self.flex_grid_sizer)
+        
+        '''
+        
         self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)
         
         self.static_text = wx.StaticText(
@@ -94,6 +114,7 @@ class SimpackSelectionDialog(CuteDialog):
         self.Layout()
         
         self.list_box.SetFocus()
+        '''
         
         
     def on_add_folder_containing_simpacks_button(self, event):
