@@ -38,8 +38,19 @@ class SimpackSelectionDialog(CuteDialog):
         assert isinstance(frame, garlicsim_wx.Frame)
         self.frame = frame
         
+        ### Setting up flex-grid-sizer: #######################################
+        #                                                                     #
         self.flex_grid_sizer = wx.FlexGridSizer(rows=2, cols=2,
                                                 hgap=16, vgap=8)
+        
+        self.SetSizer(self.flex_grid_sizer)
+        
+        self.flex_grid_sizer.AddGrowableRow(0, 1)
+        
+        self.flex_grid_sizer.AddGrowableCol(0, 1)
+        self.flex_grid_sizer.AddGrowableCol(1, 1)
+        #                                                                     #
+        ### Finished setting up flex-grid-sizer. ##############################
         
         text_ctrl_0 = wx.TextCtrl(self)
         self.flex_grid_sizer.Add(text_ctrl_0, 1, wx.EXPAND)
@@ -50,11 +61,55 @@ class SimpackSelectionDialog(CuteDialog):
         text_ctrl_2 = wx.TextCtrl(self)
         self.flex_grid_sizer.Add(text_ctrl_2, 0, wx.EXPAND)
         
-        text_ctrl_3 = wx.TextCtrl(self)
-        self.flex_grid_sizer.Add(text_ctrl_3, 0, wx.EXPAND)
+        
+        ### Building simpack-navigation buttons: ##############################
+        #                                                                     #
+
+        self.simpack_navigation_sizer = wx.BoxSizer(wx.VERTICAL)
+        
+        self.add_folder_containing_simpacks_button = wx.Button(
+            self,
+            label='&Add folder containing simpacks...'
+        )
+        self.main_v_sizer.Add(self.add_folder_containing_simpacks_button,
+                              0,
+                              wx.EXPAND | wx.ALL,
+                              border=10)            
+        self.Bind(wx.EVT_BUTTON,
+                  self.on_add_folder_containing_simpacks_button,
+                  self.add_folder_containing_simpacks_button)
         
         
-        self.SetSizer(self.flex_grid_sizer)
+        #                                                                     #
+        ### Finished building simpack-navigation buttons. #####################
+        
+        #text_ctrl_3 = wx.TextCtrl(self)
+        #self.flex_grid_sizer.Add(text_ctrl_3, 0, wx.EXPAND)
+        
+        
+        ### Creating Ok/Cancel buttons: #######################################
+        #                                                                     #
+        self.dialog_button_sizer = wx.StdDialogButtonSizer()
+        # blocktodo: make big and spaced like in mockup
+        
+        self.flex_grid_sizer.Add(self.dialog_button_sizer,
+                                 0,
+                                 wx.ALIGN_CENTER_HORIZONTAL | wx.ALL,
+                                 border=0)
+        
+        self.ok_button = wx.Button(self, wx.ID_OK, 'Create &project')
+        self.dialog_button_sizer.AddButton(self.ok_button)
+        self.ok_button.SetDefault()
+        self.dialog_button_sizer.SetAffirmativeButton(self.ok_button)
+        self.Bind(wx.EVT_BUTTON, self.on_ok, source=self.ok_button)
+        
+        self.cancel_button = wx.Button(self, wx.ID_CANCEL, 'Cancel')
+        self.dialog_button_sizer.AddButton(self.cancel_button)
+        self.Bind(wx.EVT_BUTTON, self.on_cancel, source=self.cancel_button)
+        self.dialog_button_sizer.Realize()
+        #                                                                     #
+        ### Finished creating Ok/Cancel buttons. ##############################
+        
         
         '''
         
@@ -70,17 +125,7 @@ class SimpackSelectionDialog(CuteDialog):
         self.main_v_sizer.Add(self.list_box, 1, wx.EXPAND | wx.ALL, 10)
         self.list_box.Bind(wx.EVT_LEFT_DCLICK, self.on_ok, self.list_box)
         
-        self.add_folder_containing_simpacks_button = wx.Button(
-            self,
-            label='&Add folder containing simpacks...'
-        )
-        self.main_v_sizer.Add(self.add_folder_containing_simpacks_button,
-                              0,
-                              wx.EXPAND | wx.ALL,
-                              border=10)            
-        self.Bind(wx.EVT_BUTTON,
-                  self.on_add_folder_containing_simpacks_button,
-                  self.add_folder_containing_simpacks_button)
+        
         
         self.horizontal_line = wx.StaticLine(self)
         self.main_v_sizer.Add(self.horizontal_line,
@@ -88,23 +133,7 @@ class SimpackSelectionDialog(CuteDialog):
                               wx.EXPAND | wx.ALL,
                               10)
         
-        self.dialog_button_sizer = wx.StdDialogButtonSizer()
         
-        self.main_v_sizer.Add(self.dialog_button_sizer,
-                              0,
-                              wx.ALIGN_CENTER_HORIZONTAL | wx.ALL,
-                              border=10)
-        
-        self.ok_button = wx.Button(self, wx.ID_OK, 'Create &project')
-        self.dialog_button_sizer.AddButton(self.ok_button)
-        self.ok_button.SetDefault()
-        self.dialog_button_sizer.SetAffirmativeButton(self.ok_button)
-        self.Bind(wx.EVT_BUTTON, self.on_ok, source=self.ok_button)
-        
-        self.cancel_button = wx.Button(self, wx.ID_CANCEL, 'Cancel')
-        self.dialog_button_sizer.AddButton(self.cancel_button)
-        self.Bind(wx.EVT_BUTTON, self.on_cancel, source=self.cancel_button)
-        self.dialog_button_sizer.Realize()
         
         self.update_simpack_list()
         if self.list_of_simpacks:
