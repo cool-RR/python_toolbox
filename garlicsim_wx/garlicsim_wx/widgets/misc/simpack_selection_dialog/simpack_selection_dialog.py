@@ -13,6 +13,7 @@ import glob
 import pkgutil
 
 import wx
+import pkg_resources
 
 from garlicsim.general_misc.cmp_tools import underscore_hating_cmp
 from garlicsim.general_misc import address_tools
@@ -22,6 +23,10 @@ from garlicsim.general_misc import package_finder
 from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
 
 import garlicsim_wx
+
+from . import images as __images_package
+images_package = __images_package.__name__
+
 
 
 class SimpackSelectionDialog(CuteDialog):
@@ -78,7 +83,7 @@ class SimpackSelectionDialog(CuteDialog):
             self.add_simpacks_from_a_different_folder,
             proportion=0,
             flag=wx.EXPAND | wx.ALL,
-            border=10
+            border=5
         )
         self.Bind(wx.EVT_BUTTON,
                   self.on_add_folder_containing_simpacks_button,
@@ -99,9 +104,44 @@ class SimpackSelectionDialog(CuteDialog):
         self.small_simpack_navigation_sizer.Add(
             self.search_ctrl,
             proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=10
+            flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            border=5
         )
+        
+        self.back_button = wx.BitmapButton(
+            self,
+            bitmap=wx.BitmapFromImage(
+                wx.ImageFromStream(
+                    pkg_resources.resource_stream(images_package, 'back.png'),
+                    wx.BITMAP_TYPE_ANY
+                )
+            ),
+        )
+        self.small_simpack_navigation_sizer.Add(
+            self.back_button,
+            proportion=0,
+            flag=wx.ALL,
+            border=5
+        )
+        
+        self.forward_button = wx.BitmapButton(
+            self,
+            bitmap=wx.BitmapFromImage(
+                wx.ImageFromStream(
+                    pkg_resources.resource_stream(images_package, 'forward.png'),
+                    wx.BITMAP_TYPE_ANY
+                )
+            ),
+        )
+        self.small_simpack_navigation_sizer.Add(
+            self.forward_button,
+            proportion=0,
+            flag=wx.ALL,
+            border=5
+        )
+        
+            
+            
         
         
         #                                                                     #
