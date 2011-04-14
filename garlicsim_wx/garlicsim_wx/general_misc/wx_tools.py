@@ -14,17 +14,20 @@ from garlicsim.general_misc import caching
 from garlicsim.general_misc.context_manager import ContextManager
 from garlicsim_wx.general_misc import color_tools
 
+is_mac = (wx.Platform == '__WXMAC__')
+is_gtk = (wx.Platform == '__WXGTK__')
+is_win = (wx.Platform == '__WXMSW__')
 
 @caching.cache()
 def get_background_color():
     '''Get the default `garlicsim_wx` background color'''
     
-    if wx.Platform == '__WXMSW__':
+    if is_win:
         # return wx.Colour(212, 208, 200)
         return wx.SystemSettings.GetColour(wx.SYS_COLOUR_MENUBAR)
-    elif wx.Platform == '__WXMAC__':
+    elif is_mac:
         return wx.Colour(232, 232, 232)
-    elif wx.Platform == '__WXGTK__':
+    elif is_gtk:
         # Until `SYS_COLOUR_*` get their act togother, we're using Windows
         # colors for Linux.
         return wx.Colour(212, 208, 200)

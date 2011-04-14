@@ -28,6 +28,8 @@ import garlicsim_wx
 from . import images as __images_package
 images_package = __images_package.__name__
 
+# blocktodo: Probably break into several widgets.
+
 # blocktodo: Don't forget keyboard shortcuts for everything, like back/forward.
 
 class SimpackSelectionDialog(CuteDialog):
@@ -126,7 +128,7 @@ class SimpackSelectionDialog(CuteDialog):
         
         self.search_static_text = wx.StaticText(
             self,
-            label='S&earch for simpacks:'
+            label='&Filter simpacks:'
         )
         self.search_sizer.Add(
             self.search_static_text,
@@ -203,12 +205,7 @@ class SimpackSelectionDialog(CuteDialog):
         
         ### Creating Ok/Cancel buttons: #######################################
         #                                                                     #
-        self.dialog_button_sizer_big_sizer = wx.BoxSizer(wx.VERTICAL)
-        
-        self.dialog_button_sizer = wx.StdDialogButtonSizer()
-        self.dialog_button_sizer_big_sizer.Add(self.dialog_button_sizer,
-                                               proportion=1,
-                                               flag=wx.EXPAND)
+        self.dialog_button_sizer = wx.BoxSizer(wx.VERTICAL)
         # blocktodo: make big and spaced like in mockup
         
         self.flex_grid_sizer.Add(self.dialog_button_sizer,
@@ -218,11 +215,11 @@ class SimpackSelectionDialog(CuteDialog):
                                       wx.ALL,
                                  border=5)
         
-        self.ok_button = wx.Button(self, wx.ID_OK, 'Create &project')
-        self.dialog_button_sizer.AddButton(self.ok_button)
-        self.ok_button.SetDefault()
-        self.dialog_button_sizer.SetAffirmativeButton(self.ok_button)
-        self.Bind(wx.EVT_BUTTON, self.on_ok, source=self.ok_button)
+        self.create_project_button = wx.Button(self, wx.ID_OK, 'Create &project')
+        self.dialog_button_sizer.Add(self.create_project_button)
+        self.create_project_button.SetDefault()
+        self.dialog_button_sizer.SetAffirmativeButton(self.create_project_button)
+        self.Bind(wx.EVT_BUTTON, self.on_ok, source=self.create_project_button)
         
         self.cancel_button = wx.Button(self, wx.ID_CANCEL, 'Cancel')
         self.dialog_button_sizer.AddButton(self.cancel_button)

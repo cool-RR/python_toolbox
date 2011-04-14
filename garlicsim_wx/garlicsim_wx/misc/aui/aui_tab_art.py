@@ -10,6 +10,8 @@ See its documentation for more info.
 import wx
 from garlicsim_wx.general_misc.third_party import aui
 
+from garlicsim_wx.general_misc import wx_tools
+
 # Imports for my copy-paste-modify overriding of some methods:
 # # # #
 from garlicsim_wx.general_misc.third_party.aui.aui_utilities import (
@@ -24,7 +26,7 @@ class AuiTabArt(aui.AuiDefaultTabArt):
     def __init__(self):
         aui.AuiDefaultTabArt.__init__(self)
         
-        font_size = 9 if wx.Platform == '__WXMAC__' else 7
+        font_size = 9 if wx_tools.is_mac else 7
         
         self.SetNormalFont(wx.Font(font_size, wx.FONTFAMILY_DEFAULT, wx.NORMAL, wx.NORMAL))
         self.SetSelectedFont(wx.Font(font_size, wx.FONTFAMILY_DEFAULT, wx.NORMAL, wx.NORMAL))
