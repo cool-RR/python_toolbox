@@ -46,14 +46,14 @@ class SimpackSelectionDialog(CuteDialog):
         ### Setting up flex-grid-sizer: #######################################
         #                                                                     #
         self.flex_grid_sizer = wx.FlexGridSizer(rows=2, cols=2,
-                                                hgap=16, vgap=8)
+                                                hgap=16, vgap=0)
         
         self.SetSizer(self.flex_grid_sizer)
         
         self.flex_grid_sizer.AddGrowableRow(0, 1)
         
-        self.flex_grid_sizer.AddGrowableCol(0, 1)
-        self.flex_grid_sizer.AddGrowableCol(1, 1)
+        self.flex_grid_sizer.AddGrowableCol(0, 2)
+        self.flex_grid_sizer.AddGrowableCol(1, 3)
         #                                                                     #
         ### Finished setting up flex-grid-sizer. ##############################
         
@@ -191,8 +191,10 @@ class SimpackSelectionDialog(CuteDialog):
         
         self.flex_grid_sizer.Add(self.dialog_button_sizer,
                                  0,
-                                 wx.ALIGN_CENTER_HORIZONTAL | wx.ALL,
-                                 border=0)
+                                 flag=wx.ALIGN_CENTER_HORIZONTAL | \
+                                      wx.ALIGN_CENTER_VERTICAL | \
+                                      wx.ALL,
+                                 border=5)
         
         self.ok_button = wx.Button(self, wx.ID_OK, 'Create &project')
         self.dialog_button_sizer.AddButton(self.ok_button)
