@@ -50,7 +50,7 @@ class SimpackSelectionDialog(CuteDialog):
         
     def __init_build(self):
         
-        is_mac = (wx.Platform == '__WXGTK__')
+        is_mac = (wx.Platform == '__WXMAC__')
         
         ### Setting up flex-grid-sizer: #######################################
         #                                                                     #
