@@ -204,14 +204,12 @@ class SimpackSelectionDialog(CuteDialog):
         
         ### Creating Ok/Cancel buttons: #######################################
         #                                                                     #
-        self.dialog_button_sizer = wx.BoxSizer(wx.VERTICAL)
+        self.dialog_button_sizer = wx.BoxSizer(wx.HORIZONTAL)
         # blocktodo: make big and spaced like in mockup
         
         self.flex_grid_sizer.Add(self.dialog_button_sizer,
                                  0,
-                                 flag=wx.ALIGN_CENTER_HORIZONTAL | \
-                                      wx.ALIGN_CENTER_VERTICAL | \
-                                      wx.ALL,
+                                 flag=wx.EXPAND | wx.ALL,
                                  border=5)
         
         self.create_project_button = wx.Button(self, wx.ID_OK, 'Create &project')
@@ -222,16 +220,22 @@ class SimpackSelectionDialog(CuteDialog):
         self.cancel_button = wx.Button(self, wx.ID_CANCEL, 'Cancel')
         self.Bind(wx.EVT_BUTTON, self.on_cancel, source=self.cancel_button)
         
-        buttons = [self.create_project_button,
-                   self.cancel_button]
-        buttons_to_add = buttons if wx_tools.is_win else buttons[::-1]
+        if wx_tools.is_win:
+            first_button = self.create_project_button
+            second_button = self.cancel_button
+        else: # Mac or Linux
+            first_button = self.cancel_button
+            second_button = self.create_project_button
         
-        self.dialog_button_sizer.AddStretchSpacer()
-        for button_to_add in buttons_to_add:
-            self.dialog_button_sizer.Add(button_to_add,
-                                         proportion=0,
-                                         flag=wx.ALIGN_CENTER_VERTICAL)
-            self.dialog_button_sizer.AddStretchSpacer()
+        self.dialog_button_sizer.AddStretchSpacer(prop=2)
+        self.dialog_button_sizer.Add(first_button,
+                                     proportion=0,
+                                     flag=wx.ALIGN_CENTER_VERTICAL)
+        self.dialog_button_sizer.AddStretchSpacer(prop=1)
+        self.dialog_button_sizer.Add(second_button,
+                                     proportion=0,
+                                     flag=wx.ALIGN_CENTER_VERTICAL)
+        self.dialog_button_sizer.AddStretchSpacer(prop=2)
         
         #                                                                     #
         ### Finished creating Ok/Cancel buttons. ##############################
