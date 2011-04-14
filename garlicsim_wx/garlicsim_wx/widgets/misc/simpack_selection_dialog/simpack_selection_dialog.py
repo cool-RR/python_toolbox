@@ -212,6 +212,8 @@ class SimpackSelectionDialog(CuteDialog):
         ### Finished creating Ok/Cancel buttons. ##############################
         
         
+        self.Layout()
+        
         '''
         
         self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)
