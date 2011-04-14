@@ -27,7 +27,7 @@ import garlicsim_wx
 from . import images as __images_package
 images_package = __images_package.__name__
 
-
+# blocktodo: Don't forget keyboard shortcuts for everything, like back/forward.
 
 class SimpackSelectionDialog(CuteDialog):
     '''Dialog for selecting a simpack when creating a new gui project.'''
@@ -110,7 +110,7 @@ class SimpackSelectionDialog(CuteDialog):
         self.small_simpack_navigation_sizer.Add(
             self.search_sizer,
             proportion=1,
-            flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
             border=5
         )
         
@@ -121,7 +121,7 @@ class SimpackSelectionDialog(CuteDialog):
         self.search_sizer.Add(
             self.search_static_text,
             proportion=1,
-            flag=wx.ALIGN_LEFT | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.TOP | wx.BOTTOM,
             border=5,
         )
             
@@ -134,7 +134,8 @@ class SimpackSelectionDialog(CuteDialog):
         self.search_sizer.Add(
             self.search_ctrl,
             proportion=0,
-            flag=wx.EXPAND
+            flag=wx.EXPAND | wx.TOP | wx.BOTTOM,
+            border=5,
         )
         #                                                                     #
         ### Finished building search box. #####################################
