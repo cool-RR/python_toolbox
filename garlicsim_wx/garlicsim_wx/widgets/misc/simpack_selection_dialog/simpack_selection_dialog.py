@@ -21,6 +21,7 @@ from garlicsim.general_misc import path_tools
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import package_finder
 from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
+from garlicsim_wx.general_misc import wx_tools
 
 import garlicsim_wx
 
@@ -42,6 +43,12 @@ class SimpackSelectionDialog(CuteDialog):
         
         assert isinstance(frame, garlicsim_wx.Frame)
         self.frame = frame
+        
+        with wx_tools.WindowFreezer(self):
+            self.__init_build()
+            
+        
+    def __init_build(self):
         
         ### Setting up flex-grid-sizer: #######################################
         #                                                                     #
