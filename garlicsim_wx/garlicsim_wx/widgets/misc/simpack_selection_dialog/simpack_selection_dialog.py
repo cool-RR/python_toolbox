@@ -215,15 +215,24 @@ class SimpackSelectionDialog(CuteDialog):
                                  border=5)
         
         self.create_project_button = wx.Button(self, wx.ID_OK, 'Create &project')
-        self.dialog_button_sizer.Add(self.create_project_button)
         self.create_project_button.SetDefault()
-        self.dialog_button_sizer.SetAffirmativeButton(self.create_project_button)
-        self.Bind(wx.EVT_BUTTON, self.on_ok, source=self.create_project_button)
+        self.Bind(wx.EVT_BUTTON, self.on_create_project,
+                  source=self.create_project_button)
         
         self.cancel_button = wx.Button(self, wx.ID_CANCEL, 'Cancel')
-        self.dialog_button_sizer.AddButton(self.cancel_button)
         self.Bind(wx.EVT_BUTTON, self.on_cancel, source=self.cancel_button)
-        self.dialog_button_sizer.Realize()
+        
+        buttons = [self.create_project_button,
+                   self.cancel_button]
+        buttons_to_add = buttons if wx_tools.is_win else buttons[::-1]
+        
+        self.dialog_button_sizer.AddStretchSpacer()
+        for button_to_add in buttons_to_add:
+            self.dialog_button_sizer.Add(button_to_add,
+                                         proportion=0,
+                                         flag=wx.ALIGN_CENTER_VERTICAL)
+            self.dialog_button_sizer.AddStretchSpacer()
+        
         #                                                                     #
         ### Finished creating Ok/Cancel buttons. ##############################
         
@@ -293,7 +302,7 @@ class SimpackSelectionDialog(CuteDialog):
                 sys.path.append(path)
                 
         
-    def on_ok(self, event):
+    def on_create_project(self, event):
         '''Handler for "Ok" button.'''
         if self.list_box.GetStringSelection():
             self.EndModal(wx.ID_OK)       
