@@ -39,6 +39,10 @@ class NavigationPanel(wx.Panel):
         assert isinstance(simpack_selection_dialog, SimpackSelectionDialog)
         self.simpack_selection_dialog = simpack_selection_dialog
         
+        self.SetBackgroundColour(
+            self.simpack_selection_dialog.GetBackgroundColour()
+        )
+        
         self.big_v_sizer = wx.BoxSizer(wx.VERTICAL)
         self.SetSizer(self.big_v_sizer)
         
