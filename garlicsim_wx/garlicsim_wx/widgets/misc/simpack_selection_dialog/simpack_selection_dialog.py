@@ -128,6 +128,7 @@ class SimpackSelectionDialog(CuteDialog):
         
         # blocktodo: if `wx.SearchCtrl` doesn't give us everything we need, can
         # find something else.
+        # blocktodo: not getting enough padding for the search control on Mac
         self.search_ctrl = wx.SearchCtrl(self)
         self.search_ctrl.ShowCancelButton(True)
         self.search_ctrl.SetDescriptiveText('')

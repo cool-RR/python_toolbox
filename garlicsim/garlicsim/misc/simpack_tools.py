@@ -6,6 +6,8 @@
 from garlicsim.general_misc import address_tools
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import caching
+from garlicsim.general_misc import nifty_collections
+
 
 import garlicsim.misc.simpack_grokker
 
@@ -33,3 +35,9 @@ def _get_from_state_class(state_class):
     # is a `CachedType`.
         
     return simpack
+
+SimpackMetadata = garlicsim.general_misc.third_party.namedtuple.namedtuple(
+    'SimpackMetadata',
+    'Name Description Tags',
+)
+
