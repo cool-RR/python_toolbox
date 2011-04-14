@@ -25,8 +25,6 @@ from garlicsim_wx.general_misc import wx_tools
 
 import garlicsim_wx
 
-from . import images as __images_package
-images_package = __images_package.__name__
 
 # blocktodo: Probably break into several widgets.
 
@@ -80,126 +78,15 @@ class SimpackSelectionDialog(CuteDialog):
                                  flag=wx.EXPAND | wx.ALL,
                                  border=5)
         
-        #text_ctrl_2 = wx.TextCtrl(self)
-        #self.flex_grid_sizer.Add(text_ctrl_2, 0, wx.EXPAND)
         
-        
-        #######################################################################
-        #######################################################################
         ### Building simpack-navigation buttons: ##############################
         #                                                                     #
-
-        self.big_simpack_navigation_sizer = wx.BoxSizer(wx.VERTICAL)
-        self.flex_grid_sizer.Add(self.big_simpack_navigation_sizer,
+        self.navigation_panel = NavigationPanel(self)
+        self.flex_grid_sizer.Add(self.navigation_panel,
                                  proportion=0,
                                  flag=wx.EXPAND)
-        
-        self.add_simpacks_from_a_different_folder = wx.Button(
-            self,
-            label='&Add simpacks from a different folder...'
-        )
-        self.big_simpack_navigation_sizer.Add(
-            self.add_simpacks_from_a_different_folder,
-            proportion=0,
-            flag=wx.EXPAND | wx.ALL,
-            border=5
-        )
-        self.Bind(wx.EVT_BUTTON,
-                  self.on_add_folder_containing_simpacks_button,
-                  self.add_simpacks_from_a_different_folder)
-        
-        self.small_simpack_navigation_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        self.big_simpack_navigation_sizer.Add(
-            self.small_simpack_navigation_sizer,
-            proportion=0,
-            flag=wx.EXPAND
-        )
-        
-        ### Building search box: ##############################################
-        #                                                                     #
-        self.search_sizer = wx.BoxSizer(wx.VERTICAL)
-        self.small_simpack_navigation_sizer.Add(
-            self.search_sizer,
-            proportion=1,
-            flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
-            border=5
-        )
-        
-        self.search_static_text = wx.StaticText(
-            self,
-            label='&Filter simpacks:'
-        )
-        self.search_sizer.Add(
-            self.search_static_text,
-            proportion=1,
-            flag=wx.ALIGN_LEFT | wx.TOP | wx.BOTTOM,
-            border=5,
-        )
-            
-        
-        # blocktodo: if `wx.SearchCtrl` doesn't give us everything we need, can
-        # find something else.
-        # blocktodo: not getting enough padding for the search control on Mac
-        self.search_ctrl = wx.SearchCtrl(self)
-        self.search_ctrl.ShowCancelButton(True)
-        self.search_ctrl.SetDescriptiveText('')
-        self.search_sizer.Add(
-            self.search_ctrl,
-            proportion=0,
-            flag=wx.EXPAND | wx.TOP | wx.BOTTOM,
-            border=5,
-        )
-        #                                                                     #
-        ### Finished building search box. #####################################
-        
-        ### Building back and forward buttons: ################################
-        #                                                                     #
-        self.back_button = wx.BitmapButton(
-            self,
-            bitmap=wx.BitmapFromImage(
-                wx.ImageFromStream(
-                    pkg_resources.resource_stream(images_package, 'back.png'),
-                    wx.BITMAP_TYPE_ANY
-                )
-            ),
-        )
-        self.small_simpack_navigation_sizer.Add(
-            self.back_button,
-            proportion=0,
-            flag=wx.ALL | wx.ALIGN_BOTTOM,
-            border=5
-        )
-        
-        self.forward_button = wx.BitmapButton(
-            self,
-            bitmap=wx.BitmapFromImage(
-                wx.ImageFromStream(
-                    pkg_resources.resource_stream(images_package, 'forward.png'),
-                    wx.BITMAP_TYPE_ANY
-                )
-            ),
-        )
-        self.small_simpack_navigation_sizer.Add(
-            self.forward_button,
-            proportion=0,
-            flag=wx.ALL | wx.ALIGN_BOTTOM,
-            border=5
-        )
-        #                                                                     #
-        ### Finished building back and forward buttons. #######################
-        
-        if wx_tools.is_mac:
-            self.big_simpack_navigation_sizer.AddSpacer(
-                mac_bottom_spacing_size
-            )
-        
         #                                                                     #
         ### Finished building simpack-navigation buttons. #####################
-        #######################################################################
-        #######################################################################
-        
-        #text_ctrl_3 = wx.TextCtrl(self)
-        #self.flex_grid_sizer.Add(text_ctrl_3, 0, wx.EXPAND)
         
         
         ### Creating Ok/Cancel buttons: #######################################
@@ -287,9 +174,8 @@ class SimpackSelectionDialog(CuteDialog):
         '''Handler for "Add folders containing simpacks" button.'''
         dir_dialog = wx.DirDialog(
             self,
-            'Choose folder containing simpacks. Note that you need to choose '
-            'the folder that *contains* your simpack, and not the simpack '
-            'folder itself.',
+            'Choose the folder that *contains* your simpack(s), not the '
+            'simpack folder itself.',
             style=wx.DD_DEFAULT_STYLE | wx.DD_DIR_MUST_EXIST
         )
         try:
@@ -351,4 +237,4 @@ class SimpackSelectionDialog(CuteDialog):
         return result
 
 
-
+from .navigation_panel import NavigationPanel
