@@ -143,8 +143,9 @@ class NavigationPanel(wx.Panel):
         
         if wx_tools.is_mac:
             self.big_v_sizer.AddSpacer(
-                mac_bottom_spacing_size
+                MAC_BOTTOM_SPACING_SIZE
             )
         
 
-from .simpack_selection_dialog import SimpackSelectionDialog
+from .simpack_selection_dialog import (SimpackSelectionDialog,
+                                       MAC_BOTTOM_SPACING_SIZE)

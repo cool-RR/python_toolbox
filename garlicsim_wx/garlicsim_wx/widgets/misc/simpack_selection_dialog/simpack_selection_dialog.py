@@ -26,9 +26,11 @@ from garlicsim_wx.general_misc import wx_tools
 import garlicsim_wx
 
 
-# blocktodo: Probably break into several widgets.
-
 # blocktodo: Don't forget keyboard shortcuts for everything, like back/forward.
+
+# blocktodo: Go over all methods here, ensure they're relevant.
+
+MAC_BOTTOM_SPACING_SIZE = 10
 
 class SimpackSelectionDialog(CuteDialog):
     '''Dialog for selecting a simpack when creating a new gui project.'''
@@ -49,8 +51,6 @@ class SimpackSelectionDialog(CuteDialog):
             
         
     def __init_build(self):
-        
-        mac_bottom_spacing_size = 10
         
         ### Setting up flex-grid-sizer: #######################################
         #                                                                     #
@@ -129,7 +129,7 @@ class SimpackSelectionDialog(CuteDialog):
         
         if wx_tools.is_mac:
             self.dialog_button_sizer_big_sizer.AddSpacer(
-                mac_bottom_spacing_size
+                MAC_BOTTOM_SPACING_SIZE
             )
         
         
