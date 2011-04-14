@@ -37,7 +37,7 @@ class SimpackSelectionDialog(CuteDialog):
             self,
             frame,
             title='Choose simulation package',
-            size=(-1, 400)
+            size=(950, 550)
         )
         
         assert isinstance(frame, garlicsim_wx.Frame)
@@ -67,6 +67,8 @@ class SimpackSelectionDialog(CuteDialog):
         #self.flex_grid_sizer.Add(text_ctrl_2, 0, wx.EXPAND)
         
         
+        #######################################################################
+        #######################################################################
         ### Building simpack-navigation buttons: ##############################
         #                                                                     #
 
@@ -96,18 +98,43 @@ class SimpackSelectionDialog(CuteDialog):
             flag=wx.EXPAND
         )
         
-        # blocktodo: if `wx.SearchCtrl` doesn't give us everything we need, can
-        # find something else.
-        self.search_ctrl = wx.SearchCtrl(self)
-        self.search_ctrl.ShowCancelButton(True)
-        self.search_ctrl.SetDescriptiveText('S&earch for simpacks...')
+        ### Building search box: ##############################################
+        #                                                                     #
+        self.search_sizer = wx.BoxSizer(wx.VERTICAL)
         self.small_simpack_navigation_sizer.Add(
-            self.search_ctrl,
+            self.search_sizer,
             proportion=1,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5
         )
         
+        self.search_static_text = wx.StaticText(
+            self,
+            label='S&earch for simpacks:'
+        )
+        self.search_sizer.Add(
+            self.search_static_text,
+            proportion=1,
+            flag=wx.ALIGN_LEFT | wx.ALL,
+            border=5,
+        )
+            
+        
+        # blocktodo: if `wx.SearchCtrl` doesn't give us everything we need, can
+        # find something else.
+        self.search_ctrl = wx.SearchCtrl(self)
+        self.search_ctrl.ShowCancelButton(True)
+        self.search_ctrl.SetDescriptiveText('')
+        self.search_sizer.Add(
+            self.search_ctrl,
+            proportion=0,
+            flag=wx.EXPAND
+        )
+        #                                                                     #
+        ### Finished building search box. #####################################
+        
+        ### Building back and forward buttons: ################################
+        #                                                                     #
         self.back_button = wx.BitmapButton(
             self,
             bitmap=wx.BitmapFromImage(
@@ -120,7 +147,7 @@ class SimpackSelectionDialog(CuteDialog):
         self.small_simpack_navigation_sizer.Add(
             self.back_button,
             proportion=0,
-            flag=wx.ALL,
+            flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL,
             border=5
         )
         
@@ -136,16 +163,16 @@ class SimpackSelectionDialog(CuteDialog):
         self.small_simpack_navigation_sizer.Add(
             self.forward_button,
             proportion=0,
-            flag=wx.ALL,
+            flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL,
             border=5
         )
-        
-            
-            
-        
+        #                                                                     #
+        ### Finished building back and forward buttons. #######################
         
         #                                                                     #
         ### Finished building simpack-navigation buttons. #####################
+        #######################################################################
+        #######################################################################
         
         #text_ctrl_3 = wx.TextCtrl(self)
         #self.flex_grid_sizer.Add(text_ctrl_3, 0, wx.EXPAND)
