@@ -11,6 +11,8 @@ import types
 
 import wx
 
+from garlicsim_wx.general_misc import wx_tools
+
 import garlicsim_wx
 import garlicsim
 
@@ -39,7 +41,7 @@ class StepFunctionInput(wx.ComboBox):
                 step_functions_list.remove(value)
             step_functions_list.insert(0, value)
         
-        width = 250 if wx.Platform == '__WXMSW__' else 300
+        width = 250 if wx_tools.is_win else 300
             
         wx.ComboBox.__init__(self, step_profile_dialog, value=value,
                              choices=step_functions_list, size=(width, -1))

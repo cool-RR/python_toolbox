@@ -21,7 +21,7 @@ class StaticFunctionText(wx.Panel):
         
         self.step_profile_dialog = step_profile_dialog
         
-        self.width = 400 if wx.Platform == '__WXMSW__' else 500
+        self.width = 400 if wx_tools.is_win else 500
         
         self.step_function = None
         

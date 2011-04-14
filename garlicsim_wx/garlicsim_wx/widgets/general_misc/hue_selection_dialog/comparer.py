@@ -15,8 +15,7 @@ from garlicsim_wx.general_misc import wx_tools
 class Comparer(wx.Panel):
     '''Shows the new hue compared to the old hue before dialog was started.'''
     def __init__(self, hue_selection_dialog):
-        style = wx.SIMPLE_BORDER if wx.Platform == '__WXGTK__' else \
-                wx.SUNKEN_BORDER
+        style = wx.SIMPLE_BORDER if wx_tools.is_gtk else wx.SUNKEN_BORDER
         wx.Panel.__init__(self, parent=hue_selection_dialog, size=(75, 90),
                           style=style)
         self.SetDoubleBuffered(True)

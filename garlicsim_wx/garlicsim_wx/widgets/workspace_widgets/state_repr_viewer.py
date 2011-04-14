@@ -11,8 +11,11 @@ import wx
 from garlicsim_wx.widgets import WorkspaceWidget
 import garlicsim.general_misc.dict_tools as dict_tools
 from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
+from garlicsim_wx.general_misc import wx_tools
 
-__all__ = ["StateReprViewer"]
+
+__all__ = ['StateReprViewer']
+
 
 class StateReprViewer(wx.Panel, WorkspaceWidget):
     '''Widget for showing the repr of the active state.'''
@@ -29,7 +32,7 @@ class StateReprViewer(wx.Panel, WorkspaceWidget):
             style=wx.TE_MULTILINE | wx.NO_BORDER
         )
         
-        font_size = 12 if wx.Platform == '__WXMAC__' else 9
+        font_size = 12 if wx_tools.is_mac else 9
         
         font = wx.Font(font_size, wx.DEFAULT, wx.NORMAL, wx.BOLD, False,
                        u'Courier New')

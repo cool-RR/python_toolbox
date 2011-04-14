@@ -52,7 +52,6 @@ class SimpackSelectionDialog(CuteDialog):
         
     def __init_build(self):
         
-        is_mac = (wx.Platform == '__WXMAC__')
         mac_bottom_spacing_size = 10
         
         ### Setting up flex-grid-sizer: #######################################
@@ -189,7 +188,7 @@ class SimpackSelectionDialog(CuteDialog):
         #                                                                     #
         ### Finished building back and forward buttons. #######################
         
-        if is_mac:
+        if wx_tools.is_mac:
             self.big_simpack_navigation_sizer.AddSpacer(
                 mac_bottom_spacing_size
             )
@@ -228,7 +227,7 @@ class SimpackSelectionDialog(CuteDialog):
         #                                                                     #
         ### Finished creating Ok/Cancel buttons. ##############################
         
-        if is_mac:
+        if wx_tools.is_mac:
             self.dialog_button_sizer_big_sizer.AddSpacer(
                 mac_bottom_spacing_size
             )
