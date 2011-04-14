@@ -128,7 +128,7 @@ class SimpackSelectionDialog(CuteDialog):
         ### Finished creating Ok/Cancel buttons. ##############################
         
         if wx_tools.is_mac:
-            self.dialog_button_sizer_big_sizer.AddSpacer(
+            self.dialog_button_sizer.AddSpacer(
                 MAC_BOTTOM_SPACING_SIZE
             )
         
