@@ -58,10 +58,16 @@ class SimpackSelectionDialog(CuteDialog):
         ### Finished setting up flex-grid-sizer. ##############################
         
         text_ctrl_0 = wx.TextCtrl(self)
-        self.flex_grid_sizer.Add(text_ctrl_0, proportion=1, flag=wx.EXPAND)
+        self.flex_grid_sizer.Add(text_ctrl_0,
+                                 proportion=1,
+                                 flag=wx.EXPAND | wx.ALL,
+                                 border=5)
         
         text_ctrl_1 = wx.TextCtrl(self)
-        self.flex_grid_sizer.Add(text_ctrl_1, proportion=1, flag=wx.EXPAND)
+        self.flex_grid_sizer.Add(text_ctrl_1,
+                                 proportion=1,
+                                 flag=wx.EXPAND | wx.ALL,
+                                 border=5)
         
         #text_ctrl_2 = wx.TextCtrl(self)
         #self.flex_grid_sizer.Add(text_ctrl_2, 0, wx.EXPAND)
@@ -147,7 +153,7 @@ class SimpackSelectionDialog(CuteDialog):
         self.small_simpack_navigation_sizer.Add(
             self.back_button,
             proportion=0,
-            flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL,
+            flag=wx.ALL | wx.ALIGN_BOTTOM,
             border=5
         )
         
@@ -163,7 +169,7 @@ class SimpackSelectionDialog(CuteDialog):
         self.small_simpack_navigation_sizer.Add(
             self.forward_button,
             proportion=0,
-            flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL,
+            flag=wx.ALL | wx.ALIGN_BOTTOM,
             border=5
         )
         #                                                                     #
