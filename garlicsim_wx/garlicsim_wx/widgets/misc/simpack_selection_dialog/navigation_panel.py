@@ -85,7 +85,7 @@ class NavigationPanel(wx.Panel):
         self.search_sizer.Add(
             self.search_static_text,
             proportion=1,
-            flag=wx.ALIGN_LEFT | wx.TOP | wx.BOTTOM,
+            flag=wx.ALIGN_LEFT | wx.TOP,
             border=5,
         )
             

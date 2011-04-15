@@ -68,11 +68,33 @@ class SimpackSelectionDialog(CuteDialog):
         
         ### Building simpack tree: ############################################
         #                                                                     #
-        self.simpack_tree = SimpackTree(self)
-        self.flex_grid_sizer.Add(self.simpack_tree,
+        
+        self.simpack_tree_sizer = wx.BoxSizer(wx.VERTICAL)
+        
+        self.flex_grid_sizer.Add(self.simpack_tree_sizer,
                                  proportion=1,
                                  flag=wx.EXPAND | wx.ALL,
                                  border=5)
+        
+        self.choose_a_simpack_static_text = wx.StaticText(
+            self,
+            label='Choose a &simpack:'
+        )
+        self.simpack_tree_sizer.Add(
+            self.choose_a_simpack_static_text,
+            proportion=0,
+            flag=wx.ALIGN_LEFT | wx.BOTTOM,
+            border=5,
+        )
+        
+        self.simpack_tree = SimpackTree(self)
+        
+        self.simpack_tree_sizer.Add(
+            self.simpack_tree,
+            proportion=1,
+            flag=wx.EXPAND | wx.TOP,
+            border=0,
+        )
         #                                                                     #
         ### Finished building simpack tree. ###################################
         

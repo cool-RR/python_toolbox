@@ -21,6 +21,7 @@ from garlicsim.general_misc import path_tools
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import package_finder
 from garlicsim_wx.general_misc import wx_tools
+from garlicsim_wx.widgets.general_misc import cute_hyper_tree_list
 
 import garlicsim_wx
 
@@ -28,10 +29,10 @@ from . import images as __images_package
 images_package = __images_package.__name__
 
 
-class SimpackTree(wx.Panel):
+class SimpackTree(cute_hyper_tree_list.CuteHyperTreeList):
     
     def __init__(self, simpack_selection_dialog):
-        wx.Panel.__init__(
+        cute_hyper_tree_list.CuteHyperTreeList.__init__(
             self,
             simpack_selection_dialog,
         )
@@ -39,7 +40,9 @@ class SimpackTree(wx.Panel):
         assert isinstance(simpack_selection_dialog, SimpackSelectionDialog)
         self.simpack_selection_dialog = simpack_selection_dialog
         
-        self.SetBackgroundColour(wx.NamedColor('Black'))
+        self.AddColumn('', width=600)
+        self.SetMainColumn(1)
+        self.root_item = self.AddRoot("GarlicSim's simpack library")
 
         
 from .simpack_selection_dialog import SimpackSelectionDialog
