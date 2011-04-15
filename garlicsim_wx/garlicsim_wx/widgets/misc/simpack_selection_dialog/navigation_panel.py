@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the `SimpackSelectionDialog` class.
+This module defines the `NavigationPanel` class.
 
 See its documentation for more info.
 '''
