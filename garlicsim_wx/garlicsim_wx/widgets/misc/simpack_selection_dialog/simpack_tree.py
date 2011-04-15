@@ -34,7 +34,8 @@ class SimpackTree(wx.TreeCtrl):
     def __init__(self, simpack_selection_dialog):
         wx.TreeCtrl.__init__(
             self,
-            simpack_selection_dialog,
+            parent=simpack_selection_dialog,
+            style=wx.TR_DEFAULT_STYLE | wx.SUNKEN_BORDER
         )
         
         assert isinstance(simpack_selection_dialog, SimpackSelectionDialog)
