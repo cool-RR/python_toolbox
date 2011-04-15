@@ -29,10 +29,10 @@ from . import images as __images_package
 images_package = __images_package.__name__
 
 
-class SimpackTree(cute_hyper_tree_list.CuteHyperTreeList):
+class SimpackTree(wx.TreeCtrl):
     
     def __init__(self, simpack_selection_dialog):
-        cute_hyper_tree_list.CuteHyperTreeList.__init__(
+        wx.TreeCtrl.__init__(
             self,
             simpack_selection_dialog,
         )
@@ -40,8 +40,8 @@ class SimpackTree(cute_hyper_tree_list.CuteHyperTreeList):
         assert isinstance(simpack_selection_dialog, SimpackSelectionDialog)
         self.simpack_selection_dialog = simpack_selection_dialog
         
-        self.AddColumn('', width=600)
-        self.SetMainColumn(1)
+        #self.AddColumn('', width=600)
+        #self.SetMainColumn(1)
         self.root_item = self.AddRoot("GarlicSim's simpack library")
 
         

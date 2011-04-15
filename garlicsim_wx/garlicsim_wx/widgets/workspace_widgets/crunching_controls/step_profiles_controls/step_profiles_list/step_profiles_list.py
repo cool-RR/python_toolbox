@@ -77,8 +77,6 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
         
         self.Bind(wx.EVT_TREE_SEL_CHANGED, self.on_tree_sel_changed)
         
-        self.Bind(wx.EVT_SET_FOCUS, self.on_set_focus)
-        
         self.GetMainWindow().Bind(wx.EVT_KEY_DOWN, self.on_key_down)
         
         self.gui_project.step_profiles_set_modified_emitter.add_output(
@@ -163,11 +161,6 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
         '''Select `step_profile`.'''
         item = self.step_profiles_to_items[step_profile]
         self.SelectItem(item)
-
-        
-    def real_set_focus(self):
-        '''Set focus on the `StepProfilesList`. Bypasses some cruft.'''
-        self.GetMainWindow().SetFocusIgnoringChildren()
         
         
     def on_tree_item_activated(self, event):
@@ -256,9 +249,4 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
             )
         else:
             event.Skip()
-            
-            
-    def on_set_focus(self, event):
-        if self.frame.FindFocus() == self:
-            self.GetMainWindow().SetFocusIgnoringChildren()
             

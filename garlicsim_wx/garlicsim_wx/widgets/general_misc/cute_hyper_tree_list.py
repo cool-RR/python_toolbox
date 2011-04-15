@@ -33,6 +33,8 @@ class CuteHyperTreeList(HyperTreeList):
         HyperTreeList.__init__(self, parent, id, pos, size, style, agwStyle,
                                validator, name)
         
+        self.Bind(wx.EVT_SET_FOCUS, self.__on_set_focus)
+        
         # Hackishly generating context menu event and tree item menu event from
         # these events:
         self.GetMainWindow().Bind(EVT_COMMAND_TREE_ITEM_RIGHT_CLICK,
@@ -114,6 +116,16 @@ class CuteHyperTreeList(HyperTreeList):
         else:
             event.Skip()
 
+        
+    def real_set_focus(self):
+        '''Set focus on the `HyperTreeList`. Bypasses some cruft.'''
+        self.GetMainWindow().SetFocusIgnoringChildren()
+        
+            
+    def __on_set_focus(self, event):
+        if self.TopLevelParent.FindFocus() == self:
+            self.GetMainWindow().SetFocusIgnoringChildren()
+            
 
     def __on_context_menu(self, event):
         abs_position = event.GetPosition()

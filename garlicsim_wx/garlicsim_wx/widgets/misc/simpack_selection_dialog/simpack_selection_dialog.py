@@ -80,6 +80,11 @@ class SimpackSelectionDialog(CuteDialog):
             self,
             label='Choose a &simpack:'
         )
+        #self.choose_a_simpack_static_text.Bind(
+            #wx.EVT_SET_FOCUS,
+            #lambda event: self.simpack_tree.real_set_focus(),
+            #source=self.choose_a_simpack_static_text
+        #)
         self.simpack_tree_sizer.Add(
             self.choose_a_simpack_static_text,
             proportion=0,
