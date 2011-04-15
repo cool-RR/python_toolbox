@@ -66,17 +66,25 @@ class SimpackSelectionDialog(CuteDialog):
         #                                                                     #
         ### Finished setting up flex-grid-sizer. ##############################
         
+        ### Building simpack tree: ############################################
+        #                                                                     #
         self.simpack_tree = SimpackTree(self)
         self.flex_grid_sizer.Add(self.simpack_tree,
                                  proportion=1,
                                  flag=wx.EXPAND | wx.ALL,
                                  border=5)
+        #                                                                     #
+        ### Finished building simpack tree. ###################################
         
+        ### Building simpack info panel: ######################################
+        #                                                                     #
         text_ctrl_1 = wx.TextCtrl(self)
         self.flex_grid_sizer.Add(text_ctrl_1,
                                  proportion=1,
                                  flag=wx.EXPAND | wx.ALL,
                                  border=5)
+        #                                                                     #
+        ### Finished building simpack info panel. #############################
         
         
         ### Building simpack-navigation buttons: ##############################

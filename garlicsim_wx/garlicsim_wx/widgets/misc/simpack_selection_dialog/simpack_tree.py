@@ -39,7 +39,7 @@ class SimpackTree(wx.Panel):
         assert isinstance(simpack_selection_dialog, SimpackSelectionDialog)
         self.simpack_selection_dialog = simpack_selection_dialog
         
-        self.SetBackgroundColour(wx.NamedColor('Green'))
+        self.SetBackgroundColour(wx.NamedColor('Black'))
 
         
 from .simpack_selection_dialog import SimpackSelectionDialog
