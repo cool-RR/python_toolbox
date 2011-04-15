@@ -43,7 +43,10 @@ class SimpackTree(wx.TreeCtrl):
         
         #self.AddColumn('', width=600)
         #self.SetMainColumn(1)
-        self.root_item = self.AddRoot("GarlicSim's simpack library")
+        self.root_item_id = self.AddRoot("GarlicSim's simpack library")
+        self.AppendItem(self.root_item_id, "Conway's Game of Life")
+        self.AppendItem(self.root_item_id, "Prisoner's Dilemma")
+        self.AppendItem(self.root_item_id, 'Queueing Theory')
 
         
 from .simpack_selection_dialog import SimpackSelectionDialog
