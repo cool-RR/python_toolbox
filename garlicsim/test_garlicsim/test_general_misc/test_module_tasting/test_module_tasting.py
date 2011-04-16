@@ -21,7 +21,11 @@ def test_module_tasting():
         )
     )
     
-    tasted_module = module_tasting.taste_module(path)
+    tasted_module = module_tasting.taste_module(
+        #path
+        ('test_garlicsim.test_general_misc.test_module_tasting.'
+         'sample_modules.x')
+    )
     assert tasted_module.__doc__ == "The tasted module's docstring."
     assert tasted_module.my_string == 'Just a string'
     assert tasted_module.my_list == ['A', 'list', 'of', 'stuff']

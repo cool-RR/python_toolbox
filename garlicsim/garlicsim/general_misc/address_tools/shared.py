@@ -40,3 +40,7 @@ def _get_parent_and_dict_from_namespace(namespace):
         namespace_dict = vars(parent_object)
         
     return (parent_object, namespace_dict)
+
+
+def is_address(string):
+    return bool(_address_pattern.match(string))

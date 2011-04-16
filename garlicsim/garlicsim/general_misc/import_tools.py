@@ -197,3 +197,4 @@ def import_by_path(path, name=None, keep_in_sys_modules=True):
         del sys.modules[name]
         
     return module
+

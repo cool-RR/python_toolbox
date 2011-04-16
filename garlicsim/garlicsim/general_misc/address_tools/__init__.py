@@ -23,3 +23,4 @@ For example:
 
 from .string_to_object import resolve
 from .object_to_string import describe
+from .shared import is_address

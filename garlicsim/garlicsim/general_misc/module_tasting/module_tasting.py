@@ -12,7 +12,6 @@ See its documentation for more information.
 
 from __future__ import with_statement
 
-import imp
 import uuid
 import sys
 import os.path
@@ -21,17 +20,25 @@ import encodings.mbcs as _, encodings.utf_8 as _
 from garlicsim.general_misc.third_party import mock as mock_module
 
 from garlicsim.general_misc.temp_value_setters import TempImportHookSetter
+from garlicsim.general_misc import address_tools
 from garlicsim.general_misc import import_tools
+from garlicsim.general_misc import cute_imp
 
 
-def mock_import(*args, **kwargs):
-    return mock_module.Mock(name=repr((args, kwargs)))
+def mock_import(name, *args, **kwargs):
+    return mock_module.Mock(name=name)
+
 
 def taste_module(path_or_address):
     
-    # blocktodo: implement address    
-    path = path_or_address
-    os.path.isfile(path)
+    if address_tools.is_address(path_or_address):
+        address = path_or_address
+        path = cute_imp.find_module(path_or_address)
+    else:
+        # blocktodo: implement address
+        path = path_or_address
+    
+    assert os.path.isfile(path)
     
     old_sys_modules = sys.modules.copy() # blocktodo: Make context manager for this
     
