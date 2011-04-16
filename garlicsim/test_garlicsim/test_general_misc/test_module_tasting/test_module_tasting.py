@@ -21,6 +21,9 @@ def test_module_tasting():
         )
     )
     
+    module_address = ('test_garlicsim.test_general_misc.test_module_tasting.'
+                      'sample_modules.x')
+    
     tasted_module = module_tasting.taste_module(
         #path
         ('test_garlicsim.test_general_misc.test_module_tasting.'
@@ -30,7 +33,14 @@ def test_module_tasting():
     assert tasted_module.my_string == 'Just a string'
     assert tasted_module.my_list == ['A', 'list', 'of', 'stuff']
 
-    assert sys.modules == old_sys_modules
+    ### Ensuring the module wasn't added to `sys.modules`: ####################
+    #                                                                         #
+    new_module_names = [key for key in sys.modules if key
+                        not in old_sys_modules]
+    for new_module_name in new_module_names:
+        assert not new_module_name.startswith(module_address)
+    #                                                                         #
+    ### Finished ensuring the module wasn't added to `sys.modules`. ###########
     
 
 

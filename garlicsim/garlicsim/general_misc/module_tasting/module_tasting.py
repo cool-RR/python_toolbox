@@ -33,12 +33,12 @@ def taste_module(path_or_address):
     
     if address_tools.is_address(path_or_address):
         address = path_or_address
-        path = cute_imp.find_module(path_or_address)
+        path = cute_imp.find_module(path_or_address)[1]
     else:
         # blocktodo: implement address
         path = path_or_address
     
-    assert os.path.isfile(path)
+    assert os.path.exists(path)
     
     old_sys_modules = sys.modules.copy() # blocktodo: Make context manager for this
     
