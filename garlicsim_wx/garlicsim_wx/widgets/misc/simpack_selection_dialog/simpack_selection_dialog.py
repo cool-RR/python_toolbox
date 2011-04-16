@@ -131,7 +131,8 @@ class SimpackSelectionDialog(CuteDialog):
                                  flag=wx.EXPAND | wx.ALL,
                                  border=5)
         
-        self.create_project_button = wx.Button(self, wx.ID_OK, 'Create &project')
+        self.create_project_button = wx.Button(self, wx.ID_OK,
+                                               'Create &project')
         self.create_project_button.SetDefault()
         self.Bind(wx.EVT_BUTTON, self.on_create_project,
                   source=self.create_project_button)
