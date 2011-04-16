@@ -171,26 +171,26 @@ def exists(module_name):
     
 # Unused for now:
 
-#def import_by_path(path, name=None):
-    #'''
-    #Import module/package by path.
+def import_by_path(path, name=None):
+    '''
+    Import module/package by path.
     
-    #You may specify a name: This is helpful only if it's an hierarchical name,
-    #i.e. a name with dots like "orange.claw.hammer". This will become the
-    #imported module's __name__ attribute. Otherwise only the short name,
-    #"hammer", will be used, which might cause problems in some cases. (Like
-    #when using multiprocessing.)
-    #'''
-    #short_name = os.path.splitext(os.path.split(path)[1])[0]
-    #if name is None: name = short_name
-    #path_to_dir = os.path.dirname(path)
-    #my_file = None
-    #try:
-        #(my_file, pathname, description) = \
-            #imp.find_module(short_name, [path_to_dir])
-        #module = imp.load_module(name, my_file, pathname, description)
-    #finally:
-        #if my_file is not None:
-            #my_file.close()
+    You may specify a name: This is helpful only if it's an hierarchical name,
+    i.e. a name with dots like "orange.claw.hammer". This will become the
+    imported module's __name__ attribute. Otherwise only the short name,
+    "hammer", will be used, which might cause problems in some cases. (Like
+    when using multiprocessing.)
+    '''
+    short_name = os.path.splitext(os.path.split(path)[1])[0]
+    if name is None: name = short_name
+    path_to_dir = os.path.dirname(path)
+    my_file = None
+    try:
+        (my_file, pathname, description) = \
+            imp.find_module(short_name, [path_to_dir])
+        module = imp.load_module(name, my_file, pathname, description)
+    finally:
+        if my_file is not None:
+            my_file.close()
         
-    #return module
+    return module

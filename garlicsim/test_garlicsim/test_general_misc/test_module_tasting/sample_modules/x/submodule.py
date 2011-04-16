@@ -1,0 +1,1 @@
+raise Exception('This module should never be imported.')

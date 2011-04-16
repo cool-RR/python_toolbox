@@ -12,3 +12,4 @@ subclasses of it.
 from .temp_value_setter import TempValueSetter
 from .temp_working_directory_setter import TempWorkingDirectorySetter
 from .temp_recursion_limit_setter import TempRecursionLimitSetter
+from .temp_import_hook_setter import TempImportHookSetter
