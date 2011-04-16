@@ -111,14 +111,14 @@ class SimpackSelectionDialog(CuteDialog):
         ### Finished building simpack info panel. #############################
         
         
-        ### Building simpack-navigation buttons: ##############################
+        ### Building simpack-navigation panel: ################################
         #                                                                     #
         self.navigation_panel = NavigationPanel(self)
         self.flex_grid_sizer.Add(self.navigation_panel,
                                  proportion=0,
                                  flag=wx.EXPAND)
         #                                                                     #
-        ### Finished building simpack-navigation buttons. #####################
+        ### Finished building simpack-navigation panel. #######################
         
         
         ### Creating Ok/Cancel buttons: #######################################
