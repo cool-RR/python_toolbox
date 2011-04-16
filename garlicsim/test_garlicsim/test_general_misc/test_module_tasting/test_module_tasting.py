@@ -13,7 +13,7 @@ import sys
 from garlicsim.general_misc import module_tasting
 
 def test_module_tasting():
-    old_sys_modules = sys.modules[:]
+    old_sys_modules = sys.modules.copy()
     path = os.path.realpath(
         os.path.join(
             os.path.dirname(__file__),

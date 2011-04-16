@@ -171,7 +171,7 @@ def exists(module_name):
     
 # Unused for now:
 
-def import_by_path(path, name=None):
+def import_by_path(path, name=None, keep_in_sys_modules=True):
     '''
     Import module/package by path.
     
@@ -192,5 +192,8 @@ def import_by_path(path, name=None):
     finally:
         if my_file is not None:
             my_file.close()
+            
+    if not keep_in_sys_modules:
+        del sys.modules[name]
         
     return module
