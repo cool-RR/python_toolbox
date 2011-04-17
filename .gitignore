@@ -30,4 +30,3 @@ nosetests.xml
 coverage.xml
 *.coverage
 htmlcov
-
