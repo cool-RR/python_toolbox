@@ -102,7 +102,7 @@ class SimpackTree(wx.TreeCtrl):
                 
                 simpacks.append(simpack_metadata)
             
-            simpacks.sort(key=lambda simpack_metadata: simpack_metadata
+            simpacks.sort(key=lambda simpack_metadata: simpack_metadata)
             
             entry = {'name': name,
                      'path': path,
