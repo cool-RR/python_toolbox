@@ -13,3 +13,7 @@ def underscore_hating_cmp(a, b):
         unicode(a).replace('_', unichr(sys.maxunicode)),
         unicode(b).replace('_', unichr(sys.maxunicode))
     )
+
+def underscore_hating_key(string):
+    assert isinstance(string, basestring)
+    return unicode(string).replace('_', unichr(sys.maxunicode)))

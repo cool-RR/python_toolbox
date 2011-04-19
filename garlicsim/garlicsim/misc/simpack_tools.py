@@ -7,6 +7,7 @@ from garlicsim.general_misc import address_tools
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import caching
 from garlicsim.general_misc import nifty_collections
+from garlicsim.general_misc import module_tasting
 
 
 import garlicsim.misc.simpack_grokker
@@ -38,9 +39,25 @@ def _get_from_state_class(state_class):
 
 
 _SimpackMetadataBase = garlicsim.general_misc.third_party.namedtuple.namedtuple(
-    'SimpackMetadata',
-    'Name Description Tags',
+    '_SimpackMetadataBase',
+    'address name version description tags',
 )
+
 class SimpackMetadata(_SimpackMetadataBase):
-    pass
+    
+    @caching.cache
+    @staticmethod
+    def create_from_address(address):
+        tasted_simpack = module_tasting.taste_module(address)
+        name = getattr(tasted_simpack, 'name', address.rsplit('.')[-1])
+        version = getattr(tasted_simpack, 'name', None)
+        description = getattr(tasted_simpack, 'description', None)
+        tags = getattr(tasted_simpack, 'tags', None)
+        return SimpackMetadata(address=address,
+                               name=name,
+                               version=version,
+                               description=description,
+                               tags=tags)
+
+
 

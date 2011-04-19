@@ -15,16 +15,18 @@ import pkgutil
 import wx
 import pkg_resources
 
-from garlicsim.general_misc.cmp_tools import underscore_hating_cmp
+from garlicsim.general_misc.cmp_tools import underscore_hating_key
 from garlicsim.general_misc import address_tools
 from garlicsim.general_misc import path_tools
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import package_finder
+from garlicsim.general_misc.nifty_collections import OrderedDict
 from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.widgets.general_misc import cute_hyper_tree_list
 
 import garlicsim_wx
 import garlicsim_lib
+from garlicsim.misc import simpack_tools
 
 from . import images as __images_package
 images_package = __images_package.__name__
@@ -87,12 +89,20 @@ class SimpackTree(wx.TreeCtrl):
             #                                                                 #
             ### Finished determining path to search. ##########################
                 
-            simpack_names_in_simpack_place = [
+            simpack_addresses = [
                 (package_prefix + package_name[1:]) for package_name in
                 package_finder.get_packages(path_to_search, self_in_name=False)
             ]
             
+            simpacks = []
             
+            for simpack_address in simpack_addresses:
+                simpack_metadata = simpack_tools.SimpackMetadata.\
+                                   create_from_address(simpack_address)
+                
+                simpacks.append(simpack_metadata)
+            
+            simpacks.sort(key=lambda simpack_metadata: simpack_metadata
             
             entry = {'name': name,
                      'path': path,

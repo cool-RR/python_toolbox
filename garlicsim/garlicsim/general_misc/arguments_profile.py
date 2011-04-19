@@ -360,7 +360,7 @@ class ArgumentsProfile(object):
                 getcallargs_result[s_star_kwargs].keys()
             sorted_star_kwargs_names = sorted(
                 unsorted_star_kwargs_names,
-                cmp=cmp_tools.underscore_hating_cmp
+                key=cmp_tools.underscore_hating_key
             )
             
             sorted_star_kwargs = OrderedDict(
