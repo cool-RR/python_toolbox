@@ -236,6 +236,7 @@ class SimpackSelectionDialog(CuteDialog):
         self.EndModal(wx.ID_CANCEL)
         
         
+    """
     def update_simpack_list(self):
         '''Update the list of available simpacks.'''
         
@@ -261,7 +262,7 @@ class SimpackSelectionDialog(CuteDialog):
             self.list_of_simpacks += list_of_simpacks_in_simpack_place
             
         self.list_box.SetItems(self.list_of_simpacks)
-        
+    """    
 
     def get_simpack_selection(self):
         '''Import the selected simpack and return it.'''

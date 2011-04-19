@@ -58,6 +58,8 @@ class SimpackTree(wx.TreeCtrl):
                 sys.path.append(path)
             
         
+        simpack_places_tree = []
+            
         for path, package_prefix in garlicsim_wx.simpack_places:
             
             ### Determining name for simpack place: ###########################
@@ -74,7 +76,29 @@ class SimpackTree(wx.TreeCtrl):
             #                                                                 #
             ### Finished determining name for simpack place. ##################
             
+            ### Determining path to search: ###################################
+            #                                                                 #
+            if package_prefix:
+                assert package_prefix[-1] == '.'
+                package = address_tools.resolve(package_prefix[:-1])
+                path_to_search = path_tools.get_path_of_package(package)
+            else: # not package_prefix
+                path_to_search = path
+            #                                                                 #
+            ### Finished determining path to search. ##########################
+                
+            simpack_names_in_simpack_place = [
+                (package_prefix + package_name[1:]) for package_name in
+                package_finder.get_packages(path_to_search, self_in_name=False)
+            ]
             
+            
+            
+            entry = {'name': name,
+                     'path': path,
+                     'simpacks': []}
+            
+            simpack_places_tree.append(entry)
             
 
         

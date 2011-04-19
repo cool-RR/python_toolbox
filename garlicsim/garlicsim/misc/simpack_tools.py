@@ -36,8 +36,11 @@ def _get_from_state_class(state_class):
         
     return simpack
 
-SimpackMetadata = garlicsim.general_misc.third_party.namedtuple.namedtuple(
+
+_SimpackMetadataBase = garlicsim.general_misc.third_party.namedtuple.namedtuple(
     'SimpackMetadata',
     'Name Description Tags',
 )
+class SimpackMetadata(_SimpackMetadataBase):
+    pass
 
