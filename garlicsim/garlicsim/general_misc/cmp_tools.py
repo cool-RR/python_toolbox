@@ -16,4 +16,4 @@ def underscore_hating_cmp(a, b):
 
 def underscore_hating_key(string):
     assert isinstance(string, basestring)
-    return unicode(string).replace('_', unichr(sys.maxunicode)))
+    return unicode(string).replace('_', unichr(sys.maxunicode))
