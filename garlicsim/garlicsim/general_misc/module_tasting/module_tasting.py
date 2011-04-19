@@ -15,7 +15,6 @@ from __future__ import with_statement
 import uuid
 import sys
 import os.path
-import encodings.mbcs as _, encodings.utf_8 as _
 
 from garlicsim.general_misc.third_party import mock as mock_module
 
@@ -23,6 +22,20 @@ from garlicsim.general_misc.temp_value_setters import TempImportHookSetter
 from garlicsim.general_misc import address_tools
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import cute_imp
+
+###############################################################################
+#                                                                             #
+# Importing stuff that would normally be auto-imported later. We're importing
+# it now just so it will get into `sys.modules` so we could easily track
+# changes to `sys.modules` when we do module-tasting.
+
+import encodings.utf_8 as _
+try: # Available on Windows only:
+    import encodings.mbcs as _
+except ImportError:
+    pass
+#                                                                             #
+###############################################################################
 
 
 def mock_import(name, *args, **kwargs):
