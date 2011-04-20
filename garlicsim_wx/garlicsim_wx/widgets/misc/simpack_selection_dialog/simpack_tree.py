@@ -44,23 +44,27 @@ class SimpackTree(wx.TreeCtrl):
         assert isinstance(simpack_selection_dialog, SimpackSelectionDialog)
         self.simpack_selection_dialog = simpack_selection_dialog
         
+        self.simpack_places_tree = []
+        
         #self.AddColumn('', width=600)
         #self.SetMainColumn(1)
         self.root_item_id = self.AddRoot("GarlicSim's simpack library")
         self.AppendItem(self.root_item_id, "Conway's Game of Life")
         self.AppendItem(self.root_item_id, "Prisoner's Dilemma")
         self.AppendItem(self.root_item_id, 'Queueing Theory')
-
         
-    def refresh_simpacks(self):        
+        self.ExpandAll()
 
+    
+    def _refresh_internal_tree(self):
+        
         # Ensuring all simpack place paths are in `sys.path`:
         for path, package_prefix in garlicsim_wx.simpack_places:
             if path not in sys.path:
                 sys.path.append(path)
             
         
-        simpack_places_tree = []
+        del self.simpack_places_tree[:]
             
         for path, package_prefix in garlicsim_wx.simpack_places:
             
@@ -106,10 +110,17 @@ class SimpackTree(wx.TreeCtrl):
             
             entry = {'name': name,
                      'path': path,
-                     'simpacks': []}
+                     'simpacks': simpacks}
             
-            simpack_places_tree.append(entry)
+            self.simpack_places_tree.append(entry)
             
+            
+    def refresh_simpacks(self):        
+        
+        
+        self.RootItem
+            
+        #for roots in self.GetRootItem
 
         
 from .simpack_selection_dialog import SimpackSelectionDialog
