@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the `LazyList` class.
+This module defines the `LazyTuple` class.
 
 See its documentation for more information.
 '''
@@ -19,6 +19,9 @@ from garlicsim.general_misc import decorator_tools
 from garlicsim.general_misc import sequence_tools
 
 
+class _SENTINEL(object):
+    pass
+
 def _convert_int_index_to_exhaustion_point(index):
     assert isinstance(index, int)
     if index >= 0:
@@ -26,7 +29,7 @@ def _convert_int_index_to_exhaustion_point(index):
     else: # i < 0
         return infinity
 
-    
+#blocktodo: go over all sequence and tuple methods, see what I should add
 class LazyTuple(object):
     ''' '''
     def __init__(self, iterable):
@@ -56,10 +59,13 @@ class LazyTuple(object):
         return len(self._collected_data)
     
     
-    def _exhaust(self, i):
+    def _exhaust(self, i=None):
 
         if self.exhausted:
             return
+        
+        if i is None:
+            i = infinity
         
         if isinstance(i, int):
             exhaustion_point = _convert_int_index_to_exhaustion_point(i)
@@ -81,3 +87,75 @@ class LazyTuple(object):
         self._exhaust(i)
         return self._collected_data[i]
             
+
+    def __reversed__(self):
+        self._exhaust()
+        return reversed(self._collected_data)
+    
+    
+    def __len__(self):
+        self._exhaust()
+        return len(self._collected_data)
+
+    
+    def __eq__(self, other):
+        if not sequence_tools.is_immutable_sequence(other):
+            return False
+        for i, j in cute_iter_tools.izip_longest(self, other,
+                                                 fillvalue=_SENTINEL):
+            if (i is _SENTINEL) or (j is _SENTINEL):
+                return False
+            if i != j:
+                return False
+        return True
+
+    
+    def __nonzero__(self):
+        self._exhaust(0)
+        return bool(self._collected_data)
+
+    
+    def __lt__(self, other):
+        '''
+        This method returns ``True`` if this list is "lower than" the given
+        `other` list. This is the case if...
+
+        - this list is empty and the other is not.
+        - the first nth item in this list which is unequal to the
+          corresponding item in the other list, is lower than the corresponding
+          item.
+
+        If this and the other list is empty this method will return ``False``.
+        '''
+        if not self and other:
+            return True
+        elif self and not other:
+            return False
+        elif not self and not other:
+            return False
+        for a, b in izip_longest(self, other, fillvalue=_SENTINEL):
+            if a < b:
+                return True
+            elif a == b:
+                continue
+            elif a is _SENTINEL and b is not _SENTINEL:
+                return True
+            return False
+
+        
+    def __gt__(self, other):
+        '''
+        This method returns ``True`` if this list is "greater than" the given
+        `other` list. This is the case if...
+
+        - this list is not empty and the other is
+        - the first nth item in this list which is unequal to the
+          corresponding item in the other list, is greater than the
+          corresponding item.
+
+        If this and the other list is empty this method will return ``False``.
+        '''
+
+        if not self and not other:
+            return False
+        return not self.__lt__(other)

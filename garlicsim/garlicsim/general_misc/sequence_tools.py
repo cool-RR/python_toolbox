@@ -7,6 +7,8 @@ import itertools
 
 from garlicsim.general_misc.nifty_collections import Counter
 from garlicsim.general_misc import caching
+from garlicsim.general_misc.third_party import abc
+from garlicsim.general_misc.third_party import abcs_collection
 
         
 def are_equal_regardless_of_order(seq1, seq2):
@@ -69,20 +71,16 @@ def combinations(sequence, n=None, start=0):
 ###############################################################################
 #                                                                             #
 def is_sequence(thing):
-    return hasattr(thing, ) and hasattr(thing, '__getitem__') and \
-           hasattr(thing, '__iter__') and 
+    return abcs_collection.Sequence.__instancecheck__(thing)
 
-# Support for `is_sequence`:
 
-_required_sequence_methods = ['__len__', '__getitem__', '__iter__',
-                              '__contains__']
-@caching.cache()
-def _is_type_of_sequence(type_):
-    return all(hasattr(thing, required_sequence_method) for
-               required_sequence_method in _required_sequence_methods)
+def is_mutable_sequence(thing):
+    return abcs_collection.MutableSequence.__instancecheck__(thing)
 
-#                                                                             #
-###############################################################################
+
+def is_immutable_sequence(thing):
+    return abcs_collection.Sequence.__instancecheck__(thing) and not \
+           abcs_collection.MutableSequence.__instancecheck__(thing)
 
 ### Not using now, might want in future:
 
