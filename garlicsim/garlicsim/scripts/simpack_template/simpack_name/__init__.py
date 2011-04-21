@@ -8,5 +8,9 @@ from .state import State
 # Human-readable name of your simpack:
 name = '''simpack_name'''
 
-# List of tags like 'game-theory', 'electronics', 'climate', etc.
+# Version number:
+__version__ = '0.1'
+
+# List of tags that the simpack is related to, like 'game-theory',
+# 'electronics', 'climate', 'high-cpu' etc.
 tags = []
