@@ -6,6 +6,7 @@
 import itertools
 
 from garlicsim.general_misc.nifty_collections import Counter
+from garlicsim.general_misc import caching
 
         
 def are_equal_regardless_of_order(seq1, seq2):
@@ -65,12 +66,25 @@ def combinations(sequence, n=None, start=0):
                 yield [thing] + sub_result
 
 
-### Not using now, might want in future:
+###############################################################################
+#                                                                             #
+def is_sequence(thing):
+    return hasattr(thing, ) and hasattr(thing, '__getitem__') and \
+           hasattr(thing, '__iter__') and 
 
-#def is_sequence(thing):
-    #return hasattr(thing, '__len__') and hasattr(thing, '__getitem__') and\
-    #hasattr(thing, '__iter__') and 
-    #pass
+# Support for `is_sequence`:
+
+_required_sequence_methods = ['__len__', '__getitem__', '__iter__',
+                              '__contains__']
+@caching.cache()
+def _is_type_of_sequence(type_):
+    return all(hasattr(thing, required_sequence_method) for
+               required_sequence_method in _required_sequence_methods)
+
+#                                                                             #
+###############################################################################
+
+### Not using now, might want in future:
 
 #def heads(sequence, include_empty=False, include_full=True):    
     #for i in range(0 if include_empty else 1, len(sequence)):

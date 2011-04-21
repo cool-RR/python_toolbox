@@ -16,6 +16,7 @@ import itertools
 from garlicsim.general_misc import cute_iter_tools
 from garlicsim.general_misc.infinity import infinity
 from garlicsim.general_misc import decorator_tools
+from garlicsim.general_misc import sequence_tools
 
 
 def _convert_int_index_to_exhaustion_point(index):
@@ -29,7 +30,7 @@ def _convert_int_index_to_exhaustion_point(index):
 class LazyTuple(object):
     ''' '''
     def __init__(self, iterable):
-        was_given_a_sequence = isinstance(iterable, (list, tuple, basestring))
+        was_given_a_sequence = sequence_tools.is_sequence(iterable)
         
         self.exhausted = True if was_given_a_sequence else False
         ''' '''
@@ -73,9 +74,10 @@ class LazyTuple(object):
                 self._collected_data.append(self._iterator.next())
             except StopIteration:
                 self.exhausted = True
+                break
            
             
-        
     def __getitem__(self, i):
-        if self.known_length 
+        self._exhaust(i)
+        return self._collected_data[i]
             
