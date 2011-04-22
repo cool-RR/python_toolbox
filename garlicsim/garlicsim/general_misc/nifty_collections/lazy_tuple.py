@@ -159,3 +159,20 @@ class LazyTuple(object):
         if not self and not other:
             return False
         return not self.__lt__(other)
+    
+    
+    def __repr__(self):
+        '''
+        Returns the representation string of the list, if the list exhausted
+        this looks like the representation of any other list, otherwise the
+        "lazy" part is represented by '...', like '[1, 2, 3, ...]'.
+        '''
+        if self.exhausted:
+            inner = repr(self._collected_data)
+        else: # not self.exhausted
+            if self._collected_data == ():
+                inner = '()'
+            else: 
+                inner = repr(self._collected_data)[:-1] + ' ...)'
+            
+        return '<%s: %s>' % (self.__class__.__name__, inner)
