@@ -183,11 +183,16 @@ class LazyTuple(object):
         "lazy" part is represented by '...', like '[1, 2, 3, ...]'.
         '''
         if self.exhausted:
-            inner = repr(self._collected_data)
+            inner = ''.join(('(',                             
+                             repr(self._collected_data)[1:-1],
+                             ')'))
+                             
         else: # not self.exhausted
             if self._collected_data == ():
                 inner = '()'
             else: 
-                inner = repr(self._collected_data)[:-1] + ' ...)'
+                inner = ''.join(('(',
+                                 repr(self._collected_data)[1:-1],
+                                 ' ...)'))
             
         return '<%s: %s>' % (self.__class__.__name__, inner)

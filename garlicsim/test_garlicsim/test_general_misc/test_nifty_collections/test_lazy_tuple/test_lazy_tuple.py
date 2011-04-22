@@ -24,6 +24,7 @@ def test_lazy_tuple():
     self_aware_random_iterator = SelfAwareRandomIterator()
     lazy_tuple = LazyTuple(self_aware_random_iterator)
     assert len(self_aware_random_iterator.data) == 0
+    assert not lazy_tuple.exhausted
     
     first = lazy_tuple[0]
     assert len(self_aware_random_iterator.data) == 1
@@ -41,8 +42,14 @@ def test_lazy_tuple():
     assert len(self_aware_random_iterator.data) == 16
     assert len(weird_slice) == 4
     assert weird_slice[2] == first_ten[-1] == lazy_tuple[9]
-    
-    
+    assert not lazy_tuple.exhausted
+
+def test_lazy_tuple_string():
+    string = 'meow'
+    lazy_tuple = LazyTuple(string)
+    assert lazy_tuple.exhausted
+    assert ''.join(lazy_tuple) == string
+    assert ''.join(lazy_tuple[1:-1]) == string[1:-1]
     
     
     
