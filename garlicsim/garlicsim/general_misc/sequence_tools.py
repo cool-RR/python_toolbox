@@ -89,6 +89,8 @@ def parse_slice(s):
     assert s.step != 0
     if s.step is None:
         step = 1
+    else:
+        step = s.step
     ###
         
     ### Parsing `start`:
@@ -117,16 +119,6 @@ def parse_slice(s):
             
     return (start, stop, step)
 
-
-def highest_used_indexes_of_slice(s):
-    (start, stop, step) = parse_slice(s)
-    result = []
-    if start < 0:
-        result.append(start)
-    else: # start >= 0 
-        
-    
-    
     
     
 ### Not using now, might want in future:
