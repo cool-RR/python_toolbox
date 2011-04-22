@@ -46,7 +46,7 @@ def helpful_decorator_builder(decorator_builder):
     Take a decorator builder and return a "helpful" version of it.
     
     A decorator builder is a function that returns a decorator. A decorator
-    builder is used like this:
+    is used like this:
 
         @foo
         def bar():
