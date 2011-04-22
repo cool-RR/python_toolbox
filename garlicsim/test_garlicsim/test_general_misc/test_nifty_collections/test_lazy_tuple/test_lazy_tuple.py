@@ -4,6 +4,7 @@
 '''Testing module for `garlicsim.general_misc.nifty_collections.LazyTuple`.'''
 
 import uuid
+import itertools
 
 from garlicsim.general_misc.third_party import abcs_collection
 
@@ -56,12 +57,12 @@ def test_lazy_tuple_string():
            ['abc', lazy_tuple, 'meowa', 'xyz']
     
     
-    
-    
-    
-    
-    
-    
+def test_lazy_tuple_infinite():
+    lazy_tuple = LazyTuple(itertools.count())
+    assert not lazy_tuple.exhausted
+    lazy_tuple[100]
+    assert len(lazy_tuple.collected_data) == 101
+    assert not lazy_tuple.exhausted
     
     
     

@@ -32,7 +32,7 @@ class LazyTuple(object):
         self.exhausted = True if was_given_a_sequence else False
         ''' '''
         
-        self._collected_data = list(iterable) if was_given_a_sequence else []
+        self.collected_data = list(iterable) if was_given_a_sequence else []
         ''' '''
         
         self._iterator = None if was_given_a_sequence else iter(iterable)
@@ -50,7 +50,7 @@ class LazyTuple(object):
         '''
         The number of items which have been taken from the internal iterator.
         '''
-        return len(self._collected_data)
+        return len(self.collected_data)
     
     
     def _exhaust(self, i=None):
@@ -79,9 +79,9 @@ class LazyTuple(object):
             if step > 0: # Compensating for excluded last item:
                 exhaustion_point -= 1
             
-        while len(self._collected_data) <= exhaustion_point:
+        while len(self.collected_data) <= exhaustion_point:
             try:
-                self._collected_data.append(self._iterator.next())
+                self.collected_data.append(self._iterator.next())
             except StopIteration:
                 self.exhausted = True
                 break
@@ -89,7 +89,7 @@ class LazyTuple(object):
             
     def __getitem__(self, i):
         self._exhaust(i)
-        result = self._collected_data[i]
+        result = self.collected_data[i]
         if isinstance(i, slice):
             return tuple(result)
         else:
@@ -99,12 +99,12 @@ class LazyTuple(object):
     def __reversed__(self):
         self._exhaust()
         # blocktodo: Is this actually supposed to be a generator?
-        return reversed(self._collected_data)
+        return reversed(self.collected_data)
     
     
     def __len__(self):
         self._exhaust()
-        return len(self._collected_data)
+        return len(self.collected_data)
 
     
     def __eq__(self, other):
@@ -121,7 +121,7 @@ class LazyTuple(object):
     
     def __nonzero__(self):
         self._exhaust(0)
-        return bool(self._collected_data)
+        return bool(self.collected_data)
 
     
     def __lt__(self, other):
@@ -179,15 +179,15 @@ class LazyTuple(object):
         '''
         if self.exhausted:
             inner = ''.join(('(',                             
-                             repr(self._collected_data)[1:-1],
+                             repr(self.collected_data)[1:-1],
                              ')'))
                              
         else: # not self.exhausted
-            if self._collected_data == ():
+            if self.collected_data == ():
                 inner = '()'
             else: 
                 inner = ''.join(('(',
-                                 repr(self._collected_data)[1:-1],
+                                 repr(self.collected_data)[1:-1],
                                  ' ...)'))
             
         return '<%s: %s>' % (self.__class__.__name__, inner)
