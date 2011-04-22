@@ -25,7 +25,7 @@ class _SENTINEL(object):
 def _convert_int_index_to_exhaustion_point(index):
     assert isinstance(index, int)
     if index >= 0:
-        return i
+        return index
     else: # i < 0
         return infinity
 
