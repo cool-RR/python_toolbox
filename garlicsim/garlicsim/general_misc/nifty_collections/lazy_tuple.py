@@ -69,11 +69,21 @@ class LazyTuple(object):
         
         if isinstance(i, int):
             exhaustion_point = _convert_int_index_to_exhaustion_point(i)
+            
         elif isinstance(i, slice):
+
+            # todo: can be smart and figure out if it's an empty slice and then
+            # not exhaust.
+            
+            (start, stop, step) = sequence_tools.parse_slice(i)
+            
             exhaustion_point = max(
-                _convert_int_index_to_exhaustion_point(i.start),
-                _convert_int_index_to_exhaustion_point(i.stop)
+                _convert_int_index_to_exhaustion_point(start),
+                _convert_int_index_to_exhaustion_point(stop)
             )
+            
+            if step > 0: # Compensating for excluded last item:
+                exhaustion_point -= 1
             
         while len(self._collected_data) <= exhaustion_point:
             try:
@@ -85,11 +95,16 @@ class LazyTuple(object):
             
     def __getitem__(self, i):
         self._exhaust(i)
-        return self._collected_data[i]
+        result = self._collected_data[i]
+        if isinstance(i, slice):
+            return tuple(result)
+        else:
+            return result
             
 
     def __reversed__(self):
         self._exhaust()
+        # blocktodo: Is this actually supposed to be a generator?
         return reversed(self._collected_data)
     
     

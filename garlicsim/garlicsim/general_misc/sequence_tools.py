@@ -7,6 +7,7 @@ import itertools
 
 from garlicsim.general_misc.nifty_collections import Counter
 from garlicsim.general_misc import caching
+from garlicsim.general_misc.infinity import infinity
 from garlicsim.general_misc.third_party import abc
 from garlicsim.general_misc.third_party import abcs_collection
 
@@ -68,8 +69,6 @@ def combinations(sequence, n=None, start=0):
                 yield [thing] + sub_result
 
 
-###############################################################################
-#                                                                             #
 def is_sequence(thing):
     return abcs_collection.Sequence.__instancecheck__(thing)
 
@@ -82,6 +81,54 @@ def is_immutable_sequence(thing):
     return abcs_collection.Sequence.__instancecheck__(thing) and not \
            abcs_collection.MutableSequence.__instancecheck__(thing)
 
+
+def parse_slice(s):
+    assert isinstance(s, slice)
+    
+    ### Parsing `step`:
+    assert s.step != 0
+    if s.step is None:
+        step = 1
+    ###
+        
+    ### Parsing `start`:
+    if s.start is not None:
+        start = s.start
+    else:
+        assert s.start is None
+        if step > 0:
+            start = 0
+        else:
+            assert step < 0
+            start = infinity
+    ###
+            
+    ### Parsing `stop`:
+    if s.stop is not None:
+        stop = s.stop
+    else:
+        assert s.stop is None
+        if step > 0:
+            stop = infinity
+        else:
+            assert step < 0
+            stop = 0
+    ###
+            
+    return (start, stop, step)
+
+
+def highest_used_indexes_of_slice(s):
+    (start, stop, step) = parse_slice(s)
+    result = []
+    if start < 0:
+        result.append(start)
+    else: # start >= 0 
+        
+    
+    
+    
+    
 ### Not using now, might want in future:
 
 #def heads(sequence, include_empty=False, include_full=True):    
