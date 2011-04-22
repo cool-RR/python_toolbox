@@ -40,7 +40,7 @@ class LazyTuple(object):
         
     @classmethod
     def factory(cls, callable):
-        def inner(*args, **kwargs):
+        def inner(function, *args, **kwargs):
             return cls(callable(*args, **kwargs))
         return decorator_tools.decorator(inner, callable)
         

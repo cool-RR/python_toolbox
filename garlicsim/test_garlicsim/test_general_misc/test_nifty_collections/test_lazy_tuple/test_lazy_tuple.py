@@ -12,7 +12,7 @@ from garlicsim.general_misc.third_party import abcs_collection
 from garlicsim.general_misc.nifty_collections import LazyTuple
 
 
-class SelfAwareRandomIterator(abcs_collection.Iterator):
+class SelfAwareUuidIterator(abcs_collection.Iterator):
     def __init__(self):
         self.data = []
     def next(self):
@@ -21,9 +21,9 @@ class SelfAwareRandomIterator(abcs_collection.Iterator):
         return new_entry
 
     
-def test_lazy_tuple():
-    self_aware_random_iterator = SelfAwareRandomIterator()
-    lazy_tuple = LazyTuple(self_aware_random_iterator)
+def test():
+    self_aware_uuid_iterator = SelfAwareUuidIterator()
+    lazy_tuple = LazyTuple(self_aware_uuid_iterator)
     assert len(self_aware_random_iterator.data) == 0
     assert not lazy_tuple.exhausted
     
@@ -46,7 +46,7 @@ def test_lazy_tuple():
     assert not lazy_tuple.exhausted
 
     
-def test_lazy_tuple_string():
+def test_string():
     string = 'meow'
     lazy_tuple = LazyTuple(string)
     assert lazy_tuple.exhausted
@@ -57,13 +57,22 @@ def test_lazy_tuple_string():
            ['abc', lazy_tuple, 'meowa', 'xyz']
     
     
-def test_lazy_tuple_infinite():
+def test_infinite():
     lazy_tuple = LazyTuple(itertools.count())
     assert not lazy_tuple.exhausted
     lazy_tuple[100]
     assert len(lazy_tuple.collected_data) == 101
     assert not lazy_tuple.exhausted
     
+
+def test_factory_decorator():
+    @LazyTuple.factory
+    def count(*args, **kwargs):
+        return itertools.count(*args, **kwargs)
+    
+    my_count = count()
+    assert isinstance(my_count, LazyTuple)
+    assert my_count[:10] == tuple(xrange(10))
     
     
     
