@@ -44,12 +44,18 @@ def test_lazy_tuple():
     assert weird_slice[2] == first_ten[-1] == lazy_tuple[9]
     assert not lazy_tuple.exhausted
 
+    
 def test_lazy_tuple_string():
     string = 'meow'
     lazy_tuple = LazyTuple(string)
     assert lazy_tuple.exhausted
     assert ''.join(lazy_tuple) == string
     assert ''.join(lazy_tuple[1:-1]) == string[1:-1]
+    
+    assert sorted((lazy_tuple, 'abc', 'xyz', 'meowa')) == \
+           ['abc', lazy_tuple, 'meowa', 'xyz']
+    
+    
     
     
     

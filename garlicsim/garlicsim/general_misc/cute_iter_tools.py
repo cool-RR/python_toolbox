@@ -149,11 +149,11 @@ def izip_longest(*iterables, **kwargs):
     fill_value = kwargs.get('fillvalue', None)
     def sentinel(counter=([fill_value] * (len(iterables) - 1)).pop):
         yield counter()
-    fillers = itertools.repeat(fillvalue)
+    fillers = itertools.repeat(fill_value)
     iterables = [itertools.chain(iterable, sentinel(), fillers) for iterable
                  in iterables]
     try:
-        for tuple_ in izip(*iterables):
+        for tuple_ in itertools.izip(*iterables):
             yield tuple_
     except IndexError:
         raise StopIteration

@@ -7,12 +7,6 @@ This module defines the `LazyTuple` class.
 See its documentation for more information.
 '''
 
-import textwrap
-from keyword import iskeyword
-from operator import itemgetter
-from functools import wraps
-import itertools
-
 from garlicsim.general_misc import cute_iter_tools
 from garlicsim.general_misc.infinity import infinity
 from garlicsim.general_misc import decorator_tools
@@ -148,7 +142,8 @@ class LazyTuple(object):
             return False
         elif not self and not other:
             return False
-        for a, b in izip_longest(self, other, fillvalue=_SENTINEL):
+        for a, b in cute_iter_tools.izip_longest(self, other,
+                                                 fillvalue=_SENTINEL):
             if a < b:
                 return True
             elif a == b:
