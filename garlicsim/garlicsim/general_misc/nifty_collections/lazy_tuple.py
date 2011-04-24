@@ -7,6 +7,8 @@ This module defines the `LazyTuple` class.
 See its documentation for more information.
 '''
 
+import itertools
+
 from garlicsim.general_misc import cute_iter_tools
 from garlicsim.general_misc.infinity import infinity
 from garlicsim.general_misc import decorator_tools
@@ -94,6 +96,18 @@ class LazyTuple(object):
             return tuple(result)
         else:
             return result
+
+        
+    def __iter__(self):
+        for index in itertools.count():
+            try:
+                item = self.collected_data[index]
+            except IndexError:
+                if self.exhausted:
+                    raise StopIteration
+                else: # not self.exhausted
+                    self._exhaust(index)
+                    item = self.collected_data[index] WAS HERE
             
 
     def __reversed__(self):
