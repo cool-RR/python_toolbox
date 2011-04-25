@@ -77,9 +77,9 @@ class LazyTuple(object):
             return
         
         if i is None:
-            i = infinity
+            exhaustion_point = infinity
         
-        if isinstance(i, int):
+        elif isinstance(i, int):
             exhaustion_point = _convert_int_index_to_exhaustion_point(i)
             
         elif isinstance(i, slice):
@@ -129,7 +129,11 @@ class LazyTuple(object):
                         assert self.exhausted
                         raise StopIteration
             yield item
-                        
+                
+            
+    def count(self, item):
+        self._exhaust()
+        return self.collected_data.count(item)
             
 
     def __reversed__(self):
@@ -153,7 +157,17 @@ class LazyTuple(object):
             if i != j:
                 return False
         return True
-
+    
+    
+    def __ne__(self, other):
+        return not self.__eq__(other)
+    
+    
+    def __contains__(self, item):
+        for member in self:
+            if member == item:
+                return True
+        return False
     
     def __nonzero__(self):
         self._exhaust(0)
@@ -227,3 +241,5 @@ class LazyTuple(object):
                                  ' ...)'))
             
         return '<%s: %s>' % (self.__class__.__name__, inner)
+    
+    

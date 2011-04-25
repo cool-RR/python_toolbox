@@ -8,6 +8,7 @@ import itertools
 
 from garlicsim.general_misc.third_party import abcs_collection
 from garlicsim.general_misc import cute_iter_tools
+from garlicsim.general_misc import sequence_tools
 
 
 from garlicsim.general_misc.nifty_collections import LazyTuple
@@ -75,6 +76,8 @@ def test_string():
     assert len(lazy_tuple) == lazy_tuple.known_length == \
            len(lazy_tuple.collected_data)
     
+    assert LazyTuple(reversed(LazyTuple(reversed(lazy_tuple)))) == lazy_tuple
+    
     
 def test_infinite():
     lazy_tuple = LazyTuple(itertools.count())
@@ -103,4 +106,7 @@ def test_finite_iterator():
     assert lazy_tuple.exhausted
     assert len(lazy_tuple) == lazy_tuple.known_length == \
            len(lazy_tuple.collected_data)
+    assert LazyTuple(reversed(LazyTuple(reversed(lazy_tuple)))) == lazy_tuple
     
+def test_immutable_sequence():
+    assert sequence_tools.is_immutable_sequence(LazyTuple([1, 2, 3]))
