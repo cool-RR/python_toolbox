@@ -7,6 +7,7 @@ import uuid
 import itertools
 
 from garlicsim.general_misc.third_party import abcs_collection
+from garlicsim.general_misc import cute_iter_tools
 
 
 from garlicsim.general_misc.nifty_collections import LazyTuple
@@ -24,26 +25,41 @@ class SelfAwareUuidIterator(abcs_collection.Iterator):
 def test():
     self_aware_uuid_iterator = SelfAwareUuidIterator()
     lazy_tuple = LazyTuple(self_aware_uuid_iterator)
-    assert len(self_aware_random_iterator.data) == 0
+    assert len(self_aware_uuid_iterator.data) == 0
     assert not lazy_tuple.exhausted
     
     first = lazy_tuple[0]
-    assert len(self_aware_random_iterator.data) == 1
+    assert len(self_aware_uuid_iterator.data) == 1
     assert isinstance(first, uuid.UUID)
-    assert first == self_aware_random_iterator.data[0]
+    assert first == self_aware_uuid_iterator.data[0]
     
     first_ten = lazy_tuple[:10]
     assert isinstance(first_ten, tuple)
-    assert len(self_aware_random_iterator.data) == 10
+    assert len(self_aware_uuid_iterator.data) == 10
     assert first_ten[0] == first
     assert all(isinstance(item, uuid.UUID) for item in first_ten)
     
     weird_slice = lazy_tuple[15:5:-3]
     assert isinstance(first_ten, tuple)
-    assert len(self_aware_random_iterator.data) == 16
+    assert len(self_aware_uuid_iterator.data) == 16
     assert len(weird_slice) == 4
     assert weird_slice[2] == first_ten[-1] == lazy_tuple[9]
     assert not lazy_tuple.exhausted
+    
+    iterator_twenty = cute_iter_tools.shorten(lazy_tuple, 20)
+    assert len(self_aware_uuid_iterator.data) == 16
+    first_twenty = list(iterator_twenty)
+    assert len(self_aware_uuid_iterator.data) == 20
+    assert len(first_twenty) == 20
+    assert first_twenty[:10] == list(first_ten)
+    assert first_twenty == self_aware_uuid_iterator.data
+    
+    iterator_twelve = cute_iter_tools.shorten(lazy_tuple, 12)
+    first_twelve = list(iterator_twelve)
+    assert len(self_aware_uuid_iterator.data) == 20
+    assert len(first_twelve) == 12
+    assert first_twenty[:12] == first_twelve
+    
 
     
 def test_string():
