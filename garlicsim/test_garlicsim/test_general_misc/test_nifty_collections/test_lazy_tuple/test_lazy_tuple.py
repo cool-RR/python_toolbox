@@ -90,5 +90,12 @@ def test_factory_decorator():
     assert isinstance(my_count, LazyTuple)
     assert my_count[:10] == tuple(xrange(10))
     
-    
+
+def test_finite_iterator():
+    my_finite_iterator = iter(range(5))
+    lazy_tuple = LazyTuple(my_finite_iterator)
+    assert not lazy_tuple.exhausted
+    second_to_last = lazy_tuple[-2]
+    assert second_to_last == 3
+    assert lazy_tuple.exhausted
     
