@@ -8,6 +8,7 @@ See its documentation for more information.
 '''
 
 import itertools
+import threading
 
 from garlicsim.general_misc import cute_iter_tools
 from garlicsim.general_misc.infinity import infinity
@@ -25,6 +26,17 @@ def _convert_int_index_to_exhaustion_point(index):
     else: # i < 0
         return infinity
 
+
+@decorator_tools.decorator
+def with_lock(method, *args, **kwargs):
+    '''
+    Decorator for using the tree lock (in write mode) as a context manager.
+    '''
+    self = args[0]
+    with self.lock:
+        return method(*args, **kwargs)
+
+    
 #blocktodo: go over all sequence and tuple methods, see what I should add
 class LazyTuple(object):
     ''' '''
@@ -40,6 +52,9 @@ class LazyTuple(object):
         self._iterator = None if was_given_a_sequence else iter(iterable)
         ''' '''
         
+        self.lock = threading.Lock()
+        
+        
     @classmethod
     def factory(cls, callable):
         def inner(function, *args, **kwargs):
@@ -54,7 +69,8 @@ class LazyTuple(object):
         '''
         return len(self.collected_data)
     
-    
+
+    @with_lock
     def _exhaust(self, i=None):
 
         if self.exhausted:
@@ -107,7 +123,13 @@ class LazyTuple(object):
                     raise StopIteration
                 else: # not self.exhausted
                     self._exhaust(index)
-                    item = self.collected_data[index] WAS HERE
+                    try:
+                        item = self.collected_data[index]
+                    except IndexError:
+                        assert self.exhausted
+                        raise StopIteration
+            yield item
+                        
             
 
     def __reversed__(self):
