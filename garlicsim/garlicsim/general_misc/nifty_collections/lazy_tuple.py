@@ -209,7 +209,7 @@ class LazyTuple(abcs_collection.Sequence, object):
                                  repr(self.collected_data)[1:-1],
                                  ' ...)'))
             
-        return '<%s: %s>' % (self.__class__.__name__, inner)
+        return '<%s: %s>' % (self.__class__.__name__, inner) 
     
     
 if hasattr(collections, 'Sequence'):
