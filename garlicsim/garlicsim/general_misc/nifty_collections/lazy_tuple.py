@@ -9,6 +9,8 @@ See its documentation for more information.
 
 import itertools
 import threading
+import collections
+from garlicsim.general_misc.third_party import abcs_collection
 
 from garlicsim.general_misc import cute_iter_tools
 from garlicsim.general_misc.infinity import infinity
@@ -38,7 +40,7 @@ def with_lock(method, *args, **kwargs):
 
     
 #blocktodo: go over all sequence and tuple methods, see what I should add
-class LazyTuple(object):
+class LazyTuple(abcs_collection.Sequence, object):
     ''' '''
     def __init__(self, iterable):
         was_given_a_sequence = sequence_tools.is_sequence(iterable)
@@ -112,35 +114,7 @@ class LazyTuple(object):
             return tuple(result)
         else:
             return result
-
-        
-    def __iter__(self):
-        for index in itertools.count():
-            try:
-                item = self.collected_data[index]
-            except IndexError:
-                if self.exhausted:
-                    raise StopIteration
-                else: # not self.exhausted
-                    self._exhaust(index)
-                    try:
-                        item = self.collected_data[index]
-                    except IndexError:
-                        assert self.exhausted
-                        raise StopIteration
-            yield item
-                
             
-    def count(self, item):
-        self._exhaust()
-        return self.collected_data.count(item)
-            
-
-    def __reversed__(self):
-        self._exhaust()
-        # blocktodo: Is this actually supposed to be a generator?
-        return reversed(self.collected_data)
-    
     
     def __len__(self):
         self._exhaust()
@@ -162,12 +136,6 @@ class LazyTuple(object):
     def __ne__(self, other):
         return not self.__eq__(other)
     
-    
-    def __contains__(self, item):
-        for member in self:
-            if member == item:
-                return True
-        return False
     
     def __nonzero__(self):
         self._exhaust(0)
@@ -243,3 +211,5 @@ class LazyTuple(object):
         return '<%s: %s>' % (self.__class__.__name__, inner)
     
     
+if getattr(collections, 'Sequence'):
+    collections.Sequence.register(LazyTuple)
