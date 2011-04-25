@@ -72,6 +72,9 @@ def test_string():
     assert sorted((lazy_tuple, 'abc', 'xyz', 'meowa')) == \
            ['abc', lazy_tuple, 'meowa', 'xyz']
     
+    assert len(lazy_tuple) == lazy_tuple.known_length == \
+           len(lazy_tuple.collected_data)
+    
     
 def test_infinite():
     lazy_tuple = LazyTuple(itertools.count())
@@ -98,4 +101,6 @@ def test_finite_iterator():
     second_to_last = lazy_tuple[-2]
     assert second_to_last == 3
     assert lazy_tuple.exhausted
+    assert len(lazy_tuple) == lazy_tuple.known_length == \
+           len(lazy_tuple.collected_data)
     
