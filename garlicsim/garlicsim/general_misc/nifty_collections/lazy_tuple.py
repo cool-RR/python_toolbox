@@ -7,6 +7,8 @@ This module defines the `LazyTuple` class.
 See its documentation for more information.
 '''
 
+from __future__ import with_statement
+
 import itertools
 import threading
 import collections

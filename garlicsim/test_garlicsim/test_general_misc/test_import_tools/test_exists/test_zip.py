@@ -33,7 +33,7 @@ def test_zip():
     zip_string = pkg_resources.resource_string(resources_package,
                                                'archive_with_module.zip')
     
-    with temp_file_tools.TemporaryFolder(prefix='temp_test_garlicsim_') \
+    with temp_file_tools.TemporaryFolder(prefix='test_garlicsim_') \
                                                           as temp_folder:
 
         temp_zip_path = os.path.join(temp_folder, 'archive_with_module.zip')

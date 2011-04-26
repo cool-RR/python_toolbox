@@ -33,7 +33,7 @@ of the simpack.
 
 def test_implicit_help():
     '''Test help text comes up when giving no arguments.'''
-    with temp_file_tools.TemporaryFolder(prefix='temp_test_garlicsim_') \
+    with temp_file_tools.TemporaryFolder(prefix='test_garlicsim_') \
                                                           as temp_folder:
         with TempWorkingDirectorySetter(temp_folder):
             with sys_tools.OutputCapturer() as output_capturer:
@@ -46,7 +46,7 @@ def test_implicit_help():
 
 def test_explicit_help():
     '''Test help text comes up when '--help' argument.'''
-    with temp_file_tools.TemporaryFolder(prefix='temp_test_garlicsim_') \
+    with temp_file_tools.TemporaryFolder(prefix='test_garlicsim_') \
                                                           as temp_folder:
         with TempWorkingDirectorySetter(temp_folder):
             with sys_tools.OutputCapturer() as output_capturer:
