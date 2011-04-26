@@ -82,6 +82,7 @@ def test_string():
     string = 'meow'
     lazy_tuple = LazyTuple(string)
     assert lazy_tuple.exhausted
+    assert repr(lazy_tuple) == "<LazyTuple: ('m', 'e', 'o', 'w')>"
     assert ''.join(lazy_tuple) == string
     assert ''.join(lazy_tuple[1:-1]) == string[1:-1]
     
@@ -109,6 +110,7 @@ def test_factory_decorator():
     
     my_count = count()
     assert isinstance(my_count, LazyTuple)
+    assert repr(my_count) == '<LazyTuple: (...)>'
     assert my_count[:10] == tuple(xrange(10))
     
 
@@ -121,6 +123,7 @@ def test_finite_iterator():
     assert lazy_tuple.exhausted
     assert len(lazy_tuple) == lazy_tuple.known_length == \
            len(lazy_tuple.collected_data)
+    assert repr(lazy_tuple) == '<LazyTuple: (0, 1, 2, 3, 4)>'
     assert LazyTuple(reversed(LazyTuple(reversed(lazy_tuple)))) == lazy_tuple
     
 def test_immutable_sequence():
