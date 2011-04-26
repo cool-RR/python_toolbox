@@ -17,8 +17,8 @@ def find_module(name, path=None):
         if path:
             raise NotImplemented
         parent_name, child_name = name.rsplit('.', 1)
-        parent = address_tools.resolve(parent_name)
-        return imp.find_module(child_name, parent.__path__)
+        parent_path = find_module(parent_name)[1]
+        return imp.find_module(child_name, [parent_path])
     else:
-        return find_module(name, path)
+        return imp.find_module(name, path)
         

@@ -7,6 +7,8 @@ This module defines the `` class.
 See its documentation for more information.
 '''
 
+from __future__ import with_statement
+
 import compileall
 import shutil
 import zipfile
@@ -50,7 +52,7 @@ def create_sample_package(format, folder):
         )
     
     with open(johnny_file_path, 'w') as johnny_file:
-        johnny.write(
+        johnny_file.write(
             "from . import submodule\n"
             "number_nine = 9\n"
         )
@@ -65,7 +67,7 @@ def create_sample_package(format, folder):
         os.remove(submodule_file_path)
         os.remove(johnny_file_path)
         
-        assert len(os.listdir(folder)) == 3
+        assert len(os.listdir(package_path)) == 3
         assert all([file_path[-3:-1] == 'py' for file_path in
                     os.listdir(folder)])
         

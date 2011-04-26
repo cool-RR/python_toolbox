@@ -7,6 +7,7 @@ from __future__ import with_statement
 
 import tempfile
 import shutil
+import os
 
 from garlicsim.general_misc.context_manager import ContextManager
 
@@ -46,6 +47,7 @@ class TemporaryFolder(ContextManager):
     def __enter__(self):
         assert not self._closed
         self.path = tempfile.mkdtemp(suffix=self.suffix, prefix=self.prefix)
+        assert os.path.isdir(self.path)
         return self.path
 
     

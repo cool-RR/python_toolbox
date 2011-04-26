@@ -3,6 +3,8 @@
 
 '''Various zip-related tools.'''
 
+from __future__ import with_statement
+
 import zipfile
 import os.path
 import re
