@@ -188,6 +188,9 @@ def test_comparisons():
     assert not LazyTuple(iter([])) > LazyTuple(iter([]))
     assert not LazyTuple(iter([])) < LazyTuple(iter([]))
     
+    assert LazyTuple(iter([])) <= (1, 2, 3)
+    assert LazyTuple(iter([])) < (1, 2, 3)
+    
     
     
 def test_immutable_sequence():
