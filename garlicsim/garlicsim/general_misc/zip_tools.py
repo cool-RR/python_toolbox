@@ -5,6 +5,7 @@
 
 from __future__ import with_statement
 
+import contextlib
 import zipfile
 import os.path
 import re

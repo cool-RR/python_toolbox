@@ -69,7 +69,7 @@ def create_sample_package(format, folder):
         
         assert len(os.listdir(package_path)) == 3
         assert all([file_path[-3:-1] == 'py' for file_path in
-                    os.listdir(folder)])
+                    os.listdir(package_path)])
         
         return folder
     
