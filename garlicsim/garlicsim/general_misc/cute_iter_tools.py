@@ -144,3 +144,17 @@ def iter_with(iterable, context_manager):
         yield next_item
         
         
+def izip_longest(*iterables, **kwargs):
+    # This is a really obfuscated algorithm, simplify and/or explain
+    fill_value = kwargs.get('fillvalue', None)
+    def sentinel(counter=([fill_value] * (len(iterables) - 1)).pop):
+        yield counter()
+    fillers = itertools.repeat(fill_value)
+    iterables = [itertools.chain(iterable, sentinel(), fillers) for iterable
+                 in iterables]
+    try:
+        for tuple_ in itertools.izip(*iterables):
+            yield tuple_
+    except IndexError:
+        raise StopIteration
+    
