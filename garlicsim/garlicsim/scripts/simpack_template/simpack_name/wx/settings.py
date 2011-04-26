@@ -33,6 +33,6 @@
 # These may be either scalar state functions or scalar history functions.
 
 
-# STATE_CREATION_DIALOG = widgets.state_creation_dialog
+# STATE_CREATION_DIALOG = widgets.state_creation_dialog.StateCreationDialog
 #
 # Dialog for creating a root state.
