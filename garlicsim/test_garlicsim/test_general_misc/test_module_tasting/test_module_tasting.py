@@ -11,28 +11,55 @@ import os.path
 import sys
 
 from garlicsim.general_misc import module_tasting
+from garlicsim.general_misc import temp_file_tools
+from garlicsim.general_misc import cute_iter_tools
+from garlicsim.general_misc import sys_tools
+
+from . import sample_package_creation
+
+module_name_suffixes = ['', '.__init__', 'johnny']
+
 
 def test_module_tasting():
-    old_sys_modules = sys.modules.copy()
-    path = os.path.realpath(
-        os.path.join(
-            os.path.dirname(__file__),
-            'sample_modules/x/__init__.py'
-        )
+    
+    combinations = cute_iter_tools.product(
+        sample_package_creation.formats,
+        module_name_suffixes
     )
     
-    module_address = ('test_garlicsim.test_general_misc.test_module_tasting.'
-                      'sample_modules.x')
+    for format, module_name_suffix in combinations:
+        yield _check_module_tasting, format, module_name_suffix
     
-    tasted_module = module_tasting.taste_module(
-        #path
-        ('test_garlicsim.test_general_misc.test_module_tasting.'
-         'sample_modules.x')
-    )
-    assert tasted_module.__doc__ == "The tasted module's docstring."
-    assert tasted_module.my_string == 'Just a string'
-    assert tasted_module.my_list == ['A', 'list', 'of', 'stuff']
+    
 
+def _check_module_tasting(format, module_name_suffix):
+    old_sys_modules = sys.modules.copy()
+    
+    with temp_file_tools.TemporaryFolder(prefix='temp_garlicsim_') as \
+                                                              temporary_folder:
+        
+    
+        path_to_add = sample_package_creation.create_sample_package(
+            format,
+            temporary_folder
+        )
+        
+        with sys_tools.TempSysPathAdder(path_to_add):
+            
+            module_name = 'x' + module_name_suffix
+            
+            tasted_module = module_tasting.taste_module(module_name)
+            
+            if module_name in ('', '.__init__'):
+                assert tasted_module.__doc__ == "The tasted module's docstring."
+                assert tasted_module.my_string == 'Just a string'
+                assert tasted_module.my_list == ['A', 'list', 'of', 'stuff']
+                
+            else:
+                assert module_name == 'johnny'                
+                assert tasted_module.number_nine == 9
+                
+    
     ### Ensuring the module wasn't added to `sys.modules`: ####################
     #                                                                         #
     new_module_names = [key for key in sys.modules if key
@@ -41,8 +68,5 @@ def test_module_tasting():
         assert not new_module_name.startswith(module_address)
     #                                                                         #
     ### Finished ensuring the module wasn't added to `sys.modules`. ###########
-    
 
-#def _check_module_tasting(module_path_or_address):
-    #pass
 

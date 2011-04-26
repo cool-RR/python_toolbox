@@ -55,8 +55,10 @@ def create_sample_package(format, folder):
             "number_nine = 9\n"
         )
             
-    
-    if format == ('pyco'):
+    if format == 'py':
+        return folder
+        
+    if format == 'pyco':
         compileall.compile_dir(package_path)
             
         os.remove(init_file_path)
@@ -67,7 +69,7 @@ def create_sample_package(format, folder):
         assert all([file_path[-3:-1] == 'py' for file_path in
                     os.listdir(folder)])
         
-        return
+        return folder
     
     elif format == 'zip':
         with temp_file_tools.TemporaryFolder(prefix='test_garlicsim_') as \
@@ -90,4 +92,4 @@ def create_sample_package(format, folder):
                 final_zip_path
             )
             
-            
+            return final_zip_path
