@@ -9,6 +9,7 @@ import itertools
 from garlicsim.general_misc.third_party import abcs_collection
 from garlicsim.general_misc import cute_iter_tools
 from garlicsim.general_misc import sequence_tools
+from garlicsim.general_misc import cute_testing
 
 
 from garlicsim.general_misc.nifty_collections import LazyTuple
@@ -28,6 +29,7 @@ def test():
     lazy_tuple = LazyTuple(self_aware_uuid_iterator)
     assert len(self_aware_uuid_iterator.data) == 0
     assert not lazy_tuple.exhausted
+    assert repr(lazy_tuple) == '<LazyTuple: (...)>'
     
     first = lazy_tuple[0]
     assert len(self_aware_uuid_iterator.data) == 1
@@ -62,6 +64,19 @@ def test():
     assert first_twenty[:12] == first_twelve
     
 
+def test_empty():
+    def empty_generator():
+        if False: yield # (Unreachable `yield` to make this a generator.)
+        raise StopIteration
+    lazy_tuple = LazyTuple(empty_generator())
+    assert repr(lazy_tuple) == '<LazyTuple: (...)>'
+    
+    with cute_testing.RaiseAssertor(IndexError):
+        lazy_tuple[7]
+        
+    assert repr(lazy_tuple) == '<LazyTuple: ()>'
+        
+    
     
 def test_string():
     string = 'meow'

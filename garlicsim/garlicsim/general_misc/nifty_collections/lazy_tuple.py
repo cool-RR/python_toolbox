@@ -84,8 +84,8 @@ class LazyTuple(abcs_collection.Sequence, object):
         elif isinstance(i, int):
             exhaustion_point = _convert_int_index_to_exhaustion_point(i)
             
-        else
-            assert isinstance(i, slice):
+        else:
+            assert isinstance(i, slice)
 
             # todo: can be smart and figure out if it's an empty slice and then
             # not exhaust.
@@ -202,12 +202,12 @@ class LazyTuple(abcs_collection.Sequence, object):
                              ')'))
                              
         else: # not self.exhausted
-            if self.collected_data == ():
-                inner = '()'
+            if self.collected_data == []:
+                inner = '(...)'
             else: 
                 inner = ''.join(('(',
                                  repr(self.collected_data)[1:-1],
-                                 ' ...)'))
+                                 ', ...)'))
             
         return '<%s: %s>' % (self.__class__.__name__, inner) 
     
