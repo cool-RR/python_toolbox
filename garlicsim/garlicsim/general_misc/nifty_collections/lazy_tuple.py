@@ -164,13 +164,23 @@ class LazyTuple(abcs_collection.Sequence, object):
             return False
         for a, b in cute_iter_tools.izip_longest(self, other,
                                                  fillvalue=_SENTINEL):
-            if a < b:
-                return True
+            if a is _SENTINEL:
+                # `self` ran out. Now there can be two cases: (a) `other` ran
+                # out too or (b) `other` didn't run out yet. In case of (a), we
+                # have `self == other`, and in case of (b), we have `self <
+                # other`. In any case, `self <= other is True` so we can
+                # unconditionally return `True`.
+                return True            
+            elif b is _SENTINEL:
+                assert a is not _SENTINEL
+                return False
             elif a == b:
                 continue
-            elif a is _SENTINEL and b is not _SENTINEL:
+            elif a < b:
                 return True
-            return False
+            else:
+                assert a > b
+                return False
 
         
     def __le__(self, other):
