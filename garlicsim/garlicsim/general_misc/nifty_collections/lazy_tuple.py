@@ -181,18 +181,6 @@ class LazyTuple(abcs_collection.Sequence, object):
             else:
                 assert a > b
                 return False
-
-        
-    def __le__(self, other):
-        return self.__lt__(other) or self.__eq__(other)
-
-    
-    def __gt__(self, other):
-        return not self.__lt__(other) and not self.__eq__(other)
-
-    
-    def __ge__(self, other):
-        return not self.__lt__(other)
     
     
     def __repr__(self):
@@ -216,7 +204,10 @@ class LazyTuple(abcs_collection.Sequence, object):
             
         return '<%s: %s>' % (self.__class__.__name__, inner) 
     
-
     
+cmp_tools.total_ordering(LazyTuple)
+
+
 if hasattr(collections, 'Sequence'):
     collections.Sequence.register(LazyTuple)
+    

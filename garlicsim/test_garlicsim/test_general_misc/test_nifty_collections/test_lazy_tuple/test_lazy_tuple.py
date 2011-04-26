@@ -118,6 +118,11 @@ def test_finite_iterator():
     my_finite_iterator = iter(range(5))
     lazy_tuple = LazyTuple(my_finite_iterator)
     assert not lazy_tuple.exhausted
+
+    assert list(itertools.islice(lazy_tuple, 0, 2)) == [0, 1]
+    assert not lazy_tuple.exhausted
+    assert repr(lazy_tuple) == '<LazyTuple: (0, 1, ...)>'
+    
     second_to_last = lazy_tuple[-2]
     assert second_to_last == 3
     assert lazy_tuple.exhausted
@@ -125,6 +130,30 @@ def test_finite_iterator():
            len(lazy_tuple.collected_data)
     assert repr(lazy_tuple) == '<LazyTuple: (0, 1, 2, 3, 4)>'
     assert LazyTuple(reversed(LazyTuple(reversed(lazy_tuple)))) == lazy_tuple
+    
+
+def test_comparisons():
+
+    lazy_tuple = LazyTuple(iter((0, 1, 2, 3, 4)))
+    assert lazy_tuple.known_length == 0
+    
+    assert lazy_tuple > []
+    assert lazy_tuple.known_length == 1
+
+    assert not lazy_tuple < []
+    assert lazy_tuple.known_length == 1
+
+    assert not lazy_tuple <= []
+    assert lazy_tuple.known_length == 1
+    
+    assert not lazy_tuple >= [0, 7]
+    assert lazy_tuple.known_length == 2
+    
+    assert not lazy_tuple > [0, 1, 7]
+    assert lazy_tuple.known_length == 3
+    
+    assert lazy_tuple > [0, 1, 2, 3]
+    assert lazy_tuple.known_length == 5
     
     assert lazy_tuple == (0, 1, 2, 3, 4)
     assert lazy_tuple != [0, 1, 2, 3, 4] # Can't compare to mutable sequence
@@ -152,6 +181,13 @@ def test_finite_iterator():
     assert lazy_tuple > LazyTuple((0, 1, 2, 3, 3, 6))
     assert lazy_tuple >= LazyTuple((0, 1, 2, 3, 3, 6))
     assert lazy_tuple > (0, 1, 2, 3, 3, 6)
+    
+    assert LazyTuple(iter([])) == LazyTuple(iter([]))
+    assert LazyTuple(iter([])) <= LazyTuple(iter([]))
+    assert LazyTuple(iter([])) >= LazyTuple(iter([]))
+    assert not LazyTuple(iter([])) > LazyTuple(iter([]))
+    assert not LazyTuple(iter([])) < LazyTuple(iter([]))
+    
     
     
 def test_immutable_sequence():
