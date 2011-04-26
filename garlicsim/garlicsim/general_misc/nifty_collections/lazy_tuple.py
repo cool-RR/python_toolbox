@@ -15,6 +15,7 @@ from garlicsim.general_misc.third_party import abcs_collection
 from garlicsim.general_misc import cute_iter_tools
 from garlicsim.general_misc.infinity import infinity
 from garlicsim.general_misc import decorator_tools
+from garlicsim.general_misc import cmp_tools
 from garlicsim.general_misc import sequence_tools
 
 
@@ -172,21 +173,15 @@ class LazyTuple(abcs_collection.Sequence, object):
             return False
 
         
+    def __le__(self, other):
+        return self.__lt__(other) or self.__eq__(other)
+
+    
     def __gt__(self, other):
-        '''
-        This method returns ``True`` if this list is "greater than" the given
-        `other` list. This is the case if...
+        return not self.__lt__(other) and not self.__eq__(other)
 
-        - this list is not empty and the other is
-        - the first nth item in this list which is unequal to the
-          corresponding item in the other list, is greater than the
-          corresponding item.
-
-        If this and the other list is empty this method will return ``False``.
-        '''
-
-        if not self and not other:
-            return False
+    
+    def __ge__(self, other):
         return not self.__lt__(other)
     
     
@@ -211,6 +206,7 @@ class LazyTuple(abcs_collection.Sequence, object):
             
         return '<%s: %s>' % (self.__class__.__name__, inner) 
     
+
     
 if hasattr(collections, 'Sequence'):
     collections.Sequence.register(LazyTuple)
