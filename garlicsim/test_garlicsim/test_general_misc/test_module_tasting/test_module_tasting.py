@@ -69,7 +69,7 @@ def _check_module_tasting(format, module_name):
     new_module_names = [key for key in sys.modules if key
                         not in old_sys_modules]
     for new_module_name in new_module_names:
-        assert not new_module_name.startswith(module_address)
+        assert not new_module_name.startswith(module_name)
     #                                                                         #
     ### Finished ensuring the module wasn't added to `sys.modules`. ###########
 
