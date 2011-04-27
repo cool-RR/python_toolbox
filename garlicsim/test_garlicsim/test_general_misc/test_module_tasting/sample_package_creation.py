@@ -26,7 +26,7 @@ def create_sample_package(format, folder):
     
     assert not os.listdir(folder) # `folder` is empty
     
-    package_path = os.path.join(folder, 'x')
+    package_path = os.path.join(folder, 'my_package')
     os.mkdir(package_path)
     
     init_file_path = os.path.join(package_path, '__init__.py')
@@ -61,7 +61,7 @@ def create_sample_package(format, folder):
         return folder
         
     if format == 'pyco':
-        compileall.compile_dir(package_path, 1)
+        compileall.compile_dir(package_path, quiet=1)
             
         os.remove(init_file_path)
         os.remove(submodule_file_path)
