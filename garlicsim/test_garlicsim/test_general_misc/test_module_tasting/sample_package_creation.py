@@ -61,7 +61,7 @@ def create_sample_package(format, folder):
         return folder
         
     if format == 'pyco':
-        compileall.compile_dir(package_path)
+        compileall.compile_dir(package_path, 1)
             
         os.remove(init_file_path)
         os.remove(submodule_file_path)
