@@ -50,11 +50,15 @@ def taste_module(path_or_address):
         # blocktodo: implement address
         path = path_or_address
     
-    assert os.path.exists(path)
+    is_zip_module = '.zip' in path
+        
+    if not is_zip_module:
+        assert os.path.exists(path)
     
-    old_sys_modules = sys.modules.copy() # blocktodo: Make context manager for this
+    # blocktodo: Make context manager for this
+    old_sys_modules = sys.modules.copy()
     
-    name = 'tasted_module_%s' % uuid.uuid4()
+    name = 'tasted_module_%s' % uuid.uuid4() if not is_zip_module else None
     
     with TempImportHookSetter(mock_import):
         

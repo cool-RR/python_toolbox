@@ -7,6 +7,7 @@ import sys
 import os.path
 import imp
 import zipimport
+import zipfile
 
 from garlicsim.general_misc import package_finder
 from garlicsim.general_misc import caching
@@ -135,6 +136,25 @@ def exists(module_name):
     else:
         return True
 
+def _import_by_path_from_zip(path, name=None):
+    '''
+    Import module/package by path. blocktododoc, psudopath inside zip? no file
+    extensions?
+    
+    You may specify a name: This is helpful only if it's an hierarchical name,
+    i.e. a name with dots like "orange.claw.hammer". This will become the
+    imported module's __name__ attribute. Otherwise only the short name,
+    "hammer", will be used, which might cause problems in some cases. (Like
+    when using multiprocessing.)
+    '''
+    assert '.zip' in path
+    
+    parent_path, child_name = path.rsplit(os.path.sep, 1)
+    zip_importer = zipimport.zipimporter(parent_path)
+    module = zip_importer.load_module(child_name)
+        
+    return module
+
     
 def import_by_path(path, name=None, keep_in_sys_modules=True):
     '''
@@ -146,20 +166,26 @@ def import_by_path(path, name=None, keep_in_sys_modules=True):
     "hammer", will be used, which might cause problems in some cases. (Like
     when using multiprocessing.)
     '''
-    short_name = os.path.splitext(os.path.split(path)[1])[0]
-    if name is None: name = short_name
-    path_to_dir = os.path.dirname(path)
-    my_file = None
-    try:
-        (my_file, pathname, description) = \
-            imp.find_module(short_name, [path_to_dir])
-        module = imp.load_module(name, my_file, pathname, description)
-    finally:
-        if my_file is not None:
-            my_file.close()
-            
+    if '.zip' in path:
+        if name is not None:
+            raise NotImplementedError
+        module = _import_by_path_from_zip(path)
+        
+    else: # '.zip' not in path
+        short_name = os.path.splitext(os.path.split(path)[1])[0]
+        if name is None: name = short_name
+        path_to_dir = os.path.dirname(path)
+        my_file = None
+        try:
+            (my_file, pathname, description) = \
+                imp.find_module(short_name, [path_to_dir])
+            module = imp.load_module(name, my_file, pathname, description)
+        finally:
+            if my_file is not None:
+                my_file.close()
+                
     if not keep_in_sys_modules:
-        del sys.modules[name]
+        del sys.modules[module.__name__]
         
     return module
 
@@ -213,14 +239,32 @@ def _find_module_in_some_zip_path(module_name, path=None):
             # todo: should find smarter way of catching this, excepting
             # `ZipImportError` is not a good idea.
         
-        result = zip_importer.find_module(module_name)
+        result = zip_importer.find_module(
+            # Python's zip importer stupidly needs us to replace dots with path
+            # separators:  
+            _module_address_to_partial_path(module_name)
+        )
         if result is None:
             continue
         else:
             assert result is zip_importer
-            return zip_path
+            
+            #if '.' in module_name:
+                #parent_package_name, child_module_name = \
+                    #module_name.rsplit('.')
+                #leading_path = \
+                    #_module_address_to_partial_path(parent_package_name)
+            #else:
+                #leading_path = ''
+                
+            return os.path.join(zip_path,
+                                _module_address_to_partial_path(module_name))
 
     if original_path_argument is not None:
         raise ImportError('Module not found in the given zip path.')
     else:
         raise ImportError('Module not found in any of the zip paths.')
+
+    
+def _module_address_to_partial_path(module_address):
+    return os.path.sep.join(module_address.split('.'))
