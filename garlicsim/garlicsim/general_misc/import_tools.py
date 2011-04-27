@@ -117,39 +117,6 @@ def import_if_exists(module_name, silent_fail=False):
     return normal_import(module_name)
 
 
-def _module_exists_in_some_zip_path(module_name):
-    '''
-    Return whether a module by the name `module_name` exists in a zip archive.
-    
-    Used internally by `exists`.
-    '''
-    assert '.' not in module_name
-    
-    zip_paths = [path for path in sys.path if '.zip' in path]
-    # todo: Find better way to filter zip paths.
-    
-    for zip_path in zip_paths:
-
-        # Trying to create a zip importer:
-        try:
-            zip_importer = zipimport.zipimporter(zip_path)
-        except zipimport.ZipImportError:
-            continue
-            # Excepted `ZipImportError` because we may have zip paths in
-            # `sys.path` that don't really exist, which causes `zipimport` to
-            # raise `ZipImportError`.
-            #
-            # todo: should find smarter way of catching this, excepting
-            # `ZipImportError` is not a good idea.
-        
-        if zip_importer.find_module(module_name) is not None:    
-            return True
-        else:
-            continue
-        
-    return False
-
-
 def exists(module_name):
     '''
     Return whether a module by the name `module_name` exists.
@@ -169,8 +136,6 @@ def exists(module_name):
         return True
 
     
-# Unused for now:
-
 def import_by_path(path, name=None, keep_in_sys_modules=True):
     '''
     Import module/package by path.
@@ -198,3 +163,64 @@ def import_by_path(path, name=None, keep_in_sys_modules=True):
         
     return module
 
+
+def find_module(module_name, path=None, look_in_zip=True):
+    
+    if path:
+        raise NotImplemented
+    
+    if look_in_zip:
+        try:
+            return _find_module_in_some_zip_path(module_name, path)
+        except ImportError:
+            pass        
+    
+    if '.' in module_name:
+        parent_name, child_name = module_name.rsplit('.', 1)
+        parent_path = find_module(parent_name)[1]
+        return imp.find_module(child_name, [parent_path])[1]
+    else:
+        return imp.find_module(module_name, path)[1]
+
+    
+def _find_module_in_some_zip_path(module_name, path=None):
+    '''
+    Return whether a module by the name `module_name` exists in a zip archive.
+    blocktododoc
+    Used internally by `exists`.
+    '''
+    assert '.' not in module_name
+    
+    original_path_argument = path
+    
+    if path is not None:
+        zip_paths = [path]
+    else:
+        zip_paths = [path for path in sys.path if '.zip' in path]
+        # todo: Find better way to filter zip paths.
+    
+    for zip_path in zip_paths:
+
+        # Trying to create a zip importer:
+        try:
+            zip_importer = zipimport.zipimporter(zip_path)
+        except zipimport.ZipImportError:
+            continue
+            # Excepted `ZipImportError` because we may have zip paths in
+            # `sys.path` that don't really exist, which causes `zipimport` to
+            # raise `ZipImportError`.
+            #
+            # todo: should find smarter way of catching this, excepting
+            # `ZipImportError` is not a good idea.
+        
+        result = zip_importer.find_module(module_name)
+        if result is None:
+            continue
+        else:
+            assert result is zip_importer
+            return zip_path
+
+    if original_path_argument is not None:
+        raise ImportError('Module not found in the given zip path.')
+    else:
+        raise ImportError('Module not found in any of the zip paths.')

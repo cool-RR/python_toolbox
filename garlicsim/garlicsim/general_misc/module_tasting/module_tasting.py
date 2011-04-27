@@ -21,7 +21,6 @@ from garlicsim.general_misc.third_party import mock as mock_module
 from garlicsim.general_misc.temp_value_setters import TempImportHookSetter
 from garlicsim.general_misc import address_tools
 from garlicsim.general_misc import import_tools
-from garlicsim.general_misc import cute_imp
 
 ###############################################################################
 #                                                                             #
@@ -46,7 +45,7 @@ def taste_module(path_or_address):
     
     if address_tools.is_address(path_or_address):
         address = path_or_address
-        path = cute_imp.find_module(path_or_address)[1]
+        path = import_tools.find_module(path_or_address)[1]
     else:
         # blocktodo: implement address
         path = path_or_address
