@@ -165,7 +165,9 @@ def import_by_path(path, name=None, keep_in_sys_modules=True):
 
 
 def find_module(module_name, path=None, look_in_zip=True):
-    
+    '''
+    blocktodo: test
+    '''
     if path:
         raise NotImplemented
     
@@ -177,7 +179,7 @@ def find_module(module_name, path=None, look_in_zip=True):
     
     if '.' in module_name:
         parent_name, child_name = module_name.rsplit('.', 1)
-        parent_path = find_module(parent_name)[1]
+        parent_path = find_module(parent_name)
         return imp.find_module(child_name, [parent_path])[1]
     else:
         return imp.find_module(module_name, path)[1]
@@ -189,8 +191,6 @@ def _find_module_in_some_zip_path(module_name, path=None):
     blocktododoc
     Used internally by `exists`.
     '''
-    assert '.' not in module_name
-    
     original_path_argument = path
     
     if path is not None:

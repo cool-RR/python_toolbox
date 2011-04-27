@@ -45,7 +45,7 @@ def taste_module(path_or_address):
     
     if address_tools.is_address(path_or_address):
         address = path_or_address
-        path = import_tools.find_module(path_or_address)[1]
+        path = import_tools.find_module(path_or_address)
     else:
         # blocktodo: implement address
         path = path_or_address
