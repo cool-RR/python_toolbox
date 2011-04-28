@@ -34,6 +34,7 @@ MAC_BOTTOM_SPACING_SIZE = 10
 
 class SimpackSelectionDialog(CuteDialog):
     '''Dialog for selecting a simpack when creating a new gui project.'''
+
     
     def __init__(self, frame):
         CuteDialog.__init__(
@@ -47,7 +48,8 @@ class SimpackSelectionDialog(CuteDialog):
         self.frame = frame
         
         with wx_tools.WindowFreezer(self):
-            self.__init_build()
+            with self.accelerator_table_freezer:
+                self.__init_build()
             
         
     def __init_build(self):
