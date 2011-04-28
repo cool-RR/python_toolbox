@@ -128,11 +128,12 @@ def exists(module_name):
     
     Supports modules imported from a zip file.
     '''
-    assert '.' not in module_name
+    if '.' in module_name:
+        raise NotImplementedError
     try:
-        imp.find_module(module_name)
+        find_module(module_name)
     except ImportError:
-        return _module_exists_in_some_zip_path(module_name)
+        return False
     else:
         return True
 

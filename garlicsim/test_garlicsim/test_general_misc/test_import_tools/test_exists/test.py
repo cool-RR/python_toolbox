@@ -16,4 +16,5 @@ def test():
     assert exists('email')
     assert exists('re')
     assert exists('sys')
-    nose.tools.assert_raises(Exception, lambda: exists('email.encoders'))
+    nose.tools.assert_raises(NotImplementedError,
+                             lambda: exists('email.encoders'))

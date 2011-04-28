@@ -133,6 +133,14 @@ def test_finite_iterator():
     assert repr(lazy_tuple) == '<LazyTuple: (0, 1, 2, 3, 4)>'
     assert LazyTuple(reversed(LazyTuple(reversed(lazy_tuple)))) == lazy_tuple
     
+    assert 6 * lazy_tuple == 2 * lazy_tuple * 3 == lazy_tuple * 3 * 2 == \
+           (0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4,
+            0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4)
+    
+    assert lazy_tuple + ('meow', 'frr') == (0, 1, 2, 3, 4, 'meow', 'frr')
+    assert ('meow', 'frr') + lazy_tuple == ('meow', 'frr', 0, 1, 2, 3, 4)
+        
+    
 
 def test_comparisons():
 

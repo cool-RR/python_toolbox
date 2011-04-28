@@ -43,6 +43,7 @@ def with_lock(method, *args, **kwargs):
 
     
 #blocktodo: go over all sequence and tuple methods, see what I should add
+# blocktodo: what about hash?
 class LazyTuple(abcs_collection.Sequence, object):
     ''' '''
     def __init__(self, iterable):
@@ -205,6 +206,22 @@ class LazyTuple(abcs_collection.Sequence, object):
                                  ', ...)'))
             
         return '<%s: %s>' % (self.__class__.__name__, inner) 
+    
+    
+    def __add__(self, other):
+        return tuple(self) + tuple(other)
+    
+    
+    def __radd__(self, other):
+        return tuple(other) + tuple(self)
+    
+    
+    def __mul__(self, other):
+        return tuple(self).__mul__(other)
+    
+    
+    def __rmul__(self, other):
+        return tuple(self).__rmul__(other)
     
     
 cmp_tools.total_ordering(LazyTuple)
