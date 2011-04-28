@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''Defines various tools for comparisons.'''
-# blocktodo: rename to `comparison_tools`
+
 import sys
 
 
