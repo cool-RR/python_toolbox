@@ -51,9 +51,32 @@ def _with_lock(method, *args, **kwargs):
         return method(*args, **kwargs)
 
     
-# blocktodo: what about hash?
 class LazyTuple(abcs_collection.Sequence, object):
-    ''' '''
+    '''
+    A lazy tuple which requests as few values as possible from its iterator.
+    
+    Wrap your iterators with `LazyTuple` and enjoy tuple-ish features like
+    indexed access, comparisons, length measuring, element counting and more.
+    
+    Example:
+    
+        def my_generator():
+            yield 'hello'; yield 'world'; yield 'have'; yield 'fun'
+            
+        lazy_tuple = LazyTuple(my_generator())
+        
+        assert lazy_tuple[2] == 'have'
+        assert len(lazy_tuple) == 4
+    
+    `LazyTuple` holds the given iterable and pulls items out of it. It pulls as
+    few items as it possibly can. For example, if you ask for the third
+    element, it will pull exactly three elements and then return the third one.
+    
+    Some actions require exhausting the entire iterator. For example, checking
+    the `LazyTuple` length, or doing indexex access with a negative index.
+    (e.g. asking for the seventh-to-last element.)
+    '''
+    #blocktodo: lazytuple of lazytuple causes exhaustion of both
     def __init__(self, iterable):
         was_given_a_sequence = sequence_tools.is_sequence(iterable)
         
