@@ -2,12 +2,12 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the `ObsoleteCruncherError` exception.
+This module defines the `ObsoleteCruncherException` exception.
 
 See its documentation for more info.
 '''
 
-class ObsoleteCruncherError(BaseException):
+class ObsoleteCruncherException(BaseException):
     '''
     The cruncher that got this exception raised became obsolte.
     

@@ -15,7 +15,7 @@ from garlicsim.general_misc import string_tools
 
 import garlicsim
 from garlicsim.asynchronous_crunching import \
-     BaseCruncher, HistoryBrowser, ObsoleteCruncherError, CrunchingProfile
+     BaseCruncher, HistoryBrowser, ObsoleteCruncherException, CrunchingProfile
 
 
 __all__ = ['ThreadCruncher']
@@ -107,14 +107,14 @@ class ThreadCruncher(threading.Thread, BaseCruncher):
         Internal method.
         
         This is called when the cruncher is started. It just calls the
-        `main_loop` method in a `try` clause, excepting `ObsoleteCruncherError`;
+        `main_loop` method in a `try` clause, excepting `ObsoleteCruncherException`;
         That exception means that the cruncher has been retired in the middle of
         its job, so it is propagated up to this level, where it causes the
         cruncher to terminate.
         '''
         try:
             self.main_loop()
-        except ObsoleteCruncherError:
+        except ObsoleteCruncherException:
             return
 
         
@@ -179,7 +179,7 @@ class ThreadCruncher(threading.Thread, BaseCruncher):
         we retire the cruncher.
         '''
         if self.crunching_profile.state_satisfies(state):
-            raise ObsoleteCruncherError("We're done working, the clock target "
+            raise ObsoleteCruncherException("We're done working, the clock target "
                                         "has been reached. Shutting down.")
 
         
@@ -198,7 +198,7 @@ class ThreadCruncher(threading.Thread, BaseCruncher):
     def process_order(self, order):
         '''Process an order receieved from `.order_queue`.'''
         if order == 'retire':
-            raise ObsoleteCruncherError("Cruncher received a 'retire' order; "
+            raise ObsoleteCruncherException("Cruncher received a 'retire' order; "
                                         "Shutting down.")
         
         elif isinstance(order, CrunchingProfile):
@@ -208,7 +208,7 @@ class ThreadCruncher(threading.Thread, BaseCruncher):
     def process_crunching_profile_order(self, order):
         '''Process an order to update the crunching profile.'''
         if self.crunching_profile.step_profile != order.step_profile:
-            raise ObsoleteCruncherError('Step profile changed; shutting down. '
+            raise ObsoleteCruncherException('Step profile changed; shutting down. '
                                         'Crunching manager should create a '
                                         'new cruncher.')
         self.crunching_profile = order
