@@ -52,3 +52,4 @@ def total_ordering(cls):
             opfunc.__doc__ = getattr(float, opname).__doc__
             setattr(cls, opname, opfunc)
     return cls
+

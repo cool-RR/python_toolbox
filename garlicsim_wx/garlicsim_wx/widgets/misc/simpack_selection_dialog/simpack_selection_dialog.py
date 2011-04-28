@@ -17,7 +17,7 @@ import pkgutil
 import wx
 import pkg_resources
 
-from garlicsim.general_misc.cmp_tools import underscore_hating_key
+from garlicsim.general_misc import comparison_tools
 from garlicsim.general_misc import address_tools
 from garlicsim.general_misc import path_tools
 from garlicsim.general_misc import import_tools
@@ -257,7 +257,9 @@ class SimpackSelectionDialog(CuteDialog):
                 (package_prefix + package_name[1:]) for package_name in
                 package_finder.get_packages(path_to_search, self_in_name=False)
             ]
-            list_of_simpacks_in_simpack_place.sort(cmp=underscore_hating_cmp)
+            list_of_simpacks_in_simpack_place.sort(
+                key=comparison_tools.underscore_hating_key
+            )
             
             self.list_of_simpacks += list_of_simpacks_in_simpack_place
             
