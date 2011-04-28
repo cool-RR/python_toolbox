@@ -76,24 +76,37 @@ class LazyTuple(abcs_collection.Sequence, object):
     the `LazyTuple` length, or doing indexex access with a negative index.
     (e.g. asking for the seventh-to-last element.)
     '''
-    #blocktodo: lazytuple of lazytuple causes exhaustion of both
+    
     def __init__(self, iterable):
-        was_given_a_sequence = sequence_tools.is_sequence(iterable)
+        was_given_a_sequence = sequence_tools.is_sequence(iterable) and \
+                               not isinstance(iterable, LazyTuple)
         
         self.exhausted = True if was_given_a_sequence else False
-        ''' '''
+        '''Flag saying whether the internal iterator is totally exhausted.'''
         
         self.collected_data = list(iterable) if was_given_a_sequence else []
-        ''' '''
+        '''All the items that were collected from the iterable.'''
         
         self._iterator = None if was_given_a_sequence else iter(iterable)
-        ''' '''
+        '''The internal iterator from which we get data.'''
         
         self.lock = threading.Lock()
+        '''Lock used while exhausting to make `LazyTuple` thread-safe.'''
         
         
     @classmethod
     def factory(cls, callable):
+        '''
+        Decorator to make iterator-creators return a `LazyTuple`.
+        
+        Example:
+        
+            @LazyTuple.factory
+            def my_generator():
+                yield 'hello'; yield 'world'; yield 'have'; yield 'fun'
+                
+        This can be 
+        '''
         def inner(function, *args, **kwargs):
             return cls(callable(*args, **kwargs))
         return decorator_tools.decorator(inner, callable)

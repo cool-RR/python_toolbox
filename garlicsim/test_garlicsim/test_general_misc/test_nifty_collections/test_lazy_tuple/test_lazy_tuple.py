@@ -115,6 +115,22 @@ def test_factory_decorator():
     assert repr(my_count) == '<LazyTuple: (...)>'
     assert my_count[:10] == tuple(xrange(10))
     
+    
+    class Meow(abcs_collection.Iterator):
+        def __next__(self):
+            yield 1
+            yield 2
+            yield 3
+            
+    # Decorating manually for Python 2.5 compatibility:
+    Meow = LazyTuple.factory(Meow)
+    
+    meow = Meow()
+    assert isinstance(meow, LazyTuple)
+    assert meow.known_length == 0
+    meow.exhaust()
+    assert meow.known_length == 3
+    
 
 def test_finite_iterator():
     my_finite_iterator = iter(range(5))
