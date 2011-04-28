@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-Defines the `TempWorkingDirectorySetter` class. blocktododoc
+Defines the `TempImportHookSetter` class.
 
 See its documentation for more details.
 '''
@@ -14,16 +14,13 @@ from .temp_value_setter import TempValueSetter
 
 class TempImportHookSetter(TempValueSetter):
     '''
-    Context manager for temporarily changing the working directory. blocktododoc
-    
-    The temporary working directory is set before the suite starts, and the
-    original working directory is used again after the suite finishes.
+    Context manager for temporarily setting a function as the import hook.
     '''
     def __init__(self, import_hook):
         '''
-        Construct the `TempWorkingDirectorySetter`. blocktododoc
+        Construct the `TempImportHookSetter`.
         
-        `working_directory` is the temporary working directory to use.
+        `import_hook` is the function to be used as the import hook.
         '''
         assert callable(import_hook)
         TempValueSetter.__init__(self,

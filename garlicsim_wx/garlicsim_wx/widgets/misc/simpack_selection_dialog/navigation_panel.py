@@ -13,6 +13,7 @@ import glob
 import pkgutil
 
 import wx
+import wx.lib.dialogs
 import pkg_resources
 
 from garlicsim.general_misc.comparison_tools import underscore_hating_key
@@ -116,6 +117,7 @@ class NavigationPanel(wx.Panel):
                 )
             ),
         )
+        self.Bind(wx.EVT_BUTTON, self._on_back_button, source=self.back_button)
         self.small_h_sizer.Add(
             self.back_button,
             proportion=0,
@@ -132,6 +134,8 @@ class NavigationPanel(wx.Panel):
                 )
             ),
         )
+        self.Bind(wx.EVT_BUTTON, self._on_forward_button,
+                  source=self.forward_button)
         self.small_h_sizer.Add(
             self.forward_button,
             proportion=0,
@@ -145,6 +149,33 @@ class NavigationPanel(wx.Panel):
             self.big_v_sizer.AddSpacer(
                 MAC_BOTTOM_SPACING_SIZE
             )
+            
+        self.accelerator_table = wx.AcceleratorTable(
+            [
+                (wx.ACCEL_ALT, wx.WXK_LEFT, self.back_button.Id),
+                (wx.ACCEL_ALT, wx.WXK_RIGHT, self.forward_button.Id),
+            ]
+        )
+        self.simpack_selection_dialog.\
+            SetAcceleratorTable(self.accelerator_table)
+
+            
+    def back(self):
+        wx.lib.dialogs.messageDialog(self, 'Back')
+    
+    
+    def forward(self):
+        wx.lib.dialogs.messageDialog(self, 'Forward')
+    
+    
+    def _on_back_button(self, event):
+        self.back()
+    
+    
+    def _on_forward_button(self, event):
+        self.forward()
+        
+        
         
 
 from .simpack_selection_dialog import (SimpackSelectionDialog,

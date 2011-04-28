@@ -10,9 +10,10 @@ See its documentation for more info.
 import wx
 
 from garlicsim_wx.general_misc import wx_tools
+from garlicsim_wx.general_misc import cute_window
 
 
-class CuteDialog(wx.Dialog):
+class CuteDialog(wx.Dialog, cute_window.CuteWindow):
     '''Improved dialog.'''
     def __init__(self, *args, **kwargs):
         if not kwargs.pop('skip_dialog_init', False):

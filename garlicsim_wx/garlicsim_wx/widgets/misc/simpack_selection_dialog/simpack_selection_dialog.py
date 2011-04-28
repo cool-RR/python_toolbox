@@ -124,7 +124,6 @@ class SimpackSelectionDialog(CuteDialog):
         ### Creating Ok/Cancel buttons: #######################################
         #                                                                     #
         self.dialog_button_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        # blocktodo: make big and spaced like in mockup
         
         self.flex_grid_sizer.Add(self.dialog_button_sizer,
                                  0,
