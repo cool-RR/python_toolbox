@@ -18,6 +18,15 @@ class CuteWindow(wx.Window):
             self.__accelerators = []
             self.__initialized = True
         
+        for accelerator in accelerators:
+            modifiers, key, id = accelerator
+            for existing_accelerator in self.__accelerators:
+                existing_modifiers, existing_key, existing_id = \
+                    existing_accelerator
+                if (modifiers, key) == (existing_modifiers, existing_key):
+                    self.__accelerators.remove(existing_accelerator)
+            self.__accelerators.append(accelerator)
+            
         self.__accelerators += accelerators
         self.__accelerator_table = wx.AcceleratorTable(self.__accelerators)
         self.SetAcceleratorTable(self.__accelerator_table)
