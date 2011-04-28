@@ -166,6 +166,7 @@ class SimpackSelectionDialog(CuteDialog):
         
         
         self.Layout()
+        self.simpack_tree.SetFocus()
         
         #######################################################################
         
