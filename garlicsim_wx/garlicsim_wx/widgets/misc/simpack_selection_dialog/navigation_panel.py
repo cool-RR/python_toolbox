@@ -37,8 +37,9 @@ class NavigationPanel(wx.Panel):
             simpack_selection_dialog,
         )
         
-        assert isinstance(simpack_selection_dialog, SimpackSelectionDialog)
         self.simpack_selection_dialog = simpack_selection_dialog
+        assert isinstance(self.simpack_selection_dialog,
+                          SimpackSelectionDialog)
         
         self.SetBackgroundColour(
             self.simpack_selection_dialog.GetBackgroundColour()
@@ -149,15 +150,22 @@ class NavigationPanel(wx.Panel):
             self.big_v_sizer.AddSpacer(
                 MAC_BOTTOM_SPACING_SIZE
             )
-            
-        self.accelerator_table = wx.AcceleratorTable(
+        
+        self.simpack_selection_dialog.add_accelerators(
             [
                 (wx.ACCEL_ALT, wx.WXK_LEFT, self.back_button.Id),
                 (wx.ACCEL_ALT, wx.WXK_RIGHT, self.forward_button.Id),
             ]
         )
-        self.simpack_selection_dialog.\
-            SetAcceleratorTable(self.accelerator_table)
+            
+        #self.accelerator_table = wx.AcceleratorTable(
+            #[
+                #(wx.ACCEL_ALT, wx.WXK_LEFT, self.back_button.Id),
+                #(wx.ACCEL_ALT, wx.WXK_RIGHT, self.forward_button.Id),
+            #]
+        #)
+        #self.simpack_selection_dialog.\
+            #SetAcceleratorTable(self.accelerator_table)
 
             
     def back(self):

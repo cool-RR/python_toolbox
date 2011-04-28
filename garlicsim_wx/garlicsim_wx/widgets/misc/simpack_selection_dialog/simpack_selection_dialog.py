@@ -28,8 +28,6 @@ from garlicsim_wx.general_misc import wx_tools
 import garlicsim_wx
 
 
-# blocktodo: Don't forget keyboard shortcuts for everything, like back/forward.
-
 # blocktodo: Go over all methods here, ensure they're relevant.
 
 MAC_BOTTOM_SPACING_SIZE = 10
@@ -167,6 +165,16 @@ class SimpackSelectionDialog(CuteDialog):
         
         self.Layout()
         
+        #######################################################################
+        
+        refresh_id = wx.NewId()
+        self.Bind(wx.EVT_MENU, self._on_refresh, id=refresh_id)
+        self.add_accelerators(
+            [
+                (wx.ACCEL_NORMAL, wx.WXK_F5, refresh_id)
+            ]
+        )
+        
         '''
         
         self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)
@@ -270,6 +278,9 @@ class SimpackSelectionDialog(CuteDialog):
         string = self.list_box.GetStringSelection()
         result = import_tools.normal_import(string)
         return result
+    
+    def _on_refresh(self, event):
+        wx.lib.dialogs.messageDialog(self, 'Refresh')
 
 
 from .navigation_panel import NavigationPanel
