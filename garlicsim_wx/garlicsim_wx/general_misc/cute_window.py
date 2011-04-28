@@ -13,6 +13,7 @@ from garlicsim.general_misc import context_manager
 from garlicsim.general_misc import caching
 
 class AcceleratorTableFreezer(context_manager.ContextManager):
+    # probably acrhive this shit in a branch, probably not needed
     def __init__(self, cute_window):
         self.cute_window = cute_window
         assert isinstance(self.cute_window, CuteWindow)
@@ -45,8 +46,6 @@ class CuteWindow(wx.Window):
                 if (modifiers, key) == (existing_modifiers, existing_key):
                     self.__accelerators.remove(existing_accelerator)
             self.__accelerators.append(accelerator)
-            
-        self.__accelerators += accelerators
         
         if not self.accelerator_table_freezer.frozen:
             self.__build_and_set_accelerator_table()
