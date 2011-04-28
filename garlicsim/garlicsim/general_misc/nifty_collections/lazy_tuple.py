@@ -9,7 +9,6 @@ See its documentation for more information.
 
 from __future__ import with_statement
 
-import itertools
 import threading
 import collections
 from garlicsim.general_misc.third_party import abcs_collection
@@ -22,10 +21,22 @@ from garlicsim.general_misc import sequence_tools
 
 
 class _SENTINEL(object):
-    pass
+    '''Sentinel used to detect the end of an iterable.'''
+    
 
-def _convert_int_index_to_exhaustion_point(index):
-    assert isinstance(index, int)
+def _convert_index_to_exhaustion_point(index):
+    '''
+    Convert an index to an "exhaustion point".
+    
+    The index may be either an integer or infinity.
+    
+    "Exhaustion point" means "until which index do we need to exhaust the
+    internal iterator." If an index of `3` was requested, we need to exhaust it
+    to index `3`, but if `-7` was requested, we have no choice but to exhaust
+    the iterator completely (i.e. to `infinity`, actually the last element,)
+    because only then we could know which member is the seventh-to-last.    
+    '''
+    assert isinstance(index, int) or index == infinity
     if index >= 0:
         return index
     else: # i < 0
@@ -33,16 +44,13 @@ def _convert_int_index_to_exhaustion_point(index):
 
 
 @decorator_tools.decorator
-def with_lock(method, *args, **kwargs):
-    '''
-    Decorator for using the tree lock (in write mode) as a context manager.
-    '''
+def _with_lock(method, *args, **kwargs):
+    '''Decorator for using the `LazyTuple`'s lock.'''
     self = args[0]
     with self.lock:
         return method(*args, **kwargs)
 
     
-#blocktodo: go over all sequence and tuple methods, see what I should add
 # blocktodo: what about hash?
 class LazyTuple(abcs_collection.Sequence, object):
     ''' '''
@@ -76,17 +84,14 @@ class LazyTuple(abcs_collection.Sequence, object):
         return len(self.collected_data)
     
 
-    @with_lock
-    def _exhaust(self, i=None):
+    @_with_lock
+    def exhaust(self, i=infinity):
 
         if self.exhausted:
             return
         
-        if i is None:
-            exhaustion_point = infinity
-        
-        elif isinstance(i, int):
-            exhaustion_point = _convert_int_index_to_exhaustion_point(i)
+        elif isinstance(i, int) or i == infinity:
+            exhaustion_point = _convert_index_to_exhaustion_point(i)
             
         else:
             assert isinstance(i, slice)
@@ -97,8 +102,8 @@ class LazyTuple(abcs_collection.Sequence, object):
             (start, stop, step) = sequence_tools.parse_slice(i)
             
             exhaustion_point = max(
-                _convert_int_index_to_exhaustion_point(start),
-                _convert_int_index_to_exhaustion_point(stop)
+                _convert_index_to_exhaustion_point(start),
+                _convert_index_to_exhaustion_point(stop)
             )
             
             if step > 0: # Compensating for excluded last item:
@@ -113,7 +118,7 @@ class LazyTuple(abcs_collection.Sequence, object):
            
             
     def __getitem__(self, i):
-        self._exhaust(i)
+        self.exhaust(i)
         result = self.collected_data[i]
         if isinstance(i, slice):
             return tuple(result)
@@ -122,7 +127,7 @@ class LazyTuple(abcs_collection.Sequence, object):
             
     
     def __len__(self):
-        self._exhaust()
+        self.exhaust()
         return len(self.collected_data)
 
     
@@ -143,7 +148,7 @@ class LazyTuple(abcs_collection.Sequence, object):
     
     
     def __nonzero__(self):
-        self._exhaust(0)
+        self.exhaust(0)
         return bool(self.collected_data)
 
     
@@ -222,6 +227,14 @@ class LazyTuple(abcs_collection.Sequence, object):
     
     def __rmul__(self, other):
         return tuple(self).__rmul__(other)
+    
+    
+    def __hash__(self):
+        '''
+        Note: Hashing the 
+        '''
+        self.exhaust()
+        return hash(tuple(self))
     
     
 cmp_tools.total_ordering(LazyTuple)

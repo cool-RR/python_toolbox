@@ -139,7 +139,19 @@ def test_finite_iterator():
     
     assert lazy_tuple + ('meow', 'frr') == (0, 1, 2, 3, 4, 'meow', 'frr')
     assert ('meow', 'frr') + lazy_tuple == ('meow', 'frr', 0, 1, 2, 3, 4)
-        
+
+    
+    identical_lazy_tuple = LazyTuple(iter(range(5)))
+    assert not identical_lazy_tuple.exhausted
+    my_dict = {}
+    my_dict[identical_lazy_tuple] = 'flugzeug'
+    assert identical_lazy_tuple.exhausted
+    assert my_dict[lazy_tuple] == 'flugzeug'
+    assert len(my_dict) == 1
+    assert lazy_tuple == identical_lazy_tuple
+    my_dict[lazy_tuple] = 'lederhosen'
+    assert my_dict[identical_lazy_tuple] == 'lederhosen'
+    assert len(my_dict) == 1
     
 
 def test_comparisons():
