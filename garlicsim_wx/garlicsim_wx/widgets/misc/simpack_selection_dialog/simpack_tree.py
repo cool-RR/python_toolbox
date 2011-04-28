@@ -15,7 +15,7 @@ import pkgutil
 import wx
 import pkg_resources
 
-from garlicsim.general_misc.cmp_tools import underscore_hating_key
+from garlicsim.general_misc.comparison_tools import underscore_hating_key
 from garlicsim.general_misc import address_tools
 from garlicsim.general_misc import path_tools
 from garlicsim.general_misc import import_tools

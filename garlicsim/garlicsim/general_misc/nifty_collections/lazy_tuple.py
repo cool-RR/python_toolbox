@@ -16,7 +16,7 @@ from garlicsim.general_misc.third_party import abcs_collection
 from garlicsim.general_misc import cute_iter_tools
 from garlicsim.general_misc.infinity import infinity
 from garlicsim.general_misc import decorator_tools
-from garlicsim.general_misc import cmp_tools
+from garlicsim.general_misc import comparison_tools
 from garlicsim.general_misc import sequence_tools
 
 
@@ -276,7 +276,7 @@ class LazyTuple(abcs_collection.Sequence, object):
         return hash(tuple(self))
     
     
-cmp_tools.total_ordering(LazyTuple)
+comparison_tools.total_ordering(LazyTuple)
 
 if hasattr(collections, 'Sequence'):
     collections.Sequence.register(LazyTuple)
