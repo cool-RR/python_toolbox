@@ -17,11 +17,6 @@ def decorator(caller, func=None):
     `decorator(caller)` converts a caller function into a decorator;
     `decorator(caller, func)` decorates a function using a caller.
     '''
-    if issubclass(func, type):
-        class_ = func WAS HERE
-        def func(*args, **kwargs):
-            return class_(*args, **kwargs)
-    
     if func is not None: # returns a decorated function
         evaldict = func.func_globals.copy()
         evaldict['_call_'] = caller

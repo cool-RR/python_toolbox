@@ -18,6 +18,7 @@ from garlicsim.general_misc.nifty_collections import LazyTuple
 
 
 class SelfAwareUuidIterator(abcs_collection.Iterator):
+    '''Iterator that gives UUIDs and keeps them all in an internal list.'''
     def __init__(self):
         self.data = []
     def next(self):
@@ -27,6 +28,7 @@ class SelfAwareUuidIterator(abcs_collection.Iterator):
 
     
 def test():
+    '''Test the basic workings of `LazyTuple`.'''    
     self_aware_uuid_iterator = SelfAwareUuidIterator()
     lazy_tuple = LazyTuple(self_aware_uuid_iterator)
     assert len(self_aware_uuid_iterator.data) == 0
@@ -65,8 +67,11 @@ def test():
     assert len(first_twelve) == 12
     assert first_twenty[:12] == first_twelve
     
+    assert bool(lazy_tuple) == True
+    
 
 def test_empty():
+    '''Test an empty `LazyTuple`.'''
     def empty_generator():
         if False: yield # (Unreachable `yield` to make this a generator.)
         raise StopIteration
@@ -77,10 +82,14 @@ def test_empty():
         lazy_tuple[7]
         
     assert repr(lazy_tuple) == '<LazyTuple: ()>'
+    
+    assert bool(LazyTuple(())) == False
+    assert bool(lazy_tuple) == False
         
     
     
 def test_string():
+    '''Test a `LazyTuple` built from a string.'''
     string = 'meow'
     lazy_tuple = LazyTuple(string)
     assert lazy_tuple.exhausted
@@ -98,6 +107,7 @@ def test_string():
     
     
 def test_infinite():
+    '''Test an infinite `LazyTuple`.'''
     lazy_tuple = LazyTuple(itertools.count())
     assert not lazy_tuple.exhausted
     lazy_tuple[100]
@@ -106,6 +116,7 @@ def test_infinite():
     
 
 def test_factory_decorator():
+    '''Test the `LazyTuple.factory` decorator.'''
     @LazyTuple.factory
     def count(*args, **kwargs):
         return itertools.count(*args, **kwargs)
@@ -115,24 +126,9 @@ def test_factory_decorator():
     assert repr(my_count) == '<LazyTuple: (...)>'
     assert my_count[:10] == tuple(xrange(10))
     
-    
-    class Meow(abcs_collection.Iterator):
-        def __next__(self):
-            yield 1
-            yield 2
-            yield 3
-            
-    # Decorating manually for Python 2.5 compatibility:
-    Meow = LazyTuple.factory(Meow)
-    
-    meow = Meow()
-    assert isinstance(meow, LazyTuple)
-    assert meow.known_length == 0
-    meow.exhaust()
-    assert meow.known_length == 3
-    
 
 def test_finite_iterator():
+    '''Test `LazyTuple` on a finite iterator.'''
     my_finite_iterator = iter(range(5))
     lazy_tuple = LazyTuple(my_finite_iterator)
     assert not lazy_tuple.exhausted
@@ -171,6 +167,7 @@ def test_finite_iterator():
     
 
 def test_comparisons():
+    '''Test comparisons of `LazyTuple`.'''
 
     lazy_tuple = LazyTuple(iter((0, 1, 2, 3, 4)))
     assert lazy_tuple.known_length == 0
@@ -232,4 +229,5 @@ def test_comparisons():
     
     
 def test_immutable_sequence():
+    '''Test that `LazyTuple` is considered an immutable sequence.'''
     assert sequence_tools.is_immutable_sequence(LazyTuple([1, 2, 3]))

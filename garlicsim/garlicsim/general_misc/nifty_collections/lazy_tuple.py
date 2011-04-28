@@ -97,16 +97,18 @@ class LazyTuple(abcs_collection.Sequence, object):
     @classmethod
     def factory(cls, callable):
         '''
-        Decorator to make iterator-creators return a `LazyTuple`.
-        
+        Decorator to make generators return a `LazyTuple`.
+                
         Example:
         
             @LazyTuple.factory
             def my_generator():
                 yield 'hello'; yield 'world'; yield 'have'; yield 'fun'
-                
-        This can be 
+        
+        This works on any function that returns an iterator. todo: Make it work
+        on iterator classes.
         '''
+        
         def inner(function, *args, **kwargs):
             return cls(callable(*args, **kwargs))
         return decorator_tools.decorator(inner, callable)
@@ -122,7 +124,12 @@ class LazyTuple(abcs_collection.Sequence, object):
 
     @_with_lock
     def exhaust(self, i=infinity):
-
+        '''
+        Take items from the internal iterators and save them.
+        
+        This will take enough items so we will have `i` items in total,
+        including the items we had before.
+        '''
         if self.exhausted:
             return
         
@@ -154,6 +161,7 @@ class LazyTuple(abcs_collection.Sequence, object):
            
             
     def __getitem__(self, i):
+        '''Get item by index, either an integer index or a slice.'''
         self.exhaust(i)
         result = self.collected_data[i]
         if isinstance(i, slice):
@@ -189,17 +197,6 @@ class LazyTuple(abcs_collection.Sequence, object):
 
     
     def __lt__(self, other):
-        '''
-        This method returns ``True`` if this list is "lower than" the given
-        `other` list. This is the case if...
-
-        - this list is empty and the other is not.
-        - the first nth item in this list which is unequal to the
-          corresponding item in the other list, is lower than the corresponding
-          item.
-
-        If this and the other list is empty this method will return ``False``.
-        '''
         if not self and other:
             return True
         elif self and not other:
@@ -229,9 +226,13 @@ class LazyTuple(abcs_collection.Sequence, object):
     
     def __repr__(self):
         '''
-        Returns the representation string of the list, if the list exhausted
-        this looks like the representation of any other list, otherwise the
-        "lazy" part is represented by '...', like '[1, 2, 3, ...]'.
+        Return a human-readeable representation of the `LazyTuple`.
+        
+        Example:
+        
+            <LazyTuple: (1, 2, 3, ...)>
+            
+        The '...' denotes a non-exhausted lazy tuple.
         '''
         if self.exhausted:
             inner = ''.join(('(',                             
@@ -267,14 +268,15 @@ class LazyTuple(abcs_collection.Sequence, object):
     
     def __hash__(self):
         '''
-        Note: Hashing the 
+        Get the `LazyTuple`'s hash.
+        
+        Note: Hashing the `LazyTuple` will completely exhaust it.
         '''
         self.exhaust()
         return hash(tuple(self))
     
     
 cmp_tools.total_ordering(LazyTuple)
-
 
 if hasattr(collections, 'Sequence'):
     collections.Sequence.register(LazyTuple)
