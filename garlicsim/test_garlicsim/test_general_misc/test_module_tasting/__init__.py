@@ -1,10 +1,4 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''
-This module defines the `` class.
-
-See its documentation for more information.
-'''
-
-# blocktododoc
+'''Testing package for `garlicsim.general_misc.module_tasting`.'''
