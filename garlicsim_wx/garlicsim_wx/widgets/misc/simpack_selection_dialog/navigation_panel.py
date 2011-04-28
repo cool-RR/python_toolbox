@@ -109,6 +109,8 @@ class NavigationPanel(wx.Panel):
         
         ### Building back and forward buttons: ################################
         #                                                                     #
+        # (We're binding button events to parent because otherwise accelerators
+        # don't work on parent on GTK.)
         self.back_button = wx.BitmapButton(
             self,
             bitmap=wx.BitmapFromImage(
@@ -118,7 +120,9 @@ class NavigationPanel(wx.Panel):
                 )
             ),
         )
-        self.Bind(wx.EVT_BUTTON, self._on_back_button, source=self.back_button)
+        self.simpack_selection_dialog.Bind(wx.EVT_BUTTON,
+                                           self._on_back_button,
+                                           source=self.back_button)
         self.small_h_sizer.Add(
             self.back_button,
             proportion=0,
@@ -135,8 +139,9 @@ class NavigationPanel(wx.Panel):
                 )
             ),
         )
-        self.Bind(wx.EVT_BUTTON, self._on_forward_button,
-                  source=self.forward_button)
+        self.simpack_selection_dialog.Bind(wx.EVT_BUTTON,
+                                           self._on_forward_button,
+                                           source=self.forward_button)
         self.small_h_sizer.Add(
             self.forward_button,
             proportion=0,
