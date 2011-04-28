@@ -23,6 +23,9 @@ from garlicsim.general_misc.temp_value_setters import TempImportHookSetter
 from garlicsim.general_misc import address_tools
 from garlicsim.general_misc import dict_tools
 from garlicsim.general_misc import import_tools
+from garlicsim.general_misc import context_manager
+
+from .sys_modules_assertor import SysModulesUnchangedAssertor
 
 ###############################################################################
 #                                                                             #
@@ -39,11 +42,6 @@ except ImportError:
 #                                                                             #
 ###############################################################################
 
-_known_false_positive_new_modules = set([
-    'garlicsim.general_misc.zlib'
-])
-
-
 class MockImporter(object):
     def __init__(self, original_import, skip_first_import=False):
         self.original_import = original_import        
@@ -58,7 +56,7 @@ class MockImporter(object):
             self.times_called += 1
             return mock_module.Mock(name=name)
 
-
+        
 def taste_module(path_or_address):
     
     if address_tools.is_address(path_or_address):
@@ -73,29 +71,22 @@ def taste_module(path_or_address):
     if not is_zip_module:
         assert os.path.exists(path)
     
-    # blocktodo: Make context manager for this
-    old_sys_modules = sys.modules.copy()
-    
-    name = 'tasted_module_%s' % uuid.uuid4() if not is_zip_module else None
-    
-    mock_importer = MockImporter(
-        original_import=__builtin__.__import__,
-        skip_first_import = is_zip_module
-    )
-    
-    with TempImportHookSetter(mock_importer):
+    with SysModulesUnchangedAssertor():
+            
+        name = 'tasted_module_%s' % uuid.uuid4() if not is_zip_module else None
         
-        # Note that `import_by_path` is not affected by the import hook, unless
-        # it's a zip import:
-        tasted_module = import_tools.import_by_path(path,
-                                                    name=name,
-                                                    keep_in_sys_modules=False)
+        mock_importer = MockImporter(
+            original_import=__builtin__.__import__,
+            skip_first_import = is_zip_module
+        )
         
-    new_modules_in_sys_modules = [module_name for module_name in sys.modules if
-                                  module_name not in old_sys_modules]
-    assert set(new_modules_in_sys_modules).issubset(
-        _known_false_positive_new_modules
-    )
+        with TempImportHookSetter(mock_importer):
+            
+            # Note that `import_by_path` is not affected by the import hook, unless
+            # it's a zip import:
+            tasted_module = import_tools.import_by_path(path,
+                                                        name=name,
+                                                        keep_in_sys_modules=False)
     
     return tasted_module
         
