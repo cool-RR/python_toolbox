@@ -126,6 +126,12 @@ class NavigationPanel(wx.Panel):
         self.Bind(wx.EVT_BUTTON,
                                            self._on_back_button,
                                            source=self.back_button)
+        self.simpack_selection_dialog.Bind(wx.EVT_MENU,
+                                           self._on_back_button,
+                                           source=self.back_button)
+        self.Bind(wx.EVT_MENU,
+                                           self._on_back_button,
+                                           source=self.back_button)
         self.small_h_sizer.Add(
             self.back_button,
             proportion=0,
