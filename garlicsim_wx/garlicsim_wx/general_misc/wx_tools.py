@@ -173,12 +173,16 @@ back_keys = (
         Key(wx.WXK_LEFT, alt=True),
     )
 
+back_key_string = u'\u2318-\u00ab' if is_mac else u'Alt-\u00ab'
+
 forward_keys = (
     Key(ord(']'), cmd=True),
     Key(wx.WXK_RIGHT, cmd=True)
     ) if is_mac else (
         Key(wx.WXK_RIGHT, alt=True),
     )
+
+forward_key_string = u'\u2318-\u00bb' if is_mac else u'Alt-\u00bb'
     
 
 

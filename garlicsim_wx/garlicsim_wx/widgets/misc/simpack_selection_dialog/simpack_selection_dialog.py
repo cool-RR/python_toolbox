@@ -29,6 +29,7 @@ import garlicsim_wx
 
 
 # blocktodo: Go over all methods here, ensure they're relevant.
+# blocktodo: Don't forget tooltips here wherever possible
 
 MAC_BOTTOM_SPACING_SIZE = 10
 
