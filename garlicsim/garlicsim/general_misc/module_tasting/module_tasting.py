@@ -42,9 +42,13 @@ except ImportError:
 #                                                                             #
 ###############################################################################
 
+# blocktodo: test this is correct:
+zip_import_uses_import_hook = (sys.version_info[:2] == (2, 5))
+
+
 class MockImporter(object):
-    def __init__(self, original_import, skip_first_import=False):
-        self.original_import = original_import        
+    def __init__(self, skip_first_import=False):
+        self.original_import = __builtin__.__import__
         self.skip_first_import = skip_first_import
         self.times_called = 0
         
@@ -70,14 +74,15 @@ def taste_module(path_or_address):
         
     if not is_zip_module:
         assert os.path.exists(path)
+        
+    skip_first_import = is_zip_module and zip_import_uses_import_hook
     
     with SysModulesUnchangedAssertor():
             
         name = 'tasted_module_%s' % uuid.uuid4() if not is_zip_module else None
         
         mock_importer = MockImporter(
-            original_import=__builtin__.__import__,
-            skip_first_import = is_zip_module
+            skip_first_import=skip_first_import
         )
         
         with TempImportHookSetter(mock_importer):
