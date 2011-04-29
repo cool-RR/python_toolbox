@@ -133,7 +133,8 @@ class NavigationPanel(wx.Panel):
         self.simpack_selection_dialog.Bind(wx.EVT_MENU,
                                            self._on_back_button,
                                            source=self.back_button)
-        self.back_button.SetToolTipString(wx_tools.back_key_string)
+        self.back_button.SetToolTipString(u'Back (%s)' % \
+                                          wx_tools.back_key_string)
         self.small_h_sizer.Add(
             self.back_button,
             proportion=0,
@@ -157,7 +158,8 @@ class NavigationPanel(wx.Panel):
         self.simpack_selection_dialog.Bind(wx.EVT_MENU,
                                            self._on_forward_button,
                                            source=self.forward_button)
-        self.forward_button.SetToolTipString(wx_tools.forward_key_string)
+        self.forward_button.SetToolTipString(u'Forward (%s)' % \
+                                             wx_tools.forward_key_string)
         self.small_h_sizer.Add(
             self.forward_button,
             proportion=0,
