@@ -162,9 +162,9 @@ menu_keys = [Key(wx.WXK_MENU), Key(wx.WXK_WINDOWS_MENU),
              Key(wx.WXK_F10, shift=True)]
 '''Keys used for raising a context menu.'''
 
-back_key = Key(ord('['), ctrl=True) if is_mac \
+back_key = Key(ord('['), cmd=True) if is_mac \
            else Key(wx.WXK_LEFT, alt=True)
-forward_key = Key(ord(']'), ctrl=True) if is_mac \
+forward_key = Key(ord(']'), cmd=True) if is_mac \
             else Key(wx.WXK_RIGHT, alt=True)
 
 
