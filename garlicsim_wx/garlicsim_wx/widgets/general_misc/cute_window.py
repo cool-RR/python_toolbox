@@ -44,7 +44,7 @@ def _key_dict_to_accelerators(key_dict):
     original_key_dict = key_dict
     key_dict = {}
     
-    ### Breaking down key lists to individual entries: ########################
+    ### Breaking down key tuples to individual entries: #######################
     #                                                                         #
     for key, id in original_key_dict.items():
         if sequence_tools.is_sequence(key):
@@ -54,7 +54,7 @@ def _key_dict_to_accelerators(key_dict):
         else:
             key_dict[key] = id
     #                                                                         #
-    ### Finished breaking down key lists to individual entries. ###############
+    ### Finished breaking down key tuples to individual entries. ##############
     
     for key, id in key_dict.items():
         if isinstance(key, int):
