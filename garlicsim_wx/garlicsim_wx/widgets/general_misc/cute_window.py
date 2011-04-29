@@ -32,8 +32,6 @@ def _key_dict_to_accelerators(key_dict):
     ### Finished breaking down key lists to individual entries. ###############
     
     for key, id in key_dict.items():
-        if sequence_tools.is_sequence(key):
-            0 0 0
         if isinstance(key, int):
             key = wx_tools.Key(key)
         assert isinstance(key, wx_tools.Key)

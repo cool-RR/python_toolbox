@@ -166,19 +166,19 @@ menu_keys = [Key(wx.WXK_MENU), Key(wx.WXK_WINDOWS_MENU),
 
 # blocktodo: Make separate keys module for each OS
 
-back_keys = [
+back_keys = (
     Key(ord('['), cmd=True),
     Key(wx.WXK_LEFT, cmd=True)
-    ] if is_mac else [
-        Key(wx.WXK_LEFT, alt=True)
-    ]
+    ) if is_mac else (
+        Key(wx.WXK_LEFT, alt=True),
+    )
 
-forward_keys = [
+forward_keys = (
     Key(ord(']'), cmd=True),
     Key(wx.WXK_RIGHT, cmd=True)
-    ] if is_mac else [
-        Key(wx.WXK_RIGHT, alt=True)
-    ]
+    ) if is_mac else (
+        Key(wx.WXK_RIGHT, alt=True),
+    )
     
 
 
