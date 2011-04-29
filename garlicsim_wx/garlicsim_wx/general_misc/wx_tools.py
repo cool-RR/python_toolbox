@@ -162,10 +162,24 @@ menu_keys = [Key(wx.WXK_MENU), Key(wx.WXK_WINDOWS_MENU),
              Key(wx.WXK_F10, shift=True)]
 '''Keys used for raising a context menu.'''
 
-back_key = Key(ord('['), cmd=True) if is_mac \
-           else Key(wx.WXK_LEFT, alt=True)
-forward_key = Key(ord(']'), cmd=True) if is_mac \
-            else Key(wx.WXK_RIGHT, alt=True)
+# blocktodo: finally explode this module
+
+# blocktodo: Make separate keys module for each OS
+
+back_keys = [
+    Key(ord('['), cmd=True),
+    Key(wx.WXK_LEFT, alt=True)
+    ] if is_mac else [
+        Key(wx.WXK_LEFT, alt=True)
+    ]
+
+forward_keys = [
+    Key(ord(']'), cmd=True),
+    Key(wx.WXK_RIGHT, cmd=True)
+    ] if is_mac else [
+        Key(wx.WXK_RIGHT, alt=True)
+    ]
+    
 
 
 def navigate_from_key_event(key_event):
