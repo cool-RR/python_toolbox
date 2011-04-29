@@ -9,6 +9,19 @@ See its documentation for more information.
 
 import wx
 
+from garlicsim_wx.general_misc import wx_tools
+
+
+def _key_dict_to_accelerators(key_dict):
+    accelerators = []
+    for key, id in key_dict.items():
+        if isinstance(key, int):
+            key = wx_tools.Key(key)
+        assert isinstance(key, wx_tools.Key)
+        (modifiers, key_code) = key.to_accelerator_pair()
+        accelerator = (modifiers, key_code, id)
+        accelerators.append(accelerator)
+    return accelerators
 
 class CuteWindow(wx.Window):
     
@@ -17,6 +30,9 @@ class CuteWindow(wx.Window):
             self.__accelerator_table = None
             self.__accelerators = []
             self.__initialized = True
+            
+        if isinstance(accelerators, dict):
+            accelerators = _key_dict_to_accelerators(accelerators)
         
         for accelerator in accelerators:
             modifiers, key, id = accelerator

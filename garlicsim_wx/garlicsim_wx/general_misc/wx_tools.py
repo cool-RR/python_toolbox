@@ -135,6 +135,17 @@ class Key(object):
         return Key(event.GetKeyCode(), event.CmdDown(),
                    event.AltDown(), event.ShiftDown())
     
+    def to_accelerator_pair(self):
+        modifiers = (
+            wx.ACCEL_NORMAL |
+            (wx.ACCEL_CMD if self.cmd else wx.ACCEL_NORMAL) |
+            (wx.ACCEL_ALT if self.alt else wx.ACCEL_NORMAL) |
+            (wx.ACCEL_SHIFT if self.shift else wx.ACCEL_NORMAL)
+        )
+        
+        return (modifiers, self.key_code)
+         
+    
     def __hash__(self):
         return hash(tuple(sorted(tuple(vars(self)))))
     
@@ -145,10 +156,16 @@ class Key(object):
                self.cmd == other.cmd and \
                self.shift == other.shift and \
                self.alt == other.alt
+
         
 menu_keys = [Key(wx.WXK_MENU), Key(wx.WXK_WINDOWS_MENU),
              Key(wx.WXK_F10, shift=True)]
 '''Keys used for raising a context menu.'''
+
+back_key = Key(ord('['), ctrl=True) if is_mac \
+           else Key(wx.WXK_LEFT, alt=True)
+forward_key = Key(ord(']'), ctrl=True) if is_mac \
+            else Key(wx.WXK_RIGHT, alt=True)
 
 
 def navigate_from_key_event(key_event):

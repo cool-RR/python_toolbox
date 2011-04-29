@@ -172,9 +172,7 @@ class SimpackSelectionDialog(CuteDialog):
         refresh_id = wx.NewId()
         self.Bind(wx.EVT_MENU, self._on_refresh, id=refresh_id)
         self.add_accelerators(
-            [
-                (wx.ACCEL_NORMAL, wx.WXK_F5, refresh_id)
-            ]
+            {wx.WXK_F5: refresh_id}
         )
         
         '''
