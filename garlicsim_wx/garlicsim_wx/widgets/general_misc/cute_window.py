@@ -14,6 +14,31 @@ from garlicsim.general_misc import sequence_tools
 
 
 def _key_dict_to_accelerators(key_dict):
+    '''
+    Convert a dict mapping keys to ids to a list of accelerators.
+    
+    The values of `key_dict` are wxPython IDs. The keys may be either:
+    
+     - `Key` instances.
+     - Key-codes given as `int`s.
+     - Tuples of `Key` instances and/or key-codes given as `int`s.
+
+    Example:
+    
+        _key_dict_to_accelerators(
+            {Key(ord('Q')): quit_id,
+             (Key(ord('R'), cmd=True),
+              Key(wx.WXK_F5)): refresh_id,
+             wx.WXK_F1: help_id}
+        ) == [
+            (wx.ACCEL_NORMAL, ord('Q'), quit_id),
+            (wx.ACCEL_CMD, ord('R'), refresh_id),
+            (wx.ACCEL_NORMAL, ord('Q'), refresh_id),
+            (wx.ACCEL_NORMAL, wx.WXK_F1, help_id),
+        ]
+    
+    '''
+    
     accelerators = []
     
     original_key_dict = key_dict
