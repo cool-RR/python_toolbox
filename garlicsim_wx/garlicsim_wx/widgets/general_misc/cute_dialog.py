@@ -19,7 +19,7 @@ class CuteDialog(wx.Dialog, CuteWindow):
         if not kwargs.pop('skip_dialog_init', False):
             wx.Dialog.__init__(self, *args, **kwargs)
         self.SetBackgroundColour(wx_tools.get_background_color())
-        self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
+        #self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
 
         
     def ShowModal(self):
