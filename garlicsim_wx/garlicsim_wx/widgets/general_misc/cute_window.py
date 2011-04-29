@@ -15,6 +15,22 @@ from garlicsim.general_misc import sequence_tools
 
 def _key_dict_to_accelerators(key_dict):
     accelerators = []
+    
+    original_key_dict = key_dict
+    key_dict = {}
+    
+    ### Breaking down key lists to individual entries: ########################
+    #                                                                         #
+    for key, id in original_key_dict.items():
+        if sequence_tools.is_sequence(key):
+            key_sequence = key
+            for actual_key in key_sequence:
+                key_dict[actual_key] = id
+        else:
+            key_dict[key] = id
+    #                                                                         #
+    ### Finished breaking down key lists to individual entries. ###############
+    
     for key, id in key_dict.items():
         if sequence_tools.is_sequence(key):
             0 0 0

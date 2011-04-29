@@ -168,7 +168,7 @@ menu_keys = [Key(wx.WXK_MENU), Key(wx.WXK_WINDOWS_MENU),
 
 back_keys = [
     Key(ord('['), cmd=True),
-    Key(wx.WXK_LEFT, alt=True)
+    Key(wx.WXK_LEFT, cmd=True)
     ] if is_mac else [
         Key(wx.WXK_LEFT, alt=True)
     ]

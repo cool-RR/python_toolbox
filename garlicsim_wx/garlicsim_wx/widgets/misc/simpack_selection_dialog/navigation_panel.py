@@ -157,8 +157,8 @@ class NavigationPanel(wx.Panel):
             )
         
         self.simpack_selection_dialog.add_accelerators(
-            {wx_tools.back_key: self.back_button.Id,
-             wx_tools.forward_key: self.forward_button.Id}
+            {wx_tools.back_keys: self.back_button.Id,
+             wx_tools.forward_keys: self.forward_button.Id}
         )
             
         #self.accelerator_table = wx.AcceleratorTable(
