@@ -20,7 +20,6 @@ class CuteDialog(wx.Dialog, CuteWindow):
             wx.Dialog.__init__(self, *args, **kwargs)
         self.SetBackgroundColour(wx_tools.get_background_color())
         self.SetDoubleBuffered(True)
-        #self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
 
         
     def ShowModal(self):
