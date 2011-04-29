@@ -19,9 +19,9 @@ def _key_dict_to_accelerators(key_dict):
     
     The values of `key_dict` are wxPython IDs. The keys may be either:
     
-     - `Key` instances.
-     - Key-codes given as `int`s.
-     - Tuples of `Key` instances and/or key-codes given as `int`s.
+      - `Key` instances.
+      - Key-codes given as `int`s.
+      - Tuples of `Key` instances and/or key-codes given as `int`s.
 
     Example:
     
@@ -65,9 +65,43 @@ def _key_dict_to_accelerators(key_dict):
         accelerators.append(accelerator)
     return accelerators
 
+
 class CuteWindow(wx.Window):
     
     def add_accelerators(self, accelerators):
+        '''
+        Add accelerators to the window.
+        
+        There are two formats for adding accelerators. One is the old-fashioned
+        list of tuples, like this:
+
+            cute_window.add_accelerators(
+                [
+                    (wx.ACCEL_NORMAL, ord('Q'), quit_id),
+                    (wx.ACCEL_CMD, ord('R'), refresh_id),
+                    (wx.ACCEL_NORMAL, ord('Q'), refresh_id),
+                    (wx.ACCEL_NORMAL, wx.WXK_F1, help_id),
+               ]
+            )
+        
+        Another is to use a dictionary. The values of the dictionary should be
+        wxPython IDs. The keys may be either:
+    
+         - `Key` instances.
+         - Key-codes given as `int`s.
+         - Tuples of `Key` instances and/or key-codes given as `int`s.
+   
+       Here's an example of using a key dictionary that gives an identical
+       accelerator table as the previous example which used a list of tuples:
+       
+           cute_window.add_accelerators(
+               {Key(ord('Q')): quit_id,
+                (Key(ord('R'), cmd=True),
+                 Key(wx.WXK_F5)): refresh_id,
+                wx.WXK_F1: help_id}
+           )
+           
+        '''
         if not getattr(self, '_CuteWindow__initialized', False):
             self.__accelerator_table = None
             self.__accelerators = []
