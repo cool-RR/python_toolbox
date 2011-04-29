@@ -109,8 +109,14 @@ class NavigationPanel(wx.Panel):
         
         ### Building back and forward buttons: ################################
         #                                                                     #
-        # (We're binding button events to parent because otherwise accelerators
-        # don't work on parent on GTK.)
+        
+        # Two peculiar things about how we're binding events here, both due to
+        # accelerator weirdnesses:
+        #  1. We're binding events to the parent instead of the current widget
+        #     because otherwise accelerators don't work on parent on GTK.
+        #  2. We're binding both button event *and* menu events, because on Mac
+        #     accelerators can only trigger menu events.
+        
         self.back_button = wx.BitmapButton(
             self,
             bitmap=wx.BitmapFromImage(
@@ -123,13 +129,7 @@ class NavigationPanel(wx.Panel):
         self.simpack_selection_dialog.Bind(wx.EVT_BUTTON,
                                            self._on_back_button,
                                            source=self.back_button)
-        self.Bind(wx.EVT_BUTTON,
-                                           self._on_back_button,
-                                           source=self.back_button)
         self.simpack_selection_dialog.Bind(wx.EVT_MENU,
-                                           self._on_back_button,
-                                           source=self.back_button)
-        self.Bind(wx.EVT_MENU,
                                            self._on_back_button,
                                            source=self.back_button)
         self.small_h_sizer.Add(
@@ -151,6 +151,9 @@ class NavigationPanel(wx.Panel):
         self.simpack_selection_dialog.Bind(wx.EVT_BUTTON,
                                            self._on_forward_button,
                                            source=self.forward_button)
+        self.simpack_selection_dialog.Bind(wx.EVT_MENU,
+                                           self._on_forward_button,
+                                           source=self.forward_button)
         self.small_h_sizer.Add(
             self.forward_button,
             proportion=0,
@@ -169,15 +172,6 @@ class NavigationPanel(wx.Panel):
             {wx_tools.back_keys: self.back_button.Id,
              wx_tools.forward_keys: self.forward_button.Id}
         )
-            
-        #self.accelerator_table = wx.AcceleratorTable(
-            #[
-                #(wx.ACCEL_ALT, wx.WXK_LEFT, self.back_button.Id),
-                #(wx.ACCEL_ALT, wx.WXK_RIGHT, self.forward_button.Id),
-            #]
-        #)
-        #self.simpack_selection_dialog.\
-            #SetAcceleratorTable(self.accelerator_table)
 
             
     def back(self):
