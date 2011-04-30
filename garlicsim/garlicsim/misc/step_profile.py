@@ -279,8 +279,6 @@ class StepProfile(ArgumentsProfile):
                     return garlicsim.misc.simpack_tools.getting_from_state.\
                            get_from_state_class(module.State)
                 
-                
-                
                            
     def __eq__(self, other):
         return isinstance(other, StepProfile) and \
