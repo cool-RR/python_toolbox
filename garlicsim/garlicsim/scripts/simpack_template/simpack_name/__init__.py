@@ -11,6 +11,6 @@ name = '''simpack_name'''
 # Version number:
 __version__ = '0.1'
 
-# List of tags that the simpack is related to, like 'game-theory',
+# Tuple of tags that the simpack is related to, like 'game-theory',
 # 'electronics', 'climate', 'high-cpu' etc.
-tags = []
+tags = ()

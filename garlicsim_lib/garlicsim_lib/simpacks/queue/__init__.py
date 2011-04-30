@@ -26,6 +26,6 @@ servicing them according to a Poisson distribution.
 
 from .state import State
 
-name = 'Queue'
+name = 'Queueing Theory'
 
-tags = ['queueing-theory']
+tags = ('queueing-theory')

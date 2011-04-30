@@ -22,7 +22,8 @@ from garlicsim.general_misc import sys_tools
 from . import sample_package_creation
 
 
-module_names = ['my_package', 'my_package.__init__', 'my_package.johnny']
+module_names = ['my_package_meow_frrr', 'my_package_meow_frrr.__init__',
+                'my_package_meow_frrr.johnny']
 
 is_python_25 = (sys.version_info[:2] == (2, 5))
 
@@ -60,7 +61,8 @@ def _check_module_tasting(format, module_name):
             
             tasted_module = module_tasting.taste_module(module_name)
             
-            if module_name in ('my_package', 'my_package.__init__'):
+            if module_name in ('my_package_meow_frrr',
+                               'my_package_meow_frrr.__init__'):
                 assert tasted_module.__doc__ == \
                     "The tasted module's docstring."
                 assert tasted_module.my_string == \
@@ -69,7 +71,7 @@ def _check_module_tasting(format, module_name):
                     ['A', 'list', 'of', 'stuff']
                 
             else:
-                assert module_name == 'my_package.johnny'
+                assert module_name == 'my_package_meow_frrr.johnny'
                 assert tasted_module.number_nine == 9
                 
     

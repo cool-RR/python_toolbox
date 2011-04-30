@@ -26,7 +26,7 @@ def create_sample_package(format, folder):
     
     assert not os.listdir(folder) # `folder` is empty
     
-    package_path = os.path.join(folder, 'my_package')
+    package_path = os.path.join(folder, 'my_package_meow_frrr')
     os.mkdir(package_path)
     
     init_file_path = os.path.join(package_path, '__init__.py')
