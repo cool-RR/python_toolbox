@@ -43,7 +43,7 @@ def consecutive_pairs(iterable, wrap_around=False):
     
 def shorten(iterable, n):
     '''
-    Shorten an iterator to length `n`.
+    Shorten an iterable to length `n`.
     
     Iterate over the given iterable, but stop after `n` iterations (Or when the
     iterable stops iteration by itself.)
