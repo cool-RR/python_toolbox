@@ -18,11 +18,11 @@ import garlicsim.misc.simpack_grokker
 def get_from_state(state):
     '''Find the simpack that a state class (or a state instance) belong to.'''
     state_class = state if isinstance(state, type) else type(state)
-    return _get_from_state_class(state_class)
+    return get_from_state_class(state_class)
     
 
 @caching.cache()
-def _get_from_state_class(state_class):
+def get_from_state_class(state_class):
     '''
     Find the simpack that a state class belongs to.
     
