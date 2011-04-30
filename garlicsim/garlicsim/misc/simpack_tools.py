@@ -70,7 +70,7 @@ class SimpackMetadata(_SimpackMetadataBase):
         tasted_simpack = module_tasting.taste_module(address)
         name = getattr(tasted_simpack, 'name', address.rsplit('.')[-1])
         version = getattr(tasted_simpack, 'name', None)
-        description = getattr(tasted_simpack, 'description', None)
+        description = getattr(tasted_simpack, '__doc__', None)
         tags = getattr(tasted_simpack, 'tags', None)
         return SimpackMetadata(address=address,
                                name=name,
