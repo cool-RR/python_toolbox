@@ -16,7 +16,7 @@ of the simulation, the following transitions occur:
     
     - Any live cell with more than three live neighbours becomes dead.
     
-    - Any dead cell with exactly three live neighbours becomes alive
+    - Any dead cell with exactly three live neighbours becomes alive.
     
 Out of the simple rules of the Life universe, one can observe `many complex and
 interesting "life forms"`_ emerge.
