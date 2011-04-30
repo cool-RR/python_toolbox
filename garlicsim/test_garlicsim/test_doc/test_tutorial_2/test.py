@@ -117,13 +117,14 @@ def test():
                 assert _coin_flip.name == '_coin_flip'                
                 
                 state = _coin_flip.State.create_root()
-                assert repr(vars(state)) == \
-                       "{'balance': 5000, 'last_bet_result': 0}"
+                assert vars(state) == {'balance': 5000, 'last_bet_result': 0}
 
                 new_state = garlicsim.simulate(state, 5)
-                assert repr(vars(new_state)) == \
-                "{'balance': %s, 'clock': %s, 'last_bet_result': %s}" % \
-                (new_state.balance, new_state.clock, new_state.last_bet_result)
+                assert vars(new_state) == {
+                    'balance': new_state.balance,
+                    'clock': new_state.clock,
+                    'last_bet_result': new_state.last_bet_result
+                }
                 
                 from garlicsim.general_misc.infinity import infinity
                 
@@ -131,10 +132,11 @@ def test():
                 got_loser = False
                 while not (got_winner and got_loser):
                     new_state = garlicsim.simulate(state, infinity)
-                    assert repr(vars(new_state)) == \
-                           ("{'balance': %s, 'clock': %s, 'last_bet_result': "
-                            "%s}" % (new_state.balance, new_state.clock,
-                            new_state.last_bet_result))
+                    assert vars(new_state) == {
+                        'balance': new_state.balance,
+                        'clock': new_state.clock,
+                        'last_bet_result': new_state.last_bet_result
+                    }
                     assert new_state.balance <= 6000
                     if new_state.balance == 6000:
                         assert new_state.last_bet_result > 0
