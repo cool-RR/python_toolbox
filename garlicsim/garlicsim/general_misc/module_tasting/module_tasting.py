@@ -61,21 +61,19 @@ class MockImporter(object):
             return mock_module.Mock(name=name)
 
         
-def taste_module(path_or_address):
+def taste_module(address):
     
-    if address_tools.is_address(path_or_address):
-        address = path_or_address
-        path = import_tools.find_module(path_or_address)
-    else:
-        # blocktodo: implement address
-        path = path_or_address
+    assert address_tools.is_address(address)
+    path = import_tools.find_module(address)
     
+    is_dotted_address = '.' in address    
     is_zip_module = '.zip' in path
         
     if not is_zip_module:
         assert os.path.exists(path)
         
-    skip_first_import = is_zip_module and zip_import_uses_import_hook
+    skip_first_import = is_zip_module and (zip_import_uses_import_hook and
+                                           not is_dotted_address)
     
     with SysModulesUnchangedAssertor():
             

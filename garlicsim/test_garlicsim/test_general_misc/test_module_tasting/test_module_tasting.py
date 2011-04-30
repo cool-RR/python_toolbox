@@ -12,6 +12,8 @@ from __future__ import with_statement
 import os.path
 import sys
 
+import nose
+
 from garlicsim.general_misc import module_tasting
 from garlicsim.general_misc import temp_file_tools
 from garlicsim.general_misc import cute_iter_tools
@@ -21,6 +23,8 @@ from . import sample_package_creation
 
 
 module_names = ['my_package', 'my_package.__init__', 'my_package.johnny']
+
+is_python_25 = (sys.version_info[:2] == (2, 5))
 
 
 def test_module_tasting():
@@ -36,6 +40,11 @@ def test_module_tasting():
     
 
 def _check_module_tasting(format, module_name):
+    
+    if format == 'zip' and is_python_25:
+        raise nose.SkipTest("Python 2.5 can't handle module-tasting of "
+                            "zip-imported modules.")
+    
     old_sys_modules = sys.modules.copy()
     
     with temp_file_tools.TemporaryFolder(prefix='temp_garlicsim_') as \
