@@ -25,7 +25,7 @@ from garlicsim.general_misc import dict_tools
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import context_manager
 
-from .sys_modules_assertor import SysModulesUnchangedAssertor
+from .sys_modules_unchanged_assertor import SysModulesUnchangedAssertor
 
 ###############################################################################
 #                                                                             #
