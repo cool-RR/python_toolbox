@@ -1,47 +1,24 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''Defines various tools for working with simpacks.'''
+'''
+This module defines the `SimpackMetadata` class.
 
-from garlicsim.general_misc import address_tools
-from garlicsim.general_misc import import_tools
-from garlicsim.general_misc import caching
-from garlicsim.general_misc import nifty_collections
+See its documentation for more information.
+'''
+
+import garlicsim.general_misc.third_party.namedtuple
+
 from garlicsim.general_misc import module_tasting
+from garlicsim.general_misc import caching
 
 
-import garlicsim.misc.simpack_grokker
+_SimpackMetadataBase = garlicsim.general_misc.\
+                       third_party.namedtuple.namedtuple(
+                           '_SimpackMetadataBase',
+                           'address name version description tags',
+                       )
 
-
-def get_from_state(state):
-    '''Find the simpack that a state class (or a state instance) belong to.'''
-    state_class = state if isinstance(state, type) else type(state)
-    return _get_from_state_class(state_class)
-    
-
-@caching.cache()
-def _get_from_state_class(state_class):
-    '''
-    Find the simpack that a state class belongs to.
-    
-    Internal use.
-    '''
-    assert state_class.__name__ == 'State' # remove this limitation
-    short_address = address_tools.describe(state_class, shorten=True)
-    simpack_name = '.'.join(short_address.split('.')[:-1])
-    simpack = import_tools.normal_import(simpack_name)
-        
-    garlicsim.misc.simpack_grokker.SimpackGrokker(simpack)
-    # Not saving the reference: But it'll get cached because `SimpackGrokker`
-    # is a `CachedType`.
-        
-    return simpack
-
-
-_SimpackMetadataBase = garlicsim.general_misc.third_party.namedtuple.namedtuple(
-    '_SimpackMetadataBase',
-    'address name version description tags',
-)
 
 class SimpackMetadata(_SimpackMetadataBase):
     
