@@ -46,18 +46,22 @@ _SimpackMetadataBase = garlicsim.general_misc.third_party.namedtuple.namedtuple(
 class SimpackMetadata(_SimpackMetadataBase):
     
     def __init__(self, *args, **kwargs):
+        
         _SimpackMetadataBase.__init__(self, *args, **kwargs)
-        self.address = self.address
-        self.name = self.name
-        self.version = self.version
-        self.description = self.description
-        self.tags = self.tags
         
         assert isinstance(self.address, basestring) or self.address is None
         assert isinstance(self.name, basestring) or self.name is None
         assert isinstance(self.version, basestring) or self.version is None
         assert isinstance(self.description, basestring) or self.description is None
-        assert isinstance(self.tags, tuple) or self.tags is None
+        assert isinstance(self.tags, tuple) or self.tags is None        
+        
+        
+        if False: # This section gives us better source assistance in Wing IDE:
+            self.address = self.address
+            self.name = self.name
+            self.version = self.version
+            self.description = self.description
+            self.tags = self.tags
         
     
     @staticmethod

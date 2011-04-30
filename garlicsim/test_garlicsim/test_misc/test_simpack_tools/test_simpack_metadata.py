@@ -23,5 +23,3 @@ def test_on_garlicsim_lib():
     addresses = [(prefix + simpack_name) for simpack_name in simpack_names]
     for address in addresses:
         simpack_metadata = SimpackMetadata.create_from_address(address)
-        assert isinstance(simpack_metadata.name, basestring)
-        simpack_metadata.versi

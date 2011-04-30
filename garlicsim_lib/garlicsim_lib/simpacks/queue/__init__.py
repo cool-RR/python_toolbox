@@ -28,4 +28,4 @@ from .state import State
 
 name = 'Queueing Theory'
 
-tags = ('queueing-theory')
+tags = ('queueing-theory',)
