@@ -5,10 +5,11 @@
 Testing module for `garlicsim.general_misc.sleek_refs.CuteSleekValueDict`.
 '''
 
-import gc
 import weakref
 
 from garlicsim.general_misc import sequence_tools
+
+from garlicsim.general_misc import gc_tools
 
 from garlicsim.general_misc.sleek_refs import (SleekCallArgs,
                                                SleekRef,
@@ -35,13 +36,13 @@ def test():
             csvd[len(csvd)] = volatile_thing
             count = counter()
             del volatile_thing
-            gc.collect()
+            gc_tools.collect()
             assert counter() == count + 2
         else:
             csvd[len(csvd)] = volatile_thing
             count = counter()
             del volatile_thing
-            gc.collect()
+            gc_tools.collect()
             assert counter() == count + 1
 
             
@@ -52,7 +53,7 @@ def test():
         csvd[len(csvd)] = unvolatile_thing
         count = counter()
         del unvolatile_thing
-        gc.collect()
+        gc_tools.collect()
         assert counter() == count + 1
         
         
@@ -72,13 +73,13 @@ def test_one_by_one():
             csvd[len(csvd)] = volatile_thing
             count = counter()
             del volatile_thing
-            gc.collect()
+            gc_tools.collect()
             assert counter() == count + 2
         else:
             csvd[len(csvd)] = volatile_thing
             count = counter()
             del volatile_thing
-            gc.collect()
+            gc_tools.collect()
             assert counter() == count + 1
             
     while unvolatile_things:
@@ -88,7 +89,7 @@ def test_one_by_one():
         csvd[len(csvd)] = unvolatile_thing
         count = counter()
         del unvolatile_thing
-        gc.collect()
+        gc_tools.collect()
         assert counter() == count + 1
         
         

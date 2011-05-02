@@ -106,6 +106,7 @@ The "frozen string", if we are frozen, otherwise `None`.
 This is useful for checking if we are frozen, e.g. with py2exe.
 '''
 
+is_pypy = ('__pypy__' in sys.builtin_module_names)
 
 # May want in future:
 #def execute(command):

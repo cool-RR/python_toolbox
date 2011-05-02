@@ -9,11 +9,11 @@ import sys
 import UserDict
 import random
 import string
-import gc
 import weakref
 
 import nose
 from garlicsim.general_misc.third_party import unittest2
+from garlicsim.general_misc import gc_tools
 
 from garlicsim.general_misc.sleek_refs import CuteSleekValueDict
 
@@ -665,7 +665,7 @@ class GenericDictTest(unittest2.TestCase):
             container = CuteSleekValueDict(null_callback, {obj: 1})
             obj.x = i(container)
             del obj, container
-            gc.collect()
+            gc_tools.collect()
             self.assertIs(ref(), None, "Cycle was not collected")
     
 
