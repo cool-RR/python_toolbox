@@ -13,7 +13,7 @@ from garlicsim.general_misc import sys_tools
 
 def collect():
     if sys_tools.is_pypy:
-        for i in range(300):
+        for i in range(5):
             gc.collect()
     else:
         gc.collect()
