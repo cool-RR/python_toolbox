@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''Defines tools related to abstract base classes from the `abc` module.'''
-
+#blocktodo: camelcase
 
 class abstract_static_method(staticmethod):
     '''
