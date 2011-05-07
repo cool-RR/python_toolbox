@@ -273,8 +273,12 @@ What's next
 ===========
 
 This is the end of the tutorial series for now. To learn more about GarlicSim,
-read the :ref:`topical guides <topics-index>` or `say hello on the mailing
-list`_.
+read the :ref:`topical guides <topics-index>`. You should also go over all of 
+the skeleton files that were created when you executed the
+:command:`start_simpack.py` script: There's useful information there about
+how to customize different aspects of your simpack.
+
+If you need more help come `say hello on the mailing list`_.
 
 .. _Graphical User Interface: http://en.wikipedia.org/wiki/Graphical_user_interface
 .. _wxPython: http://wxpython.org

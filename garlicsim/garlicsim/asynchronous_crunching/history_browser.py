@@ -17,7 +17,7 @@ from garlicsim.general_misc import decorator_tools
 from garlicsim.general_misc.context_manager import ContextManager
 
 import garlicsim.misc
-from .obsolete_cruncher_error import ObsoleteCruncherError
+from .obsolete_cruncher_error import ObsoleteCruncherException
 
 
 __all__ = ['HistoryBrowser']
@@ -268,7 +268,7 @@ class HistoryBrowser(garlicsim.misc.BaseHistoryBrowser, ContextManager):
         if num == 1:
             our_node = nodes_that_are_us[0]
         else: # num == 0
-            raise ObsoleteCruncherError
+            raise ObsoleteCruncherException
         return our_node
         
     

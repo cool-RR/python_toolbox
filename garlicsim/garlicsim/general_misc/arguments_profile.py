@@ -11,7 +11,7 @@ from garlicsim.general_misc import cute_inspect
 from garlicsim.general_misc import cheat_hashing
 from garlicsim.general_misc.nifty_collections import OrderedDict
 from garlicsim.general_misc import dict_tools
-from garlicsim.general_misc import cmp_tools
+from garlicsim.general_misc import comparison_tools
 from garlicsim.general_misc.infinity import infinity
 
 
@@ -360,7 +360,7 @@ class ArgumentsProfile(object):
                 getcallargs_result[s_star_kwargs].keys()
             sorted_star_kwargs_names = sorted(
                 unsorted_star_kwargs_names,
-                cmp=cmp_tools.underscore_hating_cmp
+                cmp=comparison_tools.underscore_hating_cmp
             )
             
             sorted_star_kwargs = OrderedDict(
