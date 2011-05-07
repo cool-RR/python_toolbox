@@ -16,6 +16,7 @@ class MockImporter(object):
     '''
     Importer that creates a mock object instead of actually importing modules.
     '''
+    
     def __init__(self, skip_first_import=False):
         '''
         Create the `MockImporter`.
