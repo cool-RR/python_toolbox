@@ -7,6 +7,8 @@ This module defines the `MockImporter` class.
 See its documentation for more information.
 '''
 
+import __builtin__
+
 from garlicsim.general_misc.third_party import mock as mock_module
 
 

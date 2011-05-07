@@ -13,7 +13,6 @@ See its documentation for more information.
 from __future__ import with_statement
 
 import uuid
-import __builtin__
 import sys
 import os.path
 
