@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-Testing module for `garlicsim.general_misc.abc_tools.abstract_static_method`.
+Testing module for `garlicsim.general_misc.abc_tools.AbstractStaticMethod`.
 '''
 
 import copy
