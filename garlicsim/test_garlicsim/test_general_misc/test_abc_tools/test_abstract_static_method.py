@@ -2,19 +2,19 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-Testing module for `garlicsim.general_misc.abc_tools.abstract_static_method`.
+Testing module for `garlicsim.general_misc.abc_tools.AbstractStaticMethod`.
 '''
 
 import sys
 
 import nose
 
-from garlicsim.general_misc.abc_tools import abstract_static_method
+from garlicsim.general_misc.abc_tools import AbstractStaticMethod
 from garlicsim.general_misc.third_party import abc
 
 
 def test_instantiate_without_subclassing():
-    '''Test you can't instantiate a class with an `abstract_static_method`.'''
+    '''Test you can't instantiate a class with an `AbstractStaticMethod`.'''
     
     if sys.version_info[:2] <= (2, 5):
         raise nose.SkipTest("Python 2.5 and below can't enforce abstract "
@@ -23,7 +23,7 @@ def test_instantiate_without_subclassing():
     class A(object):
         __metaclass__ = abc.ABCMeta
         
-        @abstract_static_method
+        @AbstractStaticMethod
         def f():
             pass
          
@@ -32,13 +32,13 @@ def test_instantiate_without_subclassing():
         
 def test_override():
     '''
-    Can't instantiate subclass that doesn't override `abstract_static_method`.
+    Can't instantiate subclass that doesn't override `AbstractStaticMethod`.
     '''
     
     class B(object):
         __metaclass__ = abc.ABCMeta
         
-        @abstract_static_method
+        @AbstractStaticMethod
         def f():
             pass
     
