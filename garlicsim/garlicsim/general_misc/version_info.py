@@ -29,13 +29,13 @@ class VersionInfo(tuple):
 
     
     def __new__(_cls, major, minor, micro):
-        '''Create new instance of VersionInfo(major, minor, micro).'''
+        '''Create new instance of `VersionInfo(major, minor, micro)`.'''
         return tuple.__new__(_cls, (major, minor, micro)) 
 
     
     @classmethod
     def _make(cls, iterable, new=tuple.__new__, len=len):
-        '''Make a new VersionInfo object from a sequence or iterable.'''
+        '''Make a new `VersionInfo` object from a sequence or iterable.'''
         result = new(cls, iterable)
         if len(result) != 3:
             raise TypeError('Expected 3 arguments, got %d' % len(result))
@@ -48,13 +48,15 @@ class VersionInfo(tuple):
 
     
     def _asdict(self):
-        '''Return a new OrderedDict which maps field names to their values.'''
+        '''
+        Return a new `OrderedDict` which maps field names to their values.
+        '''
         return OrderedDict(zip(self._fields, self)) 
 
     
     def _replace(_self, **kwargs):
         '''
-        Make a VersionInfo object replacing specified fields with new values.
+        Make a `VersionInfo` object replacing specified fields with new values.
         '''
         result = \
             _self._make(map(kwargs.pop, ('major', 'minor', 'micro'),_self))
