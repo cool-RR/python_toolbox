@@ -33,6 +33,11 @@ images_package = __images_package.__name__
 
 
 class SimpackTree(wx.TreeCtrl):
+    '''
+    Widget showing a simpack tree, from which we can select a simpack.
+    
+    The tree can be filtered using the navigation panel's search box.
+    '''
     
     def __init__(self, simpack_selection_dialog):
         wx.TreeCtrl.__init__(

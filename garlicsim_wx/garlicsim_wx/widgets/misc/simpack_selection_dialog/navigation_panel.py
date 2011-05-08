@@ -30,7 +30,12 @@ images_package = __images_package.__name__
 
 
 class NavigationPanel(wx.Panel):
+    '''
+    Panel for navigating between simpacks.
     
+    It contains a filter/search box, back and forward buttons, and an "Add\
+    simpacks from a different folder" button.
+    '''
     def __init__(self, simpack_selection_dialog):
         wx.Panel.__init__(
             self,
@@ -128,10 +133,10 @@ class NavigationPanel(wx.Panel):
             ),
         )
         self.simpack_selection_dialog.Bind(wx.EVT_BUTTON,
-                                           self._on_back_button,
+                                           lambda event: self.back(),
                                            source=self.back_button)
         self.simpack_selection_dialog.Bind(wx.EVT_MENU,
-                                           self._on_back_button,
+                                           lambda event: self.back(),
                                            source=self.back_button)
         self.back_button.SetToolTipString(u'Back (%s)' % \
                                           wx_tools.back_key_string)
@@ -153,10 +158,10 @@ class NavigationPanel(wx.Panel):
             ),
         )
         self.simpack_selection_dialog.Bind(wx.EVT_BUTTON,
-                                           self._on_forward_button,
+                                           lambda event: self.forward(),
                                            source=self.forward_button)
         self.simpack_selection_dialog.Bind(wx.EVT_MENU,
-                                           self._on_forward_button,
+                                           lambda event: self.forward(),
                                            source=self.forward_button)
         self.forward_button.SetToolTipString(u'Forward (%s)' % \
                                              wx_tools.forward_key_string)
@@ -181,22 +186,15 @@ class NavigationPanel(wx.Panel):
 
             
     def back(self):
+        '''Go to the previously-selected simpack.'''
         wx.lib.dialogs.messageDialog(self, 'Back')
     
     
     def forward(self):
+        '''Go to the simpack that was selected before we hit "Back".'''
         wx.lib.dialogs.messageDialog(self, 'Forward')
     
     
-    def _on_back_button(self, event):
-        self.back()
-    
-    
-    def _on_forward_button(self, event):
-        self.forward()
-        
-        
-        
 
 from .simpack_selection_dialog import (SimpackSelectionDialog,
                                        MAC_BOTTOM_SPACING_SIZE)

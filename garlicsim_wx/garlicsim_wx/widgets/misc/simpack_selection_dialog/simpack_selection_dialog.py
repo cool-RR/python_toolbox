@@ -31,11 +31,12 @@ import garlicsim_wx
 # blocktodo: Go over all methods here, ensure they're relevant.
 # blocktodo: Don't forget tooltips here wherever possible
 
+
 MAC_BOTTOM_SPACING_SIZE = 10
+
 
 class SimpackSelectionDialog(CuteDialog):
     '''Dialog for selecting a simpack when creating a new gui project.'''
-
     
     def __init__(self, frame):
         CuteDialog.__init__(
@@ -234,7 +235,7 @@ class SimpackSelectionDialog(CuteDialog):
                 
         
     def on_create_project(self, event):
-        '''Handler for "Ok" button.'''
+        '''Handler for "Create project" button.'''
         if self.list_box.GetStringSelection():
             self.EndModal(wx.ID_OK)       
         
