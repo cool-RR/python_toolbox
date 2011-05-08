@@ -4,9 +4,12 @@
 '''Defines tools related to abstract base classes from the `abc` module.'''
 
 
-class abstract_static_method(staticmethod):
+class AbstractStaticMethod(staticmethod):
     '''
     A combination of `abc.abstractmethod` and `staticmethod`.
+    
+    A method which (a) doesn't take a `self` argument and (b) must be
+    overridden in any subclass if you want that subclass to be instanciable.
     
     This class is good only for documentation; it doesn't enforce overriding
     methods to be static.
@@ -15,5 +18,5 @@ class abstract_static_method(staticmethod):
     __isabstractmethod__ = True
     
     def __init__(self, function):
-        super(abstract_static_method, self).__init__(function)
+        super(AbstractStaticMethod, self).__init__(function)
         function.__isabstractmethod__ = True
