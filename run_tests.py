@@ -268,7 +268,7 @@ def loadTestsFromDir(self, path):
     # pop paths
     if self.config.addPaths:
         for p in paths_added:
-          remove_path(p)
+            remove_path(p)
     plugins.afterDirectory(path)
 nose.loader.TestLoader.loadTestsFromDir = \
     types.MethodType(loadTestsFromDir, None, nose.loader.TestLoader)
