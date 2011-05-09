@@ -198,10 +198,7 @@ def find_module(module_name, path=None, look_in_zip=True, legacy_output=False):
     blocktodo: test
     
     Gives funky output when `legacy_output=True and look_in_zip=True`.
-    '''
-    if path:
-        raise NotImplemented
-    
+    '''    
     if look_in_zip:
         try:
             result = _find_module_in_some_zip_path(module_name, path)
@@ -213,7 +210,7 @@ def find_module(module_name, path=None, look_in_zip=True, legacy_output=False):
     
     if '.' in module_name:
         parent_name, child_name = module_name.rsplit('.', 1)
-        parent_path = find_module(parent_name)
+        parent_path = find_module(parent_name, path)
         result = imp.find_module(child_name, [parent_path])
     else:
         result = imp.find_module(module_name, path)
@@ -230,7 +227,7 @@ def _find_module_in_some_zip_path(module_name, path=None):
     original_path_argument = path
     
     if path is not None:
-        zip_paths = [path]
+        zip_paths = path
     else:
         zip_paths = [path for path in sys.path if '.zip' in path]
         # todo: Find better way to filter zip paths.

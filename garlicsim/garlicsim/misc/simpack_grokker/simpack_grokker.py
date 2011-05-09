@@ -42,9 +42,9 @@ class SimpackGrokker(object):
     
     def __init__(self, simpack):
         self.simpack = simpack
-        #self.__init_analysis()
+        self.__init_analysis()
         self.__init_analysis_settings()
-        #self.__init_analysis_cruncher_types()
+        self.__init_analysis_cruncher_types()
 
         
     def __init_analysis(self):
