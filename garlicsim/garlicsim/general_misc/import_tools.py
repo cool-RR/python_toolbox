@@ -215,7 +215,13 @@ def find_module(module_name, path=None, look_in_zip=True, legacy_output=False):
     else:
         result = imp.find_module(module_name, path)
         
-    return result if legacy_output else result[1]
+    if legacy_output:
+        return result
+    else: # not legacy_output
+        file_, path_, description_ = result
+        if file_ is not None:
+            file_.close()
+        return path_
 
     
 def _find_module_in_some_zip_path(module_name, path=None):
