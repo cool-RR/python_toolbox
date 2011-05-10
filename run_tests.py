@@ -48,6 +48,7 @@ import glob
 
 
 frozen = getattr(sys, 'frozen', None)
+is_pypy = ('__pypy__' in sys.builtin_module_names)
 
 
 if frozen:
@@ -426,10 +427,22 @@ if __name__ == '__main__':
         
         sys.stdout.write('Running tests directly from GarlicSim repo.\n')
         
-    # Adding test packages to arguments to have Nose take tests from them:
-    argv += manually_specified_test_locations or test_packages_paths[::-1]
-    # (Reversing package order for now, to put the shorter tests first.)
-    
+    ## Adding test packages to arguments to have Nose take tests from them: ###
+    #                                                                         #
+    if manually_specified_test_locations:
+        argv += manually_specified_test_locations
+        
+    else: # not manually_specified_test_locations
+        
+        # (Reversing package order for now, to put the shorter tests first.)
+        if is_pypy:
+            sys.stdout.write("Pypy doesn't have wxPython, not loading "
+                             "`garlicsim_wx` tests.\n")
+            argv += test_packages_paths[-2::-1]
+        else: # not is_pypy
+            argv += test_packages_paths[::-1]
+    #                                                                         #
+    ###########################################################################
     
     try:
         #######################################################################
