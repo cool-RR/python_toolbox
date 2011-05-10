@@ -9,28 +9,30 @@ Script for running tests on all GarlicSim packages together.
 Nose is used to run the tests, and any extraneous arguments will be passed to
 Nose; type `nosetests --help` to see Nose's list of arguments.
 
-GarlicSim-specific arguments:
+## GarlicSim-specific arguments: ##
 
     --help
         Show this help screen
 
-#### Load GarlicSim from: ####
-
+        
+  #### Load GarlicSim from: ####
+  
     --from-zip
         Test GarlicSim when imported from zip files
     
     --from-py2exe
         Test GarlicSim when imported from py2exe distribution
-        
+      
     --from-win-installer
-        Test GarlicSim when installed from Windows installer.        
+        Test GarlicSim when installed from Windows installer.    
         Currently not fully implemented; only creates a Windows installer for
         you as `GarlicSim-x.y.z.exe`, you have to run it yourself and then run
         `run_tests.exe` in the installation folder.
+      
         
-#### Choosing tests: ####
-
-    --test-only=PATH    
+  #### Choosing tests: ####
+  
+    --test-only=PATH  
         Load tests from specified file/folder instead of loading GarlicSim's
         test suite. Useful for picking just a few tests. Note that you can only
         put a single path in one of these, so if you want to use multiple
