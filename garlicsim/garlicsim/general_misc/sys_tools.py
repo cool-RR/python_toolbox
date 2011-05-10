@@ -14,6 +14,7 @@ import subprocess
 from garlicsim.general_misc.context_manager import (ContextManager,
                                                     BlankContextManager)
 from garlicsim.general_misc.temp_value_setters import TempValueSetter
+from garlicsim.general_misc.reasoned_bool import ReasonedBool
 
 
 class OutputCapturer(ContextManager):
@@ -107,6 +108,12 @@ This is useful for checking if we are frozen, e.g. with py2exe.
 '''
 
 is_pypy = ('__pypy__' in sys.builtin_module_names)
+
+can_import_compiled_modules = \
+    ReasonedBool(False, "Pypy can't import compiled "
+                         "modules by default") if is_pypy else True
+
+
 
 # May want in future:
 #def execute(command):

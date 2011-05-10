@@ -52,6 +52,11 @@ def _check_module_tasting(format, module_name):
         raise nose.SkipTest("Python 2.5 can't handle module-tasting of "
                             "zip-imported modules.")
     
+    if format == 'pyco' and not sys_tools.can_import_compiled_modules:
+        raise nose.SkipTest(
+            getattr(sys_tools.can_import_compiled_modules, 'reason', None)
+        )
+    
     old_sys_modules = sys.modules.copy()
     
     with temp_file_tools.TemporaryFolder(prefix='temp_garlicsim_') as \
