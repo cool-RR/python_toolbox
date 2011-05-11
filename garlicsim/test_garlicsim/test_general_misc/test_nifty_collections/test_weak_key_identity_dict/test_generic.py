@@ -12,6 +12,8 @@ import operator
 
 from test_garlicsim.third_party import forked_mapping_tests
 
+from garlicsim.general_misc import gc_tools
+
 from garlicsim.general_misc.nifty_collections import WeakKeyIdentityDict
 
 # Used in ReferencesTestCase.test_ref_created_during_del() .
@@ -211,6 +213,7 @@ class MappingTestCase(TestBase):
         for o in objs:
             count += 1
             del d[o]
+        gc_tools.collect()
         self.assertEqual(len(d), 0)
         self.assertEqual(count, 2)
 
