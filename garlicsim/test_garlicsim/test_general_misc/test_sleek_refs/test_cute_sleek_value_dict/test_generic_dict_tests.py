@@ -13,6 +13,7 @@ import weakref
 
 import nose
 from garlicsim.general_misc.third_party import unittest2
+from garlicsim.general_misc import sys_tools
 from garlicsim.general_misc import gc_tools
 
 from garlicsim.general_misc.sleek_refs import CuteSleekValueDict
@@ -407,6 +408,8 @@ class GenericDictTest(unittest2.TestCase):
 
         
     def test_popitem(self):
+        if sys_tools.is_pypy:
+            raise nose.SkipTest("Pypy doesn't maintain dict order.")
         for copymode in -1, +1:
             # -1: b has same structure as a
             # +1: b is a.copy()
@@ -425,7 +428,8 @@ class GenericDictTest(unittest2.TestCase):
                     self.assertEqual(va, int(ka))
                     kb, vb = tb = b.popitem()
                     self.assertEqual(vb, int(kb))
-                    self.assertFalse(copymode < 0 and ta != tb)
+                    if copymode < 0:
+                        self.assertEqual(ta, tb)
                 self.assertFalse(a)
                 self.assertFalse(b)
 
