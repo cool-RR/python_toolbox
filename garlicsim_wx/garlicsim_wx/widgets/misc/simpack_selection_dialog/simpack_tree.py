@@ -49,16 +49,45 @@ class SimpackTree(wx.TreeCtrl):
         assert isinstance(simpack_selection_dialog, SimpackSelectionDialog)
         self.simpack_selection_dialog = simpack_selection_dialog
         
+        self.__init_images()
+        
         self.simpack_places_tree = []
+        
+        
+        
         
         #self.AddColumn('', width=600)
         #self.SetMainColumn(1)
         self.root_item_id = self.AddRoot("GarlicSim's simpack library")
-        self.AppendItem(self.root_item_id, "Conway's Game of Life")
+        
+        item = self.AppendItem(self.root_item_id, "Conway's Game of Life")
+        self.SetItemImage(item,
+                          self._SIMPACK_BITMAP_INDEX,
+                          wx.TreeItemIcon_Normal)
+        
         self.AppendItem(self.root_item_id, "Prisoner's Dilemma")
         self.AppendItem(self.root_item_id, 'Queueing Theory')
         
         self.ExpandAll()
+
+    def __init_images(self):
+        self._simpack_bitmap = wx.BitmapFromImage(
+            wx.ImageFromStream(
+                pkg_resources.resource_stream(images_package,
+                                              'simpack.png'),
+                wx.BITMAP_TYPE_ANY
+            )
+        )        
+        
+        self._bitmaps = [
+            self._simpack_bitmap
+        ]
+        
+        (self._SIMPACK_BITMAP_INDEX,) = range(1)
+        
+        self.image_list = wx.ImageList(16, 16, initialCount=0)
+        for bitmap in self._bitmaps:
+            self.image_list.Add(bitmap)
 
     
     def _refresh_internal_tree(self):
