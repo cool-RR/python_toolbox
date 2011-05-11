@@ -276,7 +276,10 @@ def test_function_in_main():
     with TempValueSetter((globals(), '__name__'), '__main__'):
         def f(x):
             pass
+        
+        # Accessing `f.__module__` here so PyPy will calculate it:
         assert f.__module__ == '__main__'
+        
     assert f.__module__ == '__main__'
     import __main__
     __main__.f = f
