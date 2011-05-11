@@ -3,12 +3,13 @@
 
 '''Testing module for `garlicsim.general_misc.sleek_refs.SleekCallArgs`.'''
 
-import gc
 import weakref
+
+from garlicsim.general_misc import gc_tools
+
 from garlicsim.general_misc.sleek_refs import (SleekCallArgs,
                                                SleekRef,
                                                CuteSleekValueDict)
-
 from .shared import _is_weakreffable, A, counter
 
 
@@ -23,14 +24,14 @@ def test():
     sca1 = SleekCallArgs(sca_dict, f, *args)
     sca_dict[sca1] = 'meow'
     del args
-    gc.collect()
+    gc_tools.collect()
     assert len(sca_dict) == 1
     
     args = (1, A())
     sca2 = SleekCallArgs(sca_dict, f, *args)
     sca_dict[sca2] = 'meow'
     del args
-    gc.collect()
+    gc_tools.collect()
     assert len(sca_dict) == 1
     
     
@@ -43,7 +44,7 @@ def test_unhashable():
     hash(sca1)
     sca_dict[sca1] = 'meow'
     del args
-    gc.collect()
+    gc_tools.collect()
     # GCed because there's a `set` in `args`, and it's weakreffable:
     assert len(sca_dict) == 0
     
@@ -62,7 +63,7 @@ def test_unhashable():
     hash(sca2)
     sca_dict[sca2] = 'meow'
     del kwargs
-    gc.collect()
+    gc_tools.collect()
     # Not GCed because all objects in `kwargs` are not weakreffable:
     assert len(sca_dict) == 1
     

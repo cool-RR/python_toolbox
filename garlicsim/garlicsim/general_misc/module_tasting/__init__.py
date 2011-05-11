@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the `` class.
+This package defines the `taste_module` function.
 
 See its documentation for more information.
 '''

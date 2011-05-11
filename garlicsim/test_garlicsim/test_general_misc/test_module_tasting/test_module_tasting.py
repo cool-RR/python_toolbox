@@ -1,11 +1,7 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''
-This module defines the `` class.
-
-See its documentation for more information.
-'''
+'''Testing pacakge for `garlicsim.general_misc.module_tasting`.'''
 
 from __future__ import with_statement
 
@@ -14,21 +10,25 @@ import sys
 
 import nose
 
-from garlicsim.general_misc import module_tasting
 from garlicsim.general_misc import temp_file_tools
 from garlicsim.general_misc import cute_iter_tools
 from garlicsim.general_misc import sys_tools
+
+from garlicsim.general_misc import module_tasting
 
 from . import sample_package_creation
 
 
 module_names = ['my_package_meow_frrr', 'my_package_meow_frrr.__init__',
                 'my_package_meow_frrr.johnny']
+'''The names of the modules that we're tasting.'''
+
 
 is_python_25 = (sys.version_info[:2] == (2, 5))
 
 
 def test_module_tasting():
+    '''Test module-tasting.'''
     
     combinations = cute_iter_tools.product(
         sample_package_creation.formats,
@@ -41,16 +41,26 @@ def test_module_tasting():
     
 
 def _check_module_tasting(format, module_name):
+    '''
+    Test module-tasting with a given format and module.
+    
+    The `format` means what kind of file the module is imported from, and it
+    may be either 'py', 'pyco', or 'zip'.
+    '''
     
     if format == 'zip' and is_python_25:
         raise nose.SkipTest("Python 2.5 can't handle module-tasting of "
                             "zip-imported modules.")
     
+    if format == 'pyco' and not sys_tools.can_import_compiled_modules:
+        raise nose.SkipTest(
+            getattr(sys_tools.can_import_compiled_modules, 'reason', None)
+        )
+    
     old_sys_modules = sys.modules.copy()
     
     with temp_file_tools.TemporaryFolder(prefix='temp_garlicsim_') as \
                                                               temporary_folder:
-        
     
         path_to_add = sample_package_creation.create_sample_package(
             format,

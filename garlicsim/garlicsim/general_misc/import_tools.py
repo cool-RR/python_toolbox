@@ -94,23 +94,19 @@ def import_if_exists(module_name, silent_fail=False):
             assert silent_fail is True
             return None
         package_path = package.__path__
-        try:
-            imp.find_module(submodule_name, package_path)
-        except ImportError:
+        if not exists(submodule_name, package_path):
             if silent_fail is True:
                 return None
             else: # silent_fail is False
-                raise
+                raise ImportError("Can't find %s." % module_name)
     else: # '.' not in module_name
-        try:
-            imp.find_module(module_name)
-        except ImportError:
+        if not exists(module_name):
             if silent_fail is True:
                 return None
             else: # silent_fail is False
-                raise
+                raise ImportError("Can't find %s." % module_name)
 
-    # Not actually using the result of `imp.find_module`, just want to know
+    # blocktododoc Not actually using the result of `imp.find_module`, just want to know
     # that it worked and the module exists. We'll let `normal_import` find the
     # module again, assuming its finding procedure will work exactly the same
     # as `imp`'s.
@@ -118,7 +114,7 @@ def import_if_exists(module_name, silent_fail=False):
     return normal_import(module_name)
 
 
-def exists(module_name):
+def exists(module_name, path=None):
     '''
     Return whether a module by the name `module_name` exists.
     
@@ -130,12 +126,18 @@ def exists(module_name):
     '''
     if '.' in module_name:
         raise NotImplementedError
+    module_file = None
     try:
-        find_module(module_name)
+        module_file, _, _ = find_module(module_name, path=path,
+                                        legacy_output=True)
     except ImportError:
         return False
     else:
         return True
+    finally:
+        if hasattr(module_file, 'close'):
+            module_file.close()
+        
 
 def _import_by_path_from_zip(path, name=None):
     '''
@@ -191,25 +193,35 @@ def import_by_path(path, name=None, keep_in_sys_modules=True):
     return module
 
 
-def find_module(module_name, path=None, look_in_zip=True):
+def find_module(module_name, path=None, look_in_zip=True, legacy_output=False):
     '''
     blocktodo: test
-    '''
-    if path:
-        raise NotImplemented
     
+    Gives funky output when `legacy_output=True and look_in_zip=True`.
+    '''    
     if look_in_zip:
         try:
-            return _find_module_in_some_zip_path(module_name, path)
+            result = _find_module_in_some_zip_path(module_name, path)
         except ImportError:
-            pass        
+            pass
+        else:
+            return (None, result, None) if legacy_output else result
+            
     
     if '.' in module_name:
         parent_name, child_name = module_name.rsplit('.', 1)
-        parent_path = find_module(parent_name)
-        return imp.find_module(child_name, [parent_path])[1]
+        parent_path = find_module(parent_name, path)
+        result = imp.find_module(child_name, [parent_path])
     else:
-        return imp.find_module(module_name, path)[1]
+        result = imp.find_module(module_name, path)
+        
+    if legacy_output:
+        return result
+    else: # not legacy_output
+        file_, path_, description_ = result
+        if file_ is not None:
+            file_.close()
+        return path_
 
     
 def _find_module_in_some_zip_path(module_name, path=None):
@@ -221,7 +233,7 @@ def _find_module_in_some_zip_path(module_name, path=None):
     original_path_argument = path
     
     if path is not None:
-        zip_paths = [path]
+        zip_paths = path
     else:
         zip_paths = [path for path in sys.path if '.zip' in path]
         # todo: Find better way to filter zip paths.

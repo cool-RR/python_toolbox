@@ -5,10 +5,11 @@
 Testing module for `garlicsim.general_misc.sleek_refs.CuteSleekValueDict`.
 '''
 
-import gc
 import weakref
 
 from garlicsim.general_misc import sequence_tools
+
+from garlicsim.general_misc import gc_tools
 
 from garlicsim.general_misc.sleek_refs import (SleekCallArgs,
                                                SleekRef,
@@ -21,8 +22,7 @@ def test():
     '''Test the basic workings of `CuteSleekValueDict`.'''
     volatile_things = [A(), 1, 4.5, 'meow', u'woof', [1, 2], (1, 2), {1: 2},
                        set([1, 2, 3])]
-    unvolatile_things = [A.s, __builtins__, list, type,  list.append, str.join,
-                         sum]
+    unvolatile_things = [__builtins__, list, type, sum]
     
     # Using len(csvd) as our key; just to guarantee we're not running over an
     # existing key.
@@ -35,13 +35,13 @@ def test():
             csvd[len(csvd)] = volatile_thing
             count = counter()
             del volatile_thing
-            gc.collect()
+            gc_tools.collect()
             assert counter() == count + 2
         else:
             csvd[len(csvd)] = volatile_thing
             count = counter()
             del volatile_thing
-            gc.collect()
+            gc_tools.collect()
             assert counter() == count + 1
 
             
@@ -52,15 +52,14 @@ def test():
         csvd[len(csvd)] = unvolatile_thing
         count = counter()
         del unvolatile_thing
-        gc.collect()
+        gc_tools.collect()
         assert counter() == count + 1
         
         
 def test_one_by_one():
     volatile_things = [A(), 1, 4.5, 'meow', u'woof', [1, 2], (1, 2), {1: 2},
                        set([1, 2, 3])]
-    unvolatile_things = [A.s, __builtins__, list, type,  list.append, str.join,
-                         sum]
+    unvolatile_things = [__builtins__, list, type, sum]
     
     # Using len(csvd) as our key; just to guarantee we're not running over an
     # existing key.
@@ -72,13 +71,13 @@ def test_one_by_one():
             csvd[len(csvd)] = volatile_thing
             count = counter()
             del volatile_thing
-            gc.collect()
+            gc_tools.collect()
             assert counter() == count + 2
         else:
             csvd[len(csvd)] = volatile_thing
             count = counter()
             del volatile_thing
-            gc.collect()
+            gc_tools.collect()
             assert counter() == count + 1
             
     while unvolatile_things:
@@ -88,7 +87,7 @@ def test_one_by_one():
         csvd[len(csvd)] = unvolatile_thing
         count = counter()
         del unvolatile_thing
-        gc.collect()
+        gc_tools.collect()
         assert counter() == count + 1
         
         

@@ -3,10 +3,11 @@
 
 '''Testing module for `garlicsim.general_misc.sleek_refs.SleekRef`.'''
 
-import gc
 import weakref
 
 import nose.tools
+
+from garlicsim.general_misc import gc_tools
 
 from garlicsim.general_misc.sleek_refs import (SleekCallArgs,
                                                SleekRef,
@@ -21,8 +22,7 @@ def test_sleek_ref():
 
     volatile_things = [A(), 1, 4.5, 'meow', u'woof', [1, 2], (1, 2), {1: 2},
                        set([1, 2, 3]), (None, 3, {None: 4})]
-    unvolatile_things = [A.s, __builtins__, list, type,  list.append, str.join,
-                         sum, None]
+    unvolatile_things = [__builtins__, list, type, sum, None]
     
     while volatile_things:
         volatile_thing = volatile_things.pop()
@@ -31,13 +31,13 @@ def test_sleek_ref():
         if _is_weakreffable(volatile_thing):
             count = counter()
             del volatile_thing
-            gc.collect()
+            gc_tools.collect()
             assert counter() == count + 2
             nose.tools.assert_raises(SleekRefDied, sleek_ref)
         else:
             count = counter()
             del volatile_thing
-            gc.collect()
+            gc_tools.collect()
             assert counter() == count + 1
             assert sleek_ref() is not None
     
@@ -48,7 +48,7 @@ def test_sleek_ref():
         
         count = counter()
         del unvolatile_thing
-        gc.collect()
+        gc_tools.collect()
         assert counter() == count + 1
-        # Testing if it will raise SleekRefDied:
+        # Testing if it will raise `SleekRefDied`:
         sleek_ref()

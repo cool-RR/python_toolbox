@@ -73,7 +73,7 @@ class BaseCruncher(object):
                           garlicsim.asynchronous_crunching.CrunchingProfile)
         
     
-    @abc_tools.abstract_static_method
+    @abc_tools.AbstractStaticMethod
     def can_be_used_with_simpack_grokker(simpack_grokker):
         '''
         Return whether this cruncher type can be used with a simpack grokker.
