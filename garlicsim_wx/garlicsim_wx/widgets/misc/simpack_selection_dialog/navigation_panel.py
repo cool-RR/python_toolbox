@@ -139,7 +139,7 @@ class NavigationPanel(wx.Panel):
                                            lambda event: self.back(),
                                            source=self.back_button)
         self.back_button.SetToolTipString(u'Back (%s)' % \
-                                          wx_tools.back_key_string)
+                                          wx_tools.keyboard.keys.back_key_string)
         self.small_h_sizer.Add(
             self.back_button,
             proportion=0,
@@ -164,7 +164,7 @@ class NavigationPanel(wx.Panel):
                                            lambda event: self.forward(),
                                            source=self.forward_button)
         self.forward_button.SetToolTipString(u'Forward (%s)' % \
-                                             wx_tools.forward_key_string)
+                                             wx_tools.keyboard.keys.forward_key_string)
         self.small_h_sizer.Add(
             self.forward_button,
             proportion=0,
@@ -180,8 +180,8 @@ class NavigationPanel(wx.Panel):
             )
         
         self.simpack_selection_dialog.add_accelerators(
-            {wx_tools.back_keys: self.back_button.Id,
-             wx_tools.forward_keys: self.forward_button.Id}
+            {wx_tools.keyboard.keys.back_keys: self.back_button.Id,
+             wx_tools.keyboard.keys.forward_keys: self.forward_button.Id}
         )
 
             

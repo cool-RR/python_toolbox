@@ -84,8 +84,10 @@ class SimpackTree(wx.TreeCtrl):
                 wx.BITMAP_TYPE_ANY
             )
         )
-        self._closed_folder_bitmap = wx_tools.get_closed_folder_bitmap()
-        self._open_folder_bitmap = wx_tools.get_open_folder_bitmap()
+        self._closed_folder_bitmap = \
+            wx_tools.generic_bitmaps.get_closed_folder_bitmap()
+        self._open_folder_bitmap = \
+            wx_tools.generic_bitmaps.get_open_folder_bitmap()
         
         self._bitmaps = [
             self._simpack_bitmap,

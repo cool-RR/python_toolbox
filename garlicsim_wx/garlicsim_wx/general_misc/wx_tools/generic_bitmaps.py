@@ -42,7 +42,7 @@ def get_closed_folder_bitmap(size=(16, 16)):
         return wx.ArtProvider_GetBitmap(wx.ART_FOLDER, wx.ART_OTHER, size)
 
 @caching.cache()
-def get_open_folder_bitmap():
+def get_open_folder_bitmap(size=(16, 16)):
     if is_win:
         return _get_icon_bitmap_from_shell32_dll(4, size=size)
     else:
