@@ -292,17 +292,16 @@ def get_icon_bitmap_from_shell32_dll(index_number, size):
 
 @caching.cache()
 def get_closed_folder_bitmap(size=(16, 16)):
-    is_win = False
+    # blocktodo: test this and its brother on Win7, Ubuntu and Mac
     if is_win:
-        return get_icon_bitmap_from_shell32_dll(3, size=(16, 16))
+        return get_icon_bitmap_from_shell32_dll(3, size=size)
     else:
-        return wx.ArtProvider_GetBitmap(wx.ART_FOLDER, wx.ART_OTHER, (16, 16))
+        return wx.ArtProvider_GetBitmap(wx.ART_FOLDER, wx.ART_OTHER, size)
 
 @caching.cache()
 def get_open_folder_bitmap():
-    is_win = False
     if is_win:
-        return get_icon_bitmap_from_shell32_dll(4, size=(16, 16))
+        return get_icon_bitmap_from_shell32_dll(4, size=size)
     else:
-        return wx.ArtProvider_GetBitmap(wx.ART_FOLDER_OPEN, wx.ART_OTHER, (16, 16))
+        return wx.ArtProvider_GetBitmap(wx.ART_FOLDER_OPEN, wx.ART_OTHER, size)
     
