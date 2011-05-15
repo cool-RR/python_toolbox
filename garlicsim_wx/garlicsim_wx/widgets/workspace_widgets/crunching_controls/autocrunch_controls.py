@@ -50,7 +50,7 @@ class AutocrunchControls(wx.Panel):
         
         wx.Panel.__init__(self, parent, -1)
         
-        self.SetBackgroundColour(wx_tools.get_background_color())
+        self.set_good_background_color()
         
         tooltip_text = ('Set the clock buffer that will be crunched '
                         'automatically from the active node.')

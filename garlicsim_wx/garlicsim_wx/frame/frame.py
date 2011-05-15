@@ -50,7 +50,7 @@ class Frame(wx.Frame, CuteWindow):
         wx.Frame.__init__(self, *args, **kwargs)
         
         self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
-        self.SetBackgroundColour(wx_tools.colors.get_background_color())
+        self.set_good_background_color()
         
         self.SetDoubleBuffered(True)
         self.SetIcons(garlicsim_wx.misc.icon_bundle.get_icon_bundle())

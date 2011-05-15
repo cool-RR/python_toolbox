@@ -26,7 +26,7 @@ class StarKwarg(wx.Panel):
     def __init__(self, argument_control, star_kwarg_box, name='', value=''):
         wx.Panel.__init__(self, argument_control)
         if wx_tools.is_gtk:
-            self.SetBackgroundColour(wx_tools.get_background_color())
+            self.set_good_background_color()
         
         self.argument_control = argument_control
         

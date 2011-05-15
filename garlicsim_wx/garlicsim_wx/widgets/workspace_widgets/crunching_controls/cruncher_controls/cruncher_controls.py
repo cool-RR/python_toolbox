@@ -22,7 +22,7 @@ class CruncherControls(wx.Panel):
         
         wx.Panel.__init__(self, parent)
         
-        self.SetBackgroundColour(wx_tools.get_background_color())
+        self.set_good_background_color()
         
         self.SetToolTipString('Observe or change the cruncher type that is '
                               'used when crunching the simulation.')

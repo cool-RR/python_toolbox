@@ -47,7 +47,7 @@ class Textual(wx.Panel):
     '''Display (and allow modifying) the hue as a number 0-359.'''
     def __init__(self, hue_selection_dialog):
         wx.Panel.__init__(self, parent=hue_selection_dialog, size=(75, 100))
-        self.SetBackgroundColour(wx_tools.get_background_color())
+        self.set_good_background_color()
         
         self.hue_selection_dialog = hue_selection_dialog
         self.hue = hue_selection_dialog.hue

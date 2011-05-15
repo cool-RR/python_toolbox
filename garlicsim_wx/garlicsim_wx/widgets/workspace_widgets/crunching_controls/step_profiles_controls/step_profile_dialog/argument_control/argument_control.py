@@ -28,7 +28,7 @@ class ArgumentControl(wx.Panel):
         
         wx.Panel.__init__(self, step_profile_dialog)
         
-        self.SetBackgroundColour(wx_tools.get_background_color())
+        self.set_good_background_color()
         
         self.box_size = wx.Size(200, -1) if wx_tools.is_win \
                         else wx.Size(250, -1) 

@@ -27,13 +27,13 @@ class StaticFunctionText(wx.Panel):
         
         wx.Panel.__init__(self, step_profile_dialog)
         
-        self.SetBackgroundColour(wx_tools.get_background_color())
+        self.set_good_background_color()
         
         self.text = wx.StaticText(self, style=wx.ALIGN_CENTER_HORIZONTAL)
         
         self.SetMinSize((self.width, 25))
         
-        #self.SetBackgroundColour(wx_tools.get_background_color())
+        #self.set_good_background_color()
         
         self.text.Wrap(self.width - 10)
         

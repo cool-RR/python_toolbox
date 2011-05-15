@@ -18,7 +18,7 @@ class CuteDialog(wx.Dialog, CuteWindow):
     def __init__(self, *args, **kwargs):
         if not kwargs.pop('skip_dialog_init', False):
             wx.Dialog.__init__(self, *args, **kwargs)
-        self.SetBackgroundColour(wx_tools.get_background_color())
+        self.set_good_background_color()
         self.SetDoubleBuffered(True)
 
         

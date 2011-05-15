@@ -48,7 +48,7 @@ def get_background_color():
     
 @caching.cache()
 def get_background_brush():
-    '''Get the default garlicsim_wx background brush.'''
+    '''Get the default `garlicsim_wx` background brush.'''
     return wx.Brush(get_background_color())
 
 

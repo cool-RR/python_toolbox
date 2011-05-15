@@ -52,10 +52,12 @@ class AboutDialog(CuteDialog):
         self.html_window = wx.html.HtmlWindow(self, size=(628, 270))
         v_sizer.Add(self.html_window, 0)
         
-        foreground_color_in_hex = \
-            wx_tools.wx_color_to_html_color(wx_tools.get_background_color())
-        background_color_in_hex = \
-            wx_tools.wx_color_to_html_color(wx.Colour(0, 0, 0))
+        foreground_color_in_hex = wx_tools.wx_color_to_html_color(
+            wx_tools.colors.get_background_color()
+        )
+        background_color_in_hex = wx_tools.wx_color_to_html_color(
+            wx.Colour(0, 0, 0)
+        )
         
         
         self.html_window.SetPage(

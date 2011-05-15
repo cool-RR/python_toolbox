@@ -36,7 +36,7 @@ class StepProfilesControls(wx.Panel):
         
         wx.Panel.__init__(self, parent, *args, **kwargs)
         
-        self.SetBackgroundColour(wx_tools.get_background_color())
+        self.set_good_background_color()
         
         self.SetToolTipString('Add, remove or organize step profiles.')
 

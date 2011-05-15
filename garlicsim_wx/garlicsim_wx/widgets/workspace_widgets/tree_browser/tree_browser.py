@@ -44,7 +44,7 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
         WorkspaceWidget.__init__(self, frame)
         
         self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
-        self.SetBackgroundColour(wx_tools.get_background_color())
+        self.set_good_background_color()
         
         self.SetupScrolling()
         #self.SetScrollRate(20,20)

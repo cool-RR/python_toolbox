@@ -51,7 +51,7 @@ class AuiDockArt(aui.AuiDefaultDockArt):
         #               aui.AUI_GRADIENT_NONE)
         
         self.SetColor(aui.AUI_DOCKART_INACTIVE_CAPTION_COLOUR,
-                      wx_tools.get_background_color())
+                      wx_tools.colors.get_background_color())
 
         
     def DrawCaption(self, dc, window, text, rect, pane):

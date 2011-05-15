@@ -44,7 +44,7 @@ def make_bitmap(lightness=1, saturation=1):
     
     center_x = center_y = BIG_LENGTH // 2 
     background_color_rgb = wx_tools.wx_color_to_rgb(
-        wx_tools.get_background_color()
+        wx_tools.colors.get_background_color()
     )
     
     for x, y in cute_iter_tools.product(xrange(BIG_LENGTH),

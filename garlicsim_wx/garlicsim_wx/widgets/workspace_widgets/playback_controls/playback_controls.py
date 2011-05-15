@@ -71,7 +71,7 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         WorkspaceWidget.__init__(self, frame)
         
         #self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
-        self.SetBackgroundColour(wx_tools.get_background_color())
+        self.set_good_background_color()
         self.SetDoubleBuffered(True)
         
         
@@ -85,7 +85,7 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         self.inner_panel = wx.Panel(self, -1, size=(184, 124))
         '''The panel that contains all the subwidgets.'''
         
-        self.inner_panel.SetBackgroundColour(wx_tools.get_background_color())
+        self.inner_panel.set_good_background_color()
         
         self.center_button_mode = PlayMode
         '''The current mode of the center button.'''
