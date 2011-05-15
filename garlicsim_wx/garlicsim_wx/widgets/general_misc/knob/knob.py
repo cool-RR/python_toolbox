@@ -16,7 +16,6 @@ import pkg_resources
 
 from garlicsim.general_misc import math_tools
 from garlicsim_wx.general_misc import wx_tools
-from garlicsim_wx.general_misc import wx_tools.cursors.collection
 from garlicsim.general_misc import binary_search
 from garlicsim.general_misc import cute_iter_tools
 

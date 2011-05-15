@@ -37,3 +37,6 @@ class CuteWindow(AcceleratorSavvyWindow, wx.Window):
         `wx.CURSOR_BULLSEYE`.
         '''
         return wx_tools.cursors.CursorChanger(self, cursor)
+    
+    def set_good_background_color(self):
+        self.SetBackgroundColour(wx_tools.colors.get_background_color())

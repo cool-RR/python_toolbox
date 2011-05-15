@@ -3,7 +3,9 @@
 
 '''This module defines GTK-specific keys.'''
 
-from garlicsim.general_misc.wx_tools.keyboard import Key
+import wx
+
+from ..key import Key
 
 
 back_keys = (

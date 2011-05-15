@@ -3,7 +3,9 @@
 
 '''Defines keys that work on all operating systems.'''
 
-from garlicsim.general_misc.wx_tools.keyboard import Key
+import wx
+
+from ..key import Key
 
 
 menu_keys = [Key(wx.WXK_MENU), Key(wx.WXK_WINDOWS_MENU),

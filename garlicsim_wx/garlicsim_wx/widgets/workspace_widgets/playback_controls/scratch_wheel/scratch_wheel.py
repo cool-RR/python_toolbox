@@ -16,7 +16,7 @@ import math
 import time
 
 from garlicsim_wx.widgets import WorkspaceWidget
-from garlicsim_wx.general_misc import wx_tools.cursors.collection
+from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.general_misc import cute_timer
 from garlicsim.general_misc import math_tools
 from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
