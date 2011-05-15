@@ -1,7 +1,7 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''Defines various tools for wxPython.'''
+# blocktodo: delete this file
 
 from __future__ import division
 
@@ -14,91 +14,9 @@ from garlicsim.general_misc import caching
 from garlicsim.general_misc.context_manager import ContextManager
 from garlicsim_wx.general_misc import color_tools
 
-is_mac = (wx.Platform == '__WXMAC__')
-is_gtk = (wx.Platform == '__WXGTK__')
-is_win = (wx.Platform == '__WXMSW__')
 
 if is_win:
     import win32api
-
-@caching.cache()
-def get_background_color():
-    '''Get the default `garlicsim_wx` background color'''
-    
-    if is_win:
-        # return wx.Colour(212, 208, 200)
-        return wx.SystemSettings.GetColour(wx.SYS_COLOUR_MENUBAR)
-    elif is_mac:
-        return wx.Colour(232, 232, 232)
-    elif is_gtk:
-        # Until `SYS_COLOUR_*` get their act togother, we're using Windows
-        # colors for Linux.
-        return wx.Colour(212, 208, 200)
-    
-    else:
-        warnings.warn("Unidentified platform! It's neither '__WXGTK__', "
-                      "'__WXMAC__' nor '__WXMSW__'. Things might not work "
-                      "properly.")
-        return wx.Colour(212, 208, 200)
-
-
-@caching.cache()
-def get_background_brush():
-    '''Get the default garlicsim_wx background brush.'''
-    return wx.Brush(get_background_color())
-
-
-def wx_color_to_html_color(wx_color):
-    '''Convert a wxPython color to an HTML color string.'''
-    rgb = wx_color.GetRGB()
-    (green_blue, red) = divmod(rgb, 256)
-    (blue, green) = divmod(green_blue, 256)
-    return '#%02x%02x%02x' % (red, green, blue)
-
-
-def hls_to_wx_color(hls, alpha=255):
-    '''Convert an HLS color to a wxPython color.'''
-    return rgb_to_wx_color(colorsys.hls_to_rgb(*hls), alpha=alpha)
-
-
-def wx_color_to_hls(wx_color):
-    '''Convert a wxPython color to an HLS color.'''
-    return colorsys.rgb_to_hls(wx_color.red, wx_color.blue, wx_color.green)
-
-
-def rgb_to_wx_color(rgb, alpha=255):
-    '''Convert an RGB color to a wxPython color.'''
-    r, g, b = rgb
-    return wx.Colour(r * 255, g * 255, b * 255, alpha)
-
-
-def wx_color_to_rgb(wx_color):
-    '''Convert a wxPython color to an RGB color.'''
-    return (
-        wx_color.red / 255,
-        wx_color.blue / 255,
-        wx_color.green / 255
-    )
-
-
-def wx_color_to_big_rgb(wx_color):
-    '''Convert a wxPython color to a big (i.e. `int`) RGB color.'''
-    return (
-        wx_color.red,
-        wx_color.green,
-        wx_color.blue
-    )
-
-
-def mix_wx_color(ratio, color1, color2):
-    '''Mix two wxPython colors according to the given `ratio`.'''
-    rgb = color_tools.mix_rgb(
-        ratio,
-        wx_color_to_rgb(color1),
-        wx_color_to_rgb(color2)
-    )
-    return rgb_to_wx_color(rgb)
-
 
 def post_event(evt_handler, event_binder, source=None, **kwargs):
     '''Post an event to an evt_handler.'''
@@ -114,78 +32,8 @@ def post_event(evt_handler, event_binder, source=None, **kwargs):
     wx.PostEvent(evt_handler, event)
     
     
-class Key(object):    
-    '''A key combination.'''
-
-    def __init__(self, key_code, cmd=False, alt=False, shift=False):
-
-        self.key_code = key_code        
-        '''The numerical code of the pressed key.'''
-        
-        self.cmd = cmd
-        '''Flag saying whether the ctrl/cmd key was pressed.'''
-        
-        self.alt = alt
-        '''Flag saying whether the alt key was pressed.'''
-        
-        self.shift = shift
-        '''Flag saying whether the shift key was pressed.'''
-        
-        
-    @staticmethod
-    def get_from_key_event(event):
-        '''Construct a Key from a wx.EVT_KEY_DOWN event.'''
-        return Key(event.GetKeyCode(), event.CmdDown(),
-                   event.AltDown(), event.ShiftDown())
-    
-    def to_accelerator_pair(self):
-        modifiers = (
-            wx.ACCEL_NORMAL |
-            (wx.ACCEL_CMD if self.cmd else wx.ACCEL_NORMAL) |
-            (wx.ACCEL_ALT if self.alt else wx.ACCEL_NORMAL) |
-            (wx.ACCEL_SHIFT if self.shift else wx.ACCEL_NORMAL)
-        )
-        
-        return (modifiers, self.key_code)
-         
-    
-    def __hash__(self):
-        return hash(tuple(sorted(tuple(vars(self)))))
-    
-    def __eq__(self, other):
-        if not isinstance(other, Key):
-            return NotImplemented
-        return self.key_code == other.key_code and \
-               self.cmd == other.cmd and \
-               self.shift == other.shift and \
-               self.alt == other.alt
 
         
-menu_keys = [Key(wx.WXK_MENU), Key(wx.WXK_WINDOWS_MENU),
-             Key(wx.WXK_F10, shift=True)]
-'''Keys used for raising a context menu.'''
-
-# blocktodo: finally explode this module
-
-# blocktodo: Make separate keys module for each OS
-
-back_keys = (
-    Key(ord('['), cmd=True),
-    Key(wx.WXK_LEFT, cmd=True)
-    ) if is_mac else (
-        Key(wx.WXK_LEFT, alt=True),
-    )
-
-back_key_string = u'\u2318\u00ab' if is_mac else u'Alt-\u00ab'
-
-forward_keys = (
-    Key(ord(']'), cmd=True),
-    Key(wx.WXK_RIGHT, cmd=True)
-    ) if is_mac else (
-        Key(wx.WXK_RIGHT, alt=True),
-    )
-
-forward_key_string = u'\u2318\u00bb' if is_mac else u'Alt-\u00bb'
     
 
 
