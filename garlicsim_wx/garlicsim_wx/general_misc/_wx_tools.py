@@ -3,16 +3,10 @@
 
 # blocktodo: delete this file
 
-from __future__ import division
-
-import warnings
-import colorsys
-
 import wx
 
 from garlicsim.general_misc import caching
 from garlicsim.general_misc.context_manager import ContextManager
-from garlicsim_wx.general_misc import color_tools
 
 
 if is_win:

@@ -1,3 +1,16 @@
+# Copyright 2009-2011 Ram Rachum.
+# This program is distributed under the LGPL2.1 license.
+
+'''
+Defines color-related tools.
+
+This includes functions for getting general colors (e.g. background color) and
+functions to convert between different respresentations of colors.
+'''
+
+
+from __future__ import division
+
 import colorsys
 import warnings
 

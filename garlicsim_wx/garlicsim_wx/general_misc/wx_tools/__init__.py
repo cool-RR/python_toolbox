@@ -3,8 +3,13 @@
 
 '''Defines various tools for wxPython.'''
 
+import wx
+
+
 is_mac = (wx.Platform == '__WXMAC__')
 is_gtk = (wx.Platform == '__WXGTK__')
 is_win = (wx.Platform == '__WXMSW__')
 
+
 from . import colors
+from . import keyboard

@@ -4,3 +4,4 @@
 '''Defines various keyboard-related tools.'''
 
 from .key import Key
+from . import keys
