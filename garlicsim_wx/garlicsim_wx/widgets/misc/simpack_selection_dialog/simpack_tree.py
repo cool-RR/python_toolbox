@@ -60,8 +60,11 @@ class SimpackTree(wx.TreeCtrl):
         #self.SetMainColumn(1)
         self.root_item_id = self.AddRoot("GarlicSim's simpack library")
         self.SetItemImage(self.root_item_id,
-                          self._CLOSED_FOLDER_BITMAP_INDEX)
-                          
+                          self._CLOSED_FOLDER_BITMAP_INDEX,
+                          which=wx.TreeItemIcon_Normal)
+        self.SetItemImage(self.root_item_id,
+                          self._OPEN_FOLDER_BITMAP_INDEX,
+                          which=wx.TreeItemIcon_Expanded)
         
         titles = ["Conway's Game of Life", "Prisoner's Dilemma",
                   'Queueing Theory']
@@ -82,14 +85,17 @@ class SimpackTree(wx.TreeCtrl):
             )
         )
         self._closed_folder_bitmap = wx_tools.get_closed_folder_bitmap()
+        self._open_folder_bitmap = wx_tools.get_open_folder_bitmap()
         
         self._bitmaps = [
             self._simpack_bitmap,
-            self._closed_folder_bitmap
+            self._closed_folder_bitmap,
+            self._open_folder_bitmap
         ]
         
         (self._SIMPACK_BITMAP_INDEX,
-         self._CLOSED_FOLDER_BITMAP_INDEX,) = range(2)
+         self._CLOSED_FOLDER_BITMAP_INDEX,
+         self._OPEN_FOLDER_BITMAP_INDEX) = range(3)
         
         self._image_list = wx.ImageList(16, 16, initialCount=0)
         for bitmap in self._bitmaps:

@@ -274,22 +274,33 @@ class CursorChanger(ContextManager):
     def __exit__(self, *args, **kwargs):
         self.window.SetCursor(self.old_cursor)
         
+@caching.cache()
+def get_icon_from_shell32_dll(icon_number, icon_size):
+    assert isinstance(icon_number, int)
+    width, height = icon_size
+    shell32_dll = win32api.GetModuleFileName(
+        win32api.GetModuleHandle('shell32.dll')
+    )
+    return wx.BitmapFromIcon(
+        wx.Icon(
+            '%s;%s' % (shell32, icon_number),
+            wx.BITMAP_TYPE_ICO,
+            desiredWidth=width,
+            desiredHeight=height
+        )
+    )
 
 @caching.cache()
 def get_closed_folder_bitmap():    
     if is_win:
-        shell32 = win32api.GetModuleFileName(
-            win32api.GetModuleHandle('shell32.dll')
-        )
-        return wx.BitmapFromIcon(
-            wx.Icon(shell32 + ';3', wx.BITMAP_TYPE_ICO, desiredWidth=16,
-                    desiredHeight=16)
-        )
+        return get_icon_from_shell32_dll(3)
     else:
         return wx.ArtProvider_GetBitmap(wx.ART_FOLDER, wx.ART_OTHER, (16, 16))
-    #fldropenidx = il.Add(wx.ArtProvider_GetBitmap(wx.ART_FILE_OPEN,   wx.ART_OTHER, isz))
 
 @caching.cache()
-def get_open_folder_icon():
-    pass
+def get_open_folder_icon():    
+    if is_win:
+        return get_icon_from_shell32_dll(4)
+    else:
+        return wx.ArtProvider_GetBitmap(wx.ART_FOLDER, wx.ART_OTHER, (16, 16))
     
