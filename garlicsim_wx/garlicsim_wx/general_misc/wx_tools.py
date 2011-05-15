@@ -275,15 +275,15 @@ class CursorChanger(ContextManager):
         self.window.SetCursor(self.old_cursor)
         
 @caching.cache()
-def get_icon_from_shell32_dll(icon_number, icon_size):
-    assert isinstance(icon_number, int)
-    width, height = icon_size
+def get_icon_bitmap_from_shell32_dll(index_number, size):
+    assert isinstance(index_number, int)
+    width, height = size
     shell32_dll = win32api.GetModuleFileName(
         win32api.GetModuleHandle('shell32.dll')
     )
     return wx.BitmapFromIcon(
         wx.Icon(
-            '%s;%s' % (shell32, icon_number),
+            '%s;%s' % (shell32_dll, index_number),
             wx.BITMAP_TYPE_ICO,
             desiredWidth=width,
             desiredHeight=height
@@ -291,16 +291,18 @@ def get_icon_from_shell32_dll(icon_number, icon_size):
     )
 
 @caching.cache()
-def get_closed_folder_bitmap():    
+def get_closed_folder_bitmap(size=(16, 16)):
+    is_win = False
     if is_win:
-        return get_icon_from_shell32_dll(3)
+        return get_icon_bitmap_from_shell32_dll(3, size=(16, 16))
     else:
         return wx.ArtProvider_GetBitmap(wx.ART_FOLDER, wx.ART_OTHER, (16, 16))
 
 @caching.cache()
-def get_open_folder_icon():    
+def get_open_folder_bitmap():
+    is_win = False
     if is_win:
-        return get_icon_from_shell32_dll(4)
+        return get_icon_bitmap_from_shell32_dll(4, size=(16, 16))
     else:
-        return wx.ArtProvider_GetBitmap(wx.ART_FOLDER, wx.ART_OTHER, (16, 16))
+        return wx.ArtProvider_GetBitmap(wx.ART_FOLDER_OPEN, wx.ART_OTHER, (16, 16))
     
