@@ -52,7 +52,7 @@ class WindowMenu(CuteMenu):
         
         frame.Bind(
             wx.EVT_MENU,
-            lambda event: wx_tools.post_event(
+            lambda event: wx_tools.event_tools.post_event(
                 frame.crunching_controls,
                 EVT_WORKSPACE_WIDGET_MENU_SELECT
             ),
@@ -70,7 +70,7 @@ class WindowMenu(CuteMenu):
         
         #frame.Bind(
             #wx.EVT_MENU,
-            #lambda event: wx_tools.post_event(
+            #lambda event: wx_tools.event_tools.post_event(
                 #frame.local_nodes_examiner,
                 #EVT_WORKSPACE_WIDGET_MENU_SELECT
             #),
@@ -87,7 +87,7 @@ class WindowMenu(CuteMenu):
         
         frame.Bind(
             wx.EVT_MENU,
-            lambda event: wx_tools.post_event(
+            lambda event: wx_tools.event_tools.post_event(
                 frame.playback_controls,
                 EVT_WORKSPACE_WIDGET_MENU_SELECT
             ),
@@ -103,7 +103,7 @@ class WindowMenu(CuteMenu):
         
         frame.Bind(
             wx.EVT_MENU,
-            lambda event: wx_tools.post_event(
+            lambda event: wx_tools.event_tools.post_event(
                 frame.seek_bar,
                 EVT_WORKSPACE_WIDGET_MENU_SELECT
             ),
@@ -120,7 +120,7 @@ class WindowMenu(CuteMenu):
         
         frame.Bind(
             wx.EVT_MENU,
-            lambda event: wx_tools.post_event(
+            lambda event: wx_tools.event_tools.post_event(
                 frame.shell,
                 EVT_WORKSPACE_WIDGET_MENU_SELECT
             ),
@@ -138,7 +138,7 @@ class WindowMenu(CuteMenu):
         
         #frame.Bind(
             #wx.EVT_MENU,
-            #lambda event: wx_tools.post_event(
+            #lambda event: wx_tools.event_tools.post_event(
                 #frame.toolbox,
                 #EVT_WORKSPACE_WIDGET_MENU_SELECT
             #),
@@ -154,7 +154,7 @@ class WindowMenu(CuteMenu):
         
         frame.Bind(
             wx.EVT_MENU,
-            lambda event: wx_tools.post_event(
+            lambda event: wx_tools.event_tools.post_event(
                 frame.tree_browser,
                 EVT_WORKSPACE_WIDGET_MENU_SELECT
             ),

@@ -1,13 +1,11 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-# blocktodo: delete this file
+'''Defines event-related tools.'''
 
 import wx
 
-from garlicsim.general_misc import caching
-from garlicsim.general_misc.context_manager import ContextManager
-
+from garlicsim_wx.general_misc.wx_tools.keyboard import Key
 
 
 def post_event(evt_handler, event_binder, source=None, **kwargs):
@@ -23,11 +21,6 @@ def post_event(evt_handler, event_binder, source=None, **kwargs):
     event.SetEventType(event_binder.evtType[0])
     wx.PostEvent(evt_handler, event)
     
-    
-
-        
-    
-
 
 def navigate_from_key_event(key_event):
     '''
@@ -64,29 +57,3 @@ def navigate_from_key_event(key_event):
         return False
             
 
-    
-def iter_rects_of_region(region):
-    '''Iterate over the rects of a region.'''
-    i = wx.RegionIterator(region)
-    while i.HaveRects():
-        yield i.GetRect()
-        i.Next()
-        
-
-
-def color_replaced_bitmap(bitmap, old_rgb, new_rgb):
-    '''Replace all appearances of `old_rgb` with `new_rgb` in `bitmap`.'''
-    old_r, old_g, old_b = old_rgb
-    new_r, new_g, new_b = new_rgb
-    image = wx.ImageFromBitmap(bitmap)
-    assert isinstance(image, wx.Image)
-    image.Replace(old_r, old_g, old_b, new_r, new_g, new_b)
-    return wx.BitmapFromImage(image)
-    
-
-        
-        
-
-        
-
-    

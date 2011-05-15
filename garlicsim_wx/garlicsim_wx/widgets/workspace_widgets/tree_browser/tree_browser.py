@@ -32,7 +32,7 @@ connector_length = 10 # length of connecting line between elements
 
 
 my_color_replaced_bitmap = \
-    caching.cache(max_size=80)(wx_tools.color_replaced_bitmap)
+    caching.cache(max_size=80)(wx_tools.bitmap_tools.color_replaced_bitmap)
 
 
 class TreeBrowser(ScrolledPanel, WorkspaceWidget):

@@ -95,7 +95,7 @@ class CuteHyperTreeList(HyperTreeList):
         
             
     def __on_key_down(self, event):
-        if wx_tools.navigate_from_key_event(event):
+        if wx_tools.event_tools.navigate_from_key_event(event):
             return
         # Hacky, either the OS or wxPython should be doing this:
         key = wx_tools.Key.get_from_key_event(event)
@@ -112,7 +112,11 @@ class CuteHyperTreeList(HyperTreeList):
                 self.GetEventHandler().ProcessEvent(new_event)
                 
             else:
-                wx_tools.post_event(self, wx.EVT_CONTEXT_MENU, self)
+                wx_tools.event_tools.post_event(
+                    self,
+                    wx.EVT_CONTEXT_MENU,
+                    self
+                )
         else:
             event.Skip()
 

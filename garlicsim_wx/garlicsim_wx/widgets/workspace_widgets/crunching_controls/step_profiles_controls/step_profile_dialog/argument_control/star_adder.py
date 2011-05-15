@@ -52,7 +52,11 @@ class StarAdder(wx.BitmapButton):
         self.Bind(wx.EVT_BUTTON, self.on_button)
         
     def on_button(self, event):
-        wx_tools.post_event(self, EVT_STAR_ADDER_PRESSED, source=self)
+        wx_tools.event_tools.post_event(
+            self,
+            EVT_STAR_ADDER_PRESSED,
+            source=self
+        )
         event.Skip()
             
         
