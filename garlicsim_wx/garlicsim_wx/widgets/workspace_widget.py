@@ -56,7 +56,7 @@ class WorkspaceWidget(object):
         
         
         self.Bind(wx.EVT_KEY_DOWN, self.on_key_down)
-        self.__escape_key = wx_tools.Key(wx.WXK_ESCAPE)
+        self.__escape_key = wx_tools.keyboard.Key(wx.WXK_ESCAPE)
         
         self.Bind(EVT_WORKSPACE_WIDGET_MENU_SELECT,
                   self.on_workspace_widget_menu_select)
@@ -77,7 +77,9 @@ class WorkspaceWidget(object):
     def on_key_down(self, event):
         '''Handler for key down event.'''
         
-        if wx_tools.Key.get_from_key_event(event) == self.__escape_key and \
+        key = wx_tools.keyboard.Key.get_from_key_event(event)
+        
+        if key == self.__escape_key and \
            self.frame.FindFocus() is not self.frame:
                 
                 self.frame.SetFocus()

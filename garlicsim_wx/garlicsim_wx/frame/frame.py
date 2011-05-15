@@ -284,22 +284,19 @@ class Frame(wx.Frame, CuteWindow):
                 
                 self.gui_project.finalize_active_node()
 
-        
-                
-        
         self.key_handlers = {
-            wx_tools.Key(wx.WXK_HOME): on_home,
-            wx_tools.Key(wx.WXK_END): on_end,
-            wx_tools.Key(wx.WXK_UP): on_up,
-            wx_tools.Key(wx.WXK_DOWN): on_down,
-            wx_tools.Key(wx.WXK_LEFT): on_left,
-            wx_tools.Key(wx.WXK_RIGHT): on_right,
-            wx_tools.Key(wx.WXK_LEFT, cmd=True): on_command_left,
-            wx_tools.Key(wx.WXK_RIGHT, cmd=True): on_command_right,
-            wx_tools.Key(wx.WXK_PAGEUP): on_page_up,
-            wx_tools.Key(wx.WXK_PAGEDOWN): on_page_down,
-            wx_tools.Key(wx.WXK_SPACE): on_space,
-            wx_tools.Key(wx.WXK_RETURN): on_return,
+            wx_tools.keyboard.Key(wx.WXK_HOME): on_home,
+            wx_tools.keyboard.Key(wx.WXK_END): on_end,
+            wx_tools.keyboard.Key(wx.WXK_UP): on_up,
+            wx_tools.keyboard.Key(wx.WXK_DOWN): on_down,
+            wx_tools.keyboard.Key(wx.WXK_LEFT): on_left,
+            wx_tools.keyboard.Key(wx.WXK_RIGHT): on_right,
+            wx_tools.keyboard.Key(wx.WXK_LEFT, cmd=True): on_command_left,
+            wx_tools.keyboard.Key(wx.WXK_RIGHT, cmd=True): on_command_right,
+            wx_tools.keyboard.Key(wx.WXK_PAGEUP): on_page_up,
+            wx_tools.keyboard.Key(wx.WXK_PAGEDOWN): on_page_down,
+            wx_tools.keyboard.Key(wx.WXK_SPACE): on_space,
+            wx_tools.keyboard.Key(wx.WXK_RETURN): on_return,
         }    
             
         
@@ -718,7 +715,7 @@ class Frame(wx.Frame, CuteWindow):
     
     def on_key_down(self, event):
         '''wx.EVT_KEY_DOWN handler.'''
-        key = wx_tools.Key.get_from_key_event(event)
+        key = wx_tools.keyboard.Key.get_from_key_event(event)
         handler = self.key_handlers.get(key, None)
         if handler:
             handler()

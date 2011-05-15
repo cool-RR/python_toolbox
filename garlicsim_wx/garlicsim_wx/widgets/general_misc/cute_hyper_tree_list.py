@@ -98,7 +98,7 @@ class CuteHyperTreeList(HyperTreeList):
         if wx_tools.event_tools.navigate_from_key_event(event):
             return
         # Hacky, either the OS or wxPython should be doing this:
-        key = wx_tools.Key.get_from_key_event(event)
+        key = wx_tools.keyboard.Key.get_from_key_event(event)
         if key in wx_tools.menu_keys:
             selection = self.GetSelection()
             if selection is not None:

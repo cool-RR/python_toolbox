@@ -242,8 +242,8 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
        
         
     def on_key_down(self, event):
-        key = wx_tools.Key.get_from_key_event(event)
-        if key == wx_tools.Key(wx.WXK_DELETE):
+        key = wx_tools.keyboard.Key.get_from_key_event(event)
+        if key == wx_tools.keyboard.Key(wx.WXK_DELETE):
             self.step_profiles_controls.try_delete_step_profile(
                 self.get_selected_step_profile()
             )

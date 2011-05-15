@@ -58,8 +58,8 @@ def _key_dict_to_accelerators(key_dict):
     
     for key, id in key_dict.items():
         if isinstance(key, int):
-            key = wx_tools.Key(key)
-        assert isinstance(key, wx_tools.Key)
+            key = wx_tools.keyboard.Key(key)
+        assert isinstance(key, wx_tools.keyboard.Key)
         (modifiers, key_code) = key.to_accelerator_pair()
         accelerator = (modifiers, key_code, id)
         accelerators.append(accelerator)
