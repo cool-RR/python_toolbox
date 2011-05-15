@@ -276,13 +276,14 @@ class CursorChanger(ContextManager):
         
 
 @caching.cache()
-def get_closed_folder_icon():    
+def get_closed_folder_bitmap():    
     if is_win:
         shell32 = win32api.GetModuleFileName(
             win32api.GetModuleHandle('shell32.dll')
         )
         return wx.BitmapFromIcon(
-            wx.Icon(shell32 + ';3', wx.BITMAP_TYPE_ICO)
+            wx.Icon(shell32 + ';3', wx.BITMAP_TYPE_ICO, desiredWidth=16,
+                    desiredHeight=16)
         )
     else:
         return wx.ArtProvider_GetBitmap(wx.ART_FOLDER, wx.ART_OTHER, (16, 16))
