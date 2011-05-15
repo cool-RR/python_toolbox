@@ -63,34 +63,34 @@ class AboutDialog(CuteDialog):
         self.html_window.SetPage(
             '''
             <html>
-                <body bgcolor="%s" color="%s">
-                    <div align="center"> <font size="1">
-                        &copy; 2009-2011 Ram Rachum (a.k.a. cool-RR)
-                        <br />                        
-                        This program is distributed under the LGPL2.1 license.
-                        <br />
-                    </font></div>
-                    <div> 
-                        GarlicSim is a platform for writing, running and
-                        analyzing computer simulations. It is general enough to
-                        handle any kind of simulation: Physics, game theory,
-                        epidemic spread, electronics, etc.<br />
-                        <font size="1"><br /></font>
-                        <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Version %s</b>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Website:
-                        <a href="http://garlicsim.org">http://garlicsim.org</a>
-                    </div>
-                    <div>
-                        <font size="1"><br /></font>
-                        I would like to thank the open source community for
-                        making this program possible. This includes the
-                        developers of Python, Psyco, wxPython, wxWidgets,
-                        Mayavi, git, and so many others... And more thanks to
-                        the many people who spent many hours helping me out
-                        with various issues, on mailing lists such as
-                        wxpython-users and on the StackOverflow website.
-                    </div>
-                </body>
+              <body bgcolor="%s" color="%s">
+                <div align="center"> <font size="1">
+                  &copy; 2009-2011 Ram Rachum (a.k.a. cool-RR)
+                  <br />            
+                  This program is distributed under the LGPL2.1 license.
+                  <br />
+                </font></div>
+                <div> 
+                  GarlicSim is a platform for writing, running and
+                  analyzing computer simulations. It is general enough to
+                  handle any kind of simulation: Physics, game theory,
+                  epidemic spread, electronics, etc.<br />
+                  <font size="1"><br /></font>
+                  <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Version %s</b>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Website:
+                  <a href="http://garlicsim.org">http://garlicsim.org</a>
+                </div>
+                <div>
+                  <font size="1"><br /></font>
+                  I would like to thank the open source community for
+                  making this program possible. This includes the
+                  developers of Python, Psyco, wxPython, wxWidgets,
+                  Mayavi, git, and so many others... And more thanks to
+                  the many people who spent many hours helping me out
+                  with various issues, on mailing lists such as
+                  wxpython-users and on the StackOverflow website.
+                </div>
+              </body>
             </html>
             ''' % (
                     foreground_color_in_hex,
