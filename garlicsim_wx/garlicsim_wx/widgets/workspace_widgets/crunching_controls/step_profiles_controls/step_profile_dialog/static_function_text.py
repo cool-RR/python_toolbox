@@ -9,12 +9,13 @@ See its documentation for more details.
 
 import wx
 
+from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
 from garlicsim_wx.general_misc import wx_tools
 
 import garlicsim
 
 
-class StaticFunctionText(wx.Panel):
+class StaticFunctionText(CutePanel):
     '''Static text showing information about the current step function.'''
     
     def __init__(self, step_profile_dialog, step_function=None):

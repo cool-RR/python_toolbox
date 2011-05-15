@@ -15,9 +15,10 @@ import garlicsim, garlicsim_wx
 
 from garlicsim.general_misc.context_manager import ContextManager
 from garlicsim_wx.general_misc import wx_tools
+from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
 
 
-class Freezer(ContextManager):
+class AutocrunchFreezer(ContextManager):
     '''
     Freezer for not changing the `SpinCtrl`'s text value.
 
@@ -39,7 +40,7 @@ class Freezer(ContextManager):
         self.autocrunch_controls.frozen -= 1
         
 
-class AutocrunchControls(wx.Panel):
+class AutocrunchControls(CutePanel):
 
     def __init__(self, parent, frame):
 
@@ -58,7 +59,7 @@ class AutocrunchControls(wx.Panel):
         self.SetToolTipString(tooltip_text)
                 
         self.frozen = 0
-        self.freezer = Freezer(self)
+        self.autocrunch_freezer = AutocrunchFreezer(self)
         
         self.main_h_sizer = wx.BoxSizer(wx.HORIZONTAL)
         
@@ -149,7 +150,7 @@ class AutocrunchControls(wx.Panel):
             
         
     def on_text(self, event):
-        with self.freezer:
+        with self.autocrunch_freezer:
             self._update_gui_project()
         event.Skip()
         

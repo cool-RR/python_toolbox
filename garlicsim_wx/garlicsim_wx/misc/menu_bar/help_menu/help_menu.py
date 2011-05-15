@@ -75,7 +75,7 @@ class HelpMenu(CuteMenu):
         frame.Bind(
             wx.EVT_MENU,
             lambda event: garlicsim_wx.widgets.misc.AboutDialog.\
-                          create_show_modal_and_destroy(frame),
+                          create_and_show_modal(frame),
             self.about_button
         )
  

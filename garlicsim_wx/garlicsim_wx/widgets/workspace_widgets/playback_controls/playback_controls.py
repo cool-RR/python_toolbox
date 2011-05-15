@@ -10,6 +10,7 @@ See its documentation for more info.
 import pkg_resources
 import wx
 
+import garlicsim_wx.widgets.general_misc.cute_panel
 from garlicsim_wx.general_misc.third_party import aui
 from garlicsim_wx.general_misc import thread_timer
 from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
@@ -82,7 +83,12 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         self.Bind(wx.EVT_SIZE, self.on_size)
         self.Bind(wx.EVT_PAINT, self.on_paint)
         
-        self.inner_panel = wx.Panel(self, -1, size=(184, 124))
+        self.inner_panel = \
+            garlicsim_wx.widgets.general_misc.cute_panel.CutePanel(
+                self,
+                -1,
+                size=(184, 124)
+            )
         '''The panel that contains all the subwidgets.'''
         
         self.inner_panel.set_good_background_color()

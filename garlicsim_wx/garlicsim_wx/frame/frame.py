@@ -341,18 +341,12 @@ class Frame(wx.Frame, CuteWindow):
                         return
                 finally:
                     warning_dialog.Destroy()
+                    
+        simpack = garlicsim_wx.widgets.misc.SimpackSelectionDialog.\
+                  create_show_modal_and_return_simpack(self)
         
-        dialog = garlicsim_wx.widgets.misc.SimpackSelectionDialog(self)
-        
-        try:
-            if dialog.ShowModal() == wx.ID_OK:
-                simpack = dialog.get_simpack_selection()
-            else:
-                dialog.Destroy()
-                return
-        finally:
-            dialog.Destroy()
-
+        if not simpack:
+            return
         
         if self.gui_project is None:
             self._new_gui_project_from_simpack(simpack)

@@ -10,6 +10,7 @@ See their documentation for more info.
 import wx
 
 import garlicsim_wx
+from garlicsim_wx.widgets.general_misc.cute_window import CuteWindow
 from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.general_misc.third_party import aui
 from garlicsim.general_misc.third_party import abc
@@ -24,7 +25,7 @@ EVT_WORKSPACE_WIDGET_MENU_SELECT = wx.PyEventBinder(
 '''Event for when a workspace widget gets activated from the menu.'''
 
 
-class WorkspaceWidget(object):
+class WorkspaceWidget(CuteWindow):
     '''
     Abstract base class for workspace widgets.
     
@@ -32,8 +33,6 @@ class WorkspaceWidget(object):
     and is connected to a specific gui project.
     '''
 
-    # todo: How do I make it so all subclasses must inherit from `Window`?
-    
     __metaclass__ = abc.ABCMeta
     
 

@@ -30,7 +30,7 @@ class CuteWindow(AcceleratorSavvyWindow, wx.Window):
         '''Context manager for freezing the window while the suite executes.'''
     )
     
-    def create_cursor_changer(cursor):
+    def create_cursor_changer(self, cursor):
         '''
         
         `cursor` may be either a `wx.Cursor` object or a constant like

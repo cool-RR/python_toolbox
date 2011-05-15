@@ -5,13 +5,15 @@ import pkg_resources
 import wx
 
 from garlicsim_wx.general_misc import wx_tools
+from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
 
-import garlicsim, garlicsim_wx
+import garlicsim
+import garlicsim_wx
 
 from .cruncher_selection_dialog import CruncherSelectionDialog
 
     
-class CruncherControls(wx.Panel):
+class CruncherControls(CutePanel):
     '''Widget for viewing/changing the active cruncher type.'''
     
     def __init__(self, parent, frame):

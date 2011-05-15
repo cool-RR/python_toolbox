@@ -24,7 +24,7 @@ class Placeholder(wx.StaticText):
         
         old_foreground_color = self.GetForegroundColour()        
         
-        faint_color = wx_tools.mix_wx_color(
+        faint_color = wx_tools.colors.mix_wx_color(
             0.5,
             old_foreground_color,
             wx_tools.colors.get_background_color()

@@ -69,7 +69,7 @@ class HueControl(CuteWindow):
     
     def on_paint(self, event):
         dc = wx.PaintDC(self)
-        color = wx_tools.hls_to_wx_color(
+        color = wx_tools.colors.hls_to_wx_color(
             (
                 self.getter(),
                 self.lightness,

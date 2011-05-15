@@ -30,6 +30,7 @@ import garlicsim_wx
 
 # blocktodo: Go over all methods here, ensure they're relevant.
 # blocktodo: Don't forget tooltips here wherever possible
+# blocktodo: Enter on simpack tree should OK the dialog
 
 
 MAC_BOTTOM_SPACING_SIZE = 10
@@ -48,6 +49,8 @@ class SimpackSelectionDialog(CuteDialog):
         
         assert isinstance(frame, garlicsim_wx.Frame)
         self.frame = frame
+        
+        self.simpack = None
         
         with self.freezer:
             self.__init_build()
@@ -211,6 +214,16 @@ class SimpackSelectionDialog(CuteDialog):
         self.list_box.SetFocus()
         '''
         
+    @staticmethod
+    def create_show_modal_and_return_simpack(frame):
+        simpack_selection_dialog = SimpackSelectionDialog(frame)
+        try:
+            return_id = simpack_selection_dialog.ShowModal()
+        finally:
+            simpack_selection_dialog.Destroy()
+        if return_id == wx.ID_OK:
+            return simpack_selection_dialog.simpack
+        
         
     def on_add_folder_containing_simpacks_button(self, event):
         '''Handler for "Add folders containing simpacks" button.'''
@@ -236,8 +249,12 @@ class SimpackSelectionDialog(CuteDialog):
         
     def on_create_project(self, event):
         '''Handler for "Create project" button.'''
-        if self.list_box.GetStringSelection():
-            self.EndModal(wx.ID_OK)       
+        #if self.list_box.GetStringSelection():
+            #self.EndModal(wx.ID_OK)       
+        from garlicsim_lib.simpacks import life
+        self.simpack = life
+        self.EndModal(wx.ID_OK)
+        
         
         
     def on_cancel(self, event):

@@ -3,6 +3,8 @@
 
 '''Defines bitmap-related tools.'''
 
+import wx
+
 
 def color_replaced_bitmap(bitmap, old_rgb, new_rgb):
     '''Replace all appearances of `old_rgb` with `new_rgb` in `bitmap`.'''

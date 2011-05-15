@@ -144,7 +144,7 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
         dc = NiftyPaintDC(self, self.gui_project,
                           self.CalcScrolledPosition((0, 0)), self)
         
-        dc.SetBackground(wx_tools.get_background_brush())
+        dc.SetBackground(wx_tools.colors.get_background_brush())
         dc.Clear()
         
         (self.clickable_map, (width, height)) = \
@@ -277,7 +277,7 @@ class NiftyPaintDC(wx.BufferedPaintDC):
             bitmap = my_color_replaced_bitmap(
                 self.tree_browser.elements['Block'],
                 (0, 255, 0),
-                wx_tools.wx_color_to_big_rgb(color)
+                wx_tools.colors.wx_color_to_big_rgb(color)
             )
             bitmap_size = bitmap.GetSize()
             self.gc.DrawBitmap(bitmap, point[0], point[1],
@@ -309,7 +309,7 @@ class NiftyPaintDC(wx.BufferedPaintDC):
             bitmap = my_color_replaced_bitmap(
                 self.tree_browser.elements[type],
                 (0, 255, 0),
-                wx_tools.wx_color_to_big_rgb(color)
+                wx_tools.colors.wx_color_to_big_rgb(color)
             )
             bitmap_size = bitmap.GetSize()
             self.gc.DrawBitmap(bitmap, point[0], point[1],
@@ -425,7 +425,7 @@ class NiftyPaintDC(wx.BufferedPaintDC):
         bitmap = my_color_replaced_bitmap(
             self.tree_browser.elements['Untouched End'],
             (0, 255, 0),
-            wx_tools.wx_color_to_big_rgb(color)
+            wx_tools.colors.wx_color_to_big_rgb(color)
         )
         self.DrawBitmapPoint(bitmap, point, useMask=True)
         bitmap_size = bitmap.GetSize()

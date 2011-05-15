@@ -38,12 +38,12 @@ def make_bitmap(lightness=1, saturation=1):
     assert isinstance(bitmap, wx.Bitmap)
     dc = wx.MemoryDC(bitmap)
     
-    dc.SetBrush(wx_tools.get_background_brush())
+    dc.SetBrush(wx_tools.colors.get_background_brush())
     dc.SetPen(wx.TRANSPARENT_PEN)
     dc.DrawRectangle(-5, -5, BIG_LENGTH + 10, BIG_LENGTH + 10)
     
     center_x = center_y = BIG_LENGTH // 2 
-    background_color_rgb = wx_tools.wx_color_to_rgb(
+    background_color_rgb = wx_tools.colors.wx_color_to_rgb(
         wx_tools.colors.get_background_color()
     )
     
@@ -79,7 +79,7 @@ def make_bitmap(lightness=1, saturation=1):
                     rgb
                 )
                 
-            color = wx_tools.rgb_to_wx_color(rgb)
+            color = wx_tools.colors.rgb_to_wx_color(rgb)
             pen = wx.Pen(color)
             dc.SetPen(pen)
             

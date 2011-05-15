@@ -12,6 +12,7 @@ import wx
 
 from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.widgets.general_misc.error_dialog import ErrorDialog
+from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
 
 import garlicsim
 import garlicsim_wx
@@ -23,7 +24,7 @@ from . import images as __images_package
 images_package = __images_package.__name__
 
     
-class StepProfilesControls(wx.Panel):
+class StepProfilesControls(CutePanel):
     '''Widget for manipulating the step profiles used in the gui project.'''
     
     def __init__(self, parent, frame, *args, **kwargs):
@@ -153,7 +154,7 @@ class StepProfilesControls(wx.Panel):
             return
         tree_step_profiles = self.gui_project.project.tree.get_step_profiles()
         if step_profile in tree_step_profiles:
-            ErrorDialog.create_show_modal_and_destroy(
+            ErrorDialog.create_and_show_modal(
                 self,
                 "The step profile `%s` is currently used in the tree; it may "
                 "not be deleted." % step_profile.__repr__(

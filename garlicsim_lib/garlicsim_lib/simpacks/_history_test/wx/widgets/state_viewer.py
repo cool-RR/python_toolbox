@@ -37,7 +37,7 @@ class StateViewer(wx.Window, garlicsim_wx.widgets.WorkspaceWidget):
         event.Skip()
         dc = wx.BufferedPaintDC(self)
                 
-        dc.SetBackground(wx_tools.get_background_brush())
+        dc.SetBackground(wx_tools.colors.get_background_brush())
         dc.Clear()
         
         dc.SetBrush(wx.Brush("white", wx.TRANSPARENT))

@@ -337,7 +337,7 @@ class StepProfileDialog(CuteDialog):
         
         
         if step_profile in self.gui_project.step_profiles:
-            result = AlreadyExistsDialog.create_show_modal_and_destroy(
+            result = AlreadyExistsDialog.create_and_show_modal(
                 self,
                 step_profile,
                 and_fork=self.and_fork

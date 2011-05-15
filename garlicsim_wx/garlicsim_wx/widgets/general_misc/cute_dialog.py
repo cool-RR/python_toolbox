@@ -28,7 +28,7 @@ class CuteDialog(wx.Dialog, CuteWindow):
     
     
     @classmethod # blocktodo: Use everywhere I can, document
-    def create_show_modal_and_destroy(cls, *args, **kwargs):
+    def create_and_show_modal(cls, *args, **kwargs):
         dialog = cls(*args, **kwargs)
         try:
             result = dialog.ShowModal()

@@ -134,7 +134,7 @@ class BoardViewer(scrolled.ScrolledPanel,
                 
         dc = wx.BufferedPaintDC(self)
         
-        dc.SetBackground(wx_tools.get_background_brush())
+        dc.SetBackground(wx_tools.colors.get_background_brush())
         dc.Clear()
         
         dc.DrawBitmapPoint(self._buffer_bitmap,

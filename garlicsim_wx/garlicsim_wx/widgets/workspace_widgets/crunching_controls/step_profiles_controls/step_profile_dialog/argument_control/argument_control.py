@@ -11,6 +11,7 @@ import wx
 
 from garlicsim.general_misc import cute_inspect
 from garlicsim.general_misc import misc_tools
+from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
 from garlicsim_wx.general_misc import wx_tools
 
 from .arg_box import ArgBox
@@ -20,7 +21,7 @@ from .placeholder import Placeholder
 from .exceptions import ResolveFailed
 
 
-class ArgumentControl(wx.Panel):
+class ArgumentControl(CutePanel):
     '''Widget for specifying arguments to a step function.'''
     def __init__(self, step_profile_dialog, step_function=None):
         self.step_profile_dialog = step_profile_dialog

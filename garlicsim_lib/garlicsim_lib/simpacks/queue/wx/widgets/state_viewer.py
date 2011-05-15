@@ -60,7 +60,7 @@ class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,
         state = self.state
         dc = wx.BufferedPaintDC(self)
         
-        dc.SetBackground(wx_tools.get_background_brush())
+        dc.SetBackground(wx_tools.colors.get_background_brush())
         dc.Clear()
         
         if state is None:
@@ -80,8 +80,8 @@ class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,
             
             name, light_color, dark_color = (
                 personality.human_name,
-                wx_tools.rgb_to_wx_color(personality.light_color),
-                wx_tools.rgb_to_wx_color(personality.dark_color)
+                wx_tools.colors.rgb_to_wx_color(personality.light_color),
+                wx_tools.colors.rgb_to_wx_color(personality.dark_color)
             )
             
             x0 = 10 + 200 * i
@@ -112,8 +112,8 @@ class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,
                 
                 client_name, client_light_color, client_dark_color = (
                     client_personality.human_name,
-                    wx_tools.rgb_to_wx_color(client_personality.light_color),
-                    wx_tools.rgb_to_wx_color(client_personality.dark_color)
+                    wx_tools.colors.rgb_to_wx_color(client_personality.light_color),
+                    wx_tools.colors.rgb_to_wx_color(client_personality.dark_color)
                 )
                 
                 dc.SetTextBackground(client_light_color)
@@ -150,10 +150,10 @@ class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,
             coords=
                 [(150, 89 + (19 * i)) for i in range(len(waiting_clients))],
             foregrounds=
-                [wx_tools.rgb_to_wx_color(client.personality.dark_color) for
+                [wx_tools.colors.rgb_to_wx_color(client.personality.dark_color) for
                  client in waiting_clients],
             backgrounds=
-                [wx_tools.rgb_to_wx_color(client.personality.light_color) for
+                [wx_tools.colors.rgb_to_wx_color(client.personality.light_color) for
                  client in waiting_clients]
         )
         #                                                                     #

@@ -90,7 +90,7 @@ class SeekBar(wx.Panel, WorkspaceWidget):
         end = self.start + (w / self.zoom)
         dc = wx.BufferedPaintDC(self)
 
-        dc.SetBackground(wx_tools.get_background_brush())
+        dc.SetBackground(wx_tools.colors.get_background_brush())
         dc.Clear()
         
         #dc.DrawRectangle(3,3,50,90)

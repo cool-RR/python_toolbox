@@ -212,7 +212,7 @@ class Knob(wx.Panel):
         
         dc = wx.BufferedPaintDC(self)
         
-        dc.SetBackground(wx_tools.get_background_brush())
+        dc.SetBackground(wx_tools.colors.get_background_brush())
         dc.Clear()
         
         w, h = self.GetClientSize()

@@ -13,6 +13,7 @@ from __future__ import with_statement
 import wx
 
 from garlicsim_wx.general_misc import wx_tools
+from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
 from garlicsim.general_misc.context_manager import ContextManager
 
 
@@ -43,7 +44,7 @@ class Freezer(ContextManager):
         self.textual.frozen -= 1
 
 
-class Textual(wx.Panel):
+class Textual(CutePanel):
     '''Display (and allow modifying) the hue as a number 0-359.'''
     def __init__(self, hue_selection_dialog):
         wx.Panel.__init__(self, parent=hue_selection_dialog, size=(75, 100))
