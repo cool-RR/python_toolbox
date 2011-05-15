@@ -18,6 +18,9 @@ is_mac = (wx.Platform == '__WXMAC__')
 is_gtk = (wx.Platform == '__WXGTK__')
 is_win = (wx.Platform == '__WXMSW__')
 
+if is_win:
+    import win32api
+
 @caching.cache()
 def get_background_color():
     '''Get the default `garlicsim_wx` background color'''
@@ -271,3 +274,21 @@ class CursorChanger(ContextManager):
     def __exit__(self, *args, **kwargs):
         self.window.SetCursor(self.old_cursor)
         
+
+@caching.cache()
+def get_closed_folder_icon():    
+    if is_win:
+        shell32 = win32api.GetModuleFileName(
+            win32api.GetModuleHandle('shell32.dll')
+        )
+        return wx.BitmapFromIcon(
+            wx.Icon(shell32 + ';3', wx.BITMAP_TYPE_ICO)
+        )
+    else:
+        return wx.ArtProvider_GetBitmap(wx.ART_FOLDER, wx.ART_OTHER, (16, 16))
+    #fldropenidx = il.Add(wx.ArtProvider_GetBitmap(wx.ART_FILE_OPEN,   wx.ART_OTHER, isz))
+
+@caching.cache()
+def get_open_folder_icon():
+    pass
+    
