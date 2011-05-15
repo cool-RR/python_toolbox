@@ -13,3 +13,4 @@ is_win = (wx.Platform == '__WXMSW__')
 
 from . import colors
 from . import keyboard
+from . import window_tools

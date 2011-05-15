@@ -49,7 +49,7 @@ class SimpackSelectionDialog(CuteDialog):
         assert isinstance(frame, garlicsim_wx.Frame)
         self.frame = frame
         
-        with wx_tools.WindowFreezer(self):
+        with self.freezer:
             self.__init_build()
             
         

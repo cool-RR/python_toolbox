@@ -258,7 +258,7 @@ class StepProfileDialog(CuteDialog):
     def set_step_function(self, step_function):
         '''Set the step function to be used in our new step profile.'''
         if step_function != self.step_function:
-            with wx_tools.WindowFreezer(self): 
+            with self.freezer: 
                 self.step_function = step_function
                 self.static_function_text.set_step_function(step_function)
                 self.argument_control.set_step_function(step_function)

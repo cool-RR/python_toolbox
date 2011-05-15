@@ -9,8 +9,6 @@ from garlicsim.general_misc import caching
 from garlicsim.general_misc.context_manager import ContextManager
 
 
-if is_win:
-    import win32api
 
 def post_event(evt_handler, event_binder, source=None, **kwargs):
     '''Post an event to an evt_handler.'''
@@ -86,15 +84,6 @@ def color_replaced_bitmap(bitmap, old_rgb, new_rgb):
     return wx.BitmapFromImage(image)
     
 
-class WindowFreezer(ContextManager):
-    '''Context manager for having `window` frozen while the suite executes.'''
-    def __init__(self, window):
-        assert isinstance(window, wx.Window)
-        self.window = window
-    def __enter__(self):
-        self.window.Freeze()
-    def __exit__(self, *args, **kwargs):
-        self.window.Thaw()
         
         
 class CursorChanger(ContextManager):
@@ -116,34 +105,5 @@ class CursorChanger(ContextManager):
     def __exit__(self, *args, **kwargs):
         self.window.SetCursor(self.old_cursor)
         
-@caching.cache()
-def get_icon_bitmap_from_shell32_dll(index_number, size):
-    assert isinstance(index_number, int)
-    width, height = size
-    shell32_dll = win32api.GetModuleFileName(
-        win32api.GetModuleHandle('shell32.dll')
-    )
-    return wx.BitmapFromIcon(
-        wx.Icon(
-            '%s;%s' % (shell32_dll, index_number),
-            wx.BITMAP_TYPE_ICO,
-            desiredWidth=width,
-            desiredHeight=height
-        )
-    )
 
-@caching.cache()
-def get_closed_folder_bitmap(size=(16, 16)):
-    # blocktodo: test this and its brother on Win7, Ubuntu and Mac
-    if is_win:
-        return get_icon_bitmap_from_shell32_dll(3, size=size)
-    else:
-        return wx.ArtProvider_GetBitmap(wx.ART_FOLDER, wx.ART_OTHER, size)
-
-@caching.cache()
-def get_open_folder_bitmap():
-    if is_win:
-        return get_icon_bitmap_from_shell32_dll(4, size=size)
-    else:
-        return wx.ArtProvider_GetBitmap(wx.ART_FOLDER_OPEN, wx.ART_OTHER, size)
     

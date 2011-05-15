@@ -23,6 +23,7 @@ from garlicsim.general_misc.temp_value_setters import TempRecursionLimitSetter
 from garlicsim_wx.general_misc import thread_timer
 from garlicsim_wx.general_misc import misc_tools
 from garlicsim_wx.general_misc import wx_tools
+from garlicsim_wx.widgets.general_misc.cute_window import CuteWindow
 
 import garlicsim
 from garlicsim_wx.gui_project import GuiProject
@@ -39,7 +40,7 @@ wildcard_text = ('GarlicSim Simulation Pickle (*.gssp)|*.gssp|'
                  'All files (*)|*')
 
 
-class Frame(wx.Frame):
+class Frame(wx.Frame, CuteWindow):
     '''
     The main window of `garlicsim_wx`.
     
@@ -432,7 +433,7 @@ class Frame(wx.Frame):
         # todo: should create StateReprViewer only if the simpack got no
         # workspace widgets
         
-        with wx_tools.WindowFreezer(self):
+        with self.freezer:
             
             self.tree_browser = workspace_widgets.TreeBrowser(self)
             self.aui_manager.AddPane(

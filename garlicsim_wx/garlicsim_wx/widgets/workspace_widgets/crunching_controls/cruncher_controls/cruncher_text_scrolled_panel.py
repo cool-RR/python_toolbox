@@ -13,11 +13,13 @@ import wx
 
 from garlicsim.general_misc import string_tools
 from garlicsim_wx.general_misc import wx_tools
+from garlicsim_wx.widgets.general_misc.cute_window import CuteWindow
 
 import garlicsim
 
 
-class CruncherTextScrolledPanel(wx.lib.scrolledpanel.ScrolledPanel):
+class CruncherTextScrolledPanel(wx.lib.scrolledpanel.ScrolledPanel,
+                                CuteWindow):
     '''Widget for showing information about the selected cruncher type.'''
     
     def __init__(self, cruncher_selection_dialog):
@@ -63,7 +65,7 @@ class CruncherTextScrolledPanel(wx.lib.scrolledpanel.ScrolledPanel):
     
     def update(self):
         '''Update to show information about the current cruncher type.'''
-        with wx_tools.WindowFreezer(self):
+        with self.freezer:
             cruncher_type = \
                 self.cruncher_selection_dialog.selected_cruncher_type
             self.cruncher_text.SetLabel(cruncher_type.gui_explanation)

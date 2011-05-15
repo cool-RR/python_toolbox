@@ -62,7 +62,7 @@ class StarKwargBox(wx.StaticBox):
         
     def on_star_adder_pressed(self, event):
         
-        with wx_tools.WindowFreezer(self.Parent.Parent):
+        with wx_tools.window_tools.WindowFreezer(self.Parent.Parent):
             star_kwarg = StarKwarg(self.argument_control, self)
             star_kwarg.MoveBeforeInTabOrder(self.star_adder)
             star_kwarg.SetFocus()
@@ -74,7 +74,7 @@ class StarKwargBox(wx.StaticBox):
         
     def layout(self):
 
-        with wx_tools.WindowFreezer(self.Parent.Parent):
+        with wx_tools.window_tools.WindowFreezer(self.Parent.Parent):
         
             self.Parent.main_h_sizer.Fit(self.Parent)
             self.Parent.Layout()
@@ -95,7 +95,7 @@ class StarKwargBox(wx.StaticBox):
         else:
             place_to_put_focus_in = self.star_adder
         
-        with wx_tools.WindowFreezer(self.Parent.Parent):
+        with wx_tools.window_tools.WindowFreezer(self.Parent.Parent):
             self.star_kwargs.remove(star_kwarg)
             self.sizer.Remove(star_kwarg)
             star_kwarg.DestroyChildren()
