@@ -16,7 +16,7 @@ import pkg_resources
 
 from garlicsim.general_misc import math_tools
 from garlicsim_wx.general_misc import wx_tools
-from garlicsim_wx.general_misc import cursor_collection
+from garlicsim_wx.general_misc import wx_tools.cursors.collection
 from garlicsim.general_misc import binary_search
 from garlicsim.general_misc import cute_iter_tools
 
@@ -88,7 +88,7 @@ class Knob(wx.Panel):
         self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse)
         # self.Bind(wx.EVT_ERASE_BACKGROUND, self.on_erase)
         
-        self.SetCursor(cursor_collection.get_open_grab())
+        self.SetCursor(wx_tools.cursors.collection.get_open_grab())
         
         
         self._knob_house_brush = wx.Brush(wx.Colour(0, 0, 0))
@@ -259,7 +259,7 @@ class Knob(wx.Panel):
                 initial_ratio=self.current_ratio
             )
             
-            self.SetCursor(cursor_collection.get_closed_grab())
+            self.SetCursor(wx_tools.cursors.collection.get_closed_grab())
             # SetCursor must be before CaptureMouse because of wxPython/GTK
             # weirdness
             self.CaptureMouse()
@@ -279,7 +279,7 @@ class Knob(wx.Panel):
                 self.ReleaseMouse()
             # SetCursor must be after ReleaseMouse because of wxPython/GTK
             # weirdness
-            self.SetCursor(cursor_collection.get_open_grab())
+            self.SetCursor(wx_tools.cursors.collection.get_open_grab())
             self.being_dragged = False
             self.snap_map = None
             

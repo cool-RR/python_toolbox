@@ -16,10 +16,11 @@ import wx
 from garlicsim_wx.widgets.general_misc.hue_selection_dialog \
      import HueSelectionDialog
 from garlicsim_wx.general_misc import wx_tools
+from garlicsim_wx.widgets.general_misc.cute_window import CuteWindow
 from garlicsim_wx.general_misc.emitters import Emitter
 
 
-class HueControl(wx.Window):
+class HueControl(CuteWindow):
     '''
     Widget for displaying (and possibly modifying) a hue.
     
@@ -28,7 +29,7 @@ class HueControl(wx.Window):
     def __init__(self, parent, getter, setter, emitter=None, lightness=1,
                  saturation=1, dialog_title='Select hue', size=(25, 10)):
         
-        wx.Window.__init__(self, parent, size=size, style=wx.SIMPLE_BORDER)
+        CuteWindow.__init__(self, parent, size=size, style=wx.SIMPLE_BORDER)
         
         self.getter = getter
         
@@ -89,7 +90,7 @@ class HueControl(wx.Window):
         '''Open a dialog to edit the hue.'''
         old_hue = self.getter()
         
-        with wx_tools.CursorChanger(self, wx.CURSOR_WAIT):
+        with self.create_cursor_changer(wx.CURSOR_WAIT):
             hue_selection_dialog = HueSelectionDialog(
                 self.GetTopLevelParent(), self.getter, self.setter,
                 self.emitter,

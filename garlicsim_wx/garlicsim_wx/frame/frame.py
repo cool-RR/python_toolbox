@@ -366,7 +366,7 @@ class Frame(wx.Frame, CuteWindow):
                 program_to_run.append('__garlicsim_wx_simpack_place=%s' % \
                                       ','.join(simpack_place))
          
-            with wx_tools.CursorChanger(self, wx.CURSOR_WAIT):
+            with self.create_cursor_changer(wx.CURSOR_WAIT):
                 subprocess.Popen(program_to_run)
             
             return
@@ -378,7 +378,7 @@ class Frame(wx.Frame, CuteWindow):
         Internal use.
         '''
         assert self.gui_project is None
-        with wx_tools.CursorChanger(self, wx.CURSOR_WAIT):
+        with self.create_cursor_changer(wx.CURSOR_WAIT):
             gui_project = GuiProject(simpack, self)
             self.__setup_gui_project(gui_project)
 
@@ -627,7 +627,7 @@ class Frame(wx.Frame, CuteWindow):
                         program.append('__garlicsim_wx_simpack_place=%s' % \
                                        ','.join(simpack_place))
                     
-                    with wx_tools.CursorChanger(self, wx.CURSOR_WAIT):
+                    with self.create_cursor_changer(wx.CURSOR_WAIT):
                         subprocess.Popen(program)
         finally:
             open_dialog.Destroy()
@@ -643,7 +643,7 @@ class Frame(wx.Frame, CuteWindow):
         with TempRecursionLimitSetter(10000):
             try:
                 with open(path, 'rb') as my_file:
-                    with wx_tools.CursorChanger(self, wx.CURSOR_WAIT):
+                    with self.create_cursor_changer(wx.CURSOR_WAIT):
                         unpickler = misc.pickling.Unpickler(my_file)
                         gui_project = unpickler.load()
                 
@@ -686,7 +686,7 @@ class Frame(wx.Frame, CuteWindow):
                 with TempRecursionLimitSetter(10000):
                     try:
                         with open(path, 'wb') as my_file:
-                            with wx_tools.CursorChanger(self, wx.CURSOR_WAIT):
+                            with self.create_cursor_changer(wx.CURSOR_WAIT):
                                 with self.gui_project.project.tree.lock.read:
                                     pickler = misc.pickling.Pickler(
                                         my_file,

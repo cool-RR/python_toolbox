@@ -3,4 +3,4 @@
 
 '''A collection of cursors.'''
 
-from .cursor_collection import get_open_grab, get_closed_grab
+from .collection import get_open_grab, get_closed_grab

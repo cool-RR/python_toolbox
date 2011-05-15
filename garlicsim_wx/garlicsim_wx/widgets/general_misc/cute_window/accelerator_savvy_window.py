@@ -9,14 +9,10 @@ See its documentation for more information.
 
 import wx
 
-from garlicsim_wx.general_misc import wx_tools
 from garlicsim.general_misc import sequence_tools
-from garlicsim.general_misc import caching
-from garlicsim.general_misc.context_manager import ContextManager
+from garlicsim_wx.general_misc import wx_tools
 
 
-
-# blocktodo: possibly explode
 def _key_dict_to_accelerators(key_dict):
     '''
     Convert a dict mapping keys to ids to a list of accelerators.
@@ -70,18 +66,7 @@ def _key_dict_to_accelerators(key_dict):
     return accelerators
 
 
-class CuteWindow(wx.Window):
-    '''
-    
-    This class doesn't require calling its `__init__` when subclassing. (i.e.,
-    you *may* call its `__init__` if you want, but it will do the same as
-    calling `wx.Window.__init__`.)
-    '''
-    
-    freezer = caching.CachedProperty(
-        wx_tools.window_tools.WindowFreezer,
-        '''Context manager for freezing the window while the suite executes.'''
-    )
+class AcceleratorSavvyWindow(wx.Window):
     
     def add_accelerators(self, accelerators):
         '''
@@ -117,7 +102,7 @@ class CuteWindow(wx.Window):
            )
            
         '''
-        if not getattr(self, '_CuteWindow__initialized', False):
+        if not getattr(self, '_AcceleratorSavvyWindow__initialized', False):
             self.__accelerator_table = None
             self.__accelerators = []
             self.__initialized = True

@@ -16,7 +16,7 @@ import math
 import time
 
 from garlicsim_wx.widgets import WorkspaceWidget
-from garlicsim_wx.general_misc import cursor_collection
+from garlicsim_wx.general_misc import wx_tools.cursors.collection
 from garlicsim_wx.general_misc import cute_timer
 from garlicsim.general_misc import math_tools
 from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
@@ -46,7 +46,7 @@ class ScratchWheel(wx.Panel):
         self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse_event)
         self.Unbind(wx.EVT_ERASE_BACKGROUND) # Good or bad?
         
-        self.SetCursor(cursor_collection.get_open_grab())
+        self.SetCursor(wx_tools.cursors.collection.get_open_grab())
         
         self.gui_project = gui_project
         '''The gui project that this scratch wheel is attached to.'''
@@ -308,7 +308,7 @@ class ScratchWheel(wx.Panel):
             self.gui_project.stop_playing()
             self.being_dragged = True
             
-            self.SetCursor(cursor_collection.get_closed_grab())
+            self.SetCursor(wx_tools.cursors.collection.get_closed_grab())
             # SetCursor must be before CaptureMouse because of wxPython/GTK
             # weirdness
             self.CaptureMouse()
@@ -352,7 +352,7 @@ class ScratchWheel(wx.Panel):
                 self.ReleaseMouse()
             # SetCursor must be after ReleaseMouse because of wxPython/GTK
             # weirdness
-            self.SetCursor(cursor_collection.get_open_grab())
+            self.SetCursor(wx_tools.cursors.collection.get_open_grab())
             self.being_dragged = False
             self.grabbed_angle = None
             self.grabbed_pseudoclock = None

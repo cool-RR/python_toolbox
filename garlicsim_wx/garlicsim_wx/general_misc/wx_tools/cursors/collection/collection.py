@@ -3,23 +3,21 @@
 
 '''A collection of cursors.'''
 
-# todo: change to use generic caching decorator
-
 import pkg_resources
 import wx
+
+from garlicsim.general_misc import caching
+
 
 from . import images as __images_package
 images_package = __images_package.__name__
 
-cached_cursors = {}
 
+@caching.cache()
 def get_open_grab():
     '''Get the "open grab" cursor.'''
-    name = 'open_grab'
     file_name = 'open_grab.png'
     hotspot = (8, 8)
-    if name in cached_cursors:
-        return cached_cursors[name]
     stream = pkg_resources.resource_stream(images_package,
                                            file_name)
     image = wx.ImageFromStream(stream, wx.BITMAP_TYPE_ANY)
@@ -29,17 +27,14 @@ def get_open_grab():
         image.SetOptionInt(wx.IMAGE_OPTION_CUR_HOTSPOT_Y, hotspot[1])
         
     cursor = wx.CursorFromImage(image)
-    cached_cursors[name] = cursor
     return cursor
 
 
+@caching.cache()
 def get_closed_grab():
     '''Get the "closed grab" cursor.'''
-    name = 'closed_grab'
     file_name = 'closed_grab.png'
     hotspot = (8, 8)
-    if name in cached_cursors:
-        return cached_cursors[name]
     stream = pkg_resources.resource_stream(images_package,
                                            file_name)
     image = wx.ImageFromStream(stream, wx.BITMAP_TYPE_ANY)
@@ -49,5 +44,4 @@ def get_closed_grab():
         image.SetOptionInt(wx.IMAGE_OPTION_CUR_HOTSPOT_Y, hotspot[1])
         
     cursor = wx.CursorFromImage(image)
-    cached_cursors[name] = cursor
     return cursor
