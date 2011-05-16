@@ -156,7 +156,10 @@ class NavigationPanel(wx.Panel):
         self.back_button.SetToolTipString(
             u'Back (%s)' % wx_tools.keyboard.keys.back_key_string
         )
-        self.back_button.SetHelpText('Go to the previously-visited simpack.')
+        self.back_button.SetHelpText(
+            u'Go to the previously-selected simpack. (%s)' % 
+            wx_tools.keyboard.keys.back_key_string
+        )
         
         self.small_h_sizer.Add(
             self.back_button,
@@ -184,8 +187,10 @@ class NavigationPanel(wx.Panel):
         self.forward_button.SetToolTipString(
             u'Forward (%s)' % wx_tools.keyboard.keys.forward_key_string
         )
-        self.forward_button.SetHelpText('Go to the simpack you visited before '
-                                        'you hit the back button.')
+        self.forward_button.SetHelpText(
+            u'Go to the simpack you visited before you hit the back button. '
+            '(%s)' % wx_tools.keyboard.keys.forward_key_string
+        )
         self.small_h_sizer.Add(
             self.forward_button,
             proportion=0,
