@@ -126,3 +126,4 @@ from .context_manager import ContextManager
 from .self_hook import SelfHook
 
 from .blank_context_manager import BlankContextManager
+from .reentrant_context_manager import ReentrantContextManager
