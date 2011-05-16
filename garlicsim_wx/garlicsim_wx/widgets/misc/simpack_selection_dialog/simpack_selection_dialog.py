@@ -199,10 +199,10 @@ class SimpackSelectionDialog(CuteDialog):
         #                                                                     #
         ### Finished creating context-help button (on GTK/Mac only.) ##########
         
-        if wx_tools.is_mac:
-            self.dialog_button_sizer.AddSpacer(
-                MAC_BOTTOM_SPACING_SIZE
-            )
+        #if wx_tools.is_mac:
+            #self.dialog_button_sizer.AddSpacer(
+                #MAC_BOTTOM_SPACING_SIZE
+            #)
         
         
         self.Layout()
