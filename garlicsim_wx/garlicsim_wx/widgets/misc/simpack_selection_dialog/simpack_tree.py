@@ -49,6 +49,12 @@ class SimpackTree(wx.TreeCtrl):
         assert isinstance(simpack_selection_dialog, SimpackSelectionDialog)
         self.simpack_selection_dialog = simpack_selection_dialog
         
+        self.SetHelpText('Here you can see the different simpacks available. '
+                         'Choose one of them in order to start a project. If '
+                         'you want to use simpacks from a different location, '
+                         'press the "Add simpacks from a different folder..." '
+                         'button below.')
+        
         self.__init_images()
         
         self.simpack_places_tree = []

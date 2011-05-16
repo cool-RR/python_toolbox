@@ -28,6 +28,7 @@ import garlicsim_wx
 from . import images as __images_package
 images_package = __images_package.__name__
 
+# blocktodo: Back and forward buttons should be grayed out sometimes.
 
 class NavigationPanel(wx.Panel):
     '''
@@ -75,22 +76,29 @@ class NavigationPanel(wx.Panel):
             flag=wx.EXPAND
         )
         
-        ### Building search box: ##############################################
+        ### Building filter box: ##############################################
         #                                                                     #
-        self.search_sizer = wx.BoxSizer(wx.VERTICAL)
+        
+        filter_help_text = ('Type text in the filter box in order to filter '
+                            'the simpacks. You will see only the simpacks '
+                            'that contain the text that you typed. For '
+                            'example, type "Physics" in order to see only '
+                            'Physics-related simpacks.')
+        self.filter_sizer = wx.BoxSizer(wx.VERTICAL)
         self.small_h_sizer.Add(
-            self.search_sizer,
+            self.filter_sizer,
             proportion=1,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
             border=5
         )
         
-        self.search_static_text = wx.StaticText(
+        self.filter_static_text = wx.StaticText(
             self,
             label='&Filter simpacks:'
         )
-        self.search_sizer.Add(
-            self.search_static_text,
+        self.filter_static_text.SetHelpText(filter_help_text)
+        self.filter_sizer.Add(
+            self.filter_static_text,
             proportion=1,
             flag=wx.ALIGN_LEFT | wx.TOP,
             border=5,
@@ -103,14 +111,15 @@ class NavigationPanel(wx.Panel):
         self.search_ctrl = wx.SearchCtrl(self)
         self.search_ctrl.ShowCancelButton(True)
         self.search_ctrl.SetDescriptiveText('')
-        self.search_sizer.Add(
+        self.search_ctrl.SetHelpText(filter_help_text)
+        self.filter_sizer.Add(
             self.search_ctrl,
             proportion=0,
             flag=wx.EXPAND | wx.TOP | wx.BOTTOM,
             border=5,
         )
         #                                                                     #
-        ### Finished building search box. #####################################
+        ### Finished building filter box. #####################################
         
         ### Building back and forward buttons: ################################
         #                                                                     #
@@ -138,8 +147,11 @@ class NavigationPanel(wx.Panel):
         self.simpack_selection_dialog.Bind(wx.EVT_MENU,
                                            lambda event: self.back(),
                                            source=self.back_button)
-        self.back_button.SetToolTipString(u'Back (%s)' % \
-                                          wx_tools.keyboard.keys.back_key_string)
+        self.back_button.SetToolTipString(
+            u'Back (%s)' % wx_tools.keyboard.keys.back_key_string
+        )
+        self.back_button.SetHelpText('Go to the previously-visited simpack.')
+        
         self.small_h_sizer.Add(
             self.back_button,
             proportion=0,
@@ -163,8 +175,11 @@ class NavigationPanel(wx.Panel):
         self.simpack_selection_dialog.Bind(wx.EVT_MENU,
                                            lambda event: self.forward(),
                                            source=self.forward_button)
-        self.forward_button.SetToolTipString(u'Forward (%s)' % \
-                                             wx_tools.keyboard.keys.forward_key_string)
+        self.forward_button.SetToolTipString(
+            u'Forward (%s)' % wx_tools.keyboard.keys.forward_key_string
+        )
+        self.forward_button.SetHelpText('Go to the simpack you visited before '
+                                        'you hit the back button.')
         self.small_h_sizer.Add(
             self.forward_button,
             proportion=0,

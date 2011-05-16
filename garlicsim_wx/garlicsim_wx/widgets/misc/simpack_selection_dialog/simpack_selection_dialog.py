@@ -46,6 +46,7 @@ class SimpackSelectionDialog(CuteDialog):
             title='Choose simulation package',
             size=(950, 550)
         )
+        self.SetExtraStyle(wx.FRAME_EX_CONTEXTHELP)
         
         assert isinstance(frame, garlicsim_wx.Frame)
         self.frame = frame
@@ -100,6 +101,10 @@ class SimpackSelectionDialog(CuteDialog):
             proportion=1,
             flag=wx.EXPAND | wx.TOP,
             border=0,
+        )
+        
+        self.choose_a_simpack_static_text.SetHelpText(
+            self.simpack_tree.GetHelpText()
         )
         #                                                                     #
         ### Finished building simpack tree. ###################################

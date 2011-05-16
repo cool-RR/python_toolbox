@@ -62,6 +62,9 @@ class App(wx.PySimpleApp):
         
         self.SetTopWindow(frame)
         
+        self.simple_help_provider = wx.SimpleHelpProvider()
+        wx.HelpProvider_Set(self.simple_help_provider)
+        
         if self.new_gui_project_simpack_name is not None:
             simpack = \
                 import_tools.normal_import(self.new_gui_project_simpack_name)
