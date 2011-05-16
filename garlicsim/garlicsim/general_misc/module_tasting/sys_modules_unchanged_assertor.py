@@ -8,7 +8,7 @@ See its documentation for more information.
 '''
 
 import sys
-from garlicsim.general_misc import context_manager
+from garlicsim.general_misc import context_managers
 
 
 known_false_positive_new_modules = set([
@@ -16,7 +16,7 @@ known_false_positive_new_modules = set([
 ])
 
 
-class SysModulesUnchangedAssertor(context_manager.ContextManager):
+class SysModulesUnchangedAssertor(context_managers.ContextManager):
     '''
     Context manager that asserts that `sys.modules` wasn't changed in suite.
     

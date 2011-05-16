@@ -7,13 +7,13 @@ from __future__ import with_statement
 
 from garlicsim.general_misc import cute_testing
 
-from garlicsim.general_misc.context_manager import (ContextManager,
+from garlicsim.general_misc.context_managers import (ContextManager,
                                                     ContextManagerType,
                                                     SelfHook)
 
 flag = None
 exception_type_caught = None
-
+# blocktodo: rename this stuff to context_manager*s* too.
 
 def test_generator():
     '''Test a context manager made from a generator.'''

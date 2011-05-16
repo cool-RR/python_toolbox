@@ -8,7 +8,7 @@ See its documentation for more details.
 '''
 
 from garlicsim.general_misc import address_tools
-from garlicsim.general_misc.context_manager import ContextManager
+from garlicsim.general_misc.context_managers import ContextManager
 
 
 __all__ = ['TempValueSetter']

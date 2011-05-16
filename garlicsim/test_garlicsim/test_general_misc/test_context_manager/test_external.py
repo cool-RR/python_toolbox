@@ -11,7 +11,7 @@ import nose
 from garlicsim.general_misc.third_party import unittest2
 
 import garlicsim
-from garlicsim.general_misc.context_manager import (ContextManager,
+from garlicsim.general_misc.context_managers import (ContextManager,
                                                     ContextManagerType)
 
 

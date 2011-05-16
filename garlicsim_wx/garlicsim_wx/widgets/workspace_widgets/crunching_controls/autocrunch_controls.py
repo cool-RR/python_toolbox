@@ -13,7 +13,7 @@ import wx
 
 import garlicsim, garlicsim_wx
 
-from garlicsim.general_misc.context_manager import ContextManager
+from garlicsim.general_misc.context_managers import ContextManager
 from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
 

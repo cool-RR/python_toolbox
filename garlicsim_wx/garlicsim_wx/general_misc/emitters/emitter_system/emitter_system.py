@@ -11,7 +11,7 @@ from __future__ import with_statement
 
 import itertools
 from garlicsim.general_misc import cute_iter_tools
-from garlicsim.general_misc.context_manager import ContextManager
+from garlicsim.general_misc.context_managers import ContextManager
 
 from .emitter import Emitter
 

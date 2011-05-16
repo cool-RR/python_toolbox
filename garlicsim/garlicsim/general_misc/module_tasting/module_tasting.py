@@ -20,7 +20,7 @@ from garlicsim.general_misc.temp_value_setters import TempImportHookSetter
 from garlicsim.general_misc import address_tools
 from garlicsim.general_misc import dict_tools
 from garlicsim.general_misc import import_tools
-from garlicsim.general_misc import context_manager
+from garlicsim.general_misc import context_managers
 
 from .sys_modules_unchanged_assertor import SysModulesUnchangedAssertor
 from .mock_importer import MockImporter

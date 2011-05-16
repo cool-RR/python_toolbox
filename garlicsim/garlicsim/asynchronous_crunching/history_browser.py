@@ -14,7 +14,7 @@ import threading
 from garlicsim.general_misc import binary_search
 from garlicsim.general_misc import queue_tools
 from garlicsim.general_misc import decorator_tools
-from garlicsim.general_misc.context_manager import ContextManager
+from garlicsim.general_misc.context_managers import ContextManager
 
 import garlicsim.misc
 from .obsolete_cruncher_error import ObsoleteCruncherException

@@ -11,7 +11,7 @@ import sys
 import cStringIO
 import subprocess
 
-from garlicsim.general_misc.context_manager import (ContextManager,
+from garlicsim.general_misc.context_managers import (ContextManager,
                                                     BlankContextManager)
 from garlicsim.general_misc.temp_value_setters import TempValueSetter
 from garlicsim.general_misc.reasoned_bool import ReasonedBool

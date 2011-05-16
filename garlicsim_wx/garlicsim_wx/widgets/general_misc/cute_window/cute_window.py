@@ -11,7 +11,7 @@ import wx
 
 from garlicsim_wx.general_misc import wx_tools
 from garlicsim.general_misc import caching
-from garlicsim.general_misc.context_manager import ContextManager
+from garlicsim.general_misc.context_managers import ContextManager
 
 from .accelerator_savvy_window import AcceleratorSavvyWindow
 
