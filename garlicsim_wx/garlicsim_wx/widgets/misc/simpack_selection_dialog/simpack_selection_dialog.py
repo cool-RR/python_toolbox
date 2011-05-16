@@ -23,6 +23,7 @@ from garlicsim.general_misc import path_tools
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import package_finder
 from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
+from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
 from garlicsim_wx.general_misc import wx_tools
 
 import garlicsim_wx
@@ -168,7 +169,11 @@ class SimpackSelectionDialog(CuteDialog):
                                      flag=wx.ALIGN_CENTER_VERTICAL)
         #                                                                     #
         ### Finished creating Ok/Cancel buttons. ##############################
-        self.context_help_button_panel = wx.Panel(self)
+        
+        ### Creating context-help button (on GTK/Mac only): ###################
+        #                                                                     #
+        self.context_help_button_panel = CutePanel(self)
+        self.context_help_button_panel.set_good_background_color()
         self.dialog_button_sizer.Add(
             self.context_help_button_panel,
             proportion=2,
@@ -191,6 +196,8 @@ class SimpackSelectionDialog(CuteDialog):
                 proportion=0,
                 flag=wx.ALIGN_BOTTOM
             )
+        #                                                                     #
+        ### Finished creating context-help button (on GTK/Mac only.) ##########
         
         if wx_tools.is_mac:
             self.dialog_button_sizer.AddSpacer(
