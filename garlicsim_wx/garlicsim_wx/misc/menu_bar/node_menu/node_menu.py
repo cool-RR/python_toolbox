@@ -65,7 +65,7 @@ class NodeMenu(CuteMenu):
         
         self.properties_button = self.Append(
             -1,
-            'Node &properties...',
+            'Node &properties',
             " See the active node's properties"
         )
         self.properties_button.Enable(False)        

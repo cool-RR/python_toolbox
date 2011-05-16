@@ -38,18 +38,10 @@ class HelpMenu(CuteMenu):
         
         self.welcome_screen_button = self.Append(
             -1,
-            '&Welcome screen...',
+            '&Welcome screen',
             ' Show the welcome screen'
         )
         self.welcome_screen_button.Enable(False)
-        
-                
-        self.garlicsim_book_button = self.Append(
-            -1,
-            'Read the &book, "Introduction to GarlicSim"...',
-            ' Open the GarlicSim book, a PDF document'
-        )
-        self.garlicsim_book_button.Enable(False)
         
         
         self.AppendSeparator()
@@ -69,7 +61,7 @@ class HelpMenu(CuteMenu):
                 
         self.about_button = self.Append(
             wx.ID_ABOUT,
-            '&About GarlicSim...',
+            '&About GarlicSim',
             ' Tell me a little bit about the GarlicSim software'
         )
         frame.Bind(

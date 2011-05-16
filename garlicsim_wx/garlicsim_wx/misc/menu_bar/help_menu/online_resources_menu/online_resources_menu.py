@@ -29,7 +29,7 @@ class OnlineResourcesMenu(CuteMenu):
         
         self.website_button = self.Append(
             -1,
-            'Official &website...',
+            'Official &website',
             ' Open the official GarlicSim website in your browser'
         )
         frame.Bind(
@@ -41,7 +41,7 @@ class OnlineResourcesMenu(CuteMenu):
         
         self.online_documentation_button = self.Append(
             -1,
-            'Online &documentation...',
+            'Online &documentation',
             " Open the online version of GarlicSim's documentation in your "
             "browser"
         )
@@ -54,9 +54,9 @@ class OnlineResourcesMenu(CuteMenu):
         
         self.mailing_lists_button = self.Append(
             -1,
-            '&Mailing lists...',
-            ''' Open the page with info about GarlicSim mailing lists\
-in your browser'''
+            '&Mailing lists',
+            ' Open the page with info about GarlicSim mailing lists '
+            'in your browser'
         )
         frame.Bind(
             wx.EVT_MENU,
@@ -69,7 +69,7 @@ in your browser'''
         
         self.blog_button = self.Append(
             -1,
-            '&Blog...',
+            '&Blog',
             ' Open the GarlicSim blog in your browser'
         )
         frame.Bind(
@@ -83,7 +83,7 @@ in your browser'''
 
         self.github_button = self.Append(
             -1,
-            'Code &repository...',
+            'Code &repository',
             ' Open the GitHub code repository for GarlicSim in your browser'
         )
         frame.Bind(
