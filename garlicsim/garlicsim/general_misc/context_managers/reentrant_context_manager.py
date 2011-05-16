@@ -31,7 +31,10 @@ class ReentrantContextManager(ContextManager):
     def __exit__(self, type_, value, traceback):
         assert self.depth >= 1
         if self.depth == 1:
-            self.reentrant_exit()
+            if (type_ is value is traceback is None):
+                self.reentrant_exit()
+            else:
+                self.reentrant_exit(type_, value, traceback)
         self.depth -= 1
 
         
