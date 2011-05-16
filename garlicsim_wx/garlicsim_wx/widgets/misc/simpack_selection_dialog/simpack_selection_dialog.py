@@ -33,7 +33,7 @@ import garlicsim_wx
 # blocktodo: Enter on simpack tree should OK the dialog
 
 
-MAC_BOTTOM_SPACING_SIZE = 10
+MAC_BOTTOM_SPACING_SIZE = 8
 
 
 class SimpackSelectionDialog(CuteDialog):
