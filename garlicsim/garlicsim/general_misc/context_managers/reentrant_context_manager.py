@@ -31,18 +31,17 @@ class ReentrantContextManager(ContextManager):
     def __exit__(self, type_, value, traceback):
         assert self.depth >= 1
         if self.depth == 1:
-            if (type_ is value is traceback is None):
-                self.reentrant_exit()
-            else:
-                self.reentrant_exit(type_, value, traceback)
+            self.reentrant_exit(type_, value, traceback)
+        # todo: if in depth, perhaps should save exception data if it exists
+        # and pass to outermost?
         self.depth -= 1
 
         
-    @abc.abstractmethod
     def reentrant_enter(self):
         ''' '''
+        return self
         
     
-    @abc.abstractmethod
     def reentrant_exit(self, type_, value, traceback):
         ''' '''
+        pass

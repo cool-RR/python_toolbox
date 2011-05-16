@@ -221,7 +221,7 @@ class GuiProject(object):
         
         self.emitter_system = emitters.EmitterSystem()
                 
-        with self.emitter_system.freeze_cache_rebuilding:
+        with self.emitter_system.cache_rebuilding_freezer:
         
             es = self.emitter_system
             

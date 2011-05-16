@@ -15,7 +15,7 @@ def test_reentrant_context_manager():
         def reentrant_enter(self):
             self.times_entered += 1
             return self.times_entered
-        def reentrant_exit(self):
+        def reentrant_exit(self, type_, value, traceback):
             self.times_exited += 1
            
     my_rcm = MyReentrantContextManager()

@@ -11,12 +11,12 @@ from __future__ import with_statement
 
 import itertools
 from garlicsim.general_misc import cute_iter_tools
-from garlicsim.general_misc.context_managers import ContextManager
+from garlicsim.general_misc.context_managers import ReentrantContextManager
 
 from .emitter import Emitter
 
 
-class FreezeCacheRebuildingContextManager(ContextManager):
+class CacheRebuildingFreezer(ReentrantContextManager):
     '''
     Context manager for freezing the cache rebuilding in an emitter system.
     
@@ -28,14 +28,8 @@ class FreezeCacheRebuildingContextManager(ContextManager):
     def __init__(self, emitter_system):
         self.emitter_system = emitter_system
         
-    def __enter__(self):
-        assert self.emitter_system._cache_rebuilding_frozen >= 0
-        self.emitter_system._cache_rebuilding_frozen += 1
-        
-    def __exit__(self, *args, **kwargs):
-        self.emitter_system._cache_rebuilding_frozen -= 1
-        if self.emitter_system._cache_rebuilding_frozen == 0:
-            self.emitter_system._recalculate_all_cache()
+    def reentrant_exit(self, type_, value, traceback):
+        self.emitter_system._recalculate_all_cache()
 
             
 class EmitterSystem(object):
@@ -59,9 +53,7 @@ class EmitterSystem(object):
     # to make inputs and outputs abstract.
     def __init__(self):
         
-        self._cache_rebuilding_frozen = 0
-        self.freeze_cache_rebuilding = \
-            FreezeCacheRebuildingContextManager(self)
+        self.cache_rebuilding_freezer = CacheRebuildingFreezer(self)
         
         self.emitters = set()
         
@@ -75,6 +67,9 @@ class EmitterSystem(object):
         )
         self.emitters.add(self.top_emitter)
         
+    _cache_rebuilding_frozen = property(
+        lambda self: self.cache_rebuilding_freezer.depth
+    )
             
     def make_emitter(self, inputs=(), outputs=(), name=None):
         '''Create an emitter in this emitter system. Returns the emitter.'''
@@ -95,7 +90,7 @@ class EmitterSystem(object):
         '''
         Remove an emitter from this system, disconnecting it from everything.
         '''
-        with self.freeze_cache_rebuilding:
+        with self.cache_rebuilding_freezer:
             emitter.disconnect_from_all()
         self.emitters.remove(emitter)
         
