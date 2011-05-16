@@ -5,15 +5,18 @@
 
 import wx
 
-from garlicsim.general_misc.context_managers import ContextManager
+from garlicsim.general_misc.context_managers import ReentrantContextManager
 
 
-class WindowFreezer(ContextManager):
+class WindowFreezer(ReentrantContextManager):
     '''Context manager for freezing the window while the suite executes.'''
+    
     def __init__(self, window):
         assert isinstance(window, wx.Window)
         self.window = window
-    def __enter__(self):
+        
+    def reentrant_enter(self):
         self.window.Freeze()
-    def __exit__(self, *args, **kwargs):
+        
+    def reentrant_exit(self, type_, value, traceback):
         self.window.Thaw()

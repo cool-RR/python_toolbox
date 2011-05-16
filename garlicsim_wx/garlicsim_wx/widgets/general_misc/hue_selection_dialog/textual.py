@@ -14,7 +14,7 @@ import wx
 
 from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
-from garlicsim.general_misc.context_managers import ContextManager
+from garlicsim.general_misc.context_managers import ReentrantContextManager
 
 
 def ratio_to_round_degrees(ratio):
@@ -25,7 +25,7 @@ def degrees_to_ratio(degrees):
     return degrees / 360
 
 
-class Freezer(ContextManager):
+class ValueFreezer(ReentrantContextManager):
     '''
     Freezer for not changing the `Textual`'s text value.
 
@@ -36,12 +36,6 @@ class Freezer(ContextManager):
     automatically select all the text in the `Textual`, which is really
     annoying if you're just typing in it.
     '''
-    def __init__(self, textual):
-        self.textual = textual
-    def __enter__(self):
-        self.textual.frozen += 1
-    def __exit__(self, *args, **kwargs):
-        self.textual.frozen -= 1
 
 
 class Textual(CutePanel):
@@ -53,8 +47,7 @@ class Textual(CutePanel):
         self.hue_selection_dialog = hue_selection_dialog
         self.hue = hue_selection_dialog.hue
         
-        self.frozen = 0
-        self.freezer = Freezer(self)
+        self.value_freezer = ValueFreezer()
         
         self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)
         
@@ -83,6 +76,9 @@ class Textual(CutePanel):
         
         self.Bind(wx.EVT_SPINCTRL, self.on_spin, source=self.spin_ctrl)
         self.Bind(wx.EVT_TEXT, self.on_text, source=self.spin_ctrl)
+        
+        
+    frozen = property(lambda self: self.value_freezer.depth)
                     
         
     def update(self):
@@ -100,7 +96,7 @@ class Textual(CutePanel):
         )
             
     def on_text(self, event):
-        with self.freezer:
+        with self.value_freezer:
             self.hue_selection_dialog.setter(
                 degrees_to_ratio(
                     self.spin_ctrl.GetValue()
