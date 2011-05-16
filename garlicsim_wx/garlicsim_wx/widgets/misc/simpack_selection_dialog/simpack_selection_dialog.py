@@ -142,6 +142,9 @@ class SimpackSelectionDialog(CuteDialog):
         self.create_project_button = wx.Button(self, wx.ID_OK,
                                                'Create &project')
         self.create_project_button.SetDefault()
+        self.create_project_button.SetHelpText('Start a new simulation '
+                                               'project using the selected '
+                                               'simpack.')
         self.Bind(wx.EVT_BUTTON, self.on_create_project,
                   source=self.create_project_button)
         

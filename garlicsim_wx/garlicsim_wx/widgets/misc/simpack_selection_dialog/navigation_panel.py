@@ -58,6 +58,12 @@ class NavigationPanel(wx.Panel):
             self,
             label='&Add simpacks from a different folder...'
         )
+        self.add_simpacks_from_a_different_folder_button.SetHelpText(
+            "By default, GarlicSim lets you use simpacks that are included in "
+            "GarlicSim's simpack library. If you want to use a different "
+            "simpack, press this button and choose the folder that *contains* "
+            "your simpack."
+        )
         self.big_v_sizer.Add(
             self.add_simpacks_from_a_different_folder_button,
             proportion=0,
