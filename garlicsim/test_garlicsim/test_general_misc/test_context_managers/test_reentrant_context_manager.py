@@ -1,7 +1,7 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''Testing module for `ReentrantContextManager`.'''
+'''Testing module for `ReentrantContextManager`.''' 
 
 from garlicsim.general_misc.context_managers import ReentrantContextManager
 
