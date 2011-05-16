@@ -34,7 +34,7 @@ import garlicsim_wx
 # blocktodo: Enter on simpack tree should OK the dialog
 
 
-MAC_BOTTOM_SPACING_SIZE = 15
+MAC_BOTTOM_SPACING_SIZE = 8
 
 
 class SimpackSelectionDialog(CuteDialog):
@@ -198,11 +198,6 @@ class SimpackSelectionDialog(CuteDialog):
             )
         #                                                                     #
         ### Finished creating context-help button (on GTK/Mac only.) ##########
-        
-        #if wx_tools.is_mac:
-            #self.dialog_button_sizer.AddSpacer(
-                #MAC_BOTTOM_SPACING_SIZE
-            #)
         
         
         self.Layout()
