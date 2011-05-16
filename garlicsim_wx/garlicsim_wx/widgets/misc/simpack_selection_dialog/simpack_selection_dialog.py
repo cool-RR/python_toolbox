@@ -168,6 +168,12 @@ class SimpackSelectionDialog(CuteDialog):
                                      flag=wx.ALIGN_CENTER_VERTICAL)
         self.dialog_button_sizer.AddStretchSpacer(prop=2)
         
+        if wx_tools.is_win:            
+            self.context_help_button = None
+        else:
+            self.context_help_button = wx.ContextHelpButton(self)
+            self.dialog_button_sizer.Add(self.context_help_button, 0, wx.ALIGN_BOTTOM)
+        
         #                                                                     #
         ### Finished creating Ok/Cancel buttons. ##############################
         
