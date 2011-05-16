@@ -27,7 +27,7 @@ class TempValueSetter(ContextManager):
     back to the old value after the suite finishes.
     '''
     
-    def __init__(self, variable, value):
+    def __init__(self, variable, value, assert_no_fiddling=True):
         '''
         Construct the `TempValueSetter`.
         
@@ -36,6 +36,9 @@ class TempValueSetter(ContextManager):
         
         `value` is the temporary value to set to the variable.
         '''
+        
+        self.assert_no_fiddling = assert_no_fiddling
+        
 
         #######################################################################
         # We let the user input either an `(object, attribute_string)`, a
@@ -118,8 +121,9 @@ class TempValueSetter(ContextManager):
         
     def __exit__(self, *args, **kwargs):
 
-        # Asserting no-one inside the suite changed our variable:
-        assert self.getter() == self._value_right_after_setting
+        if self.assert_no_fiddling:
+            # Asserting no-one inside the suite changed our variable:
+            assert self.getter() == self._value_right_after_setting
         
         self.setter(self.old_value)
         
