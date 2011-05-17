@@ -32,6 +32,7 @@ import garlicsim_wx
 # blocktodo: Go over all methods here, ensure they're relevant.
 # blocktodo: Don't forget tooltips here wherever possible
 # blocktodo: Enter on simpack tree should OK the dialog
+# blocktodo: On Ubuntu when I pressed X it didn't exit the dialog.
 
 
 MAC_BOTTOM_SPACING_SIZE = 8
