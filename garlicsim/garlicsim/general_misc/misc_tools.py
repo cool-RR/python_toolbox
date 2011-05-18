@@ -9,6 +9,7 @@ import types
 
 from garlicsim.general_misc import cute_iter_tools
 from garlicsim.general_misc.proxy_property import ProxyProperty
+from garlicsim.general_misc import caching
 from garlicsim.general_misc.context_managers import ReentrantContextManager
 
 
@@ -178,7 +179,7 @@ class Freezer(ReentrantContextManager):
 # del Freezer.depth # blocktodo: ask online for nicer way to do it
 
 
-class FreezerProperty(object):
+class FreezerProperty(caching.CachedProperty):
     ''' '''
     #blocktodo: doc argument
     def __init__(self, on_freeze=do_nothing, on_thaw=do_nothing,
@@ -190,36 +191,22 @@ class FreezerProperty(object):
         self.__freezer_type = freezer_type
         self._freeze_handler = on_freeze
         self._thaw_handler = on_thaw
+        caching.CachedProperty.__init__(self,
+                                        getter=self.__make_freezer,
+                                        doc=doc)
         
+    def __make_freezer(self, obj):
+        assert obj is not None
         
-    def __get__(self, obj, our_type=None):
-        
-        if obj is None:
-            # We're being accessed from the class itself, not from an object
-            return self
-
-        if not self.__our_name:
-            if not our_type:
-                our_type = type(obj)
-            (self.__our_name,) = (name for name in dir(our_type) if
-                                getattr(our_type, name, None) is self)
-            
-        self.__freezer_name = '_%s_freezer' % self.__our_name
-        
-        if not hasattr(obj, self.__freezer_name):
-            freezer = self.__freezer_type(obj)
-            freezer._Freezer__freezer_property = self
-            #freezer.reentrant_enter = \
-                #lambda: self.__freeze_handler(obj)
-            #freezer.reentrant_exit = \
-                #lambda type_, value, traceback: self.__thaw_handler(obj)
-            setattr(obj, self.__freezer_name, freezer)
-        else:
-            freezer = getattr(obj, self.__freezer_name)
-            
+        freezer = self.__freezer_type(obj)
+        freezer._Freezer__freezer_property = self
         return freezer
-
-
+        #freezer.reentrant_enter = \
+            #lambda: self.__freeze_handler(obj)
+        #freezer.reentrant_exit = \
+            #lambda type_, value, traceback: self.__thaw_handler(obj)
+            
+        
     def on_freeze(self, function):
         self._freeze_handler = function
         return function
