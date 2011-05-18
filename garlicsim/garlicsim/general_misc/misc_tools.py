@@ -8,6 +8,7 @@ import math
 import types
 
 from garlicsim.general_misc import cute_iter_tools
+from garlicsim.general_misc.context_managers import ReentrantContextManager
 
 
 def is_subclass(candidate, base_class):
@@ -146,3 +147,52 @@ def identity_function(thing):
     function might be faster as it's prepared in advance.
     '''
     return thing
+
+
+class ProxyProperty(object):
+    def __init__(self, attribute_name):
+        self.attribute_name = attribute_name
+        
+    def __get__(self, obj, our_type=None):
+        getattr(obj, self.attribute_name)
+        
+    def __set__(self, obj, value, our_type=None):
+        setattr(obj, self.attribute_name, value)
+
+    
+
+        
+
+class Freezer(ReentrantContextManager):
+    
+    del depth
+    pass
+
+
+class FreezerProperty(object):
+    ''' '''
+    def __init__(self):
+        self.reentrant_context_manager = ReentrantContextManager()
+        
+        
+    def __get__(self, obj, our_type=None):
+
+        if obj is None:
+            # We're being accessed from the class itself, not from an object
+            return self
+        
+        value = self.getter(obj)
+        
+        if not self.our_name:
+            if not our_type:
+                our_type = type(obj)
+            (self.our_name,) = (name for name in dir(our_type) if
+                                getattr(our_type, name, None) is self)
+        
+        setattr(obj, self.our_name, value)
+        
+        return value
+
+    
+
+        
