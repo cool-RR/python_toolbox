@@ -370,7 +370,7 @@ That includes three things:
 
   1. ``step_profile.step_function``: The step function that was used.
   2. ``step_profile.args``: A :class:`tuple` of positional arguments. 
-  3. ``step_profile.args``: A :class:`dict` of keyword arguments.
+  3. ``step_profile.kwargs``: A :class:`dict` of keyword arguments.
 
 When you know all three of the above, you know exactly how the state was
 created.
