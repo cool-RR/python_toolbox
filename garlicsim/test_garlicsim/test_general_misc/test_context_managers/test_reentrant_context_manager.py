@@ -3,6 +3,8 @@
 
 '''Testing module for `ReentrantContextManager`.''' 
 
+from __future__ import with_statement
+
 from garlicsim.general_misc.context_managers import ReentrantContextManager
 
 
