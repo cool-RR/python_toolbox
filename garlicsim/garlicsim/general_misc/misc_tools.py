@@ -157,17 +157,39 @@ def do_nothing(*args, **kwargs):
 
 class Freezer(ReentrantContextManager):
     
+    def __init__(self, thing):
+        self.thing = thing
+
+        
     frozen = ProxyProperty('_ReentrantContextManager__depth')
+    
+
+    def reentrant_enter(self):
+        ''' '''
+        return self.__freezer_property._freeze_handler(self.thing)
+    
+    
+    def reentrant_exit(self, type_, value, traceback):
+        ''' '''
+        return self.__freezer_property._thaw_handler(self.thing)
+        
+        
     
 # del Freezer.depth # blocktodo: ask online for nicer way to do it
 
 
 class FreezerProperty(object):
     ''' '''
-    def __init__(self, freeze_handler=do_nothing, thaw_handler=do_nothing):
+    #blocktodo: doc argument
+    def __init__(self, on_freeze=do_nothing, on_thaw=do_nothing,
+                 freezer_type=Freezer, doc=None):
         self.__our_name = None
-        self.__freeze_handler = freeze_handler
-        self.__thaw_handler = thaw_handler
+        if freezer_type is not Freezer:
+            # blocktodo: helpful exception, also in decorators
+            assert on_freeze is on_thaw is do_nothing
+        self.__freezer_type = freezer_type
+        self._freeze_handler = on_freeze
+        self._thaw_handler = on_thaw
         
         
     def __get__(self, obj, our_type=None):
@@ -185,11 +207,12 @@ class FreezerProperty(object):
         self.__freezer_name = '_%s_freezer' % self.__our_name
         
         if not hasattr(obj, self.__freezer_name):
-            freezer = Freezer()
-            freezer.reentrant_enter = \
-                lambda: self.__freeze_handler(obj)
-            freezer.reentrant_exit = \
-                lambda type_, value, traceback: self.__thaw_handler(obj)
+            freezer = self.__freezer_type(obj)
+            freezer._Freezer__freezer_property = self
+            #freezer.reentrant_enter = \
+                #lambda: self.__freeze_handler(obj)
+            #freezer.reentrant_exit = \
+                #lambda type_, value, traceback: self.__thaw_handler(obj)
             setattr(obj, self.__freezer_name, freezer)
         else:
             freezer = getattr(obj, self.__freezer_name)
@@ -198,12 +221,12 @@ class FreezerProperty(object):
 
 
     def on_freeze(self, function):
-        self.__freeze_handler = function
+        self._freeze_handler = function
         return function
 
         
     def on_thaw(self, function):
-        self.__thaw_handler = function
+        self._thaw_handler = function
         return function
         
 

@@ -11,10 +11,10 @@ import wx
 
 from garlicsim_wx.general_misc import wx_tools
 from garlicsim.general_misc import caching
+from garlicsim.general_misc import misc_tools
 from garlicsim.general_misc.context_managers import ContextManager
 
 from .accelerator_savvy_window import AcceleratorSavvyWindow
-
 
 
 class CuteWindow(AcceleratorSavvyWindow, wx.Window):
@@ -25,9 +25,9 @@ class CuteWindow(AcceleratorSavvyWindow, wx.Window):
     calling `wx.Window.__init__`.)
     '''
     
-    freezer = caching.CachedProperty(
-        wx_tools.window_tools.WindowFreezer,
-        '''Context manager for freezing the window while the suite executes.'''
+    freezer = misc_tools.FreezerProperty(
+        freezer_type=wx_tools.window_tools.WindowFreezer,
+        doc='''Freezer for freezing the window while the suite executes.'''
     )
     
     def create_cursor_changer(self, cursor):
