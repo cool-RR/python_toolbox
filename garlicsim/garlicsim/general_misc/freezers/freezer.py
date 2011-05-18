@@ -19,11 +19,19 @@ class Freezer(context_managers.ReentrantContextManager):
 
     def reentrant_enter(self):
         ''' '''
-        return self.__freezer_property._freeze_handler(self.thing)
-    
+        return self.freeze_handler()
     
     def reentrant_exit(self, type_, value, traceback):
         ''' '''
+        return self.thaw_handler()
+        
+    
+    
+    def freeze_handler(self):
+        return self.__freezer_property._freeze_handler(self.thing)
+    
+    
+    def thaw_handler(self):
         return self.__freezer_property._thaw_handler(self.thing)
     
 # del Freezer.depth # blocktodo: How do I do this?

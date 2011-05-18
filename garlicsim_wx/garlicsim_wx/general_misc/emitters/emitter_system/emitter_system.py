@@ -11,27 +11,22 @@ from __future__ import with_statement
 
 import itertools
 
-from garlicsim.general_misc import misc_tools
+from garlicsim.general_misc import freezers
 from garlicsim.general_misc import cute_iter_tools
 from garlicsim.general_misc.context_managers import ReentrantContextManager
 
 from .emitter import Emitter
 
 
-class CacheRebuildingFreezer(ReentrantContextManager):
-    '''
-    Context manager for freezing the cache rebuilding in an emitter system.
-    
-    When you do actions using this context manager, the emitters will not
-    rebuild their cache when changing their inputs/outputs. When the outermost
-    context manager has exited, all the caches for these emitters will get
-    rebuilt.
-    '''    
-    def __init__(self, emitter_system):
-        self.emitter_system = emitter_system
-        
-    def reentrant_exit(self, type_, value, traceback):
-        self.emitter_system._recalculate_all_cache()
+
+#'''
+#Context manager for freezing the cache rebuilding in an emitter system.
+
+#When you do actions using this context manager, the emitters will not
+#rebuild their cache when changing their inputs/outputs. When the outermost
+#context manager has exited, all the caches for these emitters will get
+#rebuilt.
+#'''    
 
             
 class EmitterSystem(object):
@@ -68,7 +63,7 @@ class EmitterSystem(object):
         self.emitters.add(self.top_emitter)
         
         
-    cache_rebuilding_freezer = misc_tools.FreezerProperty()
+    cache_rebuilding_freezer = freezers.FreezerProperty()
 
     
     @cache_rebuilding_freezer.on_thaw

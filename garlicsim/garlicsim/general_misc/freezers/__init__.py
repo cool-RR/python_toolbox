@@ -3,3 +3,6 @@
 
 '''
 '''
+
+from .freezer import Freezer
+from .freezer_property import FreezerProperty

@@ -5,6 +5,7 @@
 '''
 
 from garlicsim.general_misc import caching
+from garlicsim.general_misc.misc_tools import do_nothing
 
 from .freezer import Freezer
 

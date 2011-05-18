@@ -12,7 +12,7 @@ from __future__ import with_statement
 
 import wx
 
-from garlicsim.general_misc import misc_tools
+from garlicsim.general_misc import freezers
 from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
 from garlicsim.general_misc.context_managers import ReentrantContextManager
@@ -77,7 +77,7 @@ class Textual(CutePanel):
         self.Bind(wx.EVT_TEXT, self.on_text, source=self.spin_ctrl)
         
         
-    value_freezer = misc_tools.FreezerProperty()
+    value_freezer = freezers.FreezerProperty()
                     
         
     def update(self):

@@ -16,7 +16,7 @@ import wx
 
 import garlicsim, garlicsim_wx
 
-from garlicsim.general_misc import misc_tools
+from garlicsim.general_misc import freezers
 from garlicsim.general_misc.context_managers import ContextManager
 from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
@@ -119,7 +119,7 @@ class AutocrunchControls(CutePanel):
         #                                                                     #
         ### Finished setting up event handling and emitter connections. #######
         
-    value_freezer = misc_tools.FreezerProperty()
+    value_freezer = freezers.FreezerProperty()
         
         
     def on_check_box(self, event):

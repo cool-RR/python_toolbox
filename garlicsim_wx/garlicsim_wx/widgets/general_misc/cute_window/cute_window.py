@@ -11,7 +11,7 @@ import wx
 
 from garlicsim_wx.general_misc import wx_tools
 from garlicsim.general_misc import caching
-from garlicsim.general_misc import misc_tools
+from garlicsim.general_misc import freezers
 from garlicsim.general_misc.context_managers import ContextManager
 
 from .accelerator_savvy_window import AcceleratorSavvyWindow
@@ -25,7 +25,7 @@ class CuteWindow(AcceleratorSavvyWindow, wx.Window):
     calling `wx.Window.__init__`.)
     '''
     
-    freezer = misc_tools.FreezerProperty(
+    freezer = freezers.FreezerProperty(
         freezer_type=wx_tools.window_tools.WindowFreezer,
         doc='''Freezer for freezing the window while the suite executes.'''
     )
