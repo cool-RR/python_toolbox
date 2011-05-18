@@ -10,6 +10,8 @@ See documentation of EmitterSystem for more info.
 from __future__ import with_statement
 
 import itertools
+
+from garlicsim.general_misc import misc_tools
 from garlicsim.general_misc import cute_iter_tools
 from garlicsim.general_misc.context_managers import ReentrantContextManager
 
@@ -53,8 +55,6 @@ class EmitterSystem(object):
     # to make inputs and outputs abstract.
     def __init__(self):
         
-        self.cache_rebuilding_freezer = CacheRebuildingFreezer(self)
-        
         self.emitters = set()
         
         self.bottom_emitter = Emitter(self, name='bottom')
@@ -67,9 +67,16 @@ class EmitterSystem(object):
         )
         self.emitters.add(self.top_emitter)
         
-    _cache_rebuilding_frozen = property(
-        lambda self: self.cache_rebuilding_freezer.depth
-    )
+        
+    cache_rebuilding_freezer = misc_tools.FreezerProperty()
+
+    
+    @cache_rebuilding_freezer.on_thaw
+    def _recalculate_all_cache(self):
+        '''Recalculate the cache for all the emitters.'''
+        self.bottom_emitter._recalculate_total_callable_outputs_recursively()
+        
+        
             
     def make_emitter(self, inputs=(), outputs=(), name=None):
         '''Create an emitter in this emitter system. Returns the emitter.'''
@@ -94,9 +101,7 @@ class EmitterSystem(object):
             emitter.disconnect_from_all()
         self.emitters.remove(emitter)
         
-        
-    def _recalculate_all_cache(self):
-        '''Recalculate the cache for all the emitters.'''
-        self.bottom_emitter._recalculate_total_callable_outputs_recursively()
+
+    
     
 

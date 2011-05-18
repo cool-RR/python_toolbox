@@ -12,6 +12,7 @@ from __future__ import with_statement
 
 import wx
 
+from garlicsim.general_misc import misc_tools
 from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
 from garlicsim.general_misc.context_managers import ReentrantContextManager
@@ -25,17 +26,17 @@ def degrees_to_ratio(degrees):
     return degrees / 360
 
 
-class ValueFreezer(ReentrantContextManager):
-    '''
-    Freezer for not changing the `Textual`'s text value.
+#class ValueFreezer(ReentrantContextManager):
+    #'''
+    #Freezer for not changing the `Textual`'s text value.
 
-    Used as a context manager. Anything that happens inside the `with` suite
-    will not cause the `Textual` to update its text value.
+    #Used as a context manager. Anything that happens inside the `with` suite
+    #will not cause the `Textual` to update its text value.
     
-    This is useful because when the `Textual`'s value changes, some platforms
-    automatically select all the text in the `Textual`, which is really
-    annoying if you're just typing in it.
-    '''
+    #This is useful because when the `Textual`'s value changes, some platforms
+    #automatically select all the text in the `Textual`, which is really
+    #annoying if you're just typing in it.
+    #'''
 
 
 class Textual(CutePanel):
@@ -46,8 +47,6 @@ class Textual(CutePanel):
         
         self.hue_selection_dialog = hue_selection_dialog
         self.hue = hue_selection_dialog.hue
-        
-        self.value_freezer = ValueFreezer()
         
         self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)
         
@@ -78,12 +77,13 @@ class Textual(CutePanel):
         self.Bind(wx.EVT_TEXT, self.on_text, source=self.spin_ctrl)
         
         
-    frozen = property(lambda self: self.value_freezer.depth)
+    value_freezer = misc_tools.FreezerProperty()
                     
         
     def update(self):
         '''Update to show the new hue.'''
-        if not self.frozen and self.hue != self.hue_selection_dialog.hue:
+        if not self.value_freezer.frozen and \
+           self.hue != self.hue_selection_dialog.hue:
             self.hue = self.hue_selection_dialog.hue
             self.spin_ctrl.SetValue(ratio_to_round_degrees(self.hue))
     

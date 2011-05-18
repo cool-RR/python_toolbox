@@ -8,6 +8,7 @@ import math
 import types
 
 from garlicsim.general_misc import cute_iter_tools
+from garlicsim.general_misc.proxy_property import ProxyProperty
 from garlicsim.general_misc.context_managers import ReentrantContextManager
 
 
@@ -147,52 +148,63 @@ def identity_function(thing):
     function might be faster as it's prepared in advance.
     '''
     return thing
-
-
-class ProxyProperty(object):
-    def __init__(self, attribute_name):
-        self.attribute_name = attribute_name
-        
-    def __get__(self, obj, our_type=None):
-        getattr(obj, self.attribute_name)
-        
-    def __set__(self, obj, value, our_type=None):
-        setattr(obj, self.attribute_name, value)
-
     
+
+def do_nothing(*args, **kwargs):
+    pass
 
         
 
 class Freezer(ReentrantContextManager):
     
-    del depth
-    pass
+    frozen = ProxyProperty('_ReentrantContextManager__depth')
+    
+# del Freezer.depth # blocktodo: ask online for nicer way to do it
 
 
 class FreezerProperty(object):
     ''' '''
-    def __init__(self):
-        self.reentrant_context_manager = ReentrantContextManager()
+    def __init__(self, freeze_handler=do_nothing, thaw_handler=do_nothing):
+        self.__our_name = None
+        self.__freeze_handler = freeze_handler
+        self.__thaw_handler = thaw_handler
         
         
     def __get__(self, obj, our_type=None):
-
+        
         if obj is None:
             # We're being accessed from the class itself, not from an object
             return self
-        
-        value = self.getter(obj)
-        
-        if not self.our_name:
+
+        if not self.__our_name:
             if not our_type:
                 our_type = type(obj)
-            (self.our_name,) = (name for name in dir(our_type) if
+            (self.__our_name,) = (name for name in dir(our_type) if
                                 getattr(our_type, name, None) is self)
+            
+        self.__freezer_name = '_%s_freezer' % self.__our_name
         
-        setattr(obj, self.our_name, value)
-        
-        return value
+        if not hasattr(obj, self.__freezer_name):
+            freezer = Freezer()
+            freezer.reentrant_enter = \
+                lambda: self.__freeze_handler(obj)
+            freezer.reentrant_exit = \
+                lambda type_, value, traceback: self.__thaw_handler(obj)
+            setattr(obj, self.__freezer_name, freezer)
+        else:
+            freezer = getattr(obj, self.__freezer_name)
+            
+        return freezer
 
-    
+
+    def on_freeze(self, function):
+        self.__freeze_handler = function
+        return function
+
+        
+    def on_thaw(self, function):
+        self.__thaw_handler = function
+        return function
+        
 
         

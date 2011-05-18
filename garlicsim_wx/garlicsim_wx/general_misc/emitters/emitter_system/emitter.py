@@ -49,7 +49,7 @@ class Emitter(OriginalEmitter):
         
         Will not do anything if `_cache_rebuilding_frozen` is positive.
         '''
-        if not self.emitter_system._cache_rebuilding_frozen:
+        if not self.emitter_system.cache_rebuilding_freezer.frozen:
             OriginalEmitter._recalculate_total_callable_outputs_recursively(
                 self
             )

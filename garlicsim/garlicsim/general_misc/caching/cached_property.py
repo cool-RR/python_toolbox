@@ -46,6 +46,7 @@ class CachedProperty(object):
         
         value = self.getter(obj)
         
+        # blocktodo: can abstract away to `NameDiscoveringProperty`:
         if not self.our_name:
             if not our_type:
                 our_type = type(obj)
