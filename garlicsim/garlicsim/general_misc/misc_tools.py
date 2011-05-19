@@ -8,9 +8,6 @@ import math
 import types
 
 from garlicsim.general_misc import cute_iter_tools
-from garlicsim.general_misc.proxy_property import ProxyProperty
-from garlicsim.general_misc import caching
-from garlicsim.general_misc.context_managers import ReentrantContextManager
 
 
 def is_subclass(candidate, base_class):
@@ -155,11 +152,25 @@ def do_nothing(*args, **kwargs):
     pass
 
         
-
-
+class OwnNameDiscoveringProperty(object):
+    ''' '''
+    def __init__(self, name=None):
+        '''
         
-        
+        You may optionally pass in the name that this property has in the
+        class; this will save a bit of processing later.
+        '''
+        self.our_name = name
     
-
-
-
+        
+    def get_our_name(self, obj, our_type=None):
+        if self.our_name is not None:
+            return self.our_name
+        
+        if not our_type:
+            our_type = type(obj)
+        (self.our_name,) = (name for name in dir(our_type) if
+                            getattr(our_type, name, None) is self)
+        
+        return self.our_name
+        

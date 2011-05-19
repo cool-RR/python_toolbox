@@ -7,8 +7,10 @@ Defines the `CachedProperty` class.
 See its documentation for more details.
 '''
 
+from garlicsim.general_misc import misc_tools
 
-class CachedProperty(object):
+
+class CachedProperty(misc_tools.OwnNameDiscoveringProperty):
     '''
     A property that is calculated (a) lazily and (b) only once for an object.
     
@@ -33,8 +35,8 @@ class CachedProperty(object):
         You may optionally pass in the name that this property has in the
         class; this will save a bit of processing later.
         '''
+        misc_tools.OwnNameDiscoveringProperty.__init__(self, name=name)
         self.getter = getter
-        self.our_name = name
         self.__doc__ = doc or getattr(getter, '__doc__', None)
         
         
@@ -46,14 +48,7 @@ class CachedProperty(object):
         
         value = self.getter(obj)
         
-        # blocktodo: can abstract away to `NameDiscoveringProperty`:
-        if not self.our_name:
-            if not our_type:
-                our_type = type(obj)
-            (self.our_name,) = (name for name in dir(our_type) if
-                                getattr(our_type, name, None) is self)
-        
-        setattr(obj, self.our_name, value)
+        setattr(obj, self.get_our_name(obj, our_type=our_type), value)
         
         return value
 
