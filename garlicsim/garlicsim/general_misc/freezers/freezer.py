@@ -15,9 +15,6 @@ from .inner_context_manager import InnerContextManager
 
 class Freezer(context_managers.ProxyingContextManager):
     
-    def __init__(self, thing):
-        self.thing = thing
-        
     inner_context_manager = caching.CachedProperty(InnerContextManager)
 
         
