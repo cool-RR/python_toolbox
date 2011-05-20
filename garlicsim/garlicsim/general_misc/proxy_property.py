@@ -7,9 +7,15 @@ This module defines the `` class.
 See its documentation for more information.
 '''
 
+from garlicsim.general_misc import address_tools
+
+
 #blocktodo: allow doc
 class ProxyProperty(object):
     def __init__(self, attribute_name):
+        '''
+        blocktododpc: attribute can have dot in it.
+        '''
         self.attribute_name = attribute_name
         
     def __get__(self, obj, our_type=None):
@@ -17,9 +23,22 @@ class ProxyProperty(object):
             # We're being accessed from the class itself, not from an object
             return self
         else:
-            getattr(obj, self.attribute_name)
+            if '.' in self.attribute_name:
+                return address_tools.resolve('obj.%s' % self.attribute_name,
+                                             namespace={'obj': obj})
+            else:
+                return getattr(obj, self.attribute_name)
         
     def __set__(self, obj, value):
-        setattr(obj, self.attribute_name, value)
+        
+        
         # blocktodo: should I check if obj is None and set on class?
         # Same for __delete__?
+        
+        if '.' in self.attribute_name:
+            left_segment, right_segment = self.attribute_name.rsplit('.', 1)
+            deepest_object = address_tools.resolve('obj.%s' % left_segment,
+                                                   namespace={'obj': obj})
+            setattr(obj, right_segment, value)
+        else:
+            setattr(obj, self.attribute_name, value)

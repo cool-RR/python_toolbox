@@ -8,7 +8,7 @@ from garlicsim.general_misc import context_managers
 from garlicsim.general_misc import proxy_property
 
 
-class Freezer(context_managers.ReentrantContextManager):
+class Freezer(context_managers.ProxyingContextManager):
     
     def __init__(self, thing):
         self.thing = thing
