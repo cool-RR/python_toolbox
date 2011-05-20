@@ -6,32 +6,23 @@
 
 from garlicsim.general_misc import context_managers
 from garlicsim.general_misc import proxy_property
+from garlicsim.general_misc import caching
+
+from .inner_context_manager import InnerContextManager
 
 
 class Freezer(context_managers.ProxyingContextManager):
     
     def __init__(self, thing):
         self.thing = thing
+        
+    inner_context_manager = caching.CachedProperty(InnerContextManager)
 
         
-    frozen = proxy_property.ProxyProperty('_ReentrantContextManager__depth')
-    
-
-    def reentrant_enter(self):
-        ''' '''
-        return self.freeze_handler()
-    
-    def reentrant_exit(self, type_, value, traceback):
-        ''' '''
-        return self.thaw_handler()
-        
-    
+    frozen = proxy_property.ProxyProperty('inner_context_manager.depth')
     
     def freeze_handler(self):
         return self.__freezer_property._freeze_handler(self.thing)
     
-    
     def thaw_handler(self):
         return self.__freezer_property._thaw_handler(self.thing)
-    
-# del Freezer.depth # blocktodo: How do I do this?
