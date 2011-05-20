@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the `` class.
+This module defines the `ProxyProperty` class.
 
 See its documentation for more information.
 '''
@@ -14,7 +14,7 @@ from garlicsim.general_misc import address_tools
 class ProxyProperty(object):
     def __init__(self, attribute_name):
         '''
-        blocktododpc: attribute can have dot in it.
+        blocktododoc: attribute can have dot in it.
         '''
         self.attribute_name = attribute_name
         

@@ -11,8 +11,9 @@ from .freezer import Freezer
 
 class FreezerPropertyFreezer(Freezer):
     ''' '''
-    def __init__(self, freezer_property):
-        self.freezer_property = freezer_property
+    def __init__(self, thing):
+        self.thing = thing
+        
         
         
     def freeze_handler(self):

@@ -37,7 +37,7 @@ class FreezerProperty(caching.CachedProperty):
         assert obj is not None
         
         freezer = self.__freezer_type(obj)
-        freezer._Freezer__freezer_property = self
+        freezer.freezer_property = self
         return freezer
             
         
