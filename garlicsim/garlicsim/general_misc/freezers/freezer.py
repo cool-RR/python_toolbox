@@ -4,6 +4,8 @@
 '''
 '''
 
+from garlicsim.general_misc.third_party import abc
+
 from garlicsim.general_misc import context_managers
 from garlicsim.general_misc import proxy_property
 from garlicsim.general_misc import caching
@@ -21,8 +23,11 @@ class Freezer(context_managers.ProxyingContextManager):
         
     frozen = proxy_property.ProxyProperty('inner_context_manager.depth')
     
-    def freeze_handler(self):
-        return self.__freezer_property._freeze_handler(self.thing)
     
+    @abc.abstractmethod
+    def freeze_handler(self):
+        ''' '''
+    
+    @abc.abstractmethod
     def thaw_handler(self):
-        return self.__freezer_property._thaw_handler(self.thing)
+        ''' '''

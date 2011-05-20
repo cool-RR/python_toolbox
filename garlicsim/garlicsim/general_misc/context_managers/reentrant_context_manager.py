@@ -18,26 +18,24 @@ from .context_manager import ContextManager
 class ReentrantContextManager(ContextManager):
     ''' '''
     
-    __depth = caching.CachedProperty(lambda self: 0, doc='''blocktododoc''')
+    depth = caching.CachedProperty(lambda self: 0, doc='''blocktododoc''')
     # blocktodo: should CachedProperty take a non-callable?
-    
-    depth = ProxyProperty('_ReentrantContextManager__depth')
 
     
     def __enter__(self):
-        if self.__depth == 0:
+        if self.depth == 0:
             self.__enter_return_value = self.reentrant_enter()
-        self.__depth += 1
+        self.depth += 1
         return self.__enter_return_value
     
     
     def __exit__(self, type_, value, traceback):
-        assert self.__depth >= 1
-        if self.__depth == 1:
+        assert self.depth >= 1
+        if self.depth == 1:
             self.reentrant_exit(type_, value, traceback)
         # todo: if in depth, perhaps should save exception data if it exists
         # and pass to outermost?
-        self.__depth -= 1
+        self.depth -= 1
 
         
     def reentrant_enter(self):
