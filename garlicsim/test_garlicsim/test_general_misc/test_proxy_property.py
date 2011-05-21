@@ -23,7 +23,7 @@ def test():
     class A(object):
         ''' '''
         y = 'y'
-        def __init__(self, x):
+        def __init__(self):
             self.x = 'x'
             self.obj = Object()
             self.obj.z = 'z'
