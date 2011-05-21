@@ -12,11 +12,13 @@ from garlicsim.general_misc import address_tools
 
 #blocktodo: allow doc
 class ProxyProperty(object):
-    def __init__(self, attribute_name):
+    def __init__(self, attribute_name, doc=None):
         '''
         blocktododoc: attribute can have dot in it.
         '''
         self.attribute_name = attribute_name
+        self.__doc__ = doc
+        
         
     def __get__(self, obj, our_type=None):
         if obj is None:
