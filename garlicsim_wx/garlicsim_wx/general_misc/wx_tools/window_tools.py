@@ -12,7 +12,7 @@ class WindowFreezer(Freezer):
     '''Context manager for freezing the window while the suite executes.'''
     
     def __init__(self, window):
-        Freezer.__init__(self, window)
+        Freezer.__init__(self)
         assert isinstance(window, wx.Window)
         self.window = window
         
