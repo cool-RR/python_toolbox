@@ -17,17 +17,15 @@ class CustomFreezer(Freezer):
         self.obj = obj
         
     def freeze_handler(obj):
-        self.objdifferent_type_freeze_counter += 1
+        self.obj.different_type_freeze_counter += 1
         
     def thaw_handler(obj):
-        self.objdifferent_type_thaw_counter += 1
+        self.obj.different_type_thaw_counter += 1
 
         
 def test():
+    
     class A(object):
-
-        
-        
         lone_freezer = FreezerProperty()
         
         ### Defining decorate-happy freezer: ##################################
@@ -54,7 +52,8 @@ def test():
             self.argument_happy_thaw_counter += 1
         argument_happy_freezer = FreezerProperty(
             on_freeze=increment_argument_happy_freeze_counter,
-            on_thaw=increment_argument_happy_thaw_counter
+            on_thaw=increment_argument_happy_thaw_counter,
+            name='argument_happy_freezer'
         )
         #                                                                     #
         ### Finished defining argument-happy freezer. #########################
@@ -76,9 +75,12 @@ def test():
         #                                                                     #
         different_type_freeze_counter = caching.CachedProperty(lambda self: 0)
         different_type_thaw_counter = caching.CachedProperty(lambda self: 0)
-        different_type_freezer = FreezerProperty(on_freeze=increment_different_type_freeze_counter)
-        @different_type_freezer.on_thaw
-        def increment_different_type_thaw_counter(self):
-            self.different_type_thaw_counter += 1
+        different_type_freezer = FreezerProperty(
+            freezer_type=CustomFreezer,
+            doc='A freezer using a custom freezer class.'
+        )
         #                                                                     #
         ### Finished defining freezer with different freezer type. ############
+
+    a = A()
+    assert isinstance(a.lone_freezer, Freezer)
