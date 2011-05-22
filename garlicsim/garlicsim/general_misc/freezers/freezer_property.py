@@ -9,6 +9,7 @@ from garlicsim.general_misc import misc_tools
 from garlicsim.general_misc.misc_tools import do_nothing
 
 from .freezer_property_freezer import FreezerPropertyFreezer
+from .freezer import Freezer
 
 
 class FreezerProperty(caching.CachedProperty):
@@ -17,6 +18,7 @@ class FreezerProperty(caching.CachedProperty):
                  freezer_type=FreezerPropertyFreezer, doc=None, name=None):
         
         if freezer_type is not FreezerPropertyFreezer:
+            assert issubclass(freezer_type, Freezer)
             if not (on_freeze is on_thaw is do_nothing):
                 raise Exception(
                     "You've passed a `freezer_type` argument, so you're not "
