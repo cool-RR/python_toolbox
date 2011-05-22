@@ -28,30 +28,51 @@ class StateCreationDialog(CuteDialog):
         self.simpack = frame.gui_project.simpack
 
         hbox1 = wx.BoxSizer(wx.HORIZONTAL)
+
+        width_help_text = 'Set the width of the Life board, in cells.'
+        
         self.x_title = x_title = wx.StaticText(self, -1, 'Width: ')
-        self.x_textctrl = x_textctrl = wx.TextCtrl(self, -1, '45')
-        self.y_title = y_title = wx.StaticText(self, -1, 'Height: ')
-        self.y_textctrl = y_textctrl = wx.TextCtrl(self, -1, '25')
         hbox1.Add(
             x_title,
             0,
             wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM | wx.TOP | wx.LEFT,
             5)
+        
+        self.x_textctrl = x_textctrl = wx.TextCtrl(self, -1, '45')
         hbox1.Add(x_textctrl, 0, wx.EXPAND | wx.ALL, 5)
+        
+        self.x_title.SetHelpText(width_help_text)
+        self.x_textctrl.SetHelpText(width_help_text)
+        
         hbox1.AddSpacer(30)
+        
+        height_help_text = 'Set the height of the Life board, in cells.'
+        
+        self.y_title = y_title = wx.StaticText(self, -1, 'Height: ')
         hbox1.Add(
             y_title,
             0,
             wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM | wx.TOP | wx.LEFT,
             5
         )
+        self.y_textctrl = y_textctrl = wx.TextCtrl(self, -1, '25')
         hbox1.Add(y_textctrl, 0, wx.EXPAND | wx.ALL, 5)
+        
+        self.y_title.SetHelpText(height_help_text)
+        self.y_textctrl.SetHelpText(height_help_text)
 
+        
         hbox2 = wx.BoxSizer(wx.HORIZONTAL)
         self.empty = empty = wx.RadioButton(self, -1, 'All empty',
                                             style=wx.RB_GROUP)
+        self.empty.SetHelpText('All the cells in the board will be empty, '
+                               'i.e. dead.')
         self.full = full = wx.RadioButton(self, -1, 'All full')
+        self.full.SetHelpText('All the cells in the board will be full, '
+                              'i.e. alive.')
         self.random = random = wx.RadioButton(self, -1, 'Random')
+        self.random.SetHelpText('The board will be a random mixture of live '
+                                'cells and dead cells.')
         random.SetValue(True)
         hbox2.Add(empty, 0, wx.ALIGN_CENTER | wx.ALL, 5)
         hbox2.Add(full, 0, wx.ALIGN_CENTER | wx.ALL, 5)
@@ -61,6 +82,7 @@ class StateCreationDialog(CuteDialog):
 
         last_hbox = wx.BoxSizer(wx.HORIZONTAL)
         ok = wx.Button(self, wx.ID_OK, 'Create state')
+        ok.SetHelpText('Create the new state.')
         ok.SetDefault()
         self.Bind(wx.EVT_BUTTON, self.on_ok, id=ok.GetId())
         cancel = wx.Button(self, wx.ID_CANCEL, 'Cancel')
