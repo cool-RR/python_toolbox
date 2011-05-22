@@ -27,4 +27,4 @@ class CuteFrame(wx.Frame, CuteTopLevelWindow):
         wx.Frame.__init__(self, parent=parent, id=id, title=title,
                           pos=pos, size=size, style=style, name=name)
         CuteTopLevelWindow.__init__(self, parent=parent, id=id, title=title,
-                                    pos=pos, size=size, style=style, na\me=name)
+                                    pos=pos, size=size, style=style, name=name)
