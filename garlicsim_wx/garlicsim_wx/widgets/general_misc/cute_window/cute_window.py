@@ -19,10 +19,18 @@ from .accelerator_savvy_window import AcceleratorSavvyWindow
 
 class CuteWindow(AcceleratorSavvyWindow, wx.Window):
     '''
+    An improved `wx.Window`.
     
+    The advantages of this class over `wx.Window`:
+    
+     - A `.freezer` property for freezing the window.  
+     - A `.create_cursor_changer` method which creates a `CursorChanger`
+       context manager for temporarily changing the cursor.
+     - A `set_good_background_color` for setting a good background color.
+     
     This class doesn't require calling its `__init__` when subclassing. (i.e.,
     you *may* call its `__init__` if you want, but it will do the same as
-    calling `wx.Window.__init__`.)
+    calling `wx.Window.__init__`.) # blocktododoc: remove notice?
     '''
     
     freezer = freezers.FreezerProperty(
@@ -32,6 +40,7 @@ class CuteWindow(AcceleratorSavvyWindow, wx.Window):
     
     def create_cursor_changer(self, cursor):
         '''
+        Create a `CursorChanger` context manager for ...blocktotodoc
         
         `cursor` may be either a `wx.Cursor` object or a constant like
         `wx.CURSOR_BULLSEYE`.
@@ -39,4 +48,5 @@ class CuteWindow(AcceleratorSavvyWindow, wx.Window):
         return wx_tools.cursors.CursorChanger(self, cursor)
     
     def set_good_background_color(self):
+        '''Set a good background color to the window.'''
         self.SetBackgroundColour(wx_tools.colors.get_background_color())
