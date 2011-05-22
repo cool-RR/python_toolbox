@@ -32,10 +32,20 @@ class StateCreationDialog(CuteDialog):
         self.x_textctrl = x_textctrl = wx.TextCtrl(self, -1, '45')
         self.y_title = y_title = wx.StaticText(self, -1, 'Height: ')
         self.y_textctrl = y_textctrl = wx.TextCtrl(self, -1, '25')
-        hbox1.Add(x_title, 0, wx.ALIGN_CENTER | wx.EXPAND | wx.ALL, 5)
-        hbox1.Add(x_textctrl, 0, wx.EXPAND | wx.ALIGN_CENTER | wx.RIGHT, 40)
-        hbox1.Add(y_title, 0, wx.EXPAND | wx.ALIGN_CENTER | wx.RIGHT, 10)
-        hbox1.Add(y_textctrl, 0, wx.EXPAND | wx.ALIGN_CENTER | wx.RIGHT, 5)
+        hbox1.Add(
+            x_title,
+            0,
+            wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM | wx.TOP | wx.LEFT,
+            5)
+        hbox1.Add(x_textctrl, 0, wx.EXPAND | wx.ALL, 5)
+        hbox1.AddSpacer(30)
+        hbox1.Add(
+            y_title,
+            0,
+            wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM | wx.TOP | wx.LEFT,
+            5
+        )
+        hbox1.Add(y_textctrl, 0, wx.EXPAND | wx.ALL, 5)
 
         hbox2 = wx.BoxSizer(wx.HORIZONTAL)
         self.empty = empty = wx.RadioButton(self, -1, 'All empty',
