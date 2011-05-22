@@ -14,14 +14,22 @@ from .cute_top_level_window import CuteTopLevelWindow
 
 
 class CuteDialog(wx.Dialog, CuteTopLevelWindow):
-    '''Improved dialog.'''
+    '''
+    An improved `wx.Dialog`.
+    
+    The advantages of this class over `wx.Dialog`:
+    
+     - `ShowModal` centers the dialog on its parent, which sometimes doesn't
+        happen by itself on Mac. 
+     - A `create_and_show_modal` class method.
+     - Other advantages given by `CuteTopLevelWindow`
+    
+    '''
     
     def __init__(self, *args, **kwargs):
         if not kwargs.pop('skip_wx_init', False):
             wx.Dialog.__init__(self, *args, **kwargs)
         CuteTopLevelWindow.__init__(self, *args, **kwargs)
-        self.set_good_background_color()
-        self.SetDoubleBuffered(True)
         
         
     def ShowModal(self):
