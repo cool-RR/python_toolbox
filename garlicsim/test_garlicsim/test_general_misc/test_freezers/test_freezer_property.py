@@ -7,29 +7,26 @@ This module defines the `` class.
 See its documentation for more information.
 '''
 
+from __future__ import with_statement
+
 from garlicsim.general_misc.freezers import FreezerProperty, Freezer
 from garlicsim.general_misc import caching
 
 
-class CustomFreezer(Freezer):
-    ''' '''
-    def __init__(self, obj):
-        self.obj = obj
-        
-    def freeze_handler(obj):
-        self.obj.different_type_freeze_counter += 1
-        
-    def thaw_handler(obj):
-        self.obj.different_type_thaw_counter += 1
-
-        
-def test():
+def test_lone_freezer_property():
     
     class A(object):
         lone_freezer = FreezerProperty()
+
+    a = A()
+    assert isinstance(a.lone_freezer, Freezer)
+    assert a.lone_freezer.frozen == 0
+    with a.lone_freezer:
+        assert a.lone_freezer.frozen
         
-        ### Defining decorate-happy freezer: ##################################
-        #                                                                     #
+    
+def test_decorate_happy_freezer_property():
+    class C(object):
         decorate_happy_freeze_counter = caching.CachedProperty(lambda self: 0)
         decorate_happy_thaw_counter = caching.CachedProperty(lambda self: 0)
         decorate_happy_freezer = FreezerProperty()
@@ -39,11 +36,37 @@ def test():
         @decorate_happy_freezer.on_thaw
         def increment_decorate_happy_thaw_counter(self):
             self.decorate_happy_thaw_counter += 1
-        #                                                                     #
-        ### Finished defining decorate-happy freezer. #########################
+
+    b = C()
+    assert b.decorate_happy_freezer.frozen == 0
+    assert b.decorate_happy_freeze_counter == 0
+    assert b.decorate_happy_thaw_counter == 0
+    with b.decorate_happy_freezer:
+        assert b.decorate_happy_freezer.frozen == 1
+        assert b.decorate_happy_freeze_counter == 1
+        assert b.decorate_happy_thaw_counter == 0
+        with b.decorate_happy_freezer:
+            assert b.decorate_happy_freezer.frozen == 2
+            assert b.decorate_happy_freeze_counter == 1
+            assert b.decorate_happy_thaw_counter == 0
+        assert b.decorate_happy_freezer.frozen == 1
+        assert b.decorate_happy_freeze_counter == 1
+        assert b.decorate_happy_thaw_counter == 0
+    assert b.decorate_happy_freezer.frozen == 0
+    assert b.decorate_happy_freeze_counter == 1
+    assert b.decorate_happy_thaw_counter == 1
+    
+    with b.decorate_happy_freezer:
+        assert b.decorate_happy_freezer.frozen == 1
+        assert b.decorate_happy_freeze_counter == 2
+        assert b.decorate_happy_thaw_counter == 1
+    assert b.decorate_happy_freezer.frozen == 0
+    assert b.decorate_happy_freeze_counter == 2
+    assert b.decorate_happy_thaw_counter == 2
         
-        ### Defining argument-happy freezer: ##################################
-        #                                                                     #
+    
+def test_argument_happy_freezer_property():
+    class C(object):
         argument_happy_freeze_counter = caching.CachedProperty(lambda self: 0)
         argument_happy_thaw_counter = caching.CachedProperty(lambda self: 0)        
         def increment_argument_happy_freeze_counter(self):
@@ -55,11 +78,37 @@ def test():
             on_thaw=increment_argument_happy_thaw_counter,
             name='argument_happy_freezer'
         )
-        #                                                                     #
-        ### Finished defining argument-happy freezer. #########################
+     
+    c = C()
+    assert c.argument_happy_freezer.frozen == 0
+    assert c.argument_happy_freeze_counter == 0
+    assert c.argument_happy_thaw_counter == 0
+    with c.argument_happy_freezer:
+        assert c.argument_happy_freezer.frozen == 1
+        assert c.argument_happy_freeze_counter == 1
+        assert c.argument_happy_thaw_counter == 0
+        with c.argument_happy_freezer:
+            assert c.argument_happy_freezer.frozen == 2
+            assert c.argument_happy_freeze_counter == 1
+            assert c.argument_happy_thaw_counter == 0
+        assert c.argument_happy_freezer.frozen == 1
+        assert c.argument_happy_freeze_counter == 1
+        assert c.argument_happy_thaw_counter == 0
+    assert c.argument_happy_freezer.frozen == 0
+    assert c.argument_happy_freeze_counter == 1
+    assert c.argument_happy_thaw_counter == 1
+    
+    with c.argument_happy_freezer:
+        assert c.argument_happy_freezer.frozen == 1
+        assert c.argument_happy_freeze_counter == 2
+        assert c.argument_happy_thaw_counter == 1
+    assert c.argument_happy_freezer.frozen == 0
+    assert c.argument_happy_freeze_counter == 2
+    assert c.argument_happy_thaw_counter == 2
+    
         
-        ### Defining mixed freezer: ###########################################
-        #                                                                     #
+def test_mix_freezer_property():
+    class D(object):
         mix_freeze_counter = caching.CachedProperty(lambda self: 0)
         mix_thaw_counter = caching.CachedProperty(lambda self: 0)
         def increment_mix_freeze_counter(self):
@@ -68,19 +117,81 @@ def test():
         @mix_freezer.on_thaw
         def increment_mix_thaw_counter(self):
             self.mix_thaw_counter += 1
-        #                                                                     #
-        ### Finished defining mixed freezer. ##################################
+     
+    d = D()
+    assert d.mix_freezer.frozen == 0
+    assert d.mix_freeze_counter == 0
+    assert d.mix_thaw_counter == 0
+    with d.mix_freezer:
+        assert d.mix_freezer.frozen == 1
+        assert d.mix_freeze_counter == 1
+        assert d.mix_thaw_counter == 0
+        with d.mix_freezer:
+            assert d.mix_freezer.frozen == 2
+            assert d.mix_freeze_counter == 1
+            assert d.mix_thaw_counter == 0
+        assert d.mix_freezer.frozen == 1
+        assert d.mix_freeze_counter == 1
+        assert d.mix_thaw_counter == 0
+    assert d.mix_freezer.frozen == 0
+    assert d.mix_freeze_counter == 1
+    assert d.mix_thaw_counter == 1
+    
+    with d.mix_freezer:
+        assert d.mix_freezer.frozen == 1
+        assert d.mix_freeze_counter == 2
+        assert d.mix_thaw_counter == 1
+    assert d.mix_freezer.frozen == 0
+    assert d.mix_freeze_counter == 2
+    assert d.mix_thaw_counter == 2
         
-        ### Defining freezer with different freezer type: #####################
-        #                                                                     #
+    
+def test_different_type_freezer_property():
+    
+    class CustomFreezer(Freezer):
+        ''' '''
+        def __init__(self, obj):
+            self.obj = obj
+            
+        def freeze_handler(obj):
+            self.obj.different_type_freeze_counter += 1
+            
+        def thaw_handler(obj):
+            self.obj.different_type_thaw_counter += 1
+    
+    class E(object):
         different_type_freeze_counter = caching.CachedProperty(lambda self: 0)
         different_type_thaw_counter = caching.CachedProperty(lambda self: 0)
         different_type_freezer = FreezerProperty(
             freezer_type=CustomFreezer,
             doc='A freezer using a custom freezer class.'
         )
-        #                                                                     #
-        ### Finished defining freezer with different freezer type. ############
-
-    a = A()
-    assert isinstance(a.lone_freezer, Freezer)
+     
+    e = E()
+    assert e.different_type_freezer.__doc__ == \
+           'A freezer using a custom freezer class.'
+    assert e.different_type_freezer.frozen == 0
+    assert e.different_type_freeze_counter == 0
+    assert e.different_type_thaw_counter == 0
+    with e.different_type_freezer:
+        assert e.different_type_freezer.frozen == 1
+        assert e.different_type_freeze_counter == 1
+        assert e.different_type_thaw_counter == 0
+        with e.different_type_freezer:
+            assert e.different_type_freezer.frozen == 2
+            assert e.different_type_freeze_counter == 1
+            assert e.different_type_thaw_counter == 0
+        assert e.different_type_freezer.frozen == 1
+        assert e.different_type_freeze_counter == 1
+        assert e.different_type_thaw_counter == 0
+    assert e.different_type_freezer.frozen == 0
+    assert e.different_type_freeze_counter == 1
+    assert e.different_type_thaw_counter == 1
+    
+    with e.different_type_freezer:
+        assert e.different_type_freezer.frozen == 1
+        assert e.different_type_freeze_counter == 2
+        assert e.different_type_thaw_counter == 1
+    assert e.different_type_freezer.frozen == 0
+    assert e.different_type_freeze_counter == 2
+    assert e.different_type_thaw_counter == 2
