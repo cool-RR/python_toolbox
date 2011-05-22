@@ -41,6 +41,6 @@ class ProxyProperty(object):
             left_segment, right_segment = self.attribute_name.rsplit('.', 1)
             deepest_object = address_tools.resolve('obj.%s' % left_segment,
                                                    namespace={'obj': obj})
-            setattr(obj, right_segment, value)
+            setattr(deepest_object, right_segment, value)
         else:
             setattr(obj, self.attribute_name, value)

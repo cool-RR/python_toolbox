@@ -60,3 +60,16 @@ def test():
         a0.nonexistant_proxy
     with cute_testing.RaiseAssertor(AttributeError):
         a1.nonexistant_proxy
+        
+    ### Setting proxy-properties to different values: #########################
+    #                                                                         #
+    a0.x_proxy = 7
+    assert a0.x_proxy == 7 != a1.x_proxy == 'x'
+        
+    a0.y_proxy = 'meow'
+    assert a0.y_proxy == 'meow' != a1.y_proxy == 'y'
+        
+    a0.z_proxy = [1, 2, 3]
+    assert a0.z_proxy == [1, 2, 3] != a1.z_proxy == 'z'
+    #                                                                         #
+    ### Finished setting proxy-properties to different values. ################
