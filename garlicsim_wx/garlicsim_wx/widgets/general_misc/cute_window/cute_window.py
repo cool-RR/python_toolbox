@@ -23,10 +23,10 @@ class CuteWindow(AcceleratorSavvyWindow, wx.Window):
     
     The advantages of this class over `wx.Window`:
     
-     - A `.freezer` property for freezing the window.  
-     - A `.create_cursor_changer` method which creates a `CursorChanger`
+      - A `.freezer` property for freezing the window.  
+      - A `.create_cursor_changer` method which creates a `CursorChanger`
        context manager for temporarily changing the cursor.
-     - A `set_good_background_color` for setting a good background color.
+      - A `set_good_background_color` for setting a good background color.
      
     This class doesn't require calling its `__init__` when subclassing. (i.e.,
     you *may* call its `__init__` if you want, but it will do the same as

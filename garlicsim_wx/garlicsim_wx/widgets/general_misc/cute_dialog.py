@@ -19,10 +19,11 @@ class CuteDialog(wx.Dialog, CuteTopLevelWindow):
     
     The advantages of this class over `wx.Dialog`:
     
-     - `ShowModal` centers the dialog on its parent, which sometimes doesn't
+      - `ShowModal` centers the dialog on its parent, which sometimes doesn't
         happen by itself on Mac. 
-     - A `create_and_show_modal` class method.
-     - Other advantages given by `CuteTopLevelWindow`
+      - A `create_and_show_modal` class method.
+      - A "context help" button on Windows only.
+      - Other advantages given by `CuteTopLevelWindow`
     
     '''
     
@@ -30,6 +31,7 @@ class CuteDialog(wx.Dialog, CuteTopLevelWindow):
         if not kwargs.pop('skip_wx_init', False):
             wx.Dialog.__init__(self, *args, **kwargs)
         CuteTopLevelWindow.__init__(self, *args, **kwargs)
+        self.ExtraStyle |= wx.FRAME_EX_CONTEXTHELP
         
         
     def ShowModal(self):

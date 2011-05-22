@@ -21,9 +21,6 @@ class CuteFrame(wx.Frame, CuteTopLevelWindow):
     def __init__(self, parent, id=-1, title=wx.EmptyString,
                  pos=wx.DefaultPosition, size=wx.DefaultSize, 
                  style=wx.DEFAULT_FRAME_STYLE, name=wx.FrameNameStr):
-        #style |= wx.WS_EX_CONTEXTHELP
-        style = (wx.DEFAULT_FRAME_STYLE | wx.WS_EX_CONTEXTHELP) ^ \
-             (wx.RESIZE_BORDER | wx.MAXIMIZE_BOX | wx.MINIMIZE_BOX)
         wx.Frame.__init__(self, parent=parent, id=id, title=title,
                           pos=pos, size=size, style=style, name=name)
         CuteTopLevelWindow.__init__(self, parent=parent, id=id, title=title,
