@@ -14,8 +14,6 @@ from .cute_window import CuteWindow
 
 class CuteTopLevelWindow(wx.TopLevelWindow, CuteWindow):
     def __init__(self, *args, **kwargs):
-        if not kwargs.pop('skip_wx_init', False):
-            wx.TopLevelWindow.__init__(self, *args, **kwargs)
-        self.SetExtraStyle(wx.FRAME_EX_CONTEXTHELP)
+        self.ExtraStyle |= wx.FRAME_EX_CONTEXTHELP
         self.set_good_background_color()
         self.SetDoubleBuffered(True)

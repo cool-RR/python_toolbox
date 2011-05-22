@@ -12,4 +12,6 @@ import wx
 from .cute_top_level_window import CuteTopLevelWindow
 
 class CuteFrame(wx.Frame, CuteTopLevelWindow):
-    pass
+    def __init__(self, *args, **kwargs):
+        wx.Frame.__init__(self, *args, **kwargs)
+        CuteTopLevelWindow.__init__(self, *args, **kwargs)

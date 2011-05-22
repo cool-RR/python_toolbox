@@ -15,6 +15,14 @@ from .cute_top_level_window import CuteTopLevelWindow
 
 class CuteDialog(wx.Dialog, CuteTopLevelWindow):
     '''Improved dialog.'''
+    
+    def __init__(self, *args, **kwargs):
+        if not kwargs.pop('skip_wx_init', False):
+            wx.Dialog.__init__(self, *args, **kwargs)
+        CuteTopLevelWindow.__init__(self, *args, **kwargs)
+        self.set_good_background_color()
+        self.SetDoubleBuffered(True)
+        
         
     def ShowModal(self):
         self.Centre(wx.BOTH)
