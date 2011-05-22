@@ -23,7 +23,7 @@ from garlicsim.general_misc.temp_value_setters import TempRecursionLimitSetter
 from garlicsim_wx.general_misc import thread_timer
 from garlicsim_wx.general_misc import misc_tools
 from garlicsim_wx.general_misc import wx_tools
-from garlicsim_wx.widgets.general_misc.cute_window import CuteWindow
+import garlicsim_wx.widgets.general_misc.cute_frame
 
 import garlicsim
 from garlicsim_wx.gui_project import GuiProject
@@ -40,19 +40,21 @@ wildcard_text = ('GarlicSim Simulation Pickle (*.gssp)|*.gssp|'
                  'All files (*)|*')
 
 
-class Frame(wx.Frame, CuteWindow):
+class Frame(garlicsim_wx.widgets.general_misc.cute_frame.CuteFrame):
     '''
     The main window of `garlicsim_wx`.
     
     This window allows the user to create and manipulate gui projects.
     '''
     def __init__(self, *args, **kwargs):
-        wx.Frame.__init__(self, *args, **kwargs)
+        garlicsim_wx.widgets.general_misc.cute_frame.CuteFrame.__init__(
+            self,
+            *args,
+            **kwargs
+        )
         
         self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
-        self.set_good_background_color()
         
-        self.SetDoubleBuffered(True)
         self.SetIcons(garlicsim_wx.misc.icon_bundle.get_icon_bundle())
         
         self.Bind(wx.EVT_CLOSE, self.on_close)

@@ -48,7 +48,6 @@ class SimpackSelectionDialog(CuteDialog):
             title='Choose simulation package',
             size=(950, 550)
         )
-        self.SetExtraStyle(wx.FRAME_EX_CONTEXTHELP)
         
         assert isinstance(frame, garlicsim_wx.Frame)
         self.frame = frame

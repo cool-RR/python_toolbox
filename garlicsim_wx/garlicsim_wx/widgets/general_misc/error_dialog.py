@@ -17,5 +17,5 @@ class ErrorDialog(wx.MessageDialog, CuteDialog):
     def __init__(self, parent, message, caption='Error'):
         wx.MessageDialog.__init__(self, parent, message, caption,
                                   wx.OK | wx.ICON_ERROR)
-        CuteDialog.__init__(self, skip_dialog_init=True)
+        CuteDialog.__init__(self, skip_wx_init=True)
         

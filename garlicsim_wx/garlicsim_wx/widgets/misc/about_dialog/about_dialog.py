@@ -28,9 +28,7 @@ class AboutDialog(CuteDialog):
     '''An About dialog for GarlicSim.'''
     def __init__(self, frame):
    
-        wx.Dialog.__init__(self, frame, title='About GarlicSim',
-                           size=(628, 600))
-        CuteDialog.__init__(self, frame, skip_dialog_init=True)
+        CuteDialog.__init__(self, frame, title='About GarlicSim')
         
         self.SetDoubleBuffered(True)
         
@@ -46,10 +44,10 @@ class AboutDialog(CuteDialog):
             )
         )
         
-        self.bitmap_viewer = BitmapViewer(self, size=(627, 271))
+        self.bitmap_viewer = BitmapViewer(self, size=(597, 231))
         v_sizer.Add(self.bitmap_viewer, 0)
         
-        self.html_window = wx.html.HtmlWindow(self, size=(628, 270))
+        self.html_window = wx.html.HtmlWindow(self, size=(597, 250))
         v_sizer.Add(self.html_window, 0)
         
         foreground_color_in_hex = wx_tools.colors.wx_color_to_html_color(
@@ -63,6 +61,13 @@ class AboutDialog(CuteDialog):
         self.html_window.SetPage(
             '''
             <html>
+              <head>
+                <style type="text/css">
+                  body {
+                    font-size: 80%%;
+                  }
+                </style>
+              </head>
               <body bgcolor="%s" color="%s">
                 <div align="center"> <font size="1">
                   &copy; 2009-2011 Ram Rachum (a.k.a. cool-RR)
@@ -110,19 +115,17 @@ class AboutDialog(CuteDialog):
         
         self.button_sizer = button_sizer = wx.StdDialogButtonSizer()
         self.ok_button = wx.Button(self, wx.ID_OK,
-                                   "Let's get back to simulating!")
+                                   "&Let's get back to simulating!")
         self.ok_button.SetDefault()
         button_sizer.SetAffirmativeButton(self.ok_button)
         self.Bind(wx.EVT_BUTTON, self.on_ok, self.ok_button)
         button_sizer.AddButton(self.ok_button)
         button_sizer.Realize()
         button_sizer.SetMinSize((500, -1))
-        v_sizer.Add(button_sizer, 0)
+        v_sizer.Add(button_sizer, 0, wx.BOTTOM, border=10)
         
-        
-        self.SetSizer(v_sizer)
+        self.SetSizerAndFit(v_sizer)
         self.Layout()
-
         
         self.timer = garlicsim_wx.general_misc.cute_timer.CuteTimer(self)
         self.timer.Start(40, oneShot=True)
@@ -150,6 +153,10 @@ class AboutDialog(CuteDialog):
         self.bitmap_viewer.set_bitmap(wx.BitmapFromImage(new_image))
         self.timer.Start(40, oneShot=True)
 
+        
+    def ShowModal(self):
+        CuteDialog.ShowModal(self)
+        self.SetFocus()
         
     def EndModal(self, *args, **kwargs):
         self.timer.Stop()
