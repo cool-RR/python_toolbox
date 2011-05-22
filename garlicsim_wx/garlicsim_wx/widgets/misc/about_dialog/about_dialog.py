@@ -30,7 +30,7 @@ class AboutDialog(CuteDialog):
    
         CuteDialog.__init__(self, frame, title='About GarlicSim')
         
-        self.SetDoubleBuffered(True)
+        self.ExtraStyle &= ~wx.FRAME_EX_CONTEXTHELP
         
         self.frame = frame
 
