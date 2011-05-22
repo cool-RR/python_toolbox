@@ -153,10 +153,10 @@ def test_different_type_freezer_property():
         def __init__(self, obj):
             self.obj = obj
             
-        def freeze_handler(obj):
+        def freeze_handler(self):
             self.obj.different_type_freeze_counter += 1
             
-        def thaw_handler(obj):
+        def thaw_handler(self):
             self.obj.different_type_thaw_counter += 1
     
     class E(object):
@@ -168,7 +168,7 @@ def test_different_type_freezer_property():
         )
      
     e = E()
-    assert e.different_type_freezer.__doc__ == \
+    assert E.different_type_freezer.__doc__ == \
            'A freezer using a custom freezer class.'
     assert e.different_type_freezer.frozen == 0
     assert e.different_type_freeze_counter == 0
