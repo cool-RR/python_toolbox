@@ -14,9 +14,9 @@ from garlicsim.general_misc import proxy_property
 from .context_manager import ContextManager
 
 
-class ProxyingContextManager(ContextManager):
+class DelegatingContextManager(ContextManager):
     
-    inner_context_manager = abc.abstractproperty()
+    delegatee_context_manager = abc.abstractproperty()
     
     __enter__ = proxy_property.ProxyProperty('inner_context_manager.__enter__')
     __exit__ = proxy_property.ProxyProperty('inner_context_manager.__exit__')
