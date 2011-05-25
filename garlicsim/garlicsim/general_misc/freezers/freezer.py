@@ -18,7 +18,7 @@ class Freezer(context_managers.DelegatingContextManager):
     delegatee_context_manager = caching.CachedProperty(InnerContextManager)
 
         
-    frozen = proxy_property.ProxyProperty('inner_context_manager.depth')
+    frozen = proxy_property.ProxyProperty('delegatee_context_manager.depth')
     
     
     @abc.abstractmethod
