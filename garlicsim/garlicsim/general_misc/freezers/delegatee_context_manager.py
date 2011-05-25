@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the `` class.
+This module defines the `DelegateeContextManager` class.
 
 See its documentation for more information.
 '''
@@ -11,7 +11,10 @@ from garlicsim.general_misc import context_managers
 
 
 class DelegateeContextManager(context_managers.ReentrantContextManager):
-    ''' '''
+    '''
+    
+    
+    '''
     def __init__(self, freezer):
         self.freezer = freezer
         
