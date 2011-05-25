@@ -18,5 +18,9 @@ class DelegatingContextManager(ContextManager):
     
     delegatee_context_manager = abc.abstractproperty()
     
-    __enter__ = proxy_property.ProxyProperty('inner_context_manager.__enter__')
-    __exit__ = proxy_property.ProxyProperty('inner_context_manager.__exit__')
+    __enter__ = proxy_property.ProxyProperty(
+        'delegatee_context_manager.__enter__'
+    )
+    __exit__ = proxy_property.ProxyProperty(
+        'delegatee_context_manager.__exit__'
+    )

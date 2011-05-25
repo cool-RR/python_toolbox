@@ -10,12 +10,12 @@ from garlicsim.general_misc import context_managers
 from garlicsim.general_misc import proxy_property
 from garlicsim.general_misc import caching
 
-from .inner_context_manager import InnerContextManager
+from .delegatee_context_manager import DelegateeContextManager
 
 
 class Freezer(context_managers.DelegatingContextManager):
     
-    delegatee_context_manager = caching.CachedProperty(InnerContextManager)
+    delegatee_context_manager = caching.CachedProperty(DelegateeContextManager)
 
         
     frozen = proxy_property.ProxyProperty('delegatee_context_manager.depth')

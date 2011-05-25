@@ -10,7 +10,7 @@ See its documentation for more information.
 from garlicsim.general_misc import context_managers
 
 
-class InnerContextManager(context_managers.ReentrantContextManager):
+class DelegateeContextManager(context_managers.ReentrantContextManager):
     ''' '''
     def __init__(self, freezer):
         self.freezer = freezer
