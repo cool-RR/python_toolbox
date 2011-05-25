@@ -11,19 +11,25 @@ from garlicsim.general_misc import context_managers
 
 
 class DelegateeContextManager(context_managers.ReentrantContextManager):
-    '''
+    '''Inner context manager used internally by `Freezer`.'''
     
-    
-    '''
     def __init__(self, freezer):
-        self.freezer = freezer
+        '''
+        Construct the `DelegateeContextManager`.
         
+        `freezer` is the freezer to which we belong.
+        '''
+        self.freezer = freezer
+        '''The freezer to which we belong.'''
+        
+
     def reentrant_enter(self):
-        ''' '''
+        '''Call the freezer's freeze handler.'''
         return self.freezer.freeze_handler()
     
+    
     def reentrant_exit(self, type_, value, traceback):
-        ''' '''
+        '''Call the freezer's thaw handler.'''
         return self.freezer.thaw_handler()
         
     

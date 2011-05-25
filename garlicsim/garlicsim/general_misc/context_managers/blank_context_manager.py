@@ -7,8 +7,6 @@ This module defines the `BlankContextManager` class.
 See its documentation for more information.
 '''
 
-from __future__ import with_statement
-
 from .context_manager import ContextManager
 
 
