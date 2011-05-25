@@ -27,7 +27,7 @@ has their own advantages and disadvantages over the others.
         class MyContextManager(ContextManager):
             def __enter__(self):
                 pass # preparation
-            def __exit__(self, type_=None, value=None, traceback=None):
+            def __exit__(self, type_, value, traceback):
                 pass # cleanup
      
  2. As a decorated generator, like so:

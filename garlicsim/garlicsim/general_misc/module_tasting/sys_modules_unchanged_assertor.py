@@ -28,7 +28,7 @@ class SysModulesUnchangedAssertor(context_managers.ContextManager):
         self.old_sys_modules = sys.modules.copy()
 
         
-    def __exit__(self, exc_type, exc_value, traceback):
+    def __exit__(self, type_, value, traceback):
         new_modules_in_sys_modules = [module_name for module_name in
                                       sys.modules if module_name not in
                                       self.old_sys_modules]

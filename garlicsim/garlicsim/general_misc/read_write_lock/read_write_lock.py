@@ -6,19 +6,21 @@ See documentation of class `ReadWriteLock` defined in this module.
 '''
 # todo: organize.
 
+from garlicsim.general_misc import context_managers
+
 from . import original_read_write_lock
 
 
 __all__ = ['ReadWriteLock']
 
 
-class ContextManager(object):
+class ContextManager(context_managers.ContextManager):
     def __init__(self, lock, acquire_func):
         self.lock = lock
         self.acquire_func = acquire_func
-    def __enter__(self, *args, **kwargs):
+    def __enter__(self):
         self.acquire_func()
-    def __exit__(self, *args, **kwargs):
+    def __exit__(self, type_, value, traceback):
         self.lock.release()
 
         
@@ -33,11 +35,12 @@ class ReadWriteLock(original_read_write_lock.ReadWriteLock):
     
     Usage:
     
-    lock = ReadWriteLock()
-    with lock.read:
-        pass #perform read operations here
-    with lock.write:
-        pass #perform write operations here
+        lock = ReadWriteLock()
+        with lock.read:
+            pass # perform read operations here
+        with lock.write:
+            pass # perform write operations here
+            
     '''
     # todo: rename from acquireRead style to acquire_read style
     def __init__(self, *args, **kwargs):

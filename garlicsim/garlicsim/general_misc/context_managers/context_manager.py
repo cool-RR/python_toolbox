@@ -54,7 +54,7 @@ class ContextManager(object):
 
     
     @abc.abstractmethod
-    def __exit__(self, type_=None, value=None, traceback=None):
+    def __exit__(self, type_, value, traceback):
         '''Cleanup after suite execution.'''
     
 
