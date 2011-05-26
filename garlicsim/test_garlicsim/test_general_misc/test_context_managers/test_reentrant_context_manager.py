@@ -53,3 +53,5 @@ def test_reentrant_context_manager():
             assert my_rcm.times_entered == 2
             assert my_rcm.times_exited == 1
             
+            
+# blocktodo: make test for nested exception swallowing.
