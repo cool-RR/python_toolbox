@@ -22,34 +22,54 @@ class ReentrantContextManager(ContextManager):
     Subclasses should override `reentrant_enter` and `reentrant_exit`, which
     are analogue to `__enter__` and `__exit__`, except they are called only on
     the outermost suite. In other words: When you enter the reentrant context
-    manager for the first time, `reentrant_enter` is called, blocktododoc
+    manager for the first time, `reentrant_enter` is called. If you enter it
+    for a second time, nothing is called. Now `.depth == 2`. Exit it now,
+    nothing is called. Exit it again, and `reentrant_exit` is called.
+    
+    Note: The value returned by `reentrant_enter` will be returned by all the
+    no-op `__enter__` actions contained in the outermost suite.
     '''
     
-    depth = caching.CachedProperty(lambda self: 0, doc='''blocktododoc''')
-    # blocktodo: should CachedProperty take a non-callable?
+    depth = caching.CachedProperty(
+        lambda self: 0,
+        doc='''
+            The number of nested suites that entered this context manager.
+            
+            When the context manager is completely unused, it's `0`. When it's
+            first used, it becomes `1`. When its entered again, it becomes `2`.
+            If it is then exited, it returns to `1`, etc.
+            '''
+    )
+    # blocktodo: should `CachedProperty` take a non-callable?
 
     
     def __enter__(self):
+        '''Enter the context manager.'''
         if self.depth == 0:
-            self.__enter_return_value = self.reentrant_enter()
+            self.__last_reentrant_enter_return_value = self.reentrant_enter()
         self.depth += 1
-        return self.__enter_return_value
+        return self.__last_reentrant_enter_return_value
     
     
     def __exit__(self, type_, value, traceback):
+        '''Exit the context manager.'''
         assert self.depth >= 1
         if self.depth == 1:
-            self.reentrant_exit(type_, value, traceback)
-        # todo: if in depth, perhaps should save exception data if it exists
-        # and pass to outermost?
+            # Saving `reentrant_exit`'s return value, since it might be
+            # signalling an exception swallowing:
+            return_value = self.reentrant_exit(type_, value, traceback)
+        else:
+            return_value = None
         self.depth -= 1
+        return return_value
 
         
     def reentrant_enter(self):
-        ''' '''
+        '''Function that gets called when entering the outermost suite.'''
         return self
         
     
     def reentrant_exit(self, type_, value, traceback):
-        ''' '''
+        '''Function that gets called when exiting the outermost suite.'''
         pass
+    

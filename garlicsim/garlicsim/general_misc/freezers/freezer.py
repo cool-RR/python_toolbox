@@ -49,6 +49,8 @@ class Freezer(context_managers.DelegatingContextManager):
     and then every time the freezer is used as a context manager the `frozen`
     level increases. When reduced to `0` again the freezer is said to have
     thawed.
+    
+    This can be conveniently used as a boolean, i.e. `if my_freezer.frozen:`.
     '''
     
     
