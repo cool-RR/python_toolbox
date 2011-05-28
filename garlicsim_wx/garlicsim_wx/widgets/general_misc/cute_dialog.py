@@ -27,6 +27,9 @@ class CuteDialog(wx.Dialog, CuteTopLevelWindow):
     
     '''
     
+    __metaclass__ = CuteDialogType
+    
+    
     def __init__(self, *args, **kwargs):
         if not kwargs.pop('skip_wx_init', False):
             wx.Dialog.__init__(self, *args, **kwargs)

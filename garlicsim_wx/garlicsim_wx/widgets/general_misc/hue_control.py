@@ -90,18 +90,11 @@ class HueControl(CuteWindow):
         '''Open a dialog to edit the hue.'''
         old_hue = self.getter()
         
-        with self.create_cursor_changer(wx.CURSOR_WAIT):
-            hue_selection_dialog = HueSelectionDialog(
-                self.GetTopLevelParent(), self.getter, self.setter,
-                self.emitter,
-                lightness=self.lightness, saturation=self.saturation,
-                title=self.dialog_title
-            )
-        
-        try:
-            hue_selection_dialog.ShowModal()
-        finally:
-            hue_selection_dialog.Destroy()
+        hue_selection_dialog = HueSelectionDialog.create_and_show_modal(
+            self.TopLevelParent, self.getter, self.setter, self.emitter,
+            lightness=self.lightness, saturation=self.saturation,
+            title=self.dialog_title
+        )
 
             
     def update(self):

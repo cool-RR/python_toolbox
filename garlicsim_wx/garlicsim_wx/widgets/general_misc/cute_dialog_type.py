@@ -7,6 +7,8 @@ This module defines the `CuteDialogType` metaclass.
 See its documentation for more information.
 '''
 
+import wx
+
 from garlicsim_wx.general_misc.wx_tools.cursors import CursorChanger
 from garlicsim.general_misc import context_managers
 
