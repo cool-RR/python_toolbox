@@ -13,16 +13,19 @@ import functools
 
 import wx
 
-from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
-
+from garlicsim_wx.widgets.general_misc.cute_error_dialog import CuteErrorDialog
+import garlicsim_wx.widgets.misc.default_state_creation_dialog
 import garlicsim.data_structures
 
 
-class StateCreationDialog(CuteDialog):
+class StateCreationDialog(garlicsim_wx.widgets.misc.\
+                          default_state_creation_dialog.StateCreationDialog):
     '''Initial dialog for creating a root state.'''
     
     def __init__(self, frame):
-        CuteDialog.__init__(self, frame, title='Creating a root state')
+        garlicsim_wx.widgets.misc.\
+            default_state_creation_dialog.DefaultStateCreationDialog.\
+            __init__(self, frame, title='Creating a root state')
         
         self.frame = frame
         self.simpack = frame.gui_project.simpack
@@ -120,33 +123,25 @@ class StateCreationDialog(CuteDialog):
         ok.SetFocus()
 
         
-    def on_ok(self, e=None):
+    def on_ok(self, event):
         '''Do 'okay' on the dialog.'''
 
-        def complain(message):
-            dialog = wx.MessageDialog(self, message, 'Error',
-                                      wx.ICON_ERROR | wx.OK)
-            try:
-                dialog.ShowModal()
-            finally:
-                dialog.Destroy()
-
-        self.info = {}
-
         try:
-            self.info['width'] = int(self.x_textctrl.GetValue())
+            width = int(self.x_textctrl.GetValue())
         except ValueError:
-            complain('Bad width!')
+            CuteErrorDialog.create_and_show_modal(self, 'Bad width!')
             return
 
         try:
-            self.info['height'] = int(self.y_textctrl.GetValue())
+            height = int(self.y_textctrl.GetValue())
         except ValueError:
-            complain('Bad height!')
+            CuteErrorDialog.create_and_show_modal(self, 'Bad height!')
             return
 
-        self.info['fill'] = 'full' if self.full_radio_button.GetValue() else \
+        fill = 'full' if self.full_radio_button.GetValue() else \
             'empty' if self.empty_radio_button.GetValue() else 'random'
+        
+        self.state = self.simpack.State.create_root(width, height, fill)
 
         self.EndModal(wx.ID_OK)
 
@@ -154,20 +149,5 @@ class StateCreationDialog(CuteDialog):
     def on_cancel(self, e=None):
         '''Do 'cancel' on the dialog.'''
         self.EndModal(wx.ID_CANCEL)
-
-        
-    def start(self):
-        '''Start the dialog to make a new state.'''
-        if self.ShowModal() == wx.ID_OK:
-            width, height, fill = (
-                self.info['width'],
-                self.info['height'],
-                self.info['fill']
-            )
-            state = self.simpack.State.create_root(width, height, fill)
-        else:
-            state = None
-        self.Destroy()
-        return state
         
 

@@ -33,6 +33,7 @@
 # These may be either scalar state functions or scalar history functions.
 
 
-# STATE_CREATION_DIALOG = widgets.state_creation_dialog.StateCreationDialog
+# STATE_CREATION_FUNCTION = widgets.state_creation_dialog.\
+#                           StateCreationDialog.create_show_modal_and_get_state
 #
-# Dialog for creating a root state.
+# blocktododoc Dialog for creating a root state.

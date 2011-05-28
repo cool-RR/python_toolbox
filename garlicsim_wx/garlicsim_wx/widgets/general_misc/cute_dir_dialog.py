@@ -26,8 +26,8 @@ class CuteDirDialog(CuteDialog, wx.DirDialog):
     
     def __init__(self, parent, message=wx.DirSelectorPromptStr, 
                  defaultPath=wx.EmptyString, style=wx.DD_DEFAULT_STYLE,
-                 pos=wx.DefaultPosition, size=DefaultSize,
-                 name=DirDialogNameStr):
+                 pos=wx.DefaultPosition, size=wx.DefaultSize,
+                 name=wx.DirDialogNameStr):
         wx.DirDialog.__init__(self, parent, message, defaultPath, style, pos,
                               size, name)
         CuteDialog.__init__(self, parent, -1, style=style, size=size, pos=pos,

@@ -27,6 +27,6 @@ class Settings(object):
         These may be either scalar state functions or scalar history functions.
         '''
         
-        self.STATE_CREATION_DIALOG = \
-            garlicsim_wx.widgets.misc.StateCreationDialog
-        '''Dialog for creating a root state.'''
+        self.STATE_CREATION_FUNCTION = garlicsim_wx.widgets.misc.\
+            DefaultStateCreationDialog.create_show_modal_and_get_state
+        '''blocktododoc, in docs folder too. Dialog for creating a root state.'''

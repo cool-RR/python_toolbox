@@ -9,4 +9,5 @@ from . import widgets
 #SEEK_BAR_GRAPHS = [State.get_n_live_cells, changes]
 BIG_WORKSPACE_WIDGETS = [widgets.BoardViewer]
 SMALL_WORKSPACE_WIDGETS = []
-STATE_CREATION_DIALOG = widgets.StateCreationDialog
+STATE_CREATION_FUNCTION = \
+    widgets.StateCreationDialog.create_show_modal_and_get_state
