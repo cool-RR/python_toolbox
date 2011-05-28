@@ -16,7 +16,7 @@ import wx
 from garlicsim.general_misc import address_tools
 from garlicsim.general_misc import cute_inspect
 from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
-from garlicsim_wx.widgets.general_misc.error_dialog import ErrorDialog
+from garlicsim_wx.widgets.general_misc.cute_error_dialog import CuteErrorDialog
 
 import garlicsim
 import garlicsim_wx
@@ -292,7 +292,7 @@ class StepProfileDialog(CuteDialog):
         try:
             self.step_function_input.parse_text_and_set()
         except Exception, exception:
-            ErrorDialog.create_and_show_modal(self,
+            CuteErrorDialog.create_and_show_modal(self,
                                               exception.args[0])
             self.step_function_input.SetFocus()
             return
@@ -300,7 +300,7 @@ class StepProfileDialog(CuteDialog):
         try:
             self.argument_control.save()
         except ResolveFailed, resolve_failed_exception:
-            ErrorDialog.create_and_show_modal(self,
+            CuteErrorDialog.create_and_show_modal(self,
                                               resolve_failed_exception.message)
             resolve_failed_exception.widget.SetFocus()
             return

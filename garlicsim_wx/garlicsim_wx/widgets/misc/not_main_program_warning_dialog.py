@@ -9,12 +9,13 @@ See its documentation for more info.
 
 import wx
 
-from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
+from garlicsim_wx.widgets.general_misc.cute_message_dialog \
+                                                       import CuteMessageDialog
 
 
-class NotMainProgramWarningDialog(wx.MessageDialog, CuteDialog): 
+class NotMainProgramWarningDialog(CuteMessageDialog): 
     '''
-    Dialog warning that garlicsim_wx is not the main program.
+    Dialog warning that `garlicsim_wx` is not the main program.
     
     This is something that can cause problems in several operations, like
     load/save, so we warn the user about it.
@@ -35,15 +36,12 @@ class NotMainProgramWarningDialog(wx.MessageDialog, CuteDialog):
             "Do you want to try to continue?"
         )
         
-        wx.MessageDialog.__init__(
+        CuteMessageDialog.__init__(
             self,
             frame,
             content,
-            'Warning',
-            wx.YES_NO | wx.ICON_EXCLAMATION
+            caption='Warning',
+            style=(wx.YES_NO | wx.ICON_EXCLAMATION)
         )
-        
-        CuteDialog.__init__(self, frame, skip_wx_init=True)
-        self.ExtraStyle |= wx.FRAME_EX_CONTEXTHELP
         
         

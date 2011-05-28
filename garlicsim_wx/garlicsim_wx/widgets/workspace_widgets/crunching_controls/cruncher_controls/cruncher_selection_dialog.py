@@ -11,7 +11,7 @@ import wx
 
 from garlicsim.general_misc.nifty_collections import OrderedDict
 from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
-from garlicsim_wx.widgets.general_misc.error_dialog import ErrorDialog
+from garlicsim_wx.widgets.general_misc.cute_error_dialog import CuteErrorDialog
 
 import garlicsim
 import garlicsim_wx
@@ -136,7 +136,7 @@ class CruncherSelectionDialog(CuteDialog):
             self.gui_project.cruncher_type_changed_emitter.emit()
             self.EndModal(wx.ID_OK)
         else: # Selected cruncher type is unavailable
-            ErrorDialog.create_and_show_modal(
+            CuteErrorDialog.create_and_show_modal(
                 self,
                 '`%s` is not available.' % self.selected_cruncher_type.__name__
             )

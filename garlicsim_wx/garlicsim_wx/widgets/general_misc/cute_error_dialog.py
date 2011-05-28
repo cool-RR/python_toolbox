@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-Defines the `ErrorDialog` class.
+Defines the `CuteErrorDialog` class.
 
 See its documentation for more details.
 '''
@@ -12,11 +12,12 @@ import wx
 from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
 
 
-class ErrorDialog(wx.MessageDialog, CuteDialog):
+class CuteErrorDialog(wx.MessageDialog, CuteDialog):
     '''Dialog showing error message with an error icon.'''
-    def __init__(self, parent, message, caption='Error'):
+    def __init__(self, parent, message, caption='Error',
+                 style=(wx.OK | wx.ICON_ERROR)):
         wx.MessageDialog.__init__(self, parent, message, caption,
-                                  wx.OK | wx.ICON_ERROR)
+                                  style=style)
         CuteDialog.__init__(self, skip_wx_init=True)
         self.ExtraStyle &= ~wx.FRAME_EX_CONTEXTHELP
         

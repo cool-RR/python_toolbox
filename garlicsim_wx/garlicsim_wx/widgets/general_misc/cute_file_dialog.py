@@ -23,9 +23,14 @@ class CuteFileDialog(CuteDialog, wx.FileDialog):
     
     '''
     
-    def __init__(self, *args, **kwargs):
-        wx.FileDialog.__init__(self, *args, **kwargs)
-        CuteDialog.__init__(self, *args, **kwargs)
+    def __init__(self, parent, message=wx.FileSelectorPromptStr, 
+                 defaultDir=wx.EmptyString, defaultFile=wx.EmptyString,
+                 wildcard=wx.FileSelectorDefaultWildcardStr, 
+                 style=wx.FD_DEFAULT_STYLE, pos=wx.DefaultPosition):
+        wx.FileDialog.__init__(self, parent, message, defaultDir, defaultFile,
+                               wildcard, style, pos)
+        CuteDialog.__init__(self, parent, -1, title, style=style,
+                            skip_wx_init=True)
         self.ExtraStyle &= ~wx.FRAME_EX_CONTEXTHELP
         
     

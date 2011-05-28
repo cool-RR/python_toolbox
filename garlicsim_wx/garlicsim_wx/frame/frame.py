@@ -22,6 +22,7 @@ import pkg_resources
 from garlicsim.general_misc.temp_value_setters import TempRecursionLimitSetter
 from garlicsim.general_misc import sys_tools
 from garlicsim_wx.widgets.general_misc.cute_file_dialog import CuteFileDialog
+from garlicsim_wx.widgets.general_misc.cute_error_dialog import CuteErrorDialog
 from garlicsim_wx.general_misc import thread_timer
 from garlicsim_wx.general_misc import misc_tools
 from garlicsim_wx.general_misc import wx_tools
@@ -580,7 +581,7 @@ class Frame(garlicsim_wx.widgets.general_misc.cute_frame.CuteFrame):
                 we_are_main_program = ('run_gui' in main_script) or \
                                     ('garlicsim_wx' in main_script) or \
                                     ('GarlicSim' in main_script)
-            
+            we_are_main_program = False
             if not we_are_main_program:
                 if garlicsim_wx.widgets.misc.NotMainProgramWarningDialog.\
                    create_and_show_modal(self) != wx.ID_YES:
@@ -634,15 +635,10 @@ class Frame(garlicsim_wx.widgets.general_misc.cute_frame.CuteFrame):
                         gui_project = unpickler.load()
                 
             except Exception, exception:
-                dialog = wx.MessageDialog(
+                CuteErrorDialog.create_and_show_modal(
                     self,
                     'Error opening file:\n' + traceback.format_exc(),
-                    style=(wx.OK | wx.ICON_ERROR)
                 )
-                try:
-                    dialog.ShowModal()
-                finally:
-                    dialog.Destroy()
                 return
                         
         self.__setup_gui_project(gui_project)
