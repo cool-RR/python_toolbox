@@ -9,40 +9,32 @@ See its documentation for more info.
 
 import wx
 
-from .cute_top_level_window import CuteTopLevelWindow
+from .cute_dialog import CuteDialog
 
 
-class CuteDialog(wx.Dialog, CuteTopLevelWindow):
+class CuteFileDialog(CuteDialog, wx.FileDialog):
     '''
-    An improved `wx.Dialog`.
+    An improved `wx.FileDialog`.
     
-    The advantages of this class over `wx.Dialog`:
+    The advantages of this class over `wx.FileDialog`:
     
-      - `ShowModal` centers the dialog on its parent, which sometimes doesn't
-        happen by itself on Mac. 
-      - A `create_and_show_modal` class method.
-      - A "context help" button on Windows only.
-      - Other advantages given by `CuteTopLevelWindow`
+      - blocktododoc
+      - Other advantages given by `CuteDialog`
     
     '''
     
     def __init__(self, *args, **kwargs):
-        if not kwargs.pop('skip_wx_init', False):
-            wx.Dialog.__init__(self, *args, **kwargs)
-        CuteTopLevelWindow.__init__(self, *args, **kwargs)
-        self.ExtraStyle |= wx.FRAME_EX_CONTEXTHELP
+        wx.FileDialog.__init__(self, *args, **kwargs)
+        CuteDialog.__init__(self, *args, **kwargs)
+        self.ExtraStyle &= ~wx.FRAME_EX_CONTEXTHELP
         
-        
-    def ShowModal(self):
-        self.Centre(wx.BOTH)
-        return super(CuteDialog, self).ShowModal()
-    
     
     @classmethod # blocktodo: Use everywhere I can, document
-    def create_and_show_modal(cls, *args, **kwargs):
+    def create_show_modal_and_get_path(cls, *args, **kwargs):
         dialog = cls(*args, **kwargs)
         try:
             result = dialog.ShowModal()
         finally:
             dialog.Destroy()
-        return result
+        return dialog.GetPath() if result == wx.ID_OK else None
+            

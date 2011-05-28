@@ -20,6 +20,8 @@ from garlicsim_wx.general_misc.third_party import aui
 import pkg_resources
 
 from garlicsim.general_misc.temp_value_setters import TempRecursionLimitSetter
+from garlicsim.general_misc import sys_tools
+from garlicsim_wx.widgets.general_misc.cute_file_dialog import CuteFileDialog
 from garlicsim_wx.general_misc import thread_timer
 from garlicsim_wx.general_misc import misc_tools
 from garlicsim_wx.general_misc import wx_tools
@@ -325,7 +327,7 @@ class Frame(garlicsim_wx.widgets.general_misc.cute_frame.CuteFrame):
         
         if self.gui_project is not None:
             
-            if hasattr(sys, 'frozen'):
+            if sys_tools.frozen:
                 program_to_run = [sys.executable]
                 we_are_main_program = 'GarlicSim' in sys.executable
             else:
@@ -569,7 +571,7 @@ class Frame(garlicsim_wx.widgets.general_misc.cute_frame.CuteFrame):
         
         if self.gui_project is not None:
             
-            if hasattr(sys, 'frozen'):
+            if sys_tools.frozen:
                 program_to_run = [sys.executable]
                 we_are_main_program = 'GarlicSim' in sys.executable
             else:
@@ -590,32 +592,31 @@ class Frame(garlicsim_wx.widgets.general_misc.cute_frame.CuteFrame):
         
         gui_project_vars = None
 
-        open_dialog = wx.FileDialog(self, message='Choose a file',
-                                    defaultDir=folder, defaultFile='',
-                                    wildcard=wildcard_text, style=wx.OPEN)
-        try:
-            if open_dialog.ShowModal() == wx.ID_OK:
-                path = open_dialog.GetPath()
-                
-                if self.gui_project is None:
-                    self._open_gui_project_from_path(path)
-                else:
-                    if hasattr(sys, 'frozen'):
-                        program = [sys.executable]
-                    else:
-                        program = \
-                            [sys.executable, os.path.abspath(sys.argv[0])]
-                        
-                    program.append(path)
+        path = CuteFileDialog.create_show_modal_and_get_path(
+            self, message='Choose a file', defaultDir=folder, defaultFile='',
+            wildcard=wildcard_text, style=wx.OPEN
+        )
+        
+        if path is None:
+            return
             
-                    for simpack_place in garlicsim_wx.simpack_places:
-                        program.append('__garlicsim_wx_simpack_place=%s' % \
-                                       ','.join(simpack_place))
-                    
-                    with self.create_cursor_changer(wx.CURSOR_WAIT):
-                        subprocess.Popen(program)
-        finally:
-            open_dialog.Destroy()
+        if self.gui_project is None:
+            self._open_gui_project_from_path(path)
+        else:
+            if sys_tools.frozen:
+                program = [sys.executable]
+            else:
+                program = \
+                    [sys.executable, os.path.abspath(sys.argv[0])]
+                
+            program.append(path)
+    
+            for simpack_place in garlicsim_wx.simpack_places:
+                program.append('__garlicsim_wx_simpack_place=%s' % \
+                               ','.join(simpack_place))
+            
+            with self.create_cursor_changer(wx.CURSOR_WAIT):
+                subprocess.Popen(program)
                         
             
     def _open_gui_project_from_path(self, path):
@@ -655,7 +656,7 @@ class Frame(garlicsim_wx.widgets.general_misc.cute_frame.CuteFrame):
         
         folder = os.getcwd()
         
-        save_dialog = wx.FileDialog(self, message='Save file as...',
+        path = wx.FileDialog(self, message='Save file as...',
                                     defaultDir=folder, defaultFile='',
                                     wildcard=wildcard_text,
                                     style=wx.SAVE | wx.OVERWRITE_PROMPT)
