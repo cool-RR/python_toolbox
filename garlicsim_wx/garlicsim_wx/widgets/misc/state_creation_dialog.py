@@ -27,27 +27,32 @@ class StateCreationDialog(CuteDialog): # make base class
         State = self.simpack.State
 
         vbox = wx.BoxSizer(wx.VERTICAL)
-        self.messy_check_box = messy_check_box = wx.CheckBox(self, -1, 'Messy')
-        tool_tip_string = ('Make a messy chaotic state, useful for '
-                           'test-driving the simpack.')
+        self.messy_check_box = messy_check_box = wx.CheckBox(self, -1, '&Messy')
+        messy_help_text = ('Create a messy chaotic state with lots of '
+                           'interesting features. Useful for test-driving the '
+                           'simpack.')
         messy_check_box.SetValue(True)
         if State.create_root is None or State.create_messy_root is None:
             messy_check_box.Disable()
             if State.create_messy_root is None:
                 messy_check_box.SetValue(False)
-                tool_tip_string += (" Not available because the simpack "
+                messy_help_text += (" Not available because the simpack "
                                     "doesn't define `create_messy_root`.")
             else:
-                tool_tip_string += (" Can't be canceled because the simpack "
+                messy_help_text += (" Can't be canceled because the simpack "
                                     "doesn't define `create_root`.")
-        messy_check_box.SetToolTipString(tool_tip_string)
+        messy_check_box.SetToolTipString(messy_help_text)
+        messy_check_box.SetHelpText(messy_help_text)
         
         vbox.Add(messy_check_box, 0, wx.ALL, 10)
         
         # todo: add slick way to add args/kwargs
 
         last_hbox = wx.StdDialogButtonSizer()
-        ok = wx.Button(self, wx.ID_OK, 'Create state')
+        ok = wx.Button(self, wx.ID_OK, '&Create state')
+        ok_help_text = 'Create the new state.'
+        ok.SetToolTipString(ok_help_text)
+        ok.SetHelpText(ok_help_text)
         ok.SetDefault()
         last_hbox.SetAffirmativeButton(ok)
         self.Bind(wx.EVT_BUTTON, self.on_ok, id=ok.GetId())
