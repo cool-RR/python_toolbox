@@ -92,7 +92,7 @@ class ArgumentControl(CutePanel):
         else:
             self.star_arg_box = None
             self.main_h_sizer.Add(
-                Placeholder(self, '(No additional positional arguments)'),
+                Placeholder(self, '(No positional arguments)'),
                 0,
                 wx.ALL,
                 border=10
@@ -106,7 +106,7 @@ class ArgumentControl(CutePanel):
         else:
             self.star_kwarg_box = None
             self.main_h_sizer.Add(
-                Placeholder(self, '(No additional keyword arguments)'),
+                Placeholder(self, '(No keyword arguments)'),
                 0,
                 wx.ALL,
                 border=10

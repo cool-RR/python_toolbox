@@ -28,7 +28,7 @@ class StarArgBox(wx.StaticBox):
         self.argument_control = argument_control
         
         wx.StaticBox.__init__(self, argument_control,
-                              label='Additional arguments')
+                              label='&Positional arguments')
         
         self.SetMinSize(argument_control.box_size)
         self.SetMaxSize(argument_control.box_size)

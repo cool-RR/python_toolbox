@@ -22,12 +22,12 @@ class StateCreationDialog(CuteDialog): # make base class
     '''
     @classmethod
     def create_show_modal_and_get_state(cls, frame):
-        dialog = cls(frame)
+        state_creation_dialog = cls(frame)
         try:
-            result = dialog.ShowModal()
+            result = state_creation_dialog.ShowModal()
         finally:
-            dialog.Destroy()
-        return self.state if result == wx.ID_OK else None
+            state_creation_dialog.Destroy()
+        return state_creation_dialog.state if result == wx.ID_OK else None
 
         
         

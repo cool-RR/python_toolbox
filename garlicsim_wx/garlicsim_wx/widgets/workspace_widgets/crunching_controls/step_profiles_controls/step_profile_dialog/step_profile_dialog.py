@@ -143,7 +143,8 @@ class StepProfileDialog(CuteDialog):
 
         
         
-        self.static_text = wx.StaticText(self, label="Choose a step function:")
+        self.static_text = wx.StaticText(self,
+                                         label='Choose a step &function:')
         
         self.main_v_sizer.Add(self.static_text,
                               0,
@@ -231,9 +232,9 @@ class StepProfileDialog(CuteDialog):
             border=10
         )
         
-        ok_title = 'Create step profile' if not and_fork else \
-                   'Create step profile and fork with it'
-        self.ok_button = wx.Button(self, wx.ID_OK, title)
+        ok_title = '&Create step profile' if not and_fork else \
+                   '&Create step profile and fork with it'
+        self.ok_button = wx.Button(self, wx.ID_OK, ok_title)
         self.dialog_button_sizer.AddButton(self.ok_button)
         self.ok_button.SetDefault()
         self.dialog_button_sizer.SetAffirmativeButton(self.ok_button)
