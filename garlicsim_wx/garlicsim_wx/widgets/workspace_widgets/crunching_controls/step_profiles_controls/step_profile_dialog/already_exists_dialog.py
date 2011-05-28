@@ -60,8 +60,8 @@ class AlreadyExistsDialog(CuteDialog):
         
         self.main_v_sizer.Add(self.button_sizer, 0, wx.ALIGN_CENTER_HORIZONTAL)
         
-        take_me_to_it_label = 'Take me to it' if not and_fork else \
-                              'Take me to it and fork with it'
+        take_me_to_it_label = '&Take me to it' if not and_fork else \
+                              '&Take me to it and fork with it'
         self.take_me_to_it_button = wx.Button(self, label=take_me_to_it_label)
         
         # Allowing keyboard-navigation and Esc on Ubuntu:
@@ -70,7 +70,7 @@ class AlreadyExistsDialog(CuteDialog):
         self.button_sizer.Add(self.take_me_to_it_button, 0, wx.EXPAND | wx.ALL,
                               border=10)
         
-        self.keep_editing_button = wx.Button(self, label='Keep editing')
+        self.keep_editing_button = wx.Button(self, label='&Keep editing')
         
         
         
