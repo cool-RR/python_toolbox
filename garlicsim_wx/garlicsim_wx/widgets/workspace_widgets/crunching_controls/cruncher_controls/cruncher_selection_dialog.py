@@ -136,12 +136,10 @@ class CruncherSelectionDialog(CuteDialog):
             self.gui_project.cruncher_type_changed_emitter.emit()
             self.EndModal(wx.ID_OK)
         else: # Selected cruncher type is unavailable
-            error_dialog = ErrorDialog(
+            ErrorDialog.create_and_show_modal(
                 self,
                 '`%s` is not available.' % self.selected_cruncher_type.__name__
             )
-            error_dialog.ShowModal()
-            error_dialog.Destroy()
         
         
     def on_cancel(self, event):

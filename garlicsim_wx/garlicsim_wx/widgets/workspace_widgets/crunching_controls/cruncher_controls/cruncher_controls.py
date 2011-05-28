@@ -59,9 +59,7 @@ class CruncherControls(CutePanel):
         
         
     def on_change_cruncher_button(self, event):
-        cruncher_selection_dialog = CruncherSelectionDialog(self)
-        cruncher_selection_dialog.ShowModal()
-        cruncher_selection_dialog.Destroy()
+        CruncherSelectionDialog.create_and_show_modal(self)
         
     
     def _recalculate(self):

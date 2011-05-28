@@ -336,13 +336,9 @@ class Frame(garlicsim_wx.widgets.general_misc.cute_frame.CuteFrame):
                                     ('GarlicSim' in main_script)
             
             if not we_are_main_program:
-                warning_dialog = \
-                    garlicsim_wx.widgets.misc.NotMainProgramWarningDialog(self)
-                try:
-                    if warning_dialog.ShowModal() != wx.ID_YES:
-                        return
-                finally:
-                    warning_dialog.Destroy()
+                if garlicsim_wx.widgets.misc.NotMainProgramWarningDialog.\
+                   create_and_show_modal(self) != wx.ID_YES:
+                    return
                     
         simpack = garlicsim_wx.widgets.misc.SimpackSelectionDialog.\
                   create_show_modal_and_return_simpack(self)
@@ -584,13 +580,9 @@ class Frame(garlicsim_wx.widgets.general_misc.cute_frame.CuteFrame):
                                     ('GarlicSim' in main_script)
             
             if not we_are_main_program:
-                dialog = \
-                    garlicsim_wx.widgets.misc.NotMainProgramWarningDialog(self)
-                try:
-                    if dialog.ShowModal() != wx.ID_YES:
-                        return
-                finally:
-                    dialog.Destroy()
+                if garlicsim_wx.widgets.misc.NotMainProgramWarningDialog.\
+                   create_and_show_modal(self) != wx.ID_YES:
+                    return
         
         # Todo: something more sensible here. Ideally should be last place you
         # saved in, but for starters can be desktop.

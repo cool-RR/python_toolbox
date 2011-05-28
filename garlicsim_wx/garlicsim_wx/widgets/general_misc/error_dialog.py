@@ -18,4 +18,5 @@ class ErrorDialog(wx.MessageDialog, CuteDialog):
         wx.MessageDialog.__init__(self, parent, message, caption,
                                   wx.OK | wx.ICON_ERROR)
         CuteDialog.__init__(self, skip_wx_init=True)
+        self.ExtraStyle &= ~wx.FRAME_EX_CONTEXTHELP
         

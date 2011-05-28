@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-Defines the `CuteDialog` class.
+Defines the `CuteFileDialog` class.
 
 See its documentation for more info.
 '''
