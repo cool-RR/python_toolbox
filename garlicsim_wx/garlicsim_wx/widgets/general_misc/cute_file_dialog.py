@@ -9,6 +9,7 @@ See its documentation for more info.
 
 import wx
 
+from garlicsim_wx.general_misc.wx_tools.cursors import CursorChanger
 from .cute_dialog import CuteDialog
 
 
@@ -29,14 +30,13 @@ class CuteFileDialog(CuteDialog, wx.FileDialog):
                  style=wx.FD_DEFAULT_STYLE, pos=wx.DefaultPosition):
         wx.FileDialog.__init__(self, parent, message, defaultDir, defaultFile,
                                wildcard, style, pos)
-        CuteDialog.__init__(self, parent, -1, title, style=style,
-                            skip_wx_init=True)
+        CuteDialog.__init__(self, parent, -1, style=style, skip_wx_init=True)
         self.ExtraStyle &= ~wx.FRAME_EX_CONTEXTHELP
         
     
     @classmethod # blocktodo: Use everywhere I can, document
     def create_show_modal_and_get_path(cls, *args, **kwargs):
-        dialog = cls(*args, **kwargs)
+        dialog = cls(parent, *args, **kwargs)
         try:
             result = dialog.ShowModal()
         finally:

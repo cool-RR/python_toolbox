@@ -10,7 +10,8 @@ See its documentation for more info.
 import wx
 
 from .cute_top_level_window import CuteTopLevelWindow
-
+from .cute_dialog_type import CuteDialogType
+            
 
 class CuteDialog(wx.Dialog, CuteTopLevelWindow):
     '''
@@ -39,8 +40,8 @@ class CuteDialog(wx.Dialog, CuteTopLevelWindow):
     
     
     @classmethod # blocktodo: Use everywhere I can, document
-    def create_and_show_modal(cls, *args, **kwargs):
-        dialog = cls(*args, **kwargs)
+    def create_and_show_modal(cls, parent, *args, **kwargs):
+        dialog = cls(parent, *args, **kwargs)
         try:
             result = dialog.ShowModal()
         finally:

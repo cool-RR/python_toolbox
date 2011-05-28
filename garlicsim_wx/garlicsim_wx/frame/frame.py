@@ -581,7 +581,7 @@ class Frame(garlicsim_wx.widgets.general_misc.cute_frame.CuteFrame):
                 we_are_main_program = ('run_gui' in main_script) or \
                                     ('garlicsim_wx' in main_script) or \
                                     ('GarlicSim' in main_script)
-            we_are_main_program = False
+            
             if not we_are_main_program:
                 if garlicsim_wx.widgets.misc.NotMainProgramWarningDialog.\
                    create_and_show_modal(self) != wx.ID_YES:
@@ -652,41 +652,36 @@ class Frame(garlicsim_wx.widgets.general_misc.cute_frame.CuteFrame):
         
         folder = os.getcwd()
         
-        path = wx.FileDialog(self, message='Save file as...',
-                                    defaultDir=folder, defaultFile='',
-                                    wildcard=wildcard_text,
-                                    style=wx.SAVE | wx.OVERWRITE_PROMPT)
-        try:
-            if save_dialog.ShowModal() == wx.ID_OK:
-                path = save_dialog.GetPath()
-                
-                # Adding extension if got a plain file because wxPython doesn't
-                # give the checkbox that's supposed to do it on Mac:
-                path = misc_tools.add_extension_if_plain(path, '.gssp')
-                
-                
-                with TempRecursionLimitSetter(10000):
-                    try:
-                        with open(path, 'wb') as my_file:
-                            with self.create_cursor_changer(wx.CURSOR_WAIT):
-                                with self.gui_project.project.tree.lock.read:
-                                    pickler = misc.pickling.Pickler(
-                                        my_file,
-                                        protocol=2,
-                                    )
-                                    pickler.dump(self.gui_project)
+        path = CuteFileDialog.create_show_modal_and_get_path(
+            self, message='Save file as...', defaultDir=folder, defaultFile='',
+            wildcard=wildcard_text, style=wx.SAVE | wx.OVERWRITE_PROMPT
+        )
+
+        if path is None:
+            return
         
-                    except Exception, exception:
-                        error_dialog = wx.MessageDialog(
-                            self,
-                            'Error saving to file:\n' + traceback.format_exc(),
-                            style=(wx.OK | wx.ICON_ERROR)
-                        )
-                        error_dialog.ShowModal()
-                        error_dialog.Destroy()
+        # Adding extension if got a plain file because wxPython doesn't
+        # give the checkbox that's supposed to do it on Mac:
+        path = misc_tools.add_extension_if_plain(path, '.gssp')
+        
+        with TempRecursionLimitSetter(10000):
+            try:
+                with open(path, 'wb') as my_file:
+                    with self.create_cursor_changer(wx.CURSOR_WAIT):
+                        with self.gui_project.project.tree.lock.read:
+                            pickler = misc.pickling.Pickler(
+                                my_file,
+                                protocol=2,
+                            )
+                            pickler.dump(self.gui_project)
+
+            except Exception, exception:
+                CuteErrorDialog.create_and_show_modal(
+                    self,
+                    'Error saving to file:\n' + traceback.format_exc(),
+                    style=(wx.OK | wx.ICON_ERROR)
+                )
             
-        finally:
-            save_dialog.Destroy()
     
     """    
     def delete_gui_project(self,gui_project):
