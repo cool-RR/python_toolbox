@@ -23,6 +23,7 @@ from garlicsim.general_misc import path_tools
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import package_finder
 from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
+from garlicsim_wx.widgets.general_misc.cute_dir_dialog import CuteDirDialog
 from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
 from garlicsim_wx.general_misc import wx_tools
 
@@ -258,24 +259,21 @@ class SimpackSelectionDialog(CuteDialog):
         
     def on_add_folder_containing_simpacks_button(self, event):
         '''Handler for "Add folders containing simpacks" button.'''
-        dir_dialog = wx.DirDialog(
+        path = CuteDirDialog.create_show_modal_and_get_path(
             self,
             'Choose the folder that *contains* your simpack(s), not the '
             'simpack folder itself.',
             style=wx.DD_DEFAULT_STYLE | wx.DD_DIR_MUST_EXIST
         )
-        try:
-            dir_dialog_return_value = dir_dialog.ShowModal()
-        finally:
-            dir_dialog.Destroy()
+        
+        if path is None:
+            return
             
-        if dir_dialog_return_value == wx.ID_OK:
-            path = dir_dialog.GetPath()
-            if path not in zip(garlicsim_wx.simpack_places)[0]:
-                garlicsim_wx.simpack_places.append((path, ''))
-                self.update_simpack_list()
-            if path not in sys.path:
-                sys.path.append(path)
+        if path not in zip(garlicsim_wx.simpack_places)[0]:
+            garlicsim_wx.simpack_places.append((path, ''))
+            self.update_simpack_list()
+        if path not in sys.path:
+            sys.path.append(path)
                 
         
     def on_create_project(self, event):
