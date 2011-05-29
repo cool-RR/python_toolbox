@@ -15,6 +15,7 @@ from garlicsim.general_misc.third_party import abc
 
 from garlicsim.general_misc import decorator_tools
 
+from .base_classes.decorating_context_manager import DecoratingContextManager
 from .context_manager_type import ContextManagerType
 from .self_hook import SelfHook
 
@@ -105,7 +106,7 @@ class ContextManager(object):
         generator = self._ContextManager__generators.pop()
         assert isinstance(generator, types.GeneratorType)
         
-        if type_ is None:
+        if exc_type is None:
             try:
                 generator.next()
             except StopIteration:
@@ -116,17 +117,17 @@ class ContextManager(object):
                     "have more than one `yield` in the generator function? "
                     "The generator function must yield exactly one time.")
         else:
-            if value is None:
+            if exc_value is None:
                 # Need to force instantiation so we can reliably
                 # tell if we get the same exception back
-                value = type_()
+                exc_value = exc_type()
             try:
                 generator.throw(exc_type, exc_value, exc_traceback)
-            except StopIteration, exc:
+            except StopIteration, stop_iteration:
                 # Suppress the exception *unless* it's the same exception that
                 # was passed to throw().  This prevents a StopIteration
                 # raised inside the "with" statement from being suppressed
-                return exc is not value
+                return stop_iteration is not exc_value
             except:
                 # only re-raise if it's *not* the exception that was
                 # passed to throw(), because __exit__() must not raise
@@ -135,7 +136,7 @@ class ContextManager(object):
                 # fixes the impedance mismatch between the throw() protocol
                 # and the __exit__() protocol.
                 #
-                if sys.exc_info()[1] is not value:
+                if sys.exc_info()[1] is not exc_value:
                     raise
             else:
                 raise RuntimeError(

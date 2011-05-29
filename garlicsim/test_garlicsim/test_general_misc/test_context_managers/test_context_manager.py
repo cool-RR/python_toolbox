@@ -310,8 +310,8 @@ def test_error_catching_enter_exit():
         def __exit__(self, exc_type, exc_value, exc_traceback):
             global flag, exception_type_caught
             flag = self._former_values.pop()
-            if type_:
-                exception_type_caught = type_
+            if exc_type:
+                exception_type_caught = exc_type
                 return True
     
     check_context_manager_type(MyContextManager,
@@ -357,8 +357,8 @@ def test_error_catching_self_returning_enter_exit():
         def __exit__(self, exc_type, exc_value, exc_traceback):
             global flag, exception_type_caught
             flag = self._former_values.pop()
-            if type_:
-                exception_type_caught = type_
+            if exc_type:
+                exception_type_caught = exc_type
                 return True
     
     check_context_manager_type(MyContextManager,
@@ -389,8 +389,8 @@ def test_enter_exit_overriding_generator():
         def __exit__(self, exc_type, exc_value, exc_traceback):
             global flag, exception_type_caught
             flag = self._former_values.pop()
-            if type_:
-                exception_type_caught = type_
+            if exc_type:
+                exception_type_caught = exc_type
                 return True
     
     check_context_manager_type(MyContextManager,
@@ -424,8 +424,8 @@ def test_enter_exit_overriding_manage_context():
         def __exit__(self, exc_type, exc_value, exc_traceback):
             global flag, exception_type_caught
             flag = self._former_values.pop()
-            if type_:
-                exception_type_caught = type_
+            if exc_type:
+                exception_type_caught = exc_type
                 return True
     
     check_context_manager_type(MyContextManager,
@@ -462,8 +462,8 @@ def test_enter_exit_overriding_enter_exit():
         def __exit__(self, exc_type, exc_value, exc_traceback):
             global flag, exception_type_caught
             flag = self._former_values.pop()
-            if type_:
-                exception_type_caught = type_
+            if exc_type:
+                exception_type_caught = exc_type
                 return True
     
     check_context_manager_type(MyContextManager,
@@ -484,8 +484,8 @@ def test_enter_subclassing_exit():
         def __exit__(self, exc_type, exc_value, exc_traceback):
             global flag, exception_type_caught
             flag = self._former_values.pop()
-            if type_:
-                exception_type_caught = type_
+            if exc_type:
+                exception_type_caught = exc_type
                 return True
         
     
@@ -530,8 +530,8 @@ def test_exit_subclassing_enter():
         def __exit__(self, exc_type, exc_value, exc_traceback):
             global flag, exception_type_caught
             flag = self._former_values.pop()
-            if type_:
-                exception_type_caught = type_
+            if exc_type:
+                exception_type_caught = exc_type
                 return True
         
     

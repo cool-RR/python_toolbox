@@ -59,6 +59,23 @@ def test_reentrant_context_manager():
             assert my_rcm.times_entered == 2
             assert my_rcm.times_exited == 1
             
+    
+    
+    with cute_testing.RaiseAssertor(MyException):
+        with my_rcm as enter_return_value:
+            assert enter_return_value == 3
+            assert my_rcm.times_entered == 3
+            assert my_rcm.times_exited == 2
+            with my_rcm as enter_return_value:
+                with my_rcm as enter_return_value:
+                    assert enter_return_value == 3
+                    assert my_rcm.times_entered == 3
+                    assert my_rcm.times_exited == 2
+                assert enter_return_value == 3
+                assert my_rcm.times_entered == 3
+                assert my_rcm.times_exited == 2
+                raise MyException
+            
             
 def test_exception_swallowing():
     class SwallowingReentrantContextManager(ReentrantContextManager):
@@ -93,7 +110,6 @@ def test_exception_swallowing():
             my_set.add(7)
         my_set.add(8)
     assert my_set == set([0, 1, 2, 3, 4])
-    
-    with cute_testing.RaiseAssertor(MyException):
+        
         
 # blocktodo: make test for nested exception swallowing.
