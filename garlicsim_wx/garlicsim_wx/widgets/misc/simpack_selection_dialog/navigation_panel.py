@@ -70,10 +70,11 @@ class NavigationPanel(wx.Panel):
             flag=wx.EXPAND | wx.ALL,
             border=5
         )
-        self.Bind(wx.EVT_BUTTON,
-                  self.simpack_selection_dialog.\
-                       on_add_folder_containing_simpacks_button,
-                  self.add_simpacks_from_a_different_folder_button)
+        self.Bind(
+            wx.EVT_BUTTON,
+            self.simpack_selection_dialog._on_add_folder_containing_simpacks,
+            self.add_simpacks_from_a_different_folder_button
+        )
         
         self.small_h_sizer = wx.BoxSizer(wx.HORIZONTAL)
         self.big_v_sizer.Add(

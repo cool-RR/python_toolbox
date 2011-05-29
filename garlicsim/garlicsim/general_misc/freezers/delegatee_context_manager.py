@@ -28,7 +28,7 @@ class DelegateeContextManager(context_managers.ReentrantContextManager):
         return self.freezer.freeze_handler()
     
     
-    def reentrant_exit(self, type_, value, traceback):
+    def reentrant_exit(self, exc_type, exc_value, exc_traceback):
         '''Call the freezer's thaw handler.'''
         return self.freezer.thaw_handler()
         

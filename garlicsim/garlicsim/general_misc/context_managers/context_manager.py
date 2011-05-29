@@ -54,7 +54,7 @@ class ContextManager(object):
 
     
     @abc.abstractmethod
-    def __exit__(self, type_, value, traceback):
+    def __exit__(self, exc_type, exc_value, exc_traceback):
         '''Cleanup after suite execution.'''
     
 
@@ -95,7 +95,7 @@ class ContextManager(object):
                                "must yield one time exactly.")
     
         
-    def __exit_using_manage_context(self, type_, value, traceback):
+    def __exit_using_manage_context(self, exc_type, exc_value, exc_traceback):
         '''
         Cleanup after suite execution.
         
@@ -121,7 +121,7 @@ class ContextManager(object):
                 # tell if we get the same exception back
                 value = type_()
             try:
-                generator.throw(type_, value, traceback)
+                generator.throw(exc_type, exc_value, exc_traceback)
             except StopIteration, exc:
                 # Suppress the exception *unless* it's the same exception that
                 # was passed to throw().  This prevents a StopIteration

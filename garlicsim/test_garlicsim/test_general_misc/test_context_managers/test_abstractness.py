@@ -24,7 +24,7 @@ def test_abstractness():
         pass
 
     class EnterlessContextManager(ContextManager):
-        def __exit__(self, type_, value, traceback):
+        def __exit__(self, exc_type, exc_value, exc_traceback):
             pass
         
     class ExitlessContextManager(ContextManager):
@@ -62,7 +62,7 @@ def test_can_instantiate_when_defining_enter_exit():
     class AnotherContextManager(ContextManager):
         def __enter__(self):
             pass
-        def __exit__(self, type_, value, traceback):
+        def __exit__(self, exc_type, exc_value, exc_traceback):
             pass
     AnotherContextManager()
     

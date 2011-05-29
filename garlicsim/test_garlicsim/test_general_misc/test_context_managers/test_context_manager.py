@@ -250,7 +250,7 @@ def test_manage_context_overriding_enter_exit():
         def __enter__(self):
             raise Exception('This code is supposed to be overridden.')
             
-        def __exit__(self, type_, value, traceback):
+        def __exit__(self, exc_type, exc_value, exc_traceback):
             raise Exception('This code is supposed to be overridden.')
 
             
@@ -286,7 +286,7 @@ def test_enter_exit():
             self._former_values.append(flag)
             flag = self.value
             
-        def __exit__(self, type_, value, traceback):
+        def __exit__(self, exc_type, exc_value, exc_traceback):
             global flag
             flag = self._former_values.pop()
     
@@ -307,7 +307,7 @@ def test_error_catching_enter_exit():
             self._former_values.append(flag)
             flag = self.value
             
-        def __exit__(self, type_, value, traceback):
+        def __exit__(self, exc_type, exc_value, exc_traceback):
             global flag, exception_type_caught
             flag = self._former_values.pop()
             if type_:
@@ -332,7 +332,7 @@ def test_self_returning_enter_exit():
             flag = self.value
             return self
             
-        def __exit__(self, type_, value, traceback):
+        def __exit__(self, exc_type, exc_value, exc_traceback):
             global flag
             flag = self._former_values.pop()
     
@@ -354,7 +354,7 @@ def test_error_catching_self_returning_enter_exit():
             flag = self.value
             return self
             
-        def __exit__(self, type_, value, traceback):
+        def __exit__(self, exc_type, exc_value, exc_traceback):
             global flag, exception_type_caught
             flag = self._former_values.pop()
             if type_:
@@ -386,7 +386,7 @@ def test_enter_exit_overriding_generator():
             flag = self.value
             return self
             
-        def __exit__(self, type_, value, traceback):
+        def __exit__(self, exc_type, exc_value, exc_traceback):
             global flag, exception_type_caught
             flag = self._former_values.pop()
             if type_:
@@ -421,7 +421,7 @@ def test_enter_exit_overriding_manage_context():
             flag = self.value
             return self
             
-        def __exit__(self, type_, value, traceback):
+        def __exit__(self, exc_type, exc_value, exc_traceback):
             global flag, exception_type_caught
             flag = self._former_values.pop()
             if type_:
@@ -444,7 +444,7 @@ def test_enter_exit_overriding_enter_exit():
         def __enter__(self):
             raise Exception('This code is supposed to be overridden.')
             
-        def __exit__(self, type_, value, traceback):
+        def __exit__(self, exc_type, exc_value, exc_traceback):
             raise Exception('This code is supposed to be overridden.')
         
     
@@ -459,7 +459,7 @@ def test_enter_exit_overriding_enter_exit():
             flag = self.value
             return self
             
-        def __exit__(self, type_, value, traceback):
+        def __exit__(self, exc_type, exc_value, exc_traceback):
             global flag, exception_type_caught
             flag = self._former_values.pop()
             if type_:
@@ -481,7 +481,7 @@ def test_enter_subclassing_exit():
             self.value = value
             self._former_values = []
             
-        def __exit__(self, type_, value, traceback):
+        def __exit__(self, exc_type, exc_value, exc_traceback):
             global flag, exception_type_caught
             flag = self._former_values.pop()
             if type_:
@@ -527,7 +527,7 @@ def test_exit_subclassing_enter():
             self.value = value
             self._former_values = []
             
-        def __exit__(self, type_, value, traceback):
+        def __exit__(self, exc_type, exc_value, exc_traceback):
             global flag, exception_type_caught
             flag = self._former_values.pop()
             if type_:

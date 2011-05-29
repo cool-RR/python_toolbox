@@ -20,7 +20,7 @@ class ReentrantContextManager(ContextManager):
     A context manager which can be entered several times before it's exited.
     
     Subclasses should override `reentrant_enter` and `reentrant_exit`, which
-    are analogue to `__enter__` and `__exit__`, except they are called only on
+    are analogues to `__enter__` and `__exit__`, except they are called only on
     the outermost suite. In other words: When you enter the reentrant context
     manager for the first time, `reentrant_enter` is called. If you enter it
     for a second time, nothing is called. Now `.depth == 2`. Exit it now,

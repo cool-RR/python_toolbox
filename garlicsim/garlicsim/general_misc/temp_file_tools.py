@@ -51,7 +51,7 @@ class TemporaryFolder(ContextManager):
         return self.path
 
     
-    def __exit__(self, type_, value, traceback):
+    def __exit__(self, exc_type, exc_value, exc_traceback):
         assert not self._closed
         shutil.rmtree(self.path)
         self._closed = True

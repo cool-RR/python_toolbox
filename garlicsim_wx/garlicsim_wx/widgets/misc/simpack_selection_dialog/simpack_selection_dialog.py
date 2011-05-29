@@ -147,11 +147,11 @@ class SimpackSelectionDialog(CuteDialog):
         self.create_project_button.SetHelpText('Start a new simulation '
                                                'project using the selected '
                                                'simpack.')
-        self.Bind(wx.EVT_BUTTON, self.on_create_project,
+        self.Bind(wx.EVT_BUTTON, self._on_create_project,
                   source=self.create_project_button)
         
         self.cancel_button = wx.Button(self, wx.ID_CANCEL, 'Cancel')
-        self.Bind(wx.EVT_BUTTON, self.on_cancel, source=self.cancel_button)
+        self.Bind(wx.EVT_BUTTON, self._on_cancel, source=self.cancel_button)
         
         if wx_tools.is_win:
             first_button = self.create_project_button
@@ -257,7 +257,7 @@ class SimpackSelectionDialog(CuteDialog):
             return simpack_selection_dialog.simpack
         
         
-    def on_add_folder_containing_simpacks_button(self, event):
+    def _on_add_folder_containing_simpacks(self, event):
         '''Handler for "Add folders containing simpacks" button.'''
         path = CuteDirDialog.create_show_modal_and_get_path(
             self,
@@ -276,7 +276,7 @@ class SimpackSelectionDialog(CuteDialog):
             sys.path.append(path)
                 
         
-    def on_create_project(self, event):
+    def _on_create_project(self, event):
         '''Handler for "Create project" button.'''
         #if self.list_box.GetStringSelection():
             #self.EndModal(wx.ID_OK)       
@@ -286,7 +286,7 @@ class SimpackSelectionDialog(CuteDialog):
         
         
         
-    def on_cancel(self, event):
+    def _on_cancel(self, event):
         '''Handler for "Cancel" button.'''
         self.EndModal(wx.ID_CANCEL)
         
