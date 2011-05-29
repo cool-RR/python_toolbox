@@ -79,9 +79,9 @@ class AlreadyExistsDialog(CuteDialog):
         self.button_sizer.Add(self.keep_editing_button, 0, wx.EXPAND | wx.ALL,
                               border=10)
         
-        self.Bind(wx.EVT_BUTTON, self.on_take_me_to_it_button,
+        self.Bind(wx.EVT_BUTTON, self._on_take_me_to_it_button,
                   source=self.take_me_to_it_button)
-        self.Bind(wx.EVT_BUTTON, self.on_keep_editing_button,
+        self.Bind(wx.EVT_BUTTON, self._on_keep_editing_button,
                   source=self.keep_editing_button)
         
         self.take_me_to_it_button.SetDefault()
@@ -91,7 +91,8 @@ class AlreadyExistsDialog(CuteDialog):
         
         
         
-    def on_take_me_to_it_button(self, event):
+    def _on_take_me_to_it_button(self, event):
+        '''Handler for "Take me to it" button.'''
         self.EndModal(wx.ID_OK)
         step_profiles_list = self.frame.crunching_controls.\
                              step_profiles_controls.step_profiles_list
@@ -102,8 +103,8 @@ class AlreadyExistsDialog(CuteDialog):
         wx.CallLater(200, step_profiles_list.real_set_focus)
         
     
-    
-    def on_keep_editing_button(self, event):
+    def _on_keep_editing_button(self, event):
+        '''Handler for "Keep editing" button.'''
         self.EndModal(wx.ID_CANCEL)
         
     
