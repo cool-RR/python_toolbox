@@ -50,7 +50,7 @@ has their own advantages and disadvantages over the others.
     by doing `yield SelfHook`.
     
  3. The third and novel way is by defining a class with a `manage_context`
-    method which returns a decorator. Example:
+    method which returns a generator. Example:
     
         class MyContextManager(ContextManager):
             def manage_context(self):

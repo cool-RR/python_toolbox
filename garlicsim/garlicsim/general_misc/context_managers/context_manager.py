@@ -20,7 +20,7 @@ from .context_manager_type import ContextManagerType
 from .self_hook import SelfHook
 
 
-class ContextManager(object):
+class ContextManager(DecoratingContextManager):
     '''
     Allows running preparation code before a given suite and cleanup after.
     
@@ -39,14 +39,6 @@ class ContextManager(object):
     
     
     __metaclass__ = ContextManagerType
-
-    
-    def __call__(self, function):
-        '''Decorate `function` to use this context manager when it's called.'''
-        def inner(function_, *args, **kwargs):
-            with self:
-                return function_(*args, **kwargs)
-        return decorator_tools.decorator(inner, function)
     
     
     @abc.abstractmethod
