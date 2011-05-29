@@ -37,14 +37,14 @@ class CruncherSelectionDialog(CuteDialog):
         
         self.general_text = wx.StaticText(
             self,
-            label=("Choose a cruncher type to be used when crunching the "
+            label=("&Choose a cruncher type to be used when crunching the "
                    "simulation. Your simulation will use the same algorithm "
                    "regardless of which cruncher you'll choose; the choice of "
                    "cruncher will affect how and where that algorithm will be "
                    "run.")
         )
         #self.general_text.SetSize((self.ClientSize[0] - 20, -1))
-        self.general_text.Wrap(self.ClientSize[0] - 20)
+        self.general_text.Wrap(self.general_text.ClientSize[0] - 100)
                                   
         self.general_text.Wrap(self.general_text.Size[0])
         
@@ -94,7 +94,7 @@ class CruncherSelectionDialog(CuteDialog):
         self.main_v_sizer.Add(self.dialog_button_sizer, 0,
                               wx.ALIGN_CENTER | wx.ALL, border=10)
         
-        self.ok_button = wx.Button(self, wx.ID_OK, 'Switch cruncher type')
+        self.ok_button = wx.Button(self, wx.ID_OK, '&Switch cruncher type')
         self.dialog_button_sizer.AddButton(self.ok_button)
         self.ok_button.SetDefault()
         self.dialog_button_sizer.SetAffirmativeButton(self.ok_button)
