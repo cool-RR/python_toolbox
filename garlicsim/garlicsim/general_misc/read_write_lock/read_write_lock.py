@@ -20,7 +20,7 @@ class ContextManager(context_managers.ContextManager):
         self.acquire_func = acquire_func
     def __enter__(self):
         self.acquire_func()
-    def __exit__(self, type_, value, traceback):
+    def __exit__(self, exc_type, exc_value, exc_traceback):
         self.lock.release()
 
         

@@ -51,13 +51,13 @@ class ReentrantContextManager(ContextManager):
         return self.__last_reentrant_enter_return_value
     
     
-    def __exit__(self, type_, value, traceback):
+    def __exit__(self, exc_type, exc_value, exc_traceback):
         '''Exit the context manager.'''
         assert self.depth >= 1
         if self.depth == 1:
             # Saving `reentrant_exit`'s return value, since it might be
             # signalling an exception swallowing:
-            return_value = self.reentrant_exit(type_, value, traceback)
+            return_value = self.reentrant_exit(exc_type, exc_value, exc_traceback)
         else:
             return_value = None
         self.depth -= 1
@@ -69,7 +69,7 @@ class ReentrantContextManager(ContextManager):
         return self
         
     
-    def reentrant_exit(self, type_, value, traceback):
+    def reentrant_exit(self, exc_type, exc_value, exc_traceback):
         '''Function that gets called when exiting the outermost suite.'''
         pass
     
