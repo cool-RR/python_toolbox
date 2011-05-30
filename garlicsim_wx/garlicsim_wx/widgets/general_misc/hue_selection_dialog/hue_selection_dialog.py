@@ -77,7 +77,7 @@ class HueSelectionDialog(CuteDialog):
         self.main_v_sizer.Add(self.dialog_button_sizer, 0,
                               wx.ALIGN_CENTER | wx.ALL, border=10)
         
-        self.ok_button = wx.Button(self, wx.ID_OK, 'Okay')
+        self.ok_button = wx.Button(self, wx.ID_OK, '&Ok')
         self.dialog_button_sizer.AddButton(self.ok_button)
         self.ok_button.SetDefault()
         self.dialog_button_sizer.SetAffirmativeButton(self.ok_button)

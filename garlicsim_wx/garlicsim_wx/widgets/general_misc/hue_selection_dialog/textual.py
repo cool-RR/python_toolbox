@@ -50,7 +50,7 @@ class Textual(CutePanel):
         
         self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)
         
-        self.hue_static_text = wx.StaticText(self, label='Hue:')
+        self.hue_static_text = wx.StaticText(self, label='&Hue:')
         
         self.main_v_sizer.Add(self.hue_static_text, 0,
                               wx.ALIGN_LEFT | wx.BOTTOM, border=5)
