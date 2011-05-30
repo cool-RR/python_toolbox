@@ -74,6 +74,9 @@ class CruncherSelectionDialog(CuteDialog):
             choices=cruncher_titles.keys()
         )
         self.cruncher_list_box.SetMinSize((250, 100))
+        self.cruncher_list_box.SetHelpText(
+            'List of cruncher types from which you can choose.'
+        )
         
         self.cruncher_list_box.Select(
             cruncher_titles.values().index(

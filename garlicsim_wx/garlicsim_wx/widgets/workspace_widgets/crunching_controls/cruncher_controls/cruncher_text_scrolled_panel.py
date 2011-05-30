@@ -28,6 +28,8 @@ class CruncherTextScrolledPanel(wx.lib.scrolledpanel.ScrolledPanel,
                                                     cruncher_selection_dialog)
         self.set_good_background_color()
         self.SetMinSize((530, 300))
+        self.SetHelpText('Explanation about the currently selected cruncher '
+                         'type.')
         
         self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)
         
