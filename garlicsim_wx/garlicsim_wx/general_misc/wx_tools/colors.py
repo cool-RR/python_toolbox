@@ -97,6 +97,30 @@ def wx_color_to_big_rgb(wx_color):
 #                                                                             #
 ### Finished color conversions. ###############################################
 
+### Color inversion: ##########################################################
+#                                                                             #
+def invert_rgb(rgb):
+    red, green, blue = rgb
+    return (
+        1 - red,
+        1 - green,
+        1 - blue
+    )
+
+
+def invert_hls(hls):
+    rgb = colorsys.hls_to_rgb(hls)
+    inverted_rgb = inverted_rgb(rgb)
+    return colorsys.rgb_to_hls(inverted_rgb)
+
+
+def invert_wx_color(wx_color):
+    rgb = wx_color_to_rgb(wx_color)
+    inverted_rgb = invert_rgb(rgb)
+    return rgb_to_wx_color(invert_rgb)
+#                                                                             #
+### Finished color inversion. #################################################
+
 
 def mix_wx_color(ratio, color1, color2):
     '''Mix two wxPython colors according to the given `ratio`.'''

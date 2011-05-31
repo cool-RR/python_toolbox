@@ -35,14 +35,23 @@ class Comparer(CutePanel):
         self.Bind(wx.EVT_PAINT, self._on_paint)
         self.Bind(wx.EVT_LEFT_DOWN, self._on_mouse_left_down)
         
-        
-    def _calculate(self):
-        '''Create a brush for showing the new hue.'''
-        self.color = wx_tools.colors.hls_to_wx_color(
+    
+    @property
+    def color(self):
+        return wx_tools.colors.hls_to_wx_color(
             (self.hue,
              self.hue_selection_dialog.lightness,
              self.hue_selection_dialog.saturation)
         )
+        
+      
+    @property
+    def negative_color(self):
+        return wx_tools.colors.invert_wx_color(self.color)
+        
+        
+    def _calculate(self):
+        '''Create a brush for showing the new hue.'''
         self.brush = wx.Brush(self.color)
         
         
@@ -70,10 +79,15 @@ class Comparer(CutePanel):
         
         if True or self.has_focus():
             dc.SetPen(
-                wx_tools.drawing_tools.pens.get_selection_pen()
+                wx_tools.drawing_tools.pens.get_selection_pen(
+                    self.negative_color
+                )
             )
+            wx.Color
             graphics_context.SetPen(
-                wx_tools.drawing_tools.pens.get_selection_pen()
+                wx_tools.drawing_tools.pens.get_selection_pen(
+                    self.negative_color
+                )
             )
             graphics_context.SetBrush(self.brush)
             dc.SetBrush(self.brush)

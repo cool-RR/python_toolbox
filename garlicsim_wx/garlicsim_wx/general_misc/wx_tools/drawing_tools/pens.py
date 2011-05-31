@@ -17,14 +17,17 @@ is_gtk = (wx.Platform == '__WXGTK__')
 is_win = (wx.Platform == '__WXMSW__')
 
 
-@caching.cache()
-def get_selection_pen():
+@caching.cache(max_size=100)
+def get_selection_pen(color='black'):
     ''' '''
+    if isinstance(color, basestring):
+        color = wx.Color(color)
+        
     if is_mac:
         return 1/0 #blocktododoc implement
     else:
         pen = wx.Pen(wx.Color(0, 0, 0),
-                     1,
+                     color,
                      wx.USER_DASH)
         pen.SetDashes([1, 4])
         return pen
