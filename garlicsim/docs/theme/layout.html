@@ -83,16 +83,6 @@
             {{ _('Enter search terms or a module, class or function name.') }}
             </p>
           </div>
-          <div id="copypasta-section">
-            <a id="copypasta-button" style="display: none;">
-              <img src="http://copypasta.credibl.es/images/button-light.png" alt="Suggest changes"> 
-            </a>
-            <script type="text/javascript">
-              copypasta_account_id = '8cg';
-            </script>
-            <script type="text/javascript" src="{{ pathto('_static/copypasta.js', 1) }}">
-            </script>
-          </div>
           <script type="text/javascript">$('#searchbox').show(0);</script>
           {%- endif %}
           {%- endblock %}
