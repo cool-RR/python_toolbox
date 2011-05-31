@@ -56,7 +56,9 @@ class Comparer(CutePanel):
             
     def _on_paint(self, event):
         width, height = self.GetClientSize()
-        dc = wx.PaintDC(self)
+        dc = wx.BufferedPaintDC(self)
+        #graphics_context = wx.GraphicsContext.Create(dc)
+        #assert isinstance(graphics_context, wx.GraphicsContext)
 
         dc.SetPen(self._transparent_pen)
         
@@ -66,8 +68,12 @@ class Comparer(CutePanel):
         dc.SetBrush(self.old_brush)
         dc.DrawRectangle(0, (height // 2), width, (height // 2) + 1)
         
-        if self.has_focus():
-        
+        if True or self.has_focus():
+            dc.SetPen(
+                wx_tools.drawing_tools.pens.get_selection_pen()
+            )
+            dc.SetBrush(wx.TRANSPARENT_BRUSH)
+            dc.DrawRectangle(3, 3, width - 6, (height // 2) - 6)
                 
     
     def _on_mouse_left_down(self, event):
