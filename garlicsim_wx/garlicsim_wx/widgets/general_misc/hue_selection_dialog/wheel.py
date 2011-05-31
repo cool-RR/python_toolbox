@@ -100,7 +100,6 @@ class Wheel(wx.Panel):
         self.hue = hue_selection_dialog.hue
         self.bitmap = make_bitmap(hue_selection_dialog.lightness,
                                   hue_selection_dialog.saturation)
-        self._calculate_angle()
         self._pen = wx.Pen(
             wx.Colour(255, 255, 255) if hue_selection_dialog.lightness < 0.5
             else wx.Colour(0, 0, 0),
@@ -126,11 +125,13 @@ class Wheel(wx.Panel):
         assert isinstance(gc, wx.GraphicsContext)
         gc.SetPen(self._pen)
         cx, cy = BIG_LENGTH // 2, BIG_LENGTH // 2
-        start_x, start_y = cx + SMALL_RADIUS * math.sin(self.angle), \
-                           cy + SMALL_RADIUS * math.cos(self.angle)
-        end_x, end_y = cx + BIG_RADIUS * math.sin(self.angle), \
-                       cy + BIG_RADIUS * math.cos(self.angle)
-        gc.StrokeLine(start_x, start_y, end_x, end_y)
+        start_x, start_y = cx + SMALL_RADIUS ,\
+                           cy + SMALL_RADIUS #* math.cos(self.angle)
+        end_x, end_y = cx + BIG_RADIUS ,\
+                       cy + BIG_RADIUS #* math.cos(self.angle)
+        gc.Translate(cx, cy)
+        gc.Rotate((math.pi / 2) - self.angle)
+        gc.StrokeLine(SMALL_RADIUS, 0, BIG_RADIUS, 0)
 
         #dc.SetPen(self._pen)
         #dc.DrawLine(start_x, start_y, end_x, end_y)
@@ -174,17 +175,18 @@ class Wheel(wx.Panel):
                 self.ReleaseMouse()
             
                 
+
+    @property
+    def angle():
+        '''Current angle of hue marker. (In radians.)'''
+        return (- (2 * self.hue - 1) * math.pi)
         
-    def _calculate_angle(self):
-        '''Calculate the angle to represent current hue and put in `.angle`.'''
-        self.angle = - (2 * self.hue - 1) * math.pi
         
         
     def update(self):
         '''If hue changed, show new hue.'''
         if self.hue != self.hue_selection_dialog.hue:
             self.hue = self.hue_selection_dialog.hue
-            self._calculate_angle()
             self.Refresh()
             
         
