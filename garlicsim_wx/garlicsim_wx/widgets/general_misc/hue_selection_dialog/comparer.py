@@ -16,7 +16,8 @@ from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
 class Comparer(CutePanel):
     '''Shows the new hue compared to the old hue before dialog was started.'''
     def __init__(self, hue_selection_dialog):
-        style = wx.SIMPLE_BORDER if wx_tools.is_gtk else wx.SUNKEN_BORDER
+        style = wx.TAB_TRAVERSAL | (wx.SIMPLE_BORDER if wx_tools.is_gtk
+                                    else wx.SUNKEN_BORDER)
         wx.Panel.__init__(self, parent=hue_selection_dialog, size=(75, 90),
                           style=style)
         self.SetDoubleBuffered(True)
@@ -25,6 +26,7 @@ class Comparer(CutePanel):
         self.old_hls = hue_selection_dialog.old_hls
         self.old_hue = hue_selection_dialog.old_hue
         self.old_color = wx_tools.colors.hls_to_wx_color(self.old_hls)
+        self.negative_old_color = wx_tools.colors.invert_wx_color(self.color)
         self.old_brush = wx.Brush(self.old_color)
         self._transparent_pen = \
             wx.Pen(wx.Colour(0, 0, 0), width=0, style=wx.TRANSPARENT)
@@ -34,6 +36,9 @@ class Comparer(CutePanel):
         
         self.Bind(wx.EVT_PAINT, self._on_paint)
         self.Bind(wx.EVT_LEFT_DOWN, self._on_mouse_left_down)
+        self.Bind(wx.EVT_SET_FOCUS, self._on_set_focus)
+        self.Bind(wx.EVT_KILL_FOCUS, self._on_kill_focus)
+        self.Bind(wx.EVT_CHAR, self._on_char)
         
     
     @property
@@ -43,11 +48,6 @@ class Comparer(CutePanel):
              self.hue_selection_dialog.lightness,
              self.hue_selection_dialog.saturation)
         )
-        
-      
-    @property
-    def negative_color(self):
-        return wx_tools.colors.invert_wx_color(self.color)
         
         
     def _calculate(self):
@@ -61,6 +61,10 @@ class Comparer(CutePanel):
             self.hue = self.hue_selection_dialog.hue
             self._calculate()
             self.Refresh()
+            
+    
+    def change_to_old_hue(self):
+        self.hue_selection_dialog.setter(self.old_hue)
 
             
     def _on_paint(self, event):
@@ -77,25 +81,39 @@ class Comparer(CutePanel):
         dc.SetBrush(self.old_brush)
         dc.DrawRectangle(0, (height // 2), width, (height // 2) + 1)
         
-        if True or self.has_focus():
-            dc.SetPen(
-                wx_tools.drawing_tools.pens.get_selection_pen(
-                    self.negative_color
-                )
-            )
-            wx.Color
+        if self.has_focus():
             graphics_context.SetPen(
                 wx_tools.drawing_tools.pens.get_selection_pen(
-                    self.negative_color
+                    self.negative_old_color
                 )
             )
-            graphics_context.SetBrush(self.brush)
-            dc.SetBrush(self.brush)
-            graphics_context.DrawRectangle(3, 3, width - 6, (height // 2) - 6)
+            graphics_context.SetBrush(self.old_brush)
+            graphics_context.DrawRectangle(3, (height // 2) + 3,
+                                           width - 6, (height // 2) - 6)
                 
     
     def _on_mouse_left_down(self, event):
         x, y = event.GetPosition()
         width, height = self.GetClientSize()
         if y >= height // 2:
-            self.hue_selection_dialog.setter(self.old_hue)
+            self.change_to_old_hue()
+            
+    def _on_char(self, event):
+        char = unichr(event.GetUniChar())
+        if char == ' ':
+            self.change_to_old_hue()
+        else:
+            event.Skip()
+            
+            
+    def _on_set_focus(self, event):
+        event.Skip()
+        self.Refresh()
+        
+
+    def _on_kill_focus(self, event):
+        event.Skip()
+        self.Refresh()
+        
+        
+        

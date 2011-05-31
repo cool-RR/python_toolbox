@@ -23,13 +23,10 @@ def get_selection_pen(color='black'):
     if isinstance(color, basestring):
         color = wx.Color(color)
         
-    if is_mac:
-        return 1/0 #blocktododoc implement
-    else:
-        pen = wx.Pen(wx.Color(0, 0, 0),
-                     color,
-                     wx.USER_DASH)
-        pen.SetDashes([1, 4])
-        return pen
+    # blocktodoc: do `if is_mac`, also gtk maybe
+    
+    pen = wx.Pen(color, 1, wx.USER_DASH)
+    pen.SetDashes([1, 4])
+    return pen
     
     

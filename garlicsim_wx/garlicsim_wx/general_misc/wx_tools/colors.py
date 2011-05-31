@@ -117,7 +117,7 @@ def invert_hls(hls):
 def invert_wx_color(wx_color):
     rgb = wx_color_to_rgb(wx_color)
     inverted_rgb = invert_rgb(rgb)
-    return rgb_to_wx_color(invert_rgb)
+    return rgb_to_wx_color(inverted_rgb)
 #                                                                             #
 ### Finished color inversion. #################################################
 
