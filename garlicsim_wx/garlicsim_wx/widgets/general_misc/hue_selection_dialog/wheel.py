@@ -18,6 +18,7 @@ import wx
 from garlicsim.general_misc import caching
 from garlicsim.general_misc import cute_iter_tools
 from garlicsim_wx.general_misc import wx_tools
+from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
 from garlicsim_wx.general_misc import color_tools
 
 BIG_LENGTH = 221
@@ -88,7 +89,7 @@ def make_bitmap(lightness=1, saturation=1):
     return bitmap
 
 
-class Wheel(wx.Panel):
+class Wheel(CutePanel):
     '''
     Color wheel displaying current hue and allows moving to different hue.
     '''
@@ -103,20 +104,30 @@ class Wheel(wx.Panel):
         self._pen = wx.Pen(
             wx.Colour(255, 255, 255) if hue_selection_dialog.lightness < 0.5
             else wx.Colour(0, 0, 0),
-            width=2,
-            style=wx.DOT
+            width=1,
+            style=wx.SOLID
+        )
+        self._selection_pen = wx_tools.drawing_tools.pens.get_selection_pen(
+            color=wx_tools.colors.mix_wx_color(
+                0.7,
+                wx.NamedColor('black'),
+                wx_tools.colors.get_background_color()
+            ),                              
+            dashes=[2, 2]
         )
         self._cursor_set_to_bullseye = False
         
         self.Bind(wx.EVT_PAINT, self.on_paint)
         self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse)
+        self.Bind(wx.EVT_SET_FOCUS, self._on_set_focus)
+        self.Bind(wx.EVT_KILL_FOCUS, self._on_kill_focus)
+        self.Bind(wx.EVT_CHAR, self._on_char)
         
     
     def on_paint(self, event):
         dc = wx.BufferedPaintDC(self)
                     
         dc.DrawBitmap(self.bitmap, 0, 0)
-
         
         #######################################################################
         # Drawing dashed line which marks the selected color:
@@ -124,17 +135,18 @@ class Wheel(wx.Panel):
         gc = wx.GraphicsContext.Create(dc)
         assert isinstance(gc, wx.GraphicsContext)
         gc.SetPen(self._pen)
-        cx, cy = BIG_LENGTH // 2, BIG_LENGTH // 2
-        start_x, start_y = cx + SMALL_RADIUS ,\
-                           cy + SMALL_RADIUS #* math.cos(self.angle)
-        end_x, end_y = cx + BIG_RADIUS ,\
-                       cy + BIG_RADIUS #* math.cos(self.angle)
-        gc.Translate(cx, cy)
-        gc.Rotate((math.pi / 2) - self.angle)
-        gc.StrokeLine(SMALL_RADIUS, 0, BIG_RADIUS, 0)
+        center_x, center_y = BIG_LENGTH // 2, BIG_LENGTH // 2
+        gc.Translate(center_x, center_y)
+        gc.Rotate(self.angle)
+        #gc.StrokeLine(SMALL_RADIUS, 0, BIG_RADIUS, 0)
+        gc.DrawRectangle(SMALL_RADIUS - 1, -2,
+                         (BIG_RADIUS - SMALL_RADIUS) + 1, 4)
+        
+        if self.has_focus():
+            gc.SetPen(self._selection_pen)
+            gc.DrawRectangle(SMALL_RADIUS - 3, -4,
+                             (BIG_RADIUS - SMALL_RADIUS) + 5, 8)
 
-        #dc.SetPen(self._pen)
-        #dc.DrawLine(start_x, start_y, end_x, end_y)
                 
         
                 
@@ -158,9 +170,10 @@ class Wheel(wx.Panel):
             self.SetCursor(wx.StockCursor(wx.CURSOR_DEFAULT))
             self._cursor_set_to_bullseye = False
 
+        if event.LeftIsDown() or event.LeftDown():
+            self.SetFocus()            
             
         if event.LeftIsDown():
-            
             if inside_wheel and not self.HasCapture():
                 self.CaptureMouse()
                 
@@ -177,9 +190,9 @@ class Wheel(wx.Panel):
                 
 
     @property
-    def angle():
+    def angle(self):
         '''Current angle of hue marker. (In radians.)'''
-        return (- (2 * self.hue - 1) * math.pi)
+        return ((self.hue - 0.25) * 2 * math.pi)
         
         
         
@@ -189,6 +202,20 @@ class Wheel(wx.Panel):
             self.hue = self.hue_selection_dialog.hue
             self.Refresh()
             
+                
+    def _on_char(self, event):
+        char = unichr(event.GetUniChar()) #blocktodo
+        if char == ' ':
+            self.change_to_old_hue()
+        else:
+            event.Skip()
+            
+            
+    def _on_set_focus(self, event):
+        event.Skip()
+        self.Refresh()
         
-        
-    
+
+    def _on_kill_focus(self, event):
+        event.Skip()
+        self.Refresh()
