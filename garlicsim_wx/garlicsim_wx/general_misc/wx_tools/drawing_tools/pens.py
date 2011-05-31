@@ -23,6 +23,10 @@ def get_selection_pen():
     if is_mac:
         return 1/0 #blocktododoc implement
     else:
-        return wx.Pen(wx.Color(100, 100, 100),
-                      1,
-                      wx.SHORT_DASH)
+        pen = wx.Pen(wx.Color(0, 0, 0),
+                     1,
+                     wx.USER_DASH)
+        pen.SetDashes([1, 4])
+        return pen
+    
+    
