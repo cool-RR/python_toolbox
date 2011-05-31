@@ -73,8 +73,9 @@ class Textual(CutePanel):
         
         self.SetSizerAndFit(self.main_v_sizer)
         
-        self.Bind(wx.EVT_SPINCTRL, self.on_spin, source=self.spin_ctrl)
-        self.Bind(wx.EVT_TEXT, self.on_text, source=self.spin_ctrl)
+        self.Bind(wx.EVT_SPINCTRL, self._on_spin, source=self.spin_ctrl)
+        self.Bind(wx.EVT_TEXT, self._on_text, source=self.spin_ctrl)
+        #self.Bind(wx.EVT_KILL_FOCUS, self._on_kill_focue)
         
         
     value_freezer = freezers.FreezerProperty()
@@ -87,18 +88,32 @@ class Textual(CutePanel):
             self.hue = self.hue_selection_dialog.hue
             self.spin_ctrl.SetValue(ratio_to_round_degrees(self.hue))
     
+
             
-    def on_spin(self, event):
+    def _on_spin(self, event):
         self.hue_selection_dialog.setter(
-            degrees_to_ratio(
-                self.spin_ctrl.GetValue()
-            )
+            degrees_to_ratio(self.spin_ctrl.Value)
         )
-            
-    def on_text(self, event):
+
+        
+    def _on_text(self, event):
         with self.value_freezer:
             self.hue_selection_dialog.setter(
-                degrees_to_ratio(
-                    self.spin_ctrl.GetValue()
-                )
+                degrees_to_ratio(self.spin_ctrl.Value)
             )
+
+            
+    #def _on_kill_focus(self, event):
+        #assert not self.value_freezer.frozen
+
+            
+    def set_focus_on_spin_ctrl_and_select_all(self):
+        '''
+        
+        
+        The "select all" part works only on Windows and generic `wx.SpinCtrl`
+        implementations.
+        '''
+        self.spin_ctrl.SetFocus()
+        self.spin_ctrl.SetSelection(-1, -1)
+        

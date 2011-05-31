@@ -7,6 +7,8 @@ Defines the `HueSelectionDialog` class.
 See its documentation for more details.
 '''
 
+# todo: should have validation in `Textual`, currently can enter words
+
 import wx
 
 from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
@@ -81,11 +83,11 @@ class HueSelectionDialog(CuteDialog):
         self.dialog_button_sizer.AddButton(self.ok_button)
         self.ok_button.SetDefault()
         self.dialog_button_sizer.SetAffirmativeButton(self.ok_button)
-        self.Bind(wx.EVT_BUTTON, self.on_ok, source=self.ok_button)
+        self.Bind(wx.EVT_BUTTON, self._on_ok, source=self.ok_button)
         
         self.cancel_button = wx.Button(self, wx.ID_CANCEL, 'Cancel')
         self.dialog_button_sizer.AddButton(self.cancel_button)
-        self.Bind(wx.EVT_BUTTON, self.on_cancel, source=self.cancel_button)
+        self.Bind(wx.EVT_BUTTON, self._on_cancel, source=self.cancel_button)
         self.dialog_button_sizer.Realize()
 
         
@@ -94,13 +96,18 @@ class HueSelectionDialog(CuteDialog):
         
         
         self.emitter.add_output(self.update)
+
+
+    def ShowModal(self):
+        wx.CallAfter(self.textual.set_focus_on_spin_ctrl_and_select_all)
+        return super(HueSelectionDialog, self).ShowModal()
         
         
-    def on_ok(self, event):
+    def _on_ok(self, event):
         self.EndModal(wx.ID_OK)
         
     
-    def on_cancel(self, event):
+    def _on_cancel(self, event):
         self.setter(self.old_hue)
         self.EndModal(wx.ID_CANCEL)
         

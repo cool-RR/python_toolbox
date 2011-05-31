@@ -154,8 +154,8 @@ class AboutDialog(CuteDialog):
 
         
     def ShowModal(self):
-        CuteDialog.ShowModal(self)
         wx.CallAfter(self.ok_button.SetFocus)
+        CuteDialog.ShowModal(self)
         
         
     def EndModal(self, *args, **kwargs):
