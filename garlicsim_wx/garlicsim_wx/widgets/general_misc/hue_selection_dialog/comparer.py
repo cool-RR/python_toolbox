@@ -10,9 +10,10 @@ See its documentation for more details.
 import wx
 
 from garlicsim_wx.general_misc import wx_tools
+from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
 
 
-class Comparer(wx.Panel):
+class Comparer(CutePanel):
     '''Shows the new hue compared to the old hue before dialog was started.'''
     def __init__(self, hue_selection_dialog):
         style = wx.SIMPLE_BORDER if wx_tools.is_gtk else wx.SUNKEN_BORDER
@@ -25,13 +26,14 @@ class Comparer(wx.Panel):
         self.old_hue = hue_selection_dialog.old_hue
         self.old_color = wx_tools.colors.hls_to_wx_color(self.old_hls)
         self.old_brush = wx.Brush(self.old_color)
-        self._pen = wx.Pen(wx.Colour(0, 0, 0), width=0, style=wx.TRANSPARENT)
+        self._transparent_pen = \
+            wx.Pen(wx.Colour(0, 0, 0), width=0, style=wx.TRANSPARENT)
         self._calculate()
         
         self.SetCursor(wx.StockCursor(wx.CURSOR_BULLSEYE))
         
-        self.Bind(wx.EVT_PAINT, self.on_paint)
-        self.Bind(wx.EVT_LEFT_DOWN, self.on_mouse_left_down)
+        self.Bind(wx.EVT_PAINT, self._on_paint)
+        self.Bind(wx.EVT_LEFT_DOWN, self._on_mouse_left_down)
         
         
     def _calculate(self):
@@ -52,22 +54,24 @@ class Comparer(wx.Panel):
             self.Refresh()
 
             
-    def on_paint(self, event):
-        w, h = self.GetClientSize()
+    def _on_paint(self, event):
+        width, height = self.GetClientSize()
         dc = wx.PaintDC(self)
 
-        dc.SetPen(self._pen)
+        dc.SetPen(self._transparent_pen)
         
         dc.SetBrush(self.brush)
-        dc.DrawRectangle(0, 0, w, (h // 2))
-        
+        dc.DrawRectangle(0, 0, width, (height // 2))
+                    
         dc.SetBrush(self.old_brush)
-        dc.DrawRectangle(0, (h // 2), w, (h // 2) + 1)
+        dc.DrawRectangle(0, (height // 2), width, (height // 2) + 1)
+        
+        if self.has_focus():
         
                 
     
-    def on_mouse_left_down(self, event):
+    def _on_mouse_left_down(self, event):
         x, y = event.GetPosition()
-        w, h = self.GetClientSize()
-        if y >= h // 2:
+        width, height = self.GetClientSize()
+        if y >= height // 2:
             self.hue_selection_dialog.setter(self.old_hue)

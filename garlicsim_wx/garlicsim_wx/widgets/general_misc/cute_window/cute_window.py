@@ -50,3 +50,7 @@ class CuteWindow(AcceleratorSavvyWindow, wx.Window):
     def set_good_background_color(self):
         '''Set a good background color to the window.'''
         self.SetBackgroundColour(wx_tools.colors.get_background_color())
+        
+
+    def has_focus(self):
+        return wx.Window.FindFocus() == self
