@@ -33,9 +33,7 @@ class HueControl(CuteWindow):
         
         self.getter = getter
         
-        self.setter = setter
-                
-        
+        self.setter = setter                
         
         self.lightness = lightness
         
@@ -43,6 +41,7 @@ class HueControl(CuteWindow):
         
         self.dialog_title = dialog_title
         
+        self.SetHelpText('Shows the current hue. Click to change.')
         
         self._pen = wx.Pen(wx.Colour(0, 0, 0), width=0, style=wx.TRANSPARENT)
         

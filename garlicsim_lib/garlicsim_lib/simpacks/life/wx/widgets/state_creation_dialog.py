@@ -102,7 +102,7 @@ class StateCreationDialog(garlicsim_wx.widgets.misc.\
         vbox = wx.BoxSizer(wx.VERTICAL)
 
         last_hbox = wx.BoxSizer(wx.HORIZONTAL)
-        ok = wx.Button(self, wx.ID_OK, '&Create state')
+        ok = wx.Button(self, wx.ID_OK, 'Create &state')
         ok_help_text = 'Create the new state.'
         ok.SetHelpText(ok_help_text)
         ok.SetToolTipString(ok_help_text)
