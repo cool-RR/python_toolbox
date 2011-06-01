@@ -11,6 +11,7 @@ import wx
 
 from garlicsim.general_misc.nifty_collections import OrderedDict
 from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
+from garlicsim_wx.widgets.general_misc.cute_static_text import CuteStaticText
 from garlicsim_wx.widgets.general_misc.cute_error_dialog import CuteErrorDialog
 
 import garlicsim
@@ -35,7 +36,7 @@ class CruncherSelectionDialog(CuteDialog):
         
         self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)
         
-        self.general_text = wx.StaticText(
+        self.general_text = CuteStaticText(
             self,
             label=("C&hoose a cruncher type to be used when crunching the "
                    "simulation. Your simulation will use the same algorithm "
@@ -43,10 +44,6 @@ class CruncherSelectionDialog(CuteDialog):
                    "cruncher will affect how and where that algorithm will be "
                    "run.")
         )
-        #self.general_text.SetSize((self.ClientSize[0] - 20, -1))
-        self.general_text.Wrap(self.general_text.ClientSize[0] - 100)
-                                  
-        self.general_text.Wrap(self.general_text.Size[0])
         
         self.main_v_sizer.Add(self.general_text, 0, wx.EXPAND | wx.ALL,
                               border=10)
