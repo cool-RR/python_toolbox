@@ -121,7 +121,7 @@ class Wheel(CutePanel):
         self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse)
         self.Bind(wx.EVT_SET_FOCUS, self._on_set_focus)
         self.Bind(wx.EVT_KILL_FOCUS, self._on_kill_focus)
-        self.Bind(wx.EVT_CHAR, self._on_char)
+        self.Bind(wx.EVT_KEY_DOWN, self._on_key_down)
         
     
     def on_paint(self, event):
@@ -202,11 +202,17 @@ class Wheel(CutePanel):
             self.hue = self.hue_selection_dialog.hue
             self.Refresh()
             
-                
-    def _on_char(self, event):
-        char = unichr(event.GetUniChar()) #blocktodo
-        if char == ' ':
-            self.change_to_old_hue()
+            
+    def _on_key_down(self, event):
+        key = wx_tools.keyboard.Key.get_from_key_event(event)
+        if key == wx_tools.keyboard.Key(wx.WXK_UP):
+            self.hue_selection_dialog.setter(
+                (self.hue_selection_dialog.getter + 0.05) % 1
+            )
+        elif key == wx_tools.keyboard.Key(wx.WXK_DOWN):
+            self.hue_selection_dialog.setter(
+                (self.hue_selection_dialog.getter - 0.05) % 1
+            )
         else:
             event.Skip()
             

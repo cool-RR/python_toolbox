@@ -22,6 +22,7 @@ class Comparer(CutePanel):
                           style=style)
         self.SetDoubleBuffered(True)
         self.hue_selection_dialog = hue_selection_dialog
+        assert isinstance(self.hue_selection_dialog, HueSelectionDialog)
         self.hue = hue_selection_dialog.hue
         self.old_hls = hue_selection_dialog.old_hls
         self.old_hue = hue_selection_dialog.old_hue
@@ -116,4 +117,4 @@ class Comparer(CutePanel):
         self.Refresh()
         
         
-        
+from .hue_selection_dialog import HueSelectionDialog
