@@ -11,13 +11,14 @@ import wx
 
 from garlicsim.general_misc import misc_tools
 from garlicsim_wx.general_misc import wx_tools
+from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
 
 from .name_text_ctrl import NameTextCtrl
 from .value_text_ctrl import ValueTextCtrl
 from .close_button import CloseButton
 
 
-class StarKwarg(wx.Panel):
+class StarKwarg(CutePanel):
     '''
     Widget for specifying an extraneous keyword argument (for `**kwargs`).
     

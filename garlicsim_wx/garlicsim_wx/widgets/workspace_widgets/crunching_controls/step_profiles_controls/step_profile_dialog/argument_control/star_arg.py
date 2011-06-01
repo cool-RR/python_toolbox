@@ -15,7 +15,7 @@ from .close_button import CloseButton
 from .value_text_ctrl import ValueTextCtrl
 
 
-class StarArg(wx.Panel):
+class StarArg(CutePanel):
     '''
     Widget for specifying an extraneous positional argument (for `*args`).
     '''
