@@ -113,7 +113,7 @@ class Wheel(CutePanel):
                 0.7,
                 wx.NamedColor('black'),
                 wx_tools.colors.get_background_color()
-            ),                              
+            ),
             dashes=[2, 2]
         )
         self._cursor_set_to_bullseye = False
