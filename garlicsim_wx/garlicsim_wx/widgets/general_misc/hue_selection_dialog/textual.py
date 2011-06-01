@@ -44,6 +44,9 @@ class Textual(CutePanel):
     def __init__(self, hue_selection_dialog):
         wx.Panel.__init__(self, parent=hue_selection_dialog, size=(75, 100))
         self.set_good_background_color()
+        self.SetHelpText(
+            u'Set the hue in angles (0%s-359%s).' % (unichr(176), unichr(176))
+        )
         
         self.hue_selection_dialog = hue_selection_dialog
         self.hue = hue_selection_dialog.hue

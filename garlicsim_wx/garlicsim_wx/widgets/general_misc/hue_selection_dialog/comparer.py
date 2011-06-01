@@ -21,6 +21,9 @@ class Comparer(CutePanel):
         wx.Panel.__init__(self, parent=hue_selection_dialog, size=(75, 90),
                           style=style)
         self.SetDoubleBuffered(True)
+        self.SetHelpText('The current hue is shown next to the old hue for '
+                         'comparison. To change back to the old hue, click on '
+                         'it.')
         self.hue_selection_dialog = hue_selection_dialog
         assert isinstance(self.hue_selection_dialog, HueSelectionDialog)
         self.hue = hue_selection_dialog.hue

@@ -89,12 +89,14 @@ class HueSelectionDialog(CuteDialog):
                               wx.ALIGN_CENTER | wx.ALL, border=10)
         
         self.ok_button = wx.Button(self, wx.ID_OK, '&Ok')
+        self.ok_button.SetHelpText('Change to the selected hue.')
         self.dialog_button_sizer.AddButton(self.ok_button)
         self.ok_button.SetDefault()
         self.dialog_button_sizer.SetAffirmativeButton(self.ok_button)
         self.Bind(wx.EVT_BUTTON, self._on_ok, source=self.ok_button)
         
         self.cancel_button = wx.Button(self, wx.ID_CANCEL, 'Cancel')
+        self.cancel_button.SetHelpText('Change back to the old hue.')
         self.dialog_button_sizer.AddButton(self.cancel_button)
         self.Bind(wx.EVT_BUTTON, self._on_cancel, source=self.cancel_button)
         self.dialog_button_sizer.Realize()

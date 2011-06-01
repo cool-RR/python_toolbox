@@ -27,7 +27,9 @@ class HueControl(CuteWindow):
     Clicking on the hue will open a dialog for changing it.
     '''
     def __init__(self, parent, getter, setter, emitter=None, lightness=1,
-                 saturation=1, dialog_title='Select hue', size=(25, 10)):
+                 saturation=1, dialog_title='Select hue',
+                 help_text='Shows the current hue. Click to change.',
+                 size=(25, 10)):
         
         CuteWindow.__init__(self, parent, size=size, style=wx.SIMPLE_BORDER)
         
@@ -41,7 +43,7 @@ class HueControl(CuteWindow):
         
         self.dialog_title = dialog_title
         
-        self.SetHelpText('Shows the current hue. Click to change.')
+        self.SetHelpText(help_text)
         
         self._pen = wx.Pen(wx.Colour(0, 0, 0), width=0, style=wx.TRANSPARENT)
         

@@ -98,6 +98,7 @@ class Wheel(CutePanel):
         wx.Panel.__init__(self, parent=hue_selection_dialog,
                           size=(BIG_LENGTH, BIG_LENGTH), style=style)
         self.SetDoubleBuffered(True)
+        self.SetHelpText('Click any hue in the wheel to change to it.')
         self.hue_selection_dialog = hue_selection_dialog
         self.hue = hue_selection_dialog.hue
         self.bitmap = make_bitmap(hue_selection_dialog.lightness,
