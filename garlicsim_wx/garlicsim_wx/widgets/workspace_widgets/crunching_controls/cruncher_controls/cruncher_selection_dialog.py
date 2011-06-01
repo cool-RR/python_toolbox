@@ -37,7 +37,7 @@ class CruncherSelectionDialog(CuteDialog):
         
         self.general_text = wx.StaticText(
             self,
-            label=("&Choose a cruncher type to be used when crunching the "
+            label=("C&hoose a cruncher type to be used when crunching the "
                    "simulation. Your simulation will use the same algorithm "
                    "regardless of which cruncher you'll choose; the choice of "
                    "cruncher will affect how and where that algorithm will be "
