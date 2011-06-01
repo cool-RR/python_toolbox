@@ -45,8 +45,12 @@ class HueControl(CuteWindow):
         
         self._pen = wx.Pen(wx.Colour(0, 0, 0), width=0, style=wx.TRANSPARENT)
         
-        self.Bind(wx.EVT_PAINT, self.on_paint)
-        self.Bind(wx.EVT_LEFT_DOWN, self.on_mouse_left_down)
+        self.Bind(wx.EVT_PAINT, self._on_paint)
+        self.Bind(wx.EVT_LEFT_DOWN, self._on_mouse_left_down)
+        self.Bind(wx.EVT_SET_FOCUS, self._on_set_focus)
+        self.Bind(wx.EVT_KILL_FOCUS, self._on_kill_focus)
+        self.Bind(wx.EVT_CHAR, self._on_char)
+
         
         if emitter:
             assert isinstance(emitter, Emitter)
@@ -64,10 +68,15 @@ class HueControl(CuteWindow):
                 self.emitter.emit()
             self.setter = new_setter
             
-        
     
-    def on_paint(self, event):
-        dc = wx.PaintDC(self)
+    @property
+    def extreme_negative_wx_color(self):
+        return wx.NamedColor('Black') if self.lightness > 0.5 else \
+               wx.NamedColor('White')
+    
+            
+    def _on_paint(self, event):
+        dc = wx.BufferedPaintDC(self)
         color = wx_tools.colors.hls_to_wx_color(
             (
                 self.getter(),
@@ -77,11 +86,26 @@ class HueControl(CuteWindow):
         )
         dc.SetBrush(wx.Brush(color))
         dc.SetPen(self._pen)
-        width, height = self.GetSize()
+        width, height = self.ClientSize
         dc.DrawRectangle(-5, -5, width+10, height+10)
+
+        if self.has_focus():
+            graphics_context = wx.GraphicsContext.Create(dc)
+            assert isinstance(graphics_context, wx.GraphicsContext)
+            graphics_context.SetPen(
+                wx_tools.drawing_tools.pens.get_selection_pen(
+                    color=self.extreme_negative_wx_color
+                )
+            )
+            graphics_context.SetBrush(wx.TRANSPARENT_BRUSH)
+            graphics_context.DrawRectangle(2, 2,
+                                           width - 5, height - 5)
+        
+        
+        
                 
     
-    def on_mouse_left_down(self, event):
+    def _on_mouse_left_down(self, event):
         self.open_editing_dialog()
       
         
@@ -104,3 +128,21 @@ class HueControl(CuteWindow):
     def Destroy(self):
         self.emitter.remove_output(self.update)
         super(HueControl, self).Destroy()
+        
+        
+    def _on_char(self, event):
+        char = unichr(event.GetUniChar())
+        if char == ' ':
+            self.open_editing_dialog()
+        else:
+            event.Skip()
+            
+            
+    def _on_set_focus(self, event):
+        event.Skip()
+        self.Refresh()
+        
+
+    def _on_kill_focus(self, event):
+        event.Skip()
+        self.Refresh()
