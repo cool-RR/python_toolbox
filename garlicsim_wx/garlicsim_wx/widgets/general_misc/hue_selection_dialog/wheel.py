@@ -94,8 +94,9 @@ class Wheel(CutePanel):
     Color wheel displaying current hue and allows moving to different hue.
     '''
     def __init__(self, hue_selection_dialog):
+        style = (wx.TAB_TRAVERSAL | wx.NO_BORDER | wx.WANTS_CHARS)
         wx.Panel.__init__(self, parent=hue_selection_dialog,
-                          size=(BIG_LENGTH, BIG_LENGTH))
+                          size=(BIG_LENGTH, BIG_LENGTH), style=style)
         self.SetDoubleBuffered(True)
         self.hue_selection_dialog = hue_selection_dialog
         self.hue = hue_selection_dialog.hue
@@ -202,19 +203,24 @@ class Wheel(CutePanel):
             self.hue = self.hue_selection_dialog.hue
             self.Refresh()
             
+    
+    def nudge_hue(self, direction=1, amount=0.005):
+        assert direction in (-1, 1)
+        self.hue_selection_dialog.setter(
+            (self.hue_selection_dialog.getter() + direction * amount) % 1
+        )
+        
+            
             
     def _on_key_down(self, event):
         key = wx_tools.keyboard.Key.get_from_key_event(event)
         if key == wx_tools.keyboard.Key(wx.WXK_UP):
-            self.hue_selection_dialog.setter(
-                (self.hue_selection_dialog.getter + 0.05) % 1
-            )
+            self.nudge_hue(direction=1)
         elif key == wx_tools.keyboard.Key(wx.WXK_DOWN):
-            self.hue_selection_dialog.setter(
-                (self.hue_selection_dialog.getter - 0.05) % 1
-            )
+            self.nudge_hue(direction=-1)
         else:
-            event.Skip()
+            if not wx_tools.event_tools.navigate_from_key_event(event):
+                event.Skip()
             
             
     def _on_set_focus(self, event):
