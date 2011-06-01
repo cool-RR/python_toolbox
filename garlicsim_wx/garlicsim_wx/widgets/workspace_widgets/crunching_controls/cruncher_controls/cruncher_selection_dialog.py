@@ -10,6 +10,7 @@ See its documentation for more details.
 import wx
 
 from garlicsim.general_misc.nifty_collections import OrderedDict
+from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
 from garlicsim_wx.widgets.general_misc.cute_static_text import CuteStaticText
 from garlicsim_wx.widgets.general_misc.cute_error_dialog import CuteErrorDialog
@@ -44,6 +45,15 @@ class CruncherSelectionDialog(CuteDialog):
                    "cruncher will affect how and where that algorithm will be "
                    "run.")
         )
+        if wx_tools.is_gtk: # Circumventing a bug in GTK:
+            self.add_accelerators(
+                {(wx_tools.keyboard.Key('h', alt=True),
+                  wx_tools.keyboard.Key('H', alt=True)):
+                 self.general_text.Id}
+            )
+            self.Bind(wx.EVT_MENU,
+                      lambda event: self.cruncher_list_box.SetFocus()
+                      source=self.general_text)
         
         self.main_v_sizer.Add(self.general_text, 0, wx.EXPAND | wx.ALL,
                               border=10)

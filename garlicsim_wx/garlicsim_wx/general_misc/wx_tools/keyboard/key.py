@@ -15,7 +15,9 @@ class Key(object):
 
     def __init__(self, key_code, cmd=False, alt=False, shift=False):
 
-        self.key_code = key_code        
+        assert isinstance(key_code, int) or isinstance(key_code, str)
+        self.key_code = key_code if isinstance(key_code, int) else \
+                        ord(key_code)
         '''The numerical code of the pressed key.'''
         
         self.cmd = cmd
