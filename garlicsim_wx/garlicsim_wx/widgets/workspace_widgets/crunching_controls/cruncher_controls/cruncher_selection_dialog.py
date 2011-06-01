@@ -52,7 +52,7 @@ class CruncherSelectionDialog(CuteDialog):
                  self.general_text.Id}
             )
             self.Bind(wx.EVT_MENU,
-                      lambda event: self.cruncher_list_box.SetFocus()
+                      lambda event: self.cruncher_list_box.SetFocus(),
                       source=self.general_text)
         
         self.main_v_sizer.Add(self.general_text, 0, wx.EXPAND | wx.ALL,
