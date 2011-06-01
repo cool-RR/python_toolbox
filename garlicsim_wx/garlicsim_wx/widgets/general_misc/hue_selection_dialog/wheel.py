@@ -218,6 +218,10 @@ class Wheel(CutePanel):
             self.nudge_hue(direction=1)
         elif key == wx_tools.keyboard.Key(wx.WXK_DOWN):
             self.nudge_hue(direction=-1)
+        elif key == wx_tools.keyboard.Key(wx.WXK_UP, cmd=True):
+            self.nudge_hue(direction=1, amount=0.02)
+        elif key == wx_tools.keyboard.Key(wx.WXK_DOWN, cmd=True):
+            self.nudge_hue(direction=-1, amount=0.02)
         else:
             if not wx_tools.event_tools.navigate_from_key_event(event):
                 event.Skip()
