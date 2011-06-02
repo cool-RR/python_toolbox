@@ -205,9 +205,9 @@ class SimpackSelectionDialog(CuteDialog):
         self.simpack_tree.SetFocus()
         
         #######################################################################
-        
-        refresh_id = wx.NewId()
-        self.Bind(wx.EVT_MENU, self._on_refresh, id=refresh_id)
+        self.refresh = wx_tools.event_tools.ObjectWitId() 1/0 
+        # blocktodo: make into `HiddenButton` or something
+        self.Bind(wx.EVT_MENU, self._on_refresh, source)
         self.add_accelerators(
             {wx.WXK_F5: refresh_id}
         )
