@@ -31,3 +31,7 @@ def _get_event_code_of_component_type(component_type):
         return map[component_type]
            
     
+@caching.cache()
+def get_event_code_from_name(name):
+    processed_name = 'EVT_%s' % name.upper()
+    return getattr(wx, processed_name)

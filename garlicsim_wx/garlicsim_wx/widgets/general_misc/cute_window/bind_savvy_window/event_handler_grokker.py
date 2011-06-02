@@ -11,7 +11,7 @@ import wx
 
 from garlicsim.general_misc import caching
 
-from .event_codes import get_event_code_of_component
+from .event_codes import get_event_code_of_component, get_event_code_from_name
 
 
 class EventHandlerGrokker(object):
@@ -29,14 +29,17 @@ class EventHandlerGrokker(object):
         assert isinstance(window, wx.Window)
         if hasattr(window, self.cleaned_name):
             component = getattr(window, self.cleaned_name)
-            event_code = get_event_code_of_component(component)
-            window.Bind(
-                event_code,
+            return window.Bind(
+                get_event_code_of_component(component),
                 self.event_handler,
                 source=component
             )
         else:
-            
+            return window.Bind(
+                get_event_code_from_name(component),
+                self.event_handler,
+                source=component
+            )
                 
             
         
