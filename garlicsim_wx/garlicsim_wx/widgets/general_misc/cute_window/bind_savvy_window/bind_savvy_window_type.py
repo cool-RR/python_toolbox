@@ -16,19 +16,14 @@ from .event_handler_grokker import EventHandlerGrokker
 
 
 class BindSavvyWindowType(type):
-    #def __new__(mcls, name, bases, namespace):
-        #cls = super(BindSavvyWindowType, mcls).__new__(mcls, name, bases, namespace)
-        #event_handlers = dict_tools.filter_items(
-            #namespace,
-            #lambda name, value: name.startswith('_on_') and callable(value)
-        #)
-            
-        ## blocktodo: implement
-            
-        #cls.___event_handlers = 1/0
-        
-        #return cls
     
     @caching.CachedProperty
     def _BindSavvyWindowType__event_handler_grokkers(cls):
-        return 1/0
+        
+        names_to_event_handlers = dict_tools.filter_items(
+            vars(cls),
+            lambda name, value: name.startswith('_on_') and callable(value)
+        )
+        
+        return [EventHandlerGrokker.create_from_name(name, value) for
+                (name, value) in names_to_event_handlers.items()]
