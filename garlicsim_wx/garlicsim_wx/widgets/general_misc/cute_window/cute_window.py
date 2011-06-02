@@ -58,10 +58,11 @@ class CuteWindow(AcceleratorSavvyWindow, BindSavvyWindow, wx.Window):
         return wx.Window.FindFocus() == self
     
     
-    def find_and_bind_event_handers(self, cls): #blocktodo: move to base class?
+    def bind_event_handers(self, cls): #blocktodo: move to base class?
         if not isinstance(self, cls):
             raise Exception('blocktododoc')
-        event_handler_grokkers = cls._CuteWindowType__event_handler_grokkers
+        event_handler_grokkers = \
+            cls._BindSavvyWindowType__event_handler_grokkers
         for event_handler_grokker in event_handler_grokkers:
             event_handler_grokker.bind(self)
         

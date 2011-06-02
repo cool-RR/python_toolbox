@@ -118,7 +118,7 @@ class AboutDialog(CuteDialog):
                                    "&Let's get back to simulating!")
         self.ok_button.SetDefault()
         button_sizer.SetAffirmativeButton(self.ok_button)
-        self.Bind(wx.EVT_BUTTON, self._on_ok, self.ok_button)
+        #self.Bind(wx.EVT_BUTTON, self._on_ok_button, self.ok_button)
         button_sizer.AddButton(self.ok_button)
         button_sizer.Realize()
         button_sizer.SetMinSize((500, -1))
@@ -129,13 +129,15 @@ class AboutDialog(CuteDialog):
         
         self.timer = garlicsim_wx.general_misc.cute_timer.CuteTimer(self)
         self.timer.Start(40, oneShot=True)
-        self.Bind(wx.EVT_TIMER, self._on_timer, self.timer)
+        #self.Bind(wx.EVT_TIMER, self._on_timer, self.timer)
         
         self._rotate_image_hue()
+        
+        self.bind_event_handers(AboutDialog)
 
         
-    def _on_ok(self, e=None):
-        '''Do 'Okay' on the dialog.'''
+    def _on_ok_button(self, e=None):
+        '''Do 'Ok' on the dialog.'''
         self.EndModal(wx.ID_OK)
 
         

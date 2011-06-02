@@ -11,7 +11,7 @@ import wx
 
 from .cute_top_level_window import CuteTopLevelWindow
 from .cute_dialog_type import CuteDialogType
-            
+
 
 class CuteDialog(wx.Dialog, CuteTopLevelWindow):
     '''

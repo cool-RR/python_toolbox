@@ -14,8 +14,10 @@ import wx
 from garlicsim_wx.general_misc.wx_tools.cursors import CursorChanger
 from garlicsim.general_misc import context_managers
 
+from garlicsim_wx.widgets.general_misc.cute_window import CuteWindow
 
-class CuteDialogType(type):
+
+class CuteDialogType(type(CuteWindow)):
     def __call__(self, parent, *args, **kwargs):
         context_manager = \
             CursorChanger(parent, wx.CURSOR_WAIT) if parent else \
