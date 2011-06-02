@@ -92,7 +92,7 @@ class Comparer(CutePanel):
                                            width - 6, (height // 2) - 6)
                 
     
-    def _on_mouse_left_down(self, event):
+    def _on_left_down(self, event):
         x, y = event.GetPosition()
         width, height = self.GetClientSize()
         if y >= height // 2:

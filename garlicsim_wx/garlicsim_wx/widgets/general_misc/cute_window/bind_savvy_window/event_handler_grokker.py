@@ -37,8 +37,7 @@ class EventHandlerGrokker(object):
         else:
             return window.Bind(
                 get_event_code_from_name(self.cleaned_name),
-                getattr(window, self.name), #self.event_handler,
-                source=component
+                getattr(window, self.name) #self.event_handler,
             )
                 
             
