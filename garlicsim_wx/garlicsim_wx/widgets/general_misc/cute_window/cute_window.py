@@ -33,6 +33,8 @@ class CuteWindow(AcceleratorSavvyWindow, wx.Window):
     calling `wx.Window.__init__`.) # blocktododoc: remove notice?
     '''
     
+    __metaclass__ = CuteWindowType
+    
     freezer = freezers.FreezerProperty(
         freezer_type=wx_tools.window_tools.WindowFreezer,
         doc='''Freezer for freezing the window while the suite executes.'''
