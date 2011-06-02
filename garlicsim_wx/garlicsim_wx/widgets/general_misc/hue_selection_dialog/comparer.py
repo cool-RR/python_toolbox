@@ -38,7 +38,7 @@ class Comparer(CutePanel):
         
         self.SetCursor(wx.StockCursor(wx.CURSOR_BULLSEYE))
         
-        self.bind_event_handers()
+        self.bind_event_handers(Comparer)
         
     
     @property
