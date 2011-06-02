@@ -87,7 +87,7 @@ class Comparer(CutePanel):
         
         if self.has_focus():
             graphics_context.SetPen(
-                wx_tools.drawing_tools.pens.get_selection_pen(
+                wx_tools.drawing_tools.pens.get_focus_pen(
                     self.negative_old_color
                 )
             )

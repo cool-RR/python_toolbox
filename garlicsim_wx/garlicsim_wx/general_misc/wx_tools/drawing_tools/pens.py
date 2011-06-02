@@ -18,7 +18,7 @@ is_win = (wx.Platform == '__WXMSW__')
 
 
 @caching.cache(max_size=100)
-def get_selection_pen(color='black', width=1, dashes=[1, 4]):
+def get_focus_pen(color='black', width=1, dashes=[1, 4]):
     ''' '''
     if isinstance(color, basestring):
         color = wx.NamedColour(color)

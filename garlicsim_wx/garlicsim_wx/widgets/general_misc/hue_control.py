@@ -95,7 +95,7 @@ class HueControl(CuteWindow):
             graphics_context = wx.GraphicsContext.Create(dc)
             assert isinstance(graphics_context, wx.GraphicsContext)
             graphics_context.SetPen(
-                wx_tools.drawing_tools.pens.get_selection_pen(
+                wx_tools.drawing_tools.pens.get_focus_pen(
                     color=self.extreme_negative_wx_color
                 )
             )
