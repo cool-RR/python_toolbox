@@ -26,7 +26,7 @@ class ActiveStepProfileIndicator(wx.Window):
         wx.Window.__init__(self, step_profile_item_panel, size=size)
         self.SetMinSize(size)
         self.SetBackgroundColour(step_profile_item_panel.GetBackgroundColour())
-        self.Bind(wx.EVT_PAINT, self.on_paint)
+        self.Bind(wx.EVT_PAINT, self._on_paint)
         
     
     def set_active(self):
@@ -43,7 +43,7 @@ class ActiveStepProfileIndicator(wx.Window):
             self.Refresh()
             
         
-    def on_paint(self, event):
+    def _on_paint(self, event):
         dc = wx.BufferedPaintDC(self)
         dc.Clear()
         if self.active:

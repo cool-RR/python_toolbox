@@ -26,7 +26,7 @@ class BoardViewer(scrolled.ScrolledPanel,
         
         self.SetupScrolling()
         
-        self.Bind(wx.EVT_PAINT, self.on_paint)
+        self.Bind(wx.EVT_PAINT, self._on_paint)
         self.Bind(wx.EVT_SIZE, self.on_size)
         self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse_event)
 
@@ -120,7 +120,7 @@ class BoardViewer(scrolled.ScrolledPanel,
         dc.DrawRectangleList(rectangles, transparent_pen, brushes)
 
         
-    def on_paint(self, event):
+    def _on_paint(self, event):
         '''Paint event handler.'''
         
         event.Skip()
