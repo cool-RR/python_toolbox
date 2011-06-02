@@ -106,7 +106,7 @@ class AutocrunchControls(CutePanel):
             self.update_check_box
         )
         
-        self.Bind(wx.EVT_CHECKBOX, self.on_check_box,
+        self.Bind(wx.EVT_CHECKBOX, self._on_check_box,
                   source=self.check_box)
         
         self.Bind(wx.EVT_SPINCTRL, self._on_spin, self.spin_ctrl)
@@ -122,7 +122,7 @@ class AutocrunchControls(CutePanel):
     value_freezer = freezers.FreezerProperty()
         
         
-    def on_check_box(self, event):
+    def _on_check_box(self, event):
         if event.IsChecked(): # Checkbox got checked
             new_autocrunch = \
                 self.gui_project._default_buffer_before_cancellation or 100
@@ -175,17 +175,6 @@ class AutocrunchControls(CutePanel):
         self.check_box.SetValue(
             bool(self.gui_project.default_buffer)
         )
-        
-        
-    def on_size(self, event):
-        '''EVT_SIZE handler.'''
-        self.Refresh()
-        event.Skip()
-    
-        
-    def on_paint(self, event):
-        '''EVT_PAINT handler.'''
-        event.Skip()
         
 
     
