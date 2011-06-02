@@ -27,8 +27,8 @@ class BoardViewer(scrolled.ScrolledPanel,
         self.SetupScrolling()
         
         self.Bind(wx.EVT_PAINT, self._on_paint)
-        self.Bind(wx.EVT_SIZE, self.on_size)
-        self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse_event)
+        self.Bind(wx.EVT_SIZE, self._on_size)
+        self.Bind(wx.EVT_MOUSE_EVENTS, self._on_mouse_event)
 
         self.border_width = 1
         self.square_size = 7
@@ -142,14 +142,14 @@ class BoardViewer(scrolled.ScrolledPanel,
         
                 
         
-    def on_size(self, event):
+    def _on_size(self, event):
         '''EVT_SIZE handler.'''
         self.Refresh()
         if event is not None:
 
             event.Skip()
 
-    def on_mouse_event(self, event):
+    def _on_mouse_event(self, event):
         '''Mouse event handler.'''
         
         if event.LeftDown():

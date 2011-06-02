@@ -15,19 +15,23 @@ class BitmapViewer(wx.Panel):
         wx.Panel.__init__(self, *args, **kwargs)
         #self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
         self._bitmap = wx.EmptyBitmap(1, 1)
-        self.Bind(wx.EVT_PAINT, self.on_paint)
-        self.Bind(wx.EVT_SET_FOCUS, self.on_focus)
-    
-    def on_paint(self, event):
-        '''EVT_PAINT handler.'''
-        dc = wx.PaintDC(self)
-        dc.DrawBitmap(self._bitmap, 0, 0)
+        self.Bind(wx.EVT_PAINT, self._on_paint)
+        self.Bind(wx.EVT_SET_FOCUS, self._on_focus)
                 
     def set_bitmap(self, bitmap):
         '''Set the bitmap that the viewer will display.'''
         self._bitmap = bitmap
         self.Refresh()
         
-    def on_focus(self, event):
+    ### Event handlers: #######################################################
+    #                                                                         #
+    def _on_focus(self, event):
         event.Skip()
         self.Navigate()
+        
+    def _on_paint(self, event):
+        '''EVT_PAINT handler.'''
+        dc = wx.PaintDC(self)
+        dc.DrawBitmap(self._bitmap, 0, 0)   
+    #                                                                         #
+    ### Finished event handlers. ##############################################
