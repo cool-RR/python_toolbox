@@ -172,7 +172,7 @@ class StepProfileDialog(CuteDialog):
                 saturation=1,
                 dialog_title='Select hue for new step profile',
                 help_text=('Shows the hue of the to-be-created step profile. '
-                           'Click to change'),
+                           'Click to change.'),
                 size=(25, 20)
             )
         
