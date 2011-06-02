@@ -25,5 +25,5 @@ class BindSavvyWindowType(type):
             lambda name, value: name.startswith('_on_') and callable(value)
         )
         
-        return [EventHandlerGrokker.create_from_name(name, value) for
-                (name, value) in names_to_event_handlers.items()]
+        return [EventHandlerGrokker(name, value) for (name, value) in
+                names_to_event_handlers.items()]

@@ -37,7 +37,7 @@ class CuteDirDialog(CuteDialog, wx.DirDialog):
     
     @classmethod # blocktodo: Use everywhere I can, document
     def create_show_modal_and_get_path(cls, *args, **kwargs):
-        dialog = cls(parent, *args, **kwargs)
+        dialog = cls(*args, **kwargs)
         try:
             result = dialog.ShowModal()
         finally:

@@ -257,40 +257,6 @@ class SimpackSelectionDialog(CuteDialog):
             return simpack_selection_dialog.simpack
         
         
-    def _on_add_folder_containing_simpacks(self, event):
-        '''Handler for "Add folders containing simpacks" button.'''
-        path = CuteDirDialog.create_show_modal_and_get_path(
-            self,
-            'Choose the folder that *contains* your simpack(s), not the '
-            'simpack folder itself.',
-            style=wx.DD_DEFAULT_STYLE | wx.DD_DIR_MUST_EXIST
-        )
-        
-        if path is None:
-            return
-            
-        if path not in zip(garlicsim_wx.simpack_places)[0]:
-            garlicsim_wx.simpack_places.append((path, ''))
-            self.update_simpack_list()
-        if path not in sys.path:
-            sys.path.append(path)
-                
-        
-    def _on_create_project(self, event):
-        '''Handler for "Create project" button.'''
-        #if self.list_box.GetStringSelection():
-            #self.EndModal(wx.ID_OK)       
-        from garlicsim_lib.simpacks import life as my_simpack
-        self.simpack = my_simpack
-        self.EndModal(wx.ID_OK)
-        
-        
-        
-    def _on_cancel(self, event):
-        '''Handler for "Cancel" button.'''
-        self.EndModal(wx.ID_CANCEL)
-        
-        
     """
     def update_simpack_list(self):
         '''Update the list of available simpacks.'''
@@ -327,8 +293,24 @@ class SimpackSelectionDialog(CuteDialog):
         result = import_tools.normal_import(string)
         return result
     
+    
     def _on_refresh(self, event):
-        wx.lib.dialogs.messageDialog(self, 'Refresh')
+        wx.lib.dialogs.messageDialog(self, 'Refresh')        
+                
+        
+    def _on_create_project(self, event):
+        '''Handler for "Create project" button.'''
+        #if self.list_box.GetStringSelection():
+            #self.EndModal(wx.ID_OK)       
+        from garlicsim_lib.simpacks import life as my_simpack
+        self.simpack = my_simpack
+        self.EndModal(wx.ID_OK)
+        
+        
+        
+    def _on_cancel(self, event):
+        '''Handler for "Cancel" button.'''
+        self.EndModal(wx.ID_CANCEL)
 
 
 from .navigation_panel import NavigationPanel

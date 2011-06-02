@@ -16,7 +16,7 @@ def filter_items(d, condition):
     '''
     # todo future: possibly shallow-copy `d` to allow for dict classes that
     # have more state, (like default factory.)
-    dict_type = type(d)
+    dict_type = type(d) if (type(d).__name__ != 'dictproxy') else dict
     return dict_type(
         (key, value) for (key, value) in d.iteritems() if condition(key, value)
     )

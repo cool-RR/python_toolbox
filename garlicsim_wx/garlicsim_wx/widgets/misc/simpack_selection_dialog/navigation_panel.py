@@ -22,6 +22,8 @@ from garlicsim.general_misc import path_tools
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import package_finder
 from garlicsim_wx.general_misc import wx_tools
+from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
+from garlicsim_wx.widgets.general_misc.cute_dir_dialog import CuteDirDialog
 
 import garlicsim_wx
 
@@ -30,7 +32,8 @@ images_package = __images_package.__name__
 
 # blocktodo: Back and forward buttons should be grayed out sometimes.
 
-class NavigationPanel(wx.Panel):
+
+class NavigationPanel(CutePanel):
     '''
     Panel for navigating between simpacks.
     
@@ -38,7 +41,7 @@ class NavigationPanel(wx.Panel):
     simpacks from a different folder" button.
     '''
     def __init__(self, simpack_selection_dialog):
-        wx.Panel.__init__(
+        CutePanel.__init__(
             self,
             simpack_selection_dialog,
         )
@@ -69,11 +72,6 @@ class NavigationPanel(wx.Panel):
             proportion=0,
             flag=wx.EXPAND | wx.ALL,
             border=5
-        )
-        self.Bind(
-            wx.EVT_BUTTON,
-            self.simpack_selection_dialog._on_add_folder_containing_simpacks,
-            self.add_simpacks_from_a_different_folder_button
         )
         
         self.small_h_sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -210,6 +208,8 @@ class NavigationPanel(wx.Panel):
             {wx_tools.keyboard.keys.back_keys: self.back_button.Id,
              wx_tools.keyboard.keys.forward_keys: self.forward_button.Id}
         )
+        
+        self.bind_event_handers(NavigationPanel)
 
             
     def back(self):
@@ -220,6 +220,24 @@ class NavigationPanel(wx.Panel):
     def forward(self):
         '''Go to the simpack that was selected before we hit "Back".'''
         wx.lib.dialogs.messageDialog(self, 'Forward')
+                
+        
+    def _on_add_simpacks_from_a_different_folder_button(self, event):
+        path = CuteDirDialog.create_show_modal_and_get_path(
+            self.simpack_selection_dialog,
+            'Choose the folder that *contains* your simpack(s), not the '
+            'simpack folder itself.',
+            style=wx.DD_DEFAULT_STYLE | wx.DD_DIR_MUST_EXIST
+        )
+        
+        if path is None:
+            return
+            
+        if path not in zip(garlicsim_wx.simpack_places)[0]:
+            garlicsim_wx.simpack_places.append((path, ''))
+            self.simpack_selection_dialog.update_simpack_list()
+        if path not in sys.path:
+            sys.path.append(path)
     
     
 

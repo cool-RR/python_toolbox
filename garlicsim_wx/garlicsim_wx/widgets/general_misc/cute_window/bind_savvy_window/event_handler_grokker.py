@@ -18,7 +18,7 @@ class EventHandlerGrokker(object):
     def __init__(self, name, event_handler):
         assert name.startswith('_on_')
         self.name = name
-        self.event_handler = event_handler
+        self.event_handler = event_handler # blocktodo: should we even save this?
         
     cleaned_name = caching.CachedProperty(
         lambda self: self.name[4:],
@@ -31,13 +31,13 @@ class EventHandlerGrokker(object):
             component = getattr(window, self.cleaned_name)
             return window.Bind(
                 get_event_code_of_component(component),
-                self.event_handler,
+                getattr(window, self.name), #self.event_handler,
                 source=component
             )
         else:
             return window.Bind(
-                get_event_code_from_name(component),
-                self.event_handler,
+                get_event_code_from_name(self.cleaned_name),
+                getattr(window, self.name), #self.event_handler,
                 source=component
             )
                 
