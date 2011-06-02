@@ -73,8 +73,8 @@ class HueControl(CuteWindow):
     
     @property
     def extreme_negative_wx_color(self):
-        return wx.NamedColor('Black') if self.lightness > 0.5 else \
-               wx.NamedColor('White')
+        return wx.NamedColour('Black') if self.lightness > 0.5 else \
+               wx.NamedColour('White')
     
             
     def _on_paint(self, event):

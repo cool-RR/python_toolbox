@@ -112,7 +112,7 @@ class Wheel(CutePanel):
         self._selection_pen = wx_tools.drawing_tools.pens.get_selection_pen(
             color=wx_tools.colors.mix_wx_color(
                 0.7,
-                wx.NamedColor('black'),
+                wx.NamedColour('black'),
                 wx_tools.colors.get_background_color()
             ),
             dashes=[2, 2]

@@ -165,11 +165,11 @@ code::
             ### Creating brushes and pens: ########################################
             #                                                                     #
             background_brush = wx.Brush(self.GetBackgroundColour())
-            blue_brush = wx.Brush(wx.NamedColor('Blue'))
-            gold_brush = wx.Brush(wx.NamedColor('Gold'))
+            blue_brush = wx.Brush(wx.NamedColour('Blue'))
+            gold_brush = wx.Brush(wx.NamedColour('Gold'))
             
-            black_pen = wx.Pen(wx.NamedColor('Black'), width=1.5)
-            red_pen = wx.Pen(wx.NamedColor('Red'), width=1.5)
+            black_pen = wx.Pen(wx.NamedColour('Black'), width=1.5)
+            red_pen = wx.Pen(wx.NamedColour('Red'), width=1.5)
             #                                                                     #
             ### Finished creating brushes and pens. ###############################
             
