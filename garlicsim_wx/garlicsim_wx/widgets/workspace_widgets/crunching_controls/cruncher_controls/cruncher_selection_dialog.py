@@ -118,7 +118,7 @@ class CruncherSelectionDialog(CuteDialog):
         
         self.Bind(wx.EVT_LISTBOX, self.on_list_box_change,
                   self.cruncher_list_box)
-        self.Bind(wx.EVT_LISTBOX_DCLICK, self.on_list_box_double_click,
+        self.Bind(wx.EVT_LISTBOX_DCLICK, self._on_list_box_double_click,
                   self.cruncher_list_box)
         
         self.SetSizer(self.main_v_sizer)
@@ -134,7 +134,7 @@ class CruncherSelectionDialog(CuteDialog):
         self.try_to_change_cruncher_type_and_end_modal()
         
         
-    def on_list_box_double_click(self, event):
+    def _on_list_box_double_click(self, event):
         event.Skip()
         self.try_to_change_cruncher_type_and_end_modal()
         

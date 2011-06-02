@@ -47,7 +47,7 @@ class CruncherControls(CutePanel):
         
         
         self.change_cruncher_button = wx.Button(self, -1, 'Change...')
-        self.Bind(wx.EVT_BUTTON, self.on_change_cruncher_button,
+        self.Bind(wx.EVT_BUTTON, self._on_change_cruncher_button,
                   self.change_cruncher_button)
         
         self.main_v_sizer.Add(self.change_cruncher_button, 0,
@@ -58,7 +58,7 @@ class CruncherControls(CutePanel):
         )
         
         
-    def on_change_cruncher_button(self, event):
+    def _on_change_cruncher_button(self, event):
         CruncherSelectionDialog.create_and_show_modal(self)
         
     
