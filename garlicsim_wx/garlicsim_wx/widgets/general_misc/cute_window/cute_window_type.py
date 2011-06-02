@@ -8,28 +8,23 @@ See its documentation for more information.
 '''
 
 import wx
-import abc
+
+from garlicsim.general_misc import dict_tools
+
+
+
 
 class CuteWindowType(type):
     def __new__(mcls, name, bases, namespace):
         cls = super(CuteWindowType, mcls).__new__(mcls, name, bases, namespace)
-        callables = dict(
-        for name, value in namespace.items():
+        event_handlers = dict_tools.filter_items(
+            namespace,
+            lambda name, value: name.startswith('_on_') and callable(value)
+        )
             
-        # Compute set of abstract method names
-        abstracts = set(name
-                     for name, value in namespace.items()
-                     if getattr(value, "__isabstractmethod__", False))
-        for base in bases:
-            for name in getattr(base, "__abstractmethods__", set()):
-                value = getattr(cls, name, None)
-                if getattr(value, "__isabstractmethod__", False):
-                    abstracts.add(name)
-        cls.__abstractmethods__ = frozenset(abstracts)
-        # Set up inheritance registry
-        cls._abc_registry = WeakSet()
-        cls._abc_cache = WeakSet()
-        cls._abc_negative_cache = WeakSet()
-        cls._abc_negative_cache_version = ABCMeta._abc_invalidation_counter
+        # blocktodo: implement
+            
+        cls.___event_handlers = 1/0
+        
         return cls
 
