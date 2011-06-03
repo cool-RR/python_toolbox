@@ -11,7 +11,7 @@ is_gtk = (wx.Platform == '__WXGTK__')
 is_win = (wx.Platform == '__WXMSW__')
 
 
-from .global_keys import menu_keys
+from .global_keys import menu_keys, enter_keys
 
 if is_win:
     from .win_keys import (back_keys, back_key_string,

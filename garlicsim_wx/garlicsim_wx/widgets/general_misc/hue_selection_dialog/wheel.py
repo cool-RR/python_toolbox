@@ -161,9 +161,14 @@ class Wheel(CutePanel):
             self.nudge_hue(direction=1, amount=0.02)
         elif key == wx_tools.keyboard.Key(wx.WXK_DOWN, cmd=True):
             self.nudge_hue(direction=-1, amount=0.02)
+        elif key in wx_tools.keyboard.keys.enter_keys:
+            # Handling dialog-closing here because wxPython doesn't
+            # automatically pass Enter to the dialog itself:
+            self.hue_selection_dialog.EndModal(wx.ID_OK)
         else:
             if not wx_tools.event_tools.navigate_from_key_event(event):
                 event.Skip()
+                                                
             
             
     def _on_set_focus(self, event):

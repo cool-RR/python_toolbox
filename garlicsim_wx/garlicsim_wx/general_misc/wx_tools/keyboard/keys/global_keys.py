@@ -13,3 +13,4 @@ menu_keys = [Key(wx.WXK_MENU), Key(wx.WXK_WINDOWS_MENU),
 '''Keys used for raising a context menu.'''
 # blocktodo: explode into OSes cause Mac is probably different
 
+enter_keys = [Key(wx.WXK_RETURN), Key(wx.WXK_NUMPAD_ENTER)]
