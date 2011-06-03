@@ -10,7 +10,7 @@ See its documentation for more information.
 import wx
 
 
-class Key(object):    
+class Key(object):    #blocktodo: __repr__
     '''A key combination.'''
 
     def __init__(self, key_code, cmd=False, alt=False, shift=False):
