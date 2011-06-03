@@ -91,7 +91,7 @@ def make_bitmap(lightness=1, saturation=1):
 
 class Wheel(CutePanel):
     '''
-    Color wheel displaying current hue and allows moving to different hue.
+    Color wheel that displays current hue and allows moving to different hue.
     '''
     def __init__(self, hue_selection_dialog):
         style = (wx.NO_BORDER | wx.WANTS_CHARS)
