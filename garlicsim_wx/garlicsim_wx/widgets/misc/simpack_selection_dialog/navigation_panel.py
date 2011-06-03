@@ -145,7 +145,7 @@ class NavigationPanel(CutePanel):
                     wx.BITMAP_TYPE_ANY
                 )
             ),
-        )
+        ) # blocktodo: could these four be bound automatically?
         self.simpack_selection_dialog.Bind(wx.EVT_BUTTON,
                                            lambda event: self.back(),
                                            source=self.back_button)

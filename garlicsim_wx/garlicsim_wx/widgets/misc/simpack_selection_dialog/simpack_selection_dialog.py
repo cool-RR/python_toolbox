@@ -25,6 +25,8 @@ from garlicsim.general_misc import package_finder
 from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
 from garlicsim_wx.widgets.general_misc.cute_dir_dialog import CuteDirDialog
 from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
+from garlicsim_wx.widgets.general_misc.cute_hidden_button import \
+                                                               CuteHiddenButton
 from garlicsim_wx.general_misc import wx_tools
 
 import garlicsim_wx
@@ -147,11 +149,8 @@ class SimpackSelectionDialog(CuteDialog):
         self.create_project_button.SetHelpText('Start a new simulation '
                                                'project using the selected '
                                                'simpack.')
-        self.Bind(wx.EVT_BUTTON, self._on_create_project,
-                  source=self.create_project_button)
         
         self.cancel_button = wx.Button(self, wx.ID_CANCEL, 'Cancel')
-        self.Bind(wx.EVT_BUTTON, self._on_cancel, source=self.cancel_button)
         
         if wx_tools.is_win:
             first_button = self.create_project_button
@@ -205,12 +204,12 @@ class SimpackSelectionDialog(CuteDialog):
         self.simpack_tree.SetFocus()
         
         #######################################################################
-        self.refresh = wx_tools.event_tools.ObjectWitId() 1/0 
-        # blocktodo: make into `HiddenButton` or something
-        self.Bind(wx.EVT_MENU, self._on_refresh, source)
+        self.refresh_hidden_button = CuteHiddenButton(self)
         self.add_accelerators(
-            {wx.WXK_F5: refresh_id}
+            {wx.WXK_F5: self.refresh_hidden_button.Id}
         )
+        
+        self.bind_event_handers(SimpackSelectionDialog)
         
         '''
         
@@ -294,11 +293,11 @@ class SimpackSelectionDialog(CuteDialog):
         return result
     
     
-    def _on_refresh(self, event):
+    def _on_refresh_hidden_button(self, event):
         wx.lib.dialogs.messageDialog(self, 'Refresh')        
                 
         
-    def _on_create_project(self, event):
+    def _on_create_project_button(self, event):
         '''Handler for "Create project" button.'''
         #if self.list_box.GetStringSelection():
             #self.EndModal(wx.ID_OK)       
@@ -307,8 +306,7 @@ class SimpackSelectionDialog(CuteDialog):
         self.EndModal(wx.ID_OK)
         
         
-        
-    def _on_cancel(self, event):
+    def _on_cancel_button(self, event):
         '''Handler for "Cancel" button.'''
         self.EndModal(wx.ID_CANCEL)
 
