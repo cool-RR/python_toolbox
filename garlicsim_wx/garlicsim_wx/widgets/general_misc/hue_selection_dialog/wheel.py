@@ -94,7 +94,7 @@ class Wheel(CutePanel):
     Color wheel displaying current hue and allows moving to different hue.
     '''
     def __init__(self, hue_selection_dialog):
-        style = (wx.TAB_TRAVERSAL | wx.NO_BORDER | wx.WANTS_CHARS)
+        style = (wx.NO_BORDER | wx.WANTS_CHARS)
         wx.Panel.__init__(self, parent=hue_selection_dialog,
                           size=(BIG_LENGTH, BIG_LENGTH), style=style)
         self.SetDoubleBuffered(True)
