@@ -240,16 +240,15 @@ class StepProfileDialog(CuteDialog):
         self.dialog_button_sizer.AddButton(self.ok_button)
         self.ok_button.SetDefault()
         self.dialog_button_sizer.SetAffirmativeButton(self.ok_button)
-        self.Bind(wx.EVT_BUTTON, self.on_ok, source=self.ok_button)
         
         self.cancel_button = wx.Button(self, wx.ID_CANCEL, 'Cancel')
         self.dialog_button_sizer.AddButton(self.cancel_button)
-        self.Bind(wx.EVT_BUTTON, self.on_cancel, source=self.cancel_button)
         self.dialog_button_sizer.Realize()
     
         
         self.SetSizer(self.main_v_sizer)
         self.main_v_sizer.Fit(self)
+        self.bind_event_handers(StepProfileDialog)
         
         # Finished setting up sizers and widgets.
         #######################################################################
@@ -291,7 +290,7 @@ class StepProfileDialog(CuteDialog):
         return super(StepProfileDialog, self).ShowModal()
     
     
-    def on_ok(self, event):
+    def _on_ok_button(self, event):
         try:
             self.step_function_input.parse_text_and_set()
         except Exception, exception:
@@ -349,7 +348,7 @@ class StepProfileDialog(CuteDialog):
         self.EndModal(wx.ID_OK)
     
     
-    def on_cancel(self, event):
+    def _on_cancel_button(self, event):
         # ...
         self.step_profile = None
         self.EndModal(wx.ID_CANCEL)

@@ -170,7 +170,7 @@ class Wheel(CutePanel):
             if not wx_tools.event_tools.navigate_from_key_event(event):
                 event.Skip()
         else:
-            return handler()
+            return handler(self)
             
             
     def _on_set_focus(self, event):
