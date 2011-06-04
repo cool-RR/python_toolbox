@@ -119,19 +119,13 @@ class Wheel(CutePanel):
         )
         self._cursor_set_to_bullseye = False
         
-        self.Bind(wx.EVT_PAINT, self._on_paint)
-        self.Bind(wx.EVT_MOUSE_EVENTS, self._on_mouse)
-        self.Bind(wx.EVT_SET_FOCUS, self._on_set_focus)
-        self.Bind(wx.EVT_KILL_FOCUS, self._on_kill_focus)
-        self.Bind(wx.EVT_KEY_DOWN, self._on_key_down)
+        self.bind_event_handers(Wheel)
         
-    
 
     @property
     def angle(self):
         '''Current angle of hue marker. (In radians.)'''
         return ((self.hue - 0.25) * 2 * math.pi)
-        
         
         
     def update(self):
@@ -151,24 +145,32 @@ class Wheel(CutePanel):
     ###########################################################################
     ### Event handlers: #######################################################
     #                                                                         #
+    __key_map = {
+        wx_tools.keyboard.Key(wx.WXK_UP):
+            lambda self: self.nudge_hue(direction=1),
+        wx_tools.keyboard.Key(wx.WXK_DOWN):
+            lambda self: self.nudge_hue(direction=-1),
+        wx_tools.keyboard.Key(wx.WXK_UP, cmd=True):
+            lambda self: self.nudge_hue(direction=1, amount=0.02),
+        wx_tools.keyboard.Key(wx.WXK_DOWN, cmd=True):
+            lambda self: self.nudge_hue(direction=-1, amount=0.02),    
+        # Handling dialog-closing here because wxPython doesn't
+        # automatically pass Enter to the dialog itself
+        wx_tools.keyboard.Key(wx.WXK_RETURN):
+            lambda self: self.hue_selection_dialog.EndModal(wx.ID_OK),
+        wx_tools.keyboard.Key(wx.WXK_NUMPAD_ENTER):
+            lambda self: self.hue_selection_dialog.EndModal(wx.ID_OK)
+    }
+            
     def _on_key_down(self, event):
         key = wx_tools.keyboard.Key.get_from_key_event(event)
-        if key == wx_tools.keyboard.Key(wx.WXK_UP):
-            self.nudge_hue(direction=1)
-        elif key == wx_tools.keyboard.Key(wx.WXK_DOWN):
-            self.nudge_hue(direction=-1)
-        elif key == wx_tools.keyboard.Key(wx.WXK_UP, cmd=True):
-            self.nudge_hue(direction=1, amount=0.02)
-        elif key == wx_tools.keyboard.Key(wx.WXK_DOWN, cmd=True):
-            self.nudge_hue(direction=-1, amount=0.02)
-        elif key in wx_tools.keyboard.keys.enter_keys:
-            # Handling dialog-closing here because wxPython doesn't
-            # automatically pass Enter to the dialog itself:
-            self.hue_selection_dialog.EndModal(wx.ID_OK)
-        else:
+        try:
+            handler = self.__key_map[key]
+        except KeyError:
             if not wx_tools.event_tools.navigate_from_key_event(event):
                 event.Skip()
-                                                
+        else:
+            return handler()
             
             
     def _on_set_focus(self, event):
@@ -212,7 +214,7 @@ class Wheel(CutePanel):
         
                 
         
-    def _on_mouse(self, event):
+    def _on_mouse_events(self, event):
         
         center_x = center_y = BIG_LENGTH // 2 
         x, y = event.GetPosition()
