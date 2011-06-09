@@ -12,6 +12,7 @@ from garlicsim.general_misc.sequence_tools import partitions
 
 
 def test():
+    '''Test the basic workings of `partitions`.'''
     r = range(8)
     assert partitions(r, 1) == partitions(r, n_partitions=8) == \
            [[0], [1], [2], [3], [4], [5], [6], [7]]
@@ -29,11 +30,13 @@ def test():
     
     
 def test_too_many_arguments():
+    '''Test `partitions` complains when too many arguments are given.'''
     with cute_testing.RaiseAssertor(text='*either*'):
         partitions([1, 2, 3], 2, 2)
 
         
 def test_allow_remainder():
+    '''Test `partitions` complains when there's an unallowed remainder.'''
     r = range(9)
     
     # 9 divides by 1, 3 and 9, so no problems here:

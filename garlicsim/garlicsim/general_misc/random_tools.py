@@ -29,9 +29,6 @@ def random_partitions(sequence, partition_size=None, n_partitions=None,
     exception will be raised.
     
     '''
-    # blocktodo: test
-    # blocktododoc arguments
-    
     
     shuffled_sequence = shuffled(sequence)
     
