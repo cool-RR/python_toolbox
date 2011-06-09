@@ -72,11 +72,12 @@ def combinations(sequence, n=None, start=0):
 def partitions(sequence, partition_size=None, n_partitions=None,
                allow_remainder=True):
     '''
-    Partition `sequence` into partitions of size `partition_size`, or determine
-    size automatically given the number of partitions as `n_partitions`.
+    Partition `sequence` into equal partitions of size `partition_size`, or
+    determine size automatically given the number of partitions as
+    `n_partitions`.
     
-    If the sequence can't be divided precisely, the last partition will contain
-    less members than all the other partitions.
+    If the sequence can't be divided into precisely equal partitions, the last
+    partition will contain less members than all the other partitions.
     
     Example:
     
@@ -85,12 +86,11 @@ def partitions(sequence, partition_size=None, n_partitions=None,
     
     (You need to give *either* a `partition_size` *or* an `n_partitions`
     argument, not both.)
-    blocktododoc
     
-    
+    Specify `allow_remainder=False` to enforce that the all the partition sizes
+    be equal; if there's a remainder while `allow_remainder=False`, an
+    exception will be raised.
     '''
-    
-    # blocktododoc arguments
     
     sequence_length = len(sequence)
     
