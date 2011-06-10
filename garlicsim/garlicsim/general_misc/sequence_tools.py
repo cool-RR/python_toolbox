@@ -71,13 +71,31 @@ def combinations(sequence, n=None, start=0):
 
 def partitions(sequence, partition_size=None, n_partitions=None,
                allow_remainder=True):
-    # blocktodo: test
+    '''
+    Partition `sequence` into partitions of size `partition_size`, or determine
+    size automatically given the number of partitions as `n_partitions`.
+    
+    If the sequence can't be divided precisely, the last partition will contain
+    less members than all the other partitions.
+    
+    Example:
+    
+        >>> partitions([0, 1, 2, 3, 4], 2)
+        [[0, 1], [2, 3], [4]]
+    
+    (You need to give *either* a `partition_size` *or* an `n_partitions`
+    argument, not both.)
+    blocktododoc
+    
+    
+    '''
+    
     # blocktododoc arguments
     
     sequence_length = len(sequence)
     
     ### Validating input: #####################################################
-    #                                                                         #
+    #                                                                         #    
     if (partition_size is None) == (n_partitions is None):
         raise Exception('You must specify *either* `partition_size` *or* '
                         '`n_paritions`.')

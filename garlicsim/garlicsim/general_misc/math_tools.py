@@ -35,4 +35,5 @@ def round_to_int(x, up=False):
         return rounded_down
     
 def ceil_div(x, y):
+    '''Divide `x` by `y`, rounding up if there's a remainder.'''
     return (x // y) + (1 if x % y else 0)
