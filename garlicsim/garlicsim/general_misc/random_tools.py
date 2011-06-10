@@ -16,6 +16,7 @@ def random_partition(sequence, partition_size, allow_reminder=False):
         [(0, 2), (1, 4), (3, 5)]
     
     '''
+    # blocktodo: allow specifying `n_partitions` instead of `partition_size`
     if allow_reminder:
         raise NotImplementedError
     if len(sequence) % partition_size != 0:
