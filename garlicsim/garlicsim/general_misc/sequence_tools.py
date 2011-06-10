@@ -93,9 +93,9 @@ def partitions(sequence, partition_size=None, n_partitions=None,
     ### Finished validating input. ############################################
     
     if partition_size is None:
-        partition_size = math_tools.ceil_div(sequence, n_partitions)
+        partition_size = math_tools.ceil_div(sequence_length, n_partitions)
     if n_partitions is None:
-        n_partitions = math_tools.ceil_div(sequence, partition_size)
+        n_partitions = math_tools.ceil_div(sequence_length, partition_size)
     
     enlarged_length = partition_size * n_partitions
     
