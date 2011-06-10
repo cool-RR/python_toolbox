@@ -93,16 +93,15 @@ class HueSelectionDialog(CuteDialog):
         self.dialog_button_sizer.AddButton(self.ok_button)
         self.ok_button.SetDefault()
         self.dialog_button_sizer.SetAffirmativeButton(self.ok_button)
-        self.Bind(wx.EVT_BUTTON, self._on_ok, source=self.ok_button)
         
         self.cancel_button = wx.Button(self, wx.ID_CANCEL, 'Cancel')
         self.cancel_button.SetHelpText('Change back to the old hue.')
         self.dialog_button_sizer.AddButton(self.cancel_button)
-        self.Bind(wx.EVT_BUTTON, self._on_cancel, source=self.cancel_button)
         self.dialog_button_sizer.Realize()
 
         self.SetSizer(self.main_v_sizer)
         self.main_v_sizer.Fit(self)
+        self.bind_event_handers(HueSelectionDialog)
         
         
         
@@ -130,13 +129,11 @@ class HueSelectionDialog(CuteDialog):
             
     ### Event handlers: #######################################################
     #                                                                         #
-    def _on_ok(self, event):
-        '''Handler for "Ok" button.'''
+    def _on_ok_button(self, event):
         self.EndModal(wx.ID_OK)
         
     
-    def _on_cancel(self, event):
-        '''Handler for "Cancel" button.'''
+    def _on_cancel_button(self, event):
         self.setter(self.old_hue)
         self.EndModal(wx.ID_CANCEL)
     #                                                                         #

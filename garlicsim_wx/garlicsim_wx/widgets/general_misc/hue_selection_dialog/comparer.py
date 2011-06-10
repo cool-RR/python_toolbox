@@ -37,11 +37,7 @@ class Comparer(CutePanel):
         
         self.SetCursor(wx.StockCursor(wx.CURSOR_BULLSEYE))
         
-        self.Bind(wx.EVT_PAINT, self._on_paint)
-        self.Bind(wx.EVT_LEFT_DOWN, self._on_mouse_left_down)
-        self.Bind(wx.EVT_SET_FOCUS, self._on_set_focus)
-        self.Bind(wx.EVT_KILL_FOCUS, self._on_kill_focus)
-        self.Bind(wx.EVT_CHAR, self._on_char)
+        self.bind_event_handers(Comparer)
         
     
     @property
@@ -95,7 +91,7 @@ class Comparer(CutePanel):
                                            width - 6, (height // 2) - 6)
                 
     
-    def _on_mouse_left_down(self, event):
+    def _on_left_down(self, event):
         x, y = event.GetPosition()
         width, height = self.GetClientSize()
         if y >= height // 2:

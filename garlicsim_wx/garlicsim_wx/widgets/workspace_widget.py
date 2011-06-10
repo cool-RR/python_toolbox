@@ -25,6 +25,10 @@ EVT_WORKSPACE_WIDGET_MENU_SELECT = wx.PyEventBinder(
 '''Event for when a workspace widget gets activated from the menu.'''
 
 
+class WorkspaceWidgetType(type(CuteWindow), abc.ABCMeta):
+    ''' '''
+        
+
 class WorkspaceWidget(CuteWindow):
     '''
     Abstract base class for workspace widgets.
@@ -33,7 +37,7 @@ class WorkspaceWidget(CuteWindow):
     and is connected to a specific gui project.
     '''
 
-    __metaclass__ = abc.ABCMeta
+    __metaclass__ = WorkspaceWidgetType
     
 
     _WorkspaceWidget__name = None

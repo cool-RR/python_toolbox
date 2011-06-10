@@ -5,6 +5,7 @@
 
 import wx
 
+from garlicsim.general_misc import caching
 from garlicsim_wx.general_misc.wx_tools.keyboard import Key
 
 
@@ -57,3 +58,5 @@ def navigate_from_key_event(key_event):
         return False
             
 
+class ObjectWithId(object):
+    Id = caching.CachedProperty(wx.NewId())

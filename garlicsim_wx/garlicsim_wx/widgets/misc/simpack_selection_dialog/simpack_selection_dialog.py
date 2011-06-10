@@ -25,6 +25,8 @@ from garlicsim.general_misc import package_finder
 from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
 from garlicsim_wx.widgets.general_misc.cute_dir_dialog import CuteDirDialog
 from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
+from garlicsim_wx.widgets.general_misc.cute_hidden_button import \
+                                                               CuteHiddenButton
 from garlicsim_wx.general_misc import wx_tools
 
 import garlicsim_wx
@@ -147,11 +149,8 @@ class SimpackSelectionDialog(CuteDialog):
         self.create_project_button.SetHelpText('Start a new simulation '
                                                'project using the selected '
                                                'simpack.')
-        self.Bind(wx.EVT_BUTTON, self._on_create_project,
-                  source=self.create_project_button)
         
         self.cancel_button = wx.Button(self, wx.ID_CANCEL, 'Cancel')
-        self.Bind(wx.EVT_BUTTON, self._on_cancel, source=self.cancel_button)
         
         if wx_tools.is_win:
             first_button = self.create_project_button
@@ -205,12 +204,12 @@ class SimpackSelectionDialog(CuteDialog):
         self.simpack_tree.SetFocus()
         
         #######################################################################
-        
-        refresh_id = wx.NewId()
-        self.Bind(wx.EVT_MENU, self._on_refresh, id=refresh_id)
+        self.refresh_hidden_button = CuteHiddenButton(self)
         self.add_accelerators(
-            {wx.WXK_F5: refresh_id}
+            {wx.WXK_F5: self.refresh_hidden_button.Id}
         )
+        
+        self.bind_event_handers(SimpackSelectionDialog)
         
         '''
         
@@ -257,40 +256,6 @@ class SimpackSelectionDialog(CuteDialog):
             return simpack_selection_dialog.simpack
         
         
-    def _on_add_folder_containing_simpacks(self, event):
-        '''Handler for "Add folders containing simpacks" button.'''
-        path = CuteDirDialog.create_show_modal_and_get_path(
-            self,
-            'Choose the folder that *contains* your simpack(s), not the '
-            'simpack folder itself.',
-            style=wx.DD_DEFAULT_STYLE | wx.DD_DIR_MUST_EXIST
-        )
-        
-        if path is None:
-            return
-            
-        if path not in zip(garlicsim_wx.simpack_places)[0]:
-            garlicsim_wx.simpack_places.append((path, ''))
-            self.update_simpack_list()
-        if path not in sys.path:
-            sys.path.append(path)
-                
-        
-    def _on_create_project(self, event):
-        '''Handler for "Create project" button.'''
-        #if self.list_box.GetStringSelection():
-            #self.EndModal(wx.ID_OK)       
-        from garlicsim_lib.simpacks import life as my_simpack
-        self.simpack = my_simpack
-        self.EndModal(wx.ID_OK)
-        
-        
-        
-    def _on_cancel(self, event):
-        '''Handler for "Cancel" button.'''
-        self.EndModal(wx.ID_CANCEL)
-        
-        
     """
     def update_simpack_list(self):
         '''Update the list of available simpacks.'''
@@ -327,8 +292,23 @@ class SimpackSelectionDialog(CuteDialog):
         result = import_tools.normal_import(string)
         return result
     
-    def _on_refresh(self, event):
-        wx.lib.dialogs.messageDialog(self, 'Refresh')
+    
+    def _on_refresh_hidden_button(self, event):
+        wx.lib.dialogs.messageDialog(self, 'Refresh')        
+                
+        
+    def _on_create_project_button(self, event):
+        '''Handler for "Create project" button.'''
+        #if self.list_box.GetStringSelection():
+            #self.EndModal(wx.ID_OK)       
+        from garlicsim_lib.simpacks import life as my_simpack
+        self.simpack = my_simpack
+        self.EndModal(wx.ID_OK)
+        
+        
+    def _on_cancel_button(self, event):
+        '''Handler for "Cancel" button.'''
+        self.EndModal(wx.ID_CANCEL)
 
 
 from .navigation_panel import NavigationPanel
