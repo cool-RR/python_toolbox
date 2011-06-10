@@ -6,7 +6,8 @@
 import random
 
 
-def random_partition(sequence, partition_size, allow_reminder=False):
+def random_partitions(sequence, partition_size=None, n_paritions=None,
+                     allow_remainder=False):
     '''
     Randomly partition `sequence` into partitions of size `partition_size`.
     
@@ -17,12 +18,18 @@ def random_partition(sequence, partition_size, allow_reminder=False):
     
     '''
     # blocktodo: allow specifying `n_partitions` instead of `partition_size`
-    if allow_reminder:
+    if allow_remainder:
         raise NotImplementedError
-    if len(sequence) % partition_size != 0:
-        raise Exception("You set `allow_reminder=False`, but there's a "
-                        "reminder of %s left." % \
-                        (len(sequence) % partition_size))
+    if (partition_size is None) == (n_paritions is None):
+        raise Exception('You must specify *either* `partition_size` *or* '
+                        '`n_paritions`.')
+    if not allow_remainder:
+        remainder = len(sequence) % (partition_size if partition_size
+                                     is not None else n_paritions)
+        if remainder != 0:
+            raise Exception("You set `allow_reminder=False`, but there's a "
+                            "reminder of %s left." % \
+                            (len(sequence) % partition_size))
     
     shuffled_sequence = shuffled(sequence)
 

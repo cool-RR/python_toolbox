@@ -68,7 +68,9 @@ def combinations(sequence, n=None, start=0):
             for sub_result in combinations(sequence, n - 1, start=(i + 1)):
                 yield [thing] + sub_result
 
-
+def partitions
+                
+                
 def is_sequence(thing):
     return abcs_collection.Sequence.__instancecheck__(thing)
 
