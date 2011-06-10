@@ -7,6 +7,7 @@ import itertools
 
 from garlicsim.general_misc.nifty_collections import Counter
 from garlicsim.general_misc import caching
+from garlicsim.general_misc import math_tools
 from garlicsim.general_misc.infinity import infinity
 from garlicsim.general_misc.third_party import abc
 from garlicsim.general_misc.third_party import abcs_collection
@@ -70,33 +71,36 @@ def combinations(sequence, n=None, start=0):
 
 def partitions(sequence, partition_size=None, n_partitions=None,
                allow_remainder=True):
-    # blocktodo: implement `allow_remainder`, in `random_tools` too
     # blocktodo: test
     # blocktododoc arguments
+    
+    sequence_length = len(sequence)
+    
+    ### Validating input: #####################################################
+    #                                                                         #
     if (partition_size is None) == (n_partitions is None):
         raise Exception('You must specify *either* `partition_size` *or* '
                         '`n_paritions`.')
     
-    truncated_length = len(sequence) // (partition_size if partition_size
-                                         is not None else n_partitions)
-    remainder_length = len(sequence) - truncated_length
-    
+    remainder_length = sequence_length % (partition_size if partition_size
+                                          is not None else n_partitions)
+
     if not allow_remainder and remainder_length > 0:
         raise Exception("You set `allow_reminder=False`, but there's a "
                         "reminder of %s left." % \
                         (len(sequence) % partition_size))
-
-    truncated_sequence = sequence[:truncated_length]
-    remainder_sequence = sequence[truncated_length:]
+    #                                                                         #
+    ### Finished validating input. ############################################
     
     if partition_size is None:
-        partition_size = truncated_length // n_partitions
+        partition_size = math_tools.ceil_div(sequence, n_partitions)
+    if n_partitions is None:
+        n_partitions = math_tools.ceil_div(sequence, partition_size)
+    
+    enlarged_length = partition_size * n_partitions
     
     blocks = [sequence[i : i + partition_size] for i in
-              xrange(0, truncated_length, partition_size)]
-        
-    # blocktodo: handle case of no `blocks`
-    blocks[-1] += remainder_length
+              xrange(0, enlarged_length, partition_size)]
     
     return blocks
     

@@ -115,7 +115,11 @@ class State(garlicsim.data_structures.State):
             self.players.remove(loser)
             self.players.append(PlayerType.create_player_of_random_type())
     
-        self.player_pairs = random_tools.random_partitions(self.players, 2)
+        self.player_pairs = random_tools.random_partitions(
+            self.players,
+            2,
+            allow_remainder=False
+        )
         
         
     def get_player_with_least_points(self):

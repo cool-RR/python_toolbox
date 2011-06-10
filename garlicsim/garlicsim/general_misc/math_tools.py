@@ -33,3 +33,6 @@ def round_to_int(x, up=False):
                else rounded_down + 1
     else:
         return rounded_down
+    
+def ceil_div(x, y):
+    return (x // y) + (1 if x % y else 0)
