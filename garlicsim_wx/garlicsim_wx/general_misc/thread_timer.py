@@ -34,6 +34,9 @@ class ThreadTimer(cute_base_timer.CuteBaseTimer):
    n = 0
    '''The number of created thread timers.'''
    
+
+   _EventHandlerGrokker__event_code = EVT_THREAD_TIMER
+   
    
    def __init__(self, parent):
       '''

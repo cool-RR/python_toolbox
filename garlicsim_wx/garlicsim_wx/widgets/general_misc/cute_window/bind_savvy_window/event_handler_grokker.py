@@ -36,9 +36,10 @@ class EventHandlerGrokker(object):
             window,
             self.window_type
         )
-            
-        if hasattr(window, self.cleaned_name):
-            component = getattr(window, self.cleaned_name)
+        component_candidate = getattr(window, self.cleaned_name, None)
+        if component_candidate is not None and \
+           hasattr(component_candidate, 'GetId'):
+            component = component_candidate
             return window.Bind(
                 get_event_code_of_component(component),
                 event_handler_bound_method, #self.event_handler,

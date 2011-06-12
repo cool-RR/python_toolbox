@@ -49,7 +49,7 @@ class DefaultStateCreationDialog(StateCreationDialog):
         # todo: add slick way to add args/kwargs
 
         last_hbox = wx.StdDialogButtonSizer()
-        self.ok_button = wx.Button(self, wx.ID_OK, '&Create state')
+        self.ok_button = wx.Button(self, wx.ID_OK, 'Create &state')
         ok_help_text = 'Create the new state.'
         self.ok_button.SetToolTipString(ok_help_text)
         self.ok_button.SetHelpText(ok_help_text)

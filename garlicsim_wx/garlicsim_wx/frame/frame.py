@@ -60,8 +60,6 @@ class Frame(garlicsim_wx.widgets.general_misc.cute_frame.CuteFrame):
         
         self.SetIcons(garlicsim_wx.misc.icon_bundle.get_icon_bundle())
         
-        self.Bind(wx.EVT_CLOSE, self.on_close)
-        
         self.app = wx.GetApp()
         '''The GarlicSim `App` that created this frame.'''
         
@@ -90,19 +88,12 @@ class Frame(garlicsim_wx.widgets.general_misc.cute_frame.CuteFrame):
         self.__init_menus()
         self.__init_key_handlers()
         
-        self.Bind(wx.EVT_CONTEXT_MENU, self.on_context_menu, self)
-        
         self.background_timer = thread_timer.ThreadTimer(self)
-        
         self.background_timer.start(150)
         
-        self.Bind(
-            thread_timer.EVT_THREAD_TIMER,
-            lambda event: self.sync_crunchers(),
-            self.background_timer
-        )
-        
         self.aui_manager.Update()
+        
+        self.bind_event_handers(Frame)
         
         self.Show()
         
@@ -143,8 +134,6 @@ class Frame(garlicsim_wx.widgets.general_misc.cute_frame.CuteFrame):
         
     def __init_key_handlers(self):
         '''Initialize key shortcuts.'''
-        
-        self.Bind(wx.EVT_KEY_DOWN, self.on_key_down)
         
         def on_home():
             '''Go to root node.'''
@@ -304,17 +293,6 @@ class Frame(garlicsim_wx.widgets.general_misc.cute_frame.CuteFrame):
             wx_tools.keyboard.Key(wx.WXK_RETURN): on_return,
         }    
             
-        
-    def on_close(self, event):
-        '''Close the frame.'''
-        if self.gui_project:
-            self.gui_project.stop_playing()
-        self.aui_manager.UnInit()
-        self.Destroy()
-        garlicsim_wx.general_misc.cute_base_timer.CuteBaseTimer.\
-            stop_timers_by_frame(self)
-        event.Skip()        
-        self.background_timer.stop()
 
         
     def finalize_active_node(self, e=None):
@@ -682,19 +660,20 @@ class Frame(garlicsim_wx.widgets.general_misc.cute_frame.CuteFrame):
                     style=(wx.OK | wx.ICON_ERROR)
                 )
             
+        
+    def _on_close(self, event):
+        '''Close the frame.'''
+        if self.gui_project:
+            self.gui_project.stop_playing()
+        self.aui_manager.UnInit()
+        self.Destroy()
+        garlicsim_wx.general_misc.cute_base_timer.CuteBaseTimer.\
+            stop_timers_by_frame(self)
+        event.Skip()        
+        self.background_timer.stop()
+        
     
-    """    
-    def delete_gui_project(self,gui_project):
-        I did this wrong.
-        self.gui_projects.remove(gui_project)
-        self.notebook.AddPage(gui_project.main_window,"zort!")
-        self.notebook.DeletePage(0)
-        del gui_project
-    """
-    
-    
-    def on_key_down(self, event):
-        '''wx.EVT_KEY_DOWN handler.'''
+    def _on_key_down(self, event):
         key = wx_tools.keyboard.Key.get_from_key_event(event)
         handler = self.key_handlers.get(key, None)
         if handler:
@@ -703,8 +682,7 @@ class Frame(garlicsim_wx.widgets.general_misc.cute_frame.CuteFrame):
             event.Skip()
             
             
-    def on_context_menu(self, event):
-        '''wx.EVT_CONTEXT_MENU handler.'''
+    def _on_context_menu(self, event):
         abs_position = event.GetPosition()
         if abs_position == wx.DefaultPosition:
             position = (0, 0)
@@ -712,6 +690,8 @@ class Frame(garlicsim_wx.widgets.general_misc.cute_frame.CuteFrame):
             position = self.ScreenToClient(abs_position)
             
         self.PopupMenu(self.context_menu, position)
-        
+
+    def _on_background_timer(self, event):
+        self.sync_crunchers()
     
     
