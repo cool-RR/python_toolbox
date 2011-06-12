@@ -14,7 +14,7 @@ from garlicsim.general_misc import dict_tools
 
 from .event_handler_grokker import EventHandlerGrokker
 
-
+# blocktododoc: make decorator for "ignore this method"
 class BindSavvyWindowType(type):
     
     event_modules = []

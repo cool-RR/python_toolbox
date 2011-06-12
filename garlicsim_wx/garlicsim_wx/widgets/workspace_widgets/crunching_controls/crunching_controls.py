@@ -52,9 +52,6 @@ class CrunchingControls(wx.lib.scrolledpanel.ScrolledPanel, WorkspaceWidget):
         # I put this assert mainly for better source assistance in Wing.
         # It may be removed.
         
-        self.Bind(wx.EVT_SIZE, self.on_size)
-        self.Bind(wx.EVT_PAINT, self.on_paint)
-        
         self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)
         
         self.SetSizer(self.main_v_sizer)
@@ -80,6 +77,8 @@ class CrunchingControls(wx.lib.scrolledpanel.ScrolledPanel, WorkspaceWidget):
         self.main_v_sizer.Add(self.cruncher_controls, 0,
                               wx.EXPAND | wx.LEFT | wx.TOP | wx.RIGHT, 10)
         
+        self.bind_event_handers(CrunchingControls)
+        
         self.autocrunch_controls.SetFocus()
         # We do this so when the user switches to this widget for the first
         # time, the focus will be on the autocrunch controls. I'm not sure this
@@ -88,14 +87,6 @@ class CrunchingControls(wx.lib.scrolledpanel.ScrolledPanel, WorkspaceWidget):
 
         
     def on_size(self, event):
-        '''EVT_SIZE handler.'''
         self.Refresh()
         event.Skip()
-    
         
-    def on_paint(self, event):
-        '''EVT_PAINT handler.'''
-        event.Skip()
-        
-
-    

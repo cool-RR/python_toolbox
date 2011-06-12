@@ -12,7 +12,7 @@ import wx
 from .state_creation_dialog import StateCreationDialog
 
 
-class DefaultStateCreationDialog(StateCreationDialog): # make base class
+class DefaultStateCreationDialog(StateCreationDialog):
     '''
     An initial dialog to show when creating a root state.
     
@@ -49,37 +49,40 @@ class DefaultStateCreationDialog(StateCreationDialog): # make base class
         # todo: add slick way to add args/kwargs
 
         last_hbox = wx.StdDialogButtonSizer()
-        ok = wx.Button(self, wx.ID_OK, '&Create state')
+        self.ok_button = wx.Button(self, wx.ID_OK, '&Create state')
         ok_help_text = 'Create the new state.'
-        ok.SetToolTipString(ok_help_text)
-        ok.SetHelpText(ok_help_text)
-        ok.SetDefault()
-        last_hbox.SetAffirmativeButton(ok)
-        self.Bind(wx.EVT_BUTTON, self.on_ok, id=ok.GetId())
-        cancel = wx.Button(self, wx.ID_CANCEL, 'Cancel')
-        self.Bind(wx.EVT_BUTTON, self.on_cancel, id=cancel.GetId())
-        last_hbox.AddButton(ok)
-        last_hbox.AddButton(cancel)
+        self.ok_button.SetToolTipString(ok_help_text)
+        self.ok_button.SetHelpText(ok_help_text)
+        self.ok_button.SetDefault()
+        last_hbox.SetAffirmativeButton(self.ok_button)
+        
+        self.cancel_button = wx.Button(self, wx.ID_CANCEL, 'Cancel')
+        last_hbox.AddButton(self.ok_button)
+        last_hbox.AddButton(self.cancel_button)
         last_hbox.Realize()
 
         vbox.Add(last_hbox, 0, wx.ALIGN_CENTER | wx.BOTTOM, 10)
 
         self.SetSizer(vbox)
         vbox.Fit(self)
-        ok.SetFocus()
+        self.ok_button.SetFocus()
+        
+        self.bind_event_handers(DefaultStateCreationDialog)
 
         
-    def on_ok(self, event):
-        '''Do 'Okay' on the dialog.'''
+    ### Event handlers: #######################################################
+    #                                                                         #
+    def _on_ok_button(self, event):
         self.state = self.simpack.State.create_messy_root() if \
-            self.messy_check_box.GetValue() is True else \
+            self.messy_check_box.Value is True else \
             self.simpack.State.create_root()
         self.EndModal(wx.ID_OK)
         
         
-    def on_cancel(self, event):
-        '''Do 'cancel' on the dialog'''
+    def _on_cancel_button(self, event):
         self.EndModal(wx.ID_CANCEL)
+    #                                                                         #
+    ### Finished event handlers. ##############################################
 
         
         
