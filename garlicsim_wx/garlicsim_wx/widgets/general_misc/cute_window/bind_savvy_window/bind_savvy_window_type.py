@@ -19,7 +19,8 @@ class BindSavvyWindowType(type):
     
     event_modules = []
     
-    @caching.CachedProperty
+    @property
+    @caching.cache()
     def _BindSavvyWindowType__event_handler_grokkers(cls):
         
         names_to_event_handlers = dict_tools.filter_items(
