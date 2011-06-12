@@ -16,6 +16,7 @@ import wx.html
 from garlicsim_wx.general_misc import wx_tools
 import garlicsim_wx.general_misc.cute_timer
 from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
+from garlicsim_wx.widgets.general_misc.cute_html_window import CuteHtmlWindow
 
 import garlicsim_wx
 from .bitmap_viewer import BitmapViewer
@@ -47,7 +48,7 @@ class AboutDialog(CuteDialog):
         self.bitmap_viewer = BitmapViewer(self, size=(597, 231))
         v_sizer.Add(self.bitmap_viewer, 0)
         
-        self.html_window = wx.html.HtmlWindow(self, size=(597, 250))
+        self.html_window = CuteHtmlWindow(self, size=(597, 250))
         v_sizer.Add(self.html_window, 0)
         
         foreground_color_in_hex = wx_tools.colors.wx_color_to_html_color(
@@ -102,14 +103,6 @@ class AboutDialog(CuteDialog):
                     background_color_in_hex,
                     garlicsim_wx.__version__
                 )
-        )
-        
-        self.html_window.Bind(
-            wx.html.EVT_HTML_LINK_CLICKED, 
-            lambda event: webbrowser.open_new_tab(
-                event.GetLinkInfo().GetHref()
-                ),
-            self.html_window
         )
 
         

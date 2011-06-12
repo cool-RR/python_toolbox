@@ -26,7 +26,7 @@ EVT_WORKSPACE_WIDGET_MENU_SELECT = wx.PyEventBinder(
 
 
 class WorkspaceWidgetType(type(CuteWindow), abc.ABCMeta):
-    ''' '''
+    '''The type of `WorkspaceWidget`.'''
         
     
 class WorkspaceWidget(CuteWindow):
@@ -57,9 +57,6 @@ class WorkspaceWidget(CuteWindow):
         assert isinstance(self.aui_manager, aui.AuiManager)
         
         self.bind_event_handers(WorkspaceWidget)
-        #self.Bind(wx.EVT_KEY_DOWN, self._on_key_down)
-        #self.Bind(EVT_WORKSPACE_WIDGET_MENU_SELECT,
-                  #self.on_workspace_widget_menu_select)
         
         
     @classmethod
