@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the `` class.
+This module defines the `BindSavvyWindow` class.
 
 See its documentation for more information.
 '''
@@ -22,7 +22,7 @@ class BindSavvyWindow(wx.Window):
     __metaclass__ = BindSavvyWindowType
     
     
-    def find_and_bind_event_handers(self, cls): #blocktodo: move to base class?
+    def find_and_bind_event_handers(self, cls):
         if not isinstance(self, cls):
             raise Exception('blocktododoc')
         event_handler_grokkers = cls._CuteWindowType__event_handler_grokkers

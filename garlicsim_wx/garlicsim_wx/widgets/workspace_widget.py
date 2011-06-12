@@ -28,7 +28,7 @@ EVT_WORKSPACE_WIDGET_MENU_SELECT = wx.PyEventBinder(
 class WorkspaceWidgetType(type(CuteWindow), abc.ABCMeta):
     ''' '''
         
-
+    
 class WorkspaceWidget(CuteWindow):
     '''
     Abstract base class for workspace widgets.
@@ -38,7 +38,6 @@ class WorkspaceWidget(CuteWindow):
     '''
 
     __metaclass__ = WorkspaceWidgetType
-    
 
     _WorkspaceWidget__name = None
     '''The display name of the widget. Default is class name.'''
@@ -57,12 +56,10 @@ class WorkspaceWidget(CuteWindow):
         self.aui_manager = frame.aui_manager
         assert isinstance(self.aui_manager, aui.AuiManager)
         
-        
-        self.Bind(wx.EVT_KEY_DOWN, self.on_key_down)
-        self.__escape_key = wx_tools.keyboard.Key(wx.WXK_ESCAPE)
-        
-        self.Bind(EVT_WORKSPACE_WIDGET_MENU_SELECT,
-                  self.on_workspace_widget_menu_select)
+        self.bind_event_handers(WorkspaceWidget)
+        #self.Bind(wx.EVT_KEY_DOWN, self._on_key_down)
+        #self.Bind(EVT_WORKSPACE_WIDGET_MENU_SELECT,
+                  #self.on_workspace_widget_menu_select)
         
         
     @classmethod
@@ -77,13 +74,13 @@ class WorkspaceWidget(CuteWindow):
         return self.aui_manager.GetPane(self)
         
     
-    def on_key_down(self, event):
+    def _on_key_down(self, event):
         '''Handler for key down event.'''
         
         key = wx_tools.keyboard.Key.get_from_key_event(event)
         
-        if key == self.__escape_key and \
-           self.frame.FindFocus() is not self.frame:
+        if key == wx_tools.keyboard.Key(wx.WXK_ESCAPE) and \
+           not self.frame.has_focus():
                 
                 self.frame.SetFocus()
                 
@@ -102,7 +99,7 @@ class WorkspaceWidget(CuteWindow):
         self.SetFocus()
             
             
-    def on_workspace_widget_menu_select(self, event):
+    def _on_workspace_widget_menu_select(self, event):
         '''Handle the event of a workspace widget being selected in menu.'''
         self.show()
     

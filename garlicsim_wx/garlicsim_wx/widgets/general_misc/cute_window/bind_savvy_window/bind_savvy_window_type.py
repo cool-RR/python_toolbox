@@ -17,6 +17,8 @@ from .event_handler_grokker import EventHandlerGrokker
 
 class BindSavvyWindowType(type):
     
+    event_modules = []
+    
     @caching.CachedProperty
     def _BindSavvyWindowType__event_handler_grokkers(cls):
         
@@ -25,5 +27,5 @@ class BindSavvyWindowType(type):
             lambda name, value: name.startswith('_on_') and callable(value)
         )
         
-        return [EventHandlerGrokker(name, value) for (name, value) in
+        return [EventHandlerGrokker(name, value, cls) for (name, value) in
                 names_to_event_handlers.items()]
