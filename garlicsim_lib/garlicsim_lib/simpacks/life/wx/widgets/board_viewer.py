@@ -25,10 +25,6 @@ class BoardViewer(scrolled.ScrolledPanel,
         self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
         
         self.SetupScrolling()
-        
-        self.Bind(wx.EVT_PAINT, self._on_paint)
-        self.Bind(wx.EVT_SIZE, self._on_size)
-        self.Bind(wx.EVT_MOUSE_EVENTS, self._on_mouse_event)
 
         self.border_width = 1
         self.square_size = 7
@@ -41,6 +37,8 @@ class BoardViewer(scrolled.ScrolledPanel,
         )
 
         self.redraw_needed_flag = True
+        
+        self.bind_event_handers(BoardViewer)
         
         
     def unscreenify(self, x, y):
@@ -119,9 +117,11 @@ class BoardViewer(scrolled.ScrolledPanel,
         
         dc.DrawRectangleList(rectangles, transparent_pen, brushes)
 
-        
+    
+    ### Event handlers: #######################################################
+    #                                                                         #
+    
     def _on_paint(self, event):
-        '''Paint event handler.'''
         
         event.Skip()
         
@@ -140,18 +140,14 @@ class BoardViewer(scrolled.ScrolledPanel,
         dc.DrawBitmapPoint(self._buffer_bitmap,
                            self.CalcScrolledPosition((0, 0)))
         
-                
-        
+                        
     def _on_size(self, event):
-        '''EVT_SIZE handler.'''
         self.Refresh()
         if event is not None:
-
             event.Skip()
 
-    def _on_mouse_event(self, event):
-        '''Mouse event handler.'''
-        
+            
+    def _on_mouse_events(self, event):
         if event.LeftDown():
             pos = event.GetPositionTuple()
             thing = self.unscreenify(*pos)
@@ -167,3 +163,5 @@ class BoardViewer(scrolled.ScrolledPanel,
                 self.redraw_needed_flag = True
 
         self.Refresh()
+    #                                                                         #
+    ### Finished event handlers. ##############################################
