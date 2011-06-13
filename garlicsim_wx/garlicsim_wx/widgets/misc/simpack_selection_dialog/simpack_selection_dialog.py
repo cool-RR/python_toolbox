@@ -301,7 +301,7 @@ class SimpackSelectionDialog(CuteDialog):
         '''Handler for "Create project" button.'''
         #if self.list_box.GetStringSelection():
             #self.EndModal(wx.ID_OK)       
-        from garlicsim_lib.simpacks import prisoner as my_simpack
+        from garlicsim_lib.simpacks import life as my_simpack
         self.simpack = my_simpack
         self.EndModal(wx.ID_OK)
         

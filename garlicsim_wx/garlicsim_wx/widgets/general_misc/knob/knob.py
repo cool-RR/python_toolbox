@@ -18,6 +18,7 @@ from garlicsim.general_misc import math_tools
 from garlicsim_wx.general_misc import wx_tools
 from garlicsim.general_misc import binary_search
 from garlicsim.general_misc import cute_iter_tools
+from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
 
 from .snap_map import SnapMap
 
@@ -25,7 +26,7 @@ from . import images as __images_package
 images_package = __images_package.__name__
 
 
-class Knob(wx.Panel):
+class Knob(CutePanel):
     '''
     A knob that sets a real value between `-infinity` and `infinity`.
     
@@ -71,7 +72,7 @@ class Knob(wx.Panel):
         assert callable(setter) and callable(getter)
         self.value_getter, self.value_setter = getter, setter
         
-        wx.Panel.__init__(self, parent, *args, **kwargs)
+        CutePanel.__init__(self, parent, *args, **kwargs)
         
         self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
         
@@ -82,10 +83,7 @@ class Knob(wx.Panel):
             )
         )
         
-        self.Bind(wx.EVT_PAINT, self.on_paint)
-        self.Bind(wx.EVT_SIZE, self.on_size)
-        self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse)
-        # self.Bind(wx.EVT_ERASE_BACKGROUND, self.on_erase)
+        self.bind_event_handers(Knob)
         
         self.SetCursor(wx_tools.cursors.collection.get_open_grab())
         
@@ -204,7 +202,7 @@ class Knob(wx.Panel):
             self.Refresh()
         self.needs_recalculation_flag = False
     
-    def on_paint(self, event):
+    def _on_paint(self, event):
         '''EVT_PAINT handler.'''
         
         # Not checking for recalculation flag, this widget is not real-time
@@ -231,12 +229,12 @@ class Knob(wx.Panel):
         #gc.DrawEllipse(5,5,2,2)
         #gc.DrawEllipse(100,200,500,500)
         
-    def on_size(self, event):
+    def _on_size(self, event):
         '''EVT_SIZE handler.'''
         event.Skip()
         self.Refresh()
       
-    def on_mouse(self, event):
+    def _on_mouse_events(self, event):
         '''EVT_MOUSE_EVENTS handler.'''
         # todo: maybe right click should give context menu with
         # 'Sensitivity...'        
@@ -285,10 +283,6 @@ class Knob(wx.Panel):
             
         return
     
-    """
-    def on_erase(self, event):
-        pass
-    """
         
 
         

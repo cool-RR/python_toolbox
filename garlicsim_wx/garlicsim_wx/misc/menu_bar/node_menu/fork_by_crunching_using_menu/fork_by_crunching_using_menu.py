@@ -36,11 +36,11 @@ class ForkByCrunchingUsingMenu(CuteMenu):
             '&New step profile...',
             ' Create a new step profile and fork with it'
         )
-        frame.Bind(wx.EVT_MENU, self.on_new_step_profile_button,
+        frame.Bind(wx.EVT_MENU, self._on_new_step_profile_button,
                    self.new_step_profile_button)
         
         
-    def on_new_step_profile_button(self, event):
+    def _on_new_step_profile_button(self, event):
         self.frame.crunching_controls.show()
         self.frame.crunching_controls.step_profiles_controls.\
             show_step_profile_editing_dialog(and_fork=True)

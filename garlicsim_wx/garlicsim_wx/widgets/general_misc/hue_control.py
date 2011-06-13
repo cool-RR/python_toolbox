@@ -47,12 +47,7 @@ class HueControl(CuteWindow):
         
         self._pen = wx.Pen(wx.Colour(0, 0, 0), width=0, style=wx.TRANSPARENT)
         
-        self.Bind(wx.EVT_PAINT, self._on_paint)
-        self.Bind(wx.EVT_LEFT_DOWN, self._on_mouse_left_down)
-        self.Bind(wx.EVT_SET_FOCUS, self._on_set_focus)
-        self.Bind(wx.EVT_KILL_FOCUS, self._on_kill_focus)
-        self.Bind(wx.EVT_CHAR, self._on_char)
-
+        self.bind_event_handers(HueControl)
         
         if emitter:
             assert isinstance(emitter, Emitter)
@@ -76,7 +71,30 @@ class HueControl(CuteWindow):
         return wx.NamedColour('Black') if self.lightness > 0.5 else \
                wx.NamedColour('White')
     
+    
+    def open_editing_dialog(self):
+        '''Open a dialog to edit the hue.'''
+        old_hue = self.getter()
+        
+        hue_selection_dialog = HueSelectionDialog.create_and_show_modal(
+            self.TopLevelParent, self.getter, self.setter, self.emitter,
+            lightness=self.lightness, saturation=self.saturation,
+            title=self.dialog_title
+        )
+
             
+    def update(self):
+        if self: # Protecting from dead object
+            self.Refresh()
+
+        
+    def Destroy(self):
+        self.emitter.remove_output(self.update)
+        super(HueControl, self).Destroy()
+
+        
+    ### Event handlers: #######################################################
+    #                                                                         #        
     def _on_paint(self, event):
         dc = wx.BufferedPaintDC(self)
         color = wx_tools.colors.hls_to_wx_color(
@@ -103,34 +121,10 @@ class HueControl(CuteWindow):
             graphics_context.DrawRectangle(2, 2,
                                            width - 5, height - 5)
         
-        
-        
-                
     
-    def _on_mouse_left_down(self, event):
+    def _on_left_down(self, event):
         self.open_editing_dialog()
-      
-        
-    def open_editing_dialog(self):
-        '''Open a dialog to edit the hue.'''
-        old_hue = self.getter()
-        
-        hue_selection_dialog = HueSelectionDialog.create_and_show_modal(
-            self.TopLevelParent, self.getter, self.setter, self.emitter,
-            lightness=self.lightness, saturation=self.saturation,
-            title=self.dialog_title
-        )
-
-            
-    def update(self):
-        if self: # Protecting from dead object
-            self.Refresh()
-
-        
-    def Destroy(self):
-        self.emitter.remove_output(self.update)
-        super(HueControl, self).Destroy()
-        
+    
         
     def _on_char(self, event):
         char = unichr(event.GetUniChar())
@@ -147,4 +141,6 @@ class HueControl(CuteWindow):
 
     def _on_kill_focus(self, event):
         event.Skip()
-        self.Refresh()
+        self.Refresh()   
+    #                                                                         #
+    ### Finished event handlers. ##############################################

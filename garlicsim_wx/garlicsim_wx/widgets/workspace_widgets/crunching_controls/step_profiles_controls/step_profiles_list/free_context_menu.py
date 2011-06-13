@@ -31,6 +31,6 @@ class FreeContextMenu(cute_menu.CuteMenu):
             ' Create a new step profile'
         )
         self.Bind(wx.EVT_MENU,
-                  step_profiles_list.on_new_step_profile_button,
+                  step_profiles_list._on_new_step_profile_button,
                   source=self.new_step_profile_button)
     

@@ -203,7 +203,7 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
         self.PopupMenu(self.free_context_menu, position)
         
         
-    def on_new_step_profile_button(self, event):
+    def _on_new_step_profile_button(self, event):
         self.step_profiles_controls.show_step_profile_editing_dialog()
 
         
