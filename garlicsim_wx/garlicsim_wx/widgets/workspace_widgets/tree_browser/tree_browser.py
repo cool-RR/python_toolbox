@@ -155,10 +155,9 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
         self.SetVirtualSize((width,height))
         
         
-    def on_size(self, e=None):
+    def on_size(self, event):
         self.Refresh()
-        if e is not None:
-            e.Skip()
+        event.Skip()
 
     def on_mouse_event(self, e):
         #todo: should catch drag to outside of the window

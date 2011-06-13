@@ -17,6 +17,7 @@ from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
 from garlicsim_wx.general_misc import emitters
 from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.widgets.general_misc.knob import Knob
+from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
 
 import garlicsim, garlicsim_wx
 from garlicsim_wx.widgets import WorkspaceWidget
@@ -61,27 +62,21 @@ class FinalizeMode(CenterButtonMode):
 
         
 
-class PlaybackControls(wx.Panel, WorkspaceWidget):
+class PlaybackControls(CutePanel, WorkspaceWidget):
     '''Widget to control playback of the simulation.'''
     
     _WorkspaceWidget__name = 'Playback'
 
     def __init__(self, frame):
-        wx.Panel.__init__(self, frame, -1, size=(184, 128),
-                          style=wx.SUNKEN_BORDER)
+        CutePanel.__init__(self, frame, -1, size=(184, 128),
+                           style=wx.SUNKEN_BORDER)
         WorkspaceWidget.__init__(self, frame)
         
         #self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
         self.set_good_background_color()
         self.SetDoubleBuffered(True)
         
-        
         assert isinstance(self.gui_project, garlicsim_wx.GuiProject)
-        # I put this assert mainly for better source assistance in Wing.
-        # It may be removed.
-        
-        self.Bind(wx.EVT_SIZE, self.on_size)
-        self.Bind(wx.EVT_PAINT, self.on_paint)
         
         self.inner_panel = \
             garlicsim_wx.widgets.general_misc.cute_panel.CutePanel(
@@ -162,53 +157,39 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         h_sizer = wx.BoxSizer(wx.HORIZONTAL)
         
                            
-        self.button_to_start = wx.BitmapButton(
+        self.start_button = wx.BitmapButton(
             self.inner_panel, -1, bitmaps_dict['to_start'], size=(31, 50)
         )
         '''Button for moving to start of path.'''
         
-        self.button_previous_node = wx.BitmapButton(
+        self.previous_node_button = wx.BitmapButton(
             self.inner_panel, -1, bitmaps_dict['previous_node'], size=(31, 50)
         )
         '''Button for moving to previous node.'''
         
-        self.button_center_button = wx.BitmapButton(
+        self.center_button = wx.BitmapButton(
             self.inner_panel, -1, bitmaps_dict['play'], size=(60, 50)
         )
         '''Button for playing/pausing playback, and finalizing edited node.'''
         
-        self.button_next_node= wx.BitmapButton(
+        self.next_node_button= wx.BitmapButton(
             self.inner_panel, -1, bitmaps_dict['next_node'], size=(31, 50)
         )
         '''Button for moving to next node.'''
         
-        self.button_to_end = wx.BitmapButton(
+        self.end_button = wx.BitmapButton(
             self.inner_panel, -1, bitmaps_dict['to_end'], size=(31, 50)
         )
         '''Button for moving to end of path.'''
         
-        
-        self.Bind(wx.EVT_BUTTON, self.on_button_to_start,
-                  source=self.button_to_start)
-        
-        self.Bind(wx.EVT_BUTTON, self.on_button_previous_node,
-                  source=self.button_previous_node)
-        
-        self.Bind(wx.EVT_BUTTON, self.on_button_center_button,
-                  source=self.button_center_button)
-        
-        self.Bind(wx.EVT_BUTTON, self.on_button_next_node,
-                  source=self.button_next_node)
-        
-        self.Bind(wx.EVT_BUTTON, self.on_button_to_end,
-                  source=self.button_to_end)
+        self.bind_event_handers(PlaybackControls)
         
         button_line = (
-            self.button_to_start,
-            self.button_previous_node,
-            self.button_center_button,
-            self.button_next_node,
-            self.button_to_end
+            self.start_button,
+            self.previous_node_button,
+            self.center_button,
+            self.next_node_button,
+            self.end_button
         )
         
         for button in button_line:
@@ -272,51 +253,35 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
                        self.playing_speed_knob._recalculate, delay=0.03)
         )
 
-
-    def on_size(self, event):
-        '''EVT_SIZE handler.'''
-        self.Refresh()
-        event.Skip()
-    
         
-    def on_paint(self, event):
-        '''EVT_PAINT handler.'''
-        
-        if self.center_button_update_flag:
-            self._update_center_button()
-        if self.navigation_buttons_update_flag:
-            self._update_navigation_buttons()
-        
-        event.Skip()
-        
-
     def _update_navigation_buttons(self):
         '''Update the navigation buttons, disabling/enabling them as needed.'''
         
         active_node = self.gui_project.active_node
         
         if self.gui_project.path is None or active_node is None:
-            self.button_to_start.Disable()
-            self.button_previous_node.Disable()
-            self.button_next_node.Disable()
-            self.button_to_end.Disable()
+            self.start_button.Disable()
+            self.previous_node_button.Disable()
+            self.next_node_button.Disable()
+            self.end_button.Disable()
     
         else:      
             if active_node.parent is not None:
-                self.button_previous_node.Enable()
-                self.button_to_start.Enable()
+                self.previous_node_button.Enable()
+                self.start_button.Enable()
             else:
-                self.button_previous_node.Disable()
-                self.button_to_start.Disable()
+                self.previous_node_button.Disable()
+                self.start_button.Disable()
                 
             if active_node.children:
-                self.button_next_node.Enable()
-                self.button_to_end.Enable()
+                self.next_node_button.Enable()
+                self.end_button.Enable()
             else:
-                self.button_next_node.Disable()
-                self.button_to_end.Disable()
+                self.next_node_button.Disable()
+                self.end_button.Disable()
         
         self.navigation_buttons_update_flag = False    
+       
         
     def _update_center_button(self):
         '''Update the center button, changing its mode if needed.'''
@@ -325,9 +290,9 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         
         if gui_project.path is None or active_node is None:
             self.set_center_button_mode(PlayMode)
-            self.button_to_start.Disable()
+            self.start_button.Disable()
         else:
-            self.button_to_start.Enable()
+            self.start_button.Enable()
             # todo: find out if it's wasteful to call enable if the button's
             # enbaled
             
@@ -339,29 +304,44 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
                 self.set_center_button_mode(PlayMode)
         
         self.center_button_update_flag = False
-    
+
+        
     def set_center_button_mode(self, center_button_mode): 
         '''Set the mode of the center button.'''
         # Not privatized because it's a setter
         if self.center_button_mode == center_button_mode:
             return
-        self.button_center_button.SetBitmapLabel(
+        self.center_button.SetBitmapLabel(
             self.center_button_bitmap_dict[center_button_mode]
         )
         self.center_button_mode = center_button_mode
-       
         
-    def on_button_to_start(self, e=None):
-        '''Handler for when the to_start button gets pressed.'''
+    ### Event handlers: #######################################################
+    #                                                                         #
+    def _on_size(self, event):
+        self.Refresh()
+        event.Skip()
+    
+        
+    def _on_paint(self, event):        
+        if self.center_button_update_flag:
+            self._update_center_button()
+        if self.navigation_buttons_update_flag:
+            self._update_navigation_buttons()
+        
+        event.Skip()
+        
+        
+    def _on_start_button(self, event):
         try:
             if self.gui_project.path is None: return
             head_node = self.gui_project.path[0]
             self.gui_project.set_active_node(head_node)
         except garlicsim.data_structures.path.PathOutOfRangeError:
             return
+
         
-    def on_button_to_end(self, e=None):
-        '''Handler for when the to_end button gets pressed.'''
+    def _on_end_button(self, event):
         try:
             if self.gui_project.path is None: return
             tail_node = self.gui_project.path[-1]
@@ -369,16 +349,14 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         except garlicsim.data_structures.path.PathOutOfRangeError:
             return
     
-    def on_button_previous_node(self, e=None):
-        '''Handler for when the previous_node button gets pressed.'''
+    def _on_previous_node_button(self, event):
         if self.gui_project.active_node is None: return
         previous_node = self.gui_project.active_node.parent
         if previous_node is not None:
             self.gui_project.set_active_node(previous_node)
         
                 
-    def on_button_next_node(self, e=None):
-        '''Handler for when the next_node button gets pressed.'''
+    def _on_next_node_button(self, event):
         if self.gui_project.active_node is None: return
         try:
             next_node = \
@@ -387,9 +365,10 @@ class PlaybackControls(wx.Panel, WorkspaceWidget):
         except garlicsim.data_structures.path.PathOutOfRangeError:
             return
         
-    def on_button_center_button(self, e=None):
-        '''Handler for when the center button gets pressed.'''
+    def _on_center_button(self, event):
         self.center_button_mode.action(self)
+    #                                                                         #
+    ### Finished event handlers. ##############################################
             
             
             

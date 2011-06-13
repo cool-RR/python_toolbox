@@ -295,7 +295,7 @@ class Frame(garlicsim_wx.widgets.general_misc.cute_frame.CuteFrame):
             
 
         
-    def finalize_active_node(self, e=None):
+    def finalize_active_node(self, event):
         '''Finalize editing of the active node in the active gui project.'''
         assert self.gui_project
         return self.gui_project.finalize_active_node()

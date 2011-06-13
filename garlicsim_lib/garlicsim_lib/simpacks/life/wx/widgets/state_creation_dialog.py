@@ -145,7 +145,7 @@ class StateCreationDialog(garlicsim_wx.widgets.misc.\
         self.EndModal(wx.ID_OK)
 
         
-    def on_cancel(self, e=None):
+    def on_cancel(self, event):
         '''Do 'cancel' on the dialog.'''
         self.EndModal(wx.ID_CANCEL)
         
