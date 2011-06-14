@@ -86,10 +86,7 @@ class StepProfilesControls(CutePanel):
         
         self.SetSizer(self.main_v_sizer)
         
-        
-        self.Bind(wx.EVT_BUTTON, self.on_new_button, source=self.new_button)
-        self.Bind(wx.EVT_BUTTON, self.on_delete_button,
-                  source=self.delete_button)
+        self.bind_event_handers(StepProfilesControls)
 
         
     def _recalculate(self):
@@ -168,11 +165,11 @@ class StepProfilesControls(CutePanel):
             self.gui_project.step_profiles.remove(step_profile)
             
             
-    def on_new_button(self, event):
+    def _on_new_button(self, event):
         self.show_step_profile_editing_dialog(step_profile=None)
     
     
-    def on_delete_button(self, event):
+    def _on_delete_button(self, event):
         self.try_delete_step_profile(
             self.step_profiles_list.get_selected_step_profile()
         )

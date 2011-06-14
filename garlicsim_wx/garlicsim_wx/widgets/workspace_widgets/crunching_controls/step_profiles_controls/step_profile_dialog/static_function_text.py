@@ -38,7 +38,7 @@ class StaticFunctionText(CutePanel):
         
         self.text.Wrap(self.width - 10)
         
-        self.Bind(wx.EVT_SIZE, self.on_size)
+        self.bind_event_handers(StaticFunctionText)
         
         self.main_h_sizer = wx.BoxSizer(wx.HORIZONTAL)
         
@@ -85,5 +85,6 @@ class StaticFunctionText(CutePanel):
             self.Layout()
 
     
-    def on_size(self, event):
+    def _on_size(self, event):
         pass
+    

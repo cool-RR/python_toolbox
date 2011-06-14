@@ -78,7 +78,6 @@ class Textual(CutePanel):
         
         self.Bind(wx.EVT_SPINCTRL, self._on_spin, source=self.spin_ctrl)
         self.Bind(wx.EVT_TEXT, self._on_text, source=self.spin_ctrl)
-        #self.Bind(wx.EVT_KILL_FOCUS, self._on_kill_focue)
         
         
     value_freezer = freezers.FreezerProperty()
@@ -104,10 +103,6 @@ class Textual(CutePanel):
             self.hue_selection_dialog.setter(
                 degrees_to_ratio(self.spin_ctrl.Value)
             )
-
-            
-    #def _on_kill_focus(self, event):
-        #assert not self.value_freezer.frozen
 
             
     def set_focus_on_spin_ctrl_and_select_all(self):

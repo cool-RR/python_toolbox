@@ -30,8 +30,7 @@ class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,
         
         self.SetupScrolling()
         
-        self.Bind(wx.EVT_PAINT, self.on_paint)
-        self.Bind(wx.EVT_SIZE, self.on_size)
+        self.bind_event_handers(StateViewer)
         
         self.state = None
         '''The current state being displayed.'''
@@ -52,8 +51,7 @@ class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,
         self.Refresh()
 
         
-    def on_paint(self, event):
-        '''Paint event handler.'''
+    def _on_paint(self, event):
         
         event.Skip()
         
@@ -160,8 +158,7 @@ class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,
         ### Finished drawing waiting clients. #################################
         
 
-    def on_size(self, event):
-        '''Refresh the widget.'''
+    def _on_size(self, event):
         self.Refresh()
         event.Skip()
 

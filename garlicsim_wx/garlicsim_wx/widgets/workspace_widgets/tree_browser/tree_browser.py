@@ -59,10 +59,7 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
         #self.Centre()
         #self.SetVirtualSize((1000,1000))
 
-        self.Bind(wx.EVT_PAINT, self.on_paint)
-        self.Bind(wx.EVT_SIZE, self.on_size)
-        self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse_event)
-        self.Bind(wx.EVT_KEY_DOWN, self.on_key_down)
+        self.bind_event_handers(TreeBrowser)
 
         self.tree_remapping_flag = False
         self.recalculation_flag = False
@@ -123,7 +120,7 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
                 )
             )
 
-    def on_paint(self, event):
+    def _on_paint(self, event):
         '''Refresh the tree browser.'''
 
         event.Skip()
@@ -155,11 +152,11 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
         self.SetVirtualSize((width,height))
         
         
-    def on_size(self, event):
+    def _on_size(self, event):
         self.Refresh()
         event.Skip()
 
-    def on_mouse_event(self, e):
+    def _on_mouse_events(self, e):
         #todo: should catch drag to outside of the window
         #(x,y)=self.CalcUnscrolledPosition(e.GetPositionTuple())
 
@@ -206,7 +203,7 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
         return None
 
                 
-    def on_key_down(self, event):
+    def _on_key_down(self, event):
         self.frame.ProcessEvent(event)
 
 
