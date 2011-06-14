@@ -76,6 +76,7 @@ class StateReprViewer(wx.Panel, WorkspaceWidget):
                         self.text_ctrl.SetValue(state_repr)
             self.needs_recalculation_flag = False
         
+            
     def on_paint(self, event):
         '''EVT_PAINT handler.'''
         event.Skip()

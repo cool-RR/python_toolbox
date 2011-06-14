@@ -12,6 +12,7 @@ import pkg_resources
 
 from garlicsim.general_misc import caching
 from garlicsim_wx.general_misc import wx_tools
+from garlicsim_wx.widgets.general_misc.cute_window import CuteWindow
 
 from . import images as __images_package
 images_package = __images_package.__name__
@@ -42,16 +43,16 @@ EVT_STAR_ADDER_PRESSED = wx.PyEventBinder(
 '''Event saying that a star adder button was pressed.'''
 
 
-class StarAdder(wx.BitmapButton):
+class StarAdder(wx.BitmapButton, CuteWindow):
     '''Button for adding an entry for another star-arg or star-kwarg.'''
     def __init__(self, argument_control):
         self.argument_control = argument_control
         
         wx.BitmapButton.__init__(self, argument_control, bitmap=get_bitmap())
                 
-        self.Bind(wx.EVT_BUTTON, self.on_button)
+        self.bind_event_handers(StarAdder)
         
-    def on_button(self, event):
+    def _on_button(self, event):
         wx_tools.event_tools.post_event(
             self,
             EVT_STAR_ADDER_PRESSED,

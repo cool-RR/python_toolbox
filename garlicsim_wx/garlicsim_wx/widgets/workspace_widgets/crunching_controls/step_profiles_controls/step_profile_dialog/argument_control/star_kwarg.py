@@ -58,9 +58,7 @@ class StarKwarg(CutePanel):
         
         self.SetSizer(self.main_h_sizer)
         
-        self.Bind(wx.EVT_BUTTON, lambda event: self.remove(),
-                  source=self.close_button)
-        
+        self.bind_event_handers(StarKwarg)
 
         
     def remove(self):
@@ -77,3 +75,6 @@ class StarKwarg(CutePanel):
         '''Get the value of the kwarg as a string.'''
         return self.value_text_ctrl.GetValue()
         
+    
+    def _on_close_button(self, event):
+        self.remove()

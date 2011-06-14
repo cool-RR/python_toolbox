@@ -102,29 +102,27 @@ class StateCreationDialog(garlicsim_wx.widgets.misc.\
         vbox = wx.BoxSizer(wx.VERTICAL)
 
         last_hbox = wx.BoxSizer(wx.HORIZONTAL)
-        ok = wx.Button(self, wx.ID_OK, 'Create &state')
+        self.ok_button = wx.Button(self, wx.ID_OK, 'Create &state')
         ok_help_text = 'Create the new state.'
-        ok.SetHelpText(ok_help_text)
-        ok.SetToolTipString(ok_help_text)
-        ok.SetDefault()
-        self.Bind(wx.EVT_BUTTON, self.on_ok, id=ok.GetId())
-        cancel = wx.Button(self, wx.ID_CANCEL, 'Cancel')
-        self.Bind(wx.EVT_BUTTON, self.on_cancel, id=cancel.GetId())
-        last_hbox.Add(ok, 0)
-        last_hbox.Add(cancel, 0, wx.LEFT, 5)
+        self.ok_button.SetHelpText(ok_help_text)
+        self.ok_button.SetToolTipString(ok_help_text)
+        self.ok_button.SetDefault()
+        self.cancel_button = wx.Button(self, wx.ID_CANCEL, 'Cancel')
+        last_hbox.Add(self.ok_button, 0)
+        last_hbox.Add(self.cancel_button, 0, wx.LEFT, 5)
 
         vbox.Add(hbox1, 0, wx.ALIGN_CENTER | wx.TOP | wx.BOTTOM, 10)
         vbox.Add(hbox2, 0, wx.ALIGN_CENTER | wx.TOP | wx.BOTTOM, 10)
         vbox.Add(last_hbox, 1, wx.ALIGN_CENTER |  wx.BOTTOM, 10)
+        
+        self.bind_event_handers(StateCreationDialog)
 
         self.SetSizer(vbox)
         vbox.Fit(self)
-        ok.SetFocus()
+        self.ok_button.SetFocus()
 
         
-    def on_ok(self, event):
-        '''Do 'okay' on the dialog.'''
-
+    def _on_ok_button(self, event):
         try:
             width = int(self.x_textctrl.GetValue())
         except ValueError:
@@ -145,8 +143,7 @@ class StateCreationDialog(garlicsim_wx.widgets.misc.\
         self.EndModal(wx.ID_OK)
 
         
-    def on_cancel(self, event):
-        '''Do 'cancel' on the dialog.'''
+    def _on_cancel_button(self, event):
         self.EndModal(wx.ID_CANCEL)
         
 
