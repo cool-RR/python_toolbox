@@ -9,10 +9,12 @@ See its documentation for more details.
 
 import wx
 
+from garlicsim_wx.widgets.general_misc.cute_window import CuteWindow
+
 from . import colors
 
 
-class ValueTextCtrl(wx.TextCtrl):
+class ValueTextCtrl(wx.TextCtrl, CuteWindow):
     '''Widget for inputting a Python expression for an argument value.'''
     
     def __init__(self, parent, value='', root=None):
@@ -25,9 +27,7 @@ class ValueTextCtrl(wx.TextCtrl):
         
         self.SetMinSize((10, -1))
         
-        self.Bind(wx.EVT_KILL_FOCUS, self.on_kill_focus)
-        
-        self.Bind(wx.EVT_TEXT, self.on_text)
+        self.bind_event_handers(ValueTextCtrl)
         
         self.error_mode = False
         
@@ -53,12 +53,12 @@ class ValueTextCtrl(wx.TextCtrl):
         return is_valid
             
         
-    def on_text(self, event):
+    def _on_text(self, event):
         if self.error_mode:
             self._check_validity_and_color()
             
             
-    def on_kill_focus(self, event):
+    def _on_kill_focus(self, event):
         event.Skip()
         if self.FindFocus() != self:
             if not self._check_validity_and_color() and not self.error_mode:
