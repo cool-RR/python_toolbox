@@ -20,15 +20,16 @@ from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.general_misc import cute_timer
 from garlicsim.general_misc import math_tools
 from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
+from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
 
 import garlicsim, garlicsim_wx
 from . import images
 
 
-__all__ = ["ScratchWheel"]
+__all__ = ['ScratchWheel']
 
 
-class ScratchWheel(wx.Panel):
+class ScratchWheel(CutePanel):
     '''Widget for visualizing playback and browsing small time intervals.'''
     def __init__(self, parent, gui_project, *args, **kwargs):
         
@@ -37,13 +38,10 @@ class ScratchWheel(wx.Panel):
         else:
             kwargs['style'] = wx.SUNKEN_BORDER
             
-        wx.Panel.__init__(self, parent, *args, **kwargs)
+        CutePanel.__init__(self, parent, *args, **kwargs)
         
         self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
         
-        self.Bind(wx.EVT_PAINT, self.on_paint)
-        self.Bind(wx.EVT_SIZE, self.on_size)
-        self.Bind(wx.EVT_MOUSE_EVENTS, self.on_mouse_event)
         self.Unbind(wx.EVT_ERASE_BACKGROUND) # Good or bad?
         
         self.SetCursor(wx_tools.cursors.collection.get_open_grab())
@@ -117,11 +115,6 @@ class ScratchWheel(wx.Panel):
         wheel is frozen with a high motion blur.
         '''
         
-        self.Bind(wx.EVT_TIMER,
-                  self.on_motion_blur_update_timer,
-                  self.motion_blur_update_timer)
-        
-        
         self.recalculation_flag = False
         '''Flag saying whether the scratch wheel needs to recalculate.'''
         
@@ -142,6 +135,7 @@ class ScratchWheel(wx.Panel):
                 name='needs_recalculation',
             )
         
+        self.bind_event_handers(ScratchWheel)
         
         self.needs_recalculation_emitter.emit()
         
@@ -250,10 +244,13 @@ class ScratchWheel(wx.Panel):
             self.motion_blur_update_timer.Stop()
             
         self.last_tracked_time_and_angle = current
-            
+       
         
-    def on_paint(self, event):
-        '''EVT_PAINT handler.'''
+    ###########################################################################
+    ### Event handlers: #######################################################
+    #                                                                         #
+    
+    def _on_paint(self, event):
         # todo: optimization: if motion blur is (rounded to) zero, don't draw
         
         event.Skip()
@@ -279,8 +276,8 @@ class ScratchWheel(wx.Panel):
         dc.DrawBitmap(self.current_bitmap, ox, oy)
         # todo: Is the way I draw the bitmap the fastest way?
             
-    def on_mouse_event(self, e):
-        '''EVT_MOUSE_EVENTS handler.'''
+        
+    def _on_mouse_events(self, event):
         # todo: possibly do momentum, like in old shockwave carouselle.
         # todo: right click should give context menu with 'Sensitivity...' and
         # 'Disable'
@@ -295,10 +292,10 @@ class ScratchWheel(wx.Panel):
         self.Refresh()
         
         (w, h) = self.GetClientSize()
-        (x, y) = e.GetPositionTuple()
+        (x, y) = event.GetPositionTuple()
         (rx, ry) = (x/w, y/h)
         
-        if e.LeftDown():
+        if event.LeftDown():
             self.angle_while_dragging = self.grabbed_angle = \
                 self._expanded_pos_to_angle(rx)
             self.d_angle_while_dragging = 0
@@ -315,7 +312,7 @@ class ScratchWheel(wx.Panel):
             
             return
         
-        if e.LeftIsDown():
+        if event.LeftIsDown():
             if not self.HasCapture():
                 return
             self.angle_while_dragging = self._expanded_pos_to_angle(rx)
@@ -345,7 +342,7 @@ class ScratchWheel(wx.Panel):
                     self.WarpPointer(edge_x, y)
             
                 
-        if e.LeftUp(): #or e.Leaving():
+        if event.LeftUp(): #or e.Leaving():
             # todo: make sure that when leaving entire app, things don't get
             # fucked
             if self.HasCapture():
@@ -368,16 +365,18 @@ class ScratchWheel(wx.Panel):
             self.was_playing_before_drag = None
             
 
-    def on_size(self, event):
-        '''EVT_SIZE handler.'''
+    def _on_size(self, event):
         self.Refresh()
         if event is not None:
             event.Skip()
-    
-    def on_motion_blur_update_timer(self, event):
-        '''Handler for when the motion blur timer goes off.'''
+
+            
+    def _on_motion_blur_update_timer(self, event):
         self.recalculation_flag = True
         self.Refresh()
         
+    #                                                                         #
+    ### Finished event handlers. ##############################################
+    ###########################################################################
         
         

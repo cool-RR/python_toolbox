@@ -315,6 +315,7 @@ class PlaybackControls(CutePanel, WorkspaceWidget):
             self.center_button_bitmap_dict[center_button_mode]
         )
         self.center_button_mode = center_button_mode
+
         
     ### Event handlers: #######################################################
     #                                                                         #
@@ -364,6 +365,7 @@ class PlaybackControls(CutePanel, WorkspaceWidget):
             self.gui_project.set_active_node(next_node)
         except garlicsim.data_structures.path.PathOutOfRangeError:
             return
+
         
     def _on_center_button(self, event):
         self.center_button_mode.action(self)
