@@ -25,7 +25,7 @@ class StateReprViewer(wx.Panel, WorkspaceWidget):
 
         self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
         
-        self.Bind(wx.EVT_PAINT, self.on_paint)        
+        self.Bind(wx.EVT_PAINT, self._on_paint)        
         
         self.text_ctrl = wx.TextCtrl(
             self,
@@ -77,7 +77,7 @@ class StateReprViewer(wx.Panel, WorkspaceWidget):
             self.needs_recalculation_flag = False
         
             
-    def on_paint(self, event):
+    def _on_paint(self, event):
         '''EVT_PAINT handler.'''
         event.Skip()
         # Notice that we are not checking the `needs_recalculation_flag` here.

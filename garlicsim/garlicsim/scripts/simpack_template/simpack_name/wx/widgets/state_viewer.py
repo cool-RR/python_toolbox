@@ -10,15 +10,15 @@ class StateViewer(wx.Panel,
     
     def __init__(self, frame):
             
-        # We need to call the __init__ of both our base classes:
+        # We need to call the `__init__` of both our base classes:
         wx.Panel.__init__(self, frame,
                           style=wx.SUNKEN_BORDER)        
         garlicsim_wx.widgets.WorkspaceWidget.__init__(self, frame)
         
         self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM) # Solves Windows flicker
         
-        self.Bind(wx.EVT_PAINT, self.on_paint)
-        self.Bind(wx.EVT_SIZE, self.on_size)
+        self.Bind(wx.EVT_PAINT, self._on_paint)
+        self.Bind(wx.EVT_SIZE, self._on_size)
         
         # ...
         
@@ -36,8 +36,8 @@ class StateViewer(wx.Panel,
         self.Refresh()
         
         
-    def on_paint(self, event):
-        # This is your EVT_PAINT handler, which draws the state on the widget.
+    def _on_paint(self, event):
+        # This is your `EVT_PAINT` handler, which draws the state on the widget.
         
         event.Skip()
         
@@ -46,8 +46,8 @@ class StateViewer(wx.Panel,
         # ...
                 
         
-    def on_size(self, event):
-        # An EVT_SIZE handler. Just some wxPython thing that I think you're
+    def _on_size(self, event):
+        # An `EVT_SIZE` handler. Just some wxPython thing that I think you're
         # supposed to do.
         self.Refresh()
 

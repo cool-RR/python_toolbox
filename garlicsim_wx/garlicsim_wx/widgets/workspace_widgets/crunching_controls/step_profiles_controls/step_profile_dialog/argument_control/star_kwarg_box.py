@@ -56,11 +56,11 @@ class StarKwargBox(wx.StaticBox):
         self.star_adder = StarAdder(argument_control)
         self.sizer.Add(self.star_adder, 0, wx.EXPAND | wx.ALL, border=5)
         
-        self.Parent.Bind(EVT_STAR_ADDER_PRESSED, self.on_star_adder_pressed,
+        self.Parent.Bind(EVT_STAR_ADDER_PRESSED, self._on_star_adder_pressed,
                          source=self.star_adder)
         
         
-    def on_star_adder_pressed(self, event):
+    def _on_star_adder_pressed(self, event):
         
         with wx_tools.window_tools.WindowFreezer(self.Parent.Parent):
             star_kwarg = StarKwarg(self.argument_control, self)

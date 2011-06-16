@@ -86,7 +86,7 @@ class CrunchingControls(wx.lib.scrolledpanel.ScrolledPanel, WorkspaceWidget):
         # not just the local.
 
         
-    def on_size(self, event):
+    def _on_size(self, event):
         self.Refresh()
         event.Skip()
         

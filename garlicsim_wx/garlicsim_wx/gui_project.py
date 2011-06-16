@@ -396,19 +396,19 @@ class GuiProject(object):
         Initialization related to the widgets which make up the gui project.
         '''
         
-        self.frame.Bind(wx.EVT_MENU, self.on_fork_by_editing_menu_item,
+        self.frame.Bind(wx.EVT_MENU, self._on_fork_by_editing_menu_item,
                          id=s2i("Fork by editing"))
-        self.frame.Bind(wx.EVT_MENU, self.on_fork_by_crunching_menu_item,
+        self.frame.Bind(wx.EVT_MENU, self._on_fork_by_crunching_menu_item,
                          id=s2i("Fork by crunching"))
         
         
 
-    def on_fork_by_crunching_menu_item(self, event):
+    def _on_fork_by_crunching_menu_item(self, event):
         '''Event handler for "Fork by crunching" menu item.'''
         self.fork_by_crunching()
         
         
-    def on_fork_by_editing_menu_item(self, event):
+    def _on_fork_by_editing_menu_item(self, event):
         '''Event handler for "Fork by editing" menu item.'''
         self.fork_by_editing()
 

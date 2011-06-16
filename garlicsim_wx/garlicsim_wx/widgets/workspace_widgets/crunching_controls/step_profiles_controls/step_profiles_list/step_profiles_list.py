@@ -68,14 +68,14 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
         self.free_context_menu = FreeContextMenu(self)
         self.step_profile_context_menu = StepProfileContextMenu(self)
         
-        self.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.on_tree_item_activated)
+        self.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self._on_tree_item_activated)
         
-        self.Bind(wx.EVT_TREE_ITEM_MENU, self.on_tree_item_menu)
-        self.Bind(wx.EVT_CONTEXT_MENU, self.on_context_menu)
+        self.Bind(wx.EVT_TREE_ITEM_MENU, self._on_tree_item_menu)
+        self.Bind(wx.EVT_CONTEXT_MENU, self._on_context_menu)
         
-        self.Bind(wx.EVT_TREE_BEGIN_DRAG, self.on_tree_begin_drag)
+        self.Bind(wx.EVT_TREE_BEGIN_DRAG, self._on_tree_begin_drag)
         
-        self.Bind(wx.EVT_TREE_SEL_CHANGED, self.on_tree_sel_changed)
+        self.Bind(wx.EVT_TREE_SEL_CHANGED, self._on_tree_sel_changed)
         
         self.GetMainWindow().Bind(wx.EVT_KEY_DOWN, self.on_key_down)
         
@@ -163,14 +163,14 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
         self.SelectItem(item)
         
         
-    def on_tree_item_activated(self, event):
+    def _on_tree_item_activated(self, event):
         assert event.GetItem() == self.GetSelection()
         self.step_profiles_controls.show_step_profile_editing_dialog(
             self.get_selected_step_profile()
         )
     
     
-    def on_tree_item_menu(self, event):
+    def _on_tree_item_menu(self, event):
         abs_position = event.GetPoint() or wx.DefaultPosition
         
         if abs_position == wx.DefaultPosition:
@@ -191,7 +191,7 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
             
     
             
-    def on_context_menu(self, event):
+    def _on_context_menu(self, event):
 
         abs_position = event.GetPosition()
         
@@ -207,36 +207,36 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
         self.step_profiles_controls.show_step_profile_editing_dialog()
 
         
-    def on_fork_by_crunching_button(self, event):
+    def _on_fork_by_crunching_button(self, event):
         self.gui_project.fork_by_crunching(
             self.get_selected_step_profile()
         )
 
         
-    def on_select_tree_members_button(self, event):
+    def _on_select_tree_members_button(self, event):
         raise NotImplementedError()
 
         
-    def on_change_color_button(self, event):
+    def _on_change_color_button(self, event):
         item = self.GetSelection()
         item.step_profile_item_panel.hue_control.open_editing_dialog()
 
         
-    def on_duplicate_and_edit_button(self, event):
+    def _on_duplicate_and_edit_button(self, event):
         self.step_profiles_controls.show_step_profile_editing_dialog(
             self.get_selected_step_profile()
         )
 
         
-    def on_tree_begin_drag(self, event):
+    def _on_tree_begin_drag(self, event):
         event.Allow()
         
         
-    def on_tree_end_drag(self, event):
+    def _on_tree_end_drag(self, event):
         event.Allow()
         
     
-    def on_tree_sel_changed(self, event):
+    def _on_tree_sel_changed(self, event):
         event.Skip()
         self.step_profiles_controls._recalculate()
        

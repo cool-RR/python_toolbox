@@ -301,7 +301,7 @@ class Frame(garlicsim_wx.widgets.general_misc.cute_frame.CuteFrame):
         return self.gui_project.finalize_active_node()
 
     
-    def on_new(self, event=None):
+    def _on_new(self, event):
         '''Create a new gui project.'''        
         
         if self.gui_project is not None:
@@ -353,7 +353,7 @@ class Frame(garlicsim_wx.widgets.general_misc.cute_frame.CuteFrame):
             self.__setup_gui_project(gui_project)
 
         
-    def on_exit_menu_button(self, event):
+    def _on_exit_menu_button(self, event):
         '''Exit menu button handler.'''
         self._post_close_event()
 
@@ -545,8 +545,8 @@ class Frame(garlicsim_wx.widgets.general_misc.cute_frame.CuteFrame):
         self.gui_project.emitter_system.top_emitter.emit()
         
     
-    def on_open(self, event=None):
-        '''Raise a dialog for opening a gui project from file.'''
+    def _on_open(self, event):
+        '''Show a dialog for opening a gui project from file.'''
         
         if self.gui_project is not None:
             
@@ -623,7 +623,7 @@ class Frame(garlicsim_wx.widgets.general_misc.cute_frame.CuteFrame):
 
     
     
-    def on_save(self, event=None):
+    def _on_save(self, event=None):
         '''Raise a dialog for saving a gui project to file.'''
         
         assert self.gui_project is not None
