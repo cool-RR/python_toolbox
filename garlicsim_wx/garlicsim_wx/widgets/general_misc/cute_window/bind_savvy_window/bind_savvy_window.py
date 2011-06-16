@@ -17,6 +17,9 @@ from .bind_savvy_window_type import BindSavvyWindowType
 
 class BindSavvyWindow(wx.Window):
     '''
+    
+    Some of this class's functionality is in its metaclass; see documentation
+    of `BindSavvyWindowType`'s methods and attributes for more details.
     '''
     
     __metaclass__ = BindSavvyWindowType
