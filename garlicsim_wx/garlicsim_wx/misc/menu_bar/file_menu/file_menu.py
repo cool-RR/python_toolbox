@@ -31,7 +31,8 @@ class FileMenu(CuteMenu):
             '&New...\tCtrl+N',
             ' Create a new simulation'
         )
-        frame.Bind(wx.EVT_MENU, frame._on_new, self.new_button)
+        frame.Bind(wx.EVT_MENU, lambda event: frame.create_new_gui_project(),
+                   self.new_button)
         
 
         self.open_button = self.Append(
@@ -39,7 +40,8 @@ class FileMenu(CuteMenu):
             '&Open...\tCtrl+O',
             ' Open a saved simulation'
         )
-        frame.Bind(wx.EVT_MENU, frame._on_open, self.open_button)        
+        frame.Bind(wx.EVT_MENU, lambda event: frame.open_gui_project(),
+                   self.open_button)        
         
         
         # todo: put open recent here
@@ -61,7 +63,8 @@ class FileMenu(CuteMenu):
             '&Save\tCtrl+S',
             ' Save the currently open simulation'
         )
-        frame.Bind(wx.EVT_MENU, frame._on_save, self.save_button)
+        frame.Bind(wx.EVT_MENU, lambda event: frame.save_gui_project(),
+                   self.save_button)
         
         
         self.save_as_button = self.Append(
@@ -115,7 +118,7 @@ class FileMenu(CuteMenu):
             'E&xit',
             ' Close GarlicSim')              
         
-        frame.Bind(wx.EVT_MENU, frame._on_exit_menu_button, self.exit_button)
+        frame.Bind(wx.EVT_MENU, lambda event: frame.exit(), self.exit_button)
 
         
     def _recalculate(self):

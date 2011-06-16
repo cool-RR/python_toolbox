@@ -292,16 +292,15 @@ class Frame(garlicsim_wx.widgets.general_misc.cute_frame.CuteFrame):
             wx_tools.keyboard.Key(wx.WXK_SPACE): on_space,
             wx_tools.keyboard.Key(wx.WXK_RETURN): on_return,
         }    
-            
 
         
-    def finalize_active_node(self, event):
+    def finalize_active_node(self):
         '''Finalize editing of the active node in the active gui project.'''
         assert self.gui_project
         return self.gui_project.finalize_active_node()
 
     
-    def _on_new(self, event):
+    def create_new_gui_project(self):
         '''Create a new gui project.'''        
         
         if self.gui_project is not None:
@@ -351,11 +350,6 @@ class Frame(garlicsim_wx.widgets.general_misc.cute_frame.CuteFrame):
         with self.create_cursor_changer(wx.CURSOR_WAIT):
             gui_project = GuiProject(simpack, self)
             self.__setup_gui_project(gui_project)
-
-        
-    def _on_exit_menu_button(self, event):
-        '''Exit menu button handler.'''
-        self._post_close_event()
 
         
     def _post_close_event(self):
@@ -545,7 +539,7 @@ class Frame(garlicsim_wx.widgets.general_misc.cute_frame.CuteFrame):
         self.gui_project.emitter_system.top_emitter.emit()
         
     
-    def _on_open(self, event):
+    def open_gui_project(self):
         '''Show a dialog for opening a gui project from file.'''
         
         if self.gui_project is not None:
@@ -623,8 +617,8 @@ class Frame(garlicsim_wx.widgets.general_misc.cute_frame.CuteFrame):
 
     
     
-    def _on_save(self, event=None):
-        '''Raise a dialog for saving a gui project to file.'''
+    def save_gui_project(self):
+        '''Show a dialog for saving a gui project to file.'''
         
         assert self.gui_project is not None
         
@@ -659,10 +653,18 @@ class Frame(garlicsim_wx.widgets.general_misc.cute_frame.CuteFrame):
                     'Error saving to file:\n' + traceback.format_exc(),
                     style=(wx.OK | wx.ICON_ERROR)
                 )
-            
         
+    
+        
+    def exit(self):
+        '''Exit GarlicSim.'''
+        self._post_close_event()    
+        
+    ###########################################################################
+    ### Event handlers: #######################################################
+    #                                                                         #
+    
     def _on_close(self, event):
-        '''Close the frame.'''
         if self.gui_project:
             self.gui_project.stop_playing()
         self.aui_manager.UnInit()
@@ -691,7 +693,11 @@ class Frame(garlicsim_wx.widgets.general_misc.cute_frame.CuteFrame):
             
         self.PopupMenu(self.context_menu, position)
 
+        
     def _on_background_timer(self, event):
         self.sync_crunchers()
-    
-    
+        
+    #                                                                         #
+    ### Finished event handlers. ##############################################
+    ###########################################################################
+        
