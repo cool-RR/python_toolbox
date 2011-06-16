@@ -77,7 +77,7 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
         
         self.Bind(wx.EVT_TREE_SEL_CHANGED, self._on_tree_sel_changed)
         
-        self.GetMainWindow().Bind(wx.EVT_KEY_DOWN, self.on_key_down)
+        self.GetMainWindow().Bind(wx.EVT_KEY_DOWN, self._on_key_down)
         
         self.gui_project.step_profiles_set_modified_emitter.add_output(
             self.update
@@ -241,7 +241,7 @@ class StepProfilesList(cute_hyper_tree_list.CuteHyperTreeList):
         self.step_profiles_controls._recalculate()
        
         
-    def on_key_down(self, event):
+    def _on_key_down(self, event):
         key = wx_tools.keyboard.Key.get_from_key_event(event)
         if key == wx_tools.keyboard.Key(wx.WXK_DELETE):
             self.step_profiles_controls.try_delete_step_profile(

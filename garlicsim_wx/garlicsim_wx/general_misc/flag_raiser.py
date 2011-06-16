@@ -49,7 +49,7 @@ class FlagRaiser(object): # todo: rename?
             self.timer = cute_timer.CuteTimer(self.window)
             '''The timer we use to call the function.'''
             
-            self.window.Bind(wx.EVT_TIMER, self.on_timer, self.timer)
+            self.window.Bind(wx.EVT_TIMER, self._on_timer, self.timer)
 
             
     def __call__(self):
@@ -62,7 +62,6 @@ class FlagRaiser(object): # todo: rename?
             if not self.timer.IsRunning():
                 self.timer.Start(self._delay_in_ms, oneShot=True)
                 
-    def on_timer(self, event):
-        '''EVT_TIMER event handler.'''
+    def _on_timer(self, event):
         if getattr(self.window, self.attribute_name) is True:
             self.function()
