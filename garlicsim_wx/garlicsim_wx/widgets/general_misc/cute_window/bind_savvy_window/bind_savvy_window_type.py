@@ -19,7 +19,7 @@ class BindSavvyWindowType(type):
     '''
     Metaclass for the `BindSavvyWindow` class.
     
-    See its documentation for more information.
+    See documentation of `BindSavvyWindow` for more information.
     '''
     
     event_modules = []
@@ -39,7 +39,8 @@ class BindSavvyWindowType(type):
         
         Each grokker corresponds to an event handler function and its
         responsibilty is to figure out the correct event to handle based on the
-        function's name.
+        function's name. See documentation of `EventHandlerGrokker` for more
+        information.
         '''
         
         names_to_event_handlers = dict_tools.filter_items(
@@ -50,6 +51,7 @@ class BindSavvyWindowType(type):
                 getattr(value, '_BindSavvyWindowType__dont_bind_automatically',
                         None) is not True
         )
+        '''Dict mapping names to event handling functions.'''
         
         return [EventHandlerGrokker(name, value, cls) for (name, value) in
                 names_to_event_handlers.items()]

@@ -36,10 +36,13 @@ class BindSavvyWindow(wx.Window):
         `wx.EVT_KEY_DOWN`, while a method with a name of `_on_ok_button` will
         be bound to a `wx.EVT_BUTTON` event sent from `self.ok_button`.
         
-        `cls` should usually be 
+        `cls` should usually be the class in whose `__init__` method the
+        `bind_event_handers` function is being called.
         '''
         if not isinstance(self, cls):
-            raise Exception('blocktododoc')
+            raise TypeError('`cls` must be a class that the window is an '
+                            'instance of; you gave a `cls` of `%s`, which '
+                            '`%s` is not an instance of.' % (cls, self))
         event_handler_grokkers = \
             cls._BindSavvyWindowType__event_handler_grokkers
         for event_handler_grokker in event_handler_grokkers:
