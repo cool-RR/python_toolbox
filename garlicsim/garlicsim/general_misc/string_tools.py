@@ -7,13 +7,13 @@ import sys
 import re
 
 
-def camelcase_to_underscore(s):
+def camelcase_to_underscore(string):
     '''
     Convert a string from camelcase to underscore.
     
     Example: camelcase_to_underscore('HelloWorld') == 'hello_world'
     '''
-    return re.sub('(((?<=[a-z])[A-Z])|([A-Z](?![A-Z]|$)))', '_\\1', s).\
+    return re.sub('(((?<=[a-z])[A-Z])|([A-Z](?![A-Z]|$)))', '_\\1', string).\
            lower().strip('_')
 
 
@@ -23,9 +23,9 @@ def camelcase_to_spacecase(s):
     
     Example: camelcase_to_underscore('HelloWorld') == 'Hello world'
     '''
-    if s == '': return s
+    if s == '': return string
     character_process = lambda c: (' ' + c.lower()) if c.isupper() else c
-    return s[0] + ''.join(character_process(c) for c in s[1:])
+    return string[0] + ''.join(character_process(c) for c in s[1:])
 
 
 def docstring_trim(docstring):
@@ -53,4 +53,17 @@ def docstring_trim(docstring):
         trimmed.pop(0)
         
     return '\n'.join(trimmed)
-    
+
+
+def get_n_identical_edge_characters(string, character=None, head=True):
+    if not string:
+        return 0
+    index = 0 if head is True else -1
+    direction = 1 if head is True else -1
+    if character is None:
+        character = string[index]
+    for i, c in enumerate(string[::direction]):
+        if c != character:
+            return i
+    else:
+        return len(s)
