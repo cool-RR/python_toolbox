@@ -17,15 +17,15 @@ def camelcase_to_underscore(string):
            lower().strip('_')
 
 
-def camelcase_to_spacecase(s):
+def camelcase_to_spacecase(string):
     '''
     Convert a string from camelcase to spacecase.
     
     Example: camelcase_to_underscore('HelloWorld') == 'Hello world'
     '''
-    if s == '': return string
-    character_process = lambda c: (' ' + c.lower()) if c.isupper() else c
-    return string[0] + ''.join(character_process(c) for c in s[1:])
+    if string == '': return string
+    process_character = lambda c: (' ' + c.lower()) if c.isupper() else c
+    return string[0] + ''.join(process_character(c) for c in string[1:])
 
 
 def docstring_trim(docstring):

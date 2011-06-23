@@ -3,6 +3,7 @@
 
 '''Defines various tools for manipulating sequences.'''
 
+import types
 import itertools
 
 from garlicsim.general_misc.nifty_collections import Counter
@@ -174,6 +175,30 @@ def parse_slice(s):
     return (start, stop, step)
 
     
+def to_tuple(single_or_sequence, member_type=None, member_test=None):
+    if (member_type is not None) and (member_test is not None):
+        raise Exception('You may specify either `member_type` or '
+                        '`member_test` but not both.')
+    if member_test is not None:
+        actual_member_test = member_test
+    elif member_type is not None:
+        assert isinstance(member_type, (type, types.ClassType))
+        actual_member_test = \
+            lambda candidate: isinstance(candidate, member_type)
+    else:
+        actual_member_test = None
+    
+    if actual_member_test is None:
+        if is_sequence(single_or_sequence):
+            return tuple(single_or_sequence)
+        else:
+            return (single_or_sequence,)
+    else: # actual_member_test is not None
+        if actual_member_test(single_or_sequence):
+            return (single_or_sequence,)
+        else:
+            return tuple(single_or_sequence)
+        
     
 ### Not using now, might want in future:
 
