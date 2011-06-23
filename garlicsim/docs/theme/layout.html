@@ -83,16 +83,6 @@
             {{ _('Enter search terms or a module, class or function name.') }}
             </p>
           </div>
-          <div id="copypasta-section">
-            <a id="copypasta-button" style="display: none;">
-              <img src="http://copypasta.credibl.es/images/button-light.png" alt="Suggest changes"> 
-            </a>
-            <script type="text/javascript">
-              copypasta_account_id = '8cg';
-            </script>
-            <script type="text/javascript" src="{{ pathto('_static/copypasta.js', 1) }}">
-            </script>
-          </div>
           <script type="text/javascript">$('#searchbox').show(0);</script>
           {%- endif %}
           {%- endblock %}
@@ -195,8 +185,8 @@
       {% trans path=pathto('copyright'), copyright=copyright|e %}&copy; <a href="{{ path }}">Copyright</a> {{ copyright }}.{% endtrans %}
     {%- else %}
       {% trans copyright=copyright|e %}&copy; Copyright {{ copyright }}. <br />
-      This work is licensed under a Creative Commons Attribution-Share Alike 2.5 Israel License.<br />
-To view a copy of this license, visit: <a href="http://creativecommons.org/licenses/by-sa/2.5/il/">http://creativecommons.org/licenses/by-sa/2.5/il/</a><br />
+      This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 Unported License, with attribution to "Ram Rachum at <a href="http://cool-rr.com">cool-rr.com</a>" including link to <a href="http://cool-rr.com">cool-rr.com</a>.<br />
+To view a copy of this license, visit: <a href="http://creativecommons.org/licenses/by-sa/3.0/">http://creativecommons.org/licenses/by-sa/3.0/</a><br />
       {% endtrans %}
     {%- endif %}
     {%- if last_updated %}

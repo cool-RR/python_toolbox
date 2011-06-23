@@ -351,15 +351,3 @@ div.highlight * {
 }
 
 /* Done overriding Pygments */
-
-
-/* Stuff for Copypasta: */
-
-ins.diffmod, ins.diffins {
-    background-color: #050 !important;
-}
-del.diffmod, del.diffdel {
-    background-color: #500 !important;
-}
-
-/* End stuff for Copypasta: */

@@ -1,7 +1,8 @@
 ..
    Copyright 2009-2011 Ram Rachum. This work is licensed under a Creative
-   Commons Attribution-Share Alike 2.5 Israel License, which may be obtained at
-   http://creativecommons.org/licenses/by-sa/2.5/il/
+   Commons Attribution-ShareAlike 3.0 Unported License, with attribution to
+   "Ram Rachum at cool-rr.com" including link. The license may be obtained
+   at http://creativecommons.org/licenses/by-sa/3.0/
 
 .. _topics-history-dependent-simulations:
 
