@@ -175,26 +175,42 @@ def parse_slice(s):
     return (start, stop, step)
 
     
-def to_tuple(single_or_sequence, member_type=None, member_test=None):
-    if (member_type is not None) and (member_test is not None):
-        raise Exception('You may specify either `member_type` or '
-                        '`member_test` but not both.')
-    if member_test is not None:
-        actual_member_test = member_test
-    elif member_type is not None:
-        assert isinstance(member_type, (type, types.ClassType))
-        actual_member_test = \
-            lambda candidate: isinstance(candidate, member_type)
-    else:
-        actual_member_test = None
+def to_tuple(single_or_sequence, item_type=None, item_test=None):
+    '''
+    Convert an item or a sequence of items into a tuple of items.
     
-    if actual_member_test is None:
+    This is typically used in functions that request a sequence of items but
+    are considerate enough to accept a single item and wrap it in a tuple
+    `(item,)` themselves.
+    
+    This function figures out whether the user entered a sequence of items, in
+    which case it will only be converted to a tuple and returned; or the user
+    entered a single item, in which case a tuple `(item,)` will be returned.
+    
+    To aid this function in parsing, you may optionally specify `item_type`
+    which is the type of the items, or alternatively `item_test` which is a
+    callable that takes an object and returns whether it's a valid item. These
+    are necessary only when your items might be sequences themselves.
+    '''
+    if (item_type is not None) and (item_test is not None):
+        raise Exception('You may specify either `item_type` or '
+                        '`item_test` but not both.')
+    if item_test is not None:
+        actual_item_test = item_test
+    elif item_type is not None:
+        assert isinstance(item_type, (type, types.ClassType))
+        actual_item_test = \
+            lambda candidate: isinstance(candidate, item_type)
+    else:
+        actual_item_test = None
+    
+    if actual_item_test is None:
         if is_sequence(single_or_sequence):
             return tuple(single_or_sequence)
         else:
             return (single_or_sequence,)
-    else: # actual_member_test is not None
-        if actual_member_test(single_or_sequence):
+    else: # actual_item_test is not None
+        if actual_item_test(single_or_sequence):
             return (single_or_sequence,)
         else:
             return tuple(single_or_sequence)
