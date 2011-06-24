@@ -188,7 +188,7 @@ def parse_slice(s):
             stop = infinity
         else:
             assert step < 0
-            stop = 0
+            stop = -infinity
     ###
             
     return (start, stop, step)

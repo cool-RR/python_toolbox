@@ -3,6 +3,7 @@
 
 '''Testing module for `sequence_tools.parse_slice`.'''
 
+from garlicsim.general_misc import math_tools
 from garlicsim.general_misc.infinity import infinity
 
 from garlicsim.general_misc.sequence_tools import parse_slice
@@ -25,10 +26,12 @@ def test():
     for slice_ in slices:
         (start, stop, step) = parse_slice(slice_)
         
-        # Filtering out `infinity` cause Python's lists can't handle it:
-        if start == infinity: start = 10**10
-        if stop == infinity: stop = 10**10
-        if step == infinity: step = 10**10
+        # Replacing `infinity` with huge number cause Python's lists can't
+        # handle `infinity`:
+        if abs(start) == infinity: start = 10**10 * math_tools.sign(start)
+        if abs(stop) == infinity: stop = 10**10 * math_tools.sign(stop)
+        if abs(step) == infinity: step = 10**10 * math_tools.sign(step)
+        #######################################################################
             
         assert [start, stop, step].count(None) == 0
         parsed_slice = slice(start, stop, step)
