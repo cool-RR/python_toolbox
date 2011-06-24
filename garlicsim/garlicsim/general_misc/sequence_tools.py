@@ -70,6 +70,7 @@ def combinations(sequence, n=None, start=0):
             for sub_result in combinations(sequence, n - 1, start=(i + 1)):
                 yield [thing] + sub_result
 
+                
 def partitions(sequence, partition_size=None, n_partitions=None,
                allow_remainder=True):
     '''
@@ -96,7 +97,7 @@ def partitions(sequence, partition_size=None, n_partitions=None,
     sequence_length = len(sequence)
     
     ### Validating input: #####################################################
-    #                                                                         #    
+    #                                                                         #
     if (partition_size is None) == (n_partitions is None):
         raise Exception('You must specify *either* `partition_size` *or* '
                         '`n_paritions`.')
@@ -125,19 +126,37 @@ def partitions(sequence, partition_size=None, n_partitions=None,
                 
                 
 def is_sequence(thing):
+    '''Is `thing` a sequence, like `list` or `tuple`?'''
     return abcs_collection.Sequence.__instancecheck__(thing)
 
 
 def is_mutable_sequence(thing):
+    '''Is `thing` a mutable sequence, like `list`?'''
     return abcs_collection.MutableSequence.__instancecheck__(thing)
 
 
 def is_immutable_sequence(thing):
+    '''Is `thing` an immutable sequence, like `tuple`?'''
     return abcs_collection.Sequence.__instancecheck__(thing) and not \
            abcs_collection.MutableSequence.__instancecheck__(thing)
 
 
 def parse_slice(s):
+    '''
+    Parse a `slice` object into a canonical `(start, stop, step)`.
+    
+    This is helpful because `slice`'s own `.start`, `.stop` and `.step` are
+    sometimes specified as `None` for convenience, so Python will infer them
+    automatically. Here we make them explicit.
+    
+    if `start` is `None`, it will be set to `0` (if the `step` is positive) or
+    `infinity` (if the `step` is negative.)
+    
+    if `stop` is `None`, it will be set to `infinity` (if the `step` is
+    positive) or `0` (if the `step` is negative.)
+    
+    If `step` is `None`, it will be changed to the default `1`.
+    '''
     assert isinstance(s, slice)
     
     ### Parsing `step`:
