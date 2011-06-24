@@ -14,19 +14,23 @@ from garlicsim.general_misc.sequence_tools import to_tuple
 
 
 def test():
+    '''Test the basic workings of `sequence_tools.flatten`.'''
     assert to_tuple((1, 2, 3)) == (1, 2, 3)
     assert to_tuple([1, 2, 3]) == (1, 2, 3)
     assert to_tuple(7) == (7,)
     assert to_tuple((7,)) == (7,)
     assert to_tuple(Ellipsis) == (Ellipsis,)
     
+    
 def test_item_type():
+    '''Test the `item_type` argument.'''
     assert to_tuple(7, item_type=int) == (7,)
     assert to_tuple([7], item_type=list) == ([7],)
     assert to_tuple((7,), item_type=tuple) == ((7,),)
     
     
-def test_item_test():
+def test_item_test():    
+    '''Test the `item_test` argument.'''
     
     def is_int_like(item):
         '''Is `item` something like an `int`?'''
@@ -63,12 +67,13 @@ def test_item_test():
 
     
 def test_tuple_in_tuple():
+    '''Test input of tuple inside a tuple.'''
     raise nose.SkipTest("Don't know how to solve this case.")
     assert to_tuple(((1,), (2,)), item_test=is_tuple_like) == ((1,), (2,))
     
     
 def test_too_many_arguments():
-    
+    '''Test helpful error when giving both `item_type` and `item_test`.'''
     with cute_testing.RaiseAssertor(text='either'):
         to_tuple(
             (1, 2, 3),
