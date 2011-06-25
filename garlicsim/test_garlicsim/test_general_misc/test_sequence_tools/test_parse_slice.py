@@ -34,6 +34,7 @@ def test():
         #######################################################################
             
         assert [start, stop, step].count(None) == 0
+        
         parsed_slice = slice(start, stop, step)
         for range_ in ranges:
             assert range_[slice_] == range_[parsed_slice]
