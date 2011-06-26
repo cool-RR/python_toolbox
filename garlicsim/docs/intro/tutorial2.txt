@@ -112,7 +112,6 @@ read::
             # the width and height of the board using arguments to this function.
             #
             # This function returns the newly-created state.
-            pass
     
         
         #@staticmethod
@@ -130,7 +129,6 @@ read::
             # the width and height of the board using arguments to this function.
             #
             # This function returns the newly-created state.
-            pass
                                      
     
 So now we can start filling in our simpack! But before that, we need to think
