@@ -5,4 +5,9 @@
 
 from garlicsim.general_misc import context_managers
 from garlicsim.general_misc import freezers
+        
 
+def test():
+    '''Test the basic workings of `iter_with`.'''
+    blocktodo
+    
