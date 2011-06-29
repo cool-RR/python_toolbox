@@ -26,8 +26,7 @@ def random_partitions(sequence, partition_size=None, n_partitions=None,
     
     Specify `allow_remainder=False` to enforce that the all the partition sizes
     be equal; if there's a remainder while `allow_remainder=False`, an
-    exception will be raised.
-    
+    exception will be raised.    
     '''
     
     shuffled_sequence = shuffled(sequence)
