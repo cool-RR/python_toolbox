@@ -19,4 +19,7 @@ def test():
     assert get_n_identical_edge_characters('1234',
                                            character='&',
                                            head=False) == 0
-    assert get_n_identical_edge_characters('pppp') ==
+    assert get_n_identical_edge_characters('pppp') == \
+           get_n_identical_edge_characters('pppp', head=False) == \
+           get_n_identical_edge_characters('pppp', character='p',
+                                           head=False) == 4

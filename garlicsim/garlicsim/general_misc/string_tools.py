@@ -79,4 +79,4 @@ def get_n_identical_edge_characters(string, character=None, head=True):
         if c != character:
             return i
     else:
-        return len(s)
+        return len(string)
