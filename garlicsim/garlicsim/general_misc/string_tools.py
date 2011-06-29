@@ -56,12 +56,25 @@ def docstring_trim(docstring):
 
 
 def get_n_identical_edge_characters(string, character=None, head=True):
+    '''
+    Get the number of identical characters at `string`'s head.
+    
+    For example, the result for 'qqqwe' would be `3`, while the result for
+    'meow' will be `1`.
+    
+    Specify `character` to only consider that character; if a different
+    character is found at the head, `0` will be returned.
+    
+    Specify `head=False` to search the tail instead of the head.
+    '''
     if not string:
         return 0
     index = 0 if head is True else -1
     direction = 1 if head is True else -1
     if character is None:
         character = string[index]
+    else:
+        assert isinstance(character, basestring) and len(character) == 1
     for i, c in enumerate(string[::direction]):
         if c != character:
             return i

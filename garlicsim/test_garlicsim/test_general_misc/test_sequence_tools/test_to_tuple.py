@@ -14,7 +14,7 @@ from garlicsim.general_misc.sequence_tools import to_tuple
 
 
 def test():
-    '''Test the basic workings of `sequence_tools.flatten`.'''
+    '''Test the basic workings of `sequence_tools.to_tuple`.'''
     assert to_tuple((1, 2, 3)) == (1, 2, 3)
     assert to_tuple([1, 2, 3]) == (1, 2, 3)
     assert to_tuple(7) == (7,)
