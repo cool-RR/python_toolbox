@@ -63,8 +63,7 @@ class WorkspaceWidget(CuteWindow):
     def get_uppercase_name(cls):
         '''Get the name of the widget's class in uppercase. Used for title.'''
         name = cls._WorkspaceWidget__name or cls.__name__
-        return string_tools.camelcase_to_spacecase(name).upper()
-
+        return string_tools.conversions.camelcase_to_spacecase(name).upper()
     
     def get_aui_pane_info(self):
         '''Get the AuiPaneInfo of this widget in the aui manager.'''
