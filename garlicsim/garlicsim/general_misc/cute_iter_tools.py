@@ -103,7 +103,11 @@ def is_iterable(thing):
         
 
 def get_length(iterable):
-    '''Get the length of an iterable.'''
+    '''
+    Get the length of an iterable.
+    
+    If given an iterator, it will be exhausted.
+    '''
     i = 0
     for thing in iterable:
         i += 1
