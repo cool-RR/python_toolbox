@@ -59,4 +59,4 @@ def navigate_from_key_event(key_event):
             
 
 class ObjectWithId(object):
-    Id = caching.CachedProperty(wx.NewId())
+    Id = caching.CachedProperty(lambda object: wx.NewId())

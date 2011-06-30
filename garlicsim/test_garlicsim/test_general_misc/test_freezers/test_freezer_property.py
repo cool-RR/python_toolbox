@@ -1,11 +1,7 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''
-This module defines the `` class.
-
-See its documentation for more information.
-'''
+'''Testing module for `freezers.FreezerProperty`.'''
 
 from __future__ import with_statement
 
@@ -27,8 +23,8 @@ def test_lone_freezer_property():
     
 def test_decorate_happy_freezer_property():
     class C(object):
-        decorate_happy_freeze_counter = caching.CachedProperty(lambda self: 0)
-        decorate_happy_thaw_counter = caching.CachedProperty(lambda self: 0)
+        decorate_happy_freeze_counter = caching.CachedProperty(0)
+        decorate_happy_thaw_counter = caching.CachedProperty(0)
         decorate_happy_freezer = FreezerProperty()
         @decorate_happy_freezer.on_freeze
         def increment_decorate_happy_freeze_counter(self):
@@ -67,8 +63,8 @@ def test_decorate_happy_freezer_property():
     
 def test_argument_happy_freezer_property():
     class C(object):
-        argument_happy_freeze_counter = caching.CachedProperty(lambda self: 0)
-        argument_happy_thaw_counter = caching.CachedProperty(lambda self: 0)        
+        argument_happy_freeze_counter = caching.CachedProperty(0)
+        argument_happy_thaw_counter = caching.CachedProperty(0)        
         def increment_argument_happy_freeze_counter(self):
             self.argument_happy_freeze_counter += 1
         def increment_argument_happy_thaw_counter(self):
@@ -109,8 +105,8 @@ def test_argument_happy_freezer_property():
         
 def test_mix_freezer_property():
     class D(object):
-        mix_freeze_counter = caching.CachedProperty(lambda self: 0)
-        mix_thaw_counter = caching.CachedProperty(lambda self: 0)
+        mix_freeze_counter = caching.CachedProperty(0)
+        mix_thaw_counter = caching.CachedProperty(0)
         def increment_mix_freeze_counter(self):
             self.mix_freeze_counter += 1
         mix_freezer = FreezerProperty(on_freeze=increment_mix_freeze_counter)
@@ -160,8 +156,8 @@ def test_different_type_freezer_property():
             self.obj.different_type_thaw_counter += 1
     
     class E(object):
-        different_type_freeze_counter = caching.CachedProperty(lambda self: 0)
-        different_type_thaw_counter = caching.CachedProperty(lambda self: 0)
+        different_type_freeze_counter = caching.CachedProperty(0)
+        different_type_thaw_counter = caching.CachedProperty(0)
         different_type_freezer = FreezerProperty(
             freezer_type=CustomFreezer,
             doc='A freezer using a custom freezer class.'
