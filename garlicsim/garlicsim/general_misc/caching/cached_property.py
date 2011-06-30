@@ -28,15 +28,20 @@ class CachedProperty(misc_tools.OwnNameDiscoveringProperty):
             personality = CachedProperty(_get_personality)
     
     '''
-    def __init__(self, getter, doc=None, name=None):
+    def __init__(self, getter_or_value, doc=None, name=None):
         '''
         Construct the cached property.
+        
+        `getter_or_value` may be either a function that takes the parent object
+        and returns the value of the property, or the value of the property
+        itself, (as long as it's not a callable.)
         
         You may optionally pass in the name that this property has in the
         class; this will save a bit of processing later.
         '''
         misc_tools.OwnNameDiscoveringProperty.__init__(self, name=name)
-        self.getter = getter
+        self.getter = getter_or_value if callable(getter_or_value) \
+                      else lambda thing: getter_or_value
         self.__doc__ = doc or getattr(getter, '__doc__', None)
         
         

@@ -36,6 +36,19 @@ def test():
     
     assert a2.personality == a1.personality + 1
 
+def test_value():
+    '''Test `CachedProperty` when giving a value instead of a getter.'''
+    class B(object):
+        brrr_property = CachedProperty('brrr')
+    
+    assert isinstance(B.brrr_property, CachedProperty)
+        
+    b1 = B()
+    assert b1.brrr_property == 'brrr'
+    
+    b2 = B()
+    assert b2.brrr_property == 'brrr'
+
 
 def test_as_decorator():
     '''Test `CachedProperty` can work as a decorator.'''

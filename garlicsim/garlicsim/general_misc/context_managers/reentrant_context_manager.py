@@ -31,7 +31,7 @@ class ReentrantContextManager(ContextManager):
     '''
     
     depth = caching.CachedProperty(
-        lambda self: 0,
+        0,
         doc='''
             The number of nested suites that entered this context manager.
             
@@ -40,7 +40,6 @@ class ReentrantContextManager(ContextManager):
             If it is then exited, it returns to `1`, etc.
             '''
     )
-    # blocktodo: should `CachedProperty` take a non-callable?
 
     
     def __enter__(self):
