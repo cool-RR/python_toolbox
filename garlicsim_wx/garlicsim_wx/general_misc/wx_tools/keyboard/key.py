@@ -49,6 +49,7 @@ class Key(object):    #blocktodo: __repr__
     
     def __hash__(self):
         return hash(tuple(sorted(tuple(vars(self)))))
+
     
     def __eq__(self, other):
         if not isinstance(other, Key):
@@ -58,3 +59,26 @@ class Key(object):    #blocktodo: __repr__
                self.shift == other.shift and \
                self.alt == other.alt
     
+    
+    def __repr__(self):
+        '''
+        Get a string representation of the `Key`.
+        
+        Example output:
+        
+            <Key: Alt-Shift-K>
+            
+        ''' # todo: Make it work for key codes like `WXK_F12`.
+        key_list = [chr(self.key_code)]
+        if self.cmd:
+            key_list.insert(0, 'Cmd')
+        if self.shift:
+            key_list.insert(0, 'Shift')
+        if self.alt:
+            key_list.insert(0, 'Alt')
+        
+        return '<%s: %s>' % \
+               (
+                   type(self).__name__,
+                   '-'.join(key_list)
+               )
