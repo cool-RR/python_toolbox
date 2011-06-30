@@ -19,7 +19,7 @@ class CuteFileDialog(CuteDialog, wx.FileDialog):
     
     The advantages of this class over `wx.FileDialog`:
     
-      - blocktododoc
+      - A class method `.create_show_modal_and_get_path` for quick usage.
       - Other advantages given by `CuteDialog`
     
     '''
@@ -34,8 +34,13 @@ class CuteFileDialog(CuteDialog, wx.FileDialog):
         self.ExtraStyle &= ~wx.FRAME_EX_CONTEXTHELP
         
     
-    @classmethod # blocktodo: Use everywhere I can, document
+    @classmethod
     def create_show_modal_and_get_path(cls, *args, **kwargs):
+        '''
+        Create `CuteFileDialog`, show it, and get the path that was selected.
+        
+        Returns `None` if "Cancel" was pressed.
+        '''
         dialog = cls(parent, *args, **kwargs)
         try:
             result = dialog.ShowModal()

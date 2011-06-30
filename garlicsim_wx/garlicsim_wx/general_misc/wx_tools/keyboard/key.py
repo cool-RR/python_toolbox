@@ -57,3 +57,4 @@ class Key(object):    #blocktodo: __repr__
                self.cmd == other.cmd and \
                self.shift == other.shift and \
                self.alt == other.alt
+    

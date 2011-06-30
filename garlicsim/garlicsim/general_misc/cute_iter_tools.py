@@ -140,15 +140,17 @@ def product(*args, **kwargs):
 def iter_with(iterable, context_manager):
     '''Iterate on `iterable`, `with`ing the context manager on every `next`.'''
     
+    iterator = iter(iterable)
+    
     while True:
         
         with context_manager:
-            next_item = iterable.next()
-            # You may notice that we are not `except`ing a StopIteration here;
-            # If we get one, it'll just get propagated and end *this* iterator.
-            # todo: I just realized this will probably cause a bug where
-            # `__exit__` will get the `StopIteration`! Make failing tests and
-            # fix.
+            next_item = iterator.next()
+            # You may notice that we are not `except`ing a `StopIteration`
+            # here; If we get one, it'll just get propagated and end *this*
+            # iterator. todo: I just realized this will probably cause a bug
+            # where `__exit__` will get the `StopIteration`! Make failing tests
+            # and fix.
         
         yield next_item
         
