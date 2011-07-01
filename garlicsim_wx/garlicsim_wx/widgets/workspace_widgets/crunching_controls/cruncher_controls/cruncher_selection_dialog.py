@@ -108,34 +108,26 @@ class CruncherSelectionDialog(CuteDialog):
         self.dialog_button_sizer.AddButton(self.ok_button)
         self.ok_button.SetDefault()
         self.dialog_button_sizer.SetAffirmativeButton(self.ok_button)
-        self.Bind(wx.EVT_BUTTON, self._on_ok, source=self.ok_button)
         
         self.cancel_button = wx.Button(self, wx.ID_CANCEL, 'Cancel')
         self.dialog_button_sizer.AddButton(self.cancel_button)
-        self.Bind(wx.EVT_BUTTON, self._on_cancel, source=self.cancel_button)
         self.dialog_button_sizer.Realize()
-        
-        
-        self.Bind(wx.EVT_LISTBOX, self._on_list_box_change,
-                  self.cruncher_list_box)
-        self.Bind(wx.EVT_LISTBOX_DCLICK,
-                  self._on_list_box_double_click,
-                  self.cruncher_list_box)
         
         self.SetSizer(self.main_v_sizer)
         self.Layout()
         self.general_text.Wrap(self.general_text.Size[0])
         self.main_v_sizer.Fit(self)
         
+        self.bind_event_handers(CruncherSelectionDialog)
         self.update()
 
         
-    def _on_ok(self, event):
+    def _on_ok_button(self, event):
         #event.Skip()
         self.try_to_change_cruncher_type_and_end_modal()
         
         
-    def _on_list_box_double_click(self, event):
+    def _on_cruncher_list_box__listbox_dclick(self, event):
         event.Skip()
         self.try_to_change_cruncher_type_and_end_modal()
         
@@ -153,11 +145,11 @@ class CruncherSelectionDialog(CuteDialog):
             )
         
         
-    def _on_cancel(self, event):
+    def _on_cancel_button(self, event):
         self.EndModal(wx.ID_CANCEL)
 
         
-    def _on_list_box_change(self, event):
+    def _on_cruncher_list_box__listbox(self, event):
         self.update()
         
         
