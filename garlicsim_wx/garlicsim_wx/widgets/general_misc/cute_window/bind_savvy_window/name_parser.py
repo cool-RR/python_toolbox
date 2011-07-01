@@ -17,10 +17,24 @@ class BaseCaseStyle(object):
     __metaclass__ = CaseStyleType
     
 class LowerCase(BaseCaseStyle):
-    pass
+    @staticmethod
+    def parse(name):
+        if not name.startswith('on_'):
+            return None
+        cleaned_name = name[3:]
+        words = name.split('__')
+        return words
 
 class CamelCase(BaseCaseStyle):
-    pass
+    @staticmethod
+    def parse(name):
+        if not name.startswith('On'):
+            return None
+        cleaned_name = name[2:]
+        raw_words = name.split('_')
+        words = map(string_tools.conversions.camelcase_to_underscore,
+                    raw_words)
+        return words
 
 
 class NameParser(object):
@@ -44,7 +58,7 @@ class NameParser(object):
                    self.n_preceding_underscores_possibilites)
         
                 
-    def match(self, name):
+    def parse(self, name):
         n_preceding_underscores = string_tools.get_n_identical_edge_characters(
             name,
             character='_',
@@ -52,9 +66,12 @@ class NameParser(object):
         )
         if n_preceding_underscores not in \
            self.n_preceding_underscores_possibilites:
-            return False
-        cleaned_name = name[n_preceding_underscores:] # blocktodo: What about the 'on' part?
-        for case_style in self.case_style_possibilites:
-            try:
-                case_style.match(cleaned_name) 
+            return None
+        cleaned_name = name[n_preceding_underscores:]
+        # blocktodo: What about the 'on' part?
+        return any(case_style.parse(cleaned_name) for case_style in
+                   self.case_style_possibilites) or None
+    
+    def match(self, name):
+        return bool(self.parse(name))
     

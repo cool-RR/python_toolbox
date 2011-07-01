@@ -149,9 +149,9 @@ def test_mix_freezer_property():
         
     
 def test_different_type_freezer_property():
+    '''Test a freezer property that specifies a non-default freezer type.'''
     
     class CustomFreezer(Freezer):
-        ''' '''
         def __init__(self, obj):
             self.obj = obj
             
