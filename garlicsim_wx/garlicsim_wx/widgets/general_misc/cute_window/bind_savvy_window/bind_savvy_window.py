@@ -13,6 +13,7 @@ from garlicsim_wx.general_misc import wx_tools
 from garlicsim.general_misc import caching
 
 from .bind_savvy_window_type import BindSavvyWindowType
+from . import name_parser
 
 
 class BindSavvyWindow(wx.Window):
@@ -27,6 +28,10 @@ class BindSavvyWindow(wx.Window):
     
     __metaclass__ = BindSavvyWindowType
     
+    _BindSavvyWindow__name_parser = name_parser.NameParser(
+        (name_parser.LowerCase,),
+        n_preceding_underscores_possibilites=(1,)
+    )
     
     def bind_event_handers(self, cls):
         '''

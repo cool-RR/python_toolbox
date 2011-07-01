@@ -32,13 +32,16 @@ class EventHandlerGrokker(object):
         
         self.name = name
         
-        self.event_handler_self_taking_function = event_handler_self_taking_function
+        self.event_handler_self_taking_function = \
+            event_handler_self_taking_function
         
         self.window_type = window_type
         
         
     cleaned_name = caching.CachedProperty(
-        lambda self: self.name[4:],
+        lambda self: self.window_type._BindSavvyWindow__name_parser.parse(
+            self.name
+        ),
         doc=''' '''
     )
 
