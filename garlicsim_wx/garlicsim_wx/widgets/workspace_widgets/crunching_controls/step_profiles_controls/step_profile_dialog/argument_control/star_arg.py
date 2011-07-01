@@ -46,8 +46,7 @@ class StarArg(CutePanel):
         
         self.SetSizer(self.main_h_sizer)
         
-        self.Bind(wx.EVT_BUTTON, lambda event: self.remove(),
-                  source=self.close_button)
+        self.bind_event_handers(StarArg)
     
         
     def remove(self):
@@ -58,7 +57,10 @@ class StarArg(CutePanel):
     def get_value_string(self):
         '''Get the value of the arument as a string.'''
         return self.value_text_ctrl.GetValue()
-        
-        
+    
+    
+    def _on_close_button(self, event):
+        self.remove()
+    
         
             

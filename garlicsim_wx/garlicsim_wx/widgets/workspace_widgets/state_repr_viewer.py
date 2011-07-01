@@ -12,20 +12,20 @@ from garlicsim_wx.widgets import WorkspaceWidget
 import garlicsim.general_misc.dict_tools as dict_tools
 from garlicsim_wx.general_misc.flag_raiser import FlagRaiser
 from garlicsim_wx.general_misc import wx_tools
+from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
 
 
 __all__ = ['StateReprViewer']
 
 
-class StateReprViewer(wx.Panel, WorkspaceWidget):
+class StateReprViewer(CutePanel, WorkspaceWidget):
     '''Widget for showing the repr of the active state.'''
     def __init__(self, frame):
-        wx.Panel.__init__(self, frame, size=(300, 300), style=wx.SUNKEN_BORDER)
+        CutePanel.__init__(self, frame, size=(300, 300),
+                           style=wx.SUNKEN_BORDER)
         WorkspaceWidget.__init__(self, frame)
 
         self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
-        
-        self.Bind(wx.EVT_PAINT, self._on_paint)        
         
         self.text_ctrl = wx.TextCtrl(
             self,
@@ -62,6 +62,8 @@ class StateReprViewer(wx.Panel, WorkspaceWidget):
                     ),
                 name='state_repr_viewer_needs_recalculation',
             )
+        
+        self.bind_event_handers(StateReprViewer)
     
 
     def _recalculate(self):
@@ -72,7 +74,9 @@ class StateReprViewer(wx.Panel, WorkspaceWidget):
                 if active_state:
                     if active_state is not self.state:
                         self.state = active_state
-                        state_repr = dict_tools.fancy_string(vars(active_state))
+                        state_repr = dict_tools.fancy_string(
+                            vars(active_state)
+                        )
                         self.text_ctrl.SetValue(state_repr)
             self.needs_recalculation_flag = False
         
@@ -81,9 +85,9 @@ class StateReprViewer(wx.Panel, WorkspaceWidget):
         '''EVT_PAINT handler.'''
         event.Skip()
         # Notice that we are not checking the `needs_recalculation_flag` here.
-        # The FlagRaiser's 30ms delay is small enough, and we don't need to have
-        # very fast response time in the state repr viewer, so we can afford to
-        # wait another 30ms before an update.
+        # The FlagRaiser's 30ms delay is small enough, and we don't need to
+        # have very fast response time in the state repr viewer, so we can
+        # afford to wait another 30ms before an update.
         
          
         

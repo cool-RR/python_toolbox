@@ -23,6 +23,9 @@ class StepProfileContextMenu(cute_menu.CuteMenu):
         '''Build the context menu.'''
         
         step_profiles_list = self.step_profiles_list
+        from .step_profiles_list import StepProfileList # blocktodo: remove
+        assert isinstance(step_profiles_list, StepProfileList)
+        
         
         self.fork_by_crunching_button = self.Append(
             -1,
