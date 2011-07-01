@@ -12,6 +12,7 @@ import types
 import wx
 
 from garlicsim.general_misc import caching
+from garlicsim.general_misc import address_tools
 
 from .event_codes import get_event_code_of_component, get_event_code_from_name
 
@@ -38,7 +39,7 @@ class EventHandlerGrokker(object):
         self.window_type = window_type
         
         
-    cleaned_name = caching.CachedProperty(
+    parsed_words = caching.CachedProperty(
         lambda self: self.window_type._BindSavvyWindow__name_parser.parse(
             self.name
         ),
@@ -53,18 +54,27 @@ class EventHandlerGrokker(object):
             window,
             self.window_type
         )
-        component_candidate = getattr(window, self.cleaned_name, None)
+        if len(self.parsed_words) >= 2:
+            closer_window = address_tools.resolve(
+                '.'.join(self.parsed_words[:-1]),
+                root=window
+            )
+        else:
+            closer_window = window
+        last_word = self.parsed_words[-1]
+        component_candidate = getattr(closer_window, last_word, None)
         if component_candidate is not None and \
            hasattr(component_candidate, 'GetId'):
             component = component_candidate
-            return window.Bind(
+            return closer_window.Bind(
                 get_event_code_of_component(component),
                 event_handler_bound_method, #self.event_handler,
                 source=component
             )
         else:
             return window.Bind(
-                get_event_code_from_name(self.cleaned_name, self.window_type),
+                get_event_code_from_name(last_word,
+                                         self.window_type),
                 event_handler_bound_method #self.event_handler,
             )
                 

@@ -63,7 +63,7 @@ class FreezerProperty(caching.CachedProperty):
         '''Internal thaw handler. May be a no-op.'''
         
         caching.CachedProperty.__init__(self,
-                                        getter=self.__make_freezer,
+                                        self.__make_freezer,
                                         doc=doc,
                                         name=name)
         

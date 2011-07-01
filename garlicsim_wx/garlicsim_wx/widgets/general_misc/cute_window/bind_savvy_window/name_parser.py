@@ -22,7 +22,7 @@ class LowerCase(BaseCaseStyle):
         if not name.startswith('on_'):
             return None
         cleaned_name = name[3:]
-        words = name.split('__')
+        words = cleaned_name.split('__')
         return words
 
 class CamelCase(BaseCaseStyle):
@@ -31,7 +31,7 @@ class CamelCase(BaseCaseStyle):
         if not name.startswith('On'):
             return None
         cleaned_name = name[2:]
-        raw_words = name.split('_')
+        raw_words = cleaned_name.split('_')
         words = map(string_tools.conversions.camelcase_to_underscore,
                     raw_words)
         return words
@@ -43,7 +43,7 @@ class NameParser(object):
         
         self.case_style_possibilites = sequence_tools.to_tuple(
             case_style_possibilites,
-            member_type=CaseStyleType
+            item_type=CaseStyleType
         )
         
         self.n_preceding_underscores_possibilites = sequence_tools.to_tuple(
@@ -69,9 +69,14 @@ class NameParser(object):
             return None
         cleaned_name = name[n_preceding_underscores:]
         # blocktodo: What about the 'on' part?
-        return any(case_style.parse(cleaned_name) for case_style in
-                   self.case_style_possibilites) or None
+        for case_style in self.case_style_possibilites:
+            result = case_style.parse(cleaned_name)
+            if result is not None:
+                return result
+        else:
+            return None
     
+        
     def match(self, name):
         return bool(self.parse(name))
     
