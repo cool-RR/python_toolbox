@@ -42,7 +42,7 @@ class CachedProperty(misc_tools.OwnNameDiscoveringProperty):
         misc_tools.OwnNameDiscoveringProperty.__init__(self, name=name)
         self.getter = getter_or_value if callable(getter_or_value) \
                       else lambda thing: getter_or_value
-        self.__doc__ = doc or getattr(getter, '__doc__', None)
+        self.__doc__ = doc or getattr(self.getter, '__doc__', None)
         
         
     def __get__(self, obj, our_type=None):
