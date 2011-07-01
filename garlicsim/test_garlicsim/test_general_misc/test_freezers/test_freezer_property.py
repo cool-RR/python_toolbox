@@ -10,6 +10,7 @@ from garlicsim.general_misc import caching
 
 
 def test_lone_freezer_property():
+    '''Test a class that has only one freezer property without handlers.'''
     
     class A(object):
         lone_freezer = FreezerProperty()
@@ -22,6 +23,7 @@ def test_lone_freezer_property():
         
     
 def test_decorate_happy_freezer_property():
+    '''Test a freezer property which decorates both handlers.'''
     class C(object):
         decorate_happy_freeze_counter = caching.CachedProperty(0)
         decorate_happy_thaw_counter = caching.CachedProperty(0)
@@ -62,6 +64,7 @@ def test_decorate_happy_freezer_property():
         
     
 def test_argument_happy_freezer_property():
+    '''Test a freezer property which defines both handlers with arguments.'''
     class C(object):
         argument_happy_freeze_counter = caching.CachedProperty(0)
         argument_happy_thaw_counter = caching.CachedProperty(0)        
@@ -104,6 +107,9 @@ def test_argument_happy_freezer_property():
     
         
 def test_mix_freezer_property():
+    '''
+    Test freezer property which mixes decorated and arg-specified handlers.
+    '''
     class D(object):
         mix_freeze_counter = caching.CachedProperty(0)
         mix_thaw_counter = caching.CachedProperty(0)
