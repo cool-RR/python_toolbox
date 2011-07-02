@@ -14,7 +14,7 @@ import wx
 from garlicsim.general_misc import caching
 from garlicsim.general_misc import address_tools
 
-from .event_codes import get_event_code_of_component, get_event_code_from_name
+from .event_codes import get_event_codes_of_component, get_event_code_from_name
 
 
 class EventHandlerGrokker(object):
@@ -66,13 +66,16 @@ class EventHandlerGrokker(object):
         if component_candidate is not None and \
            hasattr(component_candidate, 'GetId'):
             component = component_candidate
-            return closer_window.Bind(
-                get_event_code_of_component(component),
-                event_handler_bound_method, #self.event_handler,
-                source=component
-            )
+            event_codes = get_event_codes_of_component(component)
+            for event_code in event_codes:
+                closer_window.Bind(
+                    event_code,
+                    event_handler_bound_method, #self.event_handler,
+                    source=component
+                )
+                
         else:
-            return window.Bind(
+            window.Bind(
                 get_event_code_from_name(last_word,
                                          self.window_type),
                 event_handler_bound_method #self.event_handler,

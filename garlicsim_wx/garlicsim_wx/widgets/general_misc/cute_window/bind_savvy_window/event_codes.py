@@ -14,13 +14,13 @@ from garlicsim.general_misc import sequence_tools
 from garlicsim.general_misc import address_tools
 
 # blocktododoc: in a monkeypatch function?
-wx.Button._EventHandlerGrokker__event_code = wx.EVT_BUTTON
+wx.Button._EventHandlerGrokker__event_code = (wx.EVT_BUTTON, wx.EVT_MENU)
 wx.Menu._EventHandlerGrokker__event_code = wx.EVT_MENU
 wx.Timer._EventHandlerGrokker__event_code = wx.EVT_TIMER
 
 
-def get_event_code_of_component(component):
-    return component._EventHandlerGrokker__event_code
+def get_event_codes_of_component(component):
+    return sequence_tools.to_tuple(component._EventHandlerGrokker__event_code)
            
     
 @caching.cache()

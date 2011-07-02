@@ -21,7 +21,8 @@ from .help_menu import HelpMenu
 
 
 class MenuBar(wx.MenuBar):
-    '''The main menubar of garlicsim_wx.'''
+    '''The main GarlicSim menu bar.'''
+    
     def __init__(self, frame):
         super(MenuBar, self).__init__()
         self.frame = frame

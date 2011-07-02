@@ -298,7 +298,6 @@ class SimpackSelectionDialog(CuteDialog):
                 
         
     def _on_create_project_button(self, event):
-        '''Handler for "Create project" button.'''
         #if self.list_box.GetStringSelection():
             #self.EndModal(wx.ID_OK)       
         from garlicsim_lib.simpacks import life as my_simpack
@@ -307,8 +306,16 @@ class SimpackSelectionDialog(CuteDialog):
         
         
     def _on_cancel_button(self, event):
-        '''Handler for "Cancel" button.'''
         self.EndModal(wx.ID_CANCEL)
+        
+                
+    def _on_navigation_panel__back_button(self, event):
+        self.navigation_panel.back()
+        
+        
+    def _on_navigation_panel__forward_button(self, event):
+        self.navigation_panel.forward()
+        
 
 
 from .navigation_panel import NavigationPanel

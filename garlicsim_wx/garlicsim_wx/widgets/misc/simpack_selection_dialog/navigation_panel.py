@@ -146,12 +146,6 @@ class NavigationPanel(CutePanel):
                 )
             ),
         ) # blocktodo: could these four be bound automatically?
-        self.simpack_selection_dialog.Bind(wx.EVT_BUTTON,
-                                           lambda event: self.back(),
-                                           source=self.back_button)
-        self.simpack_selection_dialog.Bind(wx.EVT_MENU,
-                                           lambda event: self.back(),
-                                           source=self.back_button)
         self.back_button.SetToolTipString(
             u'Back (%s)' % wx_tools.keyboard.keys.back_key_string
         )
@@ -177,12 +171,6 @@ class NavigationPanel(CutePanel):
                 )
             ),
         )
-        self.simpack_selection_dialog.Bind(wx.EVT_BUTTON,
-                                           lambda event: self.forward(),
-                                           source=self.forward_button)
-        self.simpack_selection_dialog.Bind(wx.EVT_MENU,
-                                           lambda event: self.forward(),
-                                           source=self.forward_button)
         self.forward_button.SetToolTipString(
             u'Forward (%s)' % wx_tools.keyboard.keys.forward_key_string
         )
