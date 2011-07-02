@@ -140,12 +140,9 @@ class NavigationPanel(CutePanel):
         
         self.back_button = CuteBitmapButton(
             self,
-            bitmap=wx.BitmapFromImage(
-                wx.ImageFromStream(
-                    pkg_resources.resource_stream(images_package,
-                                                  'back.png'),
-                    wx.BITMAP_TYPE_ANY
-                )
+            bitmap=wx_tools.bitmap_tools.bitmap_from_pkg_resources(
+                images_package,
+                'back.png'
             ),
             tool_tip=(u'Back (%s)' % wx_tools.keyboard.keys.back_key_string),
             help_text=(u'Go to the previously-selected simpack. (%s)' %
@@ -161,12 +158,9 @@ class NavigationPanel(CutePanel):
         
         self.forward_button = CuteBitmapButton(
             self,
-            bitmap=wx.BitmapFromImage(
-                wx.ImageFromStream(
-                    pkg_resources.resource_stream(images_package,
-                                                  'forward.png'),
-                    wx.BITMAP_TYPE_ANY
-                )
+            bitmap=wx_tools.bitmap_tools.bitmap_from_pkg_resources(
+                images_package,
+                'forward.png'
             ),
             tool_tip=(u'Forward (%s)' %
                       wx_tools.keyboard.keys.forward_key_string),

@@ -7,6 +7,7 @@ import wx
 import pkg_resources
 
 from garlicsim.general_misc import caching
+from garlicsim_wx.general_misc import wx_tools
 
 from . import images as __images_package
 images_package = __images_package.__name__
@@ -18,19 +19,14 @@ N_BLURRED_GEAR_FRAMES = 6
 @caching.cache()
 def get_image_raw(i):
     '''Get image number `i` of the gear, when 0 <= i <= (N_FRAMES - 1).'''
-    
+
     assert (0 <= i <= N_FRAMES - 1) and isinstance(i, int)
     
-    file_name = 'gear%04.d.png' % i
-    stream = pkg_resources.resource_stream(images_package, file_name)
-    bitmap = wx.BitmapFromImage(
-        wx.ImageFromStream(
-            stream,
-            wx.BITMAP_TYPE_ANY
-        )
+    return wx_tools.bitmap_tools.bitmap_from_pkg_resources(
+        images_package,
+        'gear%04.d.png' % i
     )
     
-    return bitmap
             
 
 @caching.cache()
@@ -45,16 +41,10 @@ def get_blur_image_raw(i):
     
     assert isinstance(i, int) and 0 <= i <= (N_BLURRED_GEAR_FRAMES - 1)
     
-    file_name = 'blurred_gear_%d.png' % i
-    stream = pkg_resources.resource_stream(images_package, file_name)
-    bitmap = wx.BitmapFromImage(
-        wx.ImageFromStream(
-            stream,
-            wx.BITMAP_TYPE_ANY
-        )
+    return wx_tools.bitmap_tools.bitmap_from_pkg_resources(
+        images_package,
+        'blurred_gear_%d.png' % i
     )
-
-    return bitmap
 
 
 @caching.cache()

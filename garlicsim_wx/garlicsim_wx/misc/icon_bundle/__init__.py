@@ -8,6 +8,7 @@ import pkg_resources
 import wx
 
 from garlicsim.general_misc import caching
+from garlicsim_wx.general_misc import wx_tools
 
 
 @caching.cache()
@@ -20,16 +21,10 @@ def get_icon_bundle():
     icons = []
     for size in [16, 24, 32, 48, 96, 128, 256]:
         file_name = 'icon%s.png' % str(size)
-        stream = pkg_resources.resource_stream(
-            images_package,
-            file_name
-        )
         icon = wx.IconFromBitmap(
-            wx.BitmapFromImage(
-                wx.ImageFromStream(
-                    stream,
-                    wx.BITMAP_TYPE_PNG
-                )
+            wx_tools.bitmap_tools.bitmap_from_pkg_resources(
+                images_package,
+                file_name
             )
         )
         icons.append(icon)

@@ -38,11 +38,9 @@ class AboutDialog(CuteDialog):
         v_sizer = wx.BoxSizer(wx.VERTICAL)
         
 
-        self._original_image = wx.ImageFromStream(
-            pkg_resources.resource_stream(
-                images_package,
-                'about.png'
-            )
+        self._original_image = wx_tools.bitmap_tools.bitmap_from_pkg_resources(
+            images_package,
+            'about.png'
         )
         
         self.bitmap_viewer = BitmapViewer(self, size=(597, 231))
