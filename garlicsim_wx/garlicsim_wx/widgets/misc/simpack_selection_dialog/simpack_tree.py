@@ -83,12 +83,9 @@ class SimpackTree(wx.TreeCtrl):
         self.ExpandAll()
 
     def __init_images(self):
-        self._simpack_bitmap = wx.BitmapFromImage(
-            wx.ImageFromStream(
-                pkg_resources.resource_stream(images_package,
-                                              'simpack.png'),
-                wx.BITMAP_TYPE_ANY
-            )
+        self._simpack_bitmap = wx_tools.bitmap_tools.bitmap_from_pkg_resources(
+            images_package,
+            'simpack.png'
         )
         self._closed_folder_bitmap = \
             wx_tools.generic_bitmaps.get_closed_folder_bitmap()

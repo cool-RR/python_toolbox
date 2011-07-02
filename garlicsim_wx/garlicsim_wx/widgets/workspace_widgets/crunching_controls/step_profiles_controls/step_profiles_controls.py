@@ -57,24 +57,18 @@ class StepProfilesControls(CutePanel):
         
         self.main_v_sizer.Add(self.button_h_sizer, 0, wx.ALIGN_RIGHT)
         
-        new_image = wx.BitmapFromImage(
-            wx.ImageFromStream(
-                pkg_resources.resource_stream(images_package,
-                                              'new.png'),
-                wx.BITMAP_TYPE_ANY
-            )
+        new_image = wx_tools.bitmap_tools.bitmap_from_pkg_resources(
+            images_package,
+            'new.png'
         )
         self.new_button = wx.BitmapButton(self, -1, new_image)
         self.new_button.SetToolTipString('Create a new step profile.')
         
         self.button_h_sizer.Add(self.new_button, 0, wx.RIGHT, 8)
         
-        delete_image = wx.BitmapFromImage(
-            wx.ImageFromStream(
-                pkg_resources.resource_stream(images_package,
-                                              'trash.png'),
-                wx.BITMAP_TYPE_ANY
-            )
+        delete_image = wx_tools.bitmap_tools.bitmap_from_pkg_resources(
+            images_package,
+            'trash.png'
         )
         self.delete_button = wx.BitmapButton(self, -1, delete_image)
         self.delete_button.SetToolTipString(

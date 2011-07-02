@@ -18,7 +18,6 @@ def color_replaced_bitmap(bitmap, old_rgb, new_rgb):
 
 
 def bitmap_from_pkg_resources(package_or_requirement, resource_name):
-    # blocktodo: use everywhere
     return wx.BitmapFromImage(
         wx.ImageFromStream(
             pkg_resources.resource_stream(package_or_requirement,

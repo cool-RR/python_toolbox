@@ -92,20 +92,15 @@ class PlaybackControls(CutePanel, WorkspaceWidget):
         '''The current mode of the center button.'''
 
         bitmap_list = ['to_start', 'previous_node', 'play',
-                                'next_node', 'to_end', 'pause',
-                                'finalize']
+                       'next_node', 'to_end', 'pause', 'finalize']
         
         bitmaps_dict = self.bitmap_dict = {}
         for bitmap_name in bitmap_list:
-            stream = pkg_resources.resource_stream(images_package,
-                                                 bitmap_name + '.png')
-            self.bitmap_dict[bitmap_name] = wx.BitmapFromImage(
-                wx.ImageFromStream(
-                    stream,
-                    wx.BITMAP_TYPE_ANY
+            self.bitmap_dict[bitmap_name] = \
+                wx_tools.bitmap_tools.bitmap_from_pkg_resources(
+                    images_package,
+                    bitmap_name + '.png'
                 )
-            )
-            
         
         self.center_button_bitmap_dict = {
             PlayMode: bitmaps_dict['play'],

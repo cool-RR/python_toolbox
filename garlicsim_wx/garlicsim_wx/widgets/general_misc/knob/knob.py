@@ -76,11 +76,9 @@ class Knob(CutePanel):
         
         self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
         
-        self.original_bitmap = wx.BitmapFromImage(
-            wx.ImageFromStream(
-                pkg_resources.resource_stream(images_package, 'knob.png'),
-                wx.BITMAP_TYPE_ANY
-            )
+        self.original_bitmap = wx_tools.bitmap_tools.bitmap_from_pkg_resources(
+            images_package,
+            'knob.png'
         )
         
         self.bind_event_handers(Knob)

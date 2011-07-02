@@ -11,6 +11,9 @@ import wx
 import pkg_resources
 
 from garlicsim.general_misc import caching
+from garlicsim_wx.general_misc import wx_tools
+from garlicsim_wx.widgets.general_misc.cute_bitmap_button import \
+                                                               CuteBitmapButton
 
 from . import images as __images_package
 images_package = __images_package.__name__
@@ -19,24 +22,21 @@ images_package = __images_package.__name__
 @caching.cache()
 def get_bitmap():
     '''Get the "X" bitmap used for the close button.'''
-    stream = pkg_resources.resource_stream(
+    return wx_tools.bitmap_tools.bitmap_from_pkg_resources(
         images_package,
         'close.png'
     )
-    
-    return wx.BitmapFromImage(
-        wx.ImageFromStream(
-            stream,
-            wx.BITMAP_TYPE_ANY
-        )
-    )
 
 
-class CloseButton(wx.BitmapButton):
+class CloseButton(CuteBitmapButton):
     '''Button for deleting a star-arg or star-kwarg.'''
     def __init__(self, parent):
         self.parent = parent
-        wx.BitmapButton.__init__(self, parent, bitmap=get_bitmap())
+        CuteBitmapButton.__init__(
+            self,
+            parent,
+            bitmap=get_bitmap()
+        )
                 
             
         

@@ -12,7 +12,8 @@ import pkg_resources
 
 from garlicsim.general_misc import caching
 from garlicsim_wx.general_misc import wx_tools
-from garlicsim_wx.widgets.general_misc.cute_window import CuteWindow
+from garlicsim_wx.widgets.general_misc.cute_bitmap_button import \
+                                                               CuteBitmapButton
 
 from . import images as __images_package
 images_package = __images_package.__name__
@@ -21,17 +22,9 @@ images_package = __images_package.__name__
 @caching.cache()
 def get_bitmap():
     '''Get the "+" bitmap used for the star adder button.'''
-
-    stream = pkg_resources.resource_stream(
+    return wx_tools.bitmap_tools.bitmap_from_pkg_resources(
         images_package,
         'plus.png'
-    )
-    
-    return wx.BitmapFromImage(
-        wx.ImageFromStream(
-            stream,
-            wx.BITMAP_TYPE_ANY
-        )
     )
 
 
@@ -43,13 +36,11 @@ EVT_STAR_ADDER_PRESSED = wx.PyEventBinder(
 '''Event saying that a star adder button was pressed.'''
 
 
-class StarAdder(wx.BitmapButton, CuteWindow):
+class StarAdder(CuteBitmapButton):
     '''Button for adding an entry for another star-arg or star-kwarg.'''
     def __init__(self, argument_control):
         self.argument_control = argument_control
-        
-        wx.BitmapButton.__init__(self, argument_control, bitmap=get_bitmap())
-                
+        CuteBitmapButton.__init__(self, argument_control, bitmap=get_bitmap())
         self.bind_event_handers(StarAdder)
         
     def _on_button(self, event):
