@@ -22,7 +22,9 @@ from garlicsim.general_misc import path_tools
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import package_finder
 from garlicsim_wx.general_misc import wx_tools
+from garlicsim_wx.general_misc.wx_tools.keyboard import keys
 from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
+from garlicsim_wx.widgets.general_misc.cute_bitmap_button import CuteBitmapButton
 from garlicsim_wx.widgets.general_misc.cute_dir_dialog import CuteDirDialog
 
 import garlicsim_wx
@@ -136,7 +138,7 @@ class NavigationPanel(CutePanel):
         #  2. We're binding both button event *and* menu events, because on Mac
         #     accelerators can only trigger menu events.
         
-        self.back_button = wx.BitmapButton(
+        self.back_button = CuteBitmapButton(
             self,
             bitmap=wx.BitmapFromImage(
                 wx.ImageFromStream(
@@ -145,13 +147,9 @@ class NavigationPanel(CutePanel):
                     wx.BITMAP_TYPE_ANY
                 )
             ),
-        ) # blocktodo: could these four be bound automatically?
-        self.back_button.SetToolTipString(
-            u'Back (%s)' % wx_tools.keyboard.keys.back_key_string
-        )
-        self.back_button.SetHelpText(
-            u'Go to the previously-selected simpack. (%s)' % 
-            wx_tools.keyboard.keys.back_key_string
+            tool_tip=(u'Back (%s)' % wx_tools.keyboard.keys.back_key_string),
+            help_text=(u'Go to the previously-selected simpack. (%s)' %
+                       keys.back_key_string)
         )
         
         self.small_h_sizer.Add(
@@ -161,7 +159,7 @@ class NavigationPanel(CutePanel):
             border=5
         )
         
-        self.forward_button = wx.BitmapButton(
+        self.forward_button = CuteBitmapButton(
             self,
             bitmap=wx.BitmapFromImage(
                 wx.ImageFromStream(
@@ -170,13 +168,10 @@ class NavigationPanel(CutePanel):
                     wx.BITMAP_TYPE_ANY
                 )
             ),
-        )
-        self.forward_button.SetToolTipString(
-            u'Forward (%s)' % wx_tools.keyboard.keys.forward_key_string
-        )
-        self.forward_button.SetHelpText(
-            u'Go to the simpack you visited before you hit the back button. '
-            '(%s)' % wx_tools.keyboard.keys.forward_key_string
+            tool_tip=(u'Forward (%s)' %
+                      wx_tools.keyboard.keys.forward_key_string),
+            help_text=(u'Go to the simpack you visited before you hit the '
+                       'back button. (%s)' % keys.forward_key_string)
         )
         self.small_h_sizer.Add(
             self.forward_button,

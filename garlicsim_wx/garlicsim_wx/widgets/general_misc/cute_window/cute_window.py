@@ -39,6 +39,7 @@ class CuteWindow(AcceleratorSavvyWindow, BindSavvyWindow, wx.Window):
         freezer_type=wx_tools.window_tools.WindowFreezer,
         doc='''Freezer for freezing the window while the suite executes.'''
     )
+
     
     def create_cursor_changer(self, cursor):
         '''
@@ -48,6 +49,7 @@ class CuteWindow(AcceleratorSavvyWindow, BindSavvyWindow, wx.Window):
         `wx.CURSOR_BULLSEYE`.
         '''
         return wx_tools.cursors.CursorChanger(self, cursor)
+
     
     def set_good_background_color(self):
         '''Set a good background color to the window.'''
@@ -58,3 +60,8 @@ class CuteWindow(AcceleratorSavvyWindow, BindSavvyWindow, wx.Window):
         return wx.Window.FindFocus() == self
         
         
+    def set_tool_tip_and_help_text(self, tool_tip=None, help_text=None):
+        if tool_tip is not None:
+            self.SetToolTipString(tool_tip)
+        if help_text is not None:
+            self.SetHelpText(help_text)
