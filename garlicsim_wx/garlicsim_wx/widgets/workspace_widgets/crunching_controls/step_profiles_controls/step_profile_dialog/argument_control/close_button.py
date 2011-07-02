@@ -35,7 +35,9 @@ class CloseButton(CuteBitmapButton):
         CuteBitmapButton.__init__(
             self,
             parent,
-            bitmap=get_bitmap()
+            bitmap=get_bitmap(),
+            tool_tip='Remove this argument.',
+            help_text='Remove this argument.',
         )
                 
             

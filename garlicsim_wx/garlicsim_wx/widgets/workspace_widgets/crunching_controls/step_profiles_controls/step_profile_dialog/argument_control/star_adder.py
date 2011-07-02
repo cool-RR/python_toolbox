@@ -40,7 +40,13 @@ class StarAdder(CuteBitmapButton):
     '''Button for adding an entry for another star-arg or star-kwarg.'''
     def __init__(self, argument_control):
         self.argument_control = argument_control
-        CuteBitmapButton.__init__(self, argument_control, bitmap=get_bitmap())
+        CuteBitmapButton.__init__(
+            self,
+            argument_control,
+            bitmap=get_bitmap(),
+            tool_tip='Add another argument.',
+            help_text='Add another argument.',
+        )
         self.bind_event_handers(StarAdder)
         
     def _on_button(self, event):
