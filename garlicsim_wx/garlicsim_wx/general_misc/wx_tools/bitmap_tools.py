@@ -18,6 +18,14 @@ def color_replaced_bitmap(bitmap, old_rgb, new_rgb):
 
 
 def bitmap_from_pkg_resources(package_or_requirement, resource_name):
+    '''
+    Get a bitmap from a file using `pkg_resources`.
+    
+    Example:
+    
+        my_bitmap = bitmap_from_pkg_resources('whatever.images', 'image.jpg')
+    
+    '''
     return wx.BitmapFromImage(
         wx.ImageFromStream(
             pkg_resources.resource_stream(package_or_requirement,

@@ -20,7 +20,7 @@ class BindSavvyWindow(wx.Window):
     '''
     Window type that allows binding events automatically by method name.
     
-    Use `bind_event_handlers` 
+    Use the `.bind_event_handlers` method to bind event handlers by name.
     
     Some of this class's functionality is in its metaclass; see documentation
     of `BindSavvyWindowType`'s methods and attributes for more details.
@@ -28,10 +28,17 @@ class BindSavvyWindow(wx.Window):
     
     __metaclass__ = BindSavvyWindowType
     
+    
     _BindSavvyWindow__name_parser = name_parser.NameParser(
         (name_parser.LowerCase,),
         n_preceding_underscores_possibilites=(1,)
     )
+    '''
+    The name parser used by this window class for parsing event handlers.
+    
+    Override this with a different instance of `NameParser` in order to use a
+    different naming convention for event handlers.
+    '''
     
     def bind_event_handers(self, cls):
         '''
