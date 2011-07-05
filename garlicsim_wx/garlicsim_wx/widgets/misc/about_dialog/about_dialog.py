@@ -48,7 +48,10 @@ class AboutDialog(CuteDialog):
         self.bitmap_viewer = BitmapViewer(self, size=(597, 231))
         v_sizer.Add(self.bitmap_viewer, 0)
         
-        self.html_window = CuteHtmlWindow(self, size=(597, 290))
+        self.html_window = CuteHtmlWindow(
+            self,
+            size=(597, 290 if wx_tools.is_gtk else 250)
+        )
         v_sizer.Add(self.html_window, 0)
         
         foreground_color_in_hex = wx_tools.colors.wx_color_to_html_color(
