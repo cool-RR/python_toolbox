@@ -26,7 +26,12 @@ images_package = __images_package.__name__
 
 
 class AboutDialog(CuteDialog):
-    '''An About dialog for GarlicSim.'''
+    '''
+    An About dialog for GarlicSim.
+    
+    The dialog explains what GarlicSim does and shows the license and version
+    number.
+    '''
     def __init__(self, frame):
    
         CuteDialog.__init__(self, frame, title='About GarlicSim')
