@@ -56,7 +56,7 @@ class EventHandlerGrokker(object):
         )
         if len(self.parsed_words) >= 2:
             closer_window = address_tools.resolve(
-                '.'.join(['window'] + self.parsed_words[:-1]),
+                '.'.join(('window',) + self.parsed_words[:-1]),
                 namespace={'window': window}
             )
         else:
