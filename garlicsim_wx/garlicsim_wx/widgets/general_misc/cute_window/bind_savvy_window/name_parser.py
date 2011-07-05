@@ -7,48 +7,110 @@ This module defines the `NameParser` class.
 See its documentation for more information.
 '''
 
+from garlicsim.general_misc.third_party import abc
+
+from garlicsim.general_misc import abc_tools
 from garlicsim.general_misc import sequence_tools
 from garlicsim.general_misc import string_tools
 
-class CaseStyleType(type):
-    pass
+
+class CaseStyleType(abc.ABCMeta):
+    '''
+    A type of case style, dictating in what convention names should be written.
+    
+    For example, `LowerCase` means names should be written 'like_this', while
+    `CamelCase` means that names should be written 'LikeThis'.
+    
+    This is a metaclass; `LowerCase` and `CamelCase` are instances of this
+    class.
+    '''
+
 
 class BaseCaseStyle(object):
+    '''Base class for case styles.'''
     __metaclass__ = CaseStyleType
     
+    @abc_tools.AbstractStaticMethod
+    def parse(name):
+        '''
+        Parse a name with the given convention into a tuple of "words".
+        
+        Returns `None` if there is no match.
+        '''
+    
+        
 class LowerCase(BaseCaseStyle):
+    '''Naming style specifying that names should be written 'like_this'.'''
+    
     @staticmethod
     def parse(name):
+        '''
+        Parse a name with the given convention into a tuple of "words".
+        
+        For example, an input of 'on_navigation_panel__left_down' would result
+        in an output of `('navigation_panel', 'left_down')`.
+        
+        Returns `None` if there is no match.
+        '''
         if not name.startswith('on_'):
             return None
         cleaned_name = name[3:]
-        words = cleaned_name.split('__')
+        words = tuple(cleaned_name.split('__'))
         return words
 
+    
 class CamelCase(BaseCaseStyle):
+    '''Naming style specifying that names should be written 'LikeThis'.'''
+    
     @staticmethod
     def parse(name):
+        '''
+        Parse a name with the given convention into a tuple of "words".
+        
+        For example, an input of 'OnNavigationPanel_LeftDown' would result in
+        an output of `('navigation_panel', 'left_down')`.
+        
+        Returns `None` if there is no match.
+        '''
         if not name.startswith('On'):
             return None
         cleaned_name = name[2:]
         raw_words = cleaned_name.split('_')
-        words = map(string_tools.conversions.camelcase_to_underscore,
-                    raw_words)
+        words = tuple(map(string_tools.conversions.camelcase_to_underscore,
+                          raw_words))
         return words
 
 
 class NameParser(object):
+    '''
+    Parser that parses an event handler name.
+    
+    For example, under default settings, '_on_navigation_panel__left_down' will
+    be parsed into a tuple `('navigation_panel', 'left_down')`.
+    '''
     def __init__(self, case_style_possibilites=(LowerCase,),
                  n_preceding_underscores_possibilites=(1,)):
+        '''
+        Construct the `NameParser`.
+        
+        In `case_style_possibilites` you may specify a set of case styles
+        (subclasses of `BaseCaseStyle`) that will be accepted by this parser.
+        In `n_preceding_underscores_possibilites`, you may specify a set of
+        ints signifying the number of underscores prefixing the name. For
+        example, if you specify `(1, 2)`, this parser will accept names
+        starting with either 1 or 2 underscores.
+        '''
         
         self.case_style_possibilites = sequence_tools.to_tuple(
             case_style_possibilites,
             item_type=CaseStyleType
         )
+        '''The set of case styles that this name parser accepts.'''
         
         self.n_preceding_underscores_possibilites = sequence_tools.to_tuple(
             n_preceding_underscores_possibilites
         )
+        '''Set of number of preceding underscores that this parser accepts.'''
         
         
         assert all(isinstance(case_style, CaseStyleType) for case_style in 
@@ -59,6 +121,15 @@ class NameParser(object):
         
                 
     def parse(self, name):
+        '''
+        Parse a name into a tuple of "words".
+        
+        For example, under default settings, an input of
+        '_on_navigation_panel__left_down' would result in an output of
+        `('navigation_panel', 'left_down')`.
+        
+        Returns `None` if there is no match.
+        '''
         n_preceding_underscores = string_tools.get_n_identical_edge_characters(
             name,
             character='_',
@@ -78,5 +149,6 @@ class NameParser(object):
     
         
     def match(self, name):
-        return bool(self.parse(name))
+        '''Does `name` match our parser? (i.e. can it be parsed into words?)'''
+        return (self.parse(name) is not None)
     
