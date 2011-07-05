@@ -68,9 +68,9 @@ class EventHandlerGrokker(object):
             component = component_candidate
             event_codes = get_event_codes_of_component(component)
             for event_code in event_codes:
-                closer_window.Bind(
+                window.Bind(
                     event_code,
-                    event_handler_bound_method, #self.event_handler,
+                    event_handler_bound_method,
                     source=component
                 )
                 
@@ -78,7 +78,8 @@ class EventHandlerGrokker(object):
             window.Bind(
                 get_event_code_from_name(last_word,
                                          self.window_type),
-                event_handler_bound_method #self.event_handler,
+                event_handler_bound_method,
+                source=closer_window
             )
                 
             

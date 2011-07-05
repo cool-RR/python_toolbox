@@ -148,26 +148,11 @@ class NavigationPanel(CutePanel):
             help_text=(u'Go to the previously-selected simpack. (%s)' %
                        keys.back_key_string)
         )
-        #self.Bind(
-            #wx.EVT_MENU,
-            #self.simpack_selection_dialog._on_navigation_panel__back_button,
-            #source=self.back_button
-        #)
-        #self.Bind(
-            #wx.EVT_BUTTON,
-            #self.simpack_selection_dialog._on_navigation_panel__back_button,
-            #source=self.back_button
-        #)
         self.simpack_selection_dialog.Bind(
             wx.EVT_MENU,
             self.simpack_selection_dialog._on_navigation_panel__back_button,
             source=self.back_button
         )
-        #self.simpack_selection_dialog.Bind(
-            #wx.EVT_BUTTON,
-            #self.simpack_selection_dialog._on_navigation_panel__back_button,
-            #source=self.back_button
-        #)
         
         self.small_h_sizer.Add(
             self.back_button,
