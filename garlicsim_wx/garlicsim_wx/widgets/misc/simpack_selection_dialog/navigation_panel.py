@@ -135,8 +135,8 @@ class NavigationPanel(CutePanel):
         # accelerator weirdnesses:
         #  1. We're binding events to the parent instead of the current widget
         #     because otherwise accelerators don't work on parent on GTK.
-        #  2. We're binding both button event *and* menu events, because on Mac
-        #     accelerators can only trigger menu events.
+        #  2. We're binding both button events *and* menu events, because on 
+        #     Mac accelerators can only trigger menu events.
         
         self.back_button = CuteBitmapButton(
             self,
@@ -147,6 +147,11 @@ class NavigationPanel(CutePanel):
             tool_tip=(u'Back (%s)' % wx_tools.keyboard.keys.back_key_string),
             help_text=(u'Go to the previously-selected simpack. (%s)' %
                        keys.back_key_string)
+        )
+        self.Bind(
+            wx.EVT_MENU,
+            self.simpack_selection_dialog._on_navigation_panel__back_button,
+            source=self.back_button
         )
         
         self.small_h_sizer.Add(
