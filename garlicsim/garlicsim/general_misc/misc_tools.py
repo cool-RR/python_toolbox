@@ -178,7 +178,8 @@ class OwnNameDiscoveringProperty(object):
         
         return self.our_name
         
-    
+
+
 def mangle_attribute_name_if_needed(attribute_name, class_name):
 
     # Ruling out four cases in which we do not mangle:
@@ -197,3 +198,9 @@ def mangle_attribute_name_if_needed(attribute_name, class_name):
         cleaned_class_name = cleaned_class_name[:(MANGLE_LEN - total_length)]
 
     return '_%s%s' % (cleaned_class_name, attribute_name)
+
+
+def will_attribute_name_be_mangled(attribute_name, class_name):
+    
+    return mangle_attribute_name_if_needed(attribute_name, class_name) != \
+                                                                 attribute_name

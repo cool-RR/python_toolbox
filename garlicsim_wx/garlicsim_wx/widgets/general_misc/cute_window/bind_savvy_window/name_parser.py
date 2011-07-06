@@ -120,7 +120,7 @@ class NameParser(object):
                    self.n_preceding_underscores_possibilites)
         
                 
-    def parse(self, name):
+    def parse(self, name, class_name):
         '''
         Parse a name into a tuple of "words".
         
@@ -148,7 +148,7 @@ class NameParser(object):
             return None
     
         
-    def match(self, name):
+    def match(self, name, class_name):
         '''Does `name` match our parser? (i.e. can it be parsed into words?)'''
         return (self.parse(name) is not None)
     
