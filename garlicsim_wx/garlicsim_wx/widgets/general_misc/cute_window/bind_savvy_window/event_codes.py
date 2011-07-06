@@ -8,6 +8,7 @@ import wx
 from garlicsim.general_misc import caching
 from garlicsim.general_misc import sequence_tools
 from garlicsim.general_misc import address_tools
+from garlicsim.general_misc import string_tools
 
 
 def monkeypatch_wx():
@@ -36,7 +37,8 @@ def get_event_code_from_name(name, window_type):
     searched for event codes in precedence to `wx` and the window type's own
     module.
     '''
-    processed_name = 'EVT_%s' % name.upper()
+    processed_name = 'EVT_%s' % string_tools.conversions.\
+                                camelcase_to_underscore(name).upper()
     raw_event_modules = \
         (window_type.event_modules if
          sequence_tools.is_sequence(window_type.event_modules) else 

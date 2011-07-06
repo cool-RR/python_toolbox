@@ -76,9 +76,7 @@ class CamelCase(BaseCaseStyle):
         if not name.startswith('On'):
             return None
         cleaned_name = name[2:]
-        raw_words = cleaned_name.split('_')
-        words = tuple(map(string_tools.conversions.camelcase_to_underscore,
-                          raw_words))
+        words = tuple(cleaned_name.split('_'))
         return words
 
 
