@@ -40,7 +40,7 @@ class EventHandlerGrokker(object):
         
         
     parsed_words = caching.CachedProperty(
-        lambda self: self.window_type._BindSavvyWindow__name_parser.parse(
+        lambda self: self.window_type._BindSavvyWindowType__name_parser.parse(
             self.name
         ),
         doc=''' '''

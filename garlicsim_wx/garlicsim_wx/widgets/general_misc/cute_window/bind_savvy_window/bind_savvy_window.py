@@ -29,7 +29,7 @@ class BindSavvyWindow(wx.Window):
     __metaclass__ = BindSavvyWindowType
     
     
-    _BindSavvyWindow__name_parser = name_parser.NameParser(
+    _BindSavvyWindowType__name_parser = name_parser.NameParser(
         (name_parser.LowerCase,),
         n_preceding_underscores_possibilites=(1,)
     )
