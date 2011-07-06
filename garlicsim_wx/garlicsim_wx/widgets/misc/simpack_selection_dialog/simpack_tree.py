@@ -64,23 +64,26 @@ class SimpackTree(wx.TreeCtrl):
         
         #self.AddColumn('', width=600)
         #self.SetMainColumn(1)
-        self.root_item_id = self.AddRoot("GarlicSim's simpack library")
-        self.SetItemImage(self.root_item_id,
+        self.root_item = self.AddRoot("All simpacks")
+        # blocktodo: make uncollapsable if possible
+        
+        self.SetItemImage(self.root_item,
                           self._CLOSED_FOLDER_BITMAP_INDEX,
                           which=wx.TreeItemIcon_Normal)
-        self.SetItemImage(self.root_item_id,
+        self.SetItemImage(self.root_item,
                           self._OPEN_FOLDER_BITMAP_INDEX,
                           which=wx.TreeItemIcon_Expanded)
         
-        titles = ["Conway's Game of Life", "Prisoner's Dilemma",
-                  'Queueing Theory']
-        for title in titles:
-            item = self.AppendItem(self.root_item_id, title)
-            self.SetItemImage(item,
-                              self._SIMPACK_BITMAP_INDEX,
-                              wx.TreeItemIcon_Normal)
+        #titles = ["Conway's Game of Life", "Prisoner's Dilemma",
+                  #'Queueing Theory']
+        #for title in titles:
+            #item = self.AppendItem(self.root_item_id, title)
+            #self.SetItemImage(item,
+                              #self._SIMPACK_BITMAP_INDEX,
+                              #wx.TreeItemIcon_Normal)
         
         self.ExpandAll()
+        self.refresh_tree()
 
     def __init_images(self):
         self._simpack_bitmap = wx_tools.bitmap_tools.bitmap_from_pkg_resources(
@@ -159,7 +162,7 @@ class SimpackTree(wx.TreeCtrl):
                 
                 simpacks.append(simpack_metadata)
             
-            simpacks.sort(key=lambda simpack_metadata: simpack_metadata)
+            simpacks.sort(key=lambda simpack_metadata: simpack_metadata.name)
             
             entry = {'name': name,
                      'path': path,
@@ -168,11 +171,12 @@ class SimpackTree(wx.TreeCtrl):
             self.simpack_places_tree.append(entry)
             
             
-    def refresh_simpacks(self):        
+    def refresh_tree(self):        
         
-        
-        self.RootItem
-            
+        self._refresh_internal_tree()
+        self.get
+        self.root_item
+        self.AppendItem
         #for roots in self.GetRootItem
 
         

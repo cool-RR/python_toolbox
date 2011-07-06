@@ -29,7 +29,8 @@ class SimpackMetadata(_SimpackMetadataBase):
         assert isinstance(self.address, basestring) or self.address is None
         assert isinstance(self.name, basestring) or self.name is None
         assert isinstance(self.version, basestring) or self.version is None
-        assert isinstance(self.description, basestring) or self.description is None
+        assert isinstance(self.description, basestring) or self.description \
+                                                                        is None
         assert isinstance(self.tags, tuple) or self.tags is None        
         
         
