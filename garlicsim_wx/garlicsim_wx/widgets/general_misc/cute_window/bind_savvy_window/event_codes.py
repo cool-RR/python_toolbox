@@ -13,8 +13,14 @@ from garlicsim.general_misc import string_tools
 
 def monkeypatch_wx():
     '''Give event code attributes to several built-in wxPython widgets.'''
+    
+    # Using `wx.EVT_MENU` for `wx.Button` (in addition to `wx.EVT_BUTTON`)
+    # because that's the event created by invoking a button's accelerator on
+    # Mac:
     wx.Button._EventHandlerGrokker__event_code = (wx.EVT_BUTTON, wx.EVT_MENU)
+    
     wx.Menu._EventHandlerGrokker__event_code = wx.EVT_MENU
+    
     wx.Timer._EventHandlerGrokker__event_code = wx.EVT_TIMER
 
 monkeypatch_wx()
