@@ -10,7 +10,7 @@
 Getting started
 ===============
 
-xNever worked with GarlicSim before?
+Never worked with GarlicSim before?
 
 In 35 minutes you could grasp the fundamentals of GarlicSim and write your first
 simulation package!
