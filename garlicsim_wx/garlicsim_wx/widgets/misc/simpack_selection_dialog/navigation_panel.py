@@ -197,8 +197,8 @@ class NavigationPanel(CutePanel):
     def forward(self):
         '''Go to the simpack that was selected before we hit "Back".'''
         wx.lib.dialogs.messageDialog(self, 'Forward')
-                
         
+            
     def _on_add_simpacks_from_a_different_folder_button(self, event):
         path = CuteDirDialog.create_show_modal_and_get_path(
             self.simpack_selection_dialog,
@@ -212,9 +212,9 @@ class NavigationPanel(CutePanel):
             
         if path not in zip(garlicsim_wx.simpack_places)[0]:
             garlicsim_wx.simpack_places.append((path, ''))
-            self.simpack_selection_dialog.update_simpack_list()
         if path not in sys.path:
             sys.path.append(path)
+        self.simpack_selection_dialog.refresh()
     
     
 

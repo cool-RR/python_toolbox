@@ -43,7 +43,7 @@ class SimpackTree(CuteTreeCtrl):
         CuteTreeCtrl.__init__(
             self,
             parent=simpack_selection_dialog,
-            style=wx.TR_DEFAULT_STYLE | wx.SUNKEN_BORDER
+            style=wx.TR_DEFAULT_STYLE | wx.TR_HIDE_ROOT | wx.SUNKEN_BORDER
         )
         
         assert isinstance(simpack_selection_dialog, SimpackSelectionDialog)
@@ -64,7 +64,7 @@ class SimpackTree(CuteTreeCtrl):
         
         #self.AddColumn('', width=600)
         #self.SetMainColumn(1)
-        self.root_item = self.AddRoot("All simpacks")
+        self.root_item = self.AddRoot('All simpack places')
         # blocktodo: make uncollapsable if possible
         
         self.SetItemImage(self.root_item,
@@ -166,7 +166,8 @@ class SimpackTree(CuteTreeCtrl):
             
             entry = {'name': name,
                      'path': path,
-                     'simpacks': simpacks}
+                     'simpacks': simpacks,
+                     'item': None}
             
             self.simpack_places_tree.append(entry)
             
@@ -175,6 +176,13 @@ class SimpackTree(CuteTreeCtrl):
         
         self._refresh_internal_tree()
         
+        #######################################################################
+        #######################################################################
+        ### Updating simpack places: ##########################################
+        #                                                                     #
+        
+        ### Removing deleted simpack places: ##################################
+        #                                                                     #
         existing_simpack_place_paths = [entry['path'] for entry in
                                         self.simpack_places_tree]
         simpack_place_items = self.get_children_of_item(self.root_item)
@@ -182,13 +190,18 @@ class SimpackTree(CuteTreeCtrl):
             if self.GetItemPyData(simpack_place_item) not in \
                                                   existing_simpack_place_paths:
                 self.Delete(simpack_place_item)
+        #                                                                     #
+        ### Finished removing deleted simpack places. #########################
             
-        paths_of_simpack_place_items = [self.GetItemData(simpack_place_item)
+        ### Adding new simpack places: ########################################
+        #                                                                     #
+        paths_of_simpack_place_items = [self.GetItemPyData(simpack_place_item)
                                         for simpack_place_item in
                                         simpack_place_items]
         simpack_place_items = self.get_children_of_item(self.root_item)
         for simpack_place in self.simpack_places_tree:
             if simpack_place['path'] not in paths_of_simpack_place_items:
+                # blocktodo: can extract this block into method:
                 new_item = self.AppendItem(self.root_item,
                                            text=simpack_place['name'])
                 self.SetItemPyData(new_item, simpack_place['path'])
@@ -198,8 +211,32 @@ class SimpackTree(CuteTreeCtrl):
                 self.SetItemImage(new_item,
                                   self._OPEN_FOLDER_BITMAP_INDEX,
                                   which=wx.TreeItemIcon_Expanded)
-                                
-        #for roots in self.GetRootItem
+                simpack_place['item'] = new_item
+        #                                                                     #
+        ### Finished adding new simpack places. ###############################
+        
+        simpack_place_items = self.get_children_of_item(self.root_item)
+        assert len(simpack_place_items) == len(self.simpack_places_tree)
+        
+        #                                                                     #
+        ### Finished updating simpack places. #################################
+        #######################################################################
+        #######################################################################
+        
+        #######################################################################
+        #######################################################################
+        ### Updating simpacks: ################################################
+        #                                                                     #
+
+        for simpack_place in self.simpack_places_tree:
+            
+            pass#for simpack_metadata in simpack_place['simpacks']:
+                
+        
+        #                                                                     #
+        ### Finished updating simpacks. #######################################
+        #######################################################################
+        #######################################################################
 
         
 from .simpack_selection_dialog import SimpackSelectionDialog

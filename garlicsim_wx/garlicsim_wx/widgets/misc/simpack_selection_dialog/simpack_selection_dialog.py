@@ -293,8 +293,13 @@ class SimpackSelectionDialog(CuteDialog):
         return result
     
     
+    def refresh(self):
+        self.simpack_tree.refresh_tree()
+                
+    
     def _on_refresh_hidden_button(self, event):
-        wx.lib.dialogs.messageDialog(self, 'Refresh')        
+        wx.lib.dialogs.messageDialog(self, 'Refresh')
+        self.refresh()
                 
         
     def _on_create_project_button(self, event):
