@@ -37,7 +37,7 @@ def will_attribute_name_be_mangled(attribute_name, class_name):
     return mangle_attribute_name_if_needed(attribute_name, class_name) != \
                                                                  attribute_name
 
-def demangle_attribute_name_if_needed(attribute_name, class_name):
+def unmangle_attribute_name_if_needed(attribute_name, class_name):
     
     # Ruling out four cases in which mangling wouldn't have happened:
     if ((string_tools.get_n_identical_edge_characters(attribute_name,

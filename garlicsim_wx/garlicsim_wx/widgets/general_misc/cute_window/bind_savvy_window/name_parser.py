@@ -129,19 +129,19 @@ class NameParser(object):
         
         Returns `None` if there is no match.
         '''
-        demangled_name = name_mangling.demangle_attribute_name_if_needed(
+        unmangled_name = name_mangling.unmangle_attribute_name_if_needed(
             name,
             class_name
         )
         n_preceding_underscores = string_tools.get_n_identical_edge_characters(
-            demangled_name,
+            unmangled_name,
             character='_',
             head=True
         )
         if n_preceding_underscores not in \
            self.n_preceding_underscores_possibilities:
             return None
-        cleaned_name = demangled_name[n_preceding_underscores:]
+        cleaned_name = unmangled_name[n_preceding_underscores:]
         # blocktodo: What about the 'on' part?
         for case_style in self.case_style_possibilites:
             result = case_style.parse(cleaned_name)
