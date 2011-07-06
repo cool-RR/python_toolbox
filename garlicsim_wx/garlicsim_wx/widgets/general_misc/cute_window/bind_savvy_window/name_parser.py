@@ -155,5 +155,5 @@ class NameParser(object):
         
     def match(self, name, class_name):
         '''Does `name` match our parser? (i.e. can it be parsed into words?)'''
-        return (self.parse(name) is not None)
+        return (self.parse(name, class_name) is not None)
     

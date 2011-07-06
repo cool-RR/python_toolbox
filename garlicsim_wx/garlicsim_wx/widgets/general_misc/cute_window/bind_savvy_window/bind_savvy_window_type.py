@@ -46,7 +46,8 @@ class BindSavvyWindowType(type):
         names_to_event_handlers = dict_tools.filter_items(
             vars(cls),
             lambda name, value:
-                cls._BindSavvyWindowType__name_parser.match(name, cls) and
+                cls._BindSavvyWindowType__name_parser.match(name,
+                                                            cls.__name__) and
                 callable(value) and
                 getattr(value, '_BindSavvyWindowType__dont_bind_automatically',
                         None) is not True

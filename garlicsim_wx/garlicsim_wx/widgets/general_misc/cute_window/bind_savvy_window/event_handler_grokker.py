@@ -29,7 +29,10 @@ class EventHandlerGrokker(object):
         function. (i.e. taking two arguments `self` and `event`.) `window_type`
         is the class in which that event handler is defined.
         '''
-        assert window_type._BindSavvyWindowType__name_parser.match(name)
+        assert window_type._BindSavvyWindowType__name_parser.match(
+            name,
+            window_type.__name__
+        )
         
         self.name = name
         
@@ -41,7 +44,8 @@ class EventHandlerGrokker(object):
         
     parsed_words = caching.CachedProperty(
         lambda self: self.window_type._BindSavvyWindowType__name_parser.parse(
-            self.name
+            self.name,
+            self.window_type.__name__
         ),
         doc=''' '''
     )
