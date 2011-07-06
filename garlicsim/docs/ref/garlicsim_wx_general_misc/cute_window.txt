@@ -36,7 +36,10 @@ whose ``__init__`` you're doing the binding.)
 
 Example::
 
+    import wx.lib.buttons    
+    
     from garlicsim_wx.widgets.general_misc.cute_window import CuteWindow
+    
     
     class MyWidget(CuteWindow):
     
@@ -106,8 +109,47 @@ camel-case event handlers with either 0 or 2 preceding underscores.
 
 Example::
 
-    1/0
+    import wx.lib.buttons
+
+    from garlicsim_wx.widgets.general_misc.cute_window import CuteWindow
+    from garlicsim_wx.widgets.general_misc.cute_window.\
+                     bind_savvy_window import name_parser as name_parser_module
+
+                     
+    class MyWidget(CuteWindow):
+        
+        _BindSavvyWindowType__name_parser = name_parser_module.NameParser(
+            name_parser_module.CamelCase,
+            n_preceding_underscores_possibilities=(0, 2)
+        )
             
+        def __init__(self, parent):
+            CuteWindow.__init__(self, parent)
+            self.OkButton = wx.lib.buttons.GenButton(self, label='Press me')
+            self.bind_event_handlers(MyWidget)
+    
+        # Example of 0 preceding underscores:
+        def OnKeyDown(self, event):
+            pass
+            # Handler for `wx.EVT_KEY_DOWN`. do whatever you want here.
+    
+        # Example of 2 preceding underscores:
+        def __OnSetFocus(self, event):
+            pass
+            # Handler for `wx.EVT_SET_FOCUS`. do whatever you want here.
+    
+        def OnOkButton(self, event):
+            pass
+            # Handler for `self.OkButton` being pressed. Do whatever you want
+            # here.
+    
+        # Example of nested bind:
+        def __OnOkButton_ContextMenu(self, event):
+            pass
+            # Handler for `self.OkButton` getting a context menu command. Do
+            # whatever you want here.
+            
+
 
 :attr:`freezer <garlicsim_wx.widgets.general_misc.cute_window.CuteWindow.freezer>`
 ==================================================================================
