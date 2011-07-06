@@ -18,9 +18,9 @@ def monkeypatch_wx():
     # Using `wx.EVT_MENU` for buttons (in addition to `wx.EVT_BUTTON`)
     # because that's the event created by invoking a button's accelerator on
     # Mac:
-    wx.Button._EventHandlerGrokker__event_code = (wx.EVT_BUTTON, wx.EVT_MENU)
-    wx.lib.buttons.GenButton.\
-      _EventHandlerGrokker__event_code = (wx.EVT_BUTTON, wx.EVT_MENU)
+    wx.Button._EventHandlerGrokker__event_code = \
+      wx.lib.buttons.GenButton._EventHandlerGrokker__event_code = \
+      (wx.EVT_BUTTON, wx.EVT_MENU)
     
     wx.Menu._EventHandlerGrokker__event_code = wx.EVT_MENU
     
