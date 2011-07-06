@@ -154,21 +154,21 @@ Binding to events from different modules
 ----------------------------------------
 
 Most of the events we bind to, such as :data:`wx.EVT_KEY_DOWN` or
-:data:`wx.EVT_PAINT` are in the :mod:`wx` namespace. But sometimes we want to
+:data:`wx.EVT_PAINT`\, are in the :mod:`wx` namespace. But sometimes we want to
 bind to events that are in other modules. Fortunately, the :class:`CuteWindow
 <garlicsim_wx.widgets.general_misc.cute_window.CuteWindow>` class allows us to
 do that while still using automatic binding.
 
 There are two approaches to binding to events defined outside of :mod:`wx`\:
 
-1. **Put the desired event in the namespace of your widget class.** This can
+1. Put the desired event in the namespace of your widget class. This can
    be done either by *defining* the event in that module or by *importing* the
    event from another module into that module. Or,
  
-2. **Give your widget class an :attr:`.event_modules
+2. Give your widget class an :attr:`.event_modules
    <garlicsim_wx.widgets.general_misc.cute_window.CuteWindow.event_module>`
-   attribute.** That attribute should a module (or a list of modules, or actually
-   namespaces) in which events will be searched.
+   attribute. That attribute should be a module (or a list of modules, or
+   actually namespaces) in which events will be searched.
    
 
 :attr:`freezer <garlicsim_wx.widgets.general_misc.cute_window.CuteWindow.freezer>`
