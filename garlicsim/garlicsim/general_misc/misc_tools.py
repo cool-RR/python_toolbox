@@ -9,6 +9,9 @@ import types
 
 from garlicsim.general_misc import cute_iter_tools
 
+    
+MANGLE_LEN = 256
+
 
 def is_subclass(candidate, base_class):
     '''
@@ -136,6 +139,7 @@ def is_number(x):
         return False
     else:
         return True
+
     
 def identity_function(thing):
     '''
@@ -174,3 +178,22 @@ class OwnNameDiscoveringProperty(object):
         
         return self.our_name
         
+    
+def mangle_attribute_name_if_needed(attribute_name, class_name):
+
+    # Ruling out four cases in which we do not mangle:
+    if ((not attribute_name.startswith('__')) or
+       (len(attribute_name) + 2 >= MANGLE_LEN) or
+       (attribute_name.endswith('__')) or
+       set(class_name) == set('_')):
+        
+        return attribute_name
+    
+    
+    cleaned_class_name = class_name.lstrip('_')
+
+    total_length = len(cleaned_class_name) + len(attribute_name)
+    if total_length > MANGLE_LEN:
+        cleaned_class_name = cleaned_class_name[:(MANGLE_LEN - total_length)]
+
+    return '_%s%s' % (cleaned_class_name, attribute_name)

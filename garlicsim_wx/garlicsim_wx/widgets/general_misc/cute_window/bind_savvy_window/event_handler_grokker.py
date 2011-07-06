@@ -29,7 +29,7 @@ class EventHandlerGrokker(object):
         function. (i.e. taking two arguments `self` and `event`.) `window_type`
         is the class in which that event handler is defined.
         '''
-        assert name.startswith('_on_')
+        assert window_type._BindSavvyWindowType__name_parser.match(name)
         
         self.name = name
         
