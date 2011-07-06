@@ -22,7 +22,7 @@ from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import package_finder
 from garlicsim.general_misc.nifty_collections import OrderedDict
 from garlicsim_wx.general_misc import wx_tools
-from garlicsim_wx.widgets.general_misc import cute_hyper_tree_list
+from garlicsim_wx.widgets.general_misc.cute_tree_ctrl import CuteTreeCtrl
 
 import garlicsim_wx
 import garlicsim_lib
@@ -32,7 +32,7 @@ from . import images as __images_package
 images_package = __images_package.__name__
 
 
-class SimpackTree(wx.TreeCtrl):
+class SimpackTree(CuteTreeCtrl):
     '''
     Widget showing a simpack tree, from which we can select a simpack.
     
@@ -40,7 +40,7 @@ class SimpackTree(wx.TreeCtrl):
     '''
     
     def __init__(self, simpack_selection_dialog):
-        wx.TreeCtrl.__init__(
+        CuteTreeCtrl.__init__(
             self,
             parent=simpack_selection_dialog,
             style=wx.TR_DEFAULT_STYLE | wx.SUNKEN_BORDER
@@ -174,9 +174,31 @@ class SimpackTree(wx.TreeCtrl):
     def refresh_tree(self):        
         
         self._refresh_internal_tree()
-        self.get
-        self.root_item
-        self.AppendItem
+        
+        existing_simpack_place_paths = [entry['path'] for entry in
+                                        self.simpack_places_tree]
+        simpack_place_items = self.get_children_of_item(self.root_item)
+        for simpack_place_item in simpack_place_items:
+            if self.GetItemPyData(simpack_place_item) not in \
+                                                  existing_simpack_place_paths:
+                self.Delete(simpack_place_item)
+            
+        paths_of_simpack_place_items = [self.GetItemData(simpack_place_item)
+                                        for simpack_place_item in
+                                        simpack_place_items]
+        simpack_place_items = self.get_children_of_item(self.root_item)
+        for simpack_place in self.simpack_places_tree:
+            if simpack_place['path'] not in paths_of_simpack_place_items:
+                new_item = self.AppendItem(self.root_item,
+                                           text=simpack_place['name'])
+                self.SetItemPyData(new_item, simpack_place['path'])
+                self.SetItemImage(new_item,
+                                  self._CLOSED_FOLDER_BITMAP_INDEX,
+                                  which=wx.TreeItemIcon_Normal)
+                self.SetItemImage(new_item,
+                                  self._OPEN_FOLDER_BITMAP_INDEX,
+                                  which=wx.TreeItemIcon_Expanded)
+                                
         #for roots in self.GetRootItem
 
         
