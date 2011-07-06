@@ -87,7 +87,7 @@ There are three different kinds of usage in the example above:
 Using different naming conventions
 ----------------------------------
 
-Not everyone uses the same naming conventions for their event handlers. Some
+Not everyone uses the same naming convention for their event handlers. Some
 people prefer ``_on_mouse_events`` while others prefer ``OnMouseEvents``.
 Fortunately, the :class:`CuteWindow
 <garlicsim_wx.widgets.general_misc.cute_window.CuteWindow>` class allows you to
@@ -97,11 +97,11 @@ specify which kind of naming scheme you'd like to use by defining a
 attribute on your window class. What you put in that attribute is a
 :class:`NameParser
 <garlicsim_wx.widgets.general_misc.cute_window.bind_savvy_window.name_parser.NameParser>`
-that you can customize.
+instance that you can customize.
 
 :class:`NameParser
 <garlicsim_wx.widgets.general_misc.cute_window.bind_savvy_window.name_parser.NameParser>`
-lets you set which types of case you want to accept (lower-case and/or
+lets you set which types of case-styles you want to accept (lower-case and/or
 camel-case) and how many leading underscores event handlers will have. For both
 of these you may set either a single option or a collection of options that
 will be acceptable. For example, you can choose to accept both lower-case and
@@ -112,8 +112,8 @@ Example::
     import wx.lib.buttons
 
     from garlicsim_wx.widgets.general_misc.cute_window import CuteWindow
-    from garlicsim_wx.widgets.general_misc.cute_window.\
-                     bind_savvy_window import name_parser as name_parser_module
+    from garlicsim_wx.widgets.general_misc.cute_window.bind_savvy_window \
+                                       import name_parser as name_parser_module
 
                      
     class MyWidget(CuteWindow):
@@ -131,12 +131,12 @@ Example::
         # Example of 0 preceding underscores:
         def OnKeyDown(self, event):
             pass
-            # Handler for `wx.EVT_KEY_DOWN`. do whatever you want here.
+            # Handler for `wx.EVT_KEY_DOWN`. Do whatever you want here.
     
         # Example of 2 preceding underscores:
         def __OnSetFocus(self, event):
             pass
-            # Handler for `wx.EVT_SET_FOCUS`. do whatever you want here.
+            # Handler for `wx.EVT_SET_FOCUS`. Do whatever you want here.
     
         def OnOkButton(self, event):
             pass
