@@ -48,7 +48,7 @@ class CruncherControls(CutePanel):
         
         self.change_cruncher_button = wx.Button(self, -1, 'Change...')
         
-        self.bind_event_handers(CruncherControls)
+        self.bind_event_handlers(CruncherControls)
         
         self.main_v_sizer.Add(self.change_cruncher_button, 0,
                               wx.ALIGN_RIGHT | wx.BOTTOM, 5)

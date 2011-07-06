@@ -27,13 +27,66 @@ bloated constructors for your widgets. To remedy this, :class:`CuteWindow
 <garlicsim_wx.widgets.general_misc.cute_window.CuteWindow>` allows binding
 event handlers automatically by their name. Since you probably name your event
 handlers according to which event they handle, we might as well use that name
-instead or requiring you to call :meth:`self.Bind <wx.Window.Bind>` many times
+instead of requiring you to call :meth:`self.Bind <wx.Window.Bind>` many times
 in your widget's ``__init__``.
 
-Example:
+To bind event handlers by name, call ``self.bind_event_handlers(window_type)``
+where ``window_type`` is the class of your window. (Typically the class in
+whose ``__init__`` you're doing the binding.)
 
-    def f():
-        pass
+Example::
+
+    from garlicsim_wx.widgets.general_misc.cute_window import CuteWindow
+
+    class MyWidget(CuteWindow):
+    
+        def __init__(self, parent):
+            CuteWindow.__init__(self, parent)
+            self.ok_button = wx.Button(self, label='Press me')
+            self.bind_event_handlers(MyWidget)
+
+        def _on_key_down(self, event):
+            pass            
+            # Handler for `wx.EVT_KEY_DOWN`. do whatever you want here.
+                
+                
+        def _on_set_focus(self, event):
+            pass            
+            # Handler for `wx.EVT_SET_FOCUS`. do whatever you want here.
+            
+            
+        def _on_ok_button(self, event):
+            pass            
+            # Handler for `self.ok_button` being pressed. Do whatever you want
+            # here.
+            
+            
+        def _on_ok_button__set_focus(self, event):
+            pass            
+            # Handler for `self.ok_button` receiving the focus. Do whatever
+            # you want here.
+            
+
+There are three different kinds of usage in the example above:
+
+- **Binding to component.** When ``_on_ok_button`` is encountered, a search is
+  made for ``self.ok_button``, and because it exists, we bind to the default
+  event for this kind of widget: :data:`wx.EVT_BUTTON`.
+  
+- **Binding to event type.** When ``_on_key_down`` is encountered, we bind to the
+  :data:`wx.EVT_KEY_DOWN` event.
+  
+- **Nested bind.** When ``_on_ok_button__set_focus`` is encountered, we bind to
+  the :data:`wx.EVT_SET_FOCUS` event with a ``source`` of ``self.ok_button``,
+  i.e. the handler will be invoked only when the button comes into focus.
+
+            
+            
+Using different naming conventions
+----------------------------------
+
+Not everyone uses the same naming conventions for their event handlers. Some people
+            
 
 :attr:`freezer <garlicsim_wx.widgets.general_misc.cute_window.CuteWindow.freezer>`
 ==================================================================================

@@ -23,7 +23,7 @@ class CuteHtmlWindow(wx.html.HtmlWindow, CuteWindow):
                  name=wx.html.HtmlWindowNameStr):
         wx.html.HtmlWindow.__init__(self, parent=parent, id=id, pos=pos,
                                     size=size, style=style, name=name)
-        self.bind_event_handers(CuteHtmlWindow)
+        self.bind_event_handlers(CuteHtmlWindow)
         
         
     def _on_html_link_clicked(self, event):

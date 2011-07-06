@@ -19,7 +19,7 @@ class BitmapViewer(CutePanel):
         wx.Panel.__init__(self, *args, **kwargs)
         #self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
         self._bitmap = wx.EmptyBitmap(1, 1)
-        self.bind_event_handers(BitmapViewer)
+        self.bind_event_handlers(BitmapViewer)
 
         
     def set_bitmap(self, bitmap):

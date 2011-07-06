@@ -106,7 +106,7 @@ class AutocrunchControls(CutePanel):
             self.update_check_box
         )
         
-        self.bind_event_handers(AutocrunchControls)
+        self.bind_event_handlers(AutocrunchControls)
     
         self.gui_project.default_buffer_modified_emitter.add_output(
             self.update_spin_ctrl

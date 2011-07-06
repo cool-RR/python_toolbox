@@ -177,7 +177,7 @@ class PlaybackControls(CutePanel, WorkspaceWidget):
         )
         '''Button for moving to end of path.'''
         
-        self.bind_event_handers(PlaybackControls)
+        self.bind_event_handlers(PlaybackControls)
         
         button_line = (
             self.start_button,

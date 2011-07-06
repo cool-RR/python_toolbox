@@ -115,7 +115,7 @@ class StateCreationDialog(garlicsim_wx.widgets.misc.\
         vbox.Add(hbox2, 0, wx.ALIGN_CENTER | wx.TOP | wx.BOTTOM, 10)
         vbox.Add(last_hbox, 1, wx.ALIGN_CENTER |  wx.BOTTOM, 10)
         
-        self.bind_event_handers(StateCreationDialog)
+        self.bind_event_handlers(StateCreationDialog)
 
         self.SetSizer(vbox)
         vbox.Fit(self)

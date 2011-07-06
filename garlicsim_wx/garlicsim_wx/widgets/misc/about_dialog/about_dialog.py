@@ -132,7 +132,7 @@ class AboutDialog(CuteDialog):
         
         self._rotate_image_hue()
         
-        self.bind_event_handers(AboutDialog)
+        self.bind_event_handlers(AboutDialog)
 
         
     def _on_ok_button(self, event):

@@ -135,7 +135,7 @@ class ScratchWheel(CutePanel):
                 name='needs_recalculation',
             )
         
-        self.bind_event_handers(ScratchWheel)
+        self.bind_event_handlers(ScratchWheel)
         
         self.needs_recalculation_emitter.emit()
         

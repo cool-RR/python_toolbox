@@ -119,7 +119,7 @@ class Wheel(CutePanel):
         )
         self._cursor_set_to_bullseye = False
         
-        self.bind_event_handers(Wheel)
+        self.bind_event_handlers(Wheel)
         
 
     @property

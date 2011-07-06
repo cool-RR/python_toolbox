@@ -83,7 +83,7 @@ class AlreadyExistsDialog(CuteDialog):
         
         self.SetSizer(self.main_v_sizer)
         self.main_v_sizer.Fit(self)
-        self.bind_event_handers(AlreadyExistsDialog)
+        self.bind_event_handlers(AlreadyExistsDialog)
         
         
     def _on_take_me_to_it_button(self, event):

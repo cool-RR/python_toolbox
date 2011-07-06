@@ -118,7 +118,7 @@ class CruncherSelectionDialog(CuteDialog):
         self.general_text.Wrap(self.general_text.Size[0])
         self.main_v_sizer.Fit(self)
         
-        self.bind_event_handers(CruncherSelectionDialog)
+        self.bind_event_handlers(CruncherSelectionDialog)
         self.update()
 
         

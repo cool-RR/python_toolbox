@@ -67,7 +67,7 @@ class DefaultStateCreationDialog(StateCreationDialog):
         vbox.Fit(self)
         self.ok_button.SetFocus()
         
-        self.bind_event_handers(DefaultStateCreationDialog)
+        self.bind_event_handlers(DefaultStateCreationDialog)
 
         
     ### Event handlers: #######################################################

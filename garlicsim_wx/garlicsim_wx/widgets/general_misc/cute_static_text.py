@@ -24,7 +24,7 @@ class CuteStaticText(wx.StaticText, CuteWindow):
         wx.StaticText.__init__(self, parent=parent, id=id, label=label,
                                pos=pos, size=size, style=style, name=name)
         self.label = label
-        self.bind_event_handers(CuteStaticText)
+        self.bind_event_handlers(CuteStaticText)
         
         
     

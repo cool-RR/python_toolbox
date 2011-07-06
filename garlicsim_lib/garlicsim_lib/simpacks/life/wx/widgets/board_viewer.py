@@ -38,7 +38,7 @@ class BoardViewer(scrolled.ScrolledPanel,
 
         self.redraw_needed_flag = True
         
-        self.bind_event_handers(BoardViewer)
+        self.bind_event_handlers(BoardViewer)
         
         
     def unscreenify(self, x, y):

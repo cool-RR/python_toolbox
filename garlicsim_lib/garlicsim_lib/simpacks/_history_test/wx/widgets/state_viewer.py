@@ -33,7 +33,7 @@ class StateViewer(CuteWindow, garlicsim_wx.widgets.WorkspaceWidget):
             lambda: self.load_state(self.gui_project.get_active_state())
         )
         
-        self.bind_event_handers(StateViewer)
+        self.bind_event_handlers(StateViewer)
         
         
     def _on_paint(self, event):

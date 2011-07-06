@@ -56,7 +56,7 @@ class WorkspaceWidget(CuteWindow):
         self.aui_manager = frame.aui_manager
         assert isinstance(self.aui_manager, aui.AuiManager)
         
-        self.bind_event_handers(WorkspaceWidget)
+        self.bind_event_handlers(WorkspaceWidget)
         
         
     @classmethod

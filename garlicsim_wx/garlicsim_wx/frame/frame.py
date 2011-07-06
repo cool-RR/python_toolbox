@@ -90,7 +90,7 @@ class Frame(CuteFrame):
         
         self.aui_manager.Update()
         
-        self.bind_event_handers(Frame)
+        self.bind_event_handlers(Frame)
         
         self.Show()
         

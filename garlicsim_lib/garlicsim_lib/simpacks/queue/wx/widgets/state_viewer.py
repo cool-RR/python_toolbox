@@ -30,7 +30,7 @@ class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,
         
         self.SetupScrolling()
         
-        self.bind_event_handers(StateViewer)
+        self.bind_event_handlers(StateViewer)
         
         self.state = None
         '''The current state being displayed.'''

@@ -47,7 +47,7 @@ class StarAdder(CuteBitmapButton):
             tool_tip='Add another argument.',
             help_text='Add another argument.',
         )
-        self.bind_event_handers(StarAdder)
+        self.bind_event_handlers(StarAdder)
         
     def _on_button(self, event):
         wx_tools.event_tools.post_event(

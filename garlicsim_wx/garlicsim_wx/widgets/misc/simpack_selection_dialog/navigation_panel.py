@@ -186,7 +186,7 @@ class NavigationPanel(CutePanel):
              wx_tools.keyboard.keys.forward_keys: self.forward_button.Id}
         )
         
-        self.bind_event_handers(NavigationPanel)
+        self.bind_event_handlers(NavigationPanel)
 
             
     def back(self):

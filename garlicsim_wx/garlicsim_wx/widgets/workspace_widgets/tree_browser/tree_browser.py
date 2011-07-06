@@ -59,7 +59,7 @@ class TreeBrowser(ScrolledPanel, WorkspaceWidget):
         #self.Centre()
         #self.SetVirtualSize((1000,1000))
 
-        self.bind_event_handers(TreeBrowser)
+        self.bind_event_handlers(TreeBrowser)
 
         self.tree_remapping_flag = False
         self.recalculation_flag = False

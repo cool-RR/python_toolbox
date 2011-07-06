@@ -24,7 +24,7 @@ class NameTextCtrl(wx.TextCtrl, CuteWindow):
         
         self.SetMinSize((10, -1))
         
-        self.bind_event_handers(NameTextCtrl)
+        self.bind_event_handlers(NameTextCtrl)
         
         self.error_mode = False
         

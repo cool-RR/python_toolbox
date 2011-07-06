@@ -209,7 +209,7 @@ class SimpackSelectionDialog(CuteDialog):
             {wx.WXK_F5: self.refresh_hidden_button.Id}
         )
         
-        self.bind_event_handers(SimpackSelectionDialog)
+        self.bind_event_handlers(SimpackSelectionDialog)
         
         '''
         

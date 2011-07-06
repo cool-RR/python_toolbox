@@ -47,7 +47,7 @@ class HueControl(CuteWindow):
         
         self._pen = wx.Pen(wx.Colour(0, 0, 0), width=0, style=wx.TRANSPARENT)
         
-        self.bind_event_handers(HueControl)
+        self.bind_event_handlers(HueControl)
         
         if emitter:
             assert isinstance(emitter, Emitter)

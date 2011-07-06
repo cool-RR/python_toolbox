@@ -27,7 +27,7 @@ class ValueTextCtrl(wx.TextCtrl, CuteWindow):
         
         self.SetMinSize((10, -1))
         
-        self.bind_event_handers(ValueTextCtrl)
+        self.bind_event_handlers(ValueTextCtrl)
         
         self.error_mode = False
         

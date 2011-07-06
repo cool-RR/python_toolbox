@@ -81,7 +81,7 @@ class Knob(CutePanel):
             'knob.png'
         )
         
-        self.bind_event_handers(Knob)
+        self.bind_event_handlers(Knob)
         
         self.SetCursor(wx_tools.cursors.collection.get_open_grab())
         

@@ -58,7 +58,7 @@ class StarKwarg(CutePanel):
         
         self.SetSizer(self.main_h_sizer)
         
-        self.bind_event_handers(StarKwarg)
+        self.bind_event_handlers(StarKwarg)
 
         
     def remove(self):

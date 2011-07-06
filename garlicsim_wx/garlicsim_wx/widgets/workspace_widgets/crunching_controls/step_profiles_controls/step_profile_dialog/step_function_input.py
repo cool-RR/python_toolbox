@@ -51,7 +51,7 @@ class StepFunctionInput(wx.ComboBox, CuteWindow):
         
         self.error_mode = False
         
-        self.bind_event_handers(StepFunctionInput)
+        self.bind_event_handlers(StepFunctionInput)
 
         
     def select_step_function(self, step_function, step_function_string):

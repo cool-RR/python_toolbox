@@ -40,7 +40,7 @@ class BindSavvyWindow(wx.Window):
     different naming convention for event handlers.
     '''
     
-    def bind_event_handers(self, cls):
+    def bind_event_handlers(self, cls):
         '''
         Look for event-handling methods on `cls` and bind events to them.
         
@@ -49,7 +49,7 @@ class BindSavvyWindow(wx.Window):
         be bound to a `wx.EVT_BUTTON` event sent from `self.ok_button`.
         
         `cls` should usually be the class in whose `__init__` method the
-        `bind_event_handers` function is being called.
+        `bind_event_handlers` function is being called.
         '''
         if not isinstance(self, cls):
             raise TypeError('`cls` must be a class that the window is an '

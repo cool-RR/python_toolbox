@@ -80,7 +80,7 @@ class StepProfilesControls(CutePanel):
         
         self.SetSizer(self.main_v_sizer)
         
-        self.bind_event_handers(StepProfilesControls)
+        self.bind_event_handlers(StepProfilesControls)
 
         
     def _recalculate(self):

@@ -46,7 +46,7 @@ class StarArg(CutePanel):
         
         self.SetSizer(self.main_h_sizer)
         
-        self.bind_event_handers(StarArg)
+        self.bind_event_handlers(StarArg)
     
         
     def remove(self):

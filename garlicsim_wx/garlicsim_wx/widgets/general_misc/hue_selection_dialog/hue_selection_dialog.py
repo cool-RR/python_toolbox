@@ -101,7 +101,7 @@ class HueSelectionDialog(CuteDialog):
 
         self.SetSizer(self.main_v_sizer)
         self.main_v_sizer.Fit(self)
-        self.bind_event_handers(HueSelectionDialog)
+        self.bind_event_handlers(HueSelectionDialog)
         
         
         

@@ -37,7 +37,7 @@ class SeekBar(wx.Panel, WorkspaceWidget):
         self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
         self.set_good_background_color()
         
-        self.bind_event_handers(SeekBar)
+        self.bind_event_handlers(SeekBar)
 
         self.zoom = 1.
         self.start = 0.

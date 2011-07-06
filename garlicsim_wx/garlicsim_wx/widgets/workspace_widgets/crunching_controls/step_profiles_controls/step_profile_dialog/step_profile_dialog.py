@@ -248,7 +248,7 @@ class StepProfileDialog(CuteDialog):
         
         self.SetSizer(self.main_v_sizer)
         self.main_v_sizer.Fit(self)
-        self.bind_event_handers(StepProfileDialog)
+        self.bind_event_handlers(StepProfileDialog)
         
         # Finished setting up sizers and widgets.
         #######################################################################

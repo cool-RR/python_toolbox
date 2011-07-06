@@ -63,7 +63,7 @@ class StateReprViewer(CutePanel, WorkspaceWidget):
                 name='state_repr_viewer_needs_recalculation',
             )
         
-        self.bind_event_handers(StateReprViewer)
+        self.bind_event_handlers(StateReprViewer)
     
 
     def _recalculate(self):
