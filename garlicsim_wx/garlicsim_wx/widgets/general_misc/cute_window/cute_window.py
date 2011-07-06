@@ -22,7 +22,7 @@ class CuteWindow(AcceleratorSavvyWindow, BindSavvyWindow, wx.Window):
     '''
     An improved `wx.Window`.
     
-    The advantages of this class over `wx.Window`:
+    The advantages of this class over `wx.Window`: #blocktododoc
     
       - A `.freezer` property for freezing the window.  
       - A `.create_cursor_changer` method which creates a `CursorChanger`

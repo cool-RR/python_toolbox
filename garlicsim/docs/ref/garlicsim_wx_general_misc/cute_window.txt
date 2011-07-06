@@ -1,0 +1,54 @@
+..
+   Copyright 2009-2011 Ram Rachum. This work is licensed under a Creative
+   Commons Attribution-ShareAlike 3.0 Unported License, with attribution to
+   "Ram Rachum at cool-rr.com" including link. The license may be obtained
+   at http://creativecommons.org/licenses/by-sa/3.0/
+
+.. _ref-garlicsim_wx_general_misc-cute_window:
+
+===========================================================================================================
+:class:`CuteWindow <garlicsim_wx.widgets.general_misc.cute_window.CuteWindow>`: An improved wxPython window
+===========================================================================================================
+
+:class:`CuteWindow <garlicsim_wx.widgets.general_misc.cute_window.CuteWindow>`
+is a wxPython window which subclasses from :class:`wx.Window` and adds a few
+useful functionalities on top of it.
+
+Each section in this document will explain a feature of :class:`CuteWindow
+<garlicsim_wx.widgets.general_misc.cute_window.CuteWindow>` and how to use it.
+
+
+Binding event handlers by name
+==============================
+
+The traditional way of binding events in wxPython is by calling
+:meth:`self.Bind <wx.Window.Bind>`. This can be too verbose, and result in more
+bloated constructors for your widgets. To remedy this, :class:`CuteWindow
+<garlicsim_wx.widgets.general_misc.cute_window.CuteWindow>` allows binding
+event handlers automatically by their name. Since you probably name your event
+handlers according to which event they handle, we might as well use that name
+instead or requiring you to call :meth:`self.Bind <wx.Window.Bind>` many times
+in your widget's ``__init__``.
+
+Example:
+
+    def f():
+        pass
+
+:attr:`freezer <garlicsim_wx.widgets.general_misc.cute_window.CuteWindow.freezer>`
+==================================================================================
+
+todo: This section is not written yet.
+
+
+:meth:`create_cursor_changer <garlicsim_wx.widgets.general_misc.cute_window.CuteWindow.create_cursor_changer>`
+==============================================================================================================
+
+todo: This section is not written yet.
+
+
+:meth:`add_accelerators <garlicsim_wx.widgets.general_misc.cute_window.CuteWindow.add_accelerators>`
+====================================================================================================
+
+todo: This section is not written yet.
+

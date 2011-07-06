@@ -4,20 +4,15 @@
    "Ram Rachum at cool-rr.com" including link. The license may be obtained
    at http://creativecommons.org/licenses/by-sa/3.0/
 
-.. _ref-index:
+.. _ref-garlicsim_wx_general_misc-index:
 
-API Reference
-=============
+Generic modules shipped with :mod:`garlicsim_wx`
+================================================
 
 This section is still incomplete.
 
 .. toctree::
    :maxdepth: 1
    
-   simpack-api
-   garlicsim_wx_general_misc/index
+   cute_window
    
-
-..
-   cruncher-api
-
