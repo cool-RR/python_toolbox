@@ -89,8 +89,8 @@ people prefer ``_on_mouse_events`` while others prefer ``OnMouseEvents``.
 Fortunately, the :class:`CuteWindow
 <garlicsim_wx.widgets.general_misc.cute_window.CuteWindow>` class allows you to
 specify which kind of naming scheme you'd like to use by defining a
-:attr:``_BindSavvyWindowType__name_parser
-<garlicsim_wx.widgets.general_misc.cute_window.CuteWindow._BindSavvyWindowType__name_parser>``
+:attr:`_BindSavvyWindowType__name_parser
+<garlicsim_wx.widgets.general_misc.cute_window.CuteWindow._BindSavvyWindowType__name_parser>`
 attribute on your window class. What you put in that attribute is a
 :class:`NameParser
 <garlicsim_wx.widgets.general_misc.cute_window.bind_savvy_window.name_parser.NameParser>`
@@ -98,10 +98,10 @@ that you can customize.
 
 :class:`NameParser
 <garlicsim_wx.widgets.general_misc.cute_window.bind_savvy_window.name_parser.NameParser>`
-lets you set which types of case you want to accept (lower-case or camel-case)
-and how many leading underscores event handlers will have. For both of these
-you may set either a single option or a collection of options that will be
-acceptable. For example, you can choose to accept both lower-case and
+lets you set which types of case you want to accept (lower-case and/or
+camel-case) and how many leading underscores event handlers will have. For both
+of these you may set either a single option or a collection of options that
+will be acceptable. For example, you can choose to accept both lower-case and
 camel-case event handlers with either 0 or 2 preceding underscores.
 
 Example::
