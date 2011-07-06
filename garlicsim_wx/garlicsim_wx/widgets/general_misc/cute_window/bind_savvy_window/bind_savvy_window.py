@@ -31,7 +31,7 @@ class BindSavvyWindow(wx.Window):
     
     _BindSavvyWindowType__name_parser = name_parser.NameParser(
         (name_parser.LowerCase,),
-        n_preceding_underscores_possibilites=(1,)
+        n_preceding_underscores_possibilities=(1,)
     )
     '''
     The name parser used by this window class for parsing event handlers.

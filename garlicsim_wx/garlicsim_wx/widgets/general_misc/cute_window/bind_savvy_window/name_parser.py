@@ -90,13 +90,13 @@ class NameParser(object):
     be parsed into a tuple `('navigation_panel', 'left_down')`.
     '''
     def __init__(self, case_style_possibilites=(LowerCase,),
-                 n_preceding_underscores_possibilites=(1,)):
+                 n_preceding_underscores_possibilities=(1,)):
         '''
         Construct the `NameParser`.
         
         In `case_style_possibilites` you may specify a set of case styles
         (subclasses of `BaseCaseStyle`) that will be accepted by this parser.
-        In `n_preceding_underscores_possibilites`, you may specify a set of
+        In `n_preceding_underscores_possibilities`, you may specify a set of
         ints signifying the number of underscores prefixing the name. For
         example, if you specify `(1, 2)`, this parser will accept names
         starting with either 1 or 2 underscores.
@@ -108,8 +108,8 @@ class NameParser(object):
         )
         '''The set of case styles that this name parser accepts.'''
         
-        self.n_preceding_underscores_possibilites = sequence_tools.to_tuple(
-            n_preceding_underscores_possibilites
+        self.n_preceding_underscores_possibilities = sequence_tools.to_tuple(
+            n_preceding_underscores_possibilities
         )
         '''Set of number of preceding underscores that this parser accepts.'''
         
@@ -118,7 +118,7 @@ class NameParser(object):
                    self.case_style_possibilites)       
         assert all(isinstance(n_preceding_underscores, int) for
                    n_preceding_underscores in
-                   self.n_preceding_underscores_possibilites)
+                   self.n_preceding_underscores_possibilities)
         
                 
     def parse(self, name, class_name):
@@ -141,7 +141,7 @@ class NameParser(object):
             head=True
         )
         if n_preceding_underscores not in \
-           self.n_preceding_underscores_possibilites:
+           self.n_preceding_underscores_possibilities:
             return None
         cleaned_name = demangled_name[n_preceding_underscores:]
         # blocktodo: What about the 'on' part?
