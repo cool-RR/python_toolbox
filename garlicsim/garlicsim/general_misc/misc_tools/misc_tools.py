@@ -10,9 +10,6 @@ import types
 from garlicsim.general_misc import cute_iter_tools
 
     
-MANGLE_LEN = 256
-
-
 def is_subclass(candidate, base_class):
     '''
     Check if `candidate` is a subclass of `base_class`.
