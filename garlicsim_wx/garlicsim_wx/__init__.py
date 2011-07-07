@@ -86,9 +86,9 @@ def start():
             if simpack_place not in garlicsim_wx.simpack_places:
                 garlicsim_wx.simpack_places.append(simpack_place)
     
-    for path, module_prefix in garlicsim_wx.simpack_places:
-        if path not in sys.path:
-            sys.path.append(path)
+    for simpack_place in garlicsim_wx.simpack_places:
+        if simpack_place.path not in sys.path:
+            sys.path.append(simpack_place.path)
     #                                                                         #
     ### Finished adding simpack places that we were given. ####################
             

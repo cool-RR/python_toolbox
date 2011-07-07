@@ -7,10 +7,13 @@ This module defines the `SimpackPlace` class.
 See its documentation for more information.
 '''
 
+import os
+
 import garlicsim.general_misc.third_party.namedtuple
 
 from garlicsim.general_misc import module_tasting
 from garlicsim.general_misc import caching
+from garlicsim.general_misc import address_tools
 
 
 _SimpackPlaceBase = garlicsim.general_misc.\
@@ -26,7 +29,9 @@ class SimpackPlace(_SimpackPlaceBase):
     __metaclass__ = caching.CachedType
     
     
-    def __init__(self, path, package_prefix='', name=None):
+    def __new__(self, path, package_prefix='', name=None):
+        # Using `__new__` instead of `__init__` because that's what
+        # `namedtuple` uses and we need to preempt their logic.
         
         ### Determining name: #################################################
         #                                                                     #
@@ -40,6 +45,17 @@ class SimpackPlace(_SimpackPlaceBase):
         #                                                                     #
         ### Finished determining name. ########################################
         
+        simpack_place = _SimpackPlaceBase.__new__(
+            SimpackPlace,
+            path=path,
+            package_prefix=package_prefix,
+            name=name
+        )
+            
+        return simpack_place
+        
+    def __init__(self, path, package_prefix='', name=None):
+        # Defining blank `__init__` to satisfy 
         _SimpackPlaceBase.__init__(self,
                                    path=path,
                                    package_prefix=package_prefix,
@@ -53,6 +69,5 @@ class SimpackPlace(_SimpackPlaceBase):
             self.path = self.path
             self.package_prefix = self.package_prefix
             self.name = self.name
-        
     
 
