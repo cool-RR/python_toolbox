@@ -330,7 +330,7 @@ class Frame(CuteFrame):
             program_to_run.append('__garlicsim_wx_new=%s' % simpack.__name__)
             for simpack_place in garlicsim_wx.simpack_places:
                 program_to_run.append('__garlicsim_wx_simpack_place=%s' % \
-                                      ','.join(simpack_place))
+                                      ','.join(simpack_place[:2]))
          
             with self.create_cursor_changer(wx.CURSOR_WAIT):
                 subprocess.Popen(program_to_run)
@@ -583,7 +583,7 @@ class Frame(CuteFrame):
     
             for simpack_place in garlicsim_wx.simpack_places:
                 program.append('__garlicsim_wx_simpack_place=%s' % \
-                               ','.join(simpack_place))
+                               ','.join(simpack_place[:2]))
             
             with self.create_cursor_changer(wx.CURSOR_WAIT):
                 subprocess.Popen(program)

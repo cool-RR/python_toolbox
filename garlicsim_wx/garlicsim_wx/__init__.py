@@ -59,6 +59,8 @@ packages inside of it.
 def start():
     '''Start the GUI.'''
     
+    from garlicsim_wx.misc.simpack_place import SimpackPlace
+    
     # The first argument is the path of the script (or the executable if we're
     # frozen), and that should be cut off:    
     args = sys.argv[1:]
@@ -72,15 +74,15 @@ def start():
     ### Adding simpack places that we were given: #############################
     #                                                                         #
     garlicsim_wx.simpack_places = [
-        (
+        SimpackPlace(
             path_tools.get_root_path_of_module(garlicsim_lib),
             'garlicsim_lib.simpacks.'
-        )
+        ),
     ]
     
     for arg in args:
         if arg.startswith('__garlicsim_wx_simpack_place='):
-            simpack_place = tuple(arg[29:].split(','))
+            simpack_place = SimpackPlace(arg[29:].split(','))
             if simpack_place not in garlicsim_wx.simpack_places:
                 garlicsim_wx.simpack_places.append(simpack_place)
     

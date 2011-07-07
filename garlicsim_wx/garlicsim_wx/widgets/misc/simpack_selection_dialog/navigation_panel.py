@@ -24,8 +24,10 @@ from garlicsim.general_misc import package_finder
 from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.general_misc.wx_tools.keyboard import keys
 from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
-from garlicsim_wx.widgets.general_misc.cute_bitmap_button import CuteBitmapButton
+from garlicsim_wx.widgets.general_misc.cute_bitmap_button import \
+                                                            CuteBitmapButton
 from garlicsim_wx.widgets.general_misc.cute_dir_dialog import CuteDirDialog
+from garlicsim_wx.misc.simpack_place import SimpackPlace
 
 import garlicsim_wx
 
@@ -211,7 +213,7 @@ class NavigationPanel(CutePanel):
             return
             
         if path not in zip(garlicsim_wx.simpack_places)[0]:
-            garlicsim_wx.simpack_places.append((path, ''))
+            garlicsim_wx.simpack_places.append(SimpackPlace(path, ''))
         if path not in sys.path:
             sys.path.append(path)
         self.simpack_selection_dialog.refresh()
