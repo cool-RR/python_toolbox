@@ -31,6 +31,8 @@ from garlicsim_wx.misc.simpack_place import SimpackPlace
 
 import garlicsim_wx
 
+from . import filter_box as filter_box_module
+
 from . import images as __images_package
 images_package = __images_package.__name__
 
@@ -88,11 +90,6 @@ class NavigationPanel(CutePanel):
         ### Building filter box: ##############################################
         #                                                                     #
         
-        filter_help_text = ('Type text in the filter box in order to filter '
-                            'the simpacks. You will see only the simpacks '
-                            'that contain the text that you typed. For '
-                            'example, type "Physics" in order to see only '
-                            'Physics-related simpacks.')
         self.filter_sizer = wx.BoxSizer(wx.VERTICAL)
         self.small_h_sizer.Add(
             self.filter_sizer,
@@ -105,7 +102,7 @@ class NavigationPanel(CutePanel):
             self,
             label='&Filter simpacks:'
         )
-        self.filter_static_text.SetHelpText(filter_help_text)
+        self.filter_static_text.SetHelpText(filter_box_module.filter_help_text)
         self.filter_sizer.Add(
             self.filter_static_text,
             proportion=1,
@@ -117,12 +114,12 @@ class NavigationPanel(CutePanel):
         # blocktodo: if `wx.SearchCtrl` doesn't give us everything we need, can
         # find something else.
         # blocktodo: not getting enough padding for the search control on Mac
-        self.search_ctrl = wx.SearchCtrl(self)
-        self.search_ctrl.ShowCancelButton(True)
-        self.search_ctrl.SetDescriptiveText('')
-        self.search_ctrl.SetHelpText(filter_help_text)
+        self.filter_box = wx.SearchCtrl(self)
+        self.filter_box.ShowCancelButton(True)
+        self.filter_box.SetDescriptiveText('')
+        self.filter_box.SetHelpText(filter_help_text)
         self.filter_sizer.Add(
-            self.search_ctrl,
+            self.filter_box,
             proportion=0,
             flag=wx.EXPAND | wx.TOP | wx.BOTTOM,
             border=5,
