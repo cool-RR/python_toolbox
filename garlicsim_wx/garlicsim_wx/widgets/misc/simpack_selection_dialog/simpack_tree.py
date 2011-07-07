@@ -236,7 +236,8 @@ class SimpackTree(CuteTreeCtrl):
             simpack_place_item = simpack_place['item']
             
             simpack_metadatas = simpack_place['simpacks']
-            simpack_addresses = [simpack.address for simpack in simpacks]
+            simpack_addresses = [simpack.address for simpack in
+                                 simpack_metadatas]
             
             simpack_items = self.get_children_of_item(simpack_place_item)
             simpack_addresses_of_items = [self.GetItemPyData(simpack_item) for
@@ -255,11 +256,11 @@ class SimpackTree(CuteTreeCtrl):
             #                                                                 #
             
             for simpack_metadata in simpack_metadatas:
-                simpack_address = simpack_metadata['address']
+                simpack_address = simpack_metadata.address
                 if simpack_address not in simpack_addresses_of_items:
                     new_simpack_item = self.AppendItem(
                         simpack_place_item,
-                        text=simpack_address
+                        text=simpack_metadata.name
                     )
                     self.SetItemPyData(new_simpack_item,
                                        simpack_address)
@@ -271,8 +272,8 @@ class SimpackTree(CuteTreeCtrl):
             ### Finished adding new simpacks. #################################
             
             
-            simpack_items = self.get_children_of_item(item)
-            assert len(simpack_items) == len(simpacks)
+            simpack_items = self.get_children_of_item(simpack_place_item)
+            assert len(simpack_items) == len(simpack_metadatas)
         
         #                                                                     #
         ### Finished updating simpacks. #######################################
