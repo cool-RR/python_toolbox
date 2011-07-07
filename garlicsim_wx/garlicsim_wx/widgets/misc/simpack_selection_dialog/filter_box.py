@@ -38,7 +38,3 @@ class FilterBox(wx.SearchCtrl, CuteControl):
         if new_filter_words != self.filter_words:
             self.filter_words = new_filter_words
             self.filter_words_changed_emitter.emit()
-
-            
-    def _on_searchctrl_search_btn(self, event):
-        self.navigation_panel.simpack_selection_dialog.simpack_tree.SetFocus()
