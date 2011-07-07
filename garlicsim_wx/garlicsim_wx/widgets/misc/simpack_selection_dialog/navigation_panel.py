@@ -114,10 +114,7 @@ class NavigationPanel(CutePanel):
         # blocktodo: if `wx.SearchCtrl` doesn't give us everything we need, can
         # find something else.
         # blocktodo: not getting enough padding for the search control on Mac
-        self.filter_box = wx.SearchCtrl(self)
-        self.filter_box.ShowCancelButton(True)
-        self.filter_box.SetDescriptiveText('')
-        self.filter_box.SetHelpText(filter_help_text)
+        self.filter_box = filter_box_module.FilterBox(self)
         self.filter_sizer.Add(
             self.filter_box,
             proportion=0,

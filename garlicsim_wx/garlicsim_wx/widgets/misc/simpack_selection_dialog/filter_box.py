@@ -8,6 +8,7 @@ See its documentation for more information.
 '''
 import wx
 
+from garlicsim_wx.general_misc import emitters
 from garlicsim_wx.widgets.general_misc.cute_control import CuteControl
 
 
@@ -20,10 +21,24 @@ filter_help_text = ('Type text in the filter box in order to filter the '
 class FilterBox(wx.SearchCtrl, CuteControl):
     def __init__(self, navigation_panel):
         wx.SearchCtrl.__init__(self, navigation_panel)
+        self.navigation_panel = navigation_panel
         self.ShowCancelButton(True)
         self.SetDescriptiveText('')
-        self.SetHelpText(filter_help_text) add emitter
+        self.SetHelpText(filter_help_text)
+        self.bind_event_handlers(FilterBox)
+        self.filter_words = ''
+        self.filter_words_changed_emitter = emitters.Emitter(
+                name='filter_words_changed',
+        )
+    
         
-    filter_words = property(
-        lambda self: self.Value.split()
-    )
+    def _on_text(self, event):
+        event.Skip()
+        new_filter_words = self.Value.split()
+        if new_filter_words != self.filter_words:
+            self.filter_words = new_filter_words
+            self.filter_words_changed_emitter.emit()
+
+            
+    def _on_searchctrl_search_btn(self, event):
+        self.navigation_panel.simpack_selection_dialog.simpack_tree.SetFocus()
