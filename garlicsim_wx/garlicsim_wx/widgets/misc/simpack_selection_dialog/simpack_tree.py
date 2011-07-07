@@ -202,16 +202,19 @@ class SimpackTree(CuteTreeCtrl):
         for simpack_place in self.simpack_places_tree:
             if simpack_place['path'] not in paths_of_simpack_place_items:
                 # blocktodo: can extract this block into method:
-                new_item = self.AppendItem(self.root_item,
-                                           text=simpack_place['name'])
-                self.SetItemPyData(new_item, simpack_place['path'])
-                self.SetItemImage(new_item,
+                new_simpack_place_item = self.AppendItem(
+                    self.root_item,
+                    text=simpack_place['name']
+                )
+                self.SetItemPyData(new_simpack_place_item,
+                                   simpack_place['path'])
+                self.SetItemImage(new_simpack_place_item,
                                   self._CLOSED_FOLDER_BITMAP_INDEX,
                                   which=wx.TreeItemIcon_Normal)
-                self.SetItemImage(new_item,
+                self.SetItemImage(new_simpack_place_item,
                                   self._OPEN_FOLDER_BITMAP_INDEX,
                                   which=wx.TreeItemIcon_Expanded)
-                simpack_place['item'] = new_item
+                simpack_place['item'] = new_simpack_place_item
         #                                                                     #
         ### Finished adding new simpack places. ###############################
         
@@ -229,9 +232,47 @@ class SimpackTree(CuteTreeCtrl):
         #                                                                     #
 
         for simpack_place in self.simpack_places_tree:
+
+            simpack_place_item = simpack_place['item']
             
-            pass#for simpack_metadata in simpack_place['simpacks']:
-                
+            simpack_metadatas = simpack_place['simpacks']
+            simpack_addresses = [simpack.address for simpack in simpacks]
+            
+            simpack_items = self.get_children_of_item(simpack_place_item)
+            simpack_addresses_of_items = [self.GetItemPyData(simpack_item) for
+                                          simpack_item in simpack_items]
+            
+            ### Removing deleted simpacks: ####################################
+            #                                                                 #
+            for simpack_item in simpack_items:
+                simpack_item_address = self.GetItemPyData(simpack_item)
+                if simpack_item_address not in simpack_addresses:
+                    self.Delete(simpack_item)
+            #                                                                 #
+            ### Finished removing deleted simpacks. ###########################
+                    
+            ### Adding new simpacks: ##########################################
+            #                                                                 #
+            
+            for simpack_metadata in simpack_metadatas:
+                simpack_address = simpack_metadata['address']
+                if simpack_address not in simpack_addresses_of_items:
+                    new_simpack_item = self.AppendItem(
+                        simpack_place_item,
+                        text=simpack_address
+                    )
+                    self.SetItemPyData(new_simpack_item,
+                                       simpack_address)
+                    self.SetItemImage(new_simpack_item,
+                                      self._SIMPACK_BITMAP_INDEX,
+                                      which=wx.TreeItemIcon_Normal)
+            
+            #                                                                 #
+            ### Finished adding new simpacks. #################################
+            
+            
+            simpack_items = self.get_children_of_item(item)
+            assert len(simpack_items) == len(simpacks)
         
         #                                                                     #
         ### Finished updating simpacks. #######################################
