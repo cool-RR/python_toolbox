@@ -55,11 +55,11 @@ class SimpackPlace(_SimpackPlaceBase):
         return simpack_place
         
     def __init__(self, path, package_prefix='', name=None):
-        # Defining blank `__init__` to satisfy 
-        _SimpackPlaceBase.__init__(self,
-                                   path=path,
-                                   package_prefix=package_prefix,
-                                   name=name)
+        # Defining blank `__init__` to satisfy `CachedType`.
+
+        _SimpackPlaceBase.__init__(self)
+        # Not passing arguments to `_SimpackPlaceBase.__init__` because it's
+        # actually `object.__init__`.
                 
         assert isinstance(self.path, basestring)
         assert isinstance(self.package_prefix, basestring)

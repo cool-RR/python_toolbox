@@ -24,7 +24,9 @@ class SimpackMetadata(_SimpackMetadataBase):
     
     def __init__(self, *args, **kwargs):
         
-        _SimpackMetadataBase.__init__(self, *args, **kwargs)
+        _SimpackMetadataBase.__init__(self)
+        # Not passing arguments to `_SimpackMetadataBase.__init__` because it's
+        # actually `object.__init__`.
         
         assert isinstance(self.address, basestring) or self.address is None
         assert isinstance(self.name, basestring) or self.name is None
