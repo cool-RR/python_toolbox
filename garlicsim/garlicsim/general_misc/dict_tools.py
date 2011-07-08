@@ -76,3 +76,13 @@ def reverse_with_set_values(d):
         new_dict[key] = set(value)
         
     return new_dict
+
+
+def devour_items(d):
+    while d:
+        yield d.popitem()
+
+        
+def devour(d):
+    while d:
+        yield d.pop()

@@ -19,6 +19,7 @@ import pkg_resources
 from garlicsim.general_misc.comparison_tools import underscore_hating_key
 from garlicsim.general_misc import address_tools
 from garlicsim.general_misc import path_tools
+from garlicsim.general_misc import dict_tools
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import package_finder
 from garlicsim.general_misc.nifty_collections import OrderedDict
@@ -147,7 +148,6 @@ class SimpackTree(CuteTreeCtrl):
     def refresh_tree(self):        
         
         self._refresh_internal_tree()
-        simpack_place_items_to_expand = []
         
         #######################################################################
         #######################################################################
@@ -156,12 +156,12 @@ class SimpackTree(CuteTreeCtrl):
         
         ### Removing deleted simpack places: ##################################
         #                                                                     #
-        existing_simpack_place_paths = [simpack_place.path for simpack_place
-                                        in self._simpack_places_tree]
         simpack_place_items = self.get_children_of_item(self.root_item)
         for simpack_place_item in simpack_place_items:
-            if self.GetItemPyData(simpack_place_item) not in \
-                                                  existing_simpack_place_paths:
+            simpack_place = self.GetItemPyData(simpack_place_item)
+            if simpack_place not in self._simpack_places_tree:
+                self._simpack_places_to_expansion_states[simpack_place] = \
+                    self.IsExpanded(simpack_place_item)
                 self.Delete(simpack_place_item)
         #                                                                     #
         ### Finished removing deleted simpack places. #########################
@@ -169,19 +169,19 @@ class SimpackTree(CuteTreeCtrl):
         ### Adding new simpack places: ########################################
         #                                                                     #
         simpack_place_items = self.get_children_of_item(self.root_item)
-        paths_of_simpack_place_items = [self.GetItemPyData(simpack_place_item)
-                                        for simpack_place_item in
-                                        simpack_place_items]
+        simpack_places_that_have_items = \
+            [self.GetItemPyData(simpack_place_item) for simpack_place_item
+            in simpack_place_items]
         simpack_place_items = self.get_children_of_item(self.root_item)
         for simpack_place in self._simpack_places_tree:
-            if simpack_place.path not in paths_of_simpack_place_items:
+            if simpack_place not in simpack_places_that_have_items:
                 # blocktodo: can extract this block into method:
                 new_simpack_place_item = self.AppendItem(
                     self.root_item,
                     text=simpack_place.name
                 )
                 self.SetItemPyData(new_simpack_place_item,
-                                   simpack_place.path)
+                                   simpack_place)
                 self.SetItemImage(new_simpack_place_item,
                                   self._CLOSED_FOLDER_BITMAP_INDEX,
                                   which=wx.TreeItemIcon_Normal)
@@ -216,8 +216,9 @@ class SimpackTree(CuteTreeCtrl):
                                  simpack_metadatas]
             
             simpack_items = self.get_children_of_item(simpack_place_item)
-            simpack_addresses_of_items = [self.GetItemPyData(simpack_item) for
-                                          simpack_item in simpack_items]
+            simpack_metadatas_that_have_items = \
+                [self.GetItemPyData(simpack_item) for simpack_item
+                 in simpack_items]
             
             ### Removing deleted simpacks: ####################################
             #                                                                 #
@@ -232,14 +233,13 @@ class SimpackTree(CuteTreeCtrl):
             #                                                                 #
             
             for simpack_metadata in simpack_metadatas:
-                simpack_address = simpack_metadata.address
-                if simpack_address not in simpack_addresses_of_items:
+                if simpack_metadata not in simpack_metadatas_that_have_items:
                     new_simpack_item = self.AppendItem(
                         simpack_place_item,
                         text=simpack_metadata.name
                     )
                     self.SetItemPyData(new_simpack_item,
-                                       simpack_address)
+                                       simpack_metadata)
                     self.SetItemImage(new_simpack_item,
                                       self._SIMPACK_BITMAP_INDEX,
                                       which=wx.TreeItemIcon_Normal)
@@ -256,8 +256,16 @@ class SimpackTree(CuteTreeCtrl):
         #######################################################################
         #######################################################################
         
-        for simpack_place_item_to_expand in simpack_place_items_to_expand:
-            self.Expand(simpack_place_item_to_expand)
+        # (Doing expansion/collapsion of simpack place items only now, because
+        # we can't expand a folder before it had items in it.)
+        for simpack_place, expansion_state in \
+             dict_tools.devour_items(self._simpack_places_to_expansion_states):
+            function =  if expansion_state else self.Collapse
+            simpack_place_item = self._simpack_places_to_items[simpack_place]
+            if expansion_state is True:
+                self.Expand(simpack_place_item)
+            else: # expansion_state is False
+                self.Collapse(simpack_place_item)
 
         
 from .simpack_selection_dialog import SimpackSelectionDialog
