@@ -59,8 +59,9 @@ class SimpackTree(CuteTreeCtrl):
         
         self.__init_images()
         
-        self.simpack_places_tree = OrderedDict()
-        self.simpack_places_to_items = {}
+        self._simpack_places_tree = OrderedDict()
+        self._simpack_places_to_items = {}
+        self._simpack_places_to_expansion_states = {}
         
         
         #self.AddColumn('', width=600)
@@ -140,7 +141,7 @@ class SimpackTree(CuteTreeCtrl):
             if simpacks:
                 new_simpack_places_tree[simpack_place] = simpacks
             
-        self.simpack_places_tree = new_simpack_places_tree
+        self._simpack_places_tree = new_simpack_places_tree
             
             
     def refresh_tree(self):        
@@ -156,7 +157,7 @@ class SimpackTree(CuteTreeCtrl):
         ### Removing deleted simpack places: ##################################
         #                                                                     #
         existing_simpack_place_paths = [simpack_place.path for simpack_place
-                                        in self.simpack_places_tree]
+                                        in self._simpack_places_tree]
         simpack_place_items = self.get_children_of_item(self.root_item)
         for simpack_place_item in simpack_place_items:
             if self.GetItemPyData(simpack_place_item) not in \
@@ -172,7 +173,7 @@ class SimpackTree(CuteTreeCtrl):
                                         for simpack_place_item in
                                         simpack_place_items]
         simpack_place_items = self.get_children_of_item(self.root_item)
-        for simpack_place in self.simpack_places_tree:
+        for simpack_place in self._simpack_places_tree:
             if simpack_place.path not in paths_of_simpack_place_items:
                 # blocktodo: can extract this block into method:
                 new_simpack_place_item = self.AppendItem(
@@ -187,14 +188,14 @@ class SimpackTree(CuteTreeCtrl):
                 self.SetItemImage(new_simpack_place_item,
                                   self._OPEN_FOLDER_BITMAP_INDEX,
                                   which=wx.TreeItemIcon_Expanded)
-                self.simpack_places_to_items[simpack_place] = \
+                self._simpack_places_to_items[simpack_place] = \
                                                          new_simpack_place_item
                 simpack_place_items_to_expand.append(new_simpack_place_item)
         #                                                                     #
         ### Finished adding new simpack places. ###############################
         
         simpack_place_items = self.get_children_of_item(self.root_item)
-        assert len(simpack_place_items) == len(self.simpack_places_tree)
+        assert len(simpack_place_items) == len(self._simpack_places_tree)
         
         #                                                                     #
         ### Finished updating simpack places. #################################
@@ -206,11 +207,11 @@ class SimpackTree(CuteTreeCtrl):
         ### Updating simpacks: ################################################
         #                                                                     #
 
-        for simpack_place in self.simpack_places_tree:
+        for simpack_place in self._simpack_places_tree:
 
-            simpack_place_item = self.simpack_places_to_items[simpack_place]
+            simpack_place_item = self._simpack_places_to_items[simpack_place]
             
-            simpack_metadatas = self.simpack_places_tree[simpack_place]
+            simpack_metadatas = self._simpack_places_tree[simpack_place]
             simpack_addresses = [simpack.address for simpack in
                                  simpack_metadatas]
             
