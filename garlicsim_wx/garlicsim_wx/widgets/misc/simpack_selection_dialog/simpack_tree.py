@@ -165,6 +165,7 @@ class SimpackTree(CuteTreeCtrl):
             
         ### Adding new simpack places: ########################################
         #                                                                     #
+        simpack_place_items = self.get_children_of_item(self.root_item)
         paths_of_simpack_place_items = [self.GetItemPyData(simpack_place_item)
                                         for simpack_place_item in
                                         simpack_place_items]
