@@ -65,7 +65,6 @@ class SimpackTree(CuteTreeCtrl):
         #self.AddColumn('', width=600)
         #self.SetMainColumn(1)
         self.root_item = self.AddRoot('All simpack places')
-        # blocktodo: make uncollapsable if possible
         
         self.SetItemImage(self.root_item,
                           self._CLOSED_FOLDER_BITMAP_INDEX,
@@ -82,8 +81,8 @@ class SimpackTree(CuteTreeCtrl):
                               #self._SIMPACK_BITMAP_INDEX,
                               #wx.TreeItemIcon_Normal)
         
-        self.ExpandAll()
         self.refresh_tree()
+        self.ExpandAll()
 
     def __init_images(self):
         self._simpack_bitmap = wx_tools.bitmap_tools.bitmap_from_pkg_resources(
