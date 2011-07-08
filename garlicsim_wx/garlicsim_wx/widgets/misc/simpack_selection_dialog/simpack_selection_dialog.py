@@ -211,6 +211,9 @@ class SimpackSelectionDialog(CuteDialog):
         
         self.bind_event_handlers(SimpackSelectionDialog)
         
+        self.simpack_tree.refresh_tree()
+        self.simpack_tree.ExpandAll()
+        
         '''
         
         self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)

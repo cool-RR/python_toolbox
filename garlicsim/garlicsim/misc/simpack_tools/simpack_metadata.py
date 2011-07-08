@@ -67,7 +67,7 @@ class SimpackMetadata(_SimpackMetadataBase):
     @caching.cache()
     def _matches_filter_word(self, word):
         assert isinstance(word, basestring)
-        texts_to_search = [self.address, self.name, self.version,
-                           self.description] + self.tags
+        texts_to_search = filter(None, (self.address, self.name, self.version,
+                                        self.description) + (self.tags or ()))
         return any(word in text_to_search for text_to_search in
                    texts_to_search)

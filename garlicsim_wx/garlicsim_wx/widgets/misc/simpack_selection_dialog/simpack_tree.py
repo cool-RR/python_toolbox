@@ -67,8 +67,6 @@ class SimpackTree(CuteTreeCtrl):
         #self.SetMainColumn(1)
         self.root_item = self.AddRoot('All simpack places')
         
-        self.refresh_tree()
-        self.ExpandAll()
 
     def __init_images(self):
         self._simpack_bitmap = wx_tools.bitmap_tools.bitmap_from_pkg_resources(
@@ -148,6 +146,7 @@ class SimpackTree(CuteTreeCtrl):
     def refresh_tree(self):        
         
         self._refresh_internal_tree()
+        simpack_place_items_to_expand = []
         
         #######################################################################
         #######################################################################
@@ -190,7 +189,7 @@ class SimpackTree(CuteTreeCtrl):
                                   which=wx.TreeItemIcon_Expanded)
                 self.simpack_places_to_items[simpack_place] = \
                                                          new_simpack_place_item
-                self.Expand(new_simpack_place_item)
+                simpack_place_items_to_expand.append(new_simpack_place_item)
         #                                                                     #
         ### Finished adding new simpack places. ###############################
         
@@ -255,6 +254,9 @@ class SimpackTree(CuteTreeCtrl):
         ### Finished updating simpacks. #######################################
         #######################################################################
         #######################################################################
+        
+        for simpack_place_item_to_expand in simpack_place_items_to_expand:
+            self.Expand(simpack_place_item_to_expand)
 
         
 from .simpack_selection_dialog import SimpackSelectionDialog
