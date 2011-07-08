@@ -22,6 +22,6 @@ class CuteTreeCtrl(wx.TreeCtrl, CuteControl):
         current_child = first_child
         while current_child.IsOk():
             children.append(current_child)
-            (current_child, cookie) = self.GetNextChild(current_child, cookie)
+            (current_child, cookie) = self.GetNextChild(item, cookie)
         
         return tuple(children)
