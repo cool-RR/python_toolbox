@@ -31,7 +31,9 @@ class FilterBox(wx.SearchCtrl, CuteControl):
         self.SetHelpText(filter_help_text)
         self.filter_words = ''
         self.filter_words_changed_emitter = emitters.Emitter(
-                name='filter_words_changed',
+            outputs=(self.navigation_panel.simpack_selection_dialog.\
+                     simpack_tree.refresh_tree,),
+            name='filter_words_changed',
         )
         self.bind_event_handlers(FilterBox)
 

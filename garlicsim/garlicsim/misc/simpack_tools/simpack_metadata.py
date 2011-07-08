@@ -59,4 +59,15 @@ class SimpackMetadata(_SimpackMetadataBase):
                                tags=tags)
 
 
+    @caching.cache()
+    def matches_filter_words(self, filter_words):
+        return all(self._matches_filter_word(word) for word in filter_words)
 
+    
+    @caching.cache()
+    def _matches_filter_word(self, word):
+        assert isinstance(word, basestring)
+        texts_to_search = [self.address, self.name, self.version,
+                           self.description] + self.tags
+        return any(word in text_to_search for text_to_search in
+                   texts_to_search)

@@ -104,6 +104,8 @@ class SimpackTree(CuteTreeCtrl):
             if simpack_place.path not in sys.path:
                 sys.path.append(simpack_place.path)
             
+        filter_words = self.simpack_selection_dialog.navigation_panel.\
+                                                        filter_box.filter_words
         
         new_simpack_places_tree = OrderedDict()
             
@@ -132,12 +134,13 @@ class SimpackTree(CuteTreeCtrl):
             for simpack_address in simpack_addresses:
                 simpack_metadata = simpack_tools.SimpackMetadata.\
                                    create_from_address(simpack_address)
-                
-                simpacks.append(simpack_metadata)
+                if simpack_metadata.matches_filter_words(filter_words):
+                    simpacks.append(simpack_metadata)
             
             simpacks.sort(key=lambda simpack_metadata: simpack_metadata.name)
             
-            new_simpack_places_tree[simpack_place] = simpacks
+            if simpacks:
+                new_simpack_places_tree[simpack_place] = simpacks
             
         self.simpack_places_tree = new_simpack_places_tree
             
@@ -187,6 +190,7 @@ class SimpackTree(CuteTreeCtrl):
                                   which=wx.TreeItemIcon_Expanded)
                 self.simpack_places_to_items[simpack_place] = \
                                                          new_simpack_place_item
+                self.Expand(new_simpack_place_item)
         #                                                                     #
         ### Finished adding new simpack places. ###############################
         
