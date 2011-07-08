@@ -254,12 +254,15 @@ class SimpackTree(CuteTreeCtrl):
         # (Doing expansion/collapsion of simpack place items only now, because
         # we can't expand a folder before it had items in it.)
         for simpack_place, expansion_state in \
-             dict_tools.devour_items(self._simpack_places_to_expansion_states):
-            simpack_place_item = self._simpack_places_to_items[simpack_place]
-            if expansion_state is True:
-                self.Expand(simpack_place_item)
-            else: # expansion_state is False
-                self.Collapse(simpack_place_item)
+                              self._simpack_places_to_expansion_states.items():
+            if simpack_place in self._simpack_places_tree:
+                del self._simpack_places_to_expansion_states[simpack_place]
+                simpack_place_item = \
+                                   self._simpack_places_to_items[simpack_place]
+                if expansion_state is True:
+                    self.Expand(simpack_place_item)
+                else: # expansion_state is False
+                    self.Collapse(simpack_place_item)
 
         
 from .simpack_selection_dialog import SimpackSelectionDialog
