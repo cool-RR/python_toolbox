@@ -190,7 +190,6 @@ class SimpackTree(CuteTreeCtrl):
                                   which=wx.TreeItemIcon_Expanded)
                 self._simpack_places_to_items[simpack_place] = \
                                                          new_simpack_place_item
-                simpack_place_items_to_expand.append(new_simpack_place_item)
         #                                                                     #
         ### Finished adding new simpack places. ###############################
         
@@ -212,8 +211,6 @@ class SimpackTree(CuteTreeCtrl):
             simpack_place_item = self._simpack_places_to_items[simpack_place]
             
             simpack_metadatas = self._simpack_places_tree[simpack_place]
-            simpack_addresses = [simpack.address for simpack in
-                                 simpack_metadatas]
             
             simpack_items = self.get_children_of_item(simpack_place_item)
             simpack_metadatas_that_have_items = \
@@ -223,15 +220,14 @@ class SimpackTree(CuteTreeCtrl):
             ### Removing deleted simpacks: ####################################
             #                                                                 #
             for simpack_item in simpack_items:
-                simpack_item_address = self.GetItemPyData(simpack_item)
-                if simpack_item_address not in simpack_addresses:
+                simpack_metadata = self.GetItemPyData(simpack_item)
+                if simpack_metadata not in simpack_metadatas:
                     self.Delete(simpack_item)
             #                                                                 #
             ### Finished removing deleted simpacks. ###########################
                     
             ### Adding new simpacks: ##########################################
             #                                                                 #
-            
             for simpack_metadata in simpack_metadatas:
                 if simpack_metadata not in simpack_metadatas_that_have_items:
                     new_simpack_item = self.AppendItem(
@@ -243,7 +239,6 @@ class SimpackTree(CuteTreeCtrl):
                     self.SetItemImage(new_simpack_item,
                                       self._SIMPACK_BITMAP_INDEX,
                                       which=wx.TreeItemIcon_Normal)
-            
             #                                                                 #
             ### Finished adding new simpacks. #################################
             
@@ -260,7 +255,6 @@ class SimpackTree(CuteTreeCtrl):
         # we can't expand a folder before it had items in it.)
         for simpack_place, expansion_state in \
              dict_tools.devour_items(self._simpack_places_to_expansion_states):
-            function =  if expansion_state else self.Collapse
             simpack_place_item = self._simpack_places_to_items[simpack_place]
             if expansion_state is True:
                 self.Expand(simpack_place_item)
