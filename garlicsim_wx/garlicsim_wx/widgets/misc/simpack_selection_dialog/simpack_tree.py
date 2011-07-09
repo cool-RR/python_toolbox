@@ -113,32 +113,13 @@ class SimpackTree(CuteTreeCtrl):
             
         for simpack_place in garlicsim_wx.simpack_places:
             
-            path, package_prefix, name = simpack_place
+            simpacks = simpack_place.get_simpack_metadatas
             
-            ### Determining path to search: ###################################
-            #                                                                 #
-            if package_prefix:
-                assert package_prefix[-1] == '.'
-                package = address_tools.resolve(package_prefix[:-1])
-                path_to_search = path_tools.get_path_of_package(package)
-            else: # not package_prefix
-                path_to_search = path
-            #                                                                 #
-            ### Finished determining path to search. ##########################
+            if simpack_metadata.matches_filter_words(filter_words) or \
+               simpack_place.matches_filter_words(filter_words):
                 
-            simpack_addresses = [
-                (package_prefix + package_name[1:]) for package_name in
-                package_finder.get_packages(path_to_search, self_in_name=False)
-            ]
-            
-            simpacks = []
-            
-            for simpack_address in simpack_addresses:
-                simpack_metadata = simpack_tools.SimpackMetadata.\
-                                   create_from_address(simpack_address)
-                if simpack_metadata.matches_filter_words(filter_words):
-                    simpacks.append(simpack_metadata)
-            
+                simpacks.append(simpack_metadata)
+                
             simpacks.sort(key=lambda simpack_metadata: simpack_metadata.name)
             
             if simpacks or not filter_words:
@@ -284,13 +265,12 @@ class SimpackTree(CuteTreeCtrl):
             simpack_item, _ = self.GetFirstChild(
                 self.GetFirstChild(self.root_item)[0]
             )
-        elif type(self.GetItemPyData(selected_item) is SimpackPlace:
+            self.SelectItem(simpack_item)
+        elif type(self.GetItemPyData(selected_item)) is SimpackPlace:
             simpack_item, _ = self.GetFirstChild(selected_item)
+            self.SelectItem(simpack_item)
         else:
-            assert type(self.GetItemPyData(selected_item) is SimpackMetadata
-                return
-        self.SelectItem(simpack_item)
-            return
+            assert type(self.GetItemPyData(selected_item)) is SimpackMetadata
                     
         
     def OnComapreItems(self, item_1, item_2):
