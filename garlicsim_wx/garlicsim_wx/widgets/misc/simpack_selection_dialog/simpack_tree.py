@@ -71,6 +71,8 @@ class SimpackTree(CuteTreeCtrl):
         #self.SetMainColumn(1)
         self.root_item = self.AddRoot('All simpack places')
         
+        self.bind_event_handlers(SimpackTree)
+        
 
     def __init_images(self):
         self._simpack_bitmap = wx_tools.bitmap_tools.bitmap_from_pkg_resources(
@@ -286,5 +288,14 @@ class SimpackTree(CuteTreeCtrl):
             assert data_type is SimpackMetadata
             return cmp(item_1_data.name, item_2_data.name) or \
                    cmp(item_1_data.address, item_2_data.address)
+        
+        
+    def _on_tree_sel_changed(self, event):
+        data = self.GetItemPyData(self.GetSelection())
+        if type(data) is SimpackMetadata:
+            self.simpack_selection_dialog.set_simpack_metadata(data)
+        else:
+            self.simpack_selection_dialog.set_simpack_metadata(None)
+            
         
 from .simpack_selection_dialog import SimpackSelectionDialog

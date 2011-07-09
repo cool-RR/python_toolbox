@@ -25,6 +25,7 @@ from garlicsim.general_misc import package_finder
 from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
 from garlicsim_wx.widgets.general_misc.cute_dir_dialog import CuteDirDialog
 from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
+from garlicsim_wx.general_misc import emitters
 from garlicsim_wx.widgets.general_misc.cute_hidden_button import \
                                                                CuteHiddenButton
 from garlicsim_wx.general_misc import wx_tools
@@ -56,6 +57,10 @@ class SimpackSelectionDialog(CuteDialog):
         self.frame = frame
         
         self.simpack = None
+        
+        self.simpack_metadata_changed_emitter = emitters.Emitter(
+            name='simpack_metadata_changed'
+        )
         
         with self.freezer:
             self.__init_build()
@@ -289,6 +294,10 @@ class SimpackSelectionDialog(CuteDialog):
         self.list_box.SetItems(self.list_of_simpacks)
     """    
 
+    def set_simpack_metadata(self, simpack_metadata):
+        self.simpack_metadata = simpack_metadata
+        self.simpack_metadata_changed_emitter.emit()
+    
     def get_simpack_selection(self):
         '''Import the selected simpack and return it.'''
         string = self.list_box.GetStringSelection()
