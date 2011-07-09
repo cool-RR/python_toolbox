@@ -82,8 +82,8 @@ def wx_color_to_rgb(wx_color):
     '''Convert a wxPython color to an RGB color.'''
     return (
         wx_color.red / 255,
-        wx_color.blue / 255,
-        wx_color.green / 255
+        wx_color.green / 255,
+        wx_color.blue / 255
     )
 
 
