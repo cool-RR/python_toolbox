@@ -17,17 +17,23 @@ from garlicsim_wx.widgets.general_misc.cute_hyperlink_ctrl \
 
 
 class CodeLink(CuteHyperlinkCtrl):
+    
     def __init__(self, technical_details_bar):
         ''' '''
         self.technical_details_bar = technical_details_bar
-        CuteHyperlinkCtrl.__init__(self, technical_details_bar,
-                                   label='Show code')
+        CuteHyperlinkCtrl.__init__(self, technical_details_bar)
         #self.ForegroundColour = wx_tools.colors.mix_wx_color(
             #0.333,
             #self.ForegroundColour,
             #self.BackgroundColour
         #)
         self.bind_event_handlers(CodeLink)
+        
+        
+    def refresh(self):
+        simpack_metadata = self.technical_details_bar.simpack_info_panel.\
+                                      simpack_selection_dialog.simpack_metadata
+        self.SetLabel('Show &code' if simpack_metadata is not None else '')
         
     def _on_hyperlink(self, event):
         simpack_metadata = self.technical_details_bar.simpack_info_panel.\

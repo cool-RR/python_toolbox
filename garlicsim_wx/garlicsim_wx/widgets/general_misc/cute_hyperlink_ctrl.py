@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the `CuteHyperLink` class.
+This module defines the `CuteHyperlinkCtrl` class.
 
 See its documentation for more information.
 '''
@@ -19,8 +19,8 @@ class CuteHyperlinkCtrl(wx.HyperlinkCtrl, CuteControl):
                  name=wx.HyperlinkCtrlNameStr):
 
         wx.HyperlinkCtrl.__init__(
-            parent=parent, id=id, label=label, url=url, pos=pos, size=size, 
-            style=style, name=name
+            self, parent=parent, id=id, label=label, url=url, pos=pos,
+            size=size, style=style, name=name
         )
         
     
