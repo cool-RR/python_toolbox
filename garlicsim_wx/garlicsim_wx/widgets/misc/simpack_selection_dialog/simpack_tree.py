@@ -26,9 +26,11 @@ from garlicsim.general_misc.nifty_collections import OrderedDict
 from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.widgets.general_misc.cute_tree_ctrl import CuteTreeCtrl
 
+import garlicsim
 import garlicsim_wx
 import garlicsim_lib
 from garlicsim.misc import simpack_tools
+from garlicsim.misc.simpack_tools import SimpackMetadata
 from garlicsim_wx.misc.simpack_place import SimpackPlace
 
 from . import images as __images_package
@@ -190,6 +192,8 @@ class SimpackTree(CuteTreeCtrl):
                                   which=wx.TreeItemIcon_Expanded)
                 self._simpack_places_to_items[simpack_place] = \
                                                          new_simpack_place_item
+                
+        self.SortChildren(self.root_item)
         #                                                                     #
         ### Finished adding new simpack places. ###############################
         
@@ -242,6 +246,7 @@ class SimpackTree(CuteTreeCtrl):
             #                                                                 #
             ### Finished adding new simpacks. #################################
             
+            self.SortChildren(simpack_place_item)
             
             simpack_items = self.get_children_of_item(simpack_place_item)
             assert len(simpack_items) == len(simpack_metadatas)
@@ -264,5 +269,17 @@ class SimpackTree(CuteTreeCtrl):
                 else: # expansion_state is False
                     self.Collapse(simpack_place_item)
 
+                    
+    def OnComapreItems(self, item_1, item_2):
+        item_1_data = self.GetItemPyData(item_1)
+        item_2_data = self.GetItemPyData(item_)
+        assert type(item_1_data) == type(item_2_data)
+        data_type = type(item_1_data)
+        if data_type is SimpackPlace:
+            return cmp(item_1_data.path, item_2_data.path)
+        else:
+            assert data_type is SimpackMetadata
+            return cmp(item_1_data.name, item_2_data.name) or \
+                   cmp(item_1_data.address, item_2_data.address)
         
 from .simpack_selection_dialog import SimpackSelectionDialog
