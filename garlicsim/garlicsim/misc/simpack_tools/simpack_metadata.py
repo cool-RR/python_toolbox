@@ -52,12 +52,16 @@ class SimpackMetadata(_SimpackMetadataBase):
         name = getattr(tasted_simpack, 'name', address.rsplit('.')[-1])
         description = getattr(tasted_simpack, '__doc__', None)
         tags = getattr(tasted_simpack, 'tags', None)
+        ### Getting version number: ###########################################
+        #                                                                     #
         if hasattr(tasted_simpack, '__version__'):            
             version = getattr(tasted_simpack, '__version__')
         elif '.' in address:
             root_address = address.split('.', 1)[0]
             root_package = address_tools.resolve(root_address)
-            version = getattr(root_address, '__version__', None)
+            version = getattr(root_package, '__version__', None)
+        #                                                                     #
+        ### Finished getting version number. ##################################
         return SimpackMetadata(address=address,
                                name=name,
                                version=version,

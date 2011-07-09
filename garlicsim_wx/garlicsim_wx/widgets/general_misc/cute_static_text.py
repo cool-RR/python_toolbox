@@ -19,10 +19,11 @@ class CuteStaticText(wx.StaticText, CuteWindow):
     '''
     def __init__(self, parent, id=-1, label=wx.EmptyString, 
                  pos=wx.DefaultPosition, size=wx.DefaultSize, 
-                 style=0, name=wx.StaticTextNameStr):
+                 style=0, name=wx.StaticTextNameStr, skip_wx_init=False):
         
-        wx.StaticText.__init__(self, parent=parent, id=id, label=label,
-                               pos=pos, size=size, style=style, name=name)
+        if not skip_wx_init:
+            wx.StaticText.__init__(self, parent=parent, id=id, label=label,
+                                   pos=pos, size=size, style=style, name=name)
         self.label = label
         self.bind_event_handlers(CuteStaticText)
         

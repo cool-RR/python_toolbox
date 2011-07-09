@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the `VersionDisplay` class.
+This module defines the `CodeLink` class.
 
 See its documentation for more information.
 '''
@@ -10,15 +10,14 @@ See its documentation for more information.
 import wx
 
 from garlicsim_wx.general_misc import wx_tools
-from garlicsim_wx.widgets.general_misc.cute_static_text import CuteStaticText
+from garlicsim_wx.widgets.general_misc.cute_hyper_link import CuteHyperLink
 
 
-class VersionDisplay(CuteStaticText):
+class CodeLink(CuteHyperLink):
     def __init__(self, technical_details_bar):
         ''' '''
         self.technical_details_bar = technical_details_bar
-        CuteStaticText.__init__(self, technical_details_bar)
-        #self.SetFont(wx.Font(12, wx.NORMAL, wx.NORMAL, wx.NORMAL))
+        CuteHyperLink.__init__(self, technical_details_bar, label=)
         self.ForegroundColour = wx_tools.colors.mix_wx_color(
             0.333,
             self.ForegroundColour,
