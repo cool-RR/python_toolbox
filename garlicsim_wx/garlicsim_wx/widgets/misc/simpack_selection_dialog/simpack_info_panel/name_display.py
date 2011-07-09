@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the `Name` class.
+This module defines the `NameDisplay` class.
 
 See its documentation for more information.
 '''
@@ -17,7 +17,7 @@ class NameDisplay(CuteStaticText):
     def __init__(self, simpack_info_panel):
         ''' '''
         self.simpack_info_panel = simpack_info_panel
-        CuteStaticText.__init__(self, simpack_info_panel, label='AasdfasdSD')
+        CuteStaticText.__init__(self, simpack_info_panel)
         self.SetFont(wx.Font(24, wx.NORMAL, wx.NORMAL, wx.NORMAL))
         
     def refresh(self):
