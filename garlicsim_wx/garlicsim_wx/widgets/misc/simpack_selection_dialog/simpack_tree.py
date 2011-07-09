@@ -117,8 +117,8 @@ class SimpackTree(CuteTreeCtrl):
             
             filtered_simpacks = \
                 [simpack_metadata for simpack_metadata in simpacks if
-                 simpack_metadata.matches_filter_words(filter_words) or                 
-                 simpack_place.matches_filter_words(filter_words)]
+                 simpack_metadata.matches_filter_words(filter_words,
+                                                       simpack_place)]
                 
             filtered_simpacks.sort(key=lambda simpack_metadata:
                                                          simpack_metadata.name)

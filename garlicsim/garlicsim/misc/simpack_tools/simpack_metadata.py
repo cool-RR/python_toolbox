@@ -68,12 +68,17 @@ class SimpackMetadata(_SimpackMetadataBase):
 
     
     @caching.cache()
-    def matches_filter_words(self, filter_words):
-        return all(self._matches_filter_word(word) for word in filter_words)
+    def matches_filter_words(self, filter_words, simpack_place=None):
+        return all(self._matches_filter_word(word, simpack_place) for
+                   word in filter_words)
 
     
     @caching.cache()
-    def _matches_filter_word(self, word):
+    def _matches_filter_word(self, word, simpack_place=None):
         assert isinstance(word, basestring)
         lower_word = word.lower()
-        return lower_word in self._text_to_search
+        if simpack_place is not None:
+            return (lower_word in self._text_to_search) or \
+                   (lower_word in simpack_place._text_to_search)
+        else:
+            return (lower_word in self._text_to_search)
