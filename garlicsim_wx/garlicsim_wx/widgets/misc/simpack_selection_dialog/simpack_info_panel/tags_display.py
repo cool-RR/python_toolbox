@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the `TagsDisaply` class.
+This module defines the `TagsDisplay` class.
 
 See its documentation for more information.
 '''
@@ -14,7 +14,7 @@ from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
 from garlicsim_wx.general_misc import wx_tools
 
 
-class TagsDisaply(CutePanel):
+class TagsDisplay(CutePanel):
 
     def __init__(self, simpack_info_panel):
         self.simpack_info_panel = simpack_info_panel

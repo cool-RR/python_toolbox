@@ -14,6 +14,7 @@ from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
 from .name_display import NameDisplay
 from .technical_details_bar import TechnicalDetailsBar
 from .description_display import DescriptionDisplay
+from .tags_display import TagsDisplay
 
 
 class SimpackInfoPanel(CutePanel):
@@ -45,10 +46,17 @@ class SimpackInfoPanel(CutePanel):
                                flag=(wx.EXPAND))
         
         self.description_display = DescriptionDisplay(self)
-        self.smaller_h_sizer.Add(self.description_display,
+        self.smaller_v_sizer.Add(self.description_display,
                                  proportion=1,
                                  flag=(wx.EXPAND | wx.RIGHT),
                                  border=2)
+
+        self.tags_display = TagsDisplay(self)
+        self.smaller_v_sizer.Add(self.tags_display,
+                                 proportion=0,
+                                 flag=(wx.EXPAND | wx.RIGHT),
+                                 border=2)
+        
         
         self.SetSizer(self.sizer)
         self.Layout()
