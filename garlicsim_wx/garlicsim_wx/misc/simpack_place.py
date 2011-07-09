@@ -17,6 +17,8 @@ from garlicsim.general_misc import path_tools
 from garlicsim.general_misc import package_finder
 from garlicsim.general_misc import address_tools
 
+from garlicsim.misc.simpack_tools import SimpackMetadata
+
 
 _SimpackPlaceBase = garlicsim.general_misc.\
                        third_party.namedtuple.namedtuple(
@@ -80,17 +82,19 @@ class SimpackPlace(_SimpackPlaceBase):
         #                                                                 #
         if self.package_prefix:
             assert self.package_prefix.endswith('.')
-            package = address_tools.resolve(package_prefix[:-1])
+            package = address_tools.resolve(self.package_prefix[:-1])
             path_to_search = path_tools.get_path_of_package(package)
         else: # not self.package_prefix
-            path_to_search = path
+            path_to_search = self.path
         #                                                                 #
         ### Finished determining path to search. ##########################
             
         simpack_addresses = [
-            (package_prefix + package_name[1:]) for package_name in
+            (self.package_prefix + package_name[1:]) for package_name in
             package_finder.get_packages(path_to_search, self_in_name=False)
         ]
+        
+        return map(SimpackMetadata.create_from_address, simpack_addresses)
     
 
     @caching.cache()
