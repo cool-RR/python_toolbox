@@ -79,8 +79,8 @@ class SimpackSelectionDialog(CuteDialog):
         
         self.flex_grid_sizer.AddGrowableRow(0, 1)
         
-        self.flex_grid_sizer.AddGrowableCol(0, 2)
-        self.flex_grid_sizer.AddGrowableCol(1, 3)
+        self.flex_grid_sizer.AddGrowableCol(0, 3)
+        self.flex_grid_sizer.AddGrowableCol(1, 5)
         #                                                                     #
         ### Finished setting up flex-grid-sizer. ##############################
         
