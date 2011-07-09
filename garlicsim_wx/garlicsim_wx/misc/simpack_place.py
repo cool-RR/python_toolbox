@@ -96,6 +96,12 @@ class SimpackPlace(_SimpackPlaceBase):
         
         return map(SimpackMetadata.create_from_address, simpack_addresses)
     
+    
+    @caching.CachedProperty
+    def _text_to_search(self):
+        return ''.join([text.lower() for text in
+                        (self.name, self.package_prefix, self.path)
+                        if text is not None])
 
     @caching.cache()
     def matches_filter_words(self, filter_words):
@@ -105,9 +111,5 @@ class SimpackPlace(_SimpackPlaceBase):
     @caching.cache()
     def _matches_filter_word(self, word):
         assert isinstance(word, basestring)
-        texts_to_search = filter(
-            None,
-            (self.name, self.package_prefix, self.path)
-        )
-        return any(word in text_to_search for text_to_search in
-                   texts_to_search)
+        lower_word = word.lower()
+        return lower_word in self._text_to_search

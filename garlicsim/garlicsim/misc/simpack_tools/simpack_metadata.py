@@ -58,7 +58,15 @@ class SimpackMetadata(_SimpackMetadataBase):
                                description=description,
                                tags=tags)
 
+    
+    @caching.CachedProperty
+    def _text_to_search(self):
+        return ''.join([text.lower() for text in
+                        ((self.address, self.name, self.version,
+                        self.description) + (self.tags or ()))
+                        if text is not None])
 
+    
     @caching.cache()
     def matches_filter_words(self, filter_words):
         return all(self._matches_filter_word(word) for word in filter_words)
@@ -67,7 +75,5 @@ class SimpackMetadata(_SimpackMetadataBase):
     @caching.cache()
     def _matches_filter_word(self, word):
         assert isinstance(word, basestring)
-        texts_to_search = filter(None, (self.address, self.name, self.version,
-                                        self.description) + (self.tags or ()))
-        return any(word in text_to_search for text_to_search in
-                   texts_to_search)
+        lower_word = word.lower()
+        return lower_word in self._text_to_search
