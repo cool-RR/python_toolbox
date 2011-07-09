@@ -12,7 +12,7 @@ import wx
 from garlicsim_wx.widgets.general_misc.cute_control import CuteControl
 
 
-class CuteHyperLink(wx.HyperlinkCtrl, CuteControl):
+class CuteHyperlinkCtrl(wx.HyperlinkCtrl, CuteControl):
     ''' '''
     def __init__(self, parent, id=-1, label='', url='', pos=wx.DefaultPosition,
                  size=wx.DefaultSize, style=wx.HL_DEFAULT_STYLE,

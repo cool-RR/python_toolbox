@@ -62,12 +62,13 @@ class SimpackMetadata(_SimpackMetadataBase):
             version = getattr(root_package, '__version__', None)
         #                                                                     #
         ### Finished getting version number. ##################################
-        return SimpackMetadata(address=address,
-                               name=name,
-                               version=version,
-                               description=description,
-                               tags=tags)
-
+        simpack_metadata = SimpackMetadata(address=address,
+                                           name=name,
+                                           version=version,
+                                           description=description,
+                                           tags=tags)
+        simpack_metadata._tasted_simpack = tasted_simpack
+        
     
     @caching.CachedProperty
     def _text_to_search(self):

@@ -7,27 +7,33 @@ This module defines the `CodeLink` class.
 See its documentation for more information.
 '''
 
+import os.path
+
 import wx
 
 from garlicsim_wx.general_misc import wx_tools
-from garlicsim_wx.widgets.general_misc.cute_hyper_link import CuteHyperLink
+from garlicsim_wx.widgets.general_misc.cute_hyperlink_ctrl \
+                                                       import CuteHyperlinkCtrl
 
 
-class CodeLink(CuteHyperLink):
+class CodeLink(CuteHyperlinkCtrl):
     def __init__(self, technical_details_bar):
         ''' '''
         self.technical_details_bar = technical_details_bar
-        CuteHyperLink.__init__(self, technical_details_bar, label=)
-        self.ForegroundColour = wx_tools.colors.mix_wx_color(
-            0.333,
-            self.ForegroundColour,
-            self.BackgroundColour
-        )
+        CuteHyperlinkCtrl.__init__(self, technical_details_bar,
+                                   label='Show code')
+        #self.ForegroundColour = wx_tools.colors.mix_wx_color(
+            #0.333,
+            #self.ForegroundColour,
+            #self.BackgroundColour
+        #)
+        self.bind_event_handlers(CodeLink)
         
-    def refresh(self):
+    def _on_hyperlink(self, event):
         simpack_metadata = self.technical_details_bar.simpack_info_panel.\
                                       simpack_selection_dialog.simpack_metadata
-        self.SetLabel(('Version %s' % simpack_metadata.version) if
-                      simpack_metadata is not None else '')
+        assert simpack_metadata is not None
+        folder_path = os.path.split(tasted_simpack.__file__)[0]
+        os.system(folder_path)
         
         
