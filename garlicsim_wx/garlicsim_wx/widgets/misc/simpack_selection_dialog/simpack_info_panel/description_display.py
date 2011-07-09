@@ -36,7 +36,11 @@ class DescriptionDisplay(CuteHtmlWindow):
 
     def __init__(self, simpack_info_panel):
         self.simpack_info_panel = simpack_info_panel
-        CuteHtmlWindow.__init__(self, simpack_info_panel)
+        CuteHtmlWindow.__init__(
+            self,
+            simpack_info_panel,
+            style=(wx.html.HW_DEFAULT_STYLE | wx.SUNKEN_BORDER)
+        )
         self.Hide()
         
     def refresh(self):
