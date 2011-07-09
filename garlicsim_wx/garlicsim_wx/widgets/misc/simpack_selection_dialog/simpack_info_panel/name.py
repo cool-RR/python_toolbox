@@ -16,4 +16,9 @@ class Name(CuteStaticText):
         ''' '''
         self.simpack_info_panel = simpack_info_panel
         CuteStaticText.__init__(self, simpack_info_panel)
+        self.simpack_info_panel.simpack_selection_dialog.\
+                      simpack_metadata_changed_emitter.add_output(self.refresh)
+        
+    def refresh(self):
+        self
         
