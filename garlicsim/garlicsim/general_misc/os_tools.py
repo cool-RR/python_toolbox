@@ -12,12 +12,12 @@ import sys
 import os.path
 
 
-def open_folder_in_explorer(path):
-    assert os.path.isdir(path)
-    if sys.platform == 'linux2':
-        subprocess.check_call(['gnome-open', '--', path])
-    elif sys.platform == 'darwin':
+def start_file(path):
+    assert os.path.exists(path)
+    if os.name == 'posix':
+        subprocess.check_call(['xdg-open', '--', path])
+    elif os.name == 'mac':
         subprocess.check_call(['open', '--', path])
     else:
-        assert sys.platform == 'windows'
-        subprocess.check_call(['explorer', path])
+        assert os.name == 'nt'
+        os.startfile(path)

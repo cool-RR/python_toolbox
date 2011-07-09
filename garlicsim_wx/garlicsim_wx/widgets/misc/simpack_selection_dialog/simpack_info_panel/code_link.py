@@ -45,6 +45,6 @@ class CodeLink(CuteHyperlinkCtrl):
         assert simpack_metadata is not None
         folder_path = \
             os.path.split(simpack_metadata._tasted_simpack.__file__)[0]
-        os_tools.open_folder_in_explorer(folder_path)
+        os_tools.start_file(folder_path)
         
         
