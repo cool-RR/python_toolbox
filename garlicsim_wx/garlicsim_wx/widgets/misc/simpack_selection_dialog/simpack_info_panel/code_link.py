@@ -21,25 +21,29 @@ class CodeLink(CuteHyperlinkCtrl):
     def __init__(self, technical_details_bar):
         ''' '''
         self.technical_details_bar = technical_details_bar
-        CuteHyperlinkCtrl.__init__(self, technical_details_bar)
+        CuteHyperlinkCtrl.__init__(self, technical_details_bar,
+                                   label='Show code')
         #self.ForegroundColour = wx_tools.colors.mix_wx_color(
             #0.333,
             #self.ForegroundColour,
             #self.BackgroundColour
         #)
         self.bind_event_handlers(CodeLink)
+        self.Hide()
         
         
     def refresh(self):
         simpack_metadata = self.technical_details_bar.simpack_info_panel.\
                                       simpack_selection_dialog.simpack_metadata
-        self.SetLabel('Show &code' if simpack_metadata is not None else '')
+        self.Show(simpack_metadata is not None)
+        
         
     def _on_hyperlink(self, event):
         simpack_metadata = self.technical_details_bar.simpack_info_panel.\
                                       simpack_selection_dialog.simpack_metadata
         assert simpack_metadata is not None
-        folder_path = os.path.split(tasted_simpack.__file__)[0]
-        os.system(folder_path)
+        folder_path = \
+            os.path.split(simpack_metadata._tasted_simpack.__file__)[0]
+        os.system('"%s"' % folder_path)
         
         

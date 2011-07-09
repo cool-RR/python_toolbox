@@ -39,5 +39,6 @@ class TechnicalDetailsBar(CutePanel):
         
     def refresh(self):
         self.version_display.refresh()
+        self.code_link.refresh()
         self.Layout
         
