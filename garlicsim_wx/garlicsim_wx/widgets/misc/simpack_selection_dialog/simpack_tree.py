@@ -141,7 +141,7 @@ class SimpackTree(CuteTreeCtrl):
             
             simpacks.sort(key=lambda simpack_metadata: simpack_metadata.name)
             
-            if simpacks:
+            if simpacks or not filter_words:
                 new_simpack_places_tree[simpack_place] = simpacks
             
         self._simpack_places_tree = new_simpack_places_tree
@@ -270,6 +270,29 @@ class SimpackTree(CuteTreeCtrl):
                     self.Collapse(simpack_place_item)
 
                     
+    def refresh_tree_and_ensure_simpack_selected(self):
+        self.refresh_tree()
+        self.ensure_simpack_selected()
+        
+        
+    def ensure_simpack_selected(self):
+        if not self._simpack_places_tree or not \
+                                       any(self._simpack_places_tree.values()):
+            return
+        selected_item = self.GetSelection()
+        if not selected_item.Ok():
+            simpack_item, _ = self.GetFirstChild(
+                self.GetFirstChild(self.root_item)[0]
+            )
+        elif type(self.GetItemPyData(selected_item) is SimpackPlace:
+            simpack_item, _ = self.GetFirstChild(selected_item)
+        else:
+            assert type(self.GetItemPyData(selected_item) is SimpackMetadata
+                return
+        self.SelectItem(simpack_item)
+            return
+                    
+        
     def OnComapreItems(self, item_1, item_2):
         item_1_data = self.GetItemPyData(item_1)
         item_2_data = self.GetItemPyData(item_)
