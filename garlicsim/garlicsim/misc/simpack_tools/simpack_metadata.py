@@ -68,6 +68,7 @@ class SimpackMetadata(_SimpackMetadataBase):
                                            description=description,
                                            tags=tags)
         simpack_metadata._tasted_simpack = tasted_simpack
+        return simpack_metadata
         
     
     @caching.CachedProperty
