@@ -18,7 +18,7 @@ from garlicsim_wx.general_misc import wx_tools
 def get_background_html_color():
     return wx_tools.colors.wx_color_to_html_color(
         wx_tools.colors.mix_wx_color(
-            0.8,
+            0.7,
             wx_tools.colors.get_background_color(),
             wx.NamedColour('yellow')
         )
@@ -37,7 +37,6 @@ class DescriptionDisplay(CuteHtmlWindow):
     def __init__(self, simpack_info_panel):
         self.simpack_info_panel = simpack_info_panel
         CuteHtmlWindow.__init__(self, simpack_info_panel)
-        self.ForegroundColour = wx.NamedColour('red')
         self.Hide()
         
     def refresh(self):
