@@ -32,6 +32,8 @@ from garlicsim_wx.general_misc import wx_tools
 
 import garlicsim_wx
 
+from .simpack_info_panel import SimpackInfoPanel
+
 
 # blocktodo: Go over all methods here, ensure they're relevant.
 # blocktodo: Don't forget tooltips here wherever possible
@@ -120,8 +122,8 @@ class SimpackSelectionDialog(CuteDialog):
         
         ### Building simpack info panel: ######################################
         #                                                                     #
-        text_ctrl_1 = wx.TextCtrl(self)
-        self.flex_grid_sizer.Add(text_ctrl_1,
+        self.simpack_info_panel = SimpackInfoPanel(self)
+        self.flex_grid_sizer.Add(self.simpack_info_panel,
                                  proportion=1,
                                  flag=wx.EXPAND | wx.ALL,
                                  border=5)

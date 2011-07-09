@@ -21,6 +21,7 @@ class NameDisplay(CuteStaticText):
         self.SetFont(wx.Font(48, wx.NORMAL, wx.NORMAL, wx.NORMAL))
         self.simpack_info_panel.simpack_selection_dialog.\
                       simpack_metadata_changed_emitter.add_output(self.refresh)
+        self.SetBackgroundColour(wx.NamedColour('red'))
         
     def refresh(self):
         simpack_metadata = self.simpack_info_panel.\
