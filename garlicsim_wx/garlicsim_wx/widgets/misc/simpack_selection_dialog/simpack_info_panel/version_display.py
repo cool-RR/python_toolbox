@@ -16,6 +16,7 @@ from garlicsim_wx.widgets.general_misc.cute_static_text import CuteStaticText
 class VersionDisplay(CuteStaticText):
     def __init__(self, technical_details_bar):
         ''' '''
+        self.technical_details_bar = technical_details_bar
         CuteStaticText.__init__(self, technical_details_bar)
         #self.SetFont(wx.Font(12, wx.NORMAL, wx.NORMAL, wx.NORMAL))
         self.ForegroundColour = wx_tools.colors.mix_wx_color(

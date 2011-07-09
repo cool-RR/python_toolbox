@@ -17,6 +17,7 @@ from .version_display import VersionDisplay
 class TechnicalDetailsBar(CutePanel):
     def __init__(self, simpack_info_panel):
         ''' '''
+        self.simpack_info_panel = simpack_info_panel
         CutePanel.__init__(self, simpack_info_panel)
         self.sizer = wx.BoxSizer(wx.HORIZONTAL)
         self.version_display = VersionDisplay(self)

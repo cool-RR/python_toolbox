@@ -10,6 +10,7 @@ See its documentation for more information.
 import garlicsim.general_misc.third_party.namedtuple
 
 from garlicsim.general_misc import module_tasting
+from garlicsim.general_misc import address_tools
 from garlicsim.general_misc import caching
 
 
@@ -49,9 +50,14 @@ class SimpackMetadata(_SimpackMetadataBase):
     def create_from_address(address):
         tasted_simpack = module_tasting.taste_module(address)
         name = getattr(tasted_simpack, 'name', address.rsplit('.')[-1])
-        version = getattr(tasted_simpack, 'name', None)
         description = getattr(tasted_simpack, '__doc__', None)
         tags = getattr(tasted_simpack, 'tags', None)
+        if hasattr(tasted_simpack, '__version__'):            
+            version = getattr(tasted_simpack, '__version__')
+        elif '.' in address:
+            root_address = address.split('.', 1)[0]
+            root_package = address_tools.resolve(root_address)
+            version = getattr(root_address, '__version__', None)
         return SimpackMetadata(address=address,
                                name=name,
                                version=version,
