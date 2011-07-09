@@ -11,6 +11,7 @@ import os.path
 
 import wx
 
+from garlicsim.general_misc import os_tools
 from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.widgets.general_misc.cute_hyperlink_ctrl \
                                                        import CuteHyperlinkCtrl
@@ -44,6 +45,6 @@ class CodeLink(CuteHyperlinkCtrl):
         assert simpack_metadata is not None
         folder_path = \
             os.path.split(simpack_metadata._tasted_simpack.__file__)[0]
-        os.system('"%s"' % folder_path)
+        os_tools.open_folder_in_explorer(folder_path)
         
         
