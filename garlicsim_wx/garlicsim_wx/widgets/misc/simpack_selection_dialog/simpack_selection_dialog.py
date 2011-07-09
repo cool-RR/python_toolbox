@@ -52,7 +52,7 @@ class SimpackSelectionDialog(CuteDialog):
             self,
             frame,
             title='Choose simulation package',
-            size=(950, 550)
+            size=(1000, 550)
         )
         
         assert isinstance(frame, garlicsim_wx.Frame)
@@ -80,7 +80,7 @@ class SimpackSelectionDialog(CuteDialog):
         self.flex_grid_sizer.AddGrowableRow(0, 1)
         
         self.flex_grid_sizer.AddGrowableCol(0, 3)
-        self.flex_grid_sizer.AddGrowableCol(1, 5)
+        self.flex_grid_sizer.AddGrowableCol(1, 6)
         #                                                                     #
         ### Finished setting up flex-grid-sizer. ##############################
         

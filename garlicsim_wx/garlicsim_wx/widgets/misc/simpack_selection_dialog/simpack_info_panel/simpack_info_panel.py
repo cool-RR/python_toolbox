@@ -34,18 +34,28 @@ class SimpackInfoPanel(CutePanel):
                        flag=(wx.ALIGN_RIGHT | wx.BOTTOM),
                        border=2)
         
-        self.description_display = DescriptionDisplay(self)
-        self.sizer.Add(self.description_display,
+        self.small_h_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        self.sizer.Add(self.small_h_sizer,
                        proportion=1,
-                       flag=(wx.EXPAND | wx.BOTTOM),
-                       border=2)
+                       flag=(wx.EXPAND))
+        
+        self.smaller_v_sizer = wx.BoxSizer(wx.VERTICAL)
+        self.small_h_sizer.Add(self.smaller_v_sizer,
+                               proportion=3,
+                               flag=(wx.EXPAND))
+        
+        self.description_display = DescriptionDisplay(self)
+        self.smaller_h_sizer.Add(self.description_display,
+                                 proportion=1,
+                                 flag=(wx.EXPAND | wx.RIGHT),
+                                 border=2)
         
         self.SetSizer(self.sizer)
         self.Layout()
         
         self.simpack_selection_dialog.\
                       simpack_metadata_changed_emitter.add_output(self.refresh)
-        
+         
         
     def refresh(self):
         self.name_display.refresh()
