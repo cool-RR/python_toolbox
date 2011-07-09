@@ -113,17 +113,18 @@ class SimpackTree(CuteTreeCtrl):
             
         for simpack_place in garlicsim_wx.simpack_places:
             
-            simpacks = simpack_place.get_simpack_metadatas
+            simpacks = simpack_place.get_simpack_metadatas()
             
-            if simpack_metadata.matches_filter_words(filter_words) or \
-               simpack_place.matches_filter_words(filter_words):
+            filtered_simpacks = \
+                [simpack_metadata for simpack_metadata in simpacks if
+                 simpack_metadata.matches_filter_words(filter_words) or                 
+                 simpack_place.matches_filter_words(filter_words)]
                 
-                simpacks.append(simpack_metadata)
-                
-            simpacks.sort(key=lambda simpack_metadata: simpack_metadata.name)
+            filtered_simpacks.sort(key=lambda simpack_metadata:
+                                                         simpack_metadata.name)
             
-            if simpacks or not filter_words:
-                new_simpack_places_tree[simpack_place] = simpacks
+            if filtered_simpacks or not filter_words:
+                new_simpack_places_tree[simpack_place] = filtered_simpacks
             
         self._simpack_places_tree = new_simpack_places_tree
             
