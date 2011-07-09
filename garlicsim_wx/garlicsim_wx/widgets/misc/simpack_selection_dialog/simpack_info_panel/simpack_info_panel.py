@@ -18,14 +18,21 @@ class SimpackInfoPanel(CutePanel):
     def __init__(self, simpack_selection_dialog):
         self.simpack_selection_dialog = simpack_selection_dialog
         CutePanel.__init__(self, simpack_selection_dialog)
-        self.SetBackgroundColour(wx.NamedColour('blue'))
         self.sizer = wx.BoxSizer(wx.VERTICAL)
         
         self.name_display = NameDisplay(self)
         self.sizer.Add(self.name_display,
                        proportion=0,
-                       flag=(wx.ALIGN_RIGHT | wx.BOTTOM),
+                       flag=(wx.ALIGN_LEFT | wx.BOTTOM),
                        border=2)
         
         self.SetSizer(self.sizer)
+        self.Layout()
+        
+        self.simpack_selection_dialog.\
+                      simpack_metadata_changed_emitter.add_output(self.refresh)
+        
+        
+    def refresh(self):
+        self.name_display.refresh()
         self.Layout()

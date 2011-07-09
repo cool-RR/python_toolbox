@@ -27,4 +27,5 @@ class CuteStaticText(wx.StaticText, CuteWindow):
         self.bind_event_handlers(CuteStaticText)
         
         
+        
     
