@@ -20,7 +20,7 @@ class TagsDisplay(CutePanel):
 
     def __init__(self, simpack_info_panel):
         self.simpack_info_panel = simpack_info_panel
-        CutePanel.__init__(self, simpack_info_panel)
+        CutePanel.__init__(self, simpack_info_panel, size=(-1, 50))
         self.Hide()
         
         self.sizer = wx.BoxSizer(wx.HORIZONTAL)

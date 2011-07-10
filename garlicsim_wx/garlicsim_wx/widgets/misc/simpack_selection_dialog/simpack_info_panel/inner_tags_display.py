@@ -54,7 +54,7 @@ class InnerTagsDisplay(CuteHtmlWindow):
                            simpack_selection_dialog.simpack_metadata
         if simpack_metadata is not None:
             self.Show()
-            self.SetPage(tags_to_html(simpack_metadata.tags))
+            self.SetPage(tags_to_html(simpack_metadata.tags or ()))
         else: # simpack_metadata is None
             self.Hide()
             
