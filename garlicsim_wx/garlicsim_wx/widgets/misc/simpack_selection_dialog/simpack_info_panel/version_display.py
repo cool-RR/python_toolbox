@@ -21,7 +21,7 @@ class VersionDisplay(CuteStaticText):
         #self.BackgroundColour = self.Parent.BackgroundColour
         #self.SetFont(wx.Font(12, wx.NORMAL, wx.NORMAL, wx.NORMAL))
         self.ForegroundColour = wx_tools.colors.mix_wx_color(
-            0.333,
+            0.5,
             self.ForegroundColour,
             self.BackgroundColour
         )
