@@ -9,6 +9,7 @@ See its documentation for more information.
 
 import wx
 
+from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
 
 from .version_display import VersionDisplay
@@ -20,7 +21,8 @@ class TechnicalDetailsBar(CutePanel):
         ''' '''
         self.simpack_info_panel = simpack_info_panel
         CutePanel.__init__(self, simpack_info_panel)
-        #self.BackgroundColour = wx.Color(0, 0, 0, 0)
+        if wx_tools.is_gtk:
+            self.set_good_background_color()
         
         self.sizer = wx.BoxSizer(wx.HORIZONTAL)
         
