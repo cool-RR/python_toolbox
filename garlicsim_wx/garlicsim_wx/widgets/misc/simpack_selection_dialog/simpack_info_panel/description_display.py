@@ -18,7 +18,7 @@ from garlicsim_wx.general_misc import wx_tools
 def get_background_html_color():
     return wx_tools.colors.wx_color_to_html_color(
         wx_tools.colors.mix_wx_color(
-            0.7,
+            0.8,
             wx_tools.colors.get_background_color(),
             wx.NamedColour('yellow')
         )
