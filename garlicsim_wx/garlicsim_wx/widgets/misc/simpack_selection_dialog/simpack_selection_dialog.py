@@ -77,7 +77,7 @@ class SimpackSelectionDialog(CuteDialog):
         ### Setting up flex-grid-sizer: #######################################
         #                                                                     #
         self.flex_grid_sizer = wx.FlexGridSizer(rows=2, cols=2,
-                                                hgap=16, vgap=0)
+                                                hgap=8, vgap=0)
         
         self.SetSizer(self.flex_grid_sizer)
         
