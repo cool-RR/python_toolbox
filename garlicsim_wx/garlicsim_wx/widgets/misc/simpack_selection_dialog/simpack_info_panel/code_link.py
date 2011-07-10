@@ -23,8 +23,9 @@ class CodeLink(CuteHyperlinkCtrl):
         ''' '''
         self.technical_details_bar = technical_details_bar
         CuteHyperlinkCtrl.__init__(self, technical_details_bar,
-                                   label='Show code')
-        #self.BackgroundColour = self.Parent.BackgroundColour
+                                   label='Show code')        
+        if wx_tools.is_gtk:
+            self.BackgroundColour = self.Parent.BackgroundCoour
         #self.ForegroundColour = wx_tools.colors.mix_wx_color(
             #0.333,
             #self.ForegroundColour,
