@@ -327,7 +327,7 @@ class SimpackTree(CuteTreeCtrl):
         else:
             self.simpack_selection_dialog.set_simpack_metadata(None)
             
-    def _on_char(self, event):
+    def _on_key_down(self, event):
         key = wx_tools.keyboard.Key.get_from_key_event(event)
         print(key.key_code)
         if key.is_alphanumeric():            
