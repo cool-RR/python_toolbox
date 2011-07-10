@@ -23,12 +23,19 @@ def tag_to_html(tag):
 
 @caching.cache()
 def tags_to_html(tags):
-    return '''<html><body bgcolor="%s" color="%s">%s</body></html>''' % \
-           (wx_tools.colors.wx_color_to_html_color(
-               wx_tools.colors.get_background_color()
-            ),
-            'black',
-            ', '.join(tag_to_html(tag) for tag in tags))
+    return '''
+        <html style="margin: 0px; padding: 0px;">
+          <body bgcolor="%s" color="%s" style="margin: 0px; padding: 0px;">
+            %s
+          </body>
+        </html>
+    ''' % (
+        wx_tools.colors.wx_color_to_html_color(
+            wx_tools.colors.get_background_color()
+        ),
+        'black',
+        ', '.join(tag_to_html(tag) for tag in tags)
+    )
 
 
 class InnerTagsDisplay(CuteHtmlWindow):
