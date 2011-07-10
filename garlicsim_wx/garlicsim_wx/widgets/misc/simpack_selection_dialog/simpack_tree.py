@@ -327,5 +327,22 @@ class SimpackTree(CuteTreeCtrl):
         else:
             self.simpack_selection_dialog.set_simpack_metadata(None)
             
+    def _on_char(self, event):
+        key = wx_tools.keyboard.Key.get_from_key_event(event)
+        if key.is_alphanumeric():            
+            filter_box = self.simpack_selection_dialog.navigation_panel.\
+                                                                     filter_box
+            filter_box.SetFocus()
+            current_filter_string = filter_box.Value
+            add_space = not current_filter_string.endswith(u' ')
+            new_filter_string = current_filter_string + (u' ' * add_space) + \
+                                                                   unicode(key)
+            filter_box.Value = new_filter_string
+            filter_box.SetSelection(len(filter_box.Value),
+                                    len(filter_box.Value))
+            
+        else:
+            event.Skip()
+            
         
 from .simpack_selection_dialog import SimpackSelectionDialog

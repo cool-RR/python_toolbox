@@ -45,7 +45,19 @@ class Key(object):    #blocktodo: __repr__
         )
         
         return (modifiers, self.key_code)
+    
+    def is_alphanumeric(self):
+        return (ord('0') <= self.key_code <= ord('9')) or \
+               (ord('A') <= self.key_code <= ord('z'))
          
+
+    def __str__(self):
+        return chr(self.key_code)
+
+    
+    def __unicode__(self):
+        return unichr(self.key_code)
+    
     
     def __hash__(self):
         return hash(tuple(sorted(tuple(vars(self)))))
