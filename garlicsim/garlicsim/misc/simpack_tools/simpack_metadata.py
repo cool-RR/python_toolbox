@@ -22,32 +22,20 @@ _SimpackMetadataBase = garlicsim.general_misc.\
 
 
 class SimpackMetadata(_SimpackMetadataBase):
+    '''
+    Metadata about a simpack, including name, version, address and description.
     
-    def __init__(self, *args, **kwargs):
-        
-        _SimpackMetadataBase.__init__(self)
-        # Not passing arguments to `_SimpackMetadataBase.__init__` because it's
-        # actually `object.__init__`.
-        
-        assert isinstance(self.address, basestring) or self.address is None
-        assert isinstance(self.name, basestring) or self.name is None
-        assert isinstance(self.version, basestring) or self.version is None
-        assert isinstance(self.description, basestring) or self.description \
-                                                                        is None
-        assert isinstance(self.tags, tuple) or self.tags is None        
-        
-        
-        if False: # This section gives us better source assistance in Wing IDE:
-            self.address = self.address
-            self.name = self.name
-            self.version = self.version
-            self.description = self.description
-            self.tags = self.tags
-        
+    The most important feature of this class is that it obtains all the
+    metadata *without* importing the simpack. (It does that using
+    module-tasting.) This is very useful because we want to get metadata about
+    a lot of simpacks, but we don't want to import them all. We want to import
+    only the one that we'll choose to work with.
+    '''
     
     @staticmethod
     @caching.cache()
     def create_from_address(address):
+        '''Create a `SimpackMetadata` from the address of a simpack.'''
         tasted_simpack = module_tasting.taste_module(address)
         name = getattr(tasted_simpack, 'name', address.rsplit('.')[-1])
         description = getattr(tasted_simpack, '__doc__', None)
@@ -68,11 +56,50 @@ class SimpackMetadata(_SimpackMetadataBase):
                                            description=description,
                                            tags=tags)
         simpack_metadata._tasted_simpack = tasted_simpack
+        
         return simpack_metadata
+    
+    
+    def __init__(self, address, name, version, description, tags):
+        
+        _SimpackMetadataBase.__init__(self)
+        # Not passing arguments to `_SimpackMetadataBase.__init__` because it's
+        # actually `object.__init__`.
+        
+        assert isinstance(self.address, basestring) or self.address is None
+        assert isinstance(self.name, basestring) or self.name is None
+        assert isinstance(self.version, basestring) or self.version is None
+        assert isinstance(self.description, basestring) or self.description \
+                                                                        is None
+        assert isinstance(self.tags, tuple) or self.tags is None        
+        
+        
+        if False: # This section gives us better source assistance in Wing IDE:
+            self.address = self.address
+            self.name = self.name
+            self.version = self.version
+            self.description = self.description
+            self.tags = self.tags
+                    
+                    
+    def import_simpack(self):
+        '''
+        Import the simpack and return it.
+        
+        The simpack may or may not be imported already. In any case after this
+        function is called it will be imported and returned.
+        '''
+        return address_tools.resolve(self.address)
         
     
     @caching.CachedProperty
     def _text_to_search(self):
+        '''
+        The total mass of search that should be searched in.
+        
+        Contains the name, address, description and version all concatenated
+        together.
+        '''
         return ''.join([text.lower() for text in
                         ((self.address, self.name, self.version,
                         self.description) + (self.tags or ()))
@@ -81,12 +108,28 @@ class SimpackMetadata(_SimpackMetadataBase):
     
     @caching.cache()
     def matches_filter_words(self, filter_words, simpack_place=None):
-        return all(self._matches_filter_word(word, simpack_place) for
-                   word in filter_words)
+        '''
+        Do all of the filter words appear in this simpack metadata's text?
+        
+        `filter_words` is a list of strings, such as `['physics', 'discrete',
+        '3d']`. Returns `True` if and only if every word appears somewhere in
+        this simpack metadata's text.
+        
+        If `simpack_place` is given, its text would also be searched,
+        (increasing the likelihood that this function would return `True`.)
+        '''
+        return all(self._matches_filter_word(word, simpack_place) for word in
+                   filter_words)
 
     
     @caching.cache()
     def _matches_filter_word(self, word, simpack_place=None):
+        '''
+        Does `word` appear in this simpack metadata's text?
+        
+        If `simpack_place` is given, its text would also be searched,
+        (increasing the likelihood that this function would return `True`.)
+        '''
         assert isinstance(word, basestring)
         lower_word = word.lower()
         if simpack_place is not None:
