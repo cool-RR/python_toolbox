@@ -22,6 +22,8 @@ class SimpackInfoPanel(CutePanel):
     def __init__(self, simpack_selection_dialog):
         self.simpack_selection_dialog = simpack_selection_dialog
         CutePanel.__init__(self, simpack_selection_dialog)
+        self.set_good_background_color()
+        
         self.static_box = wx.StaticBox(self)
         self.sizer = wx.StaticBoxSizer(self.static_box, wx.VERTICAL)
         

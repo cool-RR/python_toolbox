@@ -67,6 +67,10 @@ class SimpackSelectionDialog(CuteDialog):
         with self.freezer:
             self.__init_build()
             
+            self.simpack_tree.refresh_tree()
+            self.simpack_tree.ExpandAll()
+            self.simpack_tree.ensure_simpack_selected()
+            
         
     def __init_build(self):
         
@@ -217,9 +221,6 @@ class SimpackSelectionDialog(CuteDialog):
         )
         
         self.bind_event_handlers(SimpackSelectionDialog)
-        
-        self.simpack_tree.refresh_tree()
-        self.simpack_tree.ExpandAll()
         
         '''
         
