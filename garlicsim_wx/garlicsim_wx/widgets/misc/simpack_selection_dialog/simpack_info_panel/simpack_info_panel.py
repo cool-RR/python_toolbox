@@ -15,13 +15,15 @@ from .name_display import NameDisplay
 from .technical_details_bar import TechnicalDetailsBar
 from .description_display import DescriptionDisplay
 from .tags_display import TagsDisplay
+from .image_display import ImageDisplay
 
 
 class SimpackInfoPanel(CutePanel):
     def __init__(self, simpack_selection_dialog):
         self.simpack_selection_dialog = simpack_selection_dialog
         CutePanel.__init__(self, simpack_selection_dialog)
-        self.sizer = wx.BoxSizer(wx.VERTICAL)
+        self.static_box = wx.StaticBox(self)
+        self.sizer = wx.StaticBoxSizer(self.static_box, wx.VERTICAL)
         
         self.name_display = NameDisplay(self)
         self.sizer.Add(self.name_display,
@@ -58,6 +60,12 @@ class SimpackInfoPanel(CutePanel):
                                  border=2)
         
         
+        self.image_display = ImageDisplay(self)
+        self.small_h_sizer.Add(self.image_display,
+                               proportion=2,
+                               flag=(wx.EXPAND))
+        
+        
         self.SetSizer(self.sizer)
         self.Layout()
         
@@ -70,4 +78,5 @@ class SimpackInfoPanel(CutePanel):
         self.technical_details_bar.refresh()
         self.description_display.refresh()
         self.tags_display.refresh()
+        self.image_display.refresh()
         self.Layout()

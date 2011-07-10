@@ -28,8 +28,20 @@ def get_background_html_color():
 
 @caching.cache()
 def description_to_html(description):
-    return '''<html><body bgcolor="%s" color="%s">%s</body></html>''' % \
-           (get_background_html_color(), 'black', description)
+    return '''
+        <html>
+          <body bgcolor="%s" color="%s">
+            <font face="Georgia">
+              %s
+            </font>
+          </body>
+        </html>
+        ''' % \
+            (
+                get_background_html_color(),
+                'black',
+                description
+            )
 
 
 class DescriptionDisplay(CuteHtmlWindow):
