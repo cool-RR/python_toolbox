@@ -20,6 +20,7 @@ class TechnicalDetailsBar(CutePanel):
         ''' '''
         self.simpack_info_panel = simpack_info_panel
         CutePanel.__init__(self, simpack_info_panel)
+        self.set_good_background_color()
         self.sizer = wx.BoxSizer(wx.HORIZONTAL)
         
         self.version_display = VersionDisplay(self)
