@@ -75,12 +75,22 @@ class SimpackMetadata(_SimpackMetadataBase):
         
         
         if False: # This section gives us better source assistance in Wing IDE:
+            
             self.address = self.address
+            '''Address of the simpack, like `garlicsim_lib.simpacks.life`.'''
+            
             self.name = self.name
+            '''Name of the simpack, like "Conway's Game of Life.'''
+            
             self.version = self.version
+            '''Version of the simpack, like '0.5.2'.'''
+            
             self.description = self.description
+            '''Extensive description of the simpack in ReSTructuredText #blocktododoc how is it written?.'''
+            
             self.tags = self.tags
-                    
+            '''List of tags, like `['chemistry', '3d', 'heavy-cpu']`.'''
+            
                     
     def import_simpack(self):
         '''

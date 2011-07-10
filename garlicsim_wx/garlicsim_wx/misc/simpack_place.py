@@ -28,8 +28,17 @@ _SimpackPlaceBase = garlicsim.general_misc.\
 
 
 class SimpackPlace(_SimpackPlaceBase):
+    '''
+    A place on the filesystem where simpacks are stored.
     
-
+    A simpack place is defined not only by a path, but also by an optional
+    `.package_prefix`. When defined, it specifies the package prefix that
+    contains the simpacks. For example, in GarlicSim's simpack library, the
+    package prefix is `garlicsim_lib.simpacks.`.
+    
+    A simpack place also has a `.name` which is a user-friendly name.
+    '''
+    
     __metaclass__ = caching.CachedType
     
     
@@ -60,7 +69,8 @@ class SimpackPlace(_SimpackPlaceBase):
 
     
     def __init__(self, path, package_prefix='', name=None):
-        # Defining blank `__init__` to satisfy `CachedType`.
+        '''Construct a new `SimpackPlace`.'''
+        # Defining `__init__` mostly to satisfy `CachedType`.
 
         _SimpackPlaceBase.__init__(self)
         # Not passing arguments to `_SimpackPlaceBase.__init__` because it's
@@ -77,6 +87,11 @@ class SimpackPlace(_SimpackPlaceBase):
             
             
     def get_simpack_metadatas(self):
+        '''
+        Get the metadatas of all the simpacks contained in this simpack place.
+        
+        Returns a list of `SimpackMetadata` objects.
+        '''
         
         ### Determining path to search: ###################################
         #                                                                 #
@@ -99,17 +114,30 @@ class SimpackPlace(_SimpackPlaceBase):
     
     @caching.CachedProperty
     def _text_to_search(self):
+        '''
+        The total mass of search that should be searched in.
+        
+        Contains the name, the package prefix, and the path.
+        '''
         return ''.join([text.lower() for text in
                         (self.name, self.package_prefix, self.path)
                         if text is not None])
 
     @caching.cache()
     def matches_filter_words(self, filter_words):
+        '''
+        Do all of the filter words appear in this simpack places's text?
+        
+        `filter_words` is a list of strings, such as `['library',
+        'garlicsim']`. Returns `True` if and only if every word appears
+        somewhere in this simpack place's text.
+        '''
         return all(self._matches_filter_word(word) for word in filter_words)
 
     
     @caching.cache()
     def _matches_filter_word(self, word):
+        '''Does `word` appear in this simpack place's text?'''
         assert isinstance(word, basestring)
         lower_word = word.lower()
         return lower_word in self._text_to_search
