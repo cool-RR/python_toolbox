@@ -13,6 +13,8 @@ from garlicsim.general_misc import caching
 from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
 from garlicsim_wx.general_misc import wx_tools
 
+from .inner_tags_display import InnerTagsDisplay
+
 
 class TagsDisplay(CutePanel):
 
@@ -29,11 +31,16 @@ class TagsDisplay(CutePanel):
                        proportion=0,
                        flag=(wx.ALIGN_TOP | wx.RIGHT),
                        border=2)
-        
-
+             
+        self.inner_tags_display = InnerTagsDisplay(self)
+        self.sizer.Add(self.inner_tags_display,
+                       proportion=1,
+                       flag=(wx.EXPAND),
+                       border=0)
         
         
     def refresh(self):
+        self.inner_tags_display.refresh()
         simpack_metadata = \
             self.simpack_info_panel.simpack_selection_dialog.simpack_metadata
         if simpack_metadata is not None:

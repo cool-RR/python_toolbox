@@ -69,4 +69,5 @@ class SimpackInfoPanel(CutePanel):
         self.name_display.refresh()
         self.technical_details_bar.refresh()
         self.description_display.refresh()
+        self.tags_display.refresh()
         self.Layout()
