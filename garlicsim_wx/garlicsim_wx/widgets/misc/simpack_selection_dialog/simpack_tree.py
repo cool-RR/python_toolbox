@@ -329,7 +329,8 @@ class SimpackTree(CuteTreeCtrl):
             
             
     def _on_char(self, event):
-        # Doesn't work on Mac for some reason.
+        # Doesn't work on Mac and Linux; probably the generic tree control
+        # swallows keystrokes.
         key = wx_tools.keyboard.Key.get_from_key_event(event)
         print(key.key_code)
         if key.is_alphanumeric():            
