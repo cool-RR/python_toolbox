@@ -18,6 +18,7 @@ class VersionDisplay(CuteStaticText):
         ''' '''
         self.technical_details_bar = technical_details_bar
         CuteStaticText.__init__(self, technical_details_bar)
+        self.set_good_background_color()
         #self.SetFont(wx.Font(12, wx.NORMAL, wx.NORMAL, wx.NORMAL))
         self.ForegroundColour = wx_tools.colors.mix_wx_color(
             0.333,
