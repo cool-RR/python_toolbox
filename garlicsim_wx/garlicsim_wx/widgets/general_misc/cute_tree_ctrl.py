@@ -9,13 +9,17 @@ See its documentation for more information.
 
 import wx
 
+from garlicsim.general_misc import sequence_tools
 from garlicsim_wx.widgets.general_misc.cute_control import CuteControl
 
 
 class CuteTreeCtrl(wx.TreeCtrl, CuteControl):
     ''' '''
     
-    def get_children_of_item(self, item):
+    def get_children_of_item(self, item, generations=1):
+        if generations == 0:
+            return tuple(item)
+        
         (first_child, cookie) = self.GetFirstChild(item)
         children = []
         
@@ -24,4 +28,14 @@ class CuteTreeCtrl(wx.TreeCtrl, CuteControl):
             children.append(current_child)
             (current_child, cookie) = self.GetNextChild(item, cookie)
         
-        return tuple(children)
+        if generations == 1:
+            return tuple(children)
+        else:
+            return tuple(
+                sequence_tools.flatten(
+                    self.get_children_of_item(
+                        child,
+                        generations=generations-1
+                    ) for child in children
+                )
+            )

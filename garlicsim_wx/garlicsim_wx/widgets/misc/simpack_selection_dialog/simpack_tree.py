@@ -11,6 +11,7 @@ import os
 import sys
 import glob
 import pkgutil
+import itertools
 import collections
 
 import wx
@@ -20,6 +21,8 @@ from garlicsim.general_misc.comparison_tools import underscore_hating_key
 from garlicsim.general_misc import address_tools
 from garlicsim.general_misc import path_tools
 from garlicsim.general_misc import dict_tools
+from garlicsim.general_misc import cute_iter_tools
+from garlicsim.general_misc import sequence_tools
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import package_finder
 from garlicsim.general_misc.nifty_collections import OrderedDict
@@ -261,22 +264,49 @@ class SimpackTree(CuteTreeCtrl):
         
         
     def ensure_simpack_selected(self):
+        
         if not self._simpack_places_tree or not \
                                        any(self._simpack_places_tree.values()):
+            # If there are no simpacks, do nothing.
             return
+        
+        # If the flow reached here, we know that we have at least one simpack
+        # in the tree. We're gonna try and select a reasonable one.
+
+        # Let's see what kind of item is currently selected:
         selected_item = self.GetSelection()
-        if not selected_item.Ok():
-            simpack_item, _ = self.GetFirstChild(
-                self.GetFirstChild(self.root_item)[0]
-            )
-            self.SelectItem(simpack_item)
+        
+        if not selected_item.Ok() or \
+                       self.GetItemText(selected_item) == 'All simpack places':
+            # Either nothing is selected or the invisible root item is
+            # selected. Select the first simpack:
+            self._select_first_simpack()
+            
         elif type(self.GetItemPyData(selected_item)) is SimpackPlace:
-            simpack_item, _ = self.GetFirstChild(selected_item)
-            self.SelectItem(simpack_item)
+            # A simpack place is selected.
+             
+            
+            # If it contains simpacks, select the first one:...
+            possible_simpack_item, _ = self.GetFirstChild(selected_item)
+            if possible_simpack_item.Ok():
+                self.SelectItem(possible_simpack_item)
+            else:
+                # ...Otherwise select the first simpack in the tree:
+                self._select_first_simpack()
         else:
             assert type(self.GetItemPyData(selected_item)) is SimpackMetadata
-                    
+            # A simpack is already selected, we don't need to do anything.
+
+            
+    def _select_first_simpack(self):
+        simpack_item = self._get_simpack_items()[0]
+        self.SelectItem(simpack_item)
+                                
         
+    def _get_simpack_items(self):
+        return self.get_children_of_item(self.root_item, generations=2)
+            
+            
     def OnComapreItems(self, item_1, item_2):
         item_1_data = self.GetItemPyData(item_1)
         item_2_data = self.GetItemPyData(item_)
