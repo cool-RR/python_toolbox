@@ -14,9 +14,8 @@ from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
 from .name_display import NameDisplay
 from .technical_details_bar import TechnicalDetailsBar
 from .description_display import DescriptionDisplay
-from .tags_display import TagsDisplay
 from .image_display import ImageDisplay
-
+# blocktodo: if tags end up in html, can probably get rid of one sizer
 
 class SimpackInfoPanel(CutePanel):
     def __init__(self, simpack_selection_dialog):
@@ -61,13 +60,6 @@ class SimpackInfoPanel(CutePanel):
                                  proportion=1,
                                  flag=(wx.EXPAND | wx.RIGHT),
                                  border=2)
-
-        self.tags_display = TagsDisplay(self)
-        self.smaller_v_sizer.Add(self.tags_display,
-                                 proportion=0,
-                                 flag=(wx.EXPAND | wx.RIGHT),
-                                 border=2)
-        
         
         self.image_display = ImageDisplay(self)
         self.small_h_sizer.Add(self.image_display,
@@ -85,6 +77,5 @@ class SimpackInfoPanel(CutePanel):
         self.name_display.refresh()
         self.technical_details_bar.refresh()
         self.description_display.refresh()
-        self.tags_display.refresh()
         self.image_display.refresh()
         self.Layout()

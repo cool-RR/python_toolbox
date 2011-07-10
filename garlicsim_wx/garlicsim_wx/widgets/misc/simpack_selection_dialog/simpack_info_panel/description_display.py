@@ -26,21 +26,48 @@ def get_background_html_color():
     
 # blocktodo: probably need foreground color too
 
+
 @caching.cache()
-def description_to_html(description):
+def tag_to_html(tag):
+    return '''<a href="%s">%s</a>''' % (tag, tag)
+
+@caching.cache()
+def tags_to_html(tags):
+    return '''
+        <table id="tags">
+          <tr>
+            <td>
+              <b>
+                Tags:
+              </b> 
+            </td>
+            <td>
+              %s
+            </td>
+          </tr>
+        </table>
+        <br />
+            ''' % (
+        ', '.join(tag_to_html(tag) for tag in tags),
+                ) if tags else ''
+
+@caching.cache()
+def simpack_metadata_to_html(simpack_metadata):
     return '''
         <html>
           <body bgcolor="%s" color="%s">
-            <font face="Georgia">
+            %s
+            <div id="description">
               %s
-            </font>
+            </div>
           </body>
         </html>
         ''' % \
             (
                 get_background_html_color(),
                 'black',
-                description
+                tags_to_html(simpack_metadata.tags),
+                simpack_metadata.description,
             )
 
 
@@ -60,7 +87,11 @@ class DescriptionDisplay(CuteHtmlWindow):
             self.simpack_info_panel.simpack_selection_dialog.simpack_metadata
         if simpack_metadata is not None:
             self.Show()
-            self.SetPage(description_to_html(simpack_metadata.description))
+            self.SetPage(
+                simpack_metadata_to_html(
+                    simpack_metadata
+                )
+            )
         else: # simpack_metadata is None
             self.Hide()
             
