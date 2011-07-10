@@ -24,23 +24,30 @@ class SimpackInfoPanel(CutePanel):
         CutePanel.__init__(self, simpack_selection_dialog)
         self.set_good_background_color()
         
+        self.sizer = wx.BoxSizer(wx.HORIZONTAL)
+        self.SetSizer(self.sizer)
+        
         self.static_box = wx.StaticBox(self)
-        self.sizer = wx.StaticBoxSizer(self.static_box, wx.VERTICAL)
+        self.static_box_sizer = wx.StaticBoxSizer(self.static_box, wx.VERTICAL)
+        self.sizer.Add(self.static_box_sizer,
+                       proportion=1,
+                       flag=(wx.EXPAND | wx.RIGHT),
+                       border=8)
         
         self.name_display = NameDisplay(self)
-        self.sizer.Add(self.name_display,
+        self.static_box_sizer.Add(self.name_display,
                        proportion=0,
                        flag=(wx.ALIGN_LEFT | wx.BOTTOM),
                        border=2)
         
         self.technical_details_bar = TechnicalDetailsBar(self)
-        self.sizer.Add(self.technical_details_bar,
+        self.static_box_sizer.Add(self.technical_details_bar,
                        proportion=0,
                        flag=(wx.ALIGN_RIGHT | wx.BOTTOM),
                        border=2)
         
         self.small_h_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        self.sizer.Add(self.small_h_sizer,
+        self.static_box_sizer.Add(self.small_h_sizer,
                        proportion=1,
                        flag=(wx.EXPAND))
         
@@ -68,7 +75,6 @@ class SimpackInfoPanel(CutePanel):
                                flag=(wx.EXPAND))
         
         
-        self.SetSizer(self.sizer)
         self.Layout()
         
         self.simpack_selection_dialog.\
