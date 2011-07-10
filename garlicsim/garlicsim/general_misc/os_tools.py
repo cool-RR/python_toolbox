@@ -14,10 +14,13 @@ import os.path
 
 def start_file(path):
     assert os.path.exists(path)
-    if os.name == 'posix':
+    if sys.platform.startswith('linux'):
         subprocess.check_call(['xdg-open', '--', path])
-    elif os.name == 'mac':
+    elif sys.platform == 'darwin':
         subprocess.check_call(['open', '--', path])
-    else:
-        assert os.name == 'nt'
+    elif sys.platform in ('win32', 'cygwin'):
         os.startfile(path)
+    else:
+        raise NotImplementedError(
+            "Your operating system `%s` isn't supported by "
+            "`start_file`." % sys.platform)
