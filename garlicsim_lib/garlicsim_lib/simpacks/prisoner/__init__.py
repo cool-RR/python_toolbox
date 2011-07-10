@@ -13,7 +13,7 @@ points, a.k.a "exploitation".
 
 A `repeated game`_ in Game Theory is when players play the same game repeatedly
 for many rounds. After every round they discover what the other player played
-in that round. A repeated game allows for many interesting phenomenon not seen
+in that round. A repeated game allows for many interesting phenomena not seen
 in one-off games, like players punishing their opponents for playing mean in
 previous rounds.
 
