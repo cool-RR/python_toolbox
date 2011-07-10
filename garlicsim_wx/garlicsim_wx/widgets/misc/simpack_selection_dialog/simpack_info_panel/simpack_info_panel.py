@@ -32,7 +32,7 @@ class SimpackInfoPanel(CutePanel):
         self.sizer.Add(self.static_box_sizer,
                        proportion=1,
                        flag=(wx.EXPAND | wx.RIGHT),
-                       border=8)
+                       border=11)
         
         self.name_display = NameDisplay(self)
         self.static_box_sizer.Add(self.name_display,
