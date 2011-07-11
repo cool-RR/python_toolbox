@@ -10,13 +10,13 @@ The universe of the Game of Life is an infinite two-dimensional grid of square
 cells, each of which may be either dead (white) or alive (black). At each turn
 of the simulation, the following transitions occur:
 
-    - Any live cell with fewer than two live neighbours becomes dead.
+    - Any live cell with fewer than two live neighbors becomes dead.
     
-    - Any live cell with two or three live neighbours continues to be alive.
+    - Any live cell with two or three live neighbors continues to be alive.
     
-    - Any live cell with more than three live neighbours becomes dead.
+    - Any live cell with more than three live neighbors becomes dead.
     
-    - Any dead cell with exactly three live neighbours becomes alive.
+    - Any dead cell with exactly three live neighbors becomes alive.
     
 Out of the simple rules of the Life universe, one can observe `many complex and
 interesting "life forms"`_ emerge.
