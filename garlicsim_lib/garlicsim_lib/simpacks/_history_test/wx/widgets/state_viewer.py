@@ -16,7 +16,7 @@ from garlicsim_wx.widgets.general_misc.cute_window import CuteWindow
 import garlicsim_wx
 
 
-class StateViewer(CuteWindow, garlicsim_wx.widgets.WorkspaceWidget):
+class StateViewer(garlicsim_wx.widgets.WorkspaceWidget, CuteWindow):
     '''Widget for showing a state onscreen.'''
     
     def __init__(self, frame):

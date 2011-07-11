@@ -10,7 +10,9 @@ See its documentation for more information.
 import itertools
 
 import wx
-import wx.lib.scrolledpanel
+
+from garlicsim_wx.widgets.general_misc.cute_scrolled_panel import \
+                                                              CuteScrolledPanel
 
 import garlicsim
 import garlicsim_wx
@@ -18,12 +20,10 @@ from garlicsim.general_misc.infinity import infinity
 from garlicsim_wx.general_misc import wx_tools
 
 
-class StateViewer(wx.lib.scrolledpanel.ScrolledPanel,
-                  garlicsim_wx.widgets.WorkspaceWidget):
+class StateViewer(CuteScrolledPanel, garlicsim_wx.widgets.WorkspaceWidget):
     '''Widget for showing a state of the `queue` simpack.'''
     def __init__(self, frame):
-        wx.lib.scrolledpanel.ScrolledPanel.__init__(self, frame,
-                                                    style=wx.SUNKEN_BORDER)
+        CuteScrolledPanel.__init__(self, frame, style=wx.SUNKEN_BORDER)
         garlicsim_wx.widgets.WorkspaceWidget.__init__(self, frame)
         
         self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)

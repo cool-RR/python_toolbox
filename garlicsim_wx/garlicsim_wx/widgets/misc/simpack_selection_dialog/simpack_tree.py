@@ -328,6 +328,18 @@ class SimpackTree(CuteTreeCtrl):
             self.simpack_selection_dialog.set_simpack_metadata(None)
             
             
+    def _on_tree_item_activated(self, event):
+        item = event.GetItem()
+        data = self.GetItemPyData(item)
+        if isinstance(data, SimpackMetadata):
+            simpack_metadata = data
+            self.simpack_selection_dialog.\
+                                         set_simpack_metadata(simpack_metadata)
+            self.simpack_selection_dialog.simpack = simpack_metadata.\
+                                                               import_simpack()
+            self.simpack_selection_dialog.EndModal(wx.ID_OK)
+        
+            
     def _on_char(self, event):
         # Doesn't work on Mac and Linux; probably the generic tree control
         # swallows keystrokes.

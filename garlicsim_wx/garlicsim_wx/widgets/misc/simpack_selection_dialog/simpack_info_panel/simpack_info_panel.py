@@ -68,9 +68,6 @@ class SimpackInfoPanel(CutePanel):
         
         
         self.Layout()
-        
-        self.simpack_selection_dialog.\
-                      simpack_metadata_changed_emitter.add_output(self.refresh)
          
         
     def refresh(self):

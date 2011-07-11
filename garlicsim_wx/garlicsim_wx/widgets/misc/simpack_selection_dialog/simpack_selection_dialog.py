@@ -60,10 +60,6 @@ class SimpackSelectionDialog(CuteDialog):
         
         self.simpack = None
         
-        self.simpack_metadata_changed_emitter = emitters.Emitter(
-            name='simpack_metadata_changed'
-        )
-        
         with self.freezer:
             self.__init_build()
             
@@ -221,40 +217,7 @@ class SimpackSelectionDialog(CuteDialog):
         )
         
         self.bind_event_handlers(SimpackSelectionDialog)
-        
-        '''
-        
-        self.main_v_sizer = wx.BoxSizer(wx.VERTICAL)
-        
-        self.static_text = wx.StaticText(
-            self,
-            label='Choose a simulation package for your new simulation:'
-        )
-        self.main_v_sizer.Add(self.static_text, 0, wx.EXPAND | wx.ALL, 10)
-        
-        self.list_box = wx.ListBox(self)
-        self.main_v_sizer.Add(self.list_box, 1, wx.EXPAND | wx.ALL, 10)
-        self.list_box.Bind(wx.EVT_LEFT_DCLICK, self.on_ok, self.list_box)
-        
-        
-        
-        self.horizontal_line = wx.StaticLine(self)
-        self.main_v_sizer.Add(self.horizontal_line,
-                              0,
-                              wx.EXPAND | wx.ALL,
-                              10)
-        
-        
-        
-        self.update_simpack_list()
-        if self.list_of_simpacks:
-            self.list_box.Select(0)
-        
-        self.SetSizer(self.main_v_sizer)
-        self.Layout()
-        
-        self.list_box.SetFocus()
-        '''
+
         
     @staticmethod
     def create_show_modal_and_return_simpack(frame):
@@ -269,10 +232,12 @@ class SimpackSelectionDialog(CuteDialog):
         
     def set_simpack_metadata(self, simpack_metadata):
         self.simpack_metadata = simpack_metadata
-        self.simpack_metadata_changed_emitter.emit()
+        self.refresh()
         
     
     def refresh(self):
+        self.create_project_button.Enable(self.simpack_metadata is not None)
+        self.simpack_info_panel.refresh()
         
                 
     

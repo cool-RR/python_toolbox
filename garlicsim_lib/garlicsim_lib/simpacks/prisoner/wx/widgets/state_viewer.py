@@ -12,15 +12,17 @@ import math
 import wx
 import wx.lib.agw.piectrl as piectrl
 
+from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
+
 import garlicsim_wx
 
 from garlicsim_lib.simpacks import prisoner
 
 
-class StateViewer(wx.Panel, garlicsim_wx.widgets.WorkspaceWidget):
+class StateViewer(CutePanel, garlicsim_wx.widgets.WorkspaceWidget):
     '''Widget for viewing a `prisoner` state.'''
     def __init__(self, frame):
-        wx.Panel.__init__(self, frame)
+        CutePanel.__init__(self, frame)
         garlicsim_wx.widgets.WorkspaceWidget.__init__(self, frame)
 
         self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
