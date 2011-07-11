@@ -78,7 +78,7 @@ class DescriptionDisplay(CuteHtmlWindow):
         CuteHtmlWindow.__init__(
             self,
             simpack_info_panel,
-            style=(wx.html.HW_DEFAULT_STYLE)
+            style=(wx.html.HW_DEFAULT_STYLE | wx.SUNKEN_BORDER)
         )
         self.Hide()
         
@@ -87,16 +87,12 @@ class DescriptionDisplay(CuteHtmlWindow):
             self.simpack_info_panel.simpack_selection_dialog.simpack_metadata
         if simpack_metadata is not None:
             self.Show()
-            self.WindowStyle |= wx.SUNKEN_BORDER
-            self.Refresh
             self.SetPage(
                 simpack_metadata_to_html(
                     simpack_metadata
                 )
             )
         else: # simpack_metadata is None
-            self.WindowStyle &= ~wx.SUNKEN_BORDER
-            self.Refresh()
             self.Hide()
             
         
