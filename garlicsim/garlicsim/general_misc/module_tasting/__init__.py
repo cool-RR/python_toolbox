@@ -8,3 +8,4 @@ See its documentation for more information.
 '''
 
 from .module_tasting import taste_module
+from . import tasted_resources
