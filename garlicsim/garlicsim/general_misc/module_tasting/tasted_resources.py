@@ -37,41 +37,41 @@ def get_provider(module_or_name_or_req):
     return adapter(tasted_module)
 
 
-def resource_exists(self, package_or_requirement, resource_name):
+def resource_exists(package_or_requirement, resource_name):
     '''Does the named resource exist?'''
     return get_provider(package_or_requirement).has_resource(resource_name)
 
 
-def resource_isdir(self, package_or_requirement, resource_name):
+def resource_isdir(package_or_requirement, resource_name):
     '''Is the named resource an existing directory?'''
     return get_provider(package_or_requirement).resource_isdir(
-      resource_name
+        resource_name
     )
 
 
-def resource_filename(self, package_or_requirement, resource_name):
+def resource_filename(package_or_requirement, resource_name):
     '''Return a true filesystem path for specified resource.'''
     return get_provider(package_or_requirement).get_resource_filename(
-      self, resource_name
+        pkg_resources._manager, resource_name
     )
 
 
-def resource_stream(self, package_or_requirement, resource_name):
+def resource_stream(package_or_requirement, resource_name):
     '''Return a readable file-like object for specified resource.'''
     return get_provider(package_or_requirement).get_resource_stream(
-      self, resource_name
+        pkg_resources._manager, resource_name
     )
 
 
-def resource_string(self, package_or_requirement, resource_name):
+def resource_string(package_or_requirement, resource_name):
     '''Return specified resource as a string.'''
     return get_provider(package_or_requirement).get_resource_string(
-      self, resource_name
+        pkg_resources._manager, resource_name
     )
 
 
-def resource_listdir(self, package_or_requirement, resource_name):
+def resource_listdir(package_or_requirement, resource_name):
     '''List the contents of the named resource directory.'''
     return get_provider(package_or_requirement).resource_listdir(
-      resource_name
+        resource_name
     )

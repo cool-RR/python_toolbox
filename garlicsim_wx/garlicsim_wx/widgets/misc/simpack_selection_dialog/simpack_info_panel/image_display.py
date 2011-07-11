@@ -46,7 +46,7 @@ class ImageDisplay(CutePanel):
         CutePanel.__init__(self, simpack_info_panel)
         self._bitmap = wx.EmptyBitmap(1, 1)
         #self.BackgroundColour = wx.NamedColour('red')
-        self.bind_event_handlers(BitmapViewer)
+        self.bind_event_handlers(ImageDisplay)
         self.Hide()
         
         

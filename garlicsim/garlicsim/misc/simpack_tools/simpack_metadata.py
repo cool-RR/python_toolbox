@@ -86,7 +86,7 @@ class SimpackMetadata(_SimpackMetadataBase):
             '''Version of the simpack, like '0.5.2'.'''
             
             self.description = self.description
-            '''Extensive description of the simpack in ReSTructuredText #blocktododoc how is it written?.'''
+            '''Extensive description of the simpack in reStructuredText.'''
             
             self.tags = self.tags
             '''List of tags, like `['chemistry', '3d', 'heavy-cpu']`.'''
