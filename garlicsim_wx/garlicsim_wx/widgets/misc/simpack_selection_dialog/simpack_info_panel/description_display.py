@@ -7,8 +7,11 @@ This module defines the `DescriptionDisplay` class.
 See its documentation for more information.
 '''
 
+import re
+
 import docutils.parsers.rst
 import docutils.utils
+import docutils.core
 import wx
 
 from garlicsim.general_misc import caching
@@ -59,9 +62,19 @@ def simpack_metadata_to_html(simpack_metadata):
     #document = docutils.utils.new_document(None)
     #document.settings.tab_width = 4
     #parser.parse(simpack_metadata.description, document)
+    x = docutils.core.publish_parts(simpack_metadata.description,
+                                     writer_name='html')['body']
+    
     
     return '''
         <html>
+          <head>
+            <style type="text/css">
+              a:hover {
+                color: black;
+              }
+            </style>
+          </head>
           <body bgcolor="%s" color="%s">
             %s
             <div id="description">
@@ -74,7 +87,7 @@ def simpack_metadata_to_html(simpack_metadata):
                 get_background_html_color(),
                 'black',
                 tags_to_html(simpack_metadata.tags),
-                simpack_metadata.description,
+                x #simpack_metadata.description,
             )
 
 
