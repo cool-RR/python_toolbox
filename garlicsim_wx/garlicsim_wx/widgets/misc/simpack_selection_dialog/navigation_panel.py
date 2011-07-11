@@ -210,7 +210,7 @@ class NavigationPanel(CutePanel):
             garlicsim_wx.simpack_places.append(SimpackPlace(path, ''))
         if path not in sys.path:
             sys.path.append(path)
-        self.simpack_selection_dialog.refresh()
+        self.simpack_selection_dialog.simpack_tree.reload_tree()
     
     
 

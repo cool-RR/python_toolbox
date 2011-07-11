@@ -67,7 +67,7 @@ class SimpackSelectionDialog(CuteDialog):
         with self.freezer:
             self.__init_build()
             
-            self.simpack_tree.refresh_tree()
+            self.simpack_tree.reload_tree()
             self.simpack_tree.ExpandAll()
             self.simpack_tree.ensure_simpack_selected()
             
@@ -215,9 +215,9 @@ class SimpackSelectionDialog(CuteDialog):
         self.simpack_tree.SetFocus()
         
         #######################################################################
-        self.refresh_hidden_button = CuteHiddenButton(self)
+        self.reload_hidden_button = CuteHiddenButton(self)
         self.add_accelerators(
-            {wx.WXK_F5: self.refresh_hidden_button.Id}
+            {wx.WXK_F5: self.reload_hidden_button.Id}
         )
         
         self.bind_event_handlers(SimpackSelectionDialog)
@@ -267,61 +267,21 @@ class SimpackSelectionDialog(CuteDialog):
             return simpack_selection_dialog.simpack
         
         
-    """
-    def update_simpack_list(self):
-        '''Update the list of available simpacks.'''
-        
-        self.list_of_simpacks = []
-        
-        for path, package_prefix in garlicsim_wx.simpack_places:
-            if path not in sys.path:
-                sys.path.append(path)
-                
-            if package_prefix:
-                assert package_prefix[-1] == '.'
-                package = address_tools.resolve(package_prefix[:-1])
-                path_to_search = path_tools.get_path_of_package(package)
-            else: # not package_prefix
-                path_to_search = path
-                
-            list_of_simpacks_in_simpack_place = [
-                (package_prefix + package_name[1:]) for package_name in
-                package_finder.get_packages(path_to_search, self_in_name=False)
-            ]
-            list_of_simpacks_in_simpack_place.sort(
-                key=comparison_tools.underscore_hating_key
-            )
-            
-            self.list_of_simpacks += list_of_simpacks_in_simpack_place
-            
-        self.list_box.SetItems(self.list_of_simpacks)
-    """    
-
     def set_simpack_metadata(self, simpack_metadata):
         self.simpack_metadata = simpack_metadata
         self.simpack_metadata_changed_emitter.emit()
-    
-    def get_simpack_selection(self):
-        '''Import the selected simpack and return it.'''
-        string = self.list_box.GetStringSelection()
-        result = import_tools.normal_import(string)
-        return result
-    
+        
     
     def refresh(self):
-        self.simpack_tree.refresh_tree()
+        
                 
     
-    def _on_refresh_hidden_button(self, event):
-        wx.lib.dialogs.messageDialog(self, 'Refresh')
-        self.refresh()
+    def _on_reload_hidden_button(self, event):
+        self.simpack_tree.reload_tree()
                 
         
     def _on_create_project_button(self, event):
-        #if self.list_box.GetStringSelection():
-            #self.EndModal(wx.ID_OK)       
-        from garlicsim_lib.simpacks import life as my_simpack
-        self.simpack = my_simpack
+        self.simpack = self.simpack_metadata.import_simpack() 
         self.EndModal(wx.ID_OK)
         
         

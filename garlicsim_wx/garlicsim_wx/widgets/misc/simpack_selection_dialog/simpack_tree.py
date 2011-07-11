@@ -104,7 +104,7 @@ class SimpackTree(CuteTreeCtrl):
         self.SetImageList(self._image_list)
 
     
-    def _refresh_internal_tree(self):
+    def _reload_internal_tree(self):
         
         # Ensuring all simpack place paths are in `sys.path`:
         for simpack_place in garlicsim_wx.simpack_places:
@@ -135,9 +135,9 @@ class SimpackTree(CuteTreeCtrl):
         self._simpack_places_tree = new_simpack_places_tree
             
             
-    def refresh_tree(self):        
+    def reload_tree(self):        
         
-        self._refresh_internal_tree()
+        self._reload_internal_tree()
         
         #######################################################################
         #######################################################################
@@ -259,7 +259,7 @@ class SimpackTree(CuteTreeCtrl):
 
                     
     def refresh_tree_and_ensure_simpack_selected(self):
-        self.refresh_tree()
+        self.reload_tree()
         self.ensure_simpack_selected()
         
         
