@@ -51,7 +51,6 @@ def tags_to_html(tags):
             </td>
           </tr>
         </table>
-        <br />
             ''' % (
         ', '.join(tag_to_html(tag) for tag in tags),
                 ) if tags else ''
