@@ -97,7 +97,7 @@ class DescriptionDisplay(CuteHtmlWindow):
         CuteHtmlWindow.__init__(
             self,
             simpack_info_panel,
-            style=(wx.html.HW_DEFAULT_STYLE | wx.SUNKEN_BORDER)
+            style=(wx.html.HW_DEFAULT_STYLE | wx.SIMPLE_BORDER)
         )
         self.Hide()
         
