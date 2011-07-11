@@ -21,13 +21,12 @@ from garlicsim_wx.general_misc import wx_tools
 
 @caching.cache()
 def get_background_html_color():
-    return wx_tools.colors.wx_color_to_html_color(
-        wx_tools.colors.mix_wx_color(
-            1,#0.8,
+    if wx_tools.is_mac:
+        return '#e0e0e0' # Hard-coded color of Mac static box.
+    else:
+        return wx_tools.colors.wx_color_to_html_color(
             wx_tools.colors.get_background_color(),
-            wx.NamedColour('yellow')
         )
-    )
     
 # blocktodo: probably need foreground color too
 
