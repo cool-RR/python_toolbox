@@ -7,6 +7,8 @@ This module defines the `DescriptionDisplay` class.
 See its documentation for more information.
 '''
 
+import docutils.parsers.rst
+import docutils.utils
 import wx
 
 from garlicsim.general_misc import caching
@@ -53,6 +55,11 @@ def tags_to_html(tags):
 
 @caching.cache()
 def simpack_metadata_to_html(simpack_metadata):
+    #parser = docutils.parsers.rst.Parser()
+    #document = docutils.utils.new_document(None)
+    #document.settings.tab_width = 4
+    #parser.parse(simpack_metadata.description, document)
+    
     return '''
         <html>
           <body bgcolor="%s" color="%s">
