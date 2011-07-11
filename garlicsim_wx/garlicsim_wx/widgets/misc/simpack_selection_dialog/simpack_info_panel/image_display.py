@@ -44,7 +44,8 @@ class ImageDisplay(CutePanel):
     def __init__(self, simpack_info_panel):
         self.simpack_info_panel = simpack_info_panel
         CutePanel.__init__(self, simpack_info_panel)
-        self.set_good_background_color()
+        if wx_tools.is_gtk:
+            self.set_good_background_color()
         self._bitmap = wx.EmptyBitmap(1, 1)
         #self.BackgroundColour = wx.NamedColour('red')
         self.bind_event_handlers(ImageDisplay)

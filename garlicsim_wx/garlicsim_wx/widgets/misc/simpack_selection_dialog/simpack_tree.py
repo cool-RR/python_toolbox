@@ -332,7 +332,6 @@ class SimpackTree(CuteTreeCtrl):
         # Doesn't work on Mac and Linux; probably the generic tree control
         # swallows keystrokes.
         key = wx_tools.keyboard.Key.get_from_key_event(event)
-        print(key.key_code)
         if key.is_alphanumeric():            
             filter_box = self.simpack_selection_dialog.navigation_panel.\
                                                                      filter_box
