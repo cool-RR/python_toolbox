@@ -145,6 +145,10 @@ class NavigationPanel(CutePanel):
                 images_package,
                 'back.png'
             ),
+            bitmap_disabled=wx_tools.bitmap_tools.bitmap_from_pkg_resources(
+                images_package,
+                'back_disabled.png'
+            ),
             tool_tip=(u'Back (%s)' % wx_tools.keyboard.keys.back_key_string),
             help_text=(u'Go to the previously-selected simpack. (%s)' %
                        keys.back_key_string)
@@ -162,6 +166,10 @@ class NavigationPanel(CutePanel):
             bitmap=wx_tools.bitmap_tools.bitmap_from_pkg_resources(
                 images_package,
                 'forward.png'
+            ),
+            bitmap_disabled=wx_tools.bitmap_tools.bitmap_from_pkg_resources(
+                images_package,
+                'forward_disabled.png'
             ),
             tool_tip=(u'Forward (%s)' %
                       wx_tools.keyboard.keys.forward_key_string),
@@ -192,7 +200,8 @@ class NavigationPanel(CutePanel):
             
     def back(self):
         '''Go to the previously-selected simpack.'''
-        assert self._back_queue
+        if not self._back_queue:
+            return
         current_simpack_metadata = \
                                  self.simpack_selection_dialog.simpack_metadata
         if current_simpack_metadata is not None:
@@ -203,7 +212,8 @@ class NavigationPanel(CutePanel):
     
     def forward(self):
         '''Go to the simpack that was selected before we hit "Back".'''
-        assert self._forward_queue
+        if not self._forward_queue:
+            return
         current_simpack_metadata = \
                                  self.simpack_selection_dialog.simpack_metadata
         if current_simpack_metadata is not None:

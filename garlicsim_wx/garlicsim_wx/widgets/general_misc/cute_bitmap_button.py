@@ -17,11 +17,13 @@ class CuteBitmapButton(wx.BitmapButton, CuteButton):
     def __init__(self, parent, id=-1, bitmap=wx.NullBitmap,
                  pos=wx.DefaultPosition, size=wx.DefaultSize,
                  style=wx.BU_AUTODRAW, validator=wx.DefaultValidator,
-                 name=wx.ButtonNameStr, tool_tip=None, help_text=None):
+                 name=wx.ButtonNameStr, bitmap_disabled=None, tool_tip=None,
+                 help_text=None):
         
         wx.BitmapButton.__init__(self, parent=parent, id=id, bitmap=bitmap,
                                  pos=pos, size=size, style=style,
                                  validator=validator, name=name)
-        
+        if bitmap_disabled is not None:
+            self.SetBitmapDisabled = bitmap_disabled
         self.set_tool_tip_and_help_text(tool_tip, help_text)
         

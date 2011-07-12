@@ -320,11 +320,16 @@ class SimpackTree(CuteTreeCtrl):
             filter_box = \
                       self.simpack_selection_dialog.navigation_panel.filter_box
             
-            simpack_item = self._get_simpack_item_deleting_filter_words(new_simpack_metadata, filter_box)
+            simpack_item = self._get_simpack_item_deleting_filter_words(
+                new_simpack_metadata,
+                filter_box
+            )
                             
             self.SelectItem(simpack_item)
 
-    def _get_simpack_item_deleting_filter_words(self, new_simpack_metadata, filter_box):
+    def _get_simpack_item_deleting_filter_words(self,
+                                                new_simpack_metadata,
+                                                filter_box):
         try:
             simpack_item = self._get_simpack_item_of_simpack_metadata(
                 new_simpack_metadata
@@ -339,13 +344,20 @@ class SimpackTree(CuteTreeCtrl):
                 except LookupError:
                     new_filter_words = filter_box.filter_words[:-1]
                     filter_box.Value = ' '.join(new_filter_words)
+                    self.simpack_selection_dialog.refresh()
                 else:
                     break
             else:
-                raise LookupError("Deleted all filter words, but still "
-                                  "can't find the requested simpack "
-                                  "metadata. Perhaps the simpack was "
-                                  "deleted.")
+                try:
+                    simpack_item = \
+                        self._get_simpack_item_of_simpack_metadata(
+                            new_simpack_metadata
+                        )
+                except LookupError:
+                    raise LookupError("Deleted all filter words, but still "
+                                      "can't find the requested simpack "
+                                      "metadata. Perhaps the simpack was "
+                                      "deleted.")
         return simpack_item
 
             
