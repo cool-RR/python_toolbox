@@ -11,6 +11,7 @@ import os
 import sys
 import glob
 import pkgutil
+import collections
 
 import wx
 import wx.lib.dialogs
@@ -55,6 +56,9 @@ class NavigationPanel(CutePanel):
         self.simpack_selection_dialog = simpack_selection_dialog
         assert isinstance(self.simpack_selection_dialog,
                           SimpackSelectionDialog)
+        
+        self._back_queue = collections.deque()
+        self._forward_queue  = collections.deque()
         
         self.SetBackgroundColour(
             self.simpack_selection_dialog.GetBackgroundColour()
@@ -187,14 +191,55 @@ class NavigationPanel(CutePanel):
             
     def back(self):
         '''Go to the previously-selected simpack.'''
-        wx.lib.dialogs.messageDialog(self, 'Back')
+        if not self._back_queue:
+            return
+        current_simpack_metadata = \
+                                 self.simpack_selection_dialog.simpack_metadata
+        if current_simpack_metadata is not None:
+            self._forward_queue.append(current_simpack_metadata)
+        new_simpack_metadata = self._back_queue.pop()
+        self._set_simpack_metadata_ignoring_history(new_simpack_metadata)
     
     
     def forward(self):
         '''Go to the simpack that was selected before we hit "Back".'''
-        wx.lib.dialogs.messageDialog(self, 'Forward')
+        if not self._forward_queue:
+            return
+        current_simpack_metadata = \
+                                 self.simpack_selection_dialog.simpack_metadata
+        if current_simpack_metadata is not None:
+            self._back_queue.append(current_simpack_metadata)
+        new_simpack_metadata = self._forward_queue.pop()
+        self._set_simpack_metadata_ignoring_history(new_simpack_metadata)
+
         
-            
+    def set_simpack_metadata(self, simpack_metadata):
+        self._forward_queue.clear()
+        current_simpack_metadata = \
+                                 self.simpack_selection_dialog.simpack_metadata
+        if simpack_metadata is current_simpack_metadata:
+            return
+        if current_simpack_metadata is not None:
+            self._back_queue.append(current_simpack_metadata)
+                        
+        self._set_simpack_metadata_ignoring_history(simpack_metadata)
+
+        
+    def _set_simpack_metadata_ignoring_history(self, simpack_metadata):
+        if simpack_metadata is current_simpack_metadata:
+            return
+        self.simpack_selection_dialog.simpack_metadata = simpack_metadata
+        self.simpack_selection_dialog.refresh()
+        
+
+    def refresh(self):
+        self.back_button.Enable(bool(self._back_queue))
+        self.forward_button.Enable(bool(self._forward_queue))
+        
+    
+    ### Event handlers: #######################################################
+    #                                                                         #
+        
     def _on_add_simpacks_from_a_different_folder_button(self, event):
         path = CuteDirDialog.create_show_modal_and_get_path(
             self.simpack_selection_dialog,
@@ -212,7 +257,8 @@ class NavigationPanel(CutePanel):
             sys.path.append(path)
         self.simpack_selection_dialog.simpack_tree.reload_tree()
     
-    
+    #                                                                         #
+    ### Finished event handlers. ##############################################
 
 from .simpack_selection_dialog import (SimpackSelectionDialog,
                                        MAC_BOTTOM_SPACING_SIZE)

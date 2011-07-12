@@ -59,6 +59,8 @@ class SimpackSelectionDialog(CuteDialog):
         self.frame = frame
         
         self.simpack = None
+        self.simpack_metadata = None
+        
         
         with self.freezer:
             self.__init_build()
@@ -231,14 +233,13 @@ class SimpackSelectionDialog(CuteDialog):
         
         
     def set_simpack_metadata(self, simpack_metadata):
-        self.simpack_metadata = simpack_metadata
-        self.refresh()
+        self.navigation_panel.set_simpack_metadata(simpack_metadata)
         
     
     def refresh(self):
         self.create_project_button.Enable(self.simpack_metadata is not None)
         self.simpack_info_panel.refresh()
-        
+        self.navigation_panel.refresh()
                 
     
     def _on_reload_hidden_button(self, event):
