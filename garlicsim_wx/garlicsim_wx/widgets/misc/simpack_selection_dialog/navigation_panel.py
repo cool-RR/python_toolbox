@@ -11,6 +11,7 @@ import os
 import sys
 import glob
 import pkgutil
+import itertools
 import collections
 
 import wx
@@ -191,8 +192,7 @@ class NavigationPanel(CutePanel):
             
     def back(self):
         '''Go to the previously-selected simpack.'''
-        if not self._back_queue:
-            return
+        assert self._back_queue
         current_simpack_metadata = \
                                  self.simpack_selection_dialog.simpack_metadata
         if current_simpack_metadata is not None:
@@ -203,8 +203,7 @@ class NavigationPanel(CutePanel):
     
     def forward(self):
         '''Go to the simpack that was selected before we hit "Back".'''
-        if not self._forward_queue:
-            return
+        assert self._forward_queue
         current_simpack_metadata = \
                                  self.simpack_selection_dialog.simpack_metadata
         if current_simpack_metadata is not None:
@@ -214,12 +213,12 @@ class NavigationPanel(CutePanel):
 
         
     def set_simpack_metadata(self, simpack_metadata):
-        current_simpack_metadata = \
-                                 self.simpack_selection_dialog.simpack_metadata
-        if simpack_metadata is current_simpack_metadata:
+        if not self._should_accept_new_simpack_metadata(simpack_metadata):
             return
         
         self._forward_queue.clear()
+        current_simpack_metadata = \
+                                 self.simpack_selection_dialog.simpack_metadata
         if current_simpack_metadata is not None:
             self._back_queue.append(current_simpack_metadata)
                         
@@ -227,12 +226,23 @@ class NavigationPanel(CutePanel):
 
         
     def _set_simpack_metadata_ignoring_history(self, simpack_metadata):
-        current_simpack_metadata = \
-                                 self.simpack_selection_dialog.simpack_metadata
-        if simpack_metadata is current_simpack_metadata:
+        if not self._should_accept_new_simpack_metadata(simpack_metadata):
             return
         self.simpack_selection_dialog.simpack_metadata = simpack_metadata
         self.simpack_selection_dialog.refresh()
+
+        
+    def _should_accept_new_simpack_metadata(self, simpack_metadata):
+        current_simpack_metadata = \
+                                 self.simpack_selection_dialog.simpack_metadata
+        if simpack_metadata is current_simpack_metadata:
+            return False
+        elif (simpack_metadata is not None) and simpack_metadata not in \
+             list(itertools.chain(*self.simpack_selection_dialog.simpack_tree.
+                                  _simpack_places_tree.values())):
+            return False
+        else:
+            return True
         
 
     def refresh(self):

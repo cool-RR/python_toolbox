@@ -66,6 +66,7 @@ class SimpackTree(CuteTreeCtrl):
         self.__init_images()
         
         self._simpack_places_tree = OrderedDict()
+        self._filtered_simpack_places_tree = OrderedDict()
         self._simpack_places_to_items = {}
         self._simpack_places_to_expansion_states = {}
         
@@ -104,7 +105,7 @@ class SimpackTree(CuteTreeCtrl):
         self.SetImageList(self._image_list)
 
     
-    def _reload_internal_tree(self):
+    def _reload_internal_trees(self):
         
         # Ensuring all simpack place paths are in `sys.path`:
         for simpack_place in garlicsim_wx.simpack_places:
@@ -115,29 +116,32 @@ class SimpackTree(CuteTreeCtrl):
                                                         filter_box.filter_words
         
         new_simpack_places_tree = OrderedDict()
+        new_filtered_simpack_places_tree = OrderedDict()
             
         for simpack_place in garlicsim_wx.simpack_places:
             
             simpacks = simpack_place.get_simpack_metadatas()
+            simpacks.sort(key=lambda simpack_metadata: simpack_metadata.name)
+            new_simpack_places_tree[simpack_place] = simpacks
+            
             
             filtered_simpacks = \
                 [simpack_metadata for simpack_metadata in simpacks if
                  simpack_metadata.matches_filter_words(filter_words,
                                                        simpack_place)]
-                
-            filtered_simpacks.sort(key=lambda simpack_metadata:
-                                                         simpack_metadata.name)
             
             if filtered_simpacks or not filter_words or \
                               simpack_place.matches_filter_words(filter_words):
-                new_simpack_places_tree[simpack_place] = filtered_simpacks
+                new_filtered_simpack_places_tree[simpack_place] = \
+                                                              filtered_simpacks
             
         self._simpack_places_tree = new_simpack_places_tree
+        self._filtered_simpack_places_tree = new_filtered_simpack_places_tree
             
             
     def reload_tree(self):        
         
-        self._reload_internal_tree()
+        self._reload_internal_trees()
         
         #######################################################################
         #######################################################################
@@ -149,7 +153,7 @@ class SimpackTree(CuteTreeCtrl):
         simpack_place_items = self.get_children_of_item(self.root_item)
         for simpack_place_item in simpack_place_items:
             simpack_place = self.GetItemPyData(simpack_place_item)
-            if simpack_place not in self._simpack_places_tree:
+            if simpack_place not in self._filtered_simpack_places_tree:
                 self._simpack_places_to_expansion_states[simpack_place] = \
                     self.IsExpanded(simpack_place_item)
                 self.Delete(simpack_place_item)
@@ -163,7 +167,7 @@ class SimpackTree(CuteTreeCtrl):
             [self.GetItemPyData(simpack_place_item) for simpack_place_item
             in simpack_place_items]
         simpack_place_items = self.get_children_of_item(self.root_item)
-        for simpack_place in self._simpack_places_tree:
+        for simpack_place in self._filtered_simpack_places_tree:
             if simpack_place not in simpack_places_that_have_items:
                 # blocktodo: can extract this block into method:
                 new_simpack_place_item = self.AppendItem(
@@ -186,7 +190,8 @@ class SimpackTree(CuteTreeCtrl):
         ### Finished adding new simpack places. ###############################
         
         simpack_place_items = self.get_children_of_item(self.root_item)
-        assert len(simpack_place_items) == len(self._simpack_places_tree)
+        assert len(simpack_place_items) == \
+                                        len(self._filtered_simpack_places_tree)
         
         #                                                                     #
         ### Finished updating simpack places. #################################
@@ -198,11 +203,12 @@ class SimpackTree(CuteTreeCtrl):
         ### Updating simpacks: ################################################
         #                                                                     #
 
-        for simpack_place in self._simpack_places_tree:
+        for simpack_place in self._filtered_simpack_places_tree:
 
             simpack_place_item = self._simpack_places_to_items[simpack_place]
             
-            simpack_metadatas = self._simpack_places_tree[simpack_place]
+            simpack_metadatas = \
+                              self._filtered_simpack_places_tree[simpack_place]
             
             simpack_items = self.get_children_of_item(simpack_place_item)
             simpack_metadatas_that_have_items = \
@@ -248,7 +254,7 @@ class SimpackTree(CuteTreeCtrl):
         # we can't expand a folder before it had items in it.)
         for simpack_place, expansion_state in \
                               self._simpack_places_to_expansion_states.items():
-            if simpack_place in self._simpack_places_tree:
+            if simpack_place in self._filtered_simpack_places_tree:
                 del self._simpack_places_to_expansion_states[simpack_place]
                 simpack_place_item = \
                                    self._simpack_places_to_items[simpack_place]
@@ -265,8 +271,8 @@ class SimpackTree(CuteTreeCtrl):
         
     def ensure_simpack_selected(self):
         
-        if not self._simpack_places_tree or not \
-                                       any(self._simpack_places_tree.values()):
+        if not self._filtered_simpack_places_tree or not \
+                              any(self._filtered_simpack_places_tree.values()):
             # If there are no simpacks, do nothing.
             return
         
@@ -311,10 +317,36 @@ class SimpackTree(CuteTreeCtrl):
         new_simpack_metadata = self.simpack_selection_dialog.simpack_metadata
         if self.GetItemPyData(self.GetSelection()) is not new_simpack_metadata:
             assert new_simpack_metadata is not None
+            filter_box = \
+                      self.simpack_selection_dialog.navigation_panel.filter_box
+            
+            simpack_item = self._get_simpack_item_deleting_filter_words(new_simpack_metadata, filter_box)
+                            
+            self.SelectItem(simpack_item)
+
+    def _get_simpack_item_deleting_filter_words(self, new_simpack_metadata, filter_box):
+        try:
             simpack_item = self._get_simpack_item_of_simpack_metadata(
                 new_simpack_metadata
             )
-        self.SelectItem(simpack_item)
+        except LookupError:
+            while filter_box.filter_words:
+                try: 
+                    simpack_item = \
+                        self._get_simpack_item_of_simpack_metadata(
+                            new_simpack_metadata
+                        )
+                except LookupError:
+                    new_filter_words = filter_box.filter_words[:-1]
+                    filter_box.Value = ' '.join(new_filter_words)
+                else:
+                    break
+            else:
+                raise LookupError("Deleted all filter words, but still "
+                                  "can't find the requested simpack "
+                                  "metadata. Perhaps the simpack was "
+                                  "deleted.")
+        return simpack_item
 
             
     def _get_simpack_item_of_simpack_metadata(self, new_simpack_metadata):
