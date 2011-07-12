@@ -105,8 +105,8 @@ class SimpackPlace(_SimpackPlaceBase):
         ### Finished determining path to search. ##########################
             
         simpack_addresses = [
-            (self.package_prefix + package_name[1:]) for package_name in
-            package_finder.get_module_names(path_to_search, self_in_name=False)
+            (self.package_prefix + module_name[1:]) for module_name in
+            package_finder.get_module_names(path_to_search)
         ]
         
         return map(SimpackMetadata.create_from_address, simpack_addresses)
