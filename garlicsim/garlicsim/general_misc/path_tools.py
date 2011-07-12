@@ -42,10 +42,10 @@ def get_root_path_of_module(module):
     dir_path, file_name = os.path.split(path_of_root_module)
     if '__init__' in file_name:
          # It's a package.
-        result = os.path.normpath(os.path.join(dir_path, '..'))
+        result = os.path.abspath(os.path.join(dir_path, '..'))
     else:
         # It's a one-file module, not a package.
-        result = dir_path
+        result = os.path.abspath(dir_path)
     
     assert result in map(os.path.abspath, sys.path) 
     return result
