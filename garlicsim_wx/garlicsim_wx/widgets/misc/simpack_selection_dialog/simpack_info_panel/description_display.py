@@ -33,7 +33,7 @@ def get_background_html_color():
 
 @caching.cache()
 def tag_to_html(tag):
-    return '''<a href="%s">%s</a>''' % (tag, tag)
+    return '<a href="%s">%s</a>' % (tag, tag)
 
 @caching.cache()
 def tags_to_html(tags):
