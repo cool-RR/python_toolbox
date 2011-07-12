@@ -106,7 +106,7 @@ class SimpackPlace(_SimpackPlaceBase):
             
         simpack_addresses = [
             (self.package_prefix + package_name[1:]) for package_name in
-            package_finder.get_packages(path_to_search, self_in_name=False)
+            package_finder.get_module_names(path_to_search, self_in_name=False)
         ]
         
         return map(SimpackMetadata.create_from_address, simpack_addresses)

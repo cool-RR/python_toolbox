@@ -12,6 +12,7 @@ This module is hacky.
 import glob
 import os
 import types
+import pkgutil
 
 from garlicsim.general_misc import dict_tools
 
@@ -20,7 +21,7 @@ _extensions_by_priority = ['.pyo', '.pyc', '.pyw', '.py']
 '''List of possible extenstions of Python modules, ordered by priority.'''
 
 
-def get_packages(root, include_self=False, recursive=False, self_in_name=True):
+def get_module_names(root_path, include_self=False, recursive=False, self_in_name=True):
     '''
     Find all sub-packages.
     
@@ -28,13 +29,13 @@ def get_packages(root, include_self=False, recursive=False, self_in_name=True):
     # todo: module? really?
     '''
     
-    if isinstance(root, types.ModuleType):
-        root_module = root
+    if isinstance(root_path, types.ModuleType):
+        root_module = root_path
         root_path = os.path.dirname(root_module.__file__)
     else:
-        assert isinstance(root, basestring)
-        root_path = os.path.abspath(root)
-        # Not making root_module, it might not be imported.
+        assert isinstance(root_path, basestring)
+        root_path = os.path.abspath(root_path)
+        # Not making `root_module`, it might not be imported.
     
     root_module_name = os.path.split(root_path)[1]
 
@@ -50,7 +51,7 @@ def get_packages(root, include_self=False, recursive=False, self_in_name=True):
         if is_package(full_path):
             if recursive:
                 result += ['.' + thing for thing in 
-                           get_packages(full_path, include_self=True,
+                           get_module_names(full_path, include_self=True,
                                         recursive=True)]
             else:
                 result.append('.' + entry)
