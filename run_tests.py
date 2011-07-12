@@ -448,7 +448,7 @@ if __name__ == '__main__':
         #######################################################################
         # This is the heavy line, which actually causes Nose to start running
         # tests:
-        import garlicsim_wx; garlicsim_wx.start(); #blocktodo kill this
+        # import garlicsim_wx; garlicsim_wx.start(); #blocktodo kill this
         TestProgram(argv=argv)
         #######################################################################
     
