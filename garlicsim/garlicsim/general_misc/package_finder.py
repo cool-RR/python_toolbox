@@ -4,7 +4,7 @@
 '''
 Defines functions related to finding Python packages.
 
-See documentation of get_packages for more info.
+See documentation of `get_module_names` for more info.
 
 This module is hacky.
 '''
@@ -21,45 +21,21 @@ _extensions_by_priority = ['.pyo', '.pyc', '.pyw', '.py']
 '''List of possible extenstions of Python modules, ordered by priority.'''
 
 
-def get_module_names(root_path, include_self=False, recursive=False, self_in_name=True):
+def get_module_names(root_path):
     '''
-    Find all sub-packages.
+    Find names of all modules in a path.
     
-    `root` may be a module, package, or a path.
-    # todo: module? really?
+    Supports zip-imported modules.
     '''
     
-    if isinstance(root_path, types.ModuleType):
-        root_module = root_path
-        root_path = os.path.dirname(root_module.__file__)
-    else:
-        assert isinstance(root_path, basestring)
-        root_path = os.path.abspath(root_path)
-        # Not making `root_module`, it might not be imported.
-    
-    root_module_name = os.path.split(root_path)[1]
-
-    ######################################################
+    assert isinstance(root_path, basestring)
     
     result = []
     
-    if include_self:
-        result.append('')
-        
-    for entry in os.listdir(root_path):
-        full_path = os.path.join(root_path, entry)
-        if is_package(full_path):
-            if recursive:
-                result += ['.' + thing for thing in 
-                           get_module_names(full_path, include_self=True,
-                                        recursive=True)]
-            else:
-                result.append('.' + entry)
-    
-    if self_in_name:
-        return [(root_module_name + thing) for thing in result]
-    else:
-        return result
+    for _, module_name, _ in pkgutil.iter_modules([root_path]):
+        result.append('.' + module_name)
+                
+    return result
     
 
 def get_packages_and_modules_filenames(root, recursive=False):
