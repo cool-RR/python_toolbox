@@ -315,7 +315,8 @@ class SimpackTree(CuteTreeCtrl):
     
     def refresh(self):
         new_simpack_metadata = self.simpack_selection_dialog.simpack_metadata
-        if self.GetItemPyData(self.GetSelection()) is not new_simpack_metadata:
+        if (new_simpack_metadata is not None) and (self.GetItemPyData(self.
+            GetSelection()) is not new_simpack_metadata):
             assert new_simpack_metadata is not None
             filter_box = \
                       self.simpack_selection_dialog.navigation_panel.filter_box

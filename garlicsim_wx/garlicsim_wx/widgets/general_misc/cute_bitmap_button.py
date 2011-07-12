@@ -24,6 +24,6 @@ class CuteBitmapButton(wx.BitmapButton, CuteButton):
                                  pos=pos, size=size, style=style,
                                  validator=validator, name=name)
         if bitmap_disabled is not None:
-            self.SetBitmapDisabled = bitmap_disabled
+            self.SetBitmapDisabled(bitmap_disabled)
         self.set_tool_tip_and_help_text(tool_tip, help_text)
         
