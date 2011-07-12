@@ -214,11 +214,12 @@ class NavigationPanel(CutePanel):
 
         
     def set_simpack_metadata(self, simpack_metadata):
-        self._forward_queue.clear()
         current_simpack_metadata = \
                                  self.simpack_selection_dialog.simpack_metadata
         if simpack_metadata is current_simpack_metadata:
             return
+        
+        self._forward_queue.clear()
         if current_simpack_metadata is not None:
             self._back_queue.append(current_simpack_metadata)
                         
@@ -226,6 +227,8 @@ class NavigationPanel(CutePanel):
 
         
     def _set_simpack_metadata_ignoring_history(self, simpack_metadata):
+        current_simpack_metadata = \
+                                 self.simpack_selection_dialog.simpack_metadata
         if simpack_metadata is current_simpack_metadata:
             return
         self.simpack_selection_dialog.simpack_metadata = simpack_metadata

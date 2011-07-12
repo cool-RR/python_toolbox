@@ -305,6 +305,31 @@ class SimpackTree(CuteTreeCtrl):
         
     def _get_simpack_items(self):
         return self.get_children_of_item(self.root_item, generations=2)
+    
+    
+    def refresh(self):
+        new_simpack_metadata = self.simpack_selection_dialog.simpack_metadata
+        if self.GetItemPyData(self.GetSelection()) is not new_simpack_metadata:
+            assert new_simpack_metadata is not None
+            simpack_item = self._get_simpack_item_of_simpack_metadata(
+                new_simpack_metadata
+            )
+        self.SelectItem(simpack_item)
+
+            
+    def _get_simpack_item_of_simpack_metadata(self, new_simpack_metadata):
+        simpack_items = self._get_simpack_items()
+        matching_simpack_items = \
+            [simpack_item for simpack_item in simpack_items if
+             self.GetItemPyData(simpack_item) is new_simpack_metadata]
+        assert len(matching_simpack_items) in (0, 1)
+        if matching_simpack_items:
+            (matching_simpack_item,) = matching_simpack_items
+            return matching_simpack_item
+        else:
+            raise LookupError("The given `simpack_metadata` has no "
+                              "corresponding item in the tree; possibly it's "
+                              "been filtered out using the filter box.")
             
             
     def OnComapreItems(self, item_1, item_2):
