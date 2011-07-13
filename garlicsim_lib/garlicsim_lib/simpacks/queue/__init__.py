@@ -9,7 +9,7 @@ These can be shoppers waiting in line for a cashier in a supermarket, or
 product components waiting in a complex queue to be processed by different
 machines in a factory. Queueing Theory has applications in diverse fields,
 including telecommunications, traffic engineering, computing and the design of
-factories, shops, offices and hospitals.
+factories, offices and hospitals.
 
 In this simple simpack, clients from an infinite population arrive at a
 facility and wait to be serviced by a bunch of servers. They wait in a single
@@ -28,4 +28,4 @@ from .state import State
 
 name = 'Queueing Theory'
 
-tags = ('queueing-theory',)
+tags = ('queueing-theory', 'poisson-distribution')
