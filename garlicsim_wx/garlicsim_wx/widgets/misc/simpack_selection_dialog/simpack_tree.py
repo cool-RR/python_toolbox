@@ -263,12 +263,7 @@ class SimpackTree(CuteTreeCtrl):
                 else: # expansion_state is False
                     self.Collapse(simpack_place_item)
 
-                    
-    def refresh_tree_and_ensure_simpack_selected(self):
-        self.reload_tree()
-        self.ensure_simpack_selected()
-        
-        
+                            
     def ensure_simpack_selected(self):
         
         if not self._filtered_simpack_places_tree or not \
@@ -313,7 +308,7 @@ class SimpackTree(CuteTreeCtrl):
         return self.get_children_of_item(self.root_item, generations=2)
     
     
-    def refresh(self):
+    def refresh(self, ensure_simpack_selected=False):
         new_simpack_metadata = self.simpack_selection_dialog.simpack_metadata
         
         selected_item = self.GetSelection()
@@ -326,6 +321,9 @@ class SimpackTree(CuteTreeCtrl):
             )
                             
             self.SelectItem(simpack_item)
+        
+        if ensure_simpack_selected:
+            self.ensure_simpack_selected()
 
             
     def _get_simpack_item_deleting_filter_words(self, new_simpack_metadata):

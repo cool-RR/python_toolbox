@@ -8,6 +8,7 @@ See its documentation for more information.
 '''
 
 import re
+import urlparse
 
 import docutils.parsers.rst
 import docutils.utils
@@ -56,23 +57,9 @@ def tags_to_html(tags):
 
 @caching.cache()
 def simpack_metadata_to_html(simpack_metadata):
-    #parser = docutils.parsers.rst.Parser()
-    #document = docutils.utils.new_document(None)
-    #document.settings.tab_width = 4
-    #parser.parse(simpack_metadata.description, document)
-    x = docutils.core.publish_parts(simpack_metadata.description,
-                                     writer_name='html')['body']
-    
-    
+    parsed_rst = docutils.core.publish_parts(simpack_metadata.description,
+                                             writer_name='html')['body']
     return '''
-        <html>
-          <head>
-            <style type="text/css">
-              a:hover {
-                color: black;
-              }
-            </style>
-          </head>
           <body bgcolor="%s" color="%s">
             %s
             <div id="description">
@@ -85,7 +72,7 @@ def simpack_metadata_to_html(simpack_metadata):
                 get_background_html_color(),
                 'black',
                 tags_to_html(simpack_metadata.tags),
-                x #simpack_metadata.description,
+                parsed_rst
             )
 
 
@@ -100,6 +87,8 @@ class DescriptionDisplay(CuteHtmlWindow):
         )
         self.HelpText = 'A description of the currently-selected simpack.'
         self.Hide()
+        self.bind_event_handlers(DescriptionDisplay)
+        
         
     def refresh(self):
         simpack_metadata = \
@@ -115,3 +104,18 @@ class DescriptionDisplay(CuteHtmlWindow):
             self.Hide()
             
         
+    def _on_html_link_clicked(self, event):
+        target = event.GetLinkInfo().GetHref()        
+        parsed_target = urlparse.urlparse(target)
+        if not parsed_target.scheme: # Link to tag
+            simpack_selection_dialog = \
+                               self.simpack_info_panel.simpack_selection_dialog
+            filter_box = simpack_selection_dialog.navigation_panel.filter_box
+            filter_box.SetFocus()
+            filter_box.Value = target
+            simpack_selection_dialog.simpack_tree.SetFocus()
+            simpack_selection_dialog.refresh()
+            
+        else: # Link to web address, let parent widget open in browser:
+            event.Skip()
+            

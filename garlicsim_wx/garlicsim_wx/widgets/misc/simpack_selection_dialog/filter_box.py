@@ -30,11 +30,6 @@ class FilterBox(wx.SearchCtrl, CuteControl):
         self.SetDescriptiveText('')
         self.SetHelpText(filter_help_text)
         self.filter_words = ''
-        self.filter_words_changed_emitter = emitters.Emitter(
-            outputs=(self.navigation_panel.simpack_selection_dialog.\
-                     simpack_tree.refresh_tree_and_ensure_simpack_selected,),
-            name='filter_words_changed',
-        )
         self.bind_event_handlers(FilterBox)
 
             
@@ -42,7 +37,9 @@ class FilterBox(wx.SearchCtrl, CuteControl):
         new_filter_words = self.Value.split()
         if new_filter_words != self.filter_words:
             self.filter_words = new_filter_words
-            self.filter_words_changed_emitter.emit()
+            self.navigation_panel.simpack_selection_dialog.refresh(
+                ensure_simpack_selected=True
+            )
         
             
     def _on_text_enter(self, event):
@@ -53,5 +50,7 @@ class FilterBox(wx.SearchCtrl, CuteControl):
     
     def _on_searchctrl_cancel_btn(self, event):
         self.Value = ''
-        self.filter_words_changed_emitter.emit()
+        self.navigation_panel.simpack_selection_dialog.refresh(
+            ensure_simpack_selected=True
+        )
     
