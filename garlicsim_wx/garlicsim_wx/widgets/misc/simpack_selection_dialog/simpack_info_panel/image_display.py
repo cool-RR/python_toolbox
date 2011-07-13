@@ -46,6 +46,7 @@ class ImageDisplay(CutePanel):
     def __init__(self, simpack_info_panel):
         self.simpack_info_panel = simpack_info_panel
         CutePanel.__init__(self, simpack_info_panel)
+        self.HelpText = 'A preview image of the currently-selected simpack.'
         if wx_tools.is_gtk:
             self.set_good_background_color()
         self._bitmap = wx.EmptyBitmap(1, 1)

@@ -22,6 +22,8 @@ class SimpackInfoPanel(CutePanel):
         self.simpack_selection_dialog = simpack_selection_dialog
         CutePanel.__init__(self, simpack_selection_dialog)
         self.set_good_background_color()
+        self.HelpText = ('This panel shows information about the '
+                         'currently-selected simpack.')
         
         self.sizer = wx.BoxSizer(wx.HORIZONTAL)
         self.SetSizer(self.sizer)

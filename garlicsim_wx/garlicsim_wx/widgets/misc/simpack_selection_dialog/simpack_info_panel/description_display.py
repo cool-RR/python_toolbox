@@ -98,6 +98,7 @@ class DescriptionDisplay(CuteHtmlWindow):
             simpack_info_panel,
             style=(wx.html.HW_DEFAULT_STYLE)
         )
+        self.HelpText = 'A description of the currently-selected simpack.'
         self.Hide()
         
     def refresh(self):
