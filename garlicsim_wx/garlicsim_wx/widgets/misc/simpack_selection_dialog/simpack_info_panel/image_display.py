@@ -7,6 +7,8 @@ This module defines the `ImageDisplay` class.
 See its documentation for more information.
 '''
 
+from __future__ import division
+
 import wx
 
 from garlicsim.general_misc import caching
@@ -71,5 +73,10 @@ class ImageDisplay(CutePanel):
         
     def _on_paint(self, event):
         dc = wx.PaintDC(self)
+        
         if self._bitmap:
-            dc.DrawBitmap(self._bitmap, 0, 0)
+            width, height = self.ClientSize
+            bitmap_width, bitmap_height = self._bitmap.Size
+            origin_x = (width - bitmap_width) / 2
+            origin_y = (height- bitmap_height) / 2
+            dc.DrawBitmap(self._bitmap, origin_x, origin_y)

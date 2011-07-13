@@ -247,6 +247,11 @@ class SimpackSelectionDialog(CuteDialog):
         self.simpack_tree.refresh()
         self.simpack_info_panel.refresh()
         self.navigation_panel.refresh()
+        
+        
+    def EndModal(self, retCode):
+        self.reload_timer.Stop()
+        return CuteDialog.EndModal(self, retCode)
                 
 
     def _on_reload_timer(self, event):
