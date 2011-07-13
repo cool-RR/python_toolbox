@@ -74,6 +74,7 @@ class ImageDisplay(CutePanel):
         
     def _ensure_correct_border(self):
         #blocktodo: unneeded?
+        return
         if self._bitmap is not None:
             needed_border = wx.SIMPLE_BORDER 
             unneeded_border = wx.NO_BORDER
@@ -92,8 +93,15 @@ class ImageDisplay(CutePanel):
         dc = wx.PaintDC(self)
         
         if self._bitmap:
-            width, height = self.ClientSize
+            client_width, client_height = self.ClientSize
+            client_origin_x, client_origin_y = self.ClientAreaOrigin
+            
             bitmap_width, bitmap_height = self._bitmap.Size
-            origin_x = (width - bitmap_width) / 2
-            origin_y = (height- bitmap_height) / 2
-            dc.DrawBitmap(self._bitmap, origin_x, origin_y)
+            bitmap_origin_x = (client_width - bitmap_width) / 2
+            bitmap_origin_y = (client_height- bitmap_height) / 2
+            dc.DrawBitmap(self._bitmap, bitmap_origin_x, bitmap_origin_y)
+            
+            dc.SetPen(wx.Pen(wx.NamedColour('black')))
+            dc.SetBrush(wx.TRANSPARENT_BRUSH)
+            dc.DrawRectangle(client_origin_x, client_origin_y,
+                             client_width, client_height)
