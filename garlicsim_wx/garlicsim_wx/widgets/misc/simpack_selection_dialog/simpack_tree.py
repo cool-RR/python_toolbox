@@ -315,22 +315,22 @@ class SimpackTree(CuteTreeCtrl):
     
     def refresh(self):
         new_simpack_metadata = self.simpack_selection_dialog.simpack_metadata
-        if (new_simpack_metadata is not None) and (self.GetItemPyData(self.
-            GetSelection()) is not new_simpack_metadata):
-            assert new_simpack_metadata is not None
-            filter_box = \
-                      self.simpack_selection_dialog.navigation_panel.filter_box
+        
+        selected_item = self.GetSelection()
+        if (new_simpack_metadata is not None) and \
+           ((not selected_item.IsOk()) or
+           (self.GetItemPyData(selected_item) is not new_simpack_metadata)):
             
             simpack_item = self._get_simpack_item_deleting_filter_words(
                 new_simpack_metadata,
-                filter_box
             )
                             
             self.SelectItem(simpack_item)
 
-    def _get_simpack_item_deleting_filter_words(self,
-                                                new_simpack_metadata,
-                                                filter_box):
+            
+    def _get_simpack_item_deleting_filter_words(self, new_simpack_metadata):
+        
+        filter_box = self.simpack_selection_dialog.navigation_panel.filter_box
         try:
             simpack_item = self._get_simpack_item_of_simpack_metadata(
                 new_simpack_metadata

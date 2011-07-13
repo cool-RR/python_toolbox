@@ -21,6 +21,7 @@ import pkg_resources
 from garlicsim.general_misc.comparison_tools import underscore_hating_key
 from garlicsim.general_misc import address_tools
 from garlicsim.general_misc import path_tools
+from garlicsim.general_misc import sequence_tools
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import package_finder
 from garlicsim_wx.general_misc import wx_tools
@@ -206,9 +207,15 @@ class NavigationPanel(CutePanel):
                                  self.simpack_selection_dialog.simpack_metadata
         if current_simpack_metadata is not None:
             self._forward_queue.append(current_simpack_metadata)
-        new_simpack_metadata = self._back_queue.pop()
-        
-        self._set_simpack_metadata_ignoring_history(new_simpack_metadata)
+        try:
+            new_simpack_metadata = sequence_tools.pop_until(
+                self._back_queue,
+                self._should_accept_new_simpack_metadata
+            )
+        except IndexError:
+            pass
+        else:
+            self._set_simpack_metadata_ignoring_history(new_simpack_metadata)
     
     
     def forward(self):
@@ -219,8 +226,15 @@ class NavigationPanel(CutePanel):
                                  self.simpack_selection_dialog.simpack_metadata
         if current_simpack_metadata is not None:
             self._back_queue.append(current_simpack_metadata)
-        new_simpack_metadata = self._forward_queue.pop()
-        self._set_simpack_metadata_ignoring_history(new_simpack_metadata)
+        try:
+            new_simpack_metadata = sequence_tools.pop_until(
+                self._forward_queue,
+                self._should_accept_new_simpack_metadata
+            )
+        except IndexError:
+            pass
+        else:
+            self._set_simpack_metadata_ignoring_history(new_simpack_metadata)
 
         
     def set_simpack_metadata(self, simpack_metadata):
