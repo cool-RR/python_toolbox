@@ -4,7 +4,7 @@
 # Actually, even if you don't fill it in, your simulation will run in
 # `garlicsim_wx`-- Just not very prettily.
 #
-# To make your simulation be prettier, you should start with filling in a state
+# To make your simulation prettier, you should start with filling in a state
 # viewer. That's in the `wx/widgets/state_viewer.py` module. You may also make
 # a state creation dialog, in `wx/widgets/state_creation_dialog`.
 #

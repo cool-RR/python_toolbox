@@ -20,14 +20,17 @@ class DefaultStateCreationDialog(StateCreationDialog):
     '''
     def __init__(self, frame):
    
-        StateCreationDialog.__init__(self, frame, title='Creating a root state')
+        StateCreationDialog.__init__(self,
+                                     frame,
+                                     title='Creating a root state')
         
         self.frame = frame
         self.simpack = frame.gui_project.simpack
         State = self.simpack.State
 
         vbox = wx.BoxSizer(wx.VERTICAL)
-        self.messy_check_box = messy_check_box = wx.CheckBox(self, -1, '&Messy')
+        self.messy_check_box = messy_check_box = \
+                                                wx.CheckBox(self, -1, '&Messy')
         messy_help_text = ('Create a messy chaotic state with lots of '
                            'interesting features. Useful for test-driving the '
                            'simpack.')
