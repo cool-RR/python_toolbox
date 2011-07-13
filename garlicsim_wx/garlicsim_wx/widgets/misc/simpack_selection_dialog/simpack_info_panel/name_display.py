@@ -18,6 +18,7 @@ class NameDisplay(CuteStaticText):
         ''' '''
         self.simpack_info_panel = simpack_info_panel
         CuteStaticText.__init__(self, simpack_info_panel)
+        self.HelpText = "The currently-selected simpack's name."
         self.SetFont(wx.Font(24, wx.NORMAL, wx.NORMAL, wx.NORMAL))
         
     def refresh(self):
