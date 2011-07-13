@@ -168,4 +168,3 @@ def izip_longest(*iterables, **kwargs):
             yield tuple_
     except IndexError:
         raise StopIteration
-    

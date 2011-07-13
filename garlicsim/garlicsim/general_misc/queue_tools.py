@@ -83,7 +83,7 @@ def queue_as_list(queue):
     '''
     with queue.mutex:
         return list(queue.queue)
-    
+
 
 @caching.cache()
 def _platform_supports_multiprocessing_qsize():

@@ -233,7 +233,19 @@ def to_tuple(single_or_sequence, item_type=None, item_test=None):
             return (single_or_sequence,)
         else:
             return tuple(single_or_sequence)
+    
         
+def pop_until(sequence, condition=None):
+    '''
+    Propagates whatever error is raised on popping the sequence.
+    '''
+    condition = condition or bool
+    while True:
+        item = sequence.pop()
+        if condition(item):
+            return item
+        
+    
     
 ### Not using now, might want in future:
 

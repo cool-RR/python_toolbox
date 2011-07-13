@@ -207,6 +207,7 @@ class NavigationPanel(CutePanel):
         if current_simpack_metadata is not None:
             self._forward_queue.append(current_simpack_metadata)
         new_simpack_metadata = self._back_queue.pop()
+        
         self._set_simpack_metadata_ignoring_history(new_simpack_metadata)
     
     

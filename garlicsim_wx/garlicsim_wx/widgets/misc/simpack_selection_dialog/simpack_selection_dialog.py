@@ -213,8 +213,6 @@ class SimpackSelectionDialog(CuteDialog):
         self.Layout()
         self.simpack_tree.SetFocus()
         
-        #######################################################################
-        
         ### Setting reload triggers (button, hotkey and timer): ###############
         #                                                                     #
         self.reload_hidden_button = CuteHiddenButton(self)
