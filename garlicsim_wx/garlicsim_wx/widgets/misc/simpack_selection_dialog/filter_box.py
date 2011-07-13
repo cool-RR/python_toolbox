@@ -29,17 +29,18 @@ class FilterBox(wx.SearchCtrl, CuteControl):
         self.ShowCancelButton(True)
         self.SetDescriptiveText('')
         self.SetHelpText(filter_help_text)
-        self.filter_words = ''
         self.bind_event_handlers(FilterBox)
 
+    
+    filter_words = property(
+        lambda self: self.Value.split()
+    )
             
+    
     def _on_text(self, event):
-        new_filter_words = self.Value.split()
-        if new_filter_words != self.filter_words:
-            self.filter_words = new_filter_words
-            self.navigation_panel.simpack_selection_dialog.refresh(
-                ensure_simpack_selected=True
-            )
+        self.navigation_panel.simpack_selection_dialog.refresh(
+            ensure_simpack_selected=True
+        )
         
             
     def _on_text_enter(self, event):
