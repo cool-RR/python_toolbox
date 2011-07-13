@@ -39,4 +39,4 @@ from .base_player import BasePlayer
 
 name = "Prisoner's Dilemma"
 
-tags = ('game-theory', "prisoner's-dilemma")
+tags = ('game-theory', "prisoner's-dilemma", 'repeated-game')
