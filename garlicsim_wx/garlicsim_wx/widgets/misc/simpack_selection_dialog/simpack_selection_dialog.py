@@ -244,7 +244,9 @@ class SimpackSelectionDialog(CuteDialog):
     
     def refresh(self, ensure_simpack_selected=False):
         self.create_project_button.Enable(self.simpack_metadata is not None)
-        self.simpack_tree.refresh(ensure_simpack_selected)
+        self.simpack_tree.reload_tree(
+            ensure_simpack_selected=ensure_simpack_selected
+        )
         self.simpack_info_panel.refresh()
         self.navigation_panel.refresh()
         
