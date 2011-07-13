@@ -147,3 +147,11 @@ class SimpackMetadata(_SimpackMetadataBase):
                    (lower_word in simpack_place._text_to_search)
         else:
             return (lower_word in self._text_to_search)
+        
+    
+    @caching.CachedProperty
+    def contains_source_files(self):
+        return module_tasting.tasted_resources.resource_exists(
+            self._tasted_simpack,
+            '__sinit__.py'
+        )

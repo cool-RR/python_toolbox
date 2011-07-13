@@ -12,27 +12,30 @@ import os.path
 import wx
 
 from garlicsim.general_misc import os_tools
+from garlicsim.general_misc import sys_tools
 from garlicsim_wx.general_misc import wx_tools
-from garlicsim_wx.widgets.general_misc.cute_hyperlink_ctrl \
-                                                       import CuteHyperlinkCtrl
+from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
+
+from .inner_code_link import InnerCodeLink
+from .code_unavailable_notice import CodeUnavailableNotice
 
 
-class CodeLink(CuteHyperlinkCtrl):
+class CodeLink(CutePanel):
     
     def __init__(self, technical_details_bar):
         ''' '''
         self.technical_details_bar = technical_details_bar
-        CuteHyperlinkCtrl.__init__(self, technical_details_bar,
-                                   label='Show code')
-        self.HelpText = ("Click to open the folder with currently-selected "
-                         "simpack's code.")
+        CutePanel.__init__(self, technical_details_bar)
         if wx_tools.is_gtk:
             self.BackgroundColour = self.Parent.BackgroundColour
-        #self.ForegroundColour = wx_tools.colors.mix_wx_color(
-            #0.333,
-            #self.ForegroundColour,
-            #self.BackgroundColour
-        #)
+        self.sizer = wx.BoxSizer(wx.HORIZONTAL)
+
+        self.inner_code_link = InnerCodeLink(self)
+        self.sizer.Add(self.inner_code_link)
+
+        self.code_unavailable_notice = CodeUnavailableNotice(self)
+        self.sizer.Add(self.code_unavailable_notice)
+        
         self.bind_event_handlers(CodeLink)
         self.Hide()
         
@@ -41,6 +44,12 @@ class CodeLink(CuteHyperlinkCtrl):
         simpack_metadata = self.technical_details_bar.simpack_info_panel.\
                                       simpack_selection_dialog.simpack_metadata
         self.Show(simpack_metadata is not None)
+        if simpack_metadata.contains_source_files:
+            self.inner_code_link.Show()
+            self.code_unavailable_notice.Hide()
+        else: # not simpack_metadata.contains_source_files
+            self.inner_code_link.Hide()
+            self.code_unavailable_notice.Show()
         
         
     def _on_hyperlink(self, event):
