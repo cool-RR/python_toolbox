@@ -59,6 +59,7 @@ class ImageDisplay(CutePanel):
             self.simpack_info_panel.simpack_selection_dialog.simpack_metadata
         if simpack_metadata is not None:
             self._bitmap = get_simpack_bitmap(simpack_metadata)
+            self._ensure_correct_border()
             self.Show()
             self.Layout()
             self.Refresh()
@@ -69,7 +70,23 @@ class ImageDisplay(CutePanel):
     def _on_set_focus(self, event):
         event.Skip()
         self.Navigate()
-
+        
+        
+    def _ensure_correct_border(self):
+        #blocktodo: unneeded?
+        if self._bitmap is not None:
+            needed_border = wx.SIMPLE_BORDER 
+            unneeded_border = wx.NO_BORDER
+        else: # self._bitmap is None
+            needed_border = wx.NO_BORDER
+            unneeded_border = wx.SIMPLE_BORDER
+        
+        existing_window_style = self.WindowStyle
+        new_style = (existing_window_style & ~unneeded_border) | needed_border
+        if existing_window_style != new_style:
+            self.WindowStyle = new_style
+            self.Refresh()
+        
         
     def _on_paint(self, event):
         dc = wx.PaintDC(self)
