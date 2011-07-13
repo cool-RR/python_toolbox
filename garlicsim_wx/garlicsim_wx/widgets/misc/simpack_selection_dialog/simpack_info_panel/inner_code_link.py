@@ -23,8 +23,7 @@ class InnerCodeLink(CuteHyperlinkCtrl):
     def __init__(self, code_link):
         ''' '''
         self.code_link = code_link
-        CuteHyperlinkCtrl.__init__(self, technical_details_bar,
-                                   label='Show code')
+        CuteHyperlinkCtrl.__init__(self, code_link, label='Show code')
         self.HelpText = ("Click to open the folder with currently-selected "
                          "simpack's code.")
         if wx_tools.is_gtk:

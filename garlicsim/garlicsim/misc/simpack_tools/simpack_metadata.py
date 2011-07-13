@@ -153,5 +153,5 @@ class SimpackMetadata(_SimpackMetadataBase):
     def contains_source_files(self):
         return module_tasting.tasted_resources.resource_exists(
             self._tasted_simpack,
-            '__sinit__.py'
+            '__init__.py'
         )
