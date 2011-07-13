@@ -114,7 +114,9 @@ class DescriptionDisplay(CuteHtmlWindow):
             filter_box.SetFocus()
             filter_box.Value = target
             simpack_selection_dialog.simpack_tree.SetFocus()
-            simpack_selection_dialog.refresh(ensure_simpack_selected=True)
+            simpack_selection_dialog.simpack_tree.reload_tree(
+                ensure_simpack_selected=True
+            )
             
         else: # Link to web address, let parent widget open in browser:
             event.Skip()

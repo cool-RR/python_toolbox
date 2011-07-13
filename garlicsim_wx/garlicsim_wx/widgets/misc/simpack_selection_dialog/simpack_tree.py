@@ -217,10 +217,12 @@ class SimpackTree(CuteTreeCtrl):
             
             ### Removing deleted simpacks: ####################################
             #                                                                 #
-            for simpack_item in simpack_items:
-                simpack_metadata = self.GetItemPyData(simpack_item)
-                if simpack_metadata not in simpack_metadatas:
-                    self.Delete(simpack_item)
+            simpack_items_to_delete = \
+                [simpack_item for simpack_item in simpack_items if
+                 self.GetItemPyData(simpack_item) not in simpack_metadatas]
+            
+            for simpack_item in simpack_items_to_delete:
+                self.Delete(simpack_item)
             #                                                                 #
             ### Finished removing deleted simpacks. ###########################
                     
@@ -262,8 +264,7 @@ class SimpackTree(CuteTreeCtrl):
                     self.Expand(simpack_place_item)
                 else: # expansion_state is False
                     self.Collapse(simpack_place_item)
-                    
-                
+
         if ensure_simpack_selected:
             self.ensure_simpack_selected()
 

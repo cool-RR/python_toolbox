@@ -38,7 +38,8 @@ class FilterBox(wx.SearchCtrl, CuteControl):
             
     
     def _on_text(self, event):
-        self.navigation_panel.simpack_selection_dialog.refresh(
+        self.navigation_panel.\
+                             simpack_selection_dialog.simpack_tree.reload_tree(
             ensure_simpack_selected=True
         )
         
@@ -51,7 +52,8 @@ class FilterBox(wx.SearchCtrl, CuteControl):
     
     def _on_searchctrl_cancel_btn(self, event):
         self.Value = ''
-        self.navigation_panel.simpack_selection_dialog.refresh(
+        self.navigation_panel.\
+                             simpack_selection_dialog.simpack_tree.reload_tree(
             ensure_simpack_selected=True
         )
     
