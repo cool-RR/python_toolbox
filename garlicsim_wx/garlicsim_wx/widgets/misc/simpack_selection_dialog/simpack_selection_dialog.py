@@ -22,6 +22,7 @@ from garlicsim.general_misc import address_tools
 from garlicsim.general_misc import path_tools
 from garlicsim.general_misc import import_tools
 from garlicsim.general_misc import package_finder
+from garlicsim_wx.general_misc.cute_timer import CuteTimer
 from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
 from garlicsim_wx.widgets.general_misc.cute_dir_dialog import CuteDirDialog
 from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
@@ -213,10 +214,17 @@ class SimpackSelectionDialog(CuteDialog):
         self.simpack_tree.SetFocus()
         
         #######################################################################
+        
+        ### Setting reload triggers (button, hotkey and timer): ###############
+        #                                                                     #
         self.reload_hidden_button = CuteHiddenButton(self)
         self.add_accelerators(
             {wx.WXK_F5: self.reload_hidden_button.Id}
         )
+        self.reload_timer = CuteTimer(self)
+        self.reload_timer.Start(10000)
+        #                                                                     #
+        ### Finished setting reload triggers (button, hotkey and timer). ######
         
         self.bind_event_handlers(SimpackSelectionDialog)
 
@@ -242,7 +250,11 @@ class SimpackSelectionDialog(CuteDialog):
         self.simpack_info_panel.refresh()
         self.navigation_panel.refresh()
                 
-    
+
+    def _on_reload_timer(self, event):
+        self.simpack_tree.reload_tree()
+        
+        
     def _on_reload_hidden_button(self, event):
         self.simpack_tree.reload_tree()
                 
