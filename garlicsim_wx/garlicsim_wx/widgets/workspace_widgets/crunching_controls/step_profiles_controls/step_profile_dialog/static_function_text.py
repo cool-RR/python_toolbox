@@ -27,7 +27,8 @@ class StaticFunctionText(CutePanel):
         self.step_function = None
         
         wx.Panel.__init__(self, step_profile_dialog)
-        
+        self.HelpText = ('Information about the currently-selected step '
+                         'function.')
         self.set_good_background_color()
         
         self.text = wx.StaticText(self, style=wx.ALIGN_CENTER_HORIZONTAL)

@@ -25,6 +25,8 @@ class ArgBox(wx.StaticBox):
         
         wx.StaticBox.__init__(self, argument_control, label='&Arguments',
                               size=argument_control.box_size)
+        self.HelpText = ('Allows you to set the values of arguments that the '
+                         'step function accepts.')
         
         self.SetMinSize(argument_control.box_size)
         self.SetMaxSize(argument_control.box_size)

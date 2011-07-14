@@ -29,6 +29,10 @@ class StarKwargBox(wx.StaticBox):
         
         wx.StaticBox.__init__(self, argument_control,
                               label='&Keyword arguments')
+        self.HelpText = ('Allows you to set the values of additional '
+                         'keyword arguments that the step function accepts. '
+                         'You need to supply both the argument name and the '
+                         'argument value.')
         
         self.SetMinSize(argument_control.box_size)
         self.SetMaxSize(argument_control.box_size)

@@ -24,6 +24,10 @@ class StarArg(CutePanel):
         wx.Panel.__init__(self, argument_control)
         if wx_tools.is_gtk:
             self.set_good_background_color()
+            
+        self.HelpText = ('Allows you to set the values of additional '
+                         'arguments that the step function accepts. These '
+                         'are unnamed arguments.')
         
         self.argument_control = argument_control
         

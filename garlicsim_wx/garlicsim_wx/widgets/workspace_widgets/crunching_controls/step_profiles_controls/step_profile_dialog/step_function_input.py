@@ -20,6 +20,12 @@ import garlicsim
 from .argument_control import colors
 
 
+step_function_help_text = ('The step function to be used for crunching the '
+                           'simulation. You may type the name of a different '
+                           'step function or choose one from the given '
+                           'options.')
+
+
 class StepFunctionInput(wx.ComboBox, CuteWindow):
     '''
     Widget for specifying a step function.
@@ -46,6 +52,7 @@ class StepFunctionInput(wx.ComboBox, CuteWindow):
             
         wx.ComboBox.__init__(self, step_profile_dialog, value=value,
                              choices=step_functions_list, size=(width, -1))
+        self.HelpText = step_function_help_text
         
         self._original_background_color = self.GetBackgroundColour()
         

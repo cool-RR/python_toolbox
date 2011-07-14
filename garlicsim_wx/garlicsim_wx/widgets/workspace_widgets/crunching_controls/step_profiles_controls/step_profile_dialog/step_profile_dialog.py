@@ -23,7 +23,7 @@ import garlicsim_wx
 from garlicsim.misc import StepProfile
 
 from .static_function_text import StaticFunctionText
-from .step_function_input import StepFunctionInput
+from .step_function_input import StepFunctionInput, step_function_help_text
 from .argument_control import ArgumentControl, ResolveFailed
 from .already_exists_dialog import AlreadyExistsDialog
 from .step_functions_to_argument_dicts import StepFunctionsToArgumentDicts
@@ -145,6 +145,7 @@ class StepProfileDialog(CuteDialog):
         
         self.static_text = wx.StaticText(self,
                                          label='Choose a step &function:')
+        self.static_text.HelpText = step_function_help_text
         
         self.main_v_sizer.Add(self.static_text,
                               0,
@@ -237,6 +238,8 @@ class StepProfileDialog(CuteDialog):
         ok_title = 'Create &step profile' if not and_fork else \
                    'Create &step profile and fork with it'
         self.ok_button = wx.Button(self, wx.ID_OK, ok_title)
+        self.ok_button.HelpText = 'Create the new step profile.' if not \
+            and_fork else 'Create the new step profile and fork with it.'
         self.dialog_button_sizer.AddButton(self.ok_button)
         self.ok_button.SetDefault()
         self.dialog_button_sizer.SetAffirmativeButton(self.ok_button)
