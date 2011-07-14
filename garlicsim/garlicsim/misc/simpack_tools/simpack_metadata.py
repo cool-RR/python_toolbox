@@ -7,6 +7,8 @@ This module defines the `SimpackMetadata` class.
 See its documentation for more information.
 '''
 
+import zipimport
+
 import garlicsim.general_misc.third_party.namedtuple
 
 from garlicsim.general_misc import module_tasting
@@ -155,3 +157,10 @@ class SimpackMetadata(_SimpackMetadataBase):
             self._tasted_simpack,
             '__init__.py'
         )
+
+    
+    @caching.CachedProperty
+    def is_zip_module(self):
+        loader = getattr(self._tasted_simpack, '__loader__', None)
+        return loader is not None and isinstance(loader, zipimport.zipimporter)
+    
