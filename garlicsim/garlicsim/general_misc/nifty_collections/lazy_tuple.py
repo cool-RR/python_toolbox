@@ -122,7 +122,6 @@ class LazyTuple(abcs_collection.Sequence, object):
         return len(self.collected_data)
     
 
-    @_with_lock
     def exhaust(self, i=infinity):
         '''
         Take items from the internal iterators and save them.
@@ -154,7 +153,8 @@ class LazyTuple(abcs_collection.Sequence, object):
             
         while len(self.collected_data) <= exhaustion_point:
             try:
-                self.collected_data.append(self._iterator.next())
+                with self.lock:
+                    self.collected_data.append(self._iterator.next())
             except StopIteration:
                 self.exhausted = True
                 break
