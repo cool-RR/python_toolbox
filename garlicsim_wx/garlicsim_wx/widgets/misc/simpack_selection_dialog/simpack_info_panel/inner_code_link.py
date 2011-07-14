@@ -28,6 +28,7 @@ class InnerCodeLink(CuteHyperlinkCtrl):
                          "simpack's code.")
         if wx_tools.is_gtk:
             self.BackgroundColour = self.Parent.BackgroundColour
+        self.VisitedColour = self.HoverColour = self.NormalColour
         self.bind_event_handlers(InnerCodeLink)
         self.Hide()
         
