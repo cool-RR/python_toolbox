@@ -8,7 +8,7 @@ See its documentation for more info.
 '''
 
 import time
-import webbrowser
+import math
 
 import pkg_resources
 import wx.html
@@ -23,6 +23,10 @@ from .bitmap_viewer import BitmapViewer
 
 from . import images as __images_package
 images_package = __images_package.__name__
+
+
+def filter_function(x):
+    return x + 0.4 * math.sin(x * (2 * math.pi))
 
 
 class AboutDialog(CuteDialog):
@@ -143,11 +147,16 @@ class AboutDialog(CuteDialog):
         self._rotate_image_hue()
 
         
+    def _on_close(self, event):
+        self.timer.Stop()
+        event.Skip()
+        
+        
     def _rotate_image_hue(self):
         '''Rotate the image's hue by a tiny bit.'''
         new_image = self._original_image.Copy()
         t = time.time()
-        new_image.RotateHue((t / 50.) % 1)
+        new_image.RotateHue((filter_function(t) / 50.) % 1)
         self.bitmap_viewer.set_bitmap(wx.BitmapFromImage(new_image))
         self.timer.Start(40, oneShot=True)
 
