@@ -44,22 +44,23 @@ class CodeLink(CutePanel):
         simpack_metadata = self.technical_details_bar.simpack_info_panel.\
                                       simpack_selection_dialog.simpack_metadata
         self.Show(simpack_metadata is not None)
-        if simpack_metadata.contains_source_files and \
+        if simpack_metadata is not None:
+            if simpack_metadata.contains_source_files and \
                                             not simpack_metadata.is_zip_module:
-            self.inner_code_link.Show()
-            self.code_unavailable_notice.Hide()
-        else: # not simpack_metadata.contains_source_files
-            self.inner_code_link.Hide()
-            self.code_unavailable_notice.Show()
-            if simpack_metadata.is_zip_module:
-                self.code_unavailable_notice.set_reason(
-                    ' The code is imported from a zip archive.'
-                )
-            else:
-                assert not simpack_metadata.contains_source_files
-                self.code_unavailable_notice.set_reason(
-                    ' The code has been compiled to binary form.'
-                )
+                self.inner_code_link.Show()
+                self.code_unavailable_notice.Hide()
+            else: # not simpack_metadata.contains_source_files
+                self.inner_code_link.Hide()
+                self.code_unavailable_notice.Show()
+                if simpack_metadata.is_zip_module:
+                    self.code_unavailable_notice.set_reason(
+                        ' The code is imported from a zip archive.'
+                    )
+                else:
+                    assert not simpack_metadata.contains_source_files
+                    self.code_unavailable_notice.set_reason(
+                        ' The code has been compiled to binary form.'
+                    )
                 
         
         
