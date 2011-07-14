@@ -64,9 +64,9 @@ class EventHandlerGrokker(object):
                 namespace={'window': window}
             )
         else:
-            closer_window = window
+            closer_window = None
         last_word = self.parsed_words[-1]
-        component_candidate = getattr(closer_window, last_word, None)
+        component_candidate = getattr(closer_window or window, last_word, None)
         if component_candidate is not None and \
            hasattr(component_candidate, 'GetId'):
             component = component_candidate
@@ -83,7 +83,6 @@ class EventHandlerGrokker(object):
                 get_event_code_from_name(last_word,
                                          self.window_type),
                 event_handler_bound_method,
-                source=closer_window
             )
                 
             
