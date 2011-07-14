@@ -9,10 +9,10 @@ See its documentation for more info.
 
 import wx
 
-from .state_creation_dialog import StateCreationDialog
+from .base_state_creation_dialog import BaseStateCreationDialog
 
 
-class DefaultStateCreationDialog(StateCreationDialog):
+class DefaultStateCreationDialog(BaseStateCreationDialog):
     '''
     An initial dialog to show when creating a root state.
     
@@ -20,7 +20,7 @@ class DefaultStateCreationDialog(StateCreationDialog):
     '''
     def __init__(self, frame):
    
-        StateCreationDialog.__init__(self,
+        BaseStateCreationDialog.__init__(self,
                                      frame,
                                      title='Creating a root state')
         

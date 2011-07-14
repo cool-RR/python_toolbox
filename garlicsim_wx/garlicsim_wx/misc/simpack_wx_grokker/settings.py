@@ -29,4 +29,6 @@ class Settings(object):
         
         self.STATE_CREATION_FUNCTION = garlicsim_wx.widgets.misc.\
             DefaultStateCreationDialog.create_show_modal_and_get_state
-        '''blocktododoc, in docs folder too. Dialog for creating a root state.'''
+        '''
+        Function for creating a new state. Takes the main GarlicSim `Frame`.
+        '''

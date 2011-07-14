@@ -53,7 +53,7 @@ class HistoryStepGenerator(BaseStep):
     generator; it works as a generator which can be more convenient and it can
     look at the simulation history which is necessary for some simulations.
     
-    (1.1.2011 - Not yet implemented, sorry.)
+    (08.08.2011 - Not yet implemented, sorry.)
     '''
     step_iterator_class = NotImplemented
     name_identifier = 'history_step_generator'

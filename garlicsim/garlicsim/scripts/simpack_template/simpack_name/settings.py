@@ -19,6 +19,7 @@ import garlicsim
 # crunchers.
 
 
+
 # DETERMINISM_FUNCTION = \
 #     garlicsim.misc.simpack_grokker.misc.default_determinism_function
 
@@ -30,7 +31,7 @@ import garlicsim
 #
 # This is useful because it allows garlicsim to detect if a simulation has
 # reached a repititive state, so it can stop the crunching right there and
-# avoid wasting resources. (01.01.2011 - Still not implemented, sorry.)
+# avoid wasting resources. (08.08.2011 - Still not implemented, sorry.)
 #
 # Note that this function does not return `True` or `False`: It returns a
 # `DeterminismSetting` class. For details about those, see documentation in

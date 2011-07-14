@@ -18,13 +18,15 @@ import garlicsim_wx.widgets.misc.default_state_creation_dialog
 import garlicsim.data_structures
 
 
-class StateCreationDialog(garlicsim_wx.widgets.misc.\
-                          default_state_creation_dialog.StateCreationDialog):
+class StateCreationDialog(garlicsim_wx.widgets.misc.BaseStateCreationDialog):
     '''Initial dialog for creating a root state.'''
     
     def __init__(self, frame):
-        garlicsim_wx.widgets.misc.state_creation_dialog.StateCreationDialog.\
-            __init__(self, frame, title='Creating a root state')
+        garlicsim_wx.widgets.misc.BaseStateCreationDialog.__init__(
+            self,
+            frame,
+            title='Creating a root state'
+        )
         
         self.frame = frame
         self.simpack = frame.gui_project.simpack

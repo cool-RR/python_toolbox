@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the `StateCreationDialog` class.
+This module defines the `BaseStateCreationDialog` class.
 
 See its documentation for more info.
 '''
@@ -12,7 +12,7 @@ import wx
 from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
 
 
-class StateCreationDialog(CuteDialog): # make base class
+class BaseStateCreationDialog(CuteDialog):
     '''
     An initial dialog to show when creating a root state.
     
