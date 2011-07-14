@@ -395,9 +395,9 @@ includes = reduce(
 
 py2exe_kwargs = {
     
-    # We're giving a less nerdy description here, because this will be shown on
-    # the executable, where non-nerds might see it:
-    'description': 'Pythonic framework for computer simulations',
+    'description': 'GarlicSim',
+    # This isn't really a description, Windows uses this field as something\
+    # like a name.
     
     'windows': [
         {
