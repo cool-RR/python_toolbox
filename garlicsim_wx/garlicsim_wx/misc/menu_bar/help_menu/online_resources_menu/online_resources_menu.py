@@ -61,7 +61,7 @@ class OnlineResourcesMenu(CuteMenu):
         frame.Bind(
             wx.EVT_MENU,
             lambda event: webbrowser.open_new_tab(
-                'http://garlicsim.org/#mailing_lists'
+                'http://docs.garlicsim.org/misc/mailing-lists.html'
                 ),
             self.mailing_lists_button
         )
