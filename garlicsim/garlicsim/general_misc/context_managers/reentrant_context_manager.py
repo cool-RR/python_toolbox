@@ -56,7 +56,9 @@ class ReentrantContextManager(ContextManager):
         if self.depth == 1:
             # Saving `reentrant_exit`'s return value, since it might be
             # signalling an exception swallowing:
-            return_value = self.reentrant_exit(exc_type, exc_value, exc_traceback)
+            return_value = self.reentrant_exit(exc_type,
+                                               exc_value,
+                                               exc_traceback)
         else:
             return_value = None
         self.depth -= 1

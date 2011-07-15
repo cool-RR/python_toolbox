@@ -112,4 +112,3 @@ def test_exception_swallowing():
     assert my_set == set([0, 1, 2, 3, 4])
         
         
-# blocktodo: make test for nested exception swallowing.
