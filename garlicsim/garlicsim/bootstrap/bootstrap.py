@@ -52,22 +52,6 @@ def __check_prerequisites():
             return [pkg_resources]
     
     def check_distribute():
-        try:
-            import win32api
-            import win32process
-            import win32com
-        except ImportError:
-            raise MissingModule(
-                "`pywin32` is required, but it's not currently installed on "
-                "your system. Please install it according to the instructions "
-                "here: pypi.python.org/pypi/distribute"
-            )
-        else:
-             # Returning empty list because we didn't import `distribute`:
-            return [win32api, win32process, win32com]
-    
-        
-    def check_pywin32():
         if frozen:
             # Can't check that `distribute` is installed when frozen with
             # `py2exe`.
@@ -81,7 +65,22 @@ def __check_prerequisites():
                                 "install it according to the instructions "
                                 "here: pypi.python.org/pypi/distribute")
         else:
+            # Returning empty list because we didn't import `distribute`:
             return []
+        
+    def check_pywin32():
+        try:
+            import win32api
+            import win32process
+            import win32com
+        except ImportError:
+            raise MissingModule(
+                "`pywin32` is required, but it's not currently installed on "
+                "your system. Please install it according to the instructions "
+                "here: pypi.python.org/pypi/distribute"
+            )
+        else: 
+            return [win32api, win32process, win32com]
         
         
     checkers = [check_pkg_resources, check_distribute]
