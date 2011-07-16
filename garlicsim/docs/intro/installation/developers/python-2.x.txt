@@ -53,6 +53,8 @@ For :mod:`garlicsim_wx`
 
 * `wxPython 2.8.10.1 or above (but below 2.9)`_
 
+* `Docutils 0.7 or above`_
+
 
 
 Installation methods
@@ -117,3 +119,4 @@ like this::
 .. _Python for Windows Extensions: http://sourceforge.net/projects/pywin32
 .. _Psyco: http://psyco.sourceforge.net
 .. _wxPython 2.8.10.1 or above (but below 2.9): http://wxpython.org/download.php
+.. _Docutils 0.7 or above: http://pypi.python.org/pypi/docutils/
