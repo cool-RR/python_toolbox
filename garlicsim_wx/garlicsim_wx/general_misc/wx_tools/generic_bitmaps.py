@@ -35,7 +35,7 @@ def _get_icon_bitmap_from_shell32_dll(index_number, size):
 
 @caching.cache()
 def get_closed_folder_bitmap(size=(16, 16)):
-    # blocktodo: test this and its brother on Win7, Ubuntu and Mac
+    # blocktodo: test this and its brother on Ubuntu and Mac
     if is_win:
         return _get_icon_bitmap_from_shell32_dll(3, size=size)
     else:
