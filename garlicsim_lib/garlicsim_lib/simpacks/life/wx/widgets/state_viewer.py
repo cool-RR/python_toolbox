@@ -1,7 +1,7 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''Defines the `BoardViewer` class.'''
+'''Defines the `StateViewer` class.'''
 
 import wx
 import wx.lib.scrolledpanel as scrolled
@@ -11,7 +11,7 @@ from garlicsim_wx.general_misc import wx_tools
 import garlicsim_wx
 
 
-class BoardViewer(scrolled.ScrolledPanel,
+class StateViewer(scrolled.ScrolledPanel,
                   garlicsim_wx.widgets.WorkspaceWidget):
     '''Widget for displaying a Life board.'''
     
@@ -38,7 +38,7 @@ class BoardViewer(scrolled.ScrolledPanel,
 
         self.redraw_needed_flag = True
         
-        self.bind_event_handlers(BoardViewer)
+        self.bind_event_handlers(StateViewer)
         
         
     def unscreenify(self, x, y):

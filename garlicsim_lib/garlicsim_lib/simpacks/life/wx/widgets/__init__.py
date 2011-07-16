@@ -3,5 +3,5 @@
 
 '''Defines widgets to be used for `life` in `garlicsim_wx`.'''
 
-from .board_viewer import BoardViewer
+from .state_viewer import StateViewer
 from .state_creation_dialog import StateCreationDialog
