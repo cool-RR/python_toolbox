@@ -149,24 +149,9 @@ class SimpackTree(CuteTreeCtrl):
         simpack_places_that_have_items = \
             [self.GetItemPyData(simpack_place_item) for simpack_place_item
             in simpack_place_items]
-        simpack_place_items = self.get_children_of_item(self.root_item)
         for simpack_place in self._filtered_simpack_places_tree:
             if simpack_place not in simpack_places_that_have_items:
-                # blocktodo: can extract this block into method:
-                new_simpack_place_item = self.AppendItem(
-                    self.root_item,
-                    text=simpack_place.name
-                )
-                self.SetItemPyData(new_simpack_place_item,
-                                   simpack_place)
-                self.SetItemImage(new_simpack_place_item,
-                                  self._CLOSED_FOLDER_BITMAP_INDEX,
-                                  which=wx.TreeItemIcon_Normal)
-                self.SetItemImage(new_simpack_place_item,
-                                  self._OPEN_FOLDER_BITMAP_INDEX,
-                                  which=wx.TreeItemIcon_Expanded)
-                self._simpack_places_to_items[simpack_place] = \
-                                                         new_simpack_place_item
+                self._create_simpack_place_item(simpack_place)
                 
         self.SortChildren(self.root_item)
         #                                                                     #
@@ -213,15 +198,8 @@ class SimpackTree(CuteTreeCtrl):
             #                                                                 #
             for simpack_metadata in simpack_metadatas:
                 if simpack_metadata not in simpack_metadatas_that_have_items:
-                    new_simpack_item = self.AppendItem(
-                        simpack_place_item,
-                        text=simpack_metadata.name
-                    )
-                    self.SetItemPyData(new_simpack_item,
-                                       simpack_metadata)
-                    self.SetItemImage(new_simpack_item,
-                                      self._SIMPACK_BITMAP_INDEX,
-                                      which=wx.TreeItemIcon_Normal)
+                    self._create_simpack_item(simpack_place_item,
+                                              simpack_metadata)
             #                                                                 #
             ### Finished adding new simpacks. #################################
             
@@ -250,6 +228,35 @@ class SimpackTree(CuteTreeCtrl):
 
         if ensure_simpack_selected:
             self.ensure_simpack_selected()
+
+            
+    def _create_simpack_item(self, simpack_place_item, simpack_metadata):
+        new_simpack_item = self.AppendItem(
+            simpack_place_item,
+            text=simpack_metadata.name
+        )
+        self.SetItemPyData(new_simpack_item,
+                           simpack_metadata)
+        self.SetItemImage(new_simpack_item,
+                          self._SIMPACK_BITMAP_INDEX,
+                          which=wx.TreeItemIcon_Normal)
+
+            
+    def _create_simpack_place_item(self, simpack_place):
+        new_simpack_place_item = self.AppendItem(
+            self.root_item,
+            text=simpack_place.name
+        )
+        self.SetItemPyData(new_simpack_place_item,
+                           simpack_place)
+        self.SetItemImage(new_simpack_place_item,
+                          self._CLOSED_FOLDER_BITMAP_INDEX,
+                          which=wx.TreeItemIcon_Normal)
+        self.SetItemImage(new_simpack_place_item,
+                          self._OPEN_FOLDER_BITMAP_INDEX,
+                          which=wx.TreeItemIcon_Expanded)
+        self._simpack_places_to_items[simpack_place] = \
+                                                 new_simpack_place_item
 
                             
     def ensure_simpack_selected(self):
