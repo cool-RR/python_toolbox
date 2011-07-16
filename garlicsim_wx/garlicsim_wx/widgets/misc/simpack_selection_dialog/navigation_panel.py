@@ -11,7 +11,7 @@ import sys
 import itertools
 import collections
 
-import wx.lib.dialogs
+import wx
 
 from garlicsim.general_misc import sequence_tools
 from garlicsim_wx.general_misc import wx_tools
@@ -34,10 +34,11 @@ class NavigationPanel(CutePanel):
     '''
     Panel for navigating between simpacks.
     
-    It contains a filter/search box, back and forward buttons, and an "Add\
+    It contains a filter/search box, back and forward buttons, and an "Add
     simpacks from a different folder" button.
     '''
     def __init__(self, simpack_selection_dialog):
+        '''Construct the `NavigationPanel`.'''
         CutePanel.__init__(
             self,
             simpack_selection_dialog,
@@ -48,11 +49,22 @@ class NavigationPanel(CutePanel):
                           SimpackSelectionDialog)
         
         self._back_queue = collections.deque()
-        self._forward_queue  = collections.deque()
+        '''
+        Queue of previously-visited simpacks.
         
-        self.SetBackgroundColour(
-            self.simpack_selection_dialog.GetBackgroundColour()
-        )
+        The rightmost one is the most recently visited.
+        '''
+        
+        self._forward_queue  = collections.deque()
+        '''
+        Queue of previously-backed-out-of simpacks.
+        
+        These are simpacks that you've visited but then pressed the back
+        button. The rightmost one is the most recently visited.
+        '''
+        
+        
+        self.BackgroundColour = self.simpack_selection_dialog.BackgroundColour
         
         self.big_v_sizer = wx.BoxSizer(wx.VERTICAL)
         self.SetSizer(self.big_v_sizer)
@@ -239,6 +251,12 @@ class NavigationPanel(CutePanel):
 
         
     def _set_simpack_metadata_ignoring_history(self, simpack_metadata):
+        '''
+        Set a new simpack-metadata to be selected, ignoring history.
+        
+        This is for internal use; it sets the selected simpack metadata but
+        ignores the back and forward queues.
+        '''
         if not self._should_accept_new_simpack_metadata(simpack_metadata):
             return
         self.simpack_selection_dialog.simpack_metadata = simpack_metadata
@@ -246,6 +264,17 @@ class NavigationPanel(CutePanel):
 
         
     def _should_accept_new_simpack_metadata(self, simpack_metadata):
+        '''
+        Should we accept `simpack_metadata` as a new selected simpack metadata?
+        
+        Reasons not to accept:
+        
+         - It's already the selected simpack metadata.       
+         - It used to exist, but was deleted or otherwise removed from the
+           simpack tree.
+        
+        Returns a `bool`.
+        '''
         current_simpack_metadata = \
                                  self.simpack_selection_dialog.simpack_metadata
         if simpack_metadata is current_simpack_metadata:
@@ -259,6 +288,9 @@ class NavigationPanel(CutePanel):
         
 
     def refresh(self):
+        '''
+        Refresh the navigation panel, dis- or en-abling the history buttons.
+        '''
         self.back_button.Enable(bool(self._back_queue))
         self.forward_button.Enable(bool(self._forward_queue))
         
