@@ -23,10 +23,6 @@ import garlicsim_wx
 from .simpack_info_panel import SimpackInfoPanel
 
 
-# blocktodo: Don't forget tooltips here wherever possible
-# blocktodo: On Ubuntu when I pressed X it didn't exit the dialog.
-
-
 MAC_BOTTOM_SPACING_SIZE = 8
 
 
