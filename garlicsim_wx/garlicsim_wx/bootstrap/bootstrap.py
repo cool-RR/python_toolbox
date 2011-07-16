@@ -62,7 +62,7 @@ def __check_prerequisites():
             raise MissingModule("wxPython (version 2.8.10.1 and upwards, but "
                                 "lower than 2.9) is required, but it's not "
                                 "currently installed on your system. Please "
-                                "go download it at http://wxpython.org, "
+                                "go download it at http://wxpython.org , "
                                 "install it, then try again.")
         
         else:
@@ -78,8 +78,32 @@ def __check_prerequisites():
                               "http://wxpython.org" % (wx.__version__,))
             return [wx]
     
+    def check_docutils():
+        try:
+            import docutils
+            
+        except ImportError:
+            raise MissingModule("Docutils (version 0.7 and upwards) is "
+                                "required, but it's not currently installed "
+                                "on your system. Please go download it at "
+                                "http://pypi.python.org/pypi/docutils/ , "
+                                "install it, then try again.")
+        
+        else:
+            docutils_version = tuple(int(x) for x in
+                                               docutils.__version__.split('.'))
+            if not (docutils_version >= (0, 7)):
+                raise MissingModule(
+                    "You have Docutils version %s installed, while version "
+                    "0.7 or higher is needed. Please go download a recent "
+                    "version at http://pypi.python.org/pypi/docutils/ , "
+                    "install it, then try again."
+                    % (docutils.__version__,)
+                )
+            return [docutils]
+    
 
-    checkers = [check_garlicsim, check_wx]
+    checkers = [check_garlicsim, check_wx, check_docutils]
     
     for checker in checkers:
         modules += checker()
