@@ -9,6 +9,8 @@ See its documentation for more information.
 
 import wx
 
+from garlicsim.general_misc.proxy_property import ProxyProperty
+
 from garlicsim.general_misc import sequence_tools
 from garlicsim_wx.widgets.general_misc.cute_control import CuteControl
 
@@ -45,3 +47,8 @@ class CuteTreeCtrl(wx.TreeCtrl, CuteControl):
                     ) for child in children
                 )
             )
+        
+    OnCompareItems = ProxyProperty(
+        '_compare_items',
+        doc='''Hook for comparing items in the tree, used for sorting.'''
+    )

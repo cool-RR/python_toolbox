@@ -139,6 +139,11 @@ class SimpackTree(CuteTreeCtrl):
             
         self.SetImageList(self._image_list)
 
+        
+    ###########################################################################
+    ###########################################################################
+    ### Methods for refreshing and reloading: #################################
+    #                                                                         #
     
     def _reload_internal_trees(self):
         '''
@@ -198,7 +203,6 @@ class SimpackTree(CuteTreeCtrl):
         self._reload_internal_trees()
         
         #######################################################################
-        #######################################################################
         ### Updating simpack places: ##########################################
         #                                                                     #
         
@@ -235,9 +239,7 @@ class SimpackTree(CuteTreeCtrl):
         #                                                                     #
         ### Finished updating simpack places. #################################
         #######################################################################
-        #######################################################################
         
-        #######################################################################
         #######################################################################
         ### Updating simpacks: ################################################
         #                                                                     #
@@ -282,9 +284,6 @@ class SimpackTree(CuteTreeCtrl):
         #                                                                     #
         ### Finished updating simpacks. #######################################
         #######################################################################
-        #######################################################################
-        
-        
         
         ### Expanding/collapsing simpack place items: #########################
         #                                                                     #
@@ -293,7 +292,7 @@ class SimpackTree(CuteTreeCtrl):
         # removed from the tree and now re-added. We are returning them to the
         # same expansion state they had before being removed.
         #
-        # (The reason that we're doing this in the end of the method is because
+        # (The reason that we're doing this at the end of the method is because
         # we can't expand a folder before it has any items in it.)
         
         for simpack_place, expansion_state in \
@@ -313,6 +312,29 @@ class SimpackTree(CuteTreeCtrl):
             self.ensure_simpack_selected()
 
             
+    def refresh(self):
+        '''Refresh the tree, making it show the selected simpack-metadata.'''
+        new_simpack_metadata = self.simpack_selection_dialog.simpack_metadata
+        
+        selected_item = self.GetSelection()
+        if (new_simpack_metadata is not None) and \
+           ((not selected_item.IsOk()) or
+           (self.GetItemPyData(selected_item) is not new_simpack_metadata)):
+            
+            self._select_simpack_item_deleting_filter_words(
+                new_simpack_metadata,
+            )
+            
+    #                                                                         #
+    ### Finished methods for refreshing and reloading. ########################
+    ###########################################################################
+    ###########################################################################
+    
+    ###########################################################################
+    ###########################################################################
+    ### Methods for creating new items: #######################################
+    #                                                                         #
+    
     def _create_simpack_item(self, simpack_place_item, simpack_metadata):
         '''
         Create simpack item for `simpack_metadata` under `simpack_place_item`.
@@ -345,7 +367,16 @@ class SimpackTree(CuteTreeCtrl):
         self._simpack_places_to_items[simpack_place] = \
                                                  new_simpack_place_item
 
-                            
+    #                                                                         #
+    ### Finished methods for creating new items. ##############################
+    ###########################################################################
+    ###########################################################################
+        
+    ###########################################################################
+    ###########################################################################
+    ### Methods for selecting items: ##########################################
+    #                                                                         #
+        
     def ensure_simpack_selected(self):
         '''
         Ensure that a simpack is selected.
@@ -390,49 +421,28 @@ class SimpackTree(CuteTreeCtrl):
         '''Select the first simpack item in the visual tree.'''
         simpack_item = self._get_simpack_items()[0]
         self.SelectItem(simpack_item)
-                                
-        
-    def _get_simpack_items(self):
-        '''Get all the simpack items in the visual tree.'''
-        return self.get_children_of_item(self.root_item, generations=2)
     
-    
-    def refresh(self):
-        '''Refresh the tree, making it show the selected simpack-metadata.'''
-        new_simpack_metadata = self.simpack_selection_dialog.simpack_metadata
-        
-        selected_item = self.GetSelection()
-        if (new_simpack_metadata is not None) and \
-           ((not selected_item.IsOk()) or
-           (self.GetItemPyData(selected_item) is not new_simpack_metadata)):
             
-            simpack_item = self._get_simpack_item_deleting_filter_words(
-                new_simpack_metadata,
-            )
-                            
-            self.SelectItem(simpack_item)
-
-            
-    def _get_simpack_item_deleting_filter_words(self, simpack_metadata):
+    def _select_simpack_item_deleting_filter_words(self, simpack_metadata):
         '''
-        Get simpack item of `simpack_metadata` deleting filter words as needed.
+        Select item of `simpack_metadata` deleting filter words as needed.
         
         This is a tricky method: It's being given a `simpack_metadata`, and its
-        goal is to return the simpack item that corresponds to it. But, that
-        simpack item might not currently exist because there may be filter
-        words in the `FilterBox` that are causing it to be filtered out. If
-        this is the case, this method will delete the filter words one by one
-        until the simpack will no longer be filtered out and it will have a
-        simpack item in the visual tree.
-        
-        Returns the simpack item.
+        goal is to set the simpack item that corresponds to it as selected.
+        But, that simpack item might not currently exist because there may be
+        filter words in the `FilterBox` that are causing it to be filtered out.
+        If this is the case, this method will delete the filter words one by
+        one until the simpack will no longer be filtered out and it will have a
+        simpack item in the visual tree. Then it will be selected.
         '''
         
         filter_box = self.simpack_selection_dialog.navigation_panel.filter_box
         try:
             # First let's try to get the simpack item naively:
-            return self._get_simpack_item_of_simpack_metadata(
-                simpack_metadata
+            return self.SelectItem(
+                self._get_simpack_item_of_simpack_metadata(
+                    simpack_metadata
+                )
             )
         
         except LookupError:
@@ -441,8 +451,10 @@ class SimpackTree(CuteTreeCtrl):
             # each time) until the simpack item appears.
             while filter_box.filter_words:
                 try: 
-                    return self._get_simpack_item_of_simpack_metadata(
-                        simpack_metadata
+                    return self.SelectItem(
+                        self._get_simpack_item_of_simpack_metadata(
+                            simpack_metadata
+                        )
                     )
                 except LookupError:
                     # Remove the last filter word:
@@ -451,10 +463,12 @@ class SimpackTree(CuteTreeCtrl):
                     self.simpack_selection_dialog.refresh()
             else:
                 # All the filter words have been removed; now we'll make a
-                # final attempt at getting the simpack item and returning it:
+                # final attempt at getting the simpack item and selecting it:
                 try:
-                    return self._get_simpack_item_of_simpack_metadata(
-                        simpack_metadata
+                    return self.SelectItem(
+                        self._get_simpack_item_of_simpack_metadata(
+                            simpack_metadata
+                        )
                     )
                 except LookupError:
                     raise LookupError("Deleted all filter words, but still "
@@ -462,13 +476,31 @@ class SimpackTree(CuteTreeCtrl):
                                       "metadata. Perhaps the simpack was "
                                       "deleted.")
 
-            
-    def _get_simpack_item_of_simpack_metadata(self, new_simpack_metadata):
+    #                                                                         #
+    ### Finished methods for selecting items. #################################
+    ###########################################################################
+    ###########################################################################
+
+    ###########################################################################
+    ###########################################################################
+    ### Methods for retrieving items: #########################################
+    #                                                                         #
+        
+    def _get_simpack_items(self):
+        '''Get all the simpack items in the visual tree.'''
+        return self.get_children_of_item(self.root_item, generations=2)
+    
+    
+    def _get_simpack_item_of_simpack_metadata(self, simpack_metadata):
+        '''Get the simpack item of `simpack_metadata`.'''
         simpack_items = self._get_simpack_items()
         matching_simpack_items = \
             [simpack_item for simpack_item in simpack_items if
-             self.GetItemPyData(simpack_item) is new_simpack_metadata]
+             self.GetItemPyData(simpack_item) is simpack_metadata]
+
+        # There must either exactly one match, or none:
         assert len(matching_simpack_items) in (0, 1)
+        
         if matching_simpack_items:
             (matching_simpack_item,) = matching_simpack_items
             return matching_simpack_item
@@ -476,11 +508,28 @@ class SimpackTree(CuteTreeCtrl):
             raise LookupError("The given `simpack_metadata` has no "
                               "corresponding item in the tree; possibly it's "
                               "been filtered out using the filter box.")
+    
+    #                                                                         #
+    ### Finished methods for retrieving items. ################################
+    ###########################################################################
+    ###########################################################################
             
-            
-    def OnComapreItems(self, item_1, item_2):
+    
+    def _compare_items(self, item_1, item_2):
+        '''
+        Compare `item_1` to `item_2`.
+        
+        Returns `1` if `item_1 > item_2`, returns `-1` if `item_1 < item_2`,
+        and `0` if they are equal.
+        
+        This is a hook used by `CuteTreeCtrl`.
+        
+        If the compared items are simpack items, they are sorted by name, with
+        the address being a tiebreaker. If the compared items are simpack place
+        items, they are compared by path.
+        '''
         item_1_data = self.GetItemPyData(item_1)
-        item_2_data = self.GetItemPyData(item_)
+        item_2_data = self.GetItemPyData(item_2)
         assert type(item_1_data) == type(item_2_data)
         data_type = type(item_1_data)
         if data_type is SimpackPlace:
@@ -489,16 +538,18 @@ class SimpackTree(CuteTreeCtrl):
             assert data_type is SimpackMetadata
             return cmp(item_1_data.name, item_2_data.name) or \
                    cmp(item_1_data.address, item_2_data.address)
+    
         
-        
+    ###########################################################################
+    ### Event handlers: #######################################################
+    #                                                                         #
     def _on_tree_sel_changed(self, event):
         data = self.GetItemPyData(self.GetSelection())
         if type(data) is SimpackMetadata:
             self.simpack_selection_dialog.set_simpack_metadata(data)
         else:
             self.simpack_selection_dialog.set_simpack_metadata(None)
-            
-            
+                        
     def _on_tree_item_activated(self, event):
         item = event.GetItem()
         data = self.GetItemPyData(item)
@@ -510,7 +561,6 @@ class SimpackTree(CuteTreeCtrl):
                                                                import_simpack()
             self.simpack_selection_dialog.EndModal(wx.ID_OK)
         
-            
     def _on_char(self, event):
         # Doesn't work on Mac and Linux; probably the generic tree control
         # swallows keystrokes.
@@ -526,9 +576,11 @@ class SimpackTree(CuteTreeCtrl):
             filter_box.Value = new_filter_string
             filter_box.SetSelection(len(filter_box.Value),
                                     len(filter_box.Value))
-            
         else:
             event.Skip()
+    #                                                                         #
+    ### Finished event handlers. ##############################################
+    ###########################################################################
             
         
 from .simpack_selection_dialog import SimpackSelectionDialog
