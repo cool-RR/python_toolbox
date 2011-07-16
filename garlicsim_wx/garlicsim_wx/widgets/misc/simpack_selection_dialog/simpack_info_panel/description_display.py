@@ -9,12 +9,12 @@ See its documentation for more information.
 
 import urlparse
 
-import docutils.core
 import wx
 
 from garlicsim.general_misc import caching
 from garlicsim_wx.widgets.general_misc.cute_html_window import CuteHtmlWindow
 from garlicsim_wx.general_misc import wx_tools
+from garlicsim_wx.general_misc import rst_tools
 
 
 @caching.cache()
@@ -60,8 +60,6 @@ def tags_to_html(tags):
 
 @caching.cache()
 def simpack_metadata_to_html(simpack_metadata):
-    parsed_rst = docutils.core.publish_parts(simpack_metadata.description,
-                                             writer_name='html')['body']
     return '''
           <body bgcolor="%s" text="%s">
             %s
@@ -74,7 +72,7 @@ def simpack_metadata_to_html(simpack_metadata):
             get_background_html_color(),
             get_foreground_html_color(),
             tags_to_html(simpack_metadata.tags),
-            parsed_rst
+            rst_tools.rst_to_html(simpack_metadata.description or '')
         )
 
 

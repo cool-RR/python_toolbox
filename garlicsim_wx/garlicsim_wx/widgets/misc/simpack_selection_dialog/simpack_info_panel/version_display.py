@@ -14,13 +14,18 @@ from garlicsim_wx.widgets.general_misc.cute_static_text import CuteStaticText
 
 
 class VersionDisplay(CuteStaticText):
+    '''Static text showing the version number of the simpack, if one exists.'''
+    
     def __init__(self, technical_details_bar):
-        ''' '''
+        '''
+        Construct the `VersionDisplay`, with `technical_details_bar` as parent.
+        '''
         self.technical_details_bar = technical_details_bar
         CuteStaticText.__init__(self, technical_details_bar)
         self.HelpText = 'The version number of the currently-selected simpack.'
-        #self.BackgroundColour = self.Parent.BackgroundColour
-        #self.SetFont(wx.Font(12, wx.NORMAL, wx.NORMAL, wx.NORMAL))
+        
+        # We want to write in a text which is slightly faint, because the
+        # version is relatively non-important information:
         self.ForegroundColour = wx_tools.colors.mix_wx_color(
             0.5,
             self.ForegroundColour,
@@ -28,9 +33,12 @@ class VersionDisplay(CuteStaticText):
         )
         
     def refresh(self):
+        '''
+        Refresh all widgets, making them show the selected simpack-metadata.
+        '''
         simpack_metadata = self.technical_details_bar.simpack_info_panel.\
                                       simpack_selection_dialog.simpack_metadata
-        self.SetLabel(('Version %s' % simpack_metadata.version) if
-                      simpack_metadata is not None else '')
-        
-        
+        if (simpack_metadata is None) or (not simpack_metadata.version):
+            self.Label = ''
+        else:
+            self.Label = 'Version %s' % simpack_metadata.version

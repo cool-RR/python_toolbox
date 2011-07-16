@@ -50,6 +50,8 @@ class SimpackMetadata(_SimpackMetadataBase):
             root_address = address.split('.', 1)[0]
             root_package = address_tools.resolve(root_address)
             version = getattr(root_package, '__version__', None)
+        else:
+            version = None
         #                                                                     #
         ### Finished getting version number. ##################################
         simpack_metadata = SimpackMetadata(address=address,
