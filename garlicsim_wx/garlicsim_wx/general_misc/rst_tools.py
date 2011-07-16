@@ -7,4 +7,5 @@ import docutils.core
 
 
 def rst_to_html(rst_text):
+    '''Convert a piece of `rst_text` into HTML.'''
     return docutils.core.publish_parts(rst_text, writer_name='html')['body']

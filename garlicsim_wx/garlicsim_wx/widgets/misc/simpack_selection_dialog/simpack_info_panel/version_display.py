@@ -34,7 +34,7 @@ class VersionDisplay(CuteStaticText):
         
     def refresh(self):
         '''
-        Refresh all widgets, making them show the selected simpack-metadata.
+        Display the version of the selected simpack-metadata if one exists.
         '''
         simpack_metadata = self.technical_details_bar.simpack_info_panel.\
                                       simpack_selection_dialog.simpack_metadata

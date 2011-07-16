@@ -18,7 +18,16 @@ from .image_display import ImageDisplay
 
 
 class SimpackInfoPanel(CutePanel):
+    '''
+    Panel showing information about the currently selected simpack.
+
+    This panel wraps all of its subwidgets in a `wx.StaticBox` to make it clear
+    that they are all part of a single group.
+    '''
+    
     def __init__(self, simpack_selection_dialog):
+        '''Construct the `SimpackInfoPanel`.'''
+        
         self.simpack_selection_dialog = simpack_selection_dialog
         CutePanel.__init__(self, simpack_selection_dialog)
         self.set_good_background_color()
@@ -67,6 +76,9 @@ class SimpackInfoPanel(CutePanel):
          
         
     def refresh(self):
+        '''
+        Update all the widgets to show the currently-selected simpack-metadata.
+        '''
         self.name_display.refresh()
         self.technical_details_bar.refresh()
         self.description_display.refresh()

@@ -17,8 +17,9 @@ from .code_link import CodeLink
 
 
 class TechnicalDetailsBar(CutePanel):
+    '''Bar showing (1) version number and (2) link to the simpack's code.'''
     def __init__(self, simpack_info_panel):
-        ''' '''
+        '''Construct the `TechnicalDetailsBar`.'''
         self.simpack_info_panel = simpack_info_panel
         CutePanel.__init__(self, simpack_info_panel)
         if wx_tools.is_gtk:
@@ -42,6 +43,9 @@ class TechnicalDetailsBar(CutePanel):
         
         
     def refresh(self):
+        '''
+        Update all the widgets to show the currently-selected simpack-metadata.
+        '''
         self.version_display.refresh()
         self.code_link.refresh()
         self.Layout
