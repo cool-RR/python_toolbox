@@ -20,6 +20,9 @@ from .image_display import ImageDisplay
 class SimpackInfoPanel(CutePanel):
     '''
     Panel showing information about the currently selected simpack.
+    
+    This includes its title, version number, description, tags, preview image,
+    and a link to the simpack's source code.
 
     This panel wraps all of its subwidgets in a `wx.StaticBox` to make it clear
     that they are all part of a single group.
