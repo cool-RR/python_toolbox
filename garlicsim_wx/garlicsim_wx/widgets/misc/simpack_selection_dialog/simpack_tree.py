@@ -314,6 +314,9 @@ class SimpackTree(CuteTreeCtrl):
 
             
     def _create_simpack_item(self, simpack_place_item, simpack_metadata):
+        '''
+        Create simpack item for `simpack_metadata` under `simpack_place_item`.
+        '''
         new_simpack_item = self.AppendItem(
             simpack_place_item,
             text=simpack_metadata.name
@@ -326,6 +329,7 @@ class SimpackTree(CuteTreeCtrl):
 
             
     def _create_simpack_place_item(self, simpack_place):
+        '''Create simpack place item for `simpack_place`.'''
         new_simpack_place_item = self.AppendItem(
             self.root_item,
             text=simpack_place.name
@@ -343,7 +347,13 @@ class SimpackTree(CuteTreeCtrl):
 
                             
     def ensure_simpack_selected(self):
+        '''
+        Ensure that a simpack is selected.
         
+        If a simpack is not currently selected, we'll try to select a simpack
+        belonging to the currently-selected simpack place, if one is selected;
+        otherwise, we'll just select the first simpack in the tree.
+        '''
         if not self._filtered_simpack_places_tree or not \
                               any(self._filtered_simpack_places_tree.values()):
             # If there are no simpacks, do nothing.
@@ -363,8 +373,7 @@ class SimpackTree(CuteTreeCtrl):
             
         elif type(self.GetItemPyData(selected_item)) is SimpackPlace:
             # A simpack place is selected.
-             
-            
+              
             # If it contains simpacks, select the first one:...
             possible_simpack_item, _ = self.GetFirstChild(selected_item)
             if possible_simpack_item.Ok():
@@ -378,15 +387,18 @@ class SimpackTree(CuteTreeCtrl):
 
             
     def _select_first_simpack(self):
+        '''Select the first simpack item in the visual tree.'''
         simpack_item = self._get_simpack_items()[0]
         self.SelectItem(simpack_item)
                                 
         
     def _get_simpack_items(self):
+        '''Get all the simpack items in the visual tree.'''
         return self.get_children_of_item(self.root_item, generations=2)
     
     
     def refresh(self):
+        '''Refresh the tree, making it show the selected simpack-metadata.'''
         new_simpack_metadata = self.simpack_selection_dialog.simpack_metadata
         
         selected_item = self.GetSelection()
@@ -400,21 +412,33 @@ class SimpackTree(CuteTreeCtrl):
                             
             self.SelectItem(simpack_item)
 
-
             
-    def _get_simpack_item_deleting_filter_words(self, new_simpack_metadata):
+    def _get_simpack_item_deleting_filter_words(self, simpack_metadata):
+        '''
+        Get simpack item of `simpack_metadata` deleting filter words as needed.
+        
+        This is a tricky method: It's being given a `simpack_metadata`, and its
+        goal is to return the simpack item that corresponds to it. But, that
+        simpack item might not currently exist because there may be filter
+        words in the `FilterBox` that are causing it to be filtered out. If
+        this is the case, this method will delete the filter words one by one
+        until the simpack will no longer be filtered out and it will have a
+        simpack item in the visual tree.
+        
+        Returns the simpack item.
+        '''
         
         filter_box = self.simpack_selection_dialog.navigation_panel.filter_box
         try:
             simpack_item = self._get_simpack_item_of_simpack_metadata(
-                new_simpack_metadata
+                simpack_metadata
             )
         except LookupError:
             while filter_box.filter_words:
                 try: 
                     simpack_item = \
                         self._get_simpack_item_of_simpack_metadata(
-                            new_simpack_metadata
+                            simpack_metadata
                         )
                 except LookupError:
                     new_filter_words = filter_box.filter_words[:-1]
@@ -426,7 +450,7 @@ class SimpackTree(CuteTreeCtrl):
                 try:
                     simpack_item = \
                         self._get_simpack_item_of_simpack_metadata(
-                            new_simpack_metadata
+                            simpack_metadata
                         )
                 except LookupError:
                     raise LookupError("Deleted all filter words, but still "

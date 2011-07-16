@@ -17,6 +17,12 @@ class CuteTreeCtrl(wx.TreeCtrl, CuteControl):
     ''' '''
     
     def get_children_of_item(self, item, generations=1):
+        '''
+        Get all the child items of `item`.
+        
+        If `generations` is `1`, the children will be returned; if it's `2`,
+        the grand-children will be returned, etc.
+        '''
         if generations == 0:
             return tuple(item)
         
