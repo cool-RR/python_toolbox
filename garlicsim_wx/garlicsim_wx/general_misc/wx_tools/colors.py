@@ -26,6 +26,12 @@ is_win = (wx.Platform == '__WXMSW__')
 
 
 @caching.cache()
+def get_foreground_color():
+    '''Get the default `garlicsim_wx` foreground color.'''    
+    return wx.SystemSettings.GetColour(wx.SYS_COLOUR_MENUTEXT)
+
+
+@caching.cache()
 def get_background_color():
     '''Get the default `garlicsim_wx` background color'''
     
@@ -44,33 +50,14 @@ def get_background_color():
                       "'__WXMAC__' nor '__WXMSW__'. Things might not work "
                       "properly.")
         return wx.Colour(212, 208, 200)
-
     
-@caching.cache()
-def get_foreground_color():
-    '''Get the default `garlicsim_wx` background color blocktododoc'''
-    
-    if is_win or is_mac or is_gtk:
-        # return wx.Colour(212, 208, 200)
-        return wx.SystemSettings.GetColour(wx.SYS_COLOUR_MENUTEXT)
-    #elif is_mac:
-        #return wx.Colour(232, 232, 232)
-    #elif is_gtk:
-        ## Until `SYS_COLOUR_*` get their act togother, we're using Windows
-        ## colors for Linux.
-        #return wx.Colour(212, 208, 200)
-    
-    else:
-        warnings.warn("Unidentified platform! It's neither '__WXGTK__', "
-                      "'__WXMAC__' nor '__WXMSW__'. Things might not work "
-                      "properly.")
-        return wx.Colour(0, 0, 0)
-
     
 @caching.cache()
 def get_background_brush():
     '''Get the default `garlicsim_wx` background brush.'''
     return wx.Brush(get_background_color())
+
+
 
 
 ### Color conversions: ########################################################
