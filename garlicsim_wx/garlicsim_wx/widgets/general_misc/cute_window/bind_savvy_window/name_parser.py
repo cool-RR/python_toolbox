@@ -142,7 +142,6 @@ class NameParser(object):
            self.n_preceding_underscores_possibilities:
             return None
         cleaned_name = unmangled_name[n_preceding_underscores:]
-        # blocktodo: What about the 'on' part?
         for case_style in self.case_style_possibilites:
             result = case_style.parse(cleaned_name)
             if result is not None:
