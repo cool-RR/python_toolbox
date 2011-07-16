@@ -105,8 +105,6 @@ class NavigationPanel(CutePanel):
         )
             
         
-        # blocktodo: if `wx.SearchCtrl` doesn't give us everything we need, can
-        # find something else.
         # blocktodo: not getting enough padding for the search control on Mac
         self.filter_box = filter_box_module.FilterBox(self)
         self.filter_sizer.Add(
@@ -121,12 +119,9 @@ class NavigationPanel(CutePanel):
         ### Building back and forward buttons: ################################
         #                                                                     #
         
-        # Two peculiar things about how we're binding events here, both due to
-        # accelerator weirdnesses:
-        #  1. We're binding events to the parent instead of the current widget
-        #     because otherwise accelerators don't work on parent on GTK.
-        #  2. We're binding both button events *and* menu events, because on 
-        #     Mac accelerators can only trigger menu events.
+        # Note that the handlers for these two buttons are defined on the
+        # parent, `SimpackSelectionDialog`, because otherwise their
+        # accelerators wouldn't work on GTK.
         
         self.back_button = CuteBitmapButton(
             self,
