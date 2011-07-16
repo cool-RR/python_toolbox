@@ -69,6 +69,8 @@ def __check_prerequisites():
             return []
         
     def check_pywin32():
+        if not sys.platform == 'win32':
+            return []
         try:
             import win32api
             import win32process
@@ -83,7 +85,7 @@ def __check_prerequisites():
             return [win32api, win32process, win32com]
         
         
-    checkers = [check_pkg_resources, check_distribute]
+    checkers = [check_pkg_resources, check_distribute, check_pywin32]
     
     for checker in checkers:
         modules += checker()
