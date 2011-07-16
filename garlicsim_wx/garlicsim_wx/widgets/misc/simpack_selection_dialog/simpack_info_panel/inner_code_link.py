@@ -18,13 +18,15 @@ from garlicsim_wx.widgets.general_misc.cute_hyperlink_ctrl \
 
 
 class InnerCodeLink(CuteHyperlinkCtrl):
+    '''Actual link to the simpack's code folder.'''
     
     def __init__(self, code_link):
-        ''' '''
+        '''Construct the `InnerCodeLink`, using `code_link` as parent.'''
         self.code_link = code_link
         CuteHyperlinkCtrl.__init__(self, code_link, label='Show code')
         self.HelpText = ("Click to open the folder with currently-selected "
                          "simpack's code.")
+        self.SetToolTipString(self.HelpText)
         if wx_tools.is_gtk:
             self.BackgroundColour = self.Parent.BackgroundColour
         self.VisitedColour = self.HoverColour = self.NormalColour

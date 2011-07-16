@@ -13,12 +13,15 @@ from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.widgets.general_misc.cute_static_text import CuteStaticText
 
 
-base_help_text = "Sorry, the source code for this simpack is not available."
+base_help_text = 'Sorry, the source code for this simpack is not available.'
 
 
 class CodeUnavailableNotice(CuteStaticText):
+    '''
+    Static text saying "(Code unavailable)", specifying reason in tooltip.
+    '''
     def __init__(self, code_link):
-        ''' '''
+        '''Construct the `CodeUnavailableNotice`.'''
         self.code_link = code_link
         CuteStaticText.__init__(self,
                                 code_link,
@@ -32,5 +35,10 @@ class CodeUnavailableNotice(CuteStaticText):
         )
         
     def set_reason(self, reason):
+        '''
+        Set a textual reason for the code being unavailable.
+        
+        This reason will be shown in the tooltip and help text.
+        '''
         self.HelpText = base_help_text + reason
         self.SetToolTipString(self.HelpText)

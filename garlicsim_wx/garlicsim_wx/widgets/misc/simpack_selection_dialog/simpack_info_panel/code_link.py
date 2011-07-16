@@ -17,9 +17,15 @@ from .code_unavailable_notice import CodeUnavailableNotice
 
 
 class CodeLink(CutePanel):
+    '''
+    Link to the selected simpack's source code.
     
+    If unable to supply such a link, shows a "(Code unavailable)" static text.
+    '''
     def __init__(self, technical_details_bar):
-        ''' '''
+        '''
+        Construct the `CodeLink`, using `technical_details_bar` as parent.
+        '''
         self.technical_details_bar = technical_details_bar
         CutePanel.__init__(self, technical_details_bar)
         if wx_tools.is_gtk:
@@ -37,6 +43,7 @@ class CodeLink(CutePanel):
         
         
     def refresh(self):
+        '''Show link to simpack's code, or "(Code unavailable)" notice.'''
         simpack_metadata = self.technical_details_bar.simpack_info_panel.\
                                       simpack_selection_dialog.simpack_metadata
         self.Show(simpack_metadata is not None)
