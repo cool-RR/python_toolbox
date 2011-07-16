@@ -25,13 +25,19 @@ def get_background_html_color():
         return wx_tools.colors.wx_color_to_html_color(
             wx_tools.colors.get_background_color(),
         )
+
     
-# blocktodo: probably need foreground color too
+@caching.cache()
+def get_foreground_html_color():
+    return wx_tools.colors.wx_color_to_html_color(
+        wx_tools.colors.get_foreground_color(),
+    )
 
 
 @caching.cache()
 def tag_to_html(tag):
     return '<a href="%s">%s</a>' % (tag, tag)
+
 
 @caching.cache()
 def tags_to_html(tags):
@@ -57,20 +63,19 @@ def simpack_metadata_to_html(simpack_metadata):
     parsed_rst = docutils.core.publish_parts(simpack_metadata.description,
                                              writer_name='html')['body']
     return '''
-          <body bgcolor="%s" color="%s">
+          <body bgcolor="%s" text="%s">
             %s
             <div id="description">
               %s
             </div>
           </body>
         </html>
-        ''' % \
-            (
-                get_background_html_color(),
-                'black',
-                tags_to_html(simpack_metadata.tags),
-                parsed_rst
-            )
+        ''' % (
+            get_background_html_color(),
+            get_foreground_html_color(),
+            tags_to_html(simpack_metadata.tags),
+            parsed_rst
+        )
 
 
 class DescriptionDisplay(CuteHtmlWindow):
