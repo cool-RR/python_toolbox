@@ -23,9 +23,7 @@ import garlicsim_wx
 from .simpack_info_panel import SimpackInfoPanel
 
 
-# blocktodo: Go over all methods here, ensure they're relevant.
 # blocktodo: Don't forget tooltips here wherever possible
-# blocktodo: Enter on simpack tree should OK the dialog
 # blocktodo: On Ubuntu when I pressed X it didn't exit the dialog.
 
 

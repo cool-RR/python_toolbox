@@ -104,8 +104,6 @@ class NavigationPanel(CutePanel):
             border=5,
         )
             
-        
-        # blocktodo: not getting enough padding for the search control on Mac
         self.filter_box = filter_box_module.FilterBox(self)
         self.filter_sizer.Add(
             self.filter_box,

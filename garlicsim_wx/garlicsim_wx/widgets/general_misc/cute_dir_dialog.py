@@ -43,7 +43,6 @@ class CuteDirDialog(CuteDialog, wx.DirDialog):
         Returns `None` if "Cancel" was pressed.
         '''
         dialog = cls(*args, **kwargs)
-        dialog.SetFocus() # Needed on Win7
         try:
             result = dialog.ShowModal()
         finally:
