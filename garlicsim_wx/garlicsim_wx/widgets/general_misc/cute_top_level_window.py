@@ -19,10 +19,8 @@ class CuteTopLevelWindow(wx.TopLevelWindow, CuteWindow):
     The advantages of this class over `wx.TopLevelWindow`:
     
       - A good background color.
-      - Double-buffering.
       - Advantages given by `CuteWindow`
     
     '''
     def __init__(self, *args, **kwargs):
         self.set_good_background_color()
-        self.SetDoubleBuffered(True)

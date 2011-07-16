@@ -54,6 +54,7 @@ class Frame(CuteFrame):
         CuteFrame.__init__(self, *args, **kwargs)
         
         self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
+        self.SetDoubleBuffered(True)
         
         self.SetIcons(garlicsim_wx.misc.icon_bundle.get_icon_bundle())
         
