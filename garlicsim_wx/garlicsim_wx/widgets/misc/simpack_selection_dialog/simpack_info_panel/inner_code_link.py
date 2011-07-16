@@ -12,7 +12,6 @@ import os.path
 import wx
 
 from garlicsim.general_misc import os_tools
-from garlicsim.general_misc import sys_tools
 from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.widgets.general_misc.cute_hyperlink_ctrl \
                                                        import CuteHyperlinkCtrl

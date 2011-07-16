@@ -9,24 +9,11 @@ See its documentation for more info.
 
 from __future__ import with_statement
 
-import os
-import sys
-import glob
-import pkgutil
-
 import wx
-import pkg_resources
 
-from garlicsim.general_misc import comparison_tools
-from garlicsim.general_misc import address_tools
-from garlicsim.general_misc import path_tools
-from garlicsim.general_misc import import_tools
-from garlicsim.general_misc import package_finder
 from garlicsim_wx.general_misc.cute_timer import CuteTimer
-from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
-from garlicsim_wx.widgets.general_misc.cute_dir_dialog import CuteDirDialog
 from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
-from garlicsim_wx.general_misc import emitters
+from garlicsim_wx.widgets.general_misc.cute_dialog import CuteDialog
 from garlicsim_wx.widgets.general_misc.cute_hidden_button import \
                                                                CuteHiddenButton
 from garlicsim_wx.general_misc import wx_tools

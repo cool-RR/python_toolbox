@@ -6,9 +6,9 @@ This module defines the `` class.
 
 See its documentation for more information.
 '''
+
 import wx
 
-from garlicsim_wx.general_misc import emitters
 from garlicsim_wx.widgets.general_misc.cute_control import CuteControl
 from garlicsim_wx.general_misc import wx_tools
 

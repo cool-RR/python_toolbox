@@ -7,11 +7,8 @@ This module defines the `DescriptionDisplay` class.
 See its documentation for more information.
 '''
 
-import re
 import urlparse
 
-import docutils.parsers.rst
-import docutils.utils
 import docutils.core
 import wx
 

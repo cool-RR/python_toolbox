@@ -7,32 +7,15 @@ This module defines the `SimpackTree` class.
 See its documentation for more info.
 '''
 
-import os
 import sys
-import glob
-import pkgutil
-import itertools
-import collections
 
 import wx
-import pkg_resources
 
-from garlicsim.general_misc.comparison_tools import underscore_hating_key
-from garlicsim.general_misc import address_tools
-from garlicsim.general_misc import path_tools
-from garlicsim.general_misc import dict_tools
-from garlicsim.general_misc import cute_iter_tools
-from garlicsim.general_misc import sequence_tools
-from garlicsim.general_misc import import_tools
-from garlicsim.general_misc import package_finder
 from garlicsim.general_misc.nifty_collections import OrderedDict
 from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.widgets.general_misc.cute_tree_ctrl import CuteTreeCtrl
 
-import garlicsim
 import garlicsim_wx
-import garlicsim_lib
-from garlicsim.misc import simpack_tools
 from garlicsim.misc.simpack_tools import SimpackMetadata
 from garlicsim_wx.misc.simpack_place import SimpackPlace
 

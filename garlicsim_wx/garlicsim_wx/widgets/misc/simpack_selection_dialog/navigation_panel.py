@@ -7,23 +7,13 @@ This module defines the `NavigationPanel` class.
 See its documentation for more info.
 '''
 
-import os
 import sys
-import glob
-import pkgutil
 import itertools
 import collections
 
-import wx
 import wx.lib.dialogs
-import pkg_resources
 
-from garlicsim.general_misc.comparison_tools import underscore_hating_key
-from garlicsim.general_misc import address_tools
-from garlicsim.general_misc import path_tools
 from garlicsim.general_misc import sequence_tools
-from garlicsim.general_misc import import_tools
-from garlicsim.general_misc import package_finder
 from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.general_misc.wx_tools.keyboard import keys
 from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
@@ -38,8 +28,6 @@ from . import filter_box as filter_box_module
 
 from . import images as __images_package
 images_package = __images_package.__name__
-
-# blocktodo: Back and forward buttons should be grayed out sometimes.
 
 
 class NavigationPanel(CutePanel):
@@ -150,7 +138,7 @@ class NavigationPanel(CutePanel):
                 images_package,
                 'back_disabled.png'
             ),
-            tool_tip=(u'Back (%s)' % wx_tools.keyboard.keys.back_key_string),
+            tool_tip=(u'Back (%s)' % keys.back_key_string),
             help_text=(u'Go to the previously-selected simpack. (%s)' %
                        keys.back_key_string)
         )
@@ -172,8 +160,7 @@ class NavigationPanel(CutePanel):
                 images_package,
                 'forward_disabled.png'
             ),
-            tool_tip=(u'Forward (%s)' %
-                      wx_tools.keyboard.keys.forward_key_string),
+            tool_tip=(u'Forward (%s)' % keys.forward_key_string),
             help_text=(u'Go to the simpack you visited before you hit the '
                        'back button. (%s)' % keys.forward_key_string)
         )
@@ -192,8 +179,8 @@ class NavigationPanel(CutePanel):
             )
         
         self.simpack_selection_dialog.add_accelerators(
-            {wx_tools.keyboard.keys.back_keys: self.back_button.Id,
-             wx_tools.keyboard.keys.forward_keys: self.forward_button.Id}
+            {keys.back_keys: self.back_button.Id,
+             keys.forward_keys: self.forward_button.Id}
         )
         
         self.bind_event_handlers(NavigationPanel)

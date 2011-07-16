@@ -12,7 +12,6 @@ import wx
 from garlicsim_wx.widgets.general_misc.cute_static_text import CuteStaticText
 
 
-
 class NameDisplay(CuteStaticText):
     def __init__(self, simpack_info_panel):
         ''' '''

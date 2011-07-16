@@ -17,6 +17,7 @@ from .description_display import DescriptionDisplay
 from .image_display import ImageDisplay
 # blocktodo: if tags end up in html, can probably get rid of one sizer
 
+
 class SimpackInfoPanel(CutePanel):
     def __init__(self, simpack_selection_dialog):
         self.simpack_selection_dialog = simpack_selection_dialog
