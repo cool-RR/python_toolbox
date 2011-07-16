@@ -24,10 +24,28 @@ from .simpack_info_panel import SimpackInfoPanel
 
 
 MAC_BOTTOM_SPACING_SIZE = 8
+'''
+Space in pixel that's put at bottom at dialog on Mac.
+
+This is done because the dialog in Mac is cut too short on the bottom for some
+reason.
+'''
 
 
 class SimpackSelectionDialog(CuteDialog):
-    '''Dialog for selecting a simpack when creating a new gui project.'''
+    '''
+    Dialog for selecting a simpack when creating a new gui project.
+
+    This dialog shows a tree control from which a simpack may be chosen.
+    
+    A button allows adding simpacks from a different folder. It's also possible
+    to filter simpacks by text using the `FilterBox` in the left-bottom corner.
+    
+    When selecting a simpack, information about it (its name, description,
+    version number and tags) is shown in the `SimpackInfoPanel` subwidget in
+    the right-hand side of this widget, so the user could understand what kind
+    of simpack he's using before he decides whether to start a new project.
+    '''
     
     def __init__(self, frame):
         CuteDialog.__init__(
@@ -39,10 +57,28 @@ class SimpackSelectionDialog(CuteDialog):
         
         assert isinstance(frame, garlicsim_wx.Frame)
         self.frame = frame
+        '''The GarlicSim frame that this dialog belongs to.'''
         
         self.simpack = None
-        self.simpack_metadata = None
+        '''
+        The simpack that was selected in the dialog.
         
+        This attribute is populated only after the simpack has been imported,
+        and immediately afterwards the dialog will be closed and the new
+        project created.
+        '''
+        
+        self.simpack_metadata = None
+        '''
+        The currently selected simpack-metadata.
+        
+        This attribute is changed every time the user selects a different
+        simpack in the `SimpackTree`. The metadata is retrieved without
+        importing the simpack.
+        
+        Every time the active simpack-metadata changes, the `SimpackInfoPanel`
+        and its subwidgets refresh themselves to show the new simpack-metadata.
+        '''
         
         with self.freezer:
             self.__init_build()
@@ -53,6 +89,7 @@ class SimpackSelectionDialog(CuteDialog):
             
         
     def __init_build(self):
+        '''Build the dialog.'''
         
         ### Setting up flex-grid-sizer: #######################################
         #                                                                     #
@@ -70,7 +107,6 @@ class SimpackSelectionDialog(CuteDialog):
         
         ### Building simpack tree: ############################################
         #                                                                     #
-        
         self.simpack_tree_sizer = wx.BoxSizer(wx.VERTICAL)
         
         self.flex_grid_sizer.Add(self.simpack_tree_sizer,
@@ -98,9 +134,8 @@ class SimpackSelectionDialog(CuteDialog):
             border=0,
         )
         
-        self.choose_a_simpack_static_text.SetHelpText(
-            self.simpack_tree.GetHelpText()
-        )
+        self.choose_a_simpack_static_text.HelpText = self.simpack_tree.HelpText
+        
         #                                                                     #
         ### Finished building simpack tree. ###################################
         
@@ -137,7 +172,7 @@ class SimpackSelectionDialog(CuteDialog):
         self.create_project_button = wx.Button(self, wx.ID_OK,
                                                'Create &project')
         self.create_project_button.SetDefault()
-        self.create_project_button.SetHelpText('Start a new simulation '
+        self.create_project_button.HelpText = ('Start a new simulation '
                                                'project using the selected '
                                                'simpack.')
         
@@ -210,6 +245,12 @@ class SimpackSelectionDialog(CuteDialog):
         
     @staticmethod
     def create_show_modal_and_return_simpack(frame):
+        '''
+        Create the dialog, `.ShowModal` it, and return the selected simpack.
+        
+        Returns the simpack if the dialog succeded. If the user pressed
+        "Cancel", returns None.
+        '''
         simpack_selection_dialog = SimpackSelectionDialog(frame)
         try:
             return_id = simpack_selection_dialog.ShowModal()
@@ -220,10 +261,21 @@ class SimpackSelectionDialog(CuteDialog):
         
         
     def set_simpack_metadata(self, simpack_metadata):
+        '''
+        Set a new simpack-metadata to be selected.
+        
+        All the widgets in `SimpackInfoPanel` will show information from this
+        simpack-metadata. If the user will hit the "Create project" button, the
+        corresponding simpack will be imported and a new project will be
+        created with it.
+        '''
         self.navigation_panel.set_simpack_metadata(simpack_metadata)
         
     
     def refresh(self):
+        '''
+        Refresh all widgets, making them show the selected simpack-metadata.
+        '''
         self.create_project_button.Enable(self.simpack_metadata is not None)
         self.simpack_tree.refresh()
         self.simpack_info_panel.refresh()
@@ -235,29 +287,28 @@ class SimpackSelectionDialog(CuteDialog):
         return CuteDialog.EndModal(self, retCode)
                 
 
+    ### Event handlers: #######################################################
+    #                                                                         #
     def _on_reload_timer(self, event):
         self.simpack_tree.reload_tree()
-        
         
     def _on_reload_hidden_button(self, event):
         self.simpack_tree.reload_tree()
                 
-        
     def _on_create_project_button(self, event):
         self.simpack = self.simpack_metadata.import_simpack() 
         self.EndModal(wx.ID_OK)
         
-        
     def _on_cancel_button(self, event):
         self.EndModal(wx.ID_CANCEL)
-        
                 
     def _on_navigation_panel__back_button(self, event):
         self.navigation_panel.back()
         
-        
     def _on_navigation_panel__forward_button(self, event):
         self.navigation_panel.forward()
+    #                                                                         #
+    ### Finished event handlers. ##############################################
         
 
 

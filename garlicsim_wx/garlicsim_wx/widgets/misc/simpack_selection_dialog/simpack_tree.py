@@ -27,7 +27,14 @@ class SimpackTree(CuteTreeCtrl):
     '''
     Widget showing a simpack tree, from which we can select a simpack.
     
+    The folders in the tree are simpack places (i.e. folder in which the user
+    wants to search simpacks) and their child-items are simpacks.
+        
     The tree can be filtered using the navigation panel's search box.
+    
+    When a simpack is selected in the tree, information about it is shown in
+    the `SimpackInfoPanel`, and if we double-click it on the tree (or press
+    Enter) a new project will be started with that simpack.
     '''
     
     def __init__(self, simpack_selection_dialog):
@@ -40,7 +47,7 @@ class SimpackTree(CuteTreeCtrl):
         assert isinstance(simpack_selection_dialog, SimpackSelectionDialog)
         self.simpack_selection_dialog = simpack_selection_dialog
         
-        self.SetHelpText('Here you can see the different simpacks available. '
+        self.HelpText = ('Here you can see the different simpacks available. '
                          'Choose one of them in order to start a project. If '
                          'you want to use simpacks from a different location, '
                          'press the "Add simpacks from a different folder..." '
@@ -49,37 +56,82 @@ class SimpackTree(CuteTreeCtrl):
         self.__init_images()
         
         self._simpack_places_tree = OrderedDict()
+        '''
+        A tree containing all the simpack places and simpacks.
+        
+        This is an ordered dict from each simpack place to a list of
+        simpack-metadatas of the simpacks that reside in it.
+        
+        This is not a filtered tree; it contains *all* the simpack places and
+        simpacks and it's not being filtered or otherwise affected by the
+        `FilterBox`.
+        '''
+        
         self._filtered_simpack_places_tree = OrderedDict()
+        '''
+        A tree containing the simpack places and simpacks after filtering.
+        
+        This is an ordered dict from each simpack place to a list of
+        simpack-metadatas of the simpacks that reside in it.
+        
+        Only those simpacks and simpack places that were accepted by the filter
+        words in `FilterBox` will be admitted into this tree.
+        '''
+        
         self._simpack_places_to_items = {}
+        '''A dict from each simpack place to its item in the visual tree.'''
+        
         self._simpack_places_to_expansion_states = {}
+        '''
+        A dict from each simpack place to the last expansion state of its item.
         
+        "Expansion state" is merely a `bool` that records whether the simpack
+        place's item was expanded in the tree or not. This is stored only for
+        simpack place items that have been removed from the visual tree, so
+        next time we'll show them we'll put them in the same expansion state
+        they were last in. At this point we will also remove them from this
+        dict.
+        '''
         
-        #self.AddColumn('', width=600)
-        #self.SetMainColumn(1)
         self.root_item = self.AddRoot('All simpack places')
+        '''
+        The root item that all simpack place items will be children of.
+        
+        This is never shown visually on the screen, but we still maintain it
+        because `wx.TreeCtrl` always needs to have exactly one root item.
+        '''
         
         self.bind_event_handlers(SimpackTree)
         
 
     def __init_images(self):
+        '''Create bitmaps/images to be used as icons for tree items.'''
+        
         self._simpack_bitmap = wx_tools.bitmap_tools.bitmap_from_pkg_resources(
             images_package,
             'simpack.png'
         )
+        '''Bitmap of a simpack, showing a crate with the GarlicSim logo.'''
+        
         self._closed_folder_bitmap = \
             wx_tools.generic_bitmaps.get_closed_folder_bitmap()
+        '''Bitmap of a closed folder.'''
+        
         self._open_folder_bitmap = \
             wx_tools.generic_bitmaps.get_open_folder_bitmap()
+        '''Bitmap of an open folder.'''
         
         self._bitmaps = [
             self._simpack_bitmap,
             self._closed_folder_bitmap,
             self._open_folder_bitmap
         ]
+        '''List of all item bitmaps.'''
         
         (self._SIMPACK_BITMAP_INDEX,
          self._CLOSED_FOLDER_BITMAP_INDEX,
          self._OPEN_FOLDER_BITMAP_INDEX) = range(3)
+        '''Indices of the different bitmaps in the bitmap list.'''
         
         self._image_list = wx.ImageList(16, 16, initialCount=0)
         for bitmap in self._bitmaps:
@@ -89,7 +141,14 @@ class SimpackTree(CuteTreeCtrl):
 
     
     def _reload_internal_trees(self):
+        '''
+        Recalculate the two internal trees of simpack places and simpacks.
         
+        These are `._simpack_places_tree` and `._filtered_simpack_places_tree`.
+        
+        This function ensures that the currently-active simpack places are in
+        the tree, and that for each of them all the simpacks are listed.
+        '''
         # Ensuring all simpack place paths are in `sys.path`:
         for simpack_place in garlicsim_wx.simpack_places:
             if simpack_place.path not in sys.path:
@@ -103,11 +162,16 @@ class SimpackTree(CuteTreeCtrl):
             
         for simpack_place in garlicsim_wx.simpack_places:
             
+            ### Putting simpacks in `._simpack_places_tree`: ##################
+            #                                                                 #
             simpacks = simpack_place.get_simpack_metadatas()
             simpacks.sort(key=lambda simpack_metadata: simpack_metadata.name)
             new_simpack_places_tree[simpack_place] = simpacks
+            #                                                                 #
+            ### Finished putting simpacks in `._simpack_places_tree`. #########
             
-            
+            ### Putting simpacks in `.filtered_simpack_places_tree`: ##########
+            #                                                                 #
             filtered_simpacks = \
                 [simpack_metadata for simpack_metadata in simpacks if
                  simpack_metadata.matches_filter_words(filter_words,
@@ -117,6 +181,8 @@ class SimpackTree(CuteTreeCtrl):
                               simpack_place.matches_filter_words(filter_words):
                 new_filtered_simpack_places_tree[simpack_place] = \
                                                               filtered_simpacks
+            #                                                                 #
+            ### Finished putting simpacks in `.filtered_simpack_places_tree`. #
             
         self._simpack_places_tree = new_simpack_places_tree
         self._filtered_simpack_places_tree = new_filtered_simpack_places_tree

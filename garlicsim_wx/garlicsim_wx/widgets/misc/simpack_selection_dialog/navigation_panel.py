@@ -218,6 +218,14 @@ class NavigationPanel(CutePanel):
 
         
     def set_simpack_metadata(self, simpack_metadata):
+        '''
+        Set a new simpack-metadata to be selected.
+        
+        All the widgets in `SimpackInfoPanel` will show information from this
+        simpack-metadata. If the user will hit the "Create project" button, the
+        corresponding simpack will be imported and a new project will be
+        created with it.
+        '''
         if not self._should_accept_new_simpack_metadata(simpack_metadata):
             return
         
