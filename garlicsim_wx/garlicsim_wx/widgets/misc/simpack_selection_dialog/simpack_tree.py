@@ -189,7 +189,12 @@ class SimpackTree(CuteTreeCtrl):
             
             
     def reload_tree(self, ensure_simpack_selected=False):
+        '''
+        Reload the visual tree on the screen.
         
+        The internal trees are first updated, and then the visual tree gets
+        updated to match the filtered internal tree.
+        '''
         self._reload_internal_trees()
         
         #######################################################################
@@ -219,7 +224,7 @@ class SimpackTree(CuteTreeCtrl):
             if simpack_place not in simpack_places_that_have_items:
                 self._create_simpack_place_item(simpack_place)
                 
-        self.SortChildren(self.root_item)
+        self.SortChildren(self.root_item) # Sorting simpack places by path
         #                                                                     #
         ### Finished adding new simpack places. ###############################
         
@@ -269,7 +274,7 @@ class SimpackTree(CuteTreeCtrl):
             #                                                                 #
             ### Finished adding new simpacks. #################################
             
-            self.SortChildren(simpack_place_item)
+            self.SortChildren(simpack_place_item) # Sorting simpacks by name
             
             simpack_items = self.get_children_of_item(simpack_place_item)
             assert len(simpack_items) == len(simpack_metadatas)
@@ -279,8 +284,18 @@ class SimpackTree(CuteTreeCtrl):
         #######################################################################
         #######################################################################
         
-        # (Doing expansion/collapsion of simpack place items only now, because
-        # we can't expand a folder before it had items in it.)
+        
+        
+        ### Expanding/collapsing simpack place items: #########################
+        #                                                                     #
+        
+        # We need to expand/collapse simpack place items that were previously
+        # removed from the tree and now re-added. We are returning them to the
+        # same expansion state they had before being removed.
+        #
+        # (The reason that we're doing this in the end of the method is because
+        # we can't expand a folder before it has any items in it.)
+        
         for simpack_place, expansion_state in \
                               self._simpack_places_to_expansion_states.items():
             if simpack_place in self._filtered_simpack_places_tree:
@@ -291,6 +306,8 @@ class SimpackTree(CuteTreeCtrl):
                     self.Expand(simpack_place_item)
                 else: # expansion_state is False
                     self.Collapse(simpack_place_item)
+        #                                                                     #
+        ### Finished expanding/collapsing simpack place items. ################
 
         if ensure_simpack_selected:
             self.ensure_simpack_selected()
