@@ -22,10 +22,14 @@ possible_image_names = [
     'preview.jpg',
     'preview.gif'
 ]
+'''The different acceptable names for simpack's preview images.'''
 
 
 @caching.cache()
 def get_simpack_bitmap(simpack_metadata):
+    '''
+    Get a simpack's preview image as bitmap, or `None` if there isn't one.
+    '''
     for possible_image_name in possible_image_names:
         if module_tasting.tasted_resources.resource_exists(
             simpack_metadata._tasted_simpack,
@@ -42,20 +46,24 @@ def get_simpack_bitmap(simpack_metadata):
 
 
 class ImageDisplay(CutePanel):
+    '''Panel that shows a preview image of the selected simpack.'''
 
     def __init__(self, simpack_info_panel):
+        '''
+        Construct the `ImageDisplay`, using `simpack_info_panel` as parent.
+        '''
         self.simpack_info_panel = simpack_info_panel
         CutePanel.__init__(self, simpack_info_panel)
         self.HelpText = 'A preview image of the currently-selected simpack.'
         if wx_tools.is_gtk:
             self.set_good_background_color()
         self._bitmap = wx.EmptyBitmap(1, 1)
-        #self.BackgroundColour = wx.NamedColour('red')
         self.bind_event_handlers(ImageDisplay)
         self.Hide()
         
         
     def refresh(self):
+        '''Show the image of the currently-selected simpack.'''
         simpack_metadata = \
             self.simpack_info_panel.simpack_selection_dialog.simpack_metadata
         if simpack_metadata is not None:

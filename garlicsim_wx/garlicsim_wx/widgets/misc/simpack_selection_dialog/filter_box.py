@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the `` class.
+This module defines the `FilterBox` class.
 
 See its documentation for more information.
 '''
@@ -20,7 +20,10 @@ filter_help_text = ('Type text in the filter box in order to filter the '
 
 
 class FilterBox(wx.SearchCtrl, CuteControl):
+    '''Box in which you can type text to filter the displayed simpacks.'''
+    
     def __init__(self, navigation_panel):
+        '''Construct the `FilterBox`, using `navigation_panel` as parent.'''
         wx.SearchCtrl.__init__(
             self,
             navigation_panel,
@@ -33,7 +36,8 @@ class FilterBox(wx.SearchCtrl, CuteControl):
 
     
     filter_words = property(
-        lambda self: self.Value.split()
+        lambda self: self.Value.split(),
+        doc='''The current filter words, e.g. `['physics', '3d', 'bodies']`.'''
     )
             
     
