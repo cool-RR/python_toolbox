@@ -8,4 +8,3 @@ See its documentation for more info.
 '''
 
 from .simpack_selection_dialog import SimpackSelectionDialog
-# blocktodo: search for redundant imports in whole package

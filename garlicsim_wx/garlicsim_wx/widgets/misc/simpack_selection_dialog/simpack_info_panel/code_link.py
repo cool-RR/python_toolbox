@@ -7,12 +7,8 @@ This module defines the `CodeLink` class.
 See its documentation for more information.
 '''
 
-import os.path
-
 import wx
 
-from garlicsim.general_misc import os_tools
-from garlicsim.general_misc import sys_tools
 from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.widgets.general_misc.cute_panel import CutePanel
 
@@ -62,14 +58,5 @@ class CodeLink(CutePanel):
                         ' The code has been compiled to binary form.'
                     )
                 
-        
-        
-    def _on_hyperlink(self, event):
-        simpack_metadata = self.technical_details_bar.simpack_info_panel.\
-                                      simpack_selection_dialog.simpack_metadata
-        assert simpack_metadata is not None
-        folder_path = \
-            os.path.split(simpack_metadata._tasted_simpack.__file__)[0]
-        os_tools.start_file(folder_path)
         
         

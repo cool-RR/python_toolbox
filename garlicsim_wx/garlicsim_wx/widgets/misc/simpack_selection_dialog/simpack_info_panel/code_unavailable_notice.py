@@ -12,7 +12,9 @@ import wx
 from garlicsim_wx.general_misc import wx_tools
 from garlicsim_wx.widgets.general_misc.cute_static_text import CuteStaticText
 
+
 base_help_text = "Sorry, the source code for this simpack is not available."
+
 
 class CodeUnavailableNotice(CuteStaticText):
     def __init__(self, code_link):
