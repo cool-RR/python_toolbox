@@ -37,6 +37,8 @@ For :mod:`garlicsim`
  
 * `distribute`_.
 
+* on Windows only: `Python for Windows Extensions`_.
+
 And for users of Python 2.5 only:
 
 * `Backport of the multiprocessing module`_.
@@ -44,7 +46,6 @@ And for users of Python 2.5 only:
 Optional but recommended:
 
 * `Psyco`_.
-* on Windows only: `Python for Windows Extensions`_.
  
 
 For :mod:`garlicsim_wx`

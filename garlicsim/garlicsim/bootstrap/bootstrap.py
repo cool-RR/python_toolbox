@@ -47,7 +47,7 @@ def __check_prerequisites():
                                 "currently installed on your system. It comes "
                                 "with `distribute`, so please install it "
                                 "according to the instructions here: "
-                                "pypi.python.org/pypi/distribute")
+                                "http://pypi.python.org/pypi/distribute")
         else:
             return [pkg_resources]
     
@@ -63,7 +63,7 @@ def __check_prerequisites():
             raise MissingModule("`distribute` is required, but it's not "
                                 "currently installed on your system. Please "
                                 "install it according to the instructions "
-                                "here: pypi.python.org/pypi/distribute")
+                                "here: http://pypi.python.org/pypi/distribute")
         else:
             # Returning empty list because we didn't import `distribute`:
             return []
@@ -79,7 +79,7 @@ def __check_prerequisites():
             raise MissingModule(
                 "`pywin32` is required, but it's not currently installed on "
                 "your system. Please install it according to the instructions "
-                "here: pypi.python.org/pypi/distribute"
+                "here: http://sourceforge.net/projects/pywin32/files/pywin32/"
             )
         else: 
             return [win32api, win32process, win32com]

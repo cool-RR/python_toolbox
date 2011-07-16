@@ -35,9 +35,6 @@ For :mod:`garlicsim`
  
 * `distribute`_.
 
-
-Optional but recommended:
-
 * on Windows only: `Python for Windows Extensions`_.
  
 
