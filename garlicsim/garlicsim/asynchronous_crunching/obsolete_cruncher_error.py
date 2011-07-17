@@ -7,14 +7,16 @@ This module defines the `ObsoleteCruncherException` exception.
 See its documentation for more info.
 '''
 
-class ObsoleteCruncherException(BaseException):
+from garlicsim.general_misc.exceptions import CuteBaseException
+
+
+class ObsoleteCruncherException(CuteBaseException):
     '''
-    The cruncher that got this exception raised became obsolte.
+    The cruncher became obsolete, we don't need it do no any more crunching.
     
     The cruncher is trying to do work, but in the meantime the main program
     decided that the work assigned to this cruncher is no longer wanted, and
     should therefore be stopped.
     '''
-    # Inherits from BaseException because it is an exit exception    
-    # todo: I heard that `BaseException.message` is deprecated! Problematic?
-    # Maybe make `CuteBaseException`?
+    # Inherits from `CuteBaseException` rather than `CuteException` because it
+    # is an exit exception.

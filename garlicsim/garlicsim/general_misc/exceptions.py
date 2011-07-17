@@ -4,9 +4,9 @@
 '''Defines exceptions.'''
 
 
-class CuteException(Exception):
+class CuteBaseException(BaseException):
     '''
-    Exception that uses its first line of documentation in lieu of a message.
+    Base exception that uses its first docstring line in lieu of a message.
     '''
 
     def __init__(self, message=None):
@@ -20,7 +20,7 @@ class CuteException(Exception):
             else:
                 message = ''
                 
-        Exception.__init__(self, message)
+        BaseException.__init__(self, message)
         
         self.message = message
         '''
@@ -30,5 +30,10 @@ class CuteException(Exception):
         being deprecated in Python. The message can also be accessed as the
         Python-approved `BaseException.args[0]`.
         '''
+        
+
+class CuteException(Exception, CuteBaseException):
+    '''Exception that uses its first docstring line in lieu of a message.'''
+    
 
         
