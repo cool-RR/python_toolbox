@@ -12,7 +12,7 @@ from garlicsim.general_misc.exceptions import CuteBaseException
 
 class ObsoleteCruncherException(CuteBaseException):
     '''
-    The cruncher became obsolete, we don't need it do no any more crunching.
+    The cruncher became obsolete; we don't need it do no any more crunching.
     
     The cruncher is trying to do work, but in the meantime the main program
     decided that the work assigned to this cruncher is no longer wanted, and
