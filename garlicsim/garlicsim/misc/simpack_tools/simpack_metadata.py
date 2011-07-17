@@ -155,6 +155,7 @@ class SimpackMetadata(_SimpackMetadataBase):
     
     @caching.CachedProperty
     def contains_source_files(self):
+        '''Does the simpack contain the source files?'''
         return module_tasting.tasted_resources.resource_exists(
             self._tasted_simpack,
             '__init__.py'
@@ -163,6 +164,7 @@ class SimpackMetadata(_SimpackMetadataBase):
     
     @caching.CachedProperty
     def is_zip_module(self):
+        '''Is the simpack a zipimported module?'''
         loader = getattr(self._tasted_simpack, '__loader__', None)
         return loader is not None and isinstance(loader, zipimport.zipimporter)
     
