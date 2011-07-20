@@ -37,7 +37,10 @@ class Personality(object):
         
         u = int(persistent._CrossProcessPersistent__uuid)
         
-        (u, human_name_seed) = divmod(u, 5494)        
+        (u, human_name_seed) = divmod(
+            u,
+            len(human_names.name_list)
+        )
         self.human_name = human_names.name_list[human_name_seed]
         '''A human name. (e.g. "Jeffrey".)'''
         
