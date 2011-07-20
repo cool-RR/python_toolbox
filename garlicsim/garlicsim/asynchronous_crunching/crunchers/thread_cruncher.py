@@ -60,9 +60,10 @@ class ThreadCruncher(threading.Thread, BaseCruncher):
     
      - Easy to debug.
     
-     - On a single-core computer, it may be faster than `ProcessCruncher` because
-       of shared memory.
-     '''
+     - On a single-core computer, it may be faster than `ProcessCruncher`\
+       because of shared memory.
+       
+    '''
     )
     
     
@@ -107,10 +108,10 @@ class ThreadCruncher(threading.Thread, BaseCruncher):
         Internal method.
         
         This is called when the cruncher is started. It just calls the
-        `main_loop` method in a `try` clause, excepting `ObsoleteCruncherException`;
-        That exception means that the cruncher has been retired in the middle of
-        its job, so it is propagated up to this level, where it causes the
-        cruncher to terminate.
+        `main_loop` method in a `try` clause, excepting
+        `ObsoleteCruncherException`; That exception means that the cruncher has
+        been retired in the middle of its job, so it is propagated up to this
+        level, where it causes the cruncher to terminate.
         '''
         try:
             self.main_loop()
@@ -179,8 +180,9 @@ class ThreadCruncher(threading.Thread, BaseCruncher):
         we retire the cruncher.
         '''
         if self.crunching_profile.state_satisfies(state):
-            raise ObsoleteCruncherException("We're done working, the clock target "
-                                        "has been reached. Shutting down.")
+            raise ObsoleteCruncherException("We're done working, the clock "
+                                            "target has been reached. "
+                                            "Shutting down.")
 
         
     def get_order(self):
@@ -198,8 +200,8 @@ class ThreadCruncher(threading.Thread, BaseCruncher):
     def process_order(self, order):
         '''Process an order receieved from `.order_queue`.'''
         if order == 'retire':
-            raise ObsoleteCruncherException("Cruncher received a 'retire' order; "
-                                        "Shutting down.")
+            raise ObsoleteCruncherException("Cruncher received a 'retire' "
+                                            "order; Shutting down.")
         
         elif isinstance(order, CrunchingProfile):
             self.process_crunching_profile_order(order)
@@ -208,9 +210,9 @@ class ThreadCruncher(threading.Thread, BaseCruncher):
     def process_crunching_profile_order(self, order):
         '''Process an order to update the crunching profile.'''
         if self.crunching_profile.step_profile != order.step_profile:
-            raise ObsoleteCruncherException('Step profile changed; shutting down. '
-                                        'Crunching manager should create a '
-                                        'new cruncher.')
+            raise ObsoleteCruncherException('Step profile changed; shutting '
+                                            'down. Crunching manager should '
+                                            'create a new cruncher.')
         self.crunching_profile = order
 
         

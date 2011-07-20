@@ -26,11 +26,11 @@ class Process(multiprocessing.Process):
     '''The actual system process used by `ProcessCruncher`.'''
     # One of the reasons that `Process` is a separate entity from
     # `ProcessCruncher` is that because the way the `multiprocessing` module
-    # works, all arguments to `Process.__init__` must be pickleable, which would
-    # prevent us from getting the crunching manager as an argument, since it's
-    # not pickleable.
+    # works, all arguments to `Process.__init__` must be pickleable, which
+    # would prevent us from getting the crunching manager as an argument, since
+    # it's not pickleable.
     
-    def __init__(self, step_iterator_getter, initial_state, crunching_profile):        
+    def __init__(self, step_iterator_getter, initial_state, crunching_profile):
         multiprocessing.Process.__init__(self)
         
         self.step_iterator_getter = step_iterator_getter
@@ -89,10 +89,10 @@ class Process(multiprocessing.Process):
         Internal method.
         
         This is called when the cruncher is started. It just calls the
-        `main_loop` method in a try clause, excepting `ObsoleteCruncherException`;
-        That exception means that the cruncher has been retired in the middle of
-        its job, so it is propagated up to this level, where it causes the
-        cruncher to terminate.
+        `main_loop` method in a try clause, excepting
+        `ObsoleteCruncherException`; That exception means that the cruncher has
+        been retired in the middle of its job, so it is propagated up to this
+        level, where it causes the cruncher to terminate.
         '''
         try:
             self.main_loop()
@@ -159,8 +159,9 @@ class Process(multiprocessing.Process):
         we retire the cruncher.
         '''
         if self.crunching_profile.state_satisfies(state):
-            raise ObsoleteCruncherException("We're done working, the clock target "
-                                        "has been reached. Shutting down.")
+            raise ObsoleteCruncherException("We're done working, the clock "
+                                            "target has been reached. "
+                                            "Shutting down.")
     
         
     def get_order(self):
@@ -179,8 +180,8 @@ class Process(multiprocessing.Process):
         '''Process an order receieved from `.order_queue`.'''
         
         if order == 'retire':
-            raise ObsoleteCruncherException("Cruncher received a 'retire' order; "
-                                        "Shutting down.")
+            raise ObsoleteCruncherException("Cruncher received a 'retire' "
+                                            "order; Shutting down.")
         
         elif isinstance(order, CrunchingProfile):
             self.process_crunching_profile_order(order)
@@ -190,7 +191,7 @@ class Process(multiprocessing.Process):
     def process_crunching_profile_order(self, order):
         '''Process an order to update the crunching profile.'''
         if self.crunching_profile.step_profile != order.step_profile:
-            raise ObsoleteCruncherException('Step profile changed; shutting down. '
-                                        'Crunching manager should create a '
-                                        'new cruncher.')
+            raise ObsoleteCruncherException('Step profile changed; shutting '
+                                            'down. Crunching manager should '
+                                            'create a new cruncher.')
         self.crunching_profile = order
