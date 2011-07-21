@@ -7,6 +7,7 @@ import itertools
 
 from garlicsim.general_misc.logic_tools import all_equal
 
+
 def test():
     '''Test the basic working of `all_equal`.'''
     yield _check, False
@@ -52,4 +53,3 @@ def test_exhaustive():
     assert all_equal(funky_floats)
     assert not all_equal(funky_floats, exhaustive=True)
                 
-                                        
