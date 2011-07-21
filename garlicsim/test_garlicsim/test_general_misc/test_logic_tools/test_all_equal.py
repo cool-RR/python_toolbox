@@ -37,6 +37,7 @@ def _check(exhaustive):
     
 def test_exhaustive():
     '''Test `all_equal` in cases where `exhaustive=True` is relevant.'''
+    
     class FunkyFloat(float):
         def __eq__(self, other):
             return (abs(self - other) <= 2)
