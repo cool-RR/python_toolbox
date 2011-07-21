@@ -33,7 +33,10 @@ def all_equal(iterable, exhaustive=False):
 def logic_max(iterable, relation=lambda a, b: (a >= b)):
     '''
     Get a list of maximums from the iterable.
-        
+    
+    That is, get all items that are bigger-or-equal to all the items in the
+    iterable.
+    
     `relation` is allowed to be a partial order.
     '''
     sequence = list(iterable)
