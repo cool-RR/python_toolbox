@@ -7,7 +7,7 @@ This module defines the `HasIdentity` class.
 See its documentation for more information.
 '''
 
-from garlicsim.general_misc import caching
+from garlicsim.general_misc import proxy_property
 from garlicsim.general_misc.persistent import CrossProcessPersistent
 
 
@@ -44,9 +44,8 @@ class HasIdentity(object):
     __and__ = has_same_identity_as
     
     
-    @caching.CachedProperty
-    def personality(self):
-        '''Personality containing a human name and two colors.'''
-        return self.__identity.personality
-        
+    personality = proxy_property.ProxyProperty(
+        '__identity.personality',
+        doc='''Personality containing a human name and two colors.'''
+    )
         
