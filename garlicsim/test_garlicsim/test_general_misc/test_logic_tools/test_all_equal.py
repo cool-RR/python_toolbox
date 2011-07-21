@@ -30,6 +30,25 @@ def _check(exhaustive):
     assert not all_equal(iter([1, 17, 1.0, 1]), exhaustive)
     assert not all_equal(set(['meow', 'grr']), exhaustive)
     assert not all_equal(['frr', 'frr', {}, 'frr', 'frr'], exhaustive)
-    assert not all_equal(itertools.count(), exhaustive)
+    assert not all_equal(itertools.count()) # Not using given `exhaustive`
+                                            # flag here because `count()` is
+                                            # infinite.
     
     
+def test_exhaustive():
+    '''Test `all_equal` in cases where `exhaustive=True` is relevant.'''
+    class FunkyFloat(float):
+        def __eq__(self, other):
+            return (abs(self - other) <= 2)
+        
+    funky_floats = [
+        FunkyFloat(1),
+        FunkyFloat(2),
+        FunkyFloat(3),
+        FunkyFloat(4)
+    ]
+    
+    assert all_equal(funky_floats)
+    assert not all_equal(funky_floats, exhaustive=True)
+                
+                                        
