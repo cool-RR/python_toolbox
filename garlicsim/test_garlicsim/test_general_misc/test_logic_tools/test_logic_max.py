@@ -53,6 +53,9 @@ def test():
             self.number = number
         def __ge__(self, other):
             return (10 <= self.number <= 20)
+        def __eq__(self, other):
+            assert isinstance(other, FunkyInt)
+            return other.number == self.number
         
     assert logic_max(
         [FunkyInt(7),
