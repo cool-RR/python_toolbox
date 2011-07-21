@@ -41,10 +41,9 @@ class ProcessCruncher(BaseCruncher):
     Read more about crunchers in the documentation of the `crunchers` package.
     
     The advantage of `ProcessCruncher` over `ThreadCruncher` is that
-    `ProcessCruncher` is able to run on a different core of the processor in the
-    machine, thus using the full power of the processor.
+    `ProcessCruncher` is able to run on a different core of the processor in
+    the machine, thus using the full power of the processor.
     '''
-    
     
     gui_explanation = string_tools.docstring_trim(
     '''
@@ -94,9 +93,9 @@ class ProcessCruncher(BaseCruncher):
         '''
         Return whether `ProcessCruncher` can be used with `simpack_grokker`.
         
-        For `ProcessCruncher` to be usable, the `multiprocessing` module must be
-        installed. Assuming it's installed, `ProcessCruncher` can be used if and
-        only if the simpack is not history-dependent.
+        For `ProcessCruncher` to be usable, the `multiprocessing` module must
+        be installed. Assuming it's installed, `ProcessCruncher` can be used if
+        and only if the simpack is not history-dependent.
         '''
         
         if not import_tools.exists('multiprocessing'):
