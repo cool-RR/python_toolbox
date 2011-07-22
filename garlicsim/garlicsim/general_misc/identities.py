@@ -45,7 +45,7 @@ class HasIdentity(object):
     
     
     personality = proxy_property.ProxyProperty(
-        '__identity.personality',
+        '_HasIdentity__identity.personality',
         doc='''Personality containing a human name and two colors.'''
     )
         

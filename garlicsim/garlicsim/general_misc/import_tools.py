@@ -106,10 +106,10 @@ def import_if_exists(module_name, silent_fail=False):
             else: # silent_fail is False
                 raise ImportError("Can't find %s." % module_name)
 
-    # blocktododoc Not actually using the result of `imp.find_module`, just want to know
-    # that it worked and the module exists. We'll let `normal_import` find the
-    # module again, assuming its finding procedure will work exactly the same
-    # as `imp`'s.
+    # blocktododoc Not actually using the result of `imp.find_module`, just
+    # want to know that it worked and the module exists. We'll let
+    # `normal_import` find the module again, assuming its finding procedure
+    # will work exactly the same as `imp`'s.
         
     return normal_import(module_name)
 
