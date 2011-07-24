@@ -3,16 +3,6 @@
 
 '''Provides a list of human names as `name_list`.'''
 
-import pkg_resources
+from . import _name_list
 
-__all__ = ['name_list']
-
-(male_raw, female_raw) = \
-    [
-        pkg_resources.resource_string(__name__, file_name) for 
-        file_name in ['male.txt', 'female.txt']
-    ]
-
-del file_name
-
-name_list = male_raw.split(':') + female_raw.split(':')
+name_list = _name_list.data.split('\n')
