@@ -113,7 +113,7 @@ setup_kwargs = {
     'description': \
         'GUI for garlicsim, a Pythonic framework for computer simulations',
     'author': 'Ram Rachum',
-    'author_email': 'cool-rr@cool-rr.com',
+    'author_email': 'ram@rachum.com',
     'url': 'http://garlicsim.org',
     'packages': get_packages(),
     'scripts': ['garlicsim_wx/scripts/GarlicSim.py',
