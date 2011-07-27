@@ -92,6 +92,42 @@ non-history-dependent ones.)
 Non-mandatory definitions
 =========================
 
+Metadata
+--------
+
+You may supply metadata about your simpack, including name, tags, description,
+version number and a preview image. This is helpful especially in the GUI, so
+users will know what your simpack is about before they start a simulation with
+it.
+
+This is how the metadata should be specified in the simpack's ``__init__.py``
+module:
+
+    '''
+    Simpack that does X, Y and Z.
+    
+    This is the description of your simpack. It's parsed from ReStructuredText,
+    so you may do stuff like *this* and `this` and **this**, and include `links
+    to websites <http://python.org>` or links to simpack tags, like
+    `cellular-automata`.
+    '''
+    
+    from .state import State    
+    
+    name = 'Name of the simpack"
+    
+    tags = ('physics', 'cellular-automata', 'or', 'any', 'other', 'tags')
+    
+    __version__ = '0.8.2'
+    
+
+If you want to include a preview image with your simpack, place it alongside
+the ``__init__.py`` file. It must be either a PNG, JPEG or GIF image, and it
+must be called either ``preview.png``, ``preview.jpg`` or ``preview.gif``. Keep
+in mind that the image will be displayed cropped centerwise in the GUI, and the
+display size will be approximately 255x360 pixels.
+
+
 State creation methods
 ----------------------
 
