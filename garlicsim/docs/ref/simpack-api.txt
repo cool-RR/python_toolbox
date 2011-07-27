@@ -127,6 +127,12 @@ must be called either ``preview.png``, ``preview.jpg`` or ``preview.gif``. Keep
 in mind that the image will be displayed cropped centerwise in the GUI, and the
 display size will be approximately 255x360 pixels.
 
+One word of warning: Because of the special way that metadata is loaded from
+the ``__init__.py`` module, (namely module-tasting, which allows loading the
+metadata without importing the entire simpack,) try not to have too complex
+logic in your ``__init__.py`` module, aside from the metadata assignments and
+relative imports.
+
 
 State creation methods
 ----------------------
