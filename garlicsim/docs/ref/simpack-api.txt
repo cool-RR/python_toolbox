@@ -101,16 +101,15 @@ users will know what your simpack is about before they start a simulation with
 it.
 
 This is how the metadata should be specified in the simpack's ``__init__.py``
-module:
+module::
 
     '''
     Simpack that does X, Y and Z.
     
     This is the description of your simpack. It's parsed from ReStructuredText,
-    so you may do stuff like *this* and `this` and **this**, and include `links
-    to websites <http://python.org>` or links to simpack tags, like
-    `cellular-automata`.
-    '''
+    so you may do stuff like \*this\* and \`this\` and **this**, and include
+    `links to websites <http://python.org>` or links to simpack tags, like
+    `cellular-automata`. '''
     
     from .state import State    
     
