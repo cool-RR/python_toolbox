@@ -111,6 +111,8 @@ module::
     to websites <http://python.org>` or links to simpack tags, like
     `cellular-automata`.
     '''
+
+::
     
     from .state import State    
     
