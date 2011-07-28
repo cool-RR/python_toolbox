@@ -14,7 +14,8 @@ class CuteBaseException(BaseException):
         # to force an empty message.
         
         if message is None:
-            if self.__doc__ and (type(self) is not CuteException):
+            if self.__doc__ and \
+                        (type(self) not in (CuteBaseException, CuteException)):
                 message = self.__doc__.strip().split('\n')[0] 
                 # Getting the first line of the documentation
             else:
@@ -32,7 +33,7 @@ class CuteBaseException(BaseException):
         '''
         
 
-class CuteException(Exception, CuteBaseException):
+class CuteException(CuteBaseException, Exception):
     '''Exception that uses its first docstring line in lieu of a message.'''
     
 
