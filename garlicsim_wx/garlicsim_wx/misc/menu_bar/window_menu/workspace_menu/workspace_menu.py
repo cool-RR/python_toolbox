@@ -25,7 +25,7 @@ class WorkspaceMenu(CuteMenu):
         
         self.save_workspace_button = self.Append(
             -1,
-            '&Save workspace...',
+            '&Save Workspace...',
             ''' Save the current workspace configuration, so that it may be \
 recalled in the future'''
         )
@@ -34,7 +34,7 @@ recalled in the future'''
         
         self.delete_workspace_button = self.Append(
             -1,
-            '&Delete workspace...',
+            '&Delete Workspace...',
             ' Delete one of the saved workspace configurations'
         )
         self.delete_workspace_button.Enable(False)
@@ -45,7 +45,7 @@ recalled in the future'''
                 
         self.delete_workspace_button = self.Append(
             -1,
-            'De&fault workspace',
+            'De&fault Workspace',
             ' Use the factory-default workspace configuration'
         )
         self.delete_workspace_button.Enable(False)

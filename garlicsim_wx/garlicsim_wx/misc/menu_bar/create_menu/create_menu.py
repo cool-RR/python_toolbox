@@ -25,7 +25,7 @@ class CreateMenu(CuteMenu):
         
         self.create_state_button = self.Append(
             -1, 
-            'Create &state...',
+            'Create &State...',
             ' Create a new state, which will become a root node in the tree'
         )
         frame.Bind(
@@ -40,7 +40,7 @@ class CreateMenu(CuteMenu):
         
         self.create_step_profile_button = self.Append(
             -1, 
-            'Create step &profile...',
+            'Create Step &Profile...',
             ' Create a new step profile, which can modify the world rules '
             'under which the simulation crunches'
         )

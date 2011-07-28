@@ -25,7 +25,7 @@ class BlockMenu(CuteMenu):
        
         self.split_button = self.Append(
             -1,
-            '&Split active block...',
+            '&Split Active Block...',
             " Split the active block into two separate blocks"
         )
         self.split_button.Enable(False)
@@ -33,7 +33,7 @@ class BlockMenu(CuteMenu):
         
         self.scatter_button = self.Append( # todo: rename
             -1,
-            'S&catter active block...',
+            'S&catter Active Block...',
             ' Scatter the active block, leaving all its nodes blockless'
         )
         self.scatter_button.Enable(False)

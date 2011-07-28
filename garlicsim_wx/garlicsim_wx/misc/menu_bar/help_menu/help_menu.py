@@ -38,7 +38,7 @@ class HelpMenu(CuteMenu):
         
         self.welcome_screen_button = self.Append(
             -1,
-            '&Welcome screen',
+            '&Welcome Screen',
             ' Show the welcome screen'
         )
         self.welcome_screen_button.Enable(False)
@@ -50,7 +50,7 @@ class HelpMenu(CuteMenu):
         self.online_resources_menu = OnlineResourcesMenu(frame)
         self.online_resources_menu_button = self.AppendMenu(
             -1,
-            '&Online resources',
+            '&Online Resources',
             self.online_resources_menu,
             ' Use resources that require an internet connection'
         )       

@@ -69,7 +69,7 @@ class FileMenu(CuteMenu):
         
         self.save_as_button = self.Append(
             wx.ID_SAVEAS,
-            'Save &as...\tShift+Ctrl+S',
+            'Save &As...\tShift+Ctrl+S',
             ' Save the currently open simulation under a different name'
         )
         self.save_as_button.Enable(False)
@@ -80,7 +80,7 @@ class FileMenu(CuteMenu):
         
         self.new_simpack_button = self.Append(
             -1,
-            'New simpack...',
+            'New Simpack...',
             ' Create a new simulation package'
         )
         self.new_simpack_button.Enable(False)

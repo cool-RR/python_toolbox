@@ -27,7 +27,7 @@ class NodeMenu(CuteMenu):
        
         self.fork_by_editing_button = self.Append(
             -1,
-            'Fork by &editing',
+            'Fork by &Editing',
             " Fork the simulation by making a copy of the active node and "
             "editing it"
         )
@@ -41,7 +41,7 @@ class NodeMenu(CuteMenu):
         
         self.fork_by_crunching_button = self.Append(
             -1,
-            'Fork by &crunching',
+            'Fork by &Crunching',
             ' Fork the simulation by crunching from the active node'
         )
         frame.Bind(
@@ -53,7 +53,7 @@ class NodeMenu(CuteMenu):
         self.fork_by_crunching_using_menu = ForkByCrunchingUsingMenu(frame)
         self.fork_by_crunching_using_menu_button = self.AppendMenu(
             -1,
-            'Fork by crunching &using',
+            'Fork by Crunching &Using',
             self.fork_by_crunching_using_menu,
             ' Fork by crunching from the active node using specified step '
             'profile'
@@ -65,7 +65,7 @@ class NodeMenu(CuteMenu):
         
         self.properties_button = self.Append(
             -1,
-            'Node &properties',
+            'Node &Properties',
             " See the active node's properties"
         )
         self.properties_button.Enable(False)        
@@ -76,7 +76,7 @@ class NodeMenu(CuteMenu):
         
         self.delete_button = self.Append(
             -1,
-            '&Delete active node...',
+            '&Delete Active Node...',
             ' Delete the active node'
         )
         self.delete_button.Enable(False)

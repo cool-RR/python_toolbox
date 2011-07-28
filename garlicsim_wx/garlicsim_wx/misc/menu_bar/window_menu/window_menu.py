@@ -62,7 +62,7 @@ class WindowMenu(CuteMenu):
         
         self.local_nodes_examiner_button = self.Append(
             -1,
-            '&Local nodes examiner',
+            '&Local Nodes Examiner',
             ' Go to the local nodes examiner, which lets you manipulate '
             'tree nodes one-by-one'
         )       
@@ -97,7 +97,7 @@ class WindowMenu(CuteMenu):
         
         self.seek_bar_button = self.Append(
             -1,
-            'Seek-&bar',
+            'Seek &Bar',
             ' Go to the seek-bar, which lets you navigate the active timeline'
         )       
         
@@ -148,7 +148,7 @@ class WindowMenu(CuteMenu):
         
         self.tree_browser_button = self.Append(
             -1,
-            '&Tree browser',
+            '&Tree Browser',
             ' Go to the tree browser, which lets you navigate the time tree'
         )       
         

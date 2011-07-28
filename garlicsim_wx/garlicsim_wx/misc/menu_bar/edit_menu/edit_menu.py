@@ -97,7 +97,7 @@ class EditMenu(CuteMenu):
         
         self.invert_selection_button = self.Append(
             -1,
-            'Invert selection\tCtrl+Shift+I',
+            'Invert Selection\tCtrl+Shift+I',
             " Select all the nodes that aren't selected, and deselect those "
             "that are selected"
         )
@@ -109,7 +109,7 @@ class EditMenu(CuteMenu):
         
         self.merge_to_blocks_button = self.Append(
             -1,
-            'Merge to blocks where possible',
+            'Merge to Blocks Where Possible',
             ' Merge adjacant nodes to blocks, where possible'
         )
         self.merge_to_blocks_button.Enable(False)
