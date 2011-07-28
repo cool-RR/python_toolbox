@@ -108,8 +108,8 @@ module::
     
     This is the description of your simpack. It's parsed from ReStructuredText,
     so you may do stuff like *this* and `this` and **this**, and include `links
-    to websites <http://python.org>` or links to simpack tags, like
-    `cellular-automata`.
+    to websites <http://python.org>`_ or links to simpack tags, like
+    `cellular-automaton`_.
     '''
     
     from .state import State    
