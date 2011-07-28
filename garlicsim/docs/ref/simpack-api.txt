@@ -111,14 +111,10 @@ module::
     to websites <http://python.org>` or links to simpack tags, like
     `cellular-automata`.
     '''
-
-::
     
     from .state import State    
     
-    name = 'Name of the simpack"
-    
-::    
+    name = 'Name of the simpack'
     
     tags = ('physics', 'cellular-automata', 'or', 'any', 'other', 'tags')
     
