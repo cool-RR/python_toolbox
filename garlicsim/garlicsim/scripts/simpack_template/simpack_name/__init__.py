@@ -1,7 +1,7 @@
 '''
 simpack_name description.
 '''
-# (The above docstring should be in reStructuredText.)
+# (The above docstring should be in ReStructuredText.)
 
 from .state import State
 

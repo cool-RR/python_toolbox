@@ -137,7 +137,7 @@ relative imports.
 State creation methods
 ----------------------
 
-You may define methods for creating new states objects. These should be made
+You may define methods for creating new state objects. These should be made
 inside the ``State`` class as ``staticmethod``\s.
 
 * ``def create_root(<optional defaultful arguments>):`` - Create a plain state,
