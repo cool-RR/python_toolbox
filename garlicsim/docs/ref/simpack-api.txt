@@ -118,6 +118,8 @@ module::
     
     name = 'Name of the simpack"
     
+::    
+    
     tags = ('physics', 'cellular-automata', 'or', 'any', 'other', 'tags')
     
     __version__ = '0.8.2'
