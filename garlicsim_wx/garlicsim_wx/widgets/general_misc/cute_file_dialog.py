@@ -41,7 +41,7 @@ class CuteFileDialog(CuteDialog, wx.FileDialog):
         
         Returns `None` if "Cancel" was pressed.
         '''
-        dialog = cls(parent, *args, **kwargs)
+        dialog = cls(*args, **kwargs)
         try:
             result = dialog.ShowModal()
         finally:
