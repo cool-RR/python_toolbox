@@ -90,9 +90,11 @@ def taste_module(address):
         
         with TempImportHookSetter(mock_importer):
             
-            tasted_module = import_tools.import_by_path(path,
-                                                        name=name,
-                                                        keep_in_sys_modules=False)
-    
+            tasted_module = import_tools.import_by_path(
+                path,
+                name=name,
+                keep_in_sys_modules=False
+            )
+            
     return tasted_module
         
