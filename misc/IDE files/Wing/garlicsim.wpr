@@ -30,7 +30,25 @@ proj.directory-list = [{'dirloc': loc('../../..'),
                         'recursive': True,
                         'watch_for_changes': True}]
 proj.file-type = 'shared'
+proj.home-dir = loc('../../..')
 proj.main-file = loc('../../../run_gui.py')
+proj.pypath = {None: ('custom',
+                      ':${WING:PROJECT_HOME}/garlicsim:;${WING:PROJECT_HOME}'\
+                      '/garlicsim;:${WING:PROJECT_HOME}/garlicsim_lib:;${WIN'\
+                      'G:PROJECT_HOME}/garlicsim_lib;:${WING:PROJECT_HOME}/g'\
+                      'arlicsim_wx:;${WING:PROJECT_HOME}/garlicsim_wx;'),
+               loc('../../../run_tests.py'): ('custom',
+        '')}
+proj.shared-attribute-names = ['proj.shared-attribute-names',
+                               'proj.directory-list',
+                               'proj.file-list',
+                               'proj.file-type',
+                               'proj.main-file',
+                               'testing.test-file-list',
+                               'testing.auto-test-file-specs',
+                               'testing.test-framework',
+                               'proj.home-dir',
+                               'proj.pypath']
 testing.auto-test-file-specs = ('test_garlicsim/test*.py',
                                 'test_garlicsim_lib/test*.py',
                                 'test_garlicsim_wx/test*.py')
