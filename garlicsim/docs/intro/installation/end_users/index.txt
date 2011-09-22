@@ -24,4 +24,4 @@ way. (Currently Windows only.)
 This installer will give you :mod:`garlicsim`, :mod:`garlicsim_lib` and
 :mod:`garlicsim_wx`.
 
-End-user installers for Mac and Linux are will become available in the future.
+End-user installers for Mac and Linux will become available in the future.
