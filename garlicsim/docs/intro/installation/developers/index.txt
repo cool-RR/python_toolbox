@@ -10,10 +10,10 @@
 Installing GarlicSim
 ====================
 
-Do you prefer Python 2.x or Python 3.x? If you're not sure, choose 2.x.
+Do you prefer Python **2.x** or Python **3.x**? If you're not sure, choose **2.x**.
 
 .. toctree::
    :maxdepth: 1
     
-   Install GarlicSim under Python 2.x <python-2.x>
-   Install GarlicSim under Python 3.x (No GUI.) <python-3.x>
+   Install GarlicSim under Python **2.x** <python-2.x>
+   Install GarlicSim under Python **3.x** (No GUI.) <python-3.x>
