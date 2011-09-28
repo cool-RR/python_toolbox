@@ -69,7 +69,7 @@ def __check_prerequisites():
             # Returning empty list because we didn't import `distribute`:
             return []
         
-    def check_pywin32_on_cpython():
+    def check_pywin32():
         if not sys.platform == 'win32' or is_pypy: # todo: should check CPython
             return []
         try:
