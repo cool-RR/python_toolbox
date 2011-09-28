@@ -22,6 +22,7 @@ if sys.version_info[1] <= 4:
 
 
 frozen = getattr(sys, 'frozen', None)
+is_pypy = ('__pypy__' in sys.builtin_module_names)
 
 
 def __check_prerequisites():
@@ -69,7 +70,7 @@ def __check_prerequisites():
             return []
         
     def check_pywin32():
-        if not sys.platform == 'win32':
+        if not sys.platform == 'win32' or is_pypy: # todo: should check CPython
             return []
         try:
             import win32api
