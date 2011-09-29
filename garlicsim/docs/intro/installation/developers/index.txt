@@ -10,7 +10,7 @@
 Installing GarlicSim
 ====================
 
-Do you prefer Python 2.x or Python 3.x? If you're not sure, choose 2.x.
+Do you prefer Python **2.x** or Python **3.x**? Choose below. If you're not sure, choose **2.x**.
 
 .. toctree::
    :maxdepth: 1
