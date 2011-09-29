@@ -94,7 +94,7 @@ setuptools.setup(
     tests_require=['nose>=1.0.0'],
     description='Collection of GarlicSim simulation packages',
     author='Ram Rachum',
-    author_email='cool-rr@cool-rr.com',
+    author_email='ram@rachum.com',
     url='http://garlicsim.org',
     packages=get_packages(),
     scripts=['test_garlicsim_lib/scripts/_test_garlicsim_lib.py'],

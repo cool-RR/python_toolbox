@@ -97,7 +97,7 @@ setuptools.setup(
     tests_require=['nose>=1.0.0'],
     description='Pythonic framework for working with simulations',
     author='Ram Rachum',
-    author_email='cool-rr@cool-rr.com',
+    author_email='ram@rachum.com',
     url='http://garlicsim.org',
     packages=get_packages(),
     scripts=['garlicsim/scripts/start_simpack.py',
