@@ -37,7 +37,7 @@ For :mod:`garlicsim`
  
 * `distribute`_.
 
-* on Windows only: `Python for Windows Extensions`_. (Not required for Pypy users.)
+* on Windows only: `Python for Windows Extensions`_. (Not required for PyPy users.)
 
 For users of Python 2.5 only (not needed for modern Python versions):
 
