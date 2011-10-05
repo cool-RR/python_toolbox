@@ -29,6 +29,14 @@ class SysModulesUnchangedAssertor(context_managers.ContextManager):
 
         
     def __exit__(self, exc_type, exc_value, exc_traceback):
+        
+        if exc_type:
+            # If there's an exception, we'll just let it propagate, skipping
+            # our usual `assert` because the exception we got should get the
+            # user's attention rather than a possible unwanted module in
+            # `sys.modules`.
+            return False
+        
         new_modules_in_sys_modules = [module_name for module_name in
                                       sys.modules if module_name not in
                                       self.old_sys_modules]
