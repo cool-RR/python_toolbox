@@ -40,8 +40,21 @@ class SysModulesUnchangedAssertor(context_managers.ContextManager):
         new_modules_in_sys_modules = [module_name for module_name in
                                       sys.modules if module_name not in
                                       self.old_sys_modules]
-        assert set(new_modules_in_sys_modules).issubset(
+        if not set(new_modules_in_sys_modules).issubset(
             known_false_positive_new_modules
-        )
+        ):
+            unexpected_modules = sorted(
+                list(
+                    set(
+                        set(new_modules_in_sys_modules).difference(
+                        known_false_positive_new_modules
+                        )
+                    )
+                )
+            )
+            raise RuntimeError(
+                'The modules `%s` were added to `sys.modules`, while we '
+                'expected `sys.modules` to be unchanged.' % unexpected_modules
+            )
 
 
