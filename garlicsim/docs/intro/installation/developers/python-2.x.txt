@@ -37,9 +37,9 @@ For :mod:`garlicsim`
  
 * `distribute`_.
 
-* on Windows only: `Python for Windows Extensions`_.
+* on Windows only: `Python for Windows Extensions`_. (Not required for Pypy users.)
 
-For users of Python 2.5 only:
+For users of Python 2.5 only (not needed for modern Python versions):
 
 * `Backport of the multiprocessing module`_.
 * `pyOpenSSL`_ is needed in order to use :class:`PiCloudCruncher`.
