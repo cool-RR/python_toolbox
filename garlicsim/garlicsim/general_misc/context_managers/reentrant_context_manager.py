@@ -13,7 +13,8 @@ from garlicsim.general_misc import caching
 from garlicsim.general_misc.proxy_property import ProxyProperty
 
 from .context_manager import ContextManager
-
+# blocktodo: need tests on whether `depth` is increased before or after
+# `__enter__` and `__exit__`. Was relevant in freezers.
 
 class ReentrantContextManager(ContextManager):
     '''
