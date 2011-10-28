@@ -106,10 +106,10 @@ class CrunchingManager(object):
         The cruncher type that we will use to crunch the simulation.
         
         All crunchers that the crunching manager will create will be of this
-        type. The user may assign a different cruncher type to `.cruncher_type`,
-        and on the next call to `.sync_crunchers` the crunching manager will
-        retire all the existing crunchers and replace them with crunchers of the
-        new type.
+        type. The user may assign a different cruncher type to
+        `.cruncher_type`, and on the next call to `.sync_crunchers` the
+        crunching manager will retire all the existing crunchers and replace
+        them with crunchers of the new type.
         '''
         
         
