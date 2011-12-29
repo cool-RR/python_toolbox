@@ -9,22 +9,35 @@ Script for running tests on all GarlicSim packages together.
 Nose is used to run the tests, and any extraneous arguments will be passed to
 Nose; type `nosetests --help` to see Nose's list of arguments.
 
-GarlicSim-specific arguments:
+## GarlicSim-specific arguments: ##
 
+    --help
+        Show this help screen
+
+        
+  #### Load GarlicSim from: ####
+  
     --from-zip
         Test GarlicSim when imported from zip files
     
     --from-py2exe
         Test GarlicSim when imported from py2exe distribution
-        
+      
     --from-win-installer
-        Test GarlicSim when installed from Windows installer.        
+        Test GarlicSim when installed from Windows installer.    
         Currently not fully implemented; only creates a Windows installer for
         you as `GarlicSim-x.y.z.exe`, you have to run it yourself and then run
         `run_tests.exe` in the installation folder.
+      
+        
+  #### Choosing tests: ####
+  
+    --test-only=PATH  
+        Load tests from specified file/folder instead of loading GarlicSim's
+        test suite. Useful for picking just a few tests. Note that you can only
+        put a single path in one of these, so if you want to use multiple
+        locations, you'll have to put multiple `--test-only=` segments.
 
-    --help
-        Show this help screen
 '''
 
 import os.path
@@ -35,6 +48,7 @@ import glob
 
 
 frozen = getattr(sys, 'frozen', None)
+is_pypy = ('__pypy__' in sys.builtin_module_names)
 
 
 if frozen:
@@ -268,7 +282,7 @@ def loadTestsFromDir(self, path):
     # pop paths
     if self.config.addPaths:
         for p in paths_added:
-          remove_path(p)
+            remove_path(p)
     plugins.afterDirectory(path)
 nose.loader.TestLoader.loadTestsFromDir = \
     types.MethodType(loadTestsFromDir, None, nose.loader.TestLoader)
@@ -318,6 +332,22 @@ if __name__ == '__main__':
         raise Exception("Can test either from repo, or from zip, or from "
                         "py2exe, or from Windows installer. Can't have more "
                         "than one.")
+    
+    ### Handling manually-specified test locations: ###########################
+    #                                                                         #
+    manually_specified_test_locations = []
+    manually_specified_test_location_arguments = \
+        [argument for argument in argv if argument.startswith('--test-only=')]
+    if manually_specified_test_location_arguments:
+        if testing_from_py2exe or testing_from_win_installer:
+            raise NotImplementedError
+        for argument in manually_specified_test_location_arguments:
+            argv.remove(argument)
+            location = argument[12:]
+            assert os.path.exists(location)
+            manually_specified_test_locations.append(location)
+    #                                                                         #
+    ### Finished handling manually-specified test locations. ##################
         
     if testing_from_py2exe:
         
@@ -397,10 +427,22 @@ if __name__ == '__main__':
         
         sys.stdout.write('Running tests directly from GarlicSim repo.\n')
         
-    # Adding test packages to arguments to have Nose take tests from them:
-    argv += test_packages_paths[::-1]
-    # (Reversing package order for now, to put the shorter tests first.)
-    
+    ## Adding test packages to arguments to have Nose take tests from them: ###
+    #                                                                         #
+    if manually_specified_test_locations:
+        argv += manually_specified_test_locations
+        
+    else: # not manually_specified_test_locations
+        
+        # (Reversing package order for now, to put the shorter tests first.)
+        if is_pypy:
+            sys.stdout.write("Pypy doesn't have wxPython, not loading "
+                             "`garlicsim_wx` tests.\n")
+            argv += test_packages_paths[-2::-1]
+        else: # not is_pypy
+            argv += test_packages_paths[::-1]
+    #                                                                         #
+    ###########################################################################
     
     try:
         #######################################################################
