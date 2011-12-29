@@ -1,7 +1,7 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''Testing module for `garlicsim.general_misc.reasoned_bool.ReasonedBool`.'''
+'''Testing module for `python_toolbox.reasoned_bool.ReasonedBool`.'''
 
 from python_toolbox.reasoned_bool import ReasonedBool
 

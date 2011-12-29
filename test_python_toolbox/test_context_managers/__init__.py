@@ -1,4 +1,4 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''Test package for the `garlicsim.general_misc.context_manager` module.'''
+'''Test package for the `python_toolbox.context_manager` module.'''

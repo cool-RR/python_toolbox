@@ -17,8 +17,8 @@ def __bootstrap():
     '''
     Add needed packages in repo to path if we can't find them.
     
-    This adds `garlicsim`'s, `garlicsim_lib`'s and `garlicsim_wx`'s root
-    folders to `sys.path` if they can't currently be imported.
+    This adds `python_toolbox`'s root folder to `sys.path` if it can't
+    currently be imported.
     '''
     import os
     import sys

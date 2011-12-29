@@ -1,7 +1,7 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''Defines tools for testing `garlicsim.general_misc.cute_profile`.'''
+'''Defines tools for testing `python_toolbox.cute_profile`.'''
 
 from __future__ import with_statement
 

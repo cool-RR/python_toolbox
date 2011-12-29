@@ -34,7 +34,7 @@ class ContextManager(DecoratingContextManager):
     `with` keyword or by using it as a decorator to a function.
                 
     For more details, see documentation of the containing module,
-    `garlicsim.general_misc.context_manager`.
+    `python_toolbox.context_manager`.
     '''
     
     

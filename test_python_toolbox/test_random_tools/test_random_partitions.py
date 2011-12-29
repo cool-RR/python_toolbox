@@ -1,7 +1,7 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''Testing package for `garlicsim.general_misc.random_tools`.'''
+'''Testing package for `python_toolbox.random_tools`.'''
 
 from python_toolbox import random_tools
 from python_toolbox import sequence_tools

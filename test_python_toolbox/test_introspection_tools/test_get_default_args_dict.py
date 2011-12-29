@@ -1,9 +1,7 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''
-Testing for `garlicsim.general_misc.introspection_tools.get_default_args_dict`.
-'''
+'''Testing for `python_toolbox.introspection_tools.get_default_args_dict`.'''
 
 from python_toolbox.introspection_tools import get_default_args_dict
 from python_toolbox.nifty_collections import OrderedDict

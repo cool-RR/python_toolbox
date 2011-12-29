@@ -1,7 +1,7 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''Testing module for `garlicsim.general_misc.nifty_collections.LazyTuple`.'''
+'''Testing module for `python_toolbox.nifty_collections.LazyTuple`.'''
 
 from __future__ import with_statement
 

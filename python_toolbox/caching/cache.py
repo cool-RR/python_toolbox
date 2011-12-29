@@ -35,11 +35,11 @@ def cache(max_size=infinity):
     All the arguments are sleekreffed to prevent memory leaks. Sleekref is a
     variation of weakref. Sleekref is when you try to weakref an object, but if
     it's non-weakreffable, like a `list` or a `dict`, you maintain a normal,
-    strong reference to it. (See documentation of
-    `garlicsim.general_misc.sleek_refs` for more details.) Thanks to
-    sleekreffing you can avoid memory leaks when using weakreffable arguments,
-    but if you ever want to use non-weakreffable arguments you are still able
-    to. (Assuming you don't mind the memory leaks.)
+    strong reference to it. (See documentation of `python_toolbox.sleek_refs`
+    for more details.) Thanks to sleekreffing you can avoid memory leaks when
+    using weakreffable arguments, but if you ever want to use non-weakreffable
+    arguments you are still able to. (Assuming you don't mind the memory
+    leaks.)
     
     You may optionally specify a `max_size` for maximum number of cached
     results to store; old entries are thrown away according to a

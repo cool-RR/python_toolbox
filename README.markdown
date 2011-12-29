@@ -12,7 +12,7 @@ blocktodo: explain
 
 All general discussion happens at **[the Python Toolbox Google Group](https://groups.google.com/forum/#!forum/python-toolbox)**. If you need help with the Python Toolbox, you're welcome to post your question and we'll try to help you.
 
-The development mailing list is **[python-toolbox-dev](https://groups.google.com/forum/#!forum/garlicsim-dev)**. This is where we discuss the development of the Python Toolbox itself.
+The development mailing list is **[python-toolbox-dev](https://groups.google.com/forum/#!forum/python-toolbox-dev)**. This is where we discuss the development of the Python Toolbox itself.
 
 
 # Python versions #

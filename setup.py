@@ -29,7 +29,7 @@ def get_garlicsim_packages():
     Returns something like:
     
         ['garlicsim', 'garlicsim.misc',
-        'garlicsim.general_misc.nifty_collections', ... ]
+        'python_toolbox.nifty_collections', ... ]
         
     '''
     return ['garlicsim.' + p for p in

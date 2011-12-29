@@ -28,7 +28,7 @@ class HasIdentity(object):
         True
         
     (`DontCopyPersistent` is available as
-    `garlicsim.general_misc.persistent.DontCopyPersistent`)    
+    `python_toolbox.persistent.DontCopyPersistent`)
     '''
     def __init__(self):
         self.__identity = CrossProcessPersistent()

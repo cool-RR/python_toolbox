@@ -1,7 +1,7 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''Testing pacakge for `garlicsim.general_misc.module_tasting`.'''
+'''Testing pacakge for `python_toolbox.module_tasting`.'''
 
 from __future__ import with_statement
 

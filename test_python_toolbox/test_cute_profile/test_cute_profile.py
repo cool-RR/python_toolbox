@@ -1,9 +1,7 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''
-Testing module for `garlicsim.general_misc.cute_profile`.
-'''
+'''Testing module for `python_toolbox.cute_profile`.'''
 
 from python_toolbox import cute_profile
 from python_toolbox import cute_testing

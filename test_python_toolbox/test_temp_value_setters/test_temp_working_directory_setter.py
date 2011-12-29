@@ -1,9 +1,7 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''
-Testing `garlicsim.general_misc.temp_value_setters.TempWorkingDirectorySetter`.
-'''
+'''Testing `python_toolbox.temp_value_setters.TempWorkingDirectorySetter`.'''
 
 from __future__ import with_statement
 

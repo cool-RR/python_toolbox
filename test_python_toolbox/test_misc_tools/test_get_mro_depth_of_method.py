@@ -1,9 +1,7 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''
-Testing module for `garlicsim.general_misc.misc_tools.get_mro_depth_of_method`.
-'''
+'''Testing module for `python_toolbox.misc_tools.get_mro_depth_of_method`.'''
 
 from python_toolbox.misc_tools import get_mro_depth_of_method
 

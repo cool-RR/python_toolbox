@@ -12,7 +12,7 @@ from python_toolbox import context_managers
 
 
 known_false_positive_new_modules = set([
-    'garlicsim.general_misc.zlib'
+    'python_toolbox.zlib'
 ])
 
 

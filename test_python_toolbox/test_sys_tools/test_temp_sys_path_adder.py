@@ -1,9 +1,7 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''
-Testing module for `garlicsim.general_misc.sys_tools.TempSysPathAdder`.
-'''
+'''Testing module for `python_toolbox.sys_tools.TempSysPathAdder`.'''
 
 from __future__ import with_statement
 

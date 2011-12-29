@@ -2,16 +2,16 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-Package for bootstrapping `garlicsim` when frozen by py2exe.
+Package for bootstrapping `python_toolbox` when frozen by py2exe.
 
 This runs a bundled version of Python's `site` module, which adds things like
 `help` to `__builtins__`. This is useful because py2exe has problems with
 packaging the standard `site` module.
 
 The `python26_site` module in this package is simply the `site` module from
-Python 2.6's standard library; if you want to package `garlicsim` with py2exe
-for a different version of Python, this package will need to be expanded with
-that version's `site` module.
+Python 2.6's standard library; if you want to package `python_toolbox` with
+py2exe for a different version of Python, this package will need to be expanded
+with that version's `site` module.
 '''
 
 import sys

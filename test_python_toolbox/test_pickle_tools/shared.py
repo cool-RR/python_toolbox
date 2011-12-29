@@ -1,7 +1,7 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''Defines tools for testing `garlicsim.general_misc.pickle_tools`'''
+'''Defines tools for testing `python_toolbox.pickle_tools`'''
 
 
 class PickleableObject(object):

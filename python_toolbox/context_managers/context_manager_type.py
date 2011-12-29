@@ -33,7 +33,7 @@ class ContextManagerType(abc.ABCMeta):
     keyword or by using it as a decorator to a function.
                 
     For more details, see documentation of the containing module,
-    `garlicsim.general_misc.context_manager`.
+    `python_toolbox.context_manager`.
     '''
     
     __metaclass__ = ContextManagerTypeType
@@ -146,8 +146,8 @@ class ContextManagerType(abc.ABCMeta):
         
         return (
             (cls.__name__ == 'ContextManager') and
-            (cls.__module__ == 'garlicsim.general_misc.'
-                               'context_managers.context_manager') and
+            (cls.__module__ == 'python_toolbox.context_managers.'
+                               'context_manager') and
             (cls.mro() == [cls, object])
         )
     

@@ -1,9 +1,7 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''
-Testing modules for `garlicsim.general_misc.proxy_property.ProxyProperty`.
-'''
+'''Testing modules for `python_toolbox.proxy_property.ProxyProperty`.'''
 
 from __future__ import with_statement
 
