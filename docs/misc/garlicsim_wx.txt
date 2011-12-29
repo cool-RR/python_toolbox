@@ -1,0 +1,11 @@
+..
+   Copyright 2009-2011 Ram Rachum. This work is licensed under a Creative
+   Commons Attribution-ShareAlike 3.0 Unported License, with attribution to
+   "Ram Rachum at ram.rachum.com" including link. The license may be obtained
+   at http://creativecommons.org/licenses/by-sa/3.0/
+
+.. _misc-garlicsim_wx:
+
+===========================================
+All you need to know about ``garlicsim_wx``
+===========================================

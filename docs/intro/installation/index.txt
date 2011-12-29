@@ -1,0 +1,32 @@
+..
+   Copyright 2009-2011 Ram Rachum. This work is licensed under a Creative
+   Commons Attribution-ShareAlike 3.0 Unported License, with attribution to
+   "Ram Rachum at ram.rachum.com" including link. The license may be obtained
+   at http://creativecommons.org/licenses/by-sa/3.0/
+
+.. _intro-installation-index:
+
+====================
+Installing GarlicSim
+====================
+
+Do you want to install GarlicSim as an **end user**, or as a **developer**?
+
+:ref:`Installation for end-users <intro-installation-end-users-index>` -- Use this if
+you just want to run GarlicSim as a desktop app, like Photoshop or Word. You
+don't have to know programming to use GarlicSim this way. (Currently Windows
+only.)
+
+:ref:`Installation for developers <intro-installation-developers-index>` -- Do
+this if you want to create your own simulation packages using GarlicSim. You'll
+need to be familiar with `Python`_ to do that. This will install the GarlicSim
+packages to your existing Python distribution.
+
+.. toctree::
+    :hidden:
+    
+    end_users/index
+    developers/index
+
+
+.. _Python: http://python.org
