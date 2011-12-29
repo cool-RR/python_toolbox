@@ -1,0 +1,11 @@
+[run]
+branch = True
+source =
+    python_toolbox
+
+[report]
+# Gotta ignore errors because I create temporary code files:
+ignore_errors = True
+    
+[html]
+directory = .coverage_html_report
