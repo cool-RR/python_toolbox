@@ -6,6 +6,8 @@
 */docs/_build/*
 */docs/_deployed_build/*
 
+dist
+*.egg-info
 build
 *.exe
 
