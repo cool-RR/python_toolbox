@@ -4,3 +4,8 @@ recursive-exclude python_toolbox *.pyo
 recursive-include test_python_toolbox *
 recursive-exclude test_python_toolbox *.pyc
 recursive-exclude test_python_toolbox *.pyo
+include README.markdown
+include MANIFEST.in
+include .coveragerc
+include setup.cfg
+recursive-include docs *
