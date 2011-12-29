@@ -7,8 +7,8 @@ This module defines the `HasIdentity` class.
 See its documentation for more information.
 '''
 
-from garlicsim.general_misc import proxy_property
-from garlicsim.general_misc.persistent import CrossProcessPersistent
+from python_toolbox import proxy_property
+from python_toolbox.persistent import CrossProcessPersistent
 
 
 class HasIdentity(object):

@@ -9,7 +9,7 @@ from __future__ import with_statement
 
 import sys
 
-from garlicsim.general_misc.sys_tools import TempSysPathAdder
+from python_toolbox.sys_tools import TempSysPathAdder
 
 def test_single():
     '''Test using `TempSysPathAdder` to add a single path.'''

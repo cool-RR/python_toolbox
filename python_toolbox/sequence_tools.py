@@ -6,12 +6,12 @@
 import types
 import itertools
 
-from garlicsim.general_misc.nifty_collections import Counter
-from garlicsim.general_misc import caching
-from garlicsim.general_misc import math_tools
-from garlicsim.general_misc.infinity import infinity
-from garlicsim.general_misc.third_party import abc
-from garlicsim.general_misc.third_party import abcs_collection
+from python_toolbox.nifty_collections import Counter
+from python_toolbox import caching
+from python_toolbox import math_tools
+from python_toolbox.infinity import infinity
+from python_toolbox.third_party import abc
+from python_toolbox.third_party import abcs_collection
 
         
 def are_equal_regardless_of_order(seq1, seq2):

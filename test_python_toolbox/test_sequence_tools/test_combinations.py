@@ -5,8 +5,8 @@
 
 import nose.tools
 
-from garlicsim.general_misc.sequence_tools import combinations
-from garlicsim.general_misc import sequence_tools
+from python_toolbox.sequence_tools import combinations
+from python_toolbox import sequence_tools
 
 
 def test():

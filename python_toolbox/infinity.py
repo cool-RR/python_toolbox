@@ -7,8 +7,8 @@ This module defines the `Infinity` class and related exceptions.
 See their documentation for more info.
 '''
 
-from garlicsim.general_misc.exceptions import CuteException
-from garlicsim.general_misc import math_tools
+from python_toolbox.exceptions import CuteException
+from python_toolbox import math_tools
 
 
 __all__ = ['infinity', 'InfinityError', 'InfinityRaceError']

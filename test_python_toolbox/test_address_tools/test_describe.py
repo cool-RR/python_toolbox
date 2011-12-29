@@ -7,11 +7,11 @@ from __future__ import with_statement
 
 import nose
 
-from garlicsim.general_misc import import_tools
-from garlicsim.general_misc.temp_value_setters import TempValueSetter
+from python_toolbox import import_tools
+from python_toolbox.temp_value_setters import TempValueSetter
 
 import garlicsim
-from garlicsim.general_misc.address_tools import (describe,
+from python_toolbox.address_tools import (describe,
                                                   resolve)
 
 

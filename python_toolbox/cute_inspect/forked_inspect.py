@@ -38,7 +38,7 @@ import imp
 import tokenize
 import linecache
 from operator import attrgetter
-from garlicsim.general_misc.third_party.namedtuple import namedtuple
+from python_toolbox.third_party.namedtuple import namedtuple
 
 # These constants are from Include/code.h.
 CO_OPTIMIZED, CO_NEWLOCALS, CO_VARARGS, CO_VARKEYWORDS = 0x1, 0x2, 0x4, 0x8

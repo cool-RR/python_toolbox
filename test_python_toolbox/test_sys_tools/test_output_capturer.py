@@ -7,7 +7,7 @@ from __future__ import with_statement
 
 import sys
 
-from garlicsim.general_misc.sys_tools import OutputCapturer
+from python_toolbox.sys_tools import OutputCapturer
 
 
 def test():

@@ -5,12 +5,12 @@
 
 import re
 
-from garlicsim.general_misc.third_party import unittest2
+from python_toolbox.third_party import unittest2
 
-from garlicsim.general_misc import cute_inspect
-from garlicsim.general_misc.context_managers import ContextManager
-from garlicsim.general_misc.exceptions import CuteException
-from garlicsim.general_misc import logic_tools
+from python_toolbox import cute_inspect
+from python_toolbox.context_managers import ContextManager
+from python_toolbox.exceptions import CuteException
+from python_toolbox import logic_tools
 
 
 class Failure(CuteException, AssertionError):

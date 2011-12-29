@@ -7,7 +7,7 @@ Testing module for `garlicsim.general_misc.persistent.personality.Personality`.
 
 import colorsys
 
-from garlicsim.general_misc.persistent import CrossProcessPersistent
+from python_toolbox.persistent import CrossProcessPersistent
 
 
 def test():

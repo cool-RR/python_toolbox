@@ -7,8 +7,8 @@ from __future__ import with_statement
 
 import sys
 
-from garlicsim.general_misc.sys_tools import OutputCapturer
-from garlicsim.general_misc import logic_tools
+from python_toolbox.sys_tools import OutputCapturer
+from python_toolbox import logic_tools
 
 segments = ('function calls in', 'Ordered by', 'ncalls', 'tottime', 'percall',
             'cumtime')

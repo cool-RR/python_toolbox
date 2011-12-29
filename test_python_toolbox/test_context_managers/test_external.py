@@ -8,10 +8,10 @@ from __future__ import with_statement
 import sys
 
 import nose
-from garlicsim.general_misc.third_party import unittest2
+from python_toolbox.third_party import unittest2
 
 import garlicsim
-from garlicsim.general_misc.context_managers import (ContextManager,
+from python_toolbox.context_managers import (ContextManager,
                                                     ContextManagerType)
 
 

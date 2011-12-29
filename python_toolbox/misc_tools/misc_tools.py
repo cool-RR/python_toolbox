@@ -7,7 +7,7 @@ import re
 import math
 import types
 
-from garlicsim.general_misc import cute_iter_tools
+from python_toolbox import cute_iter_tools
 
     
 def is_subclass(candidate, base_class):

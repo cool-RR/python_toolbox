@@ -5,8 +5,8 @@
 Testing module for `garlicsim.general_misc.cute_profile`.
 '''
 
-from garlicsim.general_misc import cute_profile
-from garlicsim.general_misc import cute_testing
+from python_toolbox import cute_profile
+from python_toolbox import cute_testing
 
 from .shared import call_and_check_if_profiled
 

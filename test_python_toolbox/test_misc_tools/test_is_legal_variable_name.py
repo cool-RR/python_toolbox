@@ -5,7 +5,7 @@
 Testing module for `garlicsim.general_misc.misc_tools.is_legal_variable_name`.
 '''
 
-from garlicsim.general_misc.misc_tools import is_legal_ascii_variable_name
+from python_toolbox.misc_tools import is_legal_ascii_variable_name
 
 
 def test():

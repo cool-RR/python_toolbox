@@ -7,7 +7,7 @@ Defines the `CachedType` metaclass.
 See its documentation for more details.
 '''
 
-from garlicsim.general_misc.sleek_refs import SleekCallArgs
+from python_toolbox.sleek_refs import SleekCallArgs
 
 
 class SelfPlaceholder(object):

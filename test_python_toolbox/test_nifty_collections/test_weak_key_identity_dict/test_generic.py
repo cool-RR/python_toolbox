@@ -12,9 +12,9 @@ import operator
 
 from test_garlicsim.third_party import forked_mapping_tests
 
-from garlicsim.general_misc import gc_tools
+from python_toolbox import gc_tools
 
-from garlicsim.general_misc.nifty_collections import WeakKeyIdentityDict
+from python_toolbox.nifty_collections import WeakKeyIdentityDict
 
 # Used in ReferencesTestCase.test_ref_created_during_del() .
 ref_from_del = None

@@ -8,8 +8,8 @@ from __future__ import with_statement
 import Queue as queue_module
 import sys
 
-from garlicsim.general_misc import caching
-from garlicsim.general_misc import import_tools
+from python_toolbox import caching
+from python_toolbox import import_tools
 
 
 def is_multiprocessing_queue(queue):

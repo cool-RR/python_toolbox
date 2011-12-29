@@ -5,8 +5,8 @@
 
 import nose.tools
 
-from garlicsim.general_misc import import_tools
-from garlicsim.general_misc.import_tools import exists
+from python_toolbox import import_tools
+from python_toolbox.import_tools import exists
 
 def test():
     '''Test the basic workings of `exists`.'''

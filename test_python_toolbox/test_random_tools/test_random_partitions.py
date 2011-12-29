@@ -3,8 +3,8 @@
 
 '''Testing package for `garlicsim.general_misc.random_tools`.'''
 
-from garlicsim.general_misc import random_tools
-from garlicsim.general_misc import sequence_tools
+from python_toolbox import random_tools
+from python_toolbox import sequence_tools
 
 
 def test():

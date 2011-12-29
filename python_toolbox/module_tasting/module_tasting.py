@@ -16,11 +16,11 @@ import uuid
 import sys
 import os.path
 
-from garlicsim.general_misc.temp_value_setters import TempImportHookSetter
-from garlicsim.general_misc import address_tools
-from garlicsim.general_misc import dict_tools
-from garlicsim.general_misc import import_tools
-from garlicsim.general_misc import context_managers
+from python_toolbox.temp_value_setters import TempImportHookSetter
+from python_toolbox import address_tools
+from python_toolbox import dict_tools
+from python_toolbox import import_tools
+from python_toolbox import context_managers
 
 from .sys_modules_unchanged_assertor import SysModulesUnchangedAssertor
 from .mock_importer import MockImporter

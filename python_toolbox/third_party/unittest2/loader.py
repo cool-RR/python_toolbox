@@ -9,12 +9,12 @@ import unittest
 
 from fnmatch import fnmatch
 
-from garlicsim.general_misc.third_party.unittest2 import case, suite
+from python_toolbox.third_party.unittest2 import case, suite
 
 try:
     from os.path import relpath
 except ImportError:
-    from garlicsim.general_misc.third_party.unittest2.compatibility import relpath
+    from python_toolbox.third_party.unittest2.compatibility import relpath
 
 __unittest = True
 

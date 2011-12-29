@@ -11,13 +11,13 @@ from __future__ import with_statement
 
 import threading
 import collections
-from garlicsim.general_misc.third_party import abcs_collection
+from python_toolbox.third_party import abcs_collection
 
-from garlicsim.general_misc import cute_iter_tools
-from garlicsim.general_misc.infinity import infinity
-from garlicsim.general_misc import decorator_tools
-from garlicsim.general_misc import comparison_tools
-from garlicsim.general_misc import sequence_tools
+from python_toolbox import cute_iter_tools
+from python_toolbox.infinity import infinity
+from python_toolbox import decorator_tools
+from python_toolbox import comparison_tools
+from python_toolbox import sequence_tools
 
 
 class _SENTINEL(object):

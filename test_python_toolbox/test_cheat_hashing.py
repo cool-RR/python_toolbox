@@ -7,7 +7,7 @@ Testing module for `garlicsim.general_misc.abc_tools.AbstractStaticMethod`.
 
 import copy
 
-from garlicsim.general_misc.cheat_hashing import cheat_hash
+from python_toolbox.cheat_hashing import cheat_hash
 
 
 def test_cheat_hash():

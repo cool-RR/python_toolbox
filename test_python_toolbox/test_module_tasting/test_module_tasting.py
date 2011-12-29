@@ -10,11 +10,11 @@ import sys
 
 import nose
 
-from garlicsim.general_misc import temp_file_tools
-from garlicsim.general_misc import cute_iter_tools
-from garlicsim.general_misc import sys_tools
+from python_toolbox import temp_file_tools
+from python_toolbox import cute_iter_tools
+from python_toolbox import sys_tools
 
-from garlicsim.general_misc import module_tasting
+from python_toolbox import module_tasting
 
 from . import sample_package_creation
 

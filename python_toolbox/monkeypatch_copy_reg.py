@@ -10,7 +10,7 @@ import copy_reg
 import types
 import __builtin__
 
-from garlicsim.general_misc import import_tools
+from python_toolbox import import_tools
 
 
 ###############################################################################

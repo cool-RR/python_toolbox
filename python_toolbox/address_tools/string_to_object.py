@@ -5,9 +5,9 @@
 
 import types
 
-from garlicsim.general_misc import import_tools
-from garlicsim.general_misc import dict_tools
-from garlicsim.general_misc import re_tools
+from python_toolbox import import_tools
+from python_toolbox import dict_tools
+from python_toolbox import re_tools
 
 # from . import object_to_string (at bottom of file.)
 from .shared import (_contained_address_pattern, _address_pattern,

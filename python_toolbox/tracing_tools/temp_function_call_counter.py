@@ -9,10 +9,10 @@ See its documentation for more details.
 
 import sys
 
-from garlicsim.general_misc import cute_iter_tools
-from garlicsim.general_misc import address_tools
+from python_toolbox import cute_iter_tools
+from python_toolbox import address_tools
 
-from garlicsim.general_misc.temp_value_setters import TempValueSetter
+from python_toolbox.temp_value_setters import TempValueSetter
 from .count_calls import count_calls
 
 

@@ -9,7 +9,7 @@ See its documentation for more information.
 
 import cPickle
 
-from garlicsim.general_misc.nifty_collections import WeakKeyIdentityDict
+from python_toolbox.nifty_collections import WeakKeyIdentityDict
 
 
 class ChangeTracker(object): 

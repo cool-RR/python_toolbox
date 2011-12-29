@@ -3,10 +3,10 @@
 
 '''Testing module for `cute_iter_tools.consecutive_pairs`.'''
 
-from garlicsim.general_misc import cute_testing
-from garlicsim.general_misc import sequence_tools
+from python_toolbox import cute_testing
+from python_toolbox import sequence_tools
 
-from garlicsim.general_misc.cute_iter_tools import consecutive_pairs
+from python_toolbox.cute_iter_tools import consecutive_pairs
 
 
 def test():

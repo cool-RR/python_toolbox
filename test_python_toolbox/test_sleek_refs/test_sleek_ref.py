@@ -7,9 +7,9 @@ import weakref
 
 import nose.tools
 
-from garlicsim.general_misc import gc_tools
+from python_toolbox import gc_tools
 
-from garlicsim.general_misc.sleek_refs import (SleekCallArgs,
+from python_toolbox.sleek_refs import (SleekCallArgs,
                                                SleekRef,
                                                SleekRefDied,
                                                CuteSleekValueDict)

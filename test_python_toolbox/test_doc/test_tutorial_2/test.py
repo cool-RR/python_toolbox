@@ -13,12 +13,12 @@ import re
 import types
 import glob
 
-from garlicsim.general_misc.temp_value_setters import \
+from python_toolbox.temp_value_setters import \
     TempWorkingDirectorySetter
-from garlicsim.general_misc import sys_tools
-from garlicsim.general_misc import import_tools
-from garlicsim.general_misc import cute_inspect
-from garlicsim.general_misc import temp_file_tools
+from python_toolbox import sys_tools
+from python_toolbox import import_tools
+from python_toolbox import cute_inspect
+from python_toolbox import temp_file_tools
 
 import garlicsim.scripts.simpack_template.simpack_name.state
 import garlicsim.scripts.start_simpack
@@ -126,7 +126,7 @@ def test():
                     'last_bet_result': new_state.last_bet_result
                 }
                 
-                from garlicsim.general_misc.infinity import infinity
+                from python_toolbox.infinity import infinity
                 
                 got_winner = False
                 got_loser = False

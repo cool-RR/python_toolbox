@@ -8,7 +8,7 @@ See its documentation for more information.
 '''
 
 import sys
-from garlicsim.general_misc import context_managers
+from python_toolbox import context_managers
 
 
 known_false_positive_new_modules = set([

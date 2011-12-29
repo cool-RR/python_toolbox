@@ -8,13 +8,13 @@ from __future__ import with_statement
 import uuid
 import itertools
 
-from garlicsim.general_misc.third_party import abcs_collection
-from garlicsim.general_misc import cute_iter_tools
-from garlicsim.general_misc import sequence_tools
-from garlicsim.general_misc import cute_testing
+from python_toolbox.third_party import abcs_collection
+from python_toolbox import cute_iter_tools
+from python_toolbox import sequence_tools
+from python_toolbox import cute_testing
 
 
-from garlicsim.general_misc.nifty_collections import LazyTuple
+from python_toolbox.nifty_collections import LazyTuple
 
 
 class SelfAwareUuidIterator(abcs_collection.Iterator):

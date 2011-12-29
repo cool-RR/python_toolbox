@@ -9,7 +9,7 @@ import sys
 
 import nose
 
-from garlicsim.general_misc.context_managers import (ContextManager,
+from python_toolbox.context_managers import (ContextManager,
                                                     ContextManagerType,
                                                     SelfHook)
 

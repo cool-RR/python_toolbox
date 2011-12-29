@@ -10,17 +10,17 @@ from __future__ import with_statement
 import copy
 import pickle
 import cPickle
-from garlicsim.general_misc.third_party import abc
+from python_toolbox.third_party import abc
 
 import nose
 
-from garlicsim.general_misc import cute_iter_tools
-from garlicsim.general_misc import cute_testing
-from garlicsim.general_misc import import_tools
-from garlicsim.general_misc import queue_tools
+from python_toolbox import cute_iter_tools
+from python_toolbox import cute_testing
+from python_toolbox import import_tools
+from python_toolbox import queue_tools
 
-from garlicsim.general_misc import persistent
-from garlicsim.general_misc.persistent import CrossProcessPersistent
+from python_toolbox import persistent
+from python_toolbox.persistent import CrossProcessPersistent
 
 
 class AbstractCrossProcessPersistent(CrossProcessPersistent):

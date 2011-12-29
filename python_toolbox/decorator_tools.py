@@ -7,7 +7,7 @@ import functools
 import inspect
 import types
 
-from garlicsim.general_misc.third_party import decorator as \
+from python_toolbox.third_party import decorator as \
                                                michele_decorator_module
 
 def decorator(caller, func=None):

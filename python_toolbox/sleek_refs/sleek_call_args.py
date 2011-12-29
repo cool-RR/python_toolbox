@@ -7,8 +7,8 @@ Defines the `SleekCallArgs` class.
 See its documentation for more details.
 '''
 
-from garlicsim.general_misc import cute_inspect
-from garlicsim.general_misc import cheat_hashing
+from python_toolbox import cute_inspect
+from python_toolbox import cheat_hashing
 
 from .sleek_ref import SleekRef
 from .cute_sleek_value_dict import CuteSleekValueDict

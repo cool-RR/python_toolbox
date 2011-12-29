@@ -4,8 +4,8 @@
 '''Testing module for name demangling.'''
 
 
-from garlicsim.general_misc.misc_tools import name_mangling
-from garlicsim.general_misc.misc_tools.name_mangling import \
+from python_toolbox.misc_tools import name_mangling
+from python_toolbox.misc_tools.name_mangling import \
                                               unmangle_attribute_name_if_needed
 
 

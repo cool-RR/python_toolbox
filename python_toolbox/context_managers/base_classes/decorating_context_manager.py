@@ -9,7 +9,7 @@ See its documentation for more information.
 
 from __future__ import with_statement
 
-from garlicsim.general_misc import decorator_tools
+from python_toolbox import decorator_tools
 
 
 class DecoratingContextManager(object):

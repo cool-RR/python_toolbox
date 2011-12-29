@@ -7,7 +7,7 @@ Defines the `cheat_hash` function for cheat-hashing mutable objects.
 See its documentation for more details.
 '''
 
-from garlicsim.general_misc.infinity import infinity
+from python_toolbox.infinity import infinity
 
 from .cheat_hash_functions import (cheat_hash_dict, cheat_hash_object, 
                                    cheat_hash_sequence, cheat_hash_set)

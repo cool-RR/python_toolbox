@@ -14,7 +14,7 @@ import os
 import types
 import pkgutil
 
-from garlicsim.general_misc import dict_tools
+from python_toolbox import dict_tools
 
 
 _extensions_by_priority = ['.pyo', '.pyc', '.pyw', '.py']

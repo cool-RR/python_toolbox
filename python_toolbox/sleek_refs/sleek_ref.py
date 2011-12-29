@@ -10,7 +10,7 @@ See its documentation for more info.
 import weakref
 import UserDict
 
-from garlicsim.general_misc import cute_inspect
+from python_toolbox import cute_inspect
 
 from .exceptions import SleekRefDied
 

@@ -3,7 +3,7 @@
 
 '''Testing module for `string_tools.get_n_identical_edge_characters`.'''
 
-from garlicsim.general_misc.string_tools import get_n_identical_edge_characters
+from python_toolbox.string_tools import get_n_identical_edge_characters
 
 
 def test():

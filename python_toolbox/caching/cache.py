@@ -10,11 +10,11 @@ See its documentation for more details.
 
 import functools
 
-from garlicsim.general_misc import decorator_tools
+from python_toolbox import decorator_tools
 
-from garlicsim.general_misc.sleek_refs import SleekCallArgs
-from garlicsim.general_misc.infinity import infinity
-from garlicsim.general_misc.nifty_collections import OrderedDict
+from python_toolbox.sleek_refs import SleekCallArgs
+from python_toolbox.infinity import infinity
+from python_toolbox.nifty_collections import OrderedDict
 
 
 @decorator_tools.helpful_decorator_builder

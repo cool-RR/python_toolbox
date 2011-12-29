@@ -13,8 +13,8 @@ import compileall
 import shutil
 import os.path
 
-from garlicsim.general_misc import temp_file_tools
-from garlicsim.general_misc import zip_tools
+from python_toolbox import temp_file_tools
+from python_toolbox import zip_tools
 
 
 formats = ('py', 'pyco', 'zip')

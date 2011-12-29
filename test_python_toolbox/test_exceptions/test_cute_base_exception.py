@@ -3,9 +3,9 @@
 
 '''Testing package for `exceptions.CuteBaseException`.'''
 
-from garlicsim.general_misc import cute_testing
+from python_toolbox import cute_testing
 
-from garlicsim.general_misc.exceptions import CuteBaseException, CuteException
+from python_toolbox.exceptions import CuteBaseException, CuteException
 
 
 def test():

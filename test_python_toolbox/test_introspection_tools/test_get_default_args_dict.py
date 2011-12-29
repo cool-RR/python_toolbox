@@ -5,8 +5,8 @@
 Testing for `garlicsim.general_misc.introspection_tools.get_default_args_dict`.
 '''
 
-from garlicsim.general_misc.introspection_tools import get_default_args_dict
-from garlicsim.general_misc.nifty_collections import OrderedDict
+from python_toolbox.introspection_tools import get_default_args_dict
+from python_toolbox.nifty_collections import OrderedDict
 
 
 def test():

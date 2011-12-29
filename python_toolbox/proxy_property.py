@@ -7,7 +7,7 @@ This module defines the `ProxyProperty` class.
 See its documentation for more information.
 '''
 
-from garlicsim.general_misc import address_tools
+from python_toolbox import address_tools
 
 
 #blocktodo: allow doc

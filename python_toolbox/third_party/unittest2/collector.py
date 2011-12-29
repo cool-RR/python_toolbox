@@ -1,6 +1,6 @@
 import os
 import sys
-from garlicsim.general_misc.third_party.unittest2.loader import defaultTestLoader
+from python_toolbox.third_party.unittest2.loader import defaultTestLoader
 
 def collector():
     # import __main__ triggers code re-execution

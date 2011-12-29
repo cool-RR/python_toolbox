@@ -7,8 +7,8 @@ Defines the `TempValueSetter` class.
 See its documentation for more details.
 '''
 
-from garlicsim.general_misc import address_tools
-from garlicsim.general_misc.context_managers import ContextManager
+from python_toolbox import address_tools
+from python_toolbox.context_managers import ContextManager
 
 
 __all__ = ['TempValueSetter']

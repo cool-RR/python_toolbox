@@ -3,8 +3,8 @@
 
 '''This module defines logic-related tools.'''
 
-from garlicsim.general_misc import cute_iter_tools
-from garlicsim.general_misc import sequence_tools
+from python_toolbox import cute_iter_tools
+from python_toolbox import sequence_tools
 
 
 def all_equal(iterable, exhaustive=False):

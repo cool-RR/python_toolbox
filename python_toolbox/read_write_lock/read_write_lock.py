@@ -6,7 +6,7 @@ See documentation of class `ReadWriteLock` defined in this module.
 '''
 # todo: organize.
 
-from garlicsim.general_misc import context_managers
+from python_toolbox import context_managers
 
 from . import original_read_write_lock
 

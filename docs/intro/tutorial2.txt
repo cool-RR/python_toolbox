@@ -270,7 +270,7 @@ Simulating without a state limit
 Okay, but let's say we don't want to simulate just 5 states. We want to simulate
 until the gambler either gets $6,000 or loses too much money and quits. To do this, we simulate "to infinity":
     
-    >>> from garlicsim.general_misc.infinity import infinity
+    >>> from python_toolbox.infinity import infinity
     >>> new_state = garlicsim.simulate(state, infinity)
     
 That :const:`infinity <garlicsim.general_misc.infinity.infinity>` simply

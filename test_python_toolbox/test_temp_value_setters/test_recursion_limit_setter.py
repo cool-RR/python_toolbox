@@ -9,9 +9,9 @@ from __future__ import with_statement
 
 import sys
 
-from garlicsim.general_misc import cute_testing
+from python_toolbox import cute_testing
 
-from garlicsim.general_misc.temp_value_setters import TempRecursionLimitSetter
+from python_toolbox.temp_value_setters import TempRecursionLimitSetter
 
 
 def test():

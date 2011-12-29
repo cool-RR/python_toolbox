@@ -4,9 +4,9 @@ import sys
 import os
 import types
 
-from garlicsim.general_misc.third_party.unittest2 import loader, runner
+from python_toolbox.third_party.unittest2 import loader, runner
 try:
-    from garlicsim.general_misc.third_party.unittest2.signals import installHandler
+    from python_toolbox.third_party.unittest2.signals import installHandler
 except ImportError:
     installHandler = None
 

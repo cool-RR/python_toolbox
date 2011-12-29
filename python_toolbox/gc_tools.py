@@ -9,7 +9,7 @@ See its documentation for more information.
 
 import gc
 
-from garlicsim.general_misc import sys_tools
+from python_toolbox import sys_tools
 
 def collect():
     if sys_tools.is_pypy:

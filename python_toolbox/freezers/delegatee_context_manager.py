@@ -7,7 +7,7 @@ This module defines the `DelegateeContextManager` class.
 See its documentation for more information.
 '''
 
-from garlicsim.general_misc import context_managers
+from python_toolbox import context_managers
 
 
 class DelegateeContextManager(context_managers.ReentrantContextManager):

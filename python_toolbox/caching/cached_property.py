@@ -7,7 +7,7 @@ Defines the `CachedProperty` class.
 See its documentation for more details.
 '''
 
-from garlicsim.general_misc import misc_tools
+from python_toolbox import misc_tools
 
 
 class CachedProperty(misc_tools.OwnNameDiscoveringProperty):

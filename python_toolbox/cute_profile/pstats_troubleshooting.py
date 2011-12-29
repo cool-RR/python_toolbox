@@ -9,7 +9,7 @@ See its documentation for more details.
 
 import os
 
-from garlicsim.general_misc import import_tools
+from python_toolbox import import_tools
 
 
 def troubleshoot_pstats():

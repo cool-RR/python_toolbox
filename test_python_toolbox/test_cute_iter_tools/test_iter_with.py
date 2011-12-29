@@ -5,9 +5,9 @@
 
 import itertools
 
-from garlicsim.general_misc import context_managers
+from python_toolbox import context_managers
 
-from garlicsim.general_misc.cute_iter_tools import iter_with
+from python_toolbox.cute_iter_tools import iter_with
 
 
 class MyContextManager(context_managers.ContextManager):

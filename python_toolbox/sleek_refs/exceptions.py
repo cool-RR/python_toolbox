@@ -3,7 +3,7 @@
 
 '''Defines exceptions.'''
 
-from garlicsim.general_misc.exceptions import CuteException
+from python_toolbox.exceptions import CuteException
 
 
 class SleekRefDied(CuteException):

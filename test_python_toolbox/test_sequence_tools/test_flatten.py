@@ -3,7 +3,7 @@
 
 '''Testing module for `sequence_tools.flatten`.'''
 
-from garlicsim.general_misc.sequence_tools import flatten
+from python_toolbox.sequence_tools import flatten
 
 
 def test():

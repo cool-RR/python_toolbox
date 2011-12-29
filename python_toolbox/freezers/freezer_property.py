@@ -8,8 +8,8 @@ See its documentation for more information.
 '''
 
 
-from garlicsim.general_misc import caching
-from garlicsim.general_misc.misc_tools import do_nothing
+from python_toolbox import caching
+from python_toolbox.misc_tools import do_nothing
 
 from .freezer_property_freezer import FreezerPropertyFreezer
 from .freezer import Freezer

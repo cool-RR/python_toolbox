@@ -6,5 +6,5 @@ if sys.argv[0].endswith("__main__.py"):
 
 __unittest = True
 
-from garlicsim.general_misc.third_party.unittest2.main import main_
+from python_toolbox.third_party.unittest2.main import main_
 main_()

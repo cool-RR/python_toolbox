@@ -4,7 +4,7 @@
 '''Test that `cute_pickle` uses `cPickle` and not `pickle`.'''
 
 
-from garlicsim.general_misc import pickle_tools
+from python_toolbox import pickle_tools
 
 def test():
     '''Test that `cute_pickle` uses `cPickle` and not `pickle`.'''

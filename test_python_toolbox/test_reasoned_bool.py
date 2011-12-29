@@ -3,7 +3,7 @@
 
 '''Testing module for `garlicsim.general_misc.reasoned_bool.ReasonedBool`.'''
 
-from garlicsim.general_misc.reasoned_bool import ReasonedBool
+from python_toolbox.reasoned_bool import ReasonedBool
 
 def test():
     '''Test the basic workings of `ReasonedBool`.'''

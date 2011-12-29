@@ -11,10 +11,10 @@ import sys
 import cStringIO
 import subprocess
 
-from garlicsim.general_misc.context_managers import (ContextManager,
+from python_toolbox.context_managers import (ContextManager,
                                                     BlankContextManager)
-from garlicsim.general_misc.temp_value_setters import TempValueSetter
-from garlicsim.general_misc.reasoned_bool import ReasonedBool
+from python_toolbox.temp_value_setters import TempValueSetter
+from python_toolbox.reasoned_bool import ReasonedBool
 
 
 class OutputCapturer(ContextManager):

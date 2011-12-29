@@ -5,8 +5,8 @@
 
 from __future__ import with_statement
 
-from garlicsim.general_misc.context_managers import ReentrantContextManager
-from garlicsim.general_misc import cute_testing
+from python_toolbox.context_managers import ReentrantContextManager
+from python_toolbox import cute_testing
 
 
 class MyException(Exception):

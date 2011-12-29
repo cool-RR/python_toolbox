@@ -5,9 +5,9 @@
 
 from __future__ import with_statement
 
-from garlicsim.general_misc import cute_testing
+from python_toolbox import cute_testing
 
-from garlicsim.general_misc import monkeypatching_tools
+from python_toolbox import monkeypatching_tools
 
 
 def test():

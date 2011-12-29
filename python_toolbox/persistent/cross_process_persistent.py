@@ -16,8 +16,8 @@ todo: need to lock library to avoid thread trouble?
 import uuid
 import weakref
 
-from garlicsim.general_misc import caching
-from garlicsim.general_misc import copy_tools
+from python_toolbox import caching
+from python_toolbox import copy_tools
 
 from .copy_modes import DontCopyPersistent
 from .persistent import Persistent

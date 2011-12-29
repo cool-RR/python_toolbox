@@ -5,8 +5,8 @@
 
 from __future__ import with_statement
 
-from garlicsim.general_misc.freezers import FreezerProperty, Freezer
-from garlicsim.general_misc import caching
+from python_toolbox.freezers import FreezerProperty, Freezer
+from python_toolbox import caching
 
 
 def test_lone_freezer_property():

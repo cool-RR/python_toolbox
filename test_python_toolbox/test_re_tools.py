@@ -7,8 +7,8 @@ Testing module for `garlicsim.general_misc.re_tools`.
 
 import re
 
-from garlicsim.general_misc import re_tools
-from garlicsim.general_misc.re_tools import searchall
+from python_toolbox import re_tools
+from python_toolbox.re_tools import searchall
 
 
 def test_searchall():

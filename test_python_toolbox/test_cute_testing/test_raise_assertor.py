@@ -9,8 +9,8 @@ import re
 
 import nose
 
-from garlicsim.general_misc import cute_testing
-from garlicsim.general_misc.cute_testing import RaiseAssertor, Failure
+from python_toolbox import cute_testing
+from python_toolbox.cute_testing import RaiseAssertor, Failure
 
 
 class MyException(Exception):

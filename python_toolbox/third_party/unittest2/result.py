@@ -6,8 +6,8 @@ import unittest
 
 from StringIO import StringIO
 
-from garlicsim.general_misc.third_party.unittest2 import util
-from garlicsim.general_misc.third_party.unittest2.compatibility import wraps
+from python_toolbox.third_party.unittest2 import util
+from python_toolbox.third_party.unittest2.compatibility import wraps
 
 __unittest = True
 

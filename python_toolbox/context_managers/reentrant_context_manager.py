@@ -7,10 +7,10 @@ This module defines the `ReentrantContextManager` class.
 See its documentation for more information.
 '''
 
-from garlicsim.general_misc.third_party import abc
+from python_toolbox.third_party import abc
 
-from garlicsim.general_misc import caching
-from garlicsim.general_misc.proxy_property import ProxyProperty
+from python_toolbox import caching
+from python_toolbox.proxy_property import ProxyProperty
 
 from .context_manager import ContextManager
 # blocktodo: need tests on whether `depth` is increased before or after

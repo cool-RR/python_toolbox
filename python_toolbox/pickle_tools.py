@@ -10,8 +10,8 @@ import pickle # Importing just to get dispatch table, not pickling with it.
 import copy_reg
 import types
 
-from garlicsim.general_misc import address_tools
-from garlicsim.general_misc import misc_tools
+from python_toolbox import address_tools
+from python_toolbox import misc_tools
 
 
 def is_atomically_pickleable(thing):

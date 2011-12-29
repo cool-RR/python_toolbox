@@ -5,7 +5,7 @@
 
 import random
 
-from garlicsim.general_misc import sequence_tools
+from python_toolbox import sequence_tools
 
 
 def random_partitions(sequence, partition_size=None, n_partitions=None,

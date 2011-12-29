@@ -12,7 +12,7 @@ import nose.tools
 
 import garlicsim
 
-from garlicsim.general_misc.temp_file_tools import TemporaryFolder
+from python_toolbox.temp_file_tools import TemporaryFolder
 
 
 def test_basic():

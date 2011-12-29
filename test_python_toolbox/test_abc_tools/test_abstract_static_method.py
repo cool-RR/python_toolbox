@@ -9,8 +9,8 @@ import sys
 
 import nose
 
-from garlicsim.general_misc.abc_tools import AbstractStaticMethod
-from garlicsim.general_misc.third_party import abc
+from python_toolbox.abc_tools import AbstractStaticMethod
+from python_toolbox.third_party import abc
 
 
 def test_instantiate_without_subclassing():

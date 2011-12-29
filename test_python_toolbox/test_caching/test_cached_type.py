@@ -5,7 +5,7 @@
 Testing module for `garlicsim.general_misc.caching.CachedType`.
 '''
 
-from garlicsim.general_misc.caching import CachedType
+from python_toolbox.caching import CachedType
 
         
 def test():

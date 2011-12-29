@@ -7,7 +7,7 @@ Testing module for `garlicsim.general_misc.caching.CachedProperty`.
 
 import nose
 
-from garlicsim.general_misc.caching import (cache, CachedType,
+from python_toolbox.caching import (cache, CachedType,
                                             CachedProperty)
 
 

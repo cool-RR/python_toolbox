@@ -10,9 +10,9 @@ See its documentation for more details.
 import sys
 import types
 
-from garlicsim.general_misc import misc_tools
-from garlicsim.general_misc import import_tools
-from garlicsim.general_misc import address_tools
+from python_toolbox import misc_tools
+from python_toolbox import import_tools
+from python_toolbox import address_tools
 
 
 class FunctionAnchoringType(type):

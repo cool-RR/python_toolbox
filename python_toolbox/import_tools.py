@@ -9,8 +9,8 @@ import imp
 import zipimport
 import zipfile
 
-from garlicsim.general_misc import package_finder
-from garlicsim.general_misc import caching
+from python_toolbox import package_finder
+from python_toolbox import caching
 
     
 

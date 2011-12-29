@@ -11,10 +11,10 @@ import os
 import shutil
 import tempfile
 
-from garlicsim.general_misc import cute_testing
-from garlicsim.general_misc import temp_file_tools
+from python_toolbox import cute_testing
+from python_toolbox import temp_file_tools
 
-from garlicsim.general_misc.temp_value_setters import \
+from python_toolbox.temp_value_setters import \
      TempWorkingDirectorySetter
 
 class MyException(Exception):

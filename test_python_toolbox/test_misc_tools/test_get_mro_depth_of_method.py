@@ -5,7 +5,7 @@
 Testing module for `garlicsim.general_misc.misc_tools.get_mro_depth_of_method`.
 '''
 
-from garlicsim.general_misc.misc_tools import get_mro_depth_of_method
+from python_toolbox.misc_tools import get_mro_depth_of_method
 
 
 def test():

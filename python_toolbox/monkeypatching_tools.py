@@ -4,7 +4,7 @@
 '''Tools for monkeypatching.'''
 
 import types
-from garlicsim.general_misc import decorator_tools
+from python_toolbox import decorator_tools
 
 
 @decorator_tools.helpful_decorator_builder

@@ -7,9 +7,9 @@ Testing module for `garlicsim.general_misc.cute_testing.assert_same_signature`.
 
 from __future__ import with_statement
 
-from garlicsim.general_misc.third_party import decorator as decorator_module
+from python_toolbox.third_party import decorator as decorator_module
 
-from garlicsim.general_misc.cute_testing import (assert_same_signature,
+from python_toolbox.cute_testing import (assert_same_signature,
                                                  RaiseAssertor,
                                                  Failure)
 

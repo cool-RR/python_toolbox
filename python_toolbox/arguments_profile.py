@@ -7,12 +7,12 @@ Defines the `ArgumentsProfile` class.
 See its documentation for more details.
 '''
 
-from garlicsim.general_misc import cute_inspect
-from garlicsim.general_misc import cheat_hashing
-from garlicsim.general_misc.nifty_collections import OrderedDict
-from garlicsim.general_misc import dict_tools
-from garlicsim.general_misc import comparison_tools
-from garlicsim.general_misc.infinity import infinity
+from python_toolbox import cute_inspect
+from python_toolbox import cheat_hashing
+from python_toolbox.nifty_collections import OrderedDict
+from python_toolbox import dict_tools
+from python_toolbox import comparison_tools
+from python_toolbox.infinity import infinity
 
 
 class ArgumentsProfile(object):

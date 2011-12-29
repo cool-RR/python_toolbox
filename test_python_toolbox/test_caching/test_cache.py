@@ -10,9 +10,9 @@ import weakref
 
 import nose.tools
 
-from garlicsim.general_misc.caching import cache
-from garlicsim.general_misc import cute_testing
-from garlicsim.general_misc import gc_tools
+from python_toolbox.caching import cache
+from python_toolbox import cute_testing
+from python_toolbox import gc_tools
 
 
 def counting_func(a=1, b=2, *args, **kwargs):

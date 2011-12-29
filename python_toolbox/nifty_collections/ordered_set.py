@@ -8,7 +8,7 @@ See its documentation for more details.
 '''
 # todo: revamp
 
-from garlicsim.general_misc.third_party import abcs_collection
+from python_toolbox.third_party import abcs_collection
 
 
 KEY, PREV, NEXT = range(3)

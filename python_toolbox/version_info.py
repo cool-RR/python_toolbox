@@ -8,7 +8,7 @@ See its documentation for more details.
 '''
 
 from operator import itemgetter as _itemgetter
-from garlicsim.general_misc.nifty_collections import OrderedDict
+from python_toolbox.nifty_collections import OrderedDict
 
 
 class VersionInfo(tuple):

@@ -7,7 +7,7 @@ Defines the `count_calls` decorator.
 See its documentation for more details.
 '''
 
-from garlicsim.general_misc import decorator_tools
+from python_toolbox import decorator_tools
 
 
 def count_calls(function):

@@ -5,7 +5,7 @@
 
 import nose.tools
 
-from garlicsim.general_misc.address_tools import describe, resolve
+from python_toolbox.address_tools import describe, resolve
 
 
 # Class tree we'll try to some resolvings on:

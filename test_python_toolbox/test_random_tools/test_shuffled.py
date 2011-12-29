@@ -3,7 +3,7 @@
 
 '''Testing module for `random_tools.shuffled`.'''
 
-from garlicsim.general_misc import random_tools
+from python_toolbox import random_tools
 
 
 def test():

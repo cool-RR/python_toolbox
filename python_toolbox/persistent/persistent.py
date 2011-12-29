@@ -16,7 +16,7 @@ an old protocol?
 todo: make it polite to other similar classes. Perhaps make it a metaclass?
 '''
 from .copy_modes import DontCopyPersistent
-from garlicsim.general_misc import copy_tools
+from python_toolbox import copy_tools
 
 
 __all__ = ['Persistent']

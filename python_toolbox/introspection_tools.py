@@ -3,9 +3,9 @@
 
 '''Defines various introspection tools, similar to the stdlib's `inspect`.'''
 
-from garlicsim.general_misc import cute_inspect
+from python_toolbox import cute_inspect
 
-from garlicsim.general_misc.nifty_collections import OrderedDict
+from python_toolbox.nifty_collections import OrderedDict
 
 
 def get_default_args_dict(function):

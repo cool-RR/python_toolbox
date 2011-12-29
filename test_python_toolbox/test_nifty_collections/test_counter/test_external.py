@@ -7,13 +7,13 @@ from random import randrange
 import copy
 import pickle
 import cPickle
-from garlicsim.general_misc.third_party.abcs_collection import Mapping
+from python_toolbox.third_party.abcs_collection import Mapping
 
-from garlicsim.general_misc.third_party import unittest2
+from python_toolbox.third_party import unittest2
 
-from garlicsim.general_misc import misc_tools
+from python_toolbox import misc_tools
 
-from garlicsim.general_misc.nifty_collections import Counter
+from python_toolbox.nifty_collections import Counter
 
 
 class TestCounter(unittest2.TestCase):

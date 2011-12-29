@@ -3,7 +3,7 @@
 
 '''Testing module for `cute_iter_tools.get_length`.'''
 
-from garlicsim.general_misc.cute_iter_tools import get_length
+from python_toolbox.cute_iter_tools import get_length
 
 
 def test():

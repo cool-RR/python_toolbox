@@ -11,9 +11,9 @@ from __future__ import with_statement
 
 import sys
 import types
-from garlicsim.general_misc.third_party import abc
+from python_toolbox.third_party import abc
 
-from garlicsim.general_misc import decorator_tools
+from python_toolbox import decorator_tools
 
 from .base_classes.decorating_context_manager import DecoratingContextManager
 from .context_manager_type import ContextManagerType

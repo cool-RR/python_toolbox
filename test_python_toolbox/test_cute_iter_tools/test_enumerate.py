@@ -3,7 +3,7 @@
 
 '''Testing module for `cute_iter_tools.enumerate`.'''
 
-from garlicsim.general_misc import cute_iter_tools
+from python_toolbox import cute_iter_tools
 
 
 def test():

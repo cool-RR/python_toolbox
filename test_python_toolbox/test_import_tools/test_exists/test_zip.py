@@ -15,11 +15,11 @@ import shutil
 import pkg_resources
 import nose.tools
 
-from garlicsim.general_misc import sys_tools
-from garlicsim.general_misc import cute_testing
-from garlicsim.general_misc import import_tools
-from garlicsim.general_misc import temp_file_tools
-from garlicsim.general_misc.import_tools import exists
+from python_toolbox import sys_tools
+from python_toolbox import cute_testing
+from python_toolbox import import_tools
+from python_toolbox import temp_file_tools
+from python_toolbox.import_tools import exists
 
 from . import resources as __resources_package
 resources_package = __resources_package.__name__

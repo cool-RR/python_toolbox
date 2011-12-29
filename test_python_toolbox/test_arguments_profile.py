@@ -11,9 +11,9 @@ import sys
 
 import nose
 
-from garlicsim.general_misc.arguments_profile import ArgumentsProfile
-from garlicsim.general_misc.nifty_collections import OrderedDict
-from garlicsim.general_misc import cute_testing
+from python_toolbox.arguments_profile import ArgumentsProfile
+from python_toolbox.nifty_collections import OrderedDict
+from python_toolbox import cute_testing
 
 
 def test_only_defaultless():

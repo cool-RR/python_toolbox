@@ -10,9 +10,9 @@ import uuid
 
 import nose
 
-from garlicsim.general_misc import cute_testing
-from garlicsim.general_misc import module_tasting
-from garlicsim.general_misc.module_tasting.sys_modules_unchanged_assertor \
+from python_toolbox import cute_testing
+from python_toolbox import module_tasting
+from python_toolbox.module_tasting.sys_modules_unchanged_assertor \
                                             import SysModulesUnchangedAssertor
 
 class MyException(Exception):

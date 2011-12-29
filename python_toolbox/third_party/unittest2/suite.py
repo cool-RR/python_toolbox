@@ -2,7 +2,7 @@
 
 import sys
 import unittest
-from garlicsim.general_misc.third_party.unittest2 import case, util
+from python_toolbox.third_party.unittest2 import case, util
 
 __unittest = True
 

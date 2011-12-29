@@ -6,7 +6,7 @@
 import copy
 import pickle
 
-from garlicsim.general_misc import identities
+from python_toolbox import identities
 
 
 class A(identities.HasIdentity):

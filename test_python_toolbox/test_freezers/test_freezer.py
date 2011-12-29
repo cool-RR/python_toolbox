@@ -5,9 +5,9 @@
 
 from __future__ import with_statement
 
-from garlicsim.general_misc import cute_testing
+from python_toolbox import cute_testing
 
-from garlicsim.general_misc.freezers import Freezer
+from python_toolbox.freezers import Freezer
 
 
 class MyFreezer(Freezer):

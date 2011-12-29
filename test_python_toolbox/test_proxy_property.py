@@ -9,9 +9,9 @@ from __future__ import with_statement
 
 import uuid
 
-from garlicsim.general_misc import cute_testing
+from python_toolbox import cute_testing
 
-from garlicsim.general_misc.proxy_property import ProxyProperty
+from python_toolbox.proxy_property import ProxyProperty
 
 
 class Object(object):

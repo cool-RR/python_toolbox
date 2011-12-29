@@ -9,7 +9,7 @@ See its documentation for more details.
 
 import functools
 
-from garlicsim.general_misc import decorator_tools
+from python_toolbox import decorator_tools
 
 from . import base_profile
 

@@ -5,9 +5,9 @@
 
 import nose.tools
 
-from garlicsim.general_misc.infinity import infinity
-from garlicsim.general_misc import cute_iter_tools
-from garlicsim.general_misc.cute_iter_tools import is_iterable
+from python_toolbox.infinity import infinity
+from python_toolbox import cute_iter_tools
+from python_toolbox.cute_iter_tools import is_iterable
 
 
 def test():

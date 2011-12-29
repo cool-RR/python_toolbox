@@ -6,9 +6,9 @@
 import types
 import re
 
-from garlicsim.general_misc import import_tools
-from garlicsim.general_misc import dict_tools
-from garlicsim.general_misc import caching
+from python_toolbox import import_tools
+from python_toolbox import dict_tools
+from python_toolbox import caching
 
 # Doing at bottom:
 # from .string_to_object import _get_object_by_address, resolve

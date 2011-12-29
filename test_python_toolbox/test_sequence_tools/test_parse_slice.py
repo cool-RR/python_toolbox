@@ -3,10 +3,10 @@
 
 '''Testing module for `sequence_tools.parse_slice`.'''
 
-from garlicsim.general_misc import math_tools
-from garlicsim.general_misc.infinity import infinity
+from python_toolbox import math_tools
+from python_toolbox.infinity import infinity
 
-from garlicsim.general_misc.sequence_tools import parse_slice
+from python_toolbox.sequence_tools import parse_slice
 
 
 def test():

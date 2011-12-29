@@ -7,7 +7,7 @@ This module defines the `` class.
 See its documentation for more information.
 '''
 
-from garlicsim.general_misc import string_tools
+from python_toolbox import string_tools
 
 MANGLE_LEN = 256
 

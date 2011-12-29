@@ -7,11 +7,11 @@ This module defines the `Freezer` class.
 See its documentation for more information.
 '''
 
-from garlicsim.general_misc.third_party import abc
+from python_toolbox.third_party import abc
 
-from garlicsim.general_misc import context_managers
-from garlicsim.general_misc import proxy_property
-from garlicsim.general_misc import caching
+from python_toolbox import context_managers
+from python_toolbox import proxy_property
+from python_toolbox import caching
 
 from .delegatee_context_manager import DelegateeContextManager
 

@@ -10,7 +10,7 @@ from __future__ import with_statement
 import itertools
 import __builtin__
 
-from garlicsim.general_misc.infinity import infinity
+from python_toolbox.infinity import infinity
 
 
 def consecutive_pairs(iterable, wrap_around=False):

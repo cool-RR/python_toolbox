@@ -7,11 +7,11 @@ Testing module for `garlicsim.general_misc.sleek_refs.CuteSleekValueDict`.
 
 import weakref
 
-from garlicsim.general_misc import sequence_tools
+from python_toolbox import sequence_tools
 
-from garlicsim.general_misc import gc_tools
+from python_toolbox import gc_tools
 
-from garlicsim.general_misc.sleek_refs import (SleekCallArgs,
+from python_toolbox.sleek_refs import (SleekCallArgs,
                                                SleekRef,
                                                CuteSleekValueDict)
 
