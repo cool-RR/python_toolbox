@@ -8,8 +8,6 @@ import os.path
 
 import nose
 
-from .shared import verify_simpack_settings
-
 
 if nose.__versioninfo__ < (1, 0, 0):
     raise Exception('Nose version 1.0.0 or higher is required to run tests.')
@@ -44,36 +42,14 @@ def __bootstrap():
         else:
             return True
     
-    if not exists('garlicsim'):
-        garlicsim_candidate_path = os.path.realpath(
+    if not exists('python_toolbox'):
+        python_toolbox_candidate_path = os.path.realpath(
             os.path.join(
                 os.path.split(__file__)[0],
                 '..',
-                '..',
-                'garlicsim'
             )
         )
-        sys.path.append(garlicsim_candidate_path)
-    if not exists('garlicsim_lib'):
-        garlicsim_lib_candidate_path = os.path.realpath(
-            os.path.join(
-                os.path.split(__file__)[0],
-                '..',
-                '..',
-                'garlicsim_lib'
-            )
-        )
-        sys.path.append(garlicsim_lib_candidate_path)
-    if not exists('garlicsim_wx'):
-        garlicsim_wx_candidate_path = os.path.realpath(
-            os.path.join(
-                os.path.split(__file__)[0],
-                '..',
-                '..',
-                'garlicsim_wx'
-            )
-        )
-        sys.path.append(garlicsim_wx_candidate_path)
+        sys.path.append(python_toolbox_candidate_path)
         
         
 __bootstrap()
@@ -84,13 +60,13 @@ _default_nose_arguments = [
     '--detailed-errors',
     '--with-xunit',
     '--cover-erase',
-    '--cover-package=garlicsim,garlicsim_lib,garlicsim_wx,'
-                    'test_garlicsim,test_garlicsim_lib,test_garlicsim_wx',
+    '--cover-package=python_toolbox,test_python_toolbox',
     '--exe', # Needed because `setup.py` makes our test modules executable
 ]
 
 
 def invoke_nose(arguments=_default_nose_arguments):
-    '''Start Nose using this `test_garlicsim` test package.'''
-    nose.run(defaultTest='test_garlicsim', argv=([sys.argv[0]] + arguments))
+    '''Start Nose using this `test_python_toolbox` test package.'''
+    nose.run(defaultTest='test_python_toolbox',
+             argv=([sys.argv[0]] + arguments))
     

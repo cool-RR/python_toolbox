@@ -79,63 +79,69 @@ def test_stdlib():
     
     assert resolve('object') is object
     
+# blocktodo: convert to python_toolbox    
+#def test_garlicsim():
+    #'''Test `resolve` on `garlicsim` modules.'''
     
-def test_garlicsim():
-    '''Test `resolve` on `garlicsim` modules.'''
+    #result = resolve('garlicsim.general_misc')
+    #import garlicsim
+    #assert garlicsim.general_misc is result
     
-    result = resolve('garlicsim.general_misc')
-    import garlicsim
-    assert garlicsim.general_misc is result
+    #result = resolve('garlicsim.general_misc.persistent.'
+                     #'cross_process_persistent.'
+                     #'CrossProcessPersistent.personality')
+    #result2 = \
+        #resolve('general_misc.persistent.CrossProcessPersistent.personality', 
+                #namespace=garlicsim)
+    #result3 = resolve('persistent.CrossProcessPersistent.personality',
+                         #root=garlicsim.general_misc.persistent,
+                         #namespace='email')
+    #assert result is result2 is result3 is garlicsim.general_misc.persistent.\
+           #cross_process_persistent.CrossProcessPersistent.personality
     
-    result = resolve('garlicsim.general_misc.persistent.'
-                     'cross_process_persistent.'
-                     'CrossProcessPersistent.personality')
-    result2 = \
-        resolve('general_misc.persistent.CrossProcessPersistent.personality', 
-                namespace=garlicsim)
-    result3 = resolve('persistent.CrossProcessPersistent.personality',
-                         root=garlicsim.general_misc.persistent,
-                         namespace='email')
-    assert result is result2 is result3 is garlicsim.general_misc.persistent.\
-           cross_process_persistent.CrossProcessPersistent.personality
+    #result = resolve('data_structures.end.End',
+                        #root=garlicsim.data_structures)
+    #result2 = resolve('data_structures.End',
+                        #root=garlicsim.data_structures)
+    #result3 = resolve('data_structures.End', namespace='garlicsim')
+    #assert result is result2 is garlicsim.data_structures.end.End
     
-    result = resolve('data_structures.end.End',
-                        root=garlicsim.data_structures)
-    result2 = resolve('data_structures.End',
-                        root=garlicsim.data_structures)
-    result3 = resolve('data_structures.End', namespace='garlicsim')
-    assert result is result2 is garlicsim.data_structures.end.End
-    
-    import email
-    assert resolve('garlicsim', namespace={'e': email})
+    #import email
+    #assert resolve('garlicsim', namespace={'e': email})
     
     
 def test_address_in_expression():
         
     result = resolve('[object, email.encoders, marshal]')
-    import email, marshal, garlicsim
+    import email, marshal, python_toolbox
     assert result == [object, email.encoders, marshal]
     
     assert resolve('[email.encoders, 7, (1, 3), marshal]') == \
            [email.encoders, 7, (1, 3), marshal]
     
-    result = resolve('{email: marshal, object: 7, garlicsim: garlicsim}')
-    import garlicsim
-    assert result == {email: marshal, object: 7, garlicsim: garlicsim}
+    result = \
+         resolve('{email: marshal, object: 7, python_toolbox: python_toolbox}')
+    import python_toolbox
+    assert result == {email: marshal, object: 7,
+                      python_toolbox: python_toolbox}
     
-    assert resolve('{email: marshal, object: 7, garlicsim: garlicsim}') == \
-           {email: marshal, object: 7, garlicsim: garlicsim}
+    assert resolve('{email: marshal, '
+                   'object: 7, '
+                   'python_toolbox: python_toolbox}') == \
+                    {email: marshal, object: 7, python_toolbox: python_toolbox}
     
-    assert resolve('{Project: simulate}', namespace=garlicsim) == \
-           {garlicsim.Project: garlicsim.simulate}
+    assert resolve('{CachedProperty: cache}',
+                   namespace=python_toolbox.caching) == {
+        python_toolbox.caching.CachedProperty: python_toolbox.caching.cache
+    }
     
-    assert resolve('{asynchronous_crunching.Project: simulate}',
-                   root=garlicsim.asynchronous_crunching,
-                   namespace=garlicsim) == \
-           {garlicsim.asynchronous_crunching.Project: garlicsim.simulate}
+    assert resolve('{caching.CachedProperty: cute_testing}',
+                   root=python_toolbox.caching,
+                   namespace=python_toolbox) == \
+          {python_toolbox.caching.CachedProperty: python_toolbox.cute_testing}
 
-    assert resolve('garlicsim if 4 else e', namespace={'e': email}) is \
-           garlicsim
+    assert resolve('python_toolbox if 4 else e', namespace={'e': email}) is \
+           python_toolbox
     
 
 def test_illegal_input():
