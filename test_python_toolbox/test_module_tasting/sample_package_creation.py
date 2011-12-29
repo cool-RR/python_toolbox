@@ -113,8 +113,8 @@ def create_sample_package(format, folder):
         return folder
     
     elif format == 'zip':
-        with temp_file_tools.TemporaryFolder(prefix='test_garlicsim_') as \
-                                                              temporary_folder:
+        with temp_file_tools.TemporaryFolder(prefix='test_python_toolbox_') \
+                                                           as temporary_folder:
             
             temp_zip_path = os.path.join(temporary_folder, '1.zip')
             final_zip_path = os.path.join(folder, '1.zip')

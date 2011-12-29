@@ -59,7 +59,7 @@ def _check_module_tasting(format, module_name):
     
     old_sys_modules = sys.modules.copy()
     
-    with temp_file_tools.TemporaryFolder(prefix='temp_garlicsim_') as \
+    with temp_file_tools.TemporaryFolder(prefix='temp_python_toolbox_') as \
                                                               temporary_folder:
     
         path_to_add = sample_package_creation.create_sample_package(

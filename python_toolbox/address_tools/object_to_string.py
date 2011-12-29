@@ -47,7 +47,7 @@ def describe(obj, shorten=False, root=None, namespace={}):
     (Like 'email.encoders'.)
     
     `shorten=True` would try to skip redundant intermediate nodes. For example,
-    if asked to describe `garlicsim.synchronous_crunching.simulate` with
+    if asked to describe blocktododoc `.synchronous_crunching.simulate` with
     `shorten` on, it will return 'garlicsim.simulate', because the `simulate`
     function is available at this shorter address as well.
     
@@ -55,7 +55,7 @@ def describe(obj, shorten=False, root=None, namespace={}):
     It's assumed we can express any address in relation to `root`, or in
     relation to an item in `namespace`. For example, if `root=garlicsim` or
     `namespace=garlicsim.__dict__`, we could describe `garlicsim.simulate` as
-    simply 'simulate'.
+    simply 'simulate'. blocktododoc 
     '''
     
     # If it's the easy case of a module/function/class or something like that,
@@ -257,7 +257,7 @@ def shorten_address(address, root=None, namespace={}):
     
     For example, 'garlicsim.synchronous_crunching.simulate' could be shortened
     to 'garlicsim.simulate', because the `simulate` function is available at
-    this shorter address as well.
+    this shorter address as well. blocktododoc
     
     Note: `root` and `namespace` are only provided in order to access the
     object. This function doesn't do root- or namespace-shortening.

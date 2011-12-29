@@ -2,7 +2,7 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-A bootstrap module for garlicsim.
+A bootstrap module for `python_toolbox`.
 
 It checks all prerequisites are installed.
 '''
@@ -27,7 +27,7 @@ is_pypy = ('__pypy__' in sys.builtin_module_names)
 
 def __check_prerequisites():
     '''
-    Check that all modules required for `garlicsim` are installed.
+    Check that all modules required for `python_toolbox` are installed.
     
     Returns a list of some imported modules: A reference to this list should be
     kept alive so to prevent the imported modules from being garbage-collected,
@@ -101,7 +101,7 @@ def __check_problematic_psyco_version():
         if psyco.version_info[0] >= 2:
             import warnings
             warnings.warn("You seem to have Psyco version 2 (or newer) "
-                          "installed. It might conflict with `garlicsim`, so "
+                          "installed. It might conflict with `python_toolbox`, so "
                           "you may want to avoid using it. Psyco version 1.6 "
                           "is fine and recommended.")
 

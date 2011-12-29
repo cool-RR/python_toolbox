@@ -146,7 +146,7 @@ def test_stdlib():
     
 def test_local_modules():
     '''Test `describe` on local, relatively-imported modules.'''
-    import garlicsim
+    import python_toolbox
     
     from .sample_module_tree import w
     
@@ -164,7 +164,7 @@ def test_local_modules():
     result = describe(z, shorten=True, root=w, namespace='email')
     assert result == 'w.y.z'
     
-    result = describe(z, shorten=True, root=garlicsim, namespace=w)
+    result = describe(z, shorten=True, root=python_toolbox, namespace=w)
     assert result == 'y.z'
     
     result = describe(z, shorten=True, root=w.x)
@@ -261,8 +261,8 @@ def test_bad_module_name():
 
 def test_function_in_something():
     '''Test `describe` doesn't fail when describing `{1: sum}`.'''
-    if garlicsim.__version_info__ <= (0, 6, 3):
-        raise nose.SkipTest("This test doesn't pass in `garlicsim` version "
+    if python_toolbox.__version_info__ <= (0, 6, 3):
+        raise nose.SkipTest("This test doesn't pass in `python_toolbox` version "
                             "0.6.3 and below.")
     assert describe({1: sum}) == '{1: sum}'
     assert describe((sum, sum, list, chr)) == '(sum, sum, list, chr)'

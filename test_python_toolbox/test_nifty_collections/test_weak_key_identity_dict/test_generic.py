@@ -10,7 +10,7 @@ import UserList
 import weakref
 import operator
 
-from test_garlicsim.third_party import forked_mapping_tests
+from test_python_toolbox.third_party import forked_mapping_tests
 
 from python_toolbox import gc_tools
 

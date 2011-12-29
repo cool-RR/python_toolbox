@@ -10,7 +10,7 @@ import os.path
 
 import nose.tools
 
-import garlicsim
+import python_toolbox
 
 from python_toolbox.temp_file_tools import TemporaryFolder
 
