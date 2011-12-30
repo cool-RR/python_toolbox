@@ -2,22 +2,15 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-GarlicSim is a platform for writing, running and analyzing simulations.
+Python Toolbox is a collection of Python tools.
 
-It can handle any kind of simulation: Physics, game theory, epidemic spread,
-electronics, etc.
+These tools include caching, context manager tools, data structures, binary
+search, import tools, tools for manipulating Python's built-in types, and many
+more.
 
-Visit http://garlicsim.org for more info.
-
-This package, called `garlicsim`, is the business logic. It is copyrighted to
-Ram Rachum, 2009-2011, and is distributed under the LGPL v2.1 License. The
-license is included with this package as the file `lgpl2.1_license.txt`.
-
-This licensing does not apply to `garlicsim_wx`, which is the associated GUI
-package.
-
-This program is intended for Python versions 2.5, 2.6 and 2.7.
+Visit http://pythontoolbox.org for more info.
 '''
+# blocktodo: include wx_tools, and any other stuff from garlicsim_wx's general_misc.
 
 import python_toolbox.bootstrap
 import python_toolbox.version_info
