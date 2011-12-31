@@ -6,24 +6,18 @@
 
 .. _topics-index:
 
-All about Garlicsim
-===================
+Topical guides to the Python Toolbox
+====================================
 
-Introductions to all the key parts of GarlicSim you'll need to know:
+(This section is still incomplete.)
+
+These are topical guides about the various modules in the Python Toolbox.
+
+It focuses on giving the motivation for each module in the Python Toolbox,
+explaining what it's good for and the basics of using it.
+
+For a more complete and thorough documentation including more technical
+detalis, :ref:`check out the reference documentation <ref-index>`.
 
 .. toctree::
    :maxdepth: 1
-
-   what-is-garlicsim
-   time-tree
-   step-functions
-   step-profiles
-   
-..
-   synchronous-crunching
-   asynchronous-crunching
-   persistent
-   history-dependent-simulations
-   
-   
-This section is still incomplete.

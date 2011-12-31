@@ -6,18 +6,20 @@
 
 .. _ref-index:
 
-API Reference
-=============
+Reference to the Python Toolbox
+===============================
 
-This section is still incomplete.
+(This section is still incomplete.)
+
+This section contains reference-style documentation for the various modules in
+the Python Toolbox.
+
+It focuses on giving technical explanations of the various
+functions and classes, *without* giving the motivation for using them or a
+bigger-picture view of why they were written and what they are good for. For
+those, :ref:`check out the topical guides <topics-index>`.
 
 .. toctree::
    :maxdepth: 1
    
-   simpack-api
-   garlicsim_wx_general_misc/index
-   
-
-..
-   cruncher-api
 
