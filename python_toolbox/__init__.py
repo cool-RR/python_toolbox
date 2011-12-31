@@ -10,12 +10,11 @@ more.
 
 Visit http://pythontoolbox.org for more info.
 '''
-# blocktodo: include wx_tools, and any other stuff from garlicsim_wx's general_misc.
 
 import python_toolbox.bootstrap
 import python_toolbox.version_info
 import python_toolbox.monkeypatch_copy_reg
 
 __version_info__ = python_toolbox.version_info.VersionInfo(0, 1, 0)
-__version__ = '0.1.0'
+__version__ = '0.1'
 
