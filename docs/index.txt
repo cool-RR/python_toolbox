@@ -7,7 +7,7 @@
 .. _index:
 
 =======================
-GarlicSim Documentation
+The Python Toolbox Documentation
 =======================
 
 Contents:
@@ -23,7 +23,7 @@ Contents:
 This documentation is still incomplete. If you have any questions or feedback, say hello
 on the `mailing list`_!
 
-.. _mailing list: https://groups.google.com/forum/#!forum/garlicsim
+.. _mailing list: https://groups.google.com/forum/#!forum/python-toolbox
 
 .. * :ref:`genindex`
 .. * :ref:`modindex`

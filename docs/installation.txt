@@ -10,14 +10,8 @@
 Installing the Python Toolbox
 =============================
 
-Before you start
-================
-
 Requirements
-------------
-
-For :mod:`garlicsim`
-^^^^^^^^^^^^^^^^^^^^
+============
 
 * Python, version 2.5 or above. If you're new to Python, `download version 2.7
   <http://python.org/download/releases/2.7.2>`_.
@@ -34,4 +28,3 @@ The simplest way to install the Python Toolbox is using `pip`_:
 
 .. _pip: http://pypi.python.org/pypi/pip
 .. _distribute: http://pypi.python.org/pypi/distribute
-.. _Python for Windows Extensions: http://sourceforge.net/projects/pywin32
