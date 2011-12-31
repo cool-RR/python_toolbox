@@ -6,9 +6,9 @@
 
 .. _ref-garlicsim_wx_general_misc-cute_window:
 
-===========================================================================================================
+=============================================================================================================
 :class:`CuteWindow <garlicsim_wx.widgets.general_misc.cute_window.CuteWindow>`: An improved wxPython window
-===========================================================================================================
+=============================================================================================================
 
 :class:`CuteWindow <garlicsim_wx.widgets.general_misc.cute_window.CuteWindow>`
 is a wxPython window which subclasses from :class:`wx.Window` and adds a few
