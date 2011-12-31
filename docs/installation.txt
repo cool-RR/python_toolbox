@@ -1,0 +1,37 @@
+..
+   Copyright 2009-2011 Ram Rachum. This work is licensed under a Creative
+   Commons Attribution-ShareAlike 3.0 Unported License, with attribution to
+   "Ram Rachum at ram.rachum.com" including link. The license may be obtained
+   at http://creativecommons.org/licenses/by-sa/3.0/
+
+.. _installation:
+
+=============================
+Installing the Python Toolbox
+=============================
+
+Before you start
+================
+
+Requirements
+------------
+
+For :mod:`garlicsim`
+^^^^^^^^^^^^^^^^^^^^
+
+* Python, version 2.5 or above. If you're new to Python, `download version 2.7
+  <http://python.org/download/releases/2.7.2>`_.
+ 
+* `distribute`_.
+
+
+Installation
+============
+
+The simplest way to install the Python Toolbox is using `pip`_:
+
+* ``pip install python_toolbox``
+
+.. _pip: http://pypi.python.org/pypi/pip
+.. _distribute: http://pypi.python.org/pypi/distribute
+.. _Python for Windows Extensions: http://sourceforge.net/projects/pywin32

@@ -7,8 +7,6 @@ Defines the `set_process_priority` function.
 See its documentation for more info.
 '''
 
-import win32process, win32con, win32api
-
 def set_process_priority(priority, pid=None):
     '''
     Set the priority of a Windows process.
@@ -17,6 +15,8 @@ def set_process_priority(priority, pid=None):
     the priority of the current Python process but can take any valid process
     ID.
     '''
+    
+    import win32process, win32con, win32api
     
     priorityclasses = [
         win32process.IDLE_PRIORITY_CLASS,

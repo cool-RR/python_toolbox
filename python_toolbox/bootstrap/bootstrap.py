@@ -12,11 +12,18 @@ import sys
 ### Confirming correct Python version: ########################################
 #                                                                             #
 if sys.version_info[0] >= 3:
-    raise Exception('This package is not compatible with Python 3.x. Use '
-                    '`garlicsim_py3` instead.')
+    raise Exception(
+        "You're using Python 3.x, but this version of the Python Toolbox is "
+        "not compatible with Python 3.x. The `python_toolbox` intaller "
+        "should know to install a version compatible with Python 3.x when "
+        "launched with Python 3.x. I'm not sure what went wrong in your "
+        "system."
+    )
 if sys.version_info[1] <= 4:
-    raise Exception('This package requires Python 2.5 and upwards. (Not '
-                    'including 3.x).')
+    raise Exception(
+        "You're using Python <=2.4, but this package requires Python 2.5 and "
+        "upwards, so you can't use it unless you upgrade your Python version."
+    )
 #                                                                             #
 ### Finished confirming correct Python version. ###############################
 
@@ -44,11 +51,12 @@ def __check_prerequisites():
         try:
             import pkg_resources
         except ImportError:
-            raise MissingModule("`pkg_resources` is required, but it's not "
-                                "currently installed on your system. It comes "
-                                "with `distribute`, so please install it "
-                                "according to the instructions here: "
-                                "http://pypi.python.org/pypi/distribute")
+            raise MissingModule(
+                "`pkg_resources` is required, but it's not currently "
+                "installed on your system. It comes with `distribute`, so "
+                "please install it according to the instructions here: "
+                "http://pypi.python.org/pypi/distribute"
+            )
         else:
             return [pkg_resources]
     
@@ -61,33 +69,17 @@ def __check_prerequisites():
         try:
             pkg_resources.require('distribute')
         except pkg_resources.DistributionNotFound:
-            raise MissingModule("`distribute` is required, but it's not "
-                                "currently installed on your system. Please "
-                                "install it according to the instructions "
-                                "here: http://pypi.python.org/pypi/distribute")
+            raise MissingModule(
+                "`distribute` is required, but it's not currently installed "
+                "on your system. Please install it according to the "
+                "instructions here: http://pypi.python.org/pypi/distribute"
+            )
         else:
             # Returning empty list because we didn't import `distribute`:
             return []
         
-    def check_pywin32():
-        if not sys.platform == 'win32' or is_pypy: # todo: should check CPython
-            return []
-        try:
-            import win32api
-            import win32process
-            import win32com
-        except ImportError:
-            raise MissingModule(
-                "`pywin32` is required, but it's not currently installed on "
-                "your system. Please downloading it from here: "
-                "http://sourceforge.net/projects/pywin32/files/pywin32/ and "
-                "install it."
-            )
-        else: 
-            return [win32api, win32process, win32com]
         
-        
-    checkers = [check_pkg_resources, check_distribute, check_pywin32]
+    checkers = [check_pkg_resources, check_distribute]
     
     for checker in checkers:
         modules += checker()
@@ -95,17 +87,4 @@ def __check_prerequisites():
     return modules
 
 
-def __check_problematic_psyco_version():
-    if 'psyco' in sys.modules:
-        psyco = sys.modules['psyco']
-        if psyco.version_info[0] >= 2:
-            import warnings
-            warnings.warn("You seem to have Psyco version 2 (or newer) "
-                          "installed. It might conflict with `python_toolbox`, so "
-                          "you may want to avoid using it. Psyco version 1.6 "
-                          "is fine and recommended.")
-
 __modules_list = __check_prerequisites()
-
-__check_problematic_psyco_version()
-
