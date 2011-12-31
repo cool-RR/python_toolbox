@@ -103,9 +103,9 @@ setuptools.setup(
     packages=get_packages(),
     scripts=['test_python_toolbox/scripts/_test_python_toolbox.py'],
     license='LGPL v2.1',
-    long_description = my_long_description,
-    classifiers = my_classifiers,
-    include_package_data = True,
+    long_description=my_long_description,
+    classifiers=my_classifiers,
+    include_package_data=True,
     zip_safe=False,
 )
 
