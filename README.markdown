@@ -14,6 +14,8 @@ All general discussion happens at **[the Python Toolbox Google Group](https://gr
 
 The development mailing list is **[python-toolbox-dev](https://groups.google.com/forum/#!forum/python-toolbox-dev)**. This is where we discuss the development of the Python Toolbox itself.
 
+If you want to be informed on new releases of the Python Toolbox, sign up for
+**[the low-traffic python-toolbox-announce Google Group](https://groups.google.com/forum/#!forum/python-toolbox-announce)**.
 
 # Python versions #
  
