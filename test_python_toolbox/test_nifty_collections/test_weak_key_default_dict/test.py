@@ -5,30 +5,31 @@
 
 import nose
 
-from python_toolbox.nifty_collections import WeakKeyIdentityDict
+from python_toolbox.nifty_collections import WeakKeyDefaultDict
+from python_toolbox import gc_tools
 
 
-class WeakreffableList(list):
-    '''A `list` subclass which can be weakreffed.'''
-
+class WeakreffableObject(object):
+    ''' '''
+        
 
 def test():
-    '''Test the basic workings of `WeakKeyIdentityDict`.'''
-    wki_dict = WeakKeyIdentityDict()
-    my_weakreffable_list = WeakreffableList([1, 2])
-    wki_dict[my_weakreffable_list] = 7
-    assert my_weakreffable_list in wki_dict
-    assert wki_dict[my_weakreffable_list] == 7
-    identical_weakreffable_list = WeakreffableList([1, 2])
-    assert identical_weakreffable_list not in wki_dict
-    nose.tools.assert_raises(KeyError,
-                             lambda: wki_dict[identical_weakreffable_list])
+    '''Test the basic workings of `WeakKeyDefaultDict`.'''
+    wkd_dict = WeakKeyDefaultDict(default_factory=lambda: 7)
+
+    weakreffable_object_0 = WeakreffableObject()
+    weakreffable_object_1 = WeakreffableObject()
+    weakreffable_object_2 = WeakreffableObject()
+    weakreffable_object_3 = WeakreffableObject()
     
-    my_weakreffable_list.append(3)
-    assert my_weakreffable_list in wki_dict
-    assert wki_dict[my_weakreffable_list] == 7
+    wkd_dict[weakreffable_object_0] = 2
+    assert wkd_dict[weakreffable_object_0] == 2
+    assert wkd_dict[weakreffable_object_1] == 7
+    assert wkd_dict[weakreffable_object_2] == 7
     
-    del wki_dict[my_weakreffable_list]
-    assert my_weakreffable_list not in wki_dict
-    nose.tools.assert_raises(KeyError,
-                             lambda: wki_dict[my_weakreffable_list])
+    weakreffable_object_3 = WeakreffableObject()
+    wkd_dict[weakreffable_object_3] = 123
+    assert len(wkd_dict.keys()) == 4
+    del weakreffable_object_3
+    gc_tools.collect()
+    assert len(wkd_dict.keys()) == 3
