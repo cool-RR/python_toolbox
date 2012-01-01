@@ -5,8 +5,23 @@
 
 # What is the Python Toolbox? #
 
-blocktodo: explain
+The Python Toolbox is a collection of Python tools for various tasks. It
+contains:
 
+ - `python_toolbox.caching`: Tools for caching functions, class instances and
+   properties.
+ 
+ - `python_toolbox.cute_iter_tools`: Tools for manipulating iterables. Adds
+   useful functions not found in Python's built-in `itertools`.
+ 
+ - `python_toolbox.context_managers`: Pimping up your context managers.
+ 
+ - `python_toolbox.emitters`: A publisher-subscriber framework that doesn't
+   abuse strings
+   
+ - And much, much more! The Python Toolbox contains *hundreds* of useful little
+   tools.
+   
 
 # Mailing lists #
 
