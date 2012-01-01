@@ -3,7 +3,10 @@ from python_toolbox.path_tools import get_root_path_of_module
 def test():
     ''' '''
     import email.charset
-    import re
     assert get_root_path_of_module(email) == \
-           get_root_path_of_module(email.charset) == \
-           get_root_path_of_module(re) 
+           get_root_path_of_module(email.charset)
+    
+    import python_toolbox.path_tools
+    assert get_root_path_of_module(python_toolbox) == \
+           get_root_path_of_module(python_toolbox.path_tools)
+    

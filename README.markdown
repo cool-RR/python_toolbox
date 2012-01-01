@@ -1,6 +1,6 @@
 [Documentation](http://docs.pythontoolbox.org)
 
-[Installation](http://docs.pythontoolbox.org/intro/installation/index.html)
+[Installation](http://docs.pythontoolbox.org/installation.html)
 
 
 # What is the Python Toolbox? #
