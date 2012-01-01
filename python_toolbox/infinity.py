@@ -54,7 +54,6 @@ class Infinity(object):
     #todo: add __assign__ or whatever it's called
     #todo: add more interoperability with float(inf). (Need to detect its
     #existance)    
-    #todo: calling it Infinity is a bit wrong./
     
     def __init__(self, direction=1):
         self.direction = direction
