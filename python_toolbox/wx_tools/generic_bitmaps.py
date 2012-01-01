@@ -13,13 +13,13 @@ is_gtk = (wx.Platform == '__WXGTK__')
 is_win = (wx.Platform == '__WXMSW__')
 
 
-if is_win:
-    import win32api
-
-
 @caching.cache()
 def _get_icon_bitmap_from_shell32_dll(index_number, size):
     assert isinstance(index_number, int)
+    assert is_win
+
+    import win32api
+    
     width, height = size
     shell32_dll = win32api.GetModuleFileName(
         win32api.GetModuleHandle('shell32.dll')

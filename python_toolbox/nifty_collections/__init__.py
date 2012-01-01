@@ -9,3 +9,6 @@ from .weak_key_default_dict import WeakKeyDefaultDict
 from .weak_key_identity_dict import WeakKeyIdentityDict
 from .counter import Counter
 from .lazy_tuple import LazyTuple
+
+from .emitting_ordered_set import EmittingOrderedSet
+from .emitting_weak_key_default_dict import EmittingWeakKeyDefaultDict

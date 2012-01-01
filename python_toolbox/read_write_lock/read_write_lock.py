@@ -15,11 +15,15 @@ __all__ = ['ReadWriteLock']
 
 
 class ContextManager(context_managers.ContextManager):
+
     def __init__(self, lock, acquire_func):
         self.lock = lock
         self.acquire_func = acquire_func
+
     def __enter__(self):
         self.acquire_func()
+        return self.lock
+
     def __exit__(self, exc_type, exc_value, exc_traceback):
         self.lock.release()
 
@@ -35,10 +39,10 @@ class ReadWriteLock(original_read_write_lock.ReadWriteLock):
     
     Usage:
     
-        lock = ReadWriteLock()
-        with lock.read:
+        read_write_lock = ReadWriteLock()
+        with read_write_lock.read:
             pass # perform read operations here
-        with lock.write:
+        with read_write_lock.write:
             pass # perform write operations here
             
     '''

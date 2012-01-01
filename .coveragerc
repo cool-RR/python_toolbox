@@ -6,6 +6,11 @@ source =
 [report]
 # Gotta ignore errors because I create temporary code files:
 ignore_errors = True
+
+omit =
+    *third_party*
+    *forked_inspect*
+    *python26_site*
     
 [html]
 directory = .coverage_html_report
