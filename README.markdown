@@ -41,4 +41,4 @@ blocktodo: detail PyPy.
 
 # Current state #
 
-The Python Toolbox is at version (blocktodo), which is an alpha release. At this experimental stage of the project, backward compatibility will _not_ be maintained.
+The Python Toolbox is at version 0.1.0, which is an alpha release. At this experimental stage of the project, backward compatibility will _not_ be maintained.

@@ -107,7 +107,11 @@ There are 2 different ways in which context managers can be used:
 That's it. Inherit all your context managers from `ContextManager` (or decorate
 your generator functions with `ContextManagerType`) to enjoy all these
 benefits.
-# blocktododoc more context managers
+
+
+This package also defines a bunch of helpful context manager classes on top of
+`ContextManager`: Those are `BlankContextManager`, `ReentrantContextManager`
+and `DelegatingContextManager`. See these classes' docstrings for more info.
 '''
 
 # todo: review the few external tests that I'm skipping.
