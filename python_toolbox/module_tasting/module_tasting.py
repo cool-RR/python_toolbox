@@ -2,12 +2,12 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the `taste_module` class.
+This module defines the `taste_module` function.
 
 See its documentation for more information.
 '''
 
-# blocktodo: Will need thread safety for when another thread is importing at
+# todo: Will need thread safety for when another thread is importing at
 # the same time. probably make context manager for import lock from imp.
 
 from __future__ import with_statement

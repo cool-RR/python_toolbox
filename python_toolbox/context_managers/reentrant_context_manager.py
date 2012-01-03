@@ -13,8 +13,7 @@ from python_toolbox import caching
 from python_toolbox.proxy_property import ProxyProperty
 
 from .context_manager import ContextManager
-# blocktodo: need tests on whether `depth` is increased before or after
-# `reentrant_enter` and `reentrant_exit`. Was relevant in freezers.
+
 
 class ReentrantContextManager(ContextManager):
     '''
