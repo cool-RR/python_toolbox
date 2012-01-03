@@ -14,7 +14,7 @@ from python_toolbox.proxy_property import ProxyProperty
 
 from .context_manager import ContextManager
 # blocktodo: need tests on whether `depth` is increased before or after
-# `__enter__` and `__exit__`. Was relevant in freezers.
+# `reentrant_enter` and `reentrant_exit`. Was relevant in freezers.
 
 class ReentrantContextManager(ContextManager):
     '''

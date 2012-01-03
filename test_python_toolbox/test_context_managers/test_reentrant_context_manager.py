@@ -5,6 +5,8 @@
 
 from __future__ import with_statement
 
+import Queue as queue_module
+
 from python_toolbox.context_managers import ReentrantContextManager
 from python_toolbox import cute_testing
 
@@ -111,4 +113,41 @@ def test_exception_swallowing():
         my_set.add(8)
     assert my_set == set([0, 1, 2, 3, 4])
         
+
         
+def test_order_of_depth_modification():
+    ''' '''
+     
+    depth_log = queue_module.Queue()
+    
+    class JohnnyReentrantContextManager(ReentrantContextManager):
+        def reentrant_enter(self):
+            depth_log.put(self.depth)
+            return self
+        def reentrant_exit(self, exc_type, exc_value, exc_traceback):
+            depth_log.put(self.depth)
+        
+    johnny_reentrant_context_manager = JohnnyReentrantContextManager()
+    assert johnny_reentrant_context_manager.depth == 0
+    with johnny_reentrant_context_manager:
+        assert johnny_reentrant_context_manager.depth == 1
+        
+        # `reentrant_enter` saw a depth of 0, because the depth increment
+        # happens *after* `reentrant_enter` is called:
+        assert depth_log.get(block=False) == 0
+        
+        with johnny_reentrant_context_manager:
+            
+            assert johnny_reentrant_context_manager.depth == 2
+            assert depth_log.qsize() == 0 # We're in a depth greater than 1,
+                                          # so `reentrant_enter` wasn't even
+                                          # called.
+                                          
+        assert johnny_reentrant_context_manager.depth == 1
+        
+        assert depth_log.qsize() == 0 # We came out of a depth greater than 1,
+                                      # so `reentrant_exit` wasn't even called.
+                                      
+    # `reentrant_exit` saw a depth of 1, because the depth decrement happens
+    # *after* `reentrant_exit` is called:
+    assert depth_log.get(block=False) == 1
