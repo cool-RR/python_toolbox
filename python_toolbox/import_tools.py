@@ -190,9 +190,17 @@ def import_by_path(path, name=None, keep_in_sys_modules=True):
 
 def find_module(module_name, path=None, look_in_zip=True, legacy_output=False):
     '''
-    blocktododoc
+    Search for a module by name and return its filename.
     
-    Gives funky output when `legacy_output=True and look_in_zip=True`.
+    When `path=None`, search for a built-in, frozen or special module and
+    continue search in `sys.path`.
+    
+    When `legacy_output=True`, instead of returning the module's filename,
+    returns a tuple `(file, filename, (suffix, mode, type))`.
+    
+    When `look_in_zip=True`, also looks in zipmodules.
+    
+    todo: Gives funky output when `legacy_output=True and look_in_zip=True`.
     '''
     # todo: test
     if look_in_zip:
@@ -213,7 +221,7 @@ def find_module(module_name, path=None, look_in_zip=True, legacy_output=False):
         
     if legacy_output:
         return result
-    else: # not legacy_output
+    else: # legacy_output is False
         file_, path_, description_ = result
         if file_ is not None:
             file_.close()
@@ -222,9 +230,9 @@ def find_module(module_name, path=None, look_in_zip=True, legacy_output=False):
     
 def _find_module_in_some_zip_path(module_name, path=None):
     '''
-    Return whether a module by the name `module_name` exists in a zip archive.
-    blocktododoc
-    Used internally by `exists`.
+    If a module called `module_name` exists in a zip archive, get its path.
+    
+    If the module is not found, raises `ImportError`.
     '''
     original_path_argument = path
     
@@ -276,4 +284,10 @@ def _find_module_in_some_zip_path(module_name, path=None):
 
     
 def _module_address_to_partial_path(module_address):
+    '''
+    Convert a dot-seperated address to a path-seperated address.
+    
+    For example, on Linux, `'python_toolbox.caching.cached_property'` would be
+    converted to `'python_toolbox/caching/cached_property'`.
+    '''
     return os.path.sep.join(module_address.split('.'))

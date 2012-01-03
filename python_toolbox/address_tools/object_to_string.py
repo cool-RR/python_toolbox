@@ -255,9 +255,9 @@ def shorten_address(address, root=None, namespace={}):
     '''
     Shorten an address by dropping redundant intermediate nodes.
     
-    For example, 'garlicsim.synchronous_crunching.simulate' could be shortened
-    to 'garlicsim.simulate', because the `simulate` function is available at
-    this shorter address as well. blocktododoc
+    For example, 'python_toolbox.caching.cached_property.CachedProperty' could
+    be shortened to 'python_toolbox.caching.CachedProperty', because the
+    `CachedProperty` class is available at this shorter address as well.
     
     Note: `root` and `namespace` are only provided in order to access the
     object. This function doesn't do root- or namespace-shortening.
