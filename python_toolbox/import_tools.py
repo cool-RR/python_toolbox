@@ -190,10 +190,11 @@ def import_by_path(path, name=None, keep_in_sys_modules=True):
 
 def find_module(module_name, path=None, look_in_zip=True, legacy_output=False):
     '''
-    blocktodo: test
+    blocktododoc
     
     Gives funky output when `legacy_output=True and look_in_zip=True`.
-    '''    
+    '''
+    # todo: test
     if look_in_zip:
         try:
             result = _find_module_in_some_zip_path(module_name, path)

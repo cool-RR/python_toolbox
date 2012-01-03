@@ -79,7 +79,6 @@ def test_on_stdlib():
     
     assert resolve('object') is object
     
-# blocktodo: convert to python_toolbox    
 def test_python_toolbox():
     '''Test `resolve` on `python_toolbox` modules.'''
     

@@ -23,7 +23,7 @@ def get_focus_pen(color='black', width=1, dashes=[1, 4]):
     if isinstance(color, basestring):
         color = wx.NamedColour(color)
         
-    # blocktodoc: do `if is_mac`, also gtk maybe
+    # todo: do `if is_mac`, also gtk maybe
     
     pen = wx.Pen(color, width, wx.USER_DASH)
     pen.SetDashes(dashes)

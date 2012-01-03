@@ -41,7 +41,7 @@ except ImportError:
 ###############################################################################
 
 
-# blocktodo: test this is correct:
+# todo: test this is correct:
 zip_import_uses_import_hook = (sys.version_info[:2] == (2, 5))
 
         
