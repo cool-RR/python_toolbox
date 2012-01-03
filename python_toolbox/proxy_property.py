@@ -8,16 +8,56 @@ See its documentation for more information.
 '''
 
 from python_toolbox import address_tools
+from python_toolbox import caching
 
 
-#blocktodo: allow doc
 class ProxyProperty(object):
+    '''
+    Property that serves as a proxy to an attribute of the parent object.
+    
+    When you create a `ProxyProperty`, you pass in the name of the attribute
+    (or nested attribute) that it should proxy. Then, every time the property
+    is `set`ed or `get`ed, the attribute is `set`ed or `get`ed instead.
+    
+    Example:
+    
+        class Chair(object):
+        
+            def __init__(self, whatever):
+                self.whatever = whatever
+                
+            whatever_proxy = ProxyProperty('whatever')
+            
+        chair = Chair(3)
+        
+        assert chair.whatever == chair.whatever_proxy == 3
+        chair.whatever_proxy = 4
+        assert chair.whatever == chair.whatever_proxy == 4
+                
+                
+    You may also refer to a nested attribute of the object rather than a direct
+    one; for example, you can do `ProxyProperty('whatever.x.height')` and it
+    will access the `height` attribute of the `x` attribute of `whatever`.
+    '''
+    
     def __init__(self, attribute_name, doc=None):
         '''
-        blocktododoc: attribute can have dot in it.
+        Construct the `ProxyProperty`.
+        
+        `attribute_name` is the name of the attribute that we will proxy.
+        
+        You may also refer to a nested attribute of the object rather than a
+        direct one; for example, you can do
+        `ProxyProperty('whatever.x.height')` and it will access the `height`
+        attribute of the `x` attribute of `whatever`.
+        
+        You may specify a docstring as `doc`. Otherwise the docstring of the
+        proxy object will be used.
         '''
         self.attribute_name = attribute_name
-        self.__doc__ = doc
+        self.__given_doc = doc
+        self.__doc_from_attribute = None
+        self.__got_doc_from_attribute = False
         
         
     def __get__(self, obj, our_type=None):
@@ -26,16 +66,21 @@ class ProxyProperty(object):
             return self
         else:
             if '.' in self.attribute_name:
-                return address_tools.resolve('obj.%s' % self.attribute_name,
-                                             namespace={'obj': obj})
+                return_value = address_tools.resolve(
+                    'obj.%s' % self.attribute_name,
+                    namespace={'obj': obj}
+                )
             else:
-                return getattr(obj, self.attribute_name)
+                return_value = getattr(obj, self.attribute_name)
+            
+        self.__doc_from_attribute = getattr(return_value, '__doc__', None)
+        self.__got_doc_from_attribute = True
+        return return_value
         
     def __set__(self, obj, value):
         
-        
-        # blocktodo: should I check if obj is None and set on class?
-        # Same for __delete__?
+        # blocktodo: should I check if `obj` is `None` and set on class?
+        # Same for `__delete__`?
         
         if '.' in self.attribute_name:
             left_segment, right_segment = self.attribute_name.rsplit('.', 1)
@@ -44,3 +89,15 @@ class ProxyProperty(object):
             setattr(deepest_object, right_segment, value)
         else:
             setattr(obj, self.attribute_name, value)
+            
+            
+    @caching.CachedProperty
+    def __doc__(self):
+        ''' '''
+        if self.__given_doc is not None:
+            return self.__given_doc
+        elif self.__got_doc_from_attribute:
+            return self.__doc_from_attribute
+        else: # self.__got_doc_from_attribute is False
+            
+            

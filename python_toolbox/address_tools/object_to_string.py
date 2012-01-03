@@ -47,15 +47,15 @@ def describe(obj, shorten=False, root=None, namespace={}):
     (Like 'email.encoders'.)
     
     `shorten=True` would try to skip redundant intermediate nodes. For example,
-    if asked to describe blocktododoc `.synchronous_crunching.simulate` with
-    `shorten` on, it will return 'garlicsim.simulate', because the `simulate`
-    function is available at this shorter address as well.
+    if asked to describe `django.db.utils.ConnectionRouter` with `shorten` on,
+    it will return 'django.db.ConnectionRouter', because the `ConnectionRouter`
+    class is available at this shorter address as well.
     
     The parameters `root` and `namespace` help shorten addresses some more.
     It's assumed we can express any address in relation to `root`, or in
-    relation to an item in `namespace`. For example, if `root=garlicsim` or
-    `namespace=garlicsim.__dict__`, we could describe `garlicsim.simulate` as
-    simply 'simulate'. blocktododoc 
+    relation to an item in `namespace`. For example, if `root=python_toolbox`
+    or `namespace=python_toolbox.__dict__`, we could describe
+    `python_toolbox.caching` as simply 'caching'.)
     '''
     
     # If it's the easy case of a module/function/class or something like that,
