@@ -8,7 +8,6 @@ See its documentation for more information.
 '''
 
 from python_toolbox import address_tools
-from python_toolbox import caching
 
 
 class ProxyProperty(object):
@@ -39,7 +38,7 @@ class ProxyProperty(object):
     one; for example, you can do `ProxyProperty('whatever.x.height')` and it
     will access the `height` attribute of the `x` attribute of `whatever`.
     '''
-    
+
     def __init__(self, attribute_name, doc=None):
         '''
         Construct the `ProxyProperty`.
@@ -51,13 +50,10 @@ class ProxyProperty(object):
         `ProxyProperty('whatever.x.height')` and it will access the `height`
         attribute of the `x` attribute of `whatever`.
         
-        You may specify a docstring as `doc`. Otherwise the docstring of the
-        proxy object will be used.
+        You may specify a docstring as `doc`.
         '''
         self.attribute_name = attribute_name
-        self.__given_doc = doc
-        self.__doc_from_attribute = None
-        self.__got_doc_from_attribute = False
+        self.__doc__ = doc
         
         
     def __get__(self, obj, our_type=None):
@@ -66,16 +62,10 @@ class ProxyProperty(object):
             return self
         else:
             if '.' in self.attribute_name:
-                return_value = address_tools.resolve(
-                    'obj.%s' % self.attribute_name,
-                    namespace={'obj': obj}
-                )
+                return address_tools.resolve('obj.%s' % self.attribute_name,
+                                             namespace={'obj': obj})
             else:
-                return_value = getattr(obj, self.attribute_name)
-            
-        self.__doc_from_attribute = getattr(return_value, '__doc__', None)
-        self.__got_doc_from_attribute = True
-        return return_value
+                return getattr(obj, self.attribute_name)
         
     def __set__(self, obj, value):
         
@@ -89,15 +79,3 @@ class ProxyProperty(object):
             setattr(deepest_object, right_segment, value)
         else:
             setattr(obj, self.attribute_name, value)
-            
-            
-    @caching.CachedProperty
-    def __doc__(self):
-        ''' '''
-        if self.__given_doc is not None:
-            return self.__given_doc
-        elif self.__got_doc_from_attribute:
-            return self.__doc_from_attribute
-        else: # self.__got_doc_from_attribute is False
-            
-            
