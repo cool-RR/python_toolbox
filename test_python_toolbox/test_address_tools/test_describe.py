@@ -14,6 +14,10 @@ import python_toolbox
 from python_toolbox.address_tools import (describe,
                                                   resolve)
 
+# todo: Make test that when a root or namespace is given, it's top priority to
+# use it, even if it prevents shorterning and results in an overall longer
+# address.
+
 
 prefix = __name__ + '.'
 
@@ -70,78 +74,63 @@ def test_stdlib():
     
     
 # blocktodo: convert to python_toolbox
-#def test_garlicsim():
-    #'''Test `describe` for various `garlicsim` modules.'''
+def test_python_toolbox():
+    '''Test `describe` for various `python_toolbox` modules.'''
     
-    #import garlicsim
-    #result = describe(garlicsim.data_structures.state.State)
-    #assert result == 'garlicsim.data_structures.state.State'
-    #assert resolve(result) is garlicsim.data_structures.state.State
+    import python_toolbox.caching
+    result = describe(python_toolbox.caching.cached_property.CachedProperty)
+    assert result == 'python_toolbox.caching.cached_property.CachedProperty'
+    assert resolve(result) is \
+                          python_toolbox.caching.cached_property.CachedProperty
     
-    #result = describe(garlicsim.data_structures.state.State, shorten=True)
-    #assert result == 'garlicsim.data_structures.State'
-    #assert resolve(result) is garlicsim.data_structures.state.State
+    result = describe(python_toolbox.caching.cached_property.CachedProperty,
+                      shorten=True)
+    assert result == 'python_toolbox.caching.CachedProperty'
+    assert resolve(result) is \
+                          python_toolbox.caching.cached_property.CachedProperty
     
-    #result = describe(garlicsim.Project, shorten=True)
-    #assert result == 'garlicsim.Project'
-    #assert resolve(result) is garlicsim.Project
+    import python_toolbox.nifty_collections
+    result = describe(python_toolbox.nifty_collections.weak_key_default_dict.
+                                                            WeakKeyDefaultDict,
+                      shorten=True,
+                      root=python_toolbox.nifty_collections.
+                                                         weak_key_default_dict)
+    assert result == 'weak_key_default_dict.WeakKeyDefaultDict'
+    assert resolve(
+        result,
+        root=python_toolbox.nifty_collections.weak_key_default_dict
+        ) is python_toolbox.nifty_collections.WeakKeyDefaultDict
     
-    ## When a root or namespace is given, it's top priority to use it, even if
-    ## it prevents shorterning and results in an overall longer address:
-    #result = describe(garlicsim.Project, shorten=True,
-                      #root=garlicsim.asynchronous_crunching)
-    #assert result == 'asynchronous_crunching.Project'
-    #assert resolve(result, root=garlicsim.asynchronous_crunching) is \
-           #garlicsim.Project
+    result = describe(python_toolbox.caching.cached_property.CachedProperty,
+                      shorten=True,
+                      namespace=python_toolbox)
+    assert result == 'caching.CachedProperty'
+    assert resolve(result, namespace=python_toolbox) is \
+                                          python_toolbox.caching.CachedProperty
     
-    #result = describe(garlicsim.Project, shorten=True,
-                      #namespace=garlicsim)
-    #assert result == 'Project'
-    #assert resolve(result, namespace=garlicsim) is garlicsim.Project
+    result = describe(python_toolbox.caching.CachedProperty, shorten=True,
+                      namespace=python_toolbox.__dict__)
+    assert result == 'caching.CachedProperty'
+    assert resolve(result, namespace=python_toolbox.__dict__) is \
+           python_toolbox.caching.CachedProperty
     
-    #result = describe(garlicsim.Project, shorten=True,
-                         #namespace=garlicsim.__dict__)
-    #assert result == 'Project'
-    #assert resolve(result, namespace=garlicsim.__dict__) is \
-           #garlicsim.Project
+    result = describe(python_toolbox.caching.CachedProperty, shorten=True,
+                      namespace='python_toolbox')
+    assert result == 'caching.CachedProperty'
+    assert resolve(result, namespace='python_toolbox') is \
+                                          python_toolbox.caching.CachedProperty
     
-    #result = describe(garlicsim.Project, shorten=True,
-                      #namespace='garlicsim')
-    #assert result == 'Project'
-    #assert resolve(result, namespace='garlicsim') is garlicsim.Project
+    result = describe(python_toolbox.caching.CachedProperty, shorten=True,
+                      namespace='python_toolbox.__dict__')
+    assert result == 'caching.CachedProperty'
+    assert resolve(result, namespace='python_toolbox.__dict__') is \
+           python_toolbox.caching.CachedProperty
     
-    #result = describe(garlicsim.Project, shorten=True,
-                      #namespace='garlicsim.__dict__')
-    #assert result == 'Project'
-    #assert resolve(result, namespace='garlicsim.__dict__') is \
-           #garlicsim.Project
-    
-    #result = describe(garlicsim.data_structures.state.State, root=garlicsim)
-    #assert result == 'garlicsim.data_structures.state.State'
-    #assert resolve(result, root=garlicsim) is \
-           #garlicsim.data_structures.state.State
-    
-    
-    #import garlicsim_lib.simpacks.life
-    
-    #result = describe(garlicsim_lib.simpacks.life.state.State.step)
-    #assert result == 'garlicsim_lib.simpacks.life.state.State.step'
-    
-    #result = describe(garlicsim_lib.simpacks.life.state.State.step,
-                      #shorten=True)
-    #assert result == 'garlicsim_lib.simpacks.life.State.step'
-    
-    #result = describe(garlicsim_lib.simpacks.life.state.State.step,
-                      #root=garlicsim_lib.simpacks.life)
-    #assert result == 'life.state.State.step'
-    
-    #result = describe(garlicsim_lib.simpacks.life.state.State.step,
-                      #namespace=garlicsim_lib.simpacks)
-    #assert result == 'life.state.State.step'
-    
-    #result = describe(garlicsim_lib.simpacks.life.state.State.step,
-                      #root=garlicsim_lib.simpacks.life, shorten=True)
-    #assert result == 'life.State.step'
+    result = describe(python_toolbox.caching.cached_property.CachedProperty,
+                      root=python_toolbox)
+    assert result == 'python_toolbox.caching.cached_property.CachedProperty'
+    assert resolve(result, root=python_toolbox) is \
+                          python_toolbox.caching.cached_property.CachedProperty
     
     
 def test_local_modules():
