@@ -23,7 +23,7 @@ prefix = __name__ + '.'
 
 
 
-def test_locally_defined_class():
+def test_on_locally_defined_class():
     
     ###########################################################################
     # Testing for locally defined class:
@@ -51,7 +51,7 @@ def test_locally_defined_class():
     assert resolve(result, root='A.C.D') == A.C.D.deeper_method
     
     
-def test_stdlib():
+def test_on_stdlib():
     '''Test `describe` for various stdlib modules.'''
     
     import email.encoders
@@ -73,8 +73,7 @@ def test_stdlib():
            email.encoders
     
     
-# blocktodo: convert to python_toolbox
-def test_python_toolbox():
+def test_on_python_toolbox():
     '''Test `describe` for various `python_toolbox` modules.'''
     
     import python_toolbox.caching
@@ -133,7 +132,7 @@ def test_python_toolbox():
                           python_toolbox.caching.cached_property.CachedProperty
     
     
-def test_local_modules():
+def test_on_local_modules():
     '''Test `describe` on local, relatively-imported modules.'''
     import python_toolbox
     
@@ -160,7 +159,7 @@ def test_local_modules():
     assert result == 'x.y.z'
     
     
-def test_ignore_confusing_namespace():
+def test_on_ignore_confusing_namespace():
     '''Test that `describe` doesn't use a confusing namespace item.'''
     import email.encoders
     import marshal

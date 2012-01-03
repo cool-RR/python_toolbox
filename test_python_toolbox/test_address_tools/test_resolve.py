@@ -26,7 +26,7 @@ class A(object):
 prefix = __name__ + '.'
 
 
-def test_locally_defined_class():
+def test_on_locally_defined_class():
     '''Test `resolve` on a locally defined class tree.'''
     
     assert resolve(prefix + 'A') is A
@@ -46,7 +46,7 @@ def test_locally_defined_class():
     assert resolve('A', root=A) == A
 
     
-def test_stdlib():    
+def test_on_stdlib():    
     '''Test `resolve` on stdlib modules.'''
     
     result = resolve('email')
@@ -80,34 +80,41 @@ def test_stdlib():
     assert resolve('object') is object
     
 # blocktodo: convert to python_toolbox    
-#def test_garlicsim():
-    #'''Test `resolve` on `garlicsim` modules.'''
+def test_python_toolbox():
+    '''Test `resolve` on `python_toolbox` modules.'''
     
-    #result = resolve('garlicsim.general_misc')
-    #import garlicsim
-    #assert garlicsim.general_misc is result
+    result = resolve('python_toolbox.caching')
+    import python_toolbox
+    assert python_toolbox.caching is result
     
-    #result = resolve('garlicsim.general_misc.persistent.'
-                     #'cross_process_persistent.'
-                     #'CrossProcessPersistent.personality')
-    #result2 = \
-        #resolve('general_misc.persistent.CrossProcessPersistent.personality', 
-                #namespace=garlicsim)
-    #result3 = resolve('persistent.CrossProcessPersistent.personality',
-                         #root=garlicsim.general_misc.persistent,
-                         #namespace='email')
-    #assert result is result2 is result3 is garlicsim.general_misc.persistent.\
-           #cross_process_persistent.CrossProcessPersistent.personality
+    ###########################################################################
+    #                                                                         #
+    result_0 = resolve('python_toolbox.persistent.cross_process_persistent.'
+                     'CrossProcessPersistent.personality')
+    result_1 = resolve('persistent.CrossProcessPersistent.personality', 
+                       namespace=python_toolbox)
+    result_2 = resolve('persistent.CrossProcessPersistent.personality',
+                       root=python_toolbox.persistent,
+                       namespace='email') # Namespace is red herring.
+    assert result_0 is result_1 is result_2 is python_toolbox.persistent. \
+                    cross_process_persistent.CrossProcessPersistent.personality
+    #                                                                         #
+    ###########################################################################
     
-    #result = resolve('data_structures.end.End',
-                        #root=garlicsim.data_structures)
-    #result2 = resolve('data_structures.End',
-                        #root=garlicsim.data_structures)
-    #result3 = resolve('data_structures.End', namespace='garlicsim')
-    #assert result is result2 is garlicsim.data_structures.end.End
+    ###########################################################################
+    #                                                                         #
+    result_0 = resolve('caching.cached_property.CachedProperty',
+                       root=python_toolbox.caching)
+    result_1 = resolve('caching.CachedProperty',
+                       root=python_toolbox.caching)
+    result_2 = resolve('caching.CachedProperty', namespace='python_toolbox')
+    assert result_0 is result_1 is result_2 is \
+                          python_toolbox.caching.cached_property.CachedProperty
+    #                                                                         #
+    ###########################################################################
     
-    #import email
-    #assert resolve('garlicsim', namespace={'e': email})
+    import email
+    assert resolve('python_toolbox', namespace={'e': email}) == python_toolbox
     
     
 def test_address_in_expression():
