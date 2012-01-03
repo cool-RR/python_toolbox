@@ -69,8 +69,8 @@ class ProxyProperty(object):
         
     def __set__(self, obj, value):
         
-        # blocktodo: should I check if `obj` is `None` and set on class?
-        # Same for `__delete__`?
+        # todo: should I check if `obj` is `None` and set on class? Same for
+        # `__delete__`?
         
         if '.' in self.attribute_name:
             left_segment, right_segment = self.attribute_name.rsplit('.', 1)

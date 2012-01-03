@@ -55,13 +55,27 @@ def get_packages():
 
 my_long_description = \
 '''\
-blocktododoc
-GarlicSim is a platform for writing, running and analyzing simulations.
 
-It can handle any kind of simulation: Physics, game theory, epidemic spread,
-electronics, etc.
+The Python Toolbox is a collection of Python tools for various tasks. It
+contains:
 
-Visit http://garlicsim.org for more info.
+ - `python_toolbox.caching`: Tools for caching functions, class instances and
+    properties.
+ 
+ - `python_toolbox.cute_iter_tools`: Tools for manipulating iterables. Adds
+    useful functions not found in Python's built-in `itertools`.
+ 
+ - `python_toolbox.context_managers`: Pimping up your context managers.
+ 
+ - `python_toolbox.emitters`: A publisher-subscriber framework that doesn't
+    abuse strings.
+   
+ - And many, *many* more! The Python Toolbox contains **hundreds** of useful
+   little tools.
+
+Visit http://pythontoolbox.org for more info.
+
+Documentation is at http://docs.pythontoolbox.org .
 '''
 
 my_classifiers = [
@@ -85,7 +99,7 @@ setuptools.setup(
     install_requires=['distribute'],
     tests_require=['nose>=1.0.0',
                    'docutils>=0.8'],
-    description='Pythonic framework for working with simulations',
+    description='A collection of Python tools for various tasks',
     author='Ram Rachum',
     author_email='ram@rachum.com',
     url='http://python_toolbox.org',

@@ -1,19 +1,18 @@
 # Copyright 2009-2011 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''Test the `python_toolbox.context_manager` module.'''
+'''Test the `python_toolbox.context_managers` module.'''
 
 from __future__ import with_statement 
 
 from python_toolbox import cute_testing
 
 from python_toolbox.context_managers import (ContextManager,
-                                                    ContextManagerType,
-                                                    SelfHook)
+                                             ContextManagerType,
+                                             SelfHook)
 
 flag = None
 exception_type_caught = None
-# blocktodo: rename this stuff to context_manager*s* too.
 
 def test_generator():
     '''Test a context manager made from a generator.'''
