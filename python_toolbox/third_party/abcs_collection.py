@@ -21,6 +21,8 @@ __all__ = ["Hashable", "Iterable", "Iterator",
            "Sequence", "MutableSequence",
            ]
 
+### ONE-TRICK PONIES ###
+
 def _hasattr(C, attr):
     try:
         return any(attr in B.__dict__ for B in C.__mro__)
@@ -28,7 +30,6 @@ def _hasattr(C, attr):
         # Old-style class
         return hasattr(C, attr)
 
-### ONE-TRICK PONIES ###
 
 class Hashable:
     __metaclass__ = ABCMeta
@@ -83,7 +84,7 @@ class Iterator(Iterable):
     @classmethod
     def __subclasshook__(cls, C):
         if cls is Iterator:
-            if _hasattr(C, "next"):
+            if _hasattr(C, "next") and _hasattr(C, "__iter__"):
                 return True
         return NotImplemented
 
