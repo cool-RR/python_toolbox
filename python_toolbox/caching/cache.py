@@ -17,6 +17,10 @@ from python_toolbox.infinity import infinity
 from python_toolbox.nifty_collections import OrderedDict
 
 
+class CLEAR_ENTIRE_CACHE(object):
+    '''Sentinel object for clearing the entire cache'''
+
+
 @decorator_tools.helpful_decorator_builder
 def cache(max_size=infinity):
     '''
@@ -91,8 +95,8 @@ def cache(max_size=infinity):
         
         result = decorator_tools.decorator(cached, function)
         
-        def cache_clear(key=None):
-            if key is None:
+        def cache_clear(key=CLEAR_ENTIRE_CACHE):
+            if key is CLEAR_ENTIRE_CACHE:
                 cached._cache.clear()
             else:
                 try:
