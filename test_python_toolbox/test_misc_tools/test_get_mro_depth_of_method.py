@@ -1,4 +1,4 @@
-# Copyright 2009-2011 Ram Rachum.
+# Copyright 2009-2012 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
 '''Testing module for `python_toolbox.misc_tools.get_mro_depth_of_method`.'''
