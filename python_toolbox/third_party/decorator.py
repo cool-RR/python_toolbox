@@ -1,34 +1,38 @@
 ##########################     LICENCE     ###############################
-##
-##   Copyright (c) 2005-2011, Michele Simionato
-##   All rights reserved.
-##
-##   Redistributions of source code must retain the above copyright 
-##   notice, this list of conditions and the following disclaimer.
-##   Redistributions in bytecode form must reproduce the above copyright
-##   notice, this list of conditions and the following disclaimer in
-##   the documentation and/or other materials provided with the
-##   distribution. 
 
-##   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-##   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-##   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-##   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-##   HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-##   INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
-##   BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
-##   OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-##   ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
-##   TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
-##   USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
-##   DAMAGE.
+# Copyright (c) 2005-2012, Michele Simionato
+# All rights reserved.
+
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are
+# met:
+
+#   Redistributions of source code must retain the above copyright 
+#   notice, this list of conditions and the following disclaimer.
+#   Redistributions in bytecode form must reproduce the above copyright
+#   notice, this list of conditions and the following disclaimer in
+#   the documentation and/or other materials provided with the
+#   distribution. 
+
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+# HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+# BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
+# OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+# TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+# USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+# DAMAGE.
 
 """
 Decorator module, see http://pypi.python.org/pypi/decorator
 for the documentation.
 """
 
-__version__ = '3.3.0'
+__version__ = '3.3.3'
 
 __all__ = ["decorator", "FunctionMaker", "partial"]
 
@@ -58,7 +62,6 @@ else:
                 inspect.getargspec(f)
             self.kwonlyargs = []
             self.kwonlydefaults = None
-            self.annotations = getattr(f, '__annotations__', {})
         def __iter__(self):
             yield self.args
             yield self.varargs
@@ -86,22 +89,28 @@ class FunctionMaker(object):
             self.module = func.__module__
             if inspect.isfunction(func):
                 argspec = getfullargspec(func)
+                self.annotations = getattr(func, '__annotations__', {})
                 for a in ('args', 'varargs', 'varkw', 'defaults', 'kwonlyargs',
-                          'kwonlydefaults', 'annotations'):
+                          'kwonlydefaults'):
                     setattr(self, a, getattr(argspec, a))
                 for i, arg in enumerate(self.args):
                     setattr(self, 'arg%d' % i, arg)
-                self.signature = inspect.formatargspec(
-                    formatvalue=lambda val: "", *argspec)[1:-1]
-                allargs = list(self.args)
-                if self.varargs:
-                    allargs.append('*' + self.varargs)
-                if self.varkw:
-                    allargs.append('**' + self.varkw)
-                try:
-                    self.shortsignature = ', '.join(allargs)
-                except TypeError: # exotic signature, valid only in Python 2.X
-                    self.shortsignature = self.signature
+                if sys.version < '3': # easy way
+                    self.shortsignature = self.signature = \
+                        inspect.formatargspec(
+                        formatvalue=lambda val: "", *argspec)[1:-1]
+                else: # Python 3 way
+                    self.signature = self.shortsignature = ', '.join(self.args)
+                    if self.varargs:
+                        self.signature += ', *' + self.varargs
+                        self.shortsignature += ', *' + self.varargs
+                    if self.kwonlyargs:
+                        for a in self.kwonlyargs:
+                            self.signature += ', %s=None' % a
+                            self.shortsignature += ', %s=%s' % (a, a)
+                    if self.varkw:
+                        self.signature += ', **' + self.varkw
+                        self.shortsignature += ', **' + self.varkw
                 self.dict = func.__dict__.copy()
         # func=None happens when decorating a caller
         if name:
@@ -127,6 +136,8 @@ class FunctionMaker(object):
         func.__doc__ = getattr(self, 'doc', None)
         func.__dict__ = getattr(self, 'dict', {})
         func.func_defaults = getattr(self, 'defaults', ())
+        func.__kwdefaults__ = getattr(self, 'kwonlydefaults', None)
+        func.__annotations__ = getattr(self, 'annotations', None)
         callermodule = sys._getframe(3).f_globals.get('__name__', '?')
         func.__module__ = getattr(self, 'module', callermodule)
         func.__dict__.update(kw)
@@ -162,7 +173,7 @@ class FunctionMaker(object):
 
     @classmethod
     def create(cls, obj, body, evaldict, defaults=None,
-               doc=None, module=None, addsource=True,**attrs):
+               doc=None, module=None, addsource=True, **attrs):
         """
         Create a function from the strings name, signature and body.
         evaldict is the evaluation dictionary. If addsource is true an attribute
@@ -193,7 +204,7 @@ def decorator(caller, func=None):
         evaldict['_func_'] = func
         return FunctionMaker.create(
             func, "return _call_(_func_, %(shortsignature)s)",
-            evaldict, undecorated=func)
+            evaldict, undecorated=func, __wrapped__=func)
     else: # returns a decorator
         if isinstance(caller, partial):
             return partial(decorator, caller)
@@ -205,5 +216,5 @@ def decorator(caller, func=None):
         return FunctionMaker.create(
             '%s(%s)' % (caller.__name__, first), 
             'return decorator(_call_, %s)' % first,
-            evaldict, undecorated=caller,
+            evaldict, undecorated=caller, __wrapped__=caller,
             doc=caller.__doc__, module=caller.__module__)
