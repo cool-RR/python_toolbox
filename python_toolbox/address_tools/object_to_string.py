@@ -208,12 +208,13 @@ def get_address(obj, shorten=False, root=None, namespace={}):
             
         # Split to address parts:
         address_parts = address.split('.')
-        # e.g., `['garlicsim', 'misc', 'step_copy', 'StepCopy']`.
+        # e.g., `['python_toolbox', 'misc', 'step_copy', 'StepCopy']`.
         
         heads = ['.'.join(address_parts[:i]) for i in
                  xrange(1, len(address_parts) + 1)]
-        # `heads` is something like: `['garlicsim', 'garlicsim.misc',
-        # 'garlicsim.misc.step_copy', 'garlicsim.misc.step_copy.StepCopy']`
+        # `heads` is something like: `['python_toolbox',
+        # 'python_toolbox.caching', 'python_toolbox.caching.cached_type',
+        # 'python_toolbox.cached_type.CachedType']`
 
         
         for head in reversed(heads):
