@@ -91,9 +91,15 @@ def cache(max_size=infinity):
         
         result = decorator_tools.decorator(cached, function)
         
-        def cache_clear():
-            '''Clear the cache, deleting all saved results.'''
-            cached._cache.clear()    
+        def cache_clear(key=None):
+            if key is None:
+                cached._cache.clear()
+            else:
+                try:
+                    del cached._cache[key]
+                except KeyError:
+                    pass
+                
         result.cache_clear = cache_clear
         
         result.is_cached = True

@@ -4,7 +4,7 @@
 '''Defines several functions that may be useful when working with dicts.'''
 
 
-def filter_items(d, condition):
+def filter_items(d, condition, force_dict_type=None):
     '''
     Get new dict with items from `d` that satisfy the `condition` functions.
     
@@ -16,7 +16,10 @@ def filter_items(d, condition):
     '''
     # todo future: possibly shallow-copy `d` to allow for dict classes that
     # have more state, (like default factory.)
-    dict_type = type(d) if (type(d).__name__ != 'dictproxy') else dict
+    if force_dict_type is not None:
+        dict_type = force_dict_type
+    else:
+        dict_type = type(d) if (type(d).__name__ != 'dictproxy') else dict
     return dict_type(
         (key, value) for (key, value) in d.iteritems() if condition(key, value)
     )
