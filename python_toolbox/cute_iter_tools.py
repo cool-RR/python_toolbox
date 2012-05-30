@@ -34,7 +34,7 @@ def consecutive_pairs(iterable, wrap_around=False):
     old = first_item
     
     if not wrap_around:
-        # If `wrap_around` is `False, we avoid holding a reference to
+        # If `wrap_around` is `False`, we avoid holding a reference to
         # `first_item`, because it may need to be garbage-collected:
         del first_item 
     
