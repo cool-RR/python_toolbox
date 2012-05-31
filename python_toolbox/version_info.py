@@ -28,9 +28,9 @@ class VersionInfo(tuple):
     _fields = ('major', 'minor', 'micro') 
 
     
-    def __new__(_cls, major, minor, micro):
+    def __new__(cls, major, minor, micro):
         '''Create new instance of `VersionInfo(major, minor, micro)`.'''
-        return tuple.__new__(_cls, (major, minor, micro)) 
+        return tuple.__new__(cls, (major, minor, micro)) 
 
     
     @classmethod
@@ -54,12 +54,12 @@ class VersionInfo(tuple):
         return OrderedDict(zip(self._fields, self)) 
 
     
-    def _replace(_self, **kwargs):
+    def _replace(self, **kwargs):
         '''
         Make a `VersionInfo` object replacing specified fields with new values.
         '''
         result = \
-            _self._make(map(kwargs.pop, ('major', 'minor', 'micro'),_self))
+            self._make(map(kwargs.pop, ('major', 'minor', 'micro'), self))
         if kwargs:
             raise ValueError('Got unexpected field names: %r' % kwargs.keys())
         return result 

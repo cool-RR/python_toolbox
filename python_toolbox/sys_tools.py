@@ -6,10 +6,8 @@
 
 from __future__ import with_statement
 
-import os
 import sys
 import cStringIO
-import subprocess
 
 from python_toolbox.context_managers import (ContextManager,
                                                     BlankContextManager)

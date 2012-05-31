@@ -9,6 +9,7 @@ import os.path
 
 
 def start_file(path):
+    '''Open a file by launching the program that handles its kind.'''
     assert os.path.exists(path)
     
     if sys.platform.startswith('linux'): # Linux:

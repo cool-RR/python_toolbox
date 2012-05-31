@@ -12,7 +12,7 @@ import re
 import fnmatch
 
 
-def zip_folder(folder, zip_path, ignored_patterns=[]):
+def zip_folder(folder, zip_path, ignored_patterns=()):
     '''
     Zip `folder` into a zip file specified by `zip_path`.
     

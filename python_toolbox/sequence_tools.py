@@ -7,10 +7,8 @@ import types
 import itertools
 
 from python_toolbox.nifty_collections import Counter
-from python_toolbox import caching
 from python_toolbox import math_tools
 from python_toolbox.infinity import infinity
-from python_toolbox.third_party import abc
 from python_toolbox.third_party import abcs_collection
 
         

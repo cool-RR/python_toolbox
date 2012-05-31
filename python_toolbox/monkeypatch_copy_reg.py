@@ -8,7 +8,6 @@
 
 import copy_reg
 import types
-import __builtin__
 
 from python_toolbox import import_tools
 
