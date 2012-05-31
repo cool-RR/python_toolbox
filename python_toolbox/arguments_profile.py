@@ -12,7 +12,6 @@ from python_toolbox import cheat_hashing
 from python_toolbox.nifty_collections import OrderedDict
 from python_toolbox import dict_tools
 from python_toolbox import comparison_tools
-from python_toolbox.infinity import infinity
 
 
 class ArgumentsProfile(object):
