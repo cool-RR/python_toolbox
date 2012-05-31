@@ -71,6 +71,20 @@ def test():
     assert binary_search.binary_search(
         my_list,
         misc_tools.identity_function,
+        -5,
+        binary_search.HIGH_OTHERWISE_LOW
+    ) == 0
+    
+    assert binary_search.binary_search(
+        my_list,
+        misc_tools.identity_function,
+        -5,
+        binary_search.LOW_OTHERWISE_HIGH
+    ) == 0
+    
+    assert binary_search.binary_search(
+        my_list,
+        misc_tools.identity_function,
         100,
         binary_search.BOTH
     ) == (4, None)
@@ -89,6 +103,20 @@ def test():
         binary_search.HIGH
     ) == None
     
+    assert binary_search.binary_search(
+        my_list,
+        misc_tools.identity_function,
+        100,
+        binary_search.LOW_OTHERWISE_HIGH
+    ) == 4
+    
+    assert binary_search.binary_search(
+        my_list,
+        misc_tools.identity_function,
+        100,
+        binary_search.HIGH_OTHERWISE_LOW
+    ) == 4
+
     assert binary_search.binary_search_by_index(
         [(number * 10) for number in my_list],
         misc_tools.identity_function,
