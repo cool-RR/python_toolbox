@@ -1,5 +1,5 @@
 # Copyright 2009-2012 Ram Rachum.
-# This program is distributed under the LGPL2.1 license.
+# This program is distributed under the MIT license.
 
 '''
 Resources for `test_import_tools.test_exists.test_zip`.

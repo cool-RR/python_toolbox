@@ -1,5 +1,5 @@
 # Copyright 2009-2012 Ram Rachum.
-# This program is distributed under the LGPL2.1 license.
+# This program is distributed under the MIT license.
 
 '''This module monkey-patches the pickling dispatch table using `copy_reg`.'''
 

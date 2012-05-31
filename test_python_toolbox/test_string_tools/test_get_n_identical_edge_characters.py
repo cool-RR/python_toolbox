@@ -1,5 +1,5 @@
 # Copyright 2009-2012 Ram Rachum.
-# This program is distributed under the LGPL2.1 license.
+# This program is distributed under the MIT license.
 
 '''Testing module for `string_tools.get_n_identical_edge_characters`.'''
 

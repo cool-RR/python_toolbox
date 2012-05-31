@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Copyright 2009-2012 Ram Rachum.
-# This program is distributed under the LGPL2.1 license.
+# This program is distributed under the MIT license.
 
 '''Setuptools setup file for `python_toolbox`.'''
 
@@ -81,8 +81,7 @@ Documentation is at http://docs.pythontoolbox.org .
 my_classifiers = [
     'Development Status :: 4 - Beta',
     'Intended Audience :: Developers', 
-    ('License :: OSI Approved :: GNU Library or Lesser General '
-     'Public License (LGPL)'),
+    'License :: OSI Approved :: MIT License',
     'Operating System :: OS Independent'
     'Programming Language :: Python',
     'Programming Language :: Python :: 2.5',
@@ -107,8 +106,8 @@ setuptools.setup(
     url='http://python_toolbox.org',
     packages=get_packages(),
     scripts=['test_python_toolbox/scripts/_test_python_toolbox.py'],
-    license='LGPL v2.1',
     long_description=my_long_description,
+    license='MIT',
     classifiers=my_classifiers,
     include_package_data=True,
     zip_safe=False,
