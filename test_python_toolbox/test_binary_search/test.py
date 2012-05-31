@@ -9,7 +9,7 @@ from python_toolbox import misc_tools
 
 
 def test():
-    ''' '''
+    '''Test the basic workings of `binary_search`.'''
     my_list = [0, 1, 2, 3, 4]
     
     assert binary_search.binary_search(

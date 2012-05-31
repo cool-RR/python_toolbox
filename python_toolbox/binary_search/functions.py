@@ -83,13 +83,13 @@ def binary_search(sequence, function, value, rounding=CLOSEST):
             return tuple((None if low_value > value else
                           sequence[low], sequence[low]))
         
-        if rounding in (HIGH, HIGH_OTHERWISE_LOW, CLOSEST) or \
-           (low_value==value and rounding is EXACT):
+        if rounding in (HIGH, HIGH_OTHERWISE_LOW, CLOSEST, LOW_OTHERWISE_HIGH)\
+                                   or (low_value==value and rounding is EXACT):
             return sequence[low]
         
         else:
-            # rounding in (LOW*, *_IF_BOTH) or (rounding is EXACT and
-            # low_value!=value)
+            assert rounding in (LOW, LOW_IF_BOTH, HIGH_IF_BOTH) or \
+                                       (rounding is EXACT and low_value!=value)
             return None
 
         
@@ -99,13 +99,13 @@ def binary_search(sequence, function, value, rounding=CLOSEST):
             return (sequence[high],
                     None if high_value < value else sequence[high])
         
-        if rounding in (LOW, LOW_OTHERWISE_HIGH, CLOSEST) or \
-           (low_value==value and rounding is EXACT):
+        if rounding in (LOW, LOW_OTHERWISE_HIGH, HIGH_OTHERWISE_LOW, CLOSEST)\
+                                   or (low_value==value and rounding is EXACT):
             return sequence[high]
         
         else:
-            # rounding in (HIGH*, *_IF_BOTH) or (rounding is EXACT and
-            # low_value!=value)
+            assert rounding in (HIGH, LOW_IF_BOTH, HIGH_IF_BOTH) or \
+                                       (rounding is EXACT and low_value!=value)
             return None
         
 

@@ -56,3 +56,10 @@ def test_index():
     
     with cute_testing.RaiseAssertor(KeyError):
         ordered_dict.index('Non-existing key')
+        
+        
+def test_reversed():
+    '''Test the `OrderedDict.__reversed__` method.'''
+    
+    ordered_dict = OrderedDict(((1, 'a'), (2, 'b'), (3, 'c')))
+    assert list(reversed(ordered_dict)) == [3, 2, 1]
