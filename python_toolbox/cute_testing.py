@@ -42,6 +42,7 @@ class RaiseAssertor(ContextManager):
         exception is of the exact `exception_type` specified, and not a
         subclass of it.
         '''
+        ContextManager.__init__(self)
         
         self.exception_type = exception_type
         '''The type of exception that should be raised.'''
