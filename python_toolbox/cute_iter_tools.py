@@ -167,6 +167,16 @@ def iter_with(iterable, context_manager):
         
         
 def izip_longest(*iterables, **kwargs):
+    '''
+    izip_longest(iter1 [,iter2 [...]], [fillvalue=None]) --> izip_longest object
+    
+    Return an `izip_longest` object whose `.next()` method returns a `tuple`
+    where the i-th element comes from the i-th iterable argument. The `.next()`
+    method continues until the longest iterable in the argument sequence is
+    exhausted and then it raises `StopIteration`. When the shorter iterables
+    are exhausted, `fillvalue` is substituted in their place. The `fillvalue`
+    defaults to `None` or can be specified by a keyword argument.
+    '''    
     # This is a really obfuscated algorithm, simplify and/or explain
     fill_value = kwargs.get('fillvalue', None)
     def sentinel(counter=([fill_value] * (len(iterables) - 1)).pop):
