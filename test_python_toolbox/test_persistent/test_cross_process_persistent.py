@@ -89,11 +89,12 @@ if import_tools.exists('multiprocessing'):
             '''Dict mapping from ints to CPPs.'''
             
         def run(self):
-            for number, item in queue_tools.iterate(self.work_queue, block=True):
+            for number, item in queue_tools.iterate(self.work_queue,
+                                                    block=True):
                 if number in self.library:
                     assert self.library[number] is item
-                    other_items = [value for (key, value) in self.library.items()
-                                   if key != number]
+                    other_items = [value for (key, value) in
+                                   self.library.items() if key != number]
                     for other_item in other_items:
                         assert other_item is not item
                     self.processed_items_queue.put(item)

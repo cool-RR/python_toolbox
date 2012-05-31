@@ -171,8 +171,8 @@ class Infinity(object):
         
         elif isinstance(other, float):
             # We're checking to see if `other` is equal to `float('inf')` or
-            # `-float('inf')`. But we must `try` it carefully, because in Python
-            # 2.5 there is no `float('inf')`.
+            # `-float('inf')`. But we must `try` it carefully, because in
+            # Python 2.5 there is no `float('inf')`.
             #
             # Todo: It seems this takes precedence over `float.__eq__`,
             # fortunately. How come this happens?

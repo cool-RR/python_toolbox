@@ -35,9 +35,9 @@ class EmitterSystem(object):
     
     `EmitterSystem` offers a few advantages over using plain emitters.
     
-    There are the `bottom_emitter` and `top_emitter`, which allow, respectively,
-    to keep track of each `emit`ting that goes on, and to generate an `emit`ting
-    that affects all emitters in the system.
+    There are the `bottom_emitter` and `top_emitter`, which allow,
+    respectively, to keep track of each `emit`ting that goes on, and to
+    generate an `emit`ting that affects all emitters in the system.
     
     The `EmitterSystem` also offers a context manager,
     `.freeze_cache_rebuilding`. When you do actions using this context manager,
@@ -45,9 +45,9 @@ class EmitterSystem(object):
     inputs/outputs. When the outermost context manager has exited, all the
     caches for these emitters will get rebuilt.
     '''
-    # possible future idea: there is the idea of optimizing by cutting redundant
-    # links between boxes. I'm a bit suspicious of it. The next logical step is
-    # to make inputs and outputs abstract.
+    # possible future idea: there is the idea of optimizing by cutting
+    # redundant links between boxes. I'm a bit suspicious of it. The next
+    # logical step is to make inputs and outputs abstract.
     def __init__(self):
         
         self.emitters = set()

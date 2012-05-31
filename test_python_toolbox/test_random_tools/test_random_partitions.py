@@ -28,7 +28,8 @@ def test():
         assert_correct_members(partitions)
         
     for n_partitions in range(1, len(r)):
-        partitions = random_tools.random_partitions(r, n_partitions=n_partitions)
+        partitions = random_tools.random_partitions(r,
+                                                    n_partitions=n_partitions)
         assert len(partitions) == n_partitions
         assert_correct_members(partitions)
         

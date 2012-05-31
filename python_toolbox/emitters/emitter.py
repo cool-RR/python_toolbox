@@ -149,9 +149,9 @@ class Emitter(object):
         # inputs `A` and `B`. `A` has input `B`. A callable output `func` was
         # just removed from `self`, so this function got called. We update the
         # cache here, then take the first input layer, which is `A` and `B` in
-        # some order. Say `B` is first. Now, we do `recalculate` on `B`, but `A`
-        # still got the cache with `func`, and `B` will take that. I need to
-        # test this.
+        # some order. Say `B` is first. Now, we do `recalculate` on `B`, but
+        # `A` still got the cache with `func`, and `B` will take that. I need
+        # to test this.
         # 
         # I have an idea how to solve it: In the getter of the cache, check the
         # cache exists, otherwise rebuild. The reason we didn't do it up to now

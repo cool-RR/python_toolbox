@@ -31,8 +31,8 @@ def test_on_locally_defined_class():
     
     if python_toolbox.__version_info__ <= (0, 1, 0):
         raise nose.SkipTest("This test doesn't pass in `python_toolbox` "
-                            "version 0.1 and below, because `describe` doesn't "
-                            "support nested classes yet.")
+                            "version 0.1 and below, because `describe` :"
+                            "doesn't support nested classes yet.")
     
     result = describe(A.B)
     assert result == prefix + 'A.B'

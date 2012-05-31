@@ -168,7 +168,7 @@ def iter_with(iterable, context_manager):
         
 def izip_longest(*iterables, **kwargs):
     '''
-    izip_longest(iter1 [,iter2 [...]], [fillvalue=None]) --> izip_longest object
+    izip_longest(iter1 [,iter2 [...]], [fillvalue=None]) -> izip_longest object
     
     Return an `izip_longest` object whose `.next()` method returns a `tuple`
     where the i-th element comes from the i-th iterable argument. The `.next()`
