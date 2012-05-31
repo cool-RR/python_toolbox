@@ -87,7 +87,9 @@ def devour_items(d):
         yield d.popitem()
 
         
-def devour(d):
+def devour_keys(d):
     '''Iterator that pops keys from `d` until it's exhaused (i.e. empty).'''
     while d:
-        yield d.pop()
+        key = d.iterkeys().next()
+        del d[key]
+        yield key
