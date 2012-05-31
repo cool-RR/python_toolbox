@@ -12,13 +12,7 @@ import sys
 ### Confirming correct Python version: ########################################
 #                                                                             #
 if sys.version_info[0] >= 3:
-    raise Exception(
-        "You're using Python 3.x, but this version of the Python Toolbox is "
-        "not compatible with Python 3.x. The `python_toolbox` intaller "
-        "should know to install a version compatible with Python 3.x when "
-        "launched with Python 3.x. I'm not sure what went wrong in your "
-        "system."
-    )
+    raise Exception("Python 3.x is not supported")
 if sys.version_info[1] <= 4:
     raise Exception(
         "You're using Python <=2.4, but this package requires Python 2.5 and "

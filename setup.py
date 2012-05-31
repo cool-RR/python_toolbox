@@ -80,14 +80,16 @@ Documentation is at http://docs.pythontoolbox.org .
 
 my_classifiers = [
     'Development Status :: 4 - Beta',
-    'Intended Audience :: Science/Research',
+    'Intended Audience :: Developers', 
     ('License :: OSI Approved :: GNU Library or Lesser General '
      'Public License (LGPL)'),
+    'Operating System :: OS Independent'
     'Programming Language :: Python',
     'Programming Language :: Python :: 2.5',
     'Programming Language :: Python :: 2.6',
     'Programming Language :: Python :: 2.7',
-    'Topic :: Scientific/Engineering',
+    'Topic :: Software Development :: Libraries :: Python Modules',
+    'Topic :: Utilities'
 ]
 
 
