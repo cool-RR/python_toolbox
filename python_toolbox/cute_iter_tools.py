@@ -38,6 +38,17 @@ def consecutive_pairs(iterable, wrap_around=False):
         # `first_item`, because it may need to be garbage-collected:
         del first_item 
     
+    try:
+        second_item = iterator.next()
+    except StopIteration:
+        if wrap_around:
+            yield (first_item, first_item)
+        raise StopIteration
+    
+    current = second_item
+    yield (old, current)
+    old = current
+    
     for current in iterator:
         yield (old, current)
         old = current

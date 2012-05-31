@@ -24,5 +24,8 @@ def test():
                                           
     assert tuple(consecutive_pairs('meow')) == \
            (('m', 'e'), ('e', 'o'), ('o', 'w'))
+    
+    assert tuple(consecutive_pairs([1], wrap_around=True)) == \
+           ((1, 1),)
            
            

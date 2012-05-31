@@ -7,6 +7,7 @@ import sys
 
 
 def underscore_hating_key(string):
+    '''Key function for sorting that treats `_` as last character.'''
     assert isinstance(string, basestring)
     return unicode(string).replace('_', unichr(sys.maxunicode))
 
