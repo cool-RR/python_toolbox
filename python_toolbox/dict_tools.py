@@ -64,7 +64,7 @@ def reverse_with_set_values(d):
     
     Example:
     
-        reverse_with_set_values({1: 2, 3: 4, 'meow': 2}) = \
+        reverse_with_set_values({1: 2, 3: 4, 'meow': 2}) == \
             {2: set([1, 'meow']), 4: set([3])}
             
     '''
