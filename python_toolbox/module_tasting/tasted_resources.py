@@ -1,11 +1,7 @@
 # Copyright 2009-2012 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''
-This module defines the `` class.
-
-See its documentation for more information.
-'''
+'''Defines `pkg_resources`-like tools for tasted modules.'''
 
 import types
 import sys

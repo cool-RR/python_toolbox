@@ -11,8 +11,6 @@ import sys
 import types
 
 from python_toolbox import misc_tools
-from python_toolbox import import_tools
-from python_toolbox import address_tools
 
 
 class FunctionAnchoringType(type):

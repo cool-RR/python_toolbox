@@ -7,7 +7,6 @@ import sys
 import os.path
 import imp
 import zipimport
-import zipfile
 
 from python_toolbox import package_finder
 from python_toolbox import caching
@@ -134,17 +133,8 @@ def exists(module_name, path=None):
             module_file.close()
         
 
-def _import_by_path_from_zip(path, name=None):
-    '''
-    Import module/package by path. blocktododoc, psudopath inside zip? no file
-    extensions?
-    
-    You may specify a name: This is helpful only if it's an hierarchical name,
-    i.e. a name with dots like "orange.claw.hammer". This will become the
-    imported module's __name__ attribute. Otherwise only the short name,
-    "hammer", will be used, which might cause problems in some cases. (Like
-    when using multiprocessing.)
-    '''
+def _import_by_path_from_zip(path):
+    '''Import a module from a path inside a zip file.'''
     assert '.zip' in path
     
     parent_path, child_name = path.rsplit(os.path.sep, 1)

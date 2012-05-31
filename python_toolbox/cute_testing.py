@@ -3,8 +3,6 @@
 
 '''This module defines tools for testing.'''
 
-import re
-
 from python_toolbox.third_party import unittest2
 
 from python_toolbox import cute_inspect

@@ -82,10 +82,12 @@ def reverse_with_set_values(d):
 
 
 def devour_items(d):
+    '''Iterator that pops (key, value) pairs from `d` until it's empty.'''
     while d:
         yield d.popitem()
 
         
 def devour(d):
+    '''Iterator that pops keys from `d` until it's exhaused (i.e. empty).'''
     while d:
         yield d.pop()

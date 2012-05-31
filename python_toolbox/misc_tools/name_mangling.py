@@ -1,11 +1,7 @@
 # Copyright 2009-2012 Ram Rachum.
 # This program is distributed under the LGPL2.1 license.
 
-'''
-This module defines the `` class.
-
-See its documentation for more information.
-'''
+'''Defines tools for name-mangling.'''
 
 from python_toolbox import string_tools
 

@@ -15,6 +15,7 @@ __all__ = ['infinity', 'InfinityError', 'InfinityRaceError']
 
 
 def is_floatable(x):
+    '''Can `x` be made into a `float`?'''
     try:
         float(x)
         return True
@@ -23,6 +24,7 @@ def is_floatable(x):
 
     
 def is_nonfractional(x):
+    '''Is `x` a whole number?'''
     try:
         int(x)
         return int(x) == x
@@ -89,7 +91,7 @@ class Infinity(object):
             raise InfinityRaceError
         elif is_floatable(other):
             s = math_tools.sign(other)
-            if s==0:
+            if s == 0:
                 raise InfinityRaceError
             else:
                 return Infinity(direction=self.direction * s)
@@ -102,7 +104,7 @@ class Infinity(object):
             return Infinity(self.direction * other.direction)
         elif is_floatable(other):
             s = math_tools.sign(other)
-            if s==0:
+            if s == 0:
                 raise InfinityRaceError
             else:
                 return Infinity(direction=self.direction * s)
@@ -121,19 +123,19 @@ class Infinity(object):
             raise object # todo
         elif is_floatable(other):
             s = math_tools.sign(other)
-            if s==0:
+            if s == 0:
                 raise InfinityRaceError
             else:
-                if self.direction==1:
-                    if s==1:
+                if self.direction == 1:
+                    if s == 1:
                         return self
-                    if s==-1:
+                    if s == -1:
                         return 0
                 else: #self.direction == -1
                     if is_nonfractional(other):
-                        if s==-1:
+                        if s == -1:
                             return 0
-                        if s==1:
+                        if s == 1:
                             if s % 2 == 0:                                
                                 return Infinity()
                             else:                    
@@ -194,10 +196,10 @@ class Infinity(object):
         return not self.__eq__(other)
     
     def __repr__(self):
-        if self.direction==1:
-            suffix=''
+        if self.direction == 1:
+            suffix = ''
         else: # self.direction == -1
-            suffix='-'
+            suffix = '-'
         return suffix + 'infinity'
         
 
