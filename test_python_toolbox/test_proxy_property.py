@@ -27,17 +27,17 @@ def test():
             self.obj.z = 'z'
             self.uuid = uuid.uuid4()
             
-        x_proxy = ProxyProperty('x')
+        x_proxy = ProxyProperty('.x')
         y_proxy = ProxyProperty(
-            'y',
+            '.y',
             doc='Proxy for `y`.'
         )
-        z_proxy = ProxyProperty('obj.z')
+        z_proxy = ProxyProperty('.obj.z')
         uuid_proxy = ProxyProperty(
-            'uuid',
+            '.uuid',
             'Object-specific UUID.'
         )
-        nonexistant_proxy = ProxyProperty('whatevs')
+        nonexistant_proxy = ProxyProperty('.whatevs')
         
     assert isinstance(A.x_proxy, ProxyProperty)
     assert isinstance(A.y_proxy, ProxyProperty)
@@ -71,3 +71,17 @@ def test():
     assert a0.z_proxy == [1, 2, 3] != a1.z_proxy == 'z'
     #                                                                         #
     ### Finished setting proxy-properties to different values. ################
+
+
+def test_dot():
+    '''Text that `ProxyProperty` complains when there's no prefixing dot.'''
+    
+    with cute_testing.RaiseAssertor(text="The `attribute_name` must start "
+                                    "with a dot to make it clear it's an "
+                                    "attribute. 'y' does not start with a "
+                                    "dot."):
+        class A(object):
+            y = 'y'
+            x = ProxyProperty('y')
+            
+    
