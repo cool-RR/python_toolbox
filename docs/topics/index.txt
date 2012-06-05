@@ -16,8 +16,10 @@ These are topical guides about the various modules in the Python Toolbox.
 It focuses on giving the motivation for each module in the Python Toolbox,
 explaining what it's good for and the basics of using it.
 
-For a more complete and thorough documentation including more technical
-detalis, :ref:`check out the reference documentation <ref-index>`.
 
 .. toctree::
    :maxdepth: 1
+   
+.. 
+   For a more complete and thorough documentation including more technical 
+   detalis, :ref:`check out the reference documentation <ref-index>`.
