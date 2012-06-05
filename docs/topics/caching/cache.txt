@@ -6,8 +6,11 @@
 
 .. _topics-index:
 
-`caching.cache`: A caching decorator that understands arguments
-===============================================================
+`caching.cache`
+===============
+
+A caching decorator that understands arguments
+----------------------------------------------
 
 The idea of a caching decorator is very cool. You decorate your function with a
 caching decorator:
@@ -60,17 +63,31 @@ Enter `caching.cache`:
    Calculating
    ('something_else', 2, {})
 
-That's the main cool thing about `caching.cache`
+As you can see above, `caching.cache` analyzes the function and understands
+that calls like ``g(1)`` and ``g(1, 2)`` are identical and therefore should be
+cached together.
 
 
-; It has other interesting features that I will not go in depth into:
-<ul><li>It has a `max_size` argument which limits the size of the cache dict; old values get thrown away according to an <a href="http://en.wikipedia.org/wiki/Cache_algorithms#Least_Recently_Used">LRU algorithm</a> implemented using (my bundled version of) Python&#8217;s <a href="http://docs.python.org/dev/library/collections.html#collections.OrderedDict">`OrderedDict`</a>, specifically the new <a href="http://docs.python.org/dev/library/collections.html#collections.OrderedDict.move_to_end">`OrderedDict.move_to_end`</a> method.</li>
-<li>It stores arguments with <a href="https://github.com/cool-RR/GarlicSim/tree/master/garlicsim/garlicsim/general_misc/sleek_refs">sleekrefs</a>. Sleekrefs are a more robust variation of <a href="http://docs.python.org/library/weakref.html">weakrefs</a>. This prevents memory leaks when using potentially-heavy arguments. More about sleekrefs in a future blog post.</li>
-<li>
-It preserves the original function&#8217;s signature using <a href="http://www.artima.com/weblogs/index.jsp?blogger=micheles">Michele Simionato</a>&#8217;s excellent <a href="http://pypi.python.org/pypi/decorator">decorator module</a>.
-</li>
-</ul><h2>Source and tests for `caching.cache`</h2>
-<a href="https://github.com/cool-RR/GarlicSim/blob/master/garlicsim/garlicsim/general_misc/caching/cache.py">Source for `caching.cache`, well-documented</a>. Here are <a href="https://github.com/cool-RR/GarlicSim/blob/master/garlicsim/test_garlicsim/test_general_misc/test_caching/test_cache.py">the tests</a>.
-There is also a <a href="https://github.com/cool-RR/GarlicSim-for-Python-3.x/blob/master/garlicsim_py3/garlicsim/general_misc/caching/cache.py">Python 3 version of `caching.cache`</a>, and <a href="https://github.com/cool-RR/GarlicSim-for-Python-3.x/blob/master/garlicsim_py3/test_garlicsim/test_general_misc/test_caching/test_cache.py">here are its tests</a>. It&#8217;s available with the <a href="http://pypi.python.org/pypi/garlicsim_py3">Python 3 fork of GarlicSim</a>. Note that I haven&#8217;t tested it on Python 3&#8217;s <a href="http://www.python.org/dev/peps/pep-3102/">new kinds of function signatures</a>; I&#8217;ll be happy to get patches with tests and/or implementation of support for those.
-<h2>Please give feedback!</h2>
-I&#8217;ll be happy to get any opinions, critiques and code reviews on `caching.cache`!
+Both limited and unlimited cache
+--------------------------------
+
+By default, the cache size will be unlimited. If you want to limit the cache size, pass in the `max_size` argument:
+
+    >>> @caching.cache(max_size=7)
+    ... def f(): pass
+    
+
+If and when the cache size reaches the limit (7 in this case), old values will
+get thrown away according to a `LRU order`_.
+
+
+Sleekrefs
+----------
+
+`caching.cache` arguments with sleekrefs. Sleekrefs are a more robust variation of `weakrefs`_. They are basically a gracefully-degrading version of weakrefs, so you can use them on un-weakreff-able objects like ``int``\s, and they will just use regular references.
+
+The usage of sleekrefs prevents memory leaks when using potentially-heavy arguments.
+
+
+.. _LRU order: http://en.wikipedia.org/wiki/Cache_algorithms#Least_Recently_Used
+.. _weakrefs: http://docs.python.org/library/weakref.html
