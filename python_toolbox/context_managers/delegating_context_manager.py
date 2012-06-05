@@ -35,8 +35,8 @@ class DelegatingContextManager(ContextManager):
     '''
     
     __enter__ = proxy_property.ProxyProperty(
-        'delegatee_context_manager.__enter__'
+        '.delegatee_context_manager.__enter__'
     )
     __exit__ = proxy_property.ProxyProperty(
-        'delegatee_context_manager.__exit__'
+        '.delegatee_context_manager.__exit__'
     )

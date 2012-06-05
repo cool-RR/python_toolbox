@@ -15,8 +15,9 @@ class ProxyProperty(object):
     Property that serves as a proxy to an attribute of the parent object.
     
     When you create a `ProxyProperty`, you pass in the name of the attribute
-    (or nested attribute) that it should proxy. Then, every time the property
-    is `set`ed or `get`ed, the attribute is `set`ed or `get`ed instead.
+    (or nested attribute) that it should proxy. (Prefixed with a dot.) Then,
+    every time the property is `set`ed or `get`ed, the attribute is `set`ed or
+    `get`ed instead.
     
     Example:
     
@@ -25,7 +26,7 @@ class ProxyProperty(object):
             def __init__(self, whatever):
                 self.whatever = whatever
                 
-            whatever_proxy = ProxyProperty('whatever')
+            whatever_proxy = ProxyProperty('.whatever')
             
         chair = Chair(3)
         
@@ -35,24 +36,29 @@ class ProxyProperty(object):
                 
                 
     You may also refer to a nested attribute of the object rather than a direct
-    one; for example, you can do `ProxyProperty('whatever.x.height')` and it
-    will access the `height` attribute of the `x` attribute of `whatever`.
+    one; for example, you can do `ProxyProperty('.whatever.x.height')` and it
+    will access the `.height` attribute of the `.x` attribute of `.whatever`.
     '''
 
     def __init__(self, attribute_name, doc=None):
         '''
         Construct the `ProxyProperty`.
         
-        `attribute_name` is the name of the attribute that we will proxy.
+        `attribute_name` is the name of the attribute that we will proxy,
+        prefixed with a dot, like '.whatever'.
         
         You may also refer to a nested attribute of the object rather than a
         direct one; for example, you can do
-        `ProxyProperty('whatever.x.height')` and it will access the `height`
-        attribute of the `x` attribute of `whatever`.
+        `ProxyProperty('.whatever.x.height')` and it will access the `.height`
+        attribute of the `.x` attribute of `.whatever`.
         
         You may specify a docstring as `doc`.
         '''
-        self.attribute_name = attribute_name
+        if not attribute_name.startswith('.'):
+            raise Exception("The `attribute_name` must start with a dot to "
+                            "make it clear it's an attribute. %s does not "
+                            "start with a dot." % repr(attribute_name))
+        self.attribute_name = attribute_name[1:]
         self.__doc__ = doc
         
         

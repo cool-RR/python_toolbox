@@ -41,7 +41,7 @@ class Freezer(context_managers.DelegatingContextManager):
     '''The context manager which implements our `__enter__` and `__exit__`.'''
     
     
-    frozen = proxy_property.ProxyProperty('delegatee_context_manager.depth')
+    frozen = proxy_property.ProxyProperty('.delegatee_context_manager.depth')
     '''
     An integer specifying the freezer's level of frozenness.
     
