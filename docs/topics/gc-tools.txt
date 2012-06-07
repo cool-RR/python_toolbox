@@ -6,5 +6,5 @@
 
 .. _topics-gc-tools:
 
-`gc_tools` - documentation not written
+:mod:`gc_tools` - documentation not written
 ======================================

@@ -6,5 +6,5 @@
 
 .. _topics-abc-tools:
 
-`abc_tools` - documentation not written
+:mod:`abc_tools` - documentation not written
 ======================================

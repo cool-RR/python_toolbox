@@ -6,5 +6,5 @@
 
 .. _topics-address-tools:
 
-`address_tools` - documentation not written
+:mod:`address_tools` - documentation not written
 ======================================

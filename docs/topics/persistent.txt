@@ -6,5 +6,5 @@
 
 .. _topics-persistent:
 
-`persistent` - documentation not written
+:mod:`persistent` - documentation not written
 ======================================

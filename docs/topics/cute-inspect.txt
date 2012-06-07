@@ -6,5 +6,5 @@
 
 .. _topics-cute-inspect:
 
-`cute_inspect` - documentation not written
+:mod:`cute_inspect` - documentation not written
 ======================================

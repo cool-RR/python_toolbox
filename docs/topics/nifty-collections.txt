@@ -6,5 +6,5 @@
 
 .. _topics-nifty-collections:
 
-`nifty_collections` - documentation not written
+:mod:`nifty_collections` - documentation not written
 ======================================

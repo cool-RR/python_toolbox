@@ -6,5 +6,5 @@
 
 .. _topics-exceptions:
 
-`exceptions` - documentation not written
+:mod:`exceptions` - documentation not written
 ======================================

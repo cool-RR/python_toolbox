@@ -6,5 +6,5 @@
 
 .. _topics-pickle-tools:
 
-`pickle_tools` - documentation not written
+:mod:`pickle_tools` - documentation not written
 ======================================

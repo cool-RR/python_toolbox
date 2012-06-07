@@ -6,5 +6,5 @@
 
 .. _topics-package-finder:
 
-`package_finder` - documentation not written
+:mod:`package_finder` - documentation not written
 ======================================

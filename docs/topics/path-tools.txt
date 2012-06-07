@@ -6,5 +6,5 @@
 
 .. _topics-path-tools:
 
-`path_tools` - documentation not written
+:mod:`path_tools` - documentation not written
 ======================================

@@ -6,5 +6,5 @@
 
 .. _topics-decorator-tools:
 
-`decorator_tools` - documentation not written
+:mod:`decorator_tools` - documentation not written
 ======================================

@@ -6,5 +6,5 @@
 
 .. _topics-binary-search:
 
-`binary_search` - documentation not written
+:mod:`binary_search` - documentation not written
 ======================================

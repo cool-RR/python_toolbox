@@ -6,5 +6,5 @@
 
 .. _topics-temp-file-tools:
 
-`temp_file_tools` - documentation not written
+:mod:`temp_file_tools` - documentation not written
 ======================================

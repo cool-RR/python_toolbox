@@ -6,5 +6,5 @@
 
 .. _topics-color-tools:
 
-`color_tools` - documentation not written
+:mod:`color_tools` - documentation not written
 ======================================

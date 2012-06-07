@@ -6,5 +6,5 @@
 
 .. _topics-math-tools:
 
-`math_tools` - documentation not written
+:mod:`math_tools` - documentation not written
 ======================================

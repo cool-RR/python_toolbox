@@ -6,5 +6,5 @@
 
 .. _topics-sys-tools:
 
-`sys_tools` - documentation not written
+:mod:`sys_tools` - documentation not written
 ======================================

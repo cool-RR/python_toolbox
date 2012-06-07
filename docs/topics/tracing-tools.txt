@@ -6,5 +6,5 @@
 
 .. _topics-tracing-tools:
 
-`tracing_tools` - documentation not written
+:mod:`tracing_tools` - documentation not written
 ======================================

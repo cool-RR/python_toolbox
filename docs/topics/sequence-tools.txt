@@ -6,5 +6,5 @@
 
 .. _topics-sequence-tools:
 
-`sequence_tools` - documentation not written
+:mod:`sequence_tools` - documentation not written
 ======================================

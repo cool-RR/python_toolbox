@@ -6,5 +6,5 @@
 
 .. _topics-string-tools:
 
-`string_tools` - documentation not written
+:mod:`string_tools` - documentation not written
 ======================================

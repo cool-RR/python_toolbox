@@ -6,5 +6,5 @@
 
 .. _topics-temp-value-setters:
 
-`temp_value_setters` - documentation not written
+:mod:`temp_value_setters` - documentation not written
 ======================================

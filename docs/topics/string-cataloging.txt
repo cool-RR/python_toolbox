@@ -6,5 +6,5 @@
 
 .. _topics-string-cataloging:
 
-`string_cataloging` - documentation not written
+:mod:`string_cataloging` - documentation not written
 ======================================

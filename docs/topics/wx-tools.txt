@@ -6,5 +6,5 @@
 
 .. _topics-wx-tools:
 
-`wx_tools` - documentation not written
+:mod:`wx_tools` - documentation not written
 ======================================

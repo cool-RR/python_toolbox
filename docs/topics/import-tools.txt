@@ -6,5 +6,5 @@
 
 .. _topics-import-tools:
 
-`import_tools` - documentation not written
+:mod:`import_tools` - documentation not written
 ======================================

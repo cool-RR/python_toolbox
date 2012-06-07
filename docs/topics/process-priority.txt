@@ -6,5 +6,5 @@
 
 .. _topics-process-priority:
 
-`process_priority` - documentation not written
+:mod:`process_priority` - documentation not written
 ======================================

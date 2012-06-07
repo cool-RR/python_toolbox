@@ -6,5 +6,5 @@
 
 .. _topics-version-info:
 
-`version_info` - documentation not written
+:mod:`version_info` - documentation not written
 ======================================

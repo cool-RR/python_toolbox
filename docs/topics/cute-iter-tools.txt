@@ -6,5 +6,5 @@
 
 .. _topics-cute-iter-tools:
 
-`cute_iter_tools` - documentation not written
+:mod:`cute_iter_tools` - documentation not written
 ======================================

@@ -6,5 +6,5 @@
 
 .. _topics-rst-tools:
 
-`rst_tools` - documentation not written
+:mod:`rst_tools` - documentation not written
 ======================================

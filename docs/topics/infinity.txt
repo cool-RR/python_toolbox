@@ -6,5 +6,5 @@
 
 .. _topics-infinity:
 
-`infinity` - documentation not written
+:mod:`infinity` - documentation not written
 ======================================

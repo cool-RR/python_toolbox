@@ -6,5 +6,5 @@
 
 .. _topics-cute-testing:
 
-`cute_testing` - documentation not written
+:mod:`cute_testing` - documentation not written
 ======================================

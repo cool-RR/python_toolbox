@@ -6,5 +6,5 @@
 
 .. _topics-proxy-property:
 
-`proxy_property` - documentation not written
+:mod:`proxy_property` - documentation not written
 ======================================

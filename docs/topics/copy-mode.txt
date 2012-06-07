@@ -6,5 +6,5 @@
 
 .. _topics-copy-mode:
 
-`copy_mode` - documentation not written
+:mod:`copy_mode` - documentation not written
 ======================================

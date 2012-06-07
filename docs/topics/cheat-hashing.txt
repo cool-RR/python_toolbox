@@ -6,5 +6,5 @@
 
 .. _topics-cheat-hashing:
 
-`cheat_hashing` - documentation not written
+:mod:`cheat_hashing` - documentation not written
 ======================================

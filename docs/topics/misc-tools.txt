@@ -6,5 +6,5 @@
 
 .. _topics-misc-tools:
 
-`misc_tools` - documentation not written
+:mod:`misc_tools` - documentation not written
 ======================================

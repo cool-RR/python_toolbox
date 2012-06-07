@@ -6,5 +6,5 @@
 
 .. _topics-module-tasting:
 
-`module_tasting` - documentation not written
+:mod:`module_tasting` - documentation not written
 ======================================

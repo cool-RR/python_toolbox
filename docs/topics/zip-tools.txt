@@ -6,5 +6,5 @@
 
 .. _topics-zip-tools:
 
-`zip_tools` - documentation not written
+:mod:`zip_tools` - documentation not written
 ======================================

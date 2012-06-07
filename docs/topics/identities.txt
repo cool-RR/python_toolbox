@@ -6,5 +6,5 @@
 
 .. _topics-identities:
 
-`identities` - documentation not written
+:mod:`identities` - documentation not written
 ======================================

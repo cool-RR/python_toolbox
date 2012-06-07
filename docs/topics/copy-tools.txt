@@ -6,5 +6,5 @@
 
 .. _topics-copy-tools:
 
-`copy_tools` - documentation not written
+:mod:`copy_tools` - documentation not written
 ======================================

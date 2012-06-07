@@ -6,5 +6,5 @@
 
 .. _topics-read-write-lock:
 
-`read_write_lock` - documentation not written
+:mod:`read_write_lock` - documentation not written
 ======================================

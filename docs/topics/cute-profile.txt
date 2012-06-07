@@ -6,5 +6,5 @@
 
 .. _topics-cute-profile:
 
-`cute_profile` - documentation not written
+:mod:`cute_profile` - documentation not written
 ======================================

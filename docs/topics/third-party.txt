@@ -6,5 +6,5 @@
 
 .. _topics-third-party:
 
-`third_party` - documentation not written
+:mod:`third_party` - documentation not written
 ======================================

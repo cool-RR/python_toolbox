@@ -6,5 +6,5 @@
 
 .. _topics-context-managers:
 
-`context_managers` - documentation not written
+:mod:`context_managers` - documentation not written
 ======================================

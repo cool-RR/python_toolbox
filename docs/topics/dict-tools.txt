@@ -6,5 +6,5 @@
 
 .. _topics-dict-tools:
 
-`dict_tools` - documentation not written
+:mod:`dict_tools` - documentation not written
 ======================================

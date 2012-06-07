@@ -6,5 +6,5 @@
 
 .. _topics-re-tools:
 
-`re_tools` - documentation not written
+:mod:`re_tools` - documentation not written
 ======================================

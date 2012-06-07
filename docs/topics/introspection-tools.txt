@@ -6,5 +6,5 @@
 
 .. _topics-introspection-tools:
 
-`introspection_tools` - documentation not written
+:mod:`introspection_tools` - documentation not written
 ======================================

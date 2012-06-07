@@ -6,5 +6,5 @@
 
 .. _topics-freezers:
 
-`freezers` - documentation not written
+:mod:`freezers` - documentation not written
 ======================================

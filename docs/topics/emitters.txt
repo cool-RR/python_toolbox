@@ -6,5 +6,5 @@
 
 .. _topics-emitters:
 
-`emitters` - documentation not written
+:mod:`emitters` - documentation not written
 ======================================

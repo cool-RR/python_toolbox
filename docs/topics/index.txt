@@ -20,11 +20,11 @@ explaining what it's good for and the basics of using it.
 .. toctree::
    :maxdepth: 3
    
-   caching/index
    abc-tools
    address-tools
    arguments-profile
    binary-search
+   caching/index
    change-tracker
    cheat-hashing
    color-tools

@@ -6,5 +6,5 @@
 
 .. _topics-arguments-profile:
 
-`arguments_profile` - documentation not written
+:mod:`arguments_profile` - documentation not written
 ======================================

@@ -6,5 +6,5 @@
 
 .. _topics-os-tools:
 
-`os_tools` - documentation not written
+:mod:`os_tools` - documentation not written
 ======================================

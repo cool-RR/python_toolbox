@@ -6,5 +6,5 @@
 
 .. _topics-reasoned-bool:
 
-`reasoned_bool` - documentation not written
+:mod:`reasoned_bool` - documentation not written
 ======================================

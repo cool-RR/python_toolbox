@@ -6,5 +6,5 @@
 
 .. _topics-queue-tools:
 
-`queue_tools` - documentation not written
+:mod:`queue_tools` - documentation not written
 ======================================

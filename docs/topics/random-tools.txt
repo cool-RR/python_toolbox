@@ -6,5 +6,5 @@
 
 .. _topics-random-tools:
 
-`random_tools` - documentation not written
+:mod:`random_tools` - documentation not written
 ======================================

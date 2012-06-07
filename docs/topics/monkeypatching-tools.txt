@@ -6,5 +6,5 @@
 
 .. _topics-monkeypatching-tools:
 
-`monkeypatching_tools` - documentation not written
+:mod:`monkeypatching_tools` - documentation not written
 ======================================

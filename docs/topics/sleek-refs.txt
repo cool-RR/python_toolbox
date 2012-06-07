@@ -6,5 +6,5 @@
 
 .. _topics-sleek-refs:
 
-`sleek_refs` - documentation not written
+:mod:`sleek_refs` - documentation not written
 ======================================

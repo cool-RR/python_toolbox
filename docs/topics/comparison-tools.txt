@@ -6,5 +6,5 @@
 
 .. _topics-comparison-tools:
 
-`comparison_tools` - documentation not written
+:mod:`comparison_tools` - documentation not written
 ======================================

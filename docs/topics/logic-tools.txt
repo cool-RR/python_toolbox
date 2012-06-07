@@ -6,5 +6,5 @@
 
 .. _topics-logic-tools:
 
-`logic_tools` - documentation not written
+:mod:`logic_tools` - documentation not written
 ======================================

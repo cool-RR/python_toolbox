@@ -6,5 +6,5 @@
 
 .. _topics-monkeypatch-copy-reg:
 
-`monkeypatch_copy_reg` - documentation not written
+:mod:`monkeypatch_copy_reg` - documentation not written
 ======================================

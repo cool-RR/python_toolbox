@@ -6,5 +6,5 @@
 
 .. _topics-function-anchoring-type:
 
-`function_anchoring_type` - documentation not written
+:mod:`function_anchoring_type` - documentation not written
 ======================================
