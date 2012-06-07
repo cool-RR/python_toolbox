@@ -18,7 +18,9 @@ explaining what it's good for and the basics of using it.
 
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 3
+   
+   caching/index
    
 .. 
    For a more complete and thorough documentation including more technical 

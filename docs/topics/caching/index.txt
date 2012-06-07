@@ -4,10 +4,12 @@
    "Ram Rachum at ram.rachum.com" including link. The license may be obtained
    at http://creativecommons.org/licenses/by-sa/3.0/
 
-.. _topics-index:
+.. _topics-caching-index:
 
-Topical guides to `caching`
-====================================
+:mod:`caching`
+=============
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 3
+      
+   cache
