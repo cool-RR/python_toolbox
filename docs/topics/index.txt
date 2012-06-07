@@ -21,6 +21,64 @@ explaining what it's good for and the basics of using it.
    :maxdepth: 3
    
    caching/index
+   abc-tools
+   address-tools
+   arguments-profile
+   binary-search
+   change-tracker
+   cheat-hashing
+   color-tools
+   comparison-tools
+   context-managers
+   copy-mode
+   copy-tools
+   cute-inspect
+   cute-iter-tools
+   cute-profile
+   cute-testing
+   decorator-tools
+   dict-tools
+   emitters
+   exceptions
+   freezers
+   function-anchoring-type
+   gc-tools
+   identities
+   import-tools
+   infinity
+   introspection-tools
+   logic-tools
+   math-tools
+   misc-tools
+   module-tasting
+   monkeypatch-copy-reg
+   monkeypatching-tools
+   nifty-collections
+   os-tools
+   package-finder
+   path-tools
+   persistent
+   pickle-tools
+   process-priority
+   proxy-property
+   queue-tools
+   random-tools
+   re-tools
+   read-write-lock
+   reasoned-bool
+   rst-tools
+   sequence-tools
+   sleek-refs
+   string-cataloging
+   string-tools
+   sys-tools
+   temp-file-tools
+   temp-value-setters
+   third-party
+   tracing-tools
+   version-info
+   wx-tools
+   zip-tools
    
 .. 
    For a more complete and thorough documentation including more technical 
