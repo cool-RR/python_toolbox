@@ -9,6 +9,17 @@ import os
 import setuptools
 import sys
 
+### Confirming correct Python version: ########################################
+#                                                                             #
+if sys.version_info[0] >= 3:
+    raise Exception("Python 3.x is not supported")
+if sys.version_info[1] <= 4:
+    raise Exception(
+        "You're using Python <=2.4, but this package requires Python 2.5 and "
+        "upwards, so you can't use it unless you upgrade your Python version."
+    )
+#                                                                             #
+### Finished confirming correct Python version. ###############################
 
 def get_python_toolbox_packages():
     '''
