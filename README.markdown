@@ -21,6 +21,11 @@ contains:
    tools.
    
 
+# Not backward-compatible yet #
+
+Please keep in mind that Python Toolbox is still in alpha stage, and that backward compatibility would *not* be maintained in this phase. 
+
+
 # Mailing lists #
 
 All general discussion happens at **[the Python Toolbox Google Group](https://groups.google.com/forum/#!forum/python-toolbox)**. If you need help with the Python Toolbox, you're welcome to post your question and we'll try to help you.

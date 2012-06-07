@@ -73,6 +73,11 @@ contains:
  - And many, *many* more! The Python Toolbox contains **100+** useful
    little tools.
 
+   
+Please keep in mind that Python Toolbox is still in alpha stage, and that
+backward compatibility would *not* be maintained in this phase. 
+
+
 Visit http://pypi.python.org/pypi/python_toolbox/ for more info.
 '''
 
