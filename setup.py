@@ -70,7 +70,7 @@ contains:
  - `python_toolbox.emitters`: A publisher-subscriber framework that doesn't
     abuse strings.
    
- - And many, *many* more! The Python Toolbox contains **hundreds** of useful
+ - And many, *many* more! The Python Toolbox contains **100+** of useful
    little tools.
 
 Visit http://pypi.python.org/pypi/python_toolbox/ for more info.

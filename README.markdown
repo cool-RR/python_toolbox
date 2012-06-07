@@ -17,7 +17,7 @@ contains:
  - `python_toolbox.emitters`: A publisher-subscriber framework that doesn't
    abuse strings.
    
- - And many, *many* more! The Python Toolbox contains **hundreds** of useful little
+ - And many, *many* more! The Python Toolbox contains **100+** of useful little
    tools.
    
 
