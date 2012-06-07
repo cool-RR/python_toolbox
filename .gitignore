@@ -16,3 +16,5 @@ nosetests.xml
 coverage.xml
 *.coverage
 .coverage_html_report
+
+_build
