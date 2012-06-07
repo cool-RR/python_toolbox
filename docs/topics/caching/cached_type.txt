@@ -1,0 +1,39 @@
+..
+   Copyright 2009-2012 Ram Rachum. This work is licensed under a Creative
+   Commons Attribution-ShareAlike 3.0 Unported License, with attribution to
+   "Ram Rachum at ram.rachum.com" including link. The license may be obtained
+   at http://creativecommons.org/licenses/by-sa/3.0/
+
+.. _topics-caching-cached-type:
+
+:class:`caching.CachedType`
+===========================
+
+A class that automatically caches its instances
+-----------------------------------------------
+
+Sometimes you define classes whose instances hold absolutely no state on them,
+and are completey determined by the arguments passed to them. In these cases
+using :class:`caching.CachedType` as a metaclass would cache class instances,
+preventing more than one of them from being created:
+
+   >>> from python_toolbox import caching
+   >>>
+   >>> class A(object):
+   ...      __metaclass__ = caching.CachedType
+   ...      def __init__(self, a=1, b=2):
+   ...          self.a = a
+   ...          self.b = b
+
+Now every time you create an instance, it'll be cached:
+
+   >>> my_instance = A(b=3)
+   
+And the next time you'll create an instance with the same arguments:
+
+   >>> another_instance = A(b=3)
+   
+No instance will be actually created; the same instance from before will be used:
+
+   >>> assert another_instance is my_instance
+

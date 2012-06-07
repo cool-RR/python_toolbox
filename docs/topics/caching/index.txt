@@ -9,7 +9,12 @@
 :mod:`caching`
 =============
 
+The :mod:`caching` modules provides tools related to caching:
+
 .. toctree::
    :maxdepth: 3
       
    cache
+   cached_type
+   cached_property
+   

@@ -12,7 +12,7 @@ from python_toolbox import misc_tools
 
 class CachedProperty(misc_tools.OwnNameDiscoveringProperty):
     '''
-    A property that is calculated (a) lazily and (b) only once for an object.
+    A property that is calculated only once for an object, and then cached.
     
     Usage:
     
