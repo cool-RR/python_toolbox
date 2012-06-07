@@ -1,6 +1,4 @@
-[Documentation](http://docs.pythontoolbox.org)
-
-[Installation](http://docs.pythontoolbox.org/installation.html)
+[Documentation](http://python_toolbox.readthedocs.org)
 
 
 # What is the Python Toolbox? #
@@ -34,7 +32,7 @@ If you want to be informed on new releases of the Python Toolbox, sign up for
 
 # Python versions #
  
-The Python Toolbox supports Python versions 2.5, 2.6, 2.7, 3.1 and 3.2.
+The Python Toolbox supports Python versions 2.5, 2.6 and 2.7.
 
 blocktodo: detail PyPy.
 

@@ -17,12 +17,20 @@ Contents:
    
    topics/index
    misc/index
+   
+   ..
+      ref/index
 
-..
-   ref/index
+This documentation is still incomplete. If you have any questions or feedback,
+say hello on the `mailing list`_!
+      
+-------------------------------------------------------------------------------
 
-This documentation is still incomplete. If you have any questions or feedback, say hello
-on the `mailing list`_!
+The Python Toolbox repository is at: https://github.com/cool-RR/python_toolbox
+
+Feel free to fork and send pull requests!
+
+
 
 .. _mailing list: https://groups.google.com/forum/#!forum/python-toolbox
 

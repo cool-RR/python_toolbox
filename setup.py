@@ -73,9 +73,7 @@ contains:
  - And many, *many* more! The Python Toolbox contains **hundreds** of useful
    little tools.
 
-Visit http://pythontoolbox.org for more info.
-
-Documentation is at http://docs.pythontoolbox.org .
+Visit http://pypi.python.org/pypi/python_toolbox/ for more info.
 '''
 
 my_classifiers = [
