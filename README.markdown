@@ -36,7 +36,7 @@ If you want to be informed on new releases of the Python Toolbox, sign up for
  
 The Python Toolbox supports Python versions 2.5, 2.6, 2.7, 3.1 and 3.2.
 
-blocktodo: detail PyPy.
+It's tested on both CPython and PyPy.
 
 
 # Current state #
