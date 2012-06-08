@@ -70,15 +70,15 @@ my_long_description = \
 The Python Toolbox is a collection of Python tools for various tasks. It
 contains:
 
- - `python_toolbox.caching`: Tools for caching functions, class instances and
+ - ``python_toolbox.caching``: Tools for caching functions, class instances and
     properties.
  
- - `python_toolbox.cute_iter_tools`: Tools for manipulating iterables. Adds
-    useful functions not found in Python's built-in `itertools`.
+ - ``python_toolbox.cute_iter_tools``: Tools for manipulating iterables. Adds
+    useful functions not found in Python's built-in ``itertools``.
  
- - `python_toolbox.context_managers`: Pimping up your context managers.
+ - ``python_toolbox.context_managers``: Pimping up your context managers.
  
- - `python_toolbox.emitters`: A publisher-subscriber framework that doesn't
+ - ``python_toolbox.emitters``: A publisher-subscriber framework that doesn't
     abuse strings.
    
  - And many, *many* more! The Python Toolbox contains **100+** useful
@@ -87,9 +87,6 @@ contains:
    
 Please keep in mind that Python Toolbox is still in alpha stage, and that
 backward compatibility would *not* be maintained in this phase. 
-
-
-Visit http://pypi.python.org/pypi/python_toolbox/ for more info.
 '''
 
 my_classifiers = [
