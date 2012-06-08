@@ -1,6 +1,3 @@
-[Documentation](http://python_toolbox.readthedocs.org)
-
-
 # What is the Python Toolbox? #
 
 The Python Toolbox is a collection of Python tools for various tasks. It
