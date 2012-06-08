@@ -19,7 +19,8 @@ contains:
    
  - And many, *many* more! The Python Toolbox contains **100+** useful little
    tools.
-   
+
+Documentation: http://python-toolbox.readthedocs.org   
 
 # Not backward-compatible yet #
 
