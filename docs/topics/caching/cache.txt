@@ -1,0 +1,97 @@
+..
+   Copyright 2009-2012 Ram Rachum. This work is licensed under a Creative
+   Commons Attribution-ShareAlike 3.0 Unported License, with attribution to
+   "Ram Rachum at ram.rachum.com" including link. The license may be obtained
+   at http://creativecommons.org/licenses/by-sa/3.0/
+
+.. _topics-caching-cache:
+
+:func:`caching.cache`
+====================
+
+A caching decorator that understands arguments
+----------------------------------------------
+
+The idea of a caching decorator is very cool. You decorate your function with a
+caching decorator:
+
+   >>> from python_toolbox import caching
+   >>>
+   >>> @caching.cache
+   ... def f(x):
+   ...     print('Calculating...')
+   ...     return x ** x # Some long expensive computation
+   
+And then, every time you call it, it'll cache the results for next time:
+
+   >>> f(4)
+   Calculating...
+   256
+   >>> f(5)
+   Calculating...
+   3125
+   >>> f(5)
+   3125
+   >>> f(5)
+   3125
+   
+As you can see, after the first time we calculate ``f(5)`` the result gets
+saved to a cache and every time we'll call ``f(5)`` Python will return the
+result from the cache instead of calculating it again. This prevents making
+redundant performance-expensive calculations.
+
+Now, depending on the function, there can be many different ways to make the same call. For example, if you have a function defined like this::
+
+    def g(a, b=2, **kwargs):
+        return whatever
+
+Then ``g(1)``, ``g(1, 2)``, ``g(b=2, a=1)`` and even ``g(1, 2, **{})`` are all equivalent. They give the exact same arguments, just in different ways. Most caching decorators out there don't understand that. If you call ``g(1)`` and then ``g(1, 2)``, they will calculate the function again, because they don't understand that it's exactly the same call and they could use the cached result.
+
+Enter :func:`caching.cache`:
+
+   >>> @caching.cache()
+   ... def g(a, b=2, **kwargs):
+   ...     print('Calculating')
+   ...     return (a, b, kwargs)
+   ... 
+   >>> g(1)
+   Calculating
+   (1, 2, {})
+   >>> g(1, 2) # Look ma, no calculating:
+   (1, 2, {})
+   >>> g(b=2, a=1) # No calculating again:
+   (1, 2, {})
+   >>> g(1, 2, **{}) # No calculating here either:
+   (1, 2, {})
+   >>> g('something_else') # Now calculating for different arguments:
+   Calculating
+   ('something_else', 2, {})
+
+As you can see above, :func:`caching.cache` analyzes the function and understands
+that calls like ``g(1)`` and ``g(1, 2)`` are identical and therefore should be
+cached together.
+
+
+Both limited and unlimited cache
+--------------------------------
+
+By default, the cache size will be unlimited. If you want to limit the cache size, pass in the ``max_size`` argument:
+
+    >>> @caching.cache(max_size=7)
+    ... def f(): pass
+    
+
+If and when the cache size reaches the limit (7 in this case), old values will
+get thrown away according to a `LRU order`_.
+
+
+Sleekrefs
+----------
+
+:func:`caching.cache` arguments with sleekrefs. Sleekrefs are a more robust variation of `weakrefs`_. They are basically a gracefully-degrading version of weakrefs, so you can use them on un-weakreff-able objects like :class:`int`\, and they will just use regular references.
+
+The usage of sleekrefs prevents memory leaks when using potentially-heavy arguments.
+
+
+.. _LRU order: http://en.wikipedia.org/wiki/Cache_algorithms#Least_Recently_Used
+.. _weakrefs: http://docs.python.org/library/weakref.html

@@ -1,0 +1,46 @@
+..
+   Copyright 2009-2012 Ram Rachum. This work is licensed under a Creative
+   Commons Attribution-ShareAlike 3.0 Unported License, with attribution to
+   "Ram Rachum at ram.rachum.com" including link. The license may be obtained
+   at http://creativecommons.org/licenses/by-sa/3.0/
+
+.. _topics-caching-cached-property:
+
+:class:`caching.CachedProperty`
+===============================
+
+A cached property
+-----------------
+
+Oftentimes you have a :class:`property` on a class that never gets changed and
+needs to be calculated only once. This is a good situation to use
+:class:`caching.CachedProperty` in order to have that property be calculated
+only one time per instance. Any future accesses to the property will use the
+cached value.
+
+Example::
+
+   >>> import time
+   >>> from python_toolbox import caching
+   >>> 
+   >>> class MyObject(object):
+   ...     # ... Regular definitions here
+   ...     def _get_personality(self):
+   ...         print('Calculating personality...')
+   ...         time.sleep(5) # Time consuming process...
+   ...         return 'Nice person'
+   ...     personality = caching.CachedProperty(_get_personality)     
+
+
+Now we create an object and calculate its "personality":
+
+   >>> my_object = MyObject()
+   >>> my_object.personality
+   'Nice person'
+   >>> # We had to wait 5 seconds for the calculation!
+
+Consecutive calls will be instantaneous:
+
+   >>> my_object.personality
+   'Nice person'
+   >>> # That one was cached and therefore instantaneous!

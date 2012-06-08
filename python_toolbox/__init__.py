@@ -8,7 +8,7 @@ These tools include caching, context manager tools, data structures, binary
 search, import tools, tools for manipulating Python's built-in types, and many
 more.
 
-Visit http://pythontoolbox.org for more info.
+Visit http://pypi.python.org/pypi/python_toolbox/ for more info.
 '''
 
 import python_toolbox.bootstrap

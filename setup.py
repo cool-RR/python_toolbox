@@ -9,6 +9,17 @@ import os
 import setuptools
 import sys
 
+### Confirming correct Python version: ########################################
+#                                                                             #
+if sys.version_info[0] >= 3:
+    raise Exception("Python 3.x is not supported")
+if sys.version_info[1] <= 4:
+    raise Exception(
+        "You're using Python <=2.4, but this package requires Python 2.5 and "
+        "upwards, so you can't use it unless you upgrade your Python version."
+    )
+#                                                                             #
+### Finished confirming correct Python version. ###############################
 
 def get_python_toolbox_packages():
     '''
@@ -70,12 +81,15 @@ contains:
  - `python_toolbox.emitters`: A publisher-subscriber framework that doesn't
     abuse strings.
    
- - And many, *many* more! The Python Toolbox contains **hundreds** of useful
+ - And many, *many* more! The Python Toolbox contains **100+** useful
    little tools.
 
-Visit http://pythontoolbox.org for more info.
+   
+Please keep in mind that Python Toolbox is still in alpha stage, and that
+backward compatibility would *not* be maintained in this phase. 
 
-Documentation is at http://docs.pythontoolbox.org .
+
+Visit http://pypi.python.org/pypi/python_toolbox/ for more info.
 '''
 
 my_classifiers = [

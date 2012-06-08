@@ -1,0 +1,10 @@
+..
+   Copyright 2009-2012 Ram Rachum. This work is licensed under a Creative
+   Commons Attribution-ShareAlike 3.0 Unported License, with attribution to
+   "Ram Rachum at ram.rachum.com" including link. The license may be obtained
+   at http://creativecommons.org/licenses/by-sa/3.0/
+
+.. _topics-infinity:
+
+:mod:`infinity` - documentation not written
+======================================

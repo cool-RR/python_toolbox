@@ -1,6 +1,4 @@
-[Documentation](http://docs.pythontoolbox.org)
-
-[Installation](http://docs.pythontoolbox.org/installation.html)
+[Documentation](http://python_toolbox.readthedocs.org)
 
 
 # What is the Python Toolbox? #
@@ -19,9 +17,14 @@ contains:
  - `python_toolbox.emitters`: A publisher-subscriber framework that doesn't
    abuse strings.
    
- - And many, *many* more! The Python Toolbox contains **hundreds** of useful little
+ - And many, *many* more! The Python Toolbox contains **100+** useful little
    tools.
    
+
+# Not backward-compatible yet #
+
+Please keep in mind that Python Toolbox is still in alpha stage, and that backward compatibility would *not* be maintained in this phase. 
+
 
 # Mailing lists #
 
@@ -34,10 +37,11 @@ If you want to be informed on new releases of the Python Toolbox, sign up for
 
 # Python versions #
  
-The Python Toolbox supports Python versions 2.5, 2.6, 2.7, 3.1 and 3.2.
+The Python Toolbox supports Python versions 2.5, 2.6 and 2.7.
 
 It's tested on both CPython and PyPy.
 
+It also supports PyPy 1.8. (Which runs Python 2.7.)
 
 # Current state #
 
