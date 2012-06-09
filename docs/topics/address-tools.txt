@@ -14,8 +14,7 @@ getting the "address" of a class, and possibly shortening it to an equivalent
 but shorter string. But after I implemented that, I realized that this could be
 generalized into a pair of functions, :func:`address_tools.describe` and
 :func:`address_tools.resolve`, that can replace the built-in :func:`repr` and
-:func:`eval` functions. So I will explain about those first, and after that I
-will explain about the "class address" and shortening business.
+:func:`eval` functions.
 
 So, Python has two built-in functions called :func:`repr` and :func:`eval`. You
 can say that they are opposites of each other: :func:`repr` "describes" a
@@ -99,33 +98,36 @@ We get a pointy-bracketed un-:func:`eval`able string. How about a function?
 
 Same thing. We get a string that we can't put back in :func:`eval`. Is this really necessary? Why not return ``'decimal.Decimal'`` or ``'re.match'`` so we could :func:`eval` those later and get the original objects?
 
-It *is* sometimes helpful that the :func:`repr` string ``"<class 'decimal.Decimal'>"`` informs us that this is a class; but sometimes you want a string that you can turn back into an object. Although... :func:`eval` might not be able to find it, because :mod:`decimal` might not be imported.
+It *is* sometimes helpful that the :func:`repr` string ``"<class
+'decimal.Decimal'>"`` informs us that this is a class; but sometimes you want a
+string that you can turn back into an object. Although... :func:`eval` might
+not be able to find it, because :mod:`decimal` might not be imported.
+
 Enter :mod:`address_tools`:
-<h2>:func:`address_tools.describe` and :func:`address_tools.resolve`</h2>
+
+
+:func:`address_tools.describe` and :func:`address_tools.resolve`
+----------------------------------------------------------------
+
 Let's play with :func:`address_tools.describe` and :func:`address_tools.resolve`:
-<pre>>>> from garlicsim.general_misc import address_tools
->>> import decimal
->>> address_tools.describe(decimal.Decimal)
-'decimal.Decimal'
-</pre>
-That's a nice description string! We can put that back into <code>resolve</code> and get the original class:
-<pre>>>> address_tools.resolve(address_tools.describe(decimal.Decimal)) is decimal.Decimal
-True</pre>
-We can use <code>resolve</code> to get this function, without <code>re</code> being imported, and it will import <span>re</span> by itself:
-<pre>>>> address_tools.resolve('re.match')
-<function match at 0x00B5E6B0></pre>
-This shtick also works on classes, functions, methods, modules, and possibly other kinds of objects.
-<h2>Address shortening</h2>
-One of the original purposes of :mod:`address_tools` was address-shortening. Sometimes I have a class inside a module inside a package inside my root package. For example, the most important class in <code>garlicsim</code> is <code>garlicsim.asynchronous_crunching.project.Project</code>. But that's a really long string. And because it's such an important class, it's also available at the friendlier address <code>garlicsim.Project</code>.
-Using :func:`address_tools.describe`, we can get the shorter address of the class:
-<pre>>>> from garlicsim.general_misc import address_tools
->>> import garlicsim
->>> address_tools.describe(garlicsim.Project) # By default we get the full address:
-'garlicsim.asynchronous_crunching.project.Project'
->>> address_tools.describe(garlicsim.Project, shorten=True) # Bam, shortening:
-'garlicsim.Project'
-</pre>
-I recommend using this feature in any  <a href="http://docs.python.org/reference/datamodel.html#object.__repr__"><code>__repr__</code></a> methods that you write for your classes, to make the resulting string shorter. <a href="https://github.com/cool-RR/GarlicSim/blob/master/garlicsim/garlicsim/asynchronous_crunching/project.py#L542">Here's how I do it.</a>
+
+   >>> from python_toolbox import address_tools
+   >>> import decimal
+   >>> address_tools.describe(decimal.Decimal)
+   'decimal.Decimal'
+   
+That's a nice description string! We can put that back into :func:`resolve <address_tools.resolve>` and get the original class:
+
+   >>> address_tools.resolve(address_tools.describe(decimal.Decimal)) is decimal.Decimal
+   True
+   
+We can use :func:`resolve <address_tools.resolve>` to get this function, without :mod:`re` being imported, and it will import :mod:`re` by itself:
+
+   >>> address_tools.resolve('re.match')
+   <function match at 0x00B5E6B0>
+   
+This shtick also works on classes, functions, methods, modules, and possibly
+other kinds of objects.
 
 
 
