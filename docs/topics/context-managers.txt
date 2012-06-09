@@ -8,3 +8,130 @@
 
 :mod:`context_managers` - documentation not written
 ======================================
+
+Context managers are awesome
+----------------------------
+
+I love context managers, and I love the :keyword:`with` keyword. If you've
+never dealt with context managers or :keyword:`with`, `here's a practical guide
+which explains how to use them.`_ You may also read the more official :pep:`PEP
+343 <343>` which introduced these features to the language.
+
+Using :keyword:`with` and context managers in your code contributes a lot to making your code more beautiful and maintainable. Every time you replace a :keyword:`try`\-:keyword:`finally` clause with a :keyword:`with` clause, an angel gets a pair of wings.
+
+Now, you don't *need* any official :class:`ContextManager` class in order to
+use context managers or define them; you just need to define
+:method:`__enter__` and :method:`__exit__` methods in your class, and then you
+can use your class as a context manager. *But*, if you use the
+:class:`ContextManager` class as a base class to your context manager class,
+you could enjoy a few more features that might make your code a bit more
+concise and elegant.
+
+What does :class:`ContextManager` add?
+--------------------------------------
+
+The :class:`ContextManager` class allows using context managers as decorators
+(in addition to their normal use) and supports writing context managers in a
+new form called :method:`manage_context`. (As well as the original forms).
+First let's import:
+
+   >>> from python_toolbox import context_managers
+   
+Now let's go over the features one by one.
+
+The :class:`ContextManager` class allows you to **define** context managers in
+new ways and to **use **context managers in new ways. I'll explain both of
+these; let's start with **defining** context managers.
+
+Defining context managers
+-------------------------
+
+There are 3 different ways in which context managers can be defined, and each
+has their own advantages and disadvantages over the others.
+
+ - The classic way to define a context manager is to define a class with
+   :method:`__enter__` and :method:`__exit__` methods. This is allowed, and if you
+   do this you should still inherit from :class:`ContextManager`. Example:
+   
+      >>> class MyContextManager(context_managers.ContextManager):
+      ...     def __enter__(self):
+      ...         pass # preparation
+      ...     def __exit__(self, type_=None, value=None, traceback=None):
+      ...         pass # cleanup
+              
+ - As a decorated generator, like so:
+
+      >>> @context_managers.ContextManagerType
+      ... def MyContextManager():
+      ...     # preparation
+      ...     try:
+      ...         yield
+      ...     finally:
+      ...         pass # cleanup
+
+              
+   The advantage of this approach is its brevity, and it may be a good fit for
+   relatively simple context managers that don't require defining an actual class.
+   This usage is nothing new; it's also available when using the standard
+   library's :decorator:`contextlib.contextmanager` decorator. One thing that is
+   allowed here that :mod:`contextlib` doesn't allow is to yield the context
+   manager itself by doing ``yield context_managers.SelfHook``.
+
+ - The third and novel way is by defining a class with a :method:`manage_context`
+   method which returns a decorator. Example:
+   
+      >>> class MyContextManager(ContextManager):
+      ...     def manage_context(self):
+      ...         do_some_preparation()
+      ...         with other_context_manager:
+      ...             yield self
+      
+
+This approach is sometimes cleaner than defining :method:`__enter__` and
+:method:`__exit__`; especially when using another context manager inside
+:method:`manage_context`. In our example we did ``with other_context_manager``
+in our :method:`manage_context`, which is shorter, more idiomatic and less
+double-underscore-y than the equivalent classic definition:
+
+   >>> class MyContextManager(object):
+   ...         def __enter__(self):
+   ...             do_some_preparation()
+   ...             other_context_manager.__enter__()
+   ...             return self
+   ...         def __exit__(self, *exc):
+   ...             return other_context_manager.__exit__(*exc)
+
+Another advantage of the :method:`manage_context` approach over
+:method:`__enter__` and :method:`__exit__` is that it's better at handling
+exceptions, since any exceptions would be raised inside
+:method:`manage_context` where we could :keyword:`except` them, which is much
+more idiomatic than the way :method:`__exit__` handles exceptions, which is by
+receiving their type and returning whether to swallow them or not.
+
+These were the different ways of defining a context manager. Now let's see the different ways of **using** a context manager:
+
+Using context managers
+----------------------
+
+
+There are 2 different ways in which context managers can be used:
+<ol><li>The plain old honest-to-Guido :keyword:`with` keyword:
+<pre>with MyContextManager() as my_context_manager:
+   do_stuff()
+</pre>
+</li>
+<li>
+As a decorator to a function:
+<pre>@MyContextManager()
+def do_stuff():
+   pass # doing stuff
+</pre>
+When the <code>do_stuff</code> function will be called, the context manager will be used. This functionality is also available in the standard library of Python 3.2+ by using <code><a href="http://docs.python.org/dev/library/contextlib.html#contextlib.ContextDecorator">contextlib.ContextDecorator</a></code>, but here it is combined with all the other goodies given by :class:`ContextManager`. Another advantage that :class:`ContextManager` has over <code>ContextDecorator</code> is that it uses <a href="http://pypi.python.org/pypi/decorator">Michele Simionato's excellent decorator module</a> to preserve the decorated function's signature.
+</li>
+</ol>That's it. Inherit all your context managers from :class:`ContextManager` (or decorate your generator functions with <code>ContextManagerType</code>) to enjoy all of these benefits.
+<h2>Source and tests for <code>context_manager</code></h2>
+<a href="https://github.com/cool-RR/GarlicSim/tree/master/garlicsim/garlicsim/general_misc/context_manager.py">Source for <code>context_manager</code>, well-documented</a>. Here are <a href="https://github.com/cool-RR/GarlicSim/tree/master/garlicsim/test_garlicsim/test_general_misc/test_context_manager">the tests</a>.
+Yes, I used a double metaclass in the implementation, i.e. a metaclass which has a metaclass itself.
+There is also a <a href="https://github.com/cool-RR/GarlicSim-for-Python-3.x/tree/master/garlicsim_py3/garlicsim/general_misc/context_manager.py">Python 3 version of <code>context_manager</code></a>, and <a href="https://github.com/cool-RR/GarlicSim-for-Python-3.x/tree/master/garlicsim_py3/test_garlicsim/test_general_misc/test_context_manager">here are its tests</a>. It's available with the <a href="http://pypi.python.org/pypi/garlicsim_py3">Python 3 fork of GarlicSim</a>.
+
+.. here's a practical guide which explains how to use them.: http://effbot.org/zone/python-with-statement.htm
