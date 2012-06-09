@@ -8,3 +8,125 @@
 
 :mod:`address_tools` - documentation not written
 ======================================
+
+The problem that :mod:`address_tools` was originally designed to solve was
+getting the "address" of a class, and possibly shortening it to an equivalent
+but shorter string. But after I implemented that, I realized that this could be
+generalized into a pair of functions, :func:`address_tools.describe` and
+:func:`address_tools.resolve`, that can replace the built-in :func:`repr` and
+:func:`eval` functions. So I will explain about those first, and after that I
+will explain about the "class address" and shortening business.
+
+So, Python has two built-in functions called :func:`repr` and :func:`eval`. You
+can say that they are opposites of each other: :func:`repr` "describes" a
+Python object as a string, and :func:`eval` evaluates a string into a Python
+object.
+
+*When is this useful?* This is useful in various cases: For example when you
+have a GUI program that needs to show the user Python objects and let him
+manipulate them. As a more well-known example, Django uses something like
+:func:`eval` to let the user specify functions without importing them, both in
+``settings.py`` and ``urls.py``.
+
+In some easy cases, :func:`repr` and :func:`eval` are the exact converses of
+each other:
+
+   >>> repr([1, 2, 'meow', {3: 4}])
+   "[1, 2, 'meow', {3: 4}]"
+   >>> eval(
+   ...     repr(
+   ...         [1, 2, 'meow', {3: 4}]
+   ...     )
+   ... )
+   [1, 2, 'meow', {3: 4}]
+   
+When you put a simple object like that in :func:`repr` and then put the
+resulting string in :func:`eval`, you get the original object again. That's
+really pretty, because then we have something like a one-to-one correspondence
+between objects and strings used to describe them.
+
+In a happy-sunshine world, there would indeed be a perfect one-to-one mapping
+between Python objects and strings that describe them. You got a Python object?
+You can turn it into a string so a human could easily see it, and the string
+will be all the human will need to create the object again. But unfortunately
+some objects just can't be meaningfully described as a string in a reversible
+way:
+
+   >>> import threading
+   >>> lock = threading.Lock()
+   >>> repr(lock)
+   '<thread.lock object at 0x00ABF110>'
+   >>> eval(repr(lock))
+   Traceback (most recent call last):
+     File "", line 1, in 
+   invalid syntax: , line 1, pos 1
+
+A `lock object`_ is used for synchronization between threads. You can't really
+describe a lock in a string in a reversible way; a lock is a breathing, living
+thing that threads in your program interact with, it's not a data-type like a
+list or a dict.
+
+So when we call :func:`repr` on a lock object, we get something like
+``'<thread.lock object at 0x00ABF110>'``. Enveloping the text with pointy
+brackets is Python's way of saying, "you can't turn this string back into an
+object, sorry, but I'm still going to give you some valuable information about
+the object, in the hope that it'll be useful for you." This is good behavior on
+Python's part. We may not be able to use :func:`eval` on this string, but at
+least we got some info about the object, and introspection is a *very* useful
+ability.
+
+So some objects, like lists, dicts and strings, can be easily described by
+:func:`repr` in a reversible way; some objects, like locks, queues, and file
+objects, simply cannot by their nature; and then there are the objects in
+between.
+
+
+Classes, functions, methods, modules
+------------------------------------
+
+
+What happens when we run :func:`repr` for a Python class?
+
+   >>> import decimal
+   >>> repr(decimal.Decimal)
+   "<class 'decimal.Decimal'>"
+
+We get a pointy-bracketed un-:func:`eval`able string. How about a function?
+
+   >>> import re
+   >>> repr(re.match)
+   '<function match at 0x00E8B030>'
+
+Same thing. We get a string that we can't put back in :func:`eval`. Is this really necessary? Why not return ``'decimal.Decimal'`` or ``'re.match'`` so we could :func:`eval` those later and get the original objects?
+
+It *is* sometimes helpful that the :func:`repr` string ``"<class 'decimal.Decimal'>"`` informs us that this is a class; but sometimes you want a string that you can turn back into an object. Although... :func:`eval` might not be able to find it, because :mod:`decimal` might not be imported.
+Enter :mod:`address_tools`:
+<h2>:func:`address_tools.describe` and :func:`address_tools.resolve`</h2>
+Let's play with :func:`address_tools.describe` and :func:`address_tools.resolve`:
+<pre>>>> from garlicsim.general_misc import address_tools
+>>> import decimal
+>>> address_tools.describe(decimal.Decimal)
+'decimal.Decimal'
+</pre>
+That's a nice description string! We can put that back into <code>resolve</code> and get the original class:
+<pre>>>> address_tools.resolve(address_tools.describe(decimal.Decimal)) is decimal.Decimal
+True</pre>
+We can use <code>resolve</code> to get this function, without <code>re</code> being imported, and it will import <span>re</span> by itself:
+<pre>>>> address_tools.resolve('re.match')
+<function match at 0x00B5E6B0></pre>
+This shtick also works on classes, functions, methods, modules, and possibly other kinds of objects.
+<h2>Address shortening</h2>
+One of the original purposes of :mod:`address_tools` was address-shortening. Sometimes I have a class inside a module inside a package inside my root package. For example, the most important class in <code>garlicsim</code> is <code>garlicsim.asynchronous_crunching.project.Project</code>. But that's a really long string. And because it's such an important class, it's also available at the friendlier address <code>garlicsim.Project</code>.
+Using :func:`address_tools.describe`, we can get the shorter address of the class:
+<pre>>>> from garlicsim.general_misc import address_tools
+>>> import garlicsim
+>>> address_tools.describe(garlicsim.Project) # By default we get the full address:
+'garlicsim.asynchronous_crunching.project.Project'
+>>> address_tools.describe(garlicsim.Project, shorten=True) # Bam, shortening:
+'garlicsim.Project'
+</pre>
+I recommend using this feature in any  <a href="http://docs.python.org/reference/datamodel.html#object.__repr__"><code>__repr__</code></a> methods that you write for your classes, to make the resulting string shorter. <a href="https://github.com/cool-RR/GarlicSim/blob/master/garlicsim/garlicsim/asynchronous_crunching/project.py#L542">Here's how I do it.</a>
+
+
+
+.. _lock object: http://docs.python.org/library/threading.html#lock-objects
