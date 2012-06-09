@@ -6,8 +6,8 @@
 
 .. _topics-address-tools:
 
-:mod:`address_tools` - documentation not written
-======================================
+:mod:`address_tools`
+====================
 
 The problem that :mod:`address_tools` was originally designed to solve was
 getting the "address" of a class, and possibly shortening it to an equivalent
