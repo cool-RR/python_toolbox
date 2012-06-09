@@ -101,7 +101,7 @@ Same thing. We get a string that we can't put back in :func:`eval`. Is this real
 It *is* sometimes helpful that the :func:`repr` string ``"<class
 'decimal.Decimal'>"`` informs us that this is a class; but sometimes you want a
 string that you can turn back into an object. Although... :func:`eval` might
-not be able to find it, because :mod:`decimal` might not be imported.
+not be able to find it, because :mod:`decimal` might not be currently imported.
 
 Enter :mod:`address_tools`:
 
