@@ -90,7 +90,7 @@ What happens when we run :func:`repr` for a Python class?
    >>> repr(decimal.Decimal)
    "<class 'decimal.Decimal'>"
 
-We get a pointy-bracketed un-\ :func:`eval`able string. How about a function?
+We get a pointy-bracketed un-\ :func:`eval`\ able string. How about a function?
 
    >>> import re
    >>> repr(re.match)
