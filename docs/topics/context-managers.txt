@@ -144,3 +144,4 @@ all of these benefits.
 
 .. _here's a practical guide which explains how to use them.: http://effbot.org/zone/python-with-statement.htm
 .. _Michele Simionato's excellent decorator module: http://pypi.python.org/pypi/decorator
+ 
