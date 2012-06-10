@@ -63,7 +63,7 @@ Let's profile an example program. Our example would be a function called
 The result is ``[6, 28, 496, 8128]``. However, this function takes a few
 seconds to run. That's fairly long. Let's use :mod:`cute_profile` to find out
 *why* this function is taking so long. We'll add the
-:func:`cute_profile.profile_ready` decorator around `get_perfects`:
+:func:`cute_profile.profile_ready` decorator around ``get_perfects``:
 
    >>> from python_toolbox import cute_profile        
    >>> @cute_profile.profile_ready()
