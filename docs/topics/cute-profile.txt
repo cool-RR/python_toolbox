@@ -101,7 +101,7 @@ This table shows how long each function took. If you want to understand
 The ``tottime`` column says how much time was spent inside this function,
 across all calls, and without counting the time that was spent in
 sub-functions. See how the ``get_divisors`` function in our example has a very
-high ``tottime`` of 7.997 seconds, which is about 100% of the entire run time.
+high ``tottime`` of 7.898 seconds, which is about 100% of the entire run time.
 This means that ``get_divisors`` is what's causing our program to run slow, and
 if we'll want to optimize the program, we should try to come up with a smarter
 way of finding all of a number's divisors than going one-by-one over all
