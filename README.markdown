@@ -19,6 +19,8 @@ contains:
 
 Documentation: http://python-toolbox.readthedocs.org   
 
+GitHub: https://github.com/cool-RR/python_toolbox
+
 CI server: https://jenkins.shiningpanda.com/python-toolbox/job/python_toolbox/
 
 # Not backward-compatible yet #
