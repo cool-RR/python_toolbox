@@ -109,14 +109,14 @@ numbers.
 
 :func:`profile_ready <cute_profile.profile_ready>` has a bunch of other options. In brief:
 
-- The :argument:`condition` argument is something like a "breakpoint condition" in
+- The ``condition`` argument is something like a "breakpoint condition" in
   an IDE: It can be a function, usually a lambda, that takes the decorated
   function and any arguments and returns whether or not to profile it this time.
  
-- :argument:`off_after` means whether you want the function to stop being profiled
+- ``off_after`` means whether you want the function to stop being profiled
   after being profiled one time. Default is :data:`True`.
 
-- :argument:`sort` is an integer saying by which column the final results table
+- ``sort`` is an integer saying by which column the final results table
   should be sorted.
 
 
