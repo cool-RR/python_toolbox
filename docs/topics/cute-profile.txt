@@ -107,7 +107,7 @@ if we'll want to optimize the program, we should try to come up with a smarter
 way of finding all of a number's divisors than going one-by-one over all
 numbers.
 
-:func:`profile_ready <cute_profile.profile_ready>` has a bunch of other options that I won't explore there. In brief:
+:func:`profile_ready <cute_profile.profile_ready>` has a bunch of other options. In brief:
 
 - The :arg:`condition` argument is something like a "breakpoint condition" in
   an IDE: It can be a function, usually a lambda, that takes the decorated
