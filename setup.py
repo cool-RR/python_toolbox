@@ -120,7 +120,6 @@ setuptools.setup(
     description='A collection of Python tools for various tasks',
     author='Ram Rachum',
     author_email='ram@rachum.com',
-    url='http://python_toolbox.org',
     packages=get_packages(),
     scripts=['test_python_toolbox/scripts/_test_python_toolbox.py'],
     long_description=my_long_description,
