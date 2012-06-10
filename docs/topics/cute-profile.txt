@@ -6,5 +6,100 @@
 
 .. _topics-cute-profile:
 
-:mod:`cute_profile` - documentation not written
-======================================
+:mod:`cute_profile`
+===================
+
+The :mod:`cute_profile` module allows you to profile your code (i.e. find out
+which parts make it slow) by giving a nicer interface to the :mod:`cProfile`
+library from Python's standard library.
+
+
+What is "profiling"?
+--------------------
+
+(Programmers experienced with profilers may skip this section.)
+
+To "profile" a piece of code means to run it while checking how long it takes,
+and how long each function call inside the code takes. When you use a
+"profiler" to profile your program, you get a table of (a) all the functions
+calls that were made by the program, (b) how many times each function was
+called and (c) how long the function calls took.
+
+A profiler is an indispensable programming tool, because it allows the
+programmer to understand which parts of his code take the longest. Usually,
+when using a profiler, you discover that only a few small parts of his code
+take most of the runtime of your program. And quite often, it's not the parts
+of code that you *thought* were the slow ones.
+
+Once you realize which parts of the program cause slowness, you can focus your
+efforts on those problematic parts only, optimizing them or possibly
+redesigning the way they work so they're not slow anymore. Then the whole
+program becomes faster.
+
+Profiling Python code with :mod:`cute_profile`
+----------------------------------------------
+
+Python supplies a module called :mod:`cProfile` in its standard library.
+:mod:`cProfile` is a good profiler, but its interface can be inconvenient to
+work with. The :mod:`cute_profile` module has a more flexible interface, and it
+uses :mod:`cProfile` under the hood to do the actual profiling.
+
+Let's profile an example program. Our example would be a function called
+``get_perfects``, which finds `perfect numbers`_:
+
+   >>> def get_divisors(x):
+   ...     '''Get all the integer divisors of `x`.'''
+   ...     return [i for i in xrange(1, x) if (x % i == 0)]
+   ... 
+   >>> def is_perfect(x):
+   ...     '''Is the number `x` perfect?'''
+   ...     return sum(get_divisors(x)) == x
+   ... 
+   >>> def get_perfects(top):
+   ...     '''Get all the perfect numbers up to the number `top`.'''
+   ...     return [i for i in xrange(1, top) if is_perfect(i)]      
+   >>> print(get_perfects(20000))
+   
+The result is ``[6, 28, 496, 8128]``. However, this function takes a few
+seconds to run. That's fairly long. Let's use :mod:`cute_profile` to find out
+*why* this function is taking so long. We'll add the
+:func:`cute_profile.profile_ready` decorator around `get_perfects`:
+
+   >>> from python_toolbox import cute_profile        
+   >>> @cute_profile.profile_ready()
+   ... def get_perfects(top):
+   ...     '''Get all the perfect numbers up to the number `top`.'''
+   ...     return [i for i in xrange(1, top) if is_perfect(i)]      
+
+
+Now before we run ``get_perfects``, we set it to profile:
+
+   >>> get_perfects.profiling_on = True
+
+And now we run it:
+
+   >>> print(get_perfects(20000))
+   
+We still get the same result, but now a profiling table gets printed:
+
+6000 function calls in 6.142 seconds
+
+   Ordered by: cumulative time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    6.142    6.142 :1()
+        1    0.025    0.025    6.142    6.142 perfect_numbers.py:9(get_perfects)
+     1999    0.045    0.000    6.117    0.003 perfect_numbers.py:6(is_perfect)
+     1999    6.060    0.003    6.060    0.003 perfect_numbers.py:3(get_divisors)
+     1999    0.012    0.000    0.012    0.000 {sum}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+</pre>
+This table shows how long each function took. If you want to understand *exactly* what each number says in this table, <a href="http://docs.python.org/library/profile.html#cProfile.run">there's an explanation here</a>.
+The <code>tottime</code> column says how much time was spent inside this function, across all calls, and without counting the time that was spent in sub-functions. See how the <code>get_divisors</code> function in our example has a very high <code>tottime</code> of 6.060. This means that <code>get_divisors</code> is what's causing our program to run slow, and if we'll want to optimize the program, we should try to come up with a smarter way of finding all of a number's divisors than going one-by-one over all numbers.
+<code>profile_ready</code> has a bunch of other options that I won't explore there. In brief:
+<ul><li>The <code>condition</code> argument is something like a "breakpoint condition" in an IDE: It can be a function, usually a lambda, that takes the decorated function and any arguments and returns whether or not to profile it this time.</li>
+<li><code>off_after</code> means whether you want the function to stop being profiled after being profiled one time. Default is <code>True</code>.</li>
+<li><code>sort</code> is an integer saying by which column the final results table should be sorted.</li>
+
+
+.. _perfect numbers: http://en.wikipedia.org/wiki/Perfect_number
