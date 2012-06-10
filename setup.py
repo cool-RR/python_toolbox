@@ -89,6 +89,8 @@ Please keep in mind that Python Toolbox is still in alpha stage, and that
 backward compatibility would *not* be maintained in this phase.
 
 Documentation: http://python-toolbox.readthedocs.org
+
+CI server: https://jenkins.shiningpanda.com/python-toolbox/job/python_toolbox/
 '''
 
 my_classifiers = [
