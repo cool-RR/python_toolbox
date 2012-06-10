@@ -80,21 +80,23 @@ And now we run it:
 
    >>> print(get_perfects(20000))
    
-We still get the same result, but now a profiling table gets printed:
+We still get the same result, but now a profiling table gets printed::
 
-6000 function calls in 6.142 seconds
+            60000 function calls in 7.997 seconds
+   
+      Ordered by: cumulative time
+   
+      ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+           1    0.000    0.000    7.997    7.997 <string>:1(<module>)
+           1    0.020    0.020    7.997    7.997 <pyshell#1>:2(get_perfects)
+       19999    0.058    0.000    7.977    0.000 <pyshell#0>:5(is_perfect)
+       19999    7.898    0.000    7.898    0.000 <pyshell#0>:1(get_divisors)
+       19999    0.021    0.000    0.021    0.000 {sum}
+           1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}        
+        
 
-   Ordered by: cumulative time
+This table shows how long each function took. If you want to understand *exactly* what each number says in this table, see :func:`cProfile.run`.
 
-   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-        1    0.000    0.000    6.142    6.142 :1()
-        1    0.025    0.025    6.142    6.142 perfect_numbers.py:9(get_perfects)
-     1999    0.045    0.000    6.117    0.003 perfect_numbers.py:6(is_perfect)
-     1999    6.060    0.003    6.060    0.003 perfect_numbers.py:3(get_divisors)
-     1999    0.012    0.000    0.012    0.000 {sum}
-        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
-</pre>
-This table shows how long each function took. If you want to understand *exactly* what each number says in this table, <a href="http://docs.python.org/library/profile.html#cProfile.run">there's an explanation here</a>.
 The <code>tottime</code> column says how much time was spent inside this function, across all calls, and without counting the time that was spent in sub-functions. See how the <code>get_divisors</code> function in our example has a very high <code>tottime</code> of 6.060. This means that <code>get_divisors</code> is what's causing our program to run slow, and if we'll want to optimize the program, we should try to come up with a smarter way of finding all of a number's divisors than going one-by-one over all numbers.
 <code>profile_ready</code> has a bunch of other options that I won't explore there. In brief:
 <ul><li>The <code>condition</code> argument is something like a "breakpoint condition" in an IDE: It can be a function, usually a lambda, that takes the decorated function and any arguments and returns whether or not to profile it this time.</li>
