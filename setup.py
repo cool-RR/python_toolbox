@@ -93,6 +93,26 @@ Documentation: http://python-toolbox.readthedocs.org
 GitHub: https://github.com/cool-RR/python_toolbox
 
 CI server: https://jenkins.shiningpanda.com/python-toolbox/job/python_toolbox/
+
+Roadmap
+=======
+
+Present
+-------
+
+Python Toolbox is at version 0.1, which is an alpha release. It's being used in production every day, but backward compatibility isn't guaranteed yet.
+
+Next tasks
+----------
+
+Making Python Toolbox support Python 3.x, and the packaging arrangements necessary.
+
+Adding more useful tools.
+
+Future
+------
+
+Make a 1.0 release and start maintaining backward compatibility.
 '''
 
 my_classifiers = [
