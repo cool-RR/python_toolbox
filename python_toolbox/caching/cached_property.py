@@ -7,10 +7,11 @@ Defines the `CachedProperty` class.
 See its documentation for more details.
 '''
 
+from python_toolbox import decorator_tools
 from python_toolbox import misc_tools
 
 
-class CachedProperty(misc_tools.OwnNameDiscoveringProperty):
+class CachedProperty(misc_tools.OwnNameDiscoveringDescriptor):
     '''
     A property that is calculated only once for an object, and then cached.
     
@@ -39,7 +40,7 @@ class CachedProperty(misc_tools.OwnNameDiscoveringProperty):
         You may optionally pass in the name that this property has in the
         class; this will save a bit of processing later.
         '''
-        misc_tools.OwnNameDiscoveringProperty.__init__(self, name=name)
+        misc_tools.OwnNameDiscoveringDescriptor.__init__(self, name=name)
         self.getter = getter_or_value if callable(getter_or_value) \
                       else lambda thing: getter_or_value
         self.__doc__ = doc or getattr(self.getter, '__doc__', None)
@@ -58,3 +59,11 @@ class CachedProperty(misc_tools.OwnNameDiscoveringProperty):
         return value
 
     
+    def __call__(self, method_function):
+        '''
+        Decorate method to use value of the `CachedProperty` as a context manager.
+        '''
+        def inner(same_method_function, self_obj, *args, **kwargs):
+            with getattr(self_obj, self.get_our_name(self_obj)):
+                return method_function(self_obj, *args, **kwargs)
+        return decorator_tools.decorator(inner, method_function)

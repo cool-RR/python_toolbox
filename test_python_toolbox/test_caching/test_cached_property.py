@@ -5,8 +5,9 @@
 
 import nose
 
-from python_toolbox.caching import (cache, CachedType,
-                                            CachedProperty)
+from python_toolbox import context_managers
+
+from python_toolbox.caching import cache, CachedType, CachedProperty
 
 
 def counting_func(self):
@@ -155,4 +156,25 @@ def test_doc():
         )
         
     assert C.undocced_property.__doc__ is None
+
     
+def test_decorating():
+    '''Test method-decorating functionality.'''
+    
+    class A(object):
+        reentrant_context_manager = CachedProperty(
+            lambda self: context_managers.ReentrantContextManager()
+        )
+        
+        @reentrant_context_manager
+        def my_method(self, x, y=3):
+            return (x, y, self.reentrant_context_manager.depth)
+        
+    a = A()
+    
+    assert a.my_method(2) == (2, 3, 1)
+    with a.reentrant_context_manager:
+        assert a.my_method(y=7, x=8) == (8, 7, 2)
+        with a.reentrant_context_manager:
+            assert a.my_method(y=7, x=8) == (8, 7, 3)
+        
