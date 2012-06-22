@@ -28,6 +28,23 @@ CI server: https://jenkins.shiningpanda.com/python-toolbox/job/python_toolbox/
 Please keep in mind that Python Toolbox is still in alpha stage, and that backward compatibility would *not* be maintained in this phase. 
 
 
+# Roadmap #
+
+## Present ##
+
+Python Toolbox is at version 0.1, which is an alpha release. It's being used in production every day, but backward compatibility isn't guaranteed yet.
+
+## Next tasks ##
+
+Making Python Toolbox support Python 3.x, and the packaging arrangements necessary.
+
+Adding more useful tools.
+
+## Future ##
+
+Make a 1.0 release and start maintaining backward compatibility.
+
+
 # Mailing lists #
 
 All general discussion happens at **[the Python Toolbox Google Group](https://groups.google.com/forum/#!forum/python-toolbox)**. If you need help with the Python Toolbox, you're welcome to post your question and we'll try to help you.
