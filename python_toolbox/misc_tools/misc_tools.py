@@ -156,10 +156,12 @@ def do_nothing(*args, **kwargs):
     pass
 
         
-class OwnNameDiscoveringProperty(object):
-    ''' '''
+class OwnNameDiscoveringDescriptor(object):
+    '''A descriptor that can discover the name it's bound to on its object.'''
+    
     def __init__(self, name=None):
         '''
+        Construct the `OwnNameDiscoveringDescriptor`.
         
         You may optionally pass in the name that this property has in the
         class; this will save a bit of processing later.
