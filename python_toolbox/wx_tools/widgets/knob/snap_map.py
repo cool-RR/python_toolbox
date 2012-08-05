@@ -205,11 +205,4 @@ class SnapMap(object):
             )
             
     
-    """
-    def _debug_ratio_to_pos(self, step=0.1):
-        if step is None: step = 10
-        
-        return [(i, self.ratio_to_pos(i)) for i in
-                misc_tools.frange(-1, 1, step)]
-    """
         
