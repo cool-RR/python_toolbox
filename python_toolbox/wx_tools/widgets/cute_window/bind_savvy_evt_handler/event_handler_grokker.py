@@ -53,35 +53,36 @@ class EventHandlerGrokker(object):
     )
 
     
-    def bind(self, window):
-        assert isinstance(window, wx.Window)
+    def bind(self, evt_handler):
+        assert isinstance(evt_handler, wx.EvtHandler)
         event_handler_bound_method = types.MethodType(    
             self.event_handler_self_taking_function,
-            window,
+            evt_handler,
             self.evt_handler_type
         )
         if len(self.parsed_words) >= 2:
-            closer_window = address_tools.resolve(
+            closer_evt_handler = address_tools.resolve(
                 '.'.join(('window',) + self.parsed_words[:-1]),
-                namespace={'window': window}
+                namespace={'window': evt_handler}
             )
         else:
-            closer_window = None
+            closer_evt_handler = None
         last_word = self.parsed_words[-1]
-        component_candidate = getattr(closer_window or window, last_word, None)
+        component_candidate = getattr(closer_evt_handler or evt_handler,
+                                      last_word, None)
         if component_candidate is not None and \
            hasattr(component_candidate, 'GetId'):
             component = component_candidate
             event_codes = get_event_codes_of_component(component)
             for event_code in event_codes:
-                window.Bind(
+                evt_handler.Bind(
                     event_code,
                     event_handler_bound_method,
                     source=component
                 )
                 
         else:
-            window.Bind(
+            evt_handler.Bind(
                 get_event_code_from_name(last_word,
                                          self.evt_handler_type),
                 event_handler_bound_method,
