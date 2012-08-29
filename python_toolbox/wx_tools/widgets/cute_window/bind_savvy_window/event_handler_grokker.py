@@ -20,18 +20,19 @@ from .event_codes import get_event_codes_of_component, get_event_code_from_name
 class EventHandlerGrokker(object):
     '''Wraps an event handling function and figures out what to bind it to.'''
     
-    def __init__(self, name, event_handler_self_taking_function, window_type):
+    def __init__(self, name, event_handler_self_taking_function,
+                 evt_handler_type):
         '''
         Construct the `EventHandlerGrokker`.
         
         `name` is the name of the event handling function.
         `event_handler_self_taking_function` is the function itself, as proper
-        function. (i.e. taking two arguments `self` and `event`.) `window_type`
-        is the class in which that event handler is defined.
+        function. (i.e. taking two arguments `self` and `event`.)
+        `evt_handler_type` is the class in which that event handler is defined.
         '''
-        assert window_type._BindSavvyWindowType__name_parser.match(
+        assert evt_handler_type._BindSavvyEvtHandlerType__name_parser.match(
             name,
-            window_type.__name__
+            evt_handler_type.__name__
         )
         
         self.name = name
@@ -39,13 +40,14 @@ class EventHandlerGrokker(object):
         self.event_handler_self_taking_function = \
             event_handler_self_taking_function
         
-        self.window_type = window_type
+        self.evt_handler_type = evt_handler_type
         
         
     parsed_words = caching.CachedProperty(
-        lambda self: self.window_type._BindSavvyWindowType__name_parser.parse(
+        lambda self: self.evt_handler_type. \
+                                   _BindSavvyEvtHandlerType__name_parser.parse(
             self.name,
-            self.window_type.__name__
+            self.evt_handler_type.__name__
         ),
         doc=''' '''
     )
@@ -56,7 +58,7 @@ class EventHandlerGrokker(object):
         event_handler_bound_method = types.MethodType(    
             self.event_handler_self_taking_function,
             window,
-            self.window_type
+            self.evt_handler_type
         )
         if len(self.parsed_words) >= 2:
             closer_window = address_tools.resolve(
@@ -81,7 +83,7 @@ class EventHandlerGrokker(object):
         else:
             window.Bind(
                 get_event_code_from_name(last_word,
-                                         self.window_type),
+                                         self.evt_handler_type),
                 event_handler_bound_method,
             )
                 

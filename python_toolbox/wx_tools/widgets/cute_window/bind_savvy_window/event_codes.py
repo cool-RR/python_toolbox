@@ -35,25 +35,25 @@ def get_event_codes_of_component(component):
            
     
 @caching.cache()
-def get_event_code_from_name(name, window_type):
+def get_event_code_from_name(name, evt_handler_type):
     '''
-    Get an event code given a `name` and a `window_type`.
+    Get an event code given a `name` and an `evt_handler_type`.
     
     For example, given a `name` of `left_down` this function will return the
     event code `wx.EVT_LEFT_DOWN`.
     
-    If `window_type` has an `.event_modules` attribute, these modules will be
-    searched for event codes in precedence to `wx` and the window type's own
+    If `evt_handler_type` has an `.event_modules` attribute, these modules will be
+    searched for event codes in precedence to `wx` and the event handler type's own
     module.
     '''
     processed_name = 'EVT_%s' % string_tools.conversions.\
                                 camelcase_to_underscore(name).upper()
     raw_event_modules = \
-        (window_type.event_modules if
-         sequence_tools.is_sequence(window_type.event_modules) else 
-         [window_type.event_modules])
+        (evt_handler_type.event_modules if
+         sequence_tools.is_sequence(evt_handler_type.event_modules) else 
+         [evt_handler_type.event_modules])
     event_modules = raw_event_modules + [
-        address_tools.resolve(window_type.__module__),
+        address_tools.resolve(evt_handler_type.__module__),
         wx
     ]
     for event_module in event_modules:

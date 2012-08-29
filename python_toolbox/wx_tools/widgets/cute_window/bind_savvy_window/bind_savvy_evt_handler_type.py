@@ -2,9 +2,9 @@
 # This program is distributed under the LGPL2.1 license.
 
 '''
-This module defines the `BindSavvyWindowType` metaclass.
+This module defines the `BindSavvyEvtHandlerType` metaclass.
 
-See documentation of `BindSavvyWindow` for more information.
+See documentation of `BindSavvyEvtHandler` for more information.
 '''
 
 import wx
@@ -15,11 +15,11 @@ from python_toolbox import dict_tools
 from .event_handler_grokker import EventHandlerGrokker
 
 
-class BindSavvyWindowType(type):
+class BindSavvyEvtHandlerType(type):
     '''
-    Metaclass for the `BindSavvyWindow` class.
+    Metaclass for the `BindSavvyEvtHandler` class.
     
-    See documentation of `BindSavvyWindow` for more information.
+    See documentation of `BindSavvyEvtHandler` for more information.
     '''
     
     event_modules = []
@@ -33,7 +33,7 @@ class BindSavvyWindowType(type):
     
     @property
     @caching.cache()
-    def _BindSavvyWindowType__event_handler_grokkers(cls):
+    def _BindSavvyEvtHandlerType__event_handler_grokkers(cls):
         '''
         The `EventHandlerGrokker` objects for this window.
         
@@ -46,10 +46,10 @@ class BindSavvyWindowType(type):
         names_to_event_handlers = dict_tools.filter_items(
             vars(cls),
             lambda name, value:
-                cls._BindSavvyWindowType__name_parser.match(name,
+                cls._BindSavvyEvtHandlerType__name_parser.match(name,
                                                             cls.__name__) and
                 callable(value) and
-                getattr(value, '_BindSavvyWindowType__dont_bind_automatically',
+                getattr(value, '_BindSavvyEvtHandlerType__dont_bind_automatically',
                         None) is not True
         )
         '''Dict mapping names to event handling functions.'''
@@ -63,5 +63,5 @@ class BindSavvyWindowType(type):
         '''
         Decorate a method to not be bound automatically as an event handler.
         '''
-        function._BindSavvyWindowType__dont_bind_automatically = True
+        function._BindSavvyEvtHandlerType__dont_bind_automatically = True
         return function

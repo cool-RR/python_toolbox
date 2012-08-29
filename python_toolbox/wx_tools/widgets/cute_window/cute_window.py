@@ -15,10 +15,10 @@ from python_toolbox import freezers
 from python_toolbox.context_managers import ContextManager
 
 from .accelerator_savvy_window import AcceleratorSavvyWindow
-from .bind_savvy_window import BindSavvyWindow
+from .bind_savvy_evt_handler import BindSavvyEvtHandler
 
 
-class CuteWindow(AcceleratorSavvyWindow, BindSavvyWindow, wx.Window):
+class CuteWindow(AcceleratorSavvyWindow, BindSavvyEvtHandler, wx.Window):
     '''
     An improved `wx.Window`.
     
