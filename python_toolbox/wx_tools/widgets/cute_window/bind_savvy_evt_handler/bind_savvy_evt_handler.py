@@ -34,7 +34,7 @@ class BindSavvyEvtHandler(wx.EvtHandler):
         n_preceding_underscores_possibilities=(1,)
     )
     '''
-    The name parser used by this event handler class for parsing event handlers.
+    Name parser used by this event handler class for parsing event handlers.
     
     Override this with a different instance of `NameParser` in order to use a
     different naming convention for event handlers.
@@ -52,8 +52,8 @@ class BindSavvyEvtHandler(wx.EvtHandler):
         `bind_event_handlers` function is being called.
         '''
         if not isinstance(self, cls):
-            raise TypeError('`cls` must be a class that the event handler is an '
-                            'instance of; you gave a `cls` of `%s`, which '
+            raise TypeError('`cls` must be a class that the event handler is '
+                            'an instance of; you gave a `cls` of `%s`, which '
                             '`%s` is not an instance of.' % (cls, self))
         event_handler_grokkers = \
             cls._BindSavvyEvtHandlerType__event_handler_grokkers
