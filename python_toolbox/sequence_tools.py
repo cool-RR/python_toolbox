@@ -69,12 +69,14 @@ def combinations(sequence, n=None, start=0):
                 yield [thing] + sub_result
 
 
-class NoFillValue(object):
-    '''Don't fill last partition with default fill values.'''
+class NO_FILL_VALUE(object):
+    '''
+    Sentinel that means: Don't fill last partition with default fill values.
+    '''
 
 
 def partitions(sequence, partition_size=None, n_partitions=None,
-               allow_remainder=True, fillvalue=NoFillValue):
+               allow_remainder=True, fill_value=NO_FILL_VALUE):
     '''
     Partition `sequence` into equal partitions of size `partition_size`, or
     determine size automatically given the number of partitions as
@@ -96,14 +98,14 @@ def partitions(sequence, partition_size=None, n_partitions=None,
     exception will be raised.
 
     If you want the remainder partition to be of equal size with the other
-    partitions, you can specify `fillvalue` as the padding for the last
-    partition. A specified value for `fillvalue` implies `allow_remainder=True`
+    partitions, you can specify `fill_value` as the padding for the last
+    partition. A specified value for `fill_value` implies `allow_remainder=True`
     and will cause an exception to be raised if specified with
    `allow_remainder=False`.
 
     Example:
 
-        >>> partitions([0, 1, 2, 3, 4], 3, fillvalue=None)
+        >>> partitions([0, 1, 2, 3, 4], 3, fill_value=None)
         [[0, 1, 2], [3, 4, None]]
     '''
 
@@ -115,9 +117,9 @@ def partitions(sequence, partition_size=None, n_partitions=None,
         raise Exception('You must specify *either* `partition_size` *or* '
                         '`n_paritions`.')
 
-    if fillvalue != NoFillValue and not allow_remainder:
-        raise ValueError("fillvalue cannot be specified if allow_remainder "
-                         "is False.")
+    if fill_value != NO_FILL_VALUE and not allow_remainder:
+        raise ValueError('`fill_value` cannot be specified if '
+                         '`allow_remainder` is `False`.')
 
     remainder_length = sequence_length % (partition_size if partition_size
                                           is not None else n_partitions)
@@ -138,8 +140,9 @@ def partitions(sequence, partition_size=None, n_partitions=None,
     blocks = [sequence[i : i + partition_size] for i in
               xrange(0, enlarged_length, partition_size)]
 
-    if fillvalue != NoFillValue:
-        filler = itertools.repeat(fillvalue, enlarged_length - sequence_length)
+    if fill_value != NO_FILL_VALUE and blocks:
+        filler = itertools.repeat(fill_value,
+                                  enlarged_length - sequence_length)
         blocks[-1].extend(filler)
 
     return blocks

@@ -61,11 +61,12 @@ def test_allow_remainder():
         partitions(r, n_partitions=5, allow_remainder=False)
 
 
-def test_fillvalue():
-    '''Test `fillvalue` keyword arguemnt for `partitions`.'''
+def test_fill_value():
+    '''Test `fill_value` keyword arguemnt for `partitions`.'''
     r = range(5)
 
     assert partitions(r, 3) == [[0, 1, 2], [3, 4]]
-    assert partitions(r, 3, fillvalue=None) == [[0, 1, 2], [3, 4, None]]
-    with cute_testing.RaiseAssertor(text='fillvalue'):
-        partitions(r, 2, fillvalue=None, allow_remainder=False)
+    assert partitions(r, 3, fill_value=None) == [[0, 1, 2], [3, 4, None]]
+    with cute_testing.RaiseAssertor(text='fill_value'):
+        partitions(r, 2, fill_value=None, allow_remainder=False)
+    assert partitions([], 3, fill_value=None) == []
