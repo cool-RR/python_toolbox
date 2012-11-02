@@ -135,13 +135,12 @@ def partitions(sequence, partition_size=None, n_partitions=None,
 
     enlarged_length = partition_size * n_partitions
 
-    filler = []
-    if fillvalue != NoFillValue:
-        filler = itertools.repeat(fillvalue, enlarged_length - sequence_length)
-
     blocks = [sequence[i : i + partition_size] for i in
               xrange(0, enlarged_length, partition_size)]
-    blocks[-1].extend(filler)
+
+    if fillvalue != NoFillValue:
+        filler = itertools.repeat(fillvalue, enlarged_length - sequence_length)
+        blocks[-1].extend(filler)
 
     return blocks
 
