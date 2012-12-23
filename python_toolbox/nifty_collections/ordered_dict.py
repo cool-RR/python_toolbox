@@ -7,6 +7,7 @@ This module defines the `OrderedDict` class.
 See its documentation for more information.
 '''
 
+import __builtin__
 from UserDict import DictMixin
 
 from python_toolbox import comparison_tools
@@ -162,7 +163,7 @@ class OrderedDict(dict, DictMixin):
             end[2] = first[1] = link
 
     
-    def sort(self, key=None):
+    def sort(self, key=None, reversed=False):
         '''
         Sort the items according to their keys, changing the order in-place.
         
@@ -172,7 +173,8 @@ class OrderedDict(dict, DictMixin):
         key_function = \
                    comparison_tools.process_key_function_or_attribute_name(key)
         sorted_keys = sorted(self.keys(), key=key_function)
-        for key_ in sorted_keys[1:]:
+        step = -1 if reversed else 1
+        for key_ in sorted_keys[1::step]:
             self.move_to_end(key_)
         
             

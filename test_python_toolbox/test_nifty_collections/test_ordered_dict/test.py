@@ -41,6 +41,10 @@ def test_sort():
     second_ordered_dict.sort('imag')
     assert second_ordered_dict == \
                            OrderedDict(((3+1j, 'a'), (1+2j, 'b'), (2+3j, 'c')))
+    
+    second_ordered_dict.sort('real', reversed=True)
+    assert second_ordered_dict == \
+                           OrderedDict(((3+1j, 'a'), (2+3j, 'c'), (1+2j, 'b')))
 
     
     
