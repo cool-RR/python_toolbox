@@ -53,13 +53,9 @@ class Freezer(context_managers.DelegatingContextManager):
     This can be conveniently used as a boolean, i.e. `if my_freezer.frozen:`.
     '''
     
-    
-    @abc.abstractmethod
     def freeze_handler(self):
         '''Do something when the object gets frozen.'''
     
-        
-    @abc.abstractmethod
     def thaw_handler(self):
         '''Do something when the object gets thawed.'''
         
