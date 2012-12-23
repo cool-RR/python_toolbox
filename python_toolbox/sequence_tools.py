@@ -99,14 +99,15 @@ def partitions(sequence, partition_size=None, n_partitions=None,
 
     If you want the remainder partition to be of equal size with the other
     partitions, you can specify `fill_value` as the padding for the last
-    partition. A specified value for `fill_value` implies `allow_remainder=True`
-    and will cause an exception to be raised if specified with
-   `allow_remainder=False`.
+    partition. A specified value for `fill_value` implies
+    `allow_remainder=True` and will cause an exception to be raised if
+    specified with `allow_remainder=False`.
 
     Example:
 
         >>> partitions([0, 1, 2, 3, 4], 3, fill_value=None)
         [[0, 1, 2], [3, 4, None]]
+        
     '''
 
     sequence_length = len(sequence)
