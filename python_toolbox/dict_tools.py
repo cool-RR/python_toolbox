@@ -4,6 +4,7 @@
 '''Defines several functions that may be useful when working with dicts.'''
 
 from python_toolbox import cute_iter_tools
+from python_toolbox import comparison_tools
 
 
 def filter_items(d, condition, force_dict_type=None):
@@ -60,7 +61,7 @@ def fancy_string(d, indent=0):
     return temp2
     
 
-def reverse_with_set_values(d):
+def reverse_with_set_values(d, sort=False):
     '''
     Reverse the dict, with the values of the new dict being sets.
     
@@ -72,6 +73,10 @@ def reverse_with_set_values(d):
     Instead of a dict you may also input a tuple in which the first item is an
     iterable and the second item is either a key function or an attribute name.
     A dict will be constructed from these and used.
+    
+    If you'd like the result dict to be sorted, pass `sort=True`, and you'll
+    get a sorted `OrderedDict`. You can also specify the sorting key function
+    or attribute name as the `sort` argument.
     '''
     ### Pre-processing input: #################################################
     #                                                                         #
@@ -81,13 +86,9 @@ def reverse_with_set_values(d):
         assert cute_iter_tools.is_iterable(d) and len(d) == 2
         iterable, key_function_or_attribute_name = d
         assert cute_iter_tools.is_iterable(iterable)
-        if callable(key_function_or_attribute_name):
-            key_function = key_function_or_attribute_name
-        else:
-            assert isinstance(key_function_or_attribute_name, basestring)
-            key_function = \
-                       lambda key: getattr(key, key_function_or_attribute_name)
-            
+        key_function = comparison_tools.process_key_function_or_attribute_name(
+            key_function_or_attribute_name
+        )
         fixed_dict = dict((key, key_function(key)) for key in iterable)
     #                                                                         #
     ### Finished pre-processing input. ########################################
@@ -102,7 +103,19 @@ def reverse_with_set_values(d):
     for key, value in new_dict.copy().iteritems():
         new_dict[key] = set(value)
         
-    return new_dict
+    if sort:
+        from python_toolbox import nifty_collections
+        ordered_dict = nifty_collections.OrderedDict(new_dict)
+        if callable(sort) or isinstance(sort, basestring):
+            key_function = comparison_tools. \
+                                   process_key_function_or_attribute_name(sort)
+        else:
+            assert sort is True
+            key_function = None
+        ordered_dict.sort(key_function)
+        return ordered_dict
+    else:
+        return new_dict
 
 
 def devour_items(d):

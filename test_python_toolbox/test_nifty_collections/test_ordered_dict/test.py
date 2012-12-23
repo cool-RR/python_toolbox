@@ -37,6 +37,13 @@ def test_sort():
     assert ordered_dict == ordered_dict_copy
     
     
+    second_ordered_dict = OrderedDict(((1+2j, 'b'), (2+3j, 'c'), (3+1j, 'a')))
+    second_ordered_dict.sort('imag')
+    assert second_ordered_dict == \
+                           OrderedDict(((3+1j, 'a'), (1+2j, 'b'), (2+3j, 'c')))
+
+    
+    
 def test_index():
     '''Test the `OrderedDict.index` method.'''
     ordered_dict = OrderedDict(((1, 'a'), (2, 'b'), (3, 'c')))

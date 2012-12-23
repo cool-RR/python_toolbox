@@ -54,3 +54,15 @@ def total_ordering(cls):
             setattr(cls, opname, opfunc)
     return cls
 
+
+def process_key_function_or_attribute_name(key_function_or_attribute_name):
+    if key_function_or_attribute_name is None:
+        return None
+    elif callable(key_function_or_attribute_name):
+        return key_function_or_attribute_name
+    else:
+        assert isinstance(key_function_or_attribute_name, basestring)
+        return lambda key: getattr(key, key_function_or_attribute_name)
+
+
+
