@@ -7,7 +7,7 @@ This module defines the `NameParser` class.
 See its documentation for more information.
 '''
 
-from python_toolbox.third_party import abc
+import abc
 
 from python_toolbox import abc_tools
 from python_toolbox import sequence_tools

@@ -10,7 +10,8 @@ from __future__ import with_statement
 import itertools
 import __builtin__
 
-from python_toolbox.infinity import infinity
+
+infinity = float('inf')
 
 
 def consecutive_pairs(iterable, wrap_around=False):

@@ -7,7 +7,7 @@ This module defines the `ReentrantContextManager` class.
 See its documentation for more information.
 '''
 
-from python_toolbox.third_party import abc
+import abc
 
 from python_toolbox import caching
 from python_toolbox.proxy_property import ProxyProperty

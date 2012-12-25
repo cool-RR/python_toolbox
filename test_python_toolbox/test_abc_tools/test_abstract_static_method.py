@@ -4,11 +4,11 @@
 '''Testing module for `python_toolbox.abc_tools.AbstractStaticMethod`.'''
 
 import sys
+import abc
 
 import nose
 
 from python_toolbox.abc_tools import AbstractStaticMethod
-from python_toolbox.third_party import abc
 
 
 def test_instantiate_without_subclassing():

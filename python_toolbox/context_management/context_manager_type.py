@@ -7,7 +7,7 @@ This module defines the `ContextManagerType` class.
 See its documentation for more information.
 '''
 
-from python_toolbox.third_party import abc
+import abc
 
 from .context_manager_type_type import ContextManagerTypeType
 

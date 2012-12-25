@@ -12,11 +12,13 @@ import sys
 ### Confirming correct Python version: ########################################
 #                                                                             #
 if sys.version_info[0] >= 3:
-    raise Exception("Python 3.x is not supported")
+    raise Exception("Python 3.x is not supported, only Python 2.6 and Python "
+                    "2.7.")
 if sys.version_info[1] <= 4:
     raise Exception(
-        "You're using Python <=2.4, but this package requires Python 2.5 and "
-        "upwards, so you can't use it unless you upgrade your Python version."
+        "You're using Python <= 2.5, but this package requires either Python "
+        "2.6 or Python 2.7, so you can't use it unless you upgrade your "
+        "Python version."
     )
 #                                                                             #
 ### Finished confirming correct Python version. ###############################

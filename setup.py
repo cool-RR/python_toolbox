@@ -16,7 +16,7 @@ if sys.version_info[0] >= 3:
                     "2.7.")
 if sys.version_info[1] <= 5:
     raise Exception(
-        "You're using Python <=2.5, but this package requires either Python "
+        "You're using Python <= 2.5, but this package requires either Python "
         "2.6 or Python 2.7, so you can't use it unless you upgrade your "
         "Python version."
     )

@@ -45,7 +45,6 @@ explaining what it's good for and the basics of using it.
    gc-tools
    identities
    import-tools
-   infinity
    introspection-tools
    logic-tools
    math-tools

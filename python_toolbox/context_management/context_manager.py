@@ -11,7 +11,7 @@ from __future__ import with_statement
 
 import sys
 import types
-from python_toolbox.third_party import abc
+import abc
 
 from python_toolbox import decorator_tools
 

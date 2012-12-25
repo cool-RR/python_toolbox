@@ -8,7 +8,7 @@ from __future__ import with_statement
 import copy
 import pickle
 import cPickle
-from python_toolbox.third_party import abc
+import abc
 
 import nose
 

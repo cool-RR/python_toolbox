@@ -13,8 +13,9 @@ import functools
 from python_toolbox import decorator_tools
 
 from python_toolbox.sleek_reffing import SleekCallArgs
-from python_toolbox.infinity import infinity
 from python_toolbox.nifty_collections import OrderedDict
+
+infinity = float('inf')
 
 
 class CLEAR_ENTIRE_CACHE(object):

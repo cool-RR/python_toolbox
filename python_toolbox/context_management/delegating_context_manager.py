@@ -7,7 +7,7 @@ This module defines the `DelegatingContextManager` class.
 See its documentation for more information.
 '''
 
-from python_toolbox.third_party import abc
+import abc
 
 from python_toolbox import proxy_property
 
