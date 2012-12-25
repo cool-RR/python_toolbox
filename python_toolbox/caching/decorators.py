@@ -59,6 +59,10 @@ def cache(max_size=infinity, time_to_keep=None):
     You may optionally specify a `max_size` for maximum number of cached
     results to store; old entries are thrown away according to a
     least-recently-used alogrithm. (Often abbreivated LRU.)
+    
+    You may optionally specific a `time_to_keep`, which is a time period after
+    which a cache entry will expire. (Pass in either a `timedelta` object or
+    keyword arguments to create one.)
     '''
     # todo idea: figure how how complex the function's argspec is, and then
     # compile a function accordingly, so functions with a simple argspec won't
