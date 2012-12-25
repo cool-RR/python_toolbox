@@ -50,5 +50,5 @@ def test_sleek_ref():
         del unvolatile_thing
         gc_tools.collect()
         assert counter() == count + 1
-        # Testing if it will raise `SleekRefDied`:
+        # Ensuring it will not raise `SleekRefDied`:
         sleek_ref()
