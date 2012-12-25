@@ -76,7 +76,7 @@ contains:
  - ``python_toolbox.cute_iter_tools``: Tools for manipulating iterables. Adds
     useful functions not found in Python's built-in ``itertools``.
  
- - ``python_toolbox.context_managers``: Pimping up your context managers.
+ - ``python_toolbox.context_management``: Pimping up your context managers.
  
  - ``python_toolbox.emitters``: A publisher-subscriber framework that doesn't
     abuse strings.

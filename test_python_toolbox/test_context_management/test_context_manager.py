@@ -1,13 +1,13 @@
 # Copyright 2009-2012 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''Test the `python_toolbox.context_managers` module.'''
+'''Test the `python_toolbox.context_management` module.'''
 
 from __future__ import with_statement 
 
 from python_toolbox import cute_testing
 
-from python_toolbox.context_managers import (ContextManager,
+from python_toolbox.context_management import (ContextManager,
                                              ContextManagerType,
                                              SelfHook)
 

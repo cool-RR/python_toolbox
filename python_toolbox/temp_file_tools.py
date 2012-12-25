@@ -9,7 +9,7 @@ import tempfile
 import shutil
 import os
 
-from python_toolbox.context_managers import ContextManager
+from python_toolbox.context_management import ContextManager
 
 
 

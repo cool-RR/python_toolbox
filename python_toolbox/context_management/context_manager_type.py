@@ -146,7 +146,7 @@ class ContextManagerType(abc.ABCMeta):
         
         return (
             (cls.__name__ == 'ContextManager') and
-            (cls.__module__ == 'python_toolbox.context_managers.'
+            (cls.__module__ == 'python_toolbox.context_management.'
                                'context_manager') and
             (cls.mro() == [cls, object])
         )

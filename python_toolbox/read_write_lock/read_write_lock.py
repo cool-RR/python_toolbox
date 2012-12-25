@@ -6,7 +6,7 @@ See documentation of class `ReadWriteLock` defined in this module.
 '''
 # todo: organize.
 
-from python_toolbox import context_managers
+from python_toolbox import context_management
 
 from . import original_read_write_lock
 
@@ -14,7 +14,7 @@ from . import original_read_write_lock
 __all__ = ['ReadWriteLock']
 
 
-class ContextManager(context_managers.ContextManager):
+class ContextManager(context_management.ContextManager):
 
     def __init__(self, lock, acquire_func):
         self.lock = lock

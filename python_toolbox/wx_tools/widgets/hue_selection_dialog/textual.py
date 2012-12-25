@@ -15,7 +15,7 @@ import wx
 from python_toolbox import freezers
 from python_toolbox import wx_tools
 from python_toolbox.wx_tools.widgets.cute_panel import CutePanel
-from python_toolbox.context_managers import ReentrantContextManager
+from python_toolbox.context_management import ReentrantContextManager
 
 
 def ratio_to_round_degrees(ratio):

@@ -6,8 +6,8 @@
 
 .. _topics-context-managers:
 
-:mod:`context_managers`
-=======================
+:mod:`context_management`
+=========================
 
 Context managers are awesome
 ----------------------------
@@ -34,7 +34,7 @@ The :class:`ContextManager` class allows using context managers as decorators
 new form called :meth:`manage_context`. (As well as the original forms).
 First let's import:
 
-   >>> from python_toolbox import context_managers
+   >>> from python_toolbox import context_management
    
 Now let's go over the features one by one.
 
@@ -52,7 +52,7 @@ has their own advantages and disadvantages over the others.
   :meth:`__enter__` and :meth:`__exit__` methods. This is allowed, and if you
   do this you should still inherit from :class:`ContextManager`. Example:
   
-     >>> class MyContextManager(context_managers.ContextManager):
+     >>> class MyContextManager(context_management.ContextManager):
      ...     def __enter__(self):
      ...         pass # preparation
      ...     def __exit__(self, type_=None, value=None, traceback=None):
@@ -60,7 +60,7 @@ has their own advantages and disadvantages over the others.
              
 - As a decorated generator, like so:
 
-     >>> @context_managers.ContextManagerType
+     >>> @context_management.ContextManagerType
      ... def MyContextManager():
      ...     # preparation
      ...     try:
@@ -74,7 +74,7 @@ has their own advantages and disadvantages over the others.
   This usage is nothing new; it's also available when using the standard
   library's :func:`contextlib.contextmanager` decorator. One thing that is
   allowed here that :mod:`contextlib` doesn't allow is to yield the context
-  manager itself by doing ``yield context_managers.SelfHook``.
+  manager itself by doing ``yield context_management.SelfHook``.
 
 - The third and novel way is by defining a class with a :meth:`manage_context`
   method which returns a decorator. Example:

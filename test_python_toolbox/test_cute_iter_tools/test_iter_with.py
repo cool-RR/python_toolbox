@@ -5,12 +5,12 @@
 
 import itertools
 
-from python_toolbox import context_managers
+from python_toolbox import context_management
 
 from python_toolbox.cute_iter_tools import iter_with
 
 
-class MyContextManager(context_managers.ContextManager):
+class MyContextManager(context_management.ContextManager):
     def __init__(self):
         self.counter = -1
         self.active = False

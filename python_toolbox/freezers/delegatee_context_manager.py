@@ -7,10 +7,10 @@ This module defines the `DelegateeContextManager` class.
 See its documentation for more information.
 '''
 
-from python_toolbox import context_managers
+from python_toolbox import context_management
 
 
-class DelegateeContextManager(context_managers.ReentrantContextManager):
+class DelegateeContextManager(context_management.ReentrantContextManager):
     '''Inner context manager used internally by `Freezer`.'''
     
     def __init__(self, freezer):

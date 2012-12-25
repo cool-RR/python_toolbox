@@ -5,7 +5,7 @@
 
 import nose
 
-from python_toolbox import context_managers
+from python_toolbox import context_management
 
 from python_toolbox.caching import cache, CachedType, CachedProperty
 
@@ -163,7 +163,7 @@ def test_decorating():
     
     class A(object):
         reentrant_context_manager = CachedProperty(
-            lambda self: context_managers.ReentrantContextManager()
+            lambda self: context_management.ReentrantContextManager()
         )
         
         @reentrant_context_manager

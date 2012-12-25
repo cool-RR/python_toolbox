@@ -1,13 +1,13 @@
 # Copyright 2009-2012 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''Test the `python_toolbox.context_managers.nested` function.'''
+'''Test the `python_toolbox.context_management.nested` function.'''
 
 from __future__ import with_statement 
 
 from python_toolbox import cute_testing
 
-from python_toolbox.context_managers import ReentrantContextManager, nested
+from python_toolbox.context_management import ReentrantContextManager, nested
 
 
 

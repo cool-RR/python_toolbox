@@ -9,7 +9,7 @@ import sys
 
 import nose
 
-from python_toolbox.context_managers import (ContextManager,
+from python_toolbox.context_management import (ContextManager,
                                                     ContextManagerType,
                                                     SelfHook)
 

@@ -1,13 +1,13 @@
 # Copyright 2009-2012 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''Testing module for `context_managers.ReentrantContextManager`.''' 
+'''Testing module for `context_management.ReentrantContextManager`.''' 
 
 from __future__ import with_statement
 
 import Queue as queue_module
 
-from python_toolbox.context_managers import ReentrantContextManager
+from python_toolbox.context_management import ReentrantContextManager
 from python_toolbox import cute_testing
 
 

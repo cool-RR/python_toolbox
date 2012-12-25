@@ -11,7 +11,7 @@ import nose
 from python_toolbox.third_party import unittest2
 
 import python_toolbox
-from python_toolbox.context_managers import (ContextManager,
+from python_toolbox.context_management import (ContextManager,
                                                     ContextManagerType)
 
 

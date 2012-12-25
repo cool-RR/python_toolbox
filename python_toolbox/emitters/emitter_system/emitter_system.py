@@ -13,7 +13,7 @@ import itertools
 
 from python_toolbox import freezers
 from python_toolbox import cute_iter_tools
-from python_toolbox.context_managers import ReentrantContextManager
+from python_toolbox.context_management import ReentrantContextManager
 
 from .emitter import Emitter
 

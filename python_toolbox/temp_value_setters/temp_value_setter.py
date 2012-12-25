@@ -8,7 +8,7 @@ See its documentation for more details.
 '''
 
 from python_toolbox import address_tools
-from python_toolbox.context_managers import ContextManager
+from python_toolbox.context_management import ContextManager
 
 
 __all__ = ['TempValueSetter']

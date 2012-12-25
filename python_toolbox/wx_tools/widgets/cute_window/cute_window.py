@@ -12,7 +12,7 @@ import wx
 from python_toolbox import wx_tools
 from python_toolbox import caching
 from python_toolbox import freezers
-from python_toolbox.context_managers import ContextManager
+from python_toolbox.context_management import ContextManager
 
 from .accelerator_savvy_window import AcceleratorSavvyWindow
 from .bind_savvy_evt_handler import BindSavvyEvtHandler

@@ -9,7 +9,7 @@ from __future__ import with_statement
 import sys
 import cStringIO
 
-from python_toolbox.context_managers import (ContextManager,
+from python_toolbox.context_management import (ContextManager,
                                                     BlankContextManager)
 from python_toolbox.temp_value_setters import TempValueSetter
 from python_toolbox.reasoned_bool import ReasonedBool

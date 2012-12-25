@@ -6,7 +6,7 @@
 from python_toolbox.third_party import unittest2
 
 from python_toolbox import cute_inspect
-from python_toolbox.context_managers import ContextManager
+from python_toolbox.context_management import ContextManager
 from python_toolbox.exceptions import CuteException
 from python_toolbox import logic_tools
 

@@ -9,14 +9,14 @@ See its documentation for more information.
 
 from python_toolbox.third_party import abc
 
-from python_toolbox import context_managers
+from python_toolbox import context_management
 from python_toolbox import proxy_property
 from python_toolbox import caching
 
 from .delegatee_context_manager import DelegateeContextManager
 
 
-class Freezer(context_managers.DelegatingContextManager):
+class Freezer(context_management.DelegatingContextManager):
     '''
     A freezer is used as a context manager to "freeze" and "thaw" an object.
     
