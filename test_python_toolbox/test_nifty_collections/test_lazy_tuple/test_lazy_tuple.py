@@ -7,8 +7,8 @@ from __future__ import with_statement
 
 import uuid
 import itertools
+import collections
 
-from python_toolbox.third_party import abcs_collection
 from python_toolbox import cute_iter_tools
 from python_toolbox import sequence_tools
 from python_toolbox import cute_testing
@@ -17,7 +17,7 @@ from python_toolbox import cute_testing
 from python_toolbox.nifty_collections import LazyTuple
 
 
-class SelfAwareUuidIterator(abcs_collection.Iterator):
+class SelfAwareUuidIterator(collections.Iterator):
     '''Iterator that gives UUIDs and keeps them all in an internal list.'''
     def __init__(self):
         self.data = []

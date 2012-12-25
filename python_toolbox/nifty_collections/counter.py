@@ -1,6 +1,6 @@
 # forked from Python 2.7
 
-from python_toolbox.third_party.abcs_collection import Mapping
+from collections import Mapping
 from operator import itemgetter as _itemgetter, eq as _eq
 import heapq as _heapq
 from itertools import (repeat as _repeat, chain as _chain,

@@ -3,12 +3,12 @@
 
 '''Defines various tools for manipulating sequences.'''
 
+import collections
 import types
 import itertools
 
 from python_toolbox.nifty_collections import Counter
 from python_toolbox import math_tools
-from python_toolbox.third_party import abcs_collection
 
 
 infinity = float('inf')
@@ -153,18 +153,18 @@ def partitions(sequence, partition_size=None, n_partitions=None,
 
 def is_sequence(thing):
     '''Is `thing` a sequence, like `list` or `tuple`?'''
-    return abcs_collection.Sequence.__instancecheck__(thing)
+    return collections.Sequence.__instancecheck__(thing)
 
 
 def is_mutable_sequence(thing):
     '''Is `thing` a mutable sequence, like `list`?'''
-    return abcs_collection.MutableSequence.__instancecheck__(thing)
+    return collections.MutableSequence.__instancecheck__(thing)
 
 
 def is_immutable_sequence(thing):
     '''Is `thing` an immutable sequence, like `tuple`?'''
-    return abcs_collection.Sequence.__instancecheck__(thing) and not \
-           abcs_collection.MutableSequence.__instancecheck__(thing)
+    return collections.Sequence.__instancecheck__(thing) and not \
+           collections.MutableSequence.__instancecheck__(thing)
 
 
 def parse_slice(s):

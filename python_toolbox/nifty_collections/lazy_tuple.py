@@ -11,7 +11,6 @@ from __future__ import with_statement
 
 import threading
 import collections
-from python_toolbox.third_party import abcs_collection
 
 from python_toolbox import cute_iter_tools
 from python_toolbox import decorator_tools
@@ -52,7 +51,7 @@ def _with_lock(method, *args, **kwargs):
         return method(*args, **kwargs)
 
     
-class LazyTuple(abcs_collection.Sequence, object):
+class LazyTuple(collections.Sequence, object):
     '''
     A lazy tuple which requests as few values as possible from its iterator.
     

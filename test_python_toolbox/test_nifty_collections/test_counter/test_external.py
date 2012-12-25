@@ -7,7 +7,7 @@ from random import randrange
 import copy
 import pickle
 import cPickle
-from python_toolbox.third_party.abcs_collection import Mapping
+from collections import Mapping
 
 from python_toolbox.third_party import unittest2
 

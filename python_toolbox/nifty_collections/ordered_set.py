@@ -8,13 +8,12 @@ See its documentation for more details.
 '''
 # todo: revamp
 
-from python_toolbox.third_party import abcs_collection
-
+import collections
 
 KEY, PREV, NEXT = range(3)
 
 
-class OrderedSet(abcs_collection.MutableSet):
+class OrderedSet(collections.MutableSet):
     '''
     A set with an order.
     
