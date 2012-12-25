@@ -562,7 +562,6 @@ class Sequence(Sized, Iterable, Container):
         # Hacking around a Pypy bug:
         if cls is Sequence and \
            issubclass(subclass_candidate, (tuple, basestring, buffer, xrange)):
-            print('Got true!')
             return True
         else:
             return NotImplemented
