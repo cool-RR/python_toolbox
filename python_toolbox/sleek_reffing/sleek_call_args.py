@@ -30,7 +30,7 @@ class SleekCallArgs(object):
     The calls `f(1)`, `f(1, 2)` and `f(b=2, a=1)` all share the same call args.
     
     All the argument values are sleekreffed to avoid memory leaks. (See
-    documentation of `python_toolbox.sleek_refs.SleekRef` for more details.)
+    documentation of `python_toolbox.sleek_reffing.SleekRef` for more details.)
     '''
     # What if we one of the args gets gc'ed before this SCA gets added to the
     # dictionary? It will render this SCA invalid, but we'll still be in the

@@ -28,8 +28,8 @@ class CuteSleekValueDict(UserDict.UserDict, object):
     sleekrefs instead of weakrefs and (b) when a value dies, it calls a
     callback.
     
-    See documentation of `python_toolbox.sleek_refs.SleekRef` for more details
-    about sleekreffing.
+    See documentation of `python_toolbox.sleek_reffing.SleekRef` for more
+    details about sleekreffing.
     """
     
     def __init__(self, callback, *args, **kwargs):

@@ -1,7 +1,7 @@
 # Copyright 2009-2012 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''Testing module for `python_toolbox.sleek_refs.SleekRef`.'''
+'''Testing module for `python_toolbox.sleek_reffing.SleekRef`.'''
 
 import weakref
 
@@ -9,10 +9,10 @@ import nose.tools
 
 from python_toolbox import gc_tools
 
-from python_toolbox.sleek_refs import (SleekCallArgs,
-                                               SleekRef,
-                                               SleekRefDied,
-                                               CuteSleekValueDict)
+from python_toolbox.sleek_reffing import (SleekCallArgs,
+                                          SleekRef,
+                                          SleekRefDied,
+                                          CuteSleekValueDict)
 
 from .shared import _is_weakreffable, A, counter
 

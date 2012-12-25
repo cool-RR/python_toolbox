@@ -16,7 +16,7 @@ from python_toolbox.third_party import unittest2
 from python_toolbox import sys_tools
 from python_toolbox import gc_tools
 
-from python_toolbox.sleek_refs import CuteSleekValueDict
+from python_toolbox.sleek_reffing import CuteSleekValueDict
 
 
 null_callback = lambda: None
