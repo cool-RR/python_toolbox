@@ -40,7 +40,7 @@ explaining what it's good for and the basics of using it.
    dict-tools
    emitting
    exceptions
-   freezers
+   freezing
    function-anchoring-type
    gc-tools
    identities

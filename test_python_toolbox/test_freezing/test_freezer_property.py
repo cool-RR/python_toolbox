@@ -1,11 +1,11 @@
 # Copyright 2009-2012 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''Testing module for `freezers.FreezerProperty`.'''
+'''Testing module for `freezing.FreezerProperty`.'''
 
 from __future__ import with_statement
 
-from python_toolbox.freezers import FreezerProperty, Freezer
+from python_toolbox.freezing import FreezerProperty, Freezer
 from python_toolbox import caching
 
 

@@ -11,7 +11,7 @@ from __future__ import with_statement
 
 import itertools
 
-from python_toolbox import freezers
+from python_toolbox import freezing
 from python_toolbox import cute_iter_tools
 from python_toolbox.context_management import ReentrantContextManager
 
@@ -63,7 +63,7 @@ class EmitterSystem(object):
         self.emitters.add(self.top_emitter)
         
         
-    cache_rebuilding_freezer = freezers.FreezerProperty()
+    cache_rebuilding_freezer = freezing.FreezerProperty()
 
     
     @cache_rebuilding_freezer.on_thaw

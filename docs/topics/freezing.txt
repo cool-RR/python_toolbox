@@ -4,7 +4,7 @@
    "Ram Rachum at ram.rachum.com" including link. The license may be obtained
    at http://creativecommons.org/licenses/by-sa/3.0/
 
-.. _topics-freezers:
+.. _topics-freezing:
 
-:mod:`freezers` - documentation not written
+:mod:`freezing` - documentation not written
 ======================================

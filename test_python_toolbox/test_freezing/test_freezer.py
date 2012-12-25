@@ -1,13 +1,13 @@
 # Copyright 2009-2012 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''Testing package for `freezers.Freezer`.'''
+'''Testing package for `freezing.Freezer`.'''
 
 from __future__ import with_statement
 
 from python_toolbox import cute_testing
 
-from python_toolbox.freezers import Freezer
+from python_toolbox.freezing import Freezer
 
 
 class MyFreezer(Freezer):

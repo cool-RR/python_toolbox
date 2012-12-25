@@ -5,7 +5,7 @@
 
 import wx
 
-from python_toolbox.freezers import Freezer
+from python_toolbox.freezing import Freezer
 
 
 class WindowFreezer(Freezer):

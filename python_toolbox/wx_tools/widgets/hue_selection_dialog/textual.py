@@ -12,7 +12,7 @@ from __future__ import with_statement
 
 import wx
 
-from python_toolbox import freezers
+from python_toolbox import freezing
 from python_toolbox import wx_tools
 from python_toolbox.wx_tools.widgets.cute_panel import CutePanel
 from python_toolbox.context_management import ReentrantContextManager
@@ -80,7 +80,7 @@ class Textual(CutePanel):
         self.Bind(wx.EVT_TEXT, self._on_text, source=self.spin_ctrl)
         
         
-    value_freezer = freezers.FreezerProperty()
+    value_freezer = freezing.FreezerProperty()
                     
         
     def update(self):

@@ -11,7 +11,7 @@ import wx
 
 from python_toolbox import wx_tools
 from python_toolbox import caching
-from python_toolbox import freezers
+from python_toolbox import freezing
 from python_toolbox.context_management import ContextManager
 
 from .accelerator_savvy_window import AcceleratorSavvyWindow
@@ -35,7 +35,7 @@ class CuteWindow(AcceleratorSavvyWindow, BindSavvyEvtHandler, wx.Window):
     calling `wx.Window.__init__`.) # blocktododoc: remove notice?
     '''
     
-    freezer = freezers.FreezerProperty(
+    freezer = freezing.FreezerProperty(
         freezer_type=wx_tools.window_tools.WindowFreezer,
         doc='''Freezer for freezing the window while the suite executes.'''
     )
