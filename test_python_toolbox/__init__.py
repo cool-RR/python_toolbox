@@ -68,5 +68,4 @@ _default_nose_arguments = [
 def invoke_nose(arguments=_default_nose_arguments):
     '''Start Nose using this `test_python_toolbox` test package.'''
     nose.run(defaultTest='test_python_toolbox',
-             argv=([sys.argv[0]] + arguments))
-    
+             argv=(arguments + sys.argv[1:]))
