@@ -7,4 +7,4 @@
 .. _topics-nifty-collections:
 
 :mod:`nifty_collections` - documentation not written
-======================================
+====================================================
