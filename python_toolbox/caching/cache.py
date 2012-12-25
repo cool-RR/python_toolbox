@@ -82,12 +82,12 @@ def cache(max_size=infinity, time_to_keep=None):
 
                 cache_dict = OrderedDict()
                 sorting_key_function = lambda sleek_call_args: \
-                                              cached._cache[sleek_call_args][0]
+                                              cached._cache[sleek_call_args][1]
 
                 
                 def remove_expired_entries():
                     cutting_point = binary_search.binary_search_by_index(
-                        cached._cache,
+                        cached._cache.keys(),
                         sorting_key_function,
                         datetime_module.datetime.now(), 
                         rounding=binary_search.LOW

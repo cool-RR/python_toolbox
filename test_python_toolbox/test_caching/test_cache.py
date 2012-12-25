@@ -191,7 +191,9 @@ def test_double_caching():
     
     
 def test_time_to_keep():
-    f = cache(time_to_keep={'years': 1})(counting_func)
+    f = cache(time_to_keep={'days': 356})(counting_func)
+    
+    assert f('zero') == 0 # Just to get rid of zero
     
     assert f('a') == 1
     assert f('b') == 2
@@ -221,7 +223,8 @@ def test_time_to_keep():
         fixed_time += datetime_module.timedelta(days=100)
         assert map(f, 'abc') == (7, 8, 9)
         assert map(f, 'def') == (10, 11, 12)
+        assert f(a='d') == f(a='d', b=2) == f('d') == 10
         fixed_time += datetime_module.timedelta(days=1000)
         assert map(f, 'abcdef') == (13, 14, 15, 16, 17, 18)
-    
-    
+        assert f(a='d', b='meow') == 19
+        
