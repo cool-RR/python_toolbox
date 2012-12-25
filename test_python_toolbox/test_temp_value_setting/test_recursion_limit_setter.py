@@ -1,7 +1,7 @@
 # Copyright 2009-2012 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''Tests for `python_toolbox.temp_value_setters.TempRecursionLimitSetter`.'''
+'''Tests for `python_toolbox.temp_value_setting.TempRecursionLimitSetter`.'''
 
 from __future__ import with_statement
 
@@ -9,7 +9,7 @@ import sys
 
 from python_toolbox import cute_testing
 
-from python_toolbox.temp_value_setters import TempRecursionLimitSetter
+from python_toolbox.temp_value_setting import TempRecursionLimitSetter
 
 
 def test():

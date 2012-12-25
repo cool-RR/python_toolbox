@@ -1,7 +1,7 @@
 # Copyright 2009-2012 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''Testing `python_toolbox.temp_value_setters.TempWorkingDirectorySetter`.'''
+'''Testing `python_toolbox.temp_value_setting.TempWorkingDirectorySetter`.'''
 
 from __future__ import with_statement
 
@@ -12,7 +12,7 @@ import tempfile
 from python_toolbox import cute_testing
 from python_toolbox import temp_file_tools
 
-from python_toolbox.temp_value_setters import \
+from python_toolbox.temp_value_setting import \
      TempWorkingDirectorySetter
 
 class MyException(Exception):

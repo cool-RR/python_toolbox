@@ -9,7 +9,7 @@ See its documentation for more information.
 
 import wx
 
-from python_toolbox.temp_value_setters import TempValueSetter
+from python_toolbox.temp_value_setting import TempValueSetter
 
 
 class CursorChanger(TempValueSetter):

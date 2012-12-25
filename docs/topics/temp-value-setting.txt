@@ -4,7 +4,7 @@
    "Ram Rachum at ram.rachum.com" including link. The license may be obtained
    at http://creativecommons.org/licenses/by-sa/3.0/
 
-.. _topics-temp-value-setters:
+.. _topics-temp-value-setting:
 
-:mod:`temp_value_setters` - documentation not written
+:mod:`temp_value_setting` - documentation not written
 ======================================

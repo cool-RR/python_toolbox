@@ -1,13 +1,13 @@
 # Copyright 2009-2012 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''Testing module for `python_toolbox.temp_value_setters.TempValueSetter`.'''
+'''Testing module for `python_toolbox.temp_value_setting.TempValueSetter`.'''
 
 from __future__ import with_statement
 
 from python_toolbox import cute_testing
 
-from python_toolbox.temp_value_setters import TempValueSetter
+from python_toolbox.temp_value_setting import TempValueSetter
 
 
 class Object(object):

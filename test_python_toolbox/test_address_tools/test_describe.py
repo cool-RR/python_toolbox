@@ -8,7 +8,7 @@ from __future__ import with_statement
 import nose
 
 from python_toolbox import import_tools
-from python_toolbox.temp_value_setters import TempValueSetter
+from python_toolbox.temp_value_setting import TempValueSetter
 
 import python_toolbox
 from python_toolbox.address_tools import (describe,

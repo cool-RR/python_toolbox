@@ -72,7 +72,7 @@ explaining what it's good for and the basics of using it.
    string-tools
    sys-tools
    temp-file-tools
-   temp-value-setters
+   temp-value-setting
    third-party
    tracing-tools
    version-info

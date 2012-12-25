@@ -11,7 +11,7 @@ import cStringIO
 
 from python_toolbox.context_management import (ContextManager,
                                                     BlankContextManager)
-from python_toolbox.temp_value_setters import TempValueSetter
+from python_toolbox.temp_value_setting import TempValueSetter
 from python_toolbox.reasoned_bool import ReasonedBool
 
 
