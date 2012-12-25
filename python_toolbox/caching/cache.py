@@ -9,6 +9,7 @@ See its documentation for more details.
 # todo: examine thread-safety
 
 import functools
+import datetime as datetime_module
 
 from python_toolbox import decorator_tools
 
@@ -23,7 +24,7 @@ class CLEAR_ENTIRE_CACHE(object):
 
 
 @decorator_tools.helpful_decorator_builder
-def cache(max_size=infinity):
+def cache(max_size=infinity, time_limit=None):
     '''
     Cache a function, saving results so they won't have to be computed again.
     
@@ -54,6 +55,19 @@ def cache(max_size=infinity):
     # compile a function accordingly, so functions with a simple argspec won't
     # have to go through so much shit. update: probably it will help only for
     # completely argumentless function. so do one for those.
+    
+    if time_limit is not None:
+        if not isinstance(time_limit, datetime_module.timedelta):
+            try:
+                time_limit = datetime_module.timedelta(**time_limit)
+            except Exception:
+                raise TypeError(
+                    '`time_limit` must be either a `timedelta` object or a '
+                    'dict of keyword arguments for constructing a '
+                    '`timedelta` object.'
+                )
+        assert isinstance(time_limit, datetime_module.timedelta)
+        
 
     def decorator(function):
         
