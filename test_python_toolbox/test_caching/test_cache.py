@@ -11,6 +11,7 @@ import weakref
 
 import nose.tools
 
+from python_toolbox import caching
 from python_toolbox.caching import cache
 from python_toolbox import temp_value_setting
 from python_toolbox import cute_testing
@@ -206,25 +207,25 @@ def test_time_to_keep():
         return fixed_time
     
     with temp_value_setting.TempValueSetter(
-                                 (datetime_module.datetime, 'now'), _mock_now):
-        assert map(f, 'abc') == (1, 2, 3)
+                                  (caching.decorators, '_get_now'), _mock_now):
+        assert map(f, 'abc') == [1, 2, 3]
         fixed_time += datetime_module.timedelta(days=100)
-        assert map(f, 'abc') == (1, 2, 3)
-        assert map(f, 'def') == (4, 5, 6)
+        assert map(f, 'abc') == [1, 2, 3]
+        assert map(f, 'def') == [4, 5, 6]
         fixed_time += datetime_module.timedelta(days=100)
-        assert map(f, 'abc') == (1, 2, 3)
-        assert map(f, 'def') == (4, 5, 6)
+        assert map(f, 'abc') == [1, 2, 3]
+        assert map(f, 'def') == [4, 5, 6]
         fixed_time += datetime_module.timedelta(days=100)
-        assert map(f, 'abc') == (1, 2, 3)
-        assert map(f, 'def') == (4, 5, 6)
+        assert map(f, 'abc') == [1, 2, 3]
+        assert map(f, 'def') == [4, 5, 6]
         fixed_time += datetime_module.timedelta(days=100)
-        assert map(f, 'abc') == (7, 8, 9)
-        assert map(f, 'def') == (4, 5, 6)
+        assert map(f, 'abc') == [7, 8, 9]
+        assert map(f, 'def') == [4, 5, 6]
         fixed_time += datetime_module.timedelta(days=100)
-        assert map(f, 'abc') == (7, 8, 9)
-        assert map(f, 'def') == (10, 11, 12)
+        assert map(f, 'abc') == [7, 8, 9]
+        assert map(f, 'def') == [10, 11, 12]
         assert f(a='d') == f(a='d', b=2) == f('d') == 10
         fixed_time += datetime_module.timedelta(days=1000)
-        assert map(f, 'abcdef') == (13, 14, 15, 16, 17, 18)
+        assert map(f, 'abcdef') == [13, 14, 15, 16, 17, 18]
         assert f(a='d', b='meow') == 19
         

@@ -23,6 +23,15 @@ class CLEAR_ENTIRE_CACHE(object):
     '''Sentinel object for clearing the entire cache'''
 
 
+def _get_now():
+    '''
+    Get the current datetime.
+    
+    This is specified as a function to make testing easier.
+    '''
+    return datetime_module.datetime.now()
+
+
 @decorator_tools.helpful_decorator_builder
 def cache(max_size=infinity, time_to_keep=None):
     '''
@@ -89,7 +98,7 @@ def cache(max_size=infinity, time_to_keep=None):
                     cutting_point = binary_search.binary_search_by_index(
                         cached._cache.keys(),
                         sorting_key_function,
-                        datetime_module.datetime.now(), 
+                        _get_now(), 
                         rounding=binary_search.LOW
                     )
                     if cutting_point is not None:
@@ -107,7 +116,7 @@ def cache(max_size=infinity, time_to_keep=None):
                         value = function(*args, **kwargs)
                         cached._cache[sleek_call_args] = (
                             value,
-                            datetime_module.datetime.now()
+                            _get_now()
                         )
                         cached._cache.sort(key=sorting_key_function)
                         return value
