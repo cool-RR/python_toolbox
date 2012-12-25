@@ -192,8 +192,11 @@ def test_double_caching():
     
     
 def test_time_to_keep():
+    counting_func.i = 0 # Resetting so we could refer to hard numbers
+                        # without worrying whether other tests made `i` higher.
     f = cache(time_to_keep={'days': 356})(counting_func)
     
+    print(f('zero'))
     assert f('zero') == 0 # Just to get rid of zero
     
     assert f('a') == 1
