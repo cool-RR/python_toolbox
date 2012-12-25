@@ -22,7 +22,8 @@ def test_sleek_ref():
 
     volatile_things = [A(), 1, 4.5, 'meow', u'woof', [1, 2], (1, 2), {1: 2},
                        set([1, 2, 3]), (None, 3, {None: 4})]
-    unvolatile_things = [__builtins__, list, type, sum, None]
+    unvolatile_things = [__builtins__, type, sum, None]
+    # (Used to have `list` here too but Pypy 2.0b choked on it.)
     
     while volatile_things:
         volatile_thing = volatile_things.pop()
