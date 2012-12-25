@@ -96,9 +96,13 @@ class TempValueSetter(ContextManager):
         
         self.value = value
         '''The value to temporarily set to the variable.'''
+        
+        self.active = False
 
         
     def __enter__(self):
+        
+        self.active = True
         
         self.old_value = self.getter()
         '''The old value of the variable, before entering the suite.'''
@@ -108,7 +112,7 @@ class TempValueSetter(ContextManager):
         # In `__exit__` we'll want to check if anyone changed the value of the
         # variable in the suite, which is unallowed. But we can't compare to
         # `.value`, because sometimes when you set a value to a variable, some
-        # mechanism modifies that value fore various reasons, resulting in a
+        # mechanism modifies that value for various reasons, resulting in a
         # supposedly equivalent, but not identical, value. For example this
         # happens when you set the current working directory on Mac OS.
         #
@@ -119,7 +123,7 @@ class TempValueSetter(ContextManager):
         return self
         
         
-    def __exit__(self, *args, **kwargs):
+    def __exit__(self, exc_type, exc_value, exc_traceback):
 
         if self.assert_no_fiddling:
             # Asserting no-one inside the suite changed our variable:
@@ -127,3 +131,4 @@ class TempValueSetter(ContextManager):
         
         self.setter(self.old_value)
         
+        self.active = False

@@ -25,7 +25,21 @@ def test_simple():
     with TempValueSetter((a, 'x'), 2):
         assert a.x == 2
     assert a.x == 1
+
     
+def test_active():
+    a = Object()
+    a.x = 1
+    
+    assert a.x == 1
+    temp_value_setter = TempValueSetter((a, 'x'), 2)
+    assert not temp_value_setter.active
+    with temp_value_setter:
+        assert a.x == 2
+        assert temp_value_setter.active
+    assert not temp_value_setter.active
+    assert a.x == 1
+
 
 def test_setter_getter():
     '''Test `TempValueSetter` with variable inputted as `(getter, setter)`.'''
