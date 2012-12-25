@@ -561,7 +561,8 @@ class Sequence(Sized, Iterable, Container):
     def __subclasshook__(cls, subclass_candidate):
         # Hacking around a Pypy bug:
         if cls is Sequence and \
-           issubclass(subclass_candidate, (tuple, basestring, buffer, xrange)):
+           issubclass(subclass_candidate, (tuple, list, basestring, buffer,
+                                           xrange)):
             return True
         else:
             return NotImplemented
