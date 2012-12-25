@@ -64,7 +64,7 @@ explaining what it's good for and the basics of using it.
    queue-tools
    random-tools
    re-tools
-   read-write-lock
+   locking
    reasoned-bool
    rst-tools
    sequence-tools

@@ -1,6 +1,6 @@
 from __future__ import with_statement
 
-from python_toolbox.read_write_lock import ReadWriteLock
+from python_toolbox.locking import ReadWriteLock
 
 
 def test():
