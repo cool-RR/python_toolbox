@@ -17,7 +17,7 @@ from python_toolbox.wx_tools.widgets.hue_selection_dialog \
      import HueSelectionDialog
 from python_toolbox import wx_tools
 from python_toolbox.wx_tools.widgets.cute_window import CuteWindow
-from python_toolbox.emitters import Emitter
+from python_toolbox.emitting import Emitter
 
 
 class HueControl(CuteWindow):

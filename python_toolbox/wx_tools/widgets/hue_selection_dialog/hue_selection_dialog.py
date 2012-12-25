@@ -12,7 +12,7 @@ See its documentation for more details.
 import wx
 
 from python_toolbox.wx_tools.widgets.cute_dialog import CuteDialog
-from python_toolbox.emitters import Emitter
+from python_toolbox.emitting import Emitter
 
 from .wheel import Wheel
 from .textual import Textual

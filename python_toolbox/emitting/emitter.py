@@ -272,7 +272,7 @@ class Emitter(object):
         Get a string representation of the emitter.
         
         Example output:        
-        <python_toolbox.emitters.emitter.Emitter 'tree_modified' at
+        <python_toolbox.emitting.emitter.Emitter 'tree_modified' at
         0x1c013d0>
         '''
         return '<%s %sat %s>' % (

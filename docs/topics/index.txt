@@ -38,7 +38,7 @@ explaining what it's good for and the basics of using it.
    cute-testing
    decorator-tools
    dict-tools
-   emitters
+   emitting
    exceptions
    freezers
    function-anchoring-type

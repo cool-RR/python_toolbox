@@ -11,7 +11,7 @@ contains:
  
  - `python_toolbox.context_management`: Pimping up your context managers.
  
- - `python_toolbox.emitters`: A publisher-subscriber framework that doesn't
+ - `python_toolbox.emitting`: A publisher-subscriber framework that doesn't
    abuse strings.
    
  - And many, *many* more! The Python Toolbox contains **100+** useful little

@@ -10,7 +10,7 @@ See its documentation for more details.
 from .ordered_set import (
     OrderedSet, KEY, PREV, NEXT
 )
-from python_toolbox.emitters import Emitter
+from python_toolbox.emitting import Emitter
 
 
 class EmittingOrderedSet(OrderedSet):

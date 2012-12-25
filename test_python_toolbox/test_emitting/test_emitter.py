@@ -1,11 +1,11 @@
-from python_toolbox import emitters
+from python_toolbox import emitting
 
 
 def test():
     ''' '''
-    emitter_1 = emitters.Emitter()
-    emitter_2 = emitters.Emitter(inputs=(emitter_1,))
-    emitter_0 = emitters.Emitter(outputs=(emitter_1,))
+    emitter_1 = emitting.Emitter()
+    emitter_2 = emitting.Emitter(inputs=(emitter_1,))
+    emitter_0 = emitting.Emitter(outputs=(emitter_1,))
 
     def my_function():
         my_function.call_counter += 1
