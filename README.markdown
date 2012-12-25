@@ -60,7 +60,7 @@ The Python Toolbox supports Python versions 2.6 and 2.7.
 
 It's tested on both CPython and PyPy.
 
-It also supports PyPy 1.8. (Which runs Python 2.7.)
+It also supports PyPy 2.0. (Which runs Python 2.7.)
 
 # Current state #
 
