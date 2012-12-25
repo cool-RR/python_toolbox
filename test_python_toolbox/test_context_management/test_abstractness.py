@@ -17,8 +17,6 @@ def test_abstractness():
     '''
     A non-abstract-overriding `ContextManager` subclass can't be instantiated.
     '''
-    if sys.version_info[:2] <= (2, 5):
-        raise nose.SkipTest("Python 2.5 doesn't enforce abstractness.")
     
     class EmptyContextManager(ContextManager):
         pass

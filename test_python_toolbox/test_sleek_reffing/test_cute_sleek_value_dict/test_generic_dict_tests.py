@@ -655,9 +655,6 @@ class GenericDictTest(unittest2.TestCase):
     def test_container_iterator(self):
         # Bug #3680: tp_traverse was not implemented for dictiter objects
 
-        if sys.version_info[:2] == (2, 5):
-            raise nose.SkipTest('Bug 3680 will not be fixed in Python 2.5')
-        
         class C(object):
             pass
         iterators = (CuteSleekValueDict.iteritems,

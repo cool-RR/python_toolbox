@@ -8,8 +8,10 @@ import itertools
 
 from python_toolbox.nifty_collections import Counter
 from python_toolbox import math_tools
-from python_toolbox.infinity import infinity
 from python_toolbox.third_party import abcs_collection
+
+
+infinity = float('inf')
 
 
 def are_equal_regardless_of_order(seq1, seq2):

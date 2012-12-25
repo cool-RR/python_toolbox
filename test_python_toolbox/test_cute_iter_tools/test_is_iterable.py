@@ -5,9 +5,11 @@
 
 import nose.tools
 
-from python_toolbox.infinity import infinity
 from python_toolbox import cute_iter_tools
 from python_toolbox.cute_iter_tools import is_iterable
+
+
+infinity = float('inf')
 
 
 def test():

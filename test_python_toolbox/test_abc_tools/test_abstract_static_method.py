@@ -14,10 +14,6 @@ from python_toolbox.abc_tools import AbstractStaticMethod
 def test_instantiate_without_subclassing():
     '''Test you can't instantiate a class with an `AbstractStaticMethod`.'''
     
-    if sys.version_info[:2] <= (2, 5):
-        raise nose.SkipTest("Python 2.5 and below can't enforce abstract "
-                            "methods.")
-    
     class A(object):
         __metaclass__ = abc.ABCMeta
         

@@ -14,11 +14,12 @@ import collections
 from python_toolbox.third_party import abcs_collection
 
 from python_toolbox import cute_iter_tools
-from python_toolbox.infinity import infinity
 from python_toolbox import decorator_tools
 from python_toolbox import comparison_tools
 from python_toolbox import sequence_tools
 
+
+infinity = float('inf')
 
 class _SENTINEL(object):
     '''Sentinel used to detect the end of an iterable.'''

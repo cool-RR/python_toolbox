@@ -4,9 +4,11 @@
 '''Testing module for `sequence_tools.parse_slice`.'''
 
 from python_toolbox import math_tools
-from python_toolbox.infinity import infinity
 
 from python_toolbox.sequence_tools import parse_slice
+
+
+infinity = float('inf')
 
 
 def test():
