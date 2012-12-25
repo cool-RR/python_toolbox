@@ -29,7 +29,7 @@ explaining what it's good for and the basics of using it.
    cheat-hashing
    color-tools
    comparison-tools
-   context-managers
+   context-management
    copy-mode
    copy-tools
    cute-inspect
