@@ -95,13 +95,15 @@ def cache(max_size=infinity, time_to_keep=None):
 
                 
                 def remove_expired_entries():
-                    cutting_point = binary_search.binary_search_by_index(
+                    almost_cutting_point = \
+                                          binary_search.binary_search_by_index(
                         cached._cache.keys(),
                         sorting_key_function,
                         _get_now(), 
                         rounding=binary_search.LOW
                     )
-                    if cutting_point is not None:
+                    if almost_cutting_point is not None:
+                        cutting_point = almost_cutting_point + 1
                         for key in cached._cache.keys()[:cutting_point]:
                             del cached._cache[key]
                             
@@ -116,7 +118,7 @@ def cache(max_size=infinity, time_to_keep=None):
                         value = function(*args, **kwargs)
                         cached._cache[sleek_call_args] = (
                             value,
-                            _get_now()
+                            _get_now() + time_to_keep
                         )
                         cached._cache.sort(key=sorting_key_function)
                         return value
