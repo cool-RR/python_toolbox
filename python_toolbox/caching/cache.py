@@ -11,8 +11,8 @@ See its documentation for more details.
 import functools
 import datetime as datetime_module
 
+from python_toolbox import binary_search
 from python_toolbox import decorator_tools
-
 from python_toolbox.sleek_reffing import SleekCallArgs
 from python_toolbox.nifty_collections import OrderedDict
 
@@ -24,7 +24,7 @@ class CLEAR_ENTIRE_CACHE(object):
 
 
 @decorator_tools.helpful_decorator_builder
-def cache(max_size=infinity, time_limit=None):
+def cache(max_size=infinity, time_to_keep=None):
     '''
     Cache a function, saving results so they won't have to be computed again.
     
@@ -56,17 +56,19 @@ def cache(max_size=infinity, time_limit=None):
     # have to go through so much shit. update: probably it will help only for
     # completely argumentless function. so do one for those.
     
-    if time_limit is not None:
-        if not isinstance(time_limit, datetime_module.timedelta):
+    if time_to_keep is not None:
+        if max_size != infinity:
+            raise NotImplementedError
+        if not isinstance(time_to_keep, datetime_module.timedelta):
             try:
-                time_limit = datetime_module.timedelta(**time_limit)
+                time_to_keep = datetime_module.timedelta(**time_to_keep)
             except Exception:
                 raise TypeError(
                     '`time_limit` must be either a `timedelta` object or a '
                     'dict of keyword arguments for constructing a '
                     '`timedelta` object.'
                 )
-        assert isinstance(time_limit, datetime_module.timedelta)
+        assert isinstance(time_to_keep, datetime_module.timedelta)
         
 
     def decorator(function):
@@ -76,17 +78,53 @@ def cache(max_size=infinity, time_limit=None):
         
         if max_size == infinity:
             
-            cache_dict = {}
+            if time_to_keep:
 
-            def cached(function, *args, **kwargs):
-                sleek_call_args = \
-                    SleekCallArgs(cache_dict, function, *args, **kwargs)
-                try:
-                    return cached._cache[sleek_call_args]
-                except KeyError:
-                    cached._cache[sleek_call_args] = value = \
-                          function(*args, **kwargs)
-                    return value
+                cache_dict = OrderedDict()
+                sorting_key_function = lambda sleek_call_args: \
+                                              cached._cache[sleek_call_args][0]
+
+                
+                def remove_expired_entries():
+                    cutting_point = binary_search.binary_search_by_index(
+                        cached._cache,
+                        sorting_key_function,
+                        datetime_module.datetime.now(), 
+                        rounding=binary_search.LOW
+                    )
+                    if cutting_point is not None:
+                        for key in cached._cache.keys()[:cutting_point]:
+                            del cached._cache[key]
+                            
+                        
+                def cached(function, *args, **kwargs):
+                    remove_expired_entries()
+                    sleek_call_args = \
+                        SleekCallArgs(cache_dict, function, *args, **kwargs)
+                    try:
+                        return cached._cache[sleek_call_args][0]
+                    except KeyError:
+                        value = function(*args, **kwargs)
+                        cached._cache[sleek_call_args] = (
+                            value,
+                            datetime_module.datetime.now()
+                        )
+                        cached._cache.sort(key=sorting_key_function)
+                        return value
+                
+            else: # not time_to_keep
+                
+                cache_dict = {}
+    
+                def cached(function, *args, **kwargs):
+                    sleek_call_args = \
+                        SleekCallArgs(cache_dict, function, *args, **kwargs)
+                    try:
+                        return cached._cache[sleek_call_args]
+                    except KeyError:
+                        cached._cache[sleek_call_args] = value = \
+                              function(*args, **kwargs)
+                        return value
     
         else: # max_size < infinity
             

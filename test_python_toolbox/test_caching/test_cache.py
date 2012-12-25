@@ -5,12 +5,14 @@
 
 from __future__ import with_statement
 
+import datetime as datetime_module
 import re
 import weakref
 
 import nose.tools
 
 from python_toolbox.caching import cache
+from python_toolbox import temp_value_setting
 from python_toolbox import cute_testing
 from python_toolbox import gc_tools
 
@@ -186,4 +188,40 @@ def test_double_caching():
     g = cache()(f)
     
     assert f is g
+    
+    
+def test_time_to_keep():
+    f = cache(time_to_keep={'years': 1})(counting_func)
+    
+    assert f('a') == 1
+    assert f('b') == 2
+    assert f('c') == 3
+    assert f('b') == 2
+    
+    start_datetime = datetime_module.datetime.now()
+    fixed_time = start_datetime
+    def _mock_now():
+        return fixed_time
+    
+    with temp_value_setting.TempValueSetter(
+                                 (datetime_module.datetime, 'now'), _mock_now):
+        assert map(f, 'abc') == (1, 2, 3)
+        fixed_time += datetime_module.timedelta(days=100)
+        assert map(f, 'abc') == (1, 2, 3)
+        assert map(f, 'def') == (4, 5, 6)
+        fixed_time += datetime_module.timedelta(days=100)
+        assert map(f, 'abc') == (1, 2, 3)
+        assert map(f, 'def') == (4, 5, 6)
+        fixed_time += datetime_module.timedelta(days=100)
+        assert map(f, 'abc') == (1, 2, 3)
+        assert map(f, 'def') == (4, 5, 6)
+        fixed_time += datetime_module.timedelta(days=100)
+        assert map(f, 'abc') == (7, 8, 9)
+        assert map(f, 'def') == (4, 5, 6)
+        fixed_time += datetime_module.timedelta(days=100)
+        assert map(f, 'abc') == (7, 8, 9)
+        assert map(f, 'def') == (10, 11, 12)
+        fixed_time += datetime_module.timedelta(days=1000)
+        assert map(f, 'abcdef') == (13, 14, 15, 16, 17, 18)
+    
     
