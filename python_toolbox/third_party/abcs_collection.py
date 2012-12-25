@@ -1,4 +1,5 @@
-# Ram's note: This is cut out of Python 2.7's `_abcoll` module.
+# Ram's note: This is cut out of Python 2.7's `_abcoll` module, and hacked a
+# bit.
 
 # Copyright 2007 Google, Inc. All Rights Reserved.
 # Licensed to PSF under a Contributor Agreement.
@@ -555,6 +556,17 @@ class Sequence(Sized, Iterable, Container):
 
     def count(self, value):
         return sum(1 for v in self if v == value)
+    
+    @classmethod
+    def __subclasshook__(cls, subclass_candidate):
+        # Hacking around a Pypy bug:
+        if cls is Sequence and \
+           issubclass(subclass_candidate, (tuple, basestring, buffer, xrange)):
+            print('Got true!')
+            return True
+        else:
+            return NotImplemented
+        
 
 Sequence.register(tuple)
 Sequence.register(basestring)
