@@ -19,3 +19,4 @@ from . import cursors
 from . import event_tools
 from . import generic_bitmaps
 from . import drawing_tools
+from . import timing
