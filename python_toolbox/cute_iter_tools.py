@@ -190,3 +190,13 @@ def izip_longest(*iterables, **kwargs):
             yield tuple_
     except IndexError:
         raise StopIteration
+
+
+def get_items(iterable, n):
+    '''
+    Get the next `n` items from the iterable as a `tuple`.
+    
+    If there are less than `n` items, no exception will be raised. Whatever
+    items are there will be returned.
+    '''
+    return tuple(shorten(iterable, n))
