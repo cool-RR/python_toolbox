@@ -31,7 +31,7 @@ def test_on_locally_defined_class():
     
     if python_toolbox.__version_info__ <= (0, 4, 1, 'release'):
         raise nose.SkipTest("This test doesn't pass in `python_toolbox` "
-                            "version 0.4 and below, because `describe` :"
+                            "version 0.4.1 and below, because `describe` :"
                             "doesn't support nested classes yet.")
     
     result = describe(A.B)
@@ -251,7 +251,7 @@ def test_function_in_something():
     '''Test `describe` doesn't fail when describing `{1: sum}`.'''
     if python_toolbox.__version_info__ <= (0, 4, 1, 'release'):
         raise nose.SkipTest("This test doesn't pass in `python_toolbox`"
-                            "version 0.4 and below.")
+                            "version 0.4.1 and below.")
     assert describe({1: sum}) == '{1: sum}'
     assert describe((sum, sum, list, chr)) == '(sum, sum, list, chr)'
     
