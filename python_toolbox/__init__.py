@@ -15,6 +15,6 @@ import python_toolbox._bootstrap
 import python_toolbox.version_info
 import python_toolbox.monkeypatch_copy_reg
 
-__version_info__ = python_toolbox.version_info.VersionInfo(0, 4, 0)
+__version_info__ = python_toolbox.version_info.VersionInfo(0, 4, 1)
 __version__ = __version_info__.version_text
 
