@@ -5,9 +5,12 @@
 
 from __future__ import with_statement
 
+import uuid
+
 from python_toolbox import cute_testing
 
 from python_toolbox import monkeypatching_tools
+from python_toolbox import caching
 
 
 def test():
@@ -33,6 +36,27 @@ def test():
     assert not hasattr(a, 'woof')
     
     del meow, woof
+    
+    
+def test_monkeypatch_cached_property():
+
+    class A(object):
+        pass
+
+    @monkeypatching_tools.monkeypatch_method(A)
+    @caching.CachedProperty
+    def meow(a):
+        return (type(a), uuid.uuid4().hex)
+    
+    a0 = A()
+    assert a0.meow == a0.meow == a0.meow == a0.meow
+    
+    a1 = A()
+    assert a1.meow == a1.meow == a1.meow == a1.meow
+    
+    assert a0.meow != a1.meow
+    assert a0.meow[0] == a1.meow[0] == A
+    
     
     
 def test_helpful_message_when_forgetting_parentheses():

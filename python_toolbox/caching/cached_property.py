@@ -61,7 +61,7 @@ class CachedProperty(misc_tools.OwnNameDiscoveringDescriptor):
     
     def __call__(self, method_function):
         '''
-        Decorate method to use value of the `CachedProperty` as a context manager.
+        Decorate method to use value of `CachedProperty` as a context manager.
         '''
         def inner(same_method_function, self_obj, *args, **kwargs):
             with getattr(self_obj, self.get_our_name(self_obj)):
