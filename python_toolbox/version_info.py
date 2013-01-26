@@ -18,33 +18,39 @@ class VersionInfo(tuple):
     Example:
     
         VersionInfo(1, 2, 0) == \
-            VersionInfo(major=1, minor=2, micro=0) == \
+            VersionInfo(major=1, minor=2, micro=0, modifier='release') == \
             (1, 2, 0)
     '''
     
     __slots__ = () 
 
     
-    _fields = ('major', 'minor', 'micro') 
+    _fields = ('major', 'minor', 'micro', 'modifier') 
 
     
-    def __new__(cls, major, minor, micro):
-        '''Create new instance of `VersionInfo(major, minor, micro)`.'''
-        return tuple.__new__(cls, (major, minor, micro)) 
+    def __new__(cls, major, minor=0, micro=0, modifier='release'):
+        '''
+        Create new instance of `VersionInfo(major, minor, micro, modifier)`.
+        '''
+        assert isinstance(major, int)
+        assert isinstance(minor, int)
+        assert isinstance(micro, int)
+        assert isinstance(modifier, basestring)
+        return tuple.__new__(cls, (major, minor, micro, modifier)) 
 
     
     @classmethod
     def _make(cls, iterable, new=tuple.__new__, len=len):
         '''Make a new `VersionInfo` object from a sequence or iterable.'''
         result = new(cls, iterable)
-        if len(result) != 3:
-            raise TypeError('Expected 3 arguments, got %d' % len(result))
+        if len(result) != 4:
+            raise TypeError('Expected 4 arguments, got %d' % len(result))
         return result 
 
     
     def __repr__(self):
         '''Return a nicely formatted representation string.'''
-        return 'VersionInfo(major=%r, minor=%r, micro=%r)' % self 
+        return 'VersionInfo(major=%r, minor=%r, micro=%r, modifier=%r)' % self
 
     
     def _asdict(self):
@@ -59,21 +65,33 @@ class VersionInfo(tuple):
         Make a `VersionInfo` object replacing specified fields with new values.
         '''
         result = \
-            self._make(map(kwargs.pop, ('major', 'minor', 'micro'), self))
+            self._make(map(kwargs.pop, ('major', 'minor', 'micro', 'modifier'),
+                           self))
         if kwargs:
             raise ValueError('Got unexpected field names: %r' % kwargs.keys())
         return result 
     
     
     def __getnewargs__(self):
-        '''Return self as a plain tuple.  Used by copy and pickle.'''
-        return tuple(self) 
+        '''Return self as a plain tuple. Used by copy and pickle.'''
+        return tuple(self)
+    
+    @property
+    def version_text(self):
+        '''A textual description of the version, like '1.4.2 beta'.'''
+        version_text = '%s.%s' % (self.major, self.minor)
+        if self.micro:
+            version_text += '.%s' % self.micro
+        if self.modifier != 'release':
+            version_text += ' %s' % self.modifier
+        return version_text
     
     
-    major = property(_itemgetter(0), doc='Alias for field number 0')
+    major = property(_itemgetter(0))
     
+    minor = property(_itemgetter(1))
     
-    minor = property(_itemgetter(1), doc='Alias for field number 1')
+    micro = property(_itemgetter(2))
+
+    modifier = property(_itemgetter(3))
     
-    
-    micro = property(_itemgetter(2), doc='Alias for field number 2')
