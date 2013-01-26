@@ -27,9 +27,14 @@ class CachedProperty(misc_tools.OwnNameDiscoveringDescriptor):
                 return 'Nice person'
         
             personality = CachedProperty(_get_personality)
-    
+            
+    You can also put in a value as the first argument if you'd like to have it
+    returned instead of using a getter. (It can be a totally static value like
+    `0`). If this value happens to be a callable but you'd still like it to be
+    used as a static value, use `force_value_not_getter=True`.
     '''
-    def __init__(self, getter_or_value, doc=None, name=None):
+    def __init__(self, getter_or_value, doc=None, name=None,
+                 force_value_not_getter=False):
         '''
         Construct the cached property.
         
@@ -41,8 +46,10 @@ class CachedProperty(misc_tools.OwnNameDiscoveringDescriptor):
         class; this will save a bit of processing later.
         '''
         misc_tools.OwnNameDiscoveringDescriptor.__init__(self, name=name)
-        self.getter = getter_or_value if callable(getter_or_value) \
-                      else lambda thing: getter_or_value
+        if callable(getter_or_value) and not force_value_not_getter:
+            self.getter = getter_or_value
+        else:
+            self.getter = lambda thing: getter_or_value
         self.__doc__ = doc or getattr(self.getter, '__doc__', None)
         
         

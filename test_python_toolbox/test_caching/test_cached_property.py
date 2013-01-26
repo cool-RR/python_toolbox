@@ -178,3 +178,11 @@ def test_decorating():
         with a.reentrant_context_manager:
             assert a.my_method(y=7, x=8) == (8, 7, 3)
         
+def test_force_value_not_getter():
+    class A(object):
+        personality = CachedProperty(counting_func,
+                                     force_value_not_getter=True)
+        
+    a = A()
+    assert a.personality == counting_func == a.personality == counting_func
+    
