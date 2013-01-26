@@ -12,7 +12,7 @@ Mailing Lists
 
 There are three Python Toolbox groups, a.k.a. mailing lists:
 
-- If you need help with Python Toolbox, post a message on `the Python Toolbox
+- If you need help with Python Toolbox, post a message on `the python-toolbox
   Google Group <https://groups.google.com/forum/#!forum/python-toolbox>`_.
 
 - If you want to help on the development of Python Toolbox itself, come say
