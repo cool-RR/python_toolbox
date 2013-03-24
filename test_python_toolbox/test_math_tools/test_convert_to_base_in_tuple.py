@@ -44,7 +44,3 @@ def test_negative():
     with cute_testing.RaiseAssertor(NotImplementedError):
         convert_to_base_in_tuple(-23451759010224, 11)
         
-        
-def test_base_1():
-    assert convert_to_base_in_tuple(7, 1) == (1,) * 7
-    assert convert_to_base_in_tuple(17, 1) == (1,) * 17
