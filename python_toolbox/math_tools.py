@@ -43,6 +43,8 @@ def ceil_div(x, y):
 
 def convert_to_base_in_tuple(number, base):
     assert isinstance(number, numbers.Integral)
+    assert isinstance(base, numbers.Integral)
+    assert base >= 2
     sign_ = sign(number)
     if sign_ == 0:
         return (0,)
@@ -51,7 +53,7 @@ def convert_to_base_in_tuple(number, base):
     
     work_in_progress = []
     while number:
-        work_in_progress.append(number % base)
+        work_in_progress.append(int(number % base))
         number //= base
         
     return tuple(reversed(work_in_progress))
