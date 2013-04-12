@@ -14,7 +14,8 @@ from .roundings import (Rounding, roundings, LOW, LOW_IF_BOTH,
                         BOTH)
 
 from .functions import (binary_search, binary_search_by_index,
-                        make_both_data_into_preferred_rounding)
+                        make_both_data_into_preferred_rounding,
+                        _binary_search_both)
         
         
 class BinarySearchProfile(object):
@@ -31,7 +32,7 @@ class BinarySearchProfile(object):
         Construct a `BinarySearchProfile`.
         
         `sequence` is the sequence through which the search is made. `function`
-        is a monotonically rising function on the sequence. `value` is the
+        is a strictly monotonic rising function on the sequence. `value` is the
         wanted value.
         
         In the `both` argument you may put binary search results (with the BOTH
@@ -41,7 +42,10 @@ class BinarySearchProfile(object):
         '''
 
         if both is None:
-            both = binary_search(sequence, function, value, BOTH)
+            both = _binary_search_both(sequence, function, value)
+            
+        if function is None:
+            function = lambda x: x
         
         self.results = {}
         '''

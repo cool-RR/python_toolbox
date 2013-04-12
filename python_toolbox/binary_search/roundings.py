@@ -53,7 +53,10 @@ class LOW_IF_BOTH(Rounding):
     value.
     
     Before it returns the item, it checks if there also exists an item with a
-    value *higher* than the specified value. If there isn't, it returns `None`.
+    value *higher* than the specified value or equal to it. If there isn't, it
+    returns `None`.
+    
+    (If there's an exact match, this rounding will return it.)
     '''
     
     
@@ -65,7 +68,10 @@ class HIGH_IF_BOTH(Rounding):
     value.
     
     Before it returns the item, it checks if there also exists an item with a
-    value *lower* than the specified value. If there isn't, it returns `None`.
+    value *lower* than the specified value or equal to it. If there isn't, it
+    returns `None`.
+    
+    (If there's an exact match, this rounding will return it.)
     '''
     
     
@@ -79,6 +85,7 @@ class CLOSEST_IF_BOTH(Rounding):
     *below* the specified value. (And vice versa.) If there isn't it returns
     `None`.
 
+    (If there's an exact match, this rounding will return it.)
     '''
     
 class LOW_OTHERWISE_HIGH(Rounding):
@@ -89,6 +96,8 @@ class LOW_OTHERWISE_HIGH(Rounding):
     value.
     
     If there is no item below, give the one just above.
+
+    (If there's an exact match, this rounding will return it.)
     '''
 
     
@@ -100,6 +109,8 @@ class HIGH_OTHERWISE_LOW(Rounding):
     value.
     
     If there is no item above, give the one just below.
+
+    (If there's an exact match, this rounding will return it.)
     '''
 
     

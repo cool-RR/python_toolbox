@@ -37,11 +37,75 @@ def binary_search_by_index(sequence, function, value, rounding=CLOSEST):
     return result
 
 
+def _binary_search_both(sequence, function, value):
+    '''
+    Do a binary search through a sequence with the `BOTH` rounding.
+    
+    It is assumed that `function` is a strictly monotonic rising function on
+    `sequence`.
+    
+    Note: This function uses `None` to express its inability to find any
+    matches; therefore, you better not use it on sequences in which None is a
+    possible item.
+    '''
+    # todo: i think this should be changed to return tuples
+    
+    ### Preparing: ############################################################
+    #                                                                         #
+    if function is None:
+        function = lambda x: x
+    
+    get = lambda number: function(sequence[number])
+
+    low = 0
+    high = len(sequence) - 1
+    #                                                                         #
+    ### Finished preparing. ###################################################
+    
+    ### Handling edge cases: ##################################################
+    #                                                                         #
+    if not sequence:
+        return (None, None)
+    
+    low_value, high_value = get(low), get(high)
+        
+    if value in (low_value, high_value):
+        return tuple((value, value))
+    
+    elif low_value > value:
+        return tuple((None, sequence[low]))
+
+    elif high_value < value:
+        return (sequence[high], None)
+    #                                                                         #
+    ### Finished handling edge cases. #########################################
+        
+        
+    # Now we know the value is somewhere inside the sequence.
+    assert low_value < value < high_value
+    
+    while high - low > 1:
+        medium = (low + high) // 2
+        medium_value = get(medium)
+        if medium_value > value:
+            high = medium; high_value = medium_value
+            continue
+        if medium_value < value:
+            low = medium; low_value = medium_value
+            continue
+        if medium_value == value:
+            return (sequence[medium], sequence[medium])
+    
+    return (sequence[low], sequence[high])
+    
+
+
 def binary_search(sequence, function, value, rounding=CLOSEST):
     '''
     Do a binary search through a sequence.
     
-    It is assumed that `function` is a monotonic rising function on `sequence`.
+    It is assumed that `function` is a strictly monotonic rising function on
+    `sequence`.
     
     For all rounding options, a return value of None is returned if no matching
     item is found. (In the case of `rounding=BOTH`, either of the items in the
@@ -54,91 +118,10 @@ def binary_search(sequence, function, value, rounding=CLOSEST):
     For documentation of rounding options, check `binary_search.roundings`.
     '''
     
-    # todo: can break this into `__binary_search_with_both_rounding`
-
-    # todo: i think this should be changed to return tuples
+    from .binary_search_profile import BinarySearchProfile
     
-    assert issubclass(rounding, Rounding)
-    
-    if function is None:
-        function = lambda x: x
-    
-    if not sequence:
-        if rounding is BOTH:
-            return (None, None)
-        else:
-            return None
-    
-    get = lambda number: function(sequence[number])
-
-    low = 0
-    high = len(sequence) - 1
-
-    low_value, high_value = get(low), get(high)
-
-    
-    if low_value >= value:
-
-        if rounding is BOTH:
-            return tuple((None if low_value > value else
-                          sequence[low], sequence[low]))
-        
-        if rounding in (HIGH, HIGH_OTHERWISE_LOW, CLOSEST, LOW_OTHERWISE_HIGH)\
-                                   or (low_value==value and rounding is EXACT):
-            return sequence[low]
-        
-        else:
-            assert rounding in (LOW, LOW_IF_BOTH, HIGH_IF_BOTH) or \
-                                       (rounding is EXACT and low_value!=value)
-            return None
-
-        
-    if high_value <= value:
-
-        if rounding is BOTH:
-            return (sequence[high],
-                    None if high_value < value else sequence[high])
-        
-        if rounding in (LOW, LOW_OTHERWISE_HIGH, HIGH_OTHERWISE_LOW, CLOSEST)\
-                                   or (low_value==value and rounding is EXACT):
-            return sequence[high]
-        
-        else:
-            assert rounding in (HIGH, LOW_IF_BOTH, HIGH_IF_BOTH) or \
-                                       (rounding is EXACT and low_value!=value)
-            return None
-        
-
-    # Now we know the value is somewhere inside the sequence.
-    
-    
-    while high - low > 1:
-        medium = (low + high) // 2
-        medium_value = get(medium)
-        if medium_value > value:
-            high = medium; high_value = medium_value
-            continue
-        if medium_value < value:
-            low = medium; low_value = medium_value
-            continue
-        if medium_value == value:
-            if rounding is BOTH:
-                return (sequence[medium], sequence[medium])
-            after_medium = medium + 1;
-            after_medium_value = get(after_medium)
-            if after_medium_value == value:
-                low = medium; low_value = medium_value
-                high = after_medium; high_value = after_medium_value
-                break
-            else: # get(medium+1) > value
-                high = medium; high_value = medium_value
-                low = medium - 1; low_value = get(low)
-                break
-    
-    both = (sequence[low], sequence[high])
-    
-    return make_both_data_into_preferred_rounding(both, function,
-                                                  value, rounding)
+    binary_search_profile = BinarySearchProfile(sequence, function, value)
+    return binary_search_profile.results[rounding]
 
 
 def make_both_data_into_preferred_rounding(both, function, value, rounding):
@@ -173,8 +156,8 @@ def make_both_data_into_preferred_rounding(both, function, value, rounding):
         return both[1] if both[1] is not None else both[0]
     
     elif rounding is EXACT:
-        results = [state for state in both if
-                   (state is not None and function(state) == value)]
+        results = [item for item in both if
+                   (item is not None and function(item) == value)]
         return results[0] if results else None
     
     elif rounding in (CLOSEST, CLOSEST_IF_BOTH):
@@ -183,7 +166,7 @@ def make_both_data_into_preferred_rounding(both, function, value, rounding):
                 return None
         if both[0] is None: return both[1]
         if both[1] is None: return both[0]
-        distances = [abs(function(state)-value) for state in both]
+        distances = [abs(function(item)-value) for item in both]
         if distances[0] <= distances[1]:
             return both[0]
         else:

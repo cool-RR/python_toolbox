@@ -137,3 +137,76 @@ def test():
         32,
     ) == None
     
+
+def test_single_member():
+    
+    assert binary_search.binary_search(
+        [7],
+        misc_tools.identity_function,
+        7,
+        binary_search.LOW
+    ) == 7
+    
+    assert binary_search.binary_search(
+        [7],
+        misc_tools.identity_function,
+        7,
+        binary_search.HIGH
+    ) == 7
+    
+    assert binary_search.binary_search(
+        [7],
+        misc_tools.identity_function,
+        7,
+        binary_search.HIGH_IF_BOTH
+    ) == 7
+    
+    assert binary_search.binary_search(
+        [7],
+        misc_tools.identity_function,
+        7,
+        binary_search.LOW_IF_BOTH
+    ) == 7
+    
+    assert binary_search.binary_search(
+        [7],
+        misc_tools.identity_function,
+        7,
+        binary_search.EXACT
+    ) == 7
+    
+    assert binary_search.binary_search(
+        [7],
+        misc_tools.identity_function,
+        7,
+        binary_search.BOTH
+    ) == (7, 7)
+    
+    assert binary_search.binary_search(
+        [7],
+        misc_tools.identity_function,
+        7,
+        binary_search.CLOSEST
+    ) == 7
+    
+    assert binary_search.binary_search(
+        [7],
+        misc_tools.identity_function,
+        7,
+        binary_search.CLOSEST_IF_BOTH
+    ) == 7
+    
+    assert binary_search.binary_search(
+        [7],
+        misc_tools.identity_function,
+        7,
+        binary_search.LOW_OTHERWISE_HIGH
+    ) == 7
+    
+    assert binary_search.binary_search(
+        [7],
+        misc_tools.identity_function,
+        7,
+        binary_search.HIGH_OTHERWISE_LOW
+    ) == 7
+    
