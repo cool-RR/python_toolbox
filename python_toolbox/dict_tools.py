@@ -3,6 +3,8 @@
 
 '''Defines several functions that may be useful when working with dicts.'''
 
+import collections
+
 from python_toolbox import cute_iter_tools
 from python_toolbox import comparison_tools
 
@@ -142,3 +144,42 @@ def sum_dicts(dicts):
     for dict_ in dicts:
         result.update(dict_)
     return result
+
+
+def remove_keys(d, keys_to_remove):
+    '''
+    Remove keys from a dict.
+    
+    `keys_to_remove` is allowed to be either an iterable (in which case it will
+    be iterated on and keys with the same name will be removed), a container
+    (in which case this function will iterate over the keys of the dict, and if
+    they're contained they'll be removed), or a filter function (in which case
+    this function will iterate over the keys of the dict, and if they pass the
+    filter function they'll be removed.)
+    
+    If key doesn't exist, doesn't raise an exception.    
+    '''
+    if isinstance(keys_to_remove, collections.Iterable):
+        for key in keys_to_remove:
+            try:
+                del d[key]
+            except KeyError:
+                pass
+    else:
+        if isinstance(keys_to_remove, collections.Container):
+            filter_function = lambda value: value in keys_to_remove
+        else:
+            assert isinstance(keys_to_remove, collections.Callable)
+            filter_function = keys_to_remove
+        for key in list(d.keys()):
+            if filter_function(key):
+                del d[key]
+            
+            
+        
+    
+    
+    
+    
+    
+    
