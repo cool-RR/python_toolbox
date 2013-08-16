@@ -7,6 +7,7 @@
 
 from __future__ import with_statement
 
+import collections
 import itertools
 import __builtin__
 
@@ -200,3 +201,39 @@ def get_items(iterable, n):
     items are there will be returned.
     '''
     return tuple(shorten(iterable, n))
+
+
+def double_filter(filter_function, iterable):
+    iterator = iter(iterable)
+    
+    true_deque = collections.deque()
+    false_deque = collections.deque()
+    
+    def process_value():
+        value = next(iterator)
+        if filter_function(value):
+            true_deque.append(value)
+        else:
+            false_deque.append(value)
+    
+    def make_true_iterator():
+        while True:
+            try:
+                yield true_deque.popleft()
+            except IndexError:
+                try:
+                    process_value()
+                except StopIteration:
+                    break
+
+    def make_false_iterator():
+        while True:
+            try:
+                yield false_deque.popleft()
+            except IndexError:
+                try:
+                    process_value()
+                except StopIteration:
+                    break
+                
+    return (make_true_iterator(), make_false_iterator())
