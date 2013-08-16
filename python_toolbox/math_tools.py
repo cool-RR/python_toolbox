@@ -59,3 +59,22 @@ def convert_to_base_in_tuple(number, base):
     return tuple(reversed(work_in_progress))
   
   
+def get_median(iterable):
+    sorted_values = sorted(iterable)
+
+    if len(iterable) % 2 == 0:
+        higher_midpoint = len(iterable) // 2
+        lower_midpoint = higher_midpoint - 1
+        return (sorted_values[lower_midpoint] +
+                sorted_values[higher_midpoint]) / 2
+    else:
+        midpoint = len(iterable) // 2
+        return sorted_values[midpoint]
+    
+    
+def get_mean(iterable):
+    sum_ = 0
+    for i, value in enumerate(iterable):
+        sum_ += value
+    return sum_ / (i + 1)
+        

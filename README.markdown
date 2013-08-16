@@ -23,6 +23,8 @@ GitHub: https://github.com/cool-RR/python_toolbox
 
 CI server: https://jenkins.shiningpanda.com/python-toolbox/job/python_toolbox/
 
+The Python Toolbox is released under the MIT license.
+
 # Not backward-compatible yet #
 
 Please keep in mind that Python Toolbox is still in alpha stage, and that backward compatibility would *not* be maintained in this phase. 
