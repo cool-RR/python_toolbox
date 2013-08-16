@@ -130,3 +130,15 @@ def devour_keys(d):
         key = d.iterkeys().next()
         del d[key]
         yield key
+        
+        
+def sum_dicts(dicts):
+    '''
+    Return the sum of a bunch of dicts i.e. all the dicts merged into one.
+    
+    If there are any collisions, the latest dicts in the sequence win.
+    '''
+    result = {}
+    for dict_ in dicts:
+        result.update(dict_)
+    return result
