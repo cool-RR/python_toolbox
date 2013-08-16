@@ -8,7 +8,7 @@ from __future__ import division
 import numbers
 
 
-def sign(x):
+def get_sign(x):
     '''Get the sign of a number.'''
     if x > 0:
         return 1
@@ -45,7 +45,7 @@ def convert_to_base_in_tuple(number, base):
     assert isinstance(number, numbers.Integral)
     assert isinstance(base, numbers.Integral)
     assert base >= 2
-    sign_ = sign(number)
+    sign_ = get_sign(number)
     if sign_ == 0:
         return (0,)
     elif sign_ == -1:

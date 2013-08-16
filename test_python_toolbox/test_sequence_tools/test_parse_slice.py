@@ -30,9 +30,9 @@ def test():
         
         # Replacing `infinity` with huge number cause Python's lists can't
         # handle `infinity`:
-        if abs(start) == infinity: start = 10**10 * math_tools.sign(start)
-        if abs(stop) == infinity: stop = 10**10 * math_tools.sign(stop)
-        if abs(step) == infinity: step = 10**10 * math_tools.sign(step)
+        if abs(start) == infinity: start = 10**10 * math_tools.get_sign(start)
+        if abs(stop) == infinity: stop = 10**10 * math_tools.get_sign(stop)
+        if abs(step) == infinity: step = 10**10 * math_tools.get_sign(step)
         #######################################################################
             
         assert [start, stop, step].count(None) == 0

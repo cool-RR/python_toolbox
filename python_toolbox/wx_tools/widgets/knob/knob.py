@@ -154,13 +154,13 @@ class Knob(CutePanel):
     def _ratio_to_value(self, ratio):
         '''Convert from ratio to value.'''
         return self.sensitivity * \
-               math_tools.sign(ratio) * \
+               math_tools.get_sign(ratio) * \
                (4 / math.pi**2) * \
                math.log(math.cos(ratio * math.pi / 2))**2
         
     def _value_to_ratio(self, value):
         '''Convert from value to ratio.'''
-        return math_tools.sign(value) * \
+        return math_tools.get_sign(value) * \
                (2 / math.pi) * \
                math.acos(
                    math.exp(
