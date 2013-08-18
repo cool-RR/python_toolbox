@@ -28,51 +28,40 @@ def get_consecutive_subsequences(iterable, length=2, wrap_around=False):
     not an actual list.)
     '''
     if length == 1:
-        return iterable
+        for item in iterable:
+            yield item
     
     assert length >= 2
     
     iterator = iter(iterable)
     
+    first_items = get_items(iterator, length - 1, container=list)
     if wrap_around:
-        first_items = get_items(iterator, length - 1)
         len_first_items = len(first_items)
         xrange_len_first_items = xrange(len(first_items))
         if len(first_items) < length - 1:
-            return (
-                (first_items[(i+j) % len_first_items] for j in
-                 xrange_len_first_items) for i in xrange_len_first_items
-            )
+            for i in xrange_len_first_items: # to
+                yield (first_items[(i+j) % len_first_items] for j in
+                       xrange_len_first_items)
         else:
-            iterator = itertools.chain(
-                iter(first_items), iterator
-            )
+            iterator = itertools.chain(iterator, first_items)
             
-    Z Z Z Z Z
-    old = first_item
+    deque = collections.deque(first_items)
+    deque.appendleft(object()) # Filler to be removed on first iteration.
     
     if not wrap_around:
-        # If `wrap_around` is `False`, we avoid holding a reference to
-        # `first_item`, because it may need to be garbage-collected:
-        del first_item 
+        # If `wrap_around` is `False`, we avoid holding a reference to items in
+        # `first_items`, because they may need to be garbage-collected:
+        del first_items[:]
+        # We empty the sequence instead of deleting it because deleting it at
+        # this point would make for illegal Python syntax.
     
-    try:
-        second_item = iterator.next()
-    except StopIteration:
-        if wrap_around:
-            yield (first_item, first_item)
-        raise StopIteration
-    
-    current = second_item
-    yield (old, current)
-    old = current
+    yield tuple(first_items)
     
     for current in iterator:
-        yield (old, current)
-        old = current
-        
-    if wrap_around:
-        yield (current, first_item)
+        deque.popleft()
+        deque.append(current)
+        yield tuple(deque)
         
     
 def shorten(iterable, n):
@@ -209,14 +198,14 @@ def izip_longest(*iterables, **kwargs):
         raise StopIteration
 
 
-def get_items(iterable, n):
+def get_items(iterable, n, container=tuple):
     '''
     Get the next `n` items from the iterable as a `tuple`.
     
     If there are less than `n` items, no exception will be raised. Whatever
     items are there will be returned.
     '''
-    return tuple(shorten(iterable, n))
+    return container(shorten(iterable, n))
 
 
 def double_filter(filter_function, iterable):

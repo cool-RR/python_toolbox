@@ -206,9 +206,9 @@ def find_clear_place_on_circle(circle_points, circle_size=1):
                         "size %s." % (last_point, circle_size))
     clear_space = {}
     
-    for first_point, second_point in cute_iter_tools.consecutive_pairs(
-        sorted_circle_points, wrap_around=True
-        ):
+    for first_point, second_point in \
+        cute_iter_tools.get_consecutive_subsequences(sorted_circle_points,
+                                                     wrap_around=True):
         
         clear_space[first_point] = second_point - first_point
         

@@ -25,7 +25,7 @@ def all_equal(iterable, exhaustive=False):
     if exhaustive is True:
         pairs = sequence_tools.combinations(list(iterable), 2)
     else: # exhaustive is False
-        pairs = cute_iter_tools.consecutive_pairs(iterable)
+        pairs = cute_iter_tools.get_consecutive_subsequences(iterable)
         
     return all(a==b for (a, b) in pairs)
 
