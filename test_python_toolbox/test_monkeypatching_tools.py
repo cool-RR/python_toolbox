@@ -6,7 +6,9 @@
 from __future__ import with_statement
 
 import uuid
+import types
 
+from python_toolbox import cute_inspect
 from python_toolbox import cute_testing
 
 from python_toolbox import monkeypatching_tools
@@ -75,7 +77,7 @@ def test_helpful_message_when_forgetting_parentheses():
         confusedly_forget_parentheses()
         
 
-def test_monkeypatch_static_method():
+def test_monkeypatch_staticmethod():
 
     class A(object):
         @staticmethod
@@ -87,6 +89,10 @@ def test_monkeypatch_static_method():
     def my_static_method(x):
         return 'Success'
     
+    assert isinstance(cute_inspect.getattr_static(A, 'my_static_method'),
+                      staticmethod)
+    assert isinstance(A.my_static_method, types.FunctionType)
+    
     assert A.my_static_method(3) == A.my_static_method('Whatever') == \
                                                                       'Success'
     
@@ -95,24 +101,57 @@ def test_monkeypatch_static_method():
                                                                       'Success'
     
     
-def test_monkeypatch_static_method():
+def test_monkeypatch_classmethod():
 
     class A(object):
-        @staticmethod
-        def my_static_method(x):
+        @classmethod
+        def my_class_method(cls):
             raise 'Flow should never reach here.'
         
     @monkeypatching_tools.monkeypatch_method(A)
-    @staticmethod
-    def my_static_method(x):
-        return 'Success'
+    @classmethod
+    def my_class_method(cls):
+        return cls
+
+    assert isinstance(cute_inspect.getattr_static(A, 'my_class_method'),
+                      classmethod)
+    assert isinstance(A.my_class_method, types.MethodType)
     
-    assert A.my_static_method(3) == A.my_static_method('Whatever') == \
-                                                                      'Success'
+    assert A.my_class_method() == A
     
     a0 = A()
-    assert a0.my_static_method(3) == a0.my_static_method('Whatever') == \
-                                                                      'Success'
+    assert a0.my_class_method() == A
+        
+        
+        
+def test_monkeypatch_classmethod_subclass():
+    '''
+    Test `monkeypatch_method` on a subclass of `classmethod`.
+    
+    This is useful in Django, that uses its own `classmethod` subclass.
+    '''
+    class FunkyClassMethod(classmethod):
+        is_funky = True
+
+    class A(object):
+        @FunkyClassMethod
+        def my_funky_class_method(cls):
+            raise 'Flow should never reach here.'
+        
+    @monkeypatching_tools.monkeypatch_method(A)
+    @FunkyClassMethod
+    def my_funky_class_method(cls):
+        return cls
+
+    assert isinstance(cute_inspect.getattr_static(A, 'my_funky_class_method'),
+                      FunkyClassMethod)
+    assert cute_inspect.getattr_static(A, 'my_funky_class_method').is_funky
+    assert isinstance(A.my_funky_class_method, types.MethodType)
+    
+    assert A.my_funky_class_method() == A
+    
+    a0 = A()
+    assert a0.my_funky_class_method() == A
         
         
         
