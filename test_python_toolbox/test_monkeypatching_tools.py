@@ -73,3 +73,49 @@ def test_helpful_message_when_forgetting_parentheses():
     ):
         
         confusedly_forget_parentheses()
+        
+
+def test_monkeypatch_static_method():
+
+    class A(object):
+        @staticmethod
+        def my_static_method(x):
+            raise 'Flow should never reach here.'
+        
+    @monkeypatching_tools.monkeypatch_method(A)
+    @staticmethod
+    def my_static_method(x):
+        return 'Success'
+    
+    assert A.my_static_method(3) == A.my_static_method('Whatever') == \
+                                                                      'Success'
+    
+    a0 = A()
+    assert a0.my_static_method(3) == a0.my_static_method('Whatever') == \
+                                                                      'Success'
+    
+    
+def test_monkeypatch_static_method():
+
+    class A(object):
+        @staticmethod
+        def my_static_method(x):
+            raise 'Flow should never reach here.'
+        
+    @monkeypatching_tools.monkeypatch_method(A)
+    @staticmethod
+    def my_static_method(x):
+        return 'Success'
+    
+    assert A.my_static_method(3) == A.my_static_method('Whatever') == \
+                                                                      'Success'
+    
+    a0 = A()
+    assert a0.my_static_method(3) == a0.my_static_method('Whatever') == \
+                                                                      'Success'
+        
+        
+        
+        
+    
+    

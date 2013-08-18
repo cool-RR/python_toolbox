@@ -42,12 +42,18 @@ def monkeypatch_method(class_, name=None):
             # class_)`, is subtly wrong, make tests to prove
             setattr(class_, name_, new_method)
             return function
-        else:
-            assert isinstance(function, caching.CachedProperty)
+        elif isinstance(function, caching.CachedProperty):
             cached_property = function
             if not isinstance(cached_property.getter, types.FunctionType):
                 raise NotImplemented
             name_ = cached_property.getter.__name__
             setattr(class_, name_, cached_property)
             return cached_property
+        elif isinstance(function, (classmethod, staticmethod)):
+            name_ = function.__func__.__name__
+            setattr(class_, name_, function)
+            return function
+        else:
+            raise NotImplemented("`monkeypatch_method` doesn't know how to "
+                                 "handle this kind of function.")
     return decorator
