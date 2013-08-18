@@ -15,8 +15,9 @@ import __builtin__
 infinity = float('inf')
 
 
-def consecutive_pairs(iterable, wrap_around=False):
+def get_consecutive_subsequences(iterable, length=2, wrap_around=False):
     '''
+    blocktododoc
     Iterate over successive pairs from the iterable.
     
     If `wrap_around=True`, will include a `(last_item, first_item)` pair at the
@@ -26,13 +27,28 @@ def consecutive_pairs(iterable, wrap_around=False):
     would be `[(0, 1), (1, 2), (2, 3)]`. (Except it would be an iterator and
     not an actual list.)
     '''
+    if length == 1:
+        return iterable
+    
+    assert length >= 2
+    
     iterator = iter(iterable)
     
-    try:
-        first_item = iterator.next()
-    except StopIteration:
-        raise StopIteration
-    
+    if wrap_around:
+        first_items = get_items(iterator, length - 1)
+        len_first_items = len(first_items)
+        xrange_len_first_items = xrange(len(first_items))
+        if len(first_items) < length - 1:
+            return (
+                (first_items[(i+j) % len_first_items] for j in
+                 xrange_len_first_items) for i in xrange_len_first_items
+            )
+        else:
+            iterator = itertools.chain(
+                iter(first_items), iterator
+            )
+            
+    Z Z Z Z Z
     old = first_item
     
     if not wrap_around:
