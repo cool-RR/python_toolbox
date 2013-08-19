@@ -35,28 +35,25 @@ def get_consecutive_subsequences(iterable, length=2, wrap_around=False):
     
     iterator = iter(iterable)
     
-    first_items = get_items(iterator, length - 1, container=list)
+    first_items = get_items(iterator, length)
     if wrap_around:
-        len_first_items = len(first_items)
-        xrange_len_first_items = xrange(len(first_items))
-        if len(first_items) < length - 1:
-            for i in xrange_len_first_items: # to
-                yield (first_items[(i+j) % len_first_items] for j in
-                       xrange_len_first_items)
-        else:
-            iterator = itertools.chain(iterator, first_items)
+        if len(first_items) < length:
+            raise NotImplementedError(
+                '`length` is greater than the length of the iterable, and '
+                '`wrap_around` is set to `True`. Behavior for this is not '
+                'implemented, because it would require repeating some members '
+                'more than once.'
+            )
+        first_items_except_last = first_items[:-1]
+        iterator = itertools.chain(iterator, first_items_except_last)
             
     deque = collections.deque(first_items)
-    deque.appendleft(object()) # Filler to be removed on first iteration.
+    yield first_items
     
     if not wrap_around:
         # If `wrap_around` is `False`, we avoid holding a reference to items in
         # `first_items`, because they may need to be garbage-collected:
-        del first_items[:]
-        # We empty the sequence instead of deleting it because deleting it at
-        # this point would make for illegal Python syntax.
-    
-    yield tuple(first_items)
+        del first_items
     
     for current in iterator:
         deque.popleft()
