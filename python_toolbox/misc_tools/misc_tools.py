@@ -5,6 +5,7 @@
 
 from __future__ import division
 
+import operator
 import os.path
 import re
 import math
@@ -238,4 +239,19 @@ def add_extension_if_plain(path, extension):
         return path
     else: # not existing_extension
         return without_extension + extension
+    
+    
+def general_sum(things, start=None):
+    if start is None:
+        return reduce(operator.add, things)
+    else:
+        return reduce(operator.add, things, start)
+    
+    
+def general_product(things, start=None):
+    if start is None:
+        return reduce(operator.mul, things)
+    else:
+        return reduce(operator.mul, things, start)
+
     
