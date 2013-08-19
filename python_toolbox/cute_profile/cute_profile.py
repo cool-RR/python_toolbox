@@ -8,14 +8,33 @@ See its documentation for more details.
 '''
 
 import functools
+import marshal
 
 from python_toolbox import decorator_tools
 
 from . import base_profile
 
 
-def profile_ready(condition=None, off_after=True, sort=2):
+def profile(statement, globals_, locals_):
+    profile_ = base_profile.Profile()
+    result = None
+    try:
+        profile_ = profile_.runctx(statement, globals_, locals_)
+    except SystemExit:
+        pass
+    profile_.create_stats()
+    profile_result = marshal.dumps(self.stats, f)
+    return profile_result
+
+
+def profile_expression(expression, globals_, locals_):
+    profile_result = profile('result = %s' % expression, globals(), locals())
+    return (locals()['result'], profile_result)
+
+
+def profile_ready(condition=None, off_after=True, profile_handler=None):
     '''
+    blocktododoc
     Decorator for setting a function to be ready for profiling.
     
     For example:
@@ -73,12 +92,14 @@ def profile_ready(condition=None, off_after=True, sort=2):
                 # This line puts it in locals, weird:
                 decorated_function.original_function
                 
-                base_profile.runctx(
-                    'result = '
+                result, profile_result = profile_expression(
                     'decorated_function.original_function(*args, **kwargs)',
-                    globals(), locals(), sort=decorated_function.sort
-                )                
-                return locals()['result']
+                    globals(), locals()
+                )
+                
+                Z Z Z Do shit depending on `profile_handler`. Allow filename,  folder,  email address, or index for  printing (sort). In any case do everything on a thread.
+                
+                return result
             
             else: # decorated_function.profiling_on is False
                 
