@@ -133,7 +133,7 @@ my_classifiers = [
 setuptools.setup(
     name='python_toolbox',
     version='0.4.1',
-    requires=['distribute'],
+    requires=['distribute', 'envelopes'],
     test_suite='nose.collector',
     install_requires=['distribute'],
     tests_require=['nose>=1.0.0',

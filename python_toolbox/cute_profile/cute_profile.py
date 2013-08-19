@@ -98,7 +98,7 @@ def profile_ready(condition=None, off_after=True, profile_handler=None):
                     globals(), locals()
                 )
 
-                if misc_tools
+                if misc_tools.is_legal_email_address(profile_handler)
                 
                 Z Z Z Do shit depending on `profile_handler`. Allow filename,  folder,  email address, or index for  printing (sort). In any case do everything on a thread.
                 
