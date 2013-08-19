@@ -13,6 +13,18 @@ import types
 
 from python_toolbox import cute_iter_tools
 
+
+_email_pattern = re.compile(
+    r"(^[-!#$%&'*+/=?^_`{}|~0-9A-Z]+(\.[-!#$%&'*+/=?^_`{}|~0-9A-Z]+)*"
+    r'|^"([\001-\010\013\014\016-\037!#-\[\]-\177]|\\[\001-\011\013\014\016'
+    r'-\177])*"'
+    r')@((?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|'
+    r'[A-Z0-9-]{2,}\.?)$)'
+    r'|\[(25[0-5]|2[0-4]\d|[0-1]?\d?\d)(\.(25[0-5]|2[0-4]\d|'
+    r'[0-1]?\d?\d)){3}\]$',
+    re.IGNORECASE
+)
+
     
 def is_subclass(candidate, base_class):
     '''
@@ -255,3 +267,5 @@ def general_product(things, start=None):
         return reduce(operator.mul, things, start)
 
     
+def is_legal_email_address(email_address_candidate):
+    return bool(_email_pattern.match(email_address_candidate))

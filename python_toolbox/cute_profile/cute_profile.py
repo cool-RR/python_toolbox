@@ -10,6 +10,7 @@ See its documentation for more details.
 import functools
 import marshal
 
+from python_toolbox import misc_tools
 from python_toolbox import decorator_tools
 
 from . import base_profile
@@ -96,6 +97,8 @@ def profile_ready(condition=None, off_after=True, profile_handler=None):
                     'decorated_function.original_function(*args, **kwargs)',
                     globals(), locals()
                 )
+
+                if misc_tools
                 
                 Z Z Z Do shit depending on `profile_handler`. Allow filename,  folder,  email address, or index for  printing (sort). In any case do everything on a thread.
                 
