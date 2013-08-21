@@ -16,6 +16,7 @@ infinity = float('inf')
 
 def are_equal_regardless_of_order(seq1, seq2):
     '''
+    blocktododoc
     Return whether the two sequences are equal in the elements they contain,
     regardless of the order of the elements.
 
@@ -261,18 +262,22 @@ def to_tuple(single_or_sequence, item_type=None, item_test=None):
             return tuple(single_or_sequence)
 
 
-def pop_until(sequence, condition=None):
+def pop_until(sequence, condition=bool):
     '''
+    blocktododoc
+    
     Propagates whatever error is raised on popping the sequence.
     '''
-    condition = condition or bool
     while True:
         item = sequence.pop()
         if condition(item):
             return item
 
 
-
+def get_recurrences(sequence):
+    return {item: n_recurrences for item, n_recurrences in
+            Counter(sequence).most_common() if n_recurrences >= 2}
+    
 ### Not using now, might want in future:
 
 #def heads(sequence, include_empty=False, include_full=True):    
