@@ -244,3 +244,7 @@ def double_filter(filter_function, iterable):
                     break
                 
     return (make_true_iterator(), make_false_iterator())
+
+
+
+    
