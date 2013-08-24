@@ -13,7 +13,8 @@ getsource = forked_inspect.getsource
 
 ###############################################################################
 
-# Copied from in-development Python 3.4, for the sake of `getattr_static`:
+# Copied from in-development Python 3.4, with changes from PyPy, for the sake
+# of `getattr_static`:
 
 _sentinel = object()
 
@@ -45,17 +46,24 @@ def _is_type(obj):
         return False
     return True
 
+_dict_attr = type.__dict__["__dict__"]
+if hasattr(_dict_attr, "__objclass__"):
+    _objclass_check = lambda d, entry: d.__objclass__ is entry
+else:
+    # PyPy __dict__ descriptors are 'generic' and lack __objclass__
+    _objclass_check = lambda d, entry: not hasattr(d, "__objclass__")
+
+
 def _shadowed_dict(klass):
-    dict_attr = type.__dict__["__dict__"]
     for entry in _static_getmro(klass):
         try:
-            class_dict = dict_attr.__get__(entry)["__dict__"]
+            class_dict = _dict_attr.__get__(entry)["__dict__"]
         except KeyError:
             pass
         else:
             if not (type(class_dict) is types.GetSetDescriptorType and
                     class_dict.__name__ == "__dict__" and
-                    class_dict.__objclass__ is entry):
+                    _objclass_check(class_dict, entry)):
                 return class_dict
     return _sentinel
 
