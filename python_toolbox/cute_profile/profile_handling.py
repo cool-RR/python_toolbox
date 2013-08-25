@@ -8,7 +8,7 @@ import abc
 import os.path
 import pstats
 
-import envelopes
+from python_toolbox.third_party import envelopes
 
 from python_toolbox import caching
 from python_toolbox import misc_tools
@@ -28,9 +28,8 @@ class BaseProfileHandler(object):
     def handle(self):
         pass
     
-    default_file_name = caching.CachedProperty(
-        lambda self: 'profile-%s' % datetime_module.datetime.now()
-    )
+    make_file_name = lambda self: ('%s.profile' %
+                              datetime_module.datetime.now()).replace(':', '.')
         
     
 
@@ -66,8 +65,8 @@ class EmailProfileHandler(AuxiliaryThreadProfileHandler):
             subject='Profile data', 
         )
         
-        envelope.add_attachment_from_memory(self.profile_data,
-                                            self.default_file_name, 
+        envelope.add_attachment_from_string(self.profile_data,
+                                            self.make_file_name(), 
                                             'application/octet-stream')
         
         envelope.send(self.smtp_server, login=self.smtp_user,
@@ -82,7 +81,7 @@ class FolderProfileHandler(AuxiliaryThreadProfileHandler):
         self.folder_path = folder_path
         
     def thread_job(self):
-        with open(os.path.join(self.folder_path, self.default_file_name), \
+        with open(os.path.join(self.folder_path, self.make_file_name()), \
                                                           'wb') as output_file:
             output_file.write(self.profile_data)
         

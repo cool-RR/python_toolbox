@@ -3,7 +3,12 @@
 
 '''Testing module for `python_toolbox.cute_profile`.'''
 
+import os.path
+import dummy_threading
+
 from python_toolbox import cute_profile
+from python_toolbox import temp_value_setting
+from python_toolbox import temp_file_tools
 from python_toolbox import cute_testing
 
 from .shared import call_and_check_if_profiled
@@ -217,3 +222,62 @@ def test_polite_wrapper():
         cute_profile.profile_ready()(func),
         func
     )
+    
+
+def test_folder_handler():
+    with temp_value_setting.TempValueSetter((cute_profile.profile_handling,
+                                             'threading'), dummy_threading):
+        with temp_file_tools.TemporaryFolder(suffix='python_toolbox_testing') \
+                                                                as temp_folder:
+            f = cute_profile.profile_ready(profile_handler=temp_folder)(func)
+    
+            f(1, 2)
+            assert len(os.listdir(temp_folder)) == 0
+    
+            f(1, 2)
+            assert len(os.listdir(temp_folder)) == 0
+    
+            f.profiling_on = True
+            
+            f(1, 2)
+            assert len(os.listdir(temp_folder)) == 1
+    
+            f(1, 2)
+            assert len(os.listdir(temp_folder)) == 1
+            
+            f.profiling_on = True
+            
+            f(1, 2)
+            assert len(os.listdir(temp_folder)) == 2
+    
+            f(1, 2)
+            assert len(os.listdir(temp_folder)) == 2
+            
+
+def test_email_handler():
+    with temp_value_setting.TempValueSetter((cute_profile.profile_handling,
+                                             'threading'), dummy_threading):
+        f = cute_profile.profile_ready(profile_handler=temp_folder)(func)
+
+        f(1, 2)
+        assert len(os.listdir(temp_folder)) == 0
+
+        f(1, 2)
+        assert len(os.listdir(temp_folder)) == 0
+
+        f.profiling_on = True
+        
+        f(1, 2)
+        assert len(os.listdir(temp_folder)) == 1
+
+        f(1, 2)
+        assert len(os.listdir(temp_folder)) == 1
+        
+        f.profiling_on = True
+        
+        f(1, 2)
+        assert len(os.listdir(temp_folder)) == 2
+
+        f(1, 2)
+        assert len(os.listdir(temp_folder)) == 2
+        
