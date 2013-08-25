@@ -3,6 +3,7 @@
 
 import threading
 import datetime as datetime_module
+import abc
 import os.path
 import pstats
 
@@ -93,15 +94,16 @@ class PrintProfileHandler(BaseProfileHandler):
 
 
 def get_profile_handler(profile_handler_string):
-    if misc_tools.is_legal_email_address(profile_handler_string.split('\n')
-                                                                          [0]):
-        return EmailProfileHandler(*profile_handler_string.split('\n'))
-    elif os.path.isdir(profile_handler_string):
-        return FolderProfileHandler(profile_handler_string)
-    else:
-        assert profile_handler_string == '' or int(profile_handler_string)
+    if not profile_handler_string or profile_handler_string in \
+                                                        map(str, range(-1, 5)):
         try:
             sort_order = int(profile_handler_string)
-        except ValueError:
+        except (ValueError, TypeError):
             sort_order = -1
-        return PrintProfileHandler(sort_order)
+        return PrintProfileHandler(sort_order)    
+    elif misc_tools.is_legal_email_address(profile_handler_string.split('\n')
+                                                                          [0]):
+        return EmailProfileHandler(*profile_handler_string.split('\n'))
+    else:
+        assert os.path.isdir(profile_handler_string)
+        return FolderProfileHandler(profile_handler_string)

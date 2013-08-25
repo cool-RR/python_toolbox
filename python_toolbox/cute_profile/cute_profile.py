@@ -25,12 +25,12 @@ def profile(statement, globals_, locals_):
     except SystemExit:
         pass
     profile_.create_stats()
-    profile_result = marshal.dumps(self.stats, f)
+    profile_result = marshal.dumps(profile_.stats)
     return profile_result
 
 
 def profile_expression(expression, globals_, locals_):
-    profile_result = profile('result = %s' % expression, globals(), locals())
+    profile_result = profile('result = %s' % expression, globals_, locals_)
     return (locals()['result'], profile_result)
 
 
@@ -98,15 +98,9 @@ def profile_ready(condition=None, off_after=True, profile_handler=None):
                     'decorated_function.original_function(*args, **kwargs)',
                     globals(), locals()
                 )
+                
+                decorated_function.profile_handler(profile_result)
 
-                
-                profile_handler = \
-                          profile_handling.get_profile_handler(profile_handler)
-                
-                profile_handler(profile_result)
-                
-                Z Z Z Do shit depending on `profile_handler`. Allow filename,  folder,  email address, or index for  printing (sort). In any case do everything on a thread.
-                
                 return result
             
             else: # decorated_function.profiling_on is False
@@ -119,7 +113,8 @@ def profile_ready(condition=None, off_after=True, profile_handler=None):
         decorated_function.profiling_on = None
         decorated_function.condition = condition
         decorated_function.off_after = off_after
-        decorated_function.sort = sort
+        decorated_function.profile_handler = \
+                          profile_handling.get_profile_handler(profile_handler)
         
         return decorated_function
     
