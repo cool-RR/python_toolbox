@@ -14,6 +14,7 @@ from python_toolbox import misc_tools
 from python_toolbox import decorator_tools
 
 from . import base_profile
+from . import profile_handling
 
 
 def profile(statement, globals_, locals_):
@@ -98,7 +99,11 @@ def profile_ready(condition=None, off_after=True, profile_handler=None):
                     globals(), locals()
                 )
 
-                if misc_tools.is_legal_email_address(profile_handler)
+                
+                profile_handler = \
+                          profile_handling.get_profile_handler(profile_handler)
+                
+                profile_handler(profile_result)
                 
                 Z Z Z Do shit depending on `profile_handler`. Allow filename,  folder,  email address, or index for  printing (sort). In any case do everything on a thread.
                 
