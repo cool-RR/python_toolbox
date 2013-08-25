@@ -3,6 +3,7 @@
 
 import threading
 import datetime as datetime_module
+import marshal
 import abc
 import os.path
 import pstats
@@ -18,8 +19,13 @@ from . import base_profile
 class BaseProfileHandler(object):
     __metaclass__ = abc.ABCMeta
     
+    def __call__(self, profile):
+        self.profile = profile
+        self.profile_data = marshal.dumps(profile.stats)
+        return self.handle()
+    
     @abc.abstractmethod
-    def __call__(self):
+    def handle(self):
         pass
     
     default_file_name = caching.CachedProperty(
@@ -32,7 +38,7 @@ class AuxiliaryThreadProfileHandler(BaseProfileHandler):
     
     thread = None
     
-    def __call__(self):
+    def handle(self):
         self.thread = threading.Thread(target=self.thread_job)
         self.thread.start()
         
@@ -54,13 +60,13 @@ class EmailProfileHandler(AuxiliaryThreadProfileHandler):
         self.smtp_password = smtp_password
         self.use_tls = use_tls
         
-    def thread_job(self, profile_data):
+    def thread_job(self):
         envelope = envelopes.Envelope(
             to_addr=self.email_address,
             subject='Profile data', 
         )
         
-        envelope.add_attachment_from_memory(profile_data,
+        envelope.add_attachment_from_memory(self.profile_data,
                                             self.default_file_name, 
                                             'application/octet-stream')
         
@@ -75,10 +81,10 @@ class FolderProfileHandler(AuxiliaryThreadProfileHandler):
     def __init__(self, folder_path):
         self.folder_path = folder_path
         
-    def thread_job(self, profile_data):
+    def thread_job(self):
         with open(os.path.join(self.folder_path, self.default_file_name), \
                                                           'wb') as output_file:
-            output_file.write(profile_data)
+            output_file.write(self.profile_data)
         
 
 
@@ -87,9 +93,9 @@ class PrintProfileHandler(BaseProfileHandler):
     def __init__(self, sort_order):
         self.sort_order = sort_order
         
-    def __call__(self, profile_data):
-        pstats.Stats(self).strip_dirs().sort_stats(self.sort_order). \
-                                                                  print_stats()
+    def handle(self):
+        self.profile.print_stats(self.sort_order)
+        
         
 
 

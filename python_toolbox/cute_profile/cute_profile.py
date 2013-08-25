@@ -25,13 +25,12 @@ def profile(statement, globals_, locals_):
     except SystemExit:
         pass
     profile_.create_stats()
-    profile_result = marshal.dumps(profile_.stats)
-    return profile_result
+    return profile_
 
 
 def profile_expression(expression, globals_, locals_):
-    profile_result = profile('result = %s' % expression, globals_, locals_)
-    return (locals()['result'], profile_result)
+    profile_ = profile('result = %s' % expression, globals_, locals_)
+    return (locals_['result'], profile_)
 
 
 def profile_ready(condition=None, off_after=True, profile_handler=None):
@@ -94,12 +93,12 @@ def profile_ready(condition=None, off_after=True, profile_handler=None):
                 # This line puts it in locals, weird:
                 decorated_function.original_function
                 
-                result, profile_result = profile_expression(
+                result, profile_ = profile_expression(
                     'decorated_function.original_function(*args, **kwargs)',
                     globals(), locals()
                 )
                 
-                decorated_function.profile_handler(profile_result)
+                decorated_function.profile_handler(profile_)
 
                 return result
             
