@@ -9,7 +9,7 @@ from python_toolbox import monkeypatching_tools
 
 
 @monkeypatching_tools.monkeypatch_method(envelopes.Envelope)
-def add_attachment_from_string(self, file_data,
+def add_attachment_from_string(self, file_data, file_name, 
                                mimetype='application/octet-stream'):
     from python_toolbox.third_party.envelopes.envelope import \
                                                    MIMEBase, email_encoders, os
@@ -19,9 +19,8 @@ def add_attachment_from_string(self, file_data,
     part.set_payload(file_data)
     email_encoders.encode_base64(part)
 
-    part_filename = os.path.basename(self._encoded(file_path))
     part.add_header('Content-Disposition', 'attachment; filename="%s"'
-                    % part_filename)
+                    % file_name)
 
     self._parts.append((mimetype, part))
 

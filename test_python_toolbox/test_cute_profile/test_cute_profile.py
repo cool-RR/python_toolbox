@@ -254,30 +254,3 @@ def test_folder_handler():
             assert len(os.listdir(temp_folder)) == 2
             
 
-def test_email_handler():
-    with temp_value_setting.TempValueSetter((cute_profile.profile_handling,
-                                             'threading'), dummy_threading):
-        f = cute_profile.profile_ready(profile_handler=temp_folder)(func)
-
-        f(1, 2)
-        assert len(os.listdir(temp_folder)) == 0
-
-        f(1, 2)
-        assert len(os.listdir(temp_folder)) == 0
-
-        f.profiling_on = True
-        
-        f(1, 2)
-        assert len(os.listdir(temp_folder)) == 1
-
-        f(1, 2)
-        assert len(os.listdir(temp_folder)) == 1
-        
-        f.profiling_on = True
-        
-        f(1, 2)
-        assert len(os.listdir(temp_folder)) == 2
-
-        f(1, 2)
-        assert len(os.listdir(temp_folder)) == 2
-        
