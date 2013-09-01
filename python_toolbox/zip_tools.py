@@ -73,7 +73,7 @@ def unzip_in_memory(zip_archive):
                             compression=zip_module.ZIP_DEFLATED) as zip_file:
         assert isinstance(zip_file, zip_module.ZipFile)
         return tuple((file_name, zip_file.read(file_name)) for file_name in
-                     zip_file.namelist)
+                     zip_file.namelist())
     
     
     

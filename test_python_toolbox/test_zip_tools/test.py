@@ -1,25 +1,22 @@
+# Copyright 2009-2013 Ram Rachum.
+# This program is distributed under the MIT license.
+
 from __future__ import with_statement
 
-from python_toolbox import tracing_tools
+from python_toolbox import cute_testing
+
+from python_toolbox import zip_tools
 
 
-def my_function():
+def test_zipping_in_memory():
     ''' '''
-
-def test():
-    ''' '''
+    files = (
+        ('meow.txt', "I'm a cat."), 
+        ('dog.txt', "I'm a dog."), 
+        ('folder/binary.bin', ''.join(map(chr, xrange(256))))
+    )
     
-    with tracing_tools.TempFunctionCallCounter(my_function) as \
-                                                    temp_function_call_counter:
-        assert temp_function_call_counter.call_count == 0
-        my_function()
-        assert temp_function_call_counter.call_count == 1
-        my_function()
-        my_function()
-        my_function()
-        assert temp_function_call_counter.call_count == 4
-    
-    assert temp_function_call_counter.call_count == 4
-    my_function()
-    assert temp_function_call_counter.call_count == 4
+    zip_archive = zip_tools.zip_in_memory(files)
+    assert isinstance(zip_archive, str)
+    assert set(zip_tools.unzip_in_memory(zip_archive)) == set(files)
     
