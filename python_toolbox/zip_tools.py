@@ -6,8 +6,9 @@
 from __future__ import with_statement
 
 import contextlib
-import zipfile
+import zipfile as zip_module
 import os.path
+import cStringIO as string_io_module
 import re
 import fnmatch
 
@@ -35,7 +36,7 @@ def zip_folder(folder, zip_path, ignored_patterns=()):
     source_folder_name = os.path.split(source_folder)[1]
             
     with contextlib.closing(
-        zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED)
+        zip_module.ZipFile(zip_path, 'w', zip_module.ZIP_DEFLATED)
         ) as zip_file:
         
         for root, subfolders, files in os.walk(source_folder):
@@ -54,3 +55,42 @@ def zip_folder(folder, zip_path, ignored_patterns=()):
                 )
                 
                 zip_file.write(absolute_file_path, destination_file_path)
+                
+                
+def zip_in_memory(files):
+    zip_stream = string_io_module.StringIO()
+    with zip_module.ZipFile(zip_stream, mode='w',
+                            compression=zip_module.ZIP_DEFLATED) as zip_file:
+        assert isinstance(zip_file, zip_module.ZipFile)
+        for file_name, file_data in files:
+            zip_file.writestr(file_name, file_data)
+            
+    return zip_stream.getvalue()
+    
+def unzip_in_memory(zip_archive):
+    zip_stream = string_io_module.StringIO(zip_archive)
+    with zip_module.ZipFile(zip_stream, mode='r',
+                            compression=zip_module.ZIP_DEFLATED) as zip_file:
+        assert isinstance(zip_file, zip_module.ZipFile)
+        return tuple((file_name, zip_file.read(file_name)) for file_name in
+                     zip_file.namelist)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
