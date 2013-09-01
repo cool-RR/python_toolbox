@@ -8,6 +8,6 @@ from .misc_tools import (
     _ascii_variable_pattern, is_legal_ascii_variable_name,
     is_magic_variable_name, get_actual_type, is_number, identity_function,
     do_nothing, OwnNameDiscoveringDescriptor, find_clear_place_on_circle,
-    general_sum, general_product, is_legal_email_address
+    general_sum, general_product, is_legal_email_address, is_type
 )
 from . import name_mangling

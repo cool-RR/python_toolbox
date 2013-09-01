@@ -269,3 +269,8 @@ def general_product(things, start=None):
     
 def is_legal_email_address(email_address_candidate):
     return bool(_email_pattern.match(email_address_candidate))
+
+
+def is_type(thing):
+    return isinstance(thing, (type, types.ClassType))
+

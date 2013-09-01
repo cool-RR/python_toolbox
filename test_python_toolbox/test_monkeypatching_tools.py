@@ -153,8 +153,33 @@ def test_monkeypatch_classmethod_subclass():
     a0 = A()
     assert a0.my_funky_class_method() == A
         
-        
-        
-        
+
+def test_directly_on_object():
     
+    class A(object):
+        def woof(self):
+            return 'woof'
+
+    a0 = A()
+    a1 = A()
+
+    @monkeypatching_tools.monkeypatch_method(a0)
+    def meow(a):
+        return 'not meow'
+    
+    @monkeypatching_tools.monkeypatch_method(a0)
+    def woof(a):
+        return 'not woof'
+    
+    assert a0.meow() == 'not meow'
+    assert a0.woof() == 'not woof'
+    
+    assert a1.woof() == 'woof'
+    
+    with cute_testing.RaiseAssertor(AttributeError):
+        A.meow()
+    with cute_testing.RaiseAssertor(AttributeError):
+        a1.meow()
+        
+    assert A.woof(a0) == 'woof'
     
