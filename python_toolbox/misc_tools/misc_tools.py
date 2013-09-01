@@ -255,3 +255,5 @@ def general_product(things, start=None):
         return reduce(operator.mul, things, start)
 
     
+def is_type(thing):
+    return isinstance(thing, (type, types.ClassType))

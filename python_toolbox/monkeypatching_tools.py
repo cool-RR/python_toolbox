@@ -5,13 +5,15 @@
 
 import types
 
+from python_toolbox import misc_tools
 from python_toolbox import decorator_tools
 from python_toolbox import caching
 
 
 @decorator_tools.helpful_decorator_builder
-def monkeypatch_method(class_, name=None):
+def monkeypatch_method(monkeypatchee, name=None):
     '''
+    blocktododoc
     Monkeypatch a method into a class.
     
     Example:
@@ -32,28 +34,44 @@ def monkeypatch_method(class_, name=None):
     
     You can also use this to monkeypatch a `CachedProperty` into a class.
     '''
+    
+    monkeypatchee_is_a_class = misc_tools.is_type(monkeypatchee)
+    class_of_monkeypatchee = monkeypatchee if monkeypatchee_is_a_class else \
+                                      misc_tools.get_actual_type(monkeypatchee)
+    
     def decorator(function):
         # Note that unlike most decorators, this decorator retuns the function
         # it was given without modifying it. It modifies the class only.
         if isinstance(function, types.FunctionType):
             name_ = name or function.__name__
-            new_method = types.MethodType(function, None, class_)
+            
+            new_method = types.MethodType(function, None, monkeypatchee) if \
+                monkeypatchee_is_a_class else types.MethodType(function,
+                                         monkeypatchee, class_of_monkeypatchee)
             # todo: Last line was: `new_method = types.MethodType(function,
             # class_)`, is subtly wrong, make tests to prove
-            setattr(class_, name_, new_method)
-            return function
-        elif isinstance(function, caching.CachedProperty):
-            cached_property = function
-            if not isinstance(cached_property.getter, types.FunctionType):
-                raise NotImplemented
-            name_ = cached_property.getter.__name__
-            setattr(class_, name_, cached_property)
-            return cached_property
-        elif isinstance(function, (classmethod, staticmethod)):
-            name_ = function.__func__.__name__
-            setattr(class_, name_, function)
+            setattr(monkeypatchee, name_, new_method)
             return function
         else:
-            raise NotImplemented("`monkeypatch_method` doesn't know how to "
-                                 "handle this kind of function.")
+            # `function` is probably some kind of descriptor.
+            if not monkeypatchee_is_a_class:
+                raise NotImplemented("I don't know how to monkeypatch a "
+                                     "descriptor onto a non-class object.")
+            ### Getting name of descriptor: ###################################
+            #                                                                 #
+            if isinstance(function, caching.CachedProperty):
+                if not isinstance(function.getter, types.FunctionType):
+                    raise NotImplemented
+                name_ = function.getter.__name__
+            elif isinstance(function, (classmethod, staticmethod)):
+                name_ = function.__func__.__name__
+            else:
+                raise NotImplemented("`monkeypatch_method` doesn't know how "
+                                     "to handle this kind of function.")
+            #                                                                 #
+            ### Finished getting name of descriptor. ##########################
+            setattr(monkeypatchee, name_, function)
+            return function
+        
     return decorator
+
