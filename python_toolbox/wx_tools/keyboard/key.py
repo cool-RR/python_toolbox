@@ -70,7 +70,11 @@ class Key(object):
                self.cmd == other.cmd and \
                self.shift == other.shift and \
                self.alt == other.alt
+
     
+    def __ne__(self, other):
+        return not self == other
+
     
     def __repr__(self):
         '''

@@ -12,6 +12,11 @@ from UserDict import DictMixin
 
 from python_toolbox import comparison_tools
 
+try:
+    from collections import OrderedDict as StdlibOrderedDict
+except ImportError:
+    StdlibOrderedDict = None
+
 
 class OrderedDict(dict, DictMixin):
     '''Dict that maintains order of items.'''
@@ -37,8 +42,8 @@ class OrderedDict(dict, DictMixin):
     def __setitem__(self, key, value):
         if key not in self:
             end = self.__end
-            curr = end[1]
-            curr[2] = end[1] = self.__map[key] = [key, curr, end]
+            current = end[1]
+            current[2] = end[1] = self.__map[key] = [key, current, end]
         dict.__setitem__(self, key, value)
 
         
@@ -51,18 +56,18 @@ class OrderedDict(dict, DictMixin):
         
     def __iter__(self):
         end = self.__end
-        curr = end[2]
-        while curr is not end:
-            yield curr[0]
-            curr = curr[2]
+        current = end[2]
+        while current is not end:
+            yield current[0]
+            current = current[2]
 
             
     def __reversed__(self):
         end = self.__end
-        curr = end[1]
-        while curr is not end:
-            yield curr[0]
-            curr = curr[1]
+        current = end[1]
+        while current is not end:
+            yield current[0]
+            current = current[1]
 
             
     def popitem(self, last=True):
@@ -124,10 +129,10 @@ class OrderedDict(dict, DictMixin):
 
     
     def __eq__(self, other):
-        if isinstance(other, OrderedDict):
+        if isinstance(other, _ordered_dict_types):
             if len(self) != len(other):
                 return False
-            for p, q in  zip(self.items(), other.items()):
+            for p, q in zip(self.items(), other.items()):
                 if p != q:
                     return False
             return True
@@ -187,3 +192,5 @@ class OrderedDict(dict, DictMixin):
                 return i
         raise RuntimeError
                 
+                
+_ordered_dict_types = filter(bool, (OrderedDict, StdlibOrderedDict))

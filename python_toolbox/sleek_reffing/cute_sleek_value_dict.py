@@ -70,7 +70,11 @@ class CuteSleekValueDict(UserDict.UserDict, object):
             if other[key] != value:
                 return False
         return True
-            
+
+
+    def __ne__(self, other):
+        return not self == other
+    
     
     has_key = __contains__
 

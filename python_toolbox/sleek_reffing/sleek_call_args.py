@@ -121,5 +121,10 @@ class SleekCallArgs(object):
         return self.args == other.args and \
                self.star_args == other.star_args and \
                self.star_kwargs == other.star_kwargs
+
+    
+    def __ne__(self, other):
+        return not self == other
+    
     
     
