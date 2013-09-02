@@ -59,8 +59,8 @@ def zip_folder(folder, zip_path, ignored_patterns=()):
                 
 def zip_in_memory(files):
     zip_stream = string_io_module.StringIO()
-    with zip_module.ZipFile(zip_stream, mode='w',
-                            compression=zip_module.ZIP_DEFLATED) as zip_file:
+    with contextlib.closing(zip_module.ZipFile(zip_stream, mode='w',
+                            compression=zip_module.ZIP_DEFLATED)) as zip_file:
         assert isinstance(zip_file, zip_module.ZipFile)
         for file_name, file_data in files:
             zip_file.writestr(file_name, file_data)
@@ -69,26 +69,11 @@ def zip_in_memory(files):
     
 def unzip_in_memory(zip_archive):
     zip_stream = string_io_module.StringIO(zip_archive)
-    with zip_module.ZipFile(zip_stream, mode='r',
-                            compression=zip_module.ZIP_DEFLATED) as zip_file:
+    with contextlib.closing(zip_module.ZipFile(zip_stream, mode='r',
+                            compression=zip_module.ZIP_DEFLATED)) as zip_file:
         assert isinstance(zip_file, zip_module.ZipFile)
         return tuple((file_name, zip_file.read(file_name)) for file_name in
                      zip_file.namelist())
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
