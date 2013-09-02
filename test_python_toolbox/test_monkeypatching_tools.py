@@ -5,8 +5,11 @@
 
 from __future__ import with_statement
 
+import sys
 import uuid
 import types
+
+import nose
 
 from python_toolbox import cute_inspect
 from python_toolbox import cute_testing
@@ -103,6 +106,9 @@ def test_monkeypatch_staticmethod():
     
 def test_monkeypatch_classmethod():
 
+    if sys.version[:2] <= (2, 6):
+        raise nose.SkipTest('Not supported on Python 2.6.')
+
     class A(object):
         @classmethod
         def my_class_method(cls):
@@ -130,6 +136,9 @@ def test_monkeypatch_classmethod_subclass():
     
     This is useful in Django, that uses its own `classmethod` subclass.
     '''
+    if sys.version[:2] <= (2, 6):
+        raise nose.SkipTest('Not supported on Python 2.6.')
+
     class FunkyClassMethod(classmethod):
         is_funky = True
 
