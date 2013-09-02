@@ -23,8 +23,8 @@ def test():
         def __contains__(self, number):
             if not isinstance(number, numbers.Integral):
                 return False
-            return bool(set(str(number)).intersection(set('0', '4', '6', '8',
-                                                          '9')))
+            return bool(set(str(number)).intersection(set(('0', '4', '6', '8',
+                                                           '9'))))
             
     
     non_holed_numbers_dict = dict(origin_dict)
