@@ -275,8 +275,11 @@ def pop_until(sequence, condition=bool):
 
 
 def get_recurrences(sequence):
-    return {item: n_recurrences for item, n_recurrences in
-            Counter(sequence).most_common() if n_recurrences >= 2}
+    # Use when ditching Python 2.6:
+    #return {item: n_recurrences for item, n_recurrences in
+            #Counter(sequence).most_common() if n_recurrences >= 2}
+    return dict((item, n_recurrences) for item, n_recurrences in
+                Counter(sequence).most_common() if n_recurrences >= 2)
     
 ### Not using now, might want in future:
 
