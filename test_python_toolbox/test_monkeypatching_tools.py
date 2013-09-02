@@ -82,6 +82,9 @@ def test_helpful_message_when_forgetting_parentheses():
 
 def test_monkeypatch_staticmethod():
 
+    if sys.version[:2] <= (2, 6):
+        raise nose.SkipTest('Not supported on Python 2.6.')
+
     class A(object):
         @staticmethod
         def my_static_method(x):
