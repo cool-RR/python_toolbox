@@ -4,6 +4,7 @@
 '''Defines various tools for pickling and unpickling.'''
 
 
+import zlib
 import re
 import cPickle as pickle_module
 import pickle # Importing just to get dispatch table, not pickling with it.
@@ -186,4 +187,8 @@ class CuteUnpickler(object):
             raise pickle_module.UnpicklingError('Invalid persistent id')
  
  
-    
+def pickle_and_compress(thing):
+    return zlib.compress(pickle_module.dumps(thing, protocol=2))
+
+def decompress_and_unpickle(thing):
+    return pickle_module.loads(zlib.decompress(thing))
