@@ -9,7 +9,7 @@ See its documentation for more information.
 
 import wx
 
-from python_toolbox.proxy_property import ProxyProperty
+from python_toolbox.misc_tools import ProxyProperty
 
 from python_toolbox import sequence_tools
 from python_toolbox.wx_tools.widgets.cute_control import CuteControl

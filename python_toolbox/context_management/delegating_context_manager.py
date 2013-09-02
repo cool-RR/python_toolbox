@@ -9,7 +9,7 @@ See its documentation for more information.
 
 import abc
 
-from python_toolbox import proxy_property
+from python_toolbox import misc_tools
 
 from .context_manager import ContextManager
 
@@ -34,9 +34,9 @@ class DelegatingContextManager(ContextManager):
     You may implement this as either an instance attribute or a property.
     '''
     
-    __enter__ = proxy_property.ProxyProperty(
+    __enter__ = misc_tools.ProxyProperty(
         '.delegatee_context_manager.__enter__'
     )
-    __exit__ = proxy_property.ProxyProperty(
+    __exit__ = misc_tools.ProxyProperty(
         '.delegatee_context_manager.__exit__'
     )

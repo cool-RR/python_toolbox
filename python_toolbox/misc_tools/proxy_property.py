@@ -7,8 +7,6 @@ This module defines the `ProxyProperty` class.
 See its documentation for more information.
 '''
 
-from python_toolbox import address_tools
-
 
 class ProxyProperty(object):
     '''
@@ -68,6 +66,7 @@ class ProxyProperty(object):
             return self
         else:
             if '.' in self.attribute_name:
+                from python_toolbox import address_tools
                 return address_tools.resolve('obj.%s' % self.attribute_name,
                                              namespace={'obj': obj})
             else:
@@ -79,6 +78,7 @@ class ProxyProperty(object):
         # `__delete__`?
         
         if '.' in self.attribute_name:
+            from python_toolbox import address_tools
             left_segment, right_segment = self.attribute_name.rsplit('.', 1)
             deepest_object = address_tools.resolve('obj.%s' % left_segment,
                                                    namespace={'obj': obj})

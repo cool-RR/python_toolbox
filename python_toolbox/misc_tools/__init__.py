@@ -11,3 +11,4 @@ from .misc_tools import (
     general_sum, general_product, is_legal_email_address, is_type
 )
 from . import name_mangling
+from .proxy_property import ProxyProperty

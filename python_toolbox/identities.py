@@ -7,7 +7,7 @@ This module defines the `HasIdentity` class.
 See its documentation for more information.
 '''
 
-from python_toolbox import proxy_property
+from python_toolbox import misc_tools
 from python_toolbox.persistent import CrossProcessPersistent
 
 
@@ -44,7 +44,7 @@ class HasIdentity(object):
     __and__ = has_same_identity_as
     
     
-    personality = proxy_property.ProxyProperty(
+    personality = misc_tools.ProxyProperty(
         '._HasIdentity__identity.personality',
         doc='''Personality containing a human name and two colors.'''
     )

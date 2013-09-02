@@ -1,7 +1,7 @@
 # Copyright 2009-2013 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''Testing modules for `python_toolbox.proxy_property.ProxyProperty`.'''
+'''Testing modules for `python_toolbox.misc_tools.ProxyProperty`.'''
 
 from __future__ import with_statement
 
@@ -9,7 +9,7 @@ import uuid
 
 from python_toolbox import cute_testing
 
-from python_toolbox.proxy_property import ProxyProperty
+from python_toolbox.misc_tools import ProxyProperty
 
 
 class Object(object):

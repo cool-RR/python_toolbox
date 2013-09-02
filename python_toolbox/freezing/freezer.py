@@ -10,7 +10,7 @@ See its documentation for more information.
 import abc
 
 from python_toolbox import context_management
-from python_toolbox import proxy_property
+from python_toolbox import misc_tools
 from python_toolbox import caching
 
 from .delegatee_context_manager import DelegateeContextManager
@@ -41,7 +41,7 @@ class Freezer(context_management.DelegatingContextManager):
     '''The context manager which implements our `__enter__` and `__exit__`.'''
     
     
-    frozen = proxy_property.ProxyProperty('.delegatee_context_manager.depth')
+    frozen = misc_tools.ProxyProperty('.delegatee_context_manager.depth')
     '''
     An integer specifying the freezer's level of frozenness.
     

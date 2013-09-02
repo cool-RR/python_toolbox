@@ -10,7 +10,7 @@ See its documentation for more information.
 import abc
 
 from python_toolbox import caching
-from python_toolbox.proxy_property import ProxyProperty
+from python_toolbox.misc_tools import ProxyProperty
 
 from .context_manager import ContextManager
 
