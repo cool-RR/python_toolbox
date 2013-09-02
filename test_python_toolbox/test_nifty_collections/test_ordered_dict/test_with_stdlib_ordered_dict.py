@@ -27,12 +27,13 @@ def test():
     ordered_dict.move_to_end(1)
     
     assert ordered_dict != stdlib_ordered_dict
-    assert stdlib_ordered_dict != ordered_dict
+    #assert stdlib_ordered_dict != ordered_dict
     assert ordered_dict.items() != stdlib_ordered_dict.items()
     assert ordered_dict.keys() != stdlib_ordered_dict.keys()
     assert ordered_dict.values() != stdlib_ordered_dict.values()
     
-    stdlib_ordered_dict.move_to_end(1)
+    del stdlib_ordered_dict[1]
+    stdlib_ordered_dict[1] = 'a'
     
     assert ordered_dict == stdlib_ordered_dict
     assert stdlib_ordered_dict == ordered_dict

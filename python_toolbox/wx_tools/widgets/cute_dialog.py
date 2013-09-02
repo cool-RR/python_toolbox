@@ -42,7 +42,7 @@ class CuteDialog(wx.Dialog, CuteTopLevelWindow):
         return super(CuteDialog, self).ShowModal()
     
     
-    @classmethod # blocktodo: Use everywhere I can, document
+    @classmethod
     def create_and_show_modal(cls, parent, *args, **kwargs):
         dialog = cls(parent, *args, **kwargs)
         try:

@@ -17,15 +17,17 @@ infinity = float('inf')
 
 def get_consecutive_subsequences(iterable, length=2, wrap_around=False):
     '''
-    blocktododoc
-    Iterate over successive pairs from the iterable.
-    
-    If `wrap_around=True`, will include a `(last_item, first_item)` pair at the
-    end.
+    Iterate over successive subsequences from the iterable.
         
-    Example: if the iterable is [0, 1, 2, 3], then its `consecutive_pairs`
-    would be `[(0, 1), (1, 2), (2, 3)]`. (Except it would be an iterator and
-    not an actual list.)
+    Example: if the iterable is [0, 1, 2, 3], then its `consecutive_pairs` with
+    length 2 would be `[(0, 1), (1, 2), (2, 3)]`. (Except it would be an
+    iterator and not an actual list.)
+    
+    With a length of 3, the result would be an iterator of `[(0, 1, 2), (1,
+    2, 3)]`.
+    
+    If `wrap_around=True`, the result would be `[(0, 1, 2), (1,
+    2, 3), (2, 3, 0), (3, 0, 1)]`.
     '''
     if length == 1:
         for item in iterable:
