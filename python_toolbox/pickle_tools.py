@@ -188,7 +188,9 @@ class CuteUnpickler(object):
  
  
 def compickle(thing):
+    '''Pickle `thing` and compress it using `zlib`.'''
     return zlib.compress(pickle_module.dumps(thing, protocol=2))
 
 def decompickle(thing):
+    '''Unpickle `thing` after decompressing it using `zlib`.'''
     return pickle_module.loads(zlib.decompress(thing))

@@ -58,6 +58,11 @@ def zip_folder(folder, zip_path, ignored_patterns=()):
                 
                 
 def zip_in_memory(files):
+    '''
+    Zip files in memory and return zip archive as a string.
+    
+    Files should be given as tuples of `(file_path, file_contents)`.
+    '''
     zip_stream = string_io_module.StringIO()
     with contextlib.closing(zip_module.ZipFile(zip_stream, mode='w',
                             compression=zip_module.ZIP_DEFLATED)) as zip_file:
@@ -68,6 +73,11 @@ def zip_in_memory(files):
     return zip_stream.getvalue()
     
 def unzip_in_memory(zip_archive):
+    '''
+    Unzip a zip archive given as string, returning files
+    
+    Files are returned as tuples of `(file_path, file_contents)`.
+    '''    
     zip_stream = string_io_module.StringIO(zip_archive)
     with contextlib.closing(zip_module.ZipFile(zip_stream, mode='r',
                             compression=zip_module.ZIP_DEFLATED)) as zip_file:

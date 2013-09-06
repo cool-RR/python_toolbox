@@ -16,9 +16,9 @@ infinity = float('inf')
 
 def are_equal_regardless_of_order(seq1, seq2):
     '''
-    blocktododoc
-    Return whether the two sequences are equal in the elements they contain,
-    regardless of the order of the elements.
+    Do `seq1` and `seq2` contain the same elements, same number of times?
+    
+    Disregards order of elements.
 
     Currently will fail for items that have problems with comparing.
     '''
@@ -264,9 +264,9 @@ def to_tuple(single_or_sequence, item_type=None, item_test=None):
 
 def pop_until(sequence, condition=bool):
     '''
-    blocktododoc
+    Look for item in `sequence` that passes `condition`, popping away others.
     
-    Propagates whatever error is raised on popping the sequence.
+    When sequence is empty, propagates the `IndexError`.
     '''
     while True:
         item = sequence.pop()
@@ -275,6 +275,11 @@ def pop_until(sequence, condition=bool):
 
 
 def get_recurrences(sequence):
+    '''
+    Get a `dict` of all items that repeat at least twice.
+    
+    The values of the dict are the numbers of repititions of each item.    
+    '''
     # Use when ditching Python 2.6:
     #return {item: n_recurrences for item, n_recurrences in
             #Counter(sequence).most_common() if n_recurrences >= 2}

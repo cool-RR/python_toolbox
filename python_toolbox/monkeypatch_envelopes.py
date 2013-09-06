@@ -1,6 +1,7 @@
 # Copyright 2009-2013 Ram Rachum.
 # This program is distributed under the MIT license.
 
+'''Module for monkeypatching our own copy of `envelopes`.'''
 
 ### Monkeypatching envelopes: #################################################
 #                                                                             #

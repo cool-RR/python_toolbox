@@ -14,8 +14,7 @@ from python_toolbox import caching
 @decorator_tools.helpful_decorator_builder
 def monkeypatch_method(monkeypatchee, name=None):
     '''
-    blocktododoc
-    Monkeypatch a method into a class.
+    Monkeypatch a method into a class (or an object).
     
     Example:
     
@@ -33,7 +32,8 @@ def monkeypatch_method(monkeypatchee, name=None):
     You may use the `name` argument to specify a method name different from the
     function's name.
     
-    You can also use this to monkeypatch a `CachedProperty` into a class.
+    You can also use this to monkeypatch a `CachedProperty`, a `classmethod`
+    and a `staticmethod` into a class.
     '''
     
     monkeypatchee_is_a_class = misc_tools.is_type(monkeypatchee)
@@ -49,8 +49,6 @@ def monkeypatch_method(monkeypatchee, name=None):
             new_method = types.MethodType(function, None, monkeypatchee) if \
                 monkeypatchee_is_a_class else types.MethodType(function,
                                          monkeypatchee, class_of_monkeypatchee)
-            # todo: Last line was: `new_method = types.MethodType(function,
-            # class_)`, is subtly wrong, make tests to prove
             setattr(monkeypatchee, name_, new_method)
             return function
         else:
