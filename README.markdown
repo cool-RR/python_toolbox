@@ -34,7 +34,7 @@ Please keep in mind that Python Toolbox is still in alpha stage, and that backwa
 
 ## Present ##
 
-Python Toolbox is at version 0.5.0, which is an alpha release. It's being used in production every day, but backward compatibility isn't guaranteed yet.
+Python Toolbox is at version 0.5.1, which is an alpha release. It's being used in production every day, but backward compatibility isn't guaranteed yet.
 
 ## Next tasks ##
 
@@ -64,5 +64,5 @@ It's tested on both CPython and PyPy 2.0. (Which runs Python 2.7.)
 
 # Current state #
 
-The Python Toolbox is at version 0.5.0, which is an alpha release. At this experimental stage of the project, backward compatibility will _not_ be maintained.
+The Python Toolbox is at version 0.5.1, which is an alpha release. At this experimental stage of the project, backward compatibility will _not_ be maintained.
  

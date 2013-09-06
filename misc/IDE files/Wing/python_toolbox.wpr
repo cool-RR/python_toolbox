@@ -6,10 +6,20 @@
 [project attributes]
 debug.launch-configs = (1,
                         {'launch-OHU716PSo2P5T54y': ({},
-        {'name': u'Launch Config 1',
-         'pypath': ('custom',
-                    path([])),
-         'runargs': ''})})
+        {'buildcmd': ('default',
+                      None),
+         'env': ('project',
+                 [u'']),
+         'name': u'Launch Config 1',
+         'pyexec': ('default',
+                    u''),
+         'pypath': ('default',
+                    ''),
+         'pyrunargs': ('project',
+                       u''),
+         'runargs': u'',
+         'rundir': ('default',
+                    u'')})})
 proj.directory-list = [{'dirloc': loc('../../..'),
                         'excludes': [u'nosetests.xml',
                                      u'garlicsim_wx/py2exe_dist',
@@ -24,8 +34,9 @@ proj.directory-list = [{'dirloc': loc('../../..'),
                         'watch_for_changes': True}]
 proj.file-type = 'shared'
 proj.home-dir = loc('../../..')
-proj.launch-config = {loc('../../../run_tests.py'): ('custom',
-        ('',
+proj.launch-config = {loc('../../../../../../../../Python27/Scripts/_test_python_toolbox.py'): (''\
+        'custom',
+        (u'',
          'launch-OHU716PSo2P5T54y'))}
 testing.auto-test-file-specs = [('glob',
                                  'test_python_toolbox/test*.py')]
