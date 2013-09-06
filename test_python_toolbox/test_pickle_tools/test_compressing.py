@@ -24,8 +24,6 @@ my_messy_object = (
 )
 
 def test():
-    pickled_and_compressed = pickle_tools.pickle_and_compress(my_messy_object)
-    assert len(pickled_and_compressed) < \
-                                      len(pickle_module.dumps(my_messy_object))
-    assert pickle_tools.decompress_and_unpickle(pickled_and_compressed) == \
-                                                                my_messy_object
+    compickled = pickle_tools.compickle(my_messy_object)
+    assert len(compickled) < len(pickle_module.dumps(my_messy_object))
+    assert pickle_tools.decompickle(compickled) == my_messy_object

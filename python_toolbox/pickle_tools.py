@@ -187,8 +187,8 @@ class CuteUnpickler(object):
             raise pickle_module.UnpicklingError('Invalid persistent id')
  
  
-def pickle_and_compress(thing):
+def compickle(thing):
     return zlib.compress(pickle_module.dumps(thing, protocol=2))
 
-def decompress_and_unpickle(thing):
+def decompickle(thing):
     return pickle_module.loads(zlib.decompress(thing))

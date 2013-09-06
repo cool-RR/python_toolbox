@@ -24,23 +24,8 @@ proj.directory-list = [{'dirloc': loc('../../..'),
                         'watch_for_changes': True}]
 proj.file-type = 'shared'
 proj.home-dir = loc('../../..')
-proj.launch-config = {loc('../../../python_toolbox/__init__.py'): ('project',
-        (u'',
-         'launch-OHU716PSo2P5T54y')),
-                      loc('../../../python_toolbox/binary_search/binary_search_profile.py'): (''\
-        'project',
-        (u'',
-         'launch-OHU716PSo2P5T54y')),
-                      loc('../../../python_toolbox/cute_iter_tools.py'): ('p'\
-        'roject',
-        (u'',
-         'launch-OHU716PSo2P5T54y')),
-                      loc('../../../run_tests.py'): ('custom',
+proj.launch-config = {loc('../../../run_tests.py'): ('custom',
         ('',
-         'launch-OHU716PSo2P5T54y')),
-                      loc('../../../test_python_toolbox/test_binary_search/test.py'): (''\
-        'project',
-        (u'',
          'launch-OHU716PSo2P5T54y'))}
 testing.auto-test-file-specs = [('glob',
                                  'test_python_toolbox/test*.py')]
