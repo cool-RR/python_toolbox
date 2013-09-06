@@ -45,7 +45,7 @@ def _binary_search_both(sequence, function, value):
     `sequence`.
     
     Note: This function uses `None` to express its inability to find any
-    matches; therefore, you better not use it on sequences in which None is a
+    matches; therefore, you better not use it on sequences in which `None` is a
     possible item.
     '''
     # todo: i think this should be changed to return tuples

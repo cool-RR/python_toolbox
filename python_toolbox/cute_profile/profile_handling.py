@@ -17,6 +17,7 @@ from . import base_profile
 
 
 class BaseProfileHandler(object):
+    '''Profile handler which saves the profiling result in some way.'''
     __metaclass__ = abc.ABCMeta
     
     def __call__(self, profile):
@@ -34,7 +35,7 @@ class BaseProfileHandler(object):
     
 
 class AuxiliaryThreadProfileHandler(BaseProfileHandler):
-    
+    '''Profile handler that does its action on a separate thread.'''
     thread = None
     
     def handle(self):
@@ -47,6 +48,7 @@ class AuxiliaryThreadProfileHandler(BaseProfileHandler):
     
 
 class EmailProfileHandler(AuxiliaryThreadProfileHandler):
+    '''Profile handler that sends the profile via email on separate thread.'''
     def __init__(self, email_address, smtp_server, smtp_user, smtp_password,
                  use_tls=True):
         
@@ -76,6 +78,7 @@ class EmailProfileHandler(AuxiliaryThreadProfileHandler):
 
 
 class FolderProfileHandler(AuxiliaryThreadProfileHandler):
+    '''Profile handler that saves the profile to disk on separate thread.'''
     
     def __init__(self, folder_path):
         self.folder_path = folder_path
@@ -88,7 +91,7 @@ class FolderProfileHandler(AuxiliaryThreadProfileHandler):
 
 
 class PrintProfileHandler(BaseProfileHandler):
-    
+    '''Profile handler that prints profile data to standard output.'''
     def __init__(self, sort_order):
         self.sort_order = sort_order
         
@@ -99,6 +102,7 @@ class PrintProfileHandler(BaseProfileHandler):
 
 
 def get_profile_handler(profile_handler_string):
+    '''Parse `profile_handler_string` into a `ProfileHandler` class.'''
     if not profile_handler_string or profile_handler_string in \
                                                         map(str, range(-1, 5)):
         try:

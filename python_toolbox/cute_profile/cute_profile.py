@@ -18,6 +18,7 @@ from . import profile_handling
 
 
 def profile(statement, globals_, locals_):
+    '''Profile a statement and return the `Profile`.'''
     profile_ = base_profile.Profile()
     result = None
     try:
@@ -29,13 +30,13 @@ def profile(statement, globals_, locals_):
 
 
 def profile_expression(expression, globals_, locals_):
+    '''Profile an expression, and return a tuple of `(result, profile)`.'''
     profile_ = profile('result = %s' % expression, globals_, locals_)
     return (locals_['result'], profile_)
 
 
 def profile_ready(condition=None, off_after=True, profile_handler=None):
     '''
-    blocktododoc
     Decorator for setting a function to be ready for profiling.
     
     For example:
@@ -49,6 +50,8 @@ def profile_ready(condition=None, off_after=True, profile_handler=None):
      1. It doesn't interfere with the function's return value.
      
      2. You can set the function to be profiled *when* you want, on the fly.
+     
+     3. You can have the profile results handled in various useful ways.
      
     How can you set the function to be profiled? There are a few ways:
     
@@ -65,7 +68,18 @@ def profile_ready(condition=None, off_after=True, profile_handler=None):
     turned off afterwards as well. (Unless, again, `f.off_after` is set to
     `False`.)
     
-    `sort` is an `int` specifying which column the results will be sorted by.
+    Using `profile_handler` you can say what will be done with profile results.
+    If `profile_handler` is an `int`, the profile results will be printed, with
+    the sort order determined by `profile_handler`. If `profile_handler` is a
+    directory path, profiles will be saved to files in that directory. If
+    `profile_handler` is details on how to send email, the profile will be sent
+    as an attached file via email, on a separate thread.
+    
+    To send email, supply a `profile_handler` like so, with values separated by
+    newlines:
+    
+       'ram@rachum.com\nsmtp.gmail.com\nsmtp_username\nsmtppassword'
+       
     '''
     
     
