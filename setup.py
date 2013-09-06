@@ -133,9 +133,9 @@ my_classifiers = [
 setuptools.setup(
     name='python_toolbox',
     version='0.5.1',
-    requires=['distribute'],
+    requires=['setuptools'],
     test_suite='nose.collector',
-    install_requires=['distribute'],
+    install_requires=['setuptools'],
     tests_require=['nose>=1.0.0',
                    'docutils>=0.8'],
     description='A collection of Python tools for various tasks',

@@ -16,7 +16,7 @@ Requirements
 * Python, version 2.6 or 2.7 or above. If you're new to Python, `download
   version 2.7 <http://python.org/download/releases/2.7.2>`_.
  
-* `distribute`_.
+* `Setuptools`_.
 
 
 Installation
