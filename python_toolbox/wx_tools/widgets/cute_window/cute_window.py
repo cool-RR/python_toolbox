@@ -22,7 +22,7 @@ class CuteWindow(AcceleratorSavvyWindow, BindSavvyEvtHandler, wx.Window):
     '''
     An improved `wx.Window`.
     
-    The advantages of this class over `wx.Window`: #blocktododoc
+    The advantages of this class over `wx.Window`:
     
       - A `.freezer` property for freezing the window.  
       - A `.create_cursor_changer` method which creates a `CursorChanger`
@@ -32,7 +32,7 @@ class CuteWindow(AcceleratorSavvyWindow, BindSavvyEvtHandler, wx.Window):
      
     This class doesn't require calling its `__init__` when subclassing. (i.e.,
     you *may* call its `__init__` if you want, but it will do the same as
-    calling `wx.Window.__init__`.) # blocktododoc: remove notice?
+    calling `wx.Window.__init__`.)
     '''
     
     freezer = freezing.FreezerProperty(

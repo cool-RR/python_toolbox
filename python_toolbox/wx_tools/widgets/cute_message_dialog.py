@@ -13,7 +13,6 @@ from python_toolbox.wx_tools.widgets.cute_dialog import CuteDialog
 
 
 class CuteMessageDialog(wx.MessageDialog, CuteDialog):
-    '''blocktododoc'''
     def __init__(self, parent, message, caption='Message', style=wx.OK):
         wx.MessageDialog.__init__(self, parent, message, caption,
                                   style=style)
