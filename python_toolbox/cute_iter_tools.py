@@ -15,9 +15,9 @@ import __builtin__
 infinity = float('inf')
 
 
-def get_consecutive_subsequences(iterable, length=2, wrap_around=False):
+def iterate_overlapping_subsequences(iterable, length=2, wrap_around=False):
     '''
-    Iterate over successive subsequences from the iterable.
+    Iterate over overlapping subsequences from the iterable.
         
     Example: if the iterable is [0, 1, 2, 3], then its `consecutive_pairs` with
     length 2 would be `[(0, 1), (1, 2), (2, 3)]`. (Except it would be an

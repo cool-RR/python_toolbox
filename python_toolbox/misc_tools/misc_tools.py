@@ -220,7 +220,7 @@ def find_clear_place_on_circle(circle_points, circle_size=1):
     clear_space = {}
     
     for first_point, second_point in \
-        cute_iter_tools.get_consecutive_subsequences(sorted_circle_points,
+        cute_iter_tools.iterate_overlapping_subsequences(sorted_circle_points,
                                                      wrap_around=True):
         
         clear_space[first_point] = second_point - first_point
@@ -254,6 +254,12 @@ def add_extension_if_plain(path, extension):
     
     
 def general_sum(things, start=None):
+    '''
+    Sum a bunch of objects, adding them to each other.
+    
+    This is like the built-in `sum`, except it works for many types, not just
+    numbers.
+    '''
     if start is None:
         return reduce(operator.add, things)
     else:
@@ -261,6 +267,9 @@ def general_sum(things, start=None):
     
     
 def general_product(things, start=None):
+    '''
+    Multiply a bunch of objects by each other, not necessarily numbers.
+    '''    
     if start is None:
         return reduce(operator.mul, things)
     else:
@@ -268,9 +277,11 @@ def general_product(things, start=None):
 
     
 def is_legal_email_address(email_address_candidate):
+    '''Is `email_address_candidate` a legal email address?'''
     return bool(_email_pattern.match(email_address_candidate))
 
 
 def is_type(thing):
+    '''Is `thing` a class? Allowing both new-style and old-style classes.'''
     return isinstance(thing, (type, types.ClassType))
 
