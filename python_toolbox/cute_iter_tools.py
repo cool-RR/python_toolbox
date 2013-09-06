@@ -19,9 +19,9 @@ def iterate_overlapping_subsequences(iterable, length=2, wrap_around=False):
     '''
     Iterate over overlapping subsequences from the iterable.
         
-    Example: if the iterable is [0, 1, 2, 3], then its `consecutive_pairs` with
-    length 2 would be `[(0, 1), (1, 2), (2, 3)]`. (Except it would be an
-    iterator and not an actual list.)
+    Example: if the iterable is [0, 1, 2, 3], then the result would be
+    `[(0, 1), (1, 2), (2, 3)]`. (Except it would be an iterator and not an
+    actual list.)
     
     With a length of 3, the result would be an iterator of `[(0, 1, 2), (1,
     2, 3)]`.
