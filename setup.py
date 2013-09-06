@@ -102,7 +102,7 @@ Roadmap
 Present
 -------
 
-Python Toolbox is at version 0.5.1, which is an alpha release. It's being used in production every day, but backward compatibility isn't guaranteed yet.
+Python Toolbox is at version 0.5.2, which is an alpha release. It's being used in production every day, but backward compatibility isn't guaranteed yet.
 
 Next tasks
 ----------
@@ -132,7 +132,7 @@ my_classifiers = [
 
 setuptools.setup(
     name='python_toolbox',
-    version='0.5.1',
+    version='0.5.2',
     requires=['setuptools'],
     test_suite='nose.collector',
     install_requires=['setuptools'],
