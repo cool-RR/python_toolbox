@@ -42,6 +42,12 @@ def ceil_div(x, y):
 
 
 def convert_to_base_in_tuple(number, base):
+    '''
+    Convert a number to any base, returning result in tuple.
+    
+    For example, `convert_to_base_in_tuple(32, base=10)` will be `(3, 2)` while
+    `convert_to_base_in_tuple(32, base=16)` will be `(2, 0)`.
+    '''
     assert isinstance(number, numbers.Integral)
     assert isinstance(base, numbers.Integral)
     assert base >= 2
@@ -60,6 +66,7 @@ def convert_to_base_in_tuple(number, base):
   
   
 def get_median(iterable):
+    '''Get the median of an iterable of numbers.'''
     sorted_values = sorted(iterable)
 
     if len(iterable) % 2 == 0:
@@ -73,6 +80,7 @@ def get_median(iterable):
     
     
 def get_mean(iterable):
+    '''Get the mean (average) of an iterable of numbers.'''
     sum_ = 0
     for i, value in enumerate(iterable):
         sum_ += value

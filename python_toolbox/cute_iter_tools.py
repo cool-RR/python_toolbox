@@ -202,17 +202,27 @@ def izip_longest(*iterables, **kwargs):
         raise StopIteration
 
 
-def get_items(iterable, n, container=tuple):
+def get_items(iterable, n, container_type=tuple):
     '''
     Get the next `n` items from the iterable as a `tuple`.
     
     If there are less than `n` items, no exception will be raised. Whatever
     items are there will be returned.
+    
+    If you pass in a different kind of container than `tuple` as
+    `container_type`, it'll be used to wrap the results.
     '''
-    return container(shorten(iterable, n))
+    return container_type(shorten(iterable, n))
 
 
 def double_filter(filter_function, iterable):
+    '''
+    Filter an `iterable` into two lists according to a `filter_function`.
+    
+    This is similar to the builtin `filter`, except it returns a tuple of two
+    iterators, the first iterating on items that passed the filter function,
+    and the second iterating on items that didn't.
+    '''
     iterator = iter(iterable)
     
     true_deque = collections.deque()
