@@ -5,7 +5,7 @@ unittest2 is a backport of the new features added to the unittest testing
 framework in Python 2.7. It is tested to run on Python 2.4 - 2.6.
 
 To use unittest2 instead of unittest simply replace ``import unittest`` with
-``from python_toolbox.third_party import unittest2``.
+``import unittest2``.
 
 
 Copyright (c) 1999-2003 Steve Purcell
@@ -31,7 +31,7 @@ __all__ = ['TestResult', 'TestCase', 'TestSuite',
            'defaultTestLoader', 'SkipTest', 'skip', 'skipIf', 'skipUnless',
            'expectedFailure', 'TextTestResult', '__version__', 'collector']
 
-__version__ = '0.5.2'
+__version__ = '0.5.1'
 
 # Expose obsolete functions for backwards compatibility
 __all__.extend(['getTestCaseNames', 'makeSuite', 'findTestCases'])
