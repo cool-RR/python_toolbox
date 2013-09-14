@@ -167,7 +167,7 @@ def test_helpful_warnings_for_old_protocols():
     '''
     Test that helpful errors are given when trying to pickle with old protocol.
     '''
-    pickle_modules = [pickle, cPickle]
+    pickle_modules = [pickle]
     cross_process_persistents = [A(), CrossProcessPersistent()]
     old_protocols = [0, 1]
     

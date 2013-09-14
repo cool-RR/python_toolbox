@@ -242,9 +242,9 @@ def test_bad_module_name():
         '.'.join((non_sensical_module_name, 'A'))
     
     assert describe(A.m) == \
-        '.'.join((non_sensical_module_name, 'A.m'))
+        '.'.join((non_sensical_module_name, 'm'))
     assert describe(A.m, shorten=True, root=email, namespace={}) == \
-        '.'.join((non_sensical_module_name, 'A.m'))
+        '.'.join((non_sensical_module_name, 'm'))
     
 
 def test_function_in_something():
