@@ -8,7 +8,7 @@ See its documentation for more info.
 '''
 
 import weakref
-import UserDict
+import collections
 
 from python_toolbox import cute_inspect
 
