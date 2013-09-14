@@ -8,7 +8,7 @@ See its documentation for more information.
 '''
 
 import builtins
-from UserDict import DictMixin
+import abc
 
 from python_toolbox import comparison_tools
 
@@ -18,7 +18,7 @@ except ImportError:
     StdlibOrderedDict = None
 
 
-class OrderedDict(dict, DictMixin):
+class OrderedDict(dict, abc.MutableMapping):
     '''Dict that maintains order of items.'''
 
     def __init__(self, *args, **kwds):

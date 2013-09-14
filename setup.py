@@ -11,10 +11,10 @@ import sys
 
 ### Confirming correct Python version: ########################################
 #                                                                             #
-if sys.version_info[1] <= 5:
+if sys.version_info[1] <= 6:
     raise Exception(
         "You're using Python <= 2.5, but this package requires either Python "
-        "2.6, 2.7, or 3.3+, so you can't use it unless you upgrade your "
+        "2.7, or 3.3 or above, so you can't use it unless you upgrade your "
         "Python version."
     )
 #                                                                             #
@@ -126,8 +126,9 @@ my_classifiers = [
     'License :: OSI Approved :: MIT License',
     'Operating System :: OS Independent', 
     'Programming Language :: Python',
-    'Programming Language :: Python :: 2.6',
     'Programming Language :: Python :: 2.7',
+    'Programming Language :: Python :: 3.3',
+    'Programming Language :: Python :: 3.4',
     'Topic :: Software Development :: Libraries :: Python Modules',
     'Topic :: Utilities'
 ]

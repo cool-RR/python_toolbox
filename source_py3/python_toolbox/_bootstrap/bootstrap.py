@@ -5,7 +5,7 @@ import sys
 
 ### Confirming correct Python version: ########################################
 #                                                                             #
-if sys.version_info[0] >= 2:
+if sys.version_info[0] == 2:
     raise Exception("This is a Python 3.x distribution of `python_toolbox`, "
                     "and you're using Python 2.x. Please get the Python 2.x "
                     "distribution.")

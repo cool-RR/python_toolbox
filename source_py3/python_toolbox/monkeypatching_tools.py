@@ -63,8 +63,6 @@ def monkeypatch_method(monkeypatchee, name=None):
                     raise NotImplemented
                 name_ = function.getter.__name__
             elif isinstance(function, (classmethod, staticmethod)):
-                if sys.version_info[:2] <= (2, 6):
-                    raise NotImplementedError('Not supported on Python 2.6.')
                 name_ = function.__func__.__name__
             else:
                 raise NotImplemented("`monkeypatch_method` doesn't know how "

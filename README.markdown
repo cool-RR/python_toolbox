@@ -58,9 +58,9 @@ If you want to be informed on new releases of the Python Toolbox, sign up for
 
 # Python versions #
  
-The Python Toolbox supports Python versions 2.6 and 2.7.
+The Python Toolbox supports Python versions 2.7 and 3.3+.
 
-It's tested on both CPython and PyPy 2.1. (Which runs Python 2.7.)
+It's tested on both CPython and PyPy 2.1.
 
 # Current state #
 
