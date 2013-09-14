@@ -33,14 +33,8 @@ def is_subclass(candidate, base_class):
     You may pass in a tuple of base classes instead of just one, and it will
     check whether `candidate` is a subclass of any of these base classes.
     
-    This has 2 advantages of over the built-in `issubclass`:
-    
-     1. It doesn't throw an exception if `candidate` is not a type. (Python
-        issue 10569.)
-     2. It manually checks for a `__subclasscheck__` method on `base_class`.
-        This is helpful for Python 2.5 compatibility because Python started
-        using `__subclasscheck__` in its built-in `issubclass` starting from
-        Python 2.6.
+    This has the advantage that it doesn't throw an exception if `candidate` is
+    not a type. (Python issue 10569.)
         
     '''
     # todo: disable ability to use nested iterables.
@@ -49,8 +43,6 @@ def is_subclass(candidate, base_class):
                    single_base_class in base_class)
     elif not isinstance(candidate, (type, types.ClassType)):
         return False
-    elif hasattr(base_class, '__subclasscheck__'):
-        return base_class.__subclasscheck__(candidate)
     else:
         return issubclass(candidate, base_class)
 

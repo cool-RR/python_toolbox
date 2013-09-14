@@ -13,9 +13,6 @@ from python_toolbox.nifty_collections.ordered_dict import OrderedDict
 
 
 def test():
-    if sys.version_info[:2] <= (2, 6):
-        raise nose.SkipTest
-
     from collections import OrderedDict as StdlibOrderedDict
 
     ordered_dict = OrderedDict(((1, 'a'), (2, 'b'), (3, 'c')))

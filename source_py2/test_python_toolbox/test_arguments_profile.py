@@ -478,9 +478,6 @@ def test_unhashable_star_empty():
     
     def func(a, b, c=3, d=4, **kwargs):
         pass
-    assert sys.version_info[0] == 2
-    assert sys.version_info[1] >= 5
-        
         
     a2 = ArgumentsProfile(func, 7, ({'a': 'b'},), set([1, (3, 4)]),
                           meow=[1, 2, {1: [1, 2]}])
