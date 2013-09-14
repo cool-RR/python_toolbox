@@ -46,9 +46,9 @@ def monkeypatch_method(monkeypatchee, name=None):
         if isinstance(function, types.FunctionType):
             name_ = name or function.__name__
             
-            new_method = types.MethodType(function, None, monkeypatchee) if \
+            new_method = types.MethodType(function, monkeypatchee) if \
                 monkeypatchee_is_a_class else types.MethodType(function,
-                                         monkeypatchee, class_of_monkeypatchee)
+                                                        class_of_monkeypatchee)
             setattr(monkeypatchee, name_, new_method)
             return function
         else:
