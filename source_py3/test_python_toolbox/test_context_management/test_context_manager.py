@@ -777,7 +777,7 @@ def check_context_manager_type(context_manager_type,
                         assert flag == 123
                         with my_context_manager:
                             assert flag == 123
-                            raise StopIteration
+                            raise LookupError
                         assert flag == 123
                     assert flag == 123
                 assert flag == 123
@@ -786,11 +786,11 @@ def check_context_manager_type(context_manager_type,
     except Exception as exception:
         assert not error_catching
         assert exception_type_caught is None
-        assert type(exception) is StopIteration
+        assert type(exception) is LookupError
         
     else:
         assert error_catching
-        assert exception_type_caught is StopIteration
+        assert exception_type_caught is LookupError
         exception_type_caught = None
         
     assert flag is None

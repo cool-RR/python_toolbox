@@ -94,15 +94,13 @@ class ContextManagerType(abc.ABCMeta, metaclass=ContextManagerTypeType):
             from .context_manager import ContextManager
             
             our_enter_uses_manage_context = (
-                getattr(result_class.__enter__, 'im_func',
-                result_class.__enter__) == ContextManager.\
-                _ContextManager__enter_using_manage_context.__func__
+                result_class.__enter__ == ContextManager.\
+                                    _ContextManager__enter_using_manage_context
             )
             
             our_exit_uses_manage_context = (
-                getattr(result_class.__exit__, 'im_func',
-                result_class.__exit__) == ContextManager.\
-                _ContextManager__exit_using_manage_context.__func__
+                result_class.__exit__ == ContextManager.\
+                                     _ContextManager__exit_using_manage_context
             )
             
             if our_exit_uses_manage_context and not \
