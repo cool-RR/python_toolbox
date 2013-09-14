@@ -24,21 +24,20 @@ class OrderedDict(StdlibOrderedDict):
 
         '''
         link = self.__map[key]
-        link_prev = link[1]
-        link_next = link[2]
-        link_prev[2] = link_next
-        link_next[1] = link_prev
-        end = self.__end
+        link_prev = link[0]
+        link_next = link[1]
+        link_prev[1] = link_next
+        link_next[0] = link_prev
         if last:
-            last = end[1]
-            link[1] = last
-            link[2] = end
-            last[2] = end[1] = link
+            last = self.__root[0]
+            link[0] = last
+            link[1] = self.__root
+            last[1] = self.__root[0] = link
         else:
-            first = end[2]
-            link[1] = end
-            link[2] = first
-            end[2] = first[1] = link
+            first = self.__root[1]
+            link[0] = self.__root
+            link[1] = first
+            root[1] = first[0] = link
 
     
     def sort(self, key=None, reversed=False):
