@@ -8,7 +8,6 @@ See its documentation for more information.
 '''
 
 import __builtin__
-from UserDict import DictMixin
 
 from python_toolbox import comparison_tools
 
