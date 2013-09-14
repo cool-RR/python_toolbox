@@ -17,7 +17,8 @@ try:
 except ImportError:
     StdlibOrderedDict = None
 
-
+import collections
+collections.UserDict
 class OrderedDict(dict, abc.MutableMapping):
     '''Dict that maintains order of items.'''
 
