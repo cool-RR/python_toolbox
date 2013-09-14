@@ -115,15 +115,17 @@ def test_unhashable_arguments():
     
     f = cache()(counting_func)
     
+    x = set((1, 2))
     
-    assert f(set((1, 2))) == f(set((1, 2)))
+    assert f(x) == f(x)
     
-    assert f(7, set((1, 2))) != f(8, set((1, 2)))
+    assert f(7, x) != f(8, x)
     
     assert f('boo') != f(meow='frrr')
     
-    assert f(meow={1: [1, 2], 2: frozenset([3, 'b'])}) == \
-           f(1, meow={1: [1, 2], 2: frozenset([3, 'b'])})
+    y = {1: [1, 2], 2: frozenset([3, 'b'])}
+    
+    assert f(meow=y) == f(1, meow=y)
     
     
 def test_helpful_message_when_forgetting_parentheses():
