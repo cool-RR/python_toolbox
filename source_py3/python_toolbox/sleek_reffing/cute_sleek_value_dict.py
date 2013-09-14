@@ -8,7 +8,7 @@ See its documentation for more details.
 '''
 
 import weakref
-import UserDict
+import collections
 
 from .sleek_ref import SleekRef
 from .exceptions import SleekRefDied
@@ -17,7 +17,7 @@ from .exceptions import SleekRefDied
 __all__ = ['CuteSleekValueDict']
 
 
-class CuteSleekValueDict(UserDict.UserDict, object):
+class CuteSleekValueDict(collections.MutableMapping, object):
     """
     A dictionary which sleekrefs its values and propagates their callback.
     
