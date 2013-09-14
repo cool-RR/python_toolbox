@@ -7,8 +7,6 @@ This module defines the `OrderedDict` class.
 See its documentation for more information.
 '''
 
-import __builtin__
-
 from python_toolbox import comparison_tools
 
 from collections import OrderedDict as StdlibOrderedDict
