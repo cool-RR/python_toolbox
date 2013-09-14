@@ -9,7 +9,7 @@ See its documentation for more details.
 # todo: revamp
 
 import weakref
-import UserDict
+import collections
 
 
 __all__ = ['WeakKeyIdentityDict']
@@ -27,7 +27,7 @@ class IdentityRef(weakref.ref):
         return self._hash
 
 
-class WeakKeyIdentityDict(UserDict.UserDict, object):
+class WeakKeyIdentityDict(collections.MutableMapping, object):
     """
     A weak key dictionary which cares about the keys' identities.
     

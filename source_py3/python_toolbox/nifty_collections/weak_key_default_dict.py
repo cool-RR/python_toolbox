@@ -8,12 +8,12 @@ See its documentation for more details.
 '''
 # todo: revamp
 
-import UserDict
 from weakref import ref
 import collections
 
 
-class WeakKeyDefaultDict(UserDict.UserDict, object): #todo: needs testing
+#todo: needs testing
+class WeakKeyDefaultDict(collections.MutableMapping, object):
     '''
     A weak key dictionary which can use a default factory.
     
