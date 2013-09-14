@@ -38,7 +38,7 @@ def monkeypatch_method(monkeypatchee, name=None):
     
     monkeypatchee_is_a_class = misc_tools.is_type(monkeypatchee)
     class_of_monkeypatchee = monkeypatchee if monkeypatchee_is_a_class else \
-                                      misc_tools.get_actual_type(monkeypatchee)
+                                                            type(monkeypatchee)
     
     def decorator(function):
         # Note that unlike most decorators, this decorator retuns the function

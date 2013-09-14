@@ -117,25 +117,6 @@ def is_magic_variable_name(name):
            name[:2] == name[-2:] == '__'
 
 
-def get_actual_type(thing):
-    '''
-    Get the actual type (or class) of an object.
-    
-    This is used instead of `type(thing)` for compaibility with old-style
-    classes.
-    '''
-    
-    return getattr(thing, '__class__', None) or type(thing)
-    # Using `.__class__` instead of `type` because of goddamned old-style
-    # classes. When you do `type` on an instance of an old-style class, you
-    # just get the useless `InstanceType`. But wait, there's more! We can't
-    # just take `thing.__class__` because the old-style classes themselves,
-    # i.e. the classes and not the instances, do not have a `.__class__`
-    # attribute at all! Therefore we are using `type` as a fallback.
-    #
-    # I don't like old-style classes, that's what I'm saying.
-    
-    
 def is_number(x):
     '''Return whether `x` is a number.'''
     try:

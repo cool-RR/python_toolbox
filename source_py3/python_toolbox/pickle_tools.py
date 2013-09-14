@@ -26,7 +26,7 @@ def is_atomically_pickleable(thing):
     
     However, the `threading.Lock()` itself is not atomically pickleable.
     '''
-    my_type = misc_tools.get_actual_type(thing)
+    my_type = type(thing)
     return _is_type_atomically_pickleable(my_type, thing)
 
 
