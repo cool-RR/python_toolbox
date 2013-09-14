@@ -11,17 +11,20 @@ import sys
 
 ### Confirming correct Python version: ########################################
 #                                                                             #
-if sys.version_info[0] >= 3:
-    raise Exception("Python 3.x is not supported, only Python 2.6 and Python "
-                    "2.7.")
 if sys.version_info[1] <= 5:
     raise Exception(
         "You're using Python <= 2.5, but this package requires either Python "
-        "2.6 or Python 2.7, so you can't use it unless you upgrade your "
+        "2.6, 2.7, or 3.3+, so you can't use it unless you upgrade your "
         "Python version."
     )
 #                                                                             #
 ### Finished confirming correct Python version. ###############################
+
+if sys.version_info[0] == 3:
+    source_folder = '.source_py3'
+else:
+    source_folder = '.source_py2'
+
 
 def get_python_toolbox_packages():
     '''
@@ -141,6 +144,7 @@ setuptools.setup(
     description='A collection of Python tools for various tasks',
     author='Ram Rachum',
     author_email='ram@rachum.com',
+    package_dir=source_folder, 
     packages=get_packages(),
     scripts=['test_python_toolbox/scripts/_test_python_toolbox.py'],
     long_description=my_long_description,
