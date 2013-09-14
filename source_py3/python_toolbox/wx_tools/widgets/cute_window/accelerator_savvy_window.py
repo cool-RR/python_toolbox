@@ -46,7 +46,7 @@ def _key_dict_to_accelerators(key_dict):
     
     ### Breaking down key tuples to individual entries: #######################
     #                                                                         #
-    for key, id in original_key_dict.items():
+    for key, id in list(original_key_dict.items()):
         if sequence_tools.is_sequence(key):
             key_sequence = key
             for actual_key in key_sequence:
@@ -56,7 +56,7 @@ def _key_dict_to_accelerators(key_dict):
     #                                                                         #
     ### Finished breaking down key tuples to individual entries. ##############
     
-    for key, id in key_dict.items():
+    for key, id in list(key_dict.items()):
         if isinstance(key, int):
             key = wx_tools.keyboard.Key(key)
         assert isinstance(key, wx_tools.keyboard.Key)

@@ -7,7 +7,7 @@ Defines the `Knob` class.
 See its documentation for more info.
 '''
 
-from __future__ import division
+
 
 import math
 
@@ -23,6 +23,7 @@ from python_toolbox.wx_tools.widgets.cute_panel import CutePanel
 from .snap_map import SnapMap
 
 from . import images as __images_package
+import collections
 images_package = __images_package.__name__
 
 
@@ -69,7 +70,7 @@ class Knob(CutePanel):
         assert 'size' not in kwargs
         kwargs['size'] = (29, 29)
         
-        assert callable(setter) and callable(getter)
+        assert isinstance(setter, collections.Callable) and isinstance(getter, collections.Callable)
         self.value_getter, self.value_setter = getter, setter
         
         CutePanel.__init__(self, parent, *args, **kwargs)

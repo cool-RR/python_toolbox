@@ -4,7 +4,7 @@
 '''Testing module for `CutePickler` and `CuteUnpickler`.'''
 
 import threading
-from cStringIO import StringIO 
+from io import StringIO 
 import tempfile
 
 # We're importing `pickle_module` from `pickle_tools`, so we get the exact same
@@ -34,7 +34,7 @@ def test_totally_pickleable():
         {1: 2, 3: set((1, 2, 3))},
         None, True, False,
         (1, 2, 'meow'),
-        u'qweqweqasd',
+        'qweqweqasd',
     ]
     
     for thing in totally_pickleable_things:
@@ -58,7 +58,7 @@ def test_without_multiprocessing():
         {1: 2, 3: set((1, 2, 3))},
         None, True, False,
         (1, 2, 'meow'),
-        u'qweqweqasd',
+        'qweqweqasd',
         PickleableObject()
     ]
     
@@ -106,7 +106,7 @@ def test():
         {1: 2, 3: set((1, 2, 3))},
         None, True, False,
         (1, 2, 'meow'),
-        u'qweqweqasd',
+        'qweqweqasd',
         PickleableObject()
     ]
     

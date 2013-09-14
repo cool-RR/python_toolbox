@@ -7,7 +7,7 @@ This module defines the `DecoratingContextManager` class.
 See its documentation for more information.
 '''
 
-from __future__ import with_statement
+
 
 from python_toolbox import decorator_tools
 

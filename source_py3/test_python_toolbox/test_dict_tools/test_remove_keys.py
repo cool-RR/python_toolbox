@@ -11,7 +11,7 @@ def test():
     origin_dict = {1: 2, 3: 4, 5: 6, 7: 8, 9: 10, 11: 12, 13: 14, 15: 16,}
     
     not_divide_by_three_dict = dict(origin_dict)
-    remove_keys(not_divide_by_three_dict, xrange(0, 50, 3))
+    remove_keys(not_divide_by_three_dict, range(0, 50, 3))
     assert not_divide_by_three_dict == {1: 2, 5: 6, 7: 8, 11: 12, 13: 14}
     
     below_ten_dict = dict(origin_dict)

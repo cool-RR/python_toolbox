@@ -7,7 +7,7 @@ This module defines the `ContextManager` class.
 See its documentation for more information.
 '''
 
-from __future__ import with_statement
+
 
 import sys
 import types
@@ -20,7 +20,7 @@ from .context_manager_type import ContextManagerType
 from .self_hook import SelfHook
 
 
-class ContextManager(DecoratingContextManager):
+class ContextManager(DecoratingContextManager, metaclass=ContextManagerType):
     '''
     Allows running preparation code before a given suite and cleanup after.
     
@@ -36,9 +36,6 @@ class ContextManager(DecoratingContextManager):
     For more details, see documentation of the containing module,
     `python_toolbox.context_manager`.
     '''
-    
-    
-    __metaclass__ = ContextManagerType
     
     
     @abc.abstractmethod
@@ -79,7 +76,7 @@ class ContextManager(DecoratingContextManager):
         
         
         try:
-            generator_return_value = new_generator.next()
+            generator_return_value = next(new_generator)
             return self if (generator_return_value is SelfHook) else \
                    generator_return_value
         
@@ -100,7 +97,7 @@ class ContextManager(DecoratingContextManager):
         
         if exc_type is None:
             try:
-                generator.next()
+                next(generator)
             except StopIteration:
                 return
             else:
@@ -114,8 +111,8 @@ class ContextManager(DecoratingContextManager):
                 # tell if we get the same exception back
                 exc_value = exc_type()
             try:
-                generator.throw(exc_type, exc_value, exc_traceback)
-            except StopIteration, stop_iteration:
+                generator.throw(exc_type(exc_value).with_traceback(exc_traceback))
+            except StopIteration as stop_iteration:
                 # Suppress the exception *unless* it's the same exception that
                 # was passed to throw().  This prevents a StopIteration
                 # raised inside the "with" statement from being suppressed

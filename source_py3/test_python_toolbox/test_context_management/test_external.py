@@ -3,7 +3,7 @@
 
 '''Tests taken from Python's `contextlib'.'''
 
-from __future__ import with_statement
+
 
 import sys
 
@@ -76,7 +76,7 @@ class ContextManagerTestCase(unittest2.TestCase):
             state.append(1)
             try:
                 yield 42
-            except ZeroDivisionError, e:
+            except ZeroDivisionError as e:
                 state.append(e.args[0])
                 self.assertEqual(state, [1, 42, 999])
         with woohoo() as x:
@@ -91,7 +91,7 @@ class ContextManagerTestCase(unittest2.TestCase):
             raise nose.SkipTest
         def attribs(**kw):
             def decorate(func):
-                for k,v in kw.items():
+                for k,v in list(kw.items()):
                     setattr(func,k,v)
                 return func
             return decorate

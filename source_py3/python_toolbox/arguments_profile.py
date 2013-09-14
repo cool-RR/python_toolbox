@@ -12,6 +12,7 @@ from python_toolbox import cheat_hashing
 from python_toolbox.nifty_collections import OrderedDict
 from python_toolbox import dict_tools
 from python_toolbox import comparison_tools
+import collections
 
 
 class ArgumentsProfile(object):
@@ -92,7 +93,7 @@ class ArgumentsProfile(object):
         `*args` and `**kwargs` are the arguments that go into the `function`.
         '''
         
-        if not callable(function):
+        if not isinstance(function, collections.Callable):
             raise Exception('%s is not a callable object.' % function)
         self.function = function
         
@@ -159,7 +160,7 @@ class ArgumentsProfile(object):
                           else []
         
         # `dict` that maps from argument name to default value:
-        defaults = OrderedDict(zip(defaultful_args, s_defaults))
+        defaults = OrderedDict(list(zip(defaultful_args, s_defaults)))
         
         defaultful_args_differing_from_defaults = set((
             defaultful_arg for defaultful_arg in defaultful_args
@@ -230,7 +231,7 @@ class ArgumentsProfile(object):
             # Now we iterate on the candidates to find out which one has the
             # lowest price:
             
-            for candidate in xrange(n_defaultful_args + 1):
+            for candidate in range(n_defaultful_args + 1):
 
                 defaultful_args_to_specify_positionally = \
                     defaultful_args[:candidate]
@@ -246,10 +247,10 @@ class ArgumentsProfile(object):
                 # The `2 * candidate` addend is to account for the ", " parts
                 # between the arguments.
                     
-                defaultful_args_to_specify_by_keyword = filter(
+                defaultful_args_to_specify_by_keyword = list(filter(
                     defaultful_args_differing_from_defaults.__contains__,
                     defaultful_args[candidate:]
-                )
+                ))
                 
                 price_for_defaultful_args_specified_by_keyword = \
                     2 * len(defaultful_args_to_specify_by_keyword) + \
@@ -288,11 +289,11 @@ class ArgumentsProfile(object):
 
             # Finished iterating on candidates! Time to pick our winner.
                 
-            minimum_price = min(total_price_for_n_dasp_candidate.itervalues())
+            minimum_price = min(total_price_for_n_dasp_candidate.values())
             
             leading_candidates = [
                 candidate for candidate in 
-                total_price_for_n_dasp_candidate.iterkeys() if
+                total_price_for_n_dasp_candidate.keys() if
                 total_price_for_n_dasp_candidate[candidate] == minimum_price
             ]
             
@@ -327,10 +328,10 @@ class ArgumentsProfile(object):
         
         # Now we add those specified by keyword:
 
-        defaultful_args_to_specify_by_keyword = filter(
+        defaultful_args_to_specify_by_keyword = list(filter(
                 defaultful_args_differing_from_defaults.__contains__,
                 defaultful_args[n_defaultful_args_to_specify_positionally:]
-            )
+            ))
         for defaultful_arg in defaultful_args_to_specify_by_keyword:
             self.kwargs[defaultful_arg] = getcallargs_result[defaultful_arg]
                 
@@ -356,20 +357,20 @@ class ArgumentsProfile(object):
             # according to canonical ordering. So we need to sort them first.
             
             unsorted_star_kwargs_names = \
-                getcallargs_result[s_star_kwargs].keys()
+                list(getcallargs_result[s_star_kwargs].keys())
             sorted_star_kwargs_names = sorted(
                 unsorted_star_kwargs_names,
                 key=comparison_tools.underscore_hating_key
             )
             
             sorted_star_kwargs = OrderedDict(
-                zip(
+                list(zip(
                     sorted_star_kwargs_names,
                     dict_tools.get_list(
                         getcallargs_result[s_star_kwargs],
                         sorted_star_kwargs_names
                     )
-                )
+                ))
             )
             
             
@@ -426,17 +427,17 @@ class ArgumentsProfile(object):
     
     def keys(self):
         '''Get all the argument names.'''
-        return self._arguments.keys()
+        return list(self._arguments.keys())
     
     
     def values(self):
         '''Get all the argument values.'''
-        return self._arguments.values()
+        return list(self._arguments.values())
     
     
     def items(self):
         '''Get a tuple of all the `(argument_name, argument_value)` item.'''
-        return self._arguments.items()
+        return list(self._arguments.items())
     
     
     def __iter__(self):
@@ -446,17 +447,17 @@ class ArgumentsProfile(object):
     
     def iterkeys(self):
         '''Iterate on the argument names according to their order.'''
-        return self._arguments.iterkeys()
+        return iter(self._arguments.keys())
     
     
     def itervalues(self):        
         '''Iterate on the argument value according to their order.'''
-        return self._arguments.itervalues()
+        return iter(self._arguments.values())
         
     
     def iteritems(self):
         '''Iterate on `(argument_name, argument_value)` items by order.'''
-        return self._arguments.iteritems()
+        return iter(self._arguments.items())
     
     
     def __contains__(self, argument_name):

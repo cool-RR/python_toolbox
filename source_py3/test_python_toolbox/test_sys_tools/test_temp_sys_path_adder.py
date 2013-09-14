@@ -3,7 +3,7 @@
 
 '''Testing module for `python_toolbox.sys_tools.TempSysPathAdder`.'''
 
-from __future__ import with_statement
+
 
 import sys
 

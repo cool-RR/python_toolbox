@@ -27,7 +27,7 @@ def _check(exhaustive):
     assert not all_equal([1, 1, 2, 1], exhaustive)
     assert not all_equal([1, 1, 1.001, 1], exhaustive)
     assert not all_equal(((1 + 0j), 3, 1.0, 1), exhaustive)
-    assert not all_equal(range(7), exhaustive)
+    assert not all_equal(list(range(7)), exhaustive)
     assert not all_equal(iter([1, 17, 1.0, 1]), exhaustive)
     assert not all_equal(set(['meow', 'grr']), exhaustive)
     assert not all_equal(['frr', 'frr', {}, 'frr', 'frr'], exhaustive)

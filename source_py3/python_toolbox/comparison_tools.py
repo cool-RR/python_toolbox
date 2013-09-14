@@ -4,12 +4,13 @@
 '''Defines various tools for comparisons.'''
 
 import sys
+import collections
 
 
 def underscore_hating_key(string):
     '''Key function for sorting that treats `_` as last character.'''
-    assert isinstance(string, basestring)
-    return unicode(string).replace('_', unichr(sys.maxunicode))
+    assert isinstance(string, str)
+    return str(string).replace('_', chr(sys.maxunicode))
 
 
 def total_ordering(cls): 
@@ -66,10 +67,10 @@ def process_key_function_or_attribute_name(key_function_or_attribute_name):
     '''
     if key_function_or_attribute_name is None:
         return None
-    elif callable(key_function_or_attribute_name):
+    elif isinstance(key_function_or_attribute_name, collections.Callable):
         return key_function_or_attribute_name
     else:
-        assert isinstance(key_function_or_attribute_name, basestring)
+        assert isinstance(key_function_or_attribute_name, str)
         return lambda key: getattr(key, key_function_or_attribute_name)
 
 

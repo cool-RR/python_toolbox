@@ -70,7 +70,7 @@ class WeakKeyIdentityDict(UserDict.UserDict, object):
     def copy(self):
         """ D.copy() -> a shallow copy of D """
         new = WeakKeyIdentityDict()
-        for key, value in self.data.items():
+        for key, value in list(self.data.items()):
             o = key()
             if o is not None:
                 new[o] = value
@@ -96,7 +96,7 @@ class WeakKeyIdentityDict(UserDict.UserDict, object):
     def items(self):
         """ D.items() -> list of D's (key, value) pairs, as 2-tuples """
         L = []
-        for key, value in self.data.items():
+        for key, value in list(self.data.items()):
             o = key()
             if o is not None:
                 L.append((o, value))
@@ -105,7 +105,7 @@ class WeakKeyIdentityDict(UserDict.UserDict, object):
     
     def iteritems(self):
         """ D.iteritems() -> an iterator over the (key, value) items of D """
-        for wr, value in self.data.iteritems():
+        for wr, value in self.data.items():
             key = wr()
             if key is not None:
                 yield key, value
@@ -121,23 +121,23 @@ class WeakKeyIdentityDict(UserDict.UserDict, object):
         keep the keys around longer than needed.
 
         """
-        return self.data.iterkeys()
+        return iter(self.data.keys())
 
     
     def iterkeys(self):
         """ D.iterkeys() -> an iterator over the keys of D """
-        for wr in self.data.iterkeys():
+        for wr in self.data.keys():
             obj = wr()
             if obj is not None:
                 yield obj
 
     def __iter__(self):
-        return self.iterkeys()
+        return iter(self.keys())
 
     
     def itervalues(self):
         """ D.itervalues() -> an iterator over the values of D """
-        return self.data.itervalues()
+        return iter(self.data.values())
 
     
     def keyrefs(self):
@@ -150,13 +150,13 @@ class WeakKeyIdentityDict(UserDict.UserDict, object):
         keep the keys around longer than needed.
 
         """
-        return self.data.keys()
+        return list(self.data.keys())
 
     
     def keys(self):
         """ D.keys() -> list of D's keys """
         L = []
-        for wr in self.data.keys():
+        for wr in list(self.data.keys()):
             o = wr()
             if o is not None:
                 L.append(o)
@@ -194,7 +194,7 @@ class WeakKeyIdentityDict(UserDict.UserDict, object):
         if dict is not None:
             if not hasattr(dict, "items"):
                 dict = type({})(dict)
-            for key, value in dict.items():
+            for key, value in list(dict.items()):
                 d[IdentityRef(key, self._remove)] = value
         if len(kwargs):
             self.update(kwargs)

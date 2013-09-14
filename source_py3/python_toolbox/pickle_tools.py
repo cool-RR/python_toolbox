@@ -6,9 +6,9 @@
 
 import zlib
 import re
-import cPickle as pickle_module
+import pickle as pickle_module
 import pickle # Importing just to get dispatch table, not pickling with it.
-import copy_reg
+import copyreg
 import types
 
 from python_toolbox import address_tools
@@ -52,7 +52,7 @@ def _is_type_atomically_pickleable(type_, thing=None):
         # We assume that objects that don't have `__class__` can't be pickled.
         # (With the exception of old-style classes themselves.)
         if not hasattr(thing, '__class__') and \
-           (not isinstance(thing, types.ClassType)):
+           (not isinstance(thing, type)):
             return False
         
         if not issubclass(type_, object):
@@ -72,11 +72,11 @@ def _is_type_atomically_pickleable(type_, thing=None):
         if type_ in pickle.Pickler.dispatch:
             return True
             
-        reduce_function = copy_reg.dispatch_table.get(type_)
+        reduce_function = copyreg.dispatch_table.get(type_)
         if reduce_function:
             try:
                 reduce_result = reduce_function(thing)
-            except Exception, exception:
+            except Exception as exception:
                 assert_legit_pickling_exception(exception)
                 return False
             else:
@@ -87,7 +87,7 @@ def _is_type_atomically_pickleable(type_, thing=None):
             try:
                 reduce_result = reduce_function(thing, 0)
                 # (The `0` is the protocol argument.)
-            except Exception, exception:
+            except Exception as exception:
                 assert_legit_pickling_exception(exception)
                 return False
             else:
@@ -97,7 +97,7 @@ def _is_type_atomically_pickleable(type_, thing=None):
         if reduce_function:
             try:
                 reduce_result = reduce_function(thing)
-            except Exception, exception:
+            except Exception as exception:
                 assert_legit_pickling_exception(exception)
                 return False
             else:

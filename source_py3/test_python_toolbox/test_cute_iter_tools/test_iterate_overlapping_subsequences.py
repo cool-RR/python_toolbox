@@ -14,15 +14,15 @@ def test_length_2():
     
     # `iterate_overlapping_subsequences` returns an iterator, not a sequence:
     assert not sequence_tools.is_sequence(
-        iterate_overlapping_subsequences(range(4))
+        iterate_overlapping_subsequences(list(range(4)))
     )
                                           
-    assert tuple(iterate_overlapping_subsequences(range(4))) == \
-           tuple(iterate_overlapping_subsequences(xrange(4))) == \
+    assert tuple(iterate_overlapping_subsequences(list(range(4)))) == \
+           tuple(iterate_overlapping_subsequences(range(4))) == \
            ((0, 1), (1, 2), (2, 3))
                                           
-    assert tuple(iterate_overlapping_subsequences(range(4), wrap_around=True)) == \
-           tuple(iterate_overlapping_subsequences(xrange(4), wrap_around=True)) ==\
+    assert tuple(iterate_overlapping_subsequences(list(range(4)), wrap_around=True)) == \
+           tuple(iterate_overlapping_subsequences(range(4), wrap_around=True)) ==\
            ((0, 1), (1, 2), (2, 3), (3, 0))
                                           
     assert tuple(iterate_overlapping_subsequences('meow')) == \
@@ -35,17 +35,17 @@ def test_iterable_too_short():
            
            
 def test_various_lengths():
-    assert tuple(iterate_overlapping_subsequences(xrange(7), length=3)) == \
+    assert tuple(iterate_overlapping_subsequences(range(7), length=3)) == \
                         ((0, 1, 2), (1, 2, 3), (2, 3, 4), (3, 4, 5), (4, 5, 6))
-    assert tuple(iterate_overlapping_subsequences(xrange(7), length=4)) == \
+    assert tuple(iterate_overlapping_subsequences(range(7), length=4)) == \
                        ((0, 1, 2, 3), (1, 2, 3, 4), (2, 3, 4, 5), (3, 4, 5, 6))
-    assert tuple(iterate_overlapping_subsequences(xrange(7), length=5)) == \
+    assert tuple(iterate_overlapping_subsequences(range(7), length=5)) == \
                             ((0, 1, 2, 3, 4), (1, 2, 3, 4, 5), (2, 3, 4, 5, 6))
     
-    assert tuple(iterate_overlapping_subsequences(xrange(7), length=4,
+    assert tuple(iterate_overlapping_subsequences(range(7), length=4,
             wrap_around=True)) == ((0, 1, 2, 3), (1, 2, 3, 4), (2, 3, 4, 5),
             (3, 4, 5, 6), (4, 5, 6, 0), (5, 6, 0, 1), (6, 0, 1, 2))
-    assert tuple(iterate_overlapping_subsequences(xrange(7), length=5,
+    assert tuple(iterate_overlapping_subsequences(range(7), length=5,
             wrap_around=True)) == ((0, 1, 2, 3, 4), (1, 2, 3, 4, 5),
             (2, 3, 4, 5, 6), (3, 4, 5, 6, 0), (4, 5, 6, 0, 1), (5, 6, 0, 1, 2),
             (6, 0, 1, 2, 3))
@@ -62,7 +62,7 @@ def test_garbage_collection():
         def __del__(self):
             garbage_collected.add(self.n)
             
-    iterable = (GarbageNoter(i) for i in xrange(7))
+    iterable = (GarbageNoter(i) for i in range(7))
     
     consecutive_subsequences_iterator = \
                                iterate_overlapping_subsequences(iterable, length=3)
@@ -99,7 +99,7 @@ def test_garbage_collection_wrap_around():
         def __del__(self):
             garbage_collected.add(self.n)
             
-    iterable = (GarbageNoter(i) for i in xrange(7))
+    iterable = (GarbageNoter(i) for i in range(7))
     
     consecutive_subsequences_iterator = \
              iterate_overlapping_subsequences(iterable, length=3, wrap_around=True)

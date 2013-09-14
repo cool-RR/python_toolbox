@@ -7,7 +7,7 @@ Defines the `SnapMap` class.
 See its documentation for more info.
 '''
 
-from __future__ import division
+
 from python_toolbox import misc_tools
 
 

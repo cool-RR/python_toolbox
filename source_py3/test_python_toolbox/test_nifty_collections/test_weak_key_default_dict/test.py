@@ -32,13 +32,13 @@ def test():
     assert weakreffable_object_2 in wkd_dict
     assert 'meow' not in wkd_dict
     
-    assert sorted(wkd_dict.items()) == sorted(wkd_dict.iteritems()) == sorted(
+    assert sorted(wkd_dict.items()) == sorted(wkd_dict.items()) == sorted(
         ((weakreffable_object_0, 2),
          (weakreffable_object_1, 7),
          (weakreffable_object_2, 7), )
     )
     
-    assert set(wkd_dict.iterkeys()) == set(wkd_dict.keys()) == \
+    assert set(wkd_dict.keys()) == set(wkd_dict.keys()) == \
            set((ref() for ref in wkd_dict.iterkeyrefs())) == \
            set((ref() for ref in wkd_dict.keyrefs())) == \
            set((weakreffable_object_0, weakreffable_object_1,
@@ -46,10 +46,10 @@ def test():
     
     weakreffable_object_3 = WeakreffableObject()
     wkd_dict[weakreffable_object_3] = 123
-    assert len(wkd_dict.keys()) == 4
+    assert len(list(wkd_dict.keys())) == 4
     del weakreffable_object_3
     gc_tools.collect()
-    assert len(wkd_dict.keys()) == 3
+    assert len(list(wkd_dict.keys())) == 3
     
     assert wkd_dict.pop(weakreffable_object_2) == 7
     assert len(wkd_dict) == 2

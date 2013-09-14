@@ -66,7 +66,7 @@ class CuteSleekValueDict(UserDict.UserDict, object):
     def __eq__(self, other):
         if len(self) != len(other):
             return False
-        for key, value in self.iteritems():
+        for key, value in self.items():
             if other[key] != value:
                 return False
         return True
@@ -111,7 +111,7 @@ class CuteSleekValueDict(UserDict.UserDict, object):
     def items(self):
         """ D.items() -> list of D's (key, value) pairs, as 2-tuples """
         my_items = []
-        for key, sleek_ref in self.data.items():
+        for key, sleek_ref in list(self.data.items()):
             try:
                 thing = sleek_ref()
             except SleekRefDied:
@@ -123,7 +123,7 @@ class CuteSleekValueDict(UserDict.UserDict, object):
     
     def iteritems(self):
         """ D.iteritems() -> an iterator over the (key, value) items of D """
-        for key, sleek_ref in self.data.iteritems():
+        for key, sleek_ref in self.data.items():
             try:
                 thing = sleek_ref()
             except SleekRefDied:
@@ -134,11 +134,11 @@ class CuteSleekValueDict(UserDict.UserDict, object):
                 
     def iterkeys(self):
         """ D.iterkeys() -> an iterator over the keys of D """
-        return self.data.iterkeys()
+        return iter(self.data.keys())
 
     
     def __iter__(self):
-        return self.data.iterkeys()
+        return iter(self.data.keys())
 
     
     def itervaluerefs(self):
@@ -151,12 +151,12 @@ class CuteSleekValueDict(UserDict.UserDict, object):
         keep the values around longer than needed.
 
         """
-        return self.data.itervalues()
+        return iter(self.data.values())
 
     
     def itervalues(self):
         """ D.itervalues() -> an iterator over the values of D """
-        for sleek_ref in self.data.itervalues():
+        for sleek_ref in self.data.values():
             try:
                 yield sleek_ref()
             except SleekRefDied:
@@ -204,7 +204,7 @@ class CuteSleekValueDict(UserDict.UserDict, object):
             (other_dict,) = other_dicts        
             if not hasattr(other_dict, 'items'):
                 other_dict = dict(other_dict)
-            for key, value in other_dict.items():
+            for key, value in list(other_dict.items()):
                 self[key] = value
                 
         if kwargs:
@@ -221,13 +221,13 @@ class CuteSleekValueDict(UserDict.UserDict, object):
         keep the values around longer than needed.
 
         """
-        return self.data.values()
+        return list(self.data.values())
 
     
     def values(self):
         """ D.values() -> list of D's values """
         my_values = []
-        for sleek_ref in self.data.values():
+        for sleek_ref in list(self.data.values()):
             try:
                 my_values.append(sleek_ref())
             except SleekRefDied:

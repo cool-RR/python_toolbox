@@ -3,7 +3,7 @@
 
 '''Testing module for `python_toolbox.nifty_collections.LazyTuple`.'''
 
-from __future__ import with_statement
+
 
 import uuid
 import itertools
@@ -21,7 +21,7 @@ class SelfAwareUuidIterator(collections.Iterator):
     '''Iterator that gives UUIDs and keeps them all in an internal list.'''
     def __init__(self):
         self.data = []
-    def next(self):
+    def __next__(self):
         new_entry = uuid.uuid4()
         self.data.append(new_entry)
         return new_entry
@@ -124,12 +124,12 @@ def test_factory_decorator():
     my_count = count()
     assert isinstance(my_count, LazyTuple)
     assert repr(my_count) == '<LazyTuple: (...)>'
-    assert my_count[:10] == tuple(xrange(10))
+    assert my_count[:10] == tuple(range(10))
     
 
 def test_finite_iterator():
     '''Test `LazyTuple` on a finite iterator.'''
-    my_finite_iterator = iter(range(5))
+    my_finite_iterator = iter(list(range(5)))
     lazy_tuple = LazyTuple(my_finite_iterator)
     assert not lazy_tuple.exhausted
 
@@ -153,7 +153,7 @@ def test_finite_iterator():
     assert ('meow', 'frr') + lazy_tuple == ('meow', 'frr', 0, 1, 2, 3, 4)
 
     
-    identical_lazy_tuple = LazyTuple(iter(range(5)))
+    identical_lazy_tuple = LazyTuple(iter(list(range(5))))
     assert not identical_lazy_tuple.exhausted
     my_dict = {}
     my_dict[identical_lazy_tuple] = 'flugzeug'

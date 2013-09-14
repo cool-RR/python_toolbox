@@ -20,7 +20,7 @@ is_win = (wx.Platform == '__WXMSW__')
 @caching.cache(max_size=100)
 def get_focus_pen(color='black', width=1, dashes=[1, 4]):
     ''' '''
-    if isinstance(color, basestring):
+    if isinstance(color, str):
         color = wx.NamedColour(color)
         
     # todo: do `if is_mac`, also gtk maybe

@@ -25,7 +25,7 @@ class TempWorkingDirectorySetter(TempValueSetter):
         
         `working_directory` is the temporary working directory to use.
         '''
-        assert isinstance(working_directory, basestring)
+        assert isinstance(working_directory, str)
         TempValueSetter.__init__(self,
                                  (os.getcwd, os.chdir),
                                  value=working_directory)

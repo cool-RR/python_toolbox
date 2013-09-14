@@ -17,7 +17,7 @@ def decorator(caller, func=None):
     `decorator(caller, func)` decorates a function using a caller.
     '''
     if func is not None: # returns a decorated function
-        evaldict = func.func_globals.copy()
+        evaldict = func.__globals__.copy()
         evaldict['_call_'] = caller
         evaldict['_func_'] = func
         result = michele_decorator_module.FunctionMaker.create(
@@ -30,7 +30,7 @@ def decorator(caller, func=None):
             return functools.partial(decorator, caller)
         # otherwise assume caller is a function
         first = inspect.getargspec(caller)[0][0] # first arg
-        evaldict = caller.func_globals.copy()
+        evaldict = caller.__globals__.copy()
         evaldict['_call_'] = caller
         evaldict['decorator'] = decorator
         return michele_decorator_module.FunctionMaker.create(

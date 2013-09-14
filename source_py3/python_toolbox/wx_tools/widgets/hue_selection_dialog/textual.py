@@ -7,8 +7,8 @@ Defines the `Textual` class.
 See its documentation for more details.
 '''
 
-from __future__ import division
-from __future__ import with_statement
+
+
 
 import wx
 
@@ -45,7 +45,7 @@ class Textual(CutePanel):
         wx.Panel.__init__(self, parent=hue_selection_dialog, size=(75, 100))
         self.set_good_background_color()
         self.SetHelpText(
-            u'Set the hue in angles (0%s-359%s).' % (unichr(176), unichr(176))
+            'Set the hue in angles (0%s-359%s).' % (chr(176), chr(176))
         )
         
         self.hue_selection_dialog = hue_selection_dialog
@@ -70,7 +70,7 @@ class Textual(CutePanel):
         
         self.h_sizer.Add(self.spin_ctrl, 0)
         
-        self.degree_static_text = wx.StaticText(self, label=unichr(176))
+        self.degree_static_text = wx.StaticText(self, label=chr(176))
         
         self.h_sizer.Add(self.degree_static_text, 0)
         

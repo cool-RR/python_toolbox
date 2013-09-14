@@ -88,7 +88,7 @@ def test_method():
     assert call_and_check_if_profiled(a.increment) is False
     assert a.x == 3
 
-    a.increment.im_func.profiling_on = True
+    a.increment.__func__.profiling_on = True
     
     assert call_and_check_if_profiled(a.increment) is True
     assert a.x == 4
@@ -97,7 +97,7 @@ def test_method():
     assert call_and_check_if_profiled(a.increment) is True
     assert a.x == 6
     
-    a.increment.im_func.off_after = True
+    a.increment.__func__.off_after = True
     
     assert call_and_check_if_profiled(a.increment) is True
     assert a.x == 7
@@ -106,7 +106,7 @@ def test_method():
     assert call_and_check_if_profiled(a.increment) is False
     assert a.x == 9
     
-    a.increment.im_func.profiling_on = True
+    a.increment.__func__.profiling_on = True
     
     assert call_and_check_if_profiled(a.increment) is True
     assert a.x == 10
@@ -196,14 +196,14 @@ def test_perfects():
     '''Test `cute_profile` on a function that finds perfect numbers.'''
     
     def get_divisors(x):
-        return [i for i in xrange(1, x) if (x % i == 0)]
+        return [i for i in range(1, x) if (x % i == 0)]
     
     def is_perfect(x):
         return sum(get_divisors(x)) == x
     
     @cute_profile.profile_ready()
     def get_perfects(top):
-        return [i for i in xrange(1, top) if is_perfect(i)]
+        return [i for i in range(1, top) if is_perfect(i)]
     
     result = get_perfects(30)
     get_perfects.profiling_on = True

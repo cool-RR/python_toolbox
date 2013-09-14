@@ -3,12 +3,12 @@
 
 '''Various zip-related tools.'''
 
-from __future__ import with_statement
+
 
 import contextlib
 import zipfile as zip_module
 import os.path
-import cStringIO as string_io_module
+import io as string_io_module
 import re
 import fnmatch
 

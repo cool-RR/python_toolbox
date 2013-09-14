@@ -101,13 +101,13 @@ def get_object_by_address(address, root=None, namespace={}):
     
     if root:
         # First for `root`:
-        if isinstance(root, basestring):
+        if isinstance(root, str):
             root = get_object_by_address(root)
         root_short_name = root.__name__.rsplit('.', 1)[-1]
         
     if namespace:
         # And then for `namespace`:
-        if isinstance(namespace, basestring):
+        if isinstance(namespace, str):
             namespace = get_object_by_address(namespace)
             
         parent_object, namespace_dict = _get_parent_and_dict_from_namespace(

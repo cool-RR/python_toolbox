@@ -6,7 +6,7 @@
 # todo: alters global state, yuck! Maybe check before if it's already set to
 # something?
 
-import copy_reg
+import copyreg
 import types
 
 from python_toolbox import import_tools
@@ -20,15 +20,15 @@ def reduce_method(method):
         getattr,
         (
             
-            method.im_self or method.im_class,
+            method.__self__ or method.__self__.__class__,
             # `im_self` for bound methods, `im_class` for unbound methods.
             
-            method.im_func.__name__
+            method.__func__.__name__
         
         )
     )
 
-copy_reg.pickle(types.MethodType, reduce_method)
+copyreg.pickle(types.MethodType, reduce_method)
 
 
 ###############################################################################
@@ -38,7 +38,7 @@ def reduce_module(module):
     '''Reducer for modules.'''
     return (import_tools.normal_import, (module.__name__,))
 
-copy_reg.pickle(types.ModuleType, reduce_module)
+copyreg.pickle(types.ModuleType, reduce_module)
 
 
 ###############################################################################
@@ -55,7 +55,7 @@ def reduce_ellipsis(ellipsis):
         ()
     )
 
-copy_reg.pickle(types.EllipsisType, reduce_ellipsis)
+copyreg.pickle(type(Ellipsis), reduce_ellipsis)
 
 
 ###############################################################################

@@ -3,7 +3,7 @@
 
 '''Testing module for `python_toolbox.address_tools.describe`.'''
 
-from __future__ import with_statement
+
 
 import nose
 
@@ -225,9 +225,9 @@ def test_bad_module_name():
     my_locals = locals().copy()
     my_locals['__name__'] = non_sensical_module_name
     
-    exec 'def f(): pass' in my_locals
-    exec ('class A(object):\n'
-          '    def m(self): pass\n') in my_locals
+    exec('def f(): pass', my_locals)
+    exec(('class A(object):\n'
+          '    def m(self): pass\n'), my_locals)
     
     f, A = my_locals['f'], my_locals['A']
     

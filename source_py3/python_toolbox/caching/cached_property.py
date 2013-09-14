@@ -9,6 +9,7 @@ See its documentation for more details.
 
 from python_toolbox import decorator_tools
 from python_toolbox import misc_tools
+import collections
 
 
 class CachedProperty(misc_tools.OwnNameDiscoveringDescriptor):
@@ -46,7 +47,7 @@ class CachedProperty(misc_tools.OwnNameDiscoveringDescriptor):
         class; this will save a bit of processing later.
         '''
         misc_tools.OwnNameDiscoveringDescriptor.__init__(self, name=name)
-        if callable(getter_or_value) and not force_value_not_getter:
+        if isinstance(getter_or_value, collections.Callable) and not force_value_not_getter:
             self.getter = getter_or_value
         else:
             self.getter = lambda thing: getter_or_value

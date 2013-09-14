@@ -34,7 +34,7 @@ def flatten(iterable):
 
     iterator = iter(iterable)
     try:
-        first_item = iterator.next()
+        first_item = next(iterator)
     except StopIteration:
         return []
     return sum(iterator, first_item)
@@ -58,7 +58,7 @@ def combinations(sequence, n=None, start=0):
     if n is None:
         length = len(sequence) - start
         iterators = (combinations(sequence, n=i, start=start) for i
-                     in xrange(1, length + 1))
+                     in range(1, length + 1))
         for item in itertools.chain(*iterators):
             yield item
 
@@ -142,7 +142,7 @@ def partitions(sequence, partition_size=None, n_partitions=None,
     enlarged_length = partition_size * n_partitions
 
     blocks = [sequence[i : i + partition_size] for i in
-              xrange(0, enlarged_length, partition_size)]
+              range(0, enlarged_length, partition_size)]
 
     if fill_value != NO_FILL_VALUE and blocks:
         filler = itertools.repeat(fill_value,
@@ -244,7 +244,7 @@ def to_tuple(single_or_sequence, item_type=None, item_test=None):
     if item_test is not None:
         actual_item_test = item_test
     elif item_type is not None:
-        assert isinstance(item_type, (type, types.ClassType))
+        assert isinstance(item_type, type)
         actual_item_test = \
             lambda candidate: isinstance(candidate, item_type)
     else:

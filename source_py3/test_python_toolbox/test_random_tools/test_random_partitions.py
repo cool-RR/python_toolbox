@@ -18,7 +18,7 @@ def test():
         assert len(members) == len(r)
         assert set(members) == set(r)
         
-    r = range(10)
+    r = list(range(10))
     
     for partition_size in range(1, len(r)):
         partitions = random_tools.random_partitions(r, partition_size)

@@ -3,7 +3,7 @@
 
 '''This module defines math-related tools.'''
 
-from __future__ import division
+
 
 import numbers
 

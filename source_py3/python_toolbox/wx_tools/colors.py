@@ -9,7 +9,7 @@ functions to convert between different respresentations of colors.
 '''
 
 
-from __future__ import division
+
 
 import colorsys
 import warnings

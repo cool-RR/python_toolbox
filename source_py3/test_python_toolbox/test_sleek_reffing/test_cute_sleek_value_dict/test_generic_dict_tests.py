@@ -3,7 +3,7 @@
 
 '''Run generic `dict` tests on `CuteSleekValueDict`.'''
 
-from __future__ import with_statement
+
 
 import sys
 import UserDict
@@ -52,39 +52,39 @@ class GenericDictTest(unittest2.TestCase):
         
     def test_keys(self):
         d = CuteSleekValueDict(null_callback)
-        self.assertEqual(d.keys(), [])
+        self.assertEqual(list(d.keys()), [])
         d = CuteSleekValueDict(null_callback, {'a': 1, 'b': 2})
-        k = d.keys()
-        self.assertTrue(d.has_key('a'))
-        self.assertTrue(d.has_key('b'))
+        k = list(d.keys())
+        self.assertTrue('a' in d)
+        self.assertTrue('b' in d)
 
         self.assertRaises(TypeError, d.keys, None)
 
         
     def test_values(self):
         d = CuteSleekValueDict(null_callback)
-        self.assertEqual(d.values(), [])
+        self.assertEqual(list(d.values()), [])
         d = CuteSleekValueDict(null_callback, {1: 2})
-        self.assertEqual(d.values(), [2])
+        self.assertEqual(list(d.values()), [2])
 
         self.assertRaises(TypeError, d.values, None)
 
         
     def test_items(self):
         d = CuteSleekValueDict(null_callback)
-        self.assertEqual(d.items(), [])
+        self.assertEqual(list(d.items()), [])
 
         d = CuteSleekValueDict(null_callback, {1: 2})
-        self.assertEqual(d.items(), [(1, 2)])
+        self.assertEqual(list(d.items()), [(1, 2)])
 
         self.assertRaises(TypeError, d.items, None)
 
         
     def test_has_key(self):
         d = CuteSleekValueDict(null_callback)
-        self.assertFalse(d.has_key('a'))
+        self.assertFalse('a' in d)
         d = CuteSleekValueDict(null_callback, {'a': 1, 'b': 2})
-        k = d.keys()
+        k = list(d.keys())
         k.sort()
         self.assertEqual(k, ['a', 'b'])
 
@@ -186,7 +186,7 @@ class GenericDictTest(unittest2.TestCase):
                     {1: 1, 2: 2, 3: 3}
                 )
             def keys(self):
-                return self.d.keys()
+                return list(self.d.keys())
             def __getitem__(self, i):
                 return self.d[i]
             
@@ -212,7 +212,7 @@ class GenericDictTest(unittest2.TestCase):
                         self.i = 1
                     def __iter__(self):
                         return self
-                    def next(self):
+                    def __next__(self):
                         if self.i:
                             self.i = 0
                             return 'a'
@@ -229,7 +229,7 @@ class GenericDictTest(unittest2.TestCase):
                         self.i = ord('a')
                     def __iter__(self):
                         return self
-                    def next(self):
+                    def __next__(self):
                         if self.i <= ord('z'):
                             rtn = chr(self.i)
                             self.i += 1
@@ -243,7 +243,7 @@ class GenericDictTest(unittest2.TestCase):
         class badseq(object):
             def __iter__(self):
                 return self
-            def next(self):
+            def __next__(self):
                 raise Exc()
 
         self.assertRaises(Exc,
@@ -337,7 +337,7 @@ class GenericDictTest(unittest2.TestCase):
         class BadSeq(object):
             def __iter__(self):
                 return self
-            def next(self):
+            def __next__(self):
                 raise Exc()
 
         self.assertRaises(Exc, CuteSleekValueDict.fromkeys, BadSeq())
@@ -349,10 +349,10 @@ class GenericDictTest(unittest2.TestCase):
         self.assertRaises(Exc, badCSVD2.fromkeys, [1])
 
         # test fast path for dictionary inputs
-        d = CuteSleekValueDict(null_callback, zip(range(6), range(6)))
+        d = CuteSleekValueDict(null_callback, list(zip(list(range(6)), list(range(6)))))
         self.assertEqual(
             CuteSleekValueDict.fromkeys(d, 0),
-            CuteSleekValueDict(null_callback, zip(range(6), [0]*6)))
+            CuteSleekValueDict(null_callback, list(zip(list(range(6)), [0]*6))))
 
         
     def test_copy(self):
@@ -451,7 +451,7 @@ class GenericDictTest(unittest2.TestCase):
 
         # verify longs/ints get same value when key > 32 bits
         # (for 64-bit archs).  See SF bug #689659.
-        x = 4503599627370496L
+        x = 4503599627370496
         y = 4503599627370496
         h = CuteSleekValueDict(
             null_callback,
@@ -533,7 +533,7 @@ class GenericDictTest(unittest2.TestCase):
         self.assertEqual(d[1], 2)
         self.assertEqual(d[3], 4)
         self.assertNotIn(2, d)
-        self.assertNotIn(2, d.keys())
+        self.assertNotIn(2, list(d.keys()))
         self.assertEqual(d[2], 42)
 
         class E(CuteSleekValueDict):
@@ -597,7 +597,7 @@ class GenericDictTest(unittest2.TestCase):
                      'd.pop(x2)',
                      'd.update(CuteSleekValueDict(null_callback, {x2: 2}))']:
             with self.assertRaises(CustomException):
-                exec stmt in locals()
+                exec(stmt, locals())
 
                 
     def test_resize1(self):

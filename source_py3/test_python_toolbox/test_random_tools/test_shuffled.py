@@ -8,7 +8,7 @@ from python_toolbox import random_tools
 
 def test():
     '''Test the basic workings of `shuffled`.'''
-    my_range = range(30)
+    my_range = list(range(30))
     shuffled_list = random_tools.shuffled(my_range)
     assert type(my_range) is type(shuffled_list) is list
     
@@ -19,4 +19,4 @@ def test():
     assert my_range != shuffled_list
     
     # ...And the original list was not changed.
-    assert my_range == range(30)
+    assert my_range == list(range(30))

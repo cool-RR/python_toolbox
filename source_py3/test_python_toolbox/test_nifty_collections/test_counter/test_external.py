@@ -6,7 +6,7 @@
 from random import randrange
 import copy
 import pickle
-import cPickle
+import pickle
 from collections import Mapping
 
 from python_toolbox.third_party import unittest2
@@ -36,8 +36,8 @@ class TestCounter(unittest2.TestCase):
         self.assertEqual(c['b'], 2)
         self.assertEqual(c['z'], 0)
     
-        self.assertEqual(c.has_key('c'), True)
-        self.assertEqual(c.has_key('z'), False)
+        self.assertEqual('c' in c, True)
+        self.assertEqual('z' in c, False)
         
         self.assertEqual(c.__contains__('c'), True)
         self.assertEqual(c.__contains__('z'), False)
@@ -96,10 +96,10 @@ class TestCounter(unittest2.TestCase):
                     pickle.loads(pickle.dumps(words, 1)),
                     pickle.loads(pickle.dumps(words, 2)),
                     pickle.loads(pickle.dumps(words, -1)),
-                    cPickle.loads(cPickle.dumps(words, 0)),
-                    cPickle.loads(cPickle.dumps(words, 1)),
-                    cPickle.loads(cPickle.dumps(words, 2)),
-                    cPickle.loads(cPickle.dumps(words, -1)),
+                    pickle.loads(pickle.dumps(words, 0)),
+                    pickle.loads(pickle.dumps(words, 1)),
+                    pickle.loads(pickle.dumps(words, 2)),
+                    pickle.loads(pickle.dumps(words, -1)),
                     eval(repr(words)),
                     update_test,
                     Counter(words),
@@ -115,7 +115,7 @@ class TestCounter(unittest2.TestCase):
         s = 'she sells sea shells by the sea shore'
         self.assertEqual(sorted(Counter(s).elements()), sorted(s))
         self.assertEqual(sorted(Counter(s)), sorted(set(s)))
-        self.assertEqual(dict(Counter(s)), dict(Counter(s).items()))
+        self.assertEqual(dict(Counter(s)), dict(list(Counter(s).items())))
         self.assertEqual(set(Counter(s)), set(s))
 
     def test_invariant_for_the_in_operator(self):
@@ -147,7 +147,7 @@ class TestCounter(unittest2.TestCase):
                     self.assertEqual(numberop(p[x], q[x]), result[x],
                                      (counterop, x, p, q))
                 # verify that results exclude non-positive counts
-                self.assertTrue(x>0 for x in result.values())
+                self.assertTrue(x>0 for x in list(result.values()))
 
         elements = 'abcdef'
         for i in range(100):

@@ -12,7 +12,7 @@ def searchall(pattern, string, flags=0):
     
     Note: Currently returns only non-overlapping matches.
     '''
-    if isinstance(pattern, basestring):
+    if isinstance(pattern, str):
         pattern = re.compile(pattern, flags=flags)
     matches = []
     start = 0

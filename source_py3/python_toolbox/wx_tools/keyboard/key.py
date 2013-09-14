@@ -56,7 +56,7 @@ class Key(object):
 
     
     def __unicode__(self):
-        return unichr(self.key_code)
+        return chr(self.key_code)
     
     
     def __hash__(self):

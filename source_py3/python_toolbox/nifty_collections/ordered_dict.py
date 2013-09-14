@@ -7,7 +7,7 @@ This module defines the `OrderedDict` class.
 See its documentation for more information.
 '''
 
-import __builtin__
+import builtins
 from UserDict import DictMixin
 
 from python_toolbox import comparison_tools
@@ -78,9 +78,9 @@ class OrderedDict(dict, DictMixin):
         if not self:
             raise KeyError('dictionary is empty')
         if last:
-            key = reversed(self).next()
+            key = next(reversed(self))
         else:
-            key = iter(self).next()
+            key = next(iter(self))
         value = self.pop(key)
         return key, value
 
@@ -113,7 +113,7 @@ class OrderedDict(dict, DictMixin):
     def __repr__(self):
         if not self:
             return '%s()' % (self.__class__.__name__,)
-        return '%s(%r)' % (self.__class__.__name__, self.items())
+        return '%s(%r)' % (self.__class__.__name__, list(self.items()))
 
     
     def copy(self):
@@ -132,7 +132,7 @@ class OrderedDict(dict, DictMixin):
         if isinstance(other, _ordered_dict_types):
             if len(self) != len(other):
                 return False
-            for p, q in zip(self.items(), other.items()):
+            for p, q in zip(list(self.items()), list(other.items())):
                 if p != q:
                     return False
             return True
@@ -177,7 +177,7 @@ class OrderedDict(dict, DictMixin):
         '''
         key_function = \
                    comparison_tools.process_key_function_or_attribute_name(key)
-        sorted_keys = sorted(self.keys(), key=key_function)
+        sorted_keys = sorted(list(self.keys()), key=key_function)
         step = -1 if reversed else 1
         for key_ in sorted_keys[1::step]:
             self.move_to_end(key_)
@@ -193,4 +193,4 @@ class OrderedDict(dict, DictMixin):
         raise RuntimeError
                 
                 
-_ordered_dict_types = filter(bool, (OrderedDict, StdlibOrderedDict))
+_ordered_dict_types = list(filter(bool, (OrderedDict, StdlibOrderedDict)))

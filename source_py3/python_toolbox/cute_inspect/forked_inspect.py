@@ -61,7 +61,7 @@ def isclass(object):
     Class objects provide these attributes:
         __doc__         documentation string
         __module__      name of module in which this class was defined"""
-    return isinstance(object, (type, types.ClassType))
+    return isinstance(object, type)
 
 def ismethod(object):
     """Return true if the object is an instance method.
@@ -158,7 +158,7 @@ def isgeneratorfunction(object):
 
     See help(isfunction) for attributes listing."""
     return bool((isfunction(object) or ismethod(object)) and
-                object.func_code.co_flags & CO_GENERATOR)
+                object.__code__.co_flags & CO_GENERATOR)
 
 def isgenerator(object):
     """Return true if the object is a generator.
@@ -363,7 +363,7 @@ def getdoc(object):
         doc = object.__doc__
     except AttributeError:
         return None
-    if not isinstance(doc, types.StringTypes):
+    if not isinstance(doc, str):
         return None
     return cleandoc(doc)
 
@@ -378,7 +378,7 @@ def cleandoc(doc):
         return None
     else:
         # Find minimum indentation of any non-blank lines after first line.
-        margin = sys.maxint
+        margin = sys.maxsize
         for line in lines[1:]:
             content = len(string.lstrip(line))
             if content:
@@ -387,7 +387,7 @@ def cleandoc(doc):
         # Remove indentation.
         if lines:
             lines[0] = lines[0].lstrip()
-        if margin < sys.maxint:
+        if margin < sys.maxsize:
             for i in range(1, len(lines)): lines[i] = lines[i][margin:]
         # Remove any trailing or leading blank lines.
         while lines and not lines[-1]:
@@ -408,9 +408,9 @@ def getfile(object):
             return object.__file__
         raise TypeError('{!r} is a built-in class'.format(object))
     if ismethod(object):
-        object = object.im_func
+        object = object.__func__
     if isfunction(object):
-        object = object.func_code
+        object = object.__code__
     if istraceback(object):
         object = object.tb_frame
     if isframe(object):
@@ -425,9 +425,7 @@ ModuleInfo = namedtuple('ModuleInfo', 'name suffix mode module_type')
 def getmoduleinfo(path):
     """Get the module name, suffix, mode, and module type for a given file."""
     filename = os.path.basename(path)
-    suffixes = map(lambda info:
-                   (-len(info[0]), info[0], info[1], info[2]),
-                    imp.get_suffixes())
+    suffixes = [(-len(info[0]), info[0], info[1], info[2]) for info in imp.get_suffixes()]
     suffixes.sort() # try longest suffixes first, in case they overlap
     for neglen, suffix, mode, mtype in suffixes:
         if filename[neglen:] == suffix:
@@ -488,7 +486,7 @@ def getmodule(object, _filename=None):
         return sys.modules.get(modulesbyfile[file])
     # Update the filename to module name cache and check yet again
     # Copy sys.modules in order to cope with changes while iterating
-    for modname, module in sys.modules.items():
+    for modname, module in list(sys.modules.items()):
         if ismodule(module) and hasattr(module, '__file__'):
             f = module.__file__
             if f == _filesbymodname.get(modname, None):
@@ -561,9 +559,9 @@ def findsource(object):
             raise IOError('could not find class definition')
 
     if ismethod(object):
-        object = object.im_func
+        object = object.__func__
     if isfunction(object):
-        object = object.func_code
+        object = object.__code__
     if istraceback(object):
         object = object.tb_frame
     if isframe(object):
@@ -671,7 +669,7 @@ def getblock(lines):
     """Extract the block of code at the top of the given list of lines."""
     blockfinder = BlockFinder()
     try:
-        tokenize.tokenize(iter(lines).next, blockfinder.tokeneater)
+        tokenize.tokenize(iter(lines).__next__, blockfinder.tokeneater)
     except (EndOfBlock, IndentationError):
         pass
     return lines[:blockfinder.last]
@@ -807,11 +805,11 @@ def getargspec(func):
     """
 
     if ismethod(func):
-        func = func.im_func
+        func = func.__func__
     if not isfunction(func):
         raise TypeError('{!r} is not a Python function'.format(func))
-    args, varargs, varkw = getargs(func.func_code)
-    return ArgSpec(args, varargs, varkw, func.func_defaults)
+    args, varargs, varkw = getargs(func.__code__)
+    return ArgSpec(args, varargs, varkw, func.__defaults__)
 
 ArgInfo = namedtuple('ArgInfo', 'args varargs keywords locals')
 
@@ -834,7 +832,7 @@ def joinseq(seq):
 def strseq(object, convert, join=joinseq):
     """Recursively walk a sequence, stringifying each element."""
     if type(object) in (list, tuple):
-        return join(map(lambda o, c=convert, j=join: strseq(o, c, j), object))
+        return join(list(map(lambda o, c=convert, j=join: strseq(o, c, j), object)))
     else:
         return convert(object)
 
@@ -923,9 +921,9 @@ def getcallargs(func, *positional, **named):
         if isinstance(arg,str):
             return arg in arg2value
         return arg in assigned_tuple_params
-    if ismethod(func) and func.im_self is not None:
+    if ismethod(func) and func.__self__ is not None:
         # implicit 'self' (or 'cls' for classmethods) argument
-        positional = (func.im_self,) + positional
+        positional = (func.__self__,) + positional
     num_pos = len(positional)
     num_total = num_pos + len(named)
     num_args = len(args)
@@ -959,7 +957,7 @@ def getcallargs(func, *positional, **named):
         assign(varkw, named)
     elif named:
         unexpected = next(iter(named))
-        if isinstance(unexpected, unicode):
+        if isinstance(unexpected, str):
             unexpected = unexpected.encode(sys.getdefaultencoding(), 'replace')
         raise TypeError("%s() got an unexpected keyword argument '%s'" %
                         (f_name, unexpected))

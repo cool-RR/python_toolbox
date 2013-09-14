@@ -16,7 +16,7 @@ from .bind_savvy_evt_handler_type import BindSavvyEvtHandlerType
 from . import name_parser
 
 
-class BindSavvyEvtHandler(wx.EvtHandler):
+class BindSavvyEvtHandler(wx.EvtHandler, metaclass=BindSavvyEvtHandlerType):
     '''
     Event handler type that allows binding events automatically by method name.
     
@@ -25,8 +25,6 @@ class BindSavvyEvtHandler(wx.EvtHandler):
     Some of this class's functionality is in its metaclass; see documentation
     of `BindSavvyEvtHandlerType`'s methods and attributes for more details.
     '''
-    
-    __metaclass__ = BindSavvyEvtHandlerType
     
     
     _BindSavvyEvtHandlerType__name_parser = name_parser.NameParser(

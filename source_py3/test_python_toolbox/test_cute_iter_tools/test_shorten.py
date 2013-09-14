@@ -20,10 +20,10 @@ def test():
     assert short_iterator.__iter__() is short_iterator
     
     assert list(shorten(my_range, 0)) == []
-    assert list(shorten(my_range, 1)) == range(1)
-    assert list(shorten(my_range, 2)) == range(2)
-    assert list(shorten(my_range, 3)) == range(3)
-    assert list(shorten(my_range, 4)) == range(4)
+    assert list(shorten(my_range, 1)) == list(range(1))
+    assert list(shorten(my_range, 2)) == list(range(2))
+    assert list(shorten(my_range, 3)) == list(range(3))
+    assert list(shorten(my_range, 4)) == list(range(4))
     
     assert list(shorten(my_range, infinity)) == my_range
     assert list(shorten(iter(my_range), infinity)) == my_range

@@ -8,5 +8,5 @@ from python_toolbox import pickle_tools
 
 def test():
     '''Test that `cute_pickle` uses `cPickle` and not `pickle`.'''
-    import cPickle
+    import pickle
     assert pickle_tools.pickle_module is cPickle

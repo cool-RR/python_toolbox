@@ -3,11 +3,11 @@
 
 '''Testing module for `is_atomically_pickleable`.'''
 
-from __future__ import with_statement
+
 
 import threading
-import StringIO
-import cStringIO
+import io
+import io
 
 # We're importing `pickle_module` from `pickle_tools`, so we get the exact same
 # pickle module it's using. (Giving it the freedom to change between `cPickle`
@@ -39,12 +39,12 @@ def test_simple_atomically_pickleables():
     pickleables = [
         None, True, False,
         1, 1.1, -3, 3+4.5j,
-        'roar', u'Meow!',
+        'roar', 'Meow!',
         {1: 3, 'frr': 'meow'},
         ['one', 'two', (3, 4)],
         set([1, 2, 3, 1]),
         frozenset((1, 2, 3, 1, 'meow', frozenset())),
-        StringIO.StringIO(),
+        io.StringIO(),
         sum, slice, type
     ]
     
@@ -125,7 +125,7 @@ def test_non_atomically_pickleables():
 
     non_pickleables = [
         threading.Lock(),
-        cStringIO.StringIO()
+        io.StringIO()
     ]
         
     for thing in non_pickleables:

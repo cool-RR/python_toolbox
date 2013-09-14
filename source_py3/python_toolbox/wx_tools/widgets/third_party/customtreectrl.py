@@ -653,8 +653,8 @@ class DragImage(wx.DragImage):
             timg = bitmap.ConvertToImage()
             if not timg.HasAlpha():
                 timg.InitAlpha()
-            for y in xrange(timg.GetHeight()):
-                for x in xrange(timg.GetWidth()):
+            for y in range(timg.GetHeight()):
+                for x in range(timg.GetWidth()):
                     pix = wx.Colour(timg.GetRed(x, y),
                                     timg.GetGreen(x, y),
                                     timg.GetBlue(x, y))
@@ -2054,7 +2054,7 @@ class GenericTreeItem(object):
 
         total = count
 
-        for n in xrange(count):
+        for n in range(count):
             total += self._children[n].GetChildrenCount()
         
         return total
@@ -4798,7 +4798,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         
         count = len(children)
         
-        for n in xrange(index+1, count):
+        for n in range(index+1, count):
             if self.TagAllChildrenUntilLast(children[n], last_item, select):
                 return True
 
@@ -5169,7 +5169,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
             # necessary (which might look ugly).
             n = self._imageListNormal.GetImageCount()
 
-            for i in xrange(n):
+            for i in range(n):
             
                 width, height = self._imageListNormal.GetSize(i)
 
@@ -5183,7 +5183,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
             # necessary (which might look ugly).
             n = self._imageListButtons.GetImageCount()
 
-            for i in xrange(n):
+            for i in range(n):
             
                 width, height = self._imageListButtons.GetSize(i)
 
@@ -5197,7 +5197,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
             # necessary (which might look ugly).
             n = self._imageListCheck.GetImageCount()
 
-            for i in xrange(n):
+            for i in range(n):
             
                 width, height = self._imageListCheck.GetSize(i)
 
@@ -5211,7 +5211,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
             # necessary (which might look ugly).
             n = self._imageListLeft.GetImageCount()
 
-            for i in xrange(n):
+            for i in range(n):
             
                 width, height = self._imageListLeft.GetSize(i)
 
@@ -5247,7 +5247,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
             sz = imageList.GetSize(0)
             self._grayedImageList = wx.ImageList(sz[0], sz[1], True, 0)
 
-            for ii in xrange(imageList.GetImageCount()):
+            for ii in range(imageList.GetImageCount()):
                 bmp = imageList.GetBitmap(ii)
                 newbmp = MakeDisabledBitmap(bmp)
                 self._grayedImageList.Add(newbmp)
@@ -5275,7 +5275,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
             sz = imageList.GetSize(0)
             self._grayedImageListLeft = wx.ImageList(sz[0], sz[1], True, 0)
 
-            for ii in xrange(imageList.GetImageCount()):
+            for ii in range(imageList.GetImageCount()):
                 bmp = imageList.GetBitmap(ii)
                 newbmp = MakeDisabledBitmap(bmp)
                 self._grayedImageListLeft.Add(newbmp)
@@ -5381,7 +5381,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
             sizex, sizey = imglist.GetSize(0)
             self._imageListCheck = imglist
 
-            for ii in xrange(self._imageListCheck.GetImageCount()):
+            for ii in range(self._imageListCheck.GetImageCount()):
                 
                 bmp = self._imageListCheck.GetBitmap(ii)
                 newbmp = MakeDisabledBitmap(bmp)
@@ -5506,7 +5506,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
 
         rf, gf, bf = 0, 0, 0
         
-        for y in xrange(rect.y, rect.y + rect.height):
+        for y in range(rect.y, rect.y + rect.height):
             currCol = (r1 + rf, g1 + gf, b1 + bf)                
             dc.SetBrush(wx.Brush(currCol, wx.SOLID))
             dc.DrawRectangle(rect.x, y, rect.width, 1)
@@ -5554,7 +5554,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
 
         rf, gf, bf = 0, 0, 0
 
-        for x in xrange(rect.x, rect.x + rect.width):
+        for x in range(rect.x, rect.x + rect.width):
             currCol = (int(r1 + rf), int(g1 + gf), int(b1 + bf))
             dc.SetBrush(wx.Brush(currCol, wx.SOLID))
             dc.DrawRectangle(x, rect.y, 1, rect.height)
@@ -5613,7 +5613,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         rf, gf, bf = 0, 0, 0
         dc.SetPen(wx.TRANSPARENT_PEN)
         
-        for y in xrange(filRect.y, filRect.y + filRect.height):
+        for y in range(filRect.y, filRect.y + filRect.height):
             currCol = (r1 + rf, g1 + gf, b1 + bf)
             dc.SetBrush(wx.Brush(currCol, wx.SOLID))
             dc.DrawRectangle(filRect.x, y, filRect.width, 1)
@@ -7162,7 +7162,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
             children = item.GetChildren()
             count = len(children)
             level = level + 1
-            for n in xrange(count):
+            for n in range(count):
                 y = self.CalculateLevel(children[n], dc, level, y, align)  # recurse
                 
             return y
@@ -7181,7 +7181,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         children = item.GetChildren()
         count = len(children)
         level = level + 1
-        for n in xrange(count):
+        for n in range(count):
             y = self.CalculateLevel(children[n], dc, level, y, align)  # recurse
         
         return y

@@ -14,11 +14,11 @@ def test():
     my_range = [0, 1, 2, 3, 4]
     
     
-    assert list(combinations(xrange(4), n=2)) == [
+    assert list(combinations(range(4), n=2)) == [
         [0, 1], [0, 2], [0, 3], [1, 2], [1, 3], [2, 3]
     ]
     
-    assert list(combinations(xrange(4), 3)) == [
+    assert list(combinations(range(4), 3)) == [
         [0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]
     ]
     
@@ -36,12 +36,12 @@ def test():
         ['o', 'w', 'f', 'r', 'r']
     )
     
-    assert list(combinations(xrange(5), n=2, start=2)) == \
-           list(combinations(xrange(2, 5), n=2))
+    assert list(combinations(range(5), n=2, start=2)) == \
+           list(combinations(range(2, 5), n=2))
     
     
 def test_all_sizes():
     '''Test using `n=None` so combinations of all sizes are returned.'''
-    assert list(combinations(xrange(4))) == sequence_tools.flatten(
-        list(combinations(xrange(4), i)) for i in xrange(1, 4+1)
+    assert list(combinations(range(4))) == sequence_tools.flatten(
+        list(combinations(range(4), i)) for i in range(1, 4+1)
     )

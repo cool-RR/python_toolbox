@@ -19,7 +19,7 @@ my_messy_object = (
     set([3, 4]), 
     frozenset([3, 4]),
     ((((((((((((())))))))))))),
-    u'unicode_too',
+    'unicode_too',
     (((((3, 4, 5j)))))
 )
 

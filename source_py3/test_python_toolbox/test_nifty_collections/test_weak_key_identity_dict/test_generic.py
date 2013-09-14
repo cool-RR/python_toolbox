@@ -6,7 +6,7 @@
 import gc
 import sys
 import unittest
-import UserList
+import collections
 import weakref
 import operator
 
@@ -78,7 +78,7 @@ class MappingTestCase(TestBase):
         
     def make_weak_keyed_dict(self):
         dict_ = WeakKeyIdentityDict()
-        objects = map(Object, range(self.COUNT))
+        objects = list(map(Object, list(range(self.COUNT))))
         for o in objects:
             dict_[o] = o.arg
         return dict_, objects
@@ -132,12 +132,12 @@ class MappingTestCase(TestBase):
         weakdict = WeakKeyIdentityDict()
         weakdict.update(dict_)
         self.assertEqual(len(weakdict), len(dict_))
-        for k in weakdict.keys():
+        for k in list(weakdict.keys()):
             assert k in dict_
             v = dict_.get(k)
             assert v is weakdict[k]
             assert v is weakdict.get(k)
-        for k in dict_.keys():
+        for k in list(dict_.keys()):
             assert k in weakdict
             v = dict_[k]
             assert v is weakdict[k]
@@ -153,7 +153,7 @@ class MappingTestCase(TestBase):
         self.assertTrue(len(d) == 2)
         del d[o1]
         self.assertTrue(len(d) == 1)
-        self.assertTrue(d.keys() == [o2])
+        self.assertTrue(list(d.keys()) == [o2])
 
 
     def test_weak_keyed_bad_delitem(self):
@@ -196,7 +196,7 @@ class MappingTestCase(TestBase):
             d[o] = o.value
         del o   # now the only strong references to keys are in objs
         # Find the order in which iterkeys sees the keys.
-        objs = d.keys()
+        objs = list(d.keys())
         # Reverse it, so that the iteration implementation of __delitem__
         # has to keep looping to find the first object we delete.
         objs.reverse()

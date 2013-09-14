@@ -3,11 +3,11 @@
 
 '''Testing module for `python_toolbox.persistent.CrossProcessPersistent`.'''
 
-from __future__ import with_statement
+
 
 import copy
 import pickle
-import cPickle
+import pickle
 import abc
 
 import nose
@@ -21,13 +21,12 @@ from python_toolbox import persistent
 from python_toolbox.persistent import CrossProcessPersistent
 
 
-class AbstractCrossProcessPersistent(CrossProcessPersistent):
+class AbstractCrossProcessPersistent(CrossProcessPersistent, metaclass=abc.ABCMeta):
     '''
     An abstract cross-process persistent.
     
     This is needed to test CPP's interaction with `__abstractmethods__`.
     '''
-    __metaclass__ = abc.ABCMeta
     
     @abc.abstractmethod
     def f(self):
@@ -94,7 +93,7 @@ if import_tools.exists('multiprocessing'):
                 if number in self.library:
                     assert self.library[number] is item
                     other_items = [value for (key, value) in
-                                   self.library.items() if key != number]
+                                   list(self.library.items()) if key != number]
                     for other_item in other_items:
                         assert other_item is not item
                     self.processed_items_queue.put(item)

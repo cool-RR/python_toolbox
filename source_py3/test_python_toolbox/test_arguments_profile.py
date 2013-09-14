@@ -3,7 +3,7 @@
 
 '''Testing module for `python_toolbox.arguments_profile.ArgumentsProfile`.'''
 
-from __future__ import with_statement
+
 
 import sys
 
@@ -292,14 +292,14 @@ def test_defaultfuls_and_star_kwargs():
         
         ### Testing `.iterkeys`, `.keys` and `__iter__`: ######################
         #                                                                     #
-        assert list(arg_prof.iterkeys()) == list(arg_prof.keys()) == \
+        assert list(arg_prof.keys()) == list(arg_prof.keys()) == \
             list(arg_prof) == ['a', 'b', 'c', 'd', 'blue', 'zany']
         #                                                                     #
         ### Finished testing `.iterkeys`, `.keys` and `__iter__`. #############
         
         ### Testing `.itervalues` and `.values`: ##############################
         #                                                                     #
-        assert list(arg_prof.itervalues()) == list(arg_prof.values()) == \
+        assert list(arg_prof.values()) == list(arg_prof.values()) == \
             [1, 2, 3, 'bombastic', True, True]
         #                                                                     #
         ### Finished testing `.itervalues` and `.values`. #####################
@@ -377,7 +377,7 @@ def test_many_defaultfuls_and_star_args_and_star_kwargs():
         
         ### Testing `.iterkeys`, `.keys` and `__iter__`: ######################
         #                                                                     #
-        assert list(arg_prof.iterkeys()) == list(arg_prof.keys()) == \
+        assert list(arg_prof.keys()) == list(arg_prof.keys()) == \
             list(arg_prof) == \
             ['a', 'b', 'c', 'd', 'e', 'f', '*', 'blue', 'zany', '_wet',
              '__funky']
@@ -386,7 +386,7 @@ def test_many_defaultfuls_and_star_args_and_star_kwargs():
         
         ### Testing `.itervalues` and `.values`: ##############################
         #                                                                     #
-        assert list(arg_prof.itervalues()) == list(arg_prof.values()) == \
+        assert list(arg_prof.values()) == list(arg_prof.values()) == \
             ['one', 'two', 'three', 'four', 'five', 'bombastic', ('meow_frr',),
              True, True, False, None]
         #                                                                     #
@@ -394,9 +394,9 @@ def test_many_defaultfuls_and_star_args_and_star_kwargs():
         
         ### Testing `.iteritems` and `.items`: ################################
         #                                                                     #
-        items_1 = list(arg_prof.iteritems())
-        items_2 = arg_prof.items()
-        assert items_1 == items_2 == zip(arg_prof.keys(), arg_prof.values())
+        items_1 = list(arg_prof.items())
+        items_2 = list(arg_prof.items())
+        assert items_1 == items_2 == list(zip(list(arg_prof.keys()), list(arg_prof.values())))
         #                                                                     #
         ### Finished testing `.iteritems` and `.items`. #######################
         

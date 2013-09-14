@@ -27,9 +27,8 @@ class CaseStyleType(abc.ABCMeta):
     '''
 
 
-class BaseCaseStyle(object):
+class BaseCaseStyle(object, metaclass=CaseStyleType):
     '''Base class for case styles.'''
-    __metaclass__ = CaseStyleType
     
     @abc_tools.AbstractStaticMethod
     def parse(name):

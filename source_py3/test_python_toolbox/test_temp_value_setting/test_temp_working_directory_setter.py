@@ -3,7 +3,7 @@
 
 '''Testing `python_toolbox.temp_value_setting.TempWorkingDirectorySetter`.'''
 
-from __future__ import with_statement
+
 
 import os
 import shutil

@@ -15,14 +15,14 @@ def docstring_trim(docstring):
     # and split into a list of lines:
     lines = docstring.expandtabs().splitlines()
     # Determine minimum indentation (first line doesn't count):
-    indent = sys.maxint
+    indent = sys.maxsize
     for line in lines[1:]:
         stripped = line.lstrip()
         if stripped:
             indent = min(indent, len(line) - len(stripped))
     # Remove indentation (first line is special):
     trimmed = [lines[0].strip()]
-    if indent < sys.maxint:
+    if indent < sys.maxsize:
         for line in lines[1:]:
             trimmed.append(line[indent:].rstrip())
     # Strip off trailing and leading blank lines:
@@ -53,7 +53,7 @@ def get_n_identical_edge_characters(string, character=None, head=True):
     if character is None:
         character = string[index]
     else:
-        assert isinstance(character, basestring) and len(character) == 1
+        assert isinstance(character, str) and len(character) == 1
     for i, c in enumerate(string[::direction]):
         if c != character:
             return i

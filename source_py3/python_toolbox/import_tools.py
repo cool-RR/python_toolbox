@@ -10,6 +10,7 @@ import zipimport
 
 from python_toolbox import package_finder
 from python_toolbox import caching
+from functools import reduce
 
     
 
@@ -41,7 +42,7 @@ def import_all(package, exclude='__init__', silent_fail=False):
         
     d = {}
     
-    for (path, name) in names.items():
+    for (path, name) in list(names.items()):
         try:
             d[name] = normal_import(name)
         except Exception:

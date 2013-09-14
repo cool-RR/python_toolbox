@@ -7,7 +7,7 @@ This module defines the `ChangeTracker` class.
 See its documentation for more information.
 '''
 
-import cPickle
+import pickle
 
 from python_toolbox.nifty_collections import WeakKeyIdentityDict
 
@@ -35,7 +35,7 @@ class ChangeTracker(object):
         whether the object changed since the last time it was checked in.
         '''
         
-        new_pickle = cPickle.dumps(thing, 2)
+        new_pickle = pickle.dumps(thing, 2)
         
         if thing not in self.library:
             self.library[thing] = new_pickle

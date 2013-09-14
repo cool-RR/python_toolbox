@@ -16,9 +16,8 @@ from python_toolbox import misc_tools
 from . import base_profile
 
 
-class BaseProfileHandler(object):
+class BaseProfileHandler(object, metaclass=abc.ABCMeta):
     '''Profile handler which saves the profiling result in some way.'''
-    __metaclass__ = abc.ABCMeta
     
     def __call__(self, profile):
         self.profile = profile
@@ -104,7 +103,7 @@ class PrintProfileHandler(BaseProfileHandler):
 def get_profile_handler(profile_handler_string):
     '''Parse `profile_handler_string` into a `ProfileHandler` class.'''
     if not profile_handler_string or profile_handler_string in \
-                                                        map(str, range(-1, 5)):
+                                                        list(map(str, list(range(-1, 5)))):
         try:
             sort_order = int(profile_handler_string)
         except (ValueError, TypeError):

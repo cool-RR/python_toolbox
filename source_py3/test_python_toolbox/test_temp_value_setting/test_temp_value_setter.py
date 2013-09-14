@@ -3,7 +3,7 @@
 
 '''Testing module for `python_toolbox.temp_value_setting.TempValueSetter`.'''
 
-from __future__ import with_statement
+
 
 from python_toolbox import cute_testing
 

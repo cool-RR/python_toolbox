@@ -13,7 +13,7 @@ from .cute_top_level_window import CuteTopLevelWindow
 from .cute_dialog_type import CuteDialogType
 
 
-class CuteDialog(wx.Dialog, CuteTopLevelWindow):
+class CuteDialog(wx.Dialog, CuteTopLevelWindow, metaclass=CuteDialogType):
     '''
     An improved `wx.Dialog`.
     
@@ -26,8 +26,6 @@ class CuteDialog(wx.Dialog, CuteTopLevelWindow):
       - Other advantages given by `CuteTopLevelWindow`
     
     '''
-    
-    __metaclass__ = CuteDialogType
     
     
     def __init__(self, *args, **kwargs):

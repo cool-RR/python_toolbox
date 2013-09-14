@@ -31,7 +31,7 @@ def binary_search_by_index(sequence, function, value, rounding=CLOSEST):
     ''' 
     if function is None:
         function = lambda x: x
-    my_range = xrange(len(sequence))
+    my_range = range(len(sequence))
     fixed_function = lambda index: function(sequence[index])
     result = binary_search(my_range, fixed_function, value, rounding)
     return result

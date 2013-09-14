@@ -4,10 +4,10 @@
 '''Defines various `sys`-related tools.'''
 
 
-from __future__ import with_statement
+
 
 import sys
-import cStringIO
+import io
 
 from python_toolbox.context_management import (ContextManager,
                                                     BlankContextManager)
@@ -31,7 +31,7 @@ class OutputCapturer(ContextManager):
     captured.
     '''
     def __init__(self, stdout=True, stderr=True):
-        self.string_io = cStringIO.StringIO()
+        self.string_io = io.StringIO()
         
         if stdout:
             self._stdout_temp_setter = \
@@ -74,10 +74,10 @@ class TempSysPathAdder(ContextManager):
         
         `addition` may be a path or a sequence of paths.
         '''
-        if isinstance(addition, basestring):
+        if isinstance(addition, str):
             addition = [addition]
         for entry in addition:
-            assert isinstance(entry, basestring)
+            assert isinstance(entry, str)
         self.addition = addition
 
         

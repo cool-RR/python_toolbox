@@ -98,7 +98,7 @@ class Comparer(CutePanel):
             self.change_to_old_hue()
             
     def _on_char(self, event):
-        char = unichr(event.GetUniChar())
+        char = chr(event.GetUniChar())
         if char == ' ':
             self.change_to_old_hue()
         else:

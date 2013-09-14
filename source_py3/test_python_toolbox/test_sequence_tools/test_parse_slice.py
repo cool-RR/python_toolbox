@@ -14,9 +14,9 @@ infinity = float('inf')
 def test():
     '''Test the basic workings of `parse_slice`.'''
     
-    r1 = range(5)
-    r2 = range(2, 10)
-    r3 = range(100, 3, -7)
+    r1 = list(range(5))
+    r2 = list(range(2, 10))
+    r3 = list(range(100, 3, -7))
     ranges = [r1, r2, r3]
     
     slices = [slice(3), slice(5), slice(9), slice(1, 4), slice(4, 7),

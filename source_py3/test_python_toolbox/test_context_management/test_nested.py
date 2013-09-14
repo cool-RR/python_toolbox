@@ -3,7 +3,7 @@
 
 '''Test the `python_toolbox.context_management.nested` function.'''
 
-from __future__ import with_statement 
+ 
 
 from python_toolbox import cute_testing
 

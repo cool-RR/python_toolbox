@@ -1,7 +1,7 @@
 # Copyright 2009-2013 Ram Rachum.
 # This program is distributed under the MIT license.
 
-from __future__ import with_statement
+
 
 import sys
 
@@ -23,26 +23,26 @@ def test():
     
     assert ordered_dict == stdlib_ordered_dict
     assert stdlib_ordered_dict == ordered_dict
-    assert ordered_dict.items() == stdlib_ordered_dict.items()
-    assert ordered_dict.keys() == stdlib_ordered_dict.keys()
-    assert ordered_dict.values() == stdlib_ordered_dict.values()
+    assert list(ordered_dict.items()) == list(stdlib_ordered_dict.items())
+    assert list(ordered_dict.keys()) == list(stdlib_ordered_dict.keys())
+    assert list(ordered_dict.values()) == list(stdlib_ordered_dict.values())
     
     ordered_dict.move_to_end(1)
     
     assert ordered_dict != stdlib_ordered_dict
     #assert stdlib_ordered_dict != ordered_dict
-    assert ordered_dict.items() != stdlib_ordered_dict.items()
-    assert ordered_dict.keys() != stdlib_ordered_dict.keys()
-    assert ordered_dict.values() != stdlib_ordered_dict.values()
+    assert list(ordered_dict.items()) != list(stdlib_ordered_dict.items())
+    assert list(ordered_dict.keys()) != list(stdlib_ordered_dict.keys())
+    assert list(ordered_dict.values()) != list(stdlib_ordered_dict.values())
     
     del stdlib_ordered_dict[1]
     stdlib_ordered_dict[1] = 'a'
     
     assert ordered_dict == stdlib_ordered_dict
     assert stdlib_ordered_dict == ordered_dict
-    assert ordered_dict.items() == stdlib_ordered_dict.items()
-    assert ordered_dict.keys() == stdlib_ordered_dict.keys()
-    assert ordered_dict.values() == stdlib_ordered_dict.values()
+    assert list(ordered_dict.items()) == list(stdlib_ordered_dict.items())
+    assert list(ordered_dict.keys()) == list(stdlib_ordered_dict.keys())
+    assert list(ordered_dict.values()) == list(stdlib_ordered_dict.values())
     
     assert ordered_dict == OrderedDict(stdlib_ordered_dict) == \
                                                             stdlib_ordered_dict

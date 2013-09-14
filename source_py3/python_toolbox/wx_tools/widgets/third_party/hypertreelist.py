@@ -223,10 +223,10 @@ Version 1.2
 import wx
 import wx.gizmos
 
-from customtreectrl import CustomTreeCtrl
-from customtreectrl import DragImage, TreeEvent, GenericTreeItem
-from customtreectrl import TreeRenameTimer as TreeListRenameTimer
-from customtreectrl import EVT_TREE_ITEM_CHECKING, EVT_TREE_ITEM_CHECKED, EVT_TREE_ITEM_HYPERLINK
+from .customtreectrl import CustomTreeCtrl
+from .customtreectrl import DragImage, TreeEvent, GenericTreeItem
+from .customtreectrl import TreeRenameTimer as TreeListRenameTimer
+from .customtreectrl import EVT_TREE_ITEM_CHECKING, EVT_TREE_ITEM_CHECKED, EVT_TREE_ITEM_HYPERLINK
 
 # Version Info
 __version__ = "1.2"
@@ -360,7 +360,7 @@ class TreeListColumnInfo(object):
         :param `edit`: ``True`` to set the column as editable, ``False`` otherwise.
         """
 
-        if isinstance(input, basestring):
+        if isinstance(input, str):
             self._text = input
             self._width = width
             self._flag = flag
@@ -792,7 +792,7 @@ class TreeListHeaderWindow(wx.Window):
 
         numColumns = self.GetColumnCount()
         
-        for i in xrange(numColumns):
+        for i in range(numColumns):
 
             if x >= w:
                 break
@@ -885,7 +885,7 @@ class TreeListHeaderWindow(wx.Window):
         
         colLeft = 0
         numColumns = self.GetColumnCount()
-        for col in xrange(numColumns):
+        for col in range(numColumns):
         
             if not self.IsColumnShown(col):
                 continue 
@@ -997,7 +997,7 @@ class TreeListHeaderWindow(wx.Window):
             # find the column where this event occured
             countCol = self.GetColumnCount()
 
-            for column in xrange(countCol):
+            for column in range(countCol):
 
                 if not self.IsColumnShown(column):
                     continue # do next if not shown
@@ -1407,7 +1407,7 @@ class TreeListItem(GenericTreeItem):
                 
                 # check for right of label
                 end = 0
-                for i in xrange(maincol):
+                for i in range(maincol):
                     end += header_win.GetColumnWidth(i)
                     if ((point.x > (self._text_x + self._width)) and (point.x <= end)):
                         flags |= wx.TREE_HITTEST_ONITEMRIGHT
@@ -1416,7 +1416,7 @@ class TreeListItem(GenericTreeItem):
                 
                 # else check for each column except main
                 x = 0
-                for j in xrange(theCtrl.GetColumnCount()):
+                for j in range(theCtrl.GetColumnCount()):
                     if not header_win.IsColumnShown(j):
                         continue
                     w = header_win.GetColumnWidth(j)
@@ -1761,7 +1761,7 @@ class EditTextCtrl(wx.TextCtrl):
         if column > 0:
             x = 0
             
-        for i in xrange(column):
+        for i in range(column):
             if not self._owner.GetParent()._header_win.IsColumnShown(i):
                 continue # do next column if not shown
             
@@ -2464,7 +2464,7 @@ class TreeListMainWindow(CustomTreeCtrl):
         
         for child in self._itemWithWindow:
             if not self.IsItemVisible(child):
-                for column in xrange(self.GetColumnCount()):
+                for column in range(self.GetColumnCount()):
                     wnd = child.GetWindow(column)
                     if wnd and wnd.IsShown():
                         wnd.Hide()
@@ -2487,7 +2487,7 @@ class TreeListMainWindow(CustomTreeCtrl):
 
         item.Enable(enable)
 
-        for column in xrange(self.GetColumnCount()):
+        for column in range(self.GetColumnCount()):
             wnd = item.GetWindow(column)
 
             # Handles the eventual window associated to the item        
@@ -2760,7 +2760,7 @@ class TreeListMainWindow(CustomTreeCtrl):
         img_extraH = (total_h > self._imgHeight and [(total_h-self._imgHeight)/2] or [0])[0]
         x_colstart = 0
         
-        for i in xrange(self.GetColumnCount()):
+        for i in range(self.GetColumnCount()):
             if not self._owner.GetHeaderWindow().IsColumnShown(i):
                 continue
 
@@ -3050,7 +3050,7 @@ class TreeListMainWindow(CustomTreeCtrl):
                     # draw the twisty button here
                     dc.SetPen(wx.BLACK_PEN)
                     dc.SetBrush(self._hilightBrush)
-                    button = [wx.Point() for j in xrange(3)]
+                    button = [wx.Point() for j in range(3)]
                     if item.IsExpanded():
                         button[0].x = x - (self._btnWidth2+1)
                         button[0].y = y_mid - (self._btnHeight/3)
@@ -3177,7 +3177,7 @@ class TreeListMainWindow(CustomTreeCtrl):
 
         # calculate column start and paint
         x_maincol = 0
-        for i in xrange(self.GetMainColumn()):
+        for i in range(self.GetMainColumn()):
             if not self._owner.GetHeaderWindow().IsColumnShown(i):
                 continue
             x_maincol += self._owner.GetHeaderWindow().GetColumnWidth(i)
@@ -3698,7 +3698,7 @@ class TreeListMainWindow(CustomTreeCtrl):
             dc.SetFont(self._normalFont)
 
         text_w = text_h = wnd_w = wnd_h = 0
-        for column in xrange(self.GetColumnCount()):
+        for column in range(self.GetColumnCount()):
             w, h, dummy = dc.GetMultiLineTextExtent(item.GetText(column))
             text_w, text_h = max(w, text_w), max(h, text_h)
             
@@ -3777,7 +3777,7 @@ class TreeListMainWindow(CustomTreeCtrl):
             children = item.GetChildren()
             count = len(children)
             level = level + 1
-            for n in xrange(count):
+            for n in range(count):
                 y = self.CalculateLevel(children[n], dc, level, y, x_colstart)  # recurse
                 
             return y
@@ -3796,7 +3796,7 @@ class TreeListMainWindow(CustomTreeCtrl):
         children = item.GetChildren()
         count = len(children)
         level = level + 1
-        for n in xrange(count):
+        for n in range(count):
             y = self.CalculateLevel(children[n], dc, level, y, x_colstart)  # recurse
         
         return y
@@ -3815,7 +3815,7 @@ class TreeListMainWindow(CustomTreeCtrl):
         dc.SetPen(self._dottedPen)
 
         y, x_colstart = 2, 0
-        for i in xrange(self.GetMainColumn()):
+        for i in range(self.GetMainColumn()):
             if not self._owner.GetHeaderWindow().IsColumnShown(i):
                 continue
             x_colstart += self._owner.GetHeaderWindow().GetColumnWidth(i)
@@ -4160,7 +4160,7 @@ class HyperTreeList(wx.PyControl):
         if not self._header_win:
             return
         
-        for column in xrange(self.GetColumnCount()):
+        for column in range(self.GetColumnCount()):
             self._header_win.SetColumn(column, self.GetColumn(column).SetFont(font))
 
         self._header_win.Refresh()

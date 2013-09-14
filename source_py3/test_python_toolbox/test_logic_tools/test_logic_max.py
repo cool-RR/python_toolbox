@@ -10,9 +10,9 @@ from python_toolbox.logic_tools import logic_max
 
 def test():
     '''Test the basic working of `logic_max`.'''
-    assert logic_max(range(4)) == [3]
+    assert logic_max(list(range(4))) == [3]
     assert logic_max(set(range(5))) == [4]
-    assert logic_max(iter(range(6))) == [5]
+    assert logic_max(iter(list(range(6)))) == [5]
     assert logic_max(tuple(range(10))) == [9]
     
     class FunkyString(object):

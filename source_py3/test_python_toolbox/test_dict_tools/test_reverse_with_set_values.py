@@ -13,7 +13,7 @@ def test():
                                              {2: set([1, 'meow']), 4: set([3])}
     
 def test_iterable_input():
-    assert dict_tools.reverse_with_set_values((range(1, 5), str)) == \
+    assert dict_tools.reverse_with_set_values((list(range(1, 5)), str)) == \
         {'1': set([1]), '2': set([2]), '3': set([3]), '4': set([4]),}
     
     assert dict_tools.reverse_with_set_values(([1, 2+3j, 4, 5-6j], 'imag')) \

@@ -13,6 +13,7 @@ from python_toolbox import caching
 from python_toolbox import dict_tools
 
 from .event_handler_grokker import EventHandlerGrokker
+import collections
 
 
 class BindSavvyEvtHandlerType(type):
@@ -48,14 +49,14 @@ class BindSavvyEvtHandlerType(type):
             lambda name, value:
                 cls._BindSavvyEvtHandlerType__name_parser.match(name,
                                                             cls.__name__) and
-                callable(value) and
+                isinstance(value, collections.Callable) and
                 getattr(value, '_BindSavvyEvtHandlerType__dont_bind_automatically',
                         None) is not True
         )
         '''Dict mapping names to event handling functions.'''
         
         return [EventHandlerGrokker(name, value, cls) for (name, value) in
-                names_to_event_handlers.items()]
+                list(names_to_event_handlers.items())]
     
     
     @staticmethod

@@ -59,7 +59,7 @@ def cheat_hash_dict(my_dict):
     '''Cheat-hash a `dict`.'''
     hashable_items = []
     unhashable_items = []
-    for key, value in my_dict.iteritems():
+    for key, value in my_dict.items():
         try:
             hash((key, value))
         except Exception:

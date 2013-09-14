@@ -1,7 +1,7 @@
 # Copyright 2009-2013 Ram Rachum.
 # This program is distributed under the MIT license.
 
-from __future__ import with_statement
+
 
 from python_toolbox import cute_testing
 
@@ -13,7 +13,7 @@ def test_zipping_in_memory():
     files = (
         ('meow.txt', "I'm a cat."), 
         ('dog.txt', "I'm a dog."), 
-        ('folder/binary.bin', ''.join(map(chr, xrange(256))))
+        ('folder/binary.bin', ''.join(map(chr, range(256))))
     )
     
     zip_archive = zip_tools.zip_in_memory(files)

@@ -22,9 +22,9 @@ def test():
     human_name_2 = personality_2.human_name
     human_name_3 = personality_3.human_name
     
-    assert isinstance(human_name_1, basestring)
-    assert isinstance(human_name_2, basestring)
-    assert isinstance(human_name_3, basestring)
+    assert isinstance(human_name_1, str)
+    assert isinstance(human_name_2, str)
+    assert isinstance(human_name_3, str)
     
     light_color_1 = personality_1.light_color
     light_color_2 = personality_2.light_color

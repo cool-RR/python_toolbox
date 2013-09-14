@@ -26,7 +26,7 @@ def filter_items(d, condition, force_dict_type=None):
     else:
         dict_type = type(d) if (type(d).__name__ != 'dictproxy') else dict
     return dict_type(
-        (key, value) for (key, value) in d.iteritems() if condition(key, value)
+        (key, value) for (key, value) in d.items() if condition(key, value)
     )
 
 
@@ -37,7 +37,7 @@ def get_list(d, iterable):
 
 def get_contained(d, container):
     '''Get a list of the values in the dict whose keys are in `container`.'''
-    return [value for (key, value) in d.iteritems() if (key in container)]
+    return [value for (key, value) in d.items() if (key in container)]
 
 
 def fancy_string(d, indent=0):
@@ -56,7 +56,7 @@ def fancy_string(d, indent=0):
     
     temp1 = (
         (big_space + repr(key) + ':\n' + huge_space + show(value, indent + 8))
-        for(key, value) in d.items())
+        for(key, value) in list(d.items()))
     
     temp2 = small_space + '{\n' + ',\n'.join(temp1) + '\n' + small_space +'}'
     
@@ -96,19 +96,19 @@ def reverse_with_set_values(d, sort=False):
     ### Finished pre-processing input. ########################################
     
     new_dict = {}
-    for key, value in fixed_dict.iteritems():
+    for key, value in fixed_dict.items():
         if value not in new_dict:
             new_dict[value] = []
         new_dict[value].append(key)
     
     # Making into sets:
-    for key, value in new_dict.copy().iteritems():
+    for key, value in new_dict.copy().items():
         new_dict[key] = set(value)
         
     if sort:
         from python_toolbox import nifty_collections
         ordered_dict = nifty_collections.OrderedDict(new_dict)
-        if callable(sort) or isinstance(sort, basestring):
+        if isinstance(sort, collections.Callable) or isinstance(sort, str):
             key_function = comparison_tools. \
                                    process_key_function_or_attribute_name(sort)
         else:
@@ -129,7 +129,7 @@ def devour_items(d):
 def devour_keys(d):
     '''Iterator that pops keys from `d` until it's exhaused (i.e. empty).'''
     while d:
-        key = d.iterkeys().next()
+        key = next(iter(d.keys()))
         del d[key]
         yield key
         

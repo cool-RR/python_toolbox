@@ -105,4 +105,4 @@ class EmittingWeakKeyDefaultDict(WeakKeyDefaultDict):
         else: # not self.default_factory
             parameters = (self.emitter)
             
-        return (type(self), parameters, None, None, self.iteritems())
+        return (type(self), parameters, None, None, iter(self.items()))

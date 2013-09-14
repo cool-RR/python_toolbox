@@ -3,7 +3,7 @@
 
 '''Testing module for `python_toolbox.math_tools.convert_to_base_in_tuple`.'''
 
-from __future__ import with_statement
+
 
 import sys
 

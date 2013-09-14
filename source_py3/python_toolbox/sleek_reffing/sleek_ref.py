@@ -13,6 +13,7 @@ import UserDict
 from python_toolbox import cute_inspect
 
 from .exceptions import SleekRefDied
+import collections
 
 
 __all__ = ['SleekRef']
@@ -53,7 +54,7 @@ class SleekRef(object):
         weakreffable objects.)
         '''
         self.callback = callback
-        if callback and not callable(callback):
+        if callback and not isinstance(callback, collections.Callable):
             raise TypeError('%s is not a callable object.' % callback)
         
         self.is_none = (thing is None)

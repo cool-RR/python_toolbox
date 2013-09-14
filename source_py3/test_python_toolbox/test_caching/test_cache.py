@@ -3,7 +3,7 @@
 
 '''Testing module for `python_toolbox.caching.cache`.'''
 
-from __future__ import with_statement
+
 
 import datetime as datetime_module
 import re
@@ -196,7 +196,7 @@ def test_time_to_keep():
                         # without worrying whether other tests made `i` higher.
     f = cache(time_to_keep={'days': 356})(counting_func)
     
-    print(f('zero'))
+    print((f('zero')))
     assert f('zero') == 0 # Just to get rid of zero
     
     assert f('a') == 1
@@ -211,24 +211,24 @@ def test_time_to_keep():
     
     with temp_value_setting.TempValueSetter(
                                   (caching.decorators, '_get_now'), _mock_now):
-        assert map(f, 'abc') == [1, 2, 3]
+        assert list(map(f, 'abc')) == [1, 2, 3]
         fixed_time += datetime_module.timedelta(days=100)
-        assert map(f, 'abc') == [1, 2, 3]
-        assert map(f, 'def') == [4, 5, 6]
+        assert list(map(f, 'abc')) == [1, 2, 3]
+        assert list(map(f, 'def')) == [4, 5, 6]
         fixed_time += datetime_module.timedelta(days=100)
-        assert map(f, 'abc') == [1, 2, 3]
-        assert map(f, 'def') == [4, 5, 6]
+        assert list(map(f, 'abc')) == [1, 2, 3]
+        assert list(map(f, 'def')) == [4, 5, 6]
         fixed_time += datetime_module.timedelta(days=100)
-        assert map(f, 'abc') == [1, 2, 3]
-        assert map(f, 'def') == [4, 5, 6]
+        assert list(map(f, 'abc')) == [1, 2, 3]
+        assert list(map(f, 'def')) == [4, 5, 6]
         fixed_time += datetime_module.timedelta(days=100)
-        assert map(f, 'abc') == [7, 8, 9]
-        assert map(f, 'def') == [4, 5, 6]
+        assert list(map(f, 'abc')) == [7, 8, 9]
+        assert list(map(f, 'def')) == [4, 5, 6]
         fixed_time += datetime_module.timedelta(days=100)
-        assert map(f, 'abc') == [7, 8, 9]
-        assert map(f, 'def') == [10, 11, 12]
+        assert list(map(f, 'abc')) == [7, 8, 9]
+        assert list(map(f, 'def')) == [10, 11, 12]
         assert f(a='d') == f(a='d', b=2) == f('d') == 10
         fixed_time += datetime_module.timedelta(days=1000)
-        assert map(f, 'abcdef') == [13, 14, 15, 16, 17, 18]
+        assert list(map(f, 'abcdef')) == [13, 14, 15, 16, 17, 18]
         assert f(a='d', b='meow') == 19
         

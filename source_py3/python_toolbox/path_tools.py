@@ -13,7 +13,7 @@ def list_sub_folders(path):
     '''List all the immediate sub-folders of the folder at `path`.'''
     assert os.path.isdir(path)
     files_and_folders = glob.glob(os.path.join(path, '*'))
-    folders = filter(os.path.isdir, files_and_folders)
+    folders = list(filter(os.path.isdir, files_and_folders))
     return folders
 
 
@@ -47,6 +47,6 @@ def get_root_path_of_module(module):
         # It's a one-file module, not a package.
         result = os.path.abspath(dir_path)
     
-    assert result in map(os.path.abspath, sys.path) 
+    assert result in list(map(os.path.abspath, sys.path)) 
     return result
 

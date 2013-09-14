@@ -3,7 +3,7 @@
 
 '''Testing module for `freezing.FreezerProperty`.'''
 
-from __future__ import with_statement
+
 
 from python_toolbox.freezing import FreezerProperty, Freezer
 from python_toolbox import caching

@@ -148,7 +148,7 @@ def get_address(obj, shorten=False, root=None, namespace={}):
     if isinstance(obj, types.ModuleType):
         address = obj.__name__
     elif isinstance(obj, types.MethodType):
-        address = '.'.join((obj.__module__, obj.im_class.__name__,
+        address = '.'.join((obj.__module__, obj.__self__.__class__.__name__,
                             obj.__name__))
     else:
         address= '.'.join((obj.__module__, obj.__name__))
@@ -182,9 +182,9 @@ def get_address(obj, shorten=False, root=None, namespace={}):
     if root or namespace:
         
         # Ensuring `root` and `namespace` are actual objects:
-        if isinstance(root, basestring):
+        if isinstance(root, str):
             root = get_object_by_address(root)            
-        if isinstance(namespace, basestring):
+        if isinstance(namespace, str):
             namespace = get_object_by_address(namespace)
 
 
@@ -195,15 +195,15 @@ def get_address(obj, shorten=False, root=None, namespace={}):
             
             def my_filter(key, value):
                 name = getattr(value, '__name__', '')
-                return isinstance(name, basestring) and name.endswith(key)
+                return isinstance(name, str) and name.endswith(key)
 
             namespace_dict = dict_tools.filter_items(
                 original_namespace_dict,
                 my_filter
             )
                 
-            namespace_dict_keys = namespace_dict.keys()
-            namespace_dict_values = namespace_dict.values()
+            namespace_dict_keys = list(namespace_dict.keys())
+            namespace_dict_values = list(namespace_dict.values())
             
             
         # Split to address parts:
@@ -211,7 +211,7 @@ def get_address(obj, shorten=False, root=None, namespace={}):
         # e.g., `['python_toolbox', 'misc', 'step_copy', 'StepCopy']`.
         
         heads = ['.'.join(address_parts[:i]) for i in
-                 xrange(1, len(address_parts) + 1)]
+                 range(1, len(address_parts) + 1)]
         # `heads` is something like: `['python_toolbox',
         # 'python_toolbox.caching', 'python_toolbox.caching.cached_type',
         # 'python_toolbox.cached_type.CachedType']`

@@ -17,6 +17,8 @@ import itertools
 from python_toolbox import cute_iter_tools
 from python_toolbox import misc_tools
 from python_toolbox import address_tools
+import collections
+from functools import reduce
         
 
 class Emitter(object):
@@ -211,7 +213,7 @@ class Emitter(object):
         If adding an emitter, every time this emitter will emit the output
         emitter will emit as well.
         '''
-        assert isinstance(thing, Emitter) or callable(thing)
+        assert isinstance(thing, Emitter) or isinstance(thing, collections.Callable)
         self._outputs.add(thing)
         if isinstance(thing, Emitter):
             thing._inputs.add(self)
@@ -219,7 +221,7 @@ class Emitter(object):
         
     def remove_output(self, thing):
         '''Remove an output from this emitter.'''
-        assert isinstance(thing, Emitter) or callable(thing)
+        assert isinstance(thing, Emitter) or isinstance(thing, collections.Callable)
         self._outputs.remove(thing)
         if isinstance(thing, Emitter):
             thing._inputs.remove(self)
@@ -235,7 +237,7 @@ class Emitter(object):
     def _get_callable_outputs(self):
         '''Get the direct callable outputs of this emitter.'''
         return set((
-            output for output in self._outputs if callable(output)
+            output for output in self._outputs if isinstance(output, collections.Callable)
         ))
     
     def _get_emitter_outputs(self):

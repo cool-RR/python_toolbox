@@ -101,14 +101,14 @@ def cache(max_size=infinity, time_to_keep=None):
                 def remove_expired_entries():
                     almost_cutting_point = \
                                           binary_search.binary_search_by_index(
-                        cached._cache.keys(),
+                        list(cached._cache.keys()),
                         sorting_key_function,
                         _get_now(), 
                         rounding=binary_search.LOW
                     )
                     if almost_cutting_point is not None:
                         cutting_point = almost_cutting_point + 1
-                        for key in cached._cache.keys()[:cutting_point]:
+                        for key in list(cached._cache.keys())[:cutting_point]:
                             del cached._cache[key]
                             
                         

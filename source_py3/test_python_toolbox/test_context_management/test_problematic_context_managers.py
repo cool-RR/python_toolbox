@@ -3,7 +3,7 @@
 
 '''Testing module for various problematic context managers.'''
 
-from __future__ import with_statement
+
 
 import nose
 

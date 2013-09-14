@@ -3,7 +3,7 @@
 
 '''Testing module for `sequence_tools.to_tuple`.'''
 
-from __future__ import with_statement
+
 
 import nose
 

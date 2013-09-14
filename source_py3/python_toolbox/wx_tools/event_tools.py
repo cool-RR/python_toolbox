@@ -17,7 +17,7 @@ def post_event(evt_handler, event_binder, source=None, **kwargs):
     # the event type from `event_binder`. problem.
     event = wx.PyCommandEvent(event_binder.evtType[0],
                               source.GetId() if source else 0)
-    for key, value in kwargs.iteritems():
+    for key, value in kwargs.items():
         setattr(event, key, value)
     event.SetEventType(event_binder.evtType[0])
     wx.PostEvent(evt_handler, event)

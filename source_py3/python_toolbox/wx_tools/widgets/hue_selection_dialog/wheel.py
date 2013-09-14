@@ -7,7 +7,7 @@ Defines the `Wheel` class.
 See its documentation for more details.
 '''
 
-from __future__ import division
+
 
 import itertools
 import math
@@ -48,8 +48,8 @@ def make_bitmap(lightness=1, saturation=1):
         wx_tools.colors.get_background_color()
     )
     
-    for x, y in cute_iter_tools.product(xrange(BIG_LENGTH),
-                                        xrange(BIG_LENGTH)):
+    for x, y in cute_iter_tools.product(range(BIG_LENGTH),
+                                        range(BIG_LENGTH)):
         
         # This is a big loop so the code is optimized to keep it fast.
         

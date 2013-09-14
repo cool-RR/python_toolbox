@@ -3,7 +3,7 @@
 
 '''Testing package for `freezing.Freezer`.'''
 
-from __future__ import with_statement
+
 
 from python_toolbox import cute_testing
 

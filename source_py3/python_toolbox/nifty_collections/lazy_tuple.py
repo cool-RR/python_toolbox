@@ -7,7 +7,7 @@ This module defines the `LazyTuple` class.
 See its documentation for more information.
 '''
 
-from __future__ import with_statement
+
 
 import threading
 import collections
@@ -154,7 +154,7 @@ class LazyTuple(collections.Sequence, object):
         while len(self.collected_data) <= exhaustion_point:
             try:
                 with self.lock:
-                    self.collected_data.append(self._iterator.next())
+                    self.collected_data.append(next(self._iterator))
             except StopIteration:
                 self.exhausted = True
                 break
@@ -191,7 +191,7 @@ class LazyTuple(collections.Sequence, object):
         return not self.__eq__(other)
     
     
-    def __nonzero__(self):
+    def __bool__(self):
         self.exhaust(0)
         return bool(self.collected_data)
 

@@ -3,9 +3,9 @@
 
 '''Testing module for `context_management.ReentrantContextManager`.''' 
 
-from __future__ import with_statement
 
-import Queue as queue_module
+
+import queue as queue_module
 
 from python_toolbox.context_management import ReentrantContextManager
 from python_toolbox import cute_testing

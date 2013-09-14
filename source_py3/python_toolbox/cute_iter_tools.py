@@ -5,11 +5,11 @@
 # todo: make something like `filter` except it returns first found, or raises
 # exception
 
-from __future__ import with_statement
+
 
 import collections
 import itertools
-import __builtin__
+import builtins
 
 
 infinity = float('inf')
@@ -104,9 +104,9 @@ def enumerate(reversible, reverse_index=False):
     zero.
     '''
     if reverse_index is False:
-        return __builtin__.enumerate(reversible)
+        return builtins.enumerate(reversible)
     else:
-        my_list = list(__builtin__.enumerate(reversed(reversible)))
+        my_list = list(builtins.enumerate(reversed(reversible)))
         my_list.reverse()
         return my_list
 
@@ -151,7 +151,7 @@ def product(*args, **kwargs):
         
     '''
     # todo: revamp, probably take from stdlib
-    pools = map(tuple, args) * kwargs.get('repeat', 1)
+    pools = list(map(tuple, args)) * kwargs.get('repeat', 1)
     result = [[]]
     for pool in pools:
         result = [x + [y] for x in result for y in pool]
@@ -167,7 +167,7 @@ def iter_with(iterable, context_manager):
     while True:
         
         with context_manager:
-            next_item = iterator.next()
+            next_item = next(iterator)
             # You may notice that we are not `except`ing a `StopIteration`
             # here; If we get one, it'll just get propagated and end *this*
             # iterator. todo: I just realized this will probably cause a bug
@@ -196,7 +196,7 @@ def izip_longest(*iterables, **kwargs):
     iterables = [itertools.chain(iterable, sentinel(), fillers) for iterable
                  in iterables]
     try:
-        for tuple_ in itertools.izip(*iterables):
+        for tuple_ in zip(*iterables):
             yield tuple_
     except IndexError:
         raise StopIteration

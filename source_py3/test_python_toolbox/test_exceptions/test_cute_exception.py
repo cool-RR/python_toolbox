@@ -12,14 +12,14 @@ def test():
         
     try:
         raise CuteException
-    except Exception, exception:
+    except Exception as exception:
         assert exception.message == ''
     else:
         raise cute_testing.Failure
         
     try:
         raise CuteException()
-    except Exception, exception:
+    except Exception as exception:
         assert exception.message == ''
     else:
         raise cute_testing.Failure
@@ -31,14 +31,14 @@ def test():
         
     try:
         raise MyException()
-    except Exception, exception:
+    except Exception as exception:
         assert exception.message == '''My hovercraft is full of eels.'''
     else:
         raise cute_testing.Failure
         
     try:
         raise MyException
-    except Exception, exception:
+    except Exception as exception:
         assert exception.message == '''My hovercraft is full of eels.'''
     else:
         raise cute_testing.Failure

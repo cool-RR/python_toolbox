@@ -3,7 +3,7 @@
 
 '''This module defines miscellaneous tools.'''
 
-from __future__ import division
+
 
 import operator
 import os.path
@@ -12,6 +12,7 @@ import math
 import types
 
 from python_toolbox import cute_iter_tools
+from functools import reduce
 
 
 _email_pattern = re.compile(
@@ -47,7 +48,7 @@ def is_subclass(candidate, base_class):
     if cute_iter_tools.is_iterable(base_class):
         return any(is_subclass(candidate, single_base_class) for 
                    single_base_class in base_class)
-    elif not isinstance(candidate, (type, types.ClassType)):
+    elif not isinstance(candidate, type):
         return False
     elif hasattr(base_class, '__subclasscheck__'):
         return base_class.__subclasscheck__(candidate)
@@ -62,7 +63,7 @@ def get_mro_depth_of_method(type_, method_name):
     This means, the index number in `type_`'s MRO of the base class that
     defines this method.
     '''
-    assert isinstance(method_name, basestring)
+    assert isinstance(method_name, str)
     mro = type_.mro()
     
     assert mro[0] is type_
@@ -108,7 +109,7 @@ def getted_vars(thing, _getattr=getattr):
     # todo: can make "fallback" option, to use value from original `vars` if
     # get is unsuccessful.
     my_vars = vars(thing)
-    return dict((name, _getattr(thing, name)) for name in my_vars.iterkeys())
+    return dict((name, _getattr(thing, name)) for name in my_vars.keys())
 
 
 
@@ -228,9 +229,9 @@ def find_clear_place_on_circle(circle_points, circle_size=1):
     # That's the only one that might be negative, so we ensure it's positive:
     clear_space[last_point] %= circle_size
     
-    maximum_clear_space = max(clear_space.itervalues())
+    maximum_clear_space = max(clear_space.values())
     
-    winners = [key for (key, value) in clear_space.iteritems()
+    winners = [key for (key, value) in clear_space.items()
                if value == maximum_clear_space]
     
     winner = winners[0]
@@ -283,5 +284,5 @@ def is_legal_email_address(email_address_candidate):
 
 def is_type(thing):
     '''Is `thing` a class? Allowing both new-style and old-style classes.'''
-    return isinstance(thing, (type, types.ClassType))
+    return isinstance(thing, type)
 

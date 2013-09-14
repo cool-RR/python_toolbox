@@ -3,9 +3,9 @@
 
 '''Defines various functions for working with queues.'''
 
-from __future__ import with_statement
 
-import Queue as queue_module
+
+import queue as queue_module
 import sys
 
 from python_toolbox import caching
@@ -50,7 +50,7 @@ def iterate(queue, block=False, limit_to_original_size=False,
                 "`_prefetch_if_no_qsize=True` to have the entire queue "
                 "prefetched before yielding the items."
             )
-        for _ in xrange(queue.qsize()):
+        for _ in range(queue.qsize()):
             try:
                 yield queue.get(block=block)
             except queue_module.Empty:

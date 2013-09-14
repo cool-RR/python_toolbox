@@ -12,7 +12,7 @@ import abc
 from .context_manager_type_type import ContextManagerTypeType
 
 
-class ContextManagerType(abc.ABCMeta):
+class ContextManagerType(abc.ABCMeta, metaclass=ContextManagerTypeType):
     '''
     Metaclass for `ContextManager`.
     
@@ -35,8 +35,6 @@ class ContextManagerType(abc.ABCMeta):
     For more details, see documentation of the containing module,
     `python_toolbox.context_manager`.
     '''
-    
-    __metaclass__ = ContextManagerTypeType
 
     
     def __new__(mcls, name, bases, namespace):
@@ -98,13 +96,13 @@ class ContextManagerType(abc.ABCMeta):
             our_enter_uses_manage_context = (
                 getattr(result_class.__enter__, 'im_func',
                 result_class.__enter__) == ContextManager.\
-                _ContextManager__enter_using_manage_context.im_func
+                _ContextManager__enter_using_manage_context.__func__
             )
             
             our_exit_uses_manage_context = (
                 getattr(result_class.__exit__, 'im_func',
                 result_class.__exit__) == ContextManager.\
-                _ContextManager__exit_using_manage_context.im_func
+                _ContextManager__exit_using_manage_context.__func__
             )
             
             if our_exit_uses_manage_context and not \

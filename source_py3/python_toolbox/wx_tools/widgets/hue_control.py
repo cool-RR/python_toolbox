@@ -7,7 +7,7 @@ Defines the `HueControl` class.
 See its documentation for more details.
 '''
 
-from __future__ import with_statement
+
 
 import colorsys
 
@@ -127,7 +127,7 @@ class HueControl(CuteWindow):
     
         
     def _on_char(self, event):
-        char = unichr(event.GetUniChar())
+        char = chr(event.GetUniChar())
         if char == ' ':
             self.open_editing_dialog()
         else:

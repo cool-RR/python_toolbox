@@ -3,7 +3,7 @@
 
 '''Test the `python_toolbox.context_management` module.'''
 
-from __future__ import with_statement 
+ 
 
 from python_toolbox import cute_testing
 
@@ -41,7 +41,7 @@ def test_error_catching_generator():
         flag = value
         try:
             yield
-        except Exception, exception:
+        except Exception as exception:
             exception_type_caught = type(exception)
         finally:
             flag = former_value
@@ -79,7 +79,7 @@ def test_self_returning_error_catching_generator():
         flag = value
         try:
             yield SelfHook
-        except Exception, exception:
+        except Exception as exception:
             exception_type_caught = type(exception)
         finally:
             flag = former_value
@@ -121,7 +121,7 @@ def test_error_catching_manage_context():
             flag = self.value
             try:
                 yield
-            except Exception, exception:
+            except Exception as exception:
                 exception_type_caught = type(exception)
             finally:
                 flag = former_value
@@ -165,7 +165,7 @@ def test_self_returning_error_catching_manage_context():
             flag = self.value
             try:
                 yield self
-            except Exception, exception:
+            except Exception as exception:
                 exception_type_caught = type(exception)
             finally:
                 flag = former_value
@@ -194,7 +194,7 @@ def test_manage_context_overriding_generator():
             flag = self.value
             try:
                 yield self
-            except Exception, exception:
+            except Exception as exception:
                 exception_type_caught = type(exception)
             finally:
                 flag = former_value
@@ -226,7 +226,7 @@ def test_manage_context_overriding_manage_context():
             flag = self.value
             try:
                 yield self
-            except Exception, exception:
+            except Exception as exception:
                 exception_type_caught = type(exception)
             finally:
                 flag = former_value
@@ -263,7 +263,7 @@ def test_manage_context_overriding_enter_exit():
             flag = self.value
             try:
                 yield self
-            except Exception, exception:
+            except Exception as exception:
                 exception_type_caught = type(exception)
             finally:
                 flag = former_value
@@ -667,7 +667,7 @@ def check_context_manager_type(context_manager_type,
                 assert return_value is None
             raise TypeError('ooga booga')
         
-    except Exception, exception:
+    except Exception as exception:
         assert not error_catching
         assert type(exception) is TypeError
         
@@ -693,7 +693,7 @@ def check_context_manager_type(context_manager_type,
                 assert return_value is None
             {}[3]
     
-    except Exception, exception:
+    except Exception as exception:
         assert not error_catching
         assert exception_type_caught is None
         assert type(exception) is KeyError
@@ -717,7 +717,7 @@ def check_context_manager_type(context_manager_type,
     
     try:
         f()
-    except Exception, exception:
+    except Exception as exception:
         assert not error_catching
         assert exception_type_caught is None
         assert type(exception) is ZeroDivisionError        
@@ -751,7 +751,7 @@ def check_context_manager_type(context_manager_type,
     
     try:
         new_g('whatever')
-    except Exception, exception:
+    except Exception as exception:
         assert not error_catching
         assert exception_type_caught is None
         assert type(exception) is SyntaxError
@@ -783,7 +783,7 @@ def check_context_manager_type(context_manager_type,
                 assert flag == 123
             assert flag == 123
             
-    except Exception, exception:
+    except Exception as exception:
         assert not error_catching
         assert exception_type_caught is None
         assert type(exception) is StopIteration
@@ -807,7 +807,7 @@ def check_context_manager_type(context_manager_type,
                 assert flag == 2
             assert flag == 1
             
-    except Exception, exception:
+    except Exception as exception:
         assert not error_catching
         assert exception_type_caught is None
         assert type(exception) is NotImplementedError

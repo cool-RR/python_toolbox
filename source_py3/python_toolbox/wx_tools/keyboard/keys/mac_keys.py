@@ -13,11 +13,11 @@ back_keys = (
     Key(wx.WXK_LEFT, cmd=True)
 )
 
-back_key_string = u'\u2318\u00ab'
+back_key_string = '\u2318\u00ab'
 
 forward_keys = (
     Key(ord(']'), cmd=True),
     Key(wx.WXK_RIGHT, cmd=True)
 )
 
-forward_key_string = u'\u2318\u00bb'
+forward_key_string = '\u2318\u00bb'

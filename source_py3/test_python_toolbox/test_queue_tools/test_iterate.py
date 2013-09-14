@@ -3,9 +3,9 @@
 
 '''Testing package for `queue_tools.iterate`.'''
 
-from __future__ import with_statement
 
-import Queue as queue_module
+
+import queue as queue_module
 
 from python_toolbox import cute_testing
 

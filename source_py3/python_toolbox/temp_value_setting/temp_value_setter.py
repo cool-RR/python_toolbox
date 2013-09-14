@@ -9,6 +9,7 @@ See its documentation for more details.
 
 from python_toolbox import address_tools
 from python_toolbox.context_management import ContextManager
+import collections
 
 
 __all__ = ['TempValueSetter']
@@ -66,16 +67,16 @@ class TempValueSetter(ContextManager):
                                          first.__delitem__(second))
             ### Finished handling the `(dict, key)` case. ###
             
-        elif callable(second):
+        elif isinstance(second, collections.Callable):
             # `second` is a callable; so we were probably handed a `(getter,
             # setter)` pair.
-            if not callable(first):
+            if not isinstance(first, collections.Callable):
                 raise bad_input_exception
             self.getter, self.setter = first, second
             ### Finished handling the `(getter, setter)` case. ###
         else:
             # All that's left is the `(object, attribute_string)` case.
-            if not isinstance(second, basestring):
+            if not isinstance(second, str):
                 raise bad_input_exception
             
             parent, attribute_name = first, second
