@@ -193,7 +193,7 @@ def test_address_in_expression():
     import marshal
     
     assert describe([object, email.encoders, marshal]) == \
-           '[object, email.encoders, marshal]'
+           '[builtins.object, email.encoders, marshal]'
     
     assert describe([email.encoders, 7, (1, 3), marshal]) == \
            '[email.encoders, 7, (1, 3), marshal]'
