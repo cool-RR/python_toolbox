@@ -1,0 +1,43 @@
+#!wing
+#!version=5.0
+##################################################################
+# Wing IDE project file                                          #
+##################################################################
+[project attributes]
+debug.launch-configs = (1,
+                        {'launch-OHU716PSo2P5T54y': ({},
+        {'buildcmd': ('default',
+                      None),
+         'env': ('project',
+                 [u'']),
+         'name': u'Launch Config 1',
+         'pyexec': ('default',
+                    u''),
+         'pypath': ('default',
+                    ''),
+         'pyrunargs': ('project',
+                       u''),
+         'runargs': u'',
+         'rundir': ('default',
+                    u'')})})
+proj.directory-list = [{'dirloc': loc('../../..'),
+                        'excludes': [u'source_py2',
+                                     u'nosetests.xml',
+                                     u'.coverage_html_report',
+                                     u'build',
+                                     u'dist',
+                                     u'docs/_build',
+                                     u'python_toolbox.egg-info'],
+                        'filter': '*',
+                        'include_hidden': False,
+                        'recursive': True,
+                        'watch_for_changes': True}]
+proj.file-type = 'shared'
+proj.home-dir = loc('../../..')
+proj.launch-config = {loc('../../../../../../../../Python27/Scripts/_test_python_toolbox.py'): (''\
+        'custom',
+        (u'',
+         'launch-OHU716PSo2P5T54y'))}
+testing.auto-test-file-specs = [('glob',
+                                 'test_python_toolbox/test*.py')]
+testing.test-framework = {None: 'nose'}
