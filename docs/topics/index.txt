@@ -49,7 +49,6 @@ explaining what it's good for and the basics of using it.
    logic-tools
    math-tools
    misc-tools
-   module-tasting
    monkeypatch-copy-reg
    monkeypatching-tools
    nifty-collections
