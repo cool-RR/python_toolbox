@@ -4,12 +4,11 @@
 '''A fork of the standard-library `inspect` module.'''
 
 import types
+import inspect
 
-from . import forked_inspect
-
-getargspec = forked_inspect.getargspec
-getcallargs = forked_inspect.getcallargs
-getsource = forked_inspect.getsource
+getargspec = inspect.getargspec
+getcallargs = inspect.getcallargs
+getsource = inspect.getsource
 
 ###############################################################################
 
