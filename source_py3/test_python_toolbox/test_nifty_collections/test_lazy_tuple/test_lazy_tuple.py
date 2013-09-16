@@ -97,9 +97,6 @@ def test_string():
     assert ''.join(lazy_tuple) == string
     assert ''.join(lazy_tuple[1:-1]) == string[1:-1]
     
-    assert sorted((lazy_tuple, 'abc', 'xyz', 'meowa')) == \
-           ['abc', lazy_tuple, 'meowa', 'xyz']
-    
     assert len(lazy_tuple) == lazy_tuple.known_length == \
            len(lazy_tuple.collected_data)
     
@@ -166,68 +163,6 @@ def test_finite_iterator():
     assert len(my_dict) == 1
     
 
-def test_comparisons():
-    '''Test comparisons of `LazyTuple`.'''
-
-    lazy_tuple = LazyTuple(iter((0, 1, 2, 3, 4)))
-    assert lazy_tuple.known_length == 0
-    
-    assert lazy_tuple > []
-    assert lazy_tuple.known_length == 1
-
-    assert not lazy_tuple < []
-    assert lazy_tuple.known_length == 1
-
-    assert not lazy_tuple <= []
-    assert lazy_tuple.known_length == 1
-    
-    assert not lazy_tuple >= [0, 7]
-    assert lazy_tuple.known_length == 2
-    
-    assert not lazy_tuple > [0, 1, 7]
-    assert lazy_tuple.known_length == 3
-    
-    assert lazy_tuple > [0, 1, 2, 3]
-    assert lazy_tuple.known_length == 5
-    
-    assert lazy_tuple == (0, 1, 2, 3, 4)
-    assert lazy_tuple != [0, 1, 2, 3, 4] # Can't compare to mutable sequence
-    assert lazy_tuple != (0, 1, 2, 3)
-    assert lazy_tuple != (0, 1, 2, 3, 4, 5)
-    assert lazy_tuple != LazyTuple((0, 1, 2, 3))
-    assert lazy_tuple == LazyTuple((0, 1, 2, 3, 4))
-    assert lazy_tuple != LazyTuple((0, 1, 2, 3, 4, 5))
-    
-    assert lazy_tuple > (0, 0)
-    assert lazy_tuple > LazyTuple((0, 0))
-    assert lazy_tuple >= LazyTuple((0, 0))
-    
-    assert lazy_tuple >= LazyTuple((0, 1, 2, 3))
-    
-    assert lazy_tuple <= LazyTuple((0, 1, 2, 3, 4, 'whatever'))
-    assert not lazy_tuple < lazy_tuple
-    assert not lazy_tuple > lazy_tuple
-    assert lazy_tuple <= lazy_tuple
-    assert lazy_tuple >= lazy_tuple
-    
-    assert lazy_tuple <= LazyTuple((0, 1, 2, 3, 5))
-    assert lazy_tuple < LazyTuple((0, 1, 2, 3, 5))
-    
-    assert lazy_tuple > LazyTuple((0, 1, 2, 3, 3, 6))
-    assert lazy_tuple >= LazyTuple((0, 1, 2, 3, 3, 6))
-    assert lazy_tuple > (0, 1, 2, 3, 3, 6)
-    
-    assert LazyTuple(iter([])) == LazyTuple(iter([]))
-    assert LazyTuple(iter([])) <= LazyTuple(iter([]))
-    assert LazyTuple(iter([])) >= LazyTuple(iter([]))
-    assert not LazyTuple(iter([])) > LazyTuple(iter([]))
-    assert not LazyTuple(iter([])) < LazyTuple(iter([]))
-    
-    assert LazyTuple(iter([])) <= (1, 2, 3)
-    assert LazyTuple(iter([])) < (1, 2, 3)
-    
-    
-    
 def test_immutable_sequence():
     '''Test that `LazyTuple` is considered an immutable sequence.'''
     assert sequence_tools.is_immutable_sequence(LazyTuple([1, 2, 3]))
