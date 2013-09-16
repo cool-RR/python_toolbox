@@ -13,7 +13,7 @@ Visit http://pypi.python.org/pypi/python_toolbox/ for more info.
 
 import python_toolbox._bootstrap
 import python_toolbox.version_info
-import python_toolbox.monkeypatch_copy_reg
+import python_toolbox.monkeypatch_copyreg
 import python_toolbox.monkeypatch_envelopes
 
 __version_info__ = python_toolbox.version_info.VersionInfo(0, 6, 0)

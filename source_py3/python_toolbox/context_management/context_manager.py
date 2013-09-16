@@ -111,7 +111,7 @@ class ContextManager(DecoratingContextManager, metaclass=ContextManagerType):
                 # tell if we get the same exception back
                 exc_value = exc_type()
             try:
-                generator.throw(exc_type(exc_value).with_traceback(exc_traceback))
+                generator.throw(exc_value.with_traceback(exc_traceback))
             except StopIteration as stop_iteration:
                 # Suppress the exception *unless* it's the same exception that
                 # was passed to throw().  This prevents a StopIteration

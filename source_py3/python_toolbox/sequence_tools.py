@@ -280,7 +280,7 @@ def get_recurrences(sequence):
     The values of the dict are the numbers of repititions of each item.    
     '''
     return {item: n_recurrences for item, n_recurrences in
-            Counter(sequence).most_common() if n_recurrences >= 2}
+            collections.Counter(sequence).most_common() if n_recurrences >= 2}
     
 ### Not using now, might want in future:
 
