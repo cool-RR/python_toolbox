@@ -17,6 +17,7 @@ from python_toolbox.pickle_tools import pickle_module
 import nose
 
 from python_toolbox import import_tools
+import python_toolbox
 
 from python_toolbox import pickle_tools
 
@@ -69,9 +70,6 @@ def test_non_atomically_pickleables_multiprocessing():
     Not including `multiprocessing` objects.
     '''
     
-    if not import_tools.exists('multiprocessing'):
-        raise nose.SkipTest('`multiprocessing` is not installed.')
-    
     import multiprocessing
 
     non_pickleables = [
@@ -119,6 +117,9 @@ def test_partially_pickleables_multiprocessing():
         
 def test_non_atomically_pickleables():
     '''Test `is_atomically_pickleable` on non-atomically pickleable objects.'''
+    
+    if python_toolbox.__version_info__ <= (0, 6, 0, 'release'):
+        raise nose.SkipTest
 
     non_pickleables = [
         threading.Lock(),

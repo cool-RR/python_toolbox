@@ -86,7 +86,7 @@ def _is_type_atomically_pickleable(type_, thing=None):
         if reduce_function:
             try:
                 reduce_result = reduce_function(thing, 3)
-                # (The `0` is the protocol argument.)
+                # (The `3` is the protocol argument.)
             except Exception as exception:
                 assert_legit_pickling_exception(exception)
                 return False
