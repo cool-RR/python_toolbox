@@ -237,4 +237,6 @@ class WeakKeyDefaultDict(collections.MutableMapping, object):
         if len(kwargs):
             self.update(kwargs)
             
-            
+    def __len__(self):
+        return len(self.data)
+              

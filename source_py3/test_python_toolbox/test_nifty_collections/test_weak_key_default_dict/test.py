@@ -11,6 +11,9 @@ from python_toolbox import gc_tools
 
 class WeakreffableObject(object):
     ''' '''
+    def __lt__(self, other):
+        # Arbitrary sort order for testing.
+        return id(self) < id(other)
         
 
 def test():
