@@ -14,17 +14,6 @@ import types
 from python_toolbox import address_tools
 from python_toolbox import misc_tools
 
-_some_pickleable_types = [
-    type(None), type(Ellipsis), type(NotImplemented), bool, int, float, bytes, 
-    str, tuple, list, dict, 
-]
-
-try:
-    from org.python.core import PyStringMap
-except ImportError:
-    pass
-else:
-    _some_pickleable_types.append(PyStringMap)
 
 def is_atomically_pickleable(thing):
     '''
@@ -96,7 +85,7 @@ def _is_type_atomically_pickleable(type_, thing=None):
         reduce_function = getattr(type_, '__reduce_ex__', None)
         if reduce_function:
             try:
-                reduce_result = reduce_function(thing, 0)
+                reduce_result = reduce_function(thing, 3)
                 # (The `0` is the protocol argument.)
             except Exception as exception:
                 assert_legit_pickling_exception(exception)
