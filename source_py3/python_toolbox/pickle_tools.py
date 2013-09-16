@@ -14,6 +14,17 @@ import types
 from python_toolbox import address_tools
 from python_toolbox import misc_tools
 
+_some_pickleable_types = [
+    type(None), type(Ellipsis), type(NotImplemented), bool, int, float, bytes, 
+    str, tuple, list, dict, 
+]
+
+try:
+    from org.python.core import PyStringMap
+except ImportError:
+    pass
+else:
+    _some_pickleable_types.append(PyStringMap)
 
 def is_atomically_pickleable(thing):
     '''
@@ -68,8 +79,8 @@ def _is_type_atomically_pickleable(type_, thing=None):
             ]
             assert any((segment in message) for segment in segments)
             # todo: turn to warning
-        
-        if type_ in pickle.Pickler.dispatch:
+            
+        if type_ in pickle._Pickler.dispatch:
             return True
             
         reduce_function = copyreg.dispatch_table.get(type_)

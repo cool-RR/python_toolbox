@@ -54,8 +54,8 @@ def test_simple_atomically_pickleables():
     ]
     
     for thing in pickleables:
-        assert pickle_tools.is_atomically_pickleable(thing)
         assert is_pickle_successful(thing)
+        assert pickle_tools.is_atomically_pickleable(thing)
         
     for thing in atomically_pickleables:
         assert pickle_tools.is_atomically_pickleable(thing)
