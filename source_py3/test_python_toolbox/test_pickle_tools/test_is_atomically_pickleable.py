@@ -100,9 +100,6 @@ def test_partially_pickleables_multiprocessing():
     not pickleable.
     '''
 
-    if not import_tools.exists('multiprocessing'):
-        raise nose.SkipTest('`multiprocessing` is not installed.')
-    
     import multiprocessing
     
     x = PickleableObject()
@@ -158,43 +155,3 @@ def test_partially_pickleables():
     for thing in partially_pickleables:
         assert pickle_tools.is_atomically_pickleable(thing)
         assert not is_pickle_successful(thing)
-
-### Testing old-style classes: ################################################
-#                                                                             #
-        
-class A: # Ooh, look at me! I'm not inheriting from `object`!
-    pass
-
-class AtomicallyNonpickleable:
-    _is_atomically_pickleable = False
-    
-class AtomicallyPickleable:
-    _is_atomically_pickleable = True
-        
-        
-        
-def test_old_style_classes():
-    '''Test `is_atomically_pickleable` on old style classes objects.'''
-    
-    # I hate old-style classes. I hope they'll die soon.
-    
-    assert pickle_tools.is_atomically_pickleable(A()) is True
-    assert pickle_tools.is_atomically_pickleable(
-        AtomicallyNonpickleable()
-        ) is False
-    assert pickle_tools.is_atomically_pickleable(
-        AtomicallyPickleable()
-        ) is True
-    
-    # The classes themselves are all pickleable:
-    assert pickle_tools.is_atomically_pickleable(A) is True
-    assert pickle_tools.is_atomically_pickleable(
-        AtomicallyNonpickleable
-        ) is True
-    assert pickle_tools.is_atomically_pickleable(
-        AtomicallyPickleable
-        ) is True
-    
-    
-#                                                                             #
-### Finished testing old-style classes. #######################################
