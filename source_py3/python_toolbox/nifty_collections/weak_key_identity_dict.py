@@ -198,3 +198,6 @@ class WeakKeyIdentityDict(collections.MutableMapping, object):
                 d[IdentityRef(key, self._remove)] = value
         if len(kwargs):
             self.update(kwargs)
+
+    def __len__(self):
+        return len(self.data)
