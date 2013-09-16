@@ -58,17 +58,12 @@ class BasicTestMappingProtocol(unittest2.TestCase):
             self.assertIn(k, d)
         for k in self.other:
             self.assertNotIn(k, d)
-        #cmp
-        self.assertEqual(cmp(p,p), 0)
-        self.assertEqual(cmp(d,d), 0)
-        self.assertEqual(cmp(p,d), -1)
-        self.assertEqual(cmp(d,p), 1)
         #__non__zero__
         if p: self.fail("Empty mapping must compare to False")
         if not d: self.fail("Full mapping must compare to True")
         # keys(), items(), iterkeys() ...
         def check_iterandlist(iter, lst, ref):
-            self.assertTrue(hasattr(iter, 'next'))
+            self.assertTrue(hasattr(iter, '__next__'))
             self.assertTrue(hasattr(iter, '__iter__'))
             x = list(iter)
             self.assertTrue(set(x)==set(lst)==set(ref))

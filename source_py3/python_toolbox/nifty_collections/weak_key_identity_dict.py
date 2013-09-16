@@ -201,3 +201,4 @@ class WeakKeyIdentityDict(collections.MutableMapping, object):
 
     def __len__(self):
         return len(self.data)
+    
