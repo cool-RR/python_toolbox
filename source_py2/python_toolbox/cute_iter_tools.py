@@ -260,6 +260,7 @@ def double_filter(filter_function, iterable):
 
     
 def get_ratio(filter_function, iterable):
+    '''Get the ratio of `iterable` items that pass `filter_function`.'''
     if isinstance(filter_function, str):
         attribute_name = filter_function
         filter_function = lambda item: getattr(item, attribute_name, None)
@@ -270,6 +271,58 @@ def get_ratio(filter_function, iterable):
         if filter_function(item):
             n_passed_items += 1
     return n_passed_items / n_total_items
+    
+    
+def fill(iterable, fill_value=None, fill_value_maker=None, length=infinity,
+         sequence_type=None):
+    '''
+    Iterate on `iterable`, and after it's exhaused, yield fill values.
+    
+    If `fill_value_maker` is given, it's used to create fill values
+    dynamically. (Useful if your fill value is `[]` and you don't want to use
+    many copies of the same list.)
+    
+    If `length` is given, shortens the iterator to that length.
+    
+    If `sequence_type` is given, instead of returning an iterator, this
+    function will return a sequenceo of that type.
+    '''
+    iterator = _fill(iterable, fill_value=fill_value,
+                     fill_value_maker=fill_value_maker, 
+                     length=length)
+    
+    if sequence_type is None:
+        return iterator
+    else:
+        return sequence_type(iterator)
+    
+    
+def _fill(iterable, fill_value=None, fill_value_maker=None, length=infinity):
+    if fill_value_maker is not None:
+        assert fill_value is None
+    else:
+        fill_value_maker = lambda: fill_value
+        
+    iterator = iter(iterable)
+    iterator_exhausted = False
+    
+    for i in itertools.count():
+        if i >= length:
+            raise StopIteration
+        
+        if iterator_exhausted:
+            yield fill_value_maker()
+        else:
+            try:
+                yield next(iterator)
+            except StopIteration:
+                iterator_exhausted = True
+                yield fill_value_maker()
+                
+    
+    
+    
+    
     
     
     
