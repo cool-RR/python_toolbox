@@ -3,9 +3,9 @@
 
 '''This module defines math-related tools.'''
 
-
-
 import numbers
+
+infinity = float('inf')
 
 
 def get_sign(x):
@@ -85,4 +85,19 @@ def get_mean(iterable):
     for i, value in enumerate(iterable):
         sum_ += value
     return sum_ / (i + 1)
+        
+        
+def restrict_number_to_range(number, low_cutoff=-infinity,
+                             high_cutoff=infinity):
+    '''
+    If `number` is not in the range between cutoffs, return closest cutoff.
+    
+    If the number is in range, simply return it.
+    '''
+    if number < low_cutoff:
+        return low_cutoff
+    elif number > high_cutoff:
+        return high_cutoff
+    else:
+        return number
         

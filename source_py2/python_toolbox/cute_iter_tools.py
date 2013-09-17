@@ -5,6 +5,7 @@
 # todo: make something like `filter` except it returns first found, or raises
 # exception
 
+from __future__ import division
 from __future__ import with_statement
 
 import collections

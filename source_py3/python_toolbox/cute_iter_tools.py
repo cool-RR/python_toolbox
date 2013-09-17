@@ -259,4 +259,28 @@ def double_filter(filter_function, iterable):
 
 
 
+def get_ratio(filter_function, iterable):
+    if isinstance(filter_function, str):
+        attribute_name = filter_function
+        filter_function = lambda item: getattr(item, attribute_name, None)
+    n_total_items = 0
+    n_passed_items = 0
+    for item in iterable:
+        n_total_items += 1
+        if filter_function(item):
+            n_passed_items += 1
+    return n_passed_items / n_total_items
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
