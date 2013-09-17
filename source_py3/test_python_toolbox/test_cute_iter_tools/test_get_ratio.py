@@ -1,6 +1,8 @@
 # Copyright 2009-2013 Ram Rachum.
 # This program is distributed under the MIT license.
 
+from __future__ import division
+
 from python_toolbox import cute_iter_tools
 
 
