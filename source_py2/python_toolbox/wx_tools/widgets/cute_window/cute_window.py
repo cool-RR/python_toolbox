@@ -28,8 +28,8 @@ class CuteWindow(AcceleratorSavvyWindow, BindSavvyEvtHandler, wx.Window):
       - A `.create_cursor_changer` method which creates a `CursorChanger`
        context manager for temporarily changing the cursor.
       - A `set_good_background_color` for setting a good background color.
-      # blocktododoc
-     
+      - A few more features.
+      
     This class doesn't require calling its `__init__` when subclassing. (i.e.,
     you *may* call its `__init__` if you want, but it will do the same as
     calling `wx.Window.__init__`.)
