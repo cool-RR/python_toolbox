@@ -3,7 +3,6 @@
 
 '''Defines various functions for working with queues.'''
 
-from __future__ import with_statement
 
 import Queue as queue_module
 import sys

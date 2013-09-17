@@ -3,7 +3,6 @@
 
 '''Testing module for `python_toolbox.persistent.CrossProcessPersistent`.'''
 
-from __future__ import with_statement
 
 import copy
 import pickle

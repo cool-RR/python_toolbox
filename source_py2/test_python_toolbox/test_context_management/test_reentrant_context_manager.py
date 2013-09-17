@@ -3,7 +3,6 @@
 
 '''Testing module for `context_management.ReentrantContextManager`.''' 
 
-from __future__ import with_statement
 
 import Queue as queue_module
 

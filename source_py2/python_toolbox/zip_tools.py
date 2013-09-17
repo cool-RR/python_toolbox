@@ -3,7 +3,6 @@
 
 '''Various zip-related tools.'''
 
-from __future__ import with_statement
 
 import contextlib
 import zipfile as zip_module

@@ -3,7 +3,6 @@
 
 '''Testing module for `python_toolbox.nifty_collections.LazyTuple`.'''
 
-from __future__ import with_statement
 
 import uuid
 import itertools

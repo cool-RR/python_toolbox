@@ -3,7 +3,6 @@
 
 '''Run generic `dict` tests on `CuteSleekValueDict`.'''
 
-from __future__ import with_statement
 
 import sys
 import UserDict

@@ -3,7 +3,6 @@
 
 '''Testing module for `python_toolbox.address_tools.describe`.'''
 
-from __future__ import with_statement
 
 import nose
 

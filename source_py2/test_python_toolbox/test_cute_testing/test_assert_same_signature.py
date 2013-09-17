@@ -3,7 +3,6 @@
 
 '''Testing module for `python_toolbox.cute_testing.assert_same_signature`.'''
 
-from __future__ import with_statement
 
 from python_toolbox.third_party import decorator as decorator_module
 

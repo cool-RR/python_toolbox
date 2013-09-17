@@ -4,7 +4,6 @@
 '''Defines various `sys`-related tools.'''
 
 
-from __future__ import with_statement
 
 import sys
 import cStringIO

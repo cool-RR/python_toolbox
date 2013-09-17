@@ -3,7 +3,6 @@
 
 '''Testing module for `nifty_collections.ordered_dict.OrderedSet`.'''
 
-from __future__ import with_statement
 
 from python_toolbox import cute_testing
 

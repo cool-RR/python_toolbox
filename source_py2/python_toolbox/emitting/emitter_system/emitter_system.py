@@ -7,7 +7,6 @@ Defines an EmitterSystem, which offers some benefits over Emitter.
 See documentation of EmitterSystem for more info.
 '''
 
-from __future__ import with_statement
 
 import itertools
 

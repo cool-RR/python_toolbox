@@ -3,7 +3,6 @@
 
 '''Testing modules for `python_toolbox.misc_tools.ProxyProperty`.'''
 
-from __future__ import with_statement
 
 import uuid
 

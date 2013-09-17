@@ -3,7 +3,6 @@
 
 '''Testing module for `temp_file_tools.TemporaryFolder`.'''
 
-from __future__ import with_statement
 
 import tempfile
 import os.path

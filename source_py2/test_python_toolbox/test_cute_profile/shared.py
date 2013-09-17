@@ -3,7 +3,6 @@
 
 '''Defines tools for testing `python_toolbox.cute_profile`.'''
 
-from __future__ import with_statement
 
 import sys
 

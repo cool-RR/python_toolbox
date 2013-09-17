@@ -3,7 +3,6 @@
 
 '''Testing package for `queue_tools.iterate`.'''
 
-from __future__ import with_statement
 
 import Queue as queue_module
 

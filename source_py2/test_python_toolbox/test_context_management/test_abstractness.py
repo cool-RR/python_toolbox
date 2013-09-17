@@ -3,7 +3,6 @@
 
 '''Module for testing the abstract methods of `ContextManager`.'''
 
-from __future__ import with_statement
 
 import sys
 

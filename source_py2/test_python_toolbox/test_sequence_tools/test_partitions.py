@@ -3,7 +3,6 @@
 
 '''Testing module for `sequence_tools.partitions`.'''
 
-from __future__ import with_statement
 
 from python_toolbox import cute_testing
 

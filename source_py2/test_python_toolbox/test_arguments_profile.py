@@ -3,7 +3,6 @@
 
 '''Testing module for `python_toolbox.arguments_profile.ArgumentsProfile`.'''
 
-from __future__ import with_statement
 
 import sys
 

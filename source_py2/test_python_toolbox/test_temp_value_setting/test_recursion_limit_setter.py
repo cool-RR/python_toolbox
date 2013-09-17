@@ -3,7 +3,6 @@
 
 '''Tests for `python_toolbox.temp_value_setting.TempRecursionLimitSetter`.'''
 
-from __future__ import with_statement
 
 import sys
 

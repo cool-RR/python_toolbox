@@ -3,7 +3,6 @@
 
 '''Testing module for `python_toolbox.caching.cache`.'''
 
-from __future__ import with_statement
 
 import datetime as datetime_module
 import re

@@ -3,7 +3,6 @@
 
 '''Tests taken from Python's `contextlib'.'''
 
-from __future__ import with_statement
 
 import sys
 

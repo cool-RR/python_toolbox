@@ -3,7 +3,6 @@
 
 '''Testing module for `python_toolbox.monkeypatching_tools`.'''
 
-from __future__ import with_statement
 
 import sys
 import uuid

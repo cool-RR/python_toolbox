@@ -6,7 +6,6 @@
 # todotest: test package in zip, zip in zip, multiple root-level modules in
 # zip.
 
-from __future__ import with_statement
 
 import os
 import tempfile

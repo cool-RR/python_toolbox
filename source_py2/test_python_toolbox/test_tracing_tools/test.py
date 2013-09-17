@@ -1,4 +1,3 @@
-from __future__ import with_statement
 
 from python_toolbox import tracing_tools
 

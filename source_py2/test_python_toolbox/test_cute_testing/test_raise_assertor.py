@@ -3,7 +3,6 @@
 
 '''Testing module for `python_toolbox.cute_testing.RaiseAssertor`.'''
 
-from __future__ import with_statement
 
 import re
 

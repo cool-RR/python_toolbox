@@ -8,7 +8,6 @@ See its documentation for more details.
 '''
 
 from __future__ import division
-from __future__ import with_statement
 
 import wx
 

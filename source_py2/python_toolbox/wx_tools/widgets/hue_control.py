@@ -7,7 +7,6 @@ Defines the `HueControl` class.
 See its documentation for more details.
 '''
 
-from __future__ import with_statement
 
 import colorsys
 

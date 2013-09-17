@@ -7,7 +7,6 @@ This module defines the `ContextManager` class.
 See its documentation for more information.
 '''
 
-from __future__ import with_statement
 
 import sys
 import types
