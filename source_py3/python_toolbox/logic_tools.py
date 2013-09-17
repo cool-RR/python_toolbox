@@ -3,6 +3,8 @@
 
 '''This module defines logic-related tools.'''
 
+import collections
+
 from python_toolbox import cute_iter_tools
 from python_toolbox import sequence_tools
 
@@ -29,6 +31,27 @@ def all_equal(iterable, exhaustive=False):
         
     return all(a==b for (a, b) in pairs)
 
+
+def get_equivalence_classes(iterable, key):
+    '''
+    Divide items in `iterable` to equivalence classes, using the key function.
+    
+    i.e. each item will be put in a set with all other items that had the same
+    result when put through the `key` function.
+    
+    Returns a `dict` with keys being the results of the function, and the
+    values being the sets of items with those values.
+    '''
+    key_function = \
+             (lambda item: getattr(item, key)) if isinstance(key, str) else key
+    equivalence_class_to_members = collections.defaultdict(set)
+    for item in iterable:
+        equivalence_class = key_function(item)
+        equivalence_class_to_members[equivalence_class].add(item)
+            
+    return equivalence_class_to_members
+        
+      
 
 def logic_max(iterable, relation=lambda a, b: (a >= b)):
     '''
