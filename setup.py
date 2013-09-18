@@ -100,18 +100,28 @@ GitHub: https://github.com/cool-RR/python_toolbox
 
 CI server: https://jenkins.shiningpanda.com/python-toolbox/job/python_toolbox/
 
+
+Tests
+=====
+
+Test can be run by running the ``_test_python_toolbox.py`` script that's
+installed automatically with the Python Toolbox.
+
+When ``python_toolbox`` isn't installed, you may run ``nosetests`` at the repo
+root to run the tests.
+
+
 Roadmap
 =======
 
 Present
 -------
 
-Python Toolbox is at version 0.6.0, which is an alpha release. It's being used in production every day, but backward compatibility isn't guaranteed yet.
+Python Toolbox is at version 0.6.0, which is an alpha release. It's being used\
+in production every day, but backward compatibility isn't guaranteed yet.
 
 Next tasks
 ----------
-
-Making Python Toolbox support Python 3.x, and the packaging arrangements necessary.
 
 Adding more useful tools.
 
@@ -119,6 +129,7 @@ Future
 ------
 
 Make a 1.0 release and start maintaining backward compatibility.
+
 '''
 
 my_classifiers = [
