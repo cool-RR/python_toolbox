@@ -8,7 +8,7 @@ from python_toolbox.caching import CachedType
         
 def test():
     '''Test basic workings of `CachedType`.'''
-    class A(object, metaclass=CachedType):
+    class A(metaclass=CachedType):
         def __init__(self, a=1, b=2, *args, **kwargs):
             pass
         

@@ -3,8 +3,6 @@
 
 '''Tests taken from Python's `contextlib'.'''
 
-
-
 import sys
 
 import nose
@@ -91,7 +89,7 @@ class ContextManagerTestCase(unittest2.TestCase):
             raise nose.SkipTest
         def attribs(**kw):
             def decorate(func):
-                for k,v in list(kw.items()):
+                for k,v in kw.items():
                     setattr(func,k,v)
                 return func
             return decorate

@@ -3,8 +3,6 @@
 
 '''Test the `python_toolbox.context_management` module.'''
 
- 
-
 from python_toolbox import cute_testing
 
 from python_toolbox.context_management import (ContextManager,

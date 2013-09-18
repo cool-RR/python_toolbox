@@ -3,7 +3,6 @@
 
 '''Tests taken from Python's `contextlib'.'''
 
-
 import sys
 
 import nose

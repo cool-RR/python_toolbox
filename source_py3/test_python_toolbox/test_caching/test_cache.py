@@ -4,7 +4,6 @@
 '''Testing module for `python_toolbox.caching.cache`.'''
 
 
-
 import datetime as datetime_module
 import re
 import weakref
@@ -198,7 +197,7 @@ def test_time_to_keep():
                         # without worrying whether other tests made `i` higher.
     f = cache(time_to_keep={'days': 356})(counting_func)
     
-    print((f('zero')))
+    print(f('zero'))
     assert f('zero') == 0 # Just to get rid of zero
     
     assert f('a') == 1

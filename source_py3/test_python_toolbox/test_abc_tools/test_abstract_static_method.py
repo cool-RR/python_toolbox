@@ -14,7 +14,7 @@ from python_toolbox.abc_tools import AbstractStaticMethod
 def test_instantiate_without_subclassing():
     '''Test you can't instantiate a class with an `AbstractStaticMethod`.'''
     
-    class A(object, metaclass=abc.ABCMeta):
+    class A(metaclass=abc.ABCMeta):
         @AbstractStaticMethod
         def f():
             pass
@@ -27,7 +27,7 @@ def test_override():
     Can't instantiate subclass that doesn't override `AbstractStaticMethod`.
     '''
     
-    class B(object, metaclass=abc.ABCMeta):
+    class B(metaclass=abc.ABCMeta):
         @AbstractStaticMethod
         def f():
             pass

@@ -4,7 +4,6 @@
 '''Testing module for `python_toolbox.address_tools.describe`.'''
 
 
-
 import nose
 
 from python_toolbox import import_tools

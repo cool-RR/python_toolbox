@@ -3,7 +3,6 @@
 
 '''Testing module for various problematic context managers.'''
 
-
 import nose
 
 from python_toolbox import cute_testing

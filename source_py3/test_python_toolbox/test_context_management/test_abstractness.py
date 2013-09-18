@@ -4,7 +4,6 @@
 '''Module for testing the abstract methods of `ContextManager`.'''
 
 
-
 import sys
 
 import nose

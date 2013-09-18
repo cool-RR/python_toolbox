@@ -3,7 +3,6 @@
 
 '''Testing module for `context_management.ReentrantContextManager`.''' 
 
-
 import Queue as queue_module
 
 from python_toolbox.context_management import ReentrantContextManager
