@@ -6,7 +6,6 @@ This module defines the `ContextManagerTypeType` metaclass.
 
 See its documentation for more information.
 '''
-import collections
 
 
 class ContextManagerTypeType(type):
@@ -46,7 +45,7 @@ class ContextManagerTypeType(type):
         if len(args) == 1:
             from .context_manager import ContextManager
             (function,) = args
-            assert isinstance(function, collections.Callable)
+            assert callable(function)
             name = function.__name__
             bases = (ContextManager,)
             namespace_dict = {

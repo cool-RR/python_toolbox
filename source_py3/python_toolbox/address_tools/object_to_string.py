@@ -202,8 +202,8 @@ def get_address(obj, shorten=False, root=None, namespace={}):
                 my_filter
             )
                 
-            namespace_dict_keys = list(namespace_dict.keys())
-            namespace_dict_values = list(namespace_dict.values())
+            namespace_dict_keys = namespace_dict.keys()
+            namespace_dict_values = namespace_dict.values()
             
             
         # Split to address parts:

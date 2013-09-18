@@ -37,7 +37,6 @@ class ContextManagerType(abc.ABCMeta):
     '''
     
     __metaclass__ = ContextManagerTypeType
-
     
     def __new__(mcls, name, bases, namespace):
         '''

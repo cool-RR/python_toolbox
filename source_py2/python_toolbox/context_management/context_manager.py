@@ -7,7 +7,6 @@ This module defines the `ContextManager` class.
 See its documentation for more information.
 '''
 
-
 import sys
 import types
 import abc
@@ -34,8 +33,7 @@ class ContextManager(DecoratingContextManager):
                 
     For more details, see documentation of the containing module,
     `python_toolbox.context_manager`.
-    '''
-    
+    ''' 
     
     __metaclass__ = ContextManagerType
     
@@ -78,7 +76,7 @@ class ContextManager(DecoratingContextManager):
         
         
         try:
-            generator_return_value = new_generator.next()
+            generator_return_value = next(new_generator)
             return self if (generator_return_value is SelfHook) else \
                    generator_return_value
         
@@ -99,7 +97,7 @@ class ContextManager(DecoratingContextManager):
         
         if exc_type is None:
             try:
-                generator.next()
+                next(generator)
             except StopIteration:
                 return
             else:
@@ -114,7 +112,7 @@ class ContextManager(DecoratingContextManager):
                 exc_value = exc_type()
             try:
                 generator.throw(exc_type, exc_value, exc_traceback)
-            except StopIteration, stop_iteration:
+            except StopIteration as stop_iteration:
                 # Suppress the exception *unless* it's the same exception that
                 # was passed to throw().  This prevents a StopIteration
                 # raised inside the "with" statement from being suppressed
