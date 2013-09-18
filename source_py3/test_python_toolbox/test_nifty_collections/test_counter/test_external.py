@@ -7,13 +7,11 @@ from random import randrange
 import copy
 import pickle
 import pickle
-from collections import Mapping
+from collections import Mapping, Counter
 
 from python_toolbox.third_party import unittest2
 
 from python_toolbox import misc_tools
-
-from python_toolbox.nifty_collections import Counter
 
 
 class TestCounter(unittest2.TestCase):
