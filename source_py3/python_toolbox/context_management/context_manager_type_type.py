@@ -10,7 +10,12 @@ import collections
 
 
 class ContextManagerTypeType(type):
-    '''Metaclass for `ContextManagerType`. Shouldn't be used directly.'''
+    '''
+    Metaclass for `ContextManagerType`. Shouldn't be used directly.
+    
+    Did I just create a metaclass for a metaclass. OH YES I DID. It's like a
+    double rainbow, except I'm the only one who can see it.
+    '''
     
     def __call__(cls, *args):
         '''

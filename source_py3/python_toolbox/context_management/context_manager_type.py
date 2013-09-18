@@ -36,7 +36,6 @@ class ContextManagerType(abc.ABCMeta, metaclass=ContextManagerTypeType):
     `python_toolbox.context_manager`.
     '''
 
-    
     def __new__(mcls, name, bases, namespace):
         '''
         Create either `ContextManager` itself or a subclass of it.

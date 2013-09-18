@@ -20,10 +20,7 @@ class CachedType(type):
         
     For example, if you have a class like this:
     
-        class Grokker(object):
-            
-            __metaclass__ = caching.CachedType
-            
+        class Grokker(object, metaclass=caching.CachedType):
             def __init__(self, a, b=2):
                 self.a = a
                 self.b = b

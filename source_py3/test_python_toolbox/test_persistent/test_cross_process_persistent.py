@@ -21,7 +21,8 @@ from python_toolbox import persistent
 from python_toolbox.persistent import CrossProcessPersistent
 
 
-class AbstractCrossProcessPersistent(CrossProcessPersistent, metaclass=abc.ABCMeta):
+class AbstractCrossProcessPersistent(CrossProcessPersistent,
+                                     metaclass=abc.ABCMeta):
     '''
     An abstract cross-process persistent.
     

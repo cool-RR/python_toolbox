@@ -37,7 +37,6 @@ class ContextManager(DecoratingContextManager, metaclass=ContextManagerType):
     `python_toolbox.context_manager`.
     '''
     
-    
     @abc.abstractmethod
     def __enter__(self):
         '''Prepare for suite execution.'''
