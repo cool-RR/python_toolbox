@@ -3,16 +3,14 @@
 
 '''This module defines miscellaneous tools.'''
 
-
-
 import operator
 import os.path
 import re
 import math
 import types
+import functools
 
 from python_toolbox import cute_iter_tools
-from functools import reduce
 
 
 _email_pattern = re.compile(
@@ -100,7 +98,7 @@ def getted_vars(thing, _getattr=getattr):
     # todo: can make "fallback" option, to use value from original `vars` if
     # get is unsuccessful.
     my_vars = vars(thing)
-    return dict((name, _getattr(thing, name)) for name in my_vars.keys())
+    return {name: _getattr(thing, name) for name in my_vars.keys()}
 
 
 
@@ -117,6 +115,17 @@ def is_magic_variable_name(name):
            name[:2] == name[-2:] == '__'
 
 
+def get_actual_type(thing):
+    '''
+    Get the actual type (or class) of an object.
+    
+    This used to be needed instead of `type(thing)` in Python 2.x where we had
+    old-style classes. In Python 3.x we don't have them anymore, but keeping
+    this function for backward compatibility.
+    '''
+    return type(thing)
+    
+    
 def is_number(x):
     '''Return whether `x` is a number.'''
     try:
@@ -234,9 +243,9 @@ def general_sum(things, start=None):
     numbers.
     '''
     if start is None:
-        return reduce(operator.add, things)
+        return functools.reduce(operator.add, things)
     else:
-        return reduce(operator.add, things, start)
+        return functools.reduce(operator.add, things, start)
     
     
 def general_product(things, start=None):
@@ -244,9 +253,9 @@ def general_product(things, start=None):
     Multiply a bunch of objects by each other, not necessarily numbers.
     '''    
     if start is None:
-        return reduce(operator.mul, things)
+        return functools.reduce(operator.mul, things)
     else:
-        return reduce(operator.mul, things, start)
+        return functools.reduce(operator.mul, things, start)
 
     
 def is_legal_email_address(email_address_candidate):

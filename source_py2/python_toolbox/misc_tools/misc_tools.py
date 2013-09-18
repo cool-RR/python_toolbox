@@ -34,8 +34,7 @@ def is_subclass(candidate, base_class):
     check whether `candidate` is a subclass of any of these base classes.
     
     This has the advantage that it doesn't throw an exception if `candidate` is
-    not a type. (Python issue 10569.)
-        
+    not a type. (Python issue 10569.)        
     '''
     # todo: disable ability to use nested iterables.
     if cute_iter_tools.is_iterable(base_class):
@@ -100,7 +99,7 @@ def getted_vars(thing, _getattr=getattr):
     # todo: can make "fallback" option, to use value from original `vars` if
     # get is unsuccessful.
     my_vars = vars(thing)
-    return dict((name, _getattr(thing, name)) for name in my_vars.iterkeys())
+    return {name: _getattr(thing, name) for name in my_vars.iterkeys()}
 
 
 
