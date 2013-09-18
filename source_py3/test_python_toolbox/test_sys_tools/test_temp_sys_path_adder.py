@@ -3,11 +3,10 @@
 
 '''Testing module for `python_toolbox.sys_tools.TempSysPathAdder`.'''
 
-
-
 import sys
 
 from python_toolbox.sys_tools import TempSysPathAdder
+
 
 def test_single():
     '''Test using `TempSysPathAdder` to add a single path.'''

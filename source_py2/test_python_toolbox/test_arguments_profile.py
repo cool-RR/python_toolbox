@@ -3,7 +3,6 @@
 
 '''Testing module for `python_toolbox.arguments_profile.ArgumentsProfile`.'''
 
-
 import sys
 
 import nose

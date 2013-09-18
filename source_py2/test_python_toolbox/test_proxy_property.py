@@ -3,7 +3,6 @@
 
 '''Testing modules for `python_toolbox.misc_tools.ProxyProperty`.'''
 
-
 import uuid
 
 from python_toolbox import cute_testing

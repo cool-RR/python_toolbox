@@ -3,8 +3,6 @@
 
 '''Run generic `dict` tests on `CuteSleekValueDict`.'''
 
-
-
 import sys
 import random
 import string
@@ -449,7 +447,7 @@ class GenericDictTest(unittest2.TestCase):
         self.assertRaises(KeyError, d.pop, k)
 
         # verify longs/ints get same value when key > 32 bits
-        # (for 64-bit archs).  See SF bug #689659.
+        # (for 64-bit archs).  See SF bug #689659. (MAKES NO SENSE ON PY3)
         x = 4503599627370496
         y = 4503599627370496
         h = CuteSleekValueDict(

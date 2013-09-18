@@ -3,7 +3,6 @@
 
 '''Testing module for `sequence_tools.to_tuple`.'''
 
-
 import nose
 
 from python_toolbox import cute_testing

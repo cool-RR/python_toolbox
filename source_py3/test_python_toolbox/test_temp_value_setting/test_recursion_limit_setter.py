@@ -3,8 +3,6 @@
 
 '''Tests for `python_toolbox.temp_value_setting.TempRecursionLimitSetter`.'''
 
-
-
 import sys
 
 from python_toolbox import cute_testing

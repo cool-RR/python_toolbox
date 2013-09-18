@@ -3,8 +3,6 @@
 
 '''Testing module for `sequence_tools.partitions`.'''
 
-
-
 from python_toolbox import cute_testing
 
 from python_toolbox.sequence_tools import partitions

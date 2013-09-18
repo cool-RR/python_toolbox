@@ -3,8 +3,6 @@
 
 '''Testing module for `python_toolbox.sys_tools.OutputCapturer`.'''
 
-
-
 import sys
 
 from python_toolbox.sys_tools import OutputCapturer

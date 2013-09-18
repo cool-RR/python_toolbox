@@ -3,7 +3,6 @@
 
 '''Testing `python_toolbox.temp_value_setting.TempWorkingDirectorySetter`.'''
 
-
 import os
 import shutil
 import tempfile

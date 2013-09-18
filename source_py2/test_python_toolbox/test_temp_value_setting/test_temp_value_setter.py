@@ -3,7 +3,6 @@
 
 '''Testing module for `python_toolbox.temp_value_setting.TempValueSetter`.'''
 
-
 from python_toolbox import cute_testing
 
 from python_toolbox.temp_value_setting import TempValueSetter

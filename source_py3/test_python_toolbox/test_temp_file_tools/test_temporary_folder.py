@@ -3,8 +3,6 @@
 
 '''Testing module for `temp_file_tools.TemporaryFolder`.'''
 
-
-
 import tempfile
 import os.path
 

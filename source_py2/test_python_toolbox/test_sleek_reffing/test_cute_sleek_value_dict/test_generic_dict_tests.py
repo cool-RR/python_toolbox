@@ -3,7 +3,6 @@
 
 '''Run generic `dict` tests on `CuteSleekValueDict`.'''
 
-
 import sys
 import UserDict
 import random
