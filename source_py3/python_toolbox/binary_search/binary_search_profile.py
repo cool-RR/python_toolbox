@@ -18,7 +18,7 @@ from .functions import (binary_search, binary_search_by_index,
                         _binary_search_both)
         
         
-class BinarySearchProfile(object):
+class BinarySearchProfile:
     '''
     A profile of binary search results.
     

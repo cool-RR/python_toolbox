@@ -21,7 +21,7 @@ from python_toolbox import caching
 def test():
     '''Test basic workings of `monkeypatch_method`.'''
     
-    class A(object):
+    class A:
         pass
 
     @monkeypatching_tools.monkeypatch_method(A)
@@ -45,7 +45,7 @@ def test():
     
 def test_monkeypatch_cached_property():
 
-    class A(object):
+    class A:
         pass
 
     @monkeypatching_tools.monkeypatch_method(A)
@@ -82,7 +82,7 @@ def test_helpful_message_when_forgetting_parentheses():
 
 def test_monkeypatch_staticmethod():
 
-    class A(object):
+    class A:
         @staticmethod
         def my_static_method(x):
             raise 'Flow should never reach here.'
@@ -106,7 +106,7 @@ def test_monkeypatch_staticmethod():
     
 def test_monkeypatch_classmethod():
 
-    class A(object):
+    class A:
         @classmethod
         def my_class_method(cls):
             raise 'Flow should never reach here.'
@@ -136,7 +136,7 @@ def test_monkeypatch_classmethod_subclass():
     class FunkyClassMethod(classmethod):
         is_funky = True
 
-    class A(object):
+    class A:
         @FunkyClassMethod
         def my_funky_class_method(cls):
             raise 'Flow should never reach here.'
@@ -159,7 +159,7 @@ def test_monkeypatch_classmethod_subclass():
 
 def test_directly_on_object():
     
-    class A(object):
+    class A:
         def woof(self):
             return 'woof'
 

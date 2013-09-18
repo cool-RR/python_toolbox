@@ -8,7 +8,7 @@ See its documentation for more information.
 '''
 
 
-class ProxyProperty(object):
+class ProxyProperty:
     '''
     Property that serves as a proxy to an attribute of the parent object.
     
@@ -19,7 +19,7 @@ class ProxyProperty(object):
     
     Example:
     
-        class Chair(object):
+        class Chair:
         
             def __init__(self, whatever):
                 self.whatever = whatever

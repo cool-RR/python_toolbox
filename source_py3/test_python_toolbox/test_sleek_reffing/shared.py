@@ -15,7 +15,7 @@ def _is_weakreffable(thing):
         return True
 
     
-class A(object):
+class A:
     '''A class with a static method.'''
     @staticmethod
     def s():

@@ -18,7 +18,7 @@ def test():
     remove_keys(below_ten_dict, lambda value: value >= 10)
     assert below_ten_dict == {1: 2, 3: 4, 5: 6, 7: 8, 9: 10}
     
-    class HoledNumbersContainer(object):
+    class HoledNumbersContainer:
         '''Contains only numbers that have a digit with a hole in it.'''
         def __contains__(self, number):
             if not isinstance(number, numbers.Integral):

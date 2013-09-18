@@ -10,7 +10,7 @@ from python_toolbox import caching
 def test_lone_freezer_property():
     '''Test a class that has only one freezer property without handlers.'''
     
-    class A(object):
+    class A:
         lone_freezer = FreezerProperty()
 
     a = A()
@@ -22,7 +22,7 @@ def test_lone_freezer_property():
     
 def test_decorate_happy_freezer_property():
     '''Test a freezer property which decorates both handlers.'''
-    class C(object):
+    class C:
         decorate_happy_freeze_counter = caching.CachedProperty(0)
         decorate_happy_thaw_counter = caching.CachedProperty(0)
         decorate_happy_freezer = FreezerProperty()
@@ -63,7 +63,7 @@ def test_decorate_happy_freezer_property():
     
 def test_argument_happy_freezer_property():
     '''Test a freezer property which defines both handlers with arguments.'''
-    class C(object):
+    class C:
         argument_happy_freeze_counter = caching.CachedProperty(0)
         argument_happy_thaw_counter = caching.CachedProperty(0)        
         def increment_argument_happy_freeze_counter(self):
@@ -108,7 +108,7 @@ def test_mix_freezer_property():
     '''
     Test freezer property which mixes decorated and arg-specified handlers.
     '''
-    class D(object):
+    class D:
         mix_freeze_counter = caching.CachedProperty(0)
         mix_thaw_counter = caching.CachedProperty(0)
         def increment_mix_freeze_counter(self):
@@ -159,7 +159,7 @@ def test_different_type_freezer_property():
         def thaw_handler(self):
             self.obj.different_type_thaw_counter += 1
     
-    class E(object):
+    class E:
         different_type_freeze_counter = caching.CachedProperty(0)
         different_type_thaw_counter = caching.CachedProperty(0)
         different_type_freezer = FreezerProperty(

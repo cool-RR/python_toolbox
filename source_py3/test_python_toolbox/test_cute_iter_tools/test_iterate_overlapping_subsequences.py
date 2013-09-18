@@ -57,7 +57,7 @@ def test_garbage_collection():
     
     garbage_collected = set()
 
-    class GarbageNoter(object):
+    class GarbageNoter:
         def __init__(self, n):
             assert isinstance(n, int)
             self.n = n
@@ -94,7 +94,7 @@ def test_garbage_collection_wrap_around():
     
     garbage_collected = set()
 
-    class GarbageNoter(object):
+    class GarbageNoter:
         def __init__(self, n):
             assert isinstance(n, int)
             self.n = n

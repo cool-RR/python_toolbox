@@ -64,7 +64,7 @@ has their own advantages and disadvantages over the others.
     `manage_context`, which is shorter, more idiomatic and less
     double-underscore-y than the equivalent classic definition:
 
-        class MyContextManager(object):
+        class MyContextManager:
                 def __enter__(self):
                     do_some_preparation()
                     other_context_manager.__enter__()

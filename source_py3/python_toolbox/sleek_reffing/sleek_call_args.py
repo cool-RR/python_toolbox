@@ -17,7 +17,7 @@ from .cute_sleek_value_dict import CuteSleekValueDict
 __all__ = ['SleekCallArgs']
 
     
-class SleekCallArgs(object):
+class SleekCallArgs:
     '''
     A bunch of call args with a sleekref to them.
     

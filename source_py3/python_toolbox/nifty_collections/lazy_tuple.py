@@ -18,7 +18,7 @@ from python_toolbox import sequence_tools
 
 infinity = float('inf')
 
-class _SENTINEL(object):
+class _SENTINEL:
     '''Sentinel used to detect the end of an iterable.'''
     
 

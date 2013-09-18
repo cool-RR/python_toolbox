@@ -19,7 +19,7 @@ from python_toolbox.nifty_collections import OrderedDict
 infinity = float('inf')
 
 
-class CLEAR_ENTIRE_CACHE(object):
+class CLEAR_ENTIRE_CACHE:
     '''Sentinel object for clearing the entire cache'''
 
 

@@ -17,7 +17,7 @@ from python_toolbox.context_management import ReentrantContextManager
 from .emitter import Emitter
 
 
-class EmitterSystem(object):
+class EmitterSystem:
     '''
     A system of emitters, representing a set of possible events in a program.
     

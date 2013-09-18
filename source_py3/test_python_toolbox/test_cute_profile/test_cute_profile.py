@@ -70,7 +70,7 @@ def test_simple():
 def test_method():
     '''Test that `profile_ready` works as a method decorator.'''
     
-    class A(object):
+    class A:
         def __init__(self):
             self.x = 0
                 

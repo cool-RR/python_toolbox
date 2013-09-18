@@ -105,7 +105,7 @@ def assert_same_signature(*callables):
         raise Failure('Not all the callables have the same signature.')
     
     
-class _MissingAttribute(object):
+class _MissingAttribute:
     '''Object signifying that an attribute was not found.'''
     # todo: make uninstanciable
 

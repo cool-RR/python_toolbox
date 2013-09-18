@@ -8,7 +8,7 @@ See its documentation for more details.
 '''
 
 
-class ReasonedBool(object):
+class ReasonedBool:
     '''
     A variation on `bool` that also gives a `.reason`.
     

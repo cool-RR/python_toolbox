@@ -9,16 +9,16 @@ from python_toolbox.address_tools import describe, resolve
 
 
 # Class tree we'll try to some resolvings on:
-class A(object):
+class A:
     def method(self):
         pass
-    class B(object):
+    class B:
         def deep_method(self):
             pass
-    class C(object):
+    class C:
         def deep_method(self):
             pass
-        class D(object):
+        class D:
             def deeper_method(self):
                 pass
             

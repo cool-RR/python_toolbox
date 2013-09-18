@@ -18,7 +18,7 @@ def monkeypatch_method(monkeypatchee, name=None):
     
     Example:
     
-        class A(object):
+        class A:
             pass
     
         @monkeypatch_method(A)

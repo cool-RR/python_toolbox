@@ -14,7 +14,7 @@ from python_toolbox import dict_tools
 from python_toolbox import comparison_tools
 
 
-class ArgumentsProfile(object):
+class ArgumentsProfile:
     '''
     A canonical arguments profile for a function.
     

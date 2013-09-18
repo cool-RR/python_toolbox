@@ -19,7 +19,7 @@ class CopyMode(dict):
     
         class NetworkStyleCopying(CopyMode): pass
             
-        class Something(object):
+        class Something:
             def __deepcopy__(self, memo):
                 if isinstance(memo, NetworkStlyeCopying):
                     # Do network-style copying, whatever that means.

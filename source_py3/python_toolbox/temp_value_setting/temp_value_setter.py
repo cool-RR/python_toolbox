@@ -14,7 +14,7 @@ from python_toolbox.context_management import ContextManager
 __all__ = ['TempValueSetter']
 
 
-class NotInDict(object):
+class NotInDict:
     '''Object signifying that the key was not found in the dict.'''
     # todo: make uninstanciable
 

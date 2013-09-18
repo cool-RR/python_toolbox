@@ -412,7 +412,7 @@ def test_method_equality():
     This causes failure with both bound and unbound methods.
     '''
     
-    class C(object):
+    class C:
         def my_method(self, *args):
             pass
 

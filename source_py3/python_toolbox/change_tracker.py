@@ -12,7 +12,7 @@ import pickle
 from python_toolbox.nifty_collections import WeakKeyIdentityDict
 
 
-class ChangeTracker(object): 
+class ChangeTracker: 
     '''
     Tracks changes in objects that are registered with it.
     

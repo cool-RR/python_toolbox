@@ -151,7 +151,7 @@ def do_nothing(*args, **kwargs):
     pass
 
         
-class OwnNameDiscoveringDescriptor(object):
+class OwnNameDiscoveringDescriptor:
     '''A descriptor that can discover the name it's bound to on its object.'''
     
     def __init__(self, name=None):

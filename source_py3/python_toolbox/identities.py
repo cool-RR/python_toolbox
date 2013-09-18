@@ -11,7 +11,7 @@ from python_toolbox import misc_tools
 from python_toolbox.persistent import CrossProcessPersistent
 
 
-class HasIdentity(object):
+class HasIdentity:
     '''
     An object that has a persistent identity.
     

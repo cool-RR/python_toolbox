@@ -70,7 +70,7 @@ def combinations(sequence, n=None, start=0):
                 yield [thing] + sub_result
 
 
-class NO_FILL_VALUE(object):
+class NO_FILL_VALUE:
     '''
     Sentinel that means: Don't fill last partition with default fill values.
     '''

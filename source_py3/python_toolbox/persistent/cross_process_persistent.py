@@ -27,7 +27,7 @@ from .personality import Personality
 library = weakref.WeakValueDictionary()
 
 
-class UuidToken(object):
+class UuidToken:
     '''Token which contains a uuid with its attribute `.uuid`'''
     def __init__(self, uuid):
         self.uuid = uuid

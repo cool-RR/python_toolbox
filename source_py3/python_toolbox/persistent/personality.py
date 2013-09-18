@@ -11,7 +11,7 @@ import colorsys
 from .persistent import Persistent
 
 
-class Personality(object):
+class Personality:
     '''
     A bunch of easy-to-remember attributes associated with a persistent object.
     

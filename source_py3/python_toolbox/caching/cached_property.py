@@ -17,7 +17,7 @@ class CachedProperty(misc_tools.OwnNameDiscoveringDescriptor):
     
     Usage:
     
-        class MyObject(object):
+        class MyObject:
         
             # ... Regular definitions here
         

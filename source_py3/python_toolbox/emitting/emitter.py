@@ -22,7 +22,7 @@ from python_toolbox import misc_tools
 from python_toolbox import address_tools
         
 
-class Emitter(object):
+class Emitter:
     '''
     An emitter you can `emit` from to call all its callable outputs.
     

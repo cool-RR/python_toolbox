@@ -11,7 +11,7 @@ See its documentation for more information.
 from python_toolbox import decorator_tools
 
 
-class DecoratingContextManager(object):
+class DecoratingContextManager:
     '''
     Context manager that can decorate a function to use it.
     

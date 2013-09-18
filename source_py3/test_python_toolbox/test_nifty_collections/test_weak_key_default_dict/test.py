@@ -9,7 +9,7 @@ from python_toolbox.nifty_collections import WeakKeyDefaultDict
 from python_toolbox import gc_tools
 
 
-class WeakreffableObject(object):
+class WeakreffableObject:
     ''' '''
     def __lt__(self, other):
         # Arbitrary sort order for testing.

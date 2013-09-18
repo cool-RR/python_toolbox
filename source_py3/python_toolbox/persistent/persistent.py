@@ -22,7 +22,7 @@ from python_toolbox import copy_tools
 __all__ = ['Persistent']
 
 
-class Persistent(object):
+class Persistent:
     '''
     Object that sometimes shouldn't really be duplicated.
 

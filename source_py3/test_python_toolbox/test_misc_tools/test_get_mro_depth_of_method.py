@@ -8,7 +8,7 @@ from python_toolbox.misc_tools import get_mro_depth_of_method
 
 def test():
     '''Test the basic workings of `get_mro_depth_of_method`.'''
-    class A(object):
+    class A:
         def a_method(self):
             pass
     
@@ -20,7 +20,7 @@ def test():
         def c_method(self):
             pass
         
-    class D(object):
+    class D:
         def d_method(self):
             pass
         

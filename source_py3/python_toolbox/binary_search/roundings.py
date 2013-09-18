@@ -6,7 +6,7 @@
 # todo: Confirm that `*_IF_BOTH` options are used are used in all places that
 # currently ~use them.
 
-class Rounding(object):
+class Rounding:
     '''Base class for rounding options for binary search.'''
 
 

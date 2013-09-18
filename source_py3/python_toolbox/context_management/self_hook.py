@@ -7,7 +7,7 @@ This module defines the `SelfHook` class.
 See its documentation for more information.
 '''
 
-class SelfHook(object):
+class SelfHook:
     '''
     Hook that a context manager can yield in order to yield itself.
 

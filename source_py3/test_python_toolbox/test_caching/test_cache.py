@@ -46,7 +46,7 @@ def test_weakref():
     '''Test that `cache` weakrefs weakreffable arguments.'''
     f = cache()(counting_func)
     
-    class A(object): pass
+    class A: pass
     
     a = A()
     result = f(a)

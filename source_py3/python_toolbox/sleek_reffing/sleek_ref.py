@@ -25,7 +25,7 @@ class Ref(weakref.ref):
     '''
 
 
-class SleekRef(object):
+class SleekRef:
     '''
     Sleekref tries to reference an object weakly but if can't does it strongly.
     

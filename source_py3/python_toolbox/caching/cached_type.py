@@ -10,7 +10,7 @@ See its documentation for more details.
 from python_toolbox.sleek_reffing import SleekCallArgs
 
 
-class SelfPlaceholder(object):
+class SelfPlaceholder:
     '''Placeholder for `self` when storing call-args.''' 
 
 

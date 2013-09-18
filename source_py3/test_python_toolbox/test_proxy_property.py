@@ -16,7 +16,7 @@ class Object:
 
 def test():
     
-    class A(object):
+    class A:
         ''' '''
         y = 'y'
         def __init__(self):
@@ -78,7 +78,7 @@ def test_dot():
                                     "with a dot to make it clear it's an "
                                     "attribute. 'y' does not start with a "
                                     "dot."):
-        class A(object):
+        class A:
             y = 'y'
             x = ProxyProperty('y')
             

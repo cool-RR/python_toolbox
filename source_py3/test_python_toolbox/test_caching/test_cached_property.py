@@ -22,7 +22,7 @@ def counting_func(self):
         
 def test():
     '''Test basic workings of `CachedProperty`.'''    
-    class A(object):
+    class A:
         personality = CachedProperty(counting_func)
     
     assert isinstance(A.personality, CachedProperty)
@@ -37,7 +37,7 @@ def test():
 
 def test_value():
     '''Test `CachedProperty` when giving a value instead of a getter.'''
-    class B(object):
+    class B:
         brrr_property = CachedProperty('brrr')
     
     assert isinstance(B.brrr_property, CachedProperty)
@@ -51,7 +51,7 @@ def test_value():
 
 def test_as_decorator():
     '''Test `CachedProperty` can work as a decorator.'''
-    class B(object):
+    class B:
         @CachedProperty
         def personality(self):
             if not hasattr(B.personality, 'i'):
@@ -75,7 +75,7 @@ def test_as_decorator():
     
 def test_with_name():
     '''Test `CachedProperty` works with correct name argument.'''
-    class A(object):
+    class A:
         personality = CachedProperty(counting_func, name='personality')
     
     a1 = A()
@@ -90,7 +90,7 @@ def test_with_name():
 def test_with_wrong_name():
     '''Test `CachedProperty`'s behavior with wrong name argument.'''
         
-    class A(object):
+    class A:
         personality = CachedProperty(counting_func, name='meow')
     
     a1 = A()
@@ -105,7 +105,7 @@ def test_with_wrong_name():
 def test_on_false_object():
     '''Test `CachedProperty` on class that evaluates to `False`.'''
     
-    class C(object):
+    class C:
         @CachedProperty
         def personality(self):
             if not hasattr(C.personality, 'i'):
@@ -135,13 +135,13 @@ def test_on_false_object():
     
 def test_doc():
     '''Test the `doc` argument for setting the property's docstring.'''
-    class A(object):
+    class A:
         personality = CachedProperty(counting_func)
         
     assert A.personality.__doc__ ==  'Return a bigger number every time.'
     
     
-    class B(object):
+    class B:
         personality = CachedProperty(
             counting_func,
             doc='''Ooga booga.'''
@@ -150,7 +150,7 @@ def test_doc():
     assert B.personality.__doc__ ==  'Ooga booga.'
     
     
-    class C(object):
+    class C:
         undocced_property = CachedProperty(
             lambda self: 1/0,
         )
@@ -161,7 +161,7 @@ def test_doc():
 def test_decorating():
     '''Test method-decorating functionality.'''
     
-    class A(object):
+    class A:
         reentrant_context_manager = CachedProperty(
             lambda self: context_management.ReentrantContextManager()
         )
@@ -179,7 +179,7 @@ def test_decorating():
             assert a.my_method(y=7, x=8) == (8, 7, 3)
         
 def test_force_value_not_getter():
-    class A(object):
+    class A:
         personality = CachedProperty(counting_func,
                                      force_value_not_getter=True)
         
