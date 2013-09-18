@@ -74,7 +74,7 @@ class OrderedSet(collections.MutableSet):
         """Remove and return an arbitrary set element."""
         if not self:
             raise KeyError('set is empty')
-        key = reversed(self).next() if last else iter(self).next()
+        key = next(reversed(self) if last else iter(self))
         self.discard(key)
         return key
 

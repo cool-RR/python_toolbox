@@ -7,8 +7,6 @@ This module defines the `LazyTuple` class.
 See its documentation for more information.
 '''
 
-
-
 import threading
 import collections
 

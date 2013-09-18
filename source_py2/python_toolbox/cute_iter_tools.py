@@ -167,7 +167,7 @@ def iter_with(iterable, context_manager):
     while True:
         
         with context_manager:
-            next_item = iterator.next()
+            next_item = next(iterator)
             # You may notice that we are not `except`ing a `StopIteration`
             # here; If we get one, it'll just get propagated and end *this*
             # iterator. todo: I just realized this will probably cause a bug

@@ -28,6 +28,7 @@ class OrderedDict(StdlibOrderedDict):
         for key_ in sorted_keys[1::step]:
             self.move_to_end(key_)
         
+    
     def index(self, key):
         '''Get the index number of `key`.'''
         if key not in self:

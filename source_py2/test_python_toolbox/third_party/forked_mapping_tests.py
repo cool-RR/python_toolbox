@@ -77,8 +77,8 @@ class BasicTestMappingProtocol(unittest2.TestCase):
         check_iterandlist(d.itervalues(), d.values(), self.reference.values())
         check_iterandlist(d.iteritems(), d.items(), self.reference.items())
         #get
-        key, value = d.iteritems().next()
-        knownkey, knownvalue = self.other.iteritems().next()
+        key, value = next(d.iteritems())
+        knownkey, knownvalue = next(self.other.iteritems())
         self.assertEqual(d.get(key, knownvalue), value)
         self.assertEqual(d.get(knownkey, knownvalue), knownvalue)
         self.assertNotIn(knownkey, d)
@@ -103,8 +103,8 @@ class BasicTestMappingProtocol(unittest2.TestCase):
         self.assertEqual(dict(p), self.reference)
         d = self._full_mapping(self.reference)
         #setdefault
-        key, value = d.iteritems().next()
-        knownkey, knownvalue = self.other.iteritems().next()
+        key, value = next(d.iteritems())
+        knownkey, knownvalue = next(self.other.iteritems())
         self.assertEqual(d.setdefault(key, knownvalue), value)
         self.assertEqual(d[key], value)
         self.assertEqual(d.setdefault(knownkey, knownvalue), knownvalue)

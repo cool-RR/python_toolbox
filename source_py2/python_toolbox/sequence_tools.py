@@ -34,7 +34,7 @@ def flatten(iterable):
 
     iterator = iter(iterable)
     try:
-        first_item = iterator.next()
+        first_item = next(iterator)
     except StopIteration:
         return []
     return sum(iterator, first_item)
