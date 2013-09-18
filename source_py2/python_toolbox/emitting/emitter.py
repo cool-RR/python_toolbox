@@ -14,6 +14,8 @@ See its documentation for more info.
 # redundant calls to shared callable outputs.
 
 import itertools
+import collections
+
 from python_toolbox import cute_iter_tools
 from python_toolbox import misc_tools
 from python_toolbox import address_tools
@@ -211,7 +213,7 @@ class Emitter(object):
         If adding an emitter, every time this emitter will emit the output
         emitter will emit as well.
         '''
-        assert isinstance(thing, Emitter) or callable(thing)
+        assert isinstance(thing, (Emitter, collections.Callable))
         self._outputs.add(thing)
         if isinstance(thing, Emitter):
             thing._inputs.add(self)
@@ -219,7 +221,7 @@ class Emitter(object):
         
     def remove_output(self, thing):
         '''Remove an output from this emitter.'''
-        assert isinstance(thing, Emitter) or callable(thing)
+        assert isinstance(thing, (Emitter, collections.Callable))
         self._outputs.remove(thing)
         if isinstance(thing, Emitter):
             thing._inputs.remove(self)
@@ -234,9 +236,7 @@ class Emitter(object):
         
     def _get_callable_outputs(self):
         '''Get the direct callable outputs of this emitter.'''
-        return set((
-            output for output in self._outputs if callable(output)
-        ))
+        return set(filter(callable, self._outputs))
     
     def _get_emitter_outputs(self):
         '''Get the direct emitter outputs of this emitter.'''

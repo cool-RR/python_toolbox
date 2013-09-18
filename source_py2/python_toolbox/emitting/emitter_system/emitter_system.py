@@ -17,17 +17,6 @@ from python_toolbox.context_management import ReentrantContextManager
 from .emitter import Emitter
 
 
-
-#'''
-#Context manager for freezing the cache rebuilding in an emitter system.
-
-#When you do actions using this context manager, the emitters will not
-#rebuild their cache when changing their inputs/outputs. When the outermost
-#context manager has exited, all the caches for these emitters will get
-#rebuilt.
-#'''    
-
-            
 class EmitterSystem(object):
     '''
     A system of emitters, representing a set of possible events in a program.
@@ -63,6 +52,14 @@ class EmitterSystem(object):
         
         
     cache_rebuilding_freezer = freezing.FreezerProperty()
+    '''
+    Context manager for freezing the cache rebuilding in an emitter system.
+    
+    When you do actions using this context manager, the emitters will not
+    rebuild their cache when changing their inputs/outputs. When the outermost
+    context manager has exited, all the caches for these emitters will get
+    rebuilt.
+    '''    
 
     
     @cache_rebuilding_freezer.on_thaw

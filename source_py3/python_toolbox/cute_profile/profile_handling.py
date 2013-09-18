@@ -40,7 +40,7 @@ class AuxiliaryThreadProfileHandler(BaseProfileHandler):
     def handle(self):
         self.thread = threading.Thread(target=self.thread_job)
         self.thread.start()
-        
+    
     @abc.abstractmethod
     def thread_job(self):
         pass
@@ -103,7 +103,7 @@ class PrintProfileHandler(BaseProfileHandler):
 def get_profile_handler(profile_handler_string):
     '''Parse `profile_handler_string` into a `ProfileHandler` class.'''
     if not profile_handler_string or profile_handler_string in \
-                                                        list(map(str, list(range(-1, 5)))):
+                                                     ['0', '1', '2', '3', '4']:
         try:
             sort_order = int(profile_handler_string)
         except (ValueError, TypeError):

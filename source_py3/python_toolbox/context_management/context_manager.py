@@ -7,7 +7,6 @@ This module defines the `ContextManager` class.
 See its documentation for more information.
 '''
 
-
 import sys
 import types
 import abc
