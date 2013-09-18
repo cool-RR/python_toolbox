@@ -79,9 +79,7 @@ class VersionInfo(tuple):
     @property
     def version_text(self):
         '''A textual description of the version, like '1.4.2 beta'.'''
-        version_text = '%s.%s' % (self.major, self.minor)
-        if self.micro:
-            version_text += '.%s' % self.micro
+        version_text = '%s.%s.%s' % (self.major, self.minor, self.micro)
         if self.modifier != 'release':
             version_text += ' %s' % self.modifier
         return version_text
