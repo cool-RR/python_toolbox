@@ -8,7 +8,7 @@ from python_toolbox import cute_testing
 from python_toolbox.temp_value_setting import TempValueSetter
 
 
-class Object(object):
+class Object:
     pass
 
 

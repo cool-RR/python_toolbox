@@ -10,7 +10,7 @@ from python_toolbox import cute_testing
 from python_toolbox.misc_tools import ProxyProperty
 
 
-class Object(object):
+class Object:
     ''' '''        
 
 
