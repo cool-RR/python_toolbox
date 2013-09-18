@@ -62,6 +62,15 @@ The Python Toolbox supports Python versions 2.7 and 3.3+.
 
 It's tested on both CPython and PyPy 2.1.
 
+
+# Tests #
+
+Test can be run by running the `_test_python_toolbox.py` script that's
+installed automatically with the Python Toolbox.
+
+When `python_toolbox` isn't installed, you may run `nosetests` at the repo root
+to run the tests.
+
 # Current state #
 
 The Python Toolbox is at version 0.6.0, which is an alpha release. At this experimental stage of the project, backward compatibility will _not_ be maintained.
