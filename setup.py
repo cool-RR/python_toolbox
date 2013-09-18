@@ -11,7 +11,7 @@ import sys
 
 ### Confirming correct Python version: ########################################
 #                                                                             #
-if sys.version_info[1] <= 6:
+if sys.version_info[:2] <= (2, 5):
     raise Exception(
         "You're using Python <= 2.5, but this package requires either Python "
         "2.7, or 3.3 or above, so you can't use it unless you upgrade your "
@@ -21,9 +21,9 @@ if sys.version_info[1] <= 6:
 ### Finished confirming correct Python version. ###############################
 
 if sys.version_info[0] == 3:
-    source_folder = '.source_py3'
+    source_folder = 'source_py3'
 else:
-    source_folder = '.source_py2'
+    source_folder = 'source_py2'
 
 
 def get_python_toolbox_packages():
@@ -37,7 +37,7 @@ def get_python_toolbox_packages():
         
     '''
     return ['python_toolbox.' + p for p in
-            setuptools.find_packages('./python_toolbox')] + \
+            setuptools.find_packages('%s/python_toolbox' % source_folder)] + \
            ['python_toolbox']
 
 
@@ -52,7 +52,8 @@ def get_test_python_toolbox_packages():
         
     '''
     return ['test_python_toolbox.' + p for p in
-            setuptools.find_packages('./test_python_toolbox')] + \
+            setuptools.find_packages('%s/test_python_toolbox'
+                                                          % source_folder)] + \
            ['test_python_toolbox']
 
 
@@ -145,9 +146,10 @@ setuptools.setup(
     description='A collection of Python tools for various tasks',
     author='Ram Rachum',
     author_email='ram@rachum.com',
-    package_dir=source_folder, 
+    package_dir={'': source_folder}, 
     packages=get_packages(),
-    scripts=['test_python_toolbox/scripts/_test_python_toolbox.py'],
+    scripts=['%s/test_python_toolbox/scripts/_test_python_toolbox.py'
+                                                              % source_folder],
     long_description=my_long_description,
     license='MIT',
     classifiers=my_classifiers,
