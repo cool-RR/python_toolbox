@@ -89,7 +89,6 @@ def get_mean(iterable):
         sum_ += value
     return sum_ / (i + 1)
 
-
         
 def restrict_number_to_range(number, low_cutoff=-infinity,
                              high_cutoff=infinity):
@@ -104,4 +103,4 @@ def restrict_number_to_range(number, low_cutoff=-infinity,
         return high_cutoff
     else:
         return number
-                
+        

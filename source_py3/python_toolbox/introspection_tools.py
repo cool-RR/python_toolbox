@@ -34,6 +34,6 @@ def get_default_args_dict(function):
     defaultful_args = s_args[-n_defaultful_args:] if n_defaultful_args \
                        else []
     
-    return OrderedDict(list(zip(defaultful_args, s_defaults)))
+    return OrderedDict(zip(defaultful_args, s_defaults))
     
     

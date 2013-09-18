@@ -7,10 +7,10 @@ import sys
 import os.path
 import imp
 import zipimport
+import functools
 
 from python_toolbox import package_finder
 from python_toolbox import caching
-from functools import reduce
 
     
 
@@ -42,7 +42,7 @@ def import_all(package, exclude='__init__', silent_fail=False):
         
     d = {}
     
-    for (path, name) in list(names.items()):
+    for (path, name) in names.items():
         try:
             d[name] = normal_import(name)
         except Exception:
@@ -69,7 +69,8 @@ def normal_import(module_name):
     if '.' in module_name:
         package_name, submodule_name = module_name.rsplit('.', 1)
         package = __import__(module_name)
-        return reduce(getattr, [package] + module_name.split('.')[1:])
+        return functools.reduce(getattr,
+                                [package] + module_name.split('.')[1:])
     else:
         return __import__(module_name)
     

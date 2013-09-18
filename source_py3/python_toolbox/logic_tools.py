@@ -52,7 +52,6 @@ def get_equivalence_classes(iterable, key):
     return equivalence_class_to_members
         
       
-
 def logic_max(iterable, relation=lambda a, b: (a >= b)):
     '''
     Get a list of maximums from the iterable.

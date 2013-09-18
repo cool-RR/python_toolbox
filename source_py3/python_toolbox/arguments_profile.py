@@ -363,13 +363,13 @@ class ArgumentsProfile(object):
             )
             
             sorted_star_kwargs = OrderedDict(
-                list(zip(
+                zip(
                     sorted_star_kwargs_names,
                     dict_tools.get_list(
                         getcallargs_result[s_star_kwargs],
                         sorted_star_kwargs_names
                     )
-                ))
+                )
             )
             
             

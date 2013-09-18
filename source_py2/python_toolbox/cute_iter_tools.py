@@ -258,7 +258,7 @@ def double_filter(filter_function, iterable):
     return (make_true_iterator(), make_false_iterator())
 
 
-    
+
 def get_ratio(filter_function, iterable):
     '''Get the ratio of `iterable` items that pass `filter_function`.'''
     if isinstance(filter_function, str):
@@ -272,7 +272,7 @@ def get_ratio(filter_function, iterable):
             n_passed_items += 1
     return n_passed_items / n_total_items
     
-    
+
 def fill(iterable, fill_value=None, fill_value_maker=None, length=infinity,
          sequence_type=None):
     '''

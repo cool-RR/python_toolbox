@@ -41,7 +41,7 @@ class FunctionAnchoringType(type):
         my_getted_vars = misc_tools.getted_vars(my_type)
         # Repeat after me: "Getted, not dict."
         
-        functions_to_anchor = [value for key, value in list(my_getted_vars.items())
+        functions_to_anchor = [value for key, value in my_getted_vars.items()
                                if isinstance(value, types.FunctionType) and not
                                misc_tools.is_magic_variable_name(key)]
         for function in functions_to_anchor:

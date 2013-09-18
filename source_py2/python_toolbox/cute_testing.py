@@ -62,7 +62,7 @@ class RaiseAssertor(ContextManager):
         '''Manage the `RaiseAssertor'`s context.'''
         try:
             yield self
-        except self.exception_type, exception:
+        except self.exception_type as exception:
             self.exception = exception
             if self.assert_exact_type:
                 if self.exception_type is not type(exception):
@@ -89,7 +89,7 @@ class RaiseAssertor(ContextManager):
                     if not self.text.match(message):
                         raise Failure("A `%s` was raised but it didn't match "
                                       "the given regex." % self.exception_type)
-        except BaseException, different_exception:
+        except BaseException as different_exception:
             raise Failure(
                 "%s was excpected, but a different exception %s was raised "
                 "instead." % (self.exception_type, type(different_exception))

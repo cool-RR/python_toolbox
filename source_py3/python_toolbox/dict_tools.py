@@ -56,7 +56,7 @@ def fancy_string(d, indent=0):
     
     temp1 = (
         (big_space + repr(key) + ':\n' + huge_space + show(value, indent + 8))
-        for(key, value) in list(d.items()))
+                                           for (key, value) in list(d.items()))
     
     temp2 = small_space + '{\n' + ',\n'.join(temp1) + '\n' + small_space +'}'
     
@@ -108,7 +108,7 @@ def reverse_with_set_values(d, sort=False):
     if sort:
         from python_toolbox import nifty_collections
         ordered_dict = nifty_collections.OrderedDict(new_dict)
-        if isinstance(sort, collections.Callable) or isinstance(sort, str):
+        if isinstance(sort, (collections.Callable, str)):
             key_function = comparison_tools. \
                                    process_key_function_or_attribute_name(sort)
         else:

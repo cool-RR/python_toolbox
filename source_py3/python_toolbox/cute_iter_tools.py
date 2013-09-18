@@ -5,8 +5,6 @@
 # todo: make something like `filter` except it returns first found, or raises
 # exception
 
-
-
 import collections
 import itertools
 import builtins
