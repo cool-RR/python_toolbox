@@ -70,7 +70,7 @@ class WeakKeyIdentityDict(UserDict.UserDict, object):
     def copy(self):
         """ D.copy() -> a shallow copy of D """
         new = WeakKeyIdentityDict()
-        for key, value in self.data.items():
+        for key, value in self.data.iteritems():
             o = key()
             if o is not None:
                 new[o] = value
@@ -194,7 +194,12 @@ class WeakKeyIdentityDict(UserDict.UserDict, object):
         if dict is not None:
             if not hasattr(dict, "items"):
                 dict = type({})(dict)
-            for key, value in dict.items():
+            for key, value in dict.iteritems():
                 d[IdentityRef(key, self._remove)] = value
         if len(kwargs):
             self.update(kwargs)
+
+
+    def __len__(self):
+        return len(self.data)
+    

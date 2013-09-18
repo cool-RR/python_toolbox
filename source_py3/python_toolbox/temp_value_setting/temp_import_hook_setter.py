@@ -23,7 +23,7 @@ class TempImportHookSetter(TempValueSetter):
         
         `import_hook` is the function to be used as the import hook.
         '''
-        assert isinstance(import_hook, collections.Callable)
+        assert callable(import_hook)
         TempValueSetter.__init__(self,
                                  (__builtin__, '__import__'),
                                  value=import_hook)

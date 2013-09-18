@@ -12,7 +12,6 @@ from python_toolbox import cheat_hashing
 from python_toolbox.nifty_collections import OrderedDict
 from python_toolbox import dict_tools
 from python_toolbox import comparison_tools
-import collections
 
 
 class ArgumentsProfile(object):
@@ -93,7 +92,7 @@ class ArgumentsProfile(object):
         `*args` and `**kwargs` are the arguments that go into the `function`.
         '''
         
-        if not isinstance(function, collections.Callable):
+        if not callable(function):
             raise Exception('%s is not a callable object.' % function)
         self.function = function
         
@@ -160,7 +159,7 @@ class ArgumentsProfile(object):
                           else []
         
         # `dict` that maps from argument name to default value:
-        defaults = OrderedDict(list(zip(defaultful_args, s_defaults)))
+        defaults = OrderedDict(zip(defaultful_args, s_defaults))
         
         defaultful_args_differing_from_defaults = set((
             defaultful_arg for defaultful_arg in defaultful_args

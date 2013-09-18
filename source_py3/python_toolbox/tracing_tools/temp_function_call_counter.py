@@ -14,7 +14,6 @@ from python_toolbox import address_tools
 
 from python_toolbox.temp_value_setting import TempValueSetter
 from .count_calls import count_calls
-import collections
 
 
 class TempFunctionCallCounter(TempValueSetter):
@@ -44,11 +43,11 @@ class TempFunctionCallCounter(TempValueSetter):
             if isinstance(second, str):
                 actual_function = getattr(first, second)
             else:
-                assert isinstance(first, collections.Callable) and isinstance(second, collections.Callable)
+                assert callable(first) and callable(second)
                 actual_function = first() # `first` is the getter in this case.
                 
         else: # not cute_iter_tools.is_iterable(function)
-            assert isinstance(function, collections.Callable)
+            assert callable(function)
             actual_function = function
             try:
                 address = address_tools.object_to_string.get_address(function)

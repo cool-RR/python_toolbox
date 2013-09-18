@@ -27,7 +27,7 @@ class IdentityRef(weakref.ref):
         return self._hash
 
 
-class WeakKeyIdentityDict(collections.MutableMapping, object):
+class WeakKeyIdentityDict(collections.MutableMapping):
     """
     A weak key dictionary which cares about the keys' identities.
     
@@ -70,7 +70,7 @@ class WeakKeyIdentityDict(collections.MutableMapping, object):
     def copy(self):
         """ D.copy() -> a shallow copy of D """
         new = WeakKeyIdentityDict()
-        for key, value in list(self.data.items()):
+        for key, value in self.data.items():
             o = key()
             if o is not None:
                 new[o] = value
@@ -194,10 +194,11 @@ class WeakKeyIdentityDict(collections.MutableMapping, object):
         if dict is not None:
             if not hasattr(dict, "items"):
                 dict = type({})(dict)
-            for key, value in list(dict.items()):
+            for key, value in dict.items():
                 d[IdentityRef(key, self._remove)] = value
         if len(kwargs):
             self.update(kwargs)
+
 
     def __len__(self):
         return len(self.data)

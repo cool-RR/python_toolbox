@@ -12,7 +12,8 @@ import UserDict
 from weakref import ref
 
 
-class WeakKeyDefaultDict(UserDict.UserDict, object): #todo: needs testing
+#todo: needs testing
+class WeakKeyDefaultDict(UserDict.UserDict, object):
     '''
     A weak key dictionary which can use a default factory.
     
@@ -91,8 +92,8 @@ class WeakKeyDefaultDict(UserDict.UserDict, object): #todo: needs testing
 
            This API is used by pickle.py and copy.py.
         """
-        return \
-            (type(self), (self.default_factory,), None, None, self.iteritems())
+        return (type(self), (self.default_factory,), None, None,
+                self.iteritems())
 
     
     def __delitem__(self, key):
@@ -237,3 +238,6 @@ class WeakKeyDefaultDict(UserDict.UserDict, object): #todo: needs testing
             self.update(kwargs)
             
             
+    def __len__(self):
+        return len(self.data)
+              

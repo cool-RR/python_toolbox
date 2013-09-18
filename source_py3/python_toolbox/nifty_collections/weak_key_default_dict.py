@@ -8,12 +8,12 @@ See its documentation for more details.
 '''
 # todo: revamp
 
-from weakref import ref
 import collections
+from weakref import ref
 
 
 #todo: needs testing
-class WeakKeyDefaultDict(collections.MutableMapping, object):
+class WeakKeyDefaultDict(collections.MutableMapping):
     '''
     A weak key dictionary which can use a default factory.
     
@@ -36,7 +36,7 @@ class WeakKeyDefaultDict(collections.MutableMapping, object):
         self.default_factory = None
         if 'default_factory' in kwargs:
             self.default_factory = kwargs.pop('default_factory')
-        elif len(args) > 0 and isinstance(args[0], collections.Callable):
+        elif len(args) > 0 and callable(args[0]):
             self.default_factory = args[0]
             args = args[1:]
         
@@ -92,8 +92,8 @@ class WeakKeyDefaultDict(collections.MutableMapping, object):
 
            This API is used by pickle.py and copy.py.
         """
-        return \
-            (type(self), (self.default_factory,), None, None, iter(self.items()))
+        return (type(self), (self.default_factory,), None, None,
+                iter(self.items()))
 
     
     def __delitem__(self, key):
@@ -232,10 +232,11 @@ class WeakKeyDefaultDict(collections.MutableMapping, object):
         if dict is not None:
             if not hasattr(dict, "items"):
                 dict = type({})(dict)
-            for key, value in list(dict.items()):
+            for key, value in dict.items():
                 d[ref(key, self._remove)] = value
         if len(kwargs):
             self.update(kwargs)
+            
             
     def __len__(self):
         return len(self.data)
