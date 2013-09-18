@@ -21,8 +21,10 @@ def test_length_2():
            tuple(iterate_overlapping_subsequences(xrange(4))) == \
            ((0, 1), (1, 2), (2, 3))
                                           
-    assert tuple(iterate_overlapping_subsequences(range(4), wrap_around=True)) == \
-           tuple(iterate_overlapping_subsequences(xrange(4), wrap_around=True)) ==\
+    assert tuple(iterate_overlapping_subsequences(range(4),
+                                                  wrap_around=True)) == \
+           tuple(iterate_overlapping_subsequences(xrange(4),
+                                                  wrap_around=True)) ==\
            ((0, 1), (1, 2), (2, 3), (3, 0))
                                           
     assert tuple(iterate_overlapping_subsequences('meow')) == \
@@ -65,7 +67,7 @@ def test_garbage_collection():
     iterable = (GarbageNoter(i) for i in xrange(7))
     
     consecutive_subsequences_iterator = \
-                               iterate_overlapping_subsequences(iterable, length=3)
+                           iterate_overlapping_subsequences(iterable, length=3)
     
     def assert_garbage_collected(indexes):
         gc_tools.collect()

@@ -29,9 +29,9 @@ def test():
     active_context_manager = MyContextManager()
     inactive_context_manager = MyContextManager()
     
-    iterator = iter_with(list(range(5)), active_context_manager)
+    iterator = iter_with(range(5), active_context_manager)
     
-    for i, j in zip(iterator, list(range(5))):
+    for i, j in zip(iterator, range(5)):
         assert i == j == active_context_manager.counter
         assert active_context_manager.active is False
         assert inactive_context_manager.counter == -1
