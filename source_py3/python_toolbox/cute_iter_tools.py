@@ -30,8 +30,7 @@ def iterate_overlapping_subsequences(iterable, length=2, wrap_around=False):
     2, 3), (2, 3, 0), (3, 0, 1)]`.
     '''
     if length == 1:
-        for item in iterable:
-            yield item
+        yield from iterable
     
     assert length >= 2
     
@@ -79,8 +78,7 @@ def shorten(iterable, n):
     '''
 
     if n == infinity:
-        for thing in iterable:
-            yield thing
+        yield from iterable
         raise StopIteration
     
     assert isinstance(n, int)
@@ -196,8 +194,7 @@ def izip_longest(*iterables, **kwargs):
     iterables = [itertools.chain(iterable, sentinel(), fillers) for iterable
                  in iterables]
     try:
-        for tuple_ in zip(*iterables):
-            yield tuple_
+        yield from zip(*iterables)
     except IndexError:
         raise StopIteration
 

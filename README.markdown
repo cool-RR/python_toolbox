@@ -38,8 +38,6 @@ Python Toolbox is at version 0.6.0, which is an alpha release. It's being used i
 
 ## Next tasks ##
 
-Making Python Toolbox support Python 3.x, and the packaging arrangements necessary.
-
 Adding more useful tools.
 
 ## Future ##

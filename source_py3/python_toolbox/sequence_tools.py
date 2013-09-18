@@ -58,8 +58,7 @@ def combinations(sequence, n=None, start=0):
         length = len(sequence) - start
         iterators = (combinations(sequence, n=i, start=start) for i
                      in range(1, length + 1))
-        for item in itertools.chain(*iterators):
-            yield item
+        yield from itertools.chain(*iterators)
 
     elif n == 1:
         for thing in itertools.islice(sequence, start, None):

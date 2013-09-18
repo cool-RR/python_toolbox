@@ -44,13 +44,10 @@ def test():
     checkers = [_check_deepcopying, _check_process_passing]
     cross_process_persistent_classes = [A, CrossProcessPersistent]
     
-    iterator = cute_iter_tools.product(
+    yield from cute_iter_tools.product(
         checkers,
         cross_process_persistent_classes,
     )
-    
-    for checker, cross_process_persistent_class in iterator:
-        yield checker, cross_process_persistent_class
     
         
 def _check_deepcopying(cross_process_persistent_class):

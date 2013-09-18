@@ -32,9 +32,7 @@ def test():
 def test_dont_pull_extra_item():
     '''Test that `shorten` doesn't pull an extra member from the iterable.'''
     def generator():
-        yield 1
-        yield 2
-        yield 3
+        yield from [1, 2, 3]
         raise Exception
 
     nose.tools.assert_raises(Exception, lambda: list(generator()))

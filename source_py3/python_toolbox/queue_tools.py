@@ -40,8 +40,7 @@ def iterate(queue, block=False, limit_to_original_size=False,
            not _platform_supports_multiprocessing_qsize():
             
             if _prefetch_if_no_qsize:
-                for item in dump(queue):
-                    yield item
+                yield from dump(queue)
                 raise StopIteration
             raise NotImplementedError(
                 "This platform doesn't support `qsize` for `multiprocessing` "
