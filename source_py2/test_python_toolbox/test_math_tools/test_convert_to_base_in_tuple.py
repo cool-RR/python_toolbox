@@ -3,7 +3,6 @@
 
 '''Testing module for `python_toolbox.math_tools.convert_to_base_in_tuple`.'''
 
-
 import sys
 
 import nose

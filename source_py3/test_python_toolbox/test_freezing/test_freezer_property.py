@@ -3,8 +3,6 @@
 
 '''Testing module for `freezing.FreezerProperty`.'''
 
-
-
 from python_toolbox.freezing import FreezerProperty, Freezer
 from python_toolbox import caching
 

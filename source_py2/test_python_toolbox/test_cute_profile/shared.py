@@ -3,7 +3,6 @@
 
 '''Defines tools for testing `python_toolbox.cute_profile`.'''
 
-
 import sys
 
 from python_toolbox.sys_tools import OutputCapturer

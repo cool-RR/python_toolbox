@@ -3,8 +3,6 @@
 
 '''Testing package for `freezing.Freezer`.'''
 
-
-
 from python_toolbox import cute_testing
 
 from python_toolbox.freezing import Freezer

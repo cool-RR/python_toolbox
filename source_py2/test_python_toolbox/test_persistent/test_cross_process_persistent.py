@@ -3,7 +3,6 @@
 
 '''Testing module for `python_toolbox.persistent.CrossProcessPersistent`.'''
 
-
 import copy
 import pickle
 import cPickle

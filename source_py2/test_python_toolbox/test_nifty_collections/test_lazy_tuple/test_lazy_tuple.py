@@ -3,7 +3,6 @@
 
 '''Testing module for `python_toolbox.nifty_collections.LazyTuple`.'''
 
-
 import uuid
 import itertools
 import collections
@@ -128,7 +127,7 @@ def test_factory_decorator():
 
 def test_finite_iterator():
     '''Test `LazyTuple` on a finite iterator.'''
-    my_finite_iterator = iter(range(5))
+    my_finite_iterator = iter(xrange(5))
     lazy_tuple = LazyTuple(my_finite_iterator)
     assert not lazy_tuple.exhausted
 
@@ -152,7 +151,7 @@ def test_finite_iterator():
     assert ('meow', 'frr') + lazy_tuple == ('meow', 'frr', 0, 1, 2, 3, 4)
 
     
-    identical_lazy_tuple = LazyTuple(iter(range(5)))
+    identical_lazy_tuple = LazyTuple(iter(xrange(5)))
     assert not identical_lazy_tuple.exhausted
     my_dict = {}
     my_dict[identical_lazy_tuple] = 'flugzeug'

@@ -3,8 +3,6 @@
 
 '''Testing package for `queue_tools.iterate`.'''
 
-
-
 import queue as queue_module
 
 from python_toolbox import cute_testing

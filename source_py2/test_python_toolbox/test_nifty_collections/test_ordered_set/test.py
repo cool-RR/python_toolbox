@@ -3,7 +3,6 @@
 
 '''Testing module for `nifty_collections.ordered_dict.OrderedSet`.'''
 
-
 from python_toolbox import cute_testing
 
 from python_toolbox.nifty_collections import OrderedSet
@@ -12,7 +11,7 @@ from python_toolbox.nifty_collections import OrderedSet
 def test_sort():
     '''Test the basic workings of `OrderedSet`.'''
     
-    ordered_set = OrderedSet(range(4))
+    ordered_set = OrderedSet(xrange(4))
     
     assert list(ordered_set) == list(range(4))
     assert len(ordered_set) == 4

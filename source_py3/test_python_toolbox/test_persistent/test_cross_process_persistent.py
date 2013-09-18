@@ -3,10 +3,7 @@
 
 '''Testing module for `python_toolbox.persistent.CrossProcessPersistent`.'''
 
-
-
 import copy
-import pickle
 import pickle
 import abc
 
@@ -91,7 +88,7 @@ if import_tools.exists('multiprocessing'):
                 if number in self.library:
                     assert self.library[number] is item
                     other_items = [value for (key, value) in
-                                   list(self.library.items()) if key != number]
+                                   self.library.items() if key != number]
                     for other_item in other_items:
                         assert other_item is not item
                     self.processed_items_queue.put(item)

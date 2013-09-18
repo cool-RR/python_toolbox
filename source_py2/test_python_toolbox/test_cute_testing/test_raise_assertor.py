@@ -3,7 +3,6 @@
 
 '''Testing module for `python_toolbox.cute_testing.RaiseAssertor`.'''
 
-
 import re
 
 import nose

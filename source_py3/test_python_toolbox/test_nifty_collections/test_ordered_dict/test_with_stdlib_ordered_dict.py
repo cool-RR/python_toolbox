@@ -1,8 +1,6 @@
 # Copyright 2009-2013 Ram Rachum.
 # This program is distributed under the MIT license.
 
-
-
 import sys
 
 import nose
@@ -13,7 +11,6 @@ from python_toolbox.nifty_collections.ordered_dict import OrderedDict
 
 
 def test():
-
     from collections import OrderedDict as StdlibOrderedDict
 
     ordered_dict = OrderedDict(((1, 'a'), (2, 'b'), (3, 'c')))

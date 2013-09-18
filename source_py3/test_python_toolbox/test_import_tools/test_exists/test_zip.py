@@ -6,8 +6,6 @@
 # todotest: test package in zip, zip in zip, multiple root-level modules in
 # zip.
 
-
-
 import os
 import tempfile
 import shutil

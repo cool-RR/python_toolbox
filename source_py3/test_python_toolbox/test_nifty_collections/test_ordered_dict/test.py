@@ -3,8 +3,6 @@
 
 '''Testing module for `nifty_collections.ordered_dict.OrderedDict`.'''
 
-
-
 from python_toolbox import cute_testing
 
 from python_toolbox.nifty_collections.ordered_dict import OrderedDict

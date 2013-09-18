@@ -104,7 +104,7 @@ def test_garbage_collection_wrap_around():
     iterable = (GarbageNoter(i) for i in xrange(7))
     
     consecutive_subsequences_iterator = \
-             iterate_overlapping_subsequences(iterable, length=3, wrap_around=True)
+         iterate_overlapping_subsequences(iterable, length=3, wrap_around=True)
     
     def assert_garbage_collected(indexes):
         gc_tools.collect()
