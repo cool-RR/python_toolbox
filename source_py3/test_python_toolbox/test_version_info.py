@@ -37,7 +37,7 @@ def test():
 def test_version_text():
     assert VersionInfo(1, 5, 3).version_text == '1.5.3'
     assert VersionInfo(1, 0, 3).version_text == '1.0.3'
-    assert VersionInfo(1, 0).version_text == '1.0'
-    assert VersionInfo(1).version_text == '1.0'
-    assert VersionInfo(1, 0, modifier='rc').version_text == '1.0 rc'
-    assert VersionInfo(4, modifier='beta').version_text == '4.0 beta'
+    assert VersionInfo(1, 0).version_text == '1.0.0'
+    assert VersionInfo(1).version_text == '1.0.0'
+    assert VersionInfo(1, 0, modifier='rc').version_text == '1.0.0 rc'
+    assert VersionInfo(4, modifier='beta').version_text == '4.0.0 beta'
