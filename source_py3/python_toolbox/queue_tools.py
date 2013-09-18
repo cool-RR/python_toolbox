@@ -4,7 +4,6 @@
 '''Defines various functions for working with queues.'''
 
 
-
 import queue as queue_module
 import sys
 

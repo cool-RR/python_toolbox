@@ -57,7 +57,7 @@ class VersionInfo(tuple):
         '''
         Return a new `OrderedDict` which maps field names to their values.
         '''
-        return OrderedDict(zip(self._fields, self)) 
+        return OrderedDict(zip(self._fields, self))
 
     
     def _replace(self, **kwargs):

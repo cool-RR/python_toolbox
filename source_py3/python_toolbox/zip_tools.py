@@ -4,7 +4,6 @@
 '''Various zip-related tools.'''
 
 
-
 import contextlib
 import zipfile as zip_module
 import os.path

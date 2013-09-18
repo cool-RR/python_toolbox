@@ -4,7 +4,6 @@
 '''Defines various tools related to temporary files.'''
 
 
-
 import tempfile
 import shutil
 import os

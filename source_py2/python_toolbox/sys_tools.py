@@ -4,9 +4,8 @@
 '''Defines various `sys`-related tools.'''
 
 
-
 import sys
-import cStringIO
+import cStringIO as string_io_module
 
 from python_toolbox.context_management import (ContextManager,
                                                     BlankContextManager)
@@ -30,7 +29,7 @@ class OutputCapturer(ContextManager):
     captured.
     '''
     def __init__(self, stdout=True, stderr=True):
-        self.string_io = cStringIO.StringIO()
+        self.string_io = string_io_module.StringIO()
         
         if stdout:
             self._stdout_temp_setter = \
@@ -46,9 +45,8 @@ class OutputCapturer(ContextManager):
         
     def manage_context(self):
         '''Manage the `OutputCapturer`'s context.'''
-        with self._stdout_temp_setter:
-            with self._stderr_temp_setter:
-                yield self
+        with self._stdout_temp_setter, self._stderr_temp_setter:
+            yield self
         
     output = property(lambda self: self.string_io.getvalue(),
                       doc='''The string of output that was captured.''')

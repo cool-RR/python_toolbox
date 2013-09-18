@@ -34,9 +34,8 @@ def zip_folder(folder, zip_path, ignored_patterns=()):
     zip_name = os.path.splitext(os.path.split(zip_path)[1])[0]
     source_folder_name = os.path.split(source_folder)[1]
             
-    with contextlib.closing(
-        zip_module.ZipFile(zip_path, 'w', zip_module.ZIP_DEFLATED)
-        ) as zip_file:
+    with zip_module.ZipFile(zip_path, 'w', zip_module.ZIP_DEFLATED) \
+                                                                   as zip_file:
         
         for root, subfolders, files in os.walk(source_folder):
             
@@ -63,8 +62,8 @@ def zip_in_memory(files):
     Files should be given as tuples of `(file_path, file_contents)`.
     '''
     zip_stream = string_io_module.StringIO()
-    with contextlib.closing(zip_module.ZipFile(zip_stream, mode='w',
-                            compression=zip_module.ZIP_DEFLATED)) as zip_file:
+    with zip_module.ZipFile(zip_stream, mode='w',
+                            compression=zip_module.ZIP_DEFLATED) as zip_file:
         assert isinstance(zip_file, zip_module.ZipFile)
         for file_name, file_data in files:
             zip_file.writestr(file_name, file_data)
@@ -78,8 +77,8 @@ def unzip_in_memory(zip_archive):
     Files are returned as tuples of `(file_path, file_contents)`.
     '''    
     zip_stream = string_io_module.StringIO(zip_archive)
-    with contextlib.closing(zip_module.ZipFile(zip_stream, mode='r',
-                            compression=zip_module.ZIP_DEFLATED)) as zip_file:
+    with zip_module.ZipFile(zip_stream, mode='r',
+                            compression=zip_module.ZIP_DEFLATED) as zip_file:
         assert isinstance(zip_file, zip_module.ZipFile)
         return tuple((file_name, zip_file.read(file_name)) for file_name in
                      zip_file.namelist())

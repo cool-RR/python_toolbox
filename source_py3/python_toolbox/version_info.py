@@ -57,7 +57,7 @@ class VersionInfo(tuple):
         '''
         Return a new `OrderedDict` which maps field names to their values.
         '''
-        return OrderedDict(list(zip(self._fields, self))) 
+        return OrderedDict(zip(self._fields, self))
 
     
     def _replace(self, **kwargs):
@@ -65,10 +65,10 @@ class VersionInfo(tuple):
         Make a `VersionInfo` object replacing specified fields with new values.
         '''
         result = \
-            self._make(list(map(kwargs.pop, ('major', 'minor', 'micro', 'modifier'),
-                           self)))
+            self._make(map(kwargs.pop, ('major', 'minor', 'micro', 'modifier'),
+                           self))
         if kwargs:
-            raise ValueError('Got unexpected field names: %r' % list(kwargs.keys()))
+            raise ValueError('Got unexpected field names: %r' % kwargs.keys())
         return result 
     
     
