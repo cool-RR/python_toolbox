@@ -66,12 +66,7 @@ class ContextManagerType(abc.ABCMeta, metaclass=ContextManagerTypeType):
             namespace['__exit__'] = \
                 ContextManager._ContextManager__exit_using_manage_context
             
-        result_class = super().__new__(
-            mcls,
-            name,
-            bases,
-            namespace
-        )
+        result_class = super().__new__(mcls, name, bases, namespace)
         
         
         if (not result_class.__is_the_base_context_manager_class()) and \

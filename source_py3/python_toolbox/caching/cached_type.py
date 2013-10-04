@@ -58,5 +58,5 @@ class CachedType(type):
             return cls.__cache[sleek_call_args]
         except KeyError:
             cls.__cache[sleek_call_args] = value = \
-                super().__call__(*args, **kwargs)
+                                              super().__call__(*args, **kwargs)
             return value

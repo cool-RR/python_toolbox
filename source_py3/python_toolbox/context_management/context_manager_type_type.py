@@ -53,11 +53,7 @@ class ContextManagerTypeType(type):
                 '__init__': ContextManager.\
                             _ContextManager__init_lone_manage_context
             }
-            return super().__call__(
-                name,
-                bases,
-                namespace_dict
-            )
+            return super().__call__(name, bases, namespace_dict)
             
         else:
             return super().__call__(*args)
