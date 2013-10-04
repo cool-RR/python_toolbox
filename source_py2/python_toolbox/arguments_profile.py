@@ -161,10 +161,10 @@ class ArgumentsProfile(object):
         # `dict` that maps from argument name to default value:
         defaults = OrderedDict(zip(defaultful_args, s_defaults))
         
-        defaultful_args_differing_from_defaults = set((
+        defaultful_args_differing_from_defaults = {
             defaultful_arg for defaultful_arg in defaultful_args
             if defaults[defaultful_arg] != getcallargs_result[defaultful_arg]
-        ))
+        }
         
         if s_star_args and getcallargs_result[s_star_args]:
             # We have some arguments that go into `*args`! This means that we

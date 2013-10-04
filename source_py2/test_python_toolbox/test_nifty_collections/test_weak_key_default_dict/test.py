@@ -42,10 +42,9 @@ def test():
     )
     
     assert set(wkd_dict.iterkeys()) == set(wkd_dict.keys()) == \
-           set((ref() for ref in wkd_dict.iterkeyrefs())) == \
-           set((ref() for ref in wkd_dict.keyrefs())) == \
-           set((weakreffable_object_0, weakreffable_object_1,
-                weakreffable_object_2))
+           {ref() for ref in wkd_dict.iterkeyrefs()} == \
+           {ref() for ref in wkd_dict.keyrefs()} == \
+           {weakreffable_object_0, weakreffable_object_1, weakreffable_object_2}
     
     weakreffable_object_3 = WeakreffableObject()
     wkd_dict[weakreffable_object_3] = 123

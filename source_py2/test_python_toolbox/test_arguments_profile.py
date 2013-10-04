@@ -459,9 +459,9 @@ def test_unhashable():
     assert not a1.kwargs
     hash(a1)
     
-    a2 = ArgumentsProfile(func, 7, ({'a': 'b'},), set([1, (3, 4)]),
+    a2 = ArgumentsProfile(func, 7, ({'a': 'b'},), {1, (3, 4)},
                           meow=[1, 2, {1: [1, 2]}])
-    assert a2.args == (7, ({'a': 'b'},), set([1, (3, 4)]))
+    assert a2.args == (7, ({'a': 'b'},), {1, (3, 4)})
     assert a2.kwargs == OrderedDict(
         (('meow', [1, 2, {1: [1, 2]}]),)
     )
@@ -477,17 +477,17 @@ def test_unhashable_star_empty():
     def func(a, b, c=3, d=4, **kwargs):
         pass
         
-    a2 = ArgumentsProfile(func, 7, ({'a': 'b'},), set([1, (3, 4)]),
+    a2 = ArgumentsProfile(func, 7, ({'a': 'b'},), {1, (3, 4)},
                           meow=[1, 2, {1: [1, 2]}])
-    assert a2.args == (7, ({'a': 'b'},), set([1, (3, 4)]))
+    assert a2.args == (7, ({'a': 'b'},), {1, (3, 4)})
     assert a2.kwargs == OrderedDict(
         (('meow', [1, 2, {1: [1, 2]}]),)
     )
     
     a3 = ArgumentsProfile(func, *(), b=({'a': 'b'},),
-                          c=set([1, (3, 4)]), a=7,
+                          c={1, (3, 4)}, a=7,
                           meow=[1, 2, {1: [1, 2]}])
-    assert a3.args == (7, ({'a': 'b'},), set([1, (3, 4)]))
+    assert a3.args == (7, ({'a': 'b'},), {1, (3, 4)})
     assert a3.kwargs == OrderedDict(
         (('meow', [1, 2, {1: [1, 2]}]),)
     )
