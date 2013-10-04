@@ -91,7 +91,7 @@ def reverse_with_set_values(d, sort=False):
         key_function = comparison_tools.process_key_function_or_attribute_name(
             key_function_or_attribute_name
         )
-        fixed_dict = dict((key, key_function(key)) for key in iterable)
+        fixed_dict = {key: key_function(key) for key in iterable}
     #                                                                         #
     ### Finished pre-processing input. ########################################
     

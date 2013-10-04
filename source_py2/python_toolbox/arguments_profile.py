@@ -179,19 +179,19 @@ class ArgumentsProfile(object):
 
             # `dict` mapping from each defaultful arg to the "price" of
             # specifying its value:
-            prices_of_values = OrderedDict((
-                (defaultful_arg, len(repr(getcallargs_result[defaultful_arg])))
-                 for defaultful_arg in defaultful_args
-            ))
+            prices_of_values = OrderedDict({
+                defaultful_arg: len(repr(getcallargs_result[defaultful_arg]))
+                                          for defaultful_arg in defaultful_args
+            })
             # The price is simply the string length of the value's `repr`.
             
             # `dict` mapping from each defaultful arg to the "price" of
             # specifying it as a keyword (not including the length of the
             # value):
-            prices_of_keyword_prefixes = OrderedDict(
-                ((defaultful_arg, len(defaultful_arg)+1) for 
-                 defaultful_arg in defaultful_args)
-            )
+            prices_of_keyword_prefixes = OrderedDict({
+                defaultful_arg: len(defaultful_arg)+1 for 
+                                              defaultful_arg in defaultful_args
+            })
             # For example, if we have a defaultful arg "gravity_strength", then
             # specifiying it by keyword will require using the string
             # "gravity_strength=", which is 17 characters long, therefore the
