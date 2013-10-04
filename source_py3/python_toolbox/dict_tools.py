@@ -70,7 +70,7 @@ def reverse_with_set_values(d, sort=False):
     Example:
     
         reverse_with_set_values({1: 2, 3: 4, 'meow': 2}) == \
-            {2: set([1, 'meow']), 4: set([3])}
+                                                       {2: {1, 'meow'}, 4: {3}}
             
     Instead of a dict you may also input a tuple in which the first item is an
     iterable and the second item is either a key function or an attribute name.
@@ -91,7 +91,7 @@ def reverse_with_set_values(d, sort=False):
         key_function = comparison_tools.process_key_function_or_attribute_name(
             key_function_or_attribute_name
         )
-        fixed_dict = dict((key, key_function(key)) for key in iterable)
+        fixed_dict = {key: key_function(key) for key in iterable}
     #                                                                         #
     ### Finished pre-processing input. ########################################
     

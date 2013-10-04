@@ -13,5 +13,5 @@ def test():
     assert string_cataloging.integer_to_string(y) == 'zwei'
     assert string_cataloging.integer_to_string(z) == 'drei'
     
-    assert set([string_cataloging.string_to_integer('zwei') for
-                i in range(10)]) == set([y])
+    assert {string_cataloging.string_to_integer('zwei') for i in range(10)} \
+                                                                         == {y}
