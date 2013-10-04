@@ -68,7 +68,7 @@ class WeakKeyDefaultDict(collections.MutableMapping):
             return "%s(%s, %s)" % (
                 type_name,
                 repr(self.default_factory),
-                super(WeakKeyDefaultDict, self).__repr__()
+                super().__repr__()
             )
         finally:
             recurse.remove(id(self))

@@ -42,7 +42,7 @@ class CachedType(type):
     '''
     
     def __new__(mcls, *args, **kwargs):
-        result = super(CachedType, mcls).__new__(mcls, *args, **kwargs)
+        result = super().__new__(mcls, *args, **kwargs)
         result.__cache = {}
         return result
 
@@ -58,5 +58,5 @@ class CachedType(type):
             return cls.__cache[sleek_call_args]
         except KeyError:
             cls.__cache[sleek_call_args] = value = \
-                super(CachedType, cls).__call__(*args, **kwargs)
+                super().__call__(*args, **kwargs)
             return value

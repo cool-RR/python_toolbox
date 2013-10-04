@@ -254,7 +254,7 @@ class KeyedSleekRef(SleekRef):
 
     
     def __init__(self, thing, callback, key):
-        super(KeyedSleekRef, self).__init__(thing, callback)
+        super().__init__(thing, callback)
         if self.ref:
             self.ref.key = key
 

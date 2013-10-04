@@ -28,7 +28,7 @@ class EmittingWeakKeyDefaultDict(WeakKeyDefaultDict):
     '''
     
     def __init__(self, emitter, *args, **kwargs):
-        super(EmittingWeakKeyDefaultDict, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.emitter = emitter
 
         
@@ -38,15 +38,14 @@ class EmittingWeakKeyDefaultDict(WeakKeyDefaultDict):
 
         
     def __setitem__(self, key, value):
-        result = \
-            super(EmittingWeakKeyDefaultDict, self).__setitem__(key, value)
+        result = super().__setitem__(key, value)
         if self.emitter:
             self.emitter.emit()
         return result
 
     
     def __delitem__(self, key):
-        result = super(EmittingWeakKeyDefaultDict, self).__delitem__(key)
+        result = super().__delitem__(key)
         if self.emitter:
             self.emitter.emit()
         return result
@@ -56,7 +55,7 @@ class EmittingWeakKeyDefaultDict(WeakKeyDefaultDict):
         """ D.pop(k[,d]) -> v, remove specified key and return the 
         corresponding value. If key is not found, d is returned if given,
         otherwise KeyError is raised """
-        result = super(EmittingWeakKeyDefaultDict, self).pop(key, *args)
+        result = super().pop(key, *args)
         if self.emitter:
             self.emitter.emit()
         return result
@@ -65,7 +64,7 @@ class EmittingWeakKeyDefaultDict(WeakKeyDefaultDict):
     def popitem(self):
         """ D.popitem() -> (k, v), remove and return some (key, value) 
         pair as a 2-tuple; but raise KeyError if D is empty """
-        result = super(EmittingWeakKeyDefaultDict, self).popitem()
+        result = super().popitem()
         if self.emitter:
             self.emitter.emit()
         return result
@@ -73,7 +72,7 @@ class EmittingWeakKeyDefaultDict(WeakKeyDefaultDict):
     
     def clear(self):
         """ D.clear() -> None.  Remove all items from D. """
-        result = super(EmittingWeakKeyDefaultDict, self).clear()
+        result = super().clear()
         if self.emitter:
             self.emitter.emit()
         return result

@@ -18,5 +18,5 @@ class AbstractStaticMethod(staticmethod):
     __isabstractmethod__ = True
     
     def __init__(self, function):
-        super(AbstractStaticMethod, self).__init__(function)
+        super().__init__(function)
         function.__isabstractmethod__ = True

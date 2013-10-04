@@ -31,10 +31,7 @@ class FunctionAnchoringType(type):
     Python learns how to pickle non-module-level functions.
     '''
     def __new__(mcls, name, bases, namespace_dict):
-        my_type = super(FunctionAnchoringType, mcls).__new__(mcls,
-                                                             name,
-                                                             bases,
-                                                             namespace_dict)
+        my_type = super().__new__(mcls, name, bases, namespace_dict)
         
         # We want the type's `vars`, but we want them "getted," and not in a
         # `dict`, so we'll get method objects instead of plain functions.

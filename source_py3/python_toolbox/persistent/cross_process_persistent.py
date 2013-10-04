@@ -83,13 +83,13 @@ class CrossProcessPersistent(Persistent):
                 thing._CrossProcessPersistent__skip_setstate = True
                 return thing
             else: # This object does not exist in our library yet; let's add it
-                thing = super(CrossProcessPersistent, cls).__new__(cls)
+                thing = super().__new__(cls)
                 thing._CrossProcessPersistent__uuid = received_uuid
                 library[received_uuid] = thing
                 return thing
                 
         else: # The object is being created
-            thing = super(CrossProcessPersistent, cls).__new__(cls)
+            thing = super().__new__(cls)
             new_uuid = uuid.uuid4()
             thing._CrossProcessPersistent__uuid = new_uuid
             library[new_uuid] = thing
