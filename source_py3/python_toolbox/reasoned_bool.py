@@ -38,6 +38,10 @@ class ReasonedBool:
         
     def __eq__(self, other):
         return bool(self) == other
+
+    
+    def __hash__(self):
+        return hash(bool(self))
     
     
     def __neq__(self, other):
