@@ -267,3 +267,13 @@ def is_type(thing):
     '''Is `thing` a class? Allowing both new-style and old-style classes.'''
     return isinstance(thing, type)
 
+
+class NonInstatiable:
+    '''
+    Class that can't be instatiated.
+    
+    Inherit from this for classes that should never be instantiated, like
+    constants and settings.
+    '''
+    def __new__(self, *args, **kwargs):
+        raise RuntimeError('This class may not be instatiated.')
