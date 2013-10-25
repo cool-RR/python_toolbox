@@ -35,3 +35,4 @@ def test():
            frozen_dict.copy(meow='frrr') == \
            FrozenDict({'1': 'a', '2': 'b', '3': 'c', 'meow': 'frrr',})
     
+    assert repr(frozen_dict).startswith('FrozenDict(')
