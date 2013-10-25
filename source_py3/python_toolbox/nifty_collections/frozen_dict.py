@@ -3,6 +3,7 @@
 
 import collections
 import operator
+import functools
 
 
 class FrozenDict(collections.Mapping):
@@ -31,9 +32,9 @@ class FrozenDict(collections.Mapping):
     
     def __hash__(self):
         if self._hash is None:
-            self._hash = reduce(operator.xor,
-                                map(hash, self.iteritems()),
-                                0) ^ len(self)
+            self._hash = functools.reduce(operator.xor,
+                                          map(hash, self.items()),
+                                          0) ^ hash(len(self))
 
         return self._hash
     

@@ -54,9 +54,9 @@ class FrozenCounter(FrozenDict):
         '''
         # Emulate Bag.sortedByCount from Smalltalk
         if n is None:
-            return sorted(self.iteritems(), key=operator.itemgetter(1),
+            return sorted(self.items(), key=operator.itemgetter(1),
                           reverse=True)
-        return _heapq.nlargest(n, self.iteritems(),
+        return _heapq.nlargest(n, self.items(),
                                key=operator.itemgetter(1))
 
     def elements(self):
@@ -80,7 +80,7 @@ class FrozenCounter(FrozenDict):
         '''
         # Emulate Bag.do from Smalltalk and Multiset.begin from C++.
         return itertools.chain.from_iterable(
-            itertools.starmap(itertools.repeat, self.iteritems())
+            itertools.starmap(itertools.repeat, self.items())
         )
 
     @classmethod

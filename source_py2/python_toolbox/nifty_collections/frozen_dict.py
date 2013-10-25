@@ -33,7 +33,7 @@ class FrozenDict(collections.Mapping):
         if self._hash is None:
             self._hash = reduce(operator.xor,
                                 map(hash, self.iteritems()),
-                                0) ^ len(self)
+                                0) ^ hash(len(self))
 
         return self._hash
     

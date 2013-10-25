@@ -18,12 +18,9 @@ from python_toolbox.nifty_collections import FrozenDict
 def test():
     frozen_dict = FrozenDict({'1': 'a', '2': 'b', '3': 'c',})
     assert len(frozen_dict) == 3
-    assert set(frozen_dict) == set(frozen_dict.keys()) == \
-                                set(frozen_dict.iterkeys()) == set('123')
-    assert set(frozen_dict.values()) == \
-                                    set(frozen_dict.itervalues()) == set('abc')
-    assert set(frozen_dict.items()) == \
-          set(frozen_dict.iteritems()) == {('1', 'a'), ('2', 'b'), ('3', 'c'),}
+    assert set(frozen_dict) == set(frozen_dict.keys()) == set('123')
+    assert set(frozen_dict.values()) == set('abc')
+    assert set(frozen_dict.items()) == {('1', 'a'), ('2', 'b'), ('3', 'c'),}
     assert frozen_dict['1'] == 'a'
     with cute_testing.RaiseAssertor(exception_type=LookupError):
         frozen_dict['missing value']

@@ -23,11 +23,9 @@ def test():
     
     assert len(frozen_counter) == 5
     assert set(frozen_counter) == set(frozen_counter.keys()) == \
-                           set(frozen_counter.iterkeys()) == set('abracadabra')
-    assert set(frozen_counter.values()) == \
-                                  set(frozen_counter.itervalues()) == {1, 2, 5}
+                                                             set('abracadabra')
+    assert set(frozen_counter.values()) == {1, 2, 5}
     assert set(frozen_counter.items()) == \
-          set(frozen_counter.iteritems()) == \
                              {('a', 5), ('r', 2), ('b', 2), ('c', 1), ('d', 1)}
     assert frozen_counter['a'] == 5
     assert frozen_counter['missing value'] == 0
