@@ -38,7 +38,7 @@ def test():
     
     assert frozen_counter.copy({'meow': 9}) == \
            frozen_counter.copy(meow=9) == \
-           FrozenCounter({{'a': 5, 'r': 2, 'b': 2, 'c': 1, 'd': 1,
-                           'meow': 9,}})
+           FrozenCounter({'a': 5, 'r': 2, 'b': 2, 'c': 1, 'd': 1,
+                          'meow': 9,})
     
     assert repr(frozen_counter).startswith('FrozenCounter(')

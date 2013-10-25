@@ -34,25 +34,18 @@ class FrozenCounter(FrozenDict):
         '''
         super(FrozenCounter, self).__init__()
         
-        self_get = self._dict.get
         if iterable is not None:
             if isinstance(iterable, collections.Mapping):
-                if self:
-                    for element, count in iterable.iteritems():
-                        self._dict[element] = self_get(element, 0) + count
-                else:
-                    super(FrozenCounter, self).update(iterable) # fast path when counter is empty
+                self._dict.update(iterable)
             else:
+                self_get = self._dict.get
                 for element in iterable:
                     self._dict[element] = self_get(element, 0) + 1
         if kwargs:
-            self.update(kwargs)
+            self._dict.update(kwargs)
 
 
-    def __missing__(self, key):
-        'The count of elements not in the FrozenCounter is zero.'
-        # Needed so that self[missing_item] does not raise KeyError
-        return 0
+    __getitem__ = lambda self, key: self._dict.get(key, 0)
 
     def most_common(self, n=None):
         '''List the n most common elements and their counts from the most
@@ -66,7 +59,8 @@ class FrozenCounter(FrozenDict):
         if n is None:
             return sorted(self.iteritems(), key=operator.itemgetter(1),
                           reverse=True)
-        return _heapq.nlargest(n, self.iteritems(), key=operator.itemgetter(1))
+        return _heapq.nlargest(n, self.iteritems(),
+                               key=operator.itemgetter(1))
 
     def elements(self):
         '''Iterator over elements repeating each as many times as its count.
