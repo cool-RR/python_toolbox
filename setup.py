@@ -117,7 +117,7 @@ Roadmap
 Present
 -------
 
-Python Toolbox is at version 0.6.0, which is an alpha release. It's being used\
+Python Toolbox is at version 0.6.0, which is an alpha release. It's being used 
 in production every day, but backward compatibility isn't guaranteed yet.
 
 Next tasks
