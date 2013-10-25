@@ -41,4 +41,20 @@ def test():
            FrozenCounter({'a': 5, 'r': 2, 'b': 2, 'c': 1, 'd': 1,
                           'meow': 9,})
     
+    assert frozen_counter.most_common() == \
+                              collections.Counter(frozen_counter).most_common()
+    
+    assert frozen_counter + frozen_counter == FrozenCounter('abracadabra'*2)
+    assert frozen_counter - frozen_counter == FrozenCounter()
+    assert frozen_counter - FrozenCounter('a') == FrozenCounter('abracadabr')
+    assert frozen_counter - FrozenCounter('a') == FrozenCounter('abracadabr')
+    assert frozen_counter | FrozenCounter('a') == frozen_counter
+    assert frozen_counter | frozen_counter == \
+           frozen_counter | frozen_counter | frozen_counter == \
+                                                                 frozen_counter
+    assert frozen_counter & FrozenCounter('a') == FrozenCounter('a')
+    assert frozen_counter & frozen_counter == \
+           frozen_counter & frozen_counter & frozen_counter == \
+                                                                 frozen_counter
+    
     assert repr(frozen_counter).startswith('FrozenCounter(')

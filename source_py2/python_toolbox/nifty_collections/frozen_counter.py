@@ -43,6 +43,10 @@ class FrozenCounter(FrozenDict):
                     self._dict[element] = self_get(element, 0) + 1
         if kwargs:
             self._dict.update(kwargs)
+            
+        for key, value in self.items():
+            if value == 0:
+                del self._dict[key]
 
 
     __getitem__ = lambda self, key: self._dict.get(key, 0)
@@ -159,7 +163,7 @@ class FrozenCounter(FrozenDict):
         '''
         if not isinstance(other, FrozenCounter):
             return NotImplemented
-        result = Counter()
+        result = collections.Counter()
         for element, count in self.items():
             other_count = other[element]
             new_count = other_count if count < other_count else count
@@ -179,7 +183,7 @@ class FrozenCounter(FrozenDict):
         '''
         if not isinstance(other, FrozenCounter):
             return NotImplemented
-        result = Counter()
+        result = collections.Counter()
         for element, count in self.items():
             other_count = other[element]
             new_count = count if count < other_count else other_count
