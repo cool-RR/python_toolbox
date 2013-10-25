@@ -8,6 +8,15 @@ import collections
 
 from .frozen_dict import FrozenDict
 
+try:                                    # Load C helper function if available
+    from _collections import _count_elements
+except ImportError:
+    def _count_elements(mapping, iterable):
+        '''Tally elements from the iterable.'''
+        mapping_get = mapping.get
+        for element in iterable:
+            mapping[element] = mapping_get(element, 0) + 1
+
 
 class FrozenCounter(FrozenDict):
     '''
@@ -22,15 +31,13 @@ class FrozenCounter(FrozenDict):
     '''
     
     def __init__(self, iterable=None, **kwargs):
-        super(FrozenCounter, self).__init__()
+        super().__init__()
         
         if iterable is not None:
             if isinstance(iterable, collections.Mapping):
                 self._dict.update(iterable)
             else:
-                self_get = self._dict.get
-                for element in iterable:
-                    self._dict[element] = self_get(element, 0) + 1
+                _count_elements(self._dict, iterable)
         if kwargs:
             self._dict.update(kwargs)
             
@@ -95,8 +102,17 @@ class FrozenCounter(FrozenDict):
     def __repr__(self):
         if not self:
             return '%s()' % self.__class__.__name__
-        items = ', '.join(map('%r: %r'.__mod__, self.most_common()))
-        return '%s({%s})' % (self.__class__.__name__, items)
+        try:
+            items = ', '.join(map('%r: %r'.__mod__, self.most_common()))
+            return '%s({%s})' % (self.__class__.__name__, items)
+        except TypeError:
+            # handle case where values are not orderable
+            return '{0}({1!r})'.format(self.__class__.__name__, dict(self))
+
+
+    __pos__ = lambda self: self
+    __neg__ = lambda self: type(self)({key: -value for key, value
+                                       in self.items()})
 
     # Multiset-style mathematical operations discussed in:
     #       Knuth TAOCP Volume II section 4.6.3 exercise 19

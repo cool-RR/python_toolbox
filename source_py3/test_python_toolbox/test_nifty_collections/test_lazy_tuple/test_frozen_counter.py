@@ -57,4 +57,8 @@ def test():
     
     assert FrozenCounter(frozen_counter.elements()) == frozen_counter
     
+    assert +frozen_counter == frozen_counter
+    assert ---frozen_counter == -frozen_counter != \
+                                             frozen_counter == --frozen_counter
+    
     assert repr(frozen_counter).startswith('FrozenCounter(')
