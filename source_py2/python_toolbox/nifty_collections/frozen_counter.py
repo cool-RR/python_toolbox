@@ -1,4 +1,4 @@
-# Copyright 2009-2013 Ram Rachum.
+# Copyright 2009-2013 Ram Rachum.,
 # This program is distributed under the MIT license.
 
 import operator
@@ -34,18 +34,17 @@ class FrozenCounter(FrozenDict):
         '''
         super(FrozenCounter, self).__init__()
         
+        self_get = self._dict.get
         if iterable is not None:
             if isinstance(iterable, collections.Mapping):
                 if self:
-                    self_get = self.get
-                    for elem, count in iterable.iteritems():
-                        self[elem] = self_get(elem, 0) + count
+                    for element, count in iterable.iteritems():
+                        self._dict[element] = self_get(element, 0) + count
                 else:
                     super(FrozenCounter, self).update(iterable) # fast path when counter is empty
             else:
-                self_get = self.get
-                for elem in iterable:
-                    self[elem] = self_get(elem, 0) + 1
+                for element in iterable:
+                    self._dict[element] = self_get(element, 0) + 1
         if kwargs:
             self.update(kwargs)
 
@@ -129,13 +128,13 @@ class FrozenCounter(FrozenDict):
         if not isinstance(other, FrozenCounter):
             return NotImplemented
         result = collections.Counter()
-        for elem, count in self.items():
-            newcount = count + other[elem]
-            if newcount > 0:
-                result[elem] = newcount
-        for elem, count in other.items():
-            if elem not in self and count > 0:
-                result[elem] = count
+        for element, count in self.items():
+            new_count = count + other[element]
+            if new_count > 0:
+                result[element] = new_count
+        for element, count in other.items():
+            if element not in self and count > 0:
+                result[element] = count
         return FrozenCounter(result)
 
     def __sub__(self, other):
@@ -148,13 +147,13 @@ class FrozenCounter(FrozenDict):
         if not isinstance(other, FrozenCounter):
             return NotImplemented
         result = collections.Counter()
-        for elem, count in self.items():
-            newcount = count - other[elem]
-            if newcount > 0:
-                result[elem] = newcount
-        for elem, count in other.items():
-            if elem not in self and count < 0:
-                result[elem] = 0 - count
+        for element, count in self.items():
+            new_count = count - other[element]
+            if new_count > 0:
+                result[element] = new_count
+        for element, count in other.items():
+            if element not in self and count < 0:
+                result[element] = 0 - count
         return FrozenCounter(result)
 
     def __or__(self, other):
@@ -167,14 +166,14 @@ class FrozenCounter(FrozenDict):
         if not isinstance(other, FrozenCounter):
             return NotImplemented
         result = Counter()
-        for elem, count in self.items():
-            other_count = other[elem]
-            newcount = other_count if count < other_count else count
-            if newcount > 0:
-                result[elem] = newcount
-        for elem, count in other.items():
-            if elem not in self and count > 0:
-                result[elem] = count
+        for element, count in self.items():
+            other_count = other[element]
+            new_count = other_count if count < other_count else count
+            if new_count > 0:
+                result[element] = new_count
+        for element, count in other.items():
+            if element not in self and count > 0:
+                result[element] = count
         return FrozenCounter(result)
 
     def __and__(self, other):
@@ -187,9 +186,9 @@ class FrozenCounter(FrozenDict):
         if not isinstance(other, FrozenCounter):
             return NotImplemented
         result = Counter()
-        for elem, count in self.items():
-            other_count = other[elem]
-            newcount = count if count < other_count else other_count
-            if newcount > 0:
-                result[elem] = newcount
+        for element, count in self.items():
+            other_count = other[element]
+            new_count = count if count < other_count else other_count
+            if new_count > 0:
+                result[element] = new_count
         return FrozenCounter(result)
