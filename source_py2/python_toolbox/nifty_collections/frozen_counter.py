@@ -22,16 +22,6 @@ class FrozenCounter(FrozenDict):
     '''
     
     def __init__(self, iterable=None, **kwargs):
-        '''Create a new, empty Counter object.  And if given, count elements
-        from an input iterable.  Or, initialize the count from another mapping
-        of elements to their counts.
-
-        >>> c = Counter()                           # a new, empty counter
-        >>> c = Counter('gallahad')                 # a new counter from an iterable
-        >>> c = Counter({'a': 4, 'b': 2})           # a new counter from a mapping
-        >>> c = Counter(a=4, b=2)                   # a new counter from keyword args
-
-        '''
         super(FrozenCounter, self).__init__()
         
         if iterable is not None:
@@ -52,11 +42,14 @@ class FrozenCounter(FrozenDict):
     __getitem__ = lambda self, key: self._dict.get(key, 0)
 
     def most_common(self, n=None):
-        '''List the n most common elements and their counts from the most
-        common to the least.  If n is None, then list all element counts.
+        '''
+        List the `n` most common elements and their counts, sorted.
+        
+        Results are sorted from the most common to the least. If `n is None`,
+        then list all element counts.
 
-        >>> FrozenCounter('abcdeabcdabcaba').most_common(3)
-        [('a', 5), ('b', 4), ('c', 3)]
+            >>> FrozenCounter('abcdeabcdabcaba').most_common(3)
+            [('a', 5), ('b', 4), ('c', 3)]
 
         '''
         # Emulate Bag.sortedByCount from Smalltalk
@@ -67,30 +60,28 @@ class FrozenCounter(FrozenDict):
                                key=operator.itemgetter(1))
 
     def elements(self):
-        '''Iterator over elements repeating each as many times as its count.
+        '''
+        Iterate over elements repeating each as many times as its count.
 
-        >>> c = FrozenCounter('ABCABC')
-        >>> sorted(c.elements())
-        ['A', 'A', 'B', 'B', 'C', 'C']
-
-        # Knuth's example for prime factors of 1836:  2**2 * 3**3 * 17**1
-        >>> prime_factors = FrozenCounter({2: 2, 3: 3, 17: 1})
-        >>> product = 1
-        >>> for factor in prime_factors.elements():     # loop over factors
-        ...     product *= factor                       # and multiply them
-        >>> product
-        1836
+            >>> c = FrozenCounter('ABCABC')
+            >>> sorted(c.elements())
+            ['A', 'A', 'B', 'B', 'C', 'C']
+    
+            # Knuth's example for prime factors of 1836:  2**2 * 3**3 * 17**1
+            >>> prime_factors = FrozenCounter({2: 2, 3: 3, 17: 1})
+            >>> product = 1
+            >>> for factor in prime_factors.elements():     # loop over factors
+            ...     product *= factor                       # and multiply them
+            >>> product
+            1836
 
         Note, if an element's count has been set to zero or is a negative
-        number, elements() will ignore it.
-
+        number, `.elements()` will ignore it.
         '''
         # Emulate Bag.do from Smalltalk and Multiset.begin from C++.
         return itertools.chain.from_iterable(
             itertools.starmap(itertools.repeat, self.iteritems())
         )
-
-    # Override dict methods where necessary
 
     @classmethod
     def fromkeys(cls, iterable, v=None):
@@ -117,11 +108,12 @@ class FrozenCounter(FrozenDict):
     #       c += FrozenCounter()
 
     def __add__(self, other):
-        '''Add counts from two counters.
+        '''
+        Add counts from two counters.
 
-        >>> FrozenCounter('abbb') + FrozenCounter('bcc')
-        FrozenCounter({'b': 4, 'c': 2, 'a': 1})
-
+            >>> FrozenCounter('abbb') + FrozenCounter('bcc')
+            FrozenCounter({'b': 4, 'c': 2, 'a': 1})
+            
         '''
         if not isinstance(other, FrozenCounter):
             return NotImplemented
@@ -136,11 +128,12 @@ class FrozenCounter(FrozenDict):
         return FrozenCounter(result)
 
     def __sub__(self, other):
-        ''' Subtract count, but keep only results with positive counts.
+        '''
+        Subtract count, but keep only results with positive counts.
 
-        >>> FrozenCounter('abbbc') - FrozenCounter('bccd')
-        FrozenCounter({'b': 2, 'a': 1})
-
+            >>> FrozenCounter('abbbc') - FrozenCounter('bccd')
+            FrozenCounter({'b': 2, 'a': 1})
+            
         '''
         if not isinstance(other, FrozenCounter):
             return NotImplemented
@@ -155,11 +148,12 @@ class FrozenCounter(FrozenDict):
         return FrozenCounter(result)
 
     def __or__(self, other):
-        '''Union is the maximum of value in either of the input counters.
+        '''
+        Get the maximum of value in either of the input counters.
 
-        >>> FrozenCounter('abbb') | FrozenCounter('bcc')
-        FrozenCounter({'b': 3, 'c': 2, 'a': 1})
-
+            >>> FrozenCounter('abbb') | FrozenCounter('bcc')
+            FrozenCounter({'b': 3, 'c': 2, 'a': 1})
+            
         '''
         if not isinstance(other, FrozenCounter):
             return NotImplemented
@@ -175,11 +169,12 @@ class FrozenCounter(FrozenDict):
         return FrozenCounter(result)
 
     def __and__(self, other):
-        ''' Intersection is the minimum of corresponding counts.
+        '''
+        Get the minimum of corresponding counts.
 
-        >>> FrozenCounter('abbb') & FrozenCounter('bcc')
-        FrozenCounter({'b': 1})
-
+            >>> FrozenCounter('abbb') & FrozenCounter('bcc')
+            FrozenCounter({'b': 1})
+            
         '''
         if not isinstance(other, FrozenCounter):
             return NotImplemented
