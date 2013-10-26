@@ -53,8 +53,10 @@ def monkeypatch_method(monkeypatchee, name=None):
         else:
             # `function` is probably some kind of descriptor.
             if not monkeypatchee_is_a_class:
-                raise NotImplemented("I don't know how to monkeypatch a "
-                                     "descriptor onto a non-class object.")
+                raise NotImplementedError(
+                    "I don't know how to monkeypatch a descriptor onto a "
+                    "non-class object."
+                )
             if not name:
                 ### Getting name of descriptor: ###############################
                 #                                                             #
@@ -67,7 +69,7 @@ def monkeypatch_method(monkeypatchee, name=None):
                 elif isinstance(function, property):
                     name_ = function.fget.__name__
                 else:
-                    raise NotImplemented(
+                    raise NotImplementedError(
                         "`monkeypatch_method` doesn't know how to get the "
                         "name of this kind of function automatically, try "
                         "manually."
