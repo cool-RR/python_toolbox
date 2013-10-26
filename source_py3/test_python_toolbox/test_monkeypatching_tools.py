@@ -161,7 +161,7 @@ def test_monkeypatch_classmethod_subclass():
 
 def test_directly_on_object():
     
-    class A:
+    class A(EqualByIdentity):
         def woof(self):
             return (self, 'woof')
 
