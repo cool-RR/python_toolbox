@@ -47,6 +47,21 @@ def test():
     del meow, woof
     
     
+def test_monkeypatch_property():
+
+    class A(EqualByIdentity):
+        pass
+
+    @monkeypatching_tools.monkeypatch_method(A)
+    @property
+    def meow(a):
+        return (type(a), 'bark')
+    
+    a0 = A()
+    a1 = A()
+    assert a0.meow == a1.meow == (A, 'bark') 
+    
+    
 def test_monkeypatch_cached_property():
 
     class A(EqualByIdentity):
