@@ -11,9 +11,9 @@ import sys
 
 ### Confirming correct Python version: ########################################
 #                                                                             #
-if sys.version_info[:2] <= (2, 5):
+if sys.version_info[:2] <= (2, 6):
     raise Exception(
-        "You're using Python <= 2.5, but this package requires either Python "
+        "You're using Python <= 2.6, but this package requires either Python "
         "2.7, or 3.3 or above, so you can't use it unless you upgrade your "
         "Python version."
     )
@@ -117,7 +117,7 @@ Roadmap
 Present
 -------
 
-Python Toolbox is at version 0.6.0, which is an alpha release. It's being used 
+Python Toolbox is at version 0.6.1, which is an alpha release. It's being used 
 in production every day, but backward compatibility isn't guaranteed yet.
 
 Next tasks
@@ -147,7 +147,7 @@ my_classifiers = [
 
 setuptools.setup(
     name='python_toolbox',
-    version='0.6.0',
+    version='0.6.1',
     requires=['setuptools'],
     test_suite='nose.collector',
     install_requires=['setuptools'],
