@@ -4,7 +4,6 @@
 '''Testing module for `python_toolbox.monkeypatching_tools`.'''
 
 
-
 import sys
 import uuid
 import types
