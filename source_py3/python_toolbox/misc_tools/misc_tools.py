@@ -277,3 +277,21 @@ class NonInstatiable:
     '''
     def __new__(self, *args, **kwargs):
         raise RuntimeError('This class may not be instatiated.')
+    
+    
+def repeat_getattr(thing, query):
+    '''
+    Perform a repeated `getattr` operation.
+    
+    i.e., when given `repeat_getattr(x, '.y.z')`, will return `x.y.z`.
+    '''
+    if not query:
+        return thing
+    assert isinstance(query, str)
+    if not query.startswith('.'):
+        raise Exception('''`query` must start with '.', e.g. '.foo.bar.baz'.''')
+    attribute_names = filter(None, query.split('.'))
+    current = thing 
+    for attribute_name in attribute_names:
+        current = getattr(current, attribute_name)
+    return current
