@@ -2,7 +2,7 @@
 # This program is distributed under the MIT license.
 
 import operator
-import _heapq
+import heapq
 import itertools
 import collections
 
@@ -63,7 +63,7 @@ class FrozenCounter(FrozenDict):
         if n is None:
             return sorted(self.items(), key=operator.itemgetter(1),
                           reverse=True)
-        return _heapq.nlargest(n, self.items(),
+        return heapq.nlargest(n, self.items(),
                                key=operator.itemgetter(1))
 
     def elements(self):
