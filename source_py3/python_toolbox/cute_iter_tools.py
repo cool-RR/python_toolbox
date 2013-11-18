@@ -315,9 +315,30 @@ def _fill(iterable, fill_value=None, fill_value_maker=None, length=infinity):
                 yield fill_value_maker()
                 
     
+def get_single_if_any(iterable,
+                      exception_on_multiple=Exception('More than one value '
+                                                      'not allowed.')):
+    '''
+    Get the single item of `iterable`, if any.
     
-    
-    
-    
-    
-    
+    If `iterable` has one item, return it. If it's empty, get `None`. If it has
+    more than one item, raise an exception. (Unless
+    `exception_on_multiple=None`.)
+    '''
+    assert isinstance(exception_on_multiple, Exception) or \
+                                                  exception_on_multiple is None
+    iterator = iter(iterable)
+    try:
+        first_item = next(iterator)
+    except StopIteration:
+        return None
+    else:
+        if exception_on_multiple:
+            try:
+                second_item = next(iterator)
+            except StopIteration:
+                return first_item
+            else:
+                raise exception_on_multiple
+        else: # not exception_on_multiple
+            return first_item

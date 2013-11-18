@@ -17,34 +17,54 @@ from python_toolbox import monkeypatching_tools
 from python_toolbox import caching
 
 
+class EqualByIdentity(object):
+    def __eq__(self, other):
+        return self is other
+
+
 def test():
     '''Test basic workings of `monkeypatch_method`.'''
     
-    class A(object):
+    class A(EqualByIdentity):
         pass
 
     @monkeypatching_tools.monkeypatch_method(A)
     def meow(a):
-        return 1
+        return (a, 1)
     
     a = A()
     
-    assert a.meow() == meow(a) == 1
+    assert a.meow() == meow(a) == (a, 1)
     
     @monkeypatching_tools.monkeypatch_method(A, 'roar')
     def woof(a):
-        return 2
+        return (a, 2)
     
-    assert a.roar() == woof(a) == 2
+    assert a.roar() == woof(a) == (a, 2)
     
     assert not hasattr(a, 'woof')
     
     del meow, woof
     
     
+def test_monkeypatch_property():
+
+    class A(EqualByIdentity):
+        pass
+
+    @monkeypatching_tools.monkeypatch_method(A)
+    @property
+    def meow(a):
+        return (type(a), 'bark')
+    
+    a0 = A()
+    a1 = A()
+    assert a0.meow == a1.meow == (A, 'bark') 
+    
+    
 def test_monkeypatch_cached_property():
 
-    class A(object):
+    class A(EqualByIdentity):
         pass
 
     @monkeypatching_tools.monkeypatch_method(A)
@@ -81,7 +101,7 @@ def test_helpful_message_when_forgetting_parentheses():
 
 def test_monkeypatch_staticmethod():
 
-    class A(object):
+    class A(EqualByIdentity):
         @staticmethod
         def my_static_method(x):
             raise 'Flow should never reach here.'
@@ -89,23 +109,21 @@ def test_monkeypatch_staticmethod():
     @monkeypatching_tools.monkeypatch_method(A)
     @staticmethod
     def my_static_method(x):
-        return 'Success'
+        return (x, 'Success')
     
     assert isinstance(cute_inspect.getattr_static(A, 'my_static_method'),
                       staticmethod)
     assert isinstance(A.my_static_method, types.FunctionType)
     
-    assert A.my_static_method(3) == A.my_static_method('Whatever') == \
-                                                                      'Success'
+    assert A.my_static_method(3) == A.my_static_method(3) == (3, 'Success')
     
     a0 = A()
-    assert a0.my_static_method(3) == a0.my_static_method('Whatever') == \
-                                                                      'Success'
+    assert a0.my_static_method(3) == a0.my_static_method(3) == (3, 'Success')
     
     
 def test_monkeypatch_classmethod():
 
-    class A(object):
+    class A(EqualByIdentity):
         @classmethod
         def my_class_method(cls):
             raise 'Flow should never reach here.'
@@ -132,11 +150,10 @@ def test_monkeypatch_classmethod_subclass():
     
     This is useful in Django, that uses its own `classmethod` subclass.
     '''
-
     class FunkyClassMethod(classmethod):
         is_funky = True
 
-    class A(object):
+    class A(EqualByIdentity):
         @FunkyClassMethod
         def my_funky_class_method(cls):
             raise 'Flow should never reach here.'
@@ -159,9 +176,9 @@ def test_monkeypatch_classmethod_subclass():
 
 def test_directly_on_object():
     
-    class A(object):
+    class A(EqualByIdentity):
         def woof(self):
-            return 'woof'
+            return (self, 'woof')
 
     a0 = A()
     a1 = A()
@@ -177,12 +194,12 @@ def test_directly_on_object():
     assert a0.meow() == 'not meow'
     assert a0.woof() == 'not woof'
     
-    assert a1.woof() == 'woof'
+    assert a1.woof() == (a1, 'woof')
     
     with cute_testing.RaiseAssertor(AttributeError):
         A.meow()
     with cute_testing.RaiseAssertor(AttributeError):
         a1.meow()
         
-    assert A.woof(a0) == 'woof'
+    assert A.woof(a0) == (a0, 'woof')
     

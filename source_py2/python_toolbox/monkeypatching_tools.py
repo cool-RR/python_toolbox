@@ -54,21 +54,29 @@ def monkeypatch_method(monkeypatchee, name=None):
         else:
             # `function` is probably some kind of descriptor.
             if not monkeypatchee_is_a_class:
-                raise NotImplemented("I don't know how to monkeypatch a "
-                                     "descriptor onto a non-class object.")
-            ### Getting name of descriptor: ###################################
-            #                                                                 #
-            if isinstance(function, caching.CachedProperty):
-                if not isinstance(function.getter, types.FunctionType):
-                    raise NotImplemented
-                name_ = function.getter.__name__
-            elif isinstance(function, (classmethod, staticmethod)):
-                name_ = function.__func__.__name__
-            else:
-                raise NotImplemented("`monkeypatch_method` doesn't know how "
-                                     "to handle this kind of function.")
-            #                                                                 #
-            ### Finished getting name of descriptor. ##########################
+                raise NotImplementedError(
+                    "I don't know how to monkeypatch a descriptor onto a "
+                    "non-class object."
+                )
+            if not name:
+                ### Getting name of descriptor: ###############################
+                #                                                             #
+                if isinstance(function, caching.CachedProperty):
+                    if not isinstance(function.getter, types.FunctionType):
+                        raise NotImplemented
+                    name_ = function.getter.__name__
+                elif isinstance(function, (classmethod, staticmethod)):
+                    name_ = function.__func__.__name__
+                elif isinstance(function, property):
+                    name_ = function.fget.__name__
+                else:
+                    raise NotImplementedError(
+                        "`monkeypatch_method` doesn't know how to get the "
+                        "name of this kind of function automatically, try "
+                        "manually."
+                    )
+                #                                                             #
+                ### Finished getting name of descriptor. ######################
             setattr(monkeypatchee, name_, function)
             return function
         
