@@ -10,8 +10,7 @@ from python_toolbox import import_tools
 from python_toolbox.temp_value_setting import TempValueSetter
 
 import python_toolbox
-from python_toolbox.address_tools import (describe,
-                                                  resolve)
+from python_toolbox.address_tools import describe, resolve
 
 # todo: Make test that when a root or namespace is given, it's top priority to
 # use it, even if it prevents shorterning and results in an overall longer

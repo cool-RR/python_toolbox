@@ -7,7 +7,6 @@ Defines the `TempValueSetter` class.
 See its documentation for more details.
 '''
 
-from python_toolbox import address_tools
 from python_toolbox.context_management import ContextManager
 
 
