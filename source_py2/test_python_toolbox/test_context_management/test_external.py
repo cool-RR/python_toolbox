@@ -85,7 +85,7 @@ class ContextManagerTestCase(unittest2.TestCase):
         self.assertEqual(state, [1, 42, 999])
 
     def _create_contextmanager_attribs(self):
-        if python_toolbox.__version_info__ <= (0, 6, 2, 'release'):
+        if python_toolbox.__version_info__ <= (0, 6, 3, 'release'):
             raise nose.SkipTest
         def attribs(**kw):
             def decorate(func):
@@ -107,7 +107,7 @@ class ContextManagerTestCase(unittest2.TestCase):
     @unittest2.skipIf(hasattr(sys, 'flags') and sys.flags.optimize >= 2,
                       "Docstrings are omitted with -O2 and above")
     def test_contextmanager_doc_attrib(self):
-        if python_toolbox.__version_info__ <= (0, 6, 2, 'release'):
+        if python_toolbox.__version_info__ <= (0, 6, 3, 'release'):
             raise nose.SkipTest('Not sure what to do about this.')
         baz = self._create_contextmanager_attribs()
         self.assertEqual(baz.__doc__, "Whee!")
@@ -212,7 +212,7 @@ class TestContextDecorator(unittest2.TestCase):
 
 
     def test_typo_enter(self):
-        if python_toolbox.__version_info__ <= (0, 6, 2, 'release'):
+        if python_toolbox.__version_info__ <= (0, 6, 3, 'release'):
             raise nose.SkipTest
         class MyContextManager(ContextManager):
             def __unter__(self):
@@ -226,7 +226,7 @@ class TestContextDecorator(unittest2.TestCase):
 
 
     def test_typo_exit(self):
-        if python_toolbox.__version_info__ <= (0, 6, 2, 'release'):
+        if python_toolbox.__version_info__ <= (0, 6, 3, 'release'):
             raise nose.SkipTest
         class MyContextManager(ContextManager):
             def __enter__(self):
