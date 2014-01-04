@@ -6,6 +6,7 @@
 import subprocess
 import sys
 import os.path
+import pathlib
 
 
 def start_file(path):
@@ -25,3 +26,9 @@ def start_file(path):
         raise NotImplementedError(
             "Your operating system `%s` isn't supported by "
             "`start_file`." % sys.platform)
+    
+    
+_is_windows = (os.name == 'nt')
+null_path = pathlib.Path('\\Device\\Null') if _is_windows \
+                                                 else pathlib.Path('/dev/null')
+path_type = pathlib.WindowsPath if _is_windows else pathlib.PosixPath
