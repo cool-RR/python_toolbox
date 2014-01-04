@@ -150,7 +150,7 @@ setuptools.setup(
     version='0.6.3',
     requires=['setuptools'],
     test_suite='nose.collector',
-    install_requires=['setuptools'],
+    install_requires=['setuptools', 'pathlib>=0.97'],
     tests_require=['nose>=1.0.0',
                    'docutils>=0.8'],
     description='A collection of Python tools for various tasks',
