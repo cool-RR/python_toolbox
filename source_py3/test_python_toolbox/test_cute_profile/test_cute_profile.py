@@ -233,27 +233,27 @@ def test_folder_handler():
             f = cute_profile.profile_ready(profile_handler=temp_folder)(func)
     
             f(1, 2)
-            assert len(os.listdir(temp_folder)) == 0
+            assert len(list(temp_folder.iterdir())) == 0
     
             f(1, 2)
-            assert len(os.listdir(temp_folder)) == 0
+            assert len(list(temp_folder.iterdir())) == 0
     
             f.profiling_on = True
             
             f(1, 2)
-            assert len(os.listdir(temp_folder)) == 1
+            assert len(list(temp_folder.iterdir())) == 1
     
             f(1, 2)
-            assert len(os.listdir(temp_folder)) == 1
+            assert len(list(temp_folder.iterdir())) == 1
             
             time.sleep(0.01) # To make for a different filename.
             
             f.profiling_on = True
             f(1, 2)
 
-            assert len(os.listdir(temp_folder)) == 2
+            assert len(list(temp_folder.iterdir())) == 2
     
             f(1, 2)
-            assert len(os.listdir(temp_folder)) == 2
+            assert len(list(temp_folder.iterdir())) == 2
             
 

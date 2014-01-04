@@ -5,12 +5,14 @@
 
 
 import sys
+import pathlib
 import io
 
 from python_toolbox.context_management import (ContextManager,
                                                     BlankContextManager)
 from python_toolbox.temp_value_setting import TempValueSetter
 from python_toolbox.reasoned_bool import ReasonedBool
+from python_toolbox import sequence_tools
 
 
 class OutputCapturer(ContextManager):
@@ -71,11 +73,11 @@ class TempSysPathAdder(ContextManager):
         
         `addition` may be a path or a sequence of paths.
         '''
-        if isinstance(addition, str):
-            addition = [addition]
-        for entry in addition:
-            assert isinstance(entry, str)
-        self.addition = addition
+        self.addition = map(
+            unicode,
+            sequence_tools.to_tuple(addition,
+                                    item_type=(str, pathlib.PurePath))
+        )
 
         
     def __enter__(self):

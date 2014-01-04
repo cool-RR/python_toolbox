@@ -266,8 +266,8 @@ def _find_module_in_some_zip_path(module_name, path=None):
             #else:
                 #leading_path = ''
                 
-            return os.path.join(zip_path,
-                                _module_address_to_partial_path(module_name))
+            return pathlib.Path(str(zip_path)) / \
+                                   _module_address_to_partial_path(module_name)
 
     if original_path_argument is not None:
         raise ImportError('Module not found in the given zip path.')

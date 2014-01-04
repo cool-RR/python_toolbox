@@ -29,6 +29,5 @@ def start_file(path):
     
     
 _is_windows = (os.name == 'nt')
-null_path = pathlib.Path('\\Device\\Null') if _is_windows \
-                                                 else pathlib.Path('/dev/null')
+null_path = pathlib.Path(os.path.devnull)
 path_type = pathlib.WindowsPath if _is_windows else pathlib.PosixPath
