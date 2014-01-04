@@ -5,6 +5,7 @@
 
 import sys
 import os.path
+import pathlib
 
 import nose
 
@@ -43,12 +44,8 @@ def __bootstrap():
             return True
     
     if not exists('python_toolbox'):
-        python_toolbox_candidate_path = os.path.realpath(
-            os.path.join(
-                os.path.split(__file__)[0],
-                '..',
-            )
-        )
+        python_toolbox_candidate_path = \
+                                     pathlib(__file__).parent.parent.absolute()
         sys.path.append(python_toolbox_candidate_path)
         
         

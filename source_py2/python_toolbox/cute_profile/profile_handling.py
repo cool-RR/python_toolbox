@@ -4,6 +4,7 @@
 import threading
 import datetime as datetime_module
 import marshal
+import pathlib
 import abc
 import os.path
 import pstats
@@ -81,12 +82,11 @@ class EmailProfileHandler(AuxiliaryThreadProfileHandler):
 class FolderProfileHandler(AuxiliaryThreadProfileHandler):
     '''Profile handler that saves the profile to disk on separate thread.'''
     
-    def __init__(self, folder_path):
-        self.folder_path = folder_path
+    def __init__(self, folder):
+        self.folder = pathlib.Path(folder)
         
     def thread_job(self):
-        with open(os.path.join(self.folder_path, self.make_file_name()), \
-                                                          'wb') as output_file:
+        with (self.folder / self.make_file_name()).open('wb') as output_file:
             output_file.write(self.profile_data)
         
 
@@ -104,6 +104,9 @@ class PrintProfileHandler(BaseProfileHandler):
 
 def get_profile_handler(profile_handler_string):
     '''Parse `profile_handler_string` into a `ProfileHandler` class.'''
+    if isinstance(profile_handler_string, pathlib.Path):
+        assert profile_handler_string.is_dir()
+        return FolderProfileHandler(profile_handler_string)
     if not profile_handler_string or profile_handler_string in \
                                                      ['0', '1', '2', '3', '4']:
         try:

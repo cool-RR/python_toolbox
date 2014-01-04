@@ -236,6 +236,9 @@ def to_tuple(single_or_sequence, item_type=None, item_test=None):
     which is the type of the items, or alternatively `item_test` which is a
     callable that takes an object and returns whether it's a valid item. These
     are necessary only when your items might be sequences themselves.
+    
+    You may optionally put multiple types in `item_type`, and each object would
+    be required to match to at least one of them.
     '''
     if (item_type is not None) and (item_test is not None):
         raise Exception('You may specify either `item_type` or '
@@ -243,7 +246,6 @@ def to_tuple(single_or_sequence, item_type=None, item_test=None):
     if item_test is not None:
         actual_item_test = item_test
     elif item_type is not None:
-        assert isinstance(item_type, (type, types.ClassType))
         actual_item_test = \
             lambda candidate: isinstance(candidate, item_type)
     else:

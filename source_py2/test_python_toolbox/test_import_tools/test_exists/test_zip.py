@@ -34,10 +34,9 @@ def test_zip():
     with temp_file_tools.TemporaryFolder(prefix='test_python_toolbox_') \
                                                           as temp_folder:
 
-        temp_zip_path = os.path.join(temp_folder, 'archive_with_module.zip')
+        temp_zip_path = temp_folder / 'archive_with_module.zip'
         
-        with open(temp_zip_path, 'wb') as temp_zip_file:
-            
+        with temp_zip_path.open('wb') as temp_zip_file:
             temp_zip_file.write(zip_string)            
                 
         assert not exists('zip_imported_module_bla_bla')

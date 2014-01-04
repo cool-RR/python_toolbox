@@ -7,6 +7,7 @@ import sys
 import os.path
 import imp
 import zipimport
+import pathlib
 
 from python_toolbox import package_finder
 from python_toolbox import caching
@@ -231,7 +232,7 @@ def _find_module_in_some_zip_path(module_name, path=None):
     else:
         zip_paths = [path for path in sys.path if '.zip' in path]
         # todo: Find better way to filter zip paths.
-    
+        
     for zip_path in zip_paths:
 
         # Trying to create a zip importer:
@@ -264,8 +265,8 @@ def _find_module_in_some_zip_path(module_name, path=None):
             #else:
                 #leading_path = ''
                 
-            return os.path.join(zip_path,
-                                _module_address_to_partial_path(module_name))
+            return pathlib.Path(str(zip_path)) / \
+                                   _module_address_to_partial_path(module_name)
 
     if original_path_argument is not None:
         raise ImportError('Module not found in the given zip path.')

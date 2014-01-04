@@ -4,6 +4,7 @@
 '''Testing `python_toolbox.temp_value_setting.TempWorkingDirectorySetter`.'''
 
 import os
+import pathlib
 import shutil
 import tempfile
 
@@ -27,13 +28,13 @@ def test():
             # so we can't do `assert os.getcwd() == temp_dir`. Instead we'll
             # create a small file and check we can access it:
             
-            with open('just_a_file', 'w') as my_file:
-                my_file.write('One two three.')
+            with pathlib.Path('just_a_file').open('w') as my_file:
+                my_file.write(u'One two three.')
             
-            with open('just_a_file', 'r') as my_file:
+            with pathlib.Path('just_a_file').open('r') as my_file:
                 assert my_file.read() == 'One two three.'
         
-        with open(os.path.join(temp_folder, 'just_a_file'), 'r') as my_file:
+        with (temp_folder / 'just_a_file').open('r') as my_file:
             assert my_file.read() == 'One two three.'
         
         assert os.getcwd() == old_cwd
@@ -54,24 +55,23 @@ def test_exception():
                 # temp_folder`. Instead we'll create a small file and check we
                 # can access it:
                 
-                with open('just_a_file', 'w') as my_file:
-                    my_file.write('One two three.')
+                with pathlib.Path('just_a_file').open('w') as my_file:
+                    my_file.write(u'One two three.')
                 
-                with open('just_a_file', 'r') as my_file:
+                with pathlib.Path('just_a_file').open('r') as my_file:
                     assert my_file.read() == 'One two three.'
                 
                 raise MyException
             
         except MyException:
 
-            with open(os.path.join(temp_folder, 'just_a_file'), 'r') \
-                                                           as my_file:
+            with (temp_folder / 'just_a_file').open('r') as my_file:
                 assert my_file.read() == 'One two three.'
                 
         else:
             raise Exception
         
-        with open(os.path.join(temp_folder, 'just_a_file'), 'r') as my_file:
+        with (temp_folder / 'just_a_file').open('r') as my_file:
             assert my_file.read() == 'One two three.'
 
         
@@ -86,17 +86,17 @@ def test_as_decorator():
             # so we can't do `assert os.getcwd() == temp_folder`. Instead we'll
             # create a small file and check we can access it:
             
-            with open('just_a_file', 'w') as my_file:
-                my_file.write('One two three.')
+            with pathlib.Path('just_a_file').open('w') as my_file:
+                my_file.write(u'One two three.')
             
-            with open('just_a_file', 'r') as my_file:
+            with pathlib.Path('just_a_file').open('r') as my_file:
                 assert my_file.read() == 'One two three.'
                 
         f()
         
         cute_testing.assert_polite_wrapper(f)
         
-        with open(os.path.join(temp_folder, 'just_a_file'), 'r') as my_file:
+        with (temp_folder / 'just_a_file').open('r') as my_file:
             assert my_file.read() == 'One two three.'
         
         assert os.getcwd() == old_cwd
