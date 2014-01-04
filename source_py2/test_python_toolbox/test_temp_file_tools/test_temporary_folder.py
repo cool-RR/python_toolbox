@@ -5,6 +5,7 @@
 
 import tempfile
 import os.path
+import pathlib
 
 import nose.tools
 
@@ -14,25 +15,56 @@ from python_toolbox.temp_file_tools import TemporaryFolder
 
 
 def test_basic():
-    '''Test the basic working of `TemporaryFolder`.'''
-    with TemporaryFolder() as tf1path:
-        assert isinstance(tf1path, str)
-        assert os.path.exists(tf1path)
-        assert os.path.isdir(tf1path)
+    with TemporaryFolder() as tf1:
+        assert isinstance(tf1, pathlib.Path)
+        assert tf1.exists()
+        assert tf1.is_dir()
         
         tf2 = TemporaryFolder()
-        with tf2 as tf2path:
-            assert str(tf2) == tf2.path == tf2path
+        with tf2 as tf2:
+            assert isinstance(tf2, pathlib.Path)
+            assert tf2.exists()
+            assert tf2.is_dir()
+            
+        assert not tf2.exists()
+        assert not tf2.is_dir()
+                
+        assert tf1.exists()
+        assert tf1.is_dir()
+        file_path = (tf1 / 'my_file')
+        with file_path.open('w') as my_file:
+            my_file.write(u'Woo hoo!')
+        
+        assert file_path.exists()
+        assert file_path.is_file()
+        
+        with file_path.open('r') as my_file:
+            assert my_file.read() == 'Woo hoo!'
+            
+    assert not tf1.exists()
+    assert not tf1.is_dir()
+    
+    assert not file_path.exists()
+    assert not file_path.is_file()
+    
+
+def test_without_pathlib():
+    with TemporaryFolder() as tf1:
+        assert os.path.exists(str(tf1))
+        assert os.path.isdir(str(tf1))
+        
+        tf2 = TemporaryFolder()
+        with tf2 as tf2:
             assert os.path.exists(str(tf2))
             assert os.path.isdir(str(tf2))
             
         assert not os.path.exists(str(tf2))
-        assert not os.path.isdir(tf2path)
+        assert not os.path.isdir(str(tf2))
                 
-        assert os.path.exists(tf1path)
-        assert os.path.isdir(tf1path)
+        assert os.path.exists(str(tf1))
+        assert os.path.isdir(str(tf1))
         
-        file_path = os.path.join(tf1path, 'my_file')
+        file_path = os.path.join(str(tf1), 'my_file')
         with open(file_path, 'w') as my_file:
             my_file.write('Woo hoo!')
         
@@ -42,10 +74,17 @@ def test_basic():
         with open(file_path, 'r') as my_file:
             assert my_file.read() == 'Woo hoo!'
             
-    assert not os.path.exists(tf1path)
-    assert not os.path.isdir(tf1path)
+    assert not os.path.exists(str(tf1))
+    assert not os.path.isdir(str(tf1))
     
     assert not os.path.exists(file_path)
     assert not os.path.isdir(file_path)
     
 
+
+def test_repr():
+    tf = TemporaryFolder()
+    assert '(Not created yet)' in repr(tf)
+    with tf:
+        assert '(Not created yet)' not in repr(tf)
+        
