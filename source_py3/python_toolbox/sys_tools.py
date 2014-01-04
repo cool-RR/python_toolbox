@@ -74,7 +74,7 @@ class TempSysPathAdder(ContextManager):
         `addition` may be a path or a sequence of paths.
         '''
         self.addition = map(
-            unicode,
+            str,
             sequence_tools.to_tuple(addition,
                                     item_type=(str, pathlib.PurePath))
         )

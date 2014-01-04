@@ -8,6 +8,7 @@ import os.path
 import imp
 import zipimport
 import functools
+import pathlib
 
 from python_toolbox import package_finder
 from python_toolbox import caching
