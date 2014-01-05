@@ -5,24 +5,23 @@
 
 import sys
 import os.path
+import pathlib
 import glob
 import types
 
 
 def list_sub_folders(path):
     '''List all the immediate sub-folders of the folder at `path`.'''
-    assert os.path.isdir(path)
-    files_and_folders = glob.glob(os.path.join(path, '*'))
-    folders = list(filter(os.path.isdir, files_and_folders))
-    return folders
+    path = pathlib.Path(path)
+    assert path.is_dir()
+    return list(filter(pathlib.Path.is_dir, path.glob('*')))
 
 
 def get_path_of_package(package):
     '''Get the path of a Python package, i.e. where its modules would be.'''
-    path = package.__file__
-    dir_path, file_name = os.path.split(path)
-    assert '__init__' in file_name
-    return dir_path
+    path = pathlib.Path(package.__file__)
+    assert '__init__' in path.name
+    return path.parent
 
 
 def get_root_path_of_module(module):
@@ -38,14 +37,13 @@ def get_root_path_of_module(module):
     module_name = module.__name__
     root_module_name = module_name.split('.', 1)[0]
     root_module = sys.modules[root_module_name]
-    path_of_root_module = root_module.__file__
-    dir_path, file_name = os.path.split(path_of_root_module)
-    if '__init__' in file_name:
+    path_of_root_module = pathlib.Path(root_module.__file__)
+    if '__init__' in path_of_root_module.name:
          # It's a package.
-        result = os.path.abspath(os.path.join(dir_path, '..'))
+        result = path_of_root_module.parent.parent.absolute()
     else:
         # It's a one-file module, not a package.
-        result = os.path.abspath(dir_path)
+        result = path_of_root_module.parent.absolute()
     
     assert result in list(map(os.path.abspath, sys.path)) 
     return result

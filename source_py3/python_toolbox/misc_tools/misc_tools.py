@@ -4,7 +4,7 @@
 '''This module defines miscellaneous tools.'''
 
 import operator
-import os.path
+import pathlib
 import re
 import math
 import types
@@ -225,14 +225,14 @@ def find_clear_place_on_circle(circle_points, circle_size=1):
 def add_extension_if_plain(path, extension):
     '''Add `extenstion` to a file path if it doesn't have an extenstion.'''
     
+    path = pathlib.Path(path)
+    
     if extension:
         assert extension.startswith('.')
-    
-    (without_extension, existing_extension) = os.path.splitext(path)
-    if existing_extension:
+    if path.suffix:
+        return pathlib.Path(str(path)[:-len(path.suffix) + extension])
+    else:
         return path
-    else: # not existing_extension
-        return without_extension + extension
     
     
 def general_sum(things, start=None):

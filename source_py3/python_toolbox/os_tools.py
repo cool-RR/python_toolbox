@@ -11,13 +11,14 @@ import pathlib
 
 def start_file(path):
     '''Open a file by launching the program that handles its kind.'''
-    assert os.path.exists(path)
+    path = pathlib.Path(path)
+    assert path.exists()
     
     if sys.platform.startswith('linux'): # Linux:
-        subprocess.check_call(['xdg-open', path])
+        subprocess.check_call(['xdg-open', str(path)])
         
     elif sys.platform == 'darwin': # Mac:
-        subprocess.check_call(['open', '--', path])
+        subprocess.check_call(['open', '--', str(path)])
         
     elif sys.platform in ('win32', 'cygwin'): # Windows:
         os.startfile(path)
