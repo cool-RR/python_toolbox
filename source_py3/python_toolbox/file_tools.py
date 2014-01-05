@@ -62,6 +62,15 @@ def iterate_file_paths(path):
 def create_file_renaming_if_taken(path, mode='x',
                                   buffering=-1, encoding=None,
                                   errors=None, newline=None):
+    '''
+    Create a new file with name `path` for writing, renaming it if name taken.
+    
+    If the name given is "example.zip", the new name would be "example
+    (1).zip", and if that's taken "example (1).zip", and so on.
+    
+    Returns the file open and ready for writing. It's best to use this as a
+    context manager similarly to `open` so the file would be closed.
+    '''
     assert 'x' in mode
     for path in cute_iter_tools.shorten(iterate_file_paths(pathlib.Path(path)),
                                         N_MAX_ATTEMPTS):
@@ -81,6 +90,12 @@ def create_file_renaming_if_taken(path, mode='x',
 def write_to_file_renaming_if_taken(path, data, mode='x',
                                     buffering=-1, encoding=None,
                                     errors=None, newline=None):
+    '''
+    Write `data` to a new file with name `path`, renaming it if name taken.
+    
+    If the name given is "example.zip", the new name would be "example
+    (1).zip", and if that's taken "example (1).zip", and so on.
+    '''
     with create_file_renaming_if_taken(
         path, mode=mode, buffering=buffering, encoding=encoding, errors=errors,
         newline=newline) as file:
