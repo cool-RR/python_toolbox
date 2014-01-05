@@ -6,7 +6,6 @@
 
 import contextlib
 import zipfile as zip_module
-import os.path
 import io
 import re
 import pathlib
