@@ -17,10 +17,11 @@ numbered_name_pattern = re.compile(
 
 def _get_next_name(path):
     assert isinstance(path, pathlib.Path)
-    parent = path.parent
     suffix = path.suffix
     suffixless_name = path.name[:-len(suffix)]
-    assert '{}{}{}'.format(parent, suffixless_name, suffix) == path
+    parent_with_separator = str(path)[:-len(path.name)]
+    assert pathlib.Path('{}{}{}'.format(parent_with_separator,
+                                        suffixless_name, suffix)) == path
     match = numbered_name_pattern.match(suffixless_name)
     if match:
         fixed_suffixless_name = '{} ({})'.format(
@@ -29,9 +30,8 @@ def _get_next_name(path):
         )
     else:
         fixed_suffixless_name = '{} (1)'.format(suffixless_name,)
-        fix
     return pathlib.Path(
-        '{}{}{}'.format(parent, suffixless_name, suffix)
+        '{}{}{}'.format(parent_with_separator, fixed_suffixless_name, suffix)
     )
     
     
