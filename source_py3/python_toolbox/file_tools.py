@@ -5,7 +5,6 @@
 
 import pathlib
 import re
-import contextlib
 
 from python_toolbox import context_management
 
@@ -49,23 +48,18 @@ def create_file_renaming_if_taken(path, mode='x',
                                   errors=None, newline=None):
     assert 'x' in mode
     current_path = pathlib.Path(path)
-    with contextlib.ExitStack() as exit_stack:
-        for i in range(N_MAX_ATTEMPTS):
-            try:
-                file = exit_stack.enter_context(
-                    current_path.open(mode, buffering=buffering,
-                                      encoding=encoding, errors=errors,
-                                      newline=newline)
-                )
-            except FileExistsError:
-                current_path = _get_next_name(current_path)
-            else:
-                return FileContainer(file)
-        else:
-            raise Exception("Exceeded {} tries, can't create file {}".format(
-                N_MAX_ATTEMPTS,
-                path
-            ))
+    for i in range(N_MAX_ATTEMPTS):
+        try:
+            return current_path.open(mode, buffering=buffering,
+                                     encoding=encoding, errors=errors,
+                                     newline=newline)
+        except FileExistsError:
+            current_path = _get_next_name(current_path)
+    else:
+        raise Exception("Exceeded {} tries, can't create file {}".format(
+            N_MAX_ATTEMPTS,
+            path
+        ))
     
 
 def write_to_file_renaming_if_taken(path, data, mode='x',
@@ -74,5 +68,6 @@ def write_to_file_renaming_if_taken(path, data, mode='x',
     with create_file_renaming_if_taken(
         path, mode=mode, buffering=buffering, encoding=encoding, errors=errors,
         newline=newline) as file:
-        file.write(data)
+        
+        return file.write(data)
         
