@@ -4,7 +4,6 @@
 '''Defines various tools related to file-system paths.'''
 
 import sys
-import os.path
 import pathlib
 import glob
 import types
@@ -45,6 +44,7 @@ def get_root_path_of_module(module):
         # It's a one-file module, not a package.
         result = path_of_root_module.parent.absolute()
     
-    assert result in list(map(os.path.abspath, sys.path)) 
+    assert result in list(map(pathlib.Path.absolute,
+                              map(pathlib.Path, sys.path)))
     return result
 
