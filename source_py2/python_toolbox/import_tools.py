@@ -34,7 +34,7 @@ def import_all(package, exclude='__init__', silent_fail=False):
     
     names = {}
     for path in paths:
-        name = os.path.splitext(os.path.split(path)[1])[0]
+        name = str(path.parts[-1][:-len(path.suffix)])
         if name == exclude:
             continue
         full_name = package.__name__ + '.' + name
@@ -155,19 +155,20 @@ def import_by_path(path, name=None, keep_in_sys_modules=True):
     "hammer", will be used, which might cause problems in some cases. (Like
     when using multiprocessing.)
     '''
+    path = pathlib.Path(path)
     if '.zip' in path:
         if name is not None:
             raise NotImplementedError
         module = _import_by_path_from_zip(path)
         
     else: # '.zip' not in path
-        short_name = os.path.splitext(os.path.split(path)[1])[0]
+        short_name = str(path.parts[-1][:-len(path.suffix)])
+        
         if name is None: name = short_name
-        path_to_dir = os.path.dirname(path)
         my_file = None
         try:
             (my_file, pathname, description) = \
-                imp.find_module(short_name, [path_to_dir])
+                imp.find_module(short_name, [path.parent])
             module = imp.load_module(name, my_file, pathname, description)
         finally:
             if my_file is not None:

@@ -6,7 +6,6 @@ import datetime as datetime_module
 import marshal
 import pathlib
 import abc
-import os.path
 import pstats
 
 from python_toolbox.third_party import envelopes
@@ -118,5 +117,5 @@ def get_profile_handler(profile_handler_string):
                                                                           [0]):
         return EmailProfileHandler(*profile_handler_string.split('\n'))
     else:
-        assert os.path.isdir(profile_handler_string)
+        assert pathlib.Path(profile_handler_string).is_dir()
         return FolderProfileHandler(profile_handler_string)

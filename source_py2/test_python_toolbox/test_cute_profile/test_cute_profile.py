@@ -3,7 +3,6 @@
 
 '''Testing module for `python_toolbox.cute_profile`.'''
 
-import os.path
 import dummy_threading
 import time
 

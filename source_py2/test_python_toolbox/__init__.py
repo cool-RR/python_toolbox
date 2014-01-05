@@ -4,7 +4,6 @@
 '''Testing package for `python_toolbox`.'''
 
 import sys
-import os.path
 import pathlib
 
 import nose

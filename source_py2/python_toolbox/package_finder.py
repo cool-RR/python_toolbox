@@ -13,6 +13,7 @@ import glob
 import os
 import types
 import pkgutil
+import pathlib
 
 from python_toolbox import dict_tools
 
@@ -49,9 +50,9 @@ def get_packages_and_modules_filenames(root, recursive=False):
         
     if isinstance(root, types.ModuleType):
         root_module = root
-        root_path = os.path.dirname(root_module.__file__)
-    elif isinstance(root, str):
-        root_path = os.path.abspath(root)
+        root_path = pathlib.Path(root_module).parent
+    elif isinstance(root, (str, pathlib.PurePath)):
+        root_path = pathlib.Path(root).absolute()
         # Not making `root_module`, it might not be imported.
     
     ######################################################
@@ -60,7 +61,7 @@ def get_packages_and_modules_filenames(root, recursive=False):
         
     for entry in os.listdir(root_path):
         
-        full_path = os.path.join(root_path, entry)
+        full_path = root_path / entry
         
         if is_module(full_path):
             result.append(entry)
@@ -73,14 +74,13 @@ def get_packages_and_modules_filenames(root, recursive=False):
                     full_path,
                     recursive=True
                 )
-                result += [os.path.join(entry, thing) for thing in
-                           inner_results]
+                result += [entry / thing for thing in inner_results]
     
     ### Filtering out duplicate filenames for the same module: ################
     #                                                                         #
                 
     filename_to_module_name = {
-        filename: os.path.splitext(filename)[0] for filename in result
+        filename: filename[:-len(filename.suffix)] for filename in result
     }
     module_name_to_filenames = \
         dict_tools.reverse_with_set_values(filename_to_module_name)
@@ -92,7 +92,7 @@ def get_packages_and_modules_filenames(root, recursive=False):
         filenames_by_priority = sorted(
             filenames,
             key=lambda filename:
-                _extensions_by_priority.index(os.path.splitext(filename)[1]),
+                _extensions_by_priority.index(filename.suffix),
         )
         redundant_filenames = filenames_by_priority[1:]
         for redundant_filename in redundant_filenames:
@@ -102,18 +102,17 @@ def get_packages_and_modules_filenames(root, recursive=False):
     ### Done filtering duplicate filenames for the same module. ###############
     
     
-    return [os.path.join(os.path.dirname(full_path), entry) for entry in
-            result]
+    return [root_path / entry for entry in result]
 
 
 def is_package(path):
     '''Is the given path a Python package?'''
-    return os.path.isdir(path) and \
-           glob.glob(os.path.join(path, '__init__.*'))
+    path = pathlib.Path(path)
+    return path.is_dir() and list(path.glob('__init__.*'))
 
 
 def is_module(path):
     '''Is the given path a Python single-file module?'''
-    extension = os.path.splitext(path)[1]
-    return extension.lower() in ['.py', '.pyc', '.pyo', '.pyw']
+    path = pathlib.Path(path)
+    return path.suffix.lower() in ['.py', '.pyc', '.pyo', '.pyw', '.pyd']
 
