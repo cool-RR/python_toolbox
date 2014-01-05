@@ -6,6 +6,7 @@
 import pathlib
 import re
 
+from python_toolbox import cute_iter_tools
 from python_toolbox import context_management
 
 
@@ -15,7 +16,15 @@ numbered_name_pattern = re.compile(
     r'''(?P<raw_name>.*) \((?P<number>[0-9]+)\)'''
 )
 
-def _get_next_name(path):
+def _get_next_path(path):
+    '''
+    Get the name that `path` should be renamed to if taken.
+    
+    For example, "c:\example.ogg" would become "c:\example (1).ogg", while
+    "c:\example (1).ogg" would become "c:\example (2).ogg".
+    
+    (Uses `Path` objects rather than strings.)
+    '''
     assert isinstance(path, pathlib.Path)
     suffix = path.suffix
     suffixless_name = path.name[:-len(suffix)]
@@ -33,28 +42,35 @@ def _get_next_name(path):
     return pathlib.Path(
         '{}{}{}'.format(parent_with_separator, fixed_suffixless_name, suffix)
     )
-    
-    
-class FileContainer(context_management.ContextManager):
-    def __init__(self, file):
-        self.file = file
-        
-    def __exit__(self, exc_type, exc_value, exc_traceback):
-        return self.file.__exit__(exc_type, exc_value, exc_traceback)
-        
 
+
+def iterate_file_paths(path):
+    '''
+    Iterate over file paths, hoping to find one that's available.
+    
+    For example, when given "c:\example.ogg", would first yield
+    "c:\example.ogg", then "c:\example (1).ogg", then "c:\example (2).ogg", and
+    so on.
+    
+    (Uses `Path` objects rather than strings.)
+    '''
+    while True:
+        yield path
+        path = _get_next_path(path)
+    
+    
 def create_file_renaming_if_taken(path, mode='x',
                                   buffering=-1, encoding=None,
                                   errors=None, newline=None):
     assert 'x' in mode
-    current_path = pathlib.Path(path)
-    for i in range(N_MAX_ATTEMPTS):
+    for path in cute_iter_tools.shorten(iterate_file_paths(pathlib.Path(path)),
+                                        N_MAX_ATTEMPTS):
         try:
-            return current_path.open(mode, buffering=buffering,
+            return path.open(mode, buffering=buffering,
                                      encoding=encoding, errors=errors,
                                      newline=newline)
         except FileExistsError:
-            current_path = _get_next_name(current_path)
+            pass
     else:
         raise Exception("Exceeded {} tries, can't create file {}".format(
             N_MAX_ATTEMPTS,
