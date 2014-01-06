@@ -145,12 +145,16 @@ my_classifiers = [
 ]
 
 
+install_requires = ['setuptools']
+if sys.version_info[:2] <= (3, 3):
+    install_requires.append('pathlib>=0.97')
+    
+
 setuptools.setup(
     name='python_toolbox',
     version='0.6.3',
-    requires=['setuptools'],
     test_suite='nose.collector',
-    install_requires=['setuptools', 'pathlib>=0.97'],
+    install_requires=install_requires,
     tests_require=['nose>=1.0.0',
                    'docutils>=0.8'],
     description='A collection of Python tools for various tasks',

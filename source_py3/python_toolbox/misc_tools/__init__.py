@@ -9,7 +9,7 @@ from .misc_tools import (
     is_magic_variable_name, get_actual_type, is_number, identity_function,
     do_nothing, OwnNameDiscoveringDescriptor, find_clear_place_on_circle,
     general_sum, general_product, is_legal_email_address, is_type, NonInstatiable,
-    repeat_getattr
+    repeat_getattr, add_extension_if_plain
 )
 from . import name_mangling
 from .proxy_property import ProxyProperty
