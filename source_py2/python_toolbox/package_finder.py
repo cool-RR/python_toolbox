@@ -80,7 +80,7 @@ def get_packages_and_modules_filenames(root, recursive=False):
     #                                                                         #
                 
     filename_to_module_name = {
-        filename: filename[:-len(filename.suffix)] for filename in result
+        filename: filename.stem for filename in result
     }
     module_name_to_filenames = \
         dict_tools.reverse_with_set_values(filename_to_module_name)

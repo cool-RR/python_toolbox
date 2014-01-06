@@ -32,7 +32,7 @@ def zip_folder(source_folder, zip_path, ignored_patterns=()):
     ignored_re_patterns = [re.compile(fnmatch.translate(ignored_pattern)) for
                            ignored_pattern in ignored_patterns]
     
-    zip_name = zip_path.name[:-len(zip_path.suffix)]
+    zip_name = zip_path.stem
     
     internal_pure_path = pathlib.PurePath(source_folder.name)
             
