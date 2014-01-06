@@ -28,20 +28,26 @@ This module contains SMTP connection wrapper.
 """
 
 import smtplib
+import socket
 
-__all__ = ['SMTP', 'GMailSMTP', 'SendGridSMTP', 'MailcatcherSMTP']
+TimeoutException = socket.timeout
+
+__all__ = ['SMTP', 'GMailSMTP', 'SendGridSMTP', 'MailcatcherSMTP',
+           'TimeoutException']
 
 
 class SMTP(object):
     """Wrapper around :py:class:`smtplib.SMTP` class."""
 
-    def __init__(self, host, port=25, login=None, password=None, tls=False):
+    def __init__(self, host=None, port=25, login=None, password=None,
+                 tls=False, timeout=None):
         self._conn = None
         self._host = host
         self._port = port
         self._login = login
         self._password = password
         self._tls = tls
+        self._timeout = timeout
 
     @property
     def is_connected(self):
@@ -61,7 +67,11 @@ class SMTP(object):
             except (AttributeError, smtplib.SMTPServerDisconnected):
                 pass
 
-            self._conn = smtplib.SMTP(self._host, self._port)
+            if self._timeout:
+                self._conn = smtplib.SMTP(self._host, self._port,
+                                          timeout=self._timeout)
+            else:
+                self._conn = smtplib.SMTP(self._host, self._port)
 
         if self._tls:
             self._conn.starttls()
@@ -75,7 +85,9 @@ class SMTP(object):
             self._connect()
 
         msg = envelope.to_mime_message()
-        return self._conn.sendmail(msg['From'], msg['To'], msg.as_string())
+        to_addrs = [envelope._addrs_to_header([addr]) for addr in envelope._to + envelope._cc + envelope._bcc]
+
+        return self._conn.sendmail(msg['From'], to_addrs, msg.as_string())
 
 
 class GMailSMTP(SMTP):
@@ -84,7 +96,7 @@ class GMailSMTP(SMTP):
     GMAIL_SMTP_HOST = 'smtp.googlemail.com'
     GMAIL_SMTP_TLS = True
 
-    def __init__(self, login, password):
+    def __init__(self, login=None, password=None):
         super(GMailSMTP, self).__init__(
             self.GMAIL_SMTP_HOST, tls=self.GMAIL_SMTP_TLS, login=login,
             password=password
@@ -98,7 +110,7 @@ class SendGridSMTP(SMTP):
     SENDGRID_SMTP_PORT = 587
     SENDGRID_SMTP_TLS = False
 
-    def __init__(self, login, password):
+    def __init__(self, login=None, password=None):
         super(SendGridSMTP, self).__init__(
             self.SENDGRID_SMTP_HOST, port=self.SENDGRID_SMTP_PORT,
             tls=self.SENDGRID_SMTP_TLS, login=login,
