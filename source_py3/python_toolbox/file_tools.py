@@ -28,20 +28,20 @@ def _get_next_path(path):
     '''
     assert isinstance(path, pathlib.Path)
     suffix = path.suffix
-    suffixless_name = path.name[:-len(suffix)] if suffix else path.name
+    stem = path.stem
     parent_with_separator = str(path)[:-len(path.name)]
     assert pathlib.Path('{}{}{}'.format(parent_with_separator,
-                                        suffixless_name, suffix)) == path
-    match = numbered_name_pattern.match(suffixless_name)
+                                        stem, suffix)) == path
+    match = numbered_name_pattern.match(stem)
     if match:
-        fixed_suffixless_name = '{} ({})'.format(
+        fixed_stem = '{} ({})'.format(
             match.group('raw_name'),
             int(match.group('number'))+1,
         )
     else:
-        fixed_suffixless_name = '{} (1)'.format(suffixless_name,)
+        fixed_stem = '{} (1)'.format(stem,)
     return pathlib.Path(
-        '{}{}{}'.format(parent_with_separator, fixed_suffixless_name, suffix)
+        '{}{}{}'.format(parent_with_separator, fixed_stem, suffix)
     )
 
 

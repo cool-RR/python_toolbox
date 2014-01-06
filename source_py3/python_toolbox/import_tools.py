@@ -35,7 +35,7 @@ def import_all(package, exclude='__init__', silent_fail=False):
     
     names = {}
     for path in paths:
-        name = str(path.name[:-len(path.suffix)] if path.suffix else path.name)
+        name = path.stem
         if name == exclude:
             continue
         full_name = package.__name__ + '.' + name
@@ -164,8 +164,7 @@ def import_by_path(path, name=None, keep_in_sys_modules=True):
         module = _import_by_path_from_zip(path)
         
     else: # '.zip' not in path
-        short_name = str(path.name[:-len(path.suffix)] if path.suffix
-                         else path.name)
+        short_name = path.stem
         
         if name is None: name = short_name
         my_file = None
