@@ -240,7 +240,7 @@ def add_extension_if_plain(path, extension):
         assert extension.startswith('.')
         return pathlib.Path(str(path) + extension)
         
-        return path
+    return path
     
     
 def general_sum(things, start=None):
