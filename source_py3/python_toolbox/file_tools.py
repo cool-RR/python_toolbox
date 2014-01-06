@@ -28,20 +28,20 @@ def _get_next_path(path):
     '''
     assert isinstance(path, pathlib.Path)
     suffix = path.suffix
-    suffixless_last_part = path.parts[-1][:-len(suffix)]
-    head = str(path)[:-len(path.parts[-1])]
-    assert pathlib.Path('{}{}{}'.format(head,
-                                        suffixless_last_part, suffix)) == path
-    match = numbered_name_pattern.match(suffixless_last_part)
+    suffixless_name = path.name[:-len(suffix)] if suffix else path.name
+    parent_with_separator = str(path)[:-len(path.name)]
+    assert pathlib.Path('{}{}{}'.format(parent_with_separator,
+                                        suffixless_name, suffix)) == path
+    match = numbered_name_pattern.match(suffixless_name)
     if match:
         fixed_suffixless_name = '{} ({})'.format(
             match.group('raw_name'),
             int(match.group('number'))+1,
         )
     else:
-        fixed_suffixless_name = '{} (1)'.format(suffixless_last_part,)
+        fixed_suffixless_name = '{} (1)'.format(suffixless_name,)
     return pathlib.Path(
-        '{}{}{}'.format(head, fixed_suffixless_name, suffix)
+        '{}{}{}'.format(parent_with_separator, fixed_suffixless_name, suffix)
     )
 
 
@@ -62,12 +62,12 @@ def iterate_file_paths(path):
     
 def create_folder_renaming_if_taken(path):
     '''
-    Create a new folder with name `path` for writing, renaming if name taken.
+    Create a new folder with name `path`, renaming it if name taken.
     
-    If the name given is "example", the new name would be "example
-    (1)", and if that's taken "example (1)", and so on.
+    If the name given is "example", the new name would be "example (1)", and if
+    that's taken "example (2)", and so on.
     
-    Returns a path object to the newly-created folder
+    Returns a path object to the newly-created folder.
     '''
     for path in cute_iter_tools.shorten(iterate_file_paths(pathlib.Path(path)),
                                         N_MAX_ATTEMPTS):
