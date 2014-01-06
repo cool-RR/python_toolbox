@@ -232,15 +232,14 @@ def find_clear_place_on_circle(circle_points, circle_size=1):
         
     
 def add_extension_if_plain(path, extension):
-    '''Add `extenstion` to a file path if it doesn't have an extenstion.'''
+    '''Add `extension` to a file path if it doesn't have an extension.'''
     
     path = pathlib.Path(path)
     
-    if extension:
+    if extension and not path.suffix:
         assert extension.startswith('.')
-    if path.suffix:
-        return pathlib.Path(str(path)[:-len(path.suffix) + extension])
-    else:
+        return pathlib.Path(str(path) + extension)
+        
         return path
     
     
