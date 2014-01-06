@@ -4,6 +4,7 @@
 '''Defines various tools related to temporary files.'''
 
 import pathlib
+import os
 import re
 
 from python_toolbox import cute_iter_tools
@@ -27,20 +28,20 @@ def _get_next_path(path):
     '''
     assert isinstance(path, pathlib.Path)
     suffix = path.suffix
-    suffixless_name = path.name[:-len(suffix)]
-    parent_with_separator = str(path)[:-len(path.name)]
-    assert pathlib.Path('{}{}{}'.format(parent_with_separator,
-                                        suffixless_name, suffix)) == path
-    match = numbered_name_pattern.match(suffixless_name)
+    suffixless_last_part = path.parts[-1][:-len(suffix)]
+    head = str(path)[:-len(path.parts[-1])]
+    assert pathlib.Path('{}{}{}'.format(head,
+                                        suffixless_last_part, suffix)) == path
+    match = numbered_name_pattern.match(suffixless_last_part)
     if match:
         fixed_suffixless_name = '{} ({})'.format(
             match.group('raw_name'),
             int(match.group('number'))+1,
         )
     else:
-        fixed_suffixless_name = '{} (1)'.format(suffixless_name,)
+        fixed_suffixless_name = '{} (1)'.format(suffixless_last_part,)
     return pathlib.Path(
-        '{}{}{}'.format(parent_with_separator, fixed_suffixless_name, suffix)
+        '{}{}{}'.format(head, fixed_suffixless_name, suffix)
     )
 
 
@@ -59,6 +60,30 @@ def iterate_file_paths(path):
         path = _get_next_path(path)
     
     
+def create_folder_renaming_if_taken(path):
+    '''
+    Create a new folder with name `path` for writing, renaming if name taken.
+    
+    If the name given is "example", the new name would be "example
+    (1)", and if that's taken "example (1)", and so on.
+    
+    Returns a path object to the newly-created folder
+    '''
+    for path in cute_iter_tools.shorten(iterate_file_paths(pathlib.Path(path)),
+                                        N_MAX_ATTEMPTS):
+        try:
+            os.makedirs(str(path), exist_ok=False)
+        except OSError:
+            pass
+        else:
+            return path
+    else:
+        raise Exception("Exceeded {} tries, can't create folder {}".format(
+            N_MAX_ATTEMPTS,
+            path
+        ))
+    
+
 def create_file_renaming_if_taken(path, mode='x',
                                   buffering=-1, encoding=None,
                                   errors=None, newline=None):
@@ -66,7 +91,7 @@ def create_file_renaming_if_taken(path, mode='x',
     Create a new file with name `path` for writing, renaming it if name taken.
     
     If the name given is "example.zip", the new name would be "example
-    (1).zip", and if that's taken "example (1).zip", and so on.
+    (1).zip", and if that's taken "example (2).zip", and so on.
     
     Returns the file open and ready for writing. It's best to use this as a
     context manager similarly to `open` so the file would be closed.
@@ -94,7 +119,7 @@ def write_to_file_renaming_if_taken(path, data, mode='x',
     Write `data` to a new file with name `path`, renaming it if name taken.
     
     If the name given is "example.zip", the new name would be "example
-    (1).zip", and if that's taken "example (1).zip", and so on.
+    (1).zip", and if that's taken "example (2).zip", and so on.
     '''
     with create_file_renaming_if_taken(
         path, mode=mode, buffering=buffering, encoding=encoding, errors=errors,
