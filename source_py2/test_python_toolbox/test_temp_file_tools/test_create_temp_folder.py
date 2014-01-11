@@ -1,7 +1,7 @@
 # Copyright 2009-2014 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''Testing module for `temp_file_tools.TemporaryFolder`.'''
+'''Testing module for `temp_file_tools.create_temp_folder`.'''
 
 import tempfile
 import os.path
@@ -11,16 +11,16 @@ import nose.tools
 
 import python_toolbox
 
-from python_toolbox.temp_file_tools import TemporaryFolder
+from python_toolbox.temp_file_tools import create_temp_folder
 
 
 def test_basic():
-    with TemporaryFolder() as tf1:
+    with create_temp_folder() as tf1:
         assert isinstance(tf1, pathlib.Path)
         assert tf1.exists()
         assert tf1.is_dir()
         
-        tf2 = TemporaryFolder()
+        tf2 = create_temp_folder()
         with tf2 as tf2:
             assert isinstance(tf2, pathlib.Path)
             assert tf2.exists()
@@ -33,7 +33,7 @@ def test_basic():
         assert tf1.is_dir()
         file_path = (tf1 / 'my_file')
         with file_path.open('w') as my_file:
-            my_file.write(u'Woo hoo!')
+            my_file.write('Woo hoo!')
         
         assert file_path.exists()
         assert file_path.is_file()
@@ -49,11 +49,11 @@ def test_basic():
     
 
 def test_without_pathlib():
-    with TemporaryFolder() as tf1:
+    with create_temp_folder() as tf1:
         assert os.path.exists(str(tf1))
         assert os.path.isdir(str(tf1))
         
-        tf2 = TemporaryFolder()
+        tf2 = create_temp_folder()
         with tf2 as tf2:
             assert os.path.exists(str(tf2))
             assert os.path.isdir(str(tf2))
@@ -82,9 +82,3 @@ def test_without_pathlib():
     
 
 
-def test_repr():
-    tf = TemporaryFolder()
-    assert '(Not created yet)' in repr(tf)
-    with tf:
-        assert '(Not created yet)' not in repr(tf)
-        
