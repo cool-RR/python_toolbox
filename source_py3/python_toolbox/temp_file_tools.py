@@ -34,7 +34,5 @@ def create_temp_folder(suffix='', prefix=tempfile.template):
     Use the `suffix` and `prefix` string arguments to dictate a suffix and/or a
     prefix to the temporary folder's name in the filesystem.        
     '''
-    yield pathlib.Path(
-        tempfile.mkdtemp(suffix=self.suffix, prefix=self.prefix)
-    )
+    yield pathlib.Path(tempfile.mkdtemp(suffix=suffix, prefix=prefix))
     shutil.rmtree(self.path)
