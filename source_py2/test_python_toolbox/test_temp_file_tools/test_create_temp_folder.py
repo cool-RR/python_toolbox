@@ -33,7 +33,7 @@ def test_basic():
         assert tf1.is_dir()
         file_path = (tf1 / 'my_file')
         with file_path.open('w') as my_file:
-            my_file.write('Woo hoo!')
+            my_file.write(u'Woo hoo!')
         
         assert file_path.exists()
         assert file_path.is_file()
@@ -66,7 +66,7 @@ def test_without_pathlib():
         
         file_path = os.path.join(str(tf1), 'my_file')
         with open(file_path, 'w') as my_file:
-            my_file.write('Woo hoo!')
+            my_file.write(u'Woo hoo!')
         
         assert os.path.exists(file_path)
         assert os.path.isfile(file_path)
