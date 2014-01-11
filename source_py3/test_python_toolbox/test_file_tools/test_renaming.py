@@ -10,13 +10,13 @@ from python_toolbox import file_tools
 
 
 def test():
-    with temp_file_tools.TemporaryFolder(prefix='test_python_toolbox_') as \
-                                                              temporary_folder:
+    with temp_file_tools.create_temp_folder(
+                            prefix='test_python_toolbox_') as temp_folder:
         get_file_names_set = \
-                  lambda: set(path.name for path in temporary_folder.glob('*'))
+                  lambda: set(path.name for path in temp_folder.glob('*'))
         assert not get_file_names_set()
         
-        file_path = temporary_folder / 'meow.txt'
+        file_path = temp_folder / 'meow.txt'
         string_to_write = "I'm a cat, hear me meow!"
         
         assert file_tools.write_to_file_renaming_if_taken(
@@ -35,7 +35,7 @@ def test():
         assert file_tools.write_to_file_renaming_if_taken(
                           file_path, string_to_write) == len(string_to_write)
             
-        with (temporary_folder / 'meow (2).txt').open('r') as last_file_input:
+        with (temp_folder / 'meow (2).txt').open('r') as last_file_input:
             assert last_file_input.read() == string_to_write
         
         assert get_file_names_set() == {'meow.txt', 'meow (1).txt',
@@ -56,13 +56,13 @@ def test():
             assert last_file_input.read() == string_to_write
             
         folder_1 = file_tools.create_folder_renaming_if_taken(
-            temporary_folder / 'woof'
+            temp_folder / 'woof'
         )
         folder_2 = file_tools.create_folder_renaming_if_taken(
-            temporary_folder / 'woof'
+            temp_folder / 'woof'
         )
         folder_3 = file_tools.create_folder_renaming_if_taken(
-            temporary_folder / 'woof'
+            temp_folder / 'woof'
         )
         
         assert folder_1.name == 'woof'
