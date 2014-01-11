@@ -15,7 +15,7 @@ from python_toolbox.temp_file_tools import create_temp_folder
 
 
 def test_basic():
-    with () as tf1:
+    with create_temp_folder() as tf1:
         assert isinstance(tf1, pathlib.Path)
         assert tf1.exists()
         assert tf1.is_dir()

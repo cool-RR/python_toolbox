@@ -18,3 +18,5 @@ coverage.xml
 .coverage_html_report
 
 _build
+
+__pycache__
