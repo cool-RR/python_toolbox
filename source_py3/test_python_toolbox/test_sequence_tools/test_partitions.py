@@ -59,6 +59,37 @@ def test_allow_remainder():
         partitions(r, n_partitions=5, allow_remainder=False)
 
 
+def test_larger_on_remainder():
+    r = list(range(9))
+
+    assert partitions(r, 1, larger_on_remainder=True) == \
+           partitions(r, n_partitions=9, larger_on_remainder=True) == \
+           [[0], [1], [2], [3], [4], [5], [6], [7], [8]]
+    assert partitions(r, 2, larger_on_remainder=True) == \
+           partitions(r, n_partitions=4, larger_on_remainder=True) == \
+           partitions(r, n_partitions=4, larger_on_remainder=True,
+                      fill_value='gurr') == \
+           [[0, 1], [2, 3], [4, 5], [6, 7, 8]]
+    assert partitions(r, 3, larger_on_remainder=True) == \
+           partitions(r, n_partitions=3, larger_on_remainder=True,
+                      fill_value='gurr') == \
+           [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
+    assert partitions(tuple(r), 4, larger_on_remainder=True) == \
+           partitions(tuple(r), n_partitions=3, larger_on_remainder=True) == \
+           [(0, 1, 2, 3), (4, 5, 6, 7, 8)]
+    
+    assert partitions([1], 1, larger_on_remainder=True) == \
+           partitions([1], 2, larger_on_remainder=True) == \
+           partitions([1], n_partitions=1, larger_on_remainder=True) == \
+           partitions([1], 3, larger_on_remainder=True) == \
+           partitions([1], 4, larger_on_remainder=True) == \
+           partitions([1], 1000, larger_on_remainder=True) == \
+           partitions([1], 1000, larger_on_remainder=True, fill_value='meow') == \
+           partitions([1], 1000, larger_on_remainder=True, allow_remainder=False,
+                      fill_value='meow') == \
+           [[1]]
+
+
 def test_fill_value():
     '''Test `fill_value` keyword arguemnt for `partitions`.'''
     r = list(range(5))
