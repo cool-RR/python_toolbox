@@ -4,6 +4,7 @@
 '''Defines various tools related to temporary files.'''
 
 import pathlib
+import uuid
 import os
 import re
 
@@ -101,8 +102,8 @@ def create_file_renaming_if_taken(path, mode='x',
                                         N_MAX_ATTEMPTS):
         try:
             return path.open(mode, buffering=buffering,
-                                     encoding=encoding, errors=errors,
-                                     newline=newline)
+                             encoding=encoding, errors=errors,
+                             newline=newline)
         except FileExistsError:
             pass
     else:
@@ -127,3 +128,58 @@ def write_to_file_renaming_if_taken(path, data, mode='x',
         
         return file.write(data)
         
+        
+def atomic_create_and_write(path, data=None, binary=False):
+    '''
+    Write data to file, but use a temporary file as a buffer.
+    
+    The data you write to this file is actuall written to a temporary file in
+    the same folder, and only after you close it, without having an exception
+    raised, it renames the temporary file to your original file name. If an
+    exception was raised during writing it deletes the temporary file.
+    
+    This way you're sure you're not getting a half-baked file.
+    '''    
+    with atomic_create(path, binary=binary) as file:
+        return file.write(data)
+
+
+@context_management.ContextManagerType
+def atomic_create(path, binary=False):
+    '''
+    Create a file for writing, but use a temporary file as a buffer.
+    
+    Use as a context manager:
+    
+        with atomic_create(path) as my_file:
+            my_file.write('Whatever')
+    
+    When you write to this file it actually writes to a temporary file in the
+    same folder, and only after you close it, without having an exception
+    raised, it renames the temporary file to your original file name. If an
+    exception was raised during writing it deletes the temporary file.
+    
+    This way you're sure you're not getting a half-baked file.
+    '''
+    path = pathlib.Path(path)
+    if path.exists():
+        raise Exception("There's already a file called %s" % path)
+    desired_temp_file_path = path.parent / ('._%s.tmp' % path.stem)
+    try:
+        with create_file_renaming_if_taken(desired_temp_file_path,
+                                         'xb' if binary else 'x') as temp_file:
+            actual_temp_file_path = pathlib.Path(temp_file.name)
+            yield temp_file
+        
+        # This part runs only if there was no exception when writing to the
+        # file:
+        if path.exists():
+            raise Exception("There's already a file called %s" % path)
+        actual_temp_file_path.rename(path)
+        assert path.exists()
+        
+    finally:
+        if actual_temp_file_path.exists():
+            actual_temp_file_path.unlink()
+            
+
