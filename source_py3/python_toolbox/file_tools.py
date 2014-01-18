@@ -4,7 +4,6 @@
 '''Defines various tools related to temporary files.'''
 
 import pathlib
-import uuid
 import os
 import re
 
