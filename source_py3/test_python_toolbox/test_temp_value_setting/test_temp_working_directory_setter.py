@@ -19,8 +19,8 @@ class MyException(Exception):
 
 def test():
     '''Test basic workings of `TempWorkingDirectorySetter`.'''
-    with temp_file_tools.TemporaryFolder(prefix='test_python_toolbox_') \
-                                                          as temp_folder:
+    with temp_file_tools.create_temp_folder(
+                                 prefix='test_python_toolbox_') as temp_folder:
         old_cwd = os.getcwd()
         with TempWorkingDirectorySetter(temp_folder):
             
@@ -44,8 +44,8 @@ def test_exception():
     '''Test `TempWorkingDirectorySetter` recovering from exception in suite.'''
     # Not using `assert_raises` here because getting the `with` suite in there
     # would be tricky.
-    with temp_file_tools.TemporaryFolder(prefix='test_python_toolbox_') \
-                                                          as temp_folder:
+    with temp_file_tools.create_temp_folder(
+                                 prefix='test_python_toolbox_') as temp_folder:
         old_cwd = os.getcwd()
         try:
             with TempWorkingDirectorySetter(temp_folder):
@@ -77,8 +77,8 @@ def test_exception():
         
 def test_as_decorator():
     '''Test `TempWorkingDirectorySetter` used as a decorator.'''
-    with temp_file_tools.TemporaryFolder(prefix='test_python_toolbox_') \
-                                                          as temp_folder:
+    with temp_file_tools.create_temp_folder(
+                                 prefix='test_python_toolbox_') as temp_folder:
         old_cwd = os.getcwd()
         @TempWorkingDirectorySetter(temp_folder)
         def f():

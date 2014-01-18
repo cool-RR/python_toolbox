@@ -227,8 +227,8 @@ def test_polite_wrapper():
 def test_folder_handler():
     with temp_value_setting.TempValueSetter((cute_profile.profile_handling,
                                              'threading'), dummy_threading):
-        with temp_file_tools.TemporaryFolder(suffix='_python_toolbox_testing')\
-                                                                as temp_folder:
+        with temp_file_tools.create_temp_folder(
+                              suffix='_python_toolbox_testing') as temp_folder:
             f = cute_profile.profile_ready(profile_handler=temp_folder)(func)
     
             f(1, 2)

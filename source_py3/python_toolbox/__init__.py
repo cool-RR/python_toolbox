@@ -16,6 +16,6 @@ import python_toolbox.version_info
 import python_toolbox.monkeypatch_copyreg
 import python_toolbox.monkeypatch_envelopes
 
-__version_info__ = python_toolbox.version_info.VersionInfo(0, 6, 4)
+__version_info__ = python_toolbox.version_info.VersionInfo(0, 6, 5)
 __version__ = __version_info__.version_text
 
