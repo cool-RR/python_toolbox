@@ -59,7 +59,7 @@ class LazyTuple(collections.Sequence, object):
     Example:
     
         def my_generator():
-            yield 'hello'; yield 'world'; yield 'have'; yield 'fun'
+            yield from ('hello', 'world', 'have', 'fun')
             
         lazy_tuple = LazyTuple(my_generator())
         
