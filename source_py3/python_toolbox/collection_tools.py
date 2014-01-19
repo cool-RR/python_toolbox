@@ -11,7 +11,25 @@ from python_toolbox import nifty_collections
 
 
 @nifty_collections.LazyTuple.factory
-def get_all_contained_counters(counter):
+def get_all_contained_counters(counter, use_lazy_tuple=True):
+    '''
+    Get all counters that are subsets of `counter`.
+    
+    This means all counters that have amounts identical or smaller than
+    `counter` for each of its keys.
+    
+    If `use_lazy_tuple=True` (default), value is returned as a `LazyTuple`, so
+    it may be used both by lazily iterating on it *and* as a tuple. Otherwise
+    an iterator is returned.
+    '''
+    iterator = _get_all_contained_counters(counter)
+    if use_lazy_tuple:
+        return nifty_collections.LazyTuple(iterator)
+    else:
+        return iterator
+        
+
+def _get_all_contained_counters(counter, use_lazy_tuple=True):
     assert isinstance(counter, collections.Counter)
     counter_type = type(counter)
     keys, amounts = zip(
