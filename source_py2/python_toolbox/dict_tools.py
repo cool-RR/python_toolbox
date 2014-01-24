@@ -9,7 +9,7 @@ from python_toolbox import cute_iter_tools
 from python_toolbox import comparison_tools
 
 
-def filter_items(d, condition, force_dict_type=None):
+def filter_items(d, condition, double=False, force_dict_type=None):
     '''
     Get new dict with items from `d` that satisfy the `condition` functions.
     
@@ -18,6 +18,9 @@ def filter_items(d, condition, force_dict_type=None):
     The newly created dict will be of the same class as `d`, e.g. if you passed
     an ordered dict as `d`, the result will be an ordered dict, using the
     correct order.
+    
+    Specify `double=True` to get a tuple of two dicts instead of one. The
+    second dict will have all the rejected items.
     '''
     # todo future: possibly shallow-copy `d` to allow for dict classes that
     # have more state, (like default factory.)
@@ -25,9 +28,19 @@ def filter_items(d, condition, force_dict_type=None):
         dict_type = force_dict_type
     else:
         dict_type = type(d) if (type(d).__name__ != 'dictproxy') else dict
-    return dict_type(
-        (key, value) for (key, value) in d.iteritems() if condition(key, value)
-    )
+        
+    if double:
+        return map(
+            dict_type,
+            cute_iter_tools.double_filter(
+                lambda (key, value): condition(key, value),
+                d.iteritems()
+            )
+        )
+    else:
+        return dict_type(
+                (key, value) for (key, value) in d.iteritems() if condition(key, value)
+        )
 
 
 def get_list(d, iterable):
