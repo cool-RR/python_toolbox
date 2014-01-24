@@ -4,9 +4,11 @@
 '''Tools for monkeypatching.'''
 
 import sys
+import inspect
 import types
 
 from python_toolbox import misc_tools
+from python_toolbox import dict_tools
 from python_toolbox import decorator_tools
 from python_toolbox import caching
 
@@ -84,3 +86,27 @@ def monkeypatch_method(monkeypatchee, name=None, override_if_exists=True):
         
     return decorator
 
+
+def change_defaults(function, new_defaults={}):
+    def change_defaults_(function_, new_defaults_):
+        signature = inspect.Signature.from_function(function_)
+        defaults = list(function_.__defaults__)
+        defaultful_parameters = dict_tools.filter_items(
+            signature.parameters,
+            lambda name, parameter: parameter.default != inspect._empty
+        )
+        for i, (name, parameter) in enumerate(defaultful_parameters):
+            if name in new_defaults_:
+                defaults[i] = new_defaults[name]
+
+    if not callable(function) and new_defaults == {}:
+        # Decorator mode:
+        actual_new_defaults = function
+        return lambda function_: change_defaults_(function_,
+                                                  actual_new_defaults)
+    else:
+        # Normal usage mode:
+        change_defaults(function, new_defaults)
+        
+        
+    
