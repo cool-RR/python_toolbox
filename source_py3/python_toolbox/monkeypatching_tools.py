@@ -88,29 +88,48 @@ def monkeypatch_method(monkeypatchee, name=None, override_if_exists=True):
     return decorator
 
 
-def change_defaults(function, new_defaults={}):
+def change_defaults(function=None, new_defaults={}):
     def change_defaults_(function_, new_defaults_):
         signature = inspect.Signature.from_function(function_)
         defaults = list(function_.__defaults__ or ())
+        kwdefaults = function_.__kwdefaults__ or {}
         defaultful_parameters = dict_tools.filter_items(
             signature.parameters,
             lambda name, parameter: parameter.default != inspect._empty,
             force_dict_type=collections.OrderedDict
         )
-        for i, parameter_name in enumerate(defaultful_parameters):
+        (keyword_only_defaultful_parameters,
+         non_keyword_only_defaultful_parameters) = dict_tools.filter_items(
+             defaultful_parameters,
+             lambda name, parameter: parameter.kind == inspect._KEYWORD_ONLY,
+             double=True, 
+         )
+        
+        for parameter_name in keyword_only_defaultful_parameters:
+            if parameter_name in new_defaults_:
+                kwdefaults[parameter_name] = new_defaults_[parameter_name]
+                
+        for i, parameter_name in \
+                             enumerate(non_keyword_only_defaultful_parameters):
             if parameter_name in new_defaults_:
                 defaults[i] = new_defaults_[parameter_name]
                 
         function_.__defaults__ = tuple(defaults)
+        function_.__kwdefaults__ = kwdefaults
+        
+        return function_
 
-    if not callable(function) and new_defaults == {}:
+    if not callable(function):
         # Decorator mode:
-        actual_new_defaults = new_defaults or function or {}
+        if function is None:
+            actual_new_defaults = new_defaults
+        else:
+            actual_new_defaults = function
         return lambda function_: change_defaults_(function_,
                                                   actual_new_defaults)
     else:
         # Normal usage mode:
-        change_defaults_(function, new_defaults)
+        return change_defaults_(function, new_defaults)
         
         
     

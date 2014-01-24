@@ -17,10 +17,10 @@ def test():
     @monkeypatching_tools.change_defaults({'gamma': 100})
     def f2(alpha, beta, *args, gamma=10, delta=20, **kwargs):
         return (alpha, beta, args, gamma, delta, kwargs)
-    assert f2(1, 2) == (1, 2, (), 100, 400, {})
+    assert f2(1, 2) == (1, 2, (), 100, 20, {})
         
     @monkeypatching_tools.change_defaults(new_defaults={'gamma': 1000})
     def f3(alpha, beta, *args, gamma=10, delta=20, **kwargs):
         return (alpha, beta, args, gamma, delta, kwargs)
-    assert f3(1, 2) == (1, 2, (), 1000, 400, {})
+    assert f3(1, 2) == (1, 2, (), 1000, 20, {})
         
