@@ -20,31 +20,6 @@ class EqualByIdentity:
         return self is other
 
 
-    def test():
-        '''Test basic workings of `monkeypatch_method`.'''
-        
-        class A(EqualByIdentity):
-            pass
-    
-        @monkeypatching_tools.monkeypatch_method(A)
-        def meow(a):
-            return (a, 1)
-        
-        a = A()
-        
-        assert a.meow() == meow(a) == (a, 1)
-        
-        @monkeypatching_tools.monkeypatch_method(A, 'roar')
-        def woof(a):
-            return (a, 2)
-        
-        assert a.roar() == woof(a) == (a, 2)
-        
-        assert not hasattr(a, 'woof')
-        
-        del meow, woof
-        
-        
 def test():
     '''Test basic workings of `monkeypatch_method`.'''
     
