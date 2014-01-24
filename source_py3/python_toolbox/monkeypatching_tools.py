@@ -4,6 +4,7 @@
 '''Tools for monkeypatching.'''
 
 import sys
+import collections
 import inspect
 import types
 
@@ -90,23 +91,26 @@ def monkeypatch_method(monkeypatchee, name=None, override_if_exists=True):
 def change_defaults(function, new_defaults={}):
     def change_defaults_(function_, new_defaults_):
         signature = inspect.Signature.from_function(function_)
-        defaults = list(function_.__defaults__)
+        defaults = list(function_.__defaults__ or ())
         defaultful_parameters = dict_tools.filter_items(
             signature.parameters,
-            lambda name, parameter: parameter.default != inspect._empty
+            lambda name, parameter: parameter.default != inspect._empty,
+            force_dict_type=collections.OrderedDict
         )
-        for i, (name, parameter) in enumerate(defaultful_parameters):
-            if name in new_defaults_:
-                defaults[i] = new_defaults[name]
+        for i, parameter_name in enumerate(defaultful_parameters):
+            if parameter_name in new_defaults_:
+                defaults[i] = new_defaults_[parameter_name]
+                
+        function_.__defaults__ = tuple(defaults)
 
     if not callable(function) and new_defaults == {}:
         # Decorator mode:
-        actual_new_defaults = function
+        actual_new_defaults = new_defaults or function or {}
         return lambda function_: change_defaults_(function_,
                                                   actual_new_defaults)
     else:
         # Normal usage mode:
-        change_defaults(function, new_defaults)
+        change_defaults_(function, new_defaults)
         
         
     
