@@ -23,4 +23,17 @@ def test():
     def f3(alpha, beta, gamma=10, delta=20, *args, **kwargs):
         return (alpha, beta, args, gamma, delta, kwargs)
     assert f3(1, 2) == (1, 2, (), 1000, 20, {})
+    
+    @monkeypatching_tools.change_defaults(new_defaults={'x': 'A', 'z': 'C'})
+    def f4(x='a', y='b', z='c'):
+        return (x, y, z)
+    assert f4() == ('A', 'b', 'C')
+    
+    with cute_testing.RaiseAssertor(Exception):
+        @monkeypatching_tools.change_defaults(new_defaults={'x': 'A', 'z': 'C',
+                                                            'nonexistant': 7,})
+        def f5(x='a', y='b', z='c'):
+            return (x, y, z)
+    
+    
         

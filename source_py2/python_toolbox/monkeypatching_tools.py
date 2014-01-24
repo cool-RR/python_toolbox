@@ -113,6 +113,13 @@ def change_defaults(function=None, new_defaults={}):
             force_dict_type=collections.OrderedDict
         )
         
+        non_existing_arguments = set(new_defaults) - set(defaultful_parameters)
+        if non_existing_arguments:
+            raise Exception("Arguments %s are not defined, or do not have a "
+                            "default defined. (Can't create default value for "
+                            "argument that has no existing default.)"
+                            % non_existing_arguments)
+        
         for i, parameter_name in \
                              enumerate(non_keyword_only_defaultful_parameters):
             if parameter_name in new_defaults_:
