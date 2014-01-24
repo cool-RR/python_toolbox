@@ -116,6 +116,13 @@ def change_defaults(function=None, new_defaults={}):
              double=True, 
          )
         
+        non_existing_arguments = set(new_defaults) - set(defaultful_parameters)
+        if non_existing_arguments:
+            raise Exception("Arguments %s are not defined, or do not have a "
+                            "default defined. (Can't create default value for "
+                            "argument that has no existing default.)"
+                            % non_existing_arguments)
+        
         for parameter_name in keyword_only_defaultful_parameters:
             if parameter_name in new_defaults_:
                 kwdefaults[parameter_name] = new_defaults_[parameter_name]
