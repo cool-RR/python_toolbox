@@ -89,6 +89,17 @@ def monkeypatch_method(monkeypatchee, name=None, override_if_exists=True):
 
 
 def change_defaults(function=None, new_defaults={}):
+    '''
+    Change default values of a function.
+    
+    Include the new defaults in a dict `new_defaults`, with each key being a
+    keyword name and each value being the new default value.
+    
+    Note: This changes the actual function!
+    
+    Can be used both as a straight function and as a decorater to a function to
+    be changed.
+    '''
     def change_defaults_(function_, new_defaults_):
         signature = inspect.Signature.from_function(function_)
         defaults = list(function_.__defaults__ or ())
