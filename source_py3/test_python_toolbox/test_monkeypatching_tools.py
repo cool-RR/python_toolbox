@@ -22,6 +22,31 @@ class EqualByIdentity:
         return self is other
 
 
+    def test():
+        '''Test basic workings of `monkeypatch_method`.'''
+        
+        class A(EqualByIdentity):
+            pass
+    
+        @monkeypatching_tools.monkeypatch_method(A)
+        def meow(a):
+            return (a, 1)
+        
+        a = A()
+        
+        assert a.meow() == meow(a) == (a, 1)
+        
+        @monkeypatching_tools.monkeypatch_method(A, 'roar')
+        def woof(a):
+            return (a, 2)
+        
+        assert a.roar() == woof(a) == (a, 2)
+        
+        assert not hasattr(a, 'woof')
+        
+        del meow, woof
+        
+        
 def test():
     '''Test basic workings of `monkeypatch_method`.'''
     
@@ -45,6 +70,31 @@ def test():
     assert not hasattr(a, 'woof')
     
     del meow, woof
+    
+    
+def test_without_override():
+    
+    class A(EqualByIdentity):
+        def booga(self):
+            return 'Old method'
+
+    @monkeypatching_tools.monkeypatch_method(A, override_if_exists=False)
+    def meow(a):
+        return (a, 1)
+    
+    a = A()
+    
+    assert a.meow() == meow(a) == (a, 1)
+    
+    
+    @monkeypatching_tools.monkeypatch_method(A, override_if_exists=False)
+    def booga():
+        raise RuntimeError('Should never be called.')
+    
+    a = A()
+    
+    assert a.booga() == 'Old method'
+    
     
     
 def test_monkeypatch_property():

@@ -12,7 +12,7 @@ from python_toolbox import caching
 
 
 @decorator_tools.helpful_decorator_builder
-def monkeypatch_method(monkeypatchee, name=None):
+def monkeypatch_method(monkeypatchee, name=None, override_if_exists=True):
     '''
     Monkeypatch a method into a class (or an object).
     
@@ -48,8 +48,8 @@ def monkeypatch_method(monkeypatchee, name=None):
             
             new_method = function if monkeypatchee_is_a_class else \
                              types.MethodType(function, class_of_monkeypatchee)
-            setattr(monkeypatchee, name_, new_method)
-            return function
+            setattr_value = new_method
+            return_value = function
         else:
             # `function` is probably some kind of descriptor.
             if not monkeypatchee_is_a_class:
@@ -76,8 +76,11 @@ def monkeypatch_method(monkeypatchee, name=None):
                     )
                 #                                                             #
                 ### Finished getting name of descriptor. ######################
-            setattr(monkeypatchee, name_, function)
-            return function
+            setattr_value = return_value = function
+
+        if override_if_exists or not hasattr(monkeypatchee, name_):
+            setattr(monkeypatchee, name_, setattr_value)
+        return return_value
         
     return decorator
 
