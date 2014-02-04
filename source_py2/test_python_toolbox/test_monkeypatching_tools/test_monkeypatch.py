@@ -21,12 +21,12 @@ class EqualByIdentity(object):
 
 
 def test():
-    '''Test basic workings of `monkeypatch_method`.'''
+    '''Test basic workings of `monkeypatch`.'''
     
     class A(EqualByIdentity):
         pass
 
-    @monkeypatching_tools.monkeypatch_method(A)
+    @monkeypatching_tools.monkeypatch(A)
     def meow(a):
         return (a, 1)
     
@@ -34,7 +34,7 @@ def test():
     
     assert a.meow() == meow(a) == (a, 1)
     
-    @monkeypatching_tools.monkeypatch_method(A, 'roar')
+    @monkeypatching_tools.monkeypatch(A, 'roar')
     def woof(a):
         return (a, 2)
     
@@ -51,7 +51,7 @@ def test_without_override():
         def booga(self):
             return 'Old method'
 
-    @monkeypatching_tools.monkeypatch_method(A, override_if_exists=False)
+    @monkeypatching_tools.monkeypatch(A, override_if_exists=False)
     def meow(a):
         return (a, 1)
     
@@ -60,7 +60,7 @@ def test_without_override():
     assert a.meow() == meow(a) == (a, 1)
     
     
-    @monkeypatching_tools.monkeypatch_method(A, override_if_exists=False)
+    @monkeypatching_tools.monkeypatch(A, override_if_exists=False)
     def booga():
         raise RuntimeError('Should never be called.')
     
@@ -75,7 +75,7 @@ def test_monkeypatch_property():
     class A(EqualByIdentity):
         pass
 
-    @monkeypatching_tools.monkeypatch_method(A)
+    @monkeypatching_tools.monkeypatch(A)
     @property
     def meow(a):
         return (type(a), 'bark')
@@ -90,7 +90,7 @@ def test_monkeypatch_cached_property():
     class A(EqualByIdentity):
         pass
 
-    @monkeypatching_tools.monkeypatch_method(A)
+    @monkeypatching_tools.monkeypatch(A)
     @caching.CachedProperty
     def meow(a):
         return (type(a), uuid.uuid4().hex)
@@ -110,13 +110,13 @@ def test_helpful_message_when_forgetting_parentheses():
     '''Test user gets a helpful exception when when forgetting parentheses.'''
 
     def confusedly_forget_parentheses():
-        @monkeypatching_tools.monkeypatch_method
+        @monkeypatching_tools.monkeypatch
         def f(): pass
         
     with cute_testing.RaiseAssertor(
         TypeError,
         'It seems that you forgot to add parentheses after '
-        '`@monkeypatch_method` when decorating the `f` function.'
+        '`@monkeypatch` when decorating the `f` function.'
     ):
         
         confusedly_forget_parentheses()
@@ -129,7 +129,7 @@ def test_monkeypatch_staticmethod():
         def my_static_method(x):
             raise 'Flow should never reach here.'
         
-    @monkeypatching_tools.monkeypatch_method(A)
+    @monkeypatching_tools.monkeypatch(A)
     @staticmethod
     def my_static_method(x):
         return (x, 'Success')
@@ -151,7 +151,7 @@ def test_monkeypatch_classmethod():
         def my_class_method(cls):
             raise 'Flow should never reach here.'
         
-    @monkeypatching_tools.monkeypatch_method(A)
+    @monkeypatching_tools.monkeypatch(A)
     @classmethod
     def my_class_method(cls):
         return cls
@@ -169,7 +169,7 @@ def test_monkeypatch_classmethod():
         
 def test_monkeypatch_classmethod_subclass():
     '''
-    Test `monkeypatch_method` on a subclass of `classmethod`.
+    Test `monkeypatch` on a subclass of `classmethod`.
     
     This is useful in Django, that uses its own `classmethod` subclass.
     '''
@@ -181,7 +181,7 @@ def test_monkeypatch_classmethod_subclass():
         def my_funky_class_method(cls):
             raise 'Flow should never reach here.'
         
-    @monkeypatching_tools.monkeypatch_method(A)
+    @monkeypatching_tools.monkeypatch(A)
     @FunkyClassMethod
     def my_funky_class_method(cls):
         return cls
@@ -206,11 +206,11 @@ def test_directly_on_object():
     a0 = A()
     a1 = A()
 
-    @monkeypatching_tools.monkeypatch_method(a0)
+    @monkeypatching_tools.monkeypatch(a0)
     def meow(a):
         return 'not meow'
     
-    @monkeypatching_tools.monkeypatch_method(a0)
+    @monkeypatching_tools.monkeypatch(a0)
     def woof(a):
         return 'not woof'
     
@@ -226,3 +226,21 @@ def test_directly_on_object():
         
     assert A.woof(a0) == (a0, 'woof')
     
+
+def test_monkeypatch_module():
+    module = types.ModuleType('module')
+    assert not hasattr(module, 'meow')
+    @monkeypatching_tools.monkeypatch(module)
+    def meow():
+        return 'First meow'
+    assert module.meow() == 'First meow'
+    
+    @monkeypatching_tools.monkeypatch(module, override_if_exists=False)
+    def meow():
+        return 'Second meow'
+    assert module.meow() == 'First meow'
+    
+    @monkeypatching_tools.monkeypatch(module, name='woof', override_if_exists=False)
+    def meow():
+        return 'Third meow'
+    assert module.woof() == 'Third meow'

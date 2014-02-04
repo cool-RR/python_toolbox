@@ -17,16 +17,16 @@ from python_toolbox import caching
 
 
 @decorator_tools.helpful_decorator_builder
-def monkeypatch_method(monkeypatchee, name=None, override_if_exists=True):
+def monkeypatch(monkeypatchee, name=None, override_if_exists=True):
     '''
-    Monkeypatch a method into a class (or an object).
+    Monkeypatch a method into a class (or object), or any object into module.
     
     Example:
     
         class A(object):
             pass
     
-        @monkeypatch_method(A)
+        @monkeypatch(A)
         def my_method(a):
             return (a, 'woo!')
         
@@ -47,8 +47,11 @@ def monkeypatch_method(monkeypatchee, name=None, override_if_exists=True):
     
     def decorator(function):
         # Note that unlike most decorators, this decorator retuns the function
-        # it was given without modifying it. It modifies the class only.
-        if isinstance(function, types.FunctionType):
+        # it was given without modifying it. It modifies the class/module only.
+        if isinstance(monkeypatchee, types.ModuleType):
+            name_ = name or function.__name__
+            setattr_value = return_value = function
+        elif isinstance(function, types.FunctionType):
             name_ = name or function.__name__
             
             new_method = types.MethodType(function, None, monkeypatchee) if \
@@ -76,7 +79,7 @@ def monkeypatch_method(monkeypatchee, name=None, override_if_exists=True):
                     name_ = function.fget.__name__
                 else:
                     raise NotImplementedError(
-                        "`monkeypatch_method` doesn't know how to get the "
+                        "`monkeypatch` doesn't know how to get the "
                         "name of this kind of function automatically, try "
                         "manually."
                     )

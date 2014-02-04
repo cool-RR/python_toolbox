@@ -58,4 +58,14 @@ def get_n_identical_edge_characters(string, character=None, head=True):
         if c != character:
             return i
     else:
-        return len(string)
+        return len(string)    
+
+def rreplace(s, old, new, count=None):
+    '''
+    Replace instances of `old` in `s` with `new`, starting from the right.
+    
+    This function is to `str.replace` what `str.rsplit` is to `str.split`.
+    '''
+    return new.join(s.rsplit(old, count) if count is not None
+                    else s.rsplit(old))
+    
