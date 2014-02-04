@@ -59,3 +59,5 @@ def get_n_identical_edge_characters(string, character=None, head=True):
             return i
     else:
         return len(string)
+    
+

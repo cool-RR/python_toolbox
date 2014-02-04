@@ -4,4 +4,4 @@
 '''Defines string-related tools.'''
 
 from .string_tools import docstring_trim, get_n_identical_edge_characters
-from . import conversions
+from . import case_conversions
