@@ -285,7 +285,7 @@ def fill(iterable, fill_value=None, fill_value_maker=None, length=infinity,
     If `length` is given, shortens the iterator to that length.
     
     If `sequence_type` is given, instead of returning an iterator, this
-    function will return a sequenceo of that type.
+    function will return a sequence of that type.
     '''
     iterator = _fill(iterable, fill_value=fill_value,
                      fill_value_maker=fill_value_maker, 
