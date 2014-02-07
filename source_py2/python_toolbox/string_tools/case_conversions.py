@@ -7,7 +7,7 @@ import sys
 import re
 
 
-def camelcase_to_spacecase(s):
+def camel_case_to_space_case(s):
     '''
     Convert a string from camelcase to spacecase.
     
