@@ -9,8 +9,8 @@ See its documentation for more information.
 
 import threading
 import collections
+import itertools
 
-from python_toolbox import cute_iter_tools
 from python_toolbox import decorator_tools
 from python_toolbox import comparison_tools
 from python_toolbox import sequence_tools
@@ -176,8 +176,8 @@ class LazyTuple(collections.Sequence, object):
     def __eq__(self, other):
         if not sequence_tools.is_immutable_sequence(other):
             return False
-        for i, j in cute_iter_tools.izip_longest(self, other,
-                                                 fillvalue=_SENTINEL):
+        for i, j in itertools.izip_longest(self, other,
+                                           fillvalue=_SENTINEL):
             if (i is _SENTINEL) or (j is _SENTINEL):
                 return False
             if i != j:
@@ -201,8 +201,8 @@ class LazyTuple(collections.Sequence, object):
             return False
         elif not self and not other:
             return False
-        for a, b in cute_iter_tools.izip_longest(self, other,
-                                                 fillvalue=_SENTINEL):
+        for a, b in itertools.izip_longest(self, other,
+                                           fillvalue=_SENTINEL):
             if a is _SENTINEL:
                 # `self` ran out. Now there can be two cases: (a) `other` ran
                 # out too or (b) `other` didn't run out yet. In case of (a), we
