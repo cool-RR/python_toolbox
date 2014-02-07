@@ -5,12 +5,12 @@
 
 import copy
 import pickle
+import itertools
 import cPickle
 import abc
 
 import nose
 
-from python_toolbox import cute_iter_tools
 from python_toolbox import cute_testing
 from python_toolbox import import_tools
 from python_toolbox import queue_tools
@@ -43,7 +43,7 @@ def test():
     checkers = [_check_deepcopying, _check_process_passing]
     cross_process_persistent_classes = [A, CrossProcessPersistent]
     
-    iterator = cute_iter_tools.product(
+    iterator = itertools.product(
         checkers,
         cross_process_persistent_classes,
     )
@@ -170,7 +170,7 @@ def test_helpful_warnings_for_old_protocols():
     cross_process_persistents = [A(), CrossProcessPersistent()]
     old_protocols = [0, 1]
     
-    iterator = cute_iter_tools.product(
+    iterator = itertools.product(
         pickle_modules,
         cross_process_persistents,
         old_protocols
