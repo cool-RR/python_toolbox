@@ -136,29 +136,6 @@ def get_length(iterable):
     return i
 
 
-def product(*args, **kwargs):
-    '''
-    Cartesian product of input iterables.
-
-    Equivalent to nested for-loops in a generator expression. `product(A, B)`
-    returns the same as `((x,y) for x in A for y in B)`.
-    
-    More examples:
-    
-        list(product('ABC', 'xy')) == ['Ax', 'Ay', 'Bx', 'By', 'Cx', 'Cy']
-        
-        list(product(range(2), repeat=2) == ['00', '01', '10', '11']
-        
-    '''
-    # todo: revamp, probably take from stdlib
-    pools = map(tuple, args) * kwargs.get('repeat', 1)
-    result = [[]]
-    for pool in pools:
-        result = [x + [y] for x in result for y in pool]
-    for prod in result:
-        yield tuple(prod)
-
-
 def iter_with(iterable, context_manager):
     '''Iterate on `iterable`, `with`ing the context manager on every `next`.'''
     
@@ -177,31 +154,6 @@ def iter_with(iterable, context_manager):
         yield next_item
         
         
-def izip_longest(*iterables, **kwargs):
-    '''
-    izip_longest(iter1 [,iter2 [...]], [fillvalue=None]) -> izip_longest object
-    
-    Return an `izip_longest` object whose `.next()` method returns a `tuple`
-    where the i-th element comes from the i-th iterable argument. The `.next()`
-    method continues until the longest iterable in the argument sequence is
-    exhausted and then it raises `StopIteration`. When the shorter iterables
-    are exhausted, `fillvalue` is substituted in their place. The `fillvalue`
-    defaults to `None` or can be specified by a keyword argument.
-    '''    
-    # This is a really obfuscated algorithm, simplify and/or explain
-    fill_value = kwargs.get('fillvalue', None)
-    def sentinel(counter=([fill_value] * (len(iterables) - 1)).pop):
-        yield counter()
-    fillers = itertools.repeat(fill_value)
-    iterables = [itertools.chain(iterable, sentinel(), fillers) for iterable
-                 in iterables]
-    try:
-        for tuple_ in itertools.izip(*iterables):
-            yield tuple_
-    except IndexError:
-        raise StopIteration
-
-
 def get_items(iterable, n, container_type=tuple):
     '''
     Get the next `n` items from the iterable as a `tuple`.
@@ -228,32 +180,27 @@ def double_filter(filter_function, iterable):
     true_deque = collections.deque()
     false_deque = collections.deque()
     
-    def process_value():
-        value = next(iterator)
-        if filter_function(value):
-            true_deque.append(value)
-        else:
-            false_deque.append(value)
-    
     def make_true_iterator():
         while True:
             try:
                 yield true_deque.popleft()
             except IndexError:
-                try:
-                    process_value()
-                except StopIteration:
-                    break
+                value = next(iterator) # `StopIteration` exception recycled.
+                if filter_function(value):
+                    yield value
+                else:
+                    false_deque.append(value)
 
     def make_false_iterator():
         while True:
             try:
                 yield false_deque.popleft()
             except IndexError:
-                try:
-                    process_value()
-                except StopIteration:
-                    break
+                value = next(iterator) # `StopIteration` exception recycled.
+                if filter_function(value):
+                    true_deque.append(value)
+                else:
+                    yield value
                 
     return (make_true_iterator(), make_false_iterator())
 
