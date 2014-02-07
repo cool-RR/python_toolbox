@@ -5,7 +5,7 @@ from python_toolbox.string_tools import case_conversions
 
 
 def test():
-    assert case_conversions.camelcase_to_spacecase('HelloWorld') == \
+    assert case_conversions.camel_case_to_space_case('HelloWorld') == \
                                                                   'Hello world'
     assert case_conversions.camel_case_to_lower_case('HelloWorld') == \
                                                                   'hello_world'

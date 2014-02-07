@@ -47,8 +47,8 @@ def get_event_code_from_name(name, evt_handler_type):
     be searched for event codes in precedence to `wx` and the event handler
     type's own module.
     '''
-    processed_name = 'EVT_%s' % string_tools.conversions.\
-                                camelcase_to_underscore(name).upper()
+    processed_name = 'EVT_%s' % string_tools.case_conversions. \
+                                camel_case_to_lower_case(name).upper()
     raw_event_modules = \
         (evt_handler_type.event_modules if
          sequence_tools.is_sequence(evt_handler_type.event_modules) else 
