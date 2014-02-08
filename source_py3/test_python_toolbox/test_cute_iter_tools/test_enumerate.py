@@ -3,6 +3,8 @@
 
 '''Testing module for `cute_iter_tools.enumerate`.'''
 
+
+from python_toolbox import nifty_collections
 from python_toolbox import cute_iter_tools
 
 
@@ -18,4 +20,13 @@ def test():
     for i, j in cute_iter_tools.enumerate(range(5, 0 -1), reverse_index=True):
         assert i == j
         
+    lazy_tuple = cute_iter_tools.enumerate(range(5, 0 -1), reverse_index=True,
+                                           lazy_tuple=True)
     
+    assert isinstance(lazy_tuple, nifty_collections.LazyTuple)
+    assert not lazy_tuple.collected_data
+        
+    for i, j in lazy_tuple:
+        assert i == j
+        
+    assert lazy_tuple.exhausted
