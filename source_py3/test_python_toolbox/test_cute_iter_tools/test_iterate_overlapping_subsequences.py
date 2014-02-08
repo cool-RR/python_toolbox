@@ -4,6 +4,7 @@
 '''Testing module for `cute_iter_tools.iterate_overlapping_subsequences`.'''
 
 from python_toolbox import gc_tools
+from python_toolbox import nifty_collections
 from python_toolbox import cute_testing
 from python_toolbox import sequence_tools
 
@@ -51,6 +52,17 @@ def test_various_lengths():
             wrap_around=True)) == ((0, 1, 2, 3, 4), (1, 2, 3, 4, 5),
             (2, 3, 4, 5, 6), (3, 4, 5, 6, 0), (4, 5, 6, 0, 1), (5, 6, 0, 1, 2),
             (6, 0, 1, 2, 3))
+                                          
+           
+def test_lazy_tuple():
+    lazy_tuple = \
+          iterate_overlapping_subsequences(range(7), length=3, lazy_tuple=True)
+    assert isinstance(lazy_tuple, nifty_collections.LazyTuple)
+    assert not lazy_tuple.collected_data
+    
+    assert lazy_tuple == \
+                        ((0, 1, 2), (1, 2, 3), (2, 3, 4), (3, 4, 5), (4, 5, 6))
+    
                                           
            
 def test_garbage_collection():
