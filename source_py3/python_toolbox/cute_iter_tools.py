@@ -9,11 +9,13 @@ import collections
 import itertools
 import builtins
 
+from python_toolbox import nifty_collections
 
 infinity = float('inf')
 
 
-def iterate_overlapping_subsequences(iterable, length=2, wrap_around=False):
+def iterate_overlapping_subsequences(iterable, length=2, wrap_around=False,
+                                     lazy_tuple=False):
     '''
     Iterate over overlapping subsequences from the iterable.
         
@@ -26,7 +28,21 @@ def iterate_overlapping_subsequences(iterable, length=2, wrap_around=False):
     
     If `wrap_around=True`, the result would be `[(0, 1, 2), (1,
     2, 3), (2, 3, 0), (3, 0, 1)]`.
+    
+    If `lazy_tuple=True`, returns a `LazyTuple` rather than an iterator.
     '''
+    iterator = _iterate_overlapping_subsequences(
+        length=length, wrap_around=wrap_around
+    )
+
+    if lazy_tuple:
+        return nifty_collections.LazyTuple(iterator)
+    else:
+        return iterator
+
+
+def _iterate_overlapping_subsequences(iterable, length, wrap_around):
+
     if length == 1:
         yield from iterable
     
@@ -65,7 +81,7 @@ def iterate_overlapping_subsequences(iterable, length=2, wrap_around=False):
         yield tuple(deque)
         
     
-def shorten(iterable, n):
+def shorten(iterable, n, lazy_tuple=False):
     '''
     Shorten an iterable to length `n`.
     
@@ -73,7 +89,18 @@ def shorten(iterable, n):
     iterable stops iteration by itself.)
     
     `n` may be infinite.
+
+    If `lazy_tuple=True`, returns a `LazyTuple` rather than an iterator.
     '''
+    iterator = _shorten(iterable=iterable, n=n)
+
+    if lazy_tuple:
+        return nifty_collections.LazyTuple(iterator)
+    else:
+        return iterator
+
+
+def _shorten(iterable, n):
 
     if n == infinity:
         yield from iterable
@@ -98,7 +125,18 @@ def enumerate(reversible, reverse_index=False):
     reverse index, by specifying `reverse_index=True`. This causes `i` to count
     down to zero instead of up from zero, so the `i` of the last member will be
     zero.
+    
+    If `lazy_tuple=True`, returns a `LazyTuple` rather than an iterator.
     '''
+    iterator = _enumerate(reversible=reversible, reverse_index=reverse_index)
+
+    if lazy_tuple:
+        return nifty_collections.LazyTuple(iterator)
+    else:
+        return iterator
+
+    
+def _enumerate(reversible, reverse_index):
     if reverse_index is False:
         return builtins.enumerate(reversible)
     else:
@@ -132,8 +170,21 @@ def get_length(iterable):
     return i
 
 
-def iter_with(iterable, context_manager):
-    '''Iterate on `iterable`, `with`ing the context manager on every `next`.'''
+def iter_with(iterable, context_manager, lazy_tuple=False):
+    '''
+    Iterate on `iterable`, `with`ing the context manager on every `next`.
+    
+    If `lazy_tuple=True`, returns a `LazyTuple` rather than an iterator.
+    '''
+    iterator = _iter_with(iterable=iterable, context_manager=context_manager)
+
+    if lazy_tuple:
+        return nifty_collections.LazyTuple(iterator)
+    else:
+        return iterator
+
+    
+def _iter_with(iterable, context_manager):
     
     iterator = iter(iterable)
     
@@ -163,13 +214,15 @@ def get_items(iterable, n, container_type=tuple):
     return container_type(shorten(iterable, n))
 
 
-def double_filter(filter_function, iterable):
+def double_filter(filter_function, iterable, lazy_tuple=False):
     '''
     Filter an `iterable` into two lists according to a `filter_function`.
     
     This is similar to the builtin `filter`, except it returns a tuple of two
     iterators, the first iterating on items that passed the filter function,
     and the second iterating on items that didn't.
+    
+    If `lazy_tuple=True`, returns a `LazyTuple` rather than an iterator.
     '''
     iterator = iter(iterable)
     
@@ -198,7 +251,12 @@ def double_filter(filter_function, iterable):
                 else:
                     yield value
                 
-    return (make_true_iterator(), make_false_iterator())
+    iterators = (make_true_iterator(), make_false_iterator())
+    
+    if lazy_tuple:
+        return tuple(map(nifty_collections.LazyTuple, iterators))
+    else:
+        return iterators
 
 
 
@@ -217,7 +275,7 @@ def get_ratio(filter_function, iterable):
     
 
 def fill(iterable, fill_value=None, fill_value_maker=None, length=infinity,
-         sequence_type=None):
+         sequence_type=None, lazy_tuple=False):
     '''
     Iterate on `iterable`, and after it's exhaused, yield fill values.
     
@@ -228,19 +286,25 @@ def fill(iterable, fill_value=None, fill_value_maker=None, length=infinity,
     If `length` is given, shortens the iterator to that length.
     
     If `sequence_type` is given, instead of returning an iterator, this
-    function will return a sequence of that type.
+    function will return a sequence of that type. If `lazy_tuple=True`, uses a
+    `LazyTuple`. (Can't use both options together.)
     '''
+    # Validating user input:
+    assert (sequence_type is None) or (lazy_tuple is False)
+    
     iterator = _fill(iterable, fill_value=fill_value,
                      fill_value_maker=fill_value_maker, 
                      length=length)
     
-    if sequence_type is None:
+    if lazy_tuple:
+        return nifty_collections.LazyTuple(iterator)
+    elif sequence_type is None:
         return iterator
     else:
         return sequence_type(iterator)
     
     
-def _fill(iterable, fill_value=None, fill_value_maker=None, length=infinity):
+def _fill(iterable, fill_value, fill_value_maker, length):
     if fill_value_maker is not None:
         assert fill_value is None
     else:
