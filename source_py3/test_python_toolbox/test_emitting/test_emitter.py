@@ -1,3 +1,5 @@
+from python_toolbox import misc_tools
+
 from python_toolbox import emitting
 
 
@@ -7,9 +9,9 @@ def test():
     emitter_2 = emitting.Emitter(inputs=(emitter_1,))
     emitter_0 = emitting.Emitter(outputs=(emitter_1,))
 
+    @misc_tools.set_attributes(call_counter=0)
     def my_function():
         my_function.call_counter += 1
-    my_function.call_counter = 0
     
     emitter_1.add_output(my_function)
     

@@ -9,6 +9,7 @@ import re
 import math
 import types
 import functools
+import threading
 
 from python_toolbox import cute_iter_tools
 
@@ -294,3 +295,22 @@ def repeat_getattr(thing, query):
     for attribute_name in attribute_names:
         current = getattr(current, attribute_name)
     return current
+
+
+def set_attributes(**kwargs):
+    def decorator(function):
+        for key, value in kwargs.items():
+            setattr(function, key, value)
+        return function
+    return decorator
+        
+
+pocket_container = threading.local()
+pocket_container.value = None
+@set_attributes(container=pocket_container)
+def pocket(*args):
+    if args:
+        (pocket.container.value,) = args
+    else:
+        return pocket.container.value
+    

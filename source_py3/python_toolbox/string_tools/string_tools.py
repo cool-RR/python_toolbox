@@ -6,6 +6,8 @@
 import sys
 import re
 
+from python_toolbox import cute_iter_tools
+
 
 def docstring_trim(docstring):
     '''Trim a docstring, removing redundant tabs.'''
@@ -70,3 +72,9 @@ def rreplace(s, old, new, count=None):
     return new.join(s.rsplit(old, count) if count is not None
                     else s.rsplit(old))
     
+    
+def split(string, separator, max_split=-1, blank_fill=False):
+    return tuple(
+        cute_iter_tools.fill(string.split(separator, max_split),
+                             fill_value='')
+    )

@@ -6,18 +6,18 @@
 import nose
 
 from python_toolbox import context_management
+from python_toolbox import misc_tools
 
 from python_toolbox.caching import cache, CachedType, CachedProperty
 
 
+@misc_tools.set_attributes(i=0)
 def counting_func(self):
     '''Return a bigger number every time.'''
-    if not hasattr(counting_func, 'i'):
-        counting_func.i = 0
     try:
         return counting_func.i
     finally:
-        counting_func.i = (counting_func.i + 1)
+        counting_func.i += 1
     
         
 def test():
