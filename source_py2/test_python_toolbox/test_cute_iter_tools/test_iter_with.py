@@ -38,7 +38,7 @@ def test():
         assert inactive_context_manager.counter == -1
         assert inactive_context_manager.active is False
         
-    def test_lazy_tuple():
+def test_lazy_tuple():
     
     active_context_manager = MyContextManager()
     inactive_context_manager = MyContextManager()
@@ -47,7 +47,7 @@ def test():
     assert isinstance(lazy_tuple, nifty_collections.LazyTuple)
     assert not lazy_tuple.collected_data
     
-    for i, j in zip(lazy_tuple, range(5)):
+    for i, j in itertools.izip(lazy_tuple, range(5)):
         assert i == j == active_context_manager.counter
         assert active_context_manager.active is False
         assert inactive_context_manager.counter == -1
