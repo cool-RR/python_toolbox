@@ -331,6 +331,24 @@ def _fill(iterable, fill_value, fill_value_maker, length):
                 yield fill_value_maker()
                 
     
+def call_until_exception(function, exception, lazy_tuple=False):
+    '''Iterate on values returned from `function` until getting `exception`.'''
+    iterator = _call_until_exception(function, exception)
+    if lazy_tuple:
+        from python_toolbox import nifty_collections # Avoiding circular import.
+        return nifty_collections.LazyTuple(iterator)
+    else:
+        return iterator
+    
+
+def _call_until_exception(function, exception):
+    from python_toolbox import sequence_tools
+    exceptions = sequence_tools.to_tuple(exception, item_type=BaseException)
+    try:
+        yield function()
+    except exceptions:
+        raise StopIteration
+    
 def get_single_if_any(iterable,
                       exception_on_multiple=Exception('More than one value '
                                                       'not allowed.')):
