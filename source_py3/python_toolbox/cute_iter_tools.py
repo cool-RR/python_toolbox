@@ -194,11 +194,8 @@ def _iter_with(iterable, context_manager):
         
         with context_manager:
             next_item = next(iterator)
-            # You may notice that we are not `except`ing a `StopIteration`
-            # here; If we get one, it'll just get propagated and end *this*
-            # iterator. todo: I just realized this will probably cause a bug
-            # where `__exit__` will get the `StopIteration`! Make failing tests
-            # and fix.
+            # Recycling `StopIteration` exception. (Assuming the context
+            # manager doesn't have special treatment for it.)
         
         yield next_item
         
@@ -218,11 +215,14 @@ def get_items(iterable, n, container_type=tuple):
 
 def double_filter(filter_function, iterable, lazy_tuple=False):
     '''
-    Filter an `iterable` into two lists according to a `filter_function`.
+    Filter an `iterable` into two iterables according to a `filter_function`.
     
     This is similar to the builtin `filter`, except it returns a tuple of two
     iterators, the first iterating on items that passed the filter function,
     and the second iterating on items that didn't.
+    
+    Note that this function is not thread-safe. (You may not consume the two
+    iterators on two separate threads.)
     
     If `lazy_tuple=True`, returns a `LazyTuple` rather than an iterator.
     '''
@@ -407,6 +407,24 @@ def _fill(iterable, fill_value, fill_value_maker, length):
                 iterator_exhausted = True
                 yield fill_value_maker()
                 
+    
+def call_until_exception(function, exception, lazy_tuple=False):
+    '''Iterate on values returned from `function` until getting `exception`.'''
+    iterator = _call_until_exception(function, exception)
+    if lazy_tuple:
+        from python_toolbox import nifty_collections # Avoiding circular import.
+        return nifty_collections.LazyTuple(iterator)
+    else:
+        return iterator
+    
+
+def _call_until_exception(function, exception):
+    from python_toolbox import sequence_tools
+    exceptions = sequence_tools.to_tuple(exception, item_type=BaseException)
+    try:
+        yield function()
+    except exceptions:
+        raise StopIteration
     
 def get_single_if_any(iterable,
                       exception_on_multiple=Exception('More than one value '
