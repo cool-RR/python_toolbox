@@ -10,6 +10,8 @@ import pathlib
 import re
 import math
 import types
+import functools
+import threading
 
 from python_toolbox import cute_iter_tools
 
@@ -301,3 +303,44 @@ def repeat_getattr(thing, query):
     for attribute_name in attribute_names:
         current = getattr(current, attribute_name)
     return current
+
+def set_attributes(**kwargs):
+    '''
+    Decorator to set attributes on a function.
+    
+    Example:
+    
+        @set_attributes(meow='frrr')
+        def f():
+            return 'whatever'
+            
+        assert f.meow == 'frrr'
+        
+    '''
+    def decorator(function):
+        for key, value in kwargs.items():
+            setattr(function, key, value)
+        return function
+    return decorator
+        
+
+pocket_container = threading.local()
+pocket_container.value = None
+@set_attributes(container=pocket_container)
+def pocket(*args):
+    '''
+    Put something in the pocket, or get the value in the pocket.
+
+    Useful for things like this:
+    
+        if pocket(expensive_computation):
+            result = pocket()
+            # Do something with result...
+
+    The contents of the pocket are thread-local.
+    '''
+    if args:
+        (pocket.container.value,) = args
+    else:
+        return pocket.container.value
+    
