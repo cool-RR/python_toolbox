@@ -6,7 +6,6 @@
 import types
 import re
 
-from python_toolbox import import_tools
 from python_toolbox import dict_tools
 from python_toolbox import caching
 
