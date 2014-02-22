@@ -262,6 +262,83 @@ def double_filter(filter_function, iterable, lazy_tuple=False):
         return iterators
 
 
+def _double_filter_thread_safe(filter_function, iterable, lazy_tuple=False):
+    '''
+    (Thread-safe only in the sense that the two iterables may be consumed
+    simultaneously by two threads; doesn't mean each iterable can be consumed
+    simultaneously by multiple threads.)
+    '''
+    iterator = iter(iterable)
+    lock_0 = threading.Lock()
+    
+    deque_0 = collections.deque()
+    deque_1 = collections.deque()
+    
+    deque_0_iterator = call_until_exception(deque_0, IndexError)
+    deque_1_iterator = call_until_exception(deque_1, IndexError)
+    
+    iterator_exhausted = False
+    
+    true_deque = collections.deque()
+    false_deque = collections.deque()
+    
+    
+    def phase_0():
+        with lock_0:
+            item = next(iterator)
+            pair = [item, None]
+            deque_0.append(pair)
+            deque_1.append(pair)
+    
+    def phase_1():
+        with lock_1:
+            try:
+                pair = deque_1.popleft()
+            except IndexError:
+                for item, value in deque_0_iterator:
+                    if value:
+                        true_deque.append(item)
+                    else:
+                        false_deque.append(item)
+                raise StopIteration
+        # Reaching here (with released lock) only if we got a pair out of
+        # `deque_1`:
+        assert pair[1] is None
+        pair[1] = filter_function(pair[0])
+                
+            
+    def make_true_iterator():
+        try:
+            while True:
+                yield from true_deque
+                phase_0()
+                phase_1()
+        except StopIteration: # Original iterator exhausted
+            
+            yield from true_deque
+            
+            
+            
+
+    def make_false_iterator():
+        while True:
+            try:
+                yield false_deque.popleft()
+            except IndexError:
+                value = next(iterator) # `StopIteration` exception recycled.
+                if filter_function(value):
+                    true_deque.append(value)
+                else:
+                    yield value
+                
+    iterators = (make_true_iterator(), make_false_iterator())
+    
+    if lazy_tuple:
+        from python_toolbox import nifty_collections # Avoiding circular import.
+        return tuple(map(nifty_collections.LazyTuple, iterators))
+    else:
+        return iterators
+
 
 def get_ratio(filter_function, iterable):
     '''Get the ratio of `iterable` items that pass `filter_function`.'''
