@@ -12,19 +12,19 @@ import nose.tools
 
 from python_toolbox import caching
 from python_toolbox.caching import cache
+from python_toolbox import misc_tools
 from python_toolbox import temp_value_setting
 from python_toolbox import cute_testing
 from python_toolbox import gc_tools
 
 
+@misc_tools.set_attributes(i=0)
 def counting_func(a=1, b=2, *args, **kwargs):
     '''Function that returns a bigger number every time.'''
-    if not hasattr(counting_func, 'i'):
-        counting_func.i = 0
     try:
         return counting_func.i
     finally:
-        counting_func.i = (counting_func.i + 1)
+        counting_func.i += 1
 
         
 def test_basic():

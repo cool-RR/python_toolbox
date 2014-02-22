@@ -304,6 +304,7 @@ def repeat_getattr(thing, query):
         current = getattr(current, attribute_name)
     return current
 
+
 def set_attributes(**kwargs):
     '''
     Decorator to set attributes on a function.
