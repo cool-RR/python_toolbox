@@ -332,7 +332,11 @@ def _fill(iterable, fill_value, fill_value_maker, length):
                 
     
 def call_until_exception(function, exception, lazy_tuple=False):
-    '''Iterate on values returned from `function` until getting `exception`.'''
+    '''
+    Iterate on values returned from `function` until getting `exception`.
+    
+    If `lazy_tuple=True`, returns a `LazyTuple` rather than an iterator.
+    '''
     iterator = _call_until_exception(function, exception)
     if lazy_tuple:
         from python_toolbox import nifty_collections # Avoiding circular import.

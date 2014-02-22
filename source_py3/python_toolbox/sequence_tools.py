@@ -282,6 +282,7 @@ def get_recurrences(sequence):
     '''
     return {item: n_recurrences for item, n_recurrences in
             collections.Counter(sequence).most_common() if n_recurrences >= 2}
+
     
 ### Not using now, might want in future:
 
