@@ -6,6 +6,8 @@
 import sys
 import re
 
+from python_toolbox import cute_iter_tools
+
 
 def docstring_trim(docstring):
     '''Trim a docstring, removing redundant tabs.'''
@@ -59,6 +61,7 @@ def get_n_identical_edge_characters(string, character=None, head=True):
             return i
     else:
         return len(string)    
+
 
 def rreplace(s, old, new, count=None):
     '''

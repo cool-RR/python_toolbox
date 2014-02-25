@@ -5,6 +5,7 @@
 
 import itertools
 
+from python_toolbox import nifty_collections
 from python_toolbox import context_management
 
 from python_toolbox.cute_iter_tools import iter_with
@@ -37,4 +38,19 @@ def test():
         assert inactive_context_manager.counter == -1
         assert inactive_context_manager.active is False
         
+def test_lazy_tuple():
     
+    active_context_manager = MyContextManager()
+    inactive_context_manager = MyContextManager()
+    
+    lazy_tuple = iter_with(range(5), active_context_manager, lazy_tuple=True)
+    assert isinstance(lazy_tuple, nifty_collections.LazyTuple)
+    assert not lazy_tuple.collected_data
+    
+    for i, j in itertools.izip(lazy_tuple, range(5)):
+        assert i == j == active_context_manager.counter
+        assert active_context_manager.active is False
+        assert inactive_context_manager.counter == -1
+        assert inactive_context_manager.active is False
+        
+    assert lazy_tuple[2] == 2

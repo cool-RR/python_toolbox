@@ -3,6 +3,7 @@
 
 '''Testing module for `python_toolbox.temp_value_setting.TempValueSetter`.'''
 
+from python_toolbox import misc_tools
 from python_toolbox import cute_testing
 
 from python_toolbox.temp_value_setting import TempValueSetter
@@ -72,8 +73,9 @@ def test_dict_key():
     
 def test_as_decorator():
     '''Test `TempValueSetter` used as a decorator.'''
+    
+    @misc_tools.set_attributes(x=1)
     def a(): pass
-    a.x = 1
     
     @TempValueSetter((a, 'x'), 2)
     def f():

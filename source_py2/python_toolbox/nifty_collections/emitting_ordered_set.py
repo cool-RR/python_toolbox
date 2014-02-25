@@ -10,7 +10,6 @@ See its documentation for more details.
 from .ordered_set import (
     OrderedSet, KEY, PREV, NEXT
 )
-from python_toolbox.emitting import Emitter
 
 
 class EmittingOrderedSet(OrderedSet):
@@ -18,6 +17,7 @@ class EmittingOrderedSet(OrderedSet):
     
     def __init__(self, emitter, items=()):
         if emitter:
+            from python_toolbox.emitting import Emitter
             assert isinstance(emitter, Emitter)
         self.emitter = emitter
         OrderedSet.__init__(self, items)

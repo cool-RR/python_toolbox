@@ -5,11 +5,9 @@
 
 import types
 
-from python_toolbox import import_tools
 from python_toolbox import dict_tools
 from python_toolbox import re_tools
 
-# from . import object_to_string (at bottom of file.)
 from .shared import (_contained_address_pattern, _address_pattern,
                      _get_parent_and_dict_from_namespace)
 
@@ -89,6 +87,8 @@ def get_object_by_address(address, root=None, namespace={}):
     '''
     # todo: should know what exception this will raise if the address is bad /
     # object doesn't exist.
+    
+    from python_toolbox import import_tools # Avoiding circular import.
     
     if not _address_pattern.match(address):
         raise ValueError("'%s' is not a legal address." % address)
