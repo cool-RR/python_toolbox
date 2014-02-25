@@ -49,7 +49,7 @@ def _with_lock(method, *args, **kwargs):
         return method(*args, **kwargs)
 
     
-class LazyTuple(collections.Sequence, object):
+class LazyTuple(collections.Sequence):
     '''
     A lazy tuple which requests as few values as possible from its iterator.
     
@@ -75,7 +75,7 @@ class LazyTuple(collections.Sequence, object):
     (e.g. asking for the seventh-to-last element.)
     '''
     
-    def __init__(self, iterable):
+    def __init__(self, iterable, definitely_infinite=False):
         was_given_a_sequence = sequence_tools.is_sequence(iterable) and \
                                not isinstance(iterable, LazyTuple)
         
@@ -88,18 +88,20 @@ class LazyTuple(collections.Sequence, object):
         self._iterator = None if was_given_a_sequence else iter(iterable)
         '''The internal iterator from which we get data.'''
         
+        self.definitely_infinite = definitely_infinite
+        
         self.lock = threading.Lock()
         '''Lock used while exhausting to make `LazyTuple` thread-safe.'''
         
         
     @classmethod
-    def factory(cls, callable):
+    def factory(cls, definitely_infinite=False):
         '''
         Decorator to make generators return a `LazyTuple`.
                 
         Example:
         
-            @LazyTuple.factory
+            @LazyTuple.factory()
             def my_generator():
                 yield 'hello'; yield 'world'; yield 'have'; yield 'fun'
         
@@ -108,8 +110,9 @@ class LazyTuple(collections.Sequence, object):
         '''
         
         def inner(function, *args, **kwargs):
-            return cls(callable(*args, **kwargs))
-        return decorator_tools.decorator(inner, callable)
+            return cls(function(*args, **kwargs),
+                       definitely_infinite=definitely_infinite)
+        return decorator_tools.decorator(inner)
         
     
     @property
@@ -169,8 +172,11 @@ class LazyTuple(collections.Sequence, object):
             
     
     def __len__(self):
-        self.exhaust()
-        return len(self.collected_data)
+        if self.definitely_infinite:
+            return 0 # Unfortunately infinity isn't supported.
+        else:
+            self.exhaust()
+            return len(self.collected_data)
 
     
     def __eq__(self, other):
@@ -270,12 +276,13 @@ class LazyTuple(collections.Sequence, object):
         
         Note: Hashing the `LazyTuple` will completely exhaust it.
         '''
-        self.exhaust()
-        return hash(tuple(self))
+        if self.definitely_infinite:
+            raise TypeError("An infinite `LazyTuple` isn't hashable.")
+        else:
+            self.exhaust()
+            return hash(tuple(self))
     
     
 comparison_tools.total_ordering(LazyTuple)
-
-if hasattr(collections, 'Sequence'):
-    collections.Sequence.register(LazyTuple)
+collections.Sequence.register(LazyTuple)
     
