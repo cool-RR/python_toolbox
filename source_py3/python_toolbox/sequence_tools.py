@@ -150,20 +150,10 @@ def partitions(sequence, partition_size=None, n_partitions=None,
     return blocks
 
 
-def is_sequence(thing):
-    '''Is `thing` a sequence, like `list` or `tuple`?'''
-    return collections.Sequence.__instancecheck__(thing)
-
-
-def is_mutable_sequence(thing):
-    '''Is `thing` a mutable sequence, like `list`?'''
-    return collections.MutableSequence.__instancecheck__(thing)
-
-
 def is_immutable_sequence(thing):
     '''Is `thing` an immutable sequence, like `tuple`?'''
-    return collections.Sequence.__instancecheck__(thing) and not \
-           collections.MutableSequence.__instancecheck__(thing)
+    return isinstance(thing, collections.Sequence) and not \
+                                 isinstance(thing, collections.MutableSequence)
 
 
 def parse_slice(s):
@@ -251,7 +241,7 @@ def to_tuple(single_or_sequence, item_type=None, item_test=None):
         actual_item_test = None
 
     if actual_item_test is None:
-        if is_sequence(single_or_sequence):
+        if isinstance(single_or_sequence, collections.Sequence):
             return tuple(single_or_sequence)
         else:
             return (single_or_sequence,)

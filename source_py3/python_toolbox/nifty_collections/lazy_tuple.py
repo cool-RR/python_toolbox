@@ -76,7 +76,7 @@ class LazyTuple(collections.Sequence):
     '''
     
     def __init__(self, iterable, definitely_infinite=False):
-        was_given_a_sequence = sequence_tools.is_sequence(iterable) and \
+        was_given_a_sequence = isinstance(iterable, collections.Sequence) and \
                                not isinstance(iterable, LazyTuple)
         
         self.exhausted = True if was_given_a_sequence else False

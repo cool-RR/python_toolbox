@@ -3,6 +3,8 @@
 
 '''Testing module for `cute_iter_tools.iterate_overlapping_subsequences`.'''
 
+import collections
+
 from python_toolbox import gc_tools
 from python_toolbox import nifty_collections
 from python_toolbox import cute_testing
@@ -14,8 +16,9 @@ from python_toolbox.cute_iter_tools import iterate_overlapping_subsequences
 def test_length_2():
     
     # `iterate_overlapping_subsequences` returns an iterator, not a sequence:
-    assert not sequence_tools.is_sequence(
-        iterate_overlapping_subsequences(list(range(4)))
+    assert not isinstance(
+        iterate_overlapping_subsequences(list(range(4))),
+        collections.Sequence
     )
                                           
     assert tuple(iterate_overlapping_subsequences(list(range(4)))) == \
