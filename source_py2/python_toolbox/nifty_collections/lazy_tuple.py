@@ -49,7 +49,7 @@ def _with_lock(method, *args, **kwargs):
         return method(*args, **kwargs)
 
     
-@collections.Sequence.register
+
 @comparison_tools.total_ordering    
 class LazyTuple(collections.Sequence, object):
     '''
@@ -177,8 +177,8 @@ class LazyTuple(collections.Sequence, object):
         if self.definitely_infinite:
             return 0 # Unfortunately infinity isn't supported.
         else:
-        self.exhaust()
-        return len(self.collected_data)
+            self.exhaust()
+            return len(self.collected_data)
 
     
     def __eq__(self, other):
@@ -281,6 +281,8 @@ class LazyTuple(collections.Sequence, object):
         if self.definitely_infinite:
             raise TypeError("An infinite `LazyTuple` isn't hashable.")
         else:
-        self.exhaust()
-        return hash(tuple(self))
-    
+            self.exhaust()
+            return hash(tuple(self))
+        
+
+collections.Sequence.register(LazyTuple)
