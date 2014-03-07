@@ -7,6 +7,8 @@ This module defines the `` class.
 See its documentation for more information.
 '''
 
+import collections
+
 import wx
 
 from python_toolbox import sequence_tools
@@ -47,7 +49,7 @@ def _key_dict_to_accelerators(key_dict):
     ### Breaking down key tuples to individual entries: #######################
     #                                                                         #
     for key, id in original_key_dict.items():
-        if sequence_tools.is_sequence(key):
+        if isinstance(key, collections.Sequence):
             key_sequence = key
             for actual_key in key_sequence:
                 key_dict[actual_key] = id

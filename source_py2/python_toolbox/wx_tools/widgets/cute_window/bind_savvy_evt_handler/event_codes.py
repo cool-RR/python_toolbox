@@ -49,14 +49,11 @@ def get_event_code_from_name(name, evt_handler_type):
     '''
     processed_name = 'EVT_%s' % string_tools.case_conversions. \
                                 camel_case_to_lower_case(name).upper()
-    raw_event_modules = \
-        (evt_handler_type.event_modules if
-         sequence_tools.is_sequence(evt_handler_type.event_modules) else 
-         [evt_handler_type.event_modules])
-    event_modules = raw_event_modules + [
+    raw_event_modules = sequence_tools.to_tuple(evt_handler_type.event_modules)
+    event_modules = raw_event_modules + (
         address_tools.resolve(evt_handler_type.__module__),
         wx
-    ]
+    )
     for event_module in event_modules:
         try:
             return getattr(event_module, processed_name)
