@@ -10,7 +10,7 @@ import numbers
 from python_toolbox import nifty_collections
 
 
-@nifty_collections.LazyTuple.factory
+@nifty_collections.LazyTuple.factory()
 def get_all_contained_counters(counter, use_lazy_tuple=True):
     '''
     Get all counters that are subsets of `counter`.

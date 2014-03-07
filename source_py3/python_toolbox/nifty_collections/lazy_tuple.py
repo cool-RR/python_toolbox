@@ -48,7 +48,9 @@ def _with_lock(method, *args, **kwargs):
     with self.lock:
         return method(*args, **kwargs)
 
-    
+
+@collections.Sequence.register
+@comparison_tools.total_ordering    
 class LazyTuple(collections.Sequence):
     '''
     A lazy tuple which requests as few values as possible from its iterator.
@@ -281,8 +283,4 @@ class LazyTuple(collections.Sequence):
         else:
             self.exhaust()
             return hash(tuple(self))
-    
-    
-comparison_tools.total_ordering(LazyTuple)
-collections.Sequence.register(LazyTuple)
     

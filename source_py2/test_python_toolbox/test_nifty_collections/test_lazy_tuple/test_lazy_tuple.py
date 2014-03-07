@@ -115,14 +115,16 @@ def test_infinite():
 
 def test_factory_decorator():
     '''Test the `LazyTuple.factory` decorator.'''
-    @LazyTuple.factory
+    @LazyTuple.factory(definitely_infinite=True)
     def count(*args, **kwargs):
         return itertools.count(*args, **kwargs)
     
     my_count = count()
     assert isinstance(my_count, LazyTuple)
     assert repr(my_count) == '<LazyTuple: (...)>'
-    assert my_count[:10] == tuple(xrange(10))
+    assert my_count.definitely_infinite
+    assert my_count[:10] == tuple(range(10))
+    assert len(my_count) == 0
     
 
 def test_finite_iterator():
