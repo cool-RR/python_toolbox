@@ -30,13 +30,12 @@ def flatten(iterable):
 
     For example, `flatten([[1, 2], [3], [4, 'meow']]) == [1, 2, 3, 4, 'meow']`.
     '''
-
+    # If that ain't a damn clever implementation, I don't know what is. 
     iterator = iter(iterable)
     try:
-        first_item = next(iterator)
+        return sum(iterator, next(iterator))
     except StopIteration:
         return []
-    return sum(iterator, first_item)
 
 
 def combinations(sequence, n=None, start=0):
