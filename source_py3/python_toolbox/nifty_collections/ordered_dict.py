@@ -14,7 +14,7 @@ from collections import OrderedDict as StdlibOrderedDict
 
 class OrderedDict(StdlibOrderedDict):
     
-    def sort(self, key=None, reversed=False):
+    def sort(self, key=None, reverse=False):
         '''
         Sort the items according to their keys, changing the order in-place.
         
@@ -23,9 +23,8 @@ class OrderedDict(StdlibOrderedDict):
         '''
         key_function = \
                    comparison_tools.process_key_function_or_attribute_name(key)
-        sorted_keys = sorted(self.keys(), key=key_function)
-        step = -1 if reversed else 1
-        for key_ in sorted_keys[1::step]:
+        sorted_keys = sorted(self.keys(), key=key_function, reverse=reverse)
+        for key_ in sorted_keys[1:]:
             self.move_to_end(key_)
         
     
