@@ -40,7 +40,7 @@ def test_sort():
     assert second_ordered_dict == \
                            OrderedDict(((3+1j, 'a'), (1+2j, 'b'), (2+3j, 'c')))
     
-    second_ordered_dict.sort('real', reversed=True)
+    second_ordered_dict.sort('real', reverse=True)
     assert second_ordered_dict == \
                            OrderedDict(((3+1j, 'a'), (2+3j, 'c'), (1+2j, 'b')))
 

@@ -27,10 +27,10 @@ class EmittingOrderedSet(OrderedSet):
         """ Add an element to a set.
     
         This has no effect if the element is already present. """
-        if key not in self.map:
-            end = self.end
+        if key not in self._map:
+            end = self._end
             curr = end[PREV]
-            curr[NEXT] = end[PREV] = self.map[key] = [key, curr, end]
+            curr[NEXT] = end[PREV] = self._map[key] = [key, curr, end]
             if self.emitter:
                 self.emitter.emit()
 
@@ -39,8 +39,8 @@ class EmittingOrderedSet(OrderedSet):
         """ Remove an element from a set if it is a member.
         
         If the element is not a member, do nothing. """
-        if key in self.map:        
-            key, prev, next = self.map.pop(key)
+        if key in self._map:        
+            key, prev, next = self._map.pop(key)
             prev[NEXT] = next
             next[PREV] = prev
             if self.emitter:

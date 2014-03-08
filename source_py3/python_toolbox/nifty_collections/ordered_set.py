@@ -16,7 +16,7 @@ from python_toolbox import comparison_tools
 KEY, PREV, NEXT = range(3)
 
 
-class OrderedSet(collections.MutableSet):
+class OrderedSet(collections.MutableSet, collections.Sequence):
     '''
     A set with an order.
     
@@ -33,7 +33,16 @@ class OrderedSet(collections.MutableSet):
     def clear(self):
         self._end = [] 
         self._end += [None, self._end, self._end]
-        self._map = {}                   
+        self._map = {}
+        
+        
+    def __getitem__(self, index):
+        for i, item in enumerate(self):
+            if i == index:
+                return item
+        else:
+            raise IndexError
+        
 
     def __len__(self):
         return len(self._map)
@@ -126,7 +135,6 @@ class OrderedSet(collections.MutableSet):
         sorted_members = sorted(tuple(self), key=key_function, reverse=reverse)
         
         self.clear()
-        for member in sorted_members[1:]:
-            self.move_to_end(member)
+        self |= sorted_members
         
       
