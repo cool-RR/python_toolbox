@@ -337,3 +337,10 @@ def pocket(*args):
     else:
         return pocket.container.value
     
+
+_decimal_number_pattern = \
+                   re.compile('''^-?(?:(?:[0-9]+(?:.[0-9]*)?)|(?:.[0-9]+))$''')
+def decimal_number_from_string(string):
+    if not _decimal_number_pattern.match(string):
+        raise Exception("%s isn't a decimal number." % string)
+    return float(string) if '.' in string else int(string)
