@@ -29,6 +29,12 @@ def test_item_type():
     assert to_tuple((7,), item_type=(tuple, range)) == ((7,),)
     
     
+def test_none():
+    assert to_tuple(None) == ()
+    assert to_tuple(None, item_type=int) == ()
+    assert to_tuple(None, item_type=list) == ()
+    assert to_tuple(None, item_type=type(None)) == (None,)
+    
 def test_item_test():    
     '''Test the `item_test` argument.'''
     

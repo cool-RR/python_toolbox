@@ -242,11 +242,15 @@ def to_tuple(single_or_sequence, item_type=None, item_test=None):
     if actual_item_test is None:
         if isinstance(single_or_sequence, collections.Sequence):
             return tuple(single_or_sequence)
+        elif single_or_sequence is None:
+            return tuple()
         else:
             return (single_or_sequence,)
     else: # actual_item_test is not None
         if actual_item_test(single_or_sequence):
             return (single_or_sequence,)
+        elif single_or_sequence is None:
+            return ()
         else:
             return tuple(single_or_sequence)
 
