@@ -1,8 +1,6 @@
 # Copyright 2009-2014 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''Testing module for `find_clear_place_on_circle`.'''
-
 import nose.tools
 
 from python_toolbox.misc_tools import find_clear_place_on_circle
