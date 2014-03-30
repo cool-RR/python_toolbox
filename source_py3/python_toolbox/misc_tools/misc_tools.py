@@ -341,6 +341,18 @@ def pocket(*args):
 _decimal_number_pattern = \
                    re.compile('''^-?(?:(?:[0-9]+(?:.[0-9]*)?)|(?:.[0-9]+))$''')
 def decimal_number_from_string(string):
+    '''
+    Turn a string like '7' or '-32.55' into the corresponding number.
+    
+    Ensures that it was given a number. (This might be more secure than using
+    something like `int` directly.)
+    
+    Uses `int` for ints and `float` for floats.
+    '''
+    if isinstance(string, bytes):
+        string = string.decode()
+    if not isinstance(string, str):
+        raise Exception("%s isn't a decimal number." % string)
     if not _decimal_number_pattern.match(string):
         raise Exception("%s isn't a decimal number." % string)
     return float(string) if '.' in string else int(string)
