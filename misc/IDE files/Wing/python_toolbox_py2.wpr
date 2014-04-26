@@ -34,13 +34,18 @@ proj.directory-list = [{'dirloc': loc('../../..'),
                         'watch_for_changes': True}]
 proj.file-type = 'shared'
 proj.home-dir = loc('../../..')
-proj.launch-config = {loc('../../../../../../Desktop/fuck.py'): ('project',
-        (u'',
-         'launch-OHU716PSo2P5T54y')),
-                      loc('file:g:/Dropbox/Scripts and shortcuts/watch_for_bad_tsl_login_and_photograph.py'): (''\
-        'project',
-        (u'',
-         'launch-OHU716PSo2P5T54y'))}
+proj.shared-attribute-names = ['proj.shared-attribute-names',
+                               'proj.directory-list',
+                               'proj.file-list',
+                               'proj.file-type',
+                               'proj.main-file',
+                               'proj.home-dir',
+                               'testing.auto-test-file-specs',
+                               'testing.test-file-list',
+                               'testing.test-framework',
+                               'debug.named-entry-points',
+                               'debug.launch-configs',
+                               'console.toolbox']
 testing.auto-test-file-specs = [('glob',
                                  'test_python_toolbox/test*.py')]
 testing.test-framework = {None: 'nose'}
