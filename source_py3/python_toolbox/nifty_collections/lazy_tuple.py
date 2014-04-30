@@ -75,6 +75,9 @@ class LazyTuple(collections.Sequence):
     Some actions require exhausting the entire iterator. For example, checking
     the `LazyTuple` length, or doing indexex access with a negative index.
     (e.g. asking for the seventh-to-last element.)
+    
+    If you're passing in an iterator you definitely know to be infinite,
+    specify `definitely_infinite=False`.
     '''
     
     def __init__(self, iterable, definitely_infinite=False):
@@ -91,6 +94,12 @@ class LazyTuple(collections.Sequence):
         '''The internal iterator from which we get data.'''
         
         self.definitely_infinite = definitely_infinite
+        '''
+        The iterator is definitely infinite.
+        
+        The iterator might still be infinite if this is `False`, but if it's
+        `True` then it's definitely infinite.
+        '''
         
         self.lock = threading.Lock()
         '''Lock used while exhausting to make `LazyTuple` thread-safe.'''
