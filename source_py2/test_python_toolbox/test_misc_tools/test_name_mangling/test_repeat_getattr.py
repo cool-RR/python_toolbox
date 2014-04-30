@@ -1,8 +1,6 @@
 # Copyright 2009-2014 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''Testing module for name demangling.'''
-
 from python_toolbox import cute_testing
 
 from python_toolbox.misc_tools import repeat_getattr

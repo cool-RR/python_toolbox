@@ -10,10 +10,13 @@ See its documentation for more details.
 
 import collections
 
+from python_toolbox import comparison_tools
+
+
 KEY, PREV, NEXT = range(3)
 
 
-class OrderedSet(collections.MutableSet):
+class OrderedSet(collections.MutableSet, collections.Sequence):
     '''
     A set with an order.
     
@@ -22,17 +25,30 @@ class OrderedSet(collections.MutableSet):
     '''
 
     def __init__(self, iterable=None):
-        self.end = end = [] 
-        end += [None, end, end]         # sentinel node for doubly linked list
-        self.map = {}                   # key --> [key, prev, next]
+        self.clear()
         if iterable is not None:
             self |= iterable
 
+
+    def clear(self):
+        self._end = [] 
+        self._end += [None, self._end, self._end]
+        self._map = {}
+        
+        
+    def __getitem__(self, index):
+        for i, item in enumerate(self):
+            if i == index:
+                return item
+        else:
+            raise IndexError
+        
+
     def __len__(self):
-        return len(self.map)
+        return len(self._map)
 
     def __contains__(self, key):
-        return key in self.map
+        return key in self._map
 
     def add(self, key):
         """
@@ -40,10 +56,10 @@ class OrderedSet(collections.MutableSet):
     
         This has no effect if the element is already present.
         """
-        if key not in self.map:
-            end = self.end
+        if key not in self._map:
+            end = self._end
             curr = end[PREV]
-            curr[NEXT] = end[PREV] = self.map[key] = [key, curr, end]
+            curr[NEXT] = end[PREV] = self._map[key] = [key, curr, end]
 
     def discard(self, key):
         """
@@ -51,20 +67,20 @@ class OrderedSet(collections.MutableSet):
     
         If the element is not a member, do nothing.
         """
-        if key in self.map:        
-            key, prev, next = self.map.pop(key)
+        if key in self._map:        
+            key, prev, next = self._map.pop(key)
             prev[NEXT] = next
             next[PREV] = prev
 
     def __iter__(self):
-        end = self.end
+        end = self._end
         curr = end[NEXT]
         while curr is not end:
             yield curr[KEY]
             curr = curr[NEXT]
 
     def __reversed__(self):
-        end = self.end
+        end = self._end
         curr = end[PREV]
         while curr is not end:
             yield curr[KEY]
@@ -92,3 +108,33 @@ class OrderedSet(collections.MutableSet):
         self.clear()                    # remove circular references
         # todo: is this really needed? i'm worried about this making the gc not
         # drop circulary-referencing objects.
+
+    def move_to_end(self, key):
+        '''Move an existing element to the end (or beginning if last==False).
+
+        Raises KeyError if the element does not exist.
+        When last=True, acts like a fast version of self[key]=self.pop(key).
+
+        '''
+        # Inefficient implementation until someone cares.
+        if key in self:
+            self.remove(key)
+            self.add(key)
+            
+    
+    def sort(self, key=None, reverse=False):
+        '''
+        Sort the items according to their keys, changing the order in-place.
+        
+        The optional `key` argument will be passed to the `sorted` function as
+        a key function.
+        '''
+        # Inefficient implementation until someone cares.
+        key_function = \
+                   comparison_tools.process_key_function_or_attribute_name(key)
+        sorted_members = sorted(tuple(self), key=key_function, reverse=reverse)
+        
+        self.clear()
+        self |= sorted_members
+        
+      

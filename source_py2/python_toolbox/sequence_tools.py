@@ -30,13 +30,12 @@ def flatten(iterable):
 
     For example, `flatten([[1, 2], [3], [4, 'meow']]) == [1, 2, 3, 4, 'meow']`.
     '''
-
+    # If that ain't a damn clever implementation, I don't know what is. 
     iterator = iter(iterable)
     try:
-        first_item = next(iterator)
+        return sum(iterator, next(iterator))
     except StopIteration:
         return []
-    return sum(iterator, first_item)
 
 
 def combinations(sequence, n=None, start=0):
@@ -244,11 +243,15 @@ def to_tuple(single_or_sequence, item_type=None, item_test=None):
     if actual_item_test is None:
         if isinstance(single_or_sequence, collections.Sequence):
             return tuple(single_or_sequence)
+        elif single_or_sequence is None:
+            return tuple()
         else:
             return (single_or_sequence,)
     else: # actual_item_test is not None
         if actual_item_test(single_or_sequence):
             return (single_or_sequence,)
+        elif single_or_sequence is None:
+            return ()
         else:
             return tuple(single_or_sequence)
 

@@ -8,7 +8,7 @@ from python_toolbox import cute_testing
 from python_toolbox.nifty_collections import OrderedSet
 
 
-def test_sort():
+def test():
     '''Test the basic workings of `OrderedSet`.'''
     
     ordered_set = OrderedSet(xrange(4))
@@ -25,4 +25,16 @@ def test_sort():
     assert list(reversed(ordered_set)) == [8, 3, 1, 0]
     assert ordered_set.pop() == 8
     assert ordered_set.pop(last=False) == 0
+        
+def test_sort():
+    
+    ordered_set = OrderedSet([5, 61, 2, 7, 2])
+    assert ordered_set == {5, 61, 2, 7}
+    ordered_set.move_to_end(61)
+    assert list(ordered_set) == [5, 2, 7, 61]
+    ordered_set.sort()
+    assert list(ordered_set) == [2, 5, 7, 61]
+    ordered_set.sort(key=lambda x: -x, reverse=True)
+    assert list(ordered_set) == [2, 5, 7, 61]
+    
     
