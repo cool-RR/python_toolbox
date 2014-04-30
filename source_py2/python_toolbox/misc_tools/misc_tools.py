@@ -358,7 +358,7 @@ def decimal_number_from_string(string):
     '''
     if isinstance(string, bytes):
         string = string.decode()
-    if not isinstance(string, str):
+    if not isinstance(string, basestring):
         raise Exception("%s isn't a decimal number." % string)
     if not _decimal_number_pattern.match(string):
         raise Exception("%s isn't a decimal number." % string)
