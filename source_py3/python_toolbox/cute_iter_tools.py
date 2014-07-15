@@ -10,13 +10,10 @@ import itertools
 import builtins
 import numbers
 
-from python_toolbox import sys_tools
-from python_toolbox import misc_tools
 from python_toolbox import math_tools
-from python_toolbox import logic_tools
-
 
 infinity = float('inf')
+
 
 class _EMPTY_SENTINEL:
     pass
@@ -395,6 +392,8 @@ def get_single_if_any(iterable,
         
         
 def are_equal(*sequences):
+    from python_toolbox import sys_tools
+    from python_toolbox import logic_tools
     sequence_types = set(map(type, sequences))
     
     if not sys_tools.is_pypy: # Hack around Pypy bug 1799
@@ -420,6 +419,7 @@ def are_equal(*sequences):
 
     
 def is_sorted(iterable, key=None):
+    from python_toolbox import misc_tools
     if key is None:
         key = misc_tools.identity_function
     for first_item, second_item in \

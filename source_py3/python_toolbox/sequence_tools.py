@@ -159,58 +159,6 @@ def is_immutable_sequence(thing):
                                  isinstance(thing, collections.MutableSequence)
 
 
-def parse_slice(s):
-    '''
-    Parse a `slice` object into a canonical `(start, stop, step)`.
-
-    This is helpful because `slice`'s own `.start`, `.stop` and `.step` are
-    sometimes specified as `None` for convenience, so Python will infer them
-    automatically. Here we make them explicit.
-
-    if `start` is `None`, it will be set to `0` (if the `step` is positive) or
-    `infinity` (if the `step` is negative.)
-
-    if `stop` is `None`, it will be set to `infinity` (if the `step` is
-    positive) or `0` (if the `step` is negative.)
-
-    If `step` is `None`, it will be changed to the default `1`.
-    '''
-    assert isinstance(s, slice)
-
-    ### Parsing `step`:
-    assert s.step != 0
-    if s.step is None:
-        step = 1
-    else:
-        step = s.step
-    ###
-
-    ### Parsing `start`:
-    if s.start is not None:
-        start = s.start
-    else:
-        assert s.start is None
-        if step > 0:
-            start = 0
-        else:
-            assert step < 0
-            start = infinity
-    ###
-
-    ### Parsing `stop`:
-    if s.stop is not None:
-        stop = s.stop
-    else:
-        assert s.stop is None
-        if step > 0:
-            stop = infinity
-        else:
-            assert step < 0
-            stop = -infinity
-    ###
-
-    return (start, stop, step)
-
 
 def to_tuple(single_or_sequence, item_type=None, item_test=None):
     '''
@@ -360,7 +308,6 @@ def ensure_iterable_is_sequence(iterable, default_type=tuple,
         return default_type(iterable)
 
 
-
 class CanonicalSlice: # blockodo replace parse_slice everywhere
     def __init__(self, slice_, iterable_or_length=None, offset=0):
         '''
@@ -481,7 +428,7 @@ class CanonicalSlice: # blockodo replace parse_slice everywhere
     
     
     
-class CuteSequenceMixin(shy_misc_tools.AlternativeLengthMixin):
+class CuteSequenceMixin(misc_tools.AlternativeLengthMixin):
     def take_random(self):
         return self[random.randint(0, get_length(self))]
         

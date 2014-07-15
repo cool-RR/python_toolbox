@@ -2,6 +2,7 @@
 # This program is distributed under the MIT license.
 
 import abc
+import numbers
 
 
 class _PossiblyInfiniteIntegralType(abc.ABCMeta):

@@ -1,8 +1,6 @@
 # Copyright 2009-2014 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''Testing module for `sequence_tools.parse_slice`.'''
-
 from python_toolbox import math_tools
 
 from python_toolbox.sequence_tools import parse_slice
@@ -12,7 +10,6 @@ infinity = float('inf')
 
 
 def test():
-    '''Test the basic workings of `parse_slice`.'''
     
     r1 = list(range(5))
     r2 = list(range(2, 10))

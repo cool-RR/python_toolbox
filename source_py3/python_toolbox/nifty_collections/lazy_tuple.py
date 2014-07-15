@@ -13,7 +13,6 @@ import itertools
 
 from python_toolbox import decorator_tools
 from python_toolbox import comparison_tools
-from python_toolbox import sequence_tools
 
 
 infinity = float('inf')
@@ -141,6 +140,8 @@ class LazyTuple(collections.Sequence):
         This will take enough items so we will have `i` items in total,
         including the items we had before.
         '''
+        from python_toolbox import sequence_tools
+        
         if self.exhausted:
             return
         
@@ -153,14 +154,14 @@ class LazyTuple(collections.Sequence):
             # todo: can be smart and figure out if it's an empty slice and then
             # not exhaust.
             
-            (start, stop, step) = sequence_tools.parse_slice(i)
+            canonical_slice = sequence_tools.CanonicalSlice(i)
             
             exhaustion_point = max(
-                _convert_index_to_exhaustion_point(start),
-                _convert_index_to_exhaustion_point(stop)
+                _convert_index_to_exhaustion_point(canonical_slice.start),
+                _convert_index_to_exhaustion_point(canonical_slice.stop)
             )
             
-            if step > 0: # Compensating for excluded last item:
+            if canonical_slice.step > 0: # Compensating for excluded last item:
                 exhaustion_point -= 1
             
         while len(self.collected_data) <= exhaustion_point:
