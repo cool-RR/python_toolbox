@@ -1,8 +1,6 @@
 # Copyright 2009-2014 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''This module defines math-related tools.'''
-
 import numbers
 
 
@@ -65,27 +63,6 @@ def convert_to_base_in_tuple(number, base):
         
     return tuple(reversed(work_in_progress))
   
-  
-def get_median(iterable):
-    '''Get the median of an iterable of numbers.'''
-    sorted_values = sorted(iterable)
-
-    if len(iterable) % 2 == 0:
-        higher_midpoint = len(iterable) // 2
-        lower_midpoint = higher_midpoint - 1
-        return (sorted_values[lower_midpoint] +
-                sorted_values[higher_midpoint]) / 2
-    else:
-        midpoint = len(iterable) // 2
-        return sorted_values[midpoint]
-    
-    
-def get_mean(iterable):
-    '''Get the mean (average) of an iterable of numbers.'''
-    sum_ = 0
-    for i, value in enumerate(iterable):
-        sum_ += value
-    return sum_ / (i + 1)
 
         
 def restrict_number_to_range(number, low_cutoff=-infinity,
@@ -102,3 +79,14 @@ def restrict_number_to_range(number, low_cutoff=-infinity,
     else:
         return number
         
+        
+def binomial(big, small):
+    if big == small:
+        return 1
+    if big < small:
+        return 0
+    else:
+        return (math.factorial(big) // math.factorial(big - small)
+                                                      // math.factorial(small))
+    
+

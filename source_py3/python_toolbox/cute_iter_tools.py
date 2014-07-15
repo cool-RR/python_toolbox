@@ -8,8 +8,19 @@
 import collections
 import itertools
 import builtins
+import numbers
+
+from python_toolbox import cute_iter_tools
+from python_toolbox import sys_tools
+from python_toolbox import misc_tools
+from python_toolbox import math_tools
+from python_toolbox import logic_tools
+
 
 infinity = float('inf')
+
+class _EMPTY_SENTINEL:
+    pass
 
 
 def iterate_overlapping_subsequences(iterable, length=2, wrap_around=False,
@@ -382,3 +393,41 @@ def get_single_if_any(iterable,
                 raise exception_on_multiple
         else: # not exception_on_multiple
             return first_item
+        
+        
+def are_equal(*sequences):
+    sequence_types = set(map(type, sequences))
+    
+    if not sys_tools.is_pypy: # Hack around Pypy bug 1799
+        # Trying cheap comparison:
+        if len(sequence_types) == 1 and issubclass(cute_iter_tools.
+                          get_single_if_any(sequence_types), collections.Sequence):
+            
+            return logic_tools.all_equal(sequences)
+    if sequence_types == {CuteCount}: # Hack around Pypy bug 1799, remove
+        return logic_tools.all_equal(sequences.start for sequence in sequences)
+    
+    # If cheap comparison didn't work, trying item-by-item comparison:
+    zipped = itertools.zip_longest(*sequences,
+                                   fillvalue=_EMPTY_SENTINEL)
+    for values in zipped:
+        # No need to explicitly check for `_EMPTY_SENTINEL`, it would just make
+        # the following condition `False`, because it's impossible for all
+        # values to be the sentinel.
+        if not logic_tools.all_equal(values):
+            return False
+    else:
+        return True
+
+    
+def is_sorted(iterable, key=None):
+    if key is None:
+        key = misc_tools.identity_function
+    for first_item, second_item in \
+                    cute_iter_tools.iterate_overlapping_subsequences(iterable):
+        if not key(second_item) >= key(first_item):
+            return False
+    else:
+        return True
+        
+    

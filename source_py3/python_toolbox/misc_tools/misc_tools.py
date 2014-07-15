@@ -9,6 +9,7 @@ import re
 import math
 import types
 import functools
+import sys
 import threading
 
 from python_toolbox import cute_iter_tools
@@ -356,3 +357,15 @@ def decimal_number_from_string(string):
     if not _decimal_number_pattern.match(string):
         raise Exception("%s isn't a decimal number." % string)
     return float(string) if '.' in string else int(string)
+
+
+
+class AlternativeLengthMixin:
+    def __len__(self):
+        if self.length <= sys.maxsize:
+            return self.length
+        else:
+            raise OverflowError("Due to CPython limitation, you'll have to "
+                                "use `.length` rather than `len`")
+        
+        
