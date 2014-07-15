@@ -10,7 +10,6 @@ import itertools
 import builtins
 import numbers
 
-from python_toolbox import cute_iter_tools
 from python_toolbox import sys_tools
 from python_toolbox import misc_tools
 from python_toolbox import math_tools
