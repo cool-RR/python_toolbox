@@ -308,7 +308,7 @@ def ensure_iterable_is_sequence(iterable, default_type=tuple,
         return default_type(iterable)
 
 
-class CanonicalSlice: # blockodo replace parse_slice everywhere
+class CanonicalSlice:
     def __init__(self, slice_, iterable_or_length=None, offset=0):
         '''
         blocktododoc iterable_or_length, also note result, if not given iterable/length, can't really be used as slice (only as canonical object) because of `infinity`
