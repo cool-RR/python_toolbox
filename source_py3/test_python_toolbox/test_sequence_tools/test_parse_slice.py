@@ -3,7 +3,7 @@
 
 from python_toolbox import math_tools
 
-from python_toolbox.sequence_tools import parse_slice
+from python_toolbox.sequence_tools import CanonicalSlice
 
 
 infinity = float('inf')
@@ -23,17 +23,20 @@ def test():
               slice(None, None, -2)]
     
     for slice_ in slices:
-        (start, stop, step) = parse_slice(slice_)
+        canonical_slice = CanonicalSlice(slice_)
         
         # Replacing `infinity` with huge number cause Python's lists can't
         # handle `infinity`:
-        if abs(start) == infinity: start = 10**10 * math_tools.get_sign(start)
-        if abs(stop) == infinity: stop = 10**10 * math_tools.get_sign(stop)
-        if abs(step) == infinity: step = 10**10 * math_tools.get_sign(step)
+        if abs(canonical_slice.start) == infinity:
+            start = 10**10 * math_tools.get_sign(canonical_slice.start)
+        if abs(canonical_slice.stop) == infinity:
+            stop = 10**10 * math_tools.get_sign(canonical_slice.stop)
+        if abs(canonical_slice.step) == infinity:
+            step = 10**10 * math_tools.get_sign(canonical_slice.step)
         #######################################################################
             
-        assert [start, stop, step].count(None) == 0
+        assert [canonical_slice.start, canonical_slice.stop,
+                canonical_slice.step].count(None) == 0
         
-        parsed_slice = slice(start, stop, step)
         for range_ in ranges:
-            assert range_[slice_] == range_[parsed_slice]
+            assert range_[slice_] == range_[canonical_slice.slice_]
