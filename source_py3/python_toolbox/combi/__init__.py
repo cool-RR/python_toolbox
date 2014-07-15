@@ -1,5 +1,5 @@
 import math
-from layout_rabbit import shy_cute_iter_tools
+from python_toolbox import cute_iter_tools
 from python_toolbox import cute_testing
 from python_toolbox.math_tools import binomial # Making it easy to find
 

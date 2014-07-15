@@ -10,7 +10,7 @@ def test_perms():
     assert repr(pure_0a) == repr(pure_0b) == repr(pure_0c) == \
                          repr(pure_0d) == '<PermSpace: range(0, 4)>'
     
-    assert shy_cute_iter_tools.are_equal(pure_0a, pure_0b, pure_0c, pure_0d)
+    assert cute_iter_tools.are_equal(pure_0a, pure_0b, pure_0c, pure_0d)
     
     assert set(map(bool, (pure_0a, pure_0b, pure_0c, pure_0d))) == {True}
     
@@ -182,7 +182,7 @@ def test_degreed_perm_space():
     for perm in PermSpace(5, degrees=(1, 3)):
         assert perm.degree in (1, 3)
         
-    assert shy_cute_iter_tools.is_sorted(
+    assert cute_iter_tools.is_sorted(
         [perm.number for perm in PermSpace(5, degrees=(1, 3))]
     )
     
@@ -234,11 +234,11 @@ def test_degreed_perm_space():
         assert perm.undapplied.is_rapplied
         assert perm.unrapplied.is_dapplied
         
-    assert shy_cute_iter_tools.is_sorted(
+    assert cute_iter_tools.is_sorted(
         [perm.number for perm in funky_perm_space]
     )
     
-    assert shy_cute_iter_tools.is_sorted(funky_perm_space)
+    assert cute_iter_tools.is_sorted(funky_perm_space)
     
     
     other_perms_chain_space = ChainSpace((funky_perm_space.unsliced[:2],
@@ -260,7 +260,7 @@ def test_degreed_perm_space():
     assert other_perms_chain_space.length + funky_perm_space.length == \
                                                funky_perm_space.unsliced.length
     
-    assert shy_cute_iter_tools.is_sorted(
+    assert cute_iter_tools.is_sorted(
         [perm.number for perm in other_perms_chain_space]
     )
     
@@ -341,16 +341,16 @@ def test_partial_perm_space():
         assert perm == reconstructed_perm
         assert perm.number == reconstructed_perm.number == i
         
-    assert shy_cute_iter_tools.is_sorted(
+    assert cute_iter_tools.is_sorted(
         [perm.number for perm in perm_space_2]
     )
-    assert shy_cute_iter_tools.is_sorted(
+    assert cute_iter_tools.is_sorted(
         [tuple(perm) for perm in perm_space_2]
     )
-    assert shy_cute_iter_tools.is_sorted(
+    assert cute_iter_tools.is_sorted(
         [perm.number for perm in perm_space_7]
     )
-    assert shy_cute_iter_tools.is_sorted(
+    assert cute_iter_tools.is_sorted(
         [tuple(perm) for perm in perm_space_7]
     )
     

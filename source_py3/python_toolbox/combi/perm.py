@@ -13,24 +13,24 @@ from python_toolbox import nifty_collections
 from python_toolbox import decorator_tools
 from python_toolbox import caching
 
-from layout_rabbit import shy_math_tools
-from layout_rabbit import shy_sequence_tools
-from layout_rabbit import shy_cute_iter_tools
-from layout_rabbit import shy_misc_tools
+from python_toolbox import math_tools
+from python_toolbox import sequence_tools
+from python_toolbox import cute_iter_tools
+from python_toolbox import misc_tools
 
 from . import misc
 
 
 infinity = float('inf')
 
-class PermItems(shy_sequence_tools.CuteSequenceMixin, collections.Sequence):
+class PermItems(sequence_tools.CuteSequenceMixin, collections.Sequence):
     def __init__(self, perm):
         self.perm = perm
     def __getitem__(self, i):
         return (self.perm.domain[i], self.perm._perm_sequence[i])
     
 
-class PermAsDictoid(shy_sequence_tools.CuteSequenceMixin, collections.Mapping):
+class PermAsDictoid(sequence_tools.CuteSequenceMixin, collections.Mapping):
     def __init__(self, perm):
         self.perm = perm
     def __getitem__(self, key):
@@ -48,7 +48,7 @@ class PermType(abc.ABCMeta):
         
 
 @functools.total_ordering
-class Perm(shy_sequence_tools.CuteSequenceMixin, collections.Sequence,
+class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
            metaclass=PermType):
     
     @classmethod
@@ -70,7 +70,7 @@ class Perm(shy_sequence_tools.CuteSequenceMixin, collections.Sequence,
         perm_space = None if perm_space is None \
                                               else PermSpace.coerce(perm_space)
         if isinstance(number_or_perm_sequence, collections.Iterable):
-            number_or_perm_sequence = shy_sequence_tools. \
+            number_or_perm_sequence = sequence_tools. \
                  ensure_iterable_is_immutable_sequence(number_or_perm_sequence)
         assert isinstance(number_or_perm_sequence, (int, collections.Sequence))
         
@@ -111,7 +111,7 @@ class Perm(shy_sequence_tools.CuteSequenceMixin, collections.Sequence,
             self.number = number_or_perm_sequence
         else:
             assert isinstance(number_or_perm_sequence, collections.Iterable)
-            self._perm_sequence = shy_sequence_tools. \
+            self._perm_sequence = sequence_tools. \
                  ensure_iterable_is_immutable_sequence(number_or_perm_sequence)
             
         assert self.is_combination == isinstance(self, Comb)
@@ -188,7 +188,7 @@ class Perm(shy_sequence_tools.CuteSequenceMixin, collections.Sequence,
             index_of_current_number = unused_numbers.index(number)
             factoradic_number.append(index_of_current_number)
             del unused_numbers[index_of_current_number]
-        return shy_math_tools.from_factoradic(
+        return math_tools.from_factoradic(
             factoradic_number +
             [0] * self.just_dapplied_rapplied_perm_space.n_unused_elements
         ) // math.factorial(
@@ -200,7 +200,7 @@ class Perm(shy_sequence_tools.CuteSequenceMixin, collections.Sequence,
     def _perm_sequence(self):
         assert (0 <= self.number < 
                                  self.just_dapplied_rapplied_perm_space.length)
-        factoradic_number = shy_math_tools.to_factoradic(
+        factoradic_number = math_tools.to_factoradic(
             self.number * math.factorial(
                  self.just_dapplied_rapplied_perm_space.n_unused_elements),
             n_digits_pad=self.just_dapplied_rapplied_perm_space.sequence_length
@@ -282,7 +282,7 @@ class Perm(shy_sequence_tools.CuteSequenceMixin, collections.Sequence,
             raise TypeError("Can't rapply an rapplied permutation, try "
                             "`perm.unrapplied`.")
         sequence = \
-             shy_sequence_tools.ensure_iterable_is_immutable_sequence(sequence)
+             sequence_tools.ensure_iterable_is_immutable_sequence(sequence)
         if len(sequence) < len(self):
             raise Exception("Can't rapply permutation on sequence of "
                             "shorter length.")

@@ -13,14 +13,14 @@ from python_toolbox import sequence_tools
 from python_toolbox import caching
 import python_toolbox.arguments_profile
 
-from layout_rabbit import shy_math_tools
-from layout_rabbit import shy_sequence_tools
-from layout_rabbit import shy_cute_iter_tools
-from layout_rabbit import shy_nifty_collections
-from layout_rabbit import shy_dict_tools
+from python_toolbox import math_tools
+from python_toolbox import sequence_tools
+from python_toolbox import cute_iter_tools
+from python_toolbox import nifty_collections
+from python_toolbox import dict_tools
 
 from . import misc
-from layout_rabbit import shy_misc_tools
+from python_toolbox import misc_tools
 
 infinity = float('inf')
 
@@ -53,7 +53,7 @@ class PermSpaceType(abc.ABCMeta):
         
         
 @functools.total_ordering
-class PermSpace(shy_sequence_tools.CuteSequenceMixin, collections.Sequence,
+class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
                 metaclass=PermSpaceType):
     '''
     A space of permutations on a sequence.
@@ -123,14 +123,14 @@ class PermSpace(shy_sequence_tools.CuteSequenceMixin, collections.Sequence,
         #                                                                     #
         assert isinstance(
             iterable_or_length,
-            (collections.Iterable, shy_math_tools.PossiblyInfiniteIntegral)
+            (collections.Iterable, math_tools.PossiblyInfiniteIntegral)
         )
         if isinstance(iterable_or_length,
-                      shy_math_tools.PossiblyInfiniteIntegral):
+                      math_tools.PossiblyInfiniteIntegral):
             assert iterable_or_length >= 0
         if slice_ is not None:
             assert isinstance(slice_,
-                              (slice, shy_sequence_tools.CanonicalSlice))
+                              (slice, sequence_tools.CanonicalSlice))
             if slice_.step not in (1, None):
                 raise NotImplementedError
         assert isinstance(n_elements, numbers.Integral) or n_elements is None
@@ -142,7 +142,7 @@ class PermSpace(shy_sequence_tools.CuteSequenceMixin, collections.Sequence,
         #                                                                     #
         if iterable_or_length == infinity:
             self.is_rapplied = False
-            self.sequence = shy_cute_iter_tools.CuteCount()
+            self.sequence = cute_iter_tools.CuteCount()
             self.sequence_length = infinity
             assert not fixed_map
         elif isinstance(iterable_or_length, numbers.Integral):
@@ -151,16 +151,16 @@ class PermSpace(shy_sequence_tools.CuteSequenceMixin, collections.Sequence,
             self.sequence_length = iterable_or_length
         else:
             assert isinstance(iterable_or_length, collections.Iterable)
-            self.sequence = shy_sequence_tools. \
+            self.sequence = sequence_tools. \
                       ensure_iterable_is_immutable_sequence(iterable_or_length)
-            if isinstance(self.sequence, shy_cute_iter_tools.CuteCount):
+            if isinstance(self.sequence, cute_iter_tools.CuteCount):
                 self.is_rapplied = False
                 self.sequence_length = infinity
             else:
                 range_candidate = range(len(self.sequence))
                 
                 self.is_rapplied = not (
-                    shy_cute_iter_tools.are_equal(self.sequence,
+                    cute_iter_tools.are_equal(self.sequence,
                                                   range_candidate)
                 )
                 self.sequence_length = len(self.sequence)
@@ -188,7 +188,7 @@ class PermSpace(shy_sequence_tools.CuteSequenceMixin, collections.Sequence,
         
         self.indices = (range(self.n_elements) if
                         self.n_elements < infinity else
-                        shy_cute_iter_tools.CuteCount())
+                        cute_iter_tools.CuteCount())
         
         
         #                                                                     #
@@ -206,10 +206,10 @@ class PermSpace(shy_sequence_tools.CuteSequenceMixin, collections.Sequence,
             self._just_partialled_combinationed_length = infinity
         else:
             self._just_partialled_combinationed_length = \
-                shy_math_tools.factorial(
+                math_tools.factorial(
                     self.sequence_length,
                     start=(self.sequence_length - self.n_elements + 1)
-                ) // (shy_math_tools.factorial(self.n_elements) if
+                ) // (math_tools.factorial(self.n_elements) if
                                                     self.is_combination else 1)
         # This division is always without a remainder, because math.
         #                                                                     #
@@ -221,10 +221,10 @@ class PermSpace(shy_sequence_tools.CuteSequenceMixin, collections.Sequence,
         if domain is None:
             domain = self.indices
         domain = \
-               shy_sequence_tools.ensure_iterable_is_immutable_sequence(domain)
+               sequence_tools.ensure_iterable_is_immutable_sequence(domain)
         if self.is_partial:
             domain = domain[:self.n_elements]
-        self.is_dapplied = not shy_cute_iter_tools.are_equal(
+        self.is_dapplied = not cute_iter_tools.are_equal(
             domain, self.indices
         )
         if self.is_dapplied:
@@ -267,7 +267,7 @@ class PermSpace(shy_sequence_tools.CuteSequenceMixin, collections.Sequence,
                 
         self.is_fixed = bool(self.fixed_map)
         if self.is_fixed:
-            self._unsliced_undegreed_length = shy_math_tools.factorial(
+            self._unsliced_undegreed_length = math_tools.factorial(
                 len(self.free_indices),
                 start=(len(self.free_indices) -
                                    (self.n_elements - len(self.fixed_map)) + 1)
@@ -294,7 +294,7 @@ class PermSpace(shy_sequence_tools.CuteSequenceMixin, collections.Sequence,
         
         ### Figuring out degrees: #############################################
         #                                                                     #
-        all_degrees = shy_cute_iter_tools.CuteCount() if \
+        all_degrees = cute_iter_tools.CuteCount() if \
                                         self.sequence_length == infinity else \
                                                     range(self.sequence_length)
         if degrees is None:
@@ -303,9 +303,9 @@ class PermSpace(shy_sequence_tools.CuteSequenceMixin, collections.Sequence,
             assert isinstance(degrees, int)
             degrees = (degrees,)
         degrees = \
-              shy_sequence_tools.ensure_iterable_is_immutable_sequence(degrees)
+              sequence_tools.ensure_iterable_is_immutable_sequence(degrees)
         
-        if not degrees or shy_cute_iter_tools.are_equal(degrees,
+        if not degrees or cute_iter_tools.are_equal(degrees,
                                                         all_degrees):
             self.is_degreed = False
             self.degrees = all_degrees
@@ -317,12 +317,12 @@ class PermSpace(shy_sequence_tools.CuteSequenceMixin, collections.Sequence,
             self.degrees = tuple(
                 degree for degree in degrees if degree in all_degrees
             )
-            if isinstance(self.degrees, shy_cute_iter_tools.CuteCount):
+            if isinstance(self.degrees, cute_iter_tools.CuteCount):
                 self._unsliced_length = infinity
             else:
                 
                 self._unsliced_length = sum(
-                    shy_math_tools.abs_stirling(
+                    math_tools.abs_stirling(
                         self.sequence_length - len(self.fixed_map),
                         self.sequence_length - degree -
                                     self._n_cycles_in_fixed_items_of_just_fixed
@@ -335,7 +335,7 @@ class PermSpace(shy_sequence_tools.CuteSequenceMixin, collections.Sequence,
         ### Figuring out slice: ###############################################
         #                                                                     #
         self.slice_ = slice_
-        self.canonical_slice = shy_sequence_tools.CanonicalSlice(
+        self.canonical_slice = sequence_tools.CanonicalSlice(
             slice_ or slice(float('inf')),
             self._unsliced_length
         )
@@ -421,7 +421,7 @@ class PermSpace(shy_sequence_tools.CuteSequenceMixin, collections.Sequence,
         
     def __getitem__(self, i):
         if isinstance(i, slice):
-            canonical_slice = shy_sequence_tools.CanonicalSlice(
+            canonical_slice = sequence_tools.CanonicalSlice(
                 i, self.length, offset=self.canonical_slice.start
             )
             return PermSpace(self.sequence, domain=self.domain,
@@ -477,7 +477,7 @@ class PermSpace(shy_sequence_tools.CuteSequenceMixin, collections.Sequence,
                                      wip_n_cycles_in_fixed_items + closed_cycle
                         
                         candidate_fixed_perm_space_length = sum(
-                            shy_math_tools.abs_stirling(
+                            math_tools.abs_stirling(
                                 self.sequence_length -
                                              len(candidate_perm_sequence_dict),
                                 self.sequence_length - degree -
@@ -546,7 +546,7 @@ class PermSpace(shy_sequence_tools.CuteSequenceMixin, collections.Sequence,
         if not isinstance(perm, collections.Iterable):
             raise IndexError
         
-        perm = shy_sequence_tools.ensure_iterable_is_immutable_sequence(perm)
+        perm = sequence_tools.ensure_iterable_is_immutable_sequence(perm)
         
         if len(perm) != self.n_elements:
             raise IndexError
@@ -745,7 +745,7 @@ class PermSpace(shy_sequence_tools.CuteSequenceMixin, collections.Sequence,
         '''Get a version of this `PermSpace` that has a range of `sequence`.'''
         assert not self.is_rapplied
         sequence = \
-             shy_sequence_tools.ensure_iterable_is_immutable_sequence(sequence)
+             sequence_tools.ensure_iterable_is_immutable_sequence(sequence)
         if len(sequence) != self.sequence_length:
             raise Exception
         return PermSpace(
@@ -759,7 +759,7 @@ class PermSpace(shy_sequence_tools.CuteSequenceMixin, collections.Sequence,
         '''Get a version of this `PermSpace` that has a domain of `domain`.'''
         assert not self.is_dapplied
         domain = \
-               shy_sequence_tools.ensure_iterable_is_immutable_sequence(domain)
+               sequence_tools.ensure_iterable_is_immutable_sequence(domain)
         if len(domain) != self.n_elements:
             raise Exception
         return PermSpace(

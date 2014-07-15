@@ -10,19 +10,19 @@ from python_toolbox import dict_tools
 from python_toolbox import nifty_collections
 from python_toolbox import caching
 
-from layout_rabbit import shy_math_tools
-from layout_rabbit import shy_sequence_tools
-from layout_rabbit import shy_cute_iter_tools
-from layout_rabbit import shy_nifty_collections
+from python_toolbox import math_tools
+from python_toolbox import sequence_tools
+from python_toolbox import cute_iter_tools
+from python_toolbox import nifty_collections
 
 from . import misc
-from layout_rabbit import shy_misc_tools
+from python_toolbox import misc_tools
 
 infinity = float('inf')
 
 
         
-class ChainSpace(shy_sequence_tools.CuteSequenceMixin, collections.Sequence):
+class ChainSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
     '''
     A space of sequences chained together.
     
@@ -32,7 +32,7 @@ class ChainSpace(shy_sequence_tools.CuteSequenceMixin, collections.Sequence):
     def __init__(self, sequences):
         
         self.sequences = nifty_collections.LazyTuple(
-            (shy_sequence_tools.ensure_iterable_is_immutable_sequence(
+            (sequence_tools.ensure_iterable_is_immutable_sequence(
                 sequence, default_type=nifty_collections.LazyTuple)
                                                      for sequence in sequences)
         )
@@ -50,7 +50,7 @@ class ChainSpace(shy_sequence_tools.CuteSequenceMixin, collections.Sequence):
         total = 0
         yield 0
         for sequence in self.sequences:
-            total += shy_sequence_tools.get_length(sequence)
+            total += sequence_tools.get_length(sequence)
             yield total
         
         

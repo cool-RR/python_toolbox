@@ -327,14 +327,14 @@ class CanonicalSlice:
     
         If `step` is `None`, it will be changed to the default `1`.
         '''
-        from . import shy_math_tools
+        from . import math_tools
         if isinstance(slice_, CanonicalSlice):
             slice_ = slice(slice_.start, slice_.stop, slice_.step)
         assert isinstance(slice_, slice)
         self.given_slice = slice_
         if iterable_or_length is not None:
             if isinstance(iterable_or_length,
-                          shy_math_tools.PossiblyInfiniteIntegral):
+                          math_tools.PossiblyInfiniteIntegral):
                 self.length = iterable_or_length
             elif isinstance(iterable_or_length, collections.Sequence):
                 self.length = len(iterable_or_length)

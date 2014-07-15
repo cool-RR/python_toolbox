@@ -25,7 +25,7 @@ def reverse_factorial(number, round_up=True):
 def from_factoradic(factoradic_number):
     assert isinstance(factoradic_number, collections.Iterable)
     factoradic_number = \
-              shy_sequence_tools.ensure_iterable_is_sequence(factoradic_number)
+              sequence_tools.ensure_iterable_is_sequence(factoradic_number)
     number = 0
     for i, value in enumerate(reversed(factoradic_number)):
         assert 0 <= value <= i

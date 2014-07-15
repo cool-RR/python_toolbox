@@ -1,4 +1,4 @@
-from layout_rabbit import shy_math_tools
+from python_toolbox import math_tools
 from python_toolbox import caching
 
 from .perm import Perm
@@ -22,7 +22,7 @@ class Comb(Perm):
                                                                         0, -1):
             for j in range(self.just_dapplied_rapplied_perm_space.
                                                    sequence_length, i - 2, -1):
-                candidate = shy_math_tools.binomial(j, i)
+                candidate = math_tools.binomial(j, i)
                 if candidate <= wip_number:
                     wip_perm_sequence.append(
                         self.just_dapplied_rapplied_perm_space.sequence[-(j+1)]
@@ -52,7 +52,7 @@ class Comb(Perm):
             item for item in self._perm_sequence[::-1]
         )
         return self.just_dapplied_rapplied_perm_space.length - 1 - sum(
-            (shy_math_tools.binomial(item, i) for i, item in
+            (math_tools.binomial(item, i) for i, item in
                                   enumerate(processed_perm_sequence, start=1)),
             0
         )

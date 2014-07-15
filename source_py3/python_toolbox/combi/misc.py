@@ -8,9 +8,9 @@ from python_toolbox import dict_tools
 from python_toolbox import nifty_collections
 from python_toolbox import caching
 
-from layout_rabbit import shy_math_tools
-from layout_rabbit import shy_sequence_tools
-from layout_rabbit import shy_cute_iter_tools
+from python_toolbox import math_tools
+from python_toolbox import sequence_tools
+from python_toolbox import cute_iter_tools
 
 infinity = float('inf')
 
@@ -19,7 +19,7 @@ infinity = float('inf')
         
 def get_short_factorial_string(number, minus_one=False):
     assert number >= 0 and \
-                    isinstance(number, shy_math_tools.PossiblyInfiniteIntegral)
+                    isinstance(number, math_tools.PossiblyInfiniteIntegral)
     if number == infinity:
         return "float('inf')"
     elif number <= 10:

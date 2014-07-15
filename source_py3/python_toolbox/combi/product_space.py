@@ -10,30 +10,30 @@ from python_toolbox import dict_tools
 from python_toolbox import nifty_collections
 from python_toolbox import caching
 
-from layout_rabbit import shy_math_tools
-from layout_rabbit import shy_sequence_tools
-from layout_rabbit import shy_cute_iter_tools
-from layout_rabbit import shy_nifty_collections
+from python_toolbox import math_tools
+from python_toolbox import sequence_tools
+from python_toolbox import cute_iter_tools
+from python_toolbox import nifty_collections
 
 from . import misc
-from layout_rabbit import shy_misc_tools
+from python_toolbox import misc_tools
 
 infinity = float('inf')
 
 
         
-class ProductSpace(shy_sequence_tools.CuteSequenceMixin, collections.Sequence):
+class ProductSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
     def __init__(self, sequences):
-        self.sequences = shy_sequence_tools. \
+        self.sequences = sequence_tools. \
                                ensure_iterable_is_immutable_sequence(sequences)
-        self.sequence_lengths = tuple(map(shy_sequence_tools.get_length,
+        self.sequence_lengths = tuple(map(sequence_tools.get_length,
                                           self.sequences))
         self.length = misc_tools.general_product(self.sequence_lengths)
         
     def __repr__(self):
         return '<%s: %s>' % (
             type(self).__name__,
-            ' * '.join(str(shy_sequence_tools.get_length(sequence))
+            ' * '.join(str(sequence_tools.get_length(sequence))
                        for sequence in self.sequences),
         )
         
@@ -83,7 +83,7 @@ class ProductSpace(shy_sequence_tools.CuteSequenceMixin, collections.Sequence):
         for item, sequence in reversed(tuple(zip(given_sequence,
                                                  self.sequences))):
             wip_index += sequence.index(item) # Propagating `IndexError`
-            current_radix *= shy_sequence_tools.get_length(sequence)
+            current_radix *= sequence_tools.get_length(sequence)
             
         return wip_index
     
