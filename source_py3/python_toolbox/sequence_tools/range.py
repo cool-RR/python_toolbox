@@ -4,10 +4,12 @@ import types
 import collections
 import numbers
 
+from python_toolbox import caching
+
 infinity = float('inf')
 infinities = (infinity, -infinity)
-
 NoneType = type(None)
+
 
 def parse_range_args(*args):
     assert 0 <= len(args) <= 3
@@ -89,15 +91,18 @@ class Range(collections.Sequence, metaclass=RangeType):
     __eq__ = lambda self, other: (isinstance(other, Range) and
                                   (self._reduced == other._reduced))
     
+    distance_to_cover = caching.CachedProperty(lambda self:
+                                                        self.stop - self.start)
+    
     @caching.CachedProperty
     def length(self):
         from python_toolbox import math_tools
-        distance_to_cover = self.stop - self.start
-        if math_tools.get_sign(distance_to_cover) != \
+        
+        if math_tools.get_sign(self.distance_to_cover) != \
                                                 math_tools.get_sign(self.step):
             return 0
         else:
-            raw_length, remainder = divmod(distance_to_cover, self.step)
+            raw_length, remainder = divmod(self.distance_to_cover, self.step)
             raw_length += (remainder != 0)
             return raw_length
     
@@ -130,18 +135,22 @@ class Range(collections.Sequence, metaclass=RangeType):
         return self.length if (self.length not in infinities) else 0
         
     def __contains__(self, i):
+        try: self.index(i)
+        except ValueError: return False
+        else: return True
         
-        if not isinstance(i, numbers.Number):
-            return False
-        
-        
-    __contains__ = lambda self, i: (isinstance(i, numbers.Integral) and
-                                    i >= self.start)
     def index(self, i):
-        if not isinstance(i, numbers.Integral) or not i >= self.start:
+        if not isinstance(i, numbers.Number):
             raise ValueError
         else:
-            return i - self.start
+            distance = i - self.start
+            if math_tools.get_sign(distance) != math_tools.get_sign(self.step):
+                raise ValueError
+            index, remainder = divmod(distance, self.step)
+            if remainder == 0:
+                return index
+            else:
+                raise ValueError
         
     
 Range.register(range)
