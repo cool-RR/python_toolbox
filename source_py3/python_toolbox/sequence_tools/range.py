@@ -11,16 +11,49 @@ NoneType = type(None)
 
 def parse_range_args(*args):
     assert 0 <= len(args) <= 3
+
     if len(args) == 0:
         return (0, infinity, 1)
+    
     elif len(args) == 1:
-        return (0, args[0], 1)
+        (stop,) = args
+        if stop == -infinity: raise TypeError
+        elif stop is None: stop = infinity
+        return (0, stop, 1)
+    
     elif len(args) == 2:
-        return (args[0], args[1], 1)
+        (start, stop) = args
+        
+        if start in infinities: raise TypeError
+        elif start is None: start = 0
+
+        if stop == -infinity: raise TypeError
+        elif stop is None: stop = infinity
+        
+        return (start, stop, 1)
+    
     else:
         assert len(args) == 3
-        assert args[2] != 0
-        return args
+        (start, stop, step) = args
+        
+        if step == 0: raise TypeError
+
+        if start in infinities: raise TypeError
+        elif start is None: start = 0
+        
+        elif step > 0:
+                
+            if stop == -infinity: raise TypeError
+            elif stop is None: stop = infinity
+            
+        else:
+            assert step < 0
+        
+            if stop == infinity: raise TypeError
+            elif stop is None: stop = (-infinity)
+            
+            
+        return (start, stop, step)
     
 
 def _is_integral_or_none(thing):
@@ -36,38 +69,11 @@ class RangeType(abc.ABCMeta):
             if not all(map(_is_integral_or_none, (start, stop, step))):
                 cls_to_use = Range
                 
-            if step > 0:
-                
-                if start in infinities:
-                    raise TypeError
-                elif start is None:
-                    start = 0
+            if (step > 0 and stop == infinity) or \
+                                            (step < 0 and stop == (-infinity)):
+                cls_to_use = Range
                     
-                if stop == -infinity:
-                    raise TypeError
-                elif stop == infinity:
-                    cls_to_use = Range
-                elif stop is None:
-                    stop = infinity
-                    cls_to_use = Range
-                
-            else:
-                assert step < 0
-
-                if start in infinities:
-                    raise TypeError
-                elif start is None:
-                    start = 0
-                    
-                if stop == infinity:
-                    raise TypeError
-                elif stop == -infinity:
-                    cls_to_use = Range
-                elif stop is None:
-                    stop = -infinity
-                    cls_to_use = Range
-                    
-            return super().__call__(cls_to_use, (start, stop, end))
+            return super().__call__(cls_to_use, *args)
         
         else:
             return super().__call__(cls, *args)
@@ -75,38 +81,59 @@ class RangeType(abc.ABCMeta):
 
 class Range(collections.Sequence, metaclass=RangeType):
     def __init__(self, *args):
-        self.start, self.stop, self.end = parse_range_args(*args)
+        self.start, self.stop, self.step = parse_range_args(*args)
         
-    _reduced = property(lambda self: (type(self), self.start))
+    _reduced = property(lambda self: (type(self), (self.start, self.stop,
+                                                   self.end)))
         
     __eq__ = lambda self, other: (isinstance(other, Range) and
                                   (self._reduced == other._reduced))
     
-    def __iter__(self):
-        i = self.start
-        while True:
-            yield i
-            i += 1
-        
+    @caching.CachedProperty
+    def length(self):
+        from python_toolbox import math_tools
+        distance_to_cover = self.stop - self.start
+        if math_tools.get_sign(distance_to_cover) != \
+                                                math_tools.get_sign(self.step):
+            return 0
+        else:
+            raw_length, remainder = divmod(distance_to_cover, self.step)
+            raw_length += (remainder != 0)
+            return raw_length
+    
     __repr__ = lambda self: '%s(%s)' % (type(self).__name__, self.start)
     
     def __getitem__(self, i):
+        from python_toolbox import sequence_tools
         if isinstance(i, numbers.Integral):
-            return self.start + i
-        else:
-            assert isinstance(i, slice)
-            if i.step is not None:
-                raise NotImplementedError # Easy to implement if I needed it.
-            assert i.start is None or i.start >= 0
-            start = 0 if i.start is None else i.start
-            if i.stop == infinity:
-                return Range(self.start + start)
+            if 0 <= i < self.length:
+                return self.start + (self.step * i)
             else:
-                return range(self.start + start, self.start + i.stop)
-                
-            
+                raise IndexError
+        elif isinstance(i, (slice, sequence_tools.CanonicalSlice)):
+            canonical_slice = sequence_tools.CanonicalSlice(
+                i, iterable_or_length=self
+            )
+            if not (0 <= canonical_slice.start < self.length and
+                    0 <= canonical_slice.stop < self.length):
+                raise TypeError
+            return Range(
+                self[canonical_slice.start],
+                self[canonical_slice.stop],
+                self.step * canonical_slice.step
+            )
+        else:
+            raise TypeError
         
-    __len__ = lambda self: 0 # Sadly Python doesn't allow infinity here.
+    def __len__(self):
+        # Sadly Python doesn't allow infinity here.
+        return self.length if (self.length not in infinities) else 0
+        
+    def __contains__(self, i):
+        if not isinstance(i, numbers.Number):
+            return False
+        
+        
     __contains__ = lambda self, i: (isinstance(i, numbers.Integral) and
                                     i >= self.start)
     def index(self, i):
