@@ -26,6 +26,7 @@ def reverse_factorial(number, round_up=True):
         
     
 def from_factoradic(factoradic_number):
+    from python_toolbox import sequence_tools
     assert isinstance(factoradic_number, collections.Iterable)
     factoradic_number = \
               sequence_tools.ensure_iterable_is_sequence(factoradic_number)
