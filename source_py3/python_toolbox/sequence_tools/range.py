@@ -1,33 +1,44 @@
 import abc
+import builtins
+import types
 import collections
+import numbers
 
 infinity = float('inf')
 infinities = (infinity, -infinity)
 
-def parse_range_args(*args, **kwargs):
-    # We allow either `args` or `kwargs`, not both:
-    assert not (args and kwargs)
-    
-    if kwargs:
-        assert set(kwargs.keys()) in ('start', 'stop', 'set')
-        
+NoneType = type(None)
+
+def parse_range_args(*args):
     assert 0 <= len(args) <= 3
     if len(args) == 0:
         return (0, infinity, 1)
     elif len(args) == 1:
-        return (0, infinity, 1)
+        return (0, args[0], 1)
+    elif len(args) == 2:
+        return (args[0], args[1], 1)
+    else:
+        assert len(args) == 3
+        return (args[0], args[1], args[3])
     
-    
-    
+
+def _is_integral_or_infinite_or_none(thing):
+    return isinstance(thing, (math_tools.PossiblyInfiniteIntegral, NoneType))
 
 
 class RangeType(abc.ABCMeta):
     def __call__(cls, *args):
+        from python_toolbox import math_tools
         if cls is Range:
+            start, stop, step = parse_range_args(*args)
+            if not all(map(_is_integral_or_infinite_or_none,
+                           (start, stop, step))):
+                cls_to_use = Range
+            if 
+                
         else:
-            super().__call__(cls, *args)
-        
-        
+            cls_to_use = cls
+        return super().__call__(cls_to_use, *args)
         
 
 class Range(collections.Sequence, metaclass=RangeType):
