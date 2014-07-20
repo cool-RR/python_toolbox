@@ -96,10 +96,10 @@ class ChainSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
                                                 self.accumulated_lengths):
             try:
                 return sequence.index(item) + accumulated_length
-            except IndexError:
+            except ValueError:
                 pass
         else:
-            raise IndexError
+            raise ValueError
     
     def __bool__(self):
         try:

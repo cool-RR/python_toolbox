@@ -535,7 +535,7 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
     def __contains__(self, item):
         try:
             self.index(item)
-        except IndexError:
+        except ValueError:
             return False
         else:
             return True
@@ -544,31 +544,31 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
     def index(self, perm):
         '''Get the index number of permutation `perm` in this space.'''
         if not isinstance(perm, collections.Iterable):
-            raise IndexError
+            raise ValueError
         
         perm = sequence_tools.ensure_iterable_is_immutable_sequence(perm)
         
         if len(perm) != self.n_elements:
-            raise IndexError
+            raise ValueError
         
         if not isinstance(perm, self.perm_type):
             perm_set = set(perm)
             if perm_set != set(range(len(perm))):
                 if perm_set != set(self.sequence):
-                    raise IndexError
+                    raise ValueError
                 perm = self.perm_type(perm, self)
             else:
                 perm = self.perm_type(perm)
             
         elif self.is_rapplied:
             if not perm.is_rapplied:
-                raise IndexError
+                raise ValueError
             if set(perm) != set(self.sequence):
-                raise IndexError
+                raise ValueError
         elif perm.is_rapplied and not self.is_rapplied:
-            raise IndexError
+            raise ValueError
         if self.is_degreed and (perm.degree not in self.degrees):
-            raise IndexError
+            raise ValueError
         
         # At this point we know the permutation contains the correct items, and
         # has the correct degree.
@@ -602,7 +602,7 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
             for i, perm_item in enumerate(perm):
                 if i in self.fixed_map:
                     if self.fixed_map[i] != perm_item:
-                        raise IndexError
+                        raise ValueError
                 else:
                     free_values_perm_sequence.append(perm_item)
             
@@ -617,7 +617,7 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
             perm_number = perm.number
             
         if not perm_number in self.canonical_slice:
-            raise IndexError
+            raise ValueError
             
         return perm_number - self.canonical_slice.start
     

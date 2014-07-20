@@ -60,7 +60,7 @@ class SelectionSpace(sequence_tools.CuteSequenceMixin,
     # def __contains__(self, given_sequence):
         # try:
             # self.index(given_sequence)
-        # except IndexError:
+        # except ValueError:
             # return False
         # else:
             # return True
@@ -68,7 +68,7 @@ class SelectionSpace(sequence_tools.CuteSequenceMixin,
     # def index(self, given_sequence):
         # if not isinstance(given_sequence, collections.Sequence) or \
                                 # not len(given_sequence) == len(self.sequences):
-            # raise IndexError
+            # raise ValueError
         
         # reverse_indices = []
         # current_radix = 1
@@ -76,7 +76,7 @@ class SelectionSpace(sequence_tools.CuteSequenceMixin,
         # wip_index = 0
             
         # for item, sequence in reversed(tuple(zip(given_sequence, self.sequences))):
-            # wip_index += sequence.index(item) # Propagating `IndexError`
+            # wip_index += sequence.index(item) # Propagating `ValueError`
             # current_radix *= misc.get_length(sequence)
             
         # return wip_index

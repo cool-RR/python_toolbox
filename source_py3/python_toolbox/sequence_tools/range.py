@@ -130,6 +130,7 @@ class Range(collections.Sequence, metaclass=RangeType):
         return self.length if (self.length not in infinities) else 0
         
     def __contains__(self, i):
+        
         if not isinstance(i, numbers.Number):
             return False
         
@@ -138,7 +139,7 @@ class Range(collections.Sequence, metaclass=RangeType):
                                     i >= self.start)
     def index(self, i):
         if not isinstance(i, numbers.Integral) or not i >= self.start:
-            raise IndexError
+            raise ValueError
         else:
             return i - self.start
         

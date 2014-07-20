@@ -65,7 +65,7 @@ class ProductSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
     def __contains__(self, given_sequence):
         try:
             self.index(given_sequence)
-        except IndexError:
+        except ValueError:
             return False
         else:
             return True
@@ -73,7 +73,7 @@ class ProductSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
     def index(self, given_sequence):
         if not isinstance(given_sequence, collections.Sequence) or \
                                 not len(given_sequence) == len(self.sequences):
-            raise IndexError
+            raise ValueError
         
         reverse_indices = []
         current_radix = 1
@@ -82,7 +82,7 @@ class ProductSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
             
         for item, sequence in reversed(tuple(zip(given_sequence,
                                                  self.sequences))):
-            wip_index += sequence.index(item) # Propagating `IndexError`
+            wip_index += sequence.index(item) # Propagating `ValueError`
             current_radix *= sequence_tools.get_length(sequence)
             
         return wip_index
