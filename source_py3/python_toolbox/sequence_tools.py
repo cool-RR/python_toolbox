@@ -328,6 +328,7 @@ class CanonicalSlice:
         If `step` is `None`, it will be changed to the default `1`.
         '''
         from . import math_tools
+        
         if isinstance(slice_, CanonicalSlice):
             slice_ = slice(slice_.start, slice_.stop, slice_.step)
         assert isinstance(slice_, slice)
@@ -346,65 +347,67 @@ class CanonicalSlice:
             
         self.offset = offset
             
-        ### Parsing `step`:
+        ### Parsing `step`: ###################################################
+        #                                                                     #
         assert slice_.step != 0
         if slice_.step is None:
             self.step = 1
         else:
             self.step = slice_.step
-        ###
+        #                                                                     #
+        ### Finished parsing `step`. ##########################################
 
-        if (self.step > 0 and (slice_.start or 0) >=
-                             (slice_.stop or self.length or infinity) > 0) or \
-           (self.step < 0 and (slice_.stop or - 1) >=
-                                (slice_.start or self.length - 1 or infinity)):
             
-            self.start = self.stop = 0
-        else:
-                
-            ### Parsing `start`:
-            if slice_.start is None:
-                if self.step > 0:
-                    self.start = 0 + self.offset
-                else:
-                    assert self.step < 0
-                    start = (self.length + self.offset) if \
+        ### Parsing `start`: #################################################
+        #                                                                    #
+        if slice_.start is None:
+            if self.step > 0:
+                self.start = 0 + self.offset
+            else:
+                assert self.step < 0
+                self.start = (self.length + self.offset) if \
                                         (self.length is not None) else infinity
-            else: # s.start is not None
-                if self.length is not None:
-                    if slice_.start < 0:
-                        self.start = \
+        else: # s.start is not None
+            if self.length is not None:
+                if slice_.start < 0:
+                    self.start = \
                                max(slice_.start + self.length, 0) + self.offset
-                    else:
-                        self.start = \
-                                   min(slice_.start, self.length) + self.offset
-                else: 
-                    self.start = slice_.start + self.offset
-                    
-            ### Parsing `stop`:
-            if slice_.stop is None:
-                if self.step > 0:
-                    self.stop = (self.length + self.offset) if \
-                                        (self.length is not None) else infinity
                 else:
-                    assert self.step < 0
-                    self.stop = -1 + self.offset 
-                
-            else: # slice_.stop is not None
-                if self.length is not None:
-                    if slice_.stop < 0:
-                        self.stop = \
-                                max(slice_.stop + self.length, 0) + self.offset
-                    else: # slice_.stop >= 0
-                        self.stop = min(slice_.stop, self.length) + self.offset
-                else: 
-                    self.stop = slice_.stop + self.offset 
-            ###
+                    self.start = min(slice_.start, self.length) + self.offset
+            else: 
+                self.start = slice_.start + self.offset
+        #                                                                     #
+        ### Finished parsing `start`. #########################################
+        
+        ### Parsing `stop`: ###################################################
+        #                                                                     #
+        if slice_.stop is None:
+            if self.step > 0:
+                self.stop = (self.length + self.offset) if \
+                                        (self.length is not None) else infinity
+            else:
+                assert self.step < 0
+                self.stop = -infinity 
             
-        if infinity not in (self.start, self.stop):
-            self.slice_ = slice(*self)
-        else:
-            self.slice_ = None
+        else: # slice_.stop is not None
+            if self.length is not None:
+                if slice_.stop < 0:
+                    self.stop = max(slice_.stop + self.length, 0) + self.offset
+                else: # slice_.stop >= 0
+                    self.stop = min(slice_.stop, self.length) + self.offset
+            else: 
+                self.stop = slice_.stop + self.offset 
+        #                                                                     #
+        ### Finished parsing `stop`. ##########################################
+            
+        if (self.step > 0 and self.start >= self.stop > 0) or \
+           (self.step < 0 and self.stop >= self.start):
+            # We have a case of an empty slice.
+            self.start = self.stop = 0
+        
+            
+        self.slice_ = slice(*((item if item not in math_tools.infinities
+                               else None) for item in self))
             
         ### Doing sanity checks: ##############################################
         #                                                                     #

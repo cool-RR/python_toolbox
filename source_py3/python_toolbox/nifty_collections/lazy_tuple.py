@@ -192,6 +192,7 @@ class LazyTuple(collections.Sequence):
 
     
     def __eq__(self, other):
+        from python_toolbox import sequence_tools
         if not sequence_tools.is_immutable_sequence(other):
             return False
         for i, j in itertools.zip_longest(self, other,

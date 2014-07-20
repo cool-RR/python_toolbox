@@ -4,6 +4,9 @@
 import abc
 import numbers
 
+infinity = float('inf')
+infinities = (infinity, -infinity)
+
 
 class _PossiblyInfiniteIntegralType(abc.ABCMeta):
     # blocktodo: use everywhere in python_toolbox

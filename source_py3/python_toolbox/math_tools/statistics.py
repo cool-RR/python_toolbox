@@ -5,6 +5,7 @@ import numbers
 
 
 infinity = float('inf')
+infinities = (infinity, -infinity)
 
 
 def get_median(iterable):
