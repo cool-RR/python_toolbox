@@ -19,11 +19,12 @@ def parse_range_args(*args):
         return (args[0], args[1], 1)
     else:
         assert len(args) == 3
-        return (args[0], args[1], args[3])
+        assert args[2] != 0
+        return args
     
 
-def _is_integral_or_infinite_or_none(thing):
-    return isinstance(thing, (math_tools.PossiblyInfiniteIntegral, NoneType))
+def _is_integral_or_none(thing):
+    return isinstance(thing, (numbers.Integral, NoneType))
 
 
 class RangeType(abc.ABCMeta):
@@ -31,20 +32,50 @@ class RangeType(abc.ABCMeta):
         from python_toolbox import math_tools
         if cls is Range:
             start, stop, step = parse_range_args(*args)
-            if not all(map(_is_integral_or_infinite_or_none,
-                           (start, stop, step))):
+            cls_to_use = range # Until challenged.
+            if not all(map(_is_integral_or_none, (start, stop, step))):
                 cls_to_use = Range
-            if 
                 
+            if step > 0:
+                
+                if start in infinities:
+                    raise TypeError
+                elif start is None:
+                    start = 0
+                    
+                if stop == -infinity:
+                    raise TypeError
+                elif stop == infinity:
+                    cls_to_use = Range
+                elif stop is None:
+                    stop = infinity
+                    cls_to_use = Range
+                
+            else:
+                assert step < 0
+
+                if start in infinities:
+                    raise TypeError
+                elif start is None:
+                    start = 0
+                    
+                if stop == infinity:
+                    raise TypeError
+                elif stop == -infinity:
+                    cls_to_use = Range
+                elif stop is None:
+                    stop = -infinity
+                    cls_to_use = Range
+                    
+            return super().__call__(cls_to_use, (start, stop, end))
+        
         else:
-            cls_to_use = cls
-        return super().__call__(cls_to_use, *args)
+            return super().__call__(cls, *args)
         
 
 class Range(collections.Sequence, metaclass=RangeType):
     def __init__(self, *args):
-        assert isinstance(start, numbers.Integral)
-        self.start = start
+        self.start, self.stop, self.end = parse_range_args(*args)
         
     _reduced = property(lambda self: (type(self), self.start))
         
