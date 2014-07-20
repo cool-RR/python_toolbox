@@ -3,6 +3,7 @@
 
 import math
 import collections
+import itertools
 
 infinity = float('inf')
 

@@ -229,50 +229,6 @@ def get_recurrences(sequence):
             collections.Counter(sequence).most_common() if n_recurrences >= 2}
 
     
-class CuteCount(collections.Sequence):
-    def __init__(self, start=0):
-        assert isinstance(start, numbers.Integral)
-        self.start = start
-        
-    _reduced = property(lambda self: (type(self), self.start))
-        
-    __eq__ = lambda self, other: (isinstance(other, CuteCount) and
-                                  (self._reduced == other._reduced))
-    
-    def __iter__(self):
-        i = self.start
-        while True:
-            yield i
-            i += 1
-        
-    __repr__ = lambda self: '%s(%s)' % (type(self).__name__, self.start)
-    
-    def __getitem__(self, i):
-        if isinstance(i, numbers.Integral):
-            return self.start + i
-        else:
-            assert isinstance(i, slice)
-            if i.step is not None:
-                raise NotImplementedError # Easy to implement if I needed it.
-            assert i.start is None or i.start >= 0
-            start = 0 if i.start is None else i.start
-            if i.stop == infinity:
-                return CuteCount(self.start + start)
-            else:
-                return range(self.start + start, self.start + i.stop)
-                
-            
-        
-    __len__ = lambda self: 0 # Sadly Python doesn't allow infinity here.
-    __contains__ = lambda self, i: (isinstance(i, numbers.Integral) and
-                                    i >= self.start)
-    def index(self, i):
-        if not isinstance(i, numbers.Integral) or not i >= self.start:
-            raise IndexError
-        else:
-            return i - self.start
-        
-    
 def ensure_iterable_is_immutable_sequence(iterable, default_type=tuple,
                                           unallowed_types=(bytes,)):
     '''
