@@ -46,6 +46,6 @@ proj.shared-attribute-names = ['proj.shared-attribute-names',
                                'debug.named-entry-points',
                                'debug.launch-configs',
                                'console.toolbox']
-testing.auto-test-file-specs = [('glob',
-                                 'test_python_toolbox/test*.py')]
+testing.auto-test-file-specs = [('regex',
+                                 'test_python_toolbox(/test[^/.]*)+[.]py')]
 testing.test-framework = {None: 'nose'}
