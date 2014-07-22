@@ -63,9 +63,9 @@ def _is_integral_or_none(thing):
 
 
 class RangeType(abc.ABCMeta):
-    def __call__(cls, *args):
+    def __call__(cls, *args, _avoid_builtin_range=False):
         from python_toolbox import math_tools
-        if cls is Range:
+        if cls is Range and not _avoid_builtin_range:
             start, stop, step = parse_range_args(*args)
             cls_to_use = range # Until challenged.
             if not all(map(_is_integral_or_none, (start, stop, step))):
