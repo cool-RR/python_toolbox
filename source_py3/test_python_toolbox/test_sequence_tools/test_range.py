@@ -23,6 +23,6 @@ def test():
             assert r0[-1] == r1[-1]
         assert repr(r0)[1:] == repr(r1)[1:]
         
-    pass
+    raise 1 / 0 # Keep testing doge
         
     
