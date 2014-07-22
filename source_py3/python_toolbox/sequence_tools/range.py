@@ -67,18 +67,21 @@ class RangeType(abc.ABCMeta):
         from python_toolbox import math_tools
         if cls is Range and not _avoid_builtin_range:
             start, stop, step = parse_range_args(*args)
-            cls_to_use = range # Until challenged.
+            use_builtin_range = True # Until challenged.
             if not all(map(_is_integral_or_none, (start, stop, step))):
-                cls_to_use = Range
+                use_builtin_range = False
                 
             if (step > 0 and stop == infinity) or \
                                             (step < 0 and stop == (-infinity)):
-                cls_to_use = Range
+                use_builtin_range = False
                     
-            return super().__call__(cls_to_use, *args)
+            if use_builtin_range:
+                return range(*args)
+            else:
+                return super().__call__(*args)
         
         else:
-            return super().__call__(cls, *args)
+            return super().__call__(*args)
         
 
 class Range(collections.Sequence, metaclass=RangeType):
@@ -106,13 +109,27 @@ class Range(collections.Sequence, metaclass=RangeType):
             raw_length += (remainder != 0)
             return raw_length
     
-    __repr__ = lambda self: '%s(%s)' % (type(self).__name__, self.start)
+    __repr__ = lambda self: self._repr
+        
+        
+    @caching.CachedProperty
+    def _repr(self):
+        return '%s(%s%s%s)' % (
+            type(self).__name__,
+            '%s, ' % self.start,
+            '%s' % self.stop, 
+            (', %s' % self.step) if self.step != 1 else '',
+        )
+        
+        
     
     def __getitem__(self, i):
         from python_toolbox import sequence_tools
         if isinstance(i, numbers.Integral):
             if 0 <= i < self.length:
                 return self.start + (self.step * i)
+            elif (-self.length) <= i < 0:
+                return self.start + (self.step * (i + self.length))
             else:
                 raise IndexError
         elif isinstance(i, (slice, sequence_tools.CanonicalSlice)):
