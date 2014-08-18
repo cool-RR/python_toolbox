@@ -77,7 +77,7 @@ class LazyTuple(collections.Sequence):
     (e.g. asking for the seventh-to-last element.)
     
     If you're passing in an iterator you definitely know to be infinite,
-    specify `definitely_infinite=False`.
+    specify `definitely_infinite=True`.
     '''
     
     def __init__(self, iterable, definitely_infinite=False):
