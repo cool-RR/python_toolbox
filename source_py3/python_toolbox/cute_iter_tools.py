@@ -430,9 +430,21 @@ def is_sorted(iterable, key=None):
         return True
         
     
-class _PUSHBACK_SENTINEL: pass
+class _PUSHBACK_SENTINEL:
+    '''Sentinel used by `PushbackIterator` to say nothing was pushed back.'''
  
 class PushbackIterator(object):
+    '''
+    Iterator allowing to push back the last item so it'll be yielded next time.
+    
+    Initialize `PushbackIterator` with your favorite iterator as the argument
+    and it'll create an iterator wrapping it on which you can call
+    `.push_back()` to have it take the recently yielded item and yield it again
+    next time.
+
+    Only one item may be pushed back at any time.
+    '''
+    
     def __init__(self, iterable):
         self.iterator = iter(iterable)
         self.last_item = _PUSHBACK_SENTINEL
@@ -446,8 +458,6 @@ class PushbackIterator(object):
         else:
             self.last_item = next(self.iterator)
             return self.last_item
-            
-    next = __next__
             
     def push_back(self):
         if self.last_item == _PUSHBACK_SENTINEL:
