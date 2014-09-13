@@ -430,3 +430,30 @@ def is_sorted(iterable, key=None):
         return True
         
     
+class _PUSHBACK_SENTINEL: pass
+ 
+class PushbackIterator(object):
+    def __init__(self, iterable):
+        self.iterator = iter(iterable)
+        self.last_item = _PUSHBACK_SENTINEL
+        self.just_pushed_back = False
+        
+    def __next__(self):
+        if self.just_pushed_back:
+            assert self.last_item != _PUSHBACK_SENTINEL
+            self.just_pushed_back = False
+            return self.last_item
+        else:
+            self.last_item = next(self.iterator)
+            return self.last_item
+            
+    next = __next__
+            
+    def push_back(self):
+        if self.last_item == _PUSHBACK_SENTINEL:
+            raise Exception
+        if self.just_pushed_back:
+            raise Exception
+        self.just_pushed_back = True
+        
+ 
