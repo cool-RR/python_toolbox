@@ -1,3 +1,6 @@
+# Copyright 2009-2014 Ram Rachum.
+# This program is distributed under the MIT license.
+
 import collections
 import abc
 import functools
@@ -103,6 +106,8 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
     A permutation space can be sliced by using regular Python slice notation.
     
     Note: Some of the options are not allowed to be used with each other.
+    
+    Some clarification  on terminology <blocktododoc> rapplied, dapplied "just" etc.
     '''
     
     @classmethod
