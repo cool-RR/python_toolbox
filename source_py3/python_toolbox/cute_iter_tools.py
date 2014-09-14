@@ -346,7 +346,7 @@ def call_until_exception(function, exception, lazy_tuple=False):
     '''
     iterator = _call_until_exception(function, exception)
     if lazy_tuple:
-        from python_toolbox import nifty_collections # Avoiding circular import.
+        from python_toolbox import nifty_collections # Avoiding circular import
         return nifty_collections.LazyTuple(iterator)
     else:
         return iterator
@@ -469,3 +469,18 @@ class PushbackIterator(object):
         self.just_pushed_back = True
         
  
+ 
+def iterate_pop(poppable, lazy_tuple=False):
+    return call_until_exception(poppable.pop, IndexError,
+                                lazy_tuple=lazy_tuple)
+ 
+def iterate_popleft(left_poppable, lazy_tuple=False):
+    return call_until_exception(left_poppable.popleft, IndexError,
+                                lazy_tuple=lazy_tuple)
+
+def iterate_popitem(item_poppable, lazy_tuple=False):
+    return call_until_exception(item_poppable.popitem, KeyError,
+                                lazy_tuple=lazy_tuple)
+    
+
+
