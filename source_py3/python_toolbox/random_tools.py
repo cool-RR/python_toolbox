@@ -47,6 +47,6 @@ def shuffled(sequence):
         [0, 3, 5, 1, 4, 2]
         
     '''
-    sequence_copy = sequence[:]
+    sequence_copy = list(sequence)
     random.shuffle(sequence_copy)
     return sequence_copy

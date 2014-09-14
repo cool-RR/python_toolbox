@@ -20,3 +20,6 @@ def test():
     
     # ...And the original list was not changed.
     assert my_range == list(range(50))
+    
+    # Immutable sequences work too:
+    assert set(random_tools.shuffled((1, 2, 3))) == {1, 2, 3}
