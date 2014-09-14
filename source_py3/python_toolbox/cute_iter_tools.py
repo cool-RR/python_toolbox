@@ -458,6 +458,8 @@ class PushbackIterator(object):
         else:
             self.last_item = next(self.iterator)
             return self.last_item
+        
+    __iter__ = lambda self: self
             
     def push_back(self):
         if self.last_item == _PUSHBACK_SENTINEL:

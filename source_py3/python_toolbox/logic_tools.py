@@ -71,3 +71,6 @@ def logic_max(iterable, relation=lambda a, b: (a >= b)):
     
     return maximal_elements
         
+        
+        
+    
