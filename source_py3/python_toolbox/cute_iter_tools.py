@@ -471,14 +471,17 @@ class PushbackIterator(object):
  
  
 def iterate_pop(poppable, lazy_tuple=False):
+    '''Iterate by doing `.pop()` until no more items.'''
     return call_until_exception(poppable.pop, IndexError,
                                 lazy_tuple=lazy_tuple)
  
 def iterate_popleft(left_poppable, lazy_tuple=False):
+    '''Iterate by doing `.popleft()` until no more items.'''
     return call_until_exception(left_poppable.popleft, IndexError,
                                 lazy_tuple=lazy_tuple)
 
 def iterate_popitem(item_poppable, lazy_tuple=False):
+    '''Iterate by doing `.popitem()` until no more items.'''
     return call_until_exception(item_poppable.popitem, KeyError,
                                 lazy_tuple=lazy_tuple)
     
