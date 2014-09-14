@@ -11,7 +11,7 @@ from python_toolbox import dict_tools
 from python_toolbox import nifty_collections
 from python_toolbox import sequence_tools
 from python_toolbox import caching
-import python_toolbox.arguments_profile
+import python_toolbox.arguments_profiling
 
 from python_toolbox import math_tools
 from python_toolbox import sequence_tools
@@ -37,7 +37,7 @@ class PermSpaceType(abc.ABCMeta):
     def __call__(cls, *args, **kwargs):
         if cls == PermSpace and kwargs.get('is_combination', False):
             from .comb_space import CombSpace
-            arguments_profile = python_toolbox.arguments_profile. \
+            arguments_profile = python_toolbox.arguments_profiling. \
                     ArgumentsProfile(PermSpace.__init__, None, *args, **kwargs)
             if arguments_profile.get('fixed_map', None):
                 raise NotImplementedError

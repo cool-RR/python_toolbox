@@ -4,7 +4,7 @@
    "Ram Rachum at ram.rachum.com" including link. The license may be obtained
    at http://creativecommons.org/licenses/by-sa/3.0/
 
-.. _topics-arguments-profile:
+.. _topics-arguments-profiling:
 
-:mod:`arguments_profile` - documentation not written
+:mod:`arguments_profiling` - documentation not written
 ======================================
