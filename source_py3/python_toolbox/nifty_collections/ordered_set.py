@@ -110,7 +110,8 @@ class OrderedSet(collections.MutableSet, collections.Sequence):
         # drop circulary-referencing objects.
 
     def move_to_end(self, key):
-        '''Move an existing element to the end (or beginning if last==False).
+        '''
+        Move an existing element to the end (or beginning if last==False).
 
         Raises KeyError if the element does not exist.
         When last=True, acts like a fast version of self[key]=self.pop(key).
