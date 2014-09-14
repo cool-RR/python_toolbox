@@ -27,6 +27,7 @@ bad_segments = (
     (10 ** 10, 10 ** 11)
 )
 
+
 def test_merge_segments():
     for segment, cropped_segment in segment_to_cropped_segment.items():
         assert crop_segment(segment, base_segment) == cropped_segment
