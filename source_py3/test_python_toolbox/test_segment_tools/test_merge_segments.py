@@ -1,3 +1,5 @@
+# Copyright 2009-2014 Ram Rachum.
+# This program is distributed under the MIT license.
 
 from python_toolbox.segment_tools import merge_segments
 
