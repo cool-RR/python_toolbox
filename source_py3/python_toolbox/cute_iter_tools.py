@@ -433,7 +433,7 @@ def is_sorted(iterable, key=None):
 class _PUSHBACK_SENTINEL:
     '''Sentinel used by `PushbackIterator` to say nothing was pushed back.'''
  
-class PushbackIterator(object):
+class PushbackIterator:
     '''
     Iterator allowing to push back the last item so it'll be yielded next time.
     
