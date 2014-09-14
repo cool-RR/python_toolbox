@@ -105,6 +105,7 @@ class LazyTuple(collections.Sequence):
         
         
     @classmethod
+    @decorator_tools.helpful_decorator_builder
     def factory(cls, definitely_infinite=False):
         '''
         Decorator to make generators return a `LazyTuple`.
