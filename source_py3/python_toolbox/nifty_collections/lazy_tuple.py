@@ -113,7 +113,7 @@ class LazyTuple(collections.Sequence):
         
             @LazyTuple.factory()
             def my_generator():
-                yield 'hello'; yield 'world'; yield 'have'; yield 'fun'
+                yield from ['hello', 'world', 'have', 'fun']
         
         This works on any function that returns an iterator. todo: Make it work
         on iterator classes.
