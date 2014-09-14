@@ -105,7 +105,7 @@ def get_object_by_address(address, root=None, namespace={}):
             root = get_object_by_address(root)
         root_short_name = root.__name__.rsplit('.', 1)[-1]
         
-    if namespace:
+    if namespace not in (None, {}):
         # And then for `namespace`:
         if isinstance(namespace, str):
             namespace = get_object_by_address(namespace)
@@ -136,8 +136,8 @@ def get_object_by_address(address, root=None, namespace={}):
         if root and (address == root_short_name):
             return root
     
-        if parent_object:
-                
+        if parent_object is not None:
+    
             if isinstance(parent_object, types.ModuleType) and \
                hasattr(parent_object, '__path__'):
                                 
@@ -166,7 +166,7 @@ def get_object_by_address(address, root=None, namespace={}):
         # `parent_object`. We try this before `namespace_dict` because
         # `parent_object` may have `__getattr__` or similar magic and our
         # object might be found through that:
-        if parent_object and hasattr(parent_object, address):
+        if (parent_object is not None) and hasattr(parent_object, address):
             return getattr(parent_object, address)
         
         # Next is the `namespace_dict`:
