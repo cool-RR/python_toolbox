@@ -22,6 +22,6 @@ def test():
     assert dict(iterate_popitem(dict_)) == {1: 2, 3: 4, 5: 6,}
     assert not dict_
     
-    lazy_tuple = iterate_pop(list(range(5)))
+    lazy_tuple = iterate_pop(list(range(5)), lazy_tuple=True)
     assert isinstance(lazy_tuple, nifty_collections.LazyTuple)
     
