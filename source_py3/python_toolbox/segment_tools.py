@@ -47,14 +47,11 @@ def merge_segments(segments):
         ((0, 17), (30, 40))
 
     '''
-    assert all(len(segment) == 2 for segment in segments)
     sorted_segments = sorted(segments)
-    if not sorted_segments:
-        return ()
+    assert all(len(segment) == 2 for segment in sorted_segments)
     
     fixed_segments = []
     pushback_iterator = cute_iter_tools.PushbackIterator(sorted_segments)
-    
     
     for first_segment_in_run in pushback_iterator: # (Sharing iterator with
                                                    #  other for loop.)
