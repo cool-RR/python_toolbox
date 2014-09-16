@@ -64,12 +64,12 @@ def _is_integral_or_none(thing):
 
 class RangeType(abc.ABCMeta):
     '''Metaclass for `Range`, see its docstring for details.'''
-    def __call__(cls, *args, _avoid_builtin_range=False):
+    def __call__(cls, *args, _avoid_built_in_range=False):
         # Our job here is to decide whether to instantiate using the built-in
         # `range` or our kickass `Range`.
         from python_toolbox import math_tools
         
-        if (cls is Range) and (not _avoid_builtin_range):
+        if (cls is Range) and (not _avoid_built_in_range):
             start, stop, step = parse_range_args(*args)
             
             use_builtin_range = True # Until challenged.
@@ -90,7 +90,7 @@ class RangeType(abc.ABCMeta):
             else:
                 return super().__call__(*args)
         
-        else: # (cls is not Range) or _avoid_builtin_range
+        else: # (cls is not Range) or _avoid_built_in_range
             return super().__call__(*args)
         
 
@@ -186,6 +186,8 @@ class Range(collections.Sequence, metaclass=RangeType):
                 return index
             else:
                 raise ValueError
+            
+    is_infinity = caching.CachedProperty(lambda self: self.length == infinity)
         
     
 Range.register(range)
