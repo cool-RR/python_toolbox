@@ -8,7 +8,7 @@ from python_toolbox.sequence_tools import CuteRange
 infinity = float('inf')
 
 
-def test():
+def test_built_in():
     built_in_range_arguments_tuples = (
         (10,), (3,), (20, 30), (20, 30, 2), (20, 30, -2)
     )
@@ -29,6 +29,7 @@ def test():
             assert cr0[-1] == cr1[-1]
         assert repr(cr0)[1:] == repr(cr1)[5:]
         
+def test_infinite():
     infinite_range_arguments_tuples = (
         (), (10, infinity), (10, infinity, 2), (100, -infinity, -7)
     )
@@ -40,7 +41,10 @@ def test():
         assert isinstance(cr0, CuteRange)
         assert cr0.length == infinity and len(cr0) == 0
         assert isinstance(cr0[0], int)
+        assert cr0[10:].length == cr0[200:] == infinity
+        assert cr0[:10].length != infinity != cr0[:200]
         
+def test_illegal():
     illegal_range_arguments_tuples = (
         (infinity, 10, -7), 
     )
@@ -50,6 +54,23 @@ def test():
             CuteRange(*illegal_range_arguments_tuple)
     
         
-    raise 1 / 0 # Keep testing doge
+def test_float():
+    cr = CuteRange(10, 20, 1.5)
+    assert list(cr) == [10, 11.5, 13, 14.5, 16, 17.5, 19]
+    assert len(cr) == len(list(cr)) == 7
+    assert list(map(range(7), cr.__getitem__)) == list(cr)
+    
+    float_range_arguments_tuples = (
+        (10, 20, 1.5), (20, 10.5, -0.33), (10.3, infinity, 2.5),
+        (100, -infinity, -7.1), (10.5, 20)
+    )
+    
+    for float_range_arguments_tuple in float_range_arguments_tuples:
+        cr0 = CuteRange(*float_range_arguments_tuple)
+        assert type(cr0) == CuteRange
+        assert not isinstance(cr0, range)
+        assert isinstance(cr0, CuteRange)
+        assert float in list(map(type, cr0[:2]))
+        
         
     
