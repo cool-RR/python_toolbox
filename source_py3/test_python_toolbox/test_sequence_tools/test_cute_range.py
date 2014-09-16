@@ -14,32 +14,32 @@ def test():
     )
     
     for built_in_range_arguments_tuple in built_in_range_arguments_tuples:
-        r0 = CuteRange(*built_in_range_arguments_tuple)
-        assert type(r0) == range
-        assert isinstance(r0, range)
-        assert isinstance(r0, CuteRange)
-        r1 = CuteRange(*built_in_range_arguments_tuple, _avoid_built_in_range=True)
-        assert r1.length == len(r1)
-        assert type(r1) == CuteRange
-        assert not isinstance(r1, range)
-        assert isinstance(r1, CuteRange)
-        assert tuple(r0) == tuple(r1)
-        if r0:
-            assert r0[0] == r1[0]
-            assert r0[-1] == r1[-1]
-        assert repr(r0)[1:] == repr(r1)[1:]
+        cr0 = CuteRange(*built_in_range_arguments_tuple)
+        assert type(cr0) == range
+        assert isinstance(cr0, range)
+        assert isinstance(cr0, CuteRange)
+        cr1 = CuteRange(*built_in_range_arguments_tuple, _avoid_built_in_range=True)
+        assert cr1.length == len(cr1)
+        assert type(cr1) == CuteRange
+        assert not isinstance(cr1, range)
+        assert isinstance(cr1, CuteRange)
+        assert tuple(cr0) == tuple(cr1)
+        if cr0:
+            assert cr0[0] == cr1[0]
+            assert cr0[-1] == cr1[-1]
+        assert repr(cr0)[1:] == repr(cr1)[5:]
         
     infinite_range_arguments_tuples = (
         (), (10, infinity), (10, infinity, 2), (100, -infinity, -7)
     )
     
     for infinite_range_arguments_tuple in infinite_range_arguments_tuples:
-        r0 = CuteRange(*infinite_range_arguments_tuple)
-        assert type(r0) == CuteRange
-        assert not isinstance(r0, range)
-        assert isinstance(r0, CuteRange)
-        assert r0.length == infinity and len(r0) == 0
-        assert isinstance(r0[0], int)
+        cr0 = CuteRange(*infinite_range_arguments_tuple)
+        assert type(cr0) == CuteRange
+        assert not isinstance(cr0, range)
+        assert isinstance(cr0, CuteRange)
+        assert cr0.length == infinity and len(cr0) == 0
+        assert isinstance(cr0[0], int)
         
     illegal_range_arguments_tuples = (
         (infinity, 10, -7), 
