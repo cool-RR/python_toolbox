@@ -63,16 +63,26 @@ def _is_integral_or_none(thing):
 
 
 class RangeType(abc.ABCMeta):
+    '''Metaclass for `Range`, see its docstring for details.'''
     def __call__(cls, *args, _avoid_builtin_range=False):
+        # Our job here is to decide whether to instantiate using the built-in
+        # `range` or our kickass `Range`.
         from python_toolbox import math_tools
-        if cls is Range and not _avoid_builtin_range:
+        
+        if (cls is Range) and (not _avoid_builtin_range):
             start, stop, step = parse_range_args(*args)
+            
             use_builtin_range = True # Until challenged.
+            
             if not all(map(_is_integral_or_none, (start, stop, step))):
+                # If any of `(start, stop, step)` are not integers or `None`, we
+                # definitely need `Range`.
                 use_builtin_range = False
                 
             if (step > 0 and stop == infinity) or \
                                             (step < 0 and stop == (-infinity)):
+                # If the range of numbers is infinite, we sure as shit need
+                # `Range`.
                 use_builtin_range = False
                     
             if use_builtin_range:
@@ -80,11 +90,19 @@ class RangeType(abc.ABCMeta):
             else:
                 return super().__call__(*args)
         
-        else:
+        else: # (cls is not Range) or _avoid_builtin_range
             return super().__call__(*args)
         
 
 class Range(collections.Sequence, metaclass=RangeType):
+    '''
+    Improved version of Python's `range` that has extra features.
+    
+    `Range` is like Python's built-in `range`, except (1) it's with a capital R
+    and (2) it's completely different. LOL, just kidding.
+    
+    
+    '''
     def __init__(self, *args):
         self.start, self.stop, self.step = parse_range_args(*args)
         
