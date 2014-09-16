@@ -40,7 +40,18 @@ def parse_range_args(*args):
         
         if step == 0: raise TypeError
 
-        if start in infinities: raise TypeError
+        if start in infinities:
+            raise TypeError(
+                "Can't have `start=%s` because then what would the first item "
+                "be, %s? And the second item, %s + 1? No can do." %
+                (start, start)
+            )
+        if step in infinities:
+            raise TypeError(
+                "Can't have `step=%s` because then what would the second item "
+                "be, %s? No can do." % (step, step)
+            )
+            
         elif start is None: start = 0
         
         elif step > 0:
@@ -122,6 +133,10 @@ class Range(collections.Sequence, metaclass=RangeType):
         if math_tools.get_sign(self.distance_to_cover) != \
                                                 math_tools.get_sign(self.step):
             return 0
+        elif self.distance_to_cover in infinities:
+            # This has to be checked separately because `divmod` returns `nan`
+            # on infinite divisions, don't know why.
+            return infinity
         else:
             raw_length, remainder = divmod(self.distance_to_cover, self.step)
             raw_length += (remainder != 0)

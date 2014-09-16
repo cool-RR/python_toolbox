@@ -30,7 +30,7 @@ def test():
         assert repr(r0)[1:] == repr(r1)[1:]
         
     infinite_range_arguments_tuples = (
-        (), (10, None), (10, None, 2), (None, 10, -7)
+        (), (10, infinity), (10, infinity, 2), (100, -infinity, -7)
     )
     
     for infinite_range_arguments_tuple in infinite_range_arguments_tuples:
@@ -39,7 +39,11 @@ def test():
         assert not isinstance(r0, range)
         assert isinstance(r0, Range)
         assert r0.length == infinity and len(r0) == 0
-        assert isinstance(r[0], int)
+        assert isinstance(r0[0], int)
+        
+    illegal_range_arguments_tuples = (
+        (infinity, 10, -7), 
+    )
         
     raise 1 / 0 # Keep testing doge
         
