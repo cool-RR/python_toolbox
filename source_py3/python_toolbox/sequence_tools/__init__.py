@@ -1,3 +1,3 @@
 
 from .misc import *
-from .range import Range
+from .cute_range import CuteRange

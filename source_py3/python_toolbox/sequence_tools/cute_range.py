@@ -73,14 +73,14 @@ def _is_integral_or_none(thing):
     return isinstance(thing, (numbers.Integral, NoneType))
 
 
-class RangeType(abc.ABCMeta):
-    '''Metaclass for `Range`, see its docstring for details.'''
+class CuteRangeType(abc.ABCMeta):
+    '''Metaclass for `CuteRange`, see its docstring for details.'''
     def __call__(cls, *args, _avoid_built_in_range=False):
         # Our job here is to decide whether to instantiate using the built-in
         # `range` or our kickass `Range`.
         from python_toolbox import math_tools
         
-        if (cls is Range) and (not _avoid_built_in_range):
+        if (cls is CuteRange) and (not _avoid_built_in_range):
             start, stop, step = parse_range_args(*args)
             
             use_builtin_range = True # Until challenged.
@@ -105,12 +105,12 @@ class RangeType(abc.ABCMeta):
             return super().__call__(*args)
         
 
-class Range(collections.Sequence, metaclass=RangeType):
+class CuteRange(collections.Sequence, metaclass=CuteRangeType):
     '''
     Improved version of Python's `range` that has extra features.
     
-    `Range` is like Python's built-in `range`, except (1) it's with a capital R
-    and (2) it's completely different. LOL, just kidding.
+    `Range` is like Python's built-in `range`, except (1) it's cute and (2)
+    it's completely different. LOL, just kidding.
     
     
     '''
@@ -120,7 +120,7 @@ class Range(collections.Sequence, metaclass=RangeType):
     _reduced = property(lambda self: (type(self), (self.start, self.stop,
                                                    self.end)))
         
-    __eq__ = lambda self, other: (isinstance(other, Range) and
+    __eq__ = lambda self, other: (isinstance(other, CuteRange) and
                                   (self._reduced == other._reduced))
     
     distance_to_cover = caching.CachedProperty(lambda self:
@@ -172,7 +172,7 @@ class Range(collections.Sequence, metaclass=RangeType):
             if not (0 <= canonical_slice.start < self.length and
                     0 <= canonical_slice.stop < self.length):
                 raise TypeError
-            return Range(
+            return CuteRange(
                 self[canonical_slice.start],
                 self[canonical_slice.stop],
                 self.step * canonical_slice.step
@@ -205,4 +205,4 @@ class Range(collections.Sequence, metaclass=RangeType):
     is_infinity = caching.CachedProperty(lambda self: self.length == infinity)
         
     
-Range.register(range)
+CuteRange.register(range)
