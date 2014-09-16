@@ -294,7 +294,7 @@ class CanonicalSlice:
                           math_tools.PossiblyInfiniteIntegral):
                 self.length = iterable_or_length
             elif isinstance(iterable_or_length, collections.Sequence):
-                self.length = len(iterable_or_length)
+                self.length = get_length(iterable_or_length)
             else:
                 assert isinstance(iterable_or_length, collections.Iterable)
                 self.length = cute_iter_tools.get_length(iterable)
