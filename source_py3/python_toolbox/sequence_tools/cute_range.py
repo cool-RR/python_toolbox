@@ -135,7 +135,7 @@ class CuteRange(collections.Sequence, metaclass=CuteRangeType):
             return 0
         elif self.distance_to_cover in infinities:
             # This has to be checked separately because `divmod` returns `nan`
-            # on infinite divisions, don't know why.
+            # on infinite divisions, God know why.
             return infinity
         else:
             raw_length, remainder = divmod(self.distance_to_cover, self.step)
