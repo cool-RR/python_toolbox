@@ -44,6 +44,11 @@ def test():
     illegal_range_arguments_tuples = (
         (infinity, 10, -7), 
     )
+    
+    for illegal_range_arguments_tuple in illegal_range_arguments_tuples:
+        with cute_testing.RaiseAssertor(TypeError):
+            Range(*illegal_range_arguments_tuple)
+    
         
     raise 1 / 0 # Keep testing doge
         
