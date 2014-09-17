@@ -10,9 +10,9 @@ from python_toolbox.math_tools import cute_floor_div, cute_divmod
 from python_toolbox import logic_tools
 from python_toolbox import math_tools
 
-
 infinity = float('inf')
 infinities = (infinity, -infinity)
+
 
 def cute_equal(*items):
     # For testing purposes, we need `nan == nan`, so we use `cute_equal`.
@@ -22,6 +22,7 @@ def cute_equal(*items):
     else:
         assert all(isinstance(item, tuple) for item in items)
         return all(cute_equal(*sub_items) for sub_items in zip(*items))
+
 
 def test_degenerate_cases():
     degenerate_cases = (
