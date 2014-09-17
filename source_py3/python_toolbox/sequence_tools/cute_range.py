@@ -109,8 +109,13 @@ class CuteRange(collections.Sequence, metaclass=CuteRangeType):
     '''
     Improved version of Python's `range` that has extra features.
     
-    `Range` is like Python's built-in `range`, except (1) it's cute and (2)
+    `CuteRange` is like Python's built-in `range`, except (1) it's cute and (2)
     it's completely different. LOL, just kidding.
+    
+    `CuteRange` takes start, stop and step arguments just like `range`, but it
+    allows you to use floating-point numbers (or decimals), and it allows you
+    to use infinite numbers to produce infinite ranges.
+    
     
     
     '''
