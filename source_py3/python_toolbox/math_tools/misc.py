@@ -17,7 +17,8 @@ def cute_floor_div(x, y):
     `infinity`. (Python's built-in `divmod` would make it `nan`.)
     '''
     
-    if (x in infinities) and (y != 0):
+    if ((x in infinities) and (y != 0)) or \
+                                   (y in infinities) and (x not in infinities):
         return x / y
     else:
         return x // y
