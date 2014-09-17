@@ -6,21 +6,22 @@ import math
 
 from python_toolbox import cute_testing
 
-from python_toolbox.math_tools import cute_divmod
+from python_toolbox.math_tools import cute_floor_div, cute_divmod
+from python_toolbox import logic_tools
 from python_toolbox import math_tools
 
 
 infinity = float('inf')
 infinities = (infinity, -infinity)
 
-def cute_equal(x, y):
+def cute_equal(*items):
     # For testing purposes, we need `nan == nan`, so we use `cute_equal`.
-    if (isinstance(x, numbers.Number) and isinstance(y, numbers.Number)):
-        if all(map(math.isnan, (x, y))): return True
-        else: return x == y
+    if all(isinstance(item, numbers.Number) for item in items):
+        if all(map(math.isnan, items)): return True
+        else: return logic_tools.all_equal(items)
     else:
-        assert (isinstance(x, tuple) and isinstance(y, tuple))
-        return all(cute_equal(xx, yy) for xx, yy in zip(x, y))
+        assert all(isinstance(item, tuple) for item in items)
+        return all(cute_equal(*sub_items) for sub_items in zip(*items))
 
 def test_degenerate_cases():
     degenerate_cases = (
@@ -31,6 +32,9 @@ def test_degenerate_cases():
     for degenerate_case in degenerate_cases:
         assert cute_equal(cute_divmod(*degenerate_case),
                           divmod(*degenerate_case))
+        assert cute_equal(cute_divmod(*degenerate_case)[0],
+                          cute_floor_div(*degenerate_case),
+                          degenerate_case[0] // degenerate_case[1])
 
 
 def test_illegal_cases():
@@ -42,10 +46,18 @@ def test_illegal_cases():
             cute_divmod(*illegal_case)
         with cute_testing.RaiseAssertor() as raise_assertor_1:
             divmod(*illegal_case)
-        assert type(raise_assertor_0.exception) == \
-                                               type(raise_assertor_1.exception)
-        assert raise_assertor_0.exception.args == \
-                                                raise_assertor_1.exception.args
+        with cute_testing.RaiseAssertor() as raise_assertor_2:
+            cute_floor_div(*illegal_case)
+        assert logic_tools.all_equal((
+            type(raise_assertor_0.exception),
+            type(raise_assertor_1.exception),
+            type(raise_assertor_2.exception),
+        ))
+        assert logic_tools.all_equal((
+            raise_assertor_0.exception.args,
+            raise_assertor_1.exception.args,
+            raise_assertor_2.exception.args,
+        ))
     
         
 def test_meaningful_cases():
@@ -62,6 +74,9 @@ def test_meaningful_cases():
                                                     meaningful_denominator)
         regular_quotient, regular_remainder = divmod(meaningful_numerator,
                                                      meaningful_denominator)
+        assert cute_equal(cute_quotient,
+                          cute_floor_div(meaningful_numerator,
+                                         meaningful_denominator))
         assert not cute_equal((cute_quotient, cute_remainder), 
                               (regular_quotient, regular_remainder))
         assert (cute_quotient ==
