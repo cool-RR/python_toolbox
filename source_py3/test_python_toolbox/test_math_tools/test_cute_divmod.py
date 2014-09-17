@@ -2,6 +2,7 @@
 # This program is distributed under the MIT license.
 
 import numbers
+import math
 
 from python_toolbox import cute_testing
 
@@ -15,7 +16,7 @@ infinities = (infinity, -infinity)
 def cute_equal(x, y):
     # For testing purposes, we need `nan == nan`, so we use `cute_equal`.
     if (isinstance(x, numbers.Number) and isinstance(y, numbers.Number)):
-        if (x is float('nan')) and (y is float('nan')): return True
+        if all(map(math.isnan, (x, y))): return True
         else: return x == y
     else:
         assert (isinstance(x, tuple) and isinstance(y, tuple))
@@ -41,7 +42,10 @@ def test_illegal_cases():
             cute_divmod(*illegal_case)
         with cute_testing.RaiseAssertor() as raise_assertor_1:
             divmod(*illegal_case)
-        assert raise_assertor_0.exception == raise_assertor_1.exception
+        assert type(raise_assertor_0.exception) == \
+                                               type(raise_assertor_1.exception)
+        assert raise_assertor_0.exception.args == \
+                                                raise_assertor_1.exception.args
     
         
 def test_meaningful_cases():
