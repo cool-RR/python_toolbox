@@ -402,8 +402,9 @@ def are_equal(*sequences):
                           get_single_if_any(sequence_types), collections.Sequence):
             
             return logic_tools.all_equal(sequences)
-    if sequence_types == {CuteCount}: # Hack around Pypy bug 1799, remove
-        return logic_tools.all_equal(sequences.start for sequence in sequences)
+    # blocktodo: test on pypy and hopefully remove these two lines if not needed
+    # if sequence_types == {CuteCount}: # Hack around Pypy bug 1799, remove
+        # return logic_tools.all_equal(sequences.start for sequence in sequences)
     
     # If cheap comparison didn't work, trying item-by-item comparison:
     zipped = itertools.zip_longest(*sequences,

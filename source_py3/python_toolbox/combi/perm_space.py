@@ -147,7 +147,7 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
         #                                                                     #
         if iterable_or_length == infinity:
             self.is_rapplied = False
-            self.sequence = cute_iter_tools.CuteCount()
+            self.sequence = sequence_tools.CuteRange(infinity)
             self.sequence_length = infinity
             assert not fixed_map
         elif isinstance(iterable_or_length, numbers.Integral):
@@ -158,7 +158,7 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
             assert isinstance(iterable_or_length, collections.Iterable)
             self.sequence = sequence_tools. \
                       ensure_iterable_is_immutable_sequence(iterable_or_length)
-            if isinstance(self.sequence, cute_iter_tools.CuteCount):
+            if cute_iter_tools.get_length(self.sequence) == infinity:
                 self.is_rapplied = False
                 self.sequence_length = infinity
             else:
@@ -191,10 +191,7 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
             raise NotImplementedError
         self.is_partial = (self.n_elements < self.sequence_length)
         
-        self.indices = (range(self.n_elements) if
-                        self.n_elements < infinity else
-                        cute_iter_tools.CuteCount())
-        
+        self.indices = sequence_tools.CuteRange(self.n_elements) 
         
         #                                                                     #
         ### Finished figuring out number of elements. #########################
@@ -299,9 +296,7 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
         
         ### Figuring out degrees: #############################################
         #                                                                     #
-        all_degrees = cute_iter_tools.CuteCount() if \
-                                        self.sequence_length == infinity else \
-                                                    range(self.sequence_length)
+        all_degrees = sequence_tools.CuteRange(self.sequence_length)
         if degrees is None:
             degrees = ()
         if not isinstance(degrees, collections.Iterable):
@@ -322,7 +317,7 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
             self.degrees = tuple(
                 degree for degree in degrees if degree in all_degrees
             )
-            if isinstance(self.degrees, cute_iter_tools.CuteCount):
+            if sequence_tools.get_length(self.degrees) == infinity:
                 self._unsliced_length = infinity
             else:
                 
