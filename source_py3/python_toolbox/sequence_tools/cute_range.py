@@ -6,6 +6,8 @@ import numbers
 
 from python_toolbox import caching
 
+from .misc import CuteSequence
+
 infinity = float('inf')
 infinities = (infinity, -infinity)
 NoneType = type(None)
@@ -105,7 +107,7 @@ class CuteRangeType(abc.ABCMeta):
             return super().__call__(*args)
         
 
-class CuteRange(collections.Sequence, metaclass=CuteRangeType):
+class CuteRange(CuteSequence, metaclass=CuteRangeType):
     '''
     Improved version of Python's `range` that has extra features.
     
@@ -133,6 +135,12 @@ class CuteRange(collections.Sequence, metaclass=CuteRangeType):
     
     @caching.CachedProperty
     def length(self):
+        '''
+        The length of the `CuteRange`.
+        
+        We're using a property `.length` rather than the built-in `__len__`
+        because `__len__` can't handle infinite values.
+        '''
         from python_toolbox import math_tools
         
         if math_tools.get_sign(self.distance_to_cover) != \
