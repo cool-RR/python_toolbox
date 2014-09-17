@@ -101,7 +101,12 @@ def cute_divmod(x, y):
     '''
     if (x in infinities) and (y != 0):
         return (x / y, float('nan'))
+    elif (y in infinities) and (x not in infinities):
+        return (
+            x / y,
+            x if (get_sign(x) == get_sign(y)) else float('nan')
+        )
     else:
-        return divmod
+        return divmod(x, y)
         
     
