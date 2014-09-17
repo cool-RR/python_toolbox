@@ -398,8 +398,8 @@ def are_equal(*sequences):
     
     if not sys_tools.is_pypy: # Hack around Pypy bug 1799
         # Trying cheap comparison:
-        if len(sequence_types) == 1 and issubclass(cute_iter_tools.
-                          get_single_if_any(sequence_types), collections.Sequence):
+        if len(sequence_types) == 1 and issubclass(
+                      get_single_if_any(sequence_types), collections.Sequence):
             
             return logic_tools.all_equal(sequences)
     # blocktodo: test on pypy and hopefully remove these two lines if not needed

@@ -125,7 +125,7 @@ class CuteRange(CuteSequence, metaclass=CuteRangeType):
         self.start, self.stop, self.step = parse_range_args(*args)
         
     _reduced = property(lambda self: (type(self), (self.start, self.stop,
-                                                   self.end)))
+                                                   self.step)))
         
     __eq__ = lambda self, other: (isinstance(other, CuteRange) and
                                   (self._reduced == other._reduced))
