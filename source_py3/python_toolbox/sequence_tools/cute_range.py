@@ -138,12 +138,10 @@ class CuteRange(collections.Sequence, metaclass=CuteRangeType):
         if math_tools.get_sign(self.distance_to_cover) != \
                                                 math_tools.get_sign(self.step):
             return 0
-        elif self.distance_to_cover in infinities:
-            # This has to be checked separately because `divmod` returns `nan`
-            # on infinite divisions, God know why.
-            return infinity
         else:
-            raw_length, remainder = divmod(self.distance_to_cover, self.step)
+            raw_length, remainder = math_tools.cute_divmod(
+                self.distance_to_cover, self.step
+            )
             raw_length += (remainder != 0)
             return raw_length
     

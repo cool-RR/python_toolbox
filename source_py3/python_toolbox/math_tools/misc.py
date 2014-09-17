@@ -5,6 +5,7 @@ import numbers
 
 
 infinity = float('inf')
+infinities = (infinity, -infinity)
 
 
 def get_sign(x):
@@ -90,3 +91,17 @@ def binomial(big, small):
                                                       // math.factorial(small))
     
 
+def cute_divmod(x, y):
+    '''
+    Get the division and modulo for `x` and `y` as a tuple: `(x // y, x % y)`
+    
+    This differs from Python's built-in `divmod` in that it handles infinite
+    `x`s in a more mathematically correct way: `infinity // 7` would equal
+    `infinity`. (Python's built-in `divmod` would make it `nan`.)
+    '''
+    if (x in infinities) and (y != 0):
+        return (x / y, float('nan'))
+    else:
+        return divmod
+        
+    
