@@ -176,12 +176,20 @@ class CuteRange(CuteSequence, metaclass=CuteRangeType):
                 return self.start + (self.step * (i + self.length))
             else:
                 raise IndexError
+        elif i == infinity:
+            if self.length == infinity:
+                return self.stop
+            else:
+                raise IndexError
+        elif i == -infinity:
+            raise IndexError
         elif isinstance(i, (slice, sequence_tools.CanonicalSlice)):
             canonical_slice = sequence_tools.CanonicalSlice(
                 i, iterable_or_length=self
             )
-            if not (0 <= canonical_slice.start < self.length and
-                    0 <= canonical_slice.stop < self.length):
+            if not ((0 <= canonical_slice.start < self.length) and
+                    ((0 <= canonical_slice.stop < self.length) or
+                     (canonical_slice.stop == self.length == infinity))):
                 raise TypeError
             return CuteRange(
                 self[canonical_slice.start],
