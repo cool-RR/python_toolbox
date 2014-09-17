@@ -8,6 +8,41 @@ infinity = float('inf')
 infinities = (infinity, -infinity)
 
 
+def cute_floor_div(x, y):
+    '''
+    Get `x // y`, i.e. `x` divided by `y` floored down.
+
+    This differs from Python's built-in `//` in that it handles infinite
+    `x`s in a more mathematically correct way: `infinity // 7` would equal
+    `infinity`. (Python's built-in `divmod` would make it `nan`.)
+    '''
+    
+    if (x in infinities) and (y != 0):
+        return x / y
+    else:
+        return x // y
+        
+
+def cute_divmod(x, y):
+    '''
+    Get the division and modulo for `x` and `y` as a tuple: `(x // y, x % y)`
+    
+    This differs from Python's built-in `divmod` in that it handles infinite
+    `x`s in a more mathematically correct way: `infinity // 7` would equal
+    `infinity`. (Python's built-in `divmod` would make it `nan`.)
+    '''
+    if (x in infinities) and (y != 0):
+        return (x / y, float('nan'))
+    elif (y in infinities) and (x not in infinities):
+        return (
+            x / y,
+            x if (get_sign(x) == get_sign(y)) else float('nan')
+        )
+    else:
+        return divmod(x, y)
+        
+        
+
 def get_sign(x):
     '''Get the sign of a number.'''
     if x > 0:
@@ -29,7 +64,7 @@ def round_to_int(x, up=False):
     If you want to round a number to the closest `int`, just use
     `int(round(x))`.
     '''
-    rounded_down = int(x // 1)
+    rounded_down = int(cute_floor_div(x, 1))
     if up:
         return int(x) if (isinstance(x, float) and x.is_integer()) \
                else rounded_down + 1
@@ -38,7 +73,7 @@ def round_to_int(x, up=False):
     
 def ceil_div(x, y):
     '''Divide `x` by `y`, rounding up if there's a remainder.'''
-    return (x // y) + (1 if x % y else 0)
+    return cute_floor_div(x, y) + (1 if x % y else 0)
 
 
 def convert_to_base_in_tuple(number, base):
@@ -91,22 +126,3 @@ def binomial(big, small):
                                                       // math.factorial(small))
     
 
-def cute_divmod(x, y):
-    '''
-    Get the division and modulo for `x` and `y` as a tuple: `(x // y, x % y)`
-    
-    This differs from Python's built-in `divmod` in that it handles infinite
-    `x`s in a more mathematically correct way: `infinity // 7` would equal
-    `infinity`. (Python's built-in `divmod` would make it `nan`.)
-    '''
-    if (x in infinities) and (y != 0):
-        return (x / y, float('nan'))
-    elif (y in infinities) and (x not in infinities):
-        return (
-            x / y,
-            x if (get_sign(x) == get_sign(y)) else float('nan')
-        )
-    else:
-        return divmod(x, y)
-        
-    

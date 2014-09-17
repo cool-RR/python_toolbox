@@ -64,8 +64,10 @@ def test_meaningful_cases():
                                                      meaningful_denominator)
         assert not cute_equal((cute_quotient, cute_remainder), 
                               (regular_quotient, regular_remainder))
-        assert cute_quotient == math_tools.round_to_int(
-            meaningful_numerator / meaningful_denominator,
-        )
+        assert (cute_quotient ==
+                          (meaningful_numerator / meaningful_denominator)) or \
+        (0 <= ((meaningful_numerator / meaningful_denominator)
+                                                          - cute_quotient) < 1)
+        
 
     
