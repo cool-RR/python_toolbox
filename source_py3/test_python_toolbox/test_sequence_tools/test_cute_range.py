@@ -2,6 +2,7 @@
 # This program is distributed under the MIT license.
 
 from python_toolbox import cute_testing
+from python_toolbox import sequence_tools
 
 from python_toolbox.sequence_tools import CuteRange
 
@@ -41,8 +42,9 @@ def test_infinite():
         assert isinstance(cr0, CuteRange)
         assert cr0.length == infinity and len(cr0) == 0
         assert isinstance(cr0[0], int)
-        assert cr0[10:].length == cr0[200:] == infinity
-        assert cr0[:10].length != infinity != cr0[:200]
+        assert cr0[10:].length == cr0[200:].length == infinity
+        assert sequence_tools.get_length(cr0[:10]) != infinity != \
+                                           sequence_tools.get_length(cr0[:200])
         
 def test_illegal():
     illegal_range_arguments_tuples = (
