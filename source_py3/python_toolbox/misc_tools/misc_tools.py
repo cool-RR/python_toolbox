@@ -369,4 +369,7 @@ class AlternativeLengthMixin:
             raise OverflowError("Due to CPython limitation, you'll have to "
                                 "use `.length` rather than `len`")
         
+    def __bool__(self):
+        from python_toolbox import sequence_tools
+        return bool(sequence_tools.get_length(self))
         

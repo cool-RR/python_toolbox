@@ -59,8 +59,13 @@ def test_illegal():
 def test_float():
     cr = CuteRange(10, 20, 1.5)
     assert list(cr) == [10, 11.5, 13, 14.5, 16, 17.5, 19]
-    assert len(cr) == len(list(cr)) == 7
-    assert list(map(range(7), cr.__getitem__)) == list(cr)
+    for item in list(cr):
+        assert item in cr
+    assert 20 not in cr
+    assert 20.5 not in cr
+    assert 8.5 not in cr
+    assert cr.length == len(list(cr)) == 7
+    assert list(map(cr.__getitem__, range(7))) == list(cr)
     
     float_range_arguments_tuples = (
         (10, 20, 1.5), (20, 10.5, -0.33), (10.3, infinity, 2.5),

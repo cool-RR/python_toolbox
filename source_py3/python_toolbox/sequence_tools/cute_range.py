@@ -139,7 +139,7 @@ class CuteRange(CuteSequence, metaclass=CuteRangeType):
         The length of the `CuteRange`.
         
         We're using a property `.length` rather than the built-in `__len__`
-        because `__len__` can't handle infinite values.
+        because `__len__` can't handle infinite values or floats.
         '''
         from python_toolbox import math_tools
         
@@ -200,8 +200,8 @@ class CuteRange(CuteSequence, metaclass=CuteRangeType):
             raise TypeError
         
     def __len__(self):
-        # Sadly Python doesn't allow infinity here.
-        return self.length if (self.length not in infinities) else 0
+        # Sadly Python doesn't allow infinity or floats here.
+        return self.length if isinstance(self.length, numbers.Integral) else 0
         
     def __contains__(self, i):
         try: self.index(i)
@@ -209,14 +209,18 @@ class CuteRange(CuteSequence, metaclass=CuteRangeType):
         else: return True
         
     def index(self, i):
+        from python_toolbox import math_tools
         if not isinstance(i, numbers.Number):
             raise ValueError
         else:
             distance = i - self.start
+            if distance == 0 and self:
+                return True
             if math_tools.get_sign(distance) != math_tools.get_sign(self.step):
                 raise ValueError
-            index, remainder = divmod(distance, self.step)
-            if remainder == 0:
+            index, remainder = math_tools.cute_divmod(distance, self.step)
+            if remainder == 0 and (0 <= index < self.length or
+                                             index == self.length == infinity):
                 return index
             else:
                 raise ValueError
