@@ -2,6 +2,7 @@
 # This program is distributed under the MIT license.
 
 import numbers
+import math
 
 
 infinity = float('inf')

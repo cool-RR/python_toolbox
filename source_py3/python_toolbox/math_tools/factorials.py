@@ -6,7 +6,17 @@ import collections
 import itertools
 
 infinity = float('inf')
+infinities = (infinity, -infinity)
 
+
+def factorial(x, start=1):
+    '''
+    
+    This differs from the built-in `math.factorial` in that it allows a `start`
+    argument.
+    '''
+    from python_toolbox import misc_tools
+    return misc_tools.general_product(range(start, x+1), start=1)
 
 def reverse_factorial(number, round_up=True):
     assert number >= 0

@@ -423,8 +423,7 @@ def is_sorted(iterable, key=None):
     from python_toolbox import misc_tools
     if key is None:
         key = misc_tools.identity_function
-    for first_item, second_item in \
-                    cute_iter_tools.iterate_overlapping_subsequences(iterable):
+    for first_item, second_item in iterate_overlapping_subsequences(iterable):
         if not key(second_item) >= key(first_item):
             return False
     else:
