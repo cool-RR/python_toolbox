@@ -1,4 +1,8 @@
+# Copyright 2009-2014 Ram Rachum.
+# This program is distributed under the MIT license.
+
 from python_toolbox.combi import *
+
 
 def test_perms():
     pure_0a = PermSpace(4)
@@ -379,33 +383,3 @@ def test_neighbors():
     assert len(first_level_neighbors) + 1 == len(perm.get_neighbors((0, 1)))
     
     
-def test_chain_spaces():
-    chain_space = ChainSpace((range(3), 'meow', range(2, -1, -1)))
-    assert tuple(chain_space) == (0, 1, 2, 'm', 'e', 'o', 'w', 2, 1, 0)
-    assert len(chain_space) == chain_space.length == 10
-    for i, item in enumerate(chain_space):
-        assert chain_space[i] == item
-        
-    assert chain_space == chain_space
-    
-    assert 0 in chain_space
-    assert 'm' in chain_space
-    assert [] not in chain_space
-    
-    assert not ChainSpace(())
-    
-
-
-def test_product_spaces():
-    huge_perm_space = PermSpace(range(100))
-    big_perm_space = PermSpace(range(150), fixed_map={1: 5, 70: 3,},
-                               degrees=(3, 5))
-    product_space = ProductSpace((huge_perm_space, big_perm_space))
-    assert product_space.length == \
-                                 huge_perm_space.length * big_perm_space.length
-    (perm_0, perm_1) = product_space[10**10]
-    assert perm_0 in huge_perm_space
-    assert perm_1 in big_perm_space
-    assert (perm_0, perm_1) in product_space
-    assert product_space.index((perm_0, perm_1)) == 10 ** 10
-    assert ( ~ perm_0,  ~ perm_1) in product_space
