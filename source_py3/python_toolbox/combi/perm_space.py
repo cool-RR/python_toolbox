@@ -546,7 +546,14 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
         if not isinstance(perm, collections.Iterable):
             raise ValueError
         
-        perm = sequence_tools.ensure_iterable_is_immutable_sequence(perm)
+        try:
+            perm = sequence_tools.ensure_iterable_is_immutable_sequence(
+                perm,
+                allow_unordered=self.is_combination
+            )
+        except sequence_tools.UnorderedIterableException:
+            raise ValueError('An unordered iterable is never contained in a '
+                             'non-combination `PermSpace`.')
         perm_set = set(perm)
         if not (perm_set <= set(self.sequence)):
             raise ValueError

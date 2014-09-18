@@ -17,6 +17,12 @@ from python_toolbox import cute_iter_tools
 infinity = float('inf')
 
 
+class UnorderedIterableException(Exception):
+    '''
+    An unordered iterable was encountered when we expected an orderable one.
+    '''
+
+
 def are_equal_regardless_of_order(seq1, seq2):
     '''
     Do `seq1` and `seq2` contain the same elements, same number of times?
@@ -230,7 +236,8 @@ def get_recurrences(sequence):
 
     
 def ensure_iterable_is_immutable_sequence(iterable, default_type=tuple,
-                                          unallowed_types=(bytes,)):
+                                          unallowed_types=(bytes,),
+                                          allow_unordered=True):
     '''
     Return a version of `iterable` that is an immutable sequence.
     
@@ -239,6 +246,8 @@ def ensure_iterable_is_immutable_sequence(iterable, default_type=tuple,
     specified in `default_type`.
     '''
     assert isinstance(iterable, collections.Iterable)
+    if not allow_unordered:
+        
     if isinstance(iterable, collections.MutableSequence) or \
        isinstance(iterable, unallowed_types) or \
        not isinstance(iterable, collections.Sequence):
