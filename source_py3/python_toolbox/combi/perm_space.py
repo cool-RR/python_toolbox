@@ -653,10 +653,20 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
     @caching.CachedProperty
     def unpartialled(self):
         '''A non-partial version of this `PermSpace`.'''
+        assert self.is_partial # Otherwise this property would be overridden.
         if self.is_sliced:
-            raise Exception("Can't convert sliced `PermSpace` directly to "
-                            "unpartialled, because the number of items would "
-                            "be different. Use `.unsliced` first.")
+            raise Exception(
+                "Can't convert sliced `PermSpace` directly to unpartialled, "
+                "because the number of items would be different. Use "
+                "`.unsliced` first."
+            )
+        if self.is_dapplied:
+            raise Exception(
+                "Can't convert a partial, dapplied `PermSpace` to "
+                "non-partialled, because we'll need to extend the domain with "
+                "more items and we don't know which to use."
+            )
+            
         return PermSpace(
             self.sequence_length, domain=self.domain,
             n_elements=self.sequence_length, fixed_map=self.fixed_map,
