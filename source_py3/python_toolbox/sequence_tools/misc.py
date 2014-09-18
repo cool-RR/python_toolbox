@@ -246,8 +246,8 @@ def ensure_iterable_is_immutable_sequence(iterable, default_type=tuple,
     specified in `default_type`.
     '''
     assert isinstance(iterable, collections.Iterable)
-    if not allow_unordered:
-        
+    if not allow_unordered and isinstance(iterable, (set, frozenset)):
+        raise UnorderedIterableException
     if isinstance(iterable, collections.MutableSequence) or \
        isinstance(iterable, unallowed_types) or \
        not isinstance(iterable, collections.Sequence):
@@ -257,7 +257,8 @@ def ensure_iterable_is_immutable_sequence(iterable, default_type=tuple,
 
 
 def ensure_iterable_is_sequence(iterable, default_type=tuple, 
-                                unallowed_types=(bytes,)):
+                                unallowed_types=(bytes,), 
+                                allow_unordered=True):
     '''
     Return a version of `iterable` that is a sequence.
     
@@ -266,6 +267,8 @@ def ensure_iterable_is_sequence(iterable, default_type=tuple,
     `default_type`.
     '''
     assert isinstance(iterable, collections.Iterable)
+    if not allow_unordered and isinstance(iterable, (set, frozenset)):
+        raise UnorderedIterableException
     if isinstance(iterable, collections.Sequence) and \
        not isinstance(iterable, unallowed_types):
         return iterable
