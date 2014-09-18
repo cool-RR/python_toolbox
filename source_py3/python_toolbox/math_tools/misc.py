@@ -126,5 +126,4 @@ def binomial(big, small):
     else:
         return (math.factorial(big) // math.factorial(big - small)
                                                       // math.factorial(small))
-    
 
