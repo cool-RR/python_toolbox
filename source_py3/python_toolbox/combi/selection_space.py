@@ -28,6 +28,7 @@ class SelectionSpace(sequence_tools.CuteSequenceMixin,
         self.sequence = \
              sequence_tools.ensure_iterable_is_immutable_sequence(sequence)
         self.sequence_length = len(self.sequence)
+        self._sequence_set = set(self.sequence)
         self.length = 2 ** self.sequence_length
         
         
@@ -51,8 +52,8 @@ class SelectionSpace(sequence_tools.CuteSequenceMixin,
         
         assert len(binary_i) == self.sequence_length
         
-        return tuple(item for (is_included, item) in
-                     zip(map(int, binary_i), self.sequence) if is_included)
+        return set(item for (is_included, item) in
+                   zip(map(int, binary_i), self.sequence) if is_included)
         
         
     _reduced = property(lambda self: (type(self), self.sequence))
@@ -60,32 +61,28 @@ class SelectionSpace(sequence_tools.CuteSequenceMixin,
     __eq__ = lambda self, other: (isinstance(other, SelectionSpace) and
                                   self._reduced == other._reduced)
     
-    # def __contains__(self, given_sequence):
-        # try:
-            # self.index(given_sequence)
-        # except ValueError:
-            # return False
-        # else:
-            # return True
+    def __contains__(self, given_iterable):
+        try:
+            self.index(given_iterable)
+        except ValueError:
+            return False
+        else:
+            return True
         
-    # def index(self, given_sequence):
-        # if not isinstance(given_sequence, collections.Sequence) or \
-                                # not len(given_sequence) == len(self.sequences):
-            # raise ValueError
+    def index(self, given_iterable):
+        if not isinstance(given_iterable, collections.Iterable):
+            raise ValueError
         
-        # reverse_indices = []
-        # current_radix = 1
+        given_iterable_set = set(given_iterable)
         
-        # wip_index = 0
-            
-        # for item, sequence in reversed(tuple(zip(given_sequence, self.sequences))):
-            # wip_index += sequence.index(item) # Propagating `ValueError`
-            # current_radix *= misc.get_length(sequence)
-            
-        # return wip_index
+        if not given_iterable_set <= self._sequence_set:
+            raise ValueError
+        
+        return sum((2 ** i) for i, item in enumerate(reversed(self.sequence))
+                                                 if item in given_iterable_set)
     
     
-    # __bool__ = lambda self: bool(self.length)
+    __bool__ = lambda self: bool(self.length)
         
 
 
