@@ -384,3 +384,7 @@ def test_neighbors():
     assert len(first_level_neighbors) + 1 == len(perm.get_neighbors((0, 1)))
     
     
+
+def test_super_structure():
+    
+    
