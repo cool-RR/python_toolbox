@@ -547,23 +547,21 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
             raise ValueError
         
         perm = sequence_tools.ensure_iterable_is_immutable_sequence(perm)
+        perm_set = set(perm)
+        if not (perm_set <= set(self.sequence)):
+            raise ValueError
         
         if len(perm) != self.n_elements:
             raise ValueError
         
         if not isinstance(perm, self.perm_type):
-            perm_set = set(perm)
             if perm_set != set(range(len(perm))):
-                if perm_set != set(self.sequence):
-                    raise ValueError
                 perm = self.perm_type(perm, self)
             else:
                 perm = self.perm_type(perm)
             
         elif self.is_rapplied:
             if not perm.is_rapplied:
-                raise ValueError
-            if set(perm) != set(self.sequence):
                 raise ValueError
         elif perm.is_rapplied and not self.is_rapplied:
             raise ValueError
