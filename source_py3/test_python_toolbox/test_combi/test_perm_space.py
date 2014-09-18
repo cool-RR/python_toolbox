@@ -386,5 +386,6 @@ def test_neighbors():
     
 
 def test_super_structure():
-    
+    # blocktodo do a whole thing with mapspaces and somethingspacespaceshit
+    pass
     

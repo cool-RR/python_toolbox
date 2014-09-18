@@ -24,10 +24,11 @@ infinity = float('inf')
         
 class SelectionSpace(sequence_tools.CuteSequenceMixin,
                      collections.Sequence):
-    def __init__(self, sequence, n):
+    def __init__(self, sequence):
         self.sequence = \
              sequence_tools.ensure_iterable_is_immutable_sequence(sequence)
-        self.length = 2 ** len(self.sequence)
+        self.sequence_length = len(self.sequence)
+        self.length = 2 ** self.sequence_length
         
         
     def __repr__(self):
@@ -40,16 +41,18 @@ class SelectionSpace(sequence_tools.CuteSequenceMixin,
         if isinstance(i, slice):
             raise NotImplementedError
         
+        if (-self.length <= i <= -1):
+            i += self.length
         if not (0 <= i < self.length):
             raise IndexError
         
-        pattern = '{0:0%sb}' % self.length
+        pattern = '{0:0%sb}' % self.sequence_length
         binary_i = pattern.format(i)
         
-        assert len(binary_i) == len(self.sequence)
+        assert len(binary_i) == self.sequence_length
         
         return tuple(item for (is_included, item) in
-                     zip(binary_i, self.sequence) if is_included)
+                     zip(map(int, binary_i), self.sequence) if is_included)
         
         
     _reduced = property(lambda self: (type(self), self.sequence))
