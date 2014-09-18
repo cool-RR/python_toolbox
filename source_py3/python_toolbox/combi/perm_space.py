@@ -763,6 +763,8 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
     def get_dapplied(self, domain):
         '''Get a version of this `PermSpace` that has a domain of `domain`.'''
         assert not self.is_dapplied
+        if self.is_combination:
+            raise Exception("Can't use a domain with combination spaces.")
         domain = \
                sequence_tools.ensure_iterable_is_immutable_sequence(domain)
         if len(domain) != self.n_elements:
@@ -779,6 +781,8 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
         if self.is_sliced:
             raise Exception("Can't be used on sliced perm spaces. Try "
                             "`perm_space.unsliced.get_degreed(...)`.")
+        if self.is_combination:
+            raise Exception("Can't use degrees with combination spaces.")
         if not degrees:
             return self
         degrees_to_use = \
