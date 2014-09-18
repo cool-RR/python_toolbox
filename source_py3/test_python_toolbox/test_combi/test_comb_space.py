@@ -30,7 +30,8 @@ def test():
     assert comb_space.undapplied == comb_space
     assert comb_space.unrapplied == CombSpace(6, 2)
     assert comb_space.unpartialled == CombSpace('dumber', 6)
-    assert comb_space.uncombinationed == PermSpace('dumber', n_elements=6)
+    assert comb_space.unpartialled.get_partialled(5) == CombSpace('dumber', 5)
+    assert comb_space.uncombinationed == PermSpace('dumber', n_elements=2)
     assert comb_space.undegreed == comb_space
     assert comb_space.unrapplied.get_rapplied(range(10, 70, 10)) == \
                                                 CombSpace(range(10, 70, 10), 2)
@@ -40,8 +41,8 @@ def test():
         comb_space.get_degreed(3)
     assert comb_space.unfixed == comb_space
     assert not comb_space.fixed_indices
-    assert comb_space.free_indices == comb_space.free_keys == (0, 1)
-    assert comb_space.free_values == tuple('dumber')
+    assert comb_space.free_indices == comb_space.free_keys == range(2)
+    assert comb_space.free_values == 'dumber'
     
     
     

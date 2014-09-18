@@ -668,10 +668,9 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
             )
             
         return PermSpace(
-            self.sequence_length, domain=self.domain,
-            n_elements=self.sequence_length, fixed_map=self.fixed_map,
-            degrees=self.degrees, slice_=self.canonical_slice,
-            is_combination=self.is_combination
+            self.sequence, n_elements=self.sequence_length,
+            fixed_map=self.fixed_map, degrees=self.degrees,
+            slice_=self.canonical_slice, is_combination=self.is_combination
         )
     
     unsliced = caching.CachedProperty(
@@ -695,8 +694,8 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
                             "uncombinationed, because the number of items "
                             "would be different. Use `.unsliced` first.")
         return PermSpace(
-            self.sequence_length, domain=self.domain, fixed_map=self.fixed_map,
-            degrees=self.degrees, slice_=self.canonical_slice,
+            self.sequence, domain=self.domain, fixed_map=self.fixed_map,
+            degrees=self.degrees, slice_=None,
             n_elements=self.n_elements, is_combination=False
         )
       
@@ -732,12 +731,13 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
     def get_partialled(self, n_elements):
         '''Get a partialled version of this `PermSpace`.'''
         if self.is_sliced:
-            raise Exception("Can't get partial of sliced `PermSpace` directly, "
-                            "because the number of items would "
-                            "be different. Use `.unsliced` first.")
+            raise Exception(
+                "Can't get partial of sliced `PermSpace` directly, because the "
+                "number of items would be different. Use `.unsliced` first."
+            )
         return PermSpace(
             self.sequence, domain=self.domain, fixed_map=self.fixed_map,
-            degrees=self.degrees, slice_=self.canonical_slice,
+            degrees=self.degrees, slice_=None,
             is_combination=self.is_combination, n_elements=n_elements
         )
         
