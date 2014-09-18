@@ -24,6 +24,31 @@ infinity = float('inf')
         
 class SelectionSpace(sequence_tools.CuteSequenceMixin,
                      collections.Sequence):
+    '''
+    Space of possible selections of any number of items from `sequence`.
+    
+    For example:
+    
+        >>> tuple(combi.SelectionSpace(range(2)))
+        (set(), {1}, {0}, {0, 1})
+        
+    The selections (which are sets) can be for any number of items, from zero
+    to the length of the sequence.
+
+    Of course, this is a smart object that doesn't really create all these sets
+    in advance, but rather on demand. So you can create a `SelectionSpace` like
+    this:
+    
+        >>> selection_space = combi.SelectionSpace(range(10**4))
+        
+    And take a random selection from it:
+    
+        >>> selection_space.take_random()
+        {0, 3, 4, ..., 9996, 9997}
+        
+    Even though the length of this space is around 10 ** 3010, which is much
+    bigger than the number of particles in the universe.
+    '''
     def __init__(self, sequence):
         self.sequence = \
              sequence_tools.ensure_iterable_is_immutable_sequence(sequence)
