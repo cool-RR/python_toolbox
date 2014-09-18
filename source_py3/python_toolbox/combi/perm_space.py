@@ -652,13 +652,14 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
     )
     @caching.CachedProperty
     def unpartialled(self):
-        '''A non-partical version of this `PermSpace`.'''
+        '''A non-partial version of this `PermSpace`.'''
         if self.is_sliced:
             raise Exception("Can't convert sliced `PermSpace` directly to "
                             "unpartialled, because the number of items would "
                             "be different. Use `.unsliced` first.")
         return PermSpace(
-            self.sequence_length, domain=self.domain, fixed_map=self.fixed_map,
+            self.sequence_length, domain=self.domain,
+            n_elements=self.sequence_length, fixed_map=self.fixed_map,
             degrees=self.degrees, slice_=self.canonical_slice,
             is_combination=self.is_combination
         )

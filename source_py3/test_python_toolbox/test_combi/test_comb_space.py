@@ -29,7 +29,7 @@ def test():
     assert comb_space.index('er') == comb_space.length - 1
     assert comb_space.undapplied == comb_space
     assert comb_space.unrapplied == CombSpace(6, 2)
-    assert comb_space.unpartialled == CombSpace(6, 6)
+    assert comb_space.unpartialled == CombSpace('dumber', 6)
     assert comb_space.uncombinationed == PermSpace('dumber', n_elements=6)
     assert comb_space.undegreed == comb_space
     assert comb_space.unrapplied.get_rapplied(range(10, 70, 10)) == \
