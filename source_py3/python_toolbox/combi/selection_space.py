@@ -38,6 +38,7 @@ class SelectionSpace(sequence_tools.CuteSequenceMixin,
             self.sequence
         )
         
+      
     def __getitem__(self, i):
         if isinstance(i, slice):
             raise NotImplementedError
@@ -57,6 +58,7 @@ class SelectionSpace(sequence_tools.CuteSequenceMixin,
         
         
     _reduced = property(lambda self: (type(self), self.sequence))
+    __hash__ = lambda self: hash(self._reduced)
              
     __eq__ = lambda self, other: (isinstance(other, SelectionSpace) and
                                   self._reduced == other._reduced)
