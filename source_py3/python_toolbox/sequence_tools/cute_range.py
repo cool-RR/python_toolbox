@@ -203,11 +203,6 @@ class CuteRange(CuteSequence, metaclass=CuteRangeType):
         # Sadly Python doesn't allow infinity or floats here.
         return self.length if isinstance(self.length, numbers.Integral) else 0
         
-    def __contains__(self, i):
-        try: self.index(i)
-        except ValueError: return False
-        else: return True
-        
     def index(self, i):
         from python_toolbox import math_tools
         if not isinstance(i, numbers.Number):

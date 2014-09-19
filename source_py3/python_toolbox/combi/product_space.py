@@ -62,14 +62,6 @@ class ProductSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
     __eq__ = lambda self, other: (isinstance(other, ProductSpace) and
                                   self._reduced == other._reduced)
     
-    def __contains__(self, given_sequence):
-        try:
-            self.index(given_sequence)
-        except ValueError:
-            return False
-        else:
-            return True
-        
     def index(self, given_sequence):
         if not isinstance(given_sequence, collections.Sequence) or \
                                 not len(given_sequence) == len(self.sequences):

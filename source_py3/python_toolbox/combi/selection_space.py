@@ -84,32 +84,24 @@ class SelectionSpace(sequence_tools.CuteSequenceMixin,
         
     _reduced = property(lambda self: (type(self), self.sequence))
     __hash__ = lambda self: hash(self._reduced)
-             
+    __bool__ = lambda self: bool(self.length)
     __eq__ = lambda self, other: (isinstance(other, SelectionSpace) and
                                   self._reduced == other._reduced)
     
-    def __contains__(self, given_iterable):
-        try:
-            self.index(given_iterable)
-        except ValueError:
-            return False
-        else:
-            return True
-        
-    def index(self, given_iterable):
-        if not isinstance(given_iterable, collections.Iterable):
+    def index(self, selection):
+        '''Find the index number of `selection` in this `SelectionSpace`.'''
+        if not isinstance(selection, collections.Iterable):
             raise ValueError
         
-        given_iterable_set = set(given_iterable)
+        selection_set = set(selection)
         
-        if not given_iterable_set <= self._sequence_set:
+        if not selection_set <= self._sequence_set:
             raise ValueError
         
         return sum((2 ** i) for i, item in enumerate(reversed(self.sequence))
-                                                 if item in given_iterable_set)
+                                                 if item in selection_set)
     
     
-    __bool__ = lambda self: bool(self.length)
         
 
 

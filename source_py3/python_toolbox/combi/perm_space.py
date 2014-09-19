@@ -532,15 +532,6 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
     __hash__ = lambda self: hash(self._reduced)
     
     
-    def __contains__(self, item):
-        try:
-            self.index(item)
-        except ValueError:
-            return False
-        else:
-            return True
-            
-        
     def index(self, perm):
         '''Get the index number of permutation `perm` in this space.'''
         if not isinstance(perm, collections.Iterable):
