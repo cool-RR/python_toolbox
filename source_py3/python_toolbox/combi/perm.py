@@ -125,12 +125,20 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
     __int__ = lambda self: self.number
     __mod__ = lambda self, other: self.number % other
     __iter__ = lambda self: iter(self._perm_sequence)
+    
     __eq__ = lambda self, other: (isinstance(other, Perm) and
                                   self._reduced == other._reduced)
     __ne__ = lambda self, other: not (self == other)
     __hash__ = lambda self: hash(self._reduced)
     __bool__ = lambda self: bool(self._perm_sequence)
     
+    def __contains__(self, item):
+        try:
+            return (item in self._perm_sequence)
+        except TypeError:
+            # Gotta have this `except` because Python complains if you try `1
+            # in 'meow'`.
+            return False
     
     def __repr__(self):
         if self.just_dapplied_rapplied_perm_space.length == infinity:
