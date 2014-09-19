@@ -15,6 +15,14 @@ def factorial(x, start=1):
     
     This differs from the built-in `math.factorial` in that it allows a `start`
     argument. If one is given, the function returns `(x!)/(start!)`.
+    
+    Examples:
+    
+        >>> factorial(5)
+        120
+        >>> factorial(5, 3)
+        60
+
     '''
     from python_toolbox import misc_tools
     return misc_tools.general_product(range(start, x+1), start=1)
@@ -27,6 +35,14 @@ def inverse_factorial(number, round_up=True):
     If `number` isn't a factorial of an integer, the result will be rounded. By
     default it'll be rounded up, but you can specify `round_up=False` to have
     it be rounded down.
+    
+    Examples:
+    
+        >>> inverse_factorial(100)
+        5
+        >>> inverse_factorial(100, round_up=False)
+        4
+        
     '''
     assert number >= 0
     if number == 0:
@@ -47,11 +63,16 @@ def inverse_factorial(number, round_up=True):
     
 def from_factoradic(factoradic_number):
     '''
-    Get the integer that the factorial of would be `number`.
+    Convert a factoradic representation to the number it's representing.
     
-    If `number` isn't a factorial of an integer, the result will be rounded. By
-    default it'll be rounded up, but you can specify `round_up=False` to have
-    it be rounded down.
+    Read about factoradic numbers here:
+    https://en.wikipedia.org/wiki/Factorial_number_system
+    
+    Example:
+    
+        >>> from_factoradic((4, 0, 2, 0, 0))
+        100
+    
     '''
     from python_toolbox import sequence_tools
     assert isinstance(factoradic_number, collections.Iterable)
@@ -65,6 +86,24 @@ def from_factoradic(factoradic_number):
         
 
 def to_factoradic(number, n_digits_pad=None):
+    '''
+    Convert a number to factoradic representation (in a tuple.)
+    
+    Read about factoradic numbers here:
+    https://en.wikipedia.org/wiki/Factorial_number_system
+    
+    Example:
+    
+        >>> to_factoradic(100)
+        (4, 0, 2, 0, 0)
+        
+    
+    Use `n_digits_pad` if you want to have the result padded with zeroes:
+    
+        >>> to_factoradic(100, n_digits_pad=7)
+        (0, 0, 4, 0, 2, 0, 0)
+        
+    '''
     assert isinstance(number, int)
     assert number >= 0
     n_digits = inverse_factorial(number, round_up=False) + 1
