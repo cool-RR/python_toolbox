@@ -1,6 +1,8 @@
 # Copyright 2009-2014 Ram Rachum.
 # This program is distributed under the MIT license.
 
+import pickle
+
 from python_toolbox import sequence_tools
 
 from python_toolbox.combi import *
@@ -9,7 +11,7 @@ infinity = float('inf')
 infinities = (infinity, -infinity)
 
 
-def test_perms():
+def test_perm_spaces():
     pure_0a = PermSpace(4)
     pure_0b = PermSpace(range(4))
     pure_0c = PermSpace(list(range(4)))
@@ -40,6 +42,8 @@ def test_perms():
     assert len(pure_perm_space_dict) == 1 # They're all the same
     assert pure_perm_space_dict[pure_0a] == pure_perm_space_dict[pure_0b] == \
           pure_perm_space_dict[pure_0c] == pure_perm_space_dict[pure_0d] == 'd'
+    
+    assert None not in pure_0a # Because, damn.
     
     assert type(first_perm) == type(some_perm) == type(last_perm) == Perm
     assert set(some_perm) == set(range(4))
@@ -101,6 +105,15 @@ def test_perms():
     assert '...' in repr_of_big_perm_space
     assert len(repr_of_big_perm_space) <= 100
     
+    fixed_perm_space = pure_perm_space.get_fixed({0: 3,})
+    assert fixed_perm_space.length == 6
+    assert fixed_perm_space.is_fixed
+    assert not fixed_perm_space.is_pure
+    assert fixed_perm_space.unfixed.is_pure
+    assert fixed_perm_space.unfixed == pure_perm_space
+    
+    assert pickle.loads(pickle.dumps(pure_perm_space)) == pure_perm_space
+    
 def test_fixed_perm_space():
     pure_perm_space = PermSpace(5)
     small_fixed_perm_space = PermSpace(5, fixed_map={0: 0, 2: 2, 4: 4,})
@@ -152,6 +165,7 @@ def test_rapplied_perm_space():
     
     assert 'mowe' in rapplied_perm_space
     assert 'woof' not in rapplied_perm_space
+    assert infinite_pure_perm_space[7] not in rapplied_perm_space
     assert rapplied_perm_space[rapplied_perm_space.index('wome')] == \
                                               Perm('wome', rapplied_perm_space)
     
@@ -170,6 +184,7 @@ def test_dapplied_perm_space():
     
     assert (0, 4, 2, 3, 1) in dapplied_perm_space
     assert (0, 4, 'ooga booga', 2, 3, 1) not in dapplied_perm_space
+    assert infinite_pure_perm_space[7] not in rapplied_perm_space
     
     dapplied_perm = dapplied_perm_space[-1]
     assert dapplied_perm in dapplied_perm_space
@@ -249,6 +264,9 @@ def test_degreed_perm_space():
     assert funky_perm_space.domain == 'travels'
     assert funky_perm_space.canonical_slice.start == 2
     
+    assert funky_perm_space.undegreed.get_degreed(2)[0] not in funky_perm_space
+    assert funky_perm_space.get_fixed({'t': 'i', 'v': 'g',}) == funky_perm_space
+    
     for i, perm in enumerate(funky_perm_space):
         assert perm.is_dapplied
         assert perm.is_rapplied
@@ -306,6 +324,12 @@ def test_degreed_perm_space():
     assert not funky_perm_space._just_fixed.is_dapplied
     assert not funky_perm_space._just_fixed.is_sliced
     assert not funky_perm_space._just_fixed.is_degreed
+    
+    assert pickle.loads(pickle.dumps(funky_perm_space)) == funky_perm_space
+    assert funky_perm_space != \
+                      pickle.loads(pickle.dumps(funky_perm_space.unfixed)) == \
+                                                       funky_perm_space.unfixed
+    
     
     
 def test_partial_perm_space():
