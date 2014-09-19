@@ -223,9 +223,10 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
             factoradic_number = factoradic_number[
                 :-self.just_dapplied_rapplied_perm_space.n_unused_elements
             ]
-        unused_numbers = list(self.just_dapplied_rapplied_perm_space.sequence,)
-        result = tuple(unused_numbers.pop(factoradic_digit) for
-                       factoradic_digit in factoradic_number)
+        sequence_view = sequence_tools.SequencePoppingView(
+                               self.just_dapplied_rapplied_perm_space.sequence)
+        result = tuple(sequence_view.pop(factoradic_digit) for
+                                         factoradic_digit in factoradic_number)
         if self.is_infinite:
             from .chain_space import ChainSpace
             result = ChainSpace((
