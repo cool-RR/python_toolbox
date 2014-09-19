@@ -523,8 +523,10 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
     )
     
     __iter__ = lambda self: (self[i] for i in range(self.length))
-    _reduced = property(lambda self: (type(self), self.sequence, self.domain, 
-                                      self.fixed_map, self.canonical_slice))
+    _reduced = property(
+        lambda self: (type(self), self.sequence, self.domain, 
+                      tuple(self.fixed_map.items()), self.canonical_slice)
+    )
              
     __eq__ = lambda self, other: (isinstance(other, PermSpace) and
                                   self._reduced == other._reduced)

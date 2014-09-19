@@ -34,6 +34,13 @@ def test_perms():
     some_perm = pure_0a[7]
     last_perm = pure_0a[-1]
     
+    # Testing hashing: 
+    pure_perm_space_dict = {pure_0a: 'a', pure_0b: 'b',
+                            pure_0c: 'c', pure_0d: 'd',}
+    assert len(pure_perm_space_dict) == 1 # They're all the same
+    assert pure_perm_space_dict[pure_0a] == pure_perm_space_dict[pure_0b] == \
+          pure_perm_space_dict[pure_0c] == pure_perm_space_dict[pure_0d] == 'd'
+    
     assert type(first_perm) == type(some_perm) == type(last_perm) == Perm
     assert set(some_perm) == set(range(4))
     assert tuple(first_perm) == (0, 1, 2, 3)
@@ -89,6 +96,10 @@ def test_perms():
         perm = big_perm_space[i]
         perm.number # Just ensuring no exception
         assert big_perm_space.index(perm) == i
+        
+    repr_of_big_perm_space = repr(PermSpace(tuple(range(100, 0, -1))))
+    assert '...' in repr_of_big_perm_space
+    assert len(repr_of_big_perm_space) <= 100
     
 def test_fixed_perm_space():
     pure_perm_space = PermSpace(5)
@@ -179,6 +190,15 @@ def test_dapplied_perm_space():
         assert char not in dapplied_perm
     for number in range(5):
         assert number in dapplied_perm
+        
+    assert not dapplied_perm_space._just_fixed.is_fixed
+    assert not dapplied_perm_space._just_fixed.is_dapplied
+    assert not dapplied_perm_space._just_fixed.is_rapplied
+    assert not dapplied_perm_space._just_fixed.is_partial
+    assert not dapplied_perm_space._just_fixed.is_combination
+    assert not dapplied_perm_space._just_fixed.is_degreed
+    
+    assert repr(dapplied_perm_space) == "<PermSpace: 'growl' => range(0, 5)>"
     
 def test_degreed_perm_space():
     assert PermSpace(3, degrees=0).length == 1

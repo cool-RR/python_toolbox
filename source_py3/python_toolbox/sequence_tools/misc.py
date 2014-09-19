@@ -393,6 +393,7 @@ class CanonicalSlice:
     __iter__ = lambda self: iter((self.start, self.stop, self.step))
     __repr__ = lambda self: '%s%s' % (type(self).__name__, tuple(self))
     _reduced = property(lambda self: (type(self), tuple(self)))
+    __hash__ = lambda self: hash(self._reduced)
     __eq__ = lambda self, other: (isinstance(other, CanonicalSlice) and
                                   self._reduced == other._reduced)
     __contains__ = lambda self, number: self.start <= number < self.stop
