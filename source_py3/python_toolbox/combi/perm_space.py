@@ -902,6 +902,11 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
         return Perm(perm, self)
         
         
+    is_infinite = caching.CachedProperty(
+        lambda self: self.sequence_length == infinity
+    )
+    
+
 infinite_pure_perm_space = PermSpace(infinity)
 
 

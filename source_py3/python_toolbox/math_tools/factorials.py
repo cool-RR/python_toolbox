@@ -4,6 +4,7 @@
 import math
 import collections
 import itertools
+import numbers
 
 infinity = float('inf')
 infinities = (infinity, -infinity)
@@ -85,7 +86,7 @@ def from_factoradic(factoradic_number):
     return number
         
 
-def to_factoradic(number, n_digits_pad=None):
+def to_factoradic(number, n_digits_pad=0):
     '''
     Convert a number to factoradic representation (in a tuple.)
     
@@ -106,6 +107,7 @@ def to_factoradic(number, n_digits_pad=None):
     '''
     assert isinstance(number, int)
     assert number >= 0
+    assert isinstance(n_digits_pad, numbers.Integral)
     n_digits = inverse_factorial(number, round_up=False) + 1
     digits = [None] * n_digits
     current_number = number
@@ -114,7 +116,7 @@ def to_factoradic(number, n_digits_pad=None):
         digits[n_digits - i - 1], current_number = \
                                                    divmod(current_number, unit)
     result = tuple(digits)
-    if n_digits_pad and (len(result) < n_digits_pad):
+    if (len(result) < n_digits_pad):
         return ((0,) * (n_digits_pad - len(result))) + result
     else:
         return result
