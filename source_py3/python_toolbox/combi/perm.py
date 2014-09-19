@@ -101,7 +101,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         ### Finished analyzing `perm_space`. ##################################
         
         self.is_pure = not (self.is_rapplied or self.is_dapplied
-                            or self.is_partial, self.is_combination)
+                            or self.is_partial or self.is_combination)
         
         if not self.is_rapplied: self.unrapplied = self
         if not self.is_dapplied: self.undapplied = self
@@ -208,7 +208,6 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
     )
     
     @caching.CachedProperty
-    @nifty_collections.LazyTuple.factory()
     def _perm_sequence(self):
         assert (0 <= self.number < 
                                  self.just_dapplied_rapplied_perm_space.length)
@@ -234,7 +233,8 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
                 sequence_tools.CuteRange(len(result), infinity)
             ))
         assert sequence_tools.get_length(result) == self.length
-        return result
+        return nifty_collections.LazyTuple(result,
+                                           definitely_infinite=self.is_infinite)
     
 
 
