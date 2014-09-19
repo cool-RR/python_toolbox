@@ -11,14 +11,23 @@ infinities = (infinity, -infinity)
 
 def factorial(x, start=1):
     '''
+    Calculate a factorial
     
     This differs from the built-in `math.factorial` in that it allows a `start`
-    argument.
+    argument. If one is given, the function returns `(x!)/(start!)`.
     '''
     from python_toolbox import misc_tools
     return misc_tools.general_product(range(start, x+1), start=1)
 
-def reverse_factorial(number, round_up=True):
+
+def inverse_factorial(number, round_up=True):
+    '''
+    Get the integer that the factorial of would be `number`.
+    
+    If `number` isn't a factorial of an integer, the result will be rounded. By
+    default it'll be rounded up, but you can specify `round_up=False` to have
+    it be rounded down.
+    '''
     assert number >= 0
     if number == 0:
         return 0
@@ -37,6 +46,13 @@ def reverse_factorial(number, round_up=True):
         
     
 def from_factoradic(factoradic_number):
+    '''
+    Get the integer that the factorial of would be `number`.
+    
+    If `number` isn't a factorial of an integer, the result will be rounded. By
+    default it'll be rounded up, but you can specify `round_up=False` to have
+    it be rounded down.
+    '''
     from python_toolbox import sequence_tools
     assert isinstance(factoradic_number, collections.Iterable)
     factoradic_number = \
@@ -51,7 +67,7 @@ def from_factoradic(factoradic_number):
 def to_factoradic(number, n_digits_pad=None):
     assert isinstance(number, int)
     assert number >= 0
-    n_digits = reverse_factorial(number, round_up=False) + 1
+    n_digits = inverse_factorial(number, round_up=False) + 1
     digits = [None] * n_digits
     current_number = number
     for i in range(n_digits)[::-1]:
