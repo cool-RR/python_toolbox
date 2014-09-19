@@ -29,12 +29,17 @@ class SequencePoppingView(CuteSequence):
         return nifty_collections.OrderedSet()
     
     def _get_sequence_index(self, index):
-        current_base = 0
+        if index < 0:
+            index += len(self)
+        if not (0 <= index < self.length):
+            raise ValueError
+        current_base = -1 # Starting at -1 rather than 0 to ensure at least one
+                          # loop run
         current_goal = index
         while current_base != current_goal:
             n_popped_items_in_range = (
                 bisect.bisect(self.popped_indices, current_goal) -
-                        len(bisect.bisect_left(self.popped_indices, current_base)))
+                              bisect.bisect(self.popped_indices, current_base))
             current_base, current_goal = (current_goal, current_goal +
                                                        n_popped_items_in_range)
         assert current_goal not in self.popped_indices
@@ -61,16 +66,27 @@ class SequencePoppingView(CuteSequence):
         # raise TypeError("Can't add stuff to a `%s`" % type(self).__name__)
     # extend = insert = append = _nopity_nope_nope
     
-    clear = lambda self: self.popped_indices.__ior__(range(len(self.sequence)))
+    def clear(self):
+        self.popped_indices |= range(len(self.sequence))
+        self.popped_indices.sort()
+        
     copy = lambda self: type(self)(self.sequence,
                                    popped_indices=self.popped_indices)
-    __len__ = lambda self: len(self.sequence) - len(self.popped_indices)
+    length = property(
+                    lambda self: len(self.sequence) - len(self.popped_indices))
+    __repr__ = lambda self: '%s(%s, popped_indices=%s)' % (
+        type(self).__name__, self.sequence, self.popped_indices
+    )
     
     # These are the money methods right here:
     def pop(self, i):
         sequence_index = self._get_sequence_index(i)
-        self.popped_indices.add(sequence_index)
-        return self.sequence[sequence_index]
+        try:
+            return self.sequence[sequence_index]
+        finally:
+            self.popped_indices.add(sequence_index)
+            self.popped_indices.sort()
+            
     remove = lambda self, item: \
                              self.popped_indices.add(self.sequence.index(item))
     
