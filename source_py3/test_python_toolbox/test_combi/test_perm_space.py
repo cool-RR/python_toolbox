@@ -1,7 +1,12 @@
 # Copyright 2009-2014 Ram Rachum.
 # This program is distributed under the MIT license.
 
+from python_toolbox import sequence_tools
+
 from python_toolbox.combi import *
+
+infinity = float('inf')
+infinities = (infinity, -infinity)
 
 
 def test_perms():
@@ -276,6 +281,12 @@ def test_degreed_perm_space():
                if i not in funky_perm_space.degrees
             ).length == funky_perm_space.unsliced.undegreed.length
     
+    assert funky_perm_space._just_fixed.is_fixed
+    assert not funky_perm_space._just_fixed.is_rapplied
+    assert not funky_perm_space._just_fixed.is_dapplied
+    assert not funky_perm_space._just_fixed.is_sliced
+    assert not funky_perm_space._just_fixed.is_degreed
+    
     
 def test_partial_perm_space():
     with cute_testing.RaiseAssertor():
@@ -382,6 +393,14 @@ def test_neighbors():
     assert perm in perm.get_neighbors((0, 1))
     assert set(first_level_neighbors) < set(perm.get_neighbors((0, 1)))
     assert len(first_level_neighbors) + 1 == len(perm.get_neighbors((0, 1)))
+    
+    
+
+def test_infinite_perm_space():
+    perm_space = PermSpace(sequence_tools.CuteRange(infinity))
+    assert perm_space.length == infinity
+    assert perm_space == infinite_pure_perm_space
+    assert perm_space[100].length == infinity
     
     
 

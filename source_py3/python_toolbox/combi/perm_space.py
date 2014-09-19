@@ -158,7 +158,7 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
             assert isinstance(iterable_or_length, collections.Iterable)
             self.sequence = sequence_tools. \
                       ensure_iterable_is_immutable_sequence(iterable_or_length)
-            if cute_iter_tools.get_length(self.sequence) == infinity:
+            if sequence_tools.get_length(self.sequence) == infinity:
                 self.is_rapplied = False
                 self.sequence_length = infinity
             else:
@@ -280,7 +280,7 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
             else:
                 self._get_just_fixed = lambda: PermSpace(
                     len(self.sequence),
-                    fixed_map=self._undapplied_fixed_map,
+                    fixed_map=self._undapplied_unrapplied_fixed_map,
                 )
         else:
             self._unsliced_undegreed_length = \
