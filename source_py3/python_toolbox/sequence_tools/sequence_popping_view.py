@@ -11,7 +11,7 @@ import itertools
 
 from python_toolbox import caching
 
-from .misc import CuteSequence
+from .misc import CuteSequence, get_length
 
 infinity = float('inf')
 infinities = (infinity, -infinity)
@@ -72,8 +72,8 @@ class SequencePoppingView(CuteSequence):
         
     copy = lambda self: type(self)(self.sequence,
                                    popped_indices=self.popped_indices)
-    length = property(
-                    lambda self: len(self.sequence) - len(self.popped_indices))
+    length = property(lambda self: get_length(self.sequence) -
+                                               get_length(self.popped_indices))
     __repr__ = lambda self: '%s(%s, popped_indices=%s)' % (
         type(self).__name__, self.sequence, self.popped_indices
     )
