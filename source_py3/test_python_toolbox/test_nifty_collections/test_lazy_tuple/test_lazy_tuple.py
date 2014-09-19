@@ -79,7 +79,7 @@ def test_empty():
     with cute_testing.RaiseAssertor(IndexError):
         lazy_tuple[7]
         
-    assert repr(lazy_tuple) == '<LazyTuple: ()>'
+    assert repr(lazy_tuple) == '<LazyTuple: []>'
     
     assert bool(LazyTuple(())) == False
     assert bool(lazy_tuple) == False
@@ -91,7 +91,7 @@ def test_string():
     string = 'meow'
     lazy_tuple = LazyTuple(string)
     assert lazy_tuple.exhausted
-    assert repr(lazy_tuple) == "<LazyTuple: ('m', 'e', 'o', 'w')>"
+    assert repr(lazy_tuple) == "<LazyTuple: 'meow'>"
     assert ''.join(lazy_tuple) == string
     assert ''.join(lazy_tuple[1:-1]) == string[1:-1]
     
@@ -132,14 +132,14 @@ def test_finite_iterator():
 
     assert list(itertools.islice(lazy_tuple, 0, 2)) == [0, 1]
     assert not lazy_tuple.exhausted
-    assert repr(lazy_tuple) == '<LazyTuple: (0, 1, ...)>'
+    assert repr(lazy_tuple) == '<LazyTuple: [0, 1]...>'
     
     second_to_last = lazy_tuple[-2]
     assert second_to_last == 3
     assert lazy_tuple.exhausted
     assert len(lazy_tuple) == lazy_tuple.known_length == \
            len(lazy_tuple.collected_data)
-    assert repr(lazy_tuple) == '<LazyTuple: (0, 1, 2, 3, 4)>'
+    assert repr(lazy_tuple) == '<LazyTuple: [0, 1, 2, 3, 4]>'
     assert LazyTuple(reversed(LazyTuple(reversed(lazy_tuple)))) == lazy_tuple
     
     assert 6 * lazy_tuple == 2 * lazy_tuple * 3 == lazy_tuple * 3 * 2 == \

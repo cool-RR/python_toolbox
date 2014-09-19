@@ -253,18 +253,13 @@ class LazyTuple(collections.Sequence):
         The '...' denotes a non-exhausted lazy tuple.
         '''
         if self.exhausted:
-            inner = ''.join(('(',                             
-                             repr(self.collected_data)[1:-1],
-                             ')'))
+            inner = repr(self.collected_data)
                              
         else: # not self.exhausted
             if self.collected_data == []:
                 inner = '(...)'
             else: 
-                inner = ''.join(('(',
-                                 repr(self.collected_data)[1:-1],
-                                 ', ...)'))
-            
+                inner = '%s...' % repr(self.collected_data)            
         return '<%s: %s>' % (self.__class__.__name__, inner) 
     
     
