@@ -420,7 +420,7 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
         )
         
     def __getitem__(self, i):
-        if isinstance(i, slice):
+        if isinstance(i, (slice, sequence_tools.CanonicalSlice)):
             canonical_slice = sequence_tools.CanonicalSlice(
                 i, self.length, offset=self.canonical_slice.start
             )
@@ -547,6 +547,13 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
         except sequence_tools.UnorderedIterableException:
             raise ValueError('An unordered iterable is never contained in a '
                              'non-combination `PermSpace`.')
+        if isinstance(perm, Perm) and perm.is_infinite:
+            if self.is_infinite:
+                assert self == infinite_pure_perm_space
+                return perm.number
+            else:
+                raise ValueError
+        
         perm_set = set(perm)
         if not (perm_set <= set(self.sequence)):
             raise ValueError

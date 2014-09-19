@@ -211,7 +211,8 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
     def _perm_sequence(self):
         assert (0 <= self.number < 
                                  self.just_dapplied_rapplied_perm_space.length)
-        n_digits_pad = 0 if self.is_infinite else self.length
+        n_digits_pad = 0 if self.is_infinite else \
+                         self.just_dapplied_rapplied_perm_space.sequence_length
         factoradic_number = math_tools.to_factoradic(
             self.number * math.factorial(
                  self.just_dapplied_rapplied_perm_space.n_unused_elements),

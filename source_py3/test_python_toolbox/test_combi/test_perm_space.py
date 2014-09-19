@@ -184,7 +184,7 @@ def test_dapplied_perm_space():
     
     assert (0, 4, 2, 3, 1) in dapplied_perm_space
     assert (0, 4, 'ooga booga', 2, 3, 1) not in dapplied_perm_space
-    assert infinite_pure_perm_space[7] not in rapplied_perm_space
+    assert infinite_pure_perm_space[7] not in dapplied_perm_space
     
     dapplied_perm = dapplied_perm_space[-1]
     assert dapplied_perm in dapplied_perm_space
@@ -264,8 +264,10 @@ def test_degreed_perm_space():
     assert funky_perm_space.domain == 'travels'
     assert funky_perm_space.canonical_slice.start == 2
     
-    assert funky_perm_space.undegreed.get_degreed(2)[0] not in funky_perm_space
-    assert funky_perm_space.get_fixed({'t': 'i', 'v': 'g',}) == funky_perm_space
+    assert funky_perm_space.unsliced.undegreed.get_degreed(2)[0] \
+                                                        not in funky_perm_space
+    assert funky_perm_space.unsliced.get_fixed({'t': 'i', 'v': 'g',}) \
+                                  [funky_perm_space.slice_] == funky_perm_space
     
     for i, perm in enumerate(funky_perm_space):
         assert perm.is_dapplied
@@ -327,8 +329,8 @@ def test_degreed_perm_space():
     
     assert pickle.loads(pickle.dumps(funky_perm_space)) == funky_perm_space
     assert funky_perm_space != \
-                      pickle.loads(pickle.dumps(funky_perm_space.unfixed)) == \
-                                                       funky_perm_space.unfixed
+             pickle.loads(pickle.dumps(funky_perm_space.unsliced.unfixed)) == \
+                                              funky_perm_space.unsliced.unfixed
     
     
     
