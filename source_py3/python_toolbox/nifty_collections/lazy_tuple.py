@@ -86,7 +86,7 @@ class LazyTuple(collections.Sequence):
         self.exhausted = True if was_given_a_sequence else False
         '''Flag saying whether the internal iterator is totally exhausted.'''
         
-        self.collected_data = list(iterable) if was_given_a_sequence else []
+        self.collected_data = iterable if was_given_a_sequence else []
         '''All the items that were collected from the iterable.'''
         
         self._iterator = None if was_given_a_sequence else iter(iterable)

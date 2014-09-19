@@ -363,8 +363,9 @@ def decimal_number_from_string(string):
 
 class AlternativeLengthMixin:
     def __len__(self):
-        if self.length <= sys.maxsize:
-            return self.length
+        length = self.length
+        if (length <= sys.maxsize) and isinstance(length, int):
+            return length
         else:
             raise OverflowError("Due to CPython limitation, you'll have to "
                                 "use `.length` rather than `len`")
