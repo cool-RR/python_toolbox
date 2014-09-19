@@ -60,7 +60,7 @@ class ChainSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
     def __repr__(self):
         return '<%s: %s>' % (
             type(self).__name__,
-            '+'.join(str(len(sequence)) for sequence in sequences),
+            '+'.join(str(len(sequence)) for sequence in self.sequences),
         )
         
     def __getitem__(self, i):

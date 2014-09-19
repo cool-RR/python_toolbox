@@ -233,7 +233,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
                 result,
                 sequence_tools.CuteRange(len(result), infinity)
             ))
-        assert len(result) == self.length
+        assert sequence_tools.get_length(result) == self.length
         return result
     
 
