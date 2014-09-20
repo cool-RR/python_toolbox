@@ -85,17 +85,18 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         if perm_space is None:
             self.is_rapplied = self.is_dapplied = self.is_partial = \
                                                     self.is_combination = False
-            if isinstance(number_or_perm_sequence, int):
-                self.just_dapplied_rapplied_perm_space = \
-                                                       infinite_pure_perm_space
-            else:
-                assert isinstance(number_or_perm_sequence,
-                                  collections.Sequence)
-                # We're assuming that `number_or_perm_sequence` is a pure
-                # permutation sequence. Not asserting this because that would
-                # be O(n).
-                self.just_dapplied_rapplied_perm_space = \
-                                    PermSpace(len(number_or_perm_sequence))
+            if not isinstance(number_or_perm_sequence,
+                              collections.Sequence):
+                raise Exception(
+                    "You tried creating a `Perm` using a number instead of a "
+                    "sequence and without specifying `PermSpace`, so we have "
+                    "no way of knowing which `PermSpace` to use."
+                )
+            # We're assuming that `number_or_perm_sequence` is a pure
+            # permutation sequence. Not asserting this because that would
+            # be O(n).
+            self.just_dapplied_rapplied_perm_space = \
+                                        PermSpace(len(number_or_perm_sequence))
         else: # perm_space is not None
             self.is_rapplied = perm_space.is_rapplied
             self.is_dapplied = perm_space.is_dapplied
@@ -147,26 +148,17 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
             return False
     
     def __repr__(self):
-        if self.just_dapplied_rapplied_perm_space.length == infinity:
-            return '<%s: (%s) (%s, ...)>' % (
-                type(self).__name__, self.number,
-                ', '.join(map(repr,
-                             itertools.islice(self._perm_sequence,
-                                              self._net_length))
-                ),
-            )
-        else:
-            return '<%s%s%s: (%s / %s) %s(%s%s)>' % (
-                type(self).__name__, 
-                (', n_elements=%s' % len(self)) if self.is_partial else '',
-                ', is_combination=True' if self.is_combination else '',
-                self.number,
-                self._perm_space_short_length_string,
-                ('(%s) => ' % ', '.join(map(repr, self.domain)))
+        return '<%s%s%s: (%s / %s) %s(%s%s)>' % (
+            type(self).__name__, 
+            (', n_elements=%s' % len(self)) if self.is_partial else '',
+            ', is_combination=True' if self.is_combination else '',
+            self.number,
+            self._perm_space_short_length_string,
+            ('(%s) => ' % ', '.join(map(repr, self.domain)))
                                                    if self.is_dapplied else '',
-                ', '.join(repr(item) for item in self),
-                ',' if self.length == 1 else ''
-            )
+            ', '.join(repr(item) for item in self),
+            ',' if self.length == 1 else ''
+        )
         
     def index(self, member):
         numerical_index = self._perm_sequence.index(member)
@@ -211,11 +203,6 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
                   self.just_dapplied_rapplied_perm_space.n_unused_elements)
             
     
-    is_infinite = caching.CachedProperty(
-        lambda self: self.just_dapplied_rapplied_perm_space.is_infinite
-    )
-    
-    
     @caching.CachedProperty
     def _net_length(self):
         self._perm_sequence # Calculating this would calculate `_net_length` as
@@ -227,34 +214,21 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
     def _perm_sequence(self):
         assert (0 <= self.number < 
                                  self.just_dapplied_rapplied_perm_space.length)
-        n_digits_pad = 0 if self.is_infinite else \
-                         self.just_dapplied_rapplied_perm_space.sequence_length
         factoradic_number = math_tools.to_factoradic(
             self.number * math.factorial(
                  self.just_dapplied_rapplied_perm_space.n_unused_elements),
-            n_digits_pad=n_digits_pad
+            n_digits_pad=self.just_dapplied_rapplied_perm_space.sequence_length
         )
         if self.is_partial:
-            assert not self.is_infinite
             factoradic_number = factoradic_number[
                 :-self.just_dapplied_rapplied_perm_space.n_unused_elements
             ]
         self._net_length = len(factoradic_number)
-        cls_to_use = sequence_tools.SequencePoppingView if \
-                                                     self.is_infinite else list
-        sequence_popping_view = cls_to_use(
-                               self.just_dapplied_rapplied_perm_space.sequence)
-        result = tuple(sequence_popping_view.pop(factoradic_digit) for
+        unused_numbers = list(self.just_dapplied_rapplied_perm_space.sequence)
+        result = tuple(unused_numbers.pop(factoradic_digit) for
                                          factoradic_digit in factoradic_number)
-        if self.is_infinite:
-            from .chain_space import ChainSpace
-            result = ChainSpace((
-                result,
-                sequence_tools.CuteRange(len(result), infinity)
-            ))
         assert sequence_tools.get_length(result) == self.length
-        return nifty_collections.LazyTuple(result,
-                                           definitely_infinite=self.is_infinite)
+        return nifty_collections.LazyTuple(result)
     
 
 
@@ -322,8 +296,6 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         if self.is_rapplied:
             raise TypeError("Can't rapply an rapplied permutation, try "
                             "`perm.unrapplied`.")
-        if self.is_rapplied:
-            raise NotImplementedError("Can't rapply an infinite perm.")
         sequence = \
              sequence_tools.ensure_iterable_is_immutable_sequence(sequence)
         if sequence_tools.get_length(sequence) < \
@@ -411,14 +383,9 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
     items = caching.CachedProperty(PermItems)
     as_dictoid = caching.CachedProperty(PermAsDictoid)
     
-    # def __reduce__(self, *args, **kwargs):
-        # result = super().__reduce__(*args, **kwargs)
-        # d = result[2]
-        # return result
-    
         
 
 
-from .perm_space import PermSpace, infinite_pure_perm_space
+from .perm_space import PermSpace
 from .comb_space import CombSpace
 from .comb import Comb

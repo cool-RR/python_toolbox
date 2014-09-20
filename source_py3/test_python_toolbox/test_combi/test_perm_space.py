@@ -142,6 +142,8 @@ def test_perm_spaces():
     assert fixed_perm_space.unfixed == pure_perm_space
     
     assert pickle.loads(pickle.dumps(pure_perm_space)) == pure_perm_space
+    assert pickle.loads(pickle.dumps(pure_0b[2])) == pure_0c[2]
+    assert pickle.loads(pickle.dumps(pure_0b[3])) != pure_0b[4]
     
 def test_fixed_perm_space():
     pure_perm_space = PermSpace(5)
@@ -194,7 +196,7 @@ def test_rapplied_perm_space():
     
     assert 'mowe' in rapplied_perm_space
     assert 'woof' not in rapplied_perm_space
-    assert infinite_pure_perm_space[7] not in rapplied_perm_space
+    assert rapplied_perm_space.unrapplied[0] not in rapplied_perm_space
     assert rapplied_perm_space[rapplied_perm_space.index('wome')] == \
                                               Perm('wome', rapplied_perm_space)
     
@@ -213,7 +215,7 @@ def test_dapplied_perm_space():
     
     assert (0, 4, 2, 3, 1) in dapplied_perm_space
     assert (0, 4, 'ooga booga', 2, 3, 1) not in dapplied_perm_space
-    assert infinite_pure_perm_space[7] not in dapplied_perm_space
+    assert dapplied_perm_space.undapplied[7] not in dapplied_perm_space
     
     dapplied_perm = dapplied_perm_space[-1]
     assert dapplied_perm in dapplied_perm_space
@@ -473,23 +475,6 @@ def test_neighbors():
     assert perm in perm.get_neighbors((0, 1))
     assert set(first_level_neighbors) < set(perm.get_neighbors((0, 1)))
     assert len(first_level_neighbors) + 1 == len(perm.get_neighbors((0, 1)))
-    
-    
-
-def test_infinite_perm_space():
-    assert infinite_pure_perm_space == \
-                                  PermSpace(sequence_tools.CuteRange(infinity))
-    assert infinite_pure_perm_space.length == infinity
-    assert infinite_pure_perm_space.is_infinite
-    assert infinite_pure_perm_space[100].length == infinity
-    assert infinite_pure_perm_space.index(infinite_pure_perm_space[100]) == 100
-    assert Perm(100) == infinite_pure_perm_space[100]
-    assert repr(infinite_pure_perm_space[100]) == \
-                                           '<Perm: (100) (4, 0, 3, 1, 2, ...)>'
-    for perm in tuple(itertools.islice(infinite_pure_perm_space, 0, 30, 7)):
-        assert perm in infinite_pure_perm_space
-        assert infinite_pure_perm_space.index(perm) % 7 == 0
-        
     
     
 

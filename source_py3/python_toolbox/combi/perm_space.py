@@ -128,10 +128,9 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
         #                                                                     #
         assert isinstance(
             iterable_or_length,
-            (collections.Iterable, math_tools.PossiblyInfiniteIntegral)
+            (collections.Iterable, numbers.Integral)
         )
-        if isinstance(iterable_or_length,
-                      math_tools.PossiblyInfiniteIntegral):
+        if isinstance(iterable_or_length, numbers.Integral):
             assert iterable_or_length >= 0
         if slice_ is not None:
             assert isinstance(slice_,
@@ -145,12 +144,7 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
 
         ### Figuring out sequence and whether space is rapplied: ##############
         #                                                                     #
-        if iterable_or_length == infinity:
-            self.is_rapplied = False
-            self.sequence = sequence_tools.CuteRange(infinity)
-            self.sequence_length = infinity
-            assert not fixed_map
-        elif isinstance(iterable_or_length, numbers.Integral):
+        if isinstance(iterable_or_length, numbers.Integral):
             self.is_rapplied = False
             self.sequence = range(iterable_or_length)
             self.sequence_length = iterable_or_length
@@ -158,19 +152,15 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
             assert isinstance(iterable_or_length, collections.Iterable)
             self.sequence = sequence_tools. \
                       ensure_iterable_is_immutable_sequence(iterable_or_length)
-            if sequence_tools.get_length(self.sequence) == infinity:
-                self.is_rapplied = False
-                self.sequence_length = infinity
-            else:
-                range_candidate = range(len(self.sequence))
-                
-                self.is_rapplied = not (
-                    cute_iter_tools.are_equal(self.sequence,
-                                                  range_candidate)
-                )
-                self.sequence_length = len(self.sequence)
-                if not self.is_rapplied:
-                    self.sequence = range(self.sequence_length)
+            range_candidate = range(len(self.sequence))
+            
+            self.is_rapplied = not (
+                cute_iter_tools.are_equal(self.sequence,
+                                              range_candidate)
+            )
+            self.sequence_length = len(self.sequence)
+            if not self.is_rapplied:
+                self.sequence = range(self.sequence_length)
         
         if self.is_rapplied and (len(set(self.sequence)) < len(self.sequence)):
             # Can implement this later by calculating the actual length.
@@ -187,8 +177,6 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
         if not 0 <= self.n_elements <= self.sequence_length:
             raise Exception('`n_elements` must be between 0 and %s' %
                                                           self.sequence_length)
-        if self.sequence_length == infinity and self.n_elements != infinity:
-            raise NotImplementedError
         self.is_partial = (self.n_elements < self.sequence_length)
         
         self.indices = sequence_tools.CuteRange(self.n_elements) 
@@ -204,14 +192,11 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
             if fixed_map:
                 raise NotImplementedError
         
-        if self.sequence_length == infinity:
-            self._just_partialled_combinationed_length = infinity
-        else:
-            self._just_partialled_combinationed_length = \
-                math_tools.factorial(
-                    self.sequence_length,
-                    start=(self.sequence_length - self.n_elements + 1)
-                ) // (math_tools.factorial(self.n_elements) if
+        self._just_partialled_combinationed_length = \
+            math_tools.factorial(
+                self.sequence_length,
+                start=(self.sequence_length - self.n_elements + 1)
+            ) // (math_tools.factorial(self.n_elements) if
                                                     self.is_combination else 1)
         # This division is always without a remainder, because math.
         #                                                                     #
@@ -230,8 +215,6 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
             domain, self.indices
         )
         if self.is_dapplied:
-            if self.sequence_length == infinity:
-                raise NotImplementedError
             if self.is_combination:
                 raise Exception("Can't use a domain with combination spaces.")
             self.domain = domain
@@ -317,17 +300,13 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
             self.degrees = tuple(
                 degree for degree in degrees if degree in all_degrees
             )
-            if sequence_tools.get_length(self.degrees) == infinity:
-                self._unsliced_length = infinity
-            else:
-                
-                self._unsliced_length = sum(
-                    math_tools.abs_stirling(
-                        self.sequence_length - len(self.fixed_map),
-                        self.sequence_length - degree -
+            self._unsliced_length = sum(
+                math_tools.abs_stirling(
+                    self.sequence_length - len(self.fixed_map),
+                    self.sequence_length - degree -
                                     self._n_cycles_in_fixed_items_of_just_fixed
-                    ) for degree in self.degrees
-                )
+                ) for degree in self.degrees
+            )
             
         #                                                                     #
         ### Finished figuring out degrees. ####################################
@@ -518,8 +497,7 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
                 
                 
     n_unused_elements = caching.CachedProperty(
-        lambda self: self.sequence_length - self.n_elements if 
-                                         self.sequence_length < infinity else 0
+        lambda self: self.sequence_length - self.n_elements
     )
     
     __iter__ = lambda self: (self[i] for i in
@@ -548,12 +526,6 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
         except sequence_tools.UnorderedIterableException:
             raise ValueError('An unordered iterable is never contained in a '
                              'non-combination `PermSpace`.')
-        if isinstance(perm, Perm) and perm.is_infinite:
-            if self.is_infinite:
-                assert self == infinite_pure_perm_space
-                return perm.number
-            else:
-                raise ValueError
         
         perm_set = set(perm)
         if not (perm_set <= set(self.sequence)):
@@ -915,13 +887,6 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
         return Perm(perm, self)
         
         
-    is_infinite = caching.CachedProperty(
-        lambda self: self.sequence_length == infinity
-    )
-    
-
-infinite_pure_perm_space = PermSpace(infinity)
-
 
 from .perm import Perm
 
