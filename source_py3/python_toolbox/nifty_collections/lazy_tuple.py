@@ -83,7 +83,7 @@ class LazyTuple(collections.Sequence):
         was_given_a_sequence = isinstance(iterable, collections.Sequence) and \
                                not isinstance(iterable, LazyTuple)
         
-        self.exhausted = True if was_given_a_sequence else False
+        self.is_exhausted = True if was_given_a_sequence else False
         '''Flag saying whether the internal iterator is totally exhausted.'''
         
         self.collected_data = iterable if was_given_a_sequence else []
@@ -143,7 +143,7 @@ class LazyTuple(collections.Sequence):
         '''
         from python_toolbox import sequence_tools
         
-        if self.exhausted:
+        if self.is_exhausted:
             return
         
         elif isinstance(i, int) or i == infinity:
@@ -170,7 +170,7 @@ class LazyTuple(collections.Sequence):
                 with self.lock:
                     self.collected_data.append(next(self._iterator))
             except StopIteration:
-                self.exhausted = True
+                self.is_exhausted = True
                 break
            
             
@@ -252,7 +252,7 @@ class LazyTuple(collections.Sequence):
             
         The '...' denotes a non-exhausted lazy tuple.
         '''
-        if self.exhausted:
+        if self.is_exhausted:
             inner = repr(self.collected_data)
                              
         else: # not self.exhausted

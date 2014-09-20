@@ -65,6 +65,13 @@ class ChainSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
         if isinstance(i, slice):
             raise NotImplementedError
         assert isinstance(i, int)
+        if i <= -1:
+            i += self.length
+        if i < 0:
+            raise IndexError
+        if self.accumulated_lengths.is_exhausted and i >= self.length:
+            raise IndexError
+        # Todo: Can't have a binary search here, it exhausts all the sequences.
         sequence_index = binary_search.binary_search_by_index(
             self.accumulated_lengths, lambda x: x,
             i, rounding=binary_search.LOW_IF_BOTH
@@ -93,9 +100,14 @@ class ChainSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
         for sequence, accumulated_length in zip(self.sequences,
                                                 self.accumulated_lengths):
             try:
-                return sequence.index(item) + accumulated_length
+                index_in_sequence = sequence.index(item)
             except ValueError:
                 pass
+            except TypeError:
+                assert isinstance(sequence, (str, bytes)) and \
+                                           (not isinstance(item, (str, bytes)))
+            else:
+                return index_in_sequence + accumulated_length
         else:
             raise ValueError
     

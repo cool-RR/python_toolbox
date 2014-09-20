@@ -29,4 +29,4 @@ def test():
     for i, j in lazy_tuple:
         assert i == j
         
-    assert lazy_tuple.exhausted
+    assert lazy_tuple.is_exhausted
