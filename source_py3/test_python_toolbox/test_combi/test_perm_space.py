@@ -38,6 +38,14 @@ def test_perm_spaces():
     some_perm = pure_0a[7]
     last_perm = pure_0a[-1]
     
+    assert first_perm.index(2) == 2
+    assert first_perm.index(0) == 0
+    with cute_testing.RaiseAssertor(ValueError): first_perm.index(5)
+    
+    assert last_perm.rapply('meow') == 'woem'
+    assert last_perm.rapply('meow', str) == 'woem'
+    assert last_perm.rapply('meow', tuple) == tuple('woem')
+    
     with cute_testing.RaiseAssertor(IndexError): pure_0a[- pure_0a.length - 1]
     with cute_testing.RaiseAssertor(IndexError): pure_0a[- pure_0a.length - 2]
     with cute_testing.RaiseAssertor(IndexError): pure_0a[- pure_0a.length - 30]
@@ -159,6 +167,7 @@ def test_perm_spaces():
     assert pickle.loads(pickle.dumps(pure_0b[2])) == pure_0c[2]
     assert pickle.loads(pickle.dumps(pure_0b[3])) != pure_0b[4]
     
+    
 def test_fixed_perm_space():
     pure_perm_space = PermSpace(5)
     small_fixed_perm_space = PermSpace(5, fixed_map={0: 0, 2: 2, 4: 4,})
@@ -251,6 +260,8 @@ def test_dapplied_perm_space():
     assert dapplied_perm['g'] == 4
     assert repr(dapplied_perm) == \
          '''<Perm: (119 / 120) ('g', 'r', 'o', 'w', 'l') => (4, 3, 2, 1, 0)>'''
+    
+    assert dapplied_perm.index(4) == 'g'
     
     assert dapplied_perm.as_dictoid['g'] == 4
     assert dapplied_perm.items[0] == ('g', 4)

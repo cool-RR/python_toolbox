@@ -418,6 +418,15 @@ def get_length(sequence):
         
         
 def divide_to_slices(sequence, n_slices):
+    '''
+    Divide a sequence to slices.
+    
+    Example:
+    
+        >>> divide_to_slices(range(10), 3)
+        [range(0, 4), range(4, 7), range(7, 10)]
+        
+    '''
     assert isinstance(n_slices, numbers.Integral)
     assert n_slices >= 1
     

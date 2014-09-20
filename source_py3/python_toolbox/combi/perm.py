@@ -214,13 +214,6 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
             
     
     @caching.CachedProperty
-    def _net_length(self):
-        self._perm_sequence # Calculating this would calculate `_net_length` as
-                            # a side-effect.
-        return self._net_length
-        
-    
-    @caching.CachedProperty
     def _perm_sequence(self):
         assert (0 <= self.number < 
                                  self.just_dapplied_rapplied_perm_space.length)
@@ -233,7 +226,6 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
             factoradic_number = factoradic_number[
                 :-self.just_dapplied_rapplied_perm_space.n_unused_elements
             ]
-        self._net_length = len(factoradic_number)
         unused_numbers = list(self.just_dapplied_rapplied_perm_space.sequence)
         result = tuple(unused_numbers.pop(factoradic_digit) for
                                          factoradic_digit in factoradic_number)
@@ -315,7 +307,10 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         
         permed_generator = (sequence[i] for i in self)
         if result_type is not None:
-            return result_type(permed_generator)
+            if result_type is str:
+                return ''.join(permed_generator)
+            else:
+                return result_type(permed_generator)
         elif isinstance(sequence, Perm):
             return Perm(permed_generator,
                         sequence.just_dapplied_rapplied_perm_space)
