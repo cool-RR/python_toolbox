@@ -219,8 +219,7 @@ def pop_until(sequence, condition=bool):
     
     When sequence is empty, propagates the `IndexError`.
     '''
-    while True:
-        item = sequence.pop()
+    for item in cute_iter_tools.iterate_pop(sequence):
         if condition(item):
             return item
 

@@ -49,6 +49,8 @@ def test_perm_spaces():
     with cute_testing.RaiseAssertor(): Perm(24, pure_0a)
     with cute_testing.RaiseAssertor(): Perm(-1, pure_0a)
     
+    assert pure_0a.take_random() in pure_0c
+    
     
     # Testing hashing: 
     pure_perm_space_dict = {pure_0a: 'a', pure_0b: 'b',
