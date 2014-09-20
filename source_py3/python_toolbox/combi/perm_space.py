@@ -409,10 +409,10 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
         
         else:
             assert isinstance(i, int)
-            if not -self.length <= i <= self.length:
-                raise IndexError
             if i <= -1:
                 i += self.length
+            if not (0 <= i < self.length):
+                raise IndexError
             if self.is_rapplied:
                 return self.perm_type(self.unrapplied[i].rapply(self.sequence),
                                       self)

@@ -69,23 +69,6 @@ def get_mro_depth_of_method(type_, method_name):
     return deepest_index
 
 
-def frange(start, finish=None, step=1.):
-    '''
-    Make a `list` containing an arithmetic progression of numbers.
-
-    This is an extension of the builtin `range`; it allows using floating point
-    numbers.
-    '''
-    raise ('kill this ') #blocktodo
-    if finish is None:
-        finish, start = start, 0.
-    else:
-        start = float(start)
-
-    count = int(math.ceil(finish - start)/step)
-    return (start + n*step for n in range(count))
-    
-
 def getted_vars(thing, _getattr=getattr):
     '''
     The `vars` of an object, but after we used `getattr` to get them.

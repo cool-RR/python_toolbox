@@ -38,6 +38,18 @@ def test_perm_spaces():
     some_perm = pure_0a[7]
     last_perm = pure_0a[-1]
     
+    with cute_testing.RaiseAssertor(IndexError): pure_0a[- pure_0a.length - 1]
+    with cute_testing.RaiseAssertor(IndexError): pure_0a[- pure_0a.length - 2]
+    with cute_testing.RaiseAssertor(IndexError): pure_0a[- pure_0a.length - 30]
+    with cute_testing.RaiseAssertor(IndexError): pure_0a[pure_0a.length]
+    with cute_testing.RaiseAssertor(IndexError): pure_0a[pure_0a.length + 1]
+    with cute_testing.RaiseAssertor(IndexError): pure_0a[pure_0a.length + 2]
+    with cute_testing.RaiseAssertor(IndexError): pure_0a[pure_0a.length + 300]
+    
+    with cute_testing.RaiseAssertor(): Perm(24, pure_0a)
+    with cute_testing.RaiseAssertor(): Perm(-1, pure_0a)
+    
+    
     # Testing hashing: 
     pure_perm_space_dict = {pure_0a: 'a', pure_0b: 'b',
                             pure_0c: 'c', pure_0d: 'd',}
@@ -235,6 +247,8 @@ def test_dapplied_perm_space():
     assert dapplied_perm['o'] == 2
     assert dapplied_perm['r'] == 3
     assert dapplied_perm['g'] == 4
+    assert repr(dapplied_perm) == \
+         '''<Perm: (119 / 120) ('g', 'r', 'o', 'w', 'l') => (4, 3, 2, 1, 0)>'''
     
     assert dapplied_perm.as_dictoid['g'] == 4
     assert dapplied_perm.items[0] == ('g', 4)
@@ -254,6 +268,10 @@ def test_dapplied_perm_space():
     assert not dapplied_perm_space._just_fixed.is_degreed
     
     assert repr(dapplied_perm_space) == "<PermSpace: 'growl' => range(0, 5)>"
+    
+    # Testing `repr` shortening: 
+    assert repr(PermSpace(20, domain=tuple(range(20, 0, -1)))) == \
+       '<PermSpace: (20, 19, 18, 17, 16, 15, 14, 13, 12 ... ) => range(0, 20)>'
     
 def test_degreed_perm_space():
     assert PermSpace(3, degrees=0).length == 1

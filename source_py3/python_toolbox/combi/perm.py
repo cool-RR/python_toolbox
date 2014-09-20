@@ -115,6 +115,16 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         if not self.is_combination: self.uncombinationed = self
         
         if isinstance(number_or_perm_sequence, int):
+            if not (0 <= number_or_perm_sequence <
+                                self.just_dapplied_rapplied_perm_space.length):
+                raise Exception(
+                    "You're creating a `Perm` with number %s, but the chosen "
+                    "`PermSpace` only goes from 0 up to %s." % (
+                        number_or_perm_sequence,
+                        self.just_dapplied_rapplied_perm_space.length - 1
+                    )
+                )
+                
             self.number = number_or_perm_sequence
         else:
             assert isinstance(number_or_perm_sequence, collections.Iterable)
