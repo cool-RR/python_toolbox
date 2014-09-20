@@ -58,6 +58,11 @@ def test_perm_spaces():
     assert isinstance(first_perm.as_dictoid, combi.perm.PermAsDictoid)
     assert first_perm.as_dictoid[2] == 2
     assert dict(first_perm.as_dictoid) == {0: 0, 1: 1, 2: 2, 3: 3}
+    assert first_perm % 7 == 0
+    assert not (first_perm != first_perm)
+    assert first_perm == first_perm
+    assert first_perm
+    assert {pure_0a[4]: 1, pure_0b[4]: 2, pure_0c[4]: 3,} == {pure_0d[4]: 3,}
     
     
     assert some_perm.inverse == ~ some_perm
