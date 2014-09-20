@@ -49,6 +49,10 @@ def test():
     assert tuple(comb) == tuple(comb.uncombinationed)
     assert comb.is_combination
     assert not comb.uncombinationed.is_combination
+    assert repr(comb_space) == '''<CombSpace: 'dumber', n_elements=2>'''
+    assert repr(CombSpace(tuple(range(50, 0, -1)), 3)) == \
+     '''<CombSpace: (50, 49, 48, 47, 46, 45, 44, 43, 42 ... ), n_elements=3>'''
+    
     
     
     

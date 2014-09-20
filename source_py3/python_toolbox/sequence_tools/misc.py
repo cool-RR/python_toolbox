@@ -401,7 +401,7 @@ class CanonicalSlice:
     
 class CuteSequenceMixin(misc_tools.AlternativeLengthMixin):
     def take_random(self):
-        return self[random.randint(0, get_length(self))]
+        return self[random.randint(0, get_length(self) - 1)]
     def __contains__(self, item):
         try: self.index(item)
         except ValueError: return False
