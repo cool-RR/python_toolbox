@@ -322,9 +322,12 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         if self.is_rapplied:
             raise TypeError("Can't rapply an rapplied permutation, try "
                             "`perm.unrapplied`.")
+        if self.is_rapplied:
+            raise NotImplementedError("Can't rapply an infinite perm.")
         sequence = \
              sequence_tools.ensure_iterable_is_immutable_sequence(sequence)
-        if len(sequence) < len(self):
+        if sequence_tools.get_length(sequence) < \
+                                               sequence_tools.get_length(self):
             raise Exception("Can't rapply permutation on sequence of "
                             "shorter length.")
         
