@@ -23,16 +23,21 @@ from . import misc
 
 infinity = float('inf')
 
-class PermItems(sequence_tools.CuteSequenceMixin, collections.Sequence):
+
+class _BasePermView:
     def __init__(self, perm):
         self.perm = perm
+    __repr__ = lambda self: '<%s: %s>' % (type(self).__name__, self.perm)
+
+
+class PermItems(sequence_tools.CuteSequenceMixin, _BasePermView,
+                collections.Sequence):
     def __getitem__(self, i):
         return (self.perm.domain[i], self.perm._perm_sequence[i])
     
 
-class PermAsDictoid(sequence_tools.CuteSequenceMixin, collections.Mapping):
-    def __init__(self, perm):
-        self.perm = perm
+class PermAsDictoid(sequence_tools.CuteSequenceMixin, _BasePermView,
+                    collections.Mapping):
     def __getitem__(self, key):
         return self.perm[key]
     def __iter__(self):

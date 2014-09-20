@@ -5,6 +5,7 @@ import pickle
 
 from python_toolbox import sequence_tools
 
+from python_toolbox import combi
 from python_toolbox.combi import *
 
 infinity = float('inf')
@@ -44,11 +45,20 @@ def test_perm_spaces():
           pure_perm_space_dict[pure_0c] == pure_perm_space_dict[pure_0d] == 'd'
     
     assert None not in pure_0a # Because, damn.
+    assert PermSpace('meow')[0] not in pure_0a
     
     assert type(first_perm) == type(some_perm) == type(last_perm) == Perm
     assert set(some_perm) == set(range(4))
     assert tuple(first_perm) == (0, 1, 2, 3)
     assert tuple(last_perm) == (3, 2, 1, 0)
+    
+    assert isinstance(first_perm.items, combi.perm.PermItems)
+    assert first_perm.items[2] == (2, 2)
+    assert repr(first_perm.items) == '<PermItems: %s>' % repr(first_perm)
+    assert isinstance(first_perm.as_dictoid, combi.perm.PermAsDictoid)
+    assert first_perm.as_dictoid[2] == 2
+    assert dict(first_perm.as_dictoid) == {0: 0, 1: 1, 2: 2, 3: 3}
+    
     
     assert some_perm.inverse == ~ some_perm
     assert ~ ~ some_perm == some_perm
@@ -95,6 +105,10 @@ def test_perm_spaces():
     
     big_perm_space = PermSpace(range(150), fixed_map={1: 5, 70: 3,},
                                degrees=(3, 5))
+    
+    assert big_perm_space == PermSpace(range(150),
+                                       fixed_map={1: 5, 70: 3,}.items(),
+                                       degrees=(3, 5))
     
     for i in [10**10, 3*11**9-344, 4*12**8-5, 5*3**20+4]:
         perm = big_perm_space[i]
@@ -200,6 +214,10 @@ def test_dapplied_perm_space():
     assert dapplied_perm['r'] == 3
     assert dapplied_perm['g'] == 4
     
+    assert dapplied_perm.as_dictoid['g'] == 4
+    assert dapplied_perm.items[0] == ('g', 4)
+    
+    
     # `__contains__` works on the values, not the keys:
     for char in 'growl':
         assert char not in dapplied_perm
@@ -251,6 +269,7 @@ def test_degreed_perm_space():
     funky_perm_space = PermSpace('isogram', domain='travels',
                                  degrees=(1, 3, 5, 9),
                                  fixed_map={'t': 'i', 'v': 'g',})[2:-2]
+    assert funky_perm_space.purified == PermSpace(7)
     
     assert funky_perm_space.is_rapplied
     assert funky_perm_space.is_dapplied
@@ -447,6 +466,7 @@ def test_infinite_perm_space():
     assert perm_space.length == infinity
     assert perm_space == infinite_pure_perm_space
     assert perm_space[100].length == infinity
+    assert perm_space.index(perm_space[100]) == 100
     
     
 
