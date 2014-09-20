@@ -32,8 +32,6 @@ def test_perm_spaces():
     assert not pure_0a.is_dapplied
     assert not pure_0a.is_fixed
     assert not pure_0a.is_sliced
-    assert not pure_0a.is_infinite
-    
     
     first_perm = pure_0a[0]
     some_perm = pure_0a[7]
