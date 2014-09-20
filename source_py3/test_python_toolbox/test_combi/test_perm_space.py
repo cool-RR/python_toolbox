@@ -2,6 +2,7 @@
 # This program is distributed under the MIT license.
 
 import pickle
+import itertools
 
 from python_toolbox import sequence_tools
 
@@ -483,7 +484,12 @@ def test_infinite_perm_space():
     assert infinite_pure_perm_space[100].length == infinity
     assert infinite_pure_perm_space.index(infinite_pure_perm_space[100]) == 100
     assert Perm(100) == infinite_pure_perm_space[100]
-    assert repr(infinite_pure_perm_space[100])
+    assert repr(infinite_pure_perm_space[100]) == \
+                                           '<Perm: (100) (4, 0, 3, 1, 2, ...)>'
+    for perm in tuple(itertools.islice(infinite_pure_perm_space, 0, 30, 7)):
+        assert perm in infinite_pure_perm_space
+        assert infinite_pure_perm_space.index(perm) % 7 == 0
+        
     
     
 

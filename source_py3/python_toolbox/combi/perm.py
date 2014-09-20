@@ -148,10 +148,12 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
     
     def __repr__(self):
         if self.just_dapplied_rapplied_perm_space.length == infinity:
-            return '<%s: (%s) (%s)>' % (
+            return '<%s: (%s) (%s, ...)>' % (
                 type(self).__name__, self.number,
-                ', '.join(repr(item) for item in itertools.chain(
-                            self._perm_sequence[:self._net_length], ('...',))),
+                ', '.join(map(repr,
+                             itertools.islice(self._perm_sequence,
+                                              self._net_length))
+                ),
             )
         else:
             return '<%s%s%s: (%s / %s) %s(%s%s)>' % (
@@ -237,7 +239,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
             factoradic_number = factoradic_number[
                 :-self.just_dapplied_rapplied_perm_space.n_unused_elements
             ]
-        self._net_length = factoradic_number
+        self._net_length = len(factoradic_number)
         cls_to_use = sequence_tools.SequencePoppingView if \
                                                      self.is_infinite else list
         sequence_popping_view = cls_to_use(

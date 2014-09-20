@@ -522,7 +522,8 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
                                          self.sequence_length < infinity else 0
     )
     
-    __iter__ = lambda self: (self[i] for i in range(self.length))
+    __iter__ = lambda self: (self[i] for i in
+                                         sequence_tools.CuteRange(self.length))
     _reduced = property(
         lambda self: (type(self), self.sequence, self.domain, 
                       tuple(self.fixed_map.items()), self.canonical_slice)
