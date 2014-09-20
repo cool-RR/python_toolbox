@@ -685,6 +685,11 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
         lambda self: PermSpace(len(self.sequence)),
         doc='An purified version of this `PermSpace`.'
     )
+    _just_dapplied_rapplied = caching.CachedProperty(
+        lambda self: self.purified.get_dapplied(self.domain). \
+                                                   get_rapplied(self.sequence),
+        doc='Purified, but dapplied and rapplied, version of this `PermSpace`.'
+    )
     
     @caching.CachedProperty
     def uncombinationed(self):

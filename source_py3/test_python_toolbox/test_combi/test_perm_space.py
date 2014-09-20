@@ -52,6 +52,7 @@ def test_perm_spaces():
     assert tuple(first_perm) == (0, 1, 2, 3)
     assert tuple(last_perm) == (3, 2, 1, 0)
     assert Perm.coerce(first_perm) == first_perm
+    assert Perm.coerce(first_perm, pure_0b) == first_perm
     assert Perm.coerce(tuple(first_perm)) == first_perm
     assert Perm.coerce(list(first_perm)) == first_perm
     assert Perm.coerce(tuple(first_perm), pure_0a) == first_perm
@@ -482,6 +483,7 @@ def test_infinite_perm_space():
     assert infinite_pure_perm_space[100].length == infinity
     assert infinite_pure_perm_space.index(infinite_pure_perm_space[100]) == 100
     assert Perm(100) == infinite_pure_perm_space[100]
+    assert repr(infinite_pure_perm_space[100])
     
     
 

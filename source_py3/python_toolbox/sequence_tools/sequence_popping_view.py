@@ -29,6 +29,9 @@ class SequencePoppingView(CuteSequence):
         return nifty_collections.OrderedSet()
     
     def _get_sequence_index(self, index):
+        # todo: This can get real inefficient real fast, for example if we're
+        # looking for index 0 for a view which had items 0 to n (for large n)
+        # already popped.
         if index < 0:
             index += len(self)
         if not (0 <= index < self.length):

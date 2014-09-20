@@ -60,7 +60,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
     def coerce(cls, item, perm_space=None):
         if isinstance(item, Perm) and (perm_space is not None) and \
            (item.just_dapplied_rapplied_perm_space
-                              == perm_space.just_dapplied_rapplied_perm_space):
+                                        == perm_space._just_dapplied_rapplied):
             return item
         else:
             return cls(item, perm_space)
@@ -150,8 +150,8 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         if self.just_dapplied_rapplied_perm_space.length == infinity:
             return '<%s: (%s) (%s)>' % (
                 type(self).__name__, self.number,
-                ', '.join(repr(item) for item in
-                                              itertools.chain(self, ('...',))),
+                ', '.join(repr(item) for item in itertools.chain(
+                            self._perm_sequence[:self._net_length], ('...',))),
             )
         else:
             return '<%s%s%s: (%s / %s) %s(%s%s)>' % (
@@ -213,6 +213,14 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         lambda self: self.just_dapplied_rapplied_perm_space.is_infinite
     )
     
+    
+    @caching.CachedProperty
+    def _net_length(self):
+        self._perm_sequence # Calculating this would calculate `_net_length` as
+                            # a side-effect.
+        return self._net_length
+        
+    
     @caching.CachedProperty
     def _perm_sequence(self):
         assert (0 <= self.number < 
@@ -229,7 +237,10 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
             factoradic_number = factoradic_number[
                 :-self.just_dapplied_rapplied_perm_space.n_unused_elements
             ]
-        sequence_popping_view = sequence_tools.SequencePoppingView(
+        self._net_length = factoradic_number
+        cls_to_use = sequence_tools.SequencePoppingView if \
+                                                     self.is_infinite else list
+        sequence_popping_view = cls_to_use(
                                self.just_dapplied_rapplied_perm_space.sequence)
         result = tuple(sequence_popping_view.pop(factoradic_digit) for
                                          factoradic_digit in factoradic_number)

@@ -29,14 +29,18 @@ class ChainSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
     This is similar to `itertools.chain`, except that items can be fetched by
     index number rather than just iteration.
     '''
-    def __init__(self, sequences):
+    def __init__(self, sequences, _slice=None):
         
         self.sequences = nifty_collections.LazyTuple(
             (sequence_tools.ensure_iterable_is_immutable_sequence(
                 sequence, default_type=nifty_collections.LazyTuple)
                                                      for sequence in sequences)
         )
+        self.slice = _slice if _slice is not None else slice(0, None, 1)
     
+    def _map_index_to_sliced(self, i):
+        sliced_index = (i * self.slice.step) + self.slice.start
+        if not sliced_index
     
     @caching.CachedProperty
     @nifty_collections.LazyTuple.factory()
@@ -102,12 +106,9 @@ class ChainSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
             raise ValueError
     
     def __bool__(self):
-        try:
-            next(iter(self))
-        except StopIteration:
-            return False
-        else:
-            return True
+        try: next(iter(self))
+        except StopIteration: return False
+        else: return True
         
 
 
