@@ -28,7 +28,7 @@ class ProductSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
                                ensure_iterable_is_immutable_sequence(sequences)
         self.sequence_lengths = tuple(map(sequence_tools.get_length,
                                           self.sequences))
-        self.length = misc_tools.general_product(self.sequence_lengths)
+        self.length = math_tools.product(self.sequence_lengths)
         
     def __repr__(self):
         return '<%s: %s>' % (
@@ -58,7 +58,7 @@ class ProductSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
     
         
     _reduced = property(lambda self: (type(self), self.sequences))
-             
+    __hash__ = lambda self: hash(self._reduced)
     __eq__ = lambda self, other: (isinstance(other, ProductSpace) and
                                   self._reduced == other._reduced)
     

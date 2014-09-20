@@ -127,3 +127,8 @@ def binomial(big, small):
         return (math.factorial(big) // math.factorial(big - small)
                                                       // math.factorial(small))
 
+
+def product(numbers):
+    from python_toolbox import misc_tools
+    return misc_tools.general_product(numbers, start=1)
+    
