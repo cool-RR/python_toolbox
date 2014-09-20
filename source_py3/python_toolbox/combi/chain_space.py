@@ -84,8 +84,7 @@ class ChainSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
     
     def __iter__(self):
         for sequence in self.sequences:
-            # yield from sequence Commenting for fucking Pypy
-            for i in sequence: yield i
+            yield from sequence
         
     _reduced = property(lambda self: (type(self), self.sequences))
              
