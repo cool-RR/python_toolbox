@@ -531,7 +531,7 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
         if not (perm_set <= set(self.sequence)):
             raise ValueError
         
-        if len(perm) != self.n_elements:
+        if sequence_tools.get_length(perm) != self.n_elements:
             raise ValueError
         
         if not isinstance(perm, self.perm_type):

@@ -44,6 +44,12 @@ def test():
     assert comb_space.free_indices == comb_space.free_keys == range(2)
     assert comb_space.free_values == 'dumber'
     
+    comb = comb_space[7]
+    assert type(comb.uncombinationed) is Perm
+    assert tuple(comb) == tuple(comb.uncombinationed)
+    assert comb.is_combination
+    assert not comb.uncombinationed.is_combination
+    
     
     
         
