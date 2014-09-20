@@ -32,6 +32,8 @@ def test_perm_spaces():
     assert not pure_0a.is_dapplied
     assert not pure_0a.is_fixed
     assert not pure_0a.is_sliced
+    assert not pure_0a.is_infinite
+    
     
     first_perm = pure_0a[0]
     some_perm = pure_0a[7]
@@ -51,6 +53,14 @@ def test_perm_spaces():
     assert set(some_perm) == set(range(4))
     assert tuple(first_perm) == (0, 1, 2, 3)
     assert tuple(last_perm) == (3, 2, 1, 0)
+    assert Perm.coerce(first_perm) == first_perm
+    assert Perm.coerce(tuple(first_perm)) == first_perm
+    assert Perm.coerce(list(first_perm)) == first_perm
+    assert Perm.coerce(tuple(first_perm), pure_0a) == first_perm
+    assert Perm.coerce(list(first_perm), pure_0b) == first_perm
+    assert Perm.coerce(tuple(first_perm), PermSpace(5, n_elements=4)) != \
+                                                                     first_perm
+    
     
     assert isinstance(first_perm.items, combi.perm.PermItems)
     assert first_perm.items[2] == (2, 2)
@@ -467,11 +477,13 @@ def test_neighbors():
     
 
 def test_infinite_perm_space():
-    perm_space = PermSpace(sequence_tools.CuteRange(infinity))
-    assert perm_space.length == infinity
-    assert perm_space == infinite_pure_perm_space
-    assert perm_space[100].length == infinity
-    assert perm_space.index(perm_space[100]) == 100
+    assert infinite_pure_perm_space == \
+                                  PermSpace(sequence_tools.CuteRange(infinity))
+    assert infinite_pure_perm_space.length == infinity
+    assert infinite_pure_perm_space.is_infinite
+    assert infinite_pure_perm_space[100].length == infinity
+    assert infinite_pure_perm_space.index(infinite_pure_perm_space[100]) == 100
+    assert Perm(100) == infinite_pure_perm_space[100]
     
     
 

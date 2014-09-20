@@ -58,7 +58,8 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
     
     @classmethod
     def coerce(cls, item, perm_space=None):
-        if isinstance(item, Perm) and (item.just_dapplied_rapplied_perm_space
+        if isinstance(item, Perm) and (perm_space is not None) and \
+           (item.just_dapplied_rapplied_perm_space
                               == perm_space.just_dapplied_rapplied_perm_space):
             return item
         else:
