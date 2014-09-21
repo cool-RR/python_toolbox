@@ -82,7 +82,7 @@ class CuteRangeType(abc.ABCMeta):
         assert not kwargs
         
         # Our job here is to decide whether to instantiate using the built-in
-        # `range` or our kickass `Range`.
+        # `xrange` or our kickass `Range`.
         from python_toolbox import math_tools
         
         if (cls is CuteRange) and (not _avoid_built_in_range):
@@ -102,7 +102,7 @@ class CuteRangeType(abc.ABCMeta):
                 use_builtin_range = False
                     
             if use_builtin_range:
-                return range(*args)
+                return xrange(*args)
             else:
                 return super().__call__(*args)
         
