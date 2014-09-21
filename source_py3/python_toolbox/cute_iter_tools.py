@@ -124,7 +124,7 @@ def _shorten(iterable, n):
             raise StopIteration
         
         
-def enumerate(reversible, reverse_index=False, lazy_tuple=False):
+def enumerate(iterable, reverse_index=False, lazy_tuple=False):
     '''
     Iterate over `(i, item)` pairs, where `i` is the index number of `item`.
     
@@ -135,7 +135,7 @@ def enumerate(reversible, reverse_index=False, lazy_tuple=False):
     
     If `lazy_tuple=True`, returns a `LazyTuple` rather than an iterator.
     '''
-    iterator = _enumerate(reversible=reversible, reverse_index=reverse_index)
+    iterator = _enumerate(iterable=iterable, reverse_index=reverse_index)
 
     if lazy_tuple:
         from python_toolbox import nifty_collections # Avoiding circular import.
@@ -144,13 +144,17 @@ def enumerate(reversible, reverse_index=False, lazy_tuple=False):
         return iterator
 
     
-def _enumerate(reversible, reverse_index):
+def _enumerate(iterable, reverse_index):
     if reverse_index is False:
-        return builtins.enumerate(reversible)
+        return builtins.enumerate(iterable)
     else:
-        my_list = list(builtins.enumerate(reversed(reversible)))
-        my_list.reverse()
-        return my_list
+        from python_toolbox import sequence_tools
+        try:
+            length = sequence_tools.get_length(iterable)
+        except AttributeError:
+            iterable = revenifty_collections.LazyTuple(iterable)
+            length = len(iterable)
+        return zip(range(length - 1, -1, -1), iterable)
 
     
 def is_iterable(thing):
