@@ -56,8 +56,7 @@ class PermSpaceType(abc.ABCMeta):
         
         
 @functools.total_ordering
-class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
-                metaclass=PermSpaceType):
+class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence)
     '''
     A space of permutations on a sequence.
     
@@ -109,6 +108,7 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
     
     Some clarification  on terminology <blocktododoc> rapplied, dapplied "just" etc.
     '''
+    __metaclass__ = PermSpaceType
     
     @classmethod
     def coerce(cls, argument):

@@ -1,5 +1,4 @@
 import abc
-import builtins
 import types
 import collections
 import numbers
@@ -77,7 +76,11 @@ def _is_integral_or_none(thing):
 
 class CuteRangeType(abc.ABCMeta):
     '''Metaclass for `CuteRange`, see its docstring for details.'''
-    def __call__(cls, *args, _avoid_built_in_range=False):
+    def __call__(cls, *args, **kwargs):
+        
+        _avoid_built_in_range = kwargs.pop('_avoid_built_in_range', False)
+        assert not kwargs
+        
         # Our job here is to decide whether to instantiate using the built-in
         # `range` or our kickass `Range`.
         from python_toolbox import math_tools
@@ -107,7 +110,7 @@ class CuteRangeType(abc.ABCMeta):
             return super().__call__(*args)
         
 
-class CuteRange(CuteSequence, metaclass=CuteRangeType):
+class CuteRange(CuteSequence):
     '''
     Improved version of Python's `range` that has extra features.
     
@@ -121,6 +124,9 @@ class CuteRange(CuteSequence, metaclass=CuteRangeType):
     
     
     '''
+    
+    __metaclass__ = CuteRangeType
+    
     def __init__(self, *args):
         self.start, self.stop, self.step = parse_range_args(*args)
         

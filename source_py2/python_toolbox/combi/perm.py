@@ -53,8 +53,9 @@ class PermType(abc.ABCMeta):
         
 
 @functools.total_ordering
-class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
-           metaclass=PermType):
+class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence):
+    
+    __metaclass__ = PermType    
     
     @classmethod
     def coerce(cls, item, perm_space=None):
