@@ -283,7 +283,7 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
         if degrees is None:
             degrees = ()
         if not isinstance(degrees, collections.Iterable):
-            assert isinstance(degrees, int)
+            assert isinstance(degrees, numbers.Integral)
             degrees = (degrees,)
         degrees = \
               sequence_tools.ensure_iterable_is_immutable_sequence(degrees)
@@ -408,7 +408,7 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
                              slice_=canonical_slice)
         
         else:
-            assert isinstance(i, int)
+            assert isinstance(i, numbers.Integral)
             if i <= -1:
                 i += self.length
             if not (0 <= i < self.length):

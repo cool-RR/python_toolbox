@@ -414,8 +414,8 @@ def are_equal(*sequences):
         # return logic_tools.all_equal(sequences.start for sequence in sequences)
     
     # If cheap comparison didn't work, trying item-by-item comparison:
-    zipped = itertools.zip_longest(*sequences,
-                                   fillvalue=_EMPTY_SENTINEL)
+    zipped = itertools.izip_longest(*sequences,
+                                    fillvalue=_EMPTY_SENTINEL)
     for values in zipped:
         # No need to explicitly check for `_EMPTY_SENTINEL`, it would just make
         # the following condition `False`, because it's impossible for all
