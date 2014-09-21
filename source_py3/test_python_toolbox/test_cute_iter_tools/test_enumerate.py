@@ -17,10 +17,10 @@ def test():
     for i, j in cute_iter_tools.enumerate(range(5), reverse_index=True):
         assert i + j == 4
         
-    for i, j in cute_iter_tools.enumerate(range(5, 0 -1), reverse_index=True):
+    for i, j in cute_iter_tools.enumerate(range(4, -1, -1), reverse_index=True):
         assert i == j
         
-    lazy_tuple = cute_iter_tools.enumerate(range(5, 0 -1), reverse_index=True,
+    lazy_tuple = cute_iter_tools.enumerate(range(4, -1, -1), reverse_index=True,
                                            lazy_tuple=True)
     
     assert isinstance(lazy_tuple, nifty_collections.LazyTuple)
