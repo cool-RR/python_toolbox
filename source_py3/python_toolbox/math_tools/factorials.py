@@ -105,7 +105,7 @@ def to_factoradic(number, n_digits_pad=0):
         (0, 0, 4, 0, 2, 0, 0)
         
     '''
-    assert isinstance(number, int)
+    assert isinstance(number, numbers.Integral)
     assert number >= 0
     assert isinstance(n_digits_pad, numbers.Integral)
     n_digits = inverse_factorial(number, round_up=False) + 1

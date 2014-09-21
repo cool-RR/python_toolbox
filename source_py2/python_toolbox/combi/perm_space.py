@@ -179,7 +179,9 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
                                                           self.sequence_length)
         self.is_partial = (self.n_elements < self.sequence_length)
         
-        self.indices = sequence_tools.CuteRange(self.n_elements) 
+        self.indices = sequence_tools.CuteRange(self.n_elements,
+                                                _avoid_built_in_range=True)
+        # Avoiding built-in xrange because on Python 2 it don't have `index`.
         
         #                                                                     #
         ### Finished figuring out number of elements. #########################
