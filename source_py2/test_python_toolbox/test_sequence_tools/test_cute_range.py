@@ -28,7 +28,6 @@ def test_built_in():
         if cr0:
             assert cr0[0] == cr1[0]
             assert cr0[-1] == cr1[-1]
-        assert repr(cr0)[1:] == repr(cr1)[5:]
         
 def test_infinite():
     infinite_range_arguments_tuples = (

@@ -362,4 +362,6 @@ class AlternativeLengthMixin(object):
     def __bool__(self):
         from python_toolbox import sequence_tools
         return bool(sequence_tools.get_length(self))
+    
+    __nonzero__ = __bool__
         
