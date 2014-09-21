@@ -229,4 +229,4 @@ class CuteRange(CuteSequence):
     is_infinity = caching.CachedProperty(lambda self: self.length == infinity)
         
     
-CuteRange.register(range)
+CuteRange.register(xrange)

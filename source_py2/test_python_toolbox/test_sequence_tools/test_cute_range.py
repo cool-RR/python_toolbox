@@ -16,13 +16,13 @@ def test_built_in():
     
     for built_in_range_arguments_tuple in built_in_range_arguments_tuples:
         cr0 = CuteRange(*built_in_range_arguments_tuple)
-        assert type(cr0) == range
-        assert isinstance(cr0, range)
+        assert type(cr0) == xrange
+        assert isinstance(cr0, xrange)
         assert isinstance(cr0, CuteRange)
         cr1 = CuteRange(*built_in_range_arguments_tuple, _avoid_built_in_range=True)
         assert cr1.length == len(cr1)
         assert type(cr1) == CuteRange
-        assert not isinstance(cr1, range)
+        assert not isinstance(cr1, xrange)
         assert isinstance(cr1, CuteRange)
         assert tuple(cr0) == tuple(cr1)
         if cr0:
@@ -38,7 +38,7 @@ def test_infinite():
     for infinite_range_arguments_tuple in infinite_range_arguments_tuples:
         cr0 = CuteRange(*infinite_range_arguments_tuple)
         assert type(cr0) == CuteRange
-        assert not isinstance(cr0, range)
+        assert not isinstance(cr0, xrange)
         assert isinstance(cr0, CuteRange)
         assert cr0.length == infinity and len(cr0) == 0
         assert isinstance(cr0[0], int)
@@ -65,7 +65,7 @@ def test_float():
     assert 20.5 not in cr
     assert 8.5 not in cr
     assert cr.length == len(list(cr)) == 7
-    assert list(map(cr.__getitem__, range(7))) == list(cr)
+    assert list(map(cr.__getitem__, xrange(7))) == list(cr)
     
     float_range_arguments_tuples = (
         (10, 20, 1.5), (20, 10.5, -0.33), (10.3, infinity, 2.5),
@@ -75,7 +75,7 @@ def test_float():
     for float_range_arguments_tuple in float_range_arguments_tuples:
         cr0 = CuteRange(*float_range_arguments_tuple)
         assert type(cr0) == CuteRange
-        assert not isinstance(cr0, range)
+        assert not isinstance(cr0, xrange)
         assert isinstance(cr0, CuteRange)
         assert float in list(map(type, cr0[:2]))
         
