@@ -1,6 +1,8 @@
 # Copyright 2009-2014 Ram Rachum.
 # This program is distributed under the MIT license.
 
+from __future__ import division
+
 import collections
 import abc
 import functools
