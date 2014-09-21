@@ -52,7 +52,7 @@ class PermSpaceType(abc.ABCMeta):
                 _degrees_for_checking=arguments_profile['degrees'],
             )
         else:
-            return super().__call__(*args, **kwargs)
+            return super(PermSpaceType, self).__call__(*args, **kwargs)
         
         
 @functools.total_ordering
@@ -879,7 +879,7 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence)
             pass
         #                                                                     #
         #######################################################################
-        return super().__reduce__(*args, **kwargs)
+        return super(PermSpace, self).__reduce__(*args, **kwargs)
         
         
     def _coerce_perm(self, perm):

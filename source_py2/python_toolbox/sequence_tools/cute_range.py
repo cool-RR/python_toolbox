@@ -104,10 +104,10 @@ class CuteRangeType(abc.ABCMeta):
             if use_builtin_range:
                 return xrange(*args)
             else:
-                return super().__call__(*args)
+                return super(CuteRangeType, cls).__call__(*args)
         
         else: # (cls is not Range) or _avoid_built_in_range
-            return super().__call__(*args)
+            return super(CuteRangeType, cls).__call__(*args)
         
 
 class CuteRange(CuteSequence):
