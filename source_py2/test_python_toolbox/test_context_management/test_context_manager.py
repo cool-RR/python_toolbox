@@ -1,8 +1,6 @@
 # Copyright 2009-2014 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''Test the `python_toolbox.context_management` module.'''
-
 from python_toolbox import cute_testing
 
 from python_toolbox.context_management import (ContextManager,

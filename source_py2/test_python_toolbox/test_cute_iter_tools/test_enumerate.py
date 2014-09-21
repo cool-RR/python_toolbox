@@ -14,13 +14,15 @@ def test():
     for i, j in cute_iter_tools.enumerate(range(5)):
         assert i == j
         
-    for i, j in cute_iter_tools.enumerate(range(5), reverse_index=True):
+    for i, j in cute_iter_tools.enumerate(xrange(5), reverse_index=True):
         assert i + j == 4
         
-    for i, j in cute_iter_tools.enumerate(range(5, 0 -1), reverse_index=True):
+    for i, j in cute_iter_tools.enumerate(xrange(4, -1, -1),
+                                          reverse_index=True):
         assert i == j
         
-    lazy_tuple = cute_iter_tools.enumerate(range(5, 0 -1), reverse_index=True,
+    lazy_tuple = cute_iter_tools.enumerate(xrange(4, -1, -1),
+                                           reverse_index=True,
                                            lazy_tuple=True)
     
     assert isinstance(lazy_tuple, nifty_collections.LazyTuple)
@@ -29,4 +31,4 @@ def test():
     for i, j in lazy_tuple:
         assert i == j
         
-    assert lazy_tuple.exhausted
+    assert lazy_tuple.is_exhausted
