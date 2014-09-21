@@ -74,3 +74,8 @@ class CachedProperty(misc_tools.OwnNameDiscoveringDescriptor):
             with getattr(self_obj, self.get_our_name(self_obj)):
                 return method_function(self_obj, *args, **kwargs)
         return decorator_tools.decorator(inner, method_function)
+
+
+    def __repr__(self):
+        return '<%s: %s>' % (type(self).__name__, self.our_name or self.getter)
+        

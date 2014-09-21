@@ -1,15 +1,49 @@
 # Copyright 2009-2014 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''This module defines math-related tools.'''
-
-from __future__ import division
-
 import numbers
+import math
 
 
 infinity = float('inf')
+infinities = (infinity, -infinity)
 
+
+def cute_floor_div(x, y):
+    '''
+    Get `x // y`, i.e. `x` divided by `y` floored down.
+
+    This differs from Python's built-in `//` in that it handles infinite
+    `x`s in a more mathematically correct way: `infinity // 7` would equal
+    `infinity`. (Python's built-in `divmod` would make it `nan`.)
+    '''
+    
+    if ((x in infinities) and (y != 0)) or \
+                                   (y in infinities) and (x not in infinities):
+        return x / y
+    else:
+        return x // y
+        
+
+def cute_divmod(x, y):
+    '''
+    Get the division and modulo for `x` and `y` as a tuple: `(x // y, x % y)`
+    
+    This differs from Python's built-in `divmod` in that it handles infinite
+    `x`s in a more mathematically correct way: `infinity // 7` would equal
+    `infinity`. (Python's built-in `divmod` would make it `nan`.)
+    '''
+    if (x in infinities) and (y != 0):
+        return (x / y, float('nan'))
+    elif (y in infinities) and (x not in infinities):
+        return (
+            x / y,
+            x if (get_sign(x) == get_sign(y)) else float('nan')
+        )
+    else:
+        return divmod(x, y)
+        
+        
 
 def get_sign(x):
     '''Get the sign of a number.'''
@@ -32,7 +66,7 @@ def round_to_int(x, up=False):
     If you want to round a number to the closest `int`, just use
     `int(round(x))`.
     '''
-    rounded_down = int(x // 1)
+    rounded_down = int(cute_floor_div(x, 1))
     if up:
         return int(x) if (isinstance(x, float) and x.is_integer()) \
                else rounded_down + 1
@@ -41,7 +75,7 @@ def round_to_int(x, up=False):
     
 def ceil_div(x, y):
     '''Divide `x` by `y`, rounding up if there's a remainder.'''
-    return (x // y) + (1 if x % y else 0)
+    return cute_floor_div(x, y) + (1 if x % y else 0)
 
 
 def convert_to_base_in_tuple(number, base):
@@ -67,27 +101,6 @@ def convert_to_base_in_tuple(number, base):
         
     return tuple(reversed(work_in_progress))
   
-  
-def get_median(iterable):
-    '''Get the median of an iterable of numbers.'''
-    sorted_values = sorted(iterable)
-
-    if len(iterable) % 2 == 0:
-        higher_midpoint = len(iterable) // 2
-        lower_midpoint = higher_midpoint - 1
-        return (sorted_values[lower_midpoint] +
-                sorted_values[higher_midpoint]) / 2
-    else:
-        midpoint = len(iterable) // 2
-        return sorted_values[midpoint]
-    
-    
-def get_mean(iterable):
-    '''Get the mean (average) of an iterable of numbers.'''
-    sum_ = 0
-    for i, value in enumerate(iterable):
-        sum_ += value
-    return sum_ / (i + 1)
 
         
 def restrict_number_to_range(number, low_cutoff=-infinity,
@@ -104,3 +117,18 @@ def restrict_number_to_range(number, low_cutoff=-infinity,
     else:
         return number
         
+        
+def binomial(big, small):
+    if big == small:
+        return 1
+    if big < small:
+        return 0
+    else:
+        return (math.factorial(big) // math.factorial(big - small)
+                                                      // math.factorial(small))
+
+
+def product(numbers):
+    from python_toolbox import misc_tools
+    return misc_tools.general_product(numbers, start=1)
+    

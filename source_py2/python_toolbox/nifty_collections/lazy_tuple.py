@@ -13,7 +13,6 @@ import itertools
 
 from python_toolbox import decorator_tools
 from python_toolbox import comparison_tools
-from python_toolbox import sequence_tools
 
 
 infinity = float('inf')
@@ -77,17 +76,17 @@ class LazyTuple(collections.Sequence, object):
     (e.g. asking for the seventh-to-last element.)
     
     If you're passing in an iterator you definitely know to be infinite,
-    specify `definitely_infinite=False`.
+    specify `definitely_infinite=True`.
     '''
     
     def __init__(self, iterable, definitely_infinite=False):
         was_given_a_sequence = isinstance(iterable, collections.Sequence) and \
                                not isinstance(iterable, LazyTuple)
         
-        self.exhausted = True if was_given_a_sequence else False
+        self.is_exhausted = True if was_given_a_sequence else False
         '''Flag saying whether the internal iterator is totally exhausted.'''
         
-        self.collected_data = list(iterable) if was_given_a_sequence else []
+        self.collected_data = iterable if was_given_a_sequence else []
         '''All the items that were collected from the iterable.'''
         
         self._iterator = None if was_given_a_sequence else iter(iterable)
@@ -106,6 +105,7 @@ class LazyTuple(collections.Sequence, object):
         
         
     @classmethod
+    @decorator_tools.helpful_decorator_builder
     def factory(cls, definitely_infinite=False):
         '''
         Decorator to make generators return a `LazyTuple`.
@@ -141,7 +141,9 @@ class LazyTuple(collections.Sequence, object):
         This will take enough items so we will have `i` items in total,
         including the items we had before.
         '''
-        if self.exhausted:
+        from python_toolbox import sequence_tools
+        
+        if self.is_exhausted:
             return
         
         elif isinstance(i, int) or i == infinity:
@@ -153,14 +155,14 @@ class LazyTuple(collections.Sequence, object):
             # todo: can be smart and figure out if it's an empty slice and then
             # not exhaust.
             
-            (start, stop, step) = sequence_tools.parse_slice(i)
+            canonical_slice = sequence_tools.CanonicalSlice(i)
             
             exhaustion_point = max(
-                _convert_index_to_exhaustion_point(start),
-                _convert_index_to_exhaustion_point(stop)
+                _convert_index_to_exhaustion_point(canonical_slice.start),
+                _convert_index_to_exhaustion_point(canonical_slice.stop)
             )
             
-            if step > 0: # Compensating for excluded last item:
+            if canonical_slice.step > 0: # Compensating for excluded last item:
                 exhaustion_point -= 1
             
         while len(self.collected_data) <= exhaustion_point:
@@ -168,7 +170,7 @@ class LazyTuple(collections.Sequence, object):
                 with self.lock:
                     self.collected_data.append(next(self._iterator))
             except StopIteration:
-                self.exhausted = True
+                self.is_exhausted = True
                 break
            
             
@@ -191,6 +193,7 @@ class LazyTuple(collections.Sequence, object):
 
     
     def __eq__(self, other):
+        from python_toolbox import sequence_tools
         if not sequence_tools.is_immutable_sequence(other):
             return False
         for i, j in itertools.izip_longest(self, other,
@@ -249,19 +252,14 @@ class LazyTuple(collections.Sequence, object):
             
         The '...' denotes a non-exhausted lazy tuple.
         '''
-        if self.exhausted:
-            inner = ''.join(('(',                             
-                             repr(self.collected_data)[1:-1],
-                             ')'))
+        if self.is_exhausted:
+            inner = repr(self.collected_data)
                              
         else: # not self.exhausted
             if self.collected_data == []:
                 inner = '(...)'
             else: 
-                inner = ''.join(('(',
-                                 repr(self.collected_data)[1:-1],
-                                 ', ...)'))
-            
+                inner = '%s...' % repr(self.collected_data)            
         return '<%s: %s>' % (self.__class__.__name__, inner) 
     
     

@@ -199,8 +199,6 @@ def test_address_in_expression():
 
 def test_multiprocessing_lock():
     '''Test `describe` works for `multiprocessing.Lock()`.'''
-    if not import_tools.exists('multiprocessing'):
-        raise nose.SkipTest('`multiprocessing` not installed')
     import multiprocessing
     lock = multiprocessing.Lock()
     describe(lock)

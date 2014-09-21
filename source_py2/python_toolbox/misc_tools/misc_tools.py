@@ -11,6 +11,7 @@ import re
 import math
 import types
 import functools
+import sys
 import threading
 
 from python_toolbox import cute_iter_tools
@@ -69,22 +70,6 @@ def get_mro_depth_of_method(type_, method_name):
         
     return deepest_index
 
-
-def frange(start, finish=None, step=1.):
-    '''
-    Make a `list` containing an arithmetic progression of numbers.
-
-    This is an extension of the builtin `range`; it allows using floating point
-    numbers.
-    '''
-    if finish is None:
-        finish, start = start, 0.
-    else:
-        start = float(start)
-
-    count = int(math.ceil(finish - start)/step)
-    return (start + n*step for n in range(count))
-    
 
 def getted_vars(thing, _getattr=getattr):
     '''
@@ -363,3 +348,18 @@ def decimal_number_from_string(string):
     if not _decimal_number_pattern.match(string):
         raise Exception("%s isn't a decimal number." % string)
     return float(string) if '.' in string else int(string)
+
+
+class AlternativeLengthMixin:
+    def __len__(self):
+        length = self.length
+        if (length <= sys.maxsize) and isinstance(length, int):
+            return length
+        else:
+            raise OverflowError("Due to CPython limitation, you'll have to "
+                                "use `.length` rather than `len`")
+        
+    def __bool__(self):
+        from python_toolbox import sequence_tools
+        return bool(sequence_tools.get_length(self))
+        

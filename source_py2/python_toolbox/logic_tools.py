@@ -70,4 +70,6 @@ def logic_max(iterable, relation=lambda a, b: (a >= b)):
             maximal_elements.append(candidate)
     
     return maximal_elements
+                
         
+    

@@ -189,10 +189,7 @@ def remove_keys(d, keys_to_remove):
                 del d[key]
             
             
-        
-    
-    
-    
-    
-    
+def get_sorted_values(d, key=None):
+    kwargs = {'key': key,} if key is not None else {}
+    return dict_tools.get_list(d, sorted(d.keys(), **kwargs))
     

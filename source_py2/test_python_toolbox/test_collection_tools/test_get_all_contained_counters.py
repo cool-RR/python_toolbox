@@ -22,7 +22,7 @@ def test():
     
     # Now we'll exhaust `all_contained_counters`:
     assert len(all_contained_counters) == 6 * 3 * 3 * 2 * 2
-    assert all_contained_counters.exhausted
+    assert all_contained_counters.is_exhausted
     
     assert counter in all_contained_counters
     assert collections.Counter({'a': 0, 'b': 0, 'r': 0, 'c': 0, 'd': 0,}) in \

@@ -7,6 +7,8 @@ This module defines various functions.
 See their documentation for more information.
 '''
 
+import sys
+
 from .context_manager_type import ContextManagerType
 
 

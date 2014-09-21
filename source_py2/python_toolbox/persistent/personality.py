@@ -8,6 +8,7 @@ See its documentation for more information.
 '''
 
 import colorsys
+
 from .persistent import Persistent
 
 
@@ -29,9 +30,12 @@ class Personality(object):
     
     def __init__(self, persistent):
 
-        assert isinstance(persistent, Persistent)
         
-        from . import human_names
+        from python_toolbox import human_names
+        # (Importing inside function to avoid importing this heavy module on
+        # general import time.)
+        
+        assert isinstance(persistent, Persistent)
 
         color_resolution = 100
         

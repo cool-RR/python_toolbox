@@ -10,9 +10,15 @@ from __future__ import division
 import collections
 import itertools
 import __builtin__
+import numbers
 
+from python_toolbox import math_tools
 
 infinity = float('inf')
+
+
+class _EMPTY_SENTINEL(object):
+    pass
 
 
 def iterate_overlapping_subsequences(iterable, length=2, wrap_around=False,
@@ -122,7 +128,7 @@ def _shorten(iterable, n):
             raise StopIteration
         
         
-def enumerate(reversible, reverse_index=False, lazy_tuple=False):
+def enumerate(iterable, reverse_index=False, lazy_tuple=False):
     '''
     Iterate over `(i, item)` pairs, where `i` is the index number of `item`.
     
@@ -133,7 +139,7 @@ def enumerate(reversible, reverse_index=False, lazy_tuple=False):
     
     If `lazy_tuple=True`, returns a `LazyTuple` rather than an iterator.
     '''
-    iterator = _enumerate(reversible=reversible, reverse_index=reverse_index)
+    iterator = _enumerate(iterable=iterable, reverse_index=reverse_index)
 
     if lazy_tuple:
         from python_toolbox import nifty_collections # Avoiding circular import.
@@ -142,13 +148,17 @@ def enumerate(reversible, reverse_index=False, lazy_tuple=False):
         return iterator
 
     
-def _enumerate(reversible, reverse_index):
+def _enumerate(iterable, reverse_index):
     if reverse_index is False:
-        return __builtin__.enumerate(reversible)
+        return __builtin__.enumerate(iterable)
     else:
-        my_list = list(__builtin__.enumerate(reversed(reversible)))
-        my_list.reverse()
-        return my_list
+        from python_toolbox import sequence_tools
+        try:
+            length = sequence_tools.get_length(iterable)
+        except AttributeError:
+            iterable = revenifty_collections.LazyTuple(iterable)
+            length = len(iterable)
+        return zip(range(length - 1, -1, -1), iterable)
 
     
 def is_iterable(thing):
@@ -344,7 +354,7 @@ def call_until_exception(function, exception, lazy_tuple=False):
     '''
     iterator = _call_until_exception(function, exception)
     if lazy_tuple:
-        from python_toolbox import nifty_collections # Avoiding circular import.
+        from python_toolbox import nifty_collections # Avoiding circular import
         return nifty_collections.LazyTuple(iterator)
     else:
         return iterator
@@ -386,4 +396,102 @@ def get_single_if_any(iterable,
             else:
                 raise exception_on_multiple
         else: # not exception_on_multiple
-            return first_item
+            return first_item        
+        
+def are_equal(*sequences):
+    from python_toolbox import sys_tools
+    from python_toolbox import logic_tools
+    sequence_types = set(map(type, sequences))
+    
+    if not sys_tools.is_pypy: # Hack around Pypy bug 1799
+        # Trying cheap comparison:
+        if len(sequence_types) == 1 and issubclass(
+                      get_single_if_any(sequence_types), collections.Sequence):
+            
+            return logic_tools.all_equal(sequences)
+    # blocktodo: test on pypy and hopefully remove these two lines if not needed
+    # if sequence_types == {CuteCount}: # Hack around Pypy bug 1799, remove
+        # return logic_tools.all_equal(sequences.start for sequence in sequences)
+    
+    # If cheap comparison didn't work, trying item-by-item comparison:
+    zipped = itertools.zip_longest(*sequences,
+                                   fillvalue=_EMPTY_SENTINEL)
+    for values in zipped:
+        # No need to explicitly check for `_EMPTY_SENTINEL`, it would just make
+        # the following condition `False`, because it's impossible for all
+        # values to be the sentinel.
+        if not logic_tools.all_equal(values):
+            return False
+    else:
+        return True
+
+    
+def is_sorted(iterable, key=None):
+    from python_toolbox import misc_tools
+    if key is None:
+        key = misc_tools.identity_function
+    for first_item, second_item in iterate_overlapping_subsequences(iterable):
+        if not key(second_item) >= key(first_item):
+            return False
+    else:
+        return True
+        
+    
+class _PUSHBACK_SENTINEL(object):
+    '''Sentinel used by `PushbackIterator` to say nothing was pushed back.'''
+ 
+class PushbackIterator(object):
+    '''
+    Iterator allowing to push back the last item so it'll be yielded next time.
+    
+    Initialize `PushbackIterator` with your favorite iterator as the argument
+    and it'll create an iterator wrapping it on which you can call
+    `.push_back()` to have it take the recently yielded item and yield it again
+    next time.
+
+    Only one item may be pushed back at any time.
+    '''
+    
+    def __init__(self, iterable):
+        self.iterator = iter(iterable)
+        self.last_item = _PUSHBACK_SENTINEL
+        self.just_pushed_back = False
+        
+    def __next__(self):
+        if self.just_pushed_back:
+            assert self.last_item != _PUSHBACK_SENTINEL
+            self.just_pushed_back = False
+            return self.last_item
+        else:
+            self.last_item = next(self.iterator)
+            return self.last_item
+        
+    next = __next__
+    __iter__ = lambda self: self
+            
+    def push_back(self):
+        if self.last_item == _PUSHBACK_SENTINEL:
+            raise Exception
+        if self.just_pushed_back:
+            raise Exception
+        self.just_pushed_back = True
+        
+ 
+ 
+def iterate_pop(poppable, lazy_tuple=False):
+    '''Iterate by doing `.pop()` until no more items.'''
+    return call_until_exception(poppable.pop, IndexError,
+                                lazy_tuple=lazy_tuple)
+ 
+def iterate_popleft(left_poppable, lazy_tuple=False):
+    '''Iterate by doing `.popleft()` until no more items.'''
+    return call_until_exception(left_poppable.popleft, IndexError,
+                                lazy_tuple=lazy_tuple)
+
+def iterate_popitem(item_poppable, lazy_tuple=False):
+    '''Iterate by doing `.popitem()` until no more items.'''
+    return call_until_exception(item_poppable.popitem, KeyError,
+                                lazy_tuple=lazy_tuple)
+    
+
+
