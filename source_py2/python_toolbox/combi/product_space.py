@@ -74,7 +74,8 @@ class ProductSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
             
         for item, sequence in reversed(tuple(zip(given_sequence,
                                                  self.sequences))):
-            wip_index += sequence.index(item) # Propagating `ValueError`
+            wip_index += current_radix * sequence.index(item)
+            # (Propagating `ValueError`.)
             current_radix *= sequence_tools.get_length(sequence)
             
         return wip_index
