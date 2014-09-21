@@ -79,7 +79,7 @@ def combinations(sequence, n=None, start=0):
                 yield [thing] + sub_result
 
 
-class NO_FILL_VALUE:
+class NO_FILL_VALUE(object):
     '''
     Sentinel that means: Don't fill last partition with default fill values.
     '''
@@ -275,7 +275,7 @@ def ensure_iterable_is_sequence(iterable, default_type=tuple,
         return default_type(iterable)
 
 
-class CanonicalSlice:
+class CanonicalSlice(object):
     def __init__(self, slice_, iterable_or_length=None, offset=0):
         '''
         blocktododoc iterable_or_length, also note result, if not given iterable/length, can't really be used as slice (only as canonical object) because of `infinity`

@@ -24,7 +24,7 @@ class C:
         pass
 
 
-class Callable:
+class Callable(object):
     bar = None
 
     def __call__(self, x):
@@ -52,7 +52,7 @@ class TestBase(unittest.TestCase):
 
 
 
-class Object:
+class Object(object):
     def __init__(self, arg):
         self.arg = arg
     def __repr__(self):

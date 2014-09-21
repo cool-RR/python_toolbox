@@ -24,7 +24,7 @@ from . import misc
 infinity = float('inf')
 
 
-class _BasePermView:
+class _BasePermView(object):
     def __init__(self, perm):
         self.perm = perm
     __repr__ = lambda self: '<%s: %s>' % (type(self).__name__, self.perm)

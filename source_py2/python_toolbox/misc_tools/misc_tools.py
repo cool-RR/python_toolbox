@@ -350,7 +350,7 @@ def decimal_number_from_string(string):
     return float(string) if '.' in string else int(string)
 
 
-class AlternativeLengthMixin:
+class AlternativeLengthMixin(object):
     def __len__(self):
         length = self.length
         if (length <= sys.maxsize) and isinstance(length, int):
