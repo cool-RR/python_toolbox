@@ -78,7 +78,8 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         if isinstance(number_or_perm_sequence, collections.Iterable):
             number_or_perm_sequence = sequence_tools. \
                  ensure_iterable_is_immutable_sequence(number_or_perm_sequence)
-        assert isinstance(number_or_perm_sequence, (int, collections.Sequence))
+        assert isinstance(number_or_perm_sequence, (numbers.Integral,
+                                                    collections.Sequence))
         
         ### Analyzing `perm_space`: ###########################################
         #                                                                     #
@@ -114,7 +115,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         if not self.is_dapplied: self.undapplied = self
         if not self.is_combination: self.uncombinationed = self
         
-        if isinstance(number_or_perm_sequence, int):
+        if isinstance(number_or_perm_sequence, numbers.Integral):
             if not (0 <= number_or_perm_sequence <
                                 self.just_dapplied_rapplied_perm_space.length):
                 raise Exception(
