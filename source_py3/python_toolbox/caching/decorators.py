@@ -102,8 +102,8 @@ def cache(max_size=infinity, time_to_keep=None):
                     almost_cutting_point = \
                                           binary_search.binary_search_by_index(
                         list(cached._cache.keys()),
-                        sorting_key_function,
                         _get_now(), 
+                        sorting_key_function,
                         rounding=binary_search.LOW
                     )
                     if almost_cutting_point is not None:

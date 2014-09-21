@@ -73,8 +73,7 @@ class ChainSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
             raise IndexError
         # Todo: Can't have a binary search here, it exhausts all the sequences.
         sequence_index = binary_search.binary_search_by_index(
-            self.accumulated_lengths, lambda x: x,
-            i, rounding=binary_search.LOW_IF_BOTH
+            self.accumulated_lengths, i, rounding=binary_search.LOW_IF_BOTH
         )
         if sequence_index is None:
             raise IndexError
