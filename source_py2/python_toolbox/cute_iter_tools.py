@@ -158,7 +158,7 @@ def _enumerate(iterable, reverse_index):
         except AttributeError:
             iterable = revenifty_collections.LazyTuple(iterable)
             length = len(iterable)
-        return zip(range(length - 1, -1, -1), iterable)
+        return itertools.izip(range(length - 1, -1, -1), iterable)
 
     
 def is_iterable(thing):

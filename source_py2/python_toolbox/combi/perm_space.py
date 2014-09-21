@@ -56,7 +56,7 @@ class PermSpaceType(abc.ABCMeta):
         
         
 @functools.total_ordering
-class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence)
+class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
     '''
     A space of permutations on a sequence.
     
