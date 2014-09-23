@@ -215,7 +215,7 @@ class CuteRange(CuteSequence, metaclass=CuteRangeType):
         else:
             distance = i - self.start
             if distance == 0 and self:
-                return True
+                return 0
             if math_tools.get_sign(distance) != math_tools.get_sign(self.step):
                 raise ValueError
             index, remainder = math_tools.cute_divmod(distance, self.step)

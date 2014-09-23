@@ -497,17 +497,17 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
                                               candidate_fixed_perm_space_length
                     else:
                         raise RuntimeError
-                return self.perm_type((wip_perm_sequence_dict[i] for i in
+                return self.perm_type((wip_perm_sequence_dict[k] for k in
                                        self.domain), self)
             elif self.is_fixed:
                 free_values_perm = self._free_values_unsliced_perm_space[i]
                 free_values_perm_iterator = iter(free_values_perm)
                 return self.perm_type(
                     tuple(
-                        (self._undapplied_fixed_map[i] if
-                         (i in self.fixed_indices) else
+                        (self._undapplied_fixed_map[m] if
+                         (m in self.fixed_indices) else
                          next(free_values_perm_iterator))
-                                           for i in range(self.sequence_length)
+                        for m in range(self.sequence_length)
                     ),
                     self
                 )
