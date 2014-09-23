@@ -562,7 +562,7 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
                 if i in self.fixed_indices:
                     continue
                 unused_values.remove(value)
-                lower_values = [i for i in unused_values if i < value]
+                lower_values = [j for j in unused_values if j < value]
                 for lower_value in lower_values:
                     temp_fixed_map = dict(wip_perm_sequence_dict)
                     temp_fixed_map[i] = lower_value
