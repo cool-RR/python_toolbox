@@ -1,8 +1,9 @@
 # Copyright 2009-2014 Ram Rachum.
 # This program is distributed under the MIT license.
 
-import numbers
+from __future__ import division
 
+import numbers
 
 infinity = float('inf')
 
@@ -11,12 +12,12 @@ _stirling_caches = []
 _n_highest_cache_completed = -1
 def stirling(n, k, skip_calculation=False):
     global _n_highest_cache_completed
-    if k not in range(n + 1):
+    if k not in xrange(n + 1):
         return 0
     if n == k == 0:
         return 1
     if not skip_calculation:
-        for current_n in range(_n_highest_cache_completed + 1, n+1):
+        for current_n in xrange(_n_highest_cache_completed + 1, n+1):
             try:
                 cache = _stirling_caches[current_n]
             except IndexError:

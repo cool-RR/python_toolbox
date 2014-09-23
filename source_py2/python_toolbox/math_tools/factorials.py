@@ -1,6 +1,8 @@
 # Copyright 2009-2014 Ram Rachum.
 # This program is distributed under the MIT license.
 
+from __future__ import division
+
 import math
 import collections
 import itertools
@@ -26,7 +28,7 @@ def factorial(x, start=1):
 
     '''
     from python_toolbox import misc_tools
-    return misc_tools.general_product(range(start, x+1), start=1)
+    return misc_tools.general_product(xrange(start, x+1), start=1)
 
 
 def inverse_factorial(number, round_up=True):

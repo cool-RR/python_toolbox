@@ -1,6 +1,8 @@
 # Copyright 2009-2014 Ram Rachum.
 # This program is distributed under the MIT license.
 
+from __future__ import division
+
 import numbers
 import math
 
@@ -72,6 +74,7 @@ def round_to_int(x, up=False):
                else rounded_down + 1
     else:
         return rounded_down
+
     
 def ceil_div(x, y):
     '''Divide `x` by `y`, rounding up if there's a remainder.'''
