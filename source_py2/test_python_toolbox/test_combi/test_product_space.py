@@ -2,6 +2,7 @@
 # This program is distributed under the MIT license.
 
 from python_toolbox import cute_testing
+from python_toolbox import sequence_tools
 
 from python_toolbox.combi import *
 
@@ -39,15 +40,45 @@ def test():
     with cute_testing.RaiseAssertor(IndexError):
         product_space[-product_space.length - 100]
     
-    assert {ProductSpace((range(4), range(3))),
-            ProductSpace((range(4), range(3))),
-            ProductSpace((range(3), range(4)))} == {
-                ProductSpace((range(4), range(3))), 
-                ProductSpace((range(3), range(4)))
-            }
+    # In the following asserts, using `CuteRange` rather than `xrange` because
+    # the latter doesn't have a functional `__hash__`.
     
-    assert ProductSpace((range(4), range(3))) == \
-                                             ProductSpace((range(4), range(3)))
-    assert ProductSpace((range(4), range(3))) != \
-                                             ProductSpace((range(3), range(4)))
+    assert {
+        ProductSpace(
+            (sequence_tools.CuteRange(4, _avoid_built_in_range=True),
+             sequence_tools.CuteRange(3, _avoid_built_in_range=True))
+        ),
+        ProductSpace(
+            (sequence_tools.CuteRange(4, _avoid_built_in_range=True),
+             sequence_tools.CuteRange(3, _avoid_built_in_range=True))
+        ),
+        ProductSpace(
+            (sequence_tools.CuteRange(3, _avoid_built_in_range=True),
+             sequence_tools.CuteRange(4, _avoid_built_in_range=True))
+        )} == {
+            ProductSpace(
+                (sequence_tools.CuteRange(4, _avoid_built_in_range=True),
+                 sequence_tools.CuteRange(3, _avoid_built_in_range=True))
+            ), 
+            ProductSpace(
+                (sequence_tools.CuteRange(3, _avoid_built_in_range=True),
+                 sequence_tools.CuteRange(4, _avoid_built_in_range=True))
+            )
+    }
+    
+    assert ProductSpace(
+        (sequence_tools.CuteRange(4, _avoid_built_in_range=True),
+         sequence_tools.CuteRange(3, _avoid_built_in_range=True))
+        ) == ProductSpace(
+            (sequence_tools.CuteRange(4, _avoid_built_in_range=True),
+             sequence_tools.CuteRange(3, _avoid_built_in_range=True))
+        )
+    
+    assert ProductSpace(
+        (sequence_tools.CuteRange(4, _avoid_built_in_range=True),
+         sequence_tools.CuteRange(3, _avoid_built_in_range=True))) != \
+           ProductSpace(
+               (sequence_tools.CuteRange(3, _avoid_built_in_range=True),
+                sequence_tools.CuteRange(4, _avoid_built_in_range=True))
+           )
     
