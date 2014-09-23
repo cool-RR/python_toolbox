@@ -6,7 +6,7 @@ from python_toolbox import cute_testing
 from python_toolbox.combi import *
 
 
-def test_product_spaces():
+def test():
     huge_perm_space = PermSpace(range(100))
     big_perm_space = PermSpace(range(150), fixed_map={1: 5, 70: 3,},
                                degrees=(3, 5))
