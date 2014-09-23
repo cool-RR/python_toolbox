@@ -173,7 +173,7 @@ class CuteRange(CuteSequence, metaclass=CuteRangeType):
         from python_toolbox import sequence_tools
         if isinstance(i, numbers.Integral):
             if i < 0:
-                if i < y (-self.length) and not allow_out_of_range:
+                if i < (-self.length) and not allow_out_of_range:
                     raise IndexError
                 i += self.length
             if 0 <= i < self.length or allow_out_of_range:
@@ -192,7 +192,7 @@ class CuteRange(CuteSequence, metaclass=CuteRangeType):
                 i, iterable_or_length=self
             )
             if not ((0 <= canonical_slice.start < self.length) and
-                    ((0 <= canonical_slice.stop < self.length) or
+                    ((0 <= canonical_slice.stop <= self.length) or
                      (canonical_slice.stop == self.length == infinity))):
                 raise TypeError
             return CuteRange(
