@@ -169,13 +169,15 @@ class CuteRange(CuteSequence, metaclass=CuteRangeType):
         
         
     
-    def __getitem__(self, i):
+    def __getitem__(self, i, allow_out_of_range=False):
         from python_toolbox import sequence_tools
         if isinstance(i, numbers.Integral):
-            if 0 <= i < self.length:
+            if i < 0:
+                if i < y (-self.length) and not allow_out_of_range:
+                    raise IndexError
+                i += self.length
+            if 0 <= i < self.length or allow_out_of_range:
                 return self.start + (self.step * i)
-            elif (-self.length) <= i < 0:
-                return self.start + (self.step * (i + self.length))
             else:
                 raise IndexError
         elif i == infinity:
@@ -195,7 +197,8 @@ class CuteRange(CuteSequence, metaclass=CuteRangeType):
                 raise TypeError
             return CuteRange(
                 self[canonical_slice.start],
-                self[canonical_slice.stop],
+                self.__getitem__(canonical_slice.stop,
+                                 allow_out_of_range=True),
                 self.step * canonical_slice.step
             )
         else:
