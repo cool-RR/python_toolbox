@@ -236,7 +236,7 @@ def get_recurrences(sequence):
 
     
 def ensure_iterable_is_immutable_sequence(iterable, default_type=tuple,
-                                          unallowed_types=(bytes,),
+                                          unallowed_types=(),
                                           allow_unordered=True):
     '''
     Return a version of `iterable` that is an immutable sequence.

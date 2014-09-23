@@ -21,7 +21,7 @@ def test_perm_spaces():
     assert pure_0a == pure_0b == pure_0c == pure_0d
     assert len(pure_0a) == len(pure_0b) == len(pure_0c) == len(pure_0d)
     assert repr(pure_0a) == repr(pure_0b) == repr(pure_0c) == \
-                         repr(pure_0d) == '<PermSpace: range(0, 4)>'
+                                repr(pure_0d) == '<PermSpace: CuteRange(0, 4)>'
     
     assert cute_iter_tools.are_equal(pure_0a, pure_0b, pure_0c, pure_0d)
     

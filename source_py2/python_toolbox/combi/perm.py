@@ -309,15 +309,15 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence):
         
         permed_generator = (sequence[i] for i in self)
         if result_type is not None:
-            if result_type is str:
+            if result_type in (str, unicode):
                 return ''.join(permed_generator)
             else:
                 return result_type(permed_generator)
         elif isinstance(sequence, Perm):
             return Perm(permed_generator,
                         sequence.just_dapplied_rapplied_perm_space)
-        elif isinstance(sequence, str):
-            return ''.join(permed_generator)
+        elif isinstance(sequence, (str, unicode)):
+            return type(sequence)().join(permed_generator)
         else:
             return tuple(permed_generator)
             

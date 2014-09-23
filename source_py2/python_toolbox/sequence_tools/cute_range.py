@@ -132,6 +132,8 @@ class CuteRange(CuteSequence):
         
     _reduced = property(lambda self: (type(self), (self.start, self.stop,
                                                    self.step)))
+    
+    __hash__ = lambda self: hash(self._reduced)
         
     __eq__ = lambda self, other: (isinstance(other, CuteRange) and
                                   (self._reduced == other._reduced))
