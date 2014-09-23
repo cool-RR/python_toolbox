@@ -18,7 +18,9 @@ def test():
     assert perm_1 in big_perm_space
     assert (perm_0, perm_1) in product_space
     assert product_space.index((perm_0, perm_1)) == 10 ** 10
-    assert (~ perm_0, ~ perm_1) in product_space
+    repr(~perm_0)
+    repr(~perm_1)
+    assert (~perm_0, ~perm_1) in product_space
     assert repr(product_space) == (
         '<ProductSpace: 933262154439441526816992388562667004907159682643816214'
         '685929638952175999932299156089414639761565182862536979208272237582511'
