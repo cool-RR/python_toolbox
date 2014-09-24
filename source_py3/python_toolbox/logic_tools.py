@@ -25,7 +25,12 @@ def all_equal(iterable, exhaustive=False):
     # work for unhashables.
     
     if exhaustive is True:
-        pairs = sequence_tools.combinations(list(iterable), 2)
+        from python_toolbox import combi
+        items = tuple(iterable)
+        pairs = tuple(
+            tuple(items[i] for i in comb) for comb in
+                                combi.CombSpace(len(items), min(2, len(items)))
+        )
     else: # exhaustive is False
         pairs = cute_iter_tools.iterate_overlapping_subsequences(iterable)
         
