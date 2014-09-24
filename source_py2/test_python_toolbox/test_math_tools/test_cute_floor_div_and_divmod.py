@@ -6,6 +6,8 @@ from __future__ import division
 import numbers
 import math
 
+import nose
+
 from python_toolbox import cute_testing
 
 from python_toolbox.math_tools import cute_floor_div, cute_divmod
@@ -62,6 +64,8 @@ def test_illegal_cases():
     
         
 def test_meaningful_cases():
+    if sys_tools.is_pypy:
+        raise nose.SkipTest
     meaningful_cases = (
         (infinity, 3), (infinity, 300.5), (infinity, -3), (infinity, -300.5), 
         (-infinity, 3), (-infinity, 300.5), (-infinity, -3), (-infinity, -300.5), 
