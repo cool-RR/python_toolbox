@@ -197,12 +197,13 @@ class CuteRange(CuteSequence):
             canonical_slice = sequence_tools.CanonicalSlice(
                 i, iterable_or_length=self
             )
-            if not ((0 <= canonical_slice.start < self.length) and
+            if not ((0 <= canonical_slice.start <= self.length) and
                     ((0 <= canonical_slice.stop <= self.length) or
                      (canonical_slice.stop == self.length == infinity))):
                 raise TypeError
             return CuteRange(
-                self[canonical_slice.start],
+                self.__getitem__(canonical_slice.start,
+                                 allow_out_of_range=True),
                 self.__getitem__(canonical_slice.stop,
                                  allow_out_of_range=True),
                 self.step * canonical_slice.step

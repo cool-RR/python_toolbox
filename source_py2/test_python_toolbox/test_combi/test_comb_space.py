@@ -2,6 +2,7 @@
 # This program is distributed under the MIT license.
 
 from python_toolbox import cute_testing
+from python_toolbox import sequence_tools
 
 from python_toolbox.combi import *
 
@@ -41,7 +42,8 @@ def test():
         comb_space.get_degreed(3)
     assert comb_space.unfixed == comb_space
     assert not comb_space.fixed_indices
-    assert comb_space.free_indices == comb_space.free_keys == range(2)
+    assert comb_space.free_indices == comb_space.free_keys == \
+                        sequence_tools.CuteRange(2, _avoid_built_in_range=True)
     assert comb_space.free_values == 'dumber'
     
     comb = comb_space[7]
