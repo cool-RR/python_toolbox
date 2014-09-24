@@ -403,15 +403,13 @@ def are_equal(*sequences):
     from python_toolbox import logic_tools
     sequence_types = set(map(type, sequences))
     
-    if not sys_tools.is_pypy: # Hack around Pypy bug 1799
-        # Trying cheap comparison:
-        if len(sequence_types) == 1 and issubclass(
-                 get_single_if_any(sequence_types), collections.Sequence) and \
-                               not get_single_if_any(sequence_types) == xrange:
-            # (Excluding `xrange` from this fast check because it has no
-            # `__eq__`.)
-            
-            return logic_tools.all_equal(sequences)
+    # Trying cheap comparison:
+    if len(sequence_types) == 1 and issubclass(
+             get_single_if_any(sequence_types), collections.Sequence) and \
+                           not get_single_if_any(sequence_types) == xrange:
+        # (Excluding `xrange` from this fast check because it has no
+        # `__eq__`.)
+        return logic_tools.all_equal(sequences)
     
     # If cheap comparison didn't work, trying item-by-item comparison:
     zipped = itertools.izip_longest(*sequences,
