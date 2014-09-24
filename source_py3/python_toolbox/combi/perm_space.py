@@ -81,8 +81,31 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
     by index number any permutation of the 10**2500 permutations in a fraction
     of a second as well.
     
+    There are several variations that a perm space could have:
+     - Rapplied (Range-applied): having an arbitrary sequence as a range. To
+       make one, pass your sequence as the first argument.
+     - Dapplied (Domain-applied): having an arbitrary sequence as a domain. To make one, pass a sequence into the `domain` argument.
+     - Fixed: Having a specified number of indices always pointing at certain
+       values, making the space smaller. To make one, pass a dict from each key to the value it should be fixed to to argument `fixed_map`
+     - Sliced: A perm space can be sliced like any Python sequence (except you
+       can't change the step.) To make one, use slice notation on an existing perm space.
+     - Degreed: A perm space can be limited to perms of a certain degree. (A
+       perm's degree is the number of transformations it takes to make it.)
+     - Partialled: A perm space can be partial, in which case not all elements
+       are used in perms. E.g. you can have a perm space of a sequence of
+       length 5 but with `n_elements=3`, so every perm will have only 3
+     - Combination: If you pass in `is_combination=True` or use the subclass
+       `CombSpace`, then you'll have a space of combinations (combs) instead of
+       perms. Combs are like perms except there's no order to the elements.
+
+    
     Instead of a number, you can also pass a sequence as the first argument,
-    and the `PermSpace` will use that rather than `range`.
+    and the `PermSpace` will use that rather than a range. Such a `PermSpace`
+    is called "rapplied", which is short for range-applied. It'll have a
+    property `.unrapplied` which'll give you a non-rapplied version of that
+    perm space. You can also take any perm space and use the `.get_rapplied`
+    method on it to get that space range-applied to a sequence that you
+    provide.
     
     You may pass a sequence as the `domain` argument, and it'll be used as the
     indices for the permutations. (i.e., if the permutations are seen as a
