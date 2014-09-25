@@ -2,4 +2,5 @@
 # This program is distributed under the MIT license.
 
 from .misc import *
-from .cute_range import CuteRangefrom .canonical_slice import CanonicalSlice
+from .cute_range import CuteRange
+from .canonical_slice import CanonicalSlice

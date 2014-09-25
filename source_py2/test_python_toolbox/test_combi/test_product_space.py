@@ -45,40 +45,40 @@ def test():
     
     assert {
         ProductSpace(
-            (sequence_tools.CuteRange(4, _avoid_built_in_range=True),
-             sequence_tools.CuteRange(3, _avoid_built_in_range=True))
+            (sequence_tools.CuteRange(4),
+             sequence_tools.CuteRange(3))
         ),
         ProductSpace(
-            (sequence_tools.CuteRange(4, _avoid_built_in_range=True),
-             sequence_tools.CuteRange(3, _avoid_built_in_range=True))
+            (sequence_tools.CuteRange(4),
+             sequence_tools.CuteRange(3))
         ),
         ProductSpace(
-            (sequence_tools.CuteRange(3, _avoid_built_in_range=True),
-             sequence_tools.CuteRange(4, _avoid_built_in_range=True))
+            (sequence_tools.CuteRange(3),
+             sequence_tools.CuteRange(4))
         )} == {
             ProductSpace(
-                (sequence_tools.CuteRange(4, _avoid_built_in_range=True),
-                 sequence_tools.CuteRange(3, _avoid_built_in_range=True))
+                (sequence_tools.CuteRange(4),
+                 sequence_tools.CuteRange(3))
             ), 
             ProductSpace(
-                (sequence_tools.CuteRange(3, _avoid_built_in_range=True),
-                 sequence_tools.CuteRange(4, _avoid_built_in_range=True))
+                (sequence_tools.CuteRange(3),
+                 sequence_tools.CuteRange(4))
             )
     }
     
     assert ProductSpace(
-        (sequence_tools.CuteRange(4, _avoid_built_in_range=True),
-         sequence_tools.CuteRange(3, _avoid_built_in_range=True))
+        (sequence_tools.CuteRange(4),
+         sequence_tools.CuteRange(3))
         ) == ProductSpace(
-            (sequence_tools.CuteRange(4, _avoid_built_in_range=True),
-             sequence_tools.CuteRange(3, _avoid_built_in_range=True))
+            (sequence_tools.CuteRange(4),
+             sequence_tools.CuteRange(3))
         )
     
     assert ProductSpace(
-        (sequence_tools.CuteRange(4, _avoid_built_in_range=True),
-         sequence_tools.CuteRange(3, _avoid_built_in_range=True))) != \
+        (sequence_tools.CuteRange(4),
+         sequence_tools.CuteRange(3))) != \
            ProductSpace(
-               (sequence_tools.CuteRange(3, _avoid_built_in_range=True),
-                sequence_tools.CuteRange(4, _avoid_built_in_range=True))
+               (sequence_tools.CuteRange(3),
+                sequence_tools.CuteRange(4))
            )
     

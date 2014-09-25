@@ -48,39 +48,7 @@ def flatten(iterable):
         return []
 
 
-def combinations(sequence, n=None, start=0):
-    '''
-    Iterate over combinations of items from the sequence.
-
-    `n` specifies the number of items. (Use `None` for all possible sizes
-    together.) `start` specifies the index number of the member from which to
-    start giving combinations. (Keep the default of `start=0` for doing the
-    whole sequence.)
-
-    Example:
-
-    `combinations([1, 2, 3, 4], n=2)` would be, in list form: `[[1, 2], [1, 3],
-    [1, 4], [2, 3], [2, 4], [3, 4]]`.
-    '''
-
-    if n is None:
-        length = len(sequence) - start
-        iterators = (combinations(sequence, n=i, start=start) for i
-                     in range(1, length + 1))
-        for thing in itertools.chain(*iterators):
-            yield thing
-
-    elif n == 1:
-        for thing in itertools.islice(sequence, start, None):
-            yield [thing]
-    else:
-        assert n > 1
-        for (i, thing) in itertools.islice(enumerate(sequence), start, None):
-            for sub_result in combinations(sequence, n - 1, start=(i + 1)):
-                yield [thing] + sub_result
-
-
-class NO_FILL_VALUE(object):
+class NO_FILL_VALUE:
     '''
     Sentinel that means: Don't fill last partition with default fill values.
     '''
@@ -276,132 +244,9 @@ def ensure_iterable_is_sequence(iterable, default_type=tuple,
         return default_type(iterable)
 
 
-class CanonicalSlice(object):
-    def __init__(self, slice_, iterable_or_length=None, offset=0):
-        '''
-        blocktododoc iterable_or_length, also note result, if not given iterable/length, can't really be used as slice (only as canonical object) because of `infinity`
-        
-        Parse a `slice` object into a canonical `(start, stop, step)`.
-    
-        This is helpful because `slice`'s own `.start`, `.stop` and `.step` are
-        sometimes specified as `None` for convenience, so Python will infer
-        them automatically. Here we make them explicit.
-    
-        if `start` is `None`, it will be set to `0` (if the `step` is positive)
-        or `infinity` (if the `step` is negative.)
-    
-        if `stop` is `None`, it will be set to `infinity` (if the `step` is
-        positive) or `0` (if the `step` is negative.)
-    
-        If `step` is `None`, it will be changed to the default `1`.
-        '''
-        from . import math_tools
-        
-        if isinstance(slice_, CanonicalSlice):
-            slice_ = slice(slice_.start, slice_.stop, slice_.step)
-        assert isinstance(slice_, slice)
-        self.given_slice = slice_
-        if iterable_or_length is not None:
-            if isinstance(iterable_or_length,
-                          math_tools.PossiblyInfiniteIntegral):
-                self.length = iterable_or_length
-            elif isinstance(iterable_or_length, collections.Sequence):
-                self.length = get_length(iterable_or_length)
-            else:
-                assert isinstance(iterable_or_length, collections.Iterable)
-                self.length = cute_iter_tools.get_length(iterable)
-        else:
-            self.length = None
-            
-        self.offset = offset
-            
-        ### Parsing `step`: ###################################################
-        #                                                                     #
-        assert slice_.step != 0
-        if slice_.step is None:
-            self.step = 1
-        else:
-            self.step = slice_.step
-        #                                                                     #
-        ### Finished parsing `step`. ##########################################
-
-            
-        ### Parsing `start`: #################################################
-        #                                                                    #
-        if slice_.start is None:
-            if self.step > 0:
-                self.start = 0 + self.offset
-            else:
-                assert self.step < 0
-                self.start = (self.length + self.offset) if \
-                                        (self.length is not None) else infinity
-        else: # s.start is not None
-            if self.length is not None:
-                if slice_.start < 0:
-                    self.start = \
-                               max(slice_.start + self.length, 0) + self.offset
-                else:
-                    self.start = min(slice_.start, self.length) + self.offset
-            else: 
-                self.start = slice_.start + self.offset
-        #                                                                     #
-        ### Finished parsing `start`. #########################################
-        
-        ### Parsing `stop`: ###################################################
-        #                                                                     #
-        if slice_.stop is None:
-            if self.step > 0:
-                self.stop = (self.length + self.offset) if \
-                                        (self.length is not None) else infinity
-            else:
-                assert self.step < 0
-                self.stop = -infinity 
-            
-        else: # slice_.stop is not None
-            if self.length is not None:
-                if slice_.stop < 0:
-                    self.stop = max(slice_.stop + self.length, 0) + self.offset
-                else: # slice_.stop >= 0
-                    self.stop = min(slice_.stop, self.length) + self.offset
-            else: 
-                self.stop = slice_.stop + self.offset 
-        #                                                                     #
-        ### Finished parsing `stop`. ##########################################
-            
-        if (self.step > 0 and self.start >= self.stop > 0) or \
-           (self.step < 0 and self.stop >= self.start):
-            # We have a case of an empty slice.
-            self.start = self.stop = 0
-        
-            
-        self.slice_ = slice(*((item if item not in math_tools.infinities
-                               else None) for item in self))
-            
-        ### Doing sanity checks: ##############################################
-        #                                                                     #
-        if self.length:
-            if self.step > 0:
-                assert 0 <= self.start <= \
-                                         self.stop <= self.length + self.offset
-            else:
-                assert self.step < 0
-                assert 0 <= self.stop <= \
-                                        self.start <= self.length + self.offset
-        #                                                                     #
-        ### Finished doing sanity checks. #####################################
-        
-    __iter__ = lambda self: iter((self.start, self.stop, self.step))
-    __repr__ = lambda self: '%s%s' % (type(self).__name__, tuple(self))
-    _reduced = property(lambda self: (type(self), tuple(self)))
-    __hash__ = lambda self: hash(self._reduced)
-    __eq__ = lambda self, other: (isinstance(other, CanonicalSlice) and
-                                  self._reduced == other._reduced)
-    __contains__ = lambda self, number: self.start <= number < self.stop
-    
-    
-    
 class CuteSequenceMixin(misc_tools.AlternativeLengthMixin):
     def take_random(self):
+        '''Take a random item from the sequence.'''
         return self[random.randint(0, get_length(self) - 1)]
     def __contains__(self, item):
         try: self.index(item)
