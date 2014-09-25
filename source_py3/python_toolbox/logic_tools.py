@@ -24,15 +24,18 @@ def all_equal(iterable, exhaustive=False):
     # todo: Maybe I should simply check if `len(set(iterable)) == 1`? Will not
     # work for unhashables.
     
+    items = tuple(iterable)
+    if len(items) <= 1:
+        return True
+    
     if exhaustive is True:
         from python_toolbox import combi
-        items = tuple(iterable)
         pairs = tuple(
             tuple(items[i] for i in comb) for comb in
-                                combi.CombSpace(len(items), min(2, len(items)))
+                                                 combi.CombSpace(len(items), 2)
         )
     else: # exhaustive is False
-        pairs = cute_iter_tools.iterate_overlapping_subsequences(iterable)
+        pairs = cute_iter_tools.iterate_overlapping_subsequences(items)
         
     return all(a==b for (a, b) in pairs)
 
