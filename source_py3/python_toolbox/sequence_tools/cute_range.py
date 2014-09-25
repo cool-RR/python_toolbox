@@ -75,39 +75,8 @@ def _is_integral_or_none(thing):
     return isinstance(thing, (numbers.Integral, NoneType))
 
 
-class CuteRangeType(abc.ABCMeta):
-    '''Metaclass for `CuteRange`, see its docstring for details.'''
-    def __call__(cls, *args, _avoid_built_in_range=False):
-        # Our job here is to decide whether to instantiate using the built-in
-        # `range` or our kickass `Range`.
-        from python_toolbox import math_tools
-        
-        if (cls is CuteRange) and (not _avoid_built_in_range):
-            start, stop, step = parse_range_args(*args)
-            
-            use_builtin_range = True # Until challenged.
-            
-            if not all(map(_is_integral_or_none, (start, stop, step))):
-                # If any of `(start, stop, step)` are not integers or `None`, we
-                # definitely need `Range`.
-                use_builtin_range = False
-                
-            if (step > 0 and stop == infinity) or \
-                                            (step < 0 and stop == (-infinity)):
-                # If the range of numbers is infinite, we sure as shit need
-                # `Range`.
-                use_builtin_range = False
-                    
-            if use_builtin_range:
-                return range(*args)
-            else:
-                return super().__call__(*args)
-        
-        else: # (cls is not Range) or _avoid_built_in_range
-            return super().__call__(*args)
-        
 
-class CuteRange(CuteSequence, metaclass=CuteRangeType):
+class CuteRange(CuteSequence):
     '''
     Improved version of Python's `range` that has extra features.
     
@@ -118,8 +87,7 @@ class CuteRange(CuteSequence, metaclass=CuteRangeType):
     allows you to use floating-point numbers (or decimals), and it allows you
     to use infinite numbers to produce infinite ranges.
     
-    
-    
+    blocktododoc add examples
     '''
     def __init__(self, *args):
         self.start, self.stop, self.step = parse_range_args(*args)
@@ -228,5 +196,3 @@ class CuteRange(CuteSequence, metaclass=CuteRangeType):
             
     is_infinity = caching.CachedProperty(lambda self: self.length == infinity)
         
-    
-CuteRange.register(range)

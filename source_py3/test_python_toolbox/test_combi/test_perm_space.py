@@ -21,7 +21,7 @@ def test_perm_spaces():
     assert pure_0a == pure_0b == pure_0c == pure_0d
     assert len(pure_0a) == len(pure_0b) == len(pure_0c) == len(pure_0d)
     assert repr(pure_0a) == repr(pure_0b) == repr(pure_0c) == \
-                         repr(pure_0d) == '<PermSpace: range(0, 4)>'
+                         repr(pure_0d) == '<PermSpace: CuteRange(0, 4)>'
     
     assert cute_iter_tools.are_equal(pure_0a, pure_0b, pure_0c, pure_0d)
     
@@ -280,11 +280,14 @@ def test_dapplied_perm_space():
     assert not dapplied_perm_space._just_fixed.is_combination
     assert not dapplied_perm_space._just_fixed.is_degreed
     
-    assert repr(dapplied_perm_space) == "<PermSpace: 'growl' => range(0, 5)>"
+    assert repr(dapplied_perm_space) == \
+                                      "<PermSpace: 'growl' => CuteRange(0, 5)>"
     
     # Testing `repr` shortening: 
-    assert repr(PermSpace(20, domain=tuple(range(20, 0, -1)))) == \
-       '<PermSpace: (20, 19, 18, 17, 16, 15, 14, 13, 12 ... ) => range(0, 20)>'
+    assert repr(PermSpace(20, domain=tuple(range(20, 0, -1)))) == (
+        '<PermSpace: (20, 19, 18, 17, 16, 15, 14, 13, 12 ... ) => '
+        'CuteRange(0, 20)>'
+    )
     
 def test_degreed_perm_space():
     assert PermSpace(3, degrees=0).length == 1

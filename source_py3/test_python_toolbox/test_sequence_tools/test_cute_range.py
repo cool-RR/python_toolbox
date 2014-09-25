@@ -9,26 +9,14 @@ from python_toolbox.sequence_tools import CuteRange
 infinity = float('inf')
 
 
-def test_built_in():
-    built_in_range_arguments_tuples = (
+def test_finite():
+    finite_range_arguments_tuples = (
         (10,), (3,), (20, 30), (20, 30, 2), (20, 30, -2)
     )
     
-    for built_in_range_arguments_tuple in built_in_range_arguments_tuples:
-        cr0 = CuteRange(*built_in_range_arguments_tuple)
-        assert type(cr0) == range
-        assert isinstance(cr0, range)
-        assert isinstance(cr0, CuteRange)
-        cr1 = CuteRange(*built_in_range_arguments_tuple, _avoid_built_in_range=True)
-        assert cr1.length == len(cr1)
-        assert type(cr1) == CuteRange
-        assert not isinstance(cr1, range)
-        assert isinstance(cr1, CuteRange)
-        assert tuple(cr0) == tuple(cr1)
-        if cr0:
-            assert cr0[0] == cr1[0]
-            assert cr0[-1] == cr1[-1]
-        assert repr(cr0)[1:] == repr(cr1)[5:]
+    for finite_range_arguments_tuple in finite_range_arguments_tuples:
+        cr0 = CuteRange(*finite_range_arguments_tuple)
+        assert type(cr0) == CuteRange
         
 def test_infinite():
     infinite_range_arguments_tuples = (

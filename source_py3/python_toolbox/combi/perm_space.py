@@ -148,13 +148,13 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
         #                                                                     #
         if isinstance(iterable_or_length, numbers.Integral):
             self.is_rapplied = False
-            self.sequence = range(iterable_or_length)
+            self.sequence = sequence_tools.CuteRange(iterable_or_length)
             self.sequence_length = iterable_or_length
         else:
             assert isinstance(iterable_or_length, collections.Iterable)
             self.sequence = sequence_tools. \
                       ensure_iterable_is_immutable_sequence(iterable_or_length)
-            range_candidate = range(len(self.sequence))
+            range_candidate = sequence_tools.CuteRange(len(self.sequence))
             
             self.is_rapplied = not (
                 cute_iter_tools.are_equal(self.sequence,
@@ -162,7 +162,8 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
             )
             self.sequence_length = len(self.sequence)
             if not self.is_rapplied:
-                self.sequence = range(self.sequence_length)
+                self.sequence = sequence_tools.CuteRange(self.sequence_length)
+                
         
         if self.is_rapplied and (len(set(self.sequence)) < len(self.sequence)):
             # Can implement this later by calculating the actual length.
@@ -181,7 +182,7 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
                                                           self.sequence_length)
         self.is_partial = (self.n_elements < self.sequence_length)
         
-        self.indices = sequence_tools.CuteRange(self.n_elements) 
+        self.indices = sequence_tools.CuteRange(self.n_elements)
         
         #                                                                     #
         ### Finished figuring out number of elements. #########################
