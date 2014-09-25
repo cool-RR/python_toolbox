@@ -350,7 +350,20 @@ def decimal_number_from_string(string):
     return float(string) if '.' in string else int(string)
 
 
-class AlternativeLengthMixin(object):
+
+class AlternativeLengthMixin:
+    '''
+    Mixin for sized types that makes it easy to return non-standard lengths.
+    
+    Due to CPython limitation, Python's built-in `__len__` (and its counterpart
+    `len`) can't return really big values or floating point numbers.
+    
+    Classes which need to return such lengths can use this mixin. They'll have
+    to define a property `length` where they return their length, and if
+    someone tries to call `len` on it, then if the length happens to be a
+    number that `len` supports, it'll return that, otherwise it'll show a
+    helpful error message.
+    '''
     def __len__(self):
         length = self.length
         if (length <= sys.maxsize) and isinstance(length, int):

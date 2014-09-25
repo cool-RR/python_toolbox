@@ -30,7 +30,6 @@ from python_toolbox import misc_tools
 infinity = float('inf')
 
 
-
 class PermSpaceType(abc.ABCMeta):
     '''
     Metaclass for `PermSpace` and `CombSpace`.
@@ -82,41 +81,44 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
     by index number any permutation of the 10**2500 permutations in a fraction
     of a second as well.
     
-    Instead of a number, you can also pass a sequence as the first argument,
-    and the `PermSpace` will use that rather than `range`.
-    
-    You may pass a sequence as the `domain` argument, and it'll be used as the
-    indices for the permutations. (i.e., if the permutations are seen as a
-    function, `domain` is the domain of the function.)
-    
-    You may pass a number as `n_elements` in order to make a partial
-    permutation space. That number must be smaller than the size of the
-    sequence, and every permutation will have only that number of items. This
-    means that permutations will not use all the items in `sequence` but just
-    some of them.
-    
-    You may pass in a `dict` for the argument `fixed_map` that'll map between
-    indices and values that should remain fixed in the permutation space. Only
-    the non-fixed items will be allowed to change between permutations.
-    
-    You may pass in a list of integers as `degrees`, and then only permutations
-    with those degrees will be included in the space. (A degree of a
-    permutation stands for that number of transformations (single switches
-    between items) that are needed to create that permutation. )
-    
-    A permutation space can be sliced by using regular Python slice notation.
+    There are several variations that a perm space could have:
+     - Rapplied (Range-applied): having an arbitrary sequence as a range.
+       To make one, pass your sequence as the first argument.
+     - Dapplied (Domain-applied): having an arbitrary sequence as a domain.
+       To make one, pass a sequence into the `domain` argument.
+     - Fixed: Having a specified number of indices always pointing at certain
+       values, making the space smaller. To make one, pass a dict from each
+       key to the value it should be fixed to as the argument `fixed_map`.
+     - Sliced: A perm space can be sliced like any Python sequence (except you
+       can't change the step.) To make one, use slice notation on an existing
+       perm space, e.g. perm_space[56:100]
+     - Degreed: A perm space can be limited to perms of a certain degree. (A
+       perm's degree is the number of transformations it takes to make it.)
+       To make one, pass into the `degrees` argument either a single degree
+       (like `5`) or a tuple of different degrees (like `(1, 3, 7)`)
+     - Partial: A perm space can be partial, in which case not all elements
+       are used in perms. E.g. you can have a perm space of a sequence of
+       length 5 but with `n_elements=3`, so every perm will have only 3 items.
+       To make one, pass a number as the argument `n_elements`.
+     - Combination: If you pass in `is_combination=True` or use the subclass
+       `CombSpace`, then you'll have a space of combinations (combs) instead of
+       perms. Combs are like perms except there's no order to the elements.
     
     Note: Some of the options are not allowed to be used with each other.
     
-    Some clarification  on terminology <blocktododoc> rapplied, dapplied "just" etc.
+    For each of these variations, there's a function to make a perm space have
+    that variation and get rid of it. For example, if you want to make a normal
+    perm space be degreed, call `.get_degreed()` on it with the desired
+    degrees. If you want to make a degreed perm space non-degreed, access its
+    `.undegreed` property. The same is true for all other variations.
+    
+    A perm space that has none of these variations is called pure.
     '''
     __metaclass__ = PermSpaceType
     
     @classmethod
     def coerce(cls, argument):
-        '''
-        Make `argument` into something of class `cls`, if it isn't already.
-        '''
+        '''Make `argument` into something of class `cls` if it isn't.'''
         if isinstance(argument, PermSpace):
             return argument
         else:
@@ -148,23 +150,13 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
         #                                                                     #
         if isinstance(iterable_or_length, numbers.Integral):
             self.is_rapplied = False
-            self.sequence = sequence_tools.CuteRange(
-                iterable_or_length,
-                _avoid_built_in_range=True
-            )
-            # (Avoiding built-in `xrange` in Python 2 because it lacks
-            # `.index`.)
+            self.sequence = sequence_tools.CuteRange(iterable_or_length)
             self.sequence_length = iterable_or_length
         else:
             assert isinstance(iterable_or_length, collections.Iterable)
             self.sequence = sequence_tools. \
                       ensure_iterable_is_immutable_sequence(iterable_or_length)
-            range_candidate = sequence_tools.CuteRange(
-                len(self.sequence),
-                _avoid_built_in_range=True
-            )
-            # (Avoiding built-in `xrange` in Python 2 because it lacks
-            # `.index`.)
+            range_candidate = sequence_tools.CuteRange(len(self.sequence))
             
             self.is_rapplied = not (
                 cute_iter_tools.are_equal(self.sequence,
@@ -172,12 +164,7 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
             )
             self.sequence_length = len(self.sequence)
             if not self.is_rapplied:
-                self.sequence = sequence_tools.CuteRange(
-                    self.sequence_length,
-                    _avoid_built_in_range=True
-                )
-                # (Avoiding built-in `xrange` in Python 2 because it lacks
-                # `.index`.)
+                self.sequence = sequence_tools.CuteRange(self.sequence_length)
                 
         
         if self.is_rapplied and (len(set(self.sequence)) < len(self.sequence)):
@@ -197,9 +184,7 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
                                                           self.sequence_length)
         self.is_partial = (self.n_elements < self.sequence_length)
         
-        self.indices = sequence_tools.CuteRange(self.n_elements,
-                                                _avoid_built_in_range=True)
-        # Avoiding built-in xrange because on Python 2 it don't have `index`.
+        self.indices = sequence_tools.CuteRange(self.n_elements)
         
         #                                                                     #
         ### Finished figuring out number of elements. #########################
@@ -382,7 +367,10 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
         else:
             return self.fixed_map
         
-    _just_fixed = caching.CachedProperty(lambda self: self._get_just_fixed())
+    _just_fixed = caching.CachedProperty(
+        lambda self: self._get_just_fixed(),
+        """A version of this perm space without any variations except fixed."""
+    )
     
     def _get_just_fixed(self):
         # This gets overridden in `__init__`.
@@ -517,7 +505,8 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
                 
                 
     n_unused_elements = caching.CachedProperty(
-        lambda self: self.sequence_length - self.n_elements
+        lambda self: self.sequence_length - self.n_elements,
+        '''In partial perm spaces, number of elements that aren't used.'''
     )
     
     __iter__ = lambda self: (self[i] for i in
@@ -622,7 +611,7 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
     
     short_length_string = caching.CachedProperty(
         lambda self: misc.get_short_factorial_string(self.sequence_length),
-        doc='Short string describing size of space, e.g. "12!"'
+        doc='''Short string describing size of space, e.g. "12!"'''
     )
     
     undapplied = caching.CachedProperty(
@@ -631,7 +620,7 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
             degrees=self.degrees, slice_=self.canonical_slice,
             n_elements=self.n_elements, is_combination=self.is_combination
         ),
-        doc='A version of this `PermSpace` without a custom domain.'
+        doc='''A version of this `PermSpace` without a custom domain.'''
     )
     unrapplied = caching.CachedProperty(
         lambda self: PermSpace(
@@ -641,7 +630,7 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
             degrees=self.degrees, slice_=self.canonical_slice,
             n_elements=self.n_elements, is_combination=self.is_combination
         ),
-        doc='A version of this `PermSpace` without a custom range.'
+        doc='''A version of this `PermSpace` without a custom range.'''
     )
     @caching.CachedProperty
     def unpartialled(self):
@@ -672,16 +661,16 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
             n_elements=self.n_elements, is_combination=self.is_combination, 
             degrees=self.degrees, slice_=None
         ),
-        doc='An unsliced version of this `PermSpace`.'
+        doc='''An unsliced version of this `PermSpace`.'''
     )
     purified = caching.CachedProperty(
         lambda self: PermSpace(len(self.sequence)),
-        doc='An purified version of this `PermSpace`.'
+        doc='''An purified version of this `PermSpace`.'''
     )
     _just_dapplied_rapplied = caching.CachedProperty(
         lambda self: self.purified.get_dapplied(self.domain). \
                                                    get_rapplied(self.sequence),
-        doc='Purified, but dapplied and rapplied, version of this `PermSpace`.'
+        doc='''This perm space purified but dapplied and rapplied.'''
     )
     
     @caching.CachedProperty
@@ -740,11 +729,9 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
         )
         
         
-    
-
     @caching.CachedProperty
     def undegreed(self):
-        '''Get an undegreed version of this `PermSpace`.'''
+        '''An undegreed version of this `PermSpace`.'''
         if self.is_sliced:
             raise Exception("Can't be used on sliced perm spaces. Try "
                             "`perm_space.unsliced.undegreed`.")
@@ -865,19 +852,18 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
     free_indices = caching.CachedProperty(
         lambda self: tuple(item for item in range(self.sequence_length)
                            if item not in self._undapplied_fixed_map.keys()),
-        doc='Integer indices of items that can change between permutations.'
+        doc='''Integer indices of free items.'''
     )
     free_keys = caching.CachedProperty(
         lambda self: tuple(item for item in self.domain
                            if item not in self.fixed_map.keys()),
-        doc='Indices (possibly from domain) of items that can change between '
-             'permutations.'
+        doc='''Indices (possibly from domain) of free items.'''
         
     )
     free_values = caching.CachedProperty(
         lambda self: tuple(item for item in self.sequence
                            if item not in self.fixed_map.values()), 
-        doc='Items that can change between permutations.'
+        doc='''Items that can change between permutations.'''
     )
     
     
