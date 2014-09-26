@@ -60,16 +60,27 @@ def abs_stirling(n, k):
 
 _shitfuck_cache = {}
 
-def shitfuck(k, recurrences):
+def get_sub_counters(counter):
+    assert isinstance(counter, nifty_collections.FrozenCounter)
+    return {
+        nifty_collections.FrozenCounter(
+            {key: (value - (key == key_to_reduce)) for key, value in self.items()}
+        ) for key_to_reduce in self
+    }
+    
+
+def shitfuck(k, recurrence_counter):
     from python_toolbox import nifty_collections
-    assert isinstance(recurrences, nifty_collections.FrozenCounter)
-    levels = [collections.Counter({recurrences: 1})]
-    while len(levels) < k and any(((k - len(levels) + 1), recurrences)
+    assert isinstance(recurrence_counter, nifty_collections.FrozenCounter)
+    levels = []
+    current_reccurence_counters = {recurrence_counter}
+    while len(levels) < k and any(((k - len(levels) + 1), recurrence_counter)
                                    not in _shitfuck_cache for x in levels[-1]):
-        new_level = collections.Counter()
-        for recurrences_, factor in levels[-1].items():
-            for smaller_recurrences in recurrences_.counters_with_one_removed:
-                new_level[(k - len(levels), smaller_recurrences)] += factor
+        new_level = {}
+        for recurrence_counter_ in current_reccurence_counters:
+            new_level[recurrence_counter_] = 
+            for smaller_recurrence_counter in recurrence_counter_.counters_with_one_removed:
+                new_level[(k - len(levels), smaller_recurrence_counter)] += factor
         levels.append(new_level)
     # The last level is calculated. Time to make our way up.
     if len(levels) == k:

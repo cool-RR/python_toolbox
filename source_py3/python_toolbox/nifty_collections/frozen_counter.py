@@ -205,13 +205,3 @@ class FrozenCounter(FrozenDict):
                 result[element] = new_count
         return FrozenCounter(result)
 
-    @caching.CachedProperty
-    @LazyTuple.factory()
-    def counters_with_one_removed(self):
-        for key_to_reduce in self.keys():
-            return type(self)(
-                {key: (value - (key == key_to_reduce)) for key, value
-                                                               in self.items()}
-            )
-        
-        
