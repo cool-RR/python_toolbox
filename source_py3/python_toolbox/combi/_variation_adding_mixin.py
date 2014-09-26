@@ -67,6 +67,23 @@ class _VariationAddingMixin:
             n_elements=self.n_elements, is_combination=self.is_combination
         )
     
+    def get_fixed(self, fixed_map):
+        '''Get a fixed version of this `PermSpace`.'''
+        if self.is_sliced:
+            raise Exception("Can't be used on sliced perm spaces. Try "
+                            "`perm_space.unsliced.get_fixed(...)`.")
+        combined_fixed_map = dict(self.fixed_map)
+        for key, value in fixed_map.items():
+            if key in self.fixed_map:
+                assert self.fixed_map[key] == value
+            combined_fixed_map[key] = value
+            
+        return PermSpace(
+            self.sequence, domain=self.domain, fixed_map=combined_fixed_map,
+            degrees=self.degrees, slice_=None,
+            n_elements=self.n_elements, is_combination=self.is_combination
+        )
+    
     def get_degreed(self, degrees):
         '''Get a degreed version of this `PermSpace`.'''
         if self.is_sliced:
@@ -84,20 +101,6 @@ class _VariationAddingMixin:
             is_combination=self.is_combination
         )
     
-    def get_fixed(self, fixed_map):
-        '''Get a fixed version of this `PermSpace`.'''
-        if self.is_sliced:
-            raise Exception("Can't be used on sliced perm spaces. Try "
-                            "`perm_space.unsliced.get_fixed(...)`.")
-        combined_fixed_map = dict(self.fixed_map)
-        for key, value in fixed_map.items():
-            if key in self.fixed_map:
-                assert self.fixed_map[key] == value
-            combined_fixed_map[key] = value
-            
-        return PermSpace(
-            self.sequence, domain=self.domain, fixed_map=combined_fixed_map,
-            degrees=self.degrees, slice_=None,
-            n_elements=self.n_elements, is_combination=self.is_combination
-        )
+    # There's no `get_sliced` because slicing is done using Python's normal
+    # slice notation, e.g. perm_space[4:-7].
     
