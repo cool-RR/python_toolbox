@@ -90,11 +90,9 @@ def shitfuck(k, recurrence_counter):
     # The last level is calculated. Time to make our way up.
     for k_, level in enumerate(reversed(levels), (k - len(levels) + 1)):
         if k_ == 1:
-            continue
-        elif k_ == 2:
             for recurrence_counter_, sub_counters_counter in level.items():
                 _shitfuck_cache[(k_, recurrence_counter_)] = \
-                                                sub_counters_counter.n_elements
+                                                       len(recurrence_counter_)
         else:
             for recurrence_counter_, sub_counters_counter in level.items():
                 _shitfuck_cache[(k_, recurrence_counter_)] = sum(
