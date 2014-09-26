@@ -10,7 +10,7 @@ from .frozen_counter import FrozenCounter
 
 class FrozenCrateCounter(FrozenCounter):
     '''
-    blocktododoc do entire crate metaphor with drawings
+    blocktododoc do entire crate metaphor with drawings. say that crates of the same pile are identical.
     '''
     def __init__(self, iterable):
         super().__init__(iterable)
@@ -34,14 +34,18 @@ class FrozenCrateCounter(FrozenCounter):
                                                          value_of_key_to_reduce
         return FrozenCounter(sub_counters_counter)
             
-    def get_sub_counters_for_one_crate_removed_and_previous_crates_destroed(
-                                                                         self):
-        sub_counters_counter = collections.Counter()
-        for key_to_reduce, value_of_key_to_reduce in self.items():
+    def get_sub_counters_for_one_crate_and_previous_piles_removed(self):
+        sub_counters = []
+        d = {}
+        # sorted_items = sorted(self.items())
+        for key_to_reduce, value_of_key_to_reduce in \
+                                                reversed(sorted(self.items())):
+            d[key_to_reduce] = value_of_key_to_reduce - 1
+
             sub_counter = collections.Counter(self)
             sub_counter[key_to_reduce] -= 1
             sub_counter[key_to_reduce - 1] += 1
             sub_counters_counter[FrozenCrateCounter(sub_counter)] = \
                                                          value_of_key_to_reduce
-        return FrozenCounter(sub_counters_counter)
+        return tuple(sub_counters)
             
