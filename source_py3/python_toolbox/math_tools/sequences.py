@@ -78,10 +78,11 @@ def shitfuck(k, recurrence_counter):
     levels = []
     current_reccurence_counters = {recurrence_counter}
     while len(levels) < k and current_reccurence_counters:
+        k_ = k - len(levels)
         levels.append(
             {recurrence_counter_: recurrence_counter_.get_sub_counters_counter()
              for recurrence_counter_ in current_reccurence_counters
-                                  if recurrence_counter_ not in _shitfuck_cache
+                            if (k_, recurrence_counter_) not in _shitfuck_cache
         })
         current_reccurence_counters = \
                                      set(itertools.chain(*levels[-1].values()))
@@ -91,8 +92,7 @@ def shitfuck(k, recurrence_counter):
         if k_ == 1:
             continue
         elif k_ == 2:
-            for recurrence_counter_, sub_counters_counter in \
-                                                          levels.pop().items():
+            for recurrence_counter_, sub_counters_counter in level.items():
                 _shitfuck_cache[(k_, recurrence_counter_)] = \
                                                 sub_counters_counter.n_elements
         else:
