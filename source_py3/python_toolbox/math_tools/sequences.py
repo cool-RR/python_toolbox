@@ -92,7 +92,7 @@ def shitfuck(k, recurrence_counter):
         if k_ == 1:
             for recurrence_counter_, sub_counters_counter in level.items():
                 _shitfuck_cache[(k_, recurrence_counter_)] = \
-                                                       len(recurrence_counter_)
+                                                 recurrence_counter_.n_elements
         else:
             for recurrence_counter_, sub_counters_counter in level.items():
                 _shitfuck_cache[(k_, recurrence_counter_)] = sum(
