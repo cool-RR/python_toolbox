@@ -4,10 +4,14 @@ from python_toolbox import caching
 
 
 class _VariationRemovingMixin:
+    
     purified = caching.CachedProperty(
         lambda self: PermSpace(len(self.sequence)),
         doc='''An purified version of this `PermSpace`.'''
     )
+    
+    ###########################################################################
+    
     unrapplied = caching.CachedProperty(
         lambda self: PermSpace(
             self.sequence_length, domain=self.domain, 
