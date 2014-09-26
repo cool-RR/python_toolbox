@@ -22,10 +22,8 @@ class _VariationRemovingMixin:
         ),
         doc='''A version of this `PermSpace` without a custom range.'''
     )
-    unreccurented = caching.CachedProperty(
-        lambda self: 1 / 0, # blocktodo
-        doc='''A non-recurrent version of this `PermSpace`.'''
-    )
+    # There's no `.unrecurrented`; if you want to make a perm space
+    # non-recurrented, use `.unrapplied`.
 
     @caching.CachedProperty
     def unpartialled(self):

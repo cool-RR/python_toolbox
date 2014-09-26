@@ -20,8 +20,9 @@ class _VariationAddingMixin:
             n_elements=self.n_elements, is_combination=self.is_combination
         )
     
-    # There's no `get_recurrented` because it wouldn't make sense :) You'd need
-    # to use `get_rapplied` and set a recurrent sequence.
+    # There's no `.get_recurrented` because we can't know which sequence you'd
+    # want. If you want a recurrent perm space you need to use `.get_rapplied`
+    # with a recurrent sequence.
     
     def get_partialled(self, n_elements):
         '''Get a partialled version of this `PermSpace`.'''
@@ -92,6 +93,7 @@ class _VariationAddingMixin:
                             "`perm_space.unsliced.get_degreed(...)`.")
         if self.is_combination:
             raise Exception("Can't use degrees with combination spaces.")
+        degrees = sequence_tools.to_tuple(degrees, item_type=int)
         if not degrees:
             return self
         degrees_to_use = \

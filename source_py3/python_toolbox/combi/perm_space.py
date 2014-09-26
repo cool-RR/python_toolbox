@@ -30,6 +30,12 @@ from ._fixed_map_managing_mixin import _FixedMapManagingMixin
 infinity = float('inf')
 
 
+class UnsupportedVariationCombinationException(Exception):
+    '''blocktodo use everywhere
+    let it take variations
+    make variation classes mostly for this and testing'''
+        
+
 class PermSpaceType(abc.ABCMeta):
     '''
     Metaclass for `PermSpace` and `CombSpace`.
@@ -321,7 +327,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             self._unsliced_length = self._unsliced_undegreed_length
         else:
             self.is_degreed = True
-            if self.is_combination or self.is_partial:
+            if self.is_combination or self.is_partial or self.is_recurrent:
                 raise NotImplementedError
             self.degrees = tuple(
                 degree for degree in degrees if degree in all_degrees
