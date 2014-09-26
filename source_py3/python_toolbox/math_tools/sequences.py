@@ -68,7 +68,7 @@ def get_sub_counters_counter(counter):
             {key: (value - (key == key_to_reduce)) for
                                                  key, value in counter.items()}
         ): value_of_key_to_reduce
-                           for key_to_reduce, value_of_key_to_reduce in counter
+                   for key_to_reduce, value_of_key_to_reduce in counter.items()
     })
     
 
