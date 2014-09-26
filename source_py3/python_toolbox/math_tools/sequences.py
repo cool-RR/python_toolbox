@@ -112,6 +112,9 @@ def shitfuck(k, recurrence_counter):
 _catshit_cache = {}
 
 def catshit(k, recurrence_counter):
+    '''
+    blocktodo gotta properly name these two sons of bitches
+    '''
     from python_toolbox import nifty_collections
     from python_toolbox import cute_iter_tools
     if not isinstance(recurrence_counter, nifty_collections.FrozenCrateCounter):
