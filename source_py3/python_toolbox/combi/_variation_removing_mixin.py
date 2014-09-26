@@ -122,3 +122,9 @@ class _VariationRemovingMixin:
         raise RuntimeError
         
       
+    _just_dapplied_rapplied = caching.CachedProperty(
+        lambda self: self.purified.get_dapplied(self.domain). \
+                                                   get_rapplied(self.sequence),
+        doc='''This perm space purified but dapplied and rapplied.'''
+    )
+        
