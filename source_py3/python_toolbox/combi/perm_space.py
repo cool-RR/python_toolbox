@@ -10,20 +10,19 @@ import math
 import numbers
 
 from python_toolbox import misc_tools
-from python_toolbox import dict_tools
 from python_toolbox import nifty_collections
 from python_toolbox import sequence_tools
 from python_toolbox import caching
 import python_toolbox.arguments_profiling
-
 from python_toolbox import math_tools
 from python_toolbox import sequence_tools
 from python_toolbox import cute_iter_tools
 from python_toolbox import nifty_collections
 from python_toolbox import dict_tools
+from python_toolbox.third_party import sortedcontainers
+from python_toolbox import misc_tools
 
 from . import misc
-from python_toolbox import misc_tools
 
 infinity = float('inf')
 
@@ -165,7 +164,14 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
                 self.sequence = sequence_tools.CuteRange(self.sequence_length)
                 
         
-        if self.is_rapplied and (len(set(self.sequence)) < len(self.sequence)):
+        if self.is_rapplied:
+            self.repeating_elements = sortedcontainers.SortedDict()
+            sequence_set = set()
+            for item in self.sequence:
+                if item in sequence_set:
+                    
+                    self.repeating_elements.setdefault(item,)
+                sequence_set.add(item)
             # Can implement this later by calculating the actual length.
             raise NotImplementedError
         
@@ -501,6 +507,10 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
             else:
                 return self.perm_type(i, self)
                 
+                
+    enumerated_sequence = caching.CachedProperty(
+        lambda self: tuple(enumerate(self.sequence))
+    )
                 
     n_unused_elements = caching.CachedProperty(
         lambda self: self.sequence_length - self.n_elements,
