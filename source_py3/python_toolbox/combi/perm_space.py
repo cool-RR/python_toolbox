@@ -167,16 +167,15 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
         #                                                                     #
         ### Finished figuring out sequence and whether space is rapplied. #####
         
-        self.repeating_items = sortedcontainers.SortedDict()
+        ### Figuring out whether sequence is recurrent: #######################
+        #                                                                     #
         if self.is_rapplied:
-            sequence_set = set(self.sequence)
-            for i, item in enumerate(self.sequence):
-                if item in sequence_set:
-                    if item not in self.repeating_items:
-                        self.repeating_items[item] = \
-                                                   sortedcontainers.SortedSet()
-                    self.repeating_items[item].add(i)
-        self.is_recurrent = bool(self.repeating_items)
+            self._sequence_counteroid
+            # Sets `.is_recurrent` as a side-effect.
+        else:
+            self.is_recurrent = bool(self.repeating_items)
+        #                                                                     #
+        ### Finished figuring out whether sequence is recurrent. ##############
         
         ### Figuring out number of elements: ##################################
         #                                                                     #
@@ -201,16 +200,28 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
             if fixed_map:
                 raise NotImplementedError
         
-        self._just_partialled_combinationed_length = \
-            math_tools.factorial(
-                self.sequence_length,
-                start=(self.sequence_length - self.n_elements + 1)
-            ) // (math_tools.factorial(self.n_elements) if
-                                                    self.is_combination else 1)
-        # This division is always without a remainder, because math.
         #                                                                     #
         ### Finished figuring out whether it's a combination. #################
         
+        ### Doing interim calculation of the length: ##########################
+        #                                                                     #
+        # The length calculated here will be true only for perm spaces that
+        # don't have any additional complications.
+        if self.is_recurrent:
+            function_to_use = math_tools.catshit if self.is_combination else \
+                                                            math_tools.shitfuck
+            self._just_recurrented_partialled_combinationed_length = \
+                    function_to_use(self.n_elements, self._sequence_counteroid)
+        else:
+            self._just_recurrented_partialled_combinationed_length = \
+                math_tools.factorial(
+                    self.sequence_length,
+                    start=(self.sequence_length - self.n_elements + 1)
+                ) // (math_tools.factorial(self.n_elements) if
+                                                        self.is_combination else 1)
+            # This division is always without a remainder, because math.
+        #                                                                     #
+        ### Finished doing interim calculation of the length. #################
         
         ### Figuring out whether space is dapplied: ###########################
         #                                                                     #
@@ -276,7 +287,7 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
                 )
         else:
             self._unsliced_undegreed_length = \
-                                     self._just_partialled_combinationed_length
+                                     self._just_recurrented_partialled_combinationed_length
             if not (self.is_dapplied or self.is_rapplied or degrees or slice_
                     or (n_elements is not None) or self.is_combination):
                 self._just_fixed = self
@@ -355,6 +366,9 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
         if not self.is_combination:
             self.uncombinationed = self
             
+            
+    is_recurrent = None
+    
     @caching.CachedProperty
     def _undapplied_fixed_map(self):
         if self.is_dapplied:
@@ -362,6 +376,22 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
                     in self.fixed_map.items()}
         else:
             return self.fixed_map
+            
+    @caching.CachedProperty
+    def _sequence_counteroid(self):
+        _sequence_counteroid = collections.OrderedDict()
+        is_recurrent = False # Until challenged
+        for item in self.sequence:
+            if item not in _sequence_counteroid:
+                _sequence_counteroid[item] = 0
+            else:
+                is_recurrent = True
+            _sequence_counteroid[item] += 1
+        if self.is_recurrent is None:
+            self.is_recurrent = is_recurrent
+        else:
+            assert self.is_recurrent == is_recurrent
+        return _sequence_counteroid
             
     @caching.CachedProperty
     def _undapplied_unrapplied_fixed_map(self):

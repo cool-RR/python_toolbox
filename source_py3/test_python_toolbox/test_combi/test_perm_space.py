@@ -516,3 +516,10 @@ def test_neighbors():
     assert len(first_level_neighbors) + 1 == len(perm.get_neighbors((0, 1)))
     
     
+def test_recurrent():
+    recurrent_perm_space = PermSpace('abbccddd', n_elements=3)
+    assert recurrent_perm_space.is_recurrent
+    assert recurrent_perm_space.is_partial
+    assert recurrent_perm_space.length == 53
+    assert recurrent_perm_space.combinationed.length == 14
+    
