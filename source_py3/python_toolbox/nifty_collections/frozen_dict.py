@@ -40,6 +40,6 @@ class FrozenDict(collections.Mapping):
     
     __repr__ = lambda self: '%s(%s)' % (type(self).__name__,
                                         repr(self._dict))
-    __reduce__ = lambda self: (self.__class__, self._dict)
+    __reduce__ = lambda self: (self.__class__ , (self._dict,))
 
     
