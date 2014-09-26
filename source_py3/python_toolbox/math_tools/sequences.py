@@ -3,7 +3,7 @@
 
 import numbers
 import collections
-
+import itertools
 
 infinity = float('inf')
 
@@ -60,29 +60,60 @@ def abs_stirling(n, k):
 
 _shitfuck_cache = {}
 
-def get_sub_counters(counter):
+def get_sub_counters_counter(counter):
+    from python_toolbox import nifty_collections
     assert isinstance(counter, nifty_collections.FrozenCounter)
-    return {
+    return nifty_collections.FrozenCounter({
         nifty_collections.FrozenCounter(
-            {key: (value - (key == key_to_reduce)) for key, value in self.items()}
-        ) for key_to_reduce in self
-    }
+            {key: (value - (key == key_to_reduce)) for
+                                                 key, value in counter.items()}
+        ): value_of_key_to_reduce
+                           for key_to_reduce, value_of_key_to_reduce in counter
+    })
     
 
 def shitfuck(k, recurrence_counter):
     from python_toolbox import nifty_collections
-    assert isinstance(recurrence_counter, nifty_collections.FrozenCounter)
+    from python_toolbox import cute_iter_tools
+    if not isinstance(recurrence_counter, nifty_collections.FrozenCounter):
+        recurrence_counter = \
+                            nifty_collections.FrozenCounter(recurrence_counter)
+    if k == 1:
+        assert recurrence_counter # Works because `FrozenCounter` implements
+                                  # `__bool__`.
+        return 1
+    try:
+        return _shitfuck_cache[(k, recurrence_counter)]
+    except KeyError:
+        pass
+    
     levels = []
     current_reccurence_counters = {recurrence_counter}
-    while len(levels) < k and any(((k - len(levels) + 1), recurrence_counter)
-                                   not in _shitfuck_cache for x in levels[-1]):
-        new_level = {}
-        for recurrence_counter_ in current_reccurence_counters:
-            new_level[recurrence_counter_] = 
-            for smaller_recurrence_counter in recurrence_counter_.counters_with_one_removed:
-                new_level[(k - len(levels), smaller_recurrence_counter)] += factor
-        levels.append(new_level)
-    # The last level is calculated. Time to make our way up.
-    if len(levels) == k:
+    while len(levels) < k and current_reccurence_counters:
+        levels.append(
+            {recurrence_counter_: get_sub_counters_counter(recurrence_counter_)
+             for recurrence_counter_ in current_reccurence_counters
+                                  if recurrence_counter_ not in _shitfuck_cache
+        })
+        current_reccurence_counters = set(itertools.chain(levels[-1].values()))
         
+    # The last level is calculated. Time to make our way up.
+    for k_, level in enumerate(reversed(levels), (k - len(levels) + 1)):
+        if k_ == 1:
+            continue
+        elif k_ == 2:
+            for recurrence_counter_, sub_counters_counter in \
+                                                          levels.pop().items():
+                _shitfuck_cache[(k_, recurrence_counter_)] = \
+                                                sub_counters_counter.n_elements
+        else:
+            for recurrence_counter_, sub_counters_counter in level.items():
+                _shitfuck_cache[(k_, recurrence_counter_)] = sum(
+                    (_shitfuck_cache[(k_ - 1, sub_counter)] * factor for
+                                   sub_counter, factor in sub_counters_counter)
+                )
+    
+    return _shitfuck_cache[(k, recurrence_counter)]
+        
+    
             

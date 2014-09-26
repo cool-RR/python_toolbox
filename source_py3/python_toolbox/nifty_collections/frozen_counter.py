@@ -6,8 +6,6 @@ import heapq
 import itertools
 import collections
 
-from python_toolbox import caching
-
 from .lazy_tuple import LazyTuple
 from .frozen_dict import FrozenDict
 
@@ -205,3 +203,9 @@ class FrozenCounter(FrozenDict):
                 result[element] = new_count
         return FrozenCounter(result)
 
+
+    __bool__ = lambda self: any(True for element in self.elements())
+    
+    n_elements = property( # blocktodo: want to make this cached but import loop
+        lambda self: sum(value for value in values if value >= 1)
+    )
