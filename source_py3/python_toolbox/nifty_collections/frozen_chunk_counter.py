@@ -1,6 +1,8 @@
 # Copyright 2009-2014 Ram Rachum.,
 # This program is distributed under the MIT license.
 
+import collections
+
 from python_toolbox import math_tools
 
 from .frozen_counter import FrozenCounter
@@ -18,3 +20,14 @@ class FrozenChunkCounter(FrozenCounter):
             else:
                 raise TypeError('Keys to `FrozenChunkCounter` must be '
                                 'non-negative integers.')
+            
+    def get_sub_counters_counter(self):
+        sub_counters_counter = collections.Counter()
+        for key_to_reduce, value_of_key_to_reduce in sub_counter.items():
+            sub_counter = collections.Counter(sub_counter)
+            sub_counter[key_to_reduce] -= 1
+            sub_counter[key_to_reduce - 1] += 1
+            sub_counters_counter[FrozenChunkCounter(sub_counter)] = \
+                                                         value_of_key_to_reduce
+        return FrozenCounter(sub_counters_counter)
+            

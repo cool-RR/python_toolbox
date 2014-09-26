@@ -60,22 +60,6 @@ def abs_stirling(n, k):
 
 _shitfuck_cache = {}
 
-def get_sub_counters_counter(counter):
-    from python_toolbox import nifty_collections
-    assert isinstance(counter, nifty_collections.FrozenCounter)
-    # d = {}
-    # for key_to_reduce, value_of_key_to_reduce in counter.items():
-        
-        # pass
-    return nifty_collections.FrozenCounter({
-        nifty_collections.FrozenCounter(
-            {(key - (key == key_to_reduce)): value for
-                                                 key, value in counter.items()}
-        ): value_of_key_to_reduce
-                   
-    })
-    
-
 def shitfuck(k, recurrence_counter):
     from python_toolbox import nifty_collections
     from python_toolbox import cute_iter_tools
