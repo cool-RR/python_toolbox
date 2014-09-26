@@ -10,6 +10,9 @@ infinity = float('inf')
 _stirling_caches = []
 _n_highest_cache_completed = -1
 def stirling(n, k, skip_calculation=False):
+    '''
+    blocktododoc specify first or second kind
+    '''
     global _n_highest_cache_completed
     if k not in range(n + 1):
         return 0
