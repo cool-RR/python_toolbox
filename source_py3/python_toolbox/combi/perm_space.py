@@ -97,7 +97,8 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
      - Partial: A perm space can be partial, in which case not all elements
        are used in perms. E.g. you can have a perm space of a sequence of
        length 5 but with `n_elements=3`, so every perm will have only 3 items.
-       To make one, pass a number as the argument `n_elements`.
+       (These are usually called "k-permutations" in math-land.) To make one,
+       pass a number as the argument `n_elements`.
      - Combination: If you pass in `is_combination=True` or use the subclass
        `CombSpace`, then you'll have a space of combinations (combs) instead of
        perms. Combs are like perms except there's no order to the elements.
@@ -162,21 +163,20 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
             self.sequence_length = len(self.sequence)
             if not self.is_rapplied:
                 self.sequence = sequence_tools.CuteRange(self.sequence_length)
-                
-        
-        if self.is_rapplied:
-            self.repeating_elements = sortedcontainers.SortedDict()
-            sequence_set = set()
-            for item in self.sequence:
-                if item in sequence_set:
-                    
-                    self.repeating_elements.setdefault(item,)
-                sequence_set.add(item)
-            # Can implement this later by calculating the actual length.
-            raise NotImplementedError
         
         #                                                                     #
         ### Finished figuring out sequence and whether space is rapplied. #####
+        
+        self.repeating_items = sortedcontainers.SortedDict()
+        if self.is_rapplied:
+            sequence_set = set(self.sequence)
+            for i, item in enumerate(self.sequence):
+                if item in sequence_set:
+                    if item not in self.repeating_items:
+                        self.repeating_items[item] = \
+                                                   sortedcontainers.SortedSet()
+                    self.repeating_items[item].add(i)
+        self.is_recurrent = bool(self.repeating_items)
         
         ### Figuring out number of elements: ##################################
         #                                                                     #
