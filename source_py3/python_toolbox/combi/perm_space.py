@@ -291,7 +291,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 )
         else:
             self._unsliced_undegreed_length = \
-                                     self._just_recurrented_partialled_combinationed_length
+                         self._just_recurrented_partialled_combinationed_length
             if not (self.is_dapplied or self.is_rapplied or degrees or slice_
                     or (n_elements is not None) or self.is_combination):
                 self._just_fixed = self
