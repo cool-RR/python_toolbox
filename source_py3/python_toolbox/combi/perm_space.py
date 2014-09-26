@@ -23,6 +23,7 @@ from python_toolbox.third_party import sortedcontainers
 from python_toolbox import misc_tools
 
 from . import misc
+from ._variation_removing_mixin import _VariationRemovingMixin
 
 infinity = float('inf')
 
@@ -54,8 +55,8 @@ class PermSpaceType(abc.ABCMeta):
         
         
 @functools.total_ordering
-class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
-                metaclass=PermSpaceType):
+class PermSpace(_VariationRemovingMixin, sequence_tools.CuteSequenceMixin,
+                collections.Sequence, metaclass=PermSpaceType):
     '''
     A space of permutations on a sequence.
     
@@ -167,6 +168,31 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
         #                                                                     #
         ### Finished figuring out sequence and whether space is rapplied. #####
         
+        ### Figuring out whether sequence is recurrent: #######################
+        #                                                                     #
+        if self.is_rapplied:
+            self._sequence_counteroid
+            # Sets `.is_recurrent` as a side-effect.
+        else:
+            self.is_recurrent = False
+        #                                                                     #
+        ### Finished figuring out whether sequence is recurrent. ##############
+        
+        ### Figuring out number of elements: ##################################
+        #                                                                     #
+        
+        self.n_elements = self.sequence_length if (n_elements is None) \
+                                                                else n_elements
+        if not 0 <= self.n_elements <= self.sequence_length:
+            raise Exception('`n_elements` must be between 0 and %s' %
+                                                          self.sequence_length)
+        self.is_partial = (self.n_elements < self.sequence_length)
+        
+        self.indices = sequence_tools.CuteRange(self.n_elements)
+        
+        #                                                                     #
+        ### Finished figuring out number of elements. #########################
+
         ### Figuring out whether space is dapplied: ###########################
         #                                                                     #
         if domain is None:
@@ -189,31 +215,6 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
             self.undapplied = self
         #                                                                     #
         ### Finished figuring out whether space is dapplied. ##################
-        
-        ### Figuring out whether sequence is recurrent: #######################
-        #                                                                     #
-        if self.is_rapplied:
-            self._sequence_counteroid
-            # Sets `.is_recurrent` as a side-effect.
-        else:
-            self.is_recurrent = bool(self.repeating_items)
-        #                                                                     #
-        ### Finished figuring out whether sequence is recurrent. ##############
-        
-        ### Figuring out number of elements: ##################################
-        #                                                                     #
-        
-        self.n_elements = self.sequence_length if (n_elements is None) \
-                                                                else n_elements
-        if not 0 <= self.n_elements <= self.sequence_length:
-            raise Exception('`n_elements` must be between 0 and %s' %
-                                                          self.sequence_length)
-        self.is_partial = (self.n_elements < self.sequence_length)
-        
-        self.indices = sequence_tools.CuteRange(self.n_elements)
-        
-        #                                                                     #
-        ### Finished figuring out number of elements. #########################
         
         ### Figuring out whether it's a combination: ##########################
         #                                                                     #
@@ -355,62 +356,22 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
             self.purified = self
         if not self.is_rapplied:
             self.unrapplied = self
-        # No need do this for `undapplied`, it's already done above.
         if not self.is_recurrent:
             self.unrecurrented = self
         if not self.is_partial:
             self.unpartialled = self
+        # No need do this for `undapplied`, it's already done above.
         if not self.is_combination:
             self.uncombinationed = self
         if not self.is_fixed:
             self.unfixed = self
-        if not self.is_sliced:
-            self.unsliced = self
         if not self.is_degreed:
             self.undegreed = self
+        if not self.is_sliced:
+            self.unsliced = self
             
             
     is_recurrent = None
-    
-    ###########################################################################
-    ### Properties for removing a variation: ##################################
-    #                                                                         #
-    purified = caching.CachedProperty(
-        lambda self: PermSpace(len(self.sequence)),
-        doc='''An purified version of this `PermSpace`.'''
-    )
-    unreccurented = caching.CachedProperty(
-        lambda self: 1 / 0, # blocktodo
-        doc='''A non-recurrent version of this `PermSpace`.'''
-    )
-
-    @caching.CachedProperty
-    def unpartialled(self):
-        '''A non-partial version of this `PermSpace`.'''
-        assert self.is_partial # Otherwise this property would be overridden.
-        if self.is_sliced:
-            raise Exception(
-                "Can't convert sliced `PermSpace` directly to unpartialled, "
-                "because the number of items would be different. Use "
-                "`.unsliced` first."
-            )
-        if self.is_dapplied:
-            raise Exception(
-                "Can't convert a partial, dapplied `PermSpace` to "
-                "non-partialled, because we'll need to extend the domain with "
-                "more items and we don't know which to use."
-            )
-            
-        return PermSpace(
-            self.sequence, n_elements=self.sequence_length,
-            fixed_map=self.fixed_map, degrees=self.degrees,
-            slice_=self.canonical_slice, is_combination=self.is_combination
-        )
-    
-    
-    #                                                                         #
-    ### Finished properties for removing a variation. #########################
-    ###########################################################################
     
     @caching.CachedProperty
     def _undapplied_fixed_map(self):
@@ -707,53 +668,11 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
         doc='''Short string describing size of space, e.g. "12!"'''
     )
     
-    undapplied = caching.CachedProperty(
-        lambda self: PermSpace(
-            self.sequence, fixed_map=self._undapplied_fixed_map,
-            degrees=self.degrees, slice_=self.canonical_slice,
-            n_elements=self.n_elements, is_combination=self.is_combination
-        ),
-        doc='''A version of this `PermSpace` without a custom domain.'''
-    )
-    unrapplied = caching.CachedProperty(
-        lambda self: PermSpace(
-            self.sequence_length, domain=self.domain, 
-            fixed_map={key: self.sequence.index(value) for
-                       key, value in self.fixed_map.items()},
-            degrees=self.degrees, slice_=self.canonical_slice,
-            n_elements=self.n_elements, is_combination=self.is_combination
-        ),
-        doc='''A version of this `PermSpace` without a custom range.'''
-    )
-    unsliced = caching.CachedProperty(
-        lambda self: PermSpace(
-            self.sequence, domain=self.domain, fixed_map=self.fixed_map,
-            n_elements=self.n_elements, is_combination=self.is_combination, 
-            degrees=self.degrees, slice_=None
-        ),
-        doc='''An unsliced version of this `PermSpace`.'''
-    )
     _just_dapplied_rapplied = caching.CachedProperty(
         lambda self: self.purified.get_dapplied(self.domain). \
                                                    get_rapplied(self.sequence),
         doc='''This perm space purified but dapplied and rapplied.'''
     )
-    
-    @caching.CachedProperty
-    def uncombinationed(self):
-        '''A version of this `PermSpace` where permutations have order.'''
-        if self.is_sliced:
-            raise Exception(
-                "Can't convert sliced `CombSpace` directly to "
-                "uncombinationed, because the number of items would be "
-                "different. Use `.unsliced` first."
-            )
-        return PermSpace(
-            self.sequence, domain=self.domain, fixed_map=self.fixed_map,
-            degrees=self.degrees, slice_=None,
-            n_elements=self.n_elements, is_combination=False
-        )
-      
     
     @caching.CachedProperty
     def _free_values_purified_perm_space(self):
@@ -797,19 +716,6 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
         )
         
         
-    @caching.CachedProperty
-    def undegreed(self):
-        '''An undegreed version of this `PermSpace`.'''
-        if self.is_sliced:
-            raise Exception("Can't be used on sliced perm spaces. Try "
-                            "`perm_space.unsliced.undegreed`.")
-        return PermSpace(
-            self.sequence, domain=self.domain, fixed_map=self.fixed_map,
-            degrees=None, n_elements=self.n_elements,
-            is_combination=self.is_combination
-        )
-    
-
     def get_rapplied(self, sequence):
         '''Get a version of this `PermSpace` that has a range of `sequence`.'''
         assert not self.is_rapplied
@@ -873,19 +779,6 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
             degrees=self.degrees, slice_=None,
             n_elements=self.n_elements, is_combination=self.is_combination
         )
-    
-    @caching.CachedProperty
-    def unfixed(self):
-        '''An unfixed version of this `PermSpace`.'''
-        if self.is_sliced:
-            raise Exception("Can't be used on sliced perm spaces. Try "
-                            "`perm_space.unsliced.unfixed`.")
-        return PermSpace(
-            self.sequence, domain=self.domain, fixed_map=None,
-            degrees=self.degrees, n_elements=self.n_elements,
-            is_combination=self.is_combination
-        )
-    
     
     @caching.CachedProperty
     def _n_cycles_in_fixed_items_of_just_fixed(self):
@@ -964,5 +857,7 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
 
 from .perm import Perm
 
-# Must set this after-the-fact because of import loop:
+# Must set these after-the-fact because of import loop:
 PermSpace.perm_type = Perm
+from . import _variation_removing_mixin
+_variation_removing_mixin.PermSpace = PermSpace
