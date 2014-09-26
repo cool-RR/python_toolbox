@@ -103,4 +103,53 @@ def shitfuck(k, recurrence_counter):
     return _shitfuck_cache[(k, recurrence_counter)]
         
     
+
+
+###############################################################################
+
+_catshit_cache = {}
+
+def catshit(k, recurrence_counter):
+    from python_toolbox import nifty_collections
+    from python_toolbox import cute_iter_tools
+    if not isinstance(recurrence_counter, nifty_collections.FrozenChunkCounter):
+        recurrence_counter = \
+                       nifty_collections.FrozenChunkCounter(recurrence_counter)
+    if k == 1:
+        assert recurrence_counter # Works because `FrozenCounter` implements
+                                  # `__bool__`.
+        return 1
+    try:
+        return _catshit_cache[(k, recurrence_counter)]
+    except KeyError:
+        pass
+    
+    levels = []
+    current_reccurence_counters = {recurrence_counter}
+    while len(levels) < k and current_reccurence_counters:
+        k_ = k - len(levels)
+        levels.append(
+            {recurrence_counter_: recurrence_counter_.get_sub_counters_counter()
+             for recurrence_counter_ in current_reccurence_counters
+                            if (k_, recurrence_counter_) not in _catshit_cache
+        })
+        current_reccurence_counters = \
+                                     set(itertools.chain(*levels[-1].values()))
+        
+    # The last level is calculated. Time to make our way up.
+    for k_, level in enumerate(reversed(levels), (k - len(levels) + 1)):
+        if k_ == 1:
+            for recurrence_counter_, sub_counters_counter in level.items():
+                _catshit_cache[(k_, recurrence_counter_)] = \
+                                                 recurrence_counter_.n_elements
+        else:
+            for recurrence_counter_, sub_counters_counter in level.items():
+                _catshit_cache[(k_, recurrence_counter_)] = sum(
+                    (_catshit_cache[(k_ - 1, sub_counter)] * factor for
+                           sub_counter, factor in sub_counters_counter.items())
+                )
+    
+    return _catshit_cache[(k, recurrence_counter)]
+        
+    
             
