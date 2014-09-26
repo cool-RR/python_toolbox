@@ -520,6 +520,6 @@ def test_recurrent():
     recurrent_perm_space = PermSpace('abbccddd', n_elements=3)
     assert recurrent_perm_space.is_recurrent
     assert recurrent_perm_space.is_partial
-    assert recurrent_perm_space.length == 53
+    assert recurrent_perm_space.length == 52
     assert recurrent_perm_space.combinationed.length == 14
     
