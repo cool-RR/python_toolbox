@@ -1,4 +1,5 @@
 from python_toolbox import caching
+from python_toolbox import sequence_tools
 
 # (`PermSpace` exported to here from `perm_space.py` to avoid import loop.)
 
@@ -46,7 +47,7 @@ class _VariationAddingMixin:
             raise Exception("Can't use degrees with combination spaces.")
         
         return PermSpace(
-            self, self.sequence, domain=self.domain, n_elements=self.n_elements,
+            self.sequence, domain=self.domain, n_elements=self.n_elements,
             fixed_map=self.fixed_map, is_combination=True
         )
         
