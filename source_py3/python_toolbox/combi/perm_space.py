@@ -772,8 +772,10 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         
 
 from .perm import Perm
+from . import _variation_removing_mixin
+from . import _variation_adding_mixin
 
 # Must set these after-the-fact because of import loop:
 PermSpace.perm_type = Perm
-from . import _variation_removing_mixin
 _variation_removing_mixin.PermSpace = PermSpace
+_variation_adding_mixin.PermSpace = PermSpace
