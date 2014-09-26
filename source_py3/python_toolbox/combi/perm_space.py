@@ -245,7 +245,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                     self.sequence_length,
                     start=(self.sequence_length - self.n_elements + 1)
                 ) // (math_tools.factorial(self.n_elements) if
-                                                        self.is_combination else 1)
+                                                    self.is_combination else 1)
             # This division is always without a remainder, because math.
         #                                                                     #
         ### Finished doing interim calculation of the length. #################
@@ -276,6 +276,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 
         self.is_fixed = bool(self.fixed_map)
         if self.is_fixed:
+            assert not self.is_combination
+            # (Not implemented, blocked in metaclass)
             self._unsliced_undegreed_length = math_tools.factorial(
                 len(self.free_indices),
                 start=(len(self.free_indices) -
