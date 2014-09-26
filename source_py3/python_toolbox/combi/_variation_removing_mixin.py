@@ -103,3 +103,18 @@ class _VariationRemovingMixin:
         doc='''An unsliced version of this `PermSpace`.'''
     )
         
+    ###########################################################################
+    ###########################################################################
+    
+    # More exotic variation removals below:
+    
+    _just_fixed = caching.CachedProperty(
+        lambda self: self._get_just_fixed(),
+        """A version of this perm space without any variations except fixed."""
+    )
+    
+    def _get_just_fixed(self):
+        # This gets overridden in `__init__`.
+        raise RuntimeError
+        
+      

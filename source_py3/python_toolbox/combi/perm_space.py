@@ -417,16 +417,7 @@ class PermSpace(_VariationRemovingMixin, sequence_tools.CuteSequenceMixin,
         else:
             return self.fixed_map
         
-    _just_fixed = caching.CachedProperty(
-        lambda self: self._get_just_fixed(),
-        """A version of this perm space without any variations except fixed."""
-    )
     
-    def _get_just_fixed(self):
-        # This gets overridden in `__init__`.
-        raise RuntimeError
-        
-        
     def __repr__(self):
         
         if self.is_dapplied:
