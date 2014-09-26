@@ -6,6 +6,9 @@ import heapq
 import itertools
 import collections
 
+from python_toolbox import caching
+
+from .lazy_tuple import LazyTuple
 from .frozen_dict import FrozenDict
 
 try:                                    # Load C helper function if available
@@ -201,3 +204,14 @@ class FrozenCounter(FrozenDict):
             if new_count > 0:
                 result[element] = new_count
         return FrozenCounter(result)
+
+    @caching.CachedProperty
+    @LazyTuple.factory()
+    def counters_with_one_removed(self):
+        for key_to_reduce in self.keys():
+            return type(self)(
+                {key: (value - (key == key_to_reduce)) for key, value
+                                                               in self.items()}
+            )
+        
+        

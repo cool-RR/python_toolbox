@@ -2,6 +2,7 @@
 # This program is distributed under the MIT license.
 
 import numbers
+import collections
 
 
 infinity = float('inf')
@@ -11,7 +12,7 @@ _stirling_caches = []
 _n_highest_cache_completed = -1
 def stirling(n, k, skip_calculation=False):
     '''
-    blocktododoc specify first or second kind
+    blocktododoc specify first kind
     '''
     global _n_highest_cache_completed
     if k not in range(n + 1):
@@ -55,3 +56,22 @@ def stirling(n, k, skip_calculation=False):
 def abs_stirling(n, k):
     return abs(stirling(n, k))
     
+###############################################################################
+
+_shitfuck_cache = {}
+
+def shitfuck(k, recurrences):
+    from python_toolbox import nifty_collections
+    assert isinstance(recurrences, nifty_collections.FrozenCounter)
+    levels = [collections.Counter({recurrences: 1})]
+    while len(levels) < k and any(((k - len(levels) + 1), recurrences)
+                                   not in _shitfuck_cache for x in levels[-1]):
+        new_level = collections.Counter()
+        for recurrences_, factor in levels[-1].items():
+            for smaller_recurrences in recurrences_.counters_with_one_removed:
+                new_level[(k - len(levels), smaller_recurrences)] += factor
+        levels.append(new_level)
+    # The last level is calculated. Time to make our way up.
+    if len(levels) == k:
+        
+            
