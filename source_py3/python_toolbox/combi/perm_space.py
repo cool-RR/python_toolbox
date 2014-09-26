@@ -25,6 +25,7 @@ from python_toolbox import misc_tools
 from . import misc
 from ._variation_removing_mixin import _VariationRemovingMixin
 from ._variation_adding_mixin import _VariationAddingMixin
+from ._fixed_map_managing_mixin import _FixedMapManagingMixin
 
 infinity = float('inf')
 
@@ -57,7 +58,7 @@ class PermSpaceType(abc.ABCMeta):
         
 @functools.total_ordering
 class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
-                sequence_tools.CuteSequenceMixin,
+                _FixedMapManagingMixin, sequence_tools.CuteSequenceMixin,
                 collections.Sequence, metaclass=PermSpaceType):
     '''
     A space of permutations on a sequence.
@@ -678,8 +679,10 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
 from .perm import Perm
 from . import _variation_removing_mixin
 from . import _variation_adding_mixin
+from . import _fixed_map_managing_mixin
 
 # Must set these after-the-fact because of import loop:
 PermSpace.perm_type = Perm
 _variation_removing_mixin.PermSpace = PermSpace
 _variation_adding_mixin.PermSpace = PermSpace
+_fixed_map_managing_mixin.PermSpace = PermSpace

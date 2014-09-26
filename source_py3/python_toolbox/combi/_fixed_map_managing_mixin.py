@@ -58,7 +58,7 @@ class _FixedMapManagingMixin:
         else:
             return self.fixed_map
             
-    @caching.CachedProperty:
+    @caching.CachedProperty
     def _undapplied_unrapplied_fixed_map(self):
         if self.is_dapplied or self.is_rapplied:
             return {self.domain.index(key): self.sequence.index(value)
