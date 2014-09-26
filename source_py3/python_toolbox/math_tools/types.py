@@ -22,4 +22,9 @@ class PossiblyInfiniteReal(numbers.Number,
                            metaclass=_PossiblyInfiniteRealType):
     pass
 
-
+class _NaturalType(abc.ABCMeta):
+    def __instancecheck__(self, thing):
+        return isinstance(thing, numbers.Integral) and thing >= 1
+class Natural(numbers.Number,
+              metaclass=_NaturalType):
+    pass
