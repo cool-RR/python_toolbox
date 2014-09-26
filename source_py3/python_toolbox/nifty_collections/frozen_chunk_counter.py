@@ -10,7 +10,7 @@ from .frozen_counter import FrozenCounter
 
 class FrozenChunkCounter(FrozenCounter):
     def __init__(self, iterable):
-        super().__init__()
+        super().__init__(iterable)
         
         # All zero values were already fileterd out by `FrozenCounter`, we'll
         # filter out just the non-natural-number keys.
@@ -23,8 +23,8 @@ class FrozenChunkCounter(FrozenCounter):
             
     def get_sub_counters_counter(self):
         sub_counters_counter = collections.Counter()
-        for key_to_reduce, value_of_key_to_reduce in sub_counter.items():
-            sub_counter = collections.Counter(sub_counter)
+        for key_to_reduce, value_of_key_to_reduce in self.items():
+            sub_counter = collections.Counter(self)
             sub_counter[key_to_reduce] -= 1
             sub_counter[key_to_reduce - 1] += 1
             sub_counters_counter[FrozenChunkCounter(sub_counter)] = \
