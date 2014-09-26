@@ -42,9 +42,8 @@ class FrozenCounter(FrozenDict):
         if kwargs:
             self._dict.update(kwargs)
             
-        for key, value in self.items():
-            if value == 0:
-                del self._dict[key]
+        for key in [key for key, value in self.items() if value == 0]:
+            del self._dict[key]
 
 
     __getitem__ = lambda self, key: self._dict.get(key, 0)
@@ -207,5 +206,5 @@ class FrozenCounter(FrozenDict):
     __bool__ = lambda self: any(True for element in self.elements())
     
     n_elements = property( # blocktodo: want to make this cached but import loop
-        lambda self: sum(value for value in values if value >= 1)
+        lambda self: sum(value for value in self.values() if value >= 1)
     )
