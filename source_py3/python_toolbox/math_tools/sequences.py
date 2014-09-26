@@ -67,8 +67,9 @@ def shitfuck(k, recurrence_counter):
         recurrence_counter = \
                        nifty_collections.FrozenCrateCounter(recurrence_counter)
     if k == 1:
-        assert recurrence_counter # Works because `FrozenCounter` implements
-                                  # `__bool__`.
+        assert recurrence_counter
+        # (Works because `FrozenCrateCounter` has a functioning `__bool__`,
+        # unlike Python's `Counter`.)
         return 1
     try:
         return _shitfuck_cache[(k, recurrence_counter)]
@@ -80,7 +81,8 @@ def shitfuck(k, recurrence_counter):
     while len(levels) < k and current_reccurence_counters:
         k_ = k - len(levels)
         levels.append(
-            {recurrence_counter_: recurrence_counter_.get_sub_counters_counter()
+            {recurrence_counter_: recurrence_counter_.
+                                       get_sub_counters_for_one_crate_removed()
              for recurrence_counter_ in current_reccurence_counters
                             if (k_, recurrence_counter_) not in _shitfuck_cache
         })
@@ -116,8 +118,9 @@ def catshit(k, recurrence_counter):
         recurrence_counter = \
                        nifty_collections.FrozenCrateCounter(recurrence_counter)
     if k == 1:
-        assert recurrence_counter # Works because `FrozenCounter` implements
-                                  # `__bool__`.
+        assert recurrence_counter
+        # (Works because `FrozenCrateCounter` has a functioning `__bool__`,
+        # unlike Python's `Counter`.)
         return 1
     try:
         return _catshit_cache[(k, recurrence_counter)]
@@ -129,9 +132,10 @@ def catshit(k, recurrence_counter):
     while len(levels) < k and current_reccurence_counters:
         k_ = k - len(levels)
         levels.append(
-            {recurrence_counter_: recurrence_counter_.get_sub_counters_counter()
+            {recurrence_counter_: recurrence_counter_.
+                    get_sub_counters_for_one_crate_and_previous_piles_removed()
              for recurrence_counter_ in current_reccurence_counters
-                            if (k_, recurrence_counter_) not in _catshit_cache
+                            if (k_, recurrence_counter_) not in _shitfuck_cache
         })
         current_reccurence_counters = \
                                      set(itertools.chain(*levels[-1].values()))
@@ -139,14 +143,13 @@ def catshit(k, recurrence_counter):
     # The last level is calculated. Time to make our way up.
     for k_, level in enumerate(reversed(levels), (k - len(levels) + 1)):
         if k_ == 1:
-            for recurrence_counter_, sub_counters_counter in level.items():
-                _catshit_cache[(k_, recurrence_counter_)] = \
-                                                 recurrence_counter_.n_elements
+            for recurrence_counter_, sub_counters in level.items():
+                _catshit_cache[(k_, recurrence_counter_)] = len(sub_counters)
         else:
-            for recurrence_counter_, sub_counters_counter in level.items():
+            for recurrence_counter_, sub_counters in level.items():
                 _catshit_cache[(k_, recurrence_counter_)] = sum(
                     (_catshit_cache[(k_ - 1, sub_counter)] * factor for
-                           sub_counter, factor in sub_counters_counter.items())
+                           sub_counter, factor in sub_counters.items())
                 )
     
     return _catshit_cache[(k, recurrence_counter)]

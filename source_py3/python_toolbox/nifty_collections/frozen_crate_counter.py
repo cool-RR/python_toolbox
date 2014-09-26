@@ -48,7 +48,7 @@ class FrozenCrateCounter(FrozenCounter):
             for i in range(value_of_key_to_reduce):
                 sub_counters.append(
                     FrozenCrateCounter(
-                        {key: ((value - i) if key == key_to_reduce else value)
+                        {key: (i if key == key_to_reduce else value)
                                        for key, value in sub_counter_prototype}
                     )
                 )

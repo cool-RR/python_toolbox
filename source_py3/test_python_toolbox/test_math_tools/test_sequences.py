@@ -1,6 +1,6 @@
 
 
-from python_toolbox.math_tools import abs_stirling, shitfuck
+from python_toolbox.math_tools import abs_stirling, shitfuck, catshit
 
 
 def test_abs_stirling():
@@ -19,4 +19,8 @@ def test_abs_stirling():
 
 def test_shitfuck():
     assert shitfuck(3, (3, 1, 1)) == 13
+    
+
+def test_catshit():
+    assert catshit(3, (3, 1, 1)) == 13
     
