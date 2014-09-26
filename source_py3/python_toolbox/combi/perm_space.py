@@ -211,7 +211,7 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
             function_to_use = math_tools.catshit if self.is_combination else \
                                                             math_tools.shitfuck
             self._just_recurrented_partialled_combinationed_length = \
-                    function_to_use(self.n_elements, self._sequence_counteroid)
+                   function_to_use(self.n_elements, self._frozen_crate_counter)
         else:
             self._just_recurrented_partialled_combinationed_length = \
                 math_tools.factorial(
@@ -379,6 +379,11 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
             
     @caching.CachedProperty
     def _sequence_counteroid(self):
+        '''
+        
+        Sets `is_recurrent` as a side-effect, or if it was set ensures it was
+        set correctly.
+        '''
         _sequence_counteroid = collections.OrderedDict()
         is_recurrent = False # Until challenged
         for item in self.sequence:
@@ -392,6 +397,13 @@ class PermSpace(sequence_tools.CuteSequenceMixin, collections.Sequence,
         else:
             assert self.is_recurrent == is_recurrent
         return _sequence_counteroid
+            
+    @caching.CachedProperty
+    def _frozen_crate_counter(self):
+        return nifty_collections.FrozenCrateCounter(
+            self._sequence_counteroid.values()
+        )
+        
             
     @caching.CachedProperty
     def _undapplied_unrapplied_fixed_map(self):
