@@ -87,7 +87,22 @@ class CuteRange(CuteSequence):
     allows you to use floating-point numbers (or decimals), and it allows you
     to use infinite numbers to produce infinite ranges.
     
-    blocktododoc add examples
+    Examples:
+    
+        CuteRange(float('inf')) is an infinite range starting at zero and never
+        ending.
+        
+        CuteRange(7, float('inf')) is an infinite range starting at 7 and never
+        ending. (Like `itertools.count(7)` except it has all the amenities of a
+        sequence, you can get items using list notation, you can slice it, you
+        can get index numbers of items, etc.)
+        
+        CuteRange(-1.6, 7.3) is the finite range of numbers `(-1.6, -0.6, 0.4,
+        1.4, 2.4, 3.4, 4.4, 5.4, 6.4)`.
+        
+        CuteRange(10.4, -float('inf'), -7.1) is the infinite range of numbers
+        `(10.4, 3.3, -3.8, -10.9, -18.0, -25.1, ... )`.
+
     '''
     def __init__(self, *args):
         self.start, self.stop, self.step = parse_range_args(*args)
@@ -194,5 +209,5 @@ class CuteRange(CuteSequence):
             else:
                 raise ValueError
             
-    is_infinity = caching.CachedProperty(lambda self: self.length == infinity)
+    is_infinite = caching.CachedProperty(lambda self: self.length == infinity)
         

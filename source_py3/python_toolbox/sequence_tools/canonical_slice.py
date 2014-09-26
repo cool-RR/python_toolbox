@@ -31,6 +31,7 @@ class CanonicalSlice:
             If `stop` is `None`, it will be set to `infinity` (if the `step` is
         positive) or `0` (if the `step` is negative.)
             If `step` is `None`, it will be changed to the default `1`.
+            
         '''
         from python_toolbox import sequence_tools
         

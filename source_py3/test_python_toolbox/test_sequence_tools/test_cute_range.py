@@ -9,6 +9,18 @@ from python_toolbox.sequence_tools import CuteRange
 infinity = float('inf')
 
 
+def test():
+    assert CuteRange(10.4, -float('inf'), -7.1)[:5] == (
+        10.4,
+        3.3,
+        -3.8,
+        -10.9,
+        -18.0,
+        -25.1
+    )
+
+
+
 def test_finite():
     finite_range_arguments_tuples = (
         (10,), (3,), (20, 30), (20, 30, 2), (20, 30, -2)
