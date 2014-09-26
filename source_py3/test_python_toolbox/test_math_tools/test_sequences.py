@@ -19,8 +19,12 @@ def test_abs_stirling():
 
 def test_shitfuck():
     assert shitfuck(3, (3, 1, 1)) == 13
+    assert shitfuck(2, (3, 2, 2, 1)) == 15
+    assert shitfuck(3, (3, 2, 2, 1)) == 52
     
 
 def test_catshit():
-    assert catshit(3, (3, 1, 1)) == 13
+    assert catshit(3, (3, 1, 1)) == 4
+    assert catshit(2, (3, 2, 2, 1)) == 9
+    assert catshit(3, (3, 2, 2, 1)) == 14
     

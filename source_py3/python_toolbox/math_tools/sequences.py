@@ -84,8 +84,8 @@ def shitfuck(k, recurrence_counter):
             {recurrence_counter_: recurrence_counter_.
                                        get_sub_counters_for_one_crate_removed()
              for recurrence_counter_ in current_reccurence_counters
-                            if (k_, recurrence_counter_) not in _shitfuck_cache
-        })
+                          if (k_, recurrence_counter_) not in _shitfuck_cache}
+        )
         current_reccurence_counters = \
                                      set(itertools.chain(*levels[-1].values()))
         
@@ -135,8 +135,8 @@ def catshit(k, recurrence_counter):
             {recurrence_counter_: recurrence_counter_.
                     get_sub_counters_for_one_crate_and_previous_piles_removed()
              for recurrence_counter_ in current_reccurence_counters
-                            if (k_, recurrence_counter_) not in _shitfuck_cache
-        })
+                            if (k_, recurrence_counter_) not in _catshit_cache}
+        )
         current_reccurence_counters = \
                                      set(itertools.chain(*levels[-1].values()))
         
@@ -148,8 +148,8 @@ def catshit(k, recurrence_counter):
         else:
             for recurrence_counter_, sub_counters in level.items():
                 _catshit_cache[(k_, recurrence_counter_)] = sum(
-                    (_catshit_cache[(k_ - 1, sub_counter)] * factor for
-                           sub_counter, factor in sub_counters.items())
+                    (_catshit_cache[(k_ - 1, sub_counter)] for
+                                                   sub_counter in sub_counters)
                 )
     
     return _catshit_cache[(k, recurrence_counter)]

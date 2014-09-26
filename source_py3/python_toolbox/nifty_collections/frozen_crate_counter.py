@@ -49,7 +49,7 @@ class FrozenCrateCounter(FrozenCounter):
                 sub_counters.append(
                     FrozenCrateCounter(
                         {key: (i if key == key_to_reduce else value)
-                                       for key, value in sub_counter_prototype}
+                               for key, value in sub_counter_prototype.items()}
                     )
                 )
         return tuple(sub_counters)
