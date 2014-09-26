@@ -10,14 +10,9 @@ infinity = float('inf')
 
 
 def test():
-    assert CuteRange(10.4, -float('inf'), -7.1)[:5] == (
-        10.4,
-        3.3,
-        -3.8,
-        -10.9,
-        -18.0,
-        -25.1
-    )
+    for x, y in zip((CuteRange(10.4, -float('inf'), -7.1)[:5]),
+                    (10.4, 3.3, -3.8, -10.9, -18.0, -25.1)):
+        assert abs(x - y) < 0.000001
 
 
 
