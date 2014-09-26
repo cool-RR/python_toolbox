@@ -46,15 +46,6 @@ class _VariationRemovingMixin:
             slice_=self.canonical_slice, is_combination=self.is_combination
         )
 
-    undapplied = caching.CachedProperty(
-        lambda self: PermSpace(
-            self.sequence, fixed_map=self._undapplied_fixed_map,
-            degrees=self.degrees, slice_=self.canonical_slice,
-            n_elements=self.n_elements, is_combination=self.is_combination
-        ),
-        doc='''A version of this `PermSpace` without a custom domain.'''
-    )
-
     @caching.CachedProperty
     def uncombinationed(self):
         '''A version of this `PermSpace` where permutations have order.'''
@@ -69,6 +60,15 @@ class _VariationRemovingMixin:
             degrees=self.degrees, slice_=None,
             n_elements=self.n_elements, is_combination=False
         )
+
+    undapplied = caching.CachedProperty(
+        lambda self: PermSpace(
+            self.sequence, fixed_map=self._undapplied_fixed_map,
+            degrees=self.degrees, slice_=self.canonical_slice,
+            n_elements=self.n_elements, is_combination=self.is_combination
+        ),
+        doc='''A version of this `PermSpace` without a custom domain.'''
+    )
       
     @caching.CachedProperty
     def unfixed(self):

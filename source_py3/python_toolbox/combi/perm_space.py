@@ -193,6 +193,17 @@ class PermSpace(_VariationRemovingMixin, sequence_tools.CuteSequenceMixin,
         #                                                                     #
         ### Finished figuring out number of elements. #########################
 
+        ### Figuring out whether it's a combination: ##########################
+        #                                                                     #
+        self.is_combination = is_combination
+        
+        if self.is_combination:
+            if fixed_map:
+                raise NotImplementedError
+        
+        #                                                                     #
+        ### Finished figuring out whether it's a combination. #################
+        
         ### Figuring out whether space is dapplied: ###########################
         #                                                                     #
         if domain is None:
@@ -215,17 +226,6 @@ class PermSpace(_VariationRemovingMixin, sequence_tools.CuteSequenceMixin,
             self.undapplied = self
         #                                                                     #
         ### Finished figuring out whether space is dapplied. ##################
-        
-        ### Figuring out whether it's a combination: ##########################
-        #                                                                     #
-        self.is_combination = is_combination
-        
-        if self.is_combination:
-            if fixed_map:
-                raise NotImplementedError
-        
-        #                                                                     #
-        ### Finished figuring out whether it's a combination. #################
         
         ### Doing interim calculation of the length: ##########################
         #                                                                     #
@@ -360,9 +360,9 @@ class PermSpace(_VariationRemovingMixin, sequence_tools.CuteSequenceMixin,
             self.unrecurrented = self
         if not self.is_partial:
             self.unpartialled = self
-        # No need do this for `undapplied`, it's already done above.
         if not self.is_combination:
             self.uncombinationed = self
+        # No need do this for `undapplied`, it's already done above.
         if not self.is_fixed:
             self.unfixed = self
         if not self.is_degreed:
