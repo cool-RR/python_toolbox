@@ -13,16 +13,15 @@ class Comb(Perm):
         
     @caching.CachedProperty
     def _perm_sequence(self):
-        comb_space = self.just_dapplied_rapplied_perm_space.combinationed
-        assert (0 <= self.number < comb_space.length)
-        wip_number = (comb_space.length - 1 - self.number)
+        assert (0 <= self.number < self.nominal_perm_space.length)
+        wip_number = (self.nominal_perm_space.length - 1 - self.number)
         wip_perm_sequence = []
-        for i in range(comb_space.n_elements, 0, -1):
-            for j in range(comb_space.sequence_length, i - 2, -1):
+        for i in range(self.nominal_perm_space.n_elements, 0, -1):
+            for j in range(self.nominal_perm_space.sequence_length, i - 2, -1):
                 candidate = math_tools.binomial(j, i)
                 if candidate <= wip_number:
                     wip_perm_sequence.append(
-                        comb_space.sequence[-(j+1)]
+                        self.nominal_perm_space.sequence[-(j+1)]
                     )
                     wip_number -= candidate
                     break
@@ -45,10 +44,10 @@ class Comb(Perm):
             return self.unrapplied.undapplied.number
         
         processed_perm_sequence = tuple(
-            self.just_dapplied_rapplied_perm_space.sequence_length - 1 -
+            self.nominal_perm_space.sequence_length - 1 -
             item for item in self._perm_sequence[::-1]
         )
-        return self.just_dapplied_rapplied_perm_space.length - 1 - sum(
+        return self.nominal_perm_space.length - 1 - sum(
             (math_tools.binomial(item, i) for i, item in
                                   enumerate(processed_perm_sequence, start=1)),
             0

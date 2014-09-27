@@ -132,8 +132,8 @@ def _check_variation_selection(variation_selection):
         
         if variation_selection.variations <= {variations.Variation.DAPPLIED,
                                               variations.Variation.RAPPLIED,}:
-            assert perm.just_dapplied_rapplied_perm_space == perm_space
-        assert perm.just_dapplied_rapplied_perm_space == \
+            assert perm.nominal_perm_space == perm_space
+        assert perm.nominal_perm_space == \
                                              perm_space._just_dapplied_rapplied
         
         if not variation_selection.is_fixed and \
@@ -151,7 +151,7 @@ def _check_variation_selection(variation_selection):
         if (not variation_selection.is_dapplied and
             not variation_selection.is_rapplied):
             assert (perm * ~perm) == (~perm * perm) == \
-                                      perm.just_dapplied_rapplied_perm_space[0]
+                                      perm.nominal_perm_space[0]
         
             
         perm_set = set(perm)

@@ -59,8 +59,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
     @classmethod
     def coerce(cls, item, perm_space=None):
         if isinstance(item, Perm) and (perm_space is not None) and \
-           (item.just_dapplied_rapplied_perm_space
-                                        == perm_space._just_dapplied_rapplied):
+           (item.nominal_perm_space == perm_space._just_dapplied_rapplied):
             return item
         else:
             return cls(item, perm_space)
@@ -96,17 +95,19 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
             # We're assuming that `number_or_perm_sequence` is a pure
             # permutation sequence. Not asserting this because that would
             # be O(n).
-            self.just_dapplied_rapplied_perm_space = \
-                                        PermSpace(len(number_or_perm_sequence))
+            self.nominal_perm_space = PermSpace(len(number_or_perm_sequence))
         else: # perm_space is not None
             self.is_rapplied = perm_space.is_rapplied
             self.is_dapplied = perm_space.is_dapplied
             self.is_partial = perm_space.is_partial
             self.is_combination = perm_space.is_combination
-            self.just_dapplied_rapplied_perm_space = \
-                          perm_space.uncombinationed.unsliced.undegreed.unfixed
+            self.nominal_perm_space = perm_space.unsliced.undegreed.unfixed
         #                                                                     #
         ### Finished analyzing `perm_space`. ##################################
+        
+        # `self.nominal_perm_space` is a perm space that preserves only the
+        # rapplied, dapplied and combination properties of the original
+        # `PermSpace`.
         
         self.is_pure = not (self.is_rapplied or self.is_dapplied
                             or self.is_partial or self.is_combination)
@@ -117,12 +118,12 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         
         if isinstance(number_or_perm_sequence, numbers.Integral):
             if not (0 <= number_or_perm_sequence <
-                                self.just_dapplied_rapplied_perm_space.length):
+                                self.nominal_perm_space.length):
                 raise Exception(
                     "You're creating a `Perm` with number %s, but the chosen "
                     "`PermSpace` only goes from 0 up to %s." % (
                         number_or_perm_sequence,
-                        self.just_dapplied_rapplied_perm_space.length - 1
+                        self.nominal_perm_space.length - 1
                     )
                 )
                 
@@ -137,7 +138,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
             
     _reduced = property(lambda self: (
         type(self), self.number,
-        self.just_dapplied_rapplied_perm_space)
+        self.nominal_perm_space)
     )
             
     __int__ = lambda self: self.number
@@ -159,10 +160,9 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
             return False
     
     def __repr__(self):
-        return '<%s%s%s: (%s / %s) %s(%s%s)>' % (
+        return '<%s%s: (%s / %s) %s(%s%s)>' % (
             type(self).__name__, 
             (', n_elements=%s' % len(self)) if self.is_partial else '',
-            ', is_combination=True' if self.is_combination else '',
             self.number,
             self._perm_space_short_length_string,
             ('(%s) => ' % ', '.join(map(repr, self.domain)))
@@ -173,7 +173,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         
     def index(self, member):
         numerical_index = self._perm_sequence.index(member)
-        return self.just_dapplied_rapplied_perm_space. \
+        return self.nominal_perm_space. \
                domain[numerical_index] if self.is_dapplied else numerical_index
         
         
@@ -181,10 +181,10 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
     @caching.CachedProperty
     def _perm_space_short_length_string(self):
         if self.is_partial or self.is_combination:
-            return str(self.just_dapplied_rapplied_perm_space.length)
+            return str(self.nominal_perm_space.length)
         else:
             return misc.get_short_factorial_string(
-                self.just_dapplied_rapplied_perm_space.sequence_length,
+                self.nominal_perm_space.sequence_length,
             )
             
     
@@ -201,7 +201,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
             return self.unrapplied.undapplied.number
         
         factoradic_number = []
-        unused_numbers = list(self.just_dapplied_rapplied_perm_space.
+        unused_numbers = list(self.nominal_perm_space.
                                                                   sequence)
         for i, number in enumerate(self):
             index_of_current_number = unused_numbers.index(number)
@@ -209,25 +209,25 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
             del unused_numbers[index_of_current_number]
         return math_tools.from_factoradic(
             factoradic_number +
-            [0] * self.just_dapplied_rapplied_perm_space.n_unused_elements
+            [0] * self.nominal_perm_space.n_unused_elements
         ) // math.factorial(
-                  self.just_dapplied_rapplied_perm_space.n_unused_elements)
+                  self.nominal_perm_space.n_unused_elements)
             
     
     @caching.CachedProperty
     def _perm_sequence(self):
         assert (0 <= self.number < 
-                                 self.just_dapplied_rapplied_perm_space.length)
+                                 self.nominal_perm_space.length)
         factoradic_number = math_tools.to_factoradic(
             self.number * math.factorial(
-                 self.just_dapplied_rapplied_perm_space.n_unused_elements),
-            n_digits_pad=self.just_dapplied_rapplied_perm_space.sequence_length
+                 self.nominal_perm_space.n_unused_elements),
+            n_digits_pad=self.nominal_perm_space.sequence_length
         )
         if self.is_partial:
             factoradic_number = factoradic_number[
-                :-self.just_dapplied_rapplied_perm_space.n_unused_elements
+                :-self.nominal_perm_space.n_unused_elements
             ]
-        unused_numbers = list(self.just_dapplied_rapplied_perm_space.sequence)
+        unused_numbers = list(self.nominal_perm_space.sequence)
         result = tuple(unused_numbers.pop(factoradic_digit) for
                                          factoradic_digit in factoradic_number)
         assert sequence_tools.get_length(result) == self.length
@@ -239,29 +239,29 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
     def inverse(self):
         if self.is_rapplied:
             return self.unrapplied.inverse * \
-                                  self.just_dapplied_rapplied_perm_space[0]
+                                  self.nominal_perm_space[0]
         else:
             _perm = [None] * \
-                     self.just_dapplied_rapplied_perm_space.sequence_length
+                     self.nominal_perm_space.sequence_length
             for i, item in enumerate(self):
                 _perm[item] = i
             return type(self)(_perm,
-                              self.just_dapplied_rapplied_perm_space)
+                              self.nominal_perm_space)
         
         
     __invert__ = lambda self: self.inverse
     
     domain = caching.CachedProperty(
-        lambda self: self.just_dapplied_rapplied_perm_space.domain
+        lambda self: self.nominal_perm_space.domain
     )
     
         
     @caching.CachedProperty
     def unrapplied(self):
         unrapplied = Perm(
-            (self.just_dapplied_rapplied_perm_space.sequence.index(i)
+            (self.nominal_perm_space.sequence.index(i)
              for i in self),
-            self.just_dapplied_rapplied_perm_space.unrapplied
+            self.nominal_perm_space.unrapplied
         )
         assert not unrapplied.is_rapplied
         return unrapplied
@@ -269,14 +269,14 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
     undapplied = caching.CachedProperty(
         lambda self: Perm(
             self._perm_sequence,
-            self.just_dapplied_rapplied_perm_space.undapplied
+            self.nominal_perm_space.undapplied
         )
         
     )
     uncombinationed = caching.CachedProperty(
         lambda self: Perm(
             self._perm_sequence,
-            self.just_dapplied_rapplied_perm_space.uncombinationed
+            self.nominal_perm_space.uncombinationed
         )
         
     )
@@ -286,7 +286,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         return self._perm_sequence[i_to_use]
         
     length = property(
-        lambda self: self.just_dapplied_rapplied_perm_space.n_elements
+        lambda self: self.nominal_perm_space.n_elements
     )
     
     def apply(self, sequence, result_type=None):
@@ -317,7 +317,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
                 return result_type(permed_generator)
         elif isinstance(sequence, Perm):
             return Perm(permed_generator,
-                        sequence.just_dapplied_rapplied_perm_space)
+                        sequence.nominal_perm_space)
         elif isinstance(sequence, str):
             return ''.join(permed_generator)
         else:
@@ -335,7 +335,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         if exponent <= -1:
             return self.inverse ** (- exponent)
         elif exponent == 0:
-            return self.just_dapplied_rapplied_perm_space[0]
+            return self.nominal_perm_space[0]
         else:
             assert exponent >= 1
             return misc_tools.general_product((self,) * exponent)
@@ -376,7 +376,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
     def get_neighbors(self, degrees=(1,), perm_space=None):
         from .map_space import MapSpace
         if perm_space is None:
-            perm_space = self.just_dapplied_rapplied_perm_space
+            perm_space = self.nominal_perm_space
         return MapSpace(perm_space._coerce_perm,
                         PermSpace(self._perm_sequence,
                                   fixed_map=perm_space._undapplied_fixed_map,
@@ -385,13 +385,13 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         
     def __lt__(self, other):
         if isinstance(other, Perm):
-            return (self.number, self.just_dapplied_rapplied_perm_space) < \
-                  (other.number, other.just_dapplied_rapplied_perm_space)
+            return (self.number, self.nominal_perm_space) < \
+                  (other.number, other.nominal_perm_space)
         else:
             return NotImplemented
         
     __reversed__ = lambda self: Perm(reversed(self._perm_sequence),
-                                     self.just_dapplied_rapplied_perm_space)
+                                     self.nominal_perm_space)
     
     items = caching.CachedProperty(PermItems)
     as_dictoid = caching.CachedProperty(PermAsDictoid)
