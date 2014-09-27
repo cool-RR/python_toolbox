@@ -86,7 +86,7 @@ def _check_variation_selection(variation_selection):
     
     assert perm_space.variation_selection == variation_selection
     assert perm_space.sequence_length == 7
-    for i, perm in enumerate(perm_space[:100]):
+    for i, perm in enumerate(itertools.islice(perm_space, 100)):
         assert type(perm) == combi.Comb if variation_selection.is_combination \
                                                                 else combi.Perm
         if not variation_selection.is_fixed and \
