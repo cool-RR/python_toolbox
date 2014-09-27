@@ -81,21 +81,25 @@ class RaiseAssertor(ContextManager):
                 message = exception.args[0]
                 if isinstance(self.text, str):
                     if self.text not in message:
-                        raise Failure("A `%s` was raised but %s wasn't in its "
-                                      "message." % (self.exception_type,
-                                      repr(self.text)))
+                        raise Failure(
+                            "A `%s` was raised but %s wasn't in its message." %
+                            (self.exception_type.__name__, repr(self.text))
+                        )
                 else:
                     # It's a regex pattern
                     if not self.text.match(message):
-                        raise Failure("A `%s` was raised but it didn't match "
-                                      "the given regex." % self.exception_type)
+                        raise Failure(
+                            "A `%s` was raised but it didn't match the given "
+                            "regex." % self.exception_type.__name__
+                        )
         except BaseException as different_exception:
             raise Failure(
                 "%s was excpected, but a different exception %s was raised "
-                "instead." % (self.exception_type, type(different_exception))
+                "instead." % (self.exception_type.__name__,
+                              type(different_exception).__name__)
             )
         else:
-            raise Failure("%s wasn't raised." % self.exception_type)
+            raise Failure("%s wasn't raised." % self.exception_type.__name__)
 
                     
 def assert_same_signature(*callables):

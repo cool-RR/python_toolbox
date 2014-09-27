@@ -65,7 +65,7 @@ def _check_variation_selection(variation_selection):
             else:
                 assert variation_selection.is_combination and \
                                              not variation_selection.is_partial
-                perm_space = perm_space[:1]
+                perm_space = perm_space[:0]
     
     if not variation_selection.is_allowed:
         return

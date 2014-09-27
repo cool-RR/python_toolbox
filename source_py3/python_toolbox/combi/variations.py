@@ -47,6 +47,8 @@ class VariationSelectionSpace(SelectionSpace):
     def __repr__(self):
         return '<VariationSelectionSpace>'
     
+variation_selection_space = VariationSelectionSpace()
+
         
 class VariationSelectionType(type):
     __call__ = lambda cls, variations: cls._create_from_tuple(
@@ -93,9 +95,6 @@ class VariationSelection(metaclass=VariationSelectionType):
                 return False
         else:
             return True
-    
+        
+    number = caching.CachedProperty(variation_selection_space.index)
      
-variation_selection_space = VariationSelectionSpace()
-variation_selection_space[7].is_allowed
-tuple(variation_selection_space)
-repr(variation_selection_space[7])

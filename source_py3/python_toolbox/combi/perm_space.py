@@ -462,9 +462,11 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             canonical_slice = sequence_tools.CanonicalSlice(
                 i, self.length, offset=self.canonical_slice.start
             )
-            return PermSpace(self.sequence, domain=self.domain,
-                             fixed_map=self.fixed_map, degrees=self.degrees,
-                             slice_=canonical_slice)
+            return PermSpace(
+                self.sequence, domain=self.domain, n_elements=self.n_elements,
+                fixed_map=self.fixed_map, degrees=self.degrees,
+                is_combination=self.is_combination, slice_=canonical_slice
+            )
         
         else:
             assert isinstance(i, numbers.Integral)
