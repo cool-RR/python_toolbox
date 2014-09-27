@@ -65,6 +65,8 @@ def test_illegal_cases():
         
 def test_meaningful_cases():
     if sys_tools.is_pypy:
+        # blocktodo: When version of Pypy with bug 1873 is released, remove
+        # this skipping.
         raise nose.SkipTest
     meaningful_cases = (
         (infinity, 3), (infinity, 300.5), (infinity, -3), (infinity, -300.5), 
