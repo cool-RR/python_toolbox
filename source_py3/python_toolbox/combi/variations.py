@@ -39,6 +39,9 @@ class VariationSelectionSpace(SelectionSpace):
     def __getitem__(self, i):
         return VariationSelection(SelectionSpace.__getitem__(self, i))
         
+    def index(self, variation_selection):
+        return super().index(variation_selection.variations)
+        
     @caching.cache()
     def __repr__(self):
         return '<VariationSelectionSpace>'
