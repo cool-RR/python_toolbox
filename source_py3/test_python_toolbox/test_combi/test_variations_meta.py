@@ -1,0 +1,30 @@
+# Copyright 2009-2014 Ram Rachum.
+# This program is distributed under the MIT license.
+
+import pickle
+import itertools
+
+from python_toolbox import cute_iter_tools
+from python_toolbox import sequence_tools
+
+from python_toolbox import combi
+from python_toolbox.combi import *
+
+infinity = float('inf')
+infinities = (infinity, -infinity)
+
+
+def test():
+    assert len(combi.variations.variation_selection_space) == \
+                                           2 ** len(combi.variations.Variation)
+    
+    for i, variation_selection in \
+                         enumerate(combi.variations.variation_selection_space):
+        assert isinstance(variation_selection,
+                          combi.variations.VariationSelection)
+        assert combi.variations.variation_selection_space. \
+                                                index(variation_selection) == i
+        assert cute_iter_tools.is_sorted(variation_selection.variations)
+        
+        
+    

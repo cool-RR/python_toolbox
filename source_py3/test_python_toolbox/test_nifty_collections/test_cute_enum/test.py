@@ -24,6 +24,19 @@ def test():
     ]
     
     assert Flavor.VANILLA.number == 1
+    
+    assert Flavor.VANILLA == Flavor.VANILLA
+    assert Flavor.VANILLA <= Flavor.VANILLA
+    assert Flavor.VANILLA >= Flavor.VANILLA
+    assert not (Flavor.VANILLA < Flavor.VANILLA)
+    assert not (Flavor.VANILLA > Flavor.VANILLA)
+        
+    assert not (Flavor.VANILLA == Flavor.RASPBERRY)
+    assert Flavor.VANILLA <= Flavor.RASPBERRY
+    assert not (Flavor.VANILLA >= Flavor.RASPBERRY)
+    assert Flavor.VANILLA < Flavor.RASPBERRY
+    assert not (Flavor.VANILLA > Flavor.RASPBERRY)
+        
         
         
             

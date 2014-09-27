@@ -26,7 +26,7 @@ class _OrderableEnumMixin:
         lambda self: type(self)._member_names_.index(self.name)
     )
     __lt__ = lambda self, other: isinstance(other, CuteEnum) and \
-                                                  (self.number <= other.number)
+                                                   (self.number < other.number)
     
     
 class CuteEnum(_OrderableEnumMixin, enum.Enum, metaclass=EnumType):
