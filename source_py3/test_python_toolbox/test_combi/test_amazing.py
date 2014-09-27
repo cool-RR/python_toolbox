@@ -20,6 +20,13 @@ def _check_variation_selection(variation_selection):
     
     kwargs = {}
     
+    if variation_selection.is_recurrent and \
+                                           not variation_selection.is_rapplied:
+        assert not variation_selection.is_allowed
+        # Can't even test this illogical clash.
+        return 
+        
+    
     iterable_or_length = (
         'abracadabra' if variation_selection.is_recurrent else
         tuple(range(100, -10, -10)) if variation_selection.is_rapplied else 11
