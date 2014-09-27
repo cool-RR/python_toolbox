@@ -75,7 +75,8 @@ class VariationSelection(metaclass=VariationSelectionType):
     
     @caching.CachedProperty
     def is_allowed(self):
-        return not any(variation_clash <= self.variations for
+        _variations_set = set(self.variations)
+        return not any(variation_clash <= _variations_set for
                        variation_clash in variation_clashes)
     
      

@@ -14,8 +14,14 @@ class EnumType(enum.EnumMeta):
     
     
 @functools.total_ordering
-class CuteEnum(enum.Enum, metaclass=EnumType):
+class _OrderableEnumMixin:
+    '''
     
+    We're defining a mixin rather than defining these things on `CuteEnum`
+    because we can't use `functools.total_ordering` on Enum, because it has
+    exception-raising comparison methods, so `functools.total_ordering` doesn't
+    override them.
+    '''
     number = caching.CachedProperty(
         lambda self: type(self)._member_names_.index(self.name)
     )
@@ -23,3 +29,6 @@ class CuteEnum(enum.Enum, metaclass=EnumType):
                                                   (self.number <= other.number)
     
     
+class CuteEnum(_OrderableEnumMixin, enum.Enum, metaclass=EnumType):
+    
+    pass
