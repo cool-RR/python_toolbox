@@ -94,8 +94,11 @@ def _check_variation_selection(variation_selection):
         assert perm.is_dapplied == variation_selection.is_dapplied
         assert perm.is_partial == variation_selection.is_partial
         assert perm.is_combination == variation_selection.is_combination
-        assert perm.is_pure == (variation_selection.is_pure or
-                                variation_selection.is_sliced)
+        assert perm.is_pure == (not (variation_selection.is_rapplied or
+                                     variation_selection.is_dapplied or
+                                     variation_selection.is_partial or
+                                     variation_selection.is_combination))
+        
         
         if variation_selection.is_rapplied:
             assert perm != perm.unrapplied == perm_space.unrapplied[i]

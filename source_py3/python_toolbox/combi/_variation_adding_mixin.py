@@ -56,7 +56,6 @@ class _VariationAddingMixin:
         
     def get_dapplied(self, domain):
         '''Get a version of this `PermSpace` that has a domain of `domain`.'''
-        assert not self.is_dapplied
         if self.is_combination:
             raise Exception("Can't use a domain with combination spaces.")
         domain = \
@@ -65,7 +64,8 @@ class _VariationAddingMixin:
             raise Exception
         return PermSpace(
             self.sequence, domain,
-            fixed_map={domain[key]: value for key, value in self.fixed_map}, 
+            fixed_map={domain[key]: value for key, value in
+                                                   self._undapplied_fixed_map},
             degrees=self.degrees, slice_=self.canonical_slice,
             n_elements=self.n_elements, is_combination=self.is_combination
         )
