@@ -44,7 +44,11 @@ class VariationSelectionSpace(SelectionSpace):
         return '<VariationSelectionSpace>'
     
         
-class VariationSelection():
+class VariationSelectionType(type):
+    __call__ = lambda cls, variations: cls._create_from_tuple(
+                                           cls, tuple(sorted(set(variations))))
+    
+class VariationSelection(metaclass=VariationSelectionType):
     __call__ = classmethod(
         lambda cls, variations: cls._create_from_tuple(
                                            cls, tuple(sorted(set(variations))))
