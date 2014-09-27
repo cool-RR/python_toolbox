@@ -24,10 +24,11 @@ class Variation(nifty_collections.CuteEnum):
     
         
 variation_clashes = (
-    {Variation.DEGREED, Variation.COMBINATION},
-    {Variation.DEGREED, Variation.PARTIAL},
-    {Variation.DEGREED, Variation.RECURRENT},
-    {Variation.COMBINATION, Variation.FIXED},
+    {Variation.DEGREED: True, Variation.COMBINATION: True,},
+    {Variation.DEGREED: True, Variation.PARTIAL: True,},
+    {Variation.DEGREED: True, Variation.RECURRENT: True,},
+    {Variation.COMBINATION: True, Variation.FIXED: True,},
+    {Variation.RAPPLIED: False, Variation.RECURRENT: True,},
 )
 
 
@@ -68,6 +69,14 @@ class VariationSelection(metaclass=VariationSelectionType):
     def __init__(self, variations):
         self.variations = variations
         assert cute_iter_tools.is_sorted(self.variations)
+        self.is_rapplied = Variation.RAPPLIED in self.variations
+        self.is_recurrent = Variation.RECURRENT in self.variations
+        self.is_partial = Variation.PARTIAL in self.variations
+        self.is_combination = Variation.COMBINATION in self.variations
+        self.is_dapplied = Variation.DAPPLIED in self.variations
+        self.is_fixed = Variation.FIXED in self.variations
+        self.is_degreed = Variation.DEGREED in self.variations
+        self.is_sliced = Variation.SLICED in self.variations
         
     @caching.cache()
     def __repr__(self):
@@ -79,8 +88,14 @@ class VariationSelection(metaclass=VariationSelectionType):
     @caching.CachedProperty
     def is_allowed(self):
         _variations_set = set(self.variations)
-        return not any(variation_clash <= _variations_set for
-                       variation_clash in variation_clashes)
+        for variation_clash in variation_clashes:
+            for variation, included in variation_clash.items():
+                if (variation in _variations_set) != included:
+                    continue
+            else:
+                return False
+        else:
+            return True
     
      
 variation_selection_space = VariationSelectionSpace()
