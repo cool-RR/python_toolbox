@@ -306,7 +306,11 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
             raise Exception("Can't apply permutation on sequence of "
                             "shorter length.")
         
-        permed_generator = (sequence[i] for i in self)
+        if self.is_dapplied:
+            permed_generator = tuple(self[i] for i in sequence)
+        else:
+            permed_generator = tuple(self._perm_sequence[i] for i in sequence)
+            
         if result_type is not None:
             if result_type is str:
                 return ''.join(permed_generator)
@@ -321,7 +325,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
             return tuple(permed_generator)
             
             
-    __mul__ = apply
+    __rmul__ = apply
             
     def __pow__(self, exponent):
         assert isinstance(exponent, numbers.Integral)

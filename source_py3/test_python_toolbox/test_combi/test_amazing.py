@@ -88,6 +88,12 @@ def _check_variation_selection(variation_selection):
     
     assert perm_space.variation_selection == variation_selection
     assert perm_space.sequence_length == 7
+    
+    assert (perm_space.domain == perm_space.sequence) == (
+        not variation_selection.is_dapplied and
+        not variation_selection.is_rapplied
+    )
+    
     for i, perm in enumerate(itertools.islice(perm_space, 100)):
         assert isinstance(perm, combi.Perm)
         assert perm.is_rapplied == variation_selection.is_rapplied
@@ -139,9 +145,10 @@ def _check_variation_selection(variation_selection):
         assert Perm(perm._perm_sequence, perm_space=perm_space) == perm
         
         assert perm.length == perm_space.n_elements
-        assert ~perm == perm.inverse
+        assert ~perm == perm.inverse == perm ** -1
         assert ~~perm == perm.inverse.inverse == perm
-        assert (perm * ~perm) == (~perm * perm) == \
+        if (perm_space.domain == perm_space.sequence):
+            assert (perm * ~perm) == (~perm * perm) == \
                                       perm.just_dapplied_rapplied_perm_space[0]
         
             
