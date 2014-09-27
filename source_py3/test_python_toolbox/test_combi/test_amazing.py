@@ -123,11 +123,9 @@ def _check_variation_selection(variation_selection):
             assert perm == perm.undapplied == perm_space.undapplied[i]
             
         if variation_selection.is_combination:
-            assert perm != perm.uncombinationed == \
-                                                  perm_space.uncombinationed[i]
+            assert perm != perm.uncombinationed
         else:
-            assert perm == perm.uncombinationed == \
-                                                  perm_space.uncombinationed[i]
+            assert perm == perm.uncombinationed
             
         assert type(perm) == combi.Comb if variation_selection.is_combination \
                                                                 else combi.Perm
