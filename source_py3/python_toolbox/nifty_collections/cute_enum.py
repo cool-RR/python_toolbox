@@ -8,16 +8,13 @@ from python_toolbox import caching
 
 
 class EnumType(enum.EnumMeta):
+    def __dir__(cls):
+        return type.__dir__(cls) + cls._member_names_
     
-    number = caching.CachedProperty(
-        lambda self: type(self)._member_names_.index(self.name)
-    )
-    __lt__ = lambda self, other: isinstance(other, CuteEnum) and \
-                                                  (self.number <= other.number)
     
     
 @functools.total_ordering
-class CuteEnum(enum.Enum):
+class CuteEnum(enum.Enum, metaclass=EnumType):
     
     number = caching.CachedProperty(
         lambda self: type(self)._member_names_.index(self.name)

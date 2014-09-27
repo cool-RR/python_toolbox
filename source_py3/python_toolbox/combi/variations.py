@@ -12,7 +12,7 @@ class UnsupportedVariationCombinationException(Exception):
     make variation classes mostly for this and testing'''
     
 
-class PermSpaceVariation(nifty_collections.CuteEnum):
+class Variation(nifty_collections.CuteEnum):
     RAPPLIED = 'rapplied'
     RECURRENT = 'recurrent'
     PARTIAL = 'partial'
@@ -24,16 +24,16 @@ class PermSpaceVariation(nifty_collections.CuteEnum):
     
         
 variation_clashes = (
-    {PermSpaceVariation.DEGREED, PermSpaceVariation.COMBINATION},
-    {PermSpaceVariation.DEGREED, PermSpaceVariation.PARTIAL},
-    {PermSpaceVariation.DEGREED, PermSpaceVariation.RECURRENT},
-    {PermSpaceVariation.COMBINATION, PermSpaceVariation.FIXED},
+    {Variation.DEGREED, Variation.COMBINATION},
+    {Variation.DEGREED, Variation.PARTIAL},
+    {Variation.DEGREED, Variation.RECURRENT},
+    {Variation.COMBINATION, Variation.FIXED},
 )
 
 
 class VariationSelectionSpace(SelectionSpace):
     def __init__(self):
-        SelectionSpace.__init__(self, PermSpaceVariation)
+        SelectionSpace.__init__(self, Variation)
         
     @caching.cache()
     def __getitem__(self, i):
@@ -45,22 +45,28 @@ class VariationSelectionSpace(SelectionSpace):
     
         
 class VariationSelection():
-    __new__ = lambda cls, variations: cls._create_from_tuple(
-        tuple(sorted(set(variations)))
+    __call__ = classmethod(
+        lambda cls, variations: cls._create_from_tuple(
+                                           cls, tuple(sorted(set(variations))))
     )
-    _create_from_tuple = caching.cache()(lambda self: super().__new__(variations))
-    # This method exsits so we could cache canonically. The `__new__` method
-    # canonicalizes the `variations` argument and we cache according to it.
+    @caching.cache()
+    def _create_from_tuple(cls, variations):
+        # This method exsits so we could cache canonically. The `__new__`
+        # method canonicalizes the `variations` argument and we cache according
+        # to it.
+        variation_selection = super().__new__(cls)
+        variation_selection.__init__(variations)
+        return variation_selection
         
     def __init__(self, variations):
         self.variations = variations
+        assert cute_iter_tools.is_sorted(self.variations)
         
     @caching.cache()
     def __repr__(self):
         return '<%s: %s>' % (
             type(self).__name__,
-            ', '.join(variation.value for variation in
-                      sorted(self.variations, key=PermSpaceVariation.index))
+            ', '.join(variation.value for variation in self.variations)
         )
     
     @caching.CachedProperty
@@ -71,4 +77,5 @@ class VariationSelection():
      
 variation_selection_space = VariationSelectionSpace()
 variation_selection_space[7].is_allowed
+tuple(variation_selection_space)
 repr(variation_selection_space[7])
