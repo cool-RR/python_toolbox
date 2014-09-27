@@ -7,6 +7,7 @@ This module defines the `LazyTuple` class.
 See its documentation for more information.
 '''
 
+import functools
 import threading
 import collections
 import itertools
@@ -49,7 +50,7 @@ def _with_lock(method, *args, **kwargs):
 
 
 @collections.Sequence.register
-@comparison_tools.total_ordering    
+@functools.total_ordering    
 class LazyTuple(collections.Sequence):
     '''
     A lazy tuple which requests as few values as possible from its iterator.

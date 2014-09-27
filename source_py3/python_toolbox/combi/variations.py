@@ -48,7 +48,13 @@ class VariationSelectionSpace(SelectionSpace):
         return '<VariationSelectionSpace>'
     
         
-class VariationSelection:
+class VariationSelection():
+    __new__ = lambda cls, variations: cls._create_from_tuple(tuple(sorted(set(variations))))
+        
+    @caching.cache()
+    def _create_from_tuple(cls, variations):
+        self.variations = 1 / 0
+        
     def __init__(self, variations):
         self.variations = variations
         
@@ -69,4 +75,3 @@ class VariationSelection:
 variation_selection_space = VariationSelectionSpace()
 variation_selection_space[7].is_allowed
 repr(variation_selection_space[7])
-2 / 2
