@@ -79,7 +79,11 @@ def _check_variation_selection(variation_selection):
     
     assert perm_space.variation_selection == variation_selection
         
-    
+    for i, perm in enumerate(perm_space):
+        if not variation_selection.is_fixed and \
+                                            not variation_selection.is_degreed:
+            
+            
     pass # blocktodo add more
     
     
