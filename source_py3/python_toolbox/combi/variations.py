@@ -40,6 +40,7 @@ class Variation(nifty_collections.CuteEnum):
     
         
 variation_clashes = (
+    {Variation.DAPPLIED: True, Variation.COMBINATION: True,},
     {Variation.DEGREED: True, Variation.COMBINATION: True,},
     {Variation.DEGREED: True, Variation.PARTIAL: True,},
     {Variation.DEGREED: True, Variation.RECURRENT: True,},
