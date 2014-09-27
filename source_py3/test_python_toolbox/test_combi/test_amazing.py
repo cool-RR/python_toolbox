@@ -25,7 +25,7 @@ def _check_variation_selection(variation_selection):
         tuple(range(100, -10, -10)) if variation_selection.is_rapplied else 11
     )
     kwargs['iterable_or_length'] = iterable_or_length
-    iterable = (iterable_or_length if
+    sequence = (iterable_or_length if
                 isinstance(iterable_or_length, collections.Iterable) else
                 sequence_tools.CuteRange(iterable_or_length))
     
@@ -42,7 +42,7 @@ def _check_variation_selection(variation_selection):
         kwargs['is_combination'] = True
         
     if variation_selection.is_fixed:
-        fixed_map = {domain[1]: range[1], domain[4]: range[3],}
+        fixed_map = {domain[1]: sequence[1], domain[4]: sequence[3],}
         kwargs['fixed_map'] = fixed_map
     else:
         fixed_map = {}
@@ -50,13 +50,6 @@ def _check_variation_selection(variation_selection):
     if variation_selection.is_degreed:
         kwargs['degrees'] = (0, 2, 4, 5, 6, 7)
         
-        if variation_selection.is_fixed:
-            fixed_map = {domain[1]: range[1], domain[4]: range[3],}
-            kwargs['fixed_map'] = fixed_map
-        else:
-            fixed_map = {}
-            
-    perm_space = PermSpace(**kwargs)
 
     context_manager = (
         context_management.BlankContextManager() if
@@ -65,6 +58,7 @@ def _check_variation_selection(variation_selection):
     )
     
     with context_manager:
+        perm_space = PermSpace(**kwargs)
         if variation_selection.is_sliced:
             perm_space = perm_space[2:-2]
     
@@ -77,6 +71,6 @@ def _check_variation_selection(variation_selection):
     
     
 def test():
-    return ((_check_variation_selection, variation_selection) for
-            variation_selection in combi.variations.variation_selection_space)
+    yield from ((_check_variation_selection, variation_selection) for
+                variation_selection in combi.variations.variation_selection_space)
     

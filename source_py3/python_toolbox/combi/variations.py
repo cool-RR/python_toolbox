@@ -83,6 +83,7 @@ class VariationSelection(metaclass=VariationSelectionType):
         return '<%s: %s>' % (
             type(self).__name__,
             ', '.join(variation.value for variation in self.variations)
+                                                                      or 'pure'
         )
     
     @caching.CachedProperty
@@ -91,7 +92,7 @@ class VariationSelection(metaclass=VariationSelectionType):
         for variation_clash in variation_clashes:
             for variation, included in variation_clash.items():
                 if (variation in _variations_set) != included:
-                    continue
+                    break
             else:
                 return False
         else:
