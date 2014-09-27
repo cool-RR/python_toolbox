@@ -110,7 +110,8 @@ def _check_variation_selection(variation_selection):
             assert perm != perm.unrapplied == perm_space.unrapplied[i]
         else:
             assert perm == perm.unrapplied == perm_space.unrapplied[i]
-            assert perm.apply('isogram') == 'isogram' * perm == \
+            if not variation_selection.is_dapplied:
+                assert perm.apply('isogram') == 'isogram' * perm == \
                            perm_space.get_rapplied('isogram')[i]._perm_sequence
             
         
@@ -169,7 +170,8 @@ def _check_variation_selection(variation_selection):
             assert perm.items[j] == (key, value)
             assert perm.index(value) == key
             assert perm[key] == value
-            assert key in perm
+            assert key in perm.domain
+            assert value in perm
             
             
             
