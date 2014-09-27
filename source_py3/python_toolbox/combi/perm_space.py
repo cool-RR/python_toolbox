@@ -46,7 +46,10 @@ class PermSpaceType(abc.ABCMeta):
             arguments_profile = python_toolbox.arguments_profiling. \
                     ArgumentsProfile(PermSpace.__init__, None, *args, **kwargs)
             if arguments_profile.get('fixed_map', None):
-                raise NotImplementedError
+                raise UnallowedVariationSelectionException(
+                    {variations.FIXED: True,
+                     variations.COMBINATION: True,}
+                )
             return super(PermSpaceType, CombSpace).__call__(
                 iterable_or_length=arguments_profile['iterable_or_length'], 
                 n_elements=arguments_profile['n_elements'], 
@@ -204,7 +207,10 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         
         if self.is_combination:
             if fixed_map:
-                raise NotImplementedError
+                raise UnallowedVariationSelectionException(
+                    {variations.FIXED: True,
+                     variations.COMBINATION: True,}
+                )
         
         #                                                                     #
         ### Finished figuring out whether it's a combination. #################
@@ -222,7 +228,11 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         )
         if self.is_dapplied:
             if self.is_combination:
-                raise Exception("Can't use a domain with combination spaces.")
+                raise UnallowedVariationSelectionException(
+                    {variations.DAPPLIED: True,
+                     variations.COMBINATION: True,}
+                )
+
             self.domain = domain
             if len(set(self.domain)) < len(self.domain):
                 raise Exception('The domain must not have repeating elements.')
@@ -278,8 +288,11 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 
         self.is_fixed = bool(self.fixed_map)
         if self.is_fixed:
-            assert not self.is_combination
-            # (Not implemented, blocked in metaclass)
+            if self.is_combination:
+                raise UnallowedVariationSelectionException(
+                    {variations.FIXED: True,
+                     variations.COMBINATION: True,}
+                )
             self._unsliced_undegreed_length = math_tools.factorial(
                 len(self.free_indices),
                 start=(len(self.free_indices) -
@@ -323,8 +336,21 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             self._unsliced_length = self._unsliced_undegreed_length
         else:
             self.is_degreed = True
-            if self.is_combination or self.is_partial or self.is_recurrent:
-                raise NotImplementedError
+            if self.is_combination:
+                raise UnallowedVariationSelectionException(
+                    {variations.Variation.DEGREED: True,
+                     variations.Variation.COMBINATION: True,}
+                )
+            if self.is_partial:
+                raise UnallowedVariationSelectionException(
+                    {variations.Variation.DEGREED: True,
+                     variations.Variation.PARTIAL: True,}
+                )
+            if self.is_recurrent:
+                raise UnallowedVariationSelectionException(
+                    {variations.Variation.DEGREED: True,
+                     variations.Variation.RECURRENT: True,}
+                )
             self.degrees = tuple(
                 degree for degree in degrees if degree in all_degrees
             )

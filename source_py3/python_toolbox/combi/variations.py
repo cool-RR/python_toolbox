@@ -1,3 +1,4 @@
+from python_toolbox import exceptions
 from python_toolbox import cute_iter_tools
 from python_toolbox import nifty_collections
 from python_toolbox import caching
@@ -6,11 +7,26 @@ from python_toolbox.third_party import sortedcontainers
 from .selection_space import SelectionSpace
 
 
-class UnallowedVariationSelectionException(Exception):
-    '''blocktodo use everywhere
+class UnallowedVariationSelectionException(exceptions.CuteException):
+    '''
+    
+    blocktodo use everywhere
     let it take variations
     make variation classes mostly for this and testing'''
-    
+    def __init__(self, variation_clash):
+        self.variation_clash = variation_clash
+        assert variation_clash in variation_clashes
+        super().__init__(
+            "You can't create a `PermSpace` that's %s" % (
+                'and '.join(
+                    '%s%s' % (
+                        '' if included else 'not ',
+                        variation.value
+                    ) for variation, included in variation_clash.items()
+                )
+            )
+        )
+        
 
 class Variation(nifty_collections.CuteEnum):
     RAPPLIED = 'rapplied'
