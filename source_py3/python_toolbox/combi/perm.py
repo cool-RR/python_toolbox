@@ -137,7 +137,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
             
     _reduced = property(lambda self: (
         type(self), self.number,
-        self.just_dapplied_rapplied_perm_space.length)
+        self.just_dapplied_rapplied_perm_space)
     )
             
     __int__ = lambda self: self.number

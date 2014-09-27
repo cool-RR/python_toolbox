@@ -105,20 +105,17 @@ def _check_variation_selection(variation_selection):
             
         
         if variation_selection.is_dapplied:
-            assert perm != perm.unrapplied == perm_space.unrapplied[i]
+            assert perm != perm.undapplied == perm_space.undapplied[i]
         else:
-            assert perm == perm.unrapplied == perm_space.unrapplied[i]
-            assert perm.apply('isogram') == perm * 'isogram' == \
-                           perm_space.get_rapplied('isogram')[i]._perm_sequence
+            assert perm == perm.undapplied == perm_space.undapplied[i]
             
-        if not self.is_dapplied: self.undapplied = self
-        if not self.is_combination: self.uncombinationed = self
-
-        if perm.is_rapplied:
+        if variation_selection.is_combination:
+            assert perm != perm.uncombinationed == \
+                                                  perm_space.uncombinationed[i]
         else:
+            assert perm == perm.uncombinationed == \
+                                                  perm_space.uncombinationed[i]
             
-
-        
         assert type(perm) == combi.Comb if variation_selection.is_combination \
                                                                 else combi.Perm
         
@@ -136,6 +133,9 @@ def _check_variation_selection(variation_selection):
             
         assert Perm(perm.number, perm_space=perm_space) == perm
         assert Perm(perm._perm_sequence, perm_space=perm_space) == perm
+        
+        assert perm.length == perm_space.length
+        assert ~perm == perm.inverse == 
             
         perm_set = set(perm)
         if variation_selection.is_partial:
@@ -153,6 +153,7 @@ def _check_variation_selection(variation_selection):
             assert perm.items[j] == (key, value)
             assert perm.index(value) == key
             assert perm[key] == value
+            assert key in perm
             
             
             
