@@ -42,9 +42,9 @@ def test_perm_spaces():
     assert first_perm.index(0) == 0
     with cute_testing.RaiseAssertor(ValueError): first_perm.index(5)
     
-    assert last_perm.rapply('meow') == 'woem'
-    assert last_perm.rapply('meow', str) == 'woem'
-    assert last_perm.rapply('meow', tuple) == tuple('woem')
+    assert last_perm.apply('meow') == 'woem'
+    assert last_perm.apply('meow', str) == 'woem'
+    assert last_perm.apply('meow', tuple) == tuple('woem')
     
     with cute_testing.RaiseAssertor(IndexError): pure_0a[- pure_0a.length - 1]
     with cute_testing.RaiseAssertor(IndexError): pure_0a[- pure_0a.length - 2]

@@ -95,7 +95,16 @@ def _check_variation_selection(variation_selection):
         if not variation_selection.is_fixed and \
                                             not variation_selection.is_degreed:
             assert perm_space.index(perm) == i
-        assert set(perm) == set(sequence)
+            
+        perm_set = set(perm)
+        if variation_selection.is_partial:
+            assert perm_set < sequence_set
+            assert len(perm_set) == 5
+            assert len(perm) == 5
+        else:
+            assert perm_set == sequence_set
+            assert len(perm) == 7
+            
         for j, (value, key, (key__, value__)) in enumerate(
                                        zip(perm, perm.as_dictoid, perm.items)):
             assert key == key__
@@ -108,8 +117,8 @@ def _check_variation_selection(variation_selection):
         if perm.is_rapplied:
             assert perm.unrapplied == perm_space.unrapplied[i]
         else:
-            assert perm.rapply('isogram') == \
-                                          perm_space.get_rapplied('isogram')[i]
+            assert perm.apply('isogram') == perm * 'isogram' == \
+                           perm_space.get_rapplied('isogram')[i]._perm_sequence
             
             
             

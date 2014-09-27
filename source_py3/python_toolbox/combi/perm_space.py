@@ -502,7 +502,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             if not (0 <= i < self.length):
                 raise IndexError
             if self.is_rapplied:
-                return self.perm_type(self.unrapplied[i].rapply(self.sequence),
+                return self.perm_type(self.unrapplied[i].apply(self.sequence),
                                       self)
             elif self.is_sliced:
                 return self.unsliced[i + self.canonical_slice.start]

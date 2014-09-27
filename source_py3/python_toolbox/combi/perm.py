@@ -289,7 +289,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         lambda self: self.just_dapplied_rapplied_perm_space.n_elements
     )
     
-    def rapply(self, sequence, result_type=None):
+    def apply(self, sequence, result_type=None):
         '''
         
         Specify `result_type` to determine the type of the result returned. If
@@ -297,13 +297,13 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         `Perm`, in which case that same type would be used.
         '''
         if self.is_rapplied:
-            raise TypeError("Can't rapply an rapplied permutation, try "
+            raise TypeError("Can't apply an rapplied permutation, try "
                             "`perm.unrapplied`.")
         sequence = \
              sequence_tools.ensure_iterable_is_immutable_sequence(sequence)
         if sequence_tools.get_length(sequence) < \
                                                sequence_tools.get_length(self):
-            raise Exception("Can't rapply permutation on sequence of "
+            raise Exception("Can't apply permutation on sequence of "
                             "shorter length.")
         
         permed_generator = (sequence[i] for i in self)
@@ -321,7 +321,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
             return tuple(permed_generator)
             
             
-    __mul__ = rapply
+    __mul__ = apply
             
     def __pow__(self, exponent):
         assert isinstance(exponent, numbers.Integral)

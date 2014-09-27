@@ -15,7 +15,8 @@ class _VariationAddingMixin:
             raise Exception
         return PermSpace(
             sequence, domain=self.domain,
-            fixed_map={key: sequence[value] for key, value in self.fixed_map}, 
+            fixed_map={key: sequence[value] for key, value in
+                                                       self.fixed_map.items()},
             degrees=self.degrees, slice_=self.canonical_slice,
             n_elements=self.n_elements, is_combination=self.is_combination
         )
