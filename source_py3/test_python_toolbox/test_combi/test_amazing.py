@@ -90,11 +90,52 @@ def _check_variation_selection(variation_selection):
     assert perm_space.sequence_length == 7
     for i, perm in enumerate(itertools.islice(perm_space, 100)):
         assert isinstance(perm, combi.Perm)
+        assert perm.is_rapplied == variation_selection.is_rapplied
+        assert perm.is_dapplied == variation_selection.is_dapplied
+        assert perm.is_partial == variation_selection.is_partial
+        assert perm.is_combination == variation_selection.is_combination
+        assert perm.is_pure == variation_selection.is_pure
+        
+        if variation_selection.is_rapplied:
+            assert perm != perm.unrapplied == perm_space.unrapplied[i]
+        else:
+            assert perm == perm.unrapplied == perm_space.unrapplied[i]
+            assert perm.apply('isogram') == perm * 'isogram' == \
+                           perm_space.get_rapplied('isogram')[i]._perm_sequence
+            
+        
+        if variation_selection.is_dapplied:
+            assert perm != perm.unrapplied == perm_space.unrapplied[i]
+        else:
+            assert perm == perm.unrapplied == perm_space.unrapplied[i]
+            assert perm.apply('isogram') == perm * 'isogram' == \
+                           perm_space.get_rapplied('isogram')[i]._perm_sequence
+            
+        if not self.is_dapplied: self.undapplied = self
+        if not self.is_combination: self.uncombinationed = self
+
+        if perm.is_rapplied:
+        else:
+            
+
+        
         assert type(perm) == combi.Comb if variation_selection.is_combination \
                                                                 else combi.Perm
+        
+        if variation_selection.variations <= {variations.Variation.DAPPLIED,
+                                              variations.Variation.RAPPLIED,}:
+            assert perm.just_dapplied_rapplied_perm_space == perm_space
+        assert perm.just_dapplied_rapplied_perm_space == \
+                                             perm_space._just_dapplied_rapplied
+        
         if not variation_selection.is_fixed and \
                                             not variation_selection.is_degreed:
             assert perm_space.index(perm) == i
+            if not variation_selection.is_sliced:
+                assert perm.number == i
+            
+        assert Perm(perm.number, perm_space=perm_space) == perm
+        assert Perm(perm._perm_sequence, perm_space=perm_space) == perm
             
         perm_set = set(perm)
         if variation_selection.is_partial:
@@ -113,12 +154,6 @@ def _check_variation_selection(variation_selection):
             assert perm.index(value) == key
             assert perm[key] == value
             
-        assert perm.is_rapplied == variation_selection.is_rapplied
-        if perm.is_rapplied:
-            assert perm.unrapplied == perm_space.unrapplied[i]
-        else:
-            assert perm.apply('isogram') == perm * 'isogram' == \
-                           perm_space.get_rapplied('isogram')[i]._perm_sequence
             
             
             
