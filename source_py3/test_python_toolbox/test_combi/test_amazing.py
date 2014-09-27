@@ -5,6 +5,8 @@ import pickle
 import itertools
 import collections
 
+import nose
+
 from python_toolbox import context_management
 from python_toolbox import sequence_tools
 
@@ -20,6 +22,11 @@ def _check_variation_selection(variation_selection):
     
     kwargs = {}
     
+    if variation_selection.is_recurrent:
+        #blocktodo obviously remove when done with recurrent
+        raise nose.SkipTest
+
+
     if variation_selection.is_recurrent and \
                                            not variation_selection.is_rapplied:
         assert not variation_selection.is_allowed
