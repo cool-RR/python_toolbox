@@ -69,7 +69,7 @@ variation_selection_space = VariationSelectionSpace()
         
 class VariationSelectionType(type):
     __call__ = lambda cls, variations: cls._create_from_tuple(
-                                           cls, tuple(sorted(set(variations))))
+                                   cls, sortedcontainers.SortedSet(variations))
     
 class VariationSelection(metaclass=VariationSelectionType):
     @caching.cache()
@@ -92,6 +92,7 @@ class VariationSelection(metaclass=VariationSelectionType):
         self.is_fixed = Variation.FIXED in self.variations
         self.is_degreed = Variation.DEGREED in self.variations
         self.is_sliced = Variation.SLICED in self.variations
+        self.is_pure = not self.variations
         
     @caching.cache()
     def __repr__(self):
@@ -114,4 +115,11 @@ class VariationSelection(metaclass=VariationSelectionType):
             return True
         
     number = caching.CachedProperty(variation_selection_space.index)
+    
+    _reduced = caching.CachedProperty(lambda self: (type(self), self.number))
+    _hash = caching.CachedProperty(lambda self: hash(self._reduced))
+    __eq__ = lambda self, other: isinstance(other, VariationSelection) and \
+                                                self._reduced == other._reduced
+    __hash__ = lambda self: self._hash
+        
      

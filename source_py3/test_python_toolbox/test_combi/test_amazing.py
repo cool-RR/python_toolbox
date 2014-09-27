@@ -94,7 +94,8 @@ def _check_variation_selection(variation_selection):
         assert perm.is_dapplied == variation_selection.is_dapplied
         assert perm.is_partial == variation_selection.is_partial
         assert perm.is_combination == variation_selection.is_combination
-        assert perm.is_pure == variation_selection.is_pure
+        assert perm.is_pure == (variation_selection.is_pure or
+                                variation_selection.is_sliced)
         
         if variation_selection.is_rapplied:
             assert perm != perm.unrapplied == perm_space.unrapplied[i]
@@ -134,8 +135,12 @@ def _check_variation_selection(variation_selection):
         assert Perm(perm.number, perm_space=perm_space) == perm
         assert Perm(perm._perm_sequence, perm_space=perm_space) == perm
         
-        assert perm.length == perm_space.length
-        assert ~perm == perm.inverse == 
+        assert perm.length == perm_space.n_elements
+        assert ~perm == perm.inverse
+        assert ~~perm == perm.inverse.inverse == perm
+        assert (perm * ~perm) == (~perm * perm) == \
+                                      perm.just_dapplied_rapplied_perm_space[0]
+        
             
         perm_set = set(perm)
         if variation_selection.is_partial:
