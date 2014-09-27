@@ -299,6 +299,9 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         if self.is_rapplied:
             raise TypeError("Can't apply an rapplied permutation, try "
                             "`perm.unrapplied`.")
+        if self.is_dapplied:
+            raise TypeError("Can't apply an dapplied permutation, try "
+                            "`perm.undapplied`.")
         sequence = \
              sequence_tools.ensure_iterable_is_immutable_sequence(sequence)
         if sequence_tools.get_length(sequence) < \
