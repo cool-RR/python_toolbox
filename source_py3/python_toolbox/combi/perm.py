@@ -236,9 +236,10 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
 
     @caching.CachedProperty
     def inverse(self):
+        if self.is_partial:
+            raise TypeError("Partial perms don't have an inverse.")
         if self.is_rapplied:
-            return self.unrapplied.inverse * \
-                                  self.nominal_perm_space[0]
+            return self.unrapplied.inverse * self.nominal_perm_space[0]
         else:
             _perm = [None] * \
                      self.nominal_perm_space.sequence_length

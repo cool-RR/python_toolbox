@@ -151,12 +151,20 @@ def _check_variation_selection(variation_selection):
         assert Perm(perm._perm_sequence, perm_space=perm_space) == perm
         
         assert perm.length == perm_space.n_elements
-        assert ~perm == perm.inverse == perm ** -1
-        assert ~~perm == perm.inverse.inverse == perm
-        if (not variation_selection.is_dapplied and
-            not variation_selection.is_rapplied):
-            assert (perm * ~perm) == (~perm * perm) == \
-                                      perm.nominal_perm_space[0]
+        if variation_selection.is_partial:
+            with cute_testing.RaiseAssertor(TypeError):
+                ~perm
+            with cute_testing.RaiseAssertor(TypeError):
+                perm.inverse
+            with cute_testing.RaiseAssertor(TypeError):
+                perm ** -1
+        else:
+            assert ~perm == perm.inverse == perm ** -1
+            assert ~~perm == perm.inverse.inverse == perm
+            if (not variation_selection.is_dapplied and
+                not variation_selection.is_rapplied):
+                assert (perm * ~perm) == (~perm * perm) == \
+                                          perm.nominal_perm_space[0]
         
             
         perm_set = set(perm)
