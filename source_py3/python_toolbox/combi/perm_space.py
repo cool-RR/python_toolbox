@@ -381,6 +381,25 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
     is_recurrent = None
     
     @caching.CachedProperty
+    def variation_selection(self):
+        variation_selection = variations.VariationSelection(
+            filter(
+                None,
+                (variations.Variation.RAPPLIED if self.is_rapplied else None,
+                 variations.Variation.RECURRENT if self.is_recurrent else None,
+                 variations.Variation.PARTIAL if self.is_partial else None,
+                 variations.Variation.COMBINATION if self.is_combination
+                                                                     else None,
+                 variations.Variation.DAPPLIED if self.is_dapplied else None,
+                 variations.Variation.FIXED if self.is_fixed else None,
+                 variations.Variation.DEGREED if self.is_degreed else None,
+                 variations.Variation.SLICED if self.is_sliced else None,)
+            )
+        )
+        assert variation_selection.is_allowed
+        return variation_selection
+    
+    @caching.CachedProperty
     def _sequence_counteroid(self):
         '''
         
