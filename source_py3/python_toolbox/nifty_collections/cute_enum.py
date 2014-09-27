@@ -10,6 +10,7 @@ from python_toolbox import caching
 class EnumType(enum.EnumMeta):
     def __dir__(cls):
         return type.__dir__(cls) + cls._member_names_
+    _values_tuple= caching.CachedProperty(tuple)
     
     
     
@@ -23,7 +24,7 @@ class _OrderableEnumMixin:
     override them.
     '''
     number = caching.CachedProperty(
-        lambda self: type(self)._member_names_.index(self.name)
+        lambda self: type(self)._values_tuple.index(self)
     )
     __lt__ = lambda self, other: isinstance(other, CuteEnum) and \
                                                    (self.number < other.number)
