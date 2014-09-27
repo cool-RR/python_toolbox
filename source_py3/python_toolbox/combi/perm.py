@@ -325,6 +325,10 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
             
             
     __rmul__ = apply
+    
+    __mul__ = lambda self, other: NotImplemented
+    # (Must define this explicitly because of Python special-casing
+    # multiplication of objects of the same type.)
             
     def __pow__(self, exponent):
         assert isinstance(exponent, numbers.Integral)
