@@ -13,19 +13,16 @@ class Comb(Perm):
         
     @caching.CachedProperty
     def _perm_sequence(self):
-        assert (0 <= self.number < 
-                                 self.just_dapplied_rapplied_perm_space.length)
-        wip_number = (self.just_dapplied_rapplied_perm_space.length - 1 - 
-                                                                   self.number)
+        comb_space = self.just_dapplied_rapplied_perm_space.combinationed
+        assert (0 <= self.number < comb_space.length)
+        wip_number = (comb_space.length - 1 - self.number)
         wip_perm_sequence = []
-        for i in range(self.just_dapplied_rapplied_perm_space.n_elements,
-                                                                        0, -1):
-            for j in range(self.just_dapplied_rapplied_perm_space.
-                                                   sequence_length, i - 2, -1):
+        for i in range(comb_space.n_elements, 0, -1):
+            for j in range(comb_space.sequence_length, i - 2, -1):
                 candidate = math_tools.binomial(j, i)
                 if candidate <= wip_number:
                     wip_perm_sequence.append(
-                        self.just_dapplied_rapplied_perm_space.sequence[-(j+1)]
+                        comb_space.sequence[-(j+1)]
                     )
                     wip_number -= candidate
                     break

@@ -104,7 +104,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
             self.is_partial = perm_space.is_partial
             self.is_combination = perm_space.is_combination
             self.just_dapplied_rapplied_perm_space = \
-                                          perm_space.unsliced.undegreed.unfixed
+                          perm_space.uncombinationed.unsliced.undegreed.unfixed
         #                                                                     #
         ### Finished analyzing `perm_space`. ##################################
         
