@@ -309,11 +309,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
             raise Exception("Can't apply permutation on sequence of "
                             "shorter length.")
         
-        if self.is_dapplied:
-            permed_generator = tuple(self[i] for i in sequence)
-        else:
-            permed_generator = tuple(self._perm_sequence[i] for i in sequence)
-            
+        permed_generator = (sequence[i] for i in self)
         if result_type is not None:
             if result_type is str:
                 return ''.join(permed_generator)
