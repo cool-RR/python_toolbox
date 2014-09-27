@@ -53,10 +53,6 @@ class VariationSelectionType(type):
                                            cls, tuple(sorted(set(variations))))
     
 class VariationSelection(metaclass=VariationSelectionType):
-    __call__ = classmethod(
-        lambda cls, variations: cls._create_from_tuple(
-                                           cls, tuple(sorted(set(variations))))
-    )
     @caching.cache()
     def _create_from_tuple(cls, variations):
         # This method exsits so we could cache canonically. The `__new__`
