@@ -106,8 +106,8 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         ### Finished analyzing `perm_space`. ##################################
         
         # `self.nominal_perm_space` is a perm space that preserves only the
-        # rapplied, dapplied and combination properties of the original
-        # `PermSpace`.
+        # rapplied, dapplied, partial and combination properties of the
+        # original `PermSpace`.
         
         self.is_pure = not (self.is_rapplied or self.is_dapplied
                             or self.is_partial or self.is_combination)

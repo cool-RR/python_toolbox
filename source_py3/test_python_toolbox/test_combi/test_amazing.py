@@ -91,10 +91,12 @@ def _check_variation_selection(variation_selection):
     
     assert (perm_space.domain == perm_space.sequence) == (
         not variation_selection.is_dapplied and
-        not variation_selection.is_rapplied
+        not variation_selection.is_rapplied and
+        not variation_selection.is_partial
     )
     
-    for i, perm in enumerate(itertools.islice(perm_space, 100)):
+    # blocktodo: change to 100 after finished debugging 
+    for i, perm in enumerate(itertools.islice(perm_space, 10)):
         assert isinstance(perm, combi.Perm)
         assert perm.is_rapplied == variation_selection.is_rapplied
         assert perm.is_dapplied == variation_selection.is_dapplied
@@ -135,9 +137,8 @@ def _check_variation_selection(variation_selection):
                                             variations.Variation.COMBINATION,}:
             assert perm.nominal_perm_space == perm_space
         assert perm.nominal_perm_space == \
-                             perm_space.unsliced.undegreed.unfixed.unpartialled
-        # Give me your unsliced, your undegreed; your unfixed, your
-        # unpartialled.
+                                          perm_space.unsliced.undegreed.unfixed
+        # Give me your unsliced, your undegreed, your unfixed.
         
         if not variation_selection.is_fixed and \
                                             not variation_selection.is_degreed:
