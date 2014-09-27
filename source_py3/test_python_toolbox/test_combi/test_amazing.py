@@ -28,8 +28,8 @@ def _check_variation_selection(variation_selection):
         
     
     iterable_or_length = (
-        'abracadabra' if variation_selection.is_recurrent else
-        tuple(range(100, -10, -10)) if variation_selection.is_rapplied else 11
+        'abracab' if variation_selection.is_recurrent else
+        tuple(range(70, -10, -10)) if variation_selection.is_rapplied else 7
     )
     kwargs['iterable_or_length'] = iterable_or_length
     sequence = (iterable_or_length if
@@ -37,7 +37,7 @@ def _check_variation_selection(variation_selection):
                 sequence_tools.CuteRange(iterable_or_length))
     
     if variation_selection.is_dapplied:
-        domain = 'switzerland'
+        domain = 'isogram'
         kwargs['domain'] = domain
     else:
         domain = sequence_tools.CuteRange(11)
@@ -55,7 +55,7 @@ def _check_variation_selection(variation_selection):
         fixed_map = {}
         
     if variation_selection.is_degreed:
-        kwargs['degrees'] = (0, 2, 4, 5, 6, 7)
+        kwargs['degrees'] = (0, 2, 4, 5)
         
 
     context_manager = (
@@ -80,9 +80,11 @@ def _check_variation_selection(variation_selection):
     assert perm_space.variation_selection == variation_selection
         
     for i, perm in enumerate(perm_space):
+        assert type(perm) == combi.Comb if variation_selection.is_combination \
+                                                                else combi.Perm
         if not variation_selection.is_fixed and \
                                             not variation_selection.is_degreed:
-            
+            assert perm_space.index(perm) == i
             
     pass # blocktodo add more
     
