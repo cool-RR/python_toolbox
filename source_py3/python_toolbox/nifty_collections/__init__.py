@@ -12,7 +12,7 @@ from .frozen_dict import FrozenDict
 from .frozen_counter import FrozenCounter
 from .frozen_crate_counter import FrozenCrateCounter
 from .default_sorted_dict import DefaultSortedDict
-from .orderable_enum import OrderableEnum
+from .cute_enum import CuteEnum
 
 from .emitting_ordered_set import EmittingOrderedSet
 from .emitting_weak_key_default_dict import EmittingWeakKeyDefaultDict
