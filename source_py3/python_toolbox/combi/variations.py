@@ -1,5 +1,3 @@
-import enum
-
 from python_toolbox import cute_iter_tools
 from python_toolbox import nifty_collections
 from python_toolbox import caching
@@ -14,7 +12,7 @@ class UnsupportedVariationCombinationException(Exception):
     make variation classes mostly for this and testing'''
     
 
-class PermSpaceVariation(enum.Enum):
+class PermSpaceVariation(nifty_collections.CuteEnum):
     RAPPLIED = 'rapplied'
     RECURRENT = 'recurrent'
     PARTIAL = 'partial'
@@ -25,8 +23,6 @@ class PermSpaceVariation(enum.Enum):
     SLICED = 'sliced'
     
         
-PermSpaceVariation.index = tuple(PermSpaceVariation).index
-
 variation_clashes = (
     {PermSpaceVariation.DEGREED, PermSpaceVariation.COMBINATION},
     {PermSpaceVariation.DEGREED, PermSpaceVariation.PARTIAL},
@@ -49,11 +45,12 @@ class VariationSelectionSpace(SelectionSpace):
     
         
 class VariationSelection():
-    __new__ = lambda cls, variations: cls._create_from_tuple(tuple(sorted(set(variations))))
-        
-    @caching.cache()
-    def _create_from_tuple(cls, variations):
-        self.variations = 1 / 0
+    __new__ = lambda cls, variations: cls._create_from_tuple(
+        tuple(sorted(set(variations)))
+    )
+    _create_from_tuple = caching.cache()(lambda self: super().__new__(variations))
+    # This method exsits so we could cache canonically. The `__new__` method
+    # canonicalizes the `variations` argument and we cache according to it.
         
     def __init__(self, variations):
         self.variations = variations

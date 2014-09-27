@@ -35,6 +35,23 @@ def test():
     
     assert a2.personality == a1.personality + 1
 
+def test_inheritance():
+    class A:
+        personality = CachedProperty(counting_func)
+    
+    class B(A):
+        pass
+    
+    assert isinstance(B.personality, CachedProperty)
+        
+    b1 = B()
+    assert b1.personality == b1.personality == b1.personality
+    
+    b2 = B()
+    assert b2.personality == b2.personality == b2.personality 
+    
+    assert b2.personality == b1.personality + 1
+
 def test_value():
     '''Test `CachedProperty` when giving a value instead of a getter.'''
     class B:
