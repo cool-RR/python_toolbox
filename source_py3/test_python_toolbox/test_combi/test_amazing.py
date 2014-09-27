@@ -96,17 +96,19 @@ def _check_variation_selection(variation_selection):
                                             not variation_selection.is_degreed:
             assert perm_space.index(perm) == i
         assert set(perm) == set(sequence)
-        for j, (value, key_, (key__, value__)) in enumerate(
+        for j, (value, key, (key__, value__)) in enumerate(
                                        zip(perm, perm.as_dictoid, perm.items)):
-            assert key_ == key__
+            assert key == key__
             assert value == perm.as_dictoid[key] == value__
             assert perm.items[j] == (key, value)
             assert perm.index(value) == key
+            assert perm[key] == value
+            
         assert perm.is_rapplied == variation_selection.is_rapplied
         if perm.is_rapplied:
             assert perm.unrapplied == perm_space.unrapplied[i]
         else:
-            assert perm.get_rapplied('isogram') == \
+            assert perm.rapply('isogram') == \
                                           perm_space.get_rapplied('isogram')[i]
             
             
