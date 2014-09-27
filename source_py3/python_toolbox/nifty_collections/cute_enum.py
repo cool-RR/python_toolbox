@@ -7,6 +7,15 @@ import functools
 from python_toolbox import caching
 
 
+class EnumType(enum.EnumMeta):
+    
+    number = caching.CachedProperty(
+        lambda self: type(self)._member_names_.index(self.name)
+    )
+    __lt__ = lambda self, other: isinstance(other, CuteEnum) and \
+                                                  (self.number <= other.number)
+    
+    
 @functools.total_ordering
 class CuteEnum(enum.Enum):
     
@@ -15,3 +24,5 @@ class CuteEnum(enum.Enum):
     )
     __lt__ = lambda self, other: isinstance(other, CuteEnum) and \
                                                   (self.number <= other.number)
+    
+    
