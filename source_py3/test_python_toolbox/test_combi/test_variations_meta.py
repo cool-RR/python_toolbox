@@ -26,5 +26,7 @@ def test():
                                                 index(variation_selection) == i
         assert cute_iter_tools.is_sorted(variation_selection.variations)
         
+        assert isinstance(variation_selection.is_allowed, bool)
         
+    
     
