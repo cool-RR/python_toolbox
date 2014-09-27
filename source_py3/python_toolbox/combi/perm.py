@@ -326,7 +326,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
             
     __rmul__ = apply
     
-    __mul__ = lambda self, other: NotImplemented
+    __mul__ = lambda self, other: other.__rmul__(self)
     # (Must define this explicitly because of Python special-casing
     # multiplication of objects of the same type.)
             
