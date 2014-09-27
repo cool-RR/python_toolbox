@@ -25,6 +25,7 @@ from python_toolbox import misc_tools
 
 from . import misc
 from . import variations
+from .variations import UnallowedVariationSelectionException
 from ._variation_removing_mixin import _VariationRemovingMixin
 from ._variation_adding_mixin import _VariationAddingMixin
 from ._fixed_map_managing_mixin import _FixedMapManagingMixin
