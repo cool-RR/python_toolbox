@@ -42,12 +42,14 @@ def _check_variation_selection(variation_selection):
     sequence = (iterable_or_length if
                 isinstance(iterable_or_length, collections.Iterable) else
                 sequence_tools.CuteRange(iterable_or_length))
+    sequence_set = set(sequence)
     
     if variation_selection.is_dapplied:
         domain = 'isogram'
         kwargs['domain'] = domain
     else:
         domain = sequence_tools.CuteRange(11)
+    domain_set = set(domain)
         
     if variation_selection.is_partial:
         kwargs['n_elements'] = 5
@@ -92,6 +94,15 @@ def _check_variation_selection(variation_selection):
         if not variation_selection.is_fixed and \
                                             not variation_selection.is_degreed:
             assert perm_space.index(perm) == i
+        assert set(perm) == set(sequence)
+        for j, ((key, value), key_, (key__, value__)) in enumerate(
+                                       zip(perm, perm.as_dictoid, perm.items)):
+            assert key == key_ == key__
+            assert value == perm.as_dictoid[key] == value__
+            assert perm.items[j] == (key, value)
+            
+            
+            
             
     pass # blocktodo add more
     
