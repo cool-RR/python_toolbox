@@ -5,6 +5,7 @@ import pickle
 import itertools
 import collections
 
+from python_toolbox import context_management
 from python_toolbox import sequence_tools
 
 from python_toolbox import combi
@@ -56,11 +57,23 @@ def _check_variation_selection(variation_selection):
             fixed_map = {}
             
     perm_space = PermSpace(**kwargs)
+
+    context_manager = (
+        context_management.BlankContextManager() if
+        variation_selection.is_allowed else
+        cute_testing.RaiseAssertor(combi.UnallowedVariationSelectionException)
+    )
     
-    if variation_selection.is_sliced:
-        perm_space = perm_space[2:-2]
+    with context_manager:
+        if variation_selection.is_sliced:
+            perm_space = perm_space[2:-2]
     
-    assert perm_space.variation_selection == variation_selection
+        assert perm_space.variation_selection == variation_selection
+        
+    if not variation_selection.is_allowed:
+        return
+    
+    pass # blocktodo add more
     
     
 def test():

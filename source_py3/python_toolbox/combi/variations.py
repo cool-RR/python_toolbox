@@ -6,7 +6,7 @@ from python_toolbox.third_party import sortedcontainers
 from .selection_space import SelectionSpace
 
 
-class UnsupportedVariationCombinationException(Exception):
+class UnallowedVariationSelectionException(Exception):
     '''blocktodo use everywhere
     let it take variations
     make variation classes mostly for this and testing'''
