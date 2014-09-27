@@ -727,6 +727,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
     def _coerce_perm(self, perm):
         '''Coerce `perm` to be a permutation of this space.'''
         return Perm(perm, self)
+    
         
         
 

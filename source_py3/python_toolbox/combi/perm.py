@@ -59,7 +59,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
     @classmethod
     def coerce(cls, item, perm_space=None):
         if isinstance(item, Perm) and (perm_space is not None) and \
-           (item.nominal_perm_space == perm_space._just_dapplied_rapplied):
+          (item.nominal_perm_space == perm_space._nominal_perm_space_of_perms):
             return item
         else:
             return cls(item, perm_space)
@@ -201,8 +201,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
             return self.unrapplied.undapplied.number
         
         factoradic_number = []
-        unused_numbers = list(self.nominal_perm_space.
-                                                                  sequence)
+        unused_numbers = list(self.nominal_perm_space.sequence)
         for i, number in enumerate(self):
             index_of_current_number = unused_numbers.index(number)
             factoradic_number.append(index_of_current_number)

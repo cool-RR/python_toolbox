@@ -137,6 +137,7 @@ def _check_variation_selection(variation_selection):
                                             variations.Variation.COMBINATION,}:
             assert perm.nominal_perm_space == perm_space
         assert perm.nominal_perm_space == \
+                                   perm_space._nominal_perm_space_of_perms == \
                                           perm_space.unsliced.undegreed.unfixed
         # Give me your unsliced, your undegreed, your unfixed.
         
