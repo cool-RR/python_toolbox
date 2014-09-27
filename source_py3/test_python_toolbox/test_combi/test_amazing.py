@@ -130,11 +130,14 @@ def _check_variation_selection(variation_selection):
         assert type(perm) == combi.Comb if variation_selection.is_combination \
                                                                 else combi.Perm
         
-        if variation_selection.variations <= {variations.Variation.DAPPLIED,
-                                              variations.Variation.RAPPLIED,}:
+        if variation_selection.variations <= {
+            variations.Variation.DAPPLIED, variations.Variation.RAPPLIED,
+                                            variations.Variation.COMBINATION,}:
             assert perm.nominal_perm_space == perm_space
         assert perm.nominal_perm_space == \
-                                             perm_space._just_dapplied_rapplied
+                             perm_space.unsliced.undegreed.unfixed.unpartialled
+        # Give me your unsliced, your undegreed; your unfixed, your
+        # unpartialled.
         
         if not variation_selection.is_fixed and \
                                             not variation_selection.is_degreed:
