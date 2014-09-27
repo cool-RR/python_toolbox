@@ -297,10 +297,10 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         `Perm`, in which case that same type would be used.
         '''
         if self.is_rapplied:
-            raise TypeError("Can't apply an rapplied permutation, try "
+            raise TypeError("Can't apply a rapplied permutation, try "
                             "`perm.unrapplied`.")
         if self.is_dapplied:
-            raise TypeError("Can't apply an dapplied permutation, try "
+            raise TypeError("Can't apply a dapplied permutation, try "
                             "`perm.undapplied`.")
         sequence = \
              sequence_tools.ensure_iterable_is_immutable_sequence(sequence)
