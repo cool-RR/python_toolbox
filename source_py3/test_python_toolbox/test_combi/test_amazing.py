@@ -60,7 +60,12 @@ def _check_variation_selection(variation_selection):
     with context_manager:
         perm_space = PermSpace(**kwargs)
         if variation_selection.is_sliced:
-            perm_space = perm_space[2:-2]
+            if perm_space >= 2:
+                perm_space = perm_space[2:-2]
+            else:
+                assert variation_selection.is_combination and \
+                                             not variation_selection.is_partial
+                perm_space = perm_space[:1]
     
         assert perm_space.variation_selection == variation_selection
         
