@@ -89,6 +89,7 @@ def _check_variation_selection(variation_selection):
     assert perm_space.variation_selection == variation_selection
     assert perm_space.sequence_length == 7
     for i, perm in enumerate(itertools.islice(perm_space, 100)):
+        assert isinstance(perm, combi.PermSpace)
         assert type(perm) == combi.Comb if variation_selection.is_combination \
                                                                 else combi.Perm
         if not variation_selection.is_fixed and \
@@ -100,7 +101,11 @@ def _check_variation_selection(variation_selection):
             assert key == key_ == key__
             assert value == perm.as_dictoid[key] == value__
             assert perm.items[j] == (key, value)
-            
+        assert perm.is_rapplied == variation_selection.is_rapplied
+        if perm.is_rapplied:
+            assert perm.unrapplied == perm_space.unrapplied[i]
+        else:
+            assert perm.get_rapplied('isogram')
             
             
             
