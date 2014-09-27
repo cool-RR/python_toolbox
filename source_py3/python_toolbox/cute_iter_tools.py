@@ -235,7 +235,7 @@ def double_filter(filter_function, iterable, lazy_tuple=False):
     Note that this function is not thread-safe. (You may not consume the two
     iterators on two separate threads.)
     
-    If `lazy_tuple=True`, returns a `LazyTuple` rather than an iterator.
+    If `lazy_tuple=True`, returns two `LazyTuple` objects rather than two iterator.
     '''
     iterator = iter(iterable)
     

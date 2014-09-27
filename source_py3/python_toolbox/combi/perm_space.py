@@ -8,6 +8,7 @@ import types
 import sys
 import math
 import numbers
+import enum
 
 from python_toolbox import misc_tools
 from python_toolbox import nifty_collections
@@ -23,18 +24,13 @@ from python_toolbox.third_party import sortedcontainers
 from python_toolbox import misc_tools
 
 from . import misc
+from . import variations
 from ._variation_removing_mixin import _VariationRemovingMixin
 from ._variation_adding_mixin import _VariationAddingMixin
 from ._fixed_map_managing_mixin import _FixedMapManagingMixin
 
 infinity = float('inf')
 
-
-class UnsupportedVariationCombinationException(Exception):
-    '''blocktodo use everywhere
-    let it take variations
-    make variation classes mostly for this and testing'''
-        
 
 class PermSpaceType(abc.ABCMeta):
     '''
