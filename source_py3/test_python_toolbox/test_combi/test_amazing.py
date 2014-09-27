@@ -29,7 +29,7 @@ def _check_variation_selection(variation_selection):
     
     iterable_or_length = (
         'abracab' if variation_selection.is_recurrent else
-        tuple(range(70, -10, -10)) if variation_selection.is_rapplied else 7
+        tuple(range(60, -10, -10)) if variation_selection.is_rapplied else 7
     )
     kwargs['iterable_or_length'] = iterable_or_length
     sequence = (iterable_or_length if
@@ -78,8 +78,8 @@ def _check_variation_selection(variation_selection):
         return
     
     assert perm_space.variation_selection == variation_selection
-        
-    for i, perm in enumerate(perm_space):
+    assert perm_space.sequence_length == 7
+    for i, perm in enumerate(perm_space[:100]):
         assert type(perm) == combi.Comb if variation_selection.is_combination \
                                                                 else combi.Perm
         if not variation_selection.is_fixed and \
