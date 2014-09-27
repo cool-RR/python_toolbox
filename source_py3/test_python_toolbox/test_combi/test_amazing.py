@@ -35,13 +35,35 @@ def _check_variation_selection(variation_selection):
         domain = sequence_tools.CuteRange(11)
         
     if variation_selection.is_partial:
-        fixed_map = {domain[1]: range[1], domain[5]: range[4],}
-    else:
-        n_elements = (5 if )
+        kwargs['n_elements'] = 5
         
-    perm_space = PermSpace(
-        **kwargs
-    )
+    if variation_selection.is_combination:
+        kwargs['is_combination'] = True
+        
+    if variation_selection.is_fixed:
+        fixed_map = {domain[1]: range[1], domain[4]: range[3],}
+        kwargs['fixed_map'] = fixed_map
+    else:
+        fixed_map = {}
+        
+    if variation_selection.is_degreed:
+        kwargs['degrees'] = (0, 2, 4, 5, 6, 7)
+        
+        if variation_selection.is_fixed:
+            fixed_map = {domain[1]: range[1], domain[4]: range[3],}
+            kwargs['fixed_map'] = fixed_map
+        else:
+            fixed_map = {}
+            
+    perm_space = PermSpace(**kwargs)
+    
+    if variation_selection.is_sliced:
+        perm_space = perm_space[2:-2]
+    
+    assert perm_space.variation_selection == variation_selection
     
     
+def test():
+    return ((_check_variation_selection, variation_selection) for
+            variation_selection in combi.variations.variation_selection_space)
     
