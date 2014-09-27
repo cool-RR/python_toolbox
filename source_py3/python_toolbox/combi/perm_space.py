@@ -48,8 +48,8 @@ class PermSpaceType(abc.ABCMeta):
                     ArgumentsProfile(PermSpace.__init__, None, *args, **kwargs)
             if arguments_profile.get('fixed_map', None):
                 raise UnallowedVariationSelectionException(
-                    {variations.FIXED: True,
-                     variations.COMBINATION: True,}
+                    {variations.Variation.FIXED: True,
+                     variations.Variation.COMBINATION: True,}
                 )
             return super(PermSpaceType, CombSpace).__call__(
                 iterable_or_length=arguments_profile['iterable_or_length'], 
@@ -209,8 +209,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         if self.is_combination:
             if fixed_map:
                 raise UnallowedVariationSelectionException(
-                    {variations.FIXED: True,
-                     variations.COMBINATION: True,}
+                    {variations.Variation.FIXED: True,
+                     variations.Variation.COMBINATION: True,}
                 )
         
         #                                                                     #
@@ -230,8 +230,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         if self.is_dapplied:
             if self.is_combination:
                 raise UnallowedVariationSelectionException(
-                    {variations.DAPPLIED: True,
-                     variations.COMBINATION: True,}
+                    {variations.Variation.DAPPLIED: True,
+                     variations.Variation.COMBINATION: True,}
                 )
 
             self.domain = domain
@@ -291,8 +291,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         if self.is_fixed:
             if self.is_combination:
                 raise UnallowedVariationSelectionException(
-                    {variations.FIXED: True,
-                     variations.COMBINATION: True,}
+                    {variations.Variation.FIXED: True,
+                     variations.Variation.COMBINATION: True,}
                 )
             self._unsliced_undegreed_length = math_tools.factorial(
                 len(self.free_indices),

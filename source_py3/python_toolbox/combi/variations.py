@@ -17,8 +17,8 @@ class UnallowedVariationSelectionException(exceptions.CuteException):
         self.variation_clash = variation_clash
         assert variation_clash in variation_clashes
         super().__init__(
-            "You can't create a `PermSpace` that's %s" % (
-                'and '.join(
+            "You can't create a `PermSpace` that's %s." % (
+                ' and '.join(
                     '%s%s' % (
                         '' if included else 'not ',
                         variation.value
