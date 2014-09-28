@@ -109,7 +109,18 @@ def _check_variation_selection(variation_selection):
     assert (not perm_space != PermSpace(**kwargs)[perm_space.canonical_slice])
     assert hash(perm_space) == \
                           hash(PermSpace(**kwargs)[perm_space.canonical_slice])
-        
+
+    if perm_space.is_sliced and perm_space.length >= 2:
+        assert perm_space[0] == perm_space.unsliced[2]
+        assert perm_space[1] == perm_space.unsliced[3]
+        assert perm_space[-1] == perm_space.unsliced[-3]
+        assert perm_space[-2] == perm_space.unsliced[-4]
+        assert perm_space.unsliced[0] not in perm_space
+        assert perm_space.unsliced[1] not in perm_space
+        assert perm_space.unsliced[2] in perm_space
+        assert perm_space.unsliced[-1] not in perm_space
+        assert perm_space.unsliced[-2] not in perm_space
+        assert perm_space.unsliced[-3] in perm_space
     
     # blocktodo: change to 100 after finished debugging 
     for i, perm in enumerate(itertools.islice(perm_space, 10)):
