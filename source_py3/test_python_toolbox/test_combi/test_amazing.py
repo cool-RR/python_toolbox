@@ -193,6 +193,8 @@ def _check_variation_selection(variation_selection):
             
         if variation_selection.is_degreed:
             assert perm.degree in degrees
+        elif variation_selection.is_partial:
+            assert perm.degree == NotImplemented
         else:
             assert 0 <= perm.degree <= 7
             
