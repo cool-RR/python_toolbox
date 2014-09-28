@@ -53,5 +53,4 @@ class Comb(Perm):
             0
         )
     
-    def get_neighbors(self, *, degrees=(1,), perm_space=None):
-        raise NotImplementedError
+        
