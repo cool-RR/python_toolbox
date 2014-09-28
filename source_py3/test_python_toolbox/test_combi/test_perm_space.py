@@ -499,7 +499,7 @@ def test_neighbors():
     
     
     
-    first_and_second_level_neighbors = perm.get_neighbors((1, 2))
+    first_and_second_level_neighbors = perm.get_neighbors(degrees=(1, 2))
     assert Perm('woem', 'meow') in first_and_second_level_neighbors
     assert Perm('meow', 'meow') not in first_and_second_level_neighbors
     assert Perm('owem', 'meow') in first_and_second_level_neighbors
@@ -508,10 +508,10 @@ def test_neighbors():
     
     assert set(first_level_neighbors) < set(first_and_second_level_neighbors)
     
-    assert perm in perm.get_neighbors((0, 1))
-    assert set(first_level_neighbors) < set(perm.get_neighbors((0, 1)))
-    assert len(first_level_neighbors) + 1 == len(perm.get_neighbors((0, 1)))
-    
+    assert perm in perm.get_neighbors(degrees=(0, 1))
+    assert set(first_level_neighbors) < set(perm.get_neighbors(degrees=(0, 1)))
+    assert len(first_level_neighbors) + 1 == \
+                                        len(perm.get_neighbors(degrees=(0, 1)))
     
     
 def test_recurrent():

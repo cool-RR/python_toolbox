@@ -22,11 +22,6 @@ def _check_variation_selection(variation_selection):
     
     kwargs = {}
     
-    if variation_selection.is_recurrent:
-        #blocktodo obviously remove when done with recurrent
-        raise nose.SkipTest
-
-
     if variation_selection.is_recurrent and \
                                            not variation_selection.is_rapplied:
         assert not variation_selection.is_allowed
@@ -104,6 +99,18 @@ def _check_variation_selection(variation_selection):
         assert perm_space[0] < perm_space[-1]
         assert perm_space[0] != perm_space[-1]
         
+        
+    if variation_selection.is_partial:
+        assert perm_space.n_unused_elements == 2
+    else:
+        assert perm_space.n_unused_elements == 0
+        
+    assert perm_space == PermSpace(**kwargs)[perm_space.canonical_slice]
+    assert (not perm_space != PermSpace(**kwargs)[perm_space.canonical_slice])
+    assert hash(perm_space) == \
+                          hash(PermSpace(**kwargs)[perm_space.canonical_slice])
+        
+    
     # blocktodo: change to 100 after finished debugging 
     for i, perm in enumerate(itertools.islice(perm_space, 10)):
         assert isinstance(perm, combi.Perm)
@@ -209,8 +216,8 @@ def _check_variation_selection(variation_selection):
             assert len(cute_iter_tools.zip_non_equal((perm, neigbhor),
                                                      lazy_tuple=True)) == 2
             
-    pass # blocktodo add more
-    
+    # blocktodo add brute force generation of first 100 perms and ensure
+    # identical.
     
 def test():
     yield from ((_check_variation_selection, variation_selection) for
