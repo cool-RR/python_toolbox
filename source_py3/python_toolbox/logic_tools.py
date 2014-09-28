@@ -34,6 +34,7 @@ def all_equal(iterable, exhaustive=False):
             tuple(items[i] for i in comb) for comb in
                                                  combi.CombSpace(len(items), 2)
         )
+        # Must do it like that because items might not be hashable.
     else: # exhaustive is False
         pairs = cute_iter_tools.iterate_overlapping_subsequences(iterable)
         
