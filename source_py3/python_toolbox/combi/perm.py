@@ -396,10 +396,13 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         from .map_space import MapSpace
         if perm_space is None:
             perm_space = self.nominal_perm_space
-        return MapSpace(perm_space._coerce_perm,
-                        PermSpace(self._perm_sequence,
-                                  fixed_map=perm_space._undapplied_fixed_map,
-                                  degrees=degrees, slice_=None))
+        return MapSpace(
+            perm_space._coerce_perm,
+            nifty_collections.LazyTuple(
+                perm for perm in PermSpace(self._perm_sequence) if
+                                                      tuple(perm) in perm_space
+            )
+        )
         
         
     def __lt__(self, other):
