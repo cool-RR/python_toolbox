@@ -491,7 +491,7 @@ def iterate_popitem(item_poppable, lazy_tuple=False):
 
 def zip_non_equal(iterables, lazy_tuple=False):
     from python_toolbox import logic_tools
-    iterator = (items for items in zip(iterables)
+    iterator = (items for items in zip(*iterables)
                 if not logic_tools.all_equal(items))
 
     if lazy_tuple:

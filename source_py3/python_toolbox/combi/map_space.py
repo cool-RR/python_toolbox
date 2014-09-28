@@ -26,8 +26,7 @@ class MapSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
     def __init__(self, function, sequence):
         
         self.function = function
-        self.sequence = sequence_tools. \
-                                         ensure_iterable_is_immutable_sequence(
+        self.sequence = sequence_tools.ensure_iterable_is_immutable_sequence(
             sequence,
             default_type=nifty_collections.LazyTuple
         )
@@ -62,7 +61,5 @@ class MapSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
     __eq__ = lambda self, other: (isinstance(other, MapSpace) and
                                   self._reduced == other._reduced)
     
-    __bool__ = lambda self: bool(self.sequence)
-        
 
 

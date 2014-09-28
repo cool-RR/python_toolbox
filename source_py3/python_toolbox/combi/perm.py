@@ -376,7 +376,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         return n_cycles
       
       
-    def get_neighbors(self, degrees=(1,), perm_space=None):
+    def get_neighbors(self, *, degrees=(1,), perm_space=None):
         from .map_space import MapSpace
         if perm_space is None:
             perm_space = self.nominal_perm_space
