@@ -225,14 +225,16 @@ def _check_variation_selection(variation_selection):
             pass
             # No neighbors in this case because they'll have a degree of 1 or 3
             # which are excluded.
+        elif variation_selection.is_combination:
+            with cute_testing.RaiseAssertor(TypeError):
+                next(iter(neighbors))
         else:
             assert neighbors
-            
-        for neigbhor in neighbors:
-            # assert neigbhor in perm_space # Not sure whether this should be 
-            # true.
-            assert len(cute_iter_tools.zip_non_equal((perm, neigbhor),
-                                                     lazy_tuple=True)) == 2
+            for neigbhor in neighbors:
+                # assert neigbhor in perm_space # Not sure whether this should
+                # be true.
+                assert len(cute_iter_tools.zip_non_equal((perm, neigbhor),
+                                                         lazy_tuple=True)) == 2
             
     # blocktodo add brute force generation of first 100 perms and ensure
     # identical.
