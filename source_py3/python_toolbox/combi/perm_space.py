@@ -583,6 +583,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 ),
                 self
             )
+        elif self.is_recurrent:
+            
         
         else:
             return self.perm_type(i, self)
