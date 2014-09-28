@@ -12,16 +12,25 @@ class _VariationRemovingMixin:
     
     ###########################################################################
     
-    unrapplied = caching.CachedProperty(
-        lambda self: PermSpace(
+    @caching.CachedProperty
+    def unrapplied(self):
+        '''A version of this `PermSpace` without a custom range.'''
+        if self.is_recurrent and self.is_sliced:
+            raise Exception(
+                "You can't get an unrapplied version of a recurrent, sliced "
+                "`PermSpace` because after unrapplying it, it'll no longer be "
+                "recurrent, and thus have a different number of elements, and "
+                "thus the slice wouldn't be usable. Please use `.unsliced` "
+                "first."
+            )
+        return PermSpace(
             self.sequence_length, domain=self.domain, 
             fixed_map={key: self.sequence.index(value) for
                        key, value in self.fixed_map.items()},
             degrees=self.degrees, slice_=self.canonical_slice,
             n_elements=self.n_elements, is_combination=self.is_combination
-        ),
-        doc='''A version of this `PermSpace` without a custom range.'''
-    )
+        )
+    
     # There's no `.unrecurrented`; if you want to make a perm space
     # non-recurrented, use `.unrapplied`.
 
