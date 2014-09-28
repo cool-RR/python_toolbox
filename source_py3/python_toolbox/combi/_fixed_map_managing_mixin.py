@@ -1,4 +1,7 @@
+import collections
+
 from python_toolbox import caching
+from python_toolbox import nifty_collections
 
 # (`PermSpace` exported to here from `perm_space.py` to avoid import loop.)
 
@@ -23,11 +26,22 @@ class _FixedMapManagingMixin:
         doc='''Indices (possibly from domain) of free items.'''
         
     )
-    free_values = caching.CachedProperty(
-        lambda self: tuple(item for item in self.sequence
-                           if item not in self.fixed_map.values()), 
-        doc='''Items that can change between permutations.'''
-    )
+    
+    @caching.CachedProperty
+    @nifty_collections.LazyTuple.factory
+    def free_values(self):
+        '''Items that can change between permutations.'''
+        # This algorithm is required instead of just a one-liner because in the
+        # case of recurrent sequences, we don't want to remove all the sequence
+        # items that are in `self.fixed_map.values()` but only as many as there
+        # are in `self.fixed_map.values()`.
+        fixed_counter = collections.Counter(self.fixed_map.values())
+        for item in self.sequence:
+            if fixed_counter[item]:
+                fixed_counter[item] -= 1
+            else:
+                yield item
+    
     @caching.CachedProperty
     def _n_cycles_in_fixed_items_of_just_fixed(self):
         '''

@@ -247,19 +247,6 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         #                                                                     #
         # The length calculated here will be true only for perm spaces that
         # don't have any additional complications.
-        if self.is_recurrent:
-            function_to_use = math_tools.catshit if self.is_combination else \
-                                                            math_tools.shitfuck
-            self._just_recurrented_partialled_combinationed_length = \
-                   function_to_use(self.n_elements, self._frozen_crate_counter)
-        else:
-            self._just_recurrented_partialled_combinationed_length = \
-                math_tools.factorial(
-                    self.sequence_length,
-                    start=(self.sequence_length - self.n_elements + 1)
-                ) // (math_tools.factorial(self.n_elements) if
-                                                    self.is_combination else 1)
-            # This division is always without a remainder, because math.
         #                                                                     #
         ### Finished doing interim calculation of the length. #################
         
@@ -294,11 +281,21 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                     {variations.Variation.FIXED: True,
                      variations.Variation.COMBINATION: True,}
                 )
-            self._unsliced_undegreed_length = math_tools.factorial(
-                len(self.free_indices),
-                start=(len(self.free_indices) -
-                                   (self.n_elements - len(self.fixed_map)) + 1)
-            )
+            
+            if self.is_recurrent:
+                self._unsliced_undegreed_length = math_tools.shitfuck(
+                    self.n_elements - len(self.fixed_map),
+                    nifty_collections.FrozenCrateCounter(
+                        collections.Counter(self.free_values).values()
+                    )                    
+                )
+            else:
+                self._unsliced_undegreed_length = math_tools.factorial(
+                    len(self.free_indices),
+                    start=(len(self.free_indices) -
+                                       (self.n_elements - len(self.fixed_map)) + 1)
+                )
+            
             if not (self.is_dapplied or self.is_rapplied or degrees or slice_
                     or (n_elements is not None) or self.is_combination):
                 self._just_fixed = self
@@ -308,8 +305,21 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                     fixed_map=self._undapplied_unrapplied_fixed_map,
                 )
         else:
-            self._unsliced_undegreed_length = \
-                         self._just_recurrented_partialled_combinationed_length
+            
+            if self.is_recurrent:
+                function_to_use = math_tools.catshit if self.is_combination else \
+                                                                math_tools.shitfuck
+                self._unsliced_undegreed_length = \
+                       function_to_use(self.n_elements, self._frozen_crate_counter)
+            else:
+                self._unsliced_undegreed_length = \
+                    math_tools.factorial(
+                        self.sequence_length,
+                        start=(self.sequence_length - self.n_elements + 1)
+                    ) // (math_tools.factorial(self.n_elements) if
+                                                        self.is_combination else 1)
+                # This division is always without a remainder, because math.
+                
             if not (self.is_dapplied or self.is_rapplied or degrees or slice_
                     or (n_elements is not None) or self.is_combination):
                 self._just_fixed = self
@@ -324,14 +334,9 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         all_degrees = sequence_tools.CuteRange(self.sequence_length)
         if degrees is None:
             degrees = ()
-        if not isinstance(degrees, collections.Iterable):
-            assert isinstance(degrees, numbers.Integral)
-            degrees = (degrees,)
-        degrees = \
-              sequence_tools.ensure_iterable_is_immutable_sequence(degrees)
+        degrees = sequence_tools.to_tuple(degrees, item_type=int)
         
-        if not degrees or cute_iter_tools.are_equal(degrees,
-                                                        all_degrees):
+        if (not degrees) or cute_iter_tools.are_equal(degrees, all_degrees):
             self.is_degreed = False
             self.degrees = all_degrees
             self._unsliced_length = self._unsliced_undegreed_length
