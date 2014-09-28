@@ -166,8 +166,10 @@ def _check_variation_selection(variation_selection):
             assert ~~perm == perm.inverse.inverse == perm == perm ** 1
             assert (perm * ~perm) == (~perm * perm) == \
                                                      perm.nominal_perm_space[0]
-            assert isinstance(perm ** 4, perm_space)
-            assert isinstance(perm ** 7, perm_space)
+            assert isinstance(perm ** 4, Perm)
+            assert isinstance(perm ** -7, Perm)
+            assert perm ** 4 in perm_space
+            assert perm ** -7 in perm_space
             
         perm_set = set(perm)
         if variation_selection.is_partial:
