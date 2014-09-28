@@ -206,7 +206,8 @@ def _check_variation_selection(variation_selection):
             assert key == key__
             assert value == perm.as_dictoid[key] == value__
             assert perm.items[j] == (key, value)
-            assert perm.index(value) == key
+            if not variation_selection.is_recurrent:
+                assert perm.index(value) == key
             assert perm[key] == value
             assert key in perm.domain
             assert value in perm

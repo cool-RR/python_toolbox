@@ -86,8 +86,6 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         ### Analyzing `perm_space`: ###########################################
         #                                                                     #
         if perm_space is None:
-            self.is_rapplied = self.is_dapplied = self.is_partial = \
-                                                    self.is_combination = False
             if not isinstance(number_or_perm_sequence,
                               collections.Sequence):
                 raise Exception(
@@ -100,18 +98,20 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
             # be O(n).
             self.nominal_perm_space = PermSpace(len(number_or_perm_sequence))
         else: # perm_space is not None
-            self.is_rapplied = perm_space.is_rapplied
-            self.is_dapplied = perm_space.is_dapplied
-            self.is_partial = perm_space.is_partial
-            self.is_combination = perm_space.is_combination
             self.nominal_perm_space = perm_space.unsliced.undegreed.unfixed
-        #                                                                     #
-        ### Finished analyzing `perm_space`. ##################################
-        
+            
         # `self.nominal_perm_space` is a perm space that preserves only the
         # rapplied, dapplied, partial and combination properties of the
         # original `PermSpace`.
+            
+        #                                                                     #
+        ### Finished analyzing `perm_space`. ##################################
         
+        self.is_rapplied = self.nominal_perm_space.is_rapplied
+        self.is_recurrent = self.nominal_perm_space.is_recurrent
+        self.is_partial = self.nominal_perm_space.is_partial
+        self.is_combination = self.nominal_perm_space.is_combination
+        self.is_dapplied = self.nominal_perm_space.is_dapplied
         self.is_pure = not (self.is_rapplied or self.is_dapplied
                             or self.is_partial or self.is_combination)
         
@@ -275,7 +275,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         new_perm_sequence = []
         for i in self:
             i_index = rapplied_sequence.index(i)
-            rapplied_sequence[i] = MISSING_ELEMENT
+            rapplied_sequence[i_index] = MISSING_ELEMENT
             new_perm_sequence.append(i_index)
         #                                                                     #
         ### Finished calculating the new perm sequence. #######################
