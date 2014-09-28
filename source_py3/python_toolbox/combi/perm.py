@@ -299,12 +299,12 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         `result_type=None`, will use `tuple`, except when `other` is a `str` or
         `Perm`, in which case that same type would be used.
         '''
-        if self.is_rapplied:
-            raise TypeError("Can't apply a rapplied permutation, try "
-                            "`perm.unrapplied`.")
-        if self.is_dapplied:
-            raise TypeError("Can't apply a dapplied permutation, try "
-                            "`perm.undapplied`.")
+        # if self.is_rapplied:
+            # raise TypeError("Can't apply a rapplied permutation, try "
+                            # "`perm.unrapplied`.")
+        # if self.is_dapplied:
+            # raise TypeError("Can't apply a dapplied permutation, try "
+                            # "`perm.undapplied`.")
         sequence = \
              sequence_tools.ensure_iterable_is_immutable_sequence(sequence)
         if sequence_tools.get_length(sequence) < \

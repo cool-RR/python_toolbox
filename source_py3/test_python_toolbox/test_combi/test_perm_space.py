@@ -515,6 +515,20 @@ def test_neighbors():
     assert set(first_level_neighbors) < set(perm.get_neighbors((0, 1)))
     assert len(first_level_neighbors) + 1 == len(perm.get_neighbors((0, 1)))
     
+def test_apply():
+    # Test applying a pure perm:
+    assert 'meow' * Perm((1, 3, 2, 0)) == 'ewom'
+    
+    # Test applying a rapplied and dapplied perm:
+    assert 'meow' * Perm('ewom', PermSpace('meow', domain='meow')) == 'ewom'
+    assert 'meow' * Perm('ewom', PermSpace('ewom', domain='meow')) == 'ewom'
+    
+    # Test applying a rapplied perm:
+    assert 'meow' * Perm('eowm', PermSpace('meow')) == 'ewom'
+    
+    # Test applying a dapplied perm:
+    assert 'meow' * Perm((1, 3, 2, 0), PermSpace(4, domain='meow')) == 'ewom'
+    
     
 def test_recurrent():
     recurrent_perm_space = PermSpace('abbccddd', n_elements=3)
