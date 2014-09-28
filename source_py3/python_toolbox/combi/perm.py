@@ -23,6 +23,9 @@ from . import misc
 
 infinity = float('inf')
 
+class MISSING_ELEMENT: 
+    '''blocktotodoc'''
+        
 
 class _BasePermView:
     def __init__(self, perm):
@@ -261,11 +264,24 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         
     @caching.CachedProperty
     def unrapplied(self):
-        unrapplied = Perm(
-            (self.nominal_perm_space.sequence.index(i)
-             for i in self),
-            self.nominal_perm_space.unrapplied
-        )
+        
+        ### Calculating the new perm sequence: ################################
+        #                                                                     #
+        # This is more complex than a one-line generator because of recurrent
+        # perms; every time there's a recurrent item, we need to take not
+        # necessary the index of its first occurrence in the rapplied sequence
+        # but the first index we haven't taken already.
+        rapplied_sequence = list(self.nominal_perm_space.sequence)
+        new_perm_sequence = []
+        for i in self:
+            i_index = rapplied_sequence.index(i)
+            rapplied_sequence[i] = MISSING_ELEMENT
+            new_perm_sequence.append(i_index)
+        #                                                                     #
+        ### Finished calculating the new perm sequence. #######################
+        
+        unrapplied = Perm(new_perm_sequence,
+                          self.nominal_perm_space.unrapplied)
         assert not unrapplied.is_rapplied
         return unrapplied
     
