@@ -41,7 +41,7 @@ def iterate_overlapping_subsequences(iterable, length=2, wrap_around=False,
     )
 
     if lazy_tuple:
-        from python_toolbox import nifty_collections # Avoiding circular import.
+        from python_toolbox import nifty_collections
         return nifty_collections.LazyTuple(iterator)
     else:
         return iterator
@@ -101,7 +101,7 @@ def shorten(iterable, n, lazy_tuple=False):
     iterator = _shorten(iterable=iterable, n=n)
 
     if lazy_tuple:
-        from python_toolbox import nifty_collections # Avoiding circular import.
+        from python_toolbox import nifty_collections
         return nifty_collections.LazyTuple(iterator)
     else:
         return iterator
@@ -138,7 +138,7 @@ def enumerate(iterable, reverse_index=False, lazy_tuple=False):
     iterator = _enumerate(iterable=iterable, reverse_index=reverse_index)
 
     if lazy_tuple:
-        from python_toolbox import nifty_collections # Avoiding circular import.
+        from python_toolbox import nifty_collections
         return nifty_collections.LazyTuple(iterator)
     else:
         return iterator
@@ -191,7 +191,7 @@ def iter_with(iterable, context_manager, lazy_tuple=False):
     iterator = _iter_with(iterable=iterable, context_manager=context_manager)
 
     if lazy_tuple:
-        from python_toolbox import nifty_collections # Avoiding circular import.
+        from python_toolbox import nifty_collections
         return nifty_collections.LazyTuple(iterator)
     else:
         return iterator
@@ -267,7 +267,7 @@ def double_filter(filter_function, iterable, lazy_tuple=False):
     iterators = (make_true_iterator(), make_false_iterator())
     
     if lazy_tuple:
-        from python_toolbox import nifty_collections # Avoiding circular import.
+        from python_toolbox import nifty_collections
         return tuple(map(nifty_collections.LazyTuple, iterators))
     else:
         return iterators
@@ -311,7 +311,7 @@ def fill(iterable, fill_value=None, fill_value_maker=None, length=infinity,
                      length=length)
     
     if lazy_tuple:
-        from python_toolbox import nifty_collections # Avoiding circular import.
+        from python_toolbox import nifty_collections
         return nifty_collections.LazyTuple(iterator)
     elif sequence_type is None:
         return iterator
@@ -350,7 +350,7 @@ def call_until_exception(function, exception, lazy_tuple=False):
     '''
     iterator = _call_until_exception(function, exception)
     if lazy_tuple:
-        from python_toolbox import nifty_collections # Avoiding circular import
+        from python_toolbox import nifty_collections
         return nifty_collections.LazyTuple(iterator)
     else:
         return iterator
@@ -489,3 +489,13 @@ def iterate_popitem(item_poppable, lazy_tuple=False):
     
 
 
+def zip_non_equal(iterables, lazy_tuple=False):
+    from python_toolbox import logic_tools
+    iterator = (items for items in zip(iterables)
+                if not logic_tools.all_equal(items))
+
+    if lazy_tuple:
+        from python_toolbox import nifty_collections
+        return nifty_collections.LazyTuple(iterator)
+    else:
+        return iterator

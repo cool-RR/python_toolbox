@@ -64,7 +64,7 @@ def _check_variation_selection(variation_selection):
         fixed_map = {}
         
     if variation_selection.is_degreed:
-        kwargs['degrees'] = (0, 2, 4, 5)
+        kwargs['degrees'] = degrees = (0, 2, 4, 5)
         
 
     context_manager = (
@@ -95,6 +95,10 @@ def _check_variation_selection(variation_selection):
         not variation_selection.is_partial
     )
     
+    assert perm_space[-1] >= perm_space[0]
+    if perm_space.length >= 2:
+        assert perm_space[-1] > perm_space[0]
+        
     # blocktodo: change to 100 after finished debugging 
     for i, perm in enumerate(itertools.islice(perm_space, 10)):
         assert isinstance(perm, combi.Perm)
@@ -159,10 +163,11 @@ def _check_variation_selection(variation_selection):
                 perm ** -1
         else:
             assert ~perm == perm.inverse == perm ** -1
-            assert ~~perm == perm.inverse.inverse == perm
+            assert ~~perm == perm.inverse.inverse == perm == perm ** 1
             assert (perm * ~perm) == (~perm * perm) == \
                                                      perm.nominal_perm_space[0]
-        
+            assert isinstance(perm ** 4, perm_space)
+            assert isinstance(perm ** 7, perm_space)
             
         perm_set = set(perm)
         if variation_selection.is_partial:
@@ -183,9 +188,14 @@ def _check_variation_selection(variation_selection):
             assert key in perm.domain
             assert value in perm
             
+        if variation_selection.is_degreed:
+            assert perm.degree in degrees
+        else:
+            assert 0 <= perm.degree <= 7
             
-            
-            
+        for neigbhor in perm.get_neighbors(perm_space):
+            assert neigbhor in perm_space
+            assert len(cute_iter_tools.zip_non_equal((perm, neigbhor))) == 2
             
     pass # blocktodo add more
     
