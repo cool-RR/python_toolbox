@@ -197,15 +197,15 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         fetched from the perm space; it's the number of the perm in its nominal
         perm space, i.e. a perm space that is neither degreed, fixed or sliced.
         '''
-        if self.is_rapplied or self.is_dapplied:
-            return self.unrapplied.undapplied.number
+        if self.is_dapplied:
+            return self.undapplied.number
         
         factoradic_number = []
-        unused_numbers = list(self.nominal_perm_space.sequence)
-        for i, number in enumerate(self):
-            index_of_current_number = unused_numbers.index(number)
+        unused_values = list(self.nominal_perm_space.sequence)
+        for i, value in enumerate(self):
+            index_of_current_number = unused_values.index(value)
             factoradic_number.append(index_of_current_number)
-            del unused_numbers[index_of_current_number]
+            del unused_values[index_of_current_number]
         return math_tools.from_factoradic(
             factoradic_number +
             [0] * self.nominal_perm_space.n_unused_elements
