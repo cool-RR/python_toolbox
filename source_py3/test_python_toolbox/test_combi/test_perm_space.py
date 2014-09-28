@@ -121,11 +121,11 @@ def test_perm_spaces():
     assert Perm(7, pure_perm_space) ==  Perm(7, range(4)) == Perm(7, 4) == \
                                                                     some_perm
     
-    assert Perm((1, 3, 2, 0)) * 'meow' == 'ewom'
-    assert Perm((1, 3, 2, 0)) * Perm('meow', 'meow') == Perm('ewom', 'meow')
-    assert Perm((0, 1, 2, 3)) * [0, 1, 2, 3] == (0, 1, 2, 3)
+    assert 'meow' * Perm((1, 3, 2, 0)) == 'ewom'
+    assert Perm('meow', 'meow') * Perm((1, 3, 2, 0)) == Perm('ewom', 'meow')
+    assert [0, 1, 2, 3] * Perm((0, 1, 2, 3)) == (0, 1, 2, 3)
     assert Perm((0, 1, 2, 3)) * Perm((0, 1, 2, 3)) == Perm((0, 1, 2, 3))
-    assert Perm((0, 1, 3, 2)) * Perm((2, 0, 1, 3)) == Perm((2, 0, 3, 1))
+    assert Perm((2, 0, 1, 3)) * Perm((0, 1, 3, 2)) == Perm((2, 0, 3, 1))
     
     assert (Perm((0, 1, 2, 3)) ** (- 2)) == (Perm((0, 1, 2, 3)) ** (- 1)) == \
            (Perm((0, 1, 2, 3)) ** (0)) == (Perm((0, 1, 2, 3)) ** (1)) == \
