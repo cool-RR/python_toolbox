@@ -95,9 +95,12 @@ def _check_variation_selection(variation_selection):
         not variation_selection.is_partial
     )
     
-    assert perm_space[-1] >= perm_space[0]
     if perm_space.length >= 2:
+        assert perm_space[-1] >= perm_space[0]
         assert perm_space[-1] > perm_space[0]
+        assert perm_space[0] <= perm_space[-1]
+        assert perm_space[0] < perm_space[-1]
+        assert perm_space[0] != perm_space[-1]
         
     # blocktodo: change to 100 after finished debugging 
     for i, perm in enumerate(itertools.islice(perm_space, 10)):
