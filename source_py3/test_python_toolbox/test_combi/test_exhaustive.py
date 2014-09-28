@@ -221,7 +221,13 @@ def _check_variation_selection(variation_selection):
             
         
         neighbors = perm.get_neighbors(perm_space=perm_space)
-        assert neighbors
+        if variation_selection.is_degreed and perm.degree in (0, 2):
+            pass
+            # No neighbors in this case because they'll have a degree of 1 or 3
+            # which are excluded.
+        else:
+            assert neighbors
+            
         for neigbhor in neighbors:
             # assert neigbhor in perm_space # Not sure whether this should be 
             # true.

@@ -399,8 +399,8 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         return MapSpace(
             perm_space._coerce_perm,
             nifty_collections.LazyTuple(
-                perm for perm in PermSpace(self._perm_sequence) if
-                                                      tuple(perm) in perm_space
+                perm for perm in PermSpace(self._perm_sequence,
+                                  degrees=degrees) if tuple(perm) in perm_space
             )
         )
         
