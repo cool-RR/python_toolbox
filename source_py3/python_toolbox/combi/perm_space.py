@@ -613,7 +613,6 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                     raise RuntimeError
             assert wip_i_with_slice_boost == 0
             return self.perm_type(wip_perm_sequence, self)
-            
         
         else:
             return self.perm_type(i, self)

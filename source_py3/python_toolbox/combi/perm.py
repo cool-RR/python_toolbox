@@ -194,8 +194,8 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         '''
         
         The number here is not necessarily the number with which the perm was
-        fetched from the perm space; it's the number of the perm in a perm
-        space that is neither degreed, fixed or sliced.
+        fetched from the perm space; it's the number of the perm in its nominal
+        perm space, i.e. a perm space that is neither degreed, fixed or sliced.
         '''
         if self.is_rapplied or self.is_dapplied:
             return self.unrapplied.undapplied.number
