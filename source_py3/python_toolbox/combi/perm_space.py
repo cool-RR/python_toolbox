@@ -678,9 +678,6 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         # At this point we know the permutation contains the correct items, and
         # has the correct degree.
         
-        if self.is_rapplied or self.is_dapplied:
-            return self.unrapplied.undapplied.index(perm.unrapplied.undapplied)
-        
         if self.is_degreed:
             wip_perm_number = 0
             wip_perm_sequence_dict = dict(self.fixed_map)
