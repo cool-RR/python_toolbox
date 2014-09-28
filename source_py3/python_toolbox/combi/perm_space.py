@@ -513,7 +513,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         elif self.is_sliced:
             return self.unsliced[i + self.canonical_slice.start]
         if self.is_degreed:
-            available_elements = list(self.free_values)
+            available_values = list(self.free_values)
             wip_perm_sequence_dict = dict(self.fixed_map)
             wip_n_cycles_in_fixed_items = \
                                     self._n_cycles_in_fixed_items_of_just_fixed
@@ -522,13 +522,13 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 domain_j = self.domain[j]
                 if domain_j in wip_perm_sequence_dict:
                     continue
-                for unused_number in available_elements:
+                for unused_value in available_values:
                     candidate_perm_sequence_dict = dict(wip_perm_sequence_dict)
-                    candidate_perm_sequence_dict[domain_j] = unused_number
+                    candidate_perm_sequence_dict[domain_j] = unused_value
                     
                     ### Checking whether we closed a cycle: ###################
                     #                                                         #
-                    if j == unused_number:
+                    if j == unused_value:
                         closed_cycle = True
                     else:
                         current = domain_j
@@ -560,8 +560,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                     
                     if wip_i_with_slice_boost < \
                                              candidate_fixed_perm_space_length:
-                        available_elements.remove(unused_number)
-                        wip_perm_sequence_dict[domain_j] = unused_number
+                        available_values.remove(unused_value)
+                        wip_perm_sequence_dict[domain_j] = unused_value
                         wip_n_cycles_in_fixed_items = \
                                               candidate_n_cycles_in_fixed_items
                         
@@ -569,6 +569,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                     wip_i_with_slice_boost -= candidate_fixed_perm_space_length
                 else:
                     raise RuntimeError
+            assert wip_i_with_slice_boost == 0
             return self.perm_type((wip_perm_sequence_dict[k] for k in
                                    self.domain), self)
         elif self.is_fixed:
@@ -584,6 +585,63 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 self
             )
         elif self.is_recurrent:
+            assert not self.is_fixed
+            assert not self.is_degreed
+            available_values = list(self.sequence)
+            wip_perm_sequence = []
+            wip_i_with_slice_boost = i
+            for j in range(self.sequence_length):
+                domain_j = self.domain[j]
+                for unused_value in available_values:
+                    candidate_perm_sequence_dict = dict(wip_perm_sequence_dict)
+                    candidate_perm_sequence_dict[domain_j] = unused_value
+                    
+                    ### Checking whether we closed a cycle: ###################
+                    #                                                         #
+                    if j == unused_value:
+                        closed_cycle = True
+                    else:
+                        current = domain_j
+                        while True:
+                            current = self.domain[
+                                candidate_perm_sequence_dict[current]
+                            ]
+                            if current == domain_j:
+                                closed_cycle = True
+                                break
+                            elif current not in candidate_perm_sequence_dict:
+                                closed_cycle = False
+                                break
+                    #                                                         #
+                    ### Finished checking whether we closed a cycle. ##########
+                    
+                    candidate_n_cycles_in_fixed_items = \
+                                     wip_n_cycles_in_fixed_items + closed_cycle
+                    
+                    candidate_fixed_perm_space_length = sum(
+                        math_tools.abs_stirling(
+                            self.sequence_length -
+                                             len(candidate_perm_sequence_dict),
+                            self.sequence_length - degree -
+                                              candidate_n_cycles_in_fixed_items
+                        ) for degree in self.degrees
+                    )
+                    
+                    
+                    if wip_i_with_slice_boost < \
+                                             candidate_fixed_perm_space_length:
+                        available_values.remove(unused_value)
+                        wip_perm_sequence_dict[domain_j] = unused_value
+                        wip_n_cycles_in_fixed_items = \
+                                              candidate_n_cycles_in_fixed_items
+                        
+                        break
+                    wip_i_with_slice_boost -= candidate_fixed_perm_space_length
+                else:
+                    raise RuntimeError
+                assert wip_i_with_slice_boost == 0
+            return self.perm_type((wip_perm_sequence_dict[k] for k in
+                                   self.domain), self)
             
         
         else:
