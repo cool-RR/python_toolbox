@@ -28,7 +28,7 @@ class _FixedMapManagingMixin:
     )
     
     @caching.CachedProperty
-    @nifty_collections.LazyTuple.factory
+    @nifty_collections.LazyTuple.factory()
     def free_values(self):
         '''Items that can change between permutations.'''
         # This algorithm is required instead of just a one-liner because in the

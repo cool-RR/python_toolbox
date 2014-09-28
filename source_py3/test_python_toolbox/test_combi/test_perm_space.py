@@ -522,6 +522,5 @@ def test_recurrent():
     assert recurrent_perm_space.combinationed.length == 14
     
     assert recurrent_perm_space.get_fixed({1: 'b',}).length == 14
-    assert recurrent_perm_space.get_fixed({1: 'b',}).combinationed.length == 5
     
     # blocktodo: Don't forget getitem and index tests of course... 
