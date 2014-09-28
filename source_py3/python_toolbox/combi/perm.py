@@ -239,14 +239,17 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         if self.is_partial:
             raise TypeError("Partial perms don't have an inverse.")
         if self.is_rapplied:
+            raise TypeError("Rapplied perms don't have an inverse.")
+        if self.is_dapplied:
+            raise TypeError("Dapplied perms don't have an inverse.")
+        if self.is_rapplied:
             return self.nominal_perm_space[0] * self.unrapplied.inverse
         else:
             _perm = [None] * \
                      self.nominal_perm_space.sequence_length
             for i, item in enumerate(self):
                 _perm[item] = i
-            return type(self)(_perm,
-                              self.nominal_perm_space)
+            return type(self)(_perm, self.nominal_perm_space)
         
         
     __invert__ = lambda self: self.inverse
