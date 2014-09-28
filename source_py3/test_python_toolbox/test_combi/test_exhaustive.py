@@ -136,7 +136,9 @@ def _check_variation_selection(variation_selection):
         
         
         if variation_selection.is_rapplied:
-            assert perm != perm.unrapplied == perm_space.unrapplied[i]
+            assert perm != perm.unrapplied
+            if not variation_selection.is_recurrent:
+                perm.unrapplied == perm_space.unrapplied[i]
         else:
             assert perm == perm.unrapplied == perm_space.unrapplied[i]
             if not variation_selection.is_dapplied:
