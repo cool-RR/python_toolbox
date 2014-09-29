@@ -678,6 +678,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         
         # At this point we know the permutation contains the correct items, and
         # has the correct degree.
+        if perm.is_rapplied: return self.unrapplied.index(perm.unrapplied)
         if perm.is_dapplied: return self.undapplied.index(perm.undapplied)
         if self.is_degreed:
             wip_perm_number = 0
@@ -686,9 +687,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             for i, value in enumerate(perm):
                 if i in self.fixed_indices:
                     continue
-                value_index = unused_values.index(value)
-                unused_values.pop(value_index)
-                lower_values = unused_values[:value_index]
+                unused_values.remove(value)
+                lower_values = [j for j in unused_values if j < value]
                 for lower_value in lower_values:
                     temp_fixed_map = dict(wip_perm_sequence_dict)
                     temp_fixed_map[i] = lower_value
