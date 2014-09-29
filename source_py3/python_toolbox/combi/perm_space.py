@@ -662,10 +662,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             raise ValueError
         
         if not isinstance(perm, self.perm_type):
-            if perm_set != self._domain_set:
-                perm = self.perm_type(perm, self)
-            else:
-                perm = self.perm_type(perm)
+            perm = self.perm_type(perm, self)
             
         if self.sequence != perm.nominal_perm_space.sequence:
             # (This also covers `self.rapplied != perm.rapplied`)

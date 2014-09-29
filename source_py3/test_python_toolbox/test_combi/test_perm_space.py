@@ -237,10 +237,7 @@ def test_dapplied_perm_space():
     assert (0, 4, 'ooga booga', 2, 3, 1) not in dapplied_perm_space
     assert dapplied_perm_space.get_partialled(3)[2] not in dapplied_perm_space
     
-    assert dapplied_perm_space.undapplied[7] in dapplied_perm_space
-    # (This is true because the only difference between the two perms is the
-    # domain, so we let it slide, because we still want to look at them as
-    # sequences and not dicts.)
+    assert dapplied_perm_space.undapplied[7] not in dapplied_perm_space
     
     dapplied_perm = dapplied_perm_space[-1]
     assert dapplied_perm in dapplied_perm_space
