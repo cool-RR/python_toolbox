@@ -721,7 +721,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         else:
             perm_number = perm.number
             
-        if not perm_number in self.canonical_slice:
+        if perm_number not in self.canonical_slice:
             raise ValueError
             
         return perm_number - self.canonical_slice.start
