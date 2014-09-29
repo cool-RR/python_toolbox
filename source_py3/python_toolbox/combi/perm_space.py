@@ -503,35 +503,46 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         assert isinstance(i, numbers.Integral)
         if i <= -1:
             i += self.length
+            
         if not (0 <= i < self.length):
             raise IndexError
-        if self.is_sliced:
+        elif self.is_sliced:
             return self.unsliced[i + self.canonical_slice.start]
-        if self.is_degreed:
+        elif self.is_dapplied:
+            return self.perm_type(self.undapplied[i], perm_space=self)
+        elif self.is_degreed:
+            if self.is_rapplied:
+                assert not self.is_recurrent
+                return self.perm_type(self.unrapplied[i],
+                                      perm_space=self)
+            
+            assert not self.is_rapplied and not self.is_recurrent and \
+                   not self.is_partial and not self.is_combination and \
+                   not self.is_dapplied and not self.is_sliced
+            # If that wasn't an example of asserting one's dominance, I don't
+            # know what is.
+            
             available_values = list(self.free_values)
             wip_perm_sequence_dict = dict(self.fixed_map)
             wip_n_cycles_in_fixed_items = \
                                     self._n_cycles_in_fixed_items_of_just_fixed
-            wip_i_with_slice_boost = i
-            for j in range(self.sequence_length):
-                domain_j = self.domain[j]
-                if domain_j in wip_perm_sequence_dict:
+            wip_i = i
+            for j in self.sequence:
+                if j in wip_perm_sequence_dict:
                     continue
                 for unused_value in available_values:
                     candidate_perm_sequence_dict = dict(wip_perm_sequence_dict)
-                    candidate_perm_sequence_dict[domain_j] = unused_value
+                    candidate_perm_sequence_dict[j] = unused_value
                     
                     ### Checking whether we closed a cycle: ###################
                     #                                                         #
                     if j == unused_value:
                         closed_cycle = True
                     else:
-                        current = domain_j
+                        current = j
                         while True:
-                            current = self.domain[
-                                candidate_perm_sequence_dict[current]
-                            ]
-                            if current == domain_j:
+                            current = candidate_perm_sequence_dict[current]
+                            if current == j:
                                 closed_cycle = True
                                 break
                             elif current not in candidate_perm_sequence_dict:
@@ -553,18 +564,17 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                     )
                     
                     
-                    if wip_i_with_slice_boost < \
-                                             candidate_fixed_perm_space_length:
+                    if wip_i < candidate_fixed_perm_space_length:
                         available_values.remove(unused_value)
-                        wip_perm_sequence_dict[domain_j] = unused_value
+                        wip_perm_sequence_dict[j] = unused_value
                         wip_n_cycles_in_fixed_items = \
                                               candidate_n_cycles_in_fixed_items
                         
                         break
-                    wip_i_with_slice_boost -= candidate_fixed_perm_space_length
+                    wip_i -= candidate_fixed_perm_space_length
                 else:
                     raise RuntimeError
-            assert wip_i_with_slice_boost == 0
+            assert wip_i == 0
             return self.perm_type((wip_perm_sequence_dict[k] for k in
                                    self.domain), self)
         elif self.is_fixed:
@@ -585,7 +595,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             assert not self.is_sliced
             available_values = list(self.sequence)
             wip_perm_sequence = []
-            wip_i_with_slice_boost = i
+            wip_i = i
             for j in range(self.sequence_length):
                 for unused_value in \
                                 nifty_collections.OrderedSet(available_values):
@@ -599,14 +609,14 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                     )
                     
                     
-                    if wip_i_with_slice_boost < candidate_sub_perm_space.length:
+                    if wip_i < candidate_sub_perm_space.length:
                         available_values.remove(unused_value)
                         wip_perm_sequence.append(unused_value)
                         break
-                    wip_i_with_slice_boost -= candidate_sub_perm_space.length
+                    wip_i -= candidate_sub_perm_space.length
                 else:
                     raise RuntimeError
-            assert wip_i_with_slice_boost == 0
+            assert wip_i == 0
             return self.perm_type(wip_perm_sequence, self)
         
         else:
