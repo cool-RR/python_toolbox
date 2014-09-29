@@ -695,7 +695,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                         fixed_map=temp_fixed_map
                     ).length
                     
-                wip_perm_sequence_dict[i] = value
+                wip_perm_sequence_dict[self.domain[i]] = value
                 
             perm_number = wip_perm_number
             
