@@ -17,6 +17,59 @@ infinity = float('inf')
 infinities = (infinity, -infinity)
 
 
+class BrutePermSpace:
+    def __init__(self, iterable_or_length, domain=None, n_elements=None,
+                 fixed_map=None, degrees=None, is_combination=False,
+                 slice_=None):
+        self.sequence = tuple(iterable_or_length) if \
+            isinstance(iterable_or_length, collections.Iterable) else \
+                                   sequence_tools.CuteRange(iterable_or_length)
+        self.sequence_length = len(self.sequence)
+        self._sequence_counter = collections.Counter(self.sequence)
+        self.domain = domain or sequence_tools.CuteRange(self.sequence_length)
+        self.n_elements = n_elements if n_elements is not None else \
+                                                             len(self.sequence)
+        self.fixed_map = fixed_map or {}
+        self.degrees = \
+                      degrees or sequence_tools.CuteRange(self.sequence_length)
+        self.is_combination = is_combination
+        self.slice_ = slice_
+        
+        self.is_degreed = (self.degrees !=
+                                sequence_tools.CuteRange(self.sequence_length))
+        
+    def __iter__(self):
+        for candidate in itertools.product(*(self.sequence for i in
+                                                 range(self.sequence_length))):
+            candidate = candidate[:self.n_elements]
+            if collections.Counter(candidate) != self._sequence_counter:
+                continue
+            if any(candidate[self.domain.index(key)] != value for
+                                         key, value in self.fixed_map.items()):
+                continue
+            if self.is_degreed:
+                unvisited_items = \
+                            set(sequence_tools.CuteRange(self.sequence_length))
+                n_cycles = 0
+                while unvisited_items:
+                    starting_item = current_item = next(iter(unvisited_items))
+                    
+                    while current_item in unvisited_items:
+                        unvisited_items.remove(current_item)
+                        current_item = self.sequence.index(
+                            candidate[self.sequence.index(current_item)]
+                        )
+                        
+                    if current_item == starting_item:
+                        n_cycles += 1
+                        
+                degree = self.sequence_length - n_cycles
+                
+                if degree not in self.degrees:
+                    continue
+            yield candidate
+                
+
 def _check_variation_selection(variation_selection):
     assert isinstance(variation_selection, combi.variations.VariationSelection)
     
@@ -73,6 +126,8 @@ def _check_variation_selection(variation_selection):
         
     if not variation_selection.is_allowed:
         return
+    
+    brute_perm_space = BrutePermSpace(**kwargs)
 
     if variation_selection.is_sliced:
         if perm_space.length >= 2:
@@ -121,10 +176,19 @@ def _check_variation_selection(variation_selection):
         assert perm_space.unsliced[-1] not in perm_space
         assert perm_space.unsliced[-2] not in perm_space
         assert perm_space.unsliced[-3] in perm_space
+        
+    if perm_space:
+        # Making sure that `brute_perm_space` isn't empty:
+        next(iter(brute_perm_space))
+        # This is crucial otherwise the zip-based loop below won't run and
+        # we'll get the illusion that the tests are running while they're
+        # really not.
     
     # blocktodo: change to 100 after finished debugging 
-    for i, perm in enumerate(itertools.islice(perm_space, 10)):
+    for i, (perm, brute_perm_tuple) in enumerate(
+                      itertools.islice(zip(perm_space, brute_perm_space), 10)):
         
+        assert tuple(perm) == brute_perm_tuple
         assert perm in perm_space
         
         assert isinstance(perm, combi.Perm)
