@@ -404,7 +404,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
                 perm for perm in PermSpace(
                     self._perm_sequence, domain=self.domain, 
                     degrees=degrees
-                ) if tuple(perm) in perm_space
+                ) if perm in perm_space
             )
         )
         
