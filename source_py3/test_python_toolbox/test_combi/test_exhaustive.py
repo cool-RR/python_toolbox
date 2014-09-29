@@ -47,17 +47,18 @@ class BrutePermSpace:
             return self._iter()
         
     def _iter(self):
-        
-        for candidate in itertools.product(*(self.sequence for i in
-                                                      range(self.n_elements))):
-            if nifty_collections.FrozenCounter(candidate) > \
-                                                 self._sequence_frozen_counter:
+        yielded_candidates = set()
+        for candidate in itertools.permutations(self.sequence, self.n_elements):
+            if candidate in yielded_candidates:
                 continue
+            # if nifty_collections.FrozenCounter(candidate) > \
+                                                 # self._sequence_frozen_counter:
+                # continue
             if any(candidate[self.domain.index(key)] != value for
                                          key, value in self.fixed_map.items()):
                 continue
-            if self.is_combination and \
-                                      not cute_iter_tools.is_sorted(candidate):
+            if self.is_combination and not cute_iter_tools.is_sorted(
+                                           candidate, key=self.sequence.index):
                 continue
             if self.is_degreed:
                 unvisited_items = \
@@ -79,6 +80,8 @@ class BrutePermSpace:
                 
                 if degree not in self.degrees:
                     continue
+                
+            yielded_candidates.add(candidate)
             yield candidate
                 
 
