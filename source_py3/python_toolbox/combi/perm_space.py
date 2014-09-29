@@ -686,8 +686,9 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             for i, value in enumerate(perm):
                 if i in self.fixed_indices:
                     continue
-                unused_values.remove(value)
-                lower_values = [j for j in unused_values if j < value]
+                value_index = unused_values.index(value)
+                unused_values.pop(value_index)
+                lower_values = unused_values[:value_index]
                 for lower_value in lower_values:
                     temp_fixed_map = dict(wip_perm_sequence_dict)
                     temp_fixed_map[i] = lower_value
