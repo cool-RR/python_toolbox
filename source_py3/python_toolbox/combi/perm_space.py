@@ -513,7 +513,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         elif self.is_degreed:
             if self.is_rapplied:
                 assert not self.is_recurrent
-                return self.perm_type(self.unrapplied[i],
+                return self.perm_type(map(self.sequence.__getitem__,
+                                          self.unrapplied[i]),
                                       perm_space=self)
             
             assert not self.is_rapplied and not self.is_recurrent and \
