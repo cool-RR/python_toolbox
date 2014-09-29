@@ -39,6 +39,13 @@ class BrutePermSpace:
                                 sequence_tools.CuteRange(self.sequence_length))
         
     def __iter__(self):
+        if self.slice_:
+            return itertools.islice(self._iter())
+        else:
+            return self._iter()
+        
+    def _iter(self):
+        
         for candidate in itertools.product(*(self.sequence for i in
                                                  range(self.sequence_length))):
             candidate = candidate[:self.n_elements]
