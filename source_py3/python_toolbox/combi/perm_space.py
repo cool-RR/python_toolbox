@@ -505,12 +505,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             i += self.length
         if not (0 <= i < self.length):
             raise IndexError
-        if self.is_rapplied:
-            return self.perm_type(
-                self.unrapplied.undapplied[i].apply(self.sequence),
-                self
-            )
-        elif self.is_sliced:
+        if self.is_sliced:
             return self.unsliced[i + self.canonical_slice.start]
         if self.is_degreed:
             available_values = list(self.free_values)
@@ -725,7 +720,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
     
     
     @caching.CachedProperty
-    def short_length_string():
+    def short_length_string(self):
         '''Short string describing size of space, e.g. "12!"'''
         if not self.is_recurrent and not self.is_partial and \
            not self.is_combination and not self.is_fixed and \
