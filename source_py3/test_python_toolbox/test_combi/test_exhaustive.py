@@ -239,10 +239,9 @@ def _check_variation_selection(variation_selection):
                 # or 3 which are excluded.
             else:
                 assert neighbors
-            for neigbhor in neighbors:
-                # assert neigbhor in perm_space # Not sure whether this should
-                # be true.
-                assert len(cute_iter_tools.zip_non_equal((perm, neigbhor),
+                for neigbhor in neighbors:
+                    assert neigbhor in perm_space 
+                    assert len(cute_iter_tools.zip_non_equal((perm, neigbhor),
                                                          lazy_tuple=True)) == 2
         
         #                                                                     #
