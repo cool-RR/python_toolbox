@@ -667,17 +667,19 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             else:
                 perm = self.perm_type(perm)
             
-        elif self.is_rapplied:
-            if not perm.is_rapplied:
-                raise ValueError
-        elif perm.is_rapplied and not self.is_rapplied:
+        if self.sequence != perm.nominal_perm_space.sequence:
+            # (This also covers `self.rapplied != perm.rapplied`)
+            raise ValueError
+        if self.domain != perm.domain:
+            # (This also covers `self.dapplied != perm.dapplied`)
             raise ValueError
         if self.is_degreed and (perm.degree not in self.degrees):
             raise ValueError
         
         # At this point we know the permutation contains the correct items, and
         # has the correct degree.
-        
+        if perm.is_rapplied: return self.unrapplied.index(perm.unrapplied)
+        if perm.is_dapplied: return self.undapplied.index(perm.undapplied)
         if self.is_degreed:
             wip_perm_number = 0
             wip_perm_sequence_dict = dict(self.fixed_map)
@@ -700,6 +702,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             perm_number = wip_perm_number
             
         elif self.is_fixed:
+            assert not self.is_degreed
             free_values_perm_sequence = []
             for i, perm_item in perm.items:
                 if i in self.fixed_map:

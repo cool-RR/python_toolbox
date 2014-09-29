@@ -96,8 +96,9 @@ class VariationSelection(metaclass=VariationSelectionType):
         
     @caching.cache()
     def __repr__(self):
-        return '<%s: %s>' % (
+        return '<%s #%s: %s>' % (
             type(self).__name__,
+            self.number, 
             ', '.join(variation.value for variation in self.variations)
                                                                       or 'pure'
         )

@@ -228,7 +228,7 @@ def _check_variation_selection(variation_selection):
         ### Testing neighbors: ################################################
         #                                                                     #
         if variation_selection.is_combination or \
-                                              variation_selection.is_recurrent:
+            variation_selection.is_recurrent or variation_selection.is_partial:
             with cute_testing.RaiseAssertor(NotImplementedError):
                 neighbors = perm.get_neighbors(perm_space=perm_space)
         else:
