@@ -124,6 +124,9 @@ def _check_variation_selection(variation_selection):
     
     # blocktodo: change to 100 after finished debugging 
     for i, perm in enumerate(itertools.islice(perm_space, 10)):
+        
+        assert perm in perm_space
+        
         assert isinstance(perm, combi.Perm)
         assert perm.is_rapplied == variation_selection.is_rapplied
         assert perm.is_dapplied == variation_selection.is_dapplied

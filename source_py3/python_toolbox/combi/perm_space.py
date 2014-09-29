@@ -701,7 +701,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             
         elif self.is_fixed:
             free_values_perm_sequence = []
-            for i, perm_item in enumerate(perm):
+            for i, perm_item in perm.items:
                 if i in self.fixed_map:
                     if self.fixed_map[i] != perm_item:
                         raise ValueError
