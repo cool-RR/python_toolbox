@@ -69,7 +69,7 @@ class BrutePermSpace:
                     while current_item in unvisited_items:
                         unvisited_items.remove(current_item)
                         current_item = self.sequence.index(
-                            candidate[self.sequence.index(current_item)]
+                            candidate[current_item]
                         )
                         
                     if current_item == starting_item:
@@ -328,9 +328,6 @@ def _check_variation_selection(variation_selection):
         #                                                                     #
         ### Finished testing neighbors. #######################################
         
-        
-    # blocktodo add brute force generation of first 100 perms and ensure
-    # identical.
     
 def test():
     yield from ((_check_variation_selection, variation_selection) for
