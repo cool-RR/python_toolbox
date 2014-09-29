@@ -5,6 +5,7 @@ import operator
 import heapq
 import itertools
 import collections
+import functools
 
 from .lazy_tuple import LazyTuple
 from .frozen_dict import FrozenDict
@@ -19,6 +20,7 @@ except ImportError:
             mapping[element] = mapping_get(element, 0) + 1
 
 
+@functools.total_ordering
 class FrozenCounter(FrozenDict):
     '''
     An immutable counter.
@@ -208,3 +210,13 @@ class FrozenCounter(FrozenDict):
     n_elements = property( # blocktodo: want to make this cached but import loop
         lambda self: sum(value for value in self.values() if value >= 1)
     )
+    
+    def __lt__(self, other):
+        if not isinstance(other, FrozenCounter):
+            raise NotImplementedError
+        for key, value in self.items():
+            if other[key] < value:
+                return False
+        else:
+            return True
+                

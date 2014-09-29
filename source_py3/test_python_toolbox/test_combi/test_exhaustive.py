@@ -7,6 +7,7 @@ import collections
 
 import nose
 
+from python_toolbox import nifty_collections
 from python_toolbox import context_management
 from python_toolbox import sequence_tools
 
@@ -25,7 +26,8 @@ class BrutePermSpace:
             isinstance(iterable_or_length, collections.Iterable) else \
                                    sequence_tools.CuteRange(iterable_or_length)
         self.sequence_length = len(self.sequence)
-        self._sequence_counter = collections.Counter(self.sequence)
+        self._sequence_frozen_counter = \
+                                 nifty_collections.FrozenCounter(self.sequence)
         self.domain = domain or sequence_tools.CuteRange(self.sequence_length)
         self.n_elements = n_elements if n_elements is not None else \
                                                              len(self.sequence)
@@ -47,12 +49,15 @@ class BrutePermSpace:
     def _iter(self):
         
         for candidate in itertools.product(*(self.sequence for i in
-                                                 range(self.sequence_length))):
-            candidate = candidate[:self.n_elements]
-            if collections.Counter(candidate) != self._sequence_counter:
+                                                      range(self.n_elements))):
+            if nifty_collections.FrozenCounter(candidate) > \
+                                                 self._sequence_frozen_counter:
                 continue
             if any(candidate[self.domain.index(key)] != value for
                                          key, value in self.fixed_map.items()):
+                continue
+            if self.is_combination and \
+                                      not cute_iter_tools.is_sorted(candidate):
                 continue
             if self.is_degreed:
                 unvisited_items = \
