@@ -193,9 +193,11 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         factoradic_number = []
         unused_values = list(self.nominal_perm_space.sequence)
         for i, value in enumerate(self):
-            index_of_current_number = unused_values.index(value)
+            index_of_current_number = \
+                nifty_collections.OrderedSet(unused_values).index(value) if \
+                              self.is_recurrent else unused_values.index(value)
             factoradic_number.append(index_of_current_number)
-            del unused_values[index_of_current_number]
+            unused_values.remove(value)
         return math_tools.from_factoradic(
             factoradic_number +
             [0] * self.nominal_perm_space.n_unused_elements
