@@ -167,7 +167,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
             type(self).__name__, 
             (', n_elements=%s' % len(self)) if self.is_partial else '',
             self.number,
-            self._perm_space_short_length_string,
+            self.nominal_perm_space.short_length_string,
             ('(%s) => ' % ', '.join(map(repr, self.domain)))
                                                    if self.is_dapplied else '',
             ', '.join(repr(item) for item in self),
@@ -179,19 +179,6 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         return self.nominal_perm_space. \
                domain[numerical_index] if self.is_dapplied else numerical_index
         
-        
-    
-    @caching.CachedProperty
-    def _perm_space_short_length_string(self):
-        if self.is_partial or self.is_combination:
-            return str(self.nominal_perm_space.length)
-        else:
-            return misc.get_short_factorial_string(
-                self.nominal_perm_space.sequence_length,
-            )
-            
-    
-    
     @caching.CachedProperty
     def number(self):
         '''

@@ -724,10 +724,16 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         return perm_number - self.canonical_slice.start
     
     
-    short_length_string = caching.CachedProperty(
-        lambda self: misc.get_short_factorial_string(self.sequence_length),
-        doc='''Short string describing size of space, e.g. "12!"'''
-    )
+    @caching.CachedProperty
+    def short_length_string():
+        '''Short string describing size of space, e.g. "12!"'''
+        if not self.is_recurrent and not self.is_partial and \
+           not self.is_combination and not self.is_fixed and \
+                                                            not self.is_sliced:
+            assert self.length == math_tools.factorial(self.sequence_length)
+            return misc.get_short_factorial_string(self.sequence_length)
+        else:
+            return str(self.length)
     
     __bool__ = lambda self: bool(self.length)
     
