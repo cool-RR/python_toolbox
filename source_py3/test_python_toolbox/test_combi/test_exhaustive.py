@@ -40,7 +40,7 @@ class BrutePermSpace:
         
     def __iter__(self):
         if self.slice_:
-            return itertools.islice(self._iter())
+            return itertools.islice(self._iter(), *self.slice_)
         else:
             return self._iter()
         
@@ -134,8 +134,6 @@ def _check_variation_selection(variation_selection):
     if not variation_selection.is_allowed:
         return
     
-    brute_perm_space = BrutePermSpace(**kwargs)
-
     if variation_selection.is_sliced:
         if perm_space.length >= 2:
             perm_space = perm_space[2:-2]
@@ -143,6 +141,11 @@ def _check_variation_selection(variation_selection):
             assert variation_selection.is_combination and \
                                          not variation_selection.is_partial
             perm_space = perm_space[:0]
+    
+    brute_perm_space = BrutePermSpace(
+        slice_=(perm_space.slice_ if perm_space.is_sliced else None), 
+        **kwargs
+    )
     
     
     assert perm_space.variation_selection == variation_selection
