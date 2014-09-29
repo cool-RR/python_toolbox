@@ -662,7 +662,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             raise ValueError
         
         if not isinstance(perm, self.perm_type):
-            if perm_set != set(range(len(perm))):
+            if perm_set != self._domain_set:
                 perm = self.perm_type(perm, self)
             else:
                 perm = self.perm_type(perm)
@@ -730,6 +730,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
     )
     
     __bool__ = lambda self: bool(self.length)
+    
+    _domain_set = caching.CachedProperty(lambda self: set(self.domain))
     
     
     def __lt__(self, other):
