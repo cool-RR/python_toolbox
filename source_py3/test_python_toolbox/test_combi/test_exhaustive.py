@@ -145,8 +145,10 @@ def _check_variation_selection(variation_selection):
         else:
             assert perm == perm.unrapplied == perm_space.unrapplied[i]
             if not variation_selection.is_dapplied:
-                assert perm.apply('isogram') == 'isogram' * perm == \
-                           perm_space.get_rapplied('isogram')[i]._perm_sequence
+                assert perm.apply('isogram') == 'isogram' * perm
+                assert tuple('isogram' * perm) == tuple(
+                    perm_space.get_rapplied('isogram')[i]._perm_sequence
+                )
             
         
         if variation_selection.is_dapplied:
