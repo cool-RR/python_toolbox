@@ -650,18 +650,16 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         
         else:
             factoradic_number = math_tools.to_factoradic(
-                self.number * math.factorial(
-                     self.nominal_perm_space.n_unused_elements),
-                n_digits_pad=self.nominal_perm_space.sequence_length
+                i * math.factorial(
+                     self.n_unused_elements),
+                n_digits_pad=self.sequence_length
             )
             if self.is_partial:
-                factoradic_number = factoradic_number[
-                    :-self.nominal_perm_space.n_unused_elements
-                ]
-            unused_numbers = list(self.nominal_perm_space.sequence)
+                factoradic_number = factoradic_number[:-self.n_unused_elements]
+            unused_numbers = list(self.sequence)
             result = tuple(unused_numbers.pop(factoradic_digit) for
                                              factoradic_digit in factoradic_number)
-            assert sequence_tools.get_length(result) == self.length
+            assert sequence_tools.get_length(result) == self.sequence_length
             
             return self.perm_type(result, self)
                 

@@ -114,7 +114,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
             
             
     _reduced = property(lambda self: (
-        type(self), self._perm_sequence
+        type(self), self._perm_sequence, self.nominal_perm_space
     ))
             
     __iter__ = lambda self: iter(self._perm_sequence)
@@ -334,6 +334,10 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
     items = caching.CachedProperty(PermItems)
     as_dictoid = caching.CachedProperty(PermAsDictoid)
     
+    def __eq__(self, other):
+        return type(self) == type(other) and \
+                      self.nominal_perm_space == other.nominal_perm_space and \
+           cute_iter_tools.are_equal(self._perm_sequence, other._perm_sequence)
         
 
 

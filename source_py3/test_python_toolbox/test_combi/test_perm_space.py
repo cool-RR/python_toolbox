@@ -54,8 +54,7 @@ def test_perm_spaces():
     with cute_testing.RaiseAssertor(IndexError): pure_0a[pure_0a.length + 2]
     with cute_testing.RaiseAssertor(IndexError): pure_0a[pure_0a.length + 300]
     
-    with cute_testing.RaiseAssertor(): Perm(24, pure_0a)
-    with cute_testing.RaiseAssertor(): Perm(-1, pure_0a)
+    with cute_testing.RaiseAssertor(): pure_0a[24]
     
     assert pure_0a.take_random() in pure_0c
     
@@ -90,7 +89,6 @@ def test_perm_spaces():
     assert isinstance(first_perm.as_dictoid, combi.perm.PermAsDictoid)
     assert first_perm.as_dictoid[2] == 2
     assert dict(first_perm.as_dictoid) == {0: 0, 1: 1, 2: 2, 3: 3}
-    assert first_perm % 7 == 0
     assert not (first_perm != first_perm)
     assert first_perm == first_perm
     assert first_perm
@@ -100,8 +98,6 @@ def test_perm_spaces():
     assert some_perm.inverse == ~ some_perm
     assert ~ ~ some_perm == some_perm
     
-    assert int(first_perm) == 0
-    assert int(last_perm) == len(pure_perm_space) - 1
     
     assert first_perm in pure_perm_space
     assert set(first_perm) not in pure_perm_space # No order? Not contained.
@@ -117,9 +113,6 @@ def test_perm_spaces():
     assert pure_perm_space.index(last_perm) == \
                                                 len(pure_perm_space) - 1
     assert pure_perm_space.index(some_perm) == 7
-    
-    assert Perm(7, pure_perm_space) ==  Perm(7, range(4)) == Perm(7, 4) == \
-                                                                    some_perm
     
     assert 'meow' * Perm((1, 3, 2, 0)) == 'ewom'
     assert Perm('meow', 'meow') * Perm((1, 3, 2, 0)) == Perm('ewom', 'meow')
