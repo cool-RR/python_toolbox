@@ -797,7 +797,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 self.sequence_length - 1 -
                                      item for item in perm._perm_sequence[::-1]
             )
-            return self.length - 1 - sum(
+            perm_number = self.n_elements - 1 - sum(
                 (math_tools.binomial(item, i) for i, item in
                                       enumerate(processed_perm_sequence, start=1)),
                 0
@@ -813,7 +813,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 index_of_current_number = unused_values.index(value)
                 factoradic_number.append(index_of_current_number)
                 unused_values.remove(value)
-            return math_tools.from_factoradic(
+            perm_number = math_tools.from_factoradic(
                 factoradic_number +
                 [0] * self.n_unused_elements
             ) // math.factorial(self.n_unused_elements)
