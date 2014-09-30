@@ -44,7 +44,7 @@ variation_clashes = (
     {Variation.DEGREED: True, Variation.COMBINATION: True,},
     {Variation.DEGREED: True, Variation.PARTIAL: True,},
     {Variation.DEGREED: True, Variation.RECURRENT: True,},
-    {Variation.COMBINATION: True, Variation.FIXED: True,},
+    # {Variation.COMBINATION: True, Variation.FIXED: True,},
     {Variation.RAPPLIED: False, Variation.RECURRENT: True,},
 )
 

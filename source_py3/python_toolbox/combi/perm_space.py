@@ -46,14 +46,15 @@ class PermSpaceType(abc.ABCMeta):
             from .comb_space import CombSpace
             arguments_profile = python_toolbox.arguments_profiling. \
                     ArgumentsProfile(PermSpace.__init__, None, *args, **kwargs)
-            if arguments_profile.get('fixed_map', None):
-                raise UnallowedVariationSelectionException(
-                    {variations.Variation.FIXED: True,
-                     variations.Variation.COMBINATION: True,}
-                )
+            # if arguments_profile.get('fixed_map', None):
+                # raise UnallowedVariationSelectionException(
+                    # {variations.Variation.FIXED: True,
+                     # variations.Variation.COMBINATION: True,}
+                # )
             return super(PermSpaceType, CombSpace).__call__(
                 iterable_or_length=arguments_profile['iterable_or_length'], 
-                n_elements=arguments_profile['n_elements'], 
+                n_elements=arguments_profile['n_elements'],
+                fixed_map=arguments_profile['fixed_map'],
                 slice_=arguments_profile['slice_'],
                 _domain_for_checking=arguments_profile['domain'],
                 _degrees_for_checking=arguments_profile['degrees'],
@@ -205,14 +206,6 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         ### Figuring out whether it's a combination: ##########################
         #                                                                     #
         self.is_combination = is_combination
-        
-        if self.is_combination:
-            if fixed_map:
-                raise UnallowedVariationSelectionException(
-                    {variations.Variation.FIXED: True,
-                     variations.Variation.COMBINATION: True,}
-                )
-        
         #                                                                     #
         ### Finished figuring out whether it's a combination. #################
         
@@ -276,12 +269,6 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 
         self.is_fixed = bool(self.fixed_map)
         if self.is_fixed:
-            if self.is_combination:
-                raise UnallowedVariationSelectionException(
-                    {variations.Variation.FIXED: True,
-                     variations.Variation.COMBINATION: True,}
-                )
-            
             if self.is_recurrent:
                 self._unsliced_undegreed_length = math_tools.shitfuck(
                     self.n_elements - len(self.fixed_map),
