@@ -398,8 +398,8 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         
     def __lt__(self, other):
         if isinstance(other, Perm):
-            return (self.number, self.nominal_perm_space) < \
-                  (other.number, other.nominal_perm_space)
+            return (self.nominal_perm_space, self.number) < \
+                                       (other.nominal_perm_space, other.number)
         else:
             return NotImplemented
         
