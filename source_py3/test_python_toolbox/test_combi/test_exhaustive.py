@@ -170,11 +170,8 @@ def _check_variation_selection(variation_selection):
     )
     
     if perm_space.length >= 2:
-        assert perm_space[-1] >= perm_space[0]
-        assert perm_space[-1] > perm_space[0]
-        assert perm_space[0] <= perm_space[-1]
-        assert perm_space[0] < perm_space[-1]
-        assert perm_space[0] != perm_space[-1]
+        assert perm_space.index(perm_space[-1]) > \
+                                                perm_space.index(perm_space[0])
         
         
     if variation_selection.is_partial:
