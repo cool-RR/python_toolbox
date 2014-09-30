@@ -581,11 +581,12 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         elif self.is_recurrent:
             assert not self.is_degreed
             assert not self.is_sliced
-            available_values = list(self.free_values)
+            available_values = list(self.sequence)
             wip_perm_sequence_dict = dict(self.fixed_map)
             wip_i = i
             for j in range(self.sequence_length):
                 if j in self.fixed_map:
+                    available_values.remove(self.fixed_map[j])
                     continue
                 for unused_value in \
                                 nifty_collections.OrderedSet(available_values):
@@ -707,8 +708,38 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 
             perm_number = wip_perm_number
             
+        elif self.is_recurrent:
+            assert not self.is_degreed and not self.is_dapplied
+
+            wip_perm_number = 0
+            unused_values = list(self.sequence)
+            perm_sequence_list = list(perm._perm_sequence)
+            for i, value in enumerate(perm):
+                if i in self.fixed_map:
+                    if self.fixed_map[i] == value:
+                        unused_values.remove(value)
+                        continue
+                    else:
+                        raise ValueError
+                lower_values = [thing for thing in
+                                nifty_collections.OrderedSet(unused_values)
+                                if unused_values.index(thing) <
+                                                    unused_values.index(value)]
+                unused_values.remove(value)
+                for lower_value in lower_values:
+                    temp_fixed_map = dict(
+                            enumerate(perm_sequence_list[:i] + [lower_value])
+                        )
+                    temp_fixed_map.update(self.fixed_map)
+                    wip_perm_number += PermSpace(
+                        self.sequence,
+                        fixed_map=temp_fixed_map
+                    ).length
+                
+            perm_number = wip_perm_number
+            
         elif self.is_fixed:
-            assert not self.is_degreed
+            assert not self.is_degreed and not self.is_recurrent
             free_values_perm_sequence = []
             for i, perm_item in perm.items:
                 if i in self.fixed_map:
@@ -724,28 +755,6 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 free_values_perm_sequence
             )
             
-        elif self.is_recurrent:
-            assert (not self.is_fixed and not self.is_degreed
-                    and not self.is_dapplied)
-
-            wip_perm_number = 0
-            unused_values = list(self.sequence)
-            perm_sequence_list = list(perm._perm_sequence)
-            for i, value in enumerate(perm):
-                lower_values = [thing for thing in
-                                nifty_collections.OrderedSet(unused_values)
-                                if unused_values.index(thing) <
-                                                    unused_values.index(value)]
-                unused_values.remove(value)
-                for lower_value in lower_values:
-                    wip_perm_number += PermSpace(
-                        self.sequence,
-                        fixed_map=dict(
-                            enumerate(perm_sequence_list[:i] + [lower_value])
-                        )
-                    ).length
-                
-            perm_number = wip_perm_number
               
         else:
             perm_number = perm.number

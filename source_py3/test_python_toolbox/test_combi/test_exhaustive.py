@@ -257,8 +257,7 @@ def _check_variation_selection(variation_selection):
         # Give me your unsliced, your undegreed, your unfixed.
         
         if not variation_selection.is_fixed and \
-                                       not variation_selection.is_degreed and \
-                                          not variation_selection.is_recurrent:
+                                            not variation_selection.is_degreed:
             assert perm_space.index(perm) == i
             if not variation_selection.is_sliced:
                 assert perm.number == i
