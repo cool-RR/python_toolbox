@@ -644,7 +644,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 else:
                     raise RuntimeError
             result = tuple(wip_perm_sequence)
-            assert len(result) == self.length
+            assert len(result) == self.n_elements
             return self.perm_type(result, self)
 
         
@@ -659,7 +659,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             unused_numbers = list(self.sequence)
             result = tuple(unused_numbers.pop(factoradic_digit) for
                                              factoradic_digit in factoradic_number)
-            assert sequence_tools.get_length(result) == self.sequence_length
+            assert sequence_tools.get_length(result) == self.n_elements
             
             return self.perm_type(result, self)
                 

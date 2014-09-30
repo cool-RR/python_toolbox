@@ -245,7 +245,7 @@ def test_dapplied_perm_space():
     assert dapplied_perm['r'] == 3
     assert dapplied_perm['g'] == 4
     assert repr(dapplied_perm) == \
-         '''<Perm: (119 / 120) ('g', 'r', 'o', 'w', 'l') => (4, 3, 2, 1, 0)>'''
+                     '''<Perm: ('g', 'r', 'o', 'w', 'l') => (4, 3, 2, 1, 0)>'''
     
     assert dapplied_perm.index(4) == 'g'
     
@@ -349,9 +349,6 @@ def test_degreed_perm_space():
     assert cute_iter_tools.is_sorted(
         [funky_perm_space.index(perm) for perm in funky_perm_space]
     )
-    
-    assert cute_iter_tools.is_sorted(funky_perm_space)
-    
     
     other_perms_chain_space = ChainSpace((funky_perm_space.unsliced[:2],
                                           funky_perm_space.unsliced[-2:]))
