@@ -187,12 +187,13 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         if self.is_dapplied:
             return self.undapplied.number
         
+        if self.is_recurrent:
+            return self.nominal_perm_space.index(self)
+        
         factoradic_number = []
         unused_values = list(self.nominal_perm_space.sequence)
         for i, value in enumerate(self):
-            index_of_current_number = \
-                nifty_collections.OrderedSet(unused_values).index(value) if \
-                              self.is_recurrent else unused_values.index(value)
+            index_of_current_number = unused_values.index(value)
             factoradic_number.append(index_of_current_number)
             unused_values.remove(value)
         return math_tools.from_factoradic(

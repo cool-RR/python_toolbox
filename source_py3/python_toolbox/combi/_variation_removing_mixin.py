@@ -30,7 +30,7 @@ class _VariationRemovingMixin:
             fixed_map={key: self.sequence.index(value) for
                        key, value in self.fixed_map.items()},
             degrees=self.degrees, n_elements=self.n_elements,
-            is_combination=self.is_combination
+            slice_=self.canonical_slice, is_combination=self.is_combination
         )
     
     @caching.CachedProperty

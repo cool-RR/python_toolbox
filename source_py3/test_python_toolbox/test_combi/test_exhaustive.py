@@ -4,6 +4,7 @@
 import pickle
 import itertools
 import collections
+import ast
 
 import nose
 
@@ -256,7 +257,8 @@ def _check_variation_selection(variation_selection):
         # Give me your unsliced, your undegreed, your unfixed.
         
         if not variation_selection.is_fixed and \
-                                            not variation_selection.is_degreed:
+                                       not variation_selection.is_degreed and \
+                                          not variation_selection.is_recurrent:
             assert perm_space.index(perm) == i
             if not variation_selection.is_sliced:
                 assert perm.number == i
@@ -330,6 +332,17 @@ def _check_variation_selection(variation_selection):
         
         #                                                                     #
         ### Finished testing neighbors. #######################################
+        
+        perm_repr = repr(perm)
+        perm_number_string, big_number_string = perm_repr.split(')', 1)[0] \
+                                                 .split('(', 1)[1].split(' / ')
+        perm_number = ast.literal_eval(perm_number_string)
+        big_number = (math.factorial(ast.literal_eval(big_number_string[:-1]))
+                      if big_number_string.endswith('!')
+                      else ast.literal_eval(big_number_string))
+        
+        assert (0 <= perm_number == perm.number <= big_number ==
+                                                perm.nominal_perm_space.length)
         
     
 def test():
