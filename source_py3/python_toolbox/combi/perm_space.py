@@ -628,8 +628,42 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 ),
                 self
             )
+        
+        elif self.is_combination:
+            wip_number = self.length - 1 - i
+            wip_perm_sequence = []
+            for i in range(self.n_elements, 0, -1):
+                for j in range(self.sequence_length, i - 2, -1):
+                    candidate = math_tools.binomial(j, i)
+                    if candidate <= wip_number:
+                        wip_perm_sequence.append(
+                            self.sequence[-(j+1)]
+                        )
+                        wip_number -= candidate
+                        break
+                else:
+                    raise RuntimeError
+            result = tuple(wip_perm_sequence)
+            assert len(result) == self.length
+            return self.perm_type(result, self)
+
+        
         else:
-            return self.perm_type(i, self)
+            factoradic_number = math_tools.to_factoradic(
+                self.number * math.factorial(
+                     self.nominal_perm_space.n_unused_elements),
+                n_digits_pad=self.nominal_perm_space.sequence_length
+            )
+            if self.is_partial:
+                factoradic_number = factoradic_number[
+                    :-self.nominal_perm_space.n_unused_elements
+                ]
+            unused_numbers = list(self.nominal_perm_space.sequence)
+            result = tuple(unused_numbers.pop(factoradic_digit) for
+                                             factoradic_digit in factoradic_number)
+            assert sequence_tools.get_length(result) == self.length
+            
+            return self.perm_type(result, self)
                 
                 
     enumerated_sequence = caching.CachedProperty(
@@ -759,9 +793,33 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 free_values_perm_sequence
             )
             
+            
+        elif self.is_combination:
+            processed_perm_sequence = tuple(
+                self.sequence_length - 1 -
+                                     item for item in perm._perm_sequence[::-1]
+            )
+            return self.length - 1 - sum(
+                (math_tools.binomial(item, i) for i, item in
+                                      enumerate(processed_perm_sequence, start=1)),
+                0
+            )
+        
+            
               
         else:
-            perm_number = perm.number
+            
+            factoradic_number = []
+            unused_values = list(self.sequence)
+            for i, value in enumerate(perm):
+                index_of_current_number = unused_values.index(value)
+                factoradic_number.append(index_of_current_number)
+                unused_values.remove(value)
+            return math_tools.from_factoradic(
+                factoradic_number +
+                [0] * self.n_unused_elements
+            ) // math.factorial(self.n_unused_elements)
+            
             
         if perm_number not in self.canonical_slice:
             raise ValueError
