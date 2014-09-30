@@ -578,6 +578,36 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             assert wip_i == 0
             return self.perm_type((wip_perm_sequence_dict[k] for k in
                                    self.domain), self)
+        elif self.is_recurrent:
+            assert not self.is_degreed
+            assert not self.is_sliced
+            available_values = list(self.free_values)
+            wip_perm_sequence_dict = dict(self.fixed_map)
+            wip_i = i
+            for j in range(self.sequence_length):
+                if j in self.fixed_map:
+                    continue
+                for unused_value in \
+                                nifty_collections.OrderedSet(available_values):
+                    wip_perm_sequence_dict[j] = unused_value
+                    candidate_sub_perm_space = PermSpace(
+                        self.sequence,
+                        n_elements=self.n_elements,
+                        fixed_map=wip_perm_sequence_dict, 
+                        is_combination=self.is_combination
+                    )
+                    
+                    if wip_i < candidate_sub_perm_space.length:
+                        available_values.remove(unused_value)
+                        break
+                    else:
+                        wip_i -= candidate_sub_perm_space.length
+                        del wip_perm_sequence_dict[j]
+                else:
+                    raise RuntimeError
+            assert wip_i == 0
+            return self.perm_type(wip_perm_sequence, self)
+        
         elif self.is_fixed:
             free_values_perm = self._free_values_unsliced_perm_space[i]
             free_values_perm_iterator = iter(free_values_perm)
@@ -590,36 +620,6 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 ),
                 self
             )
-        elif self.is_recurrent:
-            assert not self.is_fixed
-            assert not self.is_degreed
-            assert not self.is_sliced
-            available_values = list(self.sequence)
-            wip_perm_sequence = []
-            wip_i = i
-            for j in range(self.sequence_length):
-                for unused_value in \
-                                nifty_collections.OrderedSet(available_values):
-                    remaining_sequence = list(available_values)
-                    remaining_sequence.remove(unused_value)
-                    candidate_sub_perm_space = PermSpace(
-                        remaining_sequence,
-                        n_elements=self.n_elements - len(wip_perm_sequence)
-                                                                           - 1,
-                        is_combination=self.is_combination
-                    )
-                    
-                    
-                    if wip_i < candidate_sub_perm_space.length:
-                        available_values.remove(unused_value)
-                        wip_perm_sequence.append(unused_value)
-                        break
-                    wip_i -= candidate_sub_perm_space.length
-                else:
-                    raise RuntimeError
-            assert wip_i == 0
-            return self.perm_type(wip_perm_sequence, self)
-        
         else:
             return self.perm_type(i, self)
                 
