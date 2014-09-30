@@ -1,5 +1,7 @@
 from python_toolbox import caching
 
+from . import misc
+
 # (`PermSpace` exported to here from `perm_space.py` to avoid import loop.)
 
 
@@ -27,12 +29,35 @@ class _VariationRemovingMixin:
             self.sequence_length, domain=self.domain, 
             fixed_map={key: self.sequence.index(value) for
                        key, value in self.fixed_map.items()},
-            degrees=self.degrees, slice_=self.canonical_slice,
-            n_elements=self.n_elements, is_combination=self.is_combination
+            degrees=self.degrees, n_elements=self.n_elements,
+            is_combination=self.is_combination
         )
     
-    # There's no `.unrecurrented`; if you want to make a perm space
-    # non-recurrented, use `.unrapplied`.
+    @caching.CachedProperty
+    def unrecurrented(self):
+        '''A version of this `PermSpace` with no recurrences.'''
+        assert self.is_recurrent # Otherwise was overridden in `__init__`
+        if self.is_sliced:
+            raise Exception(
+                "You can't get an unrecurrented version of a sliced "
+                "`PermSpace` because after unrecurrenting it, it'll have a "
+                "different number of elements, and thus the slice wouldn't be "
+                "usable. Please use `.unsliced` first."
+            )
+        
+        sequence_copy = list(self.sequence)
+        processed_fixed_map = {}
+        for key, value in self.fixed_map:
+            index = sequence_copy.index(value)
+            sequence_copy[value] = misc.MISSING_ELEMENT
+            processed_fixed_map[key] = (index, value)
+            
+        return PermSpace(
+            enumerate(self.sequence), domain=self.domain, 
+            fixed_map=processed_fixed_map, degrees=self.degrees,
+            n_elements=self.n_elements, is_combination=self.is_combination
+        )
+      
 
     @caching.CachedProperty
     def unpartialled(self):

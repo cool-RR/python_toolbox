@@ -23,9 +23,6 @@ from . import misc
 
 infinity = float('inf')
 
-class MISSING_ELEMENT: 
-    '''blocktotodoc'''
-        
 
 class _BasePermView:
     def __init__(self, perm):
@@ -264,7 +261,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         new_perm_sequence = []
         for i in self:
             i_index = rapplied_sequence.index(i)
-            rapplied_sequence[i_index] = MISSING_ELEMENT
+            rapplied_sequence[i_index] = misc.MISSING_ELEMENT
             new_perm_sequence.append(i_index)
         #                                                                     #
         ### Finished calculating the new perm sequence. #######################

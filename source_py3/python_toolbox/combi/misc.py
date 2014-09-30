@@ -14,7 +14,9 @@ from python_toolbox import cute_iter_tools
 
 infinity = float('inf')
 
-        
+
+class MISSING_ELEMENT: 
+    '''blocktotodoc'''
         
         
 def get_short_factorial_string(number, minus_one=False):
