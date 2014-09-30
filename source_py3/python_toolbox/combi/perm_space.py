@@ -729,16 +729,16 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             unused_values = list(self.sequence)
             perm_sequence_list = list(perm._perm_sequence)
             for i, value in enumerate(perm):
-                unused_values.remove(value)
                 lower_values = [thing for thing in
                                 nifty_collections.OrderedSet(unused_values)
-                                if self.sequence.index(thing) <
-                                                    self.sequence.index(value)]
+                                if unused_values.index(thing) <
+                                                    unused_values.index(value)]
+                unused_values.remove(value)
                 for lower_value in lower_values:
                     wip_perm_number += PermSpace(
                         self.sequence,
                         fixed_map=dict(
-                            enumerate(perm_sequence_list + [lower_value])
+                            enumerate(perm_sequence_list[:i] + [lower_value])
                         )
                     ).length
                 
