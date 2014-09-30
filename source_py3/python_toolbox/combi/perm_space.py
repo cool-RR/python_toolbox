@@ -582,14 +582,18 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             assert not self.is_degreed
             assert not self.is_sliced
             available_values = list(self.sequence)
+            reserved_values = list(self.fixed_map.values())
             wip_perm_sequence_dict = dict(self.fixed_map)
             wip_i = i
             for j in range(self.sequence_length):
                 if j in self.fixed_map:
                     available_values.remove(self.fixed_map[j])
+                    reserved_values.remove(self.fixed_map[j])
                     continue
-                for unused_value in \
-                                nifty_collections.OrderedSet(available_values):
+                for unused_value in nifty_collections.OrderedSet((
+                    value for value in available_values if not
+                    (value in reserved_values and available_values.count(value)
+                                            == reserved_values.count(value)))):
                     wip_perm_sequence_dict[j] = unused_value
                     candidate_sub_perm_space = PermSpace(
                         self.sequence,
