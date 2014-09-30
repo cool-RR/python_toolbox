@@ -263,7 +263,7 @@ def _check_variation_selection(variation_selection):
                                             not variation_selection.is_degreed:
             assert perm_space.index(perm) == i
             
-        assert Perm(perm.number, perm_space=perm_space) == perm
+        assert Perm(iter(perm), perm_space=perm_space) == perm
         assert Perm(perm._perm_sequence, perm_space=perm_space) == perm
         
         assert perm.length == perm_space.n_elements
