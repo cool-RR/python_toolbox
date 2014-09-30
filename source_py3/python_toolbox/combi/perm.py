@@ -190,6 +190,20 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
         if self.is_recurrent:
             return self.nominal_perm_space.index(self)
         
+        if self.is_combination:
+            if self.is_rapplied:
+                return self.unrapplied.number
+            
+            processed_perm_sequence = tuple(
+                self.nominal_perm_space.sequence_length - 1 -
+                item for item in self._perm_sequence[::-1]
+            )
+            return self.nominal_perm_space.length - 1 - sum(
+                (math_tools.binomial(item, i) for i, item in
+                                      enumerate(processed_perm_sequence, start=1)),
+                0
+            )
+        
         factoradic_number = []
         unused_values = list(self.nominal_perm_space.sequence)
         for i, value in enumerate(self):
@@ -207,20 +221,41 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
     def _perm_sequence(self):
         assert (0 <= self.number < 
                                  self.nominal_perm_space.length)
-        factoradic_number = math_tools.to_factoradic(
-            self.number * math.factorial(
-                 self.nominal_perm_space.n_unused_elements),
-            n_digits_pad=self.nominal_perm_space.sequence_length
-        )
-        if self.is_partial:
-            factoradic_number = factoradic_number[
-                :-self.nominal_perm_space.n_unused_elements
-            ]
-        unused_numbers = list(self.nominal_perm_space.sequence)
-        result = tuple(unused_numbers.pop(factoradic_digit) for
-                                         factoradic_digit in factoradic_number)
-        assert sequence_tools.get_length(result) == self.length
-        return nifty_collections.LazyTuple(result)
+        if self.is_combination:
+            wip_number = (self.nominal_perm_space.length - 1 - self.number)
+            wip_perm_sequence = []
+            for i in range(self.nominal_perm_space.n_elements, 0, -1):
+                for j in range(self.nominal_perm_space.sequence_length, i - 2, -1):
+                    candidate = math_tools.binomial(j, i)
+                    if candidate <= wip_number:
+                        wip_perm_sequence.append(
+                            self.nominal_perm_space.sequence[-(j+1)]
+                        )
+                        wip_number -= candidate
+                        break
+                else:
+                    raise RuntimeError
+            result = tuple(wip_perm_sequence)
+            assert len(result) == self.length
+            return result
+        
+        else:
+            factoradic_number = math_tools.to_factoradic(
+                self.number * math.factorial(
+                     self.nominal_perm_space.n_unused_elements),
+                n_digits_pad=self.nominal_perm_space.sequence_length
+            )
+            if self.is_partial:
+                factoradic_number = factoradic_number[
+                    :-self.nominal_perm_space.n_unused_elements
+                ]
+            unused_numbers = list(self.nominal_perm_space.sequence)
+            result = tuple(unused_numbers.pop(factoradic_digit) for
+                                             factoradic_digit in factoradic_number)
+            assert sequence_tools.get_length(result) == self.length
+        
+        
+            return nifty_collections.LazyTuple(result)
     
 
 
