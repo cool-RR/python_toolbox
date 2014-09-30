@@ -91,6 +91,9 @@ def _check_variation_selection(variation_selection):
     
     kwargs = {}
     
+    if variation_selection.is_recurrent:
+        # blocktodo remove
+        return 
     if variation_selection.is_recurrent and \
                                            not variation_selection.is_rapplied:
         assert not variation_selection.is_allowed

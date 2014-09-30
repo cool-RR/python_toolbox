@@ -10,7 +10,6 @@ from .selection_space import SelectionSpace
 class UnallowedVariationSelectionException(exceptions.CuteException):
     '''
     
-    blocktodo use everywhere
     let it take variations
     make variation classes mostly for this and testing'''
     def __init__(self, variation_clash):
