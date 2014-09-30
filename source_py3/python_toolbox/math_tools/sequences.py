@@ -66,7 +66,9 @@ def shitfuck(k, recurrence_counter):
     if not isinstance(recurrence_counter, nifty_collections.FrozenCrateCounter):
         recurrence_counter = \
                        nifty_collections.FrozenCrateCounter(recurrence_counter)
-    if k == 1:
+    if k == 0:
+        return 1
+    elif k == 1:
         assert recurrence_counter
         # (Works because `FrozenCrateCounter` has a functioning `__bool__`,
         # unlike Python's `Counter`.)

@@ -727,6 +727,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
 
             wip_perm_number = 0
             unused_values = list(self.sequence)
+            perm_sequence_list = list(perm._perm_sequence)
             for i, value in enumerate(perm):
                 unused_values.remove(value)
                 lower_values = [thing for thing in
@@ -735,9 +736,10 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                                                     self.sequence.index(value)]
                 for lower_value in lower_values:
                     wip_perm_number += PermSpace(
-                        wip_perm_sequence[:i] + [lower_value],
-                        degrees=self.degrees,
-                        fixed_map=dict(enumerate(temp_perm_sequence))
+                        self.sequence,
+                        fixed_map=dict(
+                            enumerate(perm_sequence_list + [lower_value])
+                        )
                     ).length
                 
             perm_number = wip_perm_number
