@@ -606,7 +606,10 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 else:
                     raise RuntimeError
             assert wip_i == 0
-            return self.perm_type(wip_perm_sequence, self)
+            return self.perm_type(
+                dict_tools.get_list(wip_perm_sequence_dict, self.domain),
+                self
+            )
         
         elif self.is_fixed:
             free_values_perm = self._free_values_unsliced_perm_space[i]
