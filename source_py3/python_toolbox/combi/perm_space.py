@@ -285,7 +285,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             if self.is_recurrent:
                 self._unsliced_undegreed_length = math_tools.shitfuck(
                     self.n_elements - len(self.fixed_map),
-                    nifty_collections.FrozenCrateCounter(
+                    nifty_collections.FrozenCounterCounter(
                         collections.Counter(self.free_values).values()
                     )                    
                 )
@@ -310,7 +310,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 function_to_use = math_tools.catshit if self.is_combination else \
                                                                 math_tools.shitfuck
                 self._unsliced_undegreed_length = \
-                       function_to_use(self.n_elements, self._frozen_crate_counter)
+                       function_to_use(self.n_elements, self._frozen_counter_counter)
             else:
                 self._unsliced_undegreed_length = \
                     math_tools.factorial(
@@ -454,8 +454,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
 
             
     @caching.CachedProperty
-    def _frozen_crate_counter(self):
-        return nifty_collections.FrozenCrateCounter(
+    def _frozen_counter_counter(self):
+        return nifty_collections.FrozenCounterCounter(
             self._sequence_counteroid.values()
         )
         
@@ -793,8 +793,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             
             
         elif self.is_combination:
-            if perm.is_rapplied or perm.is_dapplied:
-                return self.unrapplied.undapplied.index(perm)
+            if perm.is_rapplied:
+                return self.unrapplied.index(perm.unrapplied)
             
             processed_perm_sequence = tuple(
                 self.sequence_length - 1 -

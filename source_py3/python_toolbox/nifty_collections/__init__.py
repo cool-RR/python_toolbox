@@ -10,7 +10,7 @@ from .weak_key_identity_dict import WeakKeyIdentityDict
 from .lazy_tuple import LazyTuple
 from .frozen_dict import FrozenDict
 from .frozen_counter import FrozenCounter
-from .frozen_crate_counter import FrozenCrateCounter
+from .frozen_counter_counter import FrozenCounterCounter
 from .default_sorted_dict import DefaultSortedDict
 from .cute_enum import CuteEnum
 

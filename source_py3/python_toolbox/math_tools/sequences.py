@@ -63,9 +63,9 @@ _shitfuck_cache = {}
 def shitfuck(k, recurrence_counter):
     from python_toolbox import nifty_collections
     from python_toolbox import cute_iter_tools
-    if not isinstance(recurrence_counter, nifty_collections.FrozenCrateCounter):
+    if not isinstance(recurrence_counter, nifty_collections.FrozenCounterCounter):
         recurrence_counter = \
-                       nifty_collections.FrozenCrateCounter(recurrence_counter)
+                       nifty_collections.FrozenCounterCounter(recurrence_counter)
     if k == 0:
         return 1
     elif k == 1:
@@ -119,9 +119,9 @@ def catshit(k, recurrence_counter):
     '''
     from python_toolbox import nifty_collections
     from python_toolbox import cute_iter_tools
-    if not isinstance(recurrence_counter, nifty_collections.FrozenCrateCounter):
+    if not isinstance(recurrence_counter, nifty_collections.FrozenCounterCounter):
         recurrence_counter = \
-                       nifty_collections.FrozenCrateCounter(recurrence_counter)
+                       nifty_collections.FrozenCounterCounter(recurrence_counter)
     if k == 1:
         assert recurrence_counter
         # (Works because `FrozenCrateCounter` has a functioning `__bool__`,
