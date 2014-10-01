@@ -503,4 +503,6 @@ def test_recurrent():
     
     assert recurrent_perm_space.get_fixed({1: 'b',}).length == 14
     
+    assert PermSpace('aab', n_elements=1).length == 2
+    
     # blocktodo: Don't forget getitem and index tests of course... 

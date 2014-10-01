@@ -72,7 +72,7 @@ def shitfuck(k, recurrence_counter):
         assert recurrence_counter
         # (Works because `FrozenCrateCounter` has a functioning `__bool__`,
         # unlike Python's `Counter`.)
-        return 1
+        return len(recurrence_counter)
     try:
         return _shitfuck_cache[(k, recurrence_counter)]
     except KeyError:
