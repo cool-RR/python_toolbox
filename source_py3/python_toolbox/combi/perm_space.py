@@ -628,7 +628,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                         wip_i -= candidate_sub_perm_space.length
                         del wip_perm_sequence_dict[j]
                 else:
-                    raise RuntimeError
+                    if len(wip_perm_sequence_dict) < self.n_elements:
+                        raise RuntimeError
             assert wip_i == 0
             return self.perm_type(
                 dict_tools.get_list(wip_perm_sequence_dict, self.domain),
