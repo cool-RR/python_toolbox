@@ -122,8 +122,8 @@ def _check_variation_selection(variation_selection):
     # if not (variation_selection.is_recurrent and variation_selection.is_combination):
         # return
     #blocktodo remove
-    # if variation_selection.number != 196:
-        # return
+    if variation_selection.number != 197:
+        return
     
     iterable_or_length = (
         'abracab' if variation_selection.is_recurrent else
