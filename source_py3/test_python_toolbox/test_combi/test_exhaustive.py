@@ -58,9 +58,13 @@ class BrutePermSpace:
             if any(candidate[self.domain.index(key)] != value for
                                          key, value in self.fixed_map.items()):
                 continue
-            if self.is_combination and not cute_iter_tools.is_sorted(
-                                           candidate, key=self.sequence.index):
-                continue
+            if self.is_combination:
+                i = -1
+                for item in candidate:
+                    try:
+                        i = self.sequence.index(item, start=i+1)
+                    except ValueError:
+                        continue
             if self.is_degreed:
                 unvisited_items = \
                             set(sequence_tools.CuteRange(self.sequence_length))

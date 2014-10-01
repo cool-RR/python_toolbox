@@ -565,8 +565,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             return self.perm_type((wip_perm_sequence_dict[k] for k in
                                    self.domain), self)
         elif self.is_recurrent:
-            assert not self.is_degreed
-            assert not self.is_sliced
+            assert not self.is_dapplied and not self.is_degreed and \
+                                                             not self.is_sliced
             available_values = list(self.sequence)
             reserved_values = list(self.fixed_map.values())
             wip_perm_sequence_dict = dict(self.fixed_map)
@@ -592,17 +592,20 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                     head = []
                     fixed_map_to_use = dict(wip_perm_sequence_dict)
                     n_elements_to_use = self.n_elements
-                    for i in sequence_tools.CuteRange(infinity):
+                    for k in sequence_tools.CuteRange(infinity):
                         try:
-                            head.append(wip_perm_sequence_dict[i])
+                            head.append(wip_perm_sequence_dict[k])
                         except KeyError:
                             break
                         else:
-                            del wip_perm_sequence_dict[i]
+                            del fixed_map_to_use[k]
                             n_elements_to_use -= 1
                     sequence_to_use = list(self.sequence)
                     for item in head:
                         sequence_to_use.remove(item)
+                        
+                    fixed_map_to_use = {key - len(head): value for key, value
+                                        in fixed_map_to_use.items()}
                     
                     candidate_sub_perm_space = PermSpace(
                         sequence_to_use,

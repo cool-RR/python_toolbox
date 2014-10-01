@@ -192,20 +192,23 @@ class CuteRange(CuteSequence):
         # Sadly Python doesn't allow infinity or floats here.
         return self.length if isinstance(self.length, numbers.Integral) else 0
         
-    def index(self, i):
+    def index(self, i, start=-infinity, stop=infinity):
         from python_toolbox import math_tools
         if not isinstance(i, numbers.Number):
             raise ValueError
         else:
             distance = i - self.start
             if distance == 0 and self:
-                return 0
+                if start <= 0 < stop: return 0
+                else: raise ValueError("Found but not within range.")
             if math_tools.get_sign(distance) != math_tools.get_sign(self.step):
                 raise ValueError
             index, remainder = math_tools.cute_divmod(distance, self.step)
             if remainder == 0 and (0 <= index < self.length or
                                              index == self.length == infinity):
-                return index
+                if start <= index < stop: return index
+                else: raise ValueError("Found but not within range.")
+
             else:
                 raise ValueError
             
