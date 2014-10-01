@@ -173,11 +173,11 @@ def _check_variation_selection(variation_selection):
         not variation_selection.is_partial
     )
     
+    assert perm_space.length == len(brute_perm_space_tuple)
+    
     if perm_space.length >= 2:
         assert perm_space.index(perm_space[-1]) > \
                                                 perm_space.index(perm_space[0])
-        
-    assert perm_space.length == len(brute_perm_space_tuple)
         
     if variation_selection.is_partial:
         assert perm_space.n_unused_elements == 2
