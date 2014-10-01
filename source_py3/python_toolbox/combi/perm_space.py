@@ -801,7 +801,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 for lower_value in lower_values:
                     temp_fixed_map = dict(
                             enumerate(perm_sequence_list[:i] + [lower_value])
-                        )
+                    )
                     temp_fixed_map.update(self.fixed_map)
                     
                     
@@ -825,6 +825,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                             sequence_to_use.remove(item)
 
                     sequence_to_use = [x for x in sequence_to_use if x not in shit_set]
+                    
+                    temp_fixed_map = {key - len(head): value for key, value in temp_fixed_map.items()}
                     
                     if len(sequence_to_use) >= n_elements_to_use:
                         wip_perm_number += PermSpace(
