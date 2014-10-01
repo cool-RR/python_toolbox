@@ -581,8 +581,10 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                     continue
                 for unused_value in nifty_collections.OrderedSet((
                     value for value in available_values if not
-                    (value in reserved_values and available_values.count(value)
-                                            == reserved_values.count(value)))):
+                    ((value in reserved_values and available_values.count(value)
+                                            == reserved_values.count(value)) or value in shit_set)
+                    
+                    )):
                     wip_perm_sequence_dict[j] = unused_value
                     
                     ###########################################################
