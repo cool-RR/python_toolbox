@@ -8,8 +8,10 @@ from python_toolbox import math_tools
 from .frozen_counter import FrozenCounter
 
 
-class FrozenCrateCounter(FrozenCounter):
+class FrozenCounterCounter(FrozenCounter):
     '''
+    
+    
     blocktododoc do entire crate metaphor with drawings. say that crates of the same pile are identical.
     '''
     def __init__(self, iterable):
@@ -30,7 +32,7 @@ class FrozenCrateCounter(FrozenCounter):
             sub_counter = collections.Counter(self)
             sub_counter[key_to_reduce] -= 1
             sub_counter[key_to_reduce - 1] += 1
-            sub_counters_counter[FrozenCrateCounter(sub_counter)] = \
+            sub_counters_counter[FrozenCounterCounter(sub_counter)] = \
                                                          value_of_key_to_reduce
         return FrozenCounter(sub_counters_counter)
             
@@ -47,7 +49,7 @@ class FrozenCrateCounter(FrozenCounter):
             
             for i in range(value_of_key_to_reduce):
                 sub_counters.append(
-                    FrozenCrateCounter(
+                    FrozenCounterCounter(
                         {key: (i if key == key_to_reduce else value)
                                for key, value in sub_counter_prototype.items()}
                     )

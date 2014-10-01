@@ -54,8 +54,7 @@ def test_perm_spaces():
     with cute_testing.RaiseAssertor(IndexError): pure_0a[pure_0a.length + 2]
     with cute_testing.RaiseAssertor(IndexError): pure_0a[pure_0a.length + 300]
     
-    with cute_testing.RaiseAssertor(): Perm(24, pure_0a)
-    with cute_testing.RaiseAssertor(): Perm(-1, pure_0a)
+    with cute_testing.RaiseAssertor(): pure_0a[24]
     
     assert pure_0a.take_random() in pure_0c
     
@@ -90,7 +89,6 @@ def test_perm_spaces():
     assert isinstance(first_perm.as_dictoid, combi.perm.PermAsDictoid)
     assert first_perm.as_dictoid[2] == 2
     assert dict(first_perm.as_dictoid) == {0: 0, 1: 1, 2: 2, 3: 3}
-    assert first_perm % 7 == 0
     assert not (first_perm != first_perm)
     assert first_perm == first_perm
     assert first_perm
@@ -100,8 +98,6 @@ def test_perm_spaces():
     assert some_perm.inverse == ~ some_perm
     assert ~ ~ some_perm == some_perm
     
-    assert int(first_perm) == 0
-    assert int(last_perm) == len(pure_perm_space) - 1
     
     assert first_perm in pure_perm_space
     assert set(first_perm) not in pure_perm_space # No order? Not contained.
@@ -117,9 +113,6 @@ def test_perm_spaces():
     assert pure_perm_space.index(last_perm) == \
                                                 len(pure_perm_space) - 1
     assert pure_perm_space.index(some_perm) == 7
-    
-    assert Perm(7, pure_perm_space) ==  Perm(7, range(4)) == Perm(7, 4) == \
-                                                                    some_perm
     
     assert 'meow' * Perm((1, 3, 2, 0)) == 'ewom'
     assert Perm('meow', 'meow') * Perm((1, 3, 2, 0)) == Perm('ewom', 'meow')
@@ -146,7 +139,6 @@ def test_perm_spaces():
     
     for i in [10**10, 3*11**9-344, 4*12**8-5, 5*3**20+4]:
         perm = big_perm_space[i]
-        perm.number # Just ensuring no exception
         assert big_perm_space.index(perm) == i
         
     repr_of_big_perm_space = repr(PermSpace(tuple(range(100, 0, -1))))
@@ -253,7 +245,7 @@ def test_dapplied_perm_space():
     assert dapplied_perm['r'] == 3
     assert dapplied_perm['g'] == 4
     assert repr(dapplied_perm) == \
-         '''<Perm: (119 / 120) ('g', 'r', 'o', 'w', 'l') => (4, 3, 2, 1, 0)>'''
+                     '''<Perm: ('g', 'r', 'o', 'w', 'l') => (4, 3, 2, 1, 0)>'''
     
     assert dapplied_perm.index(4) == 'g'
     
@@ -292,11 +284,12 @@ def test_degreed_perm_space():
         assert perm.degree == 1
         
         
-    for perm in PermSpace(5, degrees=(1, 3)):
+    perm_space = PermSpace(5, degrees=(1, 3))
+    for perm in perm_space:
         assert perm.degree in (1, 3)
         
     assert cute_iter_tools.is_sorted(
-        [perm.number for perm in PermSpace(5, degrees=(1, 3))]
+        [perm_space.index(perm) for perm in perm_space]
     )
     
     assert PermSpace(
@@ -354,11 +347,8 @@ def test_degreed_perm_space():
         assert perm.unrapplied.is_dapplied
         
     assert cute_iter_tools.is_sorted(
-        [perm.number for perm in funky_perm_space]
+        [funky_perm_space.index(perm) for perm in funky_perm_space]
     )
-    
-    assert cute_iter_tools.is_sorted(funky_perm_space)
-    
     
     other_perms_chain_space = ChainSpace((funky_perm_space.unsliced[:2],
                                           funky_perm_space.unsliced[-2:]))
@@ -378,11 +368,6 @@ def test_degreed_perm_space():
         
     assert other_perms_chain_space.length + funky_perm_space.length == \
                                                funky_perm_space.unsliced.length
-    
-    assert cute_iter_tools.is_sorted(
-        [perm.number for perm in other_perms_chain_space]
-    )
-    
     
     assert funky_perm_space.unsliced.length + \
            funky_perm_space.unsliced.undegreed.get_degreed(
@@ -458,7 +443,6 @@ def test_partial_perm_space():
         assert perm_space_2.index(perm) == i
         reconstructed_perm = Perm(tuple(perm), perm_space=perm_space_2)
         assert perm == reconstructed_perm
-        assert perm.number == reconstructed_perm.number == i
         
     
     for i, perm in enumerate(perm_space_7):
@@ -470,16 +454,15 @@ def test_partial_perm_space():
         assert perm[0] < perm[1]
         reconstructed_perm = Perm(tuple(perm), perm_space=perm_space_7)
         assert perm == reconstructed_perm
-        assert perm.number == reconstructed_perm.number == i
         
     assert cute_iter_tools.is_sorted(
-        [perm.number for perm in perm_space_2]
+        [perm_space_2.index(perm) for perm in perm_space_2]
     )
     assert cute_iter_tools.is_sorted(
         [tuple(perm) for perm in perm_space_2]
     )
     assert cute_iter_tools.is_sorted(
-        [perm.number for perm in perm_space_7]
+        [perm_space_7.index(perm) for perm in perm_space_7]
     )
     assert cute_iter_tools.is_sorted(
         [tuple(perm) for perm in perm_space_7]

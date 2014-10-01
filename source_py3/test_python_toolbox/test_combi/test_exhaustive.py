@@ -167,11 +167,8 @@ def _check_variation_selection(variation_selection):
     )
     
     if perm_space.length >= 2:
-        assert perm_space[-1] >= perm_space[0]
-        assert perm_space[-1] > perm_space[0]
-        assert perm_space[0] <= perm_space[-1]
-        assert perm_space[0] < perm_space[-1]
-        assert perm_space[0] != perm_space[-1]
+        assert perm_space.index(perm_space[-1]) > \
+                                                perm_space.index(perm_space[0])
         
         
     if variation_selection.is_partial:
@@ -259,10 +256,8 @@ def _check_variation_selection(variation_selection):
         if not variation_selection.is_fixed and \
                                             not variation_selection.is_degreed:
             assert perm_space.index(perm) == i
-            if not variation_selection.is_sliced:
-                assert perm.number == i
             
-        assert Perm(perm.number, perm_space=perm_space) == perm
+        assert Perm(iter(perm), perm_space=perm_space) == perm
         assert Perm(perm._perm_sequence, perm_space=perm_space) == perm
         
         assert perm.length == perm_space.n_elements
@@ -333,15 +328,6 @@ def _check_variation_selection(variation_selection):
         ### Finished testing neighbors. #######################################
         
         perm_repr = repr(perm)
-        perm_number_string, big_number_string = perm_repr.split(')', 1)[0] \
-                                                 .split('(', 1)[1].split(' / ')
-        perm_number = ast.literal_eval(perm_number_string)
-        big_number = (math.factorial(ast.literal_eval(big_number_string[:-1]))
-                      if big_number_string.endswith('!')
-                      else ast.literal_eval(big_number_string))
-        
-        assert (0 <= perm_number == perm.number <= big_number ==
-                                                perm.nominal_perm_space.length)
         
     
 def test():

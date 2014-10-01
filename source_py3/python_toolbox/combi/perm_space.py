@@ -272,7 +272,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             if self.is_recurrent:
                 self._unsliced_undegreed_length = math_tools.shitfuck(
                     self.n_elements - len(self.fixed_map),
-                    nifty_collections.FrozenCrateCounter(
+                    nifty_collections.FrozenCounterCounter(
                         collections.Counter(self.free_values).values()
                     )                    
                 )
@@ -297,7 +297,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 function_to_use = math_tools.catshit if self.is_combination else \
                                                                 math_tools.shitfuck
                 self._unsliced_undegreed_length = \
-                       function_to_use(self.n_elements, self._frozen_crate_counter)
+                       function_to_use(self.n_elements, self._frozen_counter_counter)
             else:
                 self._unsliced_undegreed_length = \
                     math_tools.factorial(
@@ -441,8 +441,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
 
             
     @caching.CachedProperty
-    def _frozen_crate_counter(self):
-        return nifty_collections.FrozenCrateCounter(
+    def _frozen_counter_counter(self):
+        return nifty_collections.FrozenCounterCounter(
             self._sequence_counteroid.values()
         )
         
@@ -615,8 +615,40 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 ),
                 self
             )
+        
+        elif self.is_combination:
+            wip_number = self.length - 1 - i
+            wip_perm_sequence = []
+            for i in range(self.n_elements, 0, -1):
+                for j in range(self.sequence_length, i - 2, -1):
+                    candidate = math_tools.binomial(j, i)
+                    if candidate <= wip_number:
+                        wip_perm_sequence.append(
+                            self.sequence[-(j+1)]
+                        )
+                        wip_number -= candidate
+                        break
+                else:
+                    raise RuntimeError
+            result = tuple(wip_perm_sequence)
+            assert len(result) == self.n_elements
+            return self.perm_type(result, self)
+
+        
         else:
-            return self.perm_type(i, self)
+            factoradic_number = math_tools.to_factoradic(
+                i * math.factorial(
+                     self.n_unused_elements),
+                n_digits_pad=self.sequence_length
+            )
+            if self.is_partial:
+                factoradic_number = factoradic_number[:-self.n_unused_elements]
+            unused_numbers = list(self.sequence)
+            result = tuple(unused_numbers.pop(factoradic_digit) for
+                                             factoradic_digit in factoradic_number)
+            assert sequence_tools.get_length(result) == self.n_elements
+            
+            return self.perm_type(result, self)
                 
                 
     enumerated_sequence = caching.CachedProperty(
@@ -746,9 +778,36 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 free_values_perm_sequence
             )
             
+            
+        elif self.is_combination:
+            if perm.is_rapplied:
+                return self.unrapplied.index(perm.unrapplied)
+            
+            processed_perm_sequence = tuple(
+                self.sequence_length - 1 -
+                                     item for item in perm._perm_sequence[::-1]
+            )
+            perm_number = self.unsliced.length - 1 - sum(
+                (math_tools.binomial(item, i) for i, item in
+                                      enumerate(processed_perm_sequence, start=1)),
+                0
+            )
+        
+            
               
         else:
-            perm_number = perm.number
+            
+            factoradic_number = []
+            unused_values = list(self.sequence)
+            for i, value in enumerate(perm):
+                index_of_current_number = unused_values.index(value)
+                factoradic_number.append(index_of_current_number)
+                unused_values.remove(value)
+            perm_number = math_tools.from_factoradic(
+                factoradic_number +
+                [0] * self.n_unused_elements
+            ) // math.factorial(self.n_unused_elements)
+            
             
         if perm_number not in self.canonical_slice:
             raise ValueError

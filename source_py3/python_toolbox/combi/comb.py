@@ -6,9 +6,9 @@ from .comb_space import CombSpace
 
         
 class Comb(Perm):
-    def __init__(self, number_or_perm_sequence, perm_space):
+    def __init__(self, perm_sequence, perm_space):
         assert isinstance(perm_space, CombSpace)
-        Perm.__init__(self, number_or_perm_sequence=number_or_perm_sequence,
+        Perm.__init__(self, perm_sequence=perm_sequence,
                       perm_space=perm_space)
         
 
