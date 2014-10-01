@@ -60,11 +60,14 @@ class BrutePermSpace:
                 continue
             if self.is_combination:
                 i = -1
+                rule_out_because_of_bad_comb_order = False # Until challeneged.
                 for item in candidate:
                     try:
-                        i = self.sequence.index(item, start=i+1)
+                        i = self.sequence.index(item, i+1)
                     except ValueError:
-                        continue
+                        rule_out_because_of_bad_comb_order = True
+                if rule_out_because_of_bad_comb_order:
+                    continue
             if self.is_degreed:
                 unvisited_items = \
                             set(sequence_tools.CuteRange(self.sequence_length))
