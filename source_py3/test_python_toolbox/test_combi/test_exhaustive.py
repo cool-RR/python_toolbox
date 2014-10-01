@@ -29,6 +29,7 @@ class BrutePermSpace:
         self.sequence_length = len(self.sequence)
         self._sequence_frozen_counter = \
                                  nifty_collections.FrozenCounter(self.sequence)
+        self.is_recurrent = len(set(self.sequence)) < len(self.sequence)
         self.domain = domain or sequence_tools.CuteRange(self.sequence_length)
         self.n_elements = n_elements if n_elements is not None else \
                                                              len(self.sequence)
@@ -42,10 +43,23 @@ class BrutePermSpace:
                                 sequence_tools.CuteRange(self.sequence_length))
         
     def __iter__(self):
-        if self.slice_:
-            return itertools.islice(self._iter(), *self.slice_)
+        if (self.is_recurrent and self.is_combination):
+            def make_iterator():
+                crap = set()
+                for item in self._iter():
+                    fc = nifty_collections.FrozenCounter(item)
+                    if fc in crap:
+                        continue
+                    else:
+                        yield item
+                        crap.add(fc)
+            iterator = make_iterator()
         else:
-            return self._iter()
+            iterator = self._iter()
+        if self.slice_:
+            return itertools.islice(iterator, *self.slice_)
+        else:
+            return iterator
         
     def _iter(self):
         yielded_candidates = set()
@@ -104,6 +118,12 @@ def _check_variation_selection(variation_selection):
         # Can't even test this illogical clash.
         return 
         
+    #blocktodo remove
+    if not (variation_selection.is_recurrent and variation_selection.is_combination):
+        return
+    #blocktodo remove
+    if variation_selection.number != 240:
+        return
     
     iterable_or_length = (
         'abracab' if variation_selection.is_recurrent else
@@ -174,6 +194,9 @@ def _check_variation_selection(variation_selection):
     )
     
     assert perm_space.length == len(brute_perm_space_tuple)
+    
+    #blocktodo remove
+    tuple(perm_space)
     
     if perm_space.length >= 2:
         assert perm_space.index(perm_space[-1]) > \

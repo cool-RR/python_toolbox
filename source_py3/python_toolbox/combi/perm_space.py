@@ -193,8 +193,10 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         self.n_elements = self.sequence_length if (n_elements is None) \
                                                                 else n_elements
         if not 0 <= self.n_elements <= self.sequence_length:
-            raise Exception('`n_elements` must be between 0 and %s' %
-                                                          self.sequence_length)
+            raise Exception(
+                '`n_elements` must be between 0 and %s, you gave %s' %
+                                        (self.sequence_length, self.n_elements)
+            )
         self.is_partial = (self.n_elements < self.sequence_length)
         
         self.indices = sequence_tools.CuteRange(self.n_elements)
@@ -571,6 +573,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             reserved_values = list(self.fixed_map.values())
             wip_perm_sequence_dict = dict(self.fixed_map)
             wip_i = i
+            shit_set = set()
             for j in range(self.n_elements):
                 if j in self.fixed_map:
                     available_values.remove(self.fixed_map[j])
@@ -608,16 +611,23 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                             ]
                         else:
                             sequence_to_use.remove(item)
+                            
+                    sequence_to_use = [x for x in sequence_to_use if x not in
+                                       shit_set]
                         
                     fixed_map_to_use = {key - len(head): value for key, value
                                         in fixed_map_to_use.items()}
                     
-                    candidate_sub_perm_space = PermSpace(
-                        sequence_to_use,
-                        n_elements=n_elements_to_use,
-                        fixed_map=fixed_map_to_use, 
-                        is_combination=self.is_combination
-                    )
+                    if len(sequence_to_use) < n_elements_to_use:
+                        class O: length = 0
+                        candidate_sub_perm_space = O()
+                    else:
+                        candidate_sub_perm_space = PermSpace(
+                            sequence_to_use,
+                            n_elements=n_elements_to_use,
+                            fixed_map=fixed_map_to_use, 
+                            is_combination=self.is_combination
+                        )
                     #                                                         #
                     ###########################################################
                     
@@ -626,6 +636,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                         break
                     else:
                         wip_i -= candidate_sub_perm_space.length
+                        shit_set.add(wip_perm_sequence_dict[j])
                         del wip_perm_sequence_dict[j]
                 else:
                     raise RuntimeError
