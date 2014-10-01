@@ -602,7 +602,12 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                             n_elements_to_use -= 1
                     sequence_to_use = list(self.sequence)
                     for item in head:
-                        sequence_to_use.remove(item)
+                        if self.is_combination:
+                            sequence_to_use = sequence_to_use[
+                                sequence_to_use.index(item) + 1:
+                            ]
+                        else:
+                            sequence_to_use.remove(item)
                         
                     fixed_map_to_use = {key - len(head): value for key, value
                                         in fixed_map_to_use.items()}
