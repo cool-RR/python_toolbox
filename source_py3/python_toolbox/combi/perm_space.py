@@ -46,15 +46,14 @@ class PermSpaceType(abc.ABCMeta):
             from .comb_space import CombSpace
             arguments_profile = python_toolbox.arguments_profiling. \
                     ArgumentsProfile(PermSpace.__init__, None, *args, **kwargs)
-            # if arguments_profile.get('fixed_map', None):
-                # raise UnallowedVariationSelectionException(
-                    # {variations.Variation.FIXED: True,
-                     # variations.Variation.COMBINATION: True,}
-                # )
+            if arguments_profile.get('fixed_map', None):
+                raise UnallowedVariationSelectionException(
+                    {variations.Variation.FIXED: True,
+                     variations.Variation.COMBINATION: True,}
+                )
             return super(PermSpaceType, CombSpace).__call__(
                 iterable_or_length=arguments_profile['iterable_or_length'], 
                 n_elements=arguments_profile['n_elements'],
-                fixed_map=arguments_profile['fixed_map'],
                 slice_=arguments_profile['slice_'],
                 _domain_for_checking=arguments_profile['domain'],
                 _degrees_for_checking=arguments_profile['degrees'],
@@ -582,12 +581,37 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                     (value in reserved_values and available_values.count(value)
                                             == reserved_values.count(value)))):
                     wip_perm_sequence_dict[j] = unused_value
+                    
+                    ###########################################################
+                    #                                                         #
+                    # Tricky thing here: Trying to put as much as we can in a
+                    # sequence head that'll shorten the sequence we'll give to
+                    # the candidate space instead of using a fixed map, if
+                    # possible. This is crucial for `CombSpace` which can't use
+                    # `fixed_map`.
+                    head = []
+                    fixed_map_to_use = dict(wip_perm_sequence_dict)
+                    n_elements_to_use = self.n_elements
+                    for i in sequence_tools.CuteRange(infinity):
+                        try:
+                            head.append(wip_perm_sequence_dict[i])
+                        except KeyError:
+                            break
+                        else:
+                            del wip_perm_sequence_dict[i]
+                            n_elements_to_use -= 1
+                    sequence_to_use = list(self.sequence)
+                    for item in head:
+                        sequence_to_use.remove(item)
+                    
                     candidate_sub_perm_space = PermSpace(
-                        self.sequence,
-                        n_elements=self.n_elements,
-                        fixed_map=wip_perm_sequence_dict, 
+                        sequence_to_use,
+                        n_elements=n_elements_to_use,
+                        fixed_map=fixed_map_to_use, 
                         is_combination=self.is_combination
                     )
+                    #                                                         #
+                    ###########################################################
                     
                     if wip_i < candidate_sub_perm_space.length:
                         available_values.remove(unused_value)
