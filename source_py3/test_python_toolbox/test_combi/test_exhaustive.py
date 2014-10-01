@@ -162,7 +162,7 @@ def _check_variation_selection(variation_selection):
         slice_=(perm_space.slice_ if perm_space.is_sliced else None), 
         **kwargs
     )
-    
+    brute_perm_space_tuple = tuple(brute_perm_space)
     
     assert perm_space.variation_selection == variation_selection
     assert perm_space.sequence_length == 7
@@ -177,6 +177,7 @@ def _check_variation_selection(variation_selection):
         assert perm_space.index(perm_space[-1]) > \
                                                 perm_space.index(perm_space[0])
         
+    assert perm_space.length == len(brute_perm_space_tuple)
         
     if variation_selection.is_partial:
         assert perm_space.n_unused_elements == 2
@@ -209,7 +210,7 @@ def _check_variation_selection(variation_selection):
     
     # blocktodo: change to 100 after finished debugging 
     for i, (perm, brute_perm_tuple) in enumerate(
-                      itertools.islice(zip(perm_space, brute_perm_space), 10)):
+                itertools.islice(zip(perm_space, brute_perm_space_tuple), 10)):
         
         assert tuple(perm) == brute_perm_tuple
         assert perm in perm_space
