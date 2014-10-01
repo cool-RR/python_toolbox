@@ -118,12 +118,12 @@ def _check_variation_selection(variation_selection):
         # Can't even test this illogical clash.
         return 
         
-    #blocktodo remove
-    if not (variation_selection.is_recurrent and variation_selection.is_combination):
-        return
-    #blocktodo remove
-    if variation_selection.number != 240:
-        return
+    # #blocktodo remove
+    # if not (variation_selection.is_recurrent and variation_selection.is_combination):
+        # return
+    # #blocktodo remove
+    # if variation_selection.number != 192:
+        # return
     
     iterable_or_length = (
         'abracab' if variation_selection.is_recurrent else
@@ -195,9 +195,9 @@ def _check_variation_selection(variation_selection):
     
     assert perm_space.length == len(brute_perm_space_tuple)
     
-    #blocktodo remove
-    tuple(perm_space)
-    
+    if perm_space.length:
+        assert tuple(perm_space[-1]) == brute_perm_space_tuple[-1]
+               
     if perm_space.length >= 2:
         assert perm_space.index(perm_space[-1]) > \
                                                 perm_space.index(perm_space[0])
