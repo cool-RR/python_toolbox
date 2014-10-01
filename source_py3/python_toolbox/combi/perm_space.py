@@ -571,7 +571,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             reserved_values = list(self.fixed_map.values())
             wip_perm_sequence_dict = dict(self.fixed_map)
             wip_i = i
-            for j in range(self.sequence_length):
+            for j in range(self.n_elements):
                 if j in self.fixed_map:
                     available_values.remove(self.fixed_map[j])
                     reserved_values.remove(self.fixed_map[j])
@@ -628,8 +628,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                         wip_i -= candidate_sub_perm_space.length
                         del wip_perm_sequence_dict[j]
                 else:
-                    if len(wip_perm_sequence_dict) < self.n_elements:
-                        raise RuntimeError
+                    raise RuntimeError
             assert wip_i == 0
             return self.perm_type(
                 dict_tools.get_list(wip_perm_sequence_dict, self.domain),
@@ -789,7 +788,9 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                     temp_fixed_map.update(self.fixed_map)
                     wip_perm_number += PermSpace(
                         self.sequence,
-                        fixed_map=temp_fixed_map
+                        fixed_map=temp_fixed_map,
+                        n_elements=self.n_elements,
+                        is_combination=self.is_combination
                     ).length
                 
             perm_number = wip_perm_number

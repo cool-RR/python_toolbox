@@ -286,9 +286,12 @@ def _check_variation_selection(variation_selection):
             
         perm_set = set(perm)
         if variation_selection.is_partial:
-            assert perm_set < sequence_set
-            assert len(perm_set) == 5
             assert len(perm) == 5
+            if variation_selection.is_recurrent:
+                assert perm_set <= sequence_set
+            else:
+                assert perm_set < sequence_set
+                assert len(perm_set) == 5
         else:
             assert perm_set == sequence_set
             assert len(perm) == 7
