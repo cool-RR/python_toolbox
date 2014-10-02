@@ -233,9 +233,8 @@ def _check_variation_selection(variation_selection, perm_space_type,
         # we'll get the illusion that the tests are running while they're
         # really not.
     
-    # blocktodo: change to at least 30 after debugging 
     for i, (perm, brute_perm_tuple) in enumerate(
-                      itertools.islice(zip(perm_space, brute_perm_space), 3)):
+                      itertools.islice(zip(perm_space, brute_perm_space), 10)):
         
         assert tuple(perm) == brute_perm_tuple
         assert perm in perm_space
