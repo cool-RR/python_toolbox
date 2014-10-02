@@ -19,7 +19,24 @@ infinity = float('inf')
 infinities = (infinity, -infinity)
 
 
+class NO_ARGUMENT: pass
+        
+
+
 class BrutePermSpace:
+    '''
+    A `PermSpace` substitute used for testing `PermSpace`.
+    
+    This class is used for comparing with `PermSpace` in tests and ensuring it
+    produces the same results. The reason we have high confidence that
+    `BrutePermSpace` itself produces true results is because it's
+    implementation is much simpler than `PermSpace`'s, which is because it
+    doesn't need to be efficient, because it's only used for tests.
+    
+    `BrutePermSpace` takes the some signature of arguments used for
+    `PermSpace`, though it's not guaranteed to be able to deal with all the
+    kinds of arguments that `PermSpace` would take.
+    '''
     def __init__(self, iterable_or_length, domain=None, n_elements=None,
                  fixed_map=None, degrees=None, is_combination=False,
                  slice_=None):
@@ -107,85 +124,67 @@ class BrutePermSpace:
             yield candidate
                 
 
-def _check_variation_selection(variation_selection):
+def _check_variation_selection(variation_selection, perm_space_type,
+                               iterable_or_length_and_sequence, domain_to_cut,
+                               n_elements, is_combination, purified_fixed_map,
+                               degrees, slice_):
     assert isinstance(variation_selection, combi.variations.VariationSelection)
     
     kwargs = {}
     
-    if variation_selection.is_recurrent and \
-                                           not variation_selection.is_rapplied:
-        assert not variation_selection.is_allowed
-        # Can't even test this illogical clash.
-        return 
-        
-    # #blocktodo remove
-    # if not (variation_selection.is_recurrent and variation_selection.is_combination):
-        # return
-    #blocktodo remove
-    if variation_selection.number != 197:
-        return
+    iterable_or_length, sequence = iterable_or_length_and_sequence
     
-    iterable_or_length = (
-        'abracab' if variation_selection.is_recurrent else
-        tuple(range(60, -10, -10)) if variation_selection.is_rapplied else 7
-    )
     kwargs['iterable_or_length'] = iterable_or_length
-    sequence = (iterable_or_length if
-                isinstance(iterable_or_length, collections.Iterable) else
-                sequence_tools.CuteRange(iterable_or_length))
     sequence_set = set(sequence)
     
-    if variation_selection.is_dapplied:
-        domain = 'isogram'
-        kwargs['domain'] = domain
+    if domain_to_cut != NO_ARGUMENT:
+        kwargs['domain'] = actual_domain = domain_to_cut[:len(sequence)]
     else:
-        domain = sequence_tools.CuteRange(11)
-    domain_set = set(domain)
+        actual_domain = sequence_tools.CuteRange(len(sequence))
         
-    if variation_selection.is_partial:
-        kwargs['n_elements'] = 5
+    if n_elements != NO_ARGUMENT:
+        kwargs['n_elements'] = n_elements
+    actual_n_elements = n_elements if (n_elements != NO_ARGUMENT) else 0
         
-    if variation_selection.is_combination:
+    if is_combination:
         kwargs['is_combination'] = True
         
-    if variation_selection.is_fixed:
-        fixed_map = {domain[1]: sequence[1], domain[4]: sequence[3],}
-        kwargs['fixed_map'] = fixed_map
+    if purified_fixed_map != NO_ARGUMENT:
+        kwargs['fixed_map'] = actual_fixed_map = {
+            actual_domain[key]: sequence[value] for key, value
+                                                 in purified_fixed_map.items()
+        }
     else:
-        fixed_map = {}
+        actual_fixed_map = {}
         
     if variation_selection.is_degreed:
         kwargs['degrees'] = degrees = (0, 2, 4, 5)
-        
 
-    context_manager = (
-        context_management.BlankContextManager() if
-        variation_selection.is_allowed else
-        cute_testing.RaiseAssertor(combi.UnallowedVariationSelectionException)
-    )
-    
-    with context_manager:
-        perm_space = PermSpace(**kwargs)
-        
-    if not variation_selection.is_allowed:
-        return
-    
-    if variation_selection.is_sliced:
-        if perm_space.length >= 2:
-            perm_space = perm_space[2:-2]
+    try:
+        perm_space = perm_space_type(**kwargs)
+    except combi.UnallowedVariationSelectionException:
+        if not variation_selection.is_allowed:
+            return
         else:
-            assert variation_selection.is_combination and \
-                                         not variation_selection.is_partial
-            perm_space = perm_space[:0]
+            raise
+        
+    if slice_ != NO_ARGUMENT:
+        perm_space = perm_space[slice_]
+        
+    else:
+        if not variation_selection.is_allowed:
+            raise TypeError(
+                "Shouldn't have allowed this `VariationSelection.`"
+            )
     
     brute_perm_space = BrutePermSpace(
-        slice_=(perm_space.slice_ if perm_space.is_sliced else None), 
+        slice_=(slice_ if slice_ != NO_ARGUMENT else None), 
         **kwargs
     )
     brute_perm_space_tuple = tuple(brute_perm_space)
     
     assert perm_space.variation_selection == variation_selection
-    assert perm_space.sequence_length == 7
+    assert perm_space.sequence_length == len(sequence)
     
     assert (perm_space.domain == perm_space.sequence) == (
         not variation_selection.is_dapplied and
@@ -201,7 +200,8 @@ def _check_variation_selection(variation_selection):
         assert tuple(perm_space[-1]) == brute_perm_space_tuple[-1]
         
     if variation_selection.is_partial:
-        assert perm_space.n_unused_elements == 2
+        assert 0 < perm_space.n_unused_elements == \
+                                              len(sequence) - actual_n_elements
     else:
         assert perm_space.n_unused_elements == 0
         
@@ -254,9 +254,11 @@ def _check_variation_selection(variation_selection):
         else:
             assert perm == perm.unrapplied == perm_space.unrapplied[i]
             if not variation_selection.is_dapplied:
-                assert perm.apply('isogram') == 'isogram' * perm
-                assert tuple('isogram' * perm) == tuple(
-                    perm_space.get_rapplied('isogram')[i]._perm_sequence
+                sample_domain = \
+                               'qwertyasdfgzxcvbyuiophjkl;nm,.'[:len(sequence)]
+                assert perm.apply(sample_domain) == sample_domain * perm
+                assert tuple(sample_domain * perm) == tuple(
+                    perm_space.get_rapplied(sample_domain)[i]._perm_sequence
                 )
             
         
@@ -308,15 +310,15 @@ def _check_variation_selection(variation_selection):
             
         perm_set = set(perm)
         if variation_selection.is_partial:
-            assert len(perm) == 5
+            assert len(perm) == actual_n_elements
             if variation_selection.is_recurrent:
                 assert perm_set <= sequence_set
             else:
                 assert perm_set < sequence_set
-                assert len(perm_set) == 5
+                assert len(perm_set) == actual_n_elements
         else:
             assert perm_set == sequence_set
-            assert len(perm) == 7
+            assert len(perm) == len(sequence)
             
         for j, (value, key, (key__, value__)) in enumerate(
                                        zip(perm, perm.as_dictoid, perm.items)):
@@ -330,11 +332,11 @@ def _check_variation_selection(variation_selection):
             assert value in perm
             
         if variation_selection.is_degreed:
-            assert perm.degree in degrees
+            assert perm.degree == degrees or perm.degree in degrees
         elif variation_selection.is_partial:
             assert perm.degree == NotImplemented
         else:
-            assert 0 <= perm.degree <= 7
+            assert 0 <= perm.degree <= len(sequence)
             
         
         ### Testing neighbors: ################################################
@@ -361,8 +363,88 @@ def _check_variation_selection(variation_selection):
         
         perm_repr = repr(perm)
         
-    
 def test():
-    yield from ((_check_variation_selection, variation_selection) for
-                variation_selection in combi.variations.variation_selection_space)
-    
+    for variation_selection in combi.variations.variation_selection_space:
+        
+        kwargs = {}
+        
+        if variation_selection.is_recurrent and \
+                                               not variation_selection.is_rapplied:
+            assert not variation_selection.is_allowed
+            # Can't even test this illogical clash.
+            continue
+            
+        
+        if variation_selection.is_recurrent:
+            iterable_or_length_and_sequence_options = (
+                ('abracab', 'abracab'),
+                ((1, 2, 3, 4, 5, 5, 4, 3, 2, 3, 4, 5, 5, 4, 5),
+                 (1, 2, 3, 4, 5, 5, 4, 3, 2, 3, 4, 5, 5, 4, 5))
+            )
+        elif variation_selection.is_rapplied:
+            iterable_or_length_and_sequence_options = (
+                (tuple(range(60, -10, -10)),
+                 tuple(range(60, -10, -10))),
+                (iter([1, 4, 2, 5, 3, 7]),
+                 (1, 4, 2, 5, 3, 7))
+            )
+        else:
+            iterable_or_length_and_sequence_options = (
+                (7, sequence_tools.CuteRange(7)),
+                (sequence_tools.CuteRange(9), sequence_tools.CuteRange(9))
+            )
+        
+        if variation_selection.is_dapplied:
+            domain_to_cut_options = (
+                'abcdefghijklmnopqrstuvwxyz',
+                'ZYXWVUTSRQPONMLKJIHGFEDCBA',
+                [i ** 2 for i in range(20)]
+            )
+        else:
+            domain_to_cut_options = (NO_ARGUMENT,)
+            
+        if variation_selection.is_partial:
+            n_elements_options = (0, 1, 2, 5)
+        else:
+            n_elements_options = (NO_ARGUMENT,)
+            
+        if variation_selection.is_combination:
+            is_combination_options = (True,)
+            perm_space_type_options = (PermSpace, CombSpace)
+        else:
+            is_combination_options = (False, NO_ARGUMENT,)
+            perm_space_type_options = (PermSpace,)
+            
+            
+        if variation_selection.is_fixed:
+            purified_fixed_map_options = (
+                {1: 1, 4: 3,},
+                {0: 0, 1: -2, -3: -4,},
+            )
+        else:
+            purified_fixed_map_options = (NO_ARGUMENT,)
+            
+        if variation_selection.is_degreed:
+            degrees_options = (
+                (0, 2, 4, 5),
+                1,
+                (3,)
+            )
+        else:
+            degrees_options = (NO_ARGUMENT,)
+            
+        if variation_selection.is_sliced:
+            slice_options = (
+                slice(2, -2),
+                slice(3, 4)
+            )
+        else:
+            slice_options = (NO_ARGUMENT,)
+
+        for product in combi.ProductSpace(
+            ((variation_selection,), perm_space_type_options,
+             iterable_or_length_and_sequence_options, domain_to_cut_options,
+             n_elements_options, is_combination_options,
+             purified_fixed_map_options, degrees_options, slice_options)
+        ):
+            yield _check_variation_selection, product
