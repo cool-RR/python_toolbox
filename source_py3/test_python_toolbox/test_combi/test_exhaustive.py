@@ -370,8 +370,6 @@ def _check_variation_selection(variation_selection, perm_space_type,
         
         perm_repr = repr(perm)
         
-    if variation_selection.number == 197:
-        1 / 0
         
 def _iterate_tests():
     for variation_selection in combi.variations.variation_selection_space:
