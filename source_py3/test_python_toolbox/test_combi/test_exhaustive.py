@@ -19,7 +19,11 @@ infinity = float('inf')
 infinities = (infinity, -infinity)
 
 
-class NO_ARGUMENT: pass
+class _NO_ARGUMENT_TYPE(type):
+    __repr__ = lambda cls: '<%s>' % cls.__name__
+        
+
+class NO_ARGUMENT(metaclass=_NO_ARGUMENT_TYPE): pass
         
 
 
@@ -74,7 +78,8 @@ class BrutePermSpace:
         else:
             iterator = self._iter()
         if self.slice_:
-            return itertools.islice(iterator, *self.slice_)
+            return itertools.islice(iterator, self.slice_.start,
+                                    self.slice_.stop)
         else:
             return iterator
         
@@ -146,8 +151,8 @@ def _check_variation_selection(variation_selection, perm_space_type,
         kwargs['n_elements'] = n_elements
     actual_n_elements = n_elements if (n_elements != NO_ARGUMENT) else 0
         
-    if is_combination:
-        kwargs['is_combination'] = True
+    if is_combination != NO_ARGUMENT:
+        kwargs['is_combination'] = is_combination
         
     if purified_fixed_map != NO_ARGUMENT:
         kwargs['fixed_map'] = actual_fixed_map = {
@@ -178,7 +183,8 @@ def _check_variation_selection(variation_selection, perm_space_type,
             )
     
     brute_perm_space = BrutePermSpace(
-        slice_=(slice_ if slice_ != NO_ARGUMENT else None), 
+        slice_=(perm_space.canonical_slice if variation_selection.is_sliced else
+                None), 
         **kwargs
     )
     brute_perm_space_tuple = tuple(brute_perm_space)
@@ -352,7 +358,10 @@ def _check_variation_selection(variation_selection, perm_space_type,
                 # No neighbors in this case because they'll have a degree of 1
                 # or 3 which are excluded.
             else:
-                assert neighbors
+                if perm_space.length >= 5:
+                    # (Guarding against cases of really small spaces where
+                    # there aren't any neighbors.)
+                    assert neighbors
                 for neigbhor in neighbors:
                     assert neigbhor in perm_space 
                     assert len(cute_iter_tools.zip_non_equal((perm, neigbhor),
@@ -447,4 +456,4 @@ def test():
              n_elements_options, is_combination_options,
              purified_fixed_map_options, degrees_options, slice_options)
         ):
-            yield _check_variation_selection, product
+            yield (_check_variation_selection,) + product
