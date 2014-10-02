@@ -710,7 +710,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                                          sequence_tools.CuteRange(self.length))
     _reduced = property(
         lambda self: (type(self), self.sequence, self.domain, 
-                      tuple(self.fixed_map.items()), self.canonical_slice)
+                      tuple(sorted(self.fixed_map.items())),
+                      self.canonical_slice)
     )
              
     __eq__ = lambda self, other: (isinstance(other, PermSpace) and

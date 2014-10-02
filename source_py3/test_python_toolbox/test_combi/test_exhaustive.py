@@ -42,7 +42,7 @@ class BrutePermSpace:
     kinds of arguments that `PermSpace` would take.
     '''
     def __init__(self, iterable_or_length, domain=None, n_elements=None,
-                 fixed_map=None, degrees=None, is_combination=False,
+                 fixed_map={}, degrees=None, is_combination=False,
                  slice_=None):
         self.sequence = tuple(iterable_or_length) if \
             isinstance(iterable_or_length, collections.Iterable) else \
@@ -51,10 +51,12 @@ class BrutePermSpace:
         self._sequence_frozen_counter = \
                                  nifty_collections.FrozenCounter(self.sequence)
         self.is_recurrent = len(set(self.sequence)) < len(self.sequence)
-        self.domain = domain or sequence_tools.CuteRange(self.sequence_length)
         self.n_elements = n_elements if n_elements is not None else \
                                                              len(self.sequence)
-        self.fixed_map = fixed_map or {}
+        self.domain = (domain or
+              sequence_tools.CuteRange(self.sequence_length))[:self.n_elements]
+        self.fixed_map = {key: value for key, value in fixed_map.items() if key
+                          in self.domain}
         self.degrees = \
                       degrees or sequence_tools.CuteRange(self.sequence_length)
         self.is_combination = is_combination
@@ -157,7 +159,7 @@ def _check_variation_selection(variation_selection, perm_space_type,
     if purified_fixed_map != NO_ARGUMENT:
         kwargs['fixed_map'] = actual_fixed_map = {
             actual_domain[key]: sequence[value] for key, value
-                                                 in purified_fixed_map.items()
+                           in purified_fixed_map.items() if key < len(sequence)
         }
     else:
         actual_fixed_map = {}
@@ -391,10 +393,8 @@ def _iterate_tests():
             )
         elif variation_selection.is_rapplied:
             iterable_or_length_and_sequence_options = (
-                (tuple(range(60, -10, -10)),
-                 tuple(range(60, -10, -10))),
                 ([1, 4, 2, 5, 3, 7],
-                 (1, 4, 2, 5, 3, 7))
+                 (1, 4, 2, 5, 3, 7)), 
             )
         else:
             iterable_or_length_and_sequence_options = (
@@ -404,30 +404,30 @@ def _iterate_tests():
         
         if variation_selection.is_dapplied:
             domain_to_cut_options = (
-                'abcdefghijklmnopqrstuvwxyz',
-                'ZYXWVUTSRQPONMLKJIHGFEDCBA',
-                [i ** 2 for i in range(20)]
+                'QPONMLKJIHGFEDCBAZYXWVUTSR',
+                [7 + i ** 2 for i in range(20)]
             )
         else:
             domain_to_cut_options = (NO_ARGUMENT,)
             
         if variation_selection.is_partial:
-            n_elements_options = (0, 1, 2, 5)
+            n_elements_options = (1, 2, 5)
         else:
             n_elements_options = (NO_ARGUMENT,)
             
+        perm_space_type_options = (PermSpace,)
         if variation_selection.is_combination:
             is_combination_options = (True,)
-            perm_space_type_options = (PermSpace, CombSpace)
         else:
-            is_combination_options = (False, NO_ARGUMENT,)
-            perm_space_type_options = (PermSpace,)
+            is_combination_options = (NO_ARGUMENT,)
             
             
         if variation_selection.is_fixed:
+            # All fixed maps have key `0` so even if `n_elements=1` the space
+            # will still be fixed.
             purified_fixed_map_options = (
-                {1: 1, 4: 3,},
-                {0: 0, 1: -2, -3: -4,},
+                {0: 1, 4: 3,},
+                {0: 0, 1: -2, -2: -3,},
             )
         else:
             purified_fixed_map_options = (NO_ARGUMENT,)
@@ -436,7 +436,6 @@ def _iterate_tests():
             degrees_options = (
                 (0, 2, 4, 5),
                 1,
-                (3,)
             )
         else:
             degrees_options = (NO_ARGUMENT,)
@@ -471,6 +470,6 @@ for i, f in enumerate(_iterate_tests()):
     f.name = 'f_%s' % i
     locals()[f.name] = f
     lambdas.append(f)
-for i, partition in enumerate(sequence_tools.partitions(lambdas, 10)):
+for i, partition in enumerate(sequence_tools.partitions(lambdas, 100)):
     exec('def test_%s(): return (%s)' %
          (i, ', '.join('%s()'% f.name for f in partition)))

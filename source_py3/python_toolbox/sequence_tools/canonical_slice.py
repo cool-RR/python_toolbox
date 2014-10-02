@@ -106,7 +106,7 @@ class CanonicalSlice:
         #                                                                     #
         ### Finished parsing `stop`. ##########################################
             
-        if (self.step > 0 and self.start >= self.stop > 0) or \
+        if (self.step > 0 and self.start >= self.stop >= 0) or \
            (self.step < 0 and self.stop >= self.start):
             # We have a case of an empty slice.
             self.start = self.stop = 0
