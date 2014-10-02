@@ -167,7 +167,7 @@ def _check_variation_selection(variation_selection, perm_space_type,
 
     try:
         perm_space = perm_space_type(**kwargs)
-    except combi.UnallowedVariationSelectionException:
+    except (combi.UnallowedVariationSelectionException, TypeError):
         if not variation_selection.is_allowed:
             return
         else:
@@ -372,7 +372,7 @@ def _check_variation_selection(variation_selection, perm_space_type,
         
         perm_repr = repr(perm)
         
-def shit():
+def _iterate_tests():
     for variation_selection in combi.variations.variation_selection_space:
         
         kwargs = {}
@@ -458,6 +458,8 @@ def shit():
         ):
             yield (_check_variation_selection,) + product
             
-for i, x in enumerate(shit()):
+
+# We use this shit because Nose can't parallelize generator tests:
+for i, x in enumerate(_iterate_tests()):
     locals()['f_%s' % i] = lambda: x[0](*x[1:])
     exec('def test_%s(): return f_%s()' % (i, i))
