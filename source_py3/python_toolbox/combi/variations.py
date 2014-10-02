@@ -7,11 +7,28 @@ from python_toolbox.third_party import sortedcontainers
 from .selection_space import SelectionSpace
 
 
-class UnallowedVariationSelectionException(exceptions.CuteException):
+class Variation(nifty_collections.CuteEnum):
     '''
+    A variation that a `PermSpace` might have.
     
-    let it take variations
-    make variation classes mostly for this and testing'''
+    The `combi` package allows many different variations on `PermSpace`. It may
+    be range-applied, recurrent, partial, a combination, and more. Each of
+    these is a `Variation` object. This `Variation` object is used mostly for
+    meta purposes.
+    '''
+    RAPPLIED = 'rapplied'
+    RECURRENT = 'recurrent'
+    PARTIAL = 'partial'
+    COMBINATION = 'combination'
+    DAPPLIED = 'dapplied'
+    FIXED = 'fixed'
+    DEGREED = 'degreed'
+    SLICED = 'sliced'
+    
+        
+
+class UnallowedVariationSelectionException(exceptions.CuteException):
+    '''An unallowed selection of variations was attempted.'''
     def __init__(self, variation_clash):
         self.variation_clash = variation_clash
         assert variation_clash in variation_clashes
@@ -27,17 +44,6 @@ class UnallowedVariationSelectionException(exceptions.CuteException):
         )
         
 
-class Variation(nifty_collections.CuteEnum):
-    RAPPLIED = 'rapplied'
-    RECURRENT = 'recurrent'
-    PARTIAL = 'partial'
-    COMBINATION = 'combination'
-    DAPPLIED = 'dapplied'
-    FIXED = 'fixed'
-    DEGREED = 'degreed'
-    SLICED = 'sliced'
-    
-        
 variation_clashes = (
     {Variation.DAPPLIED: True, Variation.COMBINATION: True,},
     {Variation.DEGREED: True, Variation.COMBINATION: True,},
@@ -46,9 +52,18 @@ variation_clashes = (
     {Variation.COMBINATION: True, Variation.FIXED: True,},
     {Variation.RAPPLIED: False, Variation.RECURRENT: True,},
 )
+'''Variations that can't be used with each other.'''
 
 
 class VariationSelectionSpace(SelectionSpace):
+    '''
+    The space of all variation selections.
+    
+    Every member in this space is a `VariationSelection`, meaning a bunch of
+    variations that a `PermSpace` might have (like whether it's rapplied, or
+    sliced, or a combination). This is the space of all possible
+    `VariationSelection`s, both the allowed ones and the unallowed ones.
+    '''
     def __init__(self):
         SelectionSpace.__init__(self, Variation)
         
@@ -63,19 +78,57 @@ class VariationSelectionSpace(SelectionSpace):
     def __repr__(self):
         return '<VariationSelectionSpace>'
     
+    @caching.CachedProperty
+    def allowed_variation_selections(self):
+        '''
+        A tuple of all `VariationSelection` objects that are allowed.
+        
+        This means all variation selections which can be used in a `PermSpace`.
+        '''
+        return tuple(variation_selection for variation_selection in self if
+                     variation_selection.is_allowed)
+    
+    @caching.CachedProperty
+    def unallowed_variation_selections(self):
+        '''
+        A tuple of all `VariationSelection` objects that are unallowed.
+        
+        This means all variation selections which cannot be used in a
+        `PermSpace`.
+        '''        
+        return tuple(variation_selection for variation_selection in self if
+                     not variation_selection.is_allowed)
+        
+    
 variation_selection_space = VariationSelectionSpace()
 
         
 class VariationSelectionType(type):
-    __call__ = lambda cls, variations: cls._create_from_tuple(
+    __call__ = lambda cls, variations: cls._create_from_sorted_set(
                                    cls, sortedcontainers.SortedSet(variations))
     
 class VariationSelection(metaclass=VariationSelectionType):
+    '''
+    A selection of variations of a `PermSpace`.
+    
+    The `combi` package allows many different variations on `PermSpace`. It may
+    be range-applied, recurrent, partial, a combination, and more. Any
+    selection of variations from this list is represented by a
+    `VariationSelection` object. Some are allowed, while others aren't allowed.
+    (For example a `PermSpace` that is both dapplied and a combination is not
+    allowed.)
+    
+    This type is cached, meaning that after you create one from an iterable of
+    variations and then try to create an identical one by using an iterable
+    with the same variations, you'll get the original `VariationSelection`
+    object you created.
+    '''
     @caching.cache()
-    def _create_from_tuple(cls, variations):
+    def _create_from_sorted_set(cls, variations):
+        '''Create a `VariationSelection` from a `SortedSet` of variations.'''
         # This method exsits so we could cache canonically. The `__new__`
-        # method canonicalizes the `variations` argument and we cache according
-        # to it.
+        # method canonicalizes the `variations` argument to a `SortedSet` and
+        # we cache according to it.
         variation_selection = super().__new__(cls)
         variation_selection.__init__(variations)
         return variation_selection
@@ -104,6 +157,7 @@ class VariationSelection(metaclass=VariationSelectionType):
     
     @caching.CachedProperty
     def is_allowed(self):
+        '''Is this `VariationSelection` allowed to be used in a `PermSpace`?'''
         _variations_set = set(self.variations)
         for variation_clash in variation_clashes:
             for variation, included in variation_clash.items():
@@ -114,7 +168,10 @@ class VariationSelection(metaclass=VariationSelectionType):
         else:
             return True
         
-    number = caching.CachedProperty(variation_selection_space.index)
+    number = caching.CachedProperty(
+        variation_selection_space.index,
+        '''Serial number in the space of all variation selections.'''
+    )
     
     _reduced = caching.CachedProperty(lambda self: (type(self), self.number))
     _hash = caching.CachedProperty(lambda self: hash(self._reduced))

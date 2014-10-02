@@ -782,18 +782,22 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
 
             wip_perm_number = 0
             unused_values = list(self.sequence)
+            reserved_values = list(self.fixed_map.values())
             perm_sequence_list = list(perm._perm_sequence)
             shit_set = set()
             for i, value in enumerate(perm):
                 if i in self.fixed_map:
                     if self.fixed_map[i] == value:
                         unused_values.remove(value)
+                        reserved_values.remove(value)
                         continue
                     else:
                         raise ValueError
                 lower_values = [
                     thing for thing in
                     nifty_collections.OrderedSet(unused_values) if
+                    (thing not in reserved_values or unused_values.count(thing)
+                     > reserved_values.count(thing)) and 
                     unused_values.index(thing) < unused_values.index(value) and
                                                           thing not in shit_set
                 ]
