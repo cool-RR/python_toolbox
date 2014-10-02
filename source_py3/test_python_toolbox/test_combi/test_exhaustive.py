@@ -235,9 +235,8 @@ def _check_variation_selection(variation_selection, perm_space_type,
         # we'll get the illusion that the tests are running while they're
         # really not.
     
-    # blocktodo: change to 100 after finished debugging 
     for i, (perm, brute_perm_tuple) in enumerate(
-                itertools.islice(zip(perm_space, brute_perm_space_tuple), 10)):
+                itertools.islice(zip(perm_space, brute_perm_space_tuple), 30)):
         
         assert tuple(perm) == brute_perm_tuple
         assert perm in perm_space
@@ -372,6 +371,9 @@ def _check_variation_selection(variation_selection, perm_space_type,
         
         perm_repr = repr(perm)
         
+    if variation_selection.number == 197:
+        1 / 0
+        
 def _iterate_tests():
     for variation_selection in combi.variations.variation_selection_space:
         
@@ -460,6 +462,12 @@ def _iterate_tests():
             
 
 # We use this shit because Nose can't parallelize generator tests:
+lambdas = []
 for i, x in enumerate(_iterate_tests()):
-    locals()['f_%s' % i] = lambda: x[0](*x[1:])
-    exec('def test_%s(): return f_%s()' % (i, i))
+    f = lambda: x[0](*x[1:])
+    f.name = 'f_%s' % i
+    locals()[f.name] = f
+    lambdas.append(f)
+for i, partition in enumerate(sequence_tools.partitions(lambdas, 1000)):
+    exec('def test_%s(): return (%s)' %
+         (i, ', '.join('%s()'% f.name for f in partition)))
