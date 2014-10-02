@@ -386,14 +386,14 @@ def _iterate_tests():
         if variation_selection.is_recurrent:
             iterable_or_length_and_sequence_options = (
                 ('abracab', 'abracab'),
-                ((1, 2, 3, 4, 5, 5, 4, 3, 2, 3, 4, 5, 5, 4, 5),
-                 (1, 2, 3, 4, 5, 5, 4, 3, 2, 3, 4, 5, 5, 4, 5))
+                ((1, 2, 3, 4, 5, 5, 4, 3),
+                 (1, 2, 3, 4, 5, 5, 4, 3))
             )
         elif variation_selection.is_rapplied:
             iterable_or_length_and_sequence_options = (
                 (tuple(range(60, -10, -10)),
                  tuple(range(60, -10, -10))),
-                (iter([1, 4, 2, 5, 3, 7]),
+                ([1, 4, 2, 5, 3, 7],
                  (1, 4, 2, 5, 3, 7))
             )
         else:
