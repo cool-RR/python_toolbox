@@ -211,8 +211,12 @@ class LazyTuple(collections.Sequence):
     
     
     def __bool__(self):
-        self.exhaust(0)
-        return bool(self.collected_data)
+        try:
+            next(iter(self))
+        except StopIteration:
+            return False
+        else:
+            return True
 
     
     def __lt__(self, other):

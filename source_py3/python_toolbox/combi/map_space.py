@@ -61,5 +61,6 @@ class MapSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
     __eq__ = lambda self, other: (isinstance(other, MapSpace) and
                                   self._reduced == other._reduced)
     
+    __bool__ = lambda self: bool(self.sequence)
 
 

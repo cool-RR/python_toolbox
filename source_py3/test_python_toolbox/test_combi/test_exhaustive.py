@@ -187,7 +187,6 @@ def _check_variation_selection(variation_selection, perm_space_type,
                 None), 
         **kwargs
     )
-    brute_perm_space_tuple = tuple(brute_perm_space)
     
     assert perm_space.variation_selection == variation_selection
     assert perm_space.sequence_length == len(sequence)
@@ -198,12 +197,9 @@ def _check_variation_selection(variation_selection, perm_space_type,
         not variation_selection.is_partial
     )
     
-    assert perm_space.length == len(brute_perm_space_tuple)
-    
     if perm_space.length:
         assert perm_space.index(perm_space[-1]) == perm_space.length - 1
         assert perm_space.index(perm_space[0]) == 0
-        assert tuple(perm_space[-1]) == brute_perm_space_tuple[-1]
         
     if variation_selection.is_partial:
         assert 0 < perm_space.n_unused_elements == \
@@ -236,7 +232,7 @@ def _check_variation_selection(variation_selection, perm_space_type,
         # really not.
     
     for i, (perm, brute_perm_tuple) in enumerate(
-                itertools.islice(zip(perm_space, brute_perm_space_tuple), 30)):
+                      itertools.islice(zip(perm_space, brute_perm_space), 30)):
         
         assert tuple(perm) == brute_perm_tuple
         assert perm in perm_space
@@ -452,22 +448,28 @@ def _iterate_tests():
         else:
             slice_options = (NO_ARGUMENT,)
 
-        for product in combi.ProductSpace(
+        product_space_ = combi.ProductSpace(
             ((variation_selection,), perm_space_type_options,
              iterable_or_length_and_sequence_options, domain_to_cut_options,
              n_elements_options, is_combination_options,
              purified_fixed_map_options, degrees_options, slice_options)
-        ):
-            yield (_check_variation_selection,) + product
+        )
+        
+        for i in range(len(product_space_)):
+            fucking_globals = dict(globals())
+            fucking_globals.update(locals())
+            yield eval(
+                'lambda: _check_variation_selection(*product_space_[%s])' % i,
+                fucking_globals, locals()
+            )
             
 
 # We use this shit because Nose can't parallelize generator tests:
 lambdas = []
-for i, x in enumerate(_iterate_tests()):
-    f = lambda: x[0](*x[1:])
+for i, f in enumerate(_iterate_tests()):
     f.name = 'f_%s' % i
     locals()[f.name] = f
     lambdas.append(f)
-for i, partition in enumerate(sequence_tools.partitions(lambdas, 1000)):
+for i, partition in enumerate(sequence_tools.partitions(lambdas, 10)):
     exec('def test_%s(): return (%s)' %
          (i, ', '.join('%s()'% f.name for f in partition)))
