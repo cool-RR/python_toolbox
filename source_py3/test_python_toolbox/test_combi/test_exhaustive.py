@@ -372,7 +372,7 @@ def _check_variation_selection(variation_selection, perm_space_type,
         
         perm_repr = repr(perm)
         
-def test():
+def shit():
     for variation_selection in combi.variations.variation_selection_space:
         
         kwargs = {}
@@ -457,3 +457,7 @@ def test():
              purified_fixed_map_options, degrees_options, slice_options)
         ):
             yield (_check_variation_selection,) + product
+            
+for i, x in enumerate(shit()):
+    locals()['f_%s' % i] = lambda: x[0](*x[1:])
+    exec('def test_%s(): return f_%s()' % (i, i))
