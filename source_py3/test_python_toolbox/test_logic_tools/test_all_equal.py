@@ -8,10 +8,10 @@ import itertools
 from python_toolbox.logic_tools import all_equal
 
 
-def _iterate_exhaustive_tests():
+def test():
     '''Test the basic working of `all_equal`.'''
-    yield _check, False
-    yield _check, True
+    _check(False)
+    _check(True)
 
 
 def _check(exhaustive):
@@ -54,7 +54,3 @@ def test_exhaustive_true():
     assert not all_equal(funky_floats, exhaustive=True)
                 
     
-# We use this shit because Nose can't parallelize generator tests:
-for i, x in enumerate(_iterate_exhaustive_tests()):
-    locals()['f_%s' % i] = lambda: x[0](*x[1:])
-    exec('def test_%s(): return f_%s()' % (i, i))
