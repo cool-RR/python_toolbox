@@ -33,7 +33,8 @@ def test():
     
     assert frozen_ordered_dict.copy({'meow': 'frrr'}) == \
            frozen_ordered_dict.copy(meow='frrr') == \
-           FrozenOrderedDict({'1': 'a', '2': 'b', '3': 'c', 'meow': 'frrr',})
+           FrozenOrderedDict((('1', 'a'), ('2', 'b'), ('3', 'c'),
+                              ('meow', 'frrr')))
     
     assert repr(frozen_ordered_dict).startswith('FrozenOrderedDict(')
     
