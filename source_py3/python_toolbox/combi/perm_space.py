@@ -180,8 +180,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         ### Figuring out whether sequence is recurrent: #######################
         #                                                                     #
         if self.is_rapplied:
-            self._sequence_counteroid
-            # Sets `.is_recurrent` as a side-effect.
+            self.is_recurrent = any(count >= 2 for count in
+                                    self._frozen_ordered_counter.values())
         else:
             self.is_recurrent = False
         #                                                                     #
@@ -356,8 +356,6 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
 
     __init__.signature = inspect.signature(__init__)
             
-    is_recurrent = None
-            
     @caching.CachedProperty
     def _unsliced_length(self):
         '''
@@ -444,32 +442,13 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         return variation_selection
     
     @caching.CachedProperty
-    def _sequence_counteroid(self):
-        '''
-        
-        Sets `.is_recurrent` as a side-effect, or if it was set ensures it was
-        set correctly.
-        '''
-        _sequence_counteroid = collections.OrderedDict()
-        is_recurrent = False # Until challenged
-        for item in self.sequence:
-            if item not in _sequence_counteroid:
-                _sequence_counteroid[item] = 0
-            else:
-                is_recurrent = True
-            _sequence_counteroid[item] += 1
-        if self.is_recurrent is None:
-            self.is_recurrent = is_recurrent
-        else:
-            assert self.is_recurrent == is_recurrent
-        return _sequence_counteroid
-
+    def _frozen_ordered_counter(self):
+        return nifty_collections.FrozenOrderedCounter(self.sequence)
             
-    @caching.CachedProperty
-    def _frozen_counter_counter(self):
-        return nifty_collections.FrozenCounterCounter(
-            self._sequence_counteroid.values()
-        )
+    _frozen_counter_counter = caching.CachedProperty(
+        lambda self: nifty_collections.FrozenCounterCounter(
+                                          self._frozen_ordered_counter.values()
+    )
         
             
     def __repr__(self):
