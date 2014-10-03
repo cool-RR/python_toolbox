@@ -7,6 +7,7 @@ import uuid
 import pickle
 import itertools
 import collections
+import decimal as decimal_module
 
 from python_toolbox import cute_iter_tools
 from python_toolbox import sequence_tools
@@ -94,3 +95,31 @@ def test_ordering():
                                                   item not in smaller_item]
         for not_smaller_item in not_smaller_items:
             assert not item < smaller_item
+
+def test_ignores_zero():
+    frozen_counter_0 = FrozenCounter({'a': 0,})
+    frozen_counter_1 = FrozenCounter()
+    assert frozen_counter_0 == frozen_counter_1
+    
+    assert hash(frozen_counter_0) == hash(frozen_counter_1)
+    assert {frozen_counter_0, frozen_counter_1} == {frozen_counter_0} == \
+                                                             {frozen_counter_1}
+    
+    frozen_counter_2 = FrozenCounter(
+                       {'a': 0.0, 'b': 2, 'c': decimal_module.Decimal('0.0'),})
+    frozen_counter_3 = FrozenCounter('bb')
+    
+    assert hash(frozen_counter_2) == hash(frozen_counter_3)
+    assert {frozen_counter_2, frozen_counter_3} == {frozen_counter_2} == \
+                                                             {frozen_counter_3}
+
+
+def test_immutable():
+    frozen_counter = FrozenCounter('abracadabra')
+    with cute_testing.RaiseAssertor(TypeError):
+        frozen_counter['a'] += 1
+    with cute_testing.RaiseAssertor(TypeError):
+        frozen_counter['a'] -= 1
+    with cute_testing.RaiseAssertor(TypeError):
+        frozen_counter['a'] = 7
+    
