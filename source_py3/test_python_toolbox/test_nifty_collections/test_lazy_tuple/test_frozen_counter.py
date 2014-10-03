@@ -16,7 +16,8 @@ from python_toolbox import cute_testing
 
 
 from python_toolbox.nifty_collections import (FrozenCounter,
-                                              FrozenOrderedCounter)
+                                              FrozenOrderedCounter,
+                                              OrderedDict)
 
 def test_common():
     _check_common(FrozenCounter)
@@ -48,11 +49,6 @@ def _check_common(frozen_counter_type):
     assert {frozen_counter: frozen_counter} == {frozen_counter: frozen_counter}
     assert isinstance(hash(frozen_counter), int)
     
-    assert frozen_counter.copy({'meow': 9}) == \
-           frozen_counter.copy(meow=9) == \
-           frozen_counter_type({'a': 5, 'r': 2, 'b': 2, 'c': 1, 'd': 1,
-                          'meow': 9,})
-    
     assert set(frozen_counter.most_common()) == \
                          set(collections.Counter(frozen_counter).most_common())
     
@@ -79,6 +75,12 @@ def _check_common(frozen_counter_type):
     
     assert re.match('^Frozen(Ordered)?Counter\(.*$',
                     repr(frozen_counter))
+    
+    assert frozen_counter.copy({'meow': 9}) == \
+           frozen_counter.copy(meow=9) == \
+           frozen_counter_type(OrderedDict(
+               [('a', 5), ('b', 2), ('r', 2), ('c', 1), ('d', 1), ('meow', 9)])
+           )
     
     assert pickle.loads(pickle.dumps(frozen_counter)) == frozen_counter
     
@@ -171,4 +173,5 @@ def test_repr():
     )
     assert repr(FrozenOrderedCounter('ababb')) == \
                       "FrozenOrderedCounter(OrderedDict([('a', 2), ('b', 3)]))"
+    
     

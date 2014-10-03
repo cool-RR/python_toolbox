@@ -8,6 +8,7 @@ import collections
 import functools
 
 from .lazy_tuple import LazyTuple
+from .ordered_dict import OrderedDict
 from .frozen_dict_and_frozen_ordered_dict import FrozenDict, FrozenOrderedDict
 
 try:                                    # Load C helper function if available
@@ -111,8 +112,8 @@ class _FrozenCounterMixin:
 
 
     __pos__ = lambda self: self
-    __neg__ = lambda self: type(self)({key: -value for key, value
-                                       in self.items()})
+    __neg__ = lambda self: type(self)(OrderedDict(((key, -value) for key, value
+                                                   in self.items())))
 
     # Multiset-style mathematical operations discussed in:
     #       Knuth TAOCP Volume II section 4.6.3 exercise 19
@@ -133,7 +134,12 @@ class _FrozenCounterMixin:
         '''
         if not isinstance(other, _FrozenCounterMixin):
             return NotImplemented
-        result = collections.Counter()
+        
+        # Using `OrderedDict` to store interim results because
+        # `FrozenOrderedCounter` inherits from this class and it needs to have
+        # items in order.
+        result = OrderedDict()
+        
         for element, count in self.items():
             new_count = count + other[element]
             if new_count > 0:
@@ -153,7 +159,12 @@ class _FrozenCounterMixin:
         '''
         if not isinstance(other, _FrozenCounterMixin):
             return NotImplemented
-        result = collections.Counter()
+        
+        # Using `OrderedDict` to store interim results because
+        # `FrozenOrderedCounter` inherits from this class and it needs to have
+        # items in order.
+        result = OrderedDict()
+        
         for element, count in self.items():
             new_count = count - other[element]
             if new_count > 0:
@@ -173,7 +184,12 @@ class _FrozenCounterMixin:
         '''
         if not isinstance(other, _FrozenCounterMixin):
             return NotImplemented
-        result = collections.Counter()
+
+        # Using `OrderedDict` to store interim results because
+        # `FrozenOrderedCounter` inherits from this class and it needs to have
+        # items in order.
+        result = OrderedDict()
+
         for element, count in self.items():
             other_count = other[element]
             new_count = other_count if count < other_count else count
@@ -194,7 +210,12 @@ class _FrozenCounterMixin:
         '''
         if not isinstance(other, _FrozenCounterMixin):
             return NotImplemented
-        result = collections.Counter()
+
+        # Using `OrderedDict` to store interim results because
+        # `FrozenOrderedCounter` inherits from this class and it needs to have
+        # items in order.
+        result = OrderedDict()
+
         for element, count in self.items():
             other_count = other[element]
             new_count = count if count < other_count else other_count
