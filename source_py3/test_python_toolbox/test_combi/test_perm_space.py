@@ -4,6 +4,7 @@
 import pickle
 import itertools
 
+from python_toolbox import math_tools
 from python_toolbox import sequence_tools
 
 from python_toolbox import combi
@@ -506,16 +507,17 @@ def test_recurrent():
     assert PermSpace('aab', n_elements=1).length == 2
     
     recurrent_perm_space = PermSpace('ab' * 100, n_elements=2)
-    assert len(recurrent_perm_space) == 4
+    assert recurrent_perm_space.length == 4
     assert tuple(map(tuple, recurrent_perm_space)) == (
         ('a', 'b'),
         ('a', 'a'),
         ('b', 'a'),
         ('b', 'b'),
     )
+    assert recurrent_perm_space.unrecurrented.length == 200 * 199
     
     recurrent_comb_space = CombSpace('ab' * 100, n_elements=2)
-    assert len(recurrent_comb_space) == 3
+    assert recurrent_comb_space.length == 3
     assert tuple(map(tuple, recurrent_comb_space)) == (
         ('a', 'b'),
         ('a', 'a'),
@@ -523,7 +525,7 @@ def test_recurrent():
     )
     
     recurrent_perm_space = PermSpace('ab' * 100 + 'c', n_elements=2)
-    assert len(recurrent_perm_space) == 8
+    assert recurrent_perm_space.length == 8
     assert tuple(map(tuple, recurrent_perm_space)) == (
         ('a', 'b'),
         ('a', 'a'),
@@ -536,11 +538,11 @@ def test_recurrent():
     )
     
     recurrent_comb_space = CombSpace('ab' * 100 + 'c', n_elements=2)
-    assert len(recurrent_comb_space) == 5
+    assert recurrent_comb_space.length == 5
     assert tuple(map(tuple, recurrent_comb_space)) == (
         ('a', 'b'),
         ('a', 'a'),
         ('a', 'c'),
         ('b', 'b'),
         ('b', 'c'),
-    )    
+    )
