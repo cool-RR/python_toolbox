@@ -447,12 +447,11 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             
     _frozen_counter_counter = caching.CachedProperty(
         lambda self: nifty_collections.FrozenCounterCounter(
-                                          self._frozen_ordered_counter.values()
+                                         self._frozen_ordered_counter.values())
     )
         
             
     def __repr__(self):
-        
         if self.is_dapplied:
             domain_repr = repr(self.domain)
             if len(domain_repr) > 40:
