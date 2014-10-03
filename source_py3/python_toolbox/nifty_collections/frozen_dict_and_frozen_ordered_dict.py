@@ -36,7 +36,7 @@ class _AbstractFrozenDict(collections.Mapping):
     __reduce__ = lambda self: (self.__class__ , (self._dict,))
 
     
-class FrozenDict(_FrozenDictBase):
+class FrozenDict(_AbstractFrozenDict):
     '''
     An immutable `dict`.
     
@@ -48,6 +48,6 @@ class FrozenDict(_FrozenDictBase):
     _dict_type = dict
         
 
-class FrozenOrderedDict(_FrozenDictBase):
+class FrozenOrderedDict(_AbstractFrozenDict):
     _dict_type = OrderedDict
     

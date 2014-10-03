@@ -8,7 +8,7 @@ import collections
 import functools
 
 from .lazy_tuple import LazyTuple
-from .frozen_dict_and_frozen_ordered_dict import FrozenDict
+from .frozen_dict_and_frozen_ordered_dict import FrozenDict, FrozenOrderedDict
 
 try:                                    # Load C helper function if available
     from _collections import _count_elements
@@ -225,6 +225,6 @@ class FrozenCounter(_FrozenCounterMixin, FrozenDict):
     pass
                 
                 
-class FrozenOrderedCounter(_FrozenCounterMixin, FrozenOrderedCounter):
+class FrozenOrderedCounter(_FrozenCounterMixin, FrozenOrderedDict):
     pass
         

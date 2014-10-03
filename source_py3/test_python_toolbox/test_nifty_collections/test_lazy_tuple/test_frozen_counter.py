@@ -4,6 +4,7 @@
 '''Testing module for `python_toolbox.nifty_collections.LazyTuple`.'''
 
 import uuid
+import re
 import pickle
 import itertools
 import collections
@@ -14,14 +15,25 @@ from python_toolbox import sequence_tools
 from python_toolbox import cute_testing
 
 
-from python_toolbox.nifty_collections import FrozenCounter
+from python_toolbox.nifty_collections import (FrozenCounter,
+                                              FrozenOrderedCounter)
 
+def test_common():
+    _check_common(FrozenCounter)
+    _check_common(FrozenOrderedCounter)
+    _check_comparison(FrozenCounter)
+    _check_comparison(FrozenOrderedCounter)
+    _check_ignores_zero(FrozenCounter)
+    _check_ignores_zero(FrozenOrderedCounter)
+    _check_immutable(FrozenCounter)
+    _check_immutable(FrozenOrderedCounter)
+    
 
-def test():
-    frozen_counter = FrozenCounter('abracadabra')
+def _check_common(frozen_counter_type):
+    frozen_counter = frozen_counter_type('abracadabra')
     assert frozen_counter == collections.Counter('abracadabra') == \
            collections.Counter(frozen_counter) == \
-           FrozenCounter(collections.Counter('abracadabra'))
+           frozen_counter_type(collections.Counter('abracadabra'))
     
     assert len(frozen_counter) == 5
     assert set(frozen_counter) == set(frozen_counter.keys()) == \
@@ -38,41 +50,42 @@ def test():
     
     assert frozen_counter.copy({'meow': 9}) == \
            frozen_counter.copy(meow=9) == \
-           FrozenCounter({'a': 5, 'r': 2, 'b': 2, 'c': 1, 'd': 1,
+           frozen_counter_type({'a': 5, 'r': 2, 'b': 2, 'c': 1, 'd': 1,
                           'meow': 9,})
     
     assert set(frozen_counter.most_common()) == \
                          set(collections.Counter(frozen_counter).most_common())
     
-    assert frozen_counter + frozen_counter == FrozenCounter('abracadabra'*2)
-    assert frozen_counter - frozen_counter == FrozenCounter()
-    assert frozen_counter - FrozenCounter('a') == FrozenCounter('abracadabr')
-    assert frozen_counter - FrozenCounter('a') == FrozenCounter('abracadabr')
-    assert frozen_counter | FrozenCounter('a') == frozen_counter
+    assert frozen_counter + frozen_counter == frozen_counter_type('abracadabra'*2)
+    assert frozen_counter - frozen_counter == frozen_counter_type()
+    assert frozen_counter - frozen_counter_type('a') == frozen_counter_type('abracadabr')
+    assert frozen_counter - frozen_counter_type('a') == frozen_counter_type('abracadabr')
+    assert frozen_counter | frozen_counter_type('a') == frozen_counter
     assert frozen_counter | frozen_counter == \
            frozen_counter | frozen_counter | frozen_counter == \
                                                                  frozen_counter
-    assert frozen_counter & FrozenCounter('a') == FrozenCounter('a')
+    assert frozen_counter & frozen_counter_type('a') == frozen_counter_type('a')
     assert frozen_counter & frozen_counter == \
            frozen_counter & frozen_counter & frozen_counter == \
                                                                  frozen_counter
     
-    assert FrozenCounter(frozen_counter.elements()) == frozen_counter
+    assert frozen_counter_type(frozen_counter.elements()) == frozen_counter
     
     assert +frozen_counter == frozen_counter
     assert ---frozen_counter == -frozen_counter != \
                                              frozen_counter == --frozen_counter
     
-    assert repr(frozen_counter).startswith('FrozenCounter(')
+    assert re.match('^Frozen(Ordered)?Counter\(.*$',
+                    repr(frozen_counter))
     
     assert pickle.loads(pickle.dumps(frozen_counter)) == frozen_counter
     
-def test_ordering():
-    counter_0 = FrozenCounter('c')
-    counter_1 = FrozenCounter('abc')
-    counter_2 = FrozenCounter('aabc')
-    counter_3 = FrozenCounter('abbc')
-    counter_4 = FrozenCounter('aabbcc')
+def _check_comparison(frozen_counter_type):
+    counter_0 = frozen_counter_type('c')
+    counter_1 = frozen_counter_type('abc')
+    counter_2 = frozen_counter_type('aabc')
+    counter_3 = frozen_counter_type('abbc')
+    counter_4 = frozen_counter_type('aabbcc')
     
     hierarchy = (
         (counter_4, {counter_3, counter_2, counter_1, counter_0}),
@@ -83,7 +96,7 @@ def test_ordering():
     )
     
     for item, smaller_items in hierarchy:
-        if not isinstance(item, FrozenCounter):
+        if not isinstance(item, frozen_counter_type):
             continue
         for smaller_item in smaller_items:
             assert not item <= smaller_item
@@ -96,30 +109,56 @@ def test_ordering():
         for not_smaller_item in not_smaller_items:
             assert not item < smaller_item
 
-def test_ignores_zero():
-    frozen_counter_0 = FrozenCounter({'a': 0,})
-    frozen_counter_1 = FrozenCounter()
+def _check_ignores_zero(frozen_counter_type):
+    frozen_counter_0 = frozen_counter_type({'a': 0,})
+    frozen_counter_1 = frozen_counter_type()
     assert frozen_counter_0 == frozen_counter_1
     
     assert hash(frozen_counter_0) == hash(frozen_counter_1)
     assert {frozen_counter_0, frozen_counter_1} == {frozen_counter_0} == \
                                                              {frozen_counter_1}
     
-    frozen_counter_2 = FrozenCounter(
+    frozen_counter_2 = frozen_counter_type(
                        {'a': 0.0, 'b': 2, 'c': decimal_module.Decimal('0.0'),})
-    frozen_counter_3 = FrozenCounter('bb')
+    frozen_counter_3 = frozen_counter_type('bb')
     
     assert hash(frozen_counter_2) == hash(frozen_counter_3)
     assert {frozen_counter_2, frozen_counter_3} == {frozen_counter_2} == \
                                                              {frozen_counter_3}
 
 
-def test_immutable():
-    frozen_counter = FrozenCounter('abracadabra')
+def _check_immutable(frozen_counter_type):
+    frozen_counter = frozen_counter_type('abracadabra')
     with cute_testing.RaiseAssertor(TypeError):
         frozen_counter['a'] += 1
     with cute_testing.RaiseAssertor(TypeError):
         frozen_counter['a'] -= 1
     with cute_testing.RaiseAssertor(TypeError):
         frozen_counter['a'] = 7
+    
+
+def _check_immutable(frozen_counter_type):
+    frozen_counter = frozen_counter_type('abracadabra')
+    with cute_testing.RaiseAssertor(TypeError):
+        frozen_counter['a'] += 1
+    with cute_testing.RaiseAssertor(TypeError):
+        frozen_counter['a'] -= 1
+    with cute_testing.RaiseAssertor(TypeError):
+        frozen_counter['a'] = 7
+    
+def test_ordered():
+    frozen_counter_0 = FrozenCounter('ababb')
+    frozen_counter_1 = FrozenCounter('bbbaa')
+    assert frozen_counter_0 == frozen_counter_1
+    assert hash(frozen_counter_0) == hash(frozen_counter_1)
+    
+    frozen_ordered_counter_0 = FrozenOrderedCounter('ababb')
+    frozen_ordered_counter_1 = FrozenOrderedCounter('bbbaa')
+    assert frozen_ordered_counter_0 == frozen_ordered_counter_0
+    assert hash(frozen_ordered_counter_0) == hash(frozen_ordered_counter_0)
+    assert frozen_ordered_counter_1 == frozen_ordered_counter_1
+    assert hash(frozen_ordered_counter_1) == hash(frozen_ordered_counter_1)
+    assert frozen_ordered_counter_0 != frozen_ordered_counter_1
+    assert frozen_ordered_counter_0 <= frozen_ordered_counter_1
+    assert frozen_ordered_counter_0 >= frozen_ordered_counter_1
     

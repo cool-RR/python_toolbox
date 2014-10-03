@@ -5,7 +5,7 @@ import collections
 
 from python_toolbox import math_tools
 
-from .frozen_counter import FrozenCounter
+from .frozen_counter_and_frozen_ordered_counter import FrozenCounter
 
 
 class FrozenCounterCounter(FrozenCounter):
