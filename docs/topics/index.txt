@@ -22,7 +22,6 @@ explaining what it's good for and the basics of using it.
    
    abc-tools
    address-tools
-   arguments-profile
    binary-search
    caching/index
    change-tracker

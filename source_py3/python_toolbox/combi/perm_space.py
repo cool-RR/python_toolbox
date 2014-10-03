@@ -9,6 +9,7 @@ import sys
 import math
 import numbers
 import enum
+import inspect
 
 from python_toolbox import misc_tools
 from python_toolbox import nifty_collections
@@ -943,6 +944,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
     
         
         
+_init_signature = inspect.signature(PermSpace.__init__)
 
 from .perm import Perm
 from . import _variation_removing_mixin
