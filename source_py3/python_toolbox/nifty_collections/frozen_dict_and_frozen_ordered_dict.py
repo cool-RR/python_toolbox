@@ -66,3 +66,6 @@ class FrozenOrderedDict(_AbstractFrozenDict):
                                              all(map(operator.eq, self, other))
         return collections.Mapping.__eq__(self, other)
     
+    __hash__ = _AbstractFrozenDict.__hash__
+    # (Gotta manually carry `__hash__` over from the base class because setting
+    # `__eq__` resets it. )
