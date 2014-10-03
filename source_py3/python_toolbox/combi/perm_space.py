@@ -132,7 +132,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         else:
             return cls(argument)
     
-    def __init__(self, iterable_or_length, domain=None, n_elements=None, 
+    def __init__(self, iterable_or_length, domain=None, *, n_elements=None, 
                  fixed_map=None, degrees=None, is_combination=False,
                  slice_=None):
         

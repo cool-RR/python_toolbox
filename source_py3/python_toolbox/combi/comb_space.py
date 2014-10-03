@@ -10,7 +10,7 @@ class CombSpace(PermSpace):
     
     Every item in a `CombSpace` is a `Comb`.
     '''
-    def __init__(self, iterable_or_length, n_elements, slice_=None,
+    def __init__(self, iterable_or_length, n_elements, *, slice_=None,
                  _domain_for_checking=None, _degrees_for_checking=None):
         PermSpace.__init__(
             self, iterable_or_length=iterable_or_length, n_elements=n_elements,

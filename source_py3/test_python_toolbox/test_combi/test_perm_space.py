@@ -546,3 +546,5 @@ def test_recurrent():
         ('b', 'b'),
         ('b', 'c'),
     )
+    
+    assert PermSpace(4).unrecurrented == PermSpace(4)
