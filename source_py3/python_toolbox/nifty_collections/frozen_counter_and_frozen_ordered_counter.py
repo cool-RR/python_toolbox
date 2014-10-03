@@ -101,15 +101,13 @@ class _FrozenCounterMixin:
             'FrozenCounter(iterable) instead.'
         )
 
-    def __repr__(self):
-        if not self:
-            return '%s()' % self.__class__.__name__
-        try:
-            items = ', '.join(map('%r: %r'.__mod__, self.most_common()))
-            return '%s({%s})' % (self.__class__.__name__, items)
-        except TypeError:
-            # handle case where values are not orderable
-            return '{0}({1!r})'.format(self.__class__.__name__, dict(self))
+    # def __repr__(self):
+        # if not self:
+            # return '%s()' % self.__class__.__name__
+        # return '%s(%s)' % (
+            # type(self).__name__,
+            # super().__repr__()
+        # )
 
 
     __pos__ = lambda self: self
@@ -133,7 +131,7 @@ class _FrozenCounterMixin:
             FrozenCounter({'b': 4, 'c': 2, 'a': 1})
             
         '''
-        if not isinstance(other, FrozenCounter):
+        if not isinstance(other, _FrozenCounterMixin):
             return NotImplemented
         result = collections.Counter()
         for element, count in self.items():
@@ -143,7 +141,7 @@ class _FrozenCounterMixin:
         for element, count in other.items():
             if element not in self and count > 0:
                 result[element] = count
-        return FrozenCounter(result)
+        return type(self)(result)
 
     def __sub__(self, other):
         '''
@@ -153,7 +151,7 @@ class _FrozenCounterMixin:
             FrozenCounter({'b': 2, 'a': 1})
             
         '''
-        if not isinstance(other, FrozenCounter):
+        if not isinstance(other, _FrozenCounterMixin):
             return NotImplemented
         result = collections.Counter()
         for element, count in self.items():
@@ -163,7 +161,7 @@ class _FrozenCounterMixin:
         for element, count in other.items():
             if element not in self and count < 0:
                 result[element] = 0 - count
-        return FrozenCounter(result)
+        return type(self)(result)
 
     def __or__(self, other):
         '''
@@ -173,7 +171,7 @@ class _FrozenCounterMixin:
             FrozenCounter({'b': 3, 'c': 2, 'a': 1})
             
         '''
-        if not isinstance(other, FrozenCounter):
+        if not isinstance(other, _FrozenCounterMixin):
             return NotImplemented
         result = collections.Counter()
         for element, count in self.items():
@@ -184,7 +182,7 @@ class _FrozenCounterMixin:
         for element, count in other.items():
             if element not in self and count > 0:
                 result[element] = count
-        return FrozenCounter(result)
+        return type(self)(result)
 
     def __and__(self, other):
         '''
@@ -194,7 +192,7 @@ class _FrozenCounterMixin:
             FrozenCounter({'b': 1})
             
         '''
-        if not isinstance(other, FrozenCounter):
+        if not isinstance(other, _FrozenCounterMixin):
             return NotImplemented
         result = collections.Counter()
         for element, count in self.items():
@@ -202,7 +200,7 @@ class _FrozenCounterMixin:
             new_count = count if count < other_count else other_count
             if new_count > 0:
                 result[element] = new_count
-        return FrozenCounter(result)
+        return type(self)(result)
 
 
     __bool__ = lambda self: any(True for element in self.elements())
@@ -212,7 +210,7 @@ class _FrozenCounterMixin:
     )
     
     def __lt__(self, other):
-        if not isinstance(other, FrozenCounter):
+        if not isinstance(other, _FrozenCounterMixin):
             raise NotImplementedError
         for key, value in self.items():
             if other[key] < value:

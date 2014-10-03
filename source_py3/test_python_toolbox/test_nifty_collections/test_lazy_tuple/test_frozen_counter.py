@@ -56,14 +56,16 @@ def _check_common(frozen_counter_type):
     assert set(frozen_counter.most_common()) == \
                          set(collections.Counter(frozen_counter).most_common())
     
-    assert frozen_counter + frozen_counter == frozen_counter_type('abracadabra'*2)
+    assert frozen_counter + frozen_counter == \
+                                         frozen_counter_type('abracadabra' * 2)
     assert frozen_counter - frozen_counter == frozen_counter_type()
-    assert frozen_counter - frozen_counter_type('a') == frozen_counter_type('abracadabr')
-    assert frozen_counter - frozen_counter_type('a') == frozen_counter_type('abracadabr')
+    assert frozen_counter - frozen_counter_type('a') == \
+                                              frozen_counter_type('abracadabr')
+    assert frozen_counter - frozen_counter_type('a') == \
+                                              frozen_counter_type('abracadabr')
     assert frozen_counter | frozen_counter_type('a') == frozen_counter
     assert frozen_counter | frozen_counter == \
-           frozen_counter | frozen_counter | frozen_counter == \
-                                                                 frozen_counter
+           frozen_counter | frozen_counter | frozen_counter == frozen_counter
     assert frozen_counter & frozen_counter_type('a') == frozen_counter_type('a')
     assert frozen_counter & frozen_counter == \
            frozen_counter & frozen_counter & frozen_counter == \
@@ -161,4 +163,12 @@ def test_ordered():
     assert frozen_ordered_counter_0 != frozen_ordered_counter_1
     assert frozen_ordered_counter_0 <= frozen_ordered_counter_1
     assert frozen_ordered_counter_0 >= frozen_ordered_counter_1
+    
+def test_repr():
+    assert re.match(
+        "^FrozenCounter\\({(?:(?:'b': 3, 'a': 2)|(?:'a': 2, 'b': 3))}\\)$", 
+        repr(FrozenCounter('ababb'))
+    )
+    assert repr(FrozenOrderedCounter('ababb')) == \
+                      "FrozenOrderedCounter(OrderedDict([('a', 2), ('b', 3)]))"
     
