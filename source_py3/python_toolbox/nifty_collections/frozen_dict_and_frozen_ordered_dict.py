@@ -4,6 +4,7 @@
 import collections
 import operator
 import functools
+import itertools
 
 from .ordered_dict import OrderedDict
 
@@ -25,9 +26,17 @@ class _AbstractFrozenDict(collections.Mapping):
     
     def __hash__(self):
         if self._hash is None:
-            self._hash = functools.reduce(operator.xor,
-                                          map(hash, self.items()),
-                                          0) ^ hash(len(self))
+            self._hash = functools.reduce(
+                operator.xor,
+                map(
+                    hash,
+                    itertools.chain(
+                        (h for h in self.items()),
+                        (type(self), len(self))
+                    )
+                ),
+                0
+            )
 
         return self._hash
     
@@ -50,4 +59,10 @@ class FrozenDict(_AbstractFrozenDict):
 
 class FrozenOrderedDict(_AbstractFrozenDict):
     _dict_type = OrderedDict
+    
+    def __eq__(self, other):
+        if isinstance(other, (OrderedDict, FrozenOrderedDict)):
+            return collections.Mapping.__eq__(self, other) and \
+                                             all(map(operator.eq, self, other))
+        return collections.Mapping.__eq__(self, other)
     
