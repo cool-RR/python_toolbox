@@ -505,4 +505,42 @@ def test_recurrent():
     
     assert PermSpace('aab', n_elements=1).length == 2
     
-    # blocktodo: Don't forget getitem and index tests of course... 
+    recurrent_perm_space = PermSpace('ab' * 100, n_elements=2)
+    assert len(recurrent_perm_space) == 4
+    assert tuple(map(tuple, recurrent_perm_space)) == (
+        ('a', 'b'),
+        ('a', 'a'),
+        ('b', 'a'),
+        ('b', 'b'),
+    )
+    
+    recurrent_comb_space = CombSpace('ab' * 100, n_elements=2)
+    assert len(recurrent_comb_space) == 3
+    assert tuple(map(tuple, recurrent_comb_space)) == (
+        ('a', 'b'),
+        ('a', 'a'),
+        ('b', 'b'),
+    )
+    
+    recurrent_perm_space = PermSpace('ab' * 100 + 'c', n_elements=2)
+    assert len(recurrent_perm_space) == 8
+    assert tuple(map(tuple, recurrent_perm_space)) == (
+        ('a', 'b'),
+        ('a', 'a'),
+        ('a', 'c'),
+        ('b', 'a'),
+        ('b', 'b'),
+        ('b', 'c'),
+        ('c', 'a'),
+        ('c', 'b'),
+    )
+    
+    recurrent_comb_space = CombSpace('ab' * 100 + 'c', n_elements=2)
+    assert len(recurrent_comb_space) == 5
+    assert tuple(map(tuple, recurrent_comb_space)) == (
+        ('a', 'b'),
+        ('a', 'a'),
+        ('a', 'c'),
+        ('b', 'b'),
+        ('b', 'c'),
+    )    
