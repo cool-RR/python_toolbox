@@ -237,14 +237,6 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         #                                                                     #
         ### Finished figuring out whether space is dapplied. ##################
         
-        ### Doing interim calculation of the length: ##########################
-        #                                                                     #
-        # The length calculated here will be true only for perm spaces that
-        # don't have any additional complications.
-        #                                                                     #
-        ### Finished doing interim calculation of the length. #################
-        
-        
         ### Figuring out fixed map: ###########################################
         #                                                                     #
         if fixed_map is None:
@@ -270,20 +262,6 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 
         self.is_fixed = bool(self.fixed_map)
         if self.is_fixed:
-            if self.is_recurrent:
-                self._unsliced_undegreed_length = math_tools.shitfuck(
-                    self.n_elements - len(self.fixed_map),
-                    nifty_collections.FrozenCounterCounter(
-                        collections.Counter(self.free_values).values()
-                    )                    
-                )
-            else:
-                self._unsliced_undegreed_length = math_tools.factorial(
-                    len(self.free_indices),
-                    start=(len(self.free_indices) -
-                                       (self.n_elements - len(self.fixed_map)) + 1)
-                )
-            
             if not (self.is_dapplied or self.is_rapplied or degrees or slice_
                     or (n_elements is not None) or self.is_combination):
                 self._just_fixed = self
@@ -293,20 +271,6 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                     fixed_map=self._undapplied_unrapplied_fixed_map,
                 )
         else:
-            
-            if self.is_recurrent:
-                function_to_use = math_tools.catshit if self.is_combination else \
-                                                                math_tools.shitfuck
-                self._unsliced_undegreed_length = \
-                       function_to_use(self.n_elements, self._frozen_counter_counter)
-            else:
-                self._unsliced_undegreed_length = \
-                    math_tools.factorial(
-                        self.sequence_length,
-                        start=(self.sequence_length - self.n_elements + 1)
-                    ) // (math_tools.factorial(self.n_elements) if
-                                                        self.is_combination else 1)
-                # This division is always without a remainder, because math.
                 
             if not (self.is_dapplied or self.is_rapplied or degrees or slice_
                     or (n_elements is not None) or self.is_combination):
@@ -327,7 +291,6 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         if (not degrees) or cute_iter_tools.are_equal(degrees, all_degrees):
             self.is_degreed = False
             self.degrees = all_degrees
-            self._unsliced_length = self._unsliced_undegreed_length
         else:
             self.is_degreed = True
             if self.is_combination:
@@ -347,13 +310,6 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 )
             self.degrees = tuple(
                 degree for degree in degrees if degree in all_degrees
-            )
-            self._unsliced_length = sum(
-                math_tools.abs_stirling(
-                    self.sequence_length - len(self.fixed_map),
-                    self.sequence_length - degree -
-                                    self._n_cycles_in_fixed_items_of_just_fixed
-                ) for degree in self.degrees
             )
             
         #                                                                     #
@@ -399,6 +355,60 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
 
     __init__.signature = inspect.signature(__init__)
             
+            
+    @caching.CachedProperty
+    def _unsliced_length(self):
+        
+        if self.is_degreed:
+            assert not self.is_recurrent and not self.is_partial and \
+                                                        not self.is_combination
+            return sum(
+                math_tools.abs_stirling(
+                    self.sequence_length - len(self.fixed_map),
+                    self.sequence_length - degree -
+                                    self._n_cycles_in_fixed_items_of_just_fixed
+                ) for degree in self.degrees
+            )
+        elif self.is_fixed:
+            assert not self.is_degreed and not self.is_combination
+            if self.is_recurrent:
+                return math_tools.calculate_length_of_recurrent_perm_space(
+                    self.n_elements - len(self.fixed_map),
+                    nifty_collections.FrozenCounterCounter(
+                        collections.Counter(self.free_values).values()
+                    )                    
+                )
+            else:
+                return math_tools.factorial(
+                    len(self.free_indices),
+                    start=(len(self.free_indices) -
+                                   (self.n_elements - len(self.fixed_map)) + 1)
+                )
+            
+        else:
+            assert not self.is_degreed and not self.is_fixed
+            if self.is_recurrent:
+                if self.is_combination:
+                    return math_tools.calculate_length_of_recurrent_comb_space(
+                        self.n_elements,
+                        self._frozen_counter_counter
+                    )
+                else:
+                    return math_tools.calculate_length_of_recurrent_perm_space(
+                        self.n_elements,
+                        self._frozen_counter_counter
+                    )
+                    
+            else:
+                return math_tools.factorial(
+                    self.sequence_length,
+                    start=(self.sequence_length - self.n_elements + 1)
+                ) // (math_tools.factorial(self.n_elements) if
+                          self.is_combination else 1)
+                # This division is always without a remainder, because math.
+            
+            
+        
             
     is_recurrent = None
     
