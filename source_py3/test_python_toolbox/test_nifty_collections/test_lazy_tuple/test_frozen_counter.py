@@ -4,6 +4,7 @@
 '''Testing module for `python_toolbox.nifty_collections.LazyTuple`.'''
 
 import uuid
+import pickle
 import itertools
 import collections
 
@@ -62,3 +63,34 @@ def test():
                                              frozen_counter == --frozen_counter
     
     assert repr(frozen_counter).startswith('FrozenCounter(')
+    
+    assert pickle.loads(pickle.dumps(frozen_counter)) == frozen_counter
+    
+def test_ordering():
+    counter_0 = FrozenCounter('c')
+    counter_1 = FrozenCounter('abc')
+    counter_2 = FrozenCounter('aabc')
+    counter_3 = FrozenCounter('abbc')
+    counter_4 = FrozenCounter('aabbcc')
+    
+    hierarchy = (
+        (counter_4, {counter_3, counter_2, counter_1, counter_0}),
+        (counter_3, {counter_1, counter_0}),
+        (counter_2, {counter_1, counter_0}),
+        (counter_1, {counter_0}),
+        (counter_0, set()),
+    )
+    
+    for item, smaller_items in hierarchy:
+        if not isinstance(item, FrozenCounter):
+            continue
+        for smaller_item in smaller_items:
+            assert not item <= smaller_item
+            assert not item < smaller_item
+            assert item >= smaller_item
+            assert item > smaller_item
+            assert item != smaller_item
+        not_smaller_items = [item for item in next(zip(*hierarchy)) if
+                                                  item not in smaller_item]
+        for not_smaller_item in not_smaller_items:
+            assert not item < smaller_item

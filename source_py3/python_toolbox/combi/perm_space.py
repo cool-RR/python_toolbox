@@ -15,7 +15,6 @@ from python_toolbox import misc_tools
 from python_toolbox import nifty_collections
 from python_toolbox import sequence_tools
 from python_toolbox import caching
-import python_toolbox.arguments_profiling
 from python_toolbox import math_tools
 from python_toolbox import sequence_tools
 from python_toolbox import cute_iter_tools
@@ -45,19 +44,19 @@ class PermSpaceType(abc.ABCMeta):
     def __call__(cls, *args, **kwargs):
         if cls == PermSpace and kwargs.get('is_combination', False):
             from .comb_space import CombSpace
-            arguments_profile = python_toolbox.arguments_profiling. \
-                    ArgumentsProfile(PermSpace.__init__, None, *args, **kwargs)
-            if arguments_profile.get('fixed_map', None):
+            arguments = PermSpace.__init__.signature.bind(
+                                               None, *args, **kwargs).arguments
+            if arguments.get('fixed_map', None):
                 raise UnallowedVariationSelectionException(
                     {variations.Variation.FIXED: True,
                      variations.Variation.COMBINATION: True,}
                 )
             return super(PermSpaceType, CombSpace).__call__(
-                iterable_or_length=arguments_profile['iterable_or_length'], 
-                n_elements=arguments_profile['n_elements'],
-                slice_=arguments_profile['slice_'],
-                _domain_for_checking=arguments_profile['domain'],
-                _degrees_for_checking=arguments_profile['degrees'],
+                iterable_or_length=arguments['iterable_or_length'], 
+                n_elements=arguments.get('n_elements', None),
+                slice_=arguments.get('slice_', None),
+                _domain_for_checking=arguments.get('domain', None),
+                _degrees_for_checking=arguments.get('degrees', None),
             )
         else:
             return super().__call__(*args, **kwargs)
@@ -397,6 +396,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             self.undegreed = self
         if not self.is_sliced:
             self.unsliced = self
+
+    __init__.signature = inspect.signature(__init__)
             
             
     is_recurrent = None
@@ -944,7 +945,6 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
     
         
         
-_init_signature = inspect.signature(PermSpace.__init__)
 
 from .perm import Perm
 from . import _variation_removing_mixin

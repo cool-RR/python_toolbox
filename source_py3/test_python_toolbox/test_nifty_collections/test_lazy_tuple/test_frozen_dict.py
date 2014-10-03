@@ -4,6 +4,7 @@
 '''Testing module for `python_toolbox.nifty_collections.LazyTuple`.'''
 
 import uuid
+import pickle
 import itertools
 import collections
 
@@ -33,3 +34,5 @@ def test():
            FrozenDict({'1': 'a', '2': 'b', '3': 'c', 'meow': 'frrr',})
     
     assert repr(frozen_dict).startswith('FrozenDict(')
+    
+    assert pickle.loads(pickle.dumps(frozen_dict)) == frozen_dict
