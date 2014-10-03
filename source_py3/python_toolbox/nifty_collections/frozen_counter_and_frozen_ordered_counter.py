@@ -8,7 +8,7 @@ import collections
 import functools
 
 from .lazy_tuple import LazyTuple
-from .frozen_dict import FrozenDict
+from .frozen_dict_and_frozen_ordered_dict import FrozenDict
 
 try:                                    # Load C helper function if available
     from _collections import _count_elements
@@ -21,7 +21,7 @@ except ImportError:
 
 
 @functools.total_ordering
-class FrozenCounter(FrozenDict):
+class _FrozenCounterMixin:
     '''
     An immutable counter.
     
@@ -220,3 +220,11 @@ class FrozenCounter(FrozenDict):
         else:
             return True
                 
+                
+class FrozenCounter(_FrozenCounterMixin, FrozenDict):
+    pass
+                
+                
+class FrozenOrderedCounter(_FrozenCounterMixin, FrozenOrderedCounter):
+    pass
+        

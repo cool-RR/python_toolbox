@@ -5,21 +5,14 @@ import collections
 import operator
 import functools
 
+from .ordered_dict import OrderedDict
 
-class FrozenDict(collections.Mapping):
-    '''
-    An immutable `dict`.
-    
-    A `dict` that can't be changed. The advantage of this over `dict` is mainly
-    that it's hashable, and thus can be used as a key in dicts and sets.
-    
-    In other words, `FrozenDict` is to `dict` what `frozenset` is to `set`.
-    '''
-    
+
+class _AbstractFrozenDict(collections.Mapping):
     _hash = None # Overridden by instance when calculating hash.
 
     def __init__(self, *args, **kwargs):
-        self._dict = dict(*args, **kwargs)
+        self._dict = self._dict_type(*args, **kwargs)
 
     __getitem__ = lambda self, key: self._dict[key]
     __len__ = lambda self: len(self._dict)
@@ -42,4 +35,19 @@ class FrozenDict(collections.Mapping):
                                         repr(self._dict))
     __reduce__ = lambda self: (self.__class__ , (self._dict,))
 
+    
+class FrozenDict(_FrozenDictBase):
+    '''
+    An immutable `dict`.
+    
+    A `dict` that can't be changed. The advantage of this over `dict` is mainly
+    that it's hashable, and thus can be used as a key in dicts and sets.
+    
+    In other words, `FrozenDict` is to `dict` what `frozenset` is to `set`.
+    '''    
+    _dict_type = dict
+        
+
+class FrozenOrderedDict(_FrozenDictBase):
+    _dict_type = OrderedDict
     

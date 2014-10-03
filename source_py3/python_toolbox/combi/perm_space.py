@@ -207,6 +207,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         ### Figuring out whether it's a combination: ##########################
         #                                                                     #
         self.is_combination = is_combination
+        # Well that was quick.
         #                                                                     #
         ### Finished figuring out whether it's a combination. #################
         
@@ -315,7 +316,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         #                                                                     #
         ### Finished figuring out degrees. ####################################
             
-        ### Figuring out slice: ###############################################
+        ### Figuring out slice and length: ####################################
         #                                                                     #
         self.slice_ = slice_
         self.canonical_slice = sequence_tools.CanonicalSlice(
@@ -328,7 +329,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         )
         self.is_sliced = (self.length != self._unsliced_length)
         #                                                                     #
-        ### Finished figuring out slice. ######################################
+        ### Finished figuring out slice and length. ###########################
         
         
         self.is_pure = not (self.is_rapplied or self.is_fixed or self.is_sliced
@@ -355,10 +356,16 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
 
     __init__.signature = inspect.signature(__init__)
             
+    is_recurrent = None
             
     @caching.CachedProperty
     def _unsliced_length(self):
+        '''
+        The number of perms in the space, ignoring any slicing.
         
+        This is used as an interim step in calculating the actual length of the
+        space with the slice taken into account.
+        '''
         if self.is_degreed:
             assert not self.is_recurrent and not self.is_partial and \
                                                         not self.is_combination
@@ -410,10 +417,15 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             
         
             
-    is_recurrent = None
     
     @caching.CachedProperty
     def variation_selection(self):
+        '''
+        The selection of variations that describe this space.
+        
+        For example, a rapplied, recurrent, fixed `PermSpace` will get
+        `<VariationSelection #196: rapplied, recurrent, fixed>`.
+        '''
         variation_selection = variations.VariationSelection(
             filter(
                 None,
@@ -435,7 +447,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
     def _sequence_counteroid(self):
         '''
         
-        Sets `is_recurrent` as a side-effect, or if it was set ensures it was
+        Sets `.is_recurrent` as a side-effect, or if it was set ensures it was
         set correctly.
         '''
         _sequence_counteroid = collections.OrderedDict()
