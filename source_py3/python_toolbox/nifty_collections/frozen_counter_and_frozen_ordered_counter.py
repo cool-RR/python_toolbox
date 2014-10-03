@@ -20,8 +20,6 @@ except ImportError:
         for element in iterable:
             mapping[element] = mapping_get(element, 0) + 1
 
-
-@functools.total_ordering
 class _FrozenCounterMixin:
     '''
     An immutable counter.
@@ -230,15 +228,71 @@ class _FrozenCounterMixin:
         lambda self: sum(value for value in self.values() if value >= 1)
     )
     
+    # We define all the comparison methods manually instead of using
+    # `total_ordering` because `total_ordering` assumes that >= means (> and
+    # ==) while we, in `FrozenOrderedCounter`, don't have that hold because ==
+    # takes the items' order into account.
+    
     def __lt__(self, other):
-        if not isinstance(other, _FrozenCounterMixin):
-            raise NotImplementedError
-        for key, value in self.items():
-            if other[key] < value:
+        if not isinstance(other, collections.Mapping):
+            raise TypeError("Can't compare %s to non-mapping %s" %
+                            (type(self).__name__, type(other).__name__))
+        found_strict_difference = False # Until challenged.
+        for element, count in self.items():
+            try:
+                other_count = other[element]
+            except KeyError:
+                if count > 0:
+                    return False
+            if not (count <= other_count):
                 return False
-        else:
-            return True
-                
+            elif count < other_count:
+                found_strict_difference = True
+        return found_strict_difference
+    
+    def __le__(self, other):
+        if not isinstance(other, collections.Mapping):
+            raise TypeError("Can't compare %s to non-mapping %s" %
+                            (type(self).__name__, type(other).__name__))
+        for element, count in self.items():
+            try:
+                other_count = other[element]
+            except KeyError:
+                if count > 0:
+                    return False
+            if not (count <= other_count):
+                return False
+        return True
+    
+    def __gt__(self, other):
+        if not isinstance(other, collections.Mapping):
+            raise TypeError("Can't compare %s to non-mapping %s" %
+                            (type(self).__name__, type(other).__name__))
+        found_strict_difference = False # Until challenged.
+        for element, count in self.items():
+            try:
+                other_count = other[element]
+            except KeyError:
+                continue
+            if not (count >= other_count):
+                return False
+            elif count > other_count:
+                found_strict_difference = True
+        return found_strict_difference
+    
+    def __ge__(self, other):
+        if not isinstance(other, collections.Mapping):
+            raise TypeError("Can't compare %s to non-mapping %s" %
+                            (type(self).__name__, type(other).__name__))
+        for element, count in self.items():
+            try:
+                other_count = other[element]
+            except KeyError:
+                continue
+            if not (count >= other_count):
+                return False
+        return True
+            
                 
 class FrozenCounter(_FrozenCounterMixin, FrozenDict):
     pass
