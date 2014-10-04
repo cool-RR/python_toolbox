@@ -461,7 +461,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         else:
             domain_snippet = ''
             
-        sequence_repr = repr(self.sequence)
+        sequence_repr = self.sequence.short_repr if \
+                  hasattr(self.sequence, 'short_repr') else repr(self.sequence)
         if len(sequence_repr) > 40:
             sequence_repr = \
                       ''.join((sequence_repr[:35], ' ... ', sequence_repr[-1]))

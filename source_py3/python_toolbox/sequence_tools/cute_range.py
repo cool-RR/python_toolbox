@@ -151,6 +151,20 @@ class CuteRange(CuteSequence):
         )
         
         
+    @caching.CachedProperty
+    def short_repr(self):
+        '''
+        A shorter representation of the `CuteRange`.
+        
+        This is different than `repr(cute_range)` only in cases where `step=1`.
+        In these cases, while `repr(cute_range)` would be something like
+        `CuteRange(7, 20)`, `cute_range.short_repr` would be `7..20`.
+        '''
+        if self.step != 1:
+            return self._repr
+        else:
+            return '%s..%s' % (self.start, self.stop)
+        
     
     def __getitem__(self, i, allow_out_of_range=False):
         from python_toolbox import sequence_tools
