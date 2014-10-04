@@ -397,8 +397,17 @@ def test_degreed_perm_space():
     
     
 def test_partial_perm_space():
-    with cute_testing.RaiseAssertor():
-        PermSpace(5, n_elements=6)
+    empty_partial_perm_space = PermSpace(5, n_elements=6)
+    assert empty_partial_perm_space.length == 0
+    assert empty_partial_perm_space.variation_selection == \
+                  variations.VariationSelection({variations.Variation.PARTIAL})
+    assert empty_partial_perm_space != PermSpace(5, n_elements=7)
+    with cute_testing.RaiseAssertor(IndexError):
+        empty_partial_perm_space[0]
+    assert range(4) not in empty_partial_perm_space
+    assert range(5) not in empty_partial_perm_space
+    assert range(6) not in empty_partial_perm_space
+    assert range(7) not in empty_partial_perm_space
         
     perm_space_0 = PermSpace(5, n_elements=5)
     perm_space_1 = PermSpace(5, n_elements=3)
@@ -475,6 +484,8 @@ def test_partial_perm_space():
     assert cute_iter_tools.is_sorted(
         [tuple(perm) for perm in perm_space_7]
     )
+    
+    assert empty_partial_perm_space.length == 0
     
     
 def test_neighbors():

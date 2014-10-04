@@ -193,12 +193,12 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         
         self.n_elements = self.sequence_length if (n_elements is None) \
                                                                 else n_elements
-        if not 0 <= self.n_elements <= self.sequence_length:
-            raise Exception(
-                '`n_elements` must be between 0 and %s, you gave %s' %
-                                        (self.sequence_length, self.n_elements)
-            )
-        self.is_partial = (self.n_elements < self.sequence_length)
+        if not isinstance(self.n_elements, int):
+            raise TypeError('`n_elements` must be an `int`.')
+        if not self.n_elements >= 0:
+            raise TypeError('`n_elements` must be positive or zero.')
+        
+        self.is_partial = (self.n_elements != self.sequence_length)
         
         self.indices = sequence_tools.CuteRange(self.n_elements)
         
@@ -365,6 +365,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         This is used as an interim step in calculating the actual length of the
         space with the slice taken into account.
         '''
+        if self.n_elements > self.sequence_length:
+            return 0
         if self.is_degreed:
             assert not self.is_recurrent and not self.is_partial and \
                                                         not self.is_combination
@@ -503,7 +505,9 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             return self.perm_type(self.undapplied[i], perm_space=self)
         elif self.is_degreed:
             if self.is_rapplied:
-                assert not self.is_recurrent
+                assert not self.is_recurrent and \
+                       not self.is_partial and not self.is_combination and \
+                       not self.is_dapplied and not self.is_sliced
                 return self.perm_type(map(self.sequence.__getitem__,
                                           self.unrapplied[i]),
                                       perm_space=self)
@@ -585,62 +589,29 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 for unused_value in nifty_collections.OrderedSet((
                     value for value in available_values if not
                     ((value in reserved_values and available_values.count(value)
-                                            == reserved_values.count(value)) or value in shit_set)
+                         == reserved_values.count(value)) or value in shit_set)
                     
                     )):
                     wip_perm_sequence_dict[j] = unused_value
-                    
-                    ###########################################################
-                    #                                                         #
-                    # Tricky thing here: Trying to put as much as we can in a
-                    # sequence head that'll shorten the sequence we'll give to
-                    # the candidate space instead of using a fixed map, if
-                    # possible. This is crucial for `CombSpace` which can't use
-                    # `fixed_map`.
-                    head = []
-                    fixed_map_to_use = dict(wip_perm_sequence_dict)
-                    n_elements_to_use = self.n_elements
-                    for k in sequence_tools.CuteRange(infinity):
-                        try:
-                            head.append(wip_perm_sequence_dict[k])
-                        except KeyError:
-                            break
-                        else:
-                            del fixed_map_to_use[k]
-                            n_elements_to_use -= 1
-                    sequence_to_use = list(self.sequence)
-                    for item in head:
-                        if self.is_combination:
-                            sequence_to_use = sequence_to_use[
-                                sequence_to_use.index(item) + 1:
-                            ]
-                        else:
-                            sequence_to_use.remove(item)
-                            
-                    sequence_to_use = [x for x in sequence_to_use if x not in
-                                       shit_set]
-                        
-                    fixed_map_to_use = {key - len(head): value for key, value
-                                        in fixed_map_to_use.items()}
-                    
-                    if len(sequence_to_use) < n_elements_to_use:
-                        class O: length = 0
-                        candidate_sub_perm_space = O()
+                    sequence = [item for item in self.sequence
+                                                       if item not in shit_set]
+                    if any(value in shit_set for value
+                                           in wip_perm_sequence_dict.values()):
+                        candidate_sub_perm_space_length = 0
                     else:
-                        candidate_sub_perm_space = PermSpace(
-                            sequence_to_use,
-                            n_elements=n_elements_to_use,
-                            fixed_map=fixed_map_to_use, 
+                        candidate_sub_perm_space_length = \
+                                              PermSpace._create_with_cut_prefix(
+                            sequence,
+                            n_elements=self.n_elements,
+                            fixed_map=wip_perm_sequence_dict,
                             is_combination=self.is_combination
-                        )
-                    #                                                         #
-                    ###########################################################
+                        ).length
                     
-                    if wip_i < candidate_sub_perm_space.length:
+                    if wip_i < candidate_sub_perm_space_length:
                         available_values.remove(unused_value)
                         break
                     else:
-                        wip_i -= candidate_sub_perm_space.length
+                        wip_i -= candidate_sub_perm_space_length
                         if self.is_combination:
                             shit_set.add(wip_perm_sequence_dict[j])
                         del wip_perm_sequence_dict[j]
@@ -943,6 +914,59 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
     def _coerce_perm(self, perm):
         '''Coerce `perm` to be a permutation of this space.'''
         return Perm(perm, self)
+    
+    prefix = None
+    
+    @classmethod
+    def _create_with_cut_prefix(cls, sequence, domain=None, *,
+        n_elements=None, fixed_map=None, degrees=None, is_combination=False,
+                                                                  slice_=None):
+        
+        # Tricky thing here: Trying to put as much as we can in a
+        # sequence head that'll shorten the sequence we'll give to
+        # the candidate space instead of using a fixed map, if
+        # possible. This is crucial for `CombSpace` which can't use
+        # `fixed_map`.
+        
+        if degrees is not None:
+            raise NotImplementedError
+        
+        
+        prefix = []
+        fixed_map = dict(fixed_map)
+        for i in sequence_tools.CuteRange(infinity):
+            try:
+                prefix.append(fixed_map[i])
+            except KeyError:
+                break
+            else:
+                del fixed_map[i]
+                n_elements -= 1
+        
+        
+        sequence = list(sequence)
+        for item in prefix:
+            if is_combination:
+                sequence = sequence[sequence.index(item) + 1:]
+            else:
+                sequence[sequence.index(item)] = misc.MISSING_ELEMENT
+                # More efficient than removing the element, we filter these out
+                # later.
+        if not is_combination:
+            sequence = [item for item in sequence
+                                         if (item is not misc.MISSING_ELEMENT)]
+                
+        fixed_map = {key - len(prefix): value
+                                           for key, value in fixed_map.items()}
+        
+        perm_space = cls(
+            sequence, n_elements=n_elements, fixed_map=fixed_map, 
+            is_combination=is_combination, slice_=slice_, 
+        )
+        perm_space.prefix = tuple(prefix)
+        return perm_space
+        
+        
     
         
         
