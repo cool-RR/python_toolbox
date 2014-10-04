@@ -209,6 +209,7 @@ class _FrozenTallyMixin:
         return self._n_elements
     _n_elements = None
     
+    
     _frozen_tally_tally = None
     @property
     def frozen_tally_tally(self):
