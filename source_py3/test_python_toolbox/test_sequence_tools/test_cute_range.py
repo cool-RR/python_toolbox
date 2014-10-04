@@ -76,3 +76,9 @@ def test_float():
         
         
     
+def test_short_repr():
+    assert CuteRange(7, 10).short_repr == '7..10'
+    assert CuteRange(7, 10, 3).short_repr == 'CuteRange(7, 10, 3)'
+    assert CuteRange(-8, infinity).short_repr == '-8..inf'
+    assert CuteRange(8, -infinity, -1).short_repr == 'CuteRange(8, -inf, -1)'
+    
