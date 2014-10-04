@@ -156,7 +156,6 @@ class _VariationRemovingMixin:
       
     _nominal_perm_space_of_perms = caching.CachedProperty(
         lambda self: self.unsliced.undegreed.unfixed, 
-        doc='''blocktododoc'''
     )
         
     

@@ -198,9 +198,16 @@ class _FrozenTallyMixin:
 
     __bool__ = lambda self: any(True for element in self.elements())
     
-    n_elements = property( # blocktodo: want to make this cached but import loop
-        lambda self: sum(self.values())
-    )
+    
+    _n_elements = None
+    @property
+    def n_elements(self):
+        # Implemented as a poor man's `CachedProperty` because we can't use the
+        # real `CachedProperty` due to circular import.
+        if self._n_elements is None:
+            self._n_elements = sum(self.values())
+        return self._n_elements
+        
     
     # We define all the comparison methods manually instead of using
     # `total_ordering` because `total_ordering` assumes that >= means (> and
