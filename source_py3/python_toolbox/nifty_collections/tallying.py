@@ -346,89 +346,98 @@ class _OrderedDictDelegator(collections.MutableMapping):
                 
 class Tally(_TallyMixin, collections.UserDict):
     '''
-    blocktododoc
-    An immutable tally.
+    A tally that counts items.
     
-    A tally that (a) can't be changed and (b) has only positive integer values.
-    This is like `collections.Counter`, except:
+    This is a mapping between items and their count:
     
-     - Because it's immutable, it's also hashable, and thus it can be used as a
-       key in dicts and sets.
-     
-     - Unlike `collections.Counter`, we don't think of it as a "dict who
-       happens to count objects" but as an object that is absolutely intended
-       for counting objects. This means we do not allow arbitrary values for 
-       counts like `collections.Counter` and we don't have to deal with a 
-       class that has an identity crisis and doesn't know whether it's a
-       counter or a dict.
-     
+        >>> Tally('aaabcbc')
+        Tally({'a': 3, 'b': 2, 'c': 2})
+    
+    It can be created from either an iterable like above, or from a `dict`. 
+    
+    This is similar to Python's builtin `collections.Counter`, except unlike
+    `collections.Counter`, we don't think of it as a "dict that happens to
+    count objects" but as an object that is absolutely intended for counting
+    objects. This means we do not allow arbitrary values for counts like
+    `collections.Counter` and we don't have to deal with all the complications
+    that follow. Only positive integers are allowed as counts.
+    
     '''                
     _dict = property(lambda self: self.data)
     
                 
 class OrderedTally(_OrderedTallyMixin, _TallyMixin, _OrderedDictDelegator):
     '''
-    blocktododoc
-    An immutable, ordered tally.
+    An ordered tally that counts items.
     
-    A tally that (a) can't be changed and (b) has only positive integer values.
-    This is like `collections.Counter`, except:
+    This is a ordered mapping between items and their count:
     
-     - Because it's immutable, it's also hashable, and thus it can be used as a
-       key in dicts and sets.
-     
-     - Unlike `collections.Counter`, we don't think of it as a "dict who
-       happens to count objects" but as an object that is absolutely intended
-       for counting objects. This means we do not allow arbitrary values for 
-       counts like `collections.Counter` and we don't have to deal with a 
-       class that has an identity crisis and doesn't know whether it's a
-       counter or a dict.
-       
-     - It has an order to its elements, like `collections.OrderedDict`.
-     
+        >>> OrderedTally('aaabcbc')
+        OrderedTally((('a', 3), ('b', 2), ('c', 2)))
+    
+    It can be created from either an iterable like above, or from a `dict`. 
+    
+    This is similar to Python's builtin `collections.Counter`, except unlike
+    `collections.Counter`, we don't think of it as a "dict that happens to
+    count objects" but as an object that is absolutely intended for counting
+    objects. This means we do not allow arbitrary values for counts like
+    `collections.Counter` and we don't have to deal with all the complications
+    that follow. Only positive integers are allowed as counts.
+    
+    Also, unlike `collections.Counter`, items have an order. (Simliarly to
+    `collections.OrderedDict`.)
+    
     '''
     _dict = property(lambda self: self.data)
     
                 
 class FrozenTally(_BaseTallyMixin, FrozenDict):
     '''
-    An immutable tally.
+    An immutable tally that counts items.
     
-    A tally that (a) can't be changed and (b) has only positive integer values.
-    This is like `collections.Counter`, except:
+    This is an immutable mapping between items and their count:
     
-     - Because it's immutable, it's also hashable, and thus it can be used as a
-       key in dicts and sets.
-     
-     - Unlike `collections.Counter`, we don't think of it as a "dict who
-       happens to count objects" but as an object that is absolutely intended
-       for counting objects. This means we do not allow arbitrary values for 
-       counts like `collections.Counter` and we don't have to deal with a 
-       class that has an identity crisis and doesn't know whether it's a
-       counter or a dict.
-     
+        >>> FrozenTally('aaabcbc')
+        FrozenTally({'a': 3, 'b': 2, 'c': 2})
+    
+    It can be created from either an iterable like above, or from a `dict`. 
+    
+    This is similar to Python's builtin `collections.Counter`, except unlike
+    `collections.Counter`, we don't think of it as a "dict that happens to
+    count objects" but as an object that is absolutely intended for counting
+    objects. This means we do not allow arbitrary values for counts like
+    `collections.Counter` and we don't have to deal with all the complications
+    that follow. Only positive integers are allowed as counts.
+    
+    Also, unlike `collections.Counter`, it's immutable, therefore it's also
+    hashable, and thus it can be used as a key in dicts and sets.
+
     '''                
                 
 class FrozenOrderedTally(_OrderedTallyMixin, _BaseTallyMixin,
                          FrozenOrderedDict):
     '''
-    An immutable, ordered tally.
+    An immutable, ordered tally that counts items.
     
-    A tally that (a) can't be changed and (b) has only positive integer values.
-    This is like `collections.Counter`, except:
+    This is an ordered mapping between items and their count:
     
-     - Because it's immutable, it's also hashable, and thus it can be used as a
-       key in dicts and sets.
-     
-     - Unlike `collections.Counter`, we don't think of it as a "dict who
-       happens to count objects" but as an object that is absolutely intended
-       for counting objects. This means we do not allow arbitrary values for 
-       counts like `collections.Counter` and we don't have to deal with a 
-       class that has an identity crisis and doesn't know whether it's a
-       counter or a dict.
+        >>> FrozenOrderedTally('aaabcbc')
+        FrozenOrderedTally((('a', 3), ('b', 2), ('c', 2)))
+    
+    It can be created from either an iterable like above, or from a `dict`. 
+    
+    This is similar to Python's builtin `collections.Counter`, except unlike
+    `collections.Counter`, we don't think of it as a "dict that happens to
+    count objects" but as an object that is absolutely intended for counting
+    objects. This means we do not allow arbitrary values for counts like
+    `collections.Counter` and we don't have to deal with all the complications
+    that follow. Only positive integers are allowed as counts.
+    
+    Also, unlike `collections.Counter`:
+     - Items have an order. (Simliarly to `collections.OrderedDict`.)
+     - It's immutable, therefore it's also hashable, and thus it can be used as
+       a key in dicts and sets.
        
-     - It has an order to its elements, like `collections.OrderedDict`.
-     
     '''
     def __repr__(self):
         if not self:
