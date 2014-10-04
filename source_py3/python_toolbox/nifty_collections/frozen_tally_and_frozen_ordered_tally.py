@@ -23,9 +23,9 @@ except ImportError:
 
 class _FrozenTallyMixin:
     '''
-    An immutable counter.
+    blocktododoc An immutable tally.
     
-    A counter that can't be changed. The advantage of this over
+    A tally that can't be changed. The advantage of this over
     `collections.Counter` is mainly that it's hashable, and thus can be used as
     a key in dicts and sets.
     
@@ -107,15 +107,6 @@ class _FrozenTallyMixin:
     
 
     __pos__ = lambda self: self
-
-    # Multiset-style mathematical operations discussed in:
-    #       Knuth TAOCP Volume II section 4.6.3 exercise 19
-    #       and at http://en.wikipedia.org/wiki/Multiset
-    #
-    # Outputs guaranteed to only include positive counts.
-    #
-    # To strip negative and zero counts, add-in an empty counter:
-    #       c += FrozenCounter()
 
     def __add__(self, other):
         '''
@@ -281,10 +272,11 @@ class _FrozenTallyMixin:
             
                 
 class FrozenTally(_FrozenTallyMixin, FrozenDict):
-    pass
+    '''blocktododoc '''
                 
                 
 class FrozenOrderedTally(_FrozenTallyMixin, FrozenOrderedDict):
+    '''blocktododoc '''
     def __repr__(self):
         if not self:
             return '%s()' % type(self).__name__

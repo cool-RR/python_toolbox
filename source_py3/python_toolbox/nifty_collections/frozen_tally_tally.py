@@ -26,34 +26,34 @@ class FrozenTallyTally(FrozenTally):
                 raise TypeError('Keys to `FrozenChunkCounter` must be '
                                 'non-negative integers.')
             
-    def get_sub_counters_for_one_crate_removed(self):
-        sub_counters_counter = collections.Counter()
+    def get_sub_ftts_for_one_crate_removed(self):
+        sub_ftts_counter = collections.Counter()
         for key_to_reduce, value_of_key_to_reduce in self.items():
-            sub_counter = collections.Counter(self)
-            sub_counter[key_to_reduce] -= 1
-            sub_counter[key_to_reduce - 1] += 1
-            sub_counters_counter[FrozenTallyTally(sub_counter)] = \
+            sub_ftt_prototype = collections.Counter(self)
+            sub_ftt_prototype[key_to_reduce] -= 1
+            sub_ftt_prototype[key_to_reduce - 1] += 1
+            sub_ftts_counter[FrozenTallyTally(sub_ftt_prototype)] = \
                                                          value_of_key_to_reduce
-        return FrozenTally(sub_counters_counter)
+        return FrozenTally(sub_ftts_counter)
             
-    def get_sub_counters_for_one_crate_and_previous_piles_removed(self):
-        sub_counters = []
+    def get_sub_ftts_for_one_crate_and_previous_piles_removed(self):
+        sub_ftts = []
         growing_dict = {}
         for key_to_reduce, value_of_key_to_reduce in \
                                                 reversed(sorted(self.items())):
             growing_dict[key_to_reduce] = value_of_key_to_reduce
             
-            sub_counter_prototype = collections.Counter(growing_dict)
-            sub_counter_prototype[key_to_reduce] -= 1
-            sub_counter_prototype[key_to_reduce - 1] += 1
+            sub_ftt_prototype = collections.Counter(growing_dict)
+            sub_ftt_prototype[key_to_reduce] -= 1
+            sub_ftt_prototype[key_to_reduce - 1] += 1
             
             for i in range(value_of_key_to_reduce):
-                sub_counters.append(
+                sub_ftts.append(
                     FrozenTallyTally(
                         {key: (i if key == key_to_reduce else value)
-                               for key, value in sub_counter_prototype.items()}
+                               for key, value in sub_ftt_prototype.items()}
                     )
                 )
-        return tuple(sub_counters)
+        return tuple(sub_ftts)
             
     

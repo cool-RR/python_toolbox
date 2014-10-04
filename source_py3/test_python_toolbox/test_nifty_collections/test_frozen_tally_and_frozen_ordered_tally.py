@@ -36,80 +36,78 @@ def test_common():
     _check_only_positive_ints_or_zero(FrozenOrderedTally)
     
 
-def _check_common(frozen_counter_type):
-    frozen_counter = frozen_counter_type('abracadabra')
-    assert frozen_counter == collections.Counter('abracadabra') == \
-           collections.Counter(frozen_counter) == \
-           frozen_counter_type(collections.Counter('abracadabra'))
+def _check_common(frozen_tally_type):
+    frozen_tally = frozen_tally_type('abracadabra')
+    assert frozen_tally == collections.Counter('abracadabra') == \
+           collections.Counter(frozen_tally) == \
+           frozen_tally_type(collections.Counter('abracadabra'))
     
-    assert len(frozen_counter) == 5
-    assert set(frozen_counter) == set(frozen_counter.keys()) == \
-                                                             set('abracadabra')
-    assert set(frozen_counter.values()) == {1, 2, 5}
-    assert set(frozen_counter.items()) == \
+    assert len(frozen_tally) == 5
+    assert set(frozen_tally) == set(frozen_tally.keys()) == set('abracadabra')
+    assert set(frozen_tally.values()) == {1, 2, 5}
+    assert set(frozen_tally.items()) == \
                              {('a', 5), ('r', 2), ('b', 2), ('c', 1), ('d', 1)}
-    assert frozen_counter['a'] == 5
-    assert frozen_counter['missing value'] == 0
-    assert len(frozen_counter) == 5
-    assert {frozen_counter, frozen_counter} == {frozen_counter}
-    assert {frozen_counter: frozen_counter} == {frozen_counter: frozen_counter}
-    assert isinstance(hash(frozen_counter), int)
+    assert frozen_tally['a'] == 5
+    assert frozen_tally['missing value'] == 0
+    assert len(frozen_tally) == 5
+    assert {frozen_tally, frozen_tally} == {frozen_tally}
+    assert {frozen_tally: frozen_tally} == {frozen_tally: frozen_tally}
+    assert isinstance(hash(frozen_tally), int)
     
-    assert set(frozen_counter.most_common()) == \
-                         set(collections.Counter(frozen_counter).most_common())
+    assert set(frozen_tally.most_common()) == \
+                         set(collections.Counter(frozen_tally).most_common())
     
-    assert frozen_counter + frozen_counter == \
-                                         frozen_counter_type('abracadabra' * 2)
-    assert frozen_counter - frozen_counter == frozen_counter_type()
-    assert frozen_counter - frozen_counter_type('a') == \
-                                              frozen_counter_type('abracadabr')
-    assert frozen_counter - frozen_counter_type('a') == \
-                                              frozen_counter_type('abracadabr')
-    assert frozen_counter | frozen_counter_type('a') == frozen_counter
-    assert frozen_counter | frozen_counter == \
-           frozen_counter | frozen_counter | frozen_counter == frozen_counter
-    assert frozen_counter & frozen_counter_type('a') == frozen_counter_type('a')
-    assert frozen_counter & frozen_counter == \
-           frozen_counter & frozen_counter & frozen_counter == \
-                                                                 frozen_counter
+    assert frozen_tally + frozen_tally == \
+                                         frozen_tally_type('abracadabra' * 2)
+    assert frozen_tally - frozen_tally == frozen_tally_type()
+    assert frozen_tally - frozen_tally_type('a') == \
+                                              frozen_tally_type('abracadabr')
+    assert frozen_tally - frozen_tally_type('a') == \
+                                              frozen_tally_type('abracadabr')
+    assert frozen_tally | frozen_tally_type('a') == frozen_tally
+    assert frozen_tally | frozen_tally == \
+           frozen_tally | frozen_tally | frozen_tally == frozen_tally
+    assert frozen_tally & frozen_tally_type('a') == frozen_tally_type('a')
+    assert frozen_tally & frozen_tally == \
+           frozen_tally & frozen_tally & frozen_tally == frozen_tally
     
-    assert frozen_counter_type(frozen_counter.elements()) == frozen_counter
+    assert frozen_tally_type(frozen_tally.elements()) == frozen_tally
     
-    assert +frozen_counter == frozen_counter
+    assert +frozen_tally == frozen_tally
     with cute_testing.RaiseAssertor(TypeError):
-        - frozen_counter
+        - frozen_tally
     
     assert re.match('^Frozen(Ordered)?Tally\(.*$',
-                    repr(frozen_counter))
+                    repr(frozen_tally))
     
-    assert frozen_counter.copy({'meow': 9}) == \
-           frozen_counter.copy(meow=9) == \
-           frozen_counter_type(OrderedDict(
+    assert frozen_tally.copy({'meow': 9}) == \
+           frozen_tally.copy(meow=9) == \
+           frozen_tally_type(OrderedDict(
                [('a', 5), ('b', 2), ('r', 2), ('c', 1), ('d', 1), ('meow', 9)])
            )
     
-    assert pickle.loads(pickle.dumps(frozen_counter)) == frozen_counter
+    assert pickle.loads(pickle.dumps(frozen_tally)) == frozen_tally
     
-    assert frozen_counter_type({'a': 0, 'b': 1,}) == \
-                                         frozen_counter_type({'c': 0, 'b': 1,})
+    assert frozen_tally_type({'a': 0, 'b': 1,}) == \
+                                         frozen_tally_type({'c': 0, 'b': 1,})
     
-def _check_comparison(frozen_counter_type):
-    counter_0 = frozen_counter_type('c')
-    counter_1 = frozen_counter_type('abc')
-    counter_2 = frozen_counter_type('aabc')
-    counter_3 = frozen_counter_type('abbc')
-    counter_4 = frozen_counter_type('aabbcc')
+def _check_comparison(frozen_tally_type):
+    tally_0 = frozen_tally_type('c')
+    tally_1 = frozen_tally_type('abc')
+    tally_2 = frozen_tally_type('aabc')
+    tally_3 = frozen_tally_type('abbc')
+    tally_4 = frozen_tally_type('aabbcc')
     
     hierarchy = (
-        (counter_4, {counter_3, counter_2, counter_1, counter_0}),
-        (counter_3, {counter_1, counter_0}),
-        (counter_2, {counter_1, counter_0}),
-        (counter_1, {counter_0}),
-        (counter_0, set()),
+        (tally_4, {tally_3, tally_2, tally_1, tally_0}),
+        (tally_3, {tally_1, tally_0}),
+        (tally_2, {tally_1, tally_0}),
+        (tally_1, {tally_0}),
+        (tally_0, set()),
     )
     
     for item, smaller_items in hierarchy:
-        if not isinstance(item, frozen_counter_type):
+        if not isinstance(item, frozen_tally_type):
             continue
         for smaller_item in smaller_items:
             assert not item <= smaller_item
@@ -122,42 +120,42 @@ def _check_comparison(frozen_counter_type):
         for not_smaller_item in not_smaller_items:
             assert not item < smaller_item
 
-def _check_ignores_zero(frozen_counter_type):
-    frozen_counter_0 = frozen_counter_type({'a': 0,})
-    frozen_counter_1 = frozen_counter_type()
-    assert frozen_counter_0 == frozen_counter_1
+def _check_ignores_zero(frozen_tally_type):
+    frozen_tally_0 = frozen_tally_type({'a': 0,})
+    frozen_tally_1 = frozen_tally_type()
+    assert frozen_tally_0 == frozen_tally_1
     
-    assert hash(frozen_counter_0) == hash(frozen_counter_1)
-    assert {frozen_counter_0, frozen_counter_1} == {frozen_counter_0} == \
-                                                             {frozen_counter_1}
+    assert hash(frozen_tally_0) == hash(frozen_tally_1)
+    assert {frozen_tally_0, frozen_tally_1} == {frozen_tally_0} == \
+                                                             {frozen_tally_1}
     
-    frozen_counter_2 = frozen_counter_type(
+    frozen_tally_2 = frozen_tally_type(
                        {'a': 0.0, 'b': 2, 'c': decimal_module.Decimal('0.0'),})
-    frozen_counter_3 = frozen_counter_type('bb')
+    frozen_tally_3 = frozen_tally_type('bb')
     
-    assert hash(frozen_counter_2) == hash(frozen_counter_3)
-    assert {frozen_counter_2, frozen_counter_3} == {frozen_counter_2} == \
-                                                             {frozen_counter_3}
+    assert hash(frozen_tally_2) == hash(frozen_tally_3)
+    assert {frozen_tally_2, frozen_tally_3} == {frozen_tally_2} == \
+                                                             {frozen_tally_3}
 
 
-def _check_immutable(frozen_counter_type):
-    frozen_counter = frozen_counter_type('abracadabra')
+def _check_immutable(frozen_tally_type):
+    frozen_tally = frozen_tally_type('abracadabra')
     with cute_testing.RaiseAssertor(TypeError):
-        frozen_counter['a'] += 1
+        frozen_tally['a'] += 1
     with cute_testing.RaiseAssertor(TypeError):
-        frozen_counter['a'] -= 1
+        frozen_tally['a'] -= 1
     with cute_testing.RaiseAssertor(TypeError):
-        frozen_counter['a'] = 7
+        frozen_tally['a'] = 7
     
 
-def _check_immutable(frozen_counter_type):
-    frozen_counter = frozen_counter_type('abracadabra')
+def _check_immutable(frozen_tally_type):
+    frozen_tally = frozen_tally_type('abracadabra')
     with cute_testing.RaiseAssertor(TypeError):
-        frozen_counter['a'] += 1
+        frozen_tally['a'] += 1
     with cute_testing.RaiseAssertor(TypeError):
-        frozen_counter['a'] -= 1
+        frozen_tally['a'] -= 1
     with cute_testing.RaiseAssertor(TypeError):
-        frozen_counter['a'] = 7
+        frozen_tally['a'] = 7
     
 def _check_only_positive_ints_or_zero(frozen_tally_type):
     assert frozen_tally_type(
@@ -186,20 +184,20 @@ def _check_only_positive_ints_or_zero(frozen_tally_type):
     
     
 def test_ordered():
-    frozen_counter_0 = FrozenTally('ababb')
-    frozen_counter_1 = FrozenTally('bbbaa')
-    assert frozen_counter_0 == frozen_counter_1
-    assert hash(frozen_counter_0) == hash(frozen_counter_1)
+    frozen_tally_0 = FrozenTally('ababb')
+    frozen_tally_1 = FrozenTally('bbbaa')
+    assert frozen_tally_0 == frozen_tally_1
+    assert hash(frozen_tally_0) == hash(frozen_tally_1)
     
-    frozen_ordered_counter_0 = FrozenOrderedTally('ababb')
-    frozen_ordered_counter_1 = FrozenOrderedTally('bbbaa')
-    assert frozen_ordered_counter_0 == frozen_ordered_counter_0
-    assert hash(frozen_ordered_counter_0) == hash(frozen_ordered_counter_0)
-    assert frozen_ordered_counter_1 == frozen_ordered_counter_1
-    assert hash(frozen_ordered_counter_1) == hash(frozen_ordered_counter_1)
-    assert frozen_ordered_counter_0 != frozen_ordered_counter_1
-    assert frozen_ordered_counter_0 <= frozen_ordered_counter_1
-    assert frozen_ordered_counter_0 >= frozen_ordered_counter_1
+    frozen_ordered_tally_0 = FrozenOrderedTally('ababb')
+    frozen_ordered_tally_1 = FrozenOrderedTally('bbbaa')
+    assert frozen_ordered_tally_0 == frozen_ordered_tally_0
+    assert hash(frozen_ordered_tally_0) == hash(frozen_ordered_tally_0)
+    assert frozen_ordered_tally_1 == frozen_ordered_tally_1
+    assert hash(frozen_ordered_tally_1) == hash(frozen_ordered_tally_1)
+    assert frozen_ordered_tally_0 != frozen_ordered_tally_1
+    assert frozen_ordered_tally_0 <= frozen_ordered_tally_1
+    assert frozen_ordered_tally_0 >= frozen_ordered_tally_1
     
 def test_repr():
     assert re.match(

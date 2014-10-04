@@ -181,7 +181,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         #                                                                     #
         if self.is_rapplied:
             self.is_recurrent = any(count >= 2 for count in
-                                    self._frozen_ordered_counter.values())
+                                    self._frozen_ordered_tally.values())
         else:
             self.is_recurrent = False
         #                                                                     #
@@ -396,12 +396,12 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 if self.is_combination:
                     return math_tools.calculate_length_of_recurrent_comb_space(
                         self.n_elements,
-                        self._frozen_counter_counter
+                        self._frozen_tally_tally
                     )
                 else:
                     return math_tools.calculate_length_of_recurrent_perm_space(
                         self.n_elements,
-                        self._frozen_counter_counter
+                        self._frozen_tally_tally
                     )
                     
             else:
@@ -442,12 +442,12 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         return variation_selection
     
     @caching.CachedProperty
-    def _frozen_ordered_counter(self):
+    def _frozen_ordered_tally(self):
         return nifty_collections.FrozenOrderedTally(self.sequence)
             
-    _frozen_counter_counter = caching.CachedProperty(
+    _frozen_tally_tally = caching.CachedProperty(
         lambda self: nifty_collections.FrozenTallyTally(
-                                         self._frozen_ordered_counter.values())
+                                         self._frozen_ordered_tally.values())
     )
         
             
