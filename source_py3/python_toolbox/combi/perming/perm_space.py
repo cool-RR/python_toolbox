@@ -25,6 +25,7 @@ from python_toolbox import misc_tools
 
 from .. import misc
 from . import variations
+from .calculating_length import * 
 from .variations import UnallowedVariationSelectionException
 from ._variation_removing_mixin import _VariationRemovingMixin
 from ._variation_adding_mixin import _VariationAddingMixin
@@ -377,7 +378,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         elif self.is_fixed:
             assert not self.is_degreed and not self.is_combination
             if self.is_recurrent:
-                return math_tools.calculate_length_of_recurrent_perm_space(
+                return calculate_length_of_recurrent_perm_space(
                     self.n_elements - len(self.fixed_map),
                     nifty_collections.FrozenTallyTally(
                         collections.Counter(self.free_values).values()
@@ -394,12 +395,12 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             assert not self.is_degreed and not self.is_fixed
             if self.is_recurrent:
                 if self.is_combination:
-                    return math_tools.calculate_length_of_recurrent_comb_space(
+                    return calculate_length_of_recurrent_comb_space(
                         self.n_elements,
                         self._frozen_tally_tally
                     )
                 else:
-                    return math_tools.calculate_length_of_recurrent_perm_space(
+                    return calculate_length_of_recurrent_perm_space(
                         self.n_elements,
                         self._frozen_tally_tally
                     )

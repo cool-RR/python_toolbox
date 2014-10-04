@@ -2,15 +2,17 @@ import numbers
 import collections
 import itertools
 
+from python_toolbox import nifty_collections
+from python_toolbox import cute_iter_tools
+
 infinity = float('inf')
+
 
 ###############################################################################
 
 _length_of_recurrent_perm_space_cache = {}
 
 def calculate_length_of_recurrent_perm_space(k, ftt):
-    from python_toolbox import nifty_collections
-    from python_toolbox import cute_iter_tools
     cache = _length_of_recurrent_perm_space_cache
     if not isinstance(ftt, nifty_collections.FrozenTallyTally):
         ftt = nifty_collections.FrozenTallyTally(ftt)
@@ -59,11 +61,6 @@ def calculate_length_of_recurrent_perm_space(k, ftt):
 _length_of_recurrent_comb_space_cache = {}
 
 def calculate_length_of_recurrent_comb_space(k, ftt):
-    '''
-    blocktodo gotta properly name these two sons of bitches
-    '''
-    from python_toolbox import nifty_collections
-    from python_toolbox import cute_iter_tools
     cache = _length_of_recurrent_comb_space_cache
     if not isinstance(ftt, nifty_collections.FrozenTallyTally):
         ftt = nifty_collections.FrozenTallyTally(ftt)
