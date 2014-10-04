@@ -593,19 +593,15 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                     
                     )):
                     wip_perm_sequence_dict[j] = unused_value
-                    sequence = [item for item in self.sequence
-                                                       if item not in shit_set]
-                    if any(value in shit_set for value
-                                           in wip_perm_sequence_dict.values()):
-                        candidate_sub_perm_space_length = 0
-                    else:
-                        candidate_sub_perm_space_length = \
-                                              PermSpace._create_with_cut_prefix(
-                            sequence,
-                            n_elements=self.n_elements,
-                            fixed_map=wip_perm_sequence_dict,
-                            is_combination=self.is_combination
-                        ).length
+                    
+                    candidate_sub_perm_space_length = \
+                                             PermSpace._create_with_cut_prefix(
+                        self.sequence,
+                        n_elements=self.n_elements,
+                        fixed_map=wip_perm_sequence_dict,
+                        is_combination=self.is_combination,
+                        shit_set=shit_set
+                    ).length
                     
                     if wip_i < candidate_sub_perm_space_length:
                         available_values.remove(unused_value)
@@ -920,7 +916,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
     @classmethod
     def _create_with_cut_prefix(cls, sequence, domain=None, *,
         n_elements=None, fixed_map=None, degrees=None, is_combination=False,
-                                                                  slice_=None):
+                                            slice_=None, shit_set=frozenset()):
         
         # Tricky thing here: Trying to put as much as we can in a
         # sequence head that'll shorten the sequence we'll give to
@@ -952,9 +948,9 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 sequence[sequence.index(item)] = misc.MISSING_ELEMENT
                 # More efficient than removing the element, we filter these out
                 # later.
-        if not is_combination:
-            sequence = [item for item in sequence
-                                         if (item is not misc.MISSING_ELEMENT)]
+        
+        shit_set = {misc.MISSING_ELEMENT} | shit_set
+        sequence = [item for item in sequence if item not in shit_set]
                 
         fixed_map = {key - len(prefix): value
                                            for key, value in fixed_map.items()}
