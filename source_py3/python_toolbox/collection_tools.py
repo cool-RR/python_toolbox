@@ -30,7 +30,14 @@ def get_all_contained_counters(counter, use_lazy_tuple=True):
         
 
 def _get_all_contained_counters(counter, use_lazy_tuple=True):
-    assert isinstance(counter, collections.Counter)
+    assert isinstance(
+        counter,
+        (
+            collections.Counter,
+            nifty_collections.frozen_tally_and_frozen_ordered_tally.
+                                                              _FrozenTallyMixin
+        )
+    )
     counter_type = type(counter)
     keys, amounts = zip(
         *((key, amount) for key, amount in counter.items() if amount)
@@ -39,4 +46,4 @@ def _get_all_contained_counters(counter, use_lazy_tuple=True):
     amounts_tuples = \
                itertools.product(*map(lambda amount: range(amount+1), amounts))
     for amounts_tuple in amounts_tuples:
-        yield counter_type(dict(zip(keys, amounts_tuple)))
+        yield counter_type(zip(keys, amounts_tuple))
