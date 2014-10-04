@@ -207,6 +207,6 @@ def test_repr():
         repr(FrozenTally('ababb'))
     )
     assert repr(FrozenOrderedTally('ababb')) == \
-                      "FrozenOrderedTally(OrderedDict([('a', 2), ('b', 3)]))"
+                                     "FrozenOrderedTally([('a', 2), ('b', 3)])"
     
     

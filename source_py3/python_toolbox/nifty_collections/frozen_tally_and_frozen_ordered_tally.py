@@ -104,6 +104,7 @@ class _FrozenTallyMixin:
         return itertools.chain.from_iterable(
             itertools.starmap(itertools.repeat, self.items())
         )
+    
 
     __pos__ = lambda self: self
 
@@ -284,5 +285,10 @@ class FrozenTally(_FrozenTallyMixin, FrozenDict):
                 
                 
 class FrozenOrderedTally(_FrozenTallyMixin, FrozenOrderedDict):
-    pass
-        
+    def __repr__(self):
+        if not self:
+            return '%s()' % type(self).__name__
+        return '%s(%s)' % (
+            type(self).__name__,
+            '[%s]' % ', '.join('%s' % (item,) for item in self.items())
+        )
