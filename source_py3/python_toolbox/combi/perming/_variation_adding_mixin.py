@@ -29,8 +29,9 @@ class _VariationAddingMixin:
         '''Get a partialled version of this `PermSpace`.'''
         if self.is_sliced:
             raise Exception(
-                "Can't get partial of sliced `PermSpace` directly, because the "
-                "number of items would be different. Use `.unsliced` first."
+                "Can't get partial of sliced `PermSpace` directly, because "
+                "the number of items would be different. Use `.unsliced` "
+                "first."
             )
         return PermSpace(
             self.sequence, domain=self.domain, fixed_map=self.fixed_map,
@@ -42,8 +43,9 @@ class _VariationAddingMixin:
     def combinationed(self):
         if self.is_sliced:
             raise Exception(
-                "Can't get partial of sliced `PermSpace` directly, because the "
-                "number of items would be different. Use `.unsliced` first."
+                "Can't get a combinationed version of a sliced `PermSpace`"
+                "directly, because the number of items would be different. "
+                "Use `.unsliced` first."
             )
         if self.is_degreed:
             raise Exception("Can't use degrees with combination spaces.")
