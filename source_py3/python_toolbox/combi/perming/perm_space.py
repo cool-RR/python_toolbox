@@ -577,21 +577,20 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             assert not self.is_dapplied and not self.is_degreed and \
                                                              not self.is_sliced
             available_values = list(self.sequence)
-            reserved_values = list(self.fixed_map.values())
+            reserved_values = nifty_collections.Tally(self.fixed_map.values())
             wip_perm_sequence_dict = dict(self.fixed_map)
             wip_i = i
             shit_set = set()
             for j in range(self.n_elements):
                 if j in self.fixed_map:
                     available_values.remove(self.fixed_map[j])
-                    reserved_values.remove(self.fixed_map[j])
+                    reserved_values[self.fixed_map[j]] -= 1
                     continue
-                unused_values = nifty_collections.OrderedSet((
-                    value for value in available_values if not
-                    ((value in reserved_values and available_values.count(value)
-                         == reserved_values.count(value)) or value in shit_set)
-                    
-                    ))
+                unused_values = [
+                    item for item in
+                    nifty_collections.OrderedTally(available_values) -
+                    reserved_values if item not in shit_set
+                ]
                 for unused_value in unused_values:
                     wip_perm_sequence_dict[j] = unused_value
                     
