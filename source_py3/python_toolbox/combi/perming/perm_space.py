@@ -594,20 +594,20 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                     )):
                     wip_perm_sequence_dict[j] = unused_value
                     
-                    candidate_sub_perm_space_length = \
+                    candidate_sub_perm_space = \
                                              PermSpace._create_with_cut_prefix(
                         self.sequence,
                         n_elements=self.n_elements,
                         fixed_map=wip_perm_sequence_dict,
                         is_combination=self.is_combination,
                         shit_set=shit_set
-                    ).length
+                    )
                     
-                    if wip_i < candidate_sub_perm_space_length:
+                    if wip_i < candidate_sub_perm_space.length:
                         available_values.remove(unused_value)
                         break
                     else:
-                        wip_i -= candidate_sub_perm_space_length
+                        wip_i -= candidate_sub_perm_space.length
                         if self.is_combination:
                             shit_set.add(wip_perm_sequence_dict[j])
                         del wip_perm_sequence_dict[j]
@@ -779,37 +779,16 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                     )
                     temp_fixed_map.update(self.fixed_map)
                     
+                    candidate_sub_perm_space = \
+                                             PermSpace._create_with_cut_prefix(
+                        self.sequence,
+                        n_elements=self.n_elements,
+                        fixed_map=temp_fixed_map,
+                        is_combination=self.is_combination,
+                        shit_set=shit_set
+                    )
                     
-                    head = []
-                    n_elements_to_use = self.n_elements
-                    for k in sequence_tools.CuteRange(infinity):
-                        try:
-                            head.append(temp_fixed_map[k])
-                        except KeyError:
-                            break
-                        else:
-                            del temp_fixed_map[k]
-                            n_elements_to_use -= 1
-                    sequence_to_use = list(self.sequence)
-                    for item in head:
-                        if self.is_combination:
-                            sequence_to_use = sequence_to_use[
-                                sequence_to_use.index(item) + 1:
-                            ]
-                        else:
-                            sequence_to_use.remove(item)
-
-                    sequence_to_use = [x for x in sequence_to_use if x not in shit_set]
-                    
-                    temp_fixed_map = {key - len(head): value for key, value in temp_fixed_map.items()}
-                    
-                    if len(sequence_to_use) >= n_elements_to_use:
-                        wip_perm_number += PermSpace(
-                            sequence_to_use,
-                            fixed_map=temp_fixed_map,
-                            n_elements=n_elements_to_use,
-                            is_combination=self.is_combination
-                        ).length
+                    wip_perm_number += candidate_sub_perm_space.length
                     if self.is_combination:
                         shit_set.add(lower_value)
                     
