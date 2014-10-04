@@ -1,6 +1,6 @@
 from python_toolbox import caching
 
-from . import misc
+from .. import misc
 
 # (`PermSpace` exported to here from `perm_space.py` to avoid import loop.)
 

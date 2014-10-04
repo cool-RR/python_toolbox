@@ -4,7 +4,9 @@
 import pickle
 import itertools
 
+from python_toolbox import cute_testing
 from python_toolbox import math_tools
+from python_toolbox import cute_iter_tools
 from python_toolbox import sequence_tools
 
 from python_toolbox import combi

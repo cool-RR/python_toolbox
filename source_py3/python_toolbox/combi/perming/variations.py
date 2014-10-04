@@ -4,7 +4,7 @@ from python_toolbox import nifty_collections
 from python_toolbox import caching
 from python_toolbox.third_party import sortedcontainers
 
-from .selection_space import SelectionSpace
+from ..selection_space import SelectionSpace
 
 
 class Variation(nifty_collections.CuteEnum):

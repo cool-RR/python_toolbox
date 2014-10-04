@@ -18,7 +18,7 @@ from python_toolbox import sequence_tools
 from python_toolbox import cute_iter_tools
 from python_toolbox import misc_tools
 
-from . import misc
+from .. import misc
 
 
 infinity = float('inf')
@@ -305,7 +305,7 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
       
       
     def get_neighbors(self, *, degrees=(1,), perm_space=None):
-        from .map_space import MapSpace
+        from ..map_space import MapSpace
         if self.is_combination or self.is_recurrent or self.is_partial:
             raise NotImplementedError
         if perm_space is None:

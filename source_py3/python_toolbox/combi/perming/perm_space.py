@@ -23,7 +23,7 @@ from python_toolbox import dict_tools
 from python_toolbox.third_party import sortedcontainers
 from python_toolbox import misc_tools
 
-from . import misc
+from .. import misc
 from . import variations
 from .variations import UnallowedVariationSelectionException
 from ._variation_removing_mixin import _VariationRemovingMixin
