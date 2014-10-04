@@ -22,16 +22,7 @@ except ImportError:
             mapping[element] = mapping_get(element, 0) + 1
 
 class _FrozenTallyMixin:
-    '''
-    blocktododoc An immutable tally.
-    
-    A tally that can't be changed. The advantage of this over
-    `collections.Counter` is mainly that it's hashable, and thus can be used as
-    a key in dicts and sets.
-    
-    In other words, `FrozenCounter` is to `Counter` what `frozenset` is to
-    `set`.
-    '''
+    '''Mixin for `FrozenTally` and `FrozenOrderedTally`.'''
     
     def __init__(self, iterable={}):
         from python_toolbox import math_tools
@@ -70,7 +61,7 @@ class _FrozenTallyMixin:
         Results are sorted from the most common to the least. If `n is None`,
         then list all element counts.
 
-            >>> FrozenCounter('abcdeabcdabcaba').most_common(3)
+            >>> FrozenTally('abcdeabcdabcaba').most_common(3)
             [('a', 5), ('b', 4), ('c', 3)]
 
         '''
@@ -85,12 +76,12 @@ class _FrozenTallyMixin:
         '''
         Iterate over elements repeating each as many times as its count.
 
-            >>> c = FrozenCounter('ABCABC')
+            >>> c = FrozenTally('ABCABC')
             >>> sorted(c.elements())
             ['A', 'A', 'B', 'B', 'C', 'C']
     
             # Knuth's example for prime factors of 1836:  2**2 * 3**3 * 17**1
-            >>> prime_factors = FrozenCounter({2: 2, 3: 3, 17: 1})
+            >>> prime_factors = FrozenTally({2: 2, 3: 3, 17: 1})
             >>> product = 1
             >>> for factor in prime_factors.elements():     # loop over factors
             ...     product *= factor                       # and multiply them
@@ -110,17 +101,17 @@ class _FrozenTallyMixin:
 
     def __add__(self, other):
         '''
-        Add counts from two counters.
+        Add counts from two tallies.
 
-            >>> FrozenCounter('abbb') + FrozenCounter('bcc')
-            FrozenCounter({'b': 4, 'c': 2, 'a': 1})
+            >>> FrozenTally('abbb') + FrozenTally('bcc')
+            FrozenTally({'b': 4, 'c': 2, 'a': 1})
             
         '''
         if not isinstance(other, _FrozenTallyMixin):
             return NotImplemented
         
         # Using `OrderedDict` to store interim results because
-        # `FrozenOrderedCounter` inherits from this class and it needs to have
+        # `FrozenOrderedTally` inherits from this class and it needs to have
         # items in order.
         result = OrderedDict()
         
@@ -138,15 +129,15 @@ class _FrozenTallyMixin:
         '''
         Subtract count, but keep only results with positive counts.
 
-            >>> FrozenCounter('abbbc') - FrozenCounter('bccd')
-            FrozenCounter({'b': 2, 'a': 1})
+            >>> FrozenTally('abbbc') - FrozenTally('bccd')
+            FrozenTally({'b': 2, 'a': 1})
             
         '''
         if not isinstance(other, _FrozenTallyMixin):
             return NotImplemented
         
         # Using `OrderedDict` to store interim results because
-        # `FrozenOrderedCounter` inherits from this class and it needs to have
+        # `FrozenOrderedTally` inherits from this class and it needs to have
         # items in order.
         result = OrderedDict()
         
@@ -157,17 +148,17 @@ class _FrozenTallyMixin:
 
     def __or__(self, other):
         '''
-        Get the maximum of value in either of the input counters.
+        Get the maximum of value in either of the input tallies.
 
-            >>> FrozenCounter('abbb') | FrozenCounter('bcc')
-            FrozenCounter({'b': 3, 'c': 2, 'a': 1})
+            >>> FrozenTally('abbb') | FrozenTally('bcc')
+            FrozenTally({'b': 3, 'c': 2, 'a': 1})
             
         '''
         if not isinstance(other, _FrozenTallyMixin):
             return NotImplemented
 
         # Using `OrderedDict` to store interim results because
-        # `FrozenOrderedCounter` inherits from this class and it needs to have
+        # `FrozenOrderedTally` inherits from this class and it needs to have
         # items in order.
         result = OrderedDict()
 
@@ -186,15 +177,15 @@ class _FrozenTallyMixin:
         '''
         Get the minimum of corresponding counts.
 
-            >>> FrozenCounter('abbb') & FrozenCounter('bcc')
-            FrozenCounter({'b': 1})
+            >>> FrozenTally('abbb') & FrozenTally('bcc')
+            FrozenTally({'b': 1})
             
         '''
         if not isinstance(other, _FrozenTallyMixin):
             return NotImplemented
 
         # Using `OrderedDict` to store interim results because
-        # `FrozenOrderedCounter` inherits from this class and it needs to have
+        # `FrozenOrderedTally` inherits from this class and it needs to have
         # items in order.
         result = OrderedDict()
 
@@ -213,7 +204,7 @@ class _FrozenTallyMixin:
     
     # We define all the comparison methods manually instead of using
     # `total_ordering` because `total_ordering` assumes that >= means (> and
-    # ==) while we, in `FrozenOrderedCounter`, don't have that hold because ==
+    # ==) while we, in `FrozenOrderedTally`, don't have that hold because ==
     # takes the items' order into account.
     
     def __lt__(self, other):
@@ -272,11 +263,44 @@ class _FrozenTallyMixin:
             
                 
 class FrozenTally(_FrozenTallyMixin, FrozenDict):
-    '''blocktododoc '''
-                
+    '''
+    An immutable tally.
+    
+    A tally that (a) can't be changed and (b) has only positive integer values.
+    This is like `collections.Counter`, except:
+    
+     - Because it's immutable, it's also hashable, and thus it can be used as a
+       key in dicts and sets.
+     
+     - Unlike `collections.Counter`, we don't think of it as a "dict who
+       happens to count objects" but as an object that is absolutely intended
+       for counting objects. This means we do not allow arbitrary values for 
+       counts like `collections.Counter` and we don't have to deal with a 
+       class that has an identity crisis and doesn't know whether it's a
+       counter or a dict.
+     
+    '''                
                 
 class FrozenOrderedTally(_FrozenTallyMixin, FrozenOrderedDict):
-    '''blocktododoc '''
+    '''
+    An immutable, ordered tally.
+    
+    A tally that (a) can't be changed and (b) has only positive integer values.
+    This is like `collections.Counter`, except:
+    
+     - Because it's immutable, it's also hashable, and thus it can be used as a
+       key in dicts and sets.
+     
+     - Unlike `collections.Counter`, we don't think of it as a "dict who
+       happens to count objects" but as an object that is absolutely intended
+       for counting objects. This means we do not allow arbitrary values for 
+       counts like `collections.Counter` and we don't have to deal with a 
+       class that has an identity crisis and doesn't know whether it's a
+       counter or a dict.
+       
+     - It has an order to its elements, like `collections.OrderedDict`.
+     
+    '''
     def __repr__(self):
         if not self:
             return '%s()' % type(self).__name__
