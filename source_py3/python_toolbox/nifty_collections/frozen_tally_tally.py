@@ -5,10 +5,10 @@ import collections
 
 from python_toolbox import math_tools
 
-from .frozen_counter_and_frozen_ordered_counter import FrozenCounter
+from .frozen_tally_and_frozen_ordered_tally import FrozenTally
 
 
-class FrozenCounterCounter(FrozenCounter):
+class FrozenTallyTally(FrozenTally):
     '''
     
     
@@ -32,9 +32,9 @@ class FrozenCounterCounter(FrozenCounter):
             sub_counter = collections.Counter(self)
             sub_counter[key_to_reduce] -= 1
             sub_counter[key_to_reduce - 1] += 1
-            sub_counters_counter[FrozenCounterCounter(sub_counter)] = \
+            sub_counters_counter[FrozenTallyTally(sub_counter)] = \
                                                          value_of_key_to_reduce
-        return FrozenCounter(sub_counters_counter)
+        return FrozenTally(sub_counters_counter)
             
     def get_sub_counters_for_one_crate_and_previous_piles_removed(self):
         sub_counters = []
@@ -49,7 +49,7 @@ class FrozenCounterCounter(FrozenCounter):
             
             for i in range(value_of_key_to_reduce):
                 sub_counters.append(
-                    FrozenCounterCounter(
+                    FrozenTallyTally(
                         {key: (i if key == key_to_reduce else value)
                                for key, value in sub_counter_prototype.items()}
                     )

@@ -132,3 +132,11 @@ def product(numbers):
     from python_toolbox import misc_tools
     return misc_tools.general_product(numbers, start=1)
     
+    
+def is_integer(x):
+    try:
+        inted_x = int(x)
+    except (ValueError, OverflowError):
+        return False
+    return inted_x == x
+    

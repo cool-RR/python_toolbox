@@ -64,9 +64,9 @@ def calculate_length_of_recurrent_perm_space(k, recurrence_counter):
     from python_toolbox import nifty_collections
     from python_toolbox import cute_iter_tools
     cache = _length_of_recurrent_perm_space_cache
-    if not isinstance(recurrence_counter, nifty_collections.FrozenCounterCounter):
+    if not isinstance(recurrence_counter, nifty_collections.FrozenTallyTally):
         recurrence_counter = \
-                       nifty_collections.FrozenCounterCounter(recurrence_counter)
+                       nifty_collections.FrozenTallyTally(recurrence_counter)
     if k == 0:
         return 1
     elif k == 1:
@@ -121,9 +121,9 @@ def calculate_length_of_recurrent_comb_space(k, recurrence_counter):
     from python_toolbox import nifty_collections
     from python_toolbox import cute_iter_tools
     cache = _length_of_recurrent_comb_space_cache
-    if not isinstance(recurrence_counter, nifty_collections.FrozenCounterCounter):
+    if not isinstance(recurrence_counter, nifty_collections.FrozenTallyTally):
         recurrence_counter = \
-                       nifty_collections.FrozenCounterCounter(recurrence_counter)
+                       nifty_collections.FrozenTallyTally(recurrence_counter)
     if k == 0:
         return 1
     elif k == 1:

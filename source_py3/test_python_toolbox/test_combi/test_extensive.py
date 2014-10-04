@@ -51,7 +51,7 @@ class BrutePermSpace:
                                    sequence_tools.CuteRange(iterable_or_length)
         self.sequence_length = len(self.sequence)
         self._sequence_frozen_counter = \
-                                 nifty_collections.FrozenCounter(self.sequence)
+                                 nifty_collections.FrozenTally(self.sequence)
         self.is_recurrent = len(set(self.sequence)) < len(self.sequence)
         self.n_elements = n_elements if n_elements is not None else \
                                                              len(self.sequence)
@@ -72,7 +72,7 @@ class BrutePermSpace:
             def make_iterator():
                 crap = set()
                 for item in self._iter():
-                    fc = nifty_collections.FrozenCounter(item)
+                    fc = nifty_collections.FrozenTally(item)
                     if fc in crap:
                         continue
                     else:

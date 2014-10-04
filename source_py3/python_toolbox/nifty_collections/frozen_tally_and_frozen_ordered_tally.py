@@ -4,6 +4,7 @@
 import operator
 import heapq
 import itertools
+import numbers
 import collections
 import functools
 
@@ -20,7 +21,7 @@ except ImportError:
         for element in iterable:
             mapping[element] = mapping_get(element, 0) + 1
 
-class _FrozenCounterMixin:
+class _FrozenTallyMixin:
     '''
     An immutable counter.
     
@@ -32,19 +33,32 @@ class _FrozenCounterMixin:
     `set`.
     '''
     
-    def __init__(self, iterable=None, **kwargs):
+    def __init__(self, iterable={}):
+        from python_toolbox import math_tools
+        
         super().__init__()
         
-        if iterable is not None:
-            if isinstance(iterable, collections.Mapping):
-                self._dict.update(iterable)
-            else:
-                _count_elements(self._dict, iterable)
-        if kwargs:
-            self._dict.update(kwargs)
-            
-        for key in [key for key, value in self.items() if value == 0]:
-            del self._dict[key]
+        if isinstance(iterable, collections.Mapping):
+            for key, value, in iterable.items():
+                if not math_tools.is_integer(value):
+                    raise TypeError(
+                        'You passed %s as the count of %s, while '
+                        'a `Tally` can only handle integer counts.' %
+                                                                   (value, key)
+                    )
+                if value < 0:
+                    raise TypeError(
+                        "You passed %s as the count of %s, while "
+                        "a `Tally` doesn't support negative amounts." %
+                                                                   (value, key)
+                    )
+                    
+                if value == 0:
+                    continue
+                
+                self._dict[key] = int(value)
+        else:
+            _count_elements(self._dict, iterable)
 
 
     __getitem__ = lambda self, key: self._dict.get(key, 0)
@@ -91,27 +105,7 @@ class _FrozenCounterMixin:
             itertools.starmap(itertools.repeat, self.items())
         )
 
-    @classmethod
-    def fromkeys(cls, iterable, v=None):
-        # There is no equivalent method for counters because setting v=1
-        # means that no element can have a count greater than one.
-        raise NotImplementedError(
-            'FrozenCounter.fromkeys() is undefined. Use '
-            'FrozenCounter(iterable) instead.'
-        )
-
-    # def __repr__(self):
-        # if not self:
-            # return '%s()' % self.__class__.__name__
-        # return '%s(%s)' % (
-            # type(self).__name__,
-            # super().__repr__()
-        # )
-
-
     __pos__ = lambda self: self
-    __neg__ = lambda self: type(self)(OrderedDict(((key, -value) for key, value
-                                                   in self.items())))
 
     # Multiset-style mathematical operations discussed in:
     #       Knuth TAOCP Volume II section 4.6.3 exercise 19
@@ -130,7 +124,7 @@ class _FrozenCounterMixin:
             FrozenCounter({'b': 4, 'c': 2, 'a': 1})
             
         '''
-        if not isinstance(other, _FrozenCounterMixin):
+        if not isinstance(other, _FrozenTallyMixin):
             return NotImplemented
         
         # Using `OrderedDict` to store interim results because
@@ -140,10 +134,11 @@ class _FrozenCounterMixin:
         
         for element, count in self.items():
             new_count = count + other[element]
-            if new_count > 0:
-                result[element] = new_count
+            assert new_count > 0
+            result[element] = new_count
         for element, count in other.items():
-            if element not in self and count > 0:
+            assert count > 0
+            if element not in self:
                 result[element] = count
         return type(self)(result)
 
@@ -155,7 +150,7 @@ class _FrozenCounterMixin:
             FrozenCounter({'b': 2, 'a': 1})
             
         '''
-        if not isinstance(other, _FrozenCounterMixin):
+        if not isinstance(other, _FrozenTallyMixin):
             return NotImplemented
         
         # Using `OrderedDict` to store interim results because
@@ -165,11 +160,7 @@ class _FrozenCounterMixin:
         
         for element, count in self.items():
             new_count = count - other[element]
-            if new_count > 0:
-                result[element] = new_count
-        for element, count in other.items():
-            if element not in self and count < 0:
-                result[element] = 0 - count
+            result[element] = new_count
         return type(self)(result)
 
     def __or__(self, other):
@@ -180,7 +171,7 @@ class _FrozenCounterMixin:
             FrozenCounter({'b': 3, 'c': 2, 'a': 1})
             
         '''
-        if not isinstance(other, _FrozenCounterMixin):
+        if not isinstance(other, _FrozenTallyMixin):
             return NotImplemented
 
         # Using `OrderedDict` to store interim results because
@@ -191,10 +182,11 @@ class _FrozenCounterMixin:
         for element, count in self.items():
             other_count = other[element]
             new_count = other_count if count < other_count else count
-            if new_count > 0:
-                result[element] = new_count
+            assert new_count > 0
+            result[element] = new_count
         for element, count in other.items():
-            if element not in self and count > 0:
+            assert count > 0
+            if element not in self:
                 result[element] = count
         return type(self)(result)
 
@@ -206,7 +198,7 @@ class _FrozenCounterMixin:
             FrozenCounter({'b': 1})
             
         '''
-        if not isinstance(other, _FrozenCounterMixin):
+        if not isinstance(other, _FrozenTallyMixin):
             return NotImplemented
 
         # Using `OrderedDict` to store interim results because
@@ -217,15 +209,14 @@ class _FrozenCounterMixin:
         for element, count in self.items():
             other_count = other[element]
             new_count = count if count < other_count else other_count
-            if new_count > 0:
-                result[element] = new_count
+            result[element] = new_count
         return type(self)(result)
 
 
     __bool__ = lambda self: any(True for element in self.elements())
     
     n_elements = property( # blocktodo: want to make this cached but import loop
-        lambda self: sum(value for value in self.values() if value >= 1)
+        lambda self: sum(self.values())
     )
     
     # We define all the comparison methods manually instead of using
@@ -234,16 +225,14 @@ class _FrozenCounterMixin:
     # takes the items' order into account.
     
     def __lt__(self, other):
-        if not isinstance(other, collections.Mapping):
-            raise TypeError("Can't compare %s to non-mapping %s" %
-                            (type(self).__name__, type(other).__name__))
+        if not isinstance(other, _FrozenTallyMixin):
+            return NotImplemented
         found_strict_difference = False # Until challenged.
         for element, count in self.items():
             try:
                 other_count = other[element]
             except KeyError:
-                if count > 0:
-                    return False
+                return False
             if not (count <= other_count):
                 return False
             elif count < other_count:
@@ -251,23 +240,20 @@ class _FrozenCounterMixin:
         return found_strict_difference
     
     def __le__(self, other):
-        if not isinstance(other, collections.Mapping):
-            raise TypeError("Can't compare %s to non-mapping %s" %
-                            (type(self).__name__, type(other).__name__))
+        if not isinstance(other, _FrozenTallyMixin):
+            return NotImplemented
         for element, count in self.items():
             try:
                 other_count = other[element]
             except KeyError:
-                if count > 0:
-                    return False
+                return False
             if not (count <= other_count):
                 return False
         return True
     
     def __gt__(self, other):
-        if not isinstance(other, collections.Mapping):
-            raise TypeError("Can't compare %s to non-mapping %s" %
-                            (type(self).__name__, type(other).__name__))
+        if not isinstance(other, _FrozenTallyMixin):
+            return NotImplemented
         found_strict_difference = False # Until challenged.
         for element, count in self.items():
             try:
@@ -281,9 +267,8 @@ class _FrozenCounterMixin:
         return found_strict_difference
     
     def __ge__(self, other):
-        if not isinstance(other, collections.Mapping):
-            raise TypeError("Can't compare %s to non-mapping %s" %
-                            (type(self).__name__, type(other).__name__))
+        if not isinstance(other, _FrozenTallyMixin):
+            return NotImplemented
         for element, count in self.items():
             try:
                 other_count = other[element]
@@ -294,10 +279,10 @@ class _FrozenCounterMixin:
         return True
             
                 
-class FrozenCounter(_FrozenCounterMixin, FrozenDict):
+class FrozenTally(_FrozenTallyMixin, FrozenDict):
     pass
                 
                 
-class FrozenOrderedCounter(_FrozenCounterMixin, FrozenOrderedDict):
+class FrozenOrderedTally(_FrozenTallyMixin, FrozenOrderedDict):
     pass
         
