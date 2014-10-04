@@ -9,8 +9,7 @@ from .weak_key_default_dict import WeakKeyDefaultDict
 from .weak_key_identity_dict import WeakKeyIdentityDict
 from .lazy_tuple import LazyTuple
 from .frozen_dict_and_frozen_ordered_dict import FrozenDict, FrozenOrderedDict
-from .frozen_tally_and_frozen_ordered_tally import (FrozenTally,
-                                                    FrozenOrderedTally)
+from .tallying import Tally, OrderedTally, FrozenTally, FrozenOrderedTally
 from .frozen_tally_tally import FrozenTallyTally
 from .default_sorted_dict import DefaultSortedDict
 from .cute_enum import CuteEnum

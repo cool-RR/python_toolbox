@@ -21,7 +21,7 @@ except ImportError:
         for element in iterable:
             mapping[element] = mapping_get(element, 0) + 1
 
-class _FrozenTallyMixin:
+class _BaseTallyMixin:
     '''Mixin for `FrozenTally` and `FrozenOrderedTally`.'''
     
     def __init__(self, iterable={}):
@@ -40,7 +40,7 @@ class _FrozenTallyMixin:
                 if value < 0:
                     raise TypeError(
                         "You passed %s as the count of %s, while "
-                        "a `Tally` doesn't support negative amounts." %
+                        "`Tally` doesn't support negative amounts." %
                                                                    (value, key)
                     )
                     
@@ -107,7 +107,7 @@ class _FrozenTallyMixin:
             FrozenTally({'b': 4, 'c': 2, 'a': 1})
             
         '''
-        if not isinstance(other, _FrozenTallyMixin):
+        if not isinstance(other, _BaseTallyMixin):
             return NotImplemented
         
         # Using `OrderedDict` to store interim results because
@@ -133,7 +133,7 @@ class _FrozenTallyMixin:
             FrozenTally({'b': 2, 'a': 1})
             
         '''
-        if not isinstance(other, _FrozenTallyMixin):
+        if not isinstance(other, _BaseTallyMixin):
             return NotImplemented
         
         # Using `OrderedDict` to store interim results because
@@ -154,7 +154,7 @@ class _FrozenTallyMixin:
             FrozenTally({'b': 3, 'c': 2, 'a': 1})
             
         '''
-        if not isinstance(other, _FrozenTallyMixin):
+        if not isinstance(other, _BaseTallyMixin):
             return NotImplemented
 
         # Using `OrderedDict` to store interim results because
@@ -181,7 +181,7 @@ class _FrozenTallyMixin:
             FrozenTally({'b': 1})
             
         '''
-        if not isinstance(other, _FrozenTallyMixin):
+        if not isinstance(other, _BaseTallyMixin):
             return NotImplemented
 
         # Using `OrderedDict` to store interim results because
@@ -227,7 +227,7 @@ class _FrozenTallyMixin:
     # takes the items' order into account.
     
     def __lt__(self, other):
-        if not isinstance(other, _FrozenTallyMixin):
+        if not isinstance(other, _BaseTallyMixin):
             return NotImplemented
         found_strict_difference = False # Until challenged.
         for element, count in self.items():
@@ -242,7 +242,7 @@ class _FrozenTallyMixin:
         return found_strict_difference
     
     def __le__(self, other):
-        if not isinstance(other, _FrozenTallyMixin):
+        if not isinstance(other, _BaseTallyMixin):
             return NotImplemented
         for element, count in self.items():
             try:
@@ -254,7 +254,7 @@ class _FrozenTallyMixin:
         return True
     
     def __gt__(self, other):
-        if not isinstance(other, _FrozenTallyMixin):
+        if not isinstance(other, _BaseTallyMixin):
             return NotImplemented
         found_strict_difference = False # Until challenged.
         for element, count in self.items():
@@ -269,7 +269,7 @@ class _FrozenTallyMixin:
         return found_strict_difference
     
     def __ge__(self, other):
-        if not isinstance(other, _FrozenTallyMixin):
+        if not isinstance(other, _BaseTallyMixin):
             return NotImplemented
         for element, count in self.items():
             try:
@@ -280,8 +280,65 @@ class _FrozenTallyMixin:
                 return False
         return True
             
+
+class _TallyMixin(_BaseTallyMixin):
+    # blocktodo: add all mutable methods, like __iadd__ and everything
+    pass
+        
+        
+class _OrderedTallyMixin:
+    def __repr__(self):
+        if not self:
+            return '%s()' % type(self).__name__
+        return '%s(%s)' % (
+            type(self).__name__,
+            '[%s]' % ', '.join('%s' % (item,) for item in self.items())
+        )
+    
                 
-class FrozenTally(_FrozenTallyMixin, FrozenDict):
+class Tally(_TallyMixin, FrozenDict):
+    '''
+    blocktododoc
+    An immutable tally.
+    
+    A tally that (a) can't be changed and (b) has only positive integer values.
+    This is like `collections.Counter`, except:
+    
+     - Because it's immutable, it's also hashable, and thus it can be used as a
+       key in dicts and sets.
+     
+     - Unlike `collections.Counter`, we don't think of it as a "dict who
+       happens to count objects" but as an object that is absolutely intended
+       for counting objects. This means we do not allow arbitrary values for 
+       counts like `collections.Counter` and we don't have to deal with a 
+       class that has an identity crisis and doesn't know whether it's a
+       counter or a dict.
+     
+    '''                
+                
+class OrderedTally(_TallyMixin, FrozenDict):
+    '''
+    blocktododoc
+    An immutable, ordered tally.
+    
+    A tally that (a) can't be changed and (b) has only positive integer values.
+    This is like `collections.Counter`, except:
+    
+     - Because it's immutable, it's also hashable, and thus it can be used as a
+       key in dicts and sets.
+     
+     - Unlike `collections.Counter`, we don't think of it as a "dict who
+       happens to count objects" but as an object that is absolutely intended
+       for counting objects. This means we do not allow arbitrary values for 
+       counts like `collections.Counter` and we don't have to deal with a 
+       class that has an identity crisis and doesn't know whether it's a
+       counter or a dict.
+       
+     - It has an order to its elements, like `collections.OrderedDict`.
+     
+    '''                
+                
+class FrozenTally(_BaseTallyMixin, FrozenDict):
     '''
     An immutable tally.
     
@@ -300,7 +357,8 @@ class FrozenTally(_FrozenTallyMixin, FrozenDict):
      
     '''                
                 
-class FrozenOrderedTally(_FrozenTallyMixin, FrozenOrderedDict):
+class FrozenOrderedTally(_OrderedTallyMixin, _BaseTallyMixin,
+                         FrozenOrderedDict):
     '''
     An immutable, ordered tally.
     

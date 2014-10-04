@@ -5,7 +5,7 @@ import collections
 
 from python_toolbox import math_tools
 
-from .frozen_tally_and_frozen_ordered_tally import FrozenTally
+from .tallying import FrozenTally
 
 
 class FrozenTallyTally(FrozenTally):
