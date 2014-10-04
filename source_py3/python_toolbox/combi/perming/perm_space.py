@@ -447,8 +447,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         return nifty_collections.FrozenOrderedTally(self.sequence)
             
     _frozen_tally_tally = caching.CachedProperty(
-        lambda self: nifty_collections.FrozenTallyTally(
-                                         self._frozen_ordered_tally.values())
+        lambda self: self._frozen_ordered_tally.frozen_tally_tally
     )
         
             

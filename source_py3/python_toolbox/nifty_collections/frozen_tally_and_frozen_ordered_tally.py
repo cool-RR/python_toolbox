@@ -207,6 +207,17 @@ class _FrozenTallyMixin:
         if self._n_elements is None:
             self._n_elements = sum(self.values())
         return self._n_elements
+    _n_elements = None
+    
+    _frozen_tally_tally = None
+    @property
+    def frozen_tally_tally(self):
+        # Implemented as a poor man's `CachedProperty` because we can't use the
+        # real `CachedProperty` due to circular import.
+        from .frozen_tally_tally import FrozenTallyTally
+        if self._frozen_tally_tally is None:
+            self._frozen_tally_tally = FrozenTallyTally(self.values())
+        return self._frozen_tally_tally
         
     
     # We define all the comparison methods manually instead of using
