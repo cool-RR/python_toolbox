@@ -1,8 +1,6 @@
 # Copyright 2009-2014 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''Testing module for `python_toolbox.nifty_collections.LazyTuple`.'''
-
 import uuid
 import re
 import pickle
@@ -15,82 +13,102 @@ from python_toolbox import sequence_tools
 from python_toolbox import cute_testing
 
 
-from python_toolbox.nifty_collections import (FrozenTally,
-                                              FrozenOrderedTally,
+from python_toolbox.nifty_collections import (Tally, OrderedTally,
+                                              FrozenTally, FrozenOrderedTally,
                                               OrderedDict)
 
 infinity = float('inf')
 infinities = (infinity, -infinity)
 
+_check_functions = []
+def _test_on(arguments):
+    def decorator(check_function):
+        check_function.arguments = arguments
+        _check_functions.append(check_function)
+        return check_function
+    return decorator
+        
 
-def test_common():
-    _check_common(FrozenTally)
-    _check_common(FrozenOrderedTally)
-    _check_comparison(FrozenTally)
-    _check_comparison(FrozenOrderedTally)
-    _check_ignores_zero(FrozenTally)
-    _check_ignores_zero(FrozenOrderedTally)
-    _check_immutable(FrozenTally)
-    _check_immutable(FrozenOrderedTally)
-    _check_only_positive_ints_or_zero(FrozenTally)
-    _check_only_positive_ints_or_zero(FrozenOrderedTally)
-    
 
-def _check_common(frozen_tally_type):
-    frozen_tally = frozen_tally_type('abracadabra')
-    assert frozen_tally == collections.Counter('abracadabra') == \
-           collections.Counter(frozen_tally) == \
-           frozen_tally_type(collections.Counter('abracadabra'))
+def test():
+    assert Tally.is_ordered is False
+    assert Tally.is_frozen is False
+    assert OrderedTally.is_ordered is True
+    assert OrderedTally.is_frozen is False
+    assert FrozenTally.is_ordered is False
+    assert FrozenTally.is_frozen is True
+    assert FrozenOrderedTally.is_ordered is True
+    assert FrozenOrderedTally.is_frozen is True
+    assert OrderedDict.is_ordered is True
+    assert OrderedDict.is_frozen is False
     
-    assert len(frozen_tally) == 5
-    assert set(frozen_tally) == set(frozen_tally.keys()) == set('abracadabra')
-    assert set(frozen_tally.values()) == {1, 2, 5}
-    assert set(frozen_tally.items()) == \
+    for check_function in _check_functions:
+        for argument in _check_function.arguments:
+            _check_function(argument)
+        
+
+@_test_on(Tally, OrderedTally, FrozenTally, FrozenOrderedTally)
+def _check_common(tally_type):
+    tally = tally_type('abracadabra')
+    assert tally == collections.Counter('abracadabra') == \
+           collections.Counter(tally) == \
+           tally_type(collections.Counter('abracadabra'))
+    
+    assert len(tally) == 5
+    assert set(tally) == set(tally.keys()) == set('abracadabra')
+    assert set(tally.values()) == {1, 2, 5}
+    assert set(tally.items()) == \
                              {('a', 5), ('r', 2), ('b', 2), ('c', 1), ('d', 1)}
-    assert frozen_tally['a'] == 5
-    assert frozen_tally['missing value'] == 0
-    assert len(frozen_tally) == 5
-    assert {frozen_tally, frozen_tally} == {frozen_tally}
-    assert {frozen_tally: frozen_tally} == {frozen_tally: frozen_tally}
-    assert isinstance(hash(frozen_tally), int)
+    assert tally['a'] == 5
+    assert tally['missing value'] == 0
+    assert len(tally) == 5
+    if tally.is_frozen:
+        assert {tally, tally} == {tally}
+        assert {tally: tally} == {tally: tally}
+        assert isinstance(hash(tally), int)
+    else:
+        with cute_testing.RaiseAssertor(TypeError):
+            {tally}
+        with cute_testing.RaiseAssertor(TypeError):
+            {tally: None,}
+        with cute_testing.RaiseAssertor(TypeError):
+            assert isinstance(hash(tally), int)
+            
     
-    assert set(frozen_tally.most_common()) == \
-                         set(collections.Counter(frozen_tally).most_common())
+    assert set(tally.most_common()) == \
+                             set(collections.Counter(tally).most_common()) == \
+                       set(collections.Counter(tally.elements()).most_common())
     
-    assert frozen_tally + frozen_tally == \
-                                         frozen_tally_type('abracadabra' * 2)
-    assert frozen_tally - frozen_tally == frozen_tally_type()
-    assert frozen_tally - frozen_tally_type('a') == \
-                                              frozen_tally_type('abracadabr')
-    assert frozen_tally - frozen_tally_type('a') == \
-                                              frozen_tally_type('abracadabr')
-    assert frozen_tally | frozen_tally_type('a') == frozen_tally
-    assert frozen_tally | frozen_tally == \
-           frozen_tally | frozen_tally | frozen_tally == frozen_tally
-    assert frozen_tally & frozen_tally_type('a') == frozen_tally_type('a')
-    assert frozen_tally & frozen_tally == \
-           frozen_tally & frozen_tally & frozen_tally == frozen_tally
+    assert tally + tally == tally_type('abracadabra' * 2)
+    assert tally - tally == tally_type()
+    assert tally - tally_type('a') == tally_type('abracadabr')
+    assert tally - tally_type('a') == tally_type('abracadabr')
+    assert tally | tally_type('a') == tally
+    assert tally | tally == tally | tally | tally == tally
+    assert tally & tally_type('a') == tally_type('a')
+    assert tally & tally == \
+           tally & tally & tally == tally
     
-    assert frozen_tally_type(frozen_tally.elements()) == frozen_tally
+    assert tally_type(tally.elements()) == tally
     
-    assert +frozen_tally == frozen_tally
+    assert +tally == tally
     with cute_testing.RaiseAssertor(TypeError):
-        - frozen_tally
+        - tally
     
-    assert re.match('^Frozen(Ordered)?Tally\(.*$',
-                    repr(frozen_tally))
+    assert re.match('^(Frozen)?(Ordered)?Tally\(.*$', repr(tally))
     
-    assert frozen_tally.copy({'meow': 9}) == \
-           frozen_tally.copy(meow=9) == \
-           frozen_tally_type(OrderedDict(
+    assert tally.copy({'meow': 9}) == \
+           tally.copy(meow=9) == \
+           tally_type(OrderedDict(
                [('a', 5), ('b', 2), ('r', 2), ('c', 1), ('d', 1), ('meow', 9)])
            )
     
-    assert pickle.loads(pickle.dumps(frozen_tally)) == frozen_tally
+    assert pickle.loads(pickle.dumps(tally)) == tally
     
-    assert frozen_tally_type({'a': 0, 'b': 1,}) == \
-                                         frozen_tally_type({'c': 0, 'b': 1,})
+    assert tally_type({'a': 0, 'b': 1,}) == \
+                                         tally_type({'c': 0, 'b': 1,})
     
+@_test_on(Tally, OrderedTally, FrozenTally, FrozenOrderedTally)
 def _check_comparison(frozen_tally_type):
     tally_0 = frozen_tally_type('c')
     tally_1 = frozen_tally_type('abc')
@@ -120,6 +138,7 @@ def _check_comparison(frozen_tally_type):
         for not_smaller_item in not_smaller_items:
             assert not item < smaller_item
 
+@_test_on(Tally, OrderedTally, FrozenTally, FrozenOrderedTally)
 def _check_ignores_zero(frozen_tally_type):
     frozen_tally_0 = frozen_tally_type({'a': 0,})
     frozen_tally_1 = frozen_tally_type()
@@ -138,6 +157,7 @@ def _check_ignores_zero(frozen_tally_type):
                                                              {frozen_tally_3}
 
 
+@_test_on(Tally, OrderedTally, FrozenTally, FrozenOrderedTally)
 def _check_immutable(frozen_tally_type):
     frozen_tally = frozen_tally_type('abracadabra')
     with cute_testing.RaiseAssertor(TypeError):
@@ -148,6 +168,7 @@ def _check_immutable(frozen_tally_type):
         frozen_tally['a'] = 7
     
 
+@_test_on(Tally, OrderedTally, FrozenTally, FrozenOrderedTally)
 def _check_immutable(frozen_tally_type):
     frozen_tally = frozen_tally_type('abracadabra')
     with cute_testing.RaiseAssertor(TypeError):
@@ -157,6 +178,7 @@ def _check_immutable(frozen_tally_type):
     with cute_testing.RaiseAssertor(TypeError):
         frozen_tally['a'] = 7
     
+@_test_on(Tally, OrderedTally, FrozenTally, FrozenOrderedTally)
 def _check_only_positive_ints_or_zero(frozen_tally_type):
     assert frozen_tally_type(
         OrderedDict([('a', 0), ('b', 0.0), ('c', 1), ('d', 2.0),
@@ -182,8 +204,9 @@ def _check_only_positive_ints_or_zero(frozen_tally_type):
         frozen_tally_type({'a': ('still', 'nope'),})
     
     
-    
-def test_ordered():
+
+@_test_on(Tally, OrderedTally, FrozenTally, FrozenOrderedTally)
+def _check_ordered():
     frozen_tally_0 = FrozenTally('ababb')
     frozen_tally_1 = FrozenTally('bbbaa')
     assert frozen_tally_0 == frozen_tally_1
@@ -199,6 +222,8 @@ def test_ordered():
     assert frozen_ordered_tally_0 <= frozen_ordered_tally_1
     assert frozen_ordered_tally_0 >= frozen_ordered_tally_1
     
+
+@_test_on(Tally, OrderedTally, FrozenTally, FrozenOrderedTally)
 def test_repr():
     assert re.match(
         "^FrozenTally\\({(?:(?:'b': 3, 'a': 2)|(?:'a': 2, 'b': 3))}\\)$", 

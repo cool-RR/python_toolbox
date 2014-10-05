@@ -14,6 +14,9 @@ from collections import OrderedDict as StdlibOrderedDict
 
 class OrderedDict(StdlibOrderedDict):
     
+    is_ordered = True
+    is_frozen = False
+    
     def sort(self, key=None, reverse=False):
         '''
         Sort the items according to their keys, changing the order in-place.
@@ -36,4 +39,3 @@ class OrderedDict(StdlibOrderedDict):
             if key_ == key:
                 return i
         raise RuntimeError
-                

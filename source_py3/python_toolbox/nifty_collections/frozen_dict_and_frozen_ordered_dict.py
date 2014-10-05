@@ -10,6 +10,7 @@ from .ordered_dict import OrderedDict
 
 
 class _AbstractFrozenDict(collections.Mapping):
+    is_frozen = True
     _hash = None # Overridden by instance when calculating hash.
 
     def __init__(self, *args, **kwargs):

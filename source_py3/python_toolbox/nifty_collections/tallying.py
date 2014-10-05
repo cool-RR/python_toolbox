@@ -283,10 +283,12 @@ class _BaseTallyMixin:
 
 class _TallyMixin(_BaseTallyMixin):
     # blocktodo: add all mutable methods, like __iadd__ and everything
-    pass
+    is_ordered = False
+
         
         
 class _OrderedTallyMixin:
+    is_ordered = True
     def __repr__(self):
         if not self:
             return '%s()' % type(self).__name__
