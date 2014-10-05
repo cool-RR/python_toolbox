@@ -3,12 +3,15 @@
 
 '''This module defines tools for testing.'''
 
+import nose
+
 from python_toolbox.third_party import unittest2
 
 from python_toolbox import cute_inspect
 from python_toolbox.context_management import ContextManager
 from python_toolbox.exceptions import CuteException
 from python_toolbox import logic_tools
+
 
 
 class Failure(CuteException, AssertionError):
@@ -135,3 +138,7 @@ def assert_polite_wrapper(wrapper, wrapped=None, same_signature=True):
                (getattr(wrapped, attribute,  None) or _MissingAttribute)
     assert wrapper.__wrapped__ == wrapped
     
+    
+class TestCase(nose.case.Test):
+    pass
+        

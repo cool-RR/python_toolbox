@@ -8,6 +8,8 @@ import itertools
 import collections
 import decimal as decimal_module
 
+import nose
+
 from python_toolbox import cute_iter_tools
 from python_toolbox import sequence_tools
 from python_toolbox import cute_testing
@@ -19,6 +21,38 @@ from python_toolbox.nifty_collections import (Tally, OrderedTally,
 
 infinity = float('inf')
 infinities = (infinity, -infinity)
+
+class BaseTallyTestCase(cute_testing.TestCase):
+    pass
+    
+class BaseMutableTallyTestCase(BaseTallyTestCase):
+    is_frozen = False
+    
+class BaseFrozenTallyTestCase(BaseTallyTestCase):
+    is_frozen = True
+    
+class BaseOrderedTallyTestCase(BaseTallyTestCase):
+    is_ordered = True
+    
+class BaseUnorderedTallyTestCase(BaseTallyTestCase):
+    is_ordered = False
+    
+    
+class TallyTestCase(BaseMutableTallyTestCase, BaseUnorderedTallyTestCase):
+    tally_type = Tally
+
+class OrderedTallyTestCase(BaseMutableTallyTestCase,
+                           BaseOrderedTallyTestCase):
+    tally_type = OrderedTally
+    
+class FrozenTallyTestCase(BaseFrozenTallyTestCase, BaseUnorderedTallyTestCase):
+    tally_type = FrozenTally
+
+class OrderedTallyTestCase(BaseFrozenTallyTestCase,
+                           BaseOrderedTallyTestCase):
+    tally_type = FrozenOrderedTally
+    
+        
 
 _check_functions = []
 def _test_on(arguments):
@@ -159,32 +193,32 @@ def _check_comparison(tally_type):
 
 @_test_on(Tally, OrderedTally, FrozenTally, FrozenOrderedTally)
 def _check_ignores_zero(tally_type):
-    frozen_tally_0 = tally_type({'a': 0,})
-    frozen_tally_1 = tally_type()
-    assert frozen_tally_0 == frozen_tally_1
+    tally_0 = tally_type({'a': 0,})
+    tally_1 = tally_type()
+    assert tally_0 == tally_1
     
-    assert hash(frozen_tally_0) == hash(frozen_tally_1)
-    assert {frozen_tally_0, frozen_tally_1} == {frozen_tally_0} == \
-                                                             {frozen_tally_1}
+    if tally_type.is_frozen:
+        assert hash(tally_0) == hash(tally_1)
+        assert {tally_0, tally_1} == {tally_0} == {tally_1}
     
-    frozen_tally_2 = tally_type(
+    tally_2 = tally_type(
                        {'a': 0.0, 'b': 2, 'c': decimal_module.Decimal('0.0'),})
-    frozen_tally_3 = tally_type('bb')
+    tally_3 = tally_type('bb')
     
-    assert hash(frozen_tally_2) == hash(frozen_tally_3)
-    assert {frozen_tally_2, frozen_tally_3} == {frozen_tally_2} == \
-                                                             {frozen_tally_3}
+    if tally_type.is_frozen:
+        assert hash(tally_2) == hash(tally_3)
+        assert {tally_2, tally_3} == {tally_2} == {tally_3}
 
 
 @_test_on(Tally, OrderedTally, FrozenTally, FrozenOrderedTally)
 def _check_mutating(tally_type):
-    frozen_tally = tally_type('abracadabra')
+    tally = tally_type('abracadabra')
     with cute_testing.RaiseAssertor(TypeError):
-        frozen_tally['a'] += 1
+        tally['a'] += 1
     with cute_testing.RaiseAssertor(TypeError):
-        frozen_tally['a'] -= 1
+        tally['a'] -= 1
     with cute_testing.RaiseAssertor(TypeError):
-        frozen_tally['a'] = 7
+        tally['a'] = 7
     
 
     
@@ -217,10 +251,10 @@ def _check_only_positive_ints_or_zero(tally_type):
 
 @_test_on(Tally, OrderedTally, FrozenTally, FrozenOrderedTally)
 def _check_ordered():
-    frozen_tally_0 = FrozenTally('ababb')
-    frozen_tally_1 = FrozenTally('bbbaa')
-    assert frozen_tally_0 == frozen_tally_1
-    assert hash(frozen_tally_0) == hash(frozen_tally_1)
+    tally_0 = FrozenTally('ababb')
+    tally_1 = FrozenTally('bbbaa')
+    assert tally_0 == tally_1
+    assert hash(tally_0) == hash(tally_1)
     
     frozen_ordered_tally_0 = FrozenOrderedTally('ababb')
     frozen_ordered_tally_1 = FrozenOrderedTally('bbbaa')
