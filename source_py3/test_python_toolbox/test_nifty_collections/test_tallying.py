@@ -108,13 +108,15 @@ def _check_common(tally_type):
     assert tally_type({'a': 0, 'b': 1,}) == \
                                          tally_type({'c': 0, 'b': 1,})
     
+    
 @_test_on(Tally, OrderedTally, FrozenTally, FrozenOrderedTally)
-def _check_comparison(frozen_tally_type):
-    tally_0 = frozen_tally_type('c')
-    tally_1 = frozen_tally_type('abc')
-    tally_2 = frozen_tally_type('aabc')
-    tally_3 = frozen_tally_type('abbc')
-    tally_4 = frozen_tally_type('aabbcc')
+def _check_comparison(tally_type):
+    tally_0 = tally_type('c')
+    tally_1 = tally_type('abc')
+    tally_2 = tally_type('aabc')
+    tally_3 = tally_type('abbc')
+    tally_4 = tally_type('aabbcc')
+    not_a_tally = {}
     
     hierarchy = (
         (tally_4, {tally_3, tally_2, tally_1, tally_0}),
@@ -125,7 +127,7 @@ def _check_comparison(frozen_tally_type):
     )
     
     for item, smaller_items in hierarchy:
-        if not isinstance(item, frozen_tally_type):
+        if not isinstance(item, tally_type):
             continue
         for smaller_item in smaller_items:
             assert not item <= smaller_item
@@ -137,20 +139,37 @@ def _check_comparison(frozen_tally_type):
                                                   item not in smaller_item]
         for not_smaller_item in not_smaller_items:
             assert not item < smaller_item
+            
+        with cute_testing.RaiseAssertor(TypeError):
+            item <= not_a_tally
+        with cute_testing.RaiseAssertor(TypeError):
+            item < not_a_tally
+        with cute_testing.RaiseAssertor(TypeError):
+            item > not_a_tally
+        with cute_testing.RaiseAssertor(TypeError):
+            item >= not_a_tally
+        with cute_testing.RaiseAssertor(TypeError):
+            not_a_tally <= item 
+        with cute_testing.RaiseAssertor(TypeError):
+            not_a_tally < item 
+        with cute_testing.RaiseAssertor(TypeError):
+            not_a_tally > item 
+        with cute_testing.RaiseAssertor(TypeError):
+            not_a_tally >= item 
 
 @_test_on(Tally, OrderedTally, FrozenTally, FrozenOrderedTally)
-def _check_ignores_zero(frozen_tally_type):
-    frozen_tally_0 = frozen_tally_type({'a': 0,})
-    frozen_tally_1 = frozen_tally_type()
+def _check_ignores_zero(tally_type):
+    frozen_tally_0 = tally_type({'a': 0,})
+    frozen_tally_1 = tally_type()
     assert frozen_tally_0 == frozen_tally_1
     
     assert hash(frozen_tally_0) == hash(frozen_tally_1)
     assert {frozen_tally_0, frozen_tally_1} == {frozen_tally_0} == \
                                                              {frozen_tally_1}
     
-    frozen_tally_2 = frozen_tally_type(
+    frozen_tally_2 = tally_type(
                        {'a': 0.0, 'b': 2, 'c': decimal_module.Decimal('0.0'),})
-    frozen_tally_3 = frozen_tally_type('bb')
+    frozen_tally_3 = tally_type('bb')
     
     assert hash(frozen_tally_2) == hash(frozen_tally_3)
     assert {frozen_tally_2, frozen_tally_3} == {frozen_tally_2} == \
@@ -158,8 +177,8 @@ def _check_ignores_zero(frozen_tally_type):
 
 
 @_test_on(Tally, OrderedTally, FrozenTally, FrozenOrderedTally)
-def _check_immutable(frozen_tally_type):
-    frozen_tally = frozen_tally_type('abracadabra')
+def _check_mutating(tally_type):
+    frozen_tally = tally_type('abracadabra')
     with cute_testing.RaiseAssertor(TypeError):
         frozen_tally['a'] += 1
     with cute_testing.RaiseAssertor(TypeError):
@@ -168,40 +187,31 @@ def _check_immutable(frozen_tally_type):
         frozen_tally['a'] = 7
     
 
-@_test_on(Tally, OrderedTally, FrozenTally, FrozenOrderedTally)
-def _check_immutable(frozen_tally_type):
-    frozen_tally = frozen_tally_type('abracadabra')
-    with cute_testing.RaiseAssertor(TypeError):
-        frozen_tally['a'] += 1
-    with cute_testing.RaiseAssertor(TypeError):
-        frozen_tally['a'] -= 1
-    with cute_testing.RaiseAssertor(TypeError):
-        frozen_tally['a'] = 7
     
 @_test_on(Tally, OrderedTally, FrozenTally, FrozenOrderedTally)
-def _check_only_positive_ints_or_zero(frozen_tally_type):
-    assert frozen_tally_type(
+def _check_only_positive_ints_or_zero(tally_type):
+    assert tally_type(
         OrderedDict([('a', 0), ('b', 0.0), ('c', 1), ('d', 2.0),
                      ('e', decimal_module.Decimal('3.0'))])) == \
-                                                          frozen_tally_type('cddeee')
+                                                          tally_type('cddeee')
     with cute_testing.RaiseAssertor(TypeError):
-        frozen_tally_type({'a': 1.1,})
+        tally_type({'a': 1.1,})
     with cute_testing.RaiseAssertor(TypeError):
-        frozen_tally_type({'a': -2,})
+        tally_type({'a': -2,})
     with cute_testing.RaiseAssertor(TypeError):
-        frozen_tally_type({'a': -3,})
+        tally_type({'a': -3,})
     with cute_testing.RaiseAssertor(TypeError):
-        frozen_tally_type({'a': decimal_module.Decimal('-3'),})
+        tally_type({'a': decimal_module.Decimal('-3'),})
     with cute_testing.RaiseAssertor(TypeError):
-        frozen_tally_type({'a': infinity,})
+        tally_type({'a': infinity,})
     with cute_testing.RaiseAssertor(TypeError):
-        frozen_tally_type({'a': -infinity,})
+        tally_type({'a': -infinity,})
     with cute_testing.RaiseAssertor(TypeError):
-        frozen_tally_type({'a': 'whatever',})
+        tally_type({'a': 'whatever',})
     with cute_testing.RaiseAssertor(TypeError):
-        frozen_tally_type({'a': b'whateva',})
+        tally_type({'a': b'whateva',})
     with cute_testing.RaiseAssertor(TypeError):
-        frozen_tally_type({'a': ('still', 'nope'),})
+        tally_type({'a': ('still', 'nope'),})
     
     
 
