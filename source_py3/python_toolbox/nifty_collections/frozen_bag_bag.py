@@ -5,10 +5,10 @@ import collections
 
 from python_toolbox import math_tools
 
-from .tallying import FrozenTally
+from .bagging import FrozenBag
 
 
-class FrozenTallyTally(FrozenTally):
+class FrozenBagBag(FrozenBag):
     '''
     
     
@@ -32,9 +32,9 @@ class FrozenTallyTally(FrozenTally):
             sub_ftt_prototype = collections.Counter(self)
             sub_ftt_prototype[key_to_reduce] -= 1
             sub_ftt_prototype[key_to_reduce - 1] += 1
-            sub_ftts_counter[FrozenTallyTally(sub_ftt_prototype)] = \
+            sub_ftts_counter[FrozenBagBag(sub_ftt_prototype)] = \
                                                          value_of_key_to_reduce
-        return FrozenTally(sub_ftts_counter)
+        return FrozenBag(sub_ftts_counter)
             
     def get_sub_ftts_for_one_crate_and_previous_piles_removed(self):
         sub_ftts = []
@@ -49,7 +49,7 @@ class FrozenTallyTally(FrozenTally):
             
             for i in range(value_of_key_to_reduce):
                 sub_ftts.append(
-                    FrozenTallyTally(
+                    FrozenBagBag(
                         {key: (i if key == key_to_reduce else value)
                                for key, value in sub_ftt_prototype.items()}
                     )

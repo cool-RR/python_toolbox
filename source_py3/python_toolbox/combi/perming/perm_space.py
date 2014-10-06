@@ -182,7 +182,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         #                                                                     #
         if self.is_rapplied:
             self.is_recurrent = any(count >= 2 for count in
-                                    self._frozen_ordered_tally.values())
+                                    self._frozen_ordered_bag.values())
         else:
             self.is_recurrent = False
         #                                                                     #
@@ -382,7 +382,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             if self.is_recurrent:
                 return calculate_length_of_recurrent_perm_space(
                     self.n_elements - len(self.fixed_map),
-                    nifty_collections.FrozenTallyTally(
+                    nifty_collections.FrozenBagBag(
                         collections.Counter(self.free_values).values()
                     )                    
                 )
@@ -399,12 +399,12 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 if self.is_combination:
                     return calculate_length_of_recurrent_comb_space(
                         self.n_elements,
-                        self._frozen_tally_tally
+                        self._frozen_bag_bag
                     )
                 else:
                     return calculate_length_of_recurrent_perm_space(
                         self.n_elements,
-                        self._frozen_tally_tally
+                        self._frozen_bag_bag
                     )
                     
             else:
@@ -445,11 +445,11 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         return variation_selection
     
     @caching.CachedProperty
-    def _frozen_ordered_tally(self):
-        return nifty_collections.FrozenOrderedTally(self.sequence)
+    def _frozen_ordered_bag(self):
+        return nifty_collections.FrozenOrderedBag(self.sequence)
             
-    _frozen_tally_tally = caching.CachedProperty(
-        lambda self: self._frozen_ordered_tally.frozen_tally_tally
+    _frozen_bag_bag = caching.CachedProperty(
+        lambda self: self._frozen_ordered_bag.frozen_bag_bag
     )
         
             
@@ -577,7 +577,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             assert not self.is_dapplied and not self.is_degreed and \
                                                              not self.is_sliced
             available_values = list(self.sequence)
-            reserved_values = nifty_collections.Tally(self.fixed_map.values())
+            reserved_values = nifty_collections.Bag(self.fixed_map.values())
             wip_perm_sequence_dict = dict(self.fixed_map)
             wip_i = i
             shit_set = set()
@@ -588,7 +588,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                     continue
                 unused_values = [
                     item for item in
-                    nifty_collections.OrderedTally(available_values) -
+                    nifty_collections.OrderedBag(available_values) -
                     reserved_values if item not in shit_set
                 ]
                 for unused_value in unused_values:

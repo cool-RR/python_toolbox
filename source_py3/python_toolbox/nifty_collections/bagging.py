@@ -16,13 +16,13 @@ try:                                    # Load C helper function if available
     from _collections import _count_elements
 except ImportError:
     def _count_elements(mapping, iterable):
-        '''Tally elements from the iterable.'''
+        '''Bag elements from the iterable.'''
         mapping_get = mapping.get
         for element in iterable:
             mapping[element] = mapping_get(element, 0) + 1
 
-class _BaseTallyMixin:
-    '''Mixin for `FrozenTally` and `FrozenOrderedTally`.'''
+class _BaseBagMixin:
+    '''Mixin for `FrozenBag` and `FrozenOrderedBag`.'''
     
     def __init__(self, iterable={}):
         from python_toolbox import math_tools
@@ -34,13 +34,13 @@ class _BaseTallyMixin:
                 if not math_tools.is_integer(value):
                     raise TypeError(
                         'You passed %s as the count of %s, while '
-                        'a `Tally` can only handle integer counts.' %
+                        'a `Bag` can only handle integer counts.' %
                                                                    (value, key)
                     )
                 if value < 0:
                     raise TypeError(
                         "You passed %s as the count of %s, while "
-                        "`Tally` doesn't support negative amounts." %
+                        "`Bag` doesn't support negative amounts." %
                                                                    (value, key)
                     )
                     
@@ -61,7 +61,7 @@ class _BaseTallyMixin:
         Results are sorted from the most common to the least. If `n is None`,
         then list all element counts.
 
-            >>> FrozenTally('abcdeabcdabcaba').most_common(3)
+            >>> FrozenBag('abcdeabcdabcaba').most_common(3)
             [('a', 5), ('b', 4), ('c', 3)]
 
         '''
@@ -76,12 +76,12 @@ class _BaseTallyMixin:
         '''
         Iterate over elements repeating each as many times as its count.
 
-            >>> c = FrozenTally('ABCABC')
+            >>> c = FrozenBag('ABCABC')
             >>> sorted(c.elements())
             ['A', 'A', 'B', 'B', 'C', 'C']
     
             # Knuth's example for prime factors of 1836:  2**2 * 3**3 * 17**1
-            >>> prime_factors = FrozenTally({2: 2, 3: 3, 17: 1})
+            >>> prime_factors = FrozenBag({2: 2, 3: 3, 17: 1})
             >>> product = 1
             >>> for factor in prime_factors.elements():     # loop over factors
             ...     product *= factor                       # and multiply them
@@ -101,17 +101,17 @@ class _BaseTallyMixin:
 
     def __add__(self, other):
         '''
-        Add counts from two tallies.
+        Add counts from two bags.
 
-            >>> FrozenTally('abbb') + FrozenTally('bcc')
-            FrozenTally({'b': 4, 'c': 2, 'a': 1})
+            >>> FrozenBag('abbb') + FrozenBag('bcc')
+            FrozenBag({'b': 4, 'c': 2, 'a': 1})
             
         '''
-        if not isinstance(other, _BaseTallyMixin):
+        if not isinstance(other, _BaseBagMixin):
             return NotImplemented
         
         # Using `OrderedDict` to store interim results because
-        # `FrozenOrderedTally` inherits from this class and it needs to have
+        # `FrozenOrderedBag` inherits from this class and it needs to have
         # items in order.
         result = OrderedDict()
         
@@ -129,15 +129,15 @@ class _BaseTallyMixin:
         '''
         Subtract count, but keep only results with positive counts.
 
-            >>> FrozenTally('abbbc') - FrozenTally('bccd')
-            FrozenTally({'b': 2, 'a': 1})
+            >>> FrozenBag('abbbc') - FrozenBag('bccd')
+            FrozenBag({'b': 2, 'a': 1})
             
         '''
-        if not isinstance(other, _BaseTallyMixin):
+        if not isinstance(other, _BaseBagMixin):
             return NotImplemented
         
         # Using `OrderedDict` to store interim results because
-        # `FrozenOrderedTally` inherits from this class and it needs to have
+        # `FrozenOrderedBag` inherits from this class and it needs to have
         # items in order.
         result = OrderedDict()
         
@@ -148,17 +148,17 @@ class _BaseTallyMixin:
 
     def __or__(self, other):
         '''
-        Get the maximum of value in either of the input tallies.
+        Get the maximum of value in either of the input bags.
 
-            >>> FrozenTally('abbb') | FrozenTally('bcc')
-            FrozenTally({'b': 3, 'c': 2, 'a': 1})
+            >>> FrozenBag('abbb') | FrozenBag('bcc')
+            FrozenBag({'b': 3, 'c': 2, 'a': 1})
             
         '''
-        if not isinstance(other, _BaseTallyMixin):
+        if not isinstance(other, _BaseBagMixin):
             return NotImplemented
 
         # Using `OrderedDict` to store interim results because
-        # `FrozenOrderedTally` inherits from this class and it needs to have
+        # `FrozenOrderedBag` inherits from this class and it needs to have
         # items in order.
         result = OrderedDict()
 
@@ -177,15 +177,15 @@ class _BaseTallyMixin:
         '''
         Get the minimum of corresponding counts.
 
-            >>> FrozenTally('abbb') & FrozenTally('bcc')
-            FrozenTally({'b': 1})
+            >>> FrozenBag('abbb') & FrozenBag('bcc')
+            FrozenBag({'b': 1})
             
         '''
-        if not isinstance(other, _BaseTallyMixin):
+        if not isinstance(other, _BaseBagMixin):
             return NotImplemented
 
         # Using `OrderedDict` to store interim results because
-        # `FrozenOrderedTally` inherits from this class and it needs to have
+        # `FrozenOrderedBag` inherits from this class and it needs to have
         # items in order.
         result = OrderedDict()
 
@@ -210,24 +210,24 @@ class _BaseTallyMixin:
     _n_elements = None
     
     
-    _frozen_tally_tally = None
+    _frozen_bag_bag = None
     @property
-    def frozen_tally_tally(self):
+    def frozen_bag_bag(self):
         # Implemented as a poor man's `CachedProperty` because we can't use the
         # real `CachedProperty` due to circular import.
-        from .frozen_tally_tally import FrozenTallyTally
-        if self._frozen_tally_tally is None:
-            self._frozen_tally_tally = FrozenTallyTally(self.values())
-        return self._frozen_tally_tally
+        from .frozen_bag_bag import FrozenBagBag
+        if self._frozen_bag_bag is None:
+            self._frozen_bag_bag = FrozenBagBag(self.values())
+        return self._frozen_bag_bag
         
     
     # We define all the comparison methods manually instead of using
     # `total_ordering` because `total_ordering` assumes that >= means (> and
-    # ==) while we, in `FrozenOrderedTally`, don't have that hold because ==
+    # ==) while we, in `FrozenOrderedBag`, don't have that hold because ==
     # takes the items' order into account.
     
     def __lt__(self, other):
-        if not isinstance(other, _BaseTallyMixin):
+        if not isinstance(other, _BaseBagMixin):
             return NotImplemented
         found_strict_difference = False # Until challenged.
         for element, count in self.items():
@@ -242,7 +242,7 @@ class _BaseTallyMixin:
         return found_strict_difference
     
     def __le__(self, other):
-        if not isinstance(other, _BaseTallyMixin):
+        if not isinstance(other, _BaseBagMixin):
             return NotImplemented
         for element, count in self.items():
             try:
@@ -254,7 +254,7 @@ class _BaseTallyMixin:
         return True
     
     def __gt__(self, other):
-        if not isinstance(other, _BaseTallyMixin):
+        if not isinstance(other, _BaseBagMixin):
             return NotImplemented
         found_strict_difference = False # Until challenged.
         for element, count in self.items():
@@ -269,7 +269,7 @@ class _BaseTallyMixin:
         return found_strict_difference
     
     def __ge__(self, other):
-        if not isinstance(other, _BaseTallyMixin):
+        if not isinstance(other, _BaseBagMixin):
             return NotImplemented
         for element, count in self.items():
             try:
@@ -281,13 +281,13 @@ class _BaseTallyMixin:
         return True
             
 
-class _TallyMixin(_BaseTallyMixin):
+class _BagMixin(_BaseBagMixin):
     # blocktodo: add all mutable methods, like __iadd__ and everything
     is_ordered = False
 
         
         
-class _OrderedTallyMixin:
+class _OrderedBagMixin:
     is_ordered = True
     def __repr__(self):
         if not self:
@@ -346,14 +346,14 @@ class _OrderedDictDelegator(collections.MutableMapping):
 
 
                 
-class Tally(_TallyMixin, collections.UserDict):
+class Bag(_BagMixin, collections.UserDict):
     '''
-    A tally that counts items.
+    A bag that counts items.
     
     This is a mapping between items and their count:
     
-        >>> Tally('aaabcbc')
-        Tally({'a': 3, 'b': 2, 'c': 2})
+        >>> Bag('aaabcbc')
+        Bag({'a': 3, 'b': 2, 'c': 2})
     
     It can be created from either an iterable like above, or from a `dict`. 
     
@@ -368,14 +368,14 @@ class Tally(_TallyMixin, collections.UserDict):
     _dict = property(lambda self: self.data)
     
                 
-class OrderedTally(_OrderedTallyMixin, _TallyMixin, _OrderedDictDelegator):
+class OrderedBag(_OrderedBagMixin, _BagMixin, _OrderedDictDelegator):
     '''
-    An ordered tally that counts items.
+    An ordered bag that counts items.
     
     This is a ordered mapping between items and their count:
     
-        >>> OrderedTally('aaabcbc')
-        OrderedTally((('a', 3), ('b', 2), ('c', 2)))
+        >>> OrderedBag('aaabcbc')
+        OrderedBag((('a', 3), ('b', 2), ('c', 2)))
     
     It can be created from either an iterable like above, or from a `dict`. 
     
@@ -393,14 +393,14 @@ class OrderedTally(_OrderedTallyMixin, _TallyMixin, _OrderedDictDelegator):
     _dict = property(lambda self: self.data)
     
                 
-class FrozenTally(_BaseTallyMixin, FrozenDict):
+class FrozenBag(_BaseBagMixin, FrozenDict):
     '''
-    An immutable tally that counts items.
+    An immutable bag that counts items.
     
     This is an immutable mapping between items and their count:
     
-        >>> FrozenTally('aaabcbc')
-        FrozenTally({'a': 3, 'b': 2, 'c': 2})
+        >>> FrozenBag('aaabcbc')
+        FrozenBag({'a': 3, 'b': 2, 'c': 2})
     
     It can be created from either an iterable like above, or from a `dict`. 
     
@@ -416,15 +416,15 @@ class FrozenTally(_BaseTallyMixin, FrozenDict):
 
     '''                
                 
-class FrozenOrderedTally(_OrderedTallyMixin, _BaseTallyMixin,
+class FrozenOrderedBag(_OrderedBagMixin, _BaseBagMixin,
                          FrozenOrderedDict):
     '''
-    An immutable, ordered tally that counts items.
+    An immutable, ordered bag that counts items.
     
     This is an ordered mapping between items and their count:
     
-        >>> FrozenOrderedTally('aaabcbc')
-        FrozenOrderedTally((('a', 3), ('b', 2), ('c', 2)))
+        >>> FrozenOrderedBag('aaabcbc')
+        FrozenOrderedBag((('a', 3), ('b', 2), ('c', 2)))
     
     It can be created from either an iterable like above, or from a `dict`. 
     
