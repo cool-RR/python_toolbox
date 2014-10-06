@@ -129,7 +129,7 @@ class BaseBagTestCase(cute_testing.TestCase):
         assert self.bag_type(
             OrderedDict([('a', 0), ('b', 0.0), ('c', 1), ('d', 2.0),
                          ('e', decimal_module.Decimal('3.0'))])) == \
-                                                      self.bag_type('cddeee')
+                                                        self.bag_type('cddeee')
         with cute_testing.RaiseAssertor(TypeError):
             self.bag_type({'a': 1.1,})
         with cute_testing.RaiseAssertor(TypeError):
@@ -158,8 +158,8 @@ class BaseBagTestCase(cute_testing.TestCase):
             assert hash(bag_0) == hash(bag_1)
             assert {bag_0, bag_1} == {bag_0} == {bag_1}
         
-        bag_2 = bag_type(
-                           {'a': 0.0, 'b': 2, 'c': decimal_module.Decimal('0.0'),})
+        bag_2 = \
+              bag_type({'a': 0.0, 'b': 2, 'c': decimal_module.Decimal('0.0'),})
         bag_3 = bag_type('bb')
         
         if bag_type.is_frozen:
@@ -254,7 +254,6 @@ class FrozenOrderedBagTestCase(BaseFrozenBagTestCase,
 
     
 
-@_test_on(Bag, OrderedBag, FrozenBag, FrozenOrderedBag)
 def test_mutating(bag_type):
     bag = bag_type('abracadabra')
     with cute_testing.RaiseAssertor(TypeError):
