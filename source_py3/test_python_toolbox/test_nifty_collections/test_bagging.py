@@ -193,7 +193,6 @@ class BaseFrozenBagTestCase(BaseBagTestCase):
     
     
 class BaseOrderedBagTestCase(BaseBagTestCase):
-    is_ordered = True
     
     def test_ordering(self):
         ordered_bag_0 = self.bag_type('ababb')
@@ -208,7 +207,6 @@ class BaseOrderedBagTestCase(BaseBagTestCase):
           
     
 class BaseUnorderedBagTestCase(BaseBagTestCase):
-    is_ordered = False
     
     def test_ordering(self):
         bag_0 = self.bag_type('ababb')

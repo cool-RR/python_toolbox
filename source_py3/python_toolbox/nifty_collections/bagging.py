@@ -284,12 +284,10 @@ class _BaseBagMixin:
 
 class _BagMixin(_BaseBagMixin):
     # blocktodo: add all mutable methods, like __iadd__ and everything
-    is_ordered = False
-
+    pass
         
         
 class _OrderedBagMixin(Ordered):
-    is_ordered = True
     def __repr__(self):
         if not self:
             return '%s()' % type(self).__name__
