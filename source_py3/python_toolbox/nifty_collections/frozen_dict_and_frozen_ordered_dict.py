@@ -6,6 +6,7 @@ import operator
 import functools
 import itertools
 
+from .abstract import Ordered
 from .ordered_dict import OrderedDict
 
 
@@ -58,7 +59,7 @@ class FrozenDict(_AbstractFrozenDict):
     _dict_type = dict
         
 
-class FrozenOrderedDict(_AbstractFrozenDict):
+class FrozenOrderedDict(Ordered, _AbstractFrozenDict):
     _dict_type = OrderedDict
     
     def __eq__(self, other):

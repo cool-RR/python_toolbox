@@ -11,6 +11,7 @@ import functools
 from .lazy_tuple import LazyTuple
 from .ordered_dict import OrderedDict
 from .frozen_dict_and_frozen_ordered_dict import FrozenDict, FrozenOrderedDict
+from .abstract import Ordered
 
 try:                                    # Load C helper function if available
     from _collections import _count_elements
@@ -287,7 +288,7 @@ class _BagMixin(_BaseBagMixin):
 
         
         
-class _OrderedBagMixin:
+class _OrderedBagMixin(Ordered):
     is_ordered = True
     def __repr__(self):
         if not self:
@@ -298,7 +299,7 @@ class _OrderedBagMixin:
         )
     
 
-class _OrderedDictDelegator(collections.MutableMapping):
+class _OrderedDictDelegator(Ordered, collections.MutableMapping):
 
     # Start by filling-out the abstract methods
     def __init__(self, dict=None, **kwargs):
@@ -392,6 +393,7 @@ class OrderedBag(_OrderedBagMixin, _BagMixin, _OrderedDictDelegator):
     '''
     _dict = property(lambda self: self.data)
     
+    
                 
 class FrozenBag(_BaseBagMixin, FrozenDict):
     '''
@@ -417,7 +419,7 @@ class FrozenBag(_BaseBagMixin, FrozenDict):
     '''                
                 
 class FrozenOrderedBag(_OrderedBagMixin, _BaseBagMixin,
-                         FrozenOrderedDict):
+                       FrozenOrderedDict):
     '''
     An immutable, ordered bag that counts items.
     
