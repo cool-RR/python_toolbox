@@ -248,6 +248,12 @@ class BaseMutableBagTestCase(BaseBagTestCase):
         if isinstance(bag, nifty_collections.Ordered):
             assert key == 'a'
         assert bag == bag_type([c for c in 'abracadabra' if c != key])
+        other_key, other_value = bag.popitem()
+        assert other_key in 'abracadabra'
+        if isinstance(bag, nifty_collections.Ordered):
+            assert key == 'd'
+        assert bag == bag_type([c for c in 'abracadabra'
+                                                 if c not in {key, other_key}])
 
         bag = bag_type('abracadabra')
         del bag['a']
@@ -328,6 +334,7 @@ class BaseUnorderedBagTestCase(BaseBagTestCase):
 
     
 class BagTestCase(BaseMutableBagTestCase, BaseUnorderedBagTestCase):
+    __test__ = True
     bag_type = Bag
 
     _repr_result_pattern = ("^Bag\\({(?:(?:'b': 3, 'a': 2)|"
@@ -335,6 +342,7 @@ class BagTestCase(BaseMutableBagTestCase, BaseUnorderedBagTestCase):
 
 class OrderedBagTestCase(BaseMutableBagTestCase,
                            BaseOrderedBagTestCase):
+    __test__ = True
     bag_type = OrderedBag
     
     _repr_result_pattern = ("^OrderedBag\\(\\[\\('a', 2\\), "
@@ -345,13 +353,15 @@ class OrderedBagTestCase(BaseMutableBagTestCase,
     
     
 class FrozenBagTestCase(BaseFrozenBagTestCase, BaseUnorderedBagTestCase):
+    __test__ = True
     bag_type = FrozenBag
     
     _repr_result_pattern = ("^FrozenBag\\({(?:(?:'b': 3, 'a': 2)|"
                             "(?:'a': 2, 'b': 3))}\\)$")
 
 class FrozenOrderedBagTestCase(BaseFrozenBagTestCase,
-                           BaseOrderedBagTestCase):
+                               BaseOrderedBagTestCase):
+    __test__ = True
     bag_type = FrozenOrderedBag
     
     _repr_result_pattern = ("^FrozenOrderedBag\\(\\[\\('a', 2\\), "

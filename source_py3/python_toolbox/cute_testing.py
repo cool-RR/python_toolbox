@@ -140,5 +140,6 @@ def assert_polite_wrapper(wrapper, wrapped=None, same_signature=True):
     
     
 class TestCase(nose.case.Test):
-    pass
-        
+    @classmethod
+    def address(cls):
+        return '.'.join((cls.__module__, cls.__name__))        
