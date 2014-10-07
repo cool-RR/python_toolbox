@@ -50,8 +50,8 @@ class BrutePermSpace:
             isinstance(iterable_or_length, collections.Iterable) else \
                                    sequence_tools.CuteRange(iterable_or_length)
         self.sequence_length = len(self.sequence)
-        self._sequence_frozen_tally = \
-                                 nifty_collections.FrozenTally(self.sequence)
+        self._sequence_frozen_bag = \
+                                 nifty_collections.FrozenBag(self.sequence)
         self.is_recurrent = len(set(self.sequence)) < len(self.sequence)
         self.n_elements = n_elements if n_elements is not None else \
                                                              len(self.sequence)
@@ -72,7 +72,7 @@ class BrutePermSpace:
             def make_iterator():
                 crap = set()
                 for item in self._iter():
-                    fc = nifty_collections.FrozenTally(item)
+                    fc = nifty_collections.FrozenBag(item)
                     if fc in crap:
                         continue
                     else:
@@ -93,7 +93,7 @@ class BrutePermSpace:
             if candidate in yielded_candidates:
                 continue
             # if nifty_collections.FrozenCounter(candidate) > \
-                                                 # self._sequence_frozen_tally:
+                                                 # self._sequence_frozen_bag:
                 # continue
             if any(candidate[self.domain.index(key)] != value for
                                          key, value in self.fixed_map.items()):

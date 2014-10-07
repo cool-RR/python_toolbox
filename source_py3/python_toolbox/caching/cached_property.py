@@ -29,7 +29,7 @@ class CachedProperty(misc_tools.OwnNameDiscoveringDescriptor):
             personality = CachedProperty(_get_personality)
             
     You can also put in a value as the first argument if you'd like to have it
-    returned instead of using a getter. (It can be a totally static value like
+    returned instead of using a getter. (It can be a tobag static value like
     `0`). If this value happens to be a callable but you'd still like it to be
     used as a static value, use `force_value_not_getter=True`.
     '''

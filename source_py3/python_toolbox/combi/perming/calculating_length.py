@@ -14,13 +14,13 @@ _length_of_recurrent_perm_space_cache = {}
 
 def calculate_length_of_recurrent_perm_space(k, ftt):
     cache = _length_of_recurrent_perm_space_cache
-    if not isinstance(ftt, nifty_collections.FrozenTallyTally):
-        ftt = nifty_collections.FrozenTallyTally(ftt)
+    if not isinstance(ftt, nifty_collections.FrozenBagBag):
+        ftt = nifty_collections.FrozenBagBag(ftt)
     if k == 0:
         return 1
     elif k == 1:
         assert ftt
-        # (Works because `FrozenTallyTally` has a functioning `__bool__`,
+        # (Works because `FrozenBagBag` has a functioning `__bool__`,
         # unlike Python's `Counter`.)
         return ftt.n_elements
     try:
@@ -42,13 +42,13 @@ def calculate_length_of_recurrent_perm_space(k, ftt):
     # The last level is calculated. Time to make our way up.
     for k_, level in enumerate(reversed(levels), (k - len(levels) + 1)):
         if k_ == 1:
-            for ftt_, sub_ftt_tally in level.items():
+            for ftt_, sub_ftt_bag in level.items():
                 cache[(k_, ftt_)] = ftt_.n_elements
         else:
-            for ftt_, sub_ftt_tally in level.items():
+            for ftt_, sub_ftt_bag in level.items():
                 cache[(k_, ftt_)] = sum(
                     (cache[(k_ - 1, sub_ftt)] * factor for
-                           sub_ftt, factor in sub_ftt_tally.items())
+                           sub_ftt, factor in sub_ftt_bag.items())
                 )
     
     return cache[(k, ftt)]
@@ -62,13 +62,13 @@ _length_of_recurrent_comb_space_cache = {}
 
 def calculate_length_of_recurrent_comb_space(k, ftt):
     cache = _length_of_recurrent_comb_space_cache
-    if not isinstance(ftt, nifty_collections.FrozenTallyTally):
-        ftt = nifty_collections.FrozenTallyTally(ftt)
+    if not isinstance(ftt, nifty_collections.FrozenBagBag):
+        ftt = nifty_collections.FrozenBagBag(ftt)
     if k == 0:
         return 1
     elif k == 1:
         assert ftt
-        # (Works because `FrozenTallyTally` has a functioning `__bool__`,
+        # (Works because `FrozenBagBag` has a functioning `__bool__`,
         # unlike Python's `Counter`.)
         return ftt.n_elements
     try:
