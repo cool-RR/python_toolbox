@@ -15,6 +15,7 @@ from python_toolbox import sequence_tools
 from python_toolbox import cute_testing
 
 
+from python_toolbox import nifty_collections
 from python_toolbox.nifty_collections import (Bag, OrderedBag,
                                               FrozenBag, FrozenOrderedBag,
                                               OrderedDict)
@@ -76,6 +77,11 @@ class BaseBagTestCase(cute_testing.TestCase):
             self._repr_result_pattern, 
             repr(self.bag_type('ababb'))
         )
+        
+
+    def test_no_subtract(self):
+        # It's a silly method, yo.
+        assert not hasattr(self.bag_type, 'subtract')
         
 
     def test_comparison(self):
@@ -180,6 +186,77 @@ class BaseMutableBagTestCase(BaseBagTestCase):
             {bag: None,}
         with cute_testing.RaiseAssertor(TypeError):
             hash(bag)
+            
+    def test_mutating(bag_type):
+        bag = bag_type('abracadabra')
+        with cute_testing.RaiseAssertor(TypeError):
+            bag['a'] += 1
+        with cute_testing.RaiseAssertor(TypeError):
+            bag['a'] -= 1
+        with cute_testing.RaiseAssertor(TypeError):
+            bag['a'] = 7
+        
+    
+    def test_mutating(bag_type):
+        bag = bag_type('abracadabra')
+        bag['a'] += 1
+        assert bag == bag_type('abracadabra' + 'a')
+            
+        bag = bag_type('abracadabra')
+        bag['a'] -= 1
+        assert bag == bag_type('abracadabr')
+
+        bag = bag_type('abracadabra')
+        bag['a'] %= 2
+        assert bag == bag_type('abrcdbr')
+
+        bag = bag_type('abracadabra')
+        bag += bag
+        assert bag == bag_type('abracadabr' * 2)
+
+        bag = bag_type('abracadabra')
+        bag -= bag
+        assert bag == bag_type()
+
+        bag = bag_type('abracadabra')
+        bag %= 2
+        assert bag == bag_type('acd')
+
+        bag = bag_type('abracadabra')
+        bag['a'] = 7
+        assert bag == bag_type('abracadabra' + 'aa')
+
+        bag = bag_type('abracadabra')
+        bag.set('a', 7)
+        assert bag == bag_type('abracadabra' + 'aa')
+
+        bag = bag_type('abracadabra')
+        assert bag.setdefault('a', 7) == 5
+        assert bag == bag_type('abracadabra')
+        
+        bag = bag_type('abracadabra')
+        assert bag.setdefault('x', 7) == 7
+        assert bag == bag_type('abracadabra' + 'x' * 7)
+
+        bag = bag_type('abracadabra')
+        assert bag.pop('a', 7) == 7
+        assert bag == bag_type('brcdbr')
+
+        bag = bag_type('abracadabra')
+        key, value = bag.popitem()
+        assert key in 'abracadabra'
+        if isinstance(bag, nifty_collections.Ordered):
+            assert key == 'a'
+        assert bag == bag_type([c for c in 'abracadabra' if c != key])
+
+        bag = bag_type('abracadabra')
+        del bag['a']
+        assert bag == bag_type('brcdbr')
+
+        bag = bag_type('abracadabra')
+        bag.update(bag)
+        assert bag == bag_type('abracadabra')
+            
         
     
 class BaseFrozenBagTestCase(BaseBagTestCase):
@@ -191,7 +268,38 @@ class BaseFrozenBagTestCase(BaseBagTestCase):
         assert {bag: bag} == {bag: bag}
         assert isinstance(hash(bag), int)
     
-    
+
+    def test_mutating(bag_type):
+        bag = bag_type('abracadabra')
+        with cute_testing.RaiseAssertor(TypeError):
+            bag['a'] += 1
+        with cute_testing.RaiseAssertor(TypeError):
+            bag['a'] -= 1
+        with cute_testing.RaiseAssertor(TypeError):
+            bag['a'] %= 2
+        with cute_testing.RaiseAssertor(TypeError):
+            bag += bag
+        with cute_testing.RaiseAssertor(TypeError):
+            bag -= bag
+        with cute_testing.RaiseAssertor(TypeError):
+            bag %= bag
+        with cute_testing.RaiseAssertor(TypeError):
+            bag['a'] = 7
+        with cute_testing.RaiseAssertor(TypeError):
+            bag.set('a', 7)
+        with cute_testing.RaiseAssertor(TypeError):
+            bag.setdefault('a', 7)
+        with cute_testing.RaiseAssertor(TypeError):
+            bag.pop('a', 7)
+        with cute_testing.RaiseAssertor(TypeError):
+            bag.popitem()
+        with cute_testing.RaiseAssertor(TypeError):
+            del bag['a']
+        with cute_testing.RaiseAssertor(TypeError):
+            bag.update(bag)
+            
+        
+              
 class BaseOrderedBagTestCase(BaseBagTestCase):
     
     def test_ordering(self):
@@ -252,14 +360,3 @@ class FrozenOrderedBagTestCase(BaseFrozenBagTestCase,
 
     
 
-def test_mutating(bag_type):
-    bag = bag_type('abracadabra')
-    with cute_testing.RaiseAssertor(TypeError):
-        bag['a'] += 1
-    with cute_testing.RaiseAssertor(TypeError):
-        bag['a'] -= 1
-    with cute_testing.RaiseAssertor(TypeError):
-        bag['a'] = 7
-    
-
-    
