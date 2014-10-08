@@ -483,7 +483,8 @@ class _OrderedBagMixin(Ordered):
     def __eq__(self, other):
         if type(self) != type(other):
             return False
-        for item, other_item in itertools.zip_longest(self, other):
+        for item, other_item in itertools.zip_longest(self.items(),
+                                                      other.items()):
             if item != other_item:
                 return False
         else:
@@ -613,7 +614,10 @@ class FrozenBag(_BaseBagMixin, FrozenDict):
     Also, unlike `collections.Counter`, it's immutable, therefore it's also
     hashable, and thus it can be used as a key in dicts and sets.
 
-    '''                
+    '''
+    def __hash__(self):
+        return hash((type(self), frozenset(self.items())))
+      
                 
 class FrozenOrderedBag(_OrderedBagMixin, _BaseBagMixin,
                        FrozenOrderedDict):
@@ -640,4 +644,6 @@ class FrozenOrderedBag(_OrderedBagMixin, _BaseBagMixin,
        a key in dicts and sets.
        
     '''
-    pass
+    def __hash__(self):
+        return hash((type(self), tuple(self.items())))
+        

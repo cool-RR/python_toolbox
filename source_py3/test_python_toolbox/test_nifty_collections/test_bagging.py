@@ -87,10 +87,9 @@ class BaseBagTestCase(cute_testing.TestCase):
         
         
     def test_repr(self):
-        assert re.match(
-            self._repr_result_pattern, 
-            repr(self.bag_type('ababb'))
-        )
+        bag = self.bag_type('ababb')
+        assert re.match(self._repr_result_pattern, repr(bag))
+        assert eval(repr(bag)) == bag
         
 
     def test_no_subtract(self):
