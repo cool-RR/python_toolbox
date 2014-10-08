@@ -323,7 +323,6 @@ class _BaseBagMixin:
         return True
             
     def __repr__(self):
-        # Overridden in `_OrderedBagMixin`.
         if not self:
             return '%s()' % type(self).__name__
         return '%s(%s)' % (
@@ -471,13 +470,6 @@ class _MutableBagMixin(_BaseBagMixin):
 
 
 class _OrderedBagMixin(Ordered):
-    def __repr__(self):
-        if not self:
-            return '%s()' % type(self).__name__
-        return '%s(%s)' % (
-            type(self).__name__,
-            '[%s]' % ', '.join('%s' % (item,) for item in self.items())
-        )
     __reversed__ = lambda self: reversed(self._dict)
     
     def __eq__(self, other):

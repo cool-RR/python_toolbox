@@ -88,8 +88,8 @@ class BaseBagTestCase(cute_testing.TestCase):
         
     def test_repr(self):
         bag = self.bag_type('ababb')
-        assert re.match(self._repr_result_pattern, repr(bag))
         assert eval(repr(bag)) == bag
+        assert re.match(self._repr_result_pattern, repr(bag))
         
 
     def test_no_subtract(self):
@@ -486,8 +486,8 @@ class OrderedBagTestCase(BaseMutableBagTestCase,
     __test__ = True
     bag_type = OrderedBag
     
-    _repr_result_pattern = ("^OrderedBag\\(\\[\\('a', 2\\), "
-                            "\\('b', 3\\)\\]\\)$")
+    _repr_result_pattern = ("^OrderedBag\\(OrderedDict\\(\\[\\('a', 2\\), "
+                            "\\('b', 3\\)\\]\\)\\)$")
 
         
 
@@ -505,8 +505,8 @@ class FrozenOrderedBagTestCase(BaseFrozenBagTestCase,
     __test__ = True
     bag_type = FrozenOrderedBag
     
-    _repr_result_pattern = ("^FrozenOrderedBag\\(\\[\\('a', 2\\), "
-                            "\\('b', 3\\)\\]\\)$")
+    _repr_result_pattern = ("^FrozenOrderedBag\\(OrderedDict\\(\\[\\('a', 2\\), "
+                            "\\('b', 3\\)\\]\\)\\)$")
 
 
     
