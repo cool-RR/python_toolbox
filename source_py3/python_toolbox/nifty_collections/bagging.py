@@ -35,13 +35,13 @@ class _ZeroCountAttempted(Exception):
 def _process_count(count):
     if not math_tools.is_integer(count):
         raise TypeError(
-            'You passed %s as the count of %s, while a `Bag` can only handle '
-            'integer counts.' % (count, key)
+            'You passed %s as a count, while a `Bag` can only handle integer '
+            'counts.' % count
         )
     if count < 0:
         raise TypeError(
-            "You passed %s as the count of %s, while `Bag` doesn't support "
-            "negative amounts." % (count, key)
+            "You passed %s as a count, while `Bag` doesn't support negative "
+            "amounts." % count
         )
     
     if count == 0:

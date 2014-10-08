@@ -329,7 +329,8 @@ class BaseUnorderedBagTestCase(BaseBagTestCase):
         bag_0 = self.bag_type('ababb')
         bag_1 = self.bag_type('bbbaa')
         assert bag_0 == bag_1
-        assert hash(bag_0) == hash(bag_1)
+        if issubclass(self.bag_type, collections.Hashable):
+            assert hash(bag_0) == hash(bag_1)
         
 ###############################################################################
 
