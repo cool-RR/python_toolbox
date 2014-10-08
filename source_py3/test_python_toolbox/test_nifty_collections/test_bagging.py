@@ -414,15 +414,15 @@ class BaseFrozenBagTestCase(BaseBagTestCase):
         bag = bag_reference
         with cute_testing.RaiseAssertor(TypeError):
             bag['a'] = 7
-        with cute_testing.RaiseAssertor(TypeError):
+        with cute_testing.RaiseAssertor(AttributeError):
             bag.setdefault('a', 7)
-        with cute_testing.RaiseAssertor(TypeError):
+        with cute_testing.RaiseAssertor(AttributeError):
             bag.pop('a', 7)
-        with cute_testing.RaiseAssertor(TypeError):
+        with cute_testing.RaiseAssertor(AttributeError):
             bag.popitem()
         with cute_testing.RaiseAssertor(TypeError):
             del bag['a']
-        with cute_testing.RaiseAssertor(TypeError):
+        with cute_testing.RaiseAssertor(AttributeError):
             bag.update(bag)
             
         

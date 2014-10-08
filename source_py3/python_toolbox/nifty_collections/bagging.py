@@ -322,13 +322,13 @@ class _BaseBagMixin:
         return True
             
     def __repr__(self):
+        # Overridden in `_OrderedBagMixin`.
         if not self:
             return '%s()' % type(self).__name__
         return '%s(%s)' % (
             type(self).__name__,
-            '[%s]' % ', '.join('%s' % (item,) for item in self.items())
+            self._dict if self._dict else ''
         )
-
 
     __deepcopy__ = lambda self, memo: type(self)(
                                                copy.deepcopy(self._dict, memo))
@@ -377,14 +377,6 @@ class _MutableBagMixin(_BaseBagMixin):
         else:
             del self[key]
             return value
-
-    def __repr__(self):
-        if not self:
-            return '%s()' % type(self).__name__
-        return '%s(%s)' % (
-            type(self).__name__,
-            self._dict if self._dict else ''
-        )
 
     def __ior__(self, other):
         '''
