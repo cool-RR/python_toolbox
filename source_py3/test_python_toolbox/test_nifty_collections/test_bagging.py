@@ -209,7 +209,7 @@ class BaseMutableBagTestCase(BaseBagTestCase):
 
         bag = self.bag_type('abracadabra')
         bag += bag
-        assert bag == self.bag_type('abracadabr' * 2)
+        assert bag == self.bag_type('abracadabra' * 2)
 
         bag = self.bag_type('abracadabra')
         bag -= bag
@@ -224,10 +224,6 @@ class BaseMutableBagTestCase(BaseBagTestCase):
         assert bag == self.bag_type('abracadabra' + 'aa')
 
         bag = self.bag_type('abracadabra')
-        bag.set('a', 7)
-        assert bag == self.bag_type('abracadabra' + 'aa')
-
-        bag = self.bag_type('abracadabra')
         assert bag.setdefault('a', 7) == 5
         assert bag == self.bag_type('abracadabra')
         
@@ -236,7 +232,9 @@ class BaseMutableBagTestCase(BaseBagTestCase):
         assert bag == self.bag_type('abracadabra' + 'x' * 7)
 
         bag = self.bag_type('abracadabra')
-        assert bag.pop('a', 7) == 7
+        assert bag.pop('a', 7) == 5
+        assert bag == self.bag_type('brcdbr')
+        assert bag.pop('x', 7) == 7
         assert bag == self.bag_type('brcdbr')
 
         bag = self.bag_type('abracadabra')
@@ -289,8 +287,6 @@ class BaseFrozenBagTestCase(BaseBagTestCase):
             bag %= bag
         with cute_testing.RaiseAssertor(TypeError):
             bag['a'] = 7
-        with cute_testing.RaiseAssertor(TypeError):
-            bag.set('a', 7)
         with cute_testing.RaiseAssertor(TypeError):
             bag.setdefault('a', 7)
         with cute_testing.RaiseAssertor(TypeError):

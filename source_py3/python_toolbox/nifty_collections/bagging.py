@@ -8,6 +8,8 @@ import numbers
 import collections
 import functools
 
+from python_toolbox import math_tools
+
 from .lazy_tuple import LazyTuple
 from .ordered_dict import OrderedDict
 from .frozen_dict_and_frozen_ordered_dict import FrozenDict, FrozenOrderedDict
@@ -21,6 +23,33 @@ except ImportError:
         mapping_get = mapping.get
         for element in iterable:
             mapping[element] = mapping_get(element, 0) + 1
+            
+            
+class _NO_DEFAULT: 
+    pass
+            
+class _ZeroCountAttempted(Exception):
+    pass
+        
+
+def _process_count(count):
+    if not math_tools.is_integer(count):
+        raise TypeError(
+            'You passed %s as the count of %s, while a `Bag` can only handle '
+            'integer counts.' % (count, key)
+        )
+    if count < 0:
+        raise TypeError(
+            "You passed %s as the count of %s, while `Bag` doesn't support "
+            "negative amounts." % (count, key)
+        )
+    
+    if count == 0:
+        raise _ZeroCountAttempted
+    
+    return int(count)
+    
+    
 
 class _BaseBagMixin:
     '''Mixin for `FrozenBag` and `FrozenOrderedBag`.'''
@@ -32,23 +61,10 @@ class _BaseBagMixin:
         
         if isinstance(iterable, collections.Mapping):
             for key, value, in iterable.items():
-                if not math_tools.is_integer(value):
-                    raise TypeError(
-                        'You passed %s as the count of %s, while '
-                        'a `Bag` can only handle integer counts.' %
-                                                                   (value, key)
-                    )
-                if value < 0:
-                    raise TypeError(
-                        "You passed %s as the count of %s, while "
-                        "`Bag` doesn't support negative amounts." %
-                                                                   (value, key)
-                    )
-                    
-                if value == 0:
+                try:
+                    self._dict[key] = _process_count(value)
+                except _ZeroCountAttempted:
                     continue
-                
-                self._dict[key] = int(value)
         else:
             _count_elements(self._dict, iterable)
 
@@ -291,8 +307,52 @@ class _BaseBagMixin:
 
 class _MutableBagMixin(_BaseBagMixin):
     # blocktodo: ensure all mutable methods, like __iadd__ and everything
-    pass
+    
+    def __setitem__(self, i, count):
+        try:
+            super().__setitem__(i, _process_count(count))
+        except _ZeroCountAttempted:
+            del self[i]
         
+    
+    def __imod__(self, modulo):
+        for key in tuple(self.keys()):
+            self[key] %= modulo
+        return self
+    
+    def setdefault(self, key, default):
+        current_count = self[key]
+        if current_count > 0:
+            return current_count
+        else:
+            self[key] = default
+            return default
+
+    def __delitem__(self, key):
+        # We're making `__delitem__` not raise an exception on missing or
+        # zero-count elements because we're automatically deleting zero-count
+        # elements even though they seem to exist from the outside, so we're
+        # avoiding raising exceptions where someone would try to explicitly
+        # delete them.
+        try:
+            del self._dict[key]
+        except KeyError:
+            pass
+        
+    def pop(self, key, default=_NO_DEFAULT):
+        '''D.pop(k[,d]) -> v, remove specified key and return the corresponding value.
+          If key is not found, d is returned if given, otherwise KeyError is raised.
+        '''
+        value = self[key]
+        if value == 0 and default is not _NO_DEFAULT:
+            return default
+        else:
+            del self[key]
+            return value
+
+
+    
+
 class _OrderedBagMixin(Ordered):
     def __repr__(self):
         if not self:
