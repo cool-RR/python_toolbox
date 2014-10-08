@@ -480,6 +480,16 @@ class _OrderedBagMixin(Ordered):
         )
     __reversed__ = lambda self: reversed(self._dict)
     
+    def __eq__(self, other):
+        if type(self) != type(other):
+            return False
+        for item, other_item in itertools.zip_longest(self, other):
+            if item != other_item:
+                return False
+        else:
+            return True
+        
+    
 
 class _BaseDictDelegator(collections.MutableMapping):
 

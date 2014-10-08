@@ -439,9 +439,11 @@ class BaseOrderedBagTestCase(BaseBagTestCase):
         ordered_bag_0 = self.bag_type('ababb')
         ordered_bag_1 = self.bag_type('bbbaa')
         assert ordered_bag_0 == ordered_bag_0
-        assert hash(ordered_bag_0) == hash(ordered_bag_0)
+        if issubclass(self.bag_type, collections.Hashable):
+            assert hash(ordered_bag_0) == hash(ordered_bag_0)
         assert ordered_bag_1 == ordered_bag_1
-        assert hash(ordered_bag_1) == hash(ordered_bag_1)
+        if issubclass(self.bag_type, collections.Hashable):
+            assert hash(ordered_bag_1) == hash(ordered_bag_1)
         assert ordered_bag_0 != ordered_bag_1
         assert ordered_bag_0 <= ordered_bag_1
         assert ordered_bag_0 >= ordered_bag_1
