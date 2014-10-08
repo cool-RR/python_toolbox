@@ -211,93 +211,102 @@ class BaseMutableBagTestCase(BaseBagTestCase):
         with cute_testing.RaiseAssertor(TypeError):
             hash(bag)
             
-    def test_mutating(self):
-        bag = self.bag_type('abracadabra')
-        with cute_testing.RaiseAssertor(TypeError):
-            bag['a'] += 1
-        with cute_testing.RaiseAssertor(TypeError):
-            bag['a'] -= 1
-        with cute_testing.RaiseAssertor(TypeError):
-            bag['a'] = 7
-        
     
     def test_mutating(self):
-        bag = self.bag_type('abracadabra')
+        bag = bag_reference = self.bag_type('abracadabra')
         bag['a'] += 1
         assert bag == self.bag_type('abracadabra' + 'a')
+        assert bag is bag_reference
             
-        bag = self.bag_type('abracadabra')
+        bag = bag_reference = self.bag_type('abracadabra')
         bag['a'] -= 1
         assert bag == self.bag_type('abracadabr')
-
-        bag = self.bag_type('abracadabra')
+        assert bag is bag_reference
+        
+        bag = bag_reference = self.bag_type('abracadabra')
         bag['a'] *= 2
         assert bag == self.bag_type('abracadabra' + 'a' * 5)
+        assert bag is bag_reference
 
-        bag = self.bag_type('abracadabra')
+        bag = bag_reference = self.bag_type('abracadabra')
         bag['a'] //= 2
         assert bag == self.bag_type('abracdbr')
+        assert bag is bag_reference
 
-        bag = self.bag_type('abracadabra')
+        bag = bag_reference = self.bag_type('abracadabra')
         bag['a'] %= 2
         assert bag == self.bag_type('abrcdbr')
+        assert bag is bag_reference
 
-        bag = self.bag_type('abracadabra')
+        bag = bag_reference = self.bag_type('abracadabra')
         bag['a'] **= 2
         assert bag == self.bag_type('abracadabra' + 'a' * 20)
+        assert bag is bag_reference
 
-        bag = self.bag_type('abracadabra')
+        bag = bag_reference = self.bag_type('abracadabra')
         bag += bag
         assert bag == self.bag_type('abracadabra' * 2)
+        assert bag is bag_reference
 
-        bag = self.bag_type('abracadabra')
+        bag = bag_reference = self.bag_type('abracadabra')
         bag -= bag
         assert bag == self.bag_type()
+        assert bag is bag_reference
 
-        bag = self.bag_type('abracadabra')
+        bag = bag_reference = self.bag_type('abracadabra')
         bag *= 2
         assert bag == self.bag_type('abracadabra' * 2)
+        assert bag is bag_reference
 
-        bag = self.bag_type('abracadabra')
+        bag = bag_reference = self.bag_type('abracadabra')
         bag //= 2
         assert bag == self.bag_type('aabr')
+        assert bag is bag_reference
         
-        bag = self.bag_type('abracadabra')
+        bag = bag_reference = self.bag_type('abracadabra')
         bag //= self.bag_type('aabr')
         assert bag == 2
+        assert bag is bag_reference
 
-        bag = self.bag_type('abracadabra')
+        bag = bag_reference = self.bag_type('abracadabra')
         bag %= 2
         assert bag == self.bag_type('acd')
+        assert bag is bag_reference
 
-        bag = self.bag_type('abracadabra')
+        bag = bag_reference = self.bag_type('abracadabra')
         bag %= self.bag_type('aabr')
         assert bag == self.bag_type('acd')
+        assert bag is bag_reference
         
-        bag = self.bag_type('abracadabra')
+        bag = bag_reference = self.bag_type('abracadabra')
         bag **= 2
         assert bag == self.bag_type('abracadabra' + 'a' * 20 + 'b' * 2 +
                                     'r' * 2)
+        assert bag is bag_reference
 
-        bag = self.bag_type('abracadabra')
+        bag = bag_reference = self.bag_type('abracadabra')
         bag['a'] = 7
         assert bag == self.bag_type('abracadabra' + 'aa')
+        assert bag is bag_reference
 
-        bag = self.bag_type('abracadabra')
+        bag = bag_reference = self.bag_type('abracadabra')
         assert bag.setdefault('a', 7) == 5
         assert bag == self.bag_type('abracadabra')
+        assert bag is bag_reference
         
-        bag = self.bag_type('abracadabra')
+        bag = bag_reference = self.bag_type('abracadabra')
         assert bag.setdefault('x', 7) == 7
         assert bag == self.bag_type('abracadabra' + 'x' * 7)
+        assert bag is bag_reference
 
-        bag = self.bag_type('abracadabra')
+        bag = bag_reference = self.bag_type('abracadabra')
         assert bag.pop('a', 7) == 5
         assert bag == self.bag_type('brcdbr')
         assert bag.pop('x', 7) == 7
         assert bag == self.bag_type('brcdbr')
+        assert bag is bag_reference
 
-        bag = self.bag_type('abracadabra')
+        bag = bag_reference = self.bag_type('abracadabra')
         key, value = bag.popitem()
         assert key in 'abracadabra'
         if isinstance(bag, nifty_collections.Ordered):
@@ -309,14 +318,16 @@ class BaseMutableBagTestCase(BaseBagTestCase):
             assert key == 'd'
         assert bag == self.bag_type([c for c in 'abracadabra'
                                                  if c not in {key, other_key}])
+        assert bag is bag_reference
 
-        bag = self.bag_type('abracadabra')
+        bag = bag_reference = self.bag_type('abracadabra')
         del bag['a']
         assert bag == self.bag_type('brcdbr')
 
-        bag = self.bag_type('abracadabra')
+        bag = bag_reference = self.bag_type('abracadabra')
         bag.update(bag)
         assert bag == self.bag_type('abracadabra')
+        assert bag is bag_reference
             
         
     

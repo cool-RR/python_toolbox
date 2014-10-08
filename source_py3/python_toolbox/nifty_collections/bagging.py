@@ -1,4 +1,4 @@
-# Copyright 2009-2014 Ram Rachum.,
+# Copyright 2009-2014 Ram Rachum.
 # This program is distributed under the MIT license.
 
 import operator
@@ -117,36 +117,6 @@ class _BaseBagMixin:
     def __contains__(self, item):
         return (self[item] >= 1)
     
-
-    def __add__(self, other):
-        '''
-        Add counts from two bags.
-
-            >>> FrozenBag('abbb') + FrozenBag('bcc')
-            FrozenBag({'b': 4, 'c': 2, 'a': 1})
-            
-        '''
-        if not isinstance(other, _BaseBagMixin):
-            return NotImplemented
-        return type(self)(self._dict_type(
-            (key, self[key] + other[key])
-            for key in set(self) | set(other))
-        )
-
-    def __sub__(self, other):
-        '''
-        Subtract count, but keep only results with positive counts.
-
-            >>> FrozenBag('abbbc') - FrozenBag('bccd')
-            FrozenBag({'b': 2, 'a': 1})
-            
-        '''
-        if not isinstance(other, _BaseBagMixin):
-            return NotImplemented
-        return type(self)(self._dict_type(
-            (key, max(self[key] - other[key], 0)) for key in self)
-        )
-
     def __or__(self, other):
         '''
         Get the maximum of value in either of the input bags.
@@ -178,22 +148,54 @@ class _BaseBagMixin:
         )
 
 
+    def __add__(self, other):
+        if not isinstance(other, _BaseBagMixin):
+            return NotImplemented
+        return type(self)(self._dict_type(
+            (key, self[key] + other[key])
+            for key in set(self) | set(other))
+        )
+
+    def __sub__(self, other):
+        '''
+        blocktododoc
+        Negative counts are truncated to zero.        
+        '''
+        if not isinstance(other, _BaseBagMixin):
+            return NotImplemented
+        return type(self)(self._dict_type(
+            (key, max(self[key] - other[key], 0)) for key in self)
+        )
+
     def __mul__(self, other):
         if not math_tools.is_integer(other):
             return NotImplemented
         return type(self)(self._dict_type((key, count * other) for
                                           key, count in self.items()))
-    def __pow__(self, other, modulo=None):
-        if not math_tools.is_integer(other):
-            return NotImplemented
-        if modulo is None:
-            return type(self)(self._dict_type((key, count ** other) for
-                                              key, count in self.items()))
-        else:
-            return type(self)(self._dict_type(
-                (key, pow(count, other, modulo)) for
-                key, count in self.items())
+    def __floordiv__(self, other):
+        if math_tools.is_integer(other):
+            return (
+                type(self)(self._dict_type((key, count // other) for
+                                           key, count in self.items()))
             )
+        elif isinstance(other, _BaseBagMixin):
+            for key in other:
+                if key not in self:
+                    assert other[key] >= 1
+                    return (0, self.copy() if
+                            isinstance(self, collections.Hashable) else self)
+                division_results = []
+                for key in self:
+                    if other[key] >= 1:
+                        division_results.append(self[key] // other[key])
+                if division_results:
+                    return min(division_results)
+                else:
+                    raise ZeroDivisionError
+            
+        else:
+            return NotImplemented
+        
     def __mod__(self, other):
         if math_tools.is_integer(other):
             return (
@@ -204,22 +206,7 @@ class _BaseBagMixin:
             return divmod(self, other)[1]
         else:
             return NotImplemented
-    def __floordiv__(self, other):
-        if math_tools.is_integer(other):
-            return (
-                type(self)(self._dict_type((key, count // other) for
-                                           key, count in self.items())), 
-            )
-        elif isinstance(other, _BaseBagMixin):
-            for key in other:
-                if key not in self:
-                    assert other[key] >= 1
-                    return (0, self.copy() if
-                            isinstance(self, collections.Hashable) else self)
-            return min(self[key] // other[key] for key in self)
-            
-        else:
-            return NotImplemented
+        
     def __divmod__(self, other):
         if math_tools.is_integer(other):
             return (
@@ -243,6 +230,19 @@ class _BaseBagMixin:
             
         else:
             return NotImplemented
+
+    def __pow__(self, other, modulo=None):
+        if not math_tools.is_integer(other):
+            return NotImplemented
+        if modulo is None:
+            return type(self)(self._dict_type((key, count ** other) for
+                                              key, count in self.items()))
+        else:
+            return type(self)(self._dict_type(
+                (key, pow(count, other, modulo)) for
+                key, count in self.items())
+            )
+
     __bool__ = lambda self: any(True for element in self.elements())
     
     
@@ -341,8 +341,6 @@ class _BaseBagMixin:
         
 
 class _MutableBagMixin(_BaseBagMixin):
-    # blocktodo: ensure all mutable methods, like __iadd__ and everything
-    
     def __setitem__(self, i, count):
         try:
             super().__setitem__(i, _process_count(count))
@@ -350,10 +348,6 @@ class _MutableBagMixin(_BaseBagMixin):
             del self[i]
         
     
-    def __imod__(self, modulo):
-        for key in tuple(self.keys()):
-            self[key] %= modulo
-        return self
     
     def setdefault(self, key, default):
         current_count = self[key]
@@ -393,7 +387,72 @@ class _MutableBagMixin(_BaseBagMixin):
             self._dict if self._dict else ''
         )
 
+    def __ior__(self, other):
+        '''
+        Get the maximum of value in either of the input bags.
+
+            >>> FrozenBag('abbb') | FrozenBag('bcc')
+            FrozenBag({'b': 3, 'c': 2, 'a': 1})
+            
+        '''
+        if not isinstance(other, _BaseBagMixin):
+            return NotImplemented
+        for key, other_count in other.items():
+            self[key] = max(self[key], other_count)
     
+    def __iand__(self, other):
+        '''
+
+        Get the minimum of corresponding counts.
+            >>> FrozenBag('abbb') & FrozenBag('bcc')
+            FrozenBag({'b': 1})
+            
+        '''
+        if not isinstance(other, _BaseBagMixin):
+            return NotImplemented
+        for key, count in self.items():
+            self[key] = min(count, other[key])
+
+    def __iadd__(self, other):
+        if not isinstance(other, _BaseBagMixin):
+            return NotImplemented
+        for key, other_count in other.items():
+            self[key] += other_count
+
+    def __isub__(self, other):
+        '''
+        blocktododoc
+        Negative counts are truncated to zero.        
+        '''
+        if not isinstance(other, _BaseBagMixin):
+            return NotImplemented
+        for key, other_count in other.items():
+            self[key] = max(self[key] - other_count, 0)
+
+
+    def __imul__(self, other):
+        if not math_tools.is_integer(other):
+            return NotImplemented
+        for key in self:
+            self[key] *= other
+            
+    def __ifloordiv__(self, other):
+        if not math_tools.is_integer(other):
+            return NotImplemented
+        for key in self:
+            self[key] //= other
+        
+    def __imod__(self, other):
+        if not math_tools.is_integer(other):
+            return NotImplemented
+        for key in self:
+            self[key] %= other
+
+    def __ipow__(self, other, modulo=None):
+        if not math_tools.is_integer(other):
+            return NotImplemented
+        for key in self:
+            self[key] = power(self[key], other, modulo)
 
 class _OrderedBagMixin(Ordered):
     def __repr__(self):

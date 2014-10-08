@@ -136,7 +136,7 @@ def product(numbers):
 def is_integer(x):
     try:
         inted_x = int(x)
-    except (ValueError, OverflowError):
+    except (TypeError, ValueError, OverflowError):
         return False
     return inted_x == x
     
