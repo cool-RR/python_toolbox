@@ -464,7 +464,7 @@ class _MutableBagMixin(_BaseBagMixin):
         if not math_tools.is_integer(other):
             return NotImplemented
         for key in tuple(self):
-            self[key] = power(self[key], other, modulo)
+            self[key] = pow(self[key], other, modulo)
         return self
 
 
