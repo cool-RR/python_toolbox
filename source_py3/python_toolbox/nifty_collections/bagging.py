@@ -13,6 +13,7 @@ from python_toolbox import math_tools
 
 from .lazy_tuple import LazyTuple
 from .ordered_dict import OrderedDict
+from .ordered_set import OrderedSet
 from .frozen_dict_and_frozen_ordered_dict import FrozenDict, FrozenOrderedDict
 from .abstract import Ordered, DefinitelyUnordered
 
@@ -129,7 +130,7 @@ class _BaseBagMixin:
             return NotImplemented
         return type(self)(self._dict_type(
             (key, max(self[key], other[key]))
-            for key in set(self) | set(other))
+            for key in OrderedSet(self) | OrderedSet(other))
         )
     
     def __and__(self, other):
@@ -144,7 +145,7 @@ class _BaseBagMixin:
             return NotImplemented
         return type(self)(self._dict_type(
             (key, min(self[key], other[key]))
-            for key in set(self) & set(other))
+            for key in OrderedSet(self) & OrderedSet(other))
         )
 
 
@@ -153,7 +154,7 @@ class _BaseBagMixin:
             return NotImplemented
         return type(self)(self._dict_type(
             (key, self[key] + other[key])
-            for key in set(self) | set(other))
+            for key in OrderedSet(self) & OrderedSet(other))
         )
 
     def __sub__(self, other):
