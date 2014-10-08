@@ -23,7 +23,7 @@ from python_toolbox.nifty_collections import (Bag, OrderedBag,
 infinity = float('inf')
 infinities = (infinity, -infinity)
 
-class BaseBagTestCase(cute_testing.TestCase):
+class BaseBagTestCase(nose.Test): # blocktodo: using cute testing class?1
     def test_common(self, bag_type):
         bag = self.bag_type('abracadabra')
         assert bag == collections.Counter('abracadabra') == \
