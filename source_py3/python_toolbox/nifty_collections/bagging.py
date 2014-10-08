@@ -114,8 +114,6 @@ class _BaseBagMixin:
         )
     
 
-    __pos__ = lambda self: self
-
     def __add__(self, other):
         '''
         Add counts from two bags.
@@ -126,21 +124,10 @@ class _BaseBagMixin:
         '''
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented
-        
-        # Using `OrderedDict` to store interim results because
-        # `FrozenOrderedBag` inherits from this class and it needs to have
-        # items in order.
-        result = OrderedDict()
-        
-        for element, count in self.items():
-            new_count = count + other[element]
-            assert new_count > 0
-            result[element] = new_count
-        for element, count in other.items():
-            assert count > 0
-            if element not in self:
-                result[element] = count
-        return type(self)(result)
+        return type(self)(self._dict_type(
+            (key, self[key] + other[key])
+            for key in set(self) | self(other))
+        )
 
     def __sub__(self, other):
         '''
@@ -152,16 +139,9 @@ class _BaseBagMixin:
         '''
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented
-        
-        # Using `OrderedDict` to store interim results because
-        # `FrozenOrderedBag` inherits from this class and it needs to have
-        # items in order.
-        result = OrderedDict()
-        
-        for element, count in self.items():
-            new_count = count - other[element]
-            result[element] = new_count
-        return type(self)(result)
+        return type(self)(self._dict_type(
+            (key, max(self[key] - other[key], 0)) for key in self)
+        )
 
     def __or__(self, other):
         '''
@@ -173,55 +153,71 @@ class _BaseBagMixin:
         '''
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented
-
-        # Using `OrderedDict` to store interim results because
-        # `FrozenOrderedBag` inherits from this class and it needs to have
-        # items in order.
-        result = OrderedDict()
-
-        for element, count in self.items():
-            other_count = other[element]
-            new_count = other_count if count < other_count else count
-            assert new_count > 0
-            result[element] = new_count
-        for element, count in other.items():
-            assert count > 0
-            if element not in self:
-                result[element] = count
-        return type(self)(result)
-
+        return type(self)(self._dict_type(
+            (key, max(self[key], other[key]))
+            for key in set(self) | self(other))
+        )
+    
     def __and__(self, other):
         '''
-        Get the minimum of corresponding counts.
 
+        Get the minimum of corresponding counts.
             >>> FrozenBag('abbb') & FrozenBag('bcc')
             FrozenBag({'b': 1})
             
         '''
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented
-
-        # Using `OrderedDict` to store interim results because
-        # `FrozenOrderedBag` inherits from this class and it needs to have
-        # items in order.
-        result = OrderedDict()
-
-        for element, count in self.items():
-            other_count = other[element]
-            new_count = count if count < other_count else other_count
-            result[element] = new_count
-        return type(self)(result)
+        return type(self)(self._dict_type(
+            (key, min(self[key], other[key]))
+            for key in set(self) & self(other))
+        )
 
 
     def __mul__(self, other):
         if not math_tools.is_integer(other):
             return NotImplemented
-        return type(self)(OrderedDict((key, count * other) for key, count
-                                      in self.items()))
-        
-        
+        return type(self)(self._dict_type((key, count * other) for
+                                          key, count in self.items()))
+    def __mod__(self, other):
+        if math_tools.is_integer(other):
+            return type(self)(self._dict_type((key, count % other) for
+                                              key, count in self.items()))
+        elif isinstance(other, _BaseBagMixin):
+            for key in other:
+                if key not in self:
+                    assert other[key] >= 1
+                    return 0
+            return min(self[key] // other[key] for key in self)
+        else:
+            return NotImplemented
 
 
+        if not math_tools.is_integer(other):
+            return NotImplemented
+    def __pow__(self, other, modulo=None):
+        if not math_tools.is_integer(other):
+            return NotImplemented
+        if modulo is None:
+            return type(self)(self._dict_type((key, count ** other) for
+                                              key, count in self.items()))
+        else:
+            return type(self)(self._dict_type(
+                (key, pow(count, other, modulo)) for
+                key, count in self.items())
+            )
+    def __floordiv__(self, other):
+        if math_tools.is_integer(other):
+            return type(self)(self._dict_type((key, count // other) for
+                                              key, count in self.items()))
+        elif isinstance(other, _BaseBagMixin):
+            for key in other:
+                if key not in self:
+                    assert other[key] >= 1
+                    return 0
+            return min(self[key] // other[key] for key in self)
+        else:
+            return NotImplemented
     __bool__ = lambda self: any(True for element in self.elements())
     
     
