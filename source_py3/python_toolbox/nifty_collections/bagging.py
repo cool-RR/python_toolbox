@@ -113,6 +113,15 @@ class _BaseBagMixin:
             itertools.starmap(itertools.repeat, self.items())
         )
     
+    def __contains__(self, item):
+        try:
+            count = self[item]
+        except KeyError:
+            return False
+        else:
+            assert count >= 1
+            return True
+    
 
     def __add__(self, other):
         '''
@@ -179,22 +188,6 @@ class _BaseBagMixin:
             return NotImplemented
         return type(self)(self._dict_type((key, count * other) for
                                           key, count in self.items()))
-    def __mod__(self, other):
-        if math_tools.is_integer(other):
-            return type(self)(self._dict_type((key, count % other) for
-                                              key, count in self.items()))
-        elif isinstance(other, _BaseBagMixin):
-            for key in other:
-                if key not in self:
-                    assert other[key] >= 1
-                    return 0
-            return min(self[key] // other[key] for key in self)
-        else:
-            return NotImplemented
-
-
-        if not math_tools.is_integer(other):
-            return NotImplemented
     def __pow__(self, other, modulo=None):
         if not math_tools.is_integer(other):
             return NotImplemented
@@ -206,16 +199,53 @@ class _BaseBagMixin:
                 (key, pow(count, other, modulo)) for
                 key, count in self.items())
             )
+    def __mod__(self, other):
+        if math_tools.is_integer(other):
+            return (
+                type(self)(self._dict_type((key, count % other) for
+                                           key, count in self.items())), 
+            )
+        elif isinstance(other, _BaseBagMixin):
+            return divmod(self, other)[1]
+        else:
+            return NotImplemented
     def __floordiv__(self, other):
         if math_tools.is_integer(other):
-            return type(self)(self._dict_type((key, count // other) for
-                                              key, count in self.items()))
+            return (
+                type(self)(self._dict_type((key, count // other) for
+                                           key, count in self.items())), 
+            )
         elif isinstance(other, _BaseBagMixin):
             for key in other:
                 if key not in self:
                     assert other[key] >= 1
-                    return 0
+                    return (0, self.copy() if
+                            isinstance(self, collections.Hashable) else self)
             return min(self[key] // other[key] for key in self)
+            
+        else:
+            return NotImplemented
+    def __divmod__(self, other):
+        if math_tools.is_integer(other):
+            return (
+                type(self)(self._dict_type((key, count // other) for
+                                           key, count in self.items())), 
+                type(self)(self._dict_type((key, count % other) for
+                                           key, count in self.items())), 
+            )
+        elif isinstance(other, _BaseBagMixin):
+            for key in other:
+                if key not in self:
+                    assert other[key] >= 1
+                    return (0, self.copy() if
+                            isinstance(self, collections.Hashable) else self)
+            floordiv_result = min(self[key] // other[key] for key in self)
+            mod_result = type(self)(
+                self._dict_type((key, count - other[key] * floordiv_result) for
+                                key, count in self.items())
+            )
+            return (floordiv_result, mod_result)
+            
         else:
             return NotImplemented
     __bool__ = lambda self: any(True for element in self.elements())
@@ -373,6 +403,7 @@ class _OrderedBagMixin(Ordered):
             type(self).__name__,
             '[%s]' % ', '.join('%s' % (item,) for item in self.items())
         )
+    __reversed__ = lambda self: reversed(self._dict)
     
 
 class _BaseDictDelegator(collections.MutableMapping):
