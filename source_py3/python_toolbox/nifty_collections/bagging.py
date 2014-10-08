@@ -350,6 +350,13 @@ class _MutableBagMixin(_BaseBagMixin):
             del self[key]
             return value
 
+    def __repr__(self):
+        if not self:
+            return '%s()' % type(self).__name__
+        return '%s(%s)' % (
+            type(self).__name__,
+            self._dict if self._dict else ''
+        )
 
     
 
@@ -509,10 +516,4 @@ class FrozenOrderedBag(_OrderedBagMixin, _BaseBagMixin,
        a key in dicts and sets.
        
     '''
-    def __repr__(self):
-        if not self:
-            return '%s()' % type(self).__name__
-        return '%s(%s)' % (
-            type(self).__name__,
-            '[%s]' % ', '.join('%s' % (item,) for item in self.items())
-        )
+    pass

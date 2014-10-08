@@ -25,6 +25,7 @@ infinity = float('inf')
 infinities = (infinity, -infinity)
 
 class BaseBagTestCase(cute_testing.TestCase):
+    __test__ = False
     def test_common(self):
         bag = self.bag_type('abracadabra')
         assert bag == collections.Counter('abracadabra') == \
