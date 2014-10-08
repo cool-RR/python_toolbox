@@ -37,7 +37,7 @@ class BaseBagTestCase(cute_testing.TestCase):
         assert set(bag) == set(bag.keys()) == set('abracadabra')
         assert set(bag.values()) == {1, 2, 5}
         assert set(bag.items()) == \
-                                 {('a', 5), ('r', 2), ('b', 2), ('c', 1), ('d', 1)}
+                             {('a', 5), ('r', 2), ('b', 2), ('c', 1), ('d', 1)}
         assert bag['a'] == 5
         assert bag['missing value'] == 0
         assert len(bag) == 5
@@ -47,8 +47,8 @@ class BaseBagTestCase(cute_testing.TestCase):
         assert 'x' not in self.bag_type({'x': 0,})
         
         assert set(bag.most_common()) == \
-                                 set(collections.Counter(bag).most_common()) == \
-                           set(collections.Counter(bag.elements()).most_common())
+                               set(collections.Counter(bag).most_common()) == \
+                         set(collections.Counter(bag.elements()).most_common())
         
         assert bag + bag == self.bag_type('abracadabra' * 2)
         assert bag - bag == self.bag_type()
@@ -363,13 +363,13 @@ class BaseFrozenBagTestCase(BaseBagTestCase):
         assert bag is not bag_reference
         bag = bag_reference
         
-        bag //= 2
-        assert bag == bag_reference + bag_reference + bag_reference
+        bag //= 3
+        assert bag == self.bag_type('a')
         assert bag is not bag_reference
         bag = bag_reference
         
-        bag //= 
-        assert bag == bag_reference + bag_reference + bag_reference
+        bag //= self.bag_type('aabr')
+        assert bag == 2
         assert bag is not bag_reference
         bag = bag_reference
         
@@ -444,7 +444,7 @@ class BagTestCase(BaseMutableBagTestCase, BaseUnorderedBagTestCase):
                             "(?:'a': 2, 'b': 3))}\\)$")
 
 class OrderedBagTestCase(BaseMutableBagTestCase,
-                           BaseOrderedBagTestCase):
+                         BaseOrderedBagTestCase):
     __test__ = True
     bag_type = OrderedBag
     
