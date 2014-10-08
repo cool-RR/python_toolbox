@@ -7,6 +7,7 @@ import pickle
 import itertools
 import collections
 import decimal as decimal_module
+from python_toolbox.third_party import unittest2
 
 import nose
 
@@ -23,12 +24,12 @@ from python_toolbox.nifty_collections import (Bag, OrderedBag,
 infinity = float('inf')
 infinities = (infinity, -infinity)
 
-class BaseBagTestCase(nose.Test): # blocktodo: using cute testing class?1
-    def test_common(self, bag_type):
+class BaseBagTestCase(cute_testing.TestCase):
+    def test_common(self):
         bag = self.bag_type('abracadabra')
         assert bag == collections.Counter('abracadabra') == \
                collections.Counter(bag) == \
-               bag_type(collections.Counter('abracadabra'))
+               self.bag_type(collections.Counter('abracadabra'))
         
         assert len(bag) == 5
         assert set(bag) == set(bag.keys()) == set('abracadabra')
@@ -45,15 +46,15 @@ class BaseBagTestCase(nose.Test): # blocktodo: using cute testing class?1
         
         assert bag + bag == self.bag_type('abracadabra' * 2)
         assert bag - bag == self.bag_type()
-        assert bag - bag_type('a') == self.bag_type('abracadabr')
-        assert bag - bag_type('a') == self.bag_type('abracadabr')
-        assert bag | bag_type('a') == bag
+        assert bag - self.bag_type('a') == self.bag_type('abracadabr')
+        assert bag - self.bag_type('a') == self.bag_type('abracadabr')
+        assert bag | self.bag_type('a') == bag
         assert bag | bag == bag | bag | bag == bag
-        assert bag & bag_type('a') == bag_type('a')
+        assert bag & self.bag_type('a') == self.bag_type('a')
         assert bag & bag == \
                bag & bag & bag == bag
         
-        assert bag_type(bag.elements()) == bag
+        assert self.bag_type(bag.elements()) == bag
         
         assert +bag == bag
         with cute_testing.RaiseAssertor(TypeError):
@@ -61,11 +62,7 @@ class BaseBagTestCase(nose.Test): # blocktodo: using cute testing class?1
         
         assert re.match('^(Frozen)?(Ordered)?Bag\(.*$', repr(bag))
         
-        assert bag.copy({'meow': 9}) == \
-               bag.copy(meow=9) == \
-               bag_type(OrderedDict(
-                   [('a', 5), ('b', 2), ('r', 2), ('c', 1), ('d', 1), ('meow', 9)])
-               )
+        assert bag.copy() == bag
         
         assert pickle.loads(pickle.dumps(bag)) == bag
         
@@ -93,11 +90,11 @@ class BaseBagTestCase(nose.Test): # blocktodo: using cute testing class?1
         not_a_bag = {}
         
         hierarchy = (
-            (bag_4, {bag_3, bag_2, bag_1, bag_0}),
-            (bag_3, {bag_1, bag_0}),
-            (bag_2, {bag_1, bag_0}),
-            (bag_1, {bag_0}),
-            (bag_0, set()),
+            (bag_4, [bag_3, bag_2, bag_1, bag_0]),
+            (bag_3, [bag_1, bag_0]),
+            (bag_2, [bag_1, bag_0]),
+            (bag_1, [bag_0]),
+            (bag_0, []), 
         )
         
         for item, smaller_items in hierarchy:
@@ -110,7 +107,7 @@ class BaseBagTestCase(nose.Test): # blocktodo: using cute testing class?1
                 assert item > smaller_item
                 assert item != smaller_item
             not_smaller_items = [item for item in next(zip(*hierarchy)) if
-                                                      item not in smaller_item]
+                                                     item not in smaller_items]
             for not_smaller_item in not_smaller_items:
                 assert not item < smaller_item
                 
@@ -155,20 +152,20 @@ class BaseBagTestCase(nose.Test): # blocktodo: using cute testing class?1
         with cute_testing.RaiseAssertor(TypeError):
             self.bag_type({'a': ('still', 'nope'),})
         
-    def test_ignores_zero(bag_type):
-        bag_0 = bag_type({'a': 0,})
-        bag_1 = bag_type()
+    def test_ignores_zero(self):
+        bag_0 = self.bag_type({'a': 0,})
+        bag_1 = self.bag_type()
         assert bag_0 == bag_1
         
-        if bag_type.is_frozen:
+        if issubclass(self.bag_type, collections.Hashable):
             assert hash(bag_0) == hash(bag_1)
             assert {bag_0, bag_1} == {bag_0} == {bag_1}
         
         bag_2 = \
-              bag_type({'a': 0.0, 'b': 2, 'c': decimal_module.Decimal('0.0'),})
-        bag_3 = bag_type('bb')
+         self.bag_type({'a': 0.0, 'b': 2, 'c': decimal_module.Decimal('0.0'),})
+        bag_3 = self.bag_type('bb')
         
-        if bag_type.is_frozen:
+        if issubclass(self.bag_type, collections.Hashable):
             assert hash(bag_2) == hash(bag_3)
             assert {bag_2, bag_3} == {bag_2} == {bag_3}
     
@@ -176,10 +173,10 @@ class BaseBagTestCase(nose.Test): # blocktodo: using cute testing class?1
         
         
 class BaseMutableBagTestCase(BaseBagTestCase):
-    is_frozen = False
-    
     def test_hash(self):
         bag = self.bag_type('abracadabra')
+        assert not isinstance(bag, collections.Hashable)
+        assert not issubclass(self.bag_type, collections.Hashable)
         with cute_testing.RaiseAssertor(TypeError):
             {bag}
         with cute_testing.RaiseAssertor(TypeError):
@@ -266,10 +263,11 @@ class BaseMutableBagTestCase(BaseBagTestCase):
         
     
 class BaseFrozenBagTestCase(BaseBagTestCase):
-    is_frozen = True
     
     def test_hash(self):
         bag = self.bag_type('abracadabra')
+        assert isinstance(bag, collections.Hashable)
+        assert issubclass(self.bag_type, collections.Hashable)
         assert {bag, bag} == {bag}
         assert {bag: bag} == {bag: bag}
         assert isinstance(hash(bag), int)

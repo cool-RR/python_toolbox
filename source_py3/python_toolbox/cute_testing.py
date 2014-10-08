@@ -139,7 +139,5 @@ def assert_polite_wrapper(wrapper, wrapped=None, same_signature=True):
     assert wrapper.__wrapped__ == wrapped
     
     
-class TestCase(nose.case.Test):
-    @classmethod
-    def address(cls):
-        return '.'.join((cls.__module__, cls.__name__))        
+class TestCase(unittest2.TestCase):
+    pass

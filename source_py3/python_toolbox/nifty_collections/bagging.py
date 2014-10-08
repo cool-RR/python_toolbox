@@ -281,11 +281,17 @@ class _BaseBagMixin:
                 return False
         return True
             
+    def __repr__(self):
+        if not self:
+            return '%s()' % type(self).__name__
+        return '%s(%s)' % (
+            type(self).__name__,
+            '[%s]' % ', '.join('%s' % (item,) for item in self.items())
+        )
 
-class _BagMixin(_BaseBagMixin):
-    # blocktodo: add all mutable methods, like __iadd__ and everything
+class _MutableBagMixin(_BaseBagMixin):
+    # blocktodo: ensure all mutable methods, like __iadd__ and everything
     pass
-        
         
 class _OrderedBagMixin(Ordered):
     def __repr__(self):
@@ -345,7 +351,7 @@ class _OrderedDictDelegator(Ordered, collections.MutableMapping):
 
 
                 
-class Bag(_BagMixin, collections.UserDict):
+class Bag(_MutableBagMixin, collections.UserDict):
     '''
     A bag that counts items.
     
@@ -367,7 +373,7 @@ class Bag(_BagMixin, collections.UserDict):
     _dict = property(lambda self: self.data)
     
                 
-class OrderedBag(_OrderedBagMixin, _BagMixin, _OrderedDictDelegator):
+class OrderedBag(_OrderedBagMixin, _MutableBagMixin, _OrderedDictDelegator):
     '''
     An ordered bag that counts items.
     

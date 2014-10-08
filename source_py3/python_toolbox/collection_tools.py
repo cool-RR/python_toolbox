@@ -34,7 +34,7 @@ def _get_all_contained_counters(counter, use_lazy_tuple=True):
         counter,
         (
             collections.Counter,
-            nifty_collections.bagging._BagMixin
+            nifty_collections.bagging._MutableBagMixin
         )
     )
     counter_type = type(counter)
