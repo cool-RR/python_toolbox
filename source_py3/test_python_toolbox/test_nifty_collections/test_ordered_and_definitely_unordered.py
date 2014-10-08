@@ -25,12 +25,16 @@ def _make_instance_of_type(type_):
     
 
 def test():
-    ordereds = {list, tuple, str, bytearray, bytes,
-                nifty_collections.OrderedDict, collections.OrderedDict,
-                queue.Queue, multiprocessing.queues.Queue,
-                collections.deque}
-    definitely_unordereds = {set, frozenset, collections.defaultdict,
-                             collections.Counter}
+    ordereds = {
+        list, tuple, str, bytearray, bytes,
+        nifty_collections.OrderedDict, collections.OrderedDict,
+        nifty_collections.OrderedBag, nifty_collections.FrozenOrderedBag, 
+        queue.Queue, collections.deque
+    }
+    definitely_unordereds = {
+        set, frozenset, collections.defaultdict, collections.Counter,
+        nifty_collections.Bag, nifty_collections.FrozenBag
+    }
     other_unordereds = {iter({1, 2, 3}), iter({1: 2,}), iter(frozenset('abc'))}
     
     things = ordereds | definitely_unordereds | other_unordereds
