@@ -213,6 +213,15 @@ class _BaseBagMixin:
         return type(self)(result)
 
 
+    def __mul__(self, other):
+        if not math_tools.is_integer(other):
+            return NotImplemented
+        return type(self)(OrderedDict((key, count * other) for key, count
+                                      in self.items()))
+        
+        
+
+
     __bool__ = lambda self: any(True for element in self.elements())
     
     

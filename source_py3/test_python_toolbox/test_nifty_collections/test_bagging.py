@@ -281,16 +281,38 @@ class BaseFrozenBagTestCase(BaseBagTestCase):
         assert isinstance(hash(bag), int)
     
 
-    def test_mutating(bag_type):
-        bag = bag_type('abracadabra')
+    def test_mutating(self):
+        bag = self.bag_type('abracadabra')
+        bag_reference = bag
+        assert bag is bag_reference
+        
         with cute_testing.RaiseAssertor(TypeError):
             bag['a'] += 1
         with cute_testing.RaiseAssertor(TypeError):
             bag['a'] -= 1
         with cute_testing.RaiseAssertor(TypeError):
             bag['a'] %= 2
-        with cute_testing.RaiseAssertor(TypeError):
-            bag += bag
+        
+        bag += bag
+        assert bag == bag_reference * 2
+        assert bag is not bag_reference
+        bag = bag_reference
+        
+        bag -= bag
+        assert bag == bag_reference * 2
+        assert bag is not bag_reference
+        bag = bag_reference
+        
+        bag %= bag
+        assert bag == bag_reference * 2
+        assert bag is not bag_reference
+        bag = bag_reference
+        
+        bag *= 3
+        assert bag == bag_reference + bag_reference + bag_reference
+        assert bag is not bag_reference
+        bag = bag_reference
+
         with cute_testing.RaiseAssertor(TypeError):
             bag -= bag
         with cute_testing.RaiseAssertor(TypeError):
