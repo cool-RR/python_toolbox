@@ -244,8 +244,13 @@ class BaseMutableBagTestCase(BaseBagTestCase):
         assert bag is bag_reference
 
         bag = bag_reference = self.bag_type('abracadabra')
-        bag += bag
-        assert bag == self.bag_type('abracadabra' * 2)
+        bag |= self.bag_type('axyzz')
+        assert bag == self.bag_type('abracadabra' + 'xyzz')
+        assert bag is bag_reference
+        
+        bag = bag_reference = self.bag_type('abracadabra')
+        bag &= self.bag_type('axyzz')
+        assert bag == self.bag_type('a')
         assert bag is bag_reference
 
         bag = bag_reference = self.bag_type('abracadabra')
@@ -359,43 +364,54 @@ class BaseFrozenBagTestCase(BaseBagTestCase):
             bag['a'] %= 2
         with cute_testing.RaiseAssertor(TypeError):
             bag['a'] **= 2
+    
+        bag = bag_reference
+        bag |= self.bag_type('axyzz')
+        assert bag == self.bag_type('abracadabra' + 'xyzz')
+        assert bag is not bag_reference
         
+        bag = bag_reference
+        bag &= self.bag_type('axyzz')
+        assert bag == self.bag_type('a')
+        assert bag is not bag_reference
+        
+        bag = bag_reference
         bag += bag
         assert bag == bag_reference * 2
         assert bag is not bag_reference
-        bag = bag_reference
         
+        bag = bag_reference
         bag -= self.bag_type('ab')
         assert bag == bag_reference - self.bag_type('ab') == \
                                                      self.bag_type('abracadar')
         assert bag is not bag_reference
-        bag = bag_reference
         
+        bag = bag_reference
         bag *= 3
         assert bag == bag_reference + bag_reference + bag_reference
         assert bag is not bag_reference
-        bag = bag_reference
         
+        bag = bag_reference
         bag //= 3
         assert bag == self.bag_type('a')
         assert bag is not bag_reference
-        bag = bag_reference
         
+        bag = bag_reference
         bag //= self.bag_type('aabr')
         assert bag == 2
         assert bag is not bag_reference
-        bag = bag_reference
         
+        bag = bag_reference
         bag %= 2
         assert bag == bag_reference % 2 == self.bag_type('acd')
         assert bag is not bag_reference
-        bag = bag_reference
         
+        bag = bag_reference
         bag %= self.bag_type('aabr')
         assert bag == 2
         assert bag is not bag_reference
-        bag = bag_reference
 
+        bag = bag_reference
         with cute_testing.RaiseAssertor(TypeError):
             bag['a'] = 7
         with cute_testing.RaiseAssertor(TypeError):

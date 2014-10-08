@@ -399,6 +399,8 @@ class _MutableBagMixin(_BaseBagMixin):
             return NotImplemented
         for key, other_count in other.items():
             self[key] = max(self[key], other_count)
+        return self
+            
     
     def __iand__(self, other):
         '''
@@ -412,12 +414,16 @@ class _MutableBagMixin(_BaseBagMixin):
             return NotImplemented
         for key, count in self.items():
             self[key] = min(count, other[key])
+        return self
+            
 
     def __iadd__(self, other):
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented
         for key, other_count in other.items():
             self[key] += other_count
+        return self
+            
 
     def __isub__(self, other):
         '''
@@ -428,6 +434,7 @@ class _MutableBagMixin(_BaseBagMixin):
             return NotImplemented
         for key, other_count in other.items():
             self[key] = max(self[key] - other_count, 0)
+        return self
 
 
     def __imul__(self, other):
@@ -435,24 +442,31 @@ class _MutableBagMixin(_BaseBagMixin):
             return NotImplemented
         for key in self:
             self[key] *= other
+        return self
+            
             
     def __ifloordiv__(self, other):
         if not math_tools.is_integer(other):
             return NotImplemented
         for key in self:
             self[key] //= other
+        return self
+            
         
     def __imod__(self, other):
         if not math_tools.is_integer(other):
             return NotImplemented
         for key in self:
             self[key] %= other
+        return self
+            
 
     def __ipow__(self, other, modulo=None):
         if not math_tools.is_integer(other):
             return NotImplemented
         for key in self:
             self[key] = power(self[key], other, modulo)
+        return self
 
 class _OrderedBagMixin(Ordered):
     def __repr__(self):
