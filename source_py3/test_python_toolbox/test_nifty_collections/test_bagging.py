@@ -408,7 +408,7 @@ class BaseFrozenBagTestCase(BaseBagTestCase):
         
         bag = bag_reference
         bag %= self.bag_type('aabr')
-        assert bag == 2
+        assert bag == self.bag_type('acd')
         assert bag is not bag_reference
 
         bag = bag_reference

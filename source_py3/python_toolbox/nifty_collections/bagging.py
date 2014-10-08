@@ -198,7 +198,7 @@ class _BaseBagMixin:
         if math_tools.is_integer(other):
             return (
                 type(self)(self._dict_type((key, count % other) for
-                                           key, count in self.items())), 
+                                           key, count in self.items()))
             )
         elif isinstance(other, _BaseBagMixin):
             return divmod(self, other)[1]
