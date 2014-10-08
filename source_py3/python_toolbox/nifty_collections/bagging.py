@@ -215,20 +215,7 @@ class _BaseBagMixin:
             )
         elif isinstance(other, _BaseBagMixin):
             
-            for key in other:
-                if key not in self:
-                    assert other[key] >= 1
-                    return (0, self.copy() if
-                            isinstance(self, collections.Hashable) else self)
-            division_results = []
-            for key in self:
-                if other[key] >= 1:
-                    division_results.append(self[key] // other[key])
-            if division_results:
-                floordiv_result = min(division_results)
-            else:
-                raise ZeroDivisionError
-
+            floordiv_result = self // other
             mod_result = type(self)(
                 self._dict_type((key, count - other[key] * floordiv_result) for
                                 key, count in self.items())
@@ -461,11 +448,16 @@ class _MutableBagMixin(_BaseBagMixin):
             
         
     def __imod__(self, other):
-        if not math_tools.is_integer(other):
+        if math_tools.is_integer(other):
+            for key in tuple(self):
+                self[key] %= other
+            return self
+        elif isinstance(other, _BaseBagMixin):
+            floordiv_result = self // other
+            self %= floordiv_result
+            return self
+        else:
             return NotImplemented
-        for key in tuple(self):
-            self[key] %= other
-        return self
             
 
     def __ipow__(self, other, modulo=None):
