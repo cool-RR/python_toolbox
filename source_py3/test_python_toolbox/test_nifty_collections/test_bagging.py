@@ -315,15 +315,21 @@ class BaseMutableBagTestCase(BaseBagTestCase):
         key, value = bag.popitem()
         assert key in 'abracadabra'
         if isinstance(bag, nifty_collections.Ordered):
-            assert key == 'a'
+            assert key == 'd'
         assert bag == self.bag_type([c for c in 'abracadabra' if c != key])
         other_key, other_value = bag.popitem()
         assert other_key in 'abracadabra'
-        if isinstance(bag, nifty_collections.Ordered):
-            assert key == 'd'
         assert bag == self.bag_type([c for c in 'abracadabra'
                                                  if c not in {key, other_key}])
         assert bag is bag_reference
+        if isinstance(bag, nifty_collections.Ordered):
+            assert key == 'd'
+            assert other_key == 'c'
+            first_key, first_value = bag.popitem(last=False)
+            assert (first_key, first_value) == ('a', 5)
+        else:
+            with cute_testing.RaiseAssertor(TypeError):
+                bag.popitem(last=False)
 
         bag = bag_reference = self.bag_type('abracadabra')
         del bag['a']

@@ -464,6 +464,10 @@ class _MutableBagMixin(_BaseBagMixin):
         for key in tuple(self):
             self[key] = pow(self[key], other, modulo)
         return self
+    
+    def popitem(self):
+        return self._dict.popitem()
+      
 
 
 class _OrderedBagMixin(Ordered):
@@ -573,6 +577,9 @@ class OrderedBag(_OrderedBagMixin, _MutableBagMixin, _OrderedDictDelegator):
     `collections.OrderedDict`.)
     
     '''
+    def popitem(self, last=True):
+        return self._dict.popitem(last=last)
+      
     
                 
 class FrozenBag(_BaseBagMixin, FrozenDict):
