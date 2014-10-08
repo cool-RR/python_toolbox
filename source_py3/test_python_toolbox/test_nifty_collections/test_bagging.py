@@ -62,7 +62,8 @@ class BaseBagTestCase(cute_testing.TestCase):
         
         assert self.bag_type(bag.elements()) == bag
         
-        assert +bag == bag
+        with cute_testing.RaiseAssertor(TypeError):
+            + bag
         with cute_testing.RaiseAssertor(TypeError):
             - bag
         
@@ -185,15 +186,16 @@ class BaseBagTestCase(cute_testing.TestCase):
             assert {bag_2, bag_3} == {bag_2} == {bag_3}
     
     def test_copy(self):
-        my_tuple = ('meow',)
-        bag = self.bag_type({my_tuple: 3, 'a': 4,})
+        class O: pass
+        o = O()
+        bag = self.bag_type({o: 3})
         bag_shallow_copy = copy.copy(bag)
         bag_deep_copy = copy.deepcopy(bag)
-        assert bag_shallow_copy == bag == bag_deep_copy
+        assert bag_shallow_copy == bag != bag_deep_copy
         assert next(iter(bag_shallow_copy)) == next(iter(bag_shallow_copy)) \
-                                                != next(iter(bag_shallow_copy))
+                                                   != next(iter(bag_deep_copy))
         assert next(iter(bag_shallow_copy)) is next(iter(bag_shallow_copy)) \
-                                            is not next(iter(bag_shallow_copy))
+                                               is not next(iter(bag_deep_copy))
         
         
         

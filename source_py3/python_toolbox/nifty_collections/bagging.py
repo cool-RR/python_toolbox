@@ -7,6 +7,7 @@ import itertools
 import numbers
 import collections
 import functools
+import copy
 
 from python_toolbox import math_tools
 
@@ -333,6 +334,11 @@ class _BaseBagMixin:
             type(self).__name__,
             '[%s]' % ', '.join('%s' % (item,) for item in self.items())
         )
+
+
+    __deepcopy__ = lambda self, memo: type(self)(
+                                               copy.deepcopy(self._dict, memo))
+        
 
 class _MutableBagMixin(_BaseBagMixin):
     # blocktodo: ensure all mutable methods, like __iadd__ and everything
