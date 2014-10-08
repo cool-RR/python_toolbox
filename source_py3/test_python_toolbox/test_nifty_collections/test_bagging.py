@@ -40,6 +40,10 @@ class BaseBagTestCase(cute_testing.TestCase):
         assert bag['a'] == 5
         assert bag['missing value'] == 0
         assert len(bag) == 5
+        assert 'a' in bag
+        assert 'r' in bag
+        assert 'R' not in bag
+        assert 'x' not in self.bag_type({'x': 0,})
         
         assert set(bag.most_common()) == \
                                  set(collections.Counter(bag).most_common()) == \
@@ -214,8 +218,20 @@ class BaseMutableBagTestCase(BaseBagTestCase):
         assert bag == self.bag_type('abracadabr')
 
         bag = self.bag_type('abracadabra')
+        bag['a'] *= 2
+        assert bag == self.bag_type('abracadabra' + 'a' * 5)
+
+        bag = self.bag_type('abracadabra')
+        bag['a'] //= 2
+        assert bag == self.bag_type('abracdbr')
+
+        bag = self.bag_type('abracadabra')
         bag['a'] %= 2
         assert bag == self.bag_type('abrcdbr')
+
+        bag = self.bag_type('abracadabra')
+        bag['a'] **= 2
+        assert bag == self.bag_type('abracadabra' + 'a' * 20)
 
         bag = self.bag_type('abracadabra')
         bag += bag
@@ -226,8 +242,29 @@ class BaseMutableBagTestCase(BaseBagTestCase):
         assert bag == self.bag_type()
 
         bag = self.bag_type('abracadabra')
+        bag *= 2
+        assert bag == self.bag_type('abracadabra' * 2)
+
+        bag = self.bag_type('abracadabra')
+        bag //= 2
+        assert bag == self.bag_type('aabr')
+        
+        bag = self.bag_type('abracadabra')
+        bag //= self.bag_type('aabr')
+        assert bag == 2
+
+        bag = self.bag_type('abracadabra')
         bag %= 2
         assert bag == self.bag_type('acd')
+
+        bag = self.bag_type('abracadabra')
+        bag %= self.bag_type('aabr')
+        assert bag == self.bag_type('acd')
+        
+        bag = self.bag_type('abracadabra')
+        bag **= 2
+        assert bag == self.bag_type('abracadabra' + 'a' * 20 + 'b' * 2 +
+                                    'r' * 2)
 
         bag = self.bag_type('abracadabra')
         bag['a'] = 7
@@ -291,20 +328,22 @@ class BaseFrozenBagTestCase(BaseBagTestCase):
         with cute_testing.RaiseAssertor(TypeError):
             bag['a'] -= 1
         with cute_testing.RaiseAssertor(TypeError):
+            bag['a'] *= 2
+        with cute_testing.RaiseAssertor(TypeError):
+            bag['a'] //= 2
+        with cute_testing.RaiseAssertor(TypeError):
             bag['a'] %= 2
+        with cute_testing.RaiseAssertor(TypeError):
+            bag['a'] **= 2
         
         bag += bag
         assert bag == bag_reference * 2
         assert bag is not bag_reference
         bag = bag_reference
         
-        bag -= bag
-        assert bag == bag_reference * 2
-        assert bag is not bag_reference
-        bag = bag_reference
-        
-        bag %= bag
-        assert bag == bag_reference * 2
+        bag -= self.bag_type('ab')
+        assert bag == bag_reference - self.bag_type('ab') == \
+                                                     self.bag_type('abracadar')
         assert bag is not bag_reference
         bag = bag_reference
         
@@ -312,11 +351,27 @@ class BaseFrozenBagTestCase(BaseBagTestCase):
         assert bag == bag_reference + bag_reference + bag_reference
         assert bag is not bag_reference
         bag = bag_reference
+        
+        bag //= 2
+        assert bag == bag_reference + bag_reference + bag_reference
+        assert bag is not bag_reference
+        bag = bag_reference
+        
+        bag //= 
+        assert bag == bag_reference + bag_reference + bag_reference
+        assert bag is not bag_reference
+        bag = bag_reference
+        
+        bag %= 2
+        assert bag == bag_reference % 2 == self.bag_type('acd')
+        assert bag is not bag_reference
+        bag = bag_reference
+        
+        bag %= self.bag_type('aabr')
+        assert bag == 2
+        assert bag is not bag_reference
+        bag = bag_reference
 
-        with cute_testing.RaiseAssertor(TypeError):
-            bag -= bag
-        with cute_testing.RaiseAssertor(TypeError):
-            bag %= bag
         with cute_testing.RaiseAssertor(TypeError):
             bag['a'] = 7
         with cute_testing.RaiseAssertor(TypeError):
@@ -345,7 +400,11 @@ class BaseOrderedBagTestCase(BaseBagTestCase):
         assert ordered_bag_0 <= ordered_bag_1
         assert ordered_bag_0 >= ordered_bag_1
           
-    
+    def test_reversed(self):
+        bag = self.bag_type('abracadabra')
+        assert tuple(reversed(self.bag)) == tuple(reversed(tuple(self.bag)))
+            
+          
 class BaseUnorderedBagTestCase(BaseBagTestCase):
     
     def test_ordering(self):
@@ -354,6 +413,12 @@ class BaseUnorderedBagTestCase(BaseBagTestCase):
         assert bag_0 == bag_1
         if issubclass(self.bag_type, collections.Hashable):
             assert hash(bag_0) == hash(bag_1)
+            
+            
+    def test_reversed(self):
+        bag = self.bag_type('abracadabra')
+        assert set(reversed(self.bag)) == set(self.bag)
+        
         
 ###############################################################################
 
