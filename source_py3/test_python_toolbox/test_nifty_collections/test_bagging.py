@@ -442,7 +442,7 @@ class BaseOrderedBagTestCase(BaseBagTestCase):
           
     def test_reversed(self):
         bag = self.bag_type('abracadabra')
-        assert tuple(reversed(self.bag)) == tuple(reversed(tuple(self.bag)))
+        assert tuple(reversed(bag)) == tuple(reversed(tuple(bag)))
             
           
 class BaseUnorderedBagTestCase(BaseBagTestCase):
@@ -457,7 +457,8 @@ class BaseUnorderedBagTestCase(BaseBagTestCase):
             
     def test_reversed(self):
         bag = self.bag_type('abracadabra')
-        assert set(reversed(self.bag)) == set(self.bag)
+        with cute_testing.RaiseAssertor(TypeError):
+            reversed(bag)
         
         
 ###############################################################################

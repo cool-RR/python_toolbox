@@ -332,6 +332,11 @@ class _BaseBagMixin:
 
     __deepcopy__ = lambda self, memo: type(self)(
                                                copy.deepcopy(self._dict, memo))
+    
+    def __reversed__(self):
+        # Gets overridden in `_OrderedBagMixin`.
+        raise TypeError("Can't reverse an unordered bag.")
+        
         
 
 class _MutableBagMixin(_BaseBagMixin):
