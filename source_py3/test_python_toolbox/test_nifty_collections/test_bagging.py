@@ -29,9 +29,10 @@ class BaseBagTestCase(cute_testing.TestCase):
     __test__ = False
     def test_common(self):
         bag = self.bag_type('abracadabra')
-        assert bag == collections.Counter('abracadabra') == \
-               collections.Counter(bag) == \
-               self.bag_type(collections.Counter('abracadabra'))
+        if not issubclass(self.bag_type, nifty_collections.Ordered):
+            assert bag == collections.Counter('abracadabra') == \
+                   collections.Counter(bag) == \
+                   self.bag_type(collections.Counter('abracadabra'))
         
         assert len(bag) == 5
         assert set(bag) == set(bag.keys()) == set('abracadabra')
