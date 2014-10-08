@@ -397,7 +397,7 @@ class _MutableBagMixin(_BaseBagMixin):
         '''
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented
-        for key, other_count in other.items():
+        for key, other_count in tuple(other.items()):
             self[key] = max(self[key], other_count)
         return self
             
@@ -412,7 +412,7 @@ class _MutableBagMixin(_BaseBagMixin):
         '''
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented
-        for key, count in self.items():
+        for key, count in tuple(self.items()):
             self[key] = min(count, other[key])
         return self
             
@@ -420,7 +420,7 @@ class _MutableBagMixin(_BaseBagMixin):
     def __iadd__(self, other):
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented
-        for key, other_count in other.items():
+        for key, other_count in tuple(other.items()):
             self[key] += other_count
         return self
             
@@ -432,7 +432,7 @@ class _MutableBagMixin(_BaseBagMixin):
         '''
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented
-        for key, other_count in other.items():
+        for key, other_count in tuple(other.items()):
             self[key] = max(self[key] - other_count, 0)
         return self
 
@@ -440,7 +440,7 @@ class _MutableBagMixin(_BaseBagMixin):
     def __imul__(self, other):
         if not math_tools.is_integer(other):
             return NotImplemented
-        for key in self:
+        for key in tuple(self):
             self[key] *= other
         return self
             
@@ -448,7 +448,7 @@ class _MutableBagMixin(_BaseBagMixin):
     def __ifloordiv__(self, other):
         if not math_tools.is_integer(other):
             return NotImplemented
-        for key in self:
+        for key in tuple(self):
             self[key] //= other
         return self
             
@@ -456,7 +456,7 @@ class _MutableBagMixin(_BaseBagMixin):
     def __imod__(self, other):
         if not math_tools.is_integer(other):
             return NotImplemented
-        for key in self:
+        for key in tuple(self):
             self[key] %= other
         return self
             
@@ -464,9 +464,10 @@ class _MutableBagMixin(_BaseBagMixin):
     def __ipow__(self, other, modulo=None):
         if not math_tools.is_integer(other):
             return NotImplemented
-        for key in self:
+        for key in tuple(self):
             self[key] = power(self[key], other, modulo)
         return self
+
 
 class _OrderedBagMixin(Ordered):
     def __repr__(self):
