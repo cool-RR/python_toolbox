@@ -69,6 +69,15 @@ class BaseBagTestCase(cute_testing.TestCase):
         assert self.bag_type({'a': 0, 'b': 1,}) == \
                                              self.bag_type({'c': 0, 'b': 1,})
         
+    def test_no_visible_dict(self):
+        bag = self.bag_type('abc')
+        with cute_testing.RaiseAssertor(AttributeError):
+            bag.data
+        with cute_testing.RaiseAssertor(AttributeError):
+            bag.dict
+            
+        
+        
     def test_repr(self):
         assert re.match(
             self._repr_result_pattern, 

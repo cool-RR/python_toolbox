@@ -13,7 +13,7 @@ from python_toolbox import math_tools
 from .lazy_tuple import LazyTuple
 from .ordered_dict import OrderedDict
 from .frozen_dict_and_frozen_ordered_dict import FrozenDict, FrozenOrderedDict
-from .abstract import Ordered
+from .abstract import Ordered, DefinitelyUnordered
 
 try:                                    # Load C helper function if available
     from _collections import _count_elements
@@ -363,43 +363,43 @@ class _OrderedBagMixin(Ordered):
         )
     
 
-class _OrderedDictDelegator(Ordered, collections.MutableMapping):
+class _BaseDictDelegator(collections.MutableMapping):
 
     # Start by filling-out the abstract methods
     def __init__(self, dict=None, **kwargs):
-        self.data = OrderedDict()
+        self._dict = self._dict_type()
         if dict is not None:
             self.update(dict)
         if len(kwargs):
             self.update(kwargs)
-    def __len__(self): return len(self.data)
+    def __len__(self): return len(self._dict)
     def __getitem__(self, key):
-        if key in self.data:
-            return self.data[key]
+        if key in self._dict:
+            return self._dict[key]
         if hasattr(self.__class__, "__missing__"):
             return self.__class__.__missing__(self, key)
         raise KeyError(key)
-    def __setitem__(self, key, item): self.data[key] = item
-    def __delitem__(self, key): del self.data[key]
+    def __setitem__(self, key, item): self._dict[key] = item
+    def __delitem__(self, key): del self._dict[key]
     def __iter__(self):
-        return iter(self.data)
+        return iter(self._dict)
 
     # Modify __contains__ to work correctly when __missing__ is present
     def __contains__(self, key):
-        return key in self.data
+        return key in self._dict
 
     # Now, add the methods in dicts but not in MutableMapping
-    def __repr__(self): return repr(self.data)
+    def __repr__(self): return repr(self._dict)
     def copy(self):
         if self.__class__ is _OrderedDictDelegator:
-            return _OrderedDictDelegator(self.data.copy())
+            return _OrderedDictDelegator(self._dict.copy())
         import copy
-        data = self.data
+        data = self._dict
         try:
-            self.data = OrderedDict
+            self._dict = self._dict_type()
             c = copy.copy(self)
         finally:
-            self.data = data
+            self._dict = data
         c.update(self)
         return c
     @classmethod
@@ -409,9 +409,14 @@ class _OrderedDictDelegator(Ordered, collections.MutableMapping):
             d[key] = value
         return d
 
+class _OrderedDictDelegator(Ordered, _BaseDictDelegator):
+    _dict_type = OrderedDict
+
+class _DictDelegator(DefinitelyUnordered, _BaseDictDelegator):
+    _dict_type = dict
 
                 
-class Bag(_MutableBagMixin, collections.UserDict):
+class Bag(_MutableBagMixin, _DictDelegator):
     '''
     A bag that counts items.
     
@@ -430,7 +435,6 @@ class Bag(_MutableBagMixin, collections.UserDict):
     that follow. Only positive integers are allowed as counts.
     
     '''                
-    _dict = property(lambda self: self.data)
     
                 
 class OrderedBag(_OrderedBagMixin, _MutableBagMixin, _OrderedDictDelegator):
@@ -455,8 +459,6 @@ class OrderedBag(_OrderedBagMixin, _MutableBagMixin, _OrderedDictDelegator):
     `collections.OrderedDict`.)
     
     '''
-    _dict = property(lambda self: self.data)
-    
     
                 
 class FrozenBag(_BaseBagMixin, FrozenDict):
