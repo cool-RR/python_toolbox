@@ -114,13 +114,7 @@ class _BaseBagMixin:
         )
     
     def __contains__(self, item):
-        try:
-            count = self[item]
-        except KeyError:
-            return False
-        else:
-            assert count >= 1
-            return True
+        return (self[item] >= 1)
     
 
     def __add__(self, other):
@@ -135,7 +129,7 @@ class _BaseBagMixin:
             return NotImplemented
         return type(self)(self._dict_type(
             (key, self[key] + other[key])
-            for key in set(self) | self(other))
+            for key in set(self) | set(other))
         )
 
     def __sub__(self, other):
@@ -164,7 +158,7 @@ class _BaseBagMixin:
             return NotImplemented
         return type(self)(self._dict_type(
             (key, max(self[key], other[key]))
-            for key in set(self) | self(other))
+            for key in set(self) | set(other))
         )
     
     def __and__(self, other):
@@ -179,7 +173,7 @@ class _BaseBagMixin:
             return NotImplemented
         return type(self)(self._dict_type(
             (key, min(self[key], other[key]))
-            for key in set(self) & self(other))
+            for key in set(self) & set(other))
         )
 
 
