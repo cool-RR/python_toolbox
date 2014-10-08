@@ -8,6 +8,7 @@ import itertools
 import collections
 import decimal as decimal_module
 from python_toolbox.third_party import unittest2
+import copy
 
 import nose
 
@@ -183,7 +184,17 @@ class BaseBagTestCase(cute_testing.TestCase):
             assert hash(bag_2) == hash(bag_3)
             assert {bag_2, bag_3} == {bag_2} == {bag_3}
     
-    
+    def test_copy(self):
+        my_tuple = ('meow',)
+        bag = self.bag_type({my_tuple: 3, 'a': 4,})
+        bag_shallow_copy = copy.copy(bag)
+        bag_deep_copy = copy.deepcopy(bag)
+        assert bag_shallow_copy == bag == bag_deep_copy
+        assert next(iter(bag_shallow_copy)) == next(iter(bag_shallow_copy)) \
+                                                != next(iter(bag_shallow_copy))
+        assert next(iter(bag_shallow_copy)) is next(iter(bag_shallow_copy)) \
+                                            is not next(iter(bag_shallow_copy))
+        
         
         
 class BaseMutableBagTestCase(BaseBagTestCase):
