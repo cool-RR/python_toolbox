@@ -271,7 +271,7 @@ class BaseMutableBagTestCase(BaseBagTestCase):
         bag = bag_reference = self.bag_type('abracadabra')
         bag //= self.bag_type('aabr')
         assert bag == 2
-        assert bag is bag_reference
+        assert bag is not bag_reference
 
         bag = bag_reference = self.bag_type('abracadabra')
         bag %= 2

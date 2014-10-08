@@ -182,17 +182,15 @@ class _BaseBagMixin:
             for key in other:
                 if key not in self:
                     assert other[key] >= 1
-                    return (0, self.copy() if
-                            isinstance(self, collections.Hashable) else self)
-                division_results = []
-                for key in self:
-                    if other[key] >= 1:
-                        division_results.append(self[key] // other[key])
-                if division_results:
-                    return min(division_results)
-                else:
-                    raise ZeroDivisionError
-            
+                    return 0
+            division_results = []
+            for key in self:
+                if other[key] >= 1:
+                    division_results.append(self[key] // other[key])
+            if division_results:
+                return min(division_results)
+            else:
+                raise ZeroDivisionError
         else:
             return NotImplemented
         
@@ -216,12 +214,21 @@ class _BaseBagMixin:
                                            key, count in self.items())), 
             )
         elif isinstance(other, _BaseBagMixin):
+            
             for key in other:
                 if key not in self:
                     assert other[key] >= 1
                     return (0, self.copy() if
                             isinstance(self, collections.Hashable) else self)
-            floordiv_result = min(self[key] // other[key] for key in self)
+            division_results = []
+            for key in self:
+                if other[key] >= 1:
+                    division_results.append(self[key] // other[key])
+            if division_results:
+                floordiv_result = min(division_results)
+            else:
+                raise ZeroDivisionError
+
             mod_result = type(self)(
                 self._dict_type((key, count - other[key] * floordiv_result) for
                                 key, count in self.items())
