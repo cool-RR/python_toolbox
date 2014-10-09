@@ -31,7 +31,7 @@ class OrderedDict(StdlibOrderedDict):
     def index(self, key):
         '''Get the index number of `key`.'''
         if key not in self:
-            raise KeyError
+            raise ValueError
         for i, key_ in enumerate(self):
             if key_ == key:
                 return i

@@ -7,6 +7,10 @@ This module defines the `ProxyProperty` class.
 See its documentation for more information.
 '''
 
+import re
+
+simple_case_pattern = re.compile(r'''([A-Za-z0-9_]+\.?)+''')
+
 
 class ProxyProperty:
     '''
@@ -65,23 +69,29 @@ class ProxyProperty:
             # We're being accessed from the class itself, not from an object
             return self
         else:
-            if '.' in self.attribute_name:
+            if simple_case_pattern.match(self.attribute_name):
+                current_object = obj
+                for attribute_name in self.attribute_name.split('.'):
+                    current_object = getattr(current_object, attribute_name)
+                return current_object
+            else:
                 from python_toolbox import address_tools
                 return address_tools.resolve('obj.%s' % self.attribute_name,
                                              namespace={'obj': obj})
-            else:
-                return getattr(obj, self.attribute_name)
         
     def __set__(self, obj, value):
         
         # todo: should I check if `obj` is `None` and set on class? Same for
         # `__delete__`?
         
-        if '.' in self.attribute_name:
+        if simple_case_pattern.match(self.attribute_name):
+            current_object = obj
+            for attribute_name in self.attribute_name.split('.')[:-1]:
+                current_object = getattr(current_object, attribute_name)
+            setattr(current_object, self.attribute_name.split('.')[-1], value)
+        else:
             from python_toolbox import address_tools
             left_segment, right_segment = self.attribute_name.rsplit('.', 1)
             deepest_object = address_tools.resolve('obj.%s' % left_segment,
                                                    namespace={'obj': obj})
             setattr(deepest_object, right_segment, value)
-        else:
-            setattr(obj, self.attribute_name, value)

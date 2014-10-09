@@ -505,11 +505,13 @@ class OrderedBagTestCase(BaseMutableBagTestCase,
     def test_index(self):
         bag = self.bag_type('aaabbc')
         bag['d'] = 0
-        assert bag.index('a') == 3
-        assert bag.index('b') == 0
-        assert bag.index('c') == 1
+        assert bag.index('a') == 0
+        assert bag.index('b') == 1
+        assert bag.index('c') == 2
         with cute_testing.RaiseAssertor(ValueError):
-            bag.index('c')
+            bag.index('d')
+        with cute_testing.RaiseAssertor(ValueError):
+            bag.index('x')
         with cute_testing.RaiseAssertor(ValueError):
             bag.index(('meow',))
             
