@@ -521,8 +521,8 @@ class BagTestCaseWithSlowCountElements(BagTestCase):
             (nifty_collections.bagging, '_count_elements'),
             nifty_collections.bagging._count_elements_slow):
             yield self
-    # Wait, did he just make another test class for the case when the
-    # C-optimized counting function isn't available?
+    # Wait, did he just make a test class for the case when the C-optimized
+    # counting function isn't available?
     #
     # Yes I did.
     #
