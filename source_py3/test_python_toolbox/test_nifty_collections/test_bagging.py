@@ -470,7 +470,16 @@ class BaseUnorderedBagTestCase(BaseBagTestCase):
         bag = self.bag_type('abracadabra')
         with cute_testing.RaiseAssertor(TypeError):
             reversed(bag)
+
         
+    def test_index(self):
+        bag = self.bag_type('aaabbc')
+        if not isinstance(bag, collections.Hashable):
+            bag['d'] = 0
+        with cute_testing.RaiseAssertor(AttributeError):
+            bag.index('a')
+        with cute_testing.RaiseAssertor(AttributeError):
+            bag.index('x')
         
 ###############################################################################
 
@@ -493,7 +502,17 @@ class OrderedBagTestCase(BaseMutableBagTestCase,
     _repr_result_pattern = ("^OrderedBag\\(OrderedDict\\(\\[\\('a', 2\\), "
                             "\\('b', 3\\)\\]\\)\\)$")
 
-        
+    def test_index(self):
+        bag = self.bag_type('aaabbc')
+        bag['d'] = 0
+        assert bag.index('a') == 3
+        assert bag.index('b') == 0
+        assert bag.index('c') == 1
+        with cute_testing.RaiseAssertor(ValueError):
+            bag.index('c')
+        with cute_testing.RaiseAssertor(ValueError):
+            bag.index(('meow',))
+            
 
     
     

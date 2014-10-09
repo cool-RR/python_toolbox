@@ -9,6 +9,7 @@ import collections
 import functools
 import copy
 
+from python_toolbox import misc_tools
 from python_toolbox import math_tools
 
 from .lazy_tuple import LazyTuple
@@ -488,6 +489,9 @@ class _OrderedBagMixin(Ordered):
         else:
             return True
         
+    index = misc_tools.ProxyProperty('._dict.index')
+        
+        
     
 
 class _BaseDictDelegator(collections.MutableMapping):
@@ -538,6 +542,9 @@ class _BaseDictDelegator(collections.MutableMapping):
 
 class _OrderedDictDelegator(Ordered, _BaseDictDelegator):
     _dict_type = OrderedDict
+    index = misc_tools.ProxyProperty('._dict.index')
+    move_to_end = misc_tools.ProxyProperty('._dict.move_to_end')
+    sort = misc_tools.ProxyProperty('._dict.sort')
 
 class _DictDelegator(DefinitelyUnordered, _BaseDictDelegator):
     _dict_type = dict
@@ -645,3 +652,5 @@ class FrozenOrderedBag(_OrderedBagMixin, _BaseBagMixin,
     def __hash__(self):
         return hash((type(self), tuple(self.items())))
         
+    move_to_end = misc_tools.ProxyProperty('._dict.move_to_end')
+    sort = misc_tools.ProxyProperty('._dict.sort')
