@@ -52,7 +52,7 @@ class BaseBagTestCase(cute_testing.TestCase):
                          set(collections.Counter(bag.elements()).most_common())
         
         assert bag.most_common(1) == (('a', 5),)
-        assert set(bag.most_common(3)) == set((('a', 5), ('c', 2), ('r', 2)))
+        assert set(bag.most_common(3)) == set((('a', 5), ('b', 2), ('r', 2)))
         
         assert bag + bag == self.bag_type('abracadabra' * 2)
         assert bag - bag == self.bag_type()
