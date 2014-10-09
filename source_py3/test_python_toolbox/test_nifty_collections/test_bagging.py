@@ -17,7 +17,6 @@ from python_toolbox import temp_value_setting
 from python_toolbox import sequence_tools
 from python_toolbox import cute_testing
 
-
 from python_toolbox import nifty_collections
 from python_toolbox.nifty_collections import (Bag, OrderedBag,
                                               FrozenBag, FrozenOrderedBag,
@@ -516,9 +515,21 @@ class FrozenOrderedBagTestCase(BaseFrozenBagTestCase,
 
     
 class BagTestCaseWithSlowCountElements(BagTestCase):
+    
     def manage_context(self):
         with temp_value_setting.TempValueSetter(
             (nifty_collections.bagging, '_count_elements'),
             nifty_collections.bagging._count_elements_slow):
             yield self
+    # Wait, did he just make another test class for the case when the
+    # C-optimized counting function isn't available?
+    #
+    # Yes I did.
+    #
+    # *Yes.*
+    #
+    # *I.*
+    #
+    # *Did.*
+    
         
