@@ -142,8 +142,8 @@ def assert_polite_wrapper(wrapper, wrapped=None, same_signature=True):
     
     
 class TestCase(unittest2.TestCase, context_management.ContextManager):
-    setUp = misc_tools.ProxyProperty('setup')
-    tearDown = misc_tools.ProxyProperty('tear_down')
+    setUp = misc_tools.ProxyProperty('.setup')
+    tearDown = misc_tools.ProxyProperty('.tear_down')
     def manage_context(self):
         yield self
         
