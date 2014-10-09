@@ -209,6 +209,13 @@ class BaseBagTestCase(cute_testing.TestCase, metaclass=abc.ABCMeta):
             bag.move_to_end('x', last=False)
         
         
+    def test_sort(self):
+        # Overridden in test cases for bag types where it's implemented.
+        bag = self.bag_type('aaabbc')
+        with cute_testing.RaiseAssertor(AttributeError):
+            bag.sort()
+        
+        
 class BaseMutableBagTestCase(BaseBagTestCase):
     def test_hash(self):
         bag = self.bag_type('abracadabra')
@@ -538,7 +545,14 @@ class OrderedBagTestCase(BaseMutableBagTestCase,
             bag.move_to_end('x')
         with cute_testing.RaiseAssertor(KeyError):
             bag.move_to_end('x', last=False)
-
+    
+    def test_sort(self):
+        bag = self.bag_type('aaabbc')
+        bag.sort()
+        assert FrozenOrderedBag(bag) == FrozenOrderedBag('aaabbc')
+        bag.sort(key='cba'.index)
+        assert FrozenOrderedBag(bag) == FrozenOrderedBag('cbbaaa')
+        
     
 class FrozenBagTestCase(BaseFrozenBagTestCase, BaseUnorderedBagTestCase):
     __test__ = True
