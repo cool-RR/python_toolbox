@@ -13,6 +13,7 @@ import copy
 import nose
 
 from python_toolbox import cute_iter_tools
+from python_toolbox import temp_value_setting
 from python_toolbox import sequence_tools
 from python_toolbox import cute_testing
 
@@ -484,6 +485,7 @@ class BagTestCase(BaseMutableBagTestCase, BaseUnorderedBagTestCase):
     _repr_result_pattern = ("^Bag\\({(?:(?:'b': 3, 'a': 2)|"
                             "(?:'a': 2, 'b': 3))}\\)$")
 
+
 class OrderedBagTestCase(BaseMutableBagTestCase,
                          BaseOrderedBagTestCase):
     __test__ = True
@@ -513,4 +515,10 @@ class FrozenOrderedBagTestCase(BaseFrozenBagTestCase,
 
 
     
-
+class BagTestCaseWithSlowCountElements(BagTestCase):
+    def manage_context(self):
+        with temp_value_setting.TempValueSetter(
+            (nifty_collections.bagging, '_count_elements'),
+            nifty_collections.bagging._count_elements_slow):
+            yield self
+        

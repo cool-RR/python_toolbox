@@ -4,13 +4,15 @@
 '''This module defines tools for testing.'''
 
 import nose
+import sys
 
 from python_toolbox.third_party import unittest2
 
 from python_toolbox import cute_inspect
-from python_toolbox.context_management import ContextManager
+from python_toolbox import context_management
 from python_toolbox.exceptions import CuteException
 from python_toolbox import logic_tools
+from python_toolbox import misc_tools
 
 
 
@@ -18,7 +20,7 @@ class Failure(CuteException, AssertionError):
     '''A test has failed.'''
 
 
-class RaiseAssertor(ContextManager):
+class RaiseAssertor(context_management.ContextManager):
     '''
     Asserts that a certain exception was raised in the suite. You may use a
     snippet of text that must appear in the exception message or a regex that
@@ -139,5 +141,17 @@ def assert_polite_wrapper(wrapper, wrapped=None, same_signature=True):
     assert wrapper.__wrapped__ == wrapped
     
     
-class TestCase(unittest2.TestCase):
-    pass
+class TestCase(unittest2.TestCase, context_management.ContextManager):
+    setUp = misc_tools.ProxyProperty('setup')
+    tearDown = misc_tools.ProxyProperty('tear_down')
+    def manage_context(self):
+        yield self
+        
+    def setup(self):
+        return self.__enter__()
+    def tear_down(self):
+        # todo: Should probably do something with exception-swallowing here to
+        # abide with the context manager protocol, but I don't need it yet.
+        return self.__exit__(*sys.exc_info())
+        
+        

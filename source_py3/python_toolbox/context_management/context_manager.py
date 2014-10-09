@@ -101,7 +101,7 @@ class ContextManager(DecoratingContextManager, metaclass=ContextManagerType):
                 raise RuntimeError(
                     "The generator didn't stop after the yield; possibly you "
                     "have more than one `yield` in the generator function? "
-                    "The generator function must yield exactly one time.")
+                    "The generator function must `yield` exactly one time.")
         else:
             if exc_value is None:
                 # Need to force instantiation so we can reliably
@@ -128,6 +128,6 @@ class ContextManager(DecoratingContextManager, metaclass=ContextManagerType):
                 raise RuntimeError(
                     "The generator didn't stop after calling its `.throw()`; "
                     "Possibly you have more than one `yield` in the generator "
-                    "function? The generator function must yield exactly one "
+                    "function? The generator function must `yield` exactly one "
                     "time."
                 )
