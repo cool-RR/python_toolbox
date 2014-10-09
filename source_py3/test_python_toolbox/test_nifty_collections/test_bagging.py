@@ -1,10 +1,9 @@
 # Copyright 2009-2014 Ram Rachum.
 # This program is distributed under the MIT license.
 
-import uuid
 import re
 import pickle
-import itertools
+import abc
 import collections
 import decimal as decimal_module
 from python_toolbox.third_party import unittest2
@@ -25,7 +24,7 @@ from python_toolbox.nifty_collections import (Bag, OrderedBag,
 infinity = float('inf')
 infinities = (infinity, -infinity)
 
-class BaseBagTestCase(cute_testing.TestCase):
+class BaseBagTestCase(cute_testing.TestCase, metaclass=abc.ABCMeta):
     __test__ = False
     def test_common(self):
         bag = self.bag_type('abracadabra')
@@ -200,6 +199,14 @@ class BaseBagTestCase(cute_testing.TestCase):
         assert next(iter(bag_shallow_copy)) is next(iter(bag_shallow_copy)) \
                                                is not next(iter(bag_deep_copy))
         
+        
+    def test_move_to_end(self):
+        # Overridden in test cases for bag types where it's implemented.
+        bag = self.bag_type('aaabbc')
+        with cute_testing.RaiseAssertor(AttributeError):
+            bag.move_to_end('c')
+        with cute_testing.RaiseAssertor(AttributeError):
+            bag.move_to_end('x', last=False)
         
         
 class BaseMutableBagTestCase(BaseBagTestCase):
@@ -495,6 +502,7 @@ class BaseUnorderedBagTestCase(BaseBagTestCase):
             bag.index('a')
         with cute_testing.RaiseAssertor(AttributeError):
             bag.index('x')
+            
         
 ###############################################################################
 
@@ -516,6 +524,20 @@ class OrderedBagTestCase(BaseMutableBagTestCase,
     
     _repr_result_pattern = ("^OrderedBag\\(OrderedDict\\(\\[\\('a', 2\\), "
                             "\\('b', 3\\)\\]\\)\\)$")
+    
+    def test_move_to_end(self):
+        bag = self.bag_type('aaabbc')
+        bag.move_to_end('c')
+        assert FrozenOrderedBag(bag) == FrozenOrderedBag('aaabbc')
+        bag.move_to_end('a')
+        assert FrozenOrderedBag(bag) == FrozenOrderedBag('bbcaaa')
+        bag.move_to_end('c', last=False)
+        assert FrozenOrderedBag(bag) == FrozenOrderedBag('cbbaaa')
+        
+        with cute_testing.RaiseAssertor(KeyError):
+            bag.move_to_end('x')
+        with cute_testing.RaiseAssertor(KeyError):
+            bag.move_to_end('x', last=False)
 
     
 class FrozenBagTestCase(BaseFrozenBagTestCase, BaseUnorderedBagTestCase):

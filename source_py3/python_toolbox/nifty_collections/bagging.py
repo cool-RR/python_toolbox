@@ -595,6 +595,8 @@ class OrderedBag(_OrderedBagMixin, _MutableBagMixin, _OrderedDictDelegator):
     '''
     def popitem(self, last=True):
         return self._dict.popitem(last=last)
+    move_to_end = misc_tools.ProxyProperty('._dict.move_to_end')
+    sort = misc_tools.ProxyProperty('._dict.sort')
       
     
                 
@@ -652,5 +654,3 @@ class FrozenOrderedBag(_OrderedBagMixin, _BaseBagMixin,
     def __hash__(self):
         return hash((type(self), tuple(self.items())))
         
-    move_to_end = misc_tools.ProxyProperty('._dict.move_to_end')
-    sort = misc_tools.ProxyProperty('._dict.sort')
