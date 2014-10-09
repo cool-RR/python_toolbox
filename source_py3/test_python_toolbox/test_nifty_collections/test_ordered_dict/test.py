@@ -63,7 +63,7 @@ def test_index():
     
     assert ordered_dict.index('meow') == 3
     
-    with cute_testing.RaiseAssertor(KeyError):
+    with cute_testing.RaiseAssertor(ValueError):
         ordered_dict.index('Non-existing key')
         
         
