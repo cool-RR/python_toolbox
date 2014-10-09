@@ -17,21 +17,28 @@ from .ordered_set import OrderedSet
 from .frozen_dict_and_frozen_ordered_dict import FrozenDict, FrozenOrderedDict
 from .abstract import Ordered, DefinitelyUnordered
 
-try:                                    # Load C helper function if available
-    from _collections import _count_elements
-except ImportError:
-    def _count_elements(mapping, iterable):
-        '''Bag elements from the iterable.'''
-        mapping_get = mapping.get
-        for element in iterable:
-            mapping[element] = mapping_get(element, 0) + 1
-            
-            
+
 class _NO_DEFAULT: 
-    pass
+    '''Stand-in value used in `_BaseBagMixin.pop` when no default is wanted.'''
             
 class _ZeroCountAttempted(Exception):
-    pass
+    '''
+    An attempt was made to add a value with a count of zero to a bag.
+    
+    This exception is used only internally for flow control; it'll be caught
+    internally and the zero item would be silently removed.
+    '''        
+    
+def _count_elements_slow(mapping, iterable):
+    '''Bag elements from the iterable.'''
+    mapping_get = mapping.get
+    for element in iterable:
+        mapping[element] = mapping_get(element, 0) + 1
+        
+try:
+    from _collections import _count_elements
+except ImportError:
+    _count_elements = _count_elements_slow
         
 
 def _process_count(count):
