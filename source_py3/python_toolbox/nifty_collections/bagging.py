@@ -84,12 +84,11 @@ class _BaseBagMixin:
             [('a', 5), ('b', 4), ('c', 3)]
 
         '''
-        # Emulate Bag.sortedByCount from Smalltalk
         if n is None:
-            return sorted(self.items(), key=operator.itemgetter(1),
-                          reverse=True)
-        return heapq.nlargest(n, self.items(),
-                               key=operator.itemgetter(1))
+            return tuple(sorted(self.items(), key=operator.itemgetter(1),
+                                reverse=True))
+        return tuple(heapq.nlargest(n, self.items(),
+                                    key=operator.itemgetter(1)))
 
     def elements(self):
         '''

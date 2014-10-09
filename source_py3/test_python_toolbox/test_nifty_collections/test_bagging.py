@@ -47,9 +47,12 @@ class BaseBagTestCase(cute_testing.TestCase):
         assert 'R' not in bag
         assert 'x' not in self.bag_type({'x': 0,})
         
-        assert set(bag.most_common()) == \
+        assert set(bag.most_common()) == set(bag.most_common(len(bag))) == \
                                set(collections.Counter(bag).most_common()) == \
                          set(collections.Counter(bag.elements()).most_common())
+        
+        assert bag.most_common(1) == (('a', 5),)
+        assert set(bag.most_common(3)) == set((('a', 5), ('c', 2), ('r', 2)))
         
         assert bag + bag == self.bag_type('abracadabra' * 2)
         assert bag - bag == self.bag_type()
