@@ -454,6 +454,21 @@ class BaseOrderedBagTestCase(BaseBagTestCase):
     def test_reversed(self):
         bag = self.bag_type('abracadabra')
         assert tuple(reversed(bag)) == tuple(reversed(tuple(bag)))
+        
+    def test_index(self):
+        bag = self.bag_type('aaabbc')
+        if not isinstance(bag, collections.Hashable):
+            bag['d'] = 0
+        assert bag.index('a') == 0
+        assert bag.index('b') == 1
+        assert bag.index('c') == 2
+        with cute_testing.RaiseAssertor(ValueError):
+            bag.index('d')
+        with cute_testing.RaiseAssertor(ValueError):
+            bag.index('x')
+        with cute_testing.RaiseAssertor(ValueError):
+            bag.index(('meow',))
+        
             
           
 class BaseUnorderedBagTestCase(BaseBagTestCase):
@@ -502,21 +517,6 @@ class OrderedBagTestCase(BaseMutableBagTestCase,
     _repr_result_pattern = ("^OrderedBag\\(OrderedDict\\(\\[\\('a', 2\\), "
                             "\\('b', 3\\)\\]\\)\\)$")
 
-    def test_index(self):
-        bag = self.bag_type('aaabbc')
-        bag['d'] = 0
-        assert bag.index('a') == 0
-        assert bag.index('b') == 1
-        assert bag.index('c') == 2
-        with cute_testing.RaiseAssertor(ValueError):
-            bag.index('d')
-        with cute_testing.RaiseAssertor(ValueError):
-            bag.index('x')
-        with cute_testing.RaiseAssertor(ValueError):
-            bag.index(('meow',))
-            
-
-    
     
 class FrozenBagTestCase(BaseFrozenBagTestCase, BaseUnorderedBagTestCase):
     __test__ = True
