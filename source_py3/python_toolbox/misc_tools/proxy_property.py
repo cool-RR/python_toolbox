@@ -9,8 +9,6 @@ See its documentation for more information.
 
 import re
 
-simple_case_pattern = re.compile(r'''([A-Za-z0-9_]+\.?)+''')
-
 
 class ProxyProperty:
     '''
@@ -60,38 +58,24 @@ class ProxyProperty:
             raise Exception("The `attribute_name` must start with a dot to "
                             "make it clear it's an attribute. %s does not "
                             "start with a dot." % repr(attribute_name))
+        self.getter = self.setter = None
+        exec('def getter(thing): return thing%s' % attribute_name, globals(), locals())
+        exec('def setter(thing, value): thing%s = value' % attribute_name)
+        exec('self.getter, self.setter = getter, setter')
         self.attribute_name = attribute_name[1:]
         self.__doc__ = doc
         
         
-    def __get__(self, obj, our_type=None):
-        if obj is None:
+    def __get__(self, thing, our_type=None):
+        if thing is None:
             # We're being accessed from the class itself, not from an object
             return self
         else:
-            if simple_case_pattern.match(self.attribute_name):
-                current_object = obj
-                for attribute_name in self.attribute_name.split('.'):
-                    current_object = getattr(current_object, attribute_name)
-                return current_object
-            else:
-                from python_toolbox import address_tools
-                return address_tools.resolve('obj.%s' % self.attribute_name,
-                                             namespace={'obj': obj})
+            return self.getter(thing)
         
-    def __set__(self, obj, value):
-        
-        # todo: should I check if `obj` is `None` and set on class? Same for
+    def __set__(self, thing, value):
+        # todo: should I check if `thing` is `None` and set on class? Same for
         # `__delete__`?
         
-        if simple_case_pattern.match(self.attribute_name):
-            current_object = obj
-            for attribute_name in self.attribute_name.split('.')[:-1]:
-                current_object = getattr(current_object, attribute_name)
-            setattr(current_object, self.attribute_name.split('.')[-1], value)
-        else:
-            from python_toolbox import address_tools
-            left_segment, right_segment = self.attribute_name.rsplit('.', 1)
-            deepest_object = address_tools.resolve('obj.%s' % left_segment,
-                                                   namespace={'obj': obj})
-            setattr(deepest_object, right_segment, value)
+        return self.setter(thing, value)
+        
