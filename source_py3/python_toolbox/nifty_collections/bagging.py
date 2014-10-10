@@ -338,14 +338,11 @@ class _BaseBagMixin:
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented
         found_strict_difference = False # Until challenged.
-        for element, count in self.items():
-            try:
-                other_count = other[element]
-            except KeyError:
+        all_elements = set(other) | set(self)
+        for element in all_elements:
+            if self[element] > other[element]:
                 return False
-            if not (count <= other_count):
-                return False
-            elif count < other_count:
+            elif self[element] < other[element]:
                 found_strict_difference = True
         return found_strict_difference
     
@@ -353,11 +350,7 @@ class _BaseBagMixin:
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented
         for element, count in self.items():
-            try:
-                other_count = other[element]
-            except KeyError:
-                return False
-            if not (count <= other_count):
+            if count > other[element]:
                 return False
         return True
     
@@ -365,26 +358,20 @@ class _BaseBagMixin:
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented
         found_strict_difference = False # Until challenged.
-        for element, count in self.items():
-            try:
-                other_count = other[element]
-            except KeyError:
-                continue
-            if not (count >= other_count):
+        all_elements = set(other) | set(self)
+        for element in all_elements:
+            if self[element] < other[element]:
                 return False
-            elif count > other_count:
+            elif self[element] > other[element]:
                 found_strict_difference = True
         return found_strict_difference
     
     def __ge__(self, other):
         if not isinstance(other, _BaseBagMixin):
             return NotImplemented
-        for element, count in self.items():
-            try:
-                other_count = other[element]
-            except KeyError:
-                continue
-            if not (count >= other_count):
+        all_elements = set(other) | set(self)
+        for element in all_elements:
+            if self[element] < other[element]:
                 return False
         return True
             

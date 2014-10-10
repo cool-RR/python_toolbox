@@ -128,6 +128,10 @@ class BaseBagTestCase(cute_testing.TestCase, metaclass=abc.ABCMeta):
         assert eval(repr(bag)) == bag
         assert re.match(self._repr_result_pattern, repr(bag))
         
+        empty_bag = self.bag_type()
+        assert eval(repr(empty_bag)) == empty_bag
+        assert repr(empty_bag) == '%s()' % self.bag_type.__name__
+        
 
     def test_no_subtract(self):
         # It's a silly method, yo.
@@ -159,6 +163,11 @@ class BaseBagTestCase(cute_testing.TestCase, metaclass=abc.ABCMeta):
                 assert item >= smaller_item
                 assert item > smaller_item
                 assert item != smaller_item
+                assert smaller_item <= item
+                assert smaller_item < item
+                assert not smaller_item >= item
+                assert not smaller_item > item
+                assert smaller_item != item
             not_smaller_items = [item for item in next(zip(*hierarchy)) if
                                                      item not in smaller_items]
             for not_smaller_item in not_smaller_items:
