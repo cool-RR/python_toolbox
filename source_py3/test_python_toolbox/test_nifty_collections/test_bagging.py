@@ -314,6 +314,35 @@ class BaseBagTestCase(cute_testing.TestCase, metaclass=abc.ABCMeta):
         assert bag_0 // 2 == self.bag_type('bc')
         assert bag_1 // 2 == self.bag_type('c')
         assert bag_2 // 2 == self.bag_type('dd')
+        assert bag_0 // self.bag_type('ab') == 1
+        assert bag_1 // self.bag_type('ab') == 0
+        assert bag_2 // self.bag_type('ab') == 0
+        
+        assert bag_0 % 2 == self.bag_type('abcc')
+        assert bag_1 % 2 == self.bag_type('bc')
+        assert bag_2 % 2 == self.bag_type('cdd')
+        assert bag_0 % 'ab' == self.bag_type('bccc')
+        assert bag_1 % 'ab' == bag_1
+        assert bag_2 % 'ab' == bag_2
+        
+        assert bag_0 ** 2 == pow(bag_0, 2) == self.bag_type('abbbbccccccccc')
+        assert bag_1 ** 2 == pow(bag_1, 2) == self.bag_type('bcccc')
+        assert bag_2 ** 2 == pow(bag_2, 2) == \
+                                    self.bag_type('cddddddddddddddddddddddddd')
+        assert pow(bag_0, 2, 3) == self.bag_type('ab')
+        assert pow(bag_1, 2, 3) == self.bag_type('bc')
+        assert pow(bag_2, 2, 3) == self.bag_type('cd')
+        
+        assert divmod(bag_0, 3) == (bag_0 // 3, bag_0 % 3)
+        assert divmod(bag_1, 3) == (bag_1 // 3, bag_1 % 3)
+        assert divmod(bag_2, 3) == (bag_2 // 3, bag_2 % 3)
+        assert divmod(bag_0, self.bag_type('cd')) == \
+                    (bag_0 // self.bag_type('cd'), bag_0 % self.bag_type('cd'))
+        assert divmod(bag_1, self.bag_type('cd')) == \
+                    (bag_1 // self.bag_type('cd'), bag_1 % self.bag_type('cd'))
+        assert divmod(bag_2, self.bag_type('cd')) == \
+                    (bag_2 // self.bag_type('cd'), bag_2 % self.bag_type('cd'))
+        
         
         # blocktodo: continue for all operations
         
