@@ -239,7 +239,7 @@ class _BaseBagMixin:
             return NotImplemented
         return type(self)(self._dict_type(
             (key, self[key] + other[key])
-            for key in OrderedSet(self) & OrderedSet(other))
+            for key in OrderedSet(self) | OrderedSet(other))
         )
 
     def __sub__(self, other):
@@ -258,6 +258,9 @@ class _BaseBagMixin:
             return NotImplemented
         return type(self)(self._dict_type((key, count * other) for
                                           key, count in self.items()))
+    
+    __rmul__ = lambda self, other: self * other
+    
     def __floordiv__(self, other):
         if math_tools.is_integer(other):
             return (

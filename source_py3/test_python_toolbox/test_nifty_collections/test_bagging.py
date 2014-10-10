@@ -264,6 +264,8 @@ class BaseBagTestCase(cute_testing.TestCase, metaclass=abc.ABCMeta):
         with cute_testing.RaiseAssertor(TypeError): 'foo' * bag
         with cute_testing.RaiseAssertor(TypeError): bag / 'foo'
         with cute_testing.RaiseAssertor(TypeError): 'foo' / bag
+        with cute_testing.RaiseAssertor(TypeError): bag / 3
+        with cute_testing.RaiseAssertor(TypeError): 3 / bag
         with cute_testing.RaiseAssertor(TypeError): bag // 'foo'
         with cute_testing.RaiseAssertor(TypeError): 'foo' // bag
         with cute_testing.RaiseAssertor(TypeError): bag % 'foo'
@@ -287,6 +289,7 @@ class BaseBagTestCase(cute_testing.TestCase, metaclass=abc.ABCMeta):
         bag_0 = self.bag_type('abbccc')
         bag_1 = self.bag_type('bcc')
         bag_2 = self.bag_type('cddddd')
+        
         assert bag_0 + bag_1 == self.bag_type('abbccc' + 'bcc')
         assert bag_1 + bag_0 == self.bag_type('bcc' + 'abbccc')
         assert bag_0 + bag_2 == self.bag_type('abbccc' + 'cddddd')
@@ -300,6 +303,17 @@ class BaseBagTestCase(cute_testing.TestCase, metaclass=abc.ABCMeta):
         assert bag_2 - bag_0 == self.bag_type('ddddd')
         assert bag_1 - bag_2 == self.bag_type('bc')
         assert bag_2 - bag_1 == self.bag_type('ddddd')
+        
+        assert bag_0 * 2 == self.bag_type('abbccc' * 2)
+        assert bag_1 * 2 == self.bag_type('bcc' * 2)
+        assert bag_2 * 2 == self.bag_type('cddddd' * 2)
+        assert 3 * bag_0 == self.bag_type('abbccc' * 3)
+        assert 3 * bag_1 == self.bag_type('bcc' * 3)
+        assert 3 * bag_2 == self.bag_type('cddddd' * 3)
+        
+        assert bag_0 // 2 == self.bag_type('bc')
+        assert bag_1 // 2 == self.bag_type('c')
+        assert bag_2 // 2 == self.bag_type('dd')
         
         # blocktodo: continue for all operations
         
