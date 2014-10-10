@@ -318,12 +318,23 @@ class BaseBagTestCase(cute_testing.TestCase, metaclass=abc.ABCMeta):
         assert bag_1 // self.bag_type('ab') == 0
         assert bag_2 // self.bag_type('ab') == 0
         
-        assert bag_0 % 2 == self.bag_type('abcc')
-        assert bag_1 % 2 == self.bag_type('bc')
-        assert bag_2 % 2 == self.bag_type('cdd')
-        assert bag_0 % 'ab' == self.bag_type('bccc')
-        assert bag_1 % 'ab' == bag_1
-        assert bag_2 % 'ab' == bag_2
+        with cute_testing.RaiseAssertor(ZeroDivisionError):
+            bag_0 // 0
+        with cute_testing.RaiseAssertor(ZeroDivisionError):
+            bag_0 // self.bag_type()
+        
+        assert bag_0 % 2 == self.bag_type('ac') == bag_0 - ((bag_0 // 2) * 2) \
+               == self.bag_type(OrderedDict((key, count % 2) for (key, count)
+                                                             in bag_0.items()))
+        assert bag_1 % 2 == self.bag_type('b') == bag_1 - ((bag_1 // 2) * 2) \
+               == self.bag_type(OrderedDict((key, count % 2) for (key, count)
+                                                             in bag_1.items()))
+        assert bag_2 % 2 == self.bag_type('cd') == bag_2 - ((bag_2 // 2) * 2)\
+               == self.bag_type(OrderedDict((key, count % 2) for (key, count)
+                                                             in bag_2.items()))
+        assert bag_0 % self.bag_type('ac') == self.bag_type('bbcc')
+        assert bag_1 % self.bag_type('b') == self.bag_type('cc')
+        assert bag_2 % self.bag_type('cd') == self.bag_type('dddd')
         
         assert bag_0 ** 2 == pow(bag_0, 2) == self.bag_type('abbbbccccccccc')
         assert bag_1 ** 2 == pow(bag_1, 2) == self.bag_type('bcccc')
@@ -342,9 +353,6 @@ class BaseBagTestCase(cute_testing.TestCase, metaclass=abc.ABCMeta):
                     (bag_1 // self.bag_type('cd'), bag_1 % self.bag_type('cd'))
         assert divmod(bag_2, self.bag_type('cd')) == \
                     (bag_2 // self.bag_type('cd'), bag_2 % self.bag_type('cd'))
-        
-        
-        # blocktodo: continue for all operations
         
         
         
