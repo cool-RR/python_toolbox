@@ -101,6 +101,16 @@ class BaseBagTestCase(cute_testing.TestCase, metaclass=abc.ABCMeta):
             assert bag.n_elements == 5
             assert bag.n_elements == 5
             
+        
+    def test_frozen_bag_bag(self):
+        bag = self.bag_type('meeeow')
+        assert bag.frozen_bag_bag == \
+                                  nifty_collections.FrozenBagBag({3: 1, 1: 3,})
+        if not isinstance(bag, collections.Hashable):
+            bag['o'] += 2
+            assert bag.frozen_bag_bag == \
+                                  nifty_collections.FrozenBagBag({3: 2, 1: 2,})
+            
             
         
         
