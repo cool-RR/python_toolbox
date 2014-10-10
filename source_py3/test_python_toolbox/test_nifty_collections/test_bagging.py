@@ -79,6 +79,18 @@ class BaseBagTestCase(cute_testing.TestCase, metaclass=abc.ABCMeta):
         assert self.bag_type({'a': 0, 'b': 1,}) == \
                                              self.bag_type({'c': 0, 'b': 1,})
         
+    def test_bool(self):
+        bag = self.bag_type('meow')
+        assert bool(bag) is True
+        assert bag
+        assert bool(self.bag_type()) is bool(self.bag_type('')) is \
+                                        bool(self.bag_type({'d': 0,})) is False
+        if not isinstance(bag, collections.Hashable):
+            bag.clear()
+            assert bool(bag) is False
+            assert not bag
+        
+        
     def test_no_visible_dict(self):
         bag = self.bag_type('abc')
         with cute_testing.RaiseAssertor(AttributeError):
@@ -357,6 +369,12 @@ class BaseMutableBagTestCase(BaseBagTestCase):
         assert bag == self.bag_type('abracadabra')
         assert bag is bag_reference
             
+    def test_clear(self):
+        bag = self.bag_type('meow')
+        bag.clear()
+        assert not bag
+        assert bag == self.bag_type()
+        
         
     
 class BaseFrozenBagTestCase(BaseBagTestCase):
@@ -448,7 +466,14 @@ class BaseFrozenBagTestCase(BaseBagTestCase):
         with cute_testing.RaiseAssertor(AttributeError):
             bag.update(bag)
             
+    def test_clear(self):
+        bag = self.bag_type('meow')
+        with cute_testing.RaiseAssertor(AttributeError):
+            bag.clear()
+        assert bag == self.bag_type('meow')
         
+        
+          
               
 class BaseOrderedBagTestCase(BaseBagTestCase):
     
