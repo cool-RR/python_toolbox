@@ -46,6 +46,8 @@ class BaseBagTestCase(cute_testing.TestCase, metaclass=abc.ABCMeta):
         assert 'R' not in bag
         assert 'x' not in self.bag_type({'x': 0,})
         
+        assert bag != 7
+        
         assert set(bag.most_common()) == set(bag.most_common(len(bag))) == \
                                set(collections.Counter(bag).most_common()) == \
                          set(collections.Counter(bag.elements()).most_common())
@@ -111,8 +113,6 @@ class BaseBagTestCase(cute_testing.TestCase, metaclass=abc.ABCMeta):
             assert bag.frozen_bag_bag == \
                                   nifty_collections.FrozenBagBag({3: 2, 1: 2,})
             
-            
-        
         
     def test_no_visible_dict(self):
         bag = self.bag_type('abc')
@@ -418,6 +418,11 @@ class BaseMutableBagTestCase(BaseBagTestCase):
         bag = bag_reference = self.bag_type('abracadabra')
         bag &= self.bag_type('axyzz')
         assert bag == self.bag_type('a')
+        assert bag is bag_reference
+
+        bag = bag_reference = self.bag_type('abracadabra')
+        bag += bag
+        assert bag == self.bag_type('abracadabra' * 2)
         assert bag is bag_reference
 
         bag = bag_reference = self.bag_type('abracadabra')
