@@ -60,6 +60,77 @@ def _process_count(count):
     return int(count)
     
     
+class _BootstrappedCachedProperty(misc_tools.OwnNameDiscoveringDescriptor):
+    '''
+    A property that is calculated only once for an object, and then cached.
+    
+    This is defined here in `bagging.py` because we can't import the canonical
+    `CachedProperty` because of an import loop.
+    
+    Usage:
+    
+        class MyObject:
+        
+            # ... Regular definitions here
+        
+            def _get_personality(self):
+                print('Calculating personality...')
+                time.sleep(5) # Time consuming process that creates personality
+                return 'Nice person'
+        
+            personality = CachedProperty(_get_personality)
+            
+    You can also put in a value as the first argument if you'd like to have it
+    returned instead of using a getter. (It can be a tobag static value like
+    `0`). If this value happens to be a callable but you'd still like it to be
+    used as a static value, use `force_value_not_getter=True`.
+    '''    
+    def __init__(self, getter_or_value, doc=None, name=None,
+                 force_value_not_getter=False):
+        '''
+        Construct the cached property.
+        
+        `getter_or_value` may be either a function that takes the parent object
+        and returns the value of the property, or the value of the property
+        itself, (as long as it's not a callable.)
+        
+        You may optionally pass in the name that this property has in the
+        class; this will save a bit of processing later.
+        '''
+        misc_tools.OwnNameDiscoveringDescriptor.__init__(self, name=name)
+        if callable(getter_or_value) and not force_value_not_getter:
+            self.getter = getter_or_value
+        else:
+            self.getter = lambda thing: getter_or_value
+        self.__doc__ = doc or getattr(self.getter, '__doc__', None)
+        
+        
+    def __get__(self, obj, our_type=None):
+
+        if obj is None:
+            # We're being accessed from the class itself, not from an object
+            return self
+        
+        value = self.getter(obj)
+        
+        setattr(obj, self.get_our_name(obj, our_type=our_type), value)
+        
+        return value
+
+    
+    def __call__(self, method_function):
+        '''
+        Decorate method to use value of `CachedProperty` as a context manager.
+        '''
+        def inner(same_method_function, self_obj, *args, **kwargs):
+            with getattr(self_obj, self.get_our_name(self_obj)):
+                return method_function(self_obj, *args, **kwargs)
+        return decorator_tools.decorator(inner, method_function)
+
+
+    def __repr__(self):
+        return '<%s: %s>' % (type(self).__name__, self.our_name or self.getter)
+            
 
 class _BaseBagMixin:
     '''Mixin for `FrozenBag` and `FrozenOrderedBag`.'''
@@ -125,6 +196,13 @@ class _BaseBagMixin:
     def __contains__(self, item):
         return (self[item] >= 1)
     
+    n_elements = property(lambda self: sum(self.values()))
+    
+    @property
+    def frozen_bag_bag(self):
+        from .frozen_bag_bag import FrozenBagBag
+        return FrozenBagBag(self.values())
+
     def __or__(self, other):
         '''
         Get the maximum of value in either of the input bags.
@@ -247,28 +325,6 @@ class _BaseBagMixin:
 
     __bool__ = lambda self: any(True for element in self.elements())
     
-    
-    _n_elements = None
-    @property
-    def n_elements(self):
-        # Implemented as a poor man's `CachedProperty` because we can't use the
-        # real `CachedProperty` due to circular import.
-        if self._n_elements is None:
-            self._n_elements = sum(self.values())
-        return self._n_elements
-    _n_elements = None
-    
-    
-    _frozen_bag_bag = None
-    @property
-    def frozen_bag_bag(self):
-        # Implemented as a poor man's `CachedProperty` because we can't use the
-        # real `CachedProperty` due to circular import.
-        from .frozen_bag_bag import FrozenBagBag
-        if self._frozen_bag_bag is None:
-            self._frozen_bag_bag = FrozenBagBag(self.values())
-        return self._frozen_bag_bag
-        
     
     # We define all the comparison methods manually instead of using
     # `total_ordering` because `total_ordering` assumes that >= means (> and
@@ -492,6 +548,15 @@ class _OrderedBagMixin(Ordered):
     index = misc_tools.ProxyProperty('._dict.index')
         
         
+class _FrozenBagMixin:
+    
+    n_elements = _BootstrappedCachedProperty(lambda self: sum(self.values()))
+    
+    @_BootstrappedCachedProperty
+    def frozen_bag_bag(self):
+        from .frozen_bag_bag import FrozenBagBag
+        return FrozenBagBag(self.values())
+        
     
 
 class _BaseDictDelegator(collections.MutableMapping):
@@ -600,7 +665,7 @@ class OrderedBag(_OrderedBagMixin, _MutableBagMixin, _OrderedDictDelegator):
       
     
                 
-class FrozenBag(_BaseBagMixin, FrozenDict):
+class FrozenBag(_BaseBagMixin, _FrozenBagMixin, FrozenDict):
     '''
     An immutable bag that counts items.
     
@@ -626,7 +691,7 @@ class FrozenBag(_BaseBagMixin, FrozenDict):
         return hash((type(self), frozenset(self.items())))
       
                 
-class FrozenOrderedBag(_OrderedBagMixin, _BaseBagMixin,
+class FrozenOrderedBag(_OrderedBagMixin, _FrozenBagMixin, _BaseBagMixin,
                        FrozenOrderedDict):
     '''
     An immutable, ordered bag that counts items.

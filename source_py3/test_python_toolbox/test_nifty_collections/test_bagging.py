@@ -91,6 +91,19 @@ class BaseBagTestCase(cute_testing.TestCase, metaclass=abc.ABCMeta):
             assert not bag
         
         
+    def test_n_elements(self):
+        bag = self.bag_type('meow')
+        assert bag.n_elements == 4
+        assert bag.n_elements == 4 # Testing again because now it's a data 
+                                   # attribute.
+        if not isinstance(bag, collections.Hashable):
+            bag['x'] = 1
+            assert bag.n_elements == 5
+            assert bag.n_elements == 5
+            
+            
+        
+        
     def test_no_visible_dict(self):
         bag = self.bag_type('abc')
         with cute_testing.RaiseAssertor(AttributeError):
@@ -226,6 +239,42 @@ class BaseBagTestCase(cute_testing.TestCase, metaclass=abc.ABCMeta):
         bag = self.bag_type('aaabbc')
         with cute_testing.RaiseAssertor(AttributeError):
             bag.sort()
+            
+    def test_unsupported_operations(self):
+        bag = self.bag_type('meeeeow')
+        with cute_testing.RaiseAssertor(TypeError): bag | 'foo'
+        with cute_testing.RaiseAssertor(TypeError): 'foo' | bag
+        with cute_testing.RaiseAssertor(TypeError): bag & 'foo'
+        with cute_testing.RaiseAssertor(TypeError): 'foo' & bag
+        with cute_testing.RaiseAssertor(TypeError): bag + 'foo'
+        with cute_testing.RaiseAssertor(TypeError): 'foo' + bag
+        with cute_testing.RaiseAssertor(TypeError): bag - 'foo'
+        with cute_testing.RaiseAssertor(TypeError): 'foo' - bag
+        with cute_testing.RaiseAssertor(TypeError): bag * 'foo'
+        with cute_testing.RaiseAssertor(TypeError): 'foo' * bag
+        with cute_testing.RaiseAssertor(TypeError): bag / 'foo'
+        with cute_testing.RaiseAssertor(TypeError): 'foo' / bag
+        with cute_testing.RaiseAssertor(TypeError): bag // 'foo'
+        with cute_testing.RaiseAssertor(TypeError): 'foo' // bag
+        with cute_testing.RaiseAssertor(TypeError): bag % 'foo'
+        with cute_testing.RaiseAssertor(TypeError): 3 % bag
+        with cute_testing.RaiseAssertor(TypeError): bag ** 'foo'
+        with cute_testing.RaiseAssertor(TypeError): 'foo' ** bag
+        with cute_testing.RaiseAssertor(TypeError): divmod(bag, 'foo')
+        with cute_testing.RaiseAssertor(TypeError): divmod('foo', bag)
+        if not isinstance(bag, collections.Hashable):
+            with cute_testing.RaiseAssertor(TypeError): bag |= 'foo'
+            with cute_testing.RaiseAssertor(TypeError): bag &= 'foo'
+            with cute_testing.RaiseAssertor(TypeError): bag += 'foo'
+            with cute_testing.RaiseAssertor(TypeError): bag -= 'foo'
+            with cute_testing.RaiseAssertor(TypeError): bag *= 'foo'
+            with cute_testing.RaiseAssertor(TypeError): bag /= 'foo'
+            with cute_testing.RaiseAssertor(TypeError): bag //= 'foo'
+            with cute_testing.RaiseAssertor(TypeError): bag %= 'foo'
+            with cute_testing.RaiseAssertor(TypeError): bag **= 'foo'
+            
+        
+        
         
         
 class BaseMutableBagTestCase(BaseBagTestCase):

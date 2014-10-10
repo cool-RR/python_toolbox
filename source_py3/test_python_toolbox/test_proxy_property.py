@@ -11,13 +11,12 @@ from python_toolbox.misc_tools import ProxyProperty
 
 
 class Object:
-    ''' '''        
+    pass
 
 
 def test():
     
     class A:
-        ''' '''
         y = 'y'
         def __init__(self):
             self.x = 'x'
