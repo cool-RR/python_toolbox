@@ -250,7 +250,7 @@ class BaseBagTestCase(cute_testing.TestCase, metaclass=abc.ABCMeta):
         with cute_testing.RaiseAssertor(AttributeError):
             bag.sort()
             
-    def test_unsupported_operations(self):
+    def test_operations_with_foreign_operands(self):
         bag = self.bag_type('meeeeow')
         with cute_testing.RaiseAssertor(TypeError): bag | 'foo'
         with cute_testing.RaiseAssertor(TypeError): 'foo' | bag
@@ -283,6 +283,25 @@ class BaseBagTestCase(cute_testing.TestCase, metaclass=abc.ABCMeta):
             with cute_testing.RaiseAssertor(TypeError): bag %= 'foo'
             with cute_testing.RaiseAssertor(TypeError): bag **= 'foo'
             
+    def test_operations(self):
+        bag_0 = self.bag_type('abbccc')
+        bag_1 = self.bag_type('bcc')
+        bag_2 = self.bag_type('cddddd')
+        assert bag_0 + bag_1 == self.bag_type('abbccc' + 'bcc')
+        assert bag_1 + bag_0 == self.bag_type('bcc' + 'abbccc')
+        assert bag_0 + bag_2 == self.bag_type('abbccc' + 'cddddd')
+        assert bag_2 + bag_0 == self.bag_type('cddddd' + 'abbccc')
+        assert bag_1 + bag_2 == self.bag_type('bcc' + 'cddddd')
+        assert bag_2 + bag_1 == self.bag_type('cddddd' + 'bcc')
+        
+        assert bag_0 - bag_1 == self.bag_type('abc')
+        assert bag_1 - bag_0 == self.bag_type()
+        assert bag_0 - bag_2 == self.bag_type('abbcc')
+        assert bag_2 - bag_0 == self.bag_type('ddddd')
+        assert bag_1 - bag_2 == self.bag_type('bc')
+        assert bag_2 - bag_1 == self.bag_type('ddddd')
+        
+        # blocktodo: continue for all operations
         
         
         
