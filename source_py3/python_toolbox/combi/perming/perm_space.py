@@ -50,6 +50,7 @@ class PermSpaceType(abc.ABCMeta):
                 iterable_or_length=arguments['iterable_or_length'], 
                 n_elements=arguments.get('n_elements', None),
                 slice_=arguments.get('slice_', None),
+                perm_processor=arguments.get('perm_processor', None),
                 _domain_for_checking=arguments.get('domain', None),
                 _degrees_for_checking=arguments.get('degrees', None),
             )
@@ -129,7 +130,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
     
     def __init__(self, iterable_or_length, domain=None, *, n_elements=None, 
                  fixed_map=None, degrees=None, is_combination=False,
-                 slice_=None):
+                 slice_=None, perm_processor=None):
         
         ### Making basic argument checks: #####################################
         #                                                                     #
@@ -326,10 +327,20 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         #                                                                     #
         ### Finished figuring out slice and length. ###########################
         
+        ### Figuring out perm processor: ######################################
+        #                                                                     #
+        self.is_processed = \
+                     perm_processor not in (None, misc_tools.identity_function)
+            
+        self.perm_processor = perm_processor if self.is_processed else \
+                                                   misc_tools.identity_function
+        #                                                                     #
+        ### Finished figuring out perm processor. #############################
+        
         
         self.is_pure = not (self.is_rapplied or self.is_fixed or self.is_sliced
                             or self.is_degreed or self.is_partial or
-                            self.is_combination)
+                            self.is_combination or self.is_processed)
         
         if self.is_pure:
             self.purified = self
@@ -348,6 +359,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             self.undegreed = self
         if not self.is_sliced:
             self.unsliced = self
+        if not self.is_processed:
+            self.unprocessed = self
 
     __init__.signature = inspect.signature(__init__)
             
@@ -432,7 +445,9 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                  variations.Variation.DAPPLIED if self.is_dapplied else None,
                  variations.Variation.FIXED if self.is_fixed else None,
                  variations.Variation.DEGREED if self.is_degreed else None,
-                 variations.Variation.SLICED if self.is_sliced else None,)
+                 variations.Variation.SLICED if self.is_sliced else None,
+                 variations.Variation.PROCESSED if self.is_processed
+                                                                    else None,)
             )
         )
         assert variation_selection.is_allowed
@@ -486,7 +501,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             return PermSpace(
                 self.sequence, domain=self.domain, n_elements=self.n_elements,
                 fixed_map=self.fixed_map, degrees=self.degrees,
-                is_combination=self.is_combination, slice_=canonical_slice
+                is_combination=self.is_combination, slice_=canonical_slice,
+                perm_processor=self.perm_processor
             )
         
         assert isinstance(i, numbers.Integral)
@@ -677,7 +693,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
     _reduced = property(
         lambda self: (type(self), self.sequence, self.domain, 
                       tuple(sorted(self.fixed_map.items())),
-                      self.canonical_slice)
+                      self.canonical_slice, self.perm_processor)
     )
              
     __eq__ = lambda self, other: (isinstance(other, PermSpace) and
@@ -891,7 +907,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
     @classmethod
     def _create_with_cut_prefix(cls, sequence, domain=None, *,
         n_elements=None, fixed_map=None, degrees=None, is_combination=False,
-                                            slice_=None, shit_set=frozenset()):
+        slice_=None, perm_processor=None, shit_set=frozenset()):
         '''blocktododoc'''
         
         # Tricky thing here: Trying to put as much as we can in a sequence head
@@ -932,7 +948,8 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         
         perm_space = cls(
             sequence, n_elements=n_elements, fixed_map=fixed_map, 
-            is_combination=is_combination, slice_=slice_, 
+            is_combination=is_combination, slice_=slice_,
+            perm_processor=perm_processor 
         )
         perm_space.prefix = tuple(prefix)
         return perm_space

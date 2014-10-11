@@ -18,7 +18,8 @@ class _VariationAddingMixin:
             fixed_map={key: sequence[value] for key, value in
                                                        self.fixed_map.items()},
             degrees=self.degrees, slice_=self.canonical_slice,
-            n_elements=self.n_elements, is_combination=self.is_combination
+            n_elements=self.n_elements, is_combination=self.is_combination,
+            perm_processor=self.perm_processor
         )
     
     # There's no `.get_recurrented` because we can't know which sequence you'd
@@ -36,7 +37,8 @@ class _VariationAddingMixin:
         return PermSpace(
             self.sequence, domain=self.domain, fixed_map=self.fixed_map,
             degrees=self.degrees, slice_=None,
-            is_combination=self.is_combination, n_elements=n_elements
+            is_combination=self.is_combination, n_elements=n_elements,
+            perm_processor=self.perm_processor
         )
     
     @caching.CachedProperty
@@ -52,7 +54,8 @@ class _VariationAddingMixin:
         
         return PermSpace(
             self.sequence, domain=self.domain, n_elements=self.n_elements,
-            fixed_map=self.fixed_map, is_combination=True
+            fixed_map=self.fixed_map, is_combination=True,
+            perm_processor=self.perm_processor
         )
         
         
@@ -69,7 +72,8 @@ class _VariationAddingMixin:
             fixed_map={domain[key]: value for key, value in
                                                    self._undapplied_fixed_map},
             degrees=self.degrees, slice_=self.canonical_slice,
-            n_elements=self.n_elements, is_combination=self.is_combination
+            n_elements=self.n_elements, is_combination=self.is_combination,
+            perm_processor=self.perm_processor
         )
     
     def get_fixed(self, fixed_map):
@@ -86,7 +90,8 @@ class _VariationAddingMixin:
         return PermSpace(
             self.sequence, domain=self.domain, fixed_map=combined_fixed_map,
             degrees=self.degrees, slice_=None,
-            n_elements=self.n_elements, is_combination=self.is_combination
+            n_elements=self.n_elements, is_combination=self.is_combination,
+            perm_processor=self.perm_processor
         )
     
     def get_degreed(self, degrees):
@@ -104,9 +109,26 @@ class _VariationAddingMixin:
         return PermSpace(
             self.sequence, domain=self.domain, fixed_map=self.fixed_map,
             degrees=degrees_to_use, n_elements=self.n_elements,
-            is_combination=self.is_combination
+            is_combination=self.is_combination,
+            perm_processor=self.perm_processor
         )
+    
     
     # There's no `get_sliced` because slicing is done using Python's normal
     # slice notation, e.g. perm_space[4:-7].
+    
+    def get_processed(self, perm_processor):
+        '''Get a version of this `PermSpace` that has a range of `sequence`.'''
+        if self.is_processed:
+            old_perm_processor = self.perm_processor
+            added_perm_processor = perm_processor
+            perm_processor = lambda perm: added_perm_processor(
+                                                      old_perm_processor(perm))
+        return PermSpace(
+            self.sequence, domain=self.domain,
+            fixed_map=self.fixed_map,
+            degrees=self.degrees, slice_=self.canonical_slice,
+            n_elements=self.n_elements, is_combination=self.is_combination,
+            perm_processor=perm_processor
+        )
     

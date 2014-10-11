@@ -12,6 +12,7 @@ from python_toolbox import nifty_collections
 from python_toolbox import context_management
 from python_toolbox import cute_iter_tools
 from python_toolbox import cute_testing
+from python_toolbox import misc_tools
 from python_toolbox import sequence_tools
 
 from python_toolbox import combi
@@ -45,7 +46,7 @@ class BrutePermSpace:
     '''
     def __init__(self, iterable_or_length, domain=None, n_elements=None,
                  fixed_map={}, degrees=None, is_combination=False,
-                 slice_=None):
+                 slice_=None, perm_processor=None):
         self.sequence = tuple(iterable_or_length) if \
             isinstance(iterable_or_length, collections.Iterable) else \
                                    sequence_tools.CuteRange(iterable_or_length)
@@ -62,16 +63,26 @@ class BrutePermSpace:
         self.degrees = \
                       degrees or sequence_tools.CuteRange(self.sequence_length)
         self.is_combination = is_combination
-        self.slice_ = slice_
         
         self.is_degreed = (self.degrees !=
                                 sequence_tools.CuteRange(self.sequence_length))
+        
+        self.slice_ = slice_
+ 
+        if perm_processor is None:
+            self.perm_processor = misc_tools.identity_function
+            self.is_processed = False
+        else:
+            self.perm_processor = perm_processor
+            self.is_processed = True
+        
+        
         
     def __iter__(self):
         if (self.is_recurrent and self.is_combination):
             def make_iterator():
                 crap = set()
-                for item in self._iter():
+                for item in map(self.perm_processor, self._iter()):
                     fc = nifty_collections.FrozenBag(item)
                     if fc in crap:
                         continue
@@ -80,7 +91,7 @@ class BrutePermSpace:
                         crap.add(fc)
             iterator = make_iterator()
         else:
-            iterator = self._iter()
+            iterator = map(self.perm_processor, self._iter())
         if self.slice_:
             return itertools.islice(iterator, self.slice_.start,
                                     self.slice_.stop)
@@ -133,10 +144,16 @@ class BrutePermSpace:
             yield candidate
                 
 
+
+def perm_processor(perm):
+    perm.was_processed_dawg = True
+    return perm
+
+
 def _check_variation_selection(variation_selection, perm_space_type,
                                iterable_or_length_and_sequence, domain_to_cut,
                                n_elements, is_combination, purified_fixed_map,
-                               degrees, slice_):
+                               degrees, slice_, perm_processor):
     assert isinstance(variation_selection, combi.variations.VariationSelection)
     
     kwargs = {}
@@ -168,6 +185,9 @@ def _check_variation_selection(variation_selection, perm_space_type,
         
     if variation_selection.is_degreed:
         kwargs['degrees'] = degrees = (0, 2, 4, 5)
+        
+    if perm_processor != NO_ARGUMENT:
+        kwargs['perm_processor'] = perm_processor
 
     try:
         perm_space = perm_space_type(**kwargs)
@@ -215,6 +235,8 @@ def _check_variation_selection(variation_selection, perm_space_type,
     assert (not perm_space != PermSpace(**kwargs)[perm_space.canonical_slice])
     assert hash(perm_space) == \
                           hash(PermSpace(**kwargs)[perm_space.canonical_slice])
+    
+    assert variation_selection.is_processed == perm_space.is_processed
 
     if perm_space.is_sliced and perm_space.length >= 2:
         assert perm_space[0] == perm_space.unsliced[2]
@@ -253,6 +275,11 @@ def _check_variation_selection(variation_selection, perm_space_type,
                                      variation_selection.is_dapplied or
                                      variation_selection.is_partial or
                                      variation_selection.is_combination))
+        
+        if variation_selection.is_processed:
+            assert perm.was_processed_dawg is True
+        else:
+            assert not hasattr(perm, 'was_processed_dawg')
         
         
         if variation_selection.is_rapplied:
@@ -449,12 +476,21 @@ def _iterate_tests():
             )
         else:
             slice_options = (NO_ARGUMENT,)
+            
+            
+        if variation_selection.is_processed:
+            perm_processor_options = (perm_processor,)
+        else:
+            perm_processor_options = (NO_ARGUMENT,)
+            
+            
 
         product_space_ = combi.ProductSpace(
             ((variation_selection,), perm_space_type_options,
              iterable_or_length_and_sequence_options, domain_to_cut_options,
              n_elements_options, is_combination_options,
-             purified_fixed_map_options, degrees_options, slice_options)
+             purified_fixed_map_options, degrees_options, slice_options,
+             perm_processor_options)
         )
         
         for i in range(len(product_space_)):
