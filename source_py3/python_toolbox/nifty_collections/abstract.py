@@ -35,4 +35,3 @@ DefinitelyUnordered.register(frozenset)
 DefinitelyUnordered.register(dict)
 DefinitelyUnordered.register(collections.defaultdict)
 DefinitelyUnordered.register(collections.Counter)
-DefinitelyUnordered.register

@@ -694,11 +694,11 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
         try:
             perm = sequence_tools.ensure_iterable_is_immutable_sequence(
                 perm,
-                allow_unordered=self.is_combination
+                allow_unordered=False
             )
         except sequence_tools.UnorderedIterableException:
             raise ValueError('An unordered iterable is never contained in a '
-                             'non-combination `PermSpace`.')
+                             '`PermSpace`. Try an ordered one.')
         
         perm_set = set(perm)
         if not (perm_set <= set(self.sequence)):
