@@ -1,22 +1,13 @@
 import functools
 import abc
 import collections
-import itertools
-import types
-import sys
-import math
 import numbers
 
 from python_toolbox import misc_tools
-from python_toolbox import dict_tools
 from python_toolbox import nifty_collections
-from python_toolbox import decorator_tools
 from python_toolbox import caching
-
-from python_toolbox import math_tools
 from python_toolbox import sequence_tools
 from python_toolbox import cute_iter_tools
-from python_toolbox import misc_tools
 
 from .. import misc
 
@@ -334,11 +325,6 @@ class Perm(sequence_tools.CuteSequenceMixin, collections.Sequence,
     items = caching.CachedProperty(PermItems)
     as_dictoid = caching.CachedProperty(PermAsDictoid)
     
-    def __eq__(self, other):
-        return type(self) == type(other) and \
-                      self.nominal_perm_space == other.nominal_perm_space and \
-           cute_iter_tools.are_equal(self._perm_sequence, other._perm_sequence)
-        
 
 
 from .perm_space import PermSpace

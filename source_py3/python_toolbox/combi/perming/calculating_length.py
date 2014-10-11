@@ -1,11 +1,6 @@
-import numbers
-import collections
 import itertools
 
 from python_toolbox import nifty_collections
-from python_toolbox import cute_iter_tools
-
-infinity = float('inf')
 
 
 ###############################################################################
@@ -13,6 +8,7 @@ infinity = float('inf')
 _length_of_recurrent_perm_space_cache = {}
 
 def calculate_length_of_recurrent_perm_space(k, ftt):
+    '''blocktododoc'''
     cache = _length_of_recurrent_perm_space_cache
     if not isinstance(ftt, nifty_collections.FrozenBagBag):
         ftt = nifty_collections.FrozenBagBag(ftt)
@@ -61,6 +57,7 @@ def calculate_length_of_recurrent_perm_space(k, ftt):
 _length_of_recurrent_comb_space_cache = {}
 
 def calculate_length_of_recurrent_comb_space(k, ftt):
+    '''blocktododoc'''
     cache = _length_of_recurrent_comb_space_cache
     if not isinstance(ftt, nifty_collections.FrozenBagBag):
         ftt = nifty_collections.FrozenBagBag(ftt)

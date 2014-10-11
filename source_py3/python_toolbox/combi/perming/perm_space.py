@@ -5,22 +5,16 @@ import collections
 import abc
 import functools
 import types
-import sys
 import math
 import numbers
-import enum
 import inspect
 
-from python_toolbox import misc_tools
-from python_toolbox import nifty_collections
-from python_toolbox import sequence_tools
 from python_toolbox import caching
 from python_toolbox import math_tools
 from python_toolbox import sequence_tools
 from python_toolbox import cute_iter_tools
 from python_toolbox import nifty_collections
 from python_toolbox import dict_tools
-from python_toolbox.third_party import sortedcontainers
 from python_toolbox import misc_tools
 
 from .. import misc
@@ -446,10 +440,12 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
     
     @caching.CachedProperty
     def _frozen_ordered_bag(self):
+        '''blocktododoc'''
         return nifty_collections.FrozenOrderedBag(self.sequence)
             
     _frozen_bag_bag = caching.CachedProperty(
-        lambda self: self._frozen_ordered_bag.frozen_bag_bag
+        lambda self: self._frozen_ordered_bag.frozen_bag_bag,
+        '''blocktododoc'''
     )
         
             
@@ -661,7 +657,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
                 factoradic_number = factoradic_number[:-self.n_unused_elements]
             unused_numbers = list(self.sequence)
             result = tuple(unused_numbers.pop(factoradic_digit) for
-                                             factoradic_digit in factoradic_number)
+                                         factoradic_digit in factoradic_number)
             assert sequence_tools.get_length(result) == self.n_elements
             
             return self.perm_type(result, self)
@@ -823,7 +819,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             )
             perm_number = self.unsliced.length - 1 - sum(
                 (math_tools.binomial(item, i) for i, item in
-                                      enumerate(processed_perm_sequence, start=1)),
+                                  enumerate(processed_perm_sequence, start=1)),
                 0
             )
         
@@ -896,12 +892,12 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
     def _create_with_cut_prefix(cls, sequence, domain=None, *,
         n_elements=None, fixed_map=None, degrees=None, is_combination=False,
                                             slice_=None, shit_set=frozenset()):
+        '''blocktododoc'''
         
-        # Tricky thing here: Trying to put as much as we can in a
-        # sequence head that'll shorten the sequence we'll give to
-        # the candidate space instead of using a fixed map, if
-        # possible. This is crucial for `CombSpace` which can't use
-        # `fixed_map`.
+        # Tricky thing here: Trying to put as much as we can in a sequence head
+        # that'll shorten the sequence we'll give to the candidate space
+        # instead of using a fixed map, if possible. This is crucial for
+        # `CombSpace` which can't use `fixed_map`.
         
         if degrees is not None:
             raise NotImplementedError
