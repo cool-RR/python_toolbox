@@ -38,15 +38,6 @@ class VersionInfo(tuple):
         return tuple.__new__(cls, (major, minor, micro, modifier)) 
 
     
-    @classmethod
-    def _make(cls, iterable, new=tuple.__new__, len=len):
-        '''Make a new `VersionInfo` object from a sequence or iterable.'''
-        result = new(cls, iterable)
-        if len(result) != 4:
-            raise TypeError('Expected 4 arguments, got %d' % len(result))
-        return result 
-
-    
     def __repr__(self):
         '''Return a nicely formatted representation string.'''
         return 'VersionInfo(major=%r, minor=%r, micro=%r, modifier=%r)' % self
@@ -59,18 +50,6 @@ class VersionInfo(tuple):
         from python_toolbox.nifty_collections import OrderedDict
         return OrderedDict(zip(self._fields, self))
 
-    
-    def _replace(self, **kwargs):
-        '''
-        Make a `VersionInfo` object replacing specified fields with new values.
-        '''
-        result = \
-            self._make(map(kwargs.pop, ('major', 'minor', 'micro', 'modifier'),
-                           self))
-        if kwargs:
-            raise ValueError('Got unexpected field names: %r' % kwargs.keys())
-        return result 
-    
     
     def __getnewargs__(self):
         '''Return self as a plain tuple. Used by copy and pickle.'''

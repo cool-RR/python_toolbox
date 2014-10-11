@@ -1,15 +1,6 @@
-import collections
-import types
-import sys
 import math
-import numbers
-
-from python_toolbox import dict_tools
-from python_toolbox import nifty_collections
-from python_toolbox import caching
 
 from python_toolbox import math_tools
-from python_toolbox import sequence_tools
 from python_toolbox import cute_iter_tools
 
 infinity = float('inf')
@@ -20,6 +11,7 @@ class MISSING_ELEMENT:
         
         
 def get_short_factorial_string(number, minus_one=False):
+    '''blocktotodoc'''
     assert number >= 0 and \
                     isinstance(number, math_tools.PossiblyInfiniteIntegral)
     if number == infinity:

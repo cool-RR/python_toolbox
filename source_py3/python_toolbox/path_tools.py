@@ -4,16 +4,20 @@
 '''Defines various tools related to file-system paths.'''
 
 import sys
+import os
 import pathlib
 import glob
 import types
 
+_is_windows = (os.name == 'nt')
+null_path = pathlib.Path(os.path.devnull)
+path_type = pathlib.WindowsPath if _is_windows else pathlib.PosixPath
 
 def list_sub_folders(path):
     '''List all the immediate sub-folders of the folder at `path`.'''
     path = pathlib.Path(path)
     assert path.is_dir()
-    return list(filter(pathlib.Path.is_dir, path.glob('*')))
+    return tuple(filter(pathlib.Path.is_dir, path.glob('*')))
 
 
 def get_path_of_package(package):
@@ -47,4 +51,5 @@ def get_root_path_of_module(module):
     assert result in list(map(pathlib.Path.absolute,
                               map(pathlib.Path, sys.path)))
     return result
+
 

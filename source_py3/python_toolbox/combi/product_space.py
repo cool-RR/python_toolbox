@@ -1,25 +1,7 @@
 import collections
-import types
-import sys
-import math
-import numbers
-
-from python_toolbox import misc_tools
-from python_toolbox import binary_search
-from python_toolbox import dict_tools
-from python_toolbox import nifty_collections
-from python_toolbox import caching
 
 from python_toolbox import math_tools
 from python_toolbox import sequence_tools
-from python_toolbox import cute_iter_tools
-from python_toolbox import nifty_collections
-
-from . import misc
-from python_toolbox import misc_tools
-
-infinity = float('inf')
-
 
         
 class ProductSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
@@ -67,9 +49,7 @@ class ProductSpace(sequence_tools.CuteSequenceMixin, collections.Sequence):
                                 not len(given_sequence) == len(self.sequences):
             raise ValueError
         
-        reverse_indices = []
         current_radix = 1
-        
         wip_index = 0
             
         for item, sequence in reversed(tuple(zip(given_sequence,

@@ -8,7 +8,6 @@ See its documentation for more details.
 '''
 # todo: examine thread-safety
 
-import functools
 import datetime as datetime_module
 
 from python_toolbox import misc_tools

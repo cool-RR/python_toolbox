@@ -1,7 +1,7 @@
 # Copyright 2009-2014 Ram Rachum.
 # This program is distributed under the MIT license.
 
-'''
+r'''
 Module for manipulating Python addresses.
 
 Use `resolve` to turn a string description into an object, and `describe` to

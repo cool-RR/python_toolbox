@@ -150,7 +150,7 @@ def get_address(obj, shorten=False, root=None, namespace={}):
         address = '.'.join((obj.__module__, obj.__self__.__class__.__name__,
                             obj.__name__))
     else:
-        address= '.'.join((obj.__module__, obj.__name__))
+        address = '.'.join((obj.__module__, obj.__name__))
 
     # Now our attempt at an address is in `address`. Let's `try` to resolve
     # that address to see if it's right and we get the same object:        
