@@ -480,7 +480,7 @@ class PermSpace(_VariationRemovingMixin, _VariationAddingMixin,
             sequence_repr = \
                       ''.join((sequence_repr[:35], ' ... ', sequence_repr[-1]))
             
-        return '<%s: %s%s%s%s%s%s>%s' % (
+        return '<%s: %s%s%s%s%s%s%s>%s' % (
             type(self).__name__,
             domain_snippet,
             sequence_repr,
