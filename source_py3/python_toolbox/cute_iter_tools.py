@@ -87,9 +87,9 @@ def _iterate_overlapping_subsequences(iterable, length, wrap_around):
         yield tuple(deque)
         
     
-def shorten(iterable, n, lazy_tuple=False):
+def shorten(iterable, length, lazy_tuple=False):
     '''
-    Shorten an iterable to length `n`.
+    Shorten an iterable to `length`.
     
     Iterate over the given iterable, but stop after `n` iterations (Or when the
     iterable stops iteration by itself.)
@@ -98,7 +98,7 @@ def shorten(iterable, n, lazy_tuple=False):
 
     If `lazy_tuple=True`, returns a `LazyTuple` rather than an iterator.
     '''
-    iterator = _shorten(iterable=iterable, n=n)
+    iterator = _shorten(iterable=iterable, length=length)
 
     if lazy_tuple:
         from python_toolbox import nifty_collections
@@ -107,20 +107,20 @@ def shorten(iterable, n, lazy_tuple=False):
         return iterator
 
 
-def _shorten(iterable, n):
+def _shorten(iterable, length):
 
-    if n == infinity:
+    if length == infinity:
         yield from iterable
         raise StopIteration
     
-    assert isinstance(n, int)
+    assert isinstance(length, int)
 
-    if n == 0:
+    if length == 0:
         raise StopIteration
     
     for i, thing in enumerate(iterable):
         yield thing
-        if i + 1 == n: # Checking `i + 1` to avoid pulling an extra item.
+        if i + 1 == length: # Checking `i + 1` to avoid pulling an extra item.
             raise StopIteration
         
         
@@ -152,7 +152,7 @@ def _enumerate(iterable, reverse_index):
         try:
             length = sequence_tools.get_length(iterable)
         except AttributeError:
-            iterable = revenifty_collections.LazyTuple(iterable)
+            iterable = nifty_collections.LazyTuple(iterable)
             length = len(iterable)
         return zip(range(length - 1, -1, -1), iterable)
 
@@ -177,7 +177,7 @@ def get_length(iterable):
     If given an iterator, it will be exhausted.
     '''
     i = 0
-    for thing in iterable:
+    for _ in iterable:
         i += 1
     return i
 
@@ -211,9 +211,9 @@ def _iter_with(iterable, context_manager):
         yield next_item
         
         
-def get_items(iterable, n, container_type=tuple):
+def get_items(iterable, n_items, container_type=tuple):
     '''
-    Get the next `n` items from the iterable as a `tuple`.
+    Get the next `n_items` items from the iterable as a `tuple`.
     
     If there are less than `n` items, no exception will be raised. Whatever
     items are there will be returned.
@@ -221,7 +221,7 @@ def get_items(iterable, n, container_type=tuple):
     If you pass in a different kind of container than `tuple` as
     `container_type`, it'll be used to wrap the results.
     '''
-    return container_type(shorten(iterable, n))
+    return container_type(shorten(iterable, n_items))
 
 
 def double_filter(filter_function, iterable, lazy_tuple=False):
@@ -235,7 +235,8 @@ def double_filter(filter_function, iterable, lazy_tuple=False):
     Note that this function is not thread-safe. (You may not consume the two
     iterators on two separate threads.)
     
-    If `lazy_tuple=True`, returns two `LazyTuple` objects rather than two iterator.
+    If `lazy_tuple=True`, returns two `LazyTuple` objects rather than two
+    iterator.
     '''
     iterator = iter(iterable)
     
@@ -396,7 +397,7 @@ def get_single_if_any(iterable,
         
         
 def are_equal(*sequences):
-    from python_toolbox import sys_tools
+    '''blocktododoc'''
     from python_toolbox import logic_tools
     sequence_types = set(map(type, sequences))
     
@@ -422,6 +423,7 @@ def are_equal(*sequences):
 
     
 def is_sorted(iterable, key=None):
+    '''blocktododoc'''
     from python_toolbox import misc_tools
     if key is None:
         key = misc_tools.identity_function
@@ -490,6 +492,7 @@ def iterate_popitem(item_poppable, lazy_tuple=False):
 
 
 def zip_non_equal(iterables, lazy_tuple=False):
+    '''blocktododoc'''
     from python_toolbox import logic_tools
     iterator = (items for items in zip(*iterables)
                 if not logic_tools.all_equal(items))

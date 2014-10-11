@@ -29,7 +29,7 @@ def get_all_contained_counters(counter, use_lazy_tuple=True):
         return iterator
         
 
-def _get_all_contained_counters(counter, use_lazy_tuple=True):
+def _get_all_contained_counters(counter):
     assert isinstance(
         counter,
         (
